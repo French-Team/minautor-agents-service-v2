@@ -1,4 +1,4 @@
-# Convention — Sous-Protocoles
+# Convention -- Sous-Protocoles
 ---
 
 ## Principe Fondamental
@@ -6,12 +6,12 @@
 
 ## Pourquoi des sous-protocoles ?
 
-| Problème | Solution |
+| Probleme | Solution |
 |---|---|
-| Protocoles trop vagues | Sous-protocoles avec étapes détaillées |
-| Manque de guidance | Questions structurées pour clarifier |
-| Erreurs fréquentes | Étapes de vérification détaillées |
-| Incohérence | Sous-protocoles standardisés |
+| Protocoles trop vagues | Sous-protocoles avec etapes detaillees |
+| Manque de guidance | Questions structurees pour clarifier |
+| Erreurs frequentes | Etapes de verification detaillees |
+| Incoherence | Sous-protocoles standardises |
 
 ---
 
@@ -20,10 +20,10 @@
 ```
 sous-protocole-[nom].md
 |-- Objectif
-|-- Prérequis
-|-- Étapes détaillées
+|-- Prerequis
+|-- Etapes detaillees
 |-- Questions (si applicable)
-|-- Vérifications
+|-- Verifications
 ``-- Liens vers le protocole parent
 ```
 
@@ -33,31 +33,31 @@ sous-protocole-[nom].md
 
 | Type | Description | Exemple |
 |---|---|---|
-| **Questions** | Série de questions pour clarifier | `sous-protocole-questions-clartification.md` |
-| **Évaluation** | Évaluer une situation | `sous-protocole-evaluer-projet.md` |
-| **Diagnostic** | Diagnostiquer un problème | `sous-protocole-diagnostic.md` |
-| **Vérification** | Vérifier la conformité | `sous-protocole-verifier-conformite.md` |
-| **Validation** | Valider un résultat | `sous-protocole-valider-travail.md` |
+| **Questions** | Serie de questions pour clarifier | `sous-protocole-questions-clartification.md` |
+| **Evaluation** | Evaluer une situation | `sous-protocole-evaluer-projet.md` |
+| **Diagnostic** | Diagnostiquer un probleme | `sous-protocole-diagnostic.md` |
+| **Verification** | Verifier la conformite | `sous-protocole-verifier-conformite.md` |
+| **Validation** | Valider un resultat | `sous-protocole-valider-travail.md` |
 
 ---
 
-## Comment intégrer un sous-protocole
+## Comment integrer un sous-protocole
 
 ### Dans un protocole principal
 
 ```markdown
-## Étape 1 — Clarifier les besoins
+## Etape 1 -- Clarifier les besoins
 1. Poser les questions de clarification
-2. Documenter les réponses
+2. Documenter les reponses
 3. Valider avec l'utilisateur
 ```
 
 ### Dans demarrer.md
 
 ```markdown
-## Étape 1 — Nouveau projet
+## Etape 1 -- Nouveau projet
 1. Poser les questions de clarification
-2. Créer le cerveau-projet
+2. Creer le cerveau-projet
 3. ...
 ```
 
@@ -68,29 +68,29 @@ sous-protocole-[nom].md
 | Sous-protocole | Protocole parent | Description |
 |---|---|---|
 | `sous-protocole-questions-clartification.md` | `protocole-demarrer-projet` | Questions pour clarifier les besoins |
-| `sous-protocole-evaluer-projet.md` | `protocole-reprendre-projet` | Évaluer l'état d'un projet |
-| `sous-protocole-diagnostic.md` | `protocole-gestion-defaillances` | Diagnostiquer les problèmes |
-| `sous-protocole-validation.md` | Tous les protocoles | Valider le résultat |
+| `sous-protocole-evaluer-projet.md` | `protocole-reprendre-projet` | Evaluer l'etat d'un projet |
+| `sous-protocole-diagnostic.md` | `protocole-gestion-defaillances` | Diagnostiquer les problemes |
+| `sous-protocole-validation.md` | Tous les protocoles | Valider le resultat |
 
 ---
 
-## Règles des sous-protocoles
+## Regles des sous-protocoles
 
-| Règle | Description |
+| Regle | Description |
 |---|---|
-| **Clarté** | Chaque étape est claire et précise |
-| **Complétude** | Tous les cas sont couverts |
-| **Traçabilité** | Les résultats sont documentés |
-| **Validation** | Chaque étape est validée |
+| **Clarte** | Chaque etape est claire et precise |
+| **Completude** | Tous les cas sont couverts |
+| **Tracabilite** | Les resultats sont documentes |
+| **Validation** | Chaque etape est validee |
 
 ---
 
 ## Relation avec les protocoles
 
-| Concept | Rôle | Exemple |
+| Concept | Role | Exemple |
 |---|---|---|
 | **Protocole** | QUOI faire | `protocole-demarrer-projet.md` |
-| **Sous-protocole** | COMMENT le faire en détail | `sous-protocole-questions-clartification.md` |
+| **Sous-protocole** | COMMENT le faire en detail | `sous-protocole-questions-clartification.md` |
 
 ---
 
@@ -101,4 +101,4 @@ sous-protocole-[nom].md
 
 ---
 
-*Convention conforme aux règles du cerveau-projet*
+*Convention conforme aux regles du cerveau-projet*

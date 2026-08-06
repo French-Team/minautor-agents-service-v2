@@ -1,4 +1,4 @@
-# Todo — Protocole Gestion des Défaillances
+# Todo -- Protocole Gestion des Defaillances
 ---
 
 ## Statut
@@ -6,60 +6,60 @@
 | Champ | Valeur |
 |---|---|
 | **Statut** | en cours |
-| **Priorité** | haute |
-| **Créé** | 2026-08-04 |
-| **Dernière mise à jour** | 2026-08-04 |
+| **Priorite** | haute |
+| **Cree** | 2026-08-04 |
+| **Derniere mise a jour** | 2026-08-04 |
 
 ---
 
-## Tâches
+## Taches
 
-### Phase 1 — Initialisation
+### Phase 1 -- Initialisation
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
-| 1.1 | Créer le protocole | [X] terminé | haute |
-| 1.2 | Créer la spec | [X] terminé | haute |
-| 1.3 | Créer ce todo | [X] terminé | haute |
-| 1.4 | Mettre à jour les index | [ ] en attente | haute |
+| 1.1 | Creer le protocole | [X] termine | haute |
+| 1.2 | Creer la spec | [X] termine | haute |
+| 1.3 | Creer ce todo | [X] termine | haute |
+| 1.4 | Mettre a jour les index | [ ] en attente | haute |
 
-### Phase 2 — Intégration
+### Phase 2 -- Integration
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
-| 2.1 | Intégrer dans demarrer.md | [ ] en attente | haute |
-| 2.2 | Intégrer dans index-cerveau.md | [ ] en attente | haute |
-| 2.3 | Intégrer dans les protocoles d'auto-amélioration | [ ] en attente | haute |
+| 2.1 | Integrer dans demarrer.md | [ ] en attente | haute |
+| 2.2 | Integrer dans index-cerveau.md | [ ] en attente | haute |
+| 2.3 | Integrer dans les protocoles d'auto-amelioration | [ ] en attente | haute |
 | 2.4 | Tester le protocole | [ ] en attente | moyenne |
 
-### Phase 3 — Automatisation
+### Phase 3 -- Automatisation
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
-| 3.1 | Créer un système de détection automatique | [ ] en attente | haute |
-| 3.2 | Ajouter des vérifications dans les protocoles | [ ] en attente | haute |
-| 3.3 | Créer un formulaire de déclaration de défaillance | [ ] en attente | moyenne |
+| 3.1 | Creer un systeme de detection automatique | [ ] en attente | haute |
+| 3.2 | Ajouter des verifications dans les protocoles | [ ] en attente | haute |
+| 3.3 | Creer un formulaire de declaration de defaillance | [ ] en attente | moyenne |
 
-### Phase 4 — Maintien
+### Phase 4 -- Maintien
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
-| 4.1 | Appliquer le protocole à chaque session | [ ] en attente | continue |
-| 4.2 | Documenter les défaillances détectées | [ ] en attente | continue |
-| 4.3 | Améliorer le protocole selon les retours | [ ] en attente | continue |
+| 4.1 | Appliquer le protocole a chaque session | [ ] en attente | continue |
+| 4.2 | Documenter les defaillances detectees | [ ] en attente | continue |
+| 4.3 | Ameliorer le protocole selon les retours | [ ] en attente | continue |
 
 ---
 
-## Critères de validation
+## Criteres de validation
 
-- [ ] Le protocole est créé et documenté
-- [ ] La spec est créée et technique
-- [ ] Le todo est créé et complet
-- [ ] Les index sont mis à jour
-- [ ] Le protocole est intégré dans demarrer.md
-- [ ] Le protocole est intégré dans les protocoles d'auto-amélioration
-- [ ] Le système de détection automatique fonctionne
-- [ ] Le protocole est testé avec succès
+- [ ] Le protocole est cree et documente
+- [ ] La spec est creee et technique
+- [ ] Le todo est cree et complet
+- [ ] Les index sont mis a jour
+- [ ] Le protocole est integre dans demarrer.md
+- [ ] Le protocole est integre dans les protocoles d'auto-amelioration
+- [ ] Le systeme de detection automatique fonctionne
+- [ ] Le protocole est teste avec succes
 
 ---
 
@@ -67,15 +67,15 @@
 
 ### Points d'attention
 
-- Ce protocole est **fondamental** pour la maintenabilité du cerveau
-- Il doit être déclenché **automatiquement** quand une défaillance est détectée
-- Les défaillances hautes priorité doivent être corrigées **immédiatement**
+- Ce protocole est **fondamental** pour la maintenabilite du cerveau
+- Il doit etre declenche **automatiquement** quand une defaillance est detectee
+- Les defaillances hautes priorite doivent etre corrigees **immediatement**
 
-### Dépendances
+### Dependances
 
-- `convention-autoamelioration.md` — principes d'amélioration
-- `protocole-autoameliorer-cerveau.md` — amélioration du cerveau
-- `protocole-auto-correction.md` — auto-correction des agents
+- `convention-autoamelioration.md` -- principes d'amelioration
+- `protocole-autoameliorer-cerveau.md` -- amelioration du cerveau
+- `protocole-auto-correction.md` -- auto-correction des agents
 
 ---
 

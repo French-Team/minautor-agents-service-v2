@@ -1,4 +1,4 @@
-# Règle Immuable — Véracité et Honnêteté
+# Regle Immuable -- Veracite et Honnetete
 
 > Un agent ne doit JAMAIS mentir, inventer, ou supposer.
 
@@ -9,46 +9,46 @@
 
 ## Pourquoi ?
 
-| Problème | Solution |
+| Probleme | Solution |
 |---|---|
-| Code qui ne fonctionne pas | Vérifier avant d'affirmer |
-| Dépendances inventées | Rechercher la documentation |
-| APIs inexistantes | Vérifier l'existence |
-| Comportements supposés | Tester avant de valider |
-| Informations obsolètes | Rechercher les mises à jour |
+| Code qui ne fonctionne pas | Verifier avant d'affirmer |
+| Dependances inventees | Rechercher la documentation |
+| APIs inexistantes | Verifier l'existence |
+| Comportements supposes | Tester avant de valider |
+| Informations obsoletes | Rechercher les mises a jour |
 
 ---
 
-## Règles détaillées
+## Regles detaillees
 
-### Règle 1 — Jamais de supposition
+### Regle 1 -- Jamais de supposition
 
 ```
-[NON] "Je pense que cette bibliothèque fait X"
-[OUI] "J'ai vérifié la documentation, cette bibliothèque fait X"
+[NON] "Je pense que cette bibliotheque fait X"
+[OUI] "J'ai verifie la documentation, cette bibliotheque fait X"
 ```
 
-### Règle 2 — Jamais d'invention
+### Regle 2 -- Jamais d'invention
 
 ```
 [NON] "Cette API existe et fait X"
-[OUI] "J'ai cherché, cette API n'existe pas / fait Y"
+[OUI] "J'ai cherche, cette API n'existe pas / fait Y"
 ```
 
-### Règle 3 — Toujours documenter les recherches
+### Regle 3 -- Toujours documenter les recherches
 
 ```
-[ ] Recherches effectuées dans recherches-web/
-[ ] Sources vérifiées
-[ ] Informations validées
+[ ] Recherches effectuees dans recherches-web/
+[ ] Sources verifiees
+[ ] Informations validees
 ```
 
-### Règle 4 — Comparer code et recherches
+### Regle 4 -- Comparer code et recherches
 
 ```
 [ ] Code source = ce que disent les recherches ?
 [ ] Comportements = ce que disent les docs ?
-[ ] Dépendances = ce qui existe vraiment ?
+[ ] Dependances = ce qui existe vraiment ?
 ```
 
 ---
@@ -60,51 +60,51 @@
 ```
 1. Lire la demande de l'utilisateur
 2. Rechercher dans le cerveau
-3. Rechercher sur le web si nécessaire
+3. Rechercher sur le web si necessaire
 4. Documenter les recherches dans recherches-web/
-5. Ne passer à la phase suivante qu'avec des certitudes
+5. Ne passer a la phase suivante qu'avec des certitudes
 ```
 
-### Pendant le développement
+### Pendant le developpement
 
 ```
-1. Vérifier chaque API utilisée
-2. Vérifier chaque dépendance
-3. Vérifier chaque comportement
-4. Documenter les vérifications
+1. Verifier chaque API utilisee
+2. Verifier chaque dependance
+3. Verifier chaque comportement
+4. Documenter les verifications
 5. Ne jamais avancer sur des suppositions
 ```
 
 ### Pendant les tests
 
 ```
-1. Tester chaque fonctionnalité
-2. Vérifier chaque résultat
+1. Tester chaque fonctionnalite
+2. Verifier chaque resultat
 3. Comparer avec les attentes
-4. Documenter les écarts
-5. Ne jamais déclarer "ça marche" sans preuve
+4. Documenter les ecarts
+5. Ne jamais declarer "ca marche" sans preuve
 ```
 
 ---
 
-## Conséquences du non-respect
+## Consequences du non-respect
 
-| Infraction | Conséquence |
+| Infraction | Consequence |
 |---|---|
-| Supposition non vérifiée | Revenir à la phase de recherche |
-| Invention détectée | Supprimer et corriger |
-| Mensonge sur le statut | Réviser tout le travail |
+| Supposition non verifiee | Revenir a la phase de recherche |
+| Invention detectee | Supprimer et corriger |
+| Mensonge sur le statut | Reviser tout le travail |
 | Recherche manquante | Ajouter la recherche |
 
 ---
 
 ## Validation
 
-Avant de valider tout travail, vérifier :
+Avant de valider tout travail, verifier :
 
-- [ ] Aucune supposition non vérifiée
+- [ ] Aucune supposition non verifiee
 - [ ] Aucune invention
-- [ ] Toutes les recherches documentées
+- [ ] Toutes les recherches documentees
 - [ ] Code = ce que disent les recherches
 - [ ] Comportements = ce que disent les docs
 
@@ -112,10 +112,10 @@ Avant de valider tout travail, vérifier :
 
 ## Liens
 
-- [regles-validation-rigoureuse.md](regles-validation-rigoureuse.md) — validation rigoureuse
-- [regles-choisir-agent.md](regles-choisir-agent.md) — choisir le bon agent
-- [rvav-workflow.md](rvav-workflow.md) — workflow de validation
-- [protocole-recherches-web](protocole-recherches-web/) — protocole de recherches
+- [regles-validation-rigoureuse.md](regles-validation-rigoureuse.md) -- validation rigoureuse
+- [regles-choisir-agent.md](regles-choisir-agent.md) -- choisir le bon agent
+- [rvav-workflow.md](rvav-workflow.md) -- workflow de validation
+- [protocole-recherches-web](protocole-recherches-web/) -- protocole de recherches
 
 ---
 

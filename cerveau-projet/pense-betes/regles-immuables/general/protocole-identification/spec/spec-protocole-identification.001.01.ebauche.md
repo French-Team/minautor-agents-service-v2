@@ -1,9 +1,9 @@
-# Spécification — Protocole d'Identification des Agents
+# Specification -- Protocole d'Identification des Agents
 ---
 
 ## Objectif
 
-Garantir que chaque agent se reconnaît et s'identifie avant de travailler.
+Garantir que chaque agent se reconnait et s'identifie avant de travailler.
 
 ---
 
@@ -13,7 +13,7 @@ Garantir que chaque agent se reconnaît et s'identifie avant de travailler.
 cerveau-projet/
 |-- AGENTS.md                    <- agent principal actuel
 |-- agents/
-|   |-- index-agents.md          <- point d'entrée
+|   |-- index-agents.md          <- point d'entree
 |   |-- fiche-agent-template.md  <- template de fiche
 |   |-- corrections-template.md  <- template de corrections
 |   ``-- [nom-agent]/
@@ -27,27 +27,27 @@ cerveau-projet/
 
 ```
 1. Lire AGENTS.md en premier
-2. Se présenter automatiquement
-3. Vérifier si la fiche existe
-4. Si non -> créer la fiche + corrections
-5. Lire corrections.md en priorité
+2. Se presenter automatiquement
+3. Verifier si la fiche existe
+4. Si non -> creer la fiche + corrections
+5. Lire corrections.md en priorite
 6. Lire la fiche d'agent
-7. Mettre à jour AGENTS.md
+7. Mettre a jour AGENTS.md
 8. Confirmer l'identification
 ```
 
 ---
 
-## Règles de validation
+## Regles de validation
 
-| Règle | Critère |
+| Regle | Critere |
 |---|---|
 | **Lecture AGENTS.md** | Toujours lu en premier |
-| **Présentation** | Chaque agent se présente |
+| **Presentation** | Chaque agent se presente |
 | **Fiche** | Chaque agent a une fiche |
-| **Corrections** | Les corrections sont lues en priorité |
-| **Mise à jour** | AGENTS.md est mis à jour |
-| **Confirmation** | L'identification est validée |
+| **Corrections** | Les corrections sont lues en priorite |
+| **Mise a jour** | AGENTS.md est mis a jour |
+| **Confirmation** | L'identification est validee |
 
 ---
 

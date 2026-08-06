@@ -1,10 +1,10 @@
-# Spécification — Protocole d'Auto-Correction des Agents
+# Specification -- Protocole d'Auto-Correction des Agents
 ---
 
 ## Objectif
 
-Définir un système permettant aux agents de :
-1. S'identifier de manière unique
+Definir un systeme permettant aux agents de :
+1. S'identifier de maniere unique
 2. Corriger automatiquement leurs erreurs
 3. Surcharger leur configuration sans impacter les autres
 4. Devenir l'agent principal dynamiquement
@@ -18,7 +18,7 @@ projet-futur/
 |-- AGENTS.md                    <- fichier dynamique (agent principal)
 |-- cerveau-projet/
 |   ``-- agents/
-|   |-- index-agents.md          <- point d'entrée
+|   |-- index-agents.md          <- point d'entree
 |   |-- fiche-agent-template.md  <- template de fiche
 |   |-- corrections-template.md  <- template de corrections
 |   ``-- [nom-agent]/
@@ -62,38 +62,38 @@ projet-futur/
 
 ```
 1. Agent visite agents/
-2. Vérifie existence de sa fiche
-3. Si non -> crée la fiche + corrections
-4. Lit sa configuration (corrections en priorité)
-5. Met à jour AGENTS.md
+2. Verifie existence de sa fiche
+3. Si non -> cree la fiche + corrections
+4. Lit sa configuration (corrections en priorite)
+5. Met a jour AGENTS.md
 6. Travaille
-7. Détecte erreurs -> ajoute dans corrections.md
+7. Detecte erreurs -> ajoute dans corrections.md
 8. Prochaine session -> lit les nouvelles corrections
 ```
 
 ---
 
-## Règles de validation
+## Regles de validation
 
-| Règle | Critère |
+| Regle | Critere |
 |---|---|
-| **Unicité** | Chaque agent a un seul dossier |
+| **Unicite** | Chaque agent a un seul dossier |
 | **Autonomie** | Pas de partage de corrections |
 | **Persistance** | Les corrections restent entre les sessions |
-| **Dynamisme** | AGENTS.md est mis à jour à chaque session |
-| **Traçabilité** | L'historique est conservé |
+| **Dynamisme** | AGENTS.md est mis a jour a chaque session |
+| **Tracabilite** | L'historique est conserve |
 
 ---
 
-## Dépendances
+## Dependances
 
-| Dépendance | Type |
+| Dependance | Type |
 |---|---|
 | `agents/` | Dossier obligatoire |
 | `AGENTS.md` | Fichier obligatoire |
 | Templates | Fichiers obligatoires |
-| Convention protocoles | Référence |
-| `protocole-installer-regles` | Protocole pour installer les règles immuables |
+| Convention protocoles | Reference |
+| `protocole-installer-regles` | Protocole pour installer les regles immuables |
 | `protocole-recherches-web` | Protocole pour les recherches web |
 
 ---

@@ -46,7 +46,7 @@ while IFS= read -r fichier; do
     # Extraire les liens [texte](chemin) 
     while IFS= read -r lien; do
         # Extraire le chemin du lien
-        chemin=$(echo "$lien" | grep -oE '\]\(\K[^)]+' | head -1)
+        chemin=$(echo "$lien" | sed -n 's/.*\](\([^)]*\)).*/\1/p' | head -1)
         if [ -n "$chemin" ]; then
             # Ignorer les liens externes (http, https)
             case "$chemin" in
@@ -131,7 +131,7 @@ while IFS= read -r agent_dir; do
     [ -f "$agent_md" ] || continue
     while IFS= read -r outil_ref; do
         # Extraire le nom de l'outil entre backticks
-        outil=$(echo "$outil_ref" | grep -oE '`\K[^`]+' | head -1)
+        outil=$(echo "$outil_ref" | sed -n 's/.*`\([^`]*\)`.*/\1/p' | head -1)
         if [ -n "$outil" ]; then
             # Chercher si l'outil existe dans tools/
             if ! find "$dossier/cerveau-projet/agents/tools" -name "$outil" -type d 2>/dev/null | grep -q .; then

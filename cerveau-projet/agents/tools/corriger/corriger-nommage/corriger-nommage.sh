@@ -28,7 +28,7 @@ aide() {
     echo "Options:"
     echo "  --aide, -h          Afficher cette aide"
     echo "  --dry-run           Simuler sans modifier"
-    echo "  --verbose, -v       Afficher les détails"
+    echo "  --verbose, -v       Afficher les details"
     echo "  --version           Afficher la version"
     echo "  --type TYPE         Type de fichier (protocole, convention, agent, outil)"
     echo ""
@@ -56,7 +56,7 @@ corriger_protocole() {
     local minor_part=$(echo "$basename" | cut -d'.' -f3)
     local statut_part=$(echo "$basename" | cut -d'.' -f4)
 
-    # Vérifier si le format est correct
+    # Verifier si le format est correct
     if [[ -z "$nom_part" || -z "$major_part" || -z "$minor_part" || -z "$statut_part" ]]; then
         echo -e "  ${RED}[ERREUR] Format invalide : ${basename}${NC}"
         echo -e "    Impossible de corriger automatiquement"
@@ -66,27 +66,27 @@ corriger_protocole() {
     # Construire le nouveau nom
     local nouveau_nom="${nom_part}.${major_part}.${minor_part}.${statut_part}.md"
 
-    # Vérifier si une correction est nécessaire
+    # Verifier si une correction est necessaire
     if [[ "$basename" == "$nouveau_nom" ]]; then
-        echo -e "  ${GREEN}[OK] Aucune correction nécessaire${NC}"
+        echo -e "  ${GREEN}[OK] Aucune correction necessaire${NC}"
         return 0
     fi
 
-    echo -e "  ${YELLOW}[ATTENTION]  Correction nécessaire :${NC}"
+    echo -e "  ${YELLOW}[ATTENTION]  Correction necessaire :${NC}"
     echo -e "    Actuel : ${basename}"
     echo -e "    Nouveau : ${nouveau_nom}"
 
     if [[ "$dry_run" == "true" ]]; then
-        echo -e "  ${YELLOW}Mode dry-run : aucun fichier modifié${NC}"
+        echo -e "  ${YELLOW}Mode dry-run : aucun fichier modifie${NC}"
     else
         local chemin_complet="${dossier}/${nouveau_nom}"
         if [[ -f "$chemin_complet" ]]; then
-            echo -e "  ${RED}[ERREUR] Le fichier destination existe déjà${NC}"
+            echo -e "  ${RED}[ERREUR] Le fichier destination existe deja${NC}"
             return 1
         fi
         
         mv "$fichier" "$chemin_complet"
-        echo -e "  ${GREEN}[OK] Fichier renommé${NC}"
+        echo -e "  ${GREEN}[OK] Fichier renomme${NC}"
     fi
 
     return 0
@@ -104,9 +104,9 @@ corriger_agent() {
     echo -e "${BLUE}[OUTIL] Correction du nommage : ${basename}${NC}"
     echo ""
 
-    # Vérifier le format : nom-agent.md
+    # Verifier le format : nom-agent.md
     if [[ "$basename" =~ ^[a-z]+\.md$ ]]; then
-        echo -e "  ${GREEN}[OK] Aucune correction nécessaire${NC}"
+        echo -e "  ${GREEN}[OK] Aucune correction necessaire${NC}"
         return 0
     fi
 
@@ -114,21 +114,21 @@ corriger_agent() {
     local nom=$(echo "$basename" | sed 's/\.md$//')
     local nouveau_nom="${nom}.md"
 
-    echo -e "  ${YELLOW}[ATTENTION]  Correction nécessaire :${NC}"
+    echo -e "  ${YELLOW}[ATTENTION]  Correction necessaire :${NC}"
     echo -e "    Actuel : ${basename}"
     echo -e "    Nouveau : ${nouveau_nom}"
 
     if [[ "$dry_run" == "true" ]]; then
-        echo -e "  ${YELLOW}Mode dry-run : aucun fichier modifié${NC}"
+        echo -e "  ${YELLOW}Mode dry-run : aucun fichier modifie${NC}"
     else
         local chemin_complet="${dossier}/${nouveau_nom}"
         if [[ -f "$chemin_complet" ]]; then
-            echo -e "  ${RED}[ERREUR] Le fichier destination existe déjà${NC}"
+            echo -e "  ${RED}[ERREUR] Le fichier destination existe deja${NC}"
             return 1
         fi
         
         mv "$fichier" "$chemin_complet"
-        echo -e "  ${GREEN}[OK] Fichier renommé${NC}"
+        echo -e "  ${GREEN}[OK] Fichier renomme${NC}"
     fi
 
     return 0
@@ -146,9 +146,9 @@ corriger_outil() {
     echo -e "${BLUE}[OUTIL] Correction du nommage : ${basename}${NC}"
     echo ""
 
-    # Vérifier le format : nom-outil.sh ou nom-outil.md
+    # Verifier le format : nom-outil.sh ou nom-outil.md
     if [[ "$basename" =~ ^[a-z-]+\.sh$ ]] || [[ "$basename" =~ ^[a-z-]+\.md$ ]]; then
-        echo -e "  ${GREEN}[OK] Aucune correction nécessaire${NC}"
+        echo -e "  ${GREEN}[OK] Aucune correction necessaire${NC}"
         return 0
     fi
 
@@ -157,21 +157,21 @@ corriger_outil() {
     local extension="${basename##*.}"
     local nouveau_nom="${nom}.${extension}"
 
-    echo -e "  ${YELLOW}[ATTENTION]  Correction nécessaire :${NC}"
+    echo -e "  ${YELLOW}[ATTENTION]  Correction necessaire :${NC}"
     echo -e "    Actuel : ${basename}"
     echo -e "    Nouveau : ${nouveau_nom}"
 
     if [[ "$dry_run" == "true" ]]; then
-        echo -e "  ${YELLOW}Mode dry-run : aucun fichier modifié${NC}"
+        echo -e "  ${YELLOW}Mode dry-run : aucun fichier modifie${NC}"
     else
         local chemin_complet="${dossier}/${nouveau_nom}"
         if [[ -f "$chemin_complet" ]]; then
-            echo -e "  ${RED}[ERREUR] Le fichier destination existe déjà${NC}"
+            echo -e "  ${RED}[ERREUR] Le fichier destination existe deja${NC}"
             return 1
         fi
         
         mv "$fichier" "$chemin_complet"
-        echo -e "  ${GREEN}[OK] Fichier renommé${NC}"
+        echo -e "  ${GREEN}[OK] Fichier renomme${NC}"
     fi
 
     return 0
@@ -189,9 +189,9 @@ corriger_convention() {
     echo -e "${BLUE}[OUTIL] Correction du nommage : ${basename}${NC}"
     echo ""
 
-    # Vérifier le format : convention-nom.md
+    # Verifier le format : convention-nom.md
     if [[ "$basename" =~ ^convention-[a-z-]+\.md$ ]]; then
-        echo -e "  ${GREEN}[OK] Aucune correction nécessaire${NC}"
+        echo -e "  ${GREEN}[OK] Aucune correction necessaire${NC}"
         return 0
     fi
 
@@ -199,27 +199,27 @@ corriger_convention() {
     local nom=$(echo "$basename" | sed 's/\.md$//' | sed 's/^convention-//')
     local nouveau_nom="convention-${nom}.md"
 
-    echo -e "  ${YELLOW}[ATTENTION]  Correction nécessaire :${NC}"
+    echo -e "  ${YELLOW}[ATTENTION]  Correction necessaire :${NC}"
     echo -e "    Actuel : ${basename}"
     echo -e "    Nouveau : ${nouveau_nom}"
 
     if [[ "$dry_run" == "true" ]]; then
-        echo -e "  ${YELLOW}Mode dry-run : aucun fichier modifié${NC}"
+        echo -e "  ${YELLOW}Mode dry-run : aucun fichier modifie${NC}"
     else
         local chemin_complet="${dossier}/${nouveau_nom}"
         if [[ -f "$chemin_complet" ]]; then
-            echo -e "  ${RED}[ERREUR] Le fichier destination existe déjà${NC}"
+            echo -e "  ${RED}[ERREUR] Le fichier destination existe deja${NC}"
             return 1
         fi
         
         mv "$fichier" "$chemin_complet"
-        echo -e "  ${GREEN}[OK] Fichier renommé${NC}"
+        echo -e "  ${GREEN}[OK] Fichier renomme${NC}"
     fi
 
     return 0
 }
 
-# Valeurs par défaut
+# Valeurs par defaut
 VERBOSE="false"
 DRY_RUN="false"
 TYPE=""
@@ -260,9 +260,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Vérification du fichier
+# Verification du fichier
 if [[ -z "$FICHIER" ]]; then
-    echo "Erreur: Aucun fichier spécifié"
+    echo "Erreur: Aucun fichier specifie"
     echo "Utilisez --aide pour l'aide"
     exit 1
 fi
@@ -272,14 +272,14 @@ if [[ ! -f "$FICHIER" ]]; then
     exit 1
 fi
 
-# Vérifier le type
+# Verifier le type
 if [[ -z "$TYPE" ]]; then
-    echo "Erreur: Type non spécifié"
-    echo "Utilisez --type pour spécifier le type"
+    echo "Erreur: Type non specifie"
+    echo "Utilisez --type pour specifier le type"
     exit 1
 fi
 
-# Exécution selon le type
+# Execution selon le type
 case $TYPE in
     protocole)
         corriger_protocole "$FICHIER" "$DRY_RUN" "$VERBOSE"

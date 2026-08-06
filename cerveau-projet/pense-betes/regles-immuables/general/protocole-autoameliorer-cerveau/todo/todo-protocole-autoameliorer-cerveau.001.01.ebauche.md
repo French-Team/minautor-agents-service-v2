@@ -1,4 +1,4 @@
-# Todo — Protocole Auto-Améliorer le Cerveau
+# Todo -- Protocole Auto-Ameliorer le Cerveau
 ---
 
 ## Statut
@@ -6,49 +6,49 @@
 | Champ | Valeur |
 |---|---|
 | **Statut** | en cours |
-| **Priorité** | haute |
-| **Créé** | 2026-08-04 |
-| **Dernière mise à jour** | 2026-08-04 |
+| **Priorite** | haute |
+| **Cree** | 2026-08-04 |
+| **Derniere mise a jour** | 2026-08-04 |
 
 ---
 
-## Tâches
+## Taches
 
-### Phase 1 — Initialisation
+### Phase 1 -- Initialisation
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
-| 1.1 | Créer le protocole | [X] terminé | haute |
-| 1.2 | Créer la spec | [X] terminé | haute |
-| 1.3 | Créer ce todo | [X] terminé | haute |
-| 1.4 | Mettre à jour les index | [ ] en attente | haute |
+| 1.1 | Creer le protocole | [X] termine | haute |
+| 1.2 | Creer la spec | [X] termine | haute |
+| 1.3 | Creer ce todo | [X] termine | haute |
+| 1.4 | Mettre a jour les index | [ ] en attente | haute |
 
-### Phase 2 — Intégration
+### Phase 2 -- Integration
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
-| 2.1 | Intégrer dans demarrer.md | [ ] en attente | haute |
-| 2.2 | Intégrer dans index-cerveau.md | [ ] en attente | haute |
+| 2.1 | Integrer dans demarrer.md | [ ] en attente | haute |
+| 2.2 | Integrer dans index-cerveau.md | [ ] en attente | haute |
 | 2.3 | Tester le protocole | [ ] en attente | moyenne |
 
-### Phase 3 — Maintien
+### Phase 3 -- Maintien
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
-| 3.1 | Appliquer le protocole régulièrement | [ ] en attente | continue |
-| 3.2 | Documenter les améliorations | [ ] en attente | continue |
+| 3.1 | Appliquer le protocole regulierement | [ ] en attente | continue |
+| 3.2 | Documenter les ameliorations | [ ] en attente | continue |
 | 3.3 | Valider par RVAV | [ ] en attente | continue |
 
 ---
 
-## Critères de validation
+## Criteres de validation
 
-- [ ] Le protocole est créé et documenté
-- [ ] La spec est créée et technique
-- [ ] Le todo est créé et complet
-- [ ] Les index sont mis à jour
-- [ ] Le protocole est intégré dans demarrer.md
-- [ ] Le protocole est testé avec succès
+- [ ] Le protocole est cree et documente
+- [ ] La spec est creee et technique
+- [ ] Le todo est cree et complet
+- [ ] Les index sont mis a jour
+- [ ] Le protocole est integre dans demarrer.md
+- [ ] Le protocole est teste avec succes
 
 ---
 
@@ -56,15 +56,15 @@
 
 ### Points d'attention
 
-- Ce protocole est **fondamental** pour la maintenabilité du cerveau
-- Il doit être appliqué **régulièrement**, pas seulement quand il y a un problème
-- Chaque amélioration doit être **documentée** et **validée par RVAV**
+- Ce protocole est **fondamental** pour la maintenabilite du cerveau
+- Il doit etre applique **regulierement**, pas seulement quand il y a un probleme
+- Chaque amelioration doit etre **documentee** et **validee par RVAV**
 
-### Dépendances
+### Dependances
 
-- `convention-autoamelioration.md` — principes fondamentaux
-- `index-cerveau.md` — état actuel du cerveau
-- `demarrer.md` — protocoles de démarrage
+- `convention-autoamelioration.md` -- principes fondamentaux
+- `index-cerveau.md` -- etat actuel du cerveau
+- `demarrer.md` -- protocoles de demarrage
 
 ---
 

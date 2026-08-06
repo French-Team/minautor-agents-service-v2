@@ -1,13 +1,13 @@
-# Protocole — Auto-Améliorer les Outils
+# Protocole -- Auto-Ameliorer les Outils
 ---
 
 ## Objectif
 
-Permettre aux outils de s'améliorer en continu, en les adaptant aux besoins des agents.
+Permettre aux outils de s'ameliorer en continu, en les adaptant aux besoins des agents.
 
 ---
 
-## Prérequis
+## Prerequis
 
 - Lister les outils disponibles
 - Identifier les besoins non couverts
@@ -15,59 +15,59 @@ Permettre aux outils de s'améliorer en continu, en les adaptant aux besoins des
 
 ---
 
-## Étapes
+## Etapes
 
-### Étape 1 — Diagnostiquer l'état des outils
+### Etape 1 -- Diagnostiquer l'etat des outils
 
 ```
 1. Lister tous les outils disponibles
 2. Pour chaque outil :
-   a. Vérifier s'il est à jour
-   b. Vérifier s'il est utilisé
-   c. Identifier les améliorations nécessaires
+   a. Verifier s'il est a jour
+   b. Verifier s'il est utilise
+   c. Identifier les ameliorations necessaires
 3. Identifier les outils manquants
 ```
 
-### Étape 2 — Améliorer les outils existants
+### Etape 2 -- Ameliorer les outils existants
 
 ```
 Pour chaque outil :
 1. Analyser les retours d'utilisation
-2. Identifier les améliorations possibles
-3. Appliquer les améliorations
-4. Mettre à jour la documentation
+2. Identifier les ameliorations possibles
+3. Appliquer les ameliorations
+4. Mettre a jour la documentation
 5. Valider par RVAV
 ```
 
-### Étape 3 — Créer de nouveaux outils
+### Etape 3 -- Creer de nouveaux outils
 
 ```
 Pour chaque besoin non couvert :
-1. Créer un pense-bête
-2. Créer une spec
-3. Créer un todo
-4. Développer l'outil
+1. Creer un pense-bete
+2. Creer une spec
+3. Creer un todo
+4. Developper l'outil
 5. Tester l'outil
 6. Documenter l'outil
-7. Intégrer l'outil
+7. Integrer l'outil
 ```
 
-### Étape 4 — Archiver les outils obsolètes
+### Etape 4 -- Archiver les outils obsoletes
 
 ```
-Pour chaque outil obsolète :
-1. Vérifier qu'il n'est plus utilisé
-2. Le déplacer dans un dossier d'archive
-3. Mettre à jour la documentation
+Pour chaque outil obsolete :
+1. Verifier qu'il n'est plus utilise
+2. Le deplacer dans un dossier d'archive
+3. Mettre a jour la documentation
 4. Signaler l'archivage
 ```
 
-### Étape 5 — Valider la cohérence
+### Etape 5 -- Valider la coherence
 
 ```
-1. Vérifier que tous les outils sont à jour
-2. Vérifier que la documentation est complète
-3. Vérifier que les outils sont cohérents
+1. Verifier que tous les outils sont a jour
+2. Verifier que la documentation est complete
+3. Verifier que les outils sont coherents
 4. Valider par RVAV
 ```
 
@@ -75,11 +75,11 @@ Pour chaque outil obsolète :
 
 ## RVAV
 
-Appliquer le cycle complet à chaque étape critique :
-- [rechercher] — vérifier les impacts
-- [vérifier] — confirmer la cohérence
-- [analyser] — valider les conséquences
-- [valider] — approuver l'amélioration
+Appliquer le cycle complet a chaque etape critique :
+- [rechercher] -- verifier les impacts
+- [verifier] -- confirmer la coherence
+- [analyser] -- valider les consequences
+- [valider] -- approuver l'amelioration
 
 ---
 

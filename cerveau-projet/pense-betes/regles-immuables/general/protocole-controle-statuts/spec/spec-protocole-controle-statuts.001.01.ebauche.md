@@ -1,82 +1,82 @@
-# Spécification — Protocole de Contrôle des Statuts
+# Specification -- Protocole de Controle des Statuts
 
 **Version** : 0.1.0
-**Statut** : Ébauche
-**Date création** : 2026-08-05
-**Agent** : Buffy (création)
+**Statut** : Ebauche
+**Date creation** : 2026-08-05
+**Agent** : Buffy (creation)
 
 ---
 
 ## Objectif
 
-Spécifier le protocole de contrôle des statuts pour Janus.
+Specifier le protocole de controle des statuts pour Janus.
 
 ---
 
 ## Besoins fonctionnels
 
-### Entrées
+### Entrees
 
-| Entrée | Type | Description |
+| Entree | Type | Description |
 |---|---|---|
-| `fichier` | string | Chemin du fichier à contrôler |
-| `action` | string | Type de contrôle (transition, audit, ponctuel) |
+| `fichier` | string | Chemin du fichier a controler |
+| `action` | string | Type de controle (transition, audit, ponctuel) |
 
 ### Sorties
 
 | Sortie | Type | Description |
 |---|---|---|
-| `decision` | string | Validé / Rejeté / Reporté |
-| `justification` | string | Raison de la décision |
-| `action` | string | Prochaine étape |
+| `decision` | string | Valide / Rejete / Reporte |
+| `justification` | string | Raison de la decision |
+| `action` | string | Prochaine etape |
 
 ---
 
 ## Besoins techniques
 
-### Vérifications
+### Verifications
 
 ```python
 def verifier_boucle_rvav(fichier):
-    # 1. Vérifier les références
-    # 2. Vérifier la checklist
-    # 3. Vérifier la cohérence
-    # 4. Retourner les résultats
+    # 1. Verifier les references
+    # 2. Verifier la checklist
+    # 3. Verifier la coherence
+    # 4. Retourner les resultats
     pass
 ```
 
-### Décision
+### Decision
 
 ```python
 def prendre_decision(resultats):
     if tout_correct(resultats):
-        return "validé"
+        return "valide"
     elif erreur_mineure(resultats):
-        return "rejeté"
+        return "rejete"
     elif erreur_majeure(resultats):
-        return "rejeté"
+        return "rejete"
     else:
-        return "reporté"
+        return "reporte"
 ```
 
 ---
 
-## Spécification des tests
+## Specification des tests
 
-### Test 1 : Validation réussie
+### Test 1 : Validation reussie
 
-**Entrée** : Fichier avec boucle RVAV complète
-**Résultat attendu** : Decision = "validé"
+**Entree** : Fichier avec boucle RVAV complete
+**Resultat attendu** : Decision = "valide"
 
 ### Test 2 : Rejet pour erreur
 
-**Entrée** : Fichier avec erreur détectée
-**Résultat attendu** : Decision = "rejeté"
+**Entree** : Fichier avec erreur detectee
+**Resultat attendu** : Decision = "rejete"
 
 ### Test 3 : Report pour information manquante
 
-**Entrée** : Fichier avec informations manquantes
-**Résultat attendu** : Decision = "reporté"
+**Entree** : Fichier avec informations manquantes
+**Resultat attendu** : Decision = "reporte"
 
 ---
 
@@ -86,30 +86,30 @@ def prendre_decision(resultats):
 protocole-controle-statuts/
 |-- protocole-controle-statuts.md      # Le protocole
 |-- spec/
-|   ``-- spec-protocole-controle-statuts.md  # Cette spécification
+|   ``-- spec-protocole-controle-statuts.md  # Cette specification
 ``-- todo/
-    ``-- todo-protocole-controle-statuts.md   # Tâches
+    ``-- todo-protocole-controle-statuts.md   # Taches
 ```
 
 ---
 
 ## Contraintes
 
-- Janus doit être indépendant de Buffy
-- Le contrôle doit être documenté
-- Le cycle Cerberus -> Janus -> Cerberus doit être respecté
-- Les outils de validation doivent être utilisés
+- Janus doit etre independant de Buffy
+- Le controle doit etre documente
+- Le cycle Cerberus -> Janus -> Cerberus doit etre respecte
+- Les outils de validation doivent etre utilises
 
 ---
 
-## Critères de succès
+## Criteres de succes
 
-| Critère | Mesure |
+| Critere | Mesure |
 |---|---|
-| **Indépendance** | Janus ne dépend pas de Buffy |
-| **Complétude** | Toutes les vérifications sont faites |
-| **Documentation** | Chaque décision est justifiée |
-| **Intégration** | Le cycle est respecté |
+| **Independance** | Janus ne depend pas de Buffy |
+| **Completude** | Toutes les verifications sont faites |
+| **Documentation** | Chaque decision est justifiee |
+| **Integration** | Le cycle est respecte |
 
 ---
 

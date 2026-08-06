@@ -1,12 +1,12 @@
 #!/bin/bash
 # valider-conventions.sh
-# Vérifier que les conventions sont respectées dans un fichier
+# Verifier que les conventions sont respectees dans un fichier
 # Version: 0.1.0
 # Date: 2026-08-05
 # Auteur: Vulcain
 
 # Configuration
-VERSION="0.1.0"
+VERSION="0.2.0"
 DATE="2026-08-05"
 
 # Couleurs pour la sortie
@@ -20,19 +20,19 @@ NC='\033[0m' # No Color
 aide() {
     echo "=========================================="
     echo "  valider-conventions v${VERSION}"
-    echo "  Vérifier les conventions dans un fichier"
+    echo "  Verifier les conventions dans un fichier"
     echo "=========================================="
     echo ""
     echo "Usage: valider-conventions [OPTIONS] FICHIER"
     echo ""
     echo "Options:"
     echo "  --aide, -h          Afficher cette aide"
-    echo "  --verbose, -v       Afficher les détails"
+    echo "  --verbose, -v       Afficher les details"
     echo "  --version           Afficher la version"
     echo ""
-    echo "Conventions vérifiées:"
-    echo "  - Frontmatter YAML présent"
-    echo "  - Titre principal présent"
+    echo "Conventions verifiees:"
+    echo "  - Frontmatter YAML present"
+    echo "  - Titre principal present"
     echo "  - Sections avec ##"
     echo "  - Pas d'espaces en fin de ligne"
     echo "  - Fichier non vide"
@@ -53,41 +53,41 @@ valider_conventions() {
     echo -e "${BLUE}[CHECKLIST] Validation des conventions : $(basename "$fichier")${NC}"
     echo ""
 
-    # Vérifier que le fichier n'est pas vide
+    # Verifier que le fichier n'est pas vide
     if [[ ! -s "$fichier" ]]; then
         echo -e "  ${RED}[ERREUR] Fichier vide${NC}"
         return 1
     fi
 
-    # 1. Vérifier le frontmatter YAML
+    # 1. Verifier le frontmatter YAML
     echo -e "${BLUE}1. Frontmatter YAML${NC}"
     if head -1 "$fichier" | grep -q "^---"; then
-        echo -e "  ${GREEN}[OK] Frontmatter présent${NC}"
+        echo -e "  ${GREEN}[OK] Frontmatter present${NC}"
     else
         echo -e "  ${YELLOW}[ATTENTION]  Frontmatter absent${NC}"
         warnings=$((warnings + 1))
     fi
 
-    # 2. Vérifier le titre principal
+    # 2. Verifier le titre principal
     echo -e "${BLUE}2. Titre principal${NC}"
     if grep -q "^# " "$fichier"; then
-        echo -e "  ${GREEN}[OK] Titre principal présent${NC}"
+        echo -e "  ${GREEN}[OK] Titre principal present${NC}"
     else
         echo -e "  ${YELLOW}[ATTENTION]  Titre principal absent${NC}"
         warnings=$((warnings + 1))
     fi
 
-    # 3. Vérifier les sections avec ##
+    # 3. Verifier les sections avec ##
     echo -e "${BLUE}3. Sections${NC}"
     local nb_sections=$(grep -c "^## " "$fichier" 2>/dev/null || echo "0")
     if [[ $nb_sections -gt 0 ]]; then
-        echo -e "  ${GREEN}[OK] ${nb_sections} section(s) trouvée(s)${NC}"
+        echo -e "  ${GREEN}[OK] ${nb_sections} section(s) trouvee(s)${NC}"
     else
-        echo -e "  ${YELLOW}[ATTENTION]  Aucune section ## trouvée${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  Aucune section ## trouvee${NC}"
         warnings=$((warnings + 1))
     fi
 
-    # 4. Vérifier les espaces en fin de ligne
+    # 4. Verifier les espaces en fin de ligne
     echo -e "${BLUE}4. Espaces en fin de ligne${NC}"
     local nb_espaces=$(grep -c " $" "$fichier" 2>/dev/null || echo "0")
     if [[ $nb_espaces -gt 0 ]]; then
@@ -97,29 +97,29 @@ valider_conventions() {
         echo -e "  ${GREEN}[OK] Pas d'espaces en fin de ligne${NC}"
     fi
 
-    # 5. Vérifier la longueur des lignes
+    # 5. Verifier la longueur des lignes
     echo -e "${BLUE}5. Longueur des lignes${NC}"
     local nb_longues=$(awk 'length > 120' "$fichier" | wc -l)
     if [[ $nb_longues -gt 0 ]]; then
-        echo -e "  ${YELLOW}[ATTENTION]  ${nb_longues} ligne(s) > 120 caractères${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  ${nb_longues} ligne(s) > 120 caracteres${NC}"
         warnings=$((warnings + 1))
     else
-        echo -e "  ${GREEN}[OK] Toutes les lignes < 120 caractères${NC}"
+        echo -e "  ${GREEN}[OK] Toutes les lignes < 120 caracteres${NC}"
     fi
 
-    # 6. Vérifier les liens cassés (basique)
+    # 6. Verifier les liens casses (basique)
     echo -e "${BLUE}6. Liens Markdown${NC}"
-    local nb_liens=$(grep -oP '\[([^\]]*)\]\(([^)]+)\)' "$fichier" | wc -l)
+    local nb_liens=$(sed -n 's/.*\[\([^]]*\)\](\([^)]*\)).*/\1|\2/p' "$fichier" 2>/dev/null | wc -l)
     if [[ $nb_liens -gt 0 ]]; then
-        echo -e "  ${GREEN}[OK] ${nb_liens} lien(s) Markdown trouvé(s)${NC}"
+        echo -e "  ${GREEN}[OK] ${nb_liens} lien(s) Markdown trouve(s)${NC}"
     else
-        echo -e "  ${YELLOW}[ATTENTION]  Aucun lien Markdown trouvé${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  Aucun lien Markdown trouve${NC}"
     fi
 
-    # Résumé
+    # Resume
     echo ""
-    echo -e "${BLUE}Résumé :${NC}"
-    echo -e "  ${GREEN}[OK] Conventions respectées : Oui${NC}"
+    echo -e "${BLUE}Resume :${NC}"
+    echo -e "  ${GREEN}[OK] Conventions respectees : Oui${NC}"
     if [[ $warnings -gt 0 ]]; then
         echo -e "  ${YELLOW}[ATTENTION]  Avertissements : ${warnings}${NC}"
     fi
@@ -130,7 +130,7 @@ valider_conventions() {
     return $erreurs
 }
 
-# Valeurs par défaut
+# Valeurs par defaut
 VERBOSE="false"
 
 # Parsing des arguments
@@ -160,9 +160,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Vérification du fichier
+# Verification du fichier
 if [[ -z "$FICHIER" ]]; then
-    echo "Erreur: Aucun fichier spécifié"
+    echo "Erreur: Aucun fichier specifie"
     echo "Utilisez --aide pour l'aide"
     exit 1
 fi
@@ -172,7 +172,7 @@ if [[ ! -f "$FICHIER" ]]; then
     exit 1
 fi
 
-# Exécution
+# Execution
 valider_conventions "$FICHIER" "$VERBOSE"
 
 exit $?

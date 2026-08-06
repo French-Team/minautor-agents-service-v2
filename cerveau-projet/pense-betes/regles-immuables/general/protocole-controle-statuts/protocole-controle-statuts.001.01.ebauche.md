@@ -1,158 +1,163 @@
-# Protocole — Contrôle des Statuts
+# Protocole -- Controle des Statuts
 
 **Version** : 0.1.0
-**Statut** : Ébauche
-**Date création** : 2026-08-05
-**Agent** : Janus (contrôleur)
+**Statut** : Ebauche
+**Date creation** : 2026-08-05
+**Agent** : Janus (controleur)
 
 ---
 
 ## Objectif
 
-Définir comment Janus contrôle les transitions de statut des fichiers du cerveau-projet.
+Definir comment Janus controle les transitions de statut des fichiers du cerveau-projet.
 
 **Pourquoi ce protocole ?**
-- Le workflow RVAV existe mais personne ne le vérifie
+- Le workflow RVAV existe mais personne ne le verifie
 - Les agents peuvent tricher ou oublier les boucles RVAV
-- La qualité exige un contrôle indépendant
-- Janus est l'agent spécialisé dans le second contrôle
+- La qualite exige un controle independant
+- Janus est l'agent specialise dans le second controle
 
 ---
 
-## Le rôle de Janus
+## Le role de Janus
 
-### Responsabilités
+### Responsabilites
 
-| Responsabilité | Description |
+| Responsabilite | Description |
 |---|---|
-| **Contrôler les transitions** | Vérifier que les changements de statut sont légitimes |
-| **Valider les boucles RVAV** | S'assurer que chaque boucle est complète |
-| **Détecter les erreurs** | Identifier les fichiers qui ne respectent pas le workflow |
-| **Documenter les décisions** | Justifier chaque validation ou rejet |
+| **Controler les transitions** | Verifier que les changements de statut sont legitimes |
+| **Valider les boucles RVAV** | S'assurer que chaque boucle est complete |
+| **Detecter les erreurs** | Identifier les fichiers qui ne respectent pas le workflow |
+| **Documenter les decisions** | Justifier chaque validation ou rejet |
 
 ### Limites
 
 | Limite | Raison |
 |---|---|
-| **Ne crée pas de fichiers** | Janus ne crée que du contrôle |
+| **Ne cree pas de fichiers** | Janus ne cree que du controle |
 | **Ne modifie pas le contenu** | Il valide, pas il ne corrige |
 | **Ne saute pas Cerberus** | Toujours revenir au coordinateur |
 
 ---
 
-## Le processus de contrôle
+## Le processus de controle
 
 ```
-FICHIER -> VÉRIFICATION -> ANALYSE -> DÉCISION -> DOCUMENTATION
+FICHIER -> VERIFICATION -> ANALYSE -> DECISION -> DOCUMENTATION
     1          2            3          4           5
 ```
 
-| Étape | Action | Responsable |
+| Etape | Action | Responsable |
 |---|---|---|
 | 1 | Lire le fichier et son statut | Janus |
-| 2 | Vérifier la boucle RVAV | Janus |
-| 3 | Analyser la cohérence | Janus |
-| 4 | Décider : valider ou rejeter | Janus |
-| 5 | Documenter la décision | Janus |
+| 2 | Verifier la boucle RVAV | Janus |
+| 3 | Analyser la coherence | Janus |
+| 4 | Decider : valider ou rejeter | Janus |
+| 5 | Documenter la decision | Janus |
 
 ---
 
-## Étape 2 : Vérification de la boucle RVAV
+## Etape 2 : Verification de la boucle RVAV
 
 ### Checklist RVAV
 
-| Point | Vérification | Priorité |
+| Point | Verification | Priorite |
 |---|---|---|
-| **[Rechercher]** | Les références sont-elles rassemblées ? | Haute |
-| **[Vérifier]** | La checklist est-elle complète ? | Haute |
+| **[Rechercher]** | Les references sont-elles rassemblees ? | Haute |
+| **[Verifier]** | La checklist est-elle complete ? | Haute |
 | **[Analyser]** | La relecture est-elle faite ? | Haute |
-| **[Valider]** | La décision est-elle documentée ? | Haute |
+| **[Valider]** | La decision est-elle documentee ? | Haute |
 
-### Preuves à exiger
+### Preuves a exiger
 
-| Preuve | Comment la vérifier |
+| Preuve | Comment la verifier |
 |---|---|
-| **Références** | Lister les liens et dépendances |
-| **Checklist** | Vérifier chaque point coché |
+| **References** | Lister les liens et dependances |
+| **Checklist** | Verifier chaque point coche |
 | **Relecture** | Lire le contenu complet |
-| **Décision** | Justification écrite |
+| **Regle de relecture des agents** | `valider-relecture` -- chaque agent porte la regle dans sa fiche et ses corrections |
+| **Decision** | Justification ecrite |
 
 ---
 
-## Étape 3 : Analyse de cohérence
+## Etape 3 : Analyse de coherence
 
 ### Exigences par statut
 
+Les statuts reels du projet sont : `ebauche`, `prepare`, `stable`.
+
 | Statut | Exigences minimales |
 |---|---|
-| **ebauche** | Structure minimale, idée brute |
-| **préparé** | Structure complète, toutes les sections |
-| **dev** | Contenu développé, sections écrites |
-| **test** | RVAV effectué, liens vérifiés |
-| **valide** | Approuvé, référence fiable |
+| **ebauche** | Structure minimale, idee brute (premier statut) |
+| **prepare** | Structure complete, toutes les sections remplies |
+| **stable** | Approuve, reference fiable (exceptions : les dictionnaires fonctionnels) |
 
 ---
 
-## Étape 4 : Décision
+## Etape 4 : Decision
 
-### Options de décision
+### Options de decision
 
-| Décision | Condition | Action |
+| Decision | Condition | Action |
 |---|---|---|
 | **Valider** | Tout est correct | Statut +1, class +1 |
-| **Rejeter** | Erreur détectée | Boucle de rétroaction |
-| **Reporter** | Informations manquantes | Demander compléments |
+| **Rejeter** | Erreur detectee | Boucle de retroaction |
+| **Reporter** | Informations manquantes | Demander complements |
 
-### Matrice de décision
+### Matrice de decision
 
 ```
 Si tout est correct -> Valider
 Si erreur mineure -> Rejeter (correction rapide)
-Si erreur majeure -> Rejeter (boucle complète)
+Si erreur majeure -> Rejeter (boucle complete)
 Si informe manquante -> Reporter
 ```
 
 ---
 
-## Étape 5 : Documentation
+## Etape 5 : Documentation
 
 ### Format de documentation
 
 ```markdown
-## Contrôle — [nom-fichier]
+## Controle -- [nom-fichier]
 
 **Date** : [date]
 **Agent** : Janus
 **Fichier** : [chemin]
 
-### Vérifications effectuées
+### Verifications effectuees
 
 | Point | Statut | Notes |
 |---|---|---|
-| [Rechercher] | [OK]/[ERREUR] | [détails] |
-| [Vérifier] | [OK]/[ERREUR] | [détails] |
-| [Analyser] | [OK]/[ERREUR] | [détails] |
-| [Valider] | [OK]/[ERREUR] | [détails] |
+| [Rechercher] | [OK]/[ERREUR] | [details] |
+| [Verifier] | [OK]/[ERREUR] | [details] |
+| [Analyser] | [OK]/[ERREUR] | [details] |
+| [Valider] | [OK]/[ERREUR] | [details] |
 
-### Décision
+### Decision
 
-**Verdict** : [Validé / Rejeté / Reporté]
+**Verdict** : [Valide / Rejete / Reporte]
 **Raison** : [justification]
-**Action** : [prochaine étape]
+**Action** : [prochaine etape]
 ```
 
 ---
 
-## Outils de contrôle
+## Outils de controle
 
 ### Outils essentiels
 
-| Outil | Usage | Étape RVAV |
+| Outil | Usage | Etape RVAV |
 |---|---|---|
 | `lister-statuts` | Lister les fichiers par statut | [Rechercher] |
-| `valider-nommage` | Vérifier la conformité du nommage | [Vérifier] |
-| `valider-liens` | Vérifier que les liens sont valides | [Vérifier] |
-| `verifier-role-fichier` | Vérifier qu'un fichier est utilisé pour sa fonction | [Vérifier] |
+| `lister-prepares` | Lister les fichiers 'prepare' et verifier leurs specs | [Rechercher] |
+| `detecter-erreur-statut` | Detecter les fichiers dont le statut ne correspond pas au contenu | [Verifier] |
+| `valider-nommage` | Verifier la conformite du nommage | [Verifier] |
+| `valider-liens` | Verifier que les liens sont valides | [Verifier] |
+| `valider-relecture` | **SYSTEMATIQUE** : verifier que chaque fiche agent + corrections contient la regle de relecture | [Verifier] |
+| `verifier-role-fichier` | Verifier qu'un fichier est utilise pour sa fonction | [Verifier] |
+| `changer-statut` | Changer le statut d'un fichier en le renommant | [Valider] |
 
 ### Utilisation de lister-statuts
 
@@ -169,46 +174,48 @@ lister-statuts.sh --verbose cerveau-projet/
 
 ### Quand utiliser ces outils
 
-| Situation | Outil à utiliser |
+| Situation | Outil a utiliser |
 |---|---|
-| **Début de contrôle** | `lister-statuts` pour voir l'état des fichiers |
-| **Vérification du nom** | `valider-nommage` pour chaque fichier |
-| **Vérification des liens** | `valider-liens` pour chaque fichier |
-| **Vérification du rôle** | `verifier-role-fichier` pour chaque fichier |
+| **Debut de controle** | `lister-statuts` pour voir l'etat des fichiers |
+| **Verification du nom** | `valider-nommage` pour chaque fichier |
+| **Verification des liens** | `valider-liens` pour chaque fichier |
+| **Verification de la regle de relecture** | `valider-relecture` pour TOUS les agents (obligatoire a chaque controle) |
+| **Verification du role** | `verifier-role-fichier` pour chaque fichier |
 
 ---
 
-## Intégration avec le cycle
+## Integration avec le cycle
 
 ### Dans le cycle Cerberus -> Agent -> Cerberus
 
 ```
-1. Buffy crée un fichier (ebauche)
+1. Buffy cree un fichier (ebauche)
 2. Buffy fait la boucle RVAV
-3. Buffy réactive Cerberus
-4. Cerberus active Janus pour contrôle
-5. Janus vérifie et décide
-6. Janus réactive Cerberus
-7. Cerberus informe Buffy du résultat
+3. Buffy reactive Cerberus
+4. Cerberus active Janus pour controle
+5. Janus verifie et decide
+6. Janus reactive Cerberus
+7. Cerberus informe Buffy du resultat
 ```
 
 ### Activation de Janus
 
 | Contexte | Raison |
 |---|---|
-| **Après une boucle RVAV** | Valider la transition |
-| **À la demande de Buffy** | Contrôle ponctuel |
-| **Régulièrement** | Audit de qualité |
+| **Apres une boucle RVAV** | Valider la transition |
+| **A la demande de Buffy** | Controle ponctuel |
+| **Regulierement** | Audit de qualite |
 
 ---
 
 ## Notes importantes
 
-- **Janus est indépendant** — il ne dépend pas de Buffy
-- **Le contrôle est obligatoire** — pas de passage de statut sans contrôle
-- **La documentation est essentielle** — chaque décision doit être justifiée
-- **Le cycle est sacré** — toujours revenir à Cerberus
-- **Les outils sont obligatoires** — utiliser les outils pour chaque vérification
+- **Janus est independant** -- il ne depend pas de Buffy
+- **Le controle est obligatoire** -- pas de passage de statut sans controle
+- **La documentation est essentielle** -- chaque decision doit etre justifiee
+- **Le cycle est sacre** -- toujours revenir a Cerberus
+- **Les outils sont obligatoires** -- utiliser les outils pour chaque verification
+- **`valider-relecture` est SYSTEMATIQUE** -- a chaque controle, verifier que tous les agents portent la regle de relecture (garde-fou du cycle d'activation)
 
 ---
 

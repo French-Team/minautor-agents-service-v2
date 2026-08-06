@@ -1,15 +1,15 @@
-# Workflow RVAVP — Rechercher -> Vérifier -> Analyser -> Valider -> Purifier
+# Workflow RVAVP -- Rechercher -> Verifier -> Analyser -> Valider -> Purifier
 
 ## Principe fondamental
 
-Chaque fichier de contenu (`[type]-[thème].[id].[class].[statut].md`) passe par
-5 statuts. Le passage du statut N au statut N+1 **exige une boucle RVAVP complète**
-sur le travail effectué dans le statut N.
+Chaque fichier de contenu (`[type]-[theme].[id].[class].[statut].md`) passe par
+5 statuts. Le passage du statut N au statut N+1 **exige une boucle RVAVP complete**
+sur le travail effectue dans le statut N.
 
-**On ne peut jamais passer au statut supérieur sans avoir passé la boucle de
-contrôle du statut courant.** Une erreur déclenche une régression + incrément du `class`.
+**On ne peut jamais passer au statut superieur sans avoir passe la boucle de
+controle du statut courant.** Une erreur declenche une regression + increment du `class`.
 
-**Nouveau** : La purification est la dernière étape avant de considérer un fichier comme validé.
+**Nouveau** : La purification est la derniere etape avant de considerer un fichier comme valide.
 
 ---
 
@@ -17,57 +17,57 @@ contrôle du statut courant.** Une erreur déclenche une régression + incrémen
 
 | Statut | Ordre | Travail attendu |
 |---|---|---|
-| `ebauche` | 1 | Idée brute, structure minimale, rien de validé |
-| `préparé` | 2 | Structure complète, ready pour le développement |
-| `dev` | 3 | Contenu développé (toutes les sections écrites) |
-| `test` | 4 | RVAV effectué, liens vérifiés, cohérence validée |
-| `valide` | 5 | Approuvé, référence fiable pour le projet |
+| `ebauche` | 1 | Idee brute, structure minimale, rien de valide |
+| `prepare` | 2 | Structure complete, ready pour le developpement |
+| `dev` | 3 | Contenu developpe (toutes les sections ecrites) |
+| `test` | 4 | RVAV effectue, liens verifies, coherence validee |
+| `valide` | 5 | Approuve, reference fiable pour le projet |
 
 ---
 
-## Boucle RVAVP (à chaque transition)
+## Boucle RVAVP (a chaque transition)
 
 ### 1. [rechercher]
-- Rassembler toutes les références externes liées au travail du statut courant
-- Identifier les dépendances (liens vers d'autres pense-betes, specs, conventions)
-- Noter les exigences non couvertes par le travail effectué
+- Rassembler toutes les references externes liees au travail du statut courant
+- Identifier les dependances (liens vers d'autres pense-betes, specs, conventions)
+- Noter les exigences non couvertes par le travail effectue
 
-### 2. [vérifier]
-Checklist stricte — **aucun point ne peut rester ouvert** :
+### 2. [verifier]
+Checklist stricte -- **aucun point ne peut rester ouvert** :
 - [ ] Structure du nom respecte `convention-renommage.md` (id.class.statut)
 - [ ] Tous les sous-fichiers attendus existent (spec, todo, liens si applicable)
 - [ ] Tous les liens internes pointent vers des fichiers existants
-- [ ] Le contenu du statut courant est complet (rien d'à moitié-écrit)
+- [ ] Le contenu du statut courant est complet (rien d'a moitie-ecrit)
 
 ### 3. [analyser]
-- Relecture approfondie du travail effectué dans le statut courant
-- Vérifier la cohérence interne (logique, terminologie, références croisées)
-- Identifier les incohérences, manques ou erreurs
+- Relecture approfondie du travail effectue dans le statut courant
+- Verifier la coherence interne (logique, terminologie, references croisees)
+- Identifier les incoherences, manques ou erreurs
 
 ### 4. [valider]
-Décision finale après RVAV :
+Decision finale apres RVAV :
 - **Avancer** -> statut += 1, class += 1, renommage du fichier
 - **Rester** -> class += 1, statut identique, travail de correction
-- **Reculer** -> statut -= 1, class += 1, retour au travail précédent
+- **Reculer** -> statut -= 1, class += 1, retour au travail precedent
 
 ### 5. [purifier]
-Nettoyer le fichier après validation :
+Nettoyer le fichier apres validation :
 - [ ] Supprimer les blockquotes explicatifs inutiles
-- [ ] Réduire les exemples au minimum
+- [ ] Reduire les exemples au minimum
 - [ ] Supprimer les notes historiques
 - [ ] Simplifier les justifications
-- [ ] Vérifier que le fichier reste compréhensible
+- [ ] Verifier que le fichier reste comprehensible
 ---
 
-## Boucle de rétroaction (erreur)
+## Boucle de retroaction (erreur)
 
-Si une erreur est détectée à l'étape 3 [analyser] ou 4 [valider] :
+Si une erreur est detectee a l'etape 3 [analyser] ou 4 [valider] :
 
-1. Le fichier **garde** son `id` (jamais modifié)
-2. Le `class` est **incrémenté** (+1)
-3. Le fichier est **renommé** avec le nouveau class + le statut ajusté
+1. Le fichier **garde** son `id` (jamais modifie)
+2. Le `class` est **incremente** (+1)
+3. Le fichier est **renomme** avec le nouveau class + le statut ajuste
 4. Le travail de **correction** commence -> nouveau cycle RVAV depuis [rechercher]
-5. Aucune avancée de statut n'est possible tant que RVAV ne valide pas
+5. Aucune avancee de statut n'est possible tant que RVAV ne valide pas
 
 ---
 
@@ -75,25 +75,25 @@ Si une erreur est détectée à l'étape 3 [analyser] ou 4 [valider] :
 
 ```
 protocole-composition.001.01.ebauche.md
-  -> RVAV : recherche de liens, checklist, analyse de cohérence -> ÉCHEC (manque contenu spec)
+  -> RVAV : recherche de liens, checklist, analyse de coherence -> ECHEC (manque contenu spec)
   -> class +1, reste en ebauche
 protocole-composition.001.02.ebauche.md
-  -> RVAV : recherche, vérification, analyse -> SUCCÈS
+  -> RVAV : recherche, verification, analyse -> SUCCES
   -> class +1, statut +1
 protocole-composition.001.03.prepare.md
-  -> RVAV -> ÉCHEC (liens cassés)
+  -> RVAV -> ECHEC (liens casses)
 protocole-composition.001.04.prepare.md
-  -> RVAV -> SUCCÈS
+  -> RVAV -> SUCCES
   -> statut +1
 protocole-composition.001.05.dev.md
-  -> ... et ainsi de suite jusqu'à valide
+  -> ... et ainsi de suite jusqu'a valide
 ```
 
 ---
 
-## Exigibilité
+## Exigibilite
 
-Ce workflow est **contraignant par défaut**. Toute personne travaillant sur le cerveau
+Ce workflow est **contraignant par defaut**. Toute personne travaillant sur le cerveau
 doit passer chaque fichier par ce cycle RVAVP entre chaque statut.
 
-**Note** : La purification est obligatoire avant de considérer un fichier comme `valide`.
+**Note** : La purification est obligatoire avant de considerer un fichier comme `valide`.

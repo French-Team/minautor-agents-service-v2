@@ -11,6 +11,7 @@
 # ============================================================
 # Dictionnaire Emoji -> ASCII
 # Format: EMOJI|REMPLACEMENT
+⏳|[attente]
 # Ce fichier est utilise par corriger-emojis.sh
 
 # Emojis de verification

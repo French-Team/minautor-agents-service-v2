@@ -42,9 +42,9 @@ echo ""
 # 1. Nommage des fichiers de contenu (statuts)
 echo "## Nommage des statuts"
 total=$((total + 1))
-nb_bad=$(find "$dossier/cerveau-projet" -name "*.md" -type f 2>/dev/null | grep -cE '\.(preparé|préparé)\.' || true)
+nb_bad=$(find "$dossier/cerveau-projet" -name "*.md" -type f 2>/dev/null | grep -cE '\.(prepare|prepare)\.' || true)
 if [ "$nb_bad" -gt 0 ]; then
-    echo "| ERREUR | Fichiers avec accents dans les statuts | $nb_bad fichier(s) avec 'preparé' au lieu de 'prepare' |"
+    echo "| ERREUR | Fichiers avec accents dans les statuts | $nb_bad fichier(s) avec 'prepare' au lieu de 'prepare' |"
     erreurs=$((erreurs + 1))
 else
     echo "| OK | Fichiers avec accents dans les statuts | Aucun accent dans les statuts |"
@@ -102,7 +102,7 @@ echo ""
 echo "## Exclusion du dossier exemples"
 total=$((total + 1))
 exclu_valider=$(grep -c "exemples" "$dossier/cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.sh" 2>/dev/null || true)
-exclu_rechercher=$(grep -c "exemples" "$dossier/cerveau-projet/agents/tools/explorer/rechercher-accents-sensibles/rechercher-accents-sensibles.sh" 2>/dev/null || true)
+exclu_rechercher=$(grep -c "exemples" "$dossier/cerveau-projet/agents/tools/rechercher/rechercher-accents-sensibles/rechercher-accents-sensibles.sh" 2>/dev/null || true)
 exclu_corriger=$(grep -c "exemples" "$dossier/cerveau-projet/agents/tools/corriger/corriger-emojis/corriger-emojis.sh" 2>/dev/null || true)
 if [ "$exclu_valider" -gt 0 ] && [ "$exclu_rechercher" -gt 0 ] && [ "$exclu_corriger" -gt 0 ]; then
     echo "| OK | Exclusion exemples | 3 outils sur 3 excluent le dossier |"

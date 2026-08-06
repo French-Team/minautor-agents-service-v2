@@ -1,21 +1,21 @@
-# Outil — Valider un Fichier Ebauche
+# Outil -- Valider un Fichier Ebauche
 
-**Catégorie** : Valider
+**Categorie** : Valider
 **Version** : 0.2.0
 **Statut** : beta
-**Date création** : 2026-08-05
-**Propriétaire** : Vulcain (outil partagé)
+**Date creation** : 2026-08-05
+**Proprietaire** : Vulcain (outil partage)
 
 ---
 
 ## Objectif
 
-Vérifier si un fichier ebauche respecte les **exigences minimales** d'un ebauche.
+Verifier si un fichier ebauche respecte les **exigences minimales** d'un ebauche.
 
 **Pourquoi cet outil ?**
-- Un ebauche est une idée brute, pas un document structuré
-- Cet outil vérifie que le fichier est bien un ebauche (et pas un préparé déguisé)
-- Il aide à maintenir la cohérence des statuts
+- Un ebauche est une idee brute, pas un document structure
+- Cet outil verifie que le fichier est bien un ebauche (et pas un prepare deguise)
+- Il aide a maintenir la coherence des statuts
 
 ---
 
@@ -29,64 +29,64 @@ Vérifier si un fichier ebauche respecte les **exigences minimales** d'un ebauch
 
 | Option | Description |
 |---|---|
-| `--verbose` | Afficher les détails |
+| `--verbose` | Afficher les details |
 | `--aide` | Afficher l'aide |
 
 ---
 
-## Ce que vérifie l'outil
+## Ce que verifie l'outil
 
 ### Exigences minimales (obligatoires)
 
-| Vérification | Critère |
+| Verification | Critere |
 |---|---|
 | **Statut** | Le fichier est bien un ebauche |
-| **Titre** | Présence d'un titre principal (h1) |
+| **Titre** | Presence d'un titre principal (h1) |
 | **Contenu** | Au moins 5 lignes |
 
-### Vérifications de cohérence (avertissements)
+### Verifications de coherence (avertissements)
 
-| Vérification | Critère |
+| Verification | Critere |
 |---|---|
 | **Nommage** | Le nom respecte la convention |
 | **Frontmatter** | Pas de frontmatter (inutile pour un ebauche) |
-| **Tableaux** | Pas de tableaux (peut-être trop structuré) |
-| **Sections** | Pas plus de 3 sections (peut-être trop structuré) |
+| **Tableaux** | Pas de tableaux (peut-etre trop structure) |
+| **Sections** | Pas plus de 3 sections (peut-etre trop structure) |
 
 ---
 
-## Résultat
+## Resultat
 
-### Exemple de sortie (succès)
+### Exemple de sortie (succes)
 
 ```
 === Validation du fichier ebauche ===
 Fichier : protocole-xxx.001.01.ebauche.md
 
---- Vérification du nommage ---
---- Vérification de la structure minimale ---
---- Vérification du contenu minimal ---
---- Vérification : pas trop complet pour un ebauche ---
+--- Verification du nommage ---
+--- Verification de la structure minimale ---
+--- Verification du contenu minimal ---
+--- Verification : pas trop complet pour un ebauche ---
 
-=== Résumé ===
+=== Resume ===
 Erreurs : 0
 Avertissements : 1
 
 [OK] Le fichier ebauche respecte les exigences minimales
-[ATTENTION]  Cependant, il semble trop structuré pour un ebauche
-    Considérez passer au statut 'préparé'
+[ATTENTION]  Cependant, il semble trop structure pour un ebauche
+    Considerez passer au statut 'prepare'
 ```
 
-### Exemple de sortie (échec)
+### Exemple de sortie (echec)
 
 ```
 === Validation du fichier ebauche ===
 Fichier : protocole-xxx.001.01.ebauche.md
 
---- Vérification de la structure minimale ---
+--- Verification de la structure minimale ---
 [ERREUR] Pas de titre principal (h1)
 
-=== Résumé ===
+=== Resume ===
 Erreurs : 1
 Avertissements : 0
 
@@ -97,10 +97,10 @@ Avertissements : 0
 
 ## Logique de l'outil
 
-| Statut | Ce que l'outil vérifie |
+| Statut | Ce que l'outil verifie |
 |---|---|
 | **ebauche** | Le fichier respecte les exigences **minimales** d'un ebauche |
-| **ebauche** | Le fichier **n'est PAS encore** un préparé (sinon -> avertissement) |
+| **ebauche** | Le fichier **n'est PAS encore** un prepare (sinon -> avertissement) |
 
 ---
 
@@ -108,14 +108,14 @@ Avertissements : 0
 
 | Outil | Usage |
 |---|---|
-| `valider-ebauche` | Vérifier les exigences minimales d'un ebauche |
-| `detecter-erreur-statut` | Détecter les fichiers dont le statut ne correspond pas au contenu |
-| `valider-nommage` | Vérifier la conformité du nommage |
+| `valider-ebauche` | Verifier les exigences minimales d'un ebauche |
+| `detecter-erreur-statut` | Detecter les fichiers dont le statut ne correspond pas au contenu |
+| `valider-nommage` | Verifier la conformite du nommage |
 
 ---
 
 ## Notes
 
-- Un ebauche est une **idée brute**, pas un document structuré
-- Si un ebauche est "prêt", c'est une **erreur de statut** (devrait être "préparé")
-- Utiliser `detecter-erreur-statut` pour vérifier tous les fichiers d'un coup
+- Un ebauche est une **idee brute**, pas un document structure
+- Si un ebauche est "pret", c'est une **erreur de statut** (devrait etre "prepare")
+- Utiliser `detecter-erreur-statut` pour verifier tous les fichiers d'un coup

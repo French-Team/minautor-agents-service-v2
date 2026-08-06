@@ -1,8 +1,8 @@
-# Boucle de Rétro-action — Validation d'Outil
+# Boucle de Retro-action -- Validation d'Outil
 
 **Agent** : Vulcain
-**Date création** : 2026-08-05
-**Date mise à jour** : 2026-08-05
+**Date creation** : 2026-08-05
+**Date mise a jour** : 2026-08-05
 **Statut** : Active
 **Version** : 2.0 (avec sous-missions)
 
@@ -11,14 +11,14 @@
 ## Objectif
 
 S'assurer que Vulcain teste TOUJOURS un outil avec ses propres outils AVANT de le valider.
-**NOUVEAU** : Si les outils de test n'existent pas, CRÉEZ-LES avant de continuer.
+**NOUVEAU** : Si les outils de test n'existent pas, CREEZ-LES avant de continuer.
 
 ---
 
-## Le problème résolu
+## Le probleme resolu
 
-**Avant** : Vulcain utilisait des outils génériques pour tester
-**Après** : Vulcain utilise ses propres outils, et les crée si nécessaire
+**Avant** : Vulcain utilisait des outils generiques pour tester
+**Apres** : Vulcain utilise ses propres outils, et les cree si necessaire
 
 ---
 
@@ -27,116 +27,116 @@ S'assurer que Vulcain teste TOUJOURS un outil avec ses propres outils AVANT de l
 ### QUAND s'applique la boucle ?
 
 ```
-APRÈS avoir créé un outil (étape 4 de la carte de décision)
-AVANT de le valider (étape 6)
+APRES avoir cree un outil (etape 4 de la carte de decision)
+AVANT de le valider (etape 6)
 ```
 
-### COMMENT exécuter la boucle ?
+### COMMENT executer la boucle ?
 
 ```
-1. Lire la carte de décision
-2. Vérifier si l'étape 5 (Tester l'outil) est faite
-3. Si non -> EXÉCUTER : valider-cartes-decision
+1. Lire la carte de decision
+2. Verifier si l'etape 5 (Tester l'outil) est faite
+3. Si non -> EXECUTER : valider-cartes-decision
 4. Si l'outil n'existe pas -> SOUS-MISSION obligatoire
 5. Si oui -> Continuer
-6. Documenter le résultat
+6. Documenter le resultat
 ```
 
 ---
 
-## SOUS-MISSION : Créer valider-cartes-decision
+## SOUS-MISSION : Creer valider-cartes-decision
 
-### Détection
+### Detection
 
 ```
 CONDITION : valider-cartes-decision n'existe pas
 ACTION : Sortir du flux principal
 ```
 
-### Étapes de la sous-mission
+### Etapes de la sous-mission
 
-| Étape | Action | Sortie |
+| Etape | Action | Sortie |
 |---|---|---|
-| **1** | **SAUVEGARDER** la position | Position sauvegardée |
+| **1** | **SAUVEGARDER** la position | Position sauvegardee |
 | **2** | **LIRE** les specs de valider-cartes-decision | Specs lues |
-| **3** | **DÉVELOPPER** valider-cartes-decision | Outil créé |
-| **4** | **TESTER** valider-cartes-decision | Tests passés |
-| **5** | **VALIDER** valider-cartes-decision | Outil validé |
+| **3** | **DEVELOPPER** valider-cartes-decision | Outil cree |
+| **4** | **TESTER** valider-cartes-decision | Tests passes |
+| **5** | **VALIDER** valider-cartes-decision | Outil valide |
 | **6** | **REVENIR** au flux principal | Flux repris |
 
-### Détail des étapes
+### Detail des etapes
 
-#### Étape 1 : Sauvegarder
+#### Etape 1 : Sauvegarder
 
 ```bash
 gerer-sous-mission sauvegarder \
-  --mission "Créer valider-cartes-decision" \
+  --mission "Creer valider-cartes-decision" \
   --etape "1" \
-  --donnees "Vulcain en train de créer un outil de test"
+  --donnees "Vulcain en train de creer un outil de test"
 ```
 
-#### Étape 2 : Lire les specs
+#### Etape 2 : Lire les specs
 
 ```
 Fichier : cerveau-projet/agents/tools/valider/valider-cartes-decision/spec/spec-valider-cartes-decision.001.01.ebauche.md
-Action : Lire et comprendre les spécifications
+Action : Lire et comprendre les specifications
 ```
 
-#### Étape 3 : Développer l'outil
+#### Etape 3 : Developper l'outil
 
 ```
-Fichier à créer : cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.sh
-Contenu : Script qui valide les cartes de décision
+Fichier a creer : cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.sh
+Contenu : Script qui valide les cartes de decision
 ```
 
-#### Étape 4 : Tester l'outil
+#### Etape 4 : Tester l'outil
 
 ```bash
 chmod +x cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.sh
 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.sh --aide
 ```
 
-#### Étape 5 : Valider l'outil
+#### Etape 5 : Valider l'outil
 
 ```
-Vérifier que l'outil :
+Verifier que l'outil :
 - Fonctionne correctement
-- Valide les cartes de décision
-- Est documenté
+- Valide les cartes de decision
+- Est documente
 ```
 
-#### Étape 6 : Revenir au flux principal
+#### Etape 6 : Revenir au flux principal
 
 ```bash
 gerer-sous-mission revenir \
-  --resultat "succès" \
-  --outil-créé "oui"
+  --resultat "succes" \
+  --outil-cree "oui"
 ```
 
 ---
 
-## Après la sous-mission
+## Apres la sous-mission
 
 ```
 1. valider-cartes-decision existe maintenant
-2. Exécuter valider-cartes-decision sur l'outil créé
-3. Vérifier que l'outil respecte la carte de décision
-4. Continuer à l'étape 6 de la carte de décision
+2. Executer valider-cartes-decision sur l'outil cree
+3. Verifier que l'outil respecte la carte de decision
+4. Continuer a l'etape 6 de la carte de decision
 ```
 
 ---
 
-## Règle d'or
+## Regle d'or
 
 > **TOUJOURS tester un outil avec ses propres outils AVANT de le valider.**
 
 ---
 
-## Fréquence
+## Frequence
 
-- **Création d'outil** : Toujours
+- **Creation d'outil** : Toujours
 - **Modification d'outil** : Toujours
-- **Après une erreur** : Toujours
+- **Apres une erreur** : Toujours
 - **Si outil manquant** : Sous-mission obligatoire
 
 ---

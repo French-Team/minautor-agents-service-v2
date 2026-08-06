@@ -1,4 +1,4 @@
-# Mission — Outil de Condensation Markdown
+# Mission -- Outil de Condensation Markdown
 
 **Agent** : Vulcain
 **Date** : 2026-08-05
@@ -8,20 +8,20 @@
 
 ## Objectif
 
-Créer un outil `condenseur.sh` qui réduit la taille des fichiers markdown en fusionnant les éléments similaires.
+Creer un outil `condenseur.sh` qui reduit la taille des fichiers markdown en fusionnant les elements similaires.
 
 ---
 
-## Problème à résoudre
+## Probleme a resoudre
 
 Le purificateur fait un bon travail de nettoyage, mais ne peut pas :
 - Fusionner les tables similaires
-- Réduire les sections répétitives
+- Reduire les sections repetitives
 - Condenser le frontmatter
 
 ---
 
-## Fonctionnalités requises
+## Fonctionnalites requises
 
 ### 1. Analyser un fichier
 
@@ -29,14 +29,14 @@ Le purificateur fait un bon travail de nettoyage, mais ne peut pas :
 condenseur.sh --analyser [fichier]
 ```
 
-**Résultat** :
+**Resultat** :
 ```
 Fichier : buffy.md
 Lignes : 368
-Problèmes détectés :
-- Frontmatter : 106 lignes (peut être réduit à ~30)
-- Tables similaires : 5 tables de missions (peuvent être fusionnées)
-- Sections répétitives : 3 sections avec le même format
+Problemes detectes :
+- Frontmatter : 106 lignes (peut etre reduit a ~30)
+- Tables similaires : 5 tables de missions (peuvent etre fusionnees)
+- Sections repetitives : 3 sections avec le meme format
 ```
 
 ### 2. Condenser un fichier (dry-run)
@@ -45,18 +45,18 @@ Problèmes détectés :
 condenseur.sh --dry-run [fichier]
 ```
 
-**Résultat** :
+**Resultat** :
 ```
 === Condensation de buffy.md ===
 
-[CONDENSÉ] Frontmatter : 106 -> 30 lignes (-76)
-[FUSIONNÉ] 5 tables de missions -> 1 table (-40)
-[RÉDUIT] Sections répétitives : 3 -> 1 (-20)
+[CONDENSE] Frontmatter : 106 -> 30 lignes (-76)
+[FUSIONNE] 5 tables de missions -> 1 table (-40)
+[REDUIT] Sections repetitives : 3 -> 1 (-20)
 
-Résumé :
+Resume :
 - Avant : 368 lignes
-- Après : 232 lignes
-- Économie : 136 lignes (37%)
+- Apres : 232 lignes
+- Economie : 136 lignes (37%)
 ```
 
 ### 3. Appliquer la condensation
@@ -67,15 +67,15 @@ condenseur.sh [fichier]
 
 ---
 
-## Règles de condensation
+## Regles de condensation
 
-### Règle 1 — Frontmatter
+### Regle 1 -- Frontmatter
 
 **Avant** :
 ```yaml
 ---
-# Fiche d'Agent — Buffy
-# Agent principal — Développeur du cerveau-projet
+# Fiche d'Agent -- Buffy
+# Agent principal -- Developpeur du cerveau-projet
 
 agent:
   nom: "buffy"
@@ -86,100 +86,100 @@ agent:
 
 # Profil de l'agent
 profil:
-  role: "Agent principal — développe et maintient le cerveau-projet avec l'utilisateur"
+  role: "Agent principal -- developpe et maintient le cerveau-projet avec l'utilisateur"
   specialites:
-    - "Développement du cerveau-projet (fichiers principaux)"
+    - "Developpement du cerveau-projet (fichiers principaux)"
     - "Gestion des agents (fichies, corrections, AGENTS.md)"
-    - "Création de pense-betes > specs > todos"
-    - "Architecture et structures de données"
+    - "Creation de pense-betes > specs > todos"
+    - "Architecture et structures de donnees"
     - "Conventions et standards"
   ...
 ```
 
-**Après** :
+**Apres** :
 ```yaml
 ---
 agent:
   nom: "buffy"
   version: "0.2.0"
   role: "Agent principal"
-  specialites: "Développement, Agents, Contenu"
+  specialites: "Developpement, Agents, Contenu"
 ---
 ```
 
-### Règle 2 — Tables similaires
+### Regle 2 -- Tables similaires
 
 **Avant** :
 ```markdown
-### Mission : Créer un fichier
-| Étape | Action | Protocole |
+### Mission : Creer un fichier
+| Etape | Action | Protocole |
 |---|---|---|
-| 1 | Vérifier le nommage | convention-renommage |
-| 2 | Vérifier la structure | convention-structures |
-| 3 | Créer le fichier | - |
-| 4 | Mettre à jour l'index | - |
+| 1 | Verifier le nommage | convention-renommage |
+| 2 | Verifier la structure | convention-structures |
+| 3 | Creer le fichier | - |
+| 4 | Mettre a jour l'index | - |
 
 ### Mission : Modifier un fichier
-| Étape | Action | Protocole |
+| Etape | Action | Protocole |
 |---|---|---|
 | 1 | Lire le fichier | - |
-| 2 | Vérifier les dépendances | regles-veracite |
+| 2 | Verifier les dependances | regles-veracite |
 | 3 | Modifier le fichier | - |
 ```
 
-**Après** :
+**Apres** :
 ```markdown
 ### Missions
 
-| Mission | Étapes | Protocoles |
+| Mission | Etapes | Protocoles |
 |---|---|---|
-| Créer un fichier | 4 | convention-renommage, convention-structures |
+| Creer un fichier | 4 | convention-renommage, convention-structures |
 | Modifier un fichier | 3 | regles-veracite |
 ```
 
-### Règle 3 — Sections répétitives
+### Regle 3 -- Sections repetitives
 
 **Avant** :
 ```markdown
-## Spécialités
+## Specialites
 
-### Développement du cerveau-projet
-- Créer des fichiers
+### Developpement du cerveau-projet
+- Creer des fichiers
 - Modifier des fichiers
 - Valider les conventions
 
 ### Gestion des agents
-- Créer des agents
+- Creer des agents
 - Modifier des agents
 - Valider les agents
 
-### Création de contenu
-- Créer des pense-betes
-- Créer des specs
-- Créer des todos
+### Creation de contenu
+- Creer des pense-betes
+- Creer des specs
+- Creer des todos
 ```
 
-**Après** :
+**Apres** :
 ```markdown
-## Spécialités
+## Specialites
 
-Développement du cerveau-projet, Gestion des agents, Création de contenu
+Developpement du cerveau-projet, Gestion des agents, Creation de contenu
 ```
 
 ---
 
-## Critères de validation
+## Criteres de validation
 
-- [ ] L'outil détecte correctement les problèmes
-- [ ] Le dry-run montre exactement ce qui sera changé
-- [ ] La condensation est réversible (backup)
-- [ ] Le résultat est lisible
-- [ ] L'outil est documenté
+- [ ] L'outil detecte correctement les problemes
+- [ ] Le dry-run montre exactement ce qui sera change
+- [ ] La condensation est reversible (backup)
+- [ ] Le resultat est lisible
+- [ ] L'outil est documente
 
 ---
 
 ## Livrables
 
-1. `condenseur.sh` — dans `agents/tools/corriger/condenseur/`
-2. `condenseur.md` — documentation
+1. `condenseur.sh` -- dans `agents/tools/corriger/condenseur/`
+2. `condenseur.md` -- documentation
 3. Tests avec `buffy.md` et `protocole-versionning-outils.md`

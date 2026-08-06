@@ -1,73 +1,73 @@
-# Protocole — Auto-Améliorer les Règles Immuables
+# Protocole -- Auto-Ameliorer les Regles Immuables
 ---
 
 ## Objectif
 
-Permettre aux règles immuables de s'améliorer en continu, en les adaptant aux besoins du projet.
+Permettre aux regles immuables de s'ameliorer en continu, en les adaptant aux besoins du projet.
 
 ---
 
-## Prérequis
+## Prerequis
 
-- Lire `regles-immuables/index-regles-immuables.md` pour connaître les règles
+- Lire `regles-immuables/index-regles-immuables.md` pour connaitre les regles
 - Identifier les besoins non couverts
 - Lire `convention-autoamelioration.md` pour les principes
 
 ---
 
-## Étapes
+## Etapes
 
-### Étape 1 — Diagnostiquer l'état des règles
+### Etape 1 -- Diagnostiquer l'etat des regles
 
 ```
 1. Lire regles-immuables/index-regles-immuables.md
-2. Pour chaque règle :
-   a. Vérifier si elle est à jour
-   b. Vérifier si elle est respectée
-   c. Identifier les améliorations nécessaires
-3. Identifier les règles manquantes
+2. Pour chaque regle :
+   a. Verifier si elle est a jour
+   b. Verifier si elle est respectee
+   c. Identifier les ameliorations necessaires
+3. Identifier les regles manquantes
 ```
 
-### Étape 2 — Améliorer les règles existantes
+### Etape 2 -- Ameliorer les regles existantes
 
 ```
-Pour chaque règle :
+Pour chaque regle :
 1. Analyser les retours d'utilisation
-2. Identifier les améliorations possibles
-3. Appliquer les améliorations
-4. Mettre à jour la documentation
+2. Identifier les ameliorations possibles
+3. Appliquer les ameliorations
+4. Mettre a jour la documentation
 5. Valider par RVAV
 ```
 
-### Étape 3 — Créer de nouvelles règles
+### Etape 3 -- Creer de nouvelles regles
 
 ```
 Pour chaque besoin non couvert :
-1. Créer un pense-bête
-2. Créer une spec
-3. Créer un todo
-4. Développer la règle
-5. Tester la règle
-6. Documenter la règle
-7. Intégrer la règle
+1. Creer un pense-bete
+2. Creer une spec
+3. Creer un todo
+4. Developper la regle
+5. Tester la regle
+6. Documenter la regle
+7. Integrer la regle
 ```
 
-### Étape 4 — Archiver les règles obsolètes
+### Etape 4 -- Archiver les regles obsoletes
 
 ```
-Pour chaque règle obsolète :
-1. Vérifier qu'elle n'est plus utilisée
-2. La déplacer dans un dossier d'archive
-3. Mettre à jour la documentation
+Pour chaque regle obsolete :
+1. Verifier qu'elle n'est plus utilisee
+2. La deplacer dans un dossier d'archive
+3. Mettre a jour la documentation
 4. Signaler l'archivage
 ```
 
-### Étape 5 — Valider la cohérence
+### Etape 5 -- Valider la coherence
 
 ```
-1. Vérifier que toutes les règles sont à jour
-2. Vérifier que la documentation est complète
-3. Vérifier que les règles sont cohérentes
+1. Verifier que toutes les regles sont a jour
+2. Verifier que la documentation est complete
+3. Verifier que les regles sont coherentes
 4. Valider par RVAV
 ```
 
@@ -75,11 +75,11 @@ Pour chaque règle obsolète :
 
 ## RVAV
 
-Appliquer le cycle complet à chaque étape critique :
-- [rechercher] — vérifier les impacts
-- [vérifier] — confirmer la cohérence
-- [analyser] — valider les conséquences
-- [valider] — approuver l'amélioration
+Appliquer le cycle complet a chaque etape critique :
+- [rechercher] -- verifier les impacts
+- [verifier] -- confirmer la coherence
+- [analyser] -- valider les consequences
+- [valider] -- approuver l'amelioration
 
 ---
 

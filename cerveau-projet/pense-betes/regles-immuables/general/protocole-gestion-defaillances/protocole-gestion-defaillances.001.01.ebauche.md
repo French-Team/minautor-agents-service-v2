@@ -1,37 +1,37 @@
-# Protocole — Gestion des Défaillances
+# Protocole -- Gestion des Defaillances
 ---
 
 ## Objectif
 
-Détecter et corriger automatiquement les défaillances du cerveau-projet avant qu'elles n'impactent le travail des agents.
+Detecter et corriger automatiquement les defaillances du cerveau-projet avant qu'elles n'impactent le travail des agents.
 
 ---
 
-## Quand ce protocole est déclenché ?
+## Quand ce protocole est declenche ?
 
-| Déclencheur | Exemple | Priorité |
+| Declencheur | Exemple | Priorite |
 |---|---|---|
 | **Protocole non suivi** | Agent n'a pas lu AGENTS.md | Haute |
-| **Mise à jour oubliée** | index-cerveau.md pas mis à jour | Haute |
-| **Lien cassé** | Fichier référencé inexistant | Moyenne |
-| **Convention non respectée** | Fichier mal nommé | Moyenne |
-| **Incohérence détectée** | Deux fichiers contradictoires | Haute |
-| **Erreurs récurrentes** | Même erreur 2+ fois | Haute |
+| **Mise a jour oubliee** | index-cerveau.md pas mis a jour | Haute |
+| **Lien casse** | Fichier reference inexistant | Moyenne |
+| **Convention non respectee** | Fichier mal nomme | Moyenne |
+| **Incoherence detectee** | Deux fichiers contradictoires | Haute |
+| **Erreurs recurrentes** | Meme erreur 2+ fois | Haute |
 
 ---
 
-## Étapes du protocole
+## Etapes du protocole
 
-### Étape 1 — Détecter la défaillance
+### Etape 1 -- Detecter la defaillance
 
 ```
-1. Identifier le type de défaillance
-2. Localiser le fichier ou le protocole concerné
-3. Évaluer l'impact (haute/moyenne/basse priorité)
-4. Noter les détails de la défaillance
+1. Identifier le type de defaillance
+2. Localiser le fichier ou le protocole concerne
+3. Evaluer l'impact (haute/moyenne/basse priorite)
+4. Noter les details de la defaillance
 ```
 
-### Étape 2 — Diagnostiquer la cause racine
+### Etape 2 -- Diagnostiquer la cause racine
 ```
 1. Appliquer le sous-protocole de diagnostic (voir sous-protocole)
 2. Identifier la cause racine
@@ -39,149 +39,149 @@ Détecter et corriger automatiquement les défaillances du cerveau-projet avant 
 4. Valider avec l'utilisateur
 ```
 
-### Étape 3 — Classifier la défaillance
+### Etape 3 -- Classifier la defaillance
 
 | Type | Description | Action |
 |---|---|---|
-| **Oubli** | Mise à jour non faite | Mettre à jour immédiatement |
+| **Oubli** | Mise a jour non faite | Mettre a jour immediatement |
 | **Erreur** | Contenu incorrect | Corriger le contenu |
-| **Incohérence** | Deux versions contradictoires | Harmoniser |
-| **Manque** | Élément absent | Créer l'élément |
-| **Obsolète** | Contenu dépassé | Mettre à jour ou archiver |
+| **Incoherence** | Deux versions contradictoires | Harmoniser |
+| **Manque** | Element absent | Creer l'element |
+| **Obsolete** | Contenu depasse | Mettre a jour ou archiver |
 
-### Étape 3 — Corriger la défaillance
-
-```
-1. Appliquer la correction appropriée
-2. Vérifier que la correction est conforme aux conventions
-3. Mettre à jour les fichiers concernés
-4. Mettre à jour les index
-```
-
-### Étape 4 — Traiter la cause racine
+### Etape 3 -- Corriger la defaillance
 
 ```
-1. Pourquoi cette défaillance s'est-elle produite ?
+1. Appliquer la correction appropriee
+2. Verifier que la correction est conforme aux conventions
+3. Mettre a jour les fichiers concernes
+4. Mettre a jour les index
+```
+
+### Etape 4 -- Traiter la cause racine
+
+```
+1. Pourquoi cette defaillance s'est-elle produite ?
 2. Le protocole existant couvre-t-il ce cas ?
-3. Faut-il créer un nouveau protocole ?
-4. Faut-il améliorer un protocole existant ?
+3. Faut-il creer un nouveau protocole ?
+4. Faut-il ameliorer un protocole existant ?
 ```
 
-### Étape 5 — Prvenir les récidives
+### Etape 5 -- Prvenir les recidives
 
 ```
-1. Ajouter une règle si nécessaire
-2. Modifier le protocole si nécessaire
+1. Ajouter une regle si necessaire
+2. Modifier le protocole si necessaire
 3. Ajouter un test de validation
-4. Documenter l'amélioration
+4. Documenter l'amelioration
 ```
 
-### Étape 6 — Documenter
+### Etape 6 -- Documenter
 
 ```
-1. Ajouter une entrée dans l'historique
-2. Mettre à jour le fichier de l'agent (corrections.md)
-3. Mettre à jour les index
+1. Ajouter une entree dans l'historique
+2. Mettre a jour le fichier de l'agent (corrections.md)
+3. Mettre a jour les index
 4. Signer : "[nom-agent] -- [date]"
 ```
 
 ---
 
-## Points de déclenchement
+## Points de declenchement
 
 ### Dans demarrer.md
 
-Le protocole est vérifié à chaque étape critique :
-- **Étape 0.1** : Vérifier que AGENTS.md est à jour
-- **Étape 0.3** : Vérifier que les corrections sont appliquées
-- **Étape 0.4** : Vérifier que AGENTS.md est mis à jour
+Le protocole est verifie a chaque etape critique :
+- **Etape 0.1** : Verifier que AGENTS.md est a jour
+- **Etape 0.3** : Verifier que les corrections sont appliquees
+- **Etape 0.4** : Verifier que AGENTS.md est mis a jour
 
-### Dans les protocoles d'auto-amélioration
+### Dans les protocoles d'auto-amelioration
 
-Le protocole est vérifié à chaque amélioration :
-- **protocole-autoameliorer-cerveau** : Vérifier la cohérence
-- **protocole-autoameliorer-agents** : Vérifier les fiches
-- **protocole-autoameliorer-outils** : Vérifier les outils
-- **protocole-autoameliorer-conventions** : Vérifier les conventions
-- **protocole-autoameliorer-protocoles** : Vérifier les protocoles
-- **protocole-autoameliorer-regles** : Vérifier les règles
+Le protocole est verifie a chaque amelioration :
+- **protocole-autoameliorer-cerveau** : Verifier la coherence
+- **protocole-autoameliorer-agents** : Verifier les fiches
+- **protocole-autoameliorer-outils** : Verifier les outils
+- **protocole-autoameliorer-conventions** : Verifier les conventions
+- **protocole-autoameliorer-protocoles** : Verifier les protocoles
+- **protocole-autoameliorer-regles** : Verifier les regles
 
 ### Dans les protocoles de travail
 
-Le protocole est vérifié avant chaque modification :
-- Vérifier les dépendances
-- Vérifier les conventions
-- Vérifier la cohérence
+Le protocole est verifie avant chaque modification :
+- Verifier les dependances
+- Verifier les conventions
+- Verifier la coherence
 
 ---
 
-## Système de détection automatique
+## Systeme de detection automatique
 
-### Détection par les agents
+### Detection par les agents
 
-Chaque agent doit vérifier :
+Chaque agent doit verifier :
 
 ```
 1. Avant de commencer :
-   - AGENTS.md est-il à jour ?
-   - Ma fiche est-elle à jour ?
-   - Ai-je appliqué mes corrections ?
+   - AGENTS.md est-il a jour ?
+   - Ma fiche est-elle a jour ?
+   - Ai-je applique mes corrections ?
 
 2. Pendant le travail :
    - Est-ce que je respecte les conventions ?
-   - Est-ce que je mets à jour les fichiers concernés ?
+   - Est-ce que je mets a jour les fichiers concernes ?
    - Est-ce que je documente mes changements ?
 
-3. Après le travail :
-   - Ai-je mis à jour tous les fichiers concernés ?
-   - Ai-je mis à jour les index ?
-   - Ai-je documenté mes changements ?
+3. Apres le travail :
+   - Ai-je mis a jour tous les fichiers concernes ?
+   - Ai-je mis a jour les index ?
+   - Ai-je documente mes changements ?
 ```
 
-### Détection par les fichiers
+### Detection par les fichiers
 
 Chaque fichier doit contenir :
 
 ```
-1. Un en-tête avec les métadonnées
+1. Un en-tete avec les metadonnees
 2. Un historique des modifications
 3. Des liens vers les fichiers connexes
-4. Un statut à jour
+4. Un statut a jour
 ```
 
-### Détection par les index
+### Detection par les index
 
 Chaque index doit contenir :
 
 ```
-1. La liste de tous les éléments
-2. Le statut de chaque élément
-3. Les liens vers les éléments
-4. Un résumé rapide
+1. La liste de tous les elements
+2. Le statut de chaque element
+3. Les liens vers les elements
+4. Un resume rapide
 ```
 
 ---
 
-## Tableau des défaillances courantes
+## Tableau des defaillances courantes
 
-| Défaillance | Cause | Correction | Prévention |
+| Defaillance | Cause | Correction | Prevention |
 |---|---|---|---|
-| **AGENTS.md pas à jour** | Oubli | Mettre à jour | Vérifier à chaque session |
-| **Index pas à jour** | Oubli | Mettre à jour | Vérifier après chaque modification |
-| **Lien cassé** | Fichier déplacé | Corriger le lien | Vérifier les liens |
-| **Convention non respectée** | Méconnaissance | Corriger + documenter | Lire les conventions |
-| **Incohérence** | Modification partielle | Harmoniser | Vérifier la cohérence |
-| **Protocole non suivi** | Méconnaissance | Suivre le protocole | Lire les protocoles |
+| **AGENTS.md pas a jour** | Oubli | Mettre a jour | Verifier a chaque session |
+| **Index pas a jour** | Oubli | Mettre a jour | Verifier apres chaque modification |
+| **Lien casse** | Fichier deplace | Corriger le lien | Verifier les liens |
+| **Convention non respectee** | Meconnaissance | Corriger + documenter | Lire les conventions |
+| **Incoherence** | Modification partielle | Harmoniser | Verifier la coherence |
+| **Protocole non suivi** | Meconnaissance | Suivre le protocole | Lire les protocoles |
 
 ---
 
-## Priorités
+## Priorites
 
-| Priorité | Délai d'action | Exemple |
+| Priorite | Delai d'action | Exemple |
 |---|---|---|
-| **Haute** | Immédiat | Protocole non suivi, incohérence |
-| **Moyenne** | Avant la prochaine session | Mise à jour oubliée, lien cassé |
-| **Basse** | Quand possible | Amélioration mineure |
+| **Haute** | Immediat | Protocole non suivi, incoherence |
+| **Moyenne** | Avant la prochaine session | Mise a jour oubliee, lien casse |
+| **Basse** | Quand possible | Amelioration mineure |
 
 ---
 

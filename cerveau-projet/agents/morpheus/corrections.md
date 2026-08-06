@@ -40,6 +40,10 @@ Aucune correction en cours.
 ### Outils utilises
 
 - `template-test` : Pour creer des tests
-- `protection-boucles-infinies` : Protection contre les boucles infinies
-- `protection-erreurs-silencieuses` : Protection contre les erreurs silencieuses
-- `protection-blocage` : Protection contre les tests qui bloquent
+- `tester-protection-boucles-infinies` : Protection contre les boucles infinies
+- `tester-protection-erreurs-silencieuses` : Protection contre les erreurs silencieuses
+- `tester-protection-blocage` : Protection contre les tests qui bloquent
+
+## PHILOSOPHIE -- Principes de comportement
+
+| **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |

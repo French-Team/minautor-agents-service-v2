@@ -1,9 +1,9 @@
-# Schéma — Définition des Variables
+# Schema -- Definition des Variables
 ---
 
 ## Variables
 
-### [Aucune variable définie pour l'instant]
+### [Aucune variable definie pour l'instant]
 
 Pour ajouter une variable, utiliser le template suivant :
 
@@ -14,21 +14,21 @@ Pour ajouter une variable, utiliser le template suivant :
 |---|---|---|---|
 | `id` | string | [OK] | Identifiant unique |
 | `valeur` | any | [OK] | Valeur de la variable |
-| `source` | string | [OK] | Fonction qui a écrit la variable |
-| `date_creation` | datetime | [OK] | Date de création |
-| `date_modification` | datetime | [NON] | Date de dernière modification |
+| `source` | string | [OK] | Fonction qui a ecrit la variable |
+| `date_creation` | datetime | [OK] | Date de creation |
+| `date_modification` | datetime | [NON] | Date de derniere modification |
 | `description` | string | [NON] | Description de la variable |
 ```
 
 ---
 
-## Types autorisés
+## Types autorises
 
 | Type | Description | Exemple |
 |---|---|---|
 | `string` | Texte | `"hello"` |
 | `number` | Nombre | `42` |
-| `boolean` | Booléen | `true` |
+| `boolean` | Booleen | `true` |
 | `objet` | Objet JSON | `{"cle": "valeur"}` |
 | `array` | Tableau | `[1, 2, 3]` |
 | `null` | Valeur nulle | `null` |

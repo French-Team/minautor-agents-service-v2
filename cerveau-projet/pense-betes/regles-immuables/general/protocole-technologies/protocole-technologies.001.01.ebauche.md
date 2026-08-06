@@ -1,53 +1,53 @@
-# Protocole — Choix des Technologies
+# Protocole -- Choix des Technologies
 
 **Version** : 0.1.0
-**Statut** : Ébauche
-**Date création** : 2026-08-05
-**Propriétaire** : Vulcain (agent)
+**Statut** : Ebauche
+**Date creation** : 2026-08-05
+**Proprietaire** : Vulcain (agent)
 
 ---
 
 ## Objectif
 
-Définir comment choisir les technologies pour créer des outils réels en fonction du système de l'utilisateur.
+Definir comment choisir les technologies pour creer des outils reels en fonction du systeme de l'utilisateur.
 
 **Pourquoi ce protocole ?**
-- Les utilisateurs ont des systèmes différents
-- Un outil qui ne marche que sur un système est inutile
-- La portabilité = plus d'utilisateurs
-- Le choix technologique doit être documenté
+- Les utilisateurs ont des systemes differents
+- Un outil qui ne marche que sur un systeme est inutile
+- La portabilite = plus d'utilisateurs
+- Le choix technologique doit etre documente
 
 ---
 
 ## Le processus de choix
 
 ```
-SYSTÈME UTILISATEUR -> ANALYSE -> TECHNOLOGIE -> DÉVELOPPEMENT -> TEST
+SYSTEME UTILISATEUR -> ANALYSE -> TECHNOLOGIE -> DEVELOPPEMENT -> TEST
         1                2          3            4           5
 ```
 
-| Étape | Action | Responsable |
+| Etape | Action | Responsable |
 |---|---|---|
-| 1 | Vérifier le système utilisateur | Vulcain |
+| 1 | Verifier le systeme utilisateur | Vulcain |
 | 2 | Analyser les besoins techniques | Vulcain |
 | 3 | Choisir la technologie | Vulcain + Protocole |
-| 4 | Développer l'outil | Vulcain |
+| 4 | Developper l'outil | Vulcain |
 | 5 | Tester l'outil | Vulcain |
 
 ---
 
-## Étape 1 : Vérification du système
+## Etape 1 : Verification du systeme
 
-### Informations à collecter
+### Informations a collecter
 
-| Information | Priorité | Comment la collecter |
+| Information | Priorite | Comment la collecter |
 |---|---|---|
-| **Système d'exploitation** | Haute | `uname -a` ou `ver` |
+| **Systeme d'exploitation** | Haute | `uname -a` ou `ver` |
 | **Shell disponible** | Haute | `echo $SHELL` ou `where bash` |
-| **Langages installés** | Moyenne | `python --version`, `node --version` |
+| **Langages installes** | Moyenne | `python --version`, `node --version` |
 | **Outils disponibles** | Moyenne | `which`, `where`, `get-command` |
 
-### Commandes de vérification
+### Commandes de verification
 
 **Windows** :
 ```powershell
@@ -75,31 +75,31 @@ which node
 
 ---
 
-## Étape 2 : Analyse des besoins
+## Etape 2 : Analyse des besoins
 
-### Questions à se poser
+### Questions a se poser
 
 | Question | Impact |
 |---|---|
-| **L'outil doit-il être rapide ?** | Oui -> Bash/Python natif |
-| **L'outil doit-il être portable ?** | Oui -> Python ou Node.js |
-| **L'outil doit-il être simple ?** | Oui -> Bash |
-| **L'outil doit-il être puissant ?** | Oui -> Python |
+| **L'outil doit-il etre rapide ?** | Oui -> Bash/Python natif |
+| **L'outil doit-il etre portable ?** | Oui -> Python ou Node.js |
+| **L'outil doit-il etre simple ?** | Oui -> Bash |
+| **L'outil doit-il etre puissant ?** | Oui -> Python |
 
-### Critères de choix
+### Criteres de choix
 
-| Critère | Pondération | Description |
+| Critere | Ponderation | Description |
 |---|---|---|
-| **Disponibilité** | 40% | Est-ce que la technologie est installée ? |
+| **Disponibilite** | 40% | Est-ce que la technologie est installee ? |
 | **Performance** | 30% | Est-ce que c'est assez rapide ? |
-| **Facilité** | 20% | Est-ce que c'est facile à développer ? |
-| **Portabilité** | 10% | Est-ce que ça marche partout ? |
+| **Facilite** | 20% | Est-ce que c'est facile a developper ? |
+| **Portabilite** | 10% | Est-ce que ca marche partout ? |
 
 ---
 
-## Étape 3 : Choix technologique
+## Etape 3 : Choix technologique
 
-### Matrice de décision
+### Matrice de decision
 
 | Besoin | Recommandation |
 |---|---|
@@ -107,51 +107,51 @@ which node
 | **Script complexe** | **Python** |
 | **Interface web** | **Node.js** |
 | **Manipulation de fichiers** | **Bash** |
-| **Analyse de données** | **Python** |
+| **Analyse de donnees** | **Python** |
 | **API REST** | **Node.js** |
 
-### Technologies recommandées
+### Technologies recommandees
 
 **Pour les outils simples** : Bash (universel, rapide, simple)
 **Pour les outils complexes** : Python ou Node.js (puissant, portable)
 
 ---
 
-## Étape 4 : Développement
+## Etape 4 : Developpement
 
 ### Structure d'un outil
 
 ```
-outils/[nom-outil]/
-|-- [nom-outil].sh          # Script Bash
-|-- [nom-outil].py          # Script Python
-|-- [nom-outil].js          # Script Node.js
-|-- README.md               # Documentation
-|-- test-[nom-outil].sh     # Tests
-``-- spec/
-    ``-- spec-[nom-outil].md # Spécification
+agents/tools/[categorie]/[nom-outil]/
+|-- [nom-outil].sh          # Script d'implementation (technologie choisie : bash, python ou node)
+|-- [nom-outil].md          # Documentation
+|-- test-[nom-outil].md     # Tests (optionnel)
+``-- spec/                   # Specification (optionnel)
+    ``-- spec-[nom-outil].md
 ```
+
+> La structure de depart est fournie par le **outil-template** (`agents/tools/outil-template.md` + `.sh`).
 
 ### Conventions de nommage
 
-| Élément | Convention |
+| Element | Convention |
 |---|---|
 | **Nom de l'outil** | `kebab-case` (ex: `lister-agents`) |
-| **Extension** | `.sh`, `.py`, `.js` |
+| **Extension** | `.sh` (bash), `.py` (python), `.js` (node) -- une seule par outil |
 | **Tests** | `test-[nom-outil].[ext]` |
 
 ---
 
-## Étape 5 : Tests
+## Etape 5 : Tests
 
 ### Types de tests
 
-| Type | Description | Priorité |
+| Type | Description | Priorite |
 |---|---|---|
-| **Test fonctionnel** | Vérifie que l'outil fonctionne | Haute |
-| **Test de portabilité** | Vérifie que ça marche sur plusieurs systèmes | Haute |
-| **Test de performance** | Vérifie que c'est assez rapide | Moyenne |
-| **Test de robustesse** | Vérifie les cas limites | Moyenne |
+| **Test fonctionnel** | Verifie que l'outil fonctionne | Haute |
+| **Test de portabilite** | Verifie que ca marche sur plusieurs systemes | Haute |
+| **Test de performance** | Verifie que c'est assez rapide | Moyenne |
+| **Test de robustesse** | Verifie les cas limites | Moyenne |
 
 ### Processus de test
 
@@ -159,23 +159,23 @@ outils/[nom-outil]/
 # 1. Test fonctionnel
 ./outils/[nom-outil]/[nom-outil].sh
 
-# 2. Test de portabilité
+# 2. Test de portabilite
 # (Tester sur Windows, Linux, Mac)
 
 # 3. Test de performance
 time ./outils/[nom-outil]/[nom-outil].sh
 
 # 4. Test de robustesse
-# (Tester avec des entrées invalides)
+# (Tester avec des entrees invalides)
 ```
 
 ---
 
 ## Notes importantes
 
-- **Toujours vérifier le système** avant de choisir une technologie
-- **Privilégier la portabilité** quand c'est possible
-- **Tester sur plusieurs systèmes** avant de valider
+- **Toujours verifier le systeme** avant de choisir une technologie
+- **Privilegier la portabilite** quand c'est possible
+- **Tester sur plusieurs systemes** avant de valider
 - **Documenter les choix** pour la maintenance
 
 ---

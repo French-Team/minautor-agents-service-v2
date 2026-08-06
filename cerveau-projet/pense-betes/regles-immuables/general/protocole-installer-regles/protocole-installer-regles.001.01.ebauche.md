@@ -1,40 +1,40 @@
-# Protocole Immuable — Installer les Règles Immuables
+# Protocole Immuable -- Installer les Regles Immuables
 ---
 
 ## Principe Fondamental
 ---
 
-## Règles à installer
+## Regles a installer
 
-### Règles obligatoires (IMMUABLE)
+### Regles obligatoires (IMMUABLE)
 
-| # | Règle | Fichier | Description |
+| # | Regle | Fichier | Description |
 |---|---|---|---|
-| 1 | Choisir le bon agent | `regles-choisir-agent.md` | Matrice de décision pour chaque tâche |
-| 2 | Validation rigoureuse | `regles-validation-rigoureuse.md` | Contrôle derrière contrôle |
-| 3 | Bannissement des emojis | `regles-emojis-ascii.md` | Seuls les caractères ASCII sont autorisés |
-| 4 | Véracité | `regles-veracite.md` | Ne jamais mentir ou inventer |
+| 1 | Choisir le bon agent | `regles-choisir-agent.md` | Matrice de decision pour chaque tache |
+| 2 | Validation rigoureuse | `regles-validation-rigoureuse.md` | Controle derriere controle |
+| 3 | Bannissement des emojis | `regles-emojis-ascii.md` | Seuls les caracteres ASCII sont autorises |
+| 4 | Veracite | `regles-veracite.md` | Ne jamais mentir ou inventer |
 
 ### Workflow fondamental
 
-| # | Règle | Fichier | Description |
+| # | Regle | Fichier | Description |
 |---|---|---|---|
-| 4 | Workflow RVAV | `rvav-workflow.md` | Rechercher-Vérifier-Analyser-Valider |
+| 4 | Workflow RVAV | `rvav-workflow.md` | Rechercher-Verifier-Analyser-Valider |
 
 ### Structure fondamentale
 
-| # | Règle | Fichier | Description |
+| # | Regle | Fichier | Description |
 |---|---|---|---|
-| 5 | Hiérarchie par niveau | `regles-hierarchie-par-niveau.md` | Structure L0-L6 du cerveau |
+| 5 | Hierarchie par niveau | `regles-hierarchie-par-niveau.md` | Structure L0-L6 du cerveau |
 
 ---
 
-## Étape 1 — Vérifier l'existence des règles
+## Etape 1 -- Verifier l'existence des regles
 
 ```
 1. Lister regles-immuables/general/
-2. Vérifier que chaque fichier de règle existe
-3. Si une règle manque -> la créer à partir du cerveau source
+2. Verifier que chaque fichier de regle existe
+3. Si une regle manque -> la creer a partir du cerveau source
 ```
 
 ### Checklist
@@ -48,17 +48,17 @@
 
 ---
 
-## Étape 2 — Copier les règles depuis le cerveau source
+## Etape 2 -- Copier les regles depuis le cerveau source
 
 ```
 1. Identifier le chemin du cerveau source
-2. Copier chaque règle dans le bon emplacement
-3. Vérifier que le contenu est identique
+2. Copier chaque regle dans le bon emplacement
+3. Verifier que le contenu est identique
 ```
 
 ### Emplacements
 
-| Règle | Emplacement cible |
+| Regle | Emplacement cible |
 |---|---|
 | `regles-choisir-agent.md` | `regles-immuables/general/` |
 | `regles-validation-rigoureuse.md` | `regles-immuables/general/` |
@@ -69,77 +69,77 @@
 
 ---
 
-## Étape 3 — Vérifier les dépendances
+## Etape 3 -- Verifier les dependances
 
-Chaque règle a des dépendances qui doivent aussi être présentes :
+Chaque regle a des dependances qui doivent aussi etre presentes :
 
-### Dépendances de `regles-choisir-agent.md`
+### Dependances de `regles-choisir-agent.md`
 
 - [ ] `agents/` dossier existe
 - [ ] `agents/index-agents.md` existe
 - [ ] `agents/fiche-agent-template.md` existe
 - [ ] `agents/corrections-template.md` existe
-- [ ] `AGENTS.md` existe à la racine
+- [ ] `AGENTS.md` existe a la racine
 
-### Dépendances de `regles-validation-rigoureuse.md`
+### Dependances de `regles-validation-rigoureuse.md`
 
 - [ ] `rvav-workflow.md` existe
 
-### Dépendances de `regles-emojis-ascii.md`
+### Dependances de `regles-emojis-ascii.md`
 
-- [ ] Aucune dépendance spécifique
+- [ ] Aucune dependance specifique
 
-### Dépendances de `regles-veracite.md`
+### Dependances de `regles-veracite.md`
 
 - [ ] `recherches-web/` dossier existe
 - [ ] `protocole-recherches-web/` existe
 
-### Dépendances de `rvav-workflow.md`
+### Dependances de `rvav-workflow.md`
 
 - [ ] `conventions/renommage/convention-renommage.md` existe
 
-### Dépendances de `regles-hierarchie-par-niveau.md`
+### Dependances de `regles-hierarchie-par-niveau.md`
 
 - [ ] `conventions/structures/convention-structures.md` existe
 
 ---
 
-## Étape 4 — Mettre à jour les index
+## Etape 4 -- Mettre a jour les index
 
 ```
-1. Mettre à jour regles-immuables/index-regles-immuables.md
-2. Mettre à jour regles-immuables/general/index-regles-general.md
-3. Mettre à jour regles-immuables/hierarchie/index-hierarchie.md
-4. Vérifier que tous les liens sont valides
+1. Mettre a jour regles-immuables/index-regles-immuables.md
+2. Mettre a jour regles-immuables/general/index-regles-general.md
+3. Mettre a jour regles-immuables/hierarchie/index-hierarchie.md
+4. Verifier que tous les liens sont valides
 ```
 
 ---
 
-## Étape 5 — Valider par RVAV
+## Etape 5 -- Valider par RVAV
 
 ```
-1. Lister toutes les règles installées
-2. Vérifier que chaque règle est complète
-3. Vérifier que les dépendances sont satisfaites
-4. Vérifier que les index sont à jour
+1. Lister toutes les regles installees
+2. Verifier que chaque regle est complete
+3. Verifier que les dependances sont satisfaites
+4. Verifier que les index sont a jour
 5. Passer par RVAV complet
 ```
 
 ### Checklist finale
 
-- [ ] 6 règles immuables installées
-- [ ] Toutes les dépendances satisfaites
-- [ ] Tous les index à jour
+- [ ] 6 regles immuables installees
+- [ ] Toutes les dependances satisfaites
+- [ ] Tous les index a jour
 - [ ] Tous les liens valides
-- [ ] RVAV effectué
+- [ ] RVAV effectue
 
 ---
 
-## Protocoles associés
+## Protocoles associes
 
 | Protocole | Description |
 |---|---|
-| `protocole-demarrer-projet` | Créer un nouveau projet complet |
+| `protocole-demarrer-projet` | Creer un nouveau projet complet |
 | `protocole-reprendre-projet` | Reprendre un projet existant |
 | `protocole-identification` | Identification des agents |
 | `protocole-recherches-web` | Recherches web |
@@ -147,15 +147,15 @@ Chaque règle a des dépendances qui doivent aussi être présentes :
 
 ---
 
-## Résumé
+## Resume
 
-| Étape | Action | Résultat |
+| Etape | Action | Resultat |
 |---|---|---|
-| 1 | Vérifier l'existence | Règles identifiées |
-| 2 | Copier les règles | Règles installées |
-| 3 | Vérifier les dépendances | Dépendances satisfaites |
-| 4 | Mettre à jour les index | Index à jour |
-| 5 | Valider par RVAV | Règles validées |
+| 1 | Verifier l'existence | Regles identifiees |
+| 2 | Copier les regles | Regles installees |
+| 3 | Verifier les dependances | Dependances satisfaites |
+| 4 | Mettre a jour les index | Index a jour |
+| 5 | Valider par RVAV | Regles validees |
 
 ---
 

@@ -27,12 +27,12 @@ aide() {
     echo ""
     echo "Options:"
     echo "  --aide, -h          Afficher cette aide"
-    echo "  --verbose, -v       Afficher les détails"
+    echo "  --verbose, -v       Afficher les details"
     echo "  --version           Afficher la version"
-    echo "  --racine RACINE     Racine du projet (défaut: .)"
+    echo "  --racine RACINE     Racine du projet (defaut: .)"
     echo ""
     echo "Arguments:"
-    echo "  FICHIER             Fichier Markdown à valider"
+    echo "  FICHIER             Fichier Markdown a valider"
     echo ""
     echo "Exemples:"
     echo "  valider-liens fichier.md"
@@ -50,12 +50,12 @@ valider_liens() {
     local liens_invalides=0
     local liens_externes=0
 
-    # Obtenir le répertoire du fichier
+    # Obtenir le repertoire du fichier
     local dossier_fichier
     dossier_fichier=$(dirname "$fichier")
 
     echo -e "${BLUE}[LIEN] Validation des liens dans : ${fichier}${NC}"
-    echo -e "${BLUE}[DOSSIER] Répertoire du fichier : ${dossier_fichier}${NC}"
+    echo -e "${BLUE}[DOSSIER] Repertoire du fichier : ${dossier_fichier}${NC}"
     echo ""
 
     # Extraire les liens Markdown [texte](chemin) avec sed
@@ -63,7 +63,7 @@ valider_liens() {
     liens=$(sed -n 's/.*\[\([^]]*\)\](\([^)]*\)).*/\1|\2/p' "$fichier" 2>/dev/null)
 
     if [[ -z "$liens" ]]; then
-        echo -e "${YELLOW}Aucun lien Markdown trouvé.${NC}"
+        echo -e "${YELLOW}Aucun lien Markdown trouve.${NC}"
         return 0
     fi
 
@@ -71,18 +71,18 @@ valider_liens() {
     local total
     total=$(echo "$liens" | wc -l)
 
-    echo -e "${BLUE}Trouvé ${total} lien(s) Markdown${NC}"
+    echo -e "${BLUE}Trouve ${total} lien(s) Markdown${NC}"
     echo ""
 
     # Traiter chaque lien
     while IFS= read -r lien; do
-        # Séparer texte et chemin (séparateur |)
+        # Separer texte et chemin (separateur |)
         local texte
         local chemin
         texte=$(echo "$lien" | cut -d'|' -f1)
         chemin=$(echo "$lien" | cut -d'|' -f2)
 
-        # Vérifier si c'est un lien interne (pas http/https)
+        # Verifier si c'est un lien interne (pas http/https)
         if echo "$chemin" | grep -qE '^https?://'; then
             # Lien externe
             liens_externes=$((liens_externes + 1))
@@ -90,10 +90,10 @@ valider_liens() {
                 echo -e "${YELLOW}[LIEN] ${texte} -> ${chemin} (externe)${NC}"
             fi
         else
-            # Lien interne - vérifier depuis le répertoire du fichier
+            # Lien interne - verifier depuis le repertoire du fichier
             local chemin_complet="${dossier_fichier}/${chemin}"
             
-            # Normaliser le chemin (gérer ../)
+            # Normaliser le chemin (gerer ../)
             chemin_complet=$(cd "$dossier_fichier" 2>/dev/null && cd "$(dirname "$chemin")" 2>/dev/null && pwd)/$(basename "$chemin") 2>/dev/null || echo "$chemin_complet"
             
             if [[ -f "$chemin_complet" ]] || [[ -d "$chemin_complet" ]]; then
@@ -105,14 +105,14 @@ valider_liens() {
                 liens_invalides=$((liens_invalides + 1))
                 echo -e "${RED}[ERREUR] ${texte} -> ${chemin}${NC}"
                 if [[ "$verbose" == "true" ]]; then
-                    echo -e "   Chemin vérifié : ${chemin_complet}"
+                    echo -e "   Chemin verifie : ${chemin_complet}"
                 fi
             fi
         fi
     done <<< "$liens"
 
     echo ""
-    echo -e "${BLUE}Résumé :${NC}"
+    echo -e "${BLUE}Resume :${NC}"
     echo -e "${GREEN}[OK] Liens valides : ${liens_valides}${NC}"
     echo -e "${RED}[ERREUR] Liens invalides : ${liens_invalides}${NC}"
     echo -e "${YELLOW}[LIEN] Liens externes : ${liens_externes}${NC}"
@@ -124,7 +124,7 @@ valider_liens() {
     fi
 }
 
-# Valeurs par défaut
+# Valeurs par defaut
 VERBOSE="false"
 RACINE="."
 
@@ -159,9 +159,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Vérification du fichier
+# Verification du fichier
 if [[ -z "$FICHIER" ]]; then
-    echo "Erreur: Aucun fichier spécifié"
+    echo "Erreur: Aucun fichier specifie"
     echo "Utilisez --aide pour l'aide"
     exit 1
 fi
@@ -171,7 +171,7 @@ if [[ ! -f "$FICHIER" ]]; then
     exit 1
 fi
 
-# Exécution
+# Execution
 valider_liens "$FICHIER" "$VERBOSE" "$RACINE"
 
 exit $?

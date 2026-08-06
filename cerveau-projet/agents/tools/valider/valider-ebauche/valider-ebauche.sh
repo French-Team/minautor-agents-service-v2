@@ -1,7 +1,7 @@
 #!/bin/bash
 # valider-ebauche.sh
-# Vérifie si un fichier ebauche respecte les exigences minimales
-# Propriétaire : Vulcain (outil partagé)
+# Verifie si un fichier ebauche respecte les exigences minimales
+# Proprietaire : Vulcain (outil partage)
 
 # Couleurs
 RED='\033[0;31m'
@@ -18,10 +18,10 @@ FICHIER=""
 afficher_aide() {
     echo "Usage: $0 <fichier> [options]"
     echo ""
-    echo "Vérifie si un fichier ebauche respecte les exigences minimales."
+    echo "Verifie si un fichier ebauche respecte les exigences minimales."
     echo ""
     echo "Options:"
-    echo "  --verbose     Afficher les détails"
+    echo "  --verbose     Afficher les details"
     echo "  --aide        Afficher cette aide"
     echo ""
     echo "Exemples:"
@@ -29,7 +29,7 @@ afficher_aide() {
     echo "  $0 --verbose protocole-xxx.001.01.ebauche.md"
 }
 
-# Fonction pour vérifier si le fichier est un ebauche
+# Fonction pour verifier si le fichier est un ebauche
 verifier_statut() {
     local fichier=$1
     local basename=$(basename "$fichier")
@@ -42,7 +42,7 @@ verifier_statut() {
     fi
 }
 
-# Fonction pour vérifier la structure du nom
+# Fonction pour verifier la structure du nom
 verifier_nommage() {
     local fichier=$1
     local basename=$(basename "$fichier")
@@ -59,12 +59,12 @@ verifier_nommage() {
     fi
 }
 
-# Fonction pour vérifier la présence de sections minimales
+# Fonction pour verifier la presence de sections minimales
 verifier_sections() {
     local fichier=$1
     local erreurs=0
     
-    # Vérifier la présence d'un titre
+    # Verifier la presence d'un titre
     if ! grep -q "^#" "$fichier"; then
         echo -e "${RED}[ERREUR] Pas de titre principal (h1)${NC}"
         erreurs=$((erreurs + 1))
@@ -73,13 +73,13 @@ verifier_sections() {
     return $erreurs
 }
 
-# Fonction pour vérifier la présence de contenu minimal
+# Fonction pour verifier la presence de contenu minimal
 verifier_contenu() {
     local fichier=$1
     local lignes=$(wc -l < "$fichier")
     local erreurs=0
     
-    # Vérifier le nombre de lignes minimal
+    # Verifier le nombre de lignes minimal
     if [ "$lignes" -lt 5 ]; then
         echo -e "${RED}[ERREUR] Trop peu de contenu : $lignes lignes (minimum 5)${NC}"
         erreurs=$((erreurs + 1))
@@ -88,27 +88,27 @@ verifier_contenu() {
     return $erreurs
 }
 
-# Fonction pour vérifier si le fichier est TROP complet pour un ebauche
+# Fonction pour verifier si le fichier est TROP complet pour un ebauche
 verifier_pas_trop_complet() {
     local fichier=$1
     local warnings=0
     
-    # Vérifier la présence de frontmatter
+    # Verifier la presence de frontmatter
     if head -n 1 "$fichier" | grep -q "^---"; then
-        echo -e "${YELLOW}[ATTENTION]  Frontmatter présent (inutile pour un ebauche)${NC}"
+        echo -e "${YELLOW}[ATTENTION]  Frontmatter present (inutile pour un ebauche)${NC}"
         warnings=$((warnings + 1))
     fi
     
-    # Vérifier la présence de tableaux
+    # Verifier la presence de tableaux
     if grep -qE "^\|.*\|" "$fichier"; then
-        echo -e "${YELLOW}[ATTENTION]  Tableaux présents (peut-être trop structuré pour un ebauche)${NC}"
+        echo -e "${YELLOW}[ATTENTION]  Tableaux presents (peut-etre trop structure pour un ebauche)${NC}"
         warnings=$((warnings + 1))
     fi
     
-    # Vérifier la présence de many sections
+    # Verifier la presence de many sections
     local nb_sections=$(grep -c "^## " "$fichier" 2>/dev/null || echo 0)
     if [ "$nb_sections" -gt 3 ]; then
-        echo -e "${YELLOW}[ATTENTION]  $nb_sections sections (peut-être trop structuré pour un ebauche)${NC}"
+        echo -e "${YELLOW}[ATTENTION]  $nb_sections sections (peut-etre trop structure pour un ebauche)${NC}"
         warnings=$((warnings + 1))
     fi
     
@@ -125,52 +125,52 @@ valider_ebauche() {
     echo "Fichier : $fichier"
     echo ""
     
-    # Vérifier que le fichier existe
+    # Verifier que le fichier existe
     if [ ! -f "$fichier" ]; then
-        echo -e "${RED}[ERREUR] Fichier non trouvé : $fichier${NC}"
+        echo -e "${RED}[ERREUR] Fichier non trouve : $fichier${NC}"
         exit 1
     fi
     
-    # Vérifier le statut
+    # Verifier le statut
     verifier_statut "$fichier"
     if [ $? -ne 0 ]; then
         exit 1
     fi
     
-    # Vérifier le nommage
-    echo -e "${BLUE}--- Vérification du nommage ---${NC}"
+    # Verifier le nommage
+    echo -e "${BLUE}--- Verification du nommage ---${NC}"
     verifier_nommage "$fichier"
     if [ $? -ne 0 ]; then
         avertissements=$((avertissements + 1))
     fi
     
-    # Vérifier la structure
+    # Verifier la structure
     echo ""
-    echo -e "${BLUE}--- Vérification de la structure minimale ---${NC}"
+    echo -e "${BLUE}--- Verification de la structure minimale ---${NC}"
     verifier_sections "$fichier"
     if [ $? -ne 0 ]; then
         erreurs_totales=$((erreurs_totales + 1))
     fi
     
-    # Vérifier le contenu
+    # Verifier le contenu
     echo ""
-    echo -e "${BLUE}--- Vérification du contenu minimal ---${NC}"
+    echo -e "${BLUE}--- Verification du contenu minimal ---${NC}"
     verifier_contenu "$fichier"
     if [ $? -ne 0 ]; then
         erreurs_totales=$((erreurs_totales + 1))
     fi
     
-    # Vérifier si le fichier est trop complet
+    # Verifier si le fichier est trop complet
     echo ""
-    echo -e "${BLUE}--- Vérification : pas trop complet pour un ebauche ---${NC}"
+    echo -e "${BLUE}--- Verification : pas trop complet pour un ebauche ---${NC}"
     verifier_pas_trop_complet "$fichier"
     if [ $? -ne 0 ]; then
         avertissements=$((avertissements + 1))
     fi
     
-    # Résumé
+    # Resume
     echo ""
-    echo -e "${BLUE}=== Résumé ===${NC}"
+    echo -e "${BLUE}=== Resume ===${NC}"
     echo "Erreurs : $erreurs_totales"
     echo "Avertissements : $avertissements"
     
@@ -178,8 +178,8 @@ valider_ebauche() {
         echo ""
         echo -e "${GREEN}[OK] Le fichier ebauche respecte les exigences minimales${NC}"
         if [ "$avertissements" -gt 0 ]; then
-            echo -e "${YELLOW}[ATTENTION]  Cependant, il semble trop structuré pour un ebauche${NC}"
-            echo -e "${YELLOW}    Considérez passer au statut 'prepare'${NC}"
+            echo -e "${YELLOW}[ATTENTION]  Cependant, il semble trop structure pour un ebauche${NC}"
+            echo -e "${YELLOW}    Considerez passer au statut 'prepare'${NC}"
         fi
         exit 0
     else
@@ -207,9 +207,9 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-# Vérifier qu'un fichier a été spécifié
+# Verifier qu'un fichier a ete specifie
 if [ -z "$FICHIER" ]; then
-    echo -e "${RED}[ERREUR] Aucun fichier spécifié${NC}"
+    echo -e "${RED}[ERREUR] Aucun fichier specifie${NC}"
     afficher_aide
     exit 1
 fi

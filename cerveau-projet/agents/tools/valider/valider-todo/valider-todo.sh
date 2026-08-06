@@ -30,9 +30,9 @@ afficher_aide() {
     echo ""
     echo "Verifications effectuees :"
     echo "  1. Le fichier existe et n'est pas vide"
-    echo "  2. La Phase 0 (activation de l'agent) est presente — OBLIGATOIRE"
+    echo "  2. La Phase 0 (activation de l'agent) est presente -- OBLIGATOIRE"
     echo "  3. Les 10 phases (0 a 9) sont presentes"
-    echo "  4. La Phase 9 (reactivation de Cerberus) est presente — OBLIGATOIRE"
+    echo "  4. La Phase 9 (reactivation de Cerberus) est presente -- OBLIGATOIRE"
     echo "  5. Le nommage du fichier est conforme (todo-[theme].[id].[class].[statut].md)"
     echo "  6. Aucun placeholder non remplace ([...] restants)"
     echo "  7. Conformite ASCII (pas d'accents, pas d'emojis)"
@@ -70,21 +70,21 @@ verifier_phases() {
     local erreurs=0
     
     # Phase 0 - OBLIGATOIRE
-    verifier_phase "$fichier" "## Phase 0 — Activation de l'agent" "Phase 0 — Activation de l'agent" "true"
+    verifier_phase "$fichier" "## Phase 0 -- Activation de l'agent" "Phase 0 -- Activation de l'agent" "true"
     erreurs=$((erreurs + $?))
     
     # Phases 1-8
-    verifier_phase "$fichier" "## Phase 1 — Analyse de la demande" "Phase 1 — Analyse de la demande" "false"
-    verifier_phase "$fichier" "## Phase 2 — Verification du cerveau" "Phase 2 — Verification du cerveau" "false"
-    verifier_phase "$fichier" "## Phase 3 — Recherches" "Phase 3 — Recherches" "false"
-    verifier_phase "$fichier" "## Phase 4 — Preparation des outils" "Phase 4 — Preparation des outils" "false"
-    verifier_phase "$fichier" "## Phase 5 — Developpement" "Phase 5 — Developpement" "false"
-    verifier_phase "$fichier" "## Phase 6 — Tests et validation" "Phase 6 — Tests et validation" "false"
-    verifier_phase "$fichier" "## Phase 7 — Controle secondaire" "Phase 7 — Controle secondaire" "false"
-    verifier_phase "$fichier" "## Phase 8 — Finalisation" "Phase 8 — Finalisation" "false"
+    verifier_phase "$fichier" "## Phase 1 -- Analyse de la demande" "Phase 1 -- Analyse de la demande" "false"
+    verifier_phase "$fichier" "## Phase 2 -- Verification du cerveau" "Phase 2 -- Verification du cerveau" "false"
+    verifier_phase "$fichier" "## Phase 3 -- Recherches" "Phase 3 -- Recherches" "false"
+    verifier_phase "$fichier" "## Phase 4 -- Preparation des outils" "Phase 4 -- Preparation des outils" "false"
+    verifier_phase "$fichier" "## Phase 5 -- Developpement" "Phase 5 -- Developpement" "false"
+    verifier_phase "$fichier" "## Phase 6 -- Tests et validation" "Phase 6 -- Tests et validation" "false"
+    verifier_phase "$fichier" "## Phase 7 -- Controle secondaire" "Phase 7 -- Controle secondaire" "false"
+    verifier_phase "$fichier" "## Phase 8 -- Finalisation" "Phase 8 -- Finalisation" "false"
     
     # Phase 9 - OBLIGATOIRE
-    verifier_phase "$fichier" "## Phase 9 — Reactivation de Cerberus" "Phase 9 — Reactivation de Cerberus" "true"
+    verifier_phase "$fichier" "## Phase 9 -- Reactivation de Cerberus" "Phase 9 -- Reactivation de Cerberus" "true"
     erreurs=$((erreurs + $?))
     
     return $erreurs
@@ -130,9 +130,9 @@ verifier_placeholders() {
 verifier_ascii() {
     local fichier="$1"
     
-    if grep -qP '[^\x00-\x7F]' "$fichier" 2>/dev/null; then
+    if python -c "import io,sys; sys.exit(0 if any(ord(ch)>127 for ch in io.open(sys.argv[1],encoding='utf-8').read()) else 1)" "$fichier"; then
         echo -e "  ${RED}[ERREUR]${NC} Caracteres non-ASCII detectes :"
-        grep -nP '[^\x00-\x7F]' "$fichier" | head -5 | while read ligne; do
+        python -c "import io,sys; [print(str(i)+': '+l.rstrip()) for i,l in enumerate(io.open(sys.argv[1],encoding='utf-8').read().split(chr(10)),1) if any(ord(ch)>127 for ch in l)][:5]" "$fichier" | while read ligne; do
             echo "    $ligne"
         done
         return 1

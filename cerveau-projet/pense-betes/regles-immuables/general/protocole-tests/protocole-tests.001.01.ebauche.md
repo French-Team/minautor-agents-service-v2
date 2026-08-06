@@ -25,9 +25,9 @@ Definir comment tester les outils bash du cerveau-projet avec des protections qu
 ```
 tests/
   protections/           # Protections qui englobent les tests
-    protection-boucles-infinies.sh
-    protection-erreurs-silencieuses.sh
-    protection-blocage.sh
+    tester-protection-boucles-infinies.sh
+    tester-protection-erreurs-silencieuses.sh
+    tester-protection-blocage.sh
   test-001-nom-outil/    # Dossier du test (numerote)
     test-001-outil.md    # Documentation du test
     test-001-outil.sh    # Script du test
@@ -102,8 +102,8 @@ lancer_avec_protection() {
 # test-001-outil.sh
 
 # Charger les protections
-source "$(dirname "$0")/../protections/protection-boucles-infinies.sh"
-source "$(dirname "$0")/../protections/protection-erreurs-silencieuses.sh"
+source "$(dirname "$0")/../protections/tester-protection-boucles-infinies.sh"
+source "$(dirname "$0")/../protections/tester-protection-erreurs-silencieuses.sh"
 
 # Test 1: Detection des accents
 echo "=== Test 1: Detection des accents ==="

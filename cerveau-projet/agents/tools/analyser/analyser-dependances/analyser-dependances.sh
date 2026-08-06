@@ -1,12 +1,12 @@
 #!/bin/bash
 # analyser-dependances.sh
-# Analyser les dépendances entre fichiers
-# Version: 0.1.0
+# Analyser les dependances entre fichiers
+# Version: 0.2.0
 # Date: 2026-08-05
 # Auteur: Vulcain
 
 # Configuration
-VERSION="0.1.0"
+VERSION="0.2.0"
 DATE="2026-08-05"
 
 # Couleurs pour la sortie
@@ -21,16 +21,16 @@ NC='\033[0m' # No Color
 aide() {
     echo "=========================================="
     echo "  analyser-dependances v${VERSION}"
-    echo "  Analyser les dépendances entre fichiers"
+    echo "  Analyser les dependances entre fichiers"
     echo "=========================================="
     echo ""
     echo "Usage: analyser-dependances [OPTIONS] FICHIER"
     echo ""
     echo "Options:"
     echo "  --aide, -h          Afficher cette aide"
-    echo "  --verbose, -v       Afficher les détails"
+    echo "  --verbose, -v       Afficher les details"
     echo "  --version           Afficher la version"
-    echo "  --inverse, -i       Afficher les fichiers qui dépendent de celui-ci"
+    echo "  --inverse, -i       Afficher les fichiers qui dependent de celui-ci"
     echo ""
     echo "Exemples:"
     echo "  analyser-dependances fichier.md"
@@ -38,16 +38,16 @@ aide() {
     echo ""
 }
 
-# Fonction pour analyser les dépendances
+# Fonction pour analyser les dependances
 analyser_dependances() {
     local fichier=$1
     local verbose=$2
     local inverse=$3
 
-    echo -e "${BLUE}[LIEN] Analyse des dépendances : $(basename "$fichier")${NC}"
+    echo -e "${BLUE}[ANALYSE] Dependances de : $(basename "$fichier")${NC}"
     echo ""
 
-    # Vérifier que le fichier existe
+    # Verifier que le fichier existe
     if [[ ! -f "$fichier" ]]; then
         echo -e "${RED}Erreur: Le fichier '${fichier}' n'existe pas${NC}"
         return 1
@@ -56,9 +56,9 @@ analyser_dependances() {
     local dossier_fichier=$(dirname "$fichier")
 
     if [[ "$inverse" == "true" ]]; then
-        # Mode inverse : trouver les fichiers qui dépendent de celui-ci
+        # Mode inverse : trouver les fichiers qui dependent de celui-ci
         echo -e "${CYAN}----------------------------------------${NC}"
-        echo -e "${GREEN}[TELECHARGER] Fichiers qui dépendent de $(basename "$fichier")${NC}"
+        echo -e "${GREEN}[DEPENDANTS] Fichiers qui dependent de $(basename "$fichier")${NC}"
         echo -e "${CYAN}----------------------------------------${NC}"
         
         local dependants=0
@@ -74,11 +74,11 @@ analyser_dependances() {
         done
         
         echo ""
-        echo -e "${BLUE}Terminé.${NC}"
+        echo -e "${BLUE}Termine.${NC}"
     else
-        # Mode normal : analyser les dépendances de ce fichier
+        # Mode normal : analyser les dependances de ce fichier
         echo -e "${CYAN}----------------------------------------${NC}"
-        echo -e "${GREEN}[ENVOYER] Dépendances de $(basename "$fichier")${NC}"
+        echo -e "${GREEN}[DEPENDANCES] Dependances de $(basename "$fichier")${NC}"
         echo -e "${CYAN}----------------------------------------${NC}"
         
         # 1. Liens Markdown
@@ -93,7 +93,7 @@ analyser_dependances() {
                 local texte=$(echo "$lien" | cut -d'|' -f1)
                 local chemin=$(echo "$lien" | cut -d'|' -f2)
                 
-                # Vérifier si c'est un lien interne
+                # Verifier si c'est un lien interne
                 if ! echo "$chemin" | grep -qE '^https?://'; then
                     local chemin_complet="${dossier_fichier}/${chemin}"
                     if [[ -f "$chemin_complet" ]] || [[ -d "$chemin_complet" ]]; then
@@ -111,7 +111,7 @@ analyser_dependances() {
             echo -e "  ${GREEN}Valides : ${nb_valides}${NC}"
             echo -e "  ${RED}Invalides : ${nb_invalides}${NC}"
         else
-            echo -e "  ${YELLOW}Aucun lien Markdown trouvé${NC}"
+            echo -e "  ${YELLOW}Aucun lien Markdown trouve${NC}"
         fi
         echo ""
 
@@ -123,35 +123,35 @@ analyser_dependances() {
             sh|bash)
                 # Scripts Bash - chercher les sources
                 local sources=$(grep -E '^\s*source\s+|^\s*\.\s+' "$fichier" 2>/dev/null | wc -l)
-                echo -e "  [PAQUET] Sources Bash : ${sources}"
+                echo -e "  [SOURCES] Sources Bash : ${sources}"
                 ;;
             py)
                 # Scripts Python - chercher les imports
                 local imports=$(grep -E '^\s*import\s+|^\s*from\s+' "$fichier" 2>/dev/null | wc -l)
-                echo -e "  [PAQUET] Imports Python : ${imports}"
+                echo -e "  [IMPORTS] Imports Python : ${imports}"
                 ;;
             js|ts)
                 # Scripts JavaScript - chercher les imports
                 local imports=$(grep -E '^\s*import\s+|^\s*require\s*\(' "$fichier" 2>/dev/null | wc -l)
-                echo -e "  [PAQUET] Imports JavaScript : ${imports}"
+                echo -e "  [IMPORTS] Imports JavaScript : ${imports}"
                 ;;
             *)
-                echo -e "  ${YELLOW}Type de fichier non analysé pour les imports${NC}"
+                echo -e "  ${YELLOW}Type de fichier non analyse pour les imports${NC}"
                 ;;
         esac
         echo ""
 
-        # 3. Fichiers référencés
-        echo -e "${BLUE}3. Fichiers référencés${NC}"
+        # 3. Fichiers references
+        echo -e "${BLUE}3. Fichiers references${NC}"
         local refs=$(grep -oE '[a-zA-Z0-9_./-]+\.(md|sh|py|js|ts|json)' "$fichier" 2>/dev/null | sort -u | wc -l)
-        echo -e "  [FICHIER] ${refs} fichier(s) référencé(s)"
+        echo -e "  [REFERENCES] ${refs} fichier(s) reference(s)"
         echo ""
 
-        echo -e "${BLUE}Terminé.${NC}"
+        echo -e "${BLUE}Termine.${NC}"
     fi
 }
 
-# Valeurs par défaut
+# Valeurs par defaut
 VERBOSE="false"
 INVERSE="false"
 
@@ -186,14 +186,14 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Vérification du fichier
+# Verification du fichier
 if [[ -z "$FICHIER" ]]; then
-    echo "Erreur: Aucun fichier spécifié"
+    echo "Erreur: Aucun fichier specifie"
     echo "Utilisez --aide pour l'aide"
     exit 1
 fi
 
-# Exécution
+# Execution
 analyser_dependances "$FICHIER" "$VERBOSE" "$INVERSE"
 
 exit $?

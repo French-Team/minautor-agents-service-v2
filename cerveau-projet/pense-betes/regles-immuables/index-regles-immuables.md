@@ -1,4 +1,4 @@
-# Index — Règles Immuables
+# Index -- Regles Immuables
 ## Contenu
 
 | Dossier | Description | Plateforme |
@@ -34,7 +34,7 @@ Les protocoles vivent dans `general/protocole-[nom]/` :
 | `protocole-outils` | Boite a outils |
 | `protocole-auto-correction` | Auto-correction des agents |
 
-## Créer un protocole
+## Creer un protocole
 
 -> Consulter [conventions/protocoles/convention-protocoles.md](../conventions/protocoles/convention-protocoles.md)
-pour les règles de mise en place des protocoles.
+pour les regles de mise en place des protocoles.

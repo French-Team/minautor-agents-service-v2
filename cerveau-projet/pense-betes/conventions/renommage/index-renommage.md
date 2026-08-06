@@ -1,23 +1,23 @@
-# Index — Convention Renommage
+# Index -- Convention Renommage
 ## Contenu
 
 | Fichier | Description |
 |---|---|
 | [convention-renommage.md](convention-renommage.md) | Comment nommer les fichiers (ID, Class, Statut) |
 
-## Résumé rapide
+## Resume rapide
 
-| Règle | Description |
+| Regle | Description |
 |---|---|
-| **Pattern contenu** | `[type]-[thème].[id].[class].[statut].md` |
-| **Pattern plateforme** | `[thème].[id].[class].[statut].md` |
-| **Fichiers méta** | `index-[catégorie].md`, `[type]-template.md`, `convention-[thème].md` |
-| **ID fixe** | Numéro de création (3 chiffres), jamais modifié |
-| **Class évolue** | Incrémenté à chaque boucle RVAV |
-| **Statut évolue** | ebauche | prepare | dev | test | valide |
+| **Pattern contenu** | `[type]-[theme].[id].[class].[statut].md` |
+| **Pattern plateforme** | `[theme].[id].[class].[statut].md` |
+| **Fichiers meta** | `index-[categorie].md`, `[type]-template.md`, `convention-[theme].md` |
+| **ID fixe** | Numero de creation (3 chiffres), jamais modifie |
+| **Class evolue** | Incremente a chaque boucle RVAV |
+| **Statut evolue** | ebauche | prepare | dev | test | valide |
 
 ## Navigation
 
 - **Parent** : [index-conventions.md](../index-conventions.md)
-- **Sœurs** : [structures/](../structures/index-structures.md), [liens/](../liens/index-liens.md), [protocoles/](../protocoles/index-protocoles.md)
-- **Règle liée** : [rvav-workflow.md](../../regles-immuables/general/rvav-workflow.md)
+- **Soeurs** : [structures/](../structures/index-structures.md), [liens/](../liens/index-liens.md), [protocoles/](../protocoles/index-protocoles.md)
+- **Regle liee** : [rvav-workflow.md](../../regles-immuables/general/rvav-workflow.md)

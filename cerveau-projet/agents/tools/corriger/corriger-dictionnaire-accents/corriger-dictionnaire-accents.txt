@@ -1,0 +1,67 @@
+# ============================================================
+# EXCEPTION VOLONTAIRE A LA REGLE regles-emojis-ascii.md
+# ------------------------------------------------------------
+# Ce fichier CONTIENT volontairement des caracteres non-ASCII
+# (accents, fleches) : c'est le dictionnaire de correspondance
+# utilise par corriger-dictionnaire-accents.sh et valider-conformite-ascii.sh.
+#
+# NE PAS purger ce fichier. Les lignes # sont ignorees par
+# l'outil. Exception documentee dans regles-emojis-ascii.md.
+# ============================================================
+# Dictionnaire d accents vers ASCII
+# Format: accent|remplacement
+# Separateur: |
+
+# Accents francais courants
+é|e
+è|e
+ê|e
+ë|e
+à|a
+â|a
+î|i
+ï|i
+ô|o
+ù|u
+û|u
+ü|u
+ÿ|y
+ç|c
+
+# Majuscules accentuees
+É|E
+È|E
+Ê|E
+Ë|E
+À|A
+Â|A
+Î|I
+Ï|I
+Ô|O
+Ù|U
+Û|U
+Ü|U
+Ÿ|Y
+Ç|C
+
+# Ligatures
+œ|oe
+æ|ae
+
+# Apostrophes et guillemets courbes
+‘|'
+’|'
+‚|'
+“|"
+”|"
+„|"
+
+# Symboles courants
+…|...
+–|--
+—|--
+≤|<=
+≥|>=
+≠|!=
+→|->
+←|<-

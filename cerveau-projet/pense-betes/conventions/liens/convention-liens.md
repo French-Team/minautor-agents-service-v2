@@ -2,9 +2,9 @@
 
 ## Objectif
 
-Standardiser la création de liens pour garantir :
-- Une navigation cohérente dans le cerveau
-- Une maintenance facilitée
+Standardiser la creation de liens pour garantir :
+- Une navigation coherente dans le cerveau
+- Une maintenance facilitee
 - Une validation automatisable
 
 ---
@@ -15,7 +15,7 @@ Standardiser la création de liens pour garantir :
 |---|---|---|
 | **Internes** | Liens vers des fichiers du cerveau-projet | `[texte](chemin/fichier.md)` |
 | **Relatifs** | Liens utilisant `../` pour remonter | `[parent](../chemin/parent.md)` |
-| **Dans tableaux** | Liens intégrés dans les tableaux | `[Nom](chemin) \| Description \| Statut` |
+| **Dans tableaux** | Liens integres dans les tableaux | `[Nom](chemin) \| Description \| Statut` |
 
 ---
 
@@ -24,14 +24,14 @@ Standardiser la création de liens pour garantir :
 | Emplacement | Obligatoire | Usage |
 |---|---|---|
 | **Header** | [OK] | Navigation |
-| **Sections** | Optionnel | Références |
+| **Sections** | Optionnel | References |
 | **Footer** | Optionnel | Ressources connexes |
 
 ---
 
 ## Patterns de navigation
 
-### Hiérarchie ascendante
+### Hierarchie ascendante
 
 | Depuis | Vers | Syntaxe |
 |---|---|---|
@@ -39,18 +39,18 @@ Standardiser la création de liens pour garantir :
 | `dossier/fichier.md` | `parent/index.md` | `[parent](../index.md)` |
 | `dossier/fichier.md` | `racine/index.md` | `[racine](../../index.md)` |
 
-### Hiérarchie descendante
+### Hierarchie descendante
 
 | Depuis | Vers | Syntaxe |
 |---|---|---|
 | `index.md` | `dossier/fichier.md` | `[fichier](dossier/fichier.md)` |
 | `index.md` | `sous-dossier/` | `[sous-dossier/](sous-dossier/index.md)` |
 
-### Navigation latérale
+### Navigation laterale
 
 | Depuis | Vers | Syntaxe |
 |---|---|---|
-| `frere-a.md` | `frere-b.md` | `[Frère B](../frere-b/frere-b.md)` |
+| `frere-a.md` | `frere-b.md` | `[Frere B](../frere-b/frere-b.md)` |
 
 ---
 
@@ -64,14 +64,14 @@ Standardiser la création de liens pour garantir :
 
 ---
 
-## Règles de validation
+## Regles de validation
 
-| Critère | Obligatoire | Vérification |
+| Critere | Obligatoire | Verification |
 |---|---|---|
 | Fichier cible existe | [OK] | Test d'existence |
 | Texte descriptif | [OK] | Lecture humaine |
-| Chemin relatif | [OK] | Pas de `/` au début |
-| Cohérence navigation | [OK] | Parent <-> Enfant |
+| Chemin relatif | [OK] | Pas de `/` au debut |
+| Coherence navigation | [OK] | Parent <-> Enfant |
 
 ---
 
@@ -88,7 +88,7 @@ Standardiser la création de liens pour garantir :
 [ici](fichier.md)
 [Cliquez ici](fichier.md)
 
-# Liens cassés
+# Liens casses
 [Lien](fichier-inexistant.md)
 ```
 
@@ -100,33 +100,33 @@ Standardiser la création de liens pour garantir :
 
 # Texte descriptif
 [Convention de renommage](../../conventions/renommage/convention-renommage.md)
-[Index des règles](../regles-immuables/index-regles-immuables.md)
+[Index des regles](../regles-immuables/index-regles-immuables.md)
 ```
 
 ---
 
 ## Maintenance des liens
 
-| Action | Étapes |
+| Action | Etapes |
 |---|---|
-| **Déplacement** | Mettre à jour tous les liens -> Vérifier index parent -> Valider |
-| **Renommage** | Identifier liens -> Mettre à jour -> Vérifier cohérence |
-| **Suppression** | Identifier liens -> Supprimer/remplacer -> Mettre à jour index |
+| **Deplacement** | Mettre a jour tous les liens -> Verifier index parent -> Valider |
+| **Renommage** | Identifier liens -> Mettre a jour -> Verifier coherence |
+| **Suppression** | Identifier liens -> Supprimer/remplacer -> Mettre a jour index |
 
 ---
 
-## Conventions associées
+## Conventions associees
 
 | Convention | Usage |
 |---|---|
 | [Renommage](../renommage/convention-renommage.md) | Nommage des fichiers |
 | [Structures](../structures/convention-structures.md) | Organisation des dossiers |
-| [Protocoles](../protocoles/convention-protocoles.md) | Création de protocoles |
+| [Protocoles](../protocoles/convention-protocoles.md) | Creation de protocoles |
 
 ---
 
 ## Navigation
 
 - **Parent** : [index-conventions.md](../index-conventions.md)
-- **Sœurs** : [renommage/](../renommage/convention-renommage.md), [structures/](../structures/index-structures.md), [protocoles/](../protocoles/index-protocoles.md)
-- **Règles** : [regles-immuables/](../../regles-immuables/index-regles-immuables.md)
+- **Soeurs** : [renommage/](../renommage/convention-renommage.md), [structures/](../structures/index-structures.md), [protocoles/](../protocoles/index-protocoles.md)
+- **Regles** : [regles-immuables/](../../regles-immuables/index-regles-immuables.md)

@@ -1,10 +1,10 @@
-# Protocole Immuable — Reprendre un Projet Existant
+# Protocole Immuable -- Reprendre un Projet Existant
 
 ---
 
 ## Principe Fondamental
 
-Reprendre un projet existant en évaluant son état, en le classifiant, puis en appliquant les corrections nécessaires.
+Reprendre un projet existant en evaluant son etat, en le classifiant, puis en appliquant les corrections necessaires.
 
 ---
 
@@ -13,119 +13,119 @@ Reprendre un projet existant en évaluant son état, en le classifiant, puis en 
 | Cas | Description | Approche |
 |---|---|---|
 | **Projet fonctionnel** | Tout marche, on veut ajouter | Comprendre -> Ajouter |
-| **Projet incomplet** | Structure là, contenu manquant | Comprendre -> Compléter |
-| **Projet cassé** | Erreurs, bugs, problèmes | Diagnostiquer -> Corriger |
-| **Projet à refondre** | Architecture mauvaise | Analyser -> Refondre |
-| **Reprise après pause** | On reprend après une absence | Évaluer -> Continuer |
+| **Projet incomplet** | Structure la, contenu manquant | Comprendre -> Completer |
+| **Projet casse** | Erreurs, bugs, problemes | Diagnostiquer -> Corriger |
+| **Projet a refondre** | Architecture mauvaise | Analyser -> Refondre |
+| **Reprise apres pause** | On reprend apres une absence | Evaluer -> Continuer |
 
 ---
 
-## Prérequis
+## Prerequis
 
-| Élément | Vérification |
+| Element | Verification |
 |---|---|
-| **Agent** | L'agent est identifié (fiche créée ou lue) |
-| **Position** | On est à la racine du projet existant |
-| **Accès** | On a accès à tous les fichiers du projet |
+| **Agent** | L'agent est identifie (fiche creee ou lue) |
+| **Position** | On est a la racine du projet existant |
+| **Acces** | On a acces a tous les fichiers du projet |
 
 ---
 
-## Étapes
+## Etapes
 
-### Étape 0 — Identification de l'agent
+### Etape 0 -- Identification de l'agent
 1. Lire AGENTS.md
-2. Se présenter
-3. Vérifier/créer la fiche
+2. Se presenter
+3. Verifier/creer la fiche
 4. Lire corrections.md
-5. Mettre à jour AGENTS.md
+5. Mettre a jour AGENTS.md
 
-### Étape 1 — Évaluer l'état du projet
-1. Appliquer le sous-protocole d'évaluation
-2. Documenter les résultats
+### Etape 1 -- Evaluer l'etat du projet
+1. Appliquer le sous-protocole d'evaluation
+2. Documenter les resultats
 3. Classifier le projet
 4. Proposer des actions correctives
 
-### Étape 2 — Classifier le projet
+### Etape 2 -- Classifier le projet
 1. Identifier le cas de figure
-2. Définir les priorités
-3. Créer un plan d'action
+2. Definir les priorites
+3. Creer un plan d'action
 4. Demander confirmation
 
-### Étape 3 — Corriger les fichiers critiques
-- `index-cerveau.md` : créer/compléter
-- `demarrer.md` : créer si manquant
-- `AGENTS.md` : créer si manquant
+### Etape 3 -- Corriger les fichiers critiques
+- `index-cerveau.md` : creer/completer
+- `demarrer.md` : creer si manquant
+- `AGENTS.md` : creer si manquant
 
-### Étape 4 — Corriger la structure
-- Dossiers manquants : créer
-- Conventions manquantes : créer
-- Règles manquantes : créer
+### Etape 4 -- Corriger la structure
+- Dossiers manquants : creer
+- Conventions manquantes : creer
+- Regles manquantes : creer
 
-### Étape 5 — Corriger les liens
+### Etape 5 -- Corriger les liens
 1. Lister tous les liens internes
-2. Vérifier l'existence
-3. Corriger les liens cassés
+2. Verifier l'existence
+3. Corriger les liens casses
 
-### Étape 6 — Corriger le nommage
-1. Vérifier la convention
-2. Renommer si nécessaire
-3. Mettre à jour les références
+### Etape 6 -- Corriger le nommage
+1. Verifier la convention
+2. Renommer si necessaire
+3. Mettre a jour les references
 
-### Étape 7 — Appliquer les corrections
+### Etape 7 -- Appliquer les corrections
 1. Prioriser (critique -> mineur)
 2. Appliquer chaque correction
 3. Valider par RVAV
 
-### Étape 8 — Vérification finale
-1. Vérifier tous les fichiers
-2. Vérifier les liens
-3. Vérifier les conventions
-4. Mettre à jour le statut
+### Etape 8 -- Verification finale
+1. Verifier tous les fichiers
+2. Verifier les liens
+3. Verifier les conventions
+4. Mettre a jour le statut
 
 ---
 
-## Boucle de rétroaction
+## Boucle de retroaction
 
-Si erreur détectée :
-1. Identifier l'étape
+Si erreur detectee :
+1. Identifier l'etape
 2. Diagnostiquer la cause
 3. Corriger
-4. Re-exécuter l'étape
+4. Re-executer l'etape
 5. Continuer
 
 ---
 
-## Cas spéciaux
+## Cas speciaux
 
-### Projet cassé
+### Projet casse
 1. Diagnostiquer les erreurs
 2. Identifier la cause racine
 3. Corriger la cause
-4. Re-exécuter les tests
+4. Re-executer les tests
 
 ### Projet incomplet
-1. Identifier les éléments manquants
+1. Identifier les elements manquants
 2. Prioriser (essentiel -> optionnel)
-3. Compléter l'essentiel d'abord
+3. Completer l'essentiel d'abord
 
-### Projet à refondre
+### Projet a refondre
 1. Analyser l'architecture actuelle
-2. Identifier les problèmes
+2. Identifier les problemes
 3. Proposer une nouvelle architecture
-4. Refondre par étapes
+4. Refondre par etapes
 
 ---
 
-## Résumé
+## Resume
 
-| Étape | Action | Résultat |
+| Etape | Action | Resultat |
 |---|---|---|
-| 0 | Identification agent | Agent prêt |
-| 1 | Évaluer l'état | État documenté |
-| 2 | Classifier le projet | Cas identifié |
+| 0 | Identification agent | Agent pret |
+| 1 | Evaluer l'etat | Etat documente |
+| 2 | Classifier le projet | Cas identifie |
 | 3 | Corriger fichiers critiques | Fichiers de base OK |
-| 4 | Corriger la structure | Dossiers organisés |
-| 5 | Corriger les liens | Références valides |
-| 6 | Corriger le nommage | Convention respectée |
-| 7 | Appliquer corrections | Problèmes résolus |
-| 8 | Vérification finale | Tout est validé |
+| 4 | Corriger la structure | Dossiers organises |
+| 5 | Corriger les liens | References valides |
+| 6 | Corriger le nommage | Convention respectee |
+| 7 | Appliquer corrections | Problemes resolus |
+| 8 | Verification finale | Tout est valide |

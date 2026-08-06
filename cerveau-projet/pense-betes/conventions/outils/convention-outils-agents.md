@@ -42,13 +42,35 @@ Avant d'etre utilise :
 4. Valider par RVAV
 ```
 
-### Regle 4 -- Chaque outil evolue
+### Regle 5 -- Compatibilite Git Bash (interdiction PCRE)
 
 ```
-Les outils ne sont jamais "finis".
-Ils evoluent avec nos besoins.
-Chaque amelioration est documentee.
+REGLE IMMUABLE : les scripts ne doivent JAMAIS utiliser
+le mode PCRE de grep (-P, -oP, -qP, -zP) ni la
+construction \K (fonctionnalite PCRE).
+
+Pourquoi : sur Git Bash Windows, grep -P echoue avec
+"supports only unibyte and UTF-8 locales" (code 2).
+L'echec est SILENCIEUX : un "if grep -qP ..." considere
+l'erreur comme "aucun match" et laisse passer les
+fichiers fautifs sans alerte.
+
+Alternatives obligatoires :
+- Python  : detection et traitement de texte fiable
+  (ex: verifier_ascii via python -c)
+- sed BRE : remplacement et extraction simples
+  (ex: sed -n 's/.*\]([^)]*).*/\1/p')
+- grep -E / -oE : expressions regulieres etendues
+  SANS \K et SANS lookahead/lookbehind
 ```
+
+| Interdit | Raison | Alternative |
+|---|---|---|
+| `grep -P` | PCRE non fiable sur Git Bash | Python ou grep -E |
+| `grep -oP` | PCRE non fiable sur Git Bash | sed BRE |
+| `grep -qP` | Echec silencieux (faille) | Python (detection) |
+| `\\K` | Fonctionnalite PCRE, vide avec -E | sed BRE |
+| lookahead/lookbehind | PCRE uniquement | Python (regex) |
 
 ---
 
@@ -57,17 +79,13 @@ Chaque amelioration est documentee.
 ```
 agents/tools/[categorie]/[nom-outil]/
 |-- [nom-outil].md           <- documentation principale
-|-- spec/
-|   ``-- spec-[nom-outil].md  <- specification technique
-|-- todo/
-|   ``-- todo-[nom-outil].md  <- ameliorations
-|-- tests/
-|   |-- test-[nom-outil].md  <- plan de tests
-|   ``-- resultats/           <- resultats
-``-- versions/
-    |-- beta/                <- version beta
-    ``-- stable/              <- version stable
+|-- [nom-outil].sh           <- implementation (script)
+|-- spec/                    <- specification technique (optionnel, pour les outils complexes)
+|   ``-- spec-[nom-outil].md
+|-- test-[nom-outil].md      <- fichier de test (optionnel, pour les outils testes)
 ```
+
+> **Note** : la version est portee par le fichier `.md` (ex: `**Version :** 0.1.0-beta`). Il n'existe pas de dossier `versions/` : un outil reste en place et son numero de version evolue dans la documentation.
 
 ---
 
@@ -89,7 +107,7 @@ agents/tools/[categorie]/[nom-outil]/
 
 ### Besoin
 
-Buffy a besoin de lister les agents频繁ement.
+Buffy a besoin de lister les agents frequemment.
 
 ### Solution
 
@@ -100,7 +118,14 @@ Buffy a besoin de lister les agents频繁ement.
 Lister tous les agents avec leurs informations.
 
 ## Utilisation
-lister-agents(format="table", champs="nom,role,statut")
+lister-agents.sh [options]
+
+## Options
+| Option | Description |
+|---|---|
+| `--format table` | Format de sortie (table, liste, JSON) |
+| `--champs nom,role,statut` | Champs a afficher |
+| `--filtre statut=actif` | Filtrer par statut/role |
 
 ## Avantages
 - Retourne uniquement les agents

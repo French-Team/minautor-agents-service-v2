@@ -1,103 +1,104 @@
-# Protocole Immuable — Versionning des Outils
-**Portée :** Tous les outils dans `agents/tools/`
-**Prérequis :** Protocole-outils, conventions de nommage
+# Protocole Immuable -- Versionning des Outils
+**Portee :** Tous les outils dans `agents/tools/`
+**Prerequis :** Protocole-outils, conventions de nommage
 
 ---
 
 ## Objectif
 
 Garantir que chaque outil est :
-1. **Créé en bêta** avec une documentation complète
-2. **Testé indépendamment** avant toute intégration
-3. **Optimisé** via une boucle de travail dédiée
-4. **Validé** par un second contrôle (agent dédié)
-5. **Intégré** uniquement après validation complète
+1. **Cree en beta** avec une documentation complete
+2. **Teste independamment** avant toute integration
+3. **Optimise** via une boucle de travail dediee
+4. **Valide** par un second controle (agent dedie)
+5. **Integre** uniquement apres validation complete
 
 ---
 
 ## Cycle de vie d'un outil
 
 ```
-BÊTA -> TEST -> OPTIMISATION -> INTÉGRATION -> SECOND CONTRÔLE -> PRODUCTION
+BETA -> TEST -> OPTIMISATION -> INTEGRATION -> SECOND CONTROLE -> PRODUCTION
   1       2          3               4               5              6
 ```
 
 ---
 
-## Étape 1 — Création en bêta
+## Etape 1 -- Creation en beta
 
 1. **Identifier le besoin** : Qu'est-ce que je fais souvent ?
-2. **Créer la structure** : Dossier avec spec/, todo/, tests/, versions/
-3. **Documenter l'outil** : Objectif, utilisation, paramètres, exemples
+2. **Creer la structure** : Copier le outil-template vers `agents/tools/[categorie]/[nom-outil]/`
+3. **Documenter l'outil** : Objectif, utilisation, parametres, exemples (dans `[nom-outil].md`)
+4. **Versionner** : la version est portee par le `.md` (ex: `**Version :** 0.1.0-beta`) ; les spec/ et fichiers de test sont ajoutes si necessaire
 
 ---
 
-## Étape 2 — Tests indépendants
+## Etape 2 -- Tests independants
 
 1. **Phase 1** : Tests de l'outil et de ses fonctions
-2. **Phase 2** : Tests d'intégration
-3. **Résultat** : Tous les tests doivent passer
+2. **Phase 2** : Tests d'integration
+3. **Resultat** : Tous les tests doivent passer
 
 ---
 
-## Étape 3 — Boucle de travail dédiée
+## Etape 3 -- Boucle de travail dediee
 
-1. **Lister les optimisations** : Chaque amélioration = 1 fichier distinct
-2. **Documenter** : Problème, solution, impact
-3. **Valider** : Tester chaque amélioration
+1. **Lister les optimisations** : Chaque amelioration = 1 fichier distinct
+2. **Documenter** : Probleme, solution, impact
+3. **Valider** : Tester chaque amelioration
 
 ---
 
-## Étape 4 — Recherche web de confirmation
+## Etape 4 -- Recherche web de confirmation
 
-1. **Identifier** : Commande/fonction à utiliser
+1. **Identifier** : Commande/fonction a utiliser
 2. **Rechercher** : Documentation officielle
 3. **Confirmer** : Existence et syntaxe
 4. **Documenter** : Source dans le fichier
 
 ---
 
-## Étape 5 — Second contrôle
+## Etape 5 -- Second controle
 
-1. **Demande** : Cerberus active Janus — la mission "Construire / optimiser un outil" figure dans la liste définie
-2. **Agent** : Janus (dédié au contrôle)
-3. **Mission** : Écrite pour la tâche en cours
+1. **Demande** : Cerberus active Janus -- la mission "Construire / optimiser un outil" figure dans la liste definie
+2. **Agent** : Janus (dedie au controle)
+3. **Mission** : Ecrite pour la tache en cours
 4. **Points** : Documentation, tests, conventions
-5. **Verdict** : Validé ou rejeté
-6. **Retour** : Janus réactive Cerberus
+5. **Verdict** : Valide ou rejete
+6. **Retour** : Janus reactive Cerberus
 
 ---
 
-## Étape 6 — Promotion en production
+## Etape 6 -- Promotion en production
 
-1. **Conditions** : Tests OK, intégration OK, contrôle OK
-2. **Promotion** : bêta -> stable
-3. **Structure** : Version stable dans versions/stable/
+1. **Conditions** : Tests OK, integration OK, controle OK
+2. **Promotion** : le statut passe de `ebauche` a `prepare` dans le `.md` de l'outil
+3. **Version** : le numero de version evolue dans la documentation (pas de dossier `versions/`)
 
 ---
 
-## RVAV à chaque étape
+## RVAV a chaque etape
 
-| Étape | Rechercher | Vérifier | Analyser | Valider |
+| Etape | Rechercher | Verifier | Analyser | Valider |
 |---|---|---|---|---|
-| **1. Bêta** | Besoin existant ? | Structure complète ? | Cohérence ? | Prêt pour tests ? |
-| **2. Tests** | Commandes valides ? | Tous les tests passent ? | Risques identifiés ? | Tests validés ? |
-| **3. Optimisation** | Améliorations documentées ? | Fichiers distincts ? | Impact analysé ? | Optimisations validées ? |
-| **4. Web** | Sources trouvées ? | Documentation officielle ? | Compatibilité ? | Confirmation validée ? |
-| **5. Contrôle** | Missions écrite ? | Points de contrôle ? | Angles morts couverts ? | Contrôle validé ? |
-| **6. Production** | Conditions réunies ? | Version prête ? | Index à jour ? | Promotion validée ? |
+| **1. Beta** | Besoin existant ? | Structure complete ? | Coherence ? | Pret pour tests ? |
+| **2. Tests** | Commandes valides ? | Tous les tests passent ? | Risques identifies ? | Tests valides ? |
+| **3. Optimisation** | Ameliorations documentees ? | Fichiers distincts ? | Impact analyse ? | Optimisations validees ? |
+| **4. Web** | Sources trouvees ? | Documentation officielle ? | Compatibilite ? | Confirmation validee ? |
+| **5. Controle** | Missions ecrite ? | Points de controle ? | Angles morts couverts ? | Controle valide ? |
+| **6. Production** | Conditions reunies ? | Version prete ? | Index a jour ? | Promotion validee ? |
 
 ---
 
-## Pièges courants
+## Pieges courants
 
-| Piège | Solution |
+| Piege | Solution |
 |---|---|
-| Intégrer avant de tester | TOUJOURS tester indépendamment d'abord |
+| Integrer avant de tester | TOUJOURS tester independamment d'abord |
 | Oublier la recherche web | CONFIRMER chaque commande |
-| Fusionner les améliorations | UN fichier par amélioration |
-| Ignorer le second contrôle | Cerberus TOUJOURS active Janus (liste définie) |
-| Promouvoir trop tôt | S'assurer que TOUTES les conditions sont réunies |
+| Fusionner les ameliorations | UN fichier par amelioration |
+| Ignorer le second controle | Cerberus TOUJOURS active Janus (liste definie) |
+| Promouvoir trop tot | S'assurer que TOUTES les conditions sont reunies |
 
 ---
 
@@ -106,4 +107,4 @@ BÊTA -> TEST -> OPTIMISATION -> INTÉGRATION -> SECOND CONTRÔLE -> PRODUCTION
 - **Protocole parent** : [protocole-outils](../protocole-outils/)
 - **Convention** : [convention-protocoles](../../../conventions/protocoles/convention-protocoles.md)
 - **Agent Janus** : [agents/janus/](../../../../agents/janus/)
-- **Règles** : [regles-validation-rigoureuse](../../regles-validation-rigoureuse.md)
+- **Regles** : [regles-validation-rigoureuse](../../regles-validation-rigoureuse.md)

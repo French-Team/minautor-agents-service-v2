@@ -1,4 +1,4 @@
-# Mission — Outil de Décomposition Markdown
+# Mission -- Outil de Decomposition Markdown
 
 **Agent** : Vulcain
 **Date** : 2026-08-05
@@ -8,11 +8,11 @@
 
 ## Objectif
 
-Créer un outil qui décompose les fichiers markdown pour permettre aux agents de voir uniquement ce dont ils ont besoin.
+Creer un outil qui decompose les fichiers markdown pour permettre aux agents de voir uniquement ce dont ils ont besoin.
 
 ---
 
-## Problème à résoudre
+## Probleme a resoudre
 
 Les fichiers markdown du cerveau-projet sont grands (200-400 lignes). Les agents doivent :
 - Lire uniquement les sections pertinentes
@@ -21,7 +21,7 @@ Les fichiers markdown du cerveau-projet sont grands (200-400 lignes). Les agents
 
 ---
 
-## Fonctionnalités requises
+## Fonctionnalites requises
 
 ### 1. Lister les sections
 
@@ -29,13 +29,13 @@ Les fichiers markdown du cerveau-projet sont grands (200-400 lignes). Les agents
 decomposeur.sh --lister [fichier]
 ```
 
-**Résultat** :
+**Resultat** :
 ```
 1. ## Principe Fondamental (ligne 4)
 2. ## Structure (ligne 18)
-3. ## Règles (ligne 56)
-   3.1. ### Règle 1 (ligne 58)
-   3.2. ### Règle 2 (ligne 71)
+3. ## Regles (ligne 56)
+   3.1. ### Regle 1 (ligne 58)
+   3.2. ### Regle 2 (ligne 71)
 4. ## Processus (ligne 154)
 ```
 
@@ -47,11 +47,11 @@ decomposeur.sh --extraire [fichier] [section]
 
 **Exemples** :
 ```bash
-# Extraire la section "Règles"
-decomposeur.sh --extraire protocole-outils.md "Règles"
+# Extraire la section "Regles"
+decomposeur.sh --extraire protocole-outils.md "Regles"
 
-# Extraire la sous-section "Règle 1"
-decomposeur.sh --extraire protocole-outils.md "Règle 1"
+# Extraire la sous-section "Regle 1"
+decomposeur.sh --extraire protocole-outils.md "Regle 1"
 
 # Extraire les lignes 56-100
 decomposeur.sh --extraire protocole-outils.md 56-100
@@ -64,19 +64,19 @@ decomposeur.sh --filtrer [fichier] [type]
 ```
 
 **Types disponibles** :
-- `titres` — uniquement les titres (##, ###)
-- `regles` — uniquement les lignes contenant "RÈGLE", "JAMAIS", "TOUJOURS"
-- `tableaux` — uniquement les tableaux
-- `code` — uniquement les blocs de code
-- `liens` — uniquement les liens
+- `titres` -- uniquement les titres (##, ###)
+- `regles` -- uniquement les lignes contenant "REGLE", "JAMAIS", "TOUJOURS"
+- `tableaux` -- uniquement les tableaux
+- `code` -- uniquement les blocs de code
+- `liens` -- uniquement les liens
 
-### 4. Afficher le résumé
+### 4. Afficher le resume
 
 ```bash
 decomposeur.sh --resume [fichier]
 ```
 
-**Résultat** :
+**Resultat** :
 ```
 Fichier : protocole-outils.md
 Lignes : 110
@@ -92,22 +92,22 @@ Blocs de code : 6
 decomposeur.sh --compter [fichier]
 ```
 
-**Résultat** :
+**Resultat** :
 ```
 Lignes : 110
 Mots : 450
-Caractères : 2500
+Caracteres : 2500
 Sections : 8
 ```
 
 ---
 
-## Spécifications techniques
+## Specifications techniques
 
 ### Structure de sortie
 
 ```bash
-# Sortie par défaut : liste des sections
+# Sortie par defaut : liste des sections
 decomposeur.sh [fichier]
 
 # Sortie JSON (pour les agents)
@@ -119,77 +119,77 @@ decomposeur.sh --markdown [fichier]
 
 ### Options
 
-| Option | Description | Défaut |
+| Option | Description | Defaut |
 |---|---|---|
 | `--lister` | Lister les sections | Non |
 | `--extraire [section]` | Extraire une section | Non |
 | `--filtrer [type]` | Filtrer par type | Non |
-| `--resume` | Afficher le résumé | Non |
+| `--resume` | Afficher le resume | Non |
 | `--compter` | Compter le contenu | Non |
 | `--json` | Sortie JSON | Non |
 | `--markdown` | Sortie Markdown | Non |
-| `--verbose` | Détails supplémentaires | Non |
+| `--verbose` | Details supplementaires | Non |
 
 ---
 
-## Extensibilité
+## Extensibilite
 
-L'outil doit être préparé pour de futurs ajouts :
+L'outil doit etre prepare pour de futurs ajouts :
 
-### Types de contenu à ajouter
+### Types de contenu a ajouter
 
-- `definitions` — lignes avec "est", "signifie", "définit"
-- `exemples` — blocs de code avec "Exemple"
-- `erreurs` — lignes avec "ERREUR", "ATTENTION"
-- `validations` — lignes avec "Vérifier", "Tester"
+- `definitions` -- lignes avec "est", "signifie", "definit"
+- `exemples` -- blocs de code avec "Exemple"
+- `erreurs` -- lignes avec "ERREUR", "ATTENTION"
+- `validations` -- lignes avec "Verifier", "Tester"
 
-### Actions à ajouter
+### Actions a ajouter
 
-- `--comparer [fichier1] [fichier2]` — comparer deux fichiers
-- `--detecter-doublons [fichier]` — trouver les sections similaires
-- `--suggerer-condenser [fichier]` — proposer des réductions
+- `--comparer [fichier1] [fichier2]` -- comparer deux fichiers
+- `--detecter-doublons [fichier]` -- trouver les sections similaires
+- `--suggerer-condenser [fichier]` -- proposer des reductions
 
 ---
 
-## Critères de validation
+## Criteres de validation
 
 - [ ] L'outil fonctionne sur tous les fichiers .md du cerveau
-- [ ] La sortie est claire et formatée
+- [ ] La sortie est claire et formatee
 - [ ] L'outil est rapide (< 1 seconde)
-- [ ] L'outil est documenté
-- [ ] L'outil est testé
+- [ ] L'outil est documente
+- [ ] L'outil est teste
 - [ ] L'outil est extensible
 
 ---
 
 ## Livrables
 
-1. `decomposeur.sh` — dans `agents/tools/analyser/decomposeur/`
-2. `decomposeur.md` — documentation
-3. `spec-decomposeur.md` — spécifications
+1. `decomposer-fichier.sh` -- dans `agents/tools/decomposer/decomposer-fichier/`
+2. `decomposer-fichier.md` -- documentation
+3. `spec-decomposer-fichier.md` -- specifications
 4. Tests avec les fichiers du cerveau
 
 ---
 
 ## Exemple d'utilisation
 
-### Agent Buffy veut voir les règles d'un protocole
+### Agent Buffy veut voir les regles d'un protocole
 
 ```bash
 # 1. Lister les sections
 decomposeur.sh --lister protocole-outils.md
 
-# 2. Extraire la section "Règles"
-decomposeur.sh --extraire protocole-outils.md "Règles"
+# 2. Extraire la section "Regles"
+decomposeur.sh --extraire protocole-outils.md "Regles"
 
-# 3. Filtrer uniquement les règles
+# 3. Filtrer uniquement les regles
 decomposeur.sh --filtrer protocole-outils.md "regles"
 ```
 
 ### Agent Vulcain veut analyser un fichier
 
 ```bash
-# 1. Voir le résumé
+# 1. Voir le resume
 decomposeur.sh --resume protocole-outils.md
 
 # 2. Compter le contenu

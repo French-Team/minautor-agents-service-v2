@@ -1,4 +1,4 @@
-# Outil — Corriger les Emojis
+# Outil -- Corriger les Emojis
 
 **Categorie** : Corriger
 **Version** : 0.2.0
@@ -110,7 +110,7 @@ corriger-emojis/
 
 ```
 === Correction des emojis ===
-Cible : cerveau-projet/agents/tools/corriger/changer-statut/changer-statut.sh
+Cible : cerveau-projet/agents/tools/changer/changer-statut/changer-statut.sh
 Dictionnaire : cerveau-projet/agents/tools/corriger/corriger-emojis/dictionnaire-emojis.txt
 
 === Termine ===
@@ -147,5 +147,5 @@ Dictionnaire : cerveau-projet/agents/tools/corriger/corriger-emojis/dictionnaire
 ## Liens
 
 - **Regle** : `regles-emojis-ascii.md` - regle immuable sur les emojis
-- **Outil similaire** : `purifier-fichier` - purifie un fichier
-- **Outil similaire** : `condenseur` - condense un fichier
+- **Outil similaire** : `nettoyer-fichier` - purifie un fichier
+- **Outil similaire** : `condenser-fichier` - condense un fichier

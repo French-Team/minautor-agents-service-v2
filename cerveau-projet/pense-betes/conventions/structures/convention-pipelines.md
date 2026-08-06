@@ -1,4 +1,4 @@
-# Convention — Pipelines
+# Convention -- Pipelines
 ---
 
 ## Principe Fondamental
@@ -6,12 +6,12 @@
 
 ## Pourquoi un pipeline ?
 
-| Problème | Solution |
+| Probleme | Solution |
 |---|---|
-| Fonctions couplées entre elles | Dé-couplage via le classeur |
-| Difficile d'insérer une fonction | Le pipeline rend l'insertion transparente |
-| Données éparpillées | Stockage centralisé et traçable |
-| Réorganisation complexe | Réordonner les appels = changer l'ordre de lecture/écriture |
+| Fonctions couplees entre elles | De-couplage via le classeur |
+| Difficile d'inserer une fonction | Le pipeline rend l'insertion transparente |
+| Donnees eparpillees | Stockage centralise et tracable |
+| Reorganisation complexe | Reordonner les appels = changer l'ordre de lecture/ecriture |
 
 ---
 
@@ -21,14 +21,14 @@
 fonction-1 -> [ecrit resultat-1] -> classeur -> [lit resultat-1] -> fonction-2 -> [ecrit resultat-2] -> classeur -> fonction-3
 ```
 
-### Flux de données
+### Flux de donnees
 
 ```
-1. Fonction-1 reçoit les données d'entrée
-2. Fonction-1 traite et écrit le résultat dans le classeur
-3. Fonction-2 lit le résultat de Fonction-1 dans le classeur
-4. Fonction-2 traite et écrit son résultat dans le classeur
-5. Fonction-3 lit le résultat de Fonction-2 dans le classeur
+1. Fonction-1 recoit les donnees d'entree
+2. Fonction-1 traite et ecrit le resultat dans le classeur
+3. Fonction-2 lit le resultat de Fonction-1 dans le classeur
+4. Fonction-2 traite et ecrit son resultat dans le classeur
+5. Fonction-3 lit le resultat de Fonction-2 dans le classeur
 6. etc.
 ```
 
@@ -38,59 +38,59 @@ fonction-1 -> [ecrit resultat-1] -> classeur -> [lit resultat-1] -> fonction-2 -
 
 ```
 pipeline/
-|-- index-pipeline.md              <- point d'entrée global
+|-- index-pipeline.md              <- point d'entree global
 |-- pipeline.md                    <- orchestrateur
 |-- fonction-1/
-|   ``-- fonction-1.md             <- première fonction
+|   ``-- fonction-1.md             <- premiere fonction
 |-- fonction-2/
-|   ``-- fonction-2.md             <- deuxième fonction
+|   ``-- fonction-2.md             <- deuxieme fonction
 ``-- fonction-3/
-    ``-- fonction-3.md             <- troisième fonction
+    ``-- fonction-3.md             <- troisieme fonction
 ```
 
 ---
 
-## Règles des pipelines
+## Regles des pipelines
 
-### Règle 1 — Chaque fonction est autonome
+### Regle 1 -- Chaque fonction est autonome
 
 ```
 [NON] Fonction-1 appelle Fonction-2 directement
-[OUI] Fonction-1 écrit dans le classeur, Fonction-2 lit du classeur
+[OUI] Fonction-1 ecrit dans le classeur, Fonction-2 lit du classeur
 ```
 
-### Règle 2 — Communication via le classeur
+### Regle 2 -- Communication via le classeur
 
 ```
-[NON] Passer des données en paramètres
-[OUI] Lire/écrire dans le classeur de variables
+[NON] Passer des donnees en parametres
+[OUI] Lire/ecrire dans le classeur de variables
 ```
 
-### Règle 3 — Traçabilité complète
+### Regle 3 -- Tracabilite complete
 
-Chaque opération de lecture/écriture doit être documentée dans l'historique du classeur.
+Chaque operation de lecture/ecriture doit etre documentee dans l'historique du classeur.
 
-### Règle 4 — Réorganisation facile
+### Regle 4 -- Reorganisation facile
 
-Pour changer l'ordre d'exécution, modifier uniquement l'ordre des appels dans l'orchestrateur.
+Pour changer l'ordre d'execution, modifier uniquement l'ordre des appels dans l'orchestrateur.
 
 ---
 
 ## Exemple concret
 
-### Pipeline de traitement de données
+### Pipeline de traitement de donnees
 
 ```
 charger-donnees -> nettoyer-donnees -> transformer-donnees -> exporter-donnees
 ```
 
-### Flux de données
+### Flux de donnees
 
 ```
-1. charger-donnees -> écrit "donnees-brutes" dans le classeur
-2. nettoyer-donnees -> lit "donnees-brutes" -> écrit "donnees-propres"
-3. transformer-donnees -> lit "donnees-propres" -> écrit "donnees-transformees"
-4. exporter-donnees -> lit "donnees-transformees" -> écrit "fichier-final"
+1. charger-donnees -> ecrit "donnees-brutes" dans le classeur
+2. nettoyer-donnees -> lit "donnees-brutes" -> ecrit "donnees-propres"
+3. transformer-donnees -> lit "donnees-propres" -> ecrit "donnees-transformees"
+4. exporter-donnees -> lit "donnees-transformees" -> ecrit "fichier-final"
 ```
 
 ### Insertion d'une nouvelle fonction
@@ -106,7 +106,7 @@ charger-donnees -> nettoyer-donnees -> [VALIDER-DONNEES] -> transformer-donnees 
 La nouvelle fonction :
 1. Lit "donnees-propres" dans le classeur
 2. Traite
-3. Écrit "donnees-validees" dans le classeur
+3. Ecrit "donnees-validees" dans le classeur
 
 Les autres fonctions n'ont pas besoin de changer !
 
@@ -116,29 +116,29 @@ Les autres fonctions n'ont pas besoin de changer !
 
 | Convention | Lien |
 |---|---|
-| `convention-structures` | Le pipeline suit les mêmes règles de structure |
+| `convention-structures` | Le pipeline suit les memes regles de structure |
 | `convention-classeur-variables` | Le pipeline utilise le classeur pour la communication |
 | `convention-renommage` | Les fonctions suivent les patterns de nommage |
 | `convention-liens` | Les fonctions lient vers le classeur |
 
 ---
 
-## Intégration dans le workflow
+## Integration dans le workflow
 
-### Création d'un pipeline
+### Creation d'un pipeline
 
 ```
-1. Définir les variables nécessaires (schéma)
-2. Créer les fonctions (une par dossier)
-3. Créer la plateforme (orchestrateur)
-4. Chaque fonction lit/écrit dans le classeur
+1. Definir les variables necessaires (schema)
+2. Creer les fonctions (une par dossier)
+3. Creer la plateforme (orchestrateur)
+4. Chaque fonction lit/ecrit dans le classeur
 5. La plateforme appelle les fonctions dans l'ordre
 ```
 
-### Réorganisation
+### Reorganisation
 
 ```
-1. Ouvrir la plateforme (point d'entrée)
+1. Ouvrir la plateforme (point d'entree)
 2. Modifier l'ordre des appels de fonctions
 3. Tester le nouveau flux
 4. Valider par RVAV
@@ -148,24 +148,24 @@ Les autres fonctions n'ont pas besoin de changer !
 
 ## Validation
 
-Avant de valider un pipeline, vérifier :
+Avant de valider un pipeline, verifier :
 
 - [ ] Chaque fonction est autonome
 - [ ] Chaque fonction lit les bonnes variables
-- [ ] Chaque fonction écrit les bonnes variables
+- [ ] Chaque fonction ecrit les bonnes variables
 - [ ] Pas de modification directe dans le classeur
-- [ ] L'historique est documenté
-- [ ] Les dépendances entre fonctions sont claires
-- [ ] La réorganisation est possible
+- [ ] L'historique est documente
+- [ ] Les dependances entre fonctions sont claires
+- [ ] La reorganisation est possible
 
 ---
 
 ## Voir aussi
 
-- [convention-classeur-variables.md](convention-classeur-variables.md) -- stockage partagé
+- [convention-classeur-variables.md](convention-classeur-variables.md) -- stockage partage
 - [convention-structures.md](convention-structures.md) -- principes d'architecture
 - [../../classeur-variables/index-classeur.md](../../classeur-variables/index-classeur.md) -- classeur de variables
 
 ---
 
-*Convention conforme aux règles du cerveau-projet*
+*Convention conforme aux regles du cerveau-projet*

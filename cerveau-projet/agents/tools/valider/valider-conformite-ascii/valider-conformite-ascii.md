@@ -1,9 +1,10 @@
 # valider-conformite-ascii
 
-**Version :** 0.1.2-beta
-**Statut :** ebauche
+**Version :** 0.3.0
+**Statut :** prepare
 **Categorie :** Valider
 **Chemin :** `agents/tools/valider/valider-conformite-ascii/`
+**Proprietaire :** outil partage
 
 ## Description
 
@@ -33,26 +34,24 @@ valider-conformite-ascii.sh --dry-run cerveau-projet/
 | Option | Description |
 |---|---|
 | `--dry-run` | Afficher les erreurs sans corriger |
-| `--verbose` | Afficher les details |
-| `--corriger` | Corriger automatiquement les fichiers |
-| `--extensions` | Filtrer par extensions (ex: md,sh,txt) |
-| `--exclure` | Exclure des dossiers (ex: .git,node_modules) |
+| `--corriger` | Corriger automatiquement (via corriger-accents-zones-sensibles --all) |
+| `--exclure` | Exclure des motifs supplementaires (separes par des virgules) |
 | `--help` | Afficher l'aide |
 
 ## Ce que l'outil fait
 
-1. **Detection** - Trouve les caracteres non-ASCII dans chaque fichier
-2. **Analyse** - Identifie le type de caracteres (accents, emojis, symboles)
-3. **Correction** - Applique les remplacements via le dictionnaire (via perl pour UTF-8)
-4. **Verification** - Confirme que tous les caracteres ont ete remplaces
+1. **Detection** - Trouve les caracteres non-ASCII dans chaque fichier (via Python, fiable et independant de grep)
+2. **Analyse** - Identifie chaque caractere et son nombre d'occurrences
+3. **Correction** - Applique les remplacements via corriger-accents-zones-sensibles (mode --all)
+4. **Verification** - Relance la detection pour confirmer
 
 ## Dependances
 
 | Outil | Usage |
 |---|---|
-| `perl` | Correction UTF-8 (version >= 5.38) |
-| `grep -P` | Detection des caracteres non-ASCII |
-| `dictionnaire-accents.txt` | Liste des remplacements |
+| `python` | Detection des caracteres non-ASCII (fiable sur Git Bash Windows) |
+| `corriger-accents-zones-sensibles` | Correction automatique (mode --all) |
+| `corriger-dictionnaire-accents.txt` | Liste des remplacements accent -> ASCII |
 
 ## Quand l'utiliser
 
@@ -113,7 +112,7 @@ Fichiers non-ASCII : 0
 
 ## Dictionnaire
 
-Le dictionnaire `dictionnaire-accents.txt` contient les remplacements :
+Le dictionnaire `corriger-dictionnaire-accents.txt` contient les remplacements :
 
 | Categorie | Exemples |
 |---|---|
@@ -121,6 +120,14 @@ Le dictionnaire `dictionnaire-accents.txt` contient les remplacements :
 | Ligatures | oe->oe, ae->ae |
 | Guillemets courbes | '->', " -> " |
 | Symboles | ...->..., -->->--> |
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0-beta | 2026-08-05 | Creation initiale |
+| 0.1.2-beta | 2026-08-06 | Reecriture detection via Python (independante de grep -P) |
+| 0.3.0 | 2026-08-06 | Passage V2 : tests reels (fichier pur OK, fichier accentue detecte), doc alignee sur le code, promotion prepare |
 
 ## Statut
 
@@ -135,13 +142,13 @@ Le dictionnaire `dictionnaire-accents.txt` contient les remplacements :
 
 ## Notes
 
-- L'outil utilise `perl` pour la correction UTF-8 (plus fiable que `sed` sur Git Bash)
-- Les fichiers `.git` et `node_modules` sont exclus par defaut
+- L'outil utilise Python pour la detection (fiable sur Git Bash Windows)
+- Les dossiers `.git`, `.agents` et les fichiers de backup sont exclus par defaut
 - Le mode `--corriger` ecrase le fichier original
 - L'outil peut traiter n'importe quelle extension de fichier
 
 ## Exceptions volontaires
 
-Les fichiers nommes `dictionnaire-*.txt` (dictionnaires des outils `corriger-emojis` et `corriger-accents`) sont **exclus automatiquement** : ils contiennent volontairement des caracteres non-ASCII (c'est leur fonction). Voir `regles-emojis-ascii.md` section "Exceptions volontaires".
+Les fichiers nommes `dictionnaire-*.txt` (dictionnaires des outils `corriger-emojis` et `corriger-accents-zones-sensibles`) sont **exclus automatiquement** : ils contiennent volontairement des caracteres non-ASCII (c'est leur fonction). Voir `regles-emojis-ascii.md` section "Exceptions volontaires".
 
 Le dossier `cerveau-projet/exemples/` est **exclu automatiquement** : c'est la zone de test dediee aux outils (fichiers avec problemes volontaires).

@@ -1,5 +1,5 @@
 ---
-# Corrections et Surcharges — Minerve
+# Corrections et Surcharges -- Minerve
 # Agent dedie aux todos
 
 agent:
@@ -13,7 +13,7 @@ agent:
 
 ---
 
-## REGLES — Regles specifiques
+## REGLES -- Regles specifiques
 
 | Regle | Description |
 |---|---|
@@ -26,7 +26,9 @@ agent:
 
 ---
 
-## PHILOSOPHIE — Principes de comportement
+## PHILOSOPHIE -- Principes de comportement
+
+| **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |
 
 | Philosophie | Description |
 |---|---|
@@ -36,15 +38,15 @@ agent:
 
 ---
 
-## LECONS — Lecons apprises
+## LECONS -- Lecons apprises
 
 | Date | Lecon | Philosophie liee |
 |---|---|---|
-| 2026-08-06 | Creation de l'agent — premieres lecons a venir | Cycle complet |
+| 2026-08-06 | Creation de l'agent -- premieres lecons a venir | Cycle complet |
 
 ---
 
-## CONFIG — Configuration specifique
+## CONFIG -- Configuration specifique
 
 ### Preferences de travail
 
@@ -60,14 +62,14 @@ preferences:
 | Outil/Method | Usage |
 |---|---|
 | `rechercher-todos` | Rechercher les todos existants avant creation (anti-doublon) |
-| `squelette-todo` | Generer le squelette conforme au todo-template |
-| `remplir-todo` | Remplir les phases sans ouvrir le fichier |
+| `generateurs-squelette-todo` | Generer le squelette conforme au todo-template |
+| `creer-remplir-todo` | Remplir les phases sans ouvrir le fichier |
 | `valider-todo` | Valider l'integrite (phases 0-9 obligatoires) |
-| `modifier-agents-md` | Reactiver Cerberus en fin de mission (Phase 9) |
+| `mettre-a-jour-modifier-agents-md` | Reactiver Cerberus en fin de mission (Phase 9) |
 
 ---
 
-## CONNEXIONS — Connexions
+## CONNEXIONS -- Connexions
 
 | Fichier | Role |
 |---|---|

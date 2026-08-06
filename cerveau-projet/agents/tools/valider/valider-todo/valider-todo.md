@@ -7,7 +7,7 @@
 
 ## Description
 
-Verifie l'integrite d'un todo : presence des 10 phases (dont la **Phase 0 — Activation de l'agent** et la **Phase 9 — Reactivation de Cerberus** qui sont OBLIGATOIRES), nommage, placeholders et conformite ASCII. L'agent l'utilise pour s'assurer que le todo respecte le cycle complet avant de le considerer termine.
+Verifie l'integrite d'un todo : presence des 10 phases (dont la **Phase 0 -- Activation de l'agent** et la **Phase 9 -- Reactivation de Cerberus** qui sont OBLIGATOIRES), nommage, placeholders et conformite ASCII. L'agent l'utilise pour s'assurer que le todo respecte le cycle complet avant de le considerer termine.
 
 ## Utilisation
 
@@ -41,16 +41,16 @@ valider-todo.sh --verbose todo-pipeline.001.01.ebauche.md
 ## Le cycle valide
 
 ```
-Phase 0 — Activation de l'agent   <- OBLIGATOIRE (premiere action)
-Phase 1 — Analyse de la demande
-Phase 2 — Verification du cerveau
-Phase 3 — Recherches
-Phase 4 — Preparation des outils
-Phase 5 — Developpement
-Phase 6 — Tests et validation
-Phase 7 — Controle secondaire
-Phase 8 — Finalisation
-Phase 9 — Reactivation de Cerberus <- OBLIGATOIRE (derniere action)
+Phase 0 -- Activation de l'agent   <- OBLIGATOIRE (premiere action)
+Phase 1 -- Analyse de la demande
+Phase 2 -- Verification du cerveau
+Phase 3 -- Recherches
+Phase 4 -- Preparation des outils
+Phase 5 -- Developpement
+Phase 6 -- Tests et validation
+Phase 7 -- Controle secondaire
+Phase 8 -- Finalisation
+Phase 9 -- Reactivation de Cerberus <- OBLIGATOIRE (derniere action)
 ```
 
 ## Ce que l'outil fait
@@ -86,8 +86,8 @@ Fichier : todo-pipeline.001.01.ebauche.md
 
 | Outil | Complement |
 |---|---|
-| `squelette-todo` | Genere le squelette avant le remplissage |
-| `remplir-todo` | Remplit les phases avant la validation |
+| `generateurs-squelette-todo` | Genere le squelette avant le remplissage |
+| `creer-remplir-todo` | Remplit les phases avant la validation |
 | `valider-pense-bete` | Meme logique pour les pense-betes |
 | `valider-spec` | Meme logique pour les specs |
 | `changer-statut` | Change le statut apres validation |

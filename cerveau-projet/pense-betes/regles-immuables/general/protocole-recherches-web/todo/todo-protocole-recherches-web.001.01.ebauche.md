@@ -1,21 +1,21 @@
-# Todo — Protocole de Recherches Web
+# Todo -- Protocole de Recherches Web
 ---
 
-## Tâches en cours
+## Taches en cours
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
-| 1 | Créer le protocole | [OK] Termine | Haute |
-| 2 | Créer la spec technique | [OK] Termine | Haute |
-| 3 | Créer les todos | [OK] Termine | Haute |
-| 4 | Mettre à jour index-regles-general.md | [EN COURS] | Haute |
-| 5 | Mettre à jour demarrer.md | [NON COMMENCE] | Moyenne |
+| 1 | Creer le protocole | [OK] Termine | Haute |
+| 2 | Creer la spec technique | [OK] Termine | Haute |
+| 3 | Creer les todos | [OK] Termine | Haute |
+| 4 | Mettre a jour index-regles-general.md | [EN COURS] | Haute |
+| 5 | Mettre a jour demarrer.md | [NON COMMENCE] | Moyenne |
 
 ---
 
-## Tâches futures
+## Taches futures
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
 | 6 | Tester le protocole sur un projet | [NON COMMENCE] | Haute |
 | 7 | Documenter les cas d'usage | [NON COMMENCE] | Moyenne |
@@ -23,18 +23,18 @@
 
 ---
 
-## Dépendances
+## Dependances
 
-| Tâche | Dépend de |
+| Tache | Depend de |
 |---|---|
-| 4 | Protocole créé |
-| 5 | Protocole créé |
+| 4 | Protocole cree |
+| 5 | Protocole cree |
 | 6 | 4, 5 |
 
 ---
 
 ## Notes
 
-- Ce protocole est essentiel pour garantir la véracité des affirmations
-- Il doit être exécuté à chaque recherche web
-- Les recherches-web deviennent une source de vérité
+- Ce protocole est essentiel pour garantir la veracite des affirmations
+- Il doit etre execute a chaque recherche web
+- Les recherches-web deviennent une source de verite

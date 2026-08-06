@@ -1,4 +1,4 @@
-# Sous-Protocole — Validation
+# Sous-Protocole -- Validation
 
 ---
 
@@ -8,10 +8,10 @@ S'assurer que le travail est complet, correct et conforme aux conventions.
 
 ---
 
-## Prérequis
+## Prerequis
 
-- Un travail a été effectué
-- L'agent est identifié et prêt
+- Un travail a ete effectue
+- L'agent est identifie et pret
 
 ---
 
@@ -21,87 +21,87 @@ S'assurer que le travail est complet, correct et conforme aux conventions.
 |---|---|---|
 | **Niveau 1** | Validation rapide | Modifications mineures |
 | **Niveau 2** | Validation standard | Modifications moyennes |
-| **Niveau 3** | Validation complète | Modifications majeures |
+| **Niveau 3** | Validation complete | Modifications majeures |
 | **Niveau 4** | Validation critique | Changements d'architecture |
 
 ---
 
 ## Checklists par niveau
 
-### Niveau 1 — Validation rapide
+### Niveau 1 -- Validation rapide
 
-| # | Vérification | Critère |
+| # | Verification | Critere |
 |---|---|---|
-| 1.1 | **Fichier créé/modifié** | Le fichier existe et est accessible |
-| 1.2 | **Contenu cohérent** | Le contenu a du sens |
-| 1.3 | **Pas d'erreur visible** | Pas de faute d'orthographe évidente |
+| 1.1 | **Fichier cree/modifie** | Le fichier existe et est accessible |
+| 1.2 | **Contenu coherent** | Le contenu a du sens |
+| 1.3 | **Pas d'erreur visible** | Pas de faute d'orthographe evidente |
 
-### Niveau 2 — Validation standard
+### Niveau 2 -- Validation standard
 
-| # | Vérification | Critère |
+| # | Verification | Critere |
 |---|---|---|
-| 2.1 | **Fichier créé/modifié** | Le fichier existe et est accessible |
-| 2.2 | **Contenu cohérent** | Le contenu a du sens |
-| 2.3 | **Convention respectée** | Le nommage est correct |
+| 2.1 | **Fichier cree/modifie** | Le fichier existe et est accessible |
+| 2.2 | **Contenu coherent** | Le contenu a du sens |
+| 2.3 | **Convention respectee** | Le nommage est correct |
 | 2.4 | **Liens valides** | Les liens internes fonctionnent |
-| 2.5 | **Statut à jour** | Le statut est correct |
-| 2.6 | **Historique documenté** | Les changements sont notés |
+| 2.5 | **Statut a jour** | Le statut est correct |
+| 2.6 | **Historique documente** | Les changements sont notes |
 
-### Niveau 3 — Validation complète
+### Niveau 3 -- Validation complete
 
-| # | Vérification | Critère |
+| # | Verification | Critere |
 |---|---|---|
-| 3.1-3.6 | **Toutes les vérifications niveau 2** | [OK] |
-| 3.7 | **Structure cohérente** | La structure est logique |
-| 3.8 | **Références à jour** | Les références sont correctes |
-| 3.9 | **Index mis à jour** | Les index sont à jour |
-| 3.10 | **RVAV appliqué** | Le cycle RVAV est respecté |
+| 3.1-3.6 | **Toutes les verifications niveau 2** | [OK] |
+| 3.7 | **Structure coherente** | La structure est logique |
+| 3.8 | **References a jour** | Les references sont correctes |
+| 3.9 | **Index mis a jour** | Les index sont a jour |
+| 3.10 | **RVAV applique** | Le cycle RVAV est respecte |
 
-### Niveau 4 — Validation critique
+### Niveau 4 -- Validation critique
 
-| # | Vérification | Critère |
+| # | Verification | Critere |
 |---|---|---|
-| 4.1 | **Toutes les vérifications niveau 3** | [OK] |
-| 4.2 | **Tests effectués** | Les tests passent |
-| 4.3 | **Documentation complète** | La documentation est à jour |
-| 4.4 | **Dépendances vérifiées** | Les dépendances sont à jour |
-| 4.5 | **Impact évalué** | L'est impact est compris |
-| 4.6 | **Rollback planifié** | Un plan de retour arrière existe |
-| 4.7 | **Validation utilisateur** | L'utilisateur a validé |
+| 4.1 | **Toutes les verifications niveau 3** | [OK] |
+| 4.2 | **Tests effectues** | Les tests passent |
+| 4.3 | **Documentation complete** | La documentation est a jour |
+| 4.4 | **Dependances verifiees** | Les dependances sont a jour |
+| 4.5 | **Impact evalue** | L'est impact est compris |
+| 4.6 | **Rollback planifie** | Un plan de retour arriere existe |
+| 4.7 | **Validation utilisateur** | L'utilisateur a valide |
 
 ---
 
-## Matrice de décision
+## Matrice de decision
 
 | Type de modification | Niveau de validation |
 |---|---|
 | Correction de faute | Niveau 1 |
 | Ajout de contenu simple | Niveau 2 |
 | Modification de convention | Niveau 3 |
-| Création de protocole | Niveau 3 |
+| Creation de protocole | Niveau 3 |
 | Changement d'architecture | Niveau 4 |
-| Modification de règles immuables | Niveau 4 |
+| Modification de regles immuables | Niveau 4 |
 
 ---
 
 ## Template de validation
 
 ```markdown
-# Validation — [Nom de la modification]
+# Validation -- [Nom de la modification]
 
 ## Niveau de validation
 **Niveau** : [1/2/3/4]
 
 ## Checklist
 
-| # | Vérification | Statut |
+| # | Verification | Statut |
 |---|---|---|
-| 1 | [Vérification 1] | [OK] / [NON] / [PARTIEL] |
-| 2 | [Vérification 2] | [OK] / [NON] / [PARTIEL] |
-| 3 | [Vérification 3] | [OK] / [NON] / [PARTIEL] |
+| 1 | [Verification 1] | [OK] / [NON] / [PARTIEL] |
+| 2 | [Verification 2] | [OK] / [NON] / [PARTIEL] |
+| 3 | [Verification 3] | [OK] / [NON] / [PARTIEL] |
 
-## Résultat
-**Statut** : [Validé / Non validé / À corriger]
+## Resultat
+**Statut** : [Valide / Non valide / A corriger]
 
 ## Commentaires
 [Notes et observations]
@@ -115,24 +115,24 @@ S'assurer que le travail est complet, correct et conforme aux conventions.
 
 ```
 1. Identifier les impacts de la modification
-2. Vérifier les dépendances
-3. Lister les fichiers concernés
+2. Verifier les dependances
+3. Lister les fichiers concernes
 ```
 
-### Vérifier
+### Verifier
 
 ```
 1. Confirmer que la modification est conforme
-2. Vérifier que les conventions sont respectées
+2. Verifier que les conventions sont respectees
 3. Valider que les liens sont corrects
 ```
 
 ### Analyser
 
 ```
-1. Évaluer les conséquences
+1. Evaluer les consequences
 2. Identifier les risques
-3. Proposer des mesures d'atténuation
+3. Proposer des mesures d'attenuation
 ```
 
 ### Valider
@@ -140,19 +140,19 @@ S'assurer que le travail est complet, correct et conforme aux conventions.
 ```
 1. Accepter la modification
 2. Ou demander des corrections
-3. Documenter la décision
+3. Documenter la decision
 ```
 
 ---
 
 ## Erreurs courantes de validation
 
-| Erreur | Conséquence | Prévention |
+| Erreur | Consequence | Prevention |
 |---|---|---|
-| **Valider trop vite** | Erreurs non détectées | Suivre la checklist complète |
-| **Oublier les liens** | Liens cassés | Vérifier tous les liens |
-| **Oublier les index** | Index incohérents | Mettre à jour les index |
-| **Oublier l'historique** | Pas de traçabilité | Documenter les changements |
+| **Valider trop vite** | Erreurs non detectees | Suivre la checklist complete |
+| **Oublier les liens** | Liens casses | Verifier tous les liens |
+| **Oublier les index** | Index incoherents | Mettre a jour les index |
+| **Oublier l'historique** | Pas de tracabilite | Documenter les changements |
 
 ---
 

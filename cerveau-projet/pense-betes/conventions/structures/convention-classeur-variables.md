@@ -1,4 +1,4 @@
-# Convention — Classeur de Variables
+# Convention -- Classeur de Variables
 ---
 
 ## Principe Fondamental
@@ -6,12 +6,12 @@
 
 ## Pourquoi un classeur ?
 
-| Problème | Solution |
+| Probleme | Solution |
 |---|---|
-| Fonctions couplées entre elles | Dé-couplage via le classeur |
-| Difficile d'insérer une fonction | Le classeur rend l'insertion transparente |
-| Données éparpillées | Stockage centralisé et traçable |
-| Réorganisation complexe | Réordonner les appels = changer l'ordre de lecture/écriture |
+| Fonctions couplees entre elles | De-couplage via le classeur |
+| Difficile d'inserer une fonction | Le classeur rend l'insertion transparente |
+| Donnees eparpillees | Stockage centralise et tracable |
+| Reorganisation complexe | Reordonner les appels = changer l'ordre de lecture/ecriture |
 
 ---
 
@@ -21,14 +21,14 @@
 fonction-1 -> [ecrit resultat-1] -> classeur -> [lit resultat-1] -> fonction-2 -> [ecrit resultat-2] -> classeur -> fonction-3
 ```
 
-### Flux de données
+### Flux de donnees
 
 ```
-1. Fonction-1 reçoit les données d'entrée
-2. Fonction-1 traite et écrit le résultat dans le classeur
-3. Fonction-2 lit le résultat de Fonction-1 dans le classeur
-4. Fonction-2 traite et écrit son résultat dans le classeur
-5. Fonction-3 lit le résultat de Fonction-2 dans le classeur
+1. Fonction-1 recoit les donnees d'entree
+2. Fonction-1 traite et ecrit le resultat dans le classeur
+3. Fonction-2 lit le resultat de Fonction-1 dans le classeur
+4. Fonction-2 traite et ecrit son resultat dans le classeur
+5. Fonction-3 lit le resultat de Fonction-2 dans le classeur
 6. etc.
 ```
 
@@ -38,23 +38,23 @@ fonction-1 -> [ecrit resultat-1] -> classeur -> [lit resultat-1] -> fonction-2 -
 
 ```
 classeur-variables/
-|-- index-classeur.md              <- point d'entrée global
+|-- index-classeur.md              <- point d'entree global
 |-- classeur-variables.md          <- orchestrateur principal
-|-- schema/                        <- schéma des variables
-|   ``-- variables-definition.md    <- définition de chaque variable
+|-- schema/                        <- schema des variables
+|   ``-- variables-definition.md    <- definition de chaque variable
 |-- stockage/                      <- valeurs actuelles
-|   ``-- variables-actuelles.md     <- état courant
+|   ``-- variables-actuelles.md     <- etat courant
 ``-- historique/                    <- historique des modifications
     ``-- historique-modifications.md
 ```
 
-**Statut** : Structure complète et opérationnelle.
+**Statut** : Structure complete et operationnelle.
 
 ---
 
-## Règles du classeur
+## Regles du classeur
 
-### Règle 1 — Chaque variable a un nom unique
+### Regle 1 -- Chaque variable a un nom unique
 
 ```yaml
 variables:
@@ -69,7 +69,7 @@ variables:
     source: "fonction-2"
 ```
 
-### Règle 2 — Chaque variable a un schéma
+### Regle 2 -- Chaque variable a un schema
 
 ```markdown
 ## Variable : resultat-fonction-1
@@ -78,47 +78,47 @@ variables:
 |---|---|---|---|
 | `id` | string | [OK] | Identifiant unique |
 | `valeur` | any | [OK] | Valeur de la variable |
-| `source` | string | [OK] | Fonction qui a écrit la variable |
-| `date_creation` | datetime | [OK] | Date de création |
-| `date_modification` | datetime | [NON] | Date de dernière modification |
+| `source` | string | [OK] | Fonction qui a ecrit la variable |
+| `date_creation` | datetime | [OK] | Date de creation |
+| `date_modification` | datetime | [NON] | Date de derniere modification |
 ```
 
-### Règle 3 — Lecture et écriture standardisées
+### Regle 3 -- Lecture et ecriture standardisees
 
 ```markdown
 ## Lire une variable
 
 1. Chercher dans le classeur
-2. Vérifier que la variable existe
-3. Vérifier que la variable n'est pas expirée
+2. Verifier que la variable existe
+3. Verifier que la variable n'est pas expiree
 4. Retourner la valeur
 
-## Écrire une variable
+## Ecrire une variable
 
-1. Vérifier que le schéma est respecté
-2. Écrire la valeur dans le classeur
-3. Mettre à jour l'historique
-4. Noter la source (quelle fonction a écrit)
+1. Verifier que le schema est respecte
+2. Ecrire la valeur dans le classeur
+3. Mettre a jour l'historique
+4. Noter la source (quelle fonction a ecrit)
 ```
 
-### Règle 4 — Pas de modification directe
+### Regle 4 -- Pas de modification directe
 
 ```
 [NON] Modifier directement une variable dans le classeur
-[OUI] Lire -> Modifier dans la fonction -> Réécrire dans le classeur
+[OUI] Lire -> Modifier dans la fonction -> Reecrire dans le classeur
 ```
 
 ---
 
 ## Exemple concret
 
-### Scénario : Pipeline de traitement
+### Scenario : Pipeline de traitement
 
 ```
-1. fonction-chargement -> écrit "donnees-brutes" dans le classeur
-2. fonction-nettoyage -> lit "donnees-brutes" -> écrit "donnees-propres"
-3. fonction-transformation -> lit "donnees-propres" -> écrit "donnees-transformees"
-4. fonction-export -> lit "donnees-transformees" -> écrit "fichier-final"
+1. fonction-chargement -> ecrit "donnees-brutes" dans le classeur
+2. fonction-nettoyage -> lit "donnees-brutes" -> ecrit "donnees-propres"
+3. fonction-transformation -> lit "donnees-propres" -> ecrit "donnees-transformees"
+4. fonction-export -> lit "donnees-transformees" -> ecrit "fichier-final"
 ```
 
 ### Insertion d'une nouvelle fonction
@@ -134,7 +134,7 @@ fonction-chargement -> fonction-nettoyage -> [NOUVELLE-FONCTION] -> fonction-tra
 La nouvelle fonction :
 1. Lit "donnees-propres" dans le classeur
 2. Traite
-3. Écrit "donnees-enrichies" dans le classeur
+3. Ecrit "donnees-enrichies" dans le classeur
 
 Les autres fonctions n'ont pas besoin de changer !
 
@@ -144,28 +144,28 @@ Les autres fonctions n'ont pas besoin de changer !
 
 | Convention | Lien |
 |---|---|
-| `convention-structures` | Le classeur suit les mêmes règles de structure |
+| `convention-structures` | Le classeur suit les memes regles de structure |
 | `convention-renommage` | Les variables suivent les patterns de nommage |
 | `convention-liens` | Les fonctions lient vers le classeur |
 
 ---
 
-## Intégration dans le workflow
+## Integration dans le workflow
 
-### Création d'un pipeline
+### Creation d'un pipeline
 
 ```
-1. Définir les variables nécessaires (schéma)
-2. Créer les fonctions (une par dossier)
-3. Créer la plateforme (orchestrateur)
-4. Chaque fonction lit/écrit dans le classeur
+1. Definir les variables necessaires (schema)
+2. Creer les fonctions (une par dossier)
+3. Creer la plateforme (orchestrateur)
+4. Chaque fonction lit/ecrit dans le classeur
 5. La plateforme appelle les fonctions dans l'ordre
 ```
 
-### Réorganisation
+### Reorganisation
 
 ```
-1. Ouvrir la plateforme (point d'entrée)
+1. Ouvrir la plateforme (point d'entree)
 2. Modifier l'ordre des appels de fonctions
 3. Tester le nouveau flux
 4. Valider par RVAV
@@ -175,19 +175,19 @@ Les autres fonctions n'ont pas besoin de changer !
 
 ## Validation
 
-Avant de valider un pipeline, vérifier :
+Avant de valider un pipeline, verifier :
 
-- [ ] Chaque variable a un schéma défini
+- [ ] Chaque variable a un schema defini
 - [ ] Chaque fonction lit les bonnes variables
-- [ ] Chaque fonction écrit les bonnes variables
+- [ ] Chaque fonction ecrit les bonnes variables
 - [ ] Pas de modification directe dans le classeur
-- [ ] L'historique est documenté
-- [ ] Les dépendances entre fonctions sont claires
+- [ ] L'historique est documente
+- [ ] Les dependances entre fonctions sont claires
 
 ---
 
 ## Navigation
 
 - **Parent** : [index-structures.md](index-structures.md)
-- **Sœurs** : [convention-structures.md](convention-structures.md), [convention-renommage.md](../renommage/convention-renommage.md)
-- **Règles** : [regles-hierarchie-par-niveau.md](../../regles-immuables/hierarchie/regles-hierarchie-par-niveau.md)
+- **Soeurs** : [convention-structures.md](convention-structures.md), [convention-renommage.md](../renommage/convention-renommage.md)
+- **Regles** : [regles-hierarchie-par-niveau.md](../../regles-immuables/hierarchie/regles-hierarchie-par-niveau.md)

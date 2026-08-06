@@ -1,17 +1,17 @@
-# Spec — Protocole de Composition du Cerveau
+# Spec -- Protocole de Composition du Cerveau
 
 **Statut :** ebauche
 **ID :** 001
 **Class :** 01
-**Créé :** 2026-08-06
-**Thème :** protocole-composition
-**Pense-bête source :** [protocole-composition.001.01.ebauche.md](../protocole-composition.001.01.ebauche.md)
+**Cree :** 2026-08-06
+**Theme :** protocole-composition
+**Pense-bete source :** [protocole-composition.001.01.ebauche.md](../protocole-composition.001.01.ebauche.md)
 
 ---
 
 ## 1. Objectif
 
-Définir la spec technique du protocole de composition du cerveau-projet : comment créer le squelette de base (index, dossiers, templates) de manière reproductible et validée.
+Definir la spec technique du protocole de composition du cerveau-projet : comment creer le squelette de base (index, dossiers, templates) de maniere reproductible et validee.
 
 ---
 
@@ -19,57 +19,57 @@ Définir la spec technique du protocole de composition du cerveau-projet : comme
 
 ### 2.1 Origine
 
-Le protocole composition a été créé pour standardiser la création du cerveau-projet afin que chaque nouveau projet démarre avec une structure identique et fiable.
+Le protocole composition a ete cree pour standardiser la creation du cerveau-projet afin que chaque nouveau projet demarre avec une structure identique et fiable.
 
-### 2.2 Périmètre
+### 2.2 Perimetre
 
-Couvre : création de l'index, des dossiers, des templates.
-Hors périmètre : contenu des pense-betes, specs métier, outils.
+Couvre : creation de l'index, des dossiers, des templates.
+Hors perimetre : contenu des pense-betes, specs metier, outils.
 
 ### 2.3 Public cible
 
-Buffy (développeur principal) et tout agent créant un nouveau cerveau-projet.
+Buffy (developpeur principal) et tout agent creant un nouveau cerveau-projet.
 
 ---
 
 ## 3. Exigences Fonctionnelles
 
-### 3.1 Exigence 1 — Créer index-cerveau.md
+### 3.1 Exigence 1 -- Creer index-cerveau.md
 
 | Champ | Description |
 |---|---|
-| **Priorité** | Haute |
-| **Description** | Créer le point d'entrée avec titre, version, description et table des matières |
-| **Critère d'acceptation** | Le fichier existe et tous les liens pointent vers des fichiers existants |
-| **Dépendances** | convention-renommage |
+| **Priorite** | Haute |
+| **Description** | Creer le point d'entree avec titre, version, description et table des matieres |
+| **Critere d'acceptation** | Le fichier existe et tous les liens pointent vers des fichiers existants |
+| **Dependances** | convention-renommage |
 
-### 3.2 Exigence 2 — Créer la structure des dossiers
-
-| Champ | Description |
-|---|---|
-| **Priorité** | Haute |
-| **Description** | Créer pense-betes/, conventions/, specs/, regles-immuables/, recherches-web/ |
-| **Critère d'acceptation** | Aucun dossier n'est vide (au moins un index) |
-| **Dépendances** | convention-structures |
-
-### 3.3 Exigence 3 — Vérifier les templates
+### 3.2 Exigence 2 -- Creer la structure des dossiers
 
 | Champ | Description |
 |---|---|
-| **Priorité** | Moyenne |
-| **Description** | Vérifier que pense-bete-template, spec-template, todo-template existent |
-| **Critère d'acceptation** | Les 3 templates sont présents et suivent le pattern de nommage |
-| **Dépendances** | convention-renommage |
+| **Priorite** | Haute |
+| **Description** | Creer pense-betes/, conventions/, specs/, regles-immuables/, recherches-web/ |
+| **Critere d'acceptation** | Aucun dossier n'est vide (au moins un index) |
+| **Dependances** | convention-structures |
+
+### 3.3 Exigence 3 -- Verifier les templates
+
+| Champ | Description |
+|---|---|
+| **Priorite** | Moyenne |
+| **Description** | Verifier que pense-bete-template, spec-template, todo-template existent |
+| **Critere d'acceptation** | Les 3 templates sont presents et suivent le pattern de nommage |
+| **Dependances** | convention-renommage |
 
 ---
 
 ## 4. Exigences Non-Fonctionnelles
 
-| Catégorie | Exigence | Critère de mesure |
+| Categorie | Exigence | Critere de mesure |
 |---|---|---|
-| **Reproductibilité** | Mêmes étapes = même structure | Comparaison de deux exécutions |
-| **Maintenabilité** | Structure extensible sans modification profonde | Ajout d'un dossier testé |
-| **Cohérence** | Respect des conventions de nommage | valider-nommage sans erreur |
+| **Reproductibilite** | Memes etapes = meme structure | Comparaison de deux executions |
+| **Maintenabilite** | Structure extensible sans modification profonde | Ajout d'un dossier teste |
+| **Coherence** | Respect des conventions de nommage | valider-nommage sans erreur |
 
 ---
 
@@ -77,18 +77,18 @@ Buffy (développeur principal) et tout agent créant un nouveau cerveau-projet.
 
 ### 5.1 Vue d'ensemble
 
-Le protocole suit 3 étapes séquentielles, chacune validée par RVAV :
-1. Créer index-cerveau.md
-2. Créer la structure des dossiers
-3. Vérifier les templates
+Le protocole suit 3 etapes sequentielles, chacune validee par RVAV :
+1. Creer index-cerveau.md
+2. Creer la structure des dossiers
+3. Verifier les templates
 
 ### 5.2 Composants
 
-| Composant | Rôle | Dépendances |
+| Composant | Role | Dependances |
 |---|---|---|
-| index-cerveau.md | Point d'entrée | tous les index |
+| index-cerveau.md | Point d'entree | tous les index |
 | Dossiers | Organisation | convention-structures |
-| Templates | Gabarits de création | convention-renommage |
+| Templates | Gabarits de creation | convention-renommage |
 
 ---
 
@@ -99,14 +99,14 @@ Le protocole suit 3 étapes séquentielles, chacune validée par RVAV :
 | Contrainte | Impact | Mitigation |
 |---|---|---|
 | Nommage strict | Structure rigide | convention-renommage |
-| Dossiers non vides | Temps de création | Index générés |
+| Dossiers non vides | Temps de creation | Index generes |
 
 ### 6.2 Risques
 
-| Risque | Probabilité | Impact | Mitigation |
+| Risque | Probabilite | Impact | Mitigation |
 |---|---|---|---|
-| Liens cassés | Moyenne | Élevé | valider-liens à chaque étape |
-| Oubli de RVAV | Moyenne | Élevé | Checklist obligatoire |
+| Liens casses | Moyenne | Eleve | valider-liens a chaque etape |
+| Oubli de RVAV | Moyenne | Eleve | Checklist obligatoire |
 
 ---
 
@@ -121,21 +121,21 @@ Le protocole suit 3 étapes séquentielles, chacune validée par RVAV :
 
 ## 8. Plan de validation
 
-### 8.1 Critères de succès globaux
+### 8.1 Criteres de succes globaux
 
-- [ ] Les 3 étapes sont exécutées dans l'ordre
-- [ ] Chaque étape passe la boucle RVAV
+- [ ] Les 3 etapes sont executees dans l'ordre
+- [ ] Chaque etape passe la boucle RVAV
 - [ ] Aucun dossier vide restant
 
-### 8.2 Méthode de validation
+### 8.2 Methode de validation
 
-Revue des fichiers créés + vérification des liens.
+Revue des fichiers crees + verification des liens.
 
 ---
 
-## 9. Liens et Références
+## 9. Liens et References
 
-### 9.1 Pense-bête source
+### 9.1 Pense-bete source
 
 - [protocole-composition.001.01.ebauche.md](../protocole-composition.001.01.ebauche.md)
 
@@ -144,7 +144,7 @@ Revue des fichiers créés + vérification des liens.
 - [convention-renommage.md](../../../conventions/renommage/convention-renommage.md)
 - [convention-structures.md](../../../conventions/structures/convention-structures.md)
 
-### 9.3 Règles immuables
+### 9.3 Regles immuables
 
 - [rvav-workflow.md](../../rvav-workflow.md)
 
@@ -152,7 +152,7 @@ Revue des fichiers créés + vérification des liens.
 
 ## 10. RVAV de la spec
 
-- [rechercher] — références rassemblées
-- [vérifier] — structure complète
-- [analyser] — cohérente avec le protocole source
-- [valider] — prêt pour le statut suivant
+- [rechercher] -- references rassemblees
+- [verifier] -- structure complete
+- [analyser] -- coherente avec le protocole source
+- [valider] -- pret pour le statut suivant

@@ -87,7 +87,7 @@ Fichier : pense-bete-incomplet.001.01.ebauche.md
 
 | Outil | Complement |
 |---|---|
-| `squelette-pense-bete` | Cree le squelette avant le remplissage |
-| `remplir-pense-bete` | Remplit les sections avant la validation |
+| `generateurs-squelette-pense-bete` | Cree le squelette avant le remplissage |
+| `creer-remplir-pense-bete` | Remplit les sections avant la validation |
 | `valider-conformite-ascii` | Verification ASCII globale du projet |
 | `changer-statut` | Change le statut apres validation |

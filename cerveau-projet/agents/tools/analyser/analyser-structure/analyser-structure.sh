@@ -1,12 +1,12 @@
 #!/bin/bash
 # analyser-structure.sh
 # Analyser la structure du projet
-# Version: 0.1.0
+# Version: 0.2.0
 # Date: 2026-08-05
 # Auteur: Vulcain
 
 # Configuration
-VERSION="0.1.0"
+VERSION="0.2.0"
 DATE="2026-08-05"
 
 # Couleurs pour la sortie
@@ -28,9 +28,9 @@ aide() {
     echo ""
     echo "Options:"
     echo "  --aide, -h          Afficher cette aide"
-    echo "  --verbose, -v       Afficher les détails"
+    echo "  --verbose, -v       Afficher les details"
     echo "  --version           Afficher la version"
-    echo "  --profondeur, -p    Profondeur d'analyse (défaut: 2)"
+    echo "  --profondeur, -p    Profondeur d'analyse (defaut: 2)"
     echo ""
     echo "Exemples:"
     echo "  analyser-structure"
@@ -44,23 +44,23 @@ analyser_structure() {
     local verbose=$2
     local profondeur=$3
 
-    echo -e "${BLUE}[GRAPHIQUE] Analyse de la structure : ${chemin:-.}${NC}"
+    echo -e "${BLUE}[ANALYSE] Structure de : ${chemin:-.}${NC}"
     echo ""
 
-    # Chemin par défaut
+    # Chemin par defaut
     if [[ -z "$chemin" ]]; then
         chemin="."
     fi
 
-    # Vérifier que le chemin existe
+    # Verifier que le chemin existe
     if [[ ! -e "$chemin" ]]; then
         echo -e "${RED}Erreur: Le chemin '${chemin}' n'existe pas${NC}"
         return 1
     fi
 
-    # 1. Statistiques générales
+    # 1. Statistiques generales
     echo -e "${CYAN}----------------------------------------${NC}"
-    echo -e "${GREEN}[DOSSIER] Statistiques générales${NC}"
+    echo -e "${GREEN}[STATS] Statistiques generales${NC}"
     echo -e "${CYAN}----------------------------------------${NC}"
     
     local nb_dossiers=$(find "$chemin" -type d -maxdepth "$profondeur" 2>/dev/null | wc -l)
@@ -70,26 +70,26 @@ analyser_structure() {
     local nb_py=$(find "$chemin" -name "*.py" -type f -maxdepth "$profondeur" 2>/dev/null | wc -l)
     local nb_js=$(find "$chemin" -name "*.js" -type f -maxdepth "$profondeur" 2>/dev/null | wc -l)
 
-    echo -e "  [OUVRIR] Dossiers : ${nb_dossiers}"
-    echo -e "  [FICHIER] Fichiers : ${nb_fichiers}"
-    echo -e "  [DOCUMENT] Markdown : ${nb_md}"
-    echo -e "  [SHELL] Scripts Bash : ${nb_sh}"
-    echo -e "  [PYTHON] Scripts Python : ${nb_py}"
-    echo -e "  [DOCUMENT] Scripts JavaScript : ${nb_js}"
+    echo -e "  [DOSSIERS] ${nb_dossiers}"
+    echo -e "  [FICHIERS] ${nb_fichiers}"
+    echo -e "  [MD] ${nb_md}"
+    echo -e "  [SH] ${nb_sh}"
+    echo -e "  [PY] ${nb_py}"
+    echo -e "  [JS] ${nb_js}"
     echo ""
 
     # 2. Taille totale
     echo -e "${CYAN}----------------------------------------${NC}"
-    echo -e "${GREEN}[SAUVEGARDE] Taille${NC}"
+    echo -e "${GREEN}[TAILLE]${NC}"
     echo -e "${CYAN}----------------------------------------${NC}"
     
     local taille=$(du -sh "$chemin" 2>/dev/null | cut -f1)
-    echo -e "  [PAQUET] Taille totale : ${taille}"
+    echo -e "  [TAILLE] Taille totale : ${taille}"
     echo ""
 
     # 3. Extensions
     echo -e "${CYAN}----------------------------------------${NC}"
-    echo -e "${GREEN}[PIECEJointe] Extensions${NC}"
+    echo -e "${GREEN}[EXTENSIONS]${NC}"
     echo -e "${CYAN}----------------------------------------${NC}"
     
     find "$chemin" -type f -maxdepth "$profondeur" 2>/dev/null | \
@@ -100,9 +100,9 @@ analyser_structure() {
         done
     echo ""
 
-    # 4. Structure arborescente (limitée)
+    # 4. Structure arborescente (limitee)
     echo -e "${CYAN}----------------------------------------${NC}"
-    echo -e "${GREEN}[ARBORESCENCE] Structure${NC}"
+    echo -e "${GREEN}[STRUCTURE]${NC}"
     echo -e "${CYAN}----------------------------------------${NC}"
     
     if [[ "$verbose" == "true" ]]; then
@@ -113,19 +113,19 @@ analyser_structure() {
     fi
     echo ""
 
-    # 5. Fichiers récents
+    # 5. Fichiers recents
     echo -e "${CYAN}----------------------------------------${NC}"
-    echo -e "${GREEN}[HEURE] Fichiers récents (modifiés dans les 7 derniers jours)${NC}"
+    echo -e "${GREEN}[RECENTS] Fichiers recents (7 jours)${NC}"
     echo -e "${CYAN}----------------------------------------${NC}"
     
     local nb_recents=$(find "$chemin" -type f -mtime -7 -maxdepth "$profondeur" 2>/dev/null | wc -l)
-    echo -e "  [FICHIER] ${nb_recents} fichier(s) récent(s)"
+    echo -e "  [RECENTS] ${nb_recents} fichier(s) recent(s)"
     echo ""
 
-    echo -e "${BLUE}Analyse terminée.${NC}"
+    echo -e "${BLUE}Analyse terminee.${NC}"
 }
 
-# Valeurs par défaut
+# Valeurs par defaut
 VERBOSE="false"
 PROFONDEUR=2
 
@@ -160,7 +160,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Exécution
+# Execution
 analyser_structure "$CHEMIN" "$VERBOSE" "$PROFONDEUR"
 
 exit $?

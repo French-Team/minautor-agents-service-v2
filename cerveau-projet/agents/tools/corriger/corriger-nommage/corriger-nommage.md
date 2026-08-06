@@ -1,6 +1,6 @@
-# Outil — Corriger le Nommage
+# Outil -- Corriger le Nommage
 
-**Catégorie** : Corriger
+**Categorie** : Corriger
 **Version** : v0.1.0
 **Statut** : initial
 
@@ -20,78 +20,78 @@ corriger-nommage(chemin=".", convention="kebab-case", dry-run=false)
 
 ---
 
-## Paramètres
+## Parametres
 
-| Paramètre | Type | Obligatoire | Description |
+| Parametre | Type | Obligatoire | Description |
 |---|---|---|---|
-| `chemin` | string | Oui | Chemin du dossier à corriger |
-| `convention` | string | Non | Convention de nommage (défaut: "kebab-case") |
-| `dry-run` | boolean | Non | Si true, simule sans corriger (défaut: false) |
+| `chemin` | string | Oui | Chemin du dossier a corriger |
+| `convention` | string | Non | Convention de nommage (defaut: "kebab-case") |
+| `dry-run` | boolean | Non | Si true, simule sans corriger (defaut: false) |
 
 ---
 
-## Résultat
+## Resultat
 
 Retourne un rapport de correction.
 
 ```markdown
-## Résultat
+## Resultat
 
-### Fichiers renommés
+### Fichiers renommes
 - Buffy.md -> buffy.md
 - IndexCerveau.md -> index-cerveau.md
 
-### Fichiers non renommés
+### Fichiers non renommes
 - fichier-special.md -> Convention non applicable
 
 ### Statistiques
-- Fichiers analysés : 20
-- Renommés : 2
-- Non renommés : 1
+- Fichiers analyses : 20
+- Renommes : 2
+- Non renommes : 1
 ```
 
 ---
 
 ## Exemples
 
-### Exemple 1 — Simuler les corrections
+### Exemple 1 -- Simuler les corrections
 
 ```
 corriger-nommage(chemin=".", dry-run=true)
 ```
 
-**Résultat** :
-- 2 fichiers seraient renommés
+**Resultat** :
+- 2 fichiers seraient renommes
 
-### Exemple 2 — Corriger automatiquement
+### Exemple 2 -- Corriger automatiquement
 
 ```
 corriger-nommage(chemin=".", convention="kebab-case")
 ```
 
-**Résultat** :
-- 2 fichiers renommés avec succès
+**Resultat** :
+- 2 fichiers renommes avec succes
 
 ---
 
-## Dépendances
+## Dependances
 
-- `valider-nommage` — Pour identifier les fichiers mal nommés
-- `lister-fichiers` — Pour trouver les fichiers à corriger
-- `lister-dossiers` — Pour trouver les dossiers à corriger
-- `convention-renommage.md` — Pour connaître les règles de nommage
+- `valider-nommage` -- Pour identifier les fichiers mal nommes
+- `lister-fichiers` -- Pour trouver les fichiers a corriger
+- `lister-dossiers` -- Pour trouver les dossiers a corriger
+- `convention-renommage.md` -- Pour connaitre les regles de nommage
 
 ---
 
-## Implémentation
+## Implementation
 
 ### Dans le contexte du cerveau-projet
 
-1. Utiliser `valider-nommage` pour identifier les fichiers mal nommés
+1. Utiliser `valider-nommage` pour identifier les fichiers mal nommes
 2. Pour chaque fichier :
    - Appliquer la convention de nommage
    - Renommer le fichier
-   - Mettre à jour les liens qui référencent ce fichier
+   - Mettre a jour les liens qui referencent ce fichier
 
 ### Algorithme de correction
 
@@ -101,14 +101,14 @@ corriger-nommage(chemin=".", convention="kebab-case")
    - kebab-case : minuscules, tirets
    - snake_case : minuscules, underscores
 3. Si le nom change -> renommer
-4. Mettre à jour les liens
+4. Mettre a jour les liens
 ```
 
 ---
 
 ## Notes
 
-- Cet outil est essentiel pour maintenir la cohérence
+- Cet outil est essentiel pour maintenir la coherence
 - Utiliser `dry-run=true` avant de corriger
 - Les renommages peuvent casser les liens
 

@@ -6,60 +6,60 @@
 
 Permettre aux agents de :
 1. **S'identifier** via une fiche d'agent personnelle
-2. **Corriger** leurs propres erreurs de manière automatique
+2. **Corriger** leurs propres erreurs de maniere automatique
 3. **Surcharger** leur configuration sans impacter les autres agents
-4. **Devenir l'agent principal** en mettant à jour AGENTS.md
+4. **Devenir l'agent principal** en mettant a jour AGENTS.md
 
 ---
 
-## Prérequis
+## Prerequis
 
 - Le dossier `agents/` existe dans le cerveau-projet
 - Les templates `fiche-agent-template.md` et `corrections-template.md` existent
-- Le fichier `AGENTS.md` existe à la racine du projet (ou sera créé)
+- Le fichier `AGENTS.md` existe a la racine du projet (ou sera cree)
 
 ---
 
 ## Le Cycle d'Auto-Correction
 
 ```
-VÉRIFIER -> CRÉER/LIRE -> APPLIQUER -> TRAVAILLER -> CORRIGER -> RÉACTIVER
+VERIFIER -> CREER/LIRE -> APPLIQUER -> TRAVAILLER -> CORRIGER -> REACTIVER
     1          2            3           4            5           6
 ```
 
-| Étape | Action | Responsable |
+| Etape | Action | Responsable |
 |---|---|---|
-| 1 | Vérifier l'existence de sa fiche | Agent |
-| 2 | Créer ou lire sa fiche | Agent |
-| 3 | Mettre à jour AGENTS.md | Agent |
-| 4 | Exécuter la mission | Agent |
-| 5 | Détecter et documenter les erreurs | Agent |
-| 6 | Réactiver Cerberus | Agent |
+| 1 | Verifier l'existence de sa fiche | Agent |
+| 2 | Creer ou lire sa fiche | Agent |
+| 3 | Mettre a jour AGENTS.md | Agent |
+| 4 | Executer la mission | Agent |
+| 5 | Detecter et documenter les erreurs | Agent |
+| 6 | Reactiver Cerberus | Agent |
 
 ---
 
-## Étape 1 — Vérifier l'existence de sa fiche
+## Etape 1 -- Verifier l'existence de sa fiche
 
 ```
 1. Aller dans agents/
 2. Chercher le dossier [nom-agent]/
 3. Si le dossier existe -> lire la fiche et les corrections
-4. Si le dossier n'existe pas -> le créer (voir Étape 2)
+4. Si le dossier n'existe pas -> le creer (voir Etape 2)
 ```
 
 ---
 
-## Étape 2 — Créer sa fiche d'agent
+## Etape 2 -- Creer sa fiche d'agent
 
 ```
-1. Créer le dossier agents/[nom-agent]/
+1. Creer le dossier agents/[nom-agent]/
 2. Copier fiche-agent-template.md -> agents/[nom-agent]/[nom-agent].md
 3. Copier corrections-template.md -> agents/[nom-agent]/corrections.md
 4. Remplir la fiche avec les informations de l'agent
-5. Laisser les corrections vides (seront remplies à la détection d'erreurs)
+5. Laisser les corrections vides (seront remplies a la detection d'erreurs)
 ```
 
-### Structure créée
+### Structure creee
 
 ```
 agents/[nom-agent]/
@@ -69,24 +69,24 @@ agents/[nom-agent]/
 
 ---
 
-## Étape 3 — Lire sa configuration
+## Etape 3 -- Lire sa configuration
 
 ### Ordre de lecture
 
-| Priorité | Fichier | Contenu |
+| Priorite | Fichier | Contenu |
 |---|---|---|
-| 1 | `corrections.md` | Règles spécifiques, surcharges, corrections |
-| 2 | `[nom-agent].md` | Fiche principale (après surcharge) |
+| 1 | `corrections.md` | Regles specifiques, surcharges, corrections |
+| 2 | `[nom-agent].md` | Fiche principale (apres surcharge) |
 
 ---
 
-## Étape 4 — Mettre à jour AGENTS.md
+## Etape 4 -- Mettre a jour AGENTS.md
 
 ```
-1. Lire AGENTS.md à la racine du projet
+1. Lire AGENTS.md a la racine du projet
 2. Identifier la section de l'agent actuel
-3. Mettre à jour la section avec les informations de l'agent
-4. Si l'agent n'a pas encore de section, la créer
+3. Mettre a jour la section avec les informations de l'agent
+4. Si l'agent n'a pas encore de section, la creer
 5. Marquer cet agent comme "agent principal"
 ```
 
@@ -100,7 +100,7 @@ agents/[nom-agent]/
 | Champ | Valeur |
 |---|---|
 | **Nom** | [nom-agent] |
-| **Dernière mise à jour** | [date] |
+| **Derniere mise a jour** | [date] |
 | **Fiche** | [lien vers la fiche] |
 
 ## Historique des Agents
@@ -116,56 +116,56 @@ agents/[nom-agent]/
 
 ---
 
-## Étape 5 — Appliquer les corrections (auto-correction)
+## Etape 5 -- Appliquer les corrections (auto-correction)
 
 ```
-1. Pendant le travail, détecter les erreurs ou patterns problématiques
-2. Classifier l'erreur (règle, surcharge, correction, configuration)
+1. Pendant le travail, detecter les erreurs ou patterns problematiques
+2. Classifier l'erreur (regle, surcharge, correction, configuration)
 3. Ajouter la correction dans agents/[nom-agent]/corrections.md
-4. La correction sera appliquée automatiquement lors des prochaines sessions
+4. La correction sera appliquee automatiquement lors des prochaines sessions
 ```
 
 ### Types de corrections
 
 | Type | Description | Emplacement |
 |---|---|---|
-| **Règle** | Nouvelle règle spécifique à l'agent | Section "Règles spécifiques" |
+| **Regle** | Nouvelle regle specifique a l'agent | Section "Regles specifiques" |
 | **Surcharge** | Modification d'une section existante | Section "Surcharges" |
-| **Correction** | Correction d'une erreur récurrente | Section "Corrections d'erreurs" |
-| **Configuration** | Paramètre de travail spécifique | Section "Configuration spécifique" |
+| **Correction** | Correction d'une erreur recurrente | Section "Corrections d'erreurs" |
+| **Configuration** | Parametre de travail specifique | Section "Configuration specifique" |
 
 ---
 
-## Étape 6 — Passage de témoin (changement d'agent)
+## Etape 6 -- Passage de temoin (changement d'agent)
 
 ```
 1. L'agent actuel termine sa session
 2. Le nouvel agent visite agents/
-3. Le nouvel agent lit sa fiche (ou la crée)
-4. Le nouvel agent met à jour AGENTS.md
-5. L'agent précédent conserve ses corrections
+3. Le nouvel agent lit sa fiche (ou la cree)
+4. Le nouvel agent met a jour AGENTS.md
+5. L'agent precedent conserve ses corrections
 ```
 
-### Règles de passage
+### Regles de passage
 
-| Règle | Description |
+| Regle | Description |
 |---|---|
-| **Pas de suppression** | Les corrections de l'agent précédent restent |
+| **Pas de suppression** | Les corrections de l'agent precedent restent |
 | **Pas de partage** | Chaque agent a ses propres corrections |
-| **AGENTS.md dynamique** | Seul l'agent principal y écrit |
-| **Traçabilité** | L'historique des agents est conservé |
+| **AGENTS.md dynamique** | Seul l'agent principal y ecrit |
+| **Tracabilite** | L'historique des agents est conserve |
 
 ---
 
-## Pièges courants
+## Pieges courants
 
-| Piège | Solution |
+| Piege | Solution |
 |---|---|
 | Oublier de lire les corrections | Toujours lire `corrections.md` en premier |
 | Partager les corrections | Chaque agent a son propre dossier |
-| Ne pas mettre à jour AGENTS.md | C'est l'étape obligatoire avant de travailler |
+| Ne pas mettre a jour AGENTS.md | C'est l'etape obligatoire avant de travailler |
 | Supprimer les corrections d'un autre | Les corrections sont persistantes |
-| Créer une fiche sans corrections | Toujours créer `corrections.md` (même vide) |
+| Creer une fiche sans corrections | Toujours creer `corrections.md` (meme vide) |
 
 ---
 

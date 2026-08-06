@@ -1,46 +1,46 @@
-# Gabarit — Pense-bête (idée développée)
+# Gabarit -- Pense-bete (idee developpee)
 ## Header
 
 ```
 **Statut :** ebauche | prepare | dev | test | valide
 **ID :** 001
 **Class :** 01
-**Créé :** 2026-08-04
-**Thème :** [nom-du-theme]
+**Cree :** 2026-08-04
+**Theme :** [nom-du-theme]
 ```
 
-## 1. Idée (1-2 phrases)
+## 1. Idee (1-2 phrases)
 
-[L'essence du concept — ce que ce pense-bête apporte de nouveau ou résout]
+[L'essence du concept -- ce que ce pense-bete apporte de nouveau ou resout]
 
-## 2. Problème / Question
+## 2. Probleme / Question
 
-[Quel problème ou question ce pense-bête adresse-t-il ?]
+[Quel probleme ou question ce pense-bete adresse-t-il ?]
 
 ## 3. Contexte
 
-[Comment s'inscrit ce pense-bête dans le projet ou le cerveau ?
+[Comment s'inscrit ce pense-bete dans le projet ou le cerveau ?
  Liens vers : index-cerveau.md, pense-betes/index-pense-bete.md]
 
 ## 4. Liens
 
-- Pense-bêtes connexes : [...]
+- Pense-betes connexes : [...]
 - Conventions applicables : [...]
-- Règles immuables : [...]
+- Regles immuables : [...]
 
-## 5. Structure prévue (RVAV par sous-partie)
+## 5. Structure prevue (RVAV par sous-partie)
 
 | Sous-partie | Fichier cible | Statut | RVAV |
 |---|---|---|---|
-| Idée | `[thème].[id].[class].[statut].md` | ebauche | [ ] recherche □ |
-| Spec | `spec/spec-[thème].[id].[class].[statut].md` | — | à créer |
-| Todo | `spec/todo/todo-[thème].[id].[class].[statut].md` | — | à créer |
-| Liens | `liens/liens-[thème].[id].[class].[statut].md` | — | à créer |
+| Idee | `[theme].[id].[class].[statut].md` | ebauche | [ ] recherche [ ] |
+| Spec | `spec/spec-[theme].[id].[class].[statut].md` | -- | a creer |
+| Todo | `spec/todo/todo-[theme].[id].[class].[statut].md` | -- | a creer |
+| Liens | `liens/liens-[theme].[id].[class].[statut].md` | -- | a creer |
 
-## 6. RVAV du pense-bête
+## 6. RVAV du pense-bete
 
-- [rechercher] — toutes les références/liens externes sont rassemblés
-- [vérifier] — la structure (idée + problème + contexte + liens) est complète
-- [analyser] — l'idée est cohérente avec le cerveau existant (pas de doublon)
-- [valider] — prêt pour le statut suivant (`prepare`)
+- [rechercher] -- toutes les references/liens externes sont rassembles
+- [verifier] -- la structure (idee + probleme + contexte + liens) est complete
+- [analyser] -- l'idee est coherente avec le cerveau existant (pas de doublon)
+- [valider] -- pret pour le statut suivant (`prepare`)
 

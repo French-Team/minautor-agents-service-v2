@@ -1,15 +1,15 @@
-# Index — Todos des Spécifications
+# Index -- Todos des Specifications
 ## Contenu
 
 | Fichier | Description |
 |---|---|
-| [todo-template.md](todo-template.md) | Gabarit pour créer un todo |
+| [todo-template.md](todo-template.md) | Gabarit pour creer un todo |
 
 ### Todos existants
 
-| ID | Thème | Statut | Lien |
+| ID | Theme | Statut | Lien |
 |---|---|---|---|
-| — | — | — | *(aucun todo pour l'instant)* |
+| -- | -- | -- | *(aucun todo pour l'instant)* |
 
 ## Navigation
 
@@ -17,10 +17,10 @@
 - **Specs** : [spec-template.md](../spec-template.md)
 - **Protocole composition** : [todo-protocole-composition](../../regles-immuables/general/protocole-composition/spec/todo/index-todo.md)
 
-## Comment créer un todo
+## Comment creer un todo
 
-1. Repérer la **spec source** (dans `specs/`)
+1. Reperer la **spec source** (dans `specs/`)
 2. Copier le [todo-template.md](todo-template.md)
-3. Renommer selon la convention : `todo-[thème].[id].[class].[statut].md`
+3. Renommer selon la convention : `todo-[theme].[id].[class].[statut].md`
 4. Remplir les phases
 5. Ajouter ici avec son statut

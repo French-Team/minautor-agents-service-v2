@@ -1,8 +1,8 @@
-# Boucle de Rétro-action — Cohérence
+# Boucle de Retro-action -- Coherence
 
 **Agent** : Vulcain
-**Date création** : 2026-08-05
-**Date mise à jour** : 2026-08-05
+**Date creation** : 2026-08-05
+**Date mise a jour** : 2026-08-05
 **Statut** : Active
 **Version** : 2.0 (avec sous-missions)
 
@@ -10,15 +10,15 @@
 
 ## Objectif
 
-S'assurer que Vulcain suit TOUJOURS sa carte de décision.
-**NOUVEAU** : Si un outil est nécessaire mais inexistant, CRÉEZ-LE avant de continuer.
+S'assurer que Vulcain suit TOUJOURS sa carte de decision.
+**NOUVEAU** : Si un outil est necessaire mais inexistant, CREEZ-LE avant de continuer.
 
 ---
 
-## Le problème résolu
+## Le probleme resolu
 
-**Avant** : Vulcain sautait des étapes et supposait
-**Après** : Vulcain vérifie chaque étape et crée les outils manquants
+**Avant** : Vulcain sautait des etapes et supposait
+**Apres** : Vulcain verifie chaque etape et cree les outils manquants
 
 ---
 
@@ -27,123 +27,123 @@ S'assurer que Vulcain suit TOUJOURS sa carte de décision.
 ### QUAND s'applique la boucle ?
 
 ```
-À CHAQUE étape de la carte de décision
-AVANT de passer à l'étape suivante
+A CHAQUE etape de la carte de decision
+AVANT de passer a l'etape suivante
 ```
 
-### COMMENT exécuter la boucle ?
+### COMMENT executer la boucle ?
 
 ```
-1. Lire la carte de décision
-2. Identifier l'étape en cours
-3. Vérifier que l'étape précédente est terminée
-4. Si non -> Terminer l'étape précédente
-5. Vérifier si un outil est nécessaire pour cette étape
+1. Lire la carte de decision
+2. Identifier l'etape en cours
+3. Verifier que l'etape precedente est terminee
+4. Si non -> Terminer l'etape precedente
+5. Verifier si un outil est necessaire pour cette etape
 6. Si outil manquant -> SOUS-MISSION obligatoire
 7. Si oui -> Continuer
-8. Documenter le résultat
+8. Documenter le resultat
 ```
 
 ---
 
-## SOUS-MISSION : Créer un outil manquant
+## SOUS-MISSION : Creer un outil manquant
 
-### Détection
+### Detection
 
 ```
-CONDITION : Un outil est nécessaire pour l'étape en cours mais n'existe pas
+CONDITION : Un outil est necessaire pour l'etape en cours mais n'existe pas
 ACTION : Sortir du flux principal
 ```
 
-### Étapes de la sous-mission
+### Etapes de la sous-mission
 
-| Étape | Action | Sortie |
+| Etape | Action | Sortie |
 |---|---|---|
-| **1** | **SAUVEGARDER** la position | Position sauvegardée |
-| **2** | **IDENTIFIER** l'outil nécessaire | Outil identifié |
-| **3** | **VÉRIFIER** si des specs existent | Specs trouvées ou non |
-| **4** | **CRÉER** les specs si nécessaire | Specs créées |
-| **5** | **DÉVELOPPER** l'outil | Outil créé |
-| **6** | **TESTER** l'outil | Tests passés |
+| **1** | **SAUVEGARDER** la position | Position sauvegardee |
+| **2** | **IDENTIFIER** l'outil necessaire | Outil identifie |
+| **3** | **VERIFIER** si des specs existent | Specs trouvees ou non |
+| **4** | **CREER** les specs si necessaire | Specs creees |
+| **5** | **DEVELOPPER** l'outil | Outil cree |
+| **6** | **TESTER** l'outil | Tests passes |
 | **7** | **REVENIR** au flux principal | Flux repris |
 
-### Détail des étapes
+### Detail des etapes
 
-#### Étape 1 : Sauvegarder
+#### Etape 1 : Sauvegarder
 
 ```bash
 gerer-sous-mission sauvegarder \
   --mission "[mission en cours]" \
-  --etape "[numéro]" \
-  --donnees "[ce qui a été collecté]"
+  --etape "[numero]" \
+  --donnees "[ce qui a ete collecte]"
 ```
 
-#### Étape 2 : Identifier l'outil
+#### Etape 2 : Identifier l'outil
 
 ```
-Question : Quel outil est nécessaire pour cette étape ?
-Réponse : [nom-outil]
+Question : Quel outil est necessaire pour cette etape ?
+Reponse : [nom-outil]
 ```
 
-#### Étape 3 : Vérifier les specs
+#### Etape 3 : Verifier les specs
 
 ```
 Fichier : cerveau-projet/agents/tools/[categorie]/[outil]/spec/spec-[outil].001.01.ebauche.md
 Condition : Le fichier existe-t-il ?
 ```
 
-#### Étape 4 : Créer les specs (si nécessaire)
+#### Etape 4 : Creer les specs (si necessaire)
 
 ```
-Si les specs n'existent pas -> Les créer
+Si les specs n'existent pas -> Les creer
 Format : Suivre le template spec-template.md
 ```
 
-#### Étape 5 : Développer l'outil
+#### Etape 5 : Developper l'outil
 
 ```
 Fichier : cerveau-projet/agents/tools/[categorie]/[outil]/[outil].sh
-Contenu : Script qui répond aux spécifications
+Contenu : Script qui repond aux specifications
 ```
 
-#### Étape 6 : Tester l'outil
+#### Etape 6 : Tester l'outil
 
 ```bash
 chmod +x cerveau-projet/agents/tools/[categorie]/[outil]/[outil].sh
 cerveau-projet/agents/tools/[categorie]/[outil]/[outil].sh --aide
 ```
 
-#### Étape 7 : Revenir au flux principal
+#### Etape 7 : Revenir au flux principal
 
 ```bash
 gerer-sous-mission revenir \
-  --resultat "succès" \
-  --outil-créé "oui"
+  --resultat "succes" \
+  --outil-cree "oui"
 ```
 
 ---
 
-## Après la sous-mission
+## Apres la sous-mission
 
 ```
 1. L'outil existe maintenant
-2. Utiliser l'outil pour l'étape en cours
-3. Continuer à l'étape suivante de la carte de décision
+2. Utiliser l'outil pour l'etape en cours
+3. Continuer a l'etape suivante de la carte de decision
 ```
 
 ---
 
-## Règle d'or
+## Regle d'or
 
-> **TOUJOURS suivre la carte de décision dans l'ordre.**
+> **TOUJOURS suivre la carte de decision dans l'ordre.**
 
 ---
 
-## Fréquence
+## Frequence
 
-- **À chaque étape** : Toujours
-- **Après une interruption** : Toujours
-- **Après une erreur** : Toujours
+- **A chaque etape** : Toujours
+- **Apres une interruption** : Toujours
+- **Apres une erreur** : Toujours
 - **Si outil manquant** : Sous-mission obligatoire
 
 ---

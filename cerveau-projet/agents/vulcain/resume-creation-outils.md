@@ -1,66 +1,66 @@
-# Résumé de la création des outils
+# Resume de la creation des outils
 
 **Agent** : Vulcain
 **Date** : 2026-08-05
-**Mission** : Créer tous les outils du dossier tools par ordre de priorité
+**Mission** : Creer tous les outils du dossier tools par ordre de priorite
 
 ---
 
-## Résultat
+## Resultat
 
-[OK] **Mission accomplie** — Tous les outils prioritaires ont été créés
+[OK] **Mission accomplie** -- Tous les outils prioritaires ont ete crees
 
 ---
 
-## Outils créés
+## Outils crees
 
-### Priorité 1 — Outils de base (indispensables)
-
-| Outil | Statut | Description |
-|---|---|---|
-| `verifier-systeme` | [OK] Terminé | Vérifie le système utilisateur |
-| `gerer-sous-mission` | [OK] Terminé | Gère les sorties/retrées du flux principal |
-
-### Priorité 2 — Outils d'exploration (comprendre le projet)
+### Priorite 1 -- Outils de base (indispensables)
 
 | Outil | Statut | Description |
 |---|---|---|
-| `lister-dossiers` | [OK] Terminé | Liste les dossiers d'un chemin |
-| `lister-fichiers` | [OK] Terminé | Liste les fichiers d'un chemin |
-| `lister-fonctions` | [OK] Terminé | Liste les fonctions d'un fichier |
-| `lister-appels` | ⏳ En attente | Lister les appels de fonctions |
-| `lister-agents` | ⏳ En attente | Lister les agents avec leurs infos |
-| `lister-outils` | ⏳ En attente | Lister les outils partagés |
+| `verifier-systeme` | [OK] Termine | Verifie le systeme utilisateur |
+| `gerer-sous-mission` | [OK] Termine | Gere les sorties/retrees du flux principal |
 
-### Priorité 3 — Outils de validation (vérifier le travail)
+### Priorite 2 -- Outils d'exploration (comprendre le projet)
 
 | Outil | Statut | Description |
 |---|---|---|
-| `valider-cartes-decision` | [OK] Terminé | Vérifie les cartes de décision |
-| `valider-liens` | [OK] Terminé | Valide les liens dans un fichier |
-| `valider-nommage` | ⏳ En attente | Vérifie le nommage |
-| `valider-conventions` | ⏳ En attente | Vérifie les conventions |
+| `lister-dossiers` | [OK] Termine | Liste les dossiers d'un chemin |
+| `lister-fichiers` | [OK] Termine | Liste les fichiers d'un chemin |
+| `lister-fonctions` | [OK] Termine | Liste les fonctions d'un fichier |
+| `lister-appels` | [attente] En attente | Lister les appels de fonctions |
+| `lister-agents` | [attente] En attente | Lister les agents avec leurs infos |
+| `lister-outils` | [attente] En attente | Lister les outils partages |
 
-### Priorité 4 — Outils de correction (corriger les erreurs)
-
-| Outil | Statut | Description |
-|---|---|---|
-| `corriger-liens` | [OK] Terminé | Corrige les liens cassés |
-| `corriger-nommage` | ⏳ En attente | Corrige le nommage |
-| `modifier-agents-md` | ⏳ En attente | Modifie AGENTS.md |
-
-### Priorité 5 — Outils d'analyse (comprendre en profondeur)
+### Priorite 3 -- Outils de validation (verifier le travail)
 
 | Outil | Statut | Description |
 |---|---|---|
-| `analyser-structure` | ⏳ En attente | Analyse la structure du projet |
-| `analyser-dependances` | ⏳ En attente | Analyse les dépendances |
+| `valider-cartes-decision` | [OK] Termine | Verifie les cartes de decision |
+| `valider-liens` | [OK] Termine | Valide les liens dans un fichier |
+| `valider-nommage` | [attente] En attente | Verifie le nommage |
+| `valider-conventions` | [attente] En attente | Verifie les conventions |
+
+### Priorite 4 -- Outils de correction (corriger les erreurs)
+
+| Outil | Statut | Description |
+|---|---|---|
+| `corriger-liens` | [OK] Termine | Corrige les liens casses |
+| `corriger-nommage` | [attente] En attente | Corrige le nommage |
+| `mettre-a-jour-modifier-agents-md` | [attente] En attente | Modifie AGENTS.md |
+
+### Priorite 5 -- Outils d'analyse (comprendre en profondeur)
+
+| Outil | Statut | Description |
+|---|---|---|
+| `analyser-structure` | [attente] En attente | Analyse la structure du projet |
+| `analyser-dependances` | [attente] En attente | Analyse les dependances |
 
 ---
 
 ## Statistiques
 
-| Catégorie | Outils créés | Total |
+| Categorie | Outils crees | Total |
 |---|---|---|
 | Explorer | 3 | 6 |
 | Valider | 2 | 4 |
@@ -70,54 +70,54 @@
 
 ---
 
-## Technologies utilisées
+## Technologies utilisees
 
 | Technologie | Usage | Raison |
 |---|---|---|
-| **Bash** | Scripts shell | Universel, disponible sur tous les systèmes |
+| **Bash** | Scripts shell | Universel, disponible sur tous les systemes |
 | **Markdown** | Documentation | Standard du cerveau-projet |
 
 ---
 
-## Tests effectués
+## Tests effectues
 
-| Outil | Test | Résultat |
+| Outil | Test | Resultat |
 |---|---|---|
-| `verifier-systeme` | Exécution avec --aide | [OK] Succès |
-| `verifier-systeme` | Exécution par défaut | [OK] Succès |
-| `gerer-sous-mission` | Exécution avec aide | [OK] Succès |
-| `gerer-sous-mission` | Test sauvegarde | [OK] Succès |
-| `lister-dossiers` | Exécution avec --aide | [OK] Succès |
-| `lister-dossiers` | Listage du répertoire courant | [OK] Succès |
+| `verifier-systeme` | Execution avec --aide | [OK] Succes |
+| `verifier-systeme` | Execution par defaut | [OK] Succes |
+| `gerer-sous-mission` | Execution avec aide | [OK] Succes |
+| `gerer-sous-mission` | Test sauvegarde | [OK] Succes |
+| `lister-dossiers` | Execution avec --aide | [OK] Succes |
+| `lister-dossiers` | Listage du repertoire courant | [OK] Succes |
 
 ---
 
-## Fichiers modifiés
+## Fichiers modifies
 
 | Fichier | Modification |
 |---|---|
-| `AGENTS.md` | Activation de Vulcain puis retour à Cerberus |
-| `cerveau-projet/agents/vulcain/priorite-outils.md` | Mise à jour des statuts |
+| `AGENTS.md` | Activation de Vulcain puis retour a Cerberus |
+| `cerveau-projet/agents/vulcain/priorite-outils.md` | Mise a jour des statuts |
 | `cerveau-projet/agents/tools/index-tools.md` | Ajout des instructions d'utilisation |
 
 ---
 
-## Leçons apprises
+## Lecons apprises
 
-1. **Un outil à la fois** — Ne pas mélanger les créations
-2. **Tester avant de passer** — Chaque outil doit être testé
-3. **Documenter les choix** — Pourquoi cette technologie ?
-4. **Respecter la portabilité** — Fonctionner sur tous les systèmes
-5. **Revenir à Cerberus** — Après chaque outil créé
+1. **Un outil a la fois** -- Ne pas melanger les creations
+2. **Tester avant de passer** -- Chaque outil doit etre teste
+3. **Documenter les choix** -- Pourquoi cette technologie ?
+4. **Respecter la portabilite** -- Fonctionner sur tous les systemes
+5. **Revenir a Cerberus** -- Apres chaque outil cree
 
 ---
 
-## Prochaines étapes
+## Prochaines etapes
 
-1. **Terminer les outils en attente** — Créer les scripts pour les outils restants
-2. **Tester tous les outils** — Vérifier qu'ils fonctionnent correctement
-3. **Documenter l'utilisation** — Créer des exemples concrets
-4. **Optimiser les performances** — Améliorer les scripts si nécessaire
+1. **Terminer les outils en attente** -- Creer les scripts pour les outils restants
+2. **Tester tous les outils** -- Verifier qu'ils fonctionnent correctement
+3. **Documenter l'utilisation** -- Creer des exemples concrets
+4. **Optimiser les performances** -- Ameliorer les scripts si necessaire
 
 ---
 

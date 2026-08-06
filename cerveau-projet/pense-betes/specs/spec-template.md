@@ -1,24 +1,24 @@
-# Gabarit — Spécification Technique (source de vérité)
+# Gabarit -- Specification Technique (source de verite)
 ---
 
 ## Header
 
 ```
-**Statut :** ebauche | préparé | dev | test | valide
+**Statut :** ebauche | prepare | dev | test | valide
 **ID :** 001
 **Class :** 01
-**Créé :** 2026-08-04
-**Thème :** [nom-du-theme]
-**Pense-bête source :** [lien vers le pense-bête parent]
+**Cree :** 2026-08-04
+**Theme :** [nom-du-theme]
+**Pense-bete source :** [lien vers le pense-bete parent]
 ```
 
 ---
 
 ## 1. Objectif
 
-[Quel est l'objectif précis de cette spec ? Qu'est-ce qu'elle doit permettre d'atteindre ?]
+[Quel est l'objectif precis de cette spec ? Qu'est-ce qu'elle doit permettre d'atteindre ?]
 
-[Format : phrase claire, concise, sans ambiguïté]
+[Format : phrase claire, concise, sans ambiguite]
 
 ---
 
@@ -26,46 +26,46 @@
 
 ### 2.1 Origine
 
-[D'où vient ce besoin ? Quel problème ou opportunité a déclenché cette spec ?]
+[D'ou vient ce besoin ? Quel probleme ou opportunite a declenche cette spec ?]
 
-### 2.2 Périmètre
+### 2.2 Perimetre
 
-[Que couvre cette spec ? Qu'est-ce qui est hors périmètre ?]
+[Que couvre cette spec ? Qu'est-ce qui est hors perimetre ?]
 
 ### 2.3 Public cible
 
-[Qui utilise ou sera impacté par cette spec ? (utilisateurs, développeurs, système)]
+[Qui utilise ou sera impacte par cette spec ? (utilisateurs, developpeurs, systeme)]
 
 ---
 
 ## 3. Exigences Fonctionnelles
 
-[Décrire les fonctionnalités concrètes que la spec doit couvrir]
+[Decrire les fonctionnalites concretes que la spec doit couvrir]
 
-### 3.1 Exigence [ID] — [Titre]
+### 3.1 Exigence [ID] -- [Titre]
 
 | Champ | Description |
 |---|---|
-| **Priorité** | Haute / Moyenne / Basse |
-| **Description** | [Description détaillée] |
-| **Critère d'acceptation** | [Comment valider que l'exigence est remplie] |
-| **Dépendances** | [Liens vers d'autres exigences ou specs] |
+| **Priorite** | Haute / Moyenne / Basse |
+| **Description** | [Description detaillee] |
+| **Critere d'acceptation** | [Comment valider que l'exigence est remplie] |
+| **Dependances** | [Liens vers d'autres exigences ou specs] |
 
-*(Répéter pour chaque exigence)*
+*(Repeter pour chaque exigence)*
 
 ---
 
 ## 4. Exigences Non-Fonctionnelles
 
-[Contraintes techniques, performance, sécurité, maintenabilité, etc.]
+[Contraintes techniques, performance, securite, maintenabilite, etc.]
 
-| Catégorie | Exigence | Critère de mesure |
+| Categorie | Exigence | Critere de mesure |
 |---|---|---|
-| **Performance** | [ex: temps de réponse < 200ms] | [méthode de test] |
-| **Sécurité** | [ex: authentification requise] | [critère de validation] |
-| **Maintenabilité** | [ex: code testable à 80%] | [couverture de tests] |
-| **Accessibilité** | [ex: WCAG 2.1 AA] | [outil de vérification] |
-| **Autre** | [ex: compatible mobile] | [critère] |
+| **Performance** | [ex: temps de reponse < 200ms] | [methode de test] |
+| **Securite** | [ex: authentification requise] | [critere de validation] |
+| **Maintenabilite** | [ex: code testable a 80%] | [couverture de tests] |
+| **Accessibilite** | [ex: WCAG 2.1 AA] | [outil de verification] |
+| **Autre** | [ex: compatible mobile] | [critere] |
 
 ---
 
@@ -73,25 +73,25 @@
 
 ### 5.1 Vue d'ensemble
 
-[Description de l'architecture cible — comment les éléments s'assemblent]
+[Description de l'architecture cible -- comment les elements s'assemblent]
 
 ### 5.2 Composants
 
-| Composant | Rôle | Dépendances |
+| Composant | Role | Dependances |
 |---|---|---|
 | [Nom] | [Description] | [Liens] |
 
-### 5.3 Modèle de données
+### 5.3 Modele de donnees
 
-[Si applicable — schéma, entités, relations]
+[Si applicable -- schema, entites, relations]
 
 ### 5.4 Interfaces / API
 
-[Si applicable — points d'entrée, contrats, formats]
+[Si applicable -- points d'entree, contrats, formats]
 
 ### 5.5 Flux / Workflows
 
-[Si applicable — séquences d'actions, états, transitions]
+[Si applicable -- sequences d'actions, etats, transitions]
 
 ---
 
@@ -105,67 +105,67 @@
 
 ### 6.2 Risques
 
-| Risque | Probabilité | Impact | Mitigation |
+| Risque | Probabilite | Impact | Mitigation |
 |---|---|---|---|
-| [Description] | Élevée / Moyenne / Faible | Élevé / Moyen / Faible | [Solution] |
+| [Description] | Elevee / Moyenne / Faible | Eleve / Moyen / Faible | [Solution] |
 
 ---
 
 ## 7. Livrables attendus
 
-[Quels livrables concrets cette spec doit-elle générer ?]
+[Quels livrables concrets cette spec doit-elle generer ?]
 
 | Livrable | Format | Destination |
 |---|---|---|
-| [Ex: Code source] | [Répertoire, langage] | [Dépôt] |
+| [Ex: Code source] | [Repertoire, langage] | [Depot] |
 | [Ex: Documentation] | [Markdown, PDF] | [Emplacement] |
-| [Ex: Tests] | [Type de tests] | [Répertoire] |
+| [Ex: Tests] | [Type de tests] | [Repertoire] |
 
 ---
 
 ## 8. Plan de validation
 
-[Comment cette spec sera-t-elle validée ?]
+[Comment cette spec sera-t-elle validee ?]
 
-### 8.1 Critères de succès globaux
+### 8.1 Criteres de succes globaux
 
-- [ ] [Critère 1]
-- [ ] [Critère 2]
-- [ ] [Critère 3]
+- [ ] [Critere 1]
+- [ ] [Critere 2]
+- [ ] [Critere 3]
 
-### 8.2 Méthode de validation
+### 8.2 Methode de validation
 
-[Ex: revue par les pairs, tests d'intégration, démo fonctionnelle]
+[Ex: revue par les pairs, tests d'integration, demo fonctionnelle]
 
 ### 8.3 Responsables
 
-| Rôle | Responsable |
+| Role | Responsable |
 |---|---|
-| Rédaction | [Nom / Rôle] |
-| Validation technique | [Nom / Rôle] |
-| Validation métier | [Nom / Rôle] |
+| Redaction | [Nom / Role] |
+| Validation technique | [Nom / Role] |
+| Validation metier | [Nom / Role] |
 
 ---
 
-## 9. Liens et Références
+## 9. Liens et References
 
-### 9.1 Pense-bête source
+### 9.1 Pense-bete source
 
-- [Lien vers le pense-bête parent]
+- [Lien vers le pense-bete parent]
 
 ### 9.2 Specs connexes
 
-- [Lien vers autres specs liées]
+- [Lien vers autres specs liees]
 
 ### 9.3 Conventions applicables
 
-- [Lien vers conventions utilisées]
+- [Lien vers conventions utilisees]
 
-### 9.4 Règles immuables
+### 9.4 Regles immuables
 
-- [Lien vers règles respectées]
+- [Lien vers regles respectees]
 
-### 9.5 Références externes
+### 9.5 References externes
 
 - [Liens vers documentation, standards, etc.]
 
@@ -173,10 +173,10 @@
 
 ## 10. RVAV de la spec
 
-- [rechercher] — toutes les références, dépendances externes rassemblées
-- [vérifier] — la structure est complète (toutes les sections remplies)
-- [analyser] — la spec est cohérente avec le cerveau existant et le pense-bête source
-- [valider] — prêt pour le statut suivant (`préparé`)
+- [rechercher] -- toutes les references, dependances externes rassemblees
+- [verifier] -- la structure est complete (toutes les sections remplies)
+- [analyser] -- la spec est coherente avec le cerveau existant et le pense-bete source
+- [valider] -- pret pour le statut suivant (`prepare`)
 ---
 
 ## Historique des modifications

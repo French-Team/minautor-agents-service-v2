@@ -1,11 +1,11 @@
-# Protocole Immuable — Activation des Agents
+# Protocole Immuable -- Activation des Agents
 
 > L'activation inclut OBLIGATOIREMENT la lecture du fichier de l'agent.
 
-**Portée :** Tous les agents du cerveau-projet
-**Prérequis :** AGENTS.md, fiche de l'agent, corrections de l'agent
+**Portee :** Tous les agents du cerveau-projet
+**Prerequis :** AGENTS.md, fiche de l'agent, corrections de l'agent
 **Statut :** prepare (class 02)
-**Dernière mise à jour :** 2026-08-05
+**Derniere mise a jour :** 2026-08-05
 
 ---
 
@@ -16,74 +16,74 @@
 ## Le Cycle d'Activation
 
 ```
-CERBERUS -> IDENTIFIER -> LIRE -> ACTIVER -> TRAVAILLER -> RÉACTIVER -> [SECOND CONTRÔLE]
+CERBERUS -> IDENTIFIER -> LIRE -> ACTIVER -> TRAVAILLER -> REACTIVER -> [SECOND CONTROLE]
     1          2         3       4          5            6                7
 ```
 
-| Étape | Action | Responsable |
+| Etape | Action | Responsable |
 |---|---|---|
 | 1 | Cerberus analyse le besoin | Cerberus |
-| 2 | Identifier l'agent adapté | Cerberus |
+| 2 | Identifier l'agent adapte | Cerberus |
 | 3 | Lire la fiche et les corrections | Cerberus |
 | 4 | Activer dans AGENTS.md | Cerberus |
-| 5 | Agent exécute sa mission | Agent activé |
-| 6 | Réactiver Cerberus | Agent activé |
-| 7 | Si la mission figure dans la liste définie : activer Janus | Cerberus |
+| 5 | Agent execute sa mission | Agent active |
+| 6 | Reactiver Cerberus | Agent active |
+| 7 | Si la mission figure dans la liste definie : activer Janus | Cerberus |
 
-> **Second contrôle** : la liste des missions exigeant le second contrôle est dans la carte de décision de Cerberus. Janus contrôle, puis réactive Cerberus.
+> **Second controle** : la liste des missions exigeant le second controle est dans la carte de decision de Cerberus. Janus controle, puis reactive Cerberus.
 
 ---
 
-## Matrice de décision
+## Matrice de decision
 
 | Besoin | Agent | Justification |
 |---|---|---|
-| Créer/modifier du contenu | Buffy | Développeur principal |
+| Creer/modifier du contenu | Buffy | Developpeur principal |
 | Explorer le code | Atlas | Explorateur |
-| Valider un travail | Janus | Second contrôle — activé par Cerberus (liste définie) |
-| Coordonner | Cerberus | Gardien de l'entrée |
+| Valider un travail | Janus | Second controle -- active par Cerberus (liste definie) |
+| Coordonner | Cerberus | Gardien de l'entree |
 
 ---
 
-## Étape 3 — Lecture de l'Agent
+## Etape 3 -- Lecture de l'Agent
 
-> **ÉTAPE OBLIGATOIRE — Ne pas sauter !**
+> **ETAPE OBLIGATOIRE -- Ne pas sauter !**
 
 ### Quand lire corrections.md ?
 
 | Situation | Lire ? | Pourquoi |
 |---|---|---|
-| Première activation de l'agent | OUI | Découvrir les règles |
-| Activation normale (agent fonctionne) | NON | L'agent connaît déjà ses règles |
-| Erreur détectée / debug | OUI | Comprendre ce qui a mal tourné |
-| Test de l'agent | OUI | Vérifier les corrections en cours |
+| Premiere activation de l'agent | OUI | Decouvrir les regles |
+| Activation normale (agent fonctionne) | NON | L'agent connait deja ses regles |
+| Erreur detectee / debug | OUI | Comprendre ce qui a mal tourne |
+| Test de l'agent | OUI | Verifier les corrections en cours |
 
-### Règle
+### Regle
 
-> **Écrire dans corrections.md TOUJOURS, le relire UNIQUEMENT en cas de besoin.**
+> **Ecrire dans corrections.md TOUJOURS, le relire UNIQUEMENT en cas de besoin.**
 
 ---
 
-## Étape 4 — Activation dans AGENTS.md
+## Etape 4 -- Activation dans AGENTS.md
 
 > **JAMAIS** `str_replace` ou `write_file` pour ce fichier critique.
 
 ### Commande d'activation
 
 ```bash
-cerveau-projet/agents/tools/corriger/modifier-agents-md/modifier-agents-md.sh activer "Agent" "Raison" "Mission"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh activer "Agent" "Raison" "Mission"
 ```
 
 ---
 
-## Étape 6 — Réactivation de Cerberus
+## Etape 6 -- Reactivation de Cerberus
 
 > **JAMAIS** `str_replace` ou `write_file` pour AGENTS.md.
 
-### Commande de réactivation
+### Commande de reactivation
 
 ```bash
-cerveau-projet/agents/tools/corriger/modifier-agents-md/modifier-agents-md.sh reactiver "Raison" "AgentPrecedent"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "AgentPrecedent"
 ```
 
 ### Quand ?
@@ -94,33 +94,33 @@ AVANT de terminer la session.
 
 ---
 
-## Règles d'Or
+## Regles d'Or
 
-| Règle | Description |
+| Regle | Description |
 |---|---|
 | **Activation = Lecture** | Jamais d'activation sans lecture de la fiche |
-| **Corrections = Écriture** | TOUJOURS écrire, relire UNIQUEMENT en cas d'erreur |
+| **Corrections = Ecriture** | TOUJOURS ecrire, relire UNIQUEMENT en cas d'erreur |
 | **Documenter l'activation** | Raison et mission dans AGENTS.md |
-| **Réactiver Cerberus** | Toujours revenir à Cerberus |
-| **Pas de saut** | Ne jamais sauter une étape |
-| **Utiliser modifier-agents-md** | Pour toute modification d'AGENTS.md |
+| **Reactiver Cerberus** | Toujours revenir a Cerberus |
+| **Pas de saut** | Ne jamais sauter une etape |
+| **Utiliser mettre-a-jour-modifier-agents-md** | Pour toute modification d'AGENTS.md |
 
 ---
 
-## Pièges Courants
+## Pieges Courants
 
-| Piège | Solution |
+| Piege | Solution |
 |---|---|
 | Activer sans lire la fiche | TOUJOURS lire [nom-agent].md |
-| Relire corrections.md à tort | Le lire UNIQUEMENT en cas d'erreur |
-| Oublier de documenter | Mettre à jour AGENTS.md immédiatement |
-| Ne pas réactiver Cerberus | C'est la DERNIÈRE action |
-| Lire après avoir agi | Lire AVANT de commencer |
+| Relire corrections.md a tort | Le lire UNIQUEMENT en cas d'erreur |
+| Oublier de documenter | Mettre a jour AGENTS.md immediatement |
+| Ne pas reactiver Cerberus | C'est la DERNIERE action |
+| Lire apres avoir agi | Lire AVANT de commencer |
 
 ---
 
 ## Liens
 
-- **Protocole parent** : `demarrer.md` — protocole de démarrage
-- **Convention** : `convention-protocoles` — comment créer des protocoles
-- **Règle** : `regles-choisir-agent` — comment choisir le bon agent
+- **Protocole parent** : `demarrer.md` -- protocole de demarrage
+- **Convention** : `convention-protocoles` -- comment creer des protocoles
+- **Regle** : `regles-choisir-agent` -- comment choisir le bon agent

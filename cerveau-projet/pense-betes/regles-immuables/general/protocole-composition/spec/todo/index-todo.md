@@ -1,9 +1,9 @@
-# Index — Todos du Protocole Composition
+# Index -- Todos du Protocole Composition
 ## Contenu
 
 | Fichier | Description |
 |---|---|
-| [todo-protocole-composition.003.01.ebauche.md](todo-protocole-composition.003.01.ebauche.md) | Tâches pour implémenter le protocole composition |
+| [todo-protocole-composition.003.01.ebauche.md](todo-protocole-composition.003.01.ebauche.md) | Taches pour implementer le protocole composition |
 
 ## Navigation
 

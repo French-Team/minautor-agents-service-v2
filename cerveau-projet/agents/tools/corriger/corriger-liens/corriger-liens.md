@@ -1,6 +1,6 @@
-# Outil — Corriger les Liens
+# Outil -- Corriger les Liens
 
-**Catégorie** : Corriger
+**Categorie** : Corriger
 **Version** : v0.1.0
 **Statut** : initial
 
@@ -8,7 +8,7 @@
 
 ## Objectif
 
-Corriger automatiquement les liens cassés dans les fichiers Markdown.
+Corriger automatiquement les liens casses dans les fichiers Markdown.
 
 ---
 
@@ -20,76 +20,76 @@ corriger-liens(chemin=".", mode="auto", dry-run=false)
 
 ---
 
-## Paramètres
+## Parametres
 
-| Paramètre | Type | Obligatoire | Description |
+| Parametre | Type | Obligatoire | Description |
 |---|---|---|---|
-| `chemin` | string | Oui | Chemin du dossier à corriger |
-| `mode` | string | Non | Mode: "auto" (automatique), "manual" (manuel) (défaut: "auto") |
-| `dry-run` | boolean | Non | Si true, simule sans corriger (défaut: false) |
+| `chemin` | string | Oui | Chemin du dossier a corriger |
+| `mode` | string | Non | Mode: "auto" (automatique), "manual" (manuel) (defaut: "auto") |
+| `dry-run` | boolean | Non | Si true, simule sans corriger (defaut: false) |
 
 ---
 
-## Résultat
+## Resultat
 
 Retourne un rapport de correction.
 
 ```markdown
-## Résultat
+## Resultat
 
-### Liens corrigés
+### Liens corriges
 - [ancien.md](ancien.md) -> [nouveau.md](nouveau.md)
 - dossier/ -> dossier/existant/
 
-### Liens non corrigés
-- [perdu.md](perdu.md) -> Aucune correspondance trouvée
+### Liens non corriges
+- [perdu.md](perdu.md) -> Aucune correspondance trouvee
 
 ### Statistiques
-- Liens analysés : 15
-- Corrigés : 3
-- Non corrigés : 1
+- Liens analyses : 15
+- Corriges : 3
+- Non corriges : 1
 ```
 
 ---
 
 ## Exemples
 
-### Exemple 1 — Simuler les corrections
+### Exemple 1 -- Simuler les corrections
 
 ```
 corriger-liens(chemin=".", dry-run=true)
 ```
 
-**Résultat** :
-- 3 liens seraient corrigés
+**Resultat** :
+- 3 liens seraient corriges
 
-### Exemple 2 — Corriger automatiquement
+### Exemple 2 -- Corriger automatiquement
 
 ```
 corriger-liens(chemin=".", mode="auto")
 ```
 
-**Résultat** :
-- 3 liens corrigés avec succès
+**Resultat** :
+- 3 liens corriges avec succes
 
 ---
 
-## Dépendances
+## Dependances
 
-- `valider-liens` — Pour identifier les liens cassés
-- `lister-fichiers` — Pour trouver les fichiers à corriger
-- `lister-dossiers` — Pour trouver les dossiers disponibles
+- `valider-liens` -- Pour identifier les liens casses
+- `lister-fichiers` -- Pour trouver les fichiers a corriger
+- `lister-dossiers` -- Pour trouver les dossiers disponibles
 
 ---
 
-## Implémentation
+## Implementation
 
 ### Dans le contexte du cerveau-projet
 
-1. Utiliser `valider-liens` pour identifier les liens cassés
-2. Pour chaque lien cassé :
+1. Utiliser `valider-liens` pour identifier les liens casses
+2. Pour chaque lien casse :
    - Chercher un fichier avec un nom similaire
-   - Vérifier si le fichier existe
+   - Verifier si le fichier existe
    - Si oui, corriger le lien
    - Si non, signaler l'erreur
 
@@ -100,8 +100,8 @@ corriger-liens(chemin=".", mode="auto")
 2. Si le chemin existe -> OK
 3. Sinon :
    a. Chercher dans le dossier parent
-   b. Chercher par nom相似
-   c. Si trouvé -> corriger
+   b. Chercher par nom similaire
+   c. Si trouve -> corriger
    d. Sinon -> signaler
 ```
 
@@ -111,7 +111,7 @@ corriger-liens(chemin=".", mode="auto")
 
 - Cet outil est essentiel pour la maintenance
 - Utiliser `dry-run=true` avant de corriger
-- Les corrections sont irréversibles
+- Les corrections sont irreversibles
 
 ---
 

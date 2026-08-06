@@ -1,56 +1,56 @@
-# Mission — Outils de Diagnostic
+# Mission -- Outils de Diagnostic
 
 **Agent** : Vulcain
 **Date** : 2026-08-05
-**Statut** : Terminé
+**Statut** : Termine
 
 ---
 
 ## Objectif
 
-Créer des outils de diagnostic qui vérifient que chaque fichier est utilisé uniquement pour sa fonction prévue.
+Creer des outils de diagnostic qui verifient que chaque fichier est utilise uniquement pour sa fonction prevue.
 
 ---
 
-## Règle fondamentale
+## Regle fondamentale
 
-> **Aucun fichier ne doit être utilisé à autre chose que ce pour laquelle il a été écrit.**
+> **Aucun fichier ne doit etre utilise a autre chose que ce pour laquelle il a ete ecrit.**
 
 ---
 
-## Outils créés
+## Outils crees
 
 ### 1. `verifier-role-fichier`
 
-**Objectif** : Vérifier qu'un fichier est utilisé uniquement pour sa fonction
+**Objectif** : Verifier qu'un fichier est utilise uniquement pour sa fonction
 
 **Utilisation** :
 ```bash
 verifier-role-fichier.sh [fichier]
 ```
 
-**Résultat** :
+**Resultat** :
 ```
-[OK] Le fichier est conforme à son rôle
-[ERREUR] Le fichier contient du contenu inapproprié
+[OK] Le fichier est conforme a son role
+[ERREUR] Le fichier contient du contenu inapproprie
 ```
 
 ---
 
-### 2. `verifier-surcharge-fichier`
+### 2. `detecter-surcharge-fichier`
 
-**Objectif** : Détecter les fichiers qui grossissent trop
+**Objectif** : Detecter les fichiers qui grossissent trop
 
 **Utilisation** :
 ```bash
-verifier-surcharge-fichier.sh [dossier] [seuil]
+detecter-surcharge-fichier.sh [dossier] [seuil]
 ```
 
-**Seuil par défaut** : 250 lignes
+**Seuil par defaut** : 250 lignes
 
-**Résultat** :
+**Resultat** :
 ```
-[ATTENTION] Fichiers surchargés :
+[ATTENTION] Fichiers surcharges :
   - index-cerveau.md : 150 lignes (seuil: 250)
 ```
 
@@ -58,35 +58,35 @@ verifier-surcharge-fichier.sh [dossier] [seuil]
 
 ### 3. `verifier-separation-preoccupations`
 
-**Objectif** : Vérifier que chaque fichier a un rôle unique
+**Objectif** : Verifier que chaque fichier a un role unique
 
 **Utilisation** :
 ```bash
 verifier-separation-preoccupations.sh [dossier]
 ```
 
-**Résultat** :
+**Resultat** :
 ```
-[OK] Séparation des préoccupations respectée
-[ERREUR] Chevauchement détecté
+[OK] Separation des preoccupations respectee
+[ERREUR] Chevauchement detecte
 ```
 
 ---
 
-## Critères de validation
+## Criteres de validation
 
-- [x] Chaque outil fonctionne sur le système de l'utilisateur
-- [x] Chaque outil détecte les problèmes identifiés
+- [x] Chaque outil fonctionne sur le systeme de l'utilisateur
+- [x] Chaque outil detecte les problemes identifies
 - [x] Chaque outil produit une sortie claire
-- [x] Chaque outil est documenté
-- [x] Chaque outil est testé
+- [x] Chaque outil est documente
+- [x] Chaque outil est teste
 
 ---
 
 ## Livrables
 
-1. `verifier-role-fichier.sh` — dans `agents/tools/valider/`
-2. `verifier-surcharge-fichier.sh` — dans `agents/tools/valider/`
-3. `verifier-separation-preoccupations.sh` — dans `agents/tools/valider/`
+1. `verifier-role-fichier.sh` -- dans `agents/tools/verifier/`
+2. `detecter-surcharge-fichier.sh` -- dans `agents/tools/detecter/`
+3. `verifier-separation-preoccupations.sh` -- dans `agents/tools/verifier/`
 4. Documentation pour chaque outil
 5. Tests pour chaque outil

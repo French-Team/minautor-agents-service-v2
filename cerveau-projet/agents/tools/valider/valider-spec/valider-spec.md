@@ -7,7 +7,7 @@
 
 ## Description
 
-Verifie l'integrite d'une spec : structure, header, sections, nommage, placeholders et conformite ASCII. L'agent l'utilise a la fin de sa mission pour s'assurer que la spec n'est pas cassee, corrompue ou incomplète avant de passer au statut suivant.
+Verifie l'integrite d'une spec : structure, header, sections, nommage, placeholders et conformite ASCII. L'agent l'utilise a la fin de sa mission pour s'assurer que la spec n'est pas cassee, corrompue ou incomplete avant de passer au statut suivant.
 
 ## Utilisation
 
@@ -85,8 +85,8 @@ Fichier : spec-pipeline.001.01.ebauche.md
 
 | Outil | Complement |
 |---|---|
-| `squelette-spec` | Genere le squelette avant le remplissage |
-| `remplir-spec` | Remplit les sections avant la validation |
+| `generateurs-squelette-spec` | Genere le squelette avant le remplissage |
+| `creer-remplir-spec` | Remplit les sections avant la validation |
 | `valider-pense-bete` | Meme logique pour les pense-betes |
 | `valider-todo` | Meme logique pour les todos |
 | `changer-statut` | Change le statut apres validation |

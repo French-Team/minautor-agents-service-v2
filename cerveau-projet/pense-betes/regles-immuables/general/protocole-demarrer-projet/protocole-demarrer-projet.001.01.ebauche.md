@@ -1,108 +1,108 @@
-# Protocole Immuable — Démarrer un Nouveau Projet
+# Protocole Immuable -- Demarrer un Nouveau Projet
 
 ---
 
 ## Principe Fondamental
 
-Créer un nouveau projet en suivant un processus structuré et validé.
+Creer un nouveau projet en suivant un processus structure et valide.
 
 ---
 
-## Prérequis
+## Prerequis
 
-| Élément | Vérification |
+| Element | Verification |
 |---|---|
-| **Agent** | L'agent est identifié (fiche créée ou lue) |
-| **Position** | On est à la racine du futur projet |
-| **Objectif** | Le nom et l'objectif du projet sont définis |
+| **Agent** | L'agent est identifie (fiche creee ou lue) |
+| **Position** | On est a la racine du futur projet |
+| **Objectif** | Le nom et l'objectif du projet sont definis |
 
 ---
 
-## Étapes
+## Etapes
 
-### Étape 0 — Identification de l'agent
-1. Vérifier/créer la fiche agent
+### Etape 0 -- Identification de l'agent
+1. Verifier/creer la fiche agent
 2. Lire corrections.md
-3. Mettre à jour AGENTS.md
+3. Mettre a jour AGENTS.md
 
-### Étape 1 — Définir le projet
+### Etape 1 -- Definir le projet
 1. Poser les questions de clarification
-2. Documenter les réponses
+2. Documenter les reponses
 3. Nommer le projet (court, descriptif)
-4. Définir l'objectif (1 phrase)
-5. Définir le périmètre
-6. Créer le dossier racine
+4. Definir l'objectif (1 phrase)
+5. Definir le perimetre
+6. Creer le dossier racine
 
-### Étape 2 — Créer le cerveau du projet
-1. Créer `index-cerveau.md` (point d'entrée)
-2. Créer `demarrer.md` (protocole de démarrage)
-3. Créer `AGENTS.md` (agent principal)
+### Etape 2 -- Creer le cerveau du projet
+1. Creer `index-cerveau.md` (point d'entree)
+2. Creer `demarrer.md` (protocole de demarrage)
+3. Creer `AGENTS.md` (agent principal)
 
-### Étape 3 — Créer la structure des dossiers
-1. Créer `pense-betes/` (conteneur maître)
-2. Créer `classeur-variables/` (stockage partagé)
-3. Créer les index dans chaque dossier
+### Etape 3 -- Creer la structure des dossiers
+1. Creer `pense-betes/` (conteneur maitre)
+2. Creer `classeur-variables/` (stockage partage)
+3. Creer les index dans chaque dossier
 
-### Étape 4 — Créer les conventions de base
+### Etape 4 -- Creer les conventions de base
 1. `convention-renommage.md` : pattern des fichiers
-2. `convention-structures.md` : 8 règles universelles
-3. `convention-classeur-variables.md` : stockage partagé
-4. `convention-liens.md` : comment créer des liens
-5. `convention-protocoles.md` : comment créer des protocoles
+2. `convention-structures.md` : 8 regles universelles
+3. `convention-classeur-variables.md` : stockage partage
+4. `convention-liens.md` : comment creer des liens
+5. `convention-protocoles.md` : comment creer des protocoles
 
-### Étape 5 — Créer le classeur de variables
+### Etape 5 -- Creer le classeur de variables
 1. `index-classeur.md` : documentation
-2. `schema/` : définition des variables
-3. `stockage/` : état courant
+2. `schema/` : definition des variables
+3. `stockage/` : etat courant
 4. `historique/` : journal des changements
 
-### Étape 6 — Créer les règles immuables de base
+### Etape 6 -- Creer les regles immuables de base
 1. `rvav-workflow.md` : workflow complet
 2. `regles-hierarchie-par-niveau.md` : 6 niveaux
-3. `regles-choisir-agent.md` : matrice de décision
+3. `regles-choisir-agent.md` : matrice de decision
 4. `regles-validation-rigoureuse.md` : 4 niveaux
 5. `regles-emojis-ascii.md` : bannissement emojis
 6. `regles-veracite.md` : ne jamais mentir
 7. Les protocoles immuables
 
-### Étape 7 — Créer les templates
-1. `pense-bete-template.md` : structure pour idées
+### Etape 7 -- Creer les templates
+1. `pense-bete-template.md` : structure pour idees
 2. `spec-template.md` : structure pour specs
-3. `todo-template.md` : structure pour tâches
+3. `todo-template.md` : structure pour taches
 
-### Étape 8 — Créer les templates d'agent
+### Etape 8 -- Creer les templates d'agent
 1. `fiche-agent-template.md` : fiche d'agent
 2. `corrections-template.md` : corrections d'agent
 3. `index-agents.md` : navigation vers agents
 
-### Étape 9 — Vérification finale
+### Etape 9 -- Verification finale
 1. Appliquer le sous-protocole de validation
-2. Vérifier que toutes les étapes sont complètes
-3. Mettre à jour le statut dans `index-cerveau.md`
+2. Verifier que toutes les etapes sont completes
+3. Mettre a jour le statut dans `index-cerveau.md`
 
 ---
 
-## Boucle de rétroaction
+## Boucle de retroaction
 
-Si erreur détectée :
-1. Identifier l'étape
+Si erreur detectee :
+1. Identifier l'etape
 2. Corriger l'erreur
-3. Re-exécuter l'étape
+3. Re-executer l'etape
 4. Continuer
 
 ---
 
-## Résumé
+## Resume
 
-| Étape | Action | Résultat |
+| Etape | Action | Resultat |
 |---|---|---|
-| 0 | Identification agent | Agent prêt |
-| 1 | Définir le projet | Projet nommé et défini |
-| 2 | Créer le cerveau | Fichiers de base créés |
-| 3 | Créer la structure | Dossiers organisés |
-| 4 | Créer les conventions | Règles de fonctionnement |
-| 5 | Créer le classeur | Stockage partagé prêt |
-| 6 | Créer les règles | Fondations solides |
-| 7 | Créer les templates | Gabarits prêts |
-| 8 | Créer templates agent | Système d'agent opérationnel |
-| 9 | Vérification finale | Tout est validé |
+| 0 | Identification agent | Agent pret |
+| 1 | Definir le projet | Projet nomme et defini |
+| 2 | Creer le cerveau | Fichiers de base crees |
+| 3 | Creer la structure | Dossiers organises |
+| 4 | Creer les conventions | Regles de fonctionnement |
+| 5 | Creer le classeur | Stockage partage pret |
+| 6 | Creer les regles | Fondations solides |
+| 7 | Creer les templates | Gabarits prets |
+| 8 | Creer templates agent | Systeme d'agent operationnel |
+| 9 | Verification finale | Tout est valide |

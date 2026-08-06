@@ -1,21 +1,21 @@
-# Index — Règles pour les Dossiers
+# Index -- Regles pour les Dossiers
 ---
 
-## Définition
+## Definition
 
 Un **dossier** est un conteneur qui :
 - Abaisse d'un niveau la profondeur d'imbrication
-- Contient exactement **un fichier point d'entrée** (plateforme)
+- Contient exactement **un fichier point d'entree** (plateforme)
 - Contient des **sous-dossiers** pour chaque composant
-- Est **autonome** (pas de dépendances externes)
+- Est **autonome** (pas de dependances externes)
 
 ---
 
-## Règles des dossiers
+## Regles des dossiers
 
 ### 1. Un dossier = un niveau
 
-Créer un dossier descend d'un niveau dans la hiérarchie.
+Creer un dossier descend d'un niveau dans la hierarchie.
 
 ```
 niveau-0/
@@ -28,20 +28,20 @@ Le nom du dossier n'a aucune incidence sur le niveau. Seule la **profondeur** co
 
 ### 2. Plateforme obligatoire
 
-Chaque dossier **doit** contenir un fichier point d'entrée :
+Chaque dossier **doit** contenir un fichier point d'entree :
 
 | Type de dossier | Pattern de plateforme |
 |---|---|
-| Dossier racine (L0) | `index-[catégorie].md` ou `[nom].md` |
-| Dossier intermédiaire | `index-[catégorie].md` |
+| Dossier racine (L0) | `index-[categorie].md` ou `[nom].md` |
+| Dossier intermediaire | `index-[categorie].md` |
 | Dossier module | `[nom-module].md` |
 | Dossier fonction | `[nom-fonction].md` |
 
-La plateforme est le **seul point d'entrée** du dossier.
+La plateforme est le **seul point d'entree** du dossier.
 
 ### 3. Pas de fichiers orphelins
 
-Un fichier ne vit **jamais** directement dans un dossier sans être la plateforme.
+Un fichier ne vit **jamais** directement dans un dossier sans etre la plateforme.
 
 ```
 # [OK] Correct
@@ -60,7 +60,7 @@ mon-dossier/
 
 Un dossier ne partage **jamais** de ressources avec un autre dossier.
 
-Si deux dossiers ont besoin du même type de contenu (ex: `data/`), chacun a **son propre** dossier.
+Si deux dossiers ont besoin du meme type de contenu (ex: `data/`), chacun a **son propre** dossier.
 
 ```
 # [OK] Correct -- chaque module a son propre data/
@@ -84,7 +84,7 @@ module-A/
 
 On ajoute un niveau **uniquement** par un sous-dossier.
 
-On ne place **jamais** de fichier au même niveau que la plateforme.
+On ne place **jamais** de fichier au meme niveau que la plateforme.
 
 ---
 
@@ -92,7 +92,7 @@ On ne place **jamais** de fichier au même niveau que la plateforme.
 
 ```
 mon-dossier/
-|-- mon-dossier.md          <- plateforme (point d'entrée)
+|-- mon-dossier.md          <- plateforme (point d'entree)
 |-- composant-A/            <- sous-dossier niveau +1
 |   |-- composant-A.md      <- plateforme du sous-dossier
 |   |-- sous-a1/
@@ -107,4 +107,4 @@ mon-dossier/
 
 ## Relation avec les fichiers
 
--> Consulter `../fichiers/index-fichiers.md` pour les règles des fichiers.
+-> Consulter `../fichiers/index-fichiers.md` pour les regles des fichiers.

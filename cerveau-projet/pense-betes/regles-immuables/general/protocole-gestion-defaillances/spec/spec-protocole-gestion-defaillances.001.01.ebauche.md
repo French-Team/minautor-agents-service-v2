@@ -1,9 +1,9 @@
-# Spec — Protocole Gestion des Défaillances
+# Spec -- Protocole Gestion des Defaillances
 ---
 
 ## Objectif technique
 
-Détecter et corriger automatiquement les défaillances du cerveau-projet.
+Detecter et corriger automatiquement les defaillances du cerveau-projet.
 
 ---
 
@@ -13,48 +13,48 @@ Détecter et corriger automatiquement les défaillances du cerveau-projet.
 protocole-gestion-defaillances/
 |-- protocole-gestion-defaillances.001.01.ebauche.md  <- le protocole
 |-- spec/                                               <- CE FICHIER
-``-- todo/                                               <- tâches liées
+``-- todo/                                               <- taches liees
 ```
 
 ---
 
-## Données d'entrée
+## Donnees d'entree
 
-| Donnée | Source | Obligatoire |
+| Donnee | Source | Obligatoire |
 |---|---|---|
-| État du cerveau | `index-cerveau.md` | [OK] |
+| Etat du cerveau | `index-cerveau.md` | [OK] |
 | Protocoles existants | `regles-immuables/general/` | [OK] |
 | Conventions existantes | `conventions/` | [OK] |
 | Fichiers d'agent | `agents/` | [OK] |
 
 ---
 
-## Données de sortie
+## Donnees de sortie
 
-| Donnée | Destination | Format |
+| Donnee | Destination | Format |
 |---|---|---|
-| Défaillances détectées | Log interne | Liste |
-| Corrections appliquées | Fichiers concernés | Modifications |
-| Historique | Fichiers concernés | Entrées |
+| Defaillances detectees | Log interne | Liste |
+| Corrections appliquees | Fichiers concernes | Modifications |
+| Historique | Fichiers concernes | Entrees |
 
 ---
 
-## Algorithme de détection
+## Algorithme de detection
 
 ```markdown
 1. LIRE index-cerveau.md
-2. POUR CHAQUE fichier référencé :
-   a. VÉRIFIER que le fichier existe
-   b. VÉRIFIER que le lien est correct
-   c. VÉRIFIER que le statut est à jour
+2. POUR CHAQUE fichier reference :
+   a. VERIFIER que le fichier existe
+   b. VERIFIER que le lien est correct
+   c. VERIFIER que le statut est a jour
 3. POUR CHAQUE protocole :
-   a. VÉRIFIER que le protocole est à jour
-   b. VÉRIFIER que le protocole est respecté
+   a. VERIFIER que le protocole est a jour
+   b. VERIFIER que le protocole est respecte
 4. POUR CHAQUE agent :
-   a. VÉRIFIER que la fiche est à jour
-   b. VÉRIFIER que les corrections sont appliquées
-5. SI défaillance détectée :
-   a. CLASSER la défaillance
+   a. VERIFIER que la fiche est a jour
+   b. VERIFIER que les corrections sont appliquees
+5. SI defaillance detectee :
+   a. CLASSER la defaillance
    b. APPLIQUER la correction
    c. TRAITER la cause racine
    d. DOCUMENTER
@@ -65,17 +65,17 @@ protocole-gestion-defaillances/
 ## Algorithme de correction
 
 ```markdown
-1. CLASSER la défaillance (oubli, erreur, incohérence, manque, obsolète)
-2. ÉVALUER la priorité (haute, moyenne, basse)
-3. APPLIQUER la correction appropriée :
-   - Oubli -> Mettre à jour
+1. CLASSER la defaillance (oubli, erreur, incoherence, manque, obsolete)
+2. EVALUER la priorite (haute, moyenne, basse)
+3. APPLIQUER la correction appropriee :
+   - Oubli -> Mettre a jour
    - Erreur -> Corriger
-   - Incohérence -> Harmoniser
-   - Manque -> Créer
-   - Obsolète -> Mettre à jour ou archiver
-4. VÉRIFIER que la correction est conforme
-5. METTRE À JOUR les fichiers concernés
-6. METTRE À JOUR les index
+   - Incoherence -> Harmoniser
+   - Manque -> Creer
+   - Obsolete -> Mettre a jour ou archiver
+4. VERIFIER que la correction est conforme
+5. METTRE A JOUR les fichiers concernes
+6. METTRE A JOUR les index
 7. DOCUMENTER
 ```
 
@@ -85,21 +85,21 @@ protocole-gestion-defaillances/
 
 | Contrainte | Description |
 |---|---|
-| **Automatique** | La détection doit être automatique |
-| **Immédiat** | Les défaillances hautes priorité sont corrigées immédiatement |
-| **Traçable** | Chaque correction est documentée |
-| **Préventif** | Les causes racines sont traitées |
+| **Automatique** | La detection doit etre automatique |
+| **Immediat** | Les defaillances hautes priorite sont corrigees immediatement |
+| **Tracable** | Chaque correction est documentee |
+| **Preventif** | Les causes racines sont traitees |
 
 ---
 
 ## Tests
 
-| Test | Critère |
+| Test | Critere |
 |---|---|
-| **Test de détection** | Les défaillances sont détectées |
-| **Test de correction** | Les corrections sont appliquées |
-| **Test de traçabilité** | Les corrections sont documentées |
-| **Test de prévention** | Les récidives sont évitées |
+| **Test de detection** | Les defaillances sont detectees |
+| **Test de correction** | Les corrections sont appliquees |
+| **Test de tracabilite** | Les corrections sont documentees |
+| **Test de prevention** | Les recidives sont evitees |
 
 ---
 
@@ -110,4 +110,4 @@ protocole-gestion-defaillances/
 
 ---
 
-*Spécification conforme aux conventions du cerveau-projet*
+*Specification conforme aux conventions du cerveau-projet*

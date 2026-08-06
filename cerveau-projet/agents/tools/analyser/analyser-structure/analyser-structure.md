@@ -1,8 +1,8 @@
-# Outil — Analyser la Structure
+# Outil -- Analyser la Structure
 
-**Catégorie** : Analyser
-**Version** : v0.1.0
-**Statut** : initial
+**Categorie** : Analyser
+**Version** : 0.2.0
+**Statut** : prepare
 
 ---
 
@@ -20,22 +20,22 @@ analyser-structure(chemin=".", profondeur=3, format="markdown")
 
 ---
 
-## Paramètres
+## Parametres
 
-| Paramètre | Type | Obligatoire | Description |
+| Parametre | Type | Obligatoire | Description |
 |---|---|---|---|
-| `chemin` | string | Oui | Chemin du dossier à analyser |
-| `profondeur` | number | Non | Profondeur d'analyse (défaut: 3) |
-| `format` | string | Non | Format de sortie: "markdown", "json", "tree" (défaut: "markdown") |
+| `chemin` | string | Oui | Chemin du dossier a analyser |
+| `profondeur` | number | Non | Profondeur d'analyse (defaut: 3) |
+| `format` | string | Non | Format de sortie: "markdown", "json", "tree" (defaut: "markdown") |
 
 ---
 
-## Résultat
+## Resultat
 
 Retourne une analyse de la structure.
 
 ```markdown
-## Résultat
+## Resultat
 
 ### Structure du projet
 
@@ -70,24 +70,24 @@ cerveau-projet/
 
 ## Exemples
 
-### Exemple 1 — Analyser la structure du projet
+### Exemple 1 -- Analyser la structure du projet
 
 ```
 analyser-structure(chemin=".", profondeur=2)
 ```
 
-**Résultat** :
+**Resultat** :
 - 25 dossiers
 - 45 fichiers
-- Structure hiérarchique documentée
+- Structure hierarchique documentee
 
-### Exemple 2 — Analyser en format JSON
+### Exemple 2 -- Analyser en format JSON
 
 ```
 analyser-structure(chemin=".", format="json")
 ```
 
-**Résultat** :
+**Resultat** :
 ```json
 {
   "nom": "cerveau-projet",
@@ -104,14 +104,14 @@ analyser-structure(chemin=".", format="json")
 
 ---
 
-## Dépendances
+## Dependances
 
-- `lister-dossiers` — Pour explorer les dossiers
-- `lister-fichiers` — Pour explorer les fichiers
+- `lister-dossiers` -- Pour explorer les dossiers
+- `lister-fichiers` -- Pour explorer les fichiers
 
 ---
 
-## Implémentation
+## Implementation
 
 ### Commande bash equivalent
 
@@ -136,8 +136,15 @@ find . -type f | wc -l  # Fichiers
 ## Notes
 
 - Cet outil est utile pour documenter le projet
-- Peut être utilisé pour générer des README
+- Peut etre utilise pour generer des README
 - Utile pour les revues de code
 
 ---
 
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |

@@ -1,21 +1,21 @@
-# Todo — Protocole d'Identification des Agents
+# Todo -- Protocole d'Identification des Agents
 ---
 
-## Tâches en cours
+## Taches en cours
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
-| 1 | Créer le protocole | [OK] Termine | Haute |
-| 2 | Créer la spec technique | [OK] Termine | Haute |
-| 3 | Créer les todos | [OK] Termine | Haute |
-| 4 | Mettre à jour demarrer.md | [OK] Termine | Haute |
-| 5 | Mettre à jour index-regles-general.md | [EN COURS] | Haute |
+| 1 | Creer le protocole | [OK] Termine | Haute |
+| 2 | Creer la spec technique | [OK] Termine | Haute |
+| 3 | Creer les todos | [OK] Termine | Haute |
+| 4 | Mettre a jour demarrer.md | [OK] Termine | Haute |
+| 5 | Mettre a jour index-regles-general.md | [EN COURS] | Haute |
 
 ---
 
-## Tâches futures
+## Taches futures
 
-| # | Tâche | Statut | Priorité |
+| # | Tache | Statut | Priorite |
 |---|---|---|---|
 | 6 | Tester le protocole sur un projet | [NON COMMENCE] | Haute |
 | 7 | Documenter les cas d'usage | [NON COMMENCE] | Moyenne |
@@ -23,12 +23,12 @@
 
 ---
 
-## Dépendances
+## Dependances
 
-| Tâche | Dépend de |
+| Tache | Depend de |
 |---|---|
-| 4 | Protocole créé |
-| 5 | Protocole créé |
+| 4 | Protocole cree |
+| 5 | Protocole cree |
 | 6 | 4, 5 |
 
 ---
@@ -36,5 +36,5 @@
 ## Notes
 
 - Ce protocole est essentiel pour l'identification des agents
-- Il doit être exécuté à chaque démarrage de session
-- La combinaison AGENTS.md + présentation est la clé
+- Il doit etre execute a chaque demarrage de session
+- La combinaison AGENTS.md + presentation est la cle

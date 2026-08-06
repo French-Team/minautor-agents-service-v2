@@ -9,13 +9,22 @@
 # ============================================================
 # Instructions d'utilisation de ce template :
 #   1. Copier ce fichier vers agents/tools/[categorie]/[nom-outil]/[nom-outil].sh
+#      (categorie = dossier d'ACTION : ajouter, analyser, corriger, lister, ...)
 #   2. Remplacer [nom-outil] par le nom reel de l'outil
 #   3. Remplacer [Description courte] par la vraie description
 #   4. Completer les fonctions selon le besoin
 #   5. Remplir le modele de documentation [nom-outil].md (outil-template.md)
 #   6. Ajouter l'outil dans index-tools.md
-#   7. Tester en --dry-run avant toute utilisation
+#   7. Assigner l'outil a l'agent concerne (protocole-outils Regle 6)
+#   8. Tester en --dry-run avant toute utilisation
+#   9. Valider la conformite ASCII avec valider-conformite-ascii
 # ============================================================
+# REGLE IMMUABLE DE NOMMAGE :
+#   Le nom de l'outil DOIT commencer par le prefixe du dossier de categorie.
+#   Exemples : dossier 'rechercher/' -> outil 'rechercher-xxx'
+#             dossier 'lire/'       -> outil 'lire-xxx'
+#   Le bloc verifier_nommage ci-dessous controle cela au demarrage.
+#   (Ne pas supprimer ce bloc lors de la creation de l'outil)
 
 # Configuration
 VERSION="0.1.0-beta"
@@ -52,6 +61,27 @@ verifier_argument() {
     if [ -z "$valeur" ]; then
         echo -e "${RED}[ERREUR] L'argument '${nom}' est obligatoire${NC}"
         afficher_aide
+        exit 1
+    fi
+}
+
+# Verifier que le nom de l'outil commence par le prefixe de la categorie (regle immuable)
+# Structure : tools/[categorie]/[outil]/[outil].sh
+verifier_nommage() {
+    local script_nom=$(basename "$0" | sed 's/\.sh$//')
+    # outil-template est un modele, pas un outil -> exemption
+    [[ "$script_nom" == "outil-template" ]] && return 0
+    # Extraire la categorie (2 niveaux au-dessus du fichier)
+    local chemin_script=$(cd "$(dirname "$0")" 2>/dev/null && pwd)
+    local categorie=$(basename "$(dirname "$chemin_script")")
+    if [[ -z "$categorie" || "$categorie" == "." || "$categorie" == "/" ]]; then
+        return 0
+    fi
+    if [[ "$script_nom" != "${categorie}-"* ]]; then
+        echo -e "${RED}[ERREUR] Nommage invalide : $script_nom${NC}"
+        echo -e "  Le nom doit commencer par '${categorie}-' (categorie: ${categorie}/)"
+        echo -e "  Exemple attendu : ${categorie}-$(echo "$script_nom" | sed 's/^[a-z]*-//')"
+        echo -e "  Voir convention-renommage.md (regle immuable)"
         exit 1
     fi
 }
@@ -113,6 +143,9 @@ main() {
     # Executer
     executer "$cible"
 }
+
+# Verifier le nommage au demarrage (regle immuable)
+verifier_nommage
 
 # Executer
 main "$@"

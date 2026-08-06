@@ -1,131 +1,131 @@
-# Protocole — Carte de Décision pour les Agents
+# Protocole -- Carte de Decision pour les Agents
 
 **Version** : 0.1.0
-**Statut** : Ébauche
-**Date création** : 2026-08-05
-**Agent** : Buffy (création)
+**Statut** : Ebauche
+**Date creation** : 2026-08-05
+**Agent** : Buffy (creation)
 
 ---
 
 ## Objectif
 
-Transformer les fichiers d'agent en **cartes de décision** où chaque mission a un chemin précis avec les protocoles à lire à chaque étape.
+Transformer les fichiers d'agent en **cartes de decision** ou chaque mission a un chemin precis avec les protocoles a lire a chaque etape.
 
 **Pourquoi ce protocole ?**
-- Les agents supposent au lieu de vérifier
+- Les agents supposent au lieu de verifier
 - Les agents lisent trop de contexte inutilement
 - Les agents ne respectent pas les protocoles
 - Le contexte devient trop lourd
 
 ---
 
-## Le problème actuel
+## Le probleme actuel
 
-### Avant (méthode actuelle)
+### Avant (methode actuelle)
 
 ```
 1. Agent lit TOUT le fichier d'agent (100+ lignes)
 2. Agent lit TOUTES les corrections (100+ lignes)
-3. Agent a 200+ lignes en mémoire
-4. Agent exécute la mission
+3. Agent a 200+ lignes en memoire
+4. Agent execute la mission
 5. Beaucoup de contexte inutile
 ```
 
-### Problèmes
+### Problemes
 
-| Problème | Conséquence |
+| Probleme | Consequence |
 |---|---|
-| **Trop de contexte** | L'agent est submergé |
-| **Suppositions** | L'agent ne vérifie pas |
-| **Protocoles oubliés** | L'agent ne les lit pas |
-| **Erreurs répétées** | L'agent ne corrige pas |
+| **Trop de contexte** | L'agent est submerge |
+| **Suppositions** | L'agent ne verifie pas |
+| **Protocoles oublies** | L'agent ne les lit pas |
+| **Erreurs repetees** | L'agent ne corrige pas |
 
 ---
 
-## La solution : Carte de Décision
+## La solution : Carte de Decision
 
 ### Principe
 
-Le fichier d'agent devient une **carte de décision** :
+Le fichier d'agent devient une **carte de decision** :
 
 ```
-SI [mission X] ALORS [ligne X] -> [étapes] -> [protocoles à lire]
+SI [mission X] ALORS [ligne X] -> [etapes] -> [protocoles a lire]
 ```
 
 ### Structure
 
 ```markdown
-## Carte de Décision
+## Carte de Decision
 
 ### Mission : Construire un outil
 
-| Étape | Action | Protocole | Contexte |
+| Etape | Action | Protocole | Contexte |
 |---|---|---|---|
-| 1 | Vérifier le système | verifier-systeme | Système utilisateur |
+| 1 | Verifier le systeme | verifier-systeme | Systeme utilisateur |
 | 2 | Choisir la technologie | protocole-technologies | Technologies disponibles |
-| 3 | Développer l'outil | protocole-outils | Spécifications |
-| 4 | Tester l'outil | protocole-tests | Résultats des tests |
-| 5 | Valider l'outil | protocole-validation | Critères de validation |
+| 3 | Developper l'outil | protocole-outils | Specifications |
+| 4 | Tester l'outil | protocole-tests | Resultats des tests |
+| 5 | Valider l'outil | sous-protocole-validation | Criteres de validation |
 ```
 
 ---
 
-## Comment ça fonctionne
+## Comment ca fonctionne
 
-### Étape 1 : Identification de la mission
+### Etape 1 : Identification de la mission
 
 ```
-1. L'agent reçoit une mission
-2. Il cherche dans sa carte de décision
+1. L'agent recoit une mission
+2. Il cherche dans sa carte de decision
 3. Il trouve la ligne correspondante
-4. Il suit les étapes de cette ligne
+4. Il suit les etapes de cette ligne
 ```
 
-### Étape 2 : Exécution progressive
+### Etape 2 : Execution progressive
 
 ```
-ÉTAPE 1 : Vérifier le système
+ETAPE 1 : Verifier le systeme
   -> Lire : verifier-systeme
-  -> Résultat : Système connu
-  -> Contexte : [système utilisateur]
+  -> Resultat : Systeme connu
+  -> Contexte : [systeme utilisateur]
 
-ÉTAPE 2 : Choisir la technologie
+ETAPE 2 : Choisir la technologie
   -> Lire : protocole-technologies
-  -> Résultat : Technologie choisie
+  -> Resultat : Technologie choisie
   -> Contexte : [technologies disponibles]
 
-ÉTAPE 3 : Développer l'outil
+ETAPE 3 : Developper l'outil
   -> Lire : protocole-outils
-  -> Résultat : Outil créé
-  -> Contexte : [spécifications]
+  -> Resultat : Outil cree
+  -> Contexte : [specifications]
 ```
 
-### Étape 3 : Gestion du contexte
+### Etape 3 : Gestion du contexte
 
-**Avant** : 200+ lignes en mémoire tout le temps
-**Après** : 20-30 lignes par étape (uniquement le protocole en cours)
+**Avant** : 200+ lignes en memoire tout le temps
+**Apres** : 20-30 lignes par etape (uniquement le protocole en cours)
 
 ---
 
-## Format de la carte de décision
+## Format de la carte de decision
 
 ### Template
 
 ```markdown
-## Carte de Décision
+## Carte de Decision
 
 ### Missions disponibles
 
-| Mission | Étapes | Protocoles |
+| Mission | Etapes | Protocoles |
 |---|---|---|
-| [Mission 1] | [étape1] -> [étape2] -> [étape3] | [proto1], [proto2], [proto3] |
-| [Mission 2] | [étape1] -> [étape2] | [proto1], [proto2] |
+| [Mission 1] | [etape1] -> [etape2] -> [etape3] | [proto1], [proto2], [proto3] |
+| [Mission 2] | [etape1] -> [etape2] | [proto1], [proto2] |
 
-### Détail des missions
+### Detail des missions
 
 #### Mission : [Nom de la mission]
 
-| Étape | Action | Protocole | Sortie |
+| Etape | Action | Protocole | Sortie |
 |---|---|---|---|
 | 1 | [Action 1] | [protocole-1] | [sortie-1] |
 | 2 | [Action 2] | [protocole-2] | [sortie-2] |
@@ -141,10 +141,10 @@ SI [mission X] ALORS [ligne X] -> [étapes] -> [protocoles à lire]
 ```markdown
 # Vulcain
 
-## Rôle
-- Transformer les outils.md en outils réels
+## Role
+- Transformer les outils.md en outils reels
 - Choisir les technologies
-- Développer les outils
+- Developper les outils
 - Tester les outils
 - Documenter les choix
 
@@ -152,75 +152,75 @@ SI [mission X] ALORS [ligne X] -> [étapes] -> [protocoles à lire]
 1. Lire l'outil.md
 2. Analyser les besoins
 3. Choisir la technologie
-4. Développer
+4. Developper
 5. Tester
 6. Valider
 ```
 
-**Problème** : Vulcain ne sait PAS qu'il doit d'abord vérifier le système.
+**Probleme** : Vulcain ne sait PAS qu'il doit d'abord verifier le systeme.
 
-### Après (carte de décision)
+### Apres (carte de decision)
 
 ```markdown
 # Vulcain
 
-## Carte de Décision
+## Carte de Decision
 
 ### Mission : Construire un outil
 
-| Étape | Action | Protocole | Sortie |
+| Etape | Action | Protocole | Sortie |
 |---|---|---|---|
-| 1 | Vérifier le système | verifier-systeme | Système connu |
+| 1 | Verifier le systeme | verifier-systeme | Systeme connu |
 | 2 | Lire l'outil.md | - | Besoins connus |
 | 3 | Choisir la technologie | protocole-technologies | Technologie choisie |
-| 4 | Développer l'outil | protocole-outils | Outil créé |
-| 5 | Tester l'outil | protocole-tests | Tests passés |
-| 6 | Valider l'outil | protocole-validation | Outil validé |
+| 4 | Developper l'outil | protocole-outils | Outil cree |
+| 5 | Tester l'outil | protocole-tests | Tests passes |
+| 6 | Valider l'outil | sous-protocole-validation | Outil valide |
 
-### Règle absolue
+### Regle absolue
 
-> **ÉTAPE 1 OBLIGATOIRE** : Toujours vérifier le système AVANT de choisir une technologie.
+> **ETAPE 1 OBLIGATOIRE** : Toujours verifier le systeme AVANT de choisir une technologie.
 ```
 
 ---
 
 ## Avantages
 
-| Avant | Après |
+| Avant | Apres |
 |---|---|
-| L'agent lit tout au début | L'agent lit à chaque étape |
-| 200+ lignes en mémoire | 20-30 lignes par étape |
-| L'agent suppose | L'agent vérifie |
-| Protocoles oubliés | Protocoles lus à chaque étape |
-| Erreurs répétées | Erreurs corrigées |
+| L'agent lit tout au debut | L'agent lit a chaque etape |
+| 200+ lignes en memoire | 20-30 lignes par etape |
+| L'agent suppose | L'agent verifie |
+| Protocoles oublies | Protocoles lus a chaque etape |
+| Erreurs repetees | Erreurs corrigees |
 
 ---
 
-## Implémentation
+## Implementation
 
 ### Pour chaque agent
 
-1. Créer une section "Carte de Décision"
+1. Creer une section "Carte de Decision"
 2. Lister toutes les missions possibles
-3. Pour chaque mission, lister les étapes
-4. Pour chaque étape, lister le protocole à lire
-5. Ajouter des règles absolues
+3. Pour chaque mission, lister les etapes
+4. Pour chaque etape, lister le protocole a lire
+5. Ajouter des regles absolues
 
 ### Pour chaque mission
 
-1. Identifier les étapes
+1. Identifier les etapes
 2. Identifier les protocoles
-3. Identifier les sorties de chaque étape
-4. Documenter les dépendances
+3. Identifier les sorties de chaque etape
+4. Documenter les dependances
 
 ---
 
 ## Notes importantes
 
-- **Chaque étape a UN protocole** à lire
-- **Le contexte est remplacé** à chaque étape
-- **Les règles absolues** sont mises en avant
-- **Les erreurs sont documentées** dans les corrections
+- **Chaque etape a UN protocole** a lire
+- **Le contexte est remplace** a chaque etape
+- **Les regles absolues** sont mises en avant
+- **Les erreurs sont documentees** dans les corrections
 
 ---
 

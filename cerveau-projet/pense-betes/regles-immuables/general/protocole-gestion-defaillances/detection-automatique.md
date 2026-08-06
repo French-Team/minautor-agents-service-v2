@@ -1,139 +1,139 @@
-# Détection Automatique des Défaillances
+# Detection Automatique des Defaillances
 ---
 
-## Vérifications obligatoires
+## Verifications obligatoires
 
 ### 1. Fichier AGENTS.md
 
-| Vérification | Critère | Action si échec |
+| Verification | Critere | Action si echec |
 |---|---|---|
-| **AGENTS.md existe** | Fichier présent à la racine | Créer le fichier |
-| **Agent principal identifié** | Section "Agent Principal Actuel" remplie | Mettre à jour |
-| **Agent actuel identifié** | Mon nom est dans le fichier | Se présenter |
-| **Historique à jour** | Dernière entrée récente | Ajouter une entrée |
+| **AGENTS.md existe** | Fichier present a la racine | Creer le fichier |
+| **Agent principal identifie** | Section "Agent Principal Actuel" remplie | Mettre a jour |
+| **Agent actuel identifie** | Mon nom est dans le fichier | Se presenter |
+| **Historique a jour** | Derniere entree recente | Ajouter une entree |
 
 ### 2. Fiche d'agent
 
-| Vérification | Critère | Action si échec |
+| Verification | Critere | Action si echec |
 |---|---|---|
-| **Fiche existe** | `agents/[nom]/[nom].md` existe | Créer la fiche |
-| **Fiche à jour** | Dernière session documentée | Mettre à jour |
-| **Corrections lues** | `corrections.md` lu en priorité | Lire les corrections |
-| **Corrections appliquées** | Règles spécifiques appliquées | Appliquer les règles |
+| **Fiche existe** | `agents/[nom]/[nom].md` existe | Creer la fiche |
+| **Fiche a jour** | Derniere session documentee | Mettre a jour |
+| **Corrections lues** | `corrections.md` lu en priorite | Lire les corrections |
+| **Corrections appliquees** | Regles specifiques appliquees | Appliquer les regles |
 
 ### 3. Index principaux
 
-| Vérification | Critère | Action si échec |
+| Verification | Critere | Action si echec |
 |---|---|---|
-| **index-cerveau.md** | Statut à jour | Mettre à jour |
-| **index-regles-general.md** | Tous les protocoles listés | Ajouter les manquants |
-| **index-conventions.md** | Toutes les conventions listées | Ajouter les manquantes |
+| **index-cerveau.md** | Statut a jour | Mettre a jour |
+| **index-regles-general.md** | Tous les protocoles listes | Ajouter les manquants |
+| **index-conventions.md** | Toutes les conventions listees | Ajouter les manquantes |
 
 ### 4. Conventions
 
-| Vérification | Critère | Action si échec |
+| Verification | Critere | Action si echec |
 |---|---|---|
-| **Fichiers existent** | Tous les fichiers référencés existent | Créer les fichiers |
+| **Fichiers existent** | Tous les fichiers references existent | Creer les fichiers |
 | **Liens valides** | Tous les liens pointent vers des fichiers existants | Corriger les liens |
-| **Statut à jour** | Statut correct dans chaque fichier | Mettre à jour |
+| **Statut a jour** | Statut correct dans chaque fichier | Mettre a jour |
 
 ### 5. Protocoles
 
-| Vérification | Critère | Action si échec |
+| Verification | Critere | Action si echec |
 |---|---|---|
-| **Protocoles existent** | Tous les protocoles référencés existent | Créer les protocoles |
-| **Protocoles à jour** | Dernière modification documentée | Mettre à jour |
-| **Protocoles respectés** | Les étapes sont suivies | Suivre le protocole |
+| **Protocoles existent** | Tous les protocoles references existent | Creer les protocoles |
+| **Protocoles a jour** | Derniere modification documentee | Mettre a jour |
+| **Protocoles respectes** | Les etapes sont suivies | Suivre le protocole |
 
 ---
 
-## Vérifications périodiques
+## Verifications periodiques
 
 ### Hebdomadaires
 
-| Vérification | Critère | Action si échec |
+| Verification | Critere | Action si echec |
 |---|---|---|
-| **Cohérence générale** | Toutes les sections cohérentes | Harmoniser |
-| **Liens cassés** | Tous les liens valides | Corriger |
-| **Statuts à jour** | Tous les statuts corrects | Mettre à jour |
+| **Coherence generale** | Toutes les sections coherentes | Harmoniser |
+| **Liens casses** | Tous les liens valides | Corriger |
+| **Statuts a jour** | Tous les statuts corrects | Mettre a jour |
 
 ### Mensuelles
 
-| Vérification | Critère | Action si échec |
+| Verification | Critere | Action si echec |
 |---|---|---|
-| **Archivage** | Éléments obsolètes archivés | Archiver |
-| **Amélioration** | Protocoles améliorés si nécessaire | Améliorer |
-| **Documentation** | Documentation complète | Compléter |
+| **Archivage** | Elements obsoletes archives | Archiver |
+| **Amelioration** | Protocoles ameliores si necessaire | Ameliorer |
+| **Documentation** | Documentation complete | Completer |
 
 ---
 
-## Déclencheurs automatiques
+## Declencheurs automatiques
 
-### Déclenchement immédiat
+### Declenchement immediat
 
-| Déclencheur | Action |
+| Declencheur | Action |
 |---|---|
-| **AGENTS.md manquant** | Créer immédiatement |
-| **Fiche agent manquante** | Créer immédiatement |
-| **Incohérence majeure** | Corriger immédiatement |
-| **Protocole non suivi** | Appliquer immédiatement |
+| **AGENTS.md manquant** | Creer immediatement |
+| **Fiche agent manquante** | Creer immediatement |
+| **Incoherence majeure** | Corriger immediatement |
+| **Protocole non suivi** | Appliquer immediatement |
 
-### Déclenche à la prochaine session
+### Declenche a la prochaine session
 
-| Déclencheur | Action |
+| Declencheur | Action |
 |---|---|
-| **Index pas à jour** | Mettre à jour |
-| **Lien cassé** | Corriger |
+| **Index pas a jour** | Mettre a jour |
+| **Lien casse** | Corriger |
 | **Statut incorrect** | Corriger |
 
-### Déclenche quand possible
+### Declenche quand possible
 
-| Déclencheur | Action |
+| Declencheur | Action |
 |---|---|
-| **Amélioration mineure** | Appliquer |
-| **Documentation incomplète** | Compléter |
-| **Archivage nécessaire** | Archiver |
+| **Amelioration mineure** | Appliquer |
+| **Documentation incomplete** | Completer |
+| **Archivage necessaire** | Archiver |
 
 ---
 
-## Comment signaler une défaillance
+## Comment signaler une defaillance
 
-### Si tu détectes une défaillance
+### Si tu detectes une defaillance
 
 ```
-1. Noter la défaillance :
-   - Type (oubli, erreur, incohérence, manque, obsolète)
-   - Fichier concerné
-   - Priorité (haute, moyenne, basse)
+1. Noter la defaillance :
+   - Type (oubli, erreur, incoherence, manque, obsolete)
+   - Fichier concerne
+   - Priorite (haute, moyenne, basse)
    - Description
 
 2. Appliquer la correction si possible
 
-3. Si la correction nécessite une validation :
-   - Créer un pense-bête
-   - Demander validation à l'utilisateur
+3. Si la correction necessite une validation :
+   - Creer un pense-bete
+   - Demander validation a l'utilisateur
 
-4. Documenter la défaillance et la correction
+4. Documenter la defaillance et la correction
 ```
 
-### Si tu es l'auteur de la défaillance
+### Si tu es l'auteur de la defaillance
 
 ```
-1. Accepter la défaillance
+1. Accepter la defaillance
 2. Appliquer la correction
-3. Ajouter une règle dans corrections.md si nécessaire
-4. Documenter l'amélioration
+3. Ajouter une regle dans corrections.md si necessaire
+4. Documenter l'amelioration
 ```
 
 ---
 
-## Priorités
+## Priorites
 
-| Priorité | Délai | Exemple |
+| Priorite | Delai | Exemple |
 |---|---|---|
-| **Haute** | Immédiat | AGENTS.md manquant, incohérence majeure |
-| **Moyenne** | Avant prochaine session | Index pas à jour, lien cassé |
-| **Basse** | Quand possible | Amélioration mineure |
+| **Haute** | Immediat | AGENTS.md manquant, incoherence majeure |
+| **Moyenne** | Avant prochaine session | Index pas a jour, lien casse |
+| **Basse** | Quand possible | Amelioration mineure |
 
 ---
 
@@ -144,4 +144,4 @@
 
 ---
 
-*Détection automatique conforme aux conventions du cerveau-projet*
+*Detection automatique conforme aux conventions du cerveau-projet*

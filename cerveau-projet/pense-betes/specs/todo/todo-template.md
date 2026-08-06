@@ -1,15 +1,15 @@
-# Todo — [Titre de la mission]
+# Todo -- [Titre de la mission]
 
 ---
 
-## Phase 0 — Activation de l'agent
+## Phase 0 -- Activation de l'agent
 
-> **Règle OBLIGATOIRE** : La première action de tout todo est d'activer l'agent adapté.
+> **Regle OBLIGATOIRE** : La premiere action de tout todo est d'activer l'agent adapte.
 
-1. Identifier l'agent adapté
-2. Mettre à jour AGENTS.md
+1. Identifier l'agent adapte
+2. Mettre a jour AGENTS.md
 3. Lire la fiche et corrections de l'agent
-4. Agent activé et prêt
+4. Agent active et pret
 
 ---
 
@@ -31,107 +31,107 @@ mission:
 
 ## Statut de l'intervention
 
-| Élément | Statut | Lien |
+| Element | Statut | Lien |
 |---|---|---|
-| **Pense-bête** | [en-attente/cree/valide] | [lien] |
+| **Pense-bete** | [en-attente/cree/valide] | [lien] |
 | **Spec** | [en-attente/cree/valide] | [lien] |
 | **Todo** | [en-attente/en-cours/terminee] | [lien] |
 
 ---
 
-## Phase 1 — Analyse de la demande
+## Phase 1 -- Analyse de la demande
 
 1. **Comprendre le besoin** : Qu'est-ce que l'utilisateur demande vraiment ?
-2. **Tours de question** : Si ambiguïtés, poser des questions
+2. **Tours de question** : Si ambiguites, poser des questions
 3. **Classifier** : Nouveau projet, composant, bug fix, etc.
 
 ---
 
-## Phase 2 — Vérification du cerveau
+## Phase 2 -- Verification du cerveau
 
 1. **Conventions** : renommage, structures, liens, protocoles
-2. **Règles immuables** : validation, émojis, hiérarchie
-3. **Protocoles** : démarrer, reprendre, installer règles
+2. **Regles immuables** : validation, emojis, hierarchie
+3. **Protocoles** : demarrer, reprendre, installer regles
 4. **Recherches-web** : recherches similaires existantes
 
 ---
 
-## Phase 3 — Recherches
+## Phase 3 -- Recherches
 
 1. **Recherches-web** : documenter les sources
 2. **Documentation technique** : versions et liens
 3. **Comparaison** : code vs recherches
-4. **Mise à jour cerveau** : sauvegarder les trouvailles
+4. **Mise a jour cerveau** : sauvegarder les trouvailles
 
 ---
 
-## Phase 4 — Préparation des outils
+## Phase 4 -- Preparation des outils
 
 1. **Outils disponibles** : lister ceux qui existent
-2. **Outils à créer** : identifier les manquants
-3. **Protocole** : suivre protocole-outils pour création
+2. **Outils a creer** : identifier les manquants
+3. **Protocole** : suivre protocole-outils pour creation
 
 ---
 
-## Phase 5 — Développement
+## Phase 5 -- Developpement
 
-1. **Tâches** : lister avec dépendances
-2. **Vérifications** : conventions, règles, liens
+1. **Taches** : lister avec dependances
+2. **Verifications** : conventions, regles, liens
 
 ---
 
-## Phase 6 — Tests et validation
+## Phase 6 -- Tests et validation
 
 1. **Tests unitaires** : chaque fonction
-2. **Tests d'intégration** : ensemble
-3. **Validation manuelle** : exécution réelle
-4. **Checklist** : tous les points cochés
+2. **Tests d'integration** : ensemble
+3. **Validation manuelle** : execution reelle
+4. **Checklist** : tous les points coches
 
 ---
 
-## Phase 7 — Contrôle secondaire
+## Phase 7 -- Controle secondaire
 
-1. **Préparer** : fichiers modifiés, recherches, tests
-2. **Exécuter** : vérifier chaque critère
-3. **Décider** : validé, non validé, partiel
+1. **Preparer** : fichiers modifies, recherches, tests
+2. **Executer** : verifier chaque critere
+3. **Decider** : valide, non valide, partiel
 
 ---
 
-## Phase 8 — Finalisation
+## Phase 8 -- Finalisation
 
-1. **Statut** : mettre à jour dans le cerveau
+1. **Statut** : mettre a jour dans le cerveau
 2. **Documentation** : historique, recherches
-3. **Déclaration** : mission terminée
+3. **Declaration** : mission terminee
 
 ---
 
-## Phase 9 — Réactivation de Cerberus
+## Phase 9 -- Reactivation de Cerberus
 
-> **Règle OBLIGATOIRE** : La dernière action de tout todo est de réactiver Cerberus.
+> **Regle OBLIGATOIRE** : La derniere action de tout todo est de reactiver Cerberus.
 
-1. Vérifier que tout est terminé
-2. Mettre à jour AGENTS.md (Cerberus agent principal)
+1. Verifier que tout est termine
+2. Mettre a jour AGENTS.md (Cerberus agent principal)
 3. Documenter la raison du retour
 
 ---
 
 ## Historique
 
-| Date | Étape | Action | Résultat |
+| Date | Etape | Action | Resultat |
 |---|---|---|---|
-| [Date] | [Étape] | [Action] | [Résultat] |
+| [Date] | [Etape] | [Action] | [Resultat] |
 
 ---
 
 ## Notes
 
-[Notes supplémentaires sur la mission]
+[Notes supplementaires sur la mission]
 
 ---
 
 ## Liens
 
-- **Pense-bête** : [lien]
+- **Pense-bete** : [lien]
 - **Spec** : [lien]
 - **Recherches-web** : [lien]
 - **Cerveau** : [lien]

@@ -119,9 +119,9 @@ verifier_placeholders() {
 verifier_ascii() {
     local fichier="$1"
     
-    if grep -qP '[^\x00-\x7F]' "$fichier" 2>/dev/null; then
+    if python -c "import io,sys; sys.exit(0 if any(ord(ch)>127 for ch in io.open(sys.argv[1],encoding='utf-8').read()) else 1)" "$fichier"; then
         echo -e "  ${RED}[ERREUR]${NC} Caracteres non-ASCII detectes :"
-        grep -nP '[^\x00-\x7F]' "$fichier" | head -5 | while read ligne; do
+        python -c "import io,sys; [print(str(i)+': '+l.rstrip()) for i,l in enumerate(io.open(sys.argv[1],encoding='utf-8').read().split(chr(10)),1) if any(ord(ch)>127 for ch in l)][:5]" "$fichier" | while read ligne; do
             echo "    $ligne"
         done
         return 1

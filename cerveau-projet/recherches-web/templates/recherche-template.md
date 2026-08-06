@@ -1,4 +1,4 @@
-# Recherche — [Titre de la recherche]
+# Recherche -- [Titre de la recherche]
 ---
 
 ## Header
@@ -7,7 +7,7 @@
 recherche:
   id: "[RECHERCHE-XXX]"
   titre: "[Titre de la recherche]"
-  theme: "[Thème de la recherche]"
+  theme: "[Theme de la recherche]"
   agent: "[nom-agent]"
   date: "[YYYY-MM-DD]"
   source_principale: "[URL principale]"
@@ -24,7 +24,7 @@ recherche:
 [Raison de la recherche]
 ```
 
-### Quelle question cherche-t-on à répondre ?
+### Quelle question cherche-t-on a repondre ?
 
 ```
 [Question principale]
@@ -36,13 +36,13 @@ recherche:
 
 ### Source principale
 
-| Élément | Valeur |
+| Element | Valeur |
 |---|---|
 | **URL** | [URL] |
 | **Titre** | [Titre de la page] |
-| **Date d'accès** | [YYYY-MM-DD] |
+| **Date d'acces** | [YYYY-MM-DD] |
 | **Auteur** | [Auteur si disponible] |
-| **Fiabilité** | [Haute | Moyenne | Basse] |
+| **Fiabilite** | [Haute | Moyenne | Basse] |
 
 ### Sources secondaires
 
@@ -53,50 +53,50 @@ recherche:
 
 ---
 
-## Informations trouvées
+## Informations trouvees
 
-### Résumé
+### Resume
 
 ```
-[Résumé des informations trouvées]
+[Resume des informations trouvees]
 ```
 
-### Détails
+### Details
 
 #### [Point 1]
 
 ```
-[Détails du point 1]
+[Details du point 1]
 ```
 
 #### [Point 2]
 
 ```
-[Détails du point 2]
+[Details du point 2]
 ```
 
 #### [Point 3]
 
 ```
-[Détails du point 3]
+[Details du point 3]
 ```
 
 ---
 
-## Vérification
+## Verification
 
 ### Comparaison avec le code source
 
-| Élément | Code source | Recherche | Cohérent ? |
+| Element | Code source | Recherche | Coherent ? |
 |---|---|---|---|
-| [Élément 1] | [Valeur] | [Valeur] | [OUI/NON] |
-| [Élément 2] | [Valeur] | [Valeur] | [OUI/NON] |
+| [Element 1] | [Valeur] | [Valeur] | [OUI/NON] |
+| [Element 2] | [Valeur] | [Valeur] | [OUI/NON] |
 
-### Validité des informations
+### Validite des informations
 
 ```
 [ ] Informations encore valides ?
-[ ] Pas de changements récents ?
+[ ] Pas de changements recents ?
 [ ] Compatible avec le projet ?
 ```
 
@@ -120,22 +120,22 @@ recherche:
 
 ## Notes
 
-[Notes supplémentaires]
+[Notes supplementaires]
 
 ---
 
 ## Historique
 
-| Date | Action | Résultat |
+| Date | Action | Resultat |
 |---|---|---|
-| [Date] | Recherche effectuée | [Résultat] |
-| [Date] | Vérification | [Résultat] |
+| [Date] | Recherche effectuee | [Resultat] |
+| [Date] | Verification | [Resultat] |
 
 ---
 
 ## Liens
 
 - **Index des recherches** : [index-recherches-web.md](../index-recherches-web.md)
-- **Pense-bête lié** : [lien]
-- **Spec liée** : [lien]
+- **Pense-bete lie** : [lien]
+- **Spec liee** : [lien]
 - **Convention** : [lien]

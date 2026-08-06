@@ -1,14 +1,14 @@
-# Outil — Analyser les Dépendances
+# Outil -- Analyser les Dependances
 
-**Catégorie** : Analyser
-**Version** : v0.1.0
-**Statut** : initial
+**Categorie** : Analyser
+**Version** : 0.2.0
+**Statut** : prepare
 
 ---
 
 ## Objectif
 
-Analyser les dépendances entre les fichiers du projet.
+Analyser les dependances entre les fichiers du projet.
 
 ---
 
@@ -20,24 +20,24 @@ analyser-dependances(chemin=".", fichier="specific.md", direction="both")
 
 ---
 
-## Paramètres
+## Parametres
 
-| Paramètre | Type | Obligatoire | Description |
+| Parametre | Type | Obligatoire | Description |
 |---|---|---|---|
-| `chemin` | string | Oui | Chemin du dossier à analyser |
-| `fichier` | string | Non | Fichier spécifique à analyser (défaut: tous) |
-| `direction` | string | Non | Direction: "imports", "exports", "both" (défaut: "both") |
+| `chemin` | string | Oui | Chemin du dossier a analyser |
+| `fichier` | string | Non | Fichier specifique a analyser (defaut: tous) |
+| `direction` | string | Non | Direction: "imports", "exports", "both" (defaut: "both") |
 
 ---
 
-## Résultat
+## Resultat
 
-Retourne un graphe de dépendances.
+Retourne un graphe de dependances.
 
 ```markdown
-## Résultat
+## Resultat
 
-### Dépendances de index-cerveau.md
+### Dependances de index-cerveau.md
 
 #### Imports (ce qu'il utilise)
 - conventions/renommage/convention-renommage.md
@@ -49,8 +49,8 @@ Retourne un graphe de dépendances.
 - agents/buffy/buffy.md
 
 ### Statistiques
-- Fichiers analysés : 25
-- Dépendances trouvées : 45
+- Fichiers analyses : 25
+- Dependances trouvees : 45
 - Fichiers orphelins : 2
 ```
 
@@ -58,35 +58,35 @@ Retourne un graphe de dépendances.
 
 ## Exemples
 
-### Exemple 1 — Analyser toutes les dépendances
+### Exemple 1 -- Analyser toutes les dependances
 
 ```
 analyser-dependances(chemin=".")
 ```
 
-**Résultat** :
-- 45 dépendances trouvées
+**Resultat** :
+- 45 dependances trouvees
 - 2 fichiers orphelins
 
-### Exemple 2 — Analyser les dépendances d'un fichier
+### Exemple 2 -- Analyser les dependances d'un fichier
 
 ```
 analyser-dependances(fichier="index-cerveau.md")
 ```
 
-**Résultat** :
+**Resultat** :
 - 3 imports
 - 2 exports
 
 ---
 
-## Dépendances
+## Dependances
 
-- `lister-fichiers` — Pour trouver les fichiers a analyser
+- `lister-fichiers` -- Pour trouver les fichiers a analyser
 
 ---
 
-## Implémentation
+## Implementation
 
 ### Commande bash equivalent
 
@@ -115,3 +115,10 @@ grep -rn "^\[.*\]:.*" *.md
 
 ---
 
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |

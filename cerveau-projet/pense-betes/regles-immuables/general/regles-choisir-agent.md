@@ -1,164 +1,143 @@
-# Règle Immuable — Choisir le Bon Agent
+# Regle Immuable -- Choisir le Bon Agent
+
 ---
 
 ## Principe Fondamental
+
+**Cerberus ne choisit JAMAIS un agent au hasard ni par habitude.** Il identifie le type de tache, consulte la matrice ci-dessous, verifie la fiche de l'agent, puis active. Si une demande peut etre confondue entre plusieurs agents, il demande a l'utilisateur.
+
 ---
 
 ## Comment choisir ?
 
-### Étape 1 — Identifier le type de tâche
+### Etape 1 -- Identifier le type de tache
 
-| Type de tâche | Secteur | Agent recommandé |
+| Type de tache | Agent habilite | Jamais |
 |---|---|---|
-| Modifier `index-cerveau.md` | Cerveau | Buffy |
-| Modifier `demarrer.md` | Cerveau | Buffy |
-| Modifier `AGENTS.md` | Agents | Buffy |
-| Créer/modifier une convention | Cerveau | Buffy |
-| Créer/modifier un protocole | Cerveau | Buffy |
-| Créer un pense-bête | Contenu | Buffy |
-| Créer une spec | Contenu | Buffy |
-| Créer un todo | Contenu | Buffy |
-| Explorer le code | Recherche | Atlas |
-| Documenter en détail | Documentation | Atlas |
-| Analyser des dépendances | Analyse | Atlas |
-| Chercher sur le web | Recherche | Atlas |
+| Coordonner, analyser un besoin, activer un agent | Cerberus | - |
+| Modifier les fichiers du cerveau-projet (conventions, regles, protocoles, index, demarrer.md) | Buffy | Cerberus, Vulcain |
+| Modifier `AGENTS.md` / activations | Cerberus (via `mettre-a-jour-modifier-agents-md`) | - |
+| **Creer / modifier / tester / optimiser un outil (v2/v3, purification, bugs)** | **Vulcain** | Cerberus, Buffy |
+| Controler les statuts, second controle | Janus | - |
+| Ecrire et lancer les tests (protocole-tests) | Morpheus | - |
+| Creer un pense-bete | Athena | - |
+| Creer une spec | Promethee | - |
+| Creer un todo | Minerve | - |
+| Mettre a jour le README | Clio | - |
+| Explorer, chercher, documenter, analyser (information) | Atlas | - |
+| Evaluer la coherence (structure, conventions, agents) | Themis | - |
 
-### Étape 2 — Vérifier la fiche de l'agent
+### Etape 2 -- Verifier la fiche de l'agent
 
 ```
 1. Lire agents/[nom-agent]/[nom-agent].md
-2. Vérifier les spécialités
-3. Vérifier les forces
-4. Vérifier les faiblesses
-5. Confirmer que l'agent est adapté
+2. Verifier les specialites
+3. Verifier les forces
+4. Verifier les faiblesses
+5. Confirmer que l'agent est adapte
 ```
 
-### Étape 3 — Appliquer les corrections
+### Etape 3 -- Appliquer les corrections
 
 ```
-1. Lire agents/[nom-agent]/corrections.md EN PREMIER
+1. Lire agents/[nom-agent]/corrections.md
 2. Appliquer les surcharges
-3. Noter les règles spécifiques
+3. Noter les regles specifiques
 4. Respecter les limites de l'agent
 ```
 
-### Étape 4 — Exécuter la tâche
+### Etape 4 -- Activer et documenter
 
 ```
-1. Travailler selon le style de l'agent
-2. Respecter les conventions
-3. Documenter les changements
-4. Mettre à jour les fichiers liés si nécessaire
+1. Activer l'agent via mettre-a-jour-modifier-agents-md
+2. Documenter la raison et la mission
+3. L'agent execute puis reactive Cerberus
+4. Cerberus declenche Janus (si second controle) puis Clio (si fichiers changes)
 ```
 
 ---
 
-## Matrice de décision
+## Matrice de decision
 
 ### Par secteur
 
-| Secteur | Agent | Tâches |
+| Secteur | Agent | Taches |
 |---|---|---|
-| **Agents** | Buffy | Fiches, corrections, AGENTS.md, changements d'agent |
-| **Cerveau** | Buffy | Conventions, règles, protocoles, index |
-| **Contenu** | Buffy | Pense-betes, specs, todos |
+| **Coordination** | Cerberus | Accueil, analyse, activation, cycle |
+| **Cerveau** | Buffy | Conventions, regles, protocoles, index, demarrer.md |
+| **Outils** | Vulcain | Creation, modification, tests, optimisation des outils |
+| **Contenu** | Athena, Promethee, Minerve | Pense-betes, specs, todos |
+| **Controle** | Janus | Statuts, second controle |
+| **Tests** | Morpheus | Protocole-tests, protections |
+| **README** | Clio | Histoire du projet, README |
 | **Recherche** | Atlas | Exploration, documentation, analyse |
+| **Evaluation** | Themis | Coherence croisee, combos |
 
-### Par complexité
+### Piege majeur -- la confusion Cerberus/Vulcain
 
-| Complexité | Agent | Approche |
+| Situation | Erreur frequente | Bonne decision |
 |---|---|---|
-| **Simple** | Buffy | Directe, efficace |
-| **Moyenne** | Buffy ou Atlas | Selon la spécialité |
-| **Complexe** | Buffy + Atlas | Coordonner les deux |
+| "Faire evoluer un outil en v2" | Cerberus execute lui-meme | **Activer Vulcain** |
+| "Corriger un bug dans un script" | Cerberus edite le script | **Activer Vulcain** |
+| "Purifier les outils" | Cerberus lance les corrections | **Activer Vulcain** |
+| "Modifier une convention" | Vulcain s'en charge | **Activer Buffy** |
 
 ---
 
-## Règles de choix
+## Regles de choix
 
-### Règle 1 — Buffy par défaut
+### Regle 1 -- Cerberus ne travaille jamais seul sur une mission technique
 
-**Buffy est l'agent principal.** Par défaut, c'est Buffy qui fait le travail, sauf si une tâche est clairement du domaine d'un autre agent.
+Cerberus coordonne. Pour TOUTE tache d'outil, de contenu, de test ou de controle, il active l'agent dedie. Executer soi-meme une mission qui appartient a un autre agent est une faute grave (voir corrections.md de Cerberus, defaillance du 2026-08-06).
 
-### Règle 2 — Atlas pour la recherche
+### Regle 2 -- Vulcain pour tout ce qui touche aux outils
 
-**Atlas est l'explorateur.** Quand il faut chercher, documenter en détail, ou analyser, Atlas est plus adapté.
+Creer, modifier, tester, purifier, passer en v2/v3, corriger un bug d'outil : **Vulcain, toujours.** Cerberus n'edite jamais un script d'outil.
 
-### Règle 3 — Demander en cas de doute
+### Regle 3 -- Buffy pour les fichiers du cerveau
 
-**En cas de doute, demander à l'utilisateur.** "Quel agent souhaitez-vous pour cette tâche ?"
+Conventions, regles, protocoles, index, demarrer.md : **Buffy.** Elle est responsable du cerveau-projet.
 
-### Règle 4 — Ne pas forcer
+### Regle 4 -- Demander en cas de doute
 
-**Ne pas forcer un agent** pour une tâche qui ne correspond pas à ses spécialités.
+**En cas de doute, demander a l'utilisateur.** "Quel agent souhaitez-vous pour cette tache ?"
 
----
+### Regle 5 -- Ne pas forcer
 
-## Exemples
-
-### Exemple 1 — Modifier une convention
-
-```
-Tâche : Modifier convention-structures.md
-Secteur : Cerveau
-Agent : Buffy (spécialiste des conventions)
-```
-
-### Exemple 2 — Explorer le code pour comprendre un module
-
-```
-Tâche : Comprendre comment fonctionne le module X
-Secteur : Recherche
-Agent : Atlas (explorateur)
-```
-
-### Exemple 3 — Créer un nouveau pense-bête
-
-```
-Tâche : Créer un pense-bête sur le thème Y
-Secteur : Contenu
-Agent : Buffy (création de contenu)
-```
-
-### Exemple 4 — Tâche complexe
-
-```
-Tâche : Refactoring majeur du cerveau
-Secteur : Cerveau + Recherche
-Agents : Buffy (orchestration) + Atlas (exploration)
-```
+**Ne pas forcer un agent** pour une tache qui ne correspond pas a ses specialites.
 
 ---
 
-## Vérification
+## Verification
 
-Avant de commencer un travail, vérifier :
+Avant de commencer un travail, verifier :
 
-- [ ] Le type de tâche est identifié
-- [ ] Le secteur est identifié
-- [ ] L'agent optimal est choisi
+- [ ] Le type de tache est identifie
+- [ ] Le secteur est identifie
+- [ ] L'agent optimal est choisi (matrice ci-dessus)
 - [ ] La fiche de l'agent est lue
-- [ ] Les corrections sont appliquées
-- [ ] Les spécialités de l'agent correspondent à la tâche
+- [ ] Les corrections sont appliquees
+- [ ] Les specialites de l'agent correspondent a la tache
+- [ ] Cerberus n'execute pas une mission d'un autre agent
 
 ---
 
-## Pièges courants
+## Pieges courants
 
-| Piège | Solution |
+| Piege | Solution |
 |---|---|
-| Utiliser Buffy pour tout | Vérifier si Atlas serait plus adapté |
-| Utiliser Atlas pour modifier le cerveau | Buffy est le spécialiste du cerveau |
+| Cerberus execute seul les missions d'outils | Activer Vulcain (regle 2) |
+| Utiliser Buffy pour les outils | Vulcain est le constructeur d'outils |
+| Utiliser Vulcain pour le cerveau | Buffy est le specialiste du cerveau |
 | Ignorer les corrections | Toujours lire `corrections.md` en premier |
-| Forcer un agent inadapté | Demander à l'utilisateur |
+| Forcer un agent inadapte | Demander a l'utilisateur |
 
 ---
 
-## Lien avec les autres règles
+## Lien avec les autres regles
 
-- [protocole-auto-correction](protocole-auto-correction/) — comment gérer les agents
-- [convention-protocoles](../../conventions/protocoles/convention-protocoles.md) — comment créer des protocoles
-- [regles-hierarchie-par-niveau](../hierarchie/regles-hierarchie-par-niveau.md) — structure du cerveau
+- [protocole-auto-correction](protocole-auto-correction/) -- comment gerer les agents
+- [convention-protocoles](../../conventions/protocoles/convention-protocoles.md) -- comment creer des protocoles
+- [regles-hierarchie-par-niveau](../hierarchie/regles-hierarchie-par-niveau.md) -- structure du cerveau
 
 ---
-

@@ -1,7 +1,7 @@
 #!/bin/bash
 # valider-cartes-decision.sh
-# Outil pour vérifier que les agents respectent les cartes de décision
-# Propriétaire : Vulcain
+# Outil pour verifier que les agents respectent les cartes de decision
+# Proprietaire : Vulcain
 
 # Configuration
 AGENTS_DIR="cerveau-projet/agents"
@@ -11,64 +11,64 @@ get_date() {
     date +"%Y-%m-%d"
 }
 
-# Fonction pour vérifier un agent
+# Fonction pour verifier un agent
 verifier_agent() {
     local agent=$1
     local fichier="$AGENTS_DIR/$agent/$agent.md"
     
-    echo "=== Vérification de l'agent : $agent ==="
+    echo "=== Verification de l'agent : $agent ==="
     echo ""
     
-    # Vérifier que le fichier existe
+    # Verifier que le fichier existe
     if [ ! -f "$fichier" ]; then
         echo "ERREUR : Le fichier $fichier n'existe pas"
         return 1
     fi
     
-    # Vérifier la section Carte de Décision
-    echo "1. Vérification de la section Carte de Décision"
-    if grep -q "CARTE DE DÉCISION" "$fichier"; then
-        echo "   [OK] Section présente"
+    # Verifier la section Carte de Decision
+    echo "1. Verification de la section Carte de Decision"
+    if grep -q 'CARTE DE DECISION' "$fichier"; then
+        echo "   [OK] Section presente"
     else
         echo "   [ERREUR] Section manquante"
         return 1
     fi
     
-    # Vérifier le tableau des missions
-    echo "2. Vérification du tableau des missions"
+    # Verifier le tableau des missions
+    echo "2. Verification du tableau des missions"
     if grep -q "Missions disponibles" "$fichier"; then
-        echo "   [OK] Tableau présent"
+        echo "   [OK] Tableau present"
     else
         echo "   [ERREUR] Tableau manquant"
         return 1
     fi
     
-    # Vérifier les détails des missions
-    echo "3. Vérification des détails des missions"
+    # Verifier les details des missions
+    echo "3. Verification des details des missions"
     if grep -q "Mission :" "$fichier"; then
-        echo "   [OK] Détails présents"
+        echo "   [OK] Details presents"
     else
-        echo "   [ERREUR] Détails manquants"
+        echo "   [ERREUR] Details manquants"
         return 1
     fi
     
-    # Vérifier les règles absolues
-    echo "4. Vérification des règles absolues"
-    if grep -q "RÈGLE ABSOLUE" "$fichier"; then
-        echo "   [OK] Règles présentes"
+    # Verifier les regles absolues
+    echo "4. Verification des regles absolues"
+    if grep -q 'REGLE ABSOLUE' "$fichier"; then
+        echo "   [OK] Regles presentes"
     else
-        echo "   [ERREUR] Règles manquantes"
+        echo "   [ERREUR] Regles manquantes"
         return 1
     fi
     
     echo ""
-    echo "=== Résultat : CONFORME ==="
+    echo "=== Resultat : CONFORME ==="
     return 0
 }
 
-# Fonction pour vérifier tous les agents
+# Fonction pour verifier tous les agents
 verifier_tous() {
-    echo "=== Vérification de tous les agents ==="
+    echo "=== Verification de tous les agents ==="
     echo ""
     
     local agents=("cerberus" "buffy" "atlas" "janus" "vulcain")
@@ -85,17 +85,17 @@ verifier_tous() {
         fi
     done
     
-    echo "=== Résumé ==="
-    echo "Agents vérifiés : $total"
+    echo "=== Resume ==="
+    echo "Agents verifies : $total"
     echo "Agents conformes : $conformes"
     echo "Agents non conformes : $((total - conformes))"
 }
 
-# Fonction pour vérifier un fichier spécifique
+# Fonction pour verifier un fichier specifique
 verifier_fichier() {
     local fichier=$1
     
-    echo "=== Vérification du fichier : $fichier ==="
+    echo "=== Verification du fichier : $fichier ==="
     echo ""
     
     if [ ! -f "$fichier" ]; then
@@ -103,44 +103,44 @@ verifier_fichier() {
         return 1
     fi
     
-    # Vérifier la section Carte de Décision
-    echo "1. Vérification de la section Carte de Décision"
-    if grep -q "CARTE DE DÉCISION" "$fichier"; then
-        echo "   [OK] Section présente"
+    # Verifier la section Carte de Decision
+    echo "1. Verification de la section Carte de Decision"
+    if grep -q 'CARTE DE DECISION' "$fichier"; then
+        echo "   [OK] Section presente"
     else
         echo "   [ERREUR] Section manquante"
         return 1
     fi
     
-    # Vérifier le tableau des missions
-    echo "2. Vérification du tableau des missions"
+    # Verifier le tableau des missions
+    echo "2. Verification du tableau des missions"
     if grep -q "Missions disponibles" "$fichier"; then
-        echo "   [OK] Tableau présent"
+        echo "   [OK] Tableau present"
     else
         echo "   [ERREUR] Tableau manquant"
         return 1
     fi
     
-    # Vérifier les détails des missions
-    echo "3. Vérification des détails des missions"
+    # Verifier les details des missions
+    echo "3. Verification des details des missions"
     if grep -q "Mission :" "$fichier"; then
-        echo "   [OK] Détails présents"
+        echo "   [OK] Details presents"
     else
-        echo "   [ERREUR] Détails manquants"
+        echo "   [ERREUR] Details manquants"
         return 1
     fi
     
-    # Vérifier les règles absolues
-    echo "4. Vérification des règles absolues"
-    if grep -q "RÈGLE ABSOLUE" "$fichier"; then
-        echo "   [OK] Règles présentes"
+    # Verifier les regles absolues
+    echo "4. Verification des regles absolues"
+    if grep -q 'REGLE ABSOLUE' "$fichier"; then
+        echo "   [OK] Regles presentes"
     else
-        echo "   [ERREUR] Règles manquantes"
+        echo "   [ERREUR] Regles manquantes"
         return 1
     fi
     
     echo ""
-    echo "=== Résultat : CONFORME ==="
+    echo "=== Resultat : CONFORME ==="
     return 0
 }
 
@@ -149,9 +149,9 @@ afficher_aide() {
     echo "Usage: $0 [options]"
     echo ""
     echo "Options:"
-    echo "  --agent <nom>          Vérifier un agent spécifique"
-    echo "  --tous                 Vérifier tous les agents"
-    echo "  --fichier <chemin>     Vérifier un fichier spécifique"
+    echo "  --agent <nom>          Verifier un agent specifique"
+    echo "  --tous                 Verifier tous les agents"
+    echo "  --fichier <chemin>     Verifier un fichier specifique"
     echo "  --aide                 Afficher cette aide"
     echo ""
     echo "Exemples:"
@@ -160,7 +160,7 @@ afficher_aide() {
     echo "  $0 --fichier cerveau-projet/agents/buffy/buffy.md"
 }
 
-# Point d'entrée principal
+# Point d'entree principal
 case $1 in
     "--agent")
         if [ -z "$2" ]; then

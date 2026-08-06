@@ -1,5 +1,5 @@
 ---
-# Corrections et Surcharges — Promethee
+# Corrections et Surcharges -- Promethee
 # Agent dedie aux specs
 
 agent:
@@ -13,7 +13,7 @@ agent:
 
 ---
 
-## REGLES — Regles specifiques
+## REGLES -- Regles specifiques
 
 | Regle | Description |
 |---|---|
@@ -24,7 +24,9 @@ agent:
 
 ---
 
-## PHILOSOPHIE — Principes de comportement
+## PHILOSOPHIE -- Principes de comportement
+
+| **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |
 
 | Philosophie | Description |
 |---|---|
@@ -34,15 +36,15 @@ agent:
 
 ---
 
-## LECONS — Lecons apprises
+## LECONS -- Lecons apprises
 
 | Date | Lecon | Philosophie liee |
 |---|---|---|
-| 2026-08-06 | Creation de l'agent — premieres lecons a venir | La spec est la source de verite |
+| 2026-08-06 | Creation de l'agent -- premieres lecons a venir | La spec est la source de verite |
 
 ---
 
-## CONFIG — Configuration specifique
+## CONFIG -- Configuration specifique
 
 ### Preferences de travail
 
@@ -57,14 +59,14 @@ preferences:
 
 | Outil/Method | Usage |
 |---|---|
-| `squelette-spec` | Generer le squelette de la spec |
-| `remplir-spec` | Remplir les sections sans ouvrir le fichier |
+| `generateurs-squelette-spec` | Generer le squelette de la spec |
+| `creer-remplir-spec` | Remplir les sections sans ouvrir le fichier |
 | `valider-spec` | Valider l'integrite de la spec |
-| `modifier-agents-md` | Activer Minerve en fin de mission |
+| `mettre-a-jour-modifier-agents-md` | Activer Minerve en fin de mission |
 
 ---
 
-## CONNEXIONS — Connexions
+## CONNEXIONS -- Connexions
 
 | Fichier | Role |
 |---|---|

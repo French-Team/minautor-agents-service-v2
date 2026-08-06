@@ -1,6 +1,6 @@
-# Règle Immuable — Bannissement des Emojis et Utilisation de ASCII
+# Regle Immuable -- Bannissement des Emojis et Utilisation de ASCII
 
-> **Cette règle est IMMUABLE.** Elle s'applique à tout fichier du cerveau-projet.
+> **Cette regle est IMMUABLE.** Elle s'applique a tout fichier du cerveau-projet.
 
 ---
 
@@ -9,36 +9,48 @@
 
 ## Pourquoi ?
 
-| Problème | Solution |
+| Probleme | Solution |
 |---|---|
-| Incompatibilité avec certains outils | ASCII universel |
-| Difficulté de recherche/grep | Caractères standards |
-| Problèmes d'encodage | ASCII sans ambiguïté |
+| Incompatibilite avec certains outils | ASCII universel |
+| Difficulte de recherche/grep | Caracteres standards |
+| Problemes d'encodage | ASCII sans ambiguite |
 | Manque de professionnalisme | Convention technique stricte |
-| Difficulté de copier/coller | Caractères simples |
+| Difficulte de copier/coller | Caracteres simples |
 
 ---
 
-## Règles détaillées
+## Regles detaillees
 
-### Règle 1 — Aucun emoji
+### Regle 1 -- Aucun emoji
 
 Tout type d'emoji est interdit :
-- Emojis Unicode ( smiles, coeurs, flèches colorées, etc.)
+- Emojis Unicode ( smiles, coeurs, fleches colorees, etc.)
 - Emojis de transport (voitures, avions, etc.)
 - Emojis de nourriture (pommes, pizzas, etc.)
 - Emojis d'animaux (chiens, chats, etc.)
-- Tout caractère Unicode hors ASCII étendu
+- Tout caractere Unicode hors ASCII etendu
 
-### Règle 2 — Seuls les caractères ASCII sont autorisés
+### Regle 2 -- Seuls les caracteres ASCII sont autorises
 
-Les caractères autorisés sont :
+Les caracteres autorises sont :
 - Lettres (a-z, A-Z)
 - Chiffres (0-9)
 - Ponctuation standard ASCII
 - Symboles techniques ASCII
 
-### Règle 3 — Symboles de remplacement
+### Regle 2bis -- Aucun accent, aucune exception pour le texte francais
+
+La regle ASCII est **absolue** : tout caractere non-ASCII est interdit, y compris :
+- Les **accents** du texte francais (e, e, e, a, a, c, i, i, o, u, u, u, y, E, E, A, C, etc.)
+- Les **titres de sections** accentues (`## Decision` -> `## Decision`)
+- Les guillemets courbes, apostrophes courbes, tirets speciaux, points de suspension
+- Tout symbole Unicode (cases `[ ]`, fleches, etc.)
+
+**Remplacer systematiquement** : `e`->`e`, `e`->`e`, `a`->`a`, `c`->`c`, `E`->`E`, etc. (via le dictionnaire `corriger-corriger-dictionnaire-accents.txt`).
+
+Le texte francais redige **doit aussi etre purge** : il n'existe aucune tolerance. C'est le prix de la regle immuable : un fichier pur est un fichier sans caractere non-ASCII.
+
+### Regle 3 -- Symboles de remplacement
 
 Pour remplacer les emojis, utiliser des symboles ASCII :
 
@@ -46,9 +58,9 @@ Pour remplacer les emojis, utiliser des symboles ASCII :
 |---|---|
 | Checkbox coche | `[x]` ou `[X]` |
 | Checkbox vide | `[ ]` |
-| Flèche droite | `->` ou `-->` |
-| Flèche gauche | `<-` ou `<--` |
-| Flèche double | `<->` ou `<-->` |
+| Fleche droite | `->` ou `-->` |
+| Fleche gauche | `<-` ou `<--` |
+| Fleche double | `<->` ou `<-->` |
 | Coeur | `<3` |
 | Point d'exclamation | `!` ou `!!` |
 | Point d'interrogation | `?` ou `??` |
@@ -58,9 +70,9 @@ Pour remplacer les emojis, utiliser des symboles ASCII :
 | Warning | `[WARNING]` ou `ATTENTION` |
 | Erreur | `[ERROR]` ou `ERREUR` |
 
-### Règle 4 — Tableaux
+### Regle 4 -- Tableaux
 
-Dans les tableaux, utiliser des caractères ASCII :
+Dans les tableaux, utiliser des caracteres ASCII :
 
 ```markdown
 | Statut | Symbole |
@@ -71,7 +83,7 @@ Dans les tableaux, utiliser des caractères ASCII :
 | Erreur | [!!] |
 ```
 
-### Règle 5 — Listes
+### Regle 5 -- Listes
 
 Dans les listes, utiliser des puces ASCII :
 
@@ -90,16 +102,16 @@ Dans les listes, utiliser des puces ASCII :
 ### Avant (interdit)
 
 ```markdown
-# Ma section ✅
+# Ma section [OK]
 
-- Fait ✔️
-- En cours 🔧
-- Pas commence ⏳
+- Fait [OK]
+- En cours [OUTIL]
+- Pas commence [attente]
 
 | Status | Emoji |
 |---|---|
-| OK | 👍 |
-| Error | ❌ |
+| OK | [Pouce_haut] |
+| Error | [ERREUR] |
 ```
 
 ### Apres (autorise)
@@ -121,9 +133,9 @@ Dans les listes, utiliser des puces ASCII :
 
 ## Exceptions volontaires
 
-**Par defaut : aucune exception.** Cette règle est absolue pour tous les fichiers du cerveau-projet.
+**Par defaut : aucune exception.** Cette regle est absolue pour tous les fichiers du cerveau-projet.
 
-Même dans les commentaires, les notes, les brouillons, les emojis sont interdits.
+Meme dans les commentaires, les notes, les brouillons, les emojis sont interdits.
 
 ### Liste des exceptions volontaires
 
@@ -132,8 +144,7 @@ Seuls les fichiers ci-dessous contiennent **volontairement** des emojis ou carac
 | Fichier | Raison de l'exception |
 |---|---|
 | `cerveau-projet/agents/tools/corriger/corriger-emojis/dictionnaire-emojis.txt` | Dictionnaire emoji -> ASCII de `corriger-emojis`. Contient les emojis a traduire : c'est sa fonction. |
-| `cerveau-projet/agents/tools/corriger/corriger-accents/dictionnaire-accents.txt` | Dictionnaire accent -> ASCII de `corriger-accents`. Contient les caracteres non-ASCII a traduire : c'est sa fonction. |
-| `cerveau-projet/pense-betes/regles-immuables/general/regles-emojis-ascii.md` (lui-meme) | Exemples pedagogiques dans le bloc "Avant (interdit)" : montre ce qui est interdit. |
+| `cerveau-projet/agents/tools/corriger/corriger-dictionnaire-accents/corriger-dictionnaire-accents.txt` | Dictionnaire accent -> ASCII de `corriger-accents-zones-sensibles`. Contient les caracteres non-ASCII a traduire : c'est sa fonction. |
 
 ### Exception de dossier : `exemples/`
 
@@ -158,10 +169,13 @@ Le dossier `cerveau-projet/exemples/` est **exclu de la regle** : c'est une zone
 Avant de valider tout fichier, verifier :
 
 - [ ] Aucun emoji Unicode present
-- [ ] Tous les symboles sont ASCII
+- [ ] Aucun caractere non-ASCII (y compris accents du texte francais)
 - [ ] Les checkboxes utilisent `[x]` et `[ ]`
-- [ ] Les flèches utilisent `->` ou `<-`
+- [ ] Les fleches utilisent `->` ou `<-`
 - [ ] Les tableaux utilisent des caracteres ASCII
+- [ ] Les titres de sections sont ASCII
+
+Utiliser l'outil `valider-conformite-ascii` pour controler automatiquement (tout fichier non-ASCII est signale).
 
 ---
 
@@ -180,10 +194,10 @@ Cette regle s'applique a :
 
 ## Liens
 
-- [regles-general-global.md](regles-general-global.md) — regles globales
-- [regles-choisir-agent.md](regles-choisir-agent.md) — choisir le bon agent
-- [regles-validation-rigoureuse.md](regles-validation-rigoureuse.md) — validation rigoureuse
-- [convention-renommage.md](../../conventions/renommage/convention-renommage.md) — convention de renommage
+- [regles-general-global.md](regles-general-global.md) -- regles globales
+- [regles-choisir-agent.md](regles-choisir-agent.md) -- choisir le bon agent
+- [regles-validation-rigoureuse.md](regles-validation-rigoureuse.md) -- validation rigoureuse
+- [convention-renommage.md](../../conventions/renommage/convention-renommage.md) -- convention de renommage
 
 ---
 

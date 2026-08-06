@@ -1,68 +1,68 @@
-# Protocole — Auto-Améliorer les Agents
+# Protocole -- Auto-Ameliorer les Agents
 ---
 
 ## Objectif
 
-Permettre aux agents de s'améliorer en continu, en corrigeant leurs erreurs et en affinant leur configuration.
+Permettre aux agents de s'ameliorer en continu, en corrigeant leurs erreurs et en affinant leur configuration.
 
 ---
 
-## Prérequis
+## Prerequis
 
-- Lire `agents/index-agents.md` pour connaître les agents
+- Lire `agents/index-agents.md` pour connaitre les agents
 - Lire `agents/[nom-agent]/corrections.md` pour voir les erreurs
 - Lire `convention-autoamelioration.md` pour les principes
 
 ---
 
-## Étapes
+## Etapes
 
-### Étape 1 — Diagnostiquer l'état des agents
+### Etape 1 -- Diagnostiquer l'etat des agents
 
 ```
 1. Lire agents/index-agents.md
 2. Pour chaque agent :
    a. Lire sa fiche (agents/[nom]/[nom].md)
    b. Lire ses corrections (agents/[nom]/corrections.md)
-   c. Identifier les erreurs récurrentes
-   d. Identifier les améliorations nécessaires
+   c. Identifier les erreurs recurrentes
+   d. Identifier les ameliorations necessaires
 ```
 
-### Étape 2 — Améliorer les fiches d'agent
-
-```
-Pour chaque agent :
-1. Mettre à jour sa fiche si nécessaire
-2. Ajouter de nouvelles spécialités
-3. Mettre à jour ses forces/faiblesses
-4. Mettre à jour son historique
-```
-
-### Étape 3 — Améliorer les corrections
+### Etape 2 -- Ameliorer les fiches d'agent
 
 ```
 Pour chaque agent :
-1. Analyser les erreurs récurrentes
-2. Créer de nouvelles règles si nécessaire
-3. Ajouter des surcharges si nécessaire
-4. Mettre à jour les statistiques
+1. Mettre a jour sa fiche si necessaire
+2. Ajouter de nouvelles specialites
+3. Mettre a jour ses forces/faiblesses
+4. Mettre a jour son historique
 ```
 
-### Étape 4 — Améliorer les templates
+### Etape 3 -- Ameliorer les corrections
 
 ```
-1. Vérifier si les templates sont à jour
-2. Les améliorer si nécessaire
-3. Mettre à jour les examples
+Pour chaque agent :
+1. Analyser les erreurs recurrentes
+2. Creer de nouvelles regles si necessaire
+3. Ajouter des surcharges si necessaire
+4. Mettre a jour les statistiques
+```
+
+### Etape 4 -- Ameliorer les templates
+
+```
+1. Verifier si les templates sont a jour
+2. Les ameliorer si necessaire
+3. Mettre a jour les examples
 4. Valider par RVAV
 ```
 
-### Étape 5 — Valider la cohérence
+### Etape 5 -- Valider la coherence
 
 ```
-1. Vérifier que tous les agents sont cohérents
-2. Vérifier que les templates sont à jour
-3. Vérifier que les corrections sont appliquées
+1. Verifier que tous les agents sont coherents
+2. Verifier que les templates sont a jour
+3. Verifier que les corrections sont appliquees
 4. Valider par RVAV
 ```
 
@@ -70,11 +70,11 @@ Pour chaque agent :
 
 ## RVAV
 
-Appliquer le cycle complet à chaque étape critique :
-- [rechercher] — vérifier les impacts
-- [vérifier] — confirmer la cohérence
-- [analyser] — valider les conséquences
-- [valider] — approuver l'amélioration
+Appliquer le cycle complet a chaque etape critique :
+- [rechercher] -- verifier les impacts
+- [verifier] -- confirmer la coherence
+- [analyser] -- valider les consequences
+- [valider] -- approuver l'amelioration
 
 ---
 

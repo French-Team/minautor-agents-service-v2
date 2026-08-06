@@ -1,4 +1,4 @@
-# Todo — Implémentation du Protocole Composition
+# Todo -- Implementation du Protocole Composition
 
 ---
 
@@ -7,7 +7,7 @@
 ```yaml
 mission:
   id: "MISSION-PC-001"
-  titre: "Implémenter le protocole composition"
+  titre: "Implementer le protocole composition"
   statut: "en-attente"
   date_debut: "2026-08-06"
   agent: "buffy"
@@ -19,58 +19,58 @@ mission:
 
 ## Statut de l'intervention
 
-| Élément | Statut | Lien |
+| Element | Statut | Lien |
 |---|---|---|
-| **Pense-bête** | cree | [protocole-composition.001.01.ebauche.md](../../protocole-composition.001.01.ebauche.md) |
+| **Pense-bete** | cree | [protocole-composition.001.01.ebauche.md](../../protocole-composition.001.01.ebauche.md) |
 | **Spec** | cree | [spec-protocole-composition.002.01.ebauche.md](../spec-protocole-composition.002.01.ebauche.md) |
 | **Todo** | en-attente | ce fichier |
 
 ---
 
-## Tâches
+## Taches
 
-### Étape 1 — Créer index-cerveau.md
+### Etape 1 -- Creer index-cerveau.md
 
-- [ ] Créer le fichier avec titre, version, description
-- [ ] Ajouter la table des matières dynamique
+- [ ] Creer le fichier avec titre, version, description
+- [ ] Ajouter la table des matieres dynamique
 - [ ] Valider les liens (RVAV)
 
-### Étape 2 — Créer la structure des dossiers
+### Etape 2 -- Creer la structure des dossiers
 
-- [ ] Créer pense-betes/ et ses sous-dossiers
-- [ ] Créer recherches-web/
+- [ ] Creer pense-betes/ et ses sous-dossiers
+- [ ] Creer recherches-web/
 - [ ] Ajouter un index-*.md dans chaque dossier
-- [ ] Vérifier qu'aucun dossier n'est vide (RVAV)
+- [ ] Verifier qu'aucun dossier n'est vide (RVAV)
 
-### Étape 3 — Vérifier les templates
+### Etape 3 -- Verifier les templates
 
-- [ ] Vérifier pense-bete-template.md
-- [ ] Vérifier spec-template.md
-- [ ] Vérifier todo-template.md
+- [ ] Verifier pense-bete-template.md
+- [ ] Verifier spec-template.md
+- [ ] Verifier todo-template.md
 - [ ] Valider le pattern index/template (RVAV)
 
 ---
 
-## Phase 9 — Réactivation de Cerberus
+## Phase 9 -- Reactivation de Cerberus
 
-> **Règle OBLIGATOIRE** : La dernière action de tout todo est de réactiver Cerberus.
+> **Regle OBLIGATOIRE** : La derniere action de tout todo est de reactiver Cerberus.
 
-- [ ] Vérifier que tout est terminé
-- [ ] Mettre à jour AGENTS.md (Cerberus agent principal)
+- [ ] Verifier que tout est termine
+- [ ] Mettre a jour AGENTS.md (Cerberus agent principal)
 - [ ] Documenter la raison du retour
 
 ---
 
 ## Historique
 
-| Date | Étape | Action | Résultat |
+| Date | Etape | Action | Resultat |
 |---|---|---|---|
-| 2026-08-06 | Création | Todo créé | en-attente |
+| 2026-08-06 | Creation | Todo cree | en-attente |
 
 ---
 
 ## Liens
 
-- **Pense-bête** : [protocole-composition.001.01.ebauche.md](../../protocole-composition.001.01.ebauche.md)
+- **Pense-bete** : [protocole-composition.001.01.ebauche.md](../../protocole-composition.001.01.ebauche.md)
 - **Spec** : [spec-protocole-composition.002.01.ebauche.md](../spec-protocole-composition.002.01.ebauche.md)
 - **Index des todos** : [index-todo.md](index-todo.md)

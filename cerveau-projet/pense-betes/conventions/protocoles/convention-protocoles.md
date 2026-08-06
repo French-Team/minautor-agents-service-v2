@@ -1,19 +1,19 @@
-# Convention de Protocoles — Mise en Place
+# Convention de Protocoles -- Mise en Place
 ---
 
 ## Principe Fondamental
 ---
 
-## Quand créer un protocole ?
+## Quand creer un protocole ?
 
-Créer un protocole dès qu'une situation **se répète** ou **doit être standardisée** :
+Creer un protocole des qu'une situation **se repete** ou **doit etre standardisee** :
 
 | Signal | Action |
 |---|---|
-| Même tâche effectuée 2+ fois | Créer un protocole |
-| Décision structurelle importante | Créer un protocole |
-| Processus qui doit être reproductible | Créer un protocole |
-| Règle qui s'applique "partout" | Créer un protocole |
+| Meme tache effectuee 2+ fois | Creer un protocole |
+| Decision structurelle importante | Creer un protocole |
+| Processus qui doit etre reproductible | Creer un protocole |
+| Regle qui s'applique "partout" | Creer un protocole |
 
 ---
 
@@ -25,12 +25,12 @@ Chaque protocole suit un **template standard** :
 protocole-[nom].[id].[class].[statut].md
 ```
 
-### En-tête obligatoire
+### En-tete obligatoire
 
 ```markdown
 # Protocole de [Nom]
-**Portée :** [Où ce protocole s'applique]
-**Prérequis :** [Ce qu'il faut avoir avant de l'appliquer]
+**Portee :** [Ou ce protocole s'applique]
+**Prerequis :** [Ce qu'il faut avoir avant de l'appliquer]
 ```
 
 ### Sections standard
@@ -38,74 +38,74 @@ protocole-[nom].[id].[class].[statut].md
 | # | Section | Obligatoire | Description |
 |---|---|---|---|
 | 1 | **Objectif** | [OUI] | Ce que le protocole permet d'atteindre |
-| 2 | **Prérequis** | [OUI] | Conditions nécessaires avant application |
-| 3 | **Étapes** | [OUI] | Liste ordonnée des actions à effectuer |
-| 4 | **RVAV** | [OUI] | Vérification à chaque étape critique |
+| 2 | **Prerequis** | [OUI] | Conditions necessaires avant application |
+| 3 | **Etapes** | [OUI] | Liste ordonnee des actions a effectuer |
+| 4 | **RVAV** | [OUI] | Verification a chaque etape critique |
 | 5 | **Exemples** | [NON] | Cas d'usage concrets (optionnel) |
-| 6 | **Pièges courants** | [NON] | Erreurs fréquentes à éviter (optionnel) |
-| 7 | **Liens** | [OUI] | Références aux conventions et règles applicables |
+| 6 | **Pieges courants** | [NON] | Erreurs frequentes a eviter (optionnel) |
+| 7 | **Liens** | [OUI] | References aux conventions et regles applicables |
 
 ---
 
-## Processus de création
+## Processus de creation
 
-### Étape 1 — Identifier le besoin
+### Etape 1 -- Identifier le besoin
 
 ```
-1. La tâche se répète-elle ? -> OUI = protocole
-2. Doit-elle être standardisée ? -> OUI = protocole
+1. La tache se repete-elle ? -> OUI = protocole
+2. Doit-elle etre standardisee ? -> OUI = protocole
 3. Est-elle reproductible ? -> OUI = protocole
 ```
 
-### Étape 2 — Vérifier l'existence
+### Etape 2 -- Verifier l'existence
 
 ```
 1. Chercher dans regles-immuables/general/protocole-*/
 2. Chercher dans conventions/protocoles/
-3. Si un protocole similaire existe -> l'étendre, pas en créer un nouveau
+3. Si un protocole similaire existe -> l'etendre, pas en creer un nouveau
 ```
 
-### Étape 3 — Créer le protocole
+### Etape 3 -- Creer le protocole
 
 ```
 1. Copier le template (ci-dessus)
 2. Nommer selon la convention : protocole-[nom].[id].[class].[statut].md
 3. Placer dans : regles-immuables/general/protocole-[nom]/
-4. Créer le dossier avec :
+4. Creer le dossier avec :
    |-- protocole-[nom].[id].[class].[statut].md  <- le protocole
    |-- spec/                                       <- spec technique (si besoin)
-   ``-- todo/                                       <- tâches liées (si besoin)
+   ``-- todo/                                       <- taches liees (si besoin)
 ```
 
-### Étape 4 — Documenter la conception
+### Etape 4 -- Documenter la conception
 
 ```
-1. Créer une note dans conventions/protocoles/
-2. Expliquer POURQUOI ce protocole a été créé
+1. Creer une note dans conventions/protocoles/
+2. Expliquer POURQUOI ce protocole a ete cree
 3. Lier vers le protocole dans regles-immuables/
 ```
 
-### Étape 5 — Passer par RVAV
+### Etape 5 -- Passer par RVAV
 
 Appliquer le cycle complet :
-- [rechercher] — vérifier les dépendances et prérequis
-- [vérifier] — confirmer que le template est respecté
-- [analyser] — valider la cohérence avec les autres protocoles
-- [valider] — approuver pour utilisation
+- [rechercher] -- verifier les dependances et prerequis
+- [verifier] -- confirmer que le template est respecte
+- [analyser] -- valider la coherence avec les autres protocoles
+- [valider] -- approuver pour utilisation
 
 ---
 
-## Intégration des protocoles
+## Integration des protocoles
 
-### Où placer un protocole ?
+### Ou placer un protocole ?
 
 | Type de protocole | Emplacement |
 |---|---|
-| Protocole général (process, workflow) | `regles-immuables/general/protocole-[nom]/` |
-| Protocole hiérarchique | `regles-immuables/hierarchie/protocole-[nom]/` |
-| Protocole spécifique à un module | `pense-betes/[module]/protocole-[nom]/` |
+| Protocole general (process, workflow) | `regles-immuables/general/protocole-[nom]/` |
+| Protocole hierarchique | `regles-immuables/hierarchie/protocole-[nom]/` |
+| Protocole specifique a un module | `pense-betes/[module]/protocole-[nom]/` |
 
-### Comment référencer un protocole ?
+### Comment referencer un protocole ?
 
 Dans tout fichier qui utilise le protocole, ajouter :
 
@@ -118,45 +118,45 @@ Dans tout fichier qui utilise le protocole, ajouter :
 ### Comment devenir un automatisme ?
 
 1. **Documenter** dans le protocole les cas d'usage
-2. **Lier** le protocole dans les fichiers concernés
-3. **Répéter** jusqu'à ce que l'habitude soit prise
-4. **Vérifier** lors des RVAV que les protocoles sont respectés
+2. **Lier** le protocole dans les fichiers concernes
+3. **Repeter** jusqu'a ce que l'habitude soit prise
+4. **Verifier** lors des RVAV que les protocoles sont respectes
 
 ---
 
 ## Patterns courants
 
-### Pattern 1 — Protocole de création
+### Pattern 1 -- Protocole de creation
 
 ```
-Quand créer : un nouveau composant/dossier/fichier
-Étapes :
-1. Vérifier la convention de structures
-2. Créer le dossier au bon niveau
-3. Créer la plateforme (point d'entrée)
-4. Créer les sous-dossiers nécessaires
+Quand creer : un nouveau composant/dossier/fichier
+Etapes :
+1. Verifier la convention de structures
+2. Creer le dossier au bon niveau
+3. Creer la plateforme (point d'entree)
+4. Creer les sous-dossiers necessaires
 5. Passer par RVAV
 ```
 
-### Pattern 2 — Protocole de modification
+### Pattern 2 -- Protocole de modification
 
 ```
-Quand créer : modifier un composant existant
-Étapes :
+Quand creer : modifier un composant existant
+Etapes :
 1. Lire le protocole existant
-2. Vérifier les dépendances
+2. Verifier les dependances
 3. Modifier la plateforme (pas le code inline)
-4. Mettre à jour les liens
+4. Mettre a jour les liens
 5. Passer par RVAV
 ```
 
-### Pattern 3 — Protocole d'intégration
+### Pattern 3 -- Protocole d'integration
 
 ```
-Quand créer : intégrer un protocole dans un nouveau contexte
-Étapes :
-1. Identifier le protocole à intégrer
-2. Vérifier la compatibilité
+Quand creer : integrer un protocole dans un nouveau contexte
+Etapes :
+1. Identifier le protocole a integrer
+2. Verifier la compatibilite
 3. Adapter le protocole au contexte
 4. Documenter l'adaptation
 5. Passer par RVAV
@@ -173,15 +173,15 @@ Quand créer : intégrer un protocole dans un nouveau contexte
 
 ---
 
-## Récapitulatif
+## Recapitulatif
 
-| Élément | Règle |
+| Element | Regle |
 |---|---|
-| **Quand** | Dès qu'une tâche se répète ou doit être standardisée |
-| **Où créer** | `regles-immuables/general/protocole-[nom]/` |
-| **Où documenter** | `conventions/protocoles/` |
-| **Template** | En-tête + 7 sections (voir ci-dessus) |
+| **Quand** | Des qu'une tache se repete ou doit etre standardisee |
+| **Ou creer** | `regles-immuables/general/protocole-[nom]/` |
+| **Ou documenter** | `conventions/protocoles/` |
+| **Template** | En-tete + 7 sections (voir ci-dessus) |
 | **Nom** | `protocole-[nom].[id].[class].[statut].md` |
 | **Validation** | Toujours passer par RVAV |
-| **Intégration** | Lier dans les fichiers concernés |
-| **Automatisme** | Documenter -> Lier -> Répéter -> Vérifier |
+| **Integration** | Lier dans les fichiers concernes |
+| **Automatisme** | Documenter -> Lier -> Repeter -> Verifier |

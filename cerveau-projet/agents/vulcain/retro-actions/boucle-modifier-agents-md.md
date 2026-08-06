@@ -1,49 +1,49 @@
-# Boucle de Rétro-action : Modifier AGENTS.md
+# Boucle de Retro-action : Modifier AGENTS.md
 
 ## Contexte
 
-**QUAND** : Je dois modifier AGENTS.md (activer un agent ou réactiver Cerberus)
-**ACTION** : Utiliser `modifier-agents-md`
-**PROBLÈME RÉSOLU** : J'utilisais `str_replace` ou `write_file` au lieu de l'outil dédié
+**QUAND** : Je dois modifier AGENTS.md (activer un agent ou reactiver Cerberus)
+**ACTION** : Utiliser `mettre-a-jour-modifier-agents-md`
+**PROBLEME RESOLU** : J'utilisais `str_replace` ou `write_file` au lieu de l'outil dedie
 
 ---
 
-## La règle
+## La regle
 ---
 
 ## Le processus
 
-### Étape 1 : Vérifier que l'outil existe
+### Etape 1 : Verifier que l'outil existe
 
 ```bash
-ls cerveau-projet/agents/tools/corriger/modifier-agents-md/modifier-agents-md.sh
+ls cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh
 ```
 
-### Étape 2 : Si l'outil n'existe pas
+### Etape 2 : Si l'outil n'existe pas
 
-**ARRÊTER** — l'outil doit être créé avant de continuer.
+**ARRETER** -- l'outil doit etre cree avant de continuer.
 
-### Étape 3 : Si l'outil existe
+### Etape 3 : Si l'outil existe
 
 #### Pour activer un agent
 
 ```bash
-cerveau-projet/agents/tools/corriger/modifier-agents-md/modifier-agents-md.sh activer "Agent" "Raison" "Mission"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh activer "Agent" "Raison" "Mission"
 ```
 
-#### Pour réactiver Cerberus
+#### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/corriger/modifier-agents-md/modifier-agents-md.sh reactiver "Raison" "AgentPrecedent"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "AgentPrecedent"
 ```
 
 ---
 
-## Vérification post-exécution
+## Verification post-execution
 
-1. Vérifier que AGENTS.md a bien été modifié
-2. Vérifier que la section "Agent Principal Actuel" est correcte
-3. Vérifier que l'historique a été mis à jour
+1. Verifier que AGENTS.md a bien ete modifie
+2. Verifier que la section "Agent Principal Actuel" est correcte
+3. Verifier que l'historique a ete mis a jour
 
 ---
 
@@ -51,9 +51,9 @@ cerveau-projet/agents/tools/corriger/modifier-agents-md/modifier-agents-md.sh re
 
 | Erreur | Correction |
 |---|---|
-| Utiliser `str_replace` sur AGENTS.md | Utiliser `modifier-agents-md` |
-| Utiliser `write_file` sur AGENTS.md | Utiliser `modifier-agents-md` |
-| Oublier de vérifier l'existence de l'outil | Toujours vérifier avant |
+| Utiliser `str_replace` sur AGENTS.md | Utiliser `mettre-a-jour-modifier-agents-md` |
+| Utiliser `write_file` sur AGENTS.md | Utiliser `mettre-a-jour-modifier-agents-md` |
+| Oublier de verifier l'existence de l'outil | Toujours verifier avant |
 
 ---
 

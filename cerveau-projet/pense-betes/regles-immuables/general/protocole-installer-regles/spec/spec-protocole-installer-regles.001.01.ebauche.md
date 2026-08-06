@@ -1,9 +1,9 @@
-# Spécification — Protocole d'Installation des Règles Immuables
+# Specification -- Protocole d'Installation des Regles Immuables
 ---
 
 ## Objectif
 
-Garantir que chaque nouveau projet contient toutes les règles immuables fondamentales.
+Garantir que chaque nouveau projet contient toutes les regles immuables fondamentales.
 
 ---
 
@@ -27,9 +27,9 @@ projet/
 
 ---
 
-## Règles à installer
+## Regles a installer
 
-| Règle | Type | Obligatoire | Emplacement |
+| Regle | Type | Obligatoire | Emplacement |
 |---|---|---|---|
 | `regles-choisir-agent.md` | IMMUABLE | [OUI] | `general/` |
 | `regles-validation-rigoureuse.md` | IMMUABLE | [OUI] | `general/` |
@@ -40,9 +40,9 @@ projet/
 
 ---
 
-## Dépendances
+## Dependances
 
-| Règle | Dépendances |
+| Regle | Dependances |
 |---|---|
 | `regles-choisir-agent.md` | `agents/`, `AGENTS.md` |
 | `regles-validation-rigoureuse.md` | `rvav-workflow.md` |
@@ -56,23 +56,23 @@ projet/
 ## Workflow
 
 ```
-1. Vérifier l'existence des règles
-2. Copier les règles depuis le cerveau source
-3. Vérifier les dépendances
-4. Mettre à jour les index
+1. Verifier l'existence des regles
+2. Copier les regles depuis le cerveau source
+3. Verifier les dependances
+4. Mettre a jour les index
 5. Valider par RVAV
 ```
 
 ---
 
-## Règles de validation
+## Regles de validation
 
-| Règle | Critère |
+| Regle | Critere |
 |---|---|
-| **Complétude** | Toutes les règles sont présentes |
-| **Intégrité** | Le contenu est identique au cerveau source |
-| **Dépendances** | Toutes les dépendances sont satisfaites |
-| **Index** | Tous les index sont à jour |
+| **Completude** | Toutes les regles sont presentes |
+| **Integrite** | Le contenu est identique au cerveau source |
+| **Dependances** | Toutes les dependances sont satisfaites |
+| **Index** | Tous les index sont a jour |
 | **Liens** | Tous les liens sont valides |
 
 ---

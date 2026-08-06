@@ -1,34 +1,34 @@
-# Test du workflow RVAV — Protocole d'activation
+# Test du workflow RVAV -- Protocole d'activation
 
 **Date** : 2026-08-05
 **Agent** : Buffy
-**Fichier testé** : `protocole-activation.001.01.ebauche.md`
+**Fichier teste** : `protocole-activation.001.01.ebauche.md`
 **Statut actuel** : ebauche
 
 ---
 
 ## Objectif
 
-Tester le workflow RVAV (Rechercher-Vérifier-Analyser-Valider) sur un fichier existant pour valider le processus de transition de statut.
+Tester le workflow RVAV (Rechercher-Verifier-Analyser-Valider) sur un fichier existant pour valider le processus de transition de statut.
 
 ---
 
-## Étape 1 : Rechercher
+## Etape 1 : Rechercher
 
-### Références externes
+### References externes
 
-| Référence | Type | Statut |
+| Reference | Type | Statut |
 |---|---|---|
 | `demarrer.md` | Protocole parent | Existe |
 | `convention-protocoles.md` | Convention | Existe |
-| `regles-choisir-agent.md` | Règle | Existe |
-| `protocole-identification.md` | Protocole lié | Existe |
+| `regles-choisir-agent.md` | Regle | Existe |
+| `protocole-identification.md` | Protocole lie | Existe |
 
-### Dépendances
+### Dependances
 
-| Dépendance | Vérification |
+| Dependance | Verification |
 |---|---|
-| AGENTS.md | Existe et à jour |
+| AGENTS.md | Existe et a jour |
 | Fiches d'agent | Existent (Cerberus, Buffy, Atlas, Janus, Vulcain) |
 | Corrections d'agent | Existentes |
 
@@ -38,68 +38,68 @@ Tester le workflow RVAV (Rechercher-Vérifier-Analyser-Valider) sur un fichier e
 |---|---|
 | Exemples concrets | Partiellement couvert |
 | Cas limites | Non couvert |
-| Intégration avec d'autres protocoles | Partiellement couvert |
+| Integration avec d'autres protocoles | Partiellement couvert |
 
 ---
 
-## Étape 2 : Vérifier
+## Etape 2 : Verifier
 
 ### Checklist stricte
 
 | Point | Statut | Notes |
 |---|---|---|
-| [x] Structure du nom respectée | [OK] | `protocole-activation.001.01.ebauche.md` |
+| [x] Structure du nom respectee | [OK] | `protocole-activation.001.01.ebauche.md` |
 | [x] Tous les sous-fichiers attendus existent | [OK] | Pas de sous-fichiers requis |
-| [x] Tous les liens internes pointent vers des fichiers existants | [OK] | 3 liens vérifiés |
-| [x] Le contenu du statut courant est complet | [OK] | Toutes les sections écrites |
+| [x] Tous les liens internes pointent vers des fichiers existants | [OK] | 3 liens verifies |
+| [x] Le contenu du statut courant est complet | [OK] | Toutes les sections ecrites |
 
-### Vérifications supplémentaires
+### Verifications supplementaires
 
 | Point | Statut | Notes |
 |---|---|---|
-| [x] En-tête YAML complet | [OK] | Portée, prérequis définis |
-| [x] Sections numérotées | [OK] | 6 étapes claires |
-| [x] Tableaux formatés | [OK] | Matrices de décision |
-| [x] Règles d'or | [OK] | 5 règles définies |
-| [x] Pièges courants | [OK] | 4 pièges documentés |
+| [x] En-tete YAML complet | [OK] | Portee, prerequis definis |
+| [x] Sections numerotees | [OK] | 6 etapes claires |
+| [x] Tableaux formates | [OK] | Matrices de decision |
+| [x] Regles d'or | [OK] | 5 regles definies |
+| [x] Pieges courants | [OK] | 4 pieges documentes |
 
 ---
 
-## Étape 3 : Analyser
+## Etape 3 : Analyser
 
 ### Relecture du contenu
 
 **Forces du document** :
 1. Structure claire et logique
 2. Exemples concrets
-3. Règles d'or bien définies
-4. Pièges courants documentés
+3. Regles d'or bien definies
+4. Pieges courants documentes
 
-**Faiblesses identifiées** :
+**Faiblesses identifiees** :
 1. Pas d'exemple de code complet
 2. Pas de cas limites (erreur d'activation, etc.)
-3. Intégration avec Janus non mentionnée
+3. Integration avec Janus non mentionnee
 
-### Cohérence interne
+### Coherence interne
 
-| Point | Vérification |
+| Point | Verification |
 |---|---|
-| **Terminologie** | Cohérente (activation, lecture, réactivation) |
+| **Terminologie** | Coherente (activation, lecture, reactivation) |
 | **Logique** | Le cycle 1->6 est logique |
-| **Références croisées** | Les liens sont corrects |
+| **References croisees** | Les liens sont corrects |
 
-### Incohérences détectées
+### Incoherences detectees
 
-| Incohérence | Gravité |
+| Incoherence | Gravite |
 |---|---|
-| Pas de mention du contrôle des statuts | Mineure |
+| Pas de mention du controle des statuts | Mineure |
 | Pas d'exemple d'erreur | Mineure |
 
 ---
 
-## Étape 4 : Valider
+## Etape 4 : Valider
 
-### Décision
+### Decision
 
 **Verdict** : **AVANCER** -> statut +1, class +1
 
@@ -107,7 +107,7 @@ Tester le workflow RVAV (Rechercher-Vérifier-Analyser-Valider) sur un fichier e
 - Le document est complet pour le statut "ebauche"
 - La structure est correcte
 - Les exigences minimales sont satisfaites
-- Les faiblesses sont mineures et peuvent être corrigées dans le prochain statut
+- Les faiblesses sont mineures et peuvent etre corrigees dans le prochain statut
 
 ### Action
 
@@ -119,23 +119,23 @@ Nouveau nom : protocole-activation.001.02.prepare.md
 
 ---
 
-## Résultat du test
+## Resultat du test
 
-### Ce qui a fonctionné
+### Ce qui a fonctionne
 
-1. Le workflow RVAV est clair et méthodique
-2. La checklist est complète
-3. La décision est justifiée
+1. Le workflow RVAV est clair et methodique
+2. La checklist est complete
+3. La decision est justifiee
 
-### Ce qui pourrait être amélioré
+### Ce qui pourrait etre ameliore
 
-1. Ajouter une section "Exemples" plus complète
+1. Ajouter une section "Exemples" plus complete
 2. Documenter les cas limites
-3. Intégrer le contrôle de Janus
+3. Integrer le controle de Janus
 
 ### Conclusion
 
-Le workflow RVAV fonctionne bien. Le passage de "ebauche" à "préparé" est justifié.
+Le workflow RVAV fonctionne bien. Le passage de "ebauche" a "prepare" est justifie.
 
 ---
 

@@ -1,23 +1,23 @@
-# Index — Règles pour les Fichiers
+# Index -- Regles pour les Fichiers
 ---
 
-## Définition
+## Definition
 
 Un **fichier** est un orchestrateur qui :
 - Vit dans un dossier (son niveau)
-- Est le point d'entrée unique de ce dossier
+- Est le point d'entree unique de ce dossier
 - Contient une liste d'**appels** aux sous-composants
-- Ne contient **pas** de logique métier inline
+- Ne contient **pas** de logique metier inline
 
 ---
 
-## Règles des fichiers
+## Regles des fichiers
 
 ### 1. Jamais de code inline
 
-Un fichier point d'entrée ne contient **jamais** de fonctions, de classes, ou de logique métier directe.
+Un fichier point d'entree ne contient **jamais** de fonctions, de classes, ou de logique metier directe.
 
-Son rôle unique : **appeler** les composants qui vivent dans ses sous-dossiers.
+Son role unique : **appeler** les composants qui vivent dans ses sous-dossiers.
 
 ```
 # [OK] Correct -- orchestration par appels
@@ -32,9 +32,9 @@ function A() { ... }     <- interdit
 function B() { ... }     <- interdit
 ```
 
-### 2. Réordonnancement facile
+### 2. Reordonnancement facile
 
-La structure par appels permet de changer l'ordre d'exécution en déplaçant simplement les lignes d'appel.
+La structure par appels permet de changer l'ordre d'execution en deplacant simplement les lignes d'appel.
 
 **Avant :**
 ```markdown
@@ -43,49 +43,49 @@ La structure par appels permet de changer l'ordre d'exécution en déplaçant si
 3. Appeler seconde
 ```
 
-**Après :**
+**Apres :**
 ```markdown
 1. Appeler minute
 2. Appeler heure
 3. Appeler seconde
 ```
 
-Aucun code n'est déplacé. Seul l'**ordre des appels** change.
+Aucun code n'est deplace. Seul l'**ordre des appels** change.
 
-### 3. Paramètres d'activation
+### 3. Parametres d'activation
 
-Chaque appel peut recevoir des arguments type pour activer/désactiver un composant :
+Chaque appel peut recevoir des arguments type pour activer/desactiver un composant :
 
 ```markdown
 1. Appeler heure (activer: true)
 2. Appeler minute (activer: true)
-3. Appeler seconde (activer: false)    <- désactivé
+3. Appeler seconde (activer: false)    <- desactive
 ```
 
 Cela permet de :
-- Désactiver temporairement un composant
+- Desactiver temporairement un composant
 - Configurer le comportement sans modifier le code
-- Tester différentes configurations
+- Tester differentes configurations
 
-### 4. Traçabilité par le chemin
+### 4. Tracabilite par le chemin
 
-Le chemin du fichier indique exactement où l'on se trouve dans la hiérarchie :
+Le chemin du fichier indique exactement ou l'on se trouve dans la hierarchie :
 
 | Chemin | Signification |
 |---|---|
-| `module-A/module-A.md` | Point d'entrée du module A |
+| `module-A/module-A.md` | Point d'entree du module A |
 | `module-A/fonction-X/fonction-X.md` | Fonction X dans le module A |
 | `module-A/fonction-X/sous-fonction-Y/sous-fonction-Y.md` | Sous-fonction Y de la fonction X |
 
 ### 5. Single responsibility
 
-Un fichier a **un seul rôle** : orchestrer.
+Un fichier a **un seul role** : orchestrer.
 
 Il ne fait rien d'autre. Pas de calcul, pas de transformation, pas de logique.
 
 ---
 
-## Structure type d'un fichier point d'entrée
+## Structure type d'un fichier point d'entree
 
 ```markdown
 # Nom du Module
@@ -95,7 +95,7 @@ Il ne fait rien d'autre. Pas de calcul, pas de transformation, pas de logique.
 
 ## Composants
 
-| # | Composant | Rôle | Actif |
+| # | Composant | Role | Actif |
 |---|---|---|---|
 | 1 | [fonction-A](fonction-A/fonction-A.md) | [Description] | [OK] |
 | 2 | [fonction-B](fonction-B/fonction-B.md) | [Description] | [OK] |
@@ -105,11 +105,11 @@ Il ne fait rien d'autre. Pas de calcul, pas de transformation, pas de logique.
 
 1. Appeler fonction-A
 2. Appeler fonction-B
-3. ~~Appeler fonction-C~~ (désactivé)
+3. ~~Appeler fonction-C~~ (desactive)
 
 ## Configuration
 
-| Paramètre | Valeur | Description |
+| Parametre | Valeur | Description |
 |---|---|---|
 | [param] | [valeur] | [description] |
 ```
@@ -118,4 +118,4 @@ Il ne fait rien d'autre. Pas de calcul, pas de transformation, pas de logique.
 
 ## Relation avec les dossiers
 
--> Consulter `../dossiers/index-dossiers.md` pour les règles des dossiers.
+-> Consulter `../dossiers/index-dossiers.md` pour les regles des dossiers.

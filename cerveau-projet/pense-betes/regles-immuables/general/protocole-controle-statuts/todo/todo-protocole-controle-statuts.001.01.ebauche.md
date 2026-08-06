@@ -1,68 +1,68 @@
-# Todo — Protocole de Contrôle des Statuts
+# Todo -- Protocole de Controle des Statuts
 
 **Version** : 0.1.0
-**Statut** : Ébauche
-**Date création** : 2026-08-05
-**Agent** : Buffy (création)
+**Statut** : Ebauche
+**Date creation** : 2026-08-05
+**Agent** : Buffy (creation)
 
 ---
 
 ## Statut
 
-| Élément | Statut |
+| Element | Statut |
 |---|---|
 | Protocole | En cours |
-| Spécification | En cours |
-| Tests | À faire |
-| Validation | À faire |
+| Specification | En cours |
+| Tests | A faire |
+| Validation | A faire |
 
 ---
 
-## Tâches à faire
+## Taches a faire
 
-| # | Tâche | Priorité | Statut |
+| # | Tache | Priorite | Statut |
 |---|---|---|---|
-| 1 | Créer le protocole | Haute | En cours |
-| 2 | Créer la spécification | Haute | En cours |
-| 3 | Créer les tests | Moyenne | À faire |
-| 4 | Tester le protocole | Moyenne | À faire |
-| 5 | Valider avec Janus | Haute | À faire |
-| 6 | Mettre à jour l'index | Basse | À faire |
+| 1 | Creer le protocole | Haute | En cours |
+| 2 | Creer la specification | Haute | En cours |
+| 3 | Creer les tests | Moyenne | A faire |
+| 4 | Tester le protocole | Moyenne | A faire |
+| 5 | Valider avec Janus | Haute | A faire |
+| 6 | Mettre a jour l'index | Basse | A faire |
 
 ---
 
-## Tâches en cours
+## Taches en cours
 
-| # | Tâche | Début | Fin prévue |
+| # | Tache | Debut | Fin prevue |
 |---|---|---|---|
-| 1 | Création du protocole | 2026-08-05 | 2026-08-05 |
-| 2 | Création de la spécification | 2026-08-05 | 2026-08-05 |
+| 1 | Creation du protocole | 2026-08-05 | 2026-08-05 |
+| 2 | Creation de la specification | 2026-08-05 | 2026-08-05 |
 
 ---
 
-## Tâches terminées
+## Taches terminees
 
-| # | Tâche | Date | Résultat |
+| # | Tache | Date | Resultat |
 |---|---|---|---|
-| — | — | — | — |
+| -- | -- | -- | -- |
 
 ---
 
-## Dépendances
+## Dependances
 
-| Tâche | Dépend de |
+| Tache | Depend de |
 |---|---|
-| Tests | Protocole terminé |
-| Validation | Tests passés |
-| Intégration | Validation réussie |
+| Tests | Protocole termine |
+| Validation | Tests passes |
+| Integration | Validation reussie |
 
 ---
 
 ## Notes
 
-- Ce protocole est essentiel pour la qualité du cerveau
-- Janus doit être impliqué dans la validation
-- Le protocole doit être testé avant d'être validé
+- Ce protocole est essentiel pour la qualite du cerveau
+- Janus doit etre implique dans la validation
+- Le protocole doit etre teste avant d'etre valide
 
 ---
 

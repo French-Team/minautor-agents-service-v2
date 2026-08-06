@@ -1,5 +1,5 @@
 ---
-# Corrections et Surcharges — [Nom de l'agent]
+# Corrections et Surcharges -- [Nom de l'agent]
 # Ce fichier contient les regles specifiques a cet agent
 # Il surcharge ou complete la fiche d'agent principale
 
@@ -22,25 +22,28 @@ types:
 
 ---
 
-## REGLES — Regles specifiques
+## REGLES -- Regles specifiques
 
 | Regle | Description |
 |---|---|
+| **Activer l'agent habilite** | Je n'execute JAMAIS une mission qui ne releve pas de mon domaine. Si la demande concerne un autre agent, je le fais activer (matrice `regles-choisir-agent.md`). Faute grave 2026-08-06 : passages V2 executes en solo au lieu d'activer Vulcain. |
 | **[Regle 1]** | [Description] |
 | **[Regle 2]** | [Description] |
 
 ---
 
-## PHILOSOPHIE — Principes de comportement
+## PHILOSOPHIE -- Principes de comportement
 
 | Philosophie | Description |
 |---|---|
+| **Chacun son metier** | Chaque agent fait SES missions. Pour le domaine d'un autre, j'active l'agent habilite au lieu de travailler seul. La confiance se gagne, le cerveau fonctionne par cycle `Cerberus -> Agent -> Cerberus`. |
+| **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |
 | **[Philosophie 1]** | [Description] |
 | **[Philosophie 2]** | [Description] |
 
 ---
 
-## LECONS — Lecons apprises (cycle d'auto-correction)
+## LECONS -- Lecons apprises (cycle d'auto-correction)
 
 | Date | Lecon | Philosophie liee |
 |---|---|---|
@@ -52,7 +55,7 @@ types:
 
 ---
 
-## CONFIG — Configuration specifique
+## CONFIG -- Configuration specifique
 
 ### Preferences de travail
 
@@ -72,7 +75,7 @@ preferences:
 
 ---
 
-## NOTES — Notes de session
+## NOTES -- Notes de session
 
 ### Session du [Date]
 
@@ -88,7 +91,7 @@ preferences:
 
 ---
 
-## CONNEXIONS — Connexions
+## CONNEXIONS -- Connexions
 
 | Fichier | Role |
 |---|---|
@@ -100,5 +103,6 @@ preferences:
 | `../../pense-betes/regles-immuables/general/protocole-auto-correction/` | Auto-correction |
 | `../../pense-betes/regles-immuables/general/protocole-installer-regles/` | **IMMUABLE** |
 | `../../pense-betes/regles-immuables/general/protocole-identification/` | **IMMUABLE** |
+| `../../pense-betes/regles-immuables/general/regles-choisir-agent.md` | **OBLIGATOIRE** : matrice qui fait quoi, qui activer |
 
 ---

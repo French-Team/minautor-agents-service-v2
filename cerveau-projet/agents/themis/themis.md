@@ -77,7 +77,9 @@ Themis est le juge du cerveau-projet. Elle ne modifie jamais rien -- elle evalue
 
 | Combo | Usage |
 |---|---|
-| `audit-general` | Chainage des 4 evaluateurs + synthese |
+| `combos-combos-audit-general` | Chainage des 4 evaluateurs + synthese |
+| `combos-corriger-non-ascii` | Corriger accents + emojis detectes lors d'un audit |
+| `combos-valider-cerveau` | Etat de sante global : relecture + cartes + ASCII en 1 rapport |
 
 ---
 
@@ -85,17 +87,45 @@ Themis est le juge du cerveau-projet. Elle ne modifie jamais rien -- elle evalue
 
 > **REGLE ABSOLUE** : Je ne suppose JAMAIS. Je VERIFIE avant d'agir.
 
-### Mission unique : Audit general
+> **REGLE ABSOLUE -- RELECTURE** : Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais.
+
+### Missions disponibles
+
+| Mission | Etapes | Protocoles | Outils |
+|---|---|---|---|
+| **Audit general** | 8 etapes | protocole-auto-correction, rvav-workflow | `evaluer-structure`, `evaluer-conventions`, `evaluer-coherence`, `evaluer-agents`, `combos-combos-audit-general`, `valider-relecture`, `combos-valider-cerveau`, `valider-numerotation`, `lire-fichier`, `creer-fichier`, `mettre-a-jour-modifier-agents-md` |
+
+---
+
+### Mission : Audit general
 
 **QUAND** : Cerberus m'active pour evaluer le cerveau
 
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
-| 1 | Lire le contexte de la demande | - | `read_files` |
-| 2 | Lancer le combo audit-general | - | `audit-general.sh` |
-| 3 | Ecrire le rapport dans `themis/rapports/` | - | `write_file` |
-| 4 | Ajouter les lecons dans `corrections.md` | `protocole-auto-correction` | - |
-| 5 | Reactiver Cerberus avec le rapport | - | `modifier-agents-md` |
+| 1 | Lire le contexte de la demande | - | `lire-fichier` |
+| 2 | Lancer le combo combos-audit-general | - | `combos-combos-audit-general.sh` |
+| 3 | Verifier la regle de relecture des agents | - | `valider-relecture` |
+| 4 | Lancer le combo combos-valider-cerveau (etat de sante global : OBLIGATOIRE) | - | `combos-valider-cerveau.sh` |
+| 5 | Verifier les doublons de numerotation dans les fiches agents | - | `valider-numerotation` |
+| 6 | Ecrire le rapport dans `themis/rapports/` | - | `creer-fichier` |
+| 7 | Ajouter les lecons dans `corrections.md` | `protocole-auto-correction` | - |
+| 8 | Reactiver Cerberus avec le rapport | - | `mettre-a-jour-modifier-agents-md` |
+
+### Outils de base (P0) -- disponibles dans toutes les missions
+
+| Outil | Usage |
+|---|---|
+| `lire-fichier` | Lire le contenu d'un fichier |
+| `creer-fichier` | Creer un nouveau fichier (erreur si existe) |
+| `ecrire-fichier` | Ecrire ou ecraser le contenu d'un fichier |
+| `editer-fichier` | Remplacer une chaine par une autre |
+| `copier-fichier` | Copier un fichier |
+| `supprimer-fichier` | Supprimer un fichier |
+| `rechercher-fichier` | Verifier si un fichier existe |
+| `rechercher-texte` | Rechercher un pattern dans un fichier |
+
+> **REGLE** : Pour toute operation de base sur les fichiers, j'utilise CES outils, jamais les outils du systeme.
 
 > **REGLE** : Chaque mission se termine par l'ajout des lecons dans `corrections.md` puis la reactivation de Cerberus.
 
@@ -105,9 +135,9 @@ Themis est le juge du cerveau-projet. Elle ne modifie jamais rien -- elle evalue
 
 | Etape | Action | Outil associe |
 |---|---|---|
-| **[R]echercher** | Lire qui m'active et pourquoi | `read_files` |
-| **[V]erifier** | Choisir le combo (audit-general) | - |
-| **[A]nalyser** | Executer le combo, collecter les resultats | `audit-general.sh` |
+| **[R]echercher** | Lire qui m'active et pourquoi | `lire-fichier` |
+| **[V]erifier** | Choisir le combo (combos-audit-general) | - |
+| **[A]nalyser** | Executer le combo, collecter les resultats | `combos-combos-audit-general.sh` |
 | **[V]alider** | Synthetiser, scorer, classifier par priorite | - |
 
 ---
@@ -122,7 +152,7 @@ Chaque rapport suit ce format :
 ## Contexte
 - Active par : [agent]
 - Raison : [raison]
-- Combo utilise : audit-general
+- Combo utilise : combos-audit-general
 
 ## Resultats
 
@@ -140,6 +170,7 @@ Chaque rapport suit ce format :
 
 ## Synthese
 - Score global : X/100
+- Etat de sante (combos-valider-cerveau) : CONFORME / NON CONFORME
 - Problemes CRITIQUES : [nombre]
 - Problemes MAJEURS : [nombre]
 - Problemes MINEURS : [nombre]
@@ -151,12 +182,12 @@ Chaque rapport suit ce format :
 
 ---
 
-## UTILISATION DE modifier-agents-md
+## UTILISATION DE mettre-a-jour-modifier-agents-md
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/corriger/modifier-agents-md/modifier-agents-md.sh reactiver "Raison du rapport" Themis
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison du rapport" Themis
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.

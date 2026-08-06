@@ -1,4 +1,4 @@
-# Spécification — Protocole de Recherches Web
+# Specification -- Protocole de Recherches Web
 ---
 
 ## Objectif
@@ -26,23 +26,23 @@ recherches-web/
 ```
 1. Identifier le besoin de recherche
 2. Rechercher dans le cerveau
-3. Rechercher sur le web si nécessaire
+3. Rechercher sur le web si necessaire
 4. Documenter la recherche
-5. Vérifier la validité
+5. Verifier la validite
 6. Appliquer les informations
 ```
 
 ---
 
-## Règles de validation
+## Regles de validation
 
-| Règle | Critère |
+| Regle | Critere |
 |---|---|
-| **Documentation** | Chaque recherche est documentée |
-| **Sources** | Chaque source est citée |
-| **Validité** | Les informations sont vérifiées |
+| **Documentation** | Chaque recherche est documentee |
+| **Sources** | Chaque source est citee |
+| **Validite** | Les informations sont verifiees |
 | **Comparaison** | Le code = les recherches |
-| **Traçabilité** | L'historique est conservé |
+| **Tracabilite** | L'historique est conserve |
 
 ---
 

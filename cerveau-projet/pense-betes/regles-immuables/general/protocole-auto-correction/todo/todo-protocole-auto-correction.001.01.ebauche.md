@@ -1,58 +1,58 @@
-# Todo — Protocole d'Auto-Correction des Agents
+# Todo -- Protocole d'Auto-Correction des Agents
 ---
 
 ## Statut
 
-| Élément | Statut |
+| Element | Statut |
 |---|---|
-| **Protocole** | Ébauche |
-| **Spécification** | Ébauche |
-| **Templates** | Créés |
-| **Dossier agents/** | Créé |
+| **Protocole** | Ebauche |
+| **Specification** | Ebauche |
+| **Templates** | Crees |
+| **Dossier agents/** | Cree |
 
 ---
 
-## Tâches en cours
+## Taches en cours
 
 ### [ ] Finaliser le protocole
 
 - [ ] Valider la structure du protocole
-- [ ] Vérifier la cohérence avec les conventions
+- [ ] Verifier la coherence avec les conventions
 - [ ] Tester le workflow complet
 
 ### [ ] Tester avec un agent
 
-- [ ] Créer une fiche d'agent test
+- [ ] Creer une fiche d'agent test
 - [ ] Simuler une session de travail
 - [ ] Simuler une auto-correction
 - [ ] Simuler un changement d'agent
 
-### [ ] Intégrer au cerveau
+### [ ] Integrer au cerveau
 
-- [ ] Mettre à jour `index-cerveau.md`
-- [ ] Mettre à jour `conventions/protocoles/index-protocoles.md`
-- [ ] Mettre à jour `regles-immuables/general/index-regles-general.md`
+- [ ] Mettre a jour `index-cerveau.md`
+- [ ] Mettre a jour `conventions/protocoles/index-protocoles.md`
+- [ ] Mettre a jour `regles-immuables/general/index-regles-general.md`
 
 ---
 
-## Tâches à venir
+## Taches a venir
 
-### [ ] Améliorations
+### [ ] Ameliorations
 
 - [ ] Ajouter des exemples concrets
-- [ ] Créer un guide de démarrage rapide
-- [ ] Ajouter des métriques de suivi
+- [ ] Creer un guide de demarrage rapide
+- [ ] Ajouter des metriques de suivi
 
 ### [ ] Documentation
 
-- [ ] Documenter les cas d'usage avancés
+- [ ] Documenter les cas d'usage avances
 - [ ] Ajouter des FAQ
-- [ ] Créer des tutoriels
+- [ ] Creer des tutoriels
 
 ---
 
 ## Historique
 
-| Date | Action | Détails |
+| Date | Action | Details |
 |---|---|---|
-| 2026-08-04 | Création | Protocole initialisé en ébauche |
+| 2026-08-04 | Creation | Protocole initialise en ebauche |
