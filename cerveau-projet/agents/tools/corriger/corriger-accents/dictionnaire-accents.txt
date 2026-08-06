@@ -1,0 +1,41 @@
+# Dictionnaire d accents vers ASCII
+# Format: accent|remplacement
+# Separateur: |
+
+# Accents francais courants
+é|e
+è|e
+ê|e
+ë|e
+à|a
+â|a
+î|i
+ï|i
+ô|o
+ù|u
+û|u
+ü|u
+ÿ|y
+ç|c
+
+# Ligatures
+œ|oe
+æ|ae
+
+# Apostrophes et guillemets courbes
+‘|'
+’|'
+‚|'
+“|"
+”|"
+„|"
+
+# Symboles courants
+…|...
+–|--
+—|--
+≤|<=
+≥|>=
+≠|!=
+→|->
+←|<-
