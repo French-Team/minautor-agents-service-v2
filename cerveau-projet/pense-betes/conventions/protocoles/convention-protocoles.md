@@ -52,9 +52,9 @@ protocole-[nom].[id].[class].[statut].md
 ### Étape 1 — Identifier le besoin
 
 ```
-1. La tâche se répète-elle ? → OUI = protocole
-2. Doit-elle être standardisée ? → OUI = protocole
-3. Est-elle reproductible ? → OUI = protocole
+1. La tâche se répète-elle ? -> OUI = protocole
+2. Doit-elle être standardisée ? -> OUI = protocole
+3. Est-elle reproductible ? -> OUI = protocole
 ```
 
 ### Étape 2 — Vérifier l'existence
@@ -62,7 +62,7 @@ protocole-[nom].[id].[class].[statut].md
 ```
 1. Chercher dans regles-immuables/general/protocole-*/
 2. Chercher dans conventions/protocoles/
-3. Si un protocole similaire existe → l'étendre, pas en créer un nouveau
+3. Si un protocole similaire existe -> l'étendre, pas en créer un nouveau
 ```
 
 ### Étape 3 — Créer le protocole
@@ -72,9 +72,9 @@ protocole-[nom].[id].[class].[statut].md
 2. Nommer selon la convention : protocole-[nom].[id].[class].[statut].md
 3. Placer dans : regles-immuables/general/protocole-[nom]/
 4. Créer le dossier avec :
-   ├── protocole-[nom].[id].[class].[statut].md  ← le protocole
-   ├── spec/                                       ← spec technique (si besoin)
-   └── todo/                                       ← tâches liées (si besoin)
+   |-- protocole-[nom].[id].[class].[statut].md  <- le protocole
+   |-- spec/                                       <- spec technique (si besoin)
+   ``-- todo/                                       <- tâches liées (si besoin)
 ```
 
 ### Étape 4 — Documenter la conception
@@ -184,4 +184,4 @@ Quand créer : intégrer un protocole dans un nouveau contexte
 | **Nom** | `protocole-[nom].[id].[class].[statut].md` |
 | **Validation** | Toujours passer par RVAV |
 | **Intégration** | Lier dans les fichiers concernés |
-| **Automatisme** | Documenter → Lier → Répéter → Vérifier |
+| **Automatisme** | Documenter -> Lier -> Répéter -> Vérifier |

@@ -11,12 +11,12 @@ Garantir que les agents effectuent toujours des recherches avant d'avancer.
 
 ```
 recherches-web/
-├── index-recherches-web.md
-├── [theme]/
-│   ├── index.md
-│   └── [recherche].md
-└── templates/
-    └── recherche-template.md
+|-- index-recherches-web.md
+|-- [theme]/
+|   |-- index.md
+|   ``-- [recherche].md
+``-- templates/
+    ``-- recherche-template.md
 ```
 
 ---

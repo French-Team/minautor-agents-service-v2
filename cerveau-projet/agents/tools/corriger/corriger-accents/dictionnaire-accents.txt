@@ -1,3 +1,13 @@
+# ============================================================
+# EXCEPTION VOLONTAIRE A LA REGLE regles-emojis-ascii.md
+# ------------------------------------------------------------
+# Ce fichier CONTIENT volontairement des caracteres non-ASCII
+# (accents, fleches) : c'est le dictionnaire de correspondance
+# utilise par corriger-accents.sh et valider-conformite-ascii.sh.
+#
+# NE PAS purger ce fichier. Les lignes # sont ignorees par
+# l'outil. Exception documentee dans regles-emojis-ascii.md.
+# ============================================================
 # Dictionnaire d accents vers ASCII
 # Format: accent|remplacement
 # Separateur: |

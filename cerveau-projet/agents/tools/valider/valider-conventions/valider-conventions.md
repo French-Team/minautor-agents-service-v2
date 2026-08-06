@@ -37,9 +37,9 @@ Retourne un rapport de validation des conventions.
 ## Résultat
 
 ### Conventions respectées
-- convention-structures.md → OK
-- convention-renommage.md → OK
-- convention-liens.md → OK
+- convention-structures.md -> OK
+- convention-renommage.md -> OK
+- convention-liens.md -> OK
 
 ### Conventions violées
 - Fichier sans en-tête YAML

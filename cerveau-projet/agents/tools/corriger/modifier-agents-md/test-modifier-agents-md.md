@@ -29,7 +29,7 @@ Exemples:
   ./modifier-agents-md.sh reactiver "Mission terminée" Buffy
 ```
 
-**Statut du test** : ✓ Réussi
+**Statut du test** : [OK] Réussi
 
 ---
 

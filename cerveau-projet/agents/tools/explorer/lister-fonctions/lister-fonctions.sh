@@ -126,7 +126,7 @@ if [[ "$TYPE" == "auto" ]]; then
 fi
 
 # Exécution
-echo -e "${BLUE}🔍 Fonctions dans : ${FICHIER}${NC}"
+echo -e "${BLUE}[RECHERCHE] Fonctions dans : ${FICHIER}${NC}"
 echo ""
 
 case $TYPE in

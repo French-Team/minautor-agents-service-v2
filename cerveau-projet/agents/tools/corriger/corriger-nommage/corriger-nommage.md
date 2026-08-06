@@ -38,11 +38,11 @@ Retourne un rapport de correction.
 ## Résultat
 
 ### Fichiers renommés
-- Buffy.md → buffy.md
-- IndexCerveau.md → index-cerveau.md
+- Buffy.md -> buffy.md
+- IndexCerveau.md -> index-cerveau.md
 
 ### Fichiers non renommés
-- fichier-special.md → Convention non applicable
+- fichier-special.md -> Convention non applicable
 
 ### Statistiques
 - Fichiers analysés : 20
@@ -100,7 +100,7 @@ corriger-nommage(chemin=".", convention="kebab-case")
 2. Appliquer la convention :
    - kebab-case : minuscules, tirets
    - snake_case : minuscules, underscores
-3. Si le nom change → renommer
+3. Si le nom change -> renommer
 4. Mettre à jour les liens
 ```
 

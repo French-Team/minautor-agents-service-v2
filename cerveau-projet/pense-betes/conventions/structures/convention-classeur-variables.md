@@ -18,7 +18,7 @@
 ## Architecture
 
 ```
-fonction-1 → [ecrit resultat-1] → classeur → [lit resultat-1] → fonction-2 → [ecrit resultat-2] → classeur → fonction-3
+fonction-1 -> [ecrit resultat-1] -> classeur -> [lit resultat-1] -> fonction-2 -> [ecrit resultat-2] -> classeur -> fonction-3
 ```
 
 ### Flux de données
@@ -38,14 +38,14 @@ fonction-1 → [ecrit resultat-1] → classeur → [lit resultat-1] → fonction
 
 ```
 classeur-variables/
-├── index-classeur.md              ← point d'entrée global
-├── classeur-variables.md          ← orchestrateur principal
-├── schema/                        ← schéma des variables
-│   └── variables-definition.md    ← définition de chaque variable
-├── stockage/                      ← valeurs actuelles
-│   └── variables-actuelles.md     ← état courant
-└── historique/                    ← historique des modifications
-    └── historique-modifications.md
+|-- index-classeur.md              <- point d'entrée global
+|-- classeur-variables.md          <- orchestrateur principal
+|-- schema/                        <- schéma des variables
+|   ``-- variables-definition.md    <- définition de chaque variable
+|-- stockage/                      <- valeurs actuelles
+|   ``-- variables-actuelles.md     <- état courant
+``-- historique/                    <- historique des modifications
+    ``-- historique-modifications.md
 ```
 
 **Statut** : Structure complète et opérationnelle.
@@ -105,7 +105,7 @@ variables:
 
 ```
 [NON] Modifier directement une variable dans le classeur
-[OUI] Lire → Modifier dans la fonction → Réécrire dans le classeur
+[OUI] Lire -> Modifier dans la fonction -> Réécrire dans le classeur
 ```
 
 ---
@@ -115,20 +115,20 @@ variables:
 ### Scénario : Pipeline de traitement
 
 ```
-1. fonction-chargement → écrit "donnees-brutes" dans le classeur
-2. fonction-nettoyage → lit "donnees-brutes" → écrit "donnees-propres"
-3. fonction-transformation → lit "donnees-propres" → écrit "donnees-transformees"
-4. fonction-export → lit "donnees-transformees" → écrit "fichier-final"
+1. fonction-chargement -> écrit "donnees-brutes" dans le classeur
+2. fonction-nettoyage -> lit "donnees-brutes" -> écrit "donnees-propres"
+3. fonction-transformation -> lit "donnees-propres" -> écrit "donnees-transformees"
+4. fonction-export -> lit "donnees-transformees" -> écrit "fichier-final"
 ```
 
 ### Insertion d'une nouvelle fonction
 
 ```
 Avant :
-fonction-chargement → fonction-nettoyage → fonction-transformation → fonction-export
+fonction-chargement -> fonction-nettoyage -> fonction-transformation -> fonction-export
 
 Apres (insertion entre nettoyage et transformation) :
-fonction-chargement → fonction-nettoyage → [NOUVELLE-FONCTION] → fonction-transformation → fonction-export
+fonction-chargement -> fonction-nettoyage -> [NOUVELLE-FONCTION] -> fonction-transformation -> fonction-export
 ```
 
 La nouvelle fonction :

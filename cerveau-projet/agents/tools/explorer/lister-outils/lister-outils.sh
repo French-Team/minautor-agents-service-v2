@@ -47,7 +47,7 @@ lister_outils() {
     local detail=$2
     local categorie=$3
 
-    echo -e "${BLUE}🔧 Liste des outils partagés${NC}"
+    echo -e "${BLUE}[OUTIL] Liste des outils partagés${NC}"
     echo ""
 
     # Vérifier si le dossier tools existe
@@ -72,9 +72,9 @@ lister_outils() {
         local cat_dir="${TOOLS_DIR}/${cat}"
         
         if [[ -d "$cat_dir" ]]; then
-            echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-            echo -e "${GREEN}📂 Catégorie : ${cat}${NC}"
-            echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+            echo -e "${CYAN}----------------------------------------${NC}"
+            echo -e "${GREEN}[OUVRIR] Catégorie : ${cat}${NC}"
+            echo -e "${CYAN}----------------------------------------${NC}"
             
             for tool_dir in "$cat_dir"/*/; do
                 if [[ -d "$tool_dir" ]]; then
@@ -82,37 +82,37 @@ lister_outils() {
                     local tool_md="${tool_dir}${tool_name}.md"
                     local tool_sh="${tool_dir}${tool_name}.sh"
                     
-                    echo -e "  🔧 ${tool_name}"
+                    echo -e "  [OUTIL] ${tool_name}"
                     
                     # Vérifier si le script existe
                     if [[ -f "$tool_sh" ]]; then
-                        echo -e "    ✅ Script : Présent"
+                        echo -e "    [OK] Script : Présent"
                         avec_script=$((avec_script + 1))
                         
                         if [[ "$detail" == "true" ]]; then
                             # Extraire la version
                             local version=$(grep "VERSION=" "$tool_sh" 2>/dev/null | head -1 | sed 's/VERSION="//' | sed 's/"//')
                             if [[ -n "$version" ]]; then
-                                echo -e "    📦 Version : ${version}"
+                                echo -e "    [PAQUET] Version : ${version}"
                             fi
                             
                             # Vérifier si le script est exécutable
                             if [[ -x "$tool_sh" ]]; then
-                                echo -e "    🚀 Exécutable : Oui"
+                                echo -e "    [DEMARRER] Exécutable : Oui"
                             else
-                                echo -e "    ⚠️  Exécutable : Non"
+                                echo -e "    [ATTENTION]  Exécutable : Non"
                             fi
                         fi
                     else
-                        echo -e "    ❌ Script : Absent"
+                        echo -e "    [ERREUR] Script : Absent"
                         sans_script=$((sans_script + 1))
                     fi
                     
                     # Vérifier la documentation
                     if [[ -f "$tool_md" ]]; then
-                        echo -e "    📄 Documentation : Présente"
+                        echo -e "    [FICHIER] Documentation : Présente"
                     else
-                        echo -e "    ⚠️  Documentation : Absente"
+                        echo -e "    [ATTENTION]  Documentation : Absente"
                     fi
                     
                     total=$((total + 1))
@@ -122,12 +122,12 @@ lister_outils() {
         fi
     done
 
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
     echo -e "${BLUE}Résumé :${NC}"
-    echo -e "  📊 Total outils : ${total}"
-    echo -e "  ✅ Avec script : ${avec_script}"
-    echo -e "  ❌ Sans script : ${sans_script}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "  [GRAPHIQUE] Total outils : ${total}"
+    echo -e "  [OK] Avec script : ${avec_script}"
+    echo -e "  [ERREUR] Sans script : ${sans_script}"
+    echo -e "${CYAN}----------------------------------------${NC}"
 }
 
 # Valeurs par défaut

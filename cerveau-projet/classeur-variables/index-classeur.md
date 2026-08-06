@@ -8,13 +8,13 @@
 
 ```
 classeur-variables/
-├── index-classeur.md              ← point d'entrée (ce fichier)
-├── schema/                        ← schéma des variables
-│   └── variables-definition.md    ← définition de chaque variable
-├── stockage/                      ← valeurs actuelles
-│   └── variables-actuelles.md     ← état courant
-└── historique/                    ← historique des modifications
-    └── historique-modifications.md
+|-- index-classeur.md              <- point d'entrée (ce fichier)
+|-- schema/                        <- schéma des variables
+|   ``-- variables-definition.md    <- définition de chaque variable
+|-- stockage/                      <- valeurs actuelles
+|   ``-- variables-actuelles.md     <- état courant
+``-- historique/                    <- historique des modifications
+    ``-- historique-modifications.md
 ```
 
 ---
@@ -66,7 +66,7 @@ variables:
 
 ```
 [NON] Modifier directement une variable dans le classeur
-[OUI] Lire → Modifier dans la fonction → Réécrire dans le classeur
+[OUI] Lire -> Modifier dans la fonction -> Réécrire dans le classeur
 ```
 
 ---

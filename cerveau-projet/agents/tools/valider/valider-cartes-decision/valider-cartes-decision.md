@@ -87,12 +87,12 @@ valider-cartes-decision(fichier="chemin/vers/fichier.md")
 
 | Vérification | Statut | Notes |
 |---|---|---|
-| Section Carte de Décision | ✓ | Présente |
-| Tableau Missions | ✓ | 5 missions |
-| Détail des missions | ✓ | Toutes complètes |
-| Règles absolues | ✓ | 2 règles |
+| Section Carte de Décision | [OK] | Présente |
+| Tableau Missions | [OK] | 5 missions |
+| Détail des missions | [OK] | Toutes complètes |
+| Règles absolues | [OK] | 2 règles |
 
-**Verdict** : ✓ CONFORME
+**Verdict** : [OK] CONFORME
 ```
 
 ### Format détaillé
@@ -104,10 +104,10 @@ valider-cartes-decision(fichier="chemin/vers/fichier.md")
 
 | Étape | Action | Protocole | Statut |
 |---|---|---|---|
-| 1 | Vérifier le nommage | convention-renommage | ✓ |
-| 2 | Vérifier la structure | convention-structures | ✓ |
-| 3 | Créer le fichier | - | ✓ |
-| 4 | Mettre à jour l'index | - | ✓ |
+| 1 | Vérifier le nommage | convention-renommage | [OK] |
+| 2 | Vérifier la structure | convention-structures | [OK] |
+| 3 | Créer le fichier | - | [OK] |
+| 4 | Mettre à jour l'index | - | [OK] |
 ```
 
 ---

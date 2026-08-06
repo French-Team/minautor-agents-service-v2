@@ -55,6 +55,8 @@ Detecter et remplacer les emojis par des symboles ASCII dans les fichiers.
 
 L'outil utilise un fichier `dictionnaire-emojis.txt` qui contient les correspondances emoji -> texte.
 
+> **EXCEPTION VOLONTAIRE** : ce dictionnaire contient volontairement des emojis (c'est sa fonction). Il est marque du bandeau `EXCEPTION VOLONTAIRE` et exclu des outils de validation ASCII. Voir `regles-emojis-ascii.md` section "Exceptions volontaires". Ne jamais le purger.
+
 ### Format du dictionnaire
 
 ```
@@ -95,9 +97,9 @@ NOUVEL_EMOJI|REMPLACEMENT
 
 ```
 corriger-emojis/
-├── corriger-emojis.sh      # Script principal
-├── corriger-emojis.md      # Documentation
-└── dictionnaire-emojis.txt # Dictionnaire des correspondances
+|-- corriger-emojis.sh      # Script principal
+|-- corriger-emojis.md      # Documentation
+`-- dictionnaire-emojis.txt # Dictionnaire des correspondances
 ```
 
 ---

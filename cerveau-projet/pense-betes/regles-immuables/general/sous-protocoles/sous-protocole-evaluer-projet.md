@@ -94,11 +94,11 @@ Obtenir un état complet du projet avant de le reprendre.
 
 | Cas | Description | Approche |
 |---|---|---|
-| **Fonctionnel** | Tout marche | Comprendre → Ajouter |
-| **Incomplet** | Contenu manquant | Comprendre → Compléter |
-| **Cassé** | Erreurs, bugs | Diagnostiquer → Corriger |
-| **À refondre** | Architecture mauvaise | Analyser → Refondre |
-| **Pause** | Reprise après absence | Évaluer → Continuer |
+| **Fonctionnel** | Tout marche | Comprendre -> Ajouter |
+| **Incomplet** | Contenu manquant | Comprendre -> Compléter |
+| **Cassé** | Erreurs, bugs | Diagnostiquer -> Corriger |
+| **À refondre** | Architecture mauvaise | Analyser -> Refondre |
+| **Pause** | Reprise après absence | Évaluer -> Continuer |
 
 ### Étape 5 — Documenter
 

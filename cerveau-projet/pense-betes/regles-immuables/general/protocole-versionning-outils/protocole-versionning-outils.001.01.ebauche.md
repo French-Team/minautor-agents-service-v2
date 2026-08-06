@@ -18,7 +18,7 @@ Garantir que chaque outil est :
 ## Cycle de vie d'un outil
 
 ```
-BÊTA → TEST → OPTIMISATION → INTÉGRATION → SECOND CONTRÔLE → PRODUCTION
+BÊTA -> TEST -> OPTIMISATION -> INTÉGRATION -> SECOND CONTRÔLE -> PRODUCTION
   1       2          3               4               5              6
 ```
 
@@ -71,7 +71,7 @@ BÊTA → TEST → OPTIMISATION → INTÉGRATION → SECOND CONTRÔLE → PRODUC
 ## Étape 6 — Promotion en production
 
 1. **Conditions** : Tests OK, intégration OK, contrôle OK
-2. **Promotion** : bêta → stable
+2. **Promotion** : bêta -> stable
 3. **Structure** : Version stable dans versions/stable/
 
 ---

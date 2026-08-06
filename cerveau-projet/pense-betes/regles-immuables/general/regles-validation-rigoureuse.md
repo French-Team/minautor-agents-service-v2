@@ -156,15 +156,15 @@ Avant de valider un travail :
 ```
 1. Écrire la fonction `calculer-somme`
 2. Écrire un test qui vérifie `calculer-somme(1, 2) == 3`
-3. Exécuter le test → il passe
-4. Lire le code → vérifier la logique
+3. Exécuter le test -> il passe
+4. Lire le code -> vérifier la logique
 5. Executer manuellement : calculer-somme(1, 2) -> 3 [OK]
 6. Tester les cas limites :
    - calculer-somme(0, 0) == 0 [OK]
    - calculer-somme(-1, 1) == 0 [OK]
    - calculer-somme(1000000, 2000000) == 3000000 [OK]
 7. Vérifier les erreurs :
-   - calculer-somme(null, 1) → erreur documentée
+   - calculer-somme(null, 1) -> erreur documentée
 8. Valider : la fonction fonctionne VRAIMENT
 ```
 

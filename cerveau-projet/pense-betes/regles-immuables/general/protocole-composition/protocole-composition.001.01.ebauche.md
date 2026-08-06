@@ -43,9 +43,9 @@ défini dans `../rvav-workflow.md`.
 ## ÉTAPE 3 — Vérifier les templates de référence
 
 1. Les templates suivants servent de gabarit pour créer de nouveaux fichiers :
-   - `pense-betes/pense-bete-template.md` → modèle pour les plateformes de pense-bête
-   - `pense-betes/specs/spec-template.md` → modèle pour les specs
-   - `pense-betes/specs/todo/todo-template.md` → modèle pour les todos
+   - `pense-betes/pense-bete-template.md` -> modèle pour les plateformes de pense-bête
+   - `pense-betes/specs/spec-template.md` -> modèle pour les specs
+   - `pense-betes/specs/todo/todo-template.md` -> modèle pour les todos
 2. Chaque template reste vide — il définit la structure, pas le contenu
 3. **RVAV :**
    - [rechercher] Vérifier que chaque template existe et est bien vide (0 octets)

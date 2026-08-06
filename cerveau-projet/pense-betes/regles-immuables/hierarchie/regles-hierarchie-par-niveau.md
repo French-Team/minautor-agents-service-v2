@@ -8,7 +8,7 @@ une **plateforme** (fichier d'entrée) qui orchestre les niveau(s) inférieur(s)
 
 **Réorganiser = modifier les appels dans la plateforme. Jamais déplacer le code source.**
 
-→ Consulter `../../conventions/structures/convention-structures.md`
+-> Consulter `../../conventions/structures/convention-structures.md`
 pour les règles structurelles universelles.
 
 ## Les niveaux
@@ -41,7 +41,7 @@ Pour changer l'ordre d'exécution :
 2. Le code/fichiers restent **physiquement** en place
 3. La plateforme orchestre le flux
 
-→ Exemple : déplacer les minutes avant les heures = changer l'ordre des appels
+-> Exemple : déplacer les minutes avant les heures = changer l'ordre des appels
 dans le fichier point d'entrée, pas déplacer le code.
 
 ### 4. Extension verticale
@@ -49,7 +49,7 @@ Un nouveau niveau s'ajoute **uniquement** par un sous-dossier
 dans le dossier parent — jamais en plaçant des fichiers directement
 au niveau du conteneur.
 
-→ Chaque fichier de contenu vit à l'intérieur d'un dossier.
+-> Chaque fichier de contenu vit à l'intérieur d'un dossier.
 
 ### 5. Single entry par dossier
 Un dossier a **une seule** plateforme. Pas de fichier secondaire.

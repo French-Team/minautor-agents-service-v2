@@ -28,8 +28,8 @@ mon-module.md:
 
 # [NON] Incorrect -- code inline
 mon-module.md:
-function A() { ... }     ← interdit
-function B() { ... }     ← interdit
+function A() { ... }     <- interdit
+function B() { ... }     <- interdit
 ```
 
 ### 2. Réordonnancement facile
@@ -59,7 +59,7 @@ Chaque appel peut recevoir des arguments type pour activer/désactiver un compos
 ```markdown
 1. Appeler heure (activer: true)
 2. Appeler minute (activer: true)
-3. Appeler seconde (activer: false)    ← désactivé
+3. Appeler seconde (activer: false)    <- désactivé
 ```
 
 Cela permet de :
@@ -118,4 +118,4 @@ Il ne fait rien d'autre. Pas de calcul, pas de transformation, pas de logique.
 
 ## Relation avec les dossiers
 
-→ Consulter `../dossiers/index-dossiers.md` pour les règles des dossiers.
+-> Consulter `../dossiers/index-dossiers.md` pour les règles des dossiers.

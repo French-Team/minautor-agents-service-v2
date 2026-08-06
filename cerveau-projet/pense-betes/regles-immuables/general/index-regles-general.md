@@ -9,7 +9,7 @@
 | [rvav-workflow.md](rvav-workflow.md) | Workflow RVAVP (Rechercher-Vérifier-Analyser-Valider-Purifier) |
 | [regles-choisir-agent.md](regles-choisir-agent.md) | **IMMUABLE** — Choisir le bon agent |
 | [regles-validation-rigoureuse.md](regles-validation-rigoureuse.md) | **IMMUABLE** — Validation rigoureuse |
-| [regles-emojis-ascii.md](regles-emojis-ascii.md) | **IMMUABLE** — Bannissement des emojis, utilisation de ASCII |
+| [regles-emojis-ascii.md](regles-emojis-ascii.md) | **IMMUABLE** — Bannissement des emojis, utilisation de ASCII (exceptions volontaires documentees dans le fichier) |
 | [regles-veracite.md](regles-veracite.md) | **IMMUABLE** — Ne jamais mentir ou inventer |
 
 ### Protocoles
@@ -21,7 +21,7 @@
 | [protocole-reprendre-projet/](protocole-reprendre-projet/) | **IMMUABLE** -- Reprendre un projet existant | ebauche |
 | [protocole-installer-regles/](protocole-installer-regles/) | **IMMUABLE** -- Installer les regles immuables | ebauche |
 | [protocole-identification/](protocole-identification/) | **IMMUABLE** -- Identification des agents | ebauche |
-| [protocole-activation/](protocole-activation/) | **IMMUABLE** -- Activation des agents (avec lecture obligatoire + modifier-agents-md) | préparé |
+| [protocole-activation/](protocole-activation/) | **IMMUABLE** -- Activation des agents (avec lecture obligatoire + modifier-agents-md) | prepare |
 | [protocole-recherches-web/](protocole-recherches-web/) | **IMMUABLE** -- Recherches web | ebauche |
 | [protocole-outils/](protocole-outils/) | **IMMUABLE** -- Boite a outils | ebauche |
 | [protocole-auto-correction/](protocole-auto-correction/) | Auto-correction des agents | ebauche |

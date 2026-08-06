@@ -20,9 +20,9 @@
 
 ```
 agents/tools/[catégorie]/[nom-outil]/
-├── [nom-outil].md        ← documentation
-├── [nom-outil].sh        ← implémentation
-└── spec/                 ← spécifications
+|-- [nom-outil].md        <- documentation
+|-- [nom-outil].sh        <- implémentation
+``-- spec/                 <- spécifications
 ```
 
 ---
@@ -42,19 +42,19 @@ agents/tools/[catégorie]/[nom-outil]/
 ### Règle 2 — Chaque outil est testé
 
 ```
-Créer → Tester en --dry-run → Valider le résultat → Appliquer
+Créer -> Tester en --dry-run -> Valider le résultat -> Appliquer
 ```
 
 **Règle obligatoire** :
 - TOUJOURS tester avec --dry-run d'abord
 - Vérifier que le résultat est acceptable
 - NE JAMAIS appliquer sans vérification
-- Si problème → corriger l'outil avant d'appliquer
+- Si problème -> corriger l'outil avant d'appliquer
 
 ### Règle 3 — Chaque outil est partagé
 
 ```
-Créer dans agents/tools/ → Documenter dans index-tools.md → Accessible à tous
+Créer dans agents/tools/ -> Documenter dans index-tools.md -> Accessible à tous
 ```
 
 ### Règle 4 — Pas de références aux outils tiers
@@ -83,7 +83,7 @@ Un outil qui n'est assigné à personne risque de n'être jamais utilisé. Pour 
 1. Cet outil est-il utilisé dans une MISSION existante ?
 2. Quelle est la NATURE de l'outil ? (structure / fonctionnalité / exploration...)
 3. Quel agent est responsable de cette nature de tâche ?
-4. Si aucun agent ne l'utilise → outil de support → Buffy (gestion du cerveau)
+4. Si aucun agent ne l'utilise -> outil de support -> Buffy (gestion du cerveau)
 ```
 
 **Répartition par nature** :
@@ -141,9 +141,9 @@ Un outil qui n'est assigné à personne risque de n'être jamais utilisé. Pour 
 ## Boucle de rétroaction
 
 ```
-Utiliser → Si problème → Corriger
-         → Si manque → Créer
-         → Si incomplet → Compléter
+Utiliser -> Si problème -> Corriger
+         -> Si manque -> Créer
+         -> Si incomplet -> Compléter
 ```
 
 ---

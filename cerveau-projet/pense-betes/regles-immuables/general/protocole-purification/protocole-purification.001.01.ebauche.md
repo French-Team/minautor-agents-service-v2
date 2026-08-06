@@ -25,11 +25,11 @@ AVANT de considérer le fichier comme "valide"
 ### Cycle de vie d'un fichier
 
 ```
-1. Création (ebauche) → contenu complet avec remarques
-2. Développement (dev) → contenu en cours
-3. Test → validation
-4. Purification → nettoyage
-5. Validé → fichier pur
+1. Création (ebauche) -> contenu complet avec remarques
+2. Développement (dev) -> contenu en cours
+3. Test -> validation
+4. Purification -> nettoyage
+5. Validé -> fichier pur
 ```
 
 ---

@@ -10,7 +10,7 @@
 
 ## Objectif
 
-Lister les fichiers markdown par statut (ebauche, préparé, dev, test, valide).
+Lister les fichiers markdown par statut (ebauche, prepare, dev, test, valide).
 
 **Pourquoi cet outil ?**
 - Permet de voir l'état d'avancement de tous les fichiers
@@ -29,7 +29,7 @@ Lister les fichiers markdown par statut (ebauche, préparé, dev, test, valide).
 
 | Option | Description |
 |---|---|
-| `--statut <statut>` | Filtrer par statut (ebauche, préparé, dev, test, valide) |
+| `--statut <statut>` | Filtrer par statut (ebauche, prepare, dev, test, valide) |
 | `--verbose` | Afficher les détails |
 | `--aide` | Afficher l'aide |
 
@@ -57,7 +57,7 @@ Lister les fichiers markdown par statut (ebauche, préparé, dev, test, valide).
 
 ```
 cerveau-projet/pense-betes/regles-immuables/general/protocole-auto-correction/protocole-auto-correction.001.01.ebauche.md | ebauche
-cerveau-projet/pense-betes/regles-immuables/general/protocole-activation/protocole-activation.001.02.preparé.md | préparé
+cerveau-projet/pense-betes/regles-immuables/general/protocole-activation/protocole-activation.001.02.prepare.md | prepare
 cerveau-projet/pense-betes/regles-immuables/general/protocole-versionning-outils/protocole-versionning-outils.001.01.ebauche.md | ebauche
 ```
 
@@ -80,7 +80,7 @@ cerveau-projet/pense-betes/regles-immuables/general/protocole-versionning-outils
 Résumé:
   Total fichiers avec statut: 15
   ebauche: 8
-  préparé: 3
+  prepare: 3
   dev: 2
   test: 1
   valide: 1
@@ -150,7 +150,7 @@ L'outil `lister-statuts` est essentiel pour le workflow RVAV :
 ## Notes
 
 - Cet outil ne modifie pas les fichiers, il les analyse uniquement
-- Les statuts valides sont : ebauche, préparé, dev, test, valide
+- Les statuts valides sont : ebauche, prepare, dev, test, valide
 - Le format de nommage doit respecter `convention-renommage.md`
 - Utiliser `valider-nommage` pour vérifier la conformité des noms
 

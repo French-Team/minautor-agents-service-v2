@@ -56,17 +56,17 @@ Chaque amelioration est documentee.
 
 ```
 agents/tools/[categorie]/[nom-outil]/
-├── [nom-outil].md           ← documentation principale
-├── spec/
-│   └── spec-[nom-outil].md  ← specification technique
-├── todo/
-│   └── todo-[nom-outil].md  ← ameliorations
-├── tests/
-│   ├── test-[nom-outil].md  ← plan de tests
-│   └── resultats/           ← resultats
-└── versions/
-    ├── beta/                ← version beta
-    └── stable/              ← version stable
+|-- [nom-outil].md           <- documentation principale
+|-- spec/
+|   ``-- spec-[nom-outil].md  <- specification technique
+|-- todo/
+|   ``-- todo-[nom-outil].md  <- ameliorations
+|-- tests/
+|   |-- test-[nom-outil].md  <- plan de tests
+|   ``-- resultats/           <- resultats
+``-- versions/
+    |-- beta/                <- version beta
+    ``-- stable/              <- version stable
 ```
 
 ---
@@ -74,13 +74,13 @@ agents/tools/[categorie]/[nom-outil]/
 ## Cycle de vie d'un outil
 
 ```
-1. Besoin detecte → "J'ai besoin de lister les agents"
-2. Creation → Creer l'outil en beta
-3. Test → Tester l'outil
-4. Integration → L'utiliser dans mes missions
-5. Amelioration → Ajouter des fonctionnalites
-6. Stabilisation → Version 1.0.0
-7. Partage → Les autres agents peuvent l'utiliser
+1. Besoin detecte -> "J'ai besoin de lister les agents"
+2. Creation -> Creer l'outil en beta
+3. Test -> Tester l'outil
+4. Integration -> L'utiliser dans mes missions
+5. Amelioration -> Ajouter des fonctionnalites
+6. Stabilisation -> Version 1.0.0
+7. Partage -> Les autres agents peuvent l'utiliser
 ```
 
 ---
@@ -128,7 +128,7 @@ lister-agents(format="table", champs="nom,role,statut")
 |---|---|
 | **Structure** | Meme organisation |
 | **Principes** | Meme philosophie |
-| **Cycle** | Cerberus → Agent → Cerberus |
+| **Cycle** | Cerberus -> Agent -> Cerberus |
 
 ---
 

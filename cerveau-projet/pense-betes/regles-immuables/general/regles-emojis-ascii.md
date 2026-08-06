@@ -119,11 +119,37 @@ Dans les listes, utiliser des puces ASCII :
 
 ---
 
-## Exceptions
+## Exceptions volontaires
 
-**Aucune.** Cette règle est absolue.
+**Par defaut : aucune exception.** Cette règle est absolue pour tous les fichiers du cerveau-projet.
 
 Même dans les commentaires, les notes, les brouillons, les emojis sont interdits.
+
+### Liste des exceptions volontaires
+
+Seuls les fichiers ci-dessous contiennent **volontairement** des emojis ou caracteres non-ASCII. Ils sont marques d'un bandeau `EXCEPTION VOLONTAIRE` dans leur en-tete et ne doivent **jamais** etre purges :
+
+| Fichier | Raison de l'exception |
+|---|---|
+| `cerveau-projet/agents/tools/corriger/corriger-emojis/dictionnaire-emojis.txt` | Dictionnaire emoji -> ASCII de `corriger-emojis`. Contient les emojis a traduire : c'est sa fonction. |
+| `cerveau-projet/agents/tools/corriger/corriger-accents/dictionnaire-accents.txt` | Dictionnaire accent -> ASCII de `corriger-accents`. Contient les caracteres non-ASCII a traduire : c'est sa fonction. |
+| `cerveau-projet/pense-betes/regles-immuables/general/regles-emojis-ascii.md` (lui-meme) | Exemples pedagogiques dans le bloc "Avant (interdit)" : montre ce qui est interdit. |
+
+### Exception de dossier : `exemples/`
+
+Le dossier `cerveau-projet/exemples/` est **exclu de la regle** : c'est une zone de test dediee aux outils. Ses fichiers contiennent **volontairement** des problemes (emojis, accents, erreurs, faux statuts) pour tester et valider les outils de correction et de validation.
+
+- **Ne jamais purger** ce dossier : il est fait pour contenir des erreurs.
+- **Exclu automatiquement** par les outils de validation (`valider-conformite-ascii`, `rechercher-accents-sensibles`, `corriger-emojis`).
+- Les fichiers de ce dossier ne necessitent **ni bandeau, ni declaration** dans le tableau ci-dessus : l'exclusion du dossier suffit.
+- Lorsqu'un test est cree, il doit etre place dans ce dossier, jamais dans le reste du cerveau.
+
+### Regles pour les exceptions
+
+1. **Marquage obligatoire** : tout fichier exception doit avoir le bandeau `EXCEPTION VOLONTAIRE` en en-tete.
+2. **Enregistrement obligatoire** : tout fichier exception doit etre declare dans ce tableau.
+3. **Interdiction d'ajout** : il est interdit d'ajouter un fichier exception sans passer par ce tableau.
+4. **Signalement par les outils** : les outils de validation (`valider-conformite-ascii`, `rechercher-accents-sensibles`, `corriger-emojis`) doivent exclure ces fichiers de leur detection.
 
 ---
 

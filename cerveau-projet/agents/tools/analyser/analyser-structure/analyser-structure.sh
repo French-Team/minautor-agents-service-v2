@@ -44,7 +44,7 @@ analyser_structure() {
     local verbose=$2
     local profondeur=$3
 
-    echo -e "${BLUE}📊 Analyse de la structure : ${chemin:-.}${NC}"
+    echo -e "${BLUE}[GRAPHIQUE] Analyse de la structure : ${chemin:-.}${NC}"
     echo ""
 
     # Chemin par défaut
@@ -59,9 +59,9 @@ analyser_structure() {
     fi
 
     # 1. Statistiques générales
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}📁 Statistiques générales${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
+    echo -e "${GREEN}[DOSSIER] Statistiques générales${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
     
     local nb_dossiers=$(find "$chemin" -type d -maxdepth "$profondeur" 2>/dev/null | wc -l)
     local nb_fichiers=$(find "$chemin" -type f -maxdepth "$profondeur" 2>/dev/null | wc -l)
@@ -70,27 +70,27 @@ analyser_structure() {
     local nb_py=$(find "$chemin" -name "*.py" -type f -maxdepth "$profondeur" 2>/dev/null | wc -l)
     local nb_js=$(find "$chemin" -name "*.js" -type f -maxdepth "$profondeur" 2>/dev/null | wc -l)
 
-    echo -e "  📂 Dossiers : ${nb_dossiers}"
-    echo -e "  📄 Fichiers : ${nb_fichiers}"
-    echo -e "  📝 Markdown : ${nb_md}"
-    echo -e "  🐚 Scripts Bash : ${nb_sh}"
-    echo -e "  🐍 Scripts Python : ${nb_py}"
-    echo -e "  📜 Scripts JavaScript : ${nb_js}"
+    echo -e "  [OUVRIR] Dossiers : ${nb_dossiers}"
+    echo -e "  [FICHIER] Fichiers : ${nb_fichiers}"
+    echo -e "  [DOCUMENT] Markdown : ${nb_md}"
+    echo -e "  [SHELL] Scripts Bash : ${nb_sh}"
+    echo -e "  [PYTHON] Scripts Python : ${nb_py}"
+    echo -e "  [DOCUMENT] Scripts JavaScript : ${nb_js}"
     echo ""
 
     # 2. Taille totale
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}💾 Taille${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
+    echo -e "${GREEN}[SAUVEGARDE] Taille${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
     
     local taille=$(du -sh "$chemin" 2>/dev/null | cut -f1)
-    echo -e "  📦 Taille totale : ${taille}"
+    echo -e "  [PAQUET] Taille totale : ${taille}"
     echo ""
 
     # 3. Extensions
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}📎 Extensions${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
+    echo -e "${GREEN}[PIECEJointe] Extensions${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
     
     find "$chemin" -type f -maxdepth "$profondeur" 2>/dev/null | \
         sed 's/.*\.//' | \
@@ -101,9 +101,9 @@ analyser_structure() {
     echo ""
 
     # 4. Structure arborescente (limitée)
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}🌳 Structure${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
+    echo -e "${GREEN}[ARBORESCENCE] Structure${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
     
     if [[ "$verbose" == "true" ]]; then
         tree -L "$profondeur" "$chemin" 2>/dev/null || \
@@ -114,12 +114,12 @@ analyser_structure() {
     echo ""
 
     # 5. Fichiers récents
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}🕐 Fichiers récents (modifiés dans les 7 derniers jours)${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
+    echo -e "${GREEN}[HEURE] Fichiers récents (modifiés dans les 7 derniers jours)${NC}"
+    echo -e "${CYAN}----------------------------------------${NC}"
     
     local nb_recents=$(find "$chemin" -type f -mtime -7 -maxdepth "$profondeur" 2>/dev/null | wc -l)
-    echo -e "  📄 ${nb_recents} fichier(s) récent(s)"
+    echo -e "  [FICHIER] ${nb_recents} fichier(s) récent(s)"
     echo ""
 
     echo -e "${BLUE}Analyse terminée.${NC}"

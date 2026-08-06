@@ -139,3 +139,9 @@ Le dictionnaire `dictionnaire-accents.txt` contient les remplacements :
 - Les fichiers `.git` et `node_modules` sont exclus par defaut
 - Le mode `--corriger` ecrase le fichier original
 - L'outil peut traiter n'importe quelle extension de fichier
+
+## Exceptions volontaires
+
+Les fichiers nommes `dictionnaire-*.txt` (dictionnaires des outils `corriger-emojis` et `corriger-accents`) sont **exclus automatiquement** : ils contiennent volontairement des caracteres non-ASCII (c'est leur fonction). Voir `regles-emojis-ascii.md` section "Exceptions volontaires".
+
+Le dossier `cerveau-projet/exemples/` est **exclu automatiquement** : c'est la zone de test dediee aux outils (fichiers avec problemes volontaires).

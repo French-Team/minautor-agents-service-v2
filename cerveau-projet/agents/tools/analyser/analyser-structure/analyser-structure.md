@@ -41,23 +41,23 @@ Retourne une analyse de la structure.
 
 ```
 cerveau-projet/
-├── index-cerveau.md
-├── demarrer.md
-├── agents/
-│   ├── buffy/
-│   │   ├── buffy.md
-│   │   └── corrections.md
-│   └── atlas/
-│       ├── atlas.md
-│       └── corrections.md
-├── conventions/
-│   ├── renommage/
-│   ├── structures/
-│   ├── liens/
-│   └── protocoles/
-└── regles-immuables/
-    ├── general/
-    └── hierarchie/
+|-- index-cerveau.md
+|-- demarrer.md
+|-- agents/
+|   |-- buffy/
+|   |   |-- buffy.md
+|   |   `-- corrections.md
+|   `-- atlas/
+|       |-- atlas.md
+|       `-- corrections.md
+|-- conventions/
+|   |-- renommage/
+|   |-- structures/
+|   |-- liens/
+|   `-- protocoles/
+`-- regles-immuables/
+    |-- general/
+    `-- hierarchie/
 ```
 
 ### Statistiques

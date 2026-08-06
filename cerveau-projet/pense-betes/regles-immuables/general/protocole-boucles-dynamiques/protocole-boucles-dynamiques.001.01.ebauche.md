@@ -76,8 +76,8 @@ Continuer normalement
 ```
 1. Identifier l'outil nécessaire pour cette étape
 2. Vérifier si l'outil existe
-3. Si non → SOUS-MISSION obligatoire
-4. Si oui → Continuer
+3. Si non -> SOUS-MISSION obligatoire
+4. Si oui -> Continuer
 ```
 
 ### 2. Sortie du flux

@@ -14,7 +14,7 @@
 | **Fichiers méta** | `index-[catégorie].md`, `[type]-template.md`, `convention-[thème].md` |
 | **ID fixe** | Numéro de création (3 chiffres), jamais modifié |
 | **Class évolue** | Incrémenté à chaque boucle RVAV |
-| **Statut évolue** | ebauche | préparé | dev | test | valide |
+| **Statut évolue** | ebauche | prepare | dev | test | valide |
 
 ## Navigation
 

@@ -24,15 +24,15 @@
 
 ```
 recherches-web/
-├── index-recherches-web.md          ← point d'entrée (ce fichier)
-├── [theme-1]/                       ← recherches sur un thème
-│   ├── index.md                     ← sommaire du thème
-│   ├── [recherche-1].md             ← une recherche spécifique
-│   └── [recherche-2].md             ← autre recherche
-├── [theme-2]/
-│   └── ...
-└── templates/
-    └── recherche-template.md        ← template pour créer une recherche
+|-- index-recherches-web.md          <- point d'entrée (ce fichier)
+|-- [theme-1]/                       <- recherches sur un thème
+|   |-- index.md                     <- sommaire du thème
+|   |-- [recherche-1].md             <- une recherche spécifique
+|   ``-- [recherche-2].md             <- autre recherche
+|-- [theme-2]/
+|   ``-- ...
+``-- templates/
+    ``-- recherche-template.md        <- template pour créer une recherche
 ```
 
 ---

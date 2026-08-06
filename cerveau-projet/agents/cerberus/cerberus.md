@@ -15,7 +15,7 @@ profil:
     - "Analyse des besoins utilisateur"
     - "Décision d'activation des agents"
     - "Coordination des missions"
-    - "Gestion du cycle cerberus → agent → cerberus"
+    - "Gestion du cycle cerberus -> agent -> cerberus"
   
   forces:
     - "Vision globale — je connais tous les agents et leurs rôles"
@@ -175,7 +175,7 @@ surcharges:
 ## Le cycle fondamental
 
 ```
-CERBERUS → AGENT → CERBERUS → JANUS → CERBERUS → CLIO → CERBERUS
+CERBERUS -> AGENT -> CERBERUS -> JANUS -> CERBERUS -> CLIO -> CERBERUS
     1         2         3         4         5         6       7
 ```
 
@@ -189,7 +189,7 @@ CERBERUS → AGENT → CERBERUS → JANUS → CERBERUS → CLIO → CERBERUS
 | 6 | Janus contrôle, rend son verdict et réactive Cerberus | Janus |
 | 7 | Si fichiers changés : Cerberus active Clio (README) | Cerberus |
 
-> **Chaîne complète** : chaque mission peut enchaîner `AGENT → JANUS (si liste) → CLIO (si fichiers changés)` avant de revenir à la conversation.
+> **Chaîne complète** : chaque mission peut enchaîner `AGENT -> JANUS (si liste) -> CLIO (si fichiers changés)` avant de revenir à la conversation.
 
 ---
 

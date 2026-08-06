@@ -1,4 +1,4 @@
-# Workflow RVAVP — Rechercher → Vérifier → Analyser → Valider → Purifier
+# Workflow RVAVP — Rechercher -> Vérifier -> Analyser -> Valider -> Purifier
 
 ## Principe fondamental
 
@@ -46,9 +46,9 @@ Checklist stricte — **aucun point ne peut rester ouvert** :
 
 ### 4. [valider]
 Décision finale après RVAV :
-- **Avancer** → statut += 1, class += 1, renommage du fichier
-- **Rester** → class += 1, statut identique, travail de correction
-- **Reculer** → statut -= 1, class += 1, retour au travail précédent
+- **Avancer** -> statut += 1, class += 1, renommage du fichier
+- **Rester** -> class += 1, statut identique, travail de correction
+- **Reculer** -> statut -= 1, class += 1, retour au travail précédent
 
 ### 5. [purifier]
 Nettoyer le fichier après validation :
@@ -66,7 +66,7 @@ Si une erreur est détectée à l'étape 3 [analyser] ou 4 [valider] :
 1. Le fichier **garde** son `id` (jamais modifié)
 2. Le `class` est **incrémenté** (+1)
 3. Le fichier est **renommé** avec le nouveau class + le statut ajusté
-4. Le travail de **correction** commence → nouveau cycle RVAV depuis [rechercher]
+4. Le travail de **correction** commence -> nouveau cycle RVAV depuis [rechercher]
 5. Aucune avancée de statut n'est possible tant que RVAV ne valide pas
 
 ---
@@ -75,18 +75,18 @@ Si une erreur est détectée à l'étape 3 [analyser] ou 4 [valider] :
 
 ```
 protocole-composition.001.01.ebauche.md
-  → RVAV : recherche de liens, checklist, analyse de cohérence → ÉCHEC (manque contenu spec)
-  → class +1, reste en ebauche
+  -> RVAV : recherche de liens, checklist, analyse de cohérence -> ÉCHEC (manque contenu spec)
+  -> class +1, reste en ebauche
 protocole-composition.001.02.ebauche.md
-  → RVAV : recherche, vérification, analyse → SUCCÈS
-  → class +1, statut +1
-protocole-composition.001.03.preparé.md
-  → RVAV → ÉCHEC (liens cassés)
-protocole-composition.001.04.preparé.md
-  → RVAV → SUCCÈS
-  → statut +1
+  -> RVAV : recherche, vérification, analyse -> SUCCÈS
+  -> class +1, statut +1
+protocole-composition.001.03.prepare.md
+  -> RVAV -> ÉCHEC (liens cassés)
+protocole-composition.001.04.prepare.md
+  -> RVAV -> SUCCÈS
+  -> statut +1
 protocole-composition.001.05.dev.md
-  → ... et ainsi de suite jusqu'à valide
+  -> ... et ainsi de suite jusqu'à valide
 ```
 
 ---

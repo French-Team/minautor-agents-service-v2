@@ -11,14 +11,14 @@ Garantir que chaque agent se reconnaît et s'identifie avant de travailler.
 
 ```
 cerveau-projet/
-├── AGENTS.md                    ← agent principal actuel
-├── agents/
-│   ├── index-agents.md          ← point d'entrée
-│   ├── fiche-agent-template.md  ← template de fiche
-│   ├── corrections-template.md  ← template de corrections
-│   └── [nom-agent]/
-│       ├── [nom-agent].md       ← fiche de l'agent
-│       └── corrections.md       ← surcharges/corrections
+|-- AGENTS.md                    <- agent principal actuel
+|-- agents/
+|   |-- index-agents.md          <- point d'entrée
+|   |-- fiche-agent-template.md  <- template de fiche
+|   |-- corrections-template.md  <- template de corrections
+|   ``-- [nom-agent]/
+|       |-- [nom-agent].md       <- fiche de l'agent
+|       ``-- corrections.md       <- surcharges/corrections
 ```
 
 ---
@@ -29,7 +29,7 @@ cerveau-projet/
 1. Lire AGENTS.md en premier
 2. Se présenter automatiquement
 3. Vérifier si la fiche existe
-4. Si non → créer la fiche + corrections
+4. Si non -> créer la fiche + corrections
 5. Lire corrections.md en priorité
 6. Lire la fiche d'agent
 7. Mettre à jour AGENTS.md

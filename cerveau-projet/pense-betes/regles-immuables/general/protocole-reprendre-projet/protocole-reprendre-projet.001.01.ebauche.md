@@ -12,11 +12,11 @@ Reprendre un projet existant en évaluant son état, en le classifiant, puis en 
 
 | Cas | Description | Approche |
 |---|---|---|
-| **Projet fonctionnel** | Tout marche, on veut ajouter | Comprendre → Ajouter |
-| **Projet incomplet** | Structure là, contenu manquant | Comprendre → Compléter |
-| **Projet cassé** | Erreurs, bugs, problèmes | Diagnostiquer → Corriger |
-| **Projet à refondre** | Architecture mauvaise | Analyser → Refondre |
-| **Reprise après pause** | On reprend après une absence | Évaluer → Continuer |
+| **Projet fonctionnel** | Tout marche, on veut ajouter | Comprendre -> Ajouter |
+| **Projet incomplet** | Structure là, contenu manquant | Comprendre -> Compléter |
+| **Projet cassé** | Erreurs, bugs, problèmes | Diagnostiquer -> Corriger |
+| **Projet à refondre** | Architecture mauvaise | Analyser -> Refondre |
+| **Reprise après pause** | On reprend après une absence | Évaluer -> Continuer |
 
 ---
 
@@ -72,7 +72,7 @@ Reprendre un projet existant en évaluant son état, en le classifiant, puis en 
 3. Mettre à jour les références
 
 ### Étape 7 — Appliquer les corrections
-1. Prioriser (critique → mineur)
+1. Prioriser (critique -> mineur)
 2. Appliquer chaque correction
 3. Valider par RVAV
 
@@ -105,7 +105,7 @@ Si erreur détectée :
 
 ### Projet incomplet
 1. Identifier les éléments manquants
-2. Prioriser (essentiel → optionnel)
+2. Prioriser (essentiel -> optionnel)
 3. Compléter l'essentiel d'abord
 
 ### Projet à refondre

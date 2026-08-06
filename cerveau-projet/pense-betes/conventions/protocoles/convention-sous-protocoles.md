@@ -19,12 +19,12 @@
 
 ```
 sous-protocole-[nom].md
-├── Objectif
-├── Prérequis
-├── Étapes détaillées
-├── Questions (si applicable)
-├── Vérifications
-└── Liens vers le protocole parent
+|-- Objectif
+|-- Prérequis
+|-- Étapes détaillées
+|-- Questions (si applicable)
+|-- Vérifications
+``-- Liens vers le protocole parent
 ```
 
 ---

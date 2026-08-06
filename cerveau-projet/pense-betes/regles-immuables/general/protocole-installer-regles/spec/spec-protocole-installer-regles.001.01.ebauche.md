@@ -11,18 +11,18 @@ Garantir que chaque nouveau projet contient toutes les règles immuables fondame
 
 ```
 projet/
-├── regles-immuables/
-│   ├── index-regles-immuables.md
-│   ├── general/
-│   │   ├── index-regles-general.md
-│   │   ├── regles-choisir-agent.md
-│   │   ├── regles-validation-rigoureuse.md
-│   │   ├── regles-emojis-ascii.md
-│   │   ├── regles-veracite.md
-│   │   └── rvav-workflow.md
-│   └── hierarchie/
-│       ├── index-hierarchie.md
-│       └── regles-hierarchie-par-niveau.md
+|-- regles-immuables/
+|   |-- index-regles-immuables.md
+|   |-- general/
+|   |   |-- index-regles-general.md
+|   |   |-- regles-choisir-agent.md
+|   |   |-- regles-validation-rigoureuse.md
+|   |   |-- regles-emojis-ascii.md
+|   |   |-- regles-veracite.md
+|   |   ``-- rvav-workflow.md
+|   ``-- hierarchie/
+|       |-- index-hierarchie.md
+|       ``-- regles-hierarchie-par-niveau.md
 ```
 
 ---

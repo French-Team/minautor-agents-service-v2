@@ -48,20 +48,20 @@ Tester le workflow RVAV (Rechercher-Vérifier-Analyser-Valider) sur un fichier e
 
 | Point | Statut | Notes |
 |---|---|---|
-| [x] Structure du nom respectée | ✓ | `protocole-activation.001.01.ebauche.md` |
-| [x] Tous les sous-fichiers attendus existent | ✓ | Pas de sous-fichiers requis |
-| [x] Tous les liens internes pointent vers des fichiers existants | ✓ | 3 liens vérifiés |
-| [x] Le contenu du statut courant est complet | ✓ | Toutes les sections écrites |
+| [x] Structure du nom respectée | [OK] | `protocole-activation.001.01.ebauche.md` |
+| [x] Tous les sous-fichiers attendus existent | [OK] | Pas de sous-fichiers requis |
+| [x] Tous les liens internes pointent vers des fichiers existants | [OK] | 3 liens vérifiés |
+| [x] Le contenu du statut courant est complet | [OK] | Toutes les sections écrites |
 
 ### Vérifications supplémentaires
 
 | Point | Statut | Notes |
 |---|---|---|
-| [x] En-tête YAML complet | ✓ | Portée, prérequis définis |
-| [x] Sections numérotées | ✓ | 6 étapes claires |
-| [x] Tableaux formatés | ✓ | Matrices de décision |
-| [x] Règles d'or | ✓ | 5 règles définies |
-| [x] Pièges courants | ✓ | 4 pièges documentés |
+| [x] En-tête YAML complet | [OK] | Portée, prérequis définis |
+| [x] Sections numérotées | [OK] | 6 étapes claires |
+| [x] Tableaux formatés | [OK] | Matrices de décision |
+| [x] Règles d'or | [OK] | 5 règles définies |
+| [x] Pièges courants | [OK] | 4 pièges documentés |
 
 ---
 
@@ -85,7 +85,7 @@ Tester le workflow RVAV (Rechercher-Vérifier-Analyser-Valider) sur un fichier e
 | Point | Vérification |
 |---|---|
 | **Terminologie** | Cohérente (activation, lecture, réactivation) |
-| **Logique** | Le cycle 1→6 est logique |
+| **Logique** | Le cycle 1->6 est logique |
 | **Références croisées** | Les liens sont corrects |
 
 ### Incohérences détectées
@@ -101,7 +101,7 @@ Tester le workflow RVAV (Rechercher-Vérifier-Analyser-Valider) sur un fichier e
 
 ### Décision
 
-**Verdict** : **AVANCER** → statut +1, class +1
+**Verdict** : **AVANCER** -> statut +1, class +1
 
 **Raison** :
 - Le document est complet pour le statut "ebauche"
@@ -113,8 +113,8 @@ Tester le workflow RVAV (Rechercher-Vérifier-Analyser-Valider) sur un fichier e
 
 ```
 Statut actuel : ebauche (class 01)
-Nouveau statut : préparé (class 02)
-Nouveau nom : protocole-activation.001.02.preparé.md
+Nouveau statut : prepare (class 02)
+Nouveau nom : protocole-activation.001.02.prepare.md
 ```
 
 ---

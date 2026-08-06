@@ -54,8 +54,8 @@ valider_liens() {
     local dossier_fichier
     dossier_fichier=$(dirname "$fichier")
 
-    echo -e "${BLUE}🔗 Validation des liens dans : ${fichier}${NC}"
-    echo -e "${BLUE}📁 Répertoire du fichier : ${dossier_fichier}${NC}"
+    echo -e "${BLUE}[LIEN] Validation des liens dans : ${fichier}${NC}"
+    echo -e "${BLUE}[DOSSIER] Répertoire du fichier : ${dossier_fichier}${NC}"
     echo ""
 
     # Extraire les liens Markdown [texte](chemin) avec sed
@@ -87,7 +87,7 @@ valider_liens() {
             # Lien externe
             liens_externes=$((liens_externes + 1))
             if [[ "$verbose" == "true" ]]; then
-                echo -e "${YELLOW}🔗 ${texte} → ${chemin} (externe)${NC}"
+                echo -e "${YELLOW}[LIEN] ${texte} -> ${chemin} (externe)${NC}"
             fi
         else
             # Lien interne - vérifier depuis le répertoire du fichier
@@ -99,11 +99,11 @@ valider_liens() {
             if [[ -f "$chemin_complet" ]] || [[ -d "$chemin_complet" ]]; then
                 liens_valides=$((liens_valides + 1))
                 if [[ "$verbose" == "true" ]]; then
-                    echo -e "${GREEN}✅ ${texte} → ${chemin}${NC}"
+                    echo -e "${GREEN}[OK] ${texte} -> ${chemin}${NC}"
                 fi
             else
                 liens_invalides=$((liens_invalides + 1))
-                echo -e "${RED}❌ ${texte} → ${chemin}${NC}"
+                echo -e "${RED}[ERREUR] ${texte} -> ${chemin}${NC}"
                 if [[ "$verbose" == "true" ]]; then
                     echo -e "   Chemin vérifié : ${chemin_complet}"
                 fi
@@ -113,9 +113,9 @@ valider_liens() {
 
     echo ""
     echo -e "${BLUE}Résumé :${NC}"
-    echo -e "${GREEN}✅ Liens valides : ${liens_valides}${NC}"
-    echo -e "${RED}❌ Liens invalides : ${liens_invalides}${NC}"
-    echo -e "${YELLOW}🔗 Liens externes : ${liens_externes}${NC}"
+    echo -e "${GREEN}[OK] Liens valides : ${liens_valides}${NC}"
+    echo -e "${RED}[ERREUR] Liens invalides : ${liens_invalides}${NC}"
+    echo -e "${YELLOW}[LIEN] Liens externes : ${liens_externes}${NC}"
 
     if [[ $liens_invalides -gt 0 ]]; then
         return 1

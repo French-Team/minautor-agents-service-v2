@@ -113,15 +113,15 @@
 
 ```
 recherches-web/
-├── index-recherches-web.md
-├── [theme-1]/
-│   ├── index.md
-│   ├── [recherche-1].md
-│   └── [recherche-2].md
-├── [theme-2]/
-│   └── ...
-└── templates/
-    └── recherche-template.md
+|-- index-recherches-web.md
+|-- [theme-1]/
+|   |-- index.md
+|   |-- [recherche-1].md
+|   ``-- [recherche-2].md
+|-- [theme-2]/
+|   ``-- ...
+``-- templates/
+    ``-- recherche-template.md
 ```
 
 ---

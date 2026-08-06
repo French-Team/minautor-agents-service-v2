@@ -38,11 +38,11 @@ Retourne un rapport de correction.
 ## Résultat
 
 ### Liens corrigés
-- [ancien.md](ancien.md) → [nouveau.md](nouveau.md)
-- dossier/ → dossier/existant/
+- [ancien.md](ancien.md) -> [nouveau.md](nouveau.md)
+- dossier/ -> dossier/existant/
 
 ### Liens non corrigés
-- [perdu.md](perdu.md) → Aucune correspondance trouvée
+- [perdu.md](perdu.md) -> Aucune correspondance trouvée
 
 ### Statistiques
 - Liens analysés : 15
@@ -97,12 +97,12 @@ corriger-liens(chemin=".", mode="auto")
 
 ```
 1. Extraire le chemin cible du lien
-2. Si le chemin existe → OK
+2. Si le chemin existe -> OK
 3. Sinon :
    a. Chercher dans le dossier parent
    b. Chercher par nom相似
-   c. Si trouvé → corriger
-   d. Sinon → signaler
+   c. Si trouvé -> corriger
+   d. Sinon -> signaler
 ```
 
 ---

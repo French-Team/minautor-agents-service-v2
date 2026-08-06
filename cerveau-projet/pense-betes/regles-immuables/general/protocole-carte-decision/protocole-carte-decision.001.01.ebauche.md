@@ -49,7 +49,7 @@ Transformer les fichiers d'agent en **cartes de décision** où chaque mission a
 Le fichier d'agent devient une **carte de décision** :
 
 ```
-SI [mission X] ALORS [ligne X] → [étapes] → [protocoles à lire]
+SI [mission X] ALORS [ligne X] -> [étapes] -> [protocoles à lire]
 ```
 
 ### Structure
@@ -85,19 +85,19 @@ SI [mission X] ALORS [ligne X] → [étapes] → [protocoles à lire]
 
 ```
 ÉTAPE 1 : Vérifier le système
-  → Lire : verifier-systeme
-  → Résultat : Système connu
-  → Contexte : [système utilisateur]
+  -> Lire : verifier-systeme
+  -> Résultat : Système connu
+  -> Contexte : [système utilisateur]
 
 ÉTAPE 2 : Choisir la technologie
-  → Lire : protocole-technologies
-  → Résultat : Technologie choisie
-  → Contexte : [technologies disponibles]
+  -> Lire : protocole-technologies
+  -> Résultat : Technologie choisie
+  -> Contexte : [technologies disponibles]
 
 ÉTAPE 3 : Développer l'outil
-  → Lire : protocole-outils
-  → Résultat : Outil créé
-  → Contexte : [spécifications]
+  -> Lire : protocole-outils
+  -> Résultat : Outil créé
+  -> Contexte : [spécifications]
 ```
 
 ### Étape 3 : Gestion du contexte
@@ -118,8 +118,8 @@ SI [mission X] ALORS [ligne X] → [étapes] → [protocoles à lire]
 
 | Mission | Étapes | Protocoles |
 |---|---|---|
-| [Mission 1] | [étape1] → [étape2] → [étape3] | [proto1], [proto2], [proto3] |
-| [Mission 2] | [étape1] → [étape2] | [proto1], [proto2] |
+| [Mission 1] | [étape1] -> [étape2] -> [étape3] | [proto1], [proto2], [proto3] |
+| [Mission 2] | [étape1] -> [étape2] | [proto1], [proto2] |
 
 ### Détail des missions
 

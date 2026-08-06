@@ -46,7 +46,7 @@ lister_appels() {
     local verbose=$2
     local unique=$3
 
-    echo -e "${BLUE}🔍 Appels de fonctions dans : ${fichier}${NC}"
+    echo -e "${BLUE}[RECHERCHE] Appels de fonctions dans : ${fichier}${NC}"
     echo ""
 
     # Détecter le type de fichier
@@ -64,7 +64,7 @@ lister_appels() {
                     sed 's/()//' | \
                     sort -u | \
                     while read -r func; do
-                        echo -e "${GREEN}📞 ${func}${NC}"
+                        echo -e "${GREEN}[TELEPHONE] ${func}${NC}"
                     done
             else
                 # Extraire tous les appels de fonctions
@@ -85,7 +85,7 @@ lister_appels() {
                     sed 's/($//' | \
                     sort -u | \
                     while read -r func; do
-                        echo -e "${GREEN}📞 ${func}${NC}"
+                        echo -e "${GREEN}[TELEPHONE] ${func}${NC}"
                     done
             else
                 # Extraire tous les appels de fonctions
@@ -106,7 +106,7 @@ lister_appels() {
                     sed 's/($//' | \
                     sort -u | \
                     while read -r func; do
-                        echo -e "${GREEN}📞 ${func}${NC}"
+                        echo -e "${GREEN}[TELEPHONE] ${func}${NC}"
                     done
             else
                 # Extraire tous les appels de fonctions

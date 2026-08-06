@@ -12,7 +12,7 @@
 | **Toujours relatif** | Jamais de chemin absolu |
 | **Texte descriptif** | Le texte doit expliquer la destination |
 | **Validation obligatoire** | Vérifier l'existence du fichier cible |
-| **Navigation cohérente** | Parent ↔ Enfant ↔ Frère |
+| **Navigation cohérente** | Parent <-> Enfant <-> Frère |
 
 ## Types de liens
 

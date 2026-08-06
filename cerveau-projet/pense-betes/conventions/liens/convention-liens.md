@@ -109,9 +109,9 @@ Standardiser la création de liens pour garantir :
 
 | Action | Étapes |
 |---|---|
-| **Déplacement** | Mettre à jour tous les liens → Vérifier index parent → Valider |
-| **Renommage** | Identifier liens → Mettre à jour → Vérifier cohérence |
-| **Suppression** | Identifier liens → Supprimer/remplacer → Mettre à jour index |
+| **Déplacement** | Mettre à jour tous les liens -> Vérifier index parent -> Valider |
+| **Renommage** | Identifier liens -> Mettre à jour -> Vérifier cohérence |
+| **Suppression** | Identifier liens -> Supprimer/remplacer -> Mettre à jour index |
 
 ---
 

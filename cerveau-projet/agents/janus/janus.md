@@ -13,7 +13,7 @@ agent:
 profil:
   role: "Agent dédié au second contrôle — contrôleur des statuts et vérificateur"
   specialites:
-    - "Contrôle des transitions de statut (ebauche → préparé → dev → test → valide)"
+    - "Contrôle des transitions de statut (ebauche -> préparé -> dev -> test -> valide)"
     - "Validation des boucles RVAV"
     - "Second contrôle des outils"
     - "Vérification de la conformité"

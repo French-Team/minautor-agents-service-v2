@@ -44,7 +44,7 @@ analyser_dependances() {
     local verbose=$2
     local inverse=$3
 
-    echo -e "${BLUE}🔗 Analyse des dépendances : $(basename "$fichier")${NC}"
+    echo -e "${BLUE}[LIEN] Analyse des dépendances : $(basename "$fichier")${NC}"
     echo ""
 
     # Vérifier que le fichier existe
@@ -57,9 +57,9 @@ analyser_dependances() {
 
     if [[ "$inverse" == "true" ]]; then
         # Mode inverse : trouver les fichiers qui dépendent de celui-ci
-        echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-        echo -e "${GREEN}📥 Fichiers qui dépendent de $(basename "$fichier")${NC}"
-        echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        echo -e "${CYAN}----------------------------------------${NC}"
+        echo -e "${GREEN}[TELECHARGER] Fichiers qui dépendent de $(basename "$fichier")${NC}"
+        echo -e "${CYAN}----------------------------------------${NC}"
         
         local dependants=0
         
@@ -67,7 +67,7 @@ analyser_dependances() {
         find . -name "*.md" -type f | while read -r autrefichier; do
             if [[ "$autrefichier" != "$fichier" ]]; then
                 if grep -q "$(basename "$fichier")" "$autrefichier" 2>/dev/null; then
-                    echo -e "  📄 ${autrefichier}"
+                    echo -e "  [FICHIER] ${autrefichier}"
                     dependants=$((dependants + 1))
                 fi
             fi
@@ -77,9 +77,9 @@ analyser_dependances() {
         echo -e "${BLUE}Terminé.${NC}"
     else
         # Mode normal : analyser les dépendances de ce fichier
-        echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-        echo -e "${GREEN}📤 Dépendances de $(basename "$fichier")${NC}"
-        echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        echo -e "${CYAN}----------------------------------------${NC}"
+        echo -e "${GREEN}[ENVOYER] Dépendances de $(basename "$fichier")${NC}"
+        echo -e "${CYAN}----------------------------------------${NC}"
         
         # 1. Liens Markdown
         echo -e "${BLUE}1. Liens Markdown${NC}"
@@ -99,11 +99,11 @@ analyser_dependances() {
                     if [[ -f "$chemin_complet" ]] || [[ -d "$chemin_complet" ]]; then
                         nb_valides=$((nb_valides + 1))
                         if [[ "$verbose" == "true" ]]; then
-                            echo -e "  ${GREEN}✅ ${texte} → ${chemin}${NC}"
+                            echo -e "  ${GREEN}[OK] ${texte} -> ${chemin}${NC}"
                         fi
                     else
                         nb_invalides=$((nb_invalides + 1))
-                        echo -e "  ${RED}❌ ${texte} → ${chemin}${NC}"
+                        echo -e "  ${RED}[ERREUR] ${texte} -> ${chemin}${NC}"
                     fi
                 fi
             done <<< "$liens"
@@ -123,17 +123,17 @@ analyser_dependances() {
             sh|bash)
                 # Scripts Bash - chercher les sources
                 local sources=$(grep -E '^\s*source\s+|^\s*\.\s+' "$fichier" 2>/dev/null | wc -l)
-                echo -e "  📦 Sources Bash : ${sources}"
+                echo -e "  [PAQUET] Sources Bash : ${sources}"
                 ;;
             py)
                 # Scripts Python - chercher les imports
                 local imports=$(grep -E '^\s*import\s+|^\s*from\s+' "$fichier" 2>/dev/null | wc -l)
-                echo -e "  📦 Imports Python : ${imports}"
+                echo -e "  [PAQUET] Imports Python : ${imports}"
                 ;;
             js|ts)
                 # Scripts JavaScript - chercher les imports
                 local imports=$(grep -E '^\s*import\s+|^\s*require\s*\(' "$fichier" 2>/dev/null | wc -l)
-                echo -e "  📦 Imports JavaScript : ${imports}"
+                echo -e "  [PAQUET] Imports JavaScript : ${imports}"
                 ;;
             *)
                 echo -e "  ${YELLOW}Type de fichier non analysé pour les imports${NC}"
@@ -144,7 +144,7 @@ analyser_dependances() {
         # 3. Fichiers référencés
         echo -e "${BLUE}3. Fichiers référencés${NC}"
         local refs=$(grep -oE '[a-zA-Z0-9_./-]+\.(md|sh|py|js|ts|json)' "$fichier" 2>/dev/null | sort -u | wc -l)
-        echo -e "  📄 ${refs} fichier(s) référencé(s)"
+        echo -e "  [FICHIER] ${refs} fichier(s) référencé(s)"
         echo ""
 
         echo -e "${BLUE}Terminé.${NC}"

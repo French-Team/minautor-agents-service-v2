@@ -28,36 +28,36 @@ verifier_agent() {
     # Vérifier la section Carte de Décision
     echo "1. Vérification de la section Carte de Décision"
     if grep -q "CARTE DE DÉCISION" "$fichier"; then
-        echo "   ✓ Section présente"
+        echo "   [OK] Section présente"
     else
-        echo "   ✗ Section manquante"
+        echo "   [ERREUR] Section manquante"
         return 1
     fi
     
     # Vérifier le tableau des missions
     echo "2. Vérification du tableau des missions"
     if grep -q "Missions disponibles" "$fichier"; then
-        echo "   ✓ Tableau présent"
+        echo "   [OK] Tableau présent"
     else
-        echo "   ✗ Tableau manquant"
+        echo "   [ERREUR] Tableau manquant"
         return 1
     fi
     
     # Vérifier les détails des missions
     echo "3. Vérification des détails des missions"
     if grep -q "Mission :" "$fichier"; then
-        echo "   ✓ Détails présents"
+        echo "   [OK] Détails présents"
     else
-        echo "   ✗ Détails manquants"
+        echo "   [ERREUR] Détails manquants"
         return 1
     fi
     
     # Vérifier les règles absolues
     echo "4. Vérification des règles absolues"
     if grep -q "RÈGLE ABSOLUE" "$fichier"; then
-        echo "   ✓ Règles présentes"
+        echo "   [OK] Règles présentes"
     else
-        echo "   ✗ Règles manquantes"
+        echo "   [ERREUR] Règles manquantes"
         return 1
     fi
     
@@ -106,36 +106,36 @@ verifier_fichier() {
     # Vérifier la section Carte de Décision
     echo "1. Vérification de la section Carte de Décision"
     if grep -q "CARTE DE DÉCISION" "$fichier"; then
-        echo "   ✓ Section présente"
+        echo "   [OK] Section présente"
     else
-        echo "   ✗ Section manquante"
+        echo "   [ERREUR] Section manquante"
         return 1
     fi
     
     # Vérifier le tableau des missions
     echo "2. Vérification du tableau des missions"
     if grep -q "Missions disponibles" "$fichier"; then
-        echo "   ✓ Tableau présent"
+        echo "   [OK] Tableau présent"
     else
-        echo "   ✗ Tableau manquant"
+        echo "   [ERREUR] Tableau manquant"
         return 1
     fi
     
     # Vérifier les détails des missions
     echo "3. Vérification des détails des missions"
     if grep -q "Mission :" "$fichier"; then
-        echo "   ✓ Détails présents"
+        echo "   [OK] Détails présents"
     else
-        echo "   ✗ Détails manquants"
+        echo "   [ERREUR] Détails manquants"
         return 1
     fi
     
     # Vérifier les règles absolues
     echo "4. Vérification des règles absolues"
     if grep -q "RÈGLE ABSOLUE" "$fichier"; then
-        echo "   ✓ Règles présentes"
+        echo "   [OK] Règles présentes"
     else
-        echo "   ✗ Règles manquantes"
+        echo "   [ERREUR] Règles manquantes"
         return 1
     fi
     

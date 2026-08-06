@@ -115,7 +115,7 @@ sauvegarder() {
 }
 EOF
     
-    echo -e "${GREEN}✅ Position sauvegardée${NC}"
+    echo -e "${GREEN}[OK] Position sauvegardée${NC}"
     echo "- Mission : $mission"
     echo "- Étape : $etape"
     echo "- Données : $donnees"
@@ -151,7 +151,7 @@ sortir() {
         exit 1
     fi
     
-    echo -e "${YELLOW}🔄 Sortie du flux principal${NC}"
+    echo -e "${YELLOW}[ROTATION] Sortie du flux principal${NC}"
     echo "- Raison : $raison"
     echo "- Outil nécessaire : $outil"
     echo "- Sous-mission : Créer/reprendre $outil"
@@ -188,7 +188,7 @@ revenir() {
         exit 1
     fi
     
-    echo -e "${GREEN}✅ Retour au flux principal${NC}"
+    echo -e "${GREEN}[OK] Retour au flux principal${NC}"
     echo "- Résultat : $resultat"
     echo "- Outil créé : $outil_cree"
     echo ""
@@ -204,7 +204,7 @@ revenir() {
 lister() {
     creer_dossier_sauvegardes
     
-    echo -e "${BLUE}📋 Sous-missions et positions sauvegardées${NC}"
+    echo -e "${BLUE}[CHECKLIST] Sous-missions et positions sauvegardées${NC}"
     echo ""
     
     local fichiers=$(find "$DOSSIER_SAUVEGARDES" -name "*.json" -type f 2>/dev/null | head -10)

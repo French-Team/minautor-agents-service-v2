@@ -1,3 +1,14 @@
+# ============================================================
+# EXCEPTION VOLONTAIRE A LA REGLE regles-emojis-ascii.md
+# ------------------------------------------------------------
+# Ce fichier CONTIENT volontairement des emojis : c'est le
+# dictionnaire de correspondance emoji -> ASCII utilise par
+# corriger-emojis.sh. Il ne peut pas etre converti en ASCII
+# pur, sinon l'outil perdrait sa fonction.
+#
+# NE PAS purger ce fichier. Les lignes # sont ignorees par
+# l'outil. Exception documentee dans regles-emojis-ascii.md.
+# ============================================================
 # Dictionnaire Emoji -> ASCII
 # Format: EMOJI|REMPLACEMENT
 # Ce fichier est utilise par corriger-emojis.sh
@@ -23,7 +34,6 @@
 📊|[GRAPHIQUE]
 📈|[CROISSANCE]
 📉|[DECROISSANCE]
-📋|[LISTE]
 
 # Emojis de recherche
 🔍|[RECHERCHE]
@@ -101,7 +111,6 @@
 📆|[CALENDRIER]
 
 # Emojis de localisation
-📍|[POSITION]
 🗺️|[CARTE]
 🧭|[BOUSSOLE]
 
@@ -111,7 +120,6 @@
 📧|[EMAIL]
 ✉️|[ENVELOPPE]
 📨|[RECEPTION]
-📤|[ENVOI]
 
 # Emojis de media
 📷|[APPAREIL]
@@ -122,7 +130,6 @@
 🔇|[MUET]
 🔈|[SON_FAIBLE]
 🔉|[SON_MOYEN]
-🔊|[FORT]
 
 # Emojis de nature
 🌍|[MONDE]
@@ -197,7 +204,6 @@
 🙌|[LEVER_mains]
 🤝|[POIGNÉE_de_main]
 🙏|[PRIERE]
-💪|[MUSCLE]
 🦾|[MUSCLE Mécanique]
 🦿|[Jambe mécanique]
 🦵|[JAMBE]
@@ -311,3 +317,13 @@
 🏳️‍🌈|[DRAPEAU_ARC_EN_CIEL]
 🏳️‍⚧️|[DRAPEAU_TRANS]
 🏴‍☠️|[PIRATE]
+🤖|[AGENT]
+🔄|[ROTATION]
+📦|[PAQUET]
+🕐|[HEURE]
+🔗|[LIEN]
+🐚|[SHELL]
+🐍|[PYTHON]
+📜|[DOCUMENT]
+💾|[SAUVEGARDE]
+🌳|[ARBORESCENCE]

@@ -37,10 +37,10 @@ AVANT de passer à l'étape suivante
 1. Lire la carte de décision
 2. Identifier l'étape en cours
 3. Vérifier que l'étape précédente est terminée
-4. Si non → Terminer l'étape précédente
+4. Si non -> Terminer l'étape précédente
 5. Vérifier si un outil est nécessaire pour cette étape
-6. Si outil manquant → SOUS-MISSION obligatoire
-7. Si oui → Continuer
+6. Si outil manquant -> SOUS-MISSION obligatoire
+7. Si oui -> Continuer
 8. Documenter le résultat
 ```
 
@@ -95,7 +95,7 @@ Condition : Le fichier existe-t-il ?
 #### Étape 4 : Créer les specs (si nécessaire)
 
 ```
-Si les specs n'existent pas → Les créer
+Si les specs n'existent pas -> Les créer
 Format : Suivre le template spec-template.md
 ```
 

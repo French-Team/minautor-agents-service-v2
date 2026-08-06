@@ -47,7 +47,7 @@ corriger_protocole() {
     local basename=$(basename "$fichier")
     local dossier=$(dirname "$fichier")
 
-    echo -e "${BLUE}🔧 Correction du nommage : ${basename}${NC}"
+    echo -e "${BLUE}[OUTIL] Correction du nommage : ${basename}${NC}"
     echo ""
 
     # Extraire les parties du nom
@@ -58,7 +58,7 @@ corriger_protocole() {
 
     # Vérifier si le format est correct
     if [[ -z "$nom_part" || -z "$major_part" || -z "$minor_part" || -z "$statut_part" ]]; then
-        echo -e "  ${RED}❌ Format invalide : ${basename}${NC}"
+        echo -e "  ${RED}[ERREUR] Format invalide : ${basename}${NC}"
         echo -e "    Impossible de corriger automatiquement"
         return 1
     fi
@@ -68,11 +68,11 @@ corriger_protocole() {
 
     # Vérifier si une correction est nécessaire
     if [[ "$basename" == "$nouveau_nom" ]]; then
-        echo -e "  ${GREEN}✅ Aucune correction nécessaire${NC}"
+        echo -e "  ${GREEN}[OK] Aucune correction nécessaire${NC}"
         return 0
     fi
 
-    echo -e "  ${YELLOW}⚠️  Correction nécessaire :${NC}"
+    echo -e "  ${YELLOW}[ATTENTION]  Correction nécessaire :${NC}"
     echo -e "    Actuel : ${basename}"
     echo -e "    Nouveau : ${nouveau_nom}"
 
@@ -81,12 +81,12 @@ corriger_protocole() {
     else
         local chemin_complet="${dossier}/${nouveau_nom}"
         if [[ -f "$chemin_complet" ]]; then
-            echo -e "  ${RED}❌ Le fichier destination existe déjà${NC}"
+            echo -e "  ${RED}[ERREUR] Le fichier destination existe déjà${NC}"
             return 1
         fi
         
         mv "$fichier" "$chemin_complet"
-        echo -e "  ${GREEN}✅ Fichier renommé${NC}"
+        echo -e "  ${GREEN}[OK] Fichier renommé${NC}"
     fi
 
     return 0
@@ -101,12 +101,12 @@ corriger_agent() {
     local basename=$(basename "$fichier")
     local dossier=$(dirname "$fichier")
 
-    echo -e "${BLUE}🔧 Correction du nommage : ${basename}${NC}"
+    echo -e "${BLUE}[OUTIL] Correction du nommage : ${basename}${NC}"
     echo ""
 
     # Vérifier le format : nom-agent.md
     if [[ "$basename" =~ ^[a-z]+\.md$ ]]; then
-        echo -e "  ${GREEN}✅ Aucune correction nécessaire${NC}"
+        echo -e "  ${GREEN}[OK] Aucune correction nécessaire${NC}"
         return 0
     fi
 
@@ -114,7 +114,7 @@ corriger_agent() {
     local nom=$(echo "$basename" | sed 's/\.md$//')
     local nouveau_nom="${nom}.md"
 
-    echo -e "  ${YELLOW}⚠️  Correction nécessaire :${NC}"
+    echo -e "  ${YELLOW}[ATTENTION]  Correction nécessaire :${NC}"
     echo -e "    Actuel : ${basename}"
     echo -e "    Nouveau : ${nouveau_nom}"
 
@@ -123,12 +123,12 @@ corriger_agent() {
     else
         local chemin_complet="${dossier}/${nouveau_nom}"
         if [[ -f "$chemin_complet" ]]; then
-            echo -e "  ${RED}❌ Le fichier destination existe déjà${NC}"
+            echo -e "  ${RED}[ERREUR] Le fichier destination existe déjà${NC}"
             return 1
         fi
         
         mv "$fichier" "$chemin_complet"
-        echo -e "  ${GREEN}✅ Fichier renommé${NC}"
+        echo -e "  ${GREEN}[OK] Fichier renommé${NC}"
     fi
 
     return 0
@@ -143,12 +143,12 @@ corriger_outil() {
     local basename=$(basename "$fichier")
     local dossier=$(dirname "$fichier")
 
-    echo -e "${BLUE}🔧 Correction du nommage : ${basename}${NC}"
+    echo -e "${BLUE}[OUTIL] Correction du nommage : ${basename}${NC}"
     echo ""
 
     # Vérifier le format : nom-outil.sh ou nom-outil.md
     if [[ "$basename" =~ ^[a-z-]+\.sh$ ]] || [[ "$basename" =~ ^[a-z-]+\.md$ ]]; then
-        echo -e "  ${GREEN}✅ Aucune correction nécessaire${NC}"
+        echo -e "  ${GREEN}[OK] Aucune correction nécessaire${NC}"
         return 0
     fi
 
@@ -157,7 +157,7 @@ corriger_outil() {
     local extension="${basename##*.}"
     local nouveau_nom="${nom}.${extension}"
 
-    echo -e "  ${YELLOW}⚠️  Correction nécessaire :${NC}"
+    echo -e "  ${YELLOW}[ATTENTION]  Correction nécessaire :${NC}"
     echo -e "    Actuel : ${basename}"
     echo -e "    Nouveau : ${nouveau_nom}"
 
@@ -166,12 +166,12 @@ corriger_outil() {
     else
         local chemin_complet="${dossier}/${nouveau_nom}"
         if [[ -f "$chemin_complet" ]]; then
-            echo -e "  ${RED}❌ Le fichier destination existe déjà${NC}"
+            echo -e "  ${RED}[ERREUR] Le fichier destination existe déjà${NC}"
             return 1
         fi
         
         mv "$fichier" "$chemin_complet"
-        echo -e "  ${GREEN}✅ Fichier renommé${NC}"
+        echo -e "  ${GREEN}[OK] Fichier renommé${NC}"
     fi
 
     return 0
@@ -186,12 +186,12 @@ corriger_convention() {
     local basename=$(basename "$fichier")
     local dossier=$(dirname "$fichier")
 
-    echo -e "${BLUE}🔧 Correction du nommage : ${basename}${NC}"
+    echo -e "${BLUE}[OUTIL] Correction du nommage : ${basename}${NC}"
     echo ""
 
     # Vérifier le format : convention-nom.md
     if [[ "$basename" =~ ^convention-[a-z-]+\.md$ ]]; then
-        echo -e "  ${GREEN}✅ Aucune correction nécessaire${NC}"
+        echo -e "  ${GREEN}[OK] Aucune correction nécessaire${NC}"
         return 0
     fi
 
@@ -199,7 +199,7 @@ corriger_convention() {
     local nom=$(echo "$basename" | sed 's/\.md$//' | sed 's/^convention-//')
     local nouveau_nom="convention-${nom}.md"
 
-    echo -e "  ${YELLOW}⚠️  Correction nécessaire :${NC}"
+    echo -e "  ${YELLOW}[ATTENTION]  Correction nécessaire :${NC}"
     echo -e "    Actuel : ${basename}"
     echo -e "    Nouveau : ${nouveau_nom}"
 
@@ -208,12 +208,12 @@ corriger_convention() {
     else
         local chemin_complet="${dossier}/${nouveau_nom}"
         if [[ -f "$chemin_complet" ]]; then
-            echo -e "  ${RED}❌ Le fichier destination existe déjà${NC}"
+            echo -e "  ${RED}[ERREUR] Le fichier destination existe déjà${NC}"
             return 1
         fi
         
         mv "$fichier" "$chemin_complet"
-        echo -e "  ${GREEN}✅ Fichier renommé${NC}"
+        echo -e "  ${GREEN}[OK] Fichier renommé${NC}"
     fi
 
     return 0

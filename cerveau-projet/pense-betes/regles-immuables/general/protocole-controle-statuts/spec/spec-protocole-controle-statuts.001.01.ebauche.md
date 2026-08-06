@@ -84,11 +84,11 @@ def prendre_decision(resultats):
 
 ```
 protocole-controle-statuts/
-├── protocole-controle-statuts.md      # Le protocole
-├── spec/
-│   └── spec-protocole-controle-statuts.md  # Cette spécification
-└── todo/
-    └── todo-protocole-controle-statuts.md   # Tâches
+|-- protocole-controle-statuts.md      # Le protocole
+|-- spec/
+|   ``-- spec-protocole-controle-statuts.md  # Cette spécification
+``-- todo/
+    ``-- todo-protocole-controle-statuts.md   # Tâches
 ```
 
 ---
@@ -97,7 +97,7 @@ protocole-controle-statuts/
 
 - Janus doit être indépendant de Buffy
 - Le contrôle doit être documenté
-- Le cycle Cerberus → Janus → Cerberus doit être respecté
+- Le cycle Cerberus -> Janus -> Cerberus doit être respecté
 - Les outils de validation doivent être utilisés
 
 ---

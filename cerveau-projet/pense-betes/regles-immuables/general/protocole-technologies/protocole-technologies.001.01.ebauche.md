@@ -22,7 +22,7 @@ Définir comment choisir les technologies pour créer des outils réels en fonct
 ## Le processus de choix
 
 ```
-SYSTÈME UTILISATEUR → ANALYSE → TECHNOLOGIE → DÉVELOPPEMENT → TEST
+SYSTÈME UTILISATEUR -> ANALYSE -> TECHNOLOGIE -> DÉVELOPPEMENT -> TEST
         1                2          3            4           5
 ```
 
@@ -81,10 +81,10 @@ which node
 
 | Question | Impact |
 |---|---|
-| **L'outil doit-il être rapide ?** | Oui → Bash/Python natif |
-| **L'outil doit-il être portable ?** | Oui → Python ou Node.js |
-| **L'outil doit-il être simple ?** | Oui → Bash |
-| **L'outil doit-il être puissant ?** | Oui → Python |
+| **L'outil doit-il être rapide ?** | Oui -> Bash/Python natif |
+| **L'outil doit-il être portable ?** | Oui -> Python ou Node.js |
+| **L'outil doit-il être simple ?** | Oui -> Bash |
+| **L'outil doit-il être puissant ?** | Oui -> Python |
 
 ### Critères de choix
 
@@ -123,13 +123,13 @@ which node
 
 ```
 outils/[nom-outil]/
-├── [nom-outil].sh          # Script Bash
-├── [nom-outil].py          # Script Python
-├── [nom-outil].js          # Script Node.js
-├── README.md               # Documentation
-├── test-[nom-outil].sh     # Tests
-└── spec/
-    └── spec-[nom-outil].md # Spécification
+|-- [nom-outil].sh          # Script Bash
+|-- [nom-outil].py          # Script Python
+|-- [nom-outil].js          # Script Node.js
+|-- README.md               # Documentation
+|-- test-[nom-outil].sh     # Tests
+``-- spec/
+    ``-- spec-[nom-outil].md # Spécification
 ```
 
 ### Conventions de nommage

@@ -92,12 +92,12 @@ def ajouter_historique(fichier, agent, raison):
 
 ```
 modifier-agents-md/
-├── modifier-agents-md.md      # Documentation
-├── modifier-agents-md.py      # Script Python
-├── modifier-agents-md.sh      # Script Bash
-├── test-modifier-agents-md.md # Tests
-└── spec/
-    └── spec-modifier-agents-md.md  # Cette spécification
+|-- modifier-agents-md.md      # Documentation
+|-- modifier-agents-md.py      # Script Python
+|-- modifier-agents-md.sh      # Script Bash
+|-- test-modifier-agents-md.md # Tests
+`-- spec/
+    `-- spec-modifier-agents-md.md  # Cette spécification
 ```
 
 ---

@@ -11,9 +11,9 @@ Permettre au cerveau-projet de s'améliorer de manière automatisée et traçabl
 
 ```
 protocole-autoameliorer-cerveau/
-├── protocole-autoameliorer-cerveau.001.01.ebauche.md  ← le protocole
-├── spec/                                                ← CE FICHIER
-└── todo/                                                ← tâches liées
+|-- protocole-autoameliorer-cerveau.001.01.ebauche.md  <- le protocole
+|-- spec/                                                <- CE FICHIER
+``-- todo/                                                <- tâches liées
 ```
 
 ---

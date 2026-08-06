@@ -38,14 +38,14 @@ extraire_statut() {
     local basename=$(basename "$fichier")
     
     # Chercher le statut dans le nom de fichier (avec ou sans accent)
-    echo "$basename" | grep -oE '\.(ebauche|prepare|preparé|dev|test|valide)\.md$' | sed 's/\.md$//' | sed 's/^\.//' | sed 's/preparé/prepare/'
+    echo "$basename" | grep -oE '\.(ebauche|prepare|dev|test|valide)\.md$' | sed 's/\.md$//' | sed 's/^\.//'
 }
 
 # Fonction pour extraire le nom du fichier (sans le statut)
 extraire_nom() {
     local fichier=$1
     local basename=$(basename "$fichier")
-    echo "$basename" | sed 's/\.(ebauche|prepare|preparé|dev|test|valide)\.md$//'
+    echo "$basename" | sed 's/\.(ebauche|prepare|dev|test|valide)\.md$//'
 }
 
 # Fonction pour evaluer le niveau de maturite d'un contenu
@@ -127,7 +127,7 @@ statut_vers_ordre() {
     
     case "$statut" in
         "ebauche") echo 1 ;;
-        "prepare"|"préparé") echo 2 ;;
+        "prepare") echo 2 ;;
         "dev") echo 3 ;;
         "test") echo 4 ;;
         "valide") echo 5 ;;

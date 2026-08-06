@@ -23,7 +23,7 @@ Permettre aux agents de :
 ## Le Cycle d'Auto-Correction
 
 ```
-VÉRIFIER → CRÉER/LIRE → APPLIQUER → TRAVAILLER → CORRIGER → RÉACTIVER
+VÉRIFIER -> CRÉER/LIRE -> APPLIQUER -> TRAVAILLER -> CORRIGER -> RÉACTIVER
     1          2            3           4            5           6
 ```
 
@@ -43,8 +43,8 @@ VÉRIFIER → CRÉER/LIRE → APPLIQUER → TRAVAILLER → CORRIGER → RÉACTIV
 ```
 1. Aller dans agents/
 2. Chercher le dossier [nom-agent]/
-3. Si le dossier existe → lire la fiche et les corrections
-4. Si le dossier n'existe pas → le créer (voir Étape 2)
+3. Si le dossier existe -> lire la fiche et les corrections
+4. Si le dossier n'existe pas -> le créer (voir Étape 2)
 ```
 
 ---
@@ -53,8 +53,8 @@ VÉRIFIER → CRÉER/LIRE → APPLIQUER → TRAVAILLER → CORRIGER → RÉACTIV
 
 ```
 1. Créer le dossier agents/[nom-agent]/
-2. Copier fiche-agent-template.md → agents/[nom-agent]/[nom-agent].md
-3. Copier corrections-template.md → agents/[nom-agent]/corrections.md
+2. Copier fiche-agent-template.md -> agents/[nom-agent]/[nom-agent].md
+3. Copier corrections-template.md -> agents/[nom-agent]/corrections.md
 4. Remplir la fiche avec les informations de l'agent
 5. Laisser les corrections vides (seront remplies à la détection d'erreurs)
 ```
@@ -63,8 +63,8 @@ VÉRIFIER → CRÉER/LIRE → APPLIQUER → TRAVAILLER → CORRIGER → RÉACTIV
 
 ```
 agents/[nom-agent]/
-├── [nom-agent].md        ← fiche de l'agent
-└── corrections.md         ← surcharges/corrections
+|-- [nom-agent].md        <- fiche de l'agent
+``-- corrections.md         <- surcharges/corrections
 ```
 
 ---

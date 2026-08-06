@@ -16,7 +16,7 @@
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
 | **Activé par** | Cerberus (retour de mission)|
-| **Raison** | Second controle active par Cerberus selon liste definie (branches verdict + anti-boucle Janus/Clio) + bug sed Raison corrige|
+| **Raison** | Creation du combo corriger-non-ascii : chainage rechercher-accents-sensibles + corriger-emojis + corriger-accents + verification. Combo partage (pas exclusif a Themis). Index mis a jour (2 combos)|
 
 ---
 
@@ -32,7 +32,7 @@
 ### Le cycle fondamental
 
 ```
-CERBERUS → AGENT → CERBERUS
+CERBERUS -> AGENT -> CERBERUS
     1         2         3
 ```
 
@@ -82,6 +82,7 @@ CERBERUS → AGENT → CERBERUS
 | [Atlas](cerveau-projet/agents/atlas/atlas.md) | cerveau-projet/agents/atlas/ | Explorateur | Disponible (en attente) | Carte de décision mise à jour |
 | [Janus](cerveau-projet/agents/janus/janus.md) | cerveau-projet/agents/janus/ | Contrôleur des statuts | Disponible (sur demande) | Carte de décision mise à jour |
 | [Vulcain](cerveau-projet/agents/vulcain/vulcain.md) | cerveau-projet/agents/vulcain/ | Constructeur d'outils | Disponible (en attente) | 19 outils créés |
+| [Themis](cerveau-projet/agents/themis/themis.md) | cerveau-projet/agents/themis/ | Evaluatrice croisee | Disponible | 4 evaluateurs + 1 combo |
 | [Morpheus](cerveau-projet/agents/morpheus/morpheus.md) | cerveau-projet/agents/morpheus/ | Testeur dédié | Disponible (en attente) | Agent dédié aux tests |
 | [Athena](cerveau-projet/agents/athena/athena.md) | cerveau-projet/agents/athena/ | Rédactrice de pense-bêtes | Disponible (en attente) | Agent dédié aux pense-bêtes |
 | [Promethee](cerveau-projet/agents/promethee/promethee.md) | cerveau-projet/agents/promethee/ | Rédacteur de specs | Disponible (en attente) | Agent dédié aux specs |

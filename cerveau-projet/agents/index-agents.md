@@ -47,8 +47,8 @@
 2. Si non, créer le dossier avec :
    ```
    agents/[nom-agent]/
-   ├── [nom-agent].md        ← fiche de l'agent
-   └── corrections.md         ← surcharges/corrections
+   |-- [nom-agent].md        <- fiche de l'agent
+   ``-- corrections.md         <- surcharges/corrections
    ```
 3. Remplir la fiche avec le template `fiche-agent-template.md`
 4. Remplir les corrections avec le template `corrections-template.md`
@@ -72,5 +72,5 @@
 | **Auto-correction** | L'agent corrige ses propres erreurs dans `corrections.md` |
 | **AGENTS.md dynamique** | L'agent principal met à jour AGENTS.md à chaque session |
 | **Fiche obligatoire** | Pas de travail sans fiche d'agent préalable |
-| **Cycle complet** | Cerberus → Agent → Cerberus (toujours revenir à Cerberus) |
+| **Cycle complet** | Cerberus -> Agent -> Cerberus (toujours revenir à Cerberus) |
 | **Ordre logique** | Fichiers principaux d'abord, agents secondaires ensuite |

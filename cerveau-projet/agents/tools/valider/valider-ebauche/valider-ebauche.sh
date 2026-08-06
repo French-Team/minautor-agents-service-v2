@@ -37,7 +37,7 @@ verifier_statut() {
     if echo "$basename" | grep -qE '\.ebauche\.md$'; then
         return 0
     else
-        echo -e "${RED}❌ Le fichier n'est pas un ebauche : $basename${NC}"
+        echo -e "${RED}[ERREUR] Le fichier n'est pas un ebauche : $basename${NC}"
         return 1
     fi
 }
@@ -53,7 +53,7 @@ verifier_nommage() {
     if echo "$basename" | grep -qE '^([a-zA-Z0-9_-]+-)?[a-zA-Z0-9_-]+\.[0-9]{3}\.[0-9]{2}\.ebauche\.md$'; then
         return 0
     else
-        echo -e "${YELLOW}⚠️  Le nom ne respecte pas la convention : $basename${NC}"
+        echo -e "${YELLOW}[ATTENTION]  Le nom ne respecte pas la convention : $basename${NC}"
         echo "  Format attendu: [type]-[theme].[id].[class].ebauche.md"
         return 1
     fi
@@ -66,7 +66,7 @@ verifier_sections() {
     
     # Vérifier la présence d'un titre
     if ! grep -q "^#" "$fichier"; then
-        echo -e "${RED}❌ Pas de titre principal (h1)${NC}"
+        echo -e "${RED}[ERREUR] Pas de titre principal (h1)${NC}"
         erreurs=$((erreurs + 1))
     fi
     
@@ -81,7 +81,7 @@ verifier_contenu() {
     
     # Vérifier le nombre de lignes minimal
     if [ "$lignes" -lt 5 ]; then
-        echo -e "${RED}❌ Trop peu de contenu : $lignes lignes (minimum 5)${NC}"
+        echo -e "${RED}[ERREUR] Trop peu de contenu : $lignes lignes (minimum 5)${NC}"
         erreurs=$((erreurs + 1))
     fi
     
@@ -95,20 +95,20 @@ verifier_pas_trop_complet() {
     
     # Vérifier la présence de frontmatter
     if head -n 1 "$fichier" | grep -q "^---"; then
-        echo -e "${YELLOW}⚠️  Frontmatter présent (inutile pour un ebauche)${NC}"
+        echo -e "${YELLOW}[ATTENTION]  Frontmatter présent (inutile pour un ebauche)${NC}"
         warnings=$((warnings + 1))
     fi
     
     # Vérifier la présence de tableaux
     if grep -qE "^\|.*\|" "$fichier"; then
-        echo -e "${YELLOW}⚠️  Tableaux présents (peut-être trop structuré pour un ebauche)${NC}"
+        echo -e "${YELLOW}[ATTENTION]  Tableaux présents (peut-être trop structuré pour un ebauche)${NC}"
         warnings=$((warnings + 1))
     fi
     
     # Vérifier la présence de many sections
     local nb_sections=$(grep -c "^## " "$fichier" 2>/dev/null || echo 0)
     if [ "$nb_sections" -gt 3 ]; then
-        echo -e "${YELLOW}⚠️  $nb_sections sections (peut-être trop structuré pour un ebauche)${NC}"
+        echo -e "${YELLOW}[ATTENTION]  $nb_sections sections (peut-être trop structuré pour un ebauche)${NC}"
         warnings=$((warnings + 1))
     fi
     
@@ -127,7 +127,7 @@ valider_ebauche() {
     
     # Vérifier que le fichier existe
     if [ ! -f "$fichier" ]; then
-        echo -e "${RED}❌ Fichier non trouvé : $fichier${NC}"
+        echo -e "${RED}[ERREUR] Fichier non trouvé : $fichier${NC}"
         exit 1
     fi
     
@@ -176,15 +176,15 @@ valider_ebauche() {
     
     if [ "$erreurs_totales" -eq 0 ]; then
         echo ""
-        echo -e "${GREEN}✅ Le fichier ebauche respecte les exigences minimales${NC}"
+        echo -e "${GREEN}[OK] Le fichier ebauche respecte les exigences minimales${NC}"
         if [ "$avertissements" -gt 0 ]; then
-            echo -e "${YELLOW}⚠️  Cependant, il semble trop structuré pour un ebauche${NC}"
-            echo -e "${YELLOW}    Considérez passer au statut 'préparé'${NC}"
+            echo -e "${YELLOW}[ATTENTION]  Cependant, il semble trop structuré pour un ebauche${NC}"
+            echo -e "${YELLOW}    Considérez passer au statut 'prepare'${NC}"
         fi
         exit 0
     else
         echo ""
-        echo -e "${RED}❌ Le fichier ebauche ne respecte pas les exigences minimales${NC}"
+        echo -e "${RED}[ERREUR] Le fichier ebauche ne respecte pas les exigences minimales${NC}"
         exit 1
     fi
 }
@@ -209,7 +209,7 @@ done
 
 # Vérifier qu'un fichier a été spécifié
 if [ -z "$FICHIER" ]; then
-    echo -e "${RED}❌ Aucun fichier spécifié${NC}"
+    echo -e "${RED}[ERREUR] Aucun fichier spécifié${NC}"
     afficher_aide
     exit 1
 fi

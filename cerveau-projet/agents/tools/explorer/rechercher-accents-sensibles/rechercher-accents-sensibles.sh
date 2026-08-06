@@ -15,7 +15,7 @@
 # Configuration
 VERSION="0.2.0-beta"
 STATUT="ebauche"
-EXCLUSIONS_DEFAUT="node_modules,.git,.agents,.backup,.tmp"
+EXCLUSIONS_DEFAUT="node_modules,.git,.agents,.backup,.tmp,dictionnaire-,exemples"
 EXTENSIONS_DEFAUT="sh,py,js,json,yaml,yml,txt"
 
 # Couleurs
@@ -96,6 +96,7 @@ main() {
     echo "Version : ${VERSION}"
     echo "Dossier : ${dossier}"
     echo "Zones : ${zones}"
+    echo "Fichiers EXCEPTION VOLONTAIRE (dictionnaire-*) exclus automatiquement"
     echo ""
 
     if [ ! -d "$dossier" ]; then

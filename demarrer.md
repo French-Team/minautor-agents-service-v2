@@ -13,8 +13,8 @@
 3. demarrer.md dit : "Si tu es nommé, deviens cet agent"
 
 4. L'agent vérifie AGENTS.md :
-   - Si le nom dans AGENTS.md correspond → tu es déjà actif
-   - Si le nom ne correspond pas → tu dois devenir cet agent
+   - Si le nom dans AGENTS.md correspond -> tu es déjà actif
+   - Si le nom ne correspond pas -> tu dois devenir cet agent
 
 5. L'agent devient l'agent nommé pour la session
 ```
@@ -24,8 +24,8 @@
 1. Lire demarrer.md (ce fichier)
 2. Identifier le nom de l'agent dans la salutation
 3. Vérifier AGENTS.md :
-   a. Si l'agent nommé est déjà actif → confirmer et continuer
-   b. Si un autre agent est actif → devenir l'agent nommé
+   a. Si l'agent nommé est déjà actif -> confirmer et continuer
+   b. Si un autre agent est actif -> devenir l'agent nommé
 4. Aller à l'Étape 0.2
 ```
 
@@ -42,13 +42,13 @@ Je prends le relais pour cette session.
 1. Vérifier si une fiche existe pour cet agent :
    - Aller dans agents/
    - Chercher le dossier agents/[nom-agent]/
-2. Si le dossier n'existe pas → le créer :
+2. Si le dossier n'existe pas -> le créer :
    a. Créer le dossier agents/[nom-agent]/
-   b. Copier agents/fiche-agent-template.md → agents/[nom-agent]/[nom-agent].md
-   c. Copier agents/corrections-template.md → agents/[nom-agent]/corrections.md
+   b. Copier agents/fiche-agent-template.md -> agents/[nom-agent]/[nom-agent].md
+   c. Copier agents/corrections-template.md -> agents/[nom-agent]/corrections.md
    d. Remplir la fiche avec les informations de l'agent
    e. Laisser les corrections vides
-3. Si le dossier existe → aller à l'Étape 0.3
+3. Si le dossier existe -> aller à l'Étape 0.3
 ```
 
 ### Étape 0.3 — Lire sa configuration
@@ -103,7 +103,7 @@ Je prends le relais pour cette session.
 
 ```
 cerveau-projet/regles-immuables/general/protocole-demarrer-projet/
-  └── protocole-demarrer-projet.001.01.ebauche.md
+  ``-- protocole-demarrer-projet.001.01.ebauche.md
 ```
 
 ### Installer les règles immuables
@@ -114,7 +114,7 @@ Ce protocole garantit que toutes les règles fondamentales sont présentes dans 
 
 ```
 cerveau-projet/regles-immuables/general/protocole-installer-regles/
-  └── protocole-installer-regles.001.01.ebauche.md
+  ``-- protocole-installer-regles.001.01.ebauche.md
 ```
 
 ---
@@ -127,11 +127,11 @@ cerveau-projet/regles-immuables/general/protocole-installer-regles/
 
 | Cas | Description | Approche |
 |---|---|---|
-| **Fonctionnel** | Tout marche | Comprendre → Ajouter |
-| **Incomplet** | Contenu manquant | Comprendre → Compléter |
-| **Cassé** | Erreurs, bugs | Diagnostiquer → Corriger |
-| **À refondre** | Architecture mauvaise | Analyser → Refondre |
-| **Pause** | Reprise après absence | Évaluer → Continuer |
+| **Fonctionnel** | Tout marche | Comprendre -> Ajouter |
+| **Incomplet** | Contenu manquant | Comprendre -> Compléter |
+| **Cassé** | Erreurs, bugs | Diagnostiquer -> Corriger |
+| **À refondre** | Architecture mauvaise | Analyser -> Refondre |
+| **Pause** | Reprise après absence | Évaluer -> Continuer |
 
 ### Résumé du protocole
 
@@ -151,7 +151,7 @@ cerveau-projet/regles-immuables/general/protocole-installer-regles/
 
 ```
 cerveau-projet/regles-immuables/general/protocole-reprendre-projet/
-  └── protocole-reprendre-projet.001.01.ebauche.md
+  ``-- protocole-reprendre-projet.001.01.ebauche.md
 ```
 
 ---
@@ -182,9 +182,9 @@ Avant toute modification, consulter :
 
 1. **L'agent actuel** termine sa session et sauvegarde ses corrections
 2. **L'agent actuel** lit `agents/cerberus/corrections.md` EN PREMIER
-   → Les règles de Cerberus s'appliquent dès maintenant
+   -> Les règles de Cerberus s'appliquent dès maintenant
 3. **L'agent actuel** lit `agents/cerberus/cerberus.md`
-   → Connaître le rôle et les limites de Cerberus
+   -> Connaître le rôle et les limites de Cerberus
 4. **L'agent actuel** met à jour `AGENTS.md` : Nom = Cerberus
 5. **L'agent actuel** documente la fin de mission
 6. **Cerberus** reprend le contrôle avec ses instructions
@@ -234,7 +234,7 @@ Avant toute modification, consulter :
 ### Principe
 
 ```
-SI [mission] ALORS [ligne] → [étapes] → [protocoles à lire]
+SI [mission] ALORS [ligne] -> [étapes] -> [protocoles à lire]
 ```
 
 ### Pour chaque mission
@@ -249,7 +249,7 @@ SI [mission] ALORS [ligne] → [étapes] → [protocoles à lire]
 
 ```
 cerveau-projet/regles-immuables/general/protocole-carte-decision/
-  └── protocole-carte-decision.001.01.ebauche.md
+  ``-- protocole-carte-decision.001.01.ebauche.md
 ```
 
 ---
@@ -260,15 +260,15 @@ cerveau-projet/regles-immuables/general/protocole-carte-decision/
 1. Lire AGENTS.md en premier
 2. Se présenter automatiquement
 3. Vérifier si la fiche existe
-4. Si non → créer la fiche + corrections
+4. Si non -> créer la fiche + corrections
 5. Lit corrections.md en priorité
 6. Lit sa fiche d'agent
 7. Lit sa CARTE DE DÉCISION
 8. Met à jour AGENTS.md
 9. Effectue des recherches si nécessaire
 10. Travaille sur la tâche en suivant la carte
-11. Détecte erreurs → ajoute dans corrections.md
-12. Prochaine session → lit les nouvelles corrections
+11. Détecte erreurs -> ajoute dans corrections.md
+12. Prochaine session -> lit les nouvelles corrections
 ```
 
 ---

@@ -78,7 +78,7 @@ Pour chaque outil, je documente :
 
 **Ce qui s'est passé** :
 J'ai créé un outil qui ne marchait que sur Linux.
-L'utilisateur l'a testé sur Windows → échec.
+L'utilisateur l'a testé sur Windows -> échec.
 
 **Ce que j'ai compris** :
 - La portabilité n'est pas une option — c'est une nécessité

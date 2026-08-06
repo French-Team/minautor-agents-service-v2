@@ -117,19 +117,19 @@ Format : Script bash exécutable
 
 | # | Outil | Catégorie | Priorité | Statut | Début | Fin |
 |---|---|---|---|---|---|---|
-| 1 | verifier-systeme | analyser | 1 | ✅ Terminé | 2026-08-05 | 2026-08-05 |
-| 2 | gerer-sous-mission | corriger | 1 | ✅ Terminé | 2026-08-05 | 2026-08-05 |
-| 3 | lister-dossiers | explorer | 2 | ✅ Terminé | 2026-08-05 | 2026-08-05 |
-| 4 | lister-fichiers | explorer | 2 | ✅ Terminé | 2026-08-05 | 2026-08-05 |
-| 5 | lister-fonctions | explorer | 2 | ✅ Terminé | 2026-08-05 | 2026-08-05 |
+| 1 | verifier-systeme | analyser | 1 | [OK] Terminé | 2026-08-05 | 2026-08-05 |
+| 2 | gerer-sous-mission | corriger | 1 | [OK] Terminé | 2026-08-05 | 2026-08-05 |
+| 3 | lister-dossiers | explorer | 2 | [OK] Terminé | 2026-08-05 | 2026-08-05 |
+| 4 | lister-fichiers | explorer | 2 | [OK] Terminé | 2026-08-05 | 2026-08-05 |
+| 5 | lister-fonctions | explorer | 2 | [OK] Terminé | 2026-08-05 | 2026-08-05 |
 | 6 | lister-appels | explorer | 2 | En attente | - | - |
 | 7 | lister-agents | explorer | 2 | En attente | - | - |
 | 8 | lister-outils | explorer | 2 | En attente | - | - |
-| 9 | valider-cartes-decision | valider | 3 | ✅ Terminé | 2026-08-05 | 2026-08-05 |
-| 10 | valider-liens | valider | 3 | ✅ Terminé | 2026-08-05 | 2026-08-05 |
+| 9 | valider-cartes-decision | valider | 3 | [OK] Terminé | 2026-08-05 | 2026-08-05 |
+| 10 | valider-liens | valider | 3 | [OK] Terminé | 2026-08-05 | 2026-08-05 |
 | 11 | valider-nommage | valider | 3 | En attente | - | - |
 | 12 | valider-conventions | valider | 3 | En attente | - | - |
-| 13 | corriger-liens | corriger | 4 | ✅ Terminé | 2026-08-05 | 2026-08-05 |
+| 13 | corriger-liens | corriger | 4 | [OK] Terminé | 2026-08-05 | 2026-08-05 |
 | 14 | corriger-nommage | corriger | 4 | En attente | - | - |
 | 15 | modifier-agents-md | corriger | 4 | En attente | - | - |
 | 16 | analyser-structure | analyser | 5 | En attente | - | - |

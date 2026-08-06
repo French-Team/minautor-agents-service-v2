@@ -16,20 +16,20 @@ Fournir une interface standardisee pour interroger la base d'agents.
 
 ```
 lister-agents
-    │
-    ├── Entree (parametres)
-    │   ├── format : string
-    │   ├── champs : string
-    │   └── filtre : string
-    │
-    ├── Traitement
-    │   ├── Lecture de index-agents.md
-    │   ├── Extraction des agents
-    │   ├── Filtrage
-    │   └── Formatage
-    │
-    └── Sortie (resultat)
-        └── string (table, liste, ou JSON)
+    |
+    |-- Entree (parametres)
+    |   |-- format : string
+    |   |-- champs : string
+    |   `-- filtre : string
+    |
+    |-- Traitement
+    |   |-- Lecture de index-agents.md
+    |   |-- Extraction des agents
+    |   |-- Filtrage
+    |   `-- Formatage
+    |
+    `-- Sortie (resultat)
+        `-- string (table, liste, ou JSON)
 ```
 
 ---

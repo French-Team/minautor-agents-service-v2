@@ -16,7 +16,7 @@ Recherche les caracteres non-ASCII (accents, emojis, symboles Unicode) dans les 
 | Zone | Quoi | Pourquoi elle casse |
 |---|---|---|
 | `frontmatter` | Blocs `---` en tete des .md (nom, role, version...) | Parses par les outils : un accent casse la lecture YAML |
-| `noms` | Noms de fichiers avec accents (ex: `preparé.md`) | Cassent les liens, les grep et les scripts qui referencent ces chemins |
+| `noms` | Noms de fichiers avec accents (ex: un fichier nomme `prepar[E].md` -> a renommer en `prepare.md`) | Cassent les liens, les grep et les scripts qui referencent ces chemins |
 | `blocs` | Commandes dans les blocs ```...``` des .md | Copier-coller casse, les scripts reutilisent ces commandes |
 | `code` | Fichiers de code (.sh, .py, .js...) en entier | Un accent dans un script peut casser son execution selon l'encodage |
 | `liens` | Liens relatifs `[texte](chemin)` dans les .md | Un accent dans un chemin casse la navigation et les validateurs |
@@ -49,7 +49,7 @@ rechercher-accents-sensibles.sh --extensions sh,py,txt cerveau-projet/
 |---|---|---|
 | `--zones` | Zones a scanner, separees par des virgules | `frontmatter,noms,blocs,code,liens` |
 | `--extensions` | Extensions des fichiers de code | `sh,py,js,json,yaml,yml,txt` |
-| `--exclure` | Motifs de chemins a exclure | `node_modules,.git,.agents,.backup,.tmp,test-` |
+| `--exclure` | Motifs de chemins a exclure | `node_modules,.git,.agents,.backup,.tmp,test-,dictionnaire-,exemples` |
 | `--verbose` | Afficher les numeros de ligne et le contenu | false |
 | `--help` | Afficher l'aide | - |
 
@@ -71,7 +71,7 @@ $ rechercher-accents-sensibles.sh cerveau-projet/
 Version : 0.1.0-beta
 Dossier : cerveau-projet/
 
-  [noms] cerveau-projet/pense-betes/.../protocole-activation.001.02.preparé.md
+  [noms] cerveau-projet/pense-betes/.../protocole-activation.001.02.prepar[E].md  (exemple reel, a renommer)
   [frontmatter] cerveau-projet/agents/athena/athena.md
   [frontmatter] cerveau-projet/agents/cerberus/cerberus.md
 
@@ -104,6 +104,12 @@ Detections par zone :
 | **Avant d'ecrire un script** | Verifier qu'aucune commande ou fichier de code ne traine d'accent |
 | **Apres une correction** | Re-lancer pour confirmer que les zones sensibles sont propres |
 | **Audit cible** | Trouver les accents qui cassent, sans etre noye par le bruit du texte |
+
+## Exceptions volontaires
+
+Les fichiers `dictionnaire-*.txt` (dictionnaires des outils `corriger-emojis` et `corriger-accents`) sont **exclus automatiquement** : ils contiennent volontairement des caracteres non-ASCII (c'est leur fonction). Voir `regles-emojis-ascii.md` section "Exceptions volontaires".
+
+Le dossier `cerveau-projet/exemples/` est **exclu automatiquement** : c'est la zone de test dediee aux outils (fichiers avec problemes volontaires).
 
 ## Notes de creation
 

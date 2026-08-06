@@ -38,12 +38,12 @@ Retourne un rapport de validation des liens.
 ## Résultat
 
 ### Liens valides
-- [fichier1.md](fichier1.md) → OK
-- [dossier/](dossier/) → OK
+- [fichier1.md](fichier1.md) -> OK
+- [dossier/](dossier/) -> OK
 
 ### Liens cassés
-- [fichier2.md](fichier2.md) → Fichier non trouvé
-- [autre.md](autre.md) → Chemin invalide
+- [fichier2.md](fichier2.md) -> Fichier non trouvé
+- [autre.md](autre.md) -> Chemin invalide
 
 ### Statistiques
 - Total liens : 15

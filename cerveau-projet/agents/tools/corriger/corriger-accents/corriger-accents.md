@@ -55,6 +55,8 @@ corriger-accents.sh --verbose --dry-run fichier.md
 
 Le dictionnaire par défaut est `dictionnaire-accents.txt` dans le même dossier.
 
+> **EXCEPTION VOLONTAIRE** : ce dictionnaire contient volontairement des caracteres non-ASCII (c'est sa fonction). Il est marque du bandeau `EXCEPTION VOLONTAIRE` et exclu des outils de validation ASCII. Voir `regles-emojis-ascii.md` section "Exceptions volontaires". Ne jamais le purger.
+
 ### Format
 
 ```

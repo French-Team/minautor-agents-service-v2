@@ -191,6 +191,8 @@ cerveau-projet/agents/tools/analyser/lister-prepares/lister-prepares.sh
 | Generateurs | 3 |
 | Tests | 4 |
 | Templates | 1 |
-| **Total** | **53** |
+| Evaluer | 4 |
+| Combos | 2 |
+| **Total** | **58** |
 
 ---

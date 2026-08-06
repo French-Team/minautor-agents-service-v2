@@ -36,9 +36,9 @@ APRÈS avoir lu l'outil.md (étape 2)
 ```
 1. Lire la carte de décision
 2. Vérifier si l'étape 1 (VÉRIFIER LE SYSTÈME) est faite
-3. Si non → EXÉCUTER : verifier-systeme
-4. Si l'outil n'existe pas → SOUS-MISSION obligatoire
-5. Si oui → Continuer
+3. Si non -> EXÉCUTER : verifier-systeme
+4. Si l'outil n'existe pas -> SOUS-MISSION obligatoire
+5. Si oui -> Continuer
 6. Documenter le résultat
 ```
 

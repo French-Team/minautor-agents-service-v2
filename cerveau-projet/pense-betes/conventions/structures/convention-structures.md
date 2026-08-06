@@ -39,11 +39,11 @@ La racine du projet ne contient **que** :
 
 ```
 niveau-0/
-├── fichier-A.md          ← point d'entrée du dossier
-├── sous-fonction-X/      ← niveau +1
-│   └── sous-fonction-X.md
-└── sous-fonction-Y/      ← niveau +1
-    └── sous-fonction-Y.md
+|-- fichier-A.md          <- point d'entrée du dossier
+|-- sous-fonction-X/      <- niveau +1
+|   ``-- sous-fonction-X.md
+``-- sous-fonction-Y/      <- niveau +1
+    ``-- sous-fonction-Y.md
 ```
 
 Chaque dossier est un **conteneur autonome**.
@@ -62,13 +62,13 @@ Elle vit dans son propre dossier, au **niveau inférieur** par rapport au fichie
 
 ```
 mon-horloge/
-├── mon-horloge.md           ← appelle heure/, minute/, seconde/
-├── heure/
-│   └── heure.md             ← implémente la logique "heure"
-├── minute/
-│   └── minute.md            ← implémente la logique "minute"
-└── seconde/
-    └── seconde.md           ← implémente la logique "seconde"
+|-- mon-horloge.md           <- appelle heure/, minute/, seconde/
+|-- heure/
+|   ``-- heure.md             <- implémente la logique "heure"
+|-- minute/
+|   ``-- minute.md            <- implémente la logique "minute"
+``-- seconde/
+    ``-- seconde.md           <- implémente la logique "seconde"
 ```
 
 ### R5 — Réorganisation = réordonner les appels
@@ -115,16 +115,16 @@ On ajoute un nouveau niveau **uniquement** en créant un sous-dossier.
 On ne place **jamais** de fichier directement dans un conteneur sans l'encapsuler dans un dossier.
 
 ```
-# ✅ Correct
+# [OK] Correct
 mon-module/
-├── mon-module.md
-└── ma-fonction/
-    └── ma-fonction.md
+|-- mon-module.md
+``-- ma-fonction/
+    ``-- ma-fonction.md
 
-# ❌ Incorrect
+# [ERREUR] Incorrect
 mon-module/
-├── mon-module.md
-└── ma-fonction.md        ← pas de dossier = pas de niveau
+|-- mon-module.md
+``-- ma-fonction.md        <- pas de dossier = pas de niveau
 ```
 
 ---
@@ -132,19 +132,19 @@ mon-module/
 ## Application au cerveau-projet
 
 ```
-cerveau-projet/                     ← racine (L0)
-├── index-cerveau.md                ← point d'entrée global
-├── demarrer.md                     ← config/démarrage
-├── pense-betes/                    ← dossier (L1)
-│   ├── index-pense-bete.md         ← point d'entrée L1
-│   ├── conventions/                ← dossier (L2)
-│   │   ├── index-conventions.md    ← point d'entrée L2
-│   │   └── structures/             ← dossier (L3)
-│   │       └── index-structures.md ← point d'entrée L3
-│   ├── specs/                      ← dossier (L2)
-│   │   └── index-spec.md
-│   └── regles-immuables/           ← dossier (L2)
-│       └── index-regles-immuables.md
+cerveau-projet/                     <- racine (L0)
+|-- index-cerveau.md                <- point d'entrée global
+|-- demarrer.md                     <- config/démarrage
+|-- pense-betes/                    <- dossier (L1)
+|   |-- index-pense-bete.md         <- point d'entrée L1
+|   |-- conventions/                <- dossier (L2)
+|   |   |-- index-conventions.md    <- point d'entrée L2
+|   |   ``-- structures/             <- dossier (L3)
+|   |       ``-- index-structures.md <- point d'entrée L3
+|   |-- specs/                      <- dossier (L2)
+|   |   ``-- index-spec.md
+|   ``-- regles-immuables/           <- dossier (L2)
+|       ``-- index-regles-immuables.md
 ```
 
 Chaque fichier est un point d'entrée. Chaque dossier descend d'un niveau.
@@ -153,7 +153,7 @@ Chaque fichier est un point d'entrée. Chaque dossier descend d'un niveau.
 
 ## Lien avec les règles de hiérarchie
 
-→ Consulter `../regles-immuables/hierarchie/regles-hierarchie-par-niveau.md`
+-> Consulter `../regles-immuables/hierarchie/regles-hierarchie-par-niveau.md`
 
 ---
 

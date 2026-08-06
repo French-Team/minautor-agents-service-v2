@@ -18,7 +18,7 @@
 ## Architecture
 
 ```
-fonction-1 → [ecrit resultat-1] → classeur → [lit resultat-1] → fonction-2 → [ecrit resultat-2] → classeur → fonction-3
+fonction-1 -> [ecrit resultat-1] -> classeur -> [lit resultat-1] -> fonction-2 -> [ecrit resultat-2] -> classeur -> fonction-3
 ```
 
 ### Flux de données
@@ -38,14 +38,14 @@ fonction-1 → [ecrit resultat-1] → classeur → [lit resultat-1] → fonction
 
 ```
 pipeline/
-├── index-pipeline.md              ← point d'entrée global
-├── pipeline.md                    ← orchestrateur
-├── fonction-1/
-│   └── fonction-1.md             ← première fonction
-├── fonction-2/
-│   └── fonction-2.md             ← deuxième fonction
-└── fonction-3/
-    └── fonction-3.md             ← troisième fonction
+|-- index-pipeline.md              <- point d'entrée global
+|-- pipeline.md                    <- orchestrateur
+|-- fonction-1/
+|   ``-- fonction-1.md             <- première fonction
+|-- fonction-2/
+|   ``-- fonction-2.md             <- deuxième fonction
+``-- fonction-3/
+    ``-- fonction-3.md             <- troisième fonction
 ```
 
 ---
@@ -81,26 +81,26 @@ Pour changer l'ordre d'exécution, modifier uniquement l'ordre des appels dans l
 ### Pipeline de traitement de données
 
 ```
-charger-donnees → nettoyer-donnees → transformer-donnees → exporter-donnees
+charger-donnees -> nettoyer-donnees -> transformer-donnees -> exporter-donnees
 ```
 
 ### Flux de données
 
 ```
-1. charger-donnees → écrit "donnees-brutes" dans le classeur
-2. nettoyer-donnees → lit "donnees-brutes" → écrit "donnees-propres"
-3. transformer-donnees → lit "donnees-propres" → écrit "donnees-transformees"
-4. exporter-donnees → lit "donnees-transformees" → écrit "fichier-final"
+1. charger-donnees -> écrit "donnees-brutes" dans le classeur
+2. nettoyer-donnees -> lit "donnees-brutes" -> écrit "donnees-propres"
+3. transformer-donnees -> lit "donnees-propres" -> écrit "donnees-transformees"
+4. exporter-donnees -> lit "donnees-transformees" -> écrit "fichier-final"
 ```
 
 ### Insertion d'une nouvelle fonction
 
 ```
 Avant :
-charger-donnees → nettoyer-donnees → transformer-donnees → exporter-donnees
+charger-donnees -> nettoyer-donnees -> transformer-donnees -> exporter-donnees
 
 Apres (insertion entre nettoyage et transformation) :
-charger-donnees → nettoyer-donnees → [VALIDER-DONNEES] → transformer-donnees → exporter-donnees
+charger-donnees -> nettoyer-donnees -> [VALIDER-DONNEES] -> transformer-donnees -> exporter-donnees
 ```
 
 La nouvelle fonction :

@@ -49,9 +49,9 @@ condenseur.sh --dry-run [fichier]
 ```
 === Condensation de buffy.md ===
 
-[CONDENSÉ] Frontmatter : 106 → 30 lignes (-76)
-[FUSIONNÉ] 5 tables de missions → 1 table (-40)
-[RÉDUIT] Sections répétitives : 3 → 1 (-20)
+[CONDENSÉ] Frontmatter : 106 -> 30 lignes (-76)
+[FUSIONNÉ] 5 tables de missions -> 1 table (-40)
+[RÉDUIT] Sections répétitives : 3 -> 1 (-20)
 
 Résumé :
 - Avant : 368 lignes

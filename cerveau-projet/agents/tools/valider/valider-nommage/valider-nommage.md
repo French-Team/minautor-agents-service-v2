@@ -37,12 +37,12 @@ Retourne un rapport de validation du nommage.
 ## Résultat
 
 ### Nommage valide
-- agents/buffy/buffy.md → OK
-- cerveau-projet/index-cerveau.md → OK
+- agents/buffy/buffy.md -> OK
+- cerveau-projet/index-cerveau.md -> OK
 
 ### Nommage invalide
-- agents/Buffy/Buffy.md → Doit être en minuscules
-- cerveau-projet/IndexCerveau.md → Doit être en kebab-case
+- agents/Buffy/Buffy.md -> Doit être en minuscules
+- cerveau-projet/IndexCerveau.md -> Doit être en kebab-case
 
 ### Statistiques
 - Total fichiers : 20

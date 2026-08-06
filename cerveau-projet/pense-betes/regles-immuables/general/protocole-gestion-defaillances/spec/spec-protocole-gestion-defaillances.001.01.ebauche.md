@@ -11,9 +11,9 @@ Détecter et corriger automatiquement les défaillances du cerveau-projet.
 
 ```
 protocole-gestion-defaillances/
-├── protocole-gestion-defaillances.001.01.ebauche.md  ← le protocole
-├── spec/                                               ← CE FICHIER
-└── todo/                                               ← tâches liées
+|-- protocole-gestion-defaillances.001.01.ebauche.md  <- le protocole
+|-- spec/                                               <- CE FICHIER
+``-- todo/                                               <- tâches liées
 ```
 
 ---
@@ -68,11 +68,11 @@ protocole-gestion-defaillances/
 1. CLASSER la défaillance (oubli, erreur, incohérence, manque, obsolète)
 2. ÉVALUER la priorité (haute, moyenne, basse)
 3. APPLIQUER la correction appropriée :
-   - Oubli → Mettre à jour
-   - Erreur → Corriger
-   - Incohérence → Harmoniser
-   - Manque → Créer
-   - Obsolète → Mettre à jour ou archiver
+   - Oubli -> Mettre à jour
+   - Erreur -> Corriger
+   - Incohérence -> Harmoniser
+   - Manque -> Créer
+   - Obsolète -> Mettre à jour ou archiver
 4. VÉRIFIER que la correction est conforme
 5. METTRE À JOUR les fichiers concernés
 6. METTRE À JOUR les index

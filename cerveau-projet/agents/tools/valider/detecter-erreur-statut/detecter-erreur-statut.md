@@ -13,8 +13,8 @@
 Détecter les fichiers dont le statut ne correspond pas à leur contenu.
 
 **Pourquoi cet outil ?**
-- Un fichier "ebauche" trop complet devrait être "préparé"
-- Un fichier "préparé" trop simple devrait être "ebauche"
+- Un fichier "ebauche" trop complet devrait être "prepare"
+- Un fichier "prepare" trop simple devrait être "ebauche"
 - Cet outil audit la cohérence des statuts dans le projet
 
 ---
@@ -94,23 +94,23 @@ Selon la maturité, l'outil recommande un statut :
 Dossier : cerveau-projet
 Filtre : ebauche
 
-❌ protocole-auto-correction.001.01.ebauche.md
+[ERREUR] protocole-auto-correction.001.01.ebauche.md
    Statut actuel : ebauche
    Maturité : 8/15
    Statut recommandé : dev
-   → Devrait être au statut 'dev'
+   -> Devrait être au statut 'dev'
 
-❌ protocole-versionning-outils.001.01.ebauche.md
+[ERREUR] protocole-versionning-outils.001.01.ebauche.md
    Statut actuel : ebauche
    Maturité : 6/15
    Statut recommandé : dev
-   → Devrait être au statut 'dev'
+   -> Devrait être au statut 'dev'
 
 === Résumé ===
 Fichiers analysés : 15
 Erreurs détectées : 2
 
-❌ 2 erreur(s) de statut détectée(s)
+[ERREUR] 2 erreur(s) de statut détectée(s)
 ```
 
 ---
@@ -146,11 +146,11 @@ Erreurs détectées : 2
 Cet outil est utilisé à l'étape **[Rechercher]** du workflow RVAV :
 
 ```
-1. [Rechercher] → detecter-erreur-statut pour voir les incohérences
-2. [Vérifier]   → valider-nommage pour chaque fichier
-3. [Analyser]   → Lire le contenu des fichiers
-4. [Valider]    → Décider du passage de statut
-5. [Purifier]   → purifier-fichier ou condenseur
+1. [Rechercher] -> detecter-erreur-statut pour voir les incohérences
+2. [Vérifier]   -> valider-nommage pour chaque fichier
+3. [Analyser]   -> Lire le contenu des fichiers
+4. [Valider]    -> Décider du passage de statut
+5. [Purifier]   -> purifier-fichier ou condenseur
 ```
 
 ---

@@ -33,7 +33,7 @@ lister-outils()
 | corriger-nommage | Corriger | Corriger le nommage | 0.1.0 |
 | modifier-agents-md | Corriger | Modifier AGENTS.md | 0.1.0-beta |
 
-**Statut du test** : ✓ Réussi
+**Statut du test** : [OK] Réussi
 
 ---
 
@@ -56,7 +56,7 @@ lister-outils(categorie="explorer")
 | lister-agents | Lister les agents | 0.1.0-beta |
 | lister-outils | Lister les outils | 0.1.0-beta |
 
-**Statut du test** : ✓ Réussi
+**Statut du test** : [OK] Réussi
 
 ---
 
@@ -89,7 +89,7 @@ lister-outils(format="json")
 ]
 ```
 
-**Statut du test** : ✓ Réussi
+**Statut du test** : [OK] Réussi
 
 ---
 
@@ -120,7 +120,7 @@ lister-outils(champs="nom,description")
 | corriger-nommage | Corriger le nommage |
 | modifier-agents-md | Modifier AGENTS.md |
 
-**Statut du test** : ✓ Réussi
+**Statut du test** : [OK] Réussi
 
 ---
 

@@ -4,7 +4,7 @@
 
 **Portée :** Tous les agents du cerveau-projet
 **Prérequis :** AGENTS.md, fiche de l'agent, corrections de l'agent
-**Statut :** préparé (class 02)
+**Statut :** prepare (class 02)
 **Dernière mise à jour :** 2026-08-05
 
 ---
@@ -16,7 +16,7 @@
 ## Le Cycle d'Activation
 
 ```
-CERBERUS → IDENTIFIER → LIRE → ACTIVER → TRAVAILLER → RÉACTIVER → [SECOND CONTRÔLE]
+CERBERUS -> IDENTIFIER -> LIRE -> ACTIVER -> TRAVAILLER -> RÉACTIVER -> [SECOND CONTRÔLE]
     1          2         3       4          5            6                7
 ```
 

@@ -109,12 +109,12 @@ npm --version
 
 ```
 verifier-systeme/
-├── verifier-systeme.md      # Documentation
-├── verifier-systeme.sh      # Script Bash
-├── verifier-systeme.py      # Script Python
-├── test-verifier-systeme.sh # Tests
-└── spec/
-    └── spec-verifier-systeme.md  # Cette spécification
+|-- verifier-systeme.md      # Documentation
+|-- verifier-systeme.sh      # Script Bash
+|-- verifier-systeme.py      # Script Python
+|-- test-verifier-systeme.sh # Tests
+`-- spec/
+    `-- spec-verifier-systeme.md  # Cette spécification
 ```
 
 ---

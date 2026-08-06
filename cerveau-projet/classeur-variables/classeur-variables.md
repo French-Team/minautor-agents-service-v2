@@ -17,12 +17,12 @@ Point d'entree unique pour lire et ecrire dans le classeur de variables.
 
 ```
 classeur-variables/
-├── index-classeur.md           <- point d'entree global
-├── classeur-variables.md       <- CE FICHIER (orchestrateur)
-├── schema/
-│   └── variables-definition.md <- definition des variables
-└── [variable]/
-    └── [variable].md           <- implementation
+|-- index-classeur.md           <- point d'entree global
+|-- classeur-variables.md       <- CE FICHIER (orchestrateur)
+|-- schema/
+|   ``-- variables-definition.md <- definition des variables
+``-- [variable]/
+    ``-- [variable].md           <- implementation
 ```
 
 ## Operations

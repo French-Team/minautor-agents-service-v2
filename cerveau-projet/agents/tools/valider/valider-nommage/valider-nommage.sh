@@ -38,7 +38,7 @@ aide() {
     echo "  convention    convention-nom.md"
     echo ""
     echo "Statuts valides (protocoles):"
-    echo "  ebauche, préparé, prepare, dev, test, valide"
+    echo "  ebauche, prepare, dev, test, valide"
     echo ""
     echo "Exemples:"
     echo "  valider-nommage --type protocole chemin/vers/protocole.md"
@@ -54,7 +54,7 @@ valider_protocole() {
 
     local basename=$(basename "$fichier")
 
-    echo -e "${BLUE}📋 Validation du nommage : ${basename}${NC}"
+    echo -e "${BLUE}[CHECKLIST] Validation du nommage : ${basename}${NC}"
     echo ""
 
     # Extraire les parties du nom
@@ -65,23 +65,23 @@ valider_protocole() {
 
     # Vérifier que les parties existent
     if [[ -z "$nom_part" || -z "$major_part" || -z "$minor_part" || -z "$statut_part" ]]; then
-        echo -e "  ${RED}❌ Format invalide : ${basename}${NC}"
+        echo -e "  ${RED}[ERREUR] Format invalide : ${basename}${NC}"
         echo -e "    Attendu : nom-protocole.XX.XX.statut.md"
         return 1
     fi
 
     # Vérifier que major et minor sont des nombres
     if ! [[ "$major_part" =~ ^[0-9]+$ ]] || ! [[ "$minor_part" =~ ^[0-9]+$ ]]; then
-        echo -e "  ${RED}❌ Version invalide : ${major_part}.${minor_part}${NC}"
+        echo -e "  ${RED}[ERREUR] Version invalide : ${major_part}.${minor_part}${NC}"
         echo -e "    Les versions doivent être des nombres"
         return 1
     fi
 
     # Vérifier que le statut est valide
-    # Note: préparé peut être écrit avec ou sans accent
+    # NB: ASCII pur uniquement (prepare, jamais preparé) pour eviter les bugs d'encodage
     case "$statut_part" in
-        ebauche|préparé|preparé|prepare|dev|test|valide)
-            echo -e "  ${GREEN}✅ Format valide : ${basename}${NC}"
+        ebauche|prepare|dev|test|valide)
+            echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"
             
             if [[ "$verbose" == "true" ]]; then
                 echo -e "    Nom : ${nom_part}"
@@ -91,8 +91,8 @@ valider_protocole() {
             return 0
             ;;
         *)
-            echo -e "  ${RED}❌ Statut invalide : ${statut_part}${NC}"
-            echo -e "    Statuts valides : ebauche, préparé, prepare, dev, test, valide"
+            echo -e "  ${RED}[ERREUR] Statut invalide : ${statut_part}${NC}"
+            echo -e "    Statuts valides : ebauche, prepare, dev, test, valide"
             return 1
             ;;
     esac
@@ -105,15 +105,15 @@ valider_agent() {
 
     local basename=$(basename "$fichier")
 
-    echo -e "${BLUE}📋 Validation du nommage : ${basename}${NC}"
+    echo -e "${BLUE}[CHECKLIST] Validation du nommage : ${basename}${NC}"
     echo ""
 
     # Vérifier le format : nom-agent.md
     if [[ "$basename" =~ ^[a-z]+\.md$ ]]; then
-        echo -e "  ${GREEN}✅ Format valide : ${basename}${NC}"
+        echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"
         return 0
     else
-        echo -e "  ${RED}❌ Format invalide : ${basename}${NC}"
+        echo -e "  ${RED}[ERREUR] Format invalide : ${basename}${NC}"
         echo -e "    Attendu : nom-agent.md"
         return 1
     fi
@@ -126,15 +126,15 @@ valider_outil() {
 
     local basename=$(basename "$fichier")
 
-    echo -e "${BLUE}📋 Validation du nommage : ${basename}${NC}"
+    echo -e "${BLUE}[CHECKLIST] Validation du nommage : ${basename}${NC}"
     echo ""
 
     # Vérifier le format : nom-outil.sh ou nom-outil.md
     if [[ "$basename" =~ ^[a-z-]+\.sh$ ]] || [[ "$basename" =~ ^[a-z-]+\.md$ ]]; then
-        echo -e "  ${GREEN}✅ Format valide : ${basename}${NC}"
+        echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"
         return 0
     else
-        echo -e "  ${RED}❌ Format invalide : ${basename}${NC}"
+        echo -e "  ${RED}[ERREUR] Format invalide : ${basename}${NC}"
         echo -e "    Attendu : nom-outil.sh ou nom-outil.md"
         return 1
     fi
@@ -147,15 +147,15 @@ valider_convention() {
 
     local basename=$(basename "$fichier")
 
-    echo -e "${BLUE}📋 Validation du nommage : ${basename}${NC}"
+    echo -e "${BLUE}[CHECKLIST] Validation du nommage : ${basename}${NC}"
     echo ""
 
     # Vérifier le format : convention-nom.md
     if [[ "$basename" =~ ^convention-[a-z-]+\.md$ ]]; then
-        echo -e "  ${GREEN}✅ Format valide : ${basename}${NC}"
+        echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"
         return 0
     else
-        echo -e "  ${RED}❌ Format invalide : ${basename}${NC}"
+        echo -e "  ${RED}[ERREUR] Format invalide : ${basename}${NC}"
         echo -e "    Attendu : convention-nom.md"
         return 1
     fi

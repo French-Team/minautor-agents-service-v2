@@ -43,7 +43,7 @@ purifier-fichier [fichier] [options]
 ### 1. Supprimer les blockquotes explicatifs
 
 ```
-→ Supprimé
+-> Supprimé
 ```
 
 ### 2. Réduire les exemples
@@ -56,7 +56,7 @@ purifier-fichier [fichier] [options]
 3. Étape 3
 4. Étape 4
 5. Étape 5
-→ Réduit au minimum
+-> Réduit au minimum
 ```
 
 ### 3. Supprimer les notes historiques
@@ -67,13 +67,13 @@ purifier-fichier [fichier] [options]
 | Date | Événement |
 |---|---|
 | 2026-08-01 | Création |
-→ Supprimé
+-> Supprimé
 ```
 
 ### 4. Simplifier les justifications
 
 ```
-→ Supprimé
+-> Supprimé
 ```
 
 ---

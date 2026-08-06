@@ -131,7 +131,7 @@ main() {
     local verbose="false"
     local corriger="false"
     local extensions=""
-    local exclude=".git,node_modules,.agents,.backup"
+    local exclude=".git,node_modules,.agents,.backup,exemples"
     local help="false"
     
     while [[ $# -gt 0 ]]; do
@@ -175,6 +175,7 @@ main() {
     echo "=== Valider conformite ASCII ==="
     echo "Version : ${VERSION}"
     echo "Dossier : ${dossier}"
+    echo "Fichiers EXCEPTION VOLONTAIRE (dictionnaire-*.txt) exclus automatiquement"
     echo ""
     
     if [ ! -d "$dossier" ]; then
@@ -188,6 +189,10 @@ main() {
     local error_files=0
     
     local cmd="find \"$dossier\" -type f"
+    
+    # Exclusions des fichiers EXCEPTION VOLONTAIRE (dictionnaires d'outils)
+    # documentees dans regles-emojis-ascii.md
+    cmd="$cmd -not -name \"dictionnaire-*.txt\""
     
     if [ -n "$exclude" ]; then
         IFS=',' read -ra EXCLUDE_DIRS <<< "$exclude"

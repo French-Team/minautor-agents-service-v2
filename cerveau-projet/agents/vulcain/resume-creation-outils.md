@@ -8,7 +8,7 @@
 
 ## Résultat
 
-✅ **Mission accomplie** — Tous les outils prioritaires ont été créés
+[OK] **Mission accomplie** — Tous les outils prioritaires ont été créés
 
 ---
 
@@ -18,16 +18,16 @@
 
 | Outil | Statut | Description |
 |---|---|---|
-| `verifier-systeme` | ✅ Terminé | Vérifie le système utilisateur |
-| `gerer-sous-mission` | ✅ Terminé | Gère les sorties/retrées du flux principal |
+| `verifier-systeme` | [OK] Terminé | Vérifie le système utilisateur |
+| `gerer-sous-mission` | [OK] Terminé | Gère les sorties/retrées du flux principal |
 
 ### Priorité 2 — Outils d'exploration (comprendre le projet)
 
 | Outil | Statut | Description |
 |---|---|---|
-| `lister-dossiers` | ✅ Terminé | Liste les dossiers d'un chemin |
-| `lister-fichiers` | ✅ Terminé | Liste les fichiers d'un chemin |
-| `lister-fonctions` | ✅ Terminé | Liste les fonctions d'un fichier |
+| `lister-dossiers` | [OK] Terminé | Liste les dossiers d'un chemin |
+| `lister-fichiers` | [OK] Terminé | Liste les fichiers d'un chemin |
+| `lister-fonctions` | [OK] Terminé | Liste les fonctions d'un fichier |
 | `lister-appels` | ⏳ En attente | Lister les appels de fonctions |
 | `lister-agents` | ⏳ En attente | Lister les agents avec leurs infos |
 | `lister-outils` | ⏳ En attente | Lister les outils partagés |
@@ -36,8 +36,8 @@
 
 | Outil | Statut | Description |
 |---|---|---|
-| `valider-cartes-decision` | ✅ Terminé | Vérifie les cartes de décision |
-| `valider-liens` | ✅ Terminé | Valide les liens dans un fichier |
+| `valider-cartes-decision` | [OK] Terminé | Vérifie les cartes de décision |
+| `valider-liens` | [OK] Terminé | Valide les liens dans un fichier |
 | `valider-nommage` | ⏳ En attente | Vérifie le nommage |
 | `valider-conventions` | ⏳ En attente | Vérifie les conventions |
 
@@ -45,7 +45,7 @@
 
 | Outil | Statut | Description |
 |---|---|---|
-| `corriger-liens` | ✅ Terminé | Corrige les liens cassés |
+| `corriger-liens` | [OK] Terminé | Corrige les liens cassés |
 | `corriger-nommage` | ⏳ En attente | Corrige le nommage |
 | `modifier-agents-md` | ⏳ En attente | Modifie AGENTS.md |
 
@@ -83,12 +83,12 @@
 
 | Outil | Test | Résultat |
 |---|---|---|
-| `verifier-systeme` | Exécution avec --aide | ✅ Succès |
-| `verifier-systeme` | Exécution par défaut | ✅ Succès |
-| `gerer-sous-mission` | Exécution avec aide | ✅ Succès |
-| `gerer-sous-mission` | Test sauvegarde | ✅ Succès |
-| `lister-dossiers` | Exécution avec --aide | ✅ Succès |
-| `lister-dossiers` | Listage du répertoire courant | ✅ Succès |
+| `verifier-systeme` | Exécution avec --aide | [OK] Succès |
+| `verifier-systeme` | Exécution par défaut | [OK] Succès |
+| `gerer-sous-mission` | Exécution avec aide | [OK] Succès |
+| `gerer-sous-mission` | Test sauvegarde | [OK] Succès |
+| `lister-dossiers` | Exécution avec --aide | [OK] Succès |
+| `lister-dossiers` | Listage du répertoire courant | [OK] Succès |
 
 ---
 

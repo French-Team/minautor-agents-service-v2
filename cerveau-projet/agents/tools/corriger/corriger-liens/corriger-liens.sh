@@ -53,14 +53,14 @@ corriger_liens() {
     local dossier_fichier
     dossier_fichier=$(dirname "$fichier")
 
-    echo -e "${BLUE}🔧 Correction des liens dans : ${fichier}${NC}"
-    echo -e "${BLUE}📁 Répertoire du fichier : ${dossier_fichier}${NC}"
+    echo -e "${BLUE}[OUTIL] Correction des liens dans : ${fichier}${NC}"
+    echo -e "${BLUE}[DOSSIER] Répertoire du fichier : ${dossier_fichier}${NC}"
     echo ""
 
     # Créer une copie de sauvegarde
     if [[ "$dry_run" == "false" ]]; then
         cp "$fichier" "${fichier}.backup"
-        echo -e "${YELLOW}📋 Copie de sauvegarde : ${fichier}.backup${NC}"
+        echo -e "${YELLOW}[CHECKLIST] Copie de sauvegarde : ${fichier}.backup${NC}"
     fi
 
     # Extraire les liens Markdown [texte](chemin) avec sed
@@ -92,7 +92,7 @@ corriger_liens() {
             # Lien externe - on ne le corrige pas
             liens_valides=$((liens_valides + 1))
             if [[ "$verbose" == "true" ]]; then
-                echo -e "${YELLOW}🔗 ${texte} → ${chemin} (externe)${NC}"
+                echo -e "${YELLOW}[LIEN] ${texte} -> ${chemin} (externe)${NC}"
             fi
         else
             # Lien interne - vérifier depuis le répertoire du fichier
@@ -102,10 +102,10 @@ corriger_liens() {
             if [[ -f "$chemin_complet" ]] || [[ -d "$chemin_complet" ]]; then
                 liens_valides=$((liens_valides + 1))
                 if [[ "$verbose" == "true" ]]; then
-                    echo -e "${GREEN}✅ ${texte} → ${chemin}${NC}"
+                    echo -e "${GREEN}[OK] ${texte} -> ${chemin}${NC}"
                 fi
             else
-                echo -e "${RED}❌ Lien cassé : ${texte} → ${chemin}${NC}"
+                echo -e "${RED}[ERREUR] Lien cassé : ${texte} -> ${chemin}${NC}"
                 echo -e "   Chemin vérifié : ${chemin_complet}"
                 
                 # Suggestions de correction
@@ -121,8 +121,8 @@ corriger_liens() {
 
     echo ""
     echo -e "${BLUE}Résumé :${NC}"
-    echo -e "${GREEN}✅ Liens valides : ${liens_valides}${NC}"
-    echo -e "${YELLOW}⚠️  Liens à corriger : ${liens_corriges}${NC}"
+    echo -e "${GREEN}[OK] Liens valides : ${liens_valides}${NC}"
+    echo -e "${YELLOW}[ATTENTION]  Liens à corriger : ${liens_corriges}${NC}"
 
     if [[ "$dry_run" == "true" ]]; then
         echo -e "${YELLOW}Mode dry-run : aucun fichier modifié${NC}"

@@ -34,7 +34,7 @@
 ```
 1. Lister regles-immuables/general/
 2. Vérifier que chaque fichier de règle existe
-3. Si une règle manque → la créer à partir du cerveau source
+3. Si une règle manque -> la créer à partir du cerveau source
 ```
 
 ### Checklist

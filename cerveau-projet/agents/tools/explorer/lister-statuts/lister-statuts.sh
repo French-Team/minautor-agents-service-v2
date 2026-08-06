@@ -13,7 +13,7 @@ afficher_aide() {
     echo "Usage: $0 [chemin] [options]"
     echo ""
     echo "Options:"
-    echo "  --statut <statut>   Filtrer par statut (ebauche, préparé, dev, test, valide)"
+    echo "  --statut <statut>   Filtrer par statut (ebauche, prepare, dev, test, valide)"
     echo "  --verbose           Afficher les détails"
     echo "  --aide              Afficher cette aide"
     echo ""
@@ -31,7 +31,8 @@ extraire_statut() {
     
     # Extraire le statut du nom de fichier
     # Format: [type]-[theme].[id].[class].[statut].md
-    echo "$basename" | grep -oE '\.(ebauche|préparé|dev|test|valide)\.md$' | sed 's/\.md$//' | sed 's/^\.//'
+    # NB: ASCII pur uniquement (prepare, jamais preparé) pour eviter les bugs d'encodage
+    echo "$basename" | grep -oE '\.(ebauche|prepare|dev|test|valide)\.md$' | sed 's/\.md$//' | sed 's/^\.//'
 }
 
 # Fonction pour lister les fichiers par statut
@@ -64,7 +65,7 @@ lister_fichiers() {
             # Compter par statut
             case "$fstatut" in
                 "ebauche") fichiers_ebauche=$((fichiers_ebauche + 1)) ;;
-                "préparé") fichiers_prepare=$((fichiers_prepare + 1)) ;;
+                "prepare") fichiers_prepare=$((fichiers_prepare + 1)) ;;
                 "dev") fichiers_dev=$((fichiers_dev + 1)) ;;
                 "test") fichiers_test=$((fichiers_test + 1)) ;;
                 "valide") fichiers_valide=$((fichiers_valide + 1)) ;;
@@ -82,7 +83,7 @@ lister_fichiers() {
         echo "Résumé:"
         echo "  Total fichiers avec statut: $fichiers_trouves"
         echo "  ebauche: $fichiers_ebauche"
-        echo "  préparé: $fichiers_prepare"
+        echo "  prepare: $fichiers_prepare"
         echo "  dev: $fichiers_dev"
         echo "  test: $fichiers_test"
         echo "  valide: $fichiers_valide"

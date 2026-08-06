@@ -72,8 +72,8 @@ Fichier : protocole-xxx.001.01.ebauche.md
 Erreurs : 0
 Avertissements : 1
 
-✅ Le fichier ebauche respecte les exigences minimales
-⚠️  Cependant, il semble trop structuré pour un ebauche
+[OK] Le fichier ebauche respecte les exigences minimales
+[ATTENTION]  Cependant, il semble trop structuré pour un ebauche
     Considérez passer au statut 'préparé'
 ```
 
@@ -84,13 +84,13 @@ Avertissements : 1
 Fichier : protocole-xxx.001.01.ebauche.md
 
 --- Vérification de la structure minimale ---
-❌ Pas de titre principal (h1)
+[ERREUR] Pas de titre principal (h1)
 
 === Résumé ===
 Erreurs : 1
 Avertissements : 0
 
-❌ Le fichier ebauche ne respecte pas les exigences minimales
+[ERREUR] Le fichier ebauche ne respecte pas les exigences minimales
 ```
 
 ---
@@ -100,7 +100,7 @@ Avertissements : 0
 | Statut | Ce que l'outil vérifie |
 |---|---|
 | **ebauche** | Le fichier respecte les exigences **minimales** d'un ebauche |
-| **ebauche** | Le fichier **n'est PAS encore** un préparé (sinon → avertissement) |
+| **ebauche** | Le fichier **n'est PAS encore** un préparé (sinon -> avertissement) |
 
 ---
 

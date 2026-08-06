@@ -20,8 +20,8 @@
 1. Lire demarrer.md (ce fichier)
 2. Identifier le nom de l'agent dans la salutation
 3. Vérifier AGENTS.md :
-   a. Si l'agent nommé est déjà actif → confirmer et continuer
-   b. Si un autre agent est actif → devenir l'agent nommé
+   a. Si l'agent nommé est déjà actif -> confirmer et continuer
+   b. Si un autre agent est actif -> devenir l'agent nommé
 4. Aller à l'étape 2
 ```
 
@@ -55,13 +55,13 @@ Je prends le relais pour cette session.
 1. Vérifier si une fiche existe pour cet agent :
    - Aller dans agents/
    - Chercher le dossier agents/[nom-agent]/
-2. Si le dossier n'existe pas → le créer :
+2. Si le dossier n'existe pas -> le créer :
    a. Créer le dossier agents/[nom-agent]/
-   b. Copier agents/fiche-agent-template.md → agents/[nom-agent]/[nom-agent].md
-   c. Copier agents/corrections-template.md → agents/[nom-agent]/corrections.md
+   b. Copier agents/fiche-agent-template.md -> agents/[nom-agent]/[nom-agent].md
+   c. Copier agents/corrections-template.md -> agents/[nom-agent]/corrections.md
    d. Remplir la fiche avec les informations de l'agent
    e. Laisser les corrections vides
-3. Si le dossier existe → aller à l'étape 3
+3. Si le dossier existe -> aller à l'étape 3
 ```
 
 ---
@@ -71,8 +71,8 @@ Je prends le relais pour cette session.
 ```
 1. Aller dans agents/
 2. Chercher le dossier agents/[nom-agent]/
-3. Si le dossier existe → lire la fiche (étape 4)
-4. Si le dossier n'existe pas → le créer (étape 5)
+3. Si le dossier existe -> lire la fiche (étape 4)
+4. Si le dossier n'existe pas -> le créer (étape 5)
 ```
 
 ---
@@ -99,8 +99,8 @@ Je prends le relais pour cette session.
 
 ```
 1. Créer le dossier agents/[nom-agent]/
-2. Copier agents/fiche-agent-template.md → agents/[nom-agent]/[nom-agent].md
-3. Copier agents/corrections-template.md → agents/[nom-agent]/corrections.md
+2. Copier agents/fiche-agent-template.md -> agents/[nom-agent]/[nom-agent].md
+3. Copier agents/corrections-template.md -> agents/[nom-agent]/corrections.md
 4. Remplir la fiche avec les informations de l'agent
 5. Laisser les corrections vides
 ```
@@ -109,8 +109,8 @@ Je prends le relais pour cette session.
 
 ```
 agents/[nom-agent]/
-├── [nom-agent].md        ← fiche de l'agent
-└── corrections.md         ← surcharges/corrections (vide)
+|-- [nom-agent].md        <- fiche de l'agent
+``-- corrections.md         <- surcharges/corrections (vide)
 ```
 
 ---
@@ -165,8 +165,8 @@ agents/[nom-agent]/
 ```
 1. Lire AGENTS.md
 2. Vérifier si on est encore l'agent principal
-3. Si oui → lire sa fiche et ses corrections
-4. Si non → lire la fiche du nouvel agent
+3. Si oui -> lire sa fiche et ses corrections
+4. Si non -> lire la fiche du nouvel agent
 5. Mettre à jour AGENTS.md si nécessaire
 ```
 

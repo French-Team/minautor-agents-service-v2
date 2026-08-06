@@ -1,7 +1,8 @@
 #!/bin/bash
 # corriger-accents.sh
-# Outil pour détecter et corriger les accents et caractères non-ASCII
-# Conforme à la règle regles-emojis-ascii.md
+# Outil pour detecter et corriger les accents et caracteres non-ASCII
+# Conforme a la regle regles-emojis-ascii.md
+# Version : 0.3.0 (refonte python pour compatibilite Git Bash)
 
 set -e
 
@@ -9,16 +10,9 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Symboles de remplacement (ASCII)
-INFO="[INFO]"
-OK="[OK]"
-ERREUR="[ERREUR]"
-ATTENTION="[ATTENTION]"
-
-# Répertoire de l'outil
+# Repertoire de l'outil
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DICTIONNAIRE_DEFAUT="${SCRIPT_DIR}/dictionnaire-accents.txt"
 
@@ -28,153 +22,119 @@ utilisation() {
     echo ""
     echo "Options:"
     echo "  --dry-run        Afficher les changements sans les appliquer"
-    echo "  --verbose        Afficher les détails"
-    echo "  --dictionnaire   Chemin vers le dictionnaire (défaut: dictionnaire-accents.txt)"
+    echo "  --verbose        Afficher les details"
+    echo "  --dictionnaire   Chemin vers le dictionnaire"
     echo "  --help           Afficher cette aide"
-    echo ""
-    echo "Exemples:"
-    echo "  $0 fichier.md                    # Corriger les accents"
-    echo "  $0 --dry-run fichier.md          # Voir les changements"
-    echo "  $0 --verbose --dry-run fichier.md  # Détails + preview"
 }
 
-# Paramètres
+# Parametres
 DRY_RUN=0
 VERBOSE=0
 DICTIONNAIRE="$DICTIONNAIRE_DEFAUT"
 FICHIER=""
 
-# Parsing des arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
-        --dry-run)
-            DRY_RUN=1
-            shift
-            ;;
-        --verbose)
-            VERBOSE=1
-            shift
-            ;;
-        --dictionnaire)
-            DICTIONNAIRE="$2"
-            shift 2
-            ;;
-        --help|-h)
-            utilisation
-            exit 0
-            ;;
-        -*)
-            echo -e "${ERREUR} Option inconnue: $1"
-            utilisation
-            exit 1
-            ;;
-        *)
-            FICHIER="$1"
-            shift
-            ;;
+        --dry-run) DRY_RUN=1; shift ;;
+        --verbose) VERBOSE=1; shift ;;
+        --dictionnaire) DICTIONNAIRE="$2"; shift 2 ;;
+        --help|-h) utilisation; exit 0 ;;
+        -*) echo -e "${RED}[ERREUR] Option inconnue: $1${NC}"; exit 1 ;;
+        *) FICHIER="$1"; shift ;;
     esac
 done
 
-# Vérification du fichier
 if [[ -z "$FICHIER" ]]; then
-    echo -e "${ERREUR} Aucun fichier spécifié"
+    echo -e "${RED}[ERREUR] Aucun fichier specifie${NC}"
     utilisation
     exit 1
 fi
 
 if [[ ! -f "$FICHIER" ]]; then
-    echo -e "${ERREUR} Fichier non trouvé: $FICHIER"
+    echo -e "${RED}[ERREUR] Fichier non trouve: $FICHIER${NC}"
     exit 1
 fi
 
-# Vérification du dictionnaire
 if [[ ! -f "$DICTIONNAIRE" ]]; then
-    echo -e "${ERREUR} Dictionnaire non trouvé: $DICTIONNAIRE"
+    echo -e "${RED}[ERREUR] Dictionnaire non trouve: $DICTIONNAIRE${NC}"
     exit 1
 fi
 
-echo -e "${INFO} Correction des accents et caractères non-ASCII"
+echo "[INFO] Correction des accents et caracteres non-ASCII"
 echo "Fichier: $FICHIER"
 echo "Dictionnaire: $DICTIONNAIRE"
 echo ""
 
-# Compteur de changements
-CHANGEMENTS=0
+# Execution via python (evite les problemes d'encodage bash/perl sur Git Bash)
+python - "$DICTIONNAIRE" "$FICHIER" "$DRY_RUN" "$VERBOSE" <<'PYEOF'
+import io, sys, os, difflib
 
-# Création du fichier temporaire
-TEMP_FILE=$(mktemp)
-cp "$FICHIER" "$TEMP_FILE"
+dict_file = sys.argv[1]
+fichier = sys.argv[2]
+dry_run = (sys.argv[3] == "1")
+verbose = (sys.argv[4] == "1")
 
-# Détection initiale des caractères non-ASCII
-NON_ASCII_AVANT=$(perl -CSD -ne "print if /[^\x00-\x7F]/" "$TEMP_FILE" | wc -l)
-if [[ "$VERBOSE" -eq 1 ]]; then
-    echo -e "${INFO} Lignes avec caractères non-ASCII avant correction: $NON_ASCII_AVANT"
-fi
+# Lire le dictionnaire (lignes "accent|remplacement", ignorer # et vides)
+replacements = []
+with io.open(dict_file, encoding="utf-8") as df:
+    for line in df:
+        line = line.rstrip("\n")
+        if not line or line.startswith("#"):
+            continue
+        if "|" in line:
+            accent, repl = line.split("|", 1)
+            if accent:
+                replacements.append((accent, repl))
 
-# Si aucun caractère non-ASCII, on arrête
-if [[ "$NON_ASCII_AVANT" -eq 0 ]]; then
-    echo -e "${OK} Aucun caractère non-ASCII détecté"
-    rm -f "$TEMP_FILE"
-    exit 0
-fi
+# Lire le fichier
+with io.open(fichier, encoding="utf-8") as f:
+    original = f.read()
 
-# Lecture du dictionnaire et application des remplacements avec perl
-while IFS='|' read -r accent remplacement; do
-    # Ignorer les commentaires et lignes vides
-    [[ "$accent" =~ ^#.*$ ]] && continue
-    [[ -z "$accent" ]] && continue
-    
-    # Échapper les caractères spéciaux pour perl
-    accent_escaped=$(printf '%s' "$accent" | sed 's/[.[\*^$()+?{|\\]/\\&/g')
-    remplacement_escaped=$(printf '%s' "$remplacement" | sed 's/[.[\*^$()+?{|\\]/\\&/g')
-    
-    # Compter les occurrences avant
-    AVANT=$(perl -CSD -ne "print if /$accent_escaped/" "$TEMP_FILE" | wc -l)
-    
-    if [[ "$AVANT" -gt 0 ]]; then
-        # Remplacement avec perl
-        perl -CSD -pi -e "s/$accent_escaped/$remplacement_escaped/g" "$TEMP_FILE"
-        
-        CHANGEMENTS=$((CHANGEMENTS + AVANT))
-        
-        if [[ "$VERBOSE" -eq 1 ]]; then
-            echo -e "${OK} Remplacé: '$accent' -> '$remplacement' ($AVANT lignes affectées)"
-        fi
-    fi
-done < "$DICTIONNAIRE"
+content = original
 
-# Vérification des caractères non-ASCII restants
-NON_ASCII_APRES=$(perl -CSD -ne "print if /[^\x00-\x7F]/" "$TEMP_FILE" | wc -l)
+# Appliquer les remplacements
+total_changes = 0
+for accent, repl in replacements:
+    count = content.count(accent)
+    if count > 0:
+        content = content.replace(accent, repl)
+        total_changes += count
+        if verbose:
+            print("[OK] Remplace: '{}' -> '{}' ({} lignes)".format(accent, repl, count))
 
-if [[ "$VERBOSE" -eq 1 ]]; then
-    echo ""
-    echo "Lignes avec caractères non-ASCII après correction: $NON_ASCII_APRES"
-fi
+# Compter les non-ASCII restants
+non_ascii = sum(1 for c in content if ord(c) > 127)
 
-# Application ou affichage
-if [[ "$DRY_RUN" -eq 1 ]]; then
-    echo -e "${INFO} [DRY-RUN] Changements proposés:"
-    echo ""
-    diff --color=always "$FICHIER" "$TEMP_FILE" || true
-    echo ""
-    echo -e "${INFO} Total: $CHANGEMENTS lignes modifiées"
-    echo -e "${INFO} Aucune modification appliquée (dry-run)"
-else
-    if [[ "$CHANGEMENTS" -gt 0 ]]; then
+if dry_run:
+    if total_changes > 0:
+        # Afficher les differences
+        diff = list(difflib.unified_diff(
+            original.splitlines(True),
+            content.splitlines(True),
+            fromfile=fichier,
+            tofile=fichier + " (corrige)",
+            lineterm=""
+        ))
+        for line in diff[:50]:
+            print(line)
+        if len(diff) > 50:
+            print("... ({} lignes de diff en plus)".format(len(diff) - 50))
+    print("")
+    print("[INFO] Total: {} lignes modifiees".format(total_changes))
+    print("[INFO] Caracteres non-ASCII restants: {}".format(non_ascii))
+    print("[INFO] Aucune modification appliquee (dry-run)")
+else:
+    if total_changes > 0:
         # Sauvegarde
-        cp "$FICHIER" "${FICHIER}.bak"
-        
+        backup = fichier + ".bak"
+        with io.open(backup, "w", encoding="utf-8", newline="") as f:
+            f.write(original)
         # Application
-        cp "$TEMP_FILE" "$FICHIER"
-        
-        echo -e "${OK} $CHANGEMENTS lignes modifiées"
-        echo -e "${INFO} Sauvegarde créée: ${FICHIER}.bak"
-    else
-        echo -e "${OK} Aucun accent ou caractère non-ASCII détecté"
-    fi
-fi
-
-# Nettoyage
-rm -f "$TEMP_FILE"
-
-exit 0
+        with io.open(fichier, "w", encoding="utf-8", newline="") as f:
+            f.write(content)
+        print("[OK] {} lignes modifiees".format(total_changes))
+        print("[INFO] Sauvegarde creee: {}".format(backup))
+        print("[INFO] Caracteres non-ASCII restants: {}".format(non_ascii))
+    else:
+        print("[OK] Aucun accent ou caractere non-ASCII detecte")
+PYEOF

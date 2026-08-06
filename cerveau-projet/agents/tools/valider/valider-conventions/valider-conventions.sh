@@ -50,30 +50,30 @@ valider_conventions() {
     local erreurs=0
     local warnings=0
 
-    echo -e "${BLUE}📋 Validation des conventions : $(basename "$fichier")${NC}"
+    echo -e "${BLUE}[CHECKLIST] Validation des conventions : $(basename "$fichier")${NC}"
     echo ""
 
     # Vérifier que le fichier n'est pas vide
     if [[ ! -s "$fichier" ]]; then
-        echo -e "  ${RED}❌ Fichier vide${NC}"
+        echo -e "  ${RED}[ERREUR] Fichier vide${NC}"
         return 1
     fi
 
     # 1. Vérifier le frontmatter YAML
     echo -e "${BLUE}1. Frontmatter YAML${NC}"
     if head -1 "$fichier" | grep -q "^---"; then
-        echo -e "  ${GREEN}✅ Frontmatter présent${NC}"
+        echo -e "  ${GREEN}[OK] Frontmatter présent${NC}"
     else
-        echo -e "  ${YELLOW}⚠️  Frontmatter absent${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  Frontmatter absent${NC}"
         warnings=$((warnings + 1))
     fi
 
     # 2. Vérifier le titre principal
     echo -e "${BLUE}2. Titre principal${NC}"
     if grep -q "^# " "$fichier"; then
-        echo -e "  ${GREEN}✅ Titre principal présent${NC}"
+        echo -e "  ${GREEN}[OK] Titre principal présent${NC}"
     else
-        echo -e "  ${YELLOW}⚠️  Titre principal absent${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  Titre principal absent${NC}"
         warnings=$((warnings + 1))
     fi
 
@@ -81,9 +81,9 @@ valider_conventions() {
     echo -e "${BLUE}3. Sections${NC}"
     local nb_sections=$(grep -c "^## " "$fichier" 2>/dev/null || echo "0")
     if [[ $nb_sections -gt 0 ]]; then
-        echo -e "  ${GREEN}✅ ${nb_sections} section(s) trouvée(s)${NC}"
+        echo -e "  ${GREEN}[OK] ${nb_sections} section(s) trouvée(s)${NC}"
     else
-        echo -e "  ${YELLOW}⚠️  Aucune section ## trouvée${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  Aucune section ## trouvée${NC}"
         warnings=$((warnings + 1))
     fi
 
@@ -91,40 +91,40 @@ valider_conventions() {
     echo -e "${BLUE}4. Espaces en fin de ligne${NC}"
     local nb_espaces=$(grep -c " $" "$fichier" 2>/dev/null || echo "0")
     if [[ $nb_espaces -gt 0 ]]; then
-        echo -e "  ${YELLOW}⚠️  ${nb_espaces} ligne(s) avec espaces en fin${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  ${nb_espaces} ligne(s) avec espaces en fin${NC}"
         warnings=$((warnings + 1))
     else
-        echo -e "  ${GREEN}✅ Pas d'espaces en fin de ligne${NC}"
+        echo -e "  ${GREEN}[OK] Pas d'espaces en fin de ligne${NC}"
     fi
 
     # 5. Vérifier la longueur des lignes
     echo -e "${BLUE}5. Longueur des lignes${NC}"
     local nb_longues=$(awk 'length > 120' "$fichier" | wc -l)
     if [[ $nb_longues -gt 0 ]]; then
-        echo -e "  ${YELLOW}⚠️  ${nb_longues} ligne(s) > 120 caractères${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  ${nb_longues} ligne(s) > 120 caractères${NC}"
         warnings=$((warnings + 1))
     else
-        echo -e "  ${GREEN}✅ Toutes les lignes < 120 caractères${NC}"
+        echo -e "  ${GREEN}[OK] Toutes les lignes < 120 caractères${NC}"
     fi
 
     # 6. Vérifier les liens cassés (basique)
     echo -e "${BLUE}6. Liens Markdown${NC}"
     local nb_liens=$(grep -oP '\[([^\]]*)\]\(([^)]+)\)' "$fichier" | wc -l)
     if [[ $nb_liens -gt 0 ]]; then
-        echo -e "  ${GREEN}✅ ${nb_liens} lien(s) Markdown trouvé(s)${NC}"
+        echo -e "  ${GREEN}[OK] ${nb_liens} lien(s) Markdown trouvé(s)${NC}"
     else
-        echo -e "  ${YELLOW}⚠️  Aucun lien Markdown trouvé${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  Aucun lien Markdown trouvé${NC}"
     fi
 
     # Résumé
     echo ""
     echo -e "${BLUE}Résumé :${NC}"
-    echo -e "  ${GREEN}✅ Conventions respectées : Oui${NC}"
+    echo -e "  ${GREEN}[OK] Conventions respectées : Oui${NC}"
     if [[ $warnings -gt 0 ]]; then
-        echo -e "  ${YELLOW}⚠️  Avertissements : ${warnings}${NC}"
+        echo -e "  ${YELLOW}[ATTENTION]  Avertissements : ${warnings}${NC}"
     fi
     if [[ $erreurs -gt 0 ]]; then
-        echo -e "  ${RED}❌ Erreurs : ${erreurs}${NC}"
+        echo -e "  ${RED}[ERREUR] Erreurs : ${erreurs}${NC}"
     fi
 
     return $erreurs

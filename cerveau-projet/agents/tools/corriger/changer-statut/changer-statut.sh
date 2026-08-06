@@ -23,7 +23,7 @@ afficher_aide() {
     echo ""
     echo "Change le statut d'un fichier en le renommant."
     echo ""
-    echo "Statuts valides : ebauche, préparé, dev, test, valide"
+    echo "Statuts valides : ebauche, prepare, dev, test, valide (ASCII pur)"
     echo ""
     echo "Options:"
     echo "  --dry-run     Afficher les changements sans les appliquer"
@@ -32,16 +32,16 @@ afficher_aide() {
     echo "  --aide        Afficher cette aide"
     echo ""
     echo "Exemples:"
-    echo "  $0 protocole-xxx.001.01.ebauche.md préparé"
-    echo "  $0 --dry-run protocole-xxx.001.01.ebauche.md préparé"
-    echo "  $0 --force protocole-xxx.001.01.ebauche.md préparé"
+    echo "  $0 protocole-xxx.001.01.ebauche.md prepare"
+    echo "  $0 --dry-run protocole-xxx.001.01.ebauche.md prepare"
+    echo "  $0 --force protocole-xxx.001.01.ebauche.md prepare"
 }
 
 # Fonction pour vérifier si le statut est valide
 statut_valide() {
     local statut=$1
     case "$statut" in
-        "ebauche"|"préparé"|"prepare"|"dev"|"test"|"valide")
+        "ebauche"|"prepare"|"dev"|"test"|"valide")
             return 0
             ;;
         *)
@@ -50,13 +50,9 @@ statut_valide() {
     esac
 }
 
-# Fonction pour normaliser le statut (préparé → prepare)
+# Fonction pour normaliser le statut (identite, ASCII pur)
 normaliser_statut() {
-    local statut=$1
-    case "$statut" in
-        "préparé") echo "prepare" ;;
-        *) echo "$statut" ;;
-    esac
+    echo "$1"
 }
 
 # Fonction pour extraire les parties du nom de fichier
@@ -137,7 +133,7 @@ changer_statut() {
     # Vérifier que le nouveau statut est valide
     if ! statut_valide "$nouveau_statut"; then
         echo -e "${RED}[ERREUR] Statut invalide : $nouveau_statut${NC}"
-        echo "  Statuts valides : ebauche, préparé, dev, test, valide"
+        echo "  Statuts valides : ebauche, prepare, dev, test, valide"
         exit 1
     fi
     
@@ -169,8 +165,8 @@ changer_statut() {
     echo -e "${BLUE}--- Détails ---${NC}"
     echo "Nom actuel : $(basename "$fichier")"
     echo "Nom nouveau : $nouveau_nom"
-    echo "Class : $class_actuel → $nouveau_class"
-    echo "Statut : $statut_actuel → $nouveau_statut_norm"
+    echo "Class : $class_actuel -> $nouveau_class"
+    echo "Statut : $statut_actuel -> $nouveau_statut_norm"
     echo ""
     
     # Vérifier si des liens pointent vers ce fichier
@@ -199,13 +195,13 @@ changer_statut() {
     echo ""
     if [ "$DRY_RUN" = true ]; then
         echo -e "${YELLOW}[DRY-RUN] Changement non appliqué${NC}"
-        echo "  Renommer : $(basename "$fichier") → $nouveau_nom"
+        echo "  Renommer : $(basename "$fichier") -> $nouveau_nom"
     else
         # Renommer le fichier
         mv "$fichier" "$nouveau_chemin"
         if [ $? -eq 0 ]; then
             echo -e "${GREEN}[OK] Fichier renommé avec succès${NC}"
-            echo "  $(basename "$fichier") → $nouveau_nom"
+            echo "  $(basename "$fichier") -> $nouveau_nom"
         else
             echo -e "${RED}[ERREUR] Erreur lors du renommage${NC}"
             exit 1

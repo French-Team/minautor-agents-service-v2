@@ -9,6 +9,14 @@
 
 | Date et heure | Agent | Raison du changement |
 |---|---|---|
+| 2026-08-06 14:46 | Cerberus | Creation du combo corriger-non-ascii : chainage rechercher-accents-sensibles + corriger-emojis + corriger-accents + verification. Combo partage (pas exclusif a Themis). Index mis a jour (2 combos) |
+| 2026-08-06 14:37 | Cerberus | Creation de Themis (agent d'evaluation croisee) + 4 evaluateurs + combo audit-general. Premier audit : score 88/100, severite MINEUR, 0 erreur. Themis declaree dans AGENTS.md |
+| 2026-08-06 13:59 | Cerberus | Exclusion du dossier exemples/ (zone de test volontaire) des outils de validation : valider-conformite-ascii, rechercher-accents-sensibles, corriger-emojis. Documente comme exception de dossier dans regles-emojis-ascii.md + docs des outils. Les fichiers de test avec emojis volontaires ne sont plus signales |
+| 2026-08-06 13:52 | Cerberus | Signalement des fichiers EXCEPTION VOLONTAIRE (emojis/accents volontaires) partout : bandeaux dans les 2 dictionnaires d'outils, section Exceptions volontaires dans regles-emojis-ascii.md, exclusions ajoutees dans valider-conformite-ascii et rechercher-accents-sensibles, mention dans les docs des outils et index des regles |
+| 2026-08-06 13:47 | Cerberus | Verification et purge des emojis dans tout le cerveau : 6 fichiers reels nettoyes avec corriger-emojis, 53 fichiers purges (638 box-drawing + 384 fleches convertis en ASCII), exclusions conservees (dictionnaires d'outils + fichier de regles pedagogique), 0 caractere problematique restant |
+| 2026-08-06 13:43 | Cerberus | Nettoyage complet des emojis dans la boite a outils : amelioration de corriger-emojis (une passe python), dictionnaire dedoublonne + enrichi (8 emojis ajoutes), purge des box-drawing et fleches non-ASCII dans 10 fichiers, 0 emoji restant, tous les scripts valides |
+| 2026-08-06 13:23 | Cerberus | Suppression des accents 'preparé' : renommage du fichier, correction des 5 outils de statut, nettoyage des references |
+| 2026-08-06 13:07 | Cerberus | Creation de l'outil rechercher-accents-sensibles (Explorer, detection seule, 5 zones sensibles, awk monoprocess) |
 | 2026-08-06 10:55 | Cerberus | Second controle active par Cerberus selon liste definie (branches verdict + anti-boucle Janus/Clio) + bug sed Raison corrige |
 | 2026-08-06 10:45 | Cerberus | Correction philosophique de Clio + mettre-a-jour-readme : le README est le livre du projet, on corrige le texte existant (jamais de chronologie) |
 | 2026-08-06 10:33 | Cerberus | Creation de l'agent Clio (muse de l'histoire, README) + outil mettre-a-jour-readme |
@@ -68,7 +76,7 @@
 | 2026-08-05 | Vulcain | Créer l'outil condenseur.sh pour réduire la taille des fichiers markdown |
 | 2026-08-05 | Cerberus | Création de l'outil decomposeur pour décomposer les fichiers markdown |
 | 2026-08-05 | Vulcain | Créer l'outil decomposeur.md pour décomposer les fichiers markdown |
-| 2026-08-05 | Cerberus | Règle workflow Buffy→Cerberus→Vulcain ajoutée + outils de diagnostic mis à jour |
+| 2026-08-05 | Cerberus | Règle workflow Buffy->Cerberus->Vulcain ajoutée + outils de diagnostic mis à jour |
 | 2026-08-05 | Cerberus | Création des 3 outils de diagnostic : verifier-role-fichier, verifier-surcharge-fichier, verifier-separation-preoccupations |
 | 2026-08-05 | Vulcain | Exécuter la mission diagnostic : créer les outils de vérification des rôles de fichiers |
 | 2026-08-05 | Cerberus | Mission Vulcain définie : outils de diagnostic pour prévenir la surcharge des fichiers |

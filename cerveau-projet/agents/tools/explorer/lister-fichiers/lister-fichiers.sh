@@ -112,7 +112,7 @@ if [[ ! -e "$CHEMIN" ]]; then
 fi
 
 # Exécution
-echo -e "${BLUE}📄 Fichiers dans : ${CHEMIN}${NC}"
+echo -e "${BLUE}[FICHIER] Fichiers dans : ${CHEMIN}${NC}"
 echo ""
 
 lister_fichiers "$CHEMIN" "$RECURSIF" "$EXTENSION"

@@ -36,9 +36,9 @@ AVANT de le valider (étape 6)
 ```
 1. Lire la carte de décision
 2. Vérifier si l'étape 5 (Tester l'outil) est faite
-3. Si non → EXÉCUTER : valider-cartes-decision
-4. Si l'outil n'existe pas → SOUS-MISSION obligatoire
-5. Si oui → Continuer
+3. Si non -> EXÉCUTER : valider-cartes-decision
+4. Si l'outil n'existe pas -> SOUS-MISSION obligatoire
+5. Si oui -> Continuer
 6. Documenter le résultat
 ```
 

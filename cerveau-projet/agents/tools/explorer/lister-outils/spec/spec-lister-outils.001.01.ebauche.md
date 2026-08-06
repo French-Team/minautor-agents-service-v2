@@ -16,20 +16,20 @@ Fournir une interface standardisee pour interroger la boite a outils partagee.
 
 ```
 lister-outils
-    │
-    ├── Entree (parametres)
-    │   ├── format : string
-    │   ├── categorie : string
-    │   └── champs : string
-    │
-    ├── Traitement
-    │   ├── Lecture de index-tools.md
-    │   ├── Extraction des outils
-    │   ├── Filtrage par categorie
-    │   └── Formatage
-    │
-    └── Sortie (resultat)
-        └── string (table, liste, ou JSON)
+    |
+    |-- Entree (parametres)
+    |   |-- format : string
+    |   |-- categorie : string
+    |   `-- champs : string
+    |
+    |-- Traitement
+    |   |-- Lecture de index-tools.md
+    |   |-- Extraction des outils
+    |   |-- Filtrage par categorie
+    |   `-- Formatage
+    |
+    `-- Sortie (resultat)
+        `-- string (table, liste, ou JSON)
 ```
 
 ---

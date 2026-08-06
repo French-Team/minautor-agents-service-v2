@@ -98,7 +98,7 @@ if [[ ! -e "$CHEMIN" ]]; then
 fi
 
 # Exécution
-echo -e "${BLUE}📂 Dossiers dans : ${CHEMIN}${NC}"
+echo -e "${BLUE}[OUVRIR] Dossiers dans : ${CHEMIN}${NC}"
 echo ""
 
 lister_dossiers "$CHEMIN" "$RECURSIF"

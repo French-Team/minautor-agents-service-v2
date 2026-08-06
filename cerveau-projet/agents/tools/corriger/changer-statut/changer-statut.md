@@ -30,7 +30,7 @@ Changer le statut d'un fichier en le renommant selon la convention.
 | Statut | Ordre |
 |---|---|
 | `ebauche` | 1 |
-| `préparé` (ou `prepare`) | 2 |
+| `prepare` (ASCII pur) | 2 |
 | `dev` | 3 |
 | `test` | 4 |
 | `valide` | 5 |
@@ -47,14 +47,14 @@ Changer le statut d'un fichier en le renommant selon la convention.
 ### Exemples
 
 ```bash
-# Passer un ebauche au statut préparé
-./changer-statut.sh protocole-xxx.001.01.ebauche.md préparé
+# Passer un ebauche au statut prepare
+./changer-statut.sh protocole-xxx.001.01.ebauche.md prepare
 
 # Voir le résultat sans appliquer
-./changer-statut.sh --dry-run protocole-xxx.001.01.ebauche.md préparé
+./changer-statut.sh --dry-run protocole-xxx.001.01.ebauche.md prepare
 
 # Forcer même si des liens pointent vers le fichier
-./changer-statut.sh --force protocole-xxx.001.01.ebauche.md préparé
+./changer-statut.sh --force protocole-xxx.001.01.ebauche.md prepare
 ```
 
 ---
@@ -66,19 +66,19 @@ Changer le statut d'un fichier en le renommant selon la convention.
 ```
 === Changement de statut ===
 Fichier : protocole-xxx.001.01.ebauche.md
-Nouveau statut : préparé
+Nouveau statut : prepare
 
 --- Détails ---
 Nom actuel : protocole-xxx.001.01.ebauche.md
 Nom nouveau : protocole-xxx.001.02.prepare.md
-Class : 01 → 02
-Statut : ebauche → prepare
+Class : 01 -> 02
+Statut : ebauche -> prepare
 
 --- Vérification des liens ---
-✅ Aucun lien trouvé
+[OK] Aucun lien trouvé
 
-✅ Fichier renommé avec succès
-  protocole-xxx.001.01.ebauche.md → protocole-xxx.001.02.prepare.md
+[OK] Fichier renommé avec succès
+  protocole-xxx.001.01.ebauche.md -> protocole-xxx.001.02.prepare.md
 
 === Terminé ===
 ```
@@ -107,8 +107,8 @@ L'outil vérifie si des liens pointent vers le fichier avant de le renommer.
 
 | Situation | Résultat |
 |---|---|
-| Aucun lien | ✅ Renommage autorisé |
-| Liens trouvés | ❌ Renommage refusé (sauf avec `--force`) |
+| Aucun lien | [OK] Renommage autorisé |
+| Liens trouvés | [ERREUR] Renommage refusé (sauf avec `--force`) |
 
 ### Vérification du nom existant
 
@@ -121,11 +121,11 @@ L'outil vérifie que le nouveau nom n'existe pas déjà.
 Cet outil est utilisé à l'étape **[Valider]** du workflow RVAV :
 
 ```
-1. [Rechercher] → lister-statuts pour voir les fichiers
-2. [Vérifier]   → valider-ebauche pour chaque fichier
-3. [Analyser]   → Lire le contenu des fichiers
-4. [Valider]    → changer-statut pour appliquer le changement
-5. [Purifier]   → purifier-fichier ou condenseur
+1. [Rechercher] -> lister-statuts pour voir les fichiers
+2. [Vérifier]   -> valider-ebauche pour chaque fichier
+3. [Analyser]   -> Lire le contenu des fichiers
+4. [Valider]    -> changer-statut pour appliquer le changement
+5. [Purifier]   -> purifier-fichier ou condenseur
 ```
 
 ---

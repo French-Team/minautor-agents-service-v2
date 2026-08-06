@@ -15,15 +15,15 @@ Définir un système permettant aux agents de :
 
 ```
 projet-futur/
-├── AGENTS.md                    ← fichier dynamique (agent principal)
-├── cerveau-projet/
-│   └── agents/
-│   ├── index-agents.md          ← point d'entrée
-│   ├── fiche-agent-template.md  ← template de fiche
-│   ├── corrections-template.md  ← template de corrections
-│   └── [nom-agent]/
-│       ├── [nom-agent].md       ← fiche de l'agent
-│       └── corrections.md       ← surcharges/corrections
+|-- AGENTS.md                    <- fichier dynamique (agent principal)
+|-- cerveau-projet/
+|   ``-- agents/
+|   |-- index-agents.md          <- point d'entrée
+|   |-- fiche-agent-template.md  <- template de fiche
+|   |-- corrections-template.md  <- template de corrections
+|   ``-- [nom-agent]/
+|       |-- [nom-agent].md       <- fiche de l'agent
+|       ``-- corrections.md       <- surcharges/corrections
 ```
 
 ---
@@ -63,12 +63,12 @@ projet-futur/
 ```
 1. Agent visite agents/
 2. Vérifie existence de sa fiche
-3. Si non → crée la fiche + corrections
+3. Si non -> crée la fiche + corrections
 4. Lit sa configuration (corrections en priorité)
 5. Met à jour AGENTS.md
 6. Travaille
-7. Détecte erreurs → ajoute dans corrections.md
-8. Prochaine session → lit les nouvelles corrections
+7. Détecte erreurs -> ajoute dans corrections.md
+8. Prochaine session -> lit les nouvelles corrections
 ```
 
 ---

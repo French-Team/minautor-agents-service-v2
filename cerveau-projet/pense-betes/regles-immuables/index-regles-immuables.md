@@ -36,5 +36,5 @@ Les protocoles vivent dans `general/protocole-[nom]/` :
 
 ## Créer un protocole
 
-→ Consulter [conventions/protocoles/convention-protocoles.md](../conventions/protocoles/convention-protocoles.md)
+-> Consulter [conventions/protocoles/convention-protocoles.md](../conventions/protocoles/convention-protocoles.md)
 pour les règles de mise en place des protocoles.

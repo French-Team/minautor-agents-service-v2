@@ -2,7 +2,7 @@
 ## Header
 
 ```
-**Statut :** ebauche | préparé | dev | test | valide
+**Statut :** ebauche | prepare | dev | test | valide
 **ID :** 001
 **Class :** 01
 **Créé :** 2026-08-04
@@ -42,5 +42,5 @@
 - [rechercher] — toutes les références/liens externes sont rassemblés
 - [vérifier] — la structure (idée + problème + contexte + liens) est complète
 - [analyser] — l'idée est cohérente avec le cerveau existant (pas de doublon)
-- [valider] — prêt pour le statut suivant (`préparé`)
+- [valider] — prêt pour le statut suivant (`prepare`)
 

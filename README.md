@@ -27,25 +27,25 @@ Le cerveau-projet est une **structure de travail persistante** qui accompagne un
 
 ```
 projet/
-├── demarrer.md                  # Point de demarrage (a lire en premier)
-├── AGENTS.md                    # Agent principal actuel (dynamique)
-├── README.md                    # Ce fichier
-└── cerveau-projet/
-    ├── index-cerveau.md         # Point d'entree du cerveau
-    ├── agents/                  # Systeme d'agents + outils partages
-    │   ├── index-agents.md
-    │   ├── [agent]/[agent].md   # Fiche de chaque agent
-    │   ├── [agent]/corrections.md  # Corrections et lecons de l'agent
-    │   └── tools/               # Boite a outils (31 outils + protections)
-    ├── pense-betes/             # Idees, conventions, regles, specs, todos
-    │   ├── index-pense-bete.md
-    │   ├── conventions/         # Renommage, structures, liens, protocoles
-    │   ├── regles-immuables/    # Regles non negociables + protocoles + RVAV
-    │   ├── specs/               # Definitions techniques
-    │   └── pense-betes/         # Travail en cours (statuts ebauche->valide)
-    ├── classeur-variables/      # Stockage partage de variables
-    ├── recherches-web/          # Historique des recherches effectuees
-    └── exemples/                # Tests et exemples d'utilisation
+|-- demarrer.md                  # Point de demarrage (a lire en premier)
+|-- AGENTS.md                    # Agent principal actuel (dynamique)
+|-- README.md                    # Ce fichier
+`-- cerveau-projet/
+    |-- index-cerveau.md         # Point d'entree du cerveau
+    |-- agents/                  # Systeme d'agents + outils partages
+    |   |-- index-agents.md
+    |   |-- [agent]/[agent].md   # Fiche de chaque agent
+    |   |-- [agent]/corrections.md  # Corrections et lecons de l'agent
+    |   `-- tools/               # Boite a outils (31 outils + protections)
+    |-- pense-betes/             # Idees, conventions, regles, specs, todos
+    |   |-- index-pense-bete.md
+    |   |-- conventions/         # Renommage, structures, liens, protocoles
+    |   |-- regles-immuables/    # Regles non negociables + protocoles + RVAV
+    |   |-- specs/               # Definitions techniques
+    |   `-- pense-betes/         # Travail en cours (statuts ebauche->valide)
+    |-- classeur-variables/      # Stockage partage de variables
+    |-- recherches-web/          # Historique des recherches effectuees
+    `-- exemples/                # Tests et exemples d'utilisation
 ```
 
 ---
@@ -63,7 +63,7 @@ projet/
 | **Athena** | Redactrice de pense-betes | Demande de pense-bete |
 | **Promethee** | Redacteur de specs | Pense-bete termine -> spec |
 | **Minerve** | Redactrice de todos | Spec terminee -> todo |
-| **Clio** | Muse de l'histoire — README | Apres chaque mission (fichiers changes) |
+| **Clio** | Muse de l'histoire - README | Apres chaque mission (fichiers changes) |
 
 ### Le cycle fondamental
 

@@ -43,7 +43,7 @@ Définir comment Janus contrôle les transitions de statut des fichiers du cerve
 ## Le processus de contrôle
 
 ```
-FICHIER → VÉRIFICATION → ANALYSE → DÉCISION → DOCUMENTATION
+FICHIER -> VÉRIFICATION -> ANALYSE -> DÉCISION -> DOCUMENTATION
     1          2            3          4           5
 ```
 
@@ -106,10 +106,10 @@ FICHIER → VÉRIFICATION → ANALYSE → DÉCISION → DOCUMENTATION
 ### Matrice de décision
 
 ```
-Si tout est correct → Valider
-Si erreur mineure → Rejeter (correction rapide)
-Si erreur majeure → Rejeter (boucle complète)
-Si informe manquante → Reporter
+Si tout est correct -> Valider
+Si erreur mineure -> Rejeter (correction rapide)
+Si erreur majeure -> Rejeter (boucle complète)
+Si informe manquante -> Reporter
 ```
 
 ---
@@ -129,10 +129,10 @@ Si informe manquante → Reporter
 
 | Point | Statut | Notes |
 |---|---|---|
-| [Rechercher] | ✓/✗ | [détails] |
-| [Vérifier] | ✓/✗ | [détails] |
-| [Analyser] | ✓/✗ | [détails] |
-| [Valider] | ✓/✗ | [détails] |
+| [Rechercher] | [OK]/[ERREUR] | [détails] |
+| [Vérifier] | [OK]/[ERREUR] | [détails] |
+| [Analyser] | [OK]/[ERREUR] | [détails] |
+| [Valider] | [OK]/[ERREUR] | [détails] |
 
 ### Décision
 
@@ -180,7 +180,7 @@ lister-statuts.sh --verbose cerveau-projet/
 
 ## Intégration avec le cycle
 
-### Dans le cycle Cerberus → Agent → Cerberus
+### Dans le cycle Cerberus -> Agent -> Cerberus
 
 ```
 1. Buffy crée un fichier (ebauche)

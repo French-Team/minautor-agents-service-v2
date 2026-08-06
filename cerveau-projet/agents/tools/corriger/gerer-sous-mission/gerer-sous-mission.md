@@ -39,7 +39,7 @@ Permettre à un agent de :
 
 **Sortie** :
 ```
-✅ Position sauvegardée
+[OK] Position sauvegardée
 - Mission : [description]
 - Étape : [numéro]
 - Données : [ce qui a été collecté]
@@ -56,7 +56,7 @@ Permettre à un agent de :
 
 **Sortie** :
 ```
-🔄 Sortie du flux principal
+[ROTATION] Sortie du flux principal
 - Raison : [pourquoi]
 - Outil nécessaire : [nom-outil]
 - Sous-mission : [description]
@@ -72,7 +72,7 @@ Permettre à un agent de :
 
 **Sortie** :
 ```
-✅ Retour au flux principal
+[OK] Retour au flux principal
 - Sous-mission : [description]
 - Résultat : [succès/échec]
 - Outil créé : [oui/non]
@@ -89,11 +89,11 @@ Permettre à un agent de :
 
 **Sortie** :
 ```
-📋 Sous-missions en cours
+[CHECKLIST] Sous-missions en cours
 1. [description] - Étape [numéro]
 2. [description] - Étape [numéro]
 
-📋 Positions sauvegardées
+[CHECKLIST] Positions sauvegardées
 1. [mission] - Étape [numéro]
 2. [mission] - Étape [numéro]
 ```
