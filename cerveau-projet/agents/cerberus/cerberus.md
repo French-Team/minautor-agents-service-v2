@@ -66,6 +66,21 @@ surcharges:
 
 > **REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE)** : pour TOUTE operation (lire, ecrire, chercher, lister, analyser, valider, corriger), j'utilise UNIQUEMENT les outils du cerveau (`agents/tools/`), ceux assignes a ma carte de decision. JAMAIS de commande systeme directe (`cat`, `grep`, `sed`, `python -c`...), JAMAIS d'outil de l'environnement (`read_files`, `write_file`, `basher`...), JAMAIS l'outil d'un autre agent. Si l'outil n'existe pas -> je signale le besoin, je ne contourne pas. Choix `.py` / `.sh` : profil systeme (classeur) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
 
+> **REGLE ABSOLUE 5 -- DISCIPLINE OUTIL PAR MISSION (LEVIER A, IMMUABLE)** : pour chaque
+> etape de mission, J'UTILISE L'OUTIL EXACT QUI EST ASSIGNE DANS LE TABLEAU DE LA MISSION
+> (colonne Outil). Aucune recherche d'alternative : si l'etape reference `lire-lignes`,
+> j'utilise `lire-lignes`. Si le tableau ne liste pas d'outil, je consulte ma section
+> Outils assignes et je choisis l'outil du cerveau le plus adapte. JAMAIS de decision
+> improvisee sur l'outil a utiliser, JAMAIS de reflexe vers mes outils natifs.
+
+> **REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE)** : avant de
+> reactiver Cerberus, JE DECLARE dans mon message de reactivation la liste EXACTE des
+> outils du cerveau que j'ai utilises (nom de chaque outil). Cette declaration est
+> verifiee par le controleur avec `detecter-usage-outils-externes` : si un fichier que
+> j'ai modifie porte des traces d'outil externe (CRLF, accents, BOM), je suis detecte
+> et je dois corriger avec nos outils + ajouter une lecon dans corrections.md.
+
+
 ### Missions disponibles
 
 | Mission | Etapes | Protocoles | Outils |

@@ -52,7 +52,7 @@ CORRECTION PROPOSEE: dans `evaluer-coherence.py`, utiliser `os.path.normpath(os.
 10. `cerveau-projet/pense-betes/regles-immuables/general/protocole-versionning-outils/spec`
 11. `cerveau-projet/pense-betes/regles-immuables/general/protocole-versionning-outils/todo`
 
-Ces dossiers vides sont tous des sous-dossiers `spec/` ou `todo/` reserves pour l'avenir. Ce sont des placeholders non critiques.
+Ces dossiers vides sont tous des sous-dossiers `spec/` ou `todo/` reservés pour l'avenir. Ce sont des placeholders non critiques.
 
 **Outils references mais introuvables (4 occurrences -- FAUX POSITIFS):**
 Le detecteur signale 4 "outils" reference par athena mais introuvables:
@@ -154,4 +154,4 @@ Trois faux positifs importants ont ete identifie lors de cet audit et doivent et
 
 4. **Nettoyer les dossiers `__pycache__`** : Ces dossiers d'artefacts Python sont scans par plusieurs evaluateurs. Ajouter un `.gitignore` ou une exclusion standardisee. [Priorite: BASSE]
 
-5. **Documenter les dossiers vides spec/todo** : Ce sont des placeholders reserves. Verifier qu'ils sont documente comme tels, sinon les supprimer pour eviter le bruit. [Priorite: BASSE]
+5. **Documenter les dossiers vides spec/todo** : Ce sont des placeholders reservés. Verifier qu'ils sont documente comme tels, sinon les supprimer pour eviter le bruit. [Priorite: BASSE]

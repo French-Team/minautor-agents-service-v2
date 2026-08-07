@@ -105,7 +105,7 @@ Chaque agent a :
 
 ---
 
-## La boite a outils (83 outils)
+## La boite a outils (85 outils)
 
 Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 
@@ -120,11 +120,11 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Creer (4)** | creer-fichier, creer-remplir-pense-bete, creer-remplir-spec, creer-remplir-todo | Creer fichiers et contenus |
 | **Decomposer (1)** | decomposer-fichier | Decomposer les fichiers markdown |
 | **Deplacer (1)** | deplacer-fichier | Deplacer ou renommer un fichier |
-| **Detecter (3)** | detecter-erreur-statut, detecter-local-hors-fonction, detecter-surcharge-fichier | Detecter les erreurs de statut, la surcharge et les local hors fonction |
+| **Detecter (4)** | detecter-erreur-statut, detecter-local-hors-fonction, detecter-surcharge-fichier, detecter-usage-outils-externes | Detecter les erreurs de statut, la surcharge et les local hors fonction |
 | **Ecrire (1)** | ecrire-fichier | Ecrire ou ecraser un fichier |
 | **Editer (1)** | editer-fichier | Remplacer une chaine dans un fichier |
 | **Evaluer (4)** | evaluer-agents, evaluer-coherence, evaluer-conventions, evaluer-structure | Evaluer la coherence du cerveau |
-| **Generateurs (3)** | generateurs-squelette-pense-bete, generateurs-squelette-spec, generateurs-squelette-todo | Generer les squelettes conformes |
+| **Generateurs (4)** | generateurs-commande, generateurs-squelette-pense-bete, generateurs-squelette-spec, generateurs-squelette-todo | Generer les squelettes conformes |
 | **Gerer (1)** | gerer-sous-mission | Gerer les sorties/reentrees du flux |
 | **Inserer (1)** | inserer-contenu-fichier | Inserer du contenu a une position |
 | **Lire (3)** | lire-fichier, lire-frontmatter, lire-lignes | Lire le contenu des fichiers |
@@ -137,7 +137,7 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Supprimer (3)** | supprimer-dossier, supprimer-fichier, supprimer-ligne | Supprimer fichiers et dossiers |
 | **Valider (12)** | valider-cartes-decision, valider-conformite-ascii, valider-conventions, valider-ebauche, valider-liens, valider-nommage, valider-numerotation, valider-pense-bete, valider-relecture, valider-spec, valider-tableaux, valider-todo | Verifier la conformite |
 | **Verifier (4)** | verifier-documents-manquants, verifier-role-fichier, verifier-separation-preoccupations, verifier-systeme | Verifier l'etat reel |
-| **Tester (3)** | tester-protection-blocage, tester-protection-boucles-infinies, tester-protection-erreurs-silencieuses | Securiser les tests |
+| **Tester (3)** |  | Securiser les tests |
 | **Combos (3)** | combos-audit-general, combos-corriger-non-ascii, combos-valider-cerveau | Chainer des outils en sequences |
 | **Templates (1)** | outil-template | Modele standard de creation d'outils |
 

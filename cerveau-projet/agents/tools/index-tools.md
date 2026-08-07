@@ -99,6 +99,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-erreur-statut` | Detecter les fichiers dont le statut ne correspond pas au contenu | [detecter/detecter-erreur-statut/](detecter/detecter-erreur-statut/) |
 | `detecter-surcharge-fichier` | Detecter les fichiers qui grossissent trop | [detecter/detecter-surcharge-fichier/](detecter/detecter-surcharge-fichier/) |
 | `detecter-local-hors-fonction` | Detecter les local utilises hors fonction dans les scripts bash | [detecter/detecter-local-hors-fonction/](detecter/detecter-local-hors-fonction/) |
+| `detecter-usage-outils-externes` | Detecter les traces d'outils externes dans les fichiers (CRLF, non-ASCII, BOM) | [detecter/detecter-usage-outils-externes/](detecter/detecter-usage-outils-externes/) |
 
 ### Ecrire
 
@@ -128,6 +129,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `generateurs-squelette-pense-bete` | Generer le squelette d'un pense-bete conforme au template | [generateurs/generateurs-squelette-pense-bete/](generateurs/generateurs-squelette-pense-bete/) |
 | `generateurs-squelette-spec` | Generer le squelette d'une spec conforme au spec-template | [generateurs/generateurs-squelette-spec/](generateurs/generateurs-squelette-spec/) |
 | `generateurs-squelette-todo` | Generer le squelette d'un todo conforme au todo-template | [generateurs/generateurs-squelette-todo/](generateurs/generateurs-squelette-todo/) |
+| `generateurs-commande` | Composer et generer une commande complexe en posant une question par parametre | [generateurs/generateurs-commande/](generateurs/generateurs-commande/) |
 
 ### Gerer
 
@@ -362,7 +364,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Ecrire | 1 |
 | Editer | 1 |
 | Evaluer | 4 |
-| Generateurs | 3 |
+| Generateurs | 4 |
 | Gerer | 1 |
 | Inserer | 1 |
 | Lire | 3 |
@@ -377,8 +379,8 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Verifier | 4 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **78** |
+| **Total** | **79** |
 
-> **Note sur le decompte** : 71 outils d'action + 2 combos sont inclus dans les categories ci-dessus ; `lister-outils.sh` affiche 71 car il exclut `combos/` et `tester/` de son comptage.
+> **Note sur le decompte** : 72 outils d'action + 2 combos sont inclus dans les categories ci-dessus ; `lister-outils.sh` affiche 72 car il exclut `combos/` et `tester/` de son comptage.
 
 ---

@@ -46,13 +46,14 @@ echo "## Liens internes casses"
 total=$((total + 1))
 liens_casses=0
 
-LIENS_CASSES=$(python - "$dossier/cerveau-projet" << 'PYEOF'
+LIENS_CASSES=$(python - "$dossier/cerveau-projet" "$dossier" << 'PYEOF'
 import io
 import os
 import re
 import sys
 
 racine = sys.argv[1]
+racine_projet = sys.argv[2]
 
 # Motifs generiques : exemples de documentation, pas des liens reels
 # (inclut les exemples de syntaxe des conventions de liens : index.md, frere-b,
@@ -100,10 +101,11 @@ for base, dossiers, fichiers in os.walk(racine):
                 # Ignorer les motifs generiques (exemples de documentation)
                 if any(motif in chemin for motif in motifs_generiques):
                     continue
-                # Resoudre la cible : relative au fichier OU a la racine cerveau-projet
+                # Resoudre la cible : relative au fichier, a la racine cerveau-projet, ou au projet root
                 cible_fichier = os.path.normpath(os.path.join(os.path.dirname(fichier), chemin))
                 cible_racine = os.path.normpath(os.path.join(racine, chemin))
-                if not os.path.exists(cible_fichier) and not os.path.exists(cible_racine):
+                cible_projet = os.path.normpath(os.path.join(racine_projet, chemin))
+                if not os.path.exists(cible_fichier) and not os.path.exists(cible_racine) and not os.path.exists(cible_projet):
                     sortie.append(fichier + '|' + chemin)
 
 print('\n'.join(sortie))
@@ -199,6 +201,7 @@ while IFS= read -r agent_dir; do
                 convention-*|protocole-*|regles-*|rvav-*|sous-protocole-*) continue ;;
                 *-template|template-*) continue ;;
                 combos-combos-*) continue ;;
+                cat|grep|sed|basher|read_files|write_file|python|ruby|perl|node|awk|sort|find|xargs|chmod|chown|rm|mv|cp|touch|wc|head|tail|cut|tr|uniq|diff|ls|man|echo|printf|sudo|apt|brew|pip) continue ;;
             esac
             # Chercher si l'outil existe dans tools/
             if ! find "$dossier/cerveau-projet/agents/tools" -name "$outil" -type d 2>/dev/null | grep -q .; then

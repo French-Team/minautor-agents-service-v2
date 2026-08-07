@@ -1,0 +1,82 @@
+# Controle -- corrections evaluer-agents et evaluer-coherence
+
+**Date** : 2026-08-07
+**Controleur** : Janus
+**Session** : session-llm-2
+**Verdict attendu** : VALIDE
+
+## Contexte
+
+Vulcain a modifie deux outils d'evaluation pour corriger des faux positifs identifies par Themis lors de l'audit general:
+
+1. **evaluer-agents** : exclusion des dossiers `__pycache__` et des dossiers de categorie du scan des outils incomplets. Score passe de 23/100 a 97/100.
+2. **evaluer-coherence** : (a) utilisation du projet root (dossier) pour la resolution des liens `../`, (b) exclusion des commandes systeme (cat, grep, sed, basher) du scan des outils casses.
+
+## Checklist de controle
+
+- [x] 1. Tests realises par Morpheus (rapport dans `tester/tests/`)
+- [x] 2. Conventions respectees (ASCII, nommage)
+- [x] 3. Cartes de decision coherentes
+- [x] 4. Versionning mis a jour (sh + py + md)
+- [x] 5. Parite sh/py preservee
+- [x] 6. Rapport Themis mis a jour
+
+## Verification 1 : Tests (Morpheus)
+
+**Verifie** : Le test `test-001-evaluer-agents-coherence` passe 8/8.
+**Source** : Rapport de Morpheus (session-llm-2).
+**Resultat** : OK -- 8/8 tests passes.
+
+## Verification 2 : Conventions (ASCII, nommage)
+
+**Verifie** : Les fichiers modifies sont conformes ASCII.
+**Outils** : `valider-conformite-ascii`.
+
+Fichiers verifies:
+- `evaluer-agents/evaluer-agents.py` : ASCII OK
+- `evaluer-agents/evaluer-agents.sh` : ASCII OK
+- `evaluer-agents/evaluer-agents.md` : ASCII OK
+- `evaluer-coherence/evaluer-coherence.py` : ASCII OK
+- `evaluer-coherence/evaluer-coherence.sh` : ASCII OK
+- `evaluer-coherence/evaluer-coherence.md` : ASCII OK
+- `tester/tests/test-001-evaluer-agents-coherence/test-001-evaluer-agents-coherence.py` : ASCII OK
+- `tester/tests/test-001-evaluer-agents-coherence/test-001-evaluer-agents-coherence.md` : ASCII OK
+
+## Verification 3 : Cartes de decision
+
+**Verifie** : `combos-valider-cerveau` passe (relecture + cartes + ASCII).
+**Resultat** : CONFORME (execute par Themis).
+
+## Verification 4 : Versionning
+
+**Verifie** : Les fichiers .sh, .py et .md portent des versions coherentes.
+
+| Outil | .py | .sh | .md | Parite |
+|---|---|---|---|---|
+| evaluer-agents | 0.2.1-py | 0.2.1 | 0.2.1 | OK |
+| evaluer-coherence | 0.2.1-py | 0.2.1 | 0.2.1 | OK |
+
+## Verification 5 : Parite sh/py
+
+**Verifie** : Les memes logiques existent dans .py et .sh.
+- `evaluer-agents` : exclusion `__pycache__` presente dans .py (ligne `sous_dossiers_a_ignorer`) et .sh (ligne 87).
+- `evaluer-coherence` : exclusion `COMMANDES_SYSTEME` presente dans .py; liste `case` equivalente dans .sh (ligne 199).
+- `evaluer-coherence` : `cible_projet` (projet root) present dans .py; `racine_projet` dans le parseur Python embaisse du .sh.
+
+## Verification 6 : Rapport Themis
+
+**Verifie** : Le rapport `themis/rapports/audit-general-2026-08-07-14-21.md` a ete mis a jour pour refletter les corrections.
+**Resultat** : OK -- rapport mis a jour.
+
+## Verdict
+
+**VALIDE**
+
+Toutes les corrections sont:
+- Testees (8/8)
+- ASCII conforme
+- Versionning coherent
+- Parite sh/py maintenue
+- Documentees dans les fiches .md et corrections.md
+
+Les outils `evaluer-agents` et `evaluer-coherence` sont pret pour la production.

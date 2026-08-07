@@ -156,6 +156,46 @@ grep -rn "\\K" agents/tools/ --include="*.sh"              # doit etre vide
 ```
 
 > **Exception** : `activer-agent-principal` et `verifier-systeme` sont des outils PARTAGES (assignes a plusieurs agents). Tout le reste appartient a un agent precis.
+>
+> **Application verifiable** : cette regle est renforcee par le cycle A+B+C ci-dessous
+> (missions structurees + detection par traces + bilan outils obligatoire).
+
+---
+
+## Cycle anti-contournement A+B+C (IMMUABLE)
+
+> **REGLE ABSOLUE** : la regle declarative ne suffit pas (un LLM utilise naturellement ses outils natifs).
+> Le cycle A+B+C rend l'utilisation exclusive VERIFIABLE et SANCTIONNEE.
+
+| Levier | Nom | Mecanisme | Outil |
+|---|---|---|---|
+| **A** | Missions structurees | Chaque etape de mission impose L'OUTIL EXACT a utiliser (colonne Outil du tableau) : l'agent n'a plus de decision a prendre | REGLE ABSOLUE 5 (fiches agents) |
+| **B** | Detection par traces | Les fichiers modifies sont scannes : CRLF, accents, BOM = trace d'outil externe | `detecter-usage-outils-externes` |
+| **C** | Bilan outils obligatoire | En fin de mission, l'agent declare la liste EXACTE des outils utilises dans son message de reactivation | REGLE ABSOLUE 6 (fiches agents) |
+
+**Deroulement du cycle :**
+
+```
+1. L'agent execute sa mission en utilisant L'OUTIL de chaque etape (levier A)
+2. Avant de reactiver Cerberus, l'agent declare son BILAN OUTILS (levier C)
+3. Le controleur (Janus/Themis) lance detecter-usage-outils-externes sur les fichiers modifies (levier B)
+4. Aucune trace -> mission validee
+5. Trace detectee (CRLF, accents, BOM) -> l'agent est sanctionne :
+   a. Corriger les fichiers avec NOS outils (regeneration)
+   b. Ajouter une lecon dans corrections.md
+   c. Le controleur re-verifie
+```
+
+**Pourquoi la detection par traces fonctionne :**
+
+| Signature de NOS outils | Trace d'un outil EXTERNE |
+|---|---|
+| ASCII strict (regle immuable) | Caracteres non-ASCII (accents, emojis) |
+| Fins de ligne LF | CRLF (Windows) |
+| Pas de BOM | BOM UTF-8 |
+
+**Limite connue** : la lecture seule ne laisse pas de trace. C'est pourquoi le bilan (C)
+complemente la detection (B) : la declaration de l'agent est croisee avec les traces reelles.
 
 ---
 

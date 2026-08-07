@@ -48,5 +48,7 @@ Rapport markdown sur stdout avec score /100.
 | 0.2.0 | 2026-08-07 | Passage v2 : frontmatter ajoute, VERSION 0.2.0, en-tete standardise. Bug corrige : exclusions ajoutees (convention-*, protocole-*, regles-*, templates, rvav) pour eviter les faux positifs sur les references pense-betes/ |
 | 0.2.1 | 2026-08-07 | Lecon audit general : parseur Python pour les liens internes - ignore les blocs de code (``` et ~~~), les motifs generiques (texte, chemin, ancien.md, index.md, frere-b, etc.), les liens externes et les ancres. Resolution double (relative au fichier ET a la racine cerveau-projet). Exclusion du dossier exemples/ (problemes volontaires). Normalisation CRLF/LF pour Git Bash |
 | 0.2.0-py | 2026-08-07 | Version Python creee (portage fidele : dossiers vides signalent spec/todo vides, scan outils au niveau 3 incluant les protections) |
+| 0.2.1 | 2026-08-07 | Correction faux positifs: (1) resolution des liens ../ depuis le projet root (dossier) en plus de cerveau-projet/, (2) exclusion des commandes systeme (cat, grep, sed, basher) du scan des outils casses. Score coherence corrige de 25/100 a 50/100 (1 lien casse reel: badges-README-github.md). |
+| 0.2.1-py | 2026-08-07 | Version Python corrigee (parite sh/py) |
 
 ---

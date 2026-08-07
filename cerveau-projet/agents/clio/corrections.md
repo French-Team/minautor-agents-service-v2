@@ -44,7 +44,8 @@ agent:
 |---|---|---|
 | 2026-08-06 | Creation de l'agent -- premieres lecons a venir | Fichiers toujours a jour |
 | 2026-08-07 | README MAJ apres verifier-systeme --enregistrer : compteurs via --maj, texte libre via editer-fichier (.py pour eviter les parentheses regex du .sh), principe .py/.sh ajoute (profil systeme stocke dans le classeur) | Le README est le livre -- corriger le texte existant |
-| 2026-08-07 | README MAJ multi-session LLM : cycle fondamental par session (sidentifier -> session-llm-N), structure AGENTS.md (Sessions LLM), outil Activer decrit par session, demarrage session avec etape 0 sidentifier, historique 4 colonnes | Le README est le livre -- corriger le texte existant, jamais de journal |
+| 2026-08-07 | README MAJ multi-session LLM : cycle fondamental par session (sidentifier -> session-llm-N), structure AGENTS.md (Sessions LLM), outil Activer decrit par session, demarrage session avec etape 0 sidentifier, historique 4 colonnes | Le README est le livre -- corriger le texte existant, jamais de journal
+| 2026-08-07 | README MAJ corrections evaluer-agents/evaluer-coherence : passage de 83 a 85 outils (generateurs-commande, detecter-usage-outils-externes). Le --verifier signale __pycache__ a 0 outils comme MANQUANT mais c est un artefact Python, PAS une categorie -- ne pas l ajouter au README | Le README est le livre -- corriger le texte existant |
 
 ---
 

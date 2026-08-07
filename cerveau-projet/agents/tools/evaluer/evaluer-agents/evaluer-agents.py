@@ -20,7 +20,7 @@ import argparse
 import os
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.2.1-py"
 STATUT = "beta"
 
 # Couleurs ANSI
@@ -132,7 +132,7 @@ def main(argv=None):
     print("")
     print("## Outils complets (sh + md)")
     tools_dir = os.path.join(agents_dir, "tools")
-    sous_dossiers_a_ignorer = {"spec", "todo", "rapports", "protections", "test"}
+    sous_dossiers_a_ignorer = {"spec", "todo", "rapports", "protections", "test", "__pycache__"}
     if os.path.isdir(tools_dir):
         for categorie in sorted(os.listdir(tools_dir)):
             cat_path = os.path.join(tools_dir, categorie)

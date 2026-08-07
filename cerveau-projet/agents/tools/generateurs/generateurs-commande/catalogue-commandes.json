@@ -1,0 +1,259 @@
+{
+  "version": "0.1.0-beta",
+  "description": "Catalogue des commandes complexes du cerveau-projet. Source de verite : chaque commande (modele) est un copier-coller d un appel d outil deja ecrit, corrige et valide (agents/tools/). Le generateur pose une question par parametre, valide les reponses, puis compose la commande exacte a lancer.",
+  "commandes": [
+    {
+      "nom": "activer-sidentifier",
+      "description": "S identifier au demarrage d une session LLM (MODE ID)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py",
+      "modele": "sidentifier {id_llm}",
+      "parametres": [
+        {
+          "cle": "id_llm",
+          "question": "Ton identifiant LLM (donne par l utilisateur) ?",
+          "type": "texte",
+          "obligatoire": true
+        }
+      ]
+    },
+    {
+      "nom": "activer-activer",
+      "description": "Activer un agent principal dans une session LLM",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py",
+      "modele": "activer {session} {agent} {raison}",
+      "parametres": [
+        {
+          "cle": "session",
+          "question": "Session LLM cible (ex: session-llm-3) ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "agent",
+          "question": "Agent a activer ?",
+          "type": "choix",
+          "choix": ["Cerberus", "Buffy", "Vulcain", "Janus", "Themis", "Morpheus", "Atlas", "Athena", "Promethee", "Minerve", "Clio"],
+          "obligatoire": true
+        },
+        {
+          "cle": "raison",
+          "question": "Raison de la mission (texte libre) ?",
+          "type": "texte",
+          "obligatoire": true,
+          "quoter": true
+        }
+      ]
+    },
+    {
+      "nom": "activer-reactiver",
+      "description": "Revenir a Cerberus apres une mission dans une session LLM",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py",
+      "modele": "reactiver {session} {raison} {agent}",
+      "parametres": [
+        {
+          "cle": "session",
+          "question": "Session LLM (ex: session-llm-3) ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "raison",
+          "question": "Raison de la reactivation (texte libre) ?",
+          "type": "texte",
+          "obligatoire": true,
+          "quoter": true
+        },
+        {
+          "cle": "agent",
+          "question": "Agent qui reactive Cerberus ?",
+          "type": "choix",
+          "choix": ["Cerberus", "Buffy", "Vulcain", "Janus", "Themis", "Morpheus", "Atlas", "Athena", "Promethee", "Minerve", "Clio"],
+          "obligatoire": true
+        }
+      ]
+    },
+    {
+      "nom": "activer-sessions",
+      "description": "Lister toutes les sessions LLM et leur agent principal",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py",
+      "modele": "sessions",
+      "parametres": []
+    },
+    {
+      "nom": "generer-squelette-pense-bete",
+      "description": "Creer le squelette d un pense-bete conforme au template",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/generateurs/generateurs-squelette-pense-bete/generateurs-squelette-pense-bete.py",
+      "modele": "--theme {theme} --id {id} --class {class} --statut {statut} --dossier {dossier}",
+      "parametres": [
+        {
+          "cle": "theme",
+          "question": "Theme du pense-bete (minuscules, sans accents ni espaces) ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "id",
+          "question": "Identifiant numerique ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "001"
+        },
+        {
+          "cle": "class",
+          "question": "Classe numerique ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "01"
+        },
+        {
+          "cle": "statut",
+          "question": "Statut initial ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "ebauche"
+        },
+        {
+          "cle": "dossier",
+          "question": "Dossier de destination ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "cerveau-projet/pense-betes/"
+        }
+      ]
+    },
+    {
+      "nom": "remplir-pense-bete",
+      "description": "Remplir une section d un pense-bete sans ouvrir le fichier",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/creer/creer-remplir-pense-bete/creer-remplir-pense-bete.py",
+      "modele": "{fichier} {section} {contenu}",
+      "parametres": [
+        {
+          "cle": "fichier",
+          "question": "Chemin du pense-bete a remplir ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "section",
+          "question": "Section a remplir ?",
+          "type": "choix",
+          "choix": ["titre", "idee", "probleme", "contexte", "liens"],
+          "obligatoire": true
+        },
+        {
+          "cle": "contenu",
+          "question": "Contenu a inserer (texte libre) ?",
+          "type": "texte",
+          "obligatoire": true,
+          "quoter": true
+        }
+      ]
+    },
+    {
+      "nom": "corriger-accents",
+      "description": "Corriger les accents non-ASCII (mode --all, regle immuable)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py",
+      "modele": "--all {recursif} {cible}",
+      "parametres": [
+        {
+          "cle": "recursif",
+          "question": "Traiter recursivement un dossier ?",
+          "type": "flag",
+          "flag": "--recursive",
+          "obligatoire": false,
+          "defaut": "non"
+        },
+        {
+          "cle": "cible",
+          "question": "Fichier ou dossier a corriger ?",
+          "type": "texte",
+          "obligatoire": true
+        }
+      ]
+    },
+    {
+      "nom": "remplacer-texte",
+      "description": "Remplacer des paires ancien->nouveau dans un dossier (renommages massifs)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/remplacer/remplacer-texte/remplacer-texte.py",
+      "modele": "{dossier} {paire1} {paire2}",
+      "parametres": [
+        {
+          "cle": "dossier",
+          "question": "Dossier a parcourir ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "paire1",
+          "question": "Premiere paire ancien=nouveau ?",
+          "type": "texte",
+          "obligatoire": true,
+          "quoter": true
+        },
+        {
+          "cle": "paire2",
+          "question": "Seconde paire ancien=nouveau (facultatif) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "",
+          "quoter": true
+        }
+      ]
+    },
+    {
+      "nom": "audit-general",
+      "description": "Lancer les 4 evaluateurs sur le cerveau-projet et produire la synthese",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py",
+      "modele": "{dossier} {rapport}",
+      "parametres": [
+        {
+          "cle": "dossier",
+          "question": "Dossier a auditer ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "cerveau-projet"
+        },
+        {
+          "cle": "rapport",
+          "question": "Sauvegarder le rapport dans themis/rapports/ ?",
+          "type": "flag",
+          "flag": "--rapport",
+          "obligatoire": false,
+          "defaut": "non"
+        }
+      ]
+    },
+    {
+      "nom": "valider-nommage-recursif",
+      "description": "Valider le nommage de tous les outils d un dossier (mode recursive)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py",
+      "modele": "{recursif} {dossier}",
+      "parametres": [
+        {
+          "cle": "recursif",
+          "question": "Mode recursive active ?",
+          "type": "flag",
+          "flag": "--recursive",
+          "obligatoire": false,
+          "defaut": "oui"
+        },
+        {
+          "cle": "dossier",
+          "question": "Dossier des outils a valider ?",
+          "type": "texte",
+          "obligatoire": true
+        }
+      ]
+    }
+  ]
+}

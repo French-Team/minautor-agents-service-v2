@@ -4,7 +4,7 @@
 # Proprietaire : Themis (outil partage)
 # Version : 0.2.0
 
-VERSION="0.2.0"
+VERSION="0.2.1"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -84,7 +84,7 @@ echo "## Outils complets (sh + md)"
 for tool_dir in "$dossier/cerveau-projet/agents/tools"/*/*/*/; do
     tool=$(basename "$tool_dir")
     [ -d "$tool_dir" ] || continue
-    [ "$tool" = "spec" ] || [ "$tool" = "todo" ] || [ "$tool" = "rapports" ] || [ "$tool" = "protections" ] || [ "$tool" = "test" ] && continue
+    [ "$tool" = "spec" ] || [ "$tool" = "todo" ] || [ "$tool" = "rapports" ] || [ "$tool" = "protections" ] || [ "$tool" = "test" ] || [ "$tool" = "__pycache__" ] && continue
 
     total=$((total + 1))
     has_sh=0

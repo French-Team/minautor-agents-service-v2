@@ -8,7 +8,7 @@
 
 ## Sessions LLM
 
-### Session : session-llm-3
+### Session : session-llm-5
 
 | Champ | Valeur |
 |---|---|
@@ -21,6 +21,32 @@
 | **Raison** | Identification LLM - demarrage de session |
 
 
+### Session : session-llm-4
+
+| Champ | Valeur |
+|---|---|
+| **Nom** | Cerberus |
+| **Role** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-07 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | Identification |
+| **Raison** | Identification LLM - demarrage de session |
+
+
+### Session : session-llm-3
+
+| Champ | Valeur |
+|---|---|
+| **Nom** | Janus |
+| **Role** | Controleur des statuts -- validation et verification |
+| **Derniere mise a jour** | 2026-08-07 |
+| **Fiche** | [cerveau-projet/agents/janus/janus.md](cerveau-projet/agents/janus/janus.md) |
+| **Corrections** | [cerveau-projet/agents/janus/corrections.md](cerveau-projet/agents/janus/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | SECOND CONTROLE (Vulcain): controle de l'outil partage generateurs-commande cree (py+sh+json+md+spec). Verdict attendu: VALIDE (ASCII OK, nommage OK, syntaxe OK, parite py/sh OK, index-tools a jour 79 outils, fiche Vulcain assignee). |
+
+
 ### Session : session-llm-2
 
 | Champ | Valeur |
@@ -30,8 +56,8 @@
 | **Derniere mise a jour** | 2026-08-07 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Themis (retour de mission) |
-| **Raison** | Audit general termine -- rapport dans themis/rapports/audit-general-2026-08-07-14-21.md. Score global: 82/100 (hors faux positifs). Etat de sante: CONFORME. 2 faux positifs identifies: __pycache__ dans evaluer-agents, commandes systeme dans evaluer-coherence. |
+| **Active par** | Clio (retour de mission) |
+| **Raison** | README mis a jour: 83->85 outils (generateurs-commande, detecter-usage-outils-externes ajoutes). ASCII OK. __pycache__ conserve comme artefact (non liste). Corrections Clio enregistrees. |
 
 
 ### Session : session-llm-1
@@ -43,8 +69,8 @@
 | **Derniere mise a jour** | 2026-08-07 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Buffy (retour de mission) |
-| **Raison** | MISSION TERMINEE: MODE ID documente dans le cerveau. demarrer.md (section 0.0 + workflow): REGLE UTILISATEUR IMMUABLE MODE ID - chaque LLM possede SON id donne par l utilisateur, la session est LIEE a l id, UN LLM NE DEDUIT JAMAIS SA SESSION D AGENTS.md (la session visible appartient a un AUTRE LLM), lancer sidentifier <mon-id> (chemin complet) qui rend SA session (retrouvee ou nouvelle). AGENTS.md: liaison id <-> session clarifiee. 12 fiches (template + 11 agents): ETAPE SESSION = MODE ID avec sidentifier <mon-id>. Validation: ASCII strict 0 (14 fichiers), valider-tableaux 14/14 conformes, 1 occurrence MODE ID par fiche. |
+| **Active par** | Janus (retour de mission) |
+| **Raison** | SECOND CONTROLE cycle A+B+C: VERDICT CONFORME. BILAN OUTILS (levier C): outils utilises = activer-agent-principal, valider-nommage, valider-liens (86 valides/0 invalide), verifier-role-fichier (conforme), verifier-separation-preoccupations (OK), combos-valider-cerveau, valider-tableaux (14/14 CONFORME), detecter-surcharge-fichier, detecter-usage-outils-externes (LEVIER B: 0 suspect sur tous les fichiers modifies). CONTROLES: nommage OK, liens OK, roles OK, tableaux CONFORME, traces externes AUCUNE. Points PRE-EXISTANTS hors perimetre de la mission (a traiter par Themis en audit): 2 fichiers non-ASCII dans janus/controles + themis/rapports + dictionnaires (le dossier exemples/ est volontairement pollue pour les tests) + 6 fichiers en surcharge dans agents/. Aucun ne provient de cette mission. Cycle A+B+C complet et operationnel: A (REGLE ABSOLUE 5 dans 12 fiches), B (detecter-usage-outils-externes 41/41), C (REGLE ABSOLUE 6 dans 12 fiches + bilan declenche par Janus). |
 
 ---
 

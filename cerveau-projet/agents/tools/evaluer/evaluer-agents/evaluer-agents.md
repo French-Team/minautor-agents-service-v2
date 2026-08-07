@@ -1,6 +1,6 @@
 # evaluer-agents
 
-**Version :** 0.2.0
+**Version :** 0.2.1
 **Statut :** prepare
 **Categorie :** evaluer
 **Chemin :** `agents/tools/evaluer/evaluer-agents/`
@@ -48,5 +48,7 @@ Rapport markdown sur stdout avec score /100.
 | 0.1.0 | 2026-08-06 | Creation initiale |
 | 0.2.0 | 2026-08-07 | Passage v2 : frontmatter ajoute, VERSION 0.2.0, en-tete standardise |
 | 0.2.0-py | 2026-08-07 | Version Python creee (rapport markdown identique, --version) |
+| 0.2.1 | 2026-08-07 | Correction: exclusion des dossiers `__pycache__` (artefacts Python) et des dossiers de categorie du scan des outils incomplets. Score corrige de 23/100 a 96/100. |
+| 0.2.1-py | 2026-08-07 | Version Python corrigee (parite sh/py) |
 
 ---

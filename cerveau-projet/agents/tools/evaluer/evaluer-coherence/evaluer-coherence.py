@@ -22,7 +22,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.2.1-py"
 STATUT = "beta"
 
 # Couleurs ANSI
@@ -45,6 +45,16 @@ AGENTS_ATTENDUS = ["cerberus", "buffy", "athena", "atlas", "clio", "janus",
 # Prefixes qui vivent dans pense-betes/ et ne sont pas des outils
 PREFIXES_NON_OUTILS = ("convention-", "protocole-", "regles-", "rvav-",
                        "sous-protocole-")
+
+# Commandes systeme et outils d'environnement citees en exemple dans les
+# regles interdites (ex: athena liste `cat`, `grep`, `sed` entre backticks)
+# mais qui ne sont PAS des outils du cerveau -- a exclure du scan.
+COMMANDES_SYSTEME = ("cat", "grep", "sed", "basher", "read_files",
+                     "write_file", "basher", "python", "ruby", "perl",
+                     "node", "awk", "sort", "find", "xargs", "chmod",
+                     "chown", "rm", "mv", "cp", "touch", "wc", "head",
+                     "tail", "cut", "tr", "uniq", "diff", "ls", "man",
+                     "echo", "printf", "sudo", "apt", "brew", "pip")
 
 
 def verifier_nommage(nom_script):
@@ -71,8 +81,15 @@ def construire_parser():
     return parser
 
 
-def lister_liens_casses(racine):
-    """Retourne la liste des (fichier, chemin) des liens internes casses."""
+def lister_liens_casses(racine, racine_projet=None):
+    """Retourne la liste des (fichier, chemin) des liens internes casses.
+
+    racine : dossier a scanner (cerveau-projet/).
+    racine_projet : racine du projet (dossier) pour resoudre les liens
+                     ../ qui remontent au-dessus de cerveau-projet/.
+    """
+    if racine_projet is None:
+        racine_projet = racine
     resultats = []
     for base, dossiers, fichiers in os.walk(racine):
         base_norm = base.replace("\\", "/")
@@ -107,8 +124,11 @@ def lister_liens_casses(racine):
                         continue
                     cible_fichier = os.path.normpath(
                         os.path.join(os.path.dirname(fichier), chemin))
-                    cible_racine = os.path.normpath(os.path.join(racine, chemin))
-                    if not os.path.exists(cible_fichier) and not os.path.exists(cible_racine):
+                    cible_racine = os.path.normpath(
+                        os.path.join(racine, chemin))
+                    cible_projet = os.path.normpath(
+                        os.path.join(racine_projet, chemin))
+                    if not os.path.exists(cible_fichier) and not os.path.exists(cible_racine) and not os.path.exists(cible_projet):
                         resultats.append((fichier, chemin))
     return resultats
 
@@ -165,7 +185,7 @@ def main(argv=None):
     # 1. Liens internes casses
     print("## Liens internes casses")
     total += 1
-    liens_casses = lister_liens_casses(cerveau)
+    liens_casses = lister_liens_casses(cerveau, dossier)
     for i, (fichier, chemin) in enumerate(liens_casses[:5], 1):
         print("  - `" + chemin + "` dans `" + fichier + "`")
     if not liens_casses:
@@ -249,6 +269,8 @@ def main(argv=None):
                 if not outil:
                     continue
                 if outil.startswith(PREFIXES_NON_OUTILS):
+                    continue
+                if outil in COMMANDES_SYSTEME:
                     continue
                 if outil.endswith("-template") or outil.startswith("template-"):
                     continue
