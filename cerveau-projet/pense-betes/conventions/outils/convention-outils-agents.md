@@ -16,6 +16,16 @@
 
 ## Regles de creation
 
+### Regle 0 -- Utilisation EXCLUSIVE des outils du cerveau (IMMUABLE)
+
+> **REGLE ABSOLUE** : un agent utilise UNIQUEMENT les outils de `agents/tools/` pour toute operation. Jamais de commande systeme directe (`cat`, `grep`, `sed`, `python -c`...), jamais d'outil de l'environnement (`read_files`, `write_file`, `basher`...), jamais l'outil d'un autre agent.
+
+```
+1. Operation necessaire -> chercher l'outil (index-tools.md / outils assignes)
+2. Outil existe -> l'executer (.py si Python dispo, sinon .sh -- protocole-technologies)
+3. Outil absent -> signaler le besoin, NE PAS contourner (Vulcain cree l'outil)
+```
+
 ### Regle 1 -- Chaque outil est proprietaire
 
 ```

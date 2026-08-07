@@ -3,7 +3,21 @@
 
 ## Variables
 
-### [Aucune variable definie pour l'instant]
+### Variable : profil-systeme
+
+| Champ | Type | Obligatoire | Description |
+|---|---|---|---|
+| `id` | string | [OK] | Identifiant : profil-systeme |
+| `os` | string | [OK] | Systeme d'exploitation (ex: Windows 10) |
+| `bash` | string | [OK] | Bash disponible et version, ou "absent" |
+| `python` | string | [OK] | Python disponible et version, ou "absent" |
+| `node` | string | [NON] | Node.js disponible et version, ou "absent" |
+| `git` | string | [OK] | Git disponible et version, ou "absent" |
+| `source` | string | [OK] | Outil qui a ecrit : verifier-systeme |
+| `date_maj` | datetime | [OK] | Date de derniere mise a jour du profil |
+
+> **Usage** : ce profil est consulte par les agents pour choisir la version d'un outil
+> (`.py` si Python dispo, sinon `.sh`). Voir `protocole-technologies`.
 
 Pour ajouter une variable, utiliser le template suivant :
 

@@ -1,4 +1,4 @@
-# Outil -- Analyser la Structure
+# analyser-structure
 
 **Categorie** : Analyser
 **Version** : 0.2.0
@@ -13,6 +13,20 @@ Analyser et documenter la structure du projet.
 ---
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 analyser-structure.py [chemin] [options]
+
+Options :
+  --profondeur N      Profondeur de l'arborescence (defaut: 3)
+  --dry-run           Afficher sans executer
+  --verbose           Affichage detaille
+  --version           Afficher la version
+```
+
+### API (version originale)
 
 ```
 analyser-structure(chemin=".", profondeur=3, format="markdown")
@@ -147,4 +161,5 @@ find . -type f | wc -l  # Fichiers
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |

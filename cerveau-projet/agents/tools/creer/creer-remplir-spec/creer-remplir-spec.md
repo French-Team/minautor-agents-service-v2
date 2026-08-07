@@ -12,6 +12,18 @@ Remplit les sections d'une spec **sans ouvrir le fichier**. L'agent donne la sec
 
 ## Utilisation
 
+### CLI Python (version 0.2.0-py)
+
+```
+python3 creer-remplir-spec.py <fichier> <section> <contenu> [--dry-run]
+
+Options :
+  --dry-run    Afficher ce qui serait fait sans modifier
+  --version    Afficher la version
+```
+
+### CLI bash (version originale)
+
 ```bash
 # Remplir le titre
 creer-remplir-spec.sh spec-pipeline.001.01.ebauche.md titre "Spec du pipeline"
@@ -87,3 +99,9 @@ $ creer-remplir-spec.sh spec-pipeline.001.01.ebauche.md objectif "Definir les pi
 | `remplir-pense-bete` | Meme logique pour les pense-betes |
 | `remplir-todo` | Meme logique pour les todos |
 | `valider-pense-bete` | Modele pour creer un validateur de spec |
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py, interpretation des sequences d'echappement \\n) |

@@ -1,11 +1,10 @@
 #!/bin/bash
 # valider-pense-bete.sh
 # Verifie l'integrite d'un pense-bete (structure, sections, ASCII)
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.2.0
 
 # Configuration
-VERSION="0.1.0-beta"
+VERSION="0.2.0"
 STATUT="ebauche"
 
 # Couleurs

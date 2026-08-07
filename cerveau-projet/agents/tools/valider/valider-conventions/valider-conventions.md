@@ -1,7 +1,7 @@
-# Outil -- Valider les Conventions
+# valider-conventions
 
 **Categorie** : Valider
-**Version :** 0.2.0
+**Version :** 0.2.0-py
 **Statut :** prepare
 
 ---
@@ -106,3 +106,11 @@ valider-conventions(chemin=".", types="structures")
 
 ---
 
+---
+
+## Versionning
+
+| Version | Date | Changement |
+|---|---|---|
+| 0.2.0 | - | Version initiale (bash) |
+| 0.2.0-py | 2026-08-07 | Portage Python : verification des conventions dans un fichier |

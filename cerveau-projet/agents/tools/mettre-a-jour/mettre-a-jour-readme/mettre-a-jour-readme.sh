@@ -1,12 +1,12 @@
 #!/bin/bash
 # mettre-a-jour-readme.sh
 # Outil pour corriger le README afin qu'il reflete l'etat reel du projet
-# Version : 0.2.0-beta
+# Version : 0.4.0
 # Statut : ebauche
 # Proprietaire : Clio (agent dedie au README)
 
 # Configuration
-VERSION="0.2.0-beta"
+VERSION="0.4.0"
 STATUT="ebauche"
 README="README.md"
 HISTORIQUE="AGENTS-historique.md"
@@ -30,6 +30,8 @@ afficher_aide() {
     echo "  --verifier         Comparer l'etat reel au README, lister les ecarts (sans modifier)"
     echo "  --maj              Corriger le texte du README (agents, outils, compteurs)"
     echo "  --journal [N]      Consulter les N dernieres interventions (diagnostic, non inscrit au README)"
+    echo "  --logo CHEMIN      Inserer une image (logo) en tete du README, apres le titre H1"
+    echo "  --badges SPEC      Inserer des badges statiques Shields (label=message:couleur;...), apres le titre H1"
     echo "  --agents           Afficher le compte reel des agents"
     echo "  --outils           Afficher le compte reel des outils par categorie"
     echo "  --help             Afficher cette aide"
@@ -38,6 +40,8 @@ afficher_aide() {
     echo "  $0 --verifier                    # Apercu des ecarts"
     echo "  $0 --maj                         # Corriger le README"
     echo "  $0 --journal 5                   # 5 dernieres interventions"
+    echo "  $0 --logo cerveau-projet/assets/images/logo.jpg   # Inserer un logo en tete"
+    echo "  $0 --badges \"Plateforme=Windows:blue;Statut=stable:brightgreen\"   # Inserer des badges"
     echo ""
 }
 
@@ -91,8 +95,8 @@ compter_outils_categorie() {
     fi
     # Cas special tester : compter les protections dans tester/protections/
     if [ "$categorie" = "tester" ]; then
-        for f in "$dir/protections"/*.md; do
-            [ -f "$f" ] && nb=$((nb + 1))
+        for d in "$dir/protections"/*/; do
+            [ -d "$d" ] && nb=$((nb + 1))
         done
         echo "$nb"
         return
@@ -128,9 +132,9 @@ lister_outils_categorie() {
     # Cas special tester : lister les protections
     if [ "$categorie" = "tester" ]; then
         local first=""
-        for f in "$dir/protections"/*.md; do
-            [ -f "$f" ] || continue
-            local nom=$(basename "$f" .md)
+        for d in "$dir/protections"/*/; do
+            [ -d "$d" ] || continue
+            local nom=$(basename "$d")
             if [ -z "$first" ]; then
                 liste="$nom"
                 first="1"
@@ -331,6 +335,141 @@ mettre_a_jour() {
     echo -e "${GREEN}[OK]${NC} README corrige pour refleter l'etat reel."
 }
 
+# Inserer une image (logo) en tete du README, apres le titre H1
+# Idempotent : si le chemin est deja present, n'insere rien.
+inserer_logo() {
+    local chemin_image="$1"
+    local contenu
+    if [ -z "$chemin_image" ]; then
+        echo -e "${RED}[ERREUR] Option --logo necessite un chemin d'image.${NC}"
+        return 1
+    fi
+    if [ ! -f "$chemin_image" ]; then
+        echo -e "${RED}[ERREUR] Fichier image introuvable : ${chemin_image}${NC}"
+        return 1
+    fi
+    if grep -qF -- "$chemin_image" "$README"; then
+        echo -e "${GREEN}[OK]${NC} Le logo ${chemin_image} est deja present dans le README (aucun doublon)."
+        return 0
+    fi
+    # Inserer "\n![Logo](chemin)\n\n" juste apres la premiere ligne de titre H1 ("# ")
+    awk -v img="$chemin_image" '
+        BEGIN { done = 0 }
+        {
+            if (!done && $0 ~ /^# /) {
+                print $0
+                print ""
+                print "![Logo](" img ")"
+                print ""
+                done = 1
+                next
+            }
+            print
+        }
+    ' "$README" > "$README.tmp" && mv "$README.tmp" "$README"
+    # Verifier que l'insertion a reellement ete faite (un titre H1 existait)
+    if grep -qF -- "![Logo]($chemin_image)" "$README"; then
+        echo -e "${GREEN}[OK]${NC} Logo ${chemin_image} insere en tete du README, apres le titre H1."
+        return 0
+    fi
+    echo -e "${RED}[ERREUR]${NC} Aucun titre H1 (# ...) trouve : rien n'a ete insere."
+    return 1
+}
+
+# Encoder une portion de badge Shields : espace -> '_', tiret -> '--'
+encoder_badge() {
+    local texte="$1"
+    local out=""
+    local i c
+    for (( i=0; i<${#texte}; i++ )); do
+        c="${texte:$i:1}"
+        if [ "$c" = " " ]; then
+            out="${out}_"
+        elif [ "$c" = "-" ]; then
+            out="${out}--"
+        else
+            out="${out}${c}"
+        fi
+    done
+    echo "$out"
+}
+
+# Inserer des badges statiques Shields en tete du README, apres le titre H1
+# SPEC : liste separee par ';', chaque badge au format label=message:couleur
+# Idempotent : si la ligne de badges identique existe deja, n'insere rien.
+inserer_badges() {
+    local spec="$1"
+    local IFS_save="$IFS"
+    if [ -z "$spec" ]; then
+        echo -e "${RED}[ERREUR] Option --badges necessite une specification.${NC}"
+        return 1
+    fi
+    # Construire la ligne de badges
+    local ligne=""
+    local b label reste message couleur url label_enc message_enc
+    IFS=';' read -ra badges <<< "$spec"
+    IFS="$IFS_save"
+    for b in "${badges[@]}"; do
+        b="$(echo "$b" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+        [ -z "$b" ] && continue
+        if [[ "$b" != *"="* ]] || [[ "$b" != *":"* ]]; then
+            echo -e "${RED}[ERREUR] Badge invalide (attendu label=message:couleur) : ${b}${NC}"
+            return 1
+        fi
+        label="${b%%=*}"
+        reste="${b#*=}"
+        # La couleur est apres le dernier ':'
+        couleur="${reste##*:}"
+        message="${reste%:*}"
+        label="$(echo "$label" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+        message="$(echo "$message" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+        couleur="$(echo "$couleur" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+        if [ -z "$label" ] || [ -z "$message" ] || [ -z "$couleur" ]; then
+            echo -e "${RED}[ERREUR] Badge incomplet (label, message et couleur requis) : ${b}${NC}"
+            return 1
+        fi
+        # Rejeter tout caractere non-ASCII (regle immuable)
+        if printf '%s' "$label$message$couleur" | LC_ALL=C grep -q '[^ -~]'; then
+            echo -e "${RED}[ERREUR] Caractere non-ASCII dans un badge : ${b}${NC}"
+            return 1
+        fi
+        label_enc="$(encoder_badge "$label")"
+        message_enc="$(encoder_badge "$message")"
+        url="https://img.shields.io/badge/${label_enc}-${message_enc}-${couleur}?style=flat"
+        if [ -n "$ligne" ]; then ligne="$ligne "; fi
+        ligne="${ligne}[![${label}](${url})](${url})"
+    done
+    if [ -z "$ligne" ]; then
+        echo -e "${RED}[ERREUR] Aucun badge valide fourni.${NC}"
+        return 1
+    fi
+    if grep -qF -- "$ligne" "$README"; then
+        echo -e "${GREEN}[OK]${NC} Ces badges sont deja presents dans le README (aucun doublon)."
+        return 0
+    fi
+    # Inserer la ligne de badges juste apres la premiere ligne H1
+    awk -v badges_ligne="$ligne" '
+        BEGIN { done = 0 }
+        {
+            if (!done && $0 ~ /^# /) {
+                print $0
+                print ""
+                print badges_ligne
+                print ""
+                done = 1
+                next
+            }
+            print
+        }
+    ' "$README" > "$README.tmp" && mv "$README.tmp" "$README"
+    if grep -qF -- "$ligne" "$README"; then
+        echo -e "${GREEN}[OK]${NC} Badge(s) insere(s) en tete du README, apres le titre H1."
+        return 0
+    fi
+    echo -e "${RED}[ERREUR]${NC} Aucun titre H1 (# ...) trouve : rien n'a ete insere."
+    return 1
+}
+
 # Afficher le journal (diagnostic, non inscrit au README)
 afficher_journal() {
     local n="${1:-10}"
@@ -346,6 +485,8 @@ main() {
     local action=""
     local n="10"
     local help="false"
+    local logo_chemin=""
+    local badges_spec=""
 
     # Parser les arguments
     while [[ $# -gt 0 ]]; do
@@ -363,6 +504,22 @@ main() {
                 shift
                 if [[ $1 =~ ^[0-9]+$ ]]; then
                     n="$1"
+                    shift
+                fi
+                ;;
+            --logo)
+                action="logo"
+                shift
+                if [[ $# -gt 0 && "$1" != --* ]]; then
+                    logo_chemin="$1"
+                    shift
+                fi
+                ;;
+            --badges)
+                action="badges"
+                shift
+                if [[ $# -gt 0 && "$1" != --* ]]; then
+                    badges_spec="$1"
                     shift
                 fi
                 ;;
@@ -405,6 +562,12 @@ main() {
             ;;
         journal)
             afficher_journal "$n"
+            ;;
+        logo)
+            inserer_logo "$logo_chemin"
+            ;;
+        badges)
+            inserer_badges "$badges_spec"
             ;;
         agents)
             echo "Agents reels : $(compter_agents)"

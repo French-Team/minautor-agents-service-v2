@@ -1,9 +1,10 @@
 # lire-frontmatter
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Lire
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** lire
 **Chemin :** `agents/tools/lire/lire-frontmatter/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -14,6 +15,9 @@ Extraire le frontmatter YAML en tete d'un fichier markdown (le bloc delimite par
 ```bash
 # Afficher tout le frontmatter
 lire-frontmatter.sh fichier.md
+
+# Version Python (recommandee)
+python3 lire-frontmatter.py fichier.md
 
 # Afficher uniquement la valeur d'un champ
 lire-frontmatter.sh --champ statut fichier.md
@@ -70,3 +74,15 @@ statut: ebauche
 - [x] L'outil est reference dans `index-tools.md`
 - [x] L'outil est assigne a un agent dans sa carte de decision (protocole-outils Regle 6)
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (--champ, --verbose, --version) |
+
+---

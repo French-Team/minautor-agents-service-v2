@@ -1,11 +1,21 @@
 # evaluer-coherence
 
+**Version :** 0.2.1
+**Statut :** prepare
+**Categorie :** evaluer
+**Chemin :** `agents/tools/evaluer/evaluer-coherence/`
+**Proprietaire :** Themis (outil partage)
+
+## Description
+
 Evalue la coherence inter-fichiers : liens, references croisees, dossiers vides.
 
-## Usage
+## Utilisation
 
 ```bash
 bash evaluer-coherence.sh [DOSSIER]
+# Version Python (recommandee)
+python3 evaluer-coherence.py [DOSSIER]
 ```
 
 ## Ce qu'il verifie
@@ -18,3 +28,25 @@ bash evaluer-coherence.sh [DOSSIER]
 ## Sortie
 
 Rapport markdown sur stdout avec score /100.
+
+## Code retour
+
+| Code | Signification |
+|---|---|
+| 0 | Le dossier cible existe (meme avec des incoherences signalees) |
+| 1 | Le dossier cible n'existe pas |
+
+## Dependances
+
+- bash, python (parseur de liens), tr
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter ajoute, VERSION 0.2.0, en-tete standardise. Bug corrige : exclusions ajoutees (convention-*, protocole-*, regles-*, templates, rvav) pour eviter les faux positifs sur les references pense-betes/ |
+| 0.2.1 | 2026-08-07 | Lecon audit general : parseur Python pour les liens internes - ignore les blocs de code (``` et ~~~), les motifs generiques (texte, chemin, ancien.md, index.md, frere-b, etc.), les liens externes et les ancres. Resolution double (relative au fichier ET a la racine cerveau-projet). Exclusion du dossier exemples/ (problemes volontaires). Normalisation CRLF/LF pour Git Bash |
+| 0.2.0-py | 2026-08-07 | Version Python creee (portage fidele : dossiers vides signalent spec/todo vides, scan outils au niveau 3 incluant les protections) |
+
+---

@@ -1,6 +1,6 @@
 # valider-relecture
 
-**Version :** 0.2.0
+**Version :** 0.2.0-py
 **Statut :** prepare
 **Categorie :** Valider
 **Chemin :** `agents/tools/valider/valider-relecture/`

@@ -1,10 +1,10 @@
-# Outil -- Valider un Fichier Ebauche
+# valider-ebauche
 
-**Categorie** : Valider
-**Version** : 0.2.0
-**Statut** : beta
-**Date creation** : 2026-08-05
-**Proprietaire** : Vulcain (outil partage)
+**Version :** 0.2.0-py
+**Statut :** prepare
+**Categorie :** valider
+**Chemin :** `agents/tools/valider/valider-ebauche/`
+**Proprietaire :** Vulcain (outil partage)
 
 ---
 
@@ -119,3 +119,10 @@ Avertissements : 0
 - Un ebauche est une **idee brute**, pas un document structure
 - Si un ebauche est "pret", c'est une **erreur de statut** (devrait etre "prepare")
 - Utiliser `detecter-erreur-statut` pour verifier tous les fichiers d'un coup
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |

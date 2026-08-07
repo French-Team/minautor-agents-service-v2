@@ -61,8 +61,8 @@ surcharges:
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Creer un todo** | 8 etapes | todo-template, convention-renommage, rvav-workflow | `rechercher-todos`, `generateurs-squelette-todo`, `creer-remplir-todo`, `valider-todo`, `mettre-a-jour-modifier-agents-md` |
-| **Completer un todo** | 6 etapes | todo-template, rvav-workflow | `rechercher-todos`, `lire-fichier`, `creer-remplir-todo`, `valider-todo`, `mettre-a-jour-modifier-agents-md` |
+| **Creer un todo** | 9 etapes | todo-template, convention-renommage, rvav-workflow | `rechercher-todos`, `generateurs-squelette-todo`, `creer-remplir-todo`, `valider-todo`, `mettre-a-jour-agents-md` |
+| **Completer un todo** | 7 etapes | todo-template, rvav-workflow | `rechercher-todos`, `lire-fichier`, `creer-remplir-todo`, `valider-todo`, `mettre-a-jour-agents-md` |
 
 ### Outils de base (P0) -- disponibles dans toutes les missions
 
@@ -95,7 +95,7 @@ surcharges:
 | 6 | **Valider le fichier** (phases 0-9, obligations) | `rvav-workflow` | `valider-todo` |
 | 7 | Mettre a jour index-todo.md | - | - |
 | **8** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **FIN** | **REACTIVER CERBERUS** -- la mission est terminee | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **REACTIVER CERBERUS** -- la mission est terminee | - | `mettre-a-jour-agents-md` |
 
 > **REGLE** : Je travaille sans ouvrir les fichiers -- je genere le squelette, je remplis les phases, je valide l'integrite.
 > **ANTI-DOUBLON** : Avant toute creation, je lance `rechercher-todos` pour verifier qu'un todo au theme proche n'existe pas deja.
@@ -116,7 +116,7 @@ surcharges:
 | 4 | Completer les phases manquantes | `todo-template` | `creer-remplir-todo` |
 | 5 | Valider le todo | `rvav-workflow` | `valider-todo` |
 | **6** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **FIN** | **REACTIVER CERBERUS** -- la mission est terminee | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **REACTIVER CERBERUS** -- la mission est terminee | - | `mettre-a-jour-agents-md` |
 
 ---
 
@@ -135,12 +135,12 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour reactiver Cerberus (fin de mission todo)
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "Minerve"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "Minerve"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour reactiver Cerberus.

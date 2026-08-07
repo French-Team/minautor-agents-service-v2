@@ -10,13 +10,13 @@
 
 | Theme | Derniere mise a jour | Statut |
 |---|---|---|
-| [Aucune recherche pour l'instant] | -- | -- |
+| [Badges GitHub (Shields.io)](badges-github-shields/badges-README-github.md) | 2026-08-07 | validee |
 
 ### Recherches par agent
 
 | Agent | Recherches | Derniere activite |
 |---|---|---|
-| [Aucune recherche pour l'instant] | -- | -- |
+| Atlas | 1 recherche : Badges GitHub (Shields.io) | 2026-08-07 |
 
 ---
 

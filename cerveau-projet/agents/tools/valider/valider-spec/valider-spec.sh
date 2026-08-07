@@ -1,11 +1,10 @@
 #!/bin/bash
 # valider-spec.sh
 # Verifie l'integrite d'une spec (structure, sections, ASCII)
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.2.0
 
 # Configuration
-VERSION="0.1.0-beta"
+VERSION="0.2.0"
 STATUT="ebauche"
 
 # Couleurs

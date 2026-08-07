@@ -5,6 +5,7 @@
 # Version : 0.2.0
 # Optimisation : une passe unique python (le dictionnaire est lu une fois,
 #                les remplacements appliques en un seul passage par fichier)
+VERSION="0.2.0"
 
 # Couleurs
 RED='\033[0;31m'

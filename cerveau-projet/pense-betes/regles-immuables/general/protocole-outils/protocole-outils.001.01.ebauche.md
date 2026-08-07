@@ -90,7 +90,7 @@ Un outil qui n'est assigne a personne risque de n'etre jamais utilise. Pour assi
 
 | Nature de l'outil | Agent responsable | Exemples |
 |---|---|---|
-| Coordination, activation | Cerberus | `mettre-a-jour-modifier-agents-md`, `lister-agents` |
+| Coordination, activation | Cerberus | `mettre-a-jour-agents-md`, `lister-agents` |
 | Controle, analyse, structure du cerveau | Buffy | `valider-*`, `corriger-*`, `verifier-documents-manquants` |
 | Exploration | Atlas | `lister-*`, `rechercher-*` |
 | Statuts et validation | Janus | `lister-statuts`, `changer-statut`, `valider-ebauche` |
@@ -130,6 +130,32 @@ grep -rn "\\K" agents/tools/ --include="*.sh"              # doit etre vide
 ```
 
 > **Cas Python** : Python est fiable sur Git Bash pour la detection (encodage) et les regex. C'est l'alternative recommandee quand sed/grep ne suffisent pas.
+
+### Regle 8 -- Utilisation EXCLUSIVE des outils du cerveau (IMMUABLE)
+
+> **REGLE ABSOLUE** : pour TOUTE operation (lire, ecrire, editer, chercher, lister, analyser, valider, corriger, purifier...), un agent utilise UNIQUEMENT les outils de `agents/tools/`. Jamais de commande systeme directe, jamais d'outil de l'environnement.
+
+**Interdits formellement** (liste non exhaustive) :
+
+| Interdit | Pourquoi | Alternative |
+|---|---|---|
+| `cat`, `ls`, `find`, `grep`, `sed`, `awk` en commande directe | Contourne nos outils, pas trace, pas de nos standards | Outils `lire-*`, `rechercher-*`, `lister-*` |
+| `python -c "..."` ponctuel | Contourne nos outils, pas de versionnage | Version `.py` de l'outil |
+| `bash -c "..."` ponctuel | Contourne nos outils | Version `.sh` de l'outil |
+| `read_files`, `write_file`, `str_replace`, `basher` (outils de l'environnement) | Ce ne sont PAS nos outils | Nos outils dans `agents/tools/` |
+| Les outils d'un autre agent que le sien | Chaque agent a SES outils assignes | Les outils assignes a SA carte de decision |
+
+**Processus obligatoire** :
+
+```
+1. J'ai besoin de faire X -> je cherche l'outil dans index-tools.md (ou mes outils assignes)
+2. L'outil existe ? -> je l'execute (version .py si Python dispo, sinon .sh -- voir protocole-technologies)
+3. L'outil n'existe pas ? -> je NE contourne PAS avec une commande directe
+   -> je signale le besoin (boucle de retroaction) -> Vulcain cree l'outil
+4. Je n'utilise JAMAIS l'outil d'un autre agent a la place du mien
+```
+
+> **Exception** : `mettre-a-jour-agents-md` et `verifier-systeme` sont des outils PARTAGES (assignes a plusieurs agents). Tout le reste appartient a un agent precis.
 
 ---
 

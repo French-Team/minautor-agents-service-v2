@@ -1,8 +1,10 @@
-# Outil -- Corriger les Liens
+# corriger-liens
 
-**Categorie** : Corriger
-**Version** : v0.1.0
-**Statut** : initial
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** corriger
+**Chemin :** `agents/tools/corriger/corriger-liens/`
+**Proprietaire :** Buffy (outil partage)
 
 ---
 
@@ -13,6 +15,19 @@ Corriger automatiquement les liens casses dans les fichiers Markdown.
 ---
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 corriger-liens.py [OPTIONS] <fichier>
+
+Options :
+  --dry-run    Simuler sans modifier
+  --verbose    Afficher les details
+  --version    Afficher la version
+```
+
+### API (version originale)
 
 ```
 corriger-liens(chemin=".", mode="auto", dry-run=false)
@@ -115,3 +130,10 @@ corriger-liens(chemin=".", mode="auto")
 
 ---
 
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
+| 0.1.0 | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |

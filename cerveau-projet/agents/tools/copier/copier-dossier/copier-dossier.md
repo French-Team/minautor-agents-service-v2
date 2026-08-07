@@ -1,15 +1,29 @@
 # copier-dossier
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Copier
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** copier
 **Chemin :** `agents/tools/copier/copier-dossier/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
 Copier un dossier recursivement vers une destination. Verifie que la source existe, que la destination n'est pas dans la source, et cree le dossier de destination si besoin.
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 copier-dossier.py [OPTIONS] <source> <destination>
+
+Options :
+  --dry-run    Simuler sans copier
+  --verbose    Afficher les details
+  --version    Afficher la version
+```
+
+### CLI bash (version originale)
 
 ```bash
 # Copier un dossier (recursif)
@@ -75,3 +89,15 @@ Resultat : OK
 - [ ] L'outil est conforme ASCII (aucun accent, aucun emoji)
 - [ ] L'outil est reference dans `index-tools.md`
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+
+---

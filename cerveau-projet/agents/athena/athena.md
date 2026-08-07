@@ -61,8 +61,8 @@ surcharges:
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Creer un pense-bete** | 8 etapes | convention-renommage, rvav-workflow, regles-emojis-ascii | `rechercher-pense-betes`, `generateurs-squelette-pense-bete`, `creer-remplir-pense-bete`, `valider-pense-bete`, `mettre-a-jour-modifier-agents-md` |
-| **Completer un pense-bete** | 6 etapes | convention-renommage, rvav-workflow | `rechercher-pense-betes`, `lire-fichier`, `valider-conventions`, `mettre-a-jour-modifier-agents-md` |
+| **Creer un pense-bete** | 9 etapes | convention-renommage, rvav-workflow, regles-emojis-ascii | `rechercher-pense-betes`, `generateurs-squelette-pense-bete`, `creer-remplir-pense-bete`, `valider-pense-bete`, `mettre-a-jour-agents-md` |
+| **Completer un pense-bete** | 7 etapes | convention-renommage, rvav-workflow | `rechercher-pense-betes`, `lire-fichier`, `valider-conventions`, `mettre-a-jour-agents-md` |
 
 ### Outils de base (P0) -- disponibles dans toutes les missions
 
@@ -95,7 +95,7 @@ surcharges:
 | 6 | **Valider le fichier** (structure, sections, integrite) | `rvav-workflow` | `valider-pense-bete` |
 | 7 | Passer par la boucle RVAV | `rvav-workflow` | - |
 | **8** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **FIN** | **ACTIVER PROMETHEE** -- c'est lui qui cree la spec | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **ACTIVER PROMETHEE** -- c'est lui qui cree la spec | - | `mettre-a-jour-agents-md` |
 
 > **REGLE** : Je m'arrete au statut **ebauche**. Les sous-fichiers (spec, todo, liens) sont crees plus tard, sur demande.
 > **ANTI-DOUBLON** : Avant toute creation, je lance `rechercher-pense-betes` pour verifier qu'un pense-bete au theme proche n'existe pas deja.
@@ -116,7 +116,7 @@ surcharges:
 | 4 | Completer les sections manquantes | `pense-bete-template` | - |
 | 5 | Passer par la boucle RVAV | `rvav-workflow` | - |
 | **6** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **FIN** | **ACTIVER PROMETHEE** -- c'est lui qui cree la spec | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **ACTIVER PROMETHEE** -- c'est lui qui cree la spec | - | `mettre-a-jour-agents-md` |
 
 ---
 
@@ -135,18 +135,18 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour activer Promethee (fin de mission pense-bete)
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh activer "Promethee" "Pense-bete termine" "Creer la spec"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh activer "Promethee" "Pense-bete termine" "Creer la spec"
 ```
 
 ### Pour reactiver Cerberus (cas exceptionnel, sans suite)
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "Athena"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "Athena"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.

@@ -1,10 +1,10 @@
-# Outil -- Valider les Cartes de Decision
+# valider-cartes-decision
 
-**Categorie** : Valider
-**Version** : 0.1.0-beta
-**Statut** : beta
-**Date creation** : 2026-08-05
-**Proprietaire** : Vulcain (outil partage)
+**Version :** 0.2.0-py
+**Statut :** prepare
+**Categorie :** valider
+**Chemin :** `agents/tools/valider/valider-cartes-decision/`
+**Proprietaire :** Janus (outil partage)
 
 ---
 
@@ -144,4 +144,3 @@ valider-cartes-decision(fichier="chemin/vers/fichier.md")
 - Les resultats doivent etre documentes
 
 ---
-

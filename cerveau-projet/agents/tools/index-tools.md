@@ -92,6 +92,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 |---|---|---|
 | `detecter-erreur-statut` | Detecter les fichiers dont le statut ne correspond pas au contenu | [detecter/detecter-erreur-statut/](detecter/detecter-erreur-statut/) |
 | `detecter-surcharge-fichier` | Detecter les fichiers qui grossissent trop | [detecter/detecter-surcharge-fichier/](detecter/detecter-surcharge-fichier/) |
+| `detecter-local-hors-fonction` | Detecter les local utilises hors fonction dans les scripts bash | [detecter/detecter-local-hors-fonction/](detecter/detecter-local-hors-fonction/) |
 
 ### Ecrire
 
@@ -160,7 +161,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `mettre-a-jour-readme` | Mettre a jour le README depuis les sources de verite (agents, outils, chronologie) | [mettre-a-jour/mettre-a-jour-readme/](mettre-a-jour/mettre-a-jour-readme/) |
-| `mettre-a-jour-modifier-agents-md` | Modifier AGENTS.md de maniere fiable | [mettre-a-jour/mettre-a-jour-modifier-agents-md/](mettre-a-jour/mettre-a-jour-modifier-agents-md/) |
+| `mettre-a-jour-agents-md` | Modifier AGENTS.md de maniere fiable | [mettre-a-jour/mettre-a-jour-agents-md/](mettre-a-jour/mettre-a-jour-agents-md/) |
 
 ### Nettoyer
 
@@ -204,6 +205,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `valider-pense-bete` | Verifier l'integrite d'un pense-bete (structure, sections, ASCII) | [valider/valider-pense-bete/](valider/valider-pense-bete/) |
 | `valider-relecture` | Verifier que chaque fiche agent + corrections contient la regle de relecture | [valider/valider-relecture/](valider/valider-relecture/) |
 | `valider-numerotation` | Detecter les doublons d'etapes (etape X x2) dans les tableaux de mission des fiches agents | [valider/valider-numerotation/](valider/valider-numerotation/) |
+| `valider-tableaux` | Verifier la coherence des tableaux des fiches agents : nombres annonces vs lignes, numerotation continue, completude des listes | [valider/valider-tableaux/](valider/valider-tableaux/) |
 | `valider-spec` | Verifier l'integrite d'une spec (structure, sections, ASCII) | [valider/valider-spec/](valider/valider-spec/) |
 | `valider-todo` | Verifier l'integrite d'un todo (phases 0-9, obligations) | [valider/valider-todo/](valider/valider-todo/) |
 
@@ -294,9 +296,9 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 
 | Protection | Description | Chemin |
 |---|---|---|
-| `tester-protection-blocage` | Protection contre les tests qui bloquent | [tester/protections/](tester/protections/) |
-| `tester-protection-boucles-infinies` | Protection contre les boucles infinies | [tester/protections/](tester/protections/) |
-| `tester-protection-erreurs-silencieuses` | Protection contre les erreurs silencieuses | [tester/protections/](tester/protections/) |
+| `tester-protection-blocage` | Protection contre les tests qui bloquent | [tester/protections/tester-protection-blocage/](tester/protections/tester-protection-blocage/) |
+| `tester-protection-boucles-infinies` | Protection contre les boucles infinies | [tester/protections/tester-protection-boucles-infinies/](tester/protections/tester-protection-boucles-infinies/) |
+| `tester-protection-erreurs-silencieuses` | Protection contre les erreurs silencieuses | [tester/protections/tester-protection-erreurs-silencieuses/](tester/protections/tester-protection-erreurs-silencieuses/) |
 
 ---
 

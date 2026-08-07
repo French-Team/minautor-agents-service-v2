@@ -62,7 +62,7 @@ surcharges:
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Explorer le code** | 7 etapes | - | `lister-dossiers`, `lister-fichiers`, `lister-fonctions`, `lister-appels`, `lire-fichier`, `rechercher-texte`, `valider-relecture` |
+| **Explorer le code** | 8 etapes | - | `lister-dossiers`, `lister-fichiers`, `lister-fonctions`, `lister-appels`, `lire-fichier`, `rechercher-texte`, `valider-relecture` |
 | **Rechercher sur le web** | 3 etapes | protocole-recherches-web | - |
 | **Documenter** | 6 etapes | convention-protocoles | `lister-fichiers`, `decomposer-fichier`, `creer-fichier`, `ecrire-fichier` |
 | **Analyser les dependances** | 5 etapes | - | `analyser-dependances`, `analyser-structure`, `lister-fichiers`, `lire-fichier` |
@@ -162,12 +162,12 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "Atlas"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "Atlas"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour reactiver Cerberus.

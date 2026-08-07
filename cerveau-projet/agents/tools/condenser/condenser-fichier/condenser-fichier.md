@@ -1,10 +1,10 @@
-# Outil -- Condenseur Markdown
+# condenser-fichier
 
-**Categorie** : Condenser
-**Version** : 0.1.0-beta
-**Statut** : beta
-**Date creation** : 2026-08-05
-**Proprietaire** : Vulcain (outil partage)
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** condenser
+**Chemin :** `agents/tools/condenser/condenser-fichier/`
+**Proprietaire :** Buffy (outil partage)
 
 ---
 
@@ -15,6 +15,21 @@ Condenser les fichiers markdown en reduisant le contenu non essentiel.
 ---
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 condenser-fichier.py <fichier> [options]
+
+Options :
+  --analyser    Analyser le fichier uniquement
+  --dry-run     Afficher les changements sans les appliquer
+  --verbose     Afficher les details
+  --backup      Creer une copie de sauvegarde
+  --version     Afficher la version
+```
+
+### CLI bash (version originale)
 
 ```bash
 condenser-fichier.sh <fichier> [options]
@@ -119,6 +134,7 @@ $ condenser-fichier.sh cerveau-projet/agents/buffy/buffy.md
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 
 ---

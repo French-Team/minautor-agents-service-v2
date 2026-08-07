@@ -1,4 +1,4 @@
-# Outil -- Detecter les Erreurs de Statut
+# detecter-erreur-statut
 
 **Categorie** : Detecter
 **Version** : 0.2.0
@@ -23,6 +23,8 @@ Detecter les fichiers dont le statut ne correspond pas a leur contenu.
 
 ```bash
 ./detecter-erreur-statut.sh [dossier] [OPTIONS]
+# Version Python (recommandee)
+python3 detecter-erreur-statut.py [dossier] [OPTIONS]
 ```
 
 ### Options
@@ -187,3 +189,4 @@ Cet outil est utilise a l'etape **[Rechercher]** du workflow RVAV :
 | Version | Date | Changements |
 |---|---|---|
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
+| 0.2.0-py | 2026-08-07 | Version Python creee (memes fonctionnalites + --version) |

@@ -171,12 +171,45 @@ time ./outils/[nom-outil]/[nom-outil].sh
 
 ---
 
+## Etape 6 : Choix de la version d'un outil a l'execution (.sh ou .py)
+
+> Depuis le passage V2, chaque outil du cerveau existe en 2 versions : `[nom-outil].sh` (Bash) et `[nom-outil].py` (Python). L'agent doit choisir LA version a executer en fonction du systeme de l'utilisateur.
+
+### 1. Consulter le profil systeme stocke
+
+Le profil systeme est STOCKE dans le classeur (variable `profil-systeme`) :
+
+```
+classeur-variables/stockage/variables-actuelles.md  ->  ligne `profil-systeme`
+```
+
+- La variable est ecrite par l'outil `verifier-systeme` (source de verite)
+- Les agents la CONSULTENT avant d'executer un outil -- ils ne lancent pas eux-memes des commandes de detection
+
+### 2. Matrice de choix (Python d'abord)
+
+| Profil systeme | Version a executer |
+|---|---|
+| Python disponible | `.py` (priorite -- fiable, portable, detections propres) |
+| Python absent, Bash disponible | `.sh` (repli) |
+| Ni Python ni Bash | Signaler l'absence au cerveau (jamais d'invention) |
+
+### 3. Regles d'application
+
+1. TOUJOURS consulter le profil systeme avant d'executer un outil
+2. Si le profil n'existe pas : executer `verifier-systeme` (via l'agent habilite), STOCKER le resultat, puis choisir
+3. Le choix se fait a l'execution, pas au moment de la creation de l'outil
+4. Ne JAMAIS supposer que Python ou Bash est disponible : le profil est la seule source de verite
+
+---
+
 ## Notes importantes
 
 - **Toujours verifier le systeme** avant de choisir une technologie
 - **Privilegier la portabilite** quand c'est possible
 - **Tester sur plusieurs systemes** avant de valider
 - **Documenter les choix** pour la maintenance
+- **Le profil systeme stocke est la source de verite** pour le choix `.py` / `.sh`
 
 ---
 

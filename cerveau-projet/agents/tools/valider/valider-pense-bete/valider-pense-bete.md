@@ -1,9 +1,10 @@
 # valider-pense-bete
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Valider
+**Version :** 0.2.0-py
+**Statut :** prepare
+**Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-pense-bete/`
+**Proprietaire :** Athena (outil partage)
 
 ## Description
 
@@ -91,3 +92,14 @@ Fichier : pense-bete-incomplet.001.01.ebauche.md
 | `creer-remplir-pense-bete` | Remplit les sections avant la validation |
 | `valider-conformite-ascii` | Verification ASCII globale du projet |
 | `changer-statut` | Change le statut apres validation |
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+
+---

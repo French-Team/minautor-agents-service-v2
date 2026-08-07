@@ -1,10 +1,9 @@
 #!/bin/bash
 # supprimer-ligne.sh
 # Supprimer une ligne (ou une plage) par numero dans un fichier
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.2.0
 
-VERSION="0.1.0-beta"
+VERSION="0.2.0"
 STATUT="ebauche"
 
 RED='\033[0;31m'

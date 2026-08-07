@@ -1,9 +1,10 @@
 # rechercher-accents-sensibles
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Rechercher
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** rechercher
 **Chemin :** `agents/tools/rechercher/rechercher-accents-sensibles/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -23,25 +24,23 @@ Recherche les caracteres non-ASCII (accents, emojis, symboles Unicode) dans les 
 
 ## Utilisation
 
+Version Python (recommandee) :
+
 ```bash
 # Rechercher dans toutes les zones sensibles d'un dossier
-rechercher-accents-sensibles.sh cerveau-projet/
-
-# Rechercher depuis la racine
-rechercher-accents-sensibles.sh .
+python3 rechercher-accents-sensibles.py cerveau-projet/
 
 # Zones specifiques
-rechercher-accents-sensibles.sh --zones frontmatter,liens cerveau-projet/
-
-# Zone noms uniquement (toutes les extensions, sans limite)
-rechercher-accents-sensibles.sh --zones noms .
+python3 rechercher-accents-sensibles.py --zones frontmatter,liens cerveau-projet/
 
 # Afficher les lignes exactes avec --verbose
-rechercher-accents-sensibles.sh --verbose cerveau-projet/
+python3 rechercher-accents-sensibles.py --verbose cerveau-projet/
 
 # Extensions de code personnalisees
-rechercher-accents-sensibles.sh --extensions sh,py,txt cerveau-projet/
+python3 rechercher-accents-sensibles.py --extensions sh,py,txt cerveau-projet/
 ```
+
+Version bash equivalente : `rechercher-accents-sensibles.sh` (meme logique).
 
 ## Options
 
@@ -117,3 +116,15 @@ Le dossier `cerveau-projet/exemples/` est **exclu automatiquement** : c'est la z
 - [x] L'outil est conforme ASCII (aucun accent, aucun emoji)
 - [ ] L'outil est reference dans `index-tools.md`
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (rechercher-accents-sensibles.py), basee sur outil-template.py. Detection des 5 zones (frontmatter, noms, blocs, code, liens), rapport seul, exit 1 si problemes |
+
+---

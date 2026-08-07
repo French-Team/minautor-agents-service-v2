@@ -35,7 +35,7 @@ aide() {
     echo "Types de fichiers:"
     echo "  protocole     nom-protocole.XX.XX.statut.md"
     echo "  agent         nom-agent.md"
-    echo "  outil         nom-outil.sh ou nom-outil.md"
+    echo "  outil         nom-outil.sh, nom-outil.py ou nom-outil.md"
     echo "  convention    convention-nom.md"
     echo ""
     echo "Statuts valides (protocoles):"
@@ -134,17 +134,17 @@ valider_outil() {
     echo -e "${BLUE}[CHECKLIST] Validation du nommage : ${basename}${NC}"
     echo ""
 
-    # Verifier le format : nom-outil.sh ou nom-outil.md
-    if [[ "$basename" =~ ^[a-z-]+\.sh$ ]] || [[ "$basename" =~ ^[a-z-]+\.md$ ]]; then
+    # Verifier le format : nom-outil.sh, nom-outil.py ou nom-outil.md
+    if [[ "$basename" =~ ^[a-z-]+\.sh$ ]] || [[ "$basename" =~ ^[a-z-]+\.py$ ]] || [[ "$basename" =~ ^[a-z-]+\.md$ ]]; then
         echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"
     else
         echo -e "  ${RED}[ERREUR] Format invalide : ${basename}${NC}"
-        echo -e "    Attendu : nom-outil.sh ou nom-outil.md"
+        echo -e "    Attendu : nom-outil.sh, nom-outil.py ou nom-outil.md"
         erreurs=$((erreurs + 1))
     fi
 
     # Verifier le prefixe du dossier (regle immuable)
-    local nom=$(echo "$basename" | sed 's/\.sh$//; s/\.md$//')
+    local nom=$(echo "$basename" | sed 's/\.sh$//; s/\.py$//; s/\.md$//')
 
     # Si la categorie n est pas fournie, l extraire du chemin
     if [[ -z "$categorie" ]]; then
@@ -247,8 +247,8 @@ if [[ "$RECURSIVE" == "true" ]]; then
     # Parcourir tous les dossiers d'outils (structure: tools/categorie/outil/)
     while IFS= read -r dossier_outil; do
         # Extraire la categorie (dossier parent du dossier outil)
-        local categorie=$(basename "$(dirname "$dossier_outil")")
-        local nom_outil=$(basename "$dossier_outil")
+        categorie=$(basename "$(dirname "$dossier_outil")")
+        nom_outil=$(basename "$dossier_outil")
         # Parcourir les .sh du dossier
         for f in "$dossier_outil"/*.sh; do
             [[ ! -f "$f" ]] && continue
@@ -259,6 +259,14 @@ if [[ "$RECURSIVE" == "true" ]]; then
         done
         # Parcourir les .md du dossier
         for f in "$dossier_outil"/*.md; do
+            [[ ! -f "$f" ]] && continue
+            total=$((total + 1))
+            valider_outil "$f" "$VERBOSE" "$categorie"
+            [[ $? -eq 0 ]] && ok=$((ok + 1)) || ko=$((ko + 1))
+            echo ""
+        done
+        # Parcourir les .py du dossier
+        for f in "$dossier_outil"/*.py; do
             [[ ! -f "$f" ]] && continue
             total=$((total + 1))
             valider_outil "$f" "$VERBOSE" "$categorie"

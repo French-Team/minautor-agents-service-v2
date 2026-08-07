@@ -61,8 +61,8 @@ surcharges:
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Creer une spec** | 8 etapes | spec-template, convention-renommage, rvav-workflow | `rechercher-specs`, `generateurs-squelette-spec`, `creer-remplir-spec`, `valider-spec`, `mettre-a-jour-modifier-agents-md` |
-| **Completer une spec** | 6 etapes | spec-template, rvav-workflow | `rechercher-specs`, `lire-fichier`, `creer-remplir-spec`, `valider-spec`, `mettre-a-jour-modifier-agents-md` |
+| **Creer une spec** | 9 etapes | spec-template, convention-renommage, rvav-workflow | `rechercher-specs`, `generateurs-squelette-spec`, `creer-remplir-spec`, `valider-spec`, `mettre-a-jour-agents-md` |
+| **Completer une spec** | 7 etapes | spec-template, rvav-workflow | `rechercher-specs`, `lire-fichier`, `creer-remplir-spec`, `valider-spec`, `mettre-a-jour-agents-md` |
 
 ### Outils de base (P0) -- disponibles dans toutes les missions
 
@@ -95,7 +95,7 @@ surcharges:
 | 6 | **Valider le fichier** (structure, sections, integrite) | `rvav-workflow` | `valider-spec` |
 | 7 | Mettre a jour index-spec.md | - | - |
 | **8** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **FIN** | **ACTIVER MINERVE** -- c'est elle qui cree le todo | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **ACTIVER MINERVE** -- c'est elle qui cree le todo | - | `mettre-a-jour-agents-md` |
 
 > **REGLE** : Je travaille sans ouvrir les fichiers -- je genere le squelette, je remplis les sections, je valide l'integrite.
 > **ANTI-DOUBLON** : Avant toute creation, je lance `rechercher-specs` pour verifier qu'une spec au theme proche n'existe pas deja.
@@ -115,7 +115,7 @@ surcharges:
 | 4 | Completer les sections manquantes | `spec-template` | `creer-remplir-spec` |
 | 5 | Valider la spec | `rvav-workflow` | `valider-spec` |
 | **6** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **FIN** | **ACTIVER MINERVE** -- c'est elle qui cree le todo | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **ACTIVER MINERVE** -- c'est elle qui cree le todo | - | `mettre-a-jour-agents-md` |
 
 ---
 
@@ -134,18 +134,18 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour activer Minerve (fin de mission spec)
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh activer "Minerve" "Spec terminee" "Creer le todo"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh activer "Minerve" "Spec terminee" "Creer le todo"
 ```
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "Promethee"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "Promethee"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.

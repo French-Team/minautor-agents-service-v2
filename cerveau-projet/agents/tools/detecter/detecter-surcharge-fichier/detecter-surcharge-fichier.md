@@ -18,6 +18,8 @@ Detecter les fichiers qui depassent un seuil de taille (nombre de lignes).
 
 ```bash
 ./detecter-surcharge-fichier.sh [DOSSIER] [SEUIL]
+# Version Python (recommandee)
+python3 detecter-surcharge-fichier.py [DOSSIER] [--seuil N] [--recursive]
 ```
 
 ### Parametres
@@ -70,3 +72,4 @@ Seuil : 250 lignes
 | Version | Date | Changements |
 |---|---|---|
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
+| 0.2.0-py | 2026-08-07 | Version Python creee (--seuil avec tolerance 200-250, --recursive) |

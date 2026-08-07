@@ -19,9 +19,9 @@ Tester les fonctionnalites de l'outil [nom-de-l-outil].
 
 ## Protections utilisees
 
-- [ ] tester-protection-boucles-infinies.sh
-- [ ] tester-protection-erreurs-silencieuses.sh
-- [ ] tester-protection-blocage.sh
+- [ ] tester-protection-boucles-infinies/tester-protection-boucles-infinies.sh
+- [ ] tester-protection-erreurs-silencieuses/tester-protection-erreurs-silencieuses.sh
+- [ ] tester-protection-blocage/tester-protection-blocage.sh
 
 ## Tests
 
@@ -71,9 +71,9 @@ Tester les fonctionnalites de l'outil [nom-de-l-outil].
 PROTECTIONS_DIR="$(dirname "$0")/../protections"
 
 # Charger les protections
-source "$PROTECTIONS_DIR/tester-protection-boucles-infinies.sh"
-source "$PROTECTIONS_DIR/tester-protection-erreurs-silencieuses.sh"
-source "$PROTECTIONS_DIR/tester-protection-blocage.sh"
+source "$PROTECTIONS_DIR/tester-protection-boucles-infinies/tester-protection-boucles-infinies.sh"
+source "$PROTECTIONS_DIR/tester-protection-erreurs-silencieuses/tester-protection-erreurs-silencieuses.sh"
+source "$PROTECTIONS_DIR/tester-protection-blocage/tester-protection-blocage.sh"
 
 # Configuration
 OUTIL_DIR="$(dirname "$0")/../../[categorie]/[nom-outil]"

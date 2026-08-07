@@ -1,10 +1,10 @@
-# Outil -- Decomposeur Markdown
+# decomposer-fichier
 
-**Categorie** : Decomposer
-**Version** : 0.1.0-beta
-**Statut** : beta
-**Date creation** : 2026-08-05
-**Proprietaire** : Vulcain (outil partage)
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** decomposer
+**Chemin :** `agents/tools/decomposer/decomposer-fichier/`
+**Proprietaire :** Atlas (outil partage)
 
 ---
 
@@ -15,6 +15,26 @@ Decomposer les fichiers markdown pour permettre aux agents de voir uniquement ce
 ---
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 decomposer-fichier.py <fichier> [options]
+
+Actions :
+  --lister              Lister les sections
+  --extraire [section]  Extraire une section
+  --filtrer [type]      Filtrer par type (titres|regles|tableaux|code|liens)
+  --resume              Afficher le resume
+  --compter             Compter le contenu
+
+Options :
+  --json                Sortie JSON
+  --verbose             Details supplementaires
+  --version             Afficher la version
+```
+
+### CLI bash (version originale)
 
 ```bash
 decomposer-fichier.sh <fichier> [options]
@@ -130,6 +150,7 @@ L'outil est prepare pour de futurs ajouts :
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 
 ---

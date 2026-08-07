@@ -1,11 +1,11 @@
 #!/bin/bash
 # verifier-documents-manquants.sh
 # Verifier que chaque script .sh a sa documentation .md et inversement
-# Version : 0.2.0-beta
+# Version : 0.2.0
 # Statut : ebauche
 
 # Configuration
-VERSION="0.2.0-beta"
+VERSION="0.2.0"
 STATUT="ebauche"
 
 # Couleurs

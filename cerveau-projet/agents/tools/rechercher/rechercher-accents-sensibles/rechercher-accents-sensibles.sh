@@ -7,13 +7,12 @@
 #   - fichiers de code (.sh, .py, .js, etc. - fichier entier)
 #   - liens relatifs [texte](chemin) dans les .md
 # Mode : RECHERCHE ET RAPPORT UNIQUEMENT (jamais de correction)
-# Version : 0.2.0-beta
-# Statut : ebauche
+# Version : 0.2.0
 # Optimisation : UN SEUL awk pour tout le projet (via find | xargs -0 awk)
 #               = rapide meme sur Git Bash Windows (pas de fork par fichier)
 
 # Configuration
-VERSION="0.2.0-beta"
+VERSION="0.2.0"
 STATUT="ebauche"
 EXCLUSIONS_DEFAUT="node_modules,.git,.agents,.backup,.tmp,dictionnaire-,exemples"
 EXTENSIONS_DEFAUT="sh,py,js,json,yaml,yml,txt"

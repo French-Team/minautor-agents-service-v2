@@ -1,9 +1,10 @@
 # verifier-separation-preoccupations
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Verifier
+**Version :** 0.2.0-py
+**Statut :** prepare
+**Categorie :** verifier
 **Chemin :** `agents/tools/verifier/verifier-separation-preoccupations/`
+**Proprietaire :** Janus (outil partage)
 
 ## Description
 
@@ -77,3 +78,14 @@ $ verifier-separation-preoccupations.sh cerveau-projet/
 | `verifier-role-fichier` | Version ciblee sur un seul fichier |
 | `nettoyer-fichier` | Purifie les fichiers apres detection |
 | `rechercher-fichiers-vides` | Verifier que les fichiers detectes ont du contenu |
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+
+---

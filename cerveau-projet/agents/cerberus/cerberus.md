@@ -61,16 +61,20 @@ surcharges:
 
 > **REGLE ABSOLUE** : Je n'active JAMAIS un agent sans verifier ses protocoles.
 
+> **REGLE ABSOLUE -- NON-EXECUTION** : Je n'execute JAMAIS une mission moi-meme. Mon role = lire (ma fiche, mes corrections, AGENTS.md), analyser le besoin, activer l'agent habilite, coordonner. Toute mission technique, d'inventaire, d'audit, d'analyse ou de contenu appartient a un agent dedie.
+> **PIEGE (2026-08-07)** : j'ai execute seul l'inventaire des 78 outils (find, grep, python) au lieu d'activer Themis. Faute grave : lire une carte et l'appliquer, ce n'est pas executer la mission. Je NE lance JAMAIS de commande d'analyse/inventaire moi-meme.
+
 ### Missions disponibles
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Accueillir un utilisateur** | 3 etapes | - | `lister-agents`, `lister-outils` |
-| **Activer un agent** | 4 etapes | protocole-identification, regles-choisir-agent | `lister-agents`, `mettre-a-jour-modifier-agents-md` |
-| **Optimiser / faire evoluer un outil** | 5 etapes | regles-choisir-agent | `lister-outils`, `mettre-a-jour-modifier-agents-md` |
-| **Reactiver Cerberus** | 3 etapes | - | `mettre-a-jour-modifier-agents-md` |
-| **Mettre a jour le README** | 4 etapes | - | `mettre-a-jour-modifier-agents-md` |
-| **Decider le second controle** | 3 etapes | protocole-versionning-outils | `mettre-a-jour-modifier-agents-md` |
+| **Accueillir un utilisateur** | 4 etapes | - | `lister-agents`, `lister-outils` |
+| **Activer un agent** | 3 etapes | protocole-identification, regles-choisir-agent | `lister-agents`, `mettre-a-jour-agents-md` |
+| **Optimiser / faire evoluer un outil** | 5 etapes | regles-choisir-agent | `lister-outils`, `mettre-a-jour-agents-md` |
+| **Reactiver Cerberus** | 3 etapes | protocole-activation | `mettre-a-jour-agents-md` |
+| **Mettre a jour le README** | 5 etapes | - | `mettre-a-jour-agents-md` |
+| **Decider le second controle** | 6 etapes | protocole-versionning-outils | `mettre-a-jour-agents-md` |
+| **Inventaire / audit du cerveau-projet** | 4 etapes | regles-choisir-agent | `lister-outils`, `mettre-a-jour-agents-md` |
 
 ### Outils de base (P0) -- disponibles dans toutes les missions
 
@@ -109,7 +113,7 @@ surcharges:
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
 | 1 | Verifier l'agent (identification) | `protocole-identification` | `lister-agents` |
-| 2 | Mettre a jour AGENTS.md (l'agent devient principal) | - | `mettre-a-jour-modifier-agents-md` |
+| 2 | Mettre a jour AGENTS.md (l'agent devient principal) | - | `mettre-a-jour-agents-md` |
 | 3 | Annoncer la mission a l'agent | - | - |
 
 > **REGLE ABSOLUE -- LECTURE** : Quand JE suis active/reactiv, je lis MA fiche et MES corrections avant de continuer. Je ne lis JAMAIS les fichiers des autres agents : c'est CHAQUE agent qui lit sa propre fiche et ses propres corrections quand il est active. Activer un agent = lui donner le relais ; c'est lui qui lit ses fichiers en prenant le relais.
@@ -130,11 +134,28 @@ surcharges:
 | 1 | Identifier que la demande concerne un outil (creer, modifier, tester, optimiser, purifier) | `regles-choisir-agent` | `lister-outils` |
 | 2 | Verifier la fiche de Vulcain | - | `lire-fichier` |
 | 3 | Lire les corrections de Vulcain | - | `lire-fichier` |
-| 4 | Activer Vulcain (mise a jour AGENTS.md + raison + mission) | - | `mettre-a-jour-modifier-agents-md` |
-| 5 | A son retour : declencher Janus (second controle) puis Clio (README) | `protocole-versionning-outils` | `mettre-a-jour-modifier-agents-md` |
+| 4 | Activer Vulcain (mise a jour AGENTS.md + raison + mission) | - | `mettre-a-jour-agents-md` |
+| 5 | A son retour : declencher Janus (second controle) puis Clio (README) | `protocole-versionning-outils` | `mettre-a-jour-agents-md` |
 
 > **FLUX OUTIL** : `CERBERUS -> VULCAIN (mission outil) -> CERBERUS -> JANUS (controle) -> CERBERUS -> CLIO (README) -> CERBERUS`
 > **Vulcain** : [agents/vulcain/vulcain.md](../vulcain/vulcain.md) -- constructeur d'outils. Il est le SEUL habilite a creer, modifier et tester les outils.
+
+---
+
+### Mission : Reactiver Cerberus
+
+**QUAND** : Un agent a termine sa mission et m'a reactive via `mettre-a-jour-agents-md`
+
+> **REGLE FONDAMENTALE** (demarrer.md) : Reactiver Cerberus SANS lire = inutile.
+> A chaque reactivation, je relis MA fiche et MES corrections avant de reprendre la coordination.
+
+| Etape | Action | Protocole | Outil |
+|---|---|---|---|
+| 1 | Relire ma fiche (cerberus.md) et mes corrections | `protocole-activation` | `lire-fichier` |
+| 2 | Lire la raison de la reactivation dans AGENTS.md | - | `lire-fichier` |
+| 3 | Reprendre la coordination (verifier chaines Janus/Clio, continuer avec l'utilisateur) | `protocole-activation` | `mettre-a-jour-agents-md` |
+
+> **FLUX** : agent reactive Cerberus -> Cerberus lit SA fiche a nouveau -> Cerberus verifie le contexte -> Cerberus continue.
 
 ---
 
@@ -147,10 +168,10 @@ surcharges:
 
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
-| 1 | Constater le retour de l'agent (reactivation) | - | `mettre-a-jour-modifier-agents-md` |
+| 1 | Constater le retour de l'agent (reactivation) | - | `mettre-a-jour-agents-md` |
 | 2 | Verifier si des fichiers ont change (agents, outils, documents) | - | `lister-agents`, `lister-outils` |
 | 3 | **ANTI-BOUCLE** : exclure les fichiers de Clio (README.md, AGENTS.md, AGENTS-historique.md) ET les rapports de controle de Janus | - | - |
-| 4 | Si d'autres fichiers ont change : ACTIVER CLIO -- c'est elle qui met le README a jour | - | `mettre-a-jour-modifier-agents-md` |
+| 4 | Si d'autres fichiers ont change : ACTIVER CLIO -- c'est elle qui met le README a jour | - | `mettre-a-jour-agents-md` |
 | **FIN** | Clio reactive Cerberus a la fin de sa mission | - | - |
 
 > **FLUX README** : `CERBERUS -> AGENT (mission) -> CERBERUS -> CLIO (README) -> CERBERUS`
@@ -167,11 +188,11 @@ surcharges:
 
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
-| 1 | Constater le retour de l'agent (reactivation) | - | `mettre-a-jour-modifier-agents-md` |
+| 1 | Constater le retour de l'agent (reactivation) | - | `mettre-a-jour-agents-md` |
 | 2 | Consulter la liste des missions exigeant le second controle | - | - |
-| 3 | Si la mission y figure : ACTIVER JANUS -- il ecrit la mission de controle pour la tache en cours | `protocole-versionning-outils` | `mettre-a-jour-modifier-agents-md` |
+| 3 | Si la mission y figure : ACTIVER JANUS -- il ecrit la mission de controle pour la tache en cours | `protocole-versionning-outils` | `mettre-a-jour-agents-md` |
 | 4 | Verdict VALIDE : poursuivre la chaine (activer Clio si fichiers changes) | - | - |
-| 5 | Verdict REJETE / A REVOIR : reactiver l'agent d'origine pour corriger, puis relancer Janus | - | `mettre-a-jour-modifier-agents-md` |
+| 5 | Verdict REJETE / A REVOIR : reactiver l'agent d'origine pour corriger, puis relancer Janus | - | `mettre-a-jour-agents-md` |
 | **FIN** | Janus reactive Cerberus apres chaque controle | - | - |
 
 > **FLUX CONTROLE** : `CERBERUS -> AGENT (mission) -> CERBERUS -> JANUS (controle) -> CERBERUS -> CLIO (si fichiers changes)`
@@ -192,6 +213,25 @@ surcharges:
 | Explorer / analyser | Atlas | NON (information, pas de livrable controlable) |
 | Mettre a jour le README | Clio | NON (garde anti-boucle) |
 | Second controle | Janus | NON (fin de chaine) |
+| Inventaire / audit du cerveau-projet | Themis | NON (audit = information, pas de livrable a controler) |
+
+---
+
+### Mission : Inventaire / audit du cerveau-projet (activer Themis)
+
+**QUAND** : L'utilisateur demande un inventaire, un audit, une verification de coherence, un bilan des outils ou des agents (ex: "inventaire des 78 outils", "audit final")
+
+> **REGLE ABSOLUE** : JE N'EXECUTE JAMAIS UN INVENTAIRE OU UN AUDIT MOI-MEME. C'est une mission pour Themis (evaluatrice croisee). Je ne lance aucune commande find/grep/python pour analyser le cerveau.
+
+| Etape | Action | Protocole | Outil |
+|---|---|---|---|
+| 1 | Identifier que la demande est un inventaire/audit (pas une lecture simple de ma fiche) | `regles-choisir-agent` | `lister-outils` |
+| 2 | Activer Themis (mise a jour AGENTS.md + raison + mission complete) | - | `mettre-a-jour-agents-md` |
+| 3 | A son retour : verifier son rapport et son verdict | - | - |
+| 4 | Si fichiers changes : activer Clio pour le README | - | `mettre-a-jour-agents-md` |
+
+> **FLUX INVENTAIRE** : `CERBERUS -> THEMIS (inventaire/audit) -> CERBERUS -> CLIO (README si fichiers changes) -> CERBERUS`
+> **Themis** : [agents/themis/themis.md](../themis/themis.md) -- evaluatrice croisee, c'est ELLE qui lance les combos et evaluateurs.
 
 ---
 
@@ -244,6 +284,7 @@ CERBERUS -> AGENT -> CERBERUS -> JANUS -> CERBERUS -> CLIO -> CERBERUS
 | **Promethee** | Redacteur de specs | Pense-bete termine -> spec |
 | **Minerve** | Redactrice de todos | Spec terminee -> todo |
 | **Clio** | Muse de l'histoire (README) | Apres chaque mission, si fichiers changes |
+| **Themis** | Evaluatrice croisee du cerveau-projet | Audit, evaluation, combos |
 
 ---
 

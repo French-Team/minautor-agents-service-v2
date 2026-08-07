@@ -3,6 +3,7 @@
 # Outil de decomposition des fichiers markdown
 # Permet de voir uniquement ce dont on a besoin
 # Proprietaire : Vulcain (outil partage)
+VERSION="0.2.0"
 
 # Configuration
 FICHIER=""

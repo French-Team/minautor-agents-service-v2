@@ -15,6 +15,9 @@ Genere le squelette d'un pense-bete conforme au `pense-bete-template`. Athena n'
 # Creer un pense-bete avec les valeurs par defaut (id 001, class 01, ebauche)
 generateurs-squelette-pense-bete.sh --theme pipeline
 
+# Version Python (recommandee)
+python3 generateurs-squelette-pense-bete.py --theme pipeline
+
 # Avec toutes les options
 generateurs-squelette-pense-bete.sh --theme pipeline --id 002 --class 02 --dossier cerveau-projet/pense-betes/
 
@@ -84,3 +87,4 @@ $ generateurs-squelette-pense-bete.sh --theme pipeline
 | Version | Date | Changements |
 |---|---|---|
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme logique, validation theme, --dry-run, --version) |

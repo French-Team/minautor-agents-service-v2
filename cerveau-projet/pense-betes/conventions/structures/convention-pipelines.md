@@ -164,7 +164,7 @@ Avant de valider un pipeline, verifier :
 
 - [convention-classeur-variables.md](convention-classeur-variables.md) -- stockage partage
 - [convention-structures.md](convention-structures.md) -- principes d'architecture
-- [../../classeur-variables/index-classeur.md](../../classeur-variables/index-classeur.md) -- classeur de variables
+- [../../../classeur-variables/index-classeur.md](../../../classeur-variables/index-classeur.md) -- classeur de variables
 
 ---
 

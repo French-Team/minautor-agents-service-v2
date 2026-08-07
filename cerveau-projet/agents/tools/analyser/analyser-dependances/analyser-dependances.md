@@ -1,4 +1,4 @@
-# Outil -- Analyser les Dependances
+# analyser-dependances
 
 **Categorie** : Analyser
 **Version** : 0.2.0
@@ -13,6 +13,21 @@ Analyser les dependances entre les fichiers du projet.
 ---
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 analyser-dependances.py [chemin] [options]
+
+Options :
+  --fichier FICHIER   Analyser un fichier specifique
+  --inverse           Mode inverse (qui utilise ce fichier)
+  --dry-run           Afficher sans executer
+  --verbose           Affichage detaille
+  --version           Afficher la version
+```
+
+### API (version originale)
 
 ```
 analyser-dependances(chemin=".", fichier="specific.md", direction="both")
@@ -121,4 +136,5 @@ grep -rn "^\[.*\]:.*" *.md
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |

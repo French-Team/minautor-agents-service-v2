@@ -1,9 +1,10 @@
 # verifier-documents-manquants
 
-**Version :** 0.2.0-beta
-**Statut :** ebauche
-**Categorie :** Verifier
+**Version :** 0.2.0-py
+**Statut :** prepare
+**Categorie :** verifier
 **Chemin :** `agents/tools/verifier/verifier-documents-manquants/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -63,7 +64,7 @@ Les fichiers suivants sont des documents de **support** qui n'ont pas besoin d'u
 | Type | Exemple | Raison |
 |---|---|---|
 | `spec/` | `spec-verifier-systeme.001.01.ebauche.md` | Specifications, pas des docs d'outil |
-| `test-*.md` | `test-mettre-a-jour-modifier-agents-md.md` | Fichiers de test |
+| `test-*.md` | `test-mettre-a-jour-agents-md.md` | Fichiers de test |
 | `index-*.md` | `index-tools.md` | Index de navigation |
 | `*template*.md` | `template-test.md` | Templates de creation |
 
@@ -78,9 +79,9 @@ $ verifier-documents-manquants.sh cerveau-projet/agents/tools/
 Dossier : cerveau-projet/agents/tools/
 
 --- Scripts .sh sans documentation .md ---
-  [MANQUANT] cerveau-projet/agents/tools/tests/protections/tester-protection-blocage.sh
-  [MANQUANT] cerveau-projet/agents/tools/tests/protections/tester-protection-boucles-infinies.sh
-  [MANQUANT] cerveau-projet/agents/tools/tests/protections/tester-protection-erreurs-silencieuses.sh
+  [MANQUANT] cerveau-projet/agents/tools/tester/protections/tester-protection-blocage/tester-protection-blocage.sh
+  [MANQUANT] cerveau-projet/agents/tools/tester/protections/tester-protection-boucles-infinies/tester-protection-boucles-infinies.sh
+  [MANQUANT] cerveau-projet/agents/tools/tester/protections/tester-protection-erreurs-silencieuses/tester-protection-erreurs-silencieuses.sh
   -> 3 script(s) sans documentation
 
 --- Documentation .md sans script .sh ---
@@ -111,3 +112,10 @@ Documents manquants : 3
 | `rechercher-templates` | Verifier les templates (dont le outil-template) |
 | `valider-conformite-ascii` | Verifier la conformite ASCII des documents |
 | `lister-outils` | Voir la liste complete des outils |
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-beta | 2026-08-06 | Version precedente (beta) |
+| 0.2.0 | 2026-08-07 | Promotion prepare : passage v2 final |

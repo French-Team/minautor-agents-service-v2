@@ -2,9 +2,9 @@
 # evaluer-conventions.sh
 # Evalue le respect des conventions : nommage, ASCII, format
 # Proprietaire : Themis (outil partage)
-# Version : 0.1.0
+# Version : 0.2.0
 
-VERSION="0.1.0"
+VERSION="0.2.0"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -42,12 +42,22 @@ echo ""
 # 1. Nommage des fichiers de contenu (statuts)
 echo "## Nommage des statuts"
 total=$((total + 1))
-nb_bad=$(find "$dossier/cerveau-projet" -name "*.md" -type f 2>/dev/null | grep -cE '\.(prepare|prepare)\.' || true)
+# Detecter les fichiers dont le NOM contient des caracteres non-ASCII
+# (ex: .prepare-accentue. au lieu de .prepare.) via Python (fiable sur Git Bash)
+nb_bad=$(find "$dossier/cerveau-projet" -name "*.md" -type f 2>/dev/null | python -c "
+import sys
+n = 0
+for ligne in sys.stdin:
+    nom = ligne.strip()
+    if any(ord(c) > 127 for c in nom):
+        n += 1
+print(n)
+")
 if [ "$nb_bad" -gt 0 ]; then
-    echo "| ERREUR | Fichiers avec accents dans les statuts | $nb_bad fichier(s) avec 'prepare' au lieu de 'prepare' |"
+    echo "| ERREUR | Fichiers avec accents dans les statuts | $nb_bad fichier(s) avec des caracteres non-ASCII dans le nom (ex: .prepare-accentue.) |"
     erreurs=$((erreurs + 1))
 else
-    echo "| OK | Fichiers avec accents dans les statuts | Aucun accent dans les statuts |"
+    echo "| OK | Fichiers avec accents dans les statuts | Aucun accent dans les noms de fichiers |"
     ok=$((ok + 1))
 fi
 

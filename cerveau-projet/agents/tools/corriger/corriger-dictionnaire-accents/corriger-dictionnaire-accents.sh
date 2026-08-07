@@ -2,7 +2,8 @@
 # corriger-dictionnaire-accents.sh
 # Outil pour detecter et corriger les accents et caracteres non-ASCII
 # Conforme a la regle regles-emojis-ascii.md
-# Version : 0.3.0 (refonte python pour compatibilite Git Bash)
+# Version : 0.2.0
+VERSION="0.2.0"
 
 set -e
 

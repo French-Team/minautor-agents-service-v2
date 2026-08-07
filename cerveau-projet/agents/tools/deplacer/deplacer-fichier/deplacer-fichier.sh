@@ -1,10 +1,9 @@
 #!/bin/bash
 # deplacer-fichier.sh
 # Deplacer ou renommer un fichier vers une nouvelle destination
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.2.0
 
-VERSION="0.1.0-beta"
+VERSION="0.2.0"
 STATUT="ebauche"
 
 RED='\033[0;31m'

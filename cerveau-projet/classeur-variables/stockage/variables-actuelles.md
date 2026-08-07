@@ -8,6 +8,7 @@
 | `donnees-propres` | *(tableau nettoye)* | nettoyer-donnees | 2026-08-04 | [OK] |
 | `donnees-transformees` | *(tableau transforme)* | transformer-donnees | 2026-08-04 | [OK] |
 | `fichier-final` | `exports/export-2026-08-04-120000.json` | exporter-donnees | 2026-08-04 | [OK] |
+| `profil-systeme` | OS: Windows 10 / Bash: 5.2 / Python: 3.14 / Git: 2.53 | verifier-systeme | 2026-08-07 | [OK] |
 
 ---
 

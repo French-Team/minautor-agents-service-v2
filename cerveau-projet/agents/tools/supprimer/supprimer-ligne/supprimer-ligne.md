@@ -1,9 +1,10 @@
 # supprimer-ligne
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Supprimer
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** supprimer
 **Chemin :** `agents/tools/supprimer/supprimer-ligne/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -11,19 +12,23 @@ Supprimer une ligne (ou une plage de lignes) par numero dans un fichier. Outil d
 
 ## Utilisation
 
+Version Python (recommandee) :
+
 ```bash
 # Supprimer la ligne 42
-supprimer-ligne.sh fichier.md 42
+python3 supprimer-ligne.py fichier.md 42
 
 # Supprimer les lignes 10 a 15
-supprimer-ligne.sh fichier.md 10 15
+python3 supprimer-ligne.py fichier.md 10 15
 
 # Simuler avant d'appliquer
-supprimer-ligne.sh --dry-run fichier.md 42
+python3 supprimer-ligne.py --dry-run fichier.md 42
 
 # Avec details
-supprimer-ligne.sh --verbose fichier.md 10 15
+python3 supprimer-ligne.py --verbose fichier.md 10 15
 ```
+
+Version bash equivalente : `supprimer-ligne.sh` (meme logique).
 
 ## Options
 
@@ -78,3 +83,15 @@ $ supprimer-ligne.sh --verbose fichier.md 2
 - [x] L'outil est reference dans `index-tools.md`
 - [x] L'outil est assigne a un agent dans sa carte de decision (protocole-outils Regle 6)
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (supprimer-ligne.py), basee sur outil-template.py. Suppression ligne/plage avec validations + --dry-run |
+
+---

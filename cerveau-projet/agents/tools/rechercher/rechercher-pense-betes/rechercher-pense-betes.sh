@@ -1,11 +1,10 @@
 #!/bin/bash
 # rechercher-pense-betes.sh
 # Outil pour rechercher les pense-betes existants et eviter les doublons
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.2.0
 
 # Configuration
-VERSION="0.1.0-beta"
+VERSION="0.2.0"
 STATUT="ebauche"
 PREFIX="pense-bete"
 LABEL="pense-betes"

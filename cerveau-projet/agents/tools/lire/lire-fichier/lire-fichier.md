@@ -16,6 +16,9 @@ Lire le contenu complet (ou partiel) d'un fichier. Cet outil remplace l'utilisat
 # Lire un fichier complet
 lire-fichier.sh fichier.md
 
+# Version Python (recommandee)
+python3 lire-fichier.py fichier.md
+
 # Lire les 10 premieres lignes
 lire-fichier.sh --lignes 10 fichier.md
 
@@ -63,6 +66,7 @@ lire-fichier.sh --debut 20 fichier.md
 |---|---|---|
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (lecture complete, --lignes, --debut/--fin, fichier inexistant), categorie corrigee (Explorer -> Lire), promotion prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (--debut/--fin/--lignes, --version) |
 
 ## Notes de creation
 

@@ -1,6 +1,6 @@
 # valider-nommage
 
-**Version :** 0.2.0
+**Version :** 0.2.1-py
 **Statut :** prepare
 **Categorie :** Valider
 **Chemin :** `agents/tools/valider/valider-nommage/`
@@ -43,7 +43,7 @@ valider-nommage.sh --recursive --verbose cerveau-projet/agents/tools/
 |---|---|---|
 | `protocole` | `nom-protocole.XX.XX.statut.md` | `protocole-outils.001.01.ebauche.md` |
 | `agent` | `nom-agent.md` | `buffy.md` |
-| `outil` | `nom-outil.sh` ou `nom-outil.md` | `lire-fichier.sh` |
+| `outil` | `nom-outil.sh`, `nom-outil.py` ou `nom-outil.md` | `lire-fichier.sh` |
 | `convention` | `convention-nom.md` | `convention-renommage.md` |
 
 ## Regle du prefixe dossier (outils)
@@ -52,14 +52,15 @@ valider-nommage.sh --recursive --verbose cerveau-projet/agents/tools/
 
 - `lire/lire-fichier/` -> `lire-fichier.sh` 
 - `rechercher/rechercher-extension-fichier/` -> `rechercher-extension-fichier.sh` 
-- `corriger/corriger-dictionnaire-accents/` -> `corriger-dictionnaire-accents.sh`
+- `corriger/corriger-dictionnaire-accents/` -> `corriger-dictionnaire-accents.sh` 
+- `copier/copier-fichier/` -> `copier-fichier.py` (version Python)
 
 **Regle sans exclusion** : tous les dossiers d'outils suivent cette regle, y compris `generateurs/`, `combos/` et `tester/` (tout a ete renomme avec le prefixe du dossier).
 
 ## Mode recursive
 
 Le mode `--recursive` valide tous les outils d'un dossier :
-- Ne valide que les fichiers `.sh` et `.md` de premier niveau
+- Valide les fichiers `.sh`, `.py` et `.md` de premier niveau
 - Ignore les sous-dossiers `spec/`, les index, les templates
 - Affiche un resume : total, OK, erreurs
 
@@ -93,6 +94,7 @@ $ valider-nommage.sh --recursive cerveau-projet/agents/tools/
 | 0.1.0 | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-05 | Ajout de la verification du prefixe dossier (regle immuable) |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (outil conforme OK, outil sans prefixe detecte), exclusions obsoletees retirees, promotion prepare |
+| 0.2.1 | 2026-08-07 | Ajout du support des fichiers `.py` (format + prefixe dossier + mode --recursive) |
 
 ## Notes de creation
 

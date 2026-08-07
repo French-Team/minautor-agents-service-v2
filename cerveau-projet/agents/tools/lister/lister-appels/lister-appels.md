@@ -1,8 +1,10 @@
-# Outil -- Lister les Appels
+# lister-appels
 
-**Categorie** : Explorer
-**Version** : v0.1.0
-**Statut** : initial
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** lister
+**Chemin :** `agents/tools/lister/lister-appels/`
+**Proprietaire :** Atlas (outil partage)
 
 ---
 
@@ -14,18 +16,30 @@ Lister tous les appels de fonctions dans un fichier donne.
 
 ## Utilisation
 
+Version Python (recommandee) :
+
+```bash
+python3 lister-appels.py [FICHIER] [OPTIONS]
 ```
-lister-appels(fichier="path/to/file.ts", fonction="nomFonction")
+
+### Options
+
+| Option | Description |
+|---|---|
+| `FICHIER` | Fichier a analyser (defaut: detection auto dans le dossier) |
+| `--unique, -u` | Afficher les appels sans doublons |
+| `--verbose, -v` | Afficher les details d'execution |
+| `--version` | Afficher la version |
+| `--aide, -h` | Afficher l'aide |
+
+### Exemples
+
+```bash
+python3 lister-appels.py src/main.py
+python3 lister-appels.py --unique src/main.py
 ```
 
----
-
-## Parametres
-
-| Parametre | Type | Obligatoire | Description |
-|---|---|---|---|
-| `fichier` | string | Oui | Chemin du fichier a analyser |
-| `fonction` | string | Non | Nom d'une fonction specifique (defaut: toutes) |
+Version bash equivalente : `lister-appels.sh`.
 
 ---
 
@@ -105,3 +119,10 @@ grep -n "fonction(" fichier.py
 
 ---
 
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (lister-appels.py), basee sur outil-template.py |

@@ -17,8 +17,8 @@
 
 - **Parent** : [index-pense-bete.md](../index-pense-bete.md)
 - **Sous-dossier** : [todo/](todo/index-todo.md) -- taches liees aux specs
-- **Conventions** : [conventions/renommage/convention-renommage.md](../../conventions/renommage/convention-renommage.md)
-- **Regles** : [regles-immuables/general/rvav-workflow.md](../../regles-immuables/general/rvav-workflow.md)
+- **Conventions** : [conventions/renommage/convention-renommage.md](../conventions/renommage/convention-renommage.md)
+- **Regles** : [regles-immuables/general/rvav-workflow.md](../regles-immuables/general/rvav-workflow.md)
 
 ## Comment creer une nouvelle spec
 

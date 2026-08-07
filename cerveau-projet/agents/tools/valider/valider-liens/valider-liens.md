@@ -1,7 +1,7 @@
-# Outil -- Valider les Liens
+# valider-liens
 
 **Categorie** : Valider
-**Version :** 0.4.0
+**Version :** 0.4.0-py
 **Statut :** prepare
 
 ---
@@ -113,3 +113,11 @@ test -f "chemin/cible.md"
 
 ---
 
+---
+
+## Versionning
+
+| Version | Date | Changement |
+|---|---|---|
+| 0.4.0 | - | Version initiale (bash) |
+| 0.4.0-py | 2026-08-07 | Portage Python : validation des liens Markdown |

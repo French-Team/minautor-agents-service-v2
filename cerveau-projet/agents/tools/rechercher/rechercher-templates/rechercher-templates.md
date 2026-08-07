@@ -11,22 +11,23 @@ Rechercher les fichiers template dans le projet. Un template est un fichier mode
 
 ## Utilisation
 
-```bash
-# Rechercher par nom (defaut) dans le dossier courant
-rechercher-templates.sh
+Version Python (recommandee) :
 
+```bash
 # Rechercher dans un dossier specifique
-rechercher-templates.sh cerveau-projet/
+python3 rechercher-templates.py cerveau-projet/
 
 # Rechercher dans le contenu des fichiers
-rechercher-templates.sh --mode contenu cerveau-projet/
+python3 rechercher-templates.py --mode contenu cerveau-projet/
 
 # Combiner tous les modes de detection
-rechercher-templates.sh --tous cerveau-projet/
+python3 rechercher-templates.py --tous cerveau-projet/
 
 # Avec details
-rechercher-templates.sh --verbose cerveau-projet/
+python3 rechercher-templates.py --verbose cerveau-projet/
 ```
+
+Version bash equivalente : `rechercher-templates.sh` (meme logique).
 
 ## Options
 
@@ -95,3 +96,13 @@ Fichiers non-templates : 162
 | `valider-conformite-ascii` | Verifier la conformite ASCII des templates |
 | `rechercher-fichiers-vides` | Verifier qu'aucun template n'est vide |
 | `detecter-surcharge-fichier` | Detecter les templates qui grossissent trop |
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0-beta | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (rechercher-templates.py), basee sur outil-template.py. 3 modes (nom, frontmatter, contenu) + --tous |

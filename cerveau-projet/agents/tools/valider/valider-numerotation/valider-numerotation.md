@@ -2,7 +2,7 @@
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.2.0 |
+| **Version** | 0.2.0-py |
 | **Statut** | prepare |
 | **Categorie** | valider |
 | **Derniere mise a jour** | 2026-08-06 |

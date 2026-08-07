@@ -2,6 +2,7 @@
 # lister-prepares.sh
 # Liste les fichiers 'prepare' et verifie l'existence des specs
 # Proprietaire : Vulcain (outil partage)
+VERSION="0.2.0"
 
 # Couleurs
 RED='\033[0;31m'

@@ -1,15 +1,29 @@
 # deplacer-fichier
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Deplacer
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** deplacer
 **Chemin :** `agents/tools/deplacer/deplacer-fichier/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
 Deplacer ou renommer un fichier vers une nouvelle destination. Verifie que la source existe, que la destination n'est pas identique, et cree le dossier parent de destination si besoin. Attention : `changer-statut` reste l'outil dedie au renommage de statut (ebauche -> prepare).
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 deplacer-fichier.py [OPTIONS] <source> <destination>
+
+Options :
+  --dry-run    Simuler sans deplacer
+  --verbose    Afficher les details
+  --version    Afficher la version
+```
+
+### CLI bash (version originale)
 
 ```bash
 # Deplacer un fichier vers un autre dossier
@@ -72,3 +86,15 @@ Destination : dst/nouveau.md
 - [ ] L'outil est conforme ASCII (aucun accent, aucun emoji)
 - [ ] L'outil est reference dans `index-tools.md`
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+
+---

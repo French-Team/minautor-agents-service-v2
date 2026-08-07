@@ -1,10 +1,10 @@
-# Outil -- Purifier un Fichier
+# nettoyer-fichier
 
-**Categorie** : Nettoyer
-**Version** : 0.1.0-beta
-**Statut** : beta
-**Date creation** : 2026-08-05
-**Proprietaire** : Vulcain (outil partage)
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** nettoyer
+**Chemin :** `agents/tools/nettoyer/nettoyer-fichier/`
+**Proprietaire :** Buffy (outil partage)
 
 ---
 
@@ -21,9 +21,13 @@ Purifier un fichier en supprimant le contenu non essentiel.
 
 ## Utilisation
 
+Version Python (recommandee) :
+
+```bash
+python3 nettoyer-fichier.py <fichier> [options]
 ```
-nettoyer-fichier [fichier] [options]
-```
+
+Version bash equivalente : `nettoyer-fichier.sh` (meme logique).
 
 ---
 
@@ -34,47 +38,30 @@ nettoyer-fichier [fichier] [options]
 | `fichier` | string | Oui | Chemin du fichier a purifier |
 | `--dry-run` | flag | Non | Afficher les changements sans les appliquer |
 | `--verbose` | flag | Non | Afficher les details |
+| `--backup` | flag | Non | Conserver une copie de sauvegarde (fichier.backup) |
 | `--aide` | flag | Non | Afficher l'aide |
 
 ---
 
 ## Ce que fait l'outil
 
-### 1. Supprimer les blockquotes explicatifs
+### 1. Supprimer les lignes vides consecutives
 
-```
--> Supprime
-```
+Reduit les suites de lignes vides a une seule (le contenu est preserve).
 
-### 2. Reduire les exemples
+### 2. Supprimer les notes de rappel
 
-```
-### Exemple
+Supprime les blockquotes de rappel : `> Note:`, `> Important:`, `> Rappel:`.
 
-1. Etape 1
-2. Etape 2
-3. Etape 3
-4. Etape 4
-5. Etape 5
--> Reduit au minimum
-```
+### 3. Supprimer les commentaires YAML inutiles
 
-### 3. Supprimer les notes historiques
+Supprime les commentaires de frontmatter non essentiels : `# Type:`, `# Convention:`, `# Comment devenir`.
 
-```
-## Historique
+### 4. Reduire les blocs de code vides
 
-| Date | Evenement |
-|---|---|
-| 2026-08-01 | Creation |
--> Supprime
-```
+Supprime les blocs de code ne contenant qu'un commentaire seul (les fences ``` sont conservees).
 
-### 4. Simplifier les justifications
-
-```
--> Supprime
-```
+> **Conserve volontairement** : les blockquotes informatifs (autres que les rappels), les separateurs `---`, le frontmatter YAML (hors commentaires inutiles) et les commentaires YAML potentiellement importants.
 
 ---
 
@@ -118,6 +105,7 @@ VERIFIER le systeme AVANT de choisir une technologie.
 | Version | Date | Changements |
 |---|---|---|
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (nettoyer-fichier.py), basee sur outil-template.py. Portage fidele : lignes vides consecutives, notes de rappel, commentaires YAML inutiles, blocs de code vides. Bug de portage corrige (prefixes de notes) |
 
 ---
-

@@ -1,10 +1,10 @@
-# Outil -- Lister les Fichiers Prepare
+# lister-prepares
 
-**Categorie** : Lister
-**Version** : 0.1.0
-**Statut** : beta
-**Date creation** : 2026-08-05
-**Proprietaire** : Vulcain (outil partage)
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** lister
+**Chemin :** `agents/tools/lister/lister-prepares/`
+**Proprietaire :** Janus (outil partage)
 
 ---
 
@@ -23,6 +23,12 @@ Lister les fichiers au statut 'prepare' et verifier si une spec existe pour chac
 
 ```bash
 ./lister-prepares.sh [DOSSIER] [OPTIONS]
+```
+
+### Version Python (recommandee)
+
+```bash
+python3 lister-prepares.py [DOSSIER] [OPTIONS]
 ```
 
 ### Options
@@ -129,3 +135,11 @@ cerveau-projet/pense-betes/specs/spec-template.md
 - **Workflow** : `rvav-workflow.md` -- processus de validation
 - **Template** : `spec-template.md` -- template de spec
 - **Outil similaire** : `lister-statuts` -- lister les fichiers par statut
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (lister-prepares.py), basee sur outil-template.py |

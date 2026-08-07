@@ -2,6 +2,7 @@
 # valider-cartes-decision.sh
 # Outil pour verifier que les agents respectent les cartes de decision
 # Proprietaire : Vulcain
+VERSION="0.2.0"
 
 # Configuration
 AGENTS_DIR="cerveau-projet/agents"

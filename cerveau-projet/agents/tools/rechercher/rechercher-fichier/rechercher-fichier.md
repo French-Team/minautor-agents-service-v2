@@ -12,15 +12,19 @@ Verifier si un fichier existe. Retourne 0 (vrai) ou 1 (faux).
 
 ## Utilisation
 
+Version Python (recommandee) :
+
 ```bash
 # Verifier et afficher
-rechercher-fichier.sh --verbose fichier.md
+python3 rechercher-fichier.py --verbose fichier.md
 
 # Dans un script
-if rechercher-fichier.sh fichier.md; then
+if python3 rechercher-fichier.py fichier.md; then
     echo "Le fichier existe"
 fi
 ```
+
+Version bash equivalente : `rechercher-fichier.sh` (meme logique).
 
 ## Options
 
@@ -35,6 +39,7 @@ fi
 |---|---|---|
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (fichier existe code 0, inexistant code 1), promotion prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (rechercher-fichier.py), basee sur outil-template.py. Verifie l'existence d'un fichier, exit 0/1 |
 
 ## Notes de creation
 

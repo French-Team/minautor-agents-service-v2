@@ -1,4 +1,4 @@
-# Outil -- Lister les Agents
+# lister-agents
 
 **Categorie** : Lister
 **Version** : 0.2.0
@@ -22,19 +22,29 @@ Lister tous les agents du cerveau-projet avec leurs informations essentielles.
 
 ## Utilisation
 
+Version Python (recommandee) :
+
+```bash
+python3 lister-agents.py [OPTIONS]
 ```
-lister-agents(format="table", champs="nom,role,statut")
+
+### Options
+
+| Option | Description |
+|---|---|
+| `--detail, -d` | Afficher le detail complet de chaque agent |
+| `--verbose, -v` | Afficher les details d'execution |
+| `--version` | Afficher la version |
+| `--aide, -h` | Afficher l'aide |
+
+### Exemples
+
+```bash
+python3 lister-agents.py          # Liste table des agents
+python3 lister-agents.py --detail # Liste detaillee
 ```
 
----
-
-## Parametres
-
-| Parametre | Type | Obligatoire | Description |
-|---|---|---|---|
-| `format` | string | Non | Format de sortie: "table", "liste", "json" (defaut: "table") |
-| `champs` | string | Non | Champs a retourner (defaut: "tous") |
-| `filtre` | string | Non | Filtrer par role ou statut |
+Version bash equivalente : `lister-agents.sh` (meme logique, dossier source par defaut).
 
 ---
 
@@ -132,6 +142,7 @@ lister-agents(champs="nom,role")
 | Version | Date | Changements |
 |---|---|---|
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
+| 0.2.0-py | 2026-08-07 | Version Python creee (lister-agents.py), basee sur outil-template.py |
 
 ---
 

@@ -1,8 +1,10 @@
-# Outil -- Lister les Fonctions
+# lister-fonctions
 
-**Categorie** : Explorer
-**Version** : v0.1.0
-**Statut** : initial
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** lister
+**Chemin :** `agents/tools/lister/lister-fonctions/`
+**Proprietaire :** Atlas (outil partage)
 
 ---
 
@@ -14,18 +16,29 @@ Lister toutes les fonctions d'un fichier donne.
 
 ## Utilisation
 
+Version Python (recommandee) :
+
+```bash
+python3 lister-fonctions.py [FICHIER] [OPTIONS]
 ```
-lister-fonctions(fichier="path/to/file.ts", type="all")
+
+### Options
+
+| Option | Description |
+|---|---|
+| `FICHIER` | Fichier a analyser (defaut: detection auto dans le dossier) |
+| `--type` | Type de fonctions: "auto", "bash", "python" (defaut: "auto") |
+| `--version` | Afficher la version |
+| `--aide, -h` | Afficher l'aide |
+
+### Exemples
+
+```bash
+python3 lister-fonctions.py script.sh
+python3 lister-fonctions.py --type bash script.sh
 ```
 
----
-
-## Parametres
-
-| Parametre | Type | Obligatoire | Description |
-|---|---|---|---|
-| `fichier` | string | Oui | Chemin du fichier a analyser |
-| `type` | string | Non | Type de fonctions: "all", "export", "import" (defaut: "all") |
+Version bash equivalente : `lister-fonctions.sh`.
 
 ---
 
@@ -101,3 +114,10 @@ grep -n "def \|class " fichier.py
 
 ---
 
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (lister-fonctions.py), basee sur outil-template.py |

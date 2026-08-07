@@ -62,7 +62,7 @@ preferences:
 | Outil/Method | Usage |
 |---|---|
 | `mettre-a-jour-readme` | Outil UNIQUE de mise a jour du README (verifier, maj, journal) |
-| `mettre-a-jour-modifier-agents-md` | Reactiver Cerberus en fin de mission |
+| `mettre-a-jour-agents-md` | Reactiver Cerberus en fin de mission |
 | `valider-conformite-ascii` | Verifier la conformite ASCII du README |
 
 ---

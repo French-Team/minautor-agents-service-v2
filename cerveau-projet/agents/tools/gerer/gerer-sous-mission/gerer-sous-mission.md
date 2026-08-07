@@ -1,17 +1,11 @@
----
-# Outil -- gerer-sous-mission
-# Gerer les sorties et retrees du flux principal
-
-outil:
-  nom: "gerer-sous-mission"
-  version: "0.1.0"
-  statut: "beta"
-  cree: "2026-08-05"
-  auteur: "Buffy"
-  categorie: "corriger"
----
-
 # gerer-sous-mission
+
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** gerer
+**Chemin :** `agents/tools/gerer/gerer-sous-mission/`
+**Proprietaire :** Buffy (outil partage)
+
 ---
 
 ## Objectif
@@ -29,6 +23,8 @@ Permettre a un agent de :
 
 ```bash
 ./gerer-sous-mission.sh COMMANDE [OPTIONS]
+# Version Python (recommandee)
+python3 gerer-sous-mission.py COMMANDE [OPTIONS]
 ```
 
 ### `sauvegarder`
@@ -105,12 +101,12 @@ Permettre a un agent de :
 ### Scenario : Vulcain cree un outil
 
 ```bash
-# 1. Vulcain est en train de creer mettre-a-jour-modifier-agents-md
+# 1. Vulcain est en train de creer mettre-a-jour-agents-md
 # Il est a l'etape 1 : Verifier le systeme
 
 # 2. Il detecte que verifier-systeme n'existe pas
 gerer-sous-mission sauvegarder \
-  --mission "Creer mettre-a-jour-modifier-agents-md" \
+  --mission "Creer mettre-a-jour-agents-md" \
   --etape "1" \
   --donnees "Outil demande par Cerberus"
 
@@ -139,7 +135,7 @@ gerer-sous-mission revenir \
 
 ```json
 {
-  "mission": "Creer mettre-a-jour-modifier-agents-md",
+  "mission": "Creer mettre-a-jour-agents-md",
   "etape": "1",
   "donnees": "Outil demande par Cerberus",
   "date_sauvegarde": "2026-08-05T10:00:00",
@@ -180,3 +176,10 @@ cerveau-projet/agents/[agent]/sauvegardes/[mission]-[date].json
 
 ---
 
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-05 | Creation initiale (frontmatter YAML) |
+| 0.2.0 | 2026-08-07 | Conversion format v2 : frontmatter markdown, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (4 commandes, JSON gere en natif, --version) |

@@ -2,9 +2,9 @@
 # evaluer-coherence.sh
 # Evalue la coherence inter-fichiers : liens, references croisees
 # Proprietaire : Themis (outil partage)
-# Version : 0.1.0
+# Version : 0.2.1
 
-VERSION="0.1.0"
+VERSION="0.2.1"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -39,31 +39,91 @@ echo "# Rapport evaluer-coherence"
 echo ""
 
 # 1. Liens internes casses
+# Parseur Python : ignore les blocs de code (``` ou ~~~), les motifs generiques
+# (exemples de documentation) et les ancres (#section). Verifie l'existence des
+# cibles et sort uniquement les liens casses au format "fichier|chemin".
 echo "## Liens internes casses"
 total=$((total + 1))
 liens_casses=0
-while IFS= read -r fichier; do
-    # Extraire les liens [texte](chemin) 
-    while IFS= read -r lien; do
-        # Extraire le chemin du lien
-        chemin=$(echo "$lien" | sed -n 's/.*\](\([^)]*\)).*/\1/p' | head -1)
-        if [ -n "$chemin" ]; then
-            # Ignorer les liens externes (http, https)
-            case "$chemin" in
-                http://*|https://*) continue ;;
-            esac
-            # Resoudre le chemin relatif
-            dir=$(dirname "$fichier")
-            cible="$dir/$chemin"
-            if [ ! -e "$cible" ]; then
-                liens_casses=$((liens_casses + 1))
-                if [ "$liens_casses" -le 5 ]; then
-                    echo "  - \`$chemin\` dans \`$fichier\`"
-                fi
-            fi
-        fi
-    done < <(grep -oE '\[[^]]+\]\([^)]+\)' "$fichier" 2>/dev/null)
-done < <(find "$dossier/cerveau-projet" -name "*.md" -type f 2>/dev/null | head -100)
+
+LIENS_CASSES=$(python - "$dossier/cerveau-projet" << 'PYEOF'
+import io
+import os
+import re
+import sys
+
+racine = sys.argv[1]
+
+# Motifs generiques : exemples de documentation, pas des liens reels
+# (inclut les exemples de syntaxe des conventions de liens : index.md, frere-b,
+#  sous-dossier -- aucun vrai fichier ne porte ces noms fictifs)
+motifs_generiques = ('texte', 'chemin', 'ancien.md', 'nouveau.md', 'perdu.md',
+                     'exemple.md', '.*', 'fichier.md', 'dossier.md', 'cible.md',
+                     'source.md', 'destination.md', 'fichier-exemple', 'index.md',
+                     'frere-a', 'frere-b', 'sous-dossier', 'parent.md', 'racine/')
+
+pattern = re.compile(r'\[[^]]+\]\(([^)]+)\)')
+
+sortie = []
+for base, dossiers, fichiers in os.walk(racine):
+    # Exclure le dossier exemples/ : contient des problemes volontaires pour tester
+    if '/exemples/' in base.replace('\\', '/') + '/':
+        continue
+    for nom_fichier in fichiers:
+        if not nom_fichier.endswith('.md'):
+            continue
+        fichier = os.path.join(base, nom_fichier).replace('\\', '/')
+        try:
+            contenu = io.open(fichier, encoding='utf-8', errors='replace').read()
+            # Normaliser les fins de ligne (CRLF -> LF) pour eviter les \r residuels
+            contenu = contenu.replace('\r\n', '\n').replace('\r', '\n')
+            lignes = contenu.split('\n')
+        except IOError:
+            continue
+        dans_bloc = False
+        for ligne in lignes:
+            # Basculer l'etat 'dans un bloc de code'
+            if ligne.strip().startswith('```') or ligne.strip().startswith('~~~'):
+                dans_bloc = not dans_bloc
+                continue
+            if dans_bloc:
+                continue
+            for m in pattern.finditer(ligne):
+                chemin = m.group(1).strip()
+                if not chemin:
+                    continue
+                # Ignorer les liens externes et les ancres internes
+                if chemin.startswith('http://') or chemin.startswith('https://'):
+                    continue
+                if chemin.startswith('#'):
+                    continue
+                # Ignorer les motifs generiques (exemples de documentation)
+                if any(motif in chemin for motif in motifs_generiques):
+                    continue
+                # Resoudre la cible : relative au fichier OU a la racine cerveau-projet
+                cible_fichier = os.path.normpath(os.path.join(os.path.dirname(fichier), chemin))
+                cible_racine = os.path.normpath(os.path.join(racine, chemin))
+                if not os.path.exists(cible_fichier) and not os.path.exists(cible_racine):
+                    sortie.append(fichier + '|' + chemin)
+
+print('\n'.join(sortie))
+PYEOF
+)
+
+# Git Bash/MSYS peut convertir les fins de ligne en CRLF dans les substitutions
+# de commande : retirer tout \r residuel avant le traitement
+LIENS_CASSES=$(printf '%s' "$LIENS_CASSES" | tr -d '\r')
+
+# Afficher les liens casses (max 5)
+while IFS='|' read -r fichier chemin; do
+    [ -z "$fichier" ] && continue
+    liens_casses=$((liens_casses + 1))
+    if [ "$liens_casses" -le 5 ]; then
+        echo "  - \`$chemin\` dans \`$fichier\`"
+    fi
+done << EOF
+$LIENS_CASSES
+EOF
 
 if [ "$liens_casses" -eq 0 ]; then
     echo "| OK | Liens internes | Aucun lien casse detecte |"
@@ -133,6 +193,13 @@ while IFS= read -r agent_dir; do
         # Extraire le nom de l'outil entre backticks
         outil=$(echo "$outil_ref" | sed -n 's/.*`\([^`]*\)`.*/\1/p' | head -1)
         if [ -n "$outil" ]; then
+            # Exclure les conventions, protocoles, regles, templates et workflows
+            # (ils vivent dans pense-betes/, pas dans tools/ -- ce ne sont pas des outils)
+            case "$outil" in
+                convention-*|protocole-*|regles-*|rvav-*|sous-protocole-*) continue ;;
+                *-template|template-*) continue ;;
+                combos-combos-*) continue ;;
+            esac
             # Chercher si l'outil existe dans tools/
             if ! find "$dossier/cerveau-projet/agents/tools" -name "$outil" -type d 2>/dev/null | grep -q .; then
                 if ! find "$dossier/cerveau-projet/agents/tools" -name "$outil.sh" -type f 2>/dev/null | grep -q .; then

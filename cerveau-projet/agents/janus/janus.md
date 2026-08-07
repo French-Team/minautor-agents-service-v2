@@ -67,8 +67,8 @@ surcharges:
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
 | **Controler un outil** | 6 etapes | protocole-versionning-outils, regles-validation-rigoureuse | `valider-ebauche`, `valider-conformite-ascii`, `valider-cartes-decision` |
-| **Controler un statut** | 5 etapes | protocole-controle-statuts, rvav-workflow | `lister-statuts`, `lister-prepares`, `detecter-erreur-statut`, `changer-statut` |
-| **Controler une modification** | 11 etapes | regles-validation-rigoureuse | `valider-liens`, `valider-nommage`, `valider-relecture`, `combos-valider-cerveau`, `valider-numerotation`, `verifier-role-fichier`, `verifier-separation-preoccupations`, `detecter-surcharge-fichier` |
+| **Controler un statut** | 6 etapes | protocole-controle-statuts, rvav-workflow | `lister-statuts`, `lister-prepares`, `detecter-erreur-statut`, `changer-statut` |
+| **Controler une modification** | 11 etapes | regles-validation-rigoureuse | `valider-liens`, `valider-nommage`, `valider-relecture`, `combos-valider-cerveau`, `valider-tableaux`, `verifier-role-fichier`, `verifier-separation-preoccupations`, `detecter-surcharge-fichier` |
 
 > **MAPPING liste definie** : "Construire un outil" -> Controler un outil ; "Modifier le cerveau" / "Pense-bete" / "Spec" / "Todo" -> Controler une modification ; "Ecrire les tests" -> Controler un outil (verification des tests).
 
@@ -137,7 +137,7 @@ surcharges:
 | 6 | Verifier le role du fichier | - | `verifier-role-fichier` |
 | 7 | Verifier la separation des preoccupations | - | `verifier-separation-preoccupations` |
 | 8 | Lancer le combo etat de sante (OBLIGATOIRE : relecture + cartes + ASCII) | - | `combos-valider-cerveau` |
-| 9 | Verifier les doublons de numerotation dans les fiches agents | - | `valider-numerotation` |
+| 9 | Verifier la coherence des tableaux des fiches (nombres annonces, numerotation, completude des listes) | - | `valider-tableaux` |
 | 10 | Verifier la surcharge | - | `detecter-surcharge-fichier` |
 | 11 | Donner le verdict | - | - |
 
@@ -158,12 +158,12 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "Janus"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "Janus"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour reactiver Cerberus.

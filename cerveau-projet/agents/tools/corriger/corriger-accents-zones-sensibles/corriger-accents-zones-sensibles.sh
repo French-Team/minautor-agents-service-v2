@@ -3,7 +3,8 @@
 # Outil pour corriger les accents dans les zones sensibles
 # Mode standard --all : purge totale (texte francais et titres inclus)
 # Conforme a la regle regles-emojis-ascii.md
-# Version : 0.1.0-beta
+# Version : 0.2.0
+VERSION="0.2.0"
 
 set -e
 
@@ -15,7 +16,7 @@ NC='\033[0m'
 
 # Repertoire de l'outil
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DICTIONNAIRE_DEFAUT="${SCRIPT_DIR}/../dictionnaire-accents/corriger-dictionnaire-accents.txt"
+DICTIONNAIRE_DEFAUT="${SCRIPT_DIR}/../corriger-dictionnaire-accents/corriger-dictionnaire-accents.txt"
 
 # Fonction d'aide
 utilisation() {

@@ -1,10 +1,10 @@
-# Outil -- Corriger les Emojis
+# corriger-emojis
 
-**Categorie** : Corriger
-**Version** : 0.2.0
-**Statut** : beta
-**Date creation** : 2026-08-05
-**Proprietaire** : Vulcain (outil partage)
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** corriger
+**Chemin :** `agents/tools/corriger/corriger-emojis/`
+**Proprietaire :** Buffy (outil partage)
 
 ---
 
@@ -20,6 +20,19 @@ Detecter et remplacer les emojis par des symboles ASCII dans les fichiers.
 ---
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 corriger-emojis.py <fichier|dossier> [OPTIONS]
+
+Options :
+  --dry-run     Afficher les changements sans les appliquer
+  --verbose     Afficher les details
+  --version     Afficher la version
+```
+
+### CLI bash (version originale)
 
 ```bash
 ./corriger-emojis.sh <fichier|dossier> [OPTIONS]
@@ -149,3 +162,11 @@ Dictionnaire : cerveau-projet/agents/tools/corriger/corriger-emojis/dictionnaire
 - **Regle** : `regles-emojis-ascii.md` - regle immuable sur les emojis
 - **Outil similaire** : `nettoyer-fichier` - purifie un fichier
 - **Outil similaire** : `condenser-fichier` - condense un fichier
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py, lit le dictionnaire-emojis.txt existant) |
+| 0.1.0 | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |

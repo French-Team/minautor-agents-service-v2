@@ -2,6 +2,7 @@
 # condenser-fichier.sh
 # Outil pour condenser les fichiers markdown
 # Proprietaire : Vulcain (outil partage)
+VERSION="0.2.0"
 
 # Configuration
 VERBOSE=false

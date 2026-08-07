@@ -86,7 +86,7 @@ Appliquer le cycle complet a chaque etape critique :
 ## Liens
 
 - [convention-autoamelioration.md](../../../conventions/protocoles/convention-autoamelioration.md)
-- [regles-immuables/index-regles-immuables.md](../../../../regles-immuables/index-regles-immuables.md)
+- [regles-immuables/index-regles-immuables.md](../../../regles-immuables/index-regles-immuables.md)
 
 ---
 

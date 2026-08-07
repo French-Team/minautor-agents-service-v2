@@ -1,5 +1,11 @@
 # Cerveau-Projet
 
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-82-blueviolet?style=flat)](https://img.shields.io/badge/Outils-82-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)
+
+
+![Logo](cerveau-projet/assets/images/logo.jpg)
+
+
 Un systeme de developpement guide par des agents IA qui evolue et s'auto-ameliore au fil des projets.
 
 ## Ce que c'est
@@ -36,7 +42,7 @@ projet/
     |   |-- index-agents.md
     |   |-- [agent]/[agent].md   # Fiche de chaque agent
     |   |-- [agent]/corrections.md  # Corrections et lecons de l'agent
-    |   `-- tools/               # Boite a outils (77 outils + protections)
+    |   `-- tools/               # Boite a outils (78 outils + protections)
     |-- pense-betes/             # Idees, conventions, regles, specs, todos
     |   |-- index-pense-bete.md
     |   |-- conventions/         # Renommage, structures, liens, protocoles
@@ -97,7 +103,7 @@ Chaque agent a :
 
 ---
 
-## La boite a outils (77 outils)
+## La boite a outils (82 outils)
 
 Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 
@@ -112,20 +118,20 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Creer (4)** | creer-fichier, creer-remplir-pense-bete, creer-remplir-spec, creer-remplir-todo | Creer fichiers et contenus |
 | **Decomposer (1)** | decomposer-fichier | Decomposer les fichiers markdown |
 | **Deplacer (1)** | deplacer-fichier | Deplacer ou renommer un fichier |
-| **Detecter (2)** | detecter-erreur-statut, detecter-surcharge-fichier | Detecter les erreurs de statut et la surcharge |
+| **Detecter (3)** | detecter-erreur-statut, detecter-local-hors-fonction, detecter-surcharge-fichier | Detecter les erreurs de statut, la surcharge et les local hors fonction |
 | **Ecrire (1)** | ecrire-fichier | Ecrire ou ecraser un fichier |
 | **Editer (1)** | editer-fichier | Remplacer une chaine dans un fichier |
 | **Evaluer (4)** | evaluer-agents, evaluer-coherence, evaluer-conventions, evaluer-structure | Evaluer la coherence du cerveau |
 | **Generateurs (3)** | generateurs-squelette-pense-bete, generateurs-squelette-spec, generateurs-squelette-todo | Generer les squelettes conformes |
 | **Gerer (1)** | gerer-sous-mission | Gerer les sorties/reentrees du flux |
 | **Inserer (1)** | inserer-contenu-fichier | Inserer du contenu a une position |
-| **Lire (3)** | lire-fichier, lire-lignes, lire-frontmatter | Lire le contenu des fichiers |
+| **Lire (3)** | lire-fichier, lire-frontmatter, lire-lignes | Lire le contenu des fichiers |
 | **Lister (8)** | lister-agents, lister-appels, lister-dossiers, lister-fichiers, lister-fonctions, lister-outils, lister-prepares, lister-statuts | Decouvrir la structure |
-| **Mettre a jour (2)** | mettre-a-jour-readme, mettre-a-jour-modifier-agents-md | Mettre a jour les fichiers cles |
+| **Mettre a jour (2)** | mettre-a-jour-agents-md, mettre-a-jour-readme | Mettre a jour les fichiers cles |
 | **Nettoyer (1)** | nettoyer-fichier | Purifier un fichier |
-| **Rechercher (10)** | rechercher-accents-sensibles, rechercher-dossier, rechercher-fichier, rechercher-fichiers-vides, rechercher-pense-betes, rechercher-specs, rechercher-templates, rechercher-texte, rechercher-todos, rechercher-extension-fichier | Rechercher dans le cerveau |
+| **Rechercher (10)** | rechercher-accents-sensibles, rechercher-dossier, rechercher-extension-fichier, rechercher-fichier, rechercher-fichiers-vides, rechercher-pense-betes, rechercher-specs, rechercher-templates, rechercher-texte, rechercher-todos | Rechercher dans le cerveau |
 | **Supprimer (3)** | supprimer-dossier, supprimer-fichier, supprimer-ligne | Supprimer fichiers et dossiers |
-| **Valider (11)** | valider-cartes-decision, valider-conformite-ascii, valider-conventions, valider-ebauche, valider-liens, valider-nommage, valider-numerotation, valider-pense-bete, valider-relecture, valider-spec, valider-todo | Verifier la conformite |
+| **Valider (12)** | valider-cartes-decision, valider-conformite-ascii, valider-conventions, valider-ebauche, valider-liens, valider-nommage, valider-numerotation, valider-pense-bete, valider-relecture, valider-spec, valider-tableaux, valider-todo | Verifier la conformite |
 | **Verifier (4)** | verifier-documents-manquants, verifier-role-fichier, verifier-separation-preoccupations, verifier-systeme | Verifier l'etat reel |
 | **Tester (3)** | tester-protection-blocage, tester-protection-boucles-infinies, tester-protection-erreurs-silencieuses | Securiser les tests |
 | **Combos (3)** | combos-audit-general, combos-corriger-non-ascii, combos-valider-cerveau | Chainer des outils en sequences |

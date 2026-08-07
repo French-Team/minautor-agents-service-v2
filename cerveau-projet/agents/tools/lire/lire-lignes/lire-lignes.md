@@ -1,9 +1,10 @@
 # lire-lignes
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Explorer
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** lire
 **Chemin :** `agents/tools/lire/lire-lignes/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -14,6 +15,9 @@ Lire des lignes specifiques d'un fichier (par numero ou plage de numeros). Compl
 ```bash
 # Lire la ligne 5
 lire-lignes.sh fichier.md 5
+
+# Version Python (recommandee)
+python3 lire-lignes.py fichier.md 5
 
 # Lire les lignes 5 a 15
 lire-lignes.sh fichier.md 5 15
@@ -64,3 +68,15 @@ ligne 7 du fichier
 - [ ] L'outil est conforme ASCII (aucun accent, aucun emoji)
 - [ ] L'outil est reference dans `index-tools.md`
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (ligne seule / plage, validations, --version) |
+
+---

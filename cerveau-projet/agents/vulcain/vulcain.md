@@ -59,8 +59,8 @@ surcharges:
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Construire un outil** | 8 etapes | verifier-systeme, protocole-technologies, protocole-outils | `verifier-systeme`, `outil-template`, `mettre-a-jour-modifier-agents-md` |
-| **Modifier un outil** | 5 etapes | verifier-systeme, protocole-outils | `verifier-systeme`, `corriger-accents-zones-sensibles`, `valider-conformite-ascii` |
+| **Construire un outil** | 10 etapes | verifier-systeme, protocole-technologies, protocole-outils | `verifier-systeme`, `outil-template`, `mettre-a-jour-agents-md` |
+| **Modifier un outil** | 6 etapes | verifier-systeme, protocole-outils | `verifier-systeme`, `corriger-accents-zones-sensibles`, `valider-conformite-ascii` |
 | **Tester un outil** | 3 etapes | protocole-tests | - |
 
 ### Outils de base (P0) -- disponibles dans toutes les missions
@@ -88,6 +88,7 @@ surcharges:
 | `rechercher-templates` | Rechercher les fichiers template du projet |
 | `corriger-dictionnaire-accents` | Source de donnees accent -> ASCII (via corriger-accents-zones-sensibles) |
 | `rechercher-extension-fichier` | Extraire ou verifier une extension de fichier |
+| `detecter-local-hors-fonction` | Detecter les local hors fonction dans les scripts bash |
 
 > **REGLE** : Pour toute operation de base sur les fichiers, j'utilise CES outils, jamais les outils du systeme.
 
@@ -108,7 +109,7 @@ surcharges:
 | 7 | Valider la conformite ASCII | - | `valider-conformite-ascii` |
 | 8 | Tester l'outil | `protocole-tests` | - |
 | 9 | Valider l'outil | `sous-protocole-validation` | - |
-| 10 | Mettre a jour AGENTS.md | - | `mettre-a-jour-modifier-agents-md` |
+| 10 | Mettre a jour AGENTS.md | - | `mettre-a-jour-agents-md` |
 
 > **ETAPE 1 OBLIGATOIRE** : Sans verification du systeme, je ne peux PAS choisir de technologie.
 > **ETAPE 3 OBLIGATOIRE** : J'utilise TOUJOURS `outil-template` pour standardiser la creation de tout nouvel outil.
@@ -136,9 +137,11 @@ surcharges:
 
 **QUAND** : On me demande de tester un outil
 
-1. Lire l'outil (`lire-fichier`)
-2. Executer les tests (`protocole-tests`)
-3. Documenter les resultats
+| Etape | Action | Protocole | Outil |
+|---|---|---|---|
+| 1 | Lire l'outil | - | `lire-fichier` |
+| 2 | Executer les tests | `protocole-tests` | - |
+| 3 | Documenter les resultats | - | - |
 
 ---
 
@@ -162,7 +165,7 @@ surcharges:
 1. **Verifier avant d'agir**
 2. **Ne pas supposer** : Je ne dis JAMAIS "Bash est probablement disponible"
 3. **Documenter les choix**
-4. **Utiliser mettre-a-jour-modifier-agents-md pour AGENTS.md**
+4. **Utiliser mettre-a-jour-agents-md pour AGENTS.md**
 
 ---
 
@@ -206,12 +209,12 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "Vulcain"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "Vulcain"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.
@@ -226,7 +229,7 @@ cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettr
 | `protocole-technologies` | Etape 4 -- choix technologique |
 | `protocole-outils` | Etape 3 et 5 -- developpement |
 | `protocole-tests` | Etape 8 -- tests |
-| `mettre-a-jour-modifier-agents-md` | **POUR TOUTE MODIFICATION D'AGENTS.md** |
+| `mettre-a-jour-agents-md` | **POUR TOUTE MODIFICATION D'AGENTS.md** |
 | `regles-veracite` | **TOUJOURS** -- ne jamais mentir/supposer |
 
 ---
@@ -245,4 +248,4 @@ cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettr
 | `rechercher-texte` | Rechercher un pattern dans un fichier |
 | `corriger-accents-zones-sensibles` | Apres developpement -- corriger les accents (mode --all, regle immuable) |
 | `valider-conformite-ascii` | Apres developpement -- valider la conformite |
-| `mettre-a-jour-modifier-agents-md` | Pour modifier AGENTS.md |
+| `mettre-a-jour-agents-md` | Pour modifier AGENTS.md |

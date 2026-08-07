@@ -1,8 +1,8 @@
 #!/bin/bash
-# combos-combos-corriger-non-ascii.sh
+# combos-corriger-non-ascii.sh
 # Combo corriger-non-ascii : detecte et corrige les accents et emojis
 # Ressource partagee : utilise par Themis, Buffy, ou tout autre agent
-# Version : 0.1.0
+# Version : 0.2.0
 #
 # Chainage :
 #   1. rechercher-accents-sensibles -> detecter les problemes
@@ -10,7 +10,7 @@
 #   3. corriger-accents-zones-sensibles -> remplacer les accents
 #   4. rechercher-accents-sensibles -> verifier le nettoyage
 
-VERSION="0.1.0"
+VERSION="0.2.0"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

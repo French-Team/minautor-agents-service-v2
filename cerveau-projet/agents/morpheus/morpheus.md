@@ -158,12 +158,12 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "Morpheus"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "Morpheus"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour reactiver Cerberus.
@@ -175,9 +175,18 @@ cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettr
 ```
 tests/
   protections/
-    tester-protection-boucles-infinies.sh
-    tester-protection-erreurs-silencieuses.sh
-    tester-protection-blocage.sh
+    tester-protection-boucles-infinies/
+      tester-protection-boucles-infinies.sh
+      tester-protection-boucles-infinies.py
+      tester-protection-boucles-infinies.md
+    tester-protection-erreurs-silencieuses/
+      tester-protection-erreurs-silencieuses.sh
+      tester-protection-erreurs-silencieuses.py
+      tester-protection-erreurs-silencieuses.md
+    tester-protection-blocage/
+      tester-protection-blocage.sh
+      tester-protection-blocage.py
+      tester-protection-blocage.md
   test-001-nom-outil/
     test-001-outil.md
     test-001-outil.sh

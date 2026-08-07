@@ -1,4 +1,4 @@
-# Outil -- Lister les Dossiers
+# lister-dossiers
 
 **Categorie** : Explorer
 **Version :** 0.2.0
@@ -18,6 +18,12 @@ Lister tous les dossiers d'un chemin donne.
 
 ```bash
 ./lister-dossiers.sh [OPTIONS] [CHEMIN]
+```
+
+### Version Python (recommandee)
+
+```bash
+python3 lister-dossiers.py [CHEMIN] [OPTIONS]
 ```
 
 ### Options
@@ -126,4 +132,11 @@ find . -type d
 - Peut etre combine avec `lister-fichiers` pour une vue complete
 
 ---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (lister-dossiers.py), basee sur outil-template.py |
 

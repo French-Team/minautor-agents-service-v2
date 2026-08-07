@@ -1,12 +1,12 @@
 #!/bin/bash
 # lister-appels.sh
 # Lister les appels de fonctions dans un fichier
-# Version: 0.1.0
+# Version : 0.2.0
 # Date: 2026-08-05
 # Auteur: Vulcain
 
 # Configuration
-VERSION="0.1.0"
+VERSION="0.2.0"
 DATE="2026-08-05"
 
 # Couleurs pour la sortie

@@ -1,9 +1,10 @@
 # rechercher-dossier
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Rechercher
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** rechercher
 **Chemin :** `agents/tools/rechercher/rechercher-dossier/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -11,18 +12,22 @@ Verifier si un dossier existe. Retourne un code de sortie exploitable en script 
 
 ## Utilisation
 
+Version Python (recommandee) :
+
 ```bash
 # Verifier si un dossier existe
-rechercher-dossier.sh chemin/dossier
+python3 rechercher-dossier.py chemin/dossier
 
 # Avec details
-rechercher-dossier.sh --verbose chemin/dossier
+python3 rechercher-dossier.py --verbose chemin/dossier
 
 # Usage en script (code de sortie)
-if rechercher-dossier.sh chemin/dossier; then
+if python3 rechercher-dossier.py chemin/dossier; then
     echo "Le dossier existe"
 fi
 ```
+
+Version bash equivalente : `rechercher-dossier.sh` (meme logique).
 
 ## Options
 
@@ -69,3 +74,15 @@ $ rechercher-dossier.sh chemin/inexistant
 - [ ] L'outil est conforme ASCII (aucun accent, aucun emoji)
 - [ ] L'outil est reference dans `index-tools.md`
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (rechercher-dossier.py), basee sur outil-template.py. Verifie l'existence d'un dossier, exit 0/1 |
+
+---

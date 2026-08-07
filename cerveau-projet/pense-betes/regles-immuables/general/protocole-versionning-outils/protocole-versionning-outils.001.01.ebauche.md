@@ -107,4 +107,4 @@ BETA -> TEST -> OPTIMISATION -> INTEGRATION -> SECOND CONTROLE -> PRODUCTION
 - **Protocole parent** : [protocole-outils](../protocole-outils/)
 - **Convention** : [convention-protocoles](../../../conventions/protocoles/convention-protocoles.md)
 - **Agent Janus** : [agents/janus/](../../../../agents/janus/)
-- **Regles** : [regles-validation-rigoureuse](../../regles-validation-rigoureuse.md)
+- **Regles** : [regles-validation-rigoureuse](../regles-validation-rigoureuse.md)

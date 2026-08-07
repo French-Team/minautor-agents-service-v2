@@ -1,13 +1,13 @@
 #!/bin/bash
-# combos-combos-audit-general.sh
+# combos-audit-general.sh
 # Combo audit-general : chainage des 4 evaluateurs + synthese
 # Proprietaire : Themis (outil partage)
-# Version : 0.1.0
+# Version : 0.2.0
 #
 # Ce combo execute les 4 evaluateurs en sequence et produit une synthese.
 # Chaque evaluateur enrichit le contexte pour le suivant.
 
-VERSION="0.1.0"
+VERSION="0.2.0"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -81,7 +81,7 @@ executer_evaluateur() {
     RESULTATS="$RESULTATS\n## $nom\n\nScore : ${score:-?}/100\n\n$resultat\n"
 
     if [ -n "$score" ]; then
-        SCORES="$SCORES|$nom|$score|"
+        SCORES="$SCORES\n|$nom|$score|"
     fi
 
     ERREURS_TOTALES=$((ERREURS_TOTALES + erreurs))
@@ -131,7 +131,7 @@ echo ""
 echo "Tableau des scores :"
 echo "| Evaluateur | Score |"
 echo "|---|---|"
-echo "$SCORES" | sed 's/^|//' | sed 's/|$//' | while IFS='|' read -r nom score rest; do
+echo -e "$SCORES" | grep -E '^\|' | while IFS='|' read -r _ nom score _; do
     [ -n "$nom" ] && echo "| $nom | $score/100 |"
 done
 

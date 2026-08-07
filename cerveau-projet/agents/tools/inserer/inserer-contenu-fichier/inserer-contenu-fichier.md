@@ -1,9 +1,10 @@
 # inserer-contenu-fichier
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Inserer
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** inserer
 **Chemin :** `agents/tools/inserer/inserer-contenu-fichier/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -14,6 +15,9 @@ Inserer du contenu a une position precise dans un fichier (apres un numero de li
 ```bash
 # Inserer une ligne apres la ligne 5
 inserer-contenu-fichier.sh fichier.md 5 "Contenu a inserer"
+
+# Version Python (recommandee)
+python3 inserer-contenu-fichier.py fichier.md 5 "Contenu a inserer"
 
 # Inserer le contenu d'un fichier source apres la ligne 10
 inserer-contenu-fichier.sh fichier.md 10 --fichier bloc.md
@@ -72,3 +76,15 @@ Position : apres la ligne 5
 - [ ] L'outil est conforme ASCII (aucun accent, aucun emoji)
 - [ ] L'outil est reference dans `index-tools.md`
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (insertion ligne N / debut, --fichier source, --dry-run, --version) |
+
+---

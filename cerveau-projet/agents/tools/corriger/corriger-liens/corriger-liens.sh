@@ -1,7 +1,7 @@
 #!/bin/bash
 # corriger-liens.sh
 # Corrige les liens casses dans un fichier Markdown
-# Version: 0.2.0
+# Version : 0.2.0
 # Date: 2026-08-05
 # Auteur: Vulcain
 

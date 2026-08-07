@@ -141,8 +141,8 @@ Revue des fichiers crees + verification des liens.
 
 ### 9.2 Conventions applicables
 
-- [convention-renommage.md](../../../conventions/renommage/convention-renommage.md)
-- [convention-structures.md](../../../conventions/structures/convention-structures.md)
+- [convention-renommage.md](../../../../conventions/renommage/convention-renommage.md)
+- [convention-structures.md](../../../../conventions/structures/convention-structures.md)
 
 ### 9.3 Regles immuables
 

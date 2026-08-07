@@ -2,6 +2,7 @@
 # valider-ebauche.sh
 # Verifie si un fichier ebauche respecte les exigences minimales
 # Proprietaire : Vulcain (outil partage)
+VERSION="0.2.0"
 
 # Couleurs
 RED='\033[0;31m'

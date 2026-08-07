@@ -1,9 +1,10 @@
 # rechercher-extension-fichier
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Rechercher
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** rechercher
 **Chemin :** `agents/tools/rechercher/rechercher-extension-fichier/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -11,17 +12,21 @@ Extraire l'extension d'un fichier (la partie apres le dernier point), ou verifie
 
 ## Utilisation
 
+Version Python (recommandee) :
+
 ```bash
 # Afficher l'extension
-rechercher-extension-fichier.sh fichier.md
+python3 rechercher-extension-fichier.py fichier.md
 
 # Verifier si le fichier a une extension donnee
-rechercher-extension-fichier.sh --verifier sh script.sh
+python3 rechercher-extension-fichier.py --verifier sh script.sh
 echo $?   # 0 si .sh, 1 sinon
 
 # Avec details
-rechercher-extension-fichier.sh --verbose fichier.md
+python3 rechercher-extension-fichier.py --verbose fichier.md
 ```
+
+Version bash equivalente : `rechercher-extension-fichier.sh` (meme logique).
 
 ## Options
 
@@ -73,3 +78,15 @@ c'est un .sh
 - [x] L'outil est reference dans `index-tools.md`
 - [x] L'outil est assigne a un agent dans sa carte de decision (protocole-outils Regle 6)
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (rechercher-extension-fichier.py), basee sur outil-template.py. Extraction d'extension + --verifier (exit 0/1) |
+
+---

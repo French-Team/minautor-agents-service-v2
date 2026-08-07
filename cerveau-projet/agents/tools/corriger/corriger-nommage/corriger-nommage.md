@@ -1,8 +1,10 @@
-# Outil -- Corriger le Nommage
+# corriger-nommage
 
-**Categorie** : Corriger
-**Version** : v0.1.0
-**Statut** : initial
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** corriger
+**Chemin :** `agents/tools/corriger/corriger-nommage/`
+**Proprietaire :** Buffy (outil partage)
 
 ---
 
@@ -13,6 +15,20 @@ Corriger automatiquement le nommage des fichiers et dossiers.
 ---
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 corriger-nommage.py --type <protocole|agent|outil|convention> [OPTIONS] <fichier>
+
+Options :
+  --type        Type de fichier (obligatoire)
+  --dry-run     Simuler sans modifier
+  --verbose     Afficher les details
+  --version     Afficher la version
+```
+
+### API (version originale)
 
 ```
 corriger-nommage(chemin=".", convention="kebab-case", dry-run=false)
@@ -114,3 +130,10 @@ corriger-nommage(chemin=".", convention="kebab-case")
 
 ---
 
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
+| 0.1.0 | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |

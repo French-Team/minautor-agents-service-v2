@@ -1,4 +1,4 @@
-# Outil -- Lister les Outils
+# lister-outils
 
 **Categorie** : Lister
 **Version** : 0.2.0
@@ -22,19 +22,31 @@ Lister tous les outils partages du cerveau-projet avec leurs informations.
 
 ## Utilisation
 
+Version Python (recommandee) :
+
+```bash
+python3 lister-outils.py [OPTIONS]
 ```
-lister-outils(format="table", categorie="toutes")
+
+### Options
+
+| Option | Description |
+|---|---|
+| `--detail, -d` | Afficher le detail de chaque outil (script + documentation) |
+| `--categorie, -c` | Filtrer par categorie (ex: "lire", "valider") |
+| `--verbose, -v` | Afficher les details d'execution |
+| `--version` | Afficher la version |
+| `--aide, -h` | Afficher l'aide |
+
+### Exemples
+
+```bash
+python3 lister-outils.py            # Tous les outils
+python3 lister-outils.py -c lire    # Categorie lire uniquement
+python3 lister-outils.py --detail   # Detail complet
 ```
 
----
-
-## Parametres
-
-| Parametre | Type | Obligatoire | Description |
-|---|---|---|---|
-| `format` | string | Non | Format de sortie: "table", "liste", "json" (defaut: "table") |
-| `categorie` | string | Non | Filtrer par categorie: "explorer", "valider", "analyser", "corriger" (defaut: "toutes") |
-| `champs` | string | Non | Champs a retourner (defaut: "tous") |
+Version bash equivalente : `lister-outils.sh` (meme dossier source par defaut).
 
 ---
 
@@ -159,6 +171,7 @@ lister-outils(champs="nom,description")
 | Version | Date | Changements |
 |---|---|---|
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
+| 0.2.0-py | 2026-08-07 | Version Python creee (lister-outils.py), basee sur outil-template.py |
 
 ---
 

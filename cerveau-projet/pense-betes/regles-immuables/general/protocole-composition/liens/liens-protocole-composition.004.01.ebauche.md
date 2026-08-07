@@ -13,9 +13,9 @@
 
 | Fichier | Role |
 |---|---|
-| [convention-renommage.md](../../../conventions/renommage/convention-renommage.md) | Nommage des fichiers |
-| [convention-structures.md](../../../conventions/structures/convention-structures.md) | Structure des dossiers |
-| [convention-liens.md](../../../conventions/liens/convention-liens.md) | Validation des liens |
+| [convention-renommage.md](../../../../conventions/renommage/convention-renommage.md) | Nommage des fichiers |
+| [convention-structures.md](../../../../conventions/structures/convention-structures.md) | Structure des dossiers |
+| [convention-liens.md](../../../../conventions/liens/convention-liens.md) | Validation des liens |
 
 ## Regles et protocoles
 

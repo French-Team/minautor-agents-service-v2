@@ -140,7 +140,7 @@
 ## Navigation
 
 - **Parent** : [protocole-gestion-defaillances.md](protocole-gestion-defaillances.001.01.ebauche.md)
-- **Protocoles** : [index-regles-general.md](../../index-regles-general.md)
+- **Protocoles** : [index-regles-general.md](../index-regles-general.md)
 
 ---
 

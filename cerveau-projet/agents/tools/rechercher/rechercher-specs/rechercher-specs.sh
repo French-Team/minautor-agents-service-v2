@@ -1,11 +1,10 @@
 #!/bin/bash
 # rechercher-specs.sh
 # Outil pour rechercher les specs existantes et eviter les doublons
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.2.0
 
 # Configuration
-VERSION="0.1.0-beta"
+VERSION="0.2.0"
 STATUT="ebauche"
 PREFIX="spec"
 LABEL="specs"

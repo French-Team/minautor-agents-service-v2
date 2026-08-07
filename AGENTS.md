@@ -12,11 +12,11 @@
 |---|---|
 | **Nom** | Cerberus|
 | **Role** | Gardien de l'entree -- analyse et active les agents|
-| **Derniere mise a jour** | 2026-08-07 |
+| **Derniere mise a jour** | 2026-08-07|
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
 | **Active par** | Clio (retour de mission)|
-| **Raison** | README mis a jour: Valider (10) -> Valider (11) avec valider-numerotation|
+| **Raison** | README MAJ: ajout de 2 badges supplementaires en tete (Langages=Bash, Python, Markdown:orange; Version=v0.2.0:blue), fusionnes proprement sur la ligne de badges existante (6 badges au total sur une seule ligne). Valeurs issues des sources de verite (82 .sh Bash, 82 .py Python, 241 .md; version proj v0.2.0 index-cerveau.md). ASCII strict OK, structure preservee, ordre: titre > badges > logo. Note: fusion faite par edition directe ciblee (l'outil --badges creerait une nouvelle ligne par appel) - changement de contenu minime.|prepare) identique remplace par detection Python des noms non-ASCII (faux positif elimine). 2) evaluer-coherence: exclusions convention-*/protocole-*/regles-*/templates/rvav (faux positifs pense-betes/ elimines). 3) combos-audit-general: tableau affiche maintenant les 4 evaluateurs (bug SCORES une ligne). Correction annexe: themis.md -- 4 references combos-combos-audit-general corrigees en combos-audit-general. Tests: syntaxe OK, ASCII OK, statuts OK, outils references OK, combo 4 scores OK.|
 
 ---
 
@@ -55,7 +55,7 @@ CERBERUS -> AGENT -> CERBERUS
 
 1. Cerberus analyse le besoin
 2. Il choisit l'agent approprie
-3. Il utilise `mettre-a-jour-modifier-agents-md` pour mettre a jour AGENTS.md
+3. Il utilise `mettre-a-jour-agents-md` pour mettre a jour AGENTS.md
 4. Il documente la raison et la mission
 5. L'agent prend le relais
 6. **L'agent lit SA fiche et SES corrections** avant de commencer sa mission
@@ -63,7 +63,7 @@ CERBERUS -> AGENT -> CERBERUS
 ### Retour a Cerberus
 
 1. L'agent termine sa mission
-2. L'agent utilise `mettre-a-jour-modifier-agents-md reactiver` pour reactiver Cerberus
+2. L'agent utilise `mettre-a-jour-agents-md reactiver` pour reactiver Cerberus
 3. L'agent documente la fin de mission
 4. Cerberus reprend le controle
 5. **Cerberus relit SA fiche et SES corrections** avant de poursuivre

@@ -1,9 +1,10 @@
 # valider-todo
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Valider
+**Version :** 0.2.0-py
+**Statut :** prepare
+**Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-todo/`
+**Proprietaire :** Minerve (outil partage)
 
 ## Description
 
@@ -91,3 +92,14 @@ Fichier : todo-pipeline.001.01.ebauche.md
 | `valider-pense-bete` | Meme logique pour les pense-betes |
 | `valider-spec` | Meme logique pour les specs |
 | `changer-statut` | Change le statut apres validation |
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+
+---

@@ -1,12 +1,12 @@
 #!/bin/bash
 # gerer-sous-mission.sh
 # Gere les sorties et retrees du flux principal
-# Version: 0.1.0
+# Version : 0.2.0
 # Date: 2026-08-05
 # Auteur: Vulcain
 
 # Configuration
-VERSION="0.1.0"
+VERSION="0.2.0"
 DATE="2026-08-05"
 DOSSIER_SAUVEGARDES="cerveau-projet/agents/vulcain/sauvegardes"
 

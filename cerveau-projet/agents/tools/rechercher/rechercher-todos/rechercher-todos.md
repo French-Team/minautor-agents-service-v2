@@ -1,9 +1,10 @@
 # rechercher-todos
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Rechercher
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** rechercher
 **Chemin :** `agents/tools/rechercher/rechercher-todos/`
+**Proprietaire :** Minerve (outil partage)
 
 ## Description
 
@@ -13,19 +14,23 @@ Rechercher les todos existants pour eviter les doublons. L'outil liste les fichi
 
 ## Utilisation
 
+Version Python (recommandee) :
+
 ```bash
 # Inventaire complet des todos existants
-rechercher-todos.sh --tous
+python3 rechercher-todos.py --tous
 
 # Recherche anti-doublon pour un theme (avant creation)
-rechercher-todos.sh --theme pipeline
+python3 rechercher-todos.py --theme pipeline
 
 # Avec details de similarite
-rechercher-todos.sh --theme pipeline --verbose
+python3 rechercher-todos.py --theme pipeline --verbose
 
 # Rechercher dans un dossier specifique
-rechercher-todos.sh --theme pipeline --dossier cerveau-projet/examples/
+python3 rechercher-todos.py --theme pipeline --dossier cerveau-projet/
 ```
+
+Version bash equivalente : `rechercher-todos.sh` (meme logique).
 
 ## Options
 
@@ -94,3 +99,15 @@ Total : 1 todos
 | `generateurs-squelette-todo` | A lancer SEULEMENT si aucun doublon n'est detecte |
 | `lister-agents` | Voir l'agent Minerve qui utilise cet outil |
 | `valider-nommage` | Verifier la convention de nommage avant creation |
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (rechercher-todos.py), basee sur outil-template.py. Inventaire + anti-doublon (EXACT/PROCHE/PARTIEL), exit 1 si doublon |
+
+---

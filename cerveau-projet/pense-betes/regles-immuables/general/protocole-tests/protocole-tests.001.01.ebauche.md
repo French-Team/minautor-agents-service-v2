@@ -102,8 +102,8 @@ lancer_avec_protection() {
 # test-001-outil.sh
 
 # Charger les protections
-source "$(dirname "$0")/../protections/tester-protection-boucles-infinies.sh"
-source "$(dirname "$0")/../protections/tester-protection-erreurs-silencieuses.sh"
+source "$(dirname "$0")/../protections/tester-protection-boucles-infinies/tester-protection-boucles-infinies.sh"
+source "$(dirname "$0")/../protections/tester-protection-erreurs-silencieuses/tester-protection-erreurs-silencieuses.sh"
 
 # Test 1: Detection des accents
 echo "=== Test 1: Detection des accents ==="

@@ -28,6 +28,13 @@
 1. Au demarrage du script, le bloc `verifier_nommage` controle le prefixe (ne pas le supprimer).
 2. L'outil `valider-nommage` avec `--recursive` detecte toute violation.
 
+## Version Python (.py)
+
+> Chaque outil a aussi une version Python dans le MEME dossier, avec le meme nom
+> (ex: `lire-fichier/lire-fichier.py` a cote de `lire-fichier.sh`).
+> Le template Python de reference est `outil-template.py` (voir `outil-template-python.md`).
+> Les deux versions coexistent et partagent les memes options standard (`--dry-run`, `--verbose`).
+
 ## REGLE IMMUABLE : compatibilite Git Bash (interdiction PCRE)
 
 > Les outils tournent sur Git Bash Windows. Les options `grep -P`, `grep -oP`,

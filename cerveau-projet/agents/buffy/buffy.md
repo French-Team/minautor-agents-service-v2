@@ -61,14 +61,14 @@ surcharges:
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Creer un fichier** | 7 etapes | convention-renommage, convention-structures | `valider-nommage`, `valider-conventions`, `creer-fichier`, `rechercher-fichier`, `mettre-a-jour-modifier-agents-md` |
-| **Creer un pense-bete** | 4 etapes | pense-bete-template, convention-renommage | **activer Athena**, `mettre-a-jour-modifier-agents-md` |
-| **Modifier un fichier** | 11 etapes | convention-renommage, regles-veracite, protocole-auto-correction | `corriger-emojis`, `corriger-accents-zones-sensibles`, `corriger-liens`, `corriger-nommage`, `nettoyer-fichier`, `condenser-fichier`, `mettre-a-jour-modifier-agents-md` |
-| **Creer un agent** | 7 etapes | protocole-identification, fiche-agent-template | `valider-nommage`, `mettre-a-jour-modifier-agents-md` |
-| **Creer un protocole** | 6 etapes | convention-protocoles, rvav-workflow | `valider-conventions`, `mettre-a-jour-modifier-agents-md` |
-| **Creer / modifier / tester un outil** | 4 etapes | regles-choisir-agent | **activer Vulcain**, `mettre-a-jour-modifier-agents-md` |
-| **Controler le cerveau-projet** | 6 etapes | rvav-workflow, convention-structures | `verifier-documents-manquants`, `rechercher-fichiers-vides`, `valider-conformite-ascii`, `valider-relecture`, `combos-valider-cerveau`, `valider-numerotation` |
-| **Gerer les sous-missions** | 3 etapes | - | `gerer-sous-mission` |
+| **Creer un fichier** | 7 etapes | convention-renommage, convention-structures | `valider-nommage`, `valider-conventions`, `creer-fichier`, `rechercher-fichier`, `mettre-a-jour-agents-md` |
+| **Creer un pense-bete** | 4 etapes | pense-bete-template, convention-renommage | **activer Athena**, `mettre-a-jour-agents-md` |
+| **Modifier un fichier** | 11 etapes | convention-renommage, regles-veracite, protocole-auto-correction | `corriger-emojis`, `corriger-accents-zones-sensibles`, `corriger-liens`, `corriger-nommage`, `nettoyer-fichier`, `condenser-fichier`, `mettre-a-jour-agents-md` |
+| **Creer un agent** | 7 etapes | protocole-identification, fiche-agent-template | `valider-nommage`, `mettre-a-jour-agents-md` |
+| **Creer un protocole** | 6 etapes | convention-protocoles, rvav-workflow | `valider-conventions`, `mettre-a-jour-agents-md` |
+| **Creer / modifier / tester un outil** | 4 etapes | regles-choisir-agent | **activer Vulcain**, `mettre-a-jour-agents-md` |
+| **Controler le cerveau-projet** | 6 etapes | rvav-workflow, convention-structures | `verifier-documents-manquants`, `rechercher-fichiers-vides`, `valider-conformite-ascii`, `valider-relecture`, `combos-valider-cerveau`, `valider-tableaux` |
+| **Gerer les sous-missions** | 3 etapes | protocole-boucles-dynamiques | `gerer-sous-mission` |
 
 ### Outils de base (P0) -- disponibles dans toutes les missions
 
@@ -109,7 +109,7 @@ surcharges:
 | 4 | Creer le fichier | - | `creer-fichier` |
 | 5 | Mettre a jour l'index | - | - |
 | **6** | **Ajouter les lecons si necessaire** | `protocole-auto-correction` | - |
-| **7** | **Reactiver Cerberus** | - | `mettre-a-jour-modifier-agents-md` |
+| **7** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
 
 ---
 
@@ -119,10 +119,10 @@ surcharges:
 
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
-| **1** | **ACTIVER ATHENA** -- c'est elle qui redige les pense-betes | - | `mettre-a-jour-modifier-agents-md` |
+| **1** | **ACTIVER ATHENA** -- c'est elle qui redige les pense-betes | - | `mettre-a-jour-agents-md` |
 | 2 | Verifier que le pense-bete est cree au statut ebauche | `pense-bete-template` | - |
 | 3 | Verifier que l'index est mis a jour | - | - |
-| **FIN** | **Reactiver Cerberus** (apres le retour de la chaine complete) | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **Reactiver Cerberus** (apres le retour de la chaine complete) | - | `mettre-a-jour-agents-md` |
 
 > **SECTION FLUX PENSE-BETES** : Quand l'utilisateur demande un pense-bete, je n'ecris PAS le pense-bete moi-meme.
 > J'active **Athena** ([athena/athena.md](../athena/athena.md)), qui transforme la demande
@@ -148,7 +148,7 @@ surcharges:
 | 8 | Condenser si necessaire | - | `condenser-fichier` |
 | 9 | Purifier si necessaire | - | `nettoyer-fichier` |
 | **10** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **11** | **Reactiver Cerberus** | - | `mettre-a-jour-modifier-agents-md` |
+| **11** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
 
 > **ETAPE 10 OBLIGATOIRE** : Apres chaque erreur corrigee, je dois ajouter la lecon dans `corrections.md`.
 > **ETAPE 11 OBLIGATOIRE** : Je dois TOUJOURS reactiver Cerberus a la fin de ma mission.
@@ -165,9 +165,9 @@ surcharges:
 | 2 | Creer le dossier | `convention-structures` | - |
 | 3 | Copier le template | `fiche-agent-template` | `copier-fichier` |
 | 4 | Creer corrections | `corrections-template` | `creer-fichier` |
-| 5 | Mettre a jour AGENTS.md | - | `mettre-a-jour-modifier-agents-md` |
+| 5 | Mettre a jour AGENTS.md | - | `mettre-a-jour-agents-md` |
 | **6** | **Ajouter les lecons si necessaire** | `protocole-auto-correction` | - |
-| **7** | **Reactiver Cerberus** | - | `mettre-a-jour-modifier-agents-md` |
+| **7** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
 
 ---
 
@@ -182,7 +182,7 @@ surcharges:
 | 3 | Creer le protocole | - | - |
 | 4 | Passer par RVAV | `rvav-workflow` | - |
 | **5** | **Ajouter les lecons si necessaire** | `protocole-auto-correction` | - |
-| **6** | **Reactiver Cerberus** | - | `mettre-a-jour-modifier-agents-md` |
+| **6** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
 
 ---
 
@@ -195,9 +195,9 @@ surcharges:
 | 1 | Verifier les documents manquants | `convention-structures` | `verifier-documents-manquants` |
 | 2 | Verifier les fichiers vides | `convention-structures` | `rechercher-fichiers-vides` |
 | 3 | Lancer le combo etat de sante (OBLIGATOIRE : relecture + cartes + ASCII) | `rvav-workflow` | `combos-valider-cerveau` |
-| 4 | Verifier les doublons de numerotation dans les fiches agents | - | `valider-numerotation` |
+| 4 | Verifier la coherence des tableaux des fiches (nombres annonces, numerotation, completude des listes) | - | `valider-tableaux` |
 | 5 | Analyser les resultats | `rvav-workflow` | - |
-| **6** | **Reactiver Cerberus** | - | `mettre-a-jour-modifier-agents-md` |
+| **6** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
 
 ---
 
@@ -207,16 +207,32 @@ surcharges:
 
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
-| **1** | **ACTIVER VULCAIN** -- c'est lui le constructeur d'outils, pas moi | `regles-choisir-agent` | `mettre-a-jour-modifier-agents-md` |
+| **1** | **ACTIVER VULCAIN** -- c'est lui le constructeur d'outils, pas moi | `regles-choisir-agent` | `mettre-a-jour-agents-md` |
 | 2 | Verifier que l'outil est cree/modifie au statut prepare | `protocole-outils` | - |
 | 3 | Verifier le second controle Janus apres le retour | `protocole-versionning-outils` | - |
-| **FIN** | **Reactiver Cerberus** (apres le retour de la chaine complete) | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **Reactiver Cerberus** (apres le retour de la chaine complete) | - | `mettre-a-jour-agents-md` |
 
 > **REGLE ABSOLUE** : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME.
 > J'active **Vulcain** ([vulcain/vulcain.md](../vulcain/vulcain.md)), qui est le SEUL habilite
 > a creer, modifier et tester les outils du cerveau-projet.
 > **CHAINE COMPLETE** : Vulcain -> **Janus** (second controle) -> **Clio** (README) -> **Cerberus**.
 > Faute grave 2026-08-06 : les passages V2 ont ete executes en solo au lieu d'activer Vulcain. Ne jamais reproduire.
+
+---
+
+### Mission : Gerer les sous-missions
+
+**QUAND** : Pendant ma mission principale, une tache secondaire doit etre realisee avant de continuer (ex : un outil necessaire n'existe pas encore)
+
+> **FLUX ORIENTE** : Je sors du flux principal, je resous la sous-mission, puis je REVIENS au flux principal. La sous-mission n'est jamais une fin.
+
+| Etape | Action | Protocole | Outil |
+|---|---|---|---|
+| 1 | Sauvegarder ma position dans la mission principale | `protocole-boucles-dynamiques` | `gerer-sous-mission` (sauvegarder) |
+| 2 | Sortir du flux principal pour la sous-mission (raison + outil necessaire) | `protocole-boucles-dynamiques` | `gerer-sous-mission` (sortir) |
+| 3 | Revenir au flux principal une fois la sous-mission terminee (resultat + outil cree) | `protocole-boucles-dynamiques` | `gerer-sous-mission` (revenir) |
+
+> **REGLE** : Toujours sauvegarder avant de sortir, toujours revenir apres la sous-mission.
 
 ---
 
@@ -235,18 +251,18 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour activer un agent
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh activer "Agent" "Raison" "Mission"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh activer "Agent" "Raison" "Mission"
 ```
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "AgentPrecedent"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "AgentPrecedent"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.

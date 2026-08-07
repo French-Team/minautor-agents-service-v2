@@ -12,6 +12,18 @@ Remplit les sections d'un pense-bete **sans ouvrir le fichier**. Athena donne la
 
 ## Utilisation
 
+### CLI Python (version 0.2.0-py)
+
+```
+python3 creer-remplir-pense-bete.py <fichier> <section> <contenu> [--dry-run]
+
+Options :
+  --dry-run    Afficher ce qui serait fait sans modifier
+  --version    Afficher la version
+```
+
+### CLI bash (version originale)
+
 ```bash
 # Remplir le titre
 creer-remplir-pense-bete.sh pense-bete-pipeline.001.01.ebauche.md titre "Concept de Pipeline"
@@ -87,3 +99,9 @@ $ creer-remplir-pense-bete.sh pense-bete-pipeline.001.01.ebauche.md idee "Le pip
 | `generateurs-squelette-pense-bete` | Cree le squelette avant de remplir |
 | `valider-pense-bete` | Verifie le fichier apres remplissage |
 | `valider-conformite-ascii` | Verifie qu'aucun accent n'a ete introduit |
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py, interpretation des sequences d'echappement \\n) |

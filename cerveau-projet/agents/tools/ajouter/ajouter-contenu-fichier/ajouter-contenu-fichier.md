@@ -1,9 +1,10 @@
 # ajouter-contenu-fichier
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Ajouter
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** ajouter
 **Chemin :** `agents/tools/ajouter/ajouter-contenu-fichier/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -12,8 +13,11 @@ Ajouter du contenu a la fin d'un fichier (append). Complement de `ecrire-fichier
 ## Utilisation
 
 ```bash
-# Ajouter une chaine a la fin d'un fichier
+# Ajouter une chaine a la fin d'un fichier (version bash)
 ajouter-contenu-fichier.sh fichier.md "Nouvelle ligne a ajouter"
+
+# Version Python (meme logique)
+python3 ajouter-contenu-fichier.py fichier.md "Nouvelle ligne a ajouter"
 
 # Ajouter le contenu d'un fichier source a la fin
 ajouter-contenu-fichier.sh fichier-cible.md --fichier fichier-source.md
@@ -72,3 +76,15 @@ Lignes ajoutees : 1
 - [ ] L'outil est conforme ASCII (aucun accent, aucun emoji)
 - [ ] L'outil est reference dans `index-tools.md`
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (ajouter-contenu-fichier.py) - LOT 1/25 de la conversion alphabetique. Meme logique que le .sh, 100% stdlib, testee (compilation, dry-run, ajout reel, ajout source) |
+
+---

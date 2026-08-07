@@ -109,7 +109,7 @@ Appliquer le cycle complet a chaque etape critique :
 - [convention-autoamelioration.md](../../../conventions/protocoles/convention-autoamelioration.md)
 - [protocole-gestion-defaillances.md](../protocole-gestion-defaillances/protocole-gestion-defaillances.001.01.ebauche.md)
 - [index-cerveau.md](../../../../index-cerveau.md)
-- [demarrer.md](../../../../demarrer.md)
+- [demarrer.md](../../../../../demarrer.md)
 
 ---
 

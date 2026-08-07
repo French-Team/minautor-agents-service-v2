@@ -12,18 +12,23 @@ Supprimer un fichier avec verification.
 
 ## Utilisation
 
+Version Python (recommandee) :
+
 ```bash
 # Supprimer un fichier
-supprimer-fichier.sh fichier.md
+python3 supprimer-fichier.py fichier.md
 
 # Simuler
-supprimer-fichier.sh --dry-run fichier.md
+python3 supprimer-fichier.py --dry-run fichier.md
 ```
+
+Version bash equivalente : `supprimer-fichier.sh` (meme logique).
 
 ## Options
 
 | Option | Description | Defaut |
 |---|---|---|
+| `--forcer` | Supprimer sans confirmer | false |
 | `--dry-run` | Simuler sans supprimer | false |
 | `--verbose` | Afficher les details | false |
 | `--help` | Afficher l'aide | - |
@@ -34,6 +39,7 @@ supprimer-fichier.sh --dry-run fichier.md
 |---|---|---|
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (suppression, fichier inexistant, --dry-run), promotion prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (supprimer-fichier.py), basee sur outil-template.py. Suppression avec --dry-run/--forcer/--verbose |
 
 ## Notes de creation
 

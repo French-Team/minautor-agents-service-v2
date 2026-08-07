@@ -71,7 +71,7 @@ CERBERUS -> IDENTIFIER -> LIRE -> ACTIVER -> TRAVAILLER -> REACTIVER -> [SECOND 
 ### Commande d'activation
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh activer "Agent" "Raison" "Mission"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh activer "Agent" "Raison" "Mission"
 ```
 
 ---
@@ -83,7 +83,7 @@ cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettr
 ### Commande de reactivation
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "AgentPrecedent"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "AgentPrecedent"
 ```
 
 ### Quand ?
@@ -103,7 +103,7 @@ AVANT de terminer la session.
 | **Documenter l'activation** | Raison et mission dans AGENTS.md |
 | **Reactiver Cerberus** | Toujours revenir a Cerberus |
 | **Pas de saut** | Ne jamais sauter une etape |
-| **Utiliser mettre-a-jour-modifier-agents-md** | Pour toute modification d'AGENTS.md |
+| **Utiliser mettre-a-jour-agents-md** | Pour toute modification d'AGENTS.md |
 
 ---
 

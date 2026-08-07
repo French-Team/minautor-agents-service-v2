@@ -116,13 +116,15 @@ outils:
 > Si une demande concerne le domaine d'un autre agent, j'active CET agent via Cerberus ou je le fais activer.
 > La matrice de choix est dans `regles-choisir-agent.md` : chaque agent fait SES missions, personne ne travaille solo sur le domaine d'un autre.
 
+> **REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE)** : pour TOUTE operation (lire, ecrire, chercher, lister, analyser, valider, corriger), j'utilise UNIQUEMENT les outils du cerveau (`agents/tools/`), ceux assignes a ma carte de decision. JAMAIS de commande systeme directe (`cat`, `grep`, `sed`, `python -c`...), JAMAIS d'outil de l'environnement (`read_files`, `write_file`, `basher`...), JAMAIS l'outil d'un autre agent. Si l'outil n'existe pas -> je signale le besoin, je ne contourne pas. Choix `.py` / `.sh` : profil systeme (classeur) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
+
 ### Missions disponibles
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
 | [Mission 1] | [Etape 1] -> [Etape 2] | [Protocole 1] | `[outil-1]`, `[outil-2]` |
 | [Mission 2] | [Etape 1] -> [Etape 2] | [Protocole 1] | `[outil-1]` |
-| **Activer [agent-habilite]** | 3 etapes | regles-choisir-agent | `mettre-a-jour-modifier-agents-md` |
+| **Activer [agent-habilite]** | 3 etapes | regles-choisir-agent | `mettre-a-jour-agents-md` |
 
 ---
 
@@ -135,7 +137,7 @@ outils:
 | 1 | [Action 1] | [Protocole 1] | `[outil-1]` |
 | 2 | [Action 2] | [Protocole 2] | - |
 | **DERNIERE** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **FIN** | **Reactive Cerberus** | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **Reactive Cerberus** | - | `mettre-a-jour-agents-md` |
 
 > **REGLE** : Chaque mission se termine par l'ajout des lecons dans `corrections.md` puis la reactivation de Cerberus.
 
@@ -148,8 +150,8 @@ outils:
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
 | 1 | Identifier l'agent habilite avec la matrice | `regles-choisir-agent` | - |
-| 2 | Demander a Cerberus d'activer cet agent (je ne touche pas a AGENTS.md si je ne suis pas coordinateur) | - | `mettre-a-jour-modifier-agents-md` |
-| **FIN** | Suivre la chaine complete jusqu'au retour a Cerberus | - | `mettre-a-jour-modifier-agents-md` |
+| 2 | Demander a Cerberus d'activer cet agent (je ne touche pas a AGENTS.md si je ne suis pas coordinateur) | - | `mettre-a-jour-agents-md` |
+| **FIN** | Suivre la chaine complete jusqu'au retour a Cerberus | - | `mettre-a-jour-agents-md` |
 
 > **EXEMPLE** : Une demande d'outil -> j'active **Vulcain**. Une demande de pense-bete -> j'active **Athena**.
 > **NE JAMAIS** executer moi-meme une mission qui appartient a un autre agent (faute grave 2026-08-06 : passages V2 executes en solo).
@@ -171,18 +173,18 @@ outils:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour activer un agent
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh activer "Agent" "Raison" "Mission"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh activer "Agent" "Raison" "Mission"
 ```
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "AgentPrecedent"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "AgentPrecedent"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.

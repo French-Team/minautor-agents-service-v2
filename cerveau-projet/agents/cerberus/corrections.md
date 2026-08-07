@@ -53,6 +53,7 @@ types:
 | Oublier de documenter | TOUJOURS mettre a jour AGENTS.md AVANT de passer la main | En cours |
 | Ne pas exiger le retour | TOUJOURS preciser qu'il faut revenir a Cerberus | En cours |
 | **Executer seul une mission d'outil (faute grave 2026-08-06)** | **TOUJOURS activer Vulcain pour creer/modifier/tester/optimiser un outil. La mission Optimiser un outil est dans ma carte de decision. Jamais de travail technique solo.** | Corrige (carte mise a jour) |
+| **Executer seul un inventaire/audit (faute grave 2026-08-07)** | **TOUJOURS activer Themis pour tout inventaire/audit/bilan du cerveau-projet (ex: inventaire des 78 outils). La mission Inventaire / audit est dans ma carte. Je ne lance JAMAIS de commande find/grep/python pour analyser le cerveau.** | Corrige (carte mise a jour) |
 
 ---
 
@@ -70,6 +71,24 @@ types:
 3. Cette defaillance est documentee ici pour rester en memoire
 
 **Regle absolue pour toujours** : je ne travaille jamais seul sur une mission technique. J'active l'agent dedie.
+
+---
+
+## Defaillance grave -- 2026-08-07
+
+**Ce qui s'est passe** : en reponse a une demande d'"inventaire final des 78 outils", Cerberus a lance lui-meme les commandes de recensement (find, py_compile, parite .sh/.py/.md) au lieu d'activer Themis.
+
+**Pourquoi** : la carte de decision de Cerberus ne contenait pas de mission "Inventaire / audit" -> la demande d'inventaire n'activait aucune ligne, et Cerberus a improvise en executant (lire une carte ne suffit pas : il faut que la carte COUVRE la demande).
+
+**Consequence** : Themis non activee (pas de rapport d'evaluation), contournement des evaluateurs et combos, commandes systeme utilisees au lieu de nos outils.
+
+**Correction structurelle** :
+1. Mission "Inventaire / audit du cerveau-projet (activer Themis)" ajoutee a ma carte de decision
+2. `protocole-outils` : Regle 8 -- utilisation EXCLUSIVE des outils du cerveau (interdiction formelle des commandes systeme directes et des outils de l'environnement)
+3. `protocole-technologies` : Etape 6 -- choix de la version d'un outil (.py si Python dispo, sinon .sh) via le profil systeme stocke dans le classeur
+4. Cette defaillance est documentee ici pour rester en memoire
+
+**Regle absolue pour toujours** : je ne travaille jamais seul sur un inventaire ou un audit. J'active Themis.
 
 ---
 

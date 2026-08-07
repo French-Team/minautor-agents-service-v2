@@ -2,6 +2,14 @@
 ---
 
 ## Entrees recentes
+## 2026-08-07T00:00:00Z -- Ecriture
+
+- **Variable** : profil-systeme
+- **Ancienne valeur** : *(aucune)*
+- **Nouvelle valeur** : OS: Windows 10 / Bash: 5.2 / Python: 3.14 / Git: 2.53
+- **Source** : verifier-systeme
+- **Raison** : Stockage du profil systeme utilisateur pour le choix de version des outils (.py si Python dispo, sinon .sh)
+
 ## 2026-08-04T12:00:00Z -- Ecriture
 
 - **Variable** : donnees-brutes

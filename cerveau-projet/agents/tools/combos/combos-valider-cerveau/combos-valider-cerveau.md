@@ -37,6 +37,19 @@ Les 3 validateurs couvrent 3 piliers independants :
 
 ## Utilisation
 
+### CLI Python (version 0.2.0-py)
+
+```
+python3 combos-valider-cerveau.py [options]
+
+Options :
+  --detail      Afficher la sortie complete des 3 outils
+  --stop        Arreter au premier echec
+  --version     Afficher la version
+```
+
+### CLI bash (version originale)
+
 ```bash
 bash combos-valider-cerveau.sh [dossier] [options]
 ```
@@ -119,5 +132,6 @@ Les 3 outils appeles doivent exister :
 
 | Version | Statut | Changements |
 |---|---|---|
+| 0.2.0-py | prepare | Version Python creee (orchestrateur subprocess des 3 validateurs, verdict combine, options --detail/--stop, base sur outil-template.py) |
 | 0.1.0 | ebauche | Creation du combo : 3 validateurs, rapport combine, options --detail/--stop |
 | 0.2.0 | prepare | Promotion apres tests reels : 3/3 OK, cas NON CONFORME detecte (code 1), integration index-tools + cartes Buffy/Themis/Janus |

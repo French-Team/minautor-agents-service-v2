@@ -1,6 +1,6 @@
 # editer-fichier
 
-**Version :** 0.2.0
+**Version :** 0.2.0-py
 **Statut :** prepare
 **Categorie :** Editer
 **Chemin :** `agents/tools/editer/editer-fichier/`

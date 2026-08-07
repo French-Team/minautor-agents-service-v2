@@ -1,11 +1,10 @@
 #!/bin/bash
 # valider-todo.sh
 # Verifie l'integrite d'un todo (structure, phases, ASCII)
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.2.0
 
 # Configuration
-VERSION="0.1.0-beta"
+VERSION="0.2.0"
 STATUT="ebauche"
 
 # Couleurs

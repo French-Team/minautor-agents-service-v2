@@ -15,6 +15,9 @@ Genere le squelette d'un todo conforme au `todo-template` et a la `convention-re
 # Creer un todo avec les valeurs par defaut
 generateurs-squelette-todo.sh --theme pipeline
 
+# Version Python (recommandee)
+python3 generateurs-squelette-todo.py --theme pipeline
+
 # Avec toutes les options
 generateurs-squelette-todo.sh --theme pipeline --id 001 --class 01 --dossier spec/todo/
 
@@ -92,3 +95,4 @@ $ generateurs-squelette-todo.sh --theme pipeline
 | Version | Date | Changements |
 |---|---|---|
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
+| 0.2.0-py | 2026-08-07 | Version Python creee (10 phases, dossier cree, --version) |

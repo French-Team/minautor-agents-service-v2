@@ -57,6 +57,7 @@ Themis est le juge du cerveau-projet. Elle ne modifie jamais rien -- elle evalue
 1. Audit post-travail (apres plusieurs agents successifs)
 2. Doute d'un agent (un agent ne peut pas resoudre seul)
 3. RVAV phase Analyser (protocole l'exige)
+4. **Inventaire / audit du cerveau-projet** demande par Cerberus (ex: inventaire des 78 outils, bilan de coherence) -- c'est MOI qui execute, jamais Cerberus
 
 **Sortie** : Rapport dans `themis/rapports/`
 
@@ -77,9 +78,15 @@ Themis est le juge du cerveau-projet. Elle ne modifie jamais rien -- elle evalue
 
 | Combo | Usage |
 |---|---|
-| `combos-combos-audit-general` | Chainage des 4 evaluateurs + synthese |
+| `combos-audit-general` | Chainage des 4 evaluateurs + synthese |
 | `combos-corriger-non-ascii` | Corriger accents + emojis detectes lors d'un audit |
 | `combos-valider-cerveau` | Etat de sante global : relecture + cartes + ASCII en 1 rapport |
+
+### Detecteurs (tools/detecter/)
+
+| Outil | Usage |
+|---|---|
+| `detecter-local-hors-fonction` | Detecter les local utilises hors fonction dans les scripts bash |
 
 ---
 
@@ -93,7 +100,7 @@ Themis est le juge du cerveau-projet. Elle ne modifie jamais rien -- elle evalue
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Audit general** | 8 etapes | protocole-auto-correction, rvav-workflow | `evaluer-structure`, `evaluer-conventions`, `evaluer-coherence`, `evaluer-agents`, `combos-combos-audit-general`, `valider-relecture`, `combos-valider-cerveau`, `valider-numerotation`, `lire-fichier`, `creer-fichier`, `mettre-a-jour-modifier-agents-md` |
+| **Audit general (dont inventaires)** | 9 etapes | protocole-auto-correction, rvav-workflow | `evaluer-structure`, `evaluer-conventions`, `evaluer-coherence`, `evaluer-agents`, `combos-audit-general`, `valider-relecture`, `combos-valider-cerveau`, `valider-tableaux`, `detecter-local-hors-fonction`, `lire-fichier`, `creer-fichier`, `mettre-a-jour-agents-md` |
 
 ---
 
@@ -104,13 +111,14 @@ Themis est le juge du cerveau-projet. Elle ne modifie jamais rien -- elle evalue
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
 | 1 | Lire le contexte de la demande | - | `lire-fichier` |
-| 2 | Lancer le combo combos-audit-general | - | `combos-combos-audit-general.sh` |
+| 2 | Lancer le combo combos-audit-general | - | `combos-audit-general.sh` |
 | 3 | Verifier la regle de relecture des agents | - | `valider-relecture` |
 | 4 | Lancer le combo combos-valider-cerveau (etat de sante global : OBLIGATOIRE) | - | `combos-valider-cerveau.sh` |
-| 5 | Verifier les doublons de numerotation dans les fiches agents | - | `valider-numerotation` |
-| 6 | Ecrire le rapport dans `themis/rapports/` | - | `creer-fichier` |
-| 7 | Ajouter les lecons dans `corrections.md` | `protocole-auto-correction` | - |
-| 8 | Reactiver Cerberus avec le rapport | - | `mettre-a-jour-modifier-agents-md` |
+| 5 | Verifier la coherence des tableaux des fiches (nombres annonces, numerotation, completude des listes) | - | `valider-tableaux` |
+| 6 | Detecter les local hors fonction dans les scripts bash | - | `detecter-local-hors-fonction` |
+| 7 | Ecrire le rapport dans `themis/rapports/` | - | `creer-fichier` |
+| 8 | Ajouter les lecons dans `corrections.md` | `protocole-auto-correction` | - |
+| 9 | Reactiver Cerberus avec le rapport | - | `mettre-a-jour-agents-md` |
 
 ### Outils de base (P0) -- disponibles dans toutes les missions
 
@@ -137,7 +145,7 @@ Themis est le juge du cerveau-projet. Elle ne modifie jamais rien -- elle evalue
 |---|---|---|
 | **[R]echercher** | Lire qui m'active et pourquoi | `lire-fichier` |
 | **[V]erifier** | Choisir le combo (combos-audit-general) | - |
-| **[A]nalyser** | Executer le combo, collecter les resultats | `combos-combos-audit-general.sh` |
+| **[A]nalyser** | Executer le combo, collecter les resultats | `combos-audit-general.sh` |
 | **[V]alider** | Synthetiser, scorer, classifier par priorite | - |
 
 ---
@@ -182,12 +190,12 @@ Chaque rapport suit ce format :
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison du rapport" Themis
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison du rapport" Themis
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.
@@ -214,9 +222,3 @@ cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettr
 - `regles-veracite`
 
 ---
-
-## HISTORIQUE
-
-| Date | Evenement | Details |
-|---|---|---|
-| 2026-08-06 | Creation | Fiche d'agent initialisee |

@@ -1,6 +1,6 @@
 # valider-conformite-ascii
 
-**Version :** 0.3.0
+**Version :** 0.3.0-py
 **Statut :** prepare
 **Categorie :** Valider
 **Chemin :** `agents/tools/valider/valider-conformite-ascii/`

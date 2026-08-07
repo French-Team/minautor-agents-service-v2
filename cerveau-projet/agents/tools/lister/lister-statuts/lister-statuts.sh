@@ -2,6 +2,7 @@
 # lister-statuts.sh
 # Outil pour lister les fichiers par statut
 # Proprietaire : Vulcain
+VERSION="0.2.0"
 
 # Configuration
 VERBOSE=false

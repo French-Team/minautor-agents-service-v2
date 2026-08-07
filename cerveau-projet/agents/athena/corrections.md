@@ -61,7 +61,7 @@ preferences:
 |---|---|
 | `valider-nommage` | Verifier le nom du fichier avant creation |
 | `verifier-documents-manquants` | Verifier la completude apres creation |
-| `mettre-a-jour-modifier-agents-md` | Reactiver Cerberus en fin de mission |
+| `mettre-a-jour-agents-md` | Reactiver Cerberus en fin de mission |
 
 ---
 

@@ -1,10 +1,10 @@
-# Outil -- Changer le Statut d'un Fichier
+# changer-statut
 
-**Categorie** : Changer
-**Version** : 0.1.0
-**Statut** : beta
-**Date creation** : 2026-08-05
-**Proprietaire** : Vulcain (outil partage)
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** changer
+**Chemin :** `agents/tools/changer/changer-statut/`
+**Proprietaire :** Janus (outil partage)
 
 ---
 
@@ -20,6 +20,20 @@ Changer le statut d'un fichier en le renommant selon la convention.
 ---
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 changer-statut.py <fichier> <nouveau-statut> [OPTIONS]
+
+Options :
+  --dry-run     Afficher les changements sans les appliquer
+  --force       Forcer le changement meme si des liens pointent vers le fichier
+  --verbose     Afficher les details
+  --version     Afficher la version
+```
+
+### CLI bash (version originale)
 
 ```bash
 ./changer-statut.sh <fichier> <nouveau-statut> [OPTIONS]
@@ -162,3 +176,11 @@ Cet outil est utilise a l'etape **[Valider]** du workflow RVAV :
 - **Workflow** : `rvav-workflow.md` -- processus de validation
 - **Convention** : `convention-renommage.md` -- format de nommage
 - **Outil similaire** : `corriger-nommage` -- corriger le nommage sans changer le statut
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
+| 0.1.0 | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |

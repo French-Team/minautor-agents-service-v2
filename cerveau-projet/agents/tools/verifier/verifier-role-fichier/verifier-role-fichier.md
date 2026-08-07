@@ -1,9 +1,10 @@
 # verifier-role-fichier
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Verifier
+**Version :** 0.2.0-py
+**Statut :** prepare
+**Categorie :** verifier
 **Chemin :** `agents/tools/verifier/verifier-role-fichier/`
+**Proprietaire :** Janus (outil partage)
 
 ## Description
 
@@ -66,3 +67,14 @@ $ verifier-role-fichier.sh fichier-index-avec-todo.md
 | `verifier-separation-preoccupations` | Verifie sur tous les fichiers du projet (version globale) |
 | `nettoyer-fichier` | Purifie les fichiers apres detection |
 | `valider-conventions` | Verifie que les conventions sont respectees |
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+
+---

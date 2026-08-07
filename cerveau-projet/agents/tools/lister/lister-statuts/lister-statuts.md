@@ -1,10 +1,10 @@
-# Outil -- Lister les Statuts des Fichiers
+# lister-statuts
 
-**Categorie** : Explorer
-**Version** : 0.1.0
-**Statut** : stable
-**Date creation** : 2026-08-05
-**Proprietaire** : Vulcain (outil partage)
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** lister
+**Chemin :** `agents/tools/lister/lister-statuts/`
+**Proprietaire :** Janus (outil partage)
 
 ---
 
@@ -23,6 +23,12 @@ Lister les fichiers markdown par statut (ebauche, prepare, dev, test, valide).
 
 ```bash
 ./lister-statuts.sh [CHEMIN] [OPTIONS]
+```
+
+### Version Python (recommandee)
+
+```bash
+python3 lister-statuts.py [CHEMIN] [OPTIONS]
 ```
 
 ### Options
@@ -161,3 +167,11 @@ L'outil `lister-statuts` est essentiel pour le workflow RVAV :
 - **Convention** : `convention-renommage.md` -- format de nommage des fichiers
 - **Workflow** : `rvav-workflow.md` -- processus de validation
 - **Outil similaire** : `valider-nommage` -- verifie la conformite du nommage
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (lister-statuts.py), basee sur outil-template.py |

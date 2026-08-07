@@ -1,7 +1,7 @@
-# Outil -- Verifier le Systeme
+# verifier-systeme
 
 **Categorie** : Verifier
-**Version** : 0.2.0
+**Version** : 0.2.0-py
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : outil partage
@@ -129,6 +129,7 @@ npm --version
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.1.1-beta | 2026-08-05 | Ajout du script executable |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (table, resume, json), doublons du resume corriges (Python/Node.js sans redondance), promotion prepare |
+| 0.2.0-py | 2026-08-07 | Portage Python : analyse du systeme (3 formats) |
 
 ---
 

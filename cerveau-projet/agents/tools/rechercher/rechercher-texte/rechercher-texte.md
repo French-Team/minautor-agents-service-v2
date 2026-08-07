@@ -12,16 +12,20 @@ Rechercher un pattern dans un fichier (grep generique).
 
 ## Utilisation
 
+Version Python (recommandee) :
+
 ```bash
 # Rechercher un mot
-rechercher-texte.sh "mot" fichier.md
+python3 rechercher-texte.py "mot" fichier.md
 
 # Insensible a la casse avec numeros
-rechercher-texte.sh --insensible --numeros "texte" fichier.md
+python3 rechercher-texte.py --insensible --numeros "texte" fichier.md
 
 # Compter
-rechercher-texte.sh --compter "mot" fichier.md
+python3 rechercher-texte.py --compter "mot" fichier.md
 ```
+
+Version bash equivalente : `rechercher-texte.sh` (meme logique).
 
 ## Options
 
@@ -40,6 +44,7 @@ rechercher-texte.sh --compter "mot" fichier.md
 |---|---|---|
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (pattern simple, --insensible, --numeros, --compter), promotion prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (rechercher-texte.py), basee sur outil-template.py. Equivalent grep : --insensible/--numeros/--inverser/--compter |
 
 ## Notes de creation
 

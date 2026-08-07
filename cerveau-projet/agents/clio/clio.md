@@ -63,7 +63,7 @@ surcharges:
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Corriger le README** | 8 etapes | rvav-workflow, regles-emojis-ascii | `mettre-a-jour-readme`, `valider-conformite-ascii`, `mettre-a-jour-modifier-agents-md` |
+| **Corriger le README** | 8 etapes | rvav-workflow, regles-emojis-ascii | `mettre-a-jour-readme`, `valider-conformite-ascii`, `mettre-a-jour-agents-md` |
 | **Verifier le README** | 4 etapes | rvav-workflow | `mettre-a-jour-readme` |
 
 ### Outils de base (P0) -- disponibles dans toutes les missions
@@ -96,7 +96,7 @@ surcharges:
 | 5 | Verifier la conformite ASCII du README | `regles-emojis-ascii` | `valider-conformite-ascii` |
 | 6 | Passer par la boucle RVAV | `rvav-workflow` | - |
 | **7** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **FIN** | **Reactive Cerberus** -- la mission est terminee | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **Reactive Cerberus** -- la mission est terminee | - | `mettre-a-jour-agents-md` |
 
 > **REGLE** : Je n'edite JAMAIS le README directement. L'outil `mettre-a-jour-readme` est mon unique outil de modification.
 > **PHILOSOPHIE -- LE README EST LE LIVRE DU PROJET** : quand le projet change, on CORRIGE le texte existant pour qu'il parle de la realite. On n'ajoute jamais de lignes d'interventions, de chronologie ou de journal au README.
@@ -113,7 +113,7 @@ surcharges:
 | 1 | Lancer la verification de l'etat reel | `rvav-workflow` | `mettre-a-jour-readme --verifier` |
 | 2 | Analyser les differences signalees | - | - |
 | 3 | Rapporter a Cerberus si le README est a jour ou non | - | - |
-| **FIN** | **Reactive Cerberus** | - | `mettre-a-jour-modifier-agents-md` |
+| **FIN** | **Reactive Cerberus** | - | `mettre-a-jour-agents-md` |
 
 ---
 
@@ -132,12 +132,12 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-modifier-agents-md
+## UTILISATION DE mettre-a-jour-agents-md
 
 ### Pour reactiver Cerberus (fin de mission)
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-modifier-agents-md/mettre-a-jour-modifier-agents-md.sh reactiver "Raison" "Clio"
+cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "Clio"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour reactiver Cerberus.

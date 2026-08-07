@@ -12,6 +12,18 @@ Remplit les sections d'un todo **sans ouvrir le fichier**. L'agent donne la sect
 
 ## Utilisation
 
+### CLI Python (version 0.2.0-py)
+
+```
+python3 creer-remplir-todo.py <fichier> <section> <contenu> [--dry-run]
+
+Options :
+  --dry-run    Afficher ce qui serait fait sans modifier
+  --version    Afficher la version
+```
+
+### CLI bash (version originale)
+
 ```bash
 # Remplir le titre
 creer-remplir-todo.sh todo-pipeline.001.01.ebauche.md titre "Todo du pipeline"
@@ -88,3 +100,9 @@ $ creer-remplir-todo.sh todo-pipeline.001.01.ebauche.md phase5 "1. Creer le pipe
 | `remplir-pense-bete` | Meme logique pour les pense-betes |
 | `remplir-spec` | Meme logique pour les specs |
 | `valider-pense-bete` | Modele pour creer un validateur de todo |
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py, interpretation des sequences d'echappement \\n) |

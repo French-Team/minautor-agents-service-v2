@@ -1,9 +1,10 @@
 # rechercher-fichiers-vides
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Rechercher
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** rechercher
 **Chemin :** `agents/tools/rechercher/rechercher-fichiers-vides/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -11,19 +12,20 @@ Rechercher les fichiers markdown vides ou quasi vides dans le projet. Un fichier
 
 ## Utilisation
 
-```bash
-# Rechercher dans le dossier courant
-rechercher-fichiers-vides.sh
+Version Python (recommandee) :
 
+```bash
 # Rechercher dans un dossier specifique
-rechercher-fichiers-vides.sh cerveau-projet/
+python3 rechercher-fichiers-vides.py cerveau-projet/
 
 # Fichiers de moins de 10 lignes
-rechercher-fichiers-vides.sh --seuil 10 cerveau-projet/
+python3 rechercher-fichiers-vides.py --seuil 10 cerveau-projet/
 
 # Avec details
-rechercher-fichiers-vides.sh --verbose cerveau-projet/
+python3 rechercher-fichiers-vides.py --verbose cerveau-projet/
 ```
+
+Version bash equivalente : `rechercher-fichiers-vides.sh` (meme logique).
 
 ## Options
 
@@ -90,3 +92,15 @@ Fichiers avec contenu : 148
 | `lister-statuts` | Voir le statut des fichiers detectes |
 | `detecter-surcharge-fichier` | Detecter les fichiers trop gros (inverse) |
 | `valider-ebauche` | Verifier les exigences minimales d'un ebauche |
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (rechercher-fichiers-vides.py), basee sur outil-template.py. Scan + seuil de lignes non vides, exit 1 si fichiers vides |
+
+---

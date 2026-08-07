@@ -2,6 +2,7 @@
 # nettoyer-fichier.sh
 # Outil pour purifier un fichier markdown
 # Proprietaire : Vulcain (outil partage)
+VERSION="0.2.0"
 
 # Configuration
 VERBOSE=false

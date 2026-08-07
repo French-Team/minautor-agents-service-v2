@@ -1,9 +1,10 @@
 # corriger-accents-zones-sensibles
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Corriger
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** corriger
 **Chemin :** `agents/tools/corriger/corriger-accents-zones-sensibles/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -22,6 +23,25 @@ Corrige les accents et caracteres non-ASCII dans un fichier ou un dossier. Confo
 | `liens` | Liens relatifs `[texte](chemin)` dans les .md | Un accent dans un chemin casse la navigation |
 
 ## Utilisation
+
+### CLI Python (version 0.2.0-py)
+
+```
+python3 corriger-accents-zones-sensibles.py [OPTIONS] <fichier|dossier>
+
+Options :
+  --all             Corriger TOUS les accents (mode standard, regle immuable)
+  --dry-run         Simuler sans appliquer
+  --zones           Zones a corriger (defaut: frontmatter,noms,blocs,code,liens)
+  --recursive       Traiter recursivement les sous-dossiers
+  --verbose         Afficher les details
+  --extensions      Extensions des fichiers de code
+  --exclure         Motifs de chemins a exclure
+  --dictionnaire    Chemin vers le dictionnaire
+  --version         Afficher la version
+```
+
+### CLI bash (version originale)
 
 ```bash
 # Corriger TOUS les accents (mode standard, regle immuable)
@@ -122,3 +142,15 @@ Le dossier `cerveau-projet/exemples/` est **exclu automatiquement** : c'est la z
 - [x] L'outil est conforme ASCII (aucun accent, aucun emoji)
 - [x] L'outil est reference dans `index-tools.md`
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py, lit le dictionnaire existant) |
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+
+---

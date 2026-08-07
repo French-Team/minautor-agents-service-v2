@@ -15,6 +15,9 @@ Genere le squelette d'une specification technique conforme au `spec-template` et
 # Creer une spec avec les valeurs par defaut
 generateurs-squelette-spec.sh --theme pipeline
 
+# Version Python (recommandee)
+python3 generateurs-squelette-spec.py --theme pipeline
+
 # Avec toutes les options
 generateurs-squelette-spec.sh --theme pipeline --id 001 --class 01 --dossier spec/ --parent pense-bete-pipeline.001.01.ebauche.md
 
@@ -91,3 +94,4 @@ $ generateurs-squelette-spec.sh --theme pipeline --parent pense-bete-pipeline.00
 | Version | Date | Changements |
 |---|---|---|
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
+| 0.2.0-py | 2026-08-07 | Version Python creee (meme logique, --parent integre, --version) |

@@ -1,4 +1,4 @@
-# Outil -- Lister les Fichiers
+# lister-fichiers
 
 **Categorie** : Explorer
 **Version :** 0.2.0
@@ -14,19 +14,30 @@ Lister tous les fichiers d'un chemin donne.
 
 ## Utilisation
 
+Version Python (recommandee) :
+
+```bash
+python3 lister-fichiers.py [CHEMIN] [OPTIONS]
 ```
-lister-fichiers(chemin=".", pattern="*", recursif=false)
+
+### Options
+
+| Option | Description |
+|---|---|
+| `CHEMIN` | Chemin du dossier a explorer (defaut: .) |
+| `--recursif, -r` | Explorer les sous-dossiers |
+| `--extension` | Filtrer par extension (ex: "md", "py", "sh") |
+| `--version` | Afficher la version |
+| `--aide, -h` | Afficher l'aide |
+
+### Exemples
+
+```bash
+python3 lister-fichiers.py
+python3 lister-fichiers.py --recursif --extension md
 ```
 
----
-
-## Parametres
-
-| Parametre | Type | Obligatoire | Description |
-|---|---|---|---|
-| `chemin` | string | Oui | Chemin du dossier a explorer |
-| `pattern` | string | Non | Pattern de filtrage (defaut: "*") |
-| `recursif` | boolean | Non | Si true, explore les sous-dossiers (defaut: false) |
+Version bash equivalente : `lister-fichiers.sh`.
 
 ---
 
@@ -100,4 +111,11 @@ find . -type f
 - Utile pour valider la structure du projet
 
 ---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (lister-fichiers.py), basee sur outil-template.py |
 

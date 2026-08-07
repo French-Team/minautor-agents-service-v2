@@ -53,7 +53,7 @@ Les fichiers meta (index, templates, conventions, regles) n'ont pas d'ID/class/s
 - **Dossier `rechercher/`** : `rechercher-fichier`, `rechercher-texte`, `rechercher-extension-fichier`
 - **Dossier `corriger/`** : `corriger-emojis`, `corriger-liens`, `corriger-dictionnaire-accents`
 - **Dossier `creer/`** : `creer-fichier`, `creer-remplir-pense-bete`
-- **Dossier `mettre-a-jour/`** : `mettre-a-jour-readme`, `mettre-a-jour-modifier-agents-md`
+- **Dossier `mettre-a-jour/`** : `mettre-a-jour-readme`, `mettre-a-jour-agents-md`
 
 **Exclusions** : les dossiers `generateurs/`, `combos/`, `tester/` ne suivent pas cette regle.
 

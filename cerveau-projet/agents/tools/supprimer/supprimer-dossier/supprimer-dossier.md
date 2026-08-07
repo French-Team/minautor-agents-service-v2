@@ -1,9 +1,10 @@
 # supprimer-dossier
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
-**Categorie :** Supprimer
+**Version :** 0.2.0
+**Statut :** prepare
+**Categorie :** supprimer
 **Chemin :** `agents/tools/supprimer/supprimer-dossier/`
+**Proprietaire :** Buffy (outil partage)
 
 ## Description
 
@@ -11,16 +12,20 @@ Supprimer un dossier recursivement. Operation destructive : exige une confirmati
 
 ## Utilisation
 
+Version Python (recommandee) :
+
 ```bash
 # Simuler la suppression (voir ce qui serait supprime)
-supprimer-dossier.sh chemin/dossier
+python3 supprimer-dossier.py chemin/dossier
 
 # Supprimer avec confirmation forcee
-supprimer-dossier.sh --force chemin/dossier
+python3 supprimer-dossier.py --force chemin/dossier
 
 # Avec details
-supprimer-dossier.sh --force --verbose chemin/dossier
+python3 supprimer-dossier.py --force --verbose chemin/dossier
 ```
+
+Version bash equivalente : `supprimer-dossier.sh` (meme logique).
 
 ## Options
 
@@ -73,3 +78,15 @@ $ supprimer-dossier.sh --force dossier-temporaire
 - [ ] L'outil est conforme ASCII (aucun accent, aucun emoji)
 - [ ] L'outil est reference dans `index-tools.md`
 - [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (supprimer-dossier.py), basee sur outil-template.py. Suppression recursive avec dry-run par defaut, protections chemins sensibles + racine + tools/, --force pour executer |
+
+---
