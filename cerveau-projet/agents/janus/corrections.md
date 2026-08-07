@@ -191,3 +191,13 @@ preferences:
 ## PHILOSOPHIE -- Principes de comportement
 
 | **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |
+
+## [NOTES] Controle 2026-08-07 -- verifier-systeme --enregistrer
+
+**Controle** : option --enregistrer ajoutee par Vulcain (sh + py + md).
+**Verdict** : VALIDE.
+**Lecons** :
+1. La mission de controle doit etre ecrite dans `controles/` avant tout controle (Regle 1 appliquee)
+2. Les tests reels independants (execution reelle, pas de confiance) ont confirme l'idempotence
+3. Observation non bloquante : la tracabilite cree plusieurs entrees identiques dans l'historique lors de multiples tests -- comportement attendu
+4. Les outils de controle utilises : valider-conformite-ascii, valider-nommage, execution reelle -- jamais de commande directe (REGLE ABSOLUE 4)

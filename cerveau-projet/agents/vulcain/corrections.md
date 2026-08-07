@@ -90,6 +90,71 @@ Avant de creer un outil, je verifie la disponibilite des technologies sur tous l
 
 ---
 
+## [LECON] 2026-08-07 -- Renommage d outil
+
+**Tache** : Deplacer mettre-a-jour-agents-md vers activer/activer-agent-principal
+
+**Lecon** :
+- Le nom d un outil doit refleter sa fonction reelle (activer l agent principal, pas "mettre a jour")
+- La categorie du dossier determine le prefixe obligatoire (dossier activer/ -> prefixe activer-)
+- Lors d un renommage d outil : 1) deplacement physique + renommage des fichiers, 2) contenu interne (.sh/.py/.md/spec/test), 3) ~120 references dans ~31 fichiers (fiches, template, index-tools, protocoles, README, AGENTS.md), 4) boucle retro-action, 5) index-tools (nouvelle section + compteurs), 6) README (categorie), 7) test reel du cycle activer/reactiver
+- Preserver AGENTS-historique.md (journal historique) et les entrees Versionning qui documentent l ancien nom
+
+---
+
+## [LECON] 2026-08-07 -- Multi-session activer-agent-principal v0.3.0
+
+**Tache** : Faire evoluer activer-agent-principal pour plusieurs LLM en parallele (multi-session)
+
+**Lecon** :
+- Chaque LLM demarre comme Cerberus mais doit avoir SON bloc dedie dans AGENTS.md (## Sessions LLM / ### Session : session-llm-N) avec SON agent principal
+- Nouvelle action sidentifier : attribue le prochain session-llm-N libre (ou nom explicite), cree le bloc, Cerberus par defaut
+- Session OBLIGATOIRE dans activer/reactiver : ne modifier QUE le bloc de la session visee (isolation)
+- Historique global 4 colonnes : | date | session | agent | raison |
+- Migration automatique de l ancienne structure (## Agent Principal Actuel -> ## Sessions LLM + session-llm-1)
+- PIEGE CORRIGE : dans le .py, la migration retournait le contenu converti SANS le persister dans la branche identification (fichier restait ancienne structure) -- toujours ecrire le contenu migre
+- PIEGE CORRIGE : apres migration, sidentifier doit utiliser session-llm-1 (cree par la migration) et afficher le message d identification
+- Variable d environnement AGENTS_FILE / AGENTS_HISTORIQUE : indispensable pour tester sur copies
+- Les tests (12/12) sont passes par Morpheus (regle delegation respectee)
+
+---
+
+## [LECON] 2026-08-07 -- Outil permanent au lieu de script temporaire
+
+**Tache** : Creer remplacer-texte (remplacement massif multi-fichiers)
+
+**Lecon** :
+- Quand un script temporaire est cree pour un besoin recurrent (renommages massifs, mises a jour de references), il DOIT devenir un outil permanent du cerveau au lieu d etre re-ecrit a chaque fois.
+- Outil cree : remplacer-texte (dossier remplacer/, prefixe remplacer-) avec paires ancien->nouveau, exclusions (AGENTS-historique.md, exemples/), dry-run, rapport, idempotence.
+- Tests reels passes : nominal, dry-run, exclusions, idempotence, version sh.
+
+---
+
+## [LECON] 2026-08-07 -- Profil session classeur v0.3.1
+
+**Tache** : Faire evoluer activer-agent-principal (v0.3.0 -> v0.3.1) pour ecrire/mettre a jour automatiquement le profil de session dans le classeur-variables
+
+**Lecon** :
+- Nouvelle fonction mettre_a_jour_profil_session (py + sh) : variable PAR SESSION `profil-session-<session>` dans stockage/variables-actuelles.md, format `| `profil-session-<session>` | session: <session> / agent: <agent> / date: <AAAA-MM-JJ HH:MM> | activer-agent-principal | <AAAA-MM-JJ> | [OK] |`
+- Appelee a chaque sidentifier (Cerberus), activer (agent) et reactiver (Cerberus) ; ligne existante -> mise a jour, absente -> ajoutee a la fin du tableau
+- Surcharge CLASSEUR_STOCKAGE par variable d environnement pour les tests (parite avec AGENTS_FILE/AGENTS_HISTORIQUE)
+- PIEGE ECHAPPEMENT : dans un .sh, ne JAMAIS ecrire de backticks litteraux dans un bloc python -c "..." embarquee (commande substitution bash) ; utiliser $(python -c "sys.stdout.write(chr(96))") ou chr(96) en python pour construire les backticks
+- PIEGE INSERTION PYTHON : quand on insere du code .py via un script python, les sequences 
+ dans une chaine non-raw sont INTERPRETEES (vrais sauts de ligne dans le code insere) -- utiliser raw string r'''...''' ou chr(10) pour les escapes
+- Tests formels passes par Morpheus (regle delegation respectee) : test-002 v0.3.1 (7/7) + regression test-001 v0.3.0 (12/12)
+
+## [LECON] 2026-08-07 -- Regle de derivation profil-session v0.3.2
+
+**Tache** : Corriger le nommage profil-session (verdict A REVOIR de Janus : profil-session-session-llm-1 au lieu de profil-session-llm-1)
+
+**Lecon** :
+- REGLE DE DERIVATION IMMUABLE : l'id de la variable = `profil-session-` + la partie du nom complet APRES le prefixe `session-` (session session-llm-1 -> id profil-session-llm-1). NE JAMAIS concatener profil-session- avec le nom complet.
+- La regle est documentee dans le schema (variables-definition.md) comme reference unique
+- PIEGE SLICE : en python, `session[7:]` retire un caractere de trop ("session-" fait 8 caracteres) -> id `-llm-1` -> ligne `profil-session--llm-1` (double tiret). TOUJOURS utiliser `session[len("session-"):]` (ou ${session#session-} en bash)
+- PIEGE PARITE : corriger le .py ET le python embarque du .sh (2 endroits distincts)
+- Quand une regle immuable est testee, ajouter un test NEGATIF (verifier qu'aucune valeur interdite n'est creee) en plus des tests positifs
+- Le second controle de Janus a detecte l'ecart avant la mise en production - la confiance se gagne (cycle MORPHEUS -> JANUS indispensable)
+
 ## [CONFIG] Configuration specifique
 
 ### Preferences de travail

@@ -3,7 +3,7 @@
 ## Contexte
 
 **QUAND** : Je dois modifier AGENTS.md (activer un agent ou reactiver Cerberus)
-**ACTION** : Utiliser `mettre-a-jour-agents-md`
+**ACTION** : Utiliser `activer-agent-principal`
 **PROBLEME RESOLU** : J'utilisais `str_replace` ou `write_file` au lieu de l'outil dedie
 
 ---
@@ -16,7 +16,7 @@
 ### Etape 1 : Verifier que l'outil existe
 
 ```bash
-ls cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh
+ls python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py
 ```
 
 ### Etape 2 : Si l'outil n'existe pas
@@ -28,13 +28,13 @@ ls cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jo
 #### Pour activer un agent
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh activer "Agent" "Raison" "Mission"
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> "Agent" "Raison" "Mission"
 ```
 
 #### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "AgentPrecedent"
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "AgentPrecedent"
 ```
 
 ---
@@ -51,8 +51,8 @@ cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-
 
 | Erreur | Correction |
 |---|---|
-| Utiliser `str_replace` sur AGENTS.md | Utiliser `mettre-a-jour-agents-md` |
-| Utiliser `write_file` sur AGENTS.md | Utiliser `mettre-a-jour-agents-md` |
+| Utiliser `str_replace` sur AGENTS.md | Utiliser `activer-agent-principal` |
+| Utiliser `write_file` sur AGENTS.md | Utiliser `activer-agent-principal` |
 | Oublier de verifier l'existence de l'outil | Toujours verifier avant |
 
 ---

@@ -16,7 +16,7 @@
 |---|---|---|
 | Coordonner, analyser un besoin, activer un agent | Cerberus | - |
 | Modifier les fichiers du cerveau-projet (conventions, regles, protocoles, index, demarrer.md) | Buffy | Cerberus, Vulcain |
-| Modifier `AGENTS.md` / activations | Cerberus (via `mettre-a-jour-agents-md`) | - |
+| Modifier `AGENTS.md` / activations | Cerberus (via `activer-agent-principal`) | - |
 | **Creer / modifier / tester / optimiser un outil (v2/v3, purification, bugs)** | **Vulcain** | Cerberus, Buffy |
 | Controler les statuts, second controle | Janus | - |
 | Ecrire et lancer les tests (protocole-tests) | Morpheus | - |
@@ -49,7 +49,7 @@
 ### Etape 4 -- Activer et documenter
 
 ```
-1. Activer l'agent via mettre-a-jour-agents-md
+1. Activer l'agent via activer-agent-principal
 2. Documenter la raison et la mission
 3. L'agent execute puis reactive Cerberus
 4. Cerberus declenche Janus (si second controle) puis Clio (si fichiers changes)

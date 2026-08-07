@@ -47,7 +47,7 @@
 |---|---|---|
 | `corriger-liens` | [OK] Termine | Corrige les liens casses |
 | `corriger-nommage` | [attente] En attente | Corrige le nommage |
-| `mettre-a-jour-agents-md` | [attente] En attente | Modifie AGENTS.md |
+| `activer-agent-principal` | [attente] En attente | Modifie AGENTS.md |
 
 ### Priorite 5 -- Outils d'analyse (comprendre en profondeur)
 

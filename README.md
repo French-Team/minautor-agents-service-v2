@@ -23,7 +23,7 @@ Le cerveau-projet est une **structure de travail persistante** qui accompagne un
 | **Organiser** | Structure les idees, specifications, conventions et regles |
 | **Guider** | Les agents suivent une carte de decision par mission |
 | **Controler** | Chaque travail passe par le workflow RVAV avant validation |
-| **Outiller** | Boite a outils partagee (bash) creee pour les agents, par les agents |
+| **Outiller** | Boite a outils partagee (bash + python) creee pour les agents, par les agents |
 | **Apprendre** | Chaque agent corrige ses erreurs dans `corrections.md` |
 | **Tester** | Tests encadres par des protections (anti-boucle, anti-blocage) |
 
@@ -34,7 +34,7 @@ Le cerveau-projet est une **structure de travail persistante** qui accompagne un
 ```
 projet/
 |-- demarrer.md                  # Point de demarrage (a lire en premier)
-|-- AGENTS.md                    # Agent principal actuel (dynamique)
+|-- AGENTS.md                    # Sessions LLM -- un bloc et un agent principal par session
 |-- README.md                    # Ce fichier
 `-- cerveau-projet/
     |-- index-cerveau.md         # Point d'entree du cerveau
@@ -42,7 +42,7 @@ projet/
     |   |-- index-agents.md
     |   |-- [agent]/[agent].md   # Fiche de chaque agent
     |   |-- [agent]/corrections.md  # Corrections et lecons de l'agent
-    |   `-- tools/               # Boite a outils (78 outils + protections)
+    |   `-- tools/               # Boite a outils (83 outils + protections)
     |-- pense-betes/             # Idees, conventions, regles, specs, todos
     |   |-- index-pense-bete.md
     |   |-- conventions/         # Renommage, structures, liens, protocoles
@@ -72,7 +72,7 @@ projet/
 | **Clio** | Muse de l'histoire - README | Apres chaque mission (fichiers changes) |
 | **Themis** | Evaluatrice croisee du cerveau-projet | Audit, evaluation, coherence |
 
-### Le cycle fondamental
+### Le cycle fondamental (par session LLM)
 
 ```
 CERBERUS -> AGENT -> CERBERUS
@@ -82,6 +82,8 @@ CERBERUS -> AGENT -> CERBERUS
 1. Cerberus analyse le besoin et active l'agent adapte
 2. L'agent execute sa mission en suivant sa carte de decision
 3. L'agent reactive Cerberus a la fin (toujours)
+
+**Multi-session** : plusieurs LLM peuvent travailler sur le meme projet. Au demarrage, chaque LLM lance `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier` pour obtenir SA session (`session-llm-N`) et demarrer comme Cerberus. Chaque session possede SON bloc dans AGENTS.md (## Sessions LLM) et SON agent principal. Le cycle se deroule DANS la session : `activer <session> <agent> <raison>` puis `reactiver <session> <raison> <agent>`. L'historique (AGENTS-historique.md) identifie chaque intervention par sa session : `| date | session | agent | raison |`.
 
 ### La chaine documentaire (pense-bete -> spec -> todo)
 
@@ -103,7 +105,7 @@ Chaque agent a :
 
 ---
 
-## La boite a outils (82 outils)
+## La boite a outils (83 outils)
 
 Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 
@@ -127,9 +129,11 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Inserer (1)** | inserer-contenu-fichier | Inserer du contenu a une position |
 | **Lire (3)** | lire-fichier, lire-frontmatter, lire-lignes | Lire le contenu des fichiers |
 | **Lister (8)** | lister-agents, lister-appels, lister-dossiers, lister-fichiers, lister-fonctions, lister-outils, lister-prepares, lister-statuts | Decouvrir la structure |
-| **Mettre a jour (2)** | mettre-a-jour-agents-md, mettre-a-jour-readme | Mettre a jour les fichiers cles |
+| **Activer (1)** | activer-agent-principal | Activer/reactiver l agent principal par session (multi-session) |
+| **Mettre a jour (1)** | mettre-a-jour-readme | Mettre a jour le README depuis les sources |
 | **Nettoyer (1)** | nettoyer-fichier | Purifier un fichier |
 | **Rechercher (10)** | rechercher-accents-sensibles, rechercher-dossier, rechercher-extension-fichier, rechercher-fichier, rechercher-fichiers-vides, rechercher-pense-betes, rechercher-specs, rechercher-templates, rechercher-texte, rechercher-todos | Rechercher dans le cerveau |
+| **Remplacer (1)** | remplacer-texte | Remplacer des paires ancien->nouveau dans plusieurs fichiers (renommages massifs) |
 | **Supprimer (3)** | supprimer-dossier, supprimer-fichier, supprimer-ligne | Supprimer fichiers et dossiers |
 | **Valider (12)** | valider-cartes-decision, valider-conformite-ascii, valider-conventions, valider-ebauche, valider-liens, valider-nommage, valider-numerotation, valider-pense-bete, valider-relecture, valider-spec, valider-tableaux, valider-todo | Verifier la conformite |
 | **Verifier (4)** | verifier-documents-manquants, verifier-role-fichier, verifier-separation-preoccupations, verifier-systeme | Verifier l'etat reel |
@@ -137,7 +141,7 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Combos (3)** | combos-audit-general, combos-corriger-non-ascii, combos-valider-cerveau | Chainer des outils en sequences |
 | **Templates (1)** | outil-template | Modele standard de creation d'outils |
 
-**Principe** : Les agents utilisent exclusivement leurs propres outils, pas des outils generiques. Chaque outil est assigne aux agents concernes dans leur carte de decision.
+**Principe** : Les agents utilisent exclusivement leurs propres outils, pas des outils generiques. Chaque outil est assigne aux agents concernes dans leur carte de decision. Chaque outil existe en 2 versions (.sh et .py) : le choix se fait via le profil systeme stocke dans le classeur-variables (.py si Python dispo, sinon .sh).
 
 **Triplet documentaire** : pour chaque type de document (pense-bete, spec, todo) : un **generateur** cree le squelette, un outil **creer** remplit le contenu, un **validateur** verifie l'integrite.
 
@@ -148,21 +152,23 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 ### 1. Demarrage d'une session (demarrer.md)
 
 ```
-1. Lire AGENTS.md (qui est l'agent principal ?)
+0. S'identifier : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier -> obtenir SA session (session-llm-N)
+1. Lire AGENTS.md (agent principal de SA session)
 2. Se presenter automatiquement
 3. Verifier si la fiche de l'agent existe (sinon la creer)
 4. Lire corrections.md EN PRIORITE
 5. Lire la fiche d'agent + sa carte de decision
-6. Mettre a jour AGENTS.md
+6. Mettre a jour SON bloc dans AGENTS.md (avec sa session)
 7. Travailler sur la mission
 8. Detectar les erreurs -> ajouter dans corrections.md
 ```
 
 ### 2. Identification et activation
 
+- Chaque LLM s'identifie au demarrage : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier -> obtient SA session (session-llm-N) et demarre comme Cerberus
 - L'utilisateur nomme un agent -> l'agent devient actif pour la session
 - **Activer SANS lire la fiche = inutile** (regle fondamentale)
-- Le changement d'agent passe TOUJOURS par Cerberus
+- Le changement d'agent passe TOUJOURS par Cerberus, dans SA session
 
 ### 3. Execution d'une mission
 

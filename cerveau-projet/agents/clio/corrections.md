@@ -43,6 +43,8 @@ agent:
 | Date | Lecon | Philosophie liee |
 |---|---|---|
 | 2026-08-06 | Creation de l'agent -- premieres lecons a venir | Fichiers toujours a jour |
+| 2026-08-07 | README MAJ apres verifier-systeme --enregistrer : compteurs via --maj, texte libre via editer-fichier (.py pour eviter les parentheses regex du .sh), principe .py/.sh ajoute (profil systeme stocke dans le classeur) | Le README est le livre -- corriger le texte existant |
+| 2026-08-07 | README MAJ multi-session LLM : cycle fondamental par session (sidentifier -> session-llm-N), structure AGENTS.md (Sessions LLM), outil Activer decrit par session, demarrage session avec etape 0 sidentifier, historique 4 colonnes | Le README est le livre -- corriger le texte existant, jamais de journal |
 
 ---
 
@@ -62,7 +64,7 @@ preferences:
 | Outil/Method | Usage |
 |---|---|
 | `mettre-a-jour-readme` | Outil UNIQUE de mise a jour du README (verifier, maj, journal) |
-| `mettre-a-jour-agents-md` | Reactiver Cerberus en fin de mission |
+| `activer-agent-principal` | Reactiver Cerberus en fin de mission |
 | `valider-conformite-ascii` | Verifier la conformite ASCII du README |
 
 ---

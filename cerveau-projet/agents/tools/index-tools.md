@@ -21,6 +21,12 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 |---|---|---|
 | `ajouter-contenu-fichier` | Ajouter du contenu a la fin d'un fichier (append) | [ajouter/ajouter-contenu-fichier/](ajouter/ajouter-contenu-fichier/) |
 
+### Activer
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `activer-agent-principal` | Activer/reactiver l agent principal dans AGENTS.md | [activer/activer-agent-principal/](activer/activer-agent-principal/) |
+
 ### Analyser
 
 | Outil | Description | Chemin |
@@ -161,7 +167,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `mettre-a-jour-readme` | Mettre a jour le README depuis les sources de verite (agents, outils, chronologie) | [mettre-a-jour/mettre-a-jour-readme/](mettre-a-jour/mettre-a-jour-readme/) |
-| `mettre-a-jour-agents-md` | Modifier AGENTS.md de maniere fiable | [mettre-a-jour/mettre-a-jour-agents-md/](mettre-a-jour/mettre-a-jour-agents-md/) |
+
 
 ### Nettoyer
 
@@ -184,6 +190,11 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `rechercher-todos` | Rechercher les todos existants (anti-doublon) | [rechercher/rechercher-todos/](rechercher/rechercher-todos/) |
 | `rechercher-extension-fichier` | Extraire l'extension d'un fichier (ou verifier une extension) | [rechercher/rechercher-extension-fichier/](rechercher/rechercher-extension-fichier/) |
 
+### Remplacer
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `remplacer-texte` | Remplacer une liste de paires ancien->nouveau dans plusieurs fichiers (renommages massifs) | [remplacer/remplacer-texte/](remplacer/remplacer-texte/) |
 ### Supprimer
 
 | Outil | Description | Chemin |
@@ -356,15 +367,17 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Inserer | 1 |
 | Lire | 3 |
 | Lister | 8 |
-| Mettre a jour | 2 |
+| Mettre a jour | 1 |
+| Activer | 1 |
 | Nettoyer | 1 |
 | Rechercher | 10 |
+| Remplacer | 1 |
 | Supprimer | 3 |
 | Valider | 9 |
 | Verifier | 4 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **77** |
+| **Total** | **78** |
 
 > **Note sur le decompte** : 71 outils d'action + 2 combos sont inclus dans les categories ci-dessus ; `lister-outils.sh` affiche 71 car il exclut `combos/` et `tester/` de son comptage.
 

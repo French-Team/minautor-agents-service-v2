@@ -90,7 +90,7 @@ Un outil qui n'est assigne a personne risque de n'etre jamais utilise. Pour assi
 
 | Nature de l'outil | Agent responsable | Exemples |
 |---|---|---|
-| Coordination, activation | Cerberus | `mettre-a-jour-agents-md`, `lister-agents` |
+| Coordination, activation | Cerberus | `activer-agent-principal`, `lister-agents` |
 | Controle, analyse, structure du cerveau | Buffy | `valider-*`, `corriger-*`, `verifier-documents-manquants` |
 | Exploration | Atlas | `lister-*`, `rechercher-*` |
 | Statuts et validation | Janus | `lister-statuts`, `changer-statut`, `valider-ebauche` |
@@ -155,7 +155,7 @@ grep -rn "\\K" agents/tools/ --include="*.sh"              # doit etre vide
 4. Je n'utilise JAMAIS l'outil d'un autre agent a la place du mien
 ```
 
-> **Exception** : `mettre-a-jour-agents-md` et `verifier-systeme` sont des outils PARTAGES (assignes a plusieurs agents). Tout le reste appartient a un agent precis.
+> **Exception** : `activer-agent-principal` et `verifier-systeme` sont des outils PARTAGES (assignes a plusieurs agents). Tout le reste appartient a un agent precis.
 
 ---
 

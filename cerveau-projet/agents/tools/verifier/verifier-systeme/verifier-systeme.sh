@@ -6,7 +6,7 @@
 # Auteur: Vulcain
 
 # Configuration
-VERSION="0.2.0"
+VERSION="0.2.1"
 DATE="2026-08-05"
 
 # Couleurs pour la sortie
@@ -29,12 +29,14 @@ aide() {
     echo "  --aide, -h          Afficher cette aide"
     echo "  --format FORMAT     Format de sortie: table, json, resume (defaut: table)"
     echo "  --detail DETAIL     Niveau de detail: standard, complet (defaut: standard)"
+    echo "  --enregistrer       Ecrire le profil systeme dans le classeur-variables"
     echo "  --version           Afficher la version"
     echo ""
     echo "Exemples:"
     echo "  verifier-systeme"
     echo "  verifier-systeme --format json"
     echo "  verifier-systeme --format resume --detail complet"
+    echo "  verifier-systeme --enregistrer"
     echo ""
 }
 
@@ -156,6 +158,119 @@ afficher_json() {
     echo "}"
 }
 
+# Fonction pour enregistrer le profil dans le classeur-variables
+enregistrer_profil() {
+    local classeur_stockage="cerveau-projet/classeur-variables/stockage/variables-actuelles.md"
+    local classeur_hist="cerveau-projet/classeur-variables/historique/historique-modifications.md"
+
+    if [ ! -f "$classeur_stockage" ]; then
+        echo "ERREUR: classeur introuvable: $classeur_stockage"
+        return 1
+    fi
+
+    local date_jour=$(date +%F)
+
+    # Collecter les informations systeme
+    local sys_info=$(informations_systeme)
+    IFS='|' read -r os version arch <<< "$sys_info"
+
+    local bash_info=$(verifier_outil "bash")
+    IFS='|' read -r bash_dispo bash_version bash_chemin <<< "$bash_info"
+
+    local python_info=$(verifier_outil "python3")
+    IFS='|' read -r python_dispo python_version python_chemin <<< "$python_info"
+
+    local node_info=$(verifier_outil "node")
+    IFS='|' read -r node_dispo node_version node_chemin <<< "$node_info"
+
+    local git_info=$(verifier_outil "git")
+    IFS='|' read -r git_dispo git_version git_chemin <<< "$git_info"
+
+    # Versions courtes (premier numero de version)
+    local bash_short=$(echo "$bash_version" | grep -oE '[0-9]+(\.[0-9]+)+' | head -1)
+    [ -z "$bash_short" ] && bash_short="-"
+    local python_short=$(echo "$python_version" | grep -oE '[0-9]+(\.[0-9]+)+' | head -1)
+    [ -z "$python_short" ] && python_short="-"
+    local node_short=$(echo "$node_version" | grep -oE '[0-9]+(\.[0-9]+)+' | head -1)
+    [ -z "$node_short" ] && node_short="-"
+    local git_short=$(echo "$git_version" | grep -oE '[0-9]+(\.[0-9]+)+' | head -1)
+    [ -z "$git_short" ] && git_short="-"
+
+    local nouvelle_valeur="OS: $os / Bash: $bash_short / Python: $python_short / Git: $git_short / Node: $node_short"
+    local nouvelle_ligne=$(printf '| `profil-systeme` | %s | verifier-systeme | %s | [OK] |' "$nouvelle_valeur" "$date_jour")
+
+    # Ancienne valeur pour l'historique
+    local ancienne_valeur="(aucune)"
+    while IFS= read -r ligne || [ -n "$ligne" ]; do
+        case "$ligne" in
+            *"profil-systeme"*)
+                ancienne_valeur=$(echo "$ligne" | sed 's/.*| `profil-systeme` | //; s/ | verifier-systeme.*//')
+                ;;
+        esac
+    done < "$classeur_stockage"
+
+    # Detecter si la ligne profil-systeme existe deja
+    local existe_profil=0
+    while IFS= read -r ligne || [ -n "$ligne" ]; do
+        case "$ligne" in
+            *"profil-systeme"*) existe_profil=1 ;;
+        esac
+    done < "$classeur_stockage"
+
+    # Mise a jour du tableau (remplacer si existe, sinon ajouter apres fichier-final)
+    local tmp=$(mktemp)
+    if [ "$existe_profil" -eq 1 ]; then
+        local fait=0
+        while IFS= read -r ligne || [ -n "$ligne" ]; do
+            case "$ligne" in
+                *"profil-systeme"*)
+                    if [ "$fait" -eq 0 ]; then
+                        echo "$nouvelle_ligne"
+                        fait=1
+                    fi
+                    ;;
+                *) echo "$ligne" ;;
+            esac
+        done < "$classeur_stockage" > "$tmp"
+    else
+        local insere=0
+        while IFS= read -r ligne || [ -n "$ligne" ]; do
+            echo "$ligne"
+            if [ "$insere" -eq 0 ] && echo "$ligne" | grep -q "fichier-final"; then
+                echo "$nouvelle_ligne"
+                insere=1
+            fi
+        done < "$classeur_stockage" > "$tmp"
+    fi
+    mv "$tmp" "$classeur_stockage"
+
+    # Ajout de l'entree dans l'historique (apres '## Entrees recentes')
+    if [ -f "$classeur_hist" ]; then
+        local tmp_hist=$(mktemp)
+        local insere_hist=0
+        while IFS= read -r ligne || [ -n "$ligne" ]; do
+            echo "$ligne"
+            if [ "$insere_hist" -eq 0 ] && echo "$ligne" | grep -q "## Entrees recentes"; then
+                echo "## $date_jour -- Ecriture"
+                echo ""
+                echo "- **Variable** : profil-systeme"
+                echo "- **Ancienne valeur** : $ancienne_valeur"
+                echo "- **Nouvelle valeur** : $nouvelle_valeur"
+                echo "- **Source** : verifier-systeme"
+                echo "- **Raison** : Mise a jour du profil systeme utilisateur"
+                echo ""
+                insere_hist=1
+            fi
+        done < "$classeur_hist" > "$tmp_hist"
+        mv "$tmp_hist" "$classeur_hist"
+    fi
+
+    echo "[OK] Profil systeme enregistre dans le classeur-variables"
+    echo "Variable : profil-systeme"
+    echo "Valeur   : $nouvelle_valeur"
+    echo "Source   : verifier-systeme"
+}
+
 # Fonction pour afficher en format resume
 afficher_resume() {
     local sys_info=$(informations_systeme)
@@ -182,6 +297,7 @@ afficher_resume() {
 # Valeurs par defaut
 FORMAT="table"
 DETAIL="standard"
+ENREGISTRER="non"
 
 # Parsing des arguments
 while [[ $# -gt 0 ]]; do
@@ -198,6 +314,10 @@ while [[ $# -gt 0 ]]; do
             DETAIL="$2"
             shift 2
             ;;
+        --enregistrer)
+            ENREGISTRER="oui"
+            shift
+            ;;
         --version)
             echo "verifier-systeme v${VERSION}"
             exit 0
@@ -209,6 +329,12 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Si --enregistrer est demande, on enregistre et on termine
+if [ "$ENREGISTRER" = "oui" ]; then
+    enregistrer_profil
+    exit 0
+fi
 
 # Verification du format
 case $FORMAT in

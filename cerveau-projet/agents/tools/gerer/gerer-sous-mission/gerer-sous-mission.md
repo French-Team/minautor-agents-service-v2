@@ -101,12 +101,12 @@ python3 gerer-sous-mission.py COMMANDE [OPTIONS]
 ### Scenario : Vulcain cree un outil
 
 ```bash
-# 1. Vulcain est en train de creer mettre-a-jour-agents-md
+# 1. Vulcain est en train de creer activer-agent-principal
 # Il est a l'etape 1 : Verifier le systeme
 
 # 2. Il detecte que verifier-systeme n'existe pas
 gerer-sous-mission sauvegarder \
-  --mission "Creer mettre-a-jour-agents-md" \
+  --mission "Creer activer-agent-principal" \
   --etape "1" \
   --donnees "Outil demande par Cerberus"
 
@@ -135,7 +135,7 @@ gerer-sous-mission revenir \
 
 ```json
 {
-  "mission": "Creer mettre-a-jour-agents-md",
+  "mission": "Creer activer-agent-principal",
   "etape": "1",
   "donnees": "Outil demande par Cerberus",
   "date_sauvegarde": "2026-08-05T10:00:00",

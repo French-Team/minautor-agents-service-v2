@@ -52,6 +52,7 @@ classeur-variables/
 | `contexte` | object | Contexte de la mission en cours |
 | `resultats` | object | Resultats des traitements precedents |
 | `erreurs` | array | Liste des erreurs rencontrees |
+| `profil-session-<session-id>` | string | Profil de session par LLM (agent principal) - ecrit par activer-agent-principal. REGLE DE DERIVATION: id = profil-session- + partie apres le prefixe session- du nom complet (session-llm-1 -> profil-session-llm-1) |
 
 ## Propagation
 

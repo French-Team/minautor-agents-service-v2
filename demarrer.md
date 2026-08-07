@@ -2,6 +2,34 @@
 ---
 
 ## 0. Identification de l'agent (OBLIGATOIRE)
+
+### Etape 0.0 -- S'identifier (session LLM) - OBLIGATOIRE
+
+> **MULTI-SESSION** : plusieurs LLM peuvent travailler sur le meme projet. Chaque LLM a SON bloc dedie dans AGENTS.md et SON agent principal.
+
+> **REGLE UTILISATEUR (IMMUABLE -- MODE ID)** : chaque LLM possede SON id, donne par l'utilisateur
+> au lancement (ex: `llm-atlas`, `llm-2`...). La session d'un LLM est LIEE a son id.
+> **UN LLM NE DEDUIT JAMAIS SA SESSION D'AGENTS.md** : la session visible appartient a un AUTRE LLM.
+> Sa session est celle que l'outil lui rend via SON id.
+
+```
+1. Noter MON id (donne par l'utilisateur au lancement, ex: llm-atlas)
+2. Lancer : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>
+   -> l'outil compare MON id aux sessions enregistrees (classeur)
+   -> id deja lie = MA session retrouvee (ex: session-llm-2) -- redemarrage du meme LLM
+   -> id inconnu  = creation de la prochaine session libre + liaison de mon id
+   -> met Cerberus comme agent principal de la session (le LLM demarre comme Cerberus)
+3. Lire la session RENDUE par l'outil et la noter
+4. Utiliser CETTE session pour toutes les activations :
+   python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>
+   python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent>
+```
+
+> **DEUX LLM DIFFERENTS NE PARTAGENT JAMAIS UNE SESSION** : la comparaison se fait sur l'ID.
+> Si je n'ai pas d'id, je le DEMANDE a l'utilisateur avant toute action.
+
+**Regle** : chaque session LLM active et desactive SON agent principal dans SON bloc. Les autres sessions ne sont jamais touchees.
+
 ### Le processus d'identification
 
 ```
@@ -261,19 +289,21 @@ cerveau-projet/regles-immuables/general/protocole-carte-decision/
 
 ```
 1. Lire AGENTS.md en premier
-2. Se presenter automatiquement
-3. Verifier si la fiche existe
-4. Si non -> creer la fiche + corrections
-5. Lit corrections.md en priorite
-6. Lit sa fiche d'agent
-7. Lit sa CARTE DE DECISION
-8. Met a jour AGENTS.md
-9. Effectue des recherches si necessaire
-10. Travaille sur la tache en suivant la carte
-11. Detecte erreurs -> ajoute dans corrections.md
-12. Prochaine session -> lit les nouvelles corrections
+2. S'identifier : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id> -> l'outil me rend MA session (retrouvee ou nouvelle)
+3. Se presenter automatiquement
+4. Verifier si la fiche existe
+5. Si non -> creer la fiche + corrections
+6. Lit corrections.md en priorite
+7. Lit sa fiche d'agent
+8. Lit sa CARTE DE DECISION
+9. Met a jour SON bloc dans AGENTS.md (avec sa session)
+10. Effectue des recherches si necessaire
+11. Travaille sur la tache en suivant la carte
+12. Detecte erreurs -> ajoute dans corrections.md
+13. Prochaine session -> lit les nouvelles corrections
 
 A CHAQUE activation ou reactivation : relire sa fiche et ses corrections (jamais celles des autres).
+Chaque session LLM utilise SON identifiant (session-llm-N) pour toutes ses activations.
 ```
 
 ---

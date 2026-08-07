@@ -123,7 +123,7 @@ Utilisez --maj pour corriger le texte du README.
 
 | Outil | Complement |
 |---|---|
-| `mettre-a-jour-agents-md` | Met a jour AGENTS-historique.md (source de diagnostic) |
+| `activer-agent-principal` | Met a jour AGENTS-historique.md (source de diagnostic) |
 | `lister-agents` | Verifier les agents listes |
 | `lister-outils` | Verifier les outils listes |
 | `rechercher-*` | Verifier les documents par type |

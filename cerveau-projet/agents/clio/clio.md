@@ -59,11 +59,13 @@ surcharges:
 
 > **REGLE ABSOLUE** : Je ne suppose JAMAIS. Je VERIFIE les sources de verite avant d'agir.
 
+> **REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE)** : pour TOUTE operation (lire, ecrire, chercher, lister, analyser, valider, corriger), j'utilise UNIQUEMENT les outils du cerveau (`agents/tools/`), ceux assignes a ma carte de decision. JAMAIS de commande systeme directe (`cat`, `grep`, `sed`, `python -c`...), JAMAIS d'outil de l'environnement (`read_files`, `write_file`, `basher`...), JAMAIS l'outil d'un autre agent. Si l'outil n'existe pas -> je signale le besoin, je ne contourne pas. Choix `.py` / `.sh` : profil systeme (classeur) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
+
 ### Missions disponibles
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Corriger le README** | 8 etapes | rvav-workflow, regles-emojis-ascii | `mettre-a-jour-readme`, `valider-conformite-ascii`, `mettre-a-jour-agents-md` |
+| **Corriger le README** | 8 etapes | rvav-workflow, regles-emojis-ascii | `mettre-a-jour-readme`, `valider-conformite-ascii`, `activer-agent-principal` |
 | **Verifier le README** | 4 etapes | rvav-workflow | `mettre-a-jour-readme` |
 
 ### Outils de base (P0) -- disponibles dans toutes les missions
@@ -80,6 +82,8 @@ surcharges:
 | `rechercher-texte` | Rechercher un pattern dans un fichier |
 
 > **REGLE** : Pour toute operation de base sur les fichiers, j'utilise CES outils, jamais les outils du systeme.
+> **ETAPE SYSTEME (choix .py/.sh)** : avant d'executer un outil, je consulte le profil systeme stocke (classeur-variables, variable profil-systeme) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
+> **ETAPE SESSION (profil-session -- MODE ID)** : au demarrage, je lance `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>` -- mon id m'est donne par l'utilisateur -- l'outil compare mon id aux sessions enregistrees et me rend MA session (id deja lie = retrouvee, id inconnu = prochaine libre + liaison). Je ne deduis JAMAIS ma session d'AGENTS.md. Puis je consulte le profil de MA session dans le classeur (variable `profil-session-<session-id>`) pour connaitre mon agent principal actuel et la session (session-llm-N).
 
 ---
 
@@ -96,7 +100,7 @@ surcharges:
 | 5 | Verifier la conformite ASCII du README | `regles-emojis-ascii` | `valider-conformite-ascii` |
 | 6 | Passer par la boucle RVAV | `rvav-workflow` | - |
 | **7** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **FIN** | **Reactive Cerberus** -- la mission est terminee | - | `mettre-a-jour-agents-md` |
+| **FIN** | **Reactive Cerberus** -- la mission est terminee | - | `activer-agent-principal` |
 
 > **REGLE** : Je n'edite JAMAIS le README directement. L'outil `mettre-a-jour-readme` est mon unique outil de modification.
 > **PHILOSOPHIE -- LE README EST LE LIVRE DU PROJET** : quand le projet change, on CORRIGE le texte existant pour qu'il parle de la realite. On n'ajoute jamais de lignes d'interventions, de chronologie ou de journal au README.
@@ -113,7 +117,7 @@ surcharges:
 | 1 | Lancer la verification de l'etat reel | `rvav-workflow` | `mettre-a-jour-readme --verifier` |
 | 2 | Analyser les differences signalees | - | - |
 | 3 | Rapporter a Cerberus si le README est a jour ou non | - | - |
-| **FIN** | **Reactive Cerberus** | - | `mettre-a-jour-agents-md` |
+| **FIN** | **Reactive Cerberus** | - | `activer-agent-principal` |
 
 ---
 
@@ -132,12 +136,12 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-agents-md
+## UTILISATION DE activer-agent-principal
 
 ### Pour reactiver Cerberus (fin de mission)
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "Clio"
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "Clio"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour reactiver Cerberus.

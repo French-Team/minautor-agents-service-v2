@@ -1,22 +1,50 @@
 # Agents du Cerveau-Projet
 
-> Ce fichier est mis a jour dynamiquement par l'agent principal.
-> Il identifie quel agent est actuellement actif et sa configuration.
+> Ce fichier est mis a jour dynamiquement par les agents principaux.
+> Chaque session LLM (session-llm-N) possede son bloc dedie et son agent principal.
 > L'historique complet est dans [AGENTS-historique.md](AGENTS-historique.md).
 
 ---
 
-## Agent Principal Actuel
+## Sessions LLM
+
+### Session : session-llm-3
 
 | Champ | Valeur |
 |---|---|
-| **Nom** | Cerberus|
-| **Role** | Gardien de l'entree -- analyse et active les agents|
-| **Derniere mise a jour** | 2026-08-07|
+| **Nom** | Cerberus |
+| **Role** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-07 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Clio (retour de mission)|
-| **Raison** | README MAJ: ajout de 2 badges supplementaires en tete (Langages=Bash, Python, Markdown:orange; Version=v0.2.0:blue), fusionnes proprement sur la ligne de badges existante (6 badges au total sur une seule ligne). Valeurs issues des sources de verite (82 .sh Bash, 82 .py Python, 241 .md; version proj v0.2.0 index-cerveau.md). ASCII strict OK, structure preservee, ordre: titre > badges > logo. Note: fusion faite par edition directe ciblee (l'outil --badges creerait une nouvelle ligne par appel) - changement de contenu minime.|prepare) identique remplace par detection Python des noms non-ASCII (faux positif elimine). 2) evaluer-coherence: exclusions convention-*/protocole-*/regles-*/templates/rvav (faux positifs pense-betes/ elimines). 3) combos-audit-general: tableau affiche maintenant les 4 evaluateurs (bug SCORES une ligne). Correction annexe: themis.md -- 4 references combos-combos-audit-general corrigees en combos-audit-general. Tests: syntaxe OK, ASCII OK, statuts OK, outils references OK, combo 4 scores OK.|
+| **Active par** | Identification |
+| **Raison** | Identification LLM - demarrage de session |
+
+
+### Session : session-llm-2
+
+| Champ | Valeur |
+|---|---|
+| **Nom** | Cerberus |
+| **Role** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-07 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | Themis (retour de mission) |
+| **Raison** | Audit general termine -- rapport dans themis/rapports/audit-general-2026-08-07-14-21.md. Score global: 82/100 (hors faux positifs). Etat de sante: CONFORME. 2 faux positifs identifies: __pycache__ dans evaluer-agents, commandes systeme dans evaluer-coherence. |
+
+
+### Session : session-llm-1
+
+| Champ | Valeur |
+|---|---|
+| **Nom** | Cerberus |
+| **Role** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-07 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | Buffy (retour de mission) |
+| **Raison** | MISSION TERMINEE: MODE ID documente dans le cerveau. demarrer.md (section 0.0 + workflow): REGLE UTILISATEUR IMMUABLE MODE ID - chaque LLM possede SON id donne par l utilisateur, la session est LIEE a l id, UN LLM NE DEDUIT JAMAIS SA SESSION D AGENTS.md (la session visible appartient a un AUTRE LLM), lancer sidentifier <mon-id> (chemin complet) qui rend SA session (retrouvee ou nouvelle). AGENTS.md: liaison id <-> session clarifiee. 12 fiches (template + 11 agents): ETAPE SESSION = MODE ID avec sidentifier <mon-id>. Validation: ASCII strict 0 (14 fichiers), valider-tableaux 14/14 conformes, 1 occurrence MODE ID par fiche. |
 
 ---
 
@@ -49,23 +77,25 @@ CERBERUS -> AGENT -> CERBERUS
 
 ---
 
-## Comment changer d'agent
+## Comment changer d'agent (dans sa session)
 
-### Depuis Cerberus
+Chaque session LLM a son propre cycle. L'identifiant de session est obtenu au demarrage via `sidentifier <mon-id>` (**MODE ID**) : chaque LLM possede SON id (donne par l'utilisateur), l'outil compare cet id aux sessions enregistrees et rend SA session (id deja lie = retrouvee, id inconnu = creation prochaine libre + liaison). **Un LLM ne deduit jamais sa session d'AGENTS.md** -- la session visible appartient a un AUTRE LLM. Il utilise la session RENDUE par l'outil via SON id.
+
+### Depuis Cerberus (dans sa session)
 
 1. Cerberus analyse le besoin
 2. Il choisit l'agent approprie
-3. Il utilise `mettre-a-jour-agents-md` pour mettre a jour AGENTS.md
+3. Il utilise `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>` pour mettre a jour SON bloc dans AGENTS.md
 4. Il documente la raison et la mission
 5. L'agent prend le relais
 6. **L'agent lit SA fiche et SES corrections** avant de commencer sa mission
 
-### Retour a Cerberus
+### Retour a Cerberus (dans sa session)
 
 1. L'agent termine sa mission
-2. L'agent utilise `mettre-a-jour-agents-md reactiver` pour reactiver Cerberus
+2. L'agent utilise `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent>` pour reactiver Cerberus
 3. L'agent documente la fin de mission
-4. Cerberus reprend le controle
+4. Cerberus reprend le controle dans la session
 5. **Cerberus relit SA fiche et SES corrections** avant de poursuivre
 
 ---
@@ -95,6 +125,6 @@ CERBERUS -> AGENT -> CERBERUS
 
 ---
 
-> **Le cycle** : Chaque session commence et finit avec Cerberus.
-> Il analyse le besoin, active l'agent, et reprend quand l'agent a fini.
-> **Regle** : Toujours revenir a Cerberus apres chaque mission.
+> **Le cycle** : Chaque session LLM commence et finit avec Cerberus.
+> Chaque session utilise SON identifiant (session-llm-N) pour toutes ses activations.
+> **Regle** : Toujours revenir a Cerberus apres chaque mission, dans SA session.

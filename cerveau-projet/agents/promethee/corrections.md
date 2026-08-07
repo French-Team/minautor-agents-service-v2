@@ -62,7 +62,7 @@ preferences:
 | `generateurs-squelette-spec` | Generer le squelette de la spec |
 | `creer-remplir-spec` | Remplir les sections sans ouvrir le fichier |
 | `valider-spec` | Valider l'integrite de la spec |
-| `mettre-a-jour-agents-md` | Activer Minerve en fin de mission |
+| `activer-agent-principal` | Activer Minerve en fin de mission |
 
 ---
 

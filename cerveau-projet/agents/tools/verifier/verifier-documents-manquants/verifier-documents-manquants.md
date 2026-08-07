@@ -64,7 +64,7 @@ Les fichiers suivants sont des documents de **support** qui n'ont pas besoin d'u
 | Type | Exemple | Raison |
 |---|---|---|
 | `spec/` | `spec-verifier-systeme.001.01.ebauche.md` | Specifications, pas des docs d'outil |
-| `test-*.md` | `test-mettre-a-jour-agents-md.md` | Fichiers de test |
+| `test-*.md` | `test-activer-agent-principal.md` | Fichiers de test |
 | `index-*.md` | `index-tools.md` | Index de navigation |
 | `*template*.md` | `template-test.md` | Templates de creation |
 

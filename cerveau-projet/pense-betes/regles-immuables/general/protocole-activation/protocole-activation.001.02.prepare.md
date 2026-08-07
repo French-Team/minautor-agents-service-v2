@@ -71,7 +71,7 @@ CERBERUS -> IDENTIFIER -> LIRE -> ACTIVER -> TRAVAILLER -> REACTIVER -> [SECOND 
 ### Commande d'activation
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh activer "Agent" "Raison" "Mission"
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> "Agent" "Raison" "Mission"
 ```
 
 ---
@@ -83,7 +83,7 @@ cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-
 ### Commande de reactivation
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "AgentPrecedent"
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "AgentPrecedent"
 ```
 
 ### Quand ?
@@ -103,7 +103,7 @@ AVANT de terminer la session.
 | **Documenter l'activation** | Raison et mission dans AGENTS.md |
 | **Reactiver Cerberus** | Toujours revenir a Cerberus |
 | **Pas de saut** | Ne jamais sauter une etape |
-| **Utiliser mettre-a-jour-agents-md** | Pour toute modification d'AGENTS.md |
+| **Utiliser activer-agent-principal** | Pour toute modification d'AGENTS.md |
 
 ---
 

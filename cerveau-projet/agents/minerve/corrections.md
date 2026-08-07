@@ -65,7 +65,7 @@ preferences:
 | `generateurs-squelette-todo` | Generer le squelette conforme au todo-template |
 | `creer-remplir-todo` | Remplir les phases sans ouvrir le fichier |
 | `valider-todo` | Valider l'integrite (phases 0-9 obligatoires) |
-| `mettre-a-jour-agents-md` | Reactiver Cerberus en fin de mission (Phase 9) |
+| `activer-agent-principal` | Reactiver Cerberus en fin de mission (Phase 9) |
 
 ---
 

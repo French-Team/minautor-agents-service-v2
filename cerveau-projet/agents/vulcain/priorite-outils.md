@@ -51,7 +51,7 @@ Les outils doivent etre crees dans un ordre qui permet :
 |---|---|---|
 | `corriger-liens` | Corriger les liens casses | A creer |
 | `corriger-nommage` | Corriger le nommage | A creer |
-| `mettre-a-jour-agents-md` | Modifier AGENTS.md de maniere fiable | A creer |
+| `activer-agent-principal` | Modifier AGENTS.md de maniere fiable | A creer |
 
 ### Priorite 5 -- Outils d'analyse (comprendre en profondeur)
 
@@ -131,7 +131,7 @@ Format : Script bash executable
 | 12 | valider-conventions | valider | 3 | En attente | - | - |
 | 13 | corriger-liens | corriger | 4 | [OK] Termine | 2026-08-05 | 2026-08-05 |
 | 14 | corriger-nommage | corriger | 4 | En attente | - | - |
-| 15 | mettre-a-jour-agents-md | corriger | 4 | En attente | - | - |
+| 15 | activer-agent-principal | corriger | 4 | En attente | - | - |
 | 16 | analyser-structure | analyser | 5 | En attente | - | - |
 | 17 | analyser-dependances | analyser | 5 | En attente | - | - |
 

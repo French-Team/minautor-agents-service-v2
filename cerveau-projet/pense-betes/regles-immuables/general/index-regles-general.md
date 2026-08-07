@@ -21,7 +21,7 @@
 | [protocole-reprendre-projet/](protocole-reprendre-projet/) | **IMMUABLE** -- Reprendre un projet existant | ebauche |
 | [protocole-installer-regles/](protocole-installer-regles/) | **IMMUABLE** -- Installer les regles immuables | ebauche |
 | [protocole-identification/](protocole-identification/) | **IMMUABLE** -- Identification des agents | ebauche |
-| [protocole-activation/](protocole-activation/) | **IMMUABLE** -- Activation des agents (avec lecture obligatoire + mettre-a-jour-agents-md) | prepare |
+| [protocole-activation/](protocole-activation/) | **IMMUABLE** -- Activation des agents (avec lecture obligatoire + activer-agent-principal) | prepare |
 | [protocole-recherches-web/](protocole-recherches-web/) | **IMMUABLE** -- Recherches web | ebauche |
 | [protocole-outils/](protocole-outils/) | **IMMUABLE** -- Boite a outils | ebauche |
 | [protocole-technologies/](protocole-technologies/) | Choix des technologies pour creer les outils | ebauche |

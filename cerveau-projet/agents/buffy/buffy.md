@@ -57,16 +57,18 @@ surcharges:
 
 > **REGLE ABSOLUE -- RELECTURE** : Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais.
 
+> **REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE)** : pour TOUTE operation (lire, ecrire, chercher, lister, analyser, valider, corriger), j'utilise UNIQUEMENT les outils du cerveau (`agents/tools/`), ceux assignes a ma carte de decision. JAMAIS de commande systeme directe (`cat`, `grep`, `sed`, `python -c`...), JAMAIS d'outil de l'environnement (`read_files`, `write_file`, `basher`...), JAMAIS l'outil d'un autre agent. Si l'outil n'existe pas -> je signale le besoin, je ne contourne pas. Choix `.py` / `.sh` : profil systeme (classeur) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
+
 ### Missions disponibles
 
 | Mission | Etapes | Protocoles | Outils |
 |---|---|---|---|
-| **Creer un fichier** | 7 etapes | convention-renommage, convention-structures | `valider-nommage`, `valider-conventions`, `creer-fichier`, `rechercher-fichier`, `mettre-a-jour-agents-md` |
-| **Creer un pense-bete** | 4 etapes | pense-bete-template, convention-renommage | **activer Athena**, `mettre-a-jour-agents-md` |
-| **Modifier un fichier** | 11 etapes | convention-renommage, regles-veracite, protocole-auto-correction | `corriger-emojis`, `corriger-accents-zones-sensibles`, `corriger-liens`, `corriger-nommage`, `nettoyer-fichier`, `condenser-fichier`, `mettre-a-jour-agents-md` |
-| **Creer un agent** | 7 etapes | protocole-identification, fiche-agent-template | `valider-nommage`, `mettre-a-jour-agents-md` |
-| **Creer un protocole** | 6 etapes | convention-protocoles, rvav-workflow | `valider-conventions`, `mettre-a-jour-agents-md` |
-| **Creer / modifier / tester un outil** | 4 etapes | regles-choisir-agent | **activer Vulcain**, `mettre-a-jour-agents-md` |
+| **Creer un fichier** | 7 etapes | convention-renommage, convention-structures | `valider-nommage`, `valider-conventions`, `creer-fichier`, `rechercher-fichier`, `activer-agent-principal` |
+| **Creer un pense-bete** | 4 etapes | pense-bete-template, convention-renommage | **activer Athena**, `activer-agent-principal` |
+| **Modifier un fichier** | 11 etapes | convention-renommage, regles-veracite, protocole-auto-correction | `corriger-emojis`, `corriger-accents-zones-sensibles`, `corriger-liens`, `corriger-nommage`, `nettoyer-fichier`, `condenser-fichier`, `activer-agent-principal` |
+| **Creer un agent** | 7 etapes | protocole-identification, fiche-agent-template | `valider-nommage`, `activer-agent-principal` |
+| **Creer un protocole** | 6 etapes | convention-protocoles, rvav-workflow | `valider-conventions`, `activer-agent-principal` |
+| **Creer / modifier / tester un outil** | 4 etapes | regles-choisir-agent | **activer Vulcain**, `activer-agent-principal` |
 | **Controler le cerveau-projet** | 6 etapes | rvav-workflow, convention-structures | `verifier-documents-manquants`, `rechercher-fichiers-vides`, `valider-conformite-ascii`, `valider-relecture`, `combos-valider-cerveau`, `valider-tableaux` |
 | **Gerer les sous-missions** | 3 etapes | protocole-boucles-dynamiques | `gerer-sous-mission` |
 
@@ -94,6 +96,8 @@ surcharges:
 | `rechercher-extension-fichier` | Extraire ou verifier une extension de fichier |
 
 > **REGLE** : Pour toute operation de base sur les fichiers, j'utilise CES outils, jamais les outils du systeme.
+> **ETAPE SYSTEME (choix .py/.sh)** : avant d'executer un outil, je consulte le profil systeme stocke (classeur-variables, variable profil-systeme) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
+> **ETAPE SESSION (profil-session -- MODE ID)** : au demarrage, je lance `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>` -- mon id m'est donne par l'utilisateur -- l'outil compare mon id aux sessions enregistrees et me rend MA session (id deja lie = retrouvee, id inconnu = prochaine libre + liaison). Je ne deduis JAMAIS ma session d'AGENTS.md. Puis je consulte le profil de MA session dans le classeur (variable `profil-session-<session-id>`) pour connaitre mon agent principal actuel et la session (session-llm-N).
 
 ---
 
@@ -109,7 +113,7 @@ surcharges:
 | 4 | Creer le fichier | - | `creer-fichier` |
 | 5 | Mettre a jour l'index | - | - |
 | **6** | **Ajouter les lecons si necessaire** | `protocole-auto-correction` | - |
-| **7** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
+| **7** | **Reactiver Cerberus** | - | `activer-agent-principal` |
 
 ---
 
@@ -119,10 +123,10 @@ surcharges:
 
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
-| **1** | **ACTIVER ATHENA** -- c'est elle qui redige les pense-betes | - | `mettre-a-jour-agents-md` |
+| **1** | **ACTIVER ATHENA** -- c'est elle qui redige les pense-betes | - | `activer-agent-principal` |
 | 2 | Verifier que le pense-bete est cree au statut ebauche | `pense-bete-template` | - |
 | 3 | Verifier que l'index est mis a jour | - | - |
-| **FIN** | **Reactiver Cerberus** (apres le retour de la chaine complete) | - | `mettre-a-jour-agents-md` |
+| **FIN** | **Reactiver Cerberus** (apres le retour de la chaine complete) | - | `activer-agent-principal` |
 
 > **SECTION FLUX PENSE-BETES** : Quand l'utilisateur demande un pense-bete, je n'ecris PAS le pense-bete moi-meme.
 > J'active **Athena** ([athena/athena.md](../athena/athena.md)), qui transforme la demande
@@ -148,7 +152,7 @@ surcharges:
 | 8 | Condenser si necessaire | - | `condenser-fichier` |
 | 9 | Purifier si necessaire | - | `nettoyer-fichier` |
 | **10** | **Ajouter les lecons dans corrections.md** | `protocole-auto-correction` | - |
-| **11** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
+| **11** | **Reactiver Cerberus** | - | `activer-agent-principal` |
 
 > **ETAPE 10 OBLIGATOIRE** : Apres chaque erreur corrigee, je dois ajouter la lecon dans `corrections.md`.
 > **ETAPE 11 OBLIGATOIRE** : Je dois TOUJOURS reactiver Cerberus a la fin de ma mission.
@@ -165,9 +169,9 @@ surcharges:
 | 2 | Creer le dossier | `convention-structures` | - |
 | 3 | Copier le template | `fiche-agent-template` | `copier-fichier` |
 | 4 | Creer corrections | `corrections-template` | `creer-fichier` |
-| 5 | Mettre a jour AGENTS.md | - | `mettre-a-jour-agents-md` |
+| 5 | Mettre a jour AGENTS.md | - | `activer-agent-principal` |
 | **6** | **Ajouter les lecons si necessaire** | `protocole-auto-correction` | - |
-| **7** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
+| **7** | **Reactiver Cerberus** | - | `activer-agent-principal` |
 
 ---
 
@@ -182,7 +186,7 @@ surcharges:
 | 3 | Creer le protocole | - | - |
 | 4 | Passer par RVAV | `rvav-workflow` | - |
 | **5** | **Ajouter les lecons si necessaire** | `protocole-auto-correction` | - |
-| **6** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
+| **6** | **Reactiver Cerberus** | - | `activer-agent-principal` |
 
 ---
 
@@ -197,7 +201,7 @@ surcharges:
 | 3 | Lancer le combo etat de sante (OBLIGATOIRE : relecture + cartes + ASCII) | `rvav-workflow` | `combos-valider-cerveau` |
 | 4 | Verifier la coherence des tableaux des fiches (nombres annonces, numerotation, completude des listes) | - | `valider-tableaux` |
 | 5 | Analyser les resultats | `rvav-workflow` | - |
-| **6** | **Reactiver Cerberus** | - | `mettre-a-jour-agents-md` |
+| **6** | **Reactiver Cerberus** | - | `activer-agent-principal` |
 
 ---
 
@@ -207,10 +211,10 @@ surcharges:
 
 | Etape | Action | Protocole | Outil |
 |---|---|---|---|
-| **1** | **ACTIVER VULCAIN** -- c'est lui le constructeur d'outils, pas moi | `regles-choisir-agent` | `mettre-a-jour-agents-md` |
+| **1** | **ACTIVER VULCAIN** -- c'est lui le constructeur d'outils, pas moi | `regles-choisir-agent` | `activer-agent-principal` |
 | 2 | Verifier que l'outil est cree/modifie au statut prepare | `protocole-outils` | - |
 | 3 | Verifier le second controle Janus apres le retour | `protocole-versionning-outils` | - |
-| **FIN** | **Reactiver Cerberus** (apres le retour de la chaine complete) | - | `mettre-a-jour-agents-md` |
+| **FIN** | **Reactiver Cerberus** (apres le retour de la chaine complete) | - | `activer-agent-principal` |
 
 > **REGLE ABSOLUE** : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME.
 > J'active **Vulcain** ([vulcain/vulcain.md](../vulcain/vulcain.md)), qui est le SEUL habilite
@@ -251,18 +255,18 @@ surcharges:
 
 ---
 
-## UTILISATION DE mettre-a-jour-agents-md
+## UTILISATION DE activer-agent-principal
 
 ### Pour activer un agent
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh activer "Agent" "Raison" "Mission"
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> "Agent" "Raison" "Mission"
 ```
 
 ### Pour reactiver Cerberus
 
 ```bash
-cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-agents-md/mettre-a-jour-agents-md.sh reactiver "Raison" "AgentPrecedent"
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "AgentPrecedent"
 ```
 
 > **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.

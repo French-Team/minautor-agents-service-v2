@@ -19,6 +19,25 @@
 > **Usage** : ce profil est consulte par les agents pour choisir la version d'un outil
 > (`.py` si Python dispo, sinon `.sh`). Voir `protocole-technologies`.
 
+### Variable : profil-session (une par session)
+
+| Champ | Type | Obligatoire | Description |
+|---|---|---|---|
+| `id` | string | [OK] | Identifiant : profil-session-<session-id> (ex: profil-session-llm-1) |
+| `session` | string | [OK] | Nom complet de session (ex: session-llm-1) |
+| `agent_principal` | string | [OK] | Agent principal actuel de la session |
+| `date_identification` | datetime | [OK] | Date de derniere identification/activation |
+| `source` | string | [OK] | Outil qui a ecrit : activer-agent-principal |
+| `date_maj` | datetime | [OK] | Date de derniere mise a jour |
+
+> **Usage** : une variable PAR session LLM.
+> **REGLE DE DERIVATION (IMMUABLE)**: l'id de la variable = `profil-session-` + la partie du nom complet de session APRES le prefixe `session-`.
+> Exemple : session `session-llm-1` -> id `profil-session-llm-1` ; session `session-llm-2` -> id `profil-session-llm-2`.
+> NE JAMAIS concatener `profil-session-` avec le nom complet (`profil-session-session-llm-1` est INTERDIT).
+> Elle est ecrite et mise a jour automatiquement par `activer-agent-principal`
+> a chaque sidentifier/activer/reactiver. Permet a chaque LLM de connaitre
+> SA session et SON agent principal depuis le classeur.
+
 Pour ajouter une variable, utiliser le template suivant :
 
 ```markdown
