@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.2.1 |
+| **Version** | 0.2.2 |
 | **Statut** | ebauche |
 | **Categorie** | generateurs |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -99,7 +99,7 @@ python3 generateurs-case.py <parcours.json> ajouter \
 | `--apres <id>` | Inserer apres cette case (recablage auto du suivant) |
 | `--branche <reponse>:<vers>` | Branche (repetable) |
 | `--indice-regle <texte>` | Indice regle (repetable) |
-| `--indice-outil <nom>:<chemin>[:commande]>` | Indice outil (repetable) |
+| `--indice-outil <nom>:<chemin>[:commande]>` | Indice outil (repetable) -- ajoute automatiquement l'indice fichier du `.md` (Pattern 9 : LIRE AVANT USAGE) si la doc existe |
 | `--indice-fichier <chemin>:<raison>` | Indice fichier (repetable) |
 
 **Types et contraintes :**
@@ -313,3 +313,4 @@ python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-cas
 | 0.1.1-beta | ebauche | Garde-fou Pattern 5 : detection des formulations passives a la creation/edition d'une case fin |
 | 0.2.0 | ebauche | Action ajouter-bloc : bloc MODELE COMPOSE (Pattern 7) cree d'un coup (decision 2 branches + deviation + rejoint), spec-guider-parcours v0.2.13 |
 | 0.2.1 | ebauche | Garde-fou REGLES IMMUABLES : a la creation/edition d'une case d'ecriture ou d'une fin, rappel ASCII (Pattern 2, position 1) + RVAV + delegation (chaine bout-en-bout spec-guider-parcours v0.2.15 : tests -> Morpheus, controle -> Janus, bilan consolide a Cerberus) |
+| 0.2.2 | ebauche | Pattern 9 (spec-guider-parcours v0.2.16) : tout `--indice-outil` ajoute automatiquement l'indice fichier du `.md` de l'outil (LIRE AVANT USAGE) si la doc existe -- portee SYSTEMATIQUE, decision utilisateur 2026-08-08 |

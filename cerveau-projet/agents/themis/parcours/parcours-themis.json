@@ -151,13 +151,14 @@
       "branches": [
         {
           "reponse": "OUI",
-          "vers": "c9"
+          "vers": "c8b"
         },
         {
           "reponse": "NON",
           "vers": "c3"
         }
-      ]
+      ],
+      "suivant": "c8b"
     },
     "c9": {
       "titre": "Ecrire le rapport dans themis/rapports/",
@@ -316,7 +317,7 @@
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py <fichier>"
         }
       ],
-      "suivant": "c9"
+      "suivant": "c8b"
     },
     "c18": {
       "titre": "RVAV -- phase Analyser",
@@ -418,6 +419,31 @@
         }
       ],
       "suivant": "c1"
+    },
+    "c8b": {
+      "titre": "CONFORMITE D EXECUTION : l agent a-t-il fait ce que sa carte ordonnait ?",
+      "type": "controle",
+      "question": "As-tu verifie (croisement mission / carte / deroulement reel) que l EXECUTION de la mission a suivi les ordres de la carte -- et pas seulement la structure du JSON ?",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "PATTERN 11 (spec v0.2.19) : la structure valide ne prouve PAS la stabilite. Une carte peut etre CONFORME et l execution avoir devie (Vulcain -> reactiver au lieu d activer Morpheus ; Cerberus -> analyser au lieu d activer Buffy). Verifier par CROISEMENT : mission recue + cases ordonnees par la carte + actions reelles (activation, fichiers modifies, rapports)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir : le croisement mission / carte / deroulement reel (message d activation/reactivation, fichiers modifies via detecter-impacts, rapports) est la SEULE preuve de la conformite d execution."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c9"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c3"
+        }
+      ]
     }
   }
 }

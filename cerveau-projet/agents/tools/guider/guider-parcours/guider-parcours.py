@@ -30,7 +30,7 @@ import json
 import sys
 from pathlib import Path
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -146,6 +146,25 @@ def lister_cases(donnees):
 # Affichage d'une case
 # ------------------------------------------------------------------
 
+def _chemin_doc_outil(nom, chemin):
+    """Deduit le chemin du .md de documentation d'un outil depuis son indice.
+
+    Le .md d'un outil vit dans le MEME dossier que l'outil, avec le meme nom
+    (ex: agents/tools/lire/lire-fichier/lire-fichier.md). Le chemin de
+    l'indice pointe vers le DOSSIER (se termine par /) ou vers un fichier .py/.sh.
+    Retourne le chemin du .md deduit, ou None si non deduisible.
+    """
+    if not chemin:
+        return None
+    c = chemin.rstrip("/")
+    # Le chemin pointe vers un fichier precis (.py/.sh) : remonter au dossier
+    if c.endswith(".py") or c.endswith(".sh"):
+        dossier = c.rsplit("/", 1)[0]
+    else:
+        dossier = c
+    return dossier + "/" + nom + ".md"
+
+
 def afficher_indices(indices):
     """Affiche les indices de la case (regle / outil / fichier)."""
     if not indices:
@@ -163,6 +182,13 @@ def afficher_indices(indices):
                 print("         chemin: %s" % chemin)
             if ind.get("commande"):
                 print(_couleur("         > ", "cyan") + ind.get("commande"))
+            # Pattern 9 (spec v0.2.16) : lire le .md de l'outil AVANT de l'executer
+            doc = _chemin_doc_outil(nom, chemin)
+            if doc:
+                if Path(doc).is_file():
+                    print(_couleur("         LIRE AVANT USAGE: ", "jaune") + doc)
+                else:
+                    print(_couleur("         LIRE AVANT USAGE (doc a verifier): ", "jaune") + doc)
         elif typ == "fichier":
             print(_couleur("[FICHIER] ", "jaune") + ind.get("chemin", "?"))
             if ind.get("raison"):

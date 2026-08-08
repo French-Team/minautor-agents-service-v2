@@ -470,6 +470,29 @@ les mots composees deja qualifies (role_principal, role_specifique) restent inch
 6. PIEGE OPTION : `--vers` n existe que pour supprimer (pas pour ajouter) -- un ajout de fin avec --vers echoue silencieusement dans le test.
 7. VALIDATION : py_compile + bash -n, parite py/sh (wrapper pur .sh = parite par construction), ASCII 0 sur 5 fichiers, nommage OK, tests reels sur copies workspace (3 cas de garde-fou : fin delegation -> rappel chaine ; edition fin -> rappel chaine ; case ecriture sans ASCII -> rappel ASCII + RVAV).
 
+## [LECON] 2026-08-08 -- verifier-documents-manquants v0.3.0 (extension .py + branchement procedure 4g)
+
+**Tache** : etendre l outil EXISTANT verifier-documents-manquants pour couvrir les .py (il ne verifiait que les paires .sh/.md) et le brancher dans la procedure 4g du Pattern 9 (decision utilisateur : etendre l outil existant, pas en creer un nouveau).
+**Lecons** :
+1. UN OUTIL EXISTE MAIS N EST PAS BRANCHE = INVISIBLE (lecon des outils fantomes) : verifier-documents-manquants existait depuis le debut mais (a) ne couvrait pas les .py (les parcours referencent surtout les .py depuis la vague 2) et (b) n etait PAS cite dans la procedure 4g du Pattern 9 -- la spec disait verifier a la main que le .md deduit existe, alors que l outil le fait automatiquement. Avant d ecrire une verification manuelle dans une spec, chercher l outil qui l automatise deja.
+2. EXTENSION .PY : la logique de paire est identique (script -> .md du meme nom), on ajoute une 2e passe pour .py et le .md doit trouver son script en .sh OU .py (un .md avec .sh mais sans .py n est PAS un manquant : la regle est au moins un script).
+3. FILTRE FAUX POSITIFS ELARGI : le scan tools/ revelait 9 manquants qui etaient TOUS des faux positifs non couverts -- dossier tests/, prefixe tester- (avec -v0xx : les fichiers de test versionnes), suffixe -test.md, et outils-base.md (document de support racine). PIEGE : ne PAS filtrer tout tester- : les outils REELS tester-protection-* (dossier tester/protections/) doivent rester verifies -- le filtre ne les ecarte que dans tests/ ou avec -v0xx.
+4. WRAPPER PUR : le .sh (heredoc 248 lignes avec un bug de structure) est converti en wrapper pur (exec python3 du .py a cote, pattern guider-parcours v0.3.0) -- parite garantie par construction, plus de divergence de version ni de bug de heredoc.
+5. VALIDATION : parite py/sh, test negatif (un .py sans .md est detecte 1 manquant), scan complet tools/ = 0 manquant (110 .sh, 95 .py, 111 .md), protections toujours verifiees, ASCII 0 sur 4 fichiers, branchement verifie dans la spec (procedure 4g point 3 = lancer l outil, resultat attendu 0 manquant).
+6. VERSION DOCUMENTEE : la doc .md v0.3.0 reference le Pattern 9 et la procedure 4g comme usage principal (situation Quand l utiliser + relation avec guider-parcours).
+
+## [LECON] 2026-08-08 -- generateurs-carte v0.2.0 (squelette conforme aux 11 patterns : Pattern 10 + Pattern 3)
+
+**Tache** : mettre a jour le squelette creer de generateurs-carte pour integrer le Pattern 10 (une carte = un role) et le Pattern 3 (rappel des combos) dans les nouvelles cartes (decision utilisateur, suite du constat stabilite des cartes -- la spec-guider-parcours est passee a v0.2.19 avec les 11 patterns, mais le squelette nait encore avec les patterns 4-5-6-7-8).
+**Lecons** :
+1. UN SQUELETTE DE CARTE EST LE MOMENT D ENTRER DANS LE CYCLE DE VIE : si le squelette n integre pas un pattern au moment ou il est ajoute a la spec, TOUTE carte nee de l outil apres cette date nait SANS ce pattern -- les futures cartes se degradent silencieusement. Le squelette doit suivre la spec pattern par pattern (ici v0.2.19 = 11 patterns).
+2. POSITIONNEMENT DES RAPPELS : Pattern 10 (UNE CARTE = UN ROLE) place en tete des indices de c1 (la case Mission, la premiere action de la carte -- l agent voit le role AVANT de choisir une mission) ; Pattern 3 (RAPPEL DES COMBOS) place en tete des indices de c2 (la case action exemple -- l agent pense combo AVANT d enchainer des outils) ; les indices existants (Pattern 7, ASCII) passent en position 2-3 sans conflit.
+3. TEXTES DES RAPPELS : Pattern 10 = la carte ne contient QUE des actions propres au role de l agent (activation/verification/decision), JAMAIS d outils d analyse/execution d un autre role + piege du glissement (lire pour DECIDER vs lire pour EXECUTER) ; Pattern 3 = une suite lineaire d outils repetee (>= 2) ou longue (>= 3) doit etre encapsulee dans un combo Lancer le combo X (combos-moteur + definition-combo.json, protocole-creation-combos) -- 1 case = 1 combo.
+4. PIEGE CLI CONFIRME (deja note) : generateurs-carte prend l ordre `creer <parcours>` (action avant chemin), generateurs-case `<parcours> <action>` (chemin avant action) -- ne pas copier l ordre de l un dans l autre.
+5. PIEGE TEST : ne PAS creer le squelette de test dans /tmp (hors workspace, regle workspace : ecriture = workspace seul) -- creer dans un dossier temporaire DU WORKSPACE (.tmp-gc-test/) puis supprimer apres validation.
+6. VALIDATION : py_compile, squelette de test cree (c1 porte Pattern 10, c2 porte Pattern 3 en position 1 + Pattern 7 + ASCII), navigation PARCOURS TERMINE, --liste 7 cases, references validees, ASCII 0 sur py + md, nommage code 0, parite py/sh (wrapper pur = parite par construction), doc .md bumpee v0.1.1 -> v0.2.0 avec ligne de versionning.
+7. LA CHAINE CONTINUE (Pattern 8) : Vulcain termine et ACTIVE Morpheus pour tester (c est l agent delegue qui active le suivant a SA fin, pas Cerberus).
+
 ## PHILOSOPHIE -- Principes de comportement
 
 | **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |

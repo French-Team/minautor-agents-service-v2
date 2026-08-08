@@ -1,0 +1,62 @@
+{
+ "combo": {
+  "nom": "combo-corriger-fichier",
+  "description": "Correction complete d'un fichier du cerveau : corriger-nommage -> corriger-liens -> corriger-emojis -> corriger-accents-zones-sensibles -> condenser-fichier -> nettoyer-fichier. Le fichier a corriger est passe en variable initiale --var fichier=<chemin>.",
+  "version": "0.1.0",
+  "case_depart": "c1"
+ },
+ "cases": {
+  "c1": {
+   "titre": "Executer corriger-nommage",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-nommage/corriger-nommage.py {fichier}",
+   "sortie": "resultat_nommage",
+   "suivant": "c2"
+  },
+  "c2": {
+   "titre": "Executer corriger-liens",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-liens/corriger-liens.py {fichier}",
+   "sortie": "resultat_liens",
+   "suivant": "c3"
+  },
+  "c3": {
+   "titre": "Executer corriger-emojis",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-emojis/corriger-emojis.py {fichier}",
+   "sortie": "resultat_emojis",
+   "suivant": "c4"
+  },
+  "c4": {
+   "titre": "Executer corriger-accents-zones-sensibles",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py {fichier}",
+   "sortie": "resultat_accents",
+   "suivant": "c5"
+  },
+  "c5": {
+   "titre": "Executer condenser-fichier",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/condenser/condenser-fichier/condenser-fichier.py {fichier}",
+   "sortie": "resultat_condense",
+   "suivant": "c6"
+  },
+  "c6": {
+   "titre": "Executer nettoyer-fichier",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/nettoyer/nettoyer-fichier/nettoyer-fichier.py {fichier}",
+   "sortie": "resultat_nettoye",
+   "suivant": "c7"
+  },
+  "c7": {
+   "titre": "FIN - correction du fichier terminee",
+   "type": "fin",
+   "message": "Correction complete du fichier terminee : nommage, liens, emojis, accents, condensation et nettoyage executes. Si des corrections ont ete signalees, verifier le fichier puis poursuivre la chaine (controle des impacts)."
+  }
+ },
+ "identite": {
+  "type": "combo",
+  "appartient_a": "commun",
+  "commun": true
+ }
+}

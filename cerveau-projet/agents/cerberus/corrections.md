@@ -124,6 +124,17 @@ preferences:
 
 ---
 
+## [LECON] 2026-08-08 -- Verifier la carte de l agent avant d accepter sa reactivation (chaine Pattern 8)
+
+**Tache** : corriger la violation de la carte de Vulcain (mission etendre verifier-documents-manquants v0.3.0) : Vulcain a reactive Cerberus directement au lieu d activer Morpheus comme l ordonnait sa fin c15 (MORPHEUS ACTIVE pour les tests).
+**Lecons** :
+1. PROBLEME : quand un agent delegue termine et reactive Cerberus, je n ai PAS verifie que cette reactivation etait conforme a SA carte. Or le Pattern 8 (chaine bout-en-bout) ordonne que le maillon ACTIVE le suivant a SA fin (Vulcain -> Morpheus -> Janus -> Cerberus). La reactivation directe de Cerberus par un maillon dont la carte dit ACTIVER LE SUIVANT est une ANOMALIE qui coupe la chaine (le maillon suivant ne fait rien).
+2. LA CARTE EST LA SOURCE DE VERITE DE LA FIN : avant d accepter le retour d un agent, verifier QUELLE fin sa carte ordonne pour la mission executee (grep fin du parcours-<agent>.json ou --liste) : fin = reactiver Cerberus (activation directe, conforme) OU fin = J ACTIVE <suivant> (chaine, la reactivation directe est alors une violation).
+3. PIEGE DOUBLE FAUTE : en reactivant Cerberus, j ai fait d une pierre deux coups : (a) j ai accepte la violation de la carte de Vulcain, (b) j ai court-cuite Morpheus et Janus. La reparation = reactiver la chaine au maillon manquant (activer Morpheus) et documenter l ecart.
+4. REGLE POUR TOUJOURS : a CHAQUE reactivation d un agent delegue, verifier la fin de SA carte pour la mission executee avant de considerer la mission terminee. Si la carte ordonne d activer le suivant, relancer la chaine (activer le maillon) au lieu de clore.
+
+---
+
 ## Connexions
 
 | Fichier | Role |

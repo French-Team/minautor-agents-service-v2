@@ -60,18 +60,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Nom Agent** | morpheus |
+| **Role Agent** | Testeur -- validation des outils et des tests |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | buffy (retour de mission) |
-| **Raison** | CHAINE BOUT-EN-BOUT + REGLES IMMUABLES DANS LES GENERATEURS : mission terminee (Buffy + Vulcain + Themis). (1) Pattern 8 (spec v0.2.15) : Cerberus active Vulcain -> Vulcain ACTIVE Morpheus -> Morpheus ACTIVE Janus -> Janus REACTIVE Cerberus avec bilan consolide ; RVAV a chaque maillon avant activation. (2) Parcours modifies : vulcain 24 cases (RELAIS/RETOUR/CLOTURE supprimes, fins MORPHEUS ACTIVE, RVAV c7b/c13b), morpheus (fin Activer Janus), janus (RVAV c9 + bilan consolide), cerberus (c7 flux chaine). (3) Generateurs : generateurs-case v0.2.1 garde-fou RVAV+delegation+ASCII, generateurs-carte v0.1.1 squelette c2b RVAV. (4) Re-audit Themis 8 patterns : 11/11 CONFORME 0 ecart. (5) RVAV : navigation 7/7 PARCOURS TERMINE, ASCII 0 sur 15 fichiers, valider-cartes-decision 11/11. |
+| **Fiche** | [cerveau-projet/agents/morpheus/morpheus.md](cerveau-projet/agents/morpheus/morpheus.md) |
+| **Corrections** | [cerveau-projet/agents/morpheus/corrections.md](cerveau-projet/agents/morpheus/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | MISSION (Vulcain, chaine bout-en-bout Pattern 8): TESTER generateurs-carte v0.2.0 (squelette creer enrichi Pattern 10 + Pattern 3). CONTEXTE: Vulcain a modifie le squelette creer de generateurs-carte.py (v0.1.1 -> v0.2.0) : indice Pattern 10 UNE CARTE = UN ROLE ajoute en tete des indices de c1 + indice Pattern 3 RAPPEL DES COMBOS ajoute en tete des indices de c2 (spec-guider-parcours v0.2.19). Doc .md bumpee v0.2.0. Le .sh est un wrapper pur (parite par construction). TACHE: (1) VERIFIER la synthese : py_compile + ASCII 0 sur py/md + nommage code 0 + version --version 0.2.0 ; (2) TESTER le squelette : creer une carte factice dans le workspace (.tmp-morpheus-test/, JAMAIS hors workspace) et verifier - c1 porte l indice Pattern 10 (texte UNE CARTE = UN ROLE + role de l agent), c2 porte l indice Pattern 3 (RAPPEL DES COMBOS) en POSITION 1 (avant Pattern 7 et ASCII), navigation PARCOURS TERMINE, --liste OK, json valide ; (3) TESTER la regression : analyser + detecter + dupliquer-chemin fonctionnent toujours sur la carte creee (0 anomalie detectee) ; (4) TESTER la parite py/sh : les 2 versions produisent le meme squelette (--dry-run) ; (5) REDIGER le verdict dans tes corrections puis REACTIVER Vulcain avec le rapport (Pattern 8 : tu actives le maillon precedent... non - la chaine continue : apres ton rapport, JANUS controle. Relis TA fiche et TES corrections d abord.) |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-08 20:58 |
+| session-llm-1 | llm-1 | morpheus | 2026-08-08 21:45 |
 | session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
 | session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |

@@ -116,19 +116,6 @@
           "raison": "Matrice qui fait quoi : identifier l'agent habilite pour la demande"
         }
       ],
-      "suivant": "c4"
-    },
-    "c4": {
-      "titre": "Lister les outils disponibles",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "outil",
-          "nom": "lister-outils",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-outils/",
-          "commande": "python3 cerveau-projet/agents/tools/lister/lister-outils/lister-outils.py"
-        }
-      ],
       "suivant": "c5"
     },
     "c5": {
@@ -201,23 +188,6 @@
           "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
         }
       ],
-      "suivant": "c9"
-    },
-    "c9": {
-      "titre": "Lire la fiche et les corrections de l'agent",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- LECTURE : chaque agent lit SA fiche et SES corrections quand il est active. Je lui donne le relais ; c'est lui qui lit ses fichiers en prenant le relais."
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/<agent>/<agent>.md"
-        }
-      ],
       "suivant": "c10"
     },
     "c10": {
@@ -263,15 +233,8 @@
       "type": "indice",
       "indices": [
         {
-          "type": "fichier",
-          "chemin": "AGENTS.md",
-          "raison": "Lire la raison de la reactivation dans le bloc de la session"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md"
+          "type": "regle",
+          "texte": "REGLE ABSOLUE -- ROLE : je lis la raison de la reactivation (dans la conversation et AGENTS.md) pour DECIDER de la suite, jamais pour executer. Je reste le coordinateur : j active l agent habilite."
         }
       ],
       "suivant": "c12a"
@@ -350,13 +313,7 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "ANTI-BOUCLE : je n'active PAS Clio si les seuls fichiers modifies sont ceux de Clio (README.md, AGENTS.md, AGENTS-historique.md) ou les rapports de controle de Janus."
-        },
-        {
-          "type": "outil",
-          "nom": "lister-agents",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-agents/",
-          "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
+          "texte": "ANTI-BOUCLE : je n active PAS Clio si les seuls fichiers modifies sont ceux de Clio (README.md, AGENTS.md, AGENTS-historique.md) ou les rapports de controle de Janus."
         }
       ],
       "branches": [

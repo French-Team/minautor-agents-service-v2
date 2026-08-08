@@ -60,6 +60,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `combo-controle-modification` | Suite de validation d'une modification (chemin modification du parcours janus) : nommage recursif -> liens -> separation -> sante+tableaux -> surcharge -> traces externes | [combos/combo-controle-modification/](combos/combo-controle-modification/) |
 | `combo-controle-outil` | Suite de validation d'un outil (chemin outil du parcours janus) : valider-conformite-ascii -> valider-cartes-decision --tous -> valider-liens | [combos/combo-controle-outil/](combos/combo-controle-outil/) |
 | `combo-corriger-ascii` | Suite de correction des accents puis validation ASCII (parcours vulcain) : corriger-accents --all --recursive -> valider-conformite-ascii | [combos/combo-corriger-ascii/](combos/combo-corriger-ascii/) |
+| `combo-corriger-fichier` | Correction complete d'un fichier du cerveau (chemin modifier du parcours buffy, anciennes cases c12+c13) : corriger-nommage -> corriger-liens -> corriger-emojis -> corriger-accents-zones-sensibles -> condenser-fichier -> nettoyer-fichier. Fichier passe en --var fichier=<chemin> | [combos/combo-corriger-fichier/](combos/combo-corriger-fichier/) |
 | `combo-sante-tableaux` | Suite de controle de la sante du cerveau (chemin controler du parcours buffy) : verifier-documents-manquants -> rechercher-fichiers-vides -> combos-valider-cerveau -> valider-tableaux | [combos/combo-sante-tableaux/](combos/combo-sante-tableaux/) |
 
 ### Condenser
@@ -384,7 +385,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Ajouter | 1 |
 | Analyser | 2 |
 | Changer | 1 |
-| Combos | 11 |
+| Combos | 12 |
 | Condenser | 1 |
 | Copier | 2 |
 | Corriger | 5 |
@@ -414,6 +415,6 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Templates | 1 |
 | **Total** | **100** |
 
-> **Note sur le decompte** : 85 outils d'action + 11 combos + 3 protections + 1 template = 100 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
+> **Note sur le decompte** : 85 outils d'action + 12 combos + 3 protections + 1 template = 101 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 
 ---

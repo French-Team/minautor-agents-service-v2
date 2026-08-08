@@ -5,7 +5,7 @@
 # conforme aux patterns 4-5-6-7, analyser les chemins de case_depart aux fins,
 # detecter les anomalies (boucles, cases inatteignables, references cassees),
 # dupliquer un chemin (groupe de cases) avec recablage et prefixe.
-# Version : 0.1.0
+# Version : 0.2.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -26,7 +26,7 @@ import sys
 from collections import deque
 from pathlib import Path
 
-VERSION = "0.1.1"
+VERSION = "0.2.0"
 STATUT = "ebauche"
 
 # Racine du projet : 5 remontees depuis ce fichier
@@ -158,7 +158,7 @@ def valider_auto(chemin, donnees):
 # ------------------------------------------------------------
 
 def squelette_carte(agent, nom, version, description):
-    """Construit le squelette d'une carte conforme aux patterns 4-5-6-7."""
+    """Construit le squelette d'une carte conforme aux patterns 4-5-6-7-8-10-3."""
     cases = {
         "c0": {
             "titre": "Relecture : ta fiche et tes corrections en memoire ?",
@@ -225,6 +225,12 @@ def squelette_carte(agent, nom, version, description):
             "titre": "Mission",
             "type": "question",
             "question": "Quelle est la mission ?",
+            "indices": [
+                {
+                    "type": "regle",
+                    "texte": "REGLE PATTERN 10 (spec-guider-parcours v0.2.18) : UNE CARTE = UN ROLE - cette carte ne contient QUE des actions propres au role de %s : activation, verification, decision. JAMAIS d outils d ANALYSE ou d EXECUTION appartenant au role d un autre agent (lister-outils, detecter-impacts, generateurs-carte hors edition de SES cases...). PIEGE DU GLISSEMENT : lire pour DECIDER est du role ; lire pour EXECUTER est de la derive." % agent,
+                },
+            ],
             "branches": [
                 {"reponse": "a-definir", "vers": "c2"},
                 {"reponse": "autre", "vers": "c9"},
@@ -234,6 +240,10 @@ def squelette_carte(agent, nom, version, description):
             "titre": "Exemple d'action (a completer)",
             "type": "indice",
             "indices": [
+                {
+                    "type": "regle",
+                    "texte": "REGLE PATTERN 3 (spec-guider-parcours v0.2.4) : RAPPEL DES COMBOS - une SUITE LINEAIRE d outils repetee (>= 2 occurrences) ou longue (>= 3 outils) doit etre encapsulee dans un COMBO : case unique Lancer le combo X qui reference combos-moteur + definition-combo.json (protocole-creation-combos), au lieu d enchainer les outils dans la carte. La carte reste allegee : 1 case = 1 combo.",
+                },
                 {
                     "type": "regle",
                     "texte": "REGLE PATTERN 7 (spec-guider-parcours v0.2.13) : toute case de DECISION porte AU MINIMUM 2 branches (sauf action directe). Completez cette carte avec generateurs-case (ajouter/editer/supprimer) ou generateurs-carte (dupliquer-chemin).",

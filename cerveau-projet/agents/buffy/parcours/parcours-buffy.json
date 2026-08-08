@@ -260,57 +260,7 @@
           "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin> <ancien> <nouveau>"
         }
       ],
-      "suivant": "c12"
-    },
-    "c12": {
-      "titre": "Corriger nommage / liens / emojis / accents",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "outil",
-          "nom": "corriger-nommage",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-nommage/",
-          "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-nommage/corriger-nommage.py <chemin>"
-        },
-        {
-          "type": "outil",
-          "nom": "corriger-liens",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-liens/",
-          "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-liens/corriger-liens.py <chemin>"
-        },
-        {
-          "type": "outil",
-          "nom": "corriger-emojis",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-emojis/",
-          "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-emojis/corriger-emojis.py <chemin>"
-        },
-        {
-          "type": "outil",
-          "nom": "corriger-accents-zones-sensibles",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-          "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py <chemin>"
-        }
-      ],
-      "suivant": "c13"
-    },
-    "c13": {
-      "titre": "Condenser / nettoyer si necessaire",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "outil",
-          "nom": "condenser-fichier",
-          "chemin": "cerveau-projet/agents/tools/condenser/condenser-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/condenser/condenser-fichier/condenser-fichier.py <chemin>"
-        },
-        {
-          "type": "outil",
-          "nom": "nettoyer-fichier",
-          "chemin": "cerveau-projet/agents/tools/nettoyer/nettoyer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/nettoyer/nettoyer-fichier/nettoyer-fichier.py <chemin>"
-        }
-      ],
-      "suivant": "c13b"
+      "suivant": "c37"
     },
     "c14": {
       "titre": "Valider le resultat (RVAV)",
@@ -730,7 +680,7 @@
           "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py PARCOURS ajouter|editer|supprimer [--case ID] [--apres C] [--branche REP:VERS] [--suivant C]"
         }
       ],
-      "suivant": "c12"
+      "suivant": "c37"
     },
     "c10b": {
       "titre": "Question : parcours a modifier ?",
@@ -827,6 +777,37 @@
           "vers": "c14"
         }
       ]
+    },
+    "c37": {
+      "titre": "Lancer le combo corriger-fichier",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d executer combos-moteur (ex: Je lance le combo combo-corriger-fichier : cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json)."
+        },
+        {
+          "type": "regle",
+          "texte": "PATTERN 3 (spec v0.2.18) : cette case lance un COMBO - combos-moteur execute la definition (remplace la suite corriger-nommage + corriger-liens + corriger-emojis + corriger-accents + condenser + nettoyer)."
+        },
+        {
+          "type": "outil",
+          "nom": "combos-moteur",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json --var fichier=<chemin>"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json",
+          "raison": "Definition du combo a lancer (cases outil + fin)"
+        }
+      ],
+      "suivant": "c13b"
     }
   }
 }

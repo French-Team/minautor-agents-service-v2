@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.1.1 |
+| **Version** | 0.2.0 |
 | **Statut** | ebauche |
 | **Categorie** | generateurs |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -20,10 +20,10 @@ identite:
 ## Description
 
 **Agit sur une CARTE DE DECISION COMPLETE (parcours JSON)** : creer un
-squelette conforme aux patterns 4-5-6-7, analyser les chemins de `case_depart`
-aux fins, detecter les anomalies (boucles, cases inatteignables, impasses,
-references cassees), dupliquer un chemin (groupe de cases) avec recablage et
-prefixe.
+squelette conforme aux 11 patterns (dont 4-5-6-7-8-10-3), analyser les
+chemins de `case_depart` aux fins, detecter les anomalies (boucles, cases
+inatteignables, impasses, references cassees), dupliquer un chemin (groupe de
+cases) avec recablage et prefixe.
 
 **Complementaire de `generateurs-case`** : `generateurs-case` agit sur UNE case
 (ajouter/editer/supprimer), `generateurs-carte` agit sur la carte COMPLETE
@@ -205,3 +205,4 @@ python3 cerveau-projet/agents/tools/generateurs/generateurs-carte/generateurs-ca
 |---|---|---|
 | 0.1.0 | ebauche | Creation : creer (squelette patterns 4-5-6-7), analyser (chemins BFS), detecter (5 types d'anomalies), dupliquer-chemin (recablage + prefixe), validation auto, parite py/sh |
 | 0.1.1 | ebauche | Squelette creer ENRICHI (regles immuables) : case c2b RVAV avant la fin (boucle Rechercher/Verifier/Analyser/Valider + fichier rvav-workflow) + rappel ASCII dans c2 + fin c9 rappelant la chaine bout-en-bout (spec-guider-parcours v0.2.15 : J ACTIVE le maillon suivant a MA fin, dernier maillon REACTIVE Cerberus avec bilan consolide) -- constat utilisateur 2026-08-08 : les nouvelles cartes ne rappelaient plus RVAV ni la delegation |
+| 0.2.0 | ebauche | Squelette creer CONFORME AUX 11 PATTERNS : indice Pattern 10 UNE CARTE = UN ROLE ajoute en tete des indices de c1 (la carte ne contient QUE des actions propres au role de l agent, jamais d outils d analyse/execution d un autre role, piege du glissement lire pour decider vs lire pour executer) + indice Pattern 3 RAPPEL DES COMBOS ajoute en tete des indices de c2 (une suite lineaire d outils repetee ou longue doit etre encapsulee dans un combo Lancer le combo X : combos-moteur + definition-combo.json, protocole-creation-combos) -- decision utilisateur 2026-08-08 : les nouvelles cartes doivent naitre conformes au Pattern 10 et au Pattern 3 (spec-guider-parcours v0.2.19) |

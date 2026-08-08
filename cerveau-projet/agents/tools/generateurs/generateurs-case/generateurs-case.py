@@ -23,7 +23,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 STATUT = "ebauche"
 
 # Racine du projet : 5 remontees depuis ce fichier
@@ -190,6 +190,24 @@ _OUTILS_ECRITURE = (
 )
 
 
+def chemin_doc_outil(nom, chemin):
+    """Deduit le chemin du .md de documentation d'un outil depuis son indice (Pattern 9).
+
+    Le .md d'un outil vit dans le MEME dossier que l'outil, avec le meme nom
+    (ex: agents/tools/lire/lire-fichier/lire-fichier.md). Le chemin de l'indice
+    pointe vers le DOSSIER (se termine par /) ou vers un fichier .py/.sh.
+    Retourne le chemin du .md deduit, ou None si non deduisible.
+    """
+    if not chemin:
+        return None
+    c = chemin.rstrip("/")
+    if c.endswith(".py") or c.endswith(".sh"):
+        dossier = c.rsplit("/", 1)[0]
+    else:
+        dossier = c
+    return dossier + "/" + nom + ".md"
+
+
 def formuler_avertissement_regles_immuables(case):
     """Garde-fou REGLES IMMUABLES (non-bloquant) : rappelle RVAV + delegation (Morpheus/Janus)
     sur les cases d'ecriture (outil d'ecriture dans les indices) et les fins de delegation.
@@ -326,6 +344,16 @@ def construire_case(args, donnees):
             if len(parties) >= 3:
                 indice["commande"] = ":".join(parties[2:])
             indices.append(indice)
+            # Pattern 9 (spec-guider-parcours v0.2.16) : ajouter automatiquement
+            # l'indice fichier du .md de l'outil pour que l'agent lise la doc
+            # AVANT d'executer (portee SYSTEMATIQUE, decision utilisateur).
+            doc = chemin_doc_outil(parties[0], parties[1])
+            if doc and Path(doc).is_file():
+                indices.append({
+                    "type": "fichier",
+                    "chemin": doc,
+                    "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
+                })
     if args.indices_fichier:
         for spec in args.indices_fichier:
             parties = spec.split(":")

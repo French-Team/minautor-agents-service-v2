@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.2.15 |
+| **Version** | 0.3.0 |
 | **Statut** | ebauche |
 | **Categorie** | guider |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -298,6 +298,7 @@ demarre ensuite apres l'identification.
 
 | Version | Statut | Changements |
 |---|---|---|
+| 0.3.0 | ebauche | **LIRE LE .MD AVANT USAGE (Pattern 9, spec v0.2.16) : affichage auto de la ligne `LIRE AVANT USAGE : <outil.md>` pour CHAQUE indice outil** (deduite du chemin : dossier + nom + .md, ou remontee au dossier si chemin .py/.sh ; doc verifiee, sinon 'doc a verifier'). Portee SYSTEMATIQUE (decision utilisateur 2026-08-08) : l'agent lit la doc de l'outil avant de l'executer. Le .sh est CONVERTI EN WRAPPER PUR (parite garantie par construction). Couvre les 193 indices outil existants sans les modifier |
 | 0.2.15 | ebauche | **CHAINE BOUT-EN-BOUT (Pattern 8, spec v0.2.15) : la delegation ne repasse PLUS par Cerberus au milieu.** Cerberus active Vulcain -> Vulcain finit et ACTIVE Morpheus -> Morpheus finit et ACTIVE Janus -> Janus REACTIVE Cerberus avec le bilan consolide. Chaque maillon passe la boucle RVAV sur son travail AVANT d'activer le suivant. L'ancien modele boucle (Vulcain -> Morpheus -> Vulcain puis Cerberus) est remplace pour les chaines multi-maillons. Decision utilisateur 2026-08-08 : c'est l'agent delegue qui active le suivant a SA fin, pas Cerberus (plus fiable) |
 | 0.2.14 | ebauche | **REPRISE SANS BOUCLE (v0.2.0) : le message `QUESTION POUR L'AGENT` indique la commande exacte `--case <case-courante> --reponses 'REPONSE'` pour REPRENDRE la navigation depuis la case courante.** Lecon log-externe 2026-08-08 : sans `--case`, le LLM relancait depuis c0 et la question honnete de relecture etait REPOSEE a chaque relance -> boucle de relecture (NON -> relire -> relance -> re-NON). Avec `--case`, c0 n'est jamais rejouee |
 | 0.2.13 | ebauche | **MODE AGENT non-bloquant (v0.2.0) : les questions sont destinees a l'agent, jamais a un `input()` clavier.** Sans `--reponses` (ou reponses epuisees), l'outil affiche `=== QUESTION POUR L'AGENT ===` + les reponses possibles puis s'arrete proprement (code 0) ; l'agent repond et relance avec `--reponses 'REPONSE'`. Option `--interactif` reservee a l'usage humain. Cause : le demarrage d'un 2e LLM bloquait sur la saisie clavier (input) au lieu de poser la question a l'agent. Doc alignee (mode agent par defaut) |
