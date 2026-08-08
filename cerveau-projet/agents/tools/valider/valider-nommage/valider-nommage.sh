@@ -1,17 +1,23 @@
 #!/bin/bash
 # valider-nommage.sh
 # Verifier que le nommage est correct selon les conventions
-# Version: 0.2.0
-# Date: 2026-08-05
+# Version: 0.3.0
+# Date: 2026-08-08
 # Auteur: Vulcain
+#
+# Mode --mots-seuls : applique la REGLE FONDAMENTALE "aucun mot seul"
+# (convention-renommage.md) : tout identifiant = 2+ mots. Detecte les
+# IDENTIFIANTS generiques a un seul mot (nom, role, statut, id, date,
+# cible...) dans les blocs YAML (agent:, profil:, identite:) et les objets
+# JSON identite/agent/profil.
 
 # Configuration
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
-DATE="2026-08-05"
+VERSION="0.3.0"
+DATE="2026-08-08"
 
 # Couleurs pour la sortie
 RED='\033[0;31m'
@@ -19,6 +25,21 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
+
+# Identifiants generiques INTERDITS a un seul mot (le coeur de la regle)
+MOTS_SEULS_INTERDITS="nom role statut id date cible titre description theme type_controle derniere mise"
+
+# Cles autorisees (exceptions structurelles + cles de schema de fiche)
+CLES_AUTORISEES="type commun tags appartient_a version cree specialites forces faiblesses config commandes outils parcours corrections fiche profil identite session agent raison mission"
+
+# Dossiers de TRACES HISTORISEES ignores en mode recursif
+DOSSIERS_TRACES="controles rapports retro-actions historique exemples"
+
+# Fichiers de TRACES DOCUMENTAIRES assumees (notes d'exemple YAML historiques)
+FICHIERS_TRACES="mission-condenseur.md"
+
+# Blocs d'identification a verifier
+BLOCS_IDENTIFICATION="identite agent profil session"
 
 # Fonction d'aide
 aide() {
@@ -33,8 +54,9 @@ aide() {
     echo "  --aide, -h          Afficher cette aide"
     echo "  --verbose, -v       Afficher les details"
     echo "  --version           Afficher la version"
-    echo "  --type TYPE         Type de fichier (protocole, convention, agent, outil)
-  --recursive, -r     Valider tous les outils d'un dossier (ignore --type)"
+    echo "  --type TYPE         Type de fichier (protocole, convention, agent, outil)"
+    echo "  --recursive, -r     Valider tous les outils d'un dossier (ignore --type)"
+    echo "  --mots-seuls        Regle fondamentale 'aucun mot seul' (YAML/JSON)"
     echo ""
     echo "Types de fichiers:"
     echo "  protocole     nom-protocole.XX.XX.statut.md"
@@ -45,11 +67,122 @@ aide() {
     echo "Statuts valides (protocoles):"
     echo "  ebauche, prepare, dev, test, valide"
     echo ""
+    echo "Mode --mots-seuls:"
+    echo "  Applique la REGLE FONDAMENTALE : tout identifiant = 2+ mots."
+    echo "  Detecte les IDENTIFIANTS generiques a un seul mot (nom, role, statut,"
+    echo "  id, date, cible...) dans les blocs YAML (agent:, profil:, identite:) et"
+    echo "  les objets JSON identite/agent/profil."
+    echo "  Autorises : exceptions structurelles (type, commun, tags, appartient_a)"
+    echo "  et cles de schema de fiche (version, cree, specialites, forces...)."
+    echo "  En recursif : dossiers de traces ignores (controles, rapports,"
+    echo "  retro-actions, historique, exemples)."
+    echo ""
     echo "Exemples:"
     echo "  valider-nommage --type protocole chemin/vers/protocole.md"
     echo "  valider-nommage --type agent chemin/vers/agent.md"
     echo "  valider-nommage --recursive cerveau-projet/agents/tools/"
+    echo "  valider-nommage --mots-seuls cerveau-projet/agents/cerberus/cerberus.md"
+    echo "  valider-nommage --mots-seuls --recursive cerveau-projet/agents/"
     echo ""
+}
+
+# Verifier si une cle est un identifiant generique interdit
+est_mot_seul_interdit() {
+    local cle=$1
+    # Non compose (pas de - ni _) ?
+    if [[ "$cle" =~ ^[a-z]+$ ]]; then
+        # Autorisee ?
+        if [[ " $CLES_AUTORISEES " == *" $cle "* ]]; then
+            return 1
+        fi
+        # Interdite ?
+        if [[ " $MOTS_SEULS_INTERDITS " == *" $cle "* ]]; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# Analyser les blocs YAML d'un fichier .md/.py/.sh
+# Renvoie le nombre de mots seuls interdits detectes via stdout (ligne:cle)
+verifier_yaml() {
+    local fichier=$1
+    local num=0
+    local bloc=""
+    local mots=""
+    while IFS= read -r ligne || [[ -n "$ligne" ]]; do
+        num=$((num + 1))
+        # Frontmatter commente (.py/.sh) : '# identite:' racine (1 espace)
+        if [[ "$ligne" =~ ^\#[[:space:]]+[a-zA-Z0-9_-]+:[[:space:]]*$ || "$ligne" =~ ^\#[[:space:]]+[a-zA-Z0-9_-]+:[[:space:]]+ ]]; then
+            if [[ "$ligne" =~ ^\#[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
+                local racine="${BASH_REMATCH[1]}"
+                # S'il s'agit d'une sous-cle (3 espaces), c'est une sous-cle
+                if [[ "$ligne" =~ ^\#[[:space:]]{3} ]]; then
+                    local cle3=$(echo "$ligne" | sed 's/^#[[:space:]]*//' | cut -d: -f1)
+                    if [[ -n "$bloc" ]] && est_mot_seul_interdit "$cle3"; then
+                        mots="$mots $fichier:$num:$cle3"
+                    fi
+                else
+                    if [[ " $BLOCS_IDENTIFICATION " == *" $racine "* ]]; then
+                        bloc="$racine"
+                    else
+                        bloc=""
+                    fi
+                fi
+            fi
+            continue
+        fi
+        # Bloc YAML indentee de 2 espaces : '  cle: valeur'
+        if [[ "$ligne" =~ ^[[:space:]]{2}([a-zA-Z0-9_-]+): ]]; then
+            local cle2="${BASH_REMATCH[1]}"
+            if [[ -n "$bloc" ]] && est_mot_seul_interdit "$cle2"; then
+                mots="$mots $fichier:$num:$cle2"
+            fi
+            continue
+        fi
+        # Ligne racine YAML non indentee : 'agent:', 'profil:', ...
+        if [[ "$ligne" =~ ^([a-zA-Z0-9_-]+): ]]; then
+            local racine2="${BASH_REMATCH[1]}"
+            if [[ " $BLOCS_IDENTIFICATION " == *" $racine2 "* ]]; then
+                bloc="$racine2"
+            else
+                bloc=""
+            fi
+            continue
+        fi
+    done < "$fichier"
+    echo "$mots"
+}
+
+# Analyser un fichier JSON : cles des objets identite/agent/profil
+verifier_json() {
+    local fichier=$1
+    local mots=""
+    # Extraction simple des blocs identite/agent/profil
+    python3 - "$fichier" <<'PYEOF'
+import io, json, re, sys
+fichier = sys.argv[1]
+try:
+    with io.open(fichier, encoding="utf-8", errors="replace") as fh:
+        data = json.loads(fh.read())
+except Exception as e:
+    print("JSON invalide: %s" % e)
+    sys.exit(0)
+BLOCS = ("identite", "agent", "profil", "session")
+AUTORISEES = set("type commun tags appartient_a version cree specialites forces faiblesses config commandes outils parcours corrections fiche profil identite session agent raison mission".split())
+INTERDITS = set("nom role statut id date cible titre description theme type_controle derniere mise".split())
+PAT = re.compile(r"^[a-z]+$")
+def check(obj, chemin):
+    if isinstance(obj, dict):
+        for cle, valeur in obj.items():
+            if cle in BLOCS and isinstance(valeur, dict):
+                for scle in valeur.keys():
+                    if PAT.match(scle) and scle not in AUTORISEES and scle in INTERDITS:
+                        print("%s:%s:%s" % (fichier, chemin + cle, scle))
+            else:
+                check(valeur, chemin + cle + "/")
+check(data, "")
+PYEOF
 }
 
 # Fonction pour valider le nommage d'un protocole
@@ -84,11 +217,10 @@ valider_protocole() {
     fi
 
     # Verifier que le statut est valide
-    # NB: ASCII pur uniquement (prepare, jamais prepare) pour eviter les bugs d'encodage
     case "$statut_part" in
         ebauche|prepare|dev|test|valide)
             echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"
-            
+
             if [[ "$verbose" == "true" ]]; then
                 echo -e "    Nom : ${nom_part}"
                 echo -e "    Version : ${major_part}.${minor_part}"
@@ -114,7 +246,6 @@ valider_agent() {
     echo -e "${BLUE}[CHECKLIST] Validation du nommage : ${basename}${NC}"
     echo ""
 
-    # Verifier le format : nom-agent.md
     if [[ "$basename" =~ ^[a-z]+\.md$ ]]; then
         echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"
         return 0
@@ -126,7 +257,6 @@ valider_agent() {
 }
 
 # Fonction pour valider le nommage d'un outil
-# Arg1: chemin du fichier, Arg2: verbose, Arg3: nom du dossier categorie (optionnel)
 valider_outil() {
     local fichier=$1
     local verbose=$2
@@ -138,7 +268,6 @@ valider_outil() {
     echo -e "${BLUE}[CHECKLIST] Validation du nommage : ${basename}${NC}"
     echo ""
 
-    # Verifier le format : nom-outil.sh, nom-outil.py ou nom-outil.md
     if [[ "$basename" =~ ^[a-z-]+\.sh$ ]] || [[ "$basename" =~ ^[a-z-]+\.py$ ]] || [[ "$basename" =~ ^[a-z-]+\.md$ ]]; then
         echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"
     else
@@ -147,13 +276,9 @@ valider_outil() {
         erreurs=$((erreurs + 1))
     fi
 
-    # Verifier le prefixe du dossier (regle immuable)
     local nom=$(echo "$basename" | sed 's/\.sh$//; s/\.py$//; s/\.md$//')
 
-    # Si la categorie n est pas fournie, l extraire du chemin
     if [[ -z "$categorie" ]]; then
-        # Remonter de 2 niveaux depuis le fichier pour trouver la categorie
-        # Structure: tools/[categorie]/[outil]/[fichier]
         local dossier_outil=$(dirname "$fichier")
         categorie=$(basename "$(dirname "$dossier_outil")")
     fi
@@ -181,7 +306,6 @@ valider_convention() {
     echo -e "${BLUE}[CHECKLIST] Validation du nommage : ${basename}${NC}"
     echo ""
 
-    # Verifier le format : convention-nom.md
     if [[ "$basename" =~ ^convention-[a-z-]+\.md$ ]]; then
         echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"
         return 0
@@ -192,11 +316,86 @@ valider_convention() {
     fi
 }
 
+# Mode --mots-seuls sur un fichier
+verifier_mots_seuls_fichier() {
+    local fichier=$1
+    local basename=$(basename "$fichier")
+
+    echo -e "${BLUE}[CHECKLIST] Regle fondamentale 'aucun mot seul' : ${basename}${NC}"
+    echo ""
+
+    if [[ ! -f "$fichier" ]]; then
+        echo -e "  ${RED}[ERREUR] Le fichier '${fichier}' n'existe pas${NC}"
+        return 1
+    fi
+
+    local resultat=""
+    case "$fichier" in
+        *.md|*.py|*.sh)
+            resultat=$(verifier_yaml "$fichier")
+            ;;
+        *.json)
+            resultat=$(verifier_json "$fichier")
+            ;;
+        *)
+            echo -e "  ${RED}[ERREUR] Extension non analysee (md, json, py ou sh requis)${NC}"
+            return 1
+            ;;
+    esac
+
+    if [[ -n "$resultat" ]]; then
+        local total=0
+        for item in $resultat; do
+            local chemin=$(echo "$item" | cut -d: -f1-2)
+            local cle=$(echo "$item" | cut -d: -f3)
+            echo -e "  ${RED}[ERREUR] ${chemin} : cle '${cle}' = IDENTIFIANT MOT SEUL (regle fondamentale : 2+ mots)${NC}"
+            total=$((total + 1))
+        done
+        echo ""
+        echo "  Total : ${total} identifiant(s) mot(s) seul(s) detecte(s)"
+        return $total
+    fi
+    echo -e "  ${GREEN}[OK] Aucun mot seul detecte${NC}"
+    return 0
+}
+
+# Mode --mots-seuls recursif
+verifier_mots_seuls_recursif() {
+    local dossier=$1
+    if [[ ! -d "$dossier" ]]; then
+        echo "Erreur: '$dossier' n'est pas un dossier"
+        return 1
+    fi
+
+    local total=0
+    local ko=0
+    echo -e "${BLUE}=== Regle fondamentale 'aucun mot seul' (recursif) : ${dossier} ===${NC}"
+    echo ""
+
+    while IFS= read -r f; do
+        [[ -f "$f" ]] || continue
+        local basename=$(basename "$f")
+        # Ignorer les traces documentaires assumees
+        [[ " $FICHIERS_TRACES " == *" $basename "* ]] && continue
+        total=$((total + 1))
+        verifier_mots_seuls_fichier "$f"
+        local code=$?
+        [[ $code -ne 0 ]] && ko=$((ko + 1))
+        echo ""
+    done < <(find "$dossier" -type f \( -name "*.md" -o -name "*.json" \) | grep -vE "/(controles|rapports|retro-actions|historique|exemples)/" | sort)
+
+    echo -e "${BLUE}=== Resume ===${NC}"
+    echo "  Fichiers analyses : ${total}"
+    [[ $ko -gt 0 ]] && echo -e "  ${RED}Fichiers avec mots seuls : ${ko}${NC}" || echo "  Fichiers avec mots seuls : 0"
+    return $ko
+}
+
 # Valeurs par defaut
 VERBOSE="false"
 TYPE=""
 FICHIER=""
 RECURSIVE="false"
+MOTS_SEULS="false"
 
 # Parsing des arguments
 while [[ $# -gt 0 ]]; do
@@ -221,6 +420,10 @@ while [[ $# -gt 0 ]]; do
             RECURSIVE="true"
             shift
             ;;
+        --mots-seuls)
+            MOTS_SEULS="true"
+            shift
+            ;;
         -*)
             echo "Option inconnue: $1"
             echo "Utilisez --aide pour l'aide"
@@ -232,6 +435,20 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Mode --mots-seuls (prioritaire)
+if [[ "$MOTS_SEULS" == "true" ]]; then
+    if [[ -z "$FICHIER" ]]; then
+        echo "Erreur: Aucun fichier ou dossier specifie pour --mots-seuls"
+        exit 1
+    fi
+    if [[ "$RECURSIVE" == "true" ]]; then
+        verifier_mots_seuls_recursif "$FICHIER"
+        exit $?
+    fi
+    verifier_mots_seuls_fichier "$FICHIER"
+    exit $?
+fi
 
 # Mode recursive : valider tous les outils d'un dossier
 if [[ "$RECURSIVE" == "true" ]]; then
@@ -248,12 +465,9 @@ if [[ "$RECURSIVE" == "true" ]]; then
     total=0
     ok=0
     ko=0
-    # Parcourir tous les dossiers d'outils (structure: tools/categorie/outil/)
     while IFS= read -r dossier_outil; do
-        # Extraire la categorie (dossier parent du dossier outil)
         categorie=$(basename "$(dirname "$dossier_outil")")
         nom_outil=$(basename "$dossier_outil")
-        # Parcourir les .sh du dossier
         for f in "$dossier_outil"/*.sh; do
             [[ ! -f "$f" ]] && continue
             total=$((total + 1))
@@ -261,7 +475,6 @@ if [[ "$RECURSIVE" == "true" ]]; then
             [[ $? -eq 0 ]] && ok=$((ok + 1)) || ko=$((ko + 1))
             echo ""
         done
-        # Parcourir les .md du dossier
         for f in "$dossier_outil"/*.md; do
             [[ ! -f "$f" ]] && continue
             total=$((total + 1))
@@ -269,7 +482,6 @@ if [[ "$RECURSIVE" == "true" ]]; then
             [[ $? -eq 0 ]] && ok=$((ok + 1)) || ko=$((ko + 1))
             echo ""
         done
-        # Parcourir les .py du dossier
         for f in "$dossier_outil"/*.py; do
             [[ ! -f "$f" ]] && continue
             total=$((total + 1))

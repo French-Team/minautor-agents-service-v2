@@ -7,7 +7,7 @@ identite:
 # Specification -- combos-moteur
 
 **Statut :** ebauche
-**Version :** 0.1.0-ebauche
+**Version :** 0.2.0-ebauche
 **Categorie :** combos
 **Date :** 2026-08-08
 
@@ -42,15 +42,16 @@ generateur n'est PAS modifie : c'est le moteur qui fait le lien.
 | 1 | Definition | `definition-combo.json` : combo + cases + entrees/sorties |
 | 2 | Case generateur | Appelle `generateurs-commande --commande <nom> --reponses "cle=valeur;..."` avec les entrees -> sortie = commande composee |
 | 3 | Case outil | Execute la commande (subprocess), capture la sortie -> sortie = resultat |
-| 4 | Case controle | Question + branches (OUI/NON/choix) selon la reponse ou une variable |
-| 5 | Case fin | Message de fin, retourne le resultat final |
-| 6 | Variables | Memoire interne : chaque sortie alimente une variable, interpolation `{var}` |
-| 7 | Interpolation | `{nom}` remplace par la valeur de la variable dans commandes et entrees |
-| 8 | Mode liste | `--liste` : afficher les cases sans executer |
-| 9 | Mode reponses | `--reponses 'cle=valeur;...'` : resoudre les controles sans interaction |
-| 10 | Mode dry-run | `--dry-run` : afficher les commandes a executer sans les lancer |
-| 11 | Parite .py/.sh | Les deux versions lisent la meme definition et produisent la meme execution |
-| 12 | Persistance | Option `persistant: true` sur une sortie -> ecriture dans classeur-variables |
+| 4 | Case critere | Evalue une condition AUTOMATIQUEMENT (fichier-existe, sortie-contient, egalite, non-vide) et suit vers-vrai/vers-faux SANS question humaine |
+| 5 | Case controle | Question + branches (OUI/NON/choix) selon la reponse ou une variable |
+| 6 | Case fin | Message de fin, retourne le resultat final |
+| 7 | Variables | Memoire interne : chaque sortie alimente une variable, interpolation `{var}` |
+| 8 | Interpolation | `{nom}` remplace par la valeur de la variable dans commandes, entrees et conditions (lettres, chiffres, tirets, underscores) |
+| 9 | Mode liste | `--liste` : afficher les cases sans executer |
+| 10 | Mode reponses | `--reponses 'cle=valeur;...'` : resoudre les controles sans interaction |
+| 11 | Mode dry-run | `--dry-run` : afficher les commandes a executer sans les lancer |
+| 12 | Parite .py/.sh | Les deux versions lisent la meme definition et produisent la meme execution |
+| 13 | Persistance | Option `persistant: true` sur une sortie -> ecriture dans classeur-variables |
 
 ## Format de la definition (definition-combo.json)
 
@@ -108,8 +109,42 @@ generateur n'est PAS modifie : c'est le moteur qui fait le lien.
 |---|---|---|---|
 | `generateur` | `catalogue`, `entrees`, `sortie` | Appelle `generateurs-commande --commande <catalogue> --reponses "<entrees>"` | commande composee (texte) |
 | `outil` | `commande`, `sortie` | Execute la commande (subprocess), capture stdout+stderr | resultat (texte) |
+| `critere` | `condition`, `vers-vrai`, `vers-faux` | Evalue une condition AUTOMATIQUEMENT et suit la branche sans question humaine | aucune (branche vers `vers-vrai`/`vers-faux`) |
 | `controle` | `question`, `branches` | Pose une question ; la reponse (via `--reponses` ou interaction) selectionne la branche | aucune (branche vers `vers`) |
 | `fin` | `message` | Termine le combo et affiche le message | aucune |
+
+### Case critere -- branchement automatique (v0.2.0)
+
+La case **critere** repond a la decision utilisateur "les criteres ne seront pas
+utilises dans les cartes de decision mais plutot dans les combos et les outils" :
+le moteur evalue une condition sur les donnees (fichiers, variables, sorties)
+et suit `vers-vrai` ou `vers-faux` -- sans poser de question a l'agent.
+
+```json
+{
+  "titre": "Le fichier existe ?",
+  "type": "critere",
+  "condition": {
+    "type": "fichier-existe",
+    "chemin": "{chemin-cible}"
+  },
+  "vers-vrai": "c4",
+  "vers-faux": "c5"
+}
+```
+
+**Conditions supportees** (`condition.type`) :
+
+| Condition | Champs | VRAI quand |
+|---|---|---|
+| `fichier-existe` | `chemin` | le fichier (interpole) existe sur le disque |
+| `fichier-contient` | `chemin`, `texte` | le fichier contient le texte |
+| `sortie-contient` | `source`, `texte` | la valeur de `source` contient `texte` |
+| `egalite` | `variable`, `valeur` | la variable vaut exactement `valeur` |
+| `non-vide` | `variable` | la variable existe et n'est pas vide |
+
+Validation : une case `critere` DOIT avoir `condition.type` connu et `vers-vrai`
+et `vers-faux` pointant vers des cases existantes (sinon erreur au chargement).
 
 ### Case controle -- branches
 
@@ -193,6 +228,11 @@ themis c3, janus c5/c22, vulcain c7/c13, buffy c28.
 | Navigation | Les cases s'enchainent de `case_depart` jusqu'a une case `fin` |
 | Interpolation | `{var}` remplace par la valeur de la variable dans la commande |
 | Generateur AUTO | Le moteur appelle `generateurs-commande --reponses` et obtient la commande |
+| Critere fichier-existe | fichier present -> vers-vrai ; absent -> vers-faux |
+| Critere egalite/non-vide | variable == valeur -> vers-vrai ; sinon vers-faux |
+| Critere sortie-contient | source contient texte -> vers-vrai ; sinon vers-faux |
+| Critere fichier-contient | fichier contient texte -> vers-vrai ; sinon vers-faux |
+| Interpolation tirets | `{ma-variable}` (kebab-case) remplace par la valeur |
 | Controle branches | `--reponses 'resultat=OUI'` -> branche OUI ; 'NON' -> branche NON |
 | Variable manquante | Erreur claire, code retour 1 |
 | Fin | Le combo s'arrete a la case `fin` et affiche le message |

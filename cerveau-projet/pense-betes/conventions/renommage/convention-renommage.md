@@ -6,6 +6,49 @@ identite:
 ---
 # Convention de Renommage
 
+## REGLE FONDAMENTALE -- Aucun identifiant en mot seul
+
+> **REGLE FONDAMENTALE (2026-08-08, decision utilisateur)** : aucun identifiant
+> ne peut etre un MOT SEUL. Tout identifiant (champ YAML, cle JSON, nom de
+> fichier, nom de dossier, nom d'outil) doit etre COMPOSE de 2+ mots relies par
+> un tiret ou un underscore.
+
+**Pourquoi** : a mesure que le cerveau grandit (agents, outils, fichiers,
+parcours, combos), un identifiant en mot seul devient impossible a retrouver
+et a distinguer (ex: `nom` de qui ? `role` de quoi ? `lire` quoi ?).
+
+**Champs YAML d'identification** (fiches, frontmatter) :
+
+| Interdit (mot seul) | Obligatoire (compose) |
+|---|---|
+| `nom:` | `nom-agent:` |
+| `role:` | `role-agent:` |
+| `statut:` | `statut-<agent>:` (ex: `statut-cerberus`) |
+| `version:` | reste `version:` (mot technique normalise, voir exceptions) |
+
+**Cles JSON** (parcours, combos, catalogues) : les cles structurantes comme
+`nom`, `type`, `question`, `suivant` sont des MOTS TECHNIQUES du format
+(normalises par la spec) -- la regle s'applique aux cles d'IDENTIFICATION
+(pas aux mots techniques du schema).
+
+**Noms de fichiers, dossiers et outils** : toujours composes.
+
+| Interdit | Obligatoire |
+|---|---|
+| `lire.sh` | `lire-fichier.sh` |
+| `valider.md` | `valider-nommage.md` |
+| `agents/role/` | `agents/controleur/` ou `agents/verificateur/` |
+
+**Exceptions** : les mots techniques normalises par une spec ou un schema
+(`version`, `type`, `id`, `class`, `statut` en nom de segment de fichier)
+restent autorises -- la regle vise les identifiants SEMANTIQUES, pas les
+segments techniques du format.
+
+**Verification** : `valider-nommage` (mode cles) detecte les champs
+YAML/JSON en mot seul (`nom:`, `role:`, `statut:`).
+
+---
+
 ## Principe
 
 Chaque nom de fichier contient 3 references pour etre **recherchable**, **identifiable** et **tracable** :

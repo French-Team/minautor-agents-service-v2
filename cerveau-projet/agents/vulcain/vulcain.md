@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: vulcain
   commun: false
+  tags: developpement, creation, outils
 # Fiche d'Agent -- Vulcain
 # Constructeur d'outils reels
 

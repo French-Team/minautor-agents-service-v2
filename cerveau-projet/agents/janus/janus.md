@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: janus
   commun: false
+  tags: validation-croisee, controle, audit
 # Fiche d'Agent -- Janus
 # Agent dedie au second controle
 

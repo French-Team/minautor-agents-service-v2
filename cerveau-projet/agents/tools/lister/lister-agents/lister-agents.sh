@@ -1,18 +1,19 @@
 #!/bin/bash
 # lister-agents.sh
 # Lister les agents avec leurs informations
-# Version: 0.3.0
+# Version: 0.4.0
 # Date: 2026-08-08
 # Auteur: Vulcain
 # Convention identification v0.3.0 : champs YAML role-agent / statut-<agent>
 # (anciens noms role: / statut: acceptes en repli pendant la transition)
+# v0.4.0 : option --tag (convention-tags, cle tags: dans identite)
 
 # Configuration
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.3.0"
+VERSION="0.4.0"
 DATE="2026-08-08"
 AGENTS_DIR="cerveau-projet/agents"
 
@@ -38,19 +39,46 @@ aide() {
     echo "  --verbose, -v       Afficher les details"
     echo "  --version           Afficher la version"
     echo "  --detail, -d        Afficher les details complets"
+    echo "  --tag TAG           Filtrer par tag (convention-tags)"
     echo ""
     echo "Exemples:"
     echo "  lister-agents"
     echo "  lister-agents --detail"
+    echo "  lister-agents --tag coordination"
     echo ""
+}
+
+# Lire les tags d'une fiche agent (frontmatter identite)
+# Arg1: fichier -> stdout: liste des tags separes par des espaces
+lire_tags() {
+    local fichier=$1
+    [[ -f "$fichier" ]] || return 0
+    local dans_identite=0
+    while IFS= read -r ligne; do
+        if [[ "$ligne" == *"identite:"* ]]; then
+            dans_identite=1
+            continue
+        fi
+        if [[ $dans_identite -eq 1 ]]; then
+            if [[ "$ligne" =~ ^[[:space:]]*tags:[[:space:]]*(.*)$ ]]; then
+                echo "${BASH_REMATCH[1]}"
+                return 0
+            fi
+        fi
+    done < "$fichier"
+    return 0
 }
 
 # Fonction pour lister les agents
 lister_agents() {
     local verbose=$1
     local detail=$2
+    local tag=$3
 
     echo -e "${BLUE}[LISTE] Liste des agents du cerveau-projet${NC}"
+    if [[ -n "$tag" ]]; then
+        echo -e "${YELLOW}[FILTRE] Tag : ${tag}${NC}"
+    fi
     echo ""
 
     # Verifier si le dossier agents existe
@@ -76,11 +104,21 @@ lister_agents() {
             local agent_file="${agent_dir}${agent_name}.md"
             local corrections_file="${agent_dir}corrections.md"
 
-            echo -e "${CYAN}----------------------------------------${NC}"
-            echo -e "${GREEN}[AGENT] Agent : ${agent_name}${NC}"
-            echo -e "${CYAN}----------------------------------------${NC}"
-
             if [[ -f "$agent_file" ]]; then
+                # Filtre par tag (convention-tags)
+                if [[ -n "$tag" ]]; then
+                    local tags_agent=$(lire_tags "$agent_file")
+                    # Normaliser les virgules en espaces pour une comparaison fiable
+                    local tags_norm=$(echo "$tags_agent" | tr ',' ' ')
+                    if [[ " $tags_norm " != *" $tag "* ]]; then
+                        continue
+                    fi
+                fi
+
+                echo -e "${CYAN}----------------------------------------${NC}"
+                echo -e "${GREEN}[AGENT] Agent : ${agent_name}${NC}"
+                echo -e "${CYAN}----------------------------------------${NC}"
+
                 # Extraire le role (convention v0.3.0 : role-agent, repli role:)
                 local role=$(grep -E '^[[:space:]]*role-agent:' "$agent_file" 2>/dev/null | head -1 | sed 's/.*role-agent:[[:space:]]*//' | sed 's/^"//' | sed 's/"$//' | tr -d '\r')
                 if [[ -z "$role" ]]; then
@@ -162,6 +200,7 @@ lister_agents() {
 # Valeurs par defaut
 VERBOSE="false"
 DETAIL="false"
+TAG=""
 
 # Parsing des arguments
 while [[ $# -gt 0 ]]; do
@@ -182,6 +221,10 @@ while [[ $# -gt 0 ]]; do
             DETAIL="true"
             shift
             ;;
+        --tag)
+            TAG="$2"
+            shift 2
+            ;;
         -*)
             echo "Option inconnue: $1"
             echo "Utilisez --aide pour l'aide"
@@ -194,6 +237,6 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Execution
-lister_agents "$VERBOSE" "$DETAIL"
+lister_agents "$VERBOSE" "$DETAIL" "$TAG"
 
 exit $?

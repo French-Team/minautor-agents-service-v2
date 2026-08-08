@@ -3,10 +3,11 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  tags: validation, nommage, communs
 ---
 # valider-nommage
 
-**Version :** 0.2.1-py
+**Version :** 0.3.0-py
 **Statut :** prepare
 **Categorie :** Valider
 **Chemin :** `agents/tools/valider/valider-nommage/`
@@ -15,7 +16,8 @@ identite:
 ## Description
 
 Verifier que le nommage des fichiers respecte les conventions du cerveau-projet.
-Inclut la verification du **prefixe du dossier** pour les outils (regle immuable).
+Inclut la verification du **prefixe du dossier** pour les outils (regle immuable)
+et le mode **--mots-seuls** (regle fondamentale "aucun mot seul").
 
 ## Utilisation
 
@@ -29,6 +31,12 @@ valider-nommage.sh --type protocole chemin/vers/protocole.md
 # Valider TOUS les outils d'un dossier (mode recursif)
 valider-nommage.sh --recursive cerveau-projet/agents/tools/
 
+# Regle fondamentale 'aucun mot seul' sur un fichier
+valider-nommage.sh --mots-seuls cerveau-projet/agents/cerberus/cerberus.md
+
+# Regle fondamentale sur tout un dossier (recursif)
+valider-nommage.sh --mots-seuls --recursive cerveau-projet/agents/
+
 # Avec details
 valider-nommage.sh --recursive --verbose cerveau-projet/agents/tools/
 ```
@@ -39,9 +47,37 @@ valider-nommage.sh --recursive --verbose cerveau-projet/agents/tools/
 |---|---|---|
 | `--type TYPE` | Type de fichier : protocole, convention, agent, outil | - |
 | `--recursive, -r` | Valider tous les outils d'un dossier (ignore --type) | false |
+| `--mots-seuls` | Regle fondamentale 'aucun mot seul' (YAML/JSON) | false |
 | `--verbose, -v` | Afficher les details | false |
 | `--help, -h` | Afficher l'aide | - |
 | `--version` | Afficher la version | - |
+
+## Mode --mots-seuls (regle fondamentale)
+
+Applique la **REGLE FONDAMENTALE** (convention-renommage.md) :
+**tout identifiant doit etre compose d'au moins 2 mots**
+(nom-agent, role-agent, statut-cerberus, id-llm...).
+
+Le mode detecte les **identifiants generiques a un seul mot** dans les blocs
+YAML d'identification (`agent:`, `profil:`, `identite:`, `session:`) et les
+objets JSON equivalents :
+
+| Cle interdite | Doit devenir |
+|---|---|
+| `nom` | `nom-agent` |
+| `role` | `role-agent` |
+| `statut` | `statut-<agent>` |
+| `id` | `id-llm` |
+| `date` | `date-mise-a-jour` |
+| `cible` | `cible-audit` |
+
+**Autorisees** (ne sont pas des identifiants) :
+- Exceptions structurelles : `type`, `commun`, `tags`, `appartient_a`
+- Cles de schema de fiche : `version`, `cree`, `specialites`, `forces`, `faiblesses`...
+
+En mode recursif, les **dossiers de traces historisees** sont ignores :
+`controles/`, `rapports/`, `retro-actions/`, `historique/`, `exemples/`
+(documents figes qui documentent d'anciennes conventions).
 
 ## Types de fichiers
 
@@ -101,6 +137,7 @@ $ valider-nommage.sh --recursive cerveau-projet/agents/tools/
 | 0.2.0 | 2026-08-05 | Ajout de la verification du prefixe dossier (regle immuable) |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (outil conforme OK, outil sans prefixe detecte), exclusions obsoletees retirees, promotion prepare |
 | 0.2.1 | 2026-08-07 | Ajout du support des fichiers `.py` (format + prefixe dossier + mode --recursive) |
+| 0.3.0 | 2026-08-08 | Ajout du mode `--mots-seuls` (regle fondamentale : identifiants generiques a un seul mot interdits dans les blocs YAML/JSON, exceptions structurelles et cles de schema autorisees, dossiers de traces ignores en recursif) |
 
 ## Notes de creation
 

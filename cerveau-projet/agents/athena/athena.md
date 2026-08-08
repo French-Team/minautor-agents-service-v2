@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: athena
   commun: false
+  tags: redaction, pense-bete, documentation
 # Fiche d'Agent -- Athena
 # Redactrice de pense-betes
 

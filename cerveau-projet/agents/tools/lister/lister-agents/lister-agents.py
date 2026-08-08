@@ -15,6 +15,7 @@ Usage:
 
 Options:
   --detail, -d    Afficher les details complets
+  --tag TAGS      Filtrer par tag (convention-tags, cle tags: dans identite)
   --verbose, -v   Afficher les details
   --version       Afficher la version
   --aide, -h      Afficher cette aide
@@ -22,7 +23,7 @@ Options:
 Retour: 0 si succes, 1 si erreur.
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.3.0-py
+Version : 0.4.0-py
 Statut : beta
 """
 
@@ -31,7 +32,7 @@ import os
 import re
 import sys
 
-VERSION = "0.3.0-py"
+VERSION = "0.4.0-py"
 STATUT = "beta"
 
 # Couleurs ANSI
@@ -63,6 +64,21 @@ def extraire_champ(contenu, champ):
     return ""
 
 
+def lire_tags_contenu(contenu):
+    """Lit la cle tags: du frontmatter identite. Retourne la liste des tags."""
+    dans_identite = False
+    for ligne in contenu.split("\n"):
+        if "identite:" in ligne:
+            dans_identite = True
+            continue
+        if dans_identite:
+            m = re.match(r"^\s*tags:\s*(.*)$", ligne)
+            if m:
+                return [t.strip() for t in m.group(1).split(",")
+                        if t.strip()]
+    return []
+
+
 def extraire_champ_avec_repli(contenu, nouveau, ancien):
     """Extraire la valeur d'un champ avec repli : le nouveau nom (convention
     v0.3.0 : role-agent, statut-<agent>) est cherche en premier, l'ancien nom
@@ -81,6 +97,8 @@ def construire_parser():
     )
     parser.add_argument("--detail", "-d", action="store_true",
                         help="Afficher les details complets")
+    parser.add_argument("--tag", default="",
+                        help="Filtrer par tag (convention-tags)")
     parser.add_argument("--verbose", "-v", action="store_true",
                         help="Afficher les details")
     parser.add_argument("--version", action="store_true",
@@ -102,6 +120,8 @@ def main(argv=None):
         return 0
 
     print(BLUE + "[LISTE] Liste des agents du cerveau-projet" + NC)
+    if args.tag:
+        print(YELLOW + "[FILTRE] Tag : " + args.tag + NC)
     print("")
 
     if not os.path.isdir(AGENTS_DIR):
@@ -117,16 +137,22 @@ def main(argv=None):
         if not os.path.isdir(agent_dir) or nom == "tools":
             continue
 
-        print(CYAN + "----------------------------------------" + NC)
-        print(GREEN + "[AGENT] Agent : " + nom + NC)
-        print(CYAN + "----------------------------------------" + NC)
-
         agent_file = os.path.join(agent_dir, nom + ".md")
         corrections_file = os.path.join(agent_dir, "corrections.md")
 
         if os.path.isfile(agent_file):
             with open(agent_file, encoding="utf-8", errors="replace") as f:
                 contenu = f.read()
+
+            # Filtre par tag (convention-tags : cle tags: dans identite)
+            if args.tag:
+                tags_agent = lire_tags_contenu(contenu)
+                if args.tag not in tags_agent:
+                    continue
+
+            print(CYAN + "----------------------------------------" + NC)
+            print(GREEN + "[AGENT] Agent : " + nom + NC)
+            print(CYAN + "----------------------------------------" + NC)
 
             role = extraire_champ_avec_repli(contenu, "role-agent", "role")
             if role:

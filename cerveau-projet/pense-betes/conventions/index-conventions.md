@@ -14,6 +14,7 @@ identite:
 | [liens/](liens/convention-liens.md) | Comment creer des liens | convention-liens.md |
 | [outils/](outils/convention-outils-agents.md) | Comment creer et structurer les outils des agents | convention-outils-agents.md |
 | [protocoles/](protocoles/index-protocoles.md) | Comment creer des protocoles | index-protocoles.md |
+| [tags/](tags/convention-tags.md) | Comment taguer les fichiers (mots-cles de recherche) | convention-tags.md |
 
 ## Navigation
 

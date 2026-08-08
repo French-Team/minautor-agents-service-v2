@@ -7,7 +7,7 @@ identite:
 # lister-agents
 
 **Categorie** : Lister
-**Version** : 0.3.0
+**Version** : 0.4.0
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Buffy (outil partage)
@@ -39,6 +39,7 @@ python3 lister-agents.py [OPTIONS]
 | Option | Description |
 |---|---|
 | `--detail, -d` | Afficher le detail complet de chaque agent |
+| `--tag TAG` | Filtrer par tag (convention-tags : cle `tags:` dans le frontmatter `identite`) |
 | `--verbose, -v` | Afficher les details d'execution |
 | `--version` | Afficher la version |
 | `--aide, -h` | Afficher l'aide |
@@ -48,6 +49,7 @@ python3 lister-agents.py [OPTIONS]
 ```bash
 python3 lister-agents.py          # Liste table des agents
 python3 lister-agents.py --detail # Liste detaillee
+python3 lister-agents.py --tag coordination # Agents tagges 'coordination'
 ```
 
 Version bash equivalente : `lister-agents.sh` (meme logique, dossier source par defaut).
@@ -150,6 +152,7 @@ lister-agents(champs="nom,role")
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
 | 0.2.0-py | 2026-08-07 | Version Python creee (lister-agents.py), basee sur outil-template.py |
 | 0.3.0 | 2026-08-08 | CONVENTION IDENTIFICATION : lecture des nouveaux champs YAML des fiches -- role-agent et statut-<agent> (anciens noms role: / statut: acceptes en repli). py + sh + doc |
+| 0.4.0 | 2026-08-08 | Ajout de l'option `--tag` : filtre par tag (convention-tags, cle `tags:` dans le frontmatter `identite`). py + sh parite |
 
 ---
 

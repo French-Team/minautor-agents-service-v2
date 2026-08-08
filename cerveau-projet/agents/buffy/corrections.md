@@ -364,6 +364,11 @@ sed global sur un fichier markdown (risque de casser le texte)
 le format reel avant de migrer, ne pas supposer que toutes les corrections ont nom:
 3. Les traces historiques (corrections.md, notes mission) documentent l ANCIEN format -- on ne les
 modifie pas (temoignage de l evolution), seuls les fichiers ACTIFS sont migres
+4. PILOTE TAGS (2026-08-08) : la cle `tags:` se place dans le frontmatter `identite:` APRES `commun:`
+(avant les commentaires de la fiche). Les tags viennent du VOCABULAIRE CONTROLE de convention-tags.md
+(kebab-case ASCII, singulier, 2-5 par fichier). 17 fichiers pilotes : 6 outils de validation
+(validation + theme propre + communs) et 11 fiches agents (categorie agent + transverses).
+Verifier avec `lister-outils --tag <tag>` / `lister-agents --tag <tag>` que le filtre fonctionne.
 
 ## PHILOSOPHIE -- Principes de comportement
 

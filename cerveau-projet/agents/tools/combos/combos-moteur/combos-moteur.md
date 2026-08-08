@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.1.3-beta |
+| **Version** | 0.2.0-beta |
 | **Statut** | ebauche |
 | **Categorie** | combos |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -45,10 +45,13 @@ CASE 1 : generateur  -> generateurs-commande --reponses (mode AUTO)
 CASE 2 : outil       -> execute la commande {V1} (subprocess)
         |              -> sortie = resultat (variable V2)
         v
-CASE 3 : controle    -> question + branches (OUI/NON/choix)
+CASE 3 : critere     -> evalue une condition AUTOMATIQUEMENT (fichier-existe,
+        |              -> sortie-contient, egalite, non-vide...) puis suit
+        v              -> vers-vrai ou vers-faux SANS question humaine
+CASE 4 : controle    -> question + branches (OUI/NON/choix)
         |  reponse     -> si le resultat peut etre utilise BRUT, il est
         v              -> transmis directement ; sinon un generateur s'intercale
-CASE 4 : fin         -> message de fin, retourne le resultat final
+CASE 5 : fin         -> message de fin, retourne le resultat final
 ```
 
 ---
@@ -146,6 +149,7 @@ Memes options que la version Python (parite).
 |---|---|---|---|
 | `generateur` | `catalogue`, `entrees`, `sortie` | Appelle `generateurs-commande --commande <catalogue> --reponses "<entrees>"` (mode AUTO) | commande composee (texte) |
 | `outil` | `commande`, `sortie` | Execute la commande (subprocess), capture stdout+stderr | resultat (texte) |
+| `critere` | `condition`, `vers-vrai`, `vers-faux` | Evalue une condition AUTOMATIQUEMENT et suit la branche sans question humaine | aucune (branche vers `vers-vrai`/`vers-faux`) |
 | `controle` | `question`, `branches` | Pose une question ; la reponse (via `--reponses` ou interaction) selectionne la branche | aucune (branche vers `vers`) |
 | `fin` | `message` | Termine le combo et affiche le message | aucune |
 
@@ -155,6 +159,38 @@ La case ne pose AUCUNE question : le moteur appelle `generateurs-commande`
 avec `--reponses "cle=valeur;..."` alimente par les `entrees` (elles-memes
 interpolees avec les variables precedentes). La commande composee est stockee
 dans la variable `sortie` et servira a la case `outil` suivante via `{cmd}`.
+
+### Case `critere` -- branchement automatique (v0.2.0)
+
+La case **critere** evalue une condition **automatiquement** (aucune question
+humaine) et suit `vers-vrai` ou `vers-faux`. C'est l'embranchement
+multi-directions par **criteres** : le moteur decide seul, en fonction de
+donnees (fichiers, variables, sorties).
+
+```json
+{
+  "titre": "Le fichier existe ?",
+  "type": "critere",
+  "condition": {
+    "type": "fichier-existe",
+    "chemin": "{chemin-cible}"
+  },
+  "vers-vrai": "c4",
+  "vers-faux": "c5"
+}
+```
+
+**Conditions supportees** (champ `condition.type`) :
+
+| Condition | Champs | VRAI quand |
+|---|---|---|
+| `fichier-existe` | `chemin` | le fichier (interpole) existe sur le disque |
+| `fichier-contient` | `chemin`, `texte` | le fichier contient le texte |
+| `sortie-contient` | `source`, `texte` | la valeur de `source` (variable ou texte) contient `texte` |
+| `egalite` | `variable`, `valeur` | la variable vaut exactement `valeur` |
+| `non-vide` | `variable` | la variable existe et n'est pas vide |
+
+L'interpolation `{var}` fonctionne dans tous les champs des conditions.
 
 ### Case `controle` -- branches
 
@@ -288,4 +324,5 @@ Pattern 3, validation.
 | 0.1.3 | ebauche | Ajout des variables initiales `--var cle=valeur` (repetable) : disponibles pour {var} des la case depart (ex: `--var fichier=...` pour combo-controle-impacts) |
 | 0.1.2 | ebauche | Ajout de la REGLE TRACABILITE (citer le combo avant de le lancer, protocole-creation-combos 9.5) |
 | 0.1.1 | ebauche | Clarification de l'emplacement canonique des definitions (cerveau-projet/combos/) vs outils (agents/tools/combos/) + reference au protocole-creation-combos |
+| 0.2.0 | ebauche | Ajout de la case `critere` : branchement automatique par conditions (fichier-existe, fichier-contient, sortie-contient, egalite, non-vide) avec `vers-vrai`/`vers-faux`, sans question humaine. Interpolation {var} etendue aux tirets (kebab-case). py + sh parite |
 | 0.1.0 | ebauche | Creation : moteur generique de combos declaratifs (py + sh parite), 4 types de cases (generateur AUTO / outil / controle / fin), variables + interpolation {var}, persistance optionnelle vers classeur (persistant: true), modes --liste/--reponses/--dry-run/--verbose/--version, spec-combos-moteur v0.1.0 |

@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: clio
   commun: false
+  tags: redaction, documentation, historique
 # Fiche d'Agent -- Clio
 # Agent dedie a la mise a jour du README
 

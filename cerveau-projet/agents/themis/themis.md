@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: themis
   commun: false
+  tags: validation-croisee, audit, controle
 # Fiche d'Agent -- Themis
 # Evaluatrice croisee du cerveau-projet
 

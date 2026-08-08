@@ -18,7 +18,7 @@
 # REGLE IMMUABLE DE NOMMAGE : dossier 'combos/' -> prefixe 'combos-'
 # ============================================================
 
-VERSION="0.1.3-beta"
+VERSION="0.2.0-beta"
 STATUT="ebauche"
 
 # Verifier le nommage (regle immuable)
@@ -51,7 +51,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.1.3-beta"
+VERSION = "0.2.0-beta"
 STATUT = "ebauche"
 
 class ErreurCombo(Exception):
@@ -116,17 +116,28 @@ def valider_definition(donnees):
         erreurs.append("case_depart '%s' introuvable dans cases" % depart)
     for cid, case in cases.items():
         typ = case.get("type")
-        if typ not in ("generateur", "outil", "controle", "fin"):
+        if typ not in ("generateur", "outil", "controle", "critere", "fin"):
             erreurs.append("case '%s': type inconnu '%s'" % (cid, typ))
             continue
         suivant = case.get("suivant")
         branches = case.get("branches")
+        vers_vrai = case.get("vers-vrai")
+        vers_faux = case.get("vers-faux")
         if suivant and suivant not in cases:
             erreurs.append("case '%s': suivant '%s' introuvable" % (cid, suivant))
+        if vers_vrai and vers_vrai not in cases:
+            erreurs.append("case '%s': vers-vrai '%s' introuvable" % (cid, vers_vrai))
+        if vers_faux and vers_faux not in cases:
+            erreurs.append("case '%s': vers-faux '%s' introuvable" % (cid, vers_faux))
         for b in branches or []:
             vers = b.get("vers")
             if vers and vers not in cases:
                 erreurs.append("case '%s': branche vers '%s' introuvable" % (cid, vers))
+        if typ == "critere":
+            if not vers_vrai or not vers_faux:
+                erreurs.append("case '%s': critere sans 'vers-vrai' ou 'vers-faux'" % cid)
+            if "condition" not in case or "type" not in (case.get("condition") or {}):
+                erreurs.append("case '%s': critere sans 'condition.type'" % cid)
     if erreurs:
         for e in erreurs:
             print("ERREUR: " + e, file=sys.stderr)
@@ -145,7 +156,8 @@ def interpoler(texte, variables, contexte):
                 "Variable non trouvee: {%s} (%s)" % (nom, contexte)
             )
         return str(variables[nom])
-    return re.sub(r"\{([A-Za-z0-9_]+)\}", remplacer, str(texte))
+    # Accepte lettres, chiffres, tirets et underscores (kebab-case et snake_case)
+    return re.sub(r"\{([A-Za-z0-9_-]+)\}", remplacer, str(texte))
 
 
 def persister_variable(nom, valeur):
@@ -310,6 +322,67 @@ def trouver_branche(branches, reponse):
     return None
 
 
+def evaluer_critere(case, cid, variables, verbose):
+    """Case critere : evalue une condition AUTOMATIQUEMENT (fichier-existe,
+    fichier-contient, sortie-contient, egalite, non-vide) et retourne
+    vers-vrai ou vers-faux. Aucune question humaine."""
+    condition = case.get("condition") or {}
+    type_condition = condition.get("type")
+    if verbose:
+        print("  [%s] critere : %s" % (cid, type_condition))
+
+    vrai = False
+
+    if type_condition == "fichier-existe":
+        chemin = interpoler(condition.get("chemin", ""), variables, "critere " + cid)
+        vrai = Path(chemin).is_file()
+        if verbose:
+            print("  -> fichier-existe %s : %s" % (chemin, "VRAI" if vrai else "FAUX"))
+
+    elif type_condition == "fichier-contient":
+        chemin = interpoler(condition.get("chemin", ""), variables, "critere " + cid)
+        texte = interpoler(condition.get("texte", ""), variables, "critere " + cid)
+        if Path(chemin).is_file():
+            try:
+                contenu = Path(chemin).read_text(encoding="utf-8", errors="replace")
+                vrai = texte in contenu
+            except OSError:
+                vrai = False
+        else:
+            vrai = False
+        if verbose:
+            print("  -> fichier-contient %s : %s" % (chemin, "VRAI" if vrai else "FAUX"))
+
+    elif type_condition == "sortie-contient":
+        source = interpoler(condition.get("source", ""), variables, "critere " + cid)
+        texte = interpoler(condition.get("texte", ""), variables, "critere " + cid)
+        vrai = texte in (source or "")
+        if verbose:
+            print("  -> sortie-contient : %s" % ("VRAI" if vrai else "FAUX"))
+
+    elif type_condition == "egalite":
+        variable = condition.get("variable")
+        valeur = interpoler(condition.get("valeur", ""), variables, "critere " + cid)
+        actuel = str(variables.get(variable, ""))
+        vrai = actuel == valeur
+        if verbose:
+            print("  -> egalite %s=%s : %s" % (variable, valeur, "VRAI" if vrai else "FAUX"))
+
+    elif type_condition == "non-vide":
+        variable = condition.get("variable")
+        actuel = variables.get(variable)
+        vrai = actuel is not None and str(actuel).strip() != ""
+        if verbose:
+            print("  -> non-vide %s : %s" % (variable, "VRAI" if vrai else "FAUX"))
+
+    else:
+        raise ErreurCombo(
+            "Critere '%s': type de condition inconnu '%s'" % (cid, type_condition)
+        )
+
+    return case.get("vers-vrai") if vrai else case.get("vers-faux")
+
+
 def resoudre_controle(case, cid, variables, reponses_predefinies, verbose):
     """Case controle : pose la question et retourne la prochaine case."""
     question = case.get("question", "Quelle reponse ?")
@@ -400,6 +473,10 @@ def executer(donnees, reponses_predefinies, dry_run, verbose, variables_initiale
             executer_case_outil(case, cid, variables, dry_run, verbose)
         elif typ == "controle":
             suivant = resoudre_controle(case, cid, variables, reponses_predefinies, verbose)
+            cid = suivant
+            continue
+        elif typ == "critere":
+            suivant = evaluer_critere(case, cid, variables, verbose)
             cid = suivant
             continue
         else:

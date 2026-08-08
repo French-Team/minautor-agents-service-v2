@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: minerve
   commun: false
+  tags: redaction, todo, documentation
 # Fiche d'Agent -- Minerve
 # Redactrice de todos
 

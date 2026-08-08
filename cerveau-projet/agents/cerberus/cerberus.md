@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: cerberus
   commun: false
+  tags: coordination, activation, multi-llm
 # Fiche d'Agent -- Cerberus
 # Point d'entree unique de chaque session
 

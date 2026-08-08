@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: morpheus
   commun: false
+  tags: tests, controle, validation
 # Fiche d'Agent -- Morpheus
 # Agent dedie aux tests
 

@@ -3,6 +3,7 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  tags: validation, parcours, communs
 ---
 # valider-cartes-decision
 

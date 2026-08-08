@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: promethee
   commun: false
+  tags: redaction, spec, documentation
 # Fiche d'Agent -- Promethee
 # Redacteur de specs
 

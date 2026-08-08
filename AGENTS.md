@@ -19,18 +19,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Nom Agent** | buffy |
+| **Role Agent** | Developpeur principal -- contenu et structures |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | buffy (retour de mission) |
-| **Raison** | MISSION TERMINEE (Buffy - convention identification v0.5.0): migration des fiches agents TERMINEE. 11 fiches (nom-agent, role-agent, statut-<agent>), 2 templates, 11 corrections.md, parcours-demarrage.json + protocole-identification migres (Id LLM -> Nom LLM). Validation: lister-agents lit nouveaux champs, ASCII 0, detecter-impacts OK. Lecon dans corrections.md. AGENTS.md deja migre automatiquement (etape 5 couverte). |
+| **Fiche** | [cerveau-projet/agents/buffy/buffy.md](cerveau-projet/agents/buffy/buffy.md) |
+| **Corrections** | [cerveau-projet/agents/buffy/corrections.md](cerveau-projet/agents/buffy/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | MISSION (decision utilisateur - 3 infractions a corriger): TON DOMAINE - fichiers du cerveau. LIVRABLE 1 (regle workspace IMMUABLE): creer cerveau-projet/pense-betes/regles-immuables/general/regles-perimetre-workspace.md - ECRITURE = workspace uniquement (Z:/analyste-in-console), HORS WORKSPACE = LECTURE SEULE (jamais creer/modifier/supprimer de fichier hors workspace, meme temporaire), les fichiers temporaires de test/script se creent DANS le workspace (ex: dossier .tmp-test/ local) et se suppriment apres. Inscrire dans index-regles-general.md + regles-general-global.md + index-regles-immuables.md. LIVRABLE 2 (ASCII 2 alternatives): mettre a jour regles-emojis-ascii.md - a la verification ASCII, 2 ALTERNATIVES: [OK] aucun non-ASCII -> continuer / [NON] non-ASCII detecte -> LANCER LE COMBO combo-corriger-ascii (python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json) - JAMAIS corriger soi-meme les accents. LIVRABLE 3 (11 parcours): dans chaque parcours agents/<a>/parcours/parcours-<a>.json, ajouter dans les cases qui ECRIVENT/MODIFIENT un fichier un indice concis: REGLE WORKSPACE (ecriture = workspace seul) + ASCII 2 alternatives (verifier -> OK continuer / NON lancer combo-corriger-ascii). Inspecter chaque parcours pour trouver les cases d ecriture (indices avec ajouter-contenu, ecrire-fichier, editer-fichier, creer). ASCII strict, valider liens, puis reactiver Cerberus. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-08 16:06 |
+| session-llm-1 | llm-1 | buffy | 2026-08-08 16:58 |
 | session-llm-3 | - | Cerberus | 2026-08-07 16:12 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |
 | session-llm-5 | llm-3 | Cerberus | 2026-08-07 16:04 |

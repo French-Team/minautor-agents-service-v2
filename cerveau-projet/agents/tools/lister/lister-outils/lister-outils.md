@@ -7,7 +7,7 @@ identite:
 # lister-outils
 
 **Categorie** : Lister
-**Version** : 0.2.0
+**Version** : 0.3.0
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Buffy (outil partage)
@@ -40,6 +40,7 @@ python3 lister-outils.py [OPTIONS]
 |---|---|
 | `--detail, -d` | Afficher le detail de chaque outil (script + documentation) |
 | `--categorie, -c` | Filtrer par categorie (ex: "lire", "valider") |
+| `--tag TAG` | Filtrer par tag (convention-tags : cle `tags:` dans le frontmatter `identite`) |
 | `--verbose, -v` | Afficher les details d'execution |
 | `--version` | Afficher la version |
 | `--aide, -h` | Afficher l'aide |
@@ -49,6 +50,7 @@ python3 lister-outils.py [OPTIONS]
 ```bash
 python3 lister-outils.py            # Tous les outils
 python3 lister-outils.py -c lire    # Categorie lire uniquement
+python3 lister-outils.py --tag validation  # Outils tagges 'validation'
 python3 lister-outils.py --detail   # Detail complet
 ```
 
@@ -178,6 +180,7 @@ lister-outils(champs="nom,description")
 |---|---|---|
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
 | 0.2.0-py | 2026-08-07 | Version Python creee (lister-outils.py), basee sur outil-template.py |
+| 0.3.0 | 2026-08-08 | Ajout de l'option `--tag` : filtre par tag (convention-tags, cle `tags:` dans le frontmatter `identite`). py + sh parite |
 
 ---
 

@@ -15,6 +15,7 @@ Usage:
 Options:
   --detail, -d        Afficher les details complets
   --categorie, -c     Filtrer par categorie
+  --tag TAGS          Filtrer par tag (convention-tags, cle tags: dans identite)
   --verbose, -v       Afficher les details
   --version           Afficher la version
   --aide, -h          Afficher cette aide
@@ -22,15 +23,16 @@ Options:
 Retour: 0 si succes, 1 si erreur.
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.0-py
+Version : 0.3.0-py
 Statut : beta
 """
 
 import argparse
 import os
+import re
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.3.0-py"
 STATUT = "beta"
 
 # Couleurs ANSI
@@ -66,6 +68,8 @@ def construire_parser():
                         help="Afficher les details complets")
     parser.add_argument("--categorie", "-c", default="",
                         help="Filtrer par categorie")
+    parser.add_argument("--tag", default="",
+                        help="Filtrer par tag (convention-tags)")
     parser.add_argument("--verbose", "-v", action="store_true",
                         help="Afficher les details")
     parser.add_argument("--version", action="store_true",
@@ -73,6 +77,31 @@ def construire_parser():
     parser.add_argument("--aide", "-h", action="store_true",
                         help="Afficher cette aide")
     return parser
+
+
+def lire_tags_fichier(chemin):
+    """Lit la cle tags: du frontmatter identite d'un fichier .md (ou .py/.sh
+    commente). Retourne la liste des tags, vide si absents."""
+    if not os.path.isfile(chemin):
+        return []
+    try:
+        with open(chemin, encoding="utf-8", errors="replace") as fh:
+            lignes = fh.read().split("\n")
+    except OSError:
+        return []
+    dans_identite = False
+    for ligne in lignes:
+        if "identite:" in ligne:
+            dans_identite = True
+            continue
+        if dans_identite:
+            m = re.match(r"^\s*(#\s*)?tags:\s*(.*)$", ligne)
+            if m:
+                return [t.strip() for t in m.group(2).split(",")
+                        if t.strip()]
+            if m and ligne.strip() == "":
+                continue
+    return []
 
 
 def main(argv=None):
@@ -87,6 +116,8 @@ def main(argv=None):
         return 0
 
     print(BLUE + "[LISTE] Liste des outils partages" + NC)
+    if args.tag:
+        print(YELLOW + "[FILTRE] Tag : " + args.tag + NC)
     print("")
 
     if not os.path.isdir(TOOLS_DIR):
@@ -121,6 +152,12 @@ def main(argv=None):
                 continue
             tool_sh = os.path.join(outil_dir, outil + ".sh")
             tool_md = os.path.join(outil_dir, outil + ".md")
+
+            # Filtre par tag (convention-tags : cle tags: dans identite)
+            if args.tag:
+                tags_outil = lire_tags_fichier(tool_md) or lire_tags_fichier(tool_sh)
+                if args.tag not in tags_outil:
+                    continue
 
             print("  [OUTIL] " + outil)
             if os.path.isfile(tool_sh):

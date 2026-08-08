@@ -1,8 +1,8 @@
 #!/bin/bash
 # lister-outils.sh
 # Lister les outils partages du cerveau-projet
-# Version: 0.2.0
-# Date: 2026-08-05
+# Version: 0.3.0
+# Date: 2026-08-08
 # Auteur: Vulcain
 
 # Configuration
@@ -10,8 +10,8 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
-DATE="2026-08-05"
+VERSION="0.3.0"
+DATE="2026-08-08"
 TOOLS_DIR="cerveau-projet/agents/tools"
 
 # Couleurs pour la sortie
@@ -37,21 +37,48 @@ aide() {
     echo "  --version           Afficher la version"
     echo "  --detail, -d        Afficher les details complets"
     echo "  --categorie, -c     Filtrer par categorie"
+    echo "  --tag TAG           Filtrer par tag (convention-tags)"
     echo ""
     echo "Exemples:"
     echo "  lister-outils"
     echo "  lister-outils --detail"
     echo "  lister-outils --categorie rechercher"
+    echo "  lister-outils --tag validation"
     echo ""
 }
 
 # Fonction pour lister les outils
+# Lire les tags d'un fichier (frontmatter identite, format convention-tags)
+# Arg1: chemin du fichier -> stdout: liste des tags separes par des espaces
+lire_tags() {
+    local fichier=$1
+    [[ -f "$fichier" ]] || return 0
+    local dans_identite=0
+    while IFS= read -r ligne; do
+        if [[ "$ligne" == *"identite:"* ]]; then
+            dans_identite=1
+            continue
+        fi
+        if [[ $dans_identite -eq 1 ]]; then
+            if [[ "$ligne" =~ ^[[:space:]]*(#)?[[:space:]]*tags:[[:space:]]*(.*)$ ]]; then
+                echo "${BASH_REMATCH[2]}"
+                return 0
+            fi
+        fi
+    done < "$fichier"
+    return 0
+}
+
 lister_outils() {
     local verbose=$1
     local detail=$2
     local categorie=$3
+    local tag=$4
 
     echo -e "${BLUE}[LISTE] Liste des outils partages${NC}"
+    if [[ -n "$tag" ]]; then
+        echo -e "${YELLOW}[FILTRE] Tag : ${tag}${NC}"
+    fi
     echo ""
 
     # Verifier si le dossier tools existe
@@ -90,6 +117,16 @@ lister_outils() {
                     local tool_name=$(basename "$tool_dir")
                     local tool_md="${tool_dir}${tool_name}.md"
                     local tool_sh="${tool_dir}${tool_name}.sh"
+                    
+                    # Filtre par tag (convention-tags)
+                    if [[ -n "$tag" ]]; then
+                        local tags_md=$(lire_tags "$tool_md")
+                        local tags_sh=$(lire_tags "$tool_sh")
+                        local tags_norm=$(echo "$tags_md $tags_sh" | tr ',' ' ')
+                        if [[ " $tags_norm " != *" $tag "* ]]; then
+                            continue
+                        fi
+                    fi
                     
                     echo -e "  [OUTIL] ${tool_name}"
                     
@@ -143,6 +180,7 @@ lister_outils() {
 VERBOSE="false"
 DETAIL="false"
 CATEGORIE=""
+TAG=""
 
 # Parsing des arguments
 while [[ $# -gt 0 ]]; do
@@ -167,6 +205,10 @@ while [[ $# -gt 0 ]]; do
             CATEGORIE="$2"
             shift 2
             ;;
+        --tag)
+            TAG="$2"
+            shift 2
+            ;;
         -*)
             echo "Option inconnue: $1"
             echo "Utilisez --aide pour l'aide"
@@ -179,6 +221,6 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Execution
-lister_outils "$VERBOSE" "$DETAIL" "$CATEGORIE"
+lister_outils "$VERBOSE" "$DETAIL" "$CATEGORIE" "$TAG"
 
 exit $?

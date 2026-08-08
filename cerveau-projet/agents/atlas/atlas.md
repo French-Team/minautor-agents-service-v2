@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: atlas
   commun: false
+  tags: exploration, recherche, documentation
 # Fiche d'Agent -- Atlas
 # Explorateur et documentaliste du cerveau-projet
 

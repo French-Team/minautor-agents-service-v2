@@ -384,6 +384,23 @@ inverser la logique (if grep; then check 1; else check 0) sinon le test echoue a
 tableau et la ligne vide doivent etre re-emis) ; sinon le .sh reimprime l'ancien en-tete en parasite
 6. La convention 'jamais de mot seul' vaut pour les CHAMPS IDENTIFIANTS (nom, role, statut) --
 les mots composees deja qualifies (role_principal, role_specifique) restent inchanges
+7. REGLE FONDAMENTALE (2026-08-08) : la detection des mots seuls doit distinguer 3 categories :
+   (a) IDENTIFIANTS generiques interdits (nom, role, statut, id, date, cible -> liste noire explicite),
+   (b) cles de SCHEMA de fiche autorisees (version, cree, specialites, forces, faiblesses -> liste blanche),
+   (c) exceptions structurelles du format identite (type, commun, tags, appartient_a).
+   Un detecteur qui signale TOUT mot seul produit des faux positifs massifs (fiches agents) :
+   il faut une liste noire ciblee, pas une regex universelle.
+8. LES TRACES DOCUMENTAIRES sont des documents figes : les rapports (janus/controles, corrections.md,
+   mission-condenseur) documentent d'anciennes conventions et NE SONT PAS corriges. Le detecteur
+   --mots-seuls ignore les dossiers de traces (controles, rapports, retro-actions, historique,
+   exemples) en mode recursif + les fichiers traces assumes (mission-condenseur.md).
+9. INTERPOLATION {var} : accepter les TIRETS (kebab-case) dans les noms de variables -- le regex
+   [A-Za-z0-9_]+ rate {ma-variable} et laisse la cle brute non substituee. Toujours utiliser
+   [A-Za-z0-9_-]+ (bug detecte lors du test de la case critere du combos-moteur).
+10. CASE CRITERE combos-moteur v0.2.0 : l'embranchement AUTOMATIQUE (fichier-existe, egalite,
+    non-vide, sortie-contient, fichier-contient) avec vers-vrai/vers-faux repond a la decision
+    utilisateur 'les criteres dans les combos, pas dans les cartes'. La validation exige
+    condition.type connu + vers-vrai ET vers-faux existants.
 
 ## PHILOSOPHIE -- Principes de comportement
 

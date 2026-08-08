@@ -3,6 +3,7 @@ identite:
   type: fiche-agent
   appartient_a: buffy
   commun: false
+  tags: developpement, creation, multi-llm
 agent:
   nom-agent: "buffy"
   version: "0.2.0"
