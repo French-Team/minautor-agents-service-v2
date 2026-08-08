@@ -36,16 +36,16 @@ verifier() {
     fi
 }
 
-# Extraire le champ Nom du bloc d'une session
+# Extraire le champ Nom Agent du bloc d'une session (repli sur l'ancien **Nom**)
 nom_session() {
     awk -v cible="$1" '
         /^### Session : / {
             if ($0 == ("### Session : " cible)) { dans = 1 } else { dans = 0 }
             next
         }
-        dans == 1 && /^\| \*\*Nom\*\* \| / {
+        dans == 1 && /^\| \*\*(Nom Agent|Nom)\*\* \| / {
             ligne = $0
-            sub(/^\| \*\*Nom\*\* \| /, "", ligne)
+            sub(/^\| \*\*(Nom Agent|Nom)\*\* \| /, "", ligne)
             sub(/ \|$/, "", ligne)
             print ligne
             exit

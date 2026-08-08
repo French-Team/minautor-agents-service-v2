@@ -60,18 +60,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | morpheus |
-| **Role Agent** | Testeur -- validation des outils et des tests |
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/morpheus/morpheus.md](cerveau-projet/agents/morpheus/morpheus.md) |
-| **Corrections** | [cerveau-projet/agents/morpheus/corrections.md](cerveau-projet/agents/morpheus/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | MISSION TESTS (decision utilisateur, 2 livrables). LIVRABLE 1 - CORRIGER test-003-activer-agent-principal-v033.sh : la fonction nom_session (lignes 40, 114, 134) lit encore **Nom** alors que les blocs session de AGENTS.md utilisent **Nom Agent** (migration v0.5.0 faite avant cette mission - git diff du test vide = probleme preexistant, pas cause par le fix ajouter_historique). CORRECTION : adapter nom_session et tous les autres lectures de champs du test au nouveau format de bloc (Nom LLM / Nom Agent / Role Agent / Statut Agent etc), puis relancer les tests 001 a 007 et confirmer TOUS VALIDES (004-007 deja VALIDE, 001-002 OK). LIVRABLE 2 - CREER LE TEST FORMEL de nettoyer-sessions v0.1.0 : tester-nettoyer-sessions.sh dans cerveau-projet/agents/tools/nettoyer/nettoyer-sessions/tests/ (convention comme les tests activer : nommage test-NNN-...sh, ASCII strict, LF, assertions [OK]/[ERREUR], verdict final). VERIFIER : (a) execution sur COPIES avec les 3 variables AGENTS_FILE + CLASSEUR_STOCKAGE redirigees (lecon: ne jamais toucher les vrais fichiers pendant les tests), (b) blocs ### Session supprimes, (c) section ## Sessions connues supprimee, (d) lignes profil-session-* du classeur supprimees, (e) frontmatter + entete + Configuration Active PRESERVES, (f) AGENTS-historique.md JAMAIS modifie, (g) idempotence (2eme execution = rien de plus), (h) --dry-run ne modifie rien, (i) parite py/sh (memes fichiers resultats), (j) --version. VERDICT attendu : VALIDE. Puis rediger le verdict dans corrections.md de Morpheus et reactiver Cerberus avec bilan et outils utilises declares (REGLE ABSOLUE 6). |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | buffy (retour de mission) |
+| **Raison** | MISSION TERMINEE (Buffy) : REFONTE CONCEPTUELLE DU MODELE DE CASES - ETAPE CONCEPT. (1) PHILOSOPHIE : dossier agents/philosophie/ cree (index + fiche PLACE une place pour chaque chose + fiche ALLEGER alleger ne veut pas dire supprimer : decomposer - metaphore palette de briques) + convention-structures arbre L2 mis a jour. (2) SPEC v0.2.13 : Pattern 7 MODELE COMPOSE documente (decision 2+ branches sauf action directe, deviations vers workflow secondaire avec REJOINT au flux principal, schema JSON c5/c5a DEVIATION/c5b REJOINT/c6) + procedure d audit 4e + critere 18 + re-audit 6->7 patterns. (3) PROTOCOLE-CARTE-DECISION : section modele compose ajoutee (reference philosophie + exemple Cerberus/Buffy). (4) PILOTES avec generateurs-case : buffy v0.2.2 43 cases (c13c question erreurs hors mission apres c13b : OUI c13d fin signalement Cerberus / NON c14 flux) + cerberus v0.2.0 29 cases (c12a apres c12 : OUI c12b DEVIATION reactiver Buffy -> c12c REJOINT -> c13 / NON c13) - la boucle complete des 2 cotes. (5) RVAV : valider-cartes-decision --tous 11/11, ASCII 0 sur 9 fichiers, navigation des 2 deviations PARCOURS TERMINE OUI et NON, valider-tableaux CONFORME, liens 4/4. LECON documentee dans corrections.md buffy. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | morpheus | 2026-08-08 19:10 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-08 20:27 |
 | session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
 | session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |

@@ -1,487 +1,524 @@
 {
- "identite": {
-  "type": "parcours",
-  "appartient_a": "cerberus",
-  "commun": false
- },
- "parcours": {
-  "nom": "parcours-cerberus",
-  "agent": "cerberus",
-  "version": "0.1.0",
-  "case_depart": "c0",
-  "description": "Parcours (jeu de piste) des missions de coordination de Cerberus : accueillir, activer un agent, gerer le retour (second controle + README), inventaire. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
- },
- "cases": {
-  "c0": {
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question",
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c0c"
-    },
-    {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c0b"
-    }
-   ]
+  "identite": {
+    "type": "parcours",
+    "appartient_a": "cerberus",
+    "commun": false
   },
-  "c0b": {
-   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
-    },
-    {
-     "type": "outil",
-     "nom": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/cerberus/corrections.md"
-    },
-    {
-     "type": "outil",
-     "nom": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/cerberus/cerberus.md"
-    }
-   ],
-   "suivant": "c0c"
+  "parcours": {
+    "nom": "parcours-cerberus",
+    "agent": "cerberus",
+    "version": "0.2.0",
+    "case_depart": "c0",
+    "description": "Parcours (jeu de piste) des missions de coordination de Cerberus : accueillir, activer un agent, gerer le retour (second controle + README), inventaire. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : retour c12a question erreurs hors mission signalees (OUI c12b deviation reactiver Buffy -> c12c rejoint -> c13 / NON c13 flux principal)."
   },
-  "c1": {
-   "titre": "Mission",
-   "type": "question",
-   "question": "Quelle est la situation ?",
-   "branches": [
-    {
-     "reponse": "accueil",
-     "vers": "c2"
+  "cases": {
+    "c0": {
+      "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+      "type": "question",
+      "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c0c"
+        },
+        {
+          "reponse": "INCERTAIN",
+          "vers": "c0b"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c0b"
+        }
+      ]
     },
-    {
-     "reponse": "activation",
-     "vers": "c8"
+    "c0b": {
+      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/cerberus/corrections.md"
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/cerberus/cerberus.md"
+        }
+      ],
+      "suivant": "c0c"
     },
-    {
-     "reponse": "retour",
-     "vers": "c11"
+    "c1": {
+      "titre": "Mission",
+      "type": "question",
+      "question": "Quelle est la situation ?",
+      "branches": [
+        {
+          "reponse": "accueil",
+          "vers": "c2"
+        },
+        {
+          "reponse": "activation",
+          "vers": "c8"
+        },
+        {
+          "reponse": "retour",
+          "vers": "c11"
+        },
+        {
+          "reponse": "autre",
+          "vers": "c18"
+        }
+      ]
     },
-    {
-     "reponse": "autre",
-     "vers": "c18"
+    "c2": {
+      "titre": "Ecouter la demande",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : je n'execute JAMAIS une mission moi-meme. Mon role = ecouter, analyser, activer l'agent habilite, coordonner."
+        },
+        {
+          "type": "outil",
+          "nom": "lister-agents",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-agents/",
+          "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
+        }
+      ],
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Lister les agents disponibles",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "outil",
+          "nom": "lister-agents",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-agents/",
+          "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/regles-immuables/general/regles-choisir-agent.md",
+          "raison": "Matrice qui fait quoi : identifier l'agent habilite pour la demande"
+        }
+      ],
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Lister les outils disponibles",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "outil",
+          "nom": "lister-outils",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-outils/",
+          "commande": "python3 cerveau-projet/agents/tools/lister/lister-outils/lister-outils.py"
+        }
+      ],
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Identifier l'agent habilite",
+      "type": "controle",
+      "question": "L'agent habilite est-il identifie (matrice regles-choisir-agent) ?",
+      "indices": [
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/regles-immuables/general/regles-choisir-agent.md",
+          "raison": "Matrice de choix : chaque mission a un agent habilite"
+        },
+        {
+          "type": "regle",
+          "texte": "Outils -> Vulcain ; fichiers du cerveau -> Buffy ; tests -> Morpheus ; controle -> Janus ; README -> Clio ; inventaire/audit -> Themis ; pense-bete -> Athena ; spec -> Promethee ; todo -> Minerve ; exploration -> Atlas."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c6"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c5"
+        }
+      ]
+    },
+    "c6": {
+      "titre": "Activer l'agent habilite",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : je n'execute JAMAIS la mission moi-meme. J'active l'agent habilite et je lui donne la mission complete."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison> <mission>"
+        }
+      ],
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Annoncer la mission et suivre le cycle",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "FLUX : Cerberus active -> l'agent lit SA fiche en prenant le relais -> l'agent execute -> l'agent reactive Cerberus -> Cerberus relit SA fiche a nouveau."
+        },
+        {
+          "type": "regle",
+          "texte": "Au retour de l'agent : verifier si la mission figure dans la liste definie (second controle Janus) et si des fichiers ont change (README via Clio)."
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c8": {
+      "titre": "Verifier l'agent (identification)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-identification/",
+          "raison": "Protocole d'identification : verifier l'agent avant activation"
+        },
+        {
+          "type": "outil",
+          "nom": "lister-agents",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-agents/",
+          "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
+        }
+      ],
+      "suivant": "c9"
+    },
+    "c9": {
+      "titre": "Lire la fiche et les corrections de l'agent",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE -- LECTURE : chaque agent lit SA fiche et SES corrections quand il est active. Je lui donne le relais ; c'est lui qui lit ses fichiers en prenant le relais."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/<agent>/<agent>.md"
+        }
+      ],
+      "suivant": "c10"
+    },
+    "c10": {
+      "titre": "Activer l'agent",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "Mettre a jour AGENTS.md (l'agent devient principal de la session) avec la raison et la mission complete."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison> <mission>"
+        }
+      ],
+      "suivant": "c7"
+    },
+    "c11": {
+      "titre": "Relire MA fiche et MES corrections",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE FONDAMENTALE (demarrer.md) : Reactiver Cerberus SANS lire = inutile. A chaque reactivation, je relis MA fiche et MES corrections avant de reprendre la coordination."
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/cerberus/cerberus.md",
+          "raison": "Ma fiche (a relire a chaque activation)"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/cerberus/corrections.md",
+          "raison": "Mes corrections (a relire en priorite)"
+        }
+      ],
+      "suivant": "c12"
+    },
+    "c12": {
+      "titre": "Lire la raison de la reactivation",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "fichier",
+          "chemin": "AGENTS.md",
+          "raison": "Lire la raison de la reactivation dans le bloc de la session"
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md"
+        }
+      ],
+      "suivant": "c12a"
+    },
+    "c13": {
+      "titre": "Mission dans la liste definie ?",
+      "type": "controle",
+      "question": "La mission terminee figure-t-elle dans la liste des missions exigeant le second controle ?",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "LISTE DEFINIE : Construire un outil (OUI), Optimiser un outil (OUI), Modifier le cerveau-projet (OUI), Pense-bete (OUI), Spec (OUI), Todo (OUI), Tests (OUI). Second controle / README / audit / exploration (NON)."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c14"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c16"
+        }
+      ]
+    },
+    "c14": {
+      "titre": "Activer Janus (second controle)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : APRES CHAQUE RETOUR d'agent, si la mission figure dans la liste definie, j'active Janus AVANT de reprendre la conversation."
+        },
+        {
+          "type": "regle",
+          "texte": "ANTI-BOUCLE : Janus ne modifie pas les fichiers du projet. Ses rapports de controle ne declenchent PAS Clio."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus <raison-controle>"
+        }
+      ],
+      "suivant": "c15"
+    },
+    "c15": {
+      "titre": "Traiter le verdict de Janus",
+      "type": "controle",
+      "question": "Le verdict de Janus est-il VALIDE ?",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "FLUX CONTROLE : CERBERUS -> AGENT -> CERBERUS -> JANUS -> CERBERUS -> CLIO (si fichiers changes)."
+        },
+        {
+          "type": "regle",
+          "texte": "FLUX CORRECTION : si REJETE / A REVOIR -> reactiver l'agent d'origine pour corriger, puis relancer Janus."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c16"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c21"
+        }
+      ]
+    },
+    "c16": {
+      "titre": "Fichiers changes ?",
+      "type": "controle",
+      "question": "Des fichiers du projet (hors Clio et hors rapports Janus) ont-ils change ?",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "ANTI-BOUCLE : je n'active PAS Clio si les seuls fichiers modifies sont ceux de Clio (README.md, AGENTS.md, AGENTS-historique.md) ou les rapports de controle de Janus."
+        },
+        {
+          "type": "outil",
+          "nom": "lister-agents",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-agents/",
+          "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c17"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c19"
+        }
+      ]
+    },
+    "c17": {
+      "titre": "Activer Clio (README)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : si d'autres fichiers ont change -> ACTIVER CLIO -- c'est elle qui met le README a jour, pas moi."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 clio <raison-readme>"
+        }
+      ],
+      "suivant": "c19"
+    },
+    "c18": {
+      "titre": "Inventaire / audit ?",
+      "type": "question",
+      "question": "La demande est-elle un inventaire, un audit ou une analyse du cerveau-projet ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c22"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c23"
+        }
+      ]
+    },
+    "c19": {
+      "titre": "Reprendre la coordination",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "Je reprends le controle pour la suite : continuer avec l'utilisateur, verifier les chaines Janus/Clio."
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c20": {
+      "titre": "FIN - Coordination terminee",
+      "type": "fin",
+      "message": "La coordination est terminee. Le cycle CERBERUS -> AGENT -> CERBERUS est boucle."
+    },
+    "c21": {
+      "titre": "Reactiver l'agent d'origine (correction)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : verdict REJETE / A REVOIR -> reactiver l'agent d'origine pour corriger, puis relancer Janus (re-controle)."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent-auteur> <correction-a-faire>"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c22": {
+      "titre": "Activer Themis (inventaire/audit)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : JE N'EXECUTE JAMAIS UN INVENTAIRE OU UN AUDIT MOI-MEME. C'est une mission pour Themis (evaluatrice croisee). Je ne lance aucune commande find/grep/python pour analyser le cerveau."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison-audit>"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c23": {
+      "titre": "Signaler le besoin",
+      "type": "fin",
+      "message": "Situation non couverte : signaler le besoin et documenter une nouvelle case dans le parcours."
+    },
+    "c0c": {
+      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-activite-recente",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        },
+        {
+          "type": "fichier",
+          "chemin": "AGENTS.md",
+          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
+        }
+      ],
+      "suivant": "c1"
+    },
+    "c12c": {
+      "titre": "REJOINT : retour au flux principal",
+      "type": "indice",
+      "suivant": "c13"
+    },
+    "c12b": {
+      "titre": "DEVIATION : reactiver Buffy pour reparer immediatement",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE PATTERN 7 (spec v0.2.13) : deviation vers un workflow secondaire - Buffy repare les erreurs hors mission puis revient au flux principal."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 buffy REPARATION"
+        }
+      ],
+      "suivant": "c12c"
+    },
+    "c12a": {
+      "titre": "Erreurs hors mission signalees ?",
+      "type": "question",
+      "question": "La raison de la reactivation signale-t-elle des erreurs HORS MISSION detectees par l agent ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c12b"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c13"
+        }
+      ]
     }
-   ]
-  },
-  "c2": {
-   "titre": "Ecouter la demande",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : je n'execute JAMAIS une mission moi-meme. Mon role = ecouter, analyser, activer l'agent habilite, coordonner."
-    },
-    {
-     "type": "outil",
-     "nom": "lister-agents",
-     "chemin": "cerveau-projet/agents/tools/lister/lister-agents/",
-     "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
-    }
-   ],
-   "suivant": "c3"
-  },
-  "c3": {
-   "titre": "Lister les agents disponibles",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "outil",
-     "nom": "lister-agents",
-     "chemin": "cerveau-projet/agents/tools/lister/lister-agents/",
-     "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
-    },
-    {
-     "type": "fichier",
-     "chemin": "cerveau-projet/agents/regles-immuables/general/regles-choisir-agent.md",
-     "raison": "Matrice qui fait quoi : identifier l'agent habilite pour la demande"
-    }
-   ],
-   "suivant": "c4"
-  },
-  "c4": {
-   "titre": "Lister les outils disponibles",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "outil",
-     "nom": "lister-outils",
-     "chemin": "cerveau-projet/agents/tools/lister/lister-outils/",
-     "commande": "python3 cerveau-projet/agents/tools/lister/lister-outils/lister-outils.py"
-    }
-   ],
-   "suivant": "c5"
-  },
-  "c5": {
-   "titre": "Identifier l'agent habilite",
-   "type": "controle",
-   "question": "L'agent habilite est-il identifie (matrice regles-choisir-agent) ?",
-   "indices": [
-    {
-     "type": "fichier",
-     "chemin": "cerveau-projet/agents/regles-immuables/general/regles-choisir-agent.md",
-     "raison": "Matrice de choix : chaque mission a un agent habilite"
-    },
-    {
-     "type": "regle",
-     "texte": "Outils -> Vulcain ; fichiers du cerveau -> Buffy ; tests -> Morpheus ; controle -> Janus ; README -> Clio ; inventaire/audit -> Themis ; pense-bete -> Athena ; spec -> Promethee ; todo -> Minerve ; exploration -> Atlas."
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c6"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c5"
-    }
-   ]
-  },
-  "c6": {
-   "titre": "Activer l'agent habilite",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : je n'execute JAMAIS la mission moi-meme. J'active l'agent habilite et je lui donne la mission complete."
-    },
-    {
-     "type": "outil",
-     "nom": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison> <mission>"
-    }
-   ],
-   "suivant": "c7"
-  },
-  "c7": {
-   "titre": "Annoncer la mission et suivre le cycle",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "FLUX : Cerberus active -> l'agent lit SA fiche en prenant le relais -> l'agent execute -> l'agent reactive Cerberus -> Cerberus relit SA fiche a nouveau."
-    },
-    {
-     "type": "regle",
-     "texte": "Au retour de l'agent : verifier si la mission figure dans la liste definie (second controle Janus) et si des fichiers ont change (README via Clio)."
-    }
-   ],
-   "suivant": "c20"
-  },
-  "c8": {
-   "titre": "Verifier l'agent (identification)",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "fichier",
-     "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-identification/",
-     "raison": "Protocole d'identification : verifier l'agent avant activation"
-    },
-    {
-     "type": "outil",
-     "nom": "lister-agents",
-     "chemin": "cerveau-projet/agents/tools/lister/lister-agents/",
-     "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
-    }
-   ],
-   "suivant": "c9"
-  },
-  "c9": {
-   "titre": "Lire la fiche et les corrections de l'agent",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE -- LECTURE : chaque agent lit SA fiche et SES corrections quand il est active. Je lui donne le relais ; c'est lui qui lit ses fichiers en prenant le relais."
-    },
-    {
-     "type": "outil",
-     "nom": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/<agent>/<agent>.md"
-    }
-   ],
-   "suivant": "c10"
-  },
-  "c10": {
-   "titre": "Activer l'agent",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "Mettre a jour AGENTS.md (l'agent devient principal de la session) avec la raison et la mission complete."
-    },
-    {
-     "type": "outil",
-     "nom": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison> <mission>"
-    }
-   ],
-   "suivant": "c7"
-  },
-  "c11": {
-   "titre": "Relire MA fiche et MES corrections",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE FONDAMENTALE (demarrer.md) : Reactiver Cerberus SANS lire = inutile. A chaque reactivation, je relis MA fiche et MES corrections avant de reprendre la coordination."
-    },
-    {
-     "type": "fichier",
-     "chemin": "cerveau-projet/agents/cerberus/cerberus.md",
-     "raison": "Ma fiche (a relire a chaque activation)"
-    },
-    {
-     "type": "fichier",
-     "chemin": "cerveau-projet/agents/cerberus/corrections.md",
-     "raison": "Mes corrections (a relire en priorite)"
-    }
-   ],
-   "suivant": "c12"
-  },
-  "c12": {
-   "titre": "Lire la raison de la reactivation",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "fichier",
-     "chemin": "AGENTS.md",
-     "raison": "Lire la raison de la reactivation dans le bloc de la session"
-    },
-    {
-     "type": "outil",
-     "nom": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md"
-    }
-   ],
-   "suivant": "c13"
-  },
-  "c13": {
-   "titre": "Mission dans la liste definie ?",
-   "type": "controle",
-   "question": "La mission terminee figure-t-elle dans la liste des missions exigeant le second controle ?",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "LISTE DEFINIE : Construire un outil (OUI), Optimiser un outil (OUI), Modifier le cerveau-projet (OUI), Pense-bete (OUI), Spec (OUI), Todo (OUI), Tests (OUI). Second controle / README / audit / exploration (NON)."
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c14"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c16"
-    }
-   ]
-  },
-  "c14": {
-   "titre": "Activer Janus (second controle)",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE : APRES CHAQUE RETOUR d'agent, si la mission figure dans la liste definie, j'active Janus AVANT de reprendre la conversation."
-    },
-    {
-     "type": "regle",
-     "texte": "ANTI-BOUCLE : Janus ne modifie pas les fichiers du projet. Ses rapports de controle ne declenchent PAS Clio."
-    },
-    {
-     "type": "outil",
-     "nom": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus <raison-controle>"
-    }
-   ],
-   "suivant": "c15"
-  },
-  "c15": {
-   "titre": "Traiter le verdict de Janus",
-   "type": "controle",
-   "question": "Le verdict de Janus est-il VALIDE ?",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "FLUX CONTROLE : CERBERUS -> AGENT -> CERBERUS -> JANUS -> CERBERUS -> CLIO (si fichiers changes)."
-    },
-    {
-     "type": "regle",
-     "texte": "FLUX CORRECTION : si REJETE / A REVOIR -> reactiver l'agent d'origine pour corriger, puis relancer Janus."
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c16"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c21"
-    }
-   ]
-  },
-  "c16": {
-   "titre": "Fichiers changes ?",
-   "type": "controle",
-   "question": "Des fichiers du projet (hors Clio et hors rapports Janus) ont-ils change ?",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "ANTI-BOUCLE : je n'active PAS Clio si les seuls fichiers modifies sont ceux de Clio (README.md, AGENTS.md, AGENTS-historique.md) ou les rapports de controle de Janus."
-    },
-    {
-     "type": "outil",
-     "nom": "lister-agents",
-     "chemin": "cerveau-projet/agents/tools/lister/lister-agents/",
-     "commande": "python3 cerveau-projet/agents/tools/lister/lister-agents/lister-agents.py"
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c17"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c19"
-    }
-   ]
-  },
-  "c17": {
-   "titre": "Activer Clio (README)",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE : si d'autres fichiers ont change -> ACTIVER CLIO -- c'est elle qui met le README a jour, pas moi."
-    },
-    {
-     "type": "outil",
-     "nom": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 clio <raison-readme>"
-    }
-   ],
-   "suivant": "c19"
-  },
-  "c18": {
-   "titre": "Inventaire / audit ?",
-   "type": "question",
-   "question": "La demande est-elle un inventaire, un audit ou une analyse du cerveau-projet ?",
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c22"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c23"
-    }
-   ]
-  },
-  "c19": {
-   "titre": "Reprendre la coordination",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "Je reprends le controle pour la suite : continuer avec l'utilisateur, verifier les chaines Janus/Clio."
-    }
-   ],
-   "suivant": "c20"
-  },
-  "c20": {
-   "titre": "FIN - Coordination terminee",
-   "type": "fin",
-   "message": "La coordination est terminee. Le cycle CERBERUS -> AGENT -> CERBERUS est boucle."
-  },
-  "c21": {
-   "titre": "Reactiver l'agent d'origine (correction)",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE : verdict REJETE / A REVOIR -> reactiver l'agent d'origine pour corriger, puis relancer Janus (re-controle)."
-    },
-    {
-     "type": "outil",
-     "nom": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent-auteur> <correction-a-faire>"
-    }
-   ],
-   "suivant": "c20"
-  },
-  "c22": {
-   "titre": "Activer Themis (inventaire/audit)",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : JE N'EXECUTE JAMAIS UN INVENTAIRE OU UN AUDIT MOI-MEME. C'est une mission pour Themis (evaluatrice croisee). Je ne lance aucune commande find/grep/python pour analyser le cerveau."
-    },
-    {
-     "type": "outil",
-     "nom": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison-audit>"
-    }
-   ],
-   "suivant": "c20"
-  },
-  "c23": {
-   "titre": "Signaler le besoin",
-   "type": "fin",
-   "message": "Situation non couverte : signaler le besoin et documenter une nouvelle case dans le parcours."
-  },
-  "c0c": {
-   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
-    },
-    {
-     "type": "outil",
-     "nom": "lire-activite-recente",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
-    },
-    {
-     "type": "fichier",
-     "chemin": "AGENTS.md",
-     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
-    }
-   ],
-   "suivant": "c1"
   }
- }
 }

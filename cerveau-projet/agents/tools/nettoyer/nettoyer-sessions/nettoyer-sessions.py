@@ -26,7 +26,7 @@ Variables d'environnement (tests sur copies) :
   CLASSEUR_STOCKAGE    - surcharger le chemin du classeur-variables
 
 Proprietaire : Vulcain
-Version : 0.1.0
+Version : 0.1.1
 Statut : prepare
 """
 
@@ -35,7 +35,7 @@ import os
 import re
 import sys
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 STATUT = "prepare"
 
 AGENTS_FILE = os.environ.get("AGENTS_FILE", "AGENTS.md")

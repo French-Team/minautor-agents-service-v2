@@ -149,6 +149,8 @@ cerveau-projet/                     <- racine (L0)
 |   |       ``-- index-structures.md <- point d'entree L3
 |   |-- regles-immuables/           <- dossier (L2)
 |   |   ``-- index-regles-immuables.md
+|   |-- philosophie/                <- dossier (L2)
+|   |   ``-- index-philosophie.md   <- point d'entree L2
 |   |-- classeur-variables/         <- dossier (L2)
 |   |   ``-- index-classeur.md
 |   ``-- tools/                     <- dossier (L2)

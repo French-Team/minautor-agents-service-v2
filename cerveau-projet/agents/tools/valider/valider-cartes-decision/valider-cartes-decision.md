@@ -7,33 +7,38 @@ identite:
 ---
 # valider-cartes-decision
 
-**Version :** 0.2.0-py
+**Version :** 0.3.0
 **Statut :** prepare
 **Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-cartes-decision/`
-**Proprietaire :** Janus (outil partage)
+**Proprietaire :** Vulcain (outil partage)
 
 ---
 
 ## Objectif
 
-Verifier que les agents respectent les cartes de decision dans leurs fichiers.
+Verifier que les agents respectent leur **CARTE DE DECISION**. Depuis
+l'allegement des fiches (v0.2.0), la carte de decision d'un agent est son
+**PARCOURS JSON** (`agents/<agent>/parcours/parcours-<agent>.json`) : c'est la
+SOURCE DE VERITE du guidage (jeu de piste). L'outil valide la structure, les
+references et la case de relecture d'un parcours.
 
 **Pourquoi cet outil ?**
-- Les agents peuvent ne pas respecter les cartes de decision
-- Les cartes peuvent etre incompletes ou incorrectes
-- Cet outil automatise la verification
-- Il garantit la coherence du systeme
+- Les fiches allegees ne contiennent plus de section "Carte de Decision"
+- Le parcours JSON est la source unique du guidage : il doit etre valide
+- Il garantit la coherence des cartes de decision de tous les agents
 
 ---
 
 ## Utilisation
 
 ```
-valider-cartes-decision(agent="Buffy")
-valider-cartes-decision(tous="true")
-valider-cartes-decision(fichier="chemin/vers/fichier.md")
+python3 valider-cartes-decision.py --agent <nom>
+python3 valider-cartes-decision.py --tous
+python3 valider-cartes-decision.py --fichier <parcours.json>
 ```
+
+Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
 
 ---
 
@@ -41,81 +46,79 @@ valider-cartes-decision(fichier="chemin/vers/fichier.md")
 
 | Parametre | Type | Obligatoire | Description |
 |---|---|---|---|
-| `agent` | string | Non | Nom de l'agent a verifier |
-| `tous` | boolean | Non | Verifier tous les agents |
-| `fichier` | string | Non | Verifier un fichier specifique |
+| `--agent <nom>` | string | Non | Verifier le parcours d'un agent specifique |
+| `--tous` | boolean | Non | Verifier les parcours de tous les agents |
+| `--fichier <chemin>` | string | Non | Verifier un fichier parcours JSON specifique |
+| `--version` | - | Non | Afficher la version |
 
 ---
 
-## Ce que l'outil verifie
+## Ce que l'outil verifie (un parcours JSON)
 
-### 1. Presence de la section "Carte de Decision"
-
-```
-[ ] La section existe
-[ ] Elle est placee apres "Vue d'ensemble"
-[ ] Elle contient "CARTE DE DECISION" en majuscules
-```
-
-### 2. Structure de la carte
+### 1. JSON valide
 
 ```
-[ ] Tableau "Missions disponibles" present
-[ ] Chaque mission a un nom
-[ ] Chaque mission a des etapes
-[ ] Chaque mission a des protocoles
+[ ] Le fichier se parse sans erreur (json.load)
 ```
 
-### 3. Detail des missions
+### 2. Structure top-level
 
 ```
-[ ] Chaque mission a un titre "Mission : [nom]"
-[ ] Chaque mission a "QUAND" (condition de declenchement)
-[ ] Chaque mission a un tableau d'etapes
-[ ] Chaque etape a : Action, Protocole, Sortie
+[ ] Cles presentes : identite + parcours + cases
+[ ] identite.type = "parcours"
 ```
 
-### 4. Regles absolues
+### 3. Case de depart
 
 ```
-[ ] Au moins une regle absolue est definie
-[ ] La regle est en majuscules
-[ ] La regle est pertinente pour l'agent
+[ ] parcours.case_depart existe
+[ ] Elle designe une case reelle dans cases
+```
+
+### 4. Types de cases
+
+```
+[ ] Chaque case a un type valide : question / indice / controle / fin
+```
+
+### 5. References
+
+```
+[ ] chaque suivant pointe vers une case existante
+[ ] chaque branche.vers pointe vers une case existante
+```
+
+### 6. Case c0 de relecture (Pattern 4)
+
+```
+[ ] La case c0 existe et est de type question (relecture honnete)
+[ ] ATTENTION (non bloquant) si la question ne semble pas poser la relecture
 ```
 
 ---
 
 ## Format de sortie
 
-### Format tableau (defaut)
+```
+=== Verification de l'agent : <agent> ===
 
-```markdown
-## Resultat de la validation -- Agent Buffy
+1. JSON valide
+   [OK] JSON parse sans erreur
+2. Structure (identite + parcours + cases)
+   [OK] Cles top-level presentes
+3. Case de depart (case_depart)
+   [OK] case_depart 'c0' existe
+4. Types de cases (question/indice/controle/fin)
+   [OK] 41 cases, tous types valides
+5. References (suivant + branches.vers)
+   [OK] Toutes les references pointent vers des cases existantes
+6. Case c0 de relecture honnete (Pattern 4)
+   [OK] c0 est une question de relecture
 
-| Verification | Statut | Notes |
-|---|---|---|
-| Section Carte de Decision | [OK] | Presente |
-| Tableau Missions | [OK] | 5 missions |
-| Detail des missions | [OK] | Toutes completes |
-| Regles absolues | [OK] | 2 regles |
-
-**Verdict** : [OK] CONFORME
+=== Resultat : CONFORME ===
 ```
 
-### Format detaille
-
-```markdown
-## Resultat detaille
-
-### Mission : Creer un fichier
-
-| Etape | Action | Protocole | Statut |
-|---|---|---|---|
-| 1 | Verifier le nommage | convention-renommage | [OK] |
-| 2 | Verifier la structure | convention-structures | [OK] |
-| 3 | Creer le fichier | - | [OK] |
-| 4 | Mettre a jour l'index | - | [OK] |
-```
+`--tous` ajoute un resume final : Agents verifies / conformes / non conformes.
 
 ---
 
@@ -123,16 +126,20 @@ valider-cartes-decision(fichier="chemin/vers/fichier.md")
 
 | Erreur | Correction |
 |---|---|
-| Section manquante | Ajouter "## CARTE DE DECISION" |
-| Pas de tableau missions | Ajouter tableau avec Missions/Etapes/Protocoles |
-| Etape sans protocole | Ajouter protocole ou "-" si aucun |
-| Pas de regle absolue | Ajouter au moins une regle en majuscules |
+| JSON invalide | Corriger la syntaxe du fichier parcours-<agent>.json |
+| Cles manquantes | Verifier identite + parcours + cases presentes |
+| case_depart introuvable | Verifier parcours.case_depart designe une case existante |
+| Type invalide | Utiliser question / indice / controle / fin |
+| Reference cassee | Corriger suivant ou branche.vers qui pointe vers une case absente |
+| Case c0 absente | Ajouter la question de relecture honnete en case c0 (Pattern 4) |
+| Fichier .md passe en --fichier | La cible est le parcours JSON, pas la fiche allegee |
 
 ---
 
 ## Dependances
 
-- `agents/[nom]/[nom].md` -- fichier de l'agent a verifier
+- `agents/<agent>/parcours/parcours-<agent>.json` -- parcours de l'agent a verifier
+- `python3` -- requis (le `.sh` transmet au `.py`)
 
 ---
 
@@ -141,13 +148,15 @@ valider-cartes-decision(fichier="chemin/vers/fichier.md")
 | Version | Date | Changements |
 |---|---|---|
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
+| 0.2.0-py | 2026-08-06 | Portage Python (validait la section Carte de Decision des fiches) |
+| 0.3.0 | 2026-08-08 | Cible changee : PARCOURS JSON (source de verite) au lieu de la section des fiches allegees. 6 controles : JSON, structure, case_depart, types, references, c0 de relecture. --tous scanne tous les agents avec parcours/. .sh = wrapper vers .py (parite stricte) |
 
 ---
 
 ## Notes
 
-- Cet outil est ESSENTIEL pour maintenir la qualite des cartes
-- Il doit etre execute apres chaque modification de carte
-- Les resultats doivent etre documentes
+- La carte de decision d'un agent = SON parcours JSON, plus jamais la fiche
+- Cet outil doit etre execute apres chaque modification de parcours
+- `combo-controle-outil` l'appelle via `.py --tous` (interface conservee)
 
 ---

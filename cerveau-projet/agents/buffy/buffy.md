@@ -164,6 +164,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 | `gerer-sous-mission` | Gerer les sous-missions (sauvegarder/sortir/revenir) |
 | `activer-agent-principal` | Activer un agent / reactiver Cerberus |
 | `guider-parcours` | Suivre MON parcours case par case (jeu de piste) |
+| `generateurs-case` | Ajouter/editer/supprimer une case de MON parcours JSON (recablage auto + validation) |
 
 > **REGLE** : Pour toute operation de base sur les fichiers, j'utilise CES outils, jamais les outils du systeme.
 > **REGLE** : les indices OUTIL et FICHIER precis de chaque mission sont dans les CASES du parcours (source de verite).

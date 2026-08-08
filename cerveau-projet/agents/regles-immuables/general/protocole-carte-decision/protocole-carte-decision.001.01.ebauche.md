@@ -53,6 +53,30 @@ Une case peut **combiner** plusieurs modeles quand le moment l'exige, ou n'etre
 qu'une simple question quand ca suffit. Chaque reponse mene a une **branche**
 vers la case suivante.
 
+### Le modele compose (Pattern 7, v0.2.13)
+
+> Philosophie : "alleger ne veut pas dire supprimer : decomposer pour
+> faciliter" (agents/philosophie/). Une case n'est plus un cul-de-sac a
+> reponse unique : c'est le debut d'un MODELE COMPOSE.
+
+1. Toute case de **decision** (`question` ou `controle`) porte AU MINIMUM
+   **2 branches** (sauf action directe : une case `indice` a `suivant` est
+   une ACTION, pas une decision). Deux branches = deux solutions
+   alternatives, ou une decision + une deviation.
+2. Une **DEVIATION** est une branche vers un WORKFLOW SECONDAIRE (un groupe
+   de cases qui traite un sous-probleme). La derniere case du workflow
+   secondaire a un `suivant` qui **REJOINT** le workflow principal (case de
+   rejoint) -- jamais une fin au milieu, jamais une boucle d'attente
+   (regle 10 de la spec-guider-parcours).
+3. Exemple reel : la boucle Cerberus/Buffy -- si Buffy trouve des erreurs
+   HORS MISSION pendant sa mission, elle le signale a Cerberus ; la carte de
+   Cerberus porte une decision "erreur hors mission signalee" : OUI
+   (reparation immediate -> deviation : reactiver Buffy, elle repare, revient
+   au flux) / NON (differer -> le flux principal continue).
+
+Details, schema JSON et procedure d'audit : spec-guider-parcours v0.2.13
+(Pattern 7 + procedure 4e).
+
 ### Format du parcours (JSON)
 
 ```json

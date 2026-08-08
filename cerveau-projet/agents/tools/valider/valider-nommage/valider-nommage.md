@@ -7,7 +7,7 @@ identite:
 ---
 # valider-nommage
 
-**Version :** 0.3.0-py
+**Version :** 0.3.1-py
 **Statut :** prepare
 **Categorie :** Valider
 **Chemin :** `agents/tools/valider/valider-nommage/`
@@ -103,7 +103,9 @@ En mode recursif, les **dossiers de traces historisees** sont ignores :
 
 Le mode `--recursive` valide tous les outils d'un dossier :
 - Valide les fichiers `.sh`, `.py` et `.md` de premier niveau
-- Ignore les sous-dossiers `spec/`, les index, les templates
+- Ignore les **sous-dossiers composants** d'un outil : `tests/`, `spec/`,
+  `protections/` et `__pycache__/` (leurs fichiers ont leur propre convention
+  de nommage : `test-NNN-*`, `spec-*.XX.XX.ebauche.md`)
 - Affiche un resume : total, OK, erreurs
 
 ```bash
@@ -138,6 +140,7 @@ $ valider-nommage.sh --recursive cerveau-projet/agents/tools/
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (outil conforme OK, outil sans prefixe detecte), exclusions obsoletees retirees, promotion prepare |
 | 0.2.1 | 2026-08-07 | Ajout du support des fichiers `.py` (format + prefixe dossier + mode --recursive) |
 | 0.3.0 | 2026-08-08 | Ajout du mode `--mots-seuls` (regle fondamentale : identifiants generiques a un seul mot interdits dans les blocs YAML/JSON, exceptions structurelles et cles de schema autorisees, dossiers de traces ignores en recursif) |
+| 0.3.1 | 2026-08-08 | Correction du bruit du scan `--recursive` : les sous-dossiers composants d'un outil (`tests/`, `spec/`, `protections/`, `__pycache__/`) ne sont plus traites comme de faux outils (leurs fichiers `test-*`/`spec-*` etaient signales en ERREUR de prefixe a tort). Parite py/sh |
 
 ## Notes de creation
 

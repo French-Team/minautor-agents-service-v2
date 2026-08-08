@@ -6,7 +6,7 @@ identite:
 ---
 # nettoyer-sessions
 
-**Version :** 0.1.0
+**Version :** 0.1.1
 **Statut :** prepare
 **Categorie :** nettoyer
 **Chemin :** `agents/tools/nettoyer/nettoyer-sessions/`
@@ -130,4 +130,5 @@ rien et retourne `code 0` (les sections absentes ne sont pas recreees).
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.1.1 | 2026-08-08 | Parite stricte des sorties py/sh : le .sh affiche desormais le message final complet 'Nettoyage termine : N lignes supprimees' (total AGENTS + classeur) et '[DRY-RUN] Total : N lignes a supprimer (aucune modification reelle)' en dry-run, identique au .py. Harmonisation '0 ligne' -> '0 lignes' dans le message classeur vide |
 | 0.1.0 | 2026-08-08 | Creation initiale : supprime les blocs session-llm + Sessions connues (AGENTS.md) et les lignes profil-session-* (classeur), preserve le frontmatter et le journal historique. Parite py/sh, --dry-run, --verbose |

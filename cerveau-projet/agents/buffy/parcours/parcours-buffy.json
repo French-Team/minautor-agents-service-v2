@@ -7,9 +7,9 @@
   "parcours": {
     "nom": "parcours-buffy",
     "agent": "buffy",
-    "version": "0.2.0",
+    "version": "0.2.2",
     "case_depart": "c0",
-    "description": "Parcours (jeu de piste) des missions de Buffy : creer/modifier les fichiers du cerveau, creer un agent/protocole, controler le cerveau, deleguer (Athena/Vulcain), sous-missions. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : le chemin controler (c28-c30) pointe vers le combo combo-sante-tableaux (Pattern 3, spec-guider-parcours v0.2.4)."
+    "description": "Parcours (jeu de piste) des missions de Buffy : creer/modifier les fichiers du cerveau, creer un agent/protocole, controler le cerveau, deleguer (Athena/Vulcain), sous-missions. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.1 : chemins combos (Pattern 3, spec-guider-parcours v0.2.4) : controler c28 combo-sante-tableaux, modifier c13b combo-controle-impacts, autre c34b combo-activation. v0.2.2 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : modifier c13c question erreurs hors mission (OUI c13d fin signalement a Cerberus / NON c14 flux principal)."
   },
   "cases": {
     "c0": {
@@ -239,7 +239,7 @@
           "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>"
         }
       ],
-      "suivant": "c11"
+      "suivant": "c10b"
     },
     "c11": {
       "titre": "Modifier le fichier",
@@ -310,7 +310,7 @@
           "commande": "python3 cerveau-projet/agents/tools/nettoyer/nettoyer-fichier/nettoyer-fichier.py <chemin>"
         }
       ],
-      "suivant": "c14"
+      "suivant": "c13b"
     },
     "c14": {
       "titre": "Valider le resultat (RVAV)",
@@ -677,7 +677,7 @@
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
         }
       ],
-      "suivant": "c36"
+      "suivant": "c34b"
     },
     "c35": {
       "titre": "Signaler le besoin",
@@ -710,6 +710,123 @@
         }
       ],
       "suivant": "c1"
+    },
+    "c10c": {
+      "titre": "Gerer les cases de parcours avec generateurs-case",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100%% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-case",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-case/",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py PARCOURS ajouter|editer|supprimer [--case ID] [--apres C] [--branche REP:VERS] [--suivant C]"
+        }
+      ],
+      "suivant": "c12"
+    },
+    "c10b": {
+      "titre": "Question : parcours a modifier ?",
+      "type": "question",
+      "question": "Le fichier a modifier est-il une carte de decision (parcours JSON) ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c10c"
+        },
+        {
+          "reponse": "non",
+          "vers": "c11"
+        }
+      ],
+      "suivant": "c11"
+    },
+    "c13b": {
+      "titre": "Lancer le combo controle-impacts",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d executer combos-moteur (ex: Je lance le combo combo-controle-impacts : cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json)."
+        },
+        {
+          "type": "regle",
+          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition (remplace la suite detecter-impacts + valider-liens)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE + ASCII : le fichier passe en --var fichier= est le fichier modifie par la mission, dans le workspace."
+        },
+        {
+          "type": "outil",
+          "nom": "combos-moteur",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json --var fichier=<fichier-modifie>"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json",
+          "raison": "Definition du combo controle-impacts (Pattern 3) : detecter-impacts -> valider-liens"
+        }
+      ],
+      "suivant": "c13c"
+    },
+    "c34b": {
+      "titre": "Lancer le combo activation",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d executer combos-moteur (ex: Je lance le combo combo-activation : cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json)."
+        },
+        {
+          "type": "regle",
+          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition (remplace la suite sidentifier + activer + reactiver)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : le combo travaille sur AGENTS.md + AGENTS-historique.md + le classeur (fichiers du workspace uniquement)."
+        },
+        {
+          "type": "outil",
+          "nom": "combos-moteur",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json",
+          "raison": "Definition du combo activation (Pattern 3) : sidentifier -> activer -> reactiver"
+        }
+      ],
+      "suivant": "c36"
+    },
+    "c13d": {
+      "titre": "FIN - Erreurs hors mission signalees a Cerberus",
+      "type": "fin",
+      "message": "Signaler a Cerberus les erreurs hors mission detectees : il decide reparation immediate ou differee. Ma mission s arrete ici, je reviens apres sa decision."
+    },
+    "c13c": {
+      "titre": "Erreurs hors mission detectees ?",
+      "type": "question",
+      "question": "Des erreurs HORS MISSION ont-elles ete detectees pendant le travail ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c13d"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c14"
+        }
+      ]
     }
   }
 }

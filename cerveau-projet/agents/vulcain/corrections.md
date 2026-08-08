@@ -196,6 +196,16 @@ Avant de creer un outil, je verifie la disponibilite des technologies sur tous l
 - PIEGE ASCII : dans une lecon, ne jamais ecrire de caractere accentue (ex: lancait sans cedille) -> lecon validee par valider-conformite-ascii.
 - Test formel 14/14 passe par Morpheus (regle delegation respectee).
 
+## [LECON] 2026-08-08 -- Spec-guider-parcours v0.2.12 : outil de reference generateurs-case
+
+**Tache** : Documenter generateurs-case dans la spec-guider-parcours comme L OUTIL DE REFERENCE pour creer/editer/supprimer des cases (suite de l integration Buffy).
+**Lecon** :
+- CONCEPT : la spec-guider-parcours (v0.2.11) ne mentionnait PAS generateurs-case (0 occurrence) alors que c est l outil officiel de modification des cases (recablage auto + validation auto) -> un agent ou humain qui voulait creer une case ne trouvait pas l outil de reference dans la spec du format. Une spec de FORMAT doit documenter l OUTIL DE REFERENCE de ce format.
+- CONTENU AJOUTE (v0.2.12) : section complete apres Exemple minimal et avant Patterns : sous-commandes (liste/ajouter/editer/supprimer), options cles (--case, --type, --titre, --question, --message, --suivant, --apres recablage auto, --branche, --indice-regle/outil/fichier, --vers, --dry-run), 3 exemples (ajouter/editer/supprimer), 6 regles d utilisation (--dry-run d abord, recablage auto, fin sans suivant exige --vers, garde-fou Pattern 5, rappel ASCII position 1, RE-AUDIT complet apres chaque operation). Tableau Emplacement des fichiers + critere d acceptation 17 ajoutes.
+- METHODE : lire la spec complete AVANT d editer (structure, point d insertion, format CRLF respecte), s appuyer sur la doc generateurs-case.md pour des options fideles (jamais inventer une option).
+- PIEGE ASCII : les guillemets ASCII obligatoires dans les exemples de commande (ex: indice-regle avec guillemets doubles) ; valider-conformite-ascii 0 a la fin.
+- La spec est le contrat entre l outil et les parcours : chaque evolution de format (patterns, outil de reference) doit y etre documentee au meme moment.
+
 ## [CONFIG] Configuration specifique
 
 ### Preferences de travail
@@ -253,6 +263,38 @@ preferences:
 | `../../agents/regles-immuables/general/protocole-outils/` | Protocole de construction d'outils |
 
 ---
+
+## [LECON] 2026-08-08 -- nettoyer-sessions v0.1.1 (parite sorties + bug latent 0\n0)
+
+**Tache** : corriger la divergence de parite des sorties py/sh signalee par Morpheus (le .py affichait 'Nettoyage termine : N lignes supprimees', le .sh juste 'Nettoyage termine') et valider par retest Morpheus.
+**Lecons** :
+1. PARITE DES SORTIES : quand on cree un outil py+sh, les MESSAGES de sortie doivent etre strictement identiques (pas seulement les fichiers resultants) -- Morpheus a ajoute 6 assertions (reel + dry-run, CRLF normalise) qui figent la parite dans le test
+2. BUG LATENT REVELE : nb=$(grep -c ... || echo 0) produit 0\n0 quand il y a 0 occurrence (grep -c affiche 0 ET echo 0 s execute) -> casse l arithmetique $((...)) du total -> TOUJOURS nb=$(grep -c ... 2>/dev/null); nb=${nb:-0} (piege deja documente, se manifeste des qu on utilise nb dans un calcul)
+3. ORDRE DES BLOCS : dans une fonction, le test dry-run doit passer AVANT le test de valeur 0, sinon le message [DRY-RUN] Classeur : 0... est omis alors que le .py l affiche toujours -- l ordre des branches change la parite
+4. LA BOUCLE FONCTIONNE : Morpheus a detecte le bug que mes validations de base (compile, ASCII, parite fichiers) ne voyaient pas -- la delegation des tests n est pas une formalite, elle protege la qualite
+5. Versionner py/sh/md ENSEMBLE (0.1.0 -> 0.1.1) : la parite de version fait partie de la parite de l outil
+
+## [LECON] 2026-08-08 -- valider-cartes-decision v0.3.0 (cible = parcours JSON)
+
+**Tache** : mettre a jour valider-cartes-decision qui cherchait encore la section Carte de Decision dans les fiches allegees (-> --tous = 5/5 NON CONFORME a tort) pour valider le PARCOURS JSON, source de verite du guidage.
+**Lecons** :
+1. EVOLUTION DE CIBLE : quand un format change (fiches allegees v0.2.0 : la carte vit dans le parcours JSON), l OUTIL qui valide l ANCIEN format devient obsolete et produit des NON CONFORME a tort -- il faut migrer la cible de l outil DANS LA MEME logique que le format, pas seulement documenter
+2. VALIDATIONS D UN PARCOURS : json.load, cles top-level (identite + parcours + cases), identite.type = parcours, case_depart existe, types valides (question/indice/controle/fin), references (suivant + branches.vers) vers des cases existantes, case c0 question de relecture (Pattern 4) -- les 6 controles couvrent la structure ET le standard de demarrage
+3. PARITE .sh = WRAPPER : pour un outil dont la logique vit dans le .py, le .sh peut etre un wrapper pur (exec python3 "$PY_SCRIPT" "$@", pattern detecter-impacts) -- la parite des sorties est garantie PAR CONSTRUCTION (aucun doublon d en-tete, aucune divergence de logique)
+4. INTERFACE PRESERVEE : combo-controle-outil appelle .py --tous -- une evolution de cible ne doit JAMAIS casser les appels existants (verifier les combos et parcours qui citent l outil)
+5. --tous doit SCANNER les dossiers agents avec parcours/ (pas une liste en dur AGENTS_DEFAUT) : l outil devient automatiquement a jour quand un agent est cree
+6. Test formel 24/24 (Morpheus, modele boucle) : --version, --tous 11/11, --agent, --fichier (parcours/.md), parcours corrompu = 3 erreurs, fichier inexistant, parite py/sh 4 cas, ASCII, nommage
+
+## [LECON] 2026-08-08 -- valider-nommage v0.3.1 (bruit du scan recursif)
+
+**Tache** : corriger le bruit du scan --recursive qui signalait en ERREUR les fichiers des sous-dossiers composants d un outil (tests/, spec/, protections/, __pycache__/).
+**Lecons** :
+1. STRUCTURE : le scan --recursive attend categorie/outil/fichiers directs. Les SOUS-DOSSERS COMPOSANTS (tests/, spec/, protections/, __pycache__/) ne sont pas des outils : leurs fichiers (test-*, spec-*) ont leur propre convention et ne doivent PAS etre valides avec le prefixe de la categorie parente
+2. CORRECTION A 2 NIVEAUX : exclure les composants au niveau CATEGORIE (ex: tester/tests/) ET au niveau OUTIL (ex: activer-agent-principal/tests/) -- une seule exclusion laisse le bruit sur l autre niveau
+3. PARITE : la liste d exclusion doit etre definie dans le .py (constante) ET le .sh (variable + grep -vE dans le find) -- les 2 modes recursifs (listdir .py, find .sh) doivent filtrer pareil
+4. CAS PARTICULIER tester/ : protections/ est aussi un conteneur de composants (structure tester/protections/<outil>/) -- il faut l ajouter a la liste (c est le 3e conteneur apres tests/ et spec/)
+5. REGRESSION : verifier l usage NORMAL (scan global tools/) ET l usage sur categorie/outil directement -- le bruit n etait visible que sur le 2e usage (scan global deja propre car il ne descend pas dans les sous-dossiers d outils)
+6. Test formel 13/13 (Morpheus) : aucune regression -- les modes --mots-seuls et --type restent inchangees (la correction ne touche QUE le mode recursif de nommage)
 
 ## [LECON] 2026-08-08 -- Catalogue generateur 12 commandes (absorber les 2 combos)
 

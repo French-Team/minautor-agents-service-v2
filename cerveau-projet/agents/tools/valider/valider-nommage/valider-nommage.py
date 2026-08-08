@@ -32,7 +32,7 @@ Options:
   --mots-seuls        Verifier la regle fondamentale 'aucun mot seul'
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.3.0-py
+Version : 0.3.1-py
 Statut : prepare
 """
 
@@ -42,7 +42,7 @@ import os
 import re
 import sys
 
-VERSION = "0.3.0-py"
+VERSION = "0.3.1-py"
 STATUT = "prepare"
 
 STATUTS_VALIDES = ("ebauche", "prepare", "dev", "test", "valide")
@@ -81,6 +81,13 @@ BLOCS_IDENTIFICATION = ("identite", "agent", "profil", "session")
 # Dossiers de TRACES HISTORISEES ignores en mode recursif (documents figes
 # qui documentent d'anciennes conventions -- comme corrections.md).
 DOSSIERS_TRACES = ("controles", "rapports", "retro-actions", "historique", "exemples")
+
+# Sous-dossiers COMPOSANTS d'un outil (pas des outils eux-memes) : ignores par
+# le scan recursif de nommage. Ce sont des dossiers structurels de l'outil
+# (tests/, spec/, caches) dont les fichiers ont leur propre convention de
+# nommage (test-NNN-*, spec-*.XX.XX.ebauche.md) et ne doivent pas etre valides
+# avec le prefixe de la categorie parente.
+SOUS_DOSSERS_COMPOSANTS = ("tests", "spec", "protections", "__pycache__")
 
 # Fichiers de TRACES DOCUMENTAIRES assumees (notes d'exemple YAML historiques,
 # hors perimetre de la convention -- decision actee en mission precedente).
@@ -237,6 +244,8 @@ def valider_recursif(dossier, verbose):
         return 1
 
     for categorie_nom in entrees:
+        if categorie_nom in SOUS_DOSSERS_COMPOSANTS:
+            continue
         chemin_cat = os.path.join(dossier, categorie_nom)
         if not os.path.isdir(chemin_cat):
             continue
@@ -245,6 +254,8 @@ def valider_recursif(dossier, verbose):
         except OSError:
             continue
         for outil_nom in sous:
+            if outil_nom in SOUS_DOSSERS_COMPOSANTS:
+                continue
             chemin_outil = os.path.join(chemin_cat, outil_nom)
             if not os.path.isdir(chemin_outil):
                 continue

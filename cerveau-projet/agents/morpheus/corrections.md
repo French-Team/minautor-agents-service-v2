@@ -40,6 +40,7 @@ Aucune correction en cours.
 | 2026-08-08 | Tests formels de generateurs-case v0.1.0 (21/21 VALIDE) | GENERATEUR DE CASES (categorie generateurs/, Vulcain) : ajouter/editer/supprimer des cases de parcours JSON avec validation auto complete. COUVERTURE : nommage + chargement, py_compile + bash -n, parite --version py/sh, liste (21 cases), ajouter apres c8 (22 cases), editer (titre modifie), supprimer c8 AVEC RECABLAGE AUTO c7->c20 + c8 disparu, supprimer case fin sans --vers -> ERREUR, supprimer case fin avec --vers -> OK, dry-run sans modification, JSON invalide refuse, navigation guider-parcours sur copie modifiee -> PARCOURS TERMINE, ASCII 0 sur 3 fichiers, parite liste py/sh. 2 BUGS DETECTES et CORRIGES par Vulcain avant mes retests : (1) conflit --verbose declare 2 fois (sous-parser liste + boucle finale) -> argparse.ArgumentError ; (2) mode stdin du .sh : le shebang + cookie coding en tete du heredoc python cassait l execution (python3 - ignore le script), et Path(__file__).resolve().parents[2] leve IndexError en stdin (__file__ = <stdin>) -> corrige par env GC_RACINE calculee par le .sh (lecon : PAS de shebang/coding cookie dans un heredoc destine a python3 -, et PAS de __file__ en mode stdin). PIEGE DE TEST DECOUVERT : grep -A7 apres '"c7": {' ne suffit pas quand la case a plusieurs indices (le champ suivant est 24 lignes plus bas) -> utiliser -A30 ou plus (distance case -> champ suivant variable selon le nombre d indices) |
 | 2026-08-08 | Tests formels de detecter-impacts v0.1.0 (15/15 VALIDE) | DETECTER-IMPACTS (categorie detecter/, Vulcain) + combo-controle-impacts + extension moteur combos-moteur v0.1.3 (--var). CONCEPT : l identification vit dans chaque fichier (frontmatter identite: type/appartient_a/commun), l outil calcule les impacts (meme appartient_a, ou references si commun) et compare les dates. COUVERTURE sur mini-cerveau /tmp : py_compile + bash -n (2 outils), parite --version py/sh, detection fichier non commun (corrections avec meme appartient_a), statut NON MIS A JOUR (mtime), fichier commun detecte par reference (nom dans le contenu), sans identite -> ERREUR code 2, introuvable -> ERREUR code 2, parite scan py/sh (au MEME instant), moteur --var fichier=<chemin> + combo jusqu a la fin, generateur compose la commande detecter-impacts, ASCII 0 sur les 10 fichiers (outil + moteur + catalogue + combo + index). LIMITE DOCUMENTEE v0.1.0 : l identite n est lue que dans le frontmatter YAML (---), pas dans les .json ni les .py/.sh (schema hybride a la v0.2.0 - decision utilisateur). PIEGE DE TEST DECOUVERT : pour comparer la parite py/sh d un scan, TOUJOURS lancer les 2 versions au MEME instant (une comparaison differee apres un touch modifie le resultat -> faux negatif) |
 | 2026-08-08 | RETEST detecter-impacts v0.1.1 (16/16 VALIDE) | CORRECTION BUG usage reel (detecte par Buffy) : le fichier modifie apparait dans les impliques quand on lance SANS --racine. CAUSE : scanner retourne des chemins absolus, args.fichier reste relatif -> l exclusion ne matchait pas. CORRECTION Vulcain : .resolve() des 2 cotes avant comparaison (py + sh parite). RETEST : (1) CAS REEL sans --racine sur cerberus.md : source EXCLU (1 seule occurrence = ligne Fichier modifie), corrections.md detecte, (2) parite py/sh cas reel OK, --version v0.1.1, (3) REGRESSION mini-cerveau : non commun + NON MIS A JOUR, commun par reference, erreurs code 2 (sans identite/introuvable), (4) TEST FORMEL : PT12 ajoute (cas reel : source exclu + corrections detecte) -> 16/16. LECON : tester TOUJOURS un outil de scan dans son MODE REEL (sans --racine) en plus du mini-cerveau - les modes de test peuvent masquer les bugs de chemins (relatif vs absolu) |
+| 2026-08-08 | Test formel valider-cartes-decision v0.3.0 (24/24 VALIDE) | CIBLE CHANGEe (Vulcain) : l outil validait la section Carte de Decision des fiches allegees -> --tous = 5/5 NON CONFORME a tort. Nouvelle cible : PARCOURS JSON (source de verite). COUVERTURE : --version py/sh 0.3.0, --tous = 11/11 conformes (avant 5/5 non), --agent cerberus/buffy CONFORME, --fichier parcours CONFORME, --fichier .md = NON CONFORME (mauvaise cible + mentionne le parcours), parcours corrompu = 3 erreurs (type invalide, reference cassee, c0 absente) + NON CONFORME, fichier inexistant = ERREUR, parite py/sh (--tous, --agent, --fichier parcours, --fichier .md), ASCII 0 sur 3 fichiers, nommage OK. LECONS : (1) PIEGE eval + variable a ESPACES : une commande $PY (avec espaces) dans une substitution $(...) passee a eval casse l evaluation -> precalculer la sortie dans une variable simple avant le verifier (compte_16=...) ; (2) PIEGE grep apostrophe : le message 'n existe pas' ecrit sans apostrophe (n existe) ne matche PAS la sortie reelle (n'existe) -> grep le fragment stable 'existe pas' ; (3) le .sh est un WRAPPER pur vers le .py (exec python3 ... "$@", pattern detecter-impacts) : parite stricte garantie par construction, aucun doublon d en-tete |
 | 2026-08-08 | RETEST detecter-impacts v0.2.0 schema hybride (22/22 VALIDE) | EXTENSION par Vulcain : lire l identite dans les 3 formats (.md frontmatter YAML, .py/.sh commentaires en tete fenetre 12 lignes, .json cle top-level identite). RETEST : (1) .md frontmatter REGRESSION cas reel sans --racine : identite lue type=fiche-agent, corrections detecte, source exclu, (2) .py SANS bloc identite (detecter-impacts.py lui-meme) -> ERREUR code 2 : FAUX POSITIF ELIMINE (Vulcain a restreint la fenetre 60->12 lignes apres l avoir decouvert en test), (3) .py AVEC bloc identite lignes 3-7 -> identite lue type=outil + detecte comme implique + parite py/sh OK, (4) .json cle top-level (parcours) -> identite lue type=parcours + parite OK, (5) parite py/sh sur 4 formats OK, --version v0.2.0 les 2 versions, (6) REGRESSION mini-cerveau hybride : source .md -> 3 identiques dont le .py, source .py -> 3 impliques, commun par reference OK, (7) TEST FORMEL : PT13a-d (format .py) + PT14a-b (format .json) ajoutes -> 22/22. LECON 1 : la fenetre de 12 lignes pour le bloc identite en commentaires est LA convention (au-dela, un en-tete documentaire peut mentionner identite: et creer un faux positif). LECON 2 (DECOUVERTE UTILISATEUR - CHAINE CASSEE) : quand la carte d un agent se termine par une case FIN passive ("X teste et te reactive"), la delegation coupe la chaine et l agent delegue ne fait rien. La carte doit MATERIALISER la boucle (RELAIS -> RETOUR -> CLOTURE -> FIN). Corrige sur parcours-vulcain v0.2.1 (voir fiche vulcain) |
 
 ---
@@ -211,6 +212,69 @@ v0.5.0 automatiquement (Nom LLM en tete + table Sessions connues en colonne Nom 
 2. La regle workspace s applique aussi aux scripts de test, pas seulement aux interventions manuelles
 3. Un test peut etre ecrit par un autre agent mais sa VALIDATION FORMELLE appartient toujours a Morpheus (regles-choisir-agent)
 4. Verifier systematiquement le nettoyage (rm -rf) a la fin de chaque test -- zone temp supprimee ou pas
+
+## [VERDICT] 2026-08-08 -- CORRECTION test-003 (Nom Agent) + TEST FORMEL nettoyer-sessions v0.1.0
+
+**Mission** (decision utilisateur, activation directe Cerberus, 2 livrables).
+**Verdict** : VALIDE (les 2 livrables).
+
+**LIVRABLE 1 -- test-003-activer-agent-principal-v033.sh CORRIGE (22/22 VALIDE)** :
+1. Etat avant : 20/22 A REVOIR -- 2 echecs (1c, 3d) : la fonction nom_session lisait encore le champ **Nom** (format pre-v0.5.0) alors que les blocs session utilisent **Nom Agent** depuis la convention identification v0.5.0. Problematique PRE-EXISTANTE (git diff du test vide -- la migration v0.5.0 n avait pas ete propagee au test).
+2. Correction : nom_session matche maintenant /^\| \*\*(Nom Agent|Nom)\*\* \| / (repli sur l ancien **Nom**), meme style que la fonction equivalent du test-007 v0.5.0.
+3. Regression complete activer-agent-principal : test-001 12/12, test-002 8/8, test-003 22/22, test-004 19/19, test-005 28/28, test-006 26/26, test-007 22/22 = 137/137 VALIDE, 0 echec.
+
+**LIVRABLE 2 -- test-001-nettoyer-sessions.sh CREE (26/26 VALIDE)** :
+1. N1 compile py+sh OK, N2 --version py/sh identiques v0.1.0
+2. N3 dry-run : message [DRY-RUN] + AUCUN fichier modifie (AGENTS + classeur identiques)
+3. N4 execution reelle py : blocs ### Session = 0, ## Sessions LLM = 0, ## Sessions connues = 0, profil-session-* = 0
+4. N5 preservation : frontmatter identite, entete, Configuration Active, Liste des agents, variable non-session (profil-systeme) PRESERVES
+5. N6 AGENTS-historique (journal) JAMAIS modifie (intact dans l espace de test)
+6. N7 idempotence : 2e execution AGENTS = 0 ligne, classeur = 0 ligne
+7. N8 parite py/sh : fichiers resultants IDENTIQUES (AGENTS + classeur + historique) -- le .sh embarque le meme python
+8. N9 messages de sortie presents dans les 2 versions
+9. N10 ASCII : test + fichier nettoye 100% ASCII, zone temp supprimee (regle workspace)
+
+**Lecons** :
+1. Quand une convention de format de fichier change (migration v0.5.0 : **Nom** -> **Nom Agent**), les tests qui lisent les champs doivent etre alignes DANS LA MEME mission que la convention -- sinon des tests pre-existants echouent en silence a chaque regression
+2. Le repli de lecture (pattern alternance awk (Nom Agent|Nom)) rend un test robuste aux migrations : il lit le format courant ET l ancien
+3. Le scan --recursive de valider-nommage signale en ERREUR les fichiers des dossiers tests/ et spec/ (structure attendue categorie/outil/fichiers : les sous-dossiers sont traites comme des faux outils de niveau 2) -- comportement PRE-EXISTANT partage par tous les tests et specs (test-001-remplacer-texte.sh et spec-remplacer-texte sont signales pareil) : NE PAS creer de test hors convention pour l eviter, c est un bruit connu du scan
+4. DIVERGENCE PARITE DETECTEE (cosmetique, a signaler a Vulcain) : le .py affiche 'Nettoyage termine : N lignes supprimees' (ligne 168) alors que le .sh affiche juste 'Nettoyage termine' (ligne 153) sans le total -- comportement de nettoyage IDENTIQUE (fichiers resultants diff vides), seule la ligne finale differe
+5. Un test de nettoyage se teste TOUJOURS sur copies avec les 3 variables redirigees (AGENTS_FILE + CLASSEUR_STOCKAGE) : les vrais fichiers restent intacts (verifie par git status)
+
+## [VERDICT] RETEST 2026-08-08 -- nettoyer-sessions v0.1.1 (correction parite + bug latent, Vulcain)
+
+**Mission** : retester la correction de parite des sorties py/sh (modele boucle Vulcain -> Morpheus -> Vulcain -> Morpheus).
+**Verdict** : VALIDE (32/32).
+
+**Contexte** : au test formel 26/26, j avais signale une divergence cosmetique : le .py affichait 'Nettoyage termine : N lignes supprimees' alors que le .sh affichait juste 'Nettoyage termine'. Vulcain a corrige (v0.1.1 : total dans le .sh, harmonisation 0 ligne -> 0 lignes).
+**Tests** :
+1. RETEST 1 : 29/32 A REVOIR -- la correction de parite a EXPOSE un bug latent du .sh : nb=$(grep -c "profil-session-" "$fichier" 2>/dev/null || echo 0) produit 0\n0 quand il y a 0 occurrence (grep -c affiche 0 ET echo 0 s execute) -> NB_CLASSEUR=0\n0 casse l arithmetique du total ($((NB_AGENTS + NB_CLASSEUR))) -> erreur syntaxe 'line 162: syntax error in expression' en dry-run sur fichiers deja nettoyes. 3 echecs (9b sortie sh 2e passage, 10d parite dry-run, 10f message dry-run sh) TOUS lies a ce bug
+2. ENRICHISSEMENT TEST : 6 assertions ajoutees (10-10f) qui figent la parite des SORTIES py/sh (reel + dry-run, CRLF normalise) + version 0.1.1
+3. Vulcain a corrige : (1) nb=${nb:-0} sans || echo 0, (2) bloc dry-run AVANT bloc nb=0 (parite dry-run 0 occurrence : le .py affiche [DRY-RUN] Classeur : 0... toujours)
+4. RETEST FINAL : 32/32 VALIDE -- parite sorties reelles OK, parite dry-run OK, messages finaux avec total OK, idempotence OK, preservations OK, historique intact, ASCII 0, versions py/sh = 0.1.1
+**Lecons** :
+1. La parite des SORTIES (messages) est un test plus puissant que la parite des FICHIERS : elle a revele un bug latent (0\n0) invisible dans les tests de contenu -- TOUJOURS comparer les sorties py/sh ligne a ligne, pas seulement les fichiers resultants
+2. Le piege grep -c || echo 0 (documente) se manifeste AUSSI quand la valeur entre dans une expression arithmetique -- utiliser nb=${nb:-0} systematiquement
+3. Ordre des blocs dans une fonction : un test dry-run doit passer AVANT le test de valeur (0) sinon le message dry-run est omis -- le .py affiche [DRY-RUN] meme avec 0
+4. La boucle Vulcain -> Morpheus -> Vulcain -> Morpheus fonctionne : Morpheus detecte, Vulcain corrige, Morpheus revalide -- la parite est maintenant figee par le test
+
+## [VERDICT] Test formel 2026-08-08 -- valider-nommage v0.3.1 (correction bruit scan recursif, Vulcain)
+
+**Mission** : valider la correction du bruit du scan --recursive (modele boucle Vulcain -> Morpheus -> Vulcain).
+**Verdict** : VALIDE.
+
+**Contexte** : le scan --recursive traitait les SOUS-DOSSERS COMPOSANTS d un outil (tests/, spec/, protections/, __pycache__/) comme de faux outils de niveau 2 -> leurs fichiers test-*/spec-* etaient signales en ERREUR de prefixe a tort (bruit preexistant : tester/ 14 erreurs, nettoyer/ 1, remplacer/ 2). Vulcain a corrige : constante SOUS_DOSSERS_COMPOSANTS exclue au niveau categorie ET au niveau outil (.py) + parite .sh (grep -vE dans le find).
+**Tests** :
+1. M1 : test formel existant tester-valider-nommage-v030.sh = 13/13 VALIDE (aucune regression des modes --mots-seuls, --type, parite recursif)
+2. M2 : cas du bruit corrige : scan de tester/ nettoyer/ remplacer/ = 0 erreur chacun (avant : 14/1/2)
+3. M3 : un vrai outil sous une categorie (activer-agent-principal.py --type outil) reste VALIDE (0 erreur)
+4. M4 : parite py/sh des scans identique (Erreurs:0 partout sur les 3 categories)
+5. M5 : versions 0.3.1 py/sh identiques, ASCII 0 sur les 3 fichiers
+6. M6 : aucune zone temp restante (regle workspace)
+**Lecons** :
+1. Les sous-dossiers composants d un outil (tests/, spec/, protections/, __pycache__/) ne sont PAS des outils : le scan recursif doit les ignorer aux DEUX niveaux (categorie et outil) sinon leurs fichiers sont valides avec la categorie parente (faux positifs de prefixe)
+2. Le bruit etait PRE-EXISTANT et partage par tous les outils avec tests/ ou spec/ : il n etait visible que quand on scannait une CATEGORIE ou un OUTIL directement (pas tools/ entier) -- verifier les 2 usages en regression
+3. Le scan global tools/ est inchange (269/267/2) : les 2 erreurs restantes (tester-combos-moteur-v020.sh, tester-valider-nommage-v030.sh) sont des tests a la racine de tester/, HORS perimetre (fichiers de test historiques au mauvais emplacement)
 
 ## [VERDICT] Validation formelle 2026-08-08 -- migrer-identite v0.2.2 (retour migrations)
 

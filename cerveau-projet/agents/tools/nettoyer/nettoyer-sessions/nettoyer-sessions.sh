@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.1.0"
+VERSION="0.1.1"
 STATUT="prepare"
 
 AGENTS_FILE="${AGENTS_FILE:-AGENTS.md}"
@@ -35,6 +35,7 @@ nettoyer_agents() {
     local fichier="$AGENTS_FILE"
     if [ ! -f "$fichier" ]; then
         echo "WARNING: $fichier introuvable - rien a nettoyer"
+        NB_AGENTS=0
         return 0
     fi
     local resultat
@@ -78,6 +79,7 @@ if not dry:
 print(nb)
 PYEOF
 )
+    NB_AGENTS="$resultat"
     if [ "$dry_run" = "1" ]; then
         echo "[DRY-RUN] AGENTS.md : $resultat lignes supprimees (blocs session + Sessions connues)"
     else
@@ -93,21 +95,26 @@ nettoyer_classeur() {
     local fichier="$CLASSEUR_STOCKAGE"
     if [ ! -f "$fichier" ]; then
         echo "WARNING: $fichier introuvable - rien a nettoyer"
+        NB_CLASSEUR=0
         return 0
     fi
     local nb
-    nb=$(grep -c "profil-session-" "$fichier" 2>/dev/null || echo 0)
-    if [ "$nb" = "0" ]; then
-        echo "Classeur : 0 ligne profil-session supprimee"
-        return 0
-    fi
+    nb=$(grep -c "profil-session-" "$fichier" 2>/dev/null)
+    nb=${nb:-0}
     if [ "$dry_run" = "1" ]; then
         echo "[DRY-RUN] Classeur : $nb lignes profil-session supprimees"
+        NB_CLASSEUR="$nb"
+        return 0
+    fi
+    if [ "$nb" = "0" ]; then
+        echo "Classeur : 0 lignes profil-session supprimees"
+        NB_CLASSEUR=0
         return 0
     fi
     local tmp="${fichier}.nettoye"
     grep -v "profil-session-" "$fichier" > "$tmp" && mv "$tmp" "$fichier"
     echo "Classeur : $nb lignes profil-session supprimees"
+    NB_CLASSEUR="$nb"
     return 0
 }
 
@@ -148,7 +155,13 @@ for arg in "$@"; do
     esac
 done
 
+NB_AGENTS=0
+NB_CLASSEUR=0
 nettoyer_agents "$DRY"
 nettoyer_classeur "$DRY"
-echo "Nettoyage termine"
+if [ "$DRY" = "1" ]; then
+    echo "[DRY-RUN] Total : $((NB_AGENTS + NB_CLASSEUR)) lignes a supprimer (aucune modification reelle)"
+else
+    echo "Nettoyage termine : $((NB_AGENTS + NB_CLASSEUR)) lignes supprimees"
+fi
 exit 0

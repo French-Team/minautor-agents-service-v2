@@ -16,7 +16,7 @@
 # JSON identite/agent/profil.
 
 # Configuration
-VERSION="0.3.0"
+VERSION="0.3.1"
 DATE="2026-08-08"
 
 # Couleurs pour la sortie
@@ -34,6 +34,11 @@ CLES_AUTORISEES="type commun tags appartient_a version cree specialites forces f
 
 # Dossiers de TRACES HISTORISEES ignores en mode recursif
 DOSSIERS_TRACES="controles rapports retro-actions historique exemples"
+
+# Sous-dossiers COMPOSANTS d'un outil (pas des outils eux-memes) : ignores par
+# le scan recursif de nommage (tests/, spec/, caches) -- leurs fichiers ont
+# leur propre convention (test-NNN-*, spec-*.XX.XX.ebauche.md).
+SOUS_DOSSERS_COMPOSANTS="tests spec protections __pycache__"
 
 # Fichiers de TRACES DOCUMENTAIRES assumees (notes d'exemple YAML historiques)
 FICHIERS_TRACES="mission-condenseur.md"
@@ -489,7 +494,8 @@ if [[ "$RECURSIVE" == "true" ]]; then
             [[ $? -eq 0 ]] && ok=$((ok + 1)) || ko=$((ko + 1))
             echo ""
         done
-    done < <(find "$FICHIER" -mindepth 2 -maxdepth 2 -type d 2>/dev/null | sort)
+    done < <(find "$FICHIER" -mindepth 2 -maxdepth 2 -type d 2>/dev/null \
+        | grep -vE "/(tests|spec|protections|__pycache__)(/|$)" | sort)
     echo -e "${BLUE}=== Resume ===${NC}"
     echo -e "  Total : ${total}"
     echo -e "  ${GREEN}OK : ${ok}${NC}"
