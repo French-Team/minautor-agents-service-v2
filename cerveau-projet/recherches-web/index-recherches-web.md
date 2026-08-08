@@ -80,5 +80,5 @@ recherches-web/
 ## Navigation
 
 - **Parent** : [index-cerveau.md](../index-cerveau.md)
-- **Conventions** : [conventions/](../pense-betes/conventions/index-conventions.md)
-- **Regles** : [regles-immuables/](../pense-betes/regles-immuables/index-regles-immuables.md)
+- **Conventions** : [conventions/](../agents/conventions/index-conventions.md)
+- **Regles** : [regles-immuables/](../agents/regles-immuables/index-regles-immuables.md)

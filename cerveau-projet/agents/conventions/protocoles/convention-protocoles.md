@@ -109,7 +109,7 @@ Appliquer le cycle complet :
 |---|---|
 | Protocole general (process, workflow) | `regles-immuables/general/protocole-[nom]/` |
 | Protocole hierarchique | `regles-immuables/hierarchie/protocole-[nom]/` |
-| Protocole specifique a un module | `pense-betes/[module]/protocole-[nom]/` |
+| Protocole specifique a un module | `agents/[module]/protocole-[nom]/` |
 
 ### Comment referencer un protocole ?
 

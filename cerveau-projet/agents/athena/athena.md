@@ -201,12 +201,12 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Protocoles applicables
 
-- [convention-renommage](../../pense-betes/conventions/renommage/convention-renommage.md) -- nommage des pense-betes
+- [convention-renommage](../../agents/conventions/renommage/convention-renommage.md) -- nommage des pense-betes
 - [pense-bete-template](../../pense-betes/pense-bete-template.md) -- gabarit de chaque pense-bete
-- [rvav-workflow](../../pense-betes/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
-- [regles-emojis-ascii](../../pense-betes/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
-- [regles-veracite](../../pense-betes/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
-- [protocole-auto-correction](../../pense-betes/regles-immuables/general/protocole-auto-correction/) -- ajouter les lecons dans corrections.md
+- [rvav-workflow](../../agents/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
+- [regles-emojis-ascii](../../agents/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
+- [regles-veracite](../../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
+- [protocole-auto-correction](../../agents/regles-immuables/general/protocole-auto-correction/) -- ajouter les lecons dans corrections.md
 
 ---
 

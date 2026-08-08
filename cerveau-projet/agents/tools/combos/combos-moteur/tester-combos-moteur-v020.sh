@@ -5,12 +5,17 @@
 # sortie-contient, fichier-contient) + parite py/sh + interpolation tirets
 # Test: 2026-08-08
 # Auteur: Vulcain
+# identite:
+#   type: test
+#   appartient_a: commun
+#   commun: true
 
 RACINE="Z:/analyste-in-console"
 OUTIL_PY="python3 $RACINE/cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py"
 OUTIL_SH="bash $RACINE/cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.sh"
 
-TMP=$(mktemp -d)
+TMP="$RACINE/cerveau-projet/.tmp-test-combos-moteur"
+mkdir -p "$TMP"
 cd "$TMP" || exit 1
 
 PASS=0
@@ -189,8 +194,8 @@ echo ""
 echo "=== Resume ==="
 echo "  Reussis : $PASS"
 echo "  Echecs : $FAIL"
-cd /
-rm -rf "$TMP"
+cd "$RACINE" || exit 1
+rm -rf "$TMP"  # Nettoyage de la zone temporaire (regle workspace)
 if [[ $FAIL -gt 0 ]]; then
     exit 1
 fi

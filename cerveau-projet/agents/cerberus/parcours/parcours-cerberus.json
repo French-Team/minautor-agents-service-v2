@@ -112,7 +112,7 @@
     },
     {
      "type": "fichier",
-     "chemin": "cerveau-projet/pense-betes/regles-immuables/general/regles-choisir-agent.md",
+     "chemin": "cerveau-projet/agents/regles-immuables/general/regles-choisir-agent.md",
      "raison": "Matrice qui fait quoi : identifier l'agent habilite pour la demande"
     }
    ],
@@ -138,7 +138,7 @@
    "indices": [
     {
      "type": "fichier",
-     "chemin": "cerveau-projet/pense-betes/regles-immuables/general/regles-choisir-agent.md",
+     "chemin": "cerveau-projet/agents/regles-immuables/general/regles-choisir-agent.md",
      "raison": "Matrice de choix : chaque mission a un agent habilite"
     },
     {
@@ -195,7 +195,7 @@
    "indices": [
     {
      "type": "fichier",
-     "chemin": "cerveau-projet/pense-betes/regles-immuables/general/protocole-identification/",
+     "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-identification/",
      "raison": "Protocole d'identification : verifier l'agent avant activation"
     },
     {

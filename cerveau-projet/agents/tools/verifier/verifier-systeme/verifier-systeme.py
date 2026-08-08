@@ -212,8 +212,8 @@ def valeur_profil():
 
 def enregistrer_profil():
     """Ecrit ou met a jour la variable profil-systeme dans le classeur."""
-    fichier_stockage = chemin_classeur("cerveau-projet/classeur-variables/stockage/variables-actuelles.md")
-    fichier_hist = chemin_classeur("cerveau-projet/classeur-variables/historique/historique-modifications.md")
+    fichier_stockage = chemin_classeur("cerveau-projet/agents/classeur-variables/stockage/variables-actuelles.md")
+    fichier_hist = chemin_classeur("cerveau-projet/agents/classeur-variables/historique/historique-modifications.md")
 
     if not os.path.exists(fichier_stockage):
         print("ERREUR: classeur introuvable: %s" % fichier_stockage)

@@ -44,7 +44,7 @@ python3 detecter-surcharge-fichier.py [DOSSIER] [--seuil N] [--recursive]
 Seuil : 250 lignes
 
 [ATTENTION] cerveau-projet/agents/buffy/buffy.md : 212 lignes
-[ATTENTION] cerveau-projet/pense-betes/regles-immuables/general/protocole-carte-decision/protocole-carte-decision.001.01.ebauche.md : 227 lignes
+[ATTENTION] cerveau-projet/agents/regles-immuables/general/protocole-carte-decision/protocole-carte-decision.001.01.ebauche.md : 227 lignes
 
 === Termine ===
 ```

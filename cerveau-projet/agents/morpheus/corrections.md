@@ -55,8 +55,8 @@ Aucune correction en cours.
 
 ### Protocoles specifiques
 
-- [protocole-tests](../../pense-betes/regles-immuables/general/protocole-tests/)
-- [protocole-versionning-outils](../../pense-betes/regles-immuables/general/protocole-versionning-outils/)
+- [protocole-tests](../../agents/regles-immuables/general/protocole-tests/)
+- [protocole-versionning-outils](../../agents/regles-immuables/general/protocole-versionning-outils/)
 
 ### Outils utilises
 
@@ -195,6 +195,42 @@ v0.5.0 automatiquement (Nom LLM en tete + table Sessions connues en colonne Nom 
 2. Retrocompat en lecture (ancien nom accepte) obligatoire pendant la transition
 3. Piege grep mot seul : chercher le champ complet avant l ancien nom
 4. Piege test negatif : inverser la logique grep -q pour les checks AUCUN
+
+## [VERDICT] Validation formelle 2026-08-08 -- tests ecrits par Vulcain (decision utilisateur: les garder mais valides par Morpheus)
+
+**Contexte** : constat 3 utilisateur -- les tests sont le domaine de Morpheus, pas de Vulcain. Les 2 tests existants restent mais recoivent un verdict formel de Morpheus.
+**Verdict** : VALIDE (avec correction workspace).
+**Points verifies** :
+1. tester-valider-nommage-v030.sh : 13/13 Reussis, 0 Echec
+2. tester-combos-moteur-v020.sh : 10/10 Reussis, 0 Echec
+3. INF RACTION WORSPACE DETECTEE puis CORRIGEE : les 2 tests utilisaient `mktemp -d` (dossier systeme HORS workspace). Corrige : zone temporaire dans le workspace (cerveau-projet/.tmp-test-*) creee et supprimee a la fin -- conforme a la regle immuable regles-perimetre-workspace.md
+4. ASCII : 0 caracteres non-ASCII sur les 2 tests
+5. Aucune trace restante de mktemp, aucune zone .tmp-test-* laissee
+**Lecons** :
+1. Tout fichier temporaire de test se cree DANS le workspace, jamais hors workspace (regle immuable) -- meme pour les tests, meme avec mktemp
+2. La regle workspace s applique aussi aux scripts de test, pas seulement aux interventions manuelles
+3. Un test peut etre ecrit par un autre agent mais sa VALIDATION FORMELLE appartient toujours a Morpheus (regles-choisir-agent)
+4. Verifier systematiquement le nettoyage (rm -rf) a la fin de chaque test -- zone temp supprimee ou pas
+
+## [VERDICT] Validation formelle 2026-08-08 -- migrer-identite v0.2.2 (retour migrations)
+
+**Contexte** : retour sur les migrations. L outil migrer-identite v0.2.1 avait une regle de detection trop large (`combos- OU dossier combos/` -> type combo) qui typait a tort les 12 OUTILS du dossier combos/ en combo. Decision utilisateur : corriger l outil puis migrer + introduire un NOUVEAU TYPE `test` pour les fichiers tester-*.
+**Verdict** : VALIDE.
+**Points verifies** :
+1. Versions py/sh = 0.2.2 (identiques)
+2. Parite py/sh sur --liste : IDENTIQUE
+3. Types des 15 fichiers : 12 combos-* = outil, 7 definition-combo.json = combo (intacts), 2 tester-* = test, valider-nommage.sh repare (bloc ligne 5)
+4. Tests existants : tester-valider-nommage-v030 13/13 + tester-combos-moteur-v020 10/10 (heredocs INTACTS - la migration manuelle etait la bonne decision, l outil aurait supprime les blocs # identite: des heredocs de test)
+5. Idempotence : dry-run cerveau-projet 0 migre + racine 0 migre + 0 erreur
+6. ASCII 0 sur 17 fichiers modifies
+7. detecter-impacts lit type=test et type=outil correctement
+8. BONUS detecte par Cerberus : le deplacement de classeur-variables vers agents/ avait casse les chemins dans 5 outils (activer-agent-principal, verifier-systeme, evaluer-structure, parcours-vulcain) - corriges, l activation reelle fonctionne sans warning
+**Lecons** :
+1. Une regle de detection trop large (dossier combos/) cree des faux types SILENCIEUX : les 12 outils avaient le mauvais type depuis la vague 2, invisible sans audit par type
+2. La priorite tester- doit passer AVANT la regle combos/ (un test dans un dossier outil n est pas un combo)
+3. Migrer un fichier de test qui contient des blocs # identite: dans ses HEREDOCS avec l outil le casserait -> migration manuelle obligatoire pour les tester-*
+4. Apres tout deplacement de dossier, verifier les chemins en dur dans les outils (grep du chemin ancien) - le warning d activation a revele 5 fichiers casses
+5. La distinction combos- (outils) vs combo-*/definition-combo.json (definitions) doit etre ancree dans le code, pas dans l intuition
 
 ## PHILOSOPHIE -- Principes de comportement
 

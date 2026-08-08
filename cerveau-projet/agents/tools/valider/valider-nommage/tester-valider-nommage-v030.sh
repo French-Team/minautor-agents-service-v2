@@ -3,13 +3,19 @@
 # Test formel du mode --mots-seuls de valider-nommage v0.3.0
 # Verifie la regle fondamentale 'aucun mot seul' (identifiants generiques)
 # Test: 2026-08-08
-# Auteur: Vulcain
+# Auteur: Morpheus (validation formelle)
+# REGLE WORKSPACE : zone temporaire DANS le workspace, supprimee en fin de test
+# identite:
+#   type: test
+#   appartient_a: commun
+#   commun: true
 
 RACINE="Z:/analyste-in-console"
 OUTIL_PY="python3 $RACINE/cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py"
 OUTIL_SH="bash $RACINE/cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.sh"
 
-TMP=$(mktemp -d)
+TMP="$RACINE/cerveau-projet/.tmp-test-valider-nommage"
+mkdir -p "$TMP"
 cd "$TMP" || exit 1
 
 # Copier les fichiers de reference pour les tests
@@ -104,8 +110,8 @@ echo ""
 echo "=== Resume ==="
 echo "  Reussis : $PASS"
 echo "  Echecs : $FAIL"
-cd /
-rm -rf "$TMP"
+cd "$RACINE"
+rm -rf "$TMP"  # Nettoyage de la zone temporaire (regle workspace)
 if [[ $FAIL -gt 0 ]]; then
     exit 1
 fi

@@ -170,6 +170,46 @@ Le dossier `cerveau-projet/exemples/` est **exclu de la regle** : c'est une zone
 
 ---
 
+## Verification ASCII -- 2 alternatives (REGLE)
+
+Apres chaque ecriture ou modification d'un fichier, la verification ASCII
+**n'a que 2 issues** :
+
+| Resultat | Action |
+|---|---|
+| **[OK]** aucun caractere non-ASCII | **Continuer** la mission normalement |
+| **[NON]** caractere(s) non-ASCII detecte(s) | **Lancer le combo `combo-corriger-ascii`** (correction automatique + re-validation) puis revenir a la case |
+
+**JAMAIS corriger soi-meme les accents a la main.** La correction manuelle des
+caracteres non-ASCII est interdite : on utilise l'outil dedie.
+
+### Commande de verification
+
+```bash
+python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier-ou-dossier>
+```
+
+### Combo de correction (quand [NON])
+
+```bash
+python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py \
+  cerveau-projet/combos/combo-corriger-ascii/definition-combo.json
+```
+
+Le combo enchaine `corriger-accents-zones-sensibles --all --recursive` puis
+`valider-conformite-ascii` : il corrige ET re-valide en une seule execution.
+Apres le combo, verifier que le resultat est **[OK]** avant de continuer.
+
+### Rappel dans les cases
+
+Chaque case d'ecriture des parcours rappelle :
+
+```
+ASCII 2 ALTERNATIVES : verifier -> [OK] continuer / [NON] lancer combo-corriger-ascii
+```
+
+---
+
 ## Validation
 
 Avant de valider tout fichier, verifier :
@@ -180,6 +220,7 @@ Avant de valider tout fichier, verifier :
 - [ ] Les fleches utilisent `->` ou `<-`
 - [ ] Les tableaux utilisent des caracteres ASCII
 - [ ] Les titres de sections sont ASCII
+- [ ] Si non-ASCII detecte : le combo `combo-corriger-ascii` a ete lance (jamais de correction manuelle)
 
 Utiliser l'outil `valider-conformite-ascii` pour controler automatiquement (tout fichier non-ASCII est signale).
 
@@ -202,6 +243,7 @@ Cette regle s'applique a :
 
 - [regles-general-global.md](regles-general-global.md) -- regles globales
 - [regles-choisir-agent.md](regles-choisir-agent.md) -- choisir le bon agent
+- [regles-perimetre-workspace.md](regles-perimetre-workspace.md) -- perimetre du workspace (ecriture = workspace seul)
 - [regles-validation-rigoureuse.md](regles-validation-rigoureuse.md) -- validation rigoureuse
 - [convention-renommage.md](../../conventions/renommage/convention-renommage.md) -- convention de renommage
 

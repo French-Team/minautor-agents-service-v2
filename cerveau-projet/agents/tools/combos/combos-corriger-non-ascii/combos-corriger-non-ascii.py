@@ -3,7 +3,7 @@
 # Combo corriger-non-ascii : detecte et corrige les accents et emojis
 # Ressource partagee : utilise par Themis, Buffy, ou tout autre agent
 # identite:
-#   type: combo
+#   type: outil
 #   appartient_a: commun
 #   commun: true
 VERSION = "0.2.0-py"

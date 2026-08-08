@@ -68,16 +68,16 @@ python3 lister-statuts.py [CHEMIN] [OPTIONS]
 ### Exemple de sortie (sans filtre)
 
 ```
-cerveau-projet/pense-betes/regles-immuables/general/protocole-auto-correction/protocole-auto-correction.001.01.ebauche.md | ebauche
-cerveau-projet/pense-betes/regles-immuables/general/protocole-activation/protocole-activation.001.02.prepare.md | prepare
-cerveau-projet/pense-betes/regles-immuables/general/protocole-versionning-outils/protocole-versionning-outils.001.01.ebauche.md | ebauche
+cerveau-projet/agents/regles-immuables/general/protocole-auto-correction/protocole-auto-correction.001.01.ebauche.md | ebauche
+cerveau-projet/agents/regles-immuables/general/protocole-activation/protocole-activation.001.02.prepare.md | prepare
+cerveau-projet/agents/regles-immuables/general/protocole-versionning-outils/protocole-versionning-outils.001.01.ebauche.md | ebauche
 ```
 
 ### Exemple de sortie (avec filtre ebauche)
 
 ```
-cerveau-projet/pense-betes/regles-immuables/general/protocole-auto-correction/protocole-auto-correction.001.01.ebauche.md | ebauche
-cerveau-projet/pense-betes/regles-immuables/general/protocole-versionning-outils/protocole-versionning-outils.001.01.ebauche.md | ebauche
+cerveau-projet/agents/regles-immuables/general/protocole-auto-correction/protocole-auto-correction.001.01.ebauche.md | ebauche
+cerveau-projet/agents/regles-immuables/general/protocole-versionning-outils/protocole-versionning-outils.001.01.ebauche.md | ebauche
 ```
 
 ### Sortie verbose
@@ -86,8 +86,8 @@ cerveau-projet/pense-betes/regles-immuables/general/protocole-versionning-outils
 Recherche dans: cerveau-projet
 Filtrage par statut: ebauche
 ---
-cerveau-projet/pense-betes/regles-immuables/general/protocole-auto-correction/protocole-auto-correction.001.01.ebauche.md | ebauche
-cerveau-projet/pense-betes/regles-immuables/general/protocole-versionning-outils/protocole-versionning-outils.001.01.ebauche.md | ebauche
+cerveau-projet/agents/regles-immuables/general/protocole-auto-correction/protocole-auto-correction.001.01.ebauche.md | ebauche
+cerveau-projet/agents/regles-immuables/general/protocole-versionning-outils/protocole-versionning-outils.001.01.ebauche.md | ebauche
 ---
 Resume:
   Total fichiers avec statut: 15

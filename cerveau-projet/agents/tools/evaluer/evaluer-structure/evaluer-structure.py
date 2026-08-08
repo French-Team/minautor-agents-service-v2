@@ -148,7 +148,7 @@ def main(argv=None):
     evaluer("Dossier regles-immuables",
             os.path.join(cerveau, "pense-betes", "regles-immuables"), "dossier")
     evaluer("Dossier classeur-variables",
-            os.path.join(cerveau, "classeur-variables"), "dossier")
+            os.path.join(cerveau, "agents", "classeur-variables"), "dossier")
     evaluer("Dossier exemples", os.path.join(cerveau, "exemples"), "dossier")
 
     # Fichiers critiques

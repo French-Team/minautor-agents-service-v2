@@ -79,6 +79,6 @@ preferences:
 | `../index-agents.md` | Index des agents |
 | `../../pense-betes/specs/index-spec.md` | Index des specs |
 | `../../pense-betes/specs/spec-template.md` | Gabarit des specs |
-| `../../pense-betes/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/rvav-workflow.md` | **OBLIGATOIRE** |
+| `../../agents/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/rvav-workflow.md` | **OBLIGATOIRE** |

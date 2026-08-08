@@ -96,7 +96,7 @@ pipeline-exemple-01/
 
 - **Parent** : [../../index-cerveau.md](../../index-cerveau.md)
 - **Classeur** : [../../classeur-variables/index-classeur.md](../../classeur-variables/index-classeur.md)
-- **Convention** : [../../pense-betes/conventions/structures/convention-classeur-variables.md](../../pense-betes/conventions/structures/convention-classeur-variables.md)
+- **Convention** : [../../agents/conventions/structures/convention-classeur-variables.md](../../agents/conventions/structures/convention-classeur-variables.md)
 
 ---
 

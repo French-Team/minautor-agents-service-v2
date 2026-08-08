@@ -54,7 +54,7 @@ Buffy (developpeur principal) et tout agent creant un nouveau cerveau-projet.
 | Champ | Description |
 |---|---|
 | **Priorite** | Haute |
-| **Description** | Creer pense-betes/, conventions/, specs/, regles-immuables/, recherches-web/ |
+| **Description** | Creer agents/ (conventions/, regles-immuables/, classeur-variables/, tools/), pense-betes/ (specs/), recherches-web/ |
 | **Critere d'acceptation** | Aucun dossier n'est vide (au moins un index) |
 | **Dependances** | convention-structures |
 

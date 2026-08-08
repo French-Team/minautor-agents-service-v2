@@ -251,16 +251,16 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Protocoles applicables
 
-- [protocole-auto-correction](../../pense-betes/regles-immuables/general/protocole-auto-correction/)
-- [protocole-installer-regles](../../pense-betes/regles-immuables/general/protocole-installer-regles/) -- **IMMUABLE**
-- [protocole-identification](../../pense-betes/regles-immuables/general/protocole-identification/) -- **IMMUABLE**
-- [protocole-recherches-web](../../pense-betes/regles-immuables/general/protocole-recherches-web/) -- **IMMUABLE**
-- [convention-protocoles](../../pense-betes/conventions/protocoles/convention-protocoles.md)
-- [convention-structures](../../pense-betes/conventions/structures/convention-structures.md)
-- [convention-renommage](../../pense-betes/conventions/renommage/convention-renommage.md)
-- [regles-emojis-ascii](../../pense-betes/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
-- [regles-veracite](../../pense-betes/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
-- [rvav-workflow](../../pense-betes/regles-immuables/general/rvav-workflow.md)
+- [protocole-auto-correction](../../agents/regles-immuables/general/protocole-auto-correction/)
+- [protocole-installer-regles](../../agents/regles-immuables/general/protocole-installer-regles/) -- **IMMUABLE**
+- [protocole-identification](../../agents/regles-immuables/general/protocole-identification/) -- **IMMUABLE**
+- [protocole-recherches-web](../../agents/regles-immuables/general/protocole-recherches-web/) -- **IMMUABLE**
+- [convention-protocoles](../../agents/conventions/protocoles/convention-protocoles.md)
+- [convention-structures](../../agents/conventions/structures/convention-structures.md)
+- [convention-renommage](../../agents/conventions/renommage/convention-renommage.md)
+- [regles-emojis-ascii](../../agents/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
+- [regles-veracite](../../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
+- [rvav-workflow](../../agents/regles-immuables/general/rvav-workflow.md)
 - [spec-guider-parcours](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours (v0.2.0)
 
 ---

@@ -55,7 +55,7 @@ surcharges:
   fichier_corrections: "corrections.md"
   fichiers_lies:
     - "AGENTS.md"
-    - "../../pense-betes/regles-immuables/general/protocole-tests/"
+    - "../../agents/regles-immuables/general/protocole-tests/"
     - "../../agents/tools/tester/"
 
 ---
@@ -227,9 +227,9 @@ Avant de valider un test :
 
 ### Protocoles applicables
 
-- [protocole-tests](../../pense-betes/regles-immuables/general/protocole-tests/) -- comment ecrire et executer des tests
-- [protocole-versionning-outils](../../pense-betes/regles-immuables/general/protocole-versionning-outils/) -- cycle de vie des outils
-- [regles-validation-rigoureuse](../../pense-betes/regles-immuables/general/regles-validation-rigoureuse.md) -- validation rigoureuse
+- [protocole-tests](../../agents/regles-immuables/general/protocole-tests/) -- comment ecrire et executer des tests
+- [protocole-versionning-outils](../../agents/regles-immuables/general/protocole-versionning-outils/) -- cycle de vie des outils
+- [regles-validation-rigoureuse](../../agents/regles-immuables/general/regles-validation-rigoureuse.md) -- validation rigoureuse
 
 ---
 

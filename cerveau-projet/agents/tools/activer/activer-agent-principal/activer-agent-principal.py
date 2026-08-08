@@ -39,7 +39,7 @@ STATUT = "prepare"
 
 AGENTS_FILE = os.environ.get("AGENTS_FILE", "AGENTS.md")
 AGENTS_HISTORIQUE = os.environ.get("AGENTS_HISTORIQUE", "AGENTS-historique.md")
-CLASSEUR_STOCKAGE = os.environ.get("CLASSEUR_STOCKAGE", "cerveau-projet/classeur-variables/stockage/variables-actuelles.md")
+CLASSEUR_STOCKAGE = os.environ.get("CLASSEUR_STOCKAGE", "cerveau-projet/agents/classeur-variables/stockage/variables-actuelles.md")
 CERBERUS_FICHE = "cerveau-projet/agents/cerberus/cerberus.md"
 MAX_ENTREES_HISTORIQUE = 150
 PREFIXE_SESSION = "session-llm-"
@@ -364,18 +364,18 @@ def ajouter_historique(timestamp, session, agent, raison):
     insere = False
     compteur = 0
     for ligne in lignes:
-        if re.match(r"^\s*\|?---", ligne) and not insere:
-            sortie.append(ligne)
-            sortie.append(nouvelle_ligne + "\n")
-            insere = True
-            compteur += 1
-            continue
         if re.match(r"^\| 20[0-9][0-9]-", ligne):
+            if not insere:
+                sortie.append(nouvelle_ligne + "\n")
+                insere = True
+                compteur += 1
             if compteur < MAX_ENTREES_HISTORIQUE:
                 sortie.append(ligne)
                 compteur += 1
             continue
         sortie.append(ligne)
+    if not insere:
+        sortie.append(nouvelle_ligne + "\n")
 
     with io.open(AGENTS_HISTORIQUE, "w", encoding="utf-8", newline="\n") as fh:
         fh.writelines(sortie)

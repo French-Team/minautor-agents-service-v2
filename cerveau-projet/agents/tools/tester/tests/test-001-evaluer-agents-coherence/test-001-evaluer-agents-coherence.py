@@ -138,11 +138,11 @@ assert_eq(
     True,
 )
 
-# Test 7: le faux positif lien 'pense-betes/conventions/structures/' doit etre resolu
+# Test 7: le faux positif lien 'agents/conventions/structures/' doit etre resolu
 #    (ces fichiers existent sous cerveau-projet/pense-betes/...)
 liens_faux_positifs = [
-    "pense-betes/conventions/structures/convention-classeur-variables.md",
-    "pense-betes/conventions/structures/convention-structures.md",
+    "agents/conventions/structures/convention-classeur-variables.md",
+    "agents/conventions/structures/convention-structures.md",
 ]
 liens_still_casses = [l for l in liens_faux_positifs if l in stdout2]
 assert_eq(

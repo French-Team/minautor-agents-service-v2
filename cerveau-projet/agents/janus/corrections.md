@@ -188,7 +188,7 @@ preferences:
 |---|---|
 | `janus.md` | Ma fiche principale |
 | `AGENTS.md` | Fichier dynamique |
-| `../../pense-betes/regles-immuables/general/protocole-versionning-outils/` | Protocole de versionning |
+| `../../agents/regles-immuables/general/protocole-versionning-outils/` | Protocole de versionning |
 
 ---
 

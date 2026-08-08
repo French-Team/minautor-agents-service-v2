@@ -17,6 +17,7 @@ Ces regles s'appliquent a **tous** les agents et **tous** les fichiers du cervea
 | **Ne jamais supposer** | Verifier chaque point avant d'agir. La verification prime sur l'hypothese. |
 | **Ne jamais mentir** | Dire la verite, meme si elle est inconfortable. Ne pas inventer de reponses. |
 | **ASCII uniquement** | Les emojis et caracteres non-ASCII sont bannis. Utiliser `[OK]`, `[ERREUR]`, `[ATTENTION]`. |
+| **Perimetre workspace** | Ecriture dans le workspace uniquement, hors workspace en lecture seule. Ne jamais creer de fichier temporaire hors du workspace. |
 | **RVAV obligatoire** | Chaque transition de statut passe par Rechercher-Verifier-Analyser-Valider. |
 | **Cycle Cerberus** | Chaque session commence et se termine par Cerberus. |
 | **Lire avant d'agir** | Activer un agent sans lire sa fiche est inutile. |
@@ -35,4 +36,4 @@ En cas de conflit : la regle immuable gagne toujours.
 ## Navigation
 
 - **Parent** : [index-regles-general.md](index-regles-general.md)
-- **Regles liees** : [regles-veracite.md](regles-veracite.md), [regles-emojis-ascii.md](regles-emojis-ascii.md), [rvav-workflow.md](rvav-workflow.md)
+- **Regles liees** : [regles-veracite.md](regles-veracite.md), [regles-emojis-ascii.md](regles-emojis-ascii.md), [regles-perimetre-workspace.md](regles-perimetre-workspace.md), [rvav-workflow.md](rvav-workflow.md)

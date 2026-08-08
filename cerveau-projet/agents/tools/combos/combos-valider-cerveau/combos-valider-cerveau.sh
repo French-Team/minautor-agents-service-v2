@@ -10,7 +10,7 @@
 
 # Configuration
 # identite:
-#   type: combo
+#   type: outil
 #   appartient_a: commun
 #   commun: true
 VERSION="0.2.0"

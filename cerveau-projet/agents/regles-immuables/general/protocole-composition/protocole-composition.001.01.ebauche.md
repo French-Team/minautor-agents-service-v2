@@ -23,7 +23,7 @@ defini dans `../rvav-workflow.md`.
    - Titre du projet
    - Version (ex: v0.0.1)
    - Breve description (1 phrase)
-    - Table des matieres dynamique (liens vers pense-betes/ et ses sous-dossiers conventions/, specs/, regles-immuables/)
+    - Table des matieres dynamique (liens vers agents/ et ses sous-dossiers conventions/, regles-immuables/, outils, et vers pense-betes/ specs/)
 3. **RVAV :**
     - [rechercher] Verifier que le nom suit `../../../conventions/renommage/`
    - [verifier] Confirmer que tous les liens internes pointent vers des fichiers existants
@@ -32,12 +32,15 @@ defini dans `../rvav-workflow.md`.
 
 ## ETAPE 2 -- Creer la structure des dossiers
 
-1. Creer `pense-betes/` a la racine de `cerveau-projet/`
-2. A l'interieur de `pense-betes/`, creer les 3 sous-dossiers :
+1. Creer `agents/` a la racine de `cerveau-projet/`
+2. A l'interieur de `agents/`, creer les sous-dossiers :
     - `conventions/` -- renommage, structures, liens, protocoles
-    - `specs/` -- definitions techniques et fonctionnelles
     - `regles-immuables/` -- process, hierarchie, RVAV
-3. Creer `recherches-web/` a la racine de `cerveau-projet/`
+    - `classeur-variables/` -- stockage partage des variables
+    - `tools/` -- boite a outils
+3. Creer `pense-betes/` a la racine de `cerveau-projet/` pour les specs et le travail en cours
+    - `specs/` -- definitions techniques et fonctionnelles
+4. Creer `recherches-web/` a la racine de `cerveau-projet/`
     - `templates/` -- templates pour les recherches
 4. Chaque dossier possede un fichier `index-*.md` a sa racine
 5. **RVAV :**

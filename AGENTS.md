@@ -14,24 +14,66 @@ identite:
 
 ## Sessions LLM
 
+### Session : session-llm-4
+
+| Champ | Valeur |
+|---|---|
+| **Nom LLM** | llm-2 |
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-08 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | Identification |
+| **Raison** | Identification LLM - demarrage de session |
+
+
+### Session : session-llm-3
+
+| Champ | Valeur |
+|---|---|
+| **Nom LLM** | kilo-llm |
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-08 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | Identification |
+| **Raison** | Identification LLM - demarrage de session |
+
+
+### Session : session-llm-2
+
+| Champ | Valeur |
+|---|---|
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-08 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | Identification |
+| **Raison** | Identification LLM - demarrage de session |
+
+
 ### Session : session-llm-1
 
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | buffy |
-| **Role Agent** | Developpeur principal -- contenu et structures |
+| **Nom Agent** | morpheus |
+| **Role Agent** | Testeur -- validation des outils et des tests |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/buffy/buffy.md](cerveau-projet/agents/buffy/buffy.md) |
-| **Corrections** | [cerveau-projet/agents/buffy/corrections.md](cerveau-projet/agents/buffy/corrections.md) |
+| **Fiche** | [cerveau-projet/agents/morpheus/morpheus.md](cerveau-projet/agents/morpheus/morpheus.md) |
+| **Corrections** | [cerveau-projet/agents/morpheus/corrections.md](cerveau-projet/agents/morpheus/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | MISSION (decision utilisateur - 3 infractions a corriger): TON DOMAINE - fichiers du cerveau. LIVRABLE 1 (regle workspace IMMUABLE): creer cerveau-projet/pense-betes/regles-immuables/general/regles-perimetre-workspace.md - ECRITURE = workspace uniquement (Z:/analyste-in-console), HORS WORKSPACE = LECTURE SEULE (jamais creer/modifier/supprimer de fichier hors workspace, meme temporaire), les fichiers temporaires de test/script se creent DANS le workspace (ex: dossier .tmp-test/ local) et se suppriment apres. Inscrire dans index-regles-general.md + regles-general-global.md + index-regles-immuables.md. LIVRABLE 2 (ASCII 2 alternatives): mettre a jour regles-emojis-ascii.md - a la verification ASCII, 2 ALTERNATIVES: [OK] aucun non-ASCII -> continuer / [NON] non-ASCII detecte -> LANCER LE COMBO combo-corriger-ascii (python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json) - JAMAIS corriger soi-meme les accents. LIVRABLE 3 (11 parcours): dans chaque parcours agents/<a>/parcours/parcours-<a>.json, ajouter dans les cases qui ECRIVENT/MODIFIENT un fichier un indice concis: REGLE WORKSPACE (ecriture = workspace seul) + ASCII 2 alternatives (verifier -> OK continuer / NON lancer combo-corriger-ascii). Inspecter chaque parcours pour trouver les cases d ecriture (indices avec ajouter-contenu, ecrire-fichier, editer-fichier, creer). ASCII strict, valider liens, puis reactiver Cerberus. |
+| **Raison** | MISSION TESTS (decision utilisateur, 2 livrables). LIVRABLE 1 - CORRIGER test-003-activer-agent-principal-v033.sh : la fonction nom_session (lignes 40, 114, 134) lit encore **Nom** alors que les blocs session de AGENTS.md utilisent **Nom Agent** (migration v0.5.0 faite avant cette mission - git diff du test vide = probleme preexistant, pas cause par le fix ajouter_historique). CORRECTION : adapter nom_session et tous les autres lectures de champs du test au nouveau format de bloc (Nom LLM / Nom Agent / Role Agent / Statut Agent etc), puis relancer les tests 001 a 007 et confirmer TOUS VALIDES (004-007 deja VALIDE, 001-002 OK). LIVRABLE 2 - CREER LE TEST FORMEL de nettoyer-sessions v0.1.0 : tester-nettoyer-sessions.sh dans cerveau-projet/agents/tools/nettoyer/nettoyer-sessions/tests/ (convention comme les tests activer : nommage test-NNN-...sh, ASCII strict, LF, assertions [OK]/[ERREUR], verdict final). VERIFIER : (a) execution sur COPIES avec les 3 variables AGENTS_FILE + CLASSEUR_STOCKAGE redirigees (lecon: ne jamais toucher les vrais fichiers pendant les tests), (b) blocs ### Session supprimes, (c) section ## Sessions connues supprimee, (d) lignes profil-session-* du classeur supprimees, (e) frontmatter + entete + Configuration Active PRESERVES, (f) AGENTS-historique.md JAMAIS modifie, (g) idempotence (2eme execution = rien de plus), (h) --dry-run ne modifie rien, (i) parite py/sh (memes fichiers resultats), (j) --version. VERDICT attendu : VALIDE. Puis rediger le verdict dans corrections.md de Morpheus et reactiver Cerberus avec bilan et outils utilises declares (REGLE ABSOLUE 6). |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | buffy | 2026-08-08 16:58 |
-| session-llm-3 | - | Cerberus | 2026-08-07 16:12 |
+| session-llm-1 | llm-1 | morpheus | 2026-08-08 19:10 |
+| session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
+| session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |
 | session-llm-5 | llm-3 | Cerberus | 2026-08-07 16:04 |
 ## Configuration Active
@@ -71,7 +113,9 @@ session `session-llm-N` (le numero de session porte le numero de l'id). Chaque b
 dans AGENTS.md contient le champ `| **Id LLM** | <id> |` : **le LLM se reconnait en lisant
 AGENTS.md** -- le bloc qui porte SON id est SON bloc (source double : AGENTS.md + classeur
 synchronises). Au demarrage : 1) chercher SON bloc dans AGENTS.md (champ Id LLM) ; 2) si absent,
-lancer `sidentifier <mon-id>` (id deja lie = retrouvee ; id inconnu llm-N = session-llm-N ;
+lancer la SOUS-COMMANDE sidentifier d'activer-agent-principal :
+`python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>`
+(id deja lie = retrouvee ; id inconnu llm-N = session-llm-N ;
 conflit si session-llm-N liee a un autre id = prochaine libre).
 
 ### Depuis Cerberus (dans sa session)

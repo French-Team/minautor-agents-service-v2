@@ -18,27 +18,27 @@
 
 | Fichier | Description |
 |---|---|
-| [convention-structures.md](../../../pense-betes/conventions/structures/convention-structures.md) | Principes d'architecture |
-| [convention-classeur-variables.md](../../../pense-betes/conventions/structures/convention-classeur-variables.md) | Stockage partagé |
-| [convention-pipelines.md](../../../pense-betes/conventions/structures/convention-pipelines.md) | Pipelines de traitement |
-| [convention-renommage.md](../../../pense-betes/conventions/renommage/convention-renommage.md) | Règles de nommage |
-| [convention-liens.md](../../../pense-betes/conventions/liens/convention-liens.md) | Règles de liens |
+| [convention-structures.md](../../../agents/conventions/structures/convention-structures.md) | Principes d'architecture |
+| [convention-classeur-variables.md](../../../agents/conventions/structures/convention-classeur-variables.md) | Stockage partagé |
+| [convention-pipelines.md](../../../agents/conventions/structures/convention-pipelines.md) | Pipelines de traitement |
+| [convention-renommage.md](../../../agents/conventions/renommage/convention-renommage.md) | Règles de nommage |
+| [convention-liens.md](../../../agents/conventions/liens/convention-liens.md) | Règles de liens |
 
 ### Règles immuables
 
 | Fichier | Description |
 |---|---|
-| [regles-hierarchie-par-niveau.md](../../../pense-betes/regles-immuables/hierarchie/regles-hierarchie-par-niveau.md) | Hiérarchie des niveaux |
-| [rvav-workflow.md](../../../pense-betes/regles-immuables/general/rvav-workflow.md) | Workflow RVAV |
-| [regles-emojis-ascii.md](../../../pense-betes/regles-immuables/general/regles-emojis-ascii.md) | Bannissement des emojis |
-| [regles-veracite.md](../../../pense-betes/regles-immuables/general/regles-veracite.md) | Ne jamais mentir |
+| [regles-hierarchie-par-niveau.md](../../../agents/regles-immuables/hierarchie/regles-hierarchie-par-niveau.md) | Hiérarchie des niveaux |
+| [rvav-workflow.md](../../../agents/regles-immuables/general/rvav-workflow.md) | Workflow RVAV |
+| [regles-emojis-ascii.md](../../../agents/regles-immuables/general/regles-emojis-ascii.md) | Bannissement des emojis |
+| [regles-veracite.md](../../../agents/regles-immuables/general/regles-veracite.md) | Ne jamais mentir |
 
 ### Protocoles
 
 | Fichier | Description |
 |---|---|
-| [protocole-composition.md](../../../pense-betes/regles-immuables/general/protocole-composition/) | Composition du squelette |
-| [protocole-outils.md](../../../pense-betes/regles-immuables/general/protocole-outils/) | Boîte à outils |
+| [protocole-composition.md](../../../agents/regles-immuables/general/protocole-composition/) | Composition du squelette |
+| [protocole-outils.md](../../../agents/regles-immuables/general/protocole-outils/) | Boîte à outils |
 
 ### Classeur de variables
 

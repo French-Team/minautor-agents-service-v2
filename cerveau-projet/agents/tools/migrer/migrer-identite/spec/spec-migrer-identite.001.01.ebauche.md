@@ -4,12 +4,12 @@ identite:
   appartient_a: commun
   commun: true
 ---
-# SPEC - migrer-identite v0.2.1 (ebauche)
+# SPEC - migrer-identite v0.2.2 (ebauche)
 
 | Champ | Valeur |
 |---|---|
 | **Nom** | migrer-identite |
-| **Version** | 0.2.1 |
+| **Version** | 0.2.2 |
 | **Statut** | ebauche |
 | **Categorie** | Migrer |
 | **Proprietaire** | outil partage (Vulcain) |
@@ -46,9 +46,9 @@ detecter-impacts : ajouter le bloc identite (`type` / `appartient_a` /
 | Situation | Type | Appartient_a |
 |---|---|---|
 | Sous-dossier `spec/` | `spec` | defaut (commun) |
-| Nom `combos-*` OU dossier `combos/` | `combo` | defaut (commun) |
 | `combos/<combo>/definition-combo.json` | `combo` | defaut (commun) |
-| Nom `tester-*` | `outil` | defaut (commun) |
+| Nom `combos-*` (outils du dossier combos/) | `outil` | defaut (commun) |
+| Nom `tester-*` (fichiers de test) | `test` | defaut (commun) |
 | `catalogue-commandes.json` | `outil` | defaut (commun) |
 | `exemple-combo.json` | `combo` | defaut (commun) |
 | Nom `AGENTS.md` (racine) | `racine` | commun |
@@ -133,6 +133,7 @@ Code de retour : 0 si aucune erreur, 1 sinon.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.2 | 2026-08-08 | CORRECTION REGLE (decision utilisateur) : regle v0.2.1 trop large (combos- OU dossier combos/) typait a tort les outils combos-moteur/audit/corriger/valider en combo -> definition-combo.json = combo uniquement, combos-* = outil, NOUVEAU type test pour tester-* (priorite haute) |
 | 0.2.1 | 2026-08-08 | Corrections dry-run reel : type combo par dossier combos/ ; exclusions exemples/, recherches-web/, sauvegardes/ |
 | 0.2.0 | 2026-08-08 | EXTENSION VAGUE 3 : migration sur tout le cerveau - types racine/classeur/pense-bete/template/note (appartient_a dynamique) ; exclusions traces historisees (controles/, rapports/, retro-actions/) ; compatibilite retrograde agents/tools/ |
 | 0.1.0 | 2026-08-08 | Creation (vague 2 : migration schema hybride v0.2.0) |

@@ -13,6 +13,7 @@ identite:
 | [hierarchie/](hierarchie/index-hierarchie.md) | Hierarchie par niveau | index-hierarchie.md |
 | **Regle immuable** | [regles-choisir-agent.md](general/regles-choisir-agent.md) | Choisir le bon agent |
 | **Regle immuable** | [regles-emojis-ascii.md](general/regles-emojis-ascii.md) | Bannissement des emojis, utilisation de ASCII |
+| **Regle immuable** | [regles-perimetre-workspace.md](general/regles-perimetre-workspace.md) | Perimetre du workspace : ecriture dans le workspace uniquement |
 | **Regle immuable** | [regles-veracite.md](general/regles-veracite.md) | Ne jamais mentir ou inventer |
 
 ## Navigation

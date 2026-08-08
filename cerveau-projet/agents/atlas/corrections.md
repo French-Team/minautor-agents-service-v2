@@ -89,11 +89,11 @@ preferences:
 | `atlas.md` | Fiche principale d'Atlas |
 | `AGENTS.md` | Fichier dynamique de l'agent principal |
 | `../index-agents.md` | Index des agents |
-| `../../pense-betes/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/protocole-installer-regles/` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/protocole-identification/` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/protocole-recherches-web/` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/protocole-installer-regles/` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/protocole-identification/` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/protocole-recherches-web/` | **IMMUABLE** |
 
 ## PHILOSOPHIE -- Principes de comportement
 

@@ -271,13 +271,13 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Protocoles applicables
 
-- [regles-choisir-agent](../pense-betes/regles-immuables/general/regles-choisir-agent.md) -- **OBLIGATOIRE** : qui fait quoi
-- [protocole-auto-correction](../pense-betes/regles-immuables/general/protocole-auto-correction/)
-- [protocole-installer-regles](../pense-betes/regles-immuables/general/protocole-installer-regles/) -- **IMMUABLE**
-- [protocole-identification](../pense-betes/regles-immuables/general/protocole-identification/) -- **IMMUABLE**
-- [rvav-workflow](../pense-betes/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
-- [regles-emojis-ascii](../pense-betes/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
-- [regles-veracite](../pense-betes/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
+- [regles-choisir-agent](../agents/regles-immuables/general/regles-choisir-agent.md) -- **OBLIGATOIRE** : qui fait quoi
+- [protocole-auto-correction](../agents/regles-immuables/general/protocole-auto-correction/)
+- [protocole-installer-regles](../agents/regles-immuables/general/protocole-installer-regles/) -- **IMMUABLE**
+- [protocole-identification](../agents/regles-immuables/general/protocole-identification/) -- **IMMUABLE**
+- [rvav-workflow](../agents/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
+- [regles-emojis-ascii](../agents/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
+- [regles-veracite](../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
 - [spec-guider-parcours](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours (v0.2.0)
 
 ### Outils disponibles

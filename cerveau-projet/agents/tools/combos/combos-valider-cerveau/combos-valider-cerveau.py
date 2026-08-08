@@ -2,7 +2,7 @@
 # combos-valider-cerveau.py
 # Combo de validation : etat de sante du cerveau-projet en une commande
 # identite:
-#   type: combo
+#   type: outil
 #   appartient_a: commun
 #   commun: true
 VERSION = "0.2.0-py"

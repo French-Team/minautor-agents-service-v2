@@ -48,8 +48,8 @@ surcharges:
   fichier_corrections: "corrections.md"
   fichiers_lies:
     - "AGENTS.md"
-    - "../../pense-betes/regles-immuables/general/rvav-workflow/"
-    - "../../pense-betes/regles-immuables/general/protocole-auto-correction/"
+    - "../../agents/regles-immuables/general/rvav-workflow/"
+    - "../../agents/regles-immuables/general/protocole-auto-correction/"
 
 ---
 
@@ -223,10 +223,10 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Protocoles applicables
 
-- [rvav-workflow](../../pense-betes/regles-immuables/general/rvav-workflow/) -- boucle obligatoire avant verdict
-- [protocole-auto-correction](../../pense-betes/regles-immuables/general/protocole-auto-correction/) -- ajouter les lecons dans corrections.md
-- [regles-emojis-ascii](../../pense-betes/regles-immuables/general/regles-emojis-ascii.md) -- ASCII strict
-- [regles-veracite](../../pense-betes/regles-immuables/general/regles-veracite.md) -- ne jamais mentir ou inventer
+- [rvav-workflow](../../agents/regles-immuables/general/rvav-workflow/) -- boucle obligatoire avant verdict
+- [protocole-auto-correction](../../agents/regles-immuables/general/protocole-auto-correction/) -- ajouter les lecons dans corrections.md
+- [regles-emojis-ascii](../../agents/regles-immuables/general/regles-emojis-ascii.md) -- ASCII strict
+- [regles-veracite](../../agents/regles-immuables/general/regles-veracite.md) -- ne jamais mentir ou inventer
 
 ---
 

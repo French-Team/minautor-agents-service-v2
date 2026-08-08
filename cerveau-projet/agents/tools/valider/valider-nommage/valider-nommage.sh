@@ -2,6 +2,10 @@
 # valider-nommage.sh
 # Verifier que le nommage est correct selon les conventions
 # Version: 0.3.0
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 # Date: 2026-08-08
 # Auteur: Vulcain
 #
@@ -12,10 +16,6 @@
 # JSON identite/agent/profil.
 
 # Configuration
-# identite:
-#   type: outil
-#   appartient_a: commun
-#   commun: true
 VERSION="0.3.0"
 DATE="2026-08-08"
 

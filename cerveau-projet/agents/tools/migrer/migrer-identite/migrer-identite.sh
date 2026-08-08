@@ -34,7 +34,7 @@ import os
 import sys
 from pathlib import Path
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 STATUT = "ebauche"
 
 _RACINE_DEFAUT = Path(os.environ.get(
@@ -73,9 +73,11 @@ def _type_pour(chemin, racine):
         return "historique"
     if "spec" in chemin.parts:
         return "spec"
-    if nom.startswith("combos-") or "combos" in chemin.parts:
-        return "combo"
     if nom.startswith("tester-"):
+        return "test"
+    if nom == "definition-combo.json":
+        return "combo"
+    if nom.startswith("combos-"):
         return "outil"
     if nom in _NOMS_SPECIAUX:
         return _NOMS_SPECIAUX[nom]

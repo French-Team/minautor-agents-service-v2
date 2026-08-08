@@ -200,7 +200,7 @@ while IFS= read -r agent_dir; do
         outil=$(echo "$outil_ref" | sed -n 's/.*`\([^`]*\)`.*/\1/p' | head -1)
         if [ -n "$outil" ]; then
             # Exclure les conventions, protocoles, regles, templates et workflows
-            # (ils vivent dans pense-betes/, pas dans tools/ -- ce ne sont pas des outils)
+            # (ils vivent dans agents/conventions/ et agents/regles-immuables/, pas dans tools/ -- ce ne sont pas des outils)
             case "$outil" in
                 convention-*|protocole-*|regles-*|rvav-*|sous-protocole-*) continue ;;
                 *-template|template-*) continue ;;

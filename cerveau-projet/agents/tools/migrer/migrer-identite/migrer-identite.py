@@ -39,7 +39,7 @@ import os
 import sys
 from pathlib import Path
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 STATUT = "ebauche"
 
 # Chemin racine par defaut : le dossier agents/tools/ du cerveau-projet.
@@ -74,11 +74,19 @@ def _type_pour(chemin: Path, racine: Path) -> str:
     # Specs dans un sous-dossier spec/
     if "spec" in chemin.parts:
         return "spec"
-    # Fichiers combos : prefixe combos- OU dossier combos/
-    # (les definition-combo.json vivent dans combos/<combo>/)
-    if nom.startswith("combos-") or "combos" in chemin.parts:
-        return "combo"
+    # Tests d'outils (decision utilisateur 2026-08-08) : les fichiers
+    # tester-* sont des tests, type dedie 'test' (priorite sur tout :
+    # un tester- dans combos/ est un test, pas un combo).
     if nom.startswith("tester-"):
+        return "test"
+    # Combos : UNIQUEMENT les definitions (definition-combo.json) dans un
+    # dossier combos/. Les outils du dossier combos/ (combos-moteur,
+    # combos-audit-general, combos-corriger-non-ascii, combos-valider-cerveau)
+    # sont des OUTILS, pas des combos (correction v0.2.2 : la regle v0.2.1
+    # 'combos in chemin.parts' etait trop large).
+    if nom == "definition-combo.json":
+        return "combo"
+    if nom.startswith("combos-"):
         return "outil"
     if nom in _NOMS_SPECIAUX:
         return _NOMS_SPECIAUX[nom]

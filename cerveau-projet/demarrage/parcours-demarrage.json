@@ -7,12 +7,54 @@
  "parcours": {
   "nom": "parcours-demarrage",
   "agent": "demarrage",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "case_depart": "c0",
-  "description": "Parcours (jeu de piste) du DEMARRAGE d'une session LLM : s'identifier (sidentifier), verifier son bloc dans AGENTS.md, devenir Cerberus, attendre la mission. Point d'entree commun de tous les LLM (demarrer.md pointe vers ce parcours)."
+  "description": "Parcours (jeu de piste) du DEMARRAGE d'une session LLM : case de choix en premiere position (l'utilisateur peut demarrer par 'nettoyer la session existante' pour purger toutes les sessions avant de s'identifier a neuf), puis relecture honnete, contexte temps reel, s'identifier (sous-commande sidentifier d'activer-agent-principal), verifier son bloc dans AGENTS.md, devenir Cerberus, attendre la mission. Point d'entree commun de tous les LLM (demarrer.md pointe vers ce parcours)."
  },
  "cases": {
   "c0": {
+   "titre": "Nettoyer la session existante ?",
+   "type": "question",
+   "question": "L'utilisateur a-t-il commence la session par la phrase 'nettoyer la session existante' ?",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE - CHOIX DE PISTE : ce parcours a plusieurs pistes de demarrage. OUI = purger toutes les sessions LLM existantes avant de s'identifier a neuf (piste nettoyage). NON = demarrer normalement (piste standard)."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0n"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0r"
+    }
+   ]
+  },
+  "c0n": {
+   "titre": "NETTOYER les sessions LLM",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE - PERIMETRE (decision utilisateur) : nettoyer-sessions supprime les ETATS ACTIFS uniquement (blocs session-llm + table Sessions connues dans AGENTS.md, lignes profil-session-* dans le classeur). Le frontmatter et le journal AGENTS-historique.md sont PRESERVES."
+    },
+    {
+     "type": "regle",
+     "texte": "APRES LE NETTOYAGE : je DEMANDE a l'utilisateur SON id (identifiant qu'il veut utiliser), puis je m'identifie a neuf avec la sous-commande sidentifier (case c1). Aucune session existante ne subsiste : tout est a recreer."
+    },
+    {
+     "type": "outil",
+     "nom": "nettoyer-sessions",
+     "chemin": "cerveau-projet/agents/tools/nettoyer/nettoyer-sessions/",
+     "commande": "python3 cerveau-projet/agents/tools/nettoyer/nettoyer-sessions/nettoyer-sessions.py"
+    }
+   ],
+   "suivant": "c0r"
+  },
+  "c0r": {
    "titre": "Relecture : ta fiche Cerberus en memoire ?",
    "type": "question",
    "question": "Tu demarres comme Cerberus. As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
@@ -92,7 +134,7 @@
     },
     {
      "type": "regle",
-     "texte": "REGLE ABSOLUE -- MODE ID : je note MON id (donne par l'utilisateur, ex: llm-1). Je ne deduis JAMAIS ma session d'AGENTS.md : l'outil sidentifier me rend MA session (id deja lie = retrouvee, id inconnu = creation + liaison). Si je n'ai pas d'id, je le DEMANDE a l'utilisateur avant toute action."
+     "texte": "REGLE ABSOLUE -- MODE ID : je note MON id (donne par l'utilisateur, ex: llm-1). Je ne deduis JAMAIS ma session d'AGENTS.md : la sous-commande sidentifier d'activer-agent-principal me rend MA session (id deja lie = retrouvee, id inconnu = creation + liaison). Si je n'ai pas d'id, je le DEMANDE a l'utilisateur avant toute action. Il n'existe AUCUN outil autonome 'sidentifier' : c'est activer-agent-principal.py sidentifier <mon-id>."
     },
     {
      "type": "outil",
@@ -111,7 +153,7 @@
     {
      "type": "fichier",
      "chemin": "AGENTS.md",
-     "raison": "Chercher MON bloc : champ **Nom LLM** = MON id. Si absent, relancer sidentifier."
+     "raison": "Chercher MON bloc : champ **Nom LLM** = MON id. Si absent, relancer la sous-commande sidentifier d'activer-agent-principal."
     },
     {
      "type": "outil",
@@ -147,9 +189,9 @@
    "suivant": "c4"
   },
   "c4": {
-   "titre": "Attendre la mission",
+   "titre": "L'utilisateur a-t-il formule une mission ?",
    "type": "question",
-   "question": "L'utilisateur a-t-il formule une mission ?",
+   "question": "L'utilisateur a-t-il formule une mission dans la conversation ?",
    "branches": [
     {
      "reponse": "OUI",
@@ -157,14 +199,19 @@
     },
     {
      "reponse": "NON",
-     "vers": "c4"
+     "vers": "c4b"
     }
    ]
+  },
+  "c4b": {
+   "titre": "FIN -- Demarrage termine : en attente de mission",
+   "type": "fin",
+   "message": "Demarrage termine. Cerberus est en place : quand l'utilisateur formulera une mission, lancer le parcours de l'agent habilite : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json (ou parcours-cerberus pour la coordination). Aucune boucle d attente : le parcours s arrete ici, la mission arrive dans la conversation."
   },
   "c5": {
    "titre": "FIN -- Lancer le parcours de l'agent",
    "type": "fin",
-   "message": "Demarrage termine. Quand une mission arrive, lancer le parcours de l'agent habilite : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json (ou parcours-cerberus pour la coordination)."
+   "message": "Demarrage termine. Lancer le parcours de l'agent habilite : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json (ou parcours-cerberus pour la coordination)."
   }
  }
 }

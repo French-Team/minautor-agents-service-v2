@@ -23,13 +23,22 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/demarrage/parcours-demarrage.json
 ```
 
-Le parcours guide case par case :
-1. **c0** : question honnete de relecture (fiche Cerberus en memoire ?)
-2. **c1** : S'identifier -- lancer `sidentifier <mon-id>` (l'id est donne par
-   l'utilisateur ; sans id, le DEMANDER avant toute action)
+Le parcours guide case par case. Deux entrees possibles :
+- **Demarrage normal** : lancer la commande ci-dessus
+- **Nettoyer les sessions** : demarrer par la phrase `nettoyer la session existante`
+  (le parcours purge toutes les sessions LLM puis demande ton id avant de s'identifier)
+
+Deroulement :
+0. **c0** : choix de piste (nettoyer ? oui/non)
+1. **c0r** : question honnete de relecture (fiche Cerberus en memoire ?)
+2. **c1** : S'identifier -- lancer la SOUS-COMMANDE sidentifier d'activer-agent-principal :
+   `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>`
+   (l'id est donne par l'utilisateur ; sans id, le DEMANDER avant toute action)
 3. **c2** : Verifier que MON bloc existe dans AGENTS.md (champ **Id LLM**)
 4. **c3** : Devenir Cerberus et se presenter
-5. **c4/c5** : Attendre la mission, puis lancer le parcours de l'agent habilite
+5. **c4** : L'utilisateur a-t-il formule une mission ? (OUI -> c5 lance le parcours
+   de l'agent habilite ; NON -> c4b FIN : demarrage termine, en attente de
+   mission -- AUCUNE boucle, l'attente se passe dans la conversation)
 
 ---
 

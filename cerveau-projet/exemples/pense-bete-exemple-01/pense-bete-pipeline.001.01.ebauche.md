@@ -28,7 +28,7 @@ Ce pense-bête s'inscrit dans le développement du cerveau-projet. Il fait suite
 - `index-cerveau.md` — point d'entrée du cerveau
 - `pense-betes/index-pense-bete.md` — index des pense-bêtes
 - `classeur-variables/index-classeur.md` — classeur de variables
-- `pense-betes/conventions/structures/convention-pipelines.md` — convention pipelines
+- `agents/conventions/structures/convention-pipelines.md` — convention pipelines
 
 ---
 

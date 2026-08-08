@@ -6,7 +6,7 @@ identite:
 ---
 # migrer-identite
 
-**Version :** 0.2.1
+**Version :** 0.2.2
 **Statut :** ebauche
 **Categorie :** Migrer
 **Chemin :** `agents/tools/migrer/migrer-identite/`
@@ -37,9 +37,9 @@ fichier du cerveau, dans le format adapte a son type.
 | Situation | Type | Appartient_a |
 |---|---|---|
 | Fichier dans un sous-dossier `spec/` | `spec` | defaut (commun) |
-| Nom commencant par `combos-` OU dossier `combos/` | `combo` | defaut (commun) |
-| `combos/<combo>/definition-combo.json` | `combo` | defaut (commun) |
-| Nom commencant par `tester-` | `outil` | defaut (commun) |
+| Nom `definition-combo.json` dans un dossier `combos/` | `combo` | defaut (commun) |
+| Nom commencant par `combos-` (outils du dossier combos/) | `outil` | defaut (commun) |
+| Nom commencant par `tester-` (fichiers de test) | `test` | defaut (commun) |
 | `catalogue-commandes.json` | `outil` | defaut (commun) |
 | `exemple-combo.json` | `combo` | defaut (commun) |
 | Nom `AGENTS.md` (racine du projet) | `racine` | commun |
@@ -121,6 +121,7 @@ Code de retour : `0` si aucune erreur, `1` sinon.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.2 | 2026-08-08 | CORRECTION REGLE DETECTION (decision utilisateur) : la regle v0.2.1 `combos- OU dossier combos/` etait TROP LARGE -> typait a tort les outils du dossier combos/ (combos-moteur, combos-audit-general, combos-corriger-non-ascii, combos-valider-cerveau) en `combo`. Desormais : `definition-combo.json` = `combo` (uniquement les vraies definitions), `combos-*` = `outil`, `tester-*` = `test` (NOUVEAU TYPE dedie, priorite haute). 12 outils re-types en outil + 2 tests migres manuellement (l outil aurait casse les heredocs de test) + valider-nommage.sh repare. Parite py/sh, idempotence 0 migre. |
 | 0.2.1 | 2026-08-08 | CORRECTIONS (decouvertes au dry-run reel avant application vague 3) : type combo pour les definition-combo.json du dossier combos/ (detection par dossier en plus du prefixe) ; exclusions exemples/ (test pollue), recherches-web/ (recherches), sauvegardes/ (artefacts) |
 | 0.2.0 | 2026-08-08 | EXTENSION VAGUE 3 : migration possible sur tout le cerveau (pas seulement agents/tools/) - nouveaux types racine (AGENTS.md), classeur (classeur-variables/), pense-bete (pense-betes/), template (-template), note (.md hors outils -> appartient_a = dossier parent) ; exclusions traces historisees (controles/, rapports/, retro-actions/) ; compatibilite retrograde agents/tools/ inchangee |
 | 0.1.0 | 2026-08-08 | Creation (vague 2 : migration schema hybride v0.2.0) |

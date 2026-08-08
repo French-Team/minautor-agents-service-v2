@@ -38,12 +38,12 @@ identite:
 
 ### Liens
 
-- **Protocole** : [protocole-auto-correction/](../pense-betes/regles-immuables/general/protocole-auto-correction/)
-- **Protocole** : [protocole-installer-regles/](../pense-betes/regles-immuables/general/protocole-installer-regles/) -- **IMMUABLE** : installer les regles immuables
-- **Protocole** : [protocole-identification/](../pense-betes/regles-immuables/general/protocole-identification/) -- **IMMUABLE** : identification des agents
-- **Protocole** : [protocole-recherches-web/](../pense-betes/regles-immuables/general/protocole-recherches-web/) -- **IMMUABLE** : recherches web
-- **Regles** : [regles-emojis-ascii.md](../pense-betes/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE** : bannissement des emojis, utilisation de ASCII
-- **Regles** : [regles-veracite.md](../pense-betes/regles-immuables/general/regles-veracite.md) -- **IMMUABLE** : ne jamais mentir ou inventer
+- **Protocole** : [protocole-auto-correction/](../agents/regles-immuables/general/protocole-auto-correction/)
+- **Protocole** : [protocole-installer-regles/](../agents/regles-immuables/general/protocole-installer-regles/) -- **IMMUABLE** : installer les regles immuables
+- **Protocole** : [protocole-identification/](../agents/regles-immuables/general/protocole-identification/) -- **IMMUABLE** : identification des agents
+- **Protocole** : [protocole-recherches-web/](../agents/regles-immuables/general/protocole-recherches-web/) -- **IMMUABLE** : recherches web
+- **Regles** : [regles-emojis-ascii.md](../agents/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE** : bannissement des emojis, utilisation de ASCII
+- **Regles** : [regles-veracite.md](../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE** : ne jamais mentir ou inventer
 - **AGENTS.md** : [../../AGENTS.md](../../AGENTS.md) (a la racine du projet futur)
 
 ---

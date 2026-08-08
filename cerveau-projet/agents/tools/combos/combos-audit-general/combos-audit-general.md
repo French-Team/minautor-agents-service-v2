@@ -1,6 +1,6 @@
 ---
 identite:
-  type: combo
+  type: outil
   appartient_a: commun
   commun: true
 ---

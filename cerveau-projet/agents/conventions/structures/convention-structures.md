@@ -141,16 +141,21 @@ mon-module/
 cerveau-projet/                     <- racine (L0)
 |-- index-cerveau.md                <- point d'entree global
 |-- demarrer.md                     <- config/demarrage
-|-- pense-betes/                    <- dossier (L1)
-|   |-- index-pense-bete.md         <- point d'entree L1
+|-- agents/                         <- dossier (L1)
+|   |-- index-agents.md             <- point d'entree L1
 |   |-- conventions/                <- dossier (L2)
 |   |   |-- index-conventions.md    <- point d'entree L2
 |   |   ``-- structures/             <- dossier (L3)
 |   |       ``-- index-structures.md <- point d'entree L3
-|   |-- specs/                      <- dossier (L2)
-|   |   ``-- index-spec.md
-|   ``-- regles-immuables/           <- dossier (L2)
-|       ``-- index-regles-immuables.md
+|   |-- regles-immuables/           <- dossier (L2)
+|   |   ``-- index-regles-immuables.md
+|   |-- classeur-variables/         <- dossier (L2)
+|   |   ``-- index-classeur.md
+|   ``-- tools/                     <- dossier (L2)
+|-- pense-betes/                    <- dossier (L1)
+|   |-- index-pense-bete.md         <- point d'entree L1
+|   ``-- specs/                      <- dossier (L2)
+|       ``-- index-spec.md
 ```
 
 Chaque fichier est un point d'entree. Chaque dossier descend d'un niveau.

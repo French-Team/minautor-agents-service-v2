@@ -54,7 +54,7 @@ surcharges:
   fichier_corrections: "corrections.md"
   fichiers_lies:
     - "AGENTS.md"
-    - "../../pense-betes/regles-immuables/general/protocole-versionning-outils/"
+    - "../../agents/regles-immuables/general/protocole-versionning-outils/"
 
 ---
 
@@ -223,10 +223,10 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Protocoles applicables
 
-- [protocole-versionning-outils](../../pense-betes/regles-immuables/general/protocole-versionning-outils/) -- cycle de vie des outils
-- [protocole-auto-correction](../../pense-betes/regles-immuables/general/protocole-auto-correction/) -- auto-correction des agents
-- [regles-validation-rigoureuse](../../pense-betes/regles-immuables/general/regles-validation-rigoureuse.md) -- validation rigoureuse
-- [protocole-controle-statuts](../../pense-betes/regles-immuables/general/protocole-controle-statuts/) -- controle des transitions de statut
+- [protocole-versionning-outils](../../agents/regles-immuables/general/protocole-versionning-outils/) -- cycle de vie des outils
+- [protocole-auto-correction](../../agents/regles-immuables/general/protocole-auto-correction/) -- auto-correction des agents
+- [regles-validation-rigoureuse](../../agents/regles-immuables/general/regles-validation-rigoureuse.md) -- validation rigoureuse
+- [protocole-controle-statuts](../../agents/regles-immuables/general/protocole-controle-statuts/) -- controle des transitions de statut
 
 ---
 

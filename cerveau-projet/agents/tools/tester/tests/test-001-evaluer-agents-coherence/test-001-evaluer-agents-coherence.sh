@@ -71,7 +71,7 @@ fi
 # Test 4: faux positifs liens structures resolus
 echo "--- Test 4: faux positifs liens structures resolus ---"
 total=$((total + 1))
-if echo "$result2" | grep -q "pense-betes/conventions/structures/convention-structures.md\|pense-betes/conventions/structures/convention-classeur-variables.md"; then
+if echo "$result2" | grep -q "agents/conventions/structures/convention-structures.md\|agents/conventions/structures/convention-classeur-variables.md"; then
     echo -e "${RED}[ECHEC] Test 4: liens structures encore signales comme casses${NC}"
 else
     echo -e "${GREEN}[OK] Test 4: liens structures resolus${NC}"

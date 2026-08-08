@@ -98,11 +98,11 @@ preferences:
 | `[nom-agent].md` | Fiche principale de l'agent |
 | `AGENTS.md` | Fichier dynamique de l'agent principal |
 | `../index-agents.md` | Index des agents |
-| `../../pense-betes/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/protocole-auto-correction/` | Auto-correction |
-| `../../pense-betes/regles-immuables/general/protocole-installer-regles/` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/protocole-identification/` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/regles-choisir-agent.md` | **OBLIGATOIRE** : matrice qui fait quoi, qui activer |
+| `../../agents/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/protocole-auto-correction/` | Auto-correction |
+| `../../agents/regles-immuables/general/protocole-installer-regles/` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/protocole-identification/` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/regles-choisir-agent.md` | **OBLIGATOIRE** : matrice qui fait quoi, qui activer |
 
 ---

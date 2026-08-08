@@ -21,11 +21,11 @@ pas le demarrage de session (demarrer.md) se trouve ici, par la navigation.
 ## Navigation
 
 - [pense-betes/](pense-betes/index-pense-bete.md) -- idees developpees, travail en cours
-- [conventions/](pense-betes/conventions/index-conventions.md) -- renommage, structures, liens
+- [conventions/](agents/conventions/index-conventions.md) -- renommage, structures, liens
 - [specs/](pense-betes/specs/index-spec.md) -- definitions techniques et fonctionnelles
-- [regles-immuables/](pense-betes/regles-immuables/index-regles-immuables.md) -- process, hierarchie, RVAV
+- [regles-immuables/](agents/regles-immuables/index-regles-immuables.md) -- process, hierarchie, RVAV
 - [recherches-web/](recherches-web/index-recherches-web.md) -- recherches web
-- [classeur-variables/](classeur-variables/index-classeur.md) -- stockage partage des variables
+- [classeur-variables/](agents/classeur-variables/index-classeur.md) -- stockage partage des variables
 - [agents/tools/](agents/tools/index-tools.md) -- outils partages (explorer, valider, analyser, corriger)
 - [agents/](agents/index-agents.md) -- systeme d'agents avec parcours (jeu de piste)
 
@@ -35,15 +35,15 @@ pas le demarrage de session (demarrer.md) se trouve ici, par la navigation.
 
 | Protocole | Role |
 |---|---|
-| [protocole-identification](pense-betes/regles-immuables/general/protocole-identification/) | Identification du LLM (MODE ID multi-session) |
-| [protocole-carte-decision](pense-betes/regles-immuables/general/protocole-carte-decision/) | Parcours (jeu de piste) -- methode actuelle de guidage |
-| [protocole-demarrer-projet](pense-betes/regles-immuables/general/protocole-demarrer-projet/) | Demarrer un nouveau projet |
-| [protocole-reprendre-projet](pense-betes/regles-immuables/general/protocole-reprendre-projet/) | Reprendre un projet existant |
-| [protocole-activation](pense-betes/regles-immuables/general/protocole-activation/) | Activer / reactiver les agents |
-| [protocole-auto-correction](pense-betes/regles-immuables/general/protocole-auto-correction/) | Auto-correction des agents |
-| [protocole-installer-regles](pense-betes/regles-immuables/general/protocole-installer-regles/) | Installer les regles immuables |
+| [protocole-identification](agents/regles-immuables/general/protocole-identification/) | Identification du LLM (MODE ID multi-session) |
+| [protocole-carte-decision](agents/regles-immuables/general/protocole-carte-decision/) | Parcours (jeu de piste) -- methode actuelle de guidage |
+| [protocole-demarrer-projet](agents/regles-immuables/general/protocole-demarrer-projet/) | Demarrer un nouveau projet |
+| [protocole-reprendre-projet](agents/regles-immuables/general/protocole-reprendre-projet/) | Reprendre un projet existant |
+| [protocole-activation](agents/regles-immuables/general/protocole-activation/) | Activer / reactiver les agents |
+| [protocole-auto-correction](agents/regles-immuables/general/protocole-auto-correction/) | Auto-correction des agents |
+| [protocole-installer-regles](agents/regles-immuables/general/protocole-installer-regles/) | Installer les regles immuables |
 
-Liste complete des regles et protocoles : [pense-betes/regles-immuables/index-regles-immuables.md](pense-betes/regles-immuables/index-regles-immuables.md).
+Liste complete des regles et protocoles : [agents/regles-immuables/index-regles-immuables.md](agents/regles-immuables/index-regles-immuables.md).
 
 ---
 
@@ -58,7 +58,7 @@ Liste complete des regles et protocoles : [pense-betes/regles-immuables/index-re
 | `agents/<agent>/corrections.md` | Corrections de l'agent |
 | `agents/<agent>/parcours/parcours-<agent>.json` | Parcours (jeu de piste) de l'agent -- source de verite du guidage |
 | `agents/tools/guider/guider-parcours/` | Outil qui fait avancer dans le parcours (spec, py, sh, md) |
-| `classeur-variables/index-classeur.md` | Point d'entree du classeur de variables |
+| `agents/classeur-variables/index-classeur.md` | Point d'entree du classeur de variables |
 
 ---
 

@@ -82,6 +82,6 @@ preferences:
 | `../index-agents.md` | Index des agents |
 | `../../pense-betes/specs/todo/index-todo.md` | Index des todos |
 | `../../pense-betes/specs/todo/todo-template.md` | Gabarit des todos |
-| `../../pense-betes/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/rvav-workflow.md` | **OBLIGATOIRE** |
+| `../../agents/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/rvav-workflow.md` | **OBLIGATOIRE** |

@@ -106,6 +106,6 @@ preferences:
 | `AGENTS-historique.md` | Source de verite des interventions |
 | `README.md` | Fichier a maintenir a jour |
 | `../index-agents.md` | Index des agents |
-| `../../pense-betes/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
-| `../../pense-betes/regles-immuables/general/rvav-workflow.md` | **OBLIGATOIRE** |
+| `../../agents/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
+| `../../agents/regles-immuables/general/rvav-workflow.md` | **OBLIGATOIRE** |

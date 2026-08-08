@@ -95,9 +95,9 @@ En fin d'execution :
 
 ## Liens
 
-- [convention-outils-agents.md](../../../../pense-betes/conventions/outils/convention-outils-agents.md)
-- [protocole-outils](../../../../pense-betes/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md)
-- [regles-emojis-ascii.md](../../../../pense-betes/regles-immuables/general/regles-emojis-ascii.md)
+- [convention-outils-agents.md](../../../../agents/conventions/outils/convention-outils-agents.md)
+- [protocole-outils](../../../../agents/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md)
+- [regles-emojis-ascii.md](../../../../agents/regles-immuables/general/regles-emojis-ascii.md)
 
 ---
 

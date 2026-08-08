@@ -179,7 +179,7 @@ agents/[nom-agent]/
 
 - **Templates** : `agents/fiche-agent-template.md`, `agents/corrections-template.md`
 - **Index** : `agents/index-agents.md`
-- **Convention** : `pense-betes/conventions/protocoles/convention-protocoles.md`
+- **Convention** : `agents/conventions/protocoles/convention-protocoles.md`
 - **Protocoles** : `protocole-installer-regles` -- installer les regles immuables
 - **Protocoles** : `protocole-identification` -- identification des agents
 - **Protocoles** : `protocole-recherches-web` -- recherches web

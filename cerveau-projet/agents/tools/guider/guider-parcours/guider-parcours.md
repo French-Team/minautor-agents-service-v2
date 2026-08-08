@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.2.11 |
+| **Version** | 0.2.14 |
 | **Statut** | ebauche |
 | **Categorie** | guider |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -52,20 +52,34 @@ CASE N+1 : ... jusqu'a la case FIN
 
 ## Utilisation
 
-### CLI Python (version 0.1.0-py)
+### CLI Python (version 0.2.0-py)
 
 ```
 python3 guider-parcours.py <parcours.json> [options]
 
 Options :
   --case <id>       Demarrer a une case precise (ex: c3) au lieu de case_depart
-  --reponses <liste> Fournir les reponses d'un coup (separees par |) : mode non-interactif
+  --reponses <liste> Fournir les reponses d'un coup (separees par |) : mode agent
+  --interactif      Mode interactif (input clavier) reserve a l'usage humain
   --liste           Lister toutes les cases du parcours sans naviguer
   --version         Afficher la version
   --help            Afficher l'aide
 ```
 
-### CLI bash (version 0.1.0-sh)
+> **MODE AGENT (defaut) : les questions sont destinees a l'AGENT, jamais a une
+> saisie clavier.** L'outil ne fait JAMAIS `input()` en mode agent : quand une
+> question est atteinte sans reponse predefinie (pas de `--reponses`, ou
+> reponses epuisees), il affiche la question + les reponses possibles et
+> s'arrete proprement (code 0) avec le message `=== QUESTION POUR L'AGENT ===`.
+> **Un agent vit dans la console : il n'est pas un humain, il ne repond jamais
+> a une invite interactive.** Il repond selon son etat reel puis fournit sa
+> reponse PAR LA CONSOLE en relancant DEPUIS CETTE CASE : le message indique
+> la commande exacte `--case <case-courante> --reponses 'REPONSE'` pour
+> REPRENDRE la navigation sans rejouer les cases deja parcourues (et sans
+> reposer la question honnete c0). C'est le comportement du jeu de piste :
+> 1 case a la fois, l'agent repond puis relance depuis la case courante.
+
+### CLI bash (version 0.2.0-sh)
 
 ```
 bash guider-parcours.sh <parcours.json> [options]
@@ -191,17 +205,30 @@ depuis l'audit Themis du 2026-08-08 (CONFORME 100/100).
 python3 guider-parcours.py agents/vulcain/parcours/parcours-vulcain.json --liste
 ```
 
-### Naviguer en mode interactif
+### Naviguer en mode agent (par defaut, non-bloquant)
 
 ```bash
 python3 guider-parcours.py agents/vulcain/parcours/parcours-vulcain.json
 ```
+
+Affiche la premiere case. Si c'est une question, l'outil s'arrete avec
+`=== QUESTION POUR L'AGENT ===` : l'agent repond selon son etat reel puis
+relance avec `--reponses`.
 
 ### Naviguer avec les reponses fournies d'un coup
 
 ```bash
 python3 guider-parcours.py agents/vulcain/parcours/parcours-vulcain.json --reponses "construire|OUI|OUI"
 ```
+
+### Mode interactif (usage humain uniquement)
+
+```bash
+python3 guider-parcours.py agents/vulcain/parcours/parcours-vulcain.json --interactif
+```
+
+`input()` clavier reserve au test humain : les questions sont normalement
+destinees a l'agent (mode par defaut).
 
 ### Demarrer a une case precise
 
@@ -257,7 +284,7 @@ demarre ensuite apres l'identification.
 
 1. Le JSON doit etre valide et ASCII strict
 2. Toute branche doit pointer vers une case existante (valide a chaque lancement)
-3. `demarrer.md` est le lanceur de session : il NE SE LIT PAS, il SE LANCE -- il pointe vers le parcours de demarrage (`cerveau-projet/demarrage/parcours-demarrage.json`) qui guide l'identification (sidentifier), la verification du bloc dans AGENTS.md, le passage Cerberus et l'attente de mission. Le parcours d'un agent demarre ensuite apres l'identification
+3. `demarrer.md` est le lanceur de session : il NE SE LIT PAS, il SE LANCE -- il pointe vers le parcours de demarrage (`cerveau-projet/demarrage/parcours-demarrage.json`) qui guide l'identification (SOUS-COMMANDE sidentifier d'activer-agent-principal, jamais un outil autonome), la verification du bloc dans AGENTS.md, le passage Cerberus et l'attente de mission. Le parcours d'un agent demarre ensuite apres l'identification
 4. Chaque mission de l'agent doit avoir un chemin de cases (couverture verifiable via --liste)
 5. Toute case qui ECRIT dans un fichier porte un indice `regle` ASCII en tete de ses `indices` (Pattern 2)
 6. Un parcours multi-missions demarre par une case `Mission` avec branches vers les chemins, convergeant vers les cases communes (Pattern 1)
@@ -271,6 +298,8 @@ demarre ensuite apres l'identification.
 
 | Version | Statut | Changements |
 |---|---|---|
+| 0.2.14 | ebauche | **REPRISE SANS BOUCLE (v0.2.0) : le message `QUESTION POUR L'AGENT` indique la commande exacte `--case <case-courante> --reponses 'REPONSE'` pour REPRENDRE la navigation depuis la case courante.** Lecon log-externe 2026-08-08 : sans `--case`, le LLM relancait depuis c0 et la question honnete de relecture etait REPOSEE a chaque relance -> boucle de relecture (NON -> relire -> relance -> re-NON). Avec `--case`, c0 n'est jamais rejouee |
+| 0.2.13 | ebauche | **MODE AGENT non-bloquant (v0.2.0) : les questions sont destinees a l'agent, jamais a un `input()` clavier.** Sans `--reponses` (ou reponses epuisees), l'outil affiche `=== QUESTION POUR L'AGENT ===` + les reponses possibles puis s'arrete proprement (code 0) ; l'agent repond et relance avec `--reponses 'REPONSE'`. Option `--interactif` reservee a l'usage humain. Cause : le demarrage d'un 2e LLM bloquait sur la saisie clavier (input) au lieu de poser la question a l'agent. Doc alignee (mode agent par defaut) |
 | 0.2.12 | ebauche | Doc : ajout du parcours de demarrage (`cerveau-projet/demarrage/parcours-demarrage.json`) au tableau Emplacement -- demarrer.md devient un LANCEUR (il ne se lit pas, il se lance) ; regle 3 mise a jour ; 12 parcours (1 demarrage + 11 agents) |
 | 0.2.11 | ebauche | Doc : reference la spec v0.2.5 (Pattern 4 -- case Question Honnete en case 0, standard de demarrage fige) + regle 9 dans la section Regles |
 | 0.2.10 | ebauche | Doc : reference la spec v0.2.4 (Pattern 3 -- combo generateur -> execution) + regle 8 dans la section Regles |

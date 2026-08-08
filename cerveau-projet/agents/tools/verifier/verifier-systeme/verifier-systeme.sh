@@ -164,8 +164,8 @@ afficher_json() {
 
 # Fonction pour enregistrer le profil dans le classeur-variables
 enregistrer_profil() {
-    local classeur_stockage="cerveau-projet/classeur-variables/stockage/variables-actuelles.md"
-    local classeur_hist="cerveau-projet/classeur-variables/historique/historique-modifications.md"
+    local classeur_stockage="cerveau-projet/agents/classeur-variables/stockage/variables-actuelles.md"
+    local classeur_hist="cerveau-projet/agents/classeur-variables/historique/historique-modifications.md"
 
     if [ ! -f "$classeur_stockage" ]; then
         echo "ERREUR: classeur introuvable: $classeur_stockage"

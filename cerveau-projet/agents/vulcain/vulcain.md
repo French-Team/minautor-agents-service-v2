@@ -239,13 +239,13 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Protocoles applicables
 
-- [protocole-technologies](../../pense-betes/regles-immuables/general/protocole-technologies/) -- choix technologique
-- [protocole-outils](../../pense-betes/regles-immuables/general/protocole-outils/) -- construction d'outils
-- [protocole-tests](../../pense-betes/regles-immuables/general/protocole-tests/) -- lu par Morpheus (delegation)
-- [regles-choisir-agent](../../pense-betes/regles-immuables/general/regles-choisir-agent.md) -- matrice qui fait quoi
-- [regles-veracite](../../pense-betes/regles-immuables/general/regles-veracite.md) -- ne jamais mentir/supposer
-- [rvav-workflow](../../pense-betes/regles-immuables/general/rvav-workflow.md) -- boucle RVAV obligatoire
-- [regles-emojis-ascii](../../pense-betes/regles-immuables/general/regles-emojis-ascii.md) -- ASCII strict
+- [protocole-technologies](../../agents/regles-immuables/general/protocole-technologies/) -- choix technologique
+- [protocole-outils](../../agents/regles-immuables/general/protocole-outils/) -- construction d'outils
+- [protocole-tests](../../agents/regles-immuables/general/protocole-tests/) -- lu par Morpheus (delegation)
+- [regles-choisir-agent](../../agents/regles-immuables/general/regles-choisir-agent.md) -- matrice qui fait quoi
+- [regles-veracite](../../agents/regles-immuables/general/regles-veracite.md) -- ne jamais mentir/supposer
+- [rvav-workflow](../../agents/regles-immuables/general/rvav-workflow.md) -- boucle RVAV obligatoire
+- [regles-emojis-ascii](../../agents/regles-immuables/general/regles-emojis-ascii.md) -- ASCII strict
 
 ---
 

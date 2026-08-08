@@ -4,13 +4,13 @@ identite:
   appartient_a: commun
   commun: true
 ---
-# Spec -- Guide-Parcours (jeu de piste) v0.2.8
+# Spec -- Guide-Parcours (jeu de piste) v0.2.11
 
-**Version** : 0.2.8
+**Version** : 0.2.11
 **Statut** : ebauche
 **Date creation** : 2026-08-07
-**Agent** : Vulcain (creation + evolutions v0.2.0 : patterns multi-missions + rappel ASCII ; v0.2.1 : procedure d'audit des 2 patterns ; v0.2.2 : regle d'autonomie des parcours ; v0.2.3 : prototype vulcain documente comme cas legitime assume ; v0.2.4 : Pattern 3 - combo generateur -> execution, lien avec spec-combos-moteur ; v0.2.5 : Pattern 4 - case Question Honnete en case 0, standard de demarrage ; v0.2.6 : Pattern 5 - chaine de delegation ACTIVE, JAMAIS de fin passive ; v0.2.7 : regle de RE-AUDIT COMPLET des 5 patterns (lecon Themis : la procedure 4b seule ne teste que Pattern 5, c est la procedure 2 qui a revele les ecarts ASCII de vulcain) ; v0.2.8 : Pattern 6 - CONTEXTE TEMPS REEL : lecture OBLIGATOIRE de l historique a chaque activation, meme en memoire (le dynamique ne se memorise pas))
-**Historique** : v0.1.0 (creation) -> v0.2.0 (documentation des 2 patterns valides en production, 2026-08-07) -> v0.2.1 (documentation de la procedure d'audit des 2 patterns, validee par l'audit des 11 parcours par Themis, 2026-08-08) -> v0.2.2 (regle d'autonomie : chaque parcours est un fichier individuel, convergence uniquement intra-parcours, 2026-08-08) -> v0.2.3 (prototype vulcain : fins independantes documentees comme CAS LEGITIME ASSUME, compatible regle 8, 2026-08-08) -> v0.2.4 (Pattern 3 : une case de parcours peut pointer vers un COMBO - combos-moteur lit definition-combo.json, generateur-commande en mode AUTO, 2026-08-08) -> v0.2.5 (Pattern 4 : case c0 Question Honnete de relecture + c0b RELIRE obligatoire + case_depart = c0, standard de demarrage fige, valide par l'audit Themis 11/11 parcours, 2026-08-08) -> v0.2.6 (Pattern 5 : CHAINE DE DELEGATION ACTIVE - une delegation ne se termine JAMAIS par une fin passive 'X te reactive' : la carte materialise la boucle RELAIS -> RETOUR -> CLOTURE -> FIN. Lecon detecter-impacts v0.2.0 / parcours-vulcain v0.2.1, 2026-08-08) -> v0.2.7 (RE-AUDIT COMPLET DES 5 PATTERNS : a chaque creation/modification/audit, REJOUER les procedures 1, 2, 3, 4 et 4b, jamais seulement la nouvelle procedure. Lecon Themis 2026-08-08 : l audit 4b seul ne testait que Pattern 5, c est la procedure 2 qui a revele 3 ecarts ASCII chez vulcain (c4/c6/c12)) -> v0.2.8 (Pattern 6 : CONTEXTE TEMPS REEL - la question honnete c0 couvre le STATIQUE (fiche + corrections, memorisable) ; l HISTORIQUE est DYNAMIQUE (il change a chaque activation des autres LLM) : sa lecture est OBLIGATOIRE a chaque activation, meme en memoire. Case c0c CONTEXTE entre c0b et c1, traversee par TOUS les chemins. Decision utilisateur 2026-08-08 : chaque agent doit se souvenir des dernieres interventions des autres agents (15 dernieres) et savoir que les autres LLM existent (section Sessions connues), pour eviter les collisions multi-LLM)
+**Agent** : Vulcain (creation + evolutions v0.2.0 : patterns multi-missions + rappel ASCII ; v0.2.1 : procedure d'audit des 2 patterns ; v0.2.2 : regle d'autonomie des parcours ; v0.2.3 : prototype vulcain documente comme cas legitime assume ; v0.2.4 : Pattern 3 - combo generateur -> execution, lien avec spec-combos-moteur ; v0.2.5 : Pattern 4 - case Question Honnete en case 0, standard de demarrage ; v0.2.6 : Pattern 5 - chaine de delegation ACTIVE, JAMAIS de fin passive ; v0.2.7 : regle de RE-AUDIT COMPLET des 5 patterns (lecon Themis : la procedure 4b seule ne teste que Pattern 5, c est la procedure 2 qui a revele les ecarts ASCII de vulcain) ; v0.2.8 : Pattern 6 - CONTEXTE TEMPS REEL : lecture OBLIGATOIRE de l historique a chaque activation, meme en memoire (le dynamique ne se memorise pas) ; v0.2.9 : MODE AGENT NON-BLOQUANT - les questions sont destinees a l AGENT, jamais a un input() clavier ; sans --reponses l outil affiche la question et s arrete proprement (cause : demarrage d un 2e LLM bloquait sur la saisie clavier))
+**Historique** : v0.1.0 (creation) -> v0.2.0 (documentation des 2 patterns valides en production, 2026-08-07) -> v0.2.1 (documentation de la procedure d'audit des 2 patterns, validee par l'audit des 11 parcours par Themis, 2026-08-08) -> v0.2.2 (regle d'autonomie : chaque parcours est un fichier individuel, convergence uniquement intra-parcours, 2026-08-08) -> v0.2.3 (prototype vulcain : fins independantes documentees comme CAS LEGITIME ASSUME, compatible regle 8, 2026-08-08) -> v0.2.4 (Pattern 3 : une case de parcours peut pointer vers un COMBO - combos-moteur lit definition-combo.json, generateur-commande en mode AUTO, 2026-08-08) -> v0.2.5 (Pattern 4 : case c0 Question Honnete de relecture + c0b RELIRE obligatoire + case_depart = c0, standard de demarrage fige, valide par l'audit Themis 11/11 parcours, 2026-08-08) -> v0.2.6 (Pattern 5 : CHAINE DE DELEGATION ACTIVE - une delegation ne se termine JAMAIS par une fin passive 'X te reactive' : la carte materialise la boucle RELAIS -> RETOUR -> CLOTURE -> FIN. Lecon detecter-impacts v0.2.0 / parcours-vulcain v0.2.1, 2026-08-08) -> v0.2.7 (RE-AUDIT COMPLET DES 5 PATTERNS : a chaque creation/modification/audit, REJOUER les procedures 1, 2, 3, 4 et 4b, jamais seulement la nouvelle procedure. Lecon Themis 2026-08-08 : l audit 4b seul ne testait que Pattern 5, c est la procedure 2 qui a revele 3 ecarts ASCII chez vulcain (c4/c6/c12)) -> v0.2.8 (Pattern 6 : CONTEXTE TEMPS REEL - la question honnete c0 couvre le STATIQUE (fiche + corrections, memorisable) ; l HISTORIQUE est DYNAMIQUE (il change a chaque activation des autres LLM) : sa lecture est OBLIGATOIRE a chaque activation, meme en memoire. Case c0c CONTEXTE entre c0b et c1, traversee par TOUS les chemins. Decision utilisateur 2026-08-08 : chaque agent doit se souvenir des dernieres interventions des autres agents (15 dernieres) et savoir que les autres LLM existent (section Sessions connues), pour eviter les collisions multi-LLM) -> v0.2.9 (MODE AGENT NON-BLOQUANT : les questions sont destinees a l AGENT, jamais a un input() clavier ; sans --reponses l outil affiche QUESTION POUR L AGENT et s arrete proprement code 0 ; option --interactif reservee a l usage humain. Cause : demarrage d un 2e LLM bloque sur une demande de saisie clavier au lieu de repondre a la question, 2026-08-08) -> v0.2.10 (REGLE 10 : AUCUNE BOUCLE D ATTENTE - une branche qui revient sur la MEME case pour attendre est INTERDITE, l attente est une FIN pas une boucle ; les boucles de CONTROLE (re-travail) restent autorisees. Lecon log-externe 2026-08-08 : la boucle c4 -> c4 du parcours-demarrage re-posait la question a l infini) -> v0.2.11 (REPRISE SANS BOUCLE : le message QUESTION POUR L AGENT donne la commande exacte --case <case-courante> --reponses REPONSE pour reprendre la navigation sans rejouer c0. Lecon log-externe 2026-08-08 : sans --case, le LLM relancait depuis le debut et la question honnete c0 etait REPOSEE a chaque relance -> boucle de relecture)
 
 ---
 
@@ -140,6 +140,21 @@ Une case contient une combinaison libre d'elements (0 a N) :
    `corrections.md` puis la fiche, puis pointe vers `c1`. `case_depart` vaut
    TOUJOURS `c0`. Seul OUI prouve la memorisation : "je viens de les lire"
    n'est pas une preuve (regles-veracite).
+10. **AUCUNE BOUCLE D'ATTENTE (v0.2.10)** : une branche qui revient sur la MEME
+    case pour ATTENDRE (ex: `NON` -> meme case "attendre la mission") est
+    INTERDITE : l'attente est une FIN, pas une boucle. Le parcours se termine
+    par une case `fin` (message : "en attente de mission, le parcours s arrete
+    ici, la mission arrive dans la conversation") et l'agent attend dans la
+    conversation, pas en bouclant. Les boucles de CONTROLE (NON -> meme case
+    = re-travail, refaire l'action puis relancer) sont autorisees : elles ne
+    sont pas des attentes passives, l'agent refait l'action et relance avec
+    OUI. Lecon log-externe 2026-08-08 : la boucle d'attente c4 -> c4 du
+    parcours-demarrage re-posait la question a l'infini a chaque relance.
+    DETECTION AUTOMATIQUE (outil v0.2.0) : `valider_parcours` refuse toute
+    case dont le titre OU la question contient attendre/attente avec une
+    branche vers elle-meme (ERREUR BOUCLE D'ATTENTE). Verification manuelle
+    complementaire : `branche vers sa propre case` -> 0 sur les cases
+    d'attente.
 
 ## CLI de l'outil guider-parcours
 
@@ -148,13 +163,17 @@ python3 guider-parcours.py <parcours.json> [options]
 
 Options :
   --case <id>       Demarrer a une case precise (ex: c3) au lieu de case_depart
-  --reponses <liste> Fournir les reponses d'un coup (separes par |) : mode non-interactif
+  --reponses <liste> Fournir les reponses d'un coup (separes par |) : mode agent
+  --interactif      Mode interactif (input clavier) reserve a l'usage humain
   --liste           Lister toutes les cases du parcours sans naviguer
   --version         Afficher la version
   --help            Afficher l'aide
 ```
 
-### Mode interactif
+### Mode agent (par defaut) -- NON-BLOQUANT (v0.2.9)
+
+**Les questions d'un parcours sont destinees a l'AGENT, jamais a une saisie
+clavier.** L'outil ne fait JAMAIS `input()` en mode agent :
 
 1. L'outil charge le JSON et valide sa structure (erreur claire si invalide)
 2. Il affiche la case courante :
@@ -168,16 +187,37 @@ Options :
      [1] Windows
      [2] Linux
    ```
-3. Il attend la reponse (choix numerique ou texte exact)
-4. Il suit la branche correspondante et affiche la case suivante
-5. Cas d'erreur : reponse inconnue -> message clair + re-demande
-6. Une case `fin` met fin au parcours avec le message de fin
+3. Si la case est une question/controle SANS reponse predefinie disponible
+   (pas de `--reponses`, ou reponses epuisees), il affiche
+   `=== QUESTION POUR L'AGENT ===` + les reponses possibles puis **s'arrete
+   proprement (code 0)** : **un agent vit dans la console, il n'est pas un
+   humain et ne repond jamais a une invite interactive** ; il repond selon
+   son etat reel puis fournit sa reponse PAR LA CONSOLE en relancant
+   **DEPUIS CETTE CASE** -- le message donne la commande exacte
+   `--case <case-courante> --reponses 'REPONSE'` pour REPRENDRE sans rejouer
+   les cases deja parcourues (lecon log-externe 2026-08-08 : sans `--case`,
+   relancer depuis le debut rejoue c0 et repose la question honnete a chaque
+   relance -> boucle de relecture).
+4. Une case `indice` passe automatiquement a `suivant`.
+5. Une case `fin` met fin au parcours avec le message de fin.
+
+**Le blocage sur `input()` a ete la cause d'un bug de demarrage (2e LLM qui
+restait bloque sur une demande de saisie clavier) : le mode agent est
+OBLIGATOIRE par defaut, l'outil ne demande jamais rien au clavier sans
+`--interactif` explicite.**
 
 ### Mode --reponses
 
 L'agent fournit toutes les reponses d'un coup (separees par `|`), l'outil
 parcourt les cases sans interaction. Une reponse vide a une case avec branches
-est une erreur.
+est une erreur. Si les reponses fournies sont epuisees avant la fin, l'outil
+s'arrete proprement sur la question courante (mode agent).
+
+### Mode --interactif (usage humain uniquement)
+
+`input()` clavier (`--interactif`) reserve au test humain : re-demande en cas
+de reponse inconnue, navigation pas a pas au clavier. Les agents n'utilisent
+JAMAIS ce mode.
 
 ### Mode --liste
 
@@ -692,7 +732,7 @@ en v0.2.5, le Pattern 5 en v0.2.6, le Pattern 6 en v0.2.8).
 
 1. Le guide affiche les cases une a une avec indices et branches
 2. Une reponse mene a la bonne case (branches testees)
-3. Une reponse inconnue affiche une erreur claire et re-demande
+3. Une reponse inconnue affiche une erreur claire (en --reponses : sortie code 1 ; en --interactif : re-demande)
 4. Le mode --reponses parcourt le parcours sans interaction
 5. Le mode --liste inventorie les cases
 6. Un JSON invalide est refuse avec message d'erreur clair
@@ -720,3 +760,7 @@ en v0.2.5, le Pattern 5 en v0.2.6, le Pattern 6 en v0.2.8).
     avec l'outil `lire-activite-recente` et l'indice fichier AGENTS.md
     section `## Sessions connues` ; la lecture de l'historique est obligatoire
     meme en memoire (Pattern 6, v0.2.8 -- decision utilisateur multi-LLM)
+16. MODE AGENT NON-BLOQUANT (v0.2.9) : sans --reponses (ou reponses epuisees),
+    l'outil affiche `=== QUESTION POUR L'AGENT ===` + les reponses possibles puis
+    sort proprement (code 0) -- JAMAIS de `input()` bloquant en mode agent ;
+    `--interactif` reserve a l'usage humain

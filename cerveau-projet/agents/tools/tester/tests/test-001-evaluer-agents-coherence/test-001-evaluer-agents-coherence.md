@@ -75,14 +75,14 @@ python3 evaluer-coherence/evaluer-coherence.py
 
 ### Test 4: faux positifs liens structures resolus
 
-**Objectif**: Les liens `pense-betes/conventions/structures/convention-*.md` existent sous `cerveau-projet/` mais etaient signales comme casses. Apres correction (cible_racine depuis projet root), ils doivent disparaettre.
+**Objectif**: Les liens `agents/conventions/structures/convention-*.md` existent sous `cerveau-projet/` mais etaient signales comme casses. Apres correction (cible_racine depuis projet root), ils doivent disparaettre.
 
 **Commande**:
 ```bash
 python3 evaluer-coherence/evaluer-coherence.py
 ```
 
-**Sortie attendue**: Aucun lien contenant "pense-betes/conventions/structures"
+**Sortie attendue**: Aucun lien contenant "agents/conventions/structures"
 
 **Code de retour**: 0
 

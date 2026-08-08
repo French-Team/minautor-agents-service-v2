@@ -204,13 +204,13 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Protocoles applicables
 
-- [protocole-recherches-web](../../pense-betes/regles-immuables/general/protocole-recherches-web/) -- **IMMUABLE** (mission recherche web)
-- [convention-protocoles](../../pense-betes/conventions/protocoles/convention-protocoles.md) -- mission documentation
-- [convention-structures](../../pense-betes/conventions/structures/convention-structures.md)
-- [rvav-workflow](../../pense-betes/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
-- [regles-emojis-ascii](../../pense-betes/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
-- [regles-veracite](../../pense-betes/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
-- [protocole-auto-correction](../../pense-betes/regles-immuables/general/protocole-auto-correction/) -- ajouter les lecons dans corrections.md
+- [protocole-recherches-web](../../agents/regles-immuables/general/protocole-recherches-web/) -- **IMMUABLE** (mission recherche web)
+- [convention-protocoles](../../agents/conventions/protocoles/convention-protocoles.md) -- mission documentation
+- [convention-structures](../../agents/conventions/structures/convention-structures.md)
+- [rvav-workflow](../../agents/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
+- [regles-emojis-ascii](../../agents/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
+- [regles-veracite](../../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
+- [protocole-auto-correction](../../agents/regles-immuables/general/protocole-auto-correction/) -- ajouter les lecons dans corrections.md
 
 ---
 

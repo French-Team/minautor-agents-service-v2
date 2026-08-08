@@ -48,14 +48,14 @@ projet/
     |   |-- index-agents.md
     |   |-- [agent]/[agent].md   # Fiche de chaque agent
     |   |-- [agent]/corrections.md  # Corrections et lecons de l'agent
-    |   `-- tools/               # Boite a outils (83 outils + protections)
-    |-- pense-betes/             # Idees, conventions, regles, specs, todos
-    |   |-- index-pense-bete.md
     |   |-- conventions/         # Renommage, structures, liens, protocoles
     |   |-- regles-immuables/    # Regles non negociables + protocoles + RVAV
+    |   |-- classeur-variables/  # Stockage partage de variables
+    |   `-- tools/               # Boite a outils (83 outils + protections)
+    |-- pense-betes/             # Idees, specs, todos, travail en cours
+    |   |-- index-pense-bete.md
     |   |-- specs/               # Definitions techniques
     |   `-- pense-betes/         # Travail en cours (statuts ebauche->valide)
-    |-- classeur-variables/      # Stockage partage de variables
     |-- recherches-web/          # Historique des recherches effectuees
     `-- exemples/                # Tests et exemples d'utilisation
 ```

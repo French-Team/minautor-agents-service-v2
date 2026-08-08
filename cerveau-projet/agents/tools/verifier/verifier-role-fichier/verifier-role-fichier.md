@@ -26,7 +26,7 @@ verifier-role-fichier.sh cerveau-projet/index-cerveau.md
 verifier-role-fichier.sh cerveau-projet/pense-betes/index-pense-bete.md
 
 # Verifier un protocole
-verifier-role-fichier.sh cerveau-projet/pense-betes/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md
+verifier-role-fichier.sh cerveau-projet/agents/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md
 ```
 
 ## Roles et sections interdites

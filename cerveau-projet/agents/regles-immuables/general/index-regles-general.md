@@ -16,6 +16,7 @@ identite:
 | [regles-choisir-agent.md](regles-choisir-agent.md) | **IMMUABLE** -- Choisir le bon agent |
 | [regles-validation-rigoureuse.md](regles-validation-rigoureuse.md) | **IMMUABLE** -- Validation rigoureuse |
 | [regles-emojis-ascii.md](regles-emojis-ascii.md) | **IMMUABLE** -- Bannissement des emojis, utilisation de ASCII (exceptions volontaires documentees dans le fichier) |
+| [regles-perimetre-workspace.md](regles-perimetre-workspace.md) | **IMMUABLE** -- Perimetre du workspace : ecriture dans le workspace uniquement, hors workspace en lecture seule |
 | [regles-veracite.md](regles-veracite.md) | **IMMUABLE** -- Ne jamais mentir ou inventer |
 
 ### Protocoles

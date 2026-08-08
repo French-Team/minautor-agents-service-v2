@@ -223,8 +223,8 @@ CERBERUS -> AGENT -> CERBERUS -> JANUS -> CERBERUS -> CLIO -> CERBERUS
 
 ### Protocoles applicables
 
-- [protocole-identification](../../pense-betes/regles-immuables/general/protocole-identification/) -- identification des agents
-- [regles-choisir-agent](../../pense-betes/regles-immuables/general/regles-choisir-agent.md) -- comment choisir le bon agent
+- [protocole-identification](../../agents/regles-immuables/general/protocole-identification/) -- identification des agents
+- [regles-choisir-agent](../../agents/regles-immuables/general/regles-choisir-agent.md) -- comment choisir le bon agent
 - [spec-guider-parcours](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours (v0.2.0)
 
 ---

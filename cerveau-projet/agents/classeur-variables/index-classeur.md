@@ -101,6 +101,6 @@ variables:
 
 ## Navigation
 
-- **Parent** : [index-cerveau.md](../index-cerveau.md)
-- **Convention** : [convention-classeur-variables.md](pense-betes/conventions/structures/convention-classeur-variables.md)
-- **Structures** : [convention-structures.md](pense-betes/conventions/structures/convention-structures.md)
+- **Parent** : [index-cerveau.md](../../index-cerveau.md)
+- **Convention** : [convention-classeur-variables.md](../conventions/structures/convention-classeur-variables.md)
+- **Structures** : [convention-structures.md](../conventions/structures/convention-structures.md)

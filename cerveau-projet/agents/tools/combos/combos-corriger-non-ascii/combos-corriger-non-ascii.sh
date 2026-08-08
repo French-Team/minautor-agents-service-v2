@@ -10,7 +10,7 @@
 #   3. corriger-accents-zones-sensibles -> remplacer les accents
 #   4. rechercher-accents-sensibles -> verifier le nettoyage
 # identite:
-#   type: combo
+#   type: outil
 #   appartient_a: commun
 #   commun: true
 

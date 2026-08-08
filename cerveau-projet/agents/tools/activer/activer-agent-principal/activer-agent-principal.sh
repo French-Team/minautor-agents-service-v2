@@ -11,7 +11,7 @@ VERSION="0.5.0"
 # Configuration
 AGENTS_FILE="${AGENTS_FILE:-AGENTS.md}"
 AGENTS_HISTORIQUE="${AGENTS_HISTORIQUE:-AGENTS-historique.md}"
-CLASSEUR_STOCKAGE="${CLASSEUR_STOCKAGE:-cerveau-projet/classeur-variables/stockage/variables-actuelles.md}"
+CLASSEUR_STOCKAGE="${CLASSEUR_STOCKAGE:-cerveau-projet/agents/classeur-variables/stockage/variables-actuelles.md}"
 CERBERUS_FICHE="cerveau-projet/agents/cerberus/cerberus.md"
 MAX_ENTREES_HISTORIQUE=150
 PREFIXE_SESSION="session-llm-"
@@ -479,16 +479,12 @@ ajouter_historique() {
     awk -v ligne="$nouvelle_ligne" -v max="$MAX_ENTREES_HISTORIQUE" '
         BEGIN { insere = 0; compteur = 0 }
         {
-            if ($0 ~ /^\|---/) {
-                print $0
+            if (index($0, "| 20") == 1) {
                 if (insere == 0) {
                     print ligne
                     insere = 1
                     compteur++
                 }
-                next
-            }
-            if ($0 ~ /^\| 20[0-9][0-9]-/) {
                 if (compteur < max) {
                     print $0
                     compteur++
@@ -497,6 +493,7 @@ ajouter_historique() {
             }
             print $0
         }
+        END { if (insere == 0) print ligne }
     ' "$AGENTS_HISTORIQUE" > "$AGENTS_HISTORIQUE.tmp" && mv "$AGENTS_HISTORIQUE.tmp" "$AGENTS_HISTORIQUE"
 
     if ! verifier_fichier_ascii "$AGENTS_HISTORIQUE"; then

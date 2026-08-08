@@ -1,6 +1,6 @@
 ---
 identite:
-  type: combo
+  type: outil
   appartient_a: commun
   commun: true
 ---
@@ -302,7 +302,7 @@ Cycle d'activation termine.
 > `cerveau-projet/combos/<combo-nom>/definition-combo.json` (TOUJOURS ce nom).
 > Le dossier `agents/tools/combos/` est reserve aux OUTILS (moteur + combos
 > executables .py/.sh/.md, domaine Vulcain). Ne jamais melanger les deux.
-> Voir [protocole-creation-combos](../../../../pense-betes/regles-immuables/general/protocole-creation-combos/protocole-creation-combos.001.01.ebauche.md).
+> Voir [protocole-creation-combos](../../../../agents/regles-immuables/general/protocole-creation-combos/protocole-creation-combos.001.01.ebauche.md).
 
 > **REGLE TRACABILITE (protocole-creation-combos 9.5, IMMUABLE)** : avant
 > d'executer un combo, l'agent CITE le combo : `Je lance le combo <nom> :

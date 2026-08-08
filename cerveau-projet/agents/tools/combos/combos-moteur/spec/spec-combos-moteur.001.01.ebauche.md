@@ -249,7 +249,7 @@ themis c3, janus c5/c22, vulcain c7/c13, buffy c28.
 - `spec/spec-combos-moteur.001.01.ebauche.md` (ce fichier)
 - (la definition d'un combo est un fichier du cerveau, cree par Buffy selon
   le protocole-creation-combos : `cerveau-projet/combos/<combo-nom>/definition-combo.json`
-  -- voir [protocole-creation-combos](../../../../../pense-betes/regles-immuables/general/protocole-creation-combos/protocole-creation-combos.001.01.ebauche.md))
+  -- voir [protocole-creation-combos](../../../../../agents/regles-immuables/general/protocole-creation-combos/protocole-creation-combos.001.01.ebauche.md))
 
 ## Notes de creation
 

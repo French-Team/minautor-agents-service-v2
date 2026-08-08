@@ -197,6 +197,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `nettoyer-fichier` | Purifier un fichier en supprimant le contenu non essentiel | [nettoyer/nettoyer-fichier/](nettoyer/nettoyer-fichier/) |
+| `nettoyer-sessions` | Supprimer TOUTES les sessions LLM (AGENTS.md blocs + Sessions connues, classeur profil-session-*), le journal historique est conserve | [nettoyer/nettoyer-sessions/](nettoyer/nettoyer-sessions/) |
 
 ### Rechercher
 
@@ -394,7 +395,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Migrer | 1 |
 | Mettre a jour | 1 |
 | Activer | 1 |
-| Nettoyer | 1 |
+| Nettoyer | 2 |
 | Rechercher | 10 |
 | Remplacer | 1 |
 | Supprimer | 3 |
@@ -402,8 +403,8 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Verifier | 4 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **90** |
+| **Total** | **91** |
 
-> **Note sur le decompte** : 82 outils d'action + 4 combos + 3 protections + 1 template = 90 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
+> **Note sur le decompte** : 83 outils d'action + 4 combos + 3 protections + 1 template = 91 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 
 ---

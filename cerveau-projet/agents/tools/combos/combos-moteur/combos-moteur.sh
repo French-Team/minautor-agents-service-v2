@@ -4,7 +4,7 @@
 # Version : 0.1.0-beta
 # Statut : ebauche
 # identite:
-#   type: combo
+#   type: outil
 #   appartient_a: commun
 #   commun: true
 

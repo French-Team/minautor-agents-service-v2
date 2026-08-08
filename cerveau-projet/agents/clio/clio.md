@@ -209,10 +209,10 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Protocoles applicables
 
-- [rvav-workflow](../../pense-betes/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
-- [regles-emojis-ascii](../../pense-betes/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
-- [regles-veracite](../../pense-betes/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
-- [protocole-auto-correction](../../pense-betes/regles-immuables/general/protocole-auto-correction/)
+- [rvav-workflow](../../agents/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
+- [regles-emojis-ascii](../../agents/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
+- [regles-veracite](../../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
+- [protocole-auto-correction](../../agents/regles-immuables/general/protocole-auto-correction/)
 
 ---
 

@@ -3,7 +3,7 @@
 # guider-parcours.py
 # Guide l'agent case par case (jeu de piste) : affiche la case courante
 # (question + indices outil/fichier/regle), suit les branches selon la reponse.
-# Version : 0.1.0
+# Version : 0.2.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -30,7 +30,7 @@ import json
 import sys
 from pathlib import Path
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -111,6 +111,18 @@ def valider_parcours(donnees):
             vers = b.get("vers")
             if vers and vers not in cases:
                 erreurs.append("case '%s': branche vers '%s' introuvable" % (cid, vers))
+    for cid, case in cases.items():
+        # Regle 10 (spec v0.2.10) : AUCUNE BOUCLE D'ATTENTE. Une case dont le
+        # titre evoque l'attente (attendre/attente) ne doit JAMAIS avoir une
+        # branche vers elle-meme : l'attente est une FIN, pas une boucle.
+        titre = (case.get("titre", "") + " " + case.get("question", "")).lower()
+        if "attendre" in titre or "attente" in titre:
+            for b in case.get("branches") or []:
+                if b.get("vers") == cid:
+                    erreurs.append(
+                        "case '%s': BOUCLE D'ATTENTE interdite (branche '%s' -> elle-meme). "
+                        "L'attente est une case fin, pas une boucle (spec v0.2.10 regle 10)" % (cid, b.get("reponse"))
+                    )
     if erreurs:
         for e in erreurs:
             print(_couleur("ERREUR: " + e, "rouge"), file=sys.stderr)
@@ -192,8 +204,16 @@ def reponse_exacte(branches, reponse):
 # Navigation
 # ------------------------------------------------------------------
 
-def naviguer(donnees, case_debut, reponses_predefinies):
-    """Parcourt le parcours case par case."""
+def naviguer(donnees, case_debut, reponses_predefinies, interactif=False):
+    """Parcourt le parcours case par case.
+
+    Mode AGENT (defaut) : jamais d'input bloquant. Quand une question est
+    atteinte sans reponse predefinie disponible, la question est affichee et
+    l'outil s'arrete proprement : l'agent repond selon son etat reel puis
+    relance avec --reponses 'REPONSE'. Les questions sont destinees a
+    l'AGENT, jamais a une saisie clavier.
+    Mode --interactif : input() clavier, reserve a l'usage humain (tests).
+    """
     meta = donnees.get("parcours", {})
     cases = donnees.get("cases", {})
     cid = case_debut
@@ -230,17 +250,32 @@ def naviguer(donnees, case_debut, reponses_predefinies):
             position = ordre.index(cid) + 1
             continue
 
-        # Question ou controle : attendre une reponse
-        if reponses_predefinies is not None:
-            if idx_reponses >= len(reponses_predefinies):
-                print(_couleur("ERREUR: plus de reponses fournies que de questions (case '%s')" % cid, "rouge"), file=sys.stderr)
-                return 1
+        # Question ou controle : reponse de l'agent (jamais d'input bloquant)
+        if interactif:
+            try:
+                rep = input("> ").strip()
+            except EOFError:
+                print("=== PARCOURS INTERROMPU (fin d'entree) ===")
+                return 0
+        elif reponses_predefinies is not None and idx_reponses < len(reponses_predefinies):
             rep = reponses_predefinies[idx_reponses].strip()
             idx_reponses += 1
-            if rep == "":
-                rep = input("> ").strip()
         else:
-            rep = input("> ").strip()
+            # Mode agent : la question est destinee a l'agent. Un agent vit
+            # dans la console : il ne repond JAMAIS a une invite interactive.
+            # Il repond selon son etat reel puis fournit sa reponse PAR LA
+            # CONSOLE en relancant avec --reponses 'REPONSE'.
+            print("")
+            print(_couleur("=== QUESTION POUR L'AGENT ===", "cyan"))
+            print("Tu es un AGENT, tu vis dans la console : tu n'es pas un humain,")
+            print("tu ne reponds a aucune invite interactive. Reponds a la question")
+            print("ci-dessus selon ton etat reel, puis fournis ta reponse PAR LA CONSOLE")
+            print("en relancant DEPUIS CETTE CASE (pour ne pas rejouer c0) :")
+            print("  guider-parcours <parcours.json> --case %s --reponses 'REPONSE'" % cid)
+            if branches:
+                print("Reponses possibles : %s" % " / ".join(b.get("reponse", "?") for b in branches))
+            print("")
+            return 0
 
         if not branches:
             suivant = case.get("suivant")
@@ -272,7 +307,8 @@ def construire_parser():
     )
     parser.add_argument("parcours", type=str, help="Chemin du fichier de parcours JSON")
     parser.add_argument("--case", type=str, default=None, help="Case de depart (ex: c3)")
-    parser.add_argument("--reponses", type=str, default=None, help="Reponses fournies d'un coup, separees par |")
+    parser.add_argument("--reponses", type=str, default=None, help="Reponses fournies d'un coup, separees par | (mode agent)")
+    parser.add_argument("--interactif", action="store_true", help="Mode interactif (input clavier) pour usage humain")
     parser.add_argument("--liste", action="store_true", help="Lister les cases sans naviguer")
     parser.add_argument("--version", action="version", version="guider-parcours v%s" % VERSION)
     return parser
@@ -294,7 +330,7 @@ def main():
     reponses = None
     if args.reponses is not None:
         reponses = [r.strip() for r in args.reponses.split("|")]
-    return naviguer(donnees, case_debut, reponses)
+    return naviguer(donnees, case_debut, reponses, args.interactif)
 
 
 if __name__ == "__main__":

@@ -249,8 +249,8 @@ preferences:
 |---|---|
 | `vulcain.md` | Ma fiche principale |
 | `AGENTS.md` | Fichier dynamique |
-| `../../pense-betes/regles-immuables/general/protocole-technologies/` | Protocole de choix technologique |
-| `../../pense-betes/regles-immuables/general/protocole-outils/` | Protocole de construction d'outils |
+| `../../agents/regles-immuables/general/protocole-technologies/` | Protocole de choix technologique |
+| `../../agents/regles-immuables/general/protocole-outils/` | Protocole de construction d'outils |
 
 ---
 

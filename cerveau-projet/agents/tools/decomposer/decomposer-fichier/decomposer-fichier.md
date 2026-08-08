@@ -77,7 +77,7 @@ decomposer-fichier.sh <fichier> [options]
 ### Lister les sections
 
 ```bash
-$ decomposer-fichier.sh cerveau-projet/pense-betes/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md --lister
+$ decomposer-fichier.sh cerveau-projet/agents/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md --lister
 
 === Sections de protocole-outils.001.01.ebauche.md ===
 
@@ -93,7 +93,7 @@ $ decomposer-fichier.sh cerveau-projet/pense-betes/regles-immuables/general/prot
 ### Extraire une section
 
 ```bash
-$ decomposer-fichier.sh cerveau-projet/pense-betes/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md --extraire "Regles"
+$ decomposer-fichier.sh cerveau-projet/agents/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md --extraire "Regles"
 
 === Section: Regles ===
 
@@ -106,7 +106,7 @@ $ decomposer-fichier.sh cerveau-projet/pense-betes/regles-immuables/general/prot
 ### Filtrer par type
 
 ```bash
-$ decomposer-fichier.sh cerveau-projet/pense-betes/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md --filtrer regles
+$ decomposer-fichier.sh cerveau-projet/agents/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md --filtrer regles
 
 4: > **Ne jamais utiliser une commande sans la transformer en outil reutilisable.**
 58: ### Regle 1 -- Chaque outil est documente
@@ -117,7 +117,7 @@ $ decomposer-fichier.sh cerveau-projet/pense-betes/regles-immuables/general/prot
 ### Resume
 
 ```bash
-$ decomposer-fichier.sh cerveau-projet/pense-betes/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md --resume
+$ decomposer-fichier.sh cerveau-projet/agents/regles-immuables/general/protocole-outils/protocole-outils.001.01.ebauche.md --resume
 
 === Resume de protocole-outils.001.01.ebauche.md ===
 

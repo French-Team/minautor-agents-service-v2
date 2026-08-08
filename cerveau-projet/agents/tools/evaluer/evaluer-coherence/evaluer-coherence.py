@@ -46,7 +46,7 @@ PATTERN_LIEN = re.compile(r"\[[^]]+\]\(([^)]+)\)")
 AGENTS_ATTENDUS = ["cerberus", "buffy", "athena", "atlas", "clio", "janus",
                    "minerve", "morpheus", "promethee", "vulcain", "themis"]
 
-# Prefixes qui vivent dans pense-betes/ et ne sont pas des outils
+# Prefixes qui vivent dans agents/conventions/ et agents/regles-immuables/ et ne sont pas des outils
 PREFIXES_NON_OUTILS = ("convention-", "protocole-", "regles-", "rvav-",
                        "sous-protocole-")
 
