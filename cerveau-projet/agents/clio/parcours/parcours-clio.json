@@ -1,0 +1,165 @@
+{
+  "parcours": {
+    "nom": "parcours-clio",
+    "agent": "clio",
+    "version": "0.1.0",
+    "case_depart": "c1",
+    "description": "Parcours (jeu de piste) des missions de Clio : corriger le README (journal, verifier, maj, insertion manuelle si nouvelle categorie, ASCII, lecons) et verifier le README. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+  },
+  "cases": {
+    "c1": {
+      "titre": "Mission",
+      "type": "question",
+      "question": "Quelle est la mission ?",
+      "branches": [
+        { "reponse": "corriger", "vers": "c2" },
+        { "reponse": "verifier", "vers": "c11" },
+        { "reponse": "autre", "vers": "c13" }
+      ]
+    },
+    "c2": {
+      "titre": "Lire la raison de l'activation",
+      "type": "indice",
+      "indices": [
+        { "type": "fichier", "chemin": "AGENTS.md", "raison": "Lire la raison de mon activation : savoir CE QUI A CHANGE" },
+        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md" }
+      ],
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Consulter les interventions recentes",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "LE README EST LE LIVRE DU PROJET : je CORRIGE le texte existant, je n'ajoute JAMAIS de chronologie ni de lignes d'interventions." },
+        { "type": "outil", "nom": "mettre-a-jour-readme", "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/", "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --journal 10" }
+      ],
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Verifier l'etat reel",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "Je ne suppose JAMAIS. Je VERIFIE les sources de verite (AGENTS-historique, agents/, tools/)." },
+        { "type": "outil", "nom": "mettre-a-jour-readme", "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/", "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier" }
+      ],
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Ecarts detectes ?",
+      "type": "question",
+      "question": "Le --verifier signale-t-il des ecarts (OBSOLETE / MANQUANT) avec le README ?",
+      "branches": [
+        { "reponse": "OUI", "vers": "c6" },
+        { "reponse": "NON", "vers": "c9" }
+      ]
+    },
+    "c6": {
+      "titre": "Corriger le texte du README",
+      "type": "indice",  "indices": [
+   {
+    "type": "regle",
+    "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+   },
+   {
+    "type": "regle",
+    "texte": "Je n'edite JAMAIS le README directement. mettre-a-jour-readme est mon UNIQUE outil de modification."
+   },
+        { "type": "outil", "nom": "mettre-a-jour-readme", "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/", "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --maj" }
+      ],
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Nouvelle categorie manquante ?",
+      "type": "question",
+      "question": "Le --maj a-t-il corrige les compteurs mais laisse une NOUVELLE categorie absente de la table (ex: [MANQUANT] Guider) ?",
+      "indices": [
+        { "type": "regle", "texte": "Lecon Clio : --maj CORRIGE les categories existantes mais ne CREE PAS une categorie absente du README -- ajouter la ligne manuellement avec editer-fichier puis relancer --verifier." }
+      ],
+      "branches": [
+        { "reponse": "OUI", "vers": "c8" },
+        { "reponse": "NON", "vers": "c9" }
+      ]
+    },
+    "c8": {
+      "titre": "Inserer la ligne de categorie manquante",
+      "type": "indice",  "indices": [
+   {
+    "type": "regle",
+    "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+   },
+   {
+    "type": "regle",
+    "texte": "Format de ligne : | **Categorie (N)** | outils | usage |. Inserer a la bonne place alphabetique dans la table des outils."
+   },
+        { "type": "outil", "nom": "editer-fichier", "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/", "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py README.md <ligne-avant> <ligne-avec-categorie>" }
+      ],
+      "suivant": "c9"
+    },
+    "c9": {
+      "titre": "Verifier la conformite ASCII",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE : ASCII strict (aucun accent, emoji ou caractere Unicode)." },
+        { "type": "outil", "nom": "valider-conformite-ascii", "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py README.md" }
+      ],
+      "suivant": "c10"
+    },
+    "c10": {
+      "titre": "Lecons et retour",
+      "type": "indice",  "indices": [
+   {
+    "type": "regle",
+    "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+   },
+   {
+    "type": "regle",
+    "texte": "Ajouter les lecons dans corrections.md (protocole-auto-correction), passer la boucle RVAV, puis reactiver Cerberus."
+   },
+        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> clio" }
+      ],
+      "suivant": "c12"
+    },
+    "c11": {
+      "titre": "Verifier sans modifier",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "Mission de verification : on ne modifie PAS le README, on rapporte si il est a jour ou non." },
+        { "type": "outil", "nom": "mettre-a-jour-readme", "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/", "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier" }
+      ],
+      "suivant": "c12"
+    },
+    "c12": {
+      "titre": "FIN - Reactiver Cerberus",
+      "type": "fin",
+      "message": "Reactiver Cerberus avec le bilan (ecarts corriges ou README deja a jour) et la liste des outils utilises."
+    },
+    "c13": {
+      "titre": "Mission hors parcours",
+      "type": "question",
+      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
+      "branches": [
+        { "reponse": "OUI", "vers": "c14" },
+        { "reponse": "NON", "vers": "c15" }
+      ]
+    },
+    "c14": {
+      "titre": "Activer l'agent habilite",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine." },
+        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>" }
+      ],
+      "suivant": "c16"
+    },
+    "c15": {
+      "titre": "Signaler le besoin",
+      "type": "fin",
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+    },
+    "c16": {
+      "titre": "FIN - Delegation",
+      "type": "fin",
+      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+    }
+  }
+}

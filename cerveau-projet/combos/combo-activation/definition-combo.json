@@ -1,0 +1,77 @@
+{
+  "combo": {
+    "nom": "combo-activation",
+    "description": "Cycle d'activation complet d'une session LLM : sidentifier -> activer -> reactiver (le cycle le plus repete du cerveau, 11 parcours concernes)",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande sidentifier",
+      "type": "generateur",
+      "catalogue": "activer-sidentifier",
+      "entrees": { "id_llm": "llm-1" },
+      "sortie": "cmd1",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Executer sidentifier",
+      "type": "outil",
+      "commande": "{cmd1}",
+      "sortie": "resultat_sidentifier",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Controle : la session est-elle identifiee ?",
+      "type": "controle",
+      "question": "La session a-t-elle ete identifiee avec succes ?",
+      "branches": [
+        { "reponse": "OUI", "vers": "c4" },
+        { "reponse": "NON", "vers": "c8" }
+      ]
+    },
+    "c4": {
+      "titre": "Generer la commande activer",
+      "type": "generateur",
+      "catalogue": "activer-activer",
+      "entrees": {
+        "session": "session-llm-1",
+        "agent": "Buffy",
+        "raison": "Mission pilote combo-activation"
+      },
+      "sortie": "cmd2",
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Executer activer",
+      "type": "outil",
+      "commande": "{cmd2}",
+      "sortie": "resultat_activer",
+      "suivant": "c6"
+    },
+    "c6": {
+      "titre": "Generer la commande reactiver",
+      "type": "generateur",
+      "catalogue": "activer-reactiver",
+      "entrees": {
+        "session": "session-llm-1",
+        "raison": "Fin mission pilote combo-activation",
+        "agent": "Buffy"
+      },
+      "sortie": "cmd3",
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Executer reactiver",
+      "type": "outil",
+      "commande": "{cmd3}",
+      "sortie": "resultat_reactiver",
+      "suivant": "c8"
+    },
+    "c8": {
+      "titre": "FIN - cycle complet",
+      "type": "fin",
+      "message": "Cycle d'activation complet : sidentifier -> activer -> reactiver termine. Cerberus reactive dans la session."
+    }
+  }
+}

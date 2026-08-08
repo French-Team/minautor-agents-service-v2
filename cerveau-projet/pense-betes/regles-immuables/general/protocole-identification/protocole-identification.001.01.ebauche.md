@@ -1,4 +1,50 @@
 # Protocole Immuable -- Identification des Agents
+
+**Version** : 0.2.0 (MODE ID multi-session -- v0.4.0)
+**Statut** : ebauche
+
+---
+
+## EVOLUTION v0.4.0 -- MODE ID MULTI-SESSION (methode actuelle)
+
+> **REGLE UTILISATEUR (IMMUABLE -- MODE ID)** : chaque LLM possede SON id, donne
+> par l'utilisateur au lancement (ex: `llm-1`, `llm-atlas`). La session d'un LLM
+> est LIEE a son id.
+> **REGLE ALIGNEMENT (v0.4.0)** : id `llm-N` -> session `session-llm-N`. Le numero
+> de session PORTE le numero de l'id : "je suis llm-1, ma session est session-llm-1".
+> **SOURCE DOUBLE** : chaque bloc de session dans AGENTS.md contient le champ
+> `| **Id LLM** | <id> |`. Le LLM se reconnait en lisant AGENTS.md : le bloc qui
+> porte SON id est SON bloc.
+
+### Le processus (MODE ID)
+
+```
+1. Noter MON id (donne par l'utilisateur au lancement, ex: llm-1)
+2. Lire AGENTS.md et chercher MON bloc : celui dont le champ **Id LLM** = MON id
+   -> trouve = MA session (ex: session-llm-1) -- c'est MA session, redemarrage du meme LLM
+   -> absent = je n'ai pas encore de session -> etape 3
+3. Lancer : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>
+   -> l'outil compare MON id aux sessions enregistrees (AGENTS.md champ Id LLM + classeur)
+   -> id deja lie = MA session retrouvee
+   -> id inconnu llm-N = creation de session-llm-N (alignement sur l'id) + liaison
+   -> id inconnu non numerique = prochaine session libre + liaison
+   -> met Cerberus comme agent principal de la session (le LLM demarre comme Cerberus)
+4. Lire la session RENDUE par l'outil (ou trouvee dans AGENTS.md) et la noter
+5. Utiliser CETTE session pour toutes les activations :
+   python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>
+   python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent>
+```
+
+> **CONFLIT D'ALIGNEMENT** : si session-llm-N est deja liee a un AUTRE id, l'outil
+> affiche un message clair et attribue la prochaine session libre.
+> **DEUX LLM DIFFERENTS NE PARTAGENT JAMAIS UNE SESSION** : la comparaison se fait
+> sur l'ID. Si je n'ai pas d'id, je le DEMANDE a l'utilisateur avant toute action.
+
+> Le contenu ci-dessous (etapes 1-7) documente le processus historique
+> d'identification par salutation. La methode actuelle est le **MODE ID** ci-dessus :
+> l'identification par salutation complete l'alignement (l'utilisateur nomme
+> l'agent apres l'id).
+
 ---
 
 ## Principe Fondamental

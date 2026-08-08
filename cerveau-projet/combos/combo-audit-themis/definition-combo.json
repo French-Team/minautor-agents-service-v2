@@ -1,0 +1,80 @@
+{
+  "combo": {
+    "nom": "combo-audit-themis",
+    "description": "Suite d'audit croise de Themis (chemin audit du parcours themis, anciennes cases c3-c7) : audit-general -> valider-relecture -> combos-valider-cerveau -> valider-tableaux -> detecteurs. Remplace la suite d'outils par un seul lancer de combo (Pattern 3).",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande audit-general",
+      "type": "generateur",
+      "catalogue": "audit-general",
+      "entrees": {
+        "dossier": "cerveau-projet",
+        "rapport": "non"
+      },
+      "sortie": "cmd1",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Executer combos-audit-general",
+      "type": "outil",
+      "commande": "{cmd1}",
+      "sortie": "resultat_audit",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Executer valider-relecture",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-relecture/valider-relecture.py",
+      "sortie": "resultat_relecture",
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Generer la commande combos-valider-cerveau",
+      "type": "generateur",
+      "catalogue": "combos-valider-cerveau",
+      "entrees": {
+        "dossier": "cerveau-projet/agents",
+        "detail": "non",
+        "stop": "non"
+      },
+      "sortie": "cmd2",
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Executer combos-valider-cerveau",
+      "type": "outil",
+      "commande": "{cmd2}",
+      "sortie": "resultat_sante",
+      "suivant": "c6"
+    },
+    "c6": {
+      "titre": "Executer valider-tableaux",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py",
+      "sortie": "resultat_tableaux",
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Executer detecter-local-hors-fonction",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-local-hors-fonction/detecter-local-hors-fonction.py cerveau-projet",
+      "sortie": "resultat_local",
+      "suivant": "c8"
+    },
+    "c8": {
+      "titre": "Executer detecter-usage-outils-externes",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py cerveau-projet",
+      "sortie": "resultat_traces",
+      "suivant": "c9"
+    },
+    "c9": {
+      "titre": "FIN - audit croise termine",
+      "type": "fin",
+      "message": "Audit croise complet : audit-general, relecture, sante, tableaux et traces d'outils externes executes. Synthetiser les resultats dans le rapport (case suivante du parcours themis)."
+    }
+  }
+}

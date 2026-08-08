@@ -254,6 +254,78 @@
           "obligatoire": true
         }
       ]
+    },
+    {
+      "nom": "combos-valider-cerveau",
+      "description": "Etat de sante du cerveau en 1 commande (relecture + cartes + ASCII, verdict combine)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py",
+      "modele": "{dossier} {detail} {stop}",
+      "parametres": [
+        {
+          "cle": "dossier",
+          "question": "Dossier a valider ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "cerveau-projet/agents"
+        },
+        {
+          "cle": "detail",
+          "question": "Afficher la sortie complete des 3 outils ?",
+          "type": "flag",
+          "flag": "--detail",
+          "obligatoire": false,
+          "defaut": "non"
+        },
+        {
+          "cle": "stop",
+          "question": "Arreter au premier echec ?",
+          "type": "flag",
+          "flag": "--stop",
+          "obligatoire": false,
+          "defaut": "non"
+        }
+      ]
+    },
+    {
+      "nom": "combos-corriger-non-ascii",
+      "description": "Detecter et corriger les accents et emojis dans les fichiers du cerveau (4 etapes chainees)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/combos/combos-corriger-non-ascii/combos-corriger-non-ascii.py",
+      "modele": "{dossier} {dry-run} {all} {rapport}",
+      "parametres": [
+        {
+          "cle": "dossier",
+          "question": "Dossier a corriger ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "cerveau-projet"
+        },
+        {
+          "cle": "dry-run",
+          "question": "Afficher les changements sans les appliquer ?",
+          "type": "flag",
+          "flag": "--dry-run",
+          "obligatoire": false,
+          "defaut": "non"
+        },
+        {
+          "cle": "all",
+          "question": "Corriger TOUS les accents (texte francais et titres) ?",
+          "type": "flag",
+          "flag": "--all",
+          "obligatoire": false,
+          "defaut": "non"
+        },
+        {
+          "cle": "rapport",
+          "question": "Sauvegarder un rapport dans themis/rapports/ ?",
+          "type": "flag",
+          "flag": "--rapport",
+          "obligatoire": false,
+          "defaut": "non"
+        }
+      ]
     }
   ]
 }

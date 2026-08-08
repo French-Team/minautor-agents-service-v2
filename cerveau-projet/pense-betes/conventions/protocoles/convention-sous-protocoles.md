@@ -52,7 +52,7 @@ sous-protocole-[nom].md
 3. Valider avec l'utilisateur
 ```
 
-### Dans demarrer.md
+### Dans un protocole de projet (ex: demarrer-projet)
 
 ```markdown
 ## Etape 1 -- Nouveau projet
@@ -60,6 +60,9 @@ sous-protocole-[nom].md
 2. Creer le cerveau-projet
 3. ...
 ```
+
+> Note : `demarrer.md` est la porte d'entree de session (identification + parcours) --
+> les etapes de projet vivent dans `protocole-demarrer-projet`, pas dans demarrer.md.
 
 ---
 

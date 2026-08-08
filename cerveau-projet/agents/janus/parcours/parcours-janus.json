@@ -1,0 +1,276 @@
+{
+  "parcours": {
+    "nom": "parcours-janus",
+    "agent": "janus",
+    "version": "0.1.0",
+    "case_depart": "c1",
+    "description": "Parcours (jeu de piste) des missions de Janus : second controle (outil, statut, modification). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+  },
+  "cases": {
+    "c1": {
+      "titre": "Mission",
+      "type": "question",
+      "question": "Quelle est la mission de controle ?",
+      "branches": [
+        { "reponse": "outil", "vers": "c2" },
+        { "reponse": "statut", "vers": "c11" },
+        { "reponse": "modification", "vers": "c18" },
+        { "reponse": "autre", "vers": "c27" }
+      ]
+    },
+    "c2": {
+      "titre": "Ecrire la mission de controle AVANT",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "REGLE 1 (corrections) : toujours rediger la mission de controle dans un fichier dedie AVANT le moindre controle." },
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne fais PAS confiance. Je VERIFIE tout." },
+        { "type": "outil", "nom": "creer-fichier", "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/", "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/controle-<objet>-<date>.md" }
+      ],
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Lire la documentation",
+      "type": "indice",
+      "indices": [
+        { "type": "fichier", "chemin": "agents/tools/[categorie]/[nom-outil]/[nom-outil].md", "raison": "Lire la doc de l'objet controle : comprendre le comportement attendu" },
+        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>" }
+      ],
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Verifier les tests",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "Verifier que les tests existent, sont numerotes et couvrent les cas limites (protocole-versionning-outils)." },
+        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/protocole-versionning-outils/", "raison": "Protocole de versionning : cycle de vie des outils" }
+      ],
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Verifier les conventions",
+      "type": "indice",
+      "indices": [
+        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/regles-validation-rigoureuse.md", "raison": "Regles de validation rigoureuse" },
+        { "type": "outil", "nom": "valider-ebauche", "chemin": "cerveau-projet/agents/tools/valider/valider-ebauche/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-ebauche/valider-ebauche.py <spec-a-valider>" }
+      ],
+      "suivant": "c6"
+    },
+    "c6": {
+      "titre": "Verifier la conformite ASCII",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "valider-conformite-ascii", "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier> (UN fichier par appel)" }
+      ],
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Verifier les cartes de decision",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "valider-cartes-decision", "chemin": "cerveau-projet/agents/tools/valider/valider-cartes-decision/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py <fiche>" }
+      ],
+      "suivant": "c8"
+    },
+    "c8": {
+      "titre": "Verdict du controle",
+      "type": "controle",
+      "question": "Tous les points sont-ils conformes ?",
+      "indices": [
+        { "type": "regle", "texte": "REGLE 4 (corrections) : je ne CORRIGE pas, je SIGNALE. Tout probleme, meme mineur, est documente dans le rapport." },
+        { "type": "regle", "texte": "Verdicts : VALIDE (tout conforme) / A REVOIR (problemes mineurs) / REJETE (problemes majeurs)." }
+      ],
+      "branches": [
+        { "reponse": "OUI", "vers": "c9" },
+        { "reponse": "NON", "vers": "c9" }
+      ]
+    },
+    "c9": {
+      "titre": "Lecons et retour",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "Completer le rapport de controle (verdict + lecons) et ajouter les lecons dans corrections.md." },
+        { "type": "outil", "nom": "ajouter-contenu-fichier", "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/", "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/janus/corrections.md <lecon>" },
+        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> janus" }
+      ],
+      "suivant": "c10"
+    },
+    "c10": {
+      "titre": "FIN - Reactiver Cerberus",
+      "type": "fin",
+      "message": "Reactiver Cerberus avec le rapport de controle et le verdict (VALIDE / A REVOIR / REJETE)."
+    },
+    "c11": {
+      "titre": "Ecrire la mission de controle AVANT",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "REGLE 1 (corrections) : toujours rediger la mission de controle dans un fichier dedie AVANT le moindre controle." },
+        { "type": "outil", "nom": "creer-fichier", "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/", "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/controle-statut-<date>.md" }
+      ],
+      "suivant": "c12"
+    },
+    "c12": {
+      "titre": "Lister les fichiers par statut",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "lister-statuts", "chemin": "cerveau-projet/agents/tools/lister/lister-statuts/", "commande": "python3 cerveau-projet/agents/tools/lister/lister-statuts/lister-statuts.py" },
+        { "type": "outil", "nom": "lister-prepares", "chemin": "cerveau-projet/agents/tools/lister/lister-prepares/", "commande": "python3 cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.py" }
+      ],
+      "suivant": "c13"
+    },
+    "c13": {
+      "titre": "Verifier la boucle RVAV",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne donne JAMAIS de verdict sans avoir verifie la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider)." },
+        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/rvav-workflow/", "raison": "Workflow RVAV" }
+      ],
+      "suivant": "c14"
+    },
+    "c14": {
+      "titre": "Detecter les erreurs de statut",
+      "type": "indice",
+      "indices": [
+        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/protocole-controle-statuts/", "raison": "Protocole de controle des statuts" },
+        { "type": "outil", "nom": "detecter-erreur-statut", "chemin": "cerveau-projet/agents/tools/detecter/detecter-erreur-statut/", "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-erreur-statut/detecter-erreur-statut.py" }
+      ],
+      "suivant": "c15"
+    },
+    "c15": {
+      "titre": "Verifier les liens",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "valider-liens", "chemin": "cerveau-projet/agents/tools/valider/valider-liens/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-liens/valider-liens.py" }
+      ],
+      "suivant": "c16"
+    },
+    "c16": {
+      "titre": "Verdict statut : changer ?",
+      "type": "controle",
+      "question": "Le statut est-il correct ou doit-il changer ?",
+      "indices": [
+        { "type": "regle", "texte": "APRES VALIDATION : si le statut doit changer, utiliser changer-statut. Je ne corrige pas les fichiers, je signale (REGLE 4)." }
+      ],
+      "branches": [
+        { "reponse": "CHANGER", "vers": "c17" },
+        { "reponse": "CORRECT", "vers": "c9" }
+      ]
+    },
+    "c17": {
+      "titre": "Changer le statut (apres validation)",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "changer-statut", "chemin": "cerveau-projet/agents/tools/changer/changer-statut/", "commande": "python3 cerveau-projet/agents/tools/changer/changer-statut/changer-statut.py <fichier> <nouveau-statut>" }
+      ],
+      "suivant": "c9"
+    },
+    "c18": {
+      "titre": "Ecrire la mission de controle AVANT",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "REGLE 1 (corrections) : toujours rediger la mission de controle dans un fichier dedie AVANT le moindre controle." },
+        { "type": "outil", "nom": "creer-fichier", "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/", "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/controle-modification-<date>.md" }
+      ],
+      "suivant": "c19"
+    },
+    "c19": {
+      "titre": "Lire l'ancienne version",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <ancienne-version>" }
+      ],
+      "suivant": "c20"
+    },
+    "c20": {
+      "titre": "Lire la nouvelle version",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <nouvelle-version>" }
+      ],
+      "suivant": "c21"
+    },
+    "c21": {
+      "titre": "Verifier les impacts",
+      "type": "indice",
+      "indices": [
+        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/regles-validation-rigoureuse.md", "raison": "Regles de validation rigoureuse : verifier les impacts de la modification" }
+      ],
+      "suivant": "c22"
+    },
+    "c22": {
+      "titre": "Verifier le nommage",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "valider-nommage", "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <fichier>" }
+      ],
+      "suivant": "c23"
+    },
+    "c23": {
+      "titre": "Verifier les liens",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "valider-liens", "chemin": "cerveau-projet/agents/tools/valider/valider-liens/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-liens/valider-liens.py" }
+      ],
+      "suivant": "c24"
+    },
+    "c24": {
+      "titre": "Verifier role + separation",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "verifier-role-fichier", "chemin": "cerveau-projet/agents/tools/verifier/verifier-role-fichier/", "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-role-fichier/verifier-role-fichier.py <fichier>" },
+        { "type": "outil", "nom": "verifier-separation-preoccupations", "chemin": "cerveau-projet/agents/tools/verifier/verifier-separation-preoccupations/", "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-separation-preoccupations/verifier-separation-preoccupations.py <fichier>" }
+      ],
+      "suivant": "c25"
+    },
+    "c25": {
+      "titre": "Combo etat de sante + tableaux",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "Le combo etat de sante est OBLIGATOIRE : relecture + cartes + ASCII." },
+        { "type": "outil", "nom": "combos-valider-cerveau", "chemin": "cerveau-projet/agents/tools/combos/combos-valider-cerveau/", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py" },
+        { "type": "outil", "nom": "valider-tableaux", "chemin": "cerveau-projet/agents/tools/valider/valider-tableaux/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py <fichier>" }
+      ],
+      "suivant": "c26"
+    },
+    "c26": {
+      "titre": "Verifier surcharge + traces externes",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "detecter-surcharge-fichier", "chemin": "cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/", "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/detecter-surcharge-fichier.py <fichier>" },
+        { "type": "outil", "nom": "detecter-usage-outils-externes", "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/", "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <fichier> (levier B : CRLF, non-ASCII, BOM)" }
+      ],
+      "suivant": "c8"
+    },
+    "c27": {
+      "titre": "Mission hors parcours",
+      "type": "question",
+      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
+      "branches": [
+        { "reponse": "OUI", "vers": "c28" },
+        { "reponse": "NON", "vers": "c29" }
+      ]
+    },
+    "c28": {
+      "titre": "Activer l'agent habilite",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Je ne cree pas d'outils, je les controle." },
+        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>" }
+      ],
+      "suivant": "c30"
+    },
+    "c29": {
+      "titre": "Signaler le besoin",
+      "type": "fin",
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+    },
+    "c30": {
+      "titre": "FIN - Delegation",
+      "type": "fin",
+      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+    }
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "parcours": {
+    "nom": "parcours-atlas",
+    "agent": "atlas",
+    "version": "0.1.0",
+    "case_depart": "c1",
+    "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+  },
+  "cases": {
+    "c1": {
+      "titre": "Mission",
+      "type": "question",
+      "question": "Quelle est la mission d'exploration ?",
+      "branches": [
+        { "reponse": "explorer", "vers": "c2" },
+        { "reponse": "web", "vers": "c12" },
+        { "reponse": "documenter", "vers": "c15" },
+        { "reponse": "analyser", "vers": "c21" },
+        { "reponse": "autre", "vers": "c26" }
+      ]
+    },
+    "c2": {
+      "titre": "Lister les dossiers",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "regle", "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher)." },
+        { "type": "outil", "nom": "lister-dossiers", "chemin": "cerveau-projet/agents/tools/lister/lister-dossiers/", "commande": "python3 cerveau-projet/agents/tools/lister/lister-dossiers/lister-dossiers.py <chemin>" }
+      ],
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Lister les fichiers",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "lister-fichiers", "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/", "commande": "python3 cerveau-projet/agents/tools/lister/lister-fichiers/lister-fichiers.py <chemin>" }
+      ],
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Lister les fonctions",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "lister-fonctions", "chemin": "cerveau-projet/agents/tools/lister/lister-fonctions/", "commande": "python3 cerveau-projet/agents/tools/lister/lister-fonctions/lister-fonctions.py <fichier>" }
+      ],
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Lister les appels",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "lister-appels", "chemin": "cerveau-projet/agents/tools/lister/lister-appels/", "commande": "python3 cerveau-projet/agents/tools/lister/lister-appels/lister-appels.py <fichier>" }
+      ],
+      "suivant": "c6"
+    },
+    "c6": {
+      "titre": "Lire le contenu des fichiers cles",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier>" }
+      ],
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Rechercher des patterns",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "rechercher-texte", "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/", "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <fichier>" }
+      ],
+      "suivant": "c8"
+    },
+    "c8": {
+      "titre": "Verifier la regle de relecture (systeme d'agents)",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE -- RELECTURE : quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis jamais les fichiers des autres agents." },
+        { "type": "outil", "nom": "valider-relecture", "chemin": "cerveau-projet/agents/tools/valider/valider-relecture/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-relecture/valider-relecture.py <fiche-agent>" }
+      ],
+      "suivant": "c9"
+    },
+    "c9": {
+      "titre": "Documenter les decouvertes",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant d'ecrire." },
+        { "type": "regle", "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/)." },
+        { "type": "outil", "nom": "ecrire-fichier", "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/", "commande": "python3 cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py <documentation> (apres validation)" }
+      ],
+      "suivant": "c10"
+    },
+    "c10": {
+      "titre": "Lecons et retour",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de terminer, je declare dans mon message la liste EXACTE des outils du cerveau utilises (nom de chaque outil)." },
+        { "type": "outil", "nom": "ajouter-contenu-fichier", "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/", "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/atlas/corrections.md <lecon>" }
+      ],
+      "suivant": "c11"
+    },
+    "c11": {
+      "titre": "FIN - Reactiver Cerberus",
+      "type": "fin",
+      "message": "REACTIVER CERBERUS : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 '<raison>' atlas. Atlas ne delegue pas : il rend a Cerberus."
+    },
+    "c12": {
+      "titre": "Formuler la requete (protocole-recherches-web)",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/protocole-recherches-web/", "raison": "Protocole de recherche web obligatoire : formuler la requete selon le protocole" }
+      ],
+      "suivant": "c13"
+    },
+    "c13": {
+      "titre": "Executer la recherche",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "regle", "texte": "Je documente la source de chaque information : URL, date, fiabilite." }
+      ],
+      "suivant": "c14"
+    },
+    "c14": {
+      "titre": "Documenter la source",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant d'ecrire." },
+        { "type": "fichier", "chemin": "cerveau-projet/recherches-web/templates/recherche-template.md", "raison": "Documenter la recherche selon le template de recherche" }
+      ],
+      "suivant": "c10"
+    },
+    "c15": {
+      "titre": "Identifier le public cible",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "regle", "texte": "REGLE RVAV : je ne documente JAMAIS sans avoir verifie via la boucle RVAV (Rechercher, Verifier, Analyser, Valider)." }
+      ],
+      "suivant": "c16"
+    },
+    "c16": {
+      "titre": "Lister les fichiers existants",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "lister-fichiers", "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/", "commande": "python3 cerveau-projet/agents/tools/lister/lister-fichiers/lister-fichiers.py <chemin>" }
+      ],
+      "suivant": "c17"
+    },
+    "c17": {
+      "titre": "Analyser et decomposer la structure",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "analyser-structure", "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/", "commande": "python3 cerveau-projet/agents/tools/analyser/analyser-structure/analyser-structure.py <chemin>" },
+        { "type": "outil", "nom": "decomposer-fichier", "chemin": "cerveau-projet/agents/tools/decomposer/decomposer-fichier/", "commande": "python3 cerveau-projet/agents/tools/decomposer/decomposer-fichier/decomposer-fichier.py <fichier>" }
+      ],
+      "suivant": "c18"
+    },
+    "c18": {
+      "titre": "Creer la structure de documentation",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant de creer." },
+        { "type": "outil", "nom": "creer-fichier", "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/", "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <fichier> (apres validation, erreur si existe)" }
+      ],
+      "suivant": "c19"
+    },
+    "c19": {
+      "titre": "Rediger le contenu",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant d'ecrire." },
+        { "type": "regle", "texte": "REGLE PRIORISER L'ESSENTIEL : je ne documente pas chaque detail mineur, je vais a l'essentiel." },
+        { "type": "outil", "nom": "ecrire-fichier", "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/", "commande": "python3 cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py <fichier> (apres validation)" }
+      ],
+      "suivant": "c20"
+    },
+    "c20": {
+      "titre": "Passer la boucle RVAV",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE RVAV : je ne documente JAMAIS sans avoir verifie via la boucle RVAV (Rechercher, Verifier, Analyser, Valider)." },
+        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/rvav-workflow/", "raison": "Boucle RVAV obligatoire : Rechercher, Verifier, Analyser, Valider" }
+      ],
+      "suivant": "c10"
+    },
+    "c21": {
+      "titre": "Lister les fichiers",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "lister-fichiers", "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/", "commande": "python3 cerveau-projet/agents/tools/lister/lister-fichiers/lister-fichiers.py <chemin>" }
+      ],
+      "suivant": "c22"
+    },
+    "c22": {
+      "titre": "Lire le contenu des fichiers cles",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier>" }
+      ],
+      "suivant": "c23"
+    },
+    "c23": {
+      "titre": "Analyser la structure",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "analyser-structure", "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/", "commande": "python3 cerveau-projet/agents/tools/analyser/analyser-structure/analyser-structure.py <chemin>" }
+      ],
+      "suivant": "c24"
+    },
+    "c24": {
+      "titre": "Analyser les dependances",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "outil", "nom": "analyser-dependances", "chemin": "cerveau-projet/agents/tools/analyser/analyser-dependances/", "commande": "python3 cerveau-projet/agents/tools/analyser/analyser-dependances/analyser-dependances.py <chemin>" }
+      ],
+      "suivant": "c25"
+    },
+    "c25": {
+      "titre": "Creer la cartographie",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
+        { "type": "regle", "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant d'ecrire." },
+        { "type": "outil", "nom": "ecrire-fichier", "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/", "commande": "python3 cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py <cartographie> (apres validation)" }
+      ],
+      "suivant": "c10"
+    },
+    "c26": {
+      "titre": "Mission hors perimetre",
+      "type": "question",
+      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
+      "branches": [
+        { "reponse": "OUI", "vers": "c27" },
+        { "reponse": "NON", "vers": "c29" }
+      ]
+    },
+    "c27": {
+      "titre": "Activer l'agent habilite",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Si la mission releve d'un autre domaine, je signale et je laisse l'agent habilite agir." },
+        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>" }
+      ],
+      "suivant": "c28"
+    },
+    "c28": {
+      "titre": "FIN - Delegation",
+      "type": "fin",
+      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+    },
+    "c29": {
+      "titre": "Signaler le besoin",
+      "type": "fin",
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+    }
+  }
+}

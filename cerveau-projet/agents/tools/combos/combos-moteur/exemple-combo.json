@@ -1,0 +1,44 @@
+{
+  "combo": {
+    "nom": "exemple-combo",
+    "description": "Exemple de demonstration des 4 types de cases (generateur, outil, controle, fin) - commandes inoffensives pour les tests",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande sidentifier",
+      "type": "generateur",
+      "catalogue": "activer-sidentifier",
+      "entrees": { "id_llm": "llm-1" },
+      "sortie": "cmd1",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Afficher la commande generee (echo, inoffensif)",
+      "type": "outil",
+      "commande": "echo {cmd1}",
+      "sortie": "affichage",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Controle : la commande commence par python3 ?",
+      "type": "controle",
+      "question": "La commande generee commence-t-elle par python3 ?",
+      "branches": [
+        { "reponse": "OUI", "vers": "c4" },
+        { "reponse": "NON", "vers": "c5" }
+      ]
+    },
+    "c4": {
+      "titre": "FIN - chemin OUI",
+      "type": "fin",
+      "message": "Exemple termine : la commande generee est correcte."
+    },
+    "c5": {
+      "titre": "FIN - chemin NON",
+      "type": "fin",
+      "message": "Exemple termine : la commande generee est inattendue."
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "parcours": {
+    "nom": "parcours-vulcain",
+    "agent": "vulcain",
+    "version": "0.1.0",
+    "case_depart": "c1",
+    "description": "Parcours (jeu de piste) des missions de Vulcain : construire un outil, modifier un outil. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+  },
+  "cases": {
+    "c1": {
+      "titre": "Mission",
+      "type": "question",
+      "question": "Quelle est la mission ?",
+      "branches": [
+        { "reponse": "construire", "vers": "c2" },
+        { "reponse": "modifier", "vers": "c10" },
+        { "reponse": "autre", "vers": "c16" }
+      ]
+    },
+    "c2": {
+      "titre": "Verifier le systeme",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
+        { "type": "regle", "texte": "ETAPE 1 OBLIGATOIRE : sans verification du systeme, je ne peux PAS choisir de technologie." },
+        { "type": "outil", "nom": "verifier-systeme", "chemin": "cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py", "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py" },
+        { "type": "fichier", "chemin": "cerveau-projet/classeur-variables/stockage/variables-actuelles.md", "raison": "Consulter profil-systeme : .py si Python dispo, sinon .sh (protocole-technologies)" }
+      ],
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Lire l'outil a construire",
+      "type": "question",
+      "question": "L'outil a construire a-t-il une documentation .md ou une spec a lire ?",
+      "indices": [
+        { "type": "fichier", "chemin": "agents/tools/[categorie]/[nom-outil]/[nom-outil].md", "raison": "Lire l'outil.md : comprendre le besoin AVANT de developper" },
+        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>" }
+      ],
+      "branches": [
+        { "reponse": "OUI", "vers": "c4" },
+        { "reponse": "NON", "vers": "c4" }
+      ]
+    },
+    "c4": {
+      "titre": "Copier le outil-template",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "ETAPE 3 OBLIGATOIRE : j'utilise TOUJOURS outil-template pour standardiser la creation de tout nouvel outil." },
+        { "type": "regle", "texte": "REGLE IMMUABLE DE NOMMAGE : le nom DOIT commencer par le prefixe du dossier de categorie (dossier 'lire/' -> outil 'lire-xxx')." },
+        { "type": "outil", "nom": "copier-fichier", "chemin": "cerveau-projet/agents/tools/copier/copier-fichier/", "commande": "python3 cerveau-projet/agents/tools/copier/copier-fichier/copier-fichier.py cerveau-projet/agents/tools/outil-template.py cerveau-projet/agents/tools/[categorie]/[nom-outil]/[nom-outil].py" }
+      ],
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Choisir la technologie",
+      "type": "question",
+      "question": "Python est-il disponible sur le systeme (profil-systeme) ?",
+      "indices": [
+        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/protocole-technologies/", "raison": "Lire le protocole-technologies : criteres disponibilite/performance/facilite/portabilite" }
+      ],
+      "branches": [
+        { "reponse": "OUI", "vers": "c6" },
+        { "reponse": "NON", "vers": "c6" }
+      ]
+    },
+    "c6": {
+      "titre": "Developper l'outil",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE : 100% stdlib Python (aucune dependance externe)." },
+        { "type": "regle", "texte": "REGLE IMMUABLE : ASCII strict (aucun accent, emoji ou caractere Unicode)." },
+        { "type": "outil", "nom": "creer-fichier / ecrire-fichier", "chemin": "cerveau-projet/agents/tools/creer/ et ecrire/", "commande": "python3 cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py <chemin> <contenu>" },
+        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/protocole-outils/", "raison": "Lire le protocole-outils avant de developper" }
+      ],
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Corriger les accents et valider ASCII",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "corriger-accents-zones-sensibles", "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/", "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py --all <fichier>" },
+        { "type": "outil", "nom": "valider-conformite-ascii", "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>" },
+        { "type": "controle", "texte": "" }
+      ],
+      "suivant": "c8"
+    },
+    "c8": {
+      "titre": "Deleguer les tests a Morpheus",
+      "type": "controle",
+      "question": "As-tu ACTIVE MORPHEUS pour les tests (etape 8 obligatoire) ?",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE -- DELEGATION DES TESTS (IMMUABLE) : JE N'ECRIS JAMAIS LES TESTS MOI-MEME. J'ACTIVE OBLIGATOIREMENT MORPHEUS. AUCUNE EXCEPTION." },
+        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 morpheus \"TESTER ...\"" }
+      ],
+      "branches": [
+        { "reponse": "OUI", "vers": "c9" },
+        { "reponse": "NON", "vers": "c8" }
+      ]
+    },
+    "c9": {
+      "titre": "FIN - Construire un outil",
+      "type": "fin",
+      "message": "Morpheus teste et te reactive. Verifie le rapport de tests, valide l'outil (RVAV), puis reactive Cerberus avec le bilan des outils."
+    },
+    "c10": {
+      "titre": "Verifier le systeme (modification)",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "ETAPE 1 OBLIGATOIRE : verifier le systeme AVANT de modifier." },
+        { "type": "outil", "nom": "verifier-systeme", "chemin": "cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py", "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py" }
+      ],
+      "suivant": "c11"
+    },
+    "c11": {
+      "titre": "Lire l'outil existant",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin-outil>" }
+      ],
+      "suivant": "c12"
+    },
+    "c12": {
+      "titre": "Modifier l'outil",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE IMMUABLE : ASCII strict (aucun accent, emoji ou caractere Unicode)." },
+        { "type": "outil", "nom": "editer-fichier", "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/", "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <fichier> <ancien> <nouveau>" }
+      ],
+      "suivant": "c13"
+    },
+    "c13": {
+      "titre": "Corriger les accents et valider ASCII",
+      "type": "indice",
+      "indices": [
+        { "type": "outil", "nom": "corriger-accents-zones-sensibles", "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/", "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py --all <fichier>" },
+        { "type": "outil", "nom": "valider-conformite-ascii", "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>" }
+      ],
+      "suivant": "c14"
+    },
+    "c14": {
+      "titre": "Deleguer les tests a Morpheus",
+      "type": "controle",
+      "question": "As-tu ACTIVE MORPHEUS pour les tests (etape 6 obligatoire) ?",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE -- DELEGATION DES TESTS (IMMUABLE) : j'active Morpheus, je ne teste jamais moi-meme. AUCUNE EXCEPTION." }
+      ],
+      "branches": [
+        { "reponse": "OUI", "vers": "c15" },
+        { "reponse": "NON", "vers": "c14" }
+      ]
+    },
+    "c15": {
+      "titre": "FIN - Modifier un outil",
+      "type": "fin",
+      "message": "Morpheus teste et te reactive. Verifie le rapport, puis reactive Cerberus avec le bilan des outils."
+    },
+    "c16": {
+      "titre": "Mission hors parcours",
+      "type": "question",
+      "question": "La mission concerne-t-elle un domaine d'un autre agent (ex: tests -> Morpheus, audit -> Themis, README -> Clio) ?",
+      "branches": [
+        { "reponse": "OUI", "vers": "c17" },
+        { "reponse": "NON", "vers": "c18" }
+      ]
+    },
+    "c17": {
+      "titre": "Activer l'agent habilite",
+      "type": "indice",
+      "indices": [
+        { "type": "regle", "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine. J'active CET agent via Cerberus." },
+        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>" }
+      ],
+      "suivant": "c19"
+    },
+    "c18": {
+      "titre": "Signaler le besoin",
+      "type": "fin",
+      "message": "Mission hors perimetre des parcours actuels : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+    },
+    "c19": {
+      "titre": "FIN - Delegation",
+      "type": "fin",
+      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete jusqu'au retour a Cerberus."
+    }
+  }
+}

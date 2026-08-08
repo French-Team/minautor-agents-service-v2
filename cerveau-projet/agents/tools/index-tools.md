@@ -47,6 +47,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `combos-audit-general` | Chainage des 4 evaluateurs + synthese | [combos/combos-audit-general/](combos/combos-audit-general/) |
 | `combos-corriger-non-ascii` | Chainer rechercher-accents-sensibles + corriger-emojis + corriger-accents-zones-sensibles | [combos/combos-corriger-non-ascii/](combos/combos-corriger-non-ascii/) |
 | `combos-valider-cerveau` | Etat de sante du cerveau : relecture + cartes + ASCII en 1 rapport | [combos/combos-valider-cerveau/](combos/combos-valider-cerveau/) |
+| `combos-moteur` | Moteur generique de combos declaratifs : execute une definition-combo.json case par case (generateur/outil/controle/fin), variables + interpolation | [combos/combos-moteur/](combos/combos-moteur/) |
 
 ### Condenser
 
@@ -136,6 +137,12 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `gerer-sous-mission` | Gerer les sorties/reentrees du flux principal | [gerer/gerer-sous-mission/](gerer/gerer-sous-mission/) |
+
+### Guider
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `guider-parcours` | Guider l'agent case par case (jeu de piste) dans son parcours JSON : indices outil/fichier/regle + branches selon les reponses | [guider/guider-parcours/](guider/guider-parcours/) |
 
 ### Inserer
 
@@ -353,7 +360,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Ajouter | 1 |
 | Analyser | 2 |
 | Changer | 1 |
-| Combos | 2 |
+| Combos | 4 |
 | Condenser | 1 |
 | Copier | 2 |
 | Corriger | 5 |
@@ -366,6 +373,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Evaluer | 4 |
 | Generateurs | 4 |
 | Gerer | 1 |
+| Guider | 1 |
 | Inserer | 1 |
 | Lire | 3 |
 | Lister | 8 |
@@ -379,8 +387,8 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Verifier | 4 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **79** |
+| **Total** | **82** |
 
-> **Note sur le decompte** : 72 outils d'action + 2 combos sont inclus dans les categories ci-dessus ; `lister-outils.sh` affiche 72 car il exclut `combos/` et `tester/` de son comptage.
+> **Note sur le decompte** : 73 outils d'action + 4 combos sont inclus dans les categories ci-dessus ; `lister-outils.sh` affiche 73 car il exclut `combos/` et `tester/` de son comptage.
 
 ---

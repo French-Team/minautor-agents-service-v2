@@ -8,69 +8,20 @@
 
 ## Sessions LLM
 
-### Session : session-llm-5
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | Cerberus |
-| **Role** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-07 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Identification |
-| **Raison** | Identification LLM - demarrage de session |
-
-
-### Session : session-llm-4
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | Cerberus |
-| **Role** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-07 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Identification |
-| **Raison** | Identification LLM - demarrage de session |
-
-
-### Session : session-llm-3
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | Janus |
-| **Role** | Controleur des statuts -- validation et verification |
-| **Derniere mise a jour** | 2026-08-07 |
-| **Fiche** | [cerveau-projet/agents/janus/janus.md](cerveau-projet/agents/janus/janus.md) |
-| **Corrections** | [cerveau-projet/agents/janus/corrections.md](cerveau-projet/agents/janus/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | SECOND CONTROLE (Vulcain): controle de l'outil partage generateurs-commande cree (py+sh+json+md+spec). Verdict attendu: VALIDE (ASCII OK, nommage OK, syntaxe OK, parite py/sh OK, index-tools a jour 79 outils, fiche Vulcain assignee). |
-
-
-### Session : session-llm-2
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | Cerberus |
-| **Role** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-07 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Clio (retour de mission) |
-| **Raison** | README mis a jour: 83->85 outils (generateurs-commande, detecter-usage-outils-externes ajoutes). ASCII OK. __pycache__ conserve comme artefact (non liste). Corrections Clio enregistrees. |
-
-
 ### Session : session-llm-1
 
 | Champ | Valeur |
 |---|---|
 | **Nom** | Cerberus |
+| **Id LLM** | llm-1 |
 | **Role** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-07 |
+| **Derniere mise a jour** | 2026-08-08 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
 | **Active par** | Janus (retour de mission) |
-| **Raison** | SECOND CONTROLE cycle A+B+C: VERDICT CONFORME. BILAN OUTILS (levier C): outils utilises = activer-agent-principal, valider-nommage, valider-liens (86 valides/0 invalide), verifier-role-fichier (conforme), verifier-separation-preoccupations (OK), combos-valider-cerveau, valider-tableaux (14/14 CONFORME), detecter-surcharge-fichier, detecter-usage-outils-externes (LEVIER B: 0 suspect sur tous les fichiers modifies). CONTROLES: nommage OK, liens OK, roles OK, tableaux CONFORME, traces externes AUCUNE. Points PRE-EXISTANTS hors perimetre de la mission (a traiter par Themis en audit): 2 fichiers non-ASCII dans janus/controles + themis/rapports + dictionnaires (le dossier exemples/ est volontairement pollue pour les tests) + 6 fichiers en surcharge dans agents/. Aucun ne provient de cette mission. Cycle A+B+C complet et operationnel: A (REGLE ABSOLUE 5 dans 12 fiches), B (detecter-usage-outils-externes 41/41), C (REGLE ABSOLUE 6 dans 12 fiches + bilan declenche par Janus). |
+| **Raison** | SECOND CONTROLE TERMINE: VERDICT VALIDE 12/12 sur le Pattern 3 parcours-themis + combo-audit-themis (Buffy). (1) combo cree 9 cases, (2) structure generateurs + outils + fin, (3) parcours 17 cases v0.2.0, (4) c3 case combo Pattern 3, (5) c19 recable vers c3 zero ref morte, (6) json.load OK 2 fichiers, (7) --liste 17, (8) --reponses 4 chemins TERMINE, (9) ASCII 0 sur 3 fichiers, (10) parite py/sh OK, (11) moteur catalogue generateur INCHANGES, (12) lecon Buffy notee. Rapport controle-pattern3-themis-2026-08-08.md + lecon Janus notee. Bilan outils Janus: activer-agent-principal, lire-fichier, valider-conformite-ascii, guider-parcours, combos-moteur |
+
+
 
 ---
 
@@ -105,7 +56,14 @@ CERBERUS -> AGENT -> CERBERUS
 
 ## Comment changer d'agent (dans sa session)
 
-Chaque session LLM a son propre cycle. L'identifiant de session est obtenu au demarrage via `sidentifier <mon-id>` (**MODE ID**) : chaque LLM possede SON id (donne par l'utilisateur), l'outil compare cet id aux sessions enregistrees et rend SA session (id deja lie = retrouvee, id inconnu = creation prochaine libre + liaison). **Un LLM ne deduit jamais sa session d'AGENTS.md** -- la session visible appartient a un AUTRE LLM. Il utilise la session RENDUE par l'outil via SON id.
+Chaque session LLM a son propre cycle. **MODE ID** : chaque LLM possede SON id (donne par
+l'utilisateur au demarrage, ex: `llm-1`). **REGLE ALIGNEMENT (v0.4.0)** : id `llm-N` ->
+session `session-llm-N` (le numero de session porte le numero de l'id). Chaque bloc de session
+dans AGENTS.md contient le champ `| **Id LLM** | <id> |` : **le LLM se reconnait en lisant
+AGENTS.md** -- le bloc qui porte SON id est SON bloc (source double : AGENTS.md + classeur
+synchronises). Au demarrage : 1) chercher SON bloc dans AGENTS.md (champ Id LLM) ; 2) si absent,
+lancer `sidentifier <mon-id>` (id deja lie = retrouvee ; id inconnu llm-N = session-llm-N ;
+conflit si session-llm-N liee a un autre id = prochaine libre).
 
 ### Depuis Cerberus (dans sa session)
 

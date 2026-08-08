@@ -1,6 +1,8 @@
 #!/bin/bash
 # test-001-activer-agent-principal.sh
 # Tests formels de l'outil activer-agent-principal v0.3.0 (multi-session LLM) avec protections
+# ALIGNE SEMANTIQUE v0.3.5 : structure multi-session vide (sidentifier sans argument -> prochaine
+# libre, MODE ID -> id inconnu = prochaine libre + liaison, id connu = retrouvee)
 
 # Chemin vers les protections (tools/tester/protections/)
 PROTECTIONS_DIR="$(cd "$(dirname "$0")/../../../tester/protections" 2>/dev/null && pwd)"
@@ -19,9 +21,10 @@ OUTIL_SH="$(cd "$(dirname "$0")/.." && pwd)/activer-agent-principal.sh"
 ESPACE="/tmp/test-activer-agent-morpheus"
 export AGENTS_FILE="$ESPACE/AGENTS.md"
 export AGENTS_HISTORIQUE="$ESPACE/AGENTS-historique.md"
+export CLASSEUR_STOCKAGE="$ESPACE/variables-actuelles.md"
 
-# Preparer l'espace de test avec une copie de l'ANCIENNE structure (mono-session)
-preparer_ancienne_structure() {
+# Preparer un espace de test avec une structure MULTI-SESSION vide (semantique v0.3.4+)
+preparer_vide() {
     rm -rf "$ESPACE"
     mkdir -p "$ESPACE"
     cat > "$AGENTS_FILE" << 'EOF'
@@ -29,17 +32,7 @@ preparer_ancienne_structure() {
 
 ---
 
-## Agent Principal Actuel
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | Cerberus |
-| **Role** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-07 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | - |
-| **Raison** | - |
+## Sessions LLM
 
 ---
 
@@ -62,6 +55,17 @@ EOF
 
 | 2026-08-07 10:00 | Cerberus | Ancienne entree |
 EOF
+    cat > "$CLASSEUR_STOCKAGE" << 'EOF'
+# Stockage -- Variables Actuelles
+---
+
+## Variables
+| Variable | Valeur | Source | Date | Statut |
+|---|---|---|---|---|
+| `profil-systeme` | OS: Windows | verifier-systeme | 2026-08-07 | [OK] |
+
+---
+EOF
 }
 
 echo "=== Test: activer-agent-principal v0.3.0 (multi-session LLM) ==="
@@ -69,19 +73,18 @@ echo "Date: $(date)"
 echo ""
 
 # ---------------------------------------------------------------------
-# Test 1: MIGRATION + sidentifier automatique (py)
+# Test 1: sidentifier sans argument (fichier vide) -> session-llm-1 (py)
 # ---------------------------------------------------------------------
-preparer_ancienne_structure
-echo "--- Test 1: Migration + sidentifier auto (py) ---"
+preparer_vide
+echo "--- Test 1: sidentifier sans argument -> session-llm-1 (py) ---"
 RESULT=$(python3 "$OUTIL_PY" sidentifier 2>&1)
 echo "$RESULT"
 if echo "$RESULT" | grep -q "Session attribuee : session-llm-1" \
-   && grep -q "^## Sessions LLM" "$AGENTS_FILE" \
    && grep -q "^### Session : session-llm-1" "$AGENTS_FILE" \
    && grep -q "^| \*\*Nom\*\* | Cerberus |" "$AGENTS_FILE" \
    && grep -q "^## Autre section" "$AGENTS_FILE" \
    && grep -q "session-llm-1" "$AGENTS_HISTORIQUE"; then
-    echo "[OK] Test 1 passe (migration + bloc + valeurs conservees + historique)"
+    echo "[OK] Test 1 passe (bloc session-llm-1 + Cerberus + valeurs conservees + historique)"
     result1=0
 else
     echo "[ERREUR] Test 1 echoue"
@@ -89,9 +92,9 @@ else
 fi
 
 # ---------------------------------------------------------------------
-# Test 2: Deuxieme sidentifier auto -> session-llm-2 (py)
+# Test 2: Deuxieme sidentifier sans argument -> session-llm-2 (py)
 # ---------------------------------------------------------------------
-echo "--- Test 2: Deuxieme sidentifier auto -> session-llm-2 ---"
+echo "--- Test 2: Deuxieme sidentifier sans argument -> session-llm-2 ---"
 RESULT=$(python3 "$OUTIL_PY" sidentifier 2>&1)
 echo "$RESULT"
 if echo "$RESULT" | grep -q "Session attribuee : session-llm-2" \
@@ -104,13 +107,15 @@ else
 fi
 
 # ---------------------------------------------------------------------
-# Test 3: sidentifier avec nom explicite (py)
+# Test 3: sidentifier avec id LLM (MODE ID v0.3.4+) -> prochaine libre + liaison (py)
 # ---------------------------------------------------------------------
-echo "--- Test 3: sidentifier session-llm-5 (nom explicite) ---"
-RESULT=$(python3 "$OUTIL_PY" sidentifier session-llm-5 2>&1)
+echo "--- Test 3: sidentifier llm-atlas (id inconnu) -> session libre + liaison ---"
+RESULT=$(python3 "$OUTIL_PY" sidentifier llm-atlas 2>&1)
 echo "$RESULT"
-if grep -q "^### Session : session-llm-5" "$AGENTS_FILE"; then
-    echo "[OK] Test 3 passe (bloc session-llm-5 cree)"
+if grep -q "^### Session : session-llm-3" "$AGENTS_FILE" \
+   && echo "$RESULT" | grep -q "Nouvelle session pour id llm-atlas" \
+   && grep "profil-session-llm-3" "$CLASSEUR_STOCKAGE" | grep -q "id: llm-atlas"; then
+    echo "[OK] Test 3 passe (MODE ID: prochaine libre + liaison id)"
     result3=0
 else
     echo "[ERREUR] Test 3 echoue"
@@ -189,7 +194,7 @@ fi
 # ---------------------------------------------------------------------
 # Test 8: PARITE .sh (migration + activer via bash)
 # ---------------------------------------------------------------------
-preparer_ancienne_structure
+preparer_vide
 echo "--- Test 8: Parite .sh ---"
 RESULT=$(bash "$OUTIL_SH" sidentifier 2>&1)
 echo "$RESULT"
@@ -208,7 +213,8 @@ fi
 # ---------------------------------------------------------------------
 # Test 9: ASCII - raison non-ASCII REFUSEE (py)
 # ---------------------------------------------------------------------
-preparer_ancienne_structure
+preparer_vide
+python3 "$OUTIL_PY" sidentifier > /dev/null 2>&1
 echo "--- Test 9: Raison non-ASCII refusee ---"
 RAISON_ACCENT=$(printf 'raison avec accent \xc3\xa9 accentue')
 python3 "$OUTIL_PY" activer session-llm-1 Buffy "$RAISON_ACCENT" > /tmp/ascii-out.txt 2>&1
@@ -227,7 +233,7 @@ fi
 # ---------------------------------------------------------------------
 # Test 10: ACTION sessions (py)
 # ---------------------------------------------------------------------
-preparer_ancienne_structure
+preparer_vide
 python3 "$OUTIL_PY" sidentifier > /dev/null 2>&1
 python3 "$OUTIL_PY" sidentifier > /dev/null 2>&1
 python3 "$OUTIL_PY" activer session-llm-1 Buffy "Mission test 10" > /dev/null 2>&1

@@ -122,21 +122,23 @@ verifier "2b. Le bloc llm-1 reste intact" \
 verifier "2c. La sortie mentionne session-llm-2" \
     "echo \"\$SORTIE\" | grep -q 'session-llm-2'"
 
-# --- Test 3 : session occupee demandee -> prochaine libre + message clair ---
-SORTIE=$(python3 "$OUTIL_PY" sidentifier session-llm-1 2>&1)
-verifier "3. sidentifier session-llm-1 (occupee) -> N'utilise PAS llm-1" \
+# --- Test 3 : MODE ID (v0.3.4+) - id inconnu -> prochaine libre + liaison ---
+SORTIE=$(python3 "$OUTIL_PY" sidentifier llm-atlas 2>&1)
+verifier "3. sidentifier llm-atlas (id inconnu) -> prochaine libre session-llm-3" \
     "grep -q '^### Session : session-llm-3\$' '$AGENTS_FILE'"
-verifier "3b. Message clair: 'deja attribuee a un autre LLM'" \
-    "echo \"\$SORTIE\" | grep -q 'deja attribuee a un autre LLM'"
-verifier "3c. Message clair: 'Votre session est session-llm-3'" \
-    "echo \"\$SORTIE\" | grep -q 'Votre session est session-llm-3'"
+verifier "3b. Message 'Nouvelle session pour id llm-atlas'" \
+    "echo \"\$SORTIE\" | grep -q 'Nouvelle session pour id llm-atlas'"
+verifier "3c. Liaison id: llm-atlas posee sur la ligne profil llm-3" \
+    "grep 'profil-session-llm-3' '$CLASSEUR_STOCKAGE' | grep -q 'id: llm-atlas'"
 verifier "3d. Le bloc llm-1 n'a pas change (toujours Cerberus)" \
     "[ \"\$(nom_session session-llm-1)\" = 'Cerberus' ]"
 
-# --- Test 4 : session libre demandee -> attribuee telle quelle ---
-SORTIE=$(python3 "$OUTIL_PY" sidentifier session-llm-5 2>&1)
-verifier "4. sidentifier session-llm-5 (libre) -> attribue llm-5" \
-    "grep -q '^### Session : session-llm-5\$' '$AGENTS_FILE'"
+# --- Test 4 : MODE ID - redemarrage (meme id) -> retrouve SA session (pas de fantome) ---
+SORTIE=$(python3 "$OUTIL_PY" sidentifier llm-atlas 2>&1)
+verifier "4. Redemarrage llm-atlas -> 'Session retrouvee'" \
+    "echo \"\$SORTIE\" | grep -q 'Session retrouvee pour id llm-atlas'"
+verifier "4b. Toujours 3 sessions (aucun nouveau bloc fantome)" \
+    "[ \"\$(grep -c '^### Session :' '$AGENTS_FILE')\" = '3' ]"
 
 # --- Test 5 : historique utilise la NOUVELLE session ---
 verifier "5. Historique contient session-llm-3 (la session attribuee)" \
@@ -152,16 +154,16 @@ verifier "6b. Profil classeur: agent = Cerberus pour la session attribuee" \
 verifier "6c. Profil classeur: AUCUNE ligne profil-session-session-* (regle derivation)" \
     "grep -c 'profil-session-session-' '$CLASSEUR_STOCKAGE' 2>/dev/null | grep -q '^0$'"
 
-# --- Test 7 : parite .sh ---
+# --- Test 7 : parite .sh (MODE ID) ---
 preparer_vide
-SORTIE_SH=$(bash "$OUTIL_SH" sidentifier 2>&1)
-verifier "7. Parite .sh: fichier vide + sidentifier sans arg -> llm-1" \
-    "grep -q '^### Session : session-llm-1\$' '$AGENTS_FILE'"
-SORTIE_SH=$(bash "$OUTIL_SH" sidentifier session-llm-1 2>&1)
-verifier "7b. Parite .sh: session occupee -> prochaine libre (llm-2)" \
-    "grep -q '^### Session : session-llm-2\$' '$AGENTS_FILE'"
-verifier "7c. Parite .sh: message 'deja attribuee a un autre LLM'" \
-    "echo \"\$SORTIE_SH\" | grep -q 'deja attribuee a un autre LLM'"
+SORTIE_SH=$(bash "$OUTIL_SH" sidentifier llm-buffy 2>&1)
+verifier "7. Parite .sh: id inconnu -> session-llm-1 + liaison id" \
+    "grep -q '^### Session : session-llm-1\$' '$AGENTS_FILE' && grep 'profil-session-llm-1' '$CLASSEUR_STOCKAGE' | grep -q 'id: llm-buffy'"
+SORTIE_SH=$(bash "$OUTIL_SH" sidentifier llm-buffy 2>&1)
+verifier "7b. Parite .sh: relance -> retrouve SA session (pas de doublon)" \
+    "echo \"\$SORTIE_SH\" | grep -q 'Session retrouvee pour id llm-buffy'"
+verifier "7c. Parite .sh: 1 seul bloc session (aucun fantome)" \
+    "[ \"\$(grep -c '^### Session :' '$AGENTS_FILE')\" = '1' ]"
 
 # --- Test 8 : regression v0.3.2 (profil session) ---
 preparer_vide

@@ -9,9 +9,8 @@
 | `donnees-transformees` | *(tableau transforme)* | transformer-donnees | 2026-08-04 | [OK] |
 | `fichier-final` | `exports/export-2026-08-04-120000.json` | exporter-donnees | 2026-08-04 | [OK] |
 | `profil-systeme` | OS: Windows / Bash: 5.2.37 / Python: 3.14.4 / Git: 2.53.0 / Node: 24.14.1 | verifier-systeme | 2026-08-07 | [OK] |
-| `profil-session-llm-1` | session: session-llm-1 / agent: Cerberus / date: 2026-08-07 14:50 | activer-agent-principal | 2026-08-07 | [OK] |
-| `profil-session-llm-2` | session: session-llm-2 / agent: Cerberus / date: 2026-08-07 14:53 | activer-agent-principal | 2026-08-07 | [OK] |
-| `profil-session-llm-3` | session: session-llm-3 / agent: Janus / date: 2026-08-07 14:48 | activer-agent-principal | 2026-08-07 | [OK] |
+| `profil-session-llm-1` | session: session-llm-1 / id: llm-1 / agent: Cerberus / date: 2026-08-08 09:59 | activer-agent-principal | 2026-08-08 | [OK] |
+| `profil-session-llm-3` | session: session-llm-3 / agent: Cerberus / date: 2026-08-07 16:12 | activer-agent-principal | 2026-08-07 | [OK] |
 | `profil-session-llm-4` | session: session-llm-4 / id: llm-2 / agent: Cerberus / date: 2026-08-07 16:03 | activer-agent-principal | 2026-08-07 | [OK] |
 | `profil-session-llm-5` | session: session-llm-5 / id: llm-3 / agent: Cerberus / date: 2026-08-07 16:04 | activer-agent-principal | 2026-08-07 | [OK] |
 

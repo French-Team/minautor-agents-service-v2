@@ -2,7 +2,7 @@
 # activer-agent-principal.sh
 # Outil pour modifier AGENTS.md de maniere fiable, multi-session LLM
 # Proprietaire : Vulcain
-VERSION="0.3.4"
+VERSION="0.4.0"
 
 # Configuration
 AGENTS_FILE="${AGENTS_FILE:-AGENTS.md}"
@@ -136,17 +136,89 @@ trouver_prochaine_session() {
     echo "${PREFIXE_SESSION}$n"
 }
 
-# Creer un bloc de session (Cerberus par defaut) si absent
+# Trouver la session liee a un llm-id (SOURCE DOUBLE v0.4.0) :
+# 1) AGENTS.md -- bloc avec le champ '**Id LLM** | <id>'
+# 2) classeur -- ligne profil-session avec 'id: <llm-id>'
+# Permet au LLM de se reconnaitre directement en lisant AGENTS.md.
 trouver_session_par_id() {
     local llm_id=$1
+    # 1. AGENTS.md : champ Id LLM dans les blocs de session
+    if [ -f "$AGENTS_FILE" ] && grep -q "^### Session : " "$AGENTS_FILE"; then
+        local session_agents
+        session_agents=$(awk -v cible="$llm_id" '
+            /^### Session : / {
+                session = $0
+                sub(/^### Session : /, "", session)
+                dans = 1
+                next
+            }
+            dans == 1 && /^\| \*\*Id LLM\*\* \| / {
+                id = $0
+                sub(/^\| \*\*Id LLM\*\* \| /, "", id)
+                sub(/ \|$/, "", id)
+                if (id == cible) { print session; exit }
+                dans = 0
+            }
+        ' "$AGENTS_FILE")
+        if [ -n "$session_agents" ]; then
+            echo "$session_agents"
+            return 0
+        fi
+    fi
+    # 2. Classeur : liaison id dans les lignes profil-session
     if [ ! -f "$CLASSEUR_STOCKAGE" ]; then
         return 0
     fi
     grep "id: $llm_id" "$CLASSEUR_STOCKAGE" 2>/dev/null | grep -oE "session: session-llm-[0-9]+" | head -1 | sed 's/session: //'
 }
 
+# Retourner l'id LLM lie a une session (AGENTS.md champ Id LLM, puis classeur),
+# ou vide si la session n'est liee a aucun id. Detecte un CONFLIT d'alignement.
+id_lie_a_session() {
+    local session=$1
+    local id=""
+    # 1. AGENTS.md
+    if [ -f "$AGENTS_FILE" ] && grep -q "^### Session : " "$AGENTS_FILE"; then
+        id=$(awk -v cible="$session" '
+            /^### Session : / {
+                s = $0
+                sub(/^### Session : /, "", s)
+                if (s == cible) { dans = 1 } else { dans = 0 }
+                next
+            }
+            dans == 1 && /^\| \*\*Id LLM\*\* \| / {
+                ligne = $0
+                sub(/^\| \*\*Id LLM\*\* \| /, "", ligne)
+                sub(/ \|$/, "", ligne)
+                print ligne
+                exit
+            }
+        ' "$AGENTS_FILE")
+    fi
+    if [ -n "$id" ]; then
+        echo "$id"
+        return 0
+    fi
+    # 2. Classeur
+    if [ -f "$CLASSEUR_STOCKAGE" ]; then
+        id=$(grep "session: $session" "$CLASSEUR_STOCKAGE" 2>/dev/null | grep -oE "id: [^ /]+" | head -1 | sed 's/^id: //')
+    fi
+    echo "$id"
+}
+
+# REGLE ALIGNEMENT (v0.4.0) : id llm-N -> session-llm-N (le numero de session porte
+# le numero de l'id). Echo la session cible, ou rien si l'id n'est pas de la forme llm-N.
+session_cible_pour_id() {
+    local llm_id=$1
+    case $llm_id in
+        llm-[0-9]*) echo "session-llm-${llm_id#llm-}" ;;
+        *) echo "" ;;
+    esac
+}
+
 creer_bloc_session() {
     local session=$1
+    local llm_id=$2
     if grep -q "^### Session : $session$" "$AGENTS_FILE"; then
         return 0
     fi
@@ -154,8 +226,16 @@ creer_bloc_session() {
     local role=$(get_agent_role "Cerberus")
     local fiche=$(get_agent_fiche "Cerberus")
     local corrections=$(get_agent_corrections "Cerberus")
+    local champ_id=""
+    if [ -n "$llm_id" ]; then
+        champ_id="| **Id LLM** | $llm_id |"
+    fi
     local bloc
-    bloc=$(printf '\n### Session : %s\n\n| Champ | Valeur |\n|---|---|\n| **Nom** | Cerberus |\n| **Role** | %s |\n| **Derniere mise a jour** | %s |\n| **Fiche** | [%s](%s) |\n| **Corrections** | [%s](%s) |\n| **Active par** | Identification |\n| **Raison** | Identification LLM - demarrage de session |\n' "$session" "$role" "$date" "$fiche" "$fiche" "$corrections" "$corrections")
+    if [ -n "$llm_id" ]; then
+        bloc=$(printf '\n### Session : %s\n\n| Champ | Valeur |\n|---|---|\n| **Nom** | Cerberus |\n| **Id LLM** | %s |\n| **Role** | %s |\n| **Derniere mise a jour** | %s |\n| **Fiche** | [%s](%s) |\n| **Corrections** | [%s](%s) |\n| **Active par** | Identification |\n| **Raison** | Identification LLM - demarrage de session |\n' "$session" "$llm_id" "$role" "$date" "$fiche" "$fiche" "$corrections" "$corrections")
+    else
+        bloc=$(printf '\n### Session : %s\n\n| Champ | Valeur |\n|---|---|\n| **Nom** | Cerberus |\n| **Role** | %s |\n| **Derniere mise a jour** | %s |\n| **Fiche** | [%s](%s) |\n| **Corrections** | [%s](%s) |\n| **Active par** | Identification |\n| **Raison** | Identification LLM - demarrage de session |\n' "$session" "$role" "$date" "$fiche" "$fiche" "$corrections" "$corrections")
+    fi
     awk -v bloc="$bloc" '
         /^## Sessions LLM$/ {
             print $0
@@ -165,6 +245,30 @@ creer_bloc_session() {
         }
         { print }
         END { if (bloc != "") print bloc }
+    ' "$AGENTS_FILE" > "$AGENTS_FILE.tmp" && mv "$AGENTS_FILE.tmp" "$AGENTS_FILE"
+}
+
+# Ajouter ou mettre a jour le champ '**Id LLM** | <id>' dans le bloc de session.
+# Si la ligne existe -> remplacee ; sinon inseree juste apres le champ **Nom**.
+poser_id_llm_bloc() {
+    local session=$1
+    local llm_id=$2
+    awk -v session="$session" -v llm_id="$llm_id" '
+        BEGIN { dans = 0; insere = 0 }
+        {
+            if (dans == 1 && ($0 ~ /^### Session : / || $0 ~ /^## /)) { dans = 0 }
+            if ($0 == ("### Session : " session)) { dans = 1 }
+            if (dans == 1) {
+                if ($0 ~ /^\| \*\*Id LLM\*\* \| /) { print "| **Id LLM** | " llm_id " |"; insere = 1; next }
+                if ($0 ~ /^\| \*\*Nom\*\* \| / && insere == 0) {
+                    print $0
+                    print "| **Id LLM** | " llm_id " |"
+                    insere = 1
+                    next
+                }
+            }
+            print
+        }
     ' "$AGENTS_FILE" > "$AGENTS_FILE.tmp" && mv "$AGENTS_FILE.tmp" "$AGENTS_FILE"
 }
 
@@ -199,6 +303,9 @@ editer_bloc_session() {
 }
 
 # Ecrire ou mettre a jour profil-session-<session> dans le classeur-variables
+# REGLE LIAISON ID (v0.3.5) : si llm_id non fourni (activer/reactiver), lire l'id deja
+# lie dans la ligne existante et le PRESERVER -- sinon la liaison id<->session posee par
+# sidentifier serait ECRASEE et le prochain sidentifier creerait une session fantome.
 mettre_a_jour_profil_session() {
     local session=$1
     local agent=$2
@@ -208,6 +315,13 @@ mettre_a_jour_profil_session() {
     local bq=$(python -c "import sys; sys.stdout.write(chr(96))")  # backtick
     # REGLE DE DERIVATION (IMMUABLE): id = profil-session- + partie apres le prefixe session-
     local id_session="${session#session-}"
+    local prefixe_ligne="| ${bq}profil-session-$id_session${bq}"
+
+    # REGLE LIAISON ID (v0.3.5): preserver l'id existant si non fourni
+    if [ -z "$llm_id" ] && [ -f "$CLASSEUR_STOCKAGE" ]; then
+        llm_id=$(grep -F "$prefixe_ligne" "$CLASSEUR_STOCKAGE" 2>/dev/null | grep -oE "id: [^ /]+" | head -1 | sed 's/^id: //')
+    fi
+
     if [ -n "$llm_id" ]; then
         local nouvelle_ligne="| ${bq}profil-session-$id_session${bq} | session: $session / id: $llm_id / agent: $agent / date: $timestamp | activer-agent-principal | $jour | [OK] |"
     else
@@ -311,18 +425,36 @@ sidentifier() {
     migrer_si_necessaire
 
     if [ -n "$llm_id" ]; then
-        # MODE ID : chercher si cet id est deja lie a une session dans le classeur
+        # MODE ID : chercher si cet id est deja lie (AGENTS.md champ Id LLM + classeur)
         session=$(trouver_session_par_id "$llm_id")
         if [ -n "$session" ]; then
             echo "Session retrouvee pour id $llm_id : $session (agent principal : Cerberus)"
         else
-            # id inconnu -> prochaine session libre + liaison
-            if [ "$MIGRE" = "1" ]; then
-                session="session-llm-1"
+            # REGLE ALIGNEMENT (v0.4.0) : id llm-N -> session-llm-N
+            local cible=$(session_cible_pour_id "$llm_id")
+            if [ -n "$cible" ]; then
+                local id_deja_lie=$(id_lie_a_session "$cible")
+                if [ -n "$id_deja_lie" ] && [ "$id_deja_lie" != "$llm_id" ]; then
+                    # CONFLIT : session-llm-N deja liee a un autre LLM
+                    if [ "$MIGRE" = "1" ]; then
+                        session="session-llm-1"
+                    else
+                        session=$(trouver_prochaine_session)
+                    fi
+                    echo "ATTENTION: $cible deja liee a l'id $id_deja_lie - attribution $session (agent principal : Cerberus)"
+                else
+                    # Libre ou orpheline (aucun id) -> absorption
+                    session="$cible"
+                    echo "Nouvelle session pour id $llm_id : $session (alignee sur l'id, agent principal : Cerberus)"
+                fi
             else
-                session=$(trouver_prochaine_session)
+                if [ "$MIGRE" = "1" ]; then
+                    session="session-llm-1"
+                else
+                    session=$(trouver_prochaine_session)
+                fi
+                echo "Nouvelle session pour id $llm_id : $session (agent principal : Cerberus)"
             fi
-            echo "Nouvelle session pour id $llm_id : $session (agent principal : Cerberus)"
         fi
     else
         # Sans argument : compatibilite heritage -> prochaine session libre
@@ -335,7 +467,10 @@ sidentifier() {
     fi
 
     if ! grep -q "^### Session : $session$" "$AGENTS_FILE"; then
-        creer_bloc_session "$session"
+        creer_bloc_session "$session" "$llm_id"
+    elif [ -n "$llm_id" ]; then
+        # Bloc existant : poser/mettre a jour le champ Id LLM (reconnaissance par lecture)
+        poser_id_llm_bloc "$session" "$llm_id"
     fi
 
     local timestamp=$(get_timestamp)
@@ -450,15 +585,14 @@ afficher_aide() {
     echo "Usage: $0 <action> [parametres]"
     echo ""
     echo "Actions disponibles:"
-    echo "  sidentifier [session]              - Creer/choisir sa session (agent principal = Cerberus)"
+    echo "  sidentifier [id]                 - S'identifier (MODE ID: id llm-N -> session-llm-N, agent principal = Cerberus)"
     echo "  activer <session> <agent> <raison> [mission]  - Activer un agent dans sa session"
     echo "  reactiver <session> <raison> <agent_precedent> - Reactiver Cerberus dans sa session"
     echo "  sessions                           - Lister les sessions et leur agent principal"
     echo "  aide                               - Afficher cette aide"
     echo ""
     echo "Exemples:"
-    echo "  $0 sidentifier"
-    echo "  $0 sidentifier session-llm-1"
+    echo "  $0 sidentifier llm-1"
     echo "  $0 activer session-llm-1 Buffy \"Mission correction\""
     echo "  $0 reactiver session-llm-1 \"Mission terminee\" Buffy"
 }

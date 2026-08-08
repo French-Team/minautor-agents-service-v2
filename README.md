@@ -105,7 +105,7 @@ Chaque agent a :
 
 ---
 
-## La boite a outils (85 outils)
+## La boite a outils (87 outils)
 
 Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 
@@ -126,6 +126,7 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Evaluer (4)** | evaluer-agents, evaluer-coherence, evaluer-conventions, evaluer-structure | Evaluer la coherence du cerveau |
 | **Generateurs (4)** | generateurs-commande, generateurs-squelette-pense-bete, generateurs-squelette-spec, generateurs-squelette-todo | Generer les squelettes conformes |
 | **Gerer (1)** | gerer-sous-mission | Gerer les sorties/reentrees du flux |
+| **Guider (1)** | guider-parcours | Guider l agent case par case (jeu de piste) dans son parcours JSON |
 | **Inserer (1)** | inserer-contenu-fichier | Inserer du contenu a une position |
 | **Lire (3)** | lire-fichier, lire-frontmatter, lire-lignes | Lire le contenu des fichiers |
 | **Lister (8)** | lister-agents, lister-appels, lister-dossiers, lister-fichiers, lister-fonctions, lister-outils, lister-prepares, lister-statuts | Decouvrir la structure |
@@ -138,7 +139,7 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Valider (12)** | valider-cartes-decision, valider-conformite-ascii, valider-conventions, valider-ebauche, valider-liens, valider-nommage, valider-numerotation, valider-pense-bete, valider-relecture, valider-spec, valider-tableaux, valider-todo | Verifier la conformite |
 | **Verifier (4)** | verifier-documents-manquants, verifier-role-fichier, verifier-separation-preoccupations, verifier-systeme | Verifier l'etat reel |
 | **Tester (3)** |  | Securiser les tests |
-| **Combos (3)** | combos-audit-general, combos-corriger-non-ascii, combos-valider-cerveau | Chainer des outils en sequences |
+| **Combos (4)** | combos-audit-general, combos-corriger-non-ascii, combos-valider-cerveau, combos-moteur | Chainer des outils en sequences |
 | **Templates (1)** | outil-template | Modele standard de creation d'outils |
 
 **Principe** : Les agents utilisent exclusivement leurs propres outils, pas des outils generiques. Chaque outil est assigne aux agents concernes dans leur carte de decision. Chaque outil existe en 2 versions (.sh et .py) : le choix se fait via le profil systeme stocke dans le classeur-variables (.py si Python dispo, sinon .sh).

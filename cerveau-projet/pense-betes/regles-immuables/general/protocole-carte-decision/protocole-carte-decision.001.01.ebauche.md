@@ -1,9 +1,85 @@
 # Protocole -- Carte de Decision pour les Agents
 
-**Version** : 0.1.0
-**Statut** : Ebauche
+**Version** : 0.2.0
+**Statut** : prepare
 **Date creation** : 2026-08-05
-**Agent** : Buffy (creation)
+**Agent** : Buffy (creation + evolution parcours 2026-08-07)
+
+---
+
+## EVOLUTION 2026-08-07 -- LA CARTE DEVIENT UN PARCOURS (jeu de piste)
+
+> **Ce protocole est IMMUABLE mais il a EVOLUE** : la carte de decision statique
+> (tableaux `Etape | Action | Protocole | Outil`) est **SUPERSEDEE par le PARCOURS**
+> (jeu de piste). L'agent ne lit plus la carte d'avance : il suit son parcours
+> **case par case** avec l'outil `guider-parcours`, qui lui donne a chaque etape
+> l'indice exact (outil, fichier, regle) et les branches selon ses reponses.
+
+### Le principe du parcours
+
+```
+demarrer.md (CASE 0 : point d'entree de tous les parcours)
+    |
+    v
+parcours-<agent>.json  (source de verite du guidage, dans agents/<agent>/parcours/)
+    |
+    v
+guider-parcours.py <parcours.json>  (l'outil fait avancer case par case)
+    |
+    v
+CASE N : question + indices (outil / fichier / regle / controle)
+    |  reponse
+    v
+CASE N+1 : ... jusqu'a la case FIN
+```
+
+### Les 5 modeles de cases
+
+| Type de case | Ce qu'elle fait | Quand |
+|---|---|---|
+| **Question** | Pose UNE question, l'agent repond, branches OUI/NON/choix | Une simple decision suffit |
+| **Indice-outil** | Affiche l'outil exact a lancer (nom + chemin + commande) | Une action outil necessaire |
+| **Indice-fichier** | Affiche LE fichier/protocole a lire a cette etape (un seul) | Besoin de lire une reference |
+| **Regle** | Rappelle LA regle absolue pertinente pour cette case | Point sensible identifie |
+| **Controle** | Verification obligatoire avant de continuer (OUI/NON) | Garde-fou de fin d'etape |
+
+Une case peut **combiner** plusieurs modeles quand le moment l'exige, ou n'etre
+qu'une simple question quand ca suffit. Chaque reponse mene a une **branche**
+vers la case suivante.
+
+### Format du parcours (JSON)
+
+```json
+{
+  "parcours": { "nom": "parcours-<agent>", "agent": "<agent>", "version": "0.1.0", "case_depart": "c1" },
+  "cases": {
+    "c1": { "titre": "Mission", "type": "question", "question": "...", "branches": [ { "reponse": "X", "vers": "c2" } ] },
+    "c2": { "titre": "...", "type": "indice", "indices": [ { "type": "outil", "nom": "...", "chemin": "..." } ], "suivant": "c3" },
+    "cN": { "titre": "FIN", "type": "fin" }
+  }
+}
+```
+
+### Spec et outil de reference
+
+| Element | Chemin |
+|---|---|
+| Outil `guider-parcours` | `agents/tools/guider/guider-parcours/guider-parcours.py` (+ .sh parite) |
+| Spec du format | `agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md` |
+| Parcours existants | `agents/vulcain/parcours/`, `agents/morpheus/parcours/`, `agents/clio/parcours/` |
+
+### Regles du parcours (v0.2.0)
+
+1. Chaque agent a SON parcours dans `agents/<agent>/parcours/parcours-<agent>.json`
+2. `demarrer.md` est la **CASE 0** commune : apres l'identification, l'agent lance SON parcours
+3. La fiche de l'agent est **allegee** : identite, regles absolues, connexions -- le guidage vit dans le JSON
+4. Le parcours est la **source de verite** du guidage (remplace les tableaux de missions de la fiche)
+5. Une mission hors parcours : branche vers l'activation de l'agent habilite ou signalement du besoin
+6. Les lecons des corrections peuvent devenir des **cases** du parcours (ex: parcours-clio case c7)
+
+> Le contenu ci-dessous (sections historiques) documente la carte de decision
+> statique qui a precede le parcours. Il est conserve comme reference historique
+> et pour la comprehension du format. Le PARCOURS ci-dessus est la methode actuelle.
 
 ---
 
@@ -224,4 +300,16 @@ ETAPE 3 : Developper l'outil
 
 ---
 
-> **Ce protocole est IMMUABLE.**
+## EVOLUTION FINALE (v0.2.0 -- 2026-08-07)
+
+> La methode actuelle est le **PARCOURS (jeu de piste)** decrit en tete de ce
+> protocole : la carte statique (tableaux) est la version historique. Pour toute
+> nouvelle mission ou evolution d'agent :
+> 1. Creer/faire evoluer le parcours JSON (`agents/<agent>/parcours/parcours-<agent>.json`)
+> 2. Alleger la fiche (parcours = source de verite du guidage)
+> 3. Tester la navigation avec `guider-parcours --liste` et `--reponses`
+
+---
+
+> **Ce protocole est IMMUABLE.** Le parcours (jeu de piste) est l'evolution
+> officielle de la carte de decision (v0.2.0, 2026-08-07).
