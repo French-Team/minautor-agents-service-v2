@@ -60,18 +60,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Nom Agent** | vulcain |
+| **Role Agent** | Constructeur d'outils -- creation et developpement |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | buffy (retour de mission) |
-| **Raison** | MISSION TERMINEE (Buffy) : REFONTE CONCEPTUELLE DU MODELE DE CASES - ETAPE CONCEPT. (1) PHILOSOPHIE : dossier agents/philosophie/ cree (index + fiche PLACE une place pour chaque chose + fiche ALLEGER alleger ne veut pas dire supprimer : decomposer - metaphore palette de briques) + convention-structures arbre L2 mis a jour. (2) SPEC v0.2.13 : Pattern 7 MODELE COMPOSE documente (decision 2+ branches sauf action directe, deviations vers workflow secondaire avec REJOINT au flux principal, schema JSON c5/c5a DEVIATION/c5b REJOINT/c6) + procedure d audit 4e + critere 18 + re-audit 6->7 patterns. (3) PROTOCOLE-CARTE-DECISION : section modele compose ajoutee (reference philosophie + exemple Cerberus/Buffy). (4) PILOTES avec generateurs-case : buffy v0.2.2 43 cases (c13c question erreurs hors mission apres c13b : OUI c13d fin signalement Cerberus / NON c14 flux) + cerberus v0.2.0 29 cases (c12a apres c12 : OUI c12b DEVIATION reactiver Buffy -> c12c REJOINT -> c13 / NON c13) - la boucle complete des 2 cotes. (5) RVAV : valider-cartes-decision --tous 11/11, ASCII 0 sur 9 fichiers, navigation des 2 deviations PARCOURS TERMINE OUI et NON, valider-tableaux CONFORME, liens 4/4. LECON documentee dans corrections.md buffy. |
+| **Fiche** | [cerveau-projet/agents/vulcain/vulcain.md](cerveau-projet/agents/vulcain/vulcain.md) |
+| **Corrections** | [cerveau-projet/agents/vulcain/corrections.md](cerveau-projet/agents/vulcain/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | MISSION (decision utilisateur, etape OUTILS de la refonte du modele de cases): CREER L OUTIL CARTE + ETENDRE GENERATEURS-CASE POUR LES GROUPES. CONTEXTE: le Pattern 7 MODELE COMPOSE (spec-guider-parcours v0.2.13) est documente et prouve sur 2 pilotes (cerberus c12a-c12c, buffy c13c-c13d). Il faut maintenant les OUTILS: (1) outil CARTE (agit sur la carte COMPLETE) dans generateurs/generateurs-carte/ (py+sh+md, prefixe generateurs-): actions creer (squelette complet conforme aux patterns 4-5-6-7: c0 question honnete -> c0b RELIRE -> c0c CONTEXTE -> c1 Mission -> fin), analyser (lister tous les chemins de case_depart aux fins), detecter (boucles d attente, cases inatteignables, branches cassees, case_depart invalide), dupliquer-chemin (dupliquer un groupe de cases avec recablage et prefixe); (2) ETENDRE generateurs-case avec une action ajouter-bloc (modele compose par defaut: cree d un coup decision + branches + deviation + rejoint, Pattern 7) - garder les actions existantes. CRITERES: 100% stdlib, ASCII strict, parite py/sh (wrapper), validation auto (json + references + guider-parcours --liste), --dry-run avant modification, nommage prefixe generateurs-, tests reels sur copies dans le workspace, doc .md + index-tools + fiche P0 vulcain + lecons corrections.md. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-08 20:27 |
+| session-llm-1 | llm-1 | vulcain | 2026-08-08 20:29 |
 | session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
 | session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |
