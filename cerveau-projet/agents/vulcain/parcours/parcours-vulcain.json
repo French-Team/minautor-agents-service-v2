@@ -230,7 +230,7 @@
           "raison": "Definition du combo corriger-ascii (Pattern 3) : corriger-accents --all --recursive -> valider-conformite-ascii"
         }
       ],
-      "suivant": "c8"
+      "suivant": "c7b"
     },
     "c8": {
       "titre": "Deleguer les tests a Morpheus",
@@ -251,7 +251,7 @@
       "branches": [
         {
           "reponse": "OUI",
-          "vers": "c9a"
+          "vers": "c9"
         },
         {
           "reponse": "NON",
@@ -259,74 +259,10 @@
         }
       ]
     },
-    "c9a": {
-      "titre": "RELAIS : prendre le relais de Morpheus",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE RELAIS (IMMUABLE) : la delegation ne termine PAS le parcours. Je prends le relais de Morpheus : je lance SON parcours, il execute ses cases jusqu'au rapport et au verdict."
-        },
-        {
-          "type": "outil",
-          "nom": "guider-parcours",
-          "chemin": "cerveau-projet/agents/tools/guider/guider-parcours/",
-          "commande": "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json",
-          "raison": "Parcours de Morpheus : il teste (protocole-tests, template-test, protections), donne le verdict et ajoute ses lecons"
-        }
-      ],
-      "suivant": "c9b"
-    },
-    "c9b": {
-      "titre": "RETOUR : Morpheus t'a-t-il reactive ?",
-      "type": "controle",
-      "question": "Morpheus t'a-t-il reactive avec le rapport de tests et le verdict (modele boucle) ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE BOUCLE : Morpheus me REACTIVE a la fin de ses tests (Vulcain -> Morpheus -> Vulcain). Sans son retour, je ne clos pas la mission."
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c9c"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c9a"
-        }
-      ]
-    },
-    "c9c": {
-      "titre": "CLOTURE : verifier et reactiver Cerberus",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "ETAPE FINALE : verifier le rapport de tests de Morpheus, valider l'outil (RVAV), puis REACTIVER CERBERUS avec le bilan des outils (regle absolue 6 : declarer la liste exacte des outils utilises)."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 \"RAISON\" \"Vulcain\""
-        }
-      ],
-      "suivant": "c9"
-    },
     "c9": {
       "titre": "FIN - Construire un outil",
       "type": "fin",
-      "message": "Mission construire terminee : outil cree, tests VALIDES par Morpheus (verdict), Cerberus reactive avec le bilan des outils."
+      "message": "CHAINES BOUT-EN-BOUT : outil cree et valide (RVAV), MORPHEUS ACTIVE pour les tests. La chaine continue : Morpheus teste puis ACTIVE Janus (controle) qui REACTIVE Cerberus avec le bilan consolide."
     },
     "c10": {
       "titre": "Verifier le systeme (modification)",
@@ -403,7 +339,7 @@
           "raison": "Definition du combo corriger-ascii (Pattern 3) : corriger-accents --all --recursive -> valider-conformite-ascii"
         }
       ],
-      "suivant": "c14"
+      "suivant": "c13b"
     },
     "c14": {
       "titre": "Deleguer les tests a Morpheus",
@@ -418,7 +354,7 @@
       "branches": [
         {
           "reponse": "OUI",
-          "vers": "c15a"
+          "vers": "c15"
         },
         {
           "reponse": "NON",
@@ -426,74 +362,10 @@
         }
       ]
     },
-    "c15a": {
-      "titre": "RELAIS : prendre le relais de Morpheus",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE RELAIS (IMMUABLE) : la delegation ne termine PAS le parcours. Je prends le relais de Morpheus : je lance SON parcours, il execute ses cases jusqu'au rapport et au verdict."
-        },
-        {
-          "type": "outil",
-          "nom": "guider-parcours",
-          "chemin": "cerveau-projet/agents/tools/guider/guider-parcours/",
-          "commande": "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json",
-          "raison": "Parcours de Morpheus : il teste (protocole-tests, template-test, protections), donne le verdict et ajoute ses lecons"
-        }
-      ],
-      "suivant": "c15b"
-    },
-    "c15b": {
-      "titre": "RETOUR : Morpheus t'a-t-il reactive ?",
-      "type": "controle",
-      "question": "Morpheus t'a-t-il reactive avec le rapport de tests et le verdict (modele boucle) ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE BOUCLE : Morpheus me REACTIVE a la fin de ses tests (Vulcain -> Morpheus -> Vulcain). Sans son retour, je ne clos pas la mission."
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c15c"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c15a"
-        }
-      ]
-    },
-    "c15c": {
-      "titre": "CLOTURE : verifier et reactiver Cerberus",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "ETAPE FINALE : verifier le rapport de tests de Morpheus, valider la modification (RVAV), puis REACTIVER CERBERUS avec le bilan des outils (regle absolue 6 : declarer la liste exacte des outils utilises)."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 \"RAISON\" \"Vulcain\""
-        }
-      ],
-      "suivant": "c15"
-    },
     "c15": {
       "titre": "FIN - Modifier un outil",
       "type": "fin",
-      "message": "Mission modifier terminee : outil modifie, tests VALIDES par Morpheus (verdict), Cerberus reactive avec le bilan des outils.",
+      "message": "CHAINES BOUT-EN-BOUT : outil modifie et valide (RVAV), MORPHEUS ACTIVE pour les tests. La chaine continue : Morpheus teste puis ACTIVE Janus (controle) qui REACTIVE Cerberus avec le bilan consolide.",
       "indices": [
         {
           "type": "regle",
@@ -564,6 +436,38 @@
         }
       ],
       "suivant": "c1"
+    },
+    "c7b": {
+      "titre": "RVAV avant activation",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail AVANT d activer le maillon suivant de la chaine."
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
+          "raison": "Workflow RVAV obligatoire avant chaque activation"
+        }
+      ],
+      "suivant": "c8"
+    },
+    "c13b": {
+      "titre": "RVAV avant activation",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail AVANT d activer le maillon suivant de la chaine."
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
+          "raison": "Workflow RVAV obligatoire avant chaque activation"
+        }
+      ],
+      "suivant": "c14"
     }
   }
 }

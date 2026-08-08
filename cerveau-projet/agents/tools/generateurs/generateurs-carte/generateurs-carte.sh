@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # -*- coding: ascii -*-
-# generateurs-case.sh
-# Wrapper bash vers generateurs-case.py (parite stricte par construction).
-# Version : 0.2.0
+# generateurs-carte.sh
+# Wrapper bash vers generateurs-carte.py (parite stricte).
+# Version : 0.1.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -17,7 +17,7 @@
 
 # Chemin absolu du script Python (5 remontees depuis ce fichier)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PY_SCRIPT="$SCRIPT_DIR/generateurs-case.py"
+PY_SCRIPT="$SCRIPT_DIR/generateurs-carte.py"
 
 if [ ! -f "$PY_SCRIPT" ]; then
     echo "ERREUR: $PY_SCRIPT introuvable" >&2

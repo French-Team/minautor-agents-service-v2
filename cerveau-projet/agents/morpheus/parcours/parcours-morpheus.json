@@ -265,7 +265,7 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "REGLE DELEGATION : Vulcain -> Morpheus -> Vulcain (modele boucle). Si activation directe par Cerberus -> retour Cerberus."
+          "texte": "REGLE CHAINE BOUT-EN-BOUT : Vulcain -> Morpheus -> Janus -> Cerberus. Si activation par Vulcain (chaine) -> a la fin j active Janus. Si activation directe par Cerberus -> je reactive Cerberus."
         }
       ],
       "branches": [
@@ -280,9 +280,9 @@
       ]
     },
     "c10": {
-      "titre": "FIN - Reactiver Vulcain",
+      "titre": "FIN - Activer Janus",
       "type": "fin",
-      "message": "Reactiver Vulcain (modele boucle) avec le rapport de tests et le verdict, pour qu'il termine sa mission principale."
+      "message": "CHAINE BOUT-EN-BOUT : tests termines et VERDICT rendu (RVAV passe sur mon travail). J ACTIVE JANUS (controle) avec le rapport de tests et le verdict. La chaine continue : Janus controle puis REACTIVE Cerberus avec le bilan consolide."
     },
     "c11": {
       "titre": "Valider un outil existant",
@@ -374,7 +374,7 @@
     "c17": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si activite directement par lui)."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",

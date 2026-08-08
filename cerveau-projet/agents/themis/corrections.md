@@ -54,6 +54,24 @@ identite:
 3. PATTERN 2 NON UNIFORME CHEZ VULCAIN : les cases d ecriture portaient REGLE IMMUABLE : ASCII strict (ancien format) au lieu du texte uniforme REGLE IMMUABLE ASCII (spec v0.2.0) -- la procedure d audit 4b ne testait que Pattern 5, c est la procedure d audit 2 (position 1) qui a revele les 3 ecarts ; re-auditer les 5 patterns, pas seulement le nouveau
 4. L audit croise confirme : la chasse aux intentions passives (Buffy) a atteint son objectif -- 0 formulation passive dans les 11 parcours, la chaine ne peut plus se couper par une fin passive
 
+## [RAPPORT] Re-audit 2026-08-08 -- Conformite 8 patterns (spec v0.2.15) + chaine bout-en-bout
+
+**Objet** : re-audit complet des 11 parcours apres la migration vers la CHAINE BOUT-EN-BOUT (Pattern 8, spec v0.2.15) et l'ajout des regles immuables dans les generateurs (generateurs-case v0.2.1 + generateurs-carte v0.1.1).
+**Verdict** : CONFORME -- 11/11 parcours OK, 0 ecart.
+
+**Points verifies (procedure re-audit complet v0.2.7 + 4f)** :
+1. PATTERN 4 (question honnete) : 11/11 case_depart = c0, question contenant memoire + SANS relire, c0b RELIRE, c0c CONTEXTE -- OK
+2. PATTERN 2 (rappel ASCII position 1) : toutes les cases d ecriture portent un indice regle ASCII en position 1 (formulation REGLE IMMUABLE ASCII ou REGLE WORKSPACE ... ASCII 2 ALTERNATIVES, spec v0.2.0) -- 11/11 OK. ATTENTION AUDIT : un detecteur trop strict exigeant le PREFIXE EXACT 'REGLE IMMUABLE ASCII' produit des faux positifs (les cases portent REGLE WORKSPACE ... ASCII 2 ALTERNATIVES, qui est le rappel ASCII en position 1) -- verifier la PRESENCE du rappel ASCII en position 1, pas le prefixe exact
+3. PATTERN 7 (modele compose) : aucune decision a branche unique -- OK
+4. PATTERN 5/8 (fins actives + chaine bout-en-bout) : 0 formulation passive (grep te reactive/j attends/attend le retour/il me reactive) ; la chaine outil -> tests -> controle est migree : Vulcain fins c9/c15 (MORPHEUS ACTIVE), cases RVAV c7b/c13b avant activation, Morpheus fin c10 (ACTIVE JANUS avec le rapport), Janus fin c10 (REACTIVE CERBERUS avec BILAN CONSOLIDE + RVAV c9), Cerberus c7 (flux chaine bout-en-bout) -- CONFORME
+5. LE DERNIER MAILLON de la chaine (Janus) REACTIVE Cerberus avec le bilan consolide -- CONFORME (Janus c10)
+6. REGLES IMMUABLES DANS LES GENERATEURS : generateurs-case v0.2.1 (garde-fou RVAV + delegation + ASCII, non bloquant) + generateurs-carte v0.1.1 (squelette c2b RVAV avant fin + rappel ASCII + fin chaine bout-en-bout) -- les prochaines cartes/cases ne naitront plus sans regles immuables
+
+**Lecons** :
+1. Le re-audit complet (regle v0.2.7) reste la seule preuve de conformite globale : 8 procedures rejouees (1, 2, 3, 4, 4b, 4d, 4e, 4f), jamais la nouvelle seule
+2. L audit structurel automatique (python) est utile en PREMIERE PASSE, mais un audit croise manuel sur un echantillon (c0, c5 buffy, c12 vulcain) evite de declarer des faux ecarts sur des formulations legitimes
+3. La chaine bout-en-bout (Vulcain -> Morpheus -> Janus -> Cerberus) verrouille la delegation : aucun maillon ne repasse par Cerberus au milieu, chaque maillon passe RVAV avant d activer le suivant
+
 ## PHILOSOPHIE -- Principes de comportement
 
 | **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |

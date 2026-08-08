@@ -384,6 +384,18 @@ La sortie du workspace n'est autorisee qu'en LECTURE. Faute grave commise et cor
 Le combo enchaine corriger-accents --all --recursive + valider-conformite-ascii.
 Rappel insere en tete des cases d'ecriture des 10 parcours (32 cases).
 
+## [NOTES] CHAINE BOUT-EN-BOUT + REGLES IMMUABLES 2026-08-08 (Pattern 8, decision utilisateur)
+
+**Mission** : corriger le constat utilisateur (RVAV absent des generateurs 0 occurrence -> nouvelles cartes/cases sans regles immuables ; delegation court-cuitee : tests faits par l agent au lieu de Morpheus, Janus jamais active) par (1) la CHAINE DE DELEGATION BOUT-EN-BOUT et (2) les REGLES IMMUABLES dans les generateurs, puis re-audit Themis.
+**Lecons** :
+1. CHAINE BOUT-EN-BOUT (Pattern 8, spec-guider-parcours v0.2.15) : la delegation ne repasse PLUS par Cerberus au milieu -- Cerberus active Vulcain -> Vulcain finit et ACTIVE Morpheus -> Morpheus finit et ACTIVE Janus -> Janus REACTIVE Cerberus avec le BILAN CONSOLIDE. Decision utilisateur : c est l agent delegue qui active le suivant a SA fin, pas Cerberus (plus fiable que la boucle Vulcain -> Morpheus -> Vulcain puis Cerberus).
+2. RVAV A CHAQUE MAILLON : chaque agent passe la boucle RVAV (Rechercher, Verifier, Analyser, Valider) sur SON travail AVANT d activer le suivant -- case c7b/c13b ajoutee dans parcours-vulcain (RVAV avant activation), indice RVAV en tete de c9 janus.
+3. PARCOURS MODIFIES : vulcain 30->24 cases (c9a/c9b/c9c + c15a/c15b/c15c RELAIS/RETOUR/CLOTURE supprimes, branches c8/c14 OUI -> fin directe, fins c9/c15 = MORPHEUS ACTIVE) ; morpheus (c10 FIN Activer Vulcain -> FIN Activer Janus avec le rapport, c9 regle chaine) ; janus (c9 RVAV avant reactivation + c10 bilan consolide) ; cerberus (c7 flux chaine bout-en-bout).
+4. GENERATEURS PORTEURS DE REGLES : generateurs-case v0.2.1 (garde-fou non bloquant RVAV + delegation + ASCII : cases d ecriture sans rappel ASCII position 1 -> RAPPEL ASCII + RVAV ; fins de delegation -> RAPPEL DELEGATION chaine bout-en-bout) + generateurs-carte v0.1.1 (squelette c2b RVAV avant fin + rappel ASCII dans c2 + fin c9 chaine bout-en-bout).
+5. PIEGE ASCII RECURRENT (encore !) : j ai introduit nait/naitront (i circonflexe) dans les lecons vulcain et themis -- corrige avec l OUTIL corriger-dictionnaire-accents (jamais a la main, regle utilisateur) qui cree un .bak (a supprimer). La regle utilisateur : au moment de la verification ASCII, 2 alternatives (OK continuer / NON lancer l outil de correction), jamais de correction manuelle.
+6. AUDIT STRUCTUREL vs CROISE : le premier script d audit (detecteur trop strict exigeant le prefixe exact REGLE IMMUABLE ASCII et 'memoire' en minuscules) a produit 29 faux ecarts -- les parcours portent REGLE WORKSPACE ... ASCII 2 ALTERNATIVES en position 1 (rappel ASCII present) et MEMOIRE en majuscules. Toujours verifier un echantillon manuel avant de declarer des ecarts : re-audit final = 11/11 OK, 0 ecart.
+7. Le rapport Themis (corrections.md Themis) documente le verdict CONFORME : 8 procedures rejouees (1, 2, 3, 4, 4b, 4d, 4e, 4f), chaine bout-en-bout verifiee sur vulcain/morpheus/janus/cerberus.
+
 ## PHILOSOPHIE -- Principes de comportement
 
 | **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |

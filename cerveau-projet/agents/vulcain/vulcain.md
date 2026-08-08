@@ -137,6 +137,8 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 | `detecter-local-hors-fonction` | Detecter les local hors fonction dans les scripts bash |
 | `remplacer-texte` | Renommages massifs: paires ancien->nouveau dans plusieurs fichiers |
 | `generateurs-commande` | Generer des commandes complexes via menu interactif ou reponses |
+| `generateurs-case` | Ajouter, editer, supprimer une case OU ajouter un bloc modele compose (decision + deviation + rejoint, Pattern 7) d'une carte de decision |
+| `generateurs-carte` | Agir sur une carte COMPLETE : creer un squelette (patterns 4-5-6-7), analyser les chemins, detecter les anomalies (boucles/inatteignables/impasses), dupliquer un chemin |
 | `combos-moteur` | Executer une chaine d'outils declarative (definition-combo.json) : generateur/outil/controle/fin, variables + interpolation |
 | `guider-parcours` | Suivre MON parcours case par case (jeu de piste) |
 

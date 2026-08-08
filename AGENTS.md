@@ -60,18 +60,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | vulcain |
-| **Role Agent** | Constructeur d'outils -- creation et developpement |
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/vulcain/vulcain.md](cerveau-projet/agents/vulcain/vulcain.md) |
-| **Corrections** | [cerveau-projet/agents/vulcain/corrections.md](cerveau-projet/agents/vulcain/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | MISSION (decision utilisateur, etape OUTILS de la refonte du modele de cases): CREER L OUTIL CARTE + ETENDRE GENERATEURS-CASE POUR LES GROUPES. CONTEXTE: le Pattern 7 MODELE COMPOSE (spec-guider-parcours v0.2.13) est documente et prouve sur 2 pilotes (cerberus c12a-c12c, buffy c13c-c13d). Il faut maintenant les OUTILS: (1) outil CARTE (agit sur la carte COMPLETE) dans generateurs/generateurs-carte/ (py+sh+md, prefixe generateurs-): actions creer (squelette complet conforme aux patterns 4-5-6-7: c0 question honnete -> c0b RELIRE -> c0c CONTEXTE -> c1 Mission -> fin), analyser (lister tous les chemins de case_depart aux fins), detecter (boucles d attente, cases inatteignables, branches cassees, case_depart invalide), dupliquer-chemin (dupliquer un groupe de cases avec recablage et prefixe); (2) ETENDRE generateurs-case avec une action ajouter-bloc (modele compose par defaut: cree d un coup decision + branches + deviation + rejoint, Pattern 7) - garder les actions existantes. CRITERES: 100% stdlib, ASCII strict, parite py/sh (wrapper), validation auto (json + references + guider-parcours --liste), --dry-run avant modification, nommage prefixe generateurs-, tests reels sur copies dans le workspace, doc .md + index-tools + fiche P0 vulcain + lecons corrections.md. |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | buffy (retour de mission) |
+| **Raison** | CHAINE BOUT-EN-BOUT + REGLES IMMUABLES DANS LES GENERATEURS : mission terminee (Buffy + Vulcain + Themis). (1) Pattern 8 (spec v0.2.15) : Cerberus active Vulcain -> Vulcain ACTIVE Morpheus -> Morpheus ACTIVE Janus -> Janus REACTIVE Cerberus avec bilan consolide ; RVAV a chaque maillon avant activation. (2) Parcours modifies : vulcain 24 cases (RELAIS/RETOUR/CLOTURE supprimes, fins MORPHEUS ACTIVE, RVAV c7b/c13b), morpheus (fin Activer Janus), janus (RVAV c9 + bilan consolide), cerberus (c7 flux chaine). (3) Generateurs : generateurs-case v0.2.1 garde-fou RVAV+delegation+ASCII, generateurs-carte v0.1.1 squelette c2b RVAV. (4) Re-audit Themis 8 patterns : 11/11 CONFORME 0 ecart. (5) RVAV : navigation 7/7 PARCOURS TERMINE, ASCII 0 sur 15 fichiers, valider-cartes-decision 11/11. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | vulcain | 2026-08-08 20:29 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-08 20:58 |
 | session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
 | session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |

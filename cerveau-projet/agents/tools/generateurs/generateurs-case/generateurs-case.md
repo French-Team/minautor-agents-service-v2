@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.1.1-beta |
+| **Version** | 0.2.1 |
 | **Statut** | ebauche |
 | **Categorie** | generateurs |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -45,10 +45,11 @@ modifier les cartes des agents (fichiers du cerveau).
 python3 generateurs-case.py <parcours.json> <action> [options]
 
 Actions :
-  liste      Lister les cases de la carte
-  ajouter    Ajouter une case (position + contenu)
-  editer     Editer une case existante
-  supprimer  Supprimer une case avec recablage auto
+  liste           Lister les cases de la carte
+  ajouter         Ajouter une case (position + contenu)
+  ajouter-bloc    Ajouter un bloc modele compose (decision + deviation + rejoint, Pattern 7)
+  editer          Editer une case existante
+  supprimer       Supprimer une case avec recablage auto
 
 Options globales :
   --dry-run  Simuler sans rien modifier
@@ -125,6 +126,43 @@ python3 generateurs-case.py <parcours.json> editer c6 \
 | `--indice-regle <texte>` | Remplace les indices par des regles |
 | `--remove-indices` | Vider les indices |
 
+### 5. Ajouter un bloc modele compose (Pattern 7) -- action `ajouter-bloc`
+
+Cree d'un coup les 3 cases du MODELE COMPOSE (Pattern 7, spec-guider-parcours
+v0.2.13) : decision (question 2 branches) + deviation + rejoint.
+
+```
+python3 generateurs-case.py <parcours.json> ajouter-bloc \
+  --titre "Erreurs hors mission ?" \
+  --question "Des erreurs HORS MISSION ont-elles ete signalees ?" \
+  --suite c13 \
+  --apres c12
+```
+
+Structure creee (ids par defaut : prochains cN libres + suffixes a/b) :
+
+```
+<decision> (question) :
+  OUI -> <deviation> (indice) -> <rejoint> (indice) -> <suite>
+  NON -> <suite>  (flux principal)
+```
+
+| Option | Role |
+|---|---|
+| `--decision <id>` | Id de la case decision (defaut: prochain cN libre) |
+| `--deviation <id>` | Id de la deviation (defaut: <decision>a) |
+| `--rejoint <id>` | Id du rejoint (defaut: <decision>b) |
+| `--titre <texte>` | Titre de la decision |
+| `--question <texte>` | Question de la decision (defaut: Quelle est la decision ?) |
+| `--titre-deviation <texte>` | Titre de la deviation (defaut: DEVIATION : workflow secondaire) |
+| `--titre-rejoint <texte>` | Titre du rejoint (defaut: REJOINT : retour au flux principal) |
+| `--suite <id>` | Case suite du flux principal (OBLIGATOIRE, cible des branches NON et du rejoint) |
+| `--apres <id>` | Inserer apres cette case (recablage auto du suivant) |
+
+> La deviation porte le rappel Pattern 7 en indice regle : jamais une fin au
+> milieu, jamais une boucle d'attente (regle 10) -- le workflow secondaire se
+> termine toujours par le REJOINT vers la suite du flux.
+
 ### 4. Supprimer une case (recablage auto)
 
 ```
@@ -167,6 +205,35 @@ python3 generateurs-case.py <parcours.json> ajouter --type fin \
   --titre 'FIN test' --message 'Morpheus teste et te reactive, attends le retour'
 # -> ATTENTION (Pattern 5...) : le message de fin contient une formulation passive
 ```
+
+## Garde-fou REGLES IMMUABLES (v0.2.1) -- RVAV + delegation + ASCII
+
+**Constat utilisateur 2026-08-08** : RVAV et la delegation (tests -> Morpheus,
+controle -> Janus) etaient absents des generateurs -> les nouvelles cartes et
+cases produites ne rappelaient plus les regles immuables, et la chaine de
+delegation se degradait silencieusement (l'agent testait lui-meme au lieu de
+deleger a Morpheus, Janus n'etait jamais active).
+
+A chaque creation/edition d'une case, l'outil affiche un AVERTISSEMENT (jaune,
+NON BLOQUANT -- l'utilisateur decide) selon le type de case :
+
+| Cas detecte | Rappel affiche |
+|---|---|
+| Case d'ECRITURE (indice outil d'ecriture : creer-fichier, ecrire-fichier, editer-fichier, ajouter-contenu-fichier, inserer-contenu-fichier, copier-fichier) sans rappel ASCII en tete | **RAPPEL ASCII** (Pattern 2) : la case DOIT porter en TETE de ses indices un indice regle `REGLE IMMUABLE ASCII` (100%% ASCII, guillemets ASCII, jamais de guillemets francais) |
+| Case d'ecriture (ci-dessus) | **RAPPEL RVAV** : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail |
+| Case `fin` avec message de delegation (morpheus/janus/active/reactive) | **RAPPEL DELEGATION** (chaine bout-en-bout, spec-guider-parcours v0.2.15) : j ACTIVE le maillon suivant a MA fin (Vulcain active Morpheus -> Morpheus active Janus -> Janus REACTIVE Cerberus avec le bilan consolide) ; chaque maillon passe la boucle RVAV AVANT d'activer le suivant ; une activation directe par Cerberus reste valide |
+| Case `fin` (autre) | **RAPPEL RVAV** avant d'activer le maillon suivant |
+
+```bash
+# Exemple : ajouter une fin de delegation -> rappel delegation + RVAV
+python3 generateurs-case.py <parcours.json> ajouter --type fin \
+  --message 'J ACTIVE MORPHEUS pour les tests'
+# -> ATTENTION (GARDE-FOU REGLES IMMUABLES...) : RAPPEL DELEGATION ...
+```
+
+> Le rappel est NON BLOQUANT : l'operation reussit quand meme. L'agent qui
+> utilise l'outil est averti et doit appliquer la regle (ajouter l'indice
+> ASCII/RVAV ou materialiser la chaine) dans le contenu de sa case.
 
 ## Validation auto complete (apres chaque operation)
 
@@ -224,6 +291,7 @@ python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-cas
 4. Chaque operation lance la validation auto (json + references + guider-parcours --liste)
 5. Les actions sont testees en --dry-run avant toute modification reelle
 6. Format des cases : spec-guider-parcours v0.2.5 (types question/indice/controle/fin, indices, branches, suivant)
+7. Garde-fou REGLES IMMUABLES (v0.2.1) : toute case d'ecriture rappelle ASCII (position 1) + RVAV ; toute fin de delegation rappelle la chaine bout-en-bout (spec v0.2.15)
 
 ---
 
@@ -242,3 +310,6 @@ python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-cas
 | Version | Statut | Changements |
 |---|---|---|
 | 0.1.0-beta | ebauche | Creation : charger une carte, ajouter/editer/supprimer une case, recablage auto des references, validation auto complete (json + refs + guider-parcours --liste), parite py/sh |
+| 0.1.1-beta | ebauche | Garde-fou Pattern 5 : detection des formulations passives a la creation/edition d'une case fin |
+| 0.2.0 | ebauche | Action ajouter-bloc : bloc MODELE COMPOSE (Pattern 7) cree d'un coup (decision 2 branches + deviation + rejoint), spec-guider-parcours v0.2.13 |
+| 0.2.1 | ebauche | Garde-fou REGLES IMMUABLES : a la creation/edition d'une case d'ecriture ou d'une fin, rappel ASCII (Pattern 2, position 1) + RVAV + delegation (chaine bout-en-bout spec-guider-parcours v0.2.15 : tests -> Morpheus, controle -> Janus, bilan consolide a Cerberus) |

@@ -23,7 +23,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.1.1-beta"
+VERSION = "0.2.1"
 STATUT = "ebauche"
 
 # Racine du projet : 5 remontees depuis ce fichier
@@ -180,6 +180,84 @@ def formuler_avertissement_fin_passive(message):
     )
 
 
+_OUTILS_ECRITURE = (
+    "creer-fichier",
+    "ecrire-fichier",
+    "editer-fichier",
+    "ajouter-contenu-fichier",
+    "inserer-contenu-fichier",
+    "copier-fichier",
+)
+
+
+def formuler_avertissement_regles_immuables(case):
+    """Garde-fou REGLES IMMUABLES (non-bloquant) : rappelle RVAV + delegation (Morpheus/Janus)
+    sur les cases d'ecriture (outil d'ecriture dans les indices) et les fins de delegation.
+
+    Constat utilisateur 2026-08-08 : RVAV et la delegation (tests -> Morpheus, controle -> Janus)
+    etaient absents des generateurs -> les nouvelles cartes/cases produites ne rappelaient plus
+    les regles immuables et la chaine de delegation se degradait silencieusement.
+    Retourne l'avertissement (str) ou None.
+    """
+    if not case:
+        return None
+    avertissements = []
+
+    type_case = case.get("type")
+    nom_outils = []
+    for indice in case.get("indices", []):
+        if indice.get("type") == "outil" and indice.get("nom") in _OUTILS_ECRITURE:
+            nom_outils.append(indice.get("nom"))
+
+    if nom_outils or (case.get("message") and "rapport" in case.get("message", "").lower()):
+        # Case d'ecriture : rappel ASCII (Pattern 2) + RVAV avant de valider
+        if nom_outils and (
+            not case.get("indices")
+            or case["indices"][0].get("type") != "regle"
+            or not case["indices"][0].get("texte", "").startswith("REGLE IMMUABLE ASCII")
+        ):
+            avertissements.append(
+                "RAPPEL ASCII (Pattern 2, spec-guider-parcours v0.2.0) : la case d'ecriture (%s) "
+                "DOIT porter en TETE de ses indices un indice regle 'REGLE IMMUABLE ASCII' "
+                "(100%% ASCII, guillemets ASCII, jamais de guillemets francais)." % ", ".join(nom_outils)
+            )
+        avertissements.append(
+            "RAPPEL RVAV (regle immuable) : je ne valide JAMAIS sans avoir passe la boucle RVAV "
+            "complete (Rechercher, Verifier, Analyser, Valider) sur mon travail. Pour une case qui "
+            "ECRIT dans un fichier, ajouter un indice regle RVAV a la case (ou a la case suivante)."
+        )
+
+    if type_case == "fin":
+        message = (case.get("message") or "").lower()
+        if "morpheus" in message or "janus" in message or "active" in message or "reactive" in message:
+            avertissements.append(
+                "RAPPEL DELEGATION (chaine bout-en-bout, spec-guider-parcours v0.2.15) : a la fin d'un "
+                "maillon de chaine, j ACTIVE le maillon suivant a MA fin (Vulcain active Morpheus -> "
+                "Morpheus active Janus -> Janus REACTIVE Cerberus avec le bilan consolide). Chaque "
+                "maillon passe la boucle RVAV sur son travail AVANT d'activer le suivant. Une activation "
+                "directe par Cerberus reste valide (fin = reactiver Cerberus)."
+            )
+        elif "rvav" not in message:
+            avertissements.append(
+                "RAPPEL RVAV (regle immuable) : avant d'activer le maillon suivant, passer la boucle "
+                "RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail."
+            )
+
+    if not avertissements:
+        return None
+    return (
+        "ATTENTION (GARDE-FOU REGLES IMMUABLES, generateurs-case v0.2.1) : "
+        + " | ".join(avertissements)
+    )
+
+
+def afficher_avertissement_regles_immuables(case):
+    """Affiche l'avertissement des regles immuables s'il y a lieu (non-bloquant)."""
+    avertissement = formuler_avertissement_regles_immuables(case)
+    if avertissement:
+        print(_couleur("  " + avertissement, "jaune"), file=sys.stderr)
+
+
 def action_liste(args):
     donnees = charger_parcours(args.parcours)
     cases = donnees["cases"]
@@ -228,6 +306,7 @@ def construire_case(args, donnees):
             avertissement = formuler_avertissement_fin_passive(args.message)
             if avertissement:
                 print(_couleur("  " + avertissement, "jaune"), file=sys.stderr)
+        afficher_avertissement_regles_immuables(case)
         return case
     else:
         print(_couleur("ERREUR: type inconnu '%s' (question/indice/controle/fin)" % type_case, "rouge"), file=sys.stderr)
@@ -256,6 +335,7 @@ def construire_case(args, donnees):
             indices.append({"type": "fichier", "chemin": parties[0], "raison": ":".join(parties[1:])})
     if indices:
         case["indices"] = indices
+    afficher_avertissement_regles_immuables(case)
 
     branches = []
     if args.branches:
@@ -318,6 +398,109 @@ def type_case_is_indice_or_suivant(case):
     return case.get("type") in ("indice", "question", "controle")
 
 
+# ------------------------------------------------------------
+# Bloc modele compose (action ajouter-bloc, Pattern 7)
+# ------------------------------------------------------------
+
+def action_ajouter_bloc(args):
+    """Cree d'un coup un bloc MODELE COMPOSE (Pattern 7) : decision + deviation + rejoint.
+
+    Structure creee :
+      <decision> (question, 2 branches) :
+        OUI -> <deviation> (indice) -> <rejoint> (indice) -> <suite>
+        NON -> <suite> (flux principal)
+    """
+    donnees = charger_parcours(args.parcours)
+    cases = donnees["cases"]
+
+    # Ids des 3 cases du bloc (defaut : cN + cNa + cNb, prochains libres)
+    base = prochain_id_libre(cases)
+    id_decision = args.decision or base
+    id_deviation = args.deviation or (id_decision + "a")
+    id_rejoint = args.rejoint or (id_decision + "b")
+
+    for cid in (id_decision, id_deviation, id_rejoint):
+        if cid in cases:
+            print(_couleur("ERREUR: la case '%s' existe deja" % cid, "rouge"), file=sys.stderr)
+            sys.exit(1)
+
+    if not args.suite:
+        print(_couleur("ERREUR: ajouter-bloc exige --suite <case> (suite du flux principal)", "rouge"), file=sys.stderr)
+        sys.exit(1)
+
+    # Case decision (question, 2 branches)
+    decision = {
+        "titre": args.titre or "Decision",
+        "type": "question",
+        "question": args.question or "Quelle est la decision ?",
+        "branches": [
+            {"reponse": "OUI", "vers": id_deviation},
+            {"reponse": "NON", "vers": args.suite},
+        ],
+    }
+
+    # Case deviation (indice -> rejoint)
+    deviation = {
+        "titre": args.titre_deviation or "DEVIATION : workflow secondaire",
+        "type": "indice",
+        "indices": [
+            {
+                "type": "regle",
+                "texte": "REGLE PATTERN 7 (spec-guider-parcours v0.2.13) : deviation vers un workflow secondaire - le workflow secondaire se termine par un REJOINT vers le flux principal (jamais une fin au milieu, jamais une boucle d'attente).",
+            }
+        ],
+        "suivant": id_rejoint,
+    }
+
+    # Case rejoint (indice -> suite du flux principal)
+    rejoint = {
+        "titre": args.titre_rejoint or "REJOINT : retour au flux principal",
+        "type": "indice",
+        "indices": [
+            {
+                "type": "regle",
+                "texte": "REGLE PATTERN 7 (spec-guider-parcours v0.2.13) : rejoint le flux principal - la deviation est terminee, on revient a la suite du flux.",
+            }
+        ],
+        "suivant": args.suite,
+    }
+
+    cases[id_decision] = decision
+    cases[id_deviation] = deviation
+    cases[id_rejoint] = rejoint
+    afficher_avertissement_regles_immuables(decision)
+    afficher_avertissement_regles_immuables(deviation)
+    afficher_avertissement_regles_immuables(rejoint)
+
+    # Recablage si --apres : la case apres pointe vers la decision du bloc
+    if args.apres:
+        if args.apres not in cases:
+            print(_couleur("ERREUR: la case '%s' a inserer apres n'existe pas" % args.apres, "rouge"), file=sys.stderr)
+            sys.exit(1)
+        cases[args.apres]["suivant"] = id_decision
+
+    if args.dry_run:
+        print(
+            _couleur(
+                "[DRY-RUN] Bloc modele compose ajoute : %s (decision) -> %s (deviation) -> %s (rejoint) -> %s (suite)"
+                % (id_decision, id_deviation, id_rejoint, args.suite),
+                "jaune",
+            )
+        )
+        return 0
+
+    sauvegarder_parcours(args.parcours, donnees)
+    print(
+        _couleur(
+            "[OK] Bloc modele compose ajoute : %s (decision) -> %s (deviation) -> %s (rejoint) -> %s (suite)"
+            % (id_decision, id_deviation, id_rejoint, args.suite),
+            "vert",
+        )
+    )
+    valider_auto(args, donnees)
+    return 0
+
+
 def action_editer(args):
     donnees = charger_parcours(args.parcours)
     cases = donnees["cases"]
@@ -340,6 +523,7 @@ def action_editer(args):
             avertissement = formuler_avertissement_fin_passive(args.message)
             if avertissement:
                 print(_couleur("  " + avertissement, "jaune"), file=sys.stderr)
+    afficher_avertissement_regles_immuables(case)
     if args.suivant is not None:
         case["suivant"] = args.suivant
         modifications.append("suivant")
@@ -522,8 +706,20 @@ def construire_parser():
     p_supprimer.add_argument("--vers", type=str, help="Cible de recablage (defaut: le suivant de la case supprimee)")
     p_supprimer.add_argument("--force", action="store_true", help="Forcer malgre les references (recablage auto quand meme)")
 
+    # ajouter-bloc (modele compose Pattern 7)
+    p_bloc = subparsers.add_parser("ajouter-bloc", help="Ajouter un bloc MODELE COMPOSE (decision + deviation + rejoint, Pattern 7)")
+    p_bloc.add_argument("--decision", dest="decision", type=str, help="Id de la case decision (defaut: prochain cN libre)")
+    p_bloc.add_argument("--deviation", dest="deviation", type=str, help="Id de la case deviation (defaut: derive de decision)")
+    p_bloc.add_argument("--rejoint", dest="rejoint", type=str, help="Id de la case rejoint (defaut: derive de decision)")
+    p_bloc.add_argument("--titre", type=str, help="Titre de la decision")
+    p_bloc.add_argument("--question", type=str, help="Question de la decision (defaut: Quelle est la decision ?)")
+    p_bloc.add_argument("--titre-deviation", dest="titre_deviation", type=str, help="Titre de la deviation")
+    p_bloc.add_argument("--titre-rejoint", dest="titre_rejoint", type=str, help="Titre du rejoint")
+    p_bloc.add_argument("--suite", type=str, required=True, help="Case suite du flux principal (cible des branches NON et du rejoint)")
+    p_bloc.add_argument("--apres", type=str, help="Inserer apres cette case (recablage auto du suivant)")
+
     # options globales
-    for sub in (p_liste, p_ajouter, p_editer, p_supprimer):
+    for sub in (p_liste, p_ajouter, p_editer, p_supprimer, p_bloc):
         sub.add_argument("--dry-run", action="store_true", help="Simuler sans rien modifier")
         sub.add_argument("--verbose", action="store_true", help="Afficher les details")
         sub.add_argument("--version", action="version", version="generateurs-case v%s" % VERSION)
@@ -543,6 +739,8 @@ def main():
         return action_editer(args)
     elif args.action == "supprimer":
         return action_supprimer(args)
+    elif args.action == "ajouter-bloc":
+        return action_ajouter_bloc(args)
     else:
         parser.print_help()
         return 0

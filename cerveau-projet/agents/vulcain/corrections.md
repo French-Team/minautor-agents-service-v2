@@ -316,6 +316,20 @@ preferences:
 3. PIEGE PARITE SORTIE : dans le .py, `_couleur("=== COMBO TERMINE ===\n")` avec un \n integre ajoute un double saut de ligne absent du .sh (texte brut) -> les sorties py/sh divergent dans les tests de parite. Ne jamais mettre de \n dans _couleur, toujours dans un print() separe.
 4. PIEGE TEST WINDOWS : dans un test Python, un script .sh doit etre appele avec ["bash", script, ...] sinon WinError 193 (pas une application Win32 valide).
 5. Le modele du moteur (guider-parcours.py) : charger_definition + valider_definition + navigateur generique -- le combos-moteur suit le meme squelette pour les combos.
+
+## [LECON] 2026-08-08 -- generateurs-carte v0.1.0 + generateurs-case v0.2.0 (etape OUTILS de la refonte du modele de cases)
+
+**Tache** : creer l'outil CARTE (agit sur la carte COMPLETE) et etendre generateurs-case pour les GROUPES de cases (modele compose Pattern 7).
+**Lecons** :
+1. CONCEPT : generateurs-case = 1 case (liste/ajouter/editer/supprimer/ajouter-bloc) ; generateurs-carte = carte COMPLETE (creer un squelette patterns 4-5-6-7, analyser les chemins BFS, detecter 5 types d'anomalies, dupliquer un chemin avec recablage). Les deux sont complementaires et vivent cote a cote dans generateurs/.
+2. ACTION ajouter-bloc (Pattern 7) : cree d'un coup decision (question 2 branches OUI->deviation / NON->suite) + deviation (indice -> rejoint) + rejoint (indice -> suite) -- ids par defaut cN/cNa/cNb, --suite obligatoire, --apres pour le recablage du suivant. Le bloc est navigable PARCOURS TERMINE sur les 2 branches.
+3. ACTION creer : le squelette doit reproduire EXACTEMENT les cases des parcours reels (c0 question honnete OUI->c0c/INCERTAIN->c0b/NON->c0b, c0b RELIRE, c0c CONTEXTE avec lire-activite-recente + AGENTS.md, c1 Mission, fin active) -- un squelette qui oublie un pattern serait un faux depart.
+4. ACTION analyser : BFS de case_depart vers les fins avec anti-boucle (jamais repasser par une case du chemin courant) -- 6 chemins pour le squelette (3 branches c0 x 2 branches c1), les impasses marquees [impasse].
+5. ACTION detecter : 5 controles (references cassees, boucle d'attente regle 10 avec 'attente' dans titre/question + branche vers soi, cases inatteignables, cases sans sortie, decision a branche unique Pattern 7) -- la boucle d'attente n'est detectee QUE si le titre/question porte 'attente' (test negatif : branche vers soi sans 'attente' n'est pas une boucle d'attente).
+6. ACTION dupliquer-chemin : BFS debut->fin, copies prefixees (d+id), references INTERNES recablees vers les copies, references EXTERNES restent sur les originales (les copies ne sont pas branchees automatiquement sauf --brancher-debut) -- detecter signalera donc les copies comme inatteignables (comportement attendu et documente).
+7. PIEGE ARGPARSE : ne pas nommer une option --version sur une sous-commande qui recoit aussi le --version global de la boucle commune (conflit) -- renommer (--ver pour la version du parcours cree).
+8. PIEGE HEREDOC .sh : le .sh de generateurs-case etait un heredoc complet (ancien pattern) -- je l'ai CONVERTI EN WRAPPER PUR (exec python3 -- "$@") : parite garantie par construction, plus de divergence de version entre les 2 fichiers.
+9. VALIDATION : py_compile + bash -n, parite py/sh (analyser + liste identiques CRLF normalise), ASCII 0 sur 6 fichiers outils + spec v0.2.14 + index + fiche, nommage generateurs- OK, tests reels sur copies workspace (creer 6 cases, analyser 6 chemins, detecter 0 puis 5 anomalies, dupliquer 3 copies, ajouter-bloc navigation OUI/NON PARCOURS TERMINE).
 6. Test 31/31 REUSSI par Morpheus (regle delegation respectee) : --liste, navigation OUI/NON, interpolation, generateur AUTO, variable manquante code 1, dry-run, parite, nommage, ASCII, syntaxe.
 
 ## [NOTES] Spec-combos-moteur + Pattern 3 2026-08-08 (combo orchestrateur)
@@ -443,6 +457,18 @@ les mots composees deja qualifies (role_principal, role_specifique) restent inch
     non-vide, sortie-contient, fichier-contient) avec vers-vrai/vers-faux repond a la decision
     utilisateur 'les criteres dans les combos, pas dans les cartes'. La validation exige
     condition.type connu + vers-vrai ET vers-faux existants.
+
+## [LECON] 2026-08-08 -- Regles immuables dans les generateurs (garde-fou RVAV + delegation + ASCII)
+
+**Tache** : ajouter les REGLES IMMUABLES dans les generateurs (constat utilisateur : RVAV absent de generateurs-case/carte 0 occurrence -> les nouvelles cartes/cases ne rappelaient plus les regles immuables ; la delegation etait court-cuitee : tests faits par l'agent au lieu de Morpheus, Janus jamais active).
+**Lecons** :
+1. UN GENERATEUR PORTE LES REGLES DU FORMAT QU IL PRODUIT : si les regles immuables (RVAV, delegation, ASCII) ne sont pas dans les generateurs, TOUTE nouvelle carte/case nee de l'outil nait SANS ces regles -- la chaine de delegation se degrade silencieusement a chaque generation. Le generateur est le point d'entree : c est la qu il faut rappeler les regles.
+2. GARDE-FOU NON BLOQUANT (pattern existant Pattern 5) : l'avertissement est JAUNE, l'operation reussit quand meme, l'agent decide -- jamais bloquer la generation, toujours rappeler.
+3. generateurs-case v0.2.1 : fonction formuler_avertissement_regles_immuables(case) appelee a la construction (construire_case) + edition (action_editer) + ajouter-bloc (les 3 cases du bloc) -- detection : (a) case d'ECRITURE (indice outil creer/ecrire/editer/ajouter/inserer/copier-fichier) sans rappel ASCII en position 1 -> RAPPEL ASCII (Pattern 2) + RAPPEL RVAV ; (b) case fin avec message morpheus/janus/active/reactive -> RAPPEL DELEGATION chaine bout-en-bout (spec v0.2.15) ; (c) autre fin -> RAPPEL RVAV avant activation.
+4. generateurs-carte v0.1.1 : le squelette creer est ENRICHI -- case c2b RVAV avant la fin (regle RVAV complete + fichier rvav-workflow) + rappel ASCII dans c2 + fin c9 rappelant la chaine bout-en-bout (J ACTIVE le maillon suivant a MA fin, dernier maillon REACTIVE Cerberus avec bilan consolide). Un squelette qui oublie RVAV/delegation est un faux depart.
+5. PIEGE TEST : generateurs-carte prend l ordre `creer <parcours>` (action avant chemin), generateurs-case `<parcours> <action>` (chemin avant action) -- les 2 CLI sont differentes, ne pas copier l ordre de l un dans l autre.
+6. PIEGE OPTION : `--vers` n existe que pour supprimer (pas pour ajouter) -- un ajout de fin avec --vers echoue silencieusement dans le test.
+7. VALIDATION : py_compile + bash -n, parite py/sh (wrapper pur .sh = parite par construction), ASCII 0 sur 5 fichiers, nommage OK, tests reels sur copies workspace (3 cas de garde-fou : fin delegation -> rappel chaine ; edition fin -> rappel chaine ; case ecriture sans ASCII -> rappel ASCII + RVAV).
 
 ## PHILOSOPHIE -- Principes de comportement
 

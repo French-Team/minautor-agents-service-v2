@@ -145,7 +145,8 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `generateurs-squelette-spec` | Generer le squelette d'une spec conforme au spec-template | [generateurs/generateurs-squelette-spec/](generateurs/generateurs-squelette-spec/) |
 | `generateurs-squelette-todo` | Generer le squelette d'un todo conforme au todo-template | [generateurs/generateurs-squelette-todo/](generateurs/generateurs-squelette-todo/) |
 | `generateurs-commande` | Composer et generer une commande complexe en posant une question par parametre | [generateurs/generateurs-commande/](generateurs/generateurs-commande/) |
-| `generateurs-case` | Ajouter, editer ou supprimer une case d'une carte de decision (parcours JSON) avec recablage auto et validation | [generateurs/generateurs-case/](generateurs/generateurs-case/) |
+| `generateurs-case` | Ajouter, editer, supprimer une case OU ajouter un bloc modele compose (decision + deviation + rejoint, Pattern 7) d'une carte de decision (parcours JSON) avec recablage auto et validation | [generateurs/generateurs-case/](generateurs/generateurs-case/) |
+| `generateurs-carte` | Agir sur une carte COMPLETE (parcours JSON) : creer un squelette (patterns 4-5-6-7), analyser les chemins, detecter les anomalies (boucles/inatteignables/impasses), dupliquer un chemin | [generateurs/generateurs-carte/](generateurs/generateurs-carte/) |
 
 ### Gerer
 
@@ -394,7 +395,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Ecrire | 1 |
 | Editer | 1 |
 | Evaluer | 4 |
-| Generateurs | 5 |
+| Generateurs | 6 |
 | Gerer | 1 |
 | Guider | 1 |
 | Inserer | 1 |
@@ -411,8 +412,8 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Verifier | 4 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **99** |
+| **Total** | **100** |
 
-> **Note sur le decompte** : 84 outils d'action + 11 combos + 3 protections + 1 template = 99 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
+> **Note sur le decompte** : 85 outils d'action + 11 combos + 3 protections + 1 template = 100 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 
 ---

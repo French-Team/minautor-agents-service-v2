@@ -214,23 +214,7 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "Completer le rapport de controle (verdict + lecons) et ajouter les lecons dans corrections.md."
-        },
-        {
-          "type": "outil",
-          "nom": "ajouter-contenu-fichier",
-          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/janus/corrections.md <lecon>"
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> janus"
+          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail AVANT de reactiver le maillon suivant de la chaine."
         }
       ],
       "suivant": "c10"
@@ -238,7 +222,7 @@
     "c10": {
       "titre": "FIN - Reactiver Cerberus",
       "type": "fin",
-      "message": "Reactiver Cerberus avec le rapport de controle et le verdict (VALIDE / A REVOIR / REJETE)."
+      "message": "CHAINE BOUT-EN-BOUT TERMINEE : je REACTIVE CERBERUS avec le BILAN CONSOLIDE de la chaine (rapport de tests de Morpheus + rapport de controle de Janus) et mon verdict (VALIDE / A REVOIR / REJETE)."
     },
     "c11": {
       "titre": "Ecrire la mission de controle AVANT",
@@ -500,7 +484,7 @@
     "c30": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",

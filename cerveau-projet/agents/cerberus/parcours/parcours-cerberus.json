@@ -180,11 +180,7 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "FLUX : Cerberus active -> l'agent lit SA fiche en prenant le relais -> l'agent execute -> l'agent reactive Cerberus -> Cerberus relit SA fiche a nouveau."
-        },
-        {
-          "type": "regle",
-          "texte": "Au retour de l'agent : verifier si la mission figure dans la liste definie (second controle Janus) et si des fichiers ont change (README via Clio)."
+          "texte": "FLUX CHAINE BOUT-EN-BOUT : Cerberus active -> l agent lit SA fiche en prenant le relais -> l agent execute -> a SA fin il ACTIVE le maillon suivant (Vulcain active Morpheus qui active Janus) -> Janus REACTIVE Cerberus avec le bilan consolide. Chaque maillon passe la boucle RVAV sur son travail AVANT d activer le suivant."
         }
       ],
       "suivant": "c20"
