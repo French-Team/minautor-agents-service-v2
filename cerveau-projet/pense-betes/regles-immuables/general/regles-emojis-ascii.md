@@ -1,3 +1,9 @@
+---
+identite:
+  type: regle
+  appartient_a: commun
+  commun: true
+---
 # Regle Immuable -- Bannissement des Emojis et Utilisation de ASCII
 
 > **Cette regle est IMMUABLE.** Elle s'applique a tout fichier du cerveau-projet.

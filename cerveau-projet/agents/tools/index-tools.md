@@ -1,3 +1,9 @@
+---
+identite:
+  type: index
+  appartient_a: commun
+  commun: true
+---
 # Index des Outils Partages
 
 **Version** : v0.2.0
@@ -101,6 +107,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-surcharge-fichier` | Detecter les fichiers qui grossissent trop | [detecter/detecter-surcharge-fichier/](detecter/detecter-surcharge-fichier/) |
 | `detecter-local-hors-fonction` | Detecter les local utilises hors fonction dans les scripts bash | [detecter/detecter-local-hors-fonction/](detecter/detecter-local-hors-fonction/) |
 | `detecter-usage-outils-externes` | Detecter les traces d'outils externes dans les fichiers (CRLF, non-ASCII, BOM) | [detecter/detecter-usage-outils-externes/](detecter/detecter-usage-outils-externes/) |
+| `detecter-impacts` | Detecter les fichiers impliques par la modification d'un fichier du cerveau (schema identite:) | [detecter/detecter-impacts/](detecter/detecter-impacts/) |
 
 ### Ecrire
 
@@ -157,6 +164,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `lire-fichier` | Lire le contenu complet (ou partiel) d'un fichier | [lire/lire-fichier/](lire/lire-fichier/) |
 | `lire-lignes` | Lire des lignes specifiques d'un fichier (par numero ou plage) | [lire/lire-lignes/](lire/lire-lignes/) |
 | `lire-frontmatter` | Extraire le frontmatter YAML en tete d'un fichier markdown | [lire/lire-frontmatter/](lire/lire-frontmatter/) |
+| `lire-activite-recente` | Lire les N dernieres interventions des agents (historique) au format condense date | session | agent | action | [lire/lire-activite-recente/](lire/lire-activite-recente/) |
 
 ### Lister
 
@@ -170,6 +178,12 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `lister-outils` | Lister les outils partages | [lister/lister-outils/](lister/lister-outils/) |
 | `lister-prepares` | Lister les fichiers 'prepare' et verifier les specs | [lister/lister-prepares/](lister/lister-prepares/) |
 | `lister-statuts` | Lister les fichiers par statut | [lister/lister-statuts/](lister/lister-statuts/) |
+
+### Migrer
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `migrer-identite` | Migrer les fichiers vers le schema hybride v0.2.0 (bloc identite type/appartient_a/commun), idempotent avec --dry-run | [migrer/migrer-identite/](migrer/migrer-identite/) |
 
 ### Mettre a jour
 
@@ -367,7 +381,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Creer | 4 |
 | Decomposer | 1 |
 | Deplacer | 1 |
-| Detecter | 2 |
+| Detecter | 5 |
 | Ecrire | 1 |
 | Editer | 1 |
 | Evaluer | 4 |
@@ -375,20 +389,21 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Gerer | 1 |
 | Guider | 1 |
 | Inserer | 1 |
-| Lire | 3 |
+| Lire | 4 |
 | Lister | 8 |
+| Migrer | 1 |
 | Mettre a jour | 1 |
 | Activer | 1 |
 | Nettoyer | 1 |
 | Rechercher | 10 |
 | Remplacer | 1 |
 | Supprimer | 3 |
-| Valider | 9 |
+| Valider | 12 |
 | Verifier | 4 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **82** |
+| **Total** | **90** |
 
-> **Note sur le decompte** : 73 outils d'action + 4 combos sont inclus dans les categories ci-dessus ; `lister-outils.sh` affiche 73 car il exclut `combos/` et `tester/` de son comptage.
+> **Note sur le decompte** : 82 outils d'action + 4 combos + 3 protections + 1 template = 90 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 
 ---

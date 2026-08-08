@@ -3,6 +3,10 @@
 # Moteur generique de combos declaratifs (definition-combo.json) : version bash.
 # Version : 0.1.0-beta
 # Statut : ebauche
+# identite:
+#   type: combo
+#   appartient_a: commun
+#   commun: true
 
 # ============================================================
 # COMBO-ORCHESTRATEUR (spec-combos-moteur v0.1.0) - version bash
@@ -14,7 +18,7 @@
 # REGLE IMMUABLE DE NOMMAGE : dossier 'combos/' -> prefixe 'combos-'
 # ============================================================
 
-VERSION="0.1.0-beta"
+VERSION="0.1.3-beta"
 STATUT="ebauche"
 
 # Verifier le nommage (regle immuable)
@@ -47,7 +51,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.1.0-beta"
+VERSION = "0.1.3-beta"
 STATUT = "ebauche"
 
 class ErreurCombo(Exception):
@@ -355,11 +359,11 @@ def lister_cases(donnees):
     return 0
 
 
-def executer(donnees, reponses_predefinies, dry_run, verbose):
+def executer(donnees, reponses_predefinies, dry_run, verbose, variables_initiales=None):
     """Parcourt la definition case par case jusqu'a une case fin."""
     meta = donnees.get("combo", {})
     cases = donnees.get("cases", {})
-    variables = {}
+    variables = dict(variables_initiales or {})
     cid = meta.get("case_depart")
 
     print("=== Combo %s v%s ===" % (meta.get("nom", "?"), meta.get("version", "?")))
@@ -423,11 +427,28 @@ def parser_reponses_controles(chaine):
     return reponses
 
 
+def parser_variables(chaine):
+    """Parse --var 'cle=valeur' -> dict {cle: valeur} (valeurs avec = conservees)."""
+    variables = {}
+    if not chaine:
+        return variables
+    for morceau in chaine:
+        morceau = morceau.strip()
+        if not morceau:
+            continue
+        if "=" not in morceau:
+            raise ErreurCombo("Variable mal formee (cle=valeur) : %s" % morceau)
+        cle, valeur = morceau.split("=", 1)
+        variables[cle.strip()] = valeur.strip()
+    return variables
+
+
 def main():
     args = sys.argv[1:]
     definition = None
     liste = False
     reponses = None
+    variables_initiales = None
     dry_run = False
     verbose = False
     i = 0
@@ -441,6 +462,14 @@ def main():
                 print("ERREUR: --reponses attend un argument", file=sys.stderr)
                 return 1
             reponses = parser_reponses_controles(args[i])
+        elif a == "--var":
+            i += 1
+            if i >= len(args):
+                print("ERREUR: --var attend un argument", file=sys.stderr)
+                return 1
+            if variables_initiales is None:
+                variables_initiales = []
+            variables_initiales.append(args[i])
         elif a == "--dry-run":
             dry_run = True
         elif a == "--verbose":
@@ -454,6 +483,7 @@ def main():
             print("Options :")
             print("  --liste             Lister les cases sans executer")
             print("  --reponses <liste>  Reponses des controles : case=reponse;case2=reponse2")
+            print("  --var <cle=valeur>  Variable initiale (repetable, ex: --var fichier=...)")
             print("  --dry-run           Afficher les commandes sans les executer")
             print("  --verbose           Afficher les details de chaque case")
             print("  --version           Afficher la version")
@@ -475,7 +505,9 @@ def main():
         valider_definition(donnees)
         if liste:
             return lister_cases(donnees)
-        return executer(donnees, reponses, dry_run, verbose)
+        if variables_initiales is not None:
+            variables_initiales = parser_variables(variables_initiales)
+        return executer(donnees, reponses, dry_run, verbose, variables_initiales)
     except ErreurCombo as exc:
         print("[ERREUR] %s" % exc, file=sys.stderr)
         return 1

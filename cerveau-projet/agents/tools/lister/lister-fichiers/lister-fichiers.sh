@@ -6,6 +6,10 @@
 # Auteur: Vulcain
 
 # Configuration
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 DATE="2026-08-05"
 

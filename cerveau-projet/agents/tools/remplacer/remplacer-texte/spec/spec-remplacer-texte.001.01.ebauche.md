@@ -1,3 +1,9 @@
+---
+identite:
+  type: spec
+  appartient_a: commun
+  commun: true
+---
 # Specification -- remplacer-texte
 
 **Statut :** ebauche

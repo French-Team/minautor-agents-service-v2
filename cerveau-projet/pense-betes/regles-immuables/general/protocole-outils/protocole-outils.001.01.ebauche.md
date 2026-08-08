@@ -1,3 +1,9 @@
+---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
 # Protocole Immuable -- Boite a Outils
 
 > **Ce protocole est immuable.** Les agents doivent CONSTRUIRE leurs outils, pas juste les utiliser.

@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # valider-todo
 
 **Version :** 0.2.0-py

@@ -1,3 +1,9 @@
+---
+identite:
+  type: index
+  appartient_a: commun
+  commun: true
+---
 # Index du Cerveau -- projet analyste-in-console
 
 **Version** : v0.3.0

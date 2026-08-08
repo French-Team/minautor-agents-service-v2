@@ -4,6 +4,10 @@
 # Analyser la structure du projet
 # Version : 0.2.0
 # Statut : ebauche
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 
 # ============================================================
 # OUTIL PYTHON - VERSION DE analyser-structure.sh

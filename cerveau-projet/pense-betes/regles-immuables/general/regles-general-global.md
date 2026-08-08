@@ -1,3 +1,9 @@
+---
+identite:
+  type: regle
+  appartient_a: commun
+  commun: true
+---
 # Regles Generales Globales
 
 ## Principe

@@ -10,7 +10,9 @@
       "titre": "Generer la commande sidentifier",
       "type": "generateur",
       "catalogue": "activer-sidentifier",
-      "entrees": { "id_llm": "llm-1" },
+      "entrees": {
+        "id_llm": "llm-1"
+      },
       "sortie": "cmd1",
       "suivant": "c2"
     },
@@ -26,8 +28,14 @@
       "type": "controle",
       "question": "La session a-t-elle ete identifiee avec succes ?",
       "branches": [
-        { "reponse": "OUI", "vers": "c4" },
-        { "reponse": "NON", "vers": "c8" }
+        {
+          "reponse": "OUI",
+          "vers": "c4"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c8"
+        }
       ]
     },
     "c4": {
@@ -73,5 +81,10 @@
       "type": "fin",
       "message": "Cycle d'activation complet : sidentifier -> activer -> reactiver termine. Cerberus reactive dans la session."
     }
+  },
+  "identite": {
+    "type": "combo",
+    "appartient_a": "commun",
+    "commun": true
   }
 }

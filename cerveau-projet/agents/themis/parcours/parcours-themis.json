@@ -1,172 +1,419 @@
 {
-  "parcours": {
-    "nom": "parcours-themis",
-    "agent": "themis",
-    "version": "0.2.0",
-    "case_depart": "c1",
-    "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
-  },
-  "cases": {
-    "c1": {
-      "titre": "Mission",
-      "type": "question",
-      "question": "Quelle est la demande d'evaluation ?",
-      "branches": [
-        { "reponse": "audit", "vers": "c2" },
-        { "reponse": "doute", "vers": "c14" },
-        { "reponse": "rvav", "vers": "c18" },
-        { "reponse": "autre", "vers": "c21" }
-      ]
-    },
-    "c2": {
-      "titre": "Lire le contexte de la demande",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher). Si l'outil n'existe pas -> je signale le besoin, je ne contourne pas." },
-        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier-contexte>" }
-      ],
-      "suivant": "c3"
-    },
-    "c3": {
-      "titre": "Lancer le combo audit-themis",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (remplace la suite d'outils du chemin audit)." },
-        { "type": "outil", "nom": "combos-moteur", "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/", "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-audit-themis/definition-combo.json" },
-        { "type": "fichier", "chemin": "cerveau-projet/combos/combo-audit-themis/definition-combo.json", "raison": "Definition du combo audit-themis (Pattern 3) : audit-general -> valider-relecture -> combos-valider-cerveau -> valider-tableaux -> detecteurs" }
-      ],
-      "suivant": "c8"
-    },
-    "c8": {
-      "titre": "Verdict : evaluation complete ?",
-      "type": "controle",
-      "question": "Toutes les evaluations sont-elles terminees (structure, conventions, coherence, agents) ?",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau. JAMAIS de commande systeme directe." },
-        { "type": "regle", "texte": "Je ne modifie JAMAIS rien : j'evalue, je croise, je synthetise et je rapporte. Le rapport est ma seule ecriture." }
-      ],
-      "branches": [
-        { "reponse": "OUI", "vers": "c9" },
-        { "reponse": "NON", "vers": "c3" }
-      ]
-    },
-    "c9": {
-      "titre": "Ecrire le rapport dans themis/rapports/",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "Format du rapport : # Rapport d'evaluation -- [DATE] / ## Contexte / ## Resultats (Structure, Conventions, Coherence, Agents avec scores /100) / ## Synthese (score global, etat de sante CONFORME ou NON CONFORME, problemes critiques/majeurs/mineurs) / ## Recommandations." },
-        { "type": "outil", "nom": "creer-fichier", "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/", "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/themis/rapports/rapport-evaluation-<date>.md" }
-      ],
-      "suivant": "c12"
-    },
-    "c12": {
-      "titre": "Lecons et retour",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de reactiver Cerberus, je declare dans mon message de reactivation la liste EXACTE des outils du cerveau utilises (nom de chaque outil)." },
-        { "type": "outil", "nom": "ajouter-contenu-fichier", "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/", "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/themis/corrections.md <lecon>" },
-        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> themis" }
-      ],
-      "suivant": "c13"
-    },
-    "c13": {
-      "titre": "FIN - Reactiver Cerberus",
-      "type": "fin",
-      "message": "Reactiver Cerberus avec le rapport d'evaluation et le bilan des outils utilises (REGLE ABSOLUE 6)."
-    },
-    "c14": {
-      "titre": "Lire le contexte du doute",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier-contexte>" }
-      ],
-      "suivant": "c15"
-    },
-    "c15": {
-      "titre": "Choisir l'evaluateur selon le domaine",
-      "type": "question",
-      "question": "Quel domaine faut-il evaluer pour lever le doute ?",
-      "branches": [
-        { "reponse": "structure", "vers": "c16" },
-        { "reponse": "conventions", "vers": "c16" },
-        { "reponse": "coherence", "vers": "c16" },
-        { "reponse": "agents", "vers": "c16" }
-      ]
-    },
-    "c16": {
-      "titre": "Lancer l'evaluateur adapte",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "Choisir l'outil exact du domaine declare a la case precedente : evaluer-structure (arborescence), evaluer-conventions (nommage, ASCII, format), evaluer-coherence (liens, references croisees), evaluer-agents (respect des protocoles)." },
-        { "type": "outil", "nom": "evaluer-structure", "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-structure/", "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-structure/evaluer-structure.py" },
-        { "type": "outil", "nom": "evaluer-conventions", "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-conventions/", "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-conventions/evaluer-conventions.py" },
-        { "type": "outil", "nom": "evaluer-coherence", "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-coherence/", "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-coherence/evaluer-coherence.py" },
-        { "type": "outil", "nom": "evaluer-agents", "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-agents/", "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-agents/evaluer-agents.py" }
-      ],
-      "suivant": "c17"
-    },
-    "c17": {
-      "titre": "Croiser avec relecture et tableaux",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "outil", "nom": "valider-relecture", "chemin": "cerveau-projet/agents/tools/valider/valider-relecture/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-relecture/valider-relecture.py" },
-        { "type": "outil", "nom": "valider-tableaux", "chemin": "cerveau-projet/agents/tools/valider/valider-tableaux/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py <fichier>" }
-      ],
-      "suivant": "c9"
-    },
-    "c18": {
-      "titre": "RVAV -- phase Analyser",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/regles-immuables/general/rvav-workflow/", "raison": "Workflow RVAV : la boucle Rechercher, Verifier, Analyser, Valider est obligatoire" }
-      ],
-      "suivant": "c19"
-    },
-    "c19": {
-      "titre": "Executer le combo pour la phase Analyser",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "La phase Analyser exige d'executer le combo adapte puis de synthetiser, scorer et classifier par priorite." },
-        { "type": "outil", "nom": "combos-audit-general", "chemin": "cerveau-projet/agents/tools/combos/combos-audit-general/", "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py" }
-      ],
-      "suivant": "c3"
-    },
-    "c21": {
-      "titre": "Mission hors perimetre",
-      "type": "question",
-      "question": "La demande concerne-t-elle un domaine d'un autre agent ?",
-      "branches": [
-        { "reponse": "OUI", "vers": "c22" },
-        { "reponse": "NON", "vers": "c23" }
-      ]
-    },
-    "c22": {
-      "titre": "Activer l'agent habilite",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Je ne modifie rien, je signale et j'oriente." },
-        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>" }
-      ],
-      "suivant": "c24"
-    },
-    "c23": {
-      "titre": "Signaler le besoin",
-      "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
-    },
-    "c24": {
-      "titre": "FIN - Delegation",
-      "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "themis",
+  "commun": false
+ },
+ "parcours": {
+  "nom": "parcours-themis",
+  "agent": "themis",
+  "version": "0.2.0",
+  "case_depart": "c0",
+  "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
+ },
+ "cases": {
+  "c0": {
+   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+   "type": "question",
+   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
     }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "INCERTAIN",
+     "vers": "c0b"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0b"
+    }
+   ]
+  },
+  "c0b": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/themis/corrections.md"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/themis/themis.md"
+    }
+   ],
+   "suivant": "c0c"
+  },
+  "c1": {
+   "titre": "Mission",
+   "type": "question",
+   "question": "Quelle est la demande d'evaluation ?",
+   "branches": [
+    {
+     "reponse": "audit",
+     "vers": "c2"
+    },
+    {
+     "reponse": "doute",
+     "vers": "c14"
+    },
+    {
+     "reponse": "rvav",
+     "vers": "c18"
+    },
+    {
+     "reponse": "autre",
+     "vers": "c21"
+    }
+   ]
+  },
+  "c2": {
+   "titre": "Lire le contexte de la demande",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher). Si l'outil n'existe pas -> je signale le besoin, je ne contourne pas."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier-contexte>"
+    }
+   ],
+   "suivant": "c3"
+  },
+  "c3": {
+   "titre": "Lancer le combo audit-themis",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d'executer combos-moteur (ex: Je lance le combo combo-audit-themis : cerveau-projet/combos/combo-audit-themis/definition-combo.json)."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (remplace la suite d'outils du chemin audit)."
+    },
+    {
+     "type": "outil",
+     "nom": "combos-moteur",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+     "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-audit-themis/definition-combo.json"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/combos/combo-audit-themis/definition-combo.json",
+     "raison": "Definition du combo audit-themis (Pattern 3) : audit-general -> valider-relecture -> combos-valider-cerveau -> valider-tableaux -> detecteurs"
+    }
+   ],
+   "suivant": "c8"
+  },
+  "c8": {
+   "titre": "Verdict : evaluation complete ?",
+   "type": "controle",
+   "question": "Toutes les evaluations sont-elles terminees (structure, conventions, coherence, agents) ?",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau. JAMAIS de commande systeme directe."
+    },
+    {
+     "type": "regle",
+     "texte": "Je ne modifie JAMAIS rien : j'evalue, je croise, je synthetise et je rapporte. Le rapport est ma seule ecriture."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c9"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c3"
+    }
+   ]
+  },
+  "c9": {
+   "titre": "Ecrire le rapport dans themis/rapports/",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "Format du rapport : # Rapport d'evaluation -- [DATE] / ## Contexte / ## Resultats (Structure, Conventions, Coherence, Agents avec scores /100) / ## Synthese (score global, etat de sante CONFORME ou NON CONFORME, problemes critiques/majeurs/mineurs) / ## Recommandations."
+    },
+    {
+     "type": "outil",
+     "nom": "creer-fichier",
+     "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/themis/rapports/rapport-evaluation-<date>.md"
+    }
+   ],
+   "suivant": "c12"
+  },
+  "c12": {
+   "titre": "Lecons et retour",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de reactiver Cerberus, je declare dans mon message de reactivation la liste EXACTE des outils du cerveau utilises (nom de chaque outil)."
+    },
+    {
+     "type": "outil",
+     "nom": "ajouter-contenu-fichier",
+     "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/themis/corrections.md <lecon>"
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> themis"
+    }
+   ],
+   "suivant": "c13"
+  },
+  "c13": {
+   "titre": "FIN - Reactiver Cerberus",
+   "type": "fin",
+   "message": "Reactiver Cerberus avec le rapport d'evaluation et le bilan des outils utilises (REGLE ABSOLUE 6)."
+  },
+  "c14": {
+   "titre": "Lire le contexte du doute",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier-contexte>"
+    }
+   ],
+   "suivant": "c15"
+  },
+  "c15": {
+   "titre": "Choisir l'evaluateur selon le domaine",
+   "type": "question",
+   "question": "Quel domaine faut-il evaluer pour lever le doute ?",
+   "branches": [
+    {
+     "reponse": "structure",
+     "vers": "c16"
+    },
+    {
+     "reponse": "conventions",
+     "vers": "c16"
+    },
+    {
+     "reponse": "coherence",
+     "vers": "c16"
+    },
+    {
+     "reponse": "agents",
+     "vers": "c16"
+    }
+   ]
+  },
+  "c16": {
+   "titre": "Lancer l'evaluateur adapte",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "Choisir l'outil exact du domaine declare a la case precedente : evaluer-structure (arborescence), evaluer-conventions (nommage, ASCII, format), evaluer-coherence (liens, references croisees), evaluer-agents (respect des protocoles)."
+    },
+    {
+     "type": "outil",
+     "nom": "evaluer-structure",
+     "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-structure/",
+     "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-structure/evaluer-structure.py"
+    },
+    {
+     "type": "outil",
+     "nom": "evaluer-conventions",
+     "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-conventions/",
+     "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-conventions/evaluer-conventions.py"
+    },
+    {
+     "type": "outil",
+     "nom": "evaluer-coherence",
+     "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-coherence/",
+     "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-coherence/evaluer-coherence.py"
+    },
+    {
+     "type": "outil",
+     "nom": "evaluer-agents",
+     "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-agents/",
+     "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-agents/evaluer-agents.py"
+    }
+   ],
+   "suivant": "c17"
+  },
+  "c17": {
+   "titre": "Croiser avec relecture et tableaux",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "valider-relecture",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-relecture/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-relecture/valider-relecture.py"
+    },
+    {
+     "type": "outil",
+     "nom": "valider-tableaux",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-tableaux/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py <fichier>"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c18": {
+   "titre": "RVAV -- phase Analyser",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/pense-betes/regles-immuables/general/rvav-workflow/",
+     "raison": "Workflow RVAV : la boucle Rechercher, Verifier, Analyser, Valider est obligatoire"
+    }
+   ],
+   "suivant": "c19"
+  },
+  "c19": {
+   "titre": "Executer le combo pour la phase Analyser",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "La phase Analyser exige d'executer le combo adapte puis de synthetiser, scorer et classifier par priorite."
+    },
+    {
+     "type": "outil",
+     "nom": "combos-audit-general",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-audit-general/",
+     "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py"
+    }
+   ],
+   "suivant": "c3"
+  },
+  "c21": {
+   "titre": "Mission hors perimetre",
+   "type": "question",
+   "question": "La demande concerne-t-elle un domaine d'un autre agent ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c22"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c23"
+    }
+   ]
+  },
+  "c22": {
+   "titre": "Activer l'agent habilite",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Je ne modifie rien, je signale et j'oriente."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+    }
+   ],
+   "suivant": "c24"
+  },
+  "c23": {
+   "titre": "Signaler le besoin",
+   "type": "fin",
+   "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+  },
+  "c24": {
+   "titre": "FIN - Delegation",
+   "type": "fin",
+   "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+  },
+  "c0c": {
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+    },
+    {
+     "type": "fichier",
+     "chemin": "AGENTS.md",
+     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
+    }
+   ],
+   "suivant": "c1"
   }
+ }
 }

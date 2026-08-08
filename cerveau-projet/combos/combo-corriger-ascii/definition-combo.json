@@ -1,0 +1,45 @@
+{
+  "combo": {
+    "nom": "combo-corriger-ascii",
+    "description": "Suite de correction des accents puis validation ASCII (parcours vulcain, anciennes cases c7/c13) : corriger-accents --all --recursive -> valider-conformite-ascii. Remplace la suite d'outils par un seul lancer de combo (Pattern 3). La cible par defaut est le dossier des outils (cerveau-projet/agents) ; un fichier precis peut etre ajoute en indice de la case.",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande corriger-accents",
+      "type": "generateur",
+      "catalogue": "corriger-accents",
+      "entrees": {
+        "recursif": "oui",
+        "cible": "cerveau-projet/agents"
+      },
+      "sortie": "cmd1",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Executer corriger-accents-zones-sensibles",
+      "type": "outil",
+      "commande": "{cmd1}",
+      "sortie": "resultat_correction",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Executer valider-conformite-ascii",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py cerveau-projet/agents",
+      "sortie": "resultat_ascii",
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "FIN - correction ascii terminee",
+      "type": "fin",
+      "message": "Correction des accents et validation ASCII terminees. Verifier le resultat puis continuer dans le parcours vulcain."
+    }
+  },
+  "identite": {
+    "type": "combo",
+    "appartient_a": "commun",
+    "commun": true
+  }
+}

@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # Test de l'outil remplacer-texte
 
 **Version testee** : 0.1.0-beta (sh + py)

@@ -1,0 +1,34 @@
+{
+  "combo": {
+    "nom": "combo-controle-impacts",
+    "description": "Controle des impacts d'une modification : detecter-impacts (fichiers impliques + statut) -> valider-liens (references croisees). Le fichier modifie est passe en variable initiale --var fichier=<chemin>.",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Detecter les impacts du fichier modifie",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py {fichier}",
+      "sortie": "resultat_impacts",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Executer valider-liens",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-liens/valider-liens.py",
+      "sortie": "resultat_liens",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "FIN - controle des impacts termine",
+      "type": "fin",
+      "message": "Controle des impacts termine : fichiers impliques detectes (statut par date) + liens verifies. Si des impacts sont NON MIS A JOUR, les traiter avant de conclure."
+    }
+  },
+  "identite": {
+    "type": "combo",
+    "appartient_a": "commun",
+    "commun": true
+  }
+}

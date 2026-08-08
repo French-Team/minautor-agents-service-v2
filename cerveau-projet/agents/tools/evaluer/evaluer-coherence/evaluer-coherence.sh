@@ -4,6 +4,10 @@
 # Proprietaire : Themis (outil partage)
 # Version : 0.2.1
 
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.1"
 RED='\033[0;31m'
 GREEN='\033[0;32m'

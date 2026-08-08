@@ -1,7 +1,13 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.4.0
+**Version** : 0.5.0
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -12,6 +18,9 @@
 
 Modifier AGENTS.md de maniere fiable et structuree, en supportant plusieurs sessions LLM en parallele.
 Ecrit et met a jour automatiquement le profil de session (`profil-session-<session>`) dans le classeur-variables.
+Maintient la section `## Sessions connues` dans AGENTS.md : la table des sessions existantes
+(session, Nom LLM, agent actif, derniere activite) pour que chaque LLM sache que les autres
+existent et voie leur activite en temps reel.
 
 **Pourquoi cet outil ?**
 - AGENTS.md est un fichier critique -- les erreurs cassent le cycle
@@ -58,9 +67,13 @@ python3 activer-agent-principal.py sidentifier            # compatibilite herita
 session PORTE le numero de l'id : `llm-1` -> `session-llm-1`, `llm-2` -> `session-llm-2`...
 Ainsi le LLM se reconnait directement : je suis llm-1, ma session est session-llm-1.
 
-**SOURCE DOUBLE** : l'outil cherche la liaison dans AGENTS.md (champ `**Id LLM**` dans
-les blocs de session) PUIS dans le classeur (`id: <llm-id>` dans la ligne profil-session).
-Le LLM peut donc se reconnaitre en lisant AGENTS.md (son bloc contient `| **Id LLM** | <son-id> |`).
+**SOURCE DOUBLE** : l'outil cherche la liaison dans AGENTS.md (champ `**Nom LLM**` dans
+les blocs de session, ancien `**Id LLM**` accepte) PUIS dans le classeur (`id: <llm-id>` dans
+la ligne profil-session). Le LLM peut donc se reconnaitre en lisant AGENTS.md (son bloc
+contient `| **Nom LLM** | <son-id> |`).
+
+**CONVENTION IDENTIFICATION (v0.5.0)** : aucun mot seul -- `Nom LLM` (l'id) est en TETE
+avant `Nom Agent` ; `Role Agent` remplace `Role` ; le champ `**Nom**` n'existe plus.
 
 Logique complete de `sidentifier <llm-id>` :
 - id deja lie (AGENTS.md ou classeur) -> retrouve SA session (redemarrage du meme LLM)
@@ -69,7 +82,7 @@ Logique complete de `sidentifier <llm-id>` :
 - id inconnu non numerique (ex: llm-atlas) -> prochaine session libre + liaison
 
 La liaison id <-> session est persistee dans le classeur (ligne `profil-session-<id>`
-avec `id: <llm-id>` dans la valeur) ET dans le bloc AGENTS.md (champ `**Id LLM**`).
+avec `id: <llm-id>` dans la valeur) ET dans le bloc AGENTS.md (champ `**Nom LLM**`).
 Deux LLM differents ne partagent jamais une session.
 
 **Fait :**
@@ -125,9 +138,9 @@ Affiche chaque session et son agent principal actuel.
 
 | Champ | Valeur |
 |---|---|
-| **Nom** | [agent] |
-| **Id LLM** | [id du LLM, ex: llm-1 -- champ de reconnaissance v0.4.0] |
-| **Role** | [role de l'agent] |
+| **Nom LLM** | [id du LLM, ex: llm-1 -- champ de reconnaissance v0.5.0, EN TETE] |
+| **Nom Agent** | [agent] |
+| **Role Agent** | [role de l'agent] |
 | **Derniere mise a jour** | [date] |
 | **Fiche** | [lien] |
 | **Corrections** | [lien] |
@@ -146,6 +159,25 @@ Chaque session LLM possede son propre bloc et son propre agent principal. L'outi
 ### Migration automatique
 
 Si AGENTS.md contient encore l'ancienne section "## Agent Principal Actuel" (mono-session), le premier appel convertit automatiquement vers "## Sessions LLM" avec le bloc "### Session : session-llm-1" en conservant les valeurs actuelles.
+
+### Section "Sessions connues" (v0.4.1)
+
+Apres CHAQUE action (sidentifier, activer, reactiver), l'outil reconstruit la section
+`## Sessions connues` dans AGENTS.md a partir du classeur-variables (lignes
+`profil-session-*`). La table liste TOUTES les sessions existantes :
+
+```markdown
+## Sessions connues
+
+| Session | Nom LLM | Agent actif | Derniere activite |
+|---|---|---|---|
+| session-llm-1 | llm-1 | Cerberus | 2026-08-08 13:15 |
+| session-llm-3 | - | Cerberus | 2026-08-07 16:12 |
+```
+
+**Pourquoi ?** chaque LLM qui demarre lit AGENTS.md : il voit immediatement que d'autres
+sessions existent (les autres LLM) et leur derniere activite -- contexte temps reel pour
+eviter les collisions et comprendre qui intervient en parallele.
 
 ### Historique (AGENTS-historique.md)
 
@@ -170,7 +202,7 @@ La colonne session identifie quel LLM a effectue l'action.
 |---|---|
 | Multi-session | Un bloc dedie par LLM (session-llm-N), agent principal isole par session |
 | sidentifier | Attribution au demarrage : id llm-N -> session-llm-N (alignement v0.4.0), sinon prochaine libre |
-| Champ Id LLM | Chaque bloc AGENTS.md porte `| **Id LLM** | <id> |` -- le LLM se reconnait en lisant AGENTS.md |
+| Champ Nom LLM | Chaque bloc AGENTS.md porte `| **Nom LLM** | <id> |` EN TETE (v0.5.0) -- le LLM se reconnait en lisant AGENTS.md |
 | Conflit alignement | Si session-llm-N est deja liee a un autre id : message clair + prochaine libre |
 | Session obligatoire | Aucune activation sans session -- les sessions sont isolees |
 | Migration | Convertit automatiquement l'ancienne structure mono-session |
@@ -185,6 +217,7 @@ La colonne session identifie quel LLM a effectue l'action.
 | Limite 150 | Tronque automatiquement a 150 entrees |
 | Verification ASCII | Refuse toute raison contenant un caractere non-ASCII (lecon permanente 2026-08-07) |
 | Profil session classeur | Ecrit/met a jour `profil-session-<id>` (regle de derivation : partie apres `session-`) dans le classeur-variables a chaque sidentifier/activer/reactiver |
+| Sessions connues | Reconstruit la section `## Sessions connues` (table session / id LLM / agent / derniere activite) a chaque action -- contexte temps reel des autres LLM |
 
 ---
 
@@ -235,6 +268,8 @@ La colonne session identifie quel LLM a effectue l'action.
 | 0.3.4 | 2026-08-07 | MODE ID : sidentifier <llm-id> compare l'id aux sessions enregistrees (classeur) - id connu = SA session, id inconnu = creation prochaine libre + liaison id dans la ligne profil-session. Chaque LLM a SON id, jamais de partage de session |
 | 0.3.5 | 2026-08-07 | CORRECTION BUG MAJEUR (sessions fantomes) : la liaison id<->session posee par sidentifier etait ECRASEE par activer/reactiver (mettre_a_jour_profil_session sans llm_id reecrivait la ligne sans le champ id). Correction py + sh : quand llm_id n'est pas fourni, l'id deja lie dans la ligne existante est lu et PRESERVE |
 | 0.4.0 | 2026-08-07 | REGLE ALIGNEMENT : id llm-N -> session-llm-N (le numero de session porte le numero de l'id). Champ `**Id LLM**` ajoute dans chaque bloc AGENTS.md (reconnaissance directe par lecture). SOURCE DOUBLE : liaison cherchee dans AGENTS.md (champ Id LLM) puis classeur. CONFLIT gere : si session-llm-N deja liee a un autre id, message + prochaine libre. sidentifier absorbe une session-llm-N orpheline (sans id). demarrer.md revu : demarrage par 'bonjour llm-1, lire demarrer.md' -> verifier AGENTS.md pour SON bloc |
+| 0.4.1 | 2026-08-08 | SESSIONS CONNUES (contexte temps reel) : nouvelle section `## Sessions connues` dans AGENTS.md reconstruite a chaque sidentifier/activer/reactiver depuis le classeur (profil-session-*) -- table | Session | Nom LLM | Agent actif | Derniere activite |. Chaque LLM qui demarre voit immediatement que les autres sessions existent et leur derniere activite (evite les collisions multi-LLM). py + sh + doc |
+| 0.5.0 | 2026-08-08 | CONVENTION IDENTIFICATION : aucun mot seul. Blocs de session : `**Nom LLM**` (l'id) EN TETE, `**Nom Agent**` au lieu de `**Nom**`, `**Role Agent**` au lieu de `**Role**`. Migration automatique des anciens blocs (Nom -> Nom Agent, Role -> Role Agent, Id LLM -> Nom LLM) lors de chaque edition + reconstruction complete du bloc en ordre canonique. Table Sessions connues : colonne `Nom LLM`. py + sh + tests + doc |
 | Renommage | 2026-08-07 | Deplacement dans le dossier activer/ + renommage de mettre-a-jour-agents-md vers activer-agent-principal (l outil sert a activer/reactiver l agent principal dans AGENTS.md). ~120 references mises a jour dans 31 fichiers + spec + boucle retro-action |
 
 ---

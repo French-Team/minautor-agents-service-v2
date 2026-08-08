@@ -1,3 +1,9 @@
+---
+identite:
+  type: index
+  appartient_a: commun
+  commun: true
+---
 # Index -- Regles Generales
 ## Contenu
 
@@ -38,6 +44,7 @@
 | [protocole-gestion-defaillances/](protocole-gestion-defaillances/) | Gestion automatique des defaillances | ebauche |
 | [protocole-controle-statuts/](protocole-controle-statuts/) | Controle des statuts (Janus) | ebauche |
 | [protocole-carte-decision/](protocole-carte-decision/) | Carte de decision pour les agents | ebauche |
+| [protocole-creation-combos/](protocole-creation-combos/) | Creation et mise en place des combos (quand/ou/comment, Pattern 3) | ebauche |
 | [protocole-purification/](protocole-purification/) | Purification des fichiers apres validation | ebauche |
 
 ## Navigation

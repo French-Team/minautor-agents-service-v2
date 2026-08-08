@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 lister-prepares.py
 Lister les fichiers 'prepare' et verifier l'existence des specs associees.

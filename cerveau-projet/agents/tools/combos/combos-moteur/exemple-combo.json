@@ -10,7 +10,9 @@
       "titre": "Generer la commande sidentifier",
       "type": "generateur",
       "catalogue": "activer-sidentifier",
-      "entrees": { "id_llm": "llm-1" },
+      "entrees": {
+        "id_llm": "llm-1"
+      },
       "sortie": "cmd1",
       "suivant": "c2"
     },
@@ -26,8 +28,14 @@
       "type": "controle",
       "question": "La commande generee commence-t-elle par python3 ?",
       "branches": [
-        { "reponse": "OUI", "vers": "c4" },
-        { "reponse": "NON", "vers": "c5" }
+        {
+          "reponse": "OUI",
+          "vers": "c4"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c5"
+        }
       ]
     },
     "c4": {
@@ -40,5 +48,10 @@
       "type": "fin",
       "message": "Exemple termine : la commande generee est inattendue."
     }
+  },
+  "identite": {
+    "type": "combo",
+    "appartient_a": "commun",
+    "commun": true
   }
 }

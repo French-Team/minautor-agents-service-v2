@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # rechercher-fichiers-vides
 
 **Version :** 0.2.0

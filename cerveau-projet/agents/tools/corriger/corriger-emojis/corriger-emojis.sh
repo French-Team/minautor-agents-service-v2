@@ -5,6 +5,10 @@
 # Version : 0.2.0
 # Optimisation : une passe unique python (le dictionnaire est lu une fois,
 #                les remplacements appliques en un seul passage par fichier)
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 
 # Couleurs

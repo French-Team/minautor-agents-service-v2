@@ -5,6 +5,10 @@
 # case par case, avec passage de variables et interpolation {var}.
 # Version : 0.1.0-beta
 # Statut : ebauche
+# identite:
+#   type: combo
+#   appartient_a: commun
+#   commun: true
 
 # ============================================================
 # COMBO-ORCHESTRATEUR (spec-combos-moteur v0.1.0)
@@ -40,7 +44,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.1.0-beta"
+VERSION = "0.1.3-beta"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n'est pas un terminal)
@@ -404,11 +408,11 @@ def lister_cases(donnees):
     return 0
 
 
-def executer(donnees, reponses_predefinies, dry_run, verbose):
+def executer(donnees, reponses_predefinies, dry_run, verbose, variables_initiales=None):
     """Parcourt la definition case par case jusqu'a une case fin."""
     meta = donnees.get("combo", {})
     cases = donnees.get("cases", {})
-    variables = {}
+    variables = dict(variables_initiales or {})
     cid = meta.get("case_depart")
 
     print("=== Combo %s v%s ===" % (_couleur(meta.get("nom", "?"), "bleu"), meta.get("version", "?")))
@@ -469,6 +473,7 @@ def construire_parser():
     parser.add_argument("definition", type=str, help="Chemin du fichier definition-combo.json")
     parser.add_argument("--liste", action="store_true", help="Lister les cases sans executer")
     parser.add_argument("--reponses", type=str, default=None, help="Reponses des controles : case=reponse;case2=reponse2")
+    parser.add_argument("--var", type=str, default=None, action="append", help="Variable initiale : cle=valeur (repetable)")
     parser.add_argument("--dry-run", action="store_true", help="Afficher les commandes sans les executer")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details de chaque case")
     parser.add_argument("--version", action="version", version="combos-moteur v%s" % VERSION)
@@ -491,6 +496,22 @@ def parser_reponses_controles(chaine):
     return reponses
 
 
+def parser_variables(chaine):
+    """Parse --var 'cle=valeur' -> dict {cle: valeur} (valeurs avec = conservees)."""
+    variables = {}
+    if not chaine:
+        return variables
+    for morceau in chaine:
+        morceau = morceau.strip()
+        if not morceau:
+            continue
+        if "=" not in morceau:
+            raise ErreurCombo("Variable mal formee (cle=valeur) : %s" % morceau)
+        cle, valeur = morceau.split("=", 1)
+        variables[cle.strip()] = valeur.strip()
+    return variables
+
+
 def main():
     verifier_nommage(sys.argv[0])
     parser = construire_parser()
@@ -507,7 +528,11 @@ def main():
         if args.reponses is not None:
             reponses = parser_reponses_controles(args.reponses)
 
-        return executer(donnees, reponses, args.dry_run, args.verbose)
+        variables_initiales = None
+        if args.var is not None:
+            variables_initiales = parser_variables(args.var)
+
+        return executer(donnees, reponses, args.dry_run, args.verbose, variables_initiales)
     except ErreurCombo as exc:
         print(_couleur("[ERREUR] %s" % exc, "rouge"), file=sys.stderr)
         return 1

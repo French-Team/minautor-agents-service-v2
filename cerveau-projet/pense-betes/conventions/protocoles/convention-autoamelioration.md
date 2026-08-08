@@ -1,3 +1,9 @@
+---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
 # Convention -- Auto-Amelioration
 ---
 

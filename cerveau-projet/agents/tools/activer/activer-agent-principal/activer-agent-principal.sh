@@ -2,7 +2,11 @@
 # activer-agent-principal.sh
 # Outil pour modifier AGENTS.md de maniere fiable, multi-session LLM
 # Proprietaire : Vulcain
-VERSION="0.4.0"
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
+VERSION="0.5.0"
 
 # Configuration
 AGENTS_FILE="${AGENTS_FILE:-AGENTS.md}"
@@ -137,12 +141,12 @@ trouver_prochaine_session() {
 }
 
 # Trouver la session liee a un llm-id (SOURCE DOUBLE v0.4.0) :
-# 1) AGENTS.md -- bloc avec le champ '**Id LLM** | <id>'
+# 1) AGENTS.md -- bloc avec le champ '**Nom LLM** | <id>' (ancien nom **Id LLM** accepte)
 # 2) classeur -- ligne profil-session avec 'id: <llm-id>'
 # Permet au LLM de se reconnaitre directement en lisant AGENTS.md.
 trouver_session_par_id() {
     local llm_id=$1
-    # 1. AGENTS.md : champ Id LLM dans les blocs de session
+    # 1. AGENTS.md : champ Nom LLM dans les blocs de session
     if [ -f "$AGENTS_FILE" ] && grep -q "^### Session : " "$AGENTS_FILE"; then
         local session_agents
         session_agents=$(awk -v cible="$llm_id" '
@@ -152,9 +156,9 @@ trouver_session_par_id() {
                 dans = 1
                 next
             }
-            dans == 1 && /^\| \*\*Id LLM\*\* \| / {
+            dans == 1 && /^\| \*\*(Id LLM|Nom LLM)\*\* \| / {
                 id = $0
-                sub(/^\| \*\*Id LLM\*\* \| /, "", id)
+                sub(/^\| \*\*(Id LLM|Nom LLM)\*\* \| /, "", id)
                 sub(/ \|$/, "", id)
                 if (id == cible) { print session; exit }
                 dans = 0
@@ -172,7 +176,7 @@ trouver_session_par_id() {
     grep "id: $llm_id" "$CLASSEUR_STOCKAGE" 2>/dev/null | grep -oE "session: session-llm-[0-9]+" | head -1 | sed 's/session: //'
 }
 
-# Retourner l'id LLM lie a une session (AGENTS.md champ Id LLM, puis classeur),
+# Retourner l'id LLM lie a une session (AGENTS.md champ Nom LLM, puis classeur),
 # ou vide si la session n'est liee a aucun id. Detecte un CONFLIT d'alignement.
 id_lie_a_session() {
     local session=$1
@@ -186,9 +190,9 @@ id_lie_a_session() {
                 if (s == cible) { dans = 1 } else { dans = 0 }
                 next
             }
-            dans == 1 && /^\| \*\*Id LLM\*\* \| / {
+            dans == 1 && /^\| \*\*(Id LLM|Nom LLM)\*\* \| / {
                 ligne = $0
-                sub(/^\| \*\*Id LLM\*\* \| /, "", ligne)
+                sub(/^\| \*\*(Id LLM|Nom LLM)\*\* \| /, "", ligne)
                 sub(/ \|$/, "", ligne)
                 print ligne
                 exit
@@ -228,13 +232,13 @@ creer_bloc_session() {
     local corrections=$(get_agent_corrections "Cerberus")
     local champ_id=""
     if [ -n "$llm_id" ]; then
-        champ_id="| **Id LLM** | $llm_id |"
+        champ_id="| **Nom LLM** | $llm_id |"
     fi
     local bloc
     if [ -n "$llm_id" ]; then
-        bloc=$(printf '\n### Session : %s\n\n| Champ | Valeur |\n|---|---|\n| **Nom** | Cerberus |\n| **Id LLM** | %s |\n| **Role** | %s |\n| **Derniere mise a jour** | %s |\n| **Fiche** | [%s](%s) |\n| **Corrections** | [%s](%s) |\n| **Active par** | Identification |\n| **Raison** | Identification LLM - demarrage de session |\n' "$session" "$llm_id" "$role" "$date" "$fiche" "$fiche" "$corrections" "$corrections")
+        bloc=$(printf '\n### Session : %s\n\n| Champ | Valeur |\n|---|---|\n| **Nom LLM** | %s |\n| **Nom Agent** | Cerberus |\n| **Role Agent** | %s |\n| **Derniere mise a jour** | %s |\n| **Fiche** | [%s](%s) |\n| **Corrections** | [%s](%s) |\n| **Active par** | Identification |\n| **Raison** | Identification LLM - demarrage de session |\n' "$session" "$llm_id" "$role" "$date" "$fiche" "$fiche" "$corrections" "$corrections")
     else
-        bloc=$(printf '\n### Session : %s\n\n| Champ | Valeur |\n|---|---|\n| **Nom** | Cerberus |\n| **Role** | %s |\n| **Derniere mise a jour** | %s |\n| **Fiche** | [%s](%s) |\n| **Corrections** | [%s](%s) |\n| **Active par** | Identification |\n| **Raison** | Identification LLM - demarrage de session |\n' "$session" "$role" "$date" "$fiche" "$fiche" "$corrections" "$corrections")
+        bloc=$(printf '\n### Session : %s\n\n| Champ | Valeur |\n|---|---|\n| **Nom Agent** | Cerberus |\n| **Role Agent** | %s |\n| **Derniere mise a jour** | %s |\n| **Fiche** | [%s](%s) |\n| **Corrections** | [%s](%s) |\n| **Active par** | Identification |\n| **Raison** | Identification LLM - demarrage de session |\n' "$session" "$role" "$date" "$fiche" "$fiche" "$corrections" "$corrections")
     fi
     awk -v bloc="$bloc" '
         /^## Sessions LLM$/ {
@@ -248,31 +252,16 @@ creer_bloc_session() {
     ' "$AGENTS_FILE" > "$AGENTS_FILE.tmp" && mv "$AGENTS_FILE.tmp" "$AGENTS_FILE"
 }
 
-# Ajouter ou mettre a jour le champ '**Id LLM** | <id>' dans le bloc de session.
-# Si la ligne existe -> remplacee ; sinon inseree juste apres le champ **Nom**.
-poser_id_llm_bloc() {
-    local session=$1
-    local llm_id=$2
-    awk -v session="$session" -v llm_id="$llm_id" '
-        BEGIN { dans = 0; insere = 0 }
-        {
-            if (dans == 1 && ($0 ~ /^### Session : / || $0 ~ /^## /)) { dans = 0 }
-            if ($0 == ("### Session : " session)) { dans = 1 }
-            if (dans == 1) {
-                if ($0 ~ /^\| \*\*Id LLM\*\* \| /) { print "| **Id LLM** | " llm_id " |"; insere = 1; next }
-                if ($0 ~ /^\| \*\*Nom\*\* \| / && insere == 0) {
-                    print $0
-                    print "| **Id LLM** | " llm_id " |"
-                    insere = 1
-                    next
-                }
-            }
-            print
-        }
-    ' "$AGENTS_FILE" > "$AGENTS_FILE.tmp" && mv "$AGENTS_FILE.tmp" "$AGENTS_FILE"
+# Ajouter ou mettre a jour le champ '**Nom LLM** | <id>' EN TETE du bloc de session.
+# L'ancien champ **Id LLM** est migre vers **Nom LLM**. Les autres champs sont
+# preserves (parametres vides) ou remplaces (parametres renseignes).
+poser_nom_llm_bloc() {
+    editer_bloc_session "$1" "" "" "" "" "" "" "" "$2"
 }
 
-# Editer les champs du bloc de session cible uniquement (awk)
+# Editer les champs du bloc de session cible uniquement (awk), avec migration
+# v0.5.0 : anciens noms (Nom, Role, Id LLM) -> nouveaux (Nom Agent, Role Agent,
+# Nom LLM) et ordre canonique (Nom LLM en tete, puis Nom Agent, Role Agent...).
 editer_bloc_session() {
     local session=$1
     local nom=$2
@@ -282,23 +271,58 @@ editer_bloc_session() {
     local corrections=$6
     local active_par=$7
     local raison=$8
+    local nom_llm=$9
     awk -v session="$session" -v nom="$nom" -v role="$role" -v date="$date" \
-        -v fiche="$fiche" -v corrections="$corrections" -v active_par="$active_par" -v raison="$raison" '
-        BEGIN { dans_bloc = 0 }
-        {
-            if (dans_bloc == 1 && ($0 ~ /^### Session : / || $0 ~ /^## /)) { dans_bloc = 0 }
-            if ($0 == ("### Session : " session)) { dans_bloc = 1 }
-            if (dans_bloc == 1) {
-                if ($0 ~ /^\| \*\*Nom\*\* \| /) { print "| **Nom** | " nom " |"; next }
-                if ($0 ~ /^\| \*\*Role\*\* \| /) { print "| **Role** | " role " |"; next }
-                if ($0 ~ /^\| \*\*Derniere mise a jour\*\* \| /) { print "| **Derniere mise a jour** | " date " |"; next }
-                if ($0 ~ /^\| \*\*Fiche\*\* \| /) { print "| **Fiche** | [" fiche "](" fiche ") |"; next }
-                if ($0 ~ /^\| \*\*Corrections\*\* \| /) { print "| **Corrections** | [" corrections "](" corrections ") |"; next }
-                if ($0 ~ /^\| \*\*Active par\*\* \| /) { print "| **Active par** | " active_par " |"; next }
-                if ($0 ~ /^\| \*\*Raison\*\* \| /) { print "| **Raison** | " raison " |"; next }
+        -v fiche="$fiche" -v corrections="$corrections" -v active_par="$active_par" -v raison="$raison" -v nom_llm="$nom_llm" '
+        function emettre_bloc(   i, ligne, v_nom, v_role, v_date, v_fiche, v_corr, v_actif, v_raison, v_llm, autres, na, a) {
+            v_nom = ""; v_role = ""; v_date = ""; v_fiche = ""; v_corr = ""
+            v_actif = ""; v_raison = ""; v_llm = ""; na = 0
+            for (i in bloc) {
+                ligne = bloc[i]
+                if (ligne ~ /^\| \*\*(Id LLM|Nom LLM)\*\* \| /) { sub(/^\| \*\*(Id LLM|Nom LLM)\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); v_llm = ligne }
+                else if (ligne ~ /^\| \*\*(Nom Agent|Nom)\*\* \| /) { sub(/^\| \*\*(Nom Agent|Nom)\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); v_nom = ligne }
+                else if (ligne ~ /^\| \*\*(Role Agent|Role)\*\* \| /) { sub(/^\| \*\*(Role Agent|Role)\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); v_role = ligne }
+                else if (ligne ~ /^\| \*\*Derniere mise a jour\*\* \| /) { sub(/^\| \*\*Derniere mise a jour\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); v_date = ligne }
+                else if (ligne ~ /^\| \*\*Fiche\*\* \| /) { sub(/^\| \*\*Fiche\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); sub(/^\[/, "", ligne); sub(/\]\(.*$/, "", ligne); v_fiche = ligne }
+                else if (ligne ~ /^\| \*\*Corrections\*\* \| /) { sub(/^\| \*\*Corrections\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); sub(/^\[/, "", ligne); sub(/\]\(.*$/, "", ligne); v_corr = ligne }
+                else if (ligne ~ /^\| \*\*Active par\*\* \| /) { sub(/^\| \*\*Active par\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); v_actif = ligne }
+                else if (ligne ~ /^\| \*\*Raison\*\* \| /) { sub(/^\| \*\*Raison\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); v_raison = ligne }
+                else if (ligne ~ /^\| \*\*/) { autres[na++] = ligne }
             }
+            if (nom != "") v_nom = nom
+            if (role != "") v_role = role
+            if (date != "") v_date = date
+            if (fiche != "") v_fiche = fiche
+            if (corrections != "") v_corr = corrections
+            if (active_par != "") v_actif = active_par
+            if (raison != "") v_raison = raison
+            if (nom_llm != "") v_llm = nom_llm
+            print ""
+            print "| Champ | Valeur |"
+            print "|---|---|"
+            if (v_llm != "") print "| **Nom LLM** | " v_llm " |"
+            if (v_nom != "") print "| **Nom Agent** | " v_nom " |"
+            if (v_role != "") print "| **Role Agent** | " v_role " |"
+            if (v_date != "") print "| **Derniere mise a jour** | " v_date " |"
+            if (v_fiche != "") print "| **Fiche** | [" v_fiche "](" v_fiche ") |"
+            if (v_corr != "") print "| **Corrections** | [" v_corr "](" v_corr ") |"
+            if (v_actif != "") print "| **Active par** | " v_actif " |"
+            if (v_raison != "") print "| **Raison** | " v_raison " |"
+            for (a = 0; a < na; a++) print autres[a]
+        }
+        BEGIN { dans_bloc = 0; nb = 0 }
+        {
+            if (dans_bloc == 1 && ($0 ~ /^### Session : / || $0 ~ /^## /)) {
+                emettre_bloc()
+                dans_bloc = 0
+                delete bloc
+                nb = 0
+            }
+            if ($0 == ("### Session : " session)) { dans_bloc = 1; nb = 0; print; next }
+            if (dans_bloc == 1) { bloc[nb++] = $0; next }
             print
         }
+        END { if (dans_bloc == 1) emettre_bloc() }
     ' "$AGENTS_FILE" > "$AGENTS_FILE.tmp" && mv "$AGENTS_FILE.tmp" "$AGENTS_FILE"
 }
 
@@ -369,6 +393,70 @@ print('Profil session mis a jour dans ' + fichier + ' : ' + session)
 "
 }
 
+# Reconstruire la section '## Sessions connues' d'AGENTS.md a partir du classeur
+# (lignes profil-session-*) : table | Session | Nom LLM | Agent actif | Derniere activite |.
+# Relit AGENTS_FILE, remplace/insere la section, reecrit.
+mettre_a_jour_sessions_connues() {
+    CLASSEUR_ENV="$CLASSEUR_STOCKAGE" AGENTS_ENV="$AGENTS_FILE" python - << 'PYEOF'
+import io, os, re, sys
+classeur = os.environ.get('CLASSEUR_ENV', '')
+agents_file = os.environ.get('AGENTS_ENV', '')
+if not os.path.isfile(classeur) or not os.path.isfile(agents_file):
+    sys.exit(0)
+lignes = []
+with io.open(classeur, encoding='utf-8', errors='replace') as fh:
+    for ligne in fh:
+        if 'profil-session-' not in ligne:
+            continue
+        m = re.search(r'session: (session-llm-\d+)', ligne)
+        if not m:
+            continue
+        session = m.group(1)
+        mid = re.search(r'id: (\S+)', ligne)
+        llm_id = mid.group(1) if mid else '-'
+        mage = re.search(r'agent: (\S+)', ligne)
+        agent = mage.group(1) if mage else '?'
+        mdate = re.search(r'date: (\S+ \S+)', ligne)
+        date = mdate.group(1) if mdate else '-'
+        lignes.append((session, llm_id, agent, date))
+if not lignes:
+    sys.exit(0)
+
+def cle_session(entree):
+    m = re.search(r'session-llm-(\d+)', entree[0])
+    return int(m.group(1)) if m else 0
+
+lignes.sort(key=cle_session)
+table = ('## Sessions connues' + chr(10) + chr(10) +
+         '| Session | Nom LLM | Agent actif | Derniere activite |' + chr(10) +
+         '|---|---|---|---|' + chr(10))
+for session, llm_id, agent, date in lignes:
+    table += '| ' + session + ' | ' + llm_id + ' | ' + agent + ' | ' + date + ' |' + chr(10)
+
+with io.open(agents_file, encoding='utf-8', errors='replace') as fh:
+    contenu = fh.read()
+ls = contenu.split(chr(10))
+sortie = []
+i = 0
+while i < len(ls):
+    if ls[i].strip() == '## Sessions connues':
+        i += 1
+        while i < len(ls) and not ls[i].startswith('## '):
+            i += 1
+        continue
+    sortie.append(ls[i])
+    i += 1
+contenu = chr(10).join(sortie)
+if '## Configuration Active' in contenu:
+    contenu = contenu.replace('## Configuration Active', table + '## Configuration Active', 1)
+else:
+    contenu = contenu.rstrip(chr(10)) + chr(10) + chr(10) + table
+with io.open(agents_file, 'w', encoding='utf-8', newline=chr(10)) as fh:
+    fh.write(contenu)
+PYEOF
+    return $?
+}
+
 # Ajouter une entree dans l'historique (4 colonnes, en haut, max 150)
 ajouter_historique() {
     local timestamp=$1
@@ -425,7 +513,7 @@ sidentifier() {
     migrer_si_necessaire
 
     if [ -n "$llm_id" ]; then
-        # MODE ID : chercher si cet id est deja lie (AGENTS.md champ Id LLM + classeur)
+        # MODE ID : chercher si cet id est deja lie (AGENTS.md champ Nom LLM + classeur)
         session=$(trouver_session_par_id "$llm_id")
         if [ -n "$session" ]; then
             echo "Session retrouvee pour id $llm_id : $session (agent principal : Cerberus)"
@@ -469,13 +557,14 @@ sidentifier() {
     if ! grep -q "^### Session : $session$" "$AGENTS_FILE"; then
         creer_bloc_session "$session" "$llm_id"
     elif [ -n "$llm_id" ]; then
-        # Bloc existant : poser/mettre a jour le champ Id LLM (reconnaissance par lecture)
-        poser_id_llm_bloc "$session" "$llm_id"
+        # Bloc existant : poser/mettre a jour le champ Nom LLM (reconnaissance par lecture)
+        poser_nom_llm_bloc "$session" "$llm_id"
     fi
 
     local timestamp=$(get_timestamp)
     ajouter_historique "$timestamp" "$session" "Cerberus" "Identification LLM - demarrage de session"
     mettre_a_jour_profil_session "$session" "Cerberus" "$llm_id"
+    mettre_a_jour_sessions_connues
 }
 
 activer_agent() {
@@ -511,6 +600,7 @@ activer_agent() {
 
     ajouter_historique "$timestamp" "$session" "$agent" "$raison"
     mettre_a_jour_profil_session "$session" "$agent"
+    mettre_a_jour_sessions_connues
     echo "Session $session : agent $agent active avec succes"
 }
 
@@ -550,6 +640,7 @@ reactiver_cerberus() {
 
     ajouter_historique "$timestamp" "$session" "Cerberus" "$raison"
     mettre_a_jour_profil_session "$session" "Cerberus"
+    mettre_a_jour_sessions_connues
     echo "Session $session : Cerberus reactive avec succes"
 }
 
@@ -571,9 +662,9 @@ lister_sessions() {
             nom = "?"
             next
         }
-        /^\| \*\*Nom\*\* \| / {
+        /^\| \*\*(Nom Agent|Nom)\*\* \| / {
             nom = $0
-            sub(/^\| \*\*Nom\*\* \| /, "", nom)
+            sub(/^\| \*\*(Nom Agent|Nom)\*\* \| /, "", nom)
             sub(/ \|$/, "", nom)
         }
         END { if (session != "") { print session " : " nom } }

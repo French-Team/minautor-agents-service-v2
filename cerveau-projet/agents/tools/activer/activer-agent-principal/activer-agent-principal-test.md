@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # Test de l'outil activer-agent-principal
 
 **Version testee** : 0.3.4

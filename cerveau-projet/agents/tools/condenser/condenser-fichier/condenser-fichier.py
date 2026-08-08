@@ -2,6 +2,10 @@
 # condenser-fichier.py
 # Outil pour condenser les fichiers markdown
 # Proprietaire : Buffy (outil partage)
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION = "0.2.0-py"
 STATUT = "beta"
 

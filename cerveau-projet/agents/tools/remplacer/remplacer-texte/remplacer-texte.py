@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: ascii -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """remplacer-texte.py
 Remplacer une liste de paires ancien->nouveau dans plusieurs fichiers d'un dossier.
 Usage: remplacer-texte.py <dossier> <ancien1>=<nouveau1> [ancien2=nouveau2 ...] [options]

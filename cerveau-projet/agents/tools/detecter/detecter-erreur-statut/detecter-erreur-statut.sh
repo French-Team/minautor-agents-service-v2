@@ -6,6 +6,10 @@
 # Statut : prepare
 
 # Couleurs
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

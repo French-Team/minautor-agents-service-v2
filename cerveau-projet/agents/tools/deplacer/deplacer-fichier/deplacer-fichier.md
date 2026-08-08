@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # deplacer-fichier
 
 **Version :** 0.2.0

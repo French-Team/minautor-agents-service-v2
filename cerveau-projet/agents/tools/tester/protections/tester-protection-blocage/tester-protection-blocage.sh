@@ -5,6 +5,10 @@
 # Statut : ebauche
 
 # Configuration
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 PROTECTION_blocage_TIMEOUT=${PROTECTION_blocage_TIMEOUT:-60}
 PROTECTION_blocage_INTERVAL=${PROTECTION_blocage_INTERVAL:-5}
 PROTECTION_blocage_MAX_OUTPUT=${PROTECTION_blocage_MAX_OUTPUT:-1000}

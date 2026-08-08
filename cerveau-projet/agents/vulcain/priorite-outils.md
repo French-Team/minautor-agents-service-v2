@@ -1,3 +1,9 @@
+---
+identite:
+  type: note
+  appartient_a: vulcain
+  commun: true
+---
 # Priorite de creation des outils
 
 **Agent** : Vulcain

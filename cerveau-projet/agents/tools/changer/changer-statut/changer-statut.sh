@@ -2,6 +2,10 @@
 # changer-statut.sh
 # Change le statut d'un fichier en le renommant
 # Proprietaire : Vulcain (outil partage)
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 
 # Couleurs

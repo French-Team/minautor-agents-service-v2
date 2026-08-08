@@ -1,3 +1,9 @@
+---
+identite:
+  type: combo
+  appartient_a: commun
+  commun: true
+---
 # combos-corriger-non-ascii
 
 **Version :** 0.2.0

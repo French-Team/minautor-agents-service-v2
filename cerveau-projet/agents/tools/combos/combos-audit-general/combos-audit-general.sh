@@ -7,6 +7,10 @@
 # Ce combo execute les 4 evaluateurs en sequence et produit une synthese.
 # Chaque evaluateur enrichit le contexte pour le suivant.
 
+# identite:
+#   type: combo
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 RED='\033[0;31m'
 GREEN='\033[0;32m'

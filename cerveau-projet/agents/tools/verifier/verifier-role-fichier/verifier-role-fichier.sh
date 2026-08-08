@@ -2,6 +2,10 @@
 # verifier-role-fichier.sh
 # Verifie qu'un fichier est utilise uniquement pour sa fonction prevue
 # Proprietaire : Vulcain (outil partage)
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 
 FICHIER=$1

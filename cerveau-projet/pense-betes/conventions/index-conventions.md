@@ -1,3 +1,9 @@
+---
+identite:
+  type: index
+  appartient_a: commun
+  commun: true
+---
 # Index -- Conventions
 ## Contenu
 

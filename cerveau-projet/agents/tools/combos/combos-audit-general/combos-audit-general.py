@@ -2,6 +2,10 @@
 # combos-audit-general.py
 # Combo audit-general : chainage des 4 evaluateurs + synthese
 # Proprietaire : Themis (outil partage)
+# identite:
+#   type: combo
+#   appartient_a: commun
+#   commun: true
 VERSION = "0.2.0-py"
 STATUT = "beta"
 

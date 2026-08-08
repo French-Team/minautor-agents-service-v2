@@ -2,6 +2,10 @@
 # nettoyer-fichier.sh
 # Outil pour purifier un fichier markdown
 # Proprietaire : Vulcain (outil partage)
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 
 # Configuration

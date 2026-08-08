@@ -1,0 +1,244 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
+# generateurs-case
+
+| Champ | Valeur |
+|---|---|
+| **Version** | 0.1.1-beta |
+| **Statut** | ebauche |
+| **Categorie** | generateurs |
+| **Derniere mise a jour** | 2026-08-08 |
+| **Python** | generateurs-case.py |
+| **Bash** | generateurs-case.sh (parite) |
+
+---
+
+## Description
+
+**Generateur de cases pour cartes de decision (parcours JSON).** Permet de
+charger la carte de decision d'un agent (`parcours-<agent>.json`), d'ajouter
+une case a la position voulue, d'editer une case existante et de supprimer une
+case AVEC RECABLAGE AUTOMATIQUE des references (suivant / branches[].vers /
+case_depart). Chaque operation declenche une VALIDATION AUTO COMPLETE :
+json.load + references + case_depart + `guider-parcours --liste`.
+
+**Pourquoi cet outil ?** Buffy modifie regulierement les cartes de decision
+des agents. Un editeur naif casse les liens entre cases (suivant, vers). Ce
+generateur garantit l'integrite des references et le respect du format
+documente dans la spec-guider-parcours (v0.2.5, 4 patterns).
+
+**Quand l'utiliser ?** Quand un agent doit ajouter, editer ou supprimer une
+case dans sa carte de decision. C'est Buffy qui utilise cet outil pour
+modifier les cartes des agents (fichiers du cerveau).
+
+---
+
+## Utilisation
+
+### CLI Python
+
+```
+python3 generateurs-case.py <parcours.json> <action> [options]
+
+Actions :
+  liste      Lister les cases de la carte
+  ajouter    Ajouter une case (position + contenu)
+  editer     Editer une case existante
+  supprimer  Supprimer une case avec recablage auto
+
+Options globales :
+  --dry-run  Simuler sans rien modifier
+  --verbose  Afficher les details
+  --version  Afficher la version
+```
+
+### CLI bash
+
+```
+bash generateurs-case.sh <parcours.json> <action> [options]
+```
+
+Memes actions et options que la version Python (parite).
+
+---
+
+## Actions detaillees
+
+### 1. Lister les cases (charger la carte)
+
+```
+python3 generateurs-case.py cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json liste
+```
+
+Affiche le nom du parcours, sa version, l'agent, la case de depart et la liste
+des cases (id, type, titre) -- la case de depart est marquee (depart).
+
+### 2. Ajouter une case
+
+```
+python3 generateurs-case.py <parcours.json> ajouter \
+  --type indice --titre "Verifier le rapport" \
+  --suivant c9 \
+  --indice-regle "REGLE : verifier avant d'agir" \
+  --apres c8
+```
+
+| Option | Role |
+|---|---|
+| `--type <question\|indice\|controle\|fin>` | Type de la case (obligatoire) |
+| `--case <id>` | Id de la nouvelle case (defaut: prochain cN libre) |
+| `--titre <texte>` | Titre de la case |
+| `--question <texte>` | Question (types question/controle) |
+| `--message <texte>` | Message (type fin) |
+| `--suivant <id>` | Case suivante (types indice/question/controle) |
+| `--apres <id>` | Inserer apres cette case (recablage auto du suivant) |
+| `--branche <reponse>:<vers>` | Branche (repetable) |
+| `--indice-regle <texte>` | Indice regle (repetable) |
+| `--indice-outil <nom>:<chemin>[:commande]>` | Indice outil (repetable) |
+| `--indice-fichier <chemin>:<raison>` | Indice fichier (repetable) |
+
+**Types et contraintes :**
+
+| Type | Contraintes |
+|---|---|
+| `question` | `--question` obligatoire ; `--branche` ou `--suivant` |
+| `indice` | `--suivant` obligatoire ; indices libres |
+| `controle` | `--question` + `--branche` ou `--suivant` obligatoires |
+| `fin` | Aucune contrainte (message optionnel) |
+
+### 3. Editer une case existante
+
+```
+python3 generateurs-case.py <parcours.json> editer c6 \
+  --titre "Developper l'outil (v2)" --question "Python est-il disponible ?"
+```
+
+| Option | Role |
+|---|---|
+| `case_id` | Id de la case a editer (positionnel) |
+| `--titre / --question / --message / --suivant / --type` | Champs a modifier |
+| `--branche <reponse>:<vers>` | Remplace TOUTES les branches |
+| `--indice-regle <texte>` | Remplace les indices par des regles |
+| `--remove-indices` | Vider les indices |
+
+### 4. Supprimer une case (recablage auto)
+
+```
+python3 generateurs-case.py <parcours.json> supprimer c7
+```
+
+**Recablage automatique** (decision utilisateur) :
+- Toutes les references `suivant` / `branches[].vers` qui pointaient vers la
+  case supprimee sont REDIRIGEES vers la cible (par defaut : le `suivant` de
+  la case supprimee, sinon `--vers <id>`).
+- Si la case supprimee est la `case_depart`, le depart devient la cible.
+- Une case `fin` sans `suivant` exige `--vers <id>` (impossible de recabler
+  automatiquement vers un vide).
+
+| Option | Role |
+|---|---|
+| `case_id` | Id de la case a supprimer (positionnel) |
+| `--vers <id>` | Cible de recablage (defaut: le suivant de la case supprimee) |
+| `--force` | Forcer malgre les references (recablage auto quand meme) |
+
+---
+
+## Garde-fou Pattern 5 (v0.1.1-beta) -- jamais de fin passive
+
+Quand on cree ou edite une case de type `fin` (ajouter/editer avec --message),
+l'outil detecte les formulations passives bloquantes qui COUPENT LA CHAINE de
+delegation (Pattern 5, spec-guider-parcours v0.2.6) : `te reactive`,
+`il/elle me reactive`, `j'attends`, `attend le retour`, `attendre le retour`,
+`en attente de`, `tu seras reactive`...
+
+Si une telle formulation est trouvee, l'outil affiche un AVERTISSEMENT (jaune,
+non bloquant) rappelant la regle : une delegation ne se termine JAMAIS par une
+fin passive ('X te reactive') -- materialiser la boucle RELAIS -> RETOUR ->
+CLOTURE dans le parcours (voir parcours-vulcain v0.2.1). L'utilisateur decide
+ensuite : corriger le message ou assumer le choix.
+
+```bash
+# Exemple : creation d'une fin passive -> avertissement affiche
+python3 generateurs-case.py <parcours.json> ajouter --type fin \
+  --titre 'FIN test' --message 'Morpheus teste et te reactive, attends le retour'
+# -> ATTENTION (Pattern 5...) : le message de fin contient une formulation passive
+```
+
+## Validation auto complete (apres chaque operation)
+
+1. **json.load** : le fichier est recharge et valide (JSON valide)
+2. **References** : `suivant` / `branches[].vers` / `case_depart` pointent vers
+   des cases existantes -- erreur listee sinon
+3. **guider-parcours --liste** : l'outil guider-parcours est relance sur le
+   fichier modifie pour confirmer que la structure est chargeable
+
+> **REGLE ASCII** : le contenu JSON est ecrit en ASCII strict (ensure_ascii).
+> Un contenu non-ASCII est refuse avant ecriture (regle immuable).
+
+---
+
+## Exemples
+
+### Ajouter une case apres c8 dans parcours-vulcain
+
+```bash
+python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py \
+  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json ajouter \
+  --type indice --titre "Verifier le rapport" --suivant c9 --apres c8 \
+  --indice-regle "REGLE : verifier avant d'agir"
+```
+
+### Editer le titre d'une case
+
+```bash
+python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py \
+  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json editer c6 \
+  --titre "Developper l'outil (v2)"
+```
+
+### Supprimer une case (recablage auto)
+
+```bash
+python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py \
+  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json supprimer c7
+```
+
+### Simuler sans modifier (--dry-run)
+
+```bash
+python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py \
+  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json supprimer c7 --dry-run
+```
+
+---
+
+## Regles
+
+1. Le nom de l'outil DOIT commencer par le prefixe du dossier (`generateurs-`) -- controle au demarrage (verifier_nommage)
+2. Le JSON est ecrit en ASCII strict (ensure_ascii + verif avant ecriture)
+3. Toute suppression recable les references vers la cible (suivant de la case ou --vers)
+4. Chaque operation lance la validation auto (json + references + guider-parcours --liste)
+5. Les actions sont testees en --dry-run avant toute modification reelle
+6. Format des cases : spec-guider-parcours v0.2.5 (types question/indice/controle/fin, indices, branches, suivant)
+
+---
+
+## Emplacement des fichiers
+
+| Fichier | Chemin |
+|---|---|
+| Outil python | `agents/tools/generateurs/generateurs-case/generateurs-case.py` |
+| Outil bash | `agents/tools/generateurs/generateurs-case/generateurs-case.sh` (parite) |
+| Documentation | `agents/tools/generateurs/generateurs-case/generateurs-case.md` |
+
+---
+
+## Versionning
+
+| Version | Statut | Changements |
+|---|---|---|
+| 0.1.0-beta | ebauche | Creation : charger une carte, ajouter/editer/supprimer une case, recablage auto des references, validation auto complete (json + refs + guider-parcours --liste), parite py/sh |

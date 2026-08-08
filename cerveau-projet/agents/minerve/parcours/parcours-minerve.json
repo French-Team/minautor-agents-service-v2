@@ -1,184 +1,426 @@
 {
-  "parcours": {
-    "nom": "parcours-minerve",
-    "agent": "minerve",
-    "version": "0.1.0",
-    "case_depart": "c1",
-    "description": "Parcours (jeu de piste) des missions de Minerve : redactrice de todos. 2 missions (creer un todo, completer un todo) couvrant les phases 0 a 9 du todo-template. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
-  },
-  "cases": {
-    "c1": {
-      "titre": "Mission",
-      "type": "question",
-      "question": "Quelle est la mission todo ?",
-      "branches": [
-        { "reponse": "creer", "vers": "c2" },
-        { "reponse": "completer", "vers": "c11" },
-        { "reponse": "autre", "vers": "c18" }
-      ]
-    },
-    "c2": {
-      "titre": "Rechercher les todos existants (ANTI-DOUBLON)",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "REGLE ANTI-DOUBLON : avant toute creation, je lance rechercher-todos pour verifier qu'un todo au theme proche n'existe pas deja." },
-        { "type": "outil", "nom": "rechercher-todos", "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-todos/", "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-todos/rechercher-todos.py" }
-      ],
-      "suivant": "c3"
-    },
-    "c3": {
-      "titre": "Lire la spec source",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "REGLE SPEC SOURCE : je travaille uniquement a partir d'une spec source existante." },
-        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/specs/<spec-source>", "raison": "Lire la spec source a transformer en todo" }
-      ],
-      "suivant": "c4"
-    },
-    "c4": {
-      "titre": "Generer le squelette du todo",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher)." },
-        { "type": "outil", "nom": "generateurs-squelette-todo", "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-squelette-todo/", "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-todo/generateurs-squelette-todo.py <spec-source> (nommage automatique selon convention-renommage)" }
-      ],
-      "suivant": "c5"
-    },
-    "c5": {
-      "titre": "Remplir les phases 0 a 9",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE PHASE 0 : la premiere action de tout todo est d'activer l'agent adapte (je documente cette phase)." },
-        { "type": "regle", "texte": "REGLE PHASE 9 : la derniere action de tout todo est de reactiver Cerberus (je l'execute moi-meme)." },
-        { "type": "outil", "nom": "creer-remplir-todo", "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-todo/", "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-todo/creer-remplir-todo.py <todo> (titre, statut, phase0..phase9, historique, notes, liens - sans ouvrir le fichier)" }
-      ],
-      "suivant": "c6"
-    },
-    "c6": {
-      "titre": "Verifier la conformite ASCII",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "outil", "nom": "valider-conformite-ascii", "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <todo> (UN fichier par appel)" }
-      ],
-      "suivant": "c7"
-    },
-    "c7": {
-      "titre": "Valider le fichier todo",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne valide JAMAIS un todo sans avoir passe la boucle RVAV complete." },
-        { "type": "regle", "texte": "La validation verifie : phases 0 a 9 presentes, obligations (phase 0 activation + phase 9 reactivation), conformite au todo-template." },
-        { "type": "outil", "nom": "valider-todo", "chemin": "cerveau-projet/agents/tools/valider/valider-todo/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>" }
-      ],
-      "suivant": "c8"
-    },
-    "c8": {
-      "titre": "Mettre a jour index-todo.md",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE INDEX : apres creation, le todo est ajoute dans index-todo.md." },
-        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/specs/todo/index-todo.md", "raison": "Index des todos a mettre a jour avec le nouveau todo" },
-        { "type": "outil", "nom": "editer-fichier", "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/", "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/pense-betes/specs/todo/index-todo.md <ancien> <nouveau>" }
-      ],
-      "suivant": "c9"
-    },
-    "c9": {
-      "titre": "Lecons et retour",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de reactiver Cerberus, je declare dans mon message de reactivation la liste EXACTE des outils du cerveau utilises (nom de chaque outil)." },
-        { "type": "outil", "nom": "ajouter-contenu-fichier", "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/", "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/minerve/corrections.md <lecon>" },
-        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> minerve" }
-      ],
-      "suivant": "c10"
-    },
-    "c10": {
-      "titre": "FIN - Reactiver Cerberus (PHASE 9)",
-      "type": "fin",
-      "message": "Reactiver Cerberus avec le bilan des outils utilises (REGLE ABSOLUE 6). La Phase 9 (reactiver Cerberus) est OBLIGATOIRE : c'est la derniere action du todo."
-    },
-    "c11": {
-      "titre": "Rechercher les todos existants (ANTI-DOUBLON)",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "REGLE ANTI-DOUBLON : avant de completer, je lance rechercher-todos pour verifier le theme et eviter les doublons." },
-        { "type": "outil", "nom": "rechercher-todos", "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-todos/", "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-todos/rechercher-todos.py" }
-      ],
-      "suivant": "c12"
-    },
-    "c12": {
-      "titre": "Lire le todo existant",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <todo-existant>" }
-      ],
-      "suivant": "c13"
-    },
-    "c13": {
-      "titre": "Verifier les conventions",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/conventions/renommage/convention-renommage.md", "raison": "Verifier le nommage et les conventions du todo" }
-      ],
-      "suivant": "c14"
-    },
-    "c14": {
-      "titre": "Completer les phases manquantes",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE PHASE 0 : la premiere action de tout todo est d'activer l'agent adapte." },
-        { "type": "regle", "texte": "REGLE PHASE 9 : la derniere action de tout todo est de reactiver Cerberus." },
-        { "type": "outil", "nom": "creer-remplir-todo", "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-todo/", "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-todo/creer-remplir-todo.py <todo> (completer les phases manquantes selon le todo-template)" }
-      ],
-      "suivant": "c15"
-    },
-    "c15": {
-      "titre": "Valider le todo",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne valide JAMAIS un todo sans avoir passe la boucle RVAV complete." },
-        { "type": "outil", "nom": "valider-todo", "chemin": "cerveau-projet/agents/tools/valider/valider-todo/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>" }
-      ],
-      "suivant": "c9"
-    },
-    "c18": {
-      "titre": "Mission hors perimetre",
-      "type": "question",
-      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
-      "branches": [
-        { "reponse": "OUI", "vers": "c19" },
-        { "reponse": "NON", "vers": "c20" }
-      ]
-    },
-    "c19": {
-      "titre": "Activer l'agent habilite",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Je ne cree des todos que depuis une spec source." },
-        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>" }
-      ],
-      "suivant": "c21"
-    },
-    "c20": {
-      "titre": "Signaler le besoin",
-      "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
-    },
-    "c21": {
-      "titre": "FIN - Delegation",
-      "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "minerve",
+  "commun": false
+ },
+ "parcours": {
+  "nom": "parcours-minerve",
+  "agent": "minerve",
+  "version": "0.1.0",
+  "case_depart": "c0",
+  "description": "Parcours (jeu de piste) des missions de Minerve : redactrice de todos. 2 missions (creer un todo, completer un todo) couvrant les phases 0 a 9 du todo-template. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+ },
+ "cases": {
+  "c0": {
+   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+   "type": "question",
+   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
     }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "INCERTAIN",
+     "vers": "c0b"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0b"
+    }
+   ]
+  },
+  "c0b": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/minerve/corrections.md"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/minerve/minerve.md"
+    }
+   ],
+   "suivant": "c0c"
+  },
+  "c1": {
+   "titre": "Mission",
+   "type": "question",
+   "question": "Quelle est la mission todo ?",
+   "branches": [
+    {
+     "reponse": "creer",
+     "vers": "c2"
+    },
+    {
+     "reponse": "completer",
+     "vers": "c11"
+    },
+    {
+     "reponse": "autre",
+     "vers": "c18"
+    }
+   ]
+  },
+  "c2": {
+   "titre": "Rechercher les todos existants (ANTI-DOUBLON)",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ANTI-DOUBLON : avant toute creation, je lance rechercher-todos pour verifier qu'un todo au theme proche n'existe pas deja."
+    },
+    {
+     "type": "outil",
+     "nom": "rechercher-todos",
+     "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-todos/",
+     "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-todos/rechercher-todos.py"
+    }
+   ],
+   "suivant": "c3"
+  },
+  "c3": {
+   "titre": "Lire la spec source",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE SPEC SOURCE : je travaille uniquement a partir d'une spec source existante."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/pense-betes/specs/<spec-source>",
+     "raison": "Lire la spec source a transformer en todo"
+    }
+   ],
+   "suivant": "c4"
+  },
+  "c4": {
+   "titre": "Generer le squelette du todo",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher)."
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-squelette-todo",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-squelette-todo/",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-todo/generateurs-squelette-todo.py <spec-source> (nommage automatique selon convention-renommage)"
+    }
+   ],
+   "suivant": "c5"
+  },
+  "c5": {
+   "titre": "Remplir les phases 0 a 9",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE PHASE 0 : la premiere action de tout todo est d'activer l'agent adapte (je documente cette phase)."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE PHASE 9 : la derniere action de tout todo est de reactiver Cerberus (je l'execute moi-meme)."
+    },
+    {
+     "type": "outil",
+     "nom": "creer-remplir-todo",
+     "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-todo/",
+     "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-todo/creer-remplir-todo.py <todo> (titre, statut, phase0..phase9, historique, notes, liens - sans ouvrir le fichier)"
+    }
+   ],
+   "suivant": "c6"
+  },
+  "c6": {
+   "titre": "Verifier la conformite ASCII",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "valider-conformite-ascii",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <todo> (UN fichier par appel)"
+    }
+   ],
+   "suivant": "c7"
+  },
+  "c7": {
+   "titre": "Valider le fichier todo",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne valide JAMAIS un todo sans avoir passe la boucle RVAV complete."
+    },
+    {
+     "type": "regle",
+     "texte": "La validation verifie : phases 0 a 9 presentes, obligations (phase 0 activation + phase 9 reactivation), conformite au todo-template."
+    },
+    {
+     "type": "outil",
+     "nom": "valider-todo",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-todo/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>"
+    }
+   ],
+   "suivant": "c8"
+  },
+  "c8": {
+   "titre": "Mettre a jour index-todo.md",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE INDEX : apres creation, le todo est ajoute dans index-todo.md."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/pense-betes/specs/todo/index-todo.md",
+     "raison": "Index des todos a mettre a jour avec le nouveau todo"
+    },
+    {
+     "type": "outil",
+     "nom": "editer-fichier",
+     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/pense-betes/specs/todo/index-todo.md <ancien> <nouveau>"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c9": {
+   "titre": "Lecons et retour",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de reactiver Cerberus, je declare dans mon message de reactivation la liste EXACTE des outils du cerveau utilises (nom de chaque outil)."
+    },
+    {
+     "type": "outil",
+     "nom": "ajouter-contenu-fichier",
+     "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/minerve/corrections.md <lecon>"
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> minerve"
+    }
+   ],
+   "suivant": "c10"
+  },
+  "c10": {
+   "titre": "FIN - Reactiver Cerberus (PHASE 9)",
+   "type": "fin",
+   "message": "Reactiver Cerberus avec le bilan des outils utilises (REGLE ABSOLUE 6). La Phase 9 (reactiver Cerberus) est OBLIGATOIRE : c'est la derniere action du todo."
+  },
+  "c11": {
+   "titre": "Rechercher les todos existants (ANTI-DOUBLON)",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ANTI-DOUBLON : avant de completer, je lance rechercher-todos pour verifier le theme et eviter les doublons."
+    },
+    {
+     "type": "outil",
+     "nom": "rechercher-todos",
+     "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-todos/",
+     "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-todos/rechercher-todos.py"
+    }
+   ],
+   "suivant": "c12"
+  },
+  "c12": {
+   "titre": "Lire le todo existant",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <todo-existant>"
+    }
+   ],
+   "suivant": "c13"
+  },
+  "c13": {
+   "titre": "Verifier les conventions",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/pense-betes/conventions/renommage/convention-renommage.md",
+     "raison": "Verifier le nommage et les conventions du todo"
+    }
+   ],
+   "suivant": "c14"
+  },
+  "c14": {
+   "titre": "Completer les phases manquantes",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE PHASE 0 : la premiere action de tout todo est d'activer l'agent adapte."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE PHASE 9 : la derniere action de tout todo est de reactiver Cerberus."
+    },
+    {
+     "type": "outil",
+     "nom": "creer-remplir-todo",
+     "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-todo/",
+     "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-todo/creer-remplir-todo.py <todo> (completer les phases manquantes selon le todo-template)"
+    }
+   ],
+   "suivant": "c15"
+  },
+  "c15": {
+   "titre": "Valider le todo",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne valide JAMAIS un todo sans avoir passe la boucle RVAV complete."
+    },
+    {
+     "type": "outil",
+     "nom": "valider-todo",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-todo/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c18": {
+   "titre": "Mission hors perimetre",
+   "type": "question",
+   "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c19"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c20"
+    }
+   ]
+  },
+  "c19": {
+   "titre": "Activer l'agent habilite",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Je ne cree des todos que depuis une spec source."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+    }
+   ],
+   "suivant": "c21"
+  },
+  "c20": {
+   "titre": "Signaler le besoin",
+   "type": "fin",
+   "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+  },
+  "c21": {
+   "titre": "FIN - Delegation",
+   "type": "fin",
+   "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+  },
+  "c0c": {
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+    },
+    {
+     "type": "fichier",
+     "chemin": "AGENTS.md",
+     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
+    }
+   ],
+   "suivant": "c1"
   }
+ }
 }

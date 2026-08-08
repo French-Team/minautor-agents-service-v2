@@ -5,6 +5,10 @@
 # Statut : ebauche
 
 # Configuration
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 PROTECTION_TIMEOUT=${PROTECTION_TIMEOUT:-30}  # Delai maximum en secondes
 PROTECTION_ACTION=${PROTECTION_ACTION:-kill}  # Action : kill, signal, log
 

@@ -1,3 +1,9 @@
+---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
 # Test du workflow RVAV -- Protocole d'activation
 
 **Date** : 2026-08-05

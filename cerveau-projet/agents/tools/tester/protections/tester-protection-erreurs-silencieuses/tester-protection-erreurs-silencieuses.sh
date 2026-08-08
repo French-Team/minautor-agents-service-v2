@@ -5,6 +5,10 @@
 # Statut : ebauche
 
 # Configuration
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 PROTECTION_LOG_DIR=${PROTECTION_LOG_DIR:-/tmp/test-logs}
 PROTECTION_VERIFY_OUTPUT=${PROTECTION_VERIFY_OUTPUT:-true}
 

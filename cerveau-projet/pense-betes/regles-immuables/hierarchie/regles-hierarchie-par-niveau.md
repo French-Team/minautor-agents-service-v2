@@ -1,3 +1,9 @@
+---
+identite:
+  type: regle
+  appartient_a: commun
+  commun: true
+---
 # Regles de Hierarchie par Niveau
 
 ## Principe fondamental

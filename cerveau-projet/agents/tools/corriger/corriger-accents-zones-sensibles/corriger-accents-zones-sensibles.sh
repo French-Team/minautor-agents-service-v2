@@ -4,6 +4,10 @@
 # Mode standard --all : purge totale (texte francais et titres inclus)
 # Conforme a la regle regles-emojis-ascii.md
 # Version : 0.2.0
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 
 set -e

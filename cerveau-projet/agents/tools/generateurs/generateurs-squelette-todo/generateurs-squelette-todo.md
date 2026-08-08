@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # generateurs-squelette-todo
 
 **Version :** 0.2.0

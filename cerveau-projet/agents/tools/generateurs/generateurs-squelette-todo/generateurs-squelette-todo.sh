@@ -5,6 +5,10 @@
 # Statut : prepare
 
 # Configuration
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 STATUT="prepare"
 

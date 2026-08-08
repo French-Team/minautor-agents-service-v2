@@ -1,3 +1,9 @@
+---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
 # Protocole de Composition du Cerveau
 
 Recette pour composer le squelette de base du cerveau-projet.

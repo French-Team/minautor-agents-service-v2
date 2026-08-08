@@ -27,7 +27,7 @@ export AGENTS_FILE AGENTS_HISTORIQUE CLASSEUR_STOCKAGE
 NB_OK=0
 NB_ECHEC=0
 
-# Extraire le champ Id LLM du bloc d'une session
+# Extraire le champ Nom LLM du bloc d'une session (repli sur l'ancien **Id LLM**)
 id_llm_session() {
     awk -v cible="$1" '
         /^### Session : / {
@@ -36,9 +36,9 @@ id_llm_session() {
             if (s == cible) { dans = 1 } else { dans = 0 }
             next
         }
-        dans == 1 && /^\| \*\*Id LLM\*\* \| / {
+        dans == 1 && /^\| \*\*(Nom LLM|Id LLM)\*\* \| / {
             ligne = $0
-            sub(/^\| \*\*Id LLM\*\* \| /, "", ligne)
+            sub(/^\| \*\*(Nom LLM|Id LLM)\*\* \| /, "", ligne)
             sub(/ \|$/, "", ligne)
             print ligne
             exit
@@ -116,7 +116,7 @@ grep -q 'alignee sur l.id' "$ESPACE/sortie1.txt"
 check "1b. Message 'alignee sur l.id'" $?
 ID1=$(id_llm_session session-llm-1)
 [ "$ID1" = "llm-1" ]
-check "1c. Champ **Id LLM** = llm-1 dans le bloc (lu=$ID1)" $?
+check "1c. Champ **Nom LLM** = llm-1 dans le bloc (lu=$ID1)" $?
 
 # --- Test 2 : id llm-2 inconnu -> session-llm-2 (pas prochaine libre) ---
 python3 "$OUTIL_PY" sidentifier llm-2 > "$ESPACE/sortie2.txt" 2>&1
@@ -124,7 +124,7 @@ grep -q '^### Session : session-llm-2$' "$AGENTS_FILE"
 check "2. sidentifier llm-2 -> session-llm-2 (alignement)" $?
 ID2=$(id_llm_session session-llm-2)
 [ "$ID2" = "llm-2" ]
-check "2b. Champ **Id LLM** = llm-2 dans le bloc llm-2 (lu=$ID2)" $?
+check "2b. Champ **Nom LLM** = llm-2 dans le bloc llm-2 (lu=$ID2)" $?
 
 # --- Test 3 : redemarrage llm-1 -> retrouve session-llm-1 (SOURCE DOUBLE AGENTS.md) ---
 python3 "$OUTIL_PY" sidentifier llm-1 > "$ESPACE/sortie3.txt" 2>&1
@@ -187,7 +187,7 @@ grep -q 'Nouvelle session pour id llm-1' "$ESPACE/sortie5.txt"
 check "5. ABSORPTION: session-llm-1 orpheline -> llm-1 l'absorbe" $?
 ID5=$(id_llm_session session-llm-1)
 [ "$ID5" = "llm-1" ]
-check "5b. Le bloc session-llm-1 porte maintenant **Id LLM** = llm-1 (lu=$ID5)" $?
+check "5b. Le bloc session-llm-1 porte maintenant **Nom LLM** = llm-1 (lu=$ID5)" $?
 
 # --- Test 6 : id NON numerique (llm-atlas) -> prochaine libre (pas d'alignement) ---
 preparer_vide
@@ -196,7 +196,7 @@ grep -q '^### Session : session-llm-1$' "$AGENTS_FILE"
 check "6. llm-atlas (non numerique) -> session-llm-1 (prochaine libre)" $?
 ID6=$(id_llm_session session-llm-1)
 [ "$ID6" = "llm-atlas" ]
-check "6b. Champ **Id LLM** = llm-atlas (lu=$ID6)" $?
+check "6b. Champ **Nom LLM** = llm-atlas (lu=$ID6)" $?
 
 # --- Test 7 : parite .sh (alignement + champ Id LLM) ---
 preparer_vide
@@ -205,7 +205,7 @@ grep -q '^### Session : session-llm-3$' "$AGENTS_FILE"
 check "7. Parite .sh: llm-3 -> session-llm-3 (alignement)" $?
 ID7=$(id_llm_session session-llm-3)
 [ "$ID7" = "llm-3" ]
-check "7b. Parite .sh: champ **Id LLM** = llm-3 (lu=$ID7)" $?
+check "7b. Parite .sh: champ **Nom LLM** = llm-3 (lu=$ID7)" $?
 bash "$OUTIL_SH" sidentifier llm-3 > "$ESPACE/sortie7b.txt" 2>&1
 grep -q 'Session retrouvee pour id llm-3' "$ESPACE/sortie7b.txt"
 check "7c. Parite .sh: redemarrage -> 'Session retrouvee'" $?
@@ -216,13 +216,13 @@ python3 "$OUTIL_PY" sidentifier llm-1 > /dev/null 2>&1
 python3 "$OUTIL_PY" activer session-llm-1 vulcain "Test reg v035" > /dev/null 2>&1
 ID8=$(id_llm_session session-llm-1)
 [ "$ID8" = "llm-1" ]
-check "8. Regression v0.3.5: activer PRESERVE **Id LLM** = llm-1 (bloc, lu=$ID8)" $?
+check "8. Regression v0.3.5: activer PRESERVE **Nom LLM** = llm-1 (bloc, lu=$ID8)" $?
 grep 'profil-session-llm-1' "$CLASSEUR_STOCKAGE" | grep -q 'id: llm-1'
 check "8b. Regression v0.3.5: activer PRESERVE id: llm-1 (classeur)" $?
 python3 "$OUTIL_PY" reactiver session-llm-1 "Fin reg v035" vulcain > /dev/null 2>&1
 ID8c=$(id_llm_session session-llm-1)
 [ "$ID8c" = "llm-1" ]
-check "8c. Regression v0.3.5: reactiver PRESERVE **Id LLM** = llm-1 (lu=$ID8c)" $?
+check "8c. Regression v0.3.5: reactiver PRESERVE **Nom LLM** = llm-1 (lu=$ID8c)" $?
 grep 'profil-session-llm-1' "$CLASSEUR_STOCKAGE" | grep -q 'id: llm-1'
 check "8d. Regression v0.3.5: reactiver PRESERVE id: llm-1 (classeur)" $?
 
@@ -242,9 +242,9 @@ python3 "$OUTIL_PY" sidentifier > /dev/null 2>&1
 python3 "$OUTIL_PY" sidentifier > /dev/null 2>&1
 grep -q '^### Session : session-llm-1$' "$AGENTS_FILE" && grep -q '^### Session : session-llm-2$' "$AGENTS_FILE"
 check "10. Regression v0.3.3: sans argument 2x -> llm-1 puis llm-2" $?
-NB10=$(grep -c '| \*\*Id LLM\*\* |' "$AGENTS_FILE"); NB10=${NB10:-0}
+NB10=$(grep -c -e '| \*\*Id LLM\*\* |' -e '| \*\*Nom LLM\*\* |' "$AGENTS_FILE"); NB10=${NB10:-0}
 [ "$NB10" = "0" ]
-check "10b. Sans argument -> AUCUN champ **Id LLM** (pas de liaison, lu=$NB10)" $?
+check "10b. Sans argument -> AUCUN champ **Nom LLM** (pas de liaison, lu=$NB10)" $?
 
 # --- Test 11 : regression v0.3.2 (regle derivation profil-session) ---
 preparer_vide

@@ -4,6 +4,10 @@
 # Genere une commande complexe a lancer, en posant une question par parametre.
 # Version : 0.1.0-beta
 # Statut : ebauche
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 
 # ============================================================
 # BUT

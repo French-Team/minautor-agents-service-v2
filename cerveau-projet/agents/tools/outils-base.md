@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # Outils de Base - Analyse Reelle
 
 > **Objectif** : Identifier les outils fondamentaux MANQUANTS (analyse historique).

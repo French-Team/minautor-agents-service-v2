@@ -1,6 +1,12 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # evaluer-agents
 
-**Version :** 0.2.1
+**Version :** 0.2.2
 **Statut :** prepare
 **Categorie :** evaluer
 **Chemin :** `agents/tools/evaluer/evaluer-agents/`
@@ -50,5 +56,6 @@ Rapport markdown sur stdout avec score /100.
 | 0.2.0-py | 2026-08-07 | Version Python creee (rapport markdown identique, --version) |
 | 0.2.1 | 2026-08-07 | Correction: exclusion des dossiers `__pycache__` (artefacts Python) et des dossiers de categorie du scan des outils incomplets. Score corrige de 23/100 a 96/100. |
 | 0.2.1-py | 2026-08-07 | Version Python corrigee (parite sh/py) |
+| 0.2.2 | 2026-08-08 | CONVENTION IDENTIFICATION : verification de l'agent actif sur le champ **Nom Agent** (ancien **Nom** accepte en repli -- le grep 'Nom' matcherait desormais **Nom LLM** en premier). py + sh + doc |
 
 ---

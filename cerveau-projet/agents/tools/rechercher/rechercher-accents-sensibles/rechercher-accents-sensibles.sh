@@ -8,6 +8,10 @@
 #   - liens relatifs [texte](chemin) dans les .md
 # Mode : RECHERCHE ET RAPPORT UNIQUEMENT (jamais de correction)
 # Version : 0.2.0
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 # Optimisation : UN SEUL awk pour tout le projet (via find | xargs -0 awk)
 #               = rapide meme sur Git Bash Windows (pas de fork par fichier)
 

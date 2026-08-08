@@ -1,12 +1,18 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # guider-parcours
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.2.10 |
+| **Version** | 0.2.11 |
 | **Statut** | ebauche |
 | **Categorie** | guider |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Spec** | [spec-guider-parcours.001.01.ebauche.md](spec/spec-guider-parcours.001.01.ebauche.md) (v0.2.4) |
+| **Spec** | [spec-guider-parcours.001.01.ebauche.md](spec/spec-guider-parcours.001.01.ebauche.md) (v0.2.5) |
 
 ---
 
@@ -116,11 +122,11 @@ Memes options que la version Python.
 
 ---
 
-## Patterns (spec v0.2.0, v0.2.4)
+## Patterns (spec v0.2.0, v0.2.4, v0.2.5)
 
-Les 3 patterns suivants sont documentes dans la spec (v0.2.0 pour les 2 premiers,
-v0.2.4 pour le Pattern 3) et sont OBLIGATOIRES pour tout nouveau parcours.
-Verifier la conformite avec `--liste` + `--reponses`.
+Les 4 patterns suivants sont documentes dans la spec (v0.2.0 pour les 2 premiers,
+v0.2.4 pour le Pattern 3, v0.2.5 pour le Pattern 4) et sont OBLIGATOIRES pour
+tout nouveau parcours. Verifier la conformite avec `--liste` + `--reponses`.
 
 ### Pattern 1 -- Multi-missions (une case Mission + chemins convergents)
 
@@ -158,6 +164,22 @@ decide si le resultat est transmis brut ou si un generateur s'intercale.
 **Benefice** : parcours allege (1 case = 1 combo au lieu de 5-6 cases d'outils),
 commande toujours validee par le generateur (modele du catalogue), l'agent lance
 un combo et recupere le resultat final.
+
+### Pattern 4 -- Case Question Honnete en case 0
+
+TOUT parcours demarre par la case `c0` : une question honnete de relecture, au
+lieu d'imposer une relecture aveugle. La relecture est desormais DECLENCHEE par
+la reponse : seule la reponse OUI prouve la memorisation ("je viens de les lire"
+n'est pas une preuve, regles-veracite).
+
+- `c0` : type `question`, question contenant `memoire` + "SANS relire"
+- Branches : `OUI` -> `c1` (mission), `INCERTAIN` -> `c0b`, `NON` -> `c0b`
+- `c0b` : RELIRE OBLIGATOIRE (type `indice`) -- relire corrections.md puis la
+  fiche, puis `suivant` = c1
+- `case_depart` vaut TOUJOURS `c0`
+
+**Exemple reel** : les 11 parcours (`agents/*/parcours/parcours-*.json`) portent
+depuis l'audit Themis du 2026-08-08 (CONFORME 100/100).
 
 ---
 
@@ -210,6 +232,7 @@ QUESTION : Quelle est la mission ?
 
 | Parcours | Chemin |
 |---|---|
+| **Demarrage (tous les LLM)** | `cerveau-projet/demarrage/parcours-demarrage.json` |
 | Vulcain (constructeur) | `agents/vulcain/parcours/parcours-vulcain.json` |
 | Morpheus (testeur) | `agents/morpheus/parcours/parcours-morpheus.json` |
 | Clio (muse de l'histoire) | `agents/clio/parcours/parcours-clio.json` |
@@ -223,7 +246,10 @@ QUESTION : Quelle est la mission ?
 | Atlas (explorateur et documentaliste) | `agents/atlas/parcours/parcours-atlas.json` |
 
 Regle : un parcours par agent, dans le dossier de l'agent (`agents/<agent>/parcours/`).
-`demarrer.md` est la case 0 commune a tous les parcours (point d'entree).
+`demarrer.md` est le lanceur de session : il pointe vers le **parcours de demarrage**
+(`cerveau-projet/demarrage/parcours-demarrage.json`, carte de decision commune a tous
+les LLM : identification -> Cerberus -> attente de mission). Chaque parcours d'agent
+demarre ensuite apres l'identification.
 
 ---
 
@@ -231,12 +257,13 @@ Regle : un parcours par agent, dans le dossier de l'agent (`agents/<agent>/parco
 
 1. Le JSON doit etre valide et ASCII strict
 2. Toute branche doit pointer vers une case existante (valide a chaque lancement)
-3. `demarrer.md` reste la case 0 : le parcours d'un agent demarre apres l'identification
+3. `demarrer.md` est le lanceur de session : il NE SE LIT PAS, il SE LANCE -- il pointe vers le parcours de demarrage (`cerveau-projet/demarrage/parcours-demarrage.json`) qui guide l'identification (sidentifier), la verification du bloc dans AGENTS.md, le passage Cerberus et l'attente de mission. Le parcours d'un agent demarre ensuite apres l'identification
 4. Chaque mission de l'agent doit avoir un chemin de cases (couverture verifiable via --liste)
 5. Toute case qui ECRIT dans un fichier porte un indice `regle` ASCII en tete de ses `indices` (Pattern 2)
 6. Un parcours multi-missions demarre par une case `Mission` avec branches vers les chemins, convergeant vers les cases communes (Pattern 1)
 7. AUTONOMIE DES PARCOURS (v0.2.2) : chaque parcours est un fichier INDIVIDUEL, la convergence est uniquement intra-parcours, aucun partage de cases entre parcours, chaque parcours est complet et validable independamment
 8. Une case qui pointe vers un COMBO reference `combos-moteur` + la definition du combo (Pattern 3, v0.2.4) -- spec-combos-moteur documentee
+9. QUESTION HONNETE EN CASE 0 (v0.2.5) : tout parcours demarre par la case `c0` (question honnete de relecture, `memoire` + "SANS relire") avec branches OUI -> c1 / INCERTAIN -> c0b / NON -> c0b, case `c0b` RELIRE OBLIGATOIRE (corrections puis fiche) -> c1, `case_depart` = c0 (Pattern 4)
 
 ---
 
@@ -244,6 +271,8 @@ Regle : un parcours par agent, dans le dossier de l'agent (`agents/<agent>/parco
 
 | Version | Statut | Changements |
 |---|---|---|
+| 0.2.12 | ebauche | Doc : ajout du parcours de demarrage (`cerveau-projet/demarrage/parcours-demarrage.json`) au tableau Emplacement -- demarrer.md devient un LANCEUR (il ne se lit pas, il se lance) ; regle 3 mise a jour ; 12 parcours (1 demarrage + 11 agents) |
+| 0.2.11 | ebauche | Doc : reference la spec v0.2.5 (Pattern 4 -- case Question Honnete en case 0, standard de demarrage fige) + regle 9 dans la section Regles |
 | 0.2.10 | ebauche | Doc : reference la spec v0.2.4 (Pattern 3 -- combo generateur -> execution) + regle 8 dans la section Regles |
 | 0.2.9 | ebauche | Doc : reference la spec v0.2.3 (prototype vulcain documente comme cas legitime assume : fins independantes) |
 | 0.2.8 | ebauche | Doc : reference la spec v0.2.2 (ajout de la regle d'autonomie des parcours) + regle 7 AUTONOMIE dans la section Regles |

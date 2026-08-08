@@ -1,182 +1,416 @@
 {
-  "parcours": {
-    "nom": "parcours-promethee",
-    "agent": "promethee",
-    "version": "0.1.0",
-    "case_depart": "c1",
-    "description": "Parcours (jeu de piste) des missions de Promethee : redacteur de specs. 2 missions (creer une spec, completer une spec). A la fin de chaque mission, j'active Minerve pour le todo (FLUX). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
-  },
-  "cases": {
-    "c1": {
-      "titre": "Mission",
-      "type": "question",
-      "question": "Quelle est la mission spec ?",
-      "branches": [
-        { "reponse": "creer", "vers": "c2" },
-        { "reponse": "completer", "vers": "c11" },
-        { "reponse": "autre", "vers": "c18" }
-      ]
-    },
-    "c2": {
-      "titre": "Rechercher les specs existantes (ANTI-DOUBLON)",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "REGLE ANTI-DOUBLON : avant toute creation, je lance rechercher-specs pour verifier qu'une spec au theme proche n'existe pas deja." },
-        { "type": "outil", "nom": "rechercher-specs", "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-specs/", "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-specs/rechercher-specs.py" }
-      ],
-      "suivant": "c3"
-    },
-    "c3": {
-      "titre": "Lire le pense-bete source",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "REGLE PENSE-BETE SOURCE : je ne cree pas de spec sans un pense-bete source." },
-        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/<pense-bete-source>", "raison": "Lire le pense-bete source a transformer en spec" }
-      ],
-      "suivant": "c4"
-    },
-    "c4": {
-      "titre": "Generer le squelette de la spec",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher)." },
-        { "type": "outil", "nom": "generateurs-squelette-spec", "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-squelette-spec/", "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-spec/generateurs-squelette-spec.py <pense-bete-source> (nommage automatique selon convention-renommage)" }
-      ],
-      "suivant": "c5"
-    },
-    "c5": {
-      "titre": "Remplir les sections de la spec",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE SPEC-TEMPLATE : chaque spec utilise le spec-template, jamais un format libre." },
-        { "type": "regle", "texte": "Sections a remplir : titre, parent, objectif, contexte, exigences (avec criteres d'acceptation), architecture, risques, livrables, validation, liens, rvav." },
-        { "type": "outil", "nom": "creer-remplir-spec", "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-spec/", "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-spec/creer-remplir-spec.py <spec> (sections sans ouvrir le fichier)" }
-      ],
-      "suivant": "c6"
-    },
-    "c6": {
-      "titre": "Verifier la conformite ASCII",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "outil", "nom": "valider-conformite-ascii", "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <spec> (UN fichier par appel)" }
-      ],
-      "suivant": "c7"
-    },
-    "c7": {
-      "titre": "Valider le fichier spec",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne valide JAMAIS une spec sans avoir passe la boucle RVAV complete." },
-        { "type": "regle", "texte": "La validation verifie : structure, sections completes, integrite, criteres d'acceptation." },
-        { "type": "outil", "nom": "valider-spec", "chemin": "cerveau-projet/agents/tools/valider/valider-spec/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-spec/valider-spec.py <spec>" }
-      ],
-      "suivant": "c8"
-    },
-    "c8": {
-      "titre": "Mettre a jour index-spec.md",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE INDEX : apres creation, la spec est ajoutee dans index-spec.md." },
-        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/specs/index-spec.md", "raison": "Index des specs a mettre a jour avec la nouvelle spec" },
-        { "type": "outil", "nom": "editer-fichier", "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/", "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/pense-betes/specs/index-spec.md <ancien> <nouveau>" }
-      ],
-      "suivant": "c9"
-    },
-    "c9": {
-      "titre": "Lecons et retour",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de terminer, je declare dans mon message la liste EXACTE des outils du cerveau utilises (nom de chaque outil)." },
-        { "type": "outil", "nom": "ajouter-contenu-fichier", "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/", "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/promethee/corrections.md <lecon>" }
-      ],
-      "suivant": "c10"
-    },
-    "c10": {
-      "titre": "FIN - Activer Minerve (FLUX)",
-      "type": "fin",
-      "message": "ACTIVER MINERVE pour le todo : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 minerve 'Spec terminee - creer le todo'. C'est elle qui cree le todo (FLUX Promethee -> Minerve)."
-    },
-    "c11": {
-      "titre": "Rechercher les specs existantes (ANTI-DOUBLON)",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "regle", "texte": "REGLE ANTI-DOUBLON : avant de completer, je lance rechercher-specs pour verifier le theme et eviter les doublons." },
-        { "type": "outil", "nom": "rechercher-specs", "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-specs/", "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-specs/rechercher-specs.py" }
-      ],
-      "suivant": "c12"
-    },
-    "c12": {
-      "titre": "Lire la spec existante",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "outil", "nom": "lire-fichier", "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/", "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <spec-existante>" }
-      ],
-      "suivant": "c13"
-    },
-    "c13": {
-      "titre": "Verifier les conventions",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir." },
-        { "type": "fichier", "chemin": "cerveau-projet/pense-betes/conventions/renommage/convention-renommage.md", "raison": "Verifier le nommage et les conventions de la spec" }
-      ],
-      "suivant": "c14"
-    },
-    "c14": {
-      "titre": "Completer les sections manquantes",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais." },
-        { "type": "regle", "texte": "REGLE SPEC-TEMPLATE : completer les sections manquantes selon le spec-template." },
-        { "type": "outil", "nom": "creer-remplir-spec", "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-spec/", "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-spec/creer-remplir-spec.py <spec> (completer les sections manquantes selon le spec-template)" }
-      ],
-      "suivant": "c15"
-    },
-    "c15": {
-      "titre": "Valider la spec",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je ne valide JAMAIS une spec sans avoir passe la boucle RVAV complete." },
-        { "type": "outil", "nom": "valider-spec", "chemin": "cerveau-projet/agents/tools/valider/valider-spec/", "commande": "python3 cerveau-projet/agents/tools/valider/valider-spec/valider-spec.py <spec>" }
-      ],
-      "suivant": "c9"
-    },
-    "c18": {
-      "titre": "Mission hors perimetre",
-      "type": "question",
-      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
-      "branches": [
-        { "reponse": "OUI", "vers": "c19" },
-        { "reponse": "NON", "vers": "c20" }
-      ]
-    },
-    "c19": {
-      "titre": "Activer l'agent habilite",
-      "type": "indice",
-      "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Je ne cree des specs que depuis un pense-bete source." },
-        { "type": "outil", "nom": "activer-agent-principal", "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>" }
-      ],
-      "suivant": "c21"
-    },
-    "c20": {
-      "titre": "Signaler le besoin",
-      "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
-    },
-    "c21": {
-      "titre": "FIN - Delegation",
-      "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "promethee",
+  "commun": false
+ },
+ "parcours": {
+  "nom": "parcours-promethee",
+  "agent": "promethee",
+  "version": "0.1.0",
+  "case_depart": "c0",
+  "description": "Parcours (jeu de piste) des missions de Promethee : redacteur de specs. 2 missions (creer une spec, completer une spec). A la fin de chaque mission, j'active Minerve pour le todo (FLUX). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+ },
+ "cases": {
+  "c0": {
+   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+   "type": "question",
+   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
     }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "INCERTAIN",
+     "vers": "c0b"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0b"
+    }
+   ]
+  },
+  "c0b": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/promethee/corrections.md"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/promethee/promethee.md"
+    }
+   ],
+   "suivant": "c0c"
+  },
+  "c1": {
+   "titre": "Mission",
+   "type": "question",
+   "question": "Quelle est la mission spec ?",
+   "branches": [
+    {
+     "reponse": "creer",
+     "vers": "c2"
+    },
+    {
+     "reponse": "completer",
+     "vers": "c11"
+    },
+    {
+     "reponse": "autre",
+     "vers": "c18"
+    }
+   ]
+  },
+  "c2": {
+   "titre": "Rechercher les specs existantes (ANTI-DOUBLON)",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ANTI-DOUBLON : avant toute creation, je lance rechercher-specs pour verifier qu'une spec au theme proche n'existe pas deja."
+    },
+    {
+     "type": "outil",
+     "nom": "rechercher-specs",
+     "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-specs/",
+     "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-specs/rechercher-specs.py"
+    }
+   ],
+   "suivant": "c3"
+  },
+  "c3": {
+   "titre": "Lire le pense-bete source",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE PENSE-BETE SOURCE : je ne cree pas de spec sans un pense-bete source."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/pense-betes/<pense-bete-source>",
+     "raison": "Lire le pense-bete source a transformer en spec"
+    }
+   ],
+   "suivant": "c4"
+  },
+  "c4": {
+   "titre": "Generer le squelette de la spec",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher)."
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-squelette-spec",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-squelette-spec/",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-spec/generateurs-squelette-spec.py <pense-bete-source> (nommage automatique selon convention-renommage)"
+    }
+   ],
+   "suivant": "c5"
+  },
+  "c5": {
+   "titre": "Remplir les sections de la spec",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE SPEC-TEMPLATE : chaque spec utilise le spec-template, jamais un format libre."
+    },
+    {
+     "type": "regle",
+     "texte": "Sections a remplir : titre, parent, objectif, contexte, exigences (avec criteres d'acceptation), architecture, risques, livrables, validation, liens, rvav."
+    },
+    {
+     "type": "outil",
+     "nom": "creer-remplir-spec",
+     "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-spec/",
+     "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-spec/creer-remplir-spec.py <spec> (sections sans ouvrir le fichier)"
+    }
+   ],
+   "suivant": "c6"
+  },
+  "c6": {
+   "titre": "Verifier la conformite ASCII",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "valider-conformite-ascii",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <spec> (UN fichier par appel)"
+    }
+   ],
+   "suivant": "c7"
+  },
+  "c7": {
+   "titre": "Valider le fichier spec",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne valide JAMAIS une spec sans avoir passe la boucle RVAV complete."
+    },
+    {
+     "type": "regle",
+     "texte": "La validation verifie : structure, sections completes, integrite, criteres d'acceptation."
+    },
+    {
+     "type": "outil",
+     "nom": "valider-spec",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-spec/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-spec/valider-spec.py <spec>"
+    }
+   ],
+   "suivant": "c8"
+  },
+  "c8": {
+   "titre": "Mettre a jour index-spec.md",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE INDEX : apres creation, la spec est ajoutee dans index-spec.md."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/pense-betes/specs/index-spec.md",
+     "raison": "Index des specs a mettre a jour avec la nouvelle spec"
+    },
+    {
+     "type": "outil",
+     "nom": "editer-fichier",
+     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/pense-betes/specs/index-spec.md <ancien> <nouveau>"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c9": {
+   "titre": "Lecons et retour",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de terminer, je declare dans mon message la liste EXACTE des outils du cerveau utilises (nom de chaque outil)."
+    },
+    {
+     "type": "outil",
+     "nom": "ajouter-contenu-fichier",
+     "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/promethee/corrections.md <lecon>"
+    }
+   ],
+   "suivant": "c10"
+  },
+  "c10": {
+   "titre": "FIN - Activer Minerve (FLUX)",
+   "type": "fin",
+   "message": "ACTIVER MINERVE pour le todo : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 minerve 'Spec terminee - creer le todo'. C'est elle qui cree le todo (FLUX Promethee -> Minerve). RELAIS ACTIF : je ne m'arrete pas en attente - apres activation, la chaine continue avec le parcours de Minerve, puis retour a Cerberus (chacun reactive Cerberus a la fin)."
+  },
+  "c11": {
+   "titre": "Rechercher les specs existantes (ANTI-DOUBLON)",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ANTI-DOUBLON : avant de completer, je lance rechercher-specs pour verifier le theme et eviter les doublons."
+    },
+    {
+     "type": "outil",
+     "nom": "rechercher-specs",
+     "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-specs/",
+     "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-specs/rechercher-specs.py"
+    }
+   ],
+   "suivant": "c12"
+  },
+  "c12": {
+   "titre": "Lire la spec existante",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <spec-existante>"
+    }
+   ],
+   "suivant": "c13"
+  },
+  "c13": {
+   "titre": "Verifier les conventions",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/pense-betes/conventions/renommage/convention-renommage.md",
+     "raison": "Verifier le nommage et les conventions de la spec"
+    }
+   ],
+   "suivant": "c14"
+  },
+  "c14": {
+   "titre": "Completer les sections manquantes",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE SPEC-TEMPLATE : completer les sections manquantes selon le spec-template."
+    },
+    {
+     "type": "outil",
+     "nom": "creer-remplir-spec",
+     "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-spec/",
+     "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-spec/creer-remplir-spec.py <spec> (completer les sections manquantes selon le spec-template)"
+    }
+   ],
+   "suivant": "c15"
+  },
+  "c15": {
+   "titre": "Valider la spec",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne valide JAMAIS une spec sans avoir passe la boucle RVAV complete."
+    },
+    {
+     "type": "outil",
+     "nom": "valider-spec",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-spec/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-spec/valider-spec.py <spec>"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c18": {
+   "titre": "Mission hors perimetre",
+   "type": "question",
+   "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c19"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c20"
+    }
+   ]
+  },
+  "c19": {
+   "titre": "Activer l'agent habilite",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Je ne cree des specs que depuis un pense-bete source."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+    }
+   ],
+   "suivant": "c21"
+  },
+  "c20": {
+   "titre": "Signaler le besoin",
+   "type": "fin",
+   "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+  },
+  "c21": {
+   "titre": "FIN - Delegation",
+   "type": "fin",
+   "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+  },
+  "c0c": {
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+    },
+    {
+     "type": "fichier",
+     "chemin": "AGENTS.md",
+     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
+    }
+   ],
+   "suivant": "c1"
   }
+ }
 }

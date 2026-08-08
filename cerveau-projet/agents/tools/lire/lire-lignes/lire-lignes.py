@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 lire-lignes.py
 Lire des lignes specifiques d'un fichier (par numero ou plage).

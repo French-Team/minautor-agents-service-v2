@@ -4,7 +4,7 @@
 # Il surcharge ou complete la fiche d'agent principale
 
 agent:
-  nom: "[nom-agent]"
+  nom-agent: "[nom-agent]"
   version_corrections: "0.2.0"
   derniere_mise_a_jour: "2026-08-06"
 

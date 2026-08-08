@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 ecrire-fichier.py
 Ecrire ou ecraser le contenu d'un fichier. Supporte l'ecriture depuis un

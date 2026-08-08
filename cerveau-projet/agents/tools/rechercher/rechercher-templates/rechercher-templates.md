@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # rechercher-templates
 
 **Version :** 0.1.0-beta

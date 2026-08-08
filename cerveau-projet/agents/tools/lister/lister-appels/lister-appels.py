@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 lister-appels.py
 Lister les appels de fonctions dans un fichier (sh/bash, py, js/ts).

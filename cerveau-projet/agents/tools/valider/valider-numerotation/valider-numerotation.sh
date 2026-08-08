@@ -4,6 +4,10 @@
 # n'ont pas de doublons de numerotation (etape X x2)
 # Version : 0.2.0
 # Statut : prepare
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 
 # ============================================================
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier

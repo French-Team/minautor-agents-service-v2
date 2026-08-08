@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 lister-agents.py
 Lister les agents du cerveau-projet avec leurs informations (role, statut,
@@ -18,7 +22,7 @@ Options:
 Retour: 0 si succes, 1 si erreur.
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.0-py
+Version : 0.3.0-py
 Statut : beta
 """
 
@@ -27,7 +31,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.3.0-py"
 STATUT = "beta"
 
 # Couleurs ANSI
@@ -51,12 +55,22 @@ def verifier_nommage(nom_script):
 
 
 def extraire_champ(contenu, champ):
-    """Extrait la valeur d'un champ simple (role:, statut:, version:)."""
+    """Extrait la valeur d'un champ simple (role-agent:, statut-<agent>:...)."""
     for ligne in contenu.split("\n"):
         m = re.match(r"^\s*" + re.escape(champ) + r"\s*:\s*(.*)$", ligne)
         if m:
             return m.group(1).strip().strip("\"")
     return ""
+
+
+def extraire_champ_avec_repli(contenu, nouveau, ancien):
+    """Extraire la valeur d'un champ avec repli : le nouveau nom (convention
+    v0.3.0 : role-agent, statut-<agent>) est cherche en premier, l'ancien nom
+    (role:, statut:) sert de repli pendant la transition."""
+    val = extraire_champ(contenu, nouveau)
+    if val:
+        return val
+    return extraire_champ(contenu, ancien)
 
 
 def construire_parser():
@@ -114,10 +128,10 @@ def main(argv=None):
             with open(agent_file, encoding="utf-8", errors="replace") as f:
                 contenu = f.read()
 
-            role = extraire_champ(contenu, "role")
+            role = extraire_champ_avec_repli(contenu, "role-agent", "role")
             if role:
                 print("  [ROLE] " + role)
-            statut = extraire_champ(contenu, "statut")
+            statut = extraire_champ_avec_repli(contenu, "statut-" + nom, "statut")
             if statut:
                 print("  [STATUT] " + statut)
             principal = extraire_champ(contenu, "role_principal")

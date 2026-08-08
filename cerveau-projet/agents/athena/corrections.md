@@ -1,9 +1,13 @@
 ---
+identite:
+  type: corrections
+  appartient_a: athena
+  commun: false
 # Corrections et Surcharges -- Athena
 # Agent dedie aux pense-betes
 
 agent:
-  nom: "athena"
+  nom-agent: "athena"
   version_corrections: "0.1.0"
   derniere_mise_a_jour: "2026-08-06"
 

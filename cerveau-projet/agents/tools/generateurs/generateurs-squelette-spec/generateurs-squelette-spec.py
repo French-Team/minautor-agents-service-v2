@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 generateurs-squelette-spec.py
 Genere le squelette d'une spec conforme au spec-template et a la

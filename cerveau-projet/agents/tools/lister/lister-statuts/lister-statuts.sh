@@ -2,6 +2,10 @@
 # lister-statuts.sh
 # Outil pour lister les fichiers par statut
 # Proprietaire : Vulcain
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 
 # Configuration

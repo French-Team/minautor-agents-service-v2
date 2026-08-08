@@ -9,6 +9,10 @@
 #   2. corriger-emojis -> remplacer les emojis
 #   3. corriger-accents-zones-sensibles -> remplacer les accents
 #   4. rechercher-accents-sensibles -> verifier le nettoyage
+# identite:
+#   type: combo
+#   appartient_a: commun
+#   commun: true
 
 VERSION="0.2.0"
 RED='\033[0;31m'

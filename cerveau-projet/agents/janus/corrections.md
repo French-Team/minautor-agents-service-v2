@@ -1,9 +1,13 @@
 ---
+identite:
+  type: corrections
+  appartient_a: janus
+  commun: false
 # Corrections et Surcharges -- Janus
 # Agent dedie au second controle
 
 agent:
-  nom: "janus"
+  nom-agent: "janus"
   version_corrections: "0.1.0"
   derniere_mise_a_jour: "2026-08-05"
 
@@ -187,6 +191,35 @@ preferences:
 | `../../pense-betes/regles-immuables/general/protocole-versionning-outils/` | Protocole de versionning |
 
 ---
+
+## [NOTES] Controle 2026-08-08 -- protocole-creation-combos (Buffy)
+
+**Controle** : protocole-creation-combos cree (protocole + spec 8 exigences + todo) + conventions de creation des combos + corrections doc/spec moteur.
+**Verdict** : VALIDE (7/7).
+**Lecons** :
+1. Le protocole repond exactement a la question utilisee (le QUOI etait dans spec-combos-moteur, le COMMENT manquait) : il fige quand/ou/comment creer un combo + la checklist de validation -- la distinction OUTIL (agents/tools/combos/, Vulcain) vs DEFINITION (cerveau-projet/combos/, Buffy) est la cle de la convention d'emplacement
+2. Les regles de decision du protocole sont la generalisation des choix de l'etape 6 (suites combinables) : suite LINEAIRE repetee ou longue -> OUI, arbre de decision / protections embarquees / suite specifique -> NON -- le protocole capitalise une decision deja appliquee
+3. Le piege des chemins relatifs est le point le plus risque d'un nouveau protocole : 5 liens faux sur 7 dans la spec (niveau de remontee different selon spec/ vs racine) -- la lecon Buffy (valider-liens --racine .) est la parade
+4. ASCII strict re-valide sur les 7 fichiers dont mes 2 fichiers (rapport + corrections) -- le piege des accents repetitifs se rejoue a chaque redaction
+
+## [NOTES] Controle 2026-08-08 -- regle CITER le combo avant de le lancer (Buffy)
+
+**Controle** : regle de tracabilite -- l'agent qui lance un combo le CITE avant de l'executer (source de verite protocole 9.5 + EX-09 + spec/doc moteur + indice dans les 6 cases combo).
+**Verdict** : VALIDE (8/8).
+**Lecons** :
+1. Une regle de tracabilite se place en DOUBLE ANCRAGE : la source de verite (protocole + spec) documente le format de citation, le rappel en POSITION 1 des indices des cases combo rend la regle visible au moment critique -- verifier la position structurelle (script), pas seulement la presence du texte
+2. Le format de citation est uniforme : Je lance le combo <nom> : <chemin> - il enchaine <outils>. -- la citation cree la tracabilite que la commande combos-moteur seule ne donne pas (le nom du combo n'est pas dans la commande affichee)
+3. La navigation doit etre re-verifiee apres ajout d'indices : 6/6 chemins traversant les combos -> PARCOURS TERMINE (l'ajout d'un indice ne doit jamais casser le recablage)
+
+## [NOTES] Controle 2026-08-08 -- relecture en QUESTION HONNETE (Buffy)
+
+**Controle** : transformation de la REGLE DE RELECTURE (exiger une lecture) en QUESTION HONNETE (verifier la memorisation) -- case c0 dans les 11 parcours + demarrer.md + protocole-activation + 11 fiches + template.
+**Verdict** : VALIDE (9/9).
+**Lecons** :
+1. La distinction LECTURE vs MEMORISATION est la cle du piege : exiger une lecture ne prouve rien sur l'etat de memoire de l'agent -- la question (As-tu EN MEMOIRE... SANS relire ?) transforme une action en VERIFICATION, et la reponse veridique (regles-veracite) declenche l'action obligatoire
+2. La case c0 (question) + c0b (relire obligatoire) est un pattern DEJA SUPPORTE par guider-parcours : branches OUI -> c1 mission / INCERTAIN -> c0b / NON -> c0b -- la relecture devient DECLENCHEE PAR LA REPONSE, plus jamais imposee aveuglement
+3. Le remplacement uniforme (11 fiches + template) exige de verifier que l'ANCIENNE formulation a disparu (grep 0 occurrence) et que la NOUVELLE est presente (grep 1 occurrence par fichier) -- pas seulement la presence du nouveau texte
+4. La navigation prouve la logique : OUI passe directement a la mission, NON et INCERTAIN passent par c0b (relire) puis la mission -- verifier les 3 reponses, pas seulement OUI
 
 ## PHILOSOPHIE -- Principes de comportement
 
@@ -426,6 +459,18 @@ preferences:
 4. PIEGE EXTRACTION : le generateur imprime la commande sur la ligne SUIVANTE le marqueur === COMMANDE A LANCER === -- prendre la premiere ligne non vide apres le marqueur
 5. Le generateur-commande reste INCHANGE : le moteur fait le lien avec --reponses -- c'est la source de verite de la syntaxe, il devient incontournable comme composeur des cases generatrices
 6. Le test formel 31/31 couvre : --liste, navigation case_depart->fin, interpolation, generateur AUTO, controle branches OUI/NON, variable manquante code 1, dry-run, parite py/sh, nommage, ASCII, syntaxe
+
+## [NOTES] Controle 2026-08-08 -- Generalisation du Pattern 3 (Buffy)
+
+**Controle** : etape 6 plan combo-orchestrateur -- 4 combos crees + 3 parcours modifies (janus, vulcain, buffy) pour generaliser le Pattern 3.
+**Verdict** : VALIDE (12/12).
+**Lecons** :
+1. La generalisation du Pattern 3 touche les SUITES LINEAIRES d'outils : janus (2 combos : controle-outil 4 cases, controle-modification 10 cases), vulcain (combo-corriger-ascii 4 cases, x2 c7/c13), buffy (combo-sante-tableaux 6 cases) -- les parcours non transformables (cerberus retour = arbre de decision, morpheus tester = protections dans le test) restent en l'etat
+2. Chaque combo utilise les DEFANTS DU CERVEAU (cerveau-projet, cerveau-projet/agents) comme cibles stables ; les outils strictement contextuels (valider-ebauche spec, verifier-role-fichier fichier modifie) restent des INDICES de la case combo -- la case garde la regle Pattern 3 en tete + combos-moteur + definition
+3. Le generateur AUTO compose 3 nouvelles commandes du catalogue (valider-nommage-recursif, combos-valider-cerveau, corriger-accents) en plus d'audit-general -- le catalogue 12 commandes couvre les combos
+4. PIEGE COMPTAGE CHEMINS : janus 4 + vulcain 2 + buffy 6 = 12 chemins (pas 13) -- compter les branches de la case Mission de CHAQUE parcours
+5. PIEGE GREP ASCII : 'grep -c non-ASCII' compte la ligne de rapport 'Caracteres non-ASCII : 0' comme un match -- verifier la sortie reelle ([OK] Conformite ASCII stricte validee) au lieu du compteur
+6. Validation : json.load 7 fichiers + dry-run 4 combos + guider-parcours 12 chemins + ASCII 0 + parite py/sh 4/4 + zero ref morte -- meme grille que l'etape 5, elargie a 3 parcours
 
 ## [NOTES] Controle 2026-08-08 -- Pattern 3 parcours-themis + combo-audit-themis (Buffy)
 

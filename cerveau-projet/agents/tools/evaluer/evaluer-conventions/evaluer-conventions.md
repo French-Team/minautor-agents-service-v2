@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # evaluer-conventions
 
 **Version :** 0.2.0

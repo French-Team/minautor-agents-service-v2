@@ -2,6 +2,10 @@
 # verifier-separation-preoccupations.sh
 # Verifie la separation des preoccupations dans les fichiers
 # Proprietaire : Vulcain (outil partage)
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 
 DOSSIER=${1:-.}

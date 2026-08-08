@@ -1,4 +1,10 @@
 ---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
+
 # Protocole -- Boucles Dynamiques (Sous-missions)
 # Sortie et retour du flux principal
 

@@ -1,3 +1,9 @@
+---
+identite:
+  type: note
+  appartient_a: vulcain
+  commun: true
+---
 # Resume de la creation des outils
 
 **Agent** : Vulcain

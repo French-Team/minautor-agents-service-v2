@@ -1,3 +1,9 @@
+---
+identite:
+  type: spec
+  appartient_a: commun
+  commun: true
+---
 # Specification -- activer-agent-principal
 
 **Statut :** prepare
@@ -148,11 +154,17 @@ Section cible dans AGENTS.md :
 
 | Champ | Valeur |
 |---|---|
-| **Nom** | [agent] |
-| **Role** | [role] |
+| **Nom LLM** | [id du LLM, ex: llm-1 -- convention v0.5.0 : aucun mot seul, EN TETE] |
+| **Nom Agent** | [agent] |
+| **Role Agent** | [role] |
 | **Fiche** | [chemin fiche] |
 ...
 ```
+
+CONVENTION IDENTIFICATION (v0.5.0) : le champ `**Nom**` n'existe plus -- il est remplace par
+`**Nom Agent**` et `**Role Agent**`. Les anciens blocs (Nom / Role / Id LLM) sont migres
+automatiquement lors de chaque edition (reconstruction complete en ordre canonique,
+`**Nom LLM**` en tete).
 
 ### 5.4 Interfaces / API
 
@@ -276,3 +288,4 @@ Tests manuels sur le dossier `exemples/` avec des fichiers de test.
 | 2026-08-07 | 0.3.3 | REGLE UTILISATEUR : session occupee -> attribution automatique de la prochaine libre (1er LLM = llm-1) |
 | 2026-08-07 | 0.3.4 | MODE ID : sidentifier <llm-id> (comparaison id -> session, liaison dans le classeur) |
 | 0.3.2 | Vulcain | Regle de derivation du nommage (profil-session-<id> sans double prefixe) - correction du verdict A REVOIR de Janus |
+| 0.5.0 | Vulcain | CONVENTION IDENTIFICATION : blocs de session en Nom LLM (tete) / Nom Agent / Role Agent, migration automatique des anciens champs, table Sessions connues en Nom LLM |

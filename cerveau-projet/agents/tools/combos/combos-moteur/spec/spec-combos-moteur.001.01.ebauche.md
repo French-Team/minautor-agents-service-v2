@@ -1,3 +1,9 @@
+---
+identite:
+  type: spec
+  appartient_a: commun
+  commun: true
+---
 # Specification -- combos-moteur
 
 **Statut :** ebauche
@@ -159,6 +165,26 @@ bash combos-moteur.sh <definition-combo.json> [--liste] [--reponses 'cle=valeur;
 | `classeur-variables` | Persistance optionnelle des sorties (`persistant: true`) |
 | `combos-audit-general` | Exemple de combo existant (orchestrateur subprocess) |
 
+## Regle d'utilisation : citer le combo avant de le lancer
+
+> **REGLE (IMMUABLE, protocole-creation-combos 9.5)** : avant d'executer un
+> combo, l'agent ANNOUNCE le nom du combo et le chemin de sa definition.
+> Format : `Je lance le combo <nom> : <chemin> - il enchaine <outils>.`
+
+**Pourquoi** : tracabilite des executions -- l'utilisateur, Cerberus et Janus
+voient QUEL combo est lance, pas seulement la commande combos-moteur.
+
+**Exemple** :
+
+```
+Je lance le combo combo-controle-outil : cerveau-projet/combos/combo-controle-outil/definition-combo.json - il enchaine : valider-conformite-ascii -> valider-cartes-decision -> valider-liens.
+```
+
+**Rappel** : en tete des indices des cases combo des parcours (Pattern 3) :
+themis c3, janus c5/c22, vulcain c7/c13, buffy c28.
+
+---
+
 ## Tests requis
 
 | Cas | Attendu |
@@ -181,7 +207,9 @@ bash combos-moteur.sh <definition-combo.json> [--liste] [--reponses 'cle=valeur;
 - `combos-moteur.sh` (bash)
 - `combos-moteur.py` (python)
 - `spec/spec-combos-moteur.001.01.ebauche.md` (ce fichier)
-- (la definition d'un combo est un fichier du cerveau, cree par Buffy : `agents/<agent>/combos/definition-combo.json` ou `cerveau-projet/combos/`)
+- (la definition d'un combo est un fichier du cerveau, cree par Buffy selon
+  le protocole-creation-combos : `cerveau-projet/combos/<combo-nom>/definition-combo.json`
+  -- voir [protocole-creation-combos](../../../../../pense-betes/regles-immuables/general/protocole-creation-combos/protocole-creation-combos.001.01.ebauche.md))
 
 ## Notes de creation
 

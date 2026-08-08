@@ -1,3 +1,9 @@
+---
+identite:
+  type: regle
+  appartient_a: commun
+  commun: true
+---
 # Workflow RVAVP -- Rechercher -> Verifier -> Analyser -> Valider -> Purifier
 
 ## Principe fondamental

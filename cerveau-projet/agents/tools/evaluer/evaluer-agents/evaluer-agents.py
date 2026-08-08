@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 evaluer-agents.py
 Evalue le comportement des agents : respect des protocoles, outils, fiches.
@@ -12,7 +16,7 @@ Usage:
 Retour: 0 toujours (outil d'evaluation, rapport sur stdout).
 
 Proprietaire : Themis (outil partage)
-Version : 0.2.0-py
+Version : 0.2.2-py
 Statut : beta
 """
 
@@ -20,7 +24,7 @@ import argparse
 import os
 import sys
 
-VERSION = "0.2.1-py"
+VERSION = "0.2.2-py"
 STATUT = "beta"
 
 # Couleurs ANSI
@@ -189,9 +193,10 @@ def main(argv=None):
     print("")
     print("## Agent actif")
     total += 1
+    # Convention v0.5.0 : champ **Nom Agent** (ancien **Nom** accepte en repli)
     agent_actif = ""
     for ligne in contenu_agents_md.splitlines():
-        if "**Nom**" in ligne and "|" in ligne:
+        if ("**Nom Agent**" in ligne or "**Nom**" in ligne) and "|" in ligne:
             agent_actif = ligne.split("|")[2].strip()
             break
     if agent_actif == "Cerberus":

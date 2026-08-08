@@ -1,3 +1,9 @@
+---
+identite:
+  type: regle
+  appartient_a: commun
+  commun: true
+---
 # Regle Immuable -- Veracite et Honnetete
 
 > Un agent ne doit JAMAIS mentir, inventer, ou supposer.

@@ -1,9 +1,13 @@
 ---
+identite:
+  type: corrections
+  appartient_a: cerberus
+  commun: false
 # Corrections et Surcharges -- Cerberus
 # Point d'entree unique de chaque session
 
 agent:
-  nom: "cerberus"
+  nom-agent: "cerberus"
   version_corrections: "0.2.0"
   derniere_mise_a_jour: "2026-08-05"
 
@@ -103,6 +107,20 @@ preferences:
   documenter_activations: true
   exiger_retour: true
 ```
+
+---
+
+## [LECON] 2026-08-08 -- demarrer.md devient un LANCEUR (parcours de demarrage)
+
+**Tache** : corriger le probleme du 2e LLM (Kilo) qui lisait demarrer.md mais n'executait PAS sidentifier (il restait au resume au lieu d agir).
+**Lecons** :
+1. PROBLEME : demarrer.md etait un fichier PASSIF (a lire) alors que l identification est une ACTION (a executer). Un LLM tiers fait ce qu'on lui demande litteralement : lire -> il resume. La transition instructions lues -> commande lancee ne se fait pas automatiquement.
+2. SOLUTION (decision utilisateur) : demarrer.md doit avoir une CARTE DE DECISION comme le reste du cerveau -> creation du PARCOURS DE DEMARRAGE (cerveau-projet/demarrage/parcours-demarrage.json, 8 cases, identite parcours commun) : c0 question honnete -> c0b relire -> c0c contexte temps reel -> c1 S'identifier (sidentifier <mon-id>) -> c2 verifier son bloc dans AGENTS.md (controle OUI/NON) -> c3 devenir Cerberus -> c4 attendre mission -> c5 fin active (lancer le parcours de l agent).
+3. demarrer.md devient un LANCEUR : il NE SE LIT PAS, il SE LANCE. Son contenu = la commande guider-parcours.py parcours-demarrage.json + l explication des 5 etapes.
+4. PATTERN 4 respecte : case_depart=c0, question avec memoire + SANS relire (majuscules comme les 11 parcours), branches OUI->c0c / INCERTAIN->c0b / NON->c0b, c0b->c0c->c1. PATTERN 2 : regle ASCII en tete des indices de c1 (case qui ecrit dans AGENTS.md). PATTERN 5 : fin c5 ACTIVE (message = action de relais), pas de fin passive.
+5. La boucle de validation : navigation OUI (PARCOURS TERMINE), navigation NON (relire puis TERMINE), --liste 8 cases, ASCII 0, detecter-impacts lit l identite, migrer-identite le marque DEJA (schema hybride operationnel sur le nouveau fichier).
+6. PIEGE TEST : les greps sensibles a la casse faussent l audit des patterns (MEMOIRE vs memoire) -- toujours comparer en minuscule pour verifier les mots de la spec.
+7. PIEGE ACTIVATION : les caracteres () dans la raison de reactiver-agent-principal cassent le parsing (Parametres manquants) -- utiliser des raisons sans parentheses.
 
 ---
 

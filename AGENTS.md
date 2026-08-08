@@ -1,3 +1,9 @@
+---
+identite:
+  type: racine
+  appartient_a: commun
+  commun: true
+---
 # Agents du Cerveau-Projet
 
 > Ce fichier est mis a jour dynamiquement par les agents principaux.
@@ -12,19 +18,22 @@
 
 | Champ | Valeur |
 |---|---|
-| **Nom** | Cerberus |
-| **Id LLM** | llm-1 |
-| **Role** | Gardien de l'entree -- analyse et active les agents |
+| **Nom LLM** | llm-1 |
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
 | **Derniere mise a jour** | 2026-08-08 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Janus (retour de mission) |
-| **Raison** | SECOND CONTROLE TERMINE: VERDICT VALIDE 12/12 sur le Pattern 3 parcours-themis + combo-audit-themis (Buffy). (1) combo cree 9 cases, (2) structure generateurs + outils + fin, (3) parcours 17 cases v0.2.0, (4) c3 case combo Pattern 3, (5) c19 recable vers c3 zero ref morte, (6) json.load OK 2 fichiers, (7) --liste 17, (8) --reponses 4 chemins TERMINE, (9) ASCII 0 sur 3 fichiers, (10) parite py/sh OK, (11) moteur catalogue generateur INCHANGES, (12) lecon Buffy notee. Rapport controle-pattern3-themis-2026-08-08.md + lecon Janus notee. Bilan outils Janus: activer-agent-principal, lire-fichier, valider-conformite-ascii, guider-parcours, combos-moteur |
+| **Active par** | buffy (retour de mission) |
+| **Raison** | MISSION TERMINEE (Buffy - convention identification v0.5.0): migration des fiches agents TERMINEE. 11 fiches (nom-agent, role-agent, statut-<agent>), 2 templates, 11 corrections.md, parcours-demarrage.json + protocole-identification migres (Id LLM -> Nom LLM). Validation: lister-agents lit nouveaux champs, ASCII 0, detecter-impacts OK. Lecon dans corrections.md. AGENTS.md deja migre automatiquement (etape 5 couverte). |
+## Sessions connues
 
-
-
----
-
+| Session | Nom LLM | Agent actif | Derniere activite |
+|---|---|---|---|
+| session-llm-1 | llm-1 | Cerberus | 2026-08-08 16:06 |
+| session-llm-3 | - | Cerberus | 2026-08-07 16:12 |
+| session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |
+| session-llm-5 | llm-3 | Cerberus | 2026-08-07 16:04 |
 ## Configuration Active
 
 ### Regles specifiques a Cerberus

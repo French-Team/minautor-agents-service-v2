@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # valider-tableaux
 # Verifie la coherence des tableaux des fiches agents
 

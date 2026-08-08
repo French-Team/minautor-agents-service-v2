@@ -4,6 +4,10 @@
 # Ajouter du contenu a la fin d'un fichier (append)
 # Version : 0.2.0
 # Statut : ebauche
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 
 # ============================================================
 # OUTIL PYTHON - VERSION DE ajouter-contenu-fichier.sh

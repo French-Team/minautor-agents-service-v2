@@ -1,9 +1,13 @@
 ---
+identite:
+  type: corrections
+  appartient_a: clio
+  commun: false
 # Corrections et Surcharges -- Clio
 # Agent dedie a la mise a jour du README
 
 agent:
-  nom: "clio"
+  nom-agent: "clio"
   version_corrections: "0.1.0"
   derniere_mise_a_jour: "2026-08-06"
 

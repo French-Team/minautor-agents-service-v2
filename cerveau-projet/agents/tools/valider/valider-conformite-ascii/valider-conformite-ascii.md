@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # valider-conformite-ascii
 
 **Version :** 0.3.0-py

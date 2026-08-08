@@ -1,3 +1,9 @@
+---
+identite:
+  type: convention
+  appartient_a: commun
+  commun: true
+---
 # Convention Liens
 
 ## Objectif

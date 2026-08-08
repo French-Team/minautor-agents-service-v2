@@ -3,6 +3,10 @@
 # Ajouter du contenu a la fin d'un fichier (append)
 # Version : 0.2.0
 
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 STATUT="ebauche"
 

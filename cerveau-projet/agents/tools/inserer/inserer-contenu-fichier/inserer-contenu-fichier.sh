@@ -3,6 +3,10 @@
 # Inserer du contenu a une position precise dans un fichier
 # Version : 0.2.0
 
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 STATUT="ebauche"
 

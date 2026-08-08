@@ -76,5 +76,10 @@
       "type": "fin",
       "message": "Audit croise complet : audit-general, relecture, sante, tableaux et traces d'outils externes executes. Synthetiser les resultats dans le rapport (case suivante du parcours themis)."
     }
+  },
+  "identite": {
+    "type": "combo",
+    "appartient_a": "commun",
+    "commun": true
   }
 }

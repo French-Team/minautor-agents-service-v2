@@ -3,6 +3,10 @@
 # Supprimer une ligne (ou une plage) par numero dans un fichier
 # Version : 0.2.0
 
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.2.0"
 STATUT="ebauche"
 

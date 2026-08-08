@@ -1,3 +1,9 @@
+---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
 # Protocole -- Carte de Decision pour les Agents
 
 **Version** : 0.2.0

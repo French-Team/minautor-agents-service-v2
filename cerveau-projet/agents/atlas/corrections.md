@@ -1,10 +1,14 @@
 ---
+identite:
+  type: corrections
+  appartient_a: atlas
+  commun: false
 # Corrections et Surcharges -- Atlas
 # Ce fichier contient les regles specifiques a Atlas
 # Il surcharge ou complete la fiche d'agent principale
 
 agent:
-  nom: "atlas"
+  nom-agent: "atlas"
   version_corrections: "0.2.0"
   derniere_mise_a_jour: "2026-08-04"
 

@@ -1,3 +1,9 @@
+---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
 # Protocole Immuable -- Versionning des Outils
 **Portee :** Tous les outils dans `agents/tools/`
 **Prerequis :** Protocole-outils, conventions de nommage

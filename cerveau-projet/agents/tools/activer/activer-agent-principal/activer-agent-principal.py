@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: ascii -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 activer-agent-principal.py
 
@@ -20,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.4.0
+Version : 0.5.0
 Statut : prepare
 """
 
@@ -30,7 +34,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 STATUT = "prepare"
 
 AGENTS_FILE = os.environ.get("AGENTS_FILE", "AGENTS.md")
@@ -169,15 +173,15 @@ def trouver_prochaine_session(contenu):
 
 def trouver_session_par_id(llm_id):
     """Retrouver la session liee a un llm-id (ou None).
-    SOURCE DOUBLE (v0.4.0) : 1) AGENTS.md -- bloc avec le champ '**Id LLM** | <id>' ;
-    2) classeur -- ligne profil-session avec 'id: <llm-id>'. Permet au LLM de se
-    reconnaitre directement en lisant AGENTS.md."""
-    # 1. AGENTS.md : champ Id LLM dans les blocs de session
+    SOURCE DOUBLE (v0.4.0) : 1) AGENTS.md -- bloc avec le champ '**Nom LLM** | <id>'
+    (ancien nom **Id LLM** accepte) ; 2) classeur -- ligne profil-session avec
+    'id: <llm-id>'. Permet au LLM de se reconnaitre directement en lisant AGENTS.md."""
+    # 1. AGENTS.md : champ Nom LLM dans les blocs de session
     if os.path.isfile(AGENTS_FILE):
         with io.open(AGENTS_FILE, "r", encoding="utf-8", errors="replace") as fh:
             contenu = fh.read()
         for session, bloc in extraire_blocs_session(contenu):
-            m = re.search(r"\*\*Id LLM\*\* \| ([^|]+)", bloc)
+            m = re.search(r"\*\*(?:Id LLM|Nom LLM)\*\* \| ([^|]+)", bloc)
             if m and m.group(1).strip() == llm_id:
                 return session
     # 2. Classeur : liaison id dans les lignes profil-session
@@ -194,7 +198,7 @@ def trouver_session_par_id(llm_id):
 
 
 def id_lie_a_session(session_id):
-    """Retourner l'id LLM lie a une session (AGENTS.md champ Id LLM, puis classeur),
+    """Retourner l'id LLM lie a une session (AGENTS.md champ Nom LLM, puis classeur),
     ou None si la session n'est liee a aucun id. Utile pour detecter un CONFLIT
     d'alignement (v0.4.0) : session-llm-N deja liee a un autre id."""
     # 1. AGENTS.md
@@ -203,7 +207,7 @@ def id_lie_a_session(session_id):
             contenu = fh.read()
         for session, bloc in extraire_blocs_session(contenu):
             if session == session_id:
-                m = re.search(r"\*\*Id LLM\*\* \| ([^|]+)", bloc)
+                m = re.search(r"\*\*(?:Id LLM|Nom LLM)\*\* \| ([^|]+)", bloc)
                 if m and m.group(1).strip():
                     return m.group(1).strip()
     # 2. Classeur
@@ -229,33 +233,16 @@ def session_cible_pour_id(llm_id):
     return None
 
 
-def poser_id_llm_bloc(contenu, session_id, llm_id):
-    """Ajouter ou mettre a jour le champ '**Id LLM** | <id>' dans le bloc de session.
-    Si la ligne existe -> remplacee ; sinon inseree juste apres le champ **Nom**.
-    Retourne le contenu modifie."""
-    lignes = contenu.split("\n")
-    sortie = []
-    dans_bloc = False
-    for ligne in lignes:
-        if dans_bloc and (re.match(r"^### Session : ", ligne) or ligne.startswith("## ")):
-            dans_bloc = False
-        if re.match(r"^### Session : " + re.escape(session_id) + r"\s*$", ligne):
-            dans_bloc = True
-        if dans_bloc:
-            if re.match(r"^\| \*\*Id LLM\*\* \| ", ligne):
-                sortie.append("| **Id LLM** | %s |" % llm_id)
-                continue
-            if re.match(r"^\| \*\*Nom\*\* \| ", ligne):
-                sortie.append(ligne)
-                sortie.append("| **Id LLM** | %s |" % llm_id)
-                continue
-        sortie.append(ligne)
-    return "\n".join(sortie)
+def poser_nom_llm_bloc(contenu, session_id, llm_id):
+    """Ajouter ou mettre a jour le champ '**Nom LLM** | <id>' EN TETE du bloc de
+    session (convention v0.5.0 : nom-llm avant nom-agent). L'ancien champ
+    **Id LLM** est migre automatiquement vers **Nom LLM**. Retourne le contenu."""
+    return editer_champs_session(contenu, session_id, {"Nom LLM": llm_id})
 
 
 def creer_session(contenu, session_id, llm_id=None):
     """Ajouter un bloc de session (Cerberus par defaut) apres ## Sessions LLM.
-    Si llm_id fourni (v0.4.0), le champ **Id LLM** est ecrit dans le bloc."""
+    Si llm_id fourni (v0.4.0), le champ **Nom LLM** est ecrit en tete du bloc."""
     if any(s == session_id for s, _ in extraire_blocs_session(contenu)):
         return contenu
     info = get_agent_info("cerberus")
@@ -263,16 +250,16 @@ def creer_session(contenu, session_id, llm_id=None):
     date = datetime.now().strftime("%Y-%m-%d")
     champ_id = ""
     if llm_id:
-        champ_id = "| **Id LLM** | %s |\n" % llm_id
+        champ_id = "| **Nom LLM** | %s |\n" % llm_id
     bloc = (
         "\n### Session : %s\n\n"
         "| Champ | Valeur |\n"
         "|---|---|\n"
-        "| **Nom** | Cerberus |\n"
     ) % session_id
     bloc += champ_id
     bloc += (
-        "| **Role** | %s |\n"
+        "| **Nom Agent** | Cerberus |\n"
+        "| **Role Agent** | %s |\n"
         "| **Derniere mise a jour** | %s |\n"
         "| **Fiche** | [%s](%s) |\n"
         "| **Corrections** | [%s](%s) |\n"
@@ -294,28 +281,67 @@ def creer_session(contenu, session_id, llm_id=None):
 
 
 def editer_champs_session(contenu, session_id, champs):
-    """Remplacer les champs (dict nom -> valeur) du bloc de session_id uniquement."""
+    """Remplacer les champs (dict nom -> valeur) du bloc de session_id uniquement.
+    Convention v0.5.0 : reconstruction complete du bloc dans l'ordre canonique --
+    les anciens noms de champs (Nom, Role, Id LLM) sont migres automatiquement vers
+    les nouveaux (Nom Agent, Role Agent, Nom LLM), les champs manquants sont inseres
+    a leur position, Nom LLM est place EN TETE."""
+    ORDRE = ["Nom LLM", "Nom Agent", "Role Agent", "Derniere mise a jour",
+             "Fiche", "Corrections", "Active par", "Raison"]
+
+    def reconstruire_bloc(bloc, champs):
+        """Analyser les lignes d'un bloc, appliquer les champs, reemettre dans l'ordre."""
+        valeurs = {}
+        for ligne in bloc:
+            m = re.match(r"^\| \*\*([^*]+)\*\* \| (.*) \|$", ligne)
+            if not m:
+                continue
+            champ = m.group(1).strip()
+            valeur = m.group(2).strip()
+            # Migration anciens noms
+            if champ == "Nom":
+                champ = "Nom Agent"
+            elif champ == "Role":
+                champ = "Role Agent"
+            elif champ == "Id LLM":
+                champ = "Nom LLM"
+            # Fiche/Corrections : extraire le chemin depuis [x](x)
+            if champ in ("Fiche", "Corrections"):
+                mm = re.match(r"^\[(.*)\]\((.*)\)$", valeur)
+                if mm:
+                    valeur = mm.group(2)
+            valeurs[champ] = valeur
+        valeurs.update(champs)
+        nouvelles = ["", "| Champ | Valeur |", "|---|---|"]
+        for champ in ORDRE:
+            if champ in valeurs:
+                v = valeurs[champ]
+                if champ in ("Fiche", "Corrections"):
+                    nouvelles.append("| **%s** | [%s](%s) |" % (champ, v, v))
+                else:
+                    nouvelles.append("| **%s** | %s |" % (champ, v))
+        # Champs inconnus conserves (s'ils existaient dans le bloc)
+        for champ, v in valeurs.items():
+            if champ not in ORDRE:
+                nouvelles.append("| **%s** | %s |" % (champ, v))
+        return nouvelles
+
     lignes = contenu.split("\n")
     sortie = []
-    dans_bloc = False
-    for ligne in lignes:
-        if dans_bloc and (re.match(r"^### Session : ", ligne) or ligne.startswith("## ")):
-            dans_bloc = False
+    i = 0
+    while i < len(lignes):
+        ligne = lignes[i]
         if re.match(r"^### Session : " + re.escape(session_id) + r"\s*$", ligne):
-            dans_bloc = True
-        if dans_bloc:
-            for champ, valeur in champs.items():
-                motif = r"^\| \*\*%s\*\* \| " % re.escape(champ)
-                if re.match(motif, ligne):
-                    if champ in ("Fiche", "Corrections"):
-                        sortie.append("| **%s** | [%s](%s) |" % (champ, valeur, valeur))
-                    else:
-                        sortie.append("| **%s** | %s |" % (champ, valeur))
-                    break
-            else:
-                sortie.append(ligne)
+            sortie.append(ligne)
+            i += 1
+            bloc = []
+            while i < len(lignes) and not (re.match(r"^### Session : ", lignes[i]) or lignes[i].startswith("## ")):
+                bloc.append(lignes[i])
+                i += 1
+            sortie.extend(reconstruire_bloc(bloc, champs))
             continue
         sortie.append(ligne)
+        i += 1
     return "\n".join(sortie)
 
 
@@ -359,6 +385,78 @@ def ajouter_historique(timestamp, session, agent, raison):
 
     print("Historique mis a jour dans %s" % AGENTS_HISTORIQUE)
     return 0
+
+
+def mettre_a_jour_sessions_connues(contenu):
+    """Reconstruire la section '## Sessions connues' d'AGENTS.md a partir du
+    classeur-variables (lignes profil-session-*). La section liste toutes les
+    sessions existantes (session, id LLM, agent actif, derniere activite) pour
+    que chaque LLM sache que les autres existent et voie leur activite en temps
+    reel. Retourne le contenu modifie (section remplacee ou inseree)."""
+    if not os.path.isfile(CLASSEUR_STOCKAGE):
+        return contenu
+    lignes = []
+    with io.open(CLASSEUR_STOCKAGE, "r", encoding="utf-8", errors="replace") as fh:
+        for ligne in fh:
+            if "profil-session-" not in ligne:
+                continue
+            m = re.search(r"session: (session-llm-\d+)", ligne)
+            if not m:
+                continue
+            session = m.group(1)
+            mid = re.search(r"id: (\S+)", ligne)
+            llm_id = mid.group(1) if mid else "-"
+            mage = re.search(r"agent: (\S+)", ligne)
+            agent = mage.group(1) if mage else "?"
+            mdate = re.search(r"date: (\S+ \S+)", ligne)
+            date = mdate.group(1) if mdate else "-"
+            lignes.append((session, llm_id, agent, date))
+    if not lignes:
+        return contenu
+
+    def cle_session(entree):
+        m = re.search(r"session-llm-(\d+)", entree[0])
+        return int(m.group(1)) if m else 0
+
+    lignes.sort(key=cle_session)
+    table = ("## Sessions connues\n\n"
+             "| Session | Nom LLM | Agent actif | Derniere activite |\n"
+             "|---|---|---|---|\n")
+    for session, llm_id, agent, date in lignes:
+        table += "| %s | %s | %s | %s |\n" % (session, llm_id, agent, date)
+
+    # Retirer une section existante (jusqu'a la prochaine section ##)
+    ls = contenu.split("\n")
+    sortie = []
+    i = 0
+    while i < len(ls):
+        if ls[i].strip() == "## Sessions connues":
+            i += 1
+            while i < len(ls) and not ls[i].startswith("## "):
+                i += 1
+            continue
+        sortie.append(ls[i])
+        i += 1
+    contenu = "\n".join(sortie)
+
+    # Inserer avant '## Configuration Active' (ou en fin si absente)
+    if "## Configuration Active" in contenu:
+        contenu = contenu.replace("## Configuration Active",
+                                  table + "## Configuration Active", 1)
+    else:
+        contenu = contenu.rstrip("\n") + "\n\n" + table
+    return contenu
+
+
+def actualiser_sessions_connues():
+    """Relire AGENTS.md, reconstruire la section '## Sessions connues' (a partir
+    du classeur a jour) et reecrire. A appeler APRES la mise a jour du profil
+    session pour que la section reflete l'etat courant."""
+    contenu = lire_agents()
+    if contenu is None:
+        return
+    contenu = mettre_a_jour_sessions_connues(contenu)
+    ecrire_agents(contenu)
 
 
 def mettre_a_jour_profil_session(session, agent, llm_id=None):
@@ -433,7 +531,7 @@ def sidentifier(llm_id=None):
     REGLE ALIGNEMENT (v0.4.0) : id llm-N -> session-llm-N. Le numero de session
     porte le numero de l'id. Conflit gere : si session-llm-N est deja liee a un
     AUTRE id, message clair + attribution de la prochaine session libre.
-    SOURCE DOUBLE : l'outil cherche la liaison dans AGENTS.md (champ **Id LLM**)
+    SOURCE DOUBLE : l'outil cherche la liaison dans AGENTS.md (champ **Nom LLM**)
     puis dans le classeur (id: <llm-id>). Le LLM peut donc se reconnaitre en
     lisant AGENTS.md.
     - id deja lie -> c'est SA session (retrouvee)
@@ -482,13 +580,14 @@ def sidentifier(llm_id=None):
             return 1
         ecrire_agents(contenu)
     elif llm_id is not None:
-        # Bloc existant : poser/mettre a jour le champ Id LLM (reconnaissance par lecture)
-        contenu = poser_id_llm_bloc(contenu, session, llm_id)
+        # Bloc existant : poser/mettre a jour le champ Nom LLM (reconnaissance par lecture)
+        contenu = poser_nom_llm_bloc(contenu, session, llm_id)
         ecrire_agents(contenu)
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     ajouter_historique(timestamp, session, "Cerberus", "Identification LLM - demarrage de session")
     mettre_a_jour_profil_session(session, "Cerberus", llm_id)
+    actualiser_sessions_connues()
     return 0
 
 
@@ -516,8 +615,8 @@ def activer_agent(session, agent, raison, mission=None):
     role, fiche, corrections = info
     date = datetime.now().strftime("%Y-%m-%d")
     champs = {
-        "Nom": agent,
-        "Role": role,
+        "Nom Agent": agent,
+        "Role Agent": role,
         "Derniere mise a jour": date,
         "Fiche": fiche,
         "Corrections": corrections,
@@ -530,6 +629,7 @@ def activer_agent(session, agent, raison, mission=None):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     ajouter_historique(timestamp, session, agent, raison)
     mettre_a_jour_profil_session(session, agent)
+    actualiser_sessions_connues()
     print("Session %s : agent %s active avec succes" % (session, agent))
     return 0
 
@@ -561,8 +661,8 @@ def reactiver_cerberus(session, raison, agent_precedent):
     role, fiche, corrections = get_agent_info("cerberus")
     date = datetime.now().strftime("%Y-%m-%d")
     champs = {
-        "Nom": "Cerberus",
-        "Role": role,
+        "Nom Agent": "Cerberus",
+        "Role Agent": role,
         "Derniere mise a jour": date,
         "Fiche": fiche,
         "Corrections": corrections,
@@ -575,6 +675,7 @@ def reactiver_cerberus(session, raison, agent_precedent):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     ajouter_historique(timestamp, session, "Cerberus", raison)
     mettre_a_jour_profil_session(session, "Cerberus")
+    actualiser_sessions_connues()
     print("Session %s : Cerberus reactive avec succes" % session)
     return 0
 
@@ -589,7 +690,7 @@ def lister_sessions():
         print("Aucune session LLM enregistree")
         return 0
     for session, bloc in blocs:
-        m = re.search(r"\*\*Nom\*\* \| ([^|]+)", bloc)
+        m = re.search(r"\*\*(?:Nom Agent|Nom)\*\* \| ([^|]+)", bloc)
         nom = m.group(1).strip() if m else "?"
         print("%s : %s" % (session, nom))
     return 0

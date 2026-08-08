@@ -1,4 +1,10 @@
 ---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
+
 # Protocole de Tests avec Protections
 # Comment tester les outils du cerveau-projet
 

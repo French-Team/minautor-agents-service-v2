@@ -8,6 +8,10 @@
 # Version : 0.3.0-beta
 
 # Configuration
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.3.0"
 STATUT="prepare"
 

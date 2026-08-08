@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # detecter-erreur-statut
 
 **Categorie** : Detecter

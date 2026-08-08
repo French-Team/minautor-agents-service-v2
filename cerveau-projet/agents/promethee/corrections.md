@@ -1,9 +1,13 @@
 ---
+identite:
+  type: corrections
+  appartient_a: promethee
+  commun: false
 # Corrections et Surcharges -- Promethee
 # Agent dedie aux specs
 
 agent:
-  nom: "promethee"
+  nom-agent: "promethee"
   version_corrections: "0.1.0"
   derniere_mise_a_jour: "2026-08-06"
 

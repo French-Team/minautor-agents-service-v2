@@ -34,7 +34,19 @@
           "cle": "agent",
           "question": "Agent a activer ?",
           "type": "choix",
-          "choix": ["Cerberus", "Buffy", "Vulcain", "Janus", "Themis", "Morpheus", "Atlas", "Athena", "Promethee", "Minerve", "Clio"],
+          "choix": [
+            "Cerberus",
+            "Buffy",
+            "Vulcain",
+            "Janus",
+            "Themis",
+            "Morpheus",
+            "Atlas",
+            "Athena",
+            "Promethee",
+            "Minerve",
+            "Clio"
+          ],
           "obligatoire": true
         },
         {
@@ -70,7 +82,19 @@
           "cle": "agent",
           "question": "Agent qui reactive Cerberus ?",
           "type": "choix",
-          "choix": ["Cerberus", "Buffy", "Vulcain", "Janus", "Themis", "Morpheus", "Atlas", "Athena", "Promethee", "Minerve", "Clio"],
+          "choix": [
+            "Cerberus",
+            "Buffy",
+            "Vulcain",
+            "Janus",
+            "Themis",
+            "Morpheus",
+            "Atlas",
+            "Athena",
+            "Promethee",
+            "Minerve",
+            "Clio"
+          ],
           "obligatoire": true
         }
       ]
@@ -143,7 +167,13 @@
           "cle": "section",
           "question": "Section a remplir ?",
           "type": "choix",
-          "choix": ["titre", "idee", "probleme", "contexte", "liens"],
+          "choix": [
+            "titre",
+            "idee",
+            "probleme",
+            "contexte",
+            "liens"
+          ],
           "obligatoire": true
         },
         {
@@ -326,6 +356,33 @@
           "defaut": "non"
         }
       ]
+    },
+    {
+      "nom": "detecter-impacts",
+      "description": "Detecter les fichiers impliques par la modification d un fichier du cerveau (schema identite:)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py",
+      "modele": "{fichier} {racine}",
+      "parametres": [
+        {
+          "cle": "fichier",
+          "question": "Chemin du fichier modifie (avec frontmatter identite:) ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "racine",
+          "question": "Racine de scan (vide = cerveau-projet) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        }
+      ]
     }
-  ]
+  ],
+  "identite": {
+    "type": "outil",
+    "appartient_a": "commun",
+    "commun": true
+  }
 }

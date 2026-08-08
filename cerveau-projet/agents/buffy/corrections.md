@@ -1,9 +1,13 @@
 ---
+identite:
+  type: corrections
+  appartient_a: buffy
+  commun: false
 # Corrections et Surcharges -- Buffy
 # Agent principal -- Developpeur du cerveau-projet
 
 agent:
-  nom: "buffy"
+  nom-agent: "buffy"
   version_corrections: "0.5.0"
   derniere_mise_a_jour: "2026-08-05"
 
@@ -53,6 +57,11 @@ types:
 | 2026-08-07 | Quand une mission renomme une mission dans la table d'une fiche, renommer AUSSI le titre de section detaille (### Mission : X) pour que valider-tableaux trouve la correspondance | Coherence table/section |
 | 2026-08-07 | Delegation des tests : Vulcain active Morpheus au moment des tests de ses outils (modele boucle : Morpheus reactive Vulcain, qui termine puis reactive Cerberus). Les fiches vulcain.md et morpheus.md ont ete restructurees en consequence | Delegation aux agents dedies |
 | 2026-08-07 | Corrections mineures morpheus.md (rapport Themis) : lien frontmatter 'tools/tests/' -> 'tools/tester/' (dossier renomme) + motif 'protection-*' -> 'tester-protection-*' (6 occurrences) | Suivre les rapports Themis jusqu a la correction |
+| 2026-08-08 | Vague 1 migration schema identite (33 fichiers) : bloc identite: ajoute aux 11 fiches + 11 corrections (frontmatter YAML) + 11 parcours (cle JSON top-level). Lecons : (1) themis/corrections.md n avait PAS de frontmatter --- (cas particulier traite a la main), (2) guider-parcours tolere les cles inconnues mais valider-cartes-decision cherche la section Carte de Decision dans les fiches allegees -> NON CONFORME PRE-EXISTANT (hors perimetre, a signaler), (3) detecter-impacts BUG DECOUVERT en usage reel : le fichier modifie apparait lui-meme dans les impliques (comparaison chemin relatif vs absolu : args.fichier relatif vs scanner absolu) -> a corriger par Vulcain, (4) valider-nommage sur agents/ = faux positifs (concu pour outils/ uniquement) | Migration par vagues + verifier chaque outil en usage reel |
+| 2026-08-08 | CHASSE AUX INTENTIONS PASSIVES (Pattern 5, spec v0.2.6) : apres la decouverte utilisateur (carte vulcain se terminait par une FIN passive 'Morpheus teste et te reactive' -> chaine coupee), chasse systematique dans tout le cerveau. Lecons : (1) SCAN : les 11 parcours ont ete scannes pour les formulations passives dans les messages des cases fin (te reactive / j attends / attend le retour / il me reactive) -> seuls vulcain et morpheus portaient des formulations a corriger (les autres fins etaient deja actives) ; (2) CORRECTIONS : vulcain.md (J attends son retour -> LA CHAINE NE S ARRETE PAS : boucle RELAIS -> RETOUR -> CLOTURE materialisee dans la carte v0.2.1), morpheus.md (3 occurrences modele boucle precisees avec la case RETOUR c9b/c15b de Vulcain), fins CHAIN/FLUX athena c10 + promethee c10 (ajout RELAIS ACTIF : je ne m arrete pas en attente, la chaine continue jusqu au retour a Cerberus) ; (3) PREVENTION : REGLE ABSOLUE 7 ajoutee au template fiche-agent (chaine de delegation active) + Pattern 5 documente dans la spec-guider-parcours v0.2.6 (structure RELAIS -> RETOUR -> CLOTURE -> FIN + procedure d audit 4b) + GARDE-FOU generateurs-case v0.1.1 py/sh (detection des formulations passives a la creation/edition d une case fin, avertissement jaune non bloquant) + doc generateurs 0.1.1 ; (4) VALIDATION : scan final 11 parcours = 0 passif, json.load, --liste, --reponses chemins athena/promethee -> PARCOURS TERMINE, py_compile + bash -n, parite py/sh garde-fou (ATTENTION detectee 1/1), ASCII 0 sur 9 fichiers ; (5) REGLE GENERALE : une delegation ne se termine JAMAIS par une fin passive -- la carte du delegant materialise la boucle (RELAIS lancer le parcours du delegue -> RETOUR verifier son rapport -> CLOTURE reactiver Cerberus) | Toute fin passive coupe la chaine : materialiser la boucle RELAIS -> RETOUR -> CLOTURE |
+| 2026-08-08 | Spec-guider-parcours v0.2.7 : RE-AUDIT COMPLET DES 5 PATTERNS (lecon Themis : l audit 4b seul ne testait que Pattern 5, c est la procedure 2 qui a revele 3 ecarts ASCII chez vulcain c4/c6/c12). Lecons : (1) REGLE : a chaque creation/modification/audit de parcours, REJOUER les procedures 1, 2, 3, 4 et 4b en integralite -- JAMAIS seulement la procedure nouvelle ou modifiee ; un audit partiel donne un verdict partiel ; (2) AJOUTS : preamble REGLE DE RE-AUDIT COMPLET en tete de la procedure + section 4b enrichie (point 6 : distinguer DELEGATION vs ACTION FINALE -- les parcours sans delegation se terminent par des fins actives Reactiver Cerberus, pas de boucle requise) + section 4c RE-AUDIT COMPLET (rejouer les 5 procedures, verifier en particulier la procedure 2 position 1 texte UNIFORME REGLE IMMUABLE ASCII) + critere d acceptation 14 ; (3) PIEGE ASCII REPETITIF : 2 accents introduits malgre la regle (REJOUES puis Apres) -> les detecter avec valider-conformite-ascii AVANT de declarer termine (l outil signale les lignes non-ASCII, corriger puis revalider a 0) | Un audit partiel donne un verdict partiel : toujours re-auditer les 5 patterns |
+| 2026-08-08 | CONTEXTE TEMPS REEL (Pattern 6, spec-guider-parcours v0.2.8) : decision utilisateur -- chaque agent doit se souvenir des dernieres interventions des autres agents (meme si deja en memoire) et savoir que les autres LLM existent. Lecons : (1) DISTINCTION STATIQUE/DYNAMIQUE : la question honnete c0 couvre le STATIQUE (fiche + corrections, memorisable) ; l HISTORIQUE (AGENTS-historique.md) est DYNAMIQUE (il change a chaque activation des autres LLM) -- le dynamique ne se memorise pas, sa lecture est OBLIGATOIRE meme en memoire ; (2) 2 OUTILS LIVRES PAR VULCAIN (VERDICT Morpheus VALIDE, test-006 26/26) : lire-activite-recente v0.1.0 (les 15 dernieres interventions au format date | session | agent | action, env AGENTS_HISTORIQUE) + activer-agent-principal v0.4.1 (section ## Sessions connues dans AGENTS.md reconstruite a chaque action depuis le classeur, table session | id LLM | agent actif | derniere activite) ; (3) ANCRAGE 5 NIVEAUX : case c0c CONTEXTE inseree dans les 11 parcours (c0 OUI -> c0c, c0b -> c0c, c0c -> c1 -- traversee par TOUS les chemins, meme OUI) + demarrer.md (section 2) + protocole-activation (Etape 3 + regle d or + piege) + spec v0.2.8 (Pattern 6 + procedure 4d + critere 15) + template (REGLE ABSOLUE 8) ; (4) PIEGE MODIFICATION JSON EN MASSE : un heredoc complexe dans spawn_agents casse le JSON (Unterminated string) -- ecrire le script de transformation dans un fichier (write_file) puis l executer ; (5) RECABLAGE : la case c0c doit etre atteignable par OUI ET par c0b (sinon le chemin OUI contourne le contexte) -- verifier les 2 branches apres transformation | Le dynamique ne se memorise pas : relire l historique a chaque activation, meme en memoire |
+| 2026-08-08 | VAGUE 2 -- migration agents/tools/ vers le schema hybride v0.2.0 (281 fichiers migres + 5 deja + 1 IGNORE + 0 erreur, outil migrer-identite v0.1.3 Vulcain + 3 verdicts Morpheus VALIDES). Lecons : (1) APPLIQUER AVEC L OUTIL PUIS VERIFIER PAR UN RE-SCAN : apres la migration reelle, relancer l outil en dry-run -- les fichiers restes a migrer revelent les cas non couverts (le re-scan a revele 17 blocs hors fenetre 12 puis 2 cas .sh) ; (2) BUG 1 (v0.1.1) : _a_identite_md retournait DEJA sur la simple fermeture --- meme sans identite: -> 4 fichiers de test/template ignores a tort ; corrige par detection stricte + protection frontmatter-sans-identite (ignore, jamais de double frontmatter) ; (3) BUG 2 (v0.1.2) : _migrer_py_sh traversait la 1re ligne vide + le long en-tete documentaire -> bloc a la ligne 13 pour 17 fichiers (illisible par detecter-impacts, re-migration = doublon) ; corrige par insertion apres l en-tete court + mode REPARER (deplace sans doublon) ; (4) BUG 3 (v0.1.3) : 2 fichiers .sh avec en-tete court suivi de commentaires SANS ligne vide (ligne # seul) -> la boucle traversait tout jusqu a l indice 12 ; corrige par insertion APRES la ligne # Statut (ou # Version) ; (5) PIEGE DE TEST : le chemin /tmp du shell Windows (AppData) differe du Z:/tmp de write_file -> pour tester detecter-impacts sur un fichier cree par script, utiliser le chemin absolu Z:/tmp (sinon fichier introuvable = faux negatif) ; (6) REGLE : une migration massive se valide par (a) re-scan idempotence a 0 migre, (b) py_compile/bash -n/json sur TOUT, (c) detecter-impacts qui lit l identite sur un echantillon de chaque format, (d) ASCII 0 -- les 4 valides pour la vague 2 ; (7) les .pyc regeneres par py_compile apparaissent en git status (artefacts conserves par le projet, 86 suivis) : ne pas les confondre avec des fichiers de la migration | Une migration massive se valide par re-scan a 0 migre + compilation globale + detecter-impacts qui lit chaque format |
 
 ---
 
@@ -174,6 +183,18 @@ Si je vois des emojis, je les remplace immediatement.
 5. Validation en 3 etapes : --liste (8 cases, structure), --dry-run (commandes affichees sans effet, navigation jusqu'a fin), execution reelle sur copies (cycle complet Cerberus -> Buffy -> Cerberus, historique + classeur mis a jour dans les copies)
 6. Nettoyage : supprimer /tmp/combo-test apres le test pour ne laisser aucune trace
 
+## [NOTES] Generalisation du Pattern 3 2026-08-08 (etape 6 plan combo-orchestrateur)
+
+**Mission** : generaliser le Pattern 3 a tous les parcours (perimetre utilisateur : toutes les suites combinables) -- creer 4 combos et remplacer les suites d'outils repetees dans 3 parcours (janus, vulcain, buffy).
+**Lecons** :
+1. 4 combos crees (9 fichiers JSON au total dans cerveau-projet/combos/) : combo-controle-outil (4 cases, janus chemin outil), combo-controle-modification (10 cases, janus chemin modification : nommage-recursif -> liens -> separation -> sante -> tableaux -> surcharge -> traces), combo-corriger-ascii (4 cases, vulcain c7/c13), combo-sante-tableaux (6 cases, buffy chemin controler)
+2. PARCOURS MODIFIES : janus 30->24 cases (c6-c7 et c23-c26 supprimes, recables vers c5/c22 combos), vulcain 19 (c7/c13 -> combo en place), buffy 36->34 (c29-c30 supprimes, c28 -> combo) -- chaque parcours passe en v0.2.0 avec mention Pattern 3 dans la description
+3. PATTERN 3 CASE : une case combo garde la regle Pattern 3 en tete + l'outil combos-moteur (commande combos-moteur.py <definition>) + le fichier definition-combo.json -- les outils CONTEXTUELS (fichier precis de la mission) restent des indices de la case (valider-ebauche spec pour janus outil, verifier-role-fichier pour janus modification)
+4. Les combos utilisent les DEFANTS DU CERVEAU (cerveau-projet, cerveau-projet/agents) comme cibles stables -- les commandes sont composees par le generateur AUTO pour les 4 commandes du catalogue utilisees (valider-nommage-recursif, combos-valider-cerveau, corriger-accents, audit-general deja utilise)
+5. PIEGE RECABLAGE (deja note etape 5) : verifier suivant ET vers quand on supprime des cases -- c26->c8 et c7->c8 etaient les refs a conserver, les autres supprimees (grep refs mortes vide)
+6. Validation complete : json.load 7 fichiers, combos-moteur --liste + --dry-run 4 combos (navigation jusqu a fin), guider-parcours --reponses sur 14 chemins (janus 4, vulcain 2, buffy 5, themis 3 deja) PARCOURS TERMINE, ASCII 0 sur 7 fichiers, parite py/sh 4/4
+7. Les parcours NON transformables restent : cerberus (chemin retour = arbre de decision, pas une suite), morpheus (tester = protections chargees dans le test, pas des CLI), atlas/clio/athena/minerve/promethee (suites specifiques non repetees) -- le Pattern 3 s'applique aux SUITES LINEAIRES d'outils, pas aux decisions
+
 ## [NOTES] Pattern 3 dans parcours themis 2026-08-08 (etape 5 plan combo-orchestrateur)
 
 **Mission** : integrer le Pattern 3 (spec v0.2.4) dans un parcours pilote -- remplacer la suite d'outils du chemin audit du parcours themis par Lancer le combo X.
@@ -271,6 +292,78 @@ Si je vois des emojis, je les remplace immediatement.
 2. SOURCE DE VERITE PARTAGEE : toute creation de parcours (agents/<agent>/parcours/) doit mettre a jour 2 endroits : demarrer.md (case 0) ET guider-parcours.md (Emplacement des parcours) -- cerberus (5e) et buffy (6e) manquaient dans la doc, la liste a ete completee
 3. La doc guider-parcours.md a ete bumpee en v0.2.1 (mise a jour de liste seulement, CLI inchangees) -- distinguer version doc vs version outil
 4. ASCII strict valide (0 non-conforme) sur demarrer.md et guider-parcours.md
+
+## [NOTES] Protocole-creation-combos 2026-08-08 (conventions de creation des combos)
+
+**Mission** : creer le protocole + les conventions de creation des combos (decisions utilisateur : protocole dedie pense-bete+spec+todo + conventions dans la doc/spec du moteur, redacteur Buffy).
+**Lecons** :
+1. Deux niveaux documentaires : le protocole-creation-combos (cycle complet pense-bete + spec + todo dans regles-immuables/general/) porte le PROCESSUS (quand/ou/comment/valider), la spec-combos-moteur porte le FORMAT (le QUOI) -- complement, pas doublon
+2. La distinction OUTIL vs DEFINITION est la cle : agents/tools/combos/ = OUTILS (moteur + combos executables .py/.sh, domaine Vulcain) ; cerveau-projet/combos/<nom>/definition-combo.json = DEFINITIONS (fichiers du cerveau, domaine Buffy) -- la doc moteur citait 2 emplacements ambigus, corrigee vers l'emplacement canonique unique
+3. Les conventions de facto des 6 combos sont figees : nommage combo-<action> (dossier = champ nom), cases c1..cn, titres Generer la commande X / Executer X / FIN - resume, sorties cmd1.. / resultat_<action>, cibles par defaut cerveau-projet/agents (validation) ou cerveau-projet (audit), version 0.1.0, outils contextuels EXCLUS (indices de la case du parcours)
+4. Les regles de decision (quand creer) : suite LINEAIRE repetee (>=2) ou longue (>=3) -> OUI ; arbre de decision (cerberus retour) -> NON ; protections embarquees dans un test (morpheus) -> NON ; suite specifique non repetee (redacteurs) -> NON
+5. PIEGE CHEMINS RELATIFS : le niveau de remontee depend du dossier du fichier -- protocole dans protocole-creation-combos/ (3 x ../ vers pense-betes), spec dans spec/ (1 niveau de plus), spec-combos-moteur dans agents/tools/combos/combos-moteur/spec/ (5 x ../ vers la racine) -- valider TOUJOURS avec valider-liens --racine . apres creation (6 liens protocole, 7 liens spec : 5 etaient faux)
+6. PIEGE ASCII REPETITIF : ecrire en ASCII des le depart ; j ai introduit 3 accents (enchaine x2, coherent, traceable, Eleve) malgre la regle -- verifier avec valider-conformite-ascii avant de declarer termine
+
+## [NOTES] Regle CITER le combo avant de le lancer 2026-08-08 (tracabilite)
+
+**Mission** : regle de tracabilite -- l'agent qui lance un combo doit le CITER avant de l'executer (decision utilisateur : source de verite dans protocole + spec/doc moteur, rappel dans les 6 cases combo des parcours).
+**Lecons** :
+1. DOUBLE ANCRAGE d'une regle de comportement : la source de verite (protocole-creation-combos 9.5 + spec-combos-moteur + doc 0.1.2) documente la regle ET le rappel est en TETE des indices des cases combo (themis c3, janus c5/c22, vulcain c7/c13, buffy c28) -- l'agent voit la regle juste avant de lancer, meme principe que le rappel ASCII (Pattern 2)
+2. La formulation de citation est uniforme : Je lance le combo <nom> : <chemin> - il enchaine <outils>. -- la commande combos-moteur seule ne revele pas le nom du combo, la citation cree la tracabilite pour l'utilisateur, Cerberus et Janus
+3. L'indice CITER est insere en POSITION 1 des indices (avant PATTERN 3) -- comme le rappel ASCII, la regle critique est vue en premier
+4. La spec du protocole porte la regle en EX-09 (citation obligatoire avant lancement) et le flux 5.4 mentionne l'indice CITER en tete -- spec et protocole racontent la meme histoire
+5. Validation : json.load 4 parcours, ASCII 0 sur 8 fichiers, 6/6 chemins PARCOURS TERMINE (navigation inchangee), liens 0 invalide
+
+## [NOTES] Relecture en QUESTION HONNETE 2026-08-08 (decision utilisateur)
+
+**Mission** : transformer la REGLE DE RELECTURE (exiger une lecture) en QUESTION HONNETE que l agent se pose (verifier la memorisation) avec reponses + actions obligatoires.
+**Lecons** :
+1. Le probleme de la regle ancienne : exiger une LECTURE ne prouve PAS la MEMORISATION -- un LLM peut avoir lu un fichier et ne plus rien en restituer. La regle nouvelle pose la question : As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? -- seul OUI (veracite) continue
+2. DESIGN DE LA CASE : c0 (question, branches OUI -> c1 mission / INCERTAIN -> c0b / NON -> c0b) + c0b (indice RELIRE OBLIGATOIRE : corrections puis fiche, puis -> c1) -- inseree en TETE des 11 parcours avec case_depart c1 -> c0
+3. LA NAVIGATION PROUVE LA LOGIQUE : OUI -> mission directement ; NON -> passe par c0b (relire) puis mission ; INCERTAIN idem -- la relecture est DECLENCHEE PAR LA REPONSE, plus jamais imposee aveuglement
+4. PIEGE TEST CHEMIN : les chemins avec etapes supplementaires (clio corriger : question ecarts, morpheus tester : question delegation VULCAIN/CERBERUS) s arretent en attente de reponses -- ce n est pas une erreur, c est le comportement normal du guide ; compter les questions reelles avant de conclure a un echec
+5. DOUBLE ANCRAGE conserve : question dans les parcours (c0, operationnel) + regle dans demarrer.md (section 2), protocole-activation (etape 3), les 11 fiches et le template -- meme formulation partout
+6. Validation : json.load 11 parcours, navigation OUI/NON/INCERTAIN sur les chemins cles, ASCII 0 sur 25 fichiers, liens 0 invalide
+
+## [NOTES] Cerberus = ORCHESTRATION UNIQUEMENT 2026-08-08 (decision utilisateur)
+
+**Mission** : figer dans protocole-activation la regle Cerberus = orchestration uniquement -- la todolist de Cerberus ne contient que la coordination, les etapes internes de l agent vivent dans SA carte de decision (son parcours JSON).
+**Lecons** :
+1. LE PROBLEME DETECTE PAR L UTILISATEUR : quand Cerberus detaille dans sa todolist les etapes internes de l agent (relire fiche, lire spec, editer, valider...), la carte de decision de l agent devient DECORATIVE -- il n a plus qu a suivre la liste de Cerberus au lieu de suivre SON parcours
+2. LA REGLE : Cerberus donne la MISSION (le quoi + le pourquoi + les criteres de validation), jamais le comment. Quand l agent est active, il REPREND LE CONTROLE en lancant SON parcours (guider-parcours.py parcours-<agent>.json) -- SA carte de decision le guide case par case (indices outil/fichier/regle + branches)
+3. ANCRAGE DANS protocole-activation : etape 5 du cycle precissee (Agent execute sa mission en lancant SON parcours) + nouvelle section Etape 5 dediee (la reponse a la question comment l agent reprend le controle + tableau todolist Cerberus = orchestration uniquement) + Regle d Or (Cerberus = orchestration) + Piege (todolist qui detaille les etapes internes rend la carte inutile)
+4. LA TODO LIST DE CERBERUS = 4 etapes max : analyser/choisir l agent, activer, second controle Janus si liste definie, bilan/cloture -- les etapes internes ne s y trouvent JAMAIS
+5. Validation : ASCII 0 sur le protocole, presence Etape 5 + regle d or + piege verifiee
+
+## [LECON] 2026-08-08 -- VAGUE 3 : migration du reste du cerveau (schema hybride complet)
+
+**Tache** : appliquer la migration vers le schema hybride sur tout le cerveau hors agents/tools/ (decision utilisateur, outil migrer-identite v0.2.1 valide par Morpheus).
+**Lecons** :
+1. La verification Cerberus prealable a revele 2 limites de la cartographie avant l'application : (L1) BRUIT des traces historisees (controles/rapports/retro-actions jamais a jour) faussant le verdict -> detecter-impacts v0.2.1 les marque [HISTORISE] et les exclut du verdict ; (L2) fichiers racine non migres (AGENTS.md etait REFUSE par detecter-impacts) -> migrer-identite v0.2.0/v0.2.1 les couvre (types racine, historique, classeur, pense-bete, template, note)
+2. Le dry-run reel AVANT application a revele 4 cas que le mini-cerveau ne couvrait pas : definition-combo.json du dossier combos/ (type combo par dossier, pas seulement prefixe), exemples/ et recherches-web/ (test pollue + recherches jamais a migrer), sauvegardes/ (artefacts), AGENTS-historique.md (journal -> type historique)
+3. APPLICATION RELLE : 21 fichiers migres dans cerveau-projet/ (5 notes vulcain appartient_a=vulcain, 5 classeur, 7 combos, 3 templates, 1 pense-bete) + AGENTS.md (racine) + AGENTS-historique.md (historique) -> 0 erreur, idempotence 0 migre au re-scan
+4. VERIFICATION BOUT EN BOUT : detecter-impacts lit l identite sur tous les nouveaux formats (note, combo, racine), ASCII 0 sur le perimetre migre, et le cas reel final montre 20 traces [HISTORISE] exclues du verdict
+5. La cartographie des impacts est desormais COMPLETE : chaque fichier du cerveau porte son identite, detecter-impacts peut cartographier de bout en bout (modifier un outil -> famille + references vivantes, sans bruit des traces datees)
+
+## [NOTES] Convention identification v0.5.0 -- migration des fiches (2026-08-08)
+
+**Mission** : appliquer la convention 'aucun mot seul' aux fichiers du cerveau (outils valides Morpheus).
+**Migration reelle** :
+1. 11 fiches agents (agents/<a>/<a>.md) : agent.nom -> agent.nom-agent, agent.statut -> agent.statut-<a>
+(ex: statut-cerberus), profil.role -> profil.role-agent -- role_principal et role_specifique INCHANGES
+2. 2 templates (fiche-agent-template, corrections-template) : memes renommages, statut-[nom-agent]
+3. 11 corrections.md : agent.nom -> agent.nom-agent (morpheus/themis sans champ -> inchange)
+4. parcours-demarrage.json : references champ Id LLM -> Nom LLM (case c2)
+5. protocole-identification (regle immuable) : references Id LLM -> Nom LLM (lecture retrocompat notee)
+**Validation** : lister-agents v0.3.0 lit les nouveaux champs, statut-<agent> present dans les 11 fiches,
+nom-agent dans 20 fichiers, ASCII 0 sur le perimetre, detecter-impacts lit l identite des fiches
+**Lecons** :
+1. La migration ciblee au frontmatter (script) preserve le corps markdown des fiches -- ne jamais
+sed global sur un fichier markdown (risque de casser le texte)
+2. Les corrections morpheus/themis utilisent agent: "x" (deja qualifie) ou pas de champ -- verifier
+le format reel avant de migrer, ne pas supposer que toutes les corrections ont nom:
+3. Les traces historiques (corrections.md, notes mission) documentent l ANCIEN format -- on ne les
+modifie pas (temoignage de l evolution), seuls les fichiers ACTIFS sont migres
 
 ## PHILOSOPHIE -- Principes de comportement
 

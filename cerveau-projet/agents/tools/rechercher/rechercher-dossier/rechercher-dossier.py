@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: ascii -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 rechercher-dossier.py
 

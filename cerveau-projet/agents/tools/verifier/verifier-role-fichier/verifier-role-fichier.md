@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # verifier-role-fichier
 
 **Version :** 0.2.0-py

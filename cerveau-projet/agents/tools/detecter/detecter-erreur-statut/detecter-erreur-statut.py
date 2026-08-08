@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 detecter-erreur-statut.py
 Detecte les fichiers dont le statut ne correspond pas a leur contenu.

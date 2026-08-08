@@ -1,3 +1,9 @@
+---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
 # Protocole -- Choix des Technologies
 
 **Version** : 0.1.0

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 lister-statuts.py
 Lister les fichiers par statut (ebauche, prepare, dev, test, valide).

@@ -5,6 +5,10 @@
 # Version : 0.2.0-py
 # Statut : beta
 
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION = "0.2.0-py"
 STATUT = "beta"
 

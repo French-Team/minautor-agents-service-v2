@@ -1,8 +1,14 @@
+---
+identite:
+  type: combo
+  appartient_a: commun
+  commun: true
+---
 # combos-moteur
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.1.0-beta |
+| **Version** | 0.1.3-beta |
 | **Statut** | ebauche |
 | **Categorie** | combos |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -57,11 +63,26 @@ python3 combos-moteur.py <definition-combo.json> [options]
 Options :
   --liste           Lister les cases de la definition sans executer
   --reponses <liste> Reponses des controles d'un coup : case=reponse;case2=reponse2
+  --var <cle=valeur> Variable initiale disponible pour {var} (repetable)
   --dry-run         Afficher les commandes a executer sans les lancer
   --verbose         Afficher les details de chaque case
   --version         Afficher la version
   --help            Afficher l'aide
 ```
+
+### Variables initiales (--var)
+
+Depuis la version 0.1.3, on peut fournir des variables au combo AVANT la
+premiere case : `--var fichier=chemin/vers/fichier`. Elles sont disponibles
+pour l'interpolation `{fichier}` dans toutes les commandes et entrees.
+
+```bash
+python3 combos-moteur.py cerveau-projet/combos/combo-controle-impacts/definition-combo.json \
+  --var fichier=cerveau-projet/agents/cerberus/cerberus.md
+```
+
+Cela permet aux combos de recevoir un parametre d'entree (ex: le fichier
+modifie pour `combo-controle-impacts`).
 
 ### CLI bash (version 0.1.0-sh)
 
@@ -240,10 +261,23 @@ Cycle d'activation termine.
 
 ## Emplacement des combos
 
-Un combo (fichier `definition-combo.json`) est un **fichier du cerveau**,
-cree par Buffy, dans le dossier de l'agent concerne
-(`agents/<agent>/combos/definition-combo.json`) ou dans un dossier combos
-dedie. Le moteur, lui, vit dans `agents/tools/combos/combos-moteur/`.
+> **REGLE (protocole-creation-combos)** : une DEFINITION de combo est un
+> **fichier du cerveau** (domaine Buffy), place dans
+> `cerveau-projet/combos/<combo-nom>/definition-combo.json` (TOUJOURS ce nom).
+> Le dossier `agents/tools/combos/` est reserve aux OUTILS (moteur + combos
+> executables .py/.sh/.md, domaine Vulcain). Ne jamais melanger les deux.
+> Voir [protocole-creation-combos](../../../../pense-betes/regles-immuables/general/protocole-creation-combos/protocole-creation-combos.001.01.ebauche.md).
+
+> **REGLE TRACABILITE (protocole-creation-combos 9.5, IMMUABLE)** : avant
+> d'executer un combo, l'agent CITE le combo : `Je lance le combo <nom> :
+> <chemin> - il enchaine <outils>.` Le rappel est en tete des indices des
+> cases combo des parcours (Pattern 3).
+
+Le moteur, lui, vit dans `agents/tools/combos/combos-moteur/` (outil).
+Les definitions de combos vivent dans `cerveau-projet/combos/` (fichiers du
+cerveau). La creation suit le processus du protocole-creation-combos :
+audit des suites lineaires, signatures CLI, conception, test, integration
+Pattern 3, validation.
 
 ---
 
@@ -251,4 +285,7 @@ dedie. Le moteur, lui, vit dans `agents/tools/combos/combos-moteur/`.
 
 | Version | Statut | Changements |
 |---|---|---|
+| 0.1.3 | ebauche | Ajout des variables initiales `--var cle=valeur` (repetable) : disponibles pour {var} des la case depart (ex: `--var fichier=...` pour combo-controle-impacts) |
+| 0.1.2 | ebauche | Ajout de la REGLE TRACABILITE (citer le combo avant de le lancer, protocole-creation-combos 9.5) |
+| 0.1.1 | ebauche | Clarification de l'emplacement canonique des definitions (cerveau-projet/combos/) vs outils (agents/tools/combos/) + reference au protocole-creation-combos |
 | 0.1.0 | ebauche | Creation : moteur generique de combos declaratifs (py + sh parite), 4 types de cases (generateur AUTO / outil / controle / fin), variables + interpolation {var}, persistance optionnelle vers classeur (persistant: true), modes --liste/--reponses/--dry-run/--verbose/--version, spec-combos-moteur v0.1.0 |

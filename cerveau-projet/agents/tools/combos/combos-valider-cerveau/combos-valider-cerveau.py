@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # combos-valider-cerveau.py
 # Combo de validation : etat de sante du cerveau-projet en une commande
+# identite:
+#   type: combo
+#   appartient_a: commun
+#   commun: true
 VERSION = "0.2.0-py"
 STATUT = "beta"
 

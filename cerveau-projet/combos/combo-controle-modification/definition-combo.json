@@ -1,0 +1,92 @@
+{
+  "combo": {
+    "nom": "combo-controle-modification",
+    "description": "Suite de validation d'une modification (chemin modification du parcours janus, anciennes cases c22-c26) : nommage recursif -> liens -> separation -> sante+tableaux -> surcharge -> traces externes. Remplace la suite d'outils par un seul lancer de combo (Pattern 3). Les cas contextuels (verifier-role-fichier sur un fichier precis) restent des indices de la case du parcours.",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande valider-nommage",
+      "type": "generateur",
+      "catalogue": "valider-nommage-recursif",
+      "entrees": {
+        "recursif": "oui",
+        "dossier": "cerveau-projet/agents"
+      },
+      "sortie": "cmd1",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Executer valider-nommage",
+      "type": "outil",
+      "commande": "{cmd1}",
+      "sortie": "resultat_nommage",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Executer valider-liens",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-liens/valider-liens.py",
+      "sortie": "resultat_liens",
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Executer verifier-separation-preoccupations",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-separation-preoccupations/verifier-separation-preoccupations.py cerveau-projet/agents",
+      "sortie": "resultat_separation",
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Generer la commande combos-valider-cerveau",
+      "type": "generateur",
+      "catalogue": "combos-valider-cerveau",
+      "entrees": {
+        "dossier": "cerveau-projet/agents",
+        "detail": "non",
+        "stop": "non"
+      },
+      "sortie": "cmd2",
+      "suivant": "c6"
+    },
+    "c6": {
+      "titre": "Executer combos-valider-cerveau",
+      "type": "outil",
+      "commande": "{cmd2}",
+      "sortie": "resultat_sante",
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Executer valider-tableaux",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py",
+      "sortie": "resultat_tableaux",
+      "suivant": "c8"
+    },
+    "c8": {
+      "titre": "Executer detecter-surcharge-fichier",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/detecter-surcharge-fichier.py cerveau-projet/agents",
+      "sortie": "resultat_surcharge",
+      "suivant": "c9"
+    },
+    "c9": {
+      "titre": "Executer detecter-usage-outils-externes",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py cerveau-projet",
+      "sortie": "resultat_traces",
+      "suivant": "c10"
+    },
+    "c10": {
+      "titre": "FIN - controle modification termine",
+      "type": "fin",
+      "message": "Controle de modification complet : nommage, liens, separation, sante, tableaux, surcharge et traces externes valides. Synthetiser les resultats dans le rapport (case suivante du parcours janus)."
+    }
+  },
+  "identite": {
+    "type": "combo",
+    "appartient_a": "commun",
+    "commun": true
+  }
+}

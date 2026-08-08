@@ -81,7 +81,7 @@ RESULT=$(python3 "$OUTIL_PY" sidentifier 2>&1)
 echo "$RESULT"
 if echo "$RESULT" | grep -q "Session attribuee : session-llm-1" \
    && grep -q "^### Session : session-llm-1" "$AGENTS_FILE" \
-   && grep -q "^| \*\*Nom\*\* | Cerberus |" "$AGENTS_FILE" \
+   && grep -q "^| \*\*Nom Agent\*\* | Cerberus |" "$AGENTS_FILE" \
    && grep -q "^## Autre section" "$AGENTS_FILE" \
    && grep -q "session-llm-1" "$AGENTS_HISTORIQUE"; then
     echo "[OK] Test 1 passe (bloc session-llm-1 + Cerberus + valeurs conservees + historique)"
@@ -128,10 +128,10 @@ fi
 echo "--- Test 4: Isolation des sessions (activer session-llm-1, session-llm-2 intacte) ---"
 RESULT=$(python3 "$OUTIL_PY" activer session-llm-1 Buffy "Mission isolation" 2>&1)
 echo "$RESULT"
-NOM_S2=$(grep -A 8 "^### Session : session-llm-2" "$AGENTS_FILE" | grep "^| \*\*Nom\*\*" | sed 's/.*| //; s/ |//')
+NOM_S2=$(grep -A 8 "^### Session : session-llm-2" "$AGENTS_FILE" | grep "^| \*\*Nom Agent\*\*" | sed 's/.*| //; s/ |//')
 echo "Agent principal session-llm-2: $NOM_S2"
 if echo "$RESULT" | grep -q "agent Buffy active" \
-   && grep -q "^| \*\*Nom\*\* | Buffy |" "$AGENTS_FILE" \
+   && grep -q "^| \*\*Nom Agent\*\* | Buffy |" "$AGENTS_FILE" \
    && [ "$NOM_S2" = "Cerberus" ]; then
     echo "[OK] Test 4 passe (session-llm-2 intacte: $NOM_S2)"
     result4=0
@@ -146,13 +146,13 @@ fi
 echo "--- Test 5: activer - tous les champs (py) ---"
 RESULT=$(python3 "$OUTIL_PY" activer session-llm-1 Morpheus "Mission tests" 2>&1)
 echo "$RESULT"
-if grep -q "^| \*\*Nom\*\* | Morpheus |" "$AGENTS_FILE" \
-   && grep -q "^| \*\*Role\*\* | Testeur -- validation des outils et des tests |" "$AGENTS_FILE" \
+if grep -q "^| \*\*Nom Agent\*\* | Morpheus |" "$AGENTS_FILE" \
+   && grep -q "^| \*\*Role Agent\*\* | Testeur -- validation des outils et des tests |" "$AGENTS_FILE" \
    && grep -q "morpheus.md" "$AGENTS_FILE" \
    && grep -q "corrections.md" "$AGENTS_FILE" \
    && grep -q "^| \*\*Active par\*\* | Cerberus (automatique) |" "$AGENTS_FILE" \
    && grep -q "^| \*\*Raison\*\* | Mission tests |" "$AGENTS_FILE"; then
-    echo "[OK] Test 5 passe (Nom, Role, Fiche, Corrections, Active par, Raison)"
+    echo "[OK] Test 5 passe (Nom Agent, Role Agent, Fiche, Corrections, Active par, Raison)"
     result5=0
 else
     echo "[ERREUR] Test 5 echoue"
@@ -166,7 +166,7 @@ echo "--- Test 6: reactiver session-llm-1 (py) ---"
 RESULT=$(python3 "$OUTIL_PY" reactiver session-llm-1 "Mission terminee" Morpheus 2>&1)
 echo "$RESULT"
 if echo "$RESULT" | grep -q "Cerberus reactive" \
-   && grep -q "^| \*\*Nom\*\* | Cerberus |" "$AGENTS_FILE" \
+   && grep -q "^| \*\*Nom Agent\*\* | Cerberus |" "$AGENTS_FILE" \
    && grep -q "^| \*\*Active par\*\* | Morpheus (retour de mission) |" "$AGENTS_FILE"; then
     echo "[OK] Test 6 passe"
     result6=0
@@ -202,7 +202,7 @@ RESULT2=$(bash "$OUTIL_SH" activer session-llm-1 Vulcain "Parite sh" 2>&1)
 echo "$RESULT2"
 if echo "$RESULT" | grep -q "session-llm-1" \
    && echo "$RESULT2" | grep -q "agent Vulcain active" \
-   && grep -q "^| \*\*Nom\*\* | Vulcain |" "$AGENTS_FILE"; then
+   && grep -q "^| \*\*Nom Agent\*\* | Vulcain |" "$AGENTS_FILE"; then
     echo "[OK] Test 8 passe (version .sh fonctionnelle)"
     result8=0
 else
@@ -222,7 +222,7 @@ CODE=$?
 echo "Code de retour: $CODE"
 cat /tmp/ascii-out.txt
 rm -f /tmp/ascii-out.txt
-if [ "$CODE" -ne 0 ] && grep -q "^| \*\*Nom\*\* | Cerberus |" "$AGENTS_FILE"; then
+if [ "$CODE" -ne 0 ] && grep -q "^| \*\*Nom Agent\*\* | Cerberus |" "$AGENTS_FILE"; then
     echo "[OK] Test 9 passe (refuse + fichier intact)"
     result9=0
 else

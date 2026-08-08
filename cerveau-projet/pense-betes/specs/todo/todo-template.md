@@ -1,3 +1,9 @@
+---
+identite:
+  type: template
+  appartient_a: commun
+  commun: true
+---
 # Todo -- [Titre de la mission]
 
 ---

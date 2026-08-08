@@ -1,3 +1,9 @@
+---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
 # Protocole Immuable -- Identification des Agents
 
 **Version** : 0.2.0 (MODE ID multi-session -- v0.4.0)
@@ -13,18 +19,19 @@
 > **REGLE ALIGNEMENT (v0.4.0)** : id `llm-N` -> session `session-llm-N`. Le numero
 > de session PORTE le numero de l'id : "je suis llm-1, ma session est session-llm-1".
 > **SOURCE DOUBLE** : chaque bloc de session dans AGENTS.md contient le champ
-> `| **Id LLM** | <id> |`. Le LLM se reconnait en lisant AGENTS.md : le bloc qui
-> porte SON id est SON bloc.
+> `| **Nom LLM** | <id> |` (convention v0.5.0 : aucun mot seul -- l'ancien nom
+> **Id LLM** est accepte en lecture pendant la transition). Le LLM se reconnait
+> en lisant AGENTS.md : le bloc qui porte SON id est SON bloc.
 
 ### Le processus (MODE ID)
 
 ```
 1. Noter MON id (donne par l'utilisateur au lancement, ex: llm-1)
-2. Lire AGENTS.md et chercher MON bloc : celui dont le champ **Id LLM** = MON id
+2. Lire AGENTS.md et chercher MON bloc : celui dont le champ **Nom LLM** = MON id
    -> trouve = MA session (ex: session-llm-1) -- c'est MA session, redemarrage du meme LLM
    -> absent = je n'ai pas encore de session -> etape 3
 3. Lancer : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>
-   -> l'outil compare MON id aux sessions enregistrees (AGENTS.md champ Id LLM + classeur)
+   -> l'outil compare MON id aux sessions enregistrees (AGENTS.md champ Nom LLM + classeur)
    -> id deja lie = MA session retrouvee
    -> id inconnu llm-N = creation de session-llm-N (alignement sur l'id) + liaison
    -> id inconnu non numerique = prochaine session libre + liaison

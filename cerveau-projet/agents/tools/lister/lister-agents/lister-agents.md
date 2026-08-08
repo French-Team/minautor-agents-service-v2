@@ -1,7 +1,13 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # lister-agents
 
 **Categorie** : Lister
-**Version** : 0.2.0
+**Version** : 0.3.0
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Buffy (outil partage)
@@ -143,6 +149,7 @@ lister-agents(champs="nom,role")
 |---|---|---|
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels, corrections, promotion |
 | 0.2.0-py | 2026-08-07 | Version Python creee (lister-agents.py), basee sur outil-template.py |
+| 0.3.0 | 2026-08-08 | CONVENTION IDENTIFICATION : lecture des nouveaux champs YAML des fiches -- role-agent et statut-<agent> (anciens noms role: / statut: acceptes en repli). py + sh + doc |
 
 ---
 

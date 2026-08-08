@@ -1,9 +1,13 @@
 ---
+identite:
+  type: corrections
+  appartient_a: minerve
+  commun: false
 # Corrections et Surcharges -- Minerve
 # Agent dedie aux todos
 
 agent:
-  nom: "minerve"
+  nom-agent: "minerve"
   version_corrections: "0.1.0"
   derniere_mise_a_jour: "2026-08-06"
 

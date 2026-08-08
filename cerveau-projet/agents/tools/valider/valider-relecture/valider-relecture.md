@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # valider-relecture
 
 **Version :** 0.2.0-py

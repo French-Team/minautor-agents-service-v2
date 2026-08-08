@@ -6,6 +6,10 @@
 # Proprietaire : Clio (agent dedie au README)
 
 # Configuration
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 VERSION="0.4.0"
 STATUT="ebauche"
 README="README.md"

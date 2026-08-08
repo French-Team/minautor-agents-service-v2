@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # mettre-a-jour-readme
 
 **Version :** 0.4.0

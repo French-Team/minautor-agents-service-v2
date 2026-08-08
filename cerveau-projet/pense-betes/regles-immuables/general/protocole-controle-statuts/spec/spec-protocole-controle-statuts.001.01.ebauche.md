@@ -1,3 +1,9 @@
+---
+identite:
+  type: protocole
+  appartient_a: commun
+  commun: true
+---
 # Specification -- Protocole de Controle des Statuts
 
 **Version** : 0.1.0

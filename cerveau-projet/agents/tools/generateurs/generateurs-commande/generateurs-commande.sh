@@ -3,6 +3,10 @@
 # Genere une commande complexe a lancer, en posant une question par parametre.
 # Version : 0.1.0-beta
 # Statut : ebauche
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 #
 # Version bash du generateur. Elle lit le meme catalogue que la version
 # Python (catalogue-commandes.json) et applique la meme logique :

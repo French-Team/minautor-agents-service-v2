@@ -1,13 +1,19 @@
 #!/bin/bash
 # lister-agents.sh
 # Lister les agents avec leurs informations
-# Version: 0.2.0
-# Date: 2026-08-05
+# Version: 0.3.0
+# Date: 2026-08-08
 # Auteur: Vulcain
+# Convention identification v0.3.0 : champs YAML role-agent / statut-<agent>
+# (anciens noms role: / statut: acceptes en repli pendant la transition)
 
 # Configuration
-VERSION="0.2.0"
-DATE="2026-08-05"
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
+VERSION="0.3.0"
+DATE="2026-08-08"
 AGENTS_DIR="cerveau-projet/agents"
 
 # Couleurs pour la sortie
@@ -75,14 +81,20 @@ lister_agents() {
             echo -e "${CYAN}----------------------------------------${NC}"
 
             if [[ -f "$agent_file" ]]; then
-                # Extraire le role
-                local role=$(grep -E '^[[:space:]]*role:' "$agent_file" 2>/dev/null | head -1 | sed 's/.*role:[[:space:]]*//' | sed 's/^"//' | sed 's/"$//' | tr -d '\r')
+                # Extraire le role (convention v0.3.0 : role-agent, repli role:)
+                local role=$(grep -E '^[[:space:]]*role-agent:' "$agent_file" 2>/dev/null | head -1 | sed 's/.*role-agent:[[:space:]]*//' | sed 's/^"//' | sed 's/"$//' | tr -d '\r')
+                if [[ -z "$role" ]]; then
+                    role=$(grep -E '^[[:space:]]*role:' "$agent_file" 2>/dev/null | head -1 | sed 's/.*role:[[:space:]]*//' | sed 's/^"//' | sed 's/"$//' | tr -d '\r')
+                fi
                 if [[ -n "$role" ]]; then
                     echo -e "  [ROLE] ${role}"
                 fi
 
-                # Extraire le statut
-                local statut=$(grep -E '^[[:space:]]*statut:' "$agent_file" 2>/dev/null | head -1 | sed 's/.*statut:[[:space:]]*//' | sed 's/^"//' | sed 's/"$//' | tr -d '\r')
+                # Extraire le statut (convention v0.3.0 : statut-<agent>, repli statut:)
+                local statut=$(grep -E "^[[:space:]]*statut-${agent_name}:" "$agent_file" 2>/dev/null | head -1 | sed "s/.*statut-${agent_name}:[[:space:]]*//" | sed 's/^"//' | sed 's/"$//' | tr -d '\r')
+                if [[ -z "$statut" ]]; then
+                    statut=$(grep -E '^[[:space:]]*statut:' "$agent_file" 2>/dev/null | head -1 | sed 's/.*statut:[[:space:]]*//' | sed 's/^"//' | sed 's/"$//' | tr -d '\r')
+                fi
                 if [[ -n "$statut" ]]; then
                     echo -e "  [STATUT] ${statut}"
                 fi

@@ -1,3 +1,9 @@
+---
+identite:
+  type: classeur
+  appartient_a: commun
+  commun: true
+---
 # Index -- Classeur de Variables
 ---
 

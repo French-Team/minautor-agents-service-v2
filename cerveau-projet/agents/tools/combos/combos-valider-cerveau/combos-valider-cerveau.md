@@ -1,3 +1,9 @@
+---
+identite:
+  type: combo
+  appartient_a: commun
+  commun: true
+---
 # combos-valider-cerveau
 
 | Champ | Valeur |

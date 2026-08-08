@@ -1,3 +1,9 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
 # tester-protection-boucles-infinies
 
 **Version :** 0.2.0-py

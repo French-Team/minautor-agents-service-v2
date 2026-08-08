@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 """
 generateurs-squelette-todo.py
 Genere le squelette d'un todo conforme au todo-template et a la

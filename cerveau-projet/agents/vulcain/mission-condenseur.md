@@ -1,3 +1,9 @@
+---
+identite:
+  type: note
+  appartient_a: vulcain
+  commun: true
+---
 # Mission -- Outil de Condensation Markdown
 
 **Agent** : Vulcain

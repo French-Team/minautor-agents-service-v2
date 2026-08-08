@@ -6,6 +6,10 @@
 #   3. Completude des listes d'agents (Agents disponibles vs fiches existantes)
 # Version : 0.2.0
 # Statut : prepare
+# identite:
+#   type: outil
+#   appartient_a: commun
+#   commun: true
 
 # ============================================================
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier

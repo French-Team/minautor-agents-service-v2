@@ -1,0 +1,41 @@
+{
+  "combo": {
+    "nom": "combo-controle-outil",
+    "description": "Suite de validation d'un outil (chemin outil du parcours janus, anciennes cases c6-c7) : valider-conformite-ascii -> valider-cartes-decision --tous -> valider-liens. Remplace la suite d'outils par un seul lancer de combo (Pattern 3). Les cas contextuels (valider-ebauche sur une spec precise) restent des indices de la case du parcours.",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Executer valider-conformite-ascii",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py cerveau-projet/agents",
+      "sortie": "resultat_ascii",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Executer valider-cartes-decision",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --tous",
+      "sortie": "resultat_cartes",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Executer valider-liens",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-liens/valider-liens.py",
+      "sortie": "resultat_liens",
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "FIN - controle outil termine",
+      "type": "fin",
+      "message": "Controle d'outil complet : ASCII, cartes de decision et liens valides. Synthetiser les resultats dans le rapport (case suivante du parcours janus)."
+    }
+  },
+  "identite": {
+    "type": "combo",
+    "appartient_a": "commun",
+    "commun": true
+  }
+}

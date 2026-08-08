@@ -1,3 +1,9 @@
+---
+identite:
+  type: pense-bete
+  appartient_a: commun
+  commun: true
+---
 # Index -- Todos des Specifications
 ## Contenu
 

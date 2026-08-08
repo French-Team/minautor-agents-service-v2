@@ -1,3 +1,9 @@
+---
+identite:
+  type: template
+  appartient_a: commun
+  commun: true
+---
 # Gabarit -- Specification Technique (source de verite)
 ---
 
