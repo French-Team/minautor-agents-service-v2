@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-atlas",
     "agent": "atlas",
-    "version": "0.1.7",
+    "version": "0.1.10",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. PILOTE STRICT v0.1.2 : commandes composees via le generateur (catalogue), aucun fallback en dur."
   },
@@ -88,6 +88,10 @@
         {
           "reponse": "cartographier",
           "vers": "c30"
+        },
+        {
+          "reponse": "cartographier-agent",
+          "vers": "c31"
         }
       ]
     },
@@ -579,9 +583,14 @@
         },
         {
           "reponse": "NON",
-          "vers": "c29"
+          "vers": "c29b"
+        },
+        {
+          "reponse": "audit",
+          "vers": "c32"
         }
-      ]
+      ],
+      "suivant": "c29b"
     },
     "c27": {
       "titre": "Activer l'agent habilite",
@@ -608,7 +617,8 @@
     "c29": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "SIGNALER A CERBERUS : besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy. Je ne cree rien moi-meme : je signale et j attends la mission."
+      "message": "SIGNALER A CERBERUS : besoin d outil DURABLE -> activer Vulcain directement (maillon de chaine, Vulcain reactive l agent precedent), besoin de test -> Morpheus, besoin de nouvelle case -> Buffy. Je ne cree rien moi-meme : je signale et j attends la mission.",
+      "suivant": "c29c"
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -657,7 +667,120 @@
           "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
         }
       ],
-      "suivant": "c10"
+      "suivant": "c31"
+    },
+    "c29d": {
+      "titre": "FIN - Outil temporaire",
+      "type": "fin",
+      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
+    },
+    "c29c": {
+      "titre": "Creer l outil temporaire",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION + EXCEPTION OUTIL TEMPORAIRE : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-outil-temporaire",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        }
+      ],
+      "suivant": "c29d"
+    },
+    "c29b": {
+      "titre": "Besoin d outil ?",
+      "type": "question",
+      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
+      "branches": [
+        {
+          "reponse": "TEMPORAIRE",
+          "vers": "c29c"
+        },
+        {
+          "reponse": "DURABLE",
+          "vers": "c29"
+        }
+      ]
+    },
+    "c31b": {
+      "titre": "FIN - Reactiver l agent precedent avec sa carte",
+      "type": "fin",
+      "message": "J ai cree la cartographie (rapport cartographie-<parcours>.md dans le dossier du parcours audite). Je REACTIVE L AGENT PRECEDENT (maillon de chaine) : reactiver-agent-principal.py reactiver session-llm-1 <raison> <agent_precedent> - en lui fournissant ma carte. L agent reprend SA mission avec la carte."
+    },
+    "c31": {
+      "titre": "Cartographier pour un agent",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : la sortie est un RAPPORT DE MISSION (cartographie-<parcours>.md) dans le dossier du parcours audite, JAMAIS tools/. L outil est en LECTURE SEULE sur la source."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE RVAV : je passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur la cartographie AVANT de reactiver l agent precedent."
+        },
+        {
+          "type": "outil",
+          "nom": "cartographier-parcours",
+          "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/cartographier-parcours.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        }
+      ],
+      "suivant": "c31b"
+    },
+    "c32": {
+      "titre": "Activer Themis pour auditer",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : l audit est le ROLE DE THEMIS (evaluatrice) - je n audite JAMAIS moi-meme. Si j ai besoin d un audit de conformite, j ACTIVE Themis (maillon de chaine)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        }
+      ],
+      "suivant": "c33"
+    },
+    "c33": {
+      "titre": "FIN - Retour de Themis avec son rapport",
+      "type": "fin",
+      "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni."
     }
   }
 }

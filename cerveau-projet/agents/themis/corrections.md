@@ -365,3 +365,15 @@ identite:
 5. Les missions de documentation (mise a jour de fiche/corrections) sont un type de mission commun a tous les agents : la lacune de carte est probablement partagee (vulcain, buffy, atlas) -- a verifier au prochain audit 4c.
 
 **Livrables** : rapport-audit-conformite-execution-p14-2026-08-09.md (ASCII 0, LF pur).
+## [LECON] 2026-08-09 -- AUDIT PISTES MIROIRS THEMIS (verdict CONFORME)
+
+**Audit** : conformite des pistes miroirs audit generalisees par Buffy (9 demandeurs + themis, Pattern 10 + livrable avec retour, 11 parcours).
+
+**Verdict** : CONFORME -- 0 ecart bloquant, 0 fichier suspect lie a la mission. Rapport : rapport-audit-pistes-miroirs-themis-2026-08-09.md.
+
+**Lecons** :
+1. LE PATTERN 10 SE VERIFIE DANS LE CONTENU DES INDICES : la simple presence d'une branche `audit` ne suffit pas - il faut verifier que la case Activer porte bien la regle << ROLE DE THEMIS - je n audite JAMAIS moi-meme >> et la CREATION LIMITEE. Ici 9/9 demandeurs conformes + themis c25 (executant) avec ASCII + CREATION LIMITEE doc + RVAV + combo.
+2. LE LIVRABLE AVEC RETOUR SE PROUVE PAR LE MESSAGE DE LA FIN : la fin doit dire REACTIVE + fournir le rapport (pas une fin passive). Ici 10/10 fins conformes (9 retours demandeur + c25b reactiver agent precedent).
+3. detecter-usage-outils-externes ne prend QU UNE SEULE cible : en multi-cibles il echoue avec << unrecognized arguments >> - utiliser --recursive sur le dossier pour scanner plusieurs fichiers, puis verifier les fichiers suspects un par un.
+4. LES DICTIONNAIRES DE CARACTERES SPECIAUX (corriger-dictionnaire-accents.txt, dictionnaire-emojis.txt) SONT DES SUSPECTS LEGITIMES : ils contiennent des caracteres non-ASCII PAR CONCEPTION (c'est leur fonction de les corriger). Toujours verifier l identite du fichier suspect avant de conclure - hors perimetre de la mission auditee.
+5. CONFIRMATION de la lecon precedente : les guillemets francais << >> (0xAB/0xBB) ne sont PAS couverts par corriger-accents-zones-sensibles - remplacer par des guillemets ASCII et revalider (outil d'abord, puis reecriture ASCII stricte).

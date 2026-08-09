@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-themis",
     "agent": "themis",
-    "version": "0.2.7",
+    "version": "0.2.9",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
   },
@@ -82,6 +82,10 @@
         {
           "reponse": "autre",
           "vers": "c21"
+        },
+        {
+          "reponse": "audit-agent",
+          "vers": "c25"
         }
       ]
     },
@@ -401,9 +405,10 @@
         },
         {
           "reponse": "NON",
-          "vers": "c23"
+          "vers": "c23b"
         }
-      ]
+      ],
+      "suivant": "c23b"
     },
     "c22": {
       "titre": "Activer l'agent habilite",
@@ -426,7 +431,8 @@
     "c23": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission.",
+      "suivant": "c23c"
     },
     "c24": {
       "titre": "FIN - Delegation",
@@ -535,6 +541,91 @@
           "vers": "c3"
         }
       ]
+    },
+    "c23d": {
+      "titre": "FIN - Outil temporaire",
+      "type": "fin",
+      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
+    },
+    "c23c": {
+      "titre": "Creer l outil temporaire",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX RAPPORTS D AUDIT + EXCEPTION OUTIL TEMPORAIRE : je cree uniquement des rapports d audit et mes lecons (dossier de l agent, JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-outil-temporaire",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        }
+      ],
+      "suivant": "c23d"
+    },
+    "c23b": {
+      "titre": "Besoin d outil ?",
+      "type": "question",
+      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
+      "branches": [
+        {
+          "reponse": "TEMPORAIRE",
+          "vers": "c23c"
+        },
+        {
+          "reponse": "DURABLE",
+          "vers": "c23"
+        }
+      ]
+    },
+    "c25": {
+      "titre": "Auditer pour un agent",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : la sortie est un RAPPORT D AUDIT - JAMAIS tools/, JAMAIS de modification des fichiers de la mission auditee. L audit est en LECTURE sur les fichiers audites."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE RVAV : je passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur l audit AVANT de reactiver l agent precedent."
+        },
+        {
+          "type": "outil",
+          "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-audit-themis/definition-combo.json"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/combos/combo-audit-themis/definition-combo.json",
+          "raison": "Definition du combo audit-themis (Pattern 3) : suite complete d outils d audit (audit-general -> valider-relecture -> combos-valider-cerveau -> valider-tableaux -> detecteurs)"
+        }
+      ],
+      "suivant": "c25b"
+    },
+    "c25b": {
+      "titre": "FIN - Reactiver l agent precedent avec son rapport",
+      "type": "fin",
+      "message": "J ai audite sur demande. Je REACTIVE L AGENT PRECEDENT (maillon de chaine) : reactiver-agent-principal.py reactiver session-llm-1 <raison> <agent_precedent> - en lui fournissant mon rapport. L agent reprend SA mission avec le rapport."
     }
   }
 }

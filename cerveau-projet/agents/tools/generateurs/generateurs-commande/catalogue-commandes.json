@@ -1093,35 +1093,6 @@
           "flag": "--commande",
           "defaut": ""
         },
-  {
-    "nom": "generateurs-outil-temporaire",
-    "description": "Genere un outil temporaire (script Python jetable) dans le workspace",
-    "interpreteur": "python3",
-    "script": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.py",
-    "modele": "--nom {nom} --description {description} --dossier {dossier} --force",
-    "parametres": [
-      {
-        "cle": "nom",
-        "question": "Nom du besoin (sans accents ni espaces, prefixe tmp- automatique) ?",
-        "type": "texte",
-        "obligatoire": true
-      },
-      {
-        "cle": "description",
-        "question": "Description courte de l'outil temporaire ?",
-        "type": "texte",
-        "obligatoire": false,
-        "defaut": ""
-      },
-      {
-        "cle": "dossier",
-        "question": "Dossier de destination dans le workspace ?",
-        "type": "texte",
-        "obligatoire": false,
-        "defaut": "."
-      }
-    ]
-  },
         {
           "cle": "reponses",
           "question": "Valeur pour reponses ?",
@@ -1144,6 +1115,35 @@
           "type": "flag",
           "obligatoire": false,
           "flag": "--liste"
+        }
+      ]
+    },
+    {
+      "nom": "generateurs-outil-temporaire",
+      "description": "Genere un outil temporaire (script Python jetable) dans le workspace",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.py",
+      "modele": "--nom {nom} --description {description} --dossier {dossier} --force",
+      "parametres": [
+        {
+          "cle": "nom",
+          "question": "Nom du besoin (sans accents ni espaces, prefixe tmp- automatique) ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "description",
+          "question": "Description courte de l'outil temporaire ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "dossier",
+          "question": "Dossier de destination dans le workspace ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
         }
       ]
     },

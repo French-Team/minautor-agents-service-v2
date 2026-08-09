@@ -6,7 +6,7 @@ identite:
 ---
 # corriger-accents-zones-sensibles
 
-**Version :** 0.2.0
+**Version :** 0.2.2
 **Statut :** prepare
 **Categorie :** corriger
 **Chemin :** `agents/tools/corriger/corriger-accents-zones-sensibles/`
@@ -15,6 +15,8 @@ identite:
 ## Description
 
 Corrige les accents et caracteres non-ASCII dans un fichier ou un dossier. Conformement a la regle immuable `regles-emojis-ascii.md`, **aucun caractere non-ASCII n'est tolere** : le mode standard est `--all` qui purge aussi le texte francais et les titres de sections. Le mode sans `--all` ne corrige que les zones sensibles (frontmatter, noms, blocs, code, liens) et ne doit etre utilise que ponctuellement.
+
+Caracteres couverts (via le dictionnaire partage `corriger-dictionnaire-accents.txt`) : accents francais, ligatures, apostrophes et guillemets courbes, **guillemets francais U+00AB/U+00BB** (remplaces par le guillemet droit double), symboles courants, **fleches horizontales, verticales et doubles**, **box drawing** (traits et coins de schemas), **espace inse cable U+00A0**.
 
 **Mode CORRECTIF :** Cet outil modifie les fichiers (avec sauvegarde et dry-run).
 
@@ -30,7 +32,7 @@ Corrige les accents et caracteres non-ASCII dans un fichier ou un dossier. Confo
 
 ## Utilisation
 
-### CLI Python (version 0.2.0-py)
+### CLI Python (version 0.2.2-py)
 
 ```
 python3 corriger-accents-zones-sensibles.py [OPTIONS] <fichier|dossier>
@@ -156,6 +158,8 @@ Le dossier `cerveau-projet/exemples/` est **exclu automatiquement** : c'est la z
 | Version | Date | Changements |
 |---|---|---|
 | 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py, lit le dictionnaire existant) |
+| 0.2.1-py | 2026-08-09 | Guillemets francais U+00AB/U+00BB ajoutes au dictionnaire partage (corriger-dictionnaire-accents.txt) -> guillemet droit double, coherent avec les guillemets courbes U+201C/U+201D |
+| 0.2.2-py | 2026-08-09 | Fleches verticales et doubles (U+2191/U+2193/U+2194/U+21D0/U+21D2/U+21D4), box drawing (U+2500/U+2502/U+250C/U+2510/U+2514/U+2518/U+251C/U+2524) et espace inse cable U+00A0 ajoutes au dictionnaire partage |
 | 0.1.0 | 2026-08-06 | Creation initiale |
 | 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
 

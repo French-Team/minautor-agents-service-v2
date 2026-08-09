@@ -936,3 +936,46 @@ Rappel insere en tete des cases d'ecriture des 10 parcours (32 cases).
 3. L'ERREUR REFERENCES INVALIDES pendant l ajout est NORMALE si la case cible n existe pas encore : ajouter dans l ordre (c16b -> c16c -> c16d) et la validation finale confirme les 27 cases.
 4. TOUJOURS verifier la structure de la nouvelle case apres creation : P2 position 1 ASCII, P12 CREATION LIMITEE, P14 detecter-impacts -- les patterns s appliquent aux cases ajoutees comme aux existantes.
 5. La version du parcours doit etre alignee dans la fiche (vulcain.md ligne Parcours) : detecter-impacts le signale sinon (Pattern 14).
+## [LECON] 2026-08-09 -- ETAPE 2 OUTIL TEMPORAIRE : CASES ALTERNATIVES BESOIN D OUTIL ? DANS LES 10 PARCOURS
+
+**Mission** : ajouter la decision Besoin d'outil ? (TEMPORAIRE vs DURABLE) dans les 10 parcours des agents operationnels (athena, atlas, buffy, clio, janus, minerve, morpheus, promethee, themis, vulcain) + ajuster les garde-fous Pattern 12. Cerberus EXCLU (routeur pur, Pattern 10 : une carte = un role).
+
+**Structure ajoutee par parcours** : entre la case Mission hors parcours/perimetre et la case Signaler le besoin, une decision Besoin d'outil ? (question 2 branches) : TEMPORAIRE -> case Creer l outil temporaire (indices : REGLE IMMUABLE ASCII position 1 + CREATION LIMITEE adaptee au role avec EXCEPTION OUTIL TEMPORAIRE + REGLE WORKSPACE + indice outil generateurs-outil-temporaire avec champ catalogue + indice .md auto Pattern 9) -> FIN - Outil temporaire (message : suppression 0 residu + PROMOTION : 2e utilisation -> ACTIVER VULCAIN directement, Vulcain reactive l agent precedent) ; DURABLE -> case Signaler le besoin (message mis a jour : besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine).
+
+**Lecons** :
+1. LE MODELE EST REUTILISABLE PAR SCRIPT : pour une operation repetitive sur 10 parcours, ecrire un script Python parametre (config par agent : ids, texte creation limitee adapte au role, message signaler, version cible) qui appelle generateurs-case en sous-processus (outil de reference : recablage auto + validation) au lieu de 45 commandes manuelles. Le pilote (athena) a valide le modele avant generalisation.
+2. LES IDS SUFFIXES PEUVENT ENTRER EN COLLISION : verifier avant d'utiliser sign+b/c/d (ex: vulcain c16b existe deja pour documentation) -- calculer les ids libres dynamiquement.
+3. LA BRANCHE VERS SIGNALER N'EST PAS TOUJOURS NON : buffy utilise des reponses nommees (sous-mission/autre-agent/non), vulcain a 3 branches (OUI/NON/documentation). Le recablage doit reutiliser la reponse EXISTANTE de la branche (ne jamais supposer la valeur).
+4. LE TEXTE CREATION LIMITEE EST ADAPTE AU ROLE DE CHAQUE AGENT : athena pense-betes, atlas documentation, buffy fichiers du cerveau, clio README+lecons, janus missions de controle, minerve todos, morpheus lecons, promethee specs, themis rapports d audit, vulcain EXCEPTION (il cree des outils durables lui-meme). La clause commune : outil temporaire autorise via generateurs-outil-temporaire (jetable .tmp-*.py, JAMAIS tools/), outil DURABLE -> Vulcain.
+5. LES AVERTISSEMENTS generateurs-case (Pattern 5 fin passive, rappel delegation) sont PRE-EXISTANTS sur les messages Signaler le besoin -- ne pas les traiter dans cette mission (hors perimetre).
+6. IMPACT : seule la fiche vulcain.md reference la version du parcours (v0.2.9 -> v0.2.10) ; les autres fiches ne mentionnent que le lien sans version -- ne pas modifier inutilement.
+7. VALIDATIONS : JSON valide + ASCII 0 + CRLF 0 sur les 10 parcours, valider-cartes-decision --tous 11/11 CONFORME, navigation reelle des 2 chemins (TEMPORAIRE et DURABLE) sur un echantillon, branche documentation de vulcain PRESERVEE (non regression).
+## [LECON] 2026-08-09 -- PISTES MIROIRS BUFFY -> ATLAS POUR LA CARTOGRAPHIE (maillon de chaine avec retour)
+
+**Mission** : Buffy a besoin de cartographier un parcours -> elle doit avoir une piste qui l emmene vers Atlas (l agent qui cartographie) ; et Atlas doit avoir la piste miroir (quand un agent a besoin de moi, je fais et je REACTIVE l agent precedent en lui fournissant ma carte).
+
+**Structure creee** :
+- BUFFY (v0.2.10) : case c33 Mission hors parcours + branche cartographier -> c38 Activer Atlas pour cartographier (indices : REGLE UNE CARTE = UN ROLE Pattern 10 - la cartographie est le ROLE D ATLAS, je ne cartographie JAMAIS moi-meme + CREATION LIMITEE - Atlas cree le rapport + outil activer-agent-principal) -> c39 FIN - Retour d Atlas avec sa carte (Atlas me REACTIVE en me fournissant sa carte, je reprends ma mission).
+- ATLAS (v0.1.9) : case c1 Mission + branche cartographier-agent -> c31 Cartographier pour un agent (indices : ASCII + CREATION LIMITEE A LA DOCUMENTATION - sortie cartographie-<parcours>.md dans le dossier du parcours audite + RVAV + outil cartographier-parcours) -> c31b FIN - Reactiver l agent precedent avec sa carte (reactiver-agent-principal reactiver session-llm-1 <raison> <agent_precedent> en fournissant la carte).
+
+**Lecons** :
+1. PISTES MIROIRS : quand l agent A a besoin du role de l agent B, ajouter la piste d activation dans LE PARCOURS DE A (activer B en maillon de chaine) ET la piste de reception dans LE PARCOURS DE B (faire + reactiver A en lui fournissant le livrable). C est la materialisation de la boucle RELAIS -> RETOUR -> CLOTURE (Pattern 5) sans fin passive.
+2. ORDRE D AJOUT DES CASES : ajouter la FIN d abord (elle n a pas de suivant), puis l INDICE qui pointe vers elle (--suivant), puis recabler la case decision (--branche). Ne jamais --apres une case qui n existe pas encore (erreur : la case a inserer apres n existe pas).
+3. LE LIVRABLE EST FOURNI A L AGENT : la fin d Atlas ne dit pas seulement reactiver -- elle dit reactiver L AGENT PRECEDENT EN LUI FOURNISSANT MA CARTE (le livrable circule avec le retour). Le retour n est pas vide : il transporte le rapport.
+4. Pattern 10 respecte : Buffy ne cartographie PAS elle-meme (elle active Atlas), Atlas ne cree pas de case de parcours (role Buffy). Chaque piste pointe vers l agent habilite.
+5. VALIDATIONS : navigation reelle des 2 chemins (buffy c33 cartographier -> c38 -> c39 FIN ; atlas c1 cartographier-agent -> c31 -> c31b FIN), valider-cartes-decision CONFORME sur les 2 parcours, ASCII 0, LF pur, references validees (buffy 47 cases, atlas 38 cases).
+## [LECON] 2026-08-09 -- PISTES MIROIRS THEMIS GENERALISEES (audit sur demande d un agent)
+
+**Mission** : generaliser le modele de pistes miroirs (active l agent habilite + l agent reactive le demandeur avec son livrable) au besoin inter-agents THEMIS AUDITE SUR DEMANDE D UN AGENT.
+
+**Modifications** (10 parcours) :
+1. COTE DEMANDEUR (9 agents operationnels - athena v0.1.8, atlas v0.1.10, buffy v0.2.11, clio v0.1.6, janus v0.2.7, minerve v0.1.8, morpheus v0.1.7, promethee v0.1.8, vulcain v0.2.11) : branche `audit` sur la case decision Mission hors parcours -> case indice Activer Themis pour auditer (Pattern 10 : l audit est le ROLE DE THEMIS, je n audite JAMAIS moi-meme + CREATION LIMITEE + outil activer-agent-principal + LIRE AVANT USAGE) -> FIN - Retour de Themis avec son rapport (Themis me REACTIVE avec son rapport, je reprends ma mission).
+2. COTE THEMIS (v0.2.9) : branche `audit-agent` sur c1 (Mission) -> case indice Auditer pour un agent (ASCII pos 1 + CREATION LIMITEE A LA DOCUMENTATION - le rapport d audit est le livrable, JAMAIS toucher aux fichiers de la mission auditee + RVAV + combo audit-themis via combos-moteur) -> FIN - Reactiver l agent precedent avec son rapport (reactiver-agent-principal.py reactiver session-llm-1 <raison> <agent_precedent>).
+3. Cerberus EXCLU (routeur pur Pattern 10).
+
+**Lecons** :
+1. Le modele de pistes miroirs est GENERALISABLE : demandeur (branche sur la decision + Activer + FIN retour) / executeur (branche sur sa Mission + case d execution + FIN reactiver l agent precedent avec le livrable). Le livrable circule TOUJOURS avec le retour.
+2. Ajout chirurgical des branches en Python (liste de dicts {reponse, vers}) pour PRESERVER les branches existantes - generateurs-case `editer --branche` remplace TOUTES les branches, dangereux.
+3. Choix des ids : toujours verifier la liste complete des cases (numeriques ET suffixes c20b/c20c/c20d) avant d utiliser cN+1 - les suffixes sont deja pris sur beaucoup de parcours.
+4. Pattern 10 respecte partout : aucun agent n audite lui-meme, aucun agent ne cree le rapport de l autre. Chaque piste pointe vers l agent habilite (Themis pour l audit, Atlas pour la cartographie, Vulcain pour les outils durables).
+5. VALIDATIONS : navigation reelle des 2 chemins (athena c18 audit -> c22 -> c23 FIN ; themis c1 audit-agent -> c25 -> c25b FIN), valider-cartes-decision --tous = 11/11 CONFORME, ASCII 0, LF pur, references validees, impact vulcain.md aligne v0.2.11.

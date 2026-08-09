@@ -54,6 +54,8 @@
 ‚|'
 “|"
 ”|"
+«|"
+»|"
 „|"
 
 # Symboles courants
@@ -65,3 +67,23 @@
 ≠|!=
 →|->
 ←|<-
+# Fleches verticales et doubles
+↑|^
+↓|v
+↔|<->
+⇐|<=
+⇒|=>
+⇔|<=>
+
+# Box drawing (schemas)
+─|-
+│||
+┌|+-
+┐|-+
+└|+-
+┘|-+
+├||-
+┤|-|
+
+# Espace inse cable
+ | 

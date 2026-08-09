@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION = "0.2.0-py"
+VERSION = "0.2.2-py"
 STATUT = "beta"
 
 import re

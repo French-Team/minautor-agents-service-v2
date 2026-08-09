@@ -842,37 +842,7 @@ les mots composees deja qualifies (role_principal, role_specifique) restent inch
 
 **Lecons** :
 1. PIEGE DOUBLE PREFIXE : le nom du besoin est deja prefixe tmp- (ex: tmp-mesurer-taille) ; le template du script genere NE doit PAS re-ajouter tmp- dans le docstring/print (le double tmp-tmp-mesurer-taille est apparu au test). Passer le nom avec prefixe au template et l'utiliser tel quel.
-2. PIEGE INSERTION JSON DANS UN CATALOGUE : pour inserer une entree apres un bloc, ne JAMAIS chercher la premiere ligne '},' (c'est la fermeture du PREMIER sous-objet, ex: le premier parametre) -- il faut partir de la ligne '{' d'ouverture du bloc et compter les accolades (avec gestion des chaines) jusqu'au '}' qui ramene a 0. Ma 1re tentative a insere l'entree AU MILIEU de la liste parametres de generateurs-commande (JSON restait valide mais entree parasite).
+2. PIEGE INSERTION JSON DANS UN CATALOGUE : pour insérer une entree apres un bloc, ne JAMAIS chercher la premiere ligne '},' (c'est la fermeture du PREMIER sous-objet, ex: le premier parametre) -- il faut partir de la ligne '{' d'ouverture du bloc et compter les accolades (avec gestion des chaines) jusqu'au '}' qui ramene a 0. Ma 1re tentative a insere l'entree AU MILIEU de la liste parametres de generateurs-commande (JSON restait valide mais entree parasite).
 3. PIEGE REFORMATAGE JSON : ne jamais re-ecrire un catalogue avec json.dumps global (le format du fichier n'est pas un json.dumps standard : diff 47% a indent=2) -- reparer CHIRURGICALEMENT par lignes (supprimer le bloc parasite, inserer l'entree bien formatee a la bonne indentation) puis verifier git diff minimal (ici -29/+29 = parasite supprime + bonne entree).
 4. Detection du workspace : remonter depuis le script jusqu'au dossier contenant AGENTS.md (marqueur robuste, fonctionne pour toutes les racines).
 5. Verification systematique : nommage valider-nommage OK, ASCII 0 sur les 5 fichiers + index, LF pur, parite py/sh (--version, dry-run, generation reelle), test bout en bout (generation + execution du script genere + suppression 0 residu), detecter-impacts A JOUR.
-## [LECON] 2026-08-09 -- GUILLEMETS FRANCAIS AJOUTES AU DICTIONNAIRE (v0.2.1)
-
-**Mission** : ameliorer les outils corriger pour couvrir les guillemets francais U+00AB/U+00BB (lecon Themis du 2026-08-09 : l outil repondait [OK] Aucune correction necessaire alors que le fichier contenait des guillemets francais).
-
-**Modifications** (7 fichiers) :
-1. Dictionnaire partage `corriger-dictionnaire-accents.txt` : +2 entrees U+00AB et U+00BB vers guillemet droit double (coherent avec les guillemets courbes U+201C/U+201D qui vont deja vers le guillemet droit).
-2. Les 2 outils consommateurs (corriger-accents-zones-sensibles + corriger-dictionnaire-accents) beneficient automatiquement du dictionnaire : aucun changement de code necessaire, seulement le bump de version 0.2.0-py -> 0.2.1-py (py + sh + md des 2 outils) + ligne d historique + mention des caracteres couverts dans la doc.
-
-**Lecons** :
-1. LA MODIFICATION D UN DICTIONNAIRE PARTAGE PROFITE A TOUS LES CONSOMMATEURS : corriger-accents-zones-sensibles (py+sh), corriger-dictionnaire-accents (py+sh) lisent le meme fichier .txt - une seule source de verite, aucun changement de code dans les scripts.
-2. PIEGE TESTS PARALLELES : lancer 2 outils de correction EN PARALLELE sur le MEME fichier fausse les resultats (le 1er voit 0 fichier car le 2e a deja tout corrige) - toujours tester sequentiellement avec des fichiers neufs par outil.
-3. PIEGE DOSSIERS EXCLUS : les noms de dossier contenant .tmp ou test- sont exclus par defaut (--exclure node_modules,.git,.agents,.backup,.tmp,test-,dictionnaire-,exemples) - un test dans .tmp-test-xxx donne Fichiers analyses: 0. Utiliser un dossier neutre (ex: .zz-xxx).
-4. VERSION PY VS SH : les .py supportent --version, les .sh NON (erreur preexistante) - la parite --version py/sh n est pas applicable a ces outils, verifier plutot la parite de comportement (meme nombre de corrections, meme resultat).
-5. REGLE DES 5 FICHIERS : apres modification de version, verifier py, sh, md des 2 outils + ligne d historique + doc mention des caracteres couverts - ici 6 fichiers outils + 1 dictionnaire = 7, tous ASCII 0 (sauf le dictionnaire, exception volontaire), LF pur, nommage OK.
-6. detecter-impacts sur un .txt de donnees echoue (pas de frontmatter identite:) - c est normal, ce n est pas un outil migre ; les references NON MIS A JOUR signalees sont des fichiers qui mentionnent l outil sans version (bruit connu, 0 impact manquant reel).
-## [LECON] 2026-08-09 -- SYMBOLES MANQUANTS AJOUTES AU DICTIONNAIRE (v0.2.2)
-
-**Mission** : ajouter au dictionnaire partage corriger-dictionnaire-accents.txt les familles de caracteres non-ASCII courants encore manquantes (suite directe des guillemets francais v0.2.1).
-
-**Modifications** (7 fichiers) :
-1. Dictionnaire partage : +15 entrees -> 66 entrees utiles (68 lignes hors # avec 2 commentaires de section) : fleches verticales et doubles (U+2191 -> ^, U+2193 -> v, U+2194 -> <->, U+21D0 -> <=, U+21D2 -> =>, U+21D4 -> <=>), box drawing (U+2500 -> -, U+2502 -> |, U+250C -> +-, U+2510 -> -+, U+2514 -> +-, U+2518 -> -+, U+251C -> |-, U+2524 -> -|), espace inse cable U+00A0 -> espace simple.
-2. Les 2 outils consommateurs en profitent automatiquement : bump 0.2.1-py -> 0.2.2-py (py+sh+md des 2 outils) + ligne historique + doc section caracteres couverts elargie.
-
-**Lecons** :
-1. SCAN PAR OCTETS VS SCAN DECODE : compter les octets > 127 est trompeur (les octets 0x80-0x9F sont des artefacts, 0xC2/0xC3/0xE2 des prefixes UTF-8) - toujours DECODER en UTF-8 puis compter les caracteres, sinon on liste des fantomes.
-2. PIEGE CHEMINS WINDOWS : l exclusion de dossier par sous-chaine (ex: exemples/) ECHOUE si les chemins contiennent des backslashes - normaliser en forward slashes (replace backslash) avant le test d exclusion, sinon exemples/ (zone volontairement polluee) fausse le scan.
-3. LE PROJET EST 100% PROPRE hors exemples/ et hors dictionnaire : le scan propre confirme que les seuls fichiers non-ASCII sont le dictionnaire (exception volontaire) et exemples/ (zone de test). L ajout de symboles est donc PREVENTIF : couvrir les familles qui pourraient apparaitre (schemas box drawing, fleches verticales, NBSP sournois).
-4. COHERENCE DES REMPLACEMENTS : suivre les conventions existantes (U+2192 -> ->, U+2190 -> <-) : fleches verticales -> ^ et v, double sens -> <->, doubles -> <= => <=>, box drawing transcrits en traits/coins ASCII (+- -+ |- -|), NBSP -> espace simple. Verifier l absence de doublon/conflit AVANT d inserer (script avec controle).
-5. REGLE DES 5 FICHIERS : apres bump de version, verifier py, sh, md des 2 outils + ligne historique + doc mention - ici 6 fichiers outils + 1 dictionnaire = 7, ASCII 0 (sauf dictionnaire), LF pur, nommage 0 erreur.
-6. TESTS SEQUENTIELS : jamais 2 outils de correction en parallele sur le meme fichier (fausse les compteurs) - un fichier neuf par test, dossier neutre .zz-xxx (les noms .tmp/test- sont exclus par defaut).

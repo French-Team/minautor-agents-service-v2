@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-janus",
     "agent": "janus",
-    "version": "0.2.5",
+    "version": "0.2.7",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Janus : second controle (outil, statut, modification). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : les suites d'outils des chemins outil (c5-c7) et modification (c22-c26) sont remplacees par les combos combo-controle-outil et combo-controle-modification (Pattern 3, spec-guider-parcours v0.2.4)."
   },
@@ -503,9 +503,14 @@
         },
         {
           "reponse": "NON",
-          "vers": "c29"
+          "vers": "c29b"
+        },
+        {
+          "reponse": "audit",
+          "vers": "c31"
         }
-      ]
+      ],
+      "suivant": "c29b"
     },
     "c28": {
       "titre": "Activer l'agent habilite",
@@ -528,7 +533,8 @@
     "c29": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission.",
+      "suivant": "c29c"
     },
     "c30": {
       "titre": "FIN - Delegation",
@@ -557,6 +563,85 @@
         }
       ],
       "suivant": "c1"
+    },
+    "c29d": {
+      "titre": "FIN - Outil temporaire",
+      "type": "fin",
+      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
+    },
+    "c29c": {
+      "titre": "Creer l outil temporaire",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX MISSIONS DE CONTROLE ET AUX LECONS + EXCEPTION OUTIL TEMPORAIRE : je cree uniquement les missions de controle et mes lecons (dossier de l agent, JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-outil-temporaire",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        }
+      ],
+      "suivant": "c29d"
+    },
+    "c29b": {
+      "titre": "Besoin d outil ?",
+      "type": "question",
+      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
+      "branches": [
+        {
+          "reponse": "TEMPORAIRE",
+          "vers": "c29c"
+        },
+        {
+          "reponse": "DURABLE",
+          "vers": "c29"
+        }
+      ]
+    },
+    "c31": {
+      "titre": "Activer Themis pour auditer",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : l audit est le ROLE DE THEMIS (evaluatrice) - je n audite JAMAIS moi-meme. Si j ai besoin d un audit de conformite, j ACTIVE Themis (maillon de chaine)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        }
+      ],
+      "suivant": "c32"
+    },
+    "c32": {
+      "titre": "FIN - Retour de Themis avec son rapport",
+      "type": "fin",
+      "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni."
     }
   }
 }
