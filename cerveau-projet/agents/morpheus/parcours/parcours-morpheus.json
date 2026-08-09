@@ -1,27 +1,6 @@
 {
-  "identite": {
-    "type": "parcours",
-    "appartient_a": "morpheus",
-    "commun": false
-  },
-  "parcours": {
-    "nom": "parcours-morpheus",
-    "agent": "morpheus",
-    "version": "0.1.7",
-    "case_depart": "c0",
-    "description": "Parcours (jeu de piste) des missions de Morpheus : tester un outil (ecrire + executer avec protections), valider, rapporter. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
-  },
   "cases": {
     "c0": {
-      "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-      "type": "question",
-      "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
-        }
-      ],
       "branches": [
         {
           "reponse": "OUI",
@@ -35,37 +14,66 @@
           "reponse": "NON",
           "vers": "c0b"
         }
-      ]
-    },
-    "c0b": {
-      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "indice",
+      ],
       "indices": [
         {
-          "type": "regle",
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/morpheus/corrections.md"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/morpheus/morpheus.md"
+          "texte": "REGLE VERACITE : reponds la VERITE (OUI si c'est le cas, NON sinon), jamais ce qu'on attend de toi.",
+          "type": "regle"
         }
       ],
-      "suivant": "c0c"
+      "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+      "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+      "type": "question"
+    },
+    "c0b": {
+      "indices": [
+        {
+          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche (jamais celles des autres) avant de commencer.",
+          "type": "regle"
+        },
+        {
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/morpheus/corrections.md",
+          "nom": "lire-fichier",
+          "type": "outil"
+        },
+        {
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/morpheus/morpheus.md",
+          "nom": "lire-fichier",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c0c",
+      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+      "type": "action"
+    },
+    "c0c": {
+      "indices": [
+        {
+          "ref": "pattern-6",
+          "type": "ref"
+        },
+        {
+          "catalogue": "lire-activite-recente",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
+          "nom": "lire-activite-recente",
+          "type": "outil"
+        },
+        {
+          "chemin": "AGENTS.md",
+          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel",
+          "type": "fichier"
+        }
+      ],
+      "suivant": "c1",
+      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+      "type": "action"
     },
     "c1": {
-      "titre": "Mission",
-      "type": "question",
-      "question": "Quelle est la mission ?",
       "branches": [
         {
           "reponse": "tester",
@@ -79,199 +87,36 @@
           "reponse": "autre",
           "vers": "c13"
         }
-      ]
-    },
-    "c2": {
-      "titre": "Lire la documentation de l'outil",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne teste JAMAIS sans protections."
-        },
-        {
-          "type": "regle",
-          "texte": "Je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "fichier",
-          "chemin": "agents/tools/[categorie]/[nom-outil]/[nom-outil].md",
-          "raison": "Lire la doc de l'outil : comprendre le comportement attendu AVANT d'ecrire les tests"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>"
-        }
       ],
-      "suivant": "c3"
-    },
-    "c3": {
-      "titre": "Lire le protocole-tests",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-tests/",
-          "raison": "Lire le protocole-tests : comment ecrire et executer les tests, cas limites, protections obligatoires"
-        }
-      ],
-      "suivant": "c4"
-    },
-    "c4": {
-      "titre": "Lancer le combo tester-outil",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "LE COMBO ENCAPSULE le chemin de test (Pattern 3, anciennes cases c4-c5-c6) : ecrire le fichier de test via creer-fichier -> verifier les protections (REGLE ABSOLUE : jamais de test sans protections) -> executer le test. Fournir les 3 variables (fichier_test, contenu_test, commande_test) et repondre OUI au controle des protections."
-        },
-        {
-          "type": "outil",
-          "nom": "combos-moteur",
-          "catalogue": "combos-moteur",
-          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-tester-outil/definition-combo.json --var fichier_test=<chemin-du-test> --var contenu_test=<contenu> --var commande_test=<commande-d-execution> --reponses c3=OUI"
-        },
-        {
-          "type": "regle",
-          "texte": "Chaque test est NUMEROTE (test-001, test-002...)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
-        },
-        {
-          "type": "outil",
-          "nom": "corriger-symboles",
-          "catalogue": "corriger-symboles",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
-        }
-      ],
-      "suivant": "c7"
-    },
-    "c7": {
-      "titre": "Verifier les resultats et donner le verdict",
-      "type": "controle",
-      "question": "Le test est-il 100% VALIDE (0 echec, aucune protection declenchee) ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "Je valide seulement via les tests, pas via l'inspection."
-        },
-        {
-          "type": "regle",
-          "texte": "Tout probleme detecte (meme mineur) doit etre signale a l'agent d'origine."
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c8"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c8"
-        }
-      ]
-    },
-    "c8": {
-      "titre": "Ajouter les lecons dans corrections.md",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX LECONS : je cree uniquement mes lecons (corrections.md de mon dossier, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "Toute erreur detectee pendant les tests devient une lecon dans corrections.md."
-        },
-        {
-          "type": "outil",
-          "nom": "ajouter-contenu-fichier",
-          "catalogue": "ajouter-contenu-fichier",
-          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/morpheus/corrections.md <lecon>"
-        }
-      ],
-      "suivant": "c9"
-    },
-    "c9": {
-      "titre": "Retour : qui m'a delegue ?",
-      "type": "question",
-      "question": "Comment ai-je ete activee ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE CHAINE BOUT-EN-BOUT : Vulcain -> Morpheus -> Janus -> Cerberus. Si activation par Vulcain (chaine) -> a la fin j active Janus. Si activation directe par Cerberus -> je reactive Cerberus."
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "VULCAIN",
-          "vers": "c10"
-        },
-        {
-          "reponse": "CERBERUS",
-          "vers": "c14"
-        }
-      ]
+      "question": "Quelle est la mission ?",
+      "titre": "Mission",
+      "type": "question"
     },
     "c10": {
+      "message": "CHAINE BOUT-EN-BOUT : tests termines et VERDICT rendu (RVAV passe sur mon travail). J ACTIVE JANUS (controle) avec le rapport de tests et le verdict. La chaine continue : Janus controle puis REACTIVE Cerberus avec le bilan consolide.",
       "titre": "FIN - Activer Janus",
-      "type": "fin",
-      "message": "CHAINE BOUT-EN-BOUT : tests termines et VERDICT rendu (RVAV passe sur mon travail). J ACTIVE JANUS (controle) avec le rapport de tests et le verdict. La chaine continue : Janus controle puis REACTIVE Cerberus avec le bilan consolide."
+      "type": "fin"
     },
     "c11": {
-      "titre": "Valider un outil existant",
-      "type": "indice",
       "indices": [
         {
-          "type": "fichier",
           "chemin": "agents/tools/[categorie]/[nom-outil]/tests/",
-          "raison": "Verifier les tests existants, completer si necessaire"
+          "raison": "Verifier les tests existants, completer si necessaire",
+          "type": "fichier"
         },
         {
-          "type": "outil",
-          "nom": "lire-fichier",
           "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <test-existent>"
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <test-existent>",
+          "nom": "lire-fichier",
+          "type": "outil"
         }
       ],
-      "suivant": "c12"
+      "suivant": "c12",
+      "titre": "Valider un outil existant",
+      "type": "action"
     },
     "c12": {
-      "titre": "Completer et executer la regression",
-      "type": "controle",
-      "question": "La regression complete est-elle VERTE (0 echec) ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "Executer TOUS les tests de l'outil (regression complete), pas un seul."
-        },
-        {
-          "type": "outil",
-          "nom": "tester-protection-*",
-          "chemin": "cerveau-projet/agents/tools/tester/protections/",
-          "commande": "executer chaque test avec les protections"
-        }
-      ],
       "branches": [
         {
           "reponse": "OUI",
@@ -281,12 +126,24 @@
           "reponse": "NON",
           "vers": "c12"
         }
-      ]
+      ],
+      "indices": [
+        {
+          "texte": "Executer TOUS les tests de l'outil (regression complete), pas un seul.",
+          "type": "regle"
+        },
+        {
+          "chemin": "cerveau-projet/agents/tools/tester/protections/",
+          "commande": "executer chaque test avec les protections",
+          "nom": "tester-protection-*",
+          "type": "outil"
+        }
+      ],
+      "question": "La regression complete est-elle VERTE (0 echec) ?",
+      "titre": "Completer et executer la regression",
+      "type": "controle"
     },
     "c13": {
-      "titre": "Mission hors parcours",
-      "type": "question",
-      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
       "branches": [
         {
           "reponse": "OUI",
@@ -301,103 +158,41 @@
           "vers": "c18"
         }
       ],
-      "suivant": "c16b"
+      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
+      "suivant": "c16b",
+      "titre": "Mission hors parcours",
+      "type": "question"
     },
     "c14": {
+      "message": "Reactiver Cerberus avec le rapport de tests et le verdict (activation directe).",
       "titre": "FIN - Reactiver Cerberus",
-      "type": "fin",
-      "message": "Reactiver Cerberus avec le rapport de tests et le verdict (activation directe)."
+      "type": "fin"
     },
     "c15": {
-      "titre": "Activer l'agent habilite",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine."
+          "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine.",
+          "type": "regle"
         },
         {
-          "type": "outil",
-          "nom": "activer-agent-principal",
           "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
+          "nom": "activer-agent-principal",
+          "type": "outil"
         }
       ],
-      "suivant": "c17"
+      "suivant": "c17",
+      "titre": "Activer l'agent habilite",
+      "type": "action"
     },
     "c16": {
-      "titre": "Signaler le besoin",
-      "type": "fin",
       "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission.",
-      "suivant": "c16c"
-    },
-    "c17": {
-      "titre": "FIN - Delegation",
-      "type": "fin",
-      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si activite directement par lui)."
-    },
-    "c0c": {
-      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
-        },
-        {
-          "type": "outil",
-          "nom": "lire-activite-recente",
-          "catalogue": "lire-activite-recente",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
-        },
-        {
-          "type": "fichier",
-          "chemin": "AGENTS.md",
-          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
-        }
-      ],
-      "suivant": "c1"
-    },
-    "c16d": {
-      "titre": "FIN - Outil temporaire",
-      "type": "fin",
-      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
-    },
-    "c16c": {
-      "titre": "Creer l outil temporaire",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX LECONS + EXCEPTION OUTIL TEMPORAIRE : je cree uniquement mes lecons (corrections.md de mon dossier, JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
-        },
-        {
-          "type": "outil",
-          "nom": "generateurs-outil-temporaire",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
-        }
-      ],
-      "suivant": "c16d"
+      "suivant": "c16c",
+      "titre": "Signaler le besoin",
+      "type": "fin"
     },
     "c16b": {
-      "titre": "Besoin d outil ?",
-      "type": "question",
-      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
       "branches": [
         {
           "reponse": "TEMPORAIRE",
@@ -407,37 +202,202 @@
           "reponse": "DURABLE",
           "vers": "c16"
         }
-      ]
+      ],
+      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
+      "titre": "Besoin d outil ?",
+      "type": "question"
     },
-    "c18": {
-      "titre": "Activer Themis pour auditer",
-      "type": "indice",
+    "c16c": {
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : l audit est le ROLE DE THEMIS (evaluatrice) - je n audite JAMAIS moi-meme. Si j ai besoin d un audit de conformite, j ACTIVE Themis (maillon de chaine)."
+          "ref": "pattern-2",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
+          "ref": "pattern-12",
+          "type": "ref"
         },
         {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/",
+          "nom": "generateurs-outil-temporaire",
+          "type": "outil"
         }
       ],
-      "suivant": "c19"
+      "suivant": "c16d",
+      "titre": "Creer l outil temporaire",
+      "type": "action"
+    },
+    "c16d": {
+      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission.",
+      "titre": "FIN - Outil temporaire",
+      "type": "fin"
+    },
+    "c17": {
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si activite directement par lui).",
+      "titre": "FIN - Delegation",
+      "type": "fin"
+    },
+    "c18": {
+      "indices": [
+        {
+          "ref": "pattern-10",
+          "type": "ref"
+        },
+        {
+          "ref": "pattern-12",
+          "type": "ref"
+        },
+        {
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "nom": "activer-agent-principal",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c19",
+      "titre": "Activer Themis pour auditer",
+      "type": "action"
     },
     "c19": {
+      "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni.",
       "titre": "FIN - Retour de Themis avec son rapport",
-      "type": "fin",
-      "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni."
+      "type": "fin"
+    },
+    "c2": {
+      "indices": [
+        {
+          "texte": "REGLE ABSOLUE : je ne teste JAMAIS sans protections. Je ne suppose JAMAIS, je VERIFIE avant d'agir.",
+          "type": "regle"
+        },
+        {
+          "chemin": "agents/tools/[categorie]/[nom-outil]/[nom-outil].md",
+          "raison": "Lire la doc de l'outil : comprendre le comportement attendu AVANT d'ecrire les tests",
+          "type": "fichier"
+        },
+        {
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>",
+          "nom": "lire-fichier",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c3",
+      "titre": "Lire la documentation de l'outil",
+      "type": "action"
+    },
+    "c3": {
+      "indices": [
+        {
+          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-tests/",
+          "raison": "Lire le protocole-tests : comment ecrire et executer les tests, cas limites, protections obligatoires",
+          "type": "fichier"
+        }
+      ],
+      "suivant": "c4",
+      "titre": "Lire le protocole-tests",
+      "type": "action"
+    },
+    "c4": {
+      "indices": [
+        {
+          "ref": "pattern-3",
+          "type": "ref"
+        },
+        {
+          "ref": "protocole-tests",
+          "type": "ref"
+        },
+        {
+          "catalogue": "combos-moteur",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-tester-outil/definition-combo.json --var fichier_test=<chemin-du-test> --var contenu_test=<contenu> --var commande_test=<commande-d-execution> --reponses c3=OUI",
+          "nom": "combos-moteur",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c7",
+      "titre": "Lancer le combo tester-outil",
+      "type": "action"
+    },
+    "c7": {
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c8"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c8"
+        }
+      ],
+      "indices": [
+        {
+          "texte": "Je valide seulement via les tests, pas via l'inspection.",
+          "type": "regle"
+        },
+        {
+          "texte": "Tout probleme detecte (meme mineur) doit etre signale a l'agent d'origine.",
+          "type": "regle"
+        }
+      ],
+      "question": "Le test est-il 100% VALIDE (0 echec, aucune protection declenchee) ?",
+      "titre": "Verifier les resultats et donner le verdict",
+      "type": "controle"
+    },
+    "c8": {
+      "indices": [
+        {
+          "ref": "pattern-2",
+          "type": "ref"
+        },
+        {
+          "texte": "CREATION LIMITEE AUX LECONS : je cree uniquement mes lecons (corrections.md). Toute erreur detectee pendant les tests devient une lecon.",
+          "type": "regle"
+        },
+        {
+          "catalogue": "ajouter-contenu-fichier",
+          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/morpheus/corrections.md <lecon>",
+          "nom": "ajouter-contenu-fichier",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c9",
+      "titre": "Ajouter les lecons dans corrections.md",
+      "type": "action"
+    },
+    "c9": {
+      "branches": [
+        {
+          "reponse": "VULCAIN",
+          "vers": "c10"
+        },
+        {
+          "reponse": "CERBERUS",
+          "vers": "c14"
+        }
+      ],
+      "indices": [
+        {
+          "ref": "pattern-8",
+          "type": "ref"
+        }
+      ],
+      "question": "Comment ai-je ete activee ?",
+      "titre": "Retour : qui m'a delegue ?",
+      "type": "question"
     }
+  },
+  "identite": {
+    "appartient_a": "morpheus",
+    "commun": false,
+    "type": "parcours"
+  },
+  "parcours": {
+    "agent": "morpheus",
+    "case_depart": "c0",
+    "description": "v0.2.0 : MIGRATION AU NOUVEAU FORMAT (spec-refonte etape 6, pilote 2 apres cerberus) - cases indice -> action, regles > 160 car. -> references (patterns/protocoles), max 3 indices par case. Parcours (jeu de piste) des missions de Morpheus : tester un outil (ecrire + executer avec protections), valider, rapporter. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
+    "nom": "parcours-morpheus",
+    "version": "0.2.0"
   }
 }

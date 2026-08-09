@@ -3,7 +3,7 @@
 # guider-parcours.py
 # Guide l'agent case par case (jeu de piste) : affiche la case courante
 # (question + indices outil/fichier/regle), suit les branches selon la reponse.
-# Version : 0.2.0
+# Version : 0.4.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -26,18 +26,27 @@
 # ============================================================
 
 import argparse
+import io
 import json
+import os
+import re
 import sys
 from pathlib import Path
 
-VERSION = "0.3.1"
+VERSION = "0.4.0"
 STATUT = "ebauche"
+
+# Racine du projet : 6 remontees depuis ce fichier
+# (guider-parcours -> guider -> tools -> agents -> cerveau-projet -> racine)
+RACINE = Path(__file__).resolve().parents[5]
+SPEC_GUIDER = RACINE / "cerveau-projet" / "agents" / "tools" / "guider" / "guider-parcours" / "spec" / "spec-guider-parcours.001.01.ebauche.md"
 
 _COULEURS = {
     "rouge": "\033[0;31m",
     "vert": "\033[0;32m",
     "jaune": "\033[1;33m",
     "bleu": "\033[0;34m",
+    "magenta": "\033[0;35m",
     "cyan": "\033[0;36m",
     "neutre": "\033[0m",
 }
@@ -165,8 +174,62 @@ def _chemin_doc_outil(nom, chemin):
     return dossier + "/" + nom + ".md"
 
 
+def resoudre_reference(ref):
+    """Resout une reference d indice (spec-refonte 7.1 : cle ref) vers son contenu.
+
+    Formats (alignes sur valider-case --references) :
+      - pattern-<N> : extrait le titre + 3 lignes du Pattern N de la spec-guider-parcours ;
+      - protocole-<x> / regle-<x> : chemin du fichier/dossier trouve dans regles-immuables ;
+      - chemin relatif : chemin + existence du fichier.
+    Retourne (titre, corps) ou (None, message) si non resolvable.
+    """
+    # pattern-<N> : titre + corps depuis la spec-guider-parcours
+    m = re.match(r"^pattern-(\d+)$", ref)
+    if m:
+        try:
+            lignes = io.open(SPEC_GUIDER, encoding="utf-8").read().split("\n")
+        except Exception:
+            return None, "(spec-guider-parcours illisible)"
+        cible = "### Pattern %s" % m.group(1)
+        for i, l in enumerate(lignes):
+            if l.strip().startswith(cible):
+                titre = l.strip()
+                corps = []
+                for j in range(i + 1, min(i + 5, len(lignes))):
+                    l2 = lignes[j]
+                    if l2.strip().startswith("### ") or not l2.strip():
+                        if l2.strip().startswith("### "):
+                            break
+                        continue
+                    corps.append(l2.strip())
+                    if len(corps) >= 3:
+                        break
+                return titre, " ".join(corps)[:260]
+        return None, "(pattern %s introuvable dans la spec)" % m.group(1)
+    # protocole-<x> / regle-<x> : recherche par nom dans regles-immuables
+    if ref.startswith("protocole-") or ref.startswith("regle-"):
+        dossier = RACINE / "cerveau-projet" / "agents" / "regles-immuables"
+        trouve = None
+        if dossier.is_dir():
+            for racine, dossiers, fichiers in os.walk(str(dossier)):
+                for nom in dossiers + fichiers:
+                    if nom.startswith(ref):
+                        trouve = os.path.join(racine, nom)
+                        break
+                if trouve:
+                    break
+        if trouve:
+            rel = os.path.relpath(trouve, str(RACINE)).replace("\\", "/")
+            return rel, "(reference de regle immuable)"
+        return None, "(reference %s introuvable dans regles-immuables)" % ref
+    # chemin relatif : fichier existant
+    if os.path.isfile(os.path.join(str(RACINE), ref)):
+        return ref, "(fichier existant)"
+    return ref, "(reference non resolvable)"
+
+
 def afficher_indices(indices):
-    """Affiche les indices de la case (regle / outil / fichier)."""
+    """Affiche les indices de la case (regle / ref / outil / fichier)."""
     if not indices:
         return
     print("")
@@ -174,6 +237,14 @@ def afficher_indices(indices):
         typ = ind.get("type", "")
         if typ == "regle":
             print(_couleur("[REGLE] ", "rouge") + ind.get("texte", ""))
+        elif typ == "ref":
+            ref = ind.get("ref", "")
+            titre, corps = resoudre_reference(ref)
+            print(_couleur("[REFERENCE] ", "magenta" if "magenta" in _COULEURS else "rouge") + ref)
+            if titre:
+                print("         -> %s" % titre)
+            if corps:
+                print("         %s" % corps)
         elif typ == "outil":
             nom = ind.get("nom", "?")
             chemin = ind.get("chemin", "")
@@ -272,11 +343,13 @@ def naviguer(donnees, case_debut, reponses_predefinies, interactif=False):
         afficher_case(cid, case, total, position if position else ordre.index(cid) + 1)
 
         branches = case.get("branches") or []
-        if typ == "indice":
+        if typ in ("indice", "action"):
             # pas de question : passage automatique
+            # (action = NOUVEAU type, spec-refonte critere 7 : s execute sans
+            #  question et enchaine sur la case suivante, identique a indice)
             suivant = case.get("suivant")
             if not suivant:
-                print(_couleur("ERREUR: case indice '%s' sans 'suivant'" % cid, "rouge"), file=sys.stderr)
+                print(_couleur("ERREUR: case %s '%s' sans 'suivant'" % (typ, cid), "rouge"), file=sys.stderr)
                 return 1
             cid = suivant
             position = ordre.index(cid) + 1

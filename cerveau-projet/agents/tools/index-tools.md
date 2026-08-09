@@ -159,8 +159,10 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `generateurs-squelette-spec` | Generer le squelette d'une spec conforme au spec-template | [generateurs/generateurs-squelette-spec/](generateurs/generateurs-squelette-spec/) |
 | `generateurs-squelette-todo` | Generer le squelette d'un todo conforme au todo-template | [generateurs/generateurs-squelette-todo/](generateurs/generateurs-squelette-todo/) |
 | `generateurs-commande` | Composer et generer une commande complexe en posant une question par parametre | [generateurs/generateurs-commande/](generateurs/generateurs-commande/) |
-| `generateurs-case` | Ajouter, editer, supprimer une case OU ajouter un bloc modele compose (decision + deviation + rejoint, Pattern 7) d'une carte de decision (parcours JSON) avec recablage auto et validation | [generateurs/generateurs-case/](generateurs/generateurs-case/) |
-| `generateurs-carte` | Agir sur une carte COMPLETE (parcours JSON) : creer un squelette (patterns 4-5-6-7), analyser les chemins, detecter les anomalies (boucles/inatteignables/impasses), dupliquer un chemin | [generateurs/generateurs-carte/](generateurs/generateurs-carte/) |
+| `generateurs-amelioration` | Pose une checklist de questions par theme avant toute amelioration d un outil, combo, generateur ou carte | [generateurs/generateurs-amelioration/](generateurs/generateurs-amelioration/) |
+| `generateurs-case` | Ajouter, editer, supprimer une case OU ajouter un bloc modele compose COMPLET (decision + branches min 2 + deviation + rejoint, refs pattern-7) d'une carte de decision (parcours JSON) avec recablage auto, --ref (indices reference) et validation auto valider-case --modele | [generateurs/generateurs-case/](generateurs/generateurs-case/) |
+| `generateurs-carte` | Agir sur une carte COMPLETE (parcours JSON) : creer un squelette ALLEGE (indices = references, naît CONFORME 0 surcharge), analyser les chemins, detecter les anomalies (structure + delegation validateur-case), dupliquer un chemin (refs conservees) | [generateurs/generateurs-carte/](generateurs/generateurs-carte/) |
+| `generateurs-ligne` | Ajouter une LIGNE (chemin de bout en bout) a une carte de decision via des gabarits de groupes de cases (configs : defaut, config-1 deviation, config-2 RVAV, config-3 action), apres verification de la carte Atlas (existence + mtime, blocage + invite a activer Atlas sinon), dry/wet | [generateurs/generateurs-ligne/](generateurs/generateurs-ligne/) |
 | `generateurs-outil-temporaire` | Generer un outil temporaire (script Python jetable) dans le workspace : en-tete standard (identite outil-temporaire, ASCII, LF), dry-run par defaut, question de promotion (2e utilisation -> activer Vulcain) | [generateurs/generateurs-outil-temporaire/](generateurs/generateurs-outil-temporaire/) |
 | `generateurs-regenerer-catalogue` | Regenerer/synchroniser le catalogue de commandes du generateur a partir des outils reels (descriptions extraites des en-tetes .py, 2 formats) | [generateurs/generateurs-regenerer-catalogue/](generateurs/generateurs-regenerer-catalogue/) |
 
@@ -261,6 +263,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `valider-conventions` | Verifier que les conventions sont respectees | [valider/valider-conventions/](valider/valider-conventions/) |
 | `valider-ebauche` | Verifier les exigences minimales d'un ebauche | [valider/valider-ebauche/](valider/valider-ebauche/) |
 | `valider-liens` | Verifier que les liens sont valides | [valider/valider-liens/](valider/valider-liens/) |
+| `valider-case` | Valide et allege une carte de decision (parcours JSON) : structure, modele compose, surcharge des indices, references, normes - verdict CONFORME / A ALLEGER / NON CONFORME | [valider/valider-case/](valider/valider-case/) |
 | `valider-nommage` | Verifier que le nommage est correct | [valider/valider-nommage/](valider/valider-nommage/) |
 | `valider-pense-bete` | Verifier l'integrite d'un pense-bete (structure, sections, ASCII) | [valider/valider-pense-bete/](valider/valider-pense-bete/) |
 | `valider-relecture` | Verifier que chaque fiche agent + corrections contient la regle de relecture | [valider/valider-relecture/](valider/valider-relecture/) |
@@ -430,8 +433,8 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Verifier | 5 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **108** |
+| **Total** | **110** |
 
-> **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 103 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
+> **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 
 ---

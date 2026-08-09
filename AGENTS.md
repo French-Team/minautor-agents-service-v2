@@ -65,13 +65,13 @@ identite:
 | **Derniere mise a jour** | 2026-08-09 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | vulcain (retour de mission) |
-| **Raison** | MISSION TERMINEE (Vulcain) : COMMENTAIRE STALE LIGNE 318 CORRIGE - REUSSIE. CORRECTION (1 fichier, 1 ligne, AUCUN changement de code ni de version) : generateurs-regenerer-catalogue.py ligne 318 'puis reecrire CRLF' -> 'puis ecrire en LF pur (standard projet)' (point mineur de l audit Themis garde-fou regenerateur). VALIDATIONS : plus aucune reference 'reecrire CRLF' dans le code, py_compile + bash -n OK, parite --version py/sh v1.1.0 inchangee (pas de bump - recommandation audit), ASCII 0, LF pur, 0 residu. Lecon Vulcain ecrite. Fin de mission : reactivation Cerberus (Pattern 13). |
+| **Active par** | janus (retour de mission) |
+| **Raison** | SECOND CONTROLE JANUS REGLE MATERIALISEE TERMINE : VERDICT VALIDE (6/6). P1 c8/c22/c27 = FIN - Activer Janus + regle IMMUABLE JANUS (< 160 car) ; P2 parcours v0.3.2 + fiche v0.3.2 ; P3 navigation -> c8/c22/c27 PARCOURS TERMINE avec fin Activer Janus atteinte ; P4 valider-case CONFORME 0 A ALLEGER ; P5 lecon Buffy documentee ; P6 ASCII 0 LF pur. LA REGLE UTILISATEUR EST DESORMAIS STRUCTURELLE dans la carte de Buffy : apres TOUTE mission (meme sans code), elle active Janus (second controle) qui reactive Cerberus. BOUCLE FERMEE : la regle est testee par Janus lui-meme sur la carte qui la contient. LECON Janus documentee. REACTIVATION : Cerberus reactive (agent_precedent=janus). |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-09 17:08 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-09 21:55 |
 | session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
 | session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |

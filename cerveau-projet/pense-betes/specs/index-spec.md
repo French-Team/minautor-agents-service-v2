@@ -17,7 +17,7 @@ identite:
 
 | ID | Theme | Statut | Lien |
 |---|---|---|---|
-| -- | -- | -- | *(aucune spec pour l'instant)* |
+| 001 | Refonte des cartes de decision et des cases | ebauche | [spec-refonte-cartes-decision.001.01.ebauche.md](spec-refonte-cartes-decision.001.01.ebauche.md) |
 
 ## Navigation
 

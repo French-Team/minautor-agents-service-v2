@@ -8,10 +8,10 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.2.0 |
+| **Version** | 0.3.0 |
 | **Statut** | ebauche |
 | **Categorie** | generateurs |
-| **Derniere mise a jour** | 2026-08-08 |
+| **Derniere mise a jour** | 2026-08-09 |
 | **Python** | generateurs-carte.py |
 | **Bash** | generateurs-carte.sh (parite) |
 
@@ -69,15 +69,18 @@ Memes actions et options que la version Python (parite).
 python3 generateurs-carte.py creer <chemin> --agent <nom> [--nom <parcours>] [--version 0.1.0] [--description "..."] [--force]
 ```
 
-Cree une carte complete avec les cases conformes aux patterns :
+Cree une carte complete avec les cases conformes aux patterns. Les indices
+portent des REFERENCES (cle `ref`, resolues par `valider-case --references`) au
+lieu de textes inline : le squelette nait ALLEGE (verdict CONFORME, 0 a alleger).
 
 | Case | Type | Role |
 |---|---|---|
-| `c0` | question | Relecture honnete (Pattern 4) : OUI -> c0c, INCERTAIN/NON -> c0b |
-| `c0b` | indice | RELIRE OBLIGATOIRE : corrections puis fiche (Pattern 4) |
-| `c0c` | indice | CONTEXTE temps reel : lire-activite-recente + AGENTS.md (Pattern 6) |
-| `c1` | question | Mission (Pattern 1) : branches a definir |
-| `c2` | indice | Exemple d'action a completer (Pattern 7) |
+| `c0` | question | Relecture honnete (Pattern 4) : OUI -> c0c, INCERTAIN/NON -> c0b (ref protocole-activation) |
+| `c0b` | indice | RELIRE OBLIGATOIRE : corrections puis fiche (ref protocole-activation + 2 outils lire-fichier) |
+| `c0c` | indice | CONTEXTE temps reel (ref pattern-6 + outil lire-activite-recente + AGENTS.md) |
+| `c1` | question | Mission (ref pattern-10 UNE CARTE = UN ROLE) : branches a definir |
+| `c2` | indice | Exemple d'action a completer (refs pattern-3, pattern-7, pattern-2) |
+| `c2b` | indice | RVAV avant activation (ref rvav-workflow.md) |
 | `c9` | fin | FIN - Mission terminee (Pattern 5 : fin active) |
 
 `case_depart` vaut `c0`. Le fichier doit etre cree dans
@@ -101,13 +104,11 @@ python3 generateurs-carte.py detecter <parcours.json>
 
 Detecte et affiche :
 
-1. **References cassees** : `suivant` / `branches[].vers` / `case_depart` vers
-   une case inexistante
-2. **Boucles d'attente** (regle 10) : branche vers sa propre case avec
-   `attendre`/`attente` dans le titre ou la question
-3. **Cases inatteignables** depuis `case_depart` (orphelines)
-4. **Cases sans sortie** : ni `suivant`, ni `branches`, type non-`fin`
-5. **Pattern 7** : decision (`question`/`controle`) a UNE seule branche
+1. **Anomalies structurelles locales** (boucles d'attente, cases inatteignables,
+   sans sortie, references cassees, decision a branche unique)
+2. **Verifications deleguees au validateur-case** (spec-refonte 7.2, source
+   unique de verite) : modele compose, surcharge des indices, references des
+   indices -- le verdict `valider-case` est affiche en complement
 
 ### 4. Dupliquer un chemin
 
@@ -121,7 +122,10 @@ Duplique le groupe de cases du chemin `--debut` -> `--fin` (BFS) :
 - Les references INTERNES au chemin sont recablees vers les copies
 - Les references externes restent sur les originales (sauf `--brancher-debut`
   qui fait pointer l'original du debut vers la copie)
-- Validation auto complete (json + references + guider-parcours --liste)
+- Les indices REFERENCES sont CONSERVES tels quels (aucun texte inline a
+  dupliquer -- spec-refonte 7.2 : la copie porte les memes refs, rien ne derive)
+- Validation auto complete (json + references + guider-parcours --liste +
+  validateur-case --modele --references)
 
 ---
 
@@ -132,6 +136,9 @@ Duplique le groupe de cases du chemin `--debut` -> `--fin` (BFS) :
    des cases existantes -- erreur listee sinon
 3. **guider-parcours --liste** : l'outil guider-parcours est relance sur le
    fichier modifie pour confirmer que la structure est chargeable
+4. **validateur-case --modele --references** : verifications du modele compose
+   et des references d'indices (spec-refonte 7.2) -- un verdict NON CONFORME
+   bloque l'operation
 
 > **REGLE ASCII** : le contenu JSON est ecrit en ASCII strict (ensure_ascii).
 > Un contenu non-ASCII est refuse avant ecriture (regle immuable).

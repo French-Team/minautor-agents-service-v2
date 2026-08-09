@@ -3,7 +3,7 @@
 # generateurs-case.py
 # Genere, edite et supprime des cases d'une carte de decision (parcours JSON)
 # avec recablage automatique des references et validation auto complete.
-# Version : 0.1.0-beta
+# Version : 0.3.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -23,13 +23,14 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.2.2"
+VERSION = "0.3.1"
 STATUT = "ebauche"
 
 # Racine du projet : 5 remontees depuis ce fichier
 # (generateurs-case -> generateurs -> tools -> agents -> cerveau-projet -> racine)
 RACINE = Path(__file__).resolve().parents[5]
 GUIDER_PY = RACINE / "cerveau-projet" / "agents" / "tools" / "guider" / "guider-parcours" / "guider-parcours.py"
+VALIDER_CASE_PY = RACINE / "cerveau-projet" / "agents" / "tools" / "valider" / "valider-case" / "valider-case.py"
 
 _COULEURS = {
     "rouge": "\033[0;31m",
@@ -314,9 +315,9 @@ def construire_case(args, donnees):
         if type_case == "controle" and not args.branches and not args.suivant:
             print(_couleur("ERREUR: type 'controle' exige --branche ou --suivant", "rouge"), file=sys.stderr)
             sys.exit(1)
-    elif type_case == "indice":
+    elif type_case in ("indice", "action"):
         if not args.suivant:
-            print(_couleur("ERREUR: type 'indice' exige --suivant", "rouge"), file=sys.stderr)
+            print(_couleur("ERREUR: type '%s' exige --suivant" % type_case, "rouge"), file=sys.stderr)
             sys.exit(1)
     elif type_case == "fin":
         if args.message:
@@ -327,13 +328,16 @@ def construire_case(args, donnees):
         afficher_avertissement_regles_immuables(case)
         return case
     else:
-        print(_couleur("ERREUR: type inconnu '%s' (question/indice/controle/fin)" % type_case, "rouge"), file=sys.stderr)
+        print(_couleur("ERREUR: type inconnu '%s' (question/indice/action/controle/fin)" % type_case, "rouge"), file=sys.stderr)
         sys.exit(1)
 
     indices = []
     if args.indices_regle:
         for texte in args.indices_regle:
             indices.append({"type": "regle", "texte": texte})
+    if args.indices_ref:
+        for ref in args.indices_ref:
+            indices.append({"type": "ref", "ref": ref})
     if args.indices_outil:
         for spec in args.indices_outil:
             parties = spec.split(":")
@@ -377,7 +381,7 @@ def construire_case(args, donnees):
         case["branches"] = branches
     elif type_case in ("question",) and args.suivant:
         case["suivant"] = args.suivant
-    elif type_case == "indice" and args.suivant:
+    elif type_case in ("indice", "action") and args.suivant:
         case["suivant"] = args.suivant
     return case
 
@@ -431,12 +435,19 @@ def type_case_is_indice_or_suivant(case):
 # ------------------------------------------------------------
 
 def action_ajouter_bloc(args):
-    """Cree d'un coup un bloc MODELE COMPOSE (Pattern 7) : decision + deviation + rejoint.
+    """Cree d'un coup un bloc MODELE COMPOSE complet (spec-refonte, Pattern 7) :
+    decision + branches (min 2) + deviation + rejoint.
 
     Structure creee :
-      <decision> (question, 2 branches) :
-        OUI -> <deviation> (indice) -> <rejoint> (indice) -> <suite>
+      <decision> (question, branches min 2) :
+        OUI -> <deviation> (indice, ref pattern-7) -> <rejoint> (indice) -> <suite>
         NON -> <suite> (flux principal)
+        <branches supplementaires --branche reponse:vers si fournies>
+
+    Les indices deviation/rejoint portent des REFERENCES (cle ref, ex: pattern-7)
+    au lieu de textes inline -- c'est l'allegement (spec-refonte-cartes-decision
+    section 7.1 : "Ajouter l'option --ref pour poser des indices de type reference
+    au lieu du texte inline").
     """
     donnees = charger_parcours(args.parcours)
     cases = donnees["cases"]
@@ -456,38 +467,50 @@ def action_ajouter_bloc(args):
         print(_couleur("ERREUR: ajouter-bloc exige --suite <case> (suite du flux principal)", "rouge"), file=sys.stderr)
         sys.exit(1)
 
-    # Case decision (question, 2 branches)
+    # Case decision (question, branches min 2 : OUI -> deviation, NON -> suite)
+    branches = [
+        {"reponse": "OUI", "vers": id_deviation},
+        {"reponse": "NON", "vers": args.suite},
+    ]
+    # Branches supplementaires (modele compose complet : min 2, extensible)
+    if args.branches:
+        for spec in args.branches:
+            parties = spec.split(":")
+            if len(parties) != 2:
+                print(_couleur("ERREUR: --branche attend <reponse>:<vers>", "rouge"), file=sys.stderr)
+                sys.exit(1)
+            branches.append({"reponse": parties[0], "vers": parties[1]})
+
     decision = {
         "titre": args.titre or "Decision",
         "type": "question",
         "question": args.question or "Quelle est la decision ?",
-        "branches": [
-            {"reponse": "OUI", "vers": id_deviation},
-            {"reponse": "NON", "vers": args.suite},
-        ],
+        "branches": branches,
     }
 
-    # Case deviation (indice -> rejoint)
+    # Case deviation (indice REFERENCE pattern-7 -> rejoint)
+    ref_deviation = args.ref_deviation or "pattern-7"
     deviation = {
         "titre": args.titre_deviation or "DEVIATION : workflow secondaire",
         "type": "indice",
         "indices": [
             {
-                "type": "regle",
-                "texte": "REGLE PATTERN 7 (spec-guider-parcours v0.2.13) : deviation vers un workflow secondaire - le workflow secondaire se termine par un REJOINT vers le flux principal (jamais une fin au milieu, jamais une boucle d'attente).",
+                "type": "ref",
+                "ref": ref_deviation,
             }
         ],
         "suivant": id_rejoint,
     }
 
-    # Case rejoint (indice -> suite du flux principal)
+    # Case rejoint (indice REFERENCE pattern-7 -> suite du flux principal)
+    ref_rejoint = args.ref_rejoint or "pattern-7"
     rejoint = {
         "titre": args.titre_rejoint or "REJOINT : retour au flux principal",
         "type": "indice",
         "indices": [
             {
-                "type": "regle",
-                "texte": "REGLE PATTERN 7 (spec-guider-parcours v0.2.13) : rejoint le flux principal - la deviation est terminee, on revient a la suite du flux.",
+                "type": "ref",
+                "ref": ref_rejoint,
             }
         ],
         "suivant": args.suite,
@@ -510,8 +533,8 @@ def action_ajouter_bloc(args):
     if args.dry_run:
         print(
             _couleur(
-                "[DRY-RUN] Bloc modele compose ajoute : %s (decision) -> %s (deviation) -> %s (rejoint) -> %s (suite)"
-                % (id_decision, id_deviation, id_rejoint, args.suite),
+                "[DRY-RUN] Bloc modele compose ajoute : %s (decision, %d branches) -> %s (deviation, ref %s) -> %s (rejoint, ref %s) -> %s (suite)"
+                % (id_decision, len(branches), id_deviation, ref_deviation, id_rejoint, ref_rejoint, args.suite),
                 "jaune",
             )
         )
@@ -520,8 +543,8 @@ def action_ajouter_bloc(args):
     sauvegarder_parcours(args.parcours, donnees)
     print(
         _couleur(
-            "[OK] Bloc modele compose ajoute : %s (decision) -> %s (deviation) -> %s (rejoint) -> %s (suite)"
-            % (id_decision, id_deviation, id_rejoint, args.suite),
+            "[OK] Bloc modele compose ajoute : %s (decision, %d branches) -> %s (deviation, ref %s) -> %s (rejoint, ref %s) -> %s (suite)"
+            % (id_decision, len(branches), id_deviation, ref_deviation, id_rejoint, ref_rejoint, args.suite),
             "vert",
         )
     )
@@ -570,6 +593,9 @@ def action_editer(args):
         modifications.append("branches")
     if args.indices_regle is not None:
         case["indices"] = [{"type": "regle", "texte": t} for t in args.indices_regle]
+        modifications.append("indices")
+    if args.indices_ref is not None:
+        case["indices"] = [{"type": "ref", "ref": r} for r in args.indices_ref]
         modifications.append("indices")
     if args.remove_indices:
         case["indices"] = []
@@ -661,7 +687,8 @@ def action_supprimer(args):
 # ------------------------------------------------------------
 
 def valider_auto(args, donnees):
-    """Validation auto complete : json (recharge), references, case_depart, guider-parcours --liste."""
+    """Validation auto complete : json (recharge), references, case_depart, guider-parcours --liste,
+    puis validateur-case --modele (spec-refonte 7.1 : verifier le modele apres chaque commande)."""
     print(_couleur("  [VALIDATION AUTO]", "bleu"))
     ok_refs = valider_references(donnees, verbose=True)
     if not ok_refs:
@@ -683,6 +710,23 @@ def valider_auto(args, donnees):
         print(_couleur("  [OK] guider-parcours --liste : %d lignes" % len(lignes), "vert"))
     except (OSError, subprocess.TimeoutExpired) as e:
         print(_couleur("  [ATTENTION] guider-parcours non lance: %s" % e, "jaune"), file=sys.stderr)
+    # Validateur-case --modele (spec-refonte 7.1 : verifier le modele apres chaque commande)
+    try:
+        resultat = subprocess.run(
+            [sys.executable, str(VALIDER_CASE_PY), args.parcours, "--modele", "--dry-run"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        lignes = [l for l in resultat.stdout.splitlines() if l.strip()]
+        for l in lignes[-6:]:
+            print(_couleur("  | " + l, "bleu"))
+        if resultat.returncode != 0:
+            print(_couleur("  [ERREUR] validateur-case --modele a signale des problemes", "rouge"), file=sys.stderr)
+            return False
+        print(_couleur("  [OK] validateur-case --modele : conforme", "vert"))
+    except (OSError, subprocess.TimeoutExpired) as e:
+        print(_couleur("  [ATTENTION] validateur-case non lance: %s" % e, "jaune"), file=sys.stderr)
     return True
 
 
@@ -705,7 +749,7 @@ def construire_parser():
     # ajouter
     p_ajouter = subparsers.add_parser("ajouter", help="Ajouter une case")
     p_ajouter.add_argument("--case", dest="case_id", type=str, help="Id de la nouvelle case (defaut: prochain cN libre)")
-    p_ajouter.add_argument("--type", dest="type_case", type=str, required=True, choices=["question", "indice", "controle", "fin"], help="Type de la case")
+    p_ajouter.add_argument("--type", dest="type_case", type=str, required=True, choices=["question", "indice", "action", "controle", "fin"], help="Type de la case (action = NOUVEAU, spec-refonte etape 5 : sans question, enchaine sur suivant)")
     p_ajouter.add_argument("--titre", type=str, help="Titre de la case")
     p_ajouter.add_argument("--question", type=str, help="Question (types question/controle)")
     p_ajouter.add_argument("--message", type=str, help="Message (type fin)")
@@ -713,6 +757,7 @@ def construire_parser():
     p_ajouter.add_argument("--apres", type=str, help="Inserer apres cette case (recablage auto)")
     p_ajouter.add_argument("--branche", action="append", dest="branches", type=str, help="Branche <reponse>:<vers> (repetable)")
     p_ajouter.add_argument("--indice-regle", action="append", dest="indices_regle", type=str, help="Indice regle <texte> (repetable)")
+    p_ajouter.add_argument("--ref", action="append", dest="indices_ref", type=str, help="Indice reference <ref> (ex: pattern-7, protocole-tests) (repetable)")
     p_ajouter.add_argument("--indice-outil", action="append", dest="indices_outil", type=str, help="Indice outil <nom>:<chemin>[:commande] (repetable)")
     p_ajouter.add_argument("--indice-fichier", action="append", dest="indices_fichier", type=str, help="Indice fichier <chemin>:<raison> (repetable)")
 
@@ -723,9 +768,10 @@ def construire_parser():
     p_editer.add_argument("--question", type=str, help="Nouvelle question")
     p_editer.add_argument("--message", type=str, help="Nouveau message")
     p_editer.add_argument("--suivant", type=str, help="Nouvelle case suivante")
-    p_editer.add_argument("--type", dest="type_case", type=str, choices=["question", "indice", "controle", "fin"], help="Nouveau type")
+    p_editer.add_argument("--type", dest="type_case", type=str, choices=["question", "indice", "action", "controle", "fin"], help="Nouveau type")
     p_editer.add_argument("--branche", action="append", dest="branches", type=str, help="Remplace les branches <reponse>:<vers>")
     p_editer.add_argument("--indice-regle", action="append", dest="indices_regle", type=str, help="Remplace les indices par des regles")
+    p_editer.add_argument("--ref", action="append", dest="indices_ref", type=str, help="Indice reference <ref> (repetable, remplace les indices)")
     p_editer.add_argument("--remove-indices", action="store_true", help="Vider les indices")
 
     # supprimer
@@ -744,6 +790,9 @@ def construire_parser():
     p_bloc.add_argument("--titre-deviation", dest="titre_deviation", type=str, help="Titre de la deviation")
     p_bloc.add_argument("--titre-rejoint", dest="titre_rejoint", type=str, help="Titre du rejoint")
     p_bloc.add_argument("--suite", type=str, required=True, help="Case suite du flux principal (cible des branches NON et du rejoint)")
+    p_bloc.add_argument("--branche", action="append", dest="branches", type=str, help="Branche supplementaire <reponse>:<vers> (repetable, en plus de OUI/NON)")
+    p_bloc.add_argument("--ref-deviation", dest="ref_deviation", type=str, help="Reference de l indice deviation (defaut: pattern-7)")
+    p_bloc.add_argument("--ref-rejoint", dest="ref_rejoint", type=str, help="Reference de l indice rejoint (defaut: pattern-7)")
     p_bloc.add_argument("--apres", type=str, help="Inserer apres cette case (recablage auto du suivant)")
 
     # options globales
@@ -756,6 +805,18 @@ def construire_parser():
 
 def main():
     verifier_nommage(sys.argv[0])
+    if "--aide" in sys.argv or "-h" in sys.argv or "--help" in sys.argv:
+        parser = construire_parser()
+        # --aide peut cibler un sous-parser (ex: <parcours> ajouter-bloc --aide)
+        sous = None
+        if len(sys.argv) >= 3:
+            action = sys.argv[2]
+            for act in parser._actions:
+                if isinstance(act, argparse._SubParsersAction) and action in act.choices:
+                    sous = act.choices[action]
+                    break
+        (sous or parser).print_help()
+        return 0
     parser = construire_parser()
     args = parser.parse_args()
 

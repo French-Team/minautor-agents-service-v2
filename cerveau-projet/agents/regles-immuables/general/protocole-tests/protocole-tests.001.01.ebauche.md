@@ -10,7 +10,7 @@ identite:
 
 protocole:
   nom: "protocole-tests"
-  version: "0.2.0"
+  version: "0.2.1"
   statut: "ebauche"
   cree: "2026-08-06"
 
@@ -159,6 +159,20 @@ echo "Test 2: $([ $result2 -eq 0 ] && echo OK || echo ERREUR)"
 | 124 | Timeout (boucle infinie detectee) |
 | 137 | Processus tue (blocage detecte) |
 | 255 | Erreur de protection |
+
+## Delegation des tests
+
+REGLE IMMUABLE -- DELEGATION : SEUL MORPHEUS ECRIT ET EXECUTE LES TESTS.
+
+- Seul l'agent Morpheus (testeur) cree, adapte et execute les fichiers de test
+  `test-XXX-*` : la creation, la mise a jour et meme l'adaptation mineure d'un
+  test existant (version, nombre de points, attentes) sont son role.
+- Aucun autre agent ne touche a un fichier de test, meme pour une correction
+  rapide ou un simple controle (bash -n, py_compile, cas dans exemples/).
+- Quand une mission implique des tests, l'agent d'origine transmet le besoin a
+  Morpheus dans la mission : test-XXX a creer/adapter + points a couvrir.
+- Morpheus donne son verdict uniquement via les tests executes et revient a
+  l'agent qui l'a active (chaine bout-en-bout).
 
 ## Checklist de validation
 

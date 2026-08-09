@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-cerberus",
   "agent": "cerberus",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de coordination de Cerberus : accueillir, activer un agent, gerer le retour (second controle + README), inventaire. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : retour c12a question erreurs hors mission signalees (OUI c12b deviation reactiver Buffy -> c12c rejoint -> c13 / NON c13 flux principal)."
  },
@@ -19,7 +19,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
+     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la memorisation : relire sans retenir = inutile."
     }
    ],
    "branches": [
@@ -39,11 +39,11 @@
   },
   "c0b": {
    "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
     },
     {
      "type": "outil",
@@ -80,6 +80,10 @@
      "vers": "c11"
     },
     {
+     "reponse": "ameliorer",
+     "vers": "c1b"
+    },
+    {
      "reponse": "autre",
      "vers": "c18"
     }
@@ -87,7 +91,7 @@
   },
   "c2": {
    "titre": "Ecouter la demande",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
@@ -105,7 +109,7 @@
   },
   "c3": {
    "titre": "Lister les agents disponibles",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "outil",
@@ -133,8 +137,8 @@
      "raison": "Matrice de choix : chaque mission a un agent habilite"
     },
     {
-     "type": "regle",
-     "texte": "Outils -> Vulcain ; fichiers du cerveau -> Buffy ; tests -> Morpheus ; controle -> Janus ; README -> Clio ; inventaire/audit -> Themis ; pense-bete -> Athena ; spec -> Promethee ; todo -> Minerve ; exploration -> Atlas."
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/regles-choisir-agent.md"
     }
    ],
    "branches": [
@@ -150,18 +154,11 @@
   },
   "c6": {
    "titre": "Activer l'agent habilite",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
      "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande activer-agent-principal --reponses ...) au lieu de l ecrire en dur."
-    },
-    {
-     "type": "outil",
-     "nom": "generateurs-commande",
-     "catalogue": "generateurs-commande",
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
-     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande activer-agent-principal --reponses ..."
     },
     {
      "type": "regle",
@@ -179,22 +176,22 @@
   },
   "c7": {
    "titre": "Annoncer la mission et suivre le cycle",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
-     "type": "regle",
-     "texte": "FLUX CHAINE BOUT-EN-BOUT : Cerberus active -> l agent lit SA fiche en prenant le relais -> l agent execute -> a SA fin il ACTIVE le maillon suivant (Vulcain active Morpheus qui active Janus) -> Janus REACTIVE Cerberus avec le bilan consolide. Chaque maillon passe la boucle RVAV sur son travail AVANT d activer le suivant."
+     "type": "ref",
+     "ref": "pattern-8"
     },
     {
-     "type": "regle",
-     "texte": "SYNTAXE RETOUR OBLIGATOIRE : l'agent qui termine sa mission reactive Cerberus AVEC LE 3e ARGUMENT : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent_precedent>. Si le 3e argument est oublie, la commande affiche l'AIDE (echec) et le bloc session reste sur l'agent - verifier la ligne 'Session session-llm-1 : Cerberus reactive avec succes'."
+     "type": "ref",
+     "ref": "protocole-activation"
     }
    ],
    "suivant": "c20"
   },
   "c8": {
    "titre": "Verifier l'agent (identification)",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "fichier",
@@ -213,7 +210,7 @@
   },
   "c10": {
    "titre": "Activer l'agent",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
@@ -231,11 +228,11 @@
   },
   "c11": {
    "titre": "Relire MA fiche et MES corrections",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE FONDAMENTALE (demarrer.md) : Reactiver Cerberus SANS lire = inutile. A chaque reactivation, je relis MA fiche et MES corrections avant de reprendre la coordination."
+     "texte": "REGLE FONDAMENTALE (demarrer.md) : Reactiver Cerberus SANS lire = inutile. A chaque reactivation, je relis MA fiche et MES corrections."
     },
     {
      "type": "fichier",
@@ -252,11 +249,11 @@
   },
   "c12": {
    "titre": "Lire la raison de la reactivation",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE -- ROLE : je lis la raison de la reactivation (dans la conversation et AGENTS.md) pour DECIDER de la suite, jamais pour executer. Je reste le coordinateur : j active l agent habilite."
+     "type": "ref",
+     "ref": "pattern-10"
     }
    ],
    "suivant": "c12a"
@@ -268,7 +265,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "LISTE DEFINIE : Construire un outil (OUI), Optimiser un outil (OUI), Modifier le cerveau-projet (OUI), Pense-bete (OUI), Spec (OUI), Todo (OUI), Tests (OUI). Second controle / README / audit / exploration (NON)."
+     "texte": "LISTE DEFINIE : construire/optimiser outil, modifier cerveau-projet, pense-bete, spec, todo, tests = OUI. Second controle / README / audit / exploration = NON."
     }
    ],
    "branches": [
@@ -284,7 +281,7 @@
   },
   "c14": {
    "titre": "Activer Janus (second controle)",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
@@ -336,7 +333,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "ANTI-BOUCLE : je n active PAS Clio si les seuls fichiers modifies sont ceux de Clio (README.md, AGENTS.md, AGENTS-historique.md) ou les rapports de controle de Janus."
+     "texte": "ANTI-BOUCLE : je n active PAS Clio si seuls fichiers modifies = ceux de Clio (README.md, AGENTS.md, AGENTS-historique.md) ou rapports de controle Janus."
     }
    ],
    "branches": [
@@ -352,7 +349,7 @@
   },
   "c17": {
    "titre": "Activer Clio (README)",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
@@ -385,7 +382,7 @@
   },
   "c19": {
    "titre": "Reprendre la coordination",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
@@ -401,13 +398,13 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "RAPPEL : le cycle se boucle par reactiver <session> <raison> <agent_precedent> - le 3e argument (agent_precedent) est OBLIGATOIRE, son oubli affiche l'aide et ne met pas a jour le bloc."
+     "texte": "RAPPEL : reactiver <session> <raison> <agent_precedent> - le 3e argument est OBLIGATOIRE, son oubli affiche l'aide et ne met pas a jour le bloc."
     }
    ]
   },
   "c21": {
    "titre": "Reactiver l'agent d'origine (correction)",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
@@ -425,11 +422,11 @@
   },
   "c22": {
    "titre": "Activer Themis (inventaire/audit)",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE ABSOLUE : JE N'EXECUTE JAMAIS UN INVENTAIRE OU UN AUDIT MOI-MEME. C'est une mission pour Themis (evaluatrice croisee). Je ne lance aucune commande find/grep/python pour analyser le cerveau."
+     "texte": "REGLE ABSOLUE : JE N'EXECUTE JAMAIS UN INVENTAIRE OU UN AUDIT MOI-MEME. Mission pour Themis (evaluatrice croisee). Jamais de commande d'analyse."
     },
     {
      "type": "outil",
@@ -448,11 +445,11 @@
   },
   "c0c": {
    "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+     "type": "ref",
+     "ref": "pattern-6"
     },
     {
      "type": "outil",
@@ -471,12 +468,12 @@
   },
   "c12c": {
    "titre": "REJOINT : retour au flux principal",
-   "type": "indice",
+   "type": "action",
    "suivant": "c13"
   },
   "c12b": {
    "titre": "DEVIATION : reactiver Buffy pour reparer immediatement",
-   "type": "indice",
+   "type": "action",
    "indices": [
     {
      "type": "regle",
@@ -506,6 +503,27 @@
      "vers": "c13"
     }
    ]
+  },
+  "c1b": {
+   "titre": "Lancer le generateur d amelioration",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "AMELIORATION : toute demande d ameliorer/optimiser un outil declenche la checklist du generateur d amelioration AVANT d activer l agent habilite."
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-amelioration",
+     "catalogue": "generateurs-amelioration",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    }
+   ],
+   "suivant": "c5"
   }
  }
 }

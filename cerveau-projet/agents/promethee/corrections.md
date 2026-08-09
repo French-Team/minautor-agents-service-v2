@@ -148,3 +148,84 @@ preferences:
 3. Le critere 14 doit couvrir TOUS les criteres 1 a 25 (pas seulement ceux lies au pattern recent) : la conformite d un parcours = TOUS les criteres
 4. Le piege CRLF confirme encore : lire/ecrire avec newline='' (aucune conversion) - la spec est restee en LF pur (1554 lignes, 0 CRLF)
 5. Un caractere non-ASCII dans la raison d activation (COEUR -> ecrit OEU) fait REFUSER l activation par l outil : la regle ASCII s applique aussi aux messages d activation, pas seulement aux fichiers
+## [LECON] 2026-08-09 -- SPEC REFONTE CARTES DE DECISION REDIGEE (v0.1.0)
+
+**Mission** : rediger la spec de refonte du concept des cartes de decision et
+des cases (decision utilisateur : spec d abord - valider le concept AVANT de
+coder), suite au diagnostic des 2 problemes : cartes cablees mais NON
+EXECUTEES (conformite Morpheus/Janus manquee sur generateurs-amelioration) +
+degradation conceptuelle (buffy 49 cases/45 Ko, 15 patterns, indices empiles).
+
+**Livrables** :
+- `pense-betes/specs/spec-refonte-cartes-decision.001.01.ebauche.md` (v0.1.0,
+  10 sections : objectif, contexte+vision verbatim, probleme, modele case
+  composee, principe case fournie a la demande, contrat validateur-case,
+  evolution generateurs, plan 7 etapes, criteres 6, emplacement)
+- `pense-betes/specs/index-spec.md` : ligne 001 ajoutee (remplace la ligne vide)
+
+**Le concept de la spec (vision utilisateur)** :
+1. CASE FOURNIE A LA DEMANDE : l'agent recoit UNE case, l'execute, valide --
+   le SYSTEME fournit la suivante (principe catalogue). L'agent ne lit jamais
+   la carte en entier.
+2. CATALOGUES ALLEGES : les indices portent des REFERENCES (pattern-12,
+   regle-ascii, protocole-tests) au lieu des textes inline > 160 caracteres.
+3. VALIDATEUR-CASE (outil a creer) : valide structure + modele compose
+   (branches min 2, deviation = rejoint) + surcharge + references mortes.
+4. MODELE COMPOSE : decision + branches min 2 + deviation + rejoint genere en
+   UNE commande par generateurs-case (generaliser ajouter-bloc Pattern 7).
+
+**Validations** : ASCII 0 (2 recits corriges -> 0) · LF pur · frontmatter
+(type: spec) OK · 10 sections · index-spec a jour ASCII 0 · 0 residu.
+
+**Lecons** :
+1. Spec d abord = le concept est valide AVANT de coder (aucune ligne de code
+   n a ete ecrite pour cette etape) - c est le rempart contre la degradation.
+2. La regle immuable ASCII s applique AUSSI aux specs : 2 accents (recit)
+   echappaient - verifier systematiquement apres redaction.
+3. Une spec de refonte doit CITER la vision utilisateur verbatim + le
+   diagnostic factuel (tailles, chiffres) : c est la source de verite pour
+   toutes les missions d implementation ulterieures.
+4. Le plan d implementation reprend la chaine OBLIGATOIRE (Vulcain -> Morpheus
+   tests -> Janus controle) pour chaque outil cree/modifie - la lecon de la
+   conformite manquee est integree dans la spec (criteres 5).
+## [LECON] 2026-08-09 -- SPEC-REFONTE v0.1.1 : TYPE action DECLARE NOUVEAU
+
+**Mission** : clarifier le point mineur de l audit Themis (rapport-audit-spec-refonte) :
+le type action etait presente comme "inchange" alors qu il n existe pas dans le
+modele actuel (guider-parcours ne gere que fin/indice/question-controle ; aucun
+des 11 parcours ne contient de case action). Decision utilisateur : DECLARER
+action comme NOUVEAU type du modele cible.
+
+**Modifications** (spec-refonte-cartes-decision.001.01.ebauche.md, v0.1.0 -> v0.1.1) :
+1. Version 0.1.1 + ligne d historique (clarification, audit Themis)
+2. Tableau 4.1 : ligne action marquee *(NOUVEAU - modele cible, a implementer
+   a l etape 5 dans guider-parcours)*
+3. Titre 4.1 : "Types de cases (existants + 1 NOUVEAU)" au lieu de "(inchange)"
+4. Plan etape 5 : ajout "IMPLEMENTER LE TYPE action (nouveau, aujourd hui non
+   gere : seul fin/indice/question-controle)"
+5. Critere 7 : le type action implemente dans guider-parcours (comportement
+   identique a indice sans indices)
+
+**Validations** : ASCII 0 · LF pur · 10 sections intactes · index-spec inchange.
+
+**Lecons** :
+1. Un point mineur d audit se clarifie DANS la spec (source de verite) avant
+   de lancer l implementation - jamais en cours de route.
+2. Declarer un type NOUVEAU implique de mettre a jour TOUTES ses occurrences
+   dans la spec (tableau, titre, plan, criteres) : coherence interne.
+3. La spec v0.1.1 est la reference pour l etape 2 (validateur-case) : le type
+   action y est explicite comme hors perimetre des etapes 2-4 (etape 5).
+## [LECON] 2026-08-09 -- ETAPE 7 : spec-guider-parcours v0.5.0 (patterns REFERENCES, pas dupliques)
+
+**Mission** : mettre a jour la spec-guider-parcours pour que les patterns soient des REFERENCES (source de verite) et non des textes dupliques dans les cases.
+**Resultat** : spec v0.5.0 (1633 -> 1654 lignes), principe UNE PLACE POUR CHAQUE CHOSE documente, 4 exemples inline transformes en refs.
+**Lecons** :
+1. Le principe UNE PLACE POUR CHAQUE CHOSE est maintenant ecrit dans la spec : les patterns de la spec sont LA source de verite, une case POINTE (ref pattern-N) au lieu de copier. Consequences : modifier = 1 fichier, pas N cases ; une case ne derive jamais ; valider-case signale tout texte > 160 ou ref morte
+2. 4 exemples inline transformes : exemple minimal c2 (verifier avant d'agir -> pattern-9 + type action), Pattern 5 c9a (RELAIS -> pattern-5), Pattern 10 c2 (je n execute JAMAIS -> pattern-10), Pattern 11 c8b (PATTERN 11 -> pattern-11)
+3. Incoherence de version corrigee : titre ligne 7 (v0.2.27) vs Version ligne 9 (0.4.0) -> unifiees a 0.5.0 (v0.2.27 etait la version des patterns, 0.4.0 celle de la spec -- la spec avait evolue sans le titre)
+4. References documentaires mises a jour : guider-parcours.md (Spec v0.2.27 -> v0.5.0) et vulcain.md (Spec du format v0.2.27 -> v0.5.0) -- detecter-impacts a confirme les impacts
+5. Un exemple de case dans la spec doit etre la VITRINE du nouveau format : type action + indices ref, pas un exemple obsolette
+6. Normes : ASCII strict + LF pur sur les 3 fichiers modifies (spec, .md, vulcain.md)
+7. Non-regression : test-012 18/18 (resolution refs), test-013 22/22 (migration cerberus), detecter-decalages 112 conformes / 0 decalage
+
+**Preuve** : spec v0.5.0 avec principe documente + 4 refs transformees + 0 inline > 160 ; test-012/013 OK.

@@ -1,0 +1,157 @@
+{
+  "version": "0.3.0",
+  "gabarits": {
+    "config-1": {
+      "description": "Decision + DEVIATION (workflow secondaire) + rejoint (Pattern 7 complet)",
+      "cases": [
+        {
+          "suffixe": "",
+          "type": "question",
+          "titre": "TRAITEMENT PRINCIPAL OU DEVIATION ?",
+          "branches": [
+            [
+              "OUI",
+              ".1"
+            ],
+            [
+              "DEVIATION",
+              ".2"
+            ]
+          ],
+          "suivant": null
+        },
+        {
+          "suffixe": ".1",
+          "type": "action",
+          "titre": "Traitement principal",
+          "branches": [],
+          "suivant": "REJOINT"
+        },
+        {
+          "suffixe": ".2",
+          "type": "action",
+          "titre": "DEVIATION : workflow secondaire",
+          "branches": [],
+          "suivant": ".3"
+        },
+        {
+          "suffixe": ".3",
+          "type": "action",
+          "titre": "Fin du workflow secondaire",
+          "branches": [],
+          "suivant": "REJOINT"
+        },
+        {
+          "suffixe": "REJOINT",
+          "type": "action",
+          "titre": "REJOINT - retour au flux principal",
+          "branches": [],
+          "suivant": "REJOINT"
+        }
+      ]
+    },
+    "config-2": {
+      "description": "Controle RVAV (OUI/NON) + branches + rejoint",
+      "cases": [
+        {
+          "suffixe": "",
+          "type": "controle",
+          "titre": "VALIDER LE RESULTAT (RVAV) ?",
+          "branches": [
+            [
+              "OUI",
+              ".1"
+            ],
+            [
+              "NON",
+              ".2"
+            ]
+          ],
+          "suivant": null
+        },
+        {
+          "suffixe": ".1",
+          "type": "action",
+          "titre": "OUI - valide, continuer",
+          "branches": [],
+          "suivant": "REJOINT"
+        },
+        {
+          "suffixe": ".2",
+          "type": "action",
+          "titre": "NON - corriger avant de continuer",
+          "branches": [],
+          "suivant": "REJOINT"
+        },
+        {
+          "suffixe": "REJOINT",
+          "type": "action",
+          "titre": "REJOINT - retour au flux principal",
+          "branches": [],
+          "suivant": "REJOINT"
+        }
+      ]
+    },
+    "config-3": {
+      "description": "Action simple (enchainement sans question)",
+      "cases": [
+        {
+          "suffixe": "",
+          "type": "action",
+          "titre": "ACTION DIRECTE",
+          "branches": [],
+          "suivant": "REJOINT"
+        },
+        {
+          "suffixe": "REJOINT",
+          "type": "action",
+          "titre": "REJOINT - retour au flux principal",
+          "branches": [],
+          "suivant": "REJOINT"
+        }
+      ]
+    },
+    "defaut": {
+      "description": "Decision a 2 branches + rejoint (modele compose minimal, Pattern 7)",
+      "cases": [
+        {
+          "suffixe": "",
+          "type": "question",
+          "titre": "TRAITEMENT A CHOISIR ?",
+          "branches": [
+            [
+              "OUI",
+              ".1"
+            ],
+            [
+              "NON",
+              ".2"
+            ]
+          ],
+          "suivant": null
+        },
+        {
+          "suffixe": ".1",
+          "type": "action",
+          "titre": "Traitement A",
+          "branches": [],
+          "suivant": "REJOINT"
+        },
+        {
+          "suffixe": ".2",
+          "type": "action",
+          "titre": "Traitement B",
+          "branches": [],
+          "suivant": "REJOINT"
+        },
+        {
+          "suffixe": "REJOINT",
+          "type": "action",
+          "titre": "REJOINT - retour au flux principal",
+          "branches": [],
+          "suivant": "REJOINT"
+        }
+      ]
+    }
+  }
+}

@@ -8,11 +8,11 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.3.1 |
+| **Version** | 0.4.0 |
 | **Statut** | ebauche |
 | **Categorie** | guider |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Spec** | [spec-guider-parcours.001.01.ebauche.md](spec/spec-guider-parcours.001.01.ebauche.md) (v0.2.27) |
+| **Spec** | [spec-guider-parcours.001.01.ebauche.md](spec/spec-guider-parcours.001.01.ebauche.md) (v0.5.0) |
 
 ---
 
@@ -114,10 +114,17 @@ Memes options que la version Python.
 
 | Type | Comportement |
 |---|---|
-| `question` | Affiche la question + indices, attend une reponse, suit la branche |
+| `question` | Affiche la question + les indices, attend une reponse, suit la branche |
 | `indice` | Affiche les indices, sans question : passe automatiquement a `suivant` |
+| `action` | **NOUVEAU v0.4.0** : sans question, s execute et enchaine automatiquement a `suivant` (spec-refonte etape 5) |
 | `controle` | Affiche les indices + question de verification (OUI/NON), suit la branche |
 | `fin` | Case terminale : le parcours est termine |
+
+### Resolution des references (v0.4.0)
+
+Les indices `{"type": "ref", "ref": X}` sont RESOLUS a la navigation :
+`[REFERENCE] X` puis le contenu (titre + 3 lignes pour `pattern-<N>`, chemin
+trouve pour `protocole-<x>`/`regle-<x>`, existence pour un chemin relatif).
 
 ### Indices (tableau `indices`)
 
@@ -126,6 +133,7 @@ Memes options que la version Python.
 | `outil` | `nom`, `chemin`, `commande` | L'outil exact a lancer |
 | `fichier` | `chemin`, `raison` | Le fichier/protocole a lire a cette etape |
 | `regle` | `texte` | LA regle absolue pertinente pour cette case |
+| `ref` | `ref` | **NOUVEAU v0.4.0** : reference resolue a la navigation (pattern-N, protocole-x, chemin) |
 
 ### Branches (tableau `branches`)
 

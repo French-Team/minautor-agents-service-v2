@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+# -*- coding: ascii -*-
+"""
+test-013-cerberus-migration.py
+Test formel de la migration pilote du parcours-cerberus v0.3.0
+(nouveau format : indices REFERENCES + cases ACTION).
+
+Contexte (etape 6 de la spec-refonte-cartes-decision) :
+  - parcours-cerberus passe de v0.2.3 (0 erreur / 15 a alleger) a
+    v0.3.0 (0 erreur / 0 a alleger / CONFORME valider-case)
+  - 13 indices longs migres : 6 refs resolvables + 7 textes courts
+  - 18 cases de pilotage 'indice' -> 'action' (enchaine sans question)
+  - 2 surcharges de nombre corrigees (c1b, c6 : 4 -> 3 indices)
+
+Cas couverts:
+  1. Version du parcours = 0.3.0
+  2. Types : 18 action / 4 question / 4 controle / 2 fin, 0 indice
+  3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
+  4. valider-case --references : CONFORME (refs resolvables)
+  5. Navigation chemin accueil -> PARCOURS TERMINE
+  6. Navigation chemin activation -> PARCOURS TERMINE
+  7. Navigation chemin retour (reactiver) -> PARCOURS TERMINE
+  8. Refs resolues a la navigation (pattern-8, protocole-activation)
+  9. Case action enchaine SANS question (c0b -> c0c, pas de QUESTION)
+ 10. --case c11 demarre a c11 (pas de relecture c0)
+ 11. Parcours inexistant : ERREUR + code non nul
+ 12. JSON invalide : ERREUR + code non nul
+ 13. Protection : aucun fichier cree dans le dossier outil
+ 14. ASCII strict : 0 non-ASCII (parcours + test)
+ 15. LF pur : 0 CRLF
+
+Usage:
+  python3 test-013-cerberus-migration.py
+"""
+import io
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
+    PROJECT_ROOT = os.path.dirname(PROJECT_ROOT)
+
+TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
+PYTHON = sys.executable
+
+GUIDER = os.path.join(TOOLS_DIR, "guider", "guider-parcours", "guider-parcours.py")
+VALIDER_CASE = os.path.join(TOOLS_DIR, "valider", "valider-case", "valider-case.py")
+PARCOURS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "cerberus",
+                        "parcours", "parcours-cerberus.json")
+FICHE = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "cerberus",
+                     "cerberus.md")
+
+NB_POINTS = 0
+NB_OK = 0
+NB_KO = 0
+
+
+def verifier(nom, condition, detail=""):
+    global NB_POINTS, NB_OK, NB_KO
+    NB_POINTS += 1
+    if condition:
+        NB_OK += 1
+        print("  [OK] %s" % nom)
+    else:
+        NB_KO += 1
+        print("  [KO] %s %s" % (nom, ("-- " + detail) if detail else ""))
+
+
+def run(cmd, timeout=90):
+    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+
+
+def ascii_count(chemin):
+    with io.open(chemin, encoding="utf-8", errors="replace") as fh:
+        txt = fh.read()
+    return sum(1 for c in txt if ord(c) > 127)
+
+
+def crlf_count(chemin):
+    with open(chemin, "rb") as fh:
+        return fh.read().count(b"\r\n")
+
+
+def main():
+    global NB_POINTS, NB_OK, NB_KO
+
+    tmp = tempfile.mkdtemp(prefix="test-013-")
+    try:
+        print("=== Test formel migration cerberus v0.3.0 ===")
+
+        # 1. Version du parcours
+        with io.open(PARCOURS, encoding="utf-8") as fh:
+            donnees = json.load(fh)
+        verifier("1. Parcours version 0.3.0",
+                 donnees.get("parcours", {}).get("version") == "0.3.0",
+                 str(donnees.get("parcours", {}).get("version")))
+
+        # 2. Types de cases : 18 action / 4 question / 4 controle / 2 fin / 0 indice
+        cases = donnees.get("cases", {})
+        types = {}
+        for c in cases.values():
+            t = c.get("type", "?")
+            types[t] = types.get(t, 0) + 1
+        verifier("2a. 18 cases action (pilotage converti)",
+                 types.get("action", 0) == 18, str(types.get("action")))
+        verifier("2b. 4 questions + 4 controles + 2 fins (intacts)",
+                 types.get("question", 0) == 4 and types.get("controle", 0) == 4
+                 and types.get("fin", 0) == 2, str(types))
+        verifier("2c. Aucune case 'indice' restante",
+                 types.get("indice", 0) == 0, str(types))
+
+        # 3. valider-case : CONFORME (0 erreur, 0 a alleger)
+        r = run([PYTHON, VALIDER_CASE, PARCOURS, "--dry-run"])
+        verifier("3a. valider-case retourne 0", r.returncode == 0,
+                 r.stdout.strip()[-80:])
+        verifier("3b. Verdict CONFORME",
+                 "CONFORME" in r.stdout and "erreurs: 0" in r.stdout
+                 and "a alleger: 0" in r.stdout,
+                 r.stdout.strip()[:120])
+
+        # 4. valider-case --references : CONFORME (refs resolvables)
+        r_ref = run([PYTHON, VALIDER_CASE, PARCOURS, "--references", "--dry-run"])
+        verifier("4. --references : CONFORME (refs resolvables)",
+                 r_ref.returncode == 0 and "CONFORME" in r_ref.stdout,
+                 r_ref.stdout.strip()[:120])
+
+        # 5. Navigation chemin accueil
+        r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
+                     "OUI|accueil|OUI|OUI|NON|NON"])
+        verifier("5. Chemin accueil -> PARCOURS TERMINE",
+                 r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
+                 r_nav.stdout.strip()[-100:])
+
+        # 6. Navigation chemin activation
+        r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
+                     "OUI|activation|OUI|OUI|OUI|NON"])
+        verifier("6. Chemin activation -> PARCOURS TERMINE",
+                 r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
+                 r_nav.stdout.strip()[-100:])
+
+        # 7. Navigation chemin retour (reactiver)
+        r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
+                     "OUI|retour|OUI|NON|NON|NON"])
+        verifier("7. Chemin retour -> PARCOURS TERMINE",
+                 r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
+                 r_nav.stdout.strip()[-100:])
+
+        # 8. Refs resolues a la navigation (pattern-8, protocole-activation)
+        r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
+                     "OUI|accueil|OUI|OUI|NON|NON"])
+        verifier("8a. [REFERENCE] pattern-8 resolue",
+                 "[REFERENCE]" in r_nav.stdout and "pattern-8" in r_nav.stdout,
+                 r_nav.stdout.strip()[-200:])
+        verifier("8b. [REFERENCE] protocole-activation resolue",
+                 "[REFERENCE]" in r_nav.stdout and "protocole-activation" in r_nav.stdout,
+                 r_nav.stdout.strip()[-200:])
+
+        # 9. Case action enchaine SANS question (c0b -> c0c -> c1)
+        #    c0b est action : elle affiche ses indices puis enchaine vers c0c
+        #    (action) puis c1 (question) qui s'arrete la. Aucune QUESTION n'est
+        #    posee POUR c0b elle-meme : le premier arret est la question de c1.
+        r_act = run([PYTHON, GUIDER, PARCOURS, "--case", "c0b"])
+        verifier("9a. c0b enchaine (returncode 0)", r_act.returncode == 0,
+                 r_act.stdout.strip()[-80:])
+        verifier("9b. c0b (action) n'affiche pas de question pour elle-meme",
+                 "RELIRE OBLIGATOIRE" in r_act.stdout
+                 and "QUESTION POUR L'AGENT" not in r_act.stdout.split("RELIRE OBLIGATOIRE")[0],
+                 r_act.stdout.strip()[-100:])
+        verifier("9c. c0b (action) affiche ses indices",
+                 "[REGLE]" in r_act.stdout or "[REFERENCE]" in r_act.stdout,
+                 r_act.stdout.strip()[-100:])
+        verifier("9d. La navigation atteint la question suivante (c1 Mission)",
+                 "Mission" in r_act.stdout and "QUESTION POUR L'AGENT" in r_act.stdout,
+                 r_act.stdout.strip()[-100:])
+
+        # 10. --case c11 demarre a c11 (pas de relecture c0)
+        r_c11 = run([PYTHON, GUIDER, PARCOURS, "--case", "c11"])
+        verifier("10. --case c11 demarre a c11",
+                 r_c11.returncode == 0 and "Relire MA fiche" in r_c11.stdout
+                 and "Relecture : ta fiche" not in r_c11.stdout,
+                 r_c11.stdout.strip()[-120:])
+
+        # 11. Parcours inexistant : ERREUR
+        r_abs = run([PYTHON, GUIDER, os.path.join(tmp, "absent.json")])
+        verifier("11. Parcours inexistant : ERREUR + code non nul",
+                 r_abs.returncode != 0 and "ERREUR" in (r_abs.stdout + r_abs.stderr),
+                 "code=%d" % r_abs.returncode)
+
+        # 12. JSON invalide : ERREUR
+        invalide = os.path.join(tmp, "invalide.json")
+        with io.open(invalide, "w", encoding="utf-8") as fh:
+            fh.write("{ pas du json ")
+        r_inv = run([PYTHON, GUIDER, invalide])
+        verifier("12. JSON invalide : ERREUR + code non nul",
+                 r_inv.returncode != 0 and "ERREUR" in (r_inv.stdout + r_inv.stderr),
+                 "code=%d" % r_inv.returncode)
+
+        # 13. Protection : aucun fichier cree dans le dossier parcours
+        avant = set(os.listdir(os.path.dirname(PARCOURS)))
+        run([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|accueil|OUI|OUI|NON|NON"])
+        apres = set(os.listdir(os.path.dirname(PARCOURS)))
+        verifier("13. Protection : aucun fichier cree dans le dossier parcours",
+                 avant == apres, "cree: %s" % (apres - avant))
+
+        # 14. ASCII strict
+        total_non_ascii = ascii_count(PARCOURS) + ascii_count(
+            os.path.abspath(__file__))
+        verifier("14. ASCII strict : 0 non-ASCII (parcours + test)",
+                 total_non_ascii == 0, "total non-ASCII = %d" % total_non_ascii)
+
+        # 15. LF pur
+        total_crlf = crlf_count(PARCOURS) + crlf_count(os.path.abspath(__file__))
+        verifier("15. LF pur : 0 CRLF (parcours + test)",
+                 total_crlf == 0, "total CRLF = %d" % total_crlf)
+
+        print("")
+        print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return 1 if NB_KO else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

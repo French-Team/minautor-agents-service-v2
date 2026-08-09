@@ -939,3 +939,215 @@ l audit Themis de conformite d execution (rapport garde-fou regenerateur).
 3. VALIDATION LEGERE MAIS COMPLETE : py_compile + bash -n + parite --version + ASCII 0 +
    LF pur + grep de non-regression ('reecrire CRLF' absent) - une correction de commentaire
    ne necessite pas la batterie complete des tests fonctionnels.
+## [LECON] 2026-08-09 -- GENERATEURS-AMELIORATION CREE (v1.0.0)
+
+**Mission** : creer le generateur d'amelioration et d'optimisation (checklist
+de questions par theme, format JSON) + theme ameliorer-outil + inscription
+index-tools/catalogue.
+
+**Livrables** :
+- `generateurs-amelioration.py` v1.0.0 (py) + `.sh` (wrapper pur) + `.md` + `spec/`
+- `themes-amelioration.json` : theme `ameliorer-outil` (10 questions avec raison)
+- index-tools.md : ligne + total bump (108 -> 109)
+- catalogue-commandes.json : entree triee (position 45), total 111 -> 112
+- Interface : `--theme <nom>` / `--reponses 'q1=...;q2=...'` / `--liste` / `--aide` / `--version`
+
+**Validations** : parite py/sh --version OK · interrogation 10/10 non-interactive
+OK · theme inconnu -> erreur OK · py_compile/bash -n OK · nommage OK · ASCII 0 ·
+LF pur · detecter-decalages-catalogue : 111 conformes / 0 decalage · test-005
+26/26 OK.
+
+**Lecons** :
+1. Le mecanisme de questions de `generateurs-commande` (poser_question +
+   parametres question/raison) est le modele naturel : reutilise pour la
+   checklist, pas de reimplementation (code reuse).
+2. L'option `--aide` est OBLIGATOIRE pour tout outil reference au catalogue :
+   `detecter-decalages-catalogue` classe en "NON TESTABLE" tout outil sans
+   aide reconnue (decouvert : mon outil etait le 1 non testable, corrige).
+3. Checklist interrogee = reflexion deplacee HORS des cartes de decision
+   (philosophie : alleger = decomposer, une place pour chaque chose).
+4. Catalogue : toute nouvelle entree est inseree en position TRIEE (verifier
+   le tri apres insertion) avec modele --theme {theme} et parametre obligatoire.
+5. Hors perimetre (pre-existant, a ne pas corriger sans mission) :
+   `test-001-evaluer-agents-coherence` reste "NON TESTABLE" (script de test
+   sans --aide reference au catalogue).
+6. Regle des 5 fichiers respectee (py, sh, md, spec) + enregistrements
+   (index-tools, catalogue) + themes JSON = 6e fichier du dossier.
+## [LECON] 2026-08-09 -- VALIDER-CASE CREE (v1.0.0, etape 2 de la refonte)
+
+**Mission** : creer l outil qui valide et allege les cartes de decision
+(etape 2 de la spec-refonte-cartes-decision v0.1.1, contrat section 6), avec
+la CHAINE OBLIGATOIRE : apres la creation, activer Morpheus (tests) puis Janus
+(controle) - la lecon de la conformite manquee sur generateurs-amelioration.
+
+**Livrables** :
+- `valider/valider-case/valider-case.py` v1.0.0 + `.sh` (wrapper pur) + `.md` + `spec/`
+- index-tools.md : ligne + total bump (109 -> 110)
+- catalogue-commandes.json : entree triee (position 94), total 112 -> 113
+- Interface : <parcours.json> + --case / --surcharge / --modele / --references
+  / --dry-run / --rapport / --version / --aide
+
+**Fonctionnement** : verdict CONFORME / A ALLEGER / NON CONFORME + rapport md.
+- STRUCTURE : types valides (question/controle/indice/action/fin), case_depart,
+  fins joignables (BFS)
+- MODELE : branches min 2 pour decisions ; indice/action = suivant requis ;
+  boucle directe = erreur SAUF pattern de re-essai (controle NON -> soi-meme,
+  volontaire, = avertissement) ; deviation sans rejoint = avertissement
+- ALLEGEMENT : > 3 indices OU texte > 160 car. = signale avec proposition
+- REFERENCES : ref resolvable (pattern-N -> spec-guider ; chemin -> fichier ;
+  protocole-/regle- -> regles-immuables)
+- NORMES : nommage c<numero>[a-z]?, titre, ASCII
+
+**Resultat revelateur** : parcours-cerberus = A ALLEGER (0 erreur, 15
+surcharges, 1 avertissement) - la preuve objective de la degradation des
+cartes que la refonte doit corriger.
+
+**Validations** : parite py/sh --version v1.0.0 OK · py_compile/bash -n OK ·
+nommage 0 erreur (apres renommage validateur-case -> valider-case, voir lecons)
+· ASCII 0 · LF pur · detecter-decalages-catalogue 112 conformes / 0 decalage ·
+test-005 26/26 · 0 residu.
+
+**Lecons** :
+1. LE NOMMAGE PRIME SUR LE CONCEPT : l outil s appelait validateur-case (concept
+   de la spec) mais le dossier valider/ exige le prefixe valider- -> renomme en
+   valider-case AVANT le chainage (le concept reste dans les descriptions).
+   TOUJOURS lancer valider-nommage AVANT de brancher quoi que ce soit.
+2. Le pattern de re-essai (controle NON -> soi-meme) est VOLONTAIRE dans les
+   cartes (c5 cerberus, c8 vulcain) : le validateur le traite en avertissement,
+   pas en erreur - croiser la realite des cartes avant de figer une regle.
+3. La preuve de la degradation est maintenant AUTOMATISEE : valider-case sur un
+   parcours donne le compte exact de surcharges (15 sur cerberus) - la refonte
+   des generateurs (etapes 3-4) pourra mesurer sa propre efficacite.
+4. CHAINE EXECUTEE : cette fois je n ai PAS reactive Cerberus - j ai active
+   Morpheus (case c8) pour les tests formels test-009-valider-case, puis la
+   carte de Morpheus enchainera sur Janus. La conformite devient le defaut.
+
+## [LECON] 2026-08-09 -- ETAPE 3 TERMINEE : generateurs-case v0.3.0 (modele compose complet + --ref)
+
+**Mission** : refondre generateurs-case selon la spec-refonte-cartes-decision section 7.1 (etape 3).
+
+**Actions realisees** :
+1. `ajouter-bloc` generalise en MODELE COMPOSE COMPLET : decision + branches min 2 (OUI/NON + `--branche <rep>:<vers>` repetable) + deviation + rejoint.
+2. Indices deviation/rejoint transformes en REFERENCES (`--ref-deviation`/`--ref-rejoint`, defaut `pattern-7`) : `{"type": "ref", "ref": "pattern-7"}` au lieu des textes inline longs -> valider-case ne signale plus de surcharge (verifie : bloc cree = 0 a alleger, verdict CONFORME).
+3. Option `--ref <ref>` (repetable) ajoutee a `ajouter` et `editer` : pose des indices de type reference (cle `ref`, alignee sur `valider-case --references`).
+4. Validation auto enrichie : appel interne `valider-case <parcours> --modele --dry-run` apres chaque modification (spec-refonte 7.1) - un verdict NON CONFORME bloque l'operation.
+5. Regle des 5 fichiers : py + sh + md a jour (0.2.2 -> 0.3.0), SPEC CREE (spec-generateurs-case.001.01.ebauche.md, manquait - regle des 5 fichiers), index-tools ligne mise a jour.
+6. 1 caractere non-ASCII introduit pendant la refonte ("clé" dans un docstring) -> corrige immediatement (lecon : verifier ASCII des docstrings apres toute edition).
+
+**Lecons** :
+1. Les indices de type REFERENCE (cle `ref`) sont le moyen d'alleger les cartes : un bloc compose genere par ajouter-bloc v0.3.0 ne produit AUCUNE surcharge (0 a alleger) alors que v0.2.2 en produisait 2 (textes inline > 160 car).
+2. Le format de ref doit etre aligne sur la detection de valider-case --references : `pattern-<N>`, `protocole-<x>`/`regle-<x>`, chemin relatif. Lire l'outil de validation AVANT de choisir le format.
+3. La spec de l'outil generateurs-case n'existait pas (regle des 5 fichiers incomplete) - creee avec la refonte.
+4. Le testeur existant (tester-generateurs-case.sh) a 3 echecs PREEXISTANTS (PT5/PT6b attendent 21 cases dans parcours-vulcain, la carte en a 32 ; PT8b recablage c7->c20, c20 n'existe plus) : compteurs obsoletes, INDEPENDANTS de la refonte (PT6/PT9/PT15 passent). A corriger par Morpheus dans le test formel.
+
+**Validation** : py_compile OK, bash -n OK, parite --version py/sh = v0.3.0, ASCII 0 (4 fichiers + spec), LF pur 0 CRLF, nommage 0 erreur, detecter-decalages 112 conformes / 0 decalage, test-005 26/26 OK.
+
+**Conformite** : apres creation, j'active Morpheus (tests formels test-010) conformement a ma carte c8 - la chaine bout-en-bout continue.
+
+## [LECON] 2026-08-09 -- ETAPE 4 TERMINEE : generateurs-carte v0.3.0 (squelette allege + delegation validateur-case)
+
+**Mission** : refondre generateurs-carte selon la spec-refonte-cartes-decision section 7.2 (etape 4).
+
+**Actions realisees** :
+1. `creer` : squelette ALLEGE - les 8 textes de regles inline longs (> 160 car) des cases
+   c0/c0b/c0c/c1/c2/c2b remplaces par des REFERENCES resolvables :
+   - `protocole-activation` (relecture c0, action obligatoire c0b - resolu par recherche dans regles-immuables)
+   - `pattern-6` (contexte temps reel c0c), `pattern-10` (une carte = un role c1),
+   - `pattern-3`, `pattern-7`, `pattern-2` (rappels c2),
+   - `cerveau-projet/agents/regles-immuables/general/rvav-workflow.md` (RVAV c2b, chemin relatif).
+   Une carte neuve nait CONFORME (erreurs 0, a alleger 0) - LA PREUVE de l allegement a la creation.
+2. `detecter` : delegation au validateur-case v1.0.0 (`--modele --surcharge --references`) en
+   complement des anomalies structurelles locales - source unique de verite (spec 7.2).
+3. `dupliquer-chemin` : les references sont CONSERVEES telles quelles dans les copies
+   (teste : dc1 porte la ref pattern-10, aucun texte inline duplique).
+4. `valider_auto` : ajout de l appel `valider-case --modele --references --dry-run` apres chaque ecriture.
+5. Regle des 5 fichiers : py + sh + md a jour (0.2.0 -> 0.3.0, parite), SPEC CREE (spec-generateurs-carte.001.01.ebauche.md),
+   index-tools ligne maj, catalogue choix action corrige (creer/analyser/detecter/dupliquer-chemin - manquait detecter).
+
+**Lecons** :
+1. La carte neuve nait ALLEGEE : squelette v0.3.0 = CONFORME des la creation (0 surcharge),
+   alors que v0.2.2 generait des textes inline longs detectes par valider-case.
+2. Les references `pattern-N`/`protocole-x`/chemins sont resolues par valider-case --references
+   (pattern-N = "### Pattern N" dans spec-guider-parcours ; protocole-x/regle-x = recherche par nom
+   dans regles-immuables ; chemin = fichier existant). Voir resoudre_reference avant de choisir.
+3. --version seul echouait (action requise par argparse) -> interception dans main() comme --aide
+   (lecon repetee de l etape 3 : tester --aide/--version sur les outils a sous-commandes).
+4. Le catalogue portait un choix obsolet (["creer","analyser","dupliquer"]) - detecter manquait
+   et le nom exact est dupliquer-chemin : verifier le catalogue apres toute modification de sous-commandes.
+5. Attention ASCII strict dans les scripts temporaires (2 fois "nait/cle" corriges).
+
+**Validation** : py_compile OK, bash -n OK, parite --version py/sh = v0.3.0, ASCII 0 (4 fichiers + spec),
+LF pur 0 CRLF, nommage 0 erreur, detecter-decalages 112 conformes / 0 decalage, test-005 26/26 OK.
+
+**Conformite** : apres creation, j'active Morpheus (tests formels test-011) conformement a ma carte c8.
+
+## [LECON] 2026-08-09 -- ETAPE 5 TERMINEE : guider-parcours v0.4.0 (resolution des references + type action)
+
+**Mission** : consolider guider-parcours selon la spec-refonte-cartes-decision etape 5 (resolution des
+references d indices + ordre d execution obligatoire + IMPLEMENTER LE TYPE action, critere 7).
+
+**Actions realisees** :
+1. RESOLUTION DES REFERENCES dans afficher_indices (nouvelle fonction resoudre_reference) :
+   - pattern-<N> : affiche [REFERENCE] X puis le TITRE + 3 premieres lignes du Pattern N extraites
+     de la spec-guider-parcours (format '### Pattern N -- Titre') ;
+   - protocole-<x>/regle-<x> : chemin du fichier/dossier trouve par recherche dans regles-immuables ;
+   - chemin relatif : affiche le chemin + (fichier existant)/(reference non resolvable).
+   Une case du squelette v0.3.0 affiche desormais le CONTENU resolu des refs (pattern-3/7/2, rvav) -
+   la regle vit a UN endroit et l agent la voit resoudre a la navigation.
+2. IMPLEMENTATION DU TYPE action dans naviguer (spec critere 7) : une case action avec 'suivant'
+   s execute SANS question et enchaine automatiquement (teste : c8 action -> c9 fin -> PARCOURS TERMINE).
+   Ajout du type action dans les tableaux de la spec-guider-parcours (version 0.4.0) et du .md.
+3. generateurs-case v0.3.1 : type action ajoute aux choix de ajouter/editer + construire_case pose le
+   'suivant' pour action comme pour indice (bug detecte : le suivant n etait pose que pour indice).
+4. valider-case v1.0.0 acceptait DEJA le type action (TYPES_VALIDES prepare a l etape 2) - aucune
+   modification necessaire de ce cote.
+
+**Lecons** :
+1. L'integration d'un nouveau type de case est TRANSVERSALE : guider-parcours (navigation) +
+   generateurs-case (creation/edition) + valider-case (validation) + spec + .md. Verifier CHACUN
+   (valider-case l avait deja, generateurs-case ne l avait pas - corrige).
+2. Le bug 'suivant non pose pour action' etait silencieux : la case etait creee mais sans suivant,
+   le validateur le signalait (--modele) et la navigation echouait. Le test formel (test-010 mis a jour
+   avec 2 points action) couvre maintenant ce cas.
+3. Apres bump de version d'un outil, les tests formels existants qui verifient la version (test-010
+   attendait v0.3.0) doivent etre mis a jour : 1 KO detecte, corrige (v0.3.1 + 2 nouveaux points).
+4. Resoudre une reference pattern-N : le titre est '### Pattern N -- Titre', le corps suit jusqu'a la
+   prochaine '### '. Afficher 3 lignes suffit (l agent va lire la source pour le detail).
+
+**Validation** : py_compile OK, bash -n OK, parite --version py/sh = v0.4.0 (gp) / v0.3.1 (gc),
+ASCII 0 (7 fichiers), LF pur 0 CRLF, nommage 0, detecter-decalages 112 conformes / 0 decalage,
+test-001-guider-parcours 14/14, test-005 26/26, test-010 25/25 (maj), test-011 19/19.
+
+**Conformite** : apres creation, j'active Morpheus (tests formels test-012) conformement a ma carte c8.
+## [LECON] 2026-08-09 -- CORRECTIF valider-case v1.0.1 : garde-fou anti-pollution du rapport
+
+**Mission** : corriger le defaut de valider-case qui ecrivait son rapport par defaut dans le repertoire courant (lecon : rapport a la racine cree a 19:13 par Buffy).
+**Resultat** : v1.0.1, aucun fichier cree sans --rapport <fichier> explicite.
+**Lecons** :
+1. Le defaut : quand --rapport absent ET --dry-run absent, valider-case ecrivait rapport-valider-case-<date>.md dans le CWD relatif au repertoire de lancement -- un agent lançant depuis la racine pollue la racine
+2. Le correctif : sans --rapport <fichier> explicite, AUCUN fichier n'est cree (message clair 'AUCUN RAPPORT ECRIT : utilise --rapport <fichier>') ; --rapport <fichier> ecrit exactement au chemin fourni ; --dry-run conserve la simulation
+3. Regle des 5 fichiers respectee : py (v1.0.1) + sh (Version 1.0.1) + md (historique + section rapport obsolete corrigee) + spec (Version + Historique) + test-009 (version + nouveau point 11b garde-fou)
+4. Le test-009 passe de 19 a 20 points : le point 11b verifie qu'une commande sans options ne cree aucun fichier dans le repertoire courant
+5. Aucun test existant ne dependait de l'ecriture par defaut (tous utilisaient --dry-run ou --rapport explicite) : la regression est nulle
+6. Normes : ASCII strict + LF pur sur les 5 fichiers
+
+**Preuve** : test-009 20/20, parite py/sh v1.0.1, commande sans options depuis /tmp = 0 fichier cree.
+
+## [LECON] 2026-08-09 -- OUTIL generateurs-ligne cree (v0.1.0, categorie generateurs/)
+
+**Mission** : creer generateurs-ligne (decision utilisateur) -- maillon du milieu de la suite des generateurs de cartes de decision (carte -> ligne -> case). Ligne = chemin de bout en bout ; configs = gabarits de groupes de cases ; carte Atlas a jour (existence + mtime) ; dry/wet.
+**Livrables** : generateurs-ligne.py + .sh (wrapper pur exec python3) + .md + spec/ + entree catalogue-commandes.json (113 -> 114) + index-tools.md (103 -> 104).
+
+**Lecons** :
+1. La suite des generateurs est maintenant : generateurs-carte (carte COMPLETE) -> generateurs-ligne (LIGNE = groupe de cases en un bloc) -> generateurs-case (UNE case). Le maillon du milieu prepare un bloc conforme (decision + branches + deviation + rejoint) sans connaitre le metier : l'edition fine reste a l'agent habilite via SA carte.
+2. LA CONVENTION DE NOMMAGE DES IDS DE CASES EST STRICTE : c<numero>[a-z]? (PAS DE POINT). Mon premier jet generait c42.1/c42.2 -> valider-case a refuse (NOMMAGE) a la validation auto. Corrige : c42, c42a, c42b... (suffixes lettres, jamais de point).
+3. La case REJOINT d'un bloc doit pointer vers la cible EXTERNE fournie (--rejoint), pas vers elle-meme : un gabarit "REJOINT -> REJOINT" cree une boucle. Distinguer le suivant de la case REJOINT (externe) des suivants des cases AVANT (vers la case REJOINT du bloc).
+4. Verification carte Atlas avant edition : cartographie-<agent>.md doit exister ET avoir un mtime > parcours JSON. Si absente/perimee -> BLOCAGE + invite a activer Atlas (case c31 Cartographier de SA carte) pour regenerer, puis revenir. --force passe outre (decision explicite).
+5. Cablage du point d'attache : question/controle -> ajouter une BRANCHE (--reponse) ; action/indice -> recabler le suivant vers la premiere case (l'ancien suivant devient le rejoint par defaut). Une question/controle SANS suivant exige --rejoint explicite.
+6. Parite py/sh (--version identiques) : le .sh est un wrapper pur exec python3 avec gestion --version avant l'exec.
+7. detecter-impacts a signale 3 faux positifs de DATE (fichiers plus anciens sans aucune reference a generateurs-ligne) : verifier par grep que 0 reference -> justifie le NON MIS A JOUR sans modification.
+8. Le catalogue attend le champ modele "{action} {parcours}" avec des parametres interpoleables (choix/texte) -- l'utilisateur compose la commande exacte via generateurs-commande.
+
+**Validation** : py_compile OK, bash -n OK, parite --version py/sh = v0.1.0, ASCII 0 (4 fichiers), LF pur 0 CRLF, nommage 0, catalogue 114 trie, index-tools 104, bout en bout via generateurs-commande OK, ajout reel config defaut/config-1/config-3 -> valider-case CONFORME 0 erreur.
+
+**Conformite** : apres creation, j'active Morpheus (test-017-generateurs-ligne) conformement a ma carte c8.

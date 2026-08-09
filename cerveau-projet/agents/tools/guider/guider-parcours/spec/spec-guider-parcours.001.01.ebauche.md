@@ -4,9 +4,9 @@ identite:
   appartient_a: commun
   commun: true
 ---
-# Spec -- Guide-Parcours (jeu de piste) v0.2.27
+# Spec -- Guide-Parcours (jeu de piste) v0.5.0
 
-**Version** : 0.2.23
+**Version** : 0.5.0
 **Statut** : ebauche
 **Date creation** : 2026-08-07
 **Agent** : Vulcain (creation + evolutions v0.2.0 : patterns multi-missions + rappel ASCII ; v0.2.1 : procedure d'audit des 2 patterns ; v0.2.2 : regle d'autonomie des parcours ; v0.2.3 : prototype vulcain documente comme cas legitime assume ; v0.2.4 : Pattern 3 - combo generateur -> execution, lien avec spec-combos-moteur ; v0.2.5 : Pattern 4 - case Question Honnete en case 0, standard de demarrage ; v0.2.6 : Pattern 5 - chaine de delegation ACTIVE, JAMAIS de fin passive ; v0.2.7 : regle de RE-AUDIT COMPLET des 5 patterns (lecon Themis : la procedure 4b seule ne teste que Pattern 5, c est la procedure 2 qui a revele les ecarts ASCII de vulcain) ; v0.2.8 : Pattern 6 - CONTEXTE TEMPS REEL : lecture OBLIGATOIRE de l historique a chaque activation, meme en memoire (le dynamique ne se memorise pas) ; v0.2.9 : MODE AGENT NON-BLOQUANT - les questions sont destinees a l AGENT, jamais a un input() clavier ; sans --reponses l outil affiche la question et s arrete proprement (cause : demarrage d un 2e LLM bloquait sur la saisie clavier) ; v0.2.12 : outil de reference generateurs-case documente (suite de l integration : l outil officiel pour creer/editer/supprimer des cases, recablage auto + validation auto) ; v0.2.13 : Pattern 7 - modele de case compose (decision a 2+ branches, solutions alternatives, deviations avec retour au flux principal ; philosophie agents/philosophie/) ; v0.2.14 : outil de reference generateurs-carte documente (carte complete : creer/analyser/detecter/dupliquer-chemin, complement de generateurs-case pour les cases) ; v0.2.17 : branche de verifier-documents-manquants v0.3.0 dans la procedure 4g (le .md deduit de CHAQUE indice outil est controle par L OUTIL - .sh ET .py couverts - au lieu d une verification manuelle) ; v0.2.18 : Pattern 10 - UNE CARTE = UN ROLE (une carte ne contient que des actions d activation/verification/decision propres a SON role, jamais d outils d analyse/execution d un autre role ; cas Cerberus = routeur pur, carte purgee des cases lister/lire qui glissent de lire pour choisir vers lire pour executer. Lecon utilisateur 2026-08-08 : Cerberus a lance des analyses lui-meme au lieu d activer Buffy) ; v0.2.19 : Pattern 11 - CONFORMITE D EXECUTION (l audit ne verifie pas seulement la STRUCTURE du JSON mais AUSSI si l EXECUTION de la mission a suivi les ordres de la carte : l agent a-t-il fait ce que sa carte ordonnait ? Lecon constat stabilite des cartes 2026-08-08 : les violations recentes - Vulcain reactive au lieu d activer Morpheus, Cerberus analyse lui-meme - laissent les JSON structurellement valides ; la conformite d execution est le SEUL vrai test de stabilite. Critere 22 + procedure 4i + integration dans le parcours-themis (case c8b entre verdict et rapport)) ; v0.2.22 : Pattern 12 - CREATION LIMITEE (garde-fou une carte = un role applique aux cases de creation : toute case qui cree/ecrit/documente porte un indice REGLE CREATION LIMITEE precisant le perimetre - rapports de mission dans le dossier de l agent ou .tmp-* du workspace, JAMAIS tools/ - et les roles exclus : outil -> Vulcain, test -> Morpheus, case de parcours -> Buffy ; besoin manquant -> case Signaler le besoin. Lecon incident Atlas 2026-08-09 : l explorateur a ecrit un outil dans son dossier explorations/ au lieu de signaler le besoin ; carte Atlas v0.1.3 portant le garde-fou en exemple) ; v0.2.23 : Pattern 13 - LA FIN SUIT SA CARTE (generalisation de la regle de retour : activation directe = reactiver Cerberus, maillon de chaine = activer le suivant, dernier maillon = reactiver Cerberus avec bilan consolide. Lecon utilisateur 2026-08-09 : l ancienne regle toujours reactiver Cerberus etait en conflit avec les cartes - Buffy a corrige 26 fichiers ; lecon technique double/triple CRLF - lire et ecrire avec newline='' pour preserver le format natif) ; v0.2.24 : Pattern 14 - VERIFICATION D IMPACT GENERALISEE (detecter-impacts v0.2.1 devient un pas OBLIGATOIRE de TOUTE procedure d audit Themis : pour chaque mission auditee, identifier les fichiers modifies puis lancer detecter-impacts sur un echantillon representatif et verifier que TOUS les fichiers impactes listes ont ete mis a jour. Lecon utilisateur 2026-08-09 : seul le rapport-audit-janus utilisait detecter-impacts, la verification d impact doit etre GENERALISEE a tous les audits) ; v0.2.25 : RE-AUDIT COMPLET GENERALISE A 14 PATTERNS (la procedure 4c listait 12 patterns et avait vieilli pendant que 4i/4k/4l s ajoutaient ; la liste des procedures est desormais complete 1-4l et le critere 14 couvre les criteres 1 a 25. Lecon utilisateur 2026-08-09 : la procedure 4c doit etre re-verifiee a chaque ajout de pattern) ; v0.2.26 : Pattern 15 - MODE MONO-LLM (apres l activation d un agent, l agent active est JOUE IMMEDIATEMENT dans le MEME tour - relecture fiche + corrections puis mission puis reactiver/activer le suivant ; l activation documente le role (3 fichiers de trace) mais ne transfere PAS l execution (0 sous-processus). Lecon utilisateur 2026-08-09 : 2 missions se sont arretees apres l activation de Themis - le LLM closait son tour alors que la carte c10 ordonne de continuer (suivant c7)) ; v0.2.27 : CORRECTION Pattern 15 - JAMAIS D ARRET DANS AUCUN MODE (l utilisateur a corrige la formulation v0.2.26 qui autorisait l arret en mode multi-LLM : les LLM travaillent EN PARALLELE chacun dans sa session - l activation documente le role de SA session uniquement, elle ne DELEGUE jamais l execution a un autre LLM, aucun mecanisme de relais n existe. L arret apres activation est TOUJOURS fautif : il bloque la mission, personne ne reprend)
@@ -78,7 +78,7 @@ Une case contient une combinaison libre d'elements (0 a N) :
 | Cle | Type | Obligatoire | Role |
 |---|---|---|---|
 | `titre` | texte | oui | Nom de la case (ex: "Verifier le systeme") |
-| `type` | texte | oui | `question`, `indice`, `controle` ou `fin` |
+| `type` | texte | oui | `question`, `indice`, `action`, `controle` ou `fin` |
 | `question` | texte | selon type | Question posee a l'agent (obligatoire si `branches` present) |
 | `indices` | tableau | non | Liste d'indices (outil / fichier / regle) a afficher |
 | `branches` | tableau | non | Branches reponse -> case suivante |
@@ -105,8 +105,44 @@ Une case contient une combinaison libre d'elements (0 a N) :
 |---|---|
 | `question` | Affiche la question + les indices, attend une reponse, suit la branche |
 | `indice` | Affiche les indices, sans question : passe automatiquement a `suivant` |
+| `action` | **NOUVEAU (v0.4.0, etape 5 spec-refonte-cartes-decision)** : affiche les indices, sans question : s execute et enchaine automatiquement a `suivant` (comportement identique a `indice` sans indices) |
 | `controle` | Affiche les indices + question de verification (OUI/NON), suit la branche |
 | `fin` | Case terminale : le parcours est termine |
+
+### Resolution des references d indices (v0.4.0, etape 5 spec-refonte-cartes-decision)
+
+Les indices de type `ref` (`{"type": "ref", "ref": X}`) sont RESOLUS a la
+navigation : guider-parcours affiche `[REFERENCE] X` puis le contenu resolu.
+
+| Ref | Resolution affichee |
+|---|---|
+| `pattern-<N>` | Titre + 3 premieres lignes du Pattern N de la spec-guider-parcours |
+| `protocole-<x>` / `regle-<x>` | Chemin du fichier/dossier trouve dans regles-immuables |
+| chemin relatif | Chemin + existence du fichier |
+
+C est l allegement de la refonte : la regle vit a UN endroit (sa source), la
+case n y fait que pointer, et l agent la voit resoudre au moment de naviguer.
+
+### PRINCIPE UNE PLACE POUR CHAQUE CHOSE (v0.5.0, etape 7 spec-refonte-cartes-decision)
+
+**Les patterns de CETTE spec sont LA source de verite des regles de guidage.**
+Une case de parcours ne duplique JAMAIS le texte d un pattern : elle y POINTE
+par un indice `{"type": "ref", "ref": "pattern-<N>"}`.
+
+| Faire | Ne pas faire |
+|---|---|
+| Indice `ref` -> `pattern-8` (la spec est la source) | Copier le texte du pattern 8 dans la case |
+| Indice `ref` -> `protocole-<x>` / `regle-<x>` | Recopier la regle immuable dans l indice |
+| Texte court (< 160 car.) pour un rappel specifique a la case | Texte inline long qui duplique une regle existante |
+
+**Consequences** :
+1. Modifier une regle = modifier UN fichier (sa source), jamais N cases.
+2. Une case ne peut pas deriver : elle affiche toujours le contenu a jour de la source.
+3. `valider-case` signale en A ALLEGER tout texte inline > 160 car. ou tout
+   indice `ref` non resolvable (verifier_references).
+
+Ce principe est celui de la philosophie du projet (philosophie/ : une place
+pour chaque chose, alleger ne veut pas dire supprimer).
 
 ### Regles du format
 
@@ -247,9 +283,9 @@ localiser une case ou de verifier la couverture d'une mission.
     },
     "c2": {
       "titre": "Verifier le systeme",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        { "type": "regle", "texte": "REGLE ABSOLUE : verifier avant d'agir" },
+        { "type": "ref", "ref": "pattern-9" },
         { "type": "outil", "nom": "verifier-systeme", "chemin": "agents/tools/verifier/verifier-systeme/verifier-systeme.py", "commande": "python3 agents/tools/verifier/verifier-systeme/verifier-systeme.py" }
       ],
       "suivant": "c3"
@@ -553,7 +589,7 @@ La carte de l'agent DELEGANT doit MATERIALISER la boucle apres l'activation :
   "titre": "RELAIS : prendre le relais de l'agent delegue",
   "type": "indice",
   "indices": [
-    { "type": "regle", "texte": "REGLE RELAIS : la delegation ne termine PAS le parcours. Je lance le parcours de l'agent delegue (guider-parcours) et il execute ses cases jusqu'au rapport." },
+    { "type": "ref", "ref": "pattern-5" },
     { "type": "outil", "nom": "guider-parcours", "chemin": "agents/tools/guider/guider-parcours/", "commande": "python3 agents/tools/guider/guider-parcours/guider-parcours.py agents/<agent-delegue>/parcours/parcours-<agent-delegue>.json" }
   ],
   "suivant": "c9b"
@@ -878,7 +914,7 @@ lister/lire qui glissent de "lire pour choisir" vers "lire pour executer").
   "titre": "Ecouter la demande",
   "type": "indice",
   "indices": [
-    { "type": "regle", "texte": "REGLE ABSOLUE : je n execute JAMAIS une mission moi-meme. Mon role = ecouter, identifier, activer l agent habilite, verifier, decider." },
+    { "type": "ref", "ref": "pattern-10" },
     { "type": "outil", "nom": "lister-agents", "chemin": "agents/tools/lister/lister-agents/", "commande": "python3 agents/tools/lister/lister-agents/lister-agents.py" }
   ],
   "suivant": "c5"
@@ -926,7 +962,7 @@ verifie que l'execution de la mission a suivi les ordres de la carte ?").
   "type": "controle",
   "question": "As-tu verifie (croisement mission / carte / deroulement reel) que l'EXECUTION de la mission a suivi les ordres de la carte -- et pas seulement la structure du JSON ?",
   "indices": [
-    { "type": "regle", "texte": "PATTERN 11 (spec v0.2.19) : la structure valide ne prouve PAS la stabilite. Une carte peut etre CONFORME et l'execution avoir devie (Vulcain -> reactiver au lieu d'activer Morpheus ; Cerberus -> analyser au lieu d'activer Buffy). Verifier par CROISEMENT : mission recue + cases ordonnees par la carte + actions reelles (activation, fichiers modifies, rapports)." }
+    { "type": "ref", "ref": "pattern-11" }
   ],
   "branches": [
     { "reponse": "OUI", "vers": "c9" },

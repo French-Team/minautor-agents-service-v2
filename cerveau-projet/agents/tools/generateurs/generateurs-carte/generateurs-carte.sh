@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # generateurs-carte.sh
 # Wrapper bash vers generateurs-carte.py (parite stricte).
-# Version : 0.1.0
+# Version : 0.3.0
 # Statut : ebauche
 # identite:
 #   type: outil

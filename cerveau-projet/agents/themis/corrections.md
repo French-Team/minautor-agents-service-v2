@@ -392,3 +392,73 @@ identite:
 4. POINT 6 REACTIVER : verifier dans AGENTS-historique l'entree de reactivation + le
    retour effectif de la session a l'agent precedent (avant l'activation de l'auditrice).
 5. LA FIN SUIT SA CARTE : l'auditrice reactive l'agent precedent AVEC son rapport (c25b).
+## [LECON] 2026-08-09 -- AUDIT SPEC-REFONTE : VERDICT CONFORME (1 point mineur)
+
+**Mission** : etape 1 du plan de refonte - auditer la spec-refonte-cartes-decision
+(v0.1.0, Promethee) pour valider le concept AVANT de lancer l implementation.
+
+**Verdict** : CONFORME avec 1 point mineur (concept valide pour l'implementation).
+
+**Rapport** : `themis/rapports/rapport-audit-spec-refonte-cartes-decision-2026-08-09.md`
+
+**Points verifies (independamment)** :
+1. Faits cites tous verifies (buffy 49 cases/45 Ko, atlas 40, vulcain 32,
+   cerberus 28 ; spec-guider-parcours v0.2.23 a 15 patterns ; generateurs-case
+   v0.2.2 ; generateurs-carte v0.2.0)
+2. Vision utilisateur citee verbatim + traduite fidelement
+3. Contrat validateur-case complet (structure, modele, surcharge > 3 indices /
+   160 car., references, verdict CONFORME / A ALLEGER / NON CONFORME)
+4. Plan 7 etapes coherent + chaine obligatoire Vulcain -> Morpheus -> Janus
+5. Criteres d'acceptation verifiables (6)
+6. Normes : ASCII 0, LF pur, frontmatter, index-spec a jour
+7. Conformite d'execution : Promethee a reactive Cerberus (trace historique)
+
+**Point mineur (non bloquant)** : le type `action` (tableau 4.1) presente comme
+"inchange" n existe pas dans le modele actuel - guider-parcours ne gere que
+fin/indice/question-controle et aucun des 11 parcours ne contient de case
+action. A clarifier dans la spec (retirer OU declarer type nouveau a
+implementer a l etape 5).
+
+**Lecons** :
+1. Un audit de spec RE-VERIFIE chaque fait cite (tailles, versions, nombres)
+   - aucun ne s est revele faux ici (fiabilite de la spec prouvee).
+2. Croiser TOUJOURS le modele propose avec l outil d execution (guider-parcours)
+   ET les donnees reelles (les 11 parcours) : un type lister sans verification
+   d existence cree un ecart silencieux.
+3. Faux positif de mon propre script (apostrophe) : ne jamais conclure sur un
+   KO sans verifier le contexte exact.
+
+## [LECON] 2026-08-09 -- AUDIT CONFORMITE DELEGATION DES TESTS (parcours-vulcain v0.2.12)
+
+**Contexte** : audit demande par l'utilisateur (via Cerberus) : verifier que le
+renforcement v0.2.12 applique bien le pattern *interdiction au point d'action +
+verification en 2 points au controle*.
+
+**VERDICT : CONFORME avec 1 point mineur non bloquant** (rapport dans
+themis/rapports/rapport-audit-conformite-delegation-tests-vulcain-2026-08-09.md).
+
+**Points verifies (7/7 conformes)** :
+1. c6 + c12 : regle ABSOLUE DELEGATION DES TESTS en position 1 (test-XXX,
+   creation OU mise a jour, meme adaptation mineure).
+2. c6 + c12 : ambiguite "5 fichiers (dont test)" supprimee -> "4 fichiers de
+   l outil (py sh md spec) + test-XXX ECRIT PAR MORPHEUS".
+3. c8 + c14 : question en 2 points (Morpheus ECRIT et EXECUTE + aucun fichier
+   de test touche par Vulcain) + regle VERIFICATION EN 2 POINTS.
+4. vulcain.md : Pattern 14 v0.2.12 + regle fiche renforcee.
+5. Lecon Buffy documentee (point d'action vs controle tardif).
+6. Integrite : JSON, valider-case, navigation 2 chemins, ASCII 0, LF pur.
+
+**Point mineur (non bloquant)** : les regles ajoutees en c8/c14 font 341
+caracteres (> 160) -> A ALLEGER. Proposition : deplacer vers une reference
+(protocole-tests) ou raccourcir.
+
+**Lecons** :
+1. Le pattern *interdiction au point d'action + verification en 2 points au
+   controle* est bien materialise : la correction structurelle de la recidive
+   est effective.
+2. Supprimer l'ambiguite est aussi important que la regle elle-meme : une
+   contradiction residuelle autorise toujours la derive.
+3. Regles ABSOLUE > 160 caracteres = A ALLEGER : privilegier la reference vers
+   un fichier de regles commun.
+4. Faux positif de mon script (apostrophe) : toujours verifier le contexte
+   avant de conclure un KO.

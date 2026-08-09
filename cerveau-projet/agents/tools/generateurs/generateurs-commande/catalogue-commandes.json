@@ -1065,8 +1065,24 @@
       ]
     },
     {
+      "nom": "generateurs-amelioration",
+      "description": "Pose une checklist de questions par theme avant toute amelioration d un outil, combo, generateur ou carte",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/generateurs-amelioration.py",
+      "modele": "--theme {theme}",
+      "parametres": [
+        {
+          "cle": "theme",
+          "question": "Theme d amelioration ?",
+          "type": "texte",
+          "obligatoire": true,
+          "defaut": "ameliorer-outil"
+        }
+      ]
+    },
+    {
       "nom": "generateurs-carte",
-      "description": "Agit sur une carte de decision COMPLETE (parcours JSON) : creer un squelette,",
+      "description": "Agit sur une carte de decision COMPLETE (parcours JSON) : creer un squelette ALLEGE (indices = references, nait CONFORME 0 surcharge), analyser les chemins, detecter les anomalies (delegation validateur-case), dupliquer un chemin (refs conservees)",
       "interpreteur": "python3",
       "script": "cerveau-projet/agents/tools/generateurs/generateurs-carte/generateurs-carte.py",
       "modele": "{action}",
@@ -1079,7 +1095,8 @@
           "choix": [
             "creer",
             "analyser",
-            "dupliquer"
+            "detecter",
+            "dupliquer-chemin"
           ],
           "defaut": ""
         }
@@ -1138,6 +1155,159 @@
           "type": "flag",
           "obligatoire": false,
           "flag": "--liste"
+        }
+      ]
+    },
+    {
+      "nom": "generateurs-ligne",
+      "description": "Ajouter/COPIER une LIGNE (chemin de bout en bout) a une carte de decision : gabarits de groupes de cases (configs externalisees dans gabarits-ligne.json), copier une ligne existante (--source avec --mode complet/branche/suite ou --config), ajouter-config pour creer une config reutilisable, apres verification de la carte Atlas (existence + mtime) ; dry/wet.",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/generateurs/generateurs-ligne/generateurs-ligne.py",
+      "modele": "{action} {parcours} --source {source} --mode {mode} --branche {branche} --description {description} --gabarit {gabarit}",
+      "parametres": [
+        {
+          "cle": "action",
+          "question": "Action (verifier / lister-configs / config / ajouter / ajouter-config / copier) ?",
+          "type": "choix",
+          "obligatoire": true,
+          "choix": [
+            "verifier",
+            "lister-configs",
+            "config",
+            "ajouter",
+            "ajouter-config",
+            "copier"
+          ],
+          "defaut": ""
+        },
+        {
+          "cle": "parcours",
+          "question": "Chemin du parcours JSON (ou NOM de config si action=ajouter-config) ?",
+          "type": "texte",
+          "obligatoire": true,
+          "defaut": ""
+        },
+        {
+          "cle": "config",
+          "question": "Config (defaut / config-1 / config-2 / config-3 ou une config ajoutee) ?",
+          "type": "choix",
+          "obligatoire": false,
+          "choix": [
+            "defaut",
+            "config-1",
+            "config-2",
+            "config-3"
+          ],
+          "defaut": "defaut"
+        },
+        {
+          "cle": "point_attache",
+          "question": "Case d'attache (defaut: case_depart) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "rejoint",
+          "question": "Case de rejoint (defaut: ancien suivant) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "titre",
+          "question": "Titre de base de la ligne ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "forcer",
+          "question": "Forcer (passer outre carte Atlas absente/perimee) ?",
+          "type": "choix",
+          "obligatoire": false,
+          "choix": [
+            "oui",
+            "non"
+          ],
+          "defaut": "non"
+        },
+        {
+          "cle": "dry_run",
+          "question": "Dry-run (simulation) ?",
+          "type": "choix",
+          "obligatoire": false,
+          "choix": [
+            "oui",
+            "non"
+          ],
+          "defaut": "non"
+        },
+        {
+          "cle": "source",
+          "question": "Case source de la ligne a copier (ou laisser vide) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "mode",
+          "question": "Mode de detection (complet / branche / suite) ?",
+          "type": "choix",
+          "obligatoire": false,
+          "choix": [
+            "complet",
+            "branche",
+            "suite"
+          ],
+          "defaut": "complet"
+        },
+        {
+          "cle": "branche",
+          "question": "Branche a copier (mode branche) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "source",
+          "question": "Case source de la ligne a copier (ou laisser vide) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "mode",
+          "question": "Mode de detection (complet / branche / suite) ?",
+          "type": "choix",
+          "obligatoire": false,
+          "choix": [
+            "complet",
+            "branche",
+            "suite"
+          ],
+          "defaut": ""
+        },
+        {
+          "cle": "branche",
+          "question": "Branche a copier (mode branche) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "description",
+          "question": "Description de la nouvelle config (ajouter-config) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "gabarit",
+          "question": "Chemin du fichier gabarit JSON {cases: [...]} (ajouter-config) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
         }
       ]
     },
@@ -2216,6 +2386,22 @@
           "question": "Valeur pour agent ?",
           "type": "texte",
           "obligatoire": true
+        }
+      ]
+    },
+    {
+      "nom": "valider-case",
+      "description": "Valide et allege une carte de decision (parcours JSON) : structure, modele compose, surcharge des indices, references, normes - verdict CONFORME / A ALLEGER / NON CONFORME",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/valider/valider-case/valider-case.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin du parcours JSON a valider ?",
+          "type": "texte",
+          "obligatoire": true,
+          "defaut": ""
         }
       ]
     },

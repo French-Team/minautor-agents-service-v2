@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.2.2 |
+| **Version** | 0.3.1 |
 | **Statut** | ebauche |
 | **Categorie** | generateurs |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -99,6 +99,7 @@ python3 generateurs-case.py <parcours.json> ajouter \
 | `--apres <id>` | Inserer apres cette case (recablage auto du suivant) |
 | `--branche <reponse>:<vers>` | Branche (repetable) |
 | `--indice-regle <texte>` | Indice regle (repetable) |
+| `--ref <ref>` | Indice REFERENCE (repetable) -- allegement (spec-refonte-cartes-decision 7.1) : `pattern-<N>`, `protocole-<x>`, `regle-<x>` ou chemin relatif ; verifie par `valider-case --references` |
 | `--indice-outil <nom>:<chemin>[:commande]>` | Indice outil (repetable) -- ajoute automatiquement l'indice fichier du `.md` (Pattern 9 : LIRE AVANT USAGE) si la doc existe |
 | `--indice-fichier <chemin>:<raison>` | Indice fichier (repetable) |
 
@@ -126,25 +127,29 @@ python3 generateurs-case.py <parcours.json> editer c6 \
 | `--indice-regle <texte>` | Remplace les indices par des regles |
 | `--remove-indices` | Vider les indices |
 
-### 5. Ajouter un bloc modele compose (Pattern 7) -- action `ajouter-bloc`
+### 5. Ajouter un bloc modele compose COMPLET (Pattern 7 + spec-refonte 7.1) -- action `ajouter-bloc`
 
-Cree d'un coup les 3 cases du MODELE COMPOSE (Pattern 7, spec-guider-parcours
-v0.2.13) : decision (question 2 branches) + deviation + rejoint.
+Cree d'un coup les 3 cases du MODELE COMPOSE COMPLET : decision (question,
+branches min 2, extensible) + deviation + rejoint. Les indices deviation et
+rejoint portent des REFERENCES (`pattern-7` par defaut) au lieu de textes
+inline -- c'est l'allegement : `valider-case` ne signale plus de surcharge.
 
 ```
 python3 generateurs-case.py <parcours.json> ajouter-bloc \
   --titre "Erreurs hors mission ?" \
   --question "Des erreurs HORS MISSION ont-elles ete signalees ?" \
   --suite c13 \
-  --apres c12
+  --apres c12 \
+  --branche "PEUT_ETRE:c14"
 ```
 
 Structure creee (ids par defaut : prochains cN libres + suffixes a/b) :
 
 ```
-<decision> (question) :
-  OUI -> <deviation> (indice) -> <rejoint> (indice) -> <suite>
+<decision> (question, branches min 2) :
+  OUI -> <deviation> (indice, ref pattern-7) -> <rejoint> (indice) -> <suite>
   NON -> <suite>  (flux principal)
+  <branches supplementaires --branche reponse:vers>
 ```
 
 | Option | Role |
@@ -157,11 +162,15 @@ Structure creee (ids par defaut : prochains cN libres + suffixes a/b) :
 | `--titre-deviation <texte>` | Titre de la deviation (defaut: DEVIATION : workflow secondaire) |
 | `--titre-rejoint <texte>` | Titre du rejoint (defaut: REJOINT : retour au flux principal) |
 | `--suite <id>` | Case suite du flux principal (OBLIGATOIRE, cible des branches NON et du rejoint) |
+| `--branche <reponse>:<vers>` | Branche SUPPLEMENTAIRE (repetable, en plus de OUI/NON) |
+| `--ref-deviation <ref>` | Reference de l indice deviation (defaut: pattern-7) |
+| `--ref-rejoint <ref>` | Reference de l indice rejoint (defaut: pattern-7) |
 | `--apres <id>` | Inserer apres cette case (recablage auto du suivant) |
 
-> La deviation porte le rappel Pattern 7 en indice regle : jamais une fin au
-> milieu, jamais une boucle d'attente (regle 10) -- le workflow secondaire se
-> termine toujours par le REJOINT vers la suite du flux.
+> La deviation porte l indice REFERENCE `pattern-7` : jamais une fin au milieu,
+> jamais une boucle d'attente (regle 10) -- le workflow secondaire se termine
+> toujours par le REJOINT vers la suite du flux. Chaque commande declenche la
+> validation auto, y compris `valider-case --modele` (spec-refonte 7.1).
 
 ### 4. Supprimer une case (recablage auto)
 
@@ -246,6 +255,13 @@ python3 generateurs-case.py <parcours.json> ajouter --type fin \
 > **REGLE ASCII** : le contenu JSON est ecrit en ASCII strict (ensure_ascii).
 > Un contenu non-ASCII est refuse avant ecriture (regle immuable).
 
+### Validateur-case (v0.3.0, spec-refonte 7.1)
+
+Chaque commande de modification declenche la validation auto, qui inclut
+maintenant `valider-case <parcours> --modele --dry-run` : le modele compose
+(branches min 2, rejoint present, deviation sans rejoint signalee) est verifie
+a chaque fois. Un verdict NON CONFORME bloque l'operation (retour != 0).
+
 ---
 
 ## Exemples
@@ -256,7 +272,16 @@ python3 generateurs-case.py <parcours.json> ajouter --type fin \
 python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py \
   cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json ajouter \
   --type indice --titre "Verifier le rapport" --suivant c9 --apres c8 \
-  --indice-regle "REGLE : verifier avant d'agir"
+  --ref pattern-9
+```
+
+### Ajouter un bloc modele compose complet (allege par references)
+
+```bash
+python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py \
+  cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json ajouter-bloc \
+  --titre "Erreurs hors mission ?" --question "Des erreurs HORS MISSION ?" \
+  --suite c13 --apres c12 --branche "PEUT_ETRE:c14"
 ```
 
 ### Editer le titre d'une case

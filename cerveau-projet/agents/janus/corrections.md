@@ -765,3 +765,390 @@ Corriger les 5 divergences de base/suffixe (regenerer-catalogue, lister-agents, 
 2. VERIFIER LA PRESENCE newline + l ABSENCE write_text ensemble : c'est le couple qui prouve la correction (newline seul peut etre un reste, write_text seul = bug non corrige).
 3. detecter-usage-outils-externes prend UNE cible (pas plusieurs) - le scanner recursif est plus pertinent pour un lot.
 4. Les fichiers sources des outils sont eux-memes en CRLF (heritage Windows) : la migration (mission 2 Buffy) les normalisera en LF avec l outil corriger-fins-de-ligne.
+## [NOTES] Controle 2026-08-09 -- generateurs-amelioration + test-008 (reparation de conformite)
+
+**Controle** : outil generateurs-amelioration v1.0.0 + test formel test-008 (Morpheus 19/19),
+dans le cadre de la reparation de conformite (la carte de Vulcain n avait pas ete executee :
+etape Morpheus sautee puis reparnee, second controle Janus requis - LISTE DEFINIE).
+
+**Verdict** : VALIDE.
+
+**Controles croises (refaits independamment, 15 points)** :
+1. Parite py/sh --version et interrogation --reponses identiques
+2. Recapitulatif 10/10 ([X] q1..q10) + message FIN DU QUESTIONNAIRE
+3. --aide gere (contrat detecter-decalages-catalogue)
+4. Catalogue : entree presente, tri alphab. global, total 112, modele
+   --theme {theme}, param theme obligatoire
+5. index-tools : entree presente, total 109
+6. ASCII strict 0 + LF pur sur 6 fichiers (outil 5 + test)
+7. Parcours-cerberus : branche ameliorer -> c1b -> c5 avec outil
+   generateurs-amelioration
+8. test-008 relance : 19 OK / 0 KO
+9. detecter-decalages-catalogue : 111 conformes / 0 decalage
+   (le 1 non testable = test-001-evaluer-agents-coherence, preexistant hors perimetre)
+
+**Lecons** :
+1. La chaine de conformite complete (Vulcain -> Morpheus -> Janus -> Cerberus) est
+   desormais fermee pour generateurs-amelioration : le cycle protocolaire a ete
+   execute a rebours de la carte, ce qui confirme le besoin de la refonte
+   conceptuelle (les cartes doivent etre executees, pas seulement documentees).
+2. Un controle croise doit RE-EXECUTER les verifications (parite, catalogue,
+   normes, navigation), jamais se fier aux rapports precedents.
+3. Le test-008 couvre le contrat reel de l outil (--aide requis par le
+   detecteur de decalages inclus) : aucun faux positif.
+## [NOTES] Controle 2026-08-09 -- valider-case v1.0.0 + test-009 (etape 2 refonte)
+
+**Controle** : outil valider-case (etape 2 de la refonte des cartes de decision,
+spec v0.1.1) + test formel test-009 (Morpheus 18/18), dans la CHAINE bout-en-bout
+Vulcain -> Morpheus -> Janus -> Cerberus (conformite = le defaut).
+
+**Verdict** : VALIDE (13 points croises refaits independamment, apres 1 correction).
+
+**Controles** :
+1. Parite --version py/sh v1.0.0
+2. Execution parcours-cerberus : A ALLEGER + pattern de re-essai c5 en AVERTISSEMENT
+3. Renommage complet : 0 reference validateur-case (dossier valider/valider-case)
+4. Catalogue : entree valider-case (script OK), total 113, TRI ALPHABETIQUE
+5. index-tools : entree + total 110
+6. ASCII 0 / LF pur sur 5 fichiers (outil 4 + test)
+7. test-009 relance : 18 OK / 0 KO
+8. Spec-refonte v0.1.1 : type action NOUVEAU documente
+
+**1 ecart detecte et corrige** : apres le renommage validateur-case -> valider-case,
+l'entree catalogue n etait plus a sa position TRIEE (le tri se fait sur le NOUVEAU
+nom). Corrige : entree repositionnee (position 95) - c est le role du second
+controle de l attraper.
+
+**Lecons** :
+1. UN RENOMMAGE D OUTIL IMPLIQUE DE RE-TRIER LE CATALOGUE : le tri alphab.
+   se fait sur le nom de l entree - changer le nom sans repositionner = ecart
+   silencieux que seul un controle croise detecte.
+2. LA CHAINE FONCTIONNE DE BOUT EN BOUT : Vulcain a cree + active Morpheus,
+   Morpheus a teste + active Janus, Janus a controle + reactive Cerberus.
+   Le cycle documente dans les cartes (c8 Vulcain, c9/c10 Morpheus) est
+   EXECUTE - c est la conformite devenue le defaut.
+3. valider-case est operationnel et mesure la degradation (15 surcharges sur
+   cerberus) : les etapes 3-4 (refonte des generateurs) pourront verifier leur
+   efficacite avec le meme outil.
+
+## [LECON] 2026-08-09 -- CONTROLE ETAPE 3 (generateurs-case v0.3.0) : VERDICT VALIDE 17/17
+
+**Controle** : refonte generateurs-case v0.3.0 (modele compose complet + --ref) + test-010 (23/23 Morpheus).
+
+**Verdict** : VALIDE.
+
+**Points controles independamment (17)** :
+1. Parite --version v0.3.0 py/sh
+2. Structure bloc : decision + 3 branches (OUI/NON/PEUT_ETRE) + deviation/rejoint refs pattern-7 (0 texte inline)
+3. Validation auto : valider-case --modele CONFORME (0 a alleger) - L ALLEGEMENT PROUVE
+4. --ref : {"type":"ref","ref":"pattern-12"} + protocole-tests resolvables
+5. ASCII strict 0 / LF pur 0 CRLF / nommage generateurs- OK
+6. Spec de l outil creee (regle des 5 fichiers completee)
+7. Catalogue : entree presente + trie
+8. index-tools : ligne maj (modele compose COMPLET + --ref)
+9. Relances : test-010 23 OK, test-005 26 OK, detecter-decalages 0 decalage
+
+**Lecons** :
+1. La preuve de l allegement est maintenant DOUBLE : valider-case (etape 2) mesure la degradation (15 surcharges sur cerberus) ET generateurs-case v0.3.0 genere des blocs a 0 surcharge (references pattern-7 au lieu des textes inline).
+2. Les "NON MIS A JOUR" de detecter-impacts sont des references DOCUMENTAIRES passives (fiches agents, explorations) : elles citent l outil mais n ont pas a changer lors d une refonte fonctionnelle. Seuls les fichiers fonctionnels (py/sh/md/spec/catalogue/index-tools) doivent etre verifies.
+3. Le --aide a sous-commandes (argparse) : tester qu il fonctionne SEUL (interception avant parse_args) - c etait la seule correction requise pendant le test Morpheus.
+4. 3 echecs PREEXISTANTS du testeur tester-generateurs-case.sh (compteurs 21 cases obsoletes) : a traiter dans une mission ulterieure (mise a jour des compteurs vers 32 cases).
+
+**Conformite** : je reactive Cerberus avec le bilan consolide (cloture de la chaine bout-en-bout).
+
+## [LECON] 2026-08-09 -- CONTROLE ETAPE 4 (generateurs-carte v0.3.0) : VERDICT VALIDE 21/21
+
+**Controle** : refonte generateurs-carte v0.3.0 (squelette allege + delegation validateur-case) + test-011 (19/19 Morpheus).
+
+**Verdict** : VALIDE.
+
+**Points controles independamment (21)** :
+1. Parite --version v0.3.0 py/sh
+2. creer : CONFORME (0 erreur, 0 a alleger) - LA CARTE NEUVE NAIT ALLEGEE
+3. Refs presentes (>= 6) : protocole-activation, pattern-N, rvav-workflow.md - 0 texte inline > 160 car
+4. detecter : delegation au validateur-case (source unique de verite)
+5. dupliquer-chemin : refs conservees (dc1 -> pattern-10), 0 texte inline duplique
+6. ASCII strict 0 / LF pur 0 CRLF / nommage generateurs- OK
+7. Spec creee (regle des 5 fichiers completee)
+8. Catalogue : entree + choix action corrige (4 actions reelles) + trie
+9. index-tools : ligne maj (squelette ALLEGE + references)
+10. Relances : test-011 19 OK, test-005 26 OK, detecter-decalages 0 decalage
+
+**Lecons** :
+1. LA DEGRADATION EST STOPPEE A LA SOURCE : une carte creee par creer v0.3.0 est
+   CONFORME des la naissance (0 a alleger) - avant, le squelette posait des textes
+   inline longs que valider-case detectait. La boucle est fermee : mesurer (etape 2),
+   produire des cases allegees (etape 3), produire des cartes allegees (etape 4).
+2. detecter-impacts : les "NON MIS A JOUR" restants sont des references documentaires
+   passives (classeur-variables, conventions) - elles citent l outil sans devoir changer.
+3. Le catalogue portait un choix obsolet (["creer","analyser","dupliquer"]) : detecter
+   manquait et dupliquer-chemin etait mal nomme. Le controle croise du catalogue est
+   indispensable apres toute modification de sous-commandes d un outil.
+4. Chaine bout-en-bout executee pour la 3e fois : Vulcain -> Morpheus (test-011) ->
+   Janus (controle) -> Cerberus. La conformite est le defaut, plus l exception.
+
+**Conformite** : je reactive Cerberus avec le bilan consolide (cloture de la chaine).
+## [LECON] 2026-08-09 -- CONTROLE CROISE etape 5 : consolidation guider-parcours v0.4.0 (Vulcain)
+
+**Controle** : refonte guider-parcours v0.4.0 (resolution des references d'indices + type action) + generateurs-case v0.3.1 (type action) + spec-guider-parcours v0.4.0 + test-012-guider-parcours + test-010 mis a jour (v0.3.1 + action).
+**Verdict** : VALIDE. 23 OK / 0 KO en controle croise independant.
+**Lecons** :
+1. Le type action est la cle du modele compose : il s'execute sans question et enchaine (verifie : c8 action -> PARCOURS TERMINE sans QUESTION) -- il rend les cases de pilotage purement procedurales
+2. La resolution des references (pattern-N, rvav, protocoles) est operationnelle : titre + contenu extraits de la spec-guider-parcours, existence verifiee pour les chemins
+3. Parite py/sh maintenue sur les 2 outils modifies (v0.4.0 + v0.3.1) -- la lecon des 5 fichiers est bien appliquee
+4. Le test-010 a ete mis a jour par Vulcain (0.3.0 -> 0.3.1 + 2 points action) -- c'etait attendu, pas un decalage
+5. detecter-impacts confirme : fichiers fonctionnels a jour, seules des references documentaires passives (fiches, controles historises) sont NON MIS A JOUR -- comportement normal
+6. Sequence respectee bout-en-bout : Vulcain -> Morpheus (test-012 18/18 + non-regression 5 suites) -> Janus -> reactiver Cerberus
+
+**Preuve** : .zz-controle-janus-etape5.py -> 23 OK / 0 KO ; detecter-decalages : 0 decalage ; test-001-gp 14/14, test-005 26/26, test-010 25/25, test-011 19/19, test-012 18/18.
+## [LECON] 2026-08-09 -- CONTROLE CROISE etape 6 : migration cerberus v0.3.0 (Buffy)
+
+**Controle** : migration pilote du parcours-cerberus v0.3.0 (indices REFERENCES + cases ACTION) + test-013 + test-009 adapte.
+**Verdict** : VALIDE. 18 OK / 0 KO en controle croise independant.
+**Lecons** :
+1. La migration est la preuve bout-en-bout du nouveau modele : valider-case CONFORME 0/0 (avant 15 a alleger), 18 cases action / 0 indice, 0 indice > 160, 0 case > 3 indices
+2. Les refs sont resolues a la navigation : pattern-8 (chaine bout-en-bout) et protocole-activation affiches avec leur contenu -- le texte vit a UN seul endroit (spec/protocole), les cases y pointent (principe une place pour chaque chose)
+3. La navigation est intacte : les 3 chemins reels (accueil, activation, retour) aboutissent a PARCOURS TERMINE
+4. Le test-009 a ete adapte par Buffy (cerberus CONFORME -> temoin A ALLEGER = buffy) -- c'etait attendu et correct, pas un decalage
+5. Pattern 14 respecte : fiche cerberus mise a jour (PARCOURS v0.3.0) par detecter-impacts
+6. Nombre de fichiers impactes minimal : parcours JSON + fiche cerberus + test-009 + test-013 -- la migration pilote est chirurgicale
+7. Sequence respectee bout-en-bout : Buffy -> Morpheus (test-013 22/22) -> Janus -> reactiver Cerberus
+
+**Preuve** : .zz-controle-janus-etape6.py -> 18 OK / 0 KO ; test-013 22/22 ; test-009 19/19 ; test-005 26/26 ; test-010 25/25 ; test-012 18/18.
+## [LECON] 2026-08-09 -- CONTROLE CROISE etape 7 : spec-guider-parcours v0.5.0 (Promethee)
+
+**Controle** : spec-guider-parcours v0.5.0 (patterns REFERENCES, pas dupliques) + test-014.
+**Verdict** : VALIDE. 16 OK / 0 KO en controle croise independant.
+**Lecons** :
+1. Le principe UNE PLACE POUR CHAQUE CHOSE est maintenant ecrit dans la source de verite : une case POINTE vers un pattern (ref pattern-N) au lieu de copier son texte -- modifier une regle = 1 fichier, jamais N cases
+2. La spec-guider-parcours est la source de verite des refs (pattern-N) : sa version (0.5.0) est coherente entre titre, Version et les references documentaires (guider-parcours.md, vulcain.md)
+3. Les 15 patterns sont intacts (rien perdu pendant la refonte)
+4. Ses exemples sont la VITRINE du nouveau format : type action + indices ref, 0 texte inline > 160
+5. L etape 7 clot le plan de refonte : la boucle mesure (valider-case) -> produit (generateurs-case/carte) -> navigue (guider-parcours) -> documente (spec v0.5.0) est complete et coherente
+6. Sequence respectee bout-en-bout sur TOUTES les etapes : createur -> Morpheus -> Janus -> reactiver Cerberus
+
+**Preuve** : .zz-controle-janus-etape7.py -> 16 OK / 0 KO ; test-014 12/12 ; test-012 18/18 ; test-013 22/22.
+## [LECON] 2026-08-09 -- CONTROLE CROISE correctif valider-case v1.0.1 (Vulcain)
+
+**Controle** : correctif garde-fou anti-pollution du rapport valider-case v1.0.1 + test-015 + test-009 maj.
+**Verdict** : VALIDE. 10 OK / 0 KO en controle croise independant.
+**Lecons** :
+1. Le defaut corrige : valider-case ecrivait son rapport par defaut dans le repertoire courant -- un agent lançant depuis la racine polluait le workspace (lecon reelle : rapport a la racine)
+2. Le garde-fou v1.0.1 : sans --rapport <fichier> explicite, AUCUN fichier n est cree ; --rapport ecrit exactement au chemin fourni ; --dry-run simule
+3. Tester le garde-fou depuis un DOSSIER VIDE different du projet (cwd) : preuve que rien ne tombe au mauvais endroit
+4. 5 fichiers a jour : py/sh/md/spec/test-009 (test-009 passe de 19 a 20 points, point 11b)
+5. Nouveau test-015 : 9/9 -- il verifie les 3 branches du garde-fou + la non-regression
+6. Sequence bout-en-bout respectee : Vulcain -> Morpheus (test-015) -> Janus -> Cerberus
+7. Prochaine etape : Buffy migre son parcours (le prochain agent a migrer, etape 6 generalisee)
+
+**Preuve** : .zz-controle-janus-vc.py -> 10 OK / 0 KO ; test-015 9/9 ; test-009 20/20 ; test-013 22/22 ; test-014 12/12.
+
+## [VERDICT] 2026-08-09 -- MIGRATION BUFFY v0.3.0 VALIDEE (Janus)
+
+**Controle** : migration du parcours-buffy v0.3.0 (indices references + cases action) + test-016-migration-buffy.
+**Verdict** : VALIDE -- 12/12 points de controle passes.
+
+**Points verifies** :
+1. Structure : version 0.3.0, 31 action / 7 question / 2 controle / 9 fin / 0 indice, aucune case > 3 indices, aucun texte regle > 160 car.
+2. Refs resolvables : valider-case --references CONFORME.
+3. Navigation : chemins creation agent et protocole -> PARCOURS TERMINE.
+4. Normes : LF pur, ASCII 0, nommage test-016 OK.
+5. Non-regression : test-016 20/20, test-009 20/20 (temoins cerberus CONFORME + morpheus A ALLEGER).
+
+**Lecons** :
+1. La migration buffy prouve la generalisation du modele cerberus : les textes regle recurrents (ASCII -> pattern-2, CREATION LIMITEE -> pattern-12, COMBO -> pattern-3, CONTEXTE -> pattern-6) se remplacent par des refs, les cases indice par action.
+2. Le test-009 doit etre adapte a CHAQUE migration : le temoin A ALLEGER bascule vers le prochain parcours non migre (buffy -> morpheus).
+
+## [VERDICT] 2026-08-09 -- GENERATEURS-LIGNE v0.1.0 VALIDE (Janus)
+
+**Controle** : outil generateurs-ligne v0.1.0 (suite des generateurs de cartes de decision : carte -> ligne -> case) + test-017-generateurs-ligne (24/24 OK).
+**Verdict** : VALIDE -- 15/15 points de controle passes.
+
+**Points verifies** :
+1. Parite py/sh v0.1.0, ASCII 0, LF pur 0 (4 fichiers outils).
+2. Gabarits : lister-configs (4 configs), config-1 detaille (deviation + rejoint).
+3. Verification carte : A JOUR / ABSENTE / PERIMEE correctement distinguees.
+4. Ajout reel config defaut : 4 cases (c<num>, c<num>a/b/c sans point), branche creee, validation CONFORME + valider-case independant CONFORME.
+5. Blocage sans carte + invite Atlas, --force passe outre.
+6. Non-regression test-017 24/24.
+
+**Lecons** :
+1. Le concept "ligne = chemin de bout en bout, configs = gabarits de groupes de cases" est operationnel : l agent choisit une config (defaut, config-1 deviation, config-2 RVAV, config-3 action), le generateur prepare le bloc conforme (decision + branches + rejoint), le cablage est automatique (branche sur question, suivant recable sur action).
+2. La verification carte Atlas AVANT edition (existence + mtime) materialise la philosophie : on n edite une carte que si sa cartographie est a jour, sinon on active Atlas pour la regenerer puis on revient.
+3. La suite est complete : generateurs-carte (carte complete) -> generateurs-ligne (ligne) -> generateurs-case (case) + generateurs-amelioration (questions) -- l edition fine reste a l agent habilite via SA carte.
+## [VERDICT] 2026-08-09 -- CONTROLE CROISE generateurs-ligne v0.2.0 : VALIDE
+
+**Contexte** : second controle (Janus, session-llm-1) apres la chaine Vulcain (creation) + Morpheus (test-017 32/32) sur l'evolution generateurs-ligne v0.1.0 -> v0.2.0 : gabarits EXTERNALISES dans gabarits-ligne.json + sous-commande ajouter-config (dry/wet).
+**Verdict** : VALIDE (12 OK / 0 KO).
+
+**Points verifies (independants de la chaine)** :
+1. Parite py/sh v0.2.0 ; gabarits-ligne.json structure {version, gabarits{description, cases}} valide.
+2. Les 4 configs ont des tailles INCHANGEES (defaut 4, config-1 5, config-2 4, config-3 2) -> la migration du code vers le JSON n'a rien perdu.
+3. Chaque config : 1re case suffixe vide (point d'entree) + case REJOINT presente.
+4. Le dict GABARITS en dur a disparu du code (chargement via charger_gabarits/GABARITS_JSON) -> externalisation reelle, une place pour chaque chose.
+5. Sous-commande ajouter-config presente (action_ajouter_config + parser).
+6. ASCII 0 + LF pur sur les 6 fichiers (py, sh, md, spec, gabarits, test).
+7. Catalogue : ajouter-config dans les choix d'action + parametres description/gabarit + description mise a jour.
+8. test-017 : 32 points, v0.2.0, 0 KO a l'execution.
+9. detecter-impacts lit l'identite correctement (commun=true) -> le bloc identite tient dans les 12 premieres lignes.
+10. detecter-divergences-version : generateurs-ligne ALIGNE (spec 0.2.0 = py 0.2.0).
+
+**Lecons** :
+1. La contrainte du bloc identite (12 premieres lignes pour .py/.sh) est un piege recurrent : un en-tete documentaire long repousse commun: hors limite -> detecter-impacts lit "commun=false" par defaut. Toujours verifier l'identite apres toute modification d'en-tete.
+2. detecter-decalages-catalogue ne lit que l'aide RACINE : les flags des sous-parsers (--description/--gabarit d'ajouter-config) sont signales comme absents a tort. Verifier avec <sous-commande> --help avant de conclure.
+3. L'externalisation des gabarits rend l'outil extensible par l'agent utilisateur (Buffy) SANS intervention de Vulcain : c'est la philosophie "une place pour chaque chose" appliquee aux outils.
+4. Mon propre point 12 etait mal formule (cherchait l'absence du nom au lieu de ALIGNE) : toujours verifier la VALEUR de la ligne, pas seulement sa presence.
+
+**Cloture** : Cerberus reactive avec le bilan de la chaine complete.
+## [VERDICT] 2026-08-09 -- CONTROLE CROISE generateurs-ligne v0.3.0 : VALIDE
+
+**Contexte** : second controle (Janus, session-llm-1) apres la chaine Vulcain (evolution) + Morpheus (test-017 41/41) sur generateurs-ligne v0.2.0 -> v0.3.0 : sous-commande copier (2 sources --source/--config + 3 modes complet/branche/suite) pour dupliquer une ligne existante.
+**Verdict** : VALIDE (11 OK / 0 KO).
+
+**Points verifies (independants de la chaine)** :
+1. Parite py/sh v0.3.0 ; action_copier + detecter_groupe/collecter_groupe/cloner_groupe dans le code.
+2. Modes complet/branche/suite + sources --source/--config presentes.
+3. .md + spec a jour (v0.3.0 + section 4.5 copier).
+4. ASCII 0 sur les 6 fichiers ; catalogue a jour (copier + source/mode/branche).
+5. test-017 : v0.3.0, points 17a-17h, 41/41 a l'execution.
+6. detecter-impacts commun=true ; detecter-divergences-version ALIGNE.
+7. PREUVE EXTERNE : copie reelle wet sur un parcours test (ajouter config-1 puis copier) -> clone de 4 cases + CONFORME.
+
+**Lecons** :
+1. Le concept de l'utilisateur est maintenant operationnel : copier une ligne existante (ou un gabarit) pour composer une nouvelle ligne, puis generateurs-case pour l'edition fine des cases du clone -- le cycle complet de composition de cartes est en place.
+2. Les garde-fous sont identiques a ajouter : carte Atlas a jour, dry/wet, validation auto CONFORME, ids c<numero>[a-z]? sans doublon.
+3. La detection du groupe (remonter a la decision d'entree) est le point le plus delicat : bien distinguer decision source (point d'entree, pas de remontee) vs action (remonter a la 1re decision precedente).
+4. Cerberus a passe par le questionnaire generateurs-amelioration (case c1b de SA carte) avant de lancer cette evolution : conformite du cycle d'amelioration confirmee.
+
+**Cloture** : Cerberus reactive avec le bilan de la chaine complete.
+## [VERDICT] 2026-08-09 -- CONTROLE CROISE generateurs-amelioration v2.0.0 : VALIDE
+
+**Contexte** : second controle (Janus, session-llm-1) apres la chaine Vulcain (evolution) + Morpheus (test-008 19/19) sur generateurs-amelioration v1.0.0 -> v2.0.0 : theme ameliorer-outil reformule (14 questions, 5 rappels strategiques en tete).
+**Verdict** : VALIDE (10 OK / 0 KO).
+
+**Points verifies (independants de la chaine)** :
+1. Parite py/sh v2.0.0 ; themes-amelioration.json version 2.0.0, 14 questions, ids q1..q14, 5 rappels en tete avec raison pour chaque question.
+2. Contenu des 5 rappels oriente : diagnostic (usage reel), horloge, formats, ameliorer vs evoluer, perimetre.
+3. Les 9 questions techniques renumerees q6..q14 avec tous les themes (index/catalogue, interface, 5 fichiers, parite, ascii, tests, impacts, garde-fous, lecon).
+4. --liste affiche 14 questions ; questionnaire non-interactif 14 [X] + 14 reponses + FIN DU QUESTIONNAIRE.
+5. .md + spec a jour (v2.0.0) ; ASCII 0 sur les 6 fichiers.
+6. test-008 executable 19/19 ; detecter-divergences-version ALIGNE.
+
+**Lecons** :
+1. L'orientation de l'utilisateur est maintenant INTEGREE a l'outil : toute amelioration future passera d'abord par les 5 rappels (diagnostic, horloge, formats, ameliorer vs evoluer, perimetre) avant les questions techniques. C'est le mecanisme anti-patch-puis-refonte.
+2. Ce changement est AUTO-APPLICATIF : la prochaine fois qu'on me demandera d'ameliorer un outil, le questionnaire me forcera a reflechir a l'evolution avant d'agir.
+3. La regle des 5 fichiers s'applique aussi au fichier de CONTENU (themes-amelioration.json) : version 2.0.0 alignee sur le .py/.sh/.md/spec.
+
+**Cloture** : Cerberus reactive avec le bilan de la chaine complete.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE ALLEGEMENT BUFFY (parcours-vulcain v0.2.13)
+
+**Contexte** : nouvelle regle utilisateur - BUFFY DOIT SUBIR LE SECOND CONTROLE
+DE JANUS MEME SANS MODIFIER DU CODE (elle modifie les cartes et protocoles,
+pas seulement le code). Rattrapage : controle de son allegement
+(regles c6/c8/c12/c14 de 341/465 car. -> refs vers protocole-tests).
+
+**VERDICT : VALIDE (6/6 points)** :
+1. protocole-tests v0.2.1 : section Delegation des tests (seul Morpheus ECRIT
+   et EXECUTE les test-XXX) - ASCII 0, LF pur.
+2. c8/c14 : ref vers protocole-tests, chaine PRESERVEE (type controle +
+   branches OUI->c9/c15 NON->c8/c14 + question 147 car. + indice outil c8).
+3. c6/c12 : ref DELEGATION, suivant c7/c13 preserve, regles longues absentes.
+4. Parcours v0.2.13 + fiche vulcain.md v0.2.13 (Pattern 14).
+5. valider-case : 0 A ALLEGER sur c8/c14 ; navigation construire + modifier
+   PARCOURS TERMINE (preuve chaine intacte).
+6. Lecon Buffy documentee dans corrections.md.
+
+**Lecons** :
+1. Le second controle de Janus s'applique a TOUT travail d'un agent sur le
+   cerveau (code OU cartes/protocoles) - la chaine Morpheus (tests) -> Janus
+   (controle) est le standard, meme quand "il n'y a pas de code".
+2. La preuve de non-regression d'une carte : navigation guider-parcours
+   PARCOURS TERMINE avant/apres + valider-case sans A ALLEGER sur les cases
+   touchees - c'est ce qui distingue un allegement sur d'une casse.
+3. Pattern texte -> reference confirme : une regle longue documentee dans un
+   fichier commun puis remplacee par une ref reste visible a l'agent (resolue
+   nativement) sans surcharger la case.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE MIGRATION PARCOURS-MORPHEUS v0.2.0
+
+**Contexte** : pilote 2 de la migration des cartes (spec-refonte etape 6, apres
+cerberus). Buffy a migre le parcours morpheus au nouveau format et m'a active
+pour le second controle (regle utilisateur : Buffy passe par Janus meme sans
+modifier du code).
+
+**VERDICT : VALIDE (7/7 points)** :
+1. Structure : 10 cases action, 9 refs, 0 regle > 160 car., 0 case > 3 indices,
+   version 0.2.0.
+2. Refs resolvables : pattern-2/3/6/8/10/12 (tous dans la spec-guider-parcours)
+   + protocole-tests (dossier existant) - aucune ref morte.
+3. Navigation test direct (c9=CERBERUS), test chaine (c9=VULCAIN), verifier,
+   audit : PARCOURS TERMINE - les 2 fins (c10 Janus, c14 Cerberus) atteignables.
+4. Fiche morpheus.md : version parcours v0.2.0 (Pattern 14).
+5. valider-case : CONFORME, 0 A ALLEGER.
+6. Lecon Buffy documentee (migration morpheus).
+7. ASCII 0, LF pur.
+
+**Lecons** :
+1. La migration carte (indice -> action + texte long -> ref + <= 3 indices) est
+   reproductible : le modele cerberus + le modele morpheus sont maintenant 2
+   references pour migrer les 7 parcours restants.
+2. Verifier les refs est un point de controle cle : une ref morte (pattern
+   inexistant, protocole absent) casserait la navigation - valider-case ne
+   couvre pas la resolvabilite des refs, il faut la verifier contre la spec.
+3. Faux positif de mon script (pattern-2 absent de ma liste) : toujours verifier
+   contre la source (la spec) avant de conclure une ref morte.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE MIGRATION PARCOURS-ATHENA v0.2.0
+
+**Contexte** : 4e parcours migre (apres cerberus, morpheus). Buffy a migre
+athena au nouveau format et m'a active pour le second controle (regle
+utilisateur : Buffy passe par Janus meme sans modifier du code).
+
+**VERDICT : VALIDE (7/7 points)** :
+1. Structure : 18 cases action, 0 indice, 13 refs, 0 regle > 160, 0 case >
+   3 indices, version 0.2.0.
+2. Refs resolvables : pattern-2/6/10/12 (tous dans la spec) - aucune ref morte.
+3. Navigation creer + completer + audit : PARCOURS TERMINE.
+4. Fiche athena.md : version parcours v0.2.0 (Pattern 14).
+5. valider-case : CONFORME, 0 A ALLEGER.
+6. Lecon Buffy documentee (migration athena).
+7. ASCII 0, LF pur.
+
+**Lecons** :
+1. Le mapping des refs est desormais STANDARD et reutilisable : ASCII ->
+   pattern-2, CREATION LIMITEE -> pattern-12, CONTEXTE -> pattern-6, UNE CARTE
+   = UN ROLE -> pattern-10, WORKSPACE -> regle-perimetre-workspace. 3 pilotes
+   (cerberus, morpheus, athena) convergent sur le meme modele.
+2. Un parcours a 18 action / 0 indice est le marqueur de fin de migration :
+   verifier {indice} == 0 est le premier reflexe de controle.
+3. La migration reduit les cases les plus lourdes (athena c4 : 9 indices ->
+   3) : la validation valider-case 0/0/0 est la preuve que la surcharge a
+   disparu.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE REGLE JANUS (carte Buffy v0.3.2)
+
+**Contexte** : materialisation dans la carte de Buffy de la regle utilisateur
+"Buffy passe par Janus meme sans modifier du code". Buffy a transforme ses 3
+fins de creation en "FIN - Activer Janus" et m'a active pour le second
+controle - la regle s'applique a la mission qui la materialise.
+
+**VERDICT : VALIDE (6/6 points)** :
+1. c8/c22/c27 : titre "FIN - Activer Janus", type fin, regle IMMUABLE JANUS
+   presente (< 160 car.) - la chaine Buffy -> Janus -> Cerberus est materialisee.
+2. Parcours v0.3.2 + fiche buffy.md v0.3.2 (Pattern 14).
+3. Navigation -> c8/c22/c27 : PARCOURS TERMINE avec la fin "Activer Janus"
+   atteinte (preuve que la regle est bien dans le chemin).
+4. valider-case : CONFORME, 0 A ALLEGER.
+5. Lecon Buffy documentee (materialiser une regle = la mettre dans la carte).
+6. ASCII 0, LF pur.
+
+**Lecons** :
+1. Une regle appliquee en pratique mais absente de la carte est une regle
+   fragile : la materialiser dans les fins (et la description) la rend
+   structurelle, pas ponctuelle.
+2. La fin de chaine standard est desormais : l'agent execute -> active JANUS
+   (controle) -> Janus reactive Cerberus. C'est le maillon qui manquait a
+   Buffy (elle reactivait Cerberus en direct).
+3. La boucle est bouclee : la regle "Buffy passe par Janus" est maintenant
+   testee par Janus lui-meme sur la carte qui la contient.

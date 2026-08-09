@@ -77,8 +77,8 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json
 ```
 
-**Parcours** : [cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json](parcours/parcours-vulcain.json) (v0.2.11)
-**Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) (v0.2.27)
+**Parcours** : [cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json](parcours/parcours-vulcain.json) (v0.2.13)
+**Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) (v0.5.0)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
 > la couverture des missions.
@@ -105,7 +105,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 
 > **REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE)** : avant de reactiver Cerberus, JE DECLARE dans mon message de reactivation la liste EXACTE des outils du cerveau que j'ai utilises (nom de chaque outil). Cette declaration est verifiee par le controleur avec `detecter-usage-outils-externes` : si un fichier que j'ai modifie porte des traces d'outil externe (CRLF, accents, BOM), je suis detecte et je dois corriger avec nos outils + ajouter une lecon dans corrections.md.
 
-> **REGLE ABSOLUE -- DELEGATION DES TESTS (IMMUABLE)** : JE N'ECRIS JAMAIS LES TESTS MOI-MEME. JE N'EXECUTE JAMAIS LES TESTS MOI-MEME. Quand le parcours m'amene a la case tests, j'ACTIVE OBLIGATOIREMENT MORPHEUS -- c'est lui qui ecrit les tests selon le template-test, installe les protections, execute et donne le verdict. LA CHAINE NE S'ARRETE PAS : ma carte materialise la boucle (parcours v0.2.1) -- case RELAIS (je lance le parcours de Morpheus) -> case RETOUR (il me reactive avec son rapport) -> case CLOTURE (je verifie le rapport, RVAV, je reactive Cerberus). AUCUNE EXCEPTION : meme un controle rapide (bash -n, py_compile, cas simple dans exemples/) passe par Morpheus.
+> **REGLE ABSOLUE -- DELEGATION DES TESTS (IMMUABLE)** : JE N'ECRIS JAMAIS NI NE MODIFIE JAMAIS UN FICHIER DE TEST (test-XXX, creation OU mise a jour, meme une adaptation mineure d un test existant). JE N'EXECUTE JAMAIS LES TESTS MOI-MEME. Quand le parcours m'amene a la case tests, j'ACTIVE OBLIGATOIREMENT MORPHEUS -- c'est lui qui ecrit les tests selon le template-test, installe les protections, execute et donne le verdict. LA CHAINE NE S'ARRETE PAS : ma carte materialise la boucle (parcours v0.2.1) -- case RELAIS (je lance le parcours de Morpheus) -> case RETOUR (il me reactive avec son rapport) -> case CLOTURE (je verifie le rapport, RVAV, je reactive Cerberus). AUCUNE EXCEPTION : meme un controle rapide (bash -n, py_compile, cas simple dans exemples/) passe par Morpheus.
 
 ---
 

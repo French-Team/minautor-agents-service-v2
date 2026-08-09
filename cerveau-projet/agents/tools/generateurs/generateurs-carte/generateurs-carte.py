@@ -5,7 +5,7 @@
 # conforme aux patterns 4-5-6-7, analyser les chemins de case_depart aux fins,
 # detecter les anomalies (boucles, cases inatteignables, references cassees),
 # dupliquer un chemin (groupe de cases) avec recablage et prefixe.
-# Version : 0.2.0
+# Version : 0.3.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -26,13 +26,14 @@ import sys
 from collections import deque
 from pathlib import Path
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 STATUT = "ebauche"
 
 # Racine du projet : 5 remontees depuis ce fichier
 # (generateurs-carte -> generateurs -> tools -> agents -> cerveau-projet -> racine)
 RACINE = Path(__file__).resolve().parents[5]
 GUIDER_PY = RACINE / "cerveau-projet" / "agents" / "tools" / "guider" / "guider-parcours" / "guider-parcours.py"
+VALIDER_CASE_PY = RACINE / "cerveau-projet" / "agents" / "tools" / "valider" / "valider-case" / "valider-case.py"
 
 _COULEURS = {
     "rouge": "\033[0;31m",
@@ -129,7 +130,8 @@ def valider_references(donnees, verbose=False):
 
 
 def valider_auto(chemin, donnees):
-    """Validation auto complete : json (recharge), references, guider-parcours --liste."""
+    """Validation auto complete : json (recharge), references, guider-parcours --liste,
+    puis validateur-case --modele --references (spec-refonte 7.2 : reutiliser le validateur)."""
     print(_couleur("  [VALIDATION AUTO]", "bleu"))
     ok_refs = valider_references(donnees, verbose=True)
     if not ok_refs:
@@ -150,6 +152,23 @@ def valider_auto(chemin, donnees):
         print(_couleur("  [OK] guider-parcours --liste : %d lignes" % len(lignes), "vert"))
     except (OSError, subprocess.TimeoutExpired) as e:
         print(_couleur("  [ATTENTION] guider-parcours non lance: %s" % e, "jaune"), file=sys.stderr)
+    # Validateur-case (spec-refonte 7.2 : detecter/analyser/creer reutilisent ses verifications)
+    try:
+        resultat = subprocess.run(
+            [sys.executable, str(VALIDER_CASE_PY), str(chemin), "--modele", "--references", "--dry-run"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        lignes = [l for l in resultat.stdout.splitlines() if l.strip()]
+        for l in lignes[-6:]:
+            print(_couleur("  | " + l, "bleu"))
+        if resultat.returncode != 0:
+            print(_couleur("  [ERREUR] validateur-case a signale des problemes", "rouge"), file=sys.stderr)
+            return False
+        print(_couleur("  [OK] validateur-case : conforme", "vert"))
+    except (OSError, subprocess.TimeoutExpired) as e:
+        print(_couleur("  [ATTENTION] validateur-case non lance: %s" % e, "jaune"), file=sys.stderr)
     return True
 
 
@@ -166,8 +185,8 @@ def squelette_carte(agent, nom, version, description):
             "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
             "indices": [
                 {
-                    "type": "regle",
-                    "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile.",
+                    "type": "ref",
+                    "ref": "protocole-activation",
                 }
             ],
             "branches": [
@@ -181,8 +200,8 @@ def squelette_carte(agent, nom, version, description):
             "type": "indice",
             "indices": [
                 {
-                    "type": "regle",
-                    "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais.",
+                    "type": "ref",
+                    "ref": "protocole-activation",
                 },
                 {
                     "type": "outil",
@@ -204,8 +223,8 @@ def squelette_carte(agent, nom, version, description):
             "type": "indice",
             "indices": [
                 {
-                    "type": "regle",
-                    "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions).",
+                    "type": "ref",
+                    "ref": "pattern-6",
                 },
                 {
                     "type": "outil",
@@ -227,8 +246,8 @@ def squelette_carte(agent, nom, version, description):
             "question": "Quelle est la mission ?",
             "indices": [
                 {
-                    "type": "regle",
-                    "texte": "REGLE PATTERN 10 (spec-guider-parcours v0.2.18) : UNE CARTE = UN ROLE - cette carte ne contient QUE des actions propres au role de %s : activation, verification, decision. JAMAIS d outils d ANALYSE ou d EXECUTION appartenant au role d un autre agent (lister-outils, detecter-impacts, generateurs-carte hors edition de SES cases...). PIEGE DU GLISSEMENT : lire pour DECIDER est du role ; lire pour EXECUTER est de la derive." % agent,
+                    "type": "ref",
+                    "ref": "pattern-10",
                 },
             ],
             "branches": [
@@ -241,16 +260,16 @@ def squelette_carte(agent, nom, version, description):
             "type": "indice",
             "indices": [
                 {
-                    "type": "regle",
-                    "texte": "REGLE PATTERN 3 (spec-guider-parcours v0.2.4) : RAPPEL DES COMBOS - une SUITE LINEAIRE d outils repetee (>= 2 occurrences) ou longue (>= 3 outils) doit etre encapsulee dans un COMBO : case unique Lancer le combo X qui reference combos-moteur + definition-combo.json (protocole-creation-combos), au lieu d enchainer les outils dans la carte. La carte reste allegee : 1 case = 1 combo.",
+                    "type": "ref",
+                    "ref": "pattern-3",
                 },
                 {
-                    "type": "regle",
-                    "texte": "REGLE PATTERN 7 (spec-guider-parcours v0.2.13) : toute case de DECISION porte AU MINIMUM 2 branches (sauf action directe). Completez cette carte avec generateurs-case (ajouter/editer/supprimer) ou generateurs-carte (dupliquer-chemin).",
+                    "type": "ref",
+                    "ref": "pattern-7",
                 },
                 {
-                    "type": "regle",
-                    "texte": "REGLE IMMUABLE ASCII (Pattern 2) : avant d'ecrire dans un fichier, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais.",
+                    "type": "ref",
+                    "ref": "pattern-2",
                 },
             ],
             "suivant": "c2b",
@@ -260,13 +279,8 @@ def squelette_carte(agent, nom, version, description):
             "type": "indice",
             "indices": [
                 {
-                    "type": "regle",
-                    "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail AVANT d activer le maillon suivant de la chaine.",
-                },
-                {
-                    "type": "fichier",
-                    "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
-                    "raison": "Boucle RVAV obligatoire : Rechercher, Verifier, Analyser, Valider",
+                    "type": "ref",
+                    "ref": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
                 },
             ],
             "suivant": "c9",
@@ -434,7 +448,8 @@ def detecter_anomalies(donnees):
 
 
 def action_detecter(args):
-    """Detecte les anomalies de la carte."""
+    """Detecte les anomalies de la carte (spec-refonte 7.2 : les verifications
+    de modele/surcharge/references sont deleguees au validateur-case v1.0.0)."""
     donnees = charger_parcours(args.parcours)
     cases = donnees["cases"]
     anomalies = detecter_anomalies(donnees)
@@ -445,6 +460,20 @@ def action_detecter(args):
         for a in anomalies:
             print(_couleur("  [ANOMALIE] %s" % a, "jaune" if "ATTENTE" in a or "INATTEIGNABLE" in a or "SANS SORTIE" in a else "rouge"))
         print(_couleur("Total : %d anomalie(s)" % len(anomalies), "rouge"))
+    # Delegation au validateur-case (spec-refonte 7.2)
+    try:
+        resultat = subprocess.run(
+            [sys.executable, str(VALIDER_CASE_PY), args.parcours, "--modele", "--surcharge", "--references", "--dry-run"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        print("=== Verifications deleguees au validateur-case (source unique) ===")
+        lignes = [l for l in resultat.stdout.splitlines() if l.strip()]
+        for l in lignes:
+            print("  | " + l)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        print(_couleur("  [ATTENTION] validateur-case non lance: %s" % e, "jaune"), file=sys.stderr)
     return 0
 
 
@@ -588,6 +617,12 @@ def construire_parser():
 
 def main():
     verifier_nommage(sys.argv[0])
+    if "--version" in sys.argv:
+        print("generateurs-carte v%s" % VERSION)
+        return 0
+    if "--aide" in sys.argv or "-h" in sys.argv or "--help" in sys.argv:
+        construire_parser().print_help()
+        return 0
     parser = construire_parser()
     args = parser.parse_args()
 

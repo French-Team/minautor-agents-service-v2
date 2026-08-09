@@ -85,7 +85,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json
 ```
 
-**Parcours** : [cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json](parcours/parcours-morpheus.json)
+**Parcours** : [cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json](parcours/parcours-morpheus.json) (v0.2.0)
 **Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier

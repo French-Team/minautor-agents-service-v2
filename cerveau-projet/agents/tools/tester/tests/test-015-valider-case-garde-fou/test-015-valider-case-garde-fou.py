@@ -1,0 +1,170 @@
+#!/usr/bin/env python3
+# -*- coding: ascii -*-
+"""
+test-015-valider-case-garde-fou.py
+Test formel du garde-fou anti-pollution de valider-case v1.0.1
+(lecon : rapport a la racine cree par une commande sans --rapport).
+
+Contexte :
+  - valider-case v1.0.0 ecrivait son rapport par defaut
+    (rapport-valider-case-<date>.md) dans le repertoire courant quand
+    --rapport et --dry-run etaient absents.
+  - v1.0.1 : sans --rapport <fichier> explicite, AUCUN fichier n'est cree
+    (message 'AUCUN RAPPORT ECRIT') ; --rapport <fichier> ecrit exactement
+    au chemin fourni ; --dry-run simule sans ecrire.
+
+Cas couverts:
+  1. Parite --version py/sh v1.0.1
+  2. Sans --rapport ni --dry-run (depuis un dossier vide) : aucun fichier cree
+  3. Message 'AUCUN RAPPORT ECRIT' affiche
+  4. --dry-run : aucun fichier cree
+  5. --rapport <fichier> : fichier cree exactement au chemin fourni
+  6. --rapport <fichier> --dry-run : fichier NON cree
+  7. Verdict CONFORME sur parcours-cerberus (non-regression)
+  8. ASCII strict : 0 non-ASCII (outil + test)
+  9. LF pur : 0 CRLF (outil + test)
+
+Usage:
+  python3 test-015-valider-case-garde-fou.py
+"""
+import io
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
+    PROJECT_ROOT = os.path.dirname(PROJECT_ROOT)
+
+TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
+PYTHON = sys.executable
+
+OUTIL_DIR = os.path.join(TOOLS_DIR, "valider", "valider-case")
+OUTIL_PY = os.path.join(OUTIL_DIR, "valider-case.py")
+OUTIL_SH = os.path.join(OUTIL_DIR, "valider-case.sh")
+OUTIL_MD = os.path.join(OUTIL_DIR, "valider-case.md")
+OUTIL_SPEC = os.path.join(OUTIL_DIR, "spec", "spec-valider-case.001.01.ebauche.md")
+PARCOURS_CERBERUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                                 "cerberus", "parcours", "parcours-cerberus.json")
+
+NB_POINTS = 0
+NB_OK = 0
+NB_KO = 0
+
+
+def verifier(nom, condition, detail=""):
+    global NB_POINTS, NB_OK, NB_KO
+    NB_POINTS += 1
+    if condition:
+        NB_OK += 1
+        print("  [OK] %s" % nom)
+    else:
+        NB_KO += 1
+        print("  [KO] %s %s" % (nom, ("-- " + detail) if detail else ""))
+
+
+def run(cmd, cwd=None, timeout=60):
+    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
+                          cwd=cwd)
+
+
+def ascii_count(chemin):
+    with io.open(chemin, encoding="utf-8", errors="replace") as fh:
+        txt = fh.read()
+    return sum(1 for c in txt if ord(c) > 127)
+
+
+def crlf_count(chemin):
+    with open(chemin, "rb") as fh:
+        return fh.read().count(b"\r\n")
+
+
+def main():
+    global NB_POINTS, NB_OK, NB_KO
+
+    tmp = tempfile.mkdtemp(prefix="test-015-")
+    try:
+        print("=== Test formel valider-case v1.0.1 (garde-fou rapport) ===")
+
+        # 1. Parite --version py/sh v1.0.1
+        r_py = run([PYTHON, OUTIL_PY, "--version"])
+        r_sh = run(["bash", OUTIL_SH, "--version"])
+        verifier("1. --version py/sh identiques v1.0.1",
+                 r_py.returncode == 0 and r_sh.returncode == 0
+                 and "v1.0.1" in r_py.stdout
+                 and r_py.stdout.strip() == r_sh.stdout.strip(),
+                 "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
+
+        # 2. Sans --rapport ni --dry-run depuis un dossier vide : aucun fichier
+        dossier_vide = os.path.join(tmp, "vide")
+        os.makedirs(dossier_vide)
+        avant = set(os.listdir(dossier_vide))
+        r_gf = run([PYTHON, OUTIL_PY, PARCOURS_CERBERUS], cwd=dossier_vide)
+        apres = set(os.listdir(dossier_vide))
+        verifier("2. Sans --rapport ni --dry-run : aucun fichier cree",
+                 r_gf.returncode == 0 and avant == apres,
+                 "cree: %s" % (apres - avant))
+
+        # 3. Message AUCUN RAPPORT ECRIT
+        verifier("3. Message 'AUCUN RAPPORT ECRIT' affiche",
+                 "AUCUN RAPPORT ECRIT" in r_gf.stdout,
+                 r_gf.stdout.strip()[-80:])
+
+        # 4. --dry-run : aucun fichier cree
+        dossier_dr = os.path.join(tmp, "dry")
+        os.makedirs(dossier_dr)
+        avant = set(os.listdir(dossier_dr))
+        r_dr = run([PYTHON, OUTIL_PY, PARCOURS_CERBERUS, "--dry-run"],
+                   cwd=dossier_dr)
+        apres = set(os.listdir(dossier_dr))
+        verifier("4. --dry-run : aucun fichier cree",
+                 r_dr.returncode == 0 and avant == apres,
+                 "cree: %s" % (apres - avant))
+
+        # 5. --rapport <fichier> : fichier cree au chemin fourni
+        rapport = os.path.join(tmp, "mon-rapport.md")
+        r_rp = run([PYTHON, OUTIL_PY, PARCOURS_CERBERUS, "--rapport", rapport])
+        verifier("5. --rapport <fichier> : fichier cree au chemin fourni",
+                 r_rp.returncode == 0 and os.path.isfile(rapport)
+                 and "RAPPORT ECRIT" in r_rp.stdout,
+                 "existe=%s" % os.path.isfile(rapport))
+
+        # 6. --rapport + --dry-run : fichier NON cree
+        rapport2 = os.path.join(tmp, "simule.md")
+        r_dr2 = run([PYTHON, OUTIL_PY, PARCOURS_CERBERUS, "--rapport", rapport2,
+                     "--dry-run"])
+        verifier("6. --rapport + --dry-run : fichier NON cree",
+                 r_dr2.returncode == 0 and not os.path.isfile(rapport2)
+                 and "DRY-RUN" in r_dr2.stdout,
+                 "existe=%s" % os.path.isfile(rapport2))
+
+        # 7. Verdict CONFORME sur parcours-cerberus (non-regression)
+        verifier("7. Non-regression : cerberus CONFORME",
+                 "CONFORME" in r_gf.stdout and "erreurs: 0" in r_gf.stdout,
+                 r_gf.stdout.strip()[:100])
+
+        # 8. ASCII strict (outil 4 fichiers + test)
+        total_non_ascii = sum(ascii_count(f) for f in
+                              (OUTIL_PY, OUTIL_SH, OUTIL_MD, OUTIL_SPEC,
+                               os.path.abspath(__file__)))
+        verifier("8. ASCII strict : 0 non-ASCII (4 fichiers outil + test)",
+                 total_non_ascii == 0, "total non-ASCII = %d" % total_non_ascii)
+
+        # 9. LF pur (outil + test)
+        total_crlf = sum(crlf_count(f) for f in
+                         (OUTIL_PY, OUTIL_SH, OUTIL_MD, OUTIL_SPEC,
+                          os.path.abspath(__file__)))
+        verifier("9. LF pur : 0 CRLF (4 fichiers outil + test)",
+                 total_crlf == 0, "total CRLF = %d" % total_crlf)
+
+        print("")
+        print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return 1 if NB_KO else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

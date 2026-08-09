@@ -1,27 +1,6 @@
 {
-  "identite": {
-    "type": "parcours",
-    "appartient_a": "buffy",
-    "commun": false
-  },
-  "parcours": {
-    "nom": "parcours-buffy",
-    "agent": "buffy",
-    "version": "0.2.11",
-    "case_depart": "c0",
-    "description": "Parcours (jeu de piste) des missions de Buffy : creer/modifier les fichiers du cerveau, creer un agent/protocole, controler le cerveau, deleguer (Athena/Vulcain), sous-missions. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.1 : chemins combos (Pattern 3, spec-guider-parcours v0.2.4) : controler c28 combo-sante-tableaux, modifier c13b combo-controle-impacts, autre c34b combo-activation. v0.2.2 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : modifier c13c question erreurs hors mission (OUI c13d fin signalement a Cerberus / NON c14 flux principal)."
-  },
   "cases": {
     "c0": {
-      "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-      "type": "question",
-      "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
-        }
-      ],
       "branches": [
         {
           "reponse": "OUI",
@@ -35,37 +14,66 @@
           "reponse": "NON",
           "vers": "c0b"
         }
-      ]
-    },
-    "c0b": {
-      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "indice",
+      ],
       "indices": [
         {
-          "type": "regle",
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/corrections.md"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/buffy.md"
+          "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la memorisation : relire sans retenir = inutile.",
+          "type": "regle"
         }
       ],
-      "suivant": "c0c"
+      "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+      "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+      "type": "question"
+    },
+    "c0b": {
+      "indices": [
+        {
+          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents.",
+          "type": "regle"
+        },
+        {
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/corrections.md",
+          "nom": "lire-fichier",
+          "type": "outil"
+        },
+        {
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/buffy.md",
+          "nom": "lire-fichier",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c0c",
+      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+      "type": "action"
+    },
+    "c0c": {
+      "indices": [
+        {
+          "ref": "pattern-6",
+          "type": "ref"
+        },
+        {
+          "catalogue": "lire-activite-recente",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
+          "nom": "lire-activite-recente",
+          "type": "outil"
+        },
+        {
+          "chemin": "AGENTS.md",
+          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel",
+          "type": "fichier"
+        }
+      ],
+      "suivant": "c1",
+      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+      "type": "action"
     },
     "c1": {
-      "titre": "Mission",
-      "type": "question",
-      "question": "Quelle est la mission ?",
       "branches": [
         {
           "reponse": "creer",
@@ -91,227 +99,176 @@
           "reponse": "autre",
           "vers": "c33"
         }
-      ]
-    },
-    "c2": {
-      "titre": "Verifier le nommage",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande valider-nommage --reponses ...) au lieu de l ecrire en dur."
-        },
-        {
-          "type": "outil",
-          "nom": "generateurs-commande",
-          "catalogue": "generateurs-commande",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
-          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande valider-nommage --reponses ..."
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/conventions/renommage/convention-renommage.md",
-          "raison": "Convention de renommage : verifier le nom avant de creer"
-        },
-        {
-          "type": "outil",
-          "nom": "valider-nommage",
-          "catalogue": "valider-nommage",
-          "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/",
-          "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <chemin>"
-        }
       ],
-      "suivant": "c3"
-    },
-    "c3": {
-      "titre": "Verifier la structure",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/conventions/structures/convention-structures.md",
-          "raison": "Convention des structures : verifier la structure attendue"
-        },
-        {
-          "type": "outil",
-          "nom": "valider-conventions",
-          "catalogue": "valider-conventions",
-          "chemin": "cerveau-projet/agents/tools/valider/valider-conventions/",
-          "commande": "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>"
-        }
-      ],
-      "suivant": "c4"
-    },
-    "c4": {
-      "titre": "Verifier que le fichier n'existe pas",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "outil",
-          "nom": "rechercher-fichier",
-          "catalogue": "rechercher-fichier",
-          "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-fichier/rechercher-fichier.py <chemin>"
-        }
-      ],
-      "suivant": "c5"
-    },
-    "c5": {
-      "titre": "Creer le fichier",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "creer-fichier",
-          "catalogue": "creer-fichier",
-          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin> <contenu>"
-        }
-      ],
-      "suivant": "c6"
-    },
-    "c6": {
-      "titre": "Mettre a jour l'index",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "Chaque fichier cree doit etre reference dans son index (index-cerveau.md ou index de la categorie)."
-        }
-      ],
-      "suivant": "c7"
-    },
-    "c7": {
-      "titre": "Ajouter les lecons si necessaire",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "Apres chaque erreur corrigee ou piege rencontre, ajouter la lecon dans corrections.md (protocole-auto-correction)."
-        },
-        {
-          "type": "outil",
-          "nom": "ajouter-contenu-fichier",
-          "catalogue": "ajouter-contenu-fichier",
-          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>"
-        }
-      ],
-      "suivant": "c8"
-    },
-    "c8": {
-      "titre": "FIN - Reactiver Cerberus",
-      "type": "fin",
-      "message": "Reactiver Cerberus avec le bilan de la creation (fichier cree, index mis a jour, lecons ajoutees)."
-    },
-    "c9": {
-      "titre": "Lire le fichier",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>"
-        }
-      ],
-      "suivant": "c10"
+      "question": "Quelle est la mission ?",
+      "titre": "Mission",
+      "type": "question"
     },
     "c10": {
-      "titre": "Verifier les dependances",
-      "type": "indice",
       "indices": [
         {
-          "type": "fichier",
           "chemin": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md",
-          "raison": "Regles de veracite : verifier les dependances avant de modifier"
+          "raison": "Regles de veracite : verifier les dependances avant de modifier",
+          "type": "fichier"
         },
         {
-          "type": "outil",
-          "nom": "rechercher-texte",
           "catalogue": "rechercher-texte",
           "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/",
-          "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>"
+          "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>",
+          "nom": "rechercher-texte",
+          "type": "outil"
         }
       ],
-      "suivant": "c10b"
+      "suivant": "c10b",
+      "titre": "Verifier les dependances",
+      "type": "action"
+    },
+    "c10b": {
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c10c"
+        },
+        {
+          "reponse": "non",
+          "vers": "c11"
+        },
+        {
+          "reponse": "ligne",
+          "vers": "c10d"
+        }
+      ],
+      "question": "Le fichier a modifier est-il une carte de decision (parcours JSON) ?",
+      "suivant": "c11",
+      "titre": "Question : parcours a modifier ?",
+      "type": "question"
+    },
+    "c10c": {
+      "indices": [
+        {
+          "ref": "pattern-2",
+          "type": "ref"
+        },
+        {
+          "ref": "pattern-12",
+          "type": "ref"
+        },
+        {
+          "catalogue": "generateurs-case",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-case/",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py PARCOURS ajouter|editer|supprimer [--case ID] [--apres C] [--branche REP:VERS] [--suivant C]",
+          "nom": "generateurs-case",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c37",
+      "titre": "Gerer les cases de parcours avec generateurs-case",
+      "type": "action"
+    },
+    "c10d": {
+      "indices": [
+        {
+          "ref": "pattern-2",
+          "type": "ref"
+        },
+        {
+          "ref": "pattern-12",
+          "type": "ref"
+        },
+        {
+          "catalogue": "generateurs-ligne",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-ligne/",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-ligne/generateurs-ligne.py PARCOURS ajouter --config <defaut|config-1|config-2|config-3> [--point-attache CASE] [--reponse REP] [--rejoint CASE] [--titre T] [--force] [--dry-run]",
+          "nom": "generateurs-ligne",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c37",
+      "titre": "GERER UNE LIGNE DE PARCOURS AVEC GENERATEURS-LIGNE",
+      "type": "action"
     },
     "c11": {
-      "titre": "Modifier le fichier",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "ref": "pattern-2",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+          "ref": "pattern-12",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "outil",
-          "nom": "editer-fichier",
           "catalogue": "editer-fichier",
           "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin> <ancien> <nouveau>"
+          "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin> <ancien> <nouveau>",
+          "nom": "editer-fichier",
+          "type": "outil"
         }
       ],
-      "suivant": "c37"
+      "suivant": "c37",
+      "titre": "Modifier le fichier",
+      "type": "action"
     },
-    "c14": {
-      "titre": "Valider le resultat (RVAV)",
-      "type": "controle",
-      "question": "La modification respecte-t-elle la boucle RVAV complete (nommage, liens, ASCII, coherence) ?",
+    "c13b": {
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne valide JAMAIS un fichier sans avoir passe la boucle RVAV complete."
+          "ref": "pattern-3",
+          "type": "ref"
         },
         {
-          "type": "outil",
-          "nom": "valider-conformite-ascii",
-          "catalogue": "valider-conformite-ascii",
-          "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
-          "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier> (UN fichier par appel)"
+          "catalogue": "combos-moteur",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json --var fichier=<fichier-modifie>",
+          "nom": "combos-moteur",
+          "type": "outil"
+        },
+        {
+          "chemin": "cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json",
+          "raison": "Definition du combo controle-impacts (Pattern 3) : detecter-impacts -> valider-liens",
+          "type": "fichier"
         }
       ],
+      "suivant": "c13c",
+      "titre": "Lancer le combo controle-impacts",
+      "type": "action"
+    },
+    "c13c": {
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c13d"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c14"
+        }
+      ],
+      "question": "Des erreurs HORS MISSION ont-elles ete detectees pendant le travail ?",
+      "titre": "Erreurs hors mission detectees ?",
+      "type": "question"
+    },
+    "c13d": {
+      "indices": [
+        {
+          "texte": "SIGNALEMENT OBLIGATOIRE : les erreurs HORS MISSION detectees pendant la mission sont transmises a Cerberus DANS LA RAISON de la reactivation.",
+          "type": "regle"
+        },
+        {
+          "texte": "PASSE PAR LE GENERATEUR : composer la commande de reactivation via le catalogue (--commande activer-agent-principal --reponses ...) au lieu de l'ecrire en dur.",
+          "type": "regle"
+        },
+        {
+          "catalogue": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "nom": "activer-agent-principal",
+          "type": "outil"
+        }
+      ],
+      "message": "Signaler a Cerberus les erreurs hors mission detectees : il decide reparation immediate ou differee. Ma mission s arrete ici, je reviens apres sa decision.",
+      "titre": "FIN - Erreurs hors mission signalees a Cerberus",
+      "type": "fin"
+    },
+    "c14": {
       "branches": [
         {
           "reponse": "OUI",
@@ -321,48 +278,47 @@
           "reponse": "NON",
           "vers": "c11"
         }
-      ]
+      ],
+      "indices": [
+        {
+          "texte": "REGLE ABSOLUE : je ne valide JAMAIS un fichier sans avoir passe la boucle RVAV complete.",
+          "type": "regle"
+        },
+        {
+          "catalogue": "valider-conformite-ascii",
+          "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
+          "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier> (UN fichier par appel)",
+          "nom": "valider-conformite-ascii",
+          "type": "outil"
+        }
+      ],
+      "question": "La modification respecte-t-elle la boucle RVAV complete (nommage, liens, ASCII, coherence) ?",
+      "titre": "Valider le resultat (RVAV)",
+      "type": "controle"
     },
     "c15": {
-      "titre": "Ajouter les lecons dans corrections.md",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "ref": "pattern-2",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+          "ref": "pattern-12",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "ETAPE 10 OBLIGATOIRE : apres chaque erreur corrigee, ajouter la lecon dans corrections.md."
-        },
-        {
-          "type": "outil",
-          "nom": "ajouter-contenu-fichier",
           "catalogue": "ajouter-contenu-fichier",
           "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>"
+          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>",
+          "nom": "ajouter-contenu-fichier",
+          "type": "outil"
         }
       ],
-      "suivant": "c16"
+      "suivant": "c16",
+      "titre": "Ajouter les lecons dans corrections.md",
+      "type": "action"
     },
     "c16": {
-      "titre": "Verifier la delegation (pense-bete / outil)",
-      "type": "question",
-      "question": "La mission concerne-t-elle un pense-bete ou un outil ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME (Vulcain). JE N'ECRIS PAS LES PENSE-BETES (Athena)."
-        }
-      ],
       "branches": [
         {
           "reponse": "pense-bete",
@@ -376,207 +332,212 @@
           "reponse": "non",
           "vers": "c8"
         }
-      ]
+      ],
+      "indices": [
+        {
+          "texte": "REGLE ABSOLUE : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME (Vulcain). JE N'ECRIS PAS LES PENSE-BETES (Athena).",
+          "type": "regle"
+        }
+      ],
+      "question": "La mission concerne-t-elle un pense-bete ou un outil ?",
+      "titre": "Verifier la delegation (pense-bete / outil)",
+      "type": "question"
     },
     "c17": {
-      "titre": "Activer Athena (pense-bete)",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "CHAINE COMPLETE : Athena -> Promethee (spec) -> Minerve (todo) -> Cerberus."
+          "texte": "CHAINE COMPLETE : Athena -> Promethee (spec) -> Minerve (todo) -> Cerberus.",
+          "type": "regle"
         },
         {
-          "type": "outil",
-          "nom": "activer-agent-principal",
           "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 athena <raison>"
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 athena <raison>",
+          "nom": "activer-agent-principal",
+          "type": "outil"
         }
       ],
-      "suivant": "c8"
+      "suivant": "c8",
+      "titre": "Activer Athena (pense-bete)",
+      "type": "action"
     },
     "c18": {
-      "titre": "Verifier le nom de l'agent",
-      "type": "indice",
       "indices": [
         {
-          "type": "fichier",
           "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-identification/",
-          "raison": "Protocole d'identification : verifier le nom de l'agent"
+          "raison": "Protocole d'identification : verifier le nom de l'agent",
+          "type": "fichier"
         },
         {
-          "type": "outil",
-          "nom": "valider-nommage",
           "catalogue": "valider-nommage",
           "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/",
-          "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <nom-agent>"
+          "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <nom-agent>",
+          "nom": "valider-nommage",
+          "type": "outil"
         }
       ],
-      "suivant": "c19"
+      "suivant": "c19",
+      "titre": "Verifier le nom de l'agent",
+      "type": "action"
     },
     "c19": {
-      "titre": "Creer le dossier de l'agent",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "ref": "pattern-2",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+          "ref": "pattern-12",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "fichier",
           "chemin": "cerveau-projet/agents/conventions/structures/convention-structures.md",
-          "raison": "Convention des structures : dossier agents/<agent>/"
+          "raison": "Convention des structures : dossier agents/<agent>/",
+          "type": "fichier"
         }
       ],
-      "suivant": "c20"
+      "suivant": "c20",
+      "titre": "Creer le dossier de l'agent",
+      "type": "action"
+    },
+    "c2": {
+      "indices": [
+        {
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande valider-nommage --reponses ...) au lieu de l ecrire en dur.",
+          "type": "regle"
+        },
+        {
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande valider-nommage --reponses ...",
+          "nom": "generateurs-commande",
+          "type": "outil"
+        },
+        {
+          "catalogue": "valider-nommage",
+          "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/",
+          "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <chemin>",
+          "nom": "valider-nommage",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c3",
+      "titre": "Verifier le nommage",
+      "type": "action"
     },
     "c20": {
-      "titre": "Copier le template + creer corrections",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "ref": "pattern-12",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/fiche-agent-template.md",
-          "raison": "Template v0.2.0 de fiche d'agent (parcours = source de verite)"
-        },
-        {
-          "type": "outil",
-          "nom": "copier-fichier",
           "catalogue": "copier-fichier",
           "chemin": "cerveau-projet/agents/tools/copier/copier-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/copier/copier-fichier/copier-fichier.py fiche-agent-template.md agents/<agent>/<agent>.md"
+          "commande": "python3 cerveau-projet/agents/tools/copier/copier-fichier/copier-fichier.py fiche-agent-template.md agents/<agent>/<agent>.md",
+          "nom": "copier-fichier",
+          "type": "outil"
         },
         {
-          "type": "outil",
-          "nom": "creer-fichier",
           "catalogue": "creer-fichier",
           "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py agents/<agent>/corrections.md"
+          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py agents/<agent>/corrections.md",
+          "nom": "creer-fichier",
+          "type": "outil"
         }
       ],
-      "suivant": "c21"
+      "suivant": "c21",
+      "titre": "Copier le template + creer corrections",
+      "type": "action"
     },
     "c21": {
-      "titre": "Mettre a jour AGENTS.md",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+          "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "Mettre a jour la liste des agents dans AGENTS.md avec le nouvel agent."
+          "texte": "Mettre a jour la liste des agents dans AGENTS.md avec le nouvel agent.",
+          "type": "regle"
         }
       ],
-      "suivant": "c22"
+      "suivant": "c22",
+      "titre": "Mettre a jour AGENTS.md",
+      "type": "action"
     },
     "c22": {
-      "titre": "FIN - Reactiver Cerberus",
-      "type": "fin",
-      "message": "Reactiver Cerberus avec le bilan de la creation de l'agent."
+      "indices": [
+        {
+          "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
+          "type": "regle"
+        }
+      ],
+      "message": "CHAINE BOUT-EN-BOUT : creation de l'agent terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation de l'agent. La chaine continue : Janus controle puis REACTIVE Cerberus avec son verdict.",
+      "titre": "FIN - Activer Janus",
+      "type": "fin"
     },
     "c23": {
-      "titre": "Verifier la convention des protocoles",
-      "type": "indice",
       "indices": [
         {
-          "type": "fichier",
           "chemin": "cerveau-projet/agents/conventions/protocoles/convention-protocoles.md",
-          "raison": "Convention des protocoles : verifier le format attendu"
+          "raison": "Convention des protocoles : verifier le format attendu",
+          "type": "fichier"
         },
         {
-          "type": "outil",
-          "nom": "valider-conventions",
           "catalogue": "valider-conventions",
           "chemin": "cerveau-projet/agents/tools/valider/valider-conventions/",
-          "commande": "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>"
+          "commande": "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>",
+          "nom": "valider-conventions",
+          "type": "outil"
         }
       ],
-      "suivant": "c24"
+      "suivant": "c24",
+      "titre": "Verifier la convention des protocoles",
+      "type": "action"
     },
     "c24": {
-      "titre": "Creer le dossier du protocole",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "ref": "pattern-2",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+          "ref": "pattern-12",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "fichier",
           "chemin": "cerveau-projet/agents/conventions/structures/convention-structures.md",
-          "raison": "Convention des structures : dossier du protocole"
+          "raison": "Convention des structures : dossier du protocole",
+          "type": "fichier"
         }
       ],
-      "suivant": "c25"
+      "suivant": "c25",
+      "titre": "Creer le dossier du protocole",
+      "type": "action"
     },
     "c25": {
-      "titre": "Creer le protocole",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "ref": "pattern-2",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+          "ref": "pattern-12",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "outil",
-          "nom": "creer-fichier",
           "catalogue": "creer-fichier",
           "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin-protocole> <contenu>"
+          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin-protocole> <contenu>",
+          "nom": "creer-fichier",
+          "type": "outil"
         }
       ],
-      "suivant": "c26"
+      "suivant": "c26",
+      "titre": "Creer le protocole",
+      "type": "action"
     },
     "c26": {
-      "titre": "Passer par RVAV",
-      "type": "controle",
-      "question": "Le protocole respecte-t-il la boucle RVAV complete ?",
-      "indices": [
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
-          "raison": "Workflow RVAV obligatoire"
-        }
-      ],
       "branches": [
         {
           "reponse": "OUI",
@@ -586,89 +547,117 @@
           "reponse": "NON",
           "vers": "c25"
         }
-      ]
+      ],
+      "indices": [
+        {
+          "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
+          "raison": "Workflow RVAV obligatoire",
+          "type": "fichier"
+        }
+      ],
+      "question": "Le protocole respecte-t-il la boucle RVAV complete ?",
+      "titre": "Passer par RVAV",
+      "type": "controle"
     },
     "c27": {
-      "titre": "FIN - Reactiver Cerberus",
-      "type": "fin",
-      "message": "Reactiver Cerberus avec le bilan de la creation du protocole."
+      "indices": [
+        {
+          "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
+          "type": "regle"
+        }
+      ],
+      "message": "CHAINE BOUT-EN-BOUT : creation du protocole terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation du protocole. La chaine continue : Janus controle puis REACTIVE Cerberus avec son verdict.",
+      "titre": "FIN - Activer Janus",
+      "type": "fin"
     },
     "c28": {
-      "titre": "Lancer le combo sante-tableaux",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d'executer combos-moteur (ex: Je lance le combo combo-sante-tableaux : cerveau-projet/combos/combo-sante-tableaux/definition-combo.json)."
+          "ref": "pattern-3",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (remplace la suite d'outils du controle de sante)."
-        },
-        {
-          "type": "outil",
-          "nom": "combos-moteur",
           "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-sante-tableaux/definition-combo.json"
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-sante-tableaux/definition-combo.json",
+          "nom": "combos-moteur",
+          "type": "outil"
         },
         {
-          "type": "fichier",
           "chemin": "cerveau-projet/combos/combo-sante-tableaux/definition-combo.json",
-          "raison": "Definition du combo sante-tableaux (Pattern 3) : documents manquants -> fichiers vides -> combos-valider-cerveau -> valider-tableaux"
+          "raison": "Definition du combo sante-tableaux (Pattern 3) : documents manquants -> fichiers vides -> combos-valider-cerveau -> valider-tableaux",
+          "type": "fichier"
         }
       ],
-      "suivant": "c8"
+      "suivant": "c8",
+      "titre": "Lancer le combo sante-tableaux",
+      "type": "action"
+    },
+    "c3": {
+      "indices": [
+        {
+          "chemin": "cerveau-projet/agents/conventions/structures/convention-structures.md",
+          "raison": "Convention des structures : verifier la structure attendue",
+          "type": "fichier"
+        },
+        {
+          "catalogue": "valider-conventions",
+          "chemin": "cerveau-projet/agents/tools/valider/valider-conventions/",
+          "commande": "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>",
+          "nom": "valider-conventions",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c4",
+      "titre": "Verifier la structure",
+      "type": "action"
     },
     "c31": {
-      "titre": "Activer Vulcain (outil)",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME. Vulcain est le SEUL habilite a creer, modifier et tester les outils."
+          "texte": "REGLE ABSOLUE : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME. Vulcain est le SEUL habilite a creer, modifier et tester les outils.",
+          "type": "regle"
         },
         {
-          "type": "regle",
-          "texte": "CHAINE COMPLETE : Vulcain -> Janus (second controle) -> Clio (README) -> Cerberus."
+          "texte": "CHAINE COMPLETE : Vulcain -> Janus (second controle) -> Clio (README) -> Cerberus.",
+          "type": "regle"
         },
         {
-          "type": "outil",
-          "nom": "activer-agent-principal",
           "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 vulcain <raison>"
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 vulcain <raison>",
+          "nom": "activer-agent-principal",
+          "type": "outil"
         }
       ],
-      "suivant": "c8"
+      "suivant": "c8",
+      "titre": "Activer Vulcain (outil)",
+      "type": "action"
     },
     "c32": {
-      "titre": "Gerer les sous-missions",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "FLUX ORIENTE : je sors du flux principal, je resous la sous-mission, puis je REVIENS au flux principal. La sous-mission n'est jamais une fin."
+          "texte": "FLUX ORIENTE : je sors du flux principal, je resous la sous-mission, puis je REVIENS au flux principal. La sous-mission n'est jamais une fin.",
+          "type": "regle"
         },
         {
-          "type": "fichier",
           "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-boucles-dynamiques/",
-          "raison": "Protocole des boucles dynamiques : sous-missions"
+          "raison": "Protocole des boucles dynamiques : sous-missions",
+          "type": "fichier"
         },
         {
-          "type": "outil",
-          "nom": "gerer-sous-mission",
           "catalogue": "gerer-sous-mission",
           "chemin": "cerveau-projet/agents/tools/gerer/gerer-sous-mission/",
-          "commande": "python3 cerveau-projet/agents/tools/gerer/gerer-sous-mission/gerer-sous-mission.py <action>"
+          "commande": "python3 cerveau-projet/agents/tools/gerer/gerer-sous-mission/gerer-sous-mission.py <action>",
+          "nom": "gerer-sous-mission",
+          "type": "outil"
         }
       ],
-      "suivant": "c33"
+      "suivant": "c33",
+      "titre": "Gerer les sous-missions",
+      "type": "action"
     },
     "c33": {
-      "titre": "Mission hors parcours",
-      "type": "question",
-      "question": "La mission concerne-t-elle une sous-mission ou un domaine d'un autre agent ?",
       "branches": [
         {
           "reponse": "sous-mission",
@@ -691,265 +680,59 @@
           "vers": "c40"
         }
       ],
-      "suivant": "c38"
+      "question": "La mission concerne-t-elle une sous-mission ou un domaine d'un autre agent ?",
+      "suivant": "c38",
+      "titre": "Mission hors parcours",
+      "type": "question"
     },
     "c34": {
-      "titre": "Activer l'agent habilite",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je n'execute JAMAIS une mission qui ne releve pas de mon domaine."
+          "texte": "REGLE ABSOLUE : je n'execute JAMAIS une mission qui ne releve pas de mon domaine.",
+          "type": "regle"
         },
         {
-          "type": "outil",
-          "nom": "activer-agent-principal",
           "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
+          "nom": "activer-agent-principal",
+          "type": "outil"
         }
       ],
-      "suivant": "c34b"
-    },
-    "c35": {
-      "titre": "Signaler le besoin",
-      "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus). Je ne cree rien moi-meme : je signale et j attends la mission.",
-      "suivant": "c35c"
-    },
-    "c36": {
-      "titre": "FIN - Delegation",
-      "type": "fin",
-      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
-    },
-    "c0c": {
-      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
-        },
-        {
-          "type": "outil",
-          "nom": "lire-activite-recente",
-          "catalogue": "lire-activite-recente",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
-        },
-        {
-          "type": "fichier",
-          "chemin": "AGENTS.md",
-          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
-        }
-      ],
-      "suivant": "c1"
-    },
-    "c10c": {
-      "titre": "Gerer les cases de parcours avec generateurs-case",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100%% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
-        },
-        {
-          "type": "outil",
-          "nom": "generateurs-case",
-          "catalogue": "generateurs-case",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-case/",
-          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py PARCOURS ajouter|editer|supprimer [--case ID] [--apres C] [--branche REP:VERS] [--suivant C]"
-        }
-      ],
-      "suivant": "c37"
-    },
-    "c10b": {
-      "titre": "Question : parcours a modifier ?",
-      "type": "question",
-      "question": "Le fichier a modifier est-il une carte de decision (parcours JSON) ?",
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c10c"
-        },
-        {
-          "reponse": "non",
-          "vers": "c11"
-        }
-      ],
-      "suivant": "c11"
-    },
-    "c13b": {
-      "titre": "Lancer le combo controle-impacts",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d executer combos-moteur (ex: Je lance le combo combo-controle-impacts : cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json)."
-        },
-        {
-          "type": "regle",
-          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition (remplace la suite detecter-impacts + valider-liens)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE + ASCII : le fichier passe en --var fichier= est le fichier modifie par la mission, dans le workspace."
-        },
-        {
-          "type": "outil",
-          "nom": "combos-moteur",
-          "catalogue": "combos-moteur",
-          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json --var fichier=<fichier-modifie>"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json",
-          "raison": "Definition du combo controle-impacts (Pattern 3) : detecter-impacts -> valider-liens"
-        }
-      ],
-      "suivant": "c13c"
+      "suivant": "c34b",
+      "titre": "Activer l'agent habilite",
+      "type": "action"
     },
     "c34b": {
-      "titre": "Lancer le combo activation",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d executer combos-moteur (ex: Je lance le combo combo-activation : cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json)."
+          "ref": "pattern-3",
+          "type": "ref"
         },
         {
-          "type": "regle",
-          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition (remplace la suite sidentifier + activer + reactiver)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : le combo travaille sur AGENTS.md + AGENTS-historique.md + le classeur (fichiers du workspace uniquement)."
-        },
-        {
-          "type": "outil",
-          "nom": "combos-moteur",
           "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json"
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json",
+          "nom": "combos-moteur",
+          "type": "outil"
         },
         {
-          "type": "fichier",
           "chemin": "cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json",
-          "raison": "Definition du combo activation (Pattern 3) : sidentifier -> activer -> reactiver"
+          "raison": "Definition du combo activation (Pattern 3) : sidentifier -> activer -> reactiver",
+          "type": "fichier"
         }
       ],
-      "suivant": "c36"
+      "suivant": "c36",
+      "titre": "Lancer le combo activation",
+      "type": "action"
     },
-    "c13d": {
-      "titre": "FIN - Erreurs hors mission signalees a Cerberus",
-      "type": "fin",
-      "message": "Signaler a Cerberus les erreurs hors mission detectees : il decide reparation immediate ou differee. Ma mission s arrete ici, je reviens apres sa decision."
-    },
-    "c13c": {
-      "titre": "Erreurs hors mission detectees ?",
-      "type": "question",
-      "question": "Des erreurs HORS MISSION ont-elles ete detectees pendant le travail ?",
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c13d"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c14"
-        }
-      ]
-    },
-    "c37": {
-      "titre": "Lancer le combo corriger-fichier",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d executer combos-moteur (ex: Je lance le combo combo-corriger-fichier : cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json)."
-        },
-        {
-          "type": "regle",
-          "texte": "PATTERN 3 (spec v0.2.18) : cette case lance un COMBO - combos-moteur execute la definition (remplace la suite corriger-nommage + corriger-liens + corriger-emojis + corriger-accents + condenser + nettoyer)."
-        },
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
-        },
-        {
-          "type": "outil",
-          "nom": "corriger-symboles",
-          "catalogue": "corriger-symboles",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
-        },
-        {
-          "type": "outil",
-          "nom": "combos-moteur",
-          "catalogue": "combos-moteur",
-          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json --var fichier=<chemin>"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json",
-          "raison": "Definition du combo a lancer (cases outil + fin)"
-        }
-      ],
-      "suivant": "c13b"
-    },
-    "c35d": {
-      "titre": "FIN - Outil temporaire",
-      "type": "fin",
-      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission.",
-      "suivant": "c39"
-    },
-    "c35c": {
-      "titre": "Creer l outil temporaire",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU + EXCEPTION OUTIL TEMPORAIRE : je cree uniquement les fichiers du cerveau (dossier de l agent, pense-betes, specs - JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
-        },
-        {
-          "type": "outil",
-          "nom": "generateurs-outil-temporaire",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
-        }
-      ],
-      "suivant": "c35d"
+    "c35": {
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus). Je ne cree rien moi-meme : je signale et j attends la mission.",
+      "suivant": "c35c",
+      "titre": "Signaler le besoin",
+      "type": "fin"
     },
     "c35b": {
-      "titre": "Besoin d outil ?",
-      "type": "question",
-      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
       "branches": [
         {
           "reponse": "TEMPORAIRE",
@@ -959,67 +742,226 @@
           "reponse": "DURABLE",
           "vers": "c35"
         }
-      ]
+      ],
+      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
+      "titre": "Besoin d outil ?",
+      "type": "question"
+    },
+    "c35c": {
+      "indices": [
+        {
+          "ref": "pattern-2",
+          "type": "ref"
+        },
+        {
+          "texte": "EXCEPTION OUTIL TEMPORAIRE : creation d'un outil TEMPORAIRE autorisee via generateurs-outil-temporaire (jamais dans tools/).",
+          "type": "regle"
+        },
+        {
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/",
+          "nom": "generateurs-outil-temporaire",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c35d",
+      "titre": "Creer l outil temporaire",
+      "type": "action"
+    },
+    "c35d": {
+      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission.",
+      "suivant": "c39",
+      "titre": "FIN - Outil temporaire",
+      "type": "fin"
+    },
+    "c36": {
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui).",
+      "titre": "FIN - Delegation",
+      "type": "fin"
+    },
+    "c37": {
+      "indices": [
+        {
+          "ref": "pattern-3",
+          "type": "ref"
+        },
+        {
+          "catalogue": "combos-moteur",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json --var fichier=<chemin>",
+          "nom": "combos-moteur",
+          "type": "outil"
+        },
+        {
+          "chemin": "cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json",
+          "raison": "Definition du combo a lancer (cases outil + fin)",
+          "type": "fichier"
+        }
+      ],
+      "suivant": "c13b",
+      "titre": "Lancer le combo corriger-fichier",
+      "type": "action"
     },
     "c38": {
-      "titre": "Activer Atlas pour cartographier",
-      "type": "indice",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : la cartographie est le ROLE D ATLAS (explorateur) - je ne cartographie JAMAIS moi-meme. Si j ai besoin d une cartographie, j ACTIVE Atlas (maillon de chaine)."
+          "texte": "REGLE UNE CARTE = UN ROLE : la cartographie est le ROLE D'ATLAS - je ne cartographie JAMAIS moi-meme, j'ACTIVE Atlas et il me fournit son rapport a son retour.",
+          "type": "regle"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas la cartographie (role Atlas) - Atlas cree le rapport cartographie-<parcours>.md dans le dossier du parcours audite et me le fournit a son retour."
-        },
-        {
-          "type": "outil",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+          "type": "outil"
         },
         {
-          "type": "fichier",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
+          "type": "fichier"
         }
       ],
-      "suivant": "c39"
+      "suivant": "c39",
+      "titre": "Activer Atlas pour cartographier",
+      "type": "action"
     },
     "c39": {
+      "message": "Atlas a ete active pour cartographier (maillon de chaine). A SA fin, Atlas me REACTIVE en me fournissant sa carte (rapport cartographie-<parcours>.md). A mon retour, je reprends ma mission avec la carte fournie.",
       "titre": "FIN - Retour d Atlas avec sa carte",
-      "type": "fin",
-      "message": "Atlas a ete active pour cartographier (maillon de chaine). A SA fin, Atlas me REACTIVE en me fournissant sa carte (rapport cartographie-<parcours>.md). A mon retour, je reprends ma mission avec la carte fournie."
+      "type": "fin"
     },
-    "c40": {
-      "titre": "Activer Themis pour auditer",
-      "type": "indice",
+    "c4": {
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : l audit est le ROLE DE THEMIS (evaluatrice) - je n audite JAMAIS moi-meme. Si j ai besoin d un audit de conformite, j ACTIVE Themis (maillon de chaine)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+          "catalogue": "rechercher-fichier",
+          "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-fichier/rechercher-fichier.py <chemin>",
+          "nom": "rechercher-fichier",
+          "type": "outil"
         }
       ],
-      "suivant": "c41"
+      "suivant": "c5",
+      "titre": "Verifier que le fichier n'existe pas",
+      "type": "action"
+    },
+    "c40": {
+      "indices": [
+        {
+          "texte": "REGLE UNE CARTE = UN ROLE : l'audit est le ROLE DE THEMIS - je n'audite JAMAIS moi-meme, j'ACTIVE Themis et elle me fournit son rapport.",
+          "type": "regle"
+        },
+        {
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "nom": "activer-agent-principal",
+          "type": "outil"
+        },
+        {
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
+          "type": "fichier"
+        }
+      ],
+      "suivant": "c41",
+      "titre": "Activer Themis pour auditer",
+      "type": "action"
     },
     "c41": {
+      "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni.",
       "titre": "FIN - Retour de Themis avec son rapport",
-      "type": "fin",
-      "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni."
+      "type": "fin"
+    },
+    "c5": {
+      "indices": [
+        {
+          "ref": "pattern-2",
+          "type": "ref"
+        },
+        {
+          "ref": "pattern-12",
+          "type": "ref"
+        },
+        {
+          "catalogue": "creer-fichier",
+          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin> <contenu>",
+          "nom": "creer-fichier",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c6",
+      "titre": "Creer le fichier",
+      "type": "action"
+    },
+    "c6": {
+      "indices": [
+        {
+          "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md",
+          "type": "ref"
+        },
+        {
+          "texte": "Chaque fichier cree doit etre reference dans son index (index-cerveau.md ou index de la categorie).",
+          "type": "regle"
+        }
+      ],
+      "suivant": "c7",
+      "titre": "Mettre a jour l'index",
+      "type": "action"
+    },
+    "c7": {
+      "indices": [
+        {
+          "ref": "pattern-2",
+          "type": "ref"
+        },
+        {
+          "ref": "pattern-12",
+          "type": "ref"
+        },
+        {
+          "catalogue": "ajouter-contenu-fichier",
+          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>",
+          "nom": "ajouter-contenu-fichier",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c8",
+      "titre": "Ajouter les lecons si necessaire",
+      "type": "action"
+    },
+    "c8": {
+      "indices": [
+        {
+          "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
+          "type": "regle"
+        }
+      ],
+      "message": "CHAINE BOUT-EN-BOUT : creation terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan (fichier cree, index mis a jour, lecons ajoutees). La chaine continue : Janus controle puis REACTIVE Cerberus avec son verdict.",
+      "titre": "FIN - Activer Janus",
+      "type": "fin"
+    },
+    "c9": {
+      "indices": [
+        {
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>",
+          "nom": "lire-fichier",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c10",
+      "titre": "Lire le fichier",
+      "type": "action"
     }
+  },
+  "identite": {
+    "appartient_a": "buffy",
+    "commun": false,
+    "type": "parcours"
+  },
+  "parcours": {
+    "agent": "buffy",
+    "case_depart": "c0",
+    "description": "v0.3.2 : REGLE JANUS MATERIALISEE (decision utilisateur) - les fins de creation c8/c22/c27 deviennent FIN - Activer Janus : Buffy passe par le second controle Janus apres TOUTE mission de creation/modification, MEME SANS MODIFIER DU CODE ; Janus reactive Cerberus avec son verdict. Parcours (jeu de piste) des missions de Buffy : creer/modifier les fichiers du cerveau, creer un agent/protocole, controler le cerveau, deleguer (Athena/Vulcain), sous-missions. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.1 : chemins combos (Pattern 3, spec-guider-parcours v0.2.4) : controler c28 combo-sante-tableaux, modifier c13b combo-controle-impacts, autre c34b combo-activation. v0.2.2 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : modifier c13c question erreurs hors mission (OUI c13d fin signalement a Cerberus / NON c14 flux principal).",
+    "nom": "parcours-buffy",
+    "version": "0.3.2"
   }
 }

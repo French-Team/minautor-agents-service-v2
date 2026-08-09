@@ -79,7 +79,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/agents/athena/parcours/parcours-athena.json
 ```
 
-**Parcours** : [cerveau-projet/agents/athena/parcours/parcours-athena.json](parcours/parcours-athena.json)
+**Parcours** : [cerveau-projet/agents/athena/parcours/parcours-athena.json](parcours/parcours-athena.json) (v0.2.0)
 **Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier

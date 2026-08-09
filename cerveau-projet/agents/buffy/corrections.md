@@ -1058,3 +1058,306 @@ propre source. Correction : cle source dediee + modele {fichier} {position} {con
    contenu sans changement de contrat = pas de bump (evite la regression test).
 6. IMPACT LIMITE VERIFIE : seul test-007 mentionne l outil (docstring LF) - aucun parcours/
    combo ne depend de la cle fichier-source.
+## [LECON] 2026-08-09 -- PISTE AMELIORER INTEGREE AU PARCOURS CERBERUS
+
+**Mission** : brancher la piste Ameliorer dans parcours-cerberus.json (phase 2
+du design generateur d amelioration valide : integration Cerberus seul).
+
+**Livrables** (1 fichier, parcours-cerberus.json v0.2.3 -> 28 cases) :
+- Branche `{reponse: ameliorer, vers: c1b}` ajoutee dans c1 (Mission), avant
+  la branche `autre`
+- Case `c1b` (indice) : regle AMELIORATION + regle PASSE PAR LE GENERATEUR +
+  outil generateurs-amelioration (chemin/catalogue, sans commande) + regle
+  PATTERN 12 (Cerberus DECLENCHE puis ACTIVE, n execute pas) -> suivant c5
+- PAS de bump de version (ajout additif, precedent corriger-symboles)
+
+**Validations** : navigation reelle guider-parcours (chemin c0 -> c1 ->
+ameliorer -> c1b : regles + outil + LIRE AVANT USAGE affiches) OK · ASCII 0 ·
+CRLF 0 · diff minimal 29 insertions / 0 suppression · test-005 26/26 OK.
+
+**Lecons** :
+1. Le format de parcours-cerberus.json est **indent=1 SANS saut de ligne
+   final** (contrairement aux autres parcours en indent=2) : le garde-fou
+   round-trip doit DETECTER l'indentation reelle et la presence du saut final
+   avant toute reecriture (2 tentatives KO avant detection correcte).
+2. Le generateur d amelioration est maintenant DECLENCHE depuis la carte de
+   Cerberus (piste ameliorer) : la checklist est posee AVANT l activation de
+   l agent habilite -- philosophie : refflechir avant d agir.
+3. PATTERN 12 : la case d indice rappelle que Cerberus ne fait que declencher
+   la checklist (guidance) puis active l agent habilite -- il n execute pas.
+4. L'outil generateurs-amelioration est reference dans le catalogue : la
+   navigation affiche automatiquement PASSE PAR LE GENERATEUR + LIRE AVANT
+   USAGE (le branchement catalogue fonctionne bout en bout).
+## [LECON] 2026-08-09 -- BOUCLE SIGNALEMENT ERREURS HORS MISSION FERMEE (c13d)
+
+**Mission** : fermer la boucle du signalement des erreurs hors mission (perimetre
+A seul, decision utilisateur). Diagnostic : la piste c13c/c13d existait dans
+parcours-buffy.json mais c13d etait une FIN VIDE d indices - elle ne disait pas
+COMMENT signaler les erreurs a Cerberus (la decision Cerberus c12a depend de la
+RAISON de la reactivation).
+
+**Livrables** (1 fichier, parcours-buffy.json, c13d enrichie) :
+- 3 indices ajoutes a la fin c13d (message existant preserve) :
+  1. regle SIGNALEMENT OBLIGATOIRE : erreurs transmises a Cerberus DANS LA
+     RAISON de la reactivation (ce que Cerberus lit en c12a -> c12b reparation
+     immediate)
+  2. regle PASSE PAR LE GENERATEUR : commande de reactivation composee via le
+     catalogue + syntaxe reactiver <session> "<raison>" buffy (3e argument
+     agent_precedent OBLIGATOIRE)
+  3. outil activer-agent-principal (chemin/catalogue, sans commande - raison
+     dynamique)
+- PAS de bump de version (ajout additif)
+
+**Validations** : round-trip indent=2/LF/saut final OK · structure c13d (message
++ 3 indices) OK · ASCII 0 · CRLF 0 · diff 100% chirurgical (+17/-1, la seule
+suppression est la virgule du message car indices suit) · test-005 26/26 OK.
+
+**Lecons** :
+1. Une FIN de parcours n est pas un simple stop : elle doit porter les indices
+   de CLOTURE (comment reagir a la fin) sinon le flux s arrete sans effet -
+   exactement le trou de c13d (signalement non transmis).
+2. La RAISON de la reactivation est le CANAL de communication inter-agents :
+   c est elle que l agent precedent lit a son retour pour decider (c12a).
+   Un signalement qui ne passe pas par la raison est perdu.
+3. Etat du circuit apres correction : Buffy c13c OUI -> c13d (raison avec les
+   erreurs) -> Cerberus c12a OUI -> c12b reactiver Buffy (reparation) -> c12c
+   rejoint -> c13. Boucle complete.
+4. Reste hors perimetre (decision utilisateur, perimetre A seul) : les 10
+   autres agents n ont pas de piste "Erreurs hors mission" - a traiter en
+   mission B ulterieure si decide.
+## [LECON] 2026-08-09 -- MIGRATION PILOTE etape 6 : parcours-cerberus v0.3.0 (nouveau format)
+
+**Mission** : migrer le parcours cerberus (pilote) au nouveau format : indices REFERENCES + cases ACTION, avec valider-case comme juge, puis generalisation.
+**Resultat** : cerberus passe de v0.2.3 (0 erreur / 15 a alleger) a v0.3.0 (0 erreur / 0 a alleger / CONFORME).
+**Lecons** :
+1. La migration = 2 gestes : (a) remplacer les indices regle >160 car. par des refs resolvables (pattern-N, protocole-activation) ou des textes courts, (b) convertir les cases de pilotage 'indice' en 'action' (naviguent identiquement dans guider-parcours v0.4.0 : passage automatique)
+2. Piege refs : la resolution de valider-case cherche les refs 'regle-*' par prefixe de NOM de fichier -- 'regles-choisir-agent' NE MATCHE PAS (le nom du fichier est 'regles-choisir-agent.md' mais le prefixe attendu est 'regle-'; utiliser le chemin relatif complet a la place)
+3. 13 indices longs migres : 6 refs (pattern-6, pattern-8, pattern-10, pattern-12, protocole-activation x2, regles-choisir-agent via chemin) + 7 textes courts <160
+4. Surcharge de nombre d indices : c1b (4 indices) et c6 (4 indices) depassaient SEUIL_INDICES=3 -- supprime un indice redondant (PASSE PAR LE GENERATEUR, deja affiche par l'indice outil) dans chaque
+5. Le test-009 (valider-case) attendait 'A ALLEGER >= 10' sur cerberus -- a du etre adapte : cerberus = CONFORME maintenant, le temoin A ALLEGER devient buffy (60 a alleger). MAJ du test = partie integrante de la migration
+6. Non-regression complete : test-005 26/26, test-009 19/19, test-010 25/25, test-011 19/19, test-012 18/18, test-001-gp VALIDE
+7. Navigation guider-parcours intacte : chemins accueil/activation/retour aboutissent tous a PARCOURS TERMINE, refs resolues (pattern-8, protocole-activation affiches)
+8. Pattern 14 respecte : fiche cerberus mise a jour (PARCOURS v0.2.0 -> v0.3.0)
+9. Normes : ASCII strict + LF pur sur parcours + fiche + test-009
+10. La boucle mesure -> produit -> navigue est maintenant complete et prouvee sur UN parcours reel : valider-case (0 a alleger) + guider-parcours (refs resolues, action enchaine) + generateurs-case/carte (produisent des cases/cartes allegees)
+
+**Preuve** : valider-case : CONFORME 0 erreur / 0 a alleger ; detecter-decalages : 112 conformes / 0 decalage.
+
+## [LECON] 2026-08-09 -- MIGRATION DE MON PARCOURS (v0.2.11 -> v0.3.0)
+
+**Mission** : migrer le parcours-buffy vers le nouveau format (indices references + cases action), modele cerberus v0.3.0.
+**Resultat** : CONFORME (lecons surcharges) - avant : 0 erreur, 15 surcharges ; apres : 0 erreur, 0 surcharge.
+
+**Lecons** :
+1. Les dict d'indices OUTIL/FICHIER (meme avec champ commande long) ne declenchent PAS la regle des 160 caracteres : seule la longueur du TEXTE d'un indice regle compte. Les cases de cerberus CONFORME ont des commandes outil de 200+ caracteres.
+2. Le seuil de surcharge est le NOMBRE d'indices (3 max) ET la longueur du texte regle (160 max). Reduire les cases a 3 indices en priorisant : ref de garde-fou (pattern-2 ASCII, pattern-12 creation limitee) + l'outil/fichier actionnable.
+3. Les refs valides dans le parcours : pattern-N (resolu depuis spec-guider-parcours), protocole-X (dossier), chemin relatif complet d'un fichier (resolu par os.path.isfile). J'ai utilise pattern-2, pattern-3, pattern-6, pattern-12 + regles-perimetre-workspace.md.
+4. Les textes regle recurrents se remplacent par des refs (une place pour chaque chose) : "REGLE IMMUABLE ASCII" -> pattern-2, "CREATION LIMITEE" -> pattern-12, "CONTEXTE TEMPS REEL" -> pattern-6, "UNE CARTE = UN ROLE" -> pattern-10, "PATTERN 3 (spec...)" -> pattern-3.
+5. Les cases de type indice avec suivant se convertissent SANS RISQUE en action : guider-parcours navigue identiquement (enchainement sans question). 31 cases converties.
+6. Le format des questions est "branches" (liste de {reponse, vers}) et non "choix" : verifier le bon format avant d'ecrire un script de navigation.
+7. Apres la migration, le test-009 utilisait mon parcours comme temoin A ALLEGER : bascule sur morpheus (17 surcharges, non migre) - a verifier systematiquement apres chaque migration de parcours.
+8. La fiche de l'agent (Pattern 14) doit etre mise a jour avec la nouvelle version du parcours (v0.2.0 -> v0.3.0) en meme temps que la migration.
+
+## [LECON] 2026-08-09 -- GENERATEURS-LIGNE BRANCHE DANS MON PARCOURS (v0.3.0 -> v0.3.1)
+
+**Mission** : brancher generateurs-ligne v0.1.0 (cree par Vulcain, suite des generateurs : carte -> ligne -> case) dans mon parcours (je suis responsable du cerveau-projet).
+**Livrables** :
+1. Case c10d GERER UNE LIGNE DE PARCOURS AVEC GENERATEURS-LIGNE (type action) : indices ref pattern-2 (ASCII) + ref pattern-12 (CREATION LIMITEE) + outil generateurs-ligne AVEC champ catalogue (PASSE PAR LE GENERATEUR, commande ajouter --config <defaut|config-1|config-2|config-3> [--point-attache] [--reponse] [--rejoint] [--force] [--dry-run]) + suivant c37 (combo corriger-fichier, convergence comme c10c).
+2. Branche 'ligne' -> c10d ajoutee dans c10b (3 branches : OUI -> c10c, non -> c11, ligne -> c10d).
+3. Version 0.3.0 -> 0.3.1, fiche buffy a jour (Pattern 14 v0.3.1).
+4. test-016-migration-buffy adapte : version 0.3.1 + compteur action 31 -> 32 (la nouvelle case c10d est une action) -> 20/20 OK.
+
+**Validations** : valider-case CONFORME (0 erreur, 0 surcharge), navigation chemin ligne -> PARCOURS TERMINE, c10d affichee avec l indice generateurs-ligne, chemin creer -> PARCOURS TERMINE (regression OK), ASCII 0, LF pur, nommage OK, test-017 (generateurs-ligne) 24/24 non-regression.
+
+**Lecons** :
+1. Le branchement d un nouvel outil dans MON parcours suit le modele cartographier-parcours (atlas) : case dediee (action) + branche dans la question du flux concerne (c10b) + convergence sur le combo corriger (c37).
+2. IMPACT CACHE : toute nouvelle case action change le compteur de types du test-016-migration-buffy (31 -> 32 action) -- verifier systematiquement apres chaque ajout de case.
+3. L indice outil avec champ catalogue materialise le PASSE PAR LE GENERATEUR : la commande est composee via le catalogue (--commande generateurs-ligne --reponses ...) au lieu de l ecrire en dur.
+4. Le bloc est CONFORME d entree : refs pattern-2/pattern-12 + 1 outil = 3 indices max, texte court, ids conformes.
+
+## [LECON] 2026-08-09 -- RENFORCEMENT DELEGATION DES TESTS (parcours-vulcain v0.2.12)
+
+**Contexte** : l'utilisateur a constate une recidive : Vulcain a ecrit/adapte le test-008 lui-meme
+(mission generateurs-amelioration v2.0.0) au lieu d'activer Morpheus pour l'ecrire, puis la chaine
+est passee directement a Janus. Sa carte avait deja c8/c14 "Deleguer les tests a Morpheus" mais la
+regle n'empechait pas l'ecriture de tests pendant c6 (Developper) et c12 (Modifier).
+
+**Cause racine** :
+1. c6/c12 ne contenaient aucune regle explicite "ne jamais ecrire/modifier un fichier de test" ;
+   pire, la regle CREATION LIMITEE listait les "5 fichiers (py sh md spec test)" -- ambiguite qui
+   laissait croire que le test fait partie des fichiers que Vulcain cree.
+2. c8/c14 etaient des auto-controles tardifs qui ne verifiaient QUE l'activation de Morpheus, pas
+   l'absence d'ecriture de fichiers test-XXX par Vulcain lui-meme.
+
+**Corrections apportees (parcours-vulcain v0.2.12)** :
+1. c6 + c12 : nouvel indice regle position 1 "REGLE ABSOLUE -- DELEGATION DES TESTS (IMMUABLE)" :
+   ne JAMAIS ecrire ni modifier un fichier de test (test-XXX, creation OU mise a jour, meme
+   adaptation mineure) - role Morpheus ; transmettre le besoin dans la mission de Morpheus.
+2. c6 + c12 : regle CREATION LIMITEE corrigee : "4 fichiers de l outil (py, sh, md, spec)" +
+   "le fichier de test test-XXX est ECRIT PAR MORPHEUS, jamais par moi".
+3. c8 + c14 : question renforcee en 2 points (as-tu active Morpheus pour ECRIRE et EXECUTER ?
+   ET n as-tu toi-meme touche a AUCUN fichier de test ?) + regle VERIFICATION EN 2 POINTS.
+4. vulcain.md : version parcours v0.2.12 (Pattern 14) + regle delegation de la fiche renforcee
+   (mise a jour test-XXX incluse).
+
+**Lecons** :
+1. Une regle de delegation doit etre placee la ou l'action se produit (c6/c12), pas seulement au
+   point de controle final (c8/c14) -- le controle tardif n'empeche pas la faute.
+2. Une regle ambigu (5 fichiers dont test) annule la regle explicite qui la suit ("JAMAIS de
+   test") : il faut retirer la contradiction, pas seulement ajouter une nouvelle regle.
+3. Pattern valide : "interdiction au point d'action + verification en 2 points au controle final".
+
+## [LECON] 2026-08-09 -- ALLEGEMENT c6/c8/c12/c14 (parcours-vulcain v0.2.13)
+
+**Contexte** : point mineur de l'audit Themis du 2026-08-09 (regles de 341
+caracteres > 160 -> A ALLEGER dans c8/c14). L'utilisateur a pose la question
+cle : "si on allege c8/c14, on ne risque pas de casser la chaine ?"
+
+**Reponse demontree (preuves, pas intuition)** :
+1. La chaine est portee par : type controle + branches (OUI -> c9/c15,
+   NON -> c8/c14) + indice outil activer-agent-principal (c8) + question
+   (147 car.). PAS par le texte explicatif de l'indice regle.
+2. Guider-parcours ne lit jamais les indices regle pour naviguer : il lit
+   question + branches (verifie dans guider-parcours.py).
+3. Le format ref est deja le standard : 33 indices ref dans les 11 parcours,
+   resolus nativement (lignes 178/240).
+
+**Corrections apportees (v0.2.13)** :
+1. protocole-tests v0.2.1 : nouvelle section "Delegation des tests" (seul
+   Morpheus ECRIT et EXECUTE les test-XXX, creation OU mise a jour, meme
+   adaptation mineure - aucun autre agent n'y touche). C'est LE fichier de
+   regles que Morpheus lit (case c3 de sa carte) : la ref est utile.
+2. c8 + c14 : regle VERIFICATION EN 2 POINTS (341 car.) remplacee par une
+   reference vers protocole-tests. Chaine inchangee (assertions type +
+   branches + question 147).
+3. c6 + c12 : regle DELEGATION DES TESTS (465 car., ajoutee en v0.2.12)
+   remplacee par la meme reference - coherence totale (la regle reste au
+   point d'action via la ref affichee).
+4. Version parcours 0.2.13 + fiche vulcain.md Pattern 14.
+
+**Validations (TOUT VERT)** :
+- valider-case returncode 0 : 0 A ALLEGER sur c8/c14 (avant : 2) ;
+- navigation construire (c0..c9) ET modifier (c0..c15) : PARCOURS TERMINE
+  (PREUVE que la chaine n'a pas bouge) ;
+- protocole-tests : section presente, v0.2.1, ASCII 0, LF pur ;
+- parcours : JSON valide, ASCII 0, LF pur.
+
+**Lecons** :
+1. Alleger une case sans casser la chaine = ne toucher QU'AU TEXTE explicatif
+   (indices regle), JAMAIS aux branches / question / indice outil / type.
+2. La validation de navigation (guider-parcours PARCOURS TERMINE avant/apres)
+   est la PREUVE objective qu'une case controle n'a pas change de comportement.
+3. Documenter la regle longue dans un fichier de reference commun (protocole-
+   tests) puis la remplacer par une ref : la regle reste visible a l'agent
+   (resolution native) sans surcharger la case - pattern "texte -> reference".
+4. Un A ALLEGER preexistant (c12 : 6 indices en HEAD, regles longues) n'est
+   PAS introduit par l'allegement : distinguer preexistant vs introduit avant
+   de conclure (lecon deja apprise a l'audit).
+
+## [LECON] 2026-08-09 -- MIGRATION PARCOURS-MORPHEUS v0.2.0 (pilote 2, spec-refonte etape 6)
+
+**Contexte** : generalisation de la migration des cartes (spec-refonte etape 6).
+Apres le pilote cerberus, migration de morpheus (le testeur) au nouveau format
+avant de poursuivre sur les autres agents. Nouvelle regle utilisateur appliquee :
+Buffy passe par le second controle Janus MEME sans modifier du code.
+
+**Travail realise (parcours-morpheus v0.1.7 -> v0.2.0)** :
+1. 10 cases indice -> action (c0b, c0c, c2, c3, c4, c8, c11, c15, c16c, c18) :
+   elles avaient toutes un suivant et pas de question (modele cible cerberus).
+2. Regles > 160 car. -> refs :
+   - c0c : CONTEXTE TEMPS REEL (376) -> ref pattern-6 ;
+   - c4 : COMBO ENCAPSULE (332) -> ref pattern-3 + ref protocole-tests ;
+   - c8 : CREATION LIMITEE (338) -> ref pattern-2 + regle courte ;
+   - c9 : CHAINE BOUT-EN-BOUT (192) -> ref pattern-8 ;
+   - c16c : CREATION LIMITEE temporaire (400) -> ref pattern-2 + pattern-12 ;
+   - c18 : UNE CARTE = UN ROLE (193) -> ref pattern-10 + pattern-12 ;
+   - c0 : veracite (170) -> regle courte ; c2 : 2 regles fusionnees (4 -> 3 indices).
+3. Max 3 indices par case (critere d'acceptation 2 de la spec-refonte).
+4. Fiche morpheus.md : Pattern 14 (version parcours v0.2.0).
+
+**Validations TOUT VERT** :
+- valider-case CONFORME, 0 A ALLEGER, 0 regle > 160, 0 case > 3 indices ;
+- navigation des 7 chemins morpheus PARCOURS TERMINE (test direct, test chaine,
+  verifier, delegation, temporaire, durable, audit) ;
+- JSON valide, ASCII 0, LF pur.
+
+**Lecons** :
+1. Migration carte = 3 transformations : type (indice->action), texte long -> ref,
+   nb d'indices (<= 3). Le modele cerberus est la reference exacte.
+2. La navigation valide CHAQUE chemin (question/controle/fin), pas seulement le
+   chemin principal : chaque fin (c10 Activer Janus, c14 Reactiver Cerberus) doit
+   etre atteignable (Pattern 13 - la fin suit SA carte).
+3. Les refs pattern-N sont resolues nativement par guider-parcours (titre + corps
+   depuis la spec-guider-parcours) : une regle longue devenue ref reste visible.
+4. Attention aux reponses de navigation apres migration : les cases action ne
+   demandent PLUS de reponse -> adapter le nombre de reponses fournies.
+
+## [LECON] 2026-08-09 -- MIGRATION PARCOURS-ATHENA v0.2.0 (4e parcours, spec-refonte etape 6)
+
+**Contexte** : poursuite de la migration des cartes (apres cerberus et
+morpheus). Athena (redactrice de pense-betes) migree au nouveau format avec la
+chaine obligatoire Buffy -> Janus (regle utilisateur).
+
+**Travail realise (parcours-athena v0.1.8 -> v0.2.0)** :
+1. 16 cases indice -> action (dont c0b/c0c oublies au 1er passage - corrige) :
+   au final 18 action / 4 question / 5 fin / 0 indice.
+2. Regles > 160 car. -> refs :
+   - c0c : CONTEXTE TEMPS REEL (376) -> ref pattern-6 ;
+   - c4/c5/c9/c14/c20c : ASCII (181-188) + CREATION LIMITEE (350-407) ->
+     refs pattern-2 + pattern-12 (2 refs + outil = 3 indices) ;
+   - c22 : UNE CARTE = UN ROLE (193) -> ref pattern-10 + pattern-12 ;
+   - c0/c0b : relecture/action obligatoire (170/183) -> raccourcies ;
+   - c4 : 9 indices -> 3 (la plus chargee du parcours).
+3. Max 3 indices par case ; 13 refs au total, toutes resolvables.
+4. Fiche athena.md : Pattern 14 (version parcours v0.2.0).
+
+**Validations TOUT VERT** :
+- valider-case CONFORME : 0 erreur, 0 a alleger, 0 avertissement ;
+- navigation des 6 chemins athena PARCOURS TERMINE (creer, completer,
+  delegation, temporaire, durable, audit) ;
+- 0 regle > 160, 0 case > 3 indices, refs resolvables contre la spec ;
+- JSON valide, ASCII 0, LF pur.
+
+**Lecons** :
+1. Verifier la liste des cases indice AVANT de declarer la migration finie :
+   c0b/c0c ont ete traites (regles raccourcies/ref) mais leur TYPE n'a pas
+   change - reverifier {indice} apres chaque passe.
+2. Le mapping des refs est recursif et reutilisable d'un parcours a l'autre :
+   ASCII -> pattern-2, CREATION LIMITEE -> pattern-12, CONTEXTE -> pattern-6,
+   UNE CARTE = UN ROLE -> pattern-10, WORKSPACE -> regle-perimetre-workspace.
+3. Une case a 9 indices (c4) se reduit proprement a 3 avec 2 refs + l'outil
+   principal : les regles devenue refs restent visibles via la resolution.
+
+## [LECON] 2026-08-09 -- REGLE JANUS MATERIALISEE DANS MA CARTE (parcours-buffy v0.3.2)
+
+**Contexte** : la regle utilisateur "Buffy passe par Janus meme sans modifier
+du code" etait actee et appliquee en pratique (controles sur allegement v0.2.13,
+migrations morpheus + athena) mais MA carte ne la contenait pas : mes fins de
+creation c8/c22/c27 reactivaient Cerberus directement.
+
+**Corrections (v0.3.2)** :
+1. c8 (creation fichier), c22 (creation agent), c27 (creation protocole) :
+   "FIN - Reactiver Cerberus" -> "FIN - Activer Janus" avec message de chaine
+   bout-en-bout (modele morpheus c10) : j active JANUS (second controle), il
+   reactive Cerberus avec son verdict.
+2. Regle IMMUABLE JANUS ajoutee dans les 3 fins (145 car.) : "apres TOUTE
+   mission (meme sans modifier du code), j active JANUS (second controle) qui
+   reactive Cerberus avec son verdict".
+3. Description du parcours + fiche buffy.md Pattern 14 (v0.3.2).
+
+**Validations TOUT VERT** :
+- valider-case CONFORME 0 A ALLEGER ;
+- navigation des 3 chemins de creation (-> c8, -> c22, -> c27) PARCOURS TERMINE
+  avec les fins "Activer Janus" atteintes ;
+- JSON valide, ASCII 0, LF pur.
+
+**Lecons** :
+1. Materieliser une regle = la mettre dans la carte (fins + description), pas
+   seulement l'appliquer en pratique : une regle non ecrite est une regle
+   oubliee.
+2. Le modele morpheus c10 (FIN - Activer Janus) est le pattern standard de fin
+   de chaine : "j active le maillon controle qui reactive Cerberus".
+3. Regle longue > 160 car. dans une fin -> A ALLEGER : raccourcir (le message
+   detaille reste dans le message de la fin et la description du parcours).
+4. La regle s'applique a la mission qui la materialise : ce changement de carte
+   passe lui-meme par Janus (controle croise de ce fichier).

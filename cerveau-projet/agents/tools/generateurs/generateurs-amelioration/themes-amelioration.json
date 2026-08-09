@@ -1,0 +1,81 @@
+{
+  "version": "2.0.0",
+  "themes": [
+    {
+      "nom": "ameliorer-outil",
+      "description": "Checklist a parcourir avant toute amelioration d un outil existant (diagnostic, anticipation de l evolution, coherence, impact, non-regression)",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Rappel : qu est-ce qui doit etre ameliore, exactement ? Decris le defaut ou la limite constate en usage reel (pas ce que tu veux ajouter, mais ce qui existe et coince).",
+          "raison": "Diagnostiquer l existant avant tout ajout : une amelioration sans constat part de l invention plutot que du besoin."
+        },
+        {
+          "id": "q2",
+          "question": "Rappel de l horloge : si tu crees une horloge, elle contient au minimum heure + minute, mais penses-tu DES MAINTENANT aux extensions naturelles (secondes, millisecondes, chronometre) ? Cette amelioration est-elle pensee pour les evolutions previsibles de la fonction ?",
+          "raison": "Anticiper l extension naturelle des la conception : une fonction pensee pour grandir evite de la recouvrir de patches un par un."
+        },
+        {
+          "id": "q3",
+          "question": "Rappel des formats : si tu crees une fonction mp3, as-tu pense aux autres formats (wav, ogg, flac) ? La solution couvre-t-elle TOUTE la famille de cas previsibles, ou seulement un cas etroit ?",
+          "raison": "Eviter la fonction trop etroite : un cas unique aujourd hui devient un retro-equipement douloureux quand la famille arrive."
+        },
+        {
+          "id": "q4",
+          "question": "Rappel ameliorer vs evoluer : vaut-il mieux ameliorer cette fonction telle quelle, ou la faire EVOLUER maintenant (refonte ciblee) plutot que de la patcher aujourd hui et la refondre plus tard ? Compare le cout des deux chemins.",
+          "raison": "Une amelioration passee sur une fonction a refondre est du travail jete : choisir le bon moment pour evoluer."
+        },
+        {
+          "id": "q5",
+          "question": "Rappel perimetre : une fois l evolution choisie, quelles sont les limites explicites de CETTE iteration (ce qu on fait, ce qu on reporte volontairement) ?",
+          "raison": "Cadrer l iteration sans derive : savoir ce qu on ne fait PAS est aussi important que ce qu on fait."
+        },
+        {
+          "id": "q6",
+          "question": "L outil est-il reference dans index-tools.md et le catalogue generateurs-commande ?",
+          "raison": "Toute modification impacte la documentation et la generation de commande."
+        },
+        {
+          "id": "q7",
+          "question": "Quelle est l interface actuelle (options argparse) et que change-t-elle exactement ?",
+          "raison": "Ne jamais casser l interface existante : compatibilite des usages (parcours, combos, catalogue)."
+        },
+        {
+          "id": "q8",
+          "question": "La modification couvre-t-elle les 5 fichiers quand la version change (py, sh, md, spec, catalogue) ?",
+          "raison": "Regle des 5 fichiers : une divergence de version est un bug latent detecte par detecter-divergences-version."
+        },
+        {
+          "id": "q9",
+          "question": "La parite py/sh (version et comportement) est-elle maintenue ?",
+          "raison": "Une divergence py/sh cree des sessions fantomes de confiance."
+        },
+        {
+          "id": "q10",
+          "question": "Le code respecte-t-il ASCII strict et LF ?",
+          "raison": "Regles immuables : tout caractere non-ASCII ou CRLF est rejete par les validateurs."
+        },
+        {
+          "id": "q11",
+          "question": "Y a-t-il des tests formels a mettre a jour ou a ajouter (protocole-tests, Morpheus) ?",
+          "raison": "La non-regression est prouvee par les tests, pas par la confiance."
+        },
+        {
+          "id": "q12",
+          "question": "Quels parcours, combos ou outils referencent cet outil (detecter-impacts) ?",
+          "raison": "Tout impact oublie est une incoherence : verifier la chaine complete."
+        },
+        {
+          "id": "q13",
+          "question": "Des garde-fous doivent-ils etre ajoutes ou renforces (refus d ecriture, dry-run) ?",
+          "raison": "Prevenir les regressions futures plutot que les reparer."
+        },
+        {
+          "id": "q14",
+          "question": "La lecon de cette amelioration sera-t-elle documentee dans corrections.md ?",
+          "raison": "Apprentissage continu : chaque amelioration enrichit le cerveau."
+        }
+      ]
+    }
+  ]
+}
