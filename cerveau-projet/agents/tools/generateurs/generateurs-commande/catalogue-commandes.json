@@ -1,5 +1,5 @@
 {
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Catalogue des commandes complexes du cerveau-projet. Source de verite : chaque commande (modele) est un copier-coller d un appel d outil deja ecrit, corrige et valide (agents/tools/). Le generateur pose une question par parametre, valide les reponses, puis compose la commande exacte a lancer.",
   "commandes": [
     {
@@ -544,6 +544,47 @@
           "question": "Valeur pour cible ?",
           "type": "texte",
           "obligatoire": true
+        }
+      ]
+    },
+    {
+      "nom": "corriger-fins-de-ligne",
+      "description": "Convertir les fins de ligne CRLF vers LF (strategie FIGER LF)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/corriger/corriger-fins-de-ligne/corriger-fins-de-ligne.py",
+      "modele": "{chemin} {recursive} {dry-run} {verbose}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin du fichier ou dossier a convertir ?",
+          "type": "texte",
+          "obligatoire": true,
+          "flag": "",
+          "defaut": ""
+        },
+        {
+          "cle": "recursive",
+          "question": "Traiter les sous-dossiers recursivement ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--recursive",
+          "defaut": "non"
+        },
+        {
+          "cle": "dry-run",
+          "question": "Simuler sans modifier ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--dry-run",
+          "defaut": "non"
+        },
+        {
+          "cle": "verbose",
+          "question": "Afficher le detail ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--verbose",
+          "defaut": "non"
         }
       ]
     },

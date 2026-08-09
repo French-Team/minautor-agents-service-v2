@@ -205,6 +205,56 @@ complemente la detection (B) : la declaration de l'agent est croisee avec les tr
 
 ---
 
+## Regle FIGER LF (decision 2026-08-09)
+
+> **REGLE IMMUABLE** : Toute ecriture de fichier par un outil du cerveau DOIT
+> produire des fins de ligne **LF**. Le CRLF (fins de ligne Windows) est une
+> trace d'outil externe (cycle A+B+C) et une source de conflits git.
+
+### Pourquoi (constat du diagnostic)
+
+1. Les outils d'ecriture en mode texte Python (`Path.write_text()` ou
+   `open(..., "w")` sans `newline=''`) traduisent `\n` en `\r\n` sur Windows
+   -> nos propres outils produisaient du CRLF.
+2. `detecter-usage-outils-externes` signalait alors ces fichiers comme
+   "traces d'outils externes" -> sanctions injustes et boucle de corrections.
+3. `git config core.autocrlf=true` (defaut Windows) re-convertit au checkout
+   -> warnings permanents et diffs massifs.
+
+### Pattern obligatoire pour ecrire un fichier
+
+```
+# CORRECT (produit du LF) :
+with open(chemin, "w", encoding="utf-8", newline="") as f:
+    f.write(contenu)
+
+# INTERDIT (produit du CRLF sur Windows) :
+Path(chemin).write_text(contenu, encoding="utf-8")
+open(chemin, "w", encoding="utf-8").write(contenu)   # sans newline=""
+```
+
+> `newline=""` desactive la traduction des fins de ligne : les `\n` ecrits
+> restent des `\n`, quelle que soit la plateforme.
+
+### Outil de reference
+
+`corriger-fins-de-ligne` (`agents/tools/corriger/corriger-fins-de-ligne/`)
+convertit les fichiers existants de CRLF vers LF (fichier ou dossier,
+`--recursive`, `--dry-run`). **`--dry-run` est OBLIGATOIRE avant toute
+conversion reelle.**
+
+### Migration et figement git
+
+- Les fichiers sources encore en CRLF doivent etre migres en LF avec
+  `corriger-fins-de-ligne` (mission 2 du plan FIGER LF).
+- Le depot doit etre fige : `.gitattributes` (`* text=auto eol=lf`) +
+  `git config core.autocrlf false` -> plus aucun CRLF ne doit subsister
+  et git ne doit plus re-convertir au checkout.
+- Apres migration, `detecter-usage-outils-externes` doit rendre
+  **0 suspect** sur tout le projet.
+
+---
+
 ## Processus de creation
 
 > **REGLE OBLIGATOIRE** : Toute creation d'outil passe par le **outil-template** (`agents/tools/outil-template.md` + `agents/tools/outil-template.sh`).

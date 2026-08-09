@@ -163,7 +163,8 @@ def main(argv=None):
     resultat = "\n".join(nouvelles)
 
     try:
-        with open(fichier, "w", encoding="utf-8") as f:
+        # FIGER LF : newline='' evite la traduction CRLF Windows
+        with open(fichier, "w", encoding="utf-8", newline="") as f:
             f.write(resultat)
     except OSError as e:
         print(RED + "[ERREUR] L'insertion a echoue: " + str(e) + NC)

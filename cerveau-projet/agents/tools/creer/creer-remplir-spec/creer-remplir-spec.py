@@ -135,7 +135,9 @@ def remplir_section(fichier, section, contenu, dry_run):
         lignes = nouvelle
 
     try:
-        Path(fichier).write_text("\n".join(lignes) + "\n", encoding="utf-8")
+        # FIGER LF : open avec newline='' evite la traduction CRLF Windows
+        with open(fichier, "w", encoding="utf-8", newline="") as f:
+            f.write("\n".join(lignes) + "\n")
     except OSError as e:
         print(RED + "[ERREUR] Ecriture impossible : " + str(e) + NC)
         return 1

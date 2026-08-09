@@ -108,7 +108,7 @@ def main(argv=None):
     if args.backup and os.path.isfile(fichier):
         backup_path = fichier + ".bak"
         with open(fichier, "r", encoding="utf-8", errors="replace") as fsrc, \
-                open(backup_path, "w", encoding="utf-8") as fdst:
+                open(backup_path, "w", encoding="utf-8", newline="") as fdst:
             fdst.write(fsrc.read())
         if args.verbose:
             print(BLUE + "[INFO] Sauvegarde creee: " + backup_path + NC)
@@ -116,10 +116,11 @@ def main(argv=None):
     # Ecrire
     try:
         if contenu:
-            with open(fichier, "w", encoding="utf-8") as f:
+            # FIGER LF : newline='' evite la traduction CRLF Windows
+            with open(fichier, "w", encoding="utf-8", newline="") as f:
                 f.write(contenu)
         else:
-            open(fichier, "a", encoding="utf-8").close()
+            open(fichier, "a", encoding="utf-8", newline="").close()
     except OSError as e:
         print(RED + "[ERREUR] Impossible d'ecrire " + fichier +
               " : " + str(e) + NC)

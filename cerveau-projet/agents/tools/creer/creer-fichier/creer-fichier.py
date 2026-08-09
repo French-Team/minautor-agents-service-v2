@@ -79,7 +79,9 @@ def main():
     # Creer le fichier
     try:
         if args.contenu:
-            fichier.write_text(args.contenu + "\n", encoding="utf-8")
+            # FIGER LF : open en mode texte avec newline='' (pas de traduction CRLF Windows)
+            with open(fichier, "w", encoding="utf-8", newline="") as f:
+                f.write(args.contenu + "\n")
         else:
             fichier.touch()
     except OSError as e:

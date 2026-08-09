@@ -171,7 +171,8 @@ def main(argv=None):
         return 1
 
     try:
-        with open(chemin_fichier, "w", encoding="utf-8") as f:
+        # FIGER LF : newline='' evite la traduction CRLF Windows
+        with open(chemin_fichier, "w", encoding="utf-8", newline="") as f:
             f.write(squelette)
     except OSError as e:
         print(RED + "[ERREUR] Impossible de creer le fichier : " + str(e) + NC)

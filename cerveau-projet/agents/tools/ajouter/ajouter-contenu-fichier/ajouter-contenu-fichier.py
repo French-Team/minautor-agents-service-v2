@@ -145,7 +145,8 @@ def main():
         if contenu_cible and not contenu_cible.endswith("\n"):
             contenu_a_ajouter = "\n" + contenu_a_ajouter
 
-        with open(cible, "a", encoding="utf-8") as f:
+        # FIGER LF : newline='' evite la traduction CRLF Windows
+        with open(cible, "a", encoding="utf-8", newline="") as f:
             f.write(contenu_a_ajouter)
     except OSError as e:
         print(_couleur("[ERREUR] L'ajout a echoue: %s" % e, "rouge"), file=sys.stderr)

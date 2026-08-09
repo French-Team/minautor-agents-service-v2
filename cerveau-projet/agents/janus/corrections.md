@@ -746,3 +746,22 @@ Corriger les 5 divergences de base/suffixe (regenerer-catalogue, lister-agents, 
 4. C3 index-tools : categorie Cartographier presente (3 occurrences : section + stats + total), total 106 -> 107 coherent avec les compteurs.
 5. C4 test-006 : present, ASCII 0, nommage test-XXX-*.py reconnu par valider-nommage (0 erreur) - le format special des tests est bien gere.
 6. L outil cartographier-parcours est un bon exemple de RENDU DERIVE : il lit un parcours JSON et produit un fichier markdown (arbre ASCII + chemins + impasses) sans jamais modifier la source - la frontiere lecture/ecriture est respectee (Pattern 14 esprit : l impact cree est le fichier de sortie, jamais le parcours).
+## [LECON] 2026-08-09 -- CONTROLE CROISE MISSION 1 FIGER LF : VERDICT VALIDE
+
+**Controle** : mission 1 du plan FIGER LF (Vulcain : outil corriger-fins-de-ligne + 11 outils d'ecriture corriges ; Morpheus : test-007 15/15).
+**Verdict** : VALIDE. 7/7 points conformes.
+
+**Points controles** :
+1. Outils (py/sh/md/spec) : ASCII 0 x4, version v0.1.0 coherente, nommage OK
+2. Catalogue : JSON valide, 109 commandes triees, version 0.2.3, entree corriger-fins-de-ligne presente
+3. index-tools : total 108, categorie Corriger 6, entree presente
+4. 11 outils d'ecriture : newline present + write_text absent (11/11)
+5. test-007 : ASCII 0, nommage reconnu
+6. detecter-usage-outils-externes : les NOUVEAUX fichiers (corriger-fins-de-ligne, test-007) = LF pur 0 suspect ; les sources PREEXISTANTES (ex: creer-fichier.py) restent en CRLF - comportement ATTENDU, migration massive = mission 2
+7. Lecons Vulcain + Morpheus presentes (FIGER LF)
+
+**Lecons** :
+1. UNE MISSION EN 2 TEMPS (corriger la logique PUIS migrer les fichiers) : apres la correction des outils d'ecriture, les fichiers sources preexistants restent en CRLF jusqu'a la migration - ce n'est PAS une infraction, c'est l'ordre prevu. Le controleur doit verifier la LOGIQUE (newline present, write_text absent) et les NOUVEAUX fichiers (LF), pas exiger la migration immediate.
+2. VERIFIER LA PRESENCE newline + l ABSENCE write_text ensemble : c'est le couple qui prouve la correction (newline seul peut etre un reste, write_text seul = bug non corrige).
+3. detecter-usage-outils-externes prend UNE cible (pas plusieurs) - le scanner recursif est plus pertinent pour un lot.
+4. Les fichiers sources des outils sont eux-memes en CRLF (heritage Windows) : la migration (mission 2 Buffy) les normalisera en LF avec l outil corriger-fins-de-ligne.

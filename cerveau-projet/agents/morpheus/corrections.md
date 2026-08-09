@@ -387,3 +387,58 @@ v0.5.0 automatiquement (Nom LLM en tete + table Sessions connues en colonne Nom 
 2. La parite py/sh par wrapper pur (exec python3) rend le test de parite TRIVIAL (fichiers generes identiques) - c est le bon pattern pour les outils dont la logique vit dans le .py.
 3. Le test de generation reelle (bout en bout avec sortie par defaut dans le dossier du parcours) verifie AUSSI la protection workspace : le fichier genere doit etre SUPPRIME apres le test (0 residu).
 4. La chaine bout-en-bout est respectee : Vulcain m a active, je rends mon verdict et j ACTIVE JANUS (controle croise) - la chaine ne retombe jamais sur Cerberus au milieu.
+## [LECON] 2026-08-09 -- TEST 007 FIGER LF : 15/15 VALIDE (outil corriger-fins-de-ligne + regression 11 outils)
+
+**Objet** : test formel de la mission 1 du plan FIGER LF (Vulcain). Test : test-007-figer-lf.py (15 points).
+**Verdict** : VALIDE. 15/15 points passes.
+
+**Tests passes** :
+1. --version py/sh identiques v0.1.0 (wrapper pur)
+2. dry-run ne modifie rien (CRLF intact apres simulation)
+3. Conversion reelle CRLF -> LF verifiee octets (CRLF:0 LF:2)
+4. Idempotence : 2e passe = 0 converti
+5. Binaire (octet nul) ignore et intact
+6. --recursive convertit les sous-dossiers (exclusion __pycache__/pyc)
+7. Chemin inexistant -> [ERREUR]
+8. REGRESSION CRITIQUE : creer-fichier ecrit desormais du LF (CRLF:0 LF:1) - la cause racine est corrigee
+9. REGRESSION : ecrire-fichier ecrit du LF (CRLF:0 LF:2)
+10. ASCII 0 sur les 4 fichiers outils (py/sh/md/spec)
+11. valider-nommage --type outil OK
+12. Parite py/sh : le .sh wrapper convertit aussi
+13. Catalogue JSON valide, 109 commandes triees, entree corriger-fins-de-ligne presente
+14. index-tools : total 108, categorie Corriger 6
+15. 0 residu du test dans le workspace
+
+**Lecons** :
+1. UN TEST DE PROTECTION NE DOIT COMPTER QUE SES PROPRES RESIDUS : le point 15 initial detectait .tmp-eol-test (artefact COMMITE par l utilisateur, hors de mon perimetre) comme residu -> faux KO. Affiner la detection (prefixe test-007-) plutot que .tmp- global.
+2. LA REGRESSION SUR LE COMPORTEMENT D ECRITURE EST LE TEST LE PLUS PRECIEUX : verifier qu un outil corrige produit reellement du LF (lecture octets) est plus fort que verifier la presence du code newline=''.
+3. Les fichiers de test du dossier tester/tests/ ont leurs propres conventions (structure test-00N-nom-outil.py, compteur verifier) - les reutiliser pour chaque nouveau test.
+4. Le heredoc avec backslashes echoue en JSON dans les commandes - ecrire les scripts de test directement avec write_file.
+## [LECON] 2026-08-09 -- NON-REGRESSION MIGRATION FIGER LF : VERDICT VALIDE (0 regression)
+
+**Mission** : non-regression complete apres la migration CRLF->LF (286 fichiers convertis, dont 169 .py/.sh dans tools/).
+
+**Verdict** : VALIDE - la migration n'a introduit AUCUNE regression (conversion purement binaire, contenu inchange).
+
+**Preuve objective** : git diff --ignore-space-at-eol sur les fichiers testes = 0 changement de contenu (les parcours-atlas/morpheus n'ont que des fins de ligne modifiees ; seul le catalogue-commandes a 42 insertions = enrichissement anterieur legitime).
+
+**Tests passes (non-regression confirmee)** :
+- test-002-combos-moteur : REUSSI
+- test-003-combos-creer : OK
+- test-007-figer-lf : 15/15 VALIDE (v0.1.1)
+- NR1 : py_compile OK sur tous les .py modifies (169)
+- NR2 : bash -n OK sur tous les .sh modifies
+
+**Tests avec KO - TOUS PRE-EXISTANTS (a traiter separement, aucun lie a la migration)** :
+1. test-001 p6 (7/8) : FAUX POSITIF evaluer-coherence - le classeur-variables reference des VARIABLES (statut-mission, contexte, resultats) interpretees comme des outils inexistants. Score evaluer-agents 85/100.
+2. test-004 p7a (15/16) : test OBSOLETE - attend parcours-morpheus v0.1.2, version reelle 0.1.3.
+3. test-005 p14 (23/26) : test OBSOLETE - attend catalogue 0.2.2, version reelle 0.2.3.
+4. test-005 p17 : test OBSOLETE - attend parcours-atlas 0.1.2, version reelle 0.1.5.
+5. test-005 p18 : 1 champ commande en dur restant (case c30 du parcours-atlas, commande cartographier-parcours) - piste C du diagnostic non terminee.
+6. test-006 p2b (18/19) : en-tete PARTIEL genere par cartographier-parcours v0.1.0 (l'outil ne remplit pas tous les champs attendus par le test).
+
+**Lecons** :
+1. Une migration de fins de ligne NE CASSERA RIEN si le contenu est inchange - le prouver avec git diff --ignore-space-at-eol avant de conclure.
+2. NE JAMAIS conclure qu'un test echoue a cause de la migration sans verifier la version reelle des fichiers : les tests 004/005 codent des versions en dur qui deviennent obsoletes a chaque bump legitime.
+3. Les tests de non-regression detectent des dettes PRE-EXISTANTES - les documenter precisement (cause exacte + fichier + point) pour une mission de mise a jour ulterieure.
+4. evaluer-coherence a un faux positif connu : les variables du classeur (statut-mission, contexte, resultats) sont interpretees comme des outils - a declarer comme exception ou a corriger dans l'outil.

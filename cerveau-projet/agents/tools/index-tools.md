@@ -94,6 +94,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `corriger-accents-zones-sensibles` | Corriger les accents (mode --all : purge totale, regle immuable) | [corriger/corriger-accents-zones-sensibles/](corriger/corriger-accents-zones-sensibles/) |
 | `corriger-emojis` | Detecter et remplacer les emojis par des symboles ASCII | [corriger/corriger-emojis/](corriger/corriger-emojis/) |
 | `corriger-liens` | Corriger les liens casses | [corriger/corriger-liens/](corriger/corriger-liens/) |
+| `corriger-fins-de-ligne` | Convertir les fins de ligne CRLF vers LF (strategie FIGER LF) | [corriger/corriger-fins-de-ligne/](corriger/corriger-fins-de-ligne/) |
 | `corriger-nommage` | Corriger le nommage | [corriger/corriger-nommage/](corriger/corriger-nommage/) |
 
 ### Creer
@@ -403,7 +404,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Combos | 15 |
 | Condenser | 1 |
 | Copier | 2 |
-| Corriger | 5 |
+| Corriger | 6 |
 | Creer | 4 |
 | Decomposer | 1 |
 | Deplacer | 1 |
@@ -428,7 +429,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Verifier | 5 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **107** |
+| **Total** | **108** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 103 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

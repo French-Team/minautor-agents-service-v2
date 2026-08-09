@@ -83,7 +83,8 @@ def commande_sauvegarder(args):
         "date_sauvegarde": datetime.datetime.now().isoformat(),
         "sous_missions": [],
     }
-    with open(fichier, "w", encoding="utf-8") as f:
+    # FIGER LF : newline='' evite la traduction CRLF Windows
+    with open(fichier, "w", encoding="utf-8", newline="") as f:
         json.dump(donnees, f, ensure_ascii=True, indent=2)
 
     print(GREEN + "[OK] Position sauvegardee" + NC)

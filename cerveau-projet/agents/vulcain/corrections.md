@@ -725,3 +725,20 @@ les mots composees deja qualifies (role_principal, role_specifique) restent inch
 5. PARITE .sh : wrapper pur (exec python3 "$PY_SCRIPT" "$@") - la parite des sorties est garantie PAR CONSTRUCTION (pattern detecter-impacts, valider-cartes-decision). Version py/sh identiques (v0.1.0).
 6. REGLE DES 5 FICHIERS : py, sh, md, spec, tests/ - les tests formels sont DELEGUES a Morpheus (REGLE ABSOLUE), pas ecrits par moi.
 7. L OUTIL EST EN LECTURE SEULE : il ne modifie jamais le parcours source - le fichier genere est un derive (comme detecter-impacts genere un rapport).
+## [LECON] 2026-08-09 -- PLAN FIGER LF : outil corriger-fins-de-ligne cree + outils d ecriture corriges
+
+**Contexte** : diagnostic Cerberus (decision utilisateur) : la regle immuable exige LF mais nos outils d ecriture produisaient du CRLF (creer-fichier.py ecrivait via Path.write_text -> traduction CRLF Windows) et detecter-usage-outils-externes les sanctionnait comme traces d outils externes -> boucle de conflits permanente. Git autocrlf=true aggravait (warnings checkout).
+
+**Livrables** :
+1. OUTIL corriger-fins-de-ligne v0.1.0 (categorie corriger/) : py + sh (wrapper pur) + md + spec + entree catalogue (108 -> 109, v0.2.2 -> v0.2.3) + index-tools (categorie Corriger 5 -> 6, total 107 -> 108). Fonctions : fichier/dossier --recursive, --dry-run, --verbose, detection binaire (octet nul) ignore, idempotent (2e passe = 0 converti), erreur chemin introuvable.
+2. 11 OUTILS D ECRITURE CORRIGES pour produire du LF (newline='' sur open texte, ou open explicite a la place de write_text) : creer-fichier (write_text -> open newline=''), ecrire-fichier (backup + ecriture + append), ajouter-contenu-fichier, inserer-contenu-fichier, gerer-sous-mission (json.dump), generateurs-squelette-pense-bete/spec/todo, creer-remplir-pense-bete/spec/todo (write_text -> open).
+
+**Validations** : py_compile 12/12 + bash -n, --version py/sh identiques v0.1.0, dry-run sans modification, conversion reelle CRLF->LF verifiee octets, idempotence, binaire intact, erreur chemin, TEST REEL : creer-fichier ecrit desormais du LF (CRLF:0 LF:1), ASCII 0 sur 12 fichiers modifies, catalogue JSON valide 109 trie, generateur compose la commande.
+
+**Lecons** :
+1. LA CAUSE RACINE DU CRLF ETAIT NOS OUTILS, pas Git : Path.write_text() et open() en mode texte traduisent \n en \r\n sur Windows. Git autocrlf=true n etait qu un amplificateur. Corriger les outils = tarir la source ; .gitattributes = figer le depot (mission 2 Buffy).
+2. LE SCAN DES ECRITURES : open(..., 'w'/'a'...) SANS newline= et write_text() = sources de CRLF. Le mode binaire ('wb') est safe. Pattern correct : open(f, 'w', encoding='utf-8', newline='') (comme remplacer-texte.py).
+3. NE PAS TOUCHER AUX TESTS DE MORPHEUS : les tests (test-002, test-006) ecrivent volontairement des fichiers invalides - hors perimetre, laisse tels quels.
+4. INSERTION CATALOGUE : manipulation JSON programmatique (json.load -> insertion dans la liste a la position triee -> json.dumps(ensure_ascii=True, indent=2)) = fiable a 100% ; l insertion par concatenation de lignes (lecon cartographier-parcours) reste INTERDITE.
+5. LES FICHIERS .pyc COMMITES : py_compile regenere les .pyc -> les restaurer avec git restore (fichiers commites) pour ne pas polluer le working tree.
+6. PIEGE HEREDOC : les scripts heredoc avec backslashes echouent en JSON - ecrire les scripts dans des fichiers .tmp puis les executer.

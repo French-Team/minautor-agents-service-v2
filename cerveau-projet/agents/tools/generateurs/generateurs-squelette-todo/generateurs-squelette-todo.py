@@ -267,7 +267,8 @@ def main(argv=None):
 
     try:
         os.makedirs(args.dossier, exist_ok=True)
-        with open(chemin_fichier, "w", encoding="utf-8") as f:
+        # FIGER LF : newline='' evite la traduction CRLF Windows
+        with open(chemin_fichier, "w", encoding="utf-8", newline="") as f:
             f.write(squelette)
     except OSError as e:
         print(RED + "[ERREUR] Impossible de creer le fichier : " + str(e) + NC)
