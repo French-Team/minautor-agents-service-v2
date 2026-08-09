@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-vulcain",
     "agent": "vulcain",
-    "version": "0.2.6",
+    "version": "0.2.9",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Vulcain : construire un outil, modifier un outil. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.4 : REGLE DES 5 FICHIERS ajoutee dans c12 (apres toute modification de version, verifier l alignement VERSION/STATUT dans py, sh, md, spec + distinguer les versions propres du catalogue et de l index - lecon Vulcain, controle Janus). v0.2.3 : verification PARITE --version py/sh OBLIGATOIRE apres creation (c6) et modification (c12) d outil (lecon Morpheus T5 / Vulcain) - diff <(python3 outil.py --version | tr -d '\r') <(bash outil.sh --version | tr -d '\r'), si divergence aligner le .sh (VERSION/STATUT) avant de continuer. v0.2.2 : lecons des cas reels integrees. v0.2.1 : boucle de delegation MORPHEUS MATERIALISEE (RELAIS c9a/c15a -> RETOUR c9b/c15b -> CLOTURE c9c/c15c -> FIN c9/c15) - la chaine ne casse plus apres l'activation de Morpheus. v0.2.0 : les cases c7/c13 (corriger accents + valider ASCII) pointent vers le combo combo-corriger-ascii (Pattern 3, spec-guider-parcours v0.2.4)."
   },
@@ -158,6 +158,10 @@
         },
         {
           "type": "regle",
+          "texte": "CREATION LIMITEE AUX OUTILS (ROLE VULCAIN) : je cree des outils dans tools/ avec les 5 fichiers (py sh md spec test), uniquement sur mission de Cerberus. JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
+        {
+          "type": "regle",
           "texte": "ETAPE 3 OBLIGATOIRE : j'utilise TOUJOURS outil-template pour standardiser la creation de tout nouvel outil."
         },
         {
@@ -203,6 +207,10 @@
         {
           "type": "regle",
           "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX OUTILS (ROLE VULCAIN) : je cree des outils dans tools/ avec les 5 fichiers (py sh md spec test), uniquement sur mission de Cerberus. JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",
@@ -326,11 +334,15 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "texte": "CREATION LIMITEE AUX OUTILS (ROLE VULCAIN) : je cree des outils dans tools/ avec les 5 fichiers (py sh md spec test), uniquement sur mission de Cerberus. JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
         },
         {
           "type": "outil",
@@ -423,8 +435,13 @@
         {
           "reponse": "NON",
           "vers": "c18"
+        },
+        {
+          "reponse": "documentation",
+          "vers": "c16b"
         }
-      ]
+      ],
+      "suivant": "c16b"
     },
     "c17": {
       "titre": "Activer l'agent habilite",
@@ -508,6 +525,57 @@
         }
       ],
       "suivant": "c14"
+    },
+    "c16b": {
+      "titre": "Documentation / Mise a jour de ma fiche",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission et mises a jour (ma fiche, mes corrections, mes lecons - dossier de l agent ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case -> je signale a Cerberus (case Signaler le besoin)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+        },
+        {
+          "type": "outil",
+          "nom": "detecter-impacts",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py <fichier-modifie>"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        }
+      ],
+      "suivant": "c16c"
+    },
+    "c16c": {
+      "titre": "RVAV avant reactiver Cerberus",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail AVANT d activer le maillon suivant."
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
+          "raison": "Workflow RVAV obligatoire avant chaque activation"
+        }
+      ],
+      "suivant": "c16d"
+    },
+    "c16d": {
+      "titre": "FIN - Documentation",
+      "type": "fin",
+      "message": "Documentation mise a jour et validee (RVAV + detecter-impacts). Je REACTIVE Cerberus avec le bilan consolide : commande reactiver session-llm-1 <raison> <agent_precedent> (le 3e argument est obligatoire)."
     }
   }
 }

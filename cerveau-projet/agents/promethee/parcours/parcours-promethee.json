@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-promethee",
     "agent": "promethee",
-    "version": "0.1.4",
+    "version": "0.1.6",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Promethee : redacteur de specs. 2 missions (creer une spec, completer une spec). A la fin de chaque mission, j'active Minerve pour le todo (FLUX). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
   },
@@ -129,7 +129,15 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
           "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande generateurs-squelette-spec --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX SPECS : je cree uniquement des specs (dossier specs/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "outil",
@@ -141,10 +149,6 @@
         {
           "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",
@@ -166,11 +170,15 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "texte": "CREATION LIMITEE AUX SPECS : je cree uniquement des specs (dossier specs/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
         },
         {
           "type": "regle",
@@ -236,11 +244,15 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "texte": "CREATION LIMITEE AUX SPECS : je cree uniquement des specs (dossier specs/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
         },
         {
           "type": "regle",
@@ -268,6 +280,10 @@
         {
           "type": "regle",
           "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX SPECS : je cree uniquement des specs (dossier specs/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",
@@ -351,6 +367,10 @@
         {
           "type": "regle",
           "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX SPECS : je cree uniquement des specs (dossier specs/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",

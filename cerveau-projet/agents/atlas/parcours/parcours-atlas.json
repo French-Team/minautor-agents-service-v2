@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-atlas",
     "agent": "atlas",
-    "version": "0.1.5",
+    "version": "0.1.7",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. PILOTE STRICT v0.1.2 : commandes composees via le generateur (catalogue), aucun fallback en dur."
   },
@@ -220,11 +220,11 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",
@@ -250,6 +250,10 @@
         {
           "type": "regle",
           "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",
@@ -307,6 +311,10 @@
         {
           "type": "regle",
           "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",
@@ -391,15 +399,15 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
           "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",
@@ -420,15 +428,15 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
           "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",
@@ -537,15 +545,15 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
           "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",

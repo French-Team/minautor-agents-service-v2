@@ -161,6 +161,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `generateurs-commande` | Composer et generer une commande complexe en posant une question par parametre | [generateurs/generateurs-commande/](generateurs/generateurs-commande/) |
 | `generateurs-case` | Ajouter, editer, supprimer une case OU ajouter un bloc modele compose (decision + deviation + rejoint, Pattern 7) d'une carte de decision (parcours JSON) avec recablage auto et validation | [generateurs/generateurs-case/](generateurs/generateurs-case/) |
 | `generateurs-carte` | Agir sur une carte COMPLETE (parcours JSON) : creer un squelette (patterns 4-5-6-7), analyser les chemins, detecter les anomalies (boucles/inatteignables/impasses), dupliquer un chemin | [generateurs/generateurs-carte/](generateurs/generateurs-carte/) |
+| `generateurs-outil-temporaire` | Generer un outil temporaire (script Python jetable) dans le workspace : en-tete standard (identite outil-temporaire, ASCII, LF), dry-run par defaut, question de promotion (2e utilisation -> activer Vulcain) | [generateurs/generateurs-outil-temporaire/](generateurs/generateurs-outil-temporaire/) |
 | `generateurs-regenerer-catalogue` | Regenerer/synchroniser le catalogue de commandes du generateur a partir des outils reels (descriptions extraites des en-tetes .py, 2 formats) | [generateurs/generateurs-regenerer-catalogue/](generateurs/generateurs-regenerer-catalogue/) |
 
 ### Gerer

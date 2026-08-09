@@ -742,3 +742,95 @@ les mots composees deja qualifies (role_principal, role_specifique) restent inch
 4. INSERTION CATALOGUE : manipulation JSON programmatique (json.load -> insertion dans la liste a la position triee -> json.dumps(ensure_ascii=True, indent=2)) = fiable a 100% ; l insertion par concatenation de lignes (lecon cartographier-parcours) reste INTERDITE.
 5. LES FICHIERS .pyc COMMITES : py_compile regenere les .pyc -> les restaurer avec git restore (fichiers commites) pour ne pas polluer le working tree.
 6. PIEGE HEREDOC : les scripts heredoc avec backslashes echouent en JSON - ecrire les scripts dans des fichiers .tmp puis les executer.
+## [LECON] 2026-08-09 -- TESTS OBSOLETES CORRIGES (versions en dur alignees sur la realite)
+
+**Contexte** : la non-regression post-migration FIGER LF (Morpheus) a revele que 2 tests codent des versions en dur devenues obsoletes apres des bumps legitimes : test-004 (parcours morpheus v0.1.2) et test-005 (catalogue 0.2.2, atlas v0.1.2).
+
+**Livrables** :
+1. test-004-combos-tester-outil.py : v0.1.2 -> v0.1.3 (3 occurrences : docstring, commentaire, verifier 7a) + .md (1 occurrence).
+2. test-005-generateurs-commande.py : catalogue 0.2.2 -> 0.2.3 (docstring + verifier 14), atlas v0.1.2 -> v0.1.5 (docstring, titre, commentaire de section x2, verifier 17, except 17) + note historique v0.1.2 -> v0.1.5 ajoutee + .md (titre, description, tableau d evolution complete, section 17).
+
+**Resultats** : test-004 16/16 VALIDE (avant 15/16), test-005 25 OK / 1 KO (avant 23/26) - seul KO restant = point 18 (1 commande en dur restante case c30 atlas = PISTE C, mission separee, NON modifie).
+
+**Validations** : ASCII 0 sur les 4 fichiers, LF pur (CRLF 0), py_compile OK, aucun fichier cree hors test.
+
+**Lecons** :
+1. Les tests qui verifient une version doivent etre mis a jour A CHAQUE bump de version du fichier cible - c est la regle des 5 fichiers appliquee aux tests.
+2. NE PAS toucher les versions du generateur (v0.2.1) : seules les 3 versions cibles (morpheus 0.1.3, catalogue 0.2.3, atlas 0.1.5) etaient obsoletes - verifier la SOURCE DE VERITE avant de remplacer.
+3. Les notes historiques (v0.1.1 -> v0.1.2) sont PRESERVEES et completees (ajout d une ligne v0.1.2 -> v0.1.5) - ne jamais effacer l historique.
+4. Le point 18 (piste C) reste KO volontairement : la mission ne couvre pas la conversion de la derniere commande en dur (case c30 atlas).
+## [LECON] 2026-08-09 -- FAUX POSITIF EVALUER-COHERENCE CORRIGE (scan limite aux 11 agents)
+
+**Contexte** : la non-regression post-migration (Morpheus) a revele que evaluer-coherence signalait 4 outils introuvables (statut-mission, contexte, resultats, erreurs) - en realite des VARIABLES du classeur-variables, pas des outils.
+
+**Cause racine** : la section 4 (Outils references par les agents) des 2 versions py et sh iterait sur TOUS les dossiers de agents/ ayant un fichier nom.md. Le dossier classeur-variables/ possede classeur-variables.md et etait donc scanne comme une fiche d agent, ses variables entre backticks etant interpretees comme des outils inexistants.
+
+**Correction structurelle** : scan limite aux 11 agents officiels (AGENTS_ATTENDUS) au lieu de os.listdir (py) / find -type d (sh). classeur-variables/ et tout futur dossier non-agent sont ignores PAR CONCEPTION (pas une liste d exclusion a maintenir, mais un scan borne).
+
+**Versions** : bump 0.2.1 vers 0.2.2 dans py (VERSION + docstring), sh (VERSION + en-tete), md (Version + tableau Versionning). Pas de spec existante.
+
+**Verifications** : py et sh affichent tous deux OK Tous les outils references existent (0 faux positif), parite py/sh confirmee, test-001-evaluer-agents-coherence 8/8 REUSSI (le point 6 attendait deja cette correction), ASCII 0, LF pur, py_compile + bash -n OK, 0 residu.
+
+**Lecons** :
+1. Un scan qui itere sur os.listdir / find -type d d un dossier racine balaye TOUS les sous-dossiers, pas seulement les cibles prevues - borner le scan a une liste explicite (AGENTS_ATTENDUS) est plus robuste qu ajouter des exclusions une par une.
+2. Le classeur-variables est un dossier de DONNEES dans agents/, pas une fiche d agent : il ne doit jamais etre scanne comme tel.
+3. Le .sh de evaluer-coherence est lent par conception (2 find par backtick par fiche : ~100s) - c est un comportement connu, la version py est la reference pour l usage courant.
+4. Parite py/sh : appliquer la MEME correction aux 2 versions, puis prouver la parite en executant les 2 (sorties identiques sur la section corrigee).
+## [LECON] 2026-08-09 -- ECART P14 : identification vulcain.md mise a jour (parcours v0.2.8)
+
+**Mission** : corriger l'ecart P14 du re-audit Themis -- vulcain.md (mtime 11:02) plus ancien que parcours-vulcain.json (mtime 13:05, v0.2.8).
+
+**Actions** :
+1. Section PARCOURS de vulcain.md : mention parcours v0.2.8 ajoutee au lien Parcours.
+2. Spec du format alignee v0.2.5 -> v0.2.25 (version reelle de la spec-guider-parcours).
+3. Entree d'historique 2026-08-09 ajoutee (corrections Buffy P2 + P12, bump v0.2.7 -> v0.2.8).
+
+**Resultats** : vulcain.md passe de NON MIS A JOUR a A JOUR dans detecter-impacts (mtime 13:09 > 13:05). ASCII 0, LF pur.
+
+**Lecons** :
+1. Une fiche d'agent reference son parcours comme SOURCE DE VERITE : a chaque bump de version du parcours par un autre agent (Buffy, etc.), la fiche doit etre mise a jour en meme temps -- sinon detecter-impacts la signale NON MIS A JOUR (Pattern 14).
+2. La spec du format est referencee dans la fiche (spec-guider-parcours) : sa version doit rester alignee (v0.2.25 ici) pour eviter des references obsoletes.
+3. Les notes de mission (mission-*.md, priorite-outils.md, resume-creation-outils.md) sont des documents figes (type: note, sans champ version) : detecter-impacts les signale mais c'est une JUSTIFICATION legitime -- il ne faut pas les toucher pour le seul plaisir d'un mtime recent.
+4. detecter-impacts compare les mtime : apres toute edition, verifier que le fichier cible est bien plus recent que la modification source avant de conclure.
+## [LECON] 2026-08-09 -- PATTERN 15 MODE MONO-LLM documente dans la spec-guider-parcours (v0.2.26)
+
+**Mission** : documenter le Pattern 15 (MODE MONO-LLM) dans la spec-guider-parcours apres le diagnostic Cerberus (2 missions arretees apres l'activation de Themis).
+
+**Diagnostic (Cerberus)** : la carte de Cerberus case c10 ordonne de continuer (suivant c7) ; activer-agent-principal.py ne fait AUCUN sous-processus (0 subprocess/os.system/Popen/exec) -- il ecrit 3 fichiers de trace ; en mode multi-LLM l'arret apres activation est correct (un autre LLM reprend) ; en mode mono-LLM l'arret bloque la mission.
+
+**Modifications spec-guider-parcours (v0.2.25 -> v0.2.26)** :
+1. Titre aligne v0.2.19 -> v0.2.26 (decalage preexistant corrige).
+2. Pattern 15 insere apres le Pattern 14 (regles : l'activation ne clot PAS le tour, l'agent active est joue immediatement dans le meme tour, l'arret n'est valable qu'en mode multi-LLM).
+3. Procedure 4c renommee RE-AUDIT COMPLET DES 15 PATTERNS + procedure 4m (mode mono-llm) ajoutee.
+4. Critere 26 (MODE MONO-LLM) ajoute a la section criteres d'acceptation (1 a 26).
+5. Historique + Agent (ligne 12/13) : entree v0.2.26 ajoutee.
+6. Section Patterns valides en production : 14 -> 15 patterns.
+
+**Impacts alignes (Pattern 14)** : vulcain.md (spec v0.2.25 -> v0.2.26), guider-parcours.md (spec v0.2.5 -> v0.2.26 -- reference obsolete de longue date corrigee au passage). Les fiches agents referencent la spec sans version precise : pas d'impact de version.
+
+**Validations** : ASCII 0 + LF pur sur les 3 fichiers modifies (spec, vulcain.md, guider-parcours.md), coherence verifiee (6 occurrences Pattern 15, 11 occurrences v0.2.26, 5 occurrences 15 patterns), 0 residu .tmp.
+
+**Lecons** :
+1. Un diagnostic d'arret de mission doit distinguer : la carte (structure), l'outil (mecanisme) et le comportement LLM (execution) -- ici les 3 niveaux ont ete examines, la cause etait le comportement mono-LLM.
+2. Le titre d'une spec peut prendre du retard par rapport a son historique : verifier le titre (ligne # Spec) a chaque bump, pas seulement l'historique.
+3. Une spec modifiee IMPACTE les fichiers qui la referencent avec une version : verifier avec detecter-impacts ET grep des versions dans les fiches/docs.
+## [LECON] 2026-08-09 -- CORRECTION Pattern 15 v0.2.27 : JAMAIS D'ARRET, meme en multi-LLM
+
+**Mission** : corriger le Pattern 15 (v0.2.26) qui autorisait l'arret apres activation en mode multi-LLM. Correction utilisateur : les LLM travaillent EN PARALLELE chacun dans sa session -- l'activation documente le role de SA session uniquement, elle ne delegue JAMAIS l'execution a un autre LLM (aucun relais n'existe).
+
+**Modifications spec-guider-parcours (v0.2.26 -> v0.2.27)** :
+1. Titre du Pattern 15 : 'MODE MONO-LLM' -> 'JAMAIS D ARRET APRES L ACTIVATION'.
+2. Intro : suppression de la fausse idee de relais (un AUTRE LLM prend le relais) -> les LLM travaillent en parallele, l'activation documente le role de SA session uniquement.
+3. Regle 3 : 'l'arret n'est VALABLE qu'en mode multi-LLM' -> 'l'arret est TOUJOURS fautif dans AUCUN mode'.
+4. Regle 5 : suppression du cas particulier qui autorisait l'arret en multi-LLM.
+5. Conclusion : pas d'arret dans AUCUN mode (mono comme multi).
+6. Critere 26 : renomme 'JAMAIS D ARRET APRES L ACTIVATION (v0.2.27)' avec la meme correction.
+7. Versions : titre + historique + Agent + patterns valides + procedure 4c/4m -> v0.2.27.
+8. Impacts alignes : vulcain.md et guider-parcours.md (spec v0.2.26 -> v0.2.27).
+
+**Validations** : 0 formulation fautive restante (la seule occurrence restante est la trace HISTORIQUE de v0.2.26 dans la ligne 13, suivie de la correction v0.2.27 -- comportement correct de l'historique), 11x v0.2.27, ASCII 0 + LF pur sur les 3 fichiers, 0 residu.
+
+**Lecons** :
+1. Une regle documentee peut etre corrigee par l'utilisateur quelques minutes apres sa creation : l'historique doit TRACER la version fautive PUIS la correction (ne pas effacer la trace), mais le CORPS du pattern doit etre corrige partout (intro, regles, conclusion, critere).
+2. Le mode multi-LLM n'implique AUCUN relais : chaque LLM travaille en parallele dans sa session. La delegation entre agents est un changement de ROLE dans la meme session, jamais un transfert vers un autre LLM.
+3. Quand l'utilisateur corrige une formulation, verifier TOUTES les occurrences (intro, regles, conclusion, critere, historique) -- un grep cible ('valable qu.en mode multi-LLM') confirme qu'il ne reste que la trace historique legitime.

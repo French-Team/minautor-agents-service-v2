@@ -2,13 +2,13 @@
 # evaluer-coherence.sh
 # Evalue la coherence inter-fichiers : liens, references croisees
 # Proprietaire : Themis (outil partage)
-# Version : 0.2.1
+# Version : 0.2.2
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.1"
+VERSION="0.2.2"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -192,8 +192,9 @@ echo ""
 echo "## Outils references par les agents"
 total=$((total + 1))
 outils_casses=0
-while IFS= read -r agent_dir; do
-    agent_md="$agent_dir/$(basename "$agent_dir").md"
+for agent in cerberus buffy athena atlas clio janus minerve morpheus promethee vulcain themis; do
+    agent_dir="$dossier/cerveau-projet/agents/$agent"
+    agent_md="$agent_dir/$agent.md"
     [ -f "$agent_md" ] || continue
     while IFS= read -r outil_ref; do
         # Extraire le nom de l'outil entre backticks
@@ -218,7 +219,7 @@ while IFS= read -r agent_dir; do
             fi
         fi
     done < <(grep -oE '`[a-z-]+`' "$agent_md" 2>/dev/null)
-done < <(find "$dossier/cerveau-projet/agents" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
+done
 
 if [ "$outils_casses" -eq 0 ]; then
     echo "| OK | Outils references | Tous les outils references existent |"

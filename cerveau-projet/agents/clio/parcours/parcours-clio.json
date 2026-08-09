@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-clio",
     "agent": "clio",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Clio : corriger le README (journal, verifier, maj, insertion manuelle si nouvelle categorie, ASCII, lecons) et verifier le README. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
   },
@@ -219,6 +219,10 @@
         },
         {
           "type": "regle",
+          "texte": "CREATION LIMITEE AU README ET AUX LECONS : je mets a jour uniquement le README et mes lecons (dossier de l agent, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
+        {
+          "type": "regle",
           "texte": "Format de ligne : | **Categorie (N)** | outils | usage |. Inserer a la bonne place alphabetique dans la table des outils."
         },
         {
@@ -256,6 +260,10 @@
         {
           "type": "regle",
           "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AU README ET AUX LECONS : je mets a jour uniquement le README et mes lecons (dossier de l agent, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",

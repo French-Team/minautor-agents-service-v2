@@ -319,3 +319,49 @@ identite:
 2. Le critere 23 (CREATION LIMITEE, Pattern 12) n'a pas de case dediee mais est structurel : il est verifie par l'audit des cases de creation (indice regle en tete) -- pas besoin de case dediee.
 3. La couverture reelle des criteres 1-21 repose sur 3 piliers : (a) tests formels Morpheus (criteres 1-7, 16), (b) combo audit-themis en c3 (criteres 8, 13, et structure globale), (c) procedures d'audit 1-4l rejouees integralement (criteres 9-21, 23 via procedure 4c RE-AUDIT COMPLET).
 4. Risque residuel : si Morpheus ne teste pas guider-parcours ou si le combo audit-themis n'est pas lance, les criteres 1-7 et 16 ne sont couverts par RIEN. Le re-audit complet (procedure 4c) reste le filet de securite.
+## [LECON] 2026-08-09 -- RE-AUDIT COMPLET DES 14 PATTERNS (11 parcours) : 65 ECARTS P2/P12
+
+**Contexte** : mission Cerberus (decision utilisateur) : re-audit integral de la procedure 4c (spec-guider-parcours v0.2.25) sur les 11 parcours. La spec contient desormais 14 patterns (le Pattern 14 verification d impact a ete ajoute apres les 13).
+
+**Verdict** : NON CONFORME a 100 % -- 10 parcours sur 11 portent des ecarts sur 2 patterns :
+- P2 (rappel ASCII position 1) : 28 ecarts -- la procedure 2 exige que le PREMIER indice des cases d'ecriture soit REGLE IMMUABLE ASCII. Les ajouts recents (piste B PASSE PAR LE GENERATEUR, REGLE WORKSPACE, CREATION LIMITEE) ont ete inseres en position 1, repoussant l ASCII en position 2+. Seul cerberus est conforme.
+- P12 (CREATION LIMITEE) : 37 ecarts -- les cases de creation/documentation ne portent pas l indice regle CREATION LIMITEE (perimetre + roles exclus). Les cases Lecons et retour comptent comme cases de documentation (procedure 4j). Atlas est partiellement conforme (c9/c18/c19/c25 ont le garde-fou).
+- P14 (verification d impact) : 1 ecart -- vulcain.md plus ancien que parcours-vulcain.json (identification non mise a jour).
+
+**Conformes 11/11** : P1 multi-missions, P3 combos, P4 question honnete, P5 fins actives (0 passive), P6 contexte temps reel, P7 modele compose, P8 chaine bout-en-bout, P9 lire le .md (guider v0.3.1, 0 vrai manquant), P10 une carte = un role (valider-cartes-decision 11/11), P11 conformite d execution (c8b), P13 la fin suit SA carte (c8d). ASCII 0, CRLF 0.
+
+**Lecons** :
+1. LA PROCEDURE 2 EST STRUCTURELLE, PAS TEXTUELLE : une regle ASCII PRESENTE en position 2+ ne suffit pas -- la position 1 (premier indice) doit ETRE REGLE IMMUABLE ASCII. Les ajouts recents (piste B, workspace) ont silencieusement viole cette regle en inserant leurs regles en tete.
+2. VERIFIER LES AJOUTS RECENTS : chaque fois qu une piste insere un indice (PASSE PAR LE GENERATEUR, REGLE WORKSPACE, CREATION LIMITEE), il faut verifier qu elle ne deplace pas une regle structurelle de position 1.
+3. NE PAS LAISSER DE POLLUTION D AUDIT : mes scripts .tmp-* d audit ont fait remonter 185 documents manquants dans verifier-documents-manquants (faux positifs) -- nettoyer les .tmp AVANT de relancer les outils de verification.
+4. LES FINS ACTIVES : la navigation --reponses 'OUI' s arrete a la question Mission (MODE AGENT NON-BLOQUANT, comportement attendu) -- la preuve de navigation bout-en-bout vient des tests formels (test-005) et de valider-cartes-decision, pas d un chemin OUI simple.
+5. LE PATTERN 12 COMPTE LES CASES LECONS : les cases Lecons et retour (retour dans corrections.md) sont des cases de documentation au sens de la procedure 4j -- elles doivent porter le garde-fou.
+6. ACTIONS RECOMMANDEES : deplacement de l ASCII en position 1 (via generateurs-case, critere 17), ajout du garde-fou CREATION LIMITEE (modele = atlas c9/c18/c19/c25), maj identification vulcain.md, puis re-audit 4c.
+## [LECON] 2026-08-09 -- RE-AUDIT 4c v2 : CONFORME 11/11 apres corrections P2/P12/P14
+
+**Mission** : re-audit complet 4c de confirmation (spec-guider-parcours v0.2.25) apres les corrections Buffy (P2 : 28 cases position ASCII, P12 : 37 garde-fous CREATION LIMITEE) et Vulcain (P14 : identification vulcain.md).
+
+**Verdict** : CONFORME 11/11 parcours, 0 ecart structurel restant. Les 65 ecarts du precedent re-audit sont tous corriges (P2 28->0, P12 37->0, P14 1->0).
+
+**Methodes** :
+1. Diagnostic code avant audit : quand l utilisateur signale un probleme de blocage, VERIFIER d abord par execution reelle (JSON valide, guider-parcours --liste, navigation --reponses, valider-cartes-decision, ASCII/EOL) avant de conclure a un bug. Ici le code n etait PAS casse : 11/11 JSON valides, 11/11 CONFORME, navigation propre. La cause des arrets etait un comportement d execution (arret de tour apres activation), pas une regression des cartes.
+2. Audit structurel par script Python : P2/P12 scanne les cases d ecriture (position 1 ASCII + garde-fou CREATION LIMITEE), P5 compte les fins passives, P8 verifie les references suivant/branches, P4 verifie la question honnete c0.
+3. Les combos (P3) sont references via des indices fichier/outil avec mention combo dans le texte, pas un type combo dedie : le scan type=='combo' sous-compte, il faut chercher dans nom+texte.
+4. P10 : valider-cartes-decision est l outil de reference (11/11 CONFORME), le controle structurel cerberus-outils=14 n est pas un ecart (outils de coordination : activer-agent-principal, guider-parcours).
+5. Les rapports Themis dans themis/rapports/ ont leur propre convention de nommage (pas de prefixe themis-) : valider-nommage les signale en faux positif, coherent avec le rapport v1 existant.
+
+**Livrables** : rapport-audit-complet-14-patterns-11-parcours-2026-08-09-v2.md (ASCII 0, LF pur).
+## [LECON] 2026-08-09 -- AUDIT CONFORMITE D'EXECUTION P14 : 5/6 points conformes, lacune de carte
+
+**Mission** : auditer (Pattern 11, procedure 4i) si l'execution reelle de la mission P14 (mise a jour identification vulcain.md) a suivi la carte de Vulcain.
+
+**Verdict** : 5/6 points conformes (relecture, Pattern 9 lire le .md, Pattern 14 verification d'impact, RVAV, POINT 6 REACTIVER conforme). 1 ecart : lacune de carte -- le parcours-vulcain v0.2.8 n'a AUCUNE case pour les missions de mise a jour de documentation/fiche (les 3 chemins sont construire/modifier/hors-parcours->signaler). L'agent a du devier de sa carte pour accomplir une mission legitime que la carte ne couvre pas.
+
+**Lecons** :
+1. LA CONFORMITE D'EXECUTION PEUT REVELER DES LACUNES DE CARTE : quand l'execution reelle est correcte mais qu'aucune case ne correspond au type de mission, l'ecart est STRUCTUREL (la carte), pas une faute de l'agent. Le Pattern 11 ne doit pas conclure 'conforme' pour une mission que la carte ne couvre pas -- il doit signaler la lacune.
+2. VERIFIER PAR NAVIGATION REELLE : pour savoir ce que la carte ordonne, lancer guider-parcours --case c1 --reponses pour tracer le chemin complet (ici 'autre' -> c16 -> NON -> c18 'Signaler le besoin' qui ordonne de ne rien faire). Ne jamais supposer le contenu d'une case.
+3. LE POINT 6 REACTIVER SE PROUVE PAR REUSSITE : la commande reactiver exige le 3e argument agent_precedent -- son echec produit 'ERREUR: Parametres manquants'. Une reussite dans la trace AGENTS-historique est la preuve que la syntaxe etait bonne.
+4. VERIFIER LES ACCENTS AVANT DE CONCLURE : les guillemets francais << >> (0xAB/0xBB) ne sont PAS couverts par corriger-accents-zones-sensibles (dictionnaire d'accents seulement) -- les remplacer par des guillemets simples et revalider (lecon : corriger par l'outil, puis si l'outil ne couvre pas le caractere, reecrire en ASCII strict).
+5. Les missions de documentation (mise a jour de fiche/corrections) sont un type de mission commun a tous les agents : la lacune de carte est probablement partagee (vulcain, buffy, atlas) -- a verifier au prochain audit 4c.
+
+**Livrables** : rapport-audit-conformite-execution-p14-2026-08-09.md (ASCII 0, LF pur).

@@ -3,7 +3,7 @@
 """
 test-005-generateurs-commande.py
 Test formel du generateur de commande v0.2.1 (fiabilisation des flags optionnels)
-et du parcours Atlas v0.1.2 (pilote strict : commandes en dur retirees).
+et du parcours Atlas v0.1.5 (pilote strict : commandes en dur retirees).
 
 Objet (correction Buffy 2026-08-09) :
   - composer_commande avait une condition INVERSEE : les flags optionnels non
@@ -14,6 +14,7 @@ Objet (correction Buffy 2026-08-09) :
     remplaces par des placeholders {cle} : reponse oui = flag present, non = absent.
   - parcours-atlas v0.1.1 -> v0.1.2 : 24 commandes en dur retirees des indices
     outil avec catalogue (ne restent que type/nom/catalogue/chemin).
+  - parcours-atlas v0.1.2 -> v0.1.5 : versions posterieures du pilote strict.
 
 Cas couverts (22 points) :
   GENERATEUR v0.2.1
@@ -30,11 +31,11 @@ Cas couverts (22 points) :
  11. flag booleen ecrire-fichier backup=non : --backup ABSENT (py)
  12. parite py/sh : commande composee identique (CRLF normalise)
  13. catalogue JSON valide (json.load)
- 14. catalogue version = 0.2.2
+ 14. catalogue version = 0.2.3
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
-  PARCOURS ATLAS v0.1.2
- 17. parcours-atlas.json : json.load valide + version 0.1.2
+  PARCOURS ATLAS v0.1.5
+ 17. parcours-atlas.json : json.load valide + version 0.1.5
  18. 0 champ commande restant dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
@@ -107,7 +108,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.1 + parcours-atlas v0.1.2 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.1 + parcours-atlas v0.1.5 ===")
     print("")
 
     # ---------- GENERATEUR v0.2.1 ----------
@@ -156,7 +157,7 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         verifier(13, "catalogue-commandes.json JSON valide", True)
-        verifier(14, "catalogue version = 0.2.2", cat.get("version") == "0.2.2", str(cat.get("version")))
+        verifier(14, "catalogue version = 0.2.3", cat.get("version") == "0.2.3", str(cat.get("version")))
     except Exception as e:
         verifier(13, "catalogue-commandes.json JSON valide", False, str(e))
         verifier(14, "catalogue version = 0.2.0", False, "")
@@ -168,14 +169,14 @@ def main():
     ok = cmd is not None and "creer-fichier.py x.md" in cmd and "hello" in cmd
     verifier(16, "non-regression creer-fichier composee correctement", ok, str(cmd))
 
-    # ---------- PARCOURS ATLAS v0.1.2 ----------
+    # ---------- PARCOURS ATLAS v0.1.5 ----------
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.1.2",
-                 p.get("parcours", {}).get("version") == "0.1.2", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.1.5",
+                 p.get("parcours", {}).get("version") == "0.1.5", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.1.2", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.1.5", False, str(e))
         p = {}
 
     n_commande = 0

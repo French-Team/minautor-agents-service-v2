@@ -883,3 +883,56 @@ Rappel insere en tete des cases d'ecriture des 10 parcours (32 cases).
 4. detecter-usage-outils-externes : les seuls suspects restants apres migration sont les exceptions declarees (dictionnaires fonctionnels, exemples/, log-externe.md) - un resultat 0 absolu est IMPOSSIBLE par conception, le controle est : 0 suspect HORS exceptions.
 5. Le .bak suivi par git (buffy/corrections.md.bak) est converti en LF comme les autres fichiers - c est un fichier commite, le commit de migration l inclura naturellement.
 6. Verifier l'idempotence apres correction de l outil : 2e passe = 0 converti prouve que le fichier est stable.
+## [LECON] 2026-08-09 -- ECARTS P2 CORRIGES : REGLE IMMUABLE ASCII EN POSITION 1 (28 cases, 9 parcours)
+
+**Contexte** : le re-audit Themis des 14 patterns a revele 28 ecarts P2 (procedure 2 : le premier indice de chaque case d ecriture doit etre REGLE IMMUABLE ASCII). Les ajouts recents (piste B PASSE PAR LE GENERATEUR, REGLE WORKSPACE, CREATION LIMITEE) avaient insere leurs regles en position 1, repoussant l ASCII en position 2+.
+
+**Correction** : edition chirurgicale des JSON (json.load / reordonnancement / json.dump avec newline vide pour LF pur), version bump a chaque parcours modifie.
+
+**Resultat** : 28 cases corrigees sur 9 parcours (athena 2, atlas 4, buffy 9, janus 4, minerve 3, morpheus 1, promethee 3, themis 1, vulcain 1) + 3 cases SANS regle ASCII (buffy c19, c24, janus c9) ont recu la regle ajoutee en position 1. RE-AUDIT P2 : 0 ecart restant sur les 11 parcours (36 cases d ecriture toutes conformes).
+
+**Validations** : JSON valide (9/9), valider-cartes-decision CONFORME (9/9), navigation --liste OK (athena 23, buffy 43, vulcain 25 cases), ASCII 0, LF pur, versions bump : athena 0.1.5, atlas 0.1.6, buffy 0.2.7, janus 0.2.4, minerve 0.1.5, morpheus 0.1.4, promethee 0.1.5, themis 0.2.6, vulcain 0.2.7. Aucune fiche d agent a mettre a jour (les mentions de version sont des notes historiques ou references a la spec, pas au parcours).
+
+**Lecons** :
+1. LA CORRECTION P2 EST UN REORDONNANCEMENT, PAS UNE CREATION : la regle ASCII existait dans 25/28 cases en position 2+ - il suffit de la deplacer en position 1. Mais 3 cases (buffy c19/c24, janus c9) n avaient AUCUNE regle ASCII : la procedure exige qu elle soit AJOUTEE.
+2. GENERATEURS-CASE ne gere pas le reordonnancement fin des indices - l edition chirurgicale du JSON (json.load/dump) avec newline vide est la methode fiable pour reordonner sans casser le format (indent 2, LF pur).
+3. UNIFORMITE DU TEXTE : le texte de la regle ASCII doit etre IDENTIQUE aux autres cases (y compris le double pourcent 100%% present dans les JSON) - la procedure 2 exige un texte UNIFORME.
+4. BUMP DE VERSION A CHAQUE PARCOURS MODIFIE : ne pas oublier de bumper 0.x.y -> 0.x.y+1 dans le JSON (les fiches ne mentionnent pas la version du parcours sauf en notes historiques - ne pas les modifier).
+5. VERIFICATION AVANT CONCLUSION : toujours relancer le script de verification position 1 apres correction (0 ecart restant = preuve).
+## [LECON] 2026-08-09 -- PATTERN 12 APPLIQUE : 37 GARDE-FOUS CREATION LIMITEE INSERES (10 parcours)
+
+**Contexte** : le re-audit Themis des 14 patterns a revele 37 ecarts P12 : les cases de creation/documentation ne portaient pas l indice regle CREATION LIMITEE (perimetre + roles exclus) exige par la procedure 4j.
+
+**Correction** : insertion d un indice regle CREATION LIMITEE dans les 37 cases, texte ADAPTE AU ROLE DE CHAQUE AGENT (athena pense-betes, minerve todos, promethee specs, themis rapports d audit, clio README+lecons, janus missions de controle, morpheus lecons, buffy fichiers du cerveau, atlas documentation, vulcain EXCEPTION outils - il est habilite a creer des outils avec les 5 fichiers). Toutes les cases portent le suffixe commun des roles exclus (JAMAIS outil hors role, JAMAIS test Morpheus, JAMAIS case de parcours Buffy, signaler a Cerberus si manquant).
+
+**Position d insertion** : apres la regle ASCII en position 1 (preservation de la correction P2) ; si PASSE PAR LE GENERATEUR est en position 1, inserer en position 2 (athena c4 : [0] ASCII, [1] GENERATEUR, [2] CREATION LIMITEE).
+
+**Resultat** : 37/37 garde-fous inseres (0 manque), versions bump : athena 0.1.6, atlas 0.1.7, buffy 0.2.8, clio 0.1.4, janus 0.2.5, minerve 0.1.6, morpheus 0.1.5, promethee 0.1.6, themis 0.2.7, vulcain 0.2.8.
+
+**Validations** : re-audit P12 0 manque, NON-REGRESSION P2 0 ecart (position 1 ASCII preservee), JSON valide 10/10, valider-cartes-decision CONFORME 10/10, navigation --liste OK, ASCII 0, LF pur, 0 residu.
+
+**Lecons** :
+1. LE GARDE-FOU P12 EST ADAPTE AU ROLE, PAS UN COPIER-COLLER : athena ne cree pas de rapports d audit (themis) ni d outils (vulcain) - le texte doit refleter le perimetre reel de l agent. Seule l EXCEPTION vulcain (habilite a creer des outils) differe du modele JAMAIS outil.
+2. INSERTION SANS ECRASER LA CORRECTION P2 : le garde-fou s insere APRES la regle ASCII en position 1 (position 2 si PASSE PAR LE GENERATEUR est en position 1) - les 2 patterns P2 et P12 coexistent sans conflit.
+3. LES CASES LECONS COMPTENT : les cases Lecons et retour (retour dans corrections.md) sont des cases de documentation au sens de la procedure 4j - elles ont recu le garde-fou comme les autres.
+4. VULCAIN = EXCEPTION ASSUMEE : sa carte porte le garde-fou adapte (outils avec 5 fichiers, mais JAMAIS test Morpheus, JAMAIS case Buffy) - documenter cette exception pour eviter que l audit la signale comme anomalie.
+5. VERIFICATION EN DEUX PASSES : re-audit P12 (0 manque) + re-audit P2 (0 regression) - chaque correction de pattern doit prouver qu elle n a pas casse le pattern precedent.
+## [LECON] 2026-08-09 -- CASE DOCUMENTATION AJOUTEE AU PARCOURS-VULCAIN (v0.2.9)
+
+**Mission** : corriger la lacune de carte revelee par l audit de conformite d execution P14 (Themis) -- le parcours-vulcain n avait AUCUNE case pour les missions de mise a jour de documentation/fiche.
+
+**Modifications parcours-vulcain (v0.2.8 -> v0.2.9)** :
+1. Branche 'documentation' ajoutee dans c16 (Mission hors parcours) -> c16b.
+2. Case c16b (indice) 'Documentation / Mise a jour de ma fiche' : REGLE IMMUABLE ASCII (position 1, Pattern 2) + CREATION LIMITEE A LA DOCUMENTATION (Pattern 12, adaptee au role : rapport de mission + mises a jour fiche/corrections/lecons, JAMAIS tools/) + REGLE WORKSPACE + indice outil detecter-impacts (Pattern 14) + indice fichier .md auto (Pattern 9).
+3. Case c16c (indice) 'RVAV avant reactiver Cerberus' : REGLE RVAV + fichier rvav-workflow.md.
+4. Case c16d (fin) 'FIN - Documentation' : reactiver Cerberus avec bilan (rappel du 3e argument agent_precedent obligatoire, lecon reactiver).
+5. Version bump 0.2.8 -> 0.2.9 + vulcain.md aligne.
+
+**Validations** : navigation chemin documentation (c16 -> c16b -> c16c -> c16d FIN) OK, valider-cartes-decision CONFORME, references validees 27 cases, ASCII 0, LF pur, detecter-impacts (vulcain.md + corrections.md a jour apres lecon).
+
+**Lecons** :
+1. GENERATEURS-CASE EST L OUTIL DE REFERENCE : ajouter/editer/supprimer des cases avec recablage auto + validation auto (references + guider-parcours --liste) -- ne jamais editer le JSON a la main pour les cases.
+2. UNE CASE DE DOCUMENTATION N EST PAS UNE CASE D OUTIL : le chemin se termine par RVAV -> reactiver Cerberus (Pattern 13 : activation directe = reactiver), PAS par la delegation a Morpheus (les tests ne s appliquent qu aux outils). Ne pas recopier le chemin c13b-c14-c15 (modification d outil).
+3. L'ERREUR REFERENCES INVALIDES pendant l ajout est NORMALE si la case cible n existe pas encore : ajouter dans l ordre (c16b -> c16c -> c16d) et la validation finale confirme les 27 cases.
+4. TOUJOURS verifier la structure de la nouvelle case apres creation : P2 position 1 ASCII, P12 CREATION LIMITEE, P14 detecter-impacts -- les patterns s appliquent aux cases ajoutees comme aux existantes.
+5. La version du parcours doit etre alignee dans la fiche (vulcain.md ligne Parcours) : detecter-impacts le signale sinon (Pattern 14).

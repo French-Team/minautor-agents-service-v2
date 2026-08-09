@@ -16,7 +16,7 @@ Usage:
 Retour: 0 toujours (outil d'evaluation, rapport sur stdout).
 
 Proprietaire : Themis (outil partage)
-Version : 0.2.0-py
+Version : 0.2.2-py
 Statut : beta
 """
 
@@ -26,7 +26,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.1-py"
+VERSION = "0.2.2-py"
 STATUT = "beta"
 
 # Couleurs ANSI
@@ -259,10 +259,12 @@ def main(argv=None):
                 if f.endswith(".sh"):
                     noms_outils.add(f[:-3])
     if os.path.isdir(agents_dir):
-        for nom in sorted(os.listdir(agents_dir)):
+        # Scan limite aux 11 agents officiels (AGENTS_ATTENDUS) : les autres
+        # dossiers de agents/ (classeur-variables, conventions, regles-immuables,
+        # philosophie, tools) ne sont pas des fiches d agent - leurs variables
+        # ou references ne doivent PAS etre interpretees comme des outils.
+        for nom in AGENTS_ATTENDUS:
             agent_dir = os.path.join(agents_dir, nom)
-            if not os.path.isdir(agent_dir) or nom in ("tools", "examples", "exemples"):
-                continue
             agent_md = os.path.join(agent_dir, nom + ".md")
             if not os.path.isfile(agent_md):
                 continue

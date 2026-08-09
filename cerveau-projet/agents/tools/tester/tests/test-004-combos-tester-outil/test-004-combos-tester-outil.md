@@ -31,7 +31,7 @@ Reponses des controles : `--reponses 'c3=OUI'` (format case=reponse).
 4. Variable `commande_test` manquante (apres c3=OUI) -> erreur claire (case c4)
 5. Navigation OUI : fichier de test CREE + test EXECUTE + c6 FIN (COMBO TERMINE)
 6. Navigation NON : c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE preservee)
-7. Integration parcours morpheus v0.1.2 : case Lancer le combo tester-outil
+7. Integration parcours morpheus v0.1.3 : case Lancer le combo tester-outil
    puis Verifier les resultats (guider-parcours)
 8. `valider-cartes-decision --agent morpheus` : CONFORME
 9. Nommage : bruit preexistant documente (identique aux 15 combos existants)

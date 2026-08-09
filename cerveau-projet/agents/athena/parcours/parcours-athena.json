@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-athena",
     "agent": "athena",
-    "version": "0.1.4",
+    "version": "0.1.6",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions d'Athena : redactrice de pense-betes. 2 missions (creer un pense-bete, completer un pense-bete). A la fin de chaque mission, j'active Promethee pour la spec (CHAIN). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
   },
@@ -124,7 +124,15 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
           "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande generateurs-squelette-pense-bete --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX PENSE-BETES : je cree uniquement des pense-betes (dossier pense-betes/ du cerveau, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "outil",
@@ -136,10 +144,6 @@
         {
           "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",
@@ -161,11 +165,15 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
         },
         {
           "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "texte": "CREATION LIMITEE AUX PENSE-BETES : je cree uniquement des pense-betes (dossier pense-betes/ du cerveau, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
         },
         {
           "type": "regle",
@@ -255,6 +263,10 @@
         },
         {
           "type": "regle",
+          "texte": "CREATION LIMITEE AUX PENSE-BETES : je cree uniquement des pense-betes (dossier pense-betes/ du cerveau, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
+        {
+          "type": "regle",
           "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de terminer, je declare dans mon message la liste EXACTE des outils du cerveau utilises (nom de chaque outil)."
         },
         {
@@ -337,6 +349,10 @@
         {
           "type": "regle",
           "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE AUX PENSE-BETES : je cree uniquement des pense-betes (dossier pense-betes/ du cerveau, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
         },
         {
           "type": "regle",
