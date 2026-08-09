@@ -36,6 +36,28 @@ identite:
 3. La navigation prouve la logique de la decision utilisateur : OUI passe a la mission, NON et INCERTAIN passent par c0b (relire obligatoire) puis la mission -- l echantillon themis + atlas (6 chemins) confirme PARCOURS TERMINE
 4. Le rapport ne recommande AUCUNE correction : les 11 parcours sont conformes au referentiel
 
+## [RAPPORT] Audit 2026-08-08 -- Garde-fou restauration (VERDICT CONFORME 5/5)
+
+**Objet** : audit de coherence et conformite du garde-fou restauration ajoute par Buffy (lecon incident piste B) dans regles-general-global.md (tableau regles globales) et protocole-gestion-defaillances.001.01.ebauche.md (Etape 3).
+**Verdict** : CONFORME -- 5/5 criteres (presence, coherence inter-fichiers, format, non-regression, hierarchie/index).
+**Lecons** :
+1. AUDIT MULTI-NIVEAUX : le garde-fou se verifie a 5 niveaux complementaires (presence, coherence, format, non-regression, hierarchie) - un garde-fou present mais contradictoire ou mal place serait inutile.
+2. CASSE DIFFERENTE != CONTRADICTION : NON COMMITES (majuscules d emphase dans le tableau) vs non commites (texte courant du protocole) designent la meme condition - l auditeur doit comparer le SENS, pas la casse.
+3. VERIFICATION AUTOMATISEE : comparaison par script des commandes interdites (checkout/restore/reset --hard), de la condition et des alternatives (git status/cp/git stash) entre les 2 fichiers - plus fiable que la lecture seule.
+4. DIFF MINIMAL CONFIRME : 9 insertions, 0 suppression sur 2 fichiers - la rege a ete ajoutee sans reformatage global.
+5. Rapport ecrit dans themis/rapports/rapport-audit-garde-fou-restauration-2026-08-08.md (ASCII OK).
+
+## [RAPPORT] Audit 2026-08-08 -- Piste B reparse : indices PASSE PAR LE GENERATEUR (VERDICT CONFORME)
+
+**Objet** : audit croise de la piste B reparse par Buffy (indices generateurs-commande dans les 11 parcours), apres perte par git checkout et reparation.
+**Verdict** : CONFORME -- 7/7 criteres.
+**Lecons** :
+1. AUDIT SANS CONFIANCE : toutes les validations Buffy (json.load, navigation, ASCII, valider-cartes) ont ete re-executees independamment - meme verdict (11/11).
+2. LE COMPTAGE DES CHAMPS catalogue (C7) a change de facon ATTENDUE : 188 = 177 (piste C intacte) + 11 (piste B reparse, chaque indice generateurs-commande porte catalogue: generateurs-commande). Un compteur global qui ne tient pas compte des ajouts legitimes fausserait le verdict.
+3. L ajustement morpheus (c4 creer-fichier au lieu de c6 tester-protection-*) est valide : tester-protection-* est un pseudo-outil de protocole SANS entree catalogue executable - citer un nom executable dans la commande d exemple est plus utile pour l agent.
+4. La procedure d audit des patterns (spec v0.2.x) couvre bien la piste B : Pattern 3 (generateur) + Pattern 9 (LIRE AVANT USAGE) verifies sur l affichage reel.
+5. Rapport ecrit dans themis/rapports/rapport-audit-piste-b-2026-08-08.md (ASCII OK).
+
 ## [RAPPORT] Audit 2026-08-08 -- Conformite 5 patterns (spec v0.2.6), suite chasse aux intentions passives
 
 **Audit** : verifier la conformite globale des 11 parcours aux 5 patterns de la spec-guider-parcours v0.2.6, avec la PROCEDURE D AUDIT 4b (Pattern 5 -- chaine de delegation ACTIVE) fraichement documentee.
@@ -72,6 +94,228 @@ identite:
 2. L audit structurel automatique (python) est utile en PREMIERE PASSE, mais un audit croise manuel sur un echantillon (c0, c5 buffy, c12 vulcain) evite de declarer des faux ecarts sur des formulations legitimes
 3. La chaine bout-en-bout (Vulcain -> Morpheus -> Janus -> Cerberus) verrouille la delegation : aucun maillon ne repasse par Cerberus au milieu, chaque maillon passe RVAV avant d activer le suivant
 
+## [VERDICT] Audit 2026-08-08 -- Validation du diagnostic Buffy sur generateurs-commande
+
+**Objet** : verifier le diagnostic de Buffy (outil fantome ? deconnecte de la guidance).
+**Methode** : re-verification par execution reelle de chaque point (grep, comptage, lecture des definitions, git log) -- aucune confiance.
+
+**Resultats point par point** :
+1. **0 reference directe** dans les 11 parcours, demarrer.md, protocole-activation -- CONFORME (verifie par comptage reel)
+2. **Usage indirect reel** : 5 combos ont des cases generateur (combo-activation 3, combo-audit-themis 2, combo-controle-modification 2, combo-corriger-ascii 1, combo-sante-tableaux 1) ; combos-moteur contient bien generateurs-commande + --reponses -- CONFORME
+3. **Catalogue trop pauvre** : 13 commandes vs **89 outils reels** (comptage par dossier avec .py hors testers/spec), seulement 8/13 commandes couvrent un outil reel existant -- CONFORME dans le fond AVEC 1 CORRECTION : Buffy affirmait que valider-nommage n avait AUCUNE entree au catalogue ; or valider-nommage-recursif EXISTE (le mode simple seul est absent). Correction de precision : 6 outils quotidiens sur 7 sont absents (valider-nommage couvert uniquement en mode recursif)
+4. **Contresens Buffy** : les 3 combos creer-* (creer-fichier-cerveau, creer-agent, creer-protocole) ont 0 case generateur et 3-4 commandes python3 en dur chacune -- CONFORME (comptage reel : generateur=0, outil=3-4, en dur=3-4)
+5. **Chronologie** : generateurs-commande.py cree le 2026-08-07 16:07 -- CONFORME
+
+**VERDICT GLOBAL** : CONFORME AVEC 1 CORRECTION DE PRECISION (point 3 : valider-nommage-recursif existe au catalogue ; le diagnostic reste juste dans son fond : le catalogue est largement sous-couvert). Les 4 autres points sont confirmes a l identique. Les 3 pistes de correction (enrichir le catalogue, brancher un indice generateur dans les parcours, audit anti-fantome a la creation) restent valides.
+
+**Lecons** : (1) un comptage d outils reels doit scanner la structure reelle tools/categorie/outil/outil.py (mon premier glob tools/*/*.py a donne 0 par erreur de profondeur), (2) la verification par sous-chaine peut induire en erreur (valider-nommage matche valider-nommage-recursif) -- toujours lister le catalogue complet, (3) le diagnostic Buffy est globalement fiable : 4/5 points identiques, 1 nuance de precision.
+
 ## PHILOSOPHIE -- Principes de comportement
 
 | **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |
+
+## [LECON] 2026-08-09 -- AUDIT CONFORMITE D EXECUTION mission Vulcain : VERDICT NON CONFORME (c14 non execute)
+
+**Objet** : auditer la conformite d execution de la mission Vulcain (correction divergence version generateurs-commande.sh) : l agent a-t-il fait ce que sa carte ordonnait ?
+
+**Verdict** : NON CONFORME (1 ecart majeur). La carte de Vulcain (chemin modifier, v0.2.2) ordonne c14 DELEGUER LES TESTS A MORPHEUS apres toute modification d outil. Deroulement reel : Vulcain a fait SES PROPRES validations (parite --version, --liste, generation reelle, bash -n, ASCII, scan choix) puis a reactive Cerberus directement (08:18) sans activer Morpheus. AUCUNE activation Morpheus pour cette mission. Circonstance attenuante : correction mineure (1 ligne VERSION) + Morpheus avait deja teste l outil juste avant (08:12-08:14) ; mais c14 est une case CONTROLE obligatoire, pas une option.
+
+**Lecons** :
+1. La conformite d execution verifie le CROISEMENT mission/carte/deroulement reel, pas seulement le resultat. Un livrable de bonne qualite peut cacher un ecart de processus (ici c14 non execute).
+2. Une case CONTROLE de la carte est OBLIGATOIRE : l agent ne peut pas la remplacer par ses propres validations, meme legitimes. Deleguer = activer l agent habilite.
+3. Le testeur dedie (Morpheus) doit retester apres TOUTE correction d outil, meme mineure, pour que le cycle soit clos par le bon agent.
+4. Distinguer dans les cartes : validations LEGERES (controle de qualite par l agent) vs validations FORMELES (deleguees au testeur) - eviter les zones grises.
+
+**Recommandations** : 1) lancer une mission Morpheus pour retester generateurs-commande (cloture du cycle) ; 2) renforcer c14 dans le parcours Vulcain ; 3) reflechir a la distinction validations legeres/formelles dans les cartes.
+
+**Rapport** : themis/rapports/rapport-audit-conformite-execution-vulcain-2026-08-09.md
+
+---
+
+## [RAPPORT] 2026-08-09 -- AUDIT CONFORMITE EXECUTION : mission 6 divergences spec/py (Vulcain)
+
+**Question auditee** : Vulcain a-t-il aligne EXACTEMENT les 6 divergences demandees SANS toucher guider-parcours ?
+**Verdict** : **CONFORME** (6/6 points verifies)
+
+### Preuves point par point
+
+| # | Point verifie | Preuve | Resultat |
+|---|---|---|---|
+| 1 | generateurs-regenerer-catalogue spec = py (1.0.0) | rescan outil : ALIGNE 1.0.0 = 1.0.0 ; dossier non suivi git = outil recent (creation mission outil durable) | OK |
+| 2 | lister-agents spec = py (0.4.0-py) | git diff : `v0.2.0 -> v0.4.0-py` + ligne historique `2026-08-09 | 0.4.0-py | Vulcain | Alignement...` ; rescan ALIGNE | OK |
+| 3 | lister-outils spec = py (0.3.0-py) | git diff : `v0.2.0 -> v0.3.0-py` + ligne historique datee ; rescan ALIGNE | OK |
+| 4 | verifier-systeme spec = py (0.2.1-py) | git diff : `v0.2.0 -> v0.2.1-py` + ligne historique datee ; rescan ALIGNE | OK |
+| 5 | combos-moteur spec = py (0.2.0-beta) | git diff : `**Version :** 0.2.0-ebauche -> 0.2.0-beta` ; rescan ALIGNE | OK |
+| 6 | guider-parcours NON TOUCHEE (cas legitime) | git diff spec-guider-parcours : modifs ANTERIEURES (0.2.19 -> 0.2.20, colonne catalogue = missions precedentes Pattern 9/piste C) ; **AUCUNE ligne d alignement** ; version spec reste 0.2.20 (non alignee sur 0.3.1) ; rescan : DIVERGENT (base) = attendu | OK |
+
+### Points complementaires verifies
+
+| Point | Preuve | Resultat |
+|---|---|---|
+| Documentation cas legitime dans detecter-divergences-version.md | bloc `CAS LEGITIME ASSUME (decision Cerberus 2026-08-09)` present, explique spec patterns v0.2.x vs outil 0.3.1, NE PAS aligner | OK |
+| Contenu des 5 spec intact (seules les versions changees) | git diff = uniquement lignes de version + lignes d'historique ajoutees, aucune suppression de contenu | OK |
+| Aucune spec hors perimetre touchee dans CETTE mission | git status : spec-guider-parcours M = modifs anterieures (pre-existantes a la mission) ; activer-agent-principal = MISSION SEPAREE ulterieure (lignes historique) - pas celle des 6 divergences | OK |
+| ASCII | 5 spec + md outil + corrections vulcain = 0 non-ASCII | OK |
+| Lecons documentees (vulcain/corrections.md) | lecon `CORRECTION 6 DIVERGENCES` presente, 5 lecons detaillees (spec porte sa version a plusieurs endroits, en-tete prime, base vs suffixe, cas legitimes assumes, ASCII par fichier) | OK |
+
+### Lecons Themis
+1. Le git diff est la preuve la plus fiable de la conformite d'execution : il montre exactement QUELLES lignes ont change et lesquelles n'ont pas ete touchees (guider-parcours = modifs anterieures, pas d'alignement)
+2. Distinguer les modifs PRE-EXISTANTES (missions anterieures non commitees) des modifs de LA mission auditee : un fichier M dans git status n'implique pas qu'il a ete touche dans la mission courante
+3. Le rescan detecter-divergences-version + git diff se completent : l'outil valide l'etat final, le diff valide le perimetre de modification
+
+**Verification finale** : 6/6 points CONFORMES. La mission Vulcain a aligne exactement les 5 spec + documente le cas legitime guider-parcours SANS toucher la spec-guider-parcours.
+
+---
+
+## [LECON] 2026-08-09 -- CRITERE REACTIVER STANDARD dans les audits de conformite d'execution
+
+**Mission** : completer le rapport d'audit de conformite d'execution (rapport-audit-conformite-execution-vulcain-2026-08-09.md) avec le point reactiver comme critere.
+
+**Actions realisees** :
+1. Ligne c15 du tableau detaillee : `Reactivation Cerberus (08:18)` avec commande complete a 3 arguments + sortie de succes + bloc + profil classeur -> OK
+2. Verdict section 4 : paragraphe `Point REACTIVER` precisant que pour CETTE mission la reactivation etait CONFORME, donc le verdict global reste NON CONFORME (1 ecart majeur c14)
+3. Nouvelle section 7 `Critere REACTIVER` : definition du critere (5 points R1-R5) + verification des faits pour cette mission (5/5 CONFORME) + mise en garde (mission posterieure des 6 divergences a montre l'echec silencieux)
+
+**Lecons** :
+1. Le critere reactiver doit devenir STANDARD dans tous les audits de conformite d'execution : 5 points - R1 3e argument agent_precedent present, R2 pas d'aide affichee, R3 sortie `Session ... : Cerberus reactive avec succes`, R4 bloc AGENTS.md passe sur Cerberus, R5 profil classeur mis a jour
+2. Une reactivation qui affiche l'AIDE = ECHEC SILENCIEUX (le bloc reste sur l'agent) : un agent peut croire qu'il a reactive alors que le cycle est bloque - le critere rattrape ce type d'echec
+3. Distinguer la mission auditee (reactivation conforme ici) des missions posterieures (6 divergences : echec initial puis correction) - croiser AGENTS-historique pour les preuves de chaque reactivation
+4. Un nouveau critere d'audit doit etre ajoute aux rapports existants pour enrichir la grille sans changer les verdicts deja etablis (verifier l'impact avant de modifier)
+
+**Validation finale** : rapport 93 lignes, ASCII 0, section 7 complete, verdict global inchange (NON CONFORME c14) avec mention du point reactiver conforme.
+
+---
+
+## [LECON] 2026-08-09 -- PROCEDURE 4i OPERANTE (test reel sur mission Buffy)
+
+**Mission** : auditer la mission Buffy de documentation du protocole (syntaxe reactiver) pour verifier que la procedure 4i enrichie (point 6 critere reactiver, spec v0.2.21) fonctionne sur un cas reel.
+
+**Actions realisees** :
+1. Procedure 4i appliquee points 1-6 sur la mission Buffy (08:54-08:55) : croisement mission/carte/deroulement reel
+2. Point 6 (critere reactiver R1-R5) applique : 5/5 CONFORME (trace 08:55, sortie de succes, bloc, profil)
+3. Verdict global : CONFORME
+4. Rapport : themis/rapports/rapport-audit-procedure-4i-2026-08-09.md
+
+**Lecons** :
+1. La procedure 4i est OPERANTE : le point 6 s'applique sur un cas reel, les preuves sont disponibles (trace AGENTS-historique, bloc AGENTS.md, profil classeur)
+2. LIMITE : la sortie reelle de la commande reactiver n'est PAS conservee dans un fichier (verifiee en direct seulement) - pour un audit A POSTERIORI, R1/R4/R5 directement verifiables (trace historique, bloc, profil), R2/R3 deduits (pas d'entree bloque + bloc passe sur Cerberus)
+3. Le croisement mission/carte reste la base : la carte de Buffy (chemin modifier c9-c11-c37-c13b-c8) a ete croisee avec le deroulement reel - les cases combos (c37/c13b) non citees dans la lecon = zone grise a surveiller (meme theme que le rapport Vulcain c14)
+4. Un cas de test reel est la meilleure validation d'une procedure d'audit : appliquer la procedure enrichie sur une mission reelle confirme son applicabilite AVANT de la generaliser
+
+**Validation finale** : rapport redige (rapport-audit-procedure-4i-2026-08-09.md), verdict CONFORME, point 6 5/5, procedure 4i operante.
+
+---
+
+## [LECON] 2026-08-09 -- AUDIT COMPLET 11 PARCOURS : CONFORME (procedure 4i point 6 generalisee)
+
+**Mission** : generaliser la procedure 4i (point 6 critere reactiver) a tous les parcours - re-audit integral des 11.
+
+**Actions realisees** :
+1. Validation structurelle : valider-cartes-decision --tous = 11/11 CONFORME (JSON valide, c0 question relecture, references valides)
+2. Scan des patterns : P1 (11/11), P2 ASCII (10/11 - cerberus coordinateur), P4 c0 (11/11), P6 contexte (11/11), P3 combo (10/11 - cerberus), reactiver (11/11)
+3. Point 6 reactiver : 6 agents actifs CONFORMES (buffy, cerberus, janus, morpheus, themis, vulcain) - 1 cas corrige (vulcain 08:44-08:48 echec silencieux documente puis corrige) ; 5 agents en attente N/A (athena, atlas, clio, minerve, promethee)
+4. Verdict global : CONFORME
+
+**Lecons** :
+1. Le RE-AUDIT COMPLET (regle v0.2.7) fonctionne a l'echelle : les procedures 1-4i appliquees sur les 11 parcours donnent un etat fiable
+2. Le point 6 reactiver est GENERALISABLE : preuves dans AGENTS-historique (entrees MISSION/MISSION TERMINEE) - les agents sans mission = N/A (pas un ecart, etat ATTENTE)
+3. L'exception cerberus est LEGITIME et confirme le Pattern 10 (une carte = un role) : le coordinateur n'ecrit pas (P2) et ne lance pas de combos (P3)
+4. Le cercle lecon -> carte -> procedure -> audit est COMPLET : l'echec reactiver vulcain a genere documentation + critere 4i point 6 + verification generalisee
+5. Verifier la structure des lignes AGENTS-historique avant parsing (format : | date | session | agent | raison) - mon premier script utilisait le mauvais index
+
+**Validation finale** : rapport themis/rapports/rapport-audit-complet-4i-11-parcours-2026-08-09.md, verdict CONFORME, ASCII 0.
+## [LECON] 2026-08-09 -- AUDIT CIBLE JANUS (utilise quand il faut)
+
+**Audit** : conformite d'execution ciblee sur Janus (controleur des statuts), meme perimetre que l'audit complet 4i des 11 parcours (procedure 4i, point 6 reactiver) + exigence utilisateur : Janus utilise QUAND IL FAUT.
+**Verdict** : CONFORME.
+**Lecons** :
+1. Janus est branche dans le circuit de controle : carte de Cerberus c14 (Activer Janus - second controle) + c15 (Traiter le verdict de Janus) + les 3 combos de controle (controle-outil, controle-modification, controle-impacts) branches dans le parcours janus (c5/c22)
+2. Janus est un CONTROLEUR qui signale sans corriger : verdict clair (VALIDE / NON VALIDE) remonte a Cerberus qui active l agent habilite pour corriger - conforme a son role
+3. Les 3 controles majeurs recents (08:26 controle detecter-impacts avec verdict NON VALIDE + impact spec detecte, 08:35 scan regle des 5 fichiers avec 6 divergences, 21:46 controle generateurs-carte bout en bout) suivent SA carte avec verdicts clairs documentes dans ses corrections
+4. Point 6 reactiver : chaque mission janus (08:26, 08:35, 21:46) est suivie d une entree MISSION TERMINEE sous Cerberus (R1-R5 conformes, aucun echec silencieux)
+5. Le risque auto-validation (lecon Vulcain c14 : un agent qui fait ses propres validations au lieu d activer le controleur) est COUVERT par le circuit : quand un agent a valide seul, Cerberus active Janus en second controle - la procedure est en place, c est une question de declenchement par Cerberus
+6. Les agents de controle (janus, themis, morpheus) doivent rester des REFERENTS INDEPENDANTS : leur activation ne doit jamais etre contournee par l agent audite - a verifier lors des prochains audits comme critere de conformite
+
+**Validation finale** : rapport themis/rapports/rapport-audit-janus-2026-08-09.md, verdict CONFORME, ASCII 0.
+## [LECON] 2026-08-09 -- AUDIT CIBLE MORPHEUS (utilise quand des tests sont necessaires)
+
+**Audit** : conformite d'execution ciblee sur Morpheus (testeur dedie), meme perimetre que l'audit cible Janus (procedure 4i, point 6 reactiver) + exigence utilisateur : Morpheus utilise QUAND DES TESTS SONT NECESSAIRES.
+**Verdict** : CONFORME.
+**Lecons** :
+1. Le parcours morpheus v0.1.1 (20 cases) impose un chemin tester complet : lire la doc de l outil, lire le protocole-tests, ecrire les tests avec template-test (PASSE PAR LE GENERATEUR), AJOUTER LES PROTECTIONS (c5 REGLE ABSOLUE : jamais de test sans protections - tester-protection-boucles-infinies/erreurs-silencieuses/blocage), executer, verifier et donner le verdict, documenter les lecons - retour c9 (qui m a delegue ? VULCAIN -> Activer Janus / CERBERUS -> c14)
+2. La decision utilisateur du 2026-08-08 17:01 (constat 3) a acte que LES TESTS SONT LE DOMAINE DE MORPHEUS - depuis, tout test formel est delegue a Morpheus (11 missions reelles tracees)
+3. Modele boucle : les agents constructeurs (Vulcain) creent/modifient, Morpheus teste formellement (valider-nommage v0.3.1, nettoyer-sessions v0.1.1, valider-cartes-decision v0.3.0, 3 combos creer-* 89/89) - chaque boucle se termine par une reactivation conforme
+4. Cas historique assume : des tests ECRITS par Vulcain ont ete GARDES mais VALIDES par Morpheus (decision utilisateur) - le referent independant est preserve meme quand l ecriture est faite par le constructeur
+5. Chaine bout-en-bout (21:45) : Vulcain a directement active Morpheus (Pattern 8) pour tester generateurs-carte - le canal constructeur -> testeur fonctionne sans Cerberus quand le pattern l exige
+6. Point 6 reactiver : les 11 missions morpheus sont chacune suivies d une entree MISSION TERMINEE sous Cerberus (R1-R5 conformes, aucun echec silencieux)
+7. Observation non bloquante : aucun combo tester-* n existe (les 15 combos sont activation/audit/controle/corriger/creer/sante/valider) - quand les suites de test deviendront repetitives, un combo tester-* (Pattern 3) encapsulera ecrire + proteger + executer
+8. Les agents de controle/test (janus, themis, morpheus) restent des REFERENTS INDEPENDANTS : la validation formelle ne doit jamais etre contournee par l agent constructeur - a verifier aux prochains audits
+
+**Validation finale** : rapport themis/rapports/rapport-audit-morpheus-2026-08-09.md, verdict CONFORME, ASCII 0.
+## [LECON] 2026-08-09 -- Audit Pattern 12 CREATION LIMITEE sur les 11 parcours (procedure 4j)
+
+**Mission** : verifier que le Pattern 12 (CREATION LIMITEE) est applique dans les 11 parcours -- toutes les cases de creation portent-elles l'indice regle ?
+
+**Verdict** : NON CONFORME (1/11). Seul atlas v0.1.3 est conforme (pilote corrige apres l'incident du jour). 10 parcours en ecart : 21 cases de creation sans garde-fou complet (REGLE WORKSPACE en tete mais SANS les roles exclus) + 10 cases Signaler avec la mention fautive "documenter une nouvelle case dans le parcours".
+
+**Lecons** :
+1. Un nouveau pattern s'applique d'abord en PILOTE puis se generalise : l'audit d'un pattern juste documente revele TOUJOURS des ecarts sur les parcours non migres -- c'est attendu, le rapport sert de liste de travail pour la generalisation (Buffy)
+2. La REGLE WORKSPACE (deja presente dans 9 parcours) est une BASE du Pattern 12 mais PAS le pattern complet : il manque les ROLES EXCLUS (outil -> Vulcain, test -> Morpheus, case -> Buffy) et le renvoi vers la case Signaler -- l'audit doit distinguer garde-fou partiel et complet
+3. Le scan des cases de creation repose sur 2 criteres (outil de creation dans les indices OU titre evocateur) : certaines cases avec titre evocateur (ex: c3 Verifier la structure) n'utilisent AUCUN outil de creation -- il faut verifier les INDICES pas seulement les titres pour eviter les faux positifs
+4. La mention fautive "documenter une nouvelle case dans le parcours" est un marqueur fiable : presente dans 10/11 cases Signaler (seule atlas c29 corrigee) -- un grep cible suffit pour l'audit du point 4
+5. Le cas vulcain c12 (Modifier l'outil) est un CAS PARTICULIER : modifier l'outil EST son role -- le garde-fou doit l'AUTORISER (perimetre outils = Vulcain) tout en interdisant tests et cases -- le pattern n'interdit pas la creation, il la borne au role
+6. Verification croisee obligatoire : un echantillon manuel (buffy c25, athena c20) confirme que le scan JSON dit la verite avant de figer le verdict
+## [LECON] 2026-08-09 -- AUDIT PATTERN 13 (LA FIN SUIT SA CARTE) : VERDICT CONFORME
+
+**Controle** : conformite de la nouvelle regle la fin suit SA carte (Pattern 13, spec v0.2.23) dans les 11 parcours - les fins actives sont-elles conformes au Pattern 8 (chaine bout-en-bout) ?
+
+**Verdict** : CONFORME (36 fins analysees, 5 fins actives, 0 anomalie).
+
+**Lecons** :
+1. Le Pattern 13 se verifie par la procedure 4k en 4 points : fin attendue par la carte, coherence fin/type d'activation, aucune fin de maillon qui reactive Cerberus au milieu, absence de l'ancienne regle dans les documents de coordination (grep cible)
+2. La typologie des fins est maintenant stable : FIN - Reactiver Cerberus (activation directe), FIN - Activer <maillon> (chaine, message actif), FIN - Delegation (modele generique morpheus c17/janus c30), Signaler le besoin (Pattern 12, signalement). Les 11 parcours utilisent tous cette typologie - un greppage de la structure suffit a cartographier l'ecosysteme
+3. Les fins actives de la chaine Vulcain->Morpheus->Janus->Cerberus sont conformes : c9/c15 (Vulcain active Morpheus), c10 (Morpheus active Janus), c10 (Janus reactive Cerberus avec bilan consolide). La chaine Athena->Promethee->Minerve (athena c10, promethee c10) et le FLUX Promethee->Minerve sont aussi actives
+4. Les fins Reactiver Cerberus restantes correspondent toutes a des activations directes ou au dernier maillon avec bilan consolide (janus c10) : aucune incoherence
+5. Point de vigilance cosmetique : les titres des fins actives portent des suffixes heterogenes (CHAIN/FLUX pour athena/promethee, sans suffixe pour morpheus/vulcain) - non bloquant, a uniformiser eventuellement
+6. Verification croisee : naviguer les fins actives (athena c10, promethee c10, morpheus c10 via c9->VULCAIN) confirme le PARCOURS TERMINE avec le message actif - le scan JSON dit la verite
+7. Le rapport doit etre ASCII 0 : verifier avec valider-conformite-ascii apres ecriture (3 accents 'e' ont ete corriges - coherence/Cosmetique)
+## [LECON] 2026-08-09 -- DIAGNOSTIC COUVERTURE CRITERES 1-21 DANS LE PARCOURS THEMIS
+
+**Contexte** : la carte d'audit themis v0.2.5 (23 cases) a 3 cases dediees aux criteres d'execution : c8b (critere 22, Pattern 11), c8c (critere 25, Pattern 14), c8d (critere 24, Pattern 13). Question : quels criteres 1-21 n'ont PAS de case dediee ?
+
+**Verdict** : AUCUN critere 1-21 n'a de case dediee dans le parcours themis. Ce n'est PAS une anomalie : ces criteres sont STRUCTURELS (qualite de l'outil guider-parcours et des cartes), verifies par les tests formels Morpheus et les outils du combo audit-themis (c3) -- ils ne jugent pas le comportement de l'agent. Seuls les criteres d'EXECUTION (juger ce que l'agent a fait) meritent des cases dediees.
+
+**Tableau de couverture (25 criteres)** :
+| Critere | Nature | Case dediee | Couverture reelle |
+|---|---|---|---|
+| 1 (affiche cases) | structurel outil | NON | tests Morpheus (tester-guider-parcours) |
+| 2 (branches) | structurel outil | NON | tests Morpheus |
+| 3 (reponse inconnue) | structurel outil | NON | tests Morpheus |
+| 4 (mode --reponses) | structurel outil | NON | tests Morpheus |
+| 5 (mode --liste) | structurel outil | NON | tests Morpheus |
+| 6 (JSON invalide) | structurel outil | NON | tests Morpheus |
+| 7 (parite py/sh) | structurel outil | NON | tests Morpheus + detecter-divergences-version |
+| 8 (ASCII strict) | structurel | NON | combo audit-themis (valider-conformite-ascii) |
+| 9 (indice regle en tete) | structurel (Pattern 2) | NON | audit (procedure 2 rejouee) |
+| 10 (case Mission) | structurel (Pattern 1) | NON | valider-cartes-decision |
+| 11 (combo reference) | structurel (Pattern 3) | NON | audit (verification combos) |
+| 12 (c0 + c0b) | structurel (Pattern 4) | NON | valider-cartes-decision |
+| 13 (fin passive) | structurel (Pattern 5) | NON | combo audit-themis (detecteur fin passive) |
+| 14 (re-audit 14 patterns) | structurel | NON | procedure 4c relue en debut d'audit |
+| 15 (c0c contexte) | structurel (Pattern 6) | NON | valider-cartes-decision |
+| 16 (mode non-bloquant) | structurel (v0.2.9) | NON | tests Morpheus |
+| 17 (generateurs-case) | structurel (v0.2.12) | NON | audit (verification outil de reference) |
+| 18 (case compose 2 branches) | structurel (Pattern 7) | NON | valider-cartes-decision |
+| 19 (chaine bout-en-bout) | structurel (Pattern 8) | NON | audit (procedure 4i) |
+| 20 (lire .md avant usage) | structurel (Pattern 9) | NON | audit (procedure 4g) |
+| 21 (une carte = un role) | structurel (Pattern 10) | NON | audit (procedure 4j) |
+| 22 (conformite d execution) | EXECUTION (Pattern 11) | OUI c8b | case dediee |
+| 23 (creation limitee) | structurel (Pattern 12) | NON | audit (verification des cases de creation) |
+| 24 (la fin suit SA carte) | EXECUTION (Pattern 13) | OUI c8d | case dediee |
+| 25 (verification d impact) | EXECUTION (Pattern 14) | OUI c8c | case dediee |
+
+**Lecons** :
+1. La distinction STRUCTUREL vs EXECUTION est le critere de decision : seuls les criteres qui jugent le COMPORTEMENT de l'agent pendant SA mission (22, 24, 25) ont besoin d'une case dediee dans la carte de Themis. Les criteres 1-21 jugent la QUALITE des livrables (outil, cartes) -- ils sont verifies par les outils/tests, pas par une case.
+2. Le critere 23 (CREATION LIMITEE, Pattern 12) n'a pas de case dediee mais est structurel : il est verifie par l'audit des cases de creation (indice regle en tete) -- pas besoin de case dediee.
+3. La couverture reelle des criteres 1-21 repose sur 3 piliers : (a) tests formels Morpheus (criteres 1-7, 16), (b) combo audit-themis en c3 (criteres 8, 13, et structure globale), (c) procedures d'audit 1-4l rejouees integralement (criteres 9-21, 23 via procedure 4c RE-AUDIT COMPLET).
+4. Risque residuel : si Morpheus ne teste pas guider-parcours ou si le combo audit-themis n'est pas lance, les criteres 1-7 et 16 ne sont couverts par RIEN. Le re-audit complet (procedure 4c) reste le filet de securite.

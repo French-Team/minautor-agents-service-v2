@@ -219,7 +219,7 @@ lister-statuts.sh --verbose cerveau-projet/
 - **Janus est independant** -- il ne depend pas de Buffy
 - **Le controle est obligatoire** -- pas de passage de statut sans controle
 - **La documentation est essentielle** -- chaque decision doit etre justifiee
-- **Le cycle est sacre** -- toujours revenir a Cerberus
+- **Le cycle est sacre** -- la fin de mission suit SA carte : reactiver Cerberus (activation directe ou dernier maillon) ou activer le suivant selon la carte
 - **Les outils sont obligatoires** -- utiliser les outils pour chaque verification
 - **`valider-relecture` est SYSTEMATIQUE** -- a chaque controle, verifier que tous les agents portent la regle de relecture (garde-fou du cycle d'activation)
 

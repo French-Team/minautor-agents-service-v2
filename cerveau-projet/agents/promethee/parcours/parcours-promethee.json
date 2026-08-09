@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-promethee",
     "agent": "promethee",
-    "version": "0.1.0",
+    "version": "0.1.4",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Promethee : redacteur de specs. 2 missions (creer une spec, completer une spec). A la fin de chaque mission, j'active Minerve pour le todo (FLUX). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
   },
@@ -48,12 +48,14 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/promethee/corrections.md"
         },
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/promethee/promethee.md"
         }
@@ -94,6 +96,7 @@
         {
           "type": "outil",
           "nom": "rechercher-specs",
+          "catalogue": "rechercher-specs",
           "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-specs/",
           "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-specs/rechercher-specs.py"
         }
@@ -126,6 +129,17 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande generateurs-squelette-spec --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-commande",
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande generateurs-squelette-spec --reponses ..."
+        },
+        {
+          "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
         },
         {
@@ -139,6 +153,7 @@
         {
           "type": "outil",
           "nom": "generateurs-squelette-spec",
+          "catalogue": "generateurs-squelette-spec",
           "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-squelette-spec/",
           "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-spec/generateurs-squelette-spec.py <pense-bete-source> (nommage automatique selon convention-renommage)"
         }
@@ -168,6 +183,7 @@
         {
           "type": "outil",
           "nom": "creer-remplir-spec",
+          "catalogue": "creer-remplir-spec",
           "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-spec/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-spec/creer-remplir-spec.py <spec> (sections sans ouvrir le fichier)"
         }
@@ -185,6 +201,7 @@
         {
           "type": "outil",
           "nom": "valider-conformite-ascii",
+          "catalogue": "valider-conformite-ascii",
           "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <spec> (UN fichier par appel)"
         }
@@ -206,6 +223,7 @@
         {
           "type": "outil",
           "nom": "valider-spec",
+          "catalogue": "valider-spec",
           "chemin": "cerveau-projet/agents/tools/valider/valider-spec/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-spec/valider-spec.py <spec>"
         }
@@ -236,6 +254,7 @@
         {
           "type": "outil",
           "nom": "editer-fichier",
+          "catalogue": "editer-fichier",
           "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/pense-betes/specs/index-spec.md <ancien> <nouveau>"
         }
@@ -257,6 +276,7 @@
         {
           "type": "outil",
           "nom": "ajouter-contenu-fichier",
+          "catalogue": "ajouter-contenu-fichier",
           "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/promethee/corrections.md <lecon>"
         }
@@ -264,7 +284,7 @@
       "suivant": "c10"
     },
     "c10": {
-      "titre": "FIN - Activer Minerve (FLUX)",
+      "titre": "FIN - Activer Minerve",
       "type": "fin",
       "message": "ACTIVER MINERVE pour le todo : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 minerve 'Spec terminee - creer le todo'. C'est elle qui cree le todo (FLUX Promethee -> Minerve). RELAIS ACTIF : je ne m'arrete pas en attente - apres activation, la chaine continue avec le parcours de Minerve, puis retour a Cerberus (chacun reactive Cerberus a la fin)."
     },
@@ -283,6 +303,7 @@
         {
           "type": "outil",
           "nom": "rechercher-specs",
+          "catalogue": "rechercher-specs",
           "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-specs/",
           "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-specs/rechercher-specs.py"
         }
@@ -300,6 +321,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <spec-existante>"
         }
@@ -337,6 +359,7 @@
         {
           "type": "outil",
           "nom": "creer-remplir-spec",
+          "catalogue": "creer-remplir-spec",
           "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-spec/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-spec/creer-remplir-spec.py <spec> (completer les sections manquantes selon le spec-template)"
         }
@@ -354,6 +377,7 @@
         {
           "type": "outil",
           "nom": "valider-spec",
+          "catalogue": "valider-spec",
           "chemin": "cerveau-projet/agents/tools/valider/valider-spec/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-spec/valider-spec.py <spec>"
         }
@@ -386,6 +410,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
         }
@@ -395,12 +420,12 @@
     "c20": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c21": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -413,6 +438,7 @@
         {
           "type": "outil",
           "nom": "lire-activite-recente",
+          "catalogue": "lire-activite-recente",
           "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
         },

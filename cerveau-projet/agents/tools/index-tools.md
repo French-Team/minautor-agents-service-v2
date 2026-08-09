@@ -40,6 +40,12 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `analyser-dependances` | Analyser les dependances | [analyser/analyser-dependances/](analyser/analyser-dependances/) |
 | `analyser-structure` | Analyser la structure du projet | [analyser/analyser-structure/](analyser/analyser-structure/) |
 
+### Cartographier
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `cartographier-parcours` | Cartographier le parcours d un agent (arbre ASCII + chemins + impasses) dans un fichier markdown | [cartographier/cartographier-parcours/](cartographier/cartographier-parcours/) |
+
 ### Changer
 
 | Outil | Description | Chemin |
@@ -62,6 +68,10 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `combo-corriger-ascii` | Suite de correction des accents puis validation ASCII (parcours vulcain) : corriger-accents --all --recursive -> valider-conformite-ascii | [combos/combo-corriger-ascii/](combos/combo-corriger-ascii/) |
 | `combo-corriger-fichier` | Correction complete d'un fichier du cerveau (chemin modifier du parcours buffy, anciennes cases c12+c13) : corriger-nommage -> corriger-liens -> corriger-emojis -> corriger-accents-zones-sensibles -> condenser-fichier -> nettoyer-fichier. Fichier passe en --var fichier=<chemin> | [combos/combo-corriger-fichier/](combos/combo-corriger-fichier/) |
 | `combo-sante-tableaux` | Suite de controle de la sante du cerveau (chemin controler du parcours buffy) : verifier-documents-manquants -> rechercher-fichiers-vides -> combos-valider-cerveau -> valider-tableaux | [combos/combo-sante-tableaux/](combos/combo-sante-tableaux/) |
+| `combo-creer-fichier-cerveau` | Creation d'un fichier du cerveau (chemin creer du parcours buffy, v0.3.0) : valider-nommage -> valider-conventions -> rechercher-fichier -> [CONTROLE] -> creer-fichier. Fichier passe en --var chemin=<chemin> --var contenu=<contenu> | [combos/combo-creer-fichier-cerveau/](combos/combo-creer-fichier-cerveau/) |
+| `combo-creer-agent` | Creation d'un agent (chemin agent du parcours buffy, v0.3.0) : valider-nommage -> [CONTROLE] -> copier-dossier -> copier-fichier template -> creer-fichier corrections. Agent passe en --var agent=<nom> | [combos/combo-creer-agent/](combos/combo-creer-agent/) |
+| `combo-creer-protocole` | Creation d'un protocole (chemin protocole du parcours buffy, v0.3.0) : valider-conventions -> [CONTROLE] -> copier-dossier -> creer-fichier. Chemin passe en --var chemin=<chemin> --var contenu=<contenu> | [combos/combo-creer-protocole/](combos/combo-creer-protocole/) |
+| `combo-tester-outil` | Chemin de test de Morpheus encapsule (anciennes cases c4-c6 du parcours morpheus) : ecrire le fichier de test via creer-fichier -> verifier les protections (REGLE ABSOLUE : jamais de test sans protections) -> executer le test. Variables : fichier_test, contenu_test, commande_test | [combos/combo-tester-outil/](combos/combo-tester-outil/) |
 
 ### Condenser
 
@@ -115,6 +125,8 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-surcharge-fichier` | Detecter les fichiers qui grossissent trop | [detecter/detecter-surcharge-fichier/](detecter/detecter-surcharge-fichier/) |
 | `detecter-local-hors-fonction` | Detecter les local utilises hors fonction dans les scripts bash | [detecter/detecter-local-hors-fonction/](detecter/detecter-local-hors-fonction/) |
 | `detecter-usage-outils-externes` | Detecter les traces d'outils externes dans les fichiers (CRLF, non-ASCII, BOM) | [detecter/detecter-usage-outils-externes/](detecter/detecter-usage-outils-externes/) |
+| `detecter-decalages-catalogue` | Detecter les decalages entre le catalogue du generateur et les interfaces reelles des outils (--aide/--help) | [detecter/detecter-decalages-catalogue/](detecter/detecter-decalages-catalogue/) |
+| `detecter-divergences-version` | Detecter les spec/ dont la version diverge de leur .py (regle des 5 fichiers, formats de version varies) | [detecter/detecter-divergences-version/](detecter/detecter-divergences-version/) |
 | `detecter-impacts` | Detecter les fichiers impliques par la modification d'un fichier du cerveau (schema identite:) | [detecter/detecter-impacts/](detecter/detecter-impacts/) |
 
 ### Ecrire
@@ -148,6 +160,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `generateurs-commande` | Composer et generer une commande complexe en posant une question par parametre | [generateurs/generateurs-commande/](generateurs/generateurs-commande/) |
 | `generateurs-case` | Ajouter, editer, supprimer une case OU ajouter un bloc modele compose (decision + deviation + rejoint, Pattern 7) d'une carte de decision (parcours JSON) avec recablage auto et validation | [generateurs/generateurs-case/](generateurs/generateurs-case/) |
 | `generateurs-carte` | Agir sur une carte COMPLETE (parcours JSON) : creer un squelette (patterns 4-5-6-7), analyser les chemins, detecter les anomalies (boucles/inatteignables/impasses), dupliquer un chemin | [generateurs/generateurs-carte/](generateurs/generateurs-carte/) |
+| `generateurs-regenerer-catalogue` | Regenerer/synchroniser le catalogue de commandes du generateur a partir des outils reels (descriptions extraites des en-tetes .py, 2 formats) | [generateurs/generateurs-regenerer-catalogue/](generateurs/generateurs-regenerer-catalogue/) |
 
 ### Gerer
 
@@ -262,6 +275,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `verifier-role-fichier` | Verifier qu'un fichier est utilise pour sa fonction | [verifier/verifier-role-fichier/](verifier/verifier-role-fichier/) |
 | `verifier-separation-preoccupations` | Verifier la separation des preoccupations | [verifier/verifier-separation-preoccupations/](verifier/verifier-separation-preoccupations/) |
 | `verifier-systeme` | Verifier le systeme utilisateur | [verifier/verifier-systeme/](verifier/verifier-systeme/) |
+| `verifier-restauration-sure` | Detecter les fichiers non commites avant restauration git | [verifier/verifier-restauration-sure/](verifier/verifier-restauration-sure/) |
 
 ---
 
@@ -384,19 +398,20 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 |---|---|
 | Ajouter | 1 |
 | Analyser | 2 |
+| Cartographier | 1 |
 | Changer | 1 |
-| Combos | 12 |
+| Combos | 15 |
 | Condenser | 1 |
 | Copier | 2 |
 | Corriger | 5 |
 | Creer | 4 |
 | Decomposer | 1 |
 | Deplacer | 1 |
-| Detecter | 5 |
+| Detecter | 6 |
 | Ecrire | 1 |
 | Editer | 1 |
 | Evaluer | 4 |
-| Generateurs | 6 |
+| Generateurs | 7 |
 | Gerer | 1 |
 | Guider | 1 |
 | Inserer | 1 |
@@ -410,11 +425,11 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Remplacer | 1 |
 | Supprimer | 3 |
 | Valider | 12 |
-| Verifier | 4 |
+| Verifier | 5 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **100** |
+| **Total** | **107** |
 
-> **Note sur le decompte** : 85 outils d'action + 12 combos + 3 protections + 1 template = 101 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
+> **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 103 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 
 ---

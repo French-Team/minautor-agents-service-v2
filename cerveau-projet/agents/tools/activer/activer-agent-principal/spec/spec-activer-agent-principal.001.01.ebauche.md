@@ -287,5 +287,5 @@ Tests manuels sur le dossier `exemples/` avec des fichiers de test.
 | 2026-08-07 | 0.3.1 | Vulcain | Profil de session dans le classeur-variables (profil-session-<session>) ecrit/mis a jour a chaque action |
 | 2026-08-07 | 0.3.3 | REGLE UTILISATEUR : session occupee -> attribution automatique de la prochaine libre (1er LLM = llm-1) |
 | 2026-08-07 | 0.3.4 | MODE ID : sidentifier <llm-id> (comparaison id -> session, liaison dans le classeur) |
-| 0.3.2 | Vulcain | Regle de derivation du nommage (profil-session-<id> sans double prefixe) - correction du verdict A REVOIR de Janus |
-| 0.5.0 | Vulcain | CONVENTION IDENTIFICATION : blocs de session en Nom LLM (tete) / Nom Agent / Role Agent, migration automatique des anciens champs, table Sessions connues en Nom LLM |
+| 2026-08-07 | 0.3.2 | Vulcain | Regle de derivation du nommage (profil-session-<id> sans double prefixe) - correction du verdict A REVOIR de Janus |
+| 2026-08-08 | 0.5.0 | Vulcain | CONVENTION IDENTIFICATION : blocs de session en Nom LLM (tete) / Nom Agent / Role Agent, migration automatique des anciens champs, table Sessions connues en Nom LLM |

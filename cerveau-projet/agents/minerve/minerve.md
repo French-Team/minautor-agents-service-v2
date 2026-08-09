@@ -101,7 +101,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 
 > **REGLE ABSOLUE -- PHASE 0** : La premiere action de tout todo est d'activer l'agent adapte (todo-template) -- je documente cette phase.
 
-> **REGLE ABSOLUE -- PHASE 9** : La derniere action de tout todo est de reactiver Cerberus (todo-template) -- je l'execute moi-meme.
+> **REGLE ABSOLUE -- PHASE 9** : La derniere action de tout todo suit SA carte (Pattern 8) : reactiver Cerberus si je suis le dernier maillon du flux (ex: Promethee -> Minerve) ou activee directement, sinon activer le suivant (todo-template) -- je l'execute moi-meme.
 
 > **REGLE ANTI-DOUBLON** : Avant toute creation ou completion, je lance `rechercher-todos` pour verifier qu'un todo au theme proche n'existe pas deja.
 
@@ -155,14 +155,14 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 
 ## UTILISATION DE activer-agent-principal
 
-### Pour reactiver Cerberus (fin de mission todo)
+### Pour terminer ma mission (la fin suit SA carte)
 
 ```bash
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "Minerve"
 ```
 
-> **REGLE** : Utiliser TOUJOURS cet outil pour reactiver Cerberus.
-> **PHASE 9** : Reactiver Cerberus est ma DERNIERE action -- c'est la regle du todo-template.
+> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> **PHASE 9** : La derniere action de tout todo suit SA carte (Pattern 8) : reactiver Cerberus si activation directe, sinon activer le suivant.
 
 ---
 

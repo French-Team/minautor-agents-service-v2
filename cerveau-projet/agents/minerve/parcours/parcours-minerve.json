@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-minerve",
     "agent": "minerve",
-    "version": "0.1.0",
+    "version": "0.1.4",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Minerve : redactrice de todos. 2 missions (creer un todo, completer un todo) couvrant les phases 0 a 9 du todo-template. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
   },
@@ -48,12 +48,14 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/minerve/corrections.md"
         },
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/minerve/minerve.md"
         }
@@ -94,6 +96,7 @@
         {
           "type": "outil",
           "nom": "rechercher-todos",
+          "catalogue": "rechercher-todos",
           "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-todos/",
           "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-todos/rechercher-todos.py"
         }
@@ -126,6 +129,17 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande generateurs-squelette-todo --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-commande",
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande generateurs-squelette-todo --reponses ..."
+        },
+        {
+          "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
         },
         {
@@ -139,6 +153,7 @@
         {
           "type": "outil",
           "nom": "generateurs-squelette-todo",
+          "catalogue": "generateurs-squelette-todo",
           "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-squelette-todo/",
           "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-todo/generateurs-squelette-todo.py <spec-source> (nommage automatique selon convention-renommage)"
         }
@@ -163,11 +178,12 @@
         },
         {
           "type": "regle",
-          "texte": "REGLE PHASE 9 : la derniere action de tout todo est de reactiver Cerberus (je l'execute moi-meme)."
+          "texte": "REGLE PHASE 9 : la derniere action de tout todo suit SA carte (Pattern 8) : reactiver Cerberus si je suis le dernier maillon du flux (ex: Promethee -> Minerve) ou activee directement, sinon activer le suivant. Je l'execute moi-meme."
         },
         {
           "type": "outil",
           "nom": "creer-remplir-todo",
+          "catalogue": "creer-remplir-todo",
           "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-todo/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-todo/creer-remplir-todo.py <todo> (titre, statut, phase0..phase9, historique, notes, liens - sans ouvrir le fichier)"
         }
@@ -185,6 +201,7 @@
         {
           "type": "outil",
           "nom": "valider-conformite-ascii",
+          "catalogue": "valider-conformite-ascii",
           "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <todo> (UN fichier par appel)"
         }
@@ -206,6 +223,7 @@
         {
           "type": "outil",
           "nom": "valider-todo",
+          "catalogue": "valider-todo",
           "chemin": "cerveau-projet/agents/tools/valider/valider-todo/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>"
         }
@@ -236,6 +254,7 @@
         {
           "type": "outil",
           "nom": "editer-fichier",
+          "catalogue": "editer-fichier",
           "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/pense-betes/specs/todo/index-todo.md <ancien> <nouveau>"
         }
@@ -257,12 +276,14 @@
         {
           "type": "outil",
           "nom": "ajouter-contenu-fichier",
+          "catalogue": "ajouter-contenu-fichier",
           "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/minerve/corrections.md <lecon>"
         },
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> minerve"
         }
@@ -289,6 +310,7 @@
         {
           "type": "outil",
           "nom": "rechercher-todos",
+          "catalogue": "rechercher-todos",
           "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-todos/",
           "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-todos/rechercher-todos.py"
         }
@@ -306,6 +328,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <todo-existant>"
         }
@@ -342,11 +365,12 @@
         },
         {
           "type": "regle",
-          "texte": "REGLE PHASE 9 : la derniere action de tout todo est de reactiver Cerberus."
+          "texte": "REGLE PHASE 9 : la derniere action de tout todo suit SA carte (Pattern 8) : reactiver Cerberus (dernier maillon du flux ou activation directe) ou activer le suivant."
         },
         {
           "type": "outil",
           "nom": "creer-remplir-todo",
+          "catalogue": "creer-remplir-todo",
           "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-todo/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-todo/creer-remplir-todo.py <todo> (completer les phases manquantes selon le todo-template)"
         }
@@ -364,6 +388,7 @@
         {
           "type": "outil",
           "nom": "valider-todo",
+          "catalogue": "valider-todo",
           "chemin": "cerveau-projet/agents/tools/valider/valider-todo/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>"
         }
@@ -396,6 +421,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
         }
@@ -405,12 +431,12 @@
     "c20": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c21": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -423,6 +449,7 @@
         {
           "type": "outil",
           "nom": "lire-activite-recente",
+          "catalogue": "lire-activite-recente",
           "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
         },

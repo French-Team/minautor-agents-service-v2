@@ -126,8 +126,26 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 | `valider-tableaux` | Verifier la coherence des tableaux des fiches |
 | `detecter-local-hors-fonction` | Detecter les local utilises hors fonction dans les scripts bash |
 | `detecter-usage-outils-externes` | Detecter les traces d'outils externes (CRLF, non-ASCII, BOM) |
+| `detecter-impacts` | Detecter les fichiers impactes par une modification (verification d impact, Pattern 14) |
 | `activer-agent-principal` | Reactiver Cerberus en fin de mission |
 | `guider-parcours` | Suivre MON parcours case par case (jeu de piste) |
+
+> **VERIFICATIONS D AUDIT OBLIGATOIRES (criteres d execution)** : pendant
+> tout audit, je passe OBLIGATOIREMENT par les 3 cases de controle de la
+> sequence c8b -> c8c -> c8d du parcours :
+> - **c8b CONFORMITE D EXECUTION** (critere 22, Pattern 11) : l agent a-t-il
+>   fait ce que sa carte ordonnait ? (croisement mission / carte / deroulement
+>   reel)
+> - **c8c VERIFICATION D IMPACT** (critere 25, Pattern 14) : tous les fichiers
+>   impactes sont-ils mis a jour ? (lancer detecter-impacts sur un echantillon
+>   des fichiers modifies -- index-tools, catalogue, spec, fiches, parcours,
+>   corrections)
+> - **c8d LA FIN SUIT SA CARTE** (critere 24, Pattern 13) : chaque fin du
+>   parcours audite est-elle COHERENTE avec le type d activation ?
+>   activation directe par Cerberus -> reactiver Cerberus ; maillon de chaine
+>   -> activer le suivant selon SA carte ; dernier maillon -> reactiver
+>   Cerberus avec le bilan consolide ; la chaine ne retombe JAMAIS sur
+>   Cerberus au milieu. Toute fin incoherente = NON CONFORME.
 
 > **REGLE** : Pour toute operation de base sur les fichiers, j'utilise CES outils, jamais les outils du systeme.
 > **ETAPE SYSTEME (choix .py/.sh)** : avant d'executer un outil, je consulte le profil systeme stocke (classeur-variables, variable profil-systeme) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
@@ -192,13 +210,14 @@ Chaque rapport suit ce format :
 
 ## UTILISATION DE activer-agent-principal
 
-### Pour reactiver Cerberus
+### Pour terminer ma mission (la fin suit SA carte)
 
 ```bash
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison du rapport" themis
 ```
 
-> **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.
+> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> Utiliser TOUJOURS l outil activer-agent-principal (jamais str_replace/write_file) pour AGENTS.md.
 
 ---
 
@@ -236,3 +255,4 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 |---|---|---|
 | 2026-08-05 | Creation | Fiche d'agent initialisee |
 | 2026-08-07 | v0.2.0 | Fiche allegee : le guidage des missions vit dans le parcours (jeu de piste), la fiche garde identite, regles absolues et connexions |
+| 2026-08-09 | v0.2.1 | Verifications d audit documentees : bloc VERIFICATIONS D AUDIT OBLIGATOIRES (c8b critere 22, c8c critere 25, c8d critere 24) + outil detecter-impacts ajoute au tableau (suite parcours themis v0.2.5) |

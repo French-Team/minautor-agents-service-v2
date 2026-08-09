@@ -98,3 +98,31 @@ preferences:
 ## PHILOSOPHIE -- Principes de comportement
 
 | **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |
+## [LECON] 2026-08-09 -- TEST REEL PILOTE STRICT v0.1.2 (chemin explorer, generateur)
+
+**Contexte** : mission reelle de verification du pilote strict - suivre le parcours explorer en composant CHAQUE commande via le generateur.
+
+**RESULTAT GLOBAL : le pilote strict FONCTIONNE** - c0/c0c/c1 + les cases c2-c7 composees et executees SANS erreur via le generateur (lister-dossiers, lister-fichiers, lister-fonctions, lister-appels, lire-fichier --debut 1 --fin 10, rechercher-texte), PARCOURS TERMINE atteint.
+
+**PROBLEME REVELE (la valeur du test reel)** : case c8 valider-relecture - le generateur compose valider-relecture.py --fichier X mais l outil v0.2.0-py repond [ERREUR] Option inconnue : --fichier (son interface reelle est --agent <nom> / --verbose).
+
+**Lecons** :
+1. Le test reel est IRREMPLACABLE : les tests formels (005 Morpheus 26/26, controle Janus 34/34) verifient la structure et la composition SANS erreur, mais seul l EXECUTION reelle de chaque commande revele un modele catalogue obsolete (interface de l outil evoluee sans mise a jour du catalogue).
+2. Scan des 106 entrees du catalogue : 3 suspects (valider-nommage, valider-relecture, verifier-systeme) - apres verification avec le BON flag --aide, seulement 1 VRAI decalage : valider-relecture (modele --fichier vs interface --agent). valider-nommage et verifier-systeme = faux positifs (leurs flags existent).
+3. PIEGE DU SCAN : certains outils repondent Option inconnue : --help et exigent --aide - un scan automatique avec --help produit des FAUX POSITIFS. Toujours verifier le format d aide de chaque outil.
+4. Le generateur compose fidelement ce que dit le catalogue : si le modele est faux, la commande generee est fausse - le catalogue doit etre la SOURCE DE VERITE de l interface reelle des outils.
+5. RECOMMANDATION pour la generalisation : avant de retirer les commandes en dur des 10 autres parcours, CORRIGER l entree catalogue valider-relecture (modele --agent {agent} + option --verbose) - c est une action pour Vulcain/Buffy (constructeur d outils), pas pour Atlas (explorateur - je signale, je ne corrige pas).
+6. Le pilote strict est VALIDE EN CONDITIONS REELLES pour 6/7 cases du chemin explorer - le blocage c8 est un probleme de catalogue, pas du parcours ni du generateur.
+## [LECON] 2026-08-09 -- SCAN SYSTEMATIQUE CATALOGUE vs INTERFACES REELLES (105/106 conformes, 0 decalage)
+
+**Contexte** : audit complet demande avant la generalisation du pilote strict aux 10 autres parcours - comparer CHAQUE entree du catalogue v0.2.1 (106 commandes) a l interface reelle de son outil (--aide puis --help en fallback, timeout 8s).
+
+**RESULTAT** : 105 CONFORMES / 0 DECALAGE / 1 NON TESTABLE (test-001-evaluer-agents-coherence, un TEST FORMELL sans interface d aide - normal, modele {chemin} sans flag = risque nul) / 0 alerte. Le catalogue v0.2.1 est ALIGNE sur les interfaces reelles : la generalisation peut etre lancee.
+
+**Lecons** :
+1. LA REGEX DES PLACEHOLDERS DOIT INCLURE LES CHIFFRES : `\{([a-z_]+)\}` ne matche pas `{paire1}`/`{paire2}` (remplacer-texte) -> FAUX POSITIF "placeholder obligatoire absent du modele". Corrige en `\{([a-z_0-9]+)\}`. TOUJOURS valider ses propres outils de scan sur des cas connus avant de conclure.
+2. CLASSER NON TESTABLE plutot que CONFORME PAR DEFAUT : un outil qui rejette --aide ET --help n a pas d interface d aide -> le classer NON TESTABLE (honnete) au lieu de supposer conforme - c est la difference entre un scan fiable et un scan complaisant.
+3. UN TEST FORMELL dans le catalogue n a PAS d aide (il s execute directement) : ne pas le traiter comme un decalage - verifier son modele (placeholder uniquement = risque nul) et le documenter.
+4. PIEGE SHELL : `grep -oE '--[a-z...]*'` est mal interprete (le pattern commence par --) -> utiliser `grep -oE -- 'pattern'` pour eviter le faux message "unknown option".
+5. L echantillon manuel de verification est indispensable : valider 4-8 outils connus (valider-relecture, lire-fichier, detecter-impacts, ecrire-fichier...) pour confirmer que le scan automatique dit la verite.
+6. LIVRABLE REUTILISABLE : le script de scan (cerveau-projet/agents/atlas/explorations/scan-catalogue.py) + le rapport (scan-catalogue-2026-08-09.md) - a rejouer apres chaque modification du catalogue (regle : le scan devient un controle standard avant chaque generalisation).

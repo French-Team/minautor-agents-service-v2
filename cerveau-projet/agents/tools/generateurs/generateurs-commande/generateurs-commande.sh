@@ -1,7 +1,7 @@
 #!/bin/bash
 # generateurs-commande.sh
 # Genere une commande complexe a lancer, en posant une question par parametre.
-# Version : 0.1.0-beta
+# Version : 0.2.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -15,7 +15,7 @@
 #   - --reponses "a=b;c=d" : reponses fournies en une fois (mode non interactif)
 #   - mode interactif   : menu de choix + une question par parametre
 
-VERSION="0.1.0-beta"
+VERSION="0.2.1"
 STATUT="ebauche"
 
 RED='\033[0;31m'
@@ -214,7 +214,13 @@ for parametre in commande.get("parametres", []):
 modele = commande.get("modele", "")
 for parametre in commande.get("parametres", []):
     cle = parametre.get("cle", "?")
-    modele = modele.replace("{%s}" % cle, composer_valeur(parametre, reponses.get(cle, "")))
+    valeur = reponses.get(cle, "")
+    if valeur == "":
+        # Flag a valeur en dur dans le modele (--cle {cle}) : retirer le flag ET le placeholder si la valeur est vide
+        # (corrige 2026-08-09 : parite avec le .py - les flags optionnels vides n etaient jamais retires)
+        modele = re.sub(r"--[a-z0-9-]+\s+\{%s\}" % re.escape(cle), "", modele)
+        modele = re.sub(r"\s+\{%s\}" % re.escape(cle), "", modele)
+    modele = modele.replace("{%s}" % cle, composer_valeur(parametre, valeur))
 modele = re.sub(r"\s+", " ", modele).strip()
 
 base = [commande.get("interpreteur", "python3")]
@@ -258,7 +264,7 @@ main() {
         exit 0
     fi
     if [[ "$version" == "true" ]]; then
-        echo "generateurs-commande.sh v${VERSION} (${STATUT})"
+        echo "generateurs-commande v${VERSION}"
         exit 0
     fi
 

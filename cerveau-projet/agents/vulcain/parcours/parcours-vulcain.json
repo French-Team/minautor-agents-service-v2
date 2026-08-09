@@ -7,9 +7,9 @@
   "parcours": {
     "nom": "parcours-vulcain",
     "agent": "vulcain",
-    "version": "0.2.1",
+    "version": "0.2.6",
     "case_depart": "c0",
-    "description": "Parcours (jeu de piste) des missions de Vulcain : construire un outil, modifier un outil. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.1 : boucle de delegation MORPHEUS MATERIALISEE (RELAIS c9a/c15a -> RETOUR c9b/c15b -> CLOTURE c9c/c15c -> FIN c9/c15) - la chaine ne casse plus apres l'activation de Morpheus. v0.2.0 : les cases c7/c13 (corriger accents + valider ASCII) pointent vers le combo combo-corriger-ascii (Pattern 3, spec-guider-parcours v0.2.4)."
+    "description": "Parcours (jeu de piste) des missions de Vulcain : construire un outil, modifier un outil. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.4 : REGLE DES 5 FICHIERS ajoutee dans c12 (apres toute modification de version, verifier l alignement VERSION/STATUT dans py, sh, md, spec + distinguer les versions propres du catalogue et de l index - lecon Vulcain, controle Janus). v0.2.3 : verification PARITE --version py/sh OBLIGATOIRE apres creation (c6) et modification (c12) d outil (lecon Morpheus T5 / Vulcain) - diff <(python3 outil.py --version | tr -d '\r') <(bash outil.sh --version | tr -d '\r'), si divergence aligner le .sh (VERSION/STATUT) avant de continuer. v0.2.2 : lecons des cas reels integrees. v0.2.1 : boucle de delegation MORPHEUS MATERIALISEE (RELAIS c9a/c15a -> RETOUR c9b/c15b -> CLOTURE c9c/c15c -> FIN c9/c15) - la chaine ne casse plus apres l'activation de Morpheus. v0.2.0 : les cases c7/c13 (corriger accents + valider ASCII) pointent vers le combo combo-corriger-ascii (Pattern 3, spec-guider-parcours v0.2.4)."
   },
   "cases": {
     "c0": {
@@ -48,12 +48,14 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/vulcain/corrections.md"
         },
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/vulcain/vulcain.md"
         }
@@ -85,6 +87,17 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande verifier-systeme --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-commande",
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande verifier-systeme --reponses ..."
+        },
+        {
+          "type": "regle",
           "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
         },
         {
@@ -94,6 +107,7 @@
         {
           "type": "outil",
           "nom": "verifier-systeme",
+          "catalogue": "verifier-systeme",
           "chemin": "cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
           "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
         },
@@ -118,6 +132,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>"
         }
@@ -152,6 +167,7 @@
         {
           "type": "outil",
           "nom": "copier-fichier",
+          "catalogue": "copier-fichier",
           "chemin": "cerveau-projet/agents/tools/copier/copier-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/copier/copier-fichier/copier-fichier.py cerveau-projet/agents/tools/outil-template.py cerveau-projet/agents/tools/[categorie]/[nom-outil]/[nom-outil].py"
         }
@@ -202,6 +218,12 @@
           "type": "fichier",
           "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-outils/",
           "raison": "Lire le protocole-outils avant de developper"
+        },
+        {
+          "type": "outil",
+          "nom": "verifier-parite-version",
+          "commande": "diff <(python3 <outil>.py --version | tr -d '\r') <(bash <outil>.sh --version | tr -d '\r')",
+          "raison": "PARITE OBLIGATOIRE : verifier que le .py et le .sh affichent la meme version (lecon Morpheus T5) - si divergence, aligner le .sh (VERSION/STATUT) avant de continuer"
         }
       ],
       "suivant": "c7"
@@ -221,6 +243,7 @@
         {
           "type": "outil",
           "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json"
         },
@@ -244,6 +267,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 morpheus \"TESTER ...\""
         }
@@ -275,6 +299,7 @@
         {
           "type": "outil",
           "nom": "verifier-systeme",
+          "catalogue": "verifier-systeme",
           "chemin": "cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
           "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
         }
@@ -288,6 +313,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin-outil>"
         }
@@ -309,8 +335,19 @@
         {
           "type": "outil",
           "nom": "editer-fichier",
+          "catalogue": "editer-fichier",
           "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <fichier> <ancien> <nouveau>"
+        },
+        {
+          "type": "outil",
+          "nom": "verifier-parite-version",
+          "commande": "diff <(python3 <outil>.py --version | tr -d '\r') <(bash <outil>.sh --version | tr -d '\r')",
+          "raison": "PARITE OBLIGATOIRE : verifier que le .py et le .sh affichent la meme version (lecon Morpheus T5) - si divergence, aligner le .sh (VERSION/STATUT) avant de continuer"
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE DES 5 FICHIERS (lecon Vulcain, controle Janus) : apres TOUTE modification de version d un outil, verifier l alignement VERSION/STATUT dans les 5 fichiers du dossier outil (py, sh, md, spec + catalogue/index associe si present). DISTINGUER les versions propres : catalogue-commandes.json a SA version top-level, index-tools.md a la version de l index - pas celle de l outil."
         }
       ],
       "suivant": "c13"
@@ -330,6 +367,7 @@
         {
           "type": "outil",
           "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json"
         },
@@ -399,6 +437,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
         }
@@ -408,12 +447,12 @@
     "c18": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre des parcours actuels : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c19": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete jusqu'au retour a Cerberus."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -426,6 +465,7 @@
         {
           "type": "outil",
           "nom": "lire-activite-recente",
+          "catalogue": "lire-activite-recente",
           "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
         },

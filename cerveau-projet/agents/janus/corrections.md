@@ -586,6 +586,18 @@ preferences:
 3. La spec est TRIPLEMENT coherente : regles du format (6-7) = patterns documentes = criteres d'acceptation (9-10) = procedure d'audit -- le controleur croise ces 4 endroits
 4. Distinction version : spec 0.2.1 + doc 0.2.7 mais CLI toujours 0.1.0-py/-sh -- une mise a jour de documentation ne change pas l'outil
 
+## [NOTES] Controle 2026-08-08 -- generateurs-carte v0.2.0 (squelette Pattern 10 + Pattern 3, Vulcain)
+
+**Controle** : generateurs-carte.py v0.2.0 (squelette creer enrichi par Vulcain, chaine bout-en-bout -- VERDICT Morpheus VALIDE 8/8 au prealable).
+**Verdict** : CONFORME (8/8).
+**Lecons** :
+1. CONFORMITE DU CODE : squelette_carte() ligne 160 -- indice Pattern 10 (UNE CARTE = UN ROLE, texte avec % agent) en tete des indices de c1 (ligne 231), indice Pattern 3 (RAPPEL DES COMBOS) en POSITION 1 des indices de c2 (ligne 245, avant Pattern 7 et ASCII) -- les 2 patterns de la mission sont bien integres
+2. VERSION + DOC : VERSION = 0.2.0 dans le py (ligne 29) ET dans la doc .md (ligne 11), versionning 0.2.0 ajoute avec la ligne de changements complete (Pattern 10 + Pattern 3 + spec v0.2.19)
+3. REGLES TRANSVERSES : ASCII 0 sur py + md, valider-nommage code 0, parite py/sh (wrapper pur = parite par construction), spec-guider-parcours v0.2.19 reference (14 occurrences de v0.2.19/Pattern 11)
+4. LE SQUELETTE SUIT LA SPEC : quand la spec passe a 11 patterns (v0.2.19), le squelette de creation doit les integrer -- sinon toute carte nee apres cette date nait sans les nouveaux patterns (lecon : un squelette obsolete fabrique des cartes obsoletes, comme un template obsolete fabrique des fiches obsoletes)
+5. NETTOYAGE : les dossiers de test .tmp-gc-test/ et .tmp-morpheus-test/ (auto-commites par erreur dans le passe) ont ete retires du suivi git -- les dechets de test ne doivent pas etre suivis
+6. LA CHAINE S ARRETE ICI (Pattern 8) : Janus est le dernier maillon, il REACTIVE Cerberus avec le bilan consolide (modification Vulcain + tests Morpheus + controle Janus)
+
 ## [NOTES] Controle 2026-08-08 -- correction Pattern 2 minerve c8 + promethee c8 (Buffy)
 
 **Controle** : correction des 2 ecarts Pattern 2 detectes par l audit Themis (rappel ASCII en tete des indices des cases de mise a jour d index).
@@ -619,3 +631,118 @@ preferences:
 4. La mission web utilise un indice FICHIER (protocole-recherches-web) car elle n'a pas d'outil dedie -- les missions a protocole s'incarnent par des indices fichier
 5. Rappel ASCII x6 (Pattern 2) : 5 cases d'ecriture + lecons -- proportionnel au volume d'ecriture de l'agent (Atlas documente beaucoup)
 6. La serie est COMPLETE : 11 parcours / 11 agents -- le processus (creation JSON -> fiche allegee -> controle -> README -> sync listes -> controle) est roder
+
+## [RAPPORT] Controle 2026-08-09 -- detecter-impacts sur generateurs-commande.sh (mission Vulcain)
+
+**Objet** : verifier avec detecter-impacts que la modification de generateurs-commande.sh (VERSION 0.1.0-beta -> 0.2.0, mission Vulcain 08:18) n'a pas d'impact oublie (catalogue, index-tools, spec).
+
+**Outils utilises** : detecter-impacts v0.2.1 (sur .py et .sh), lecture directe des 5 fichiers du dossier + grep cible. Lire le .md avant usage : OK (schema hybride v0.2.0 : frontmatter .md, commentaires .py/.sh, cle top-level .json).
+
+**VERDICT : NON VALIDE -- 1 impact reel oublie (la spec).**
+
+### Resultats par cible
+
+| Fichier | Version referencee | Verdict |
+|---|---|---|
+| generateurs-commande.py | 0.2.0 | OK (a jour) |
+| generateurs-commande.sh | 0.2.0 | OK (a jour, corrige par Vulcain) |
+| generateurs-commande.md | 0.2.0 | OK (a jour) |
+| catalogue-commandes.json | 0.1.0-beta (ligne 2) | NON IMPACTE : c'est la version du CATALOGUE lui-meme (fichier de donnees), pas celle de l'outil. Les 2 autres occurrences (lignes 1709, 2070) sont des descriptions d'autres outils (v0.2.0 de detecter-impacts / valider-cartes-decision). |
+| index-tools.md | v0.2.0 (ligne 9) + ligne 200 | NON IMPACTE : ligne 9 = version de l'INDEX lui-meme, ligne 200 = description migrer-identite. La ligne 151 (generateurs-commande) ne reference AUCUNE version. |
+| **spec/spec-generateurs-commande.001.01.ebauche.md** | **0.1.0-beta (ligne 10)** | **IMPACT REEL OUBLIE : la spec doit passer a 0.2.0.** |
+
+### Lecture des marquages detecter-impacts (croisement)
+
+detecter-impacts marque ~50 fichiers impliques, dont beaucoup [NON MIS A JOUR] pour le .sh. Analyse : ce sont des ARTEFACTS TEMPORELS -- le .sh vient d'etre modifie (08:18) donc tous les fichiers qui le citent sont plus anciens. La plupart citent le NOM de l'outil (parcours des agents, case passe par le generateur, corrections, controles) et PAS sa version : une modification de version ne les impacte PAS. Seule la spec reference la VERSION (ligne 10) : impact reel.
+
+### Lecons (Janus)
+
+1. detecter-impacts signale les fichiers qui citent le fichier modifie, mais TOUS les [NON MIS A JOUR] ne sont pas des impacts reels : il faut CROISER avec la nature de la modification (ici : changement de version -> seuls les fichiers qui referencent la VERSION sont impactes, pas ceux qui citent le nom).
+2. Les artefacts temporels (fichier modifie plus recent que les fichiers qui le citent) generent des [NON MIS A JOUR] massifs : verifier le CONTENU de la reference (nom vs version) avant de conclure.
+3. Le dossier d'un outil contient 5 fichiers coherents (py, sh, md, json, spec) : apres toute modification de version, verifier les 5 (py, sh, md, spec) -- le catalogue a SA propre version.
+
+### Action recommandee (domaine Vulcain)
+
+Corriger spec/spec-generateurs-commande.001.01.ebauche.md ligne 10 : **Version : 0.1.0-beta -> 0.2.0** (alignement sur py/sh/md).
+
+## [RAPPORT] Controle 2026-08-09 -- SCAN GENERALISE regle des 5 fichiers : divergences spec vs py
+
+**Objet** : generaliser la regle des 5 fichiers (lecon Vulcain) en scannant les 12 dossiers outils avec spec/ pour detecter les spec dont la version diverge de leur .py.
+
+**VERDICT : 11 spec scannees | 5 ALIGNEES | 6 DIVERGENTES** (a corriger par Vulcain - controle seul, aucune correction effectuee).
+
+### Methode
+
+Pour CHAQUE spec : extraction de la version (3 formats d'en-tete + tableaux d'historique) CROISEE avec la version VERSION= du .py associe. Lecture manuelle des formats reels (lecon Janus : ne pas conclure sur un grep seul - les spec ont des formats varies : en-tete **Version :** X, tableau frontmatter | **Version** | X |, section Versionning, ou tableau historique Date|Version|Auteur pour les spec prepare sans version d'en-tete).
+
+### Tableau des 11 spec
+
+| Outil | V. spec (source) | V. py | Verdict |
+|---|---|---|---|
+| activer-agent-principal | 0.5.0 (historique) | 0.5.0 | ALIGNE |
+| combos-moteur | 0.2.0-ebauche (en-tete) | 0.2.0-beta | DIVERGENT (suffixe incoherent) |
+| generateurs-commande | 0.2.0 (en-tete) | 0.2.0 | ALIGNE |
+| generateurs-regenerer-catalogue | 0.1.0 (en-tete) | 1.0.0 | DIVERGENT (gros ecart) |
+| guider-parcours | 0.2.20 (en-tete) | 0.3.1 | DIVERGENT (cas particulier : spec versionne les PATTERNS v0.2.x, distinct de l outil) |
+| lister-agents | 0.2.0 (historique) | 0.4.0-py | DIVERGENT |
+| lister-outils | 0.2.0 (historique) | 0.3.0-py | DIVERGENT |
+| migrer-identite | 0.2.2 (en-tete) | 0.2.2 | ALIGNE |
+| remplacer-texte | 0.1.0-beta (en-tete) | 0.1.0-beta | ALIGNE |
+| verifier-restauration-sure | 0.1.0 (versionning) | 0.1.0 | ALIGNE |
+| verifier-systeme | 0.2.0 (historique) | 0.2.1-py | DIVERGENT (mineur) |
+
+### Detail des 6 divergences (a traiter par Vulcain)
+
+1. **generateurs-regenerer-catalogue** : spec 0.1.0 vs py 1.0.0 - ecart majeur (l outil cree en 1.0.0, spec jamais montee). ALIGNER spec -> 1.0.0.
+2. **guider-parcours** : spec 0.2.20 vs py 0.3.1 - CAS PARTICULIER : la spec-guider-parcours versionne les PATTERNS (v0.2.0 a v0.2.20) distincts de la version de l outil guider-parcours.py (0.3.1). Decision a prendre : documenter comme cas legitime (spec = spec de reference des parcours, pas de l outil) ou aligner. A NE PAS aligner sans decision.
+3. **lister-agents** : spec 0.2.0 vs py 0.4.0-py - spec jamais montee depuis la refonte Promethee (0.2.0). ALIGNER spec -> 0.4.0-py.
+4. **lister-outils** : spec 0.2.0 vs py 0.3.0-py - idem. ALIGNER spec -> 0.3.0-py.
+5. **verifier-systeme** : spec 0.2.0 vs py 0.2.1-py - divergence mineure (refonte Promethee 0.2.0, py passe a 0.2.1-py). ALIGNER spec -> 0.2.1-py.
+6. **combos-moteur** : spec 0.2.0-ebauche vs py 0.2.0-beta - SUFFIXE incoherent (ebauche vs beta pour la meme base 0.2.0). Decider du suffixe canonique puis aligner.
+
+### Lecons (Janus)
+
+1. Les spec ont des FORMATS DE VERSION VARIES (en-tete, tableau frontmatter, versionning, tableau historique) : un scan automatique doit gerer tous les formats ET croiser manuellement - mon 1er script a pris la mauvaise version (0.1.2 au lieu de 0.2.2 pour migrer-identite : la version d EN-TETE prime sur le tableau d historique).
+2. La regle des 5 fichiers se GENERALISE : 6 spec sur 11 divergent - l incident generateurs-commande n etait pas isole, il etait representatif.
+3. CAS PARTICULIER guider-parcours : la spec de reference des parcours versionne les patterns, pas l outil - a documenter comme cas legitime avant tout alignement.
+4. Distinguer : divergence de BASE (ecart majeur, ex: 0.1.0 vs 1.0.0) vs divergence de SUFFIXE (meme base, suffixe incoherent, ex: -ebauche vs -beta).
+
+### Action recommandee (domaine Vulcain)
+
+Corriger les 5 divergences de base/suffixe (regenerer-catalogue, lister-agents, lister-outils, verifier-systeme, combos-moteur) ; prendre une DECISION documentee pour guider-parcours (cas particulier patterns) ; NE PAS toucher aux 5 ALIGNEES.
+## [NOTES] Controle 2026-08-09 -- combo tester-outil v0.1.0 + test-004 (Verdict VALIDE)
+
+**Controle** : second controle croise du combo tester-outil (Buffy) + test-004 (Morpheus).
+**Verdict** : VALIDE.
+**Lecons** :
+1. La chaine complete fonctionne : audit (Themis) -> creation (Buffy) -> test formel (Morpheus 16/16) -> second controle (Janus VALIDE) - le circuit de controle est operationnel de bout en bout
+2. Conformite Pattern 3 verifiee : suite lineaire d outils encapsulee dans un combo (c1 generateur -> c2 outil -> c3 controle -> c4 outil -> fin), branchee dans le parcours (case Lancer le combo X avec indice outil combos-moteur), indexee dans index-tools.md (16e combo)
+3. La REGLE ABSOLUE (jamais de test sans protections) est PRESERVEE dans un combo par un controle intermediaire (c3 : protections ajoutees ? NON -> fin PROTECTIONS MANQUANTES) - un combo ne contourne jamais une regle immuable, il l'encapsule
+4. Le test formel 004 (16 points) couvre : structure, --liste, interpolation (2 variables manquantes), navigation OUI (fichier cree + test execute), navigation NON (protections manquantes), integration parcours (guider-parcours + valider-cartes), ASCII, regression
+5. Bruits preexistants documentes (non bloquants) : valider-nommage 2 ERREUR sur definition-combo.json (identique aux 15 combos) et sur test-004 (identique aux 3 tests existants) - formats speciaux hors perimetre de l outil
+6. Un second controle independant doit REFAIRE les validations lui-meme (navigation reelle, ASCII, execution du test) - ne pas se fier au rapport precedent, verifier soi-meme (REGLE ABSOLUE : je verifie, je ne suppose pas)
+
+**Validation finale** : rapport janus/controles/controle-combo-tester-outil-2026-08-09.md, verdict VALIDE, ASCII 0.
+## [LECON] 2026-08-09 -- SECOND CONTROLE PILOTE ATLAS (generateur v0.2.1 + parcours v0.1.2 + test-005)
+
+**Controle** : verification croisee du modele pilote de generalisation du generateur.
+**Verdict** : VALIDE (aucun ecart, 34/34 verifications).
+
+**Lecons** :
+1. Le second controle REFAT les validations (je verifie je ne suppose pas) : version py+sh, py_compile, bash -n, composition flags py ET sh, catalogue, navigation 6 chemins, valider-cartes, execution reelle, test-005 reexecute 26/26
+2. Le cercle complet est operationnel pour ce modele : Diagnostic (Buffy) -> Pilote + correction bug (Buffy) -> Test formel 26/26 (Morpheus) -> Second controle VALIDE (Janus)
+3. La parite py/sh du generateur est stricte : les 4 cas flags (vides, booleens oui/non) donnent des commandes IDENTIQUES py et sh
+4. Le modele strict est REPRODUCTIBLE : parcours Atlas 0 commande en dur, navigation PARCOURS TERMINE sur les 6 chemins, CONFORME
+5. La spec est alignee (detecter-divergences-version : 0 divergence generateurs-commande) - regle des 5 fichiers respectee par Buffy
+6. GENERALISATION PRETE : ce rapport est la reference pour traiter les 10 autres parcours (morpheus, demarrage, cerberus, janus, buffy, athena, minerve, promethee, themis, clio) - chaque parcours conserve son autonomie (regle v0.2.2)
+## [NOTES] Controle 2026-08-09 -- cartographier-parcours v0.1.0 + test-006 (Verdict VALIDE)
+
+**Controle** : second controle croise de l outil cartographier-parcours (Vulcain) + test-006 (Morpheus 19/19).
+**Verdict** : VALIDE.
+**Lecons** :
+1. La chaine complete fonctionne pour un NOUVEL OUTIL : creation (Vulcain) -> test formel (Morpheus 19/19) -> second controle (Janus VALIDE) - le circuit de controle est operationnel de bout en bout, la chaine bout-en-bout (Pattern 8) ne retombe jamais sur Cerberus au milieu.
+2. C1 outils : ASCII 0 sur les 4 fichiers (py/sh/md/spec), version v0.1.0 coherente py/sh (parite wrapper pur).
+3. C2 catalogue : JSON valide, 108 commandes triees alphabetiquement, entree cartographier-parcours avec modele {parcours} {sortie} {dry-run} {verbose} - le generateur compose la commande exacte.
+4. C3 index-tools : categorie Cartographier presente (3 occurrences : section + stats + total), total 106 -> 107 coherent avec les compteurs.
+5. C4 test-006 : present, ASCII 0, nommage test-XXX-*.py reconnu par valider-nommage (0 erreur) - le format special des tests est bien gere.
+6. L outil cartographier-parcours est un bon exemple de RENDU DERIVE : il lit un parcours JSON et produit un fichier markdown (arbre ASCII + chemins + impasses) sans jamais modifier la source - la frontiere lecture/ecriture est respectee (Pattern 14 esprit : l impact cree est le fichier de sortie, jamais le parcours).

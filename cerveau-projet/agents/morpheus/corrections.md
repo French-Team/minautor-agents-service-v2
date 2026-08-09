@@ -296,6 +296,94 @@ v0.5.0 automatiquement (Nom LLM en tete + table Sessions connues en colonne Nom 
 4. Apres tout deplacement de dossier, verifier les chemins en dur dans les outils (grep du chemin ancien) - le warning d activation a revele 5 fichiers casses
 5. La distinction combos- (outils) vs combo-*/definition-combo.json (definitions) doit etre ancree dans le code, pas dans l intuition
 
+## [NOTES] VERDICT 2026-08-08 -- generateurs-carte v0.2.0 (squelette Pattern 10 + Pattern 3, Vulcain)
+
+**VERDICT** : VALIDE. 8/8 points passes.
+**Controle** : generateurs-carte.py v0.2.0 (modifie par Vulcain, chaine bout-en-bout : squelette creer enrichi -- indice Pattern 10 UNE CARTE = UN ROLE en tete des indices de c1 + indice Pattern 3 RAPPEL DES COMBOS en tete des indices de c2).
+**Lecons** :
+1. SYNTHESE 4/4 : py_compile OK, ASCII 0 sur py + md, valider-nommage code 0, version --version 0.2.0 (exige une action, comportement pre-existant identique py/sh = parite de comportement).
+2. SQUELETTE 4/4 : carte factice creee dans le workspace (.tmp-morpheus-test/ puis supprimee) -- c1 porte l indice Pattern 10 (texte UNE CARTE = UN ROLE + role de l agent), c2 porte l indice Pattern 3 (RAPPEL DES COMBOS) en POSITION 1 (avant Pattern 7 et ASCII), JSON valide, navigation PARCOURS TERMINE, --liste 7 cases, references validees.
+3. REGRESSION 3/3 : analyser (6 chemins affiches), detecter sur le squelette de base = 0 anomalie, dupliquer-chemin (--debut c2 --fin c9 --prefixe dup --brancher-debut) = references validees 10 cases. L anomalie detectee apres branchement (c2b INATTEIGNABLE) est le COMPORTEMENT DOCUMENTE de --brancher-debut (la branche c1 est reorientee vers dup-c2, l original devient inatteignable) -- pas une regression de la modification.
+4. PIEGE CLI : dupliquer-chemin prend --debut/--fin (pas d arguments positionnels c2/--vers) -- verifier le --help avant d utiliser une sous-commande.
+5. PIEGE TEST : les dossiers de test se creent dans le WORKSPACE (.tmp-morpheus-test/) puis se suppriment -- JAMAIS dans /tmp (regle workspace : ecriture = workspace seul).
+6. La chaine continue (Pattern 8) : Morpheus termine et ACTIVE Janus pour le controle.
+
+## [VERDICT] Test formel 2026-08-08 -- 3 combos creer-* v0.2.0 (89/89 REUSSI)
+
+**Tache** : tester formellement combo-creer-fichier-cerveau, combo-creer-agent, combo-creer-protocole (convertis en cases generateur Pattern 3 par Buffy).
+**Verdict** : VALIDE -- 89/89 REUSSI, 0 ECHEC, code 0.
+**Lecons** :
+1. Test cree dans tester/tests/test-003-combos-creer/ (test-003-combos-creer.py + .md) sur le modele du test-002-combos-moteur -- 9 cas par combo (structure, --liste, variable manquante, navigation OUI, navigation NON, parite py/sh, dry-run sans effet, nommage, ASCII).
+2. Les combos creer-* EXIGENT leurs variables (--var chemin=... / contenu=... / agent=...) : sans elles le moteur renvoie Variable non trouvee code 1 -- protection saine, jamais de commande partielle.
+3. La branche NON d un controle ne genere AUCUNE commande creer-fichier : le court-circuit vers la fin fonctionne pour les 3 combos (verifie).
+4. PARITE py/sh conservee : memes sorties --liste et meme navigation OUI entre combos-moteur.py et combos-moteur.sh.
+5. DRY-RUN SANS EFFET : navigation en --dry-run, aucun fichier cree (cible verifiee absente) -- la protection anti-effets est la base du test de combos qui creent des fichiers.
+6. FAUX POSITIFS DE NOMMAGE documentes (2) : (a) definitions combo-* vs convention combos-* identique a tous les combos existants ; (b) fichier de test dans tests/ exige un prefixe tests- absent des tests formels test-XXX-nom-outil, identique a test-002-combos-moteur.py (reference 31/31) -- ne pas corriger.
+7. Le test formel confirme les validations rapides de Buffy (json.load, navigation, ASCII) mais ajoute ce qu elles ne couvraient pas : parite py/sh, dry-run sans effet, branches NON, variables manquantes -- la REGLE ABSOLUE (tests = Morpheus) reste operationnelle.
+| VERITE | Les combos creer-* sont des chaines generateur->outil : sans leurs variables ils refusent (code 1), avec elles ils composent des commandes correctes et la branche NON court-circuite la creation |
+
 ## PHILOSOPHIE -- Principes de comportement
 
 | **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |
+## [RAPPORT] Test 2026-08-08 -- generateurs-commande apres correction des descriptions (VERDICT : VALIDE avec 1 anomalie pre-existante)
+
+**Objet** : tester formellement generateurs-commande apres la correction des 63 descriptions cosmetiques du catalogue (105 commandes) + le nouvel outil generateurs-regenerer-catalogue.
+**Tests passes** :
+1. T1 --version : generateurs-commande v0.2.0 OK.
+2. T2 --liste : 109 lignes, 0 description cosmetique restante sur 105 (pattern Options/Arguments/[--aide]/source destination = 0).
+3. T3 generation reelle 6/6 : activer-activer (quote raison OK), valider-nommage, verifier-restauration-sure, creer-fichier, combos-moteur, generateurs-carte - commandes exactes et interpolees.
+4. T4 regenerateur : --version v1.0.0, dry-run 86 outils scannes 82 preserves 0 a ajouter, extraction 2 formats (docstring valider-nommage + commentaires copier-fichier + docstring .sh test-001), bout en bout outil fictif propose avec la bonne description puis supprime SANS residu.
+5. T5b parite generateurs-regenerer-catalogue py/sh OK.
+6. T6 non-regression : --liste 109, ASCII 0 catalogue, workspace propre (0 outil fictif, 0 .tmp).
+**BUG CORRIGE (trouve par le test)** : generateurs-carte avait un parametre action de type choix avec LISTE VIDE (heritage parsing piste A) -> generation impossible (Valeur invalide pour action). Corrige : choix = [creer, analyser, dupliquer] (l entree speciale du regenerateur). 1 seul cas sur 105.
+**ANOMALIE PRE-EXISTANTE SIGNALEE (non corrigee, domaine Vulcain)** : generateurs-commande.sh affiche v0.1.0-beta alors que le .py affiche v0.2.0 - divergence de parite version, fichier .sh non modifie par les missions recentes (pre-existant). A corriger par Vulcain (mettre a jour VERSION du .sh).
+**Lecons** :
+1. Le test de generation reelle (--commande + --reponses) est le SEUL moyen de detecter les parametres choix a liste vide (un simple json.load ne suffit pas).
+2. Les entrees SPECIALES du regenerateur (generateurs-carte, combos-moteur, verifier-restauration-sure) sont la protection contre les parses d aide imperfectibles - mais le catalogue ACTUEL peut encore contenir des entrees regenerees avec des defauts : scanner les parametres type=choix a liste vide dans tout le catalogue.
+3. Le .sh wrapper peut garder une VERSION obsolete sans etre modifie : verifier la parite --version py/sh lors de chaque test.
+## [VERDICT] Test formel 2026-08-09 -- combo tester-outil v0.1.0 (16/16 VALIDE)
+
+**Objet** : test formel du combo `tester-outil` (Pattern 3, chemin de test de Morpheus encapsule, cree par Buffy) + integration dans le parcours morpheus v0.1.2.
+**Verdict** : VALIDE. 16/16 points passes (test-004-combos-tester-outil.py).
+**Lecons** :
+1. La navigation du combo tester-outil est complete : --liste 6 cases, chemin OUI (c1 generateur creer-fichier -> c2 outil cree le fichier -> c3 controle protections -> c4 outil commande_test -> c6 FIN), chemin NON (c3=NON -> c5 FIN PROTECTIONS MANQUANTES, la REGLE ABSOLUE jamais de test sans protections est PRESERVEE)
+2. L interpolation {var} est robuste : variable manquante (fichier_test en c1, commande_test en c4) -> erreur claire avec la case source (combos-moteur refuse proprement)
+3. PIEGE WINDOWS DECOUVERT : un chemin absolu avec backslashes (Z:\...\test-001.sh) passe dans la commande generee par le generateur, puis shlex.split de la case outil ECLATE le backslash -> le fichier n est pas cree. SOLUTION : utiliser des FORWARD SLASHES dans fichier_test (Z:/.../test-001.sh) - Python les accepte, shlex aussi
+4. La sortie d une case outil n est affichee que via --verbose (sinon capturee dans la variable mais invisible) - pour verifier une sortie (EXEC-OK), lancer avec --verbose
+5. Integration parcours : parcours morpheus v0.1.2, guider-parcours affiche [6/18] Lancer le combo tester-outil puis [7/18] Verifier les resultats, valider-cartes-decision --agent morpheus CONFORME
+6. Le test 004 (16 points) est ajoute dans tests/ : .py + .md numerotes conformement au protocole-tests, protections workspace (dossier temporaire .tmp-test004 nettoye en fin de test)
+7. Bruit preexistant documente (non bloquant) : valider-nommage signale 2 ERREUR sur test-004 (format invalide test-004-combos-tester-outil.py) - IDENTIQUE aux 3 tests existants (test-001/002/003) : le format test-XXX-nom-outil.py dans tests/ est hors perimetre de l outil
+
+**Validation finale** : test-004 16/16 VALIDE, regression test-003 OK (combos creer-* non casses), ASCII 0 (test py + md), nommage bruit preexistant identique aux 3 tests existants, workspace propre.
+## [LECON] 2026-08-09 -- TEST FORMEL 005 generateurs-commande v0.2.1 + parcours-atlas v0.1.2 (26/26 VALIDE)
+
+**Contexte** : test formel du generateur fiabilise (flags optionnels vides) et du parcours Atlas pilote strict, avant generalisation aux 10 autres parcours.
+**Verdict** : VALIDE 26/26 (16 generateur + 6 parcours + 4 ASCII).
+**Lecons** :
+1. RACINE dans un test : le fichier est a cerveau-projet/agents/tools/tester/tests/test-XXX/ -> 6 niveaux de .. pour remonter a la racine du projet (pas 5) - erreur de chemin double cerveau-projet/cerveau-projet au 1er passage
+2. PIEGE WINDOWS cmd.exe : dans subprocess shell=True, les guillemets simples ne protegent pas et le pipe | casse la commande -> utiliser subprocess.run(args_liste) SANS shell pour les commandes avec --reponses contenant des pipes
+3. Le bug des flags vides est reellement corrige : lire-fichier compose --lignes 3 SANS --debut/--fin vides (avant : argparse code 2), flags booleens oui=flag/non=absent py ET sh, parite py/sh identique
+4. Le parcours atlas v0.1.2 en pilote strict : 0 champ commande dans les indices avec catalogue, navigation PARCOURS TERMINE, PASSE PAR LE GENERATEUR affiche sans commande en dur
+5. valider-nommage v0.3.2 reconnait maintenant test-XXX-*.py -> 0 ERREUR sur test-005 (plus besoin de documenter le bruit)
+6. Le modele est CERTIFIE pour generaliser aux 10 autres parcours : le generateur v0.2.1 compose sans erreur toutes les commandes
+## [VERDICT] Test formel 2026-08-09 -- cartographier-parcours v0.1.0 (19/19 VALIDE)
+
+**Objet** : test formel de l outil cartographier-parcours v0.1.0 (categorie cartographier/, cree par Vulcain - Atlas cartographie le parcours d un agent dans un fichier). Test : test-006-cartographier-parcours.py (19 points).
+**Verdict** : VALIDE. 19/19 points passes.
+**Tests passes** :
+1. --version py/sh identiques v0.1.0 (wrapper pur).
+2. Generation reelle sur parcours-atlas : fichier cree dans le dossier du parcours, en-tete complet (agent, version 0.1.4, depart c0, 32 cases, 18 chemins), sections arbre/impasses/boucles/chemins presentes.
+3. Parite py/sh : fichiers generes IDENTIQUES (diff).
+4. --sortie personnalise vers .tmp-* : fichier cree au chemin demande.
+5. --dry-run ne cree rien ([DRY-RUN] affiche).
+6. Arbre : chaque case apparait UNE fois (c0 x1, c11 x1), convergences marquees [convergence], fins visibles.
+7. ASCII 0 sur les 5 fichiers (py, sh, md, spec, genere).
+8. JSON invalide -> ERREUR claire (code 1).
+9. Parcours inexistant -> ERREUR claire (code 1).
+10. valider-nommage --type outil OK.
+11. Aucun fichier residuel dans le workspace apres les tests (cartographie-atlas supprime).
+**Lecons** :
+1. L arbre ASCII de cartographier-parcours est CORRECT apres correction du bug de double affichage : la fonction descendre avec un set affichees (1ere occurrence) + marquage [convergence] evite les cases en double et materialise les rejoints de workflow - c est le comportement attendu d une cartographie (Pattern 7 modele compose : les deviations REJOIGNENT, elles ne bouclent pas).
+2. La parite py/sh par wrapper pur (exec python3) rend le test de parite TRIVIAL (fichiers generes identiques) - c est le bon pattern pour les outils dont la logique vit dans le .py.
+3. Le test de generation reelle (bout en bout avec sortie par defaut dans le dossier du parcours) verifie AUSSI la protection workspace : le fichier genere doit etre SUPPRIME apres le test (0 residu).
+4. La chaine bout-en-bout est respectee : Vulcain m a active, je rends mon verdict et j ACTIVE JANUS (controle croise) - la chaine ne retombe jamais sur Cerberus au milieu.

@@ -79,5 +79,5 @@ identite:
 | **Auto-correction** | L'agent corrige ses propres erreurs dans `corrections.md` |
 | **AGENTS.md dynamique** | L'agent principal met a jour AGENTS.md a chaque session |
 | **Fiche obligatoire** | Pas de travail sans fiche d'agent prealable |
-| **Cycle complet** | Cerberus -> Agent -> Cerberus (toujours revenir a Cerberus) |
+| **Cycle complet** | Cerberus -> Agent -> (la fin suit SA carte : reactiver Cerberus si activation directe, sinon activer le suivant ; dernier maillon reactiver Cerberus avec bilan consolide) |
 | **Ordre logique** | Fichiers principaux d'abord, agents secondaires ensuite |

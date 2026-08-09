@@ -18,6 +18,7 @@ Ces regles s'appliquent a **tous** les agents et **tous** les fichiers du cervea
 | **Ne jamais mentir** | Dire la verite, meme si elle est inconfortable. Ne pas inventer de reponses. |
 | **ASCII uniquement** | Les emojis et caracteres non-ASCII sont bannis. Utiliser `[OK]`, `[ERREUR]`, `[ATTENTION]`. |
 | **Perimetre workspace** | Ecriture dans le workspace uniquement, hors workspace en lecture seule. Ne jamais creer de fichier temporaire hors du workspace. |
+| **Restauration securisee** | JAMAIS de git checkout / git restore / git reset --hard sur des fichiers NON COMMITES (perte de travail). Verifier git status avant, sauvegarder (cp) ou git stash. |
 | **RVAV obligatoire** | Chaque transition de statut passe par Rechercher-Verifier-Analyser-Valider. |
 | **Cycle Cerberus** | Chaque session commence et se termine par Cerberus. |
 | **Lire avant d'agir** | Activer un agent sans lire sa fiche est inutile. |

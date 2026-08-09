@@ -1,0 +1,66 @@
+{
+  "combo": {
+    "nom": "combo-tester-outil",
+    "description": "Chemin de test de Morpheus encapsule (Pattern 3, anciennes cases c4-c6 du parcours morpheus) : ecrire le fichier de test via le generateur (creer-fichier) -> verifier les protections (REGLE ABSOLUE : jamais de test sans protections) -> executer le test avec protections. Variables attendues : --var fichier_test=<chemin du fichier de test> --var contenu_test=<contenu du test> --var commande_test=<commande d execution du test>.",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande creer-fichier pour le test",
+      "type": "generateur",
+      "catalogue": "creer-fichier",
+      "entrees": {
+        "fichier": "{fichier_test}",
+        "contenu": "{contenu_test}",
+        "forcer": "oui"
+      },
+      "sortie": "cmd1",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Executer la creation du fichier de test",
+      "type": "outil",
+      "commande": "{cmd1}",
+      "sortie": "resultat_creation",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Controle : protections ajoutees ?",
+      "type": "controle",
+      "question": "Les protections sont-elles ajoutees au test (boucles infinies, erreurs silencieuses, blocage) ? REGLE ABSOLUE : jamais de test sans protections.",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c4"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c5"
+        }
+      ]
+    },
+    "c4": {
+      "titre": "Executer le test avec protections",
+      "type": "outil",
+      "commande": "{commande_test}",
+      "sortie": "resultat_tests",
+      "suivant": "c6"
+    },
+    "c5": {
+      "titre": "FIN - protections manquantes",
+      "type": "fin",
+      "message": "PROTECTIONS MANQUANTES : la REGLE ABSOLUE exige des protections (tester-protection-boucles-infinies, tester-protection-erreurs-silencieuses, tester-protection-blocage). Ajouter les protections puis relancer le combo."
+    },
+    "c6": {
+      "titre": "FIN - chemin de test termine",
+      "type": "fin",
+      "message": "Chemin de test termine : fichier de test cree, protections verifiees, test execute. Donner le verdict dans la case suivante du parcours morpheus."
+    }
+  },
+  "identite": {
+    "type": "combo",
+    "appartient_a": "commun",
+    "commun": true
+  }
+}

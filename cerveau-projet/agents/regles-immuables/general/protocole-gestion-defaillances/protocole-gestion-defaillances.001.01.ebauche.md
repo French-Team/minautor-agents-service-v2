@@ -64,6 +64,14 @@ Detecter et corriger automatiquement les defaillances du cerveau-projet avant qu
 4. Mettre a jour les index
 ```
 
+#### Regle de restauration (IMMUABLE -- lecon incident piste B)
+
+> **INTERDIT** : restaurer un fichier par `git checkout` / `git restore` / `git reset --hard` si des modifications non commitees existent. Cela ecrase le travail en cours (perte definie).
+>
+> **OBLIGATOIRE** : verifier `git status` AVANT toute restauration. Si des fichiers non commites existent : sauvegarder (cp vers un dossier temp du workspace) ou `git stash`.
+>
+> **METHODE SURE** : restaurer depuis une sauvegarde copiee dans le workspace, jamais depuis git si le fichier contient du travail non commite.
+
 ### Etape 4 -- Traiter la cause racine
 
 ```

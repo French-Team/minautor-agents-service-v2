@@ -1,402 +1,344 @@
 {
-  "identite": {
-    "type": "parcours",
-    "appartient_a": "morpheus",
-    "commun": false
-  },
-  "parcours": {
-    "nom": "parcours-morpheus",
-    "agent": "morpheus",
-    "version": "0.1.0",
-    "case_depart": "c0",
-    "description": "Parcours (jeu de piste) des missions de Morpheus : tester un outil (ecrire + executer avec protections), valider, rapporter. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
-  },
-  "cases": {
-    "c0": {
-      "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-      "type": "question",
-      "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c0c"
-        },
-        {
-          "reponse": "INCERTAIN",
-          "vers": "c0b"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c0b"
-        }
-      ]
-    },
-    "c0b": {
-      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/morpheus/corrections.md"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/morpheus/morpheus.md"
-        }
-      ],
-      "suivant": "c0c"
-    },
-    "c1": {
-      "titre": "Mission",
-      "type": "question",
-      "question": "Quelle est la mission ?",
-      "branches": [
-        {
-          "reponse": "tester",
-          "vers": "c2"
-        },
-        {
-          "reponse": "verifier",
-          "vers": "c11"
-        },
-        {
-          "reponse": "autre",
-          "vers": "c13"
-        }
-      ]
-    },
-    "c2": {
-      "titre": "Lire la documentation de l'outil",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne teste JAMAIS sans protections."
-        },
-        {
-          "type": "regle",
-          "texte": "Je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "fichier",
-          "chemin": "agents/tools/[categorie]/[nom-outil]/[nom-outil].md",
-          "raison": "Lire la doc de l'outil : comprendre le comportement attendu AVANT d'ecrire les tests"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>"
-        }
-      ],
-      "suivant": "c3"
-    },
-    "c3": {
-      "titre": "Lire le protocole-tests",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-tests/",
-          "raison": "Lire le protocole-tests : comment ecrire et executer les tests, cas limites, protections obligatoires"
-        }
-      ],
-      "suivant": "c4"
-    },
-    "c4": {
-      "titre": "Ecrire les tests avec template-test",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "Chaque test est NUMEROTE (test-001, test-002...)."
-        },
-        {
-          "type": "outil",
-          "nom": "template-test",
-          "chemin": "cerveau-projet/agents/tools/tester/",
-          "commande": "copier le template de test vers tests/test-00X-nom-outil/ (voir protocole-tests)"
-        },
-        {
-          "type": "outil",
-          "nom": "creer-fichier",
-          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin-test>"
-        }
-      ],
-      "suivant": "c5"
-    },
-    "c5": {
-      "titre": "Ajouter les protections",
-      "type": "controle",
-      "question": "Les 3 protections sont-elles chargees dans le test (boucles infinies, erreurs silencieuses, blocage) ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne teste JAMAIS sans protections."
-        },
-        {
-          "type": "outil",
-          "nom": "tester-protection-boucles-infinies",
-          "chemin": "cerveau-projet/agents/tools/tester/protections/",
-          "commande": "charger la protection boucles infinies dans le test"
-        },
-        {
-          "type": "outil",
-          "nom": "tester-protection-erreurs-silencieuses",
-          "chemin": "cerveau-projet/agents/tools/tester/protections/",
-          "commande": "charger la protection erreurs silencieuses dans le test"
-        },
-        {
-          "type": "outil",
-          "nom": "tester-protection-blocage",
-          "chemin": "cerveau-projet/agents/tools/tester/protections/",
-          "commande": "charger la protection blocage dans le test"
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c6"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c5"
-        }
-      ]
-    },
-    "c6": {
-      "titre": "Executer les tests avec protections",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "outil",
-          "nom": "tester-protection-*",
-          "chemin": "cerveau-projet/agents/tools/tester/protections/",
-          "commande": "executer le test avec les protections chargees (timeout configure)"
-        },
-        {
-          "type": "regle",
-          "texte": "Verifier : timeout configure, erreurs capturees, chaque test numerote."
-        }
-      ],
-      "suivant": "c7"
-    },
-    "c7": {
-      "titre": "Verifier les resultats et donner le verdict",
-      "type": "controle",
-      "question": "Le test est-il 100% VALIDE (0 echec, aucune protection declenchee) ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "Je valide seulement via les tests, pas via l'inspection."
-        },
-        {
-          "type": "regle",
-          "texte": "Tout probleme detecte (meme mineur) doit etre signale a l'agent d'origine."
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c8"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c8"
-        }
-      ]
-    },
-    "c8": {
-      "titre": "Ajouter les lecons dans corrections.md",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "Toute erreur detectee pendant les tests devient une lecon dans corrections.md."
-        },
-        {
-          "type": "outil",
-          "nom": "ajouter-contenu-fichier",
-          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/morpheus/corrections.md <lecon>"
-        }
-      ],
-      "suivant": "c9"
-    },
-    "c9": {
-      "titre": "Retour : qui m'a delegue ?",
-      "type": "question",
-      "question": "Comment ai-je ete activee ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE CHAINE BOUT-EN-BOUT : Vulcain -> Morpheus -> Janus -> Cerberus. Si activation par Vulcain (chaine) -> a la fin j active Janus. Si activation directe par Cerberus -> je reactive Cerberus."
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "VULCAIN",
-          "vers": "c10"
-        },
-        {
-          "reponse": "CERBERUS",
-          "vers": "c14"
-        }
-      ]
-    },
-    "c10": {
-      "titre": "FIN - Activer Janus",
-      "type": "fin",
-      "message": "CHAINE BOUT-EN-BOUT : tests termines et VERDICT rendu (RVAV passe sur mon travail). J ACTIVE JANUS (controle) avec le rapport de tests et le verdict. La chaine continue : Janus controle puis REACTIVE Cerberus avec le bilan consolide."
-    },
-    "c11": {
-      "titre": "Valider un outil existant",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "fichier",
-          "chemin": "agents/tools/[categorie]/[nom-outil]/tests/",
-          "raison": "Verifier les tests existants, completer si necessaire"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <test-existent>"
-        }
-      ],
-      "suivant": "c12"
-    },
-    "c12": {
-      "titre": "Completer et executer la regression",
-      "type": "controle",
-      "question": "La regression complete est-elle VERTE (0 echec) ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "Executer TOUS les tests de l'outil (regression complete), pas un seul."
-        },
-        {
-          "type": "outil",
-          "nom": "tester-protection-*",
-          "chemin": "cerveau-projet/agents/tools/tester/protections/",
-          "commande": "executer chaque test avec les protections"
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c8"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c12"
-        }
-      ]
-    },
-    "c13": {
-      "titre": "Mission hors parcours",
-      "type": "question",
-      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c15"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c16"
-        }
-      ]
-    },
-    "c14": {
-      "titre": "FIN - Reactiver Cerberus",
-      "type": "fin",
-      "message": "Reactiver Cerberus avec le rapport de tests et le verdict (activation directe)."
-    },
-    "c15": {
-      "titre": "Activer l'agent habilite",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
-        }
-      ],
-      "suivant": "c17"
-    },
-    "c16": {
-      "titre": "Signaler le besoin",
-      "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
-    },
-    "c17": {
-      "titre": "FIN - Delegation",
-      "type": "fin",
-      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si activite directement par lui)."
-    },
-    "c0c": {
-      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "indice",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
-        },
-        {
-          "type": "outil",
-          "nom": "lire-activite-recente",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
-        },
-        {
-          "type": "fichier",
-          "chemin": "AGENTS.md",
-          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
-        }
-      ],
-      "suivant": "c1"
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "morpheus",
+  "commun": false
+ },
+ "parcours": {
+  "nom": "parcours-morpheus",
+  "agent": "morpheus",
+  "version": "0.1.3",
+  "case_depart": "c0",
+  "description": "Parcours (jeu de piste) des missions de Morpheus : tester un outil (ecrire + executer avec protections), valider, rapporter. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+ },
+ "cases": {
+  "c0": {
+   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+   "type": "question",
+   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
     }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "INCERTAIN",
+     "vers": "c0b"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0b"
+    }
+   ]
+  },
+  "c0b": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/morpheus/corrections.md"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/morpheus/morpheus.md"
+    }
+   ],
+   "suivant": "c0c"
+  },
+  "c1": {
+   "titre": "Mission",
+   "type": "question",
+   "question": "Quelle est la mission ?",
+   "branches": [
+    {
+     "reponse": "tester",
+     "vers": "c2"
+    },
+    {
+     "reponse": "verifier",
+     "vers": "c11"
+    },
+    {
+     "reponse": "autre",
+     "vers": "c13"
+    }
+   ]
+  },
+  "c2": {
+   "titre": "Lire la documentation de l'outil",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne teste JAMAIS sans protections."
+    },
+    {
+     "type": "regle",
+     "texte": "Je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "fichier",
+     "chemin": "agents/tools/[categorie]/[nom-outil]/[nom-outil].md",
+     "raison": "Lire la doc de l'outil : comprendre le comportement attendu AVANT d'ecrire les tests"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>"
+    }
+   ],
+   "suivant": "c3"
+  },
+  "c3": {
+   "titre": "Lire le protocole-tests",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-tests/",
+     "raison": "Lire le protocole-tests : comment ecrire et executer les tests, cas limites, protections obligatoires"
+    }
+   ],
+   "suivant": "c4"
+  },
+  "c4": {
+   "titre": "Lancer le combo tester-outil",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "LE COMBO ENCAPSULE le chemin de test (Pattern 3, anciennes cases c4-c5-c6) : ecrire le fichier de test via creer-fichier -> verifier les protections (REGLE ABSOLUE : jamais de test sans protections) -> executer le test. Fournir les 3 variables (fichier_test, contenu_test, commande_test) et repondre OUI au controle des protections."
+    },
+    {
+     "type": "outil",
+     "nom": "combos-moteur",
+     "catalogue": "combos-moteur",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+     "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-tester-outil/definition-combo.json --var fichier_test=<chemin-du-test> --var contenu_test=<contenu> --var commande_test=<commande-d-execution> --reponses c3=OUI"
+    },
+    {
+     "type": "regle",
+     "texte": "Chaque test est NUMEROTE (test-001, test-002...)."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+    }
+   ],
+   "suivant": "c7"
+  },
+  "c7": {
+   "titre": "Verifier les resultats et donner le verdict",
+   "type": "controle",
+   "question": "Le test est-il 100% VALIDE (0 echec, aucune protection declenchee) ?",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "Je valide seulement via les tests, pas via l'inspection."
+    },
+    {
+     "type": "regle",
+     "texte": "Tout probleme detecte (meme mineur) doit etre signale a l'agent d'origine."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c8"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c8"
+    }
+   ]
+  },
+  "c8": {
+   "titre": "Ajouter les lecons dans corrections.md",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+    },
+    {
+     "type": "regle",
+     "texte": "Toute erreur detectee pendant les tests devient une lecon dans corrections.md."
+    },
+    {
+     "type": "outil",
+     "nom": "ajouter-contenu-fichier",
+     "catalogue": "ajouter-contenu-fichier",
+     "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/morpheus/corrections.md <lecon>"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c9": {
+   "titre": "Retour : qui m'a delegue ?",
+   "type": "question",
+   "question": "Comment ai-je ete activee ?",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE CHAINE BOUT-EN-BOUT : Vulcain -> Morpheus -> Janus -> Cerberus. Si activation par Vulcain (chaine) -> a la fin j active Janus. Si activation directe par Cerberus -> je reactive Cerberus."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "VULCAIN",
+     "vers": "c10"
+    },
+    {
+     "reponse": "CERBERUS",
+     "vers": "c14"
+    }
+   ]
+  },
+  "c10": {
+   "titre": "FIN - Activer Janus",
+   "type": "fin",
+   "message": "CHAINE BOUT-EN-BOUT : tests termines et VERDICT rendu (RVAV passe sur mon travail). J ACTIVE JANUS (controle) avec le rapport de tests et le verdict. La chaine continue : Janus controle puis REACTIVE Cerberus avec le bilan consolide."
+  },
+  "c11": {
+   "titre": "Valider un outil existant",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "fichier",
+     "chemin": "agents/tools/[categorie]/[nom-outil]/tests/",
+     "raison": "Verifier les tests existants, completer si necessaire"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <test-existent>"
+    }
+   ],
+   "suivant": "c12"
+  },
+  "c12": {
+   "titre": "Completer et executer la regression",
+   "type": "controle",
+   "question": "La regression complete est-elle VERTE (0 echec) ?",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "Executer TOUS les tests de l'outil (regression complete), pas un seul."
+    },
+    {
+     "type": "outil",
+     "nom": "tester-protection-*",
+     "chemin": "cerveau-projet/agents/tools/tester/protections/",
+     "commande": "executer chaque test avec les protections"
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c8"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c12"
+    }
+   ]
+  },
+  "c13": {
+   "titre": "Mission hors parcours",
+   "type": "question",
+   "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c15"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c16"
+    }
+   ]
+  },
+  "c14": {
+   "titre": "FIN - Reactiver Cerberus",
+   "type": "fin",
+   "message": "Reactiver Cerberus avec le rapport de tests et le verdict (activation directe)."
+  },
+  "c15": {
+   "titre": "Activer l'agent habilite",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+    }
+   ],
+   "suivant": "c17"
+  },
+  "c16": {
+   "titre": "Signaler le besoin",
+   "type": "fin",
+   "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
+  },
+  "c17": {
+   "titre": "FIN - Delegation",
+   "type": "fin",
+   "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si activite directement par lui)."
+  },
+  "c0c": {
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type": "indice",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-activite-recente",
+     "catalogue": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+    },
+    {
+     "type": "fichier",
+     "chemin": "AGENTS.md",
+     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
+    }
+   ],
+   "suivant": "c1"
   }
+ }
 }

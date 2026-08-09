@@ -7,7 +7,7 @@ identite:
 # Specification -- generateurs-commande
 
 **Statut :** ebauche
-**Version :** 0.1.0-beta
+**Version :** 0.2.1
 **Categorie :** generateurs
 **Date :** 2026-08-07
 

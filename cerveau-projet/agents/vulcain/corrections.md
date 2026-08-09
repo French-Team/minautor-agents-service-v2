@@ -94,6 +94,20 @@ Avant de creer un outil, je verifie la disponibilite des technologies sur tous l
 
 ---
 
+## [LECON] 2026-08-08 -- OUTIL verifier-restauration-sure cree + INCIDENT catalogue ecrase (git checkout) + REGENERATION
+
+**Mission 1 (demande utilisateur)** : creer verifier-restauration-sure (detecte les fichiers non commites avant restauration git - application de la regle Restauration securisee). Cree dans verifier/verifier-restauration-sure/ (.py + .sh wrapper + .md + spec/) : git status --porcelain, mode global (verdict OK/ATTENTION) + mode --fichier (code 0/1), rappel de la regle, parite py/sh. Tests : fichier modifie code 1, fichier sur code 0, hors workspace code 2, parite OK.
+**INCIDENT (faute grave, a ne JAMAIS reproduire)** : pendant l ajout de la commande au catalogue generateurs-commande, j ai reecrit le JSON avec json.dumps(indent=1) -> reformatage massif (2997 insertions / 385 suppressions) ; pour l annuler j ai lance git checkout -- catalogue-commandes.json SANS VERIFIER git status -> le fichier avait des modifications NON COMMITEES (la piste A avait porte le catalogue de 13 a 98 commandes, non commitees) -> 85 commandes ECRASEES. C est EXACTEMENT l incident piste B que la regle Restauration securisee interdit. La lecon Buffy (git status avant checkout, sauvegarde cp ou stash) etait connue mais PAS appliquee.
+**Reparation** : regeneration complete du catalogue selon la methode piste A (lecon buffy 499-511) : script parse la ligne usage: de chaque outil (--aide/--help, argparse standard ET custom) -> positionnels + flags (avec valeur/booleens) -> modele + parametres ; 13 commandes originales conservees ; entrees speciales corrigees manuellement (10 : valider-nommage, valider-relecture, verifier-systeme, valider-cartes-decision, rechercher-pense-betes/specs/todos, nettoyer-sessions, verifier-restauration-sure, combos-moteur, generateurs-carte). Resultat : 105 commandes (13 originales + 92 ajoutees), 0 script relatif, 0 modele parasite, refs parcours 53/53 couvertes, 13 originales intactes (non-regression combos OK), ASCII 0.
+**Lecons** :
+1. FAUTE GRAVE : JAMAIS git checkout / git restore / git reset --hard sur des fichiers non commites - la regle existe (regles-general-global + protocole-gestion-defaillances Etape 3) et je l ai VIOLEE. Toujours verifier git status AVANT, sauvegarder (cp) ou git stash.
+2. PIEGE json.dumps : reecrire un JSON avec json.dumps(indent different) reformate TOUT le fichier - toujours editer chirurgicalement (inserer les lignes au format exact, indent 2 espaces pour le catalogue, CRLF) ou faire un diff --stat avant/apres.
+3. PARSEUR usage: : les flags entre crochets [--debut DEBUT] doivent etre strips AVANT le test startswith(--) ; la continuation multiligne de usage: doit s arreter des qu une ligne n est pas alignee (texte de description) ; le nom du script dans usage: doit etre exclu des positionnels.
+4. DEDUPLICATION PAR NOM (pas par script) : 13 commandes originales ont des scripts partages (activer-agent-principal.py couvert par activer-sidentifier/activer/activer-reactiver/activer-sessions ET par activer-agent-principal) - les noms d outils reels doivent etre ajoutes meme si leur script est deja couvert, seuls les doublons de NOM sont exclus.
+5. VALIDATION REGENERATION : refs parcours 53/53, 13 originales intactes, 0 parasite {--flag}, 0 script relatif, generation reelle des commandes (valider-nommage --type outil test.py, verifier-restauration-sure --fichier x.md), non-regression combos-moteur --liste, ASCII 0, diff 1961+ / 0-.
+6. Outils crees/mis a jour : verifier-restauration-sure (nouveau), index-tools.md (Verifier 4->5, Total 103->104), catalogue-commandes.json (13->105). Le test formel revient a Morpheus (REGLE ABSOLUE).
+| VERITE | La regle Restauration securisee protege le travail non commite - mais elle ne sert que si chaque agent la VERIFIE avant toute commande git destructive. Verifier git status, toujours. |
+
 ## [LECON] 2026-08-07 -- Renommage d outil
 
 **Tache** : Deplacer mettre-a-jour-agents-md vers activer/activer-agent-principal
@@ -493,6 +507,221 @@ les mots composees deja qualifies (role_principal, role_specifique) restent inch
 6. VALIDATION : py_compile, squelette de test cree (c1 porte Pattern 10, c2 porte Pattern 3 en position 1 + Pattern 7 + ASCII), navigation PARCOURS TERMINE, --liste 7 cases, references validees, ASCII 0 sur py + md, nommage code 0, parite py/sh (wrapper pur = parite par construction), doc .md bumpee v0.1.1 -> v0.2.0 avec ligne de versionning.
 7. LA CHAINE CONTINUE (Pattern 8) : Vulcain termine et ACTIVE Morpheus pour tester (c est l agent delegue qui active le suivant a SA fin, pas Cerberus).
 
+## [LECON] 2026-08-08 -- PISTE C VOLET 1 : champ catalogue optionnel sur les indices outil (guider-parcours v0.3.1)
+
+**Mission** : etendre le format des indices outil avec un champ catalogue optionnel (reference a la commande du catalogue generateurs-commande) et l afficher dans guider-parcours. Strategie validee par l utilisateur : champ AJOUTE + commande en dur CONSERVEE comme fallback.
+**Lecons** :
+1. FORMAT : l indice outil accepte maintenant 4 cles : nom, chemin, commande, catalogue (optionnel) -- le catalogue = nom de la commande dans catalogue-commandes.json, la commande en dur reste le fallback. Le champ est OPTIONNEL : absence = comportement historique, les 11 parcours existants restent PARCOURS TERMINE sans modification.
+2. AFFICHAGE : guider-parcours afficher_indices affiche catalogue: <nom> + une ligne PASSE PAR LE GENERATEUR avec la commande du generateur (--commande <nom>) quand le champ est present -- le Pattern 9 (LIRE AVANT USAGE deduit du chemin) reste intact et s affiche dans les deux cas.
+3. PARITE : le .sh est un wrapper pur qui delegue au .py (parite par construction) -- le test de parite sur le parcours de test confirme PARITE OK.
+4. NON-REGRESSION : la navigation des 11 parcours (sans champ catalogue) reste PARCOURS TERMINE 11/11 -- le champ est strictement additif.
+5. PIEGE rfind : inserer du texte en fin de la longue ligne Historique de la spec avec txt.rfind(marker) a cible la mauvaise occurrence (la ligne 12 Agent plutot que la ligne 13) -- pour les lignes uniques et longues, cibler l index de ligne exact (lignes[12] += ajout).
+6. VALIDATION : py_compile, bash -n, parite py/sh, navigation avec et sans champ catalogue (parcours de test), non-regression 11/11, ASCII 0 sur 4 fichiers (py/sh/md/spec).
+| VERITE | Une reference au catalogue (champ catalogue) rend chaque commande des parcours retracable et recomposable via generateurs-commande, sans casser les commandes en dur existantes |
+
 ## PHILOSOPHIE -- Principes de comportement
 
 | **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |
+## [LECON] 2026-08-08 -- OUTIL verifier-restauration-sure + INCIDENT catalogue ecrase (git checkout) + REGENERATION
+
+**Mission 1 (demande utilisateur)** : creer verifier-restauration-sure (detecter les fichiers non commites avant restauration git - application de la regle Restauration securisee, lecon incident piste B). Cree dans verifier/verifier-restauration-sure/ (.py + .sh wrapper + .md + spec/) : git status --porcelain, mode global (OK/ATTENTION) + mode --fichier (code 0/1), hors workspace code 2, parite py/sh, rappel de la regle. index-tools mis a jour (104 -> 105).
+
+**INCIDENT (FAUTE GRAVE -- la lecon piste B s est REPRODUITE)** : pendant l ajout de la commande au catalogue, json.dumps(indent=1) a reformate tout le fichier (2997 insertions). Pour annuler, j ai lance `git checkout -- catalogue-commandes.json` SANS verifier l etat de travail : le fichier contenait 98 commandes NON COMMITEES (piste A) -> restaure a 13, 85 commandes perdues. C est EXACTEMENT le scenario de l incident piste B, malgre le garde-fou documente. La regle Restauration securisee etait en memoire mais PAS APPLIQUEE (verifier git status avant).
+
+**REPARATION** : regeneration complete du catalogue selon la methode de la lecon piste A (corrections buffy 499-511) : scan des 94 outils reels (.py hors tester/spec/combos), parsing de l aide (usage: + continuation stricte + filtrage du nom d outil), 13 commandes originales conservees intactes, entrees speciales corrigees (generateurs-carte subcommandes, combos-moteur, verifier-restauration-sure aide custom). RESULTAT : 105 commandes, 0 script relatif, 0 modele parasite ({--flag}), toutes les 53 refs parcours couvertes, non-regression combos OK, generation reelle verifiee (valider-nommage, verifier-restauration-sure).
+
+**LECONS (a integrer)** :
+1. JAMAIS git checkout / git restore / git reset --hard sur un fichier NON COMMITE : verifier git status AVANT toute restauration (la regle existe, il faut l APPLIQUER meme en urgence).
+2. Les fichiers DERIVES (catalogue-commandes.json genere par script) doivent garder leur script de generation : la regeneration a sauve la mission.
+3. json.dumps reformate TOUT un fichier : pour editer un JSON, insertion chirurgicale texte (indentation 2 espaces + CRLF respectes).
+4. Un --aide custom (pas argparse) n expose pas usage: -> entree speciale du catalogue.
+5. Le parseur doit ignorer le nom de l outil dans usage: (positionnel parasite).
+## [LECON] 2026-08-08 -- OUTIL generateurs-regenerer-catalogue cree (remplacant durable du script temporaire piste A)
+
+**Objet** : creer un outil PERMANENT pour regenerer/synchroniser le catalogue-commandes.json du generateur, en extrayant les VRAIES descriptions depuis les en-tetes .py (eviter de re-corriger a la main apres chaque regeneration - lecon piste A : 63 entrees cosmetiques corrigees par Buffy).
+**Livrable** : generateurs-regenerer-catalogue/ (.py + .sh wrapper + .md + spec/) dans la categorie generateurs/. Modes : --dry-run (defaut) / application (synchronisation preservant l existant) / --force (reconstruction complete).
+**Test de bout en bout** : outil fictif temporaire cree dans generateurs/ -> dry-run le propose avec la description extraite du docstring -> supprime sans residu. Dry-run sur catalogue reel : 86 outils scannes, 82 preserves, 0 a ajouter (aucune regression).
+**Lecons** :
+1. REGLE NOMNAGE : le nom d un outil DOIT commencer par le prefixe de la CATEGORIE (generateurs-*) - j ai d abord cree regenerer-catalogue/ (ERREUR valider-nommage : prefixe dossier manquant) puis renomme en generateurs-regenerer-catalogue/ (git mv + mv des 4 fichiers).
+2. SCHEMA IDENTITE : un outil .py/.sh doit porter le bloc identite: (type/appartient_a/commun) sinon detecter-impacts le signale NON MIGRE - ajoute apres le shebang (comme verifier-systeme).
+3. AUTO-EXCLUSION : le regenerateur doit s exclure lui-meme du scan (outil_dir == generateurs-regenerer-catalogue) sinon il s ajouterait a son propre catalogue.
+4. La spec est un FICHIER IMPLIQUE de l outil (detecter-impacts la reference) : la toucher apres modification du .py pour passer le VERDICT a jour.
+5. Extraction descriptions : 2 formats d en-tete (.py docstring triple-quote / commentaires #), jointure des phrases coupees par : ou ,, translitteration ASCII NFKD, limite ~90 caracteres. Les 13 commandes originales + 3 entrees speciales (generateurs-carte, combos-moteur, verifier-restauration-sure) ne sont jamais regenerees.
+6. PIEGE CRLF PARASITE (encore) : normaliser LF en memoire puis reecrire CRLF uniforme - le json.dumps(indent=2) + replace(n, rn) est maintenant la methode propre pour ce fichier.
+
+## [LECON] 2026-08-08 -- DIVERGENCE VERSION generateurs-commande.sh corrigee (parite py/sh)
+
+**Objet** : corriger la divergence de version pre-existante detectee par Morpheus : le .sh affichait VERSION=0.1.0-beta (ligne 18) alors que le .py affiche VERSION=0.2.0 (ligne 41) - le wrapper n'avait jamais ete mis a jour lors des versions successives du .py.
+
+**Correction** : generateurs-commande.sh ligne 18 : VERSION="0.2.0" (alignement sur le .py). STATUT deja coherent (ebauche dans les 2).
+
+**Validations** :
+1. Parite --version py/sh OK (texte identique, seul artefact CRLF sous Windows - normalise avec tr -d '\r').
+2. Parite --liste OK (contenu des commandes identique).
+3. Generation reelle via .sh OK (commande valider-nommage generee correctement).
+4. bash -n OK + ASCII 0 non-ASCII.
+5. Scan complet des parametres type=choix dans le catalogue : 0 choix vide, 0 trop court sur 105 commandes (le seul cas generateurs-carte avait deja ete corrige par Morpheus avec choix=[creer, analyser, dupliquer]).
+
+**Lecons** :
+1. A CHAQUE version du .py d'un outil, verifier que le .sh wrapper est aligne (VERSION, STATUT) - la parite --version doit etre testee a chaque modification (lecon Morpheus T5).
+2. Le scan des parametres choix a liste vide doit devenir un reflexe apres toute regeneration du catalogue (lecon Morpheus T3 : le test de generation reelle est le seul moyen de detecter les choix vides).
+3. Sous Windows, un diff py/sh peut afficher une fausse divergence due au CRLF - normaliser avec tr -d '\r' avant de conclure.
+
+## [LECON] 2026-08-09 -- REGLE DES 5 FICHIERS apres modification de version (controle Janus)
+
+**Objet** : documenter la regle issue du controle Janus (detecter-impacts, 2026-08-09) : apres TOUTE modification de version d un outil, verifier les 5 fichiers du dossier outil et distinguer les versions propres des fichiers de donnees.
+
+**Contexte** : le controle Janus sur ma modification de generateurs-commande.sh (VERSION 0.2.0) a detecte 1 IMPACT REEL OUBLIE : spec/spec-generateurs-commande.001.01.ebauche.md ligne 10 affichait encore Version : 0.1.0-beta (au lieu de 0.2.0, aligne sur py/sh/md). J avais aligne py/sh mais oublie la spec.
+
+**La regle des 5 fichiers** : apres TOUTE modification de version d un outil, verifier l alignement VERSION (et STATUT) dans les 5 fichiers du dossier outil :
+1. `<outil>.py` -- VERSION dans le code
+2. `<outil>.sh` -- VERSION dans le wrapper (lecon Morpheus T5 : le wrapper garde souvent une version obsolete)
+3. `<outil>.md` -- Version dans l en-tete de documentation
+4. `spec/spec-<outil>...md` -- Version dans l en-tete de la spec (CIBLE DE CETTE LECON : c est le fichier le plus souvent oublie)
+5. `<catalogue ou index associe>` -- SI le dossier contient un fichier de donnees (ex: catalogue-commandes.json) ou un index : DISTINGUER les versions
+
+**Distinguer les versions propres (ne pas confondre)** :
+- `catalogue-commandes.json` a SA PROPRE version top-level (ligne 2, ex: 0.1.0-beta) qui n est PAS la version de l outil : une modification de version de l outil n impose PAS de changer la version du catalogue (fichier de donnees).
+- `index-tools.md` reference la version de l INDEX lui-meme (ligne 9, ex: v0.2.0) : pas la version des outils listes.
+- Les fichiers qui citent le NOM de l outil sans sa version (parcours des agents, corrections, controles) ne sont PAS impactes par une modification de version.
+
+**Lecon sur detecter-impacts** : les marquages [NON MIS A JOUR] massifs apres une modification sont souvent des ARTEFACTS TEMPORELS (le fichier modifie est plus recent que les fichiers qui le citent). Croiser la NATURE de la modification (version) avec le CONTENU des references (nom vs version) avant de conclure : tous les NON MIS A JOUR ne sont pas des impacts reels.
+
+**Action restante (mission separee)** : corriger spec/spec-generateurs-commande.001.01.ebauche.md ligne 10 : Version 0.1.0-beta -> 0.2.0.
+
+## [LECON] 2026-08-09 -- IMPACT SPEC CORRIGE : spec-generateurs-commande Version 0.1.0-beta -> 0.2.0 (regle des 5 fichiers appliquee)
+
+**Objet** : corriger l impact reel oublie detecte par le controle Janus : la spec de generateurs-commande affichait Version 0.1.0-beta alors que py/sh/md etaient en 0.2.0. C etait l action restante de la lecon des 5 fichiers.
+
+**Correction** : spec/spec-generateurs-commande.001.01.ebauche.md ligne 10 : Version : 0.1.0-beta -> Version : 0.2.0 (edition chirurgicale, CRLF preserve).
+
+**Validations** :
+1. Une seule occurrence de 0.1.0-beta dans la spec (ligne 10) - aucune autre a corriger.
+2. 0.1.0-beta absent apres correction, 0.2.0 present (1 occurrence).
+3. valider-conformite-ascii : 0 non-ASCII.
+4. CRLF preserve (89/89).
+5. detecter-impacts sur la spec : 2 fichiers NON MIS A JOUR (janus/corrections.md, vulcain/corrections.md) = ARTEFACTS (rapports/lecons qui documentent l incident, pas des references de version a aligner).
+6. Dossier outil desormais ALIGNE : py=0.2.0, sh=0.2.0, md=0.2.0, spec=0.2.0 (les 4 fichiers de version).
+
+**Lecons** :
+1. La regle des 5 fichiers (documentee le 2026-08-09) est appliquee : apres toute modification de version, py/sh/md/spec doivent etre alignes. La spec est bien le fichier le plus souvent oublie - exactement ce que la lecon predic.
+2. detecter-impacts apres modification de la spec signale les rapports/lecons qui documentent l incident : ce sont des artefacts (contexte documentaire), pas des impacts reels - croiser avec la nature de la modification (version) et le contenu des references.
+3. La boucle est complete : controle Janus (impact detecte) -> lecon des 5 fichiers (documentee) -> indice de carte c12 (v0.2.4) -> correction de l impact (spec 0.2.0). Cercle vertueux lecon -> carte -> application -> verification.
+
+## [LECON] 2026-08-09 -- OUTIL detecter-divergences-version cree (scan durable des spec divergentes)
+
+**Objet** : creer un outil DURABLE pour remplacer les scripts temporaires de Janus (.tmp-scan-versions*.py) qui scannaient les spec/ divergentes de leur .py (regle des 5 fichiers).
+
+**Livrable** : detecter/detecter-divergences-version/ (.py + .sh wrapper + .md + spec/ + bloc identite). Scan recursif des spec/ sous une racine, extraction de la version spec (5 formats : en-tete prioritaire, tableau frontmatter, versionning, titre, tableau historique - lecon Janus), croisement avec la version VERSION= du .py associe, verdicts ALIGNE / DIVERGENT (base) / DIVERGENT (suffixe) / SANS VERSION / SANS PY. Options : --racine (defaut cerveau-projet), --liste, --export, --version.
+
+**Validations** :
+1. Scan reel : retrouve les 6 divergences de Janus (regenerer-catalogue 0.1.0 vs 1.0.0, lister-agents, lister-outils, verifier-systeme, combos-moteur suffixe, guider-parcours) + 1 decouverte (activer-agent-principal : spec historique 0.3.4 vs py 0.5.0 avec ligne d historique MALFORMEE - 2 colonnes sans date).
+2. py_compile + bash -n OK ; valider-nommage OK ; ASCII 0 sur les 4 fichiers ; parite --version py/sh OK (via python - normaliser le CRLF, le diff shell affiche un faux positif).
+3. detecter-impacts : identite reconnue, 3 fichiers du dossier [A JOUR].
+4. index-tools : Detecter 5->6, Total 105->106, ligne ajoutee.
+5. Catalogue generateurs-commande : entree ajoutee par regenerateur (106 commandes), puis CORRIGEE (le regenerateur a cree un parametre 'chemin' positionnel au lieu de 'racine' avec defaut ; corrige en modele '--racine {racine}' + defaut cerveau-projet) - generation reelle OK.
+
+**Lecons** :
+1. Le regenerateur de catalogue cree des parametres par defaut (positionnels 'chemin') qui ne correspondent pas toujours a l'API reelle de l'outil (flags comme --racine) : VERIFIER la generation reelle via generateurs-commande apres synchronisation et corriger l'entree en entree SPECIALE si besoin.
+2. L'extraction de version des spec a 5 formats + la priorite en-tete (lecon Janus) est maintenant DUPLIQUEE dans un outil durable : ne plus scanner a la main.
+3. Les spec avec lignes d'historique MALFORMEES (2 colonnes sans date) peuvent induire l'extraction en erreur : les signaler (cas activer-agent-principal) pour nettoyage, sans conclure seul.
+4. La boucle lecon -> outil -> verification est complete : le scan manuel de Janus devient un outil reutilisable pour le prochain controle.
+
+---
+
+## [LECON] 2026-08-09 -- CORRECTION 6 DIVERGENCES spec/py (regle des 5 fichiers)
+
+**Mission** : aligner les 5 spec divergentes sur leur .py + documenter le cas particulier guider-parcours.
+**Contexte** : suite du scan detecter-divergences-version (outil cree ce jour) qui avait revele 6 spec divergentes sur 11.
+
+**Actions realisees** :
+1. **generateurs-regenerer-catalogue** : spec 0.1.0 -> 1.0.0 (3 emplacements : en-tete `# Version :`, frontmatter `version:`, titre historique) -- alignee sur py 1.0.0
+2. **lister-agents** : spec 0.2.0 -> 0.4.0-py (tableau historique + reference texte) -- alignee sur py 0.4.0-py
+3. **lister-outils** : spec 0.2.0 -> 0.3.0-py (tableau historique) -- alignee sur py 0.3.0-py
+4. **verifier-systeme** : spec 0.2.0 -> 0.2.1-py (tableau historique) -- alignee sur py 0.2.1-py
+5. **combos-moteur** : spec 0.2.0-ebauche -> 0.2.0-beta (en-tete) -- alignee sur py 0.2.0-beta (suffixe coherent)
+6. **guider-parcours** : CAS LEGITIME ASSUME -- la spec versionne les PATTERNS v0.2.x (0.2.20), distincts de l'outil 0.3.1. Decision : documenter dans le .md de detecter-divergences-version comme cas legitime, NE PAS aligner la spec.
+
+**Lecons** :
+1. Une spec peut porter sa version a PLUSIEURS endroits (en-tete, frontmatter, titre, tableau historique, reference texte) : TOUT aligner, pas seulement le premier trouve
+2. La version d'EN-TETE prime, mais les spec " prepare " (sans champ Version d'en-tete) portent leur version dans le TABLEAU HISTORIQUE -- verifier le format avant de chercher
+3. Distinguer divergence de BASE (regenerer-catalogue 0.1.0 vs 1.0.0 = ecart majeur) vs de SUFFIXE (combos-moteur ebauche vs beta = coherence de suffixe)
+4. Cas legitimes assumes (guider-parcours, prototype vulcain) : ne PAS aligner aveuglement -- documenter la decision dans l'outil qui scanne pour eviter les faux positifs repetitifs
+5. Verifier l'ASCII sur CHAQUE fichier modifie apres edition chirurgicale (0 non-ASCII sur les 6)
+
+**Validation finale** : rescan detecter-divergences-version = 5 spec ALIGNEES, 2 divergences restantes = guider-parcours (cas legitime documente) + activer-agent-principal (hors perimetre, ligne d'historique malformee a nettoyer separement).
+
+---
+
+## [LECON] 2026-08-09 -- LIGNES HISTORIQUE SANS DATE = IGNOREES par detecter-divergences-version
+
+**Mission** : corriger les 2 lignes d'historique malformees de la spec activer-agent-principal (faux divergent).
+
+**Contexte** : l'outil detecter-divergences-version lit la version d'une spec prepare dans le tableau historique via la regex `| AAAA-MM-JJ | version |` (derniere ligne avec date). Les lignes SANS DATE sont IGNOREES -> l'outil retombe sur la derniere ligne DATER (0.3.4) au lieu de la version courante reelle (0.5.0) -> faux DIVERGENT.
+
+**Actions realisees** :
+1. Ligne 290 : `| 0.3.2 | Vulcain | ...` -> `| 2026-08-07 | 0.3.2 | Vulcain | ...` (date verifiee par git blame, commit 55994e04)
+2. Ligne 291 : `| 0.5.0 | Vulcain | ...` -> `| 2026-08-08 | 0.5.0 | Vulcain | ...` (date verifiee par git blame, commit 993738a6)
+
+**Lecons** :
+1. Les lignes du tableau historique d'une spec DOIVENT TOUJOURS porter leur date reelle (AAAA-MM-JJ) : sans date, detecter-divergences-version les ignore et lit une version anterieure -> faux divergent
+2. Ne JAMAIS inventer une date : utiliser `git blame -L <lignes> --date=short <fichier>` pour retrouver la date de modification reelle
+3. Apres correction, RESCAN avec l'outil pour confirmer le passage ALIGNE (boucle de validation)
+
+**Validation finale** : rescan = activer-agent-principal ALIGNE (0.5.0 = 0.5.0) ; synthese 12 spec | 9 ALIGNEES | 1 DIVERGENT (guider-parcours = cas legitime assume documente) | 2 SANS VERSION/SPEC ; ASCII 0 ; CRLF preserve 291/291.
+## [LECON] 2026-08-09 -- valider-nommage v0.3.2 (formats speciaux combos/tests)
+
+**Mission** : faire evoluer valider-nommage pour reconnaitre les 2 formats speciaux et eliminer les bruits preexistants (definition-combo.json + test-XXX-*.py).
+**Lecons** :
+1. Les formats speciaux LEGITIMES doivent etre reconnus par l outil, pas documentes comme bruit : definition-combo.json (dossier combos/combo-*/) et test-XXX-nom-outil.(py|sh|md) (dossier tests/test-XXX-*/) passent maintenant avec 0 ERREUR - la detection repose sur le DOSSIER PARENT (prefixe combo- / test-) en plus du nom du fichier
+2. La regle est : un format special est accepte quand le nom du fichier ET le dossier parent sont coherents (definition-combo.json DANS combos/combo-*, test-XXX-* DANS tests/test-XXX-*) - eviter d accepter trop large (ex: n importe quel .json dans combos/)
+3. PARITE py/sh : la meme logique doit etre portee dans les 2 fichiers (regex bash vs PATTERN_OUTIL python) et verifiee par --version (v0.3.2-py / v0.3.2) + tests croises (meme fichier -> meme resultat)
+4. REGLE DES 5 FICHIERS : apres toute modification de version d un outil py+sh, verifier py, sh, md (versionning + doc) + spec + catalogue/index le cas echeant - ici md mis a jour avec la ligne 0.3.2
+5. NON-REGRESSION : verifier 3 cas apres modification : les formats speciaux passent (0 ERREUR), les outils normaux passent toujours, les VRAIS mauvais nommages restent detectes (cree un fichier reel mal nomme dans le workspace - un fichier inexistant donne 0 ERREUR et fausse la verification)
+6. Le test formel v0.3.0 (tester-valider-nommage-v030.sh, 13/13) passe toujours - le mode --mots-seuls non regresse
+
+**Validation finale** : v0.3.2-py/v0.3.2, 15 combos 0 ERREUR, 4 tests 0 ERREUR, mauvais nommage detecte, test v0.3.0 13/13, ASCII 0 sur 3 fichiers.
+## [LECON] 2026-08-09 -- CORRECTION CATALOGUE valider-relecture (suite test reel Atlas)
+
+**Contexte** : le test reel d Atlas a revele que l entree catalogue valider-relecture composait --fichier {fichier} alors que l outil v0.2.0-py utilise --agent <nom> (+ --verbose optionnel) -> ERREUR Option inconnue : --fichier. C etait le SEUL vrai decalage du catalogue (scan 106 entrees : valider-nommage et verifier-systeme = faux positifs --help vs --aide).
+
+**Correction appliquee** :
+1. catalogue-commandes.json v0.2.0 -> v0.2.1 : modele "--agent {agent} {verbose}", parametres agent (texte, obligatoire) + verbose (type flag, flag --verbose, optionnel) - format identique a analyser-dependances/inverse
+2. generateurs-commande.md : mention "Catalogue v0.2.0 : 106 commandes" -> "Catalogue v0.2.1 : 106 commandes" (regle des 5 fichiers : catalogue + doc .md alignes; la spec ne mentionne pas la version du catalogue - rien a faire)
+3. test-005 point 14 : verifiait catalogue version == 0.2.0 en dur -> obsolete apres bump -> aligne 0.2.1 (2 lignes : description + verifier) -> 26/26 VALIDE
+
+**Validations** : JSON valide 106 commandes, composition py/sh identique (--agent atlas), verbose=oui -> --verbose present, execution reelle code 0 [OK], navigation atlas c8 affiche catalogue + PASSE PAR LE GENERATEUR SANS commande en dur, ASCII 0 sur catalogue/doc/test, regenerateur dry-run 83 preserves 0 ajoute (correction survivra).
+
+**Lecons** :
+1. UN TEST REEL VAUT PLUS QU UN TEST FORMELL : c est l execution reelle (Atlas) qui a revele le decalage modele/interface que les 26 points du test-005 ne voyaient pas - toujours comparer le modele du catalogue a l interface reelle (--aide) quand on cree/modifie une entree
+2. UN TEST QUI VERIFIE UNE VERSION EXACTE devient obsolete des que la version change legitimement - l aligner (ou le signaler a Morpheus) plutot que de figer la version pour satisfaire le test
+3. detecter-impacts signale des fichiers reference qui mentionnent le CHEMIN du catalogue (dependance stable, ex: protocole-creation-combos) : faux positifs si la version du catalogue n y figure pas - verifier le CONTENU avant de conclure a une non-mise a jour
+4. La regle des 5 fichiers s applique au couple catalogue + doc .md (version du catalogue documentee); la spec ne la porte pas toujours - verifier les 2 endroits (doc + spec) quand on bumpe le catalogue
+## [LECON] 2026-08-09 -- INSTITUTIONNALISATION detecter-decalages-catalogue (infraction Atlas corrigee)
+
+**Contexte** : Atlas (explorateur) avait ecrit scan-catalogue.py dans son dossier explorations/ pendant son audit - DOUBLE INFRACTION : (a) les outils vivent dans agents/tools/<categorie>/<outil>/ et non dans le dossier d un agent, (b) un explorateur n est pas habilite a creer des outils (role Vulcain). Mission : institutionnaliser l outil (deplacer + structure officielle) et garder le rapport comme trace dans explorations/.
+
+**Actions** : deplacement vers tools/detecter/detecter-decalages-catalogue/ (renommage detecter-decalages-catalogue, prefixe de categorie, meme famille que detecter-divergences-version) ; structure officielle py (identite) + sh (wrapper pur) + md (LIRE AVANT USAGE) + spec + entree catalogue (v0.2.1 -> v0.2.2, 106 -> 107) + index-tools.md + doc generateurs-commande.md (Catalogue v0.2.2 : 107 commandes) + test-005 point 14 aligne (0.2.1 -> 0.2.2) ; RACINE corrigee (5 niveaux a explorations/, 6 niveaux a tools/detecter/<outil>/).
+
+**Validations** : py_compile + bash -n OK, --version v0.1.0, nommage 0 ERREUR, ASCII 7/7, composition generateur --sortie present / retire si vide, execution reelle rapport + synthese (106 conformes / 0 decalage / 1 non testable = test formel / 0 alerte), test-005 26/26, regenerateur dry-run 88 scannes 84 preserves 0 ajoute, detecter-impacts VERDICT tous a jour.
+
+**Lecons** :
+1. UNE CARTE = UN ROLE (Pattern 10) : un explorateur qui decouvre un besoin d OUTIL signale a Cerberus (qui active Vulcain), il ne cree pas l outil - meme si le script semble simple et utile
+2. TRACE vs OUTIL : un rapport de mission vit dans le dossier de l agent (explorations/, controles/) ; un script reutilisable vit dans tools/ avec la structure officielle - ne jamais melanger
+3. RACINE : le nombre de niveaux .. dans un script = profondeur du dossier depuis la racine (explorations/ = 5, tools/detecter/<outil>/ = 6) - a recalculer a chaque deplacement
+4. MODELE DU CATALOGUE = INTERFACE REELLE : `{sortie}` compose en positionnel, `--sortie {sortie}` compose le flag - TOUJOURS tester la commande generee contre l interface de l outil (le scan l a revele)
+5. AJOUTER UN OUTIL AU CATALOGUE = bump de version + alignement doc (compteur 106 -> 107) + test-005 (point 14 version en dur) - la regle des 5 fichiers s etend au trio catalogue/doc/test
+6. Le regenerateur preserve les entrees manuelles (dry-run 84 preserves) : ajouter l entree dans le catalogue est sur et rejouable
+## [LECON] 2026-08-09 -- OUTIL cartographier-parcours cree (v0.1.0, categorie cartographier/)
+
+**Mission** : creer l outil cartographier-parcours (decision utilisateur - Atlas cartographie le parcours d un agent dans un fichier pour ses analyses rapides). Decisions : sortie = dossier du parcours audite (cartographie-<agent>.md), format = arbre ASCII, branchement carte Atlas = mission Buffy ulterieure.
+**Livrables** : cartographier-parcours.py (lecture seule, 100% stdlib, ASCII strict) + .sh (wrapper pur exec python3) + .md + spec/ + entree catalogue-commandes.json (107 -> 108) + index-tools.md (nouvelle categorie Cartographier, total 106 -> 107).
+**Rendu** : en-tete (agent, version, depart, nb cases, nb chemins) + arbre ASCII (1ere occurrence, branches marquees, [convergence] pour les re-visites, `|--` / `--`) + impasses + boucles + chemins BFS (logique reutilisee de generateurs-carte analyser).
+**Lecons** :
+1. REUTILISATION : la detection des chemins (BFS anti-boucle, impasses) existe deja dans generateurs-carte analyser - je l ai portee au lieu de la reimplementer. La cartographie est un RENDU en fichier de ce que generateurs-carte affiche en console.
+2. ARBRE ASCII : le premier jet affichait les cases 2 fois (branche de c0 + noeud enfant) - correction : fonction descendre(cid, prefixe, lien, contexte) avec affichees set (1ere occurrence) et marquage [convergence], liens |-- / `-- selon derniere branche.
+3. PIEGE INSERTION CATALOGUE (grave, a ne jamais refaire) : inserer une entree JSON dans le catalogue par concatenation de lignes a MAL indente (6/8 espaces au lieu de 4/6) - le JSON est reste valide PAR CHANCE apres 5 reparations (retrait de blocs residuels + reinsertion au bon niveau + repositionnement alphabetique). REGLE : pour ajouter une entree au catalogue, copier le bloc d une entree EXISTANTE avec l outil lire-fichier/editer-fichier (indentation exacte 4/6/10), ou utiliser generateurs-regenerer-catalogue qui regenere tout - JAMAIS d insertion manuelle a la volee.
+4. PIEGE ASCII DOC : les guillemets francais ' ' et les accents (complete) passes dans le .md et la spec - detectes par valider-conformite-ascii (4 + 5 caracteres) et corriges. VERIFIER valider-conformite-ascii sur TOUS les fichiers crees AVANT de declarer l outil pret (md + spec inclus, pas seulement py/sh).
+5. PARITE .sh : wrapper pur (exec python3 "$PY_SCRIPT" "$@") - la parite des sorties est garantie PAR CONSTRUCTION (pattern detecter-impacts, valider-cartes-decision). Version py/sh identiques (v0.1.0).
+6. REGLE DES 5 FICHIERS : py, sh, md, spec, tests/ - les tests formels sont DELEGUES a Morpheus (REGLE ABSOLUE), pas ecrits par moi.
+7. L OUTIL EST EN LECTURE SEULE : il ne modifie jamais le parcours source - le fichier genere est un derive (comme detecter-impacts genere un rapport).

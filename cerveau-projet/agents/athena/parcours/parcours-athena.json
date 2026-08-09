@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-athena",
     "agent": "athena",
-    "version": "0.1.0",
+    "version": "0.1.4",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions d'Athena : redactrice de pense-betes. 2 missions (creer un pense-bete, completer un pense-bete). A la fin de chaque mission, j'active Promethee pour la spec (CHAIN). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
   },
@@ -48,12 +48,14 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/athena/corrections.md"
         },
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/athena/athena.md"
         }
@@ -94,6 +96,7 @@
         {
           "type": "outil",
           "nom": "rechercher-pense-betes",
+          "catalogue": "rechercher-pense-betes",
           "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-pense-betes/",
           "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-pense-betes/rechercher-pense-betes.py"
         }
@@ -121,6 +124,17 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande generateurs-squelette-pense-bete --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-commande",
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande generateurs-squelette-pense-bete --reponses ..."
+        },
+        {
+          "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
         },
         {
@@ -134,6 +148,7 @@
         {
           "type": "outil",
           "nom": "generateurs-squelette-pense-bete",
+          "catalogue": "generateurs-squelette-pense-bete",
           "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-squelette-pense-bete/",
           "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-pense-bete/generateurs-squelette-pense-bete.py <demande> (nommage automatique selon convention-renommage)"
         }
@@ -163,6 +178,7 @@
         {
           "type": "outil",
           "nom": "creer-remplir-pense-bete",
+          "catalogue": "creer-remplir-pense-bete",
           "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-pense-bete/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-pense-bete/creer-remplir-pense-bete.py <pense-bete> (sections sans ouvrir le fichier)"
         }
@@ -180,6 +196,7 @@
         {
           "type": "outil",
           "nom": "valider-conformite-ascii",
+          "catalogue": "valider-conformite-ascii",
           "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <pense-bete> (UN fichier par appel)"
         }
@@ -201,6 +218,7 @@
         {
           "type": "outil",
           "nom": "valider-pense-bete",
+          "catalogue": "valider-pense-bete",
           "chemin": "cerveau-projet/agents/tools/valider/valider-pense-bete/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-pense-bete/valider-pense-bete.py <pense-bete>"
         }
@@ -242,6 +260,7 @@
         {
           "type": "outil",
           "nom": "ajouter-contenu-fichier",
+          "catalogue": "ajouter-contenu-fichier",
           "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/athena/corrections.md <lecon>"
         }
@@ -249,7 +268,7 @@
       "suivant": "c10"
     },
     "c10": {
-      "titre": "FIN - Activer Promethee (CHAIN)",
+      "titre": "FIN - Activer Promethee",
       "type": "fin",
       "message": "ACTIVER PROMETHEE pour la spec : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 promethee 'Pense-bete termine - creer la spec'. C'est lui qui cree la spec (CHAIN Athena -> Promethee -> Minerve). RELAIS ACTIF : je ne m'arrete pas en attente - apres activation, la chaine continue avec le parcours de Promethee, puis Minerve, puis retour a Cerberus (chacun reactive Cerberus a la fin)."
     },
@@ -268,6 +287,7 @@
         {
           "type": "outil",
           "nom": "rechercher-pense-betes",
+          "catalogue": "rechercher-pense-betes",
           "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-pense-betes/",
           "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-pense-betes/rechercher-pense-betes.py"
         }
@@ -285,6 +305,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <pense-bete-existant>"
         }
@@ -302,6 +323,7 @@
         {
           "type": "outil",
           "nom": "valider-conventions",
+          "catalogue": "valider-conventions",
           "chemin": "cerveau-projet/agents/tools/valider/valider-conventions/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <pense-bete>"
         }
@@ -323,6 +345,7 @@
         {
           "type": "outil",
           "nom": "creer-remplir-pense-bete",
+          "catalogue": "creer-remplir-pense-bete",
           "chemin": "cerveau-projet/agents/tools/creer/creer-remplir-pense-bete/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-remplir-pense-bete/creer-remplir-pense-bete.py <pense-bete> (completer les sections manquantes selon le pense-bete-template)"
         }
@@ -375,6 +398,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
         }
@@ -384,12 +408,12 @@
     "c20": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c21": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -402,6 +426,7 @@
         {
           "type": "outil",
           "nom": "lire-activite-recente",
+          "catalogue": "lire-activite-recente",
           "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
         },

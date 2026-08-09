@@ -7,7 +7,7 @@ identite:
 ---
 # valider-nommage
 
-**Version :** 0.3.1-py
+**Version :** 0.3.2-py
 **Statut :** prepare
 **Categorie :** Valider
 **Chemin :** `agents/tools/valider/valider-nommage/`
@@ -141,6 +141,7 @@ $ valider-nommage.sh --recursive cerveau-projet/agents/tools/
 | 0.2.1 | 2026-08-07 | Ajout du support des fichiers `.py` (format + prefixe dossier + mode --recursive) |
 | 0.3.0 | 2026-08-08 | Ajout du mode `--mots-seuls` (regle fondamentale : identifiants generiques a un seul mot interdits dans les blocs YAML/JSON, exceptions structurelles et cles de schema autorisees, dossiers de traces ignores en recursif) |
 | 0.3.1 | 2026-08-08 | Correction du bruit du scan `--recursive` : les sous-dossiers composants d'un outil (`tests/`, `spec/`, `protections/`, `__pycache__/`) ne sont plus traites comme de faux outils (leurs fichiers `test-*`/`spec-*` etaient signales en ERREUR de prefixe a tort). Parite py/sh |
+| 0.3.2 | 2026-08-09 | Formats speciaux reconnus en mode `--type outil` : `definition-combo.json` (dossier `combos/combo-*/`, fichier canonique d'un combo) et `test-XXX-nom-outil.(py|sh|md)` (dossier `tests/test-XXX-*/`, fichier de test formel). Ces 2 conventions dediees n'etaient plus validees avec le pattern `nom-outil.sh/py/md` + prefixe de categorie, generant 2 ERREUR sur des formats legitimes. Parite py/sh |
 
 ## Notes de creation
 

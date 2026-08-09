@@ -194,13 +194,14 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> "Agent" "Raison" "Mission"
 ```
 
-### Pour reactiver Cerberus
+### Pour terminer ma mission (la fin suit SA carte)
 
 ```bash
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "AgentPrecedent"
 ```
 
-> **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.
+> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> Utiliser TOUJOURS l outil activer-agent-principal (jamais str_replace/write_file) pour AGENTS.md.
 > Ne JAMAIS utiliser `str_replace` ou `write_file` pour ce fichier.
 
 ---

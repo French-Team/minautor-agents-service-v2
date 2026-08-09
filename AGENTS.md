@@ -60,18 +60,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | morpheus |
-| **Role Agent** | Testeur -- validation des outils et des tests |
-| **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/morpheus/morpheus.md](cerveau-projet/agents/morpheus/morpheus.md) |
-| **Corrections** | [cerveau-projet/agents/morpheus/corrections.md](cerveau-projet/agents/morpheus/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | MISSION (Vulcain, chaine bout-en-bout Pattern 8): TESTER generateurs-carte v0.2.0 (squelette creer enrichi Pattern 10 + Pattern 3). CONTEXTE: Vulcain a modifie le squelette creer de generateurs-carte.py (v0.1.1 -> v0.2.0) : indice Pattern 10 UNE CARTE = UN ROLE ajoute en tete des indices de c1 + indice Pattern 3 RAPPEL DES COMBOS ajoute en tete des indices de c2 (spec-guider-parcours v0.2.19). Doc .md bumpee v0.2.0. Le .sh est un wrapper pur (parite par construction). TACHE: (1) VERIFIER la synthese : py_compile + ASCII 0 sur py/md + nommage code 0 + version --version 0.2.0 ; (2) TESTER le squelette : creer une carte factice dans le workspace (.tmp-morpheus-test/, JAMAIS hors workspace) et verifier - c1 porte l indice Pattern 10 (texte UNE CARTE = UN ROLE + role de l agent), c2 porte l indice Pattern 3 (RAPPEL DES COMBOS) en POSITION 1 (avant Pattern 7 et ASCII), navigation PARCOURS TERMINE, --liste OK, json valide ; (3) TESTER la regression : analyser + detecter + dupliquer-chemin fonctionnent toujours sur la carte creee (0 anomalie detectee) ; (4) TESTER la parite py/sh : les 2 versions produisent le meme squelette (--dry-run) ; (5) REDIGER le verdict dans tes corrections puis REACTIVER Vulcain avec le rapport (Pattern 8 : tu actives le maillon precedent... non - la chaine continue : apres ton rapport, JANUS controle. Relis TA fiche et TES corrections d abord.) |
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-09 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | Buffy (retour de mission) |
+| **Raison** | MISSION TERMINEE (Buffy) : CARTOGRAPHIER-PARCOURS BRANCHE DANS LE PARCOURS ATLAS - REUSSIE (v0.1.4 -> v0.1.5). LIVRABLE : (1) case c30 CARTOGRAPHIER UN PARCOURS (33e case) - indice regle Pattern 9 LIRE AVANT USAGE + Pattern 12 CREATION LIMITEE (sortie = rapport dans le dossier du parcours audite, JAMAIS tools/) en tete, indice outil cartographier-parcours AVEC champ catalogue (PASSE PAR LE GENERATEUR), indice fichier LIRE AVANT USAGE auto, suivant c10 (convergence Lecons -> c11 FIN) ; (2) branche cartographier:c30 ajoutee dans c1 (6 branches preservees + nouvelle) ; (3) version 0.1.5, CRLF natif restaure (655 lignes 0 LF), ASCII 0, valider-cartes CONFORME ; (4) navigation cartographier c30 -> c10 -> c11 PARCOURS TERMINE + regression explorer OK ; (5) bout en bout : generation reelle 33 cases 21 chemins puis suppression (0 residu). PIEGE DECOUVERT (lecon Buffy) : generateurs-case editer --branche REMPLACE les branches existantes au lieu d AJOUTER - re-ecrire la liste COMPLETE des branches (5 originales + nouvelle) ; champ catalogue non ajoute par generateurs-case - ajout manuel (edition chirurgicale). BILAN OUTILS : activer-agent-principal, lire-fichier, guider-parcours, generateurs-case, valider-conformite-ascii, valider-cartes-decision, cartographier-parcours, editer-fichier. SUITE LOGIQUE : tester le parcours atlas v0.1.5 (Morpheus) ou passer au branchement dans d autres cartes. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | morpheus | 2026-08-08 21:45 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-09 11:54 |
 | session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
 | session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |
@@ -98,7 +98,7 @@ CERBERUS -> AGENT -> CERBERUS
 | 2 | Cerberus analyse et choisit l'agent |
 | 3 | Cerberus active l'agent (mise a jour AGENTS.md) |
 | 4 | **L'agent active lit SA fiche et SES corrections** puis execute sa mission |
-| 5 | Agent termine et reactive Cerberus |
+| 5 | Agent termine : la fin suit SA carte (activation directe -> reactiver Cerberus ; maillon de chaine -> activer le suivant) |
 | 6 | **Cerberus relit SA fiche et SES corrections** puis reprend pour la suite |
 
 > **REGLE DE RELECTURE** : A chaque activation ou reactivation, l'agent relit SA fiche et SES corrections (jamais celles des autres). Activer sans lire = inutile.
@@ -127,12 +127,12 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 5. L'agent prend le relais
 6. **L'agent lit SA fiche et SES corrections** avant de commencer sa mission
 
-### Retour a Cerberus (dans sa session)
+### Fin de mission (la fin suit SA carte)
 
 1. L'agent termine sa mission
-2. L'agent utilise `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent>` pour reactiver Cerberus
+2. LA FIN SUIT SA CARTE (Pattern 8) : activation directe par Cerberus -> l'agent utilise `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent>` pour reactiver Cerberus ; maillon d'une chaine -> l'agent ACTIVE le maillon suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide
 3. L'agent documente la fin de mission
-4. Cerberus reprend le controle dans la session
+4. Le controle revient a Cerberus (directement, ou par le bilan consolide du dernier maillon de la chaine)
 5. **Cerberus relit SA fiche et SES corrections** avant de poursuivre
 
 ---
@@ -164,4 +164,4 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 
 > **Le cycle** : Chaque session LLM commence et finit avec Cerberus.
 > Chaque session utilise SON identifiant (session-llm-N) pour toutes ses activations.
-> **Regle** : Toujours revenir a Cerberus apres chaque mission, dans SA session.
+> **Regle** : La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide. La chaine ne retombe JAMAIS sur Cerberus au milieu.

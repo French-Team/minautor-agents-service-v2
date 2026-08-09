@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-clio",
     "agent": "clio",
-    "version": "0.1.0",
+    "version": "0.1.3",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Clio : corriger le README (journal, verifier, maj, insertion manuelle si nouvelle categorie, ASCII, lecons) et verifier le README. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
   },
@@ -48,12 +48,14 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/clio/corrections.md"
         },
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/clio/clio.md"
         }
@@ -91,6 +93,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md"
         }
@@ -108,6 +111,7 @@
         {
           "type": "outil",
           "nom": "mettre-a-jour-readme",
+          "catalogue": "mettre-a-jour-readme",
           "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
           "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --journal 10"
         }
@@ -120,11 +124,23 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande mettre-a-jour-readme --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-commande",
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande mettre-a-jour-readme --reponses ..."
+        },
+        {
+          "type": "regle",
           "texte": "Je ne suppose JAMAIS. Je VERIFIE les sources de verite (AGENTS-historique, agents/, tools/)."
         },
         {
           "type": "outil",
           "nom": "mettre-a-jour-readme",
+          "catalogue": "mettre-a-jour-readme",
           "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
           "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier"
         }
@@ -161,6 +177,7 @@
         {
           "type": "outil",
           "nom": "mettre-a-jour-readme",
+          "catalogue": "mettre-a-jour-readme",
           "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
           "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --maj"
         }
@@ -207,6 +224,7 @@
         {
           "type": "outil",
           "nom": "editer-fichier",
+          "catalogue": "editer-fichier",
           "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py README.md <ligne-avant> <ligne-avec-categorie>"
         }
@@ -224,6 +242,7 @@
         {
           "type": "outil",
           "nom": "valider-conformite-ascii",
+          "catalogue": "valider-conformite-ascii",
           "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py README.md"
         }
@@ -245,6 +264,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> clio"
         }
@@ -266,6 +286,7 @@
         {
           "type": "outil",
           "nom": "mettre-a-jour-readme",
+          "catalogue": "mettre-a-jour-readme",
           "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
           "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier"
         }
@@ -303,6 +324,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
         }
@@ -312,12 +334,12 @@
     "c15": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c16": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -330,6 +352,7 @@
         {
           "type": "outil",
           "nom": "lire-activite-recente",
+          "catalogue": "lire-activite-recente",
           "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
         },

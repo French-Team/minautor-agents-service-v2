@@ -7,7 +7,7 @@ identite:
 # Protocole -- Creation et Mise en Place des Combos
 
 **Statut :** ebauche
-**Version :** 0.1.1
+**Version :** 0.1.2
 **ID :** 001
 **Class :** 01
 **Cree :** 2026-08-08
@@ -113,6 +113,23 @@ corriger-ascii, sante-tableaux).
   --reponses` alimente par les entrees) puis case `outil` avec `{cmd}`.
 - Commande ABSENTE du catalogue -> case `outil` directe avec la commande
   `python3 <chemin-outil.py> [cible]` complete.
+
+### 6.3b PIEGE WINDOWS : forward slashes obligatoires dans les variables de chemins
+
+> **REGLE** : toute VARIABLE de chemin (ex: `fichier_test=<chemin>`, `chemin=<chemin>`)
+> passee via `--var` doit utiliser des FORWARD SLASHES, JAMAIS de backslashes.
+
+- POURQUOI : la commande generee par le generateur (contenant le chemin) est
+  decoupee par `shlex.split` dans la case `outil`. Sur Windows, un chemin absolu
+  avec backslashes (`Z:\\...\\test-001.sh`) est ECLATE (le backslash est interprete
+  comme echappement) -> la commande est invalide et le fichier n est pas cree.
+- SOLUTION : ecrire les chemins en forward slashes (`Z:/.../test-001.sh`) -
+  Python (open, os.path) et shlex les acceptent nativement.
+- VERIFICATION OBLIGATOIRE : avant de valider un combo, tester la NAVIGATION
+  REELLE avec un chemin (case outil executee, fichier cree) - pas seulement --liste.
+- DECOUVERTE : test formel Morpheus du combo tester-outil (2026-08-09) -
+  le chemin absolu Windows a donne 2 KO (fichier non cree) corriges par
+  forward slashes, 16/16 VALIDE.
 
 ### 6.4 Cibles par defaut
 
@@ -242,3 +259,4 @@ parcours (Pattern 3) : themis c3, janus c5/c22, vulcain c7/c13, buffy c28.
 |---|---|---|---|
 | 2026-08-08 | 0.1.0 | Buffy | Creation : regles de decision, conventions nommage/structure, processus en 11 etapes, checklist Pattern 3, validation |
 | 2026-08-08 | 0.1.1 | Buffy | Ajout section 9.5 Regles d'utilisation et tracabilite : CITER le combo avant de le lancer (decision utilisateur) |
+| 2026-08-09 | 0.1.2 | Buffy | Ajout section 6.3b PIEGE WINDOWS : forward slashes obligatoires dans les variables de chemins des combos (shlex.split eclate les backslashes, decouverte test Morpheus combo tester-outil) |

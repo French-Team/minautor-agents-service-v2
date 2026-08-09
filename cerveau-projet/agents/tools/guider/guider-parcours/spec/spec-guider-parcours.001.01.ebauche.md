@@ -6,11 +6,11 @@ identite:
 ---
 # Spec -- Guide-Parcours (jeu de piste) v0.2.19
 
-**Version** : 0.2.19
+**Version** : 0.2.23
 **Statut** : ebauche
 **Date creation** : 2026-08-07
-**Agent** : Vulcain (creation + evolutions v0.2.0 : patterns multi-missions + rappel ASCII ; v0.2.1 : procedure d'audit des 2 patterns ; v0.2.2 : regle d'autonomie des parcours ; v0.2.3 : prototype vulcain documente comme cas legitime assume ; v0.2.4 : Pattern 3 - combo generateur -> execution, lien avec spec-combos-moteur ; v0.2.5 : Pattern 4 - case Question Honnete en case 0, standard de demarrage ; v0.2.6 : Pattern 5 - chaine de delegation ACTIVE, JAMAIS de fin passive ; v0.2.7 : regle de RE-AUDIT COMPLET des 5 patterns (lecon Themis : la procedure 4b seule ne teste que Pattern 5, c est la procedure 2 qui a revele les ecarts ASCII de vulcain) ; v0.2.8 : Pattern 6 - CONTEXTE TEMPS REEL : lecture OBLIGATOIRE de l historique a chaque activation, meme en memoire (le dynamique ne se memorise pas) ; v0.2.9 : MODE AGENT NON-BLOQUANT - les questions sont destinees a l AGENT, jamais a un input() clavier ; sans --reponses l outil affiche la question et s arrete proprement (cause : demarrage d un 2e LLM bloquait sur la saisie clavier) ; v0.2.12 : outil de reference generateurs-case documente (suite de l integration : l outil officiel pour creer/editer/supprimer des cases, recablage auto + validation auto) ; v0.2.13 : Pattern 7 - modele de case compose (decision a 2+ branches, solutions alternatives, deviations avec retour au flux principal ; philosophie agents/philosophie/) ; v0.2.14 : outil de reference generateurs-carte documente (carte complete : creer/analyser/detecter/dupliquer-chemin, complement de generateurs-case pour les cases) ; v0.2.17 : branche de verifier-documents-manquants v0.3.0 dans la procedure 4g (le .md deduit de CHAQUE indice outil est controle par L OUTIL - .sh ET .py couverts - au lieu d une verification manuelle) ; v0.2.18 : Pattern 10 - UNE CARTE = UN ROLE (une carte ne contient que des actions d activation/verification/decision propres a SON role, jamais d outils d analyse/execution d un autre role ; cas Cerberus = routeur pur, carte purgee des cases lister/lire qui glissent de lire pour choisir vers lire pour executer. Lecon utilisateur 2026-08-08 : Cerberus a lance des analyses lui-meme au lieu d activer Buffy) ; v0.2.19 : Pattern 11 - CONFORMITE D EXECUTION (l audit ne verifie pas seulement la STRUCTURE du JSON mais AUSSI si l EXECUTION de la mission a suivi les ordres de la carte : l agent a-t-il fait ce que sa carte ordonnait ? Lecon constat stabilite des cartes 2026-08-08 : les violations recentes - Vulcain reactive au lieu d activer Morpheus, Cerberus analyse lui-meme - laissent les JSON structurellement valides ; la conformite d execution est le SEUL vrai test de stabilite. Critere 22 + procedure 4i + integration dans le parcours-themis (case c8b entre verdict et rapport))
-**Historique** : v0.1.0 (creation) -> v0.2.0 (documentation des 2 patterns valides en production, 2026-08-07) -> v0.2.1 (documentation de la procedure d'audit des 2 patterns, validee par l'audit des 11 parcours par Themis, 2026-08-08) -> v0.2.2 (regle d'autonomie : chaque parcours est un fichier individuel, convergence uniquement intra-parcours, 2026-08-08) -> v0.2.3 (prototype vulcain : fins independantes documentees comme CAS LEGITIME ASSUME, compatible regle 8, 2026-08-08) -> v0.2.4 (Pattern 3 : une case de parcours peut pointer vers un COMBO - combos-moteur lit definition-combo.json, generateur-commande en mode AUTO, 2026-08-08) -> v0.2.5 (Pattern 4 : case c0 Question Honnete de relecture + c0b RELIRE obligatoire + case_depart = c0, standard de demarrage fige, valide par l'audit Themis 11/11 parcours, 2026-08-08) -> v0.2.6 (Pattern 5 : CHAINE DE DELEGATION ACTIVE - une delegation ne se termine JAMAIS par une fin passive 'X te reactive' : la carte materialise la boucle RELAIS -> RETOUR -> CLOTURE -> FIN. Lecon detecter-impacts v0.2.0 / parcours-vulcain v0.2.1, 2026-08-08) -> v0.2.7 (RE-AUDIT COMPLET DES 5 PATTERNS : a chaque creation/modification/audit, REJOUER les procedures 1, 2, 3, 4 et 4b, jamais seulement la nouvelle procedure. Lecon Themis 2026-08-08 : l audit 4b seul ne testait que Pattern 5, c est la procedure 2 qui a revele 3 ecarts ASCII chez vulcain (c4/c6/c12)) -> v0.2.8 (Pattern 6 : CONTEXTE TEMPS REEL - la question honnete c0 couvre le STATIQUE (fiche + corrections, memorisable) ; l HISTORIQUE est DYNAMIQUE (il change a chaque activation des autres LLM) : sa lecture est OBLIGATOIRE a chaque activation, meme en memoire. Case c0c CONTEXTE entre c0b et c1, traversee par TOUS les chemins. Decision utilisateur 2026-08-08 : chaque agent doit se souvenir des dernieres interventions des autres agents (15 dernieres) et savoir que les autres LLM existent (section Sessions connues), pour eviter les collisions multi-LLM) -> v0.2.9 (MODE AGENT NON-BLOQUANT : les questions sont destinees a l AGENT, jamais a un input() clavier ; sans --reponses l outil affiche QUESTION POUR L AGENT et s arrete proprement code 0 ; option --interactif reservee a l usage humain. Cause : demarrage d un 2e LLM bloque sur une demande de saisie clavier au lieu de repondre a la question, 2026-08-08) -> v0.2.10 (REGLE 10 : AUCUNE BOUCLE D ATTENTE - une branche qui revient sur la MEME case pour attendre est INTERDITE, l attente est une FIN pas une boucle ; les boucles de CONTROLE (re-travail) restent autorisees. Lecon log-externe 2026-08-08 : la boucle c4 -> c4 du parcours-demarrage re-posait la question a l infini) -> v0.2.11 (REPRISE SANS BOUCLE : le message QUESTION POUR L AGENT donne la commande exacte --case <case-courante> --reponses REPONSE pour reprendre la navigation sans rejouer c0. Lecon log-externe 2026-08-08 : sans --case, le LLM relancait depuis le debut et la question honnete c0 etait REPOSEE a chaque relance -> boucle de relecture) -> v0.2.12 (OUTIL DE REFERENCE DES CASES : generateurs-case documente dans la spec comme l outil officiel pour ajouter/editer/supprimer une case avec RECABLAGE AUTO des references + VALIDATION AUTO (json + references + guider-parcours --liste) ; suite de l integration Buffy, 2026-08-08) -> v0.2.13 (Pattern 7 : MODELE DE CASE COMPOSE - une case de decision a AU MINIMUM 2 branches (sauf action directe), des solutions alternatives, des DEVIATIONS vers un workflow secondaire avec RETOUR au workflow principal (case de rejoint). Exemple reel Cerberus/Buffy : erreur hors mission signalee -> decision reparation immediate (reactiver Buffy) ou differee, puis retour au flux. Decision utilisateur 2026-08-08, philosophie agents/philosophie/alleger-decomposer) -> v0.2.14 (OUTIL DE REFERENCE DE LA CARTE COMPLETE : generateurs-carte documente a cote de generateurs-case - creer un squelette conforme aux patterns 4-5-6-7, analyser les chemins BFS, detecter les anomalies (boucles d attente, cases inatteignables, impasses, references cassees, decision a branche unique), dupliquer un chemin avec recablage et prefixe ; action ajouter-bloc de generateurs-case v0.2.0 pour creer d un coup le modele compose decision + deviation + rejoint. Etape OUTILS de la refonte du modele de cases, 2026-08-08) -> v0.2.15 (Pattern 8 : CHAINE DE DELEGATION BOUT-EN-BOUT - la delegation ne repasse PLUS par Cerberus au milieu : Cerberus active Vulcain -> Vulcain finit et ACTIVE Morpheus -> Morpheus finit et ACTIVE Janus -> Janus REACTIVE Cerberus avec le bilan consolide ; chaque maillon passe la boucle RVAV sur son travail AVANT d activer le suivant. L ancien modele boucle (Vulcain -> Morpheus -> Vulcain puis Cerberus) est remplace : la chaine ne retombe jamais sur Cerberus au milieu. Decision utilisateur 2026-08-08 : c est l agent delegue qui active le suivant a SA fin, pas Cerberus (plus fiable)) -> v0.2.16 (Pattern 9 : LIRE LE .MD DE L OUTIL AVANT DE L UTILISER - portee SYSTEMATIQUE : avant d executer tout outil, l agent lit sa documentation (.md du meme dossier) pour savoir ce qu il fait. Ancrage TRIPLE (decision utilisateur) : (a) regle de format ici, (b) guider-parcours v0.3.0 affiche automatiquement LIRE AVANT USAGE : <outil.md> pour chaque indice outil (deduit du chemin, couvre les 193 indices existants SANS les modifier), (c) generateurs-case v0.2.2 ajoute automatiquement l indice fichier .md quand un --indice-outil est ajoute (couvre les futures cases). Constat utilisateur 2026-08-08 : les agents se posaient des questions de fonctionnement avant d utiliser un outil alors que chaque outil a son .md) -> v0.2.17 (GARANT AUTOMATIQUE DU PATTERN 9 : verifier-documents-manquants v0.3.0 branche dans la procedure 4g - l outil controle que chaque script .sh ET .py a son .md et que chaque .md a son script, resultat attendu 0 manquant. Question utilisateur 2026-08-08 : etait-ce evident de creer/avoir un outil qui verifie que les outils ont leur .md ? Oui - l outil existait deja mais ne couvrait pas les .py et n etait pas branche dans 4g (lecon : un outil existe mais n est pas branche = invisible)) -> v0.2.18 (Pattern 10 : UNE CARTE = UN ROLE - la carte d un agent ne contient QUE des actions propres a SON role (activation/verification/decision), jamais d outils d analyse/execution d un autre role ; carte de Cerberus purgee des cases d analyse (lister-outils, lire la fiche de l autre agent) -> 29 a 27 cases, outils restants = coordination pure. Lecon utilisateur 2026-08-08 : Cerberus a lance des analyses lui-meme au lieu d activer Buffy car ses cases lister/lire glissaient de lire pour choisir vers lire pour executer) -> v0.2.19 (Pattern 11 : CONFORMITE D EXECUTION - l'audit Themis ne verifie pas seulement la structure du JSON mais AUSSI si l'execution de la mission a suivi les ordres de la carte : l'agent a-t-il fait ce que sa carte ordonnait ? Lecon constat stabilite des cartes 2026-08-08 : Vulcain a reactive Cerberus au lieu d'activer Morpheus, Cerberus a lance des analyses au lieu d'activer Buffy - les 2 JSON etaient structurellement valides mais l'execution a devie. La conformite d'execution est le SEUL vrai test de stabilite : critere 22 + procedure 4i + case c8b dans le parcours-themis entre le verdict et le rapport, 2026-08-08)
+**Agent** : Vulcain (creation + evolutions v0.2.0 : patterns multi-missions + rappel ASCII ; v0.2.1 : procedure d'audit des 2 patterns ; v0.2.2 : regle d'autonomie des parcours ; v0.2.3 : prototype vulcain documente comme cas legitime assume ; v0.2.4 : Pattern 3 - combo generateur -> execution, lien avec spec-combos-moteur ; v0.2.5 : Pattern 4 - case Question Honnete en case 0, standard de demarrage ; v0.2.6 : Pattern 5 - chaine de delegation ACTIVE, JAMAIS de fin passive ; v0.2.7 : regle de RE-AUDIT COMPLET des 5 patterns (lecon Themis : la procedure 4b seule ne teste que Pattern 5, c est la procedure 2 qui a revele les ecarts ASCII de vulcain) ; v0.2.8 : Pattern 6 - CONTEXTE TEMPS REEL : lecture OBLIGATOIRE de l historique a chaque activation, meme en memoire (le dynamique ne se memorise pas) ; v0.2.9 : MODE AGENT NON-BLOQUANT - les questions sont destinees a l AGENT, jamais a un input() clavier ; sans --reponses l outil affiche la question et s arrete proprement (cause : demarrage d un 2e LLM bloquait sur la saisie clavier) ; v0.2.12 : outil de reference generateurs-case documente (suite de l integration : l outil officiel pour creer/editer/supprimer des cases, recablage auto + validation auto) ; v0.2.13 : Pattern 7 - modele de case compose (decision a 2+ branches, solutions alternatives, deviations avec retour au flux principal ; philosophie agents/philosophie/) ; v0.2.14 : outil de reference generateurs-carte documente (carte complete : creer/analyser/detecter/dupliquer-chemin, complement de generateurs-case pour les cases) ; v0.2.17 : branche de verifier-documents-manquants v0.3.0 dans la procedure 4g (le .md deduit de CHAQUE indice outil est controle par L OUTIL - .sh ET .py couverts - au lieu d une verification manuelle) ; v0.2.18 : Pattern 10 - UNE CARTE = UN ROLE (une carte ne contient que des actions d activation/verification/decision propres a SON role, jamais d outils d analyse/execution d un autre role ; cas Cerberus = routeur pur, carte purgee des cases lister/lire qui glissent de lire pour choisir vers lire pour executer. Lecon utilisateur 2026-08-08 : Cerberus a lance des analyses lui-meme au lieu d activer Buffy) ; v0.2.19 : Pattern 11 - CONFORMITE D EXECUTION (l audit ne verifie pas seulement la STRUCTURE du JSON mais AUSSI si l EXECUTION de la mission a suivi les ordres de la carte : l agent a-t-il fait ce que sa carte ordonnait ? Lecon constat stabilite des cartes 2026-08-08 : les violations recentes - Vulcain reactive au lieu d activer Morpheus, Cerberus analyse lui-meme - laissent les JSON structurellement valides ; la conformite d execution est le SEUL vrai test de stabilite. Critere 22 + procedure 4i + integration dans le parcours-themis (case c8b entre verdict et rapport)) ; v0.2.22 : Pattern 12 - CREATION LIMITEE (garde-fou une carte = un role applique aux cases de creation : toute case qui cree/ecrit/documente porte un indice REGLE CREATION LIMITEE precisant le perimetre - rapports de mission dans le dossier de l agent ou .tmp-* du workspace, JAMAIS tools/ - et les roles exclus : outil -> Vulcain, test -> Morpheus, case de parcours -> Buffy ; besoin manquant -> case Signaler le besoin. Lecon incident Atlas 2026-08-09 : l explorateur a ecrit un outil dans son dossier explorations/ au lieu de signaler le besoin ; carte Atlas v0.1.3 portant le garde-fou en exemple) ; v0.2.23 : Pattern 13 - LA FIN SUIT SA CARTE (generalisation de la regle de retour : activation directe = reactiver Cerberus, maillon de chaine = activer le suivant, dernier maillon = reactiver Cerberus avec bilan consolide. Lecon utilisateur 2026-08-09 : l ancienne regle toujours reactiver Cerberus etait en conflit avec les cartes - Buffy a corrige 26 fichiers ; lecon technique double/triple CRLF - lire et ecrire avec newline='' pour preserver le format natif) ; v0.2.24 : Pattern 14 - VERIFICATION D IMPACT GENERALISEE (detecter-impacts v0.2.1 devient un pas OBLIGATOIRE de TOUTE procedure d audit Themis : pour chaque mission auditee, identifier les fichiers modifies puis lancer detecter-impacts sur un echantillon representatif et verifier que TOUS les fichiers impactes listes ont ete mis a jour. Lecon utilisateur 2026-08-09 : seul le rapport-audit-janus utilisait detecter-impacts, la verification d impact doit etre GENERALISEE a tous les audits) ; v0.2.25 : RE-AUDIT COMPLET GENERALISE A 14 PATTERNS (la procedure 4c listait 12 patterns et avait vieilli pendant que 4i/4k/4l s ajoutaient ; la liste des procedures est desormais complete 1-4l et le critere 14 couvre les criteres 1 a 25. Lecon utilisateur 2026-08-09 : la procedure 4c doit etre re-verifiee a chaque ajout de pattern)
+**Historique** : v0.1.0 (creation) -> v0.2.0 (documentation des 2 patterns valides en production, 2026-08-07) -> v0.2.1 (documentation de la procedure d'audit des 2 patterns, validee par l'audit des 11 parcours par Themis, 2026-08-08) -> v0.2.2 (regle d'autonomie : chaque parcours est un fichier individuel, convergence uniquement intra-parcours, 2026-08-08) -> v0.2.3 (prototype vulcain : fins independantes documentees comme CAS LEGITIME ASSUME, compatible regle 8, 2026-08-08) -> v0.2.4 (Pattern 3 : une case de parcours peut pointer vers un COMBO - combos-moteur lit definition-combo.json, generateur-commande en mode AUTO, 2026-08-08) -> v0.2.5 (Pattern 4 : case c0 Question Honnete de relecture + c0b RELIRE obligatoire + case_depart = c0, standard de demarrage fige, valide par l'audit Themis 11/11 parcours, 2026-08-08) -> v0.2.6 (Pattern 5 : CHAINE DE DELEGATION ACTIVE - une delegation ne se termine JAMAIS par une fin passive 'X te reactive' : la carte materialise la boucle RELAIS -> RETOUR -> CLOTURE -> FIN. Lecon detecter-impacts v0.2.0 / parcours-vulcain v0.2.1, 2026-08-08) -> v0.2.7 (RE-AUDIT COMPLET DES 5 PATTERNS : a chaque creation/modification/audit, REJOUER les procedures 1, 2, 3, 4 et 4b, jamais seulement la nouvelle procedure. Lecon Themis 2026-08-08 : l audit 4b seul ne testait que Pattern 5, c est la procedure 2 qui a revele 3 ecarts ASCII chez vulcain (c4/c6/c12)) -> v0.2.8 (Pattern 6 : CONTEXTE TEMPS REEL - la question honnete c0 couvre le STATIQUE (fiche + corrections, memorisable) ; l HISTORIQUE est DYNAMIQUE (il change a chaque activation des autres LLM) : sa lecture est OBLIGATOIRE a chaque activation, meme en memoire. Case c0c CONTEXTE entre c0b et c1, traversee par TOUS les chemins. Decision utilisateur 2026-08-08 : chaque agent doit se souvenir des dernieres interventions des autres agents (15 dernieres) et savoir que les autres LLM existent (section Sessions connues), pour eviter les collisions multi-LLM) -> v0.2.9 (MODE AGENT NON-BLOQUANT : les questions sont destinees a l AGENT, jamais a un input() clavier ; sans --reponses l outil affiche QUESTION POUR L AGENT et s arrete proprement code 0 ; option --interactif reservee a l usage humain. Cause : demarrage d un 2e LLM bloque sur une demande de saisie clavier au lieu de repondre a la question, 2026-08-08) -> v0.2.10 (REGLE 10 : AUCUNE BOUCLE D ATTENTE - une branche qui revient sur la MEME case pour attendre est INTERDITE, l attente est une FIN pas une boucle ; les boucles de CONTROLE (re-travail) restent autorisees. Lecon log-externe 2026-08-08 : la boucle c4 -> c4 du parcours-demarrage re-posait la question a l infini) -> v0.2.11 (REPRISE SANS BOUCLE : le message QUESTION POUR L AGENT donne la commande exacte --case <case-courante> --reponses REPONSE pour reprendre la navigation sans rejouer c0. Lecon log-externe 2026-08-08 : sans --case, le LLM relancait depuis le debut et la question honnete c0 etait REPOSEE a chaque relance -> boucle de relecture) -> v0.2.12 (OUTIL DE REFERENCE DES CASES : generateurs-case documente dans la spec comme l outil officiel pour ajouter/editer/supprimer une case avec RECABLAGE AUTO des references + VALIDATION AUTO (json + references + guider-parcours --liste) ; suite de l integration Buffy, 2026-08-08) -> v0.2.13 (Pattern 7 : MODELE DE CASE COMPOSE - une case de decision a AU MINIMUM 2 branches (sauf action directe), des solutions alternatives, des DEVIATIONS vers un workflow secondaire avec RETOUR au workflow principal (case de rejoint). Exemple reel Cerberus/Buffy : erreur hors mission signalee -> decision reparation immediate (reactiver Buffy) ou differee, puis retour au flux. Decision utilisateur 2026-08-08, philosophie agents/philosophie/alleger-decomposer) -> v0.2.14 (OUTIL DE REFERENCE DE LA CARTE COMPLETE : generateurs-carte documente a cote de generateurs-case - creer un squelette conforme aux patterns 4-5-6-7, analyser les chemins BFS, detecter les anomalies (boucles d attente, cases inatteignables, impasses, references cassees, decision a branche unique), dupliquer un chemin avec recablage et prefixe ; action ajouter-bloc de generateurs-case v0.2.0 pour creer d un coup le modele compose decision + deviation + rejoint. Etape OUTILS de la refonte du modele de cases, 2026-08-08) -> v0.2.15 (Pattern 8 : CHAINE DE DELEGATION BOUT-EN-BOUT - la delegation ne repasse PLUS par Cerberus au milieu : Cerberus active Vulcain -> Vulcain finit et ACTIVE Morpheus -> Morpheus finit et ACTIVE Janus -> Janus REACTIVE Cerberus avec le bilan consolide ; chaque maillon passe la boucle RVAV sur son travail AVANT d activer le suivant. L ancien modele boucle (Vulcain -> Morpheus -> Vulcain puis Cerberus) est remplace : la chaine ne retombe jamais sur Cerberus au milieu. Decision utilisateur 2026-08-08 : c est l agent delegue qui active le suivant a SA fin, pas Cerberus (plus fiable)) -> v0.2.16 (Pattern 9 : LIRE LE .MD DE L OUTIL AVANT DE L UTILISER - portee SYSTEMATIQUE : avant d executer tout outil, l agent lit sa documentation (.md du meme dossier) pour savoir ce qu il fait. Ancrage TRIPLE (decision utilisateur) : (a) regle de format ici, (b) guider-parcours v0.3.0 affiche automatiquement LIRE AVANT USAGE : <outil.md> pour chaque indice outil (deduit du chemin, couvre les 193 indices existants SANS les modifier), (c) generateurs-case v0.2.2 ajoute automatiquement l indice fichier .md quand un --indice-outil est ajoute (couvre les futures cases). Constat utilisateur 2026-08-08 : les agents se posaient des questions de fonctionnement avant d utiliser un outil alors que chaque outil a son .md) -> v0.2.17 (GARANT AUTOMATIQUE DU PATTERN 9 : verifier-documents-manquants v0.3.0 branche dans la procedure 4g - l outil controle que chaque script .sh ET .py a son .md et que chaque .md a son script, resultat attendu 0 manquant. Question utilisateur 2026-08-08 : etait-ce evident de creer/avoir un outil qui verifie que les outils ont leur .md ? Oui - l outil existait deja mais ne couvrait pas les .py et n etait pas branche dans 4g (lecon : un outil existe mais n est pas branche = invisible)) -> v0.2.18 (Pattern 10 : UNE CARTE = UN ROLE - la carte d un agent ne contient QUE des actions propres a SON role (activation/verification/decision), jamais d outils d analyse/execution d un autre role ; carte de Cerberus purgee des cases d analyse (lister-outils, lire la fiche de l autre agent) -> 29 a 27 cases, outils restants = coordination pure. Lecon utilisateur 2026-08-08 : Cerberus a lance des analyses lui-meme au lieu d activer Buffy car ses cases lister/lire glissaient de lire pour choisir vers lire pour executer) -> v0.2.19 (Pattern 11 : CONFORMITE D EXECUTION - l'audit Themis ne verifie pas seulement la structure du JSON mais AUSSI si l'execution de la mission a suivi les ordres de la carte : l'agent a-t-il fait ce que sa carte ordonnait ? Lecon constat stabilite des cartes 2026-08-08 : Vulcain a reactive Cerberus au lieu d'activer Morpheus, Cerberus a lance des analyses au lieu d'activer Buffy - les 2 JSON etaient structurellement valides mais l'execution a devie. La conformite d'execution est le SEUL vrai test de stabilite : critere 22 + procedure 4i + case c8b dans le parcours-themis entre le verdict et le rapport, 2026-08-08) -> v0.2.20 (PISTE C : champ catalogue optionnel sur les indices outil - reference a la commande du catalogue generateurs-commande, commande en dur conservee comme fallback ; guider-parcours v0.3.1 affiche catalogue: <nom> + PASSE PAR LE GENERATEUR quand le champ est present, 2026-08-08) -> v0.2.22 (Pattern 12 - CREATION LIMITEE : garde-fou une carte = un role applique aux cases de creation, lecon incident Atlas 2026-08-09 - l explorateur a ecrit un outil dans son dossier au lieu de signaler, 2026-08-09) -> v0.2.23 (Pattern 13 - LA FIN SUIT SA CARTE : generalisation de la regle de retour, lecon utilisateur 2026-08-09 - la regle toujours reactiver Cerberus etait en conflit avec les cartes ; lecon technique double/triple CRLF) -> v0.2.24 (Pattern 14 - VERIFICATION D IMPACT GENERALISEE : detecter-impacts branche comme pas OBLIGATOIRE de toute procedure d audit, lecon utilisateur 2026-08-09) -> v0.2.25 (RE-AUDIT COMPLET GENERALISE A 14 PATTERNS : procedure 4c + critere 14 couvrent desormais 1-4l et les criteres 1 a 25, lecon 2026-08-09)
 
 ---
 
@@ -88,7 +88,7 @@ Une case contient une combinaison libre d'elements (0 a N) :
 
 | Type d'indice | Cle | Role |
 |---|---|---|
-| `outil` | `nom`, `chemin`, `commande` | L'outil exact a lancer (nom + chemin + exemple de commande) |
+| `outil` | `nom`, `chemin`, `commande`, `catalogue` (optionnel) | L'outil exact a lancer (nom + chemin + exemple de commande). `catalogue` = nom de la commande dans le catalogue de `generateurs-commande` (piste C) : le moteur affiche alors la reference `catalogue: <nom>` + la commande du generateur `--commande <nom>` pour composer la commande via le catalogue au lieu de l'ecrire en dur. La commande en dur est CONSERVEE comme fallback. Absence du champ = comportement historique |
 | `fichier` | `chemin`, `raison` | Le fichier/protocole a lire a cette etape (un seul, au bon moment) |
 | `regle` | `texte` | LA regle absolue pertinente pour cette case |
 
@@ -356,14 +356,14 @@ python3 agents/tools/generateurs/generateurs-case/generateurs-case.py \
    v0.2.7) : `guider-parcours --liste` + `--reponses` sur chaque chemin +
    `valider-conformite-ascii`.
 
-## Patterns valides en production (v0.2.0, v0.2.4, v0.2.5, v0.2.6, v0.2.8, v0.2.13, v0.2.15, v0.2.16, v0.2.18, v0.2.19)
+## Patterns valides en production (v0.2.0, v0.2.4, v0.2.5, v0.2.6, v0.2.8, v0.2.13, v0.2.15, v0.2.16, v0.2.18, v0.2.19, v0.2.22, v0.2.23, v0.2.24)
 
-Les 11 patterns suivants ont ete valides par les parcours existants et sont
+Les 14 patterns suivants ont ete valides par les parcours existants et sont
 OBLIGATOIRES pour tout nouveau parcours (Pattern 1 et 2 depuis v0.2.0,
 Pattern 3 depuis v0.2.4, Pattern 4 depuis v0.2.5, Pattern 5 depuis v0.2.6,
 Pattern 6 depuis v0.2.8, Pattern 7 depuis v0.2.13, Pattern 8 depuis v0.2.15,
 Pattern 9 depuis v0.2.16, Pattern 10 depuis v0.2.18, Pattern 11 depuis
-v0.2.19).
+v0.2.19, Pattern 12 depuis v0.2.22, Pattern 13 depuis v0.2.23).
 
 ### Pattern 1 -- Multi-missions (une case Mission + chemins convergents)
 
@@ -948,7 +948,180 @@ verifie que l'execution de la mission a suivi les ordres de la carte ?").
    Pattern 10 verifie la STRUCTURE de la carte, le Pattern 11 verifie
    l'EXECUTION de la mission -- les deux se completent.
 
-## Procedure d'audit des 11 patterns (v0.2.1, v0.2.4, v0.2.5, v0.2.6, v0.2.8, v0.2.13, v0.2.15, v0.2.16, v0.2.18, v0.2.19)
+5. La reactivation finale de Cerberus est un POINT DE CONFORMITE
+   obligatoire : verifier les 5 points R1-R5 (3e argument
+   `agent_precedent` present, pas d aide affichee, sortie `Session ... :
+   Cerberus reactive avec succes`, bloc AGENTS.md passe sur Cerberus,
+   profil classeur mis a jour). Une reactivation qui affiche l AIDE =
+   ECHEC SILENCIEUX (le bloc reste sur l agent) : a signaler comme
+   ecart d execution dans le rapport d audit (lecon Themis 2026-08-09).
+
+
+### Pattern 12 -- CREATION LIMITEE (garde-fou une carte = un role) (v0.2.22)
+
+Le Pattern 10 (une carte = un role) s'applique AUSSI aux CASES DE CREATION :
+toute case qui cree, ecrit ou documente porte un indice `regle` CREATION
+LIMITEE qui precise le PERIMETRE de creation (ce que l'agent est habilite a
+creer) et les ROLES EXCLUS (ce que l'agent ne doit JAMAIS creer lui-meme).
+Lecon incident Atlas 2026-08-09 : l'explorateur a ecrit un OUTIL
+(scan-catalogue.py) dans son dossier explorations/ au lieu de signaler le
+besoin -- sa carte ne portait aucun garde-fou contre la creation d'outils
+(defaut connu de sa fiche : "peut creer des structures trop elaborees").
+
+**Pourquoi** : une carte qui autorise "ecrire un fichier" peut glisser vers
+"ecrire un outil" sans changer de contenu (meme piege de glissement que le
+Pattern 10). Le garde-fou est dans le PERIMETRE EXPLICITE : l'agent sait, a
+chaque case de creation, QUOI il peut creer et QUOI il doit signaler.
+
+**Le principe** : chaque agent cree UNIQUEMENT ce que SON role habilite :
+
+| Agent | Habilite a creer | JAMAIS (roles exclus) |
+|---|---|---|
+| Atlas (explorateur) | rapports de mission (dossier explorations/ ou .tmp-* du workspace) | outil (Vulcain), test (Morpheus), case de parcours (Buffy) |
+| Buffy | fichiers du cerveau (parcours, conventions, philosophie) | outils (Vulcain), tests (Morpheus) |
+| Vulcain | outils (py/sh/md/spec + catalogue) | parcours (Buffy), tests (Morpheus) |
+| Morpheus | tests formels (tester/tests/test-XXX) | outils (Vulcain), parcours (Buffy) |
+| Promethee / Minerve / Athena | specs / todos / pense-betes | outils, tests, parcours |
+| ... | ... | ... |
+
+**Regles** :
+1. Toute case qui cree/ecrit/documente porte un indice `regle` CREATION
+   LIMITEE en TETE de ses `indices` : perimetre (rapports de mission dans le
+   dossier de l'agent ou .tmp-* du workspace, JAMAIS dans tools/) + roles
+   exclus (outil -> Vulcain, test -> Morpheus, case de parcours -> Buffy).
+2. Si la mission necessite un outil ou un test MANQUANT, l'agent NE CREE
+   RIEN lui-meme : il va a la case `Signaler le besoin` (ou signale a
+   Cerberus) qui active l'agent habilite.
+3. La case `Signaler le besoin` ne demande JAMAIS a l'agent de "documenter
+   une nouvelle case dans le parcours" : la creation de case est le role de
+   Buffy.
+4. Compatible avec les Patterns 2 (rappel ASCII position 1 des cases
+   d'ecriture) et 9 (lire le .md avant usage) : le garde-fou CREATION
+   LIMITEE s'ajoute aux autres indices sans les remplacer.
+
+```json
+"c9": {
+  "titre": "Documenter les decouvertes",
+  "type": "indice",
+  "indices": [
+    {
+      "type": "regle",
+      "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
+    },
+    {
+      "type": "regle",
+      "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII."
+    },
+    {
+      "type": "outil",
+      "nom": "ecrire-fichier",
+      "chemin": "agents/tools/ecrire/ecrire-fichier/",
+      "commande": "python3 agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py <chemin>"
+    }
+  ],
+  "suivant": "c10"
+}
+```
+
+**Cas d'application** : toute case de creation/documentation d'un parcours
+(ex: cases c9/c18/c19/c25 du parcours-atlas v0.1.3, revision lecon Atlas
+2026-08-09). Le garde-fou est place en tete des indices, l'essentiel etant
+que l'agent le voie JUSTE AVANT d'ecrire.
+
+### Pattern 13 -- LA FIN SUIT SA CARTE (v0.2.23)
+
+La fin de mission d'un agent suit SA CARTE, jamais une regle generale unique.
+L'ancienne regle "toujours reactiver Cerberus" (AGENTS.md, index-agents,
+cerberus/corrections, todo-template, 8 cases FIN - Delegation) etait en
+CONTRADICTION avec la philosophie "chaque agent active l'agent suivant dans sa
+carte" deja materialisee par le Pattern 8 (chaine bout-en-bout) et les
+parcours morpheus c17 / janus c30. Buffy a corrige le conflit dans 26
+fichiers (2026-08-09) : la regle generale dit desormais la meme chose que les
+cartes. Lecon utilisateur : le conflit venait des documents de COORDINATION
+(regle generale), pas des parcours -- un pattern doit etre enonce au meme
+endroit que les cartes qu'il regit.
+
+**Regles** :
+1. Activation DIRECTE par Cerberus (hors chaine) -> fin = reactiver Cerberus.
+2. Maillon d'une chaine de delegation -> fin = ACTIVER le maillon suivant
+   selon SA carte (message de fin actif : "J ACTIVE <maillon suivant> ...").
+3. Le DERNIER maillon de la chaine -> reactiver Cerberus avec le BILAN
+   CONSOLIDE de toute la chaine (Pattern 8).
+4. La chaine ne retombe JAMAIS sur Cerberus au milieu (retour a l'expediteur
+   au milieu = anomalie qui coupe la chaine).
+
+**Lien avec le Pattern 8** : le Pattern 8 (v0.2.15) documente la chaine
+bout-en-bout comme CAS PARTICULIER des chaines outil -> tests -> controle
+(Vulcain -> Morpheus -> Janus -> Cerberus). Le Pattern 13 GENERALISE la regle
+a TOUTES les fins de mission : chaque fiche porte une section "Pour terminer
+ma mission (la fin suit SA carte)" + une ligne FLUX adaptee au role (atlas ne
+delegue pas ; janus = dernier maillon bilan consolide ; vulcain = apres
+delegation des tests a Morpheus ; minerve = Phase 9 flux Promethee -> Minerve).
+
+**Exemple JSON** (fin d'activation directe vs fin de chaine) :
+
+```json
+{
+  "c9": {
+    "titre": "FIN - Activation directe",
+    "type": "fin",
+    "message": "Reactiver Cerberus avec le bilan (activation directe par Cerberus)."
+  },
+  "c17": {
+    "titre": "FIN - Delegation",
+    "type": "fin",
+    "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
+  }
+}
+```
+
+**Piege technique -- DOUBLE/TRIBLE CRLF (lecon Buffy 2026-08-09)** : ecrire
+un fichier CRLF avec `io.open(newline='\r\n')` CONVERTIT chaque `\r\n`
+existant en `\r\r\n` (et un second passage en `\r\r\r\n`) : corruption
+SILENCIEUSE (py_compile / bash -n cassent ensuite, sans erreur visible au
+moment de l'ecriture). REGLE : lire AVEC `newline=''` et ecrire AVEC
+`newline=''` (aucune conversion), ou reparer avec `re.sub(r'\r+\n',
+'\r\n', txt)`. Preserver le format natif du fichier, jamais laisser Python
+### Pattern 14 -- VERIFICATION D IMPACT GENERALISEE (v0.2.24)
+
+Chaque mission d'un agent IMPACTE plusieurs fichiers (outil + spec + catalogue +
+index-tools + fiches + parcours + corrections). Un audit Themis ne verifie pas
+seulement la conformite de ce qui a ete fait : il verifie AUSSI que TOUS les
+fichiers impactes ont ete mis a jour (rien d oublie). Lecon utilisateur
+2026-08-09 : seul le rapport-audit-janus utilisait detecter-impacts, la
+verification d impact doit etre GENERALISEE a tous les audits (les impacts
+oublies - spec pas bump, index pas a jour, catalogue pas regenerer - sont des
+defauts silencieux qui corrodent l ecosysteme).
+
+**Regles** :
+1. POUR CHAQUE mission auditee, identifier les fichiers modifies : message
+   d'activation, message de reactivation (bilan), git status, rapport de
+   mission.
+2. Lancer detecter-impacts (python3 cerveau-projet/agents/tools/detecter/
+   detecter-impacts/detecter-impacts.py <fichier-modifie> --racine
+   cerveau-projet) sur UN ECHANTILLON REPRESENTATIF des fichiers modifies
+   (outil principal + un fichier transverse type index-tools ou spec).
+3. Verifier que TOUS les fichiers impactes listes par l'outil ont ete mis a
+   jour : index-tools, catalogue generateurs-commande, spec, fiches,
+   parcours, corrections, AGENTS-historique.
+4. TOUT impact NON mis a jour = NON CONFORME : documenter le fichier manquant
+   dans le rapport avec l'action de correction requise.
+5. L'outil detecter-impacts est l'outil de reference (verifier son .md avant
+   usage -- Pattern 9) : il detecte les fichiers impactes par reference
+   croisee (identite, chemins, commun) et distingue les traces historisees
+   [HISTORISE] des fichiers a mettre a jour.
+
+**Lien avec les autres patterns** : le Pattern 11 (conformite d execution)
+verifie QUE l'agent a suivi sa carte ; le Pattern 14 verifie QUE les impacts
+de ce qui a ete fait sont tous mis a jour. Les deux sont des garanties
+d'execution, le premier sur le PROCESSUS, le second sur les LIVRABLES.
+
+**Piege technique -- DOUBLE/TRIBLE CRLF (lecon Buffy 2026-08-09)** : rappel
+du Pattern 13 : lire AVEC newline='' et ecrire AVEC newline='' (aucune
+conversion), ou reparer avec re.sub(r'\r+\n', '\r\n', txt). Preserver le
+format natif du fichier, jamais laisser Python convertir.
+
+## Procedure d'audit des 14 patterns (v0.2.1, v0.2.4, v0.2.5, v0.2.6, v0.2.8, v0.2.13, v0.2.15, v0.2.16, v0.2.18, v0.2.19, v0.2.22, v0.2.23, v0.2.24)
 
 La procedure suivante a ete validee par l'audit de la serie des 11 parcours
 realise par Themis (evaluatrice croisee) le 2026-08-08. Elle est a appliquer a
@@ -1043,26 +1216,35 @@ v0.2.18, le Pattern 11 en v0.2.19).
    Promethee, promethee -> Minerve). Ne pas declarer un ecart sur un parcours
    sans delegation.
 
-### 4c. RE-AUDIT COMPLET DES 11 PATTERNS (v0.2.7, LECON THEMIS)
+### 4c. RE-AUDIT COMPLET DES 14 PATTERNS (v0.2.25, LECON THEMIS)
 
 1. Apres avoir audite le pattern nouveau ou modifie (4b par exemple),
-   REJOUER integralement les procedures 1 (multi-missions), 2 (rappel ASCII
-   position 1), 3 (combos), 4 (question honnete), 4b (delegation active),
+   REJOUER integralement TOUTES les procedures d'audit dans l'ordre :
+   1 (multi-missions), 2 (rappel ASCII position 1), 3 (combos),
+   4 (question honnete), 4b (delegation active), 4c (ce re-audit),
    4d (contexte temps reel), 4e (modele compose), 4f (chaine bout-en-bout),
-   4g (lire le .md avant usage) et 4h (une carte = un role) sur le MEME
-   parcours.
-2. Ne PAS conclure au verdict global tant que les 10 procedures n ont pas ete
+   4g (lire le .md avant usage), 4h (une carte = un role),
+   4i (conformite d execution), 4j (creation limitee), 4k (la fin suit SA
+   carte) et 4l (verification d impact) sur le MEME parcours.
+2. Ne PAS conclure au verdict global tant que les 14 procedures n ont pas ete
    rejouees : un audit qui ne teste que le nouveau pattern ne prouve pas la
    conformite globale (lecon Themis : 3 ecarts ASCII chez vulcain decouverts
-   par la procedure 2 rejouee, invisibles a la procedure 4b seule).
+   par la procedure 2 rejouee, invisibles a la procedure 4b seule ; lecon
+   utilisateur 2026-08-09 : la procedure 4c elle-meme est restee a 12
+   patterns pendant que 4i/4k/4l s ajoutaient -- la liste doit etre
+   RE-VERIFIEE a chaque ajout de pattern).
 3. Verifier en particulier que la procedure 2 (position 1 = `REGLE IMMUABLE
    ASCII`, texte UNIFORME) est rejouee : les cases d'ecriture peuvent porter
    un ancien format ("REGLE IMMUABLE : ASCII strict") qui echappe a une
    simple recherche de texte -- la verification structurelle position 1 est
    obligatoire a CHAQUE audit.
-4. Appliquer le critere d'acceptation 13 (aucune fin passive) en complement
-   des criteres 1 a 20 : la conformite d'un parcours = TOUS les criteres,
-   pas seulement ceux lies au pattern recent.
+4. Appliquer TOUS les criteres d'acceptation 1 a 25 (criteres 13 fin passive,
+   22 conformite d execution, 24 la fin suit SA carte, 25 verification
+   d impact) en complement : la conformite d'un parcours = TOUS les
+   criteres, pas seulement ceux lies au pattern recent.
+5. La procedure 4l (verification d impact) est un pas OBLIGATOIRE du re-audit
+   depuis v0.2.24 : lancer detecter-impacts sur un echantillon des fichiers
+   modifies (Pattern 14).
 
 ### 4d. Pattern 6 -- CONTEXTE TEMPS REEL (v0.2.8)
 
@@ -1152,6 +1334,14 @@ v0.2.18, le Pattern 11 en v0.2.19).
 5. RE-AUDIT COMPLET (regle v0.2.7) : rejouer les procedures 1, 2, 3, 4,
    4b, 4d, 4e, 4f, 4g, 4h ET 4i dans leur integralite.
 
+6. VERIFIER LA REACTIVATION (critere reactiver R1-R5) : l agent audite
+   a-t-il reactive Cerberus correctement a la fin de sa mission (3e
+   argument `agent_precedent`, sortie `Session ... : Cerberus reactive
+   avec succes`, bloc AGENTS.md passe sur Cerberus, profil classeur mis
+   a jour) ? Une aide affichee ou un bloc restant sur l agent = ECART
+   D EXECUTION a inscrire au rapport (lecon Themis 2026-08-09).
+
+
 ### 4f. Pattern 8 -- Chaine de delegation BOUT-EN-BOUT (v0.2.15)
 
 1. Identifier la chaine : pour chaque parcours qui DELEGUE, verifier la fin
@@ -1171,6 +1361,58 @@ v0.2.18, le Pattern 11 en v0.2.19).
 6. RE-AUDIT COMPLET (regle v0.2.7) : apres la migration vers la chaine
    bout-en-bout, rejouer les procedures 1, 2, 3, 4, 4b, 4d, 4e ET 4f dans
    leur integralite.
+
+### 4j. Pattern 12 -- CREATION LIMITEE (v0.2.22)
+
+1. Identifier les cases de creation/documentation : toute case dont la liste
+   `indices` contient un outil de creation/ecriture (creer-fichier,
+   ecrire-fichier, editer-fichier, ajouter-contenu-fichier) ou dont le titre
+   evoque la creation/redaction/documentation.
+2. Pour CHAQUE case de creation, verifier qu'elle porte un indice `regle`
+   CREATION LIMITEE (en tete des indices) precisant le PERIMETRE (rapports
+   de mission dans le dossier de l'agent ou .tmp-* du workspace, JAMAIS
+   tools/) et les ROLES EXCLUS (outil -> Vulcain, test -> Morpheus, case de
+   parcours -> Buffy).
+3. Verifier qu'aucune case ne demande a l'agent de creer un outil, un test
+   ou une case de parcours lui-meme ; la case `Signaler le besoin` renvoie
+   vers l'agent habilite (Vulcain/Morpheus/Buffy), jamais vers une action de
+   creation par l'agent audite.
+4. Verifier que la case `Signaler le besoin` ne contient PAS la mention
+   "documenter une nouvelle case dans le parcours" (creation de case = role
+   de Buffy).
+
+### 4k. Pattern 13 -- LA FIN SUIT SA CARTE (v0.2.23)
+
+1. Pour CHAQUE mission du parcours, identifier la fin attendue par la carte
+   (case fin : reactiver Cerberus, ou activer le maillon suivant).
+2. Verifier que la fin est COHERENTE avec le type d'activation : activation
+   directe par Cerberus -> fin = reactiver Cerberus ; maillon de chaine ->
+   fin = activer le suivant selon SA carte ; dernier maillon -> reactiver
+   Cerberus avec le bilan consolide.
+3. Verifier qu'aucune fin de maillon de chaine ne dit "reactiver Cerberus"
+   quand la carte ordonne d'activer le suivant (anomalie qui coupe la chaine
+   -- lecon Pattern 11 : Vulcain a reactive Cerberus au lieu d'activer
+   Morpheus).
+4. Verifier qu'aucun document de coordination (AGENTS.md, index-agents,
+   cerberus/corrections, todo-template, protocoles) ne porte l'ancienne regle
+   "toujours reactiver Cerberus" (grep : "toujours revenir a Cerberus",
+   "derniere action de tout todo est de reactiver Cerberus").
+
+### 4l. Pattern 14 -- VERIFICATION D IMPACT GENERALISEE (v0.2.24)
+
+1. Pour CHAQUE mission auditee, identifier les fichiers modifies (message
+   d'activation, bilan de reactivation, git status, rapport de mission).
+2. Lancer detecter-impacts sur un ECHANTILLON REPRESENTATIF des fichiers
+   modifies (python3 cerveau-projet/agents/tools/detecter/detecter-impacts/
+   detecter-impacts.py <fichier-modifie> --racine cerveau-projet).
+3. Comparer la liste des fichiers impactes (index-tools, catalogue,
+   spec, fiches, parcours, corrections) avec ce qui a ete effectivement
+   modifie par l'agent.
+4. Tout impact NON mis a jour = NON CONFORME : documenter le fichier
+   manquant dans le rapport + l'action de correction requise (lecon
+   utilisateur 2026-08-09 : seul le rapport-audit-janus utilisait
+   detecter-impacts, la verification doit etre GENERALISEE).
+5. Verifier que l'outil a bien ete lu avant usage (.md, Pattern 9).
 
 ### 5. Cas particuliers legitimes
 | Cas | Pattern | Applicable | Raison |
@@ -1232,12 +1474,14 @@ v0.2.18, le Pattern 11 en v0.2.19).
     ("te reactive", "j'attends", "attend le retour") ; toute delegation est
     materialisee par une boucle RELAIS -> RETOUR -> CLOTURE -> FIN (Pattern 5 --
     verifier avec grep 'te reactive\|j attends' sur les messages des cases fin)
-14. RE-AUDIT COMPLET DES 11 PATTERNS : a chaque creation/modification/audit,
-    les procedures 1, 2, 3, 4, 4b, 4d, 4e, 4f, 4g, 4h et 4i sont REJOUES
-    integralement (jamais la procedure nouvelle seule) ; le verdict global
-    n'est prononce qu'apres le re-audit complet (v0.2.7 -- lecon Themis :
-    3 ecarts ASCII vulcain decouverts par la procedure 2 rejouee, invisibles
-    a la 4b seule)
+14. RE-AUDIT COMPLET DES 14 PATTERNS : a chaque creation/modification/audit,
+    les procedures 1, 2, 3, 4, 4b, 4c, 4d, 4e, 4f, 4g, 4h, 4i, 4j, 4k et 4l
+    sont REJOUES integralement (jamais la procedure nouvelle seule) ; le
+    verdict global n'est prononce qu'apres le re-audit complet (v0.2.7,
+    generalise a 14 patterns en v0.2.25 -- lecon Themis : 3 ecarts ASCII
+    vulcain decouverts par la procedure 2 rejouee, invisibles a la 4b seule ;
+    lecon 2026-08-09 : la liste des procedures doit etre re-verifiee a
+    chaque ajout de pattern)
 15. CONTEXTE TEMPS REEL : tout parcours porte la case `c0c` (CONTEXTE
     OBLIGATOIRE) entre c0b et c1 -- c0 OUI -> c0c, c0b -> c0c, c0c -> c1 --
     avec l'outil `lire-activite-recente` et l'indice fichier AGENTS.md
@@ -1284,8 +1528,27 @@ v0.2.18, le Pattern 11 en v0.2.19).
     -- ex: Vulcain a reactive Cerberus au lieu d'activer Morpheus ;
     Cerberus a lance des analyses au lieu d'activer Buffy : dans les 2 cas
     la carte etait structurellement valide mais l'execution a devie --
-    constat stabilite des cartes 2026-08-08). La conformite d'execution est
+    constat stabilite des cartes 2026-08-08) -> v0.2.20 (PISTE C : champ catalogue optionnel sur les indices outil - reference a la commande du catalogue generateurs-commande, commande en dur conservee comme fallback ; guider-parcours v0.3.1 affiche catalogue: <nom> + PASSE PAR LE GENERATEUR quand le champ est present, 2026-08-08). La conformite d'execution est
     le SEUL vrai test de stabilite : elle est verifiee par la case c8b du
     parcours-themis (entre le verdict c8 et le rapport c9), le critere est
     croise avec la mission recue, les fichiers modifies et les rapports de
     l'agent audite.
+23. CREATION LIMITEE (v0.2.22) : chaque case de creation/documentation
+    porte un indice regle CREATION LIMITEE en tete de ses indices
+    (perimetre : rapports de mission dans le dossier de l'agent ou
+    .tmp-* du workspace, JAMAIS tools/ ; roles exclus : outil ->
+    Vulcain, test -> Morpheus, case de parcours -> Buffy ; besoin
+    manquant -> Signaler le besoin) (Pattern 12 -- ex: parcours-atlas
+    v0.1.3, cases c9/c18/c19/c25)
+24. LA FIN SUIT SA CARTE (v0.2.23) : la fin de mission d'un agent suit SA
+    carte (Pattern 13) : activation directe par Cerberus -> reactiver
+    Cerberus ; maillon de chaine -> activer le suivant selon SA carte ; seul
+    le DERNIER maillon reactiver Cerberus avec le bilan consolide. Aucun
+    document de coordination ne porte l'ancienne regle "toujours reactiver
+    Cerberus" (lecon conflit 2026-08-09 corrige dans 26 fichiers par Buffy).
+25. VERIFICATION D IMPACT GENERALISEE (v0.2.24) : pour chaque mission auditee,
+    l'agent a-t-il mis a jour TOUS les fichiers impactes par sa mission
+    (verifie par detecter-impacts sur un echantillon representatif des fichiers
+    modifies) ? Tout impact NON mis a jour (index-tools, catalogue, spec,
+    fiches, parcours, corrections) = NON CONFORME (Pattern 14, lecon
+    utilisateur 2026-08-09).

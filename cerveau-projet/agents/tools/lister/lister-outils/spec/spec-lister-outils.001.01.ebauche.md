@@ -200,7 +200,7 @@ Tests manuels sur le dossier `exemples/` avec des fichiers de test.
 
 - [rechercher] -- references rassemblees (index-tools, conventions)
 - [verifier] -- structure complete (sections 1-10 presentes)
-- [analyser] -- coherent avec l'outil existant (v0.2.0)
+- [analyser] -- coherent avec l'outil existant (v0.3.0-py)
 - [valider] -- pret pour le statut prepare
 
 ---
@@ -211,3 +211,4 @@ Tests manuels sur le dossier `exemples/` avec des fichiers de test.
 |---|---|---|---|
 | 2026-08-05 | 0.1.0 | Vulcain | Creation initiale |
 | 2026-08-07 | 0.2.0 | Promethee | Refonte selon spec-template, version outil 0.2.0 |
+| 2026-08-09 | 0.3.0-py | Vulcain | Alignement regle des 5 fichiers (py 0.3.0-py) |

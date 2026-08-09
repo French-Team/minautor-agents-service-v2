@@ -210,13 +210,14 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> morpheus "<raison>"
 ```
 
-### Pour reactiver Cerberus
+### Pour terminer ma mission (la fin suit SA carte)
 
 ```bash
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "Vulcain"
 ```
 
-> **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.
+> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> **FLUX** : apres une delegation des tests a Morpheus, c est Morpheus qui active Janus ; je reactiver Cerberus avec le bilan consolide de la chaine (Pattern 8).
 
 ---
 

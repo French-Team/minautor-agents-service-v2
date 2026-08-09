@@ -7,7 +7,7 @@ identite:
 # Specification -- combos-moteur
 
 **Statut :** ebauche
-**Version :** 0.2.0-ebauche
+**Version :** 0.2.0-beta
 **Categorie :** combos
 **Date :** 2026-08-08
 

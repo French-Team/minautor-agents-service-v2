@@ -7,9 +7,9 @@
   "parcours": {
     "nom": "parcours-atlas",
     "agent": "atlas",
-    "version": "0.1.0",
+    "version": "0.1.5",
     "case_depart": "c0",
-    "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+    "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. PILOTE STRICT v0.1.2 : commandes composees via le generateur (catalogue), aucun fallback en dur."
   },
   "cases": {
     "c0": {
@@ -48,14 +48,14 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/atlas/corrections.md"
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
         },
         {
           "type": "outil",
           "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/atlas/atlas.md"
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
         }
       ],
       "suivant": "c0c"
@@ -84,6 +84,10 @@
         {
           "reponse": "autre",
           "vers": "c26"
+        },
+        {
+          "reponse": "cartographier",
+          "vers": "c30"
         }
       ]
     },
@@ -102,8 +106,8 @@
         {
           "type": "outil",
           "nom": "lister-dossiers",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-dossiers/",
-          "commande": "python3 cerveau-projet/agents/tools/lister/lister-dossiers/lister-dossiers.py <chemin>"
+          "catalogue": "lister-dossiers",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-dossiers/"
         }
       ],
       "suivant": "c3"
@@ -119,8 +123,8 @@
         {
           "type": "outil",
           "nom": "lister-fichiers",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/",
-          "commande": "python3 cerveau-projet/agents/tools/lister/lister-fichiers/lister-fichiers.py <chemin>"
+          "catalogue": "lister-fichiers",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
         }
       ],
       "suivant": "c4"
@@ -136,8 +140,8 @@
         {
           "type": "outil",
           "nom": "lister-fonctions",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-fonctions/",
-          "commande": "python3 cerveau-projet/agents/tools/lister/lister-fonctions/lister-fonctions.py <fichier>"
+          "catalogue": "lister-fonctions",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-fonctions/"
         }
       ],
       "suivant": "c5"
@@ -153,8 +157,8 @@
         {
           "type": "outil",
           "nom": "lister-appels",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-appels/",
-          "commande": "python3 cerveau-projet/agents/tools/lister/lister-appels/lister-appels.py <fichier>"
+          "catalogue": "lister-appels",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-appels/"
         }
       ],
       "suivant": "c6"
@@ -170,8 +174,8 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier>"
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
         }
       ],
       "suivant": "c7"
@@ -187,8 +191,8 @@
         {
           "type": "outil",
           "nom": "rechercher-texte",
-          "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/",
-          "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <fichier>"
+          "catalogue": "rechercher-texte",
+          "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/"
         }
       ],
       "suivant": "c8"
@@ -204,8 +208,8 @@
         {
           "type": "outil",
           "nom": "valider-relecture",
-          "chemin": "cerveau-projet/agents/tools/valider/valider-relecture/",
-          "commande": "python3 cerveau-projet/agents/tools/valider/valider-relecture/valider-relecture.py <fiche-agent>"
+          "catalogue": "valider-relecture",
+          "chemin": "cerveau-projet/agents/tools/valider/valider-relecture/"
         }
       ],
       "suivant": "c9"
@@ -214,6 +218,10 @@
       "titre": "Documenter les decouvertes",
       "type": "indice",
       "indices": [
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
         {
           "type": "regle",
           "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
@@ -229,8 +237,8 @@
         {
           "type": "outil",
           "nom": "ecrire-fichier",
-          "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py <documentation> (apres validation)"
+          "catalogue": "ecrire-fichier",
+          "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
         }
       ],
       "suivant": "c10"
@@ -250,8 +258,8 @@
         {
           "type": "outil",
           "nom": "ajouter-contenu-fichier",
-          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/atlas/corrections.md <lecon>"
+          "catalogue": "ajouter-contenu-fichier",
+          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/"
         }
       ],
       "suivant": "c11"
@@ -338,8 +346,8 @@
         {
           "type": "outil",
           "nom": "lister-fichiers",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/",
-          "commande": "python3 cerveau-projet/agents/tools/lister/lister-fichiers/lister-fichiers.py <chemin>"
+          "catalogue": "lister-fichiers",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
         }
       ],
       "suivant": "c17"
@@ -350,19 +358,29 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande analyser-structure --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-commande",
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py"
+        },
+        {
+          "type": "regle",
           "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
         },
         {
           "type": "outil",
           "nom": "analyser-structure",
-          "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/",
-          "commande": "python3 cerveau-projet/agents/tools/analyser/analyser-structure/analyser-structure.py <chemin>"
+          "catalogue": "analyser-structure",
+          "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/"
         },
         {
           "type": "outil",
           "nom": "decomposer-fichier",
-          "chemin": "cerveau-projet/agents/tools/decomposer/decomposer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/decomposer/decomposer-fichier/decomposer-fichier.py <fichier>"
+          "catalogue": "decomposer-fichier",
+          "chemin": "cerveau-projet/agents/tools/decomposer/decomposer-fichier/"
         }
       ],
       "suivant": "c18"
@@ -371,6 +389,10 @@
       "titre": "Creer la structure de documentation",
       "type": "indice",
       "indices": [
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
         {
           "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
@@ -386,8 +408,8 @@
         {
           "type": "outil",
           "nom": "creer-fichier",
-          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <fichier> (apres validation, erreur si existe)"
+          "catalogue": "creer-fichier",
+          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/"
         }
       ],
       "suivant": "c19"
@@ -396,6 +418,10 @@
       "titre": "Rediger le contenu",
       "type": "indice",
       "indices": [
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
         {
           "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
@@ -415,8 +441,8 @@
         {
           "type": "outil",
           "nom": "ecrire-fichier",
-          "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py <fichier> (apres validation)"
+          "catalogue": "ecrire-fichier",
+          "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
         }
       ],
       "suivant": "c20"
@@ -448,8 +474,8 @@
         {
           "type": "outil",
           "nom": "lister-fichiers",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/",
-          "commande": "python3 cerveau-projet/agents/tools/lister/lister-fichiers/lister-fichiers.py <chemin>"
+          "catalogue": "lister-fichiers",
+          "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
         }
       ],
       "suivant": "c22"
@@ -465,8 +491,8 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier>"
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
         }
       ],
       "suivant": "c23"
@@ -482,8 +508,8 @@
         {
           "type": "outil",
           "nom": "analyser-structure",
-          "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/",
-          "commande": "python3 cerveau-projet/agents/tools/analyser/analyser-structure/analyser-structure.py <chemin>"
+          "catalogue": "analyser-structure",
+          "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/"
         }
       ],
       "suivant": "c24"
@@ -499,8 +525,8 @@
         {
           "type": "outil",
           "nom": "analyser-dependances",
-          "chemin": "cerveau-projet/agents/tools/analyser/analyser-dependances/",
-          "commande": "python3 cerveau-projet/agents/tools/analyser/analyser-dependances/analyser-dependances.py <chemin>"
+          "catalogue": "analyser-dependances",
+          "chemin": "cerveau-projet/agents/tools/analyser/analyser-dependances/"
         }
       ],
       "suivant": "c25"
@@ -509,6 +535,10 @@
       "titre": "Creer la cartographie",
       "type": "indice",
       "indices": [
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
+        },
         {
           "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
@@ -524,11 +554,11 @@
         {
           "type": "outil",
           "nom": "ecrire-fichier",
-          "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py <cartographie> (apres validation)"
+          "catalogue": "ecrire-fichier",
+          "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
         }
       ],
-      "suivant": "c10"
+      "suivant": "c30"
     },
     "c26": {
       "titre": "Mission hors perimetre",
@@ -556,8 +586,8 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+          "catalogue": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
         }
       ],
       "suivant": "c28"
@@ -565,12 +595,12 @@
     "c28": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
     },
     "c29": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+      "message": "SIGNALER A CERBERUS : besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy. Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -583,8 +613,8 @@
         {
           "type": "outil",
           "nom": "lire-activite-recente",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+          "catalogue": "lire-activite-recente",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/"
         },
         {
           "type": "fichier",
@@ -593,6 +623,33 @@
         }
       ],
       "suivant": "c1"
+    },
+    "c30": {
+      "titre": "Cartographier un parcours",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE PATTERN 9 - LIRE AVANT USAGE : lire cartographier-parcours.md AVANT d executer (l outil genere la cartographie d un parcours JSON en fichier markdown)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE PATTERN 12 - CREATION LIMITEE : la sortie est un RAPPORT DE MISSION dans le dossier du parcours audite (cartographie-<agent>.md), JAMAIS tools/. L outil est en LECTURE SEULE sur la source (ne modifie jamais le parcours)."
+        },
+        {
+          "type": "outil",
+          "nom": "cartographier-parcours",
+          "catalogue": "cartographier-parcours",
+          "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/",
+          "commande": "python3 cerveau-projet/agents/tools/cartographier/cartographier-parcours/cartographier-parcours.py {parcours}"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/cartographier-parcours.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        }
+      ],
+      "suivant": "c10"
     }
   }
 }

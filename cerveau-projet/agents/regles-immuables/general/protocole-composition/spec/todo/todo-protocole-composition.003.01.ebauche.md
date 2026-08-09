@@ -59,7 +59,7 @@ mission:
 
 ## Phase 9 -- Reactivation de Cerberus
 
-> **Regle OBLIGATOIRE** : La derniere action de tout todo est de reactiver Cerberus.
+> **Regle OBLIGATOIRE** : La derniere action de tout todo suit SA carte (Pattern 8) : reactiver Cerberus si active directement par Cerberus, sinon activer le maillon suivant de la chaine ; seul le dernier maillon reactiver Cerberus avec le bilan consolide.
 
 - [ ] Verifier que tout est termine
 - [ ] Mettre a jour AGENTS.md (Cerberus agent principal)

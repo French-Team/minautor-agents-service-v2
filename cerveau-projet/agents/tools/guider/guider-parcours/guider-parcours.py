@@ -30,7 +30,7 @@ import json
 import sys
 from pathlib import Path
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -182,6 +182,12 @@ def afficher_indices(indices):
                 print("         chemin: %s" % chemin)
             if ind.get("commande"):
                 print(_couleur("         > ", "cyan") + ind.get("commande"))
+            # Piste C (spec v0.2.20) : reference catalogue optionnelle -- compose la
+            # commande via generateurs-commande --commande <catalogue> au lieu de l'ecrire en dur
+            if ind.get("catalogue"):
+                print(_couleur("         catalogue: ", "cyan") + ind.get("catalogue"))
+                print(_couleur("         PASSE PAR LE GENERATEUR: ", "cyan") +
+                      "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande " + ind.get("catalogue"))
             # Pattern 9 (spec v0.2.16) : lire le .md de l'outil AVANT de l'executer
             doc = _chemin_doc_outil(nom, chemin)
             if doc:

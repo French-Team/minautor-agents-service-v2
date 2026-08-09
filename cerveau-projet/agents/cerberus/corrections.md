@@ -27,7 +27,7 @@ types:
 |---|---|
 | **Toujours commencer par l'ecoute** | Ecouter d'abord, decider ensuite |
 | **Toujours documenter l'activation** | Chaque activation doit etre documentee dans AGENTS.md |
-| **Exiger le retour a Cerberus** | Chaque agent doit terminer en reactivant Cerberus |
+| **Exiger la fin conforme a la carte** | Chaque agent termine selon SA carte (Pattern 8) : reactiver Cerberus si activation directe, activer le suivant si maillon de chaine |
 | **Ne jamais sauter Cerberus** | Aucun agent ne peut etre active sans passer par Cerberus |
 
 ---
@@ -55,7 +55,7 @@ types:
 |---|---|---|
 | Activer sans comprendre | TOUJOURS poser des questions avant de decider | En cours |
 | Oublier de documenter | TOUJOURS mettre a jour AGENTS.md AVANT de passer la main | En cours |
-| Ne pas exiger le retour | TOUJOURS preciser qu'il faut revenir a Cerberus | En cours |
+| Ne pas exiger le retour | La fin suit SA carte (Pattern 8) : activation directe = reactiver Cerberus, maillon de chaine = activer le suivant, dernier maillon = reactiver Cerberus avec bilan consolide | Corrige (2026-08-09) |
 | **Executer seul une mission d'outil (faute grave 2026-08-06)** | **TOUJOURS activer Vulcain pour creer/modifier/tester/optimiser un outil. La mission Optimiser un outil est dans ma carte de decision. Jamais de travail technique solo.** | Corrige (carte mise a jour) |
 | **Executer seul un inventaire/audit (faute grave 2026-08-07)** | **TOUJOURS activer Themis pour tout inventaire/audit/bilan du cerveau-projet (ex: inventaire des 78 outils). La mission Inventaire / audit est dans ma carte. Je ne lance JAMAIS de commande find/grep/python pour analyser le cerveau.** | Corrige (carte mise a jour) |
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # valider-nommage.sh
 # Verifier que le nommage est correct selon les conventions
-# Version: 0.3.0
+# Version: 0.3.2
 # identite:
 #   type: outil
 #   appartient_a: commun
@@ -16,7 +16,7 @@
 # JSON identite/agent/profil.
 
 # Configuration
-VERSION="0.3.1"
+VERSION="0.3.2"
 DATE="2026-08-08"
 
 # Couleurs pour la sortie
@@ -272,6 +272,27 @@ valider_outil() {
 
     echo -e "${BLUE}[CHECKLIST] Validation du nommage : ${basename}${NC}"
     echo ""
+
+    # Formats speciaux LEGITIMES (conventions dediees, hors nom-outil.sh/py/md) :
+    #   - definition-combo.json : fichier canonique d'un combo (dossier combos/combo-*/)
+    #   - test-XXX-nom-outil.(py|sh|md) : fichier de test formel (dossier tests/test-XXX-*/)
+    local dossier_parent=$(basename "$(dirname "$fichier")")
+    local format_special_combo=false
+    local format_special_test=false
+    if [[ "$basename" == "definition-combo.json" ]] && [[ "$dossier_parent" == "combo-"* ]]; then
+        format_special_combo=true
+    fi
+    if [[ "$basename" =~ ^test-[0-9]+-[a-z0-9-]+\.(py|sh|md)$ ]] && [[ "$dossier_parent" == "test-"* ]]; then
+        format_special_test=true
+    fi
+
+    if [[ "$format_special_combo" == true ]] || [[ "$format_special_test" == true ]]; then
+        echo -e "  ${GREEN}[OK] Format special reconnu : ${basename}${NC}"
+        if [[ "$verbose" == "true" ]]; then
+            echo -e "  ${GREEN}[OK] Prefixe dossier respecte : ${dossier_parent}/${NC}"
+        fi
+        return 0
+    fi
 
     if [[ "$basename" =~ ^[a-z-]+\.sh$ ]] || [[ "$basename" =~ ^[a-z-]+\.py$ ]] || [[ "$basename" =~ ^[a-z-]+\.md$ ]]; then
         echo -e "  ${GREEN}[OK] Format valide : ${basename}${NC}"

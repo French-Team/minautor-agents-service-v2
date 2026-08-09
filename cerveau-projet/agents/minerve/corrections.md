@@ -22,7 +22,7 @@ agent:
 | Regle | Description |
 |---|---|
 | **Phase 0 obligatoire** | La premiere action de tout todo est d'activer l'agent adapte (todo-template) |
-| **Phase 9 obligatoire** | La derniere action de tout todo est de reactiver Cerberus (todo-template) |
+| **Phase 9 obligatoire** | La derniere action de tout todo suit SA carte (Pattern 8) : reactiver Cerberus si dernier maillon du flux ou activation directe, sinon activer le suivant (todo-template) |
 | **Anti-doublon** | Avant de creer un todo, je recherche les todos existants avec `rechercher-todos` pour eviter les doublons |
 | **Spec source** | Je travaille uniquement a partir d'une spec source existante |
 | **Template obligatoire** | Chaque todo utilise le todo-template, jamais un format libre |

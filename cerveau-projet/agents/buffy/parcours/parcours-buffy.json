@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-buffy",
     "agent": "buffy",
-    "version": "0.2.2",
+    "version": "0.2.5",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Buffy : creer/modifier les fichiers du cerveau, creer un agent/protocole, controler le cerveau, deleguer (Athena/Vulcain), sous-missions. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.1 : chemins combos (Pattern 3, spec-guider-parcours v0.2.4) : controler c28 combo-sante-tableaux, modifier c13b combo-controle-impacts, autre c34b combo-activation. v0.2.2 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : modifier c13c question erreurs hors mission (OUI c13d fin signalement a Cerberus / NON c14 flux principal)."
   },
@@ -48,12 +48,14 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/corrections.md"
         },
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/buffy.md"
         }
@@ -96,6 +98,17 @@
       "type": "indice",
       "indices": [
         {
+          "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande valider-nommage --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-commande",
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande valider-nommage --reponses ..."
+        },
+        {
           "type": "fichier",
           "chemin": "cerveau-projet/agents/conventions/renommage/convention-renommage.md",
           "raison": "Convention de renommage : verifier le nom avant de creer"
@@ -103,6 +116,7 @@
         {
           "type": "outil",
           "nom": "valider-nommage",
+          "catalogue": "valider-nommage",
           "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <chemin>"
         }
@@ -121,6 +135,7 @@
         {
           "type": "outil",
           "nom": "valider-conventions",
+          "catalogue": "valider-conventions",
           "chemin": "cerveau-projet/agents/tools/valider/valider-conventions/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>"
         }
@@ -134,6 +149,7 @@
         {
           "type": "outil",
           "nom": "rechercher-fichier",
+          "catalogue": "rechercher-fichier",
           "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-fichier/rechercher-fichier.py <chemin>"
         }
@@ -159,6 +175,7 @@
         {
           "type": "outil",
           "nom": "creer-fichier",
+          "catalogue": "creer-fichier",
           "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin> <contenu>"
         }
@@ -199,6 +216,7 @@
         {
           "type": "outil",
           "nom": "ajouter-contenu-fichier",
+          "catalogue": "ajouter-contenu-fichier",
           "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>"
         }
@@ -217,6 +235,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>"
         }
@@ -235,6 +254,7 @@
         {
           "type": "outil",
           "nom": "rechercher-texte",
+          "catalogue": "rechercher-texte",
           "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/",
           "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>"
         }
@@ -256,6 +276,7 @@
         {
           "type": "outil",
           "nom": "editer-fichier",
+          "catalogue": "editer-fichier",
           "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin> <ancien> <nouveau>"
         }
@@ -274,6 +295,7 @@
         {
           "type": "outil",
           "nom": "valider-conformite-ascii",
+          "catalogue": "valider-conformite-ascii",
           "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier> (UN fichier par appel)"
         }
@@ -308,6 +330,7 @@
         {
           "type": "outil",
           "nom": "ajouter-contenu-fichier",
+          "catalogue": "ajouter-contenu-fichier",
           "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>"
         }
@@ -350,6 +373,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 athena <raison>"
         }
@@ -368,6 +392,7 @@
         {
           "type": "outil",
           "nom": "valider-nommage",
+          "catalogue": "valider-nommage",
           "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <nom-agent>"
         }
@@ -410,12 +435,14 @@
         {
           "type": "outil",
           "nom": "copier-fichier",
+          "catalogue": "copier-fichier",
           "chemin": "cerveau-projet/agents/tools/copier/copier-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/copier/copier-fichier/copier-fichier.py fiche-agent-template.md agents/<agent>/<agent>.md"
         },
         {
           "type": "outil",
           "nom": "creer-fichier",
+          "catalogue": "creer-fichier",
           "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py agents/<agent>/corrections.md"
         }
@@ -454,6 +481,7 @@
         {
           "type": "outil",
           "nom": "valider-conventions",
+          "catalogue": "valider-conventions",
           "chemin": "cerveau-projet/agents/tools/valider/valider-conventions/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>"
         }
@@ -491,6 +519,7 @@
         {
           "type": "outil",
           "nom": "creer-fichier",
+          "catalogue": "creer-fichier",
           "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin-protocole> <contenu>"
         }
@@ -539,6 +568,7 @@
         {
           "type": "outil",
           "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-sante-tableaux/definition-combo.json"
         },
@@ -565,6 +595,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 vulcain <raison>"
         }
@@ -587,6 +618,7 @@
         {
           "type": "outil",
           "nom": "gerer-sous-mission",
+          "catalogue": "gerer-sous-mission",
           "chemin": "cerveau-projet/agents/tools/gerer/gerer-sous-mission/",
           "commande": "python3 cerveau-projet/agents/tools/gerer/gerer-sous-mission/gerer-sous-mission.py <action>"
         }
@@ -623,6 +655,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
         }
@@ -632,12 +665,12 @@
     "c35": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de test -> Morpheus). Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c36": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -650,6 +683,7 @@
         {
           "type": "outil",
           "nom": "lire-activite-recente",
+          "catalogue": "lire-activite-recente",
           "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
         },
@@ -676,6 +710,7 @@
         {
           "type": "outil",
           "nom": "generateurs-case",
+          "catalogue": "generateurs-case",
           "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-case/",
           "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py PARCOURS ajouter|editer|supprimer [--case ID] [--apres C] [--branche REP:VERS] [--suivant C]"
         }
@@ -717,6 +752,7 @@
         {
           "type": "outil",
           "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json --var fichier=<fichier-modifie>"
         },
@@ -747,6 +783,7 @@
         {
           "type": "outil",
           "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json"
         },
@@ -793,6 +830,7 @@
         {
           "type": "outil",
           "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json --var fichier=<chemin>"
         },

@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-janus",
     "agent": "janus",
-    "version": "0.2.0",
+    "version": "0.2.2",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Janus : second controle (outil, statut, modification). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : les suites d'outils des chemins outil (c5-c7) et modification (c22-c26) sont remplacees par les combos combo-controle-outil et combo-controle-modification (Pattern 3, spec-guider-parcours v0.2.4)."
   },
@@ -48,12 +48,14 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/janus/corrections.md"
         },
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/janus/janus.md"
         }
@@ -106,6 +108,7 @@
         {
           "type": "outil",
           "nom": "creer-fichier",
+          "catalogue": "creer-fichier",
           "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/controle-<objet>-<date>.md"
         }
@@ -124,6 +127,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>"
         }
@@ -152,6 +156,17 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande valider-ebauche --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-commande",
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande valider-ebauche --reponses ..."
+        },
+        {
+          "type": "regle",
           "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d'executer combos-moteur (ex: Je lance le combo combo-controle-outil : cerveau-projet/combos/combo-controle-outil/definition-combo.json)."
         },
         {
@@ -166,12 +181,14 @@
         {
           "type": "outil",
           "nom": "valider-ebauche",
+          "catalogue": "valider-ebauche",
           "chemin": "cerveau-projet/agents/tools/valider/valider-ebauche/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-ebauche/valider-ebauche.py <spec-a-valider> (cas contextuel : spec precise de l'outil)"
         },
         {
           "type": "outil",
           "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-controle-outil/definition-combo.json"
         },
@@ -243,6 +260,7 @@
         {
           "type": "outil",
           "nom": "creer-fichier",
+          "catalogue": "creer-fichier",
           "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/controle-statut-<date>.md"
         }
@@ -256,12 +274,14 @@
         {
           "type": "outil",
           "nom": "lister-statuts",
+          "catalogue": "lister-statuts",
           "chemin": "cerveau-projet/agents/tools/lister/lister-statuts/",
           "commande": "python3 cerveau-projet/agents/tools/lister/lister-statuts/lister-statuts.py"
         },
         {
           "type": "outil",
           "nom": "lister-prepares",
+          "catalogue": "lister-prepares",
           "chemin": "cerveau-projet/agents/tools/lister/lister-prepares/",
           "commande": "python3 cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.py"
         }
@@ -296,6 +316,7 @@
         {
           "type": "outil",
           "nom": "detecter-erreur-statut",
+          "catalogue": "detecter-erreur-statut",
           "chemin": "cerveau-projet/agents/tools/detecter/detecter-erreur-statut/",
           "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-erreur-statut/detecter-erreur-statut.py"
         }
@@ -309,6 +330,7 @@
         {
           "type": "outil",
           "nom": "valider-liens",
+          "catalogue": "valider-liens",
           "chemin": "cerveau-projet/agents/tools/valider/valider-liens/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-liens/valider-liens.py"
         }
@@ -343,6 +365,7 @@
         {
           "type": "outil",
           "nom": "changer-statut",
+          "catalogue": "changer-statut",
           "chemin": "cerveau-projet/agents/tools/changer/changer-statut/",
           "commande": "python3 cerveau-projet/agents/tools/changer/changer-statut/changer-statut.py <fichier> <nouveau-statut>"
         }
@@ -368,6 +391,7 @@
         {
           "type": "outil",
           "nom": "creer-fichier",
+          "catalogue": "creer-fichier",
           "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/controle-modification-<date>.md"
         }
@@ -381,6 +405,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <ancienne-version>"
         }
@@ -394,6 +419,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <nouvelle-version>"
         }
@@ -427,12 +453,14 @@
         {
           "type": "outil",
           "nom": "verifier-role-fichier",
+          "catalogue": "verifier-role-fichier",
           "chemin": "cerveau-projet/agents/tools/verifier/verifier-role-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-role-fichier/verifier-role-fichier.py <fichier> (cas contextuel : role du fichier modifie)"
         },
         {
           "type": "outil",
           "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-controle-modification/definition-combo.json"
         },
@@ -470,6 +498,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
         }
@@ -479,7 +508,7 @@
     "c29": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c30": {
       "titre": "FIN - Delegation",
@@ -497,6 +526,7 @@
         {
           "type": "outil",
           "nom": "lire-activite-recente",
+          "catalogue": "lire-activite-recente",
           "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
         },

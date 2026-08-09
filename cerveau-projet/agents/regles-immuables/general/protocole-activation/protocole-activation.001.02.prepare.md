@@ -164,6 +164,12 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "AgentPrecedent"
 ```
 
+> **3e argument OBLIGATOIRE** : `<AgentPrecedent>` (l agent qui rend la main) est
+> INDISPENSABLE. S il est oublie, la commande affiche l AIDE (echec) et le bloc
+> session reste sur l agent actif -- verifier la ligne `Session session-llm-1 :
+> Cerberus reactive avec succes` pour confirmer le succes.
+
+
 ### Quand ?
 
 ```
@@ -181,7 +187,7 @@ AVANT de terminer la session.
 | **Historique = lecture obligatoire** | Lire TOUJOURS l'historique (lire-activite-recente) + la section Sessions connues, meme en memoire -- le dynamique ne se memorise pas |
 | **Corrections = Ecriture** | TOUJOURS ecrire ; relire si la reponse n'est pas OUI |
 | **Documenter l'activation** | Raison et mission dans AGENTS.md |
-| **Reactiver Cerberus** | Toujours revenir a Cerberus |
+| **Fin de mission = SA carte** | La fin suit SA carte (Pattern 8) : reactiver Cerberus si activation directe, activer le suivant si maillon de chaine ; dernier maillon reactiver Cerberus avec bilan consolide |
 | **Pas de saut** | Ne jamais sauter une etape |
 | **Cerberus = orchestration** | Cerberus donne la MISSION (quoi + pourquoi + criteres), l'agent suit SA carte de decision (SON parcours) |
 | **Utiliser activer-agent-principal** | Pour toute modification d'AGENTS.md |
@@ -200,6 +206,7 @@ AVANT de terminer la session.
 | Ne pas reactiver Cerberus | C'est la DERNIERE action |
 | Lire apres avoir agi | Lire AVANT de commencer |
 | Cerberus detaille les etapes internes de l'agent dans sa todolist | La carte de decision devient inutile : Cerberus ne prepare QUE l'orchestration, les etapes internes vivent dans le parcours de l'agent |
+| Oublier le 3e argument de reactiver (`agent_precedent`) | La commande affiche l aide et ECHOUE EN SILENCE : le bloc session reste sur l agent -- verifier `Session ... : Cerberus reactive avec succes` |
 
 ---
 

@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-themis",
     "agent": "themis",
-    "version": "0.2.0",
+    "version": "0.2.5",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
   },
@@ -48,12 +48,14 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/themis/corrections.md"
         },
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/themis/themis.md"
         }
@@ -98,6 +100,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier-contexte>"
         }
@@ -123,6 +126,7 @@
         {
           "type": "outil",
           "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-audit-themis/definition-combo.json"
         },
@@ -179,6 +183,7 @@
         {
           "type": "outil",
           "nom": "creer-fichier",
+          "catalogue": "creer-fichier",
           "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/themis/rapports/rapport-evaluation-<date>.md"
         }
@@ -200,12 +205,14 @@
         {
           "type": "outil",
           "nom": "ajouter-contenu-fichier",
+          "catalogue": "ajouter-contenu-fichier",
           "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/themis/corrections.md <lecon>"
         },
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> themis"
         }
@@ -228,6 +235,7 @@
         {
           "type": "outil",
           "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier-contexte>"
         }
@@ -263,6 +271,17 @@
       "indices": [
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande evaluer-structure --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-commande",
+          "catalogue": "generateurs-commande",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande evaluer-structure --reponses ..."
+        },
+        {
+          "type": "regle",
           "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
         },
         {
@@ -272,24 +291,28 @@
         {
           "type": "outil",
           "nom": "evaluer-structure",
+          "catalogue": "evaluer-structure",
           "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-structure/",
           "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-structure/evaluer-structure.py"
         },
         {
           "type": "outil",
           "nom": "evaluer-conventions",
+          "catalogue": "evaluer-conventions",
           "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-conventions/",
           "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-conventions/evaluer-conventions.py"
         },
         {
           "type": "outil",
           "nom": "evaluer-coherence",
+          "catalogue": "evaluer-coherence",
           "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-coherence/",
           "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-coherence/evaluer-coherence.py"
         },
         {
           "type": "outil",
           "nom": "evaluer-agents",
+          "catalogue": "evaluer-agents",
           "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-agents/",
           "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-agents/evaluer-agents.py"
         }
@@ -307,12 +330,14 @@
         {
           "type": "outil",
           "nom": "valider-relecture",
+          "catalogue": "valider-relecture",
           "chemin": "cerveau-projet/agents/tools/valider/valider-relecture/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-relecture/valider-relecture.py"
         },
         {
           "type": "outil",
           "nom": "valider-tableaux",
+          "catalogue": "valider-tableaux",
           "chemin": "cerveau-projet/agents/tools/valider/valider-tableaux/",
           "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py <fichier>"
         }
@@ -350,6 +375,7 @@
         {
           "type": "outil",
           "nom": "combos-audit-general",
+          "catalogue": "combos-audit-general",
           "chemin": "cerveau-projet/agents/tools/combos/combos-audit-general/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py"
         }
@@ -382,6 +408,7 @@
         {
           "type": "outil",
           "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
         }
@@ -391,12 +418,12 @@
     "c23": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus et documenter une nouvelle case dans le parcours."
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil -> Vulcain, besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c24": {
       "titre": "FIN - Delegation",
       "type": "fin",
-      "message": "L'agent active execute sa mission puis reactive Cerberus. Suis la chaine complete."
+      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -409,6 +436,7 @@
         {
           "type": "outil",
           "nom": "lire-activite-recente",
+          "catalogue": "lire-activite-recente",
           "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
           "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
         },
@@ -432,6 +460,61 @@
         {
           "type": "regle",
           "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir : le croisement mission / carte / deroulement reel (message d activation/reactivation, fichiers modifies via detecter-impacts, rapports) est la SEULE preuve de la conformite d execution."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c8c"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c3"
+        }
+      ],
+      "suivant": "c8c"
+    },
+    "c8c": {
+      "titre": "VERIFICATION D IMPACT (Pattern 14)",
+      "type": "controle",
+      "question": "As-tu lance detecter-impacts sur un echantillon des fichiers modifies et verifie que TOUS les fichiers impactes sont a jour ?",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "PATTERN 14 + PROCEDURE 4l (spec v0.2.24) : chaque mission impacte plusieurs fichiers (outil, spec, catalogue, index-tools, fiches, parcours, corrections). TOUT impact NON mis a jour = NON CONFORME : documenter le fichier manquant dans le rapport avec l action de correction requise."
+        },
+        {
+          "type": "outil",
+          "nom": "detecter-impacts",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-impacts/",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py <fichier-modifie> --racine cerveau-projet"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c8d"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c3"
+        }
+      ],
+      "suivant": "c8d"
+    },
+    "c8d": {
+      "titre": "LA FIN SUIT SA CARTE (Pattern 13)",
+      "type": "controle",
+      "question": "As-tu verifie pour CHAQUE fin du parcours audite que la fin est COHERENTE avec le type d activation (activation directe par Cerberus -> reactiver Cerberus ; maillon de chaine -> activer le suivant selon SA carte ; dernier maillon -> reactiver avec bilan consolide) et qu aucune fin de maillon ne reactive Cerberus au milieu ?",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "PATTERN 13 + PROCEDURE 4k (spec v0.2.23) : la fin de mission d un agent suit SA carte - activation directe -> reactiver Cerberus, maillon de chaine -> activer le suivant, dernier maillon -> reactiver Cerberus avec bilan consolide, la chaine ne retombe JAMAIS sur Cerberus au milieu. Toute fin incoherente = NON CONFORME."
         }
       ],
       "branches": [

@@ -6,8 +6,8 @@ identite:
 ---
 # generateurs-commande
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
+**Version :** 0.2.1
+**Statut :** dev
 **Categorie :** Generateurs
 **Chemin :** `agents/tools/generateurs/generateurs-commande/`
 
@@ -18,6 +18,8 @@ identite:
 C'est un menu interactif concu pour un agent (sans interface graphique) : l'outil pose une question par parametre, valide chaque reponse, puis compose la commande.
 
 **Source de verite** : chaque commande du catalogue (`catalogue-commandes.json`) est un copier-coller d'un appel d'outil **deja ecrit, corrige et valide** dans `agents/tools/`. Le generateur ne reinvente jamais une commande : il reutilise les modeles valides.
+
+**Catalogue v0.2.2** : **107 commandes** couvrant les 92 outils reels du cerveau-projet (89 outils + combos-moteur + generateurs-regenerer-catalogue + generateurs-commande lui-meme). Chaque entree contient le script, le modele compose et les parametres (texte, choix, flag) avec leurs questions.
 
 ## REGLE IMMUABLE : prefixe du dossier
 

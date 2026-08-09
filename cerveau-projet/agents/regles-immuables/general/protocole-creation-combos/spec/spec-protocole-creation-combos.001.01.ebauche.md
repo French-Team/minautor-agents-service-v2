@@ -7,7 +7,7 @@ identite:
 # Specification -- Protocole de Creation et Mise en Place des Combos
 
 **Statut :** ebauche
-**Version :** 0.1.1-ebauche
+**Version :** 0.1.2-ebauche
 **Categorie :** regles-immuables / protocoles
 **Date :** 2026-08-08
 **Pense-bete source :** [protocole-creation-combos.001.01.ebauche.md](../protocole-creation-combos.001.01.ebauche.md)
@@ -130,6 +130,15 @@ le Pattern 3 dans la spec-guider-parcours, la creation d'OUTILS combos
 | **Description** | Tout lancement d'un combo est ANONCE par l'agent avant execution : `Je lance le combo <nom> : <chemin> - il enchaine <outils>.` Tracabilite des executions pour l'utilisateur, Cerberus et Janus. Le rappel est en tete des indices des cases combo des parcours. |
 | **Critere d'acceptation** | Chaque case combo des parcours porte l'indice regle de citation en tete ; les agents citent le combo avant de le lancer. |
 | **Dependances** | EX-07 (integration Pattern 3) |
+
+### 3.10 EX-10 -- PIEGE WINDOWS : forward slashes dans les variables de chemins
+
+| Champ | Description |
+|---|---|
+| **Priorite** | Haute |
+| **Description** | Toute VARIABLE de chemin passee via `--var` (ex: `fichier_test=<chemin>`, `chemin=<chemin>`) utilise des FORWARD SLASHES, jamais de backslashes. La commande generee est decoupee par `shlex.split` dans la case `outil` : sur Windows un chemin absolu avec backslashes (`Z:\\...\\x.sh`) est eclate (backslash = echappement) -> fichier non cree. |
+| **Critere d'acceptation** | Navigation reelle testee avec un chemin en forward slashes : la case `outil` cree le fichier (ex: combo tester-outil 16/16 VALIDE). Aucun chemin avec backslash dans les entrees des cases generateur. |
+| **Dependances** | EX-04 (cases generateur vs outil), combos-moteur (interpolation + shlex) |
 
 ### 3.8 EX-08 -- Validation complete
 
@@ -292,3 +301,4 @@ existants, la spec-combos-moteur et la spec-guider-parcours.
 |---|---|---|---|
 | 2026-08-08 | 0.1.0 | Buffy | Creation : 8 exigences fonctionnelles, emplacement canonique, processus 11 etapes, checklist Pattern 3 |
 | 2026-08-08 | 0.1.1 | Buffy | Ajout EX-09 : citation obligatoire avant lancement (tracabilite, decision utilisateur) |
+| 2026-08-09 | 0.1.2 | Buffy | Ajout EX-10 : PIEGE WINDOWS forward slashes dans les variables de chemins (decouverte test Morpheus combo tester-outil, section 6.3b du protocole) |

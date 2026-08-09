@@ -214,7 +214,7 @@ Execution reelle sur le systeme de l'utilisateur + fichiers de test dans `exempl
 
 - [rechercher] -- references rassemblees (platform, commandes systeme, conventions)
 - [verifier] -- structure complete (sections 1-10 presentes)
-- [analyser] -- coherent avec l'outil existant (v0.2.0)
+- [analyser] -- coherent avec l'outil existant (v0.2.1-py)
 - [valider] -- pret pour le statut prepare
 
 ---
@@ -225,3 +225,4 @@ Execution reelle sur le systeme de l'utilisateur + fichiers de test dans `exempl
 |---|---|---|---|
 | 2026-08-05 | 0.1.0 | Vulcain | Creation initiale |
 | 2026-08-07 | 0.2.0 | Promethee | Refonte selon spec-template, version outil 0.2.0 |
+| 2026-08-09 | 0.2.1-py | Vulcain | Alignement regle des 5 fichiers (py 0.2.1-py) |

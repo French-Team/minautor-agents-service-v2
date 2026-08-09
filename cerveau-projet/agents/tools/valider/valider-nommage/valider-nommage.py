@@ -42,7 +42,7 @@ import os
 import re
 import sys
 
-VERSION = "0.3.1-py"
+VERSION = "0.3.2-py"
 STATUT = "prepare"
 
 STATUTS_VALIDES = ("ebauche", "prepare", "dev", "test", "valide")
@@ -202,6 +202,21 @@ def valider_outil(fichier, verbose, categorie=None):
     print("[CHECKLIST] Validation du nommage : %s" % basename)
     print("")
 
+    # Formats speciaux LEGITIMES (conventions dediees, hors nom-outil.sh/py/md) :
+    #   - definition-combo.json : fichier canonique d'un combo (dossier combos/combo-*/)
+    #   - test-XXX-nom-outil.(py|sh|md) : fichier de test formel (dossier tests/test-XXX-*/)
+    dossier_parent = os.path.basename(os.path.dirname(os.path.abspath(fichier)))
+    format_special_combo = (basename == "definition-combo.json" and dossier_parent.startswith("combo-"))
+    format_special_test = (re.match(r"^test-\d+-[a-z0-9-]+\.(py|sh|md)$", basename)
+                           and dossier_parent.startswith("test-"))
+
+    if format_special_combo or format_special_test:
+        print("  [OK] Format special reconnu : %s (convention %s)" % (
+            basename, "definition-combo.json" if format_special_combo else "test-XXX-nom-outil"))
+        if verbose:
+            print("  [OK] Prefixe dossier respecte : %s/" % dossier_parent)
+        return erreurs
+
     if not PATTERN_OUTIL.match(basename):
         print("  [ERREUR] Format invalide : %s" % basename)
         print("    Attendu : nom-outil.sh, nom-outil.py ou nom-outil.md")
@@ -222,6 +237,7 @@ def valider_outil(fichier, verbose, categorie=None):
         erreurs += 1
 
     return erreurs
+
 
 
 def valider_recursif(dossier, verbose):

@@ -153,13 +153,14 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 
 ## UTILISATION DE activer-agent-principal
 
-### Pour reactiver Cerberus (fin de mission)
+### Pour terminer ma mission (la fin suit SA carte)
 
 ```bash
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "Clio"
 ```
 
-> **REGLE** : Utiliser TOUJOURS cet outil pour reactiver Cerberus.
+> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> **FLUX** : Ma mission se termine en reactivant Cerberus (activation directe) ou en activant le suivant selon ma carte.
 
 ---
 
