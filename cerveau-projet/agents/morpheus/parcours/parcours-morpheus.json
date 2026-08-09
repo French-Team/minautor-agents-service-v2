@@ -142,6 +142,16 @@
         {
           "type": "regle",
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+        },
+        {
+          "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "corriger-symboles",
+          "catalogue": "corriger-symboles",
+          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
         }
       ],
       "suivant": "c7"

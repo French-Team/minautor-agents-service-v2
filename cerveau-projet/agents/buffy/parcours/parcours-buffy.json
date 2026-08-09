@@ -882,6 +882,16 @@
           "texte": "PATTERN 3 (spec v0.2.18) : cette case lance un COMBO - combos-moteur execute la definition (remplace la suite corriger-nommage + corriger-liens + corriger-emojis + corriger-accents + condenser + nettoyer)."
         },
         {
+          "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "corriger-symboles",
+          "catalogue": "corriger-symboles",
+          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
+        },
+        {
           "type": "outil",
           "nom": "combos-moteur",
           "catalogue": "combos-moteur",

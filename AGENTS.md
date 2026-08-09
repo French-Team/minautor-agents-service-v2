@@ -60,18 +60,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | vulcain |
-| **Role Agent** | Constructeur d'outils -- creation et developpement |
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
 | **Derniere mise a jour** | 2026-08-09 |
-| **Fiche** | [cerveau-projet/agents/vulcain/vulcain.md](cerveau-projet/agents/vulcain/vulcain.md) |
-| **Corrections** | [cerveau-projet/agents/vulcain/corrections.md](cerveau-projet/agents/vulcain/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | MISSION (Cerberus, demande utilisateur) : AJOUTER AU DICTIONNAIRE LES CARACTERES NON-ASCII COURANTS MANQUANTS (suite directe de la mission guillemets francais v0.2.1). DIAGNOSTIC ETABLI PAR CERBERUS (scan propre hors exemples/ et hors dictionnaire) : le projet est 100% propre, mais le dictionnaire partage corriger-dictionnaire-accents.txt ne couvre PAS encore plusieurs familles de caracteres courants : 1) FLECHES VERTICALES et DOUBLES manquantes (U+2191 hausse, U+2193 baisse, U+2194 double sens) - seules U+2192 droite et U+2190 gauche sont couvertes ; 2) BOX DRAWING manquants (U+2500 trait horizontal, U+2502 trait vertical, U+250C coin haut-gauche, U+2510 coin haut-droite, U+2514 coin bas-gauche, U+2518 coin bas-droite, U+251C embranchement gauche, U+2524 embranchement droite) - presents dans les schemas des fichiers exemples/ ; 3) ESPACE INSE CABLE U+00A0 manquant - caractere sournois qui casse le controle ASCII. MISSION : 1) AJOUTER au dictionnaire partage (fin du fichier, section Symboles) avec remplacements ASCII coherents avec les conventions existantes (U+2192 va vers ->, U+2190 vers <-, tiret cadratin vers --) : U+2191 vers ^ (caret, convention ASCII hausse), U+2193 vers v (convention ASCII baisse), U+2194 vers <-> (combinaison des 2 sens), U+21D0 vers <=, U+21D2 vers =>, U+21D4 vers <=> (fleches doubles) ; box drawing : U+2500 vers -, U+2502 vers |, U+250C vers +-, U+2510 vers -+, U+2514 vers +-, U+2518 vers -+, U+251C vers |-, U+2524 vers -| (transcription ASCII des traits et coins) ; U+00A0 (espace inse cable) vers espace simple. VERIFIER chaque remplacement est coherent et non ambigu (pas de conflit avec les entrees existantes). 2) METTRE A JOUR les 2 docs .md (corriger-accents-zones-sensibles.md et corriger-dictionnaire-accents.md) : section caracteres couverts - ajouter fleches verticales/doubles, box drawing, espace inse cable. 3) BUMP version 0.2.1-py -> 0.2.2-py (py+sh+md des 2 outils + ligne historique + regle des 5 fichiers). 4) TESTS REELS SEQUENTIELS (jamais en parallele sur le meme fichier, dossiers neutres .zz-xxx pour eviter les exclusions .tmp/test-) : fichier de test contenant fleches verticales/doubles + box drawing + espace inse cable + accents + guillemets francais -> corriger-accents-zones-sensibles --all : TOUS les non-ASCII purges (0 restant), memes remplacements py/sh (parite de comportement) ; corriger-dictionnaire-accents py+sh : 0 restant. 5) VALIDATIONS : ASCII 0 sur les 6 fichiers outils (le dictionnaire reste exception volontaire), LF pur, nommage, detecter-impacts, 0 residu. 6) LECON Vulcain documentee (ASCII 0, LF pur). ATTENTION : les caracteres non-ASCII du dictionnaire s inserent en UTF-8 reel (fichier exception), les autres fichiers restent ASCII strict ; ne pas purger ni reordonner le dictionnaire ; verifier qu aucun doublon (les entrees existantes U+2192/U+2190/.../tiret cadratin ne doivent pas etre re-ajoutees). |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | vulcain (retour de mission) |
+| **Raison** | MISSION TERMINEE (Vulcain) : COMMENTAIRE STALE LIGNE 318 CORRIGE - REUSSIE. CORRECTION (1 fichier, 1 ligne, AUCUN changement de code ni de version) : generateurs-regenerer-catalogue.py ligne 318 'puis reecrire CRLF' -> 'puis ecrire en LF pur (standard projet)' (point mineur de l audit Themis garde-fou regenerateur). VALIDATIONS : plus aucune reference 'reecrire CRLF' dans le code, py_compile + bash -n OK, parite --version py/sh v1.1.0 inchangee (pas de bump - recommandation audit), ASCII 0, LF pur, 0 residu. Lecon Vulcain ecrite. Fin de mission : reactivation Cerberus (Pattern 13). |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | vulcain | 2026-08-09 14:23 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-09 17:08 |
 | session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
 | session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |

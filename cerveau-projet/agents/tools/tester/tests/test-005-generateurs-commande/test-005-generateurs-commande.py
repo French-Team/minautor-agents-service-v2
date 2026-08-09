@@ -3,7 +3,7 @@
 """
 test-005-generateurs-commande.py
 Test formel du generateur de commande v0.2.1 (fiabilisation des flags optionnels)
-et du parcours Atlas v0.1.5 (pilote strict : commandes en dur retirees).
+et du parcours Atlas v0.1.10 (pilote strict : 1 commande template residuelle c30).
 
 Objet (correction Buffy 2026-08-09) :
   - composer_commande avait une condition INVERSEE : les flags optionnels non
@@ -14,7 +14,8 @@ Objet (correction Buffy 2026-08-09) :
     remplaces par des placeholders {cle} : reponse oui = flag present, non = absent.
   - parcours-atlas v0.1.1 -> v0.1.2 : 24 commandes en dur retirees des indices
     outil avec catalogue (ne restent que type/nom/catalogue/chemin).
-  - parcours-atlas v0.1.2 -> v0.1.5 : versions posterieures du pilote strict.
+  - parcours-atlas v0.1.2 -> v0.1.10 : pilote strict - 1 commande template
+    residuelle case c30 (cartographier-parcours.py {parcours}), connue et documentee.
 
 Cas couverts (22 points) :
   GENERATEUR v0.2.1
@@ -34,9 +35,9 @@ Cas couverts (22 points) :
  14. catalogue version = 0.2.3
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
-  PARCOURS ATLAS v0.1.5
- 17. parcours-atlas.json : json.load valide + version 0.1.5
- 18. 0 champ commande restant dans les indices outil avec catalogue
+  PARCOURS ATLAS v0.1.10
+ 17. parcours-atlas.json : json.load valide + version 0.1.10
+ 18. 1 seul residu connu (c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
  21. valider-cartes-decision --agent atlas : CONFORME
@@ -108,7 +109,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.1 + parcours-atlas v0.1.5 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.1 + parcours-atlas v0.1.10 ===")
     print("")
 
     # ---------- GENERATEUR v0.2.1 ----------
@@ -169,22 +170,28 @@ def main():
     ok = cmd is not None and "creer-fichier.py x.md" in cmd and "hello" in cmd
     verifier(16, "non-regression creer-fichier composee correctement", ok, str(cmd))
 
-    # ---------- PARCOURS ATLAS v0.1.5 ----------
+    # ---------- PARCOURS ATLAS v0.1.10 ----------
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.1.5",
-                 p.get("parcours", {}).get("version") == "0.1.5", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.1.10",
+                 p.get("parcours", {}).get("version") == "0.1.10", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.1.5", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.1.10", False, str(e))
         p = {}
 
+    # Residu connu et documente : case c30 (commande template cartographier-parcours.py {parcours}).
+    # Toute commande en dur SUPPLEMENTAIRE = regression a signaler (KO).
     n_commande = 0
-    for c in p.get("cases", {}).values():
+    cases_commande = []
+    for k, c in p.get("cases", {}).items():
         for i in c.get("indices", []):
             if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
                 n_commande += 1
-    verifier(18, "0 champ commande restant dans les indices avec catalogue", n_commande == 0, "restants=%d" % n_commande)
+                cases_commande.append(k)
+    verifier(18, "1 seul residu connu (c30) dans les indices avec catalogue",
+             n_commande == 1 and cases_commande == ["c30"],
+             "restants=%d cases=%s" % (n_commande, cases_commande))
 
     for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer"), (20, "autre+OUI", "OUI|autre|OUI")]:
         c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", chemin])

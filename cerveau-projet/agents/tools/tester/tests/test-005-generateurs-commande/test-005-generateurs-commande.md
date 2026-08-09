@@ -1,9 +1,9 @@
-# Test 005 -- generateurs-commande v0.2.1 + parcours-atlas v0.1.5
+# Test 005 -- generateurs-commande v0.2.1 + parcours-atlas v0.1.10
 
 **Testeur** : Morpheus (testeur dedie)
 **Date** : 2026-08-09
 **Objet** : test formel du generateur de commande v0.2.1 (fiabilisation des flags
-optionnels) et du parcours Atlas v0.1.5 (pilote strict, commandes en dur retirees)
+optionnels) et du parcours Atlas v0.1.10 (pilote strict, 1 commande template residuelle c30)
 
 ---
 
@@ -18,7 +18,7 @@ aux 10 autres parcours :
 | generateurs-commande.sh | v0.2.0 (logique absente) | v0.2.1 (logique portee, parite) |
 | catalogue-commandes.json | v0.1.0-beta (9 flags booleens en dur) | v0.2.0 (placeholders {cle}) |
 | parcours-atlas.json | v0.1.1 (24 commandes en dur) | v0.1.2 (pilote strict : 0 commande) |
-| parcours-atlas.json | v0.1.2 (pilote strict) | v0.1.5 (piste B/C : 1 commande restante c30) |
+| parcours-atlas.json | v0.1.2 (pilote strict) | v0.1.10 (piste B/C : 1 commande restante c30) |
 
 **Bug corrige** : `composer_commande` retirait le flag optionnel uniquement quand
 le parametre n'avait PAS de champ `flag` (condition inversee) -> les commandes
@@ -45,13 +45,13 @@ reponse `non` = flag absent.
 11. flag booleen `ecrire-fichier` backup=non : `--backup` ABSENT (py)
 12. parite py/sh : commande composee identique (CRLF normalise)
 13. catalogue JSON valide
-14. catalogue version = 0.2.0
+14. catalogue version = 0.2.3
 15. flag optionnel renseigne conserve : `lister-fichiers --extension md` PRESENT
 16. non-regression : `creer-fichier` compose correctement
 
-### Parcours Atlas v0.1.5
-17. json.load valide + version 0.1.5
-18. 0 champ `commande` restant dans les indices outil avec catalogue
+### Parcours Atlas v0.1.10
+17. json.load valide + version 0.1.10
+18. 1 seul residu connu (c30) dans les indices outil avec catalogue
 19. navigation `OUI|explorer` : PARCOURS TERMINE
 20. navigation `OUI|autre|OUI` (delegation) : PARCOURS TERMINE
 21. `valider-cartes-decision --agent atlas` : CONFORME

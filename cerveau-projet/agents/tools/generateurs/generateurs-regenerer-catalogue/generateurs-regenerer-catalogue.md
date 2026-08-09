@@ -2,7 +2,7 @@
 
 > Outil de maintenance du catalogue de commandes du generateur.
 > **Categorie** : generateurs | **Type** : outil | **Statut** : ebauche
-> **Version** : 1.0.0
+> **Version** : 1.1.0
 
 ---
 
@@ -29,11 +29,14 @@ de `cerveau-projet/agents/tools/`.
 # Mode SYNCHRONISATION (defaut) : preserve l'existant, ajoute les outils manquants
 python3 cerveau-projet/agents/tools/generateurs/regenerer-catalogue/regenerer-catalogue.py
 
-# Dry-run : affiche ce qui serait fait sans rien ecrire
+# Dry-run : affiche ce qui serait fait sans rien ecrire (+ rapport garde-fou)
 python3 .../regenerer-catalogue.py --dry-run
 
 # Force : reconstruit tout depuis les outils reels (originales + speciales + outils)
 python3 .../regenerer-catalogue.py --force
+
+# Catalogue alternatif (tests) : cible un autre fichier que le catalogue reel
+python3 .../regenerer-catalogue.py --catalogue /chemin/test-catalogue.json --dry-run
 
 # Version
 python3 .../regenerer-catalogue.py --version
@@ -62,12 +65,17 @@ Certaines entrees ont un modele manuel (le parsing d'aide est imperfectible) :
 
 1. **JAMAIS** `git checkout` / `git restore` / `git reset --hard` sur un fichier
    non commite (lecon incident piste B, reproduit 2 fois).
-2. ECRITURE : indentation 2 espaces + **CRLF uniforme** (normaliser LF en
-   memoire, reecrire CRLF - piege des CRLF parasites).
-3. ASCII strict sur toute sortie.
+2. **GARDE-FOU cles dupliquees** : avant toute ecriture, verification que chaque
+   entree a des cles uniques dans `parametres` (collision de placeholder, lecon
+   inserer-contenu-fichier). Si doublon : refus d'ecrire + liste des entrees
+   fautives. En `--dry-run`, rapport sans ecriture.
+3. ECRITURE : indentation 2 espaces + **LF pur** (standard projet, `.gitattributes
+   eol=lf`) - le piege des CRLF parasites est evite (plus de reecriture CRLF).
+4. ASCII strict sur toute sortie.
 
 ## Historique
 
 | Version | Date | Changement |
 |---|---|---|
+| 1.1.0 | 2026-08-09 | GARDE-FOU cles dupliquees dans parametres (refus d'ecriture si doublon, rapport en dry-run) + option --catalogue <chemin> (tests) + ecriture LF pur (standard projet). |
 | 1.0.0 | 2026-08-08 | Creation : remplacant durable du script temporaire regen-catalogue3.py (piste A). Extraction des descriptions depuis les en-tetes .py (2 formats), synchronisation preservant l'existant, entrees speciales, CRLF uniforme. |

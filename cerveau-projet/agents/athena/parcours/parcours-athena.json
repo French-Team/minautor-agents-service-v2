@@ -147,6 +147,16 @@
         },
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "corriger-symboles",
+          "catalogue": "corriger-symboles",
+          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
+        },
+        {
+          "type": "regle",
           "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher)."
         },
         {

@@ -442,7 +442,7 @@
       "description": "Corriger les accents non-ASCII (mode --all, regle immuable)",
       "interpreteur": "python3",
       "script": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py",
-      "modele": "--all {recursif} {cible}",
+      "modele": "{recursif} {cible} --all",
       "parametres": [
         {
           "cle": "recursif",
@@ -617,6 +617,29 @@
           "obligatoire": false,
           "flag": "--type",
           "defaut": ""
+        }
+      ]
+    },
+    {
+      "nom": "corriger-symboles",
+      "description": "Corriger les symboles non-ASCII (fleches, box drawing, espace inse cable, guillemets francais) - mode --all, regle immuable",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py",
+      "modele": "{recursif} {cible} --all",
+      "parametres": [
+        {
+          "cle": "recursif",
+          "question": "Traiter recursivement un dossier ?",
+          "type": "flag",
+          "flag": "--recursive",
+          "obligatoire": false,
+          "defaut": "non"
+        },
+        {
+          "cle": "cible",
+          "question": "Fichier ou dossier a corriger ?",
+          "type": "texte",
+          "obligatoire": true
         }
       ]
     },
@@ -1405,7 +1428,7 @@
       "description": "Inserer du contenu a une position precise dans un fichier (apres un numero",
       "interpreteur": "python3",
       "script": "cerveau-projet/agents/tools/inserer/inserer-contenu-fichier/inserer-contenu-fichier.py",
-      "modele": "{fichier} {position} {contenu} --fichier {fichier}",
+      "modele": "{fichier} {position} {contenu} --fichier {source}",
       "parametres": [
         {
           "cle": "fichier",
@@ -1426,8 +1449,8 @@
           "obligatoire": true
         },
         {
-          "cle": "fichier",
-          "question": "Valeur pour fichier ?",
+          "cle": "source",
+          "question": "Valeur pour source ?",
           "type": "texte",
           "obligatoire": false,
           "flag": "--fichier",

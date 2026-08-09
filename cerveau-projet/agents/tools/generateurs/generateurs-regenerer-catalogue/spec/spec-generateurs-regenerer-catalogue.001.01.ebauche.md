@@ -1,11 +1,11 @@
 ---
 # Spec: regenerer-catalogue
-# Version : 1.0.0
+# Version : 1.1.0
 # Statut : ebauche
 
 spec:
   nom: "spec-regenerer-catalogue"
-  version: "1.0.0"
+  version: "1.1.0"
   statut: "ebauche"
   classe: "01"
   numero: "01"
@@ -15,7 +15,7 @@ spec:
   auteur: "Vulcain"
 ---
 
-# Spec generateurs-regenerer-catalogue v1.0.0
+# Spec generateurs-regenerer-catalogue v1.1.0
 
 ## Objectif
 
@@ -62,11 +62,20 @@ des descriptions fiables extraites de l'en-tete des `.py` (2 formats).
 
 ### E5. Ecriture
 
-- Indentation 2 espaces, **CRLF uniforme** (normaliser LF en memoire, reecrire
-  CRLF - piege des CRLF parasites).
+- Indentation 2 espaces, **LF pur** (standard projet, `.gitattributes eol=lf`)
+  - le piege des CRLF parasites est evite.
 - JSON valide, ASCII strict.
 
-### E6. Securite
+### E6. Garde-fou cles dupliquees
+
+- AVANT toute ecriture : chaque entree doit avoir des cles UNIQUES dans
+  `parametres` (collision de placeholder - lecon inserer-contenu-fichier).
+- Si doublon : refus d'ecrire + liste des entrees fautives (exit non nul).
+- En `--dry-run` : rapport des doublons sans ecriture.
+- Option `--catalogue <chemin>` : cibler un catalogue alternatif (tests) sans
+  toucher au catalogue reel.
+
+### E7. Securite
 
 - JAMAIS `git checkout`/`restore`/`reset --hard` sur fichier non commite.
 - Dry-run obligatoire avant application.
@@ -79,5 +88,6 @@ des descriptions fiables extraites de l'en-tete des `.py` (2 formats).
 | V2 | Description correcte pour les 2 formats | extraction sur echantillon (docstring + commentaires) |
 | V3 | JSON valide apres ecriture | json.load |
 | V4 | ASCII 0 | valider-conformite-ascii |
-| V5 | CRLF uniforme | comptage LF = CR = CRLF |
+| V5 | LF pur | comptage CRLF = 0 |
 | V6 | Non-regression generateur | generateurs-commande --liste + generation reelle |
+| V7 | Garde-fou cles dupliquees | catalogue avec doublon -> refus + liste ; catalogue sain -> 0 doublon |

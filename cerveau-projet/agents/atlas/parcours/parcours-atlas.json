@@ -415,6 +415,16 @@
         },
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "corriger-symboles",
+          "catalogue": "corriger-symboles",
+          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
+        },
+        {
+          "type": "regle",
           "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant de creer."
         },
         {

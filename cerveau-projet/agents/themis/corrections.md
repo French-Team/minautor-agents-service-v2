@@ -377,3 +377,18 @@ identite:
 3. detecter-usage-outils-externes ne prend QU UNE SEULE cible : en multi-cibles il echoue avec << unrecognized arguments >> - utiliser --recursive sur le dossier pour scanner plusieurs fichiers, puis verifier les fichiers suspects un par un.
 4. LES DICTIONNAIRES DE CARACTERES SPECIAUX (corriger-dictionnaire-accents.txt, dictionnaire-emojis.txt) SONT DES SUSPECTS LEGITIMES : ils contiennent des caracteres non-ASCII PAR CONCEPTION (c'est leur fonction de les corriger). Toujours verifier l identite du fichier suspect avant de conclure - hors perimetre de la mission auditee.
 5. CONFIRMATION de la lecon precedente : les guillemets francais << >> (0xAB/0xBB) ne sont PAS couverts par corriger-accents-zones-sensibles - remplacer par des guillemets ASCII et revalider (outil d'abord, puis reecriture ASCII stricte).
+## [LECON] 2026-08-09 -- AUDIT CONFORMITE EXECUTION : GARDE-FOU REGENERATEUR (VULCAIN)
+
+**Audit** : mission Vulcain 'garde-fou cles dupliquees au regenerateur du catalogue'.
+**Verdict** : CONFORME (1 point mineur non fonctionnel : commentaire stale ligne 318).
+**Lecons** :
+1. VERIFIER LE CODE ET LE FONCTIONNEL, PAS LES LECONS : l'audit doit refaire les tests
+   (positif/negatif) de facon independante, pas se fier au bilan de l'agent audite.
+2. UN COMMENTAIRE STALE EST UN ECART D'EXECUTION : la ligne 318 ('puis reecrire CRLF')
+   contredit l'ecriture LF nouvelle - quand on change un comportement, balayer les
+   commentaires inline qui le decrivent (pas seulement le docstring).
+3. LE MOT CRLF DANS UN COMMENTAIRE N'EST PAS UNE ECRITURE CRLF : ne pas flagger le mot
+   - verifier l'ABSENCE d'ecriture (variable resultat_crlf, replace \r\n en ecriture).
+4. POINT 6 REACTIVER : verifier dans AGENTS-historique l'entree de reactivation + le
+   retour effectif de la session a l'agent precedent (avant l'activation de l'auditrice).
+5. LA FIN SUIT SA CARTE : l'auditrice reactive l'agent precedent AVEC son rapport (c25b).

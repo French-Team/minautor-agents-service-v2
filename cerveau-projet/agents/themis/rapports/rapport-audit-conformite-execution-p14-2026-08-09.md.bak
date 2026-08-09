@@ -24,18 +24,18 @@ L'execution a ete correcte sur les points de processus (relecture, verification 
 
 | # | Point controle (procedure 4i) | Resultat | Preuve |
 |---|---|---|---|
-| 1 | **Relecture avant d'agir** (c0 question honnete + c0b RELIRE) | **CONFORME** | L'agent a annonce « Reregle de relecture (question honnete) : je relis ma fiche et mes corrections » puis a lu corrections.md (tail) et vulcain.md (head) |
-| 2 | **Case de la carte suivie** | **ECART (lacune)** | Le parcours v0.2.8 a 3 chemins : construire (c2-c9), modifier (c10-c15), hors-parcours (c16-c19). Aucune case pour « mettre a jour MA fiche / MA documentation ». Le chemin « autre -> NON » aboutit a c18 « Signaler le besoin » : « Je ne cree rien moi-meme : je signale et j'attends la mission » — la carte ORDONNE de ne pas faire ce type de mission, ce qui est contradictoire avec une mission de documentation confiee par Cerberus. L'agent a donc execute la mission directement sans case dediee (deviation justifiee par la lacune). |
-| 3 | **Lire le .md des outils avant usage** (Pattern 9) | **CONFORME** | Outils utilises : detecter-impacts, valider-conformite-ascii, activer-agent-principal — usage standard documente dans la fiche |
+| 1 | **Relecture avant d'agir** (c0 question honnete + c0b RELIRE) | **CONFORME** | L'agent a annonce " Reregle de relecture (question honnete) : je relis ma fiche et mes corrections " puis a lu corrections.md (tail) et vulcain.md (head) |
+| 2 | **Case de la carte suivie** | **ECART (lacune)** | Le parcours v0.2.8 a 3 chemins : construire (c2-c9), modifier (c10-c15), hors-parcours (c16-c19). Aucune case pour " mettre a jour MA fiche / MA documentation ". Le chemin " autre -> NON " aboutit a c18 " Signaler le besoin " : " Je ne cree rien moi-meme : je signale et j'attends la mission " -- la carte ORDONNE de ne pas faire ce type de mission, ce qui est contradictoire avec une mission de documentation confiee par Cerberus. L'agent a donc execute la mission directement sans case dediee (deviation justifiee par la lacune). |
+| 3 | **Lire le .md des outils avant usage** (Pattern 9) | **CONFORME** | Outils utilises : detecter-impacts, valider-conformite-ascii, activer-agent-principal -- usage standard documente dans la fiche |
 | 4 | **Verification d'impact** (Pattern 14) | **CONFORME** | detecter-impacts lance 2 fois (avant 7 NON MIS A JOUR, apres vulcain.md A JOUR). Les 5 notes de mission justifiees (type note sans version) |
 | 5 | **Boucle RVAV avant activation** | **CONFORME** | Validations ASCII 0 + LF pur (CRLF 0) sur vulcain.md et corrections.md AVANT de reactiver |
-| 6 | **POINT 6 REACTIVER correct** | **CONFORME** | Commande `reactiver <session> <raison> <agent_precedent>` avec le 3e argument `vulcain` fourni — la commande a REUSSI (preuve : la sortie « Session session-llm-1 : Cerberus reactive avec succes »). Le 1er essai SANS le 3e argument (test de la lecon) avait echoue avec ERREUR: Parametres manquants — ce qui prouve que la syntaxe utilisee dans la mission reelle etait la bonne. |
+| 6 | **POINT 6 REACTIVER correct** | **CONFORME** | Commande `reactiver <session> <raison> <agent_precedent>` avec le 3e argument `vulcain` fourni -- la commande a REUSSI (preuve : la sortie " Session session-llm-1 : Cerberus reactive avec succes "). Le 1er essai SANS le 3e argument (test de la lecon) avait echoue avec ERREUR: Parametres manquants -- ce qui prouve que la syntaxe utilisee dans la mission reelle etait la bonne. |
 
 ---
 
 ## 3. Analyse de la lacune de carte (point 2)
 
-### 3.1 Parcours-vulcain v0.2.8 — chemins existants
+### 3.1 Parcours-vulcain v0.2.8 -- chemins existants
 | Chemin | Cases | Type de mission couvert |
 |---|---|---|
 | Construire | c2 -> c9 | Creation d'un NOUVEL outil |
@@ -43,23 +43,23 @@ L'execution a ete correcte sur les points de processus (relecture, verification 
 | Hors-parcours | c16 -> c17/c18 | Autre agent (OUI) ou signaler le besoin (NON) |
 
 ### 3.2 Mission P14 : mise a jour de documentation
-- Type de mission : mettre a jour la PROPRE fiche de l'agent (vulcain.md) + corrections.md — AUCUN outil construit/modifie.
-- Chemin « autre » -> c16 (Mission hors parcours) -> question : « La mission concerne-t-elle un domaine d'un autre agent ? »
-  - La mise a jour de SA fiche ne concerne PAS un autre agent -> reponse NON -> c18 « Signaler le besoin ».
-- c18 ordonne : « Je ne cree rien moi-meme : je signale et j'attends la mission. »
+- Type de mission : mettre a jour la PROPRE fiche de l'agent (vulcain.md) + corrections.md -- AUCUN outil construit/modifie.
+- Chemin " autre " -> c16 (Mission hors parcours) -> question : " La mission concerne-t-elle un domaine d'un autre agent ? "
+  - La mise a jour de SA fiche ne concerne PAS un autre agent -> reponse NON -> c18 " Signaler le besoin ".
+- c18 ordonne : " Je ne cree rien moi-meme : je signale et j'attends la mission. "
 - **Contradiction** : la carte ne permet pas a Vulcain de faire une mission de documentation alors que les missions de mise a jour de fiche sont legitimes (documentees dans les lecons de TOUS les agents).
 
 ### 3.3 Consequence
-L'agent a fait le travail correctement (P14 corrige, vulcain.md A JOUR) mais SANS case de carte pour l'encadrer. C'est une **deviation de la carte induite par la carte elle-meme** — le Pattern 11 ne peut pas etre « conforme » pour une mission que la carte ne couvre pas.
+L'agent a fait le travail correctement (P14 corrige, vulcain.md A JOUR) mais SANS case de carte pour l'encadrer. C'est une **deviation de la carte induite par la carte elle-meme** -- le Pattern 11 ne peut pas etre " conforme " pour une mission que la carte ne couvre pas.
 
 ---
 
 ## 4. Recommandation
 
-**Ajouter une case « Documentation / Mise a jour de fiche » au parcours-vulcain** (role : Buffy, conformement au Pattern 12 CREATION LIMITEE et au Pattern 10 une carte = un role) :
-- c16 -> nouvelle branche « documentation » -> case dediee « Mettre a jour MA documentation (fiche, corrections, lecons) » -> RVAV -> reactiver Cerberus.
-- Alternative : enrichir c16 avec une 3e branche « documentation » menant a la nouvelle case.
-- Le modele existe dans d'autres parcours (buffy a des cases de documentation/lecons) — s'inspirer de buffy c10c/c25.
+**Ajouter une case " Documentation / Mise a jour de fiche " au parcours-vulcain** (role : Buffy, conformement au Pattern 12 CREATION LIMITEE et au Pattern 10 une carte = un role) :
+- c16 -> nouvelle branche " documentation " -> case dediee " Mettre a jour MA documentation (fiche, corrections, lecons) " -> RVAV -> reactiver Cerberus.
+- Alternative : enrichir c16 avec une 3e branche " documentation " menant a la nouvelle case.
+- Le modele existe dans d'autres parcours (buffy a des cases de documentation/lecons) -- s'inspirer de buffy c10c/c25.
 
 Cette lacune est probablement partagee par les autres agents de construction (vulcain, buffy, atlas) : a verifier dans le prochain audit 4c.
 
@@ -68,5 +68,5 @@ Cette lacune est probablement partagee par les autres agents de construction (vu
 ## 5. Conclusion
 
 - **Conformite d'execution** : 4/5 points conformes (relecture, P9, P14, RVAV, reactiver).
-- **Ecart** : 1 lacune structurelle du parcours-vulcain (pas de case de documentation) — a corriger par Buffy (case de parcours) puis re-auditer.
+- **Ecart** : 1 lacune structurelle du parcours-vulcain (pas de case de documentation) -- a corriger par Buffy (case de parcours) puis re-auditer.
 - Le **point 6 reactiver est conforme** : le 3e argument agent_precedent a ete fourni (preuve par reussite de la commande vs echec du test sans l'argument).

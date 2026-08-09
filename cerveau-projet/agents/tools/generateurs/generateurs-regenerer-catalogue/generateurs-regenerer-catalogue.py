@@ -31,8 +31,10 @@
 #
 # REGLES DE SECURITE :
 #   - JAMAIS git checkout/restore/reset sur un fichier non commite.
-#   - ECRITURE : indentation 2 espaces + CRLF uniforme (normaliser LF en
-#     memoire, reecrire CRLF - piege CRLF parasite).
+#   - GARDE-FOU : verification des cles dupliquees dans parametres avant
+#     toute ecriture (collision de placeholder) - refus si doublon.
+#   - ECRITURE : indentation 2 espaces + LF pur (standard projet,
+#     .gitattributes eol=lf) - piege CRLF parasite evite.
 #   - ASCII strict sur toute sortie.
 # =============================================================================
 
@@ -44,7 +46,7 @@ import subprocess
 import sys
 import unicodedata
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 STATUT = "ebauche"
 
 CATALOGUE = "cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json"
@@ -275,6 +277,31 @@ def scan_outils():
 
 
 # ---------------------------------------------------------------------------
+# Garde-fou : cles dupliquees
+# ---------------------------------------------------------------------------
+
+def verifier_cles_dupliquees(commandes):
+    """GARDE-FOU : detecte les cles dupliquees dans parametres (collision de
+    placeholder : deux parametres meme cle = meme valeur generee 2 fois).
+    Retourne [(nom, [cles_dupliquees]), ...]."""
+    defauts = []
+    for e in commandes:
+        cles = [p.get("cle") for p in e.get("parametres", []) if p.get("cle")]
+        doublons = sorted({c for c in cles if cles.count(c) > 1})
+        if doublons:
+            defauts.append((e["nom"], doublons))
+    return defauts
+
+
+def chemin_catalogue():
+    """Chemin du catalogue : option --catalogue <chemin> (tests) ou defaut."""
+    for i, a in enumerate(sys.argv):
+        if a == "--catalogue" and i + 1 < len(sys.argv):
+            return sys.argv[i + 1]
+    return CATALOGUE
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -284,10 +311,11 @@ def main():
     if "--version" in sys.argv:
         print("regenerer-catalogue v%s (%s)" % (VERSION, STATUT))
         return
+    catalogue = chemin_catalogue()
 
-    with io.open(CATALOGUE, encoding="utf-8", newline="") as fh:
+    with io.open(catalogue, encoding="utf-8", newline="") as fh:
         txt = fh.read()
-    # Normaliser LF en memoire (piege CRLF parasite) puis reecrire CRLF
+    # Normaliser LF en memoire (piege CRLF parasite) puis ecrire en LF pur (standard projet)
     txt_normalise = txt.replace("\r\n", "\n")
     d = json.loads(txt_normalise)
     commandes_existantes = {e["nom"]: e for e in d["commandes"]}
@@ -325,6 +353,14 @@ def main():
               % (len(outils), len(a_preserver), len(a_ajouter)))
         for e in a_ajouter[:10]:
             print("  + %-32s | %s" % (e["nom"], e["description"][:60]))
+        defauts = verifier_cles_dupliquees(d["commandes"])
+        if defauts:
+            print("=== GARDE-FOU : cles dupliquees dans parametres (%d entree(s)) ==="
+                  % len(defauts))
+            for nom, cles in defauts:
+                print("  ERREUR %-32s cles dupliquees: %s" % (nom, ", ".join(cles)))
+        else:
+            print("GARDE-FOU : 0 cle dupliquee (OK)")
         if force:
             print("(--force : reconstruirait depuis zero)")
         return
@@ -348,10 +384,19 @@ def main():
         d["commandes"].sort(key=lambda e: e["nom"])
         n_ajoutes = len(a_ajouter)
 
-    resultat = json.dumps(d, ensure_ascii=True, indent=2)
-    resultat_crlf = resultat.replace("\n", "\r\n") + "\r\n"
-    with io.open(CATALOGUE, "w", encoding="utf-8", newline="") as fh:
-        fh.write(resultat_crlf)
+    # GARDE-FOU : refuser d ecrire si des cles sont dupliquees
+    defauts = verifier_cles_dupliquees(d["commandes"])
+    if defauts:
+        print("=== GARDE-FOU : cles dupliquees dans parametres (%d entree(s)) ==="
+              % len(defauts))
+        for nom, cles in defauts:
+            print("  ERREUR %-32s cles dupliquees: %s" % (nom, ", ".join(cles)))
+        print("Refus d ecrire le catalogue : corriger les entrees fautives avant regeneration.")
+        sys.exit(1)
+
+    resultat = json.dumps(d, ensure_ascii=True, indent=2) + "\n"
+    with io.open(catalogue, "w", encoding="utf-8", newline="") as fh:
+        fh.write(resultat)
     print("=== APPLIQUE : %d outils ajoutes (total %d commandes) ==="
           % (n_ajoutes, len(d["commandes"])))
     for e in a_ajouter[:8]:

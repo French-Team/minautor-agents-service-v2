@@ -103,6 +103,16 @@
         },
         {
           "type": "regle",
+          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
+        },
+        {
+          "type": "outil",
+          "nom": "corriger-symboles",
+          "catalogue": "corriger-symboles",
+          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
+        },
+        {
+          "type": "regle",
           "texte": "REGLE 1 (corrections) : toujours rediger la mission de controle dans un fichier dedie AVANT le moindre controle."
         },
         {

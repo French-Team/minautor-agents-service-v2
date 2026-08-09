@@ -876,3 +876,66 @@ les mots composees deja qualifies (role_principal, role_specifique) restent inch
 4. COHERENCE DES REMPLACEMENTS : suivre les conventions existantes (U+2192 -> ->, U+2190 -> <-) : fleches verticales -> ^ et v, double sens -> <->, doubles -> <= => <=>, box drawing transcrits en traits/coins ASCII (+- -+ |- -|), NBSP -> espace simple. Verifier l absence de doublon/conflit AVANT d inserer (script avec controle).
 5. REGLE DES 5 FICHIERS : apres bump de version, verifier py, sh, md des 2 outils + ligne historique + doc mention - ici 6 fichiers outils + 1 dictionnaire = 7, ASCII 0 (sauf dictionnaire), LF pur, nommage 0 erreur.
 6. TESTS SEQUENTIELS : jamais 2 outils de correction en parallele sur le meme fichier (fausse les compteurs) - un fichier neuf par test, dossier neutre .zz-xxx (les noms .tmp/test- sont exclus par defaut).
+## [LECON] 2026-08-09 -- ALIGNER UN TEST SUR LA REALITE (2 KO PREEXISTANTS)
+
+**Mission** : mettre a jour test-005-generateurs-commande pour les 2 KO preexistants
+(point 17 : version parcours-atlas attendue 0.1.5 vs reelle 0.1.10 ; point 18 : le test
+exigeait 0 commande en dur alors que la case c30 porte une commande TEMPLATE connue
+cartographier-parcours.py {parcours}).
+
+**Lecons** :
+1. QUAND UNE DONNEE EVOLUE, UN TEST OBSOLETE EST UNE DETTE : le .md documentait deja le
+   residu (tableau : "1 commande restante c30") mais le .py exigeait encore 0 -> le test
+   et sa doc ne racontaient pas la meme histoire. Toujours aligner .py ET .md ensemble.
+2. NE PAS GELLER UNE DEFAILLANCE SANS GARDE-FOU : le point 18 ne doit pas devenir
+   "toujours passer" - il doit tolerer EXACTEMENT le residu connu (n_commande == 1 ET
+   case == c30) pour que TOUTE commande supplementaire soit un KO (detection de regression).
+3. BALAYER TOUTES LES REFS DE VERSION : apres un changement de version attendue, grep
+   complet sur les 2 fichiers (docstring, en-tete, titre, commentaires de section dans le
+   CODE) - la ref v0.1.5 a ete trouvee 9 fois, dont 1 dans un commentaire de section
+   (ligne 173) facile a oublier.
+4. DECALAGE DOCUMENTAIRE A CORRIGER AU PASSAGE : le .md ligne 14 disait catalogue 0.2.0
+   alors que le .py verifie 0.2.3 - profiter d une mise a jour de test pour resynchroniser
+   la doc avec le code (regle des 5 fichiers appliquee au test lui-meme).
+5. VALIDATION = RE-EXECUTION COMPLETE : 26/26 OK apres correction, ASCII 0, LF pur,
+   py_compile OK, 0 residu. Un test mis a jour doit re-passer A L IDENTIQUE avant clore.
+## [LECON] 2026-08-09 -- GARDE-FOU CLES DUPLIQUEES DANS LE REGENERATEUR DE CATALOGUE
+
+**Mission** : ajouter un garde-fou a generateurs-regenerer-catalogue pour detecter les cles
+dupliquees dans parametres lors des regenerations (lecon inserer-contenu-fichier : cle fichier
+en double = collision de placeholder = meme valeur generee 2 fois).
+
+**Lecons** :
+1. LA DEDUPLICATION DE parser_aide NE COUVRE QUE LES NOUVELLES ENTREES : le mode sync
+   PRESERVE l existant tel quel - un doublon preexistant passait sans controle. Le garde-fou
+   doit valider le catalogue FINAL (existant + nouvelles + speciales + originales) AVANT
+   ecriture, jamais seulement ce qui est genere.
+2. GARDE-FOU = REFUS D ECRITURE + EXIT NON NUL : ne pas se contenter d un avertissement -
+   si doublon detecte, ne PAS ecrire et lister les entrees fautives (nom + cles). En dry-run,
+   rapport sans ecriture (outil de controle avant application).
+3. TESTABILITE = OPTION --catalogue <chemin> : tester le garde-fou (positif et negatif) SANS
+   toucher au catalogue reel - cibler une copie temporaire. Positif = doublon injecte -> refus
+   + fichier inchange ; negatif = copie saine -> ecriture OK.
+4. DEFAILLANCE LATENTE CRLF DECOUVERTE : l outil ecrivait en CRLF alors que le standard projet
+   est LF (.gitattributes eol=lf + protocole-outils) - toute regeneration wet aurait corrompu
+   le catalogue (conflit LF/CRLF). Corrige : ecriture LF pur + docstring/docs/spec mis a jour.
+5. REGLE DES 5 FICHIERS APPLIQUEE : bump 1.0.0 -> 1.1.0 sur py (VERSION) + md (Version +
+   historique) + spec (3 refs : frontmatter, champ version, titre) - le .sh est un simple
+   wrapper exec (parite --version automatique, aucune version a dupliquer - verifier avant de
+   chercher).
+6. VALIDATION NON-REGRESSION : test-005 26/26 apres modification du regenerateur - le catalogue
+   reel ne doit JAMAIS etre modifie par les tests du regenerateur (option --catalogue).
+## [LECON] 2026-08-09 -- CORRECTION POINT MINEUR AUDIT : COMMENTAIRE STALE LIGNE 318
+
+**Mission** : corriger le commentaire stale de generateurs-regenerer-catalogue.py (ligne 318)
+'puis reecrire CRLF' -> 'puis ecrire en LF pur (standard projet)' - point mineur signale par
+l audit Themis de conformite d execution (rapport garde-fou regenerateur).
+**Lecons** :
+1. UN COMMENTAIRE QUI DECRIT UN ANCIEN COMPORTEMENT EST UN ECART : quand on supprime une
+   logique (resultat_crlf), le commentaire inline qui la decrivait devient trompeur - le
+   corriger dans la MEME mission (ne pas laisser le docstring seul a jour).
+2. CORRECTION DE COMMENTAIRE = PAS DE BUMP DE VERSION : la recommandation de l audit etait
+   explicite (1 ligne, sans bump) - la version v1.1.0 reste inchangee, parite py/sh intacte.
+3. VALIDATION LEGERE MAIS COMPLETE : py_compile + bash -n + parite --version + ASCII 0 +
+   LF pur + grep de non-regression ('reecrire CRLF' absent) - une correction de commentaire
+   ne necessite pas la batterie complete des tests fonctionnels.

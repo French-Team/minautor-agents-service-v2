@@ -979,3 +979,82 @@ Rappel insere en tete des cases d'ecriture des 10 parcours (32 cases).
 3. Choix des ids : toujours verifier la liste complete des cases (numeriques ET suffixes c20b/c20c/c20d) avant d utiliser cN+1 - les suffixes sont deja pris sur beaucoup de parcours.
 4. Pattern 10 respecte partout : aucun agent n audite lui-meme, aucun agent ne cree le rapport de l autre. Chaque piste pointe vers l agent habilite (Themis pour l audit, Atlas pour la cartographie, Vulcain pour les outils durables).
 5. VALIDATIONS : navigation reelle des 2 chemins (athena c18 audit -> c22 -> c23 FIN ; themis c1 audit-agent -> c25 -> c25b FIN), valider-cartes-decision --tous = 11/11 CONFORME, ASCII 0, LF pur, references validees, impact vulcain.md aligne v0.2.11.
+## [LECON] 2026-08-09 -- SCAN ET CORRECTION GUILLEMETS FRANCAIS (projet 100% propre)
+
+**Mission** : scanner tout le projet pour detecter les fichiers contenant encore des guillemets francais U+00AB/U+00BB et les corriger avec l outil ameliore (v0.2.2).
+
+**Resultat** : le projet actif etait deja 100% propre (hors exemples/ et hors dictionnaires) - le SEUL fichier concerne etait un .bak suivi par git : rapport-audit-conformite-execution-p14-2026-08-09.md.bak (30 guillemets francais, ancienne version du rapport Themis avant sa correction).
+
+**Actions** :
+1. Dry-run puis application reelle de corriger-accents-zones-sensibles --all sur le .bak : 39 corrections (30 guillemets + 9 autres non-ASCII), ASCII 0, LF pur, 0 guillemet restant.
+2. Suppression du .bak.bak (sauvegarde de sauvegarde creee par l outil, non suivie par git, 0 residu).
+3. Scan global final : seuls restent le dictionnaire (exception volontaire, contient " " par fonction) et logo.jpg (binaire JPEG, hors perimetre texte).
+
+**Lecons** :
+1. L OUTIL CREE UN .bak.bak QUAND ON CORRIGE UN .bak : avant de corriger un fichier .bak, prevoir la suppression du .bak.bak resultant (artefact non suivi par git, 0 residu obligatoire).
+2. LES FAUX POSITIFS DU SCAN : les octets 0xC2/0xAB peuvent apparaitre par hasard dans les fichiers BINAIRES (logo.jpg) - verifier l identite du fichier (binaire vs texte) avant de conclure ; le dictionnaire corriger-dictionnaire-accents.txt ne commence PAS par dictionnaire- (nom corriger-dictionnaire-accents.txt) - l exclusion par prefixe ne le capture pas dans un scan maison (les outils l excluent par sous-chaine du chemin).
+3. L OUTIL AMELIORE (v0.2.2) FONCTIONNE : dry-run 39 corrections, application reelle identique, parite py/sh deja confirmee en v0.2.2 - la correction est chirurgicale et fiable.
+4. LE PROJET EST VRAIMENT PROPRE : scan decode UTF-8 avec chemins normalises (piege backslash Windows) confirme 0 fichier texte avec guillemets francais hors exceptions - la maintenance reguliere (missions guillemets v0.2.1 + symboles v0.2.2 + ce scan) porte ses fruits.
+## [LECON] 2026-08-09 -- AJOUT corriger-symboles AU CATALOGUE (Buffy)
+
+**Mission** : ajouter la commande `corriger-symboles` au catalogue generateurs-commande (le dictionnaire couvre maintenant plus de familles : fleches, box drawing, NBSP, guillemets francais).
+**Verdict** : REUSSIE.
+**Actions** :
+1. Entree `corriger-symboles` ajoutee au catalogue (111 commandes) : alias oriente symboles du script `corriger-accents-zones-sensibles.py` (meme modele que l'alias existant `corriger-accents`, description dediee aux symboles)
+2. **BUG DECOUVERT ET CORRIGE** : le modele `--all {recursif} {cible}` faisait perdre `--all` (partie fixe, purge totale regle immuable) quand `recursif` est vide (cas par defaut) : la regex de nettoyage du generateur retire `--flag {placeholder}` ensemble quand la valeur du placeholder est vide. Correction : placer le flag fixe EN FIN de modele, jamais suivi d'un placeholder -> `{recursif} {cible} --all`. Applique aux 2 alias (corriger-accents + corriger-symboles) pour la coherence.
+**Lecons** :
+1. Un flag EN DUR dans un modele NE DOIT JAMAIS etre suivi d'un placeholder : `--all {recursif}` -> la regex du generateur mange les deux quand recursif est vide. Pattern correct : `{recursif} {cible} --all`
+2. La position d'un flag fixe (fin de modele) est la garantie qu'il reste toujours present dans la commande generee
+3. detecter-decalages-catalogue : 0 decalage (110 conformes, 1 non testable preexistant = test-001-evaluer-agents-coherence)
+4. test-005-generateurs-commande : 24/26 OK, 2 KO PREEXISTANTS hors perimetre (parcours-atlas : version 0.1.10 reelle vs 0.1.5 attendue par le test + 1 commande en dur restante dans la case c30 atlas) - a signaler pour une future mise a jour du test
+5. Piege des fichiers de test : ne pas nommer les fichiers de test avec la sous-chaine `test-` (exclue par le filtre par defaut de l'outil -> "Aucun fichier trouve")
+6. L'outil corriger-accents-zones-sensibles corrige les symboles MEME sans --all (mode intelligent zones sensibles) mais le mode --all est la purge totale (regle immuable) - les 2 alias le garantissent desormais
+## [LECON] 2026-08-09 -- INDICE PASSE PAR LE GENERATEUR CORRIGER-SYMBOLES (10 PARCOURS)
+
+**Mission** : ajouter l'indice PASSE PAR LE GENERATEUR pour corriger-symboles dans le 1er
+cas de correction ASCII de 10 parcours (perimetre valide par l utilisateur : 1 cas principal
+par parcours ; Cerberus exclu, 0 cas de correction). Insertion apres la regle mentionnant
+combo-corriger-ascii (buffy c37 : apres la regle PATTERN 3, cas sans regle combo).
+
+**Lecons** :
+1. GARDE-FOU ROUND-TRIP AVANT TOUTE REWRITE JSON : verifier que load + dump(indent=2) + '\n'
+   reproduit le fichier a l'identique AVANT de modifier - le saut de ligne final manquant dans
+   json.dumps a ete attrape par le garde-fou (le diff contenu = 0 ligne, seule l EOL finale
+   differait). Sans ce controle, une rewrite aurait reformate tout le fichier (diff geant).
+2. PATTERN INDICE OUTIL STRICT : {type: outil, nom, catalogue, chemin} SANS champ commande
+   (pilote strict) - guider-parcours affiche alors catalogue: + PASSE PAR LE GENERATEUR.
+   Toujours verifier 3 occurrences par parcours (texte regle + nom + catalogue) = pas de doublon.
+3. NE PAS BUMP DE VERSION SANS BESOIN : l ajout d indices est purement additif - bump de
+   version entrainerait la cascade fiches (Pattern 14) + tests (test-005 atlas 0.1.10,
+   test-004 morpheus) - garder les versions stables, documenter la decision.
+4. PILOTE STRICT : corriger-symboles est un ALIAS du script corriger-accents-zones-sensibles
+   (catalogue v0.2.3) - l indice outil pointe vers le dossier du script reel, jamais un chemin
+   imaginaire.
+5. NON-REGRESSION : test-005-generateurs-commande 26/26 OK apres modification des 10 parcours
+   (atlas c3/c18 modifies sans casser la navigation testee).
+6. OBSERVATION DIVERGENCE PREEXISTANTE : test-004 p7a attend morpheus v0.1.3, parcours reel
+   v0.1.7 - a signaler (hors perimetre de cette mission, ne pas corriger ici).
+## [LECON] 2026-08-09 -- DEFAILLANCE CLE DUPLIQUEE DANS LE CATALOGUE (inserer-contenu-fichier)
+
+**Mission** : corriger l entree inserer-contenu-fichier du catalogue generateurs-commande -
+cle fichier dupliquee (positionnelle obligatoire = cible + optionnelle flag --fichier = source)
+et modele {fichier} {position} {contenu} --fichier {fichier} qui generait la cible comme SA
+propre source. Correction : cle source dediee + modele {fichier} {position} {contenu} --fichier {source}.
+
+**Lecons** :
+1. CLE DUPLIQUEE = COLLISION DE PLACEHOLDER : deux parametres avec la meme cle produisent la
+   meme valeur 2 fois dans la commande generee (inserer generait cible.md debut hello
+   --fichier cible.md) - TOUJOURS verifier l unicite des cles (scan cibles : 1 seul doublon
+   dans les 111 entrees).
+2. LIRE L INTERFACE RELLE DE L OUTIL AVANT DE MODELISER : dans inserer-contenu-fichier,
+   --fichier (dest=source) = FICHIER SOURCE a inserer, pas la cible - le modele confondait
+   cible et source. Le flag du parametre source doit porter une cle distincte ({source}).
+3. GARDE-FOU ROUND-TRIP REUTILISABLE : load + dump(indent=2)+LF identique verifie avant rewrite
+   (meme methode que pour les parcours) - diff minimal garanti (3 lignes modifiees ici).
+4. VERIFICATION PAR GENERATION REELLE : optionnel vide -> flag ABSENT (cible.md debut hello),
+   optionnel renseigne -> --fichier src.txt, parite py/sh identique - la generation est la
+   preuve de la correction.
+5. NE PAS BUMP LA VERSION SANS BESOIN : test-005 p14 verifie catalogue 0.2.3 - correction de
+   contenu sans changement de contrat = pas de bump (evite la regression test).
+6. IMPACT LIMITE VERIFIE : seul test-007 mentionne l outil (docstring LF) - aucun parcours/
+   combo ne depend de la cle fichier-source.
