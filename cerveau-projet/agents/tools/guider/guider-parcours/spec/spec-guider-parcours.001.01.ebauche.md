@@ -6,7 +6,7 @@ identite:
 ---
 # Spec -- Guide-Parcours (jeu de piste) v0.5.0
 
-**Version** : 0.5.0
+**Version** : 0.6.0
 **Statut** : ebauche
 **Date creation** : 2026-08-07
 **Agent** : Vulcain (creation + evolutions v0.2.0 : patterns multi-missions + rappel ASCII ; v0.2.1 : procedure d'audit des 2 patterns ; v0.2.2 : regle d'autonomie des parcours ; v0.2.3 : prototype vulcain documente comme cas legitime assume ; v0.2.4 : Pattern 3 - combo generateur -> execution, lien avec spec-combos-moteur ; v0.2.5 : Pattern 4 - case Question Honnete en case 0, standard de demarrage ; v0.2.6 : Pattern 5 - chaine de delegation ACTIVE, JAMAIS de fin passive ; v0.2.7 : regle de RE-AUDIT COMPLET des 5 patterns (lecon Themis : la procedure 4b seule ne teste que Pattern 5, c est la procedure 2 qui a revele les ecarts ASCII de vulcain) ; v0.2.8 : Pattern 6 - CONTEXTE TEMPS REEL : lecture OBLIGATOIRE de l historique a chaque activation, meme en memoire (le dynamique ne se memorise pas) ; v0.2.9 : MODE AGENT NON-BLOQUANT - les questions sont destinees a l AGENT, jamais a un input() clavier ; sans --reponses l outil affiche la question et s arrete proprement (cause : demarrage d un 2e LLM bloquait sur la saisie clavier) ; v0.2.12 : outil de reference generateurs-case documente (suite de l integration : l outil officiel pour creer/editer/supprimer des cases, recablage auto + validation auto) ; v0.2.13 : Pattern 7 - modele de case compose (decision a 2+ branches, solutions alternatives, deviations avec retour au flux principal ; philosophie agents/philosophie/) ; v0.2.14 : outil de reference generateurs-carte documente (carte complete : creer/analyser/detecter/dupliquer-chemin, complement de generateurs-case pour les cases) ; v0.2.17 : branche de verifier-documents-manquants v0.3.0 dans la procedure 4g (le .md deduit de CHAQUE indice outil est controle par L OUTIL - .sh ET .py couverts - au lieu d une verification manuelle) ; v0.2.18 : Pattern 10 - UNE CARTE = UN ROLE (une carte ne contient que des actions d activation/verification/decision propres a SON role, jamais d outils d analyse/execution d un autre role ; cas Cerberus = routeur pur, carte purgee des cases lister/lire qui glissent de lire pour choisir vers lire pour executer. Lecon utilisateur 2026-08-08 : Cerberus a lance des analyses lui-meme au lieu d activer Buffy) ; v0.2.19 : Pattern 11 - CONFORMITE D EXECUTION (l audit ne verifie pas seulement la STRUCTURE du JSON mais AUSSI si l EXECUTION de la mission a suivi les ordres de la carte : l agent a-t-il fait ce que sa carte ordonnait ? Lecon constat stabilite des cartes 2026-08-08 : les violations recentes - Vulcain reactive au lieu d activer Morpheus, Cerberus analyse lui-meme - laissent les JSON structurellement valides ; la conformite d execution est le SEUL vrai test de stabilite. Critere 22 + procedure 4i + integration dans le parcours-themis (case c8b entre verdict et rapport)) ; v0.2.22 : Pattern 12 - CREATION LIMITEE (garde-fou une carte = un role applique aux cases de creation : toute case qui cree/ecrit/documente porte un indice REGLE CREATION LIMITEE precisant le perimetre - rapports de mission dans le dossier de l agent ou .tmp-* du workspace, JAMAIS tools/ - et les roles exclus : outil -> Vulcain, test -> Morpheus, case de parcours -> Buffy ; besoin manquant -> case Signaler le besoin. Lecon incident Atlas 2026-08-09 : l explorateur a ecrit un outil dans son dossier explorations/ au lieu de signaler le besoin ; carte Atlas v0.1.3 portant le garde-fou en exemple) ; v0.2.23 : Pattern 13 - LA FIN SUIT SA CARTE (generalisation de la regle de retour : activation directe = reactiver Cerberus, maillon de chaine = activer le suivant, dernier maillon = reactiver Cerberus avec bilan consolide. Lecon utilisateur 2026-08-09 : l ancienne regle toujours reactiver Cerberus etait en conflit avec les cartes - Buffy a corrige 26 fichiers ; lecon technique double/triple CRLF - lire et ecrire avec newline='' pour preserver le format natif) ; v0.2.24 : Pattern 14 - VERIFICATION D IMPACT GENERALISEE (detecter-impacts v0.2.1 devient un pas OBLIGATOIRE de TOUTE procedure d audit Themis : pour chaque mission auditee, identifier les fichiers modifies puis lancer detecter-impacts sur un echantillon representatif et verifier que TOUS les fichiers impactes listes ont ete mis a jour. Lecon utilisateur 2026-08-09 : seul le rapport-audit-janus utilisait detecter-impacts, la verification d impact doit etre GENERALISEE a tous les audits) ; v0.2.25 : RE-AUDIT COMPLET GENERALISE A 14 PATTERNS (la procedure 4c listait 12 patterns et avait vieilli pendant que 4i/4k/4l s ajoutaient ; la liste des procedures est desormais complete 1-4l et le critere 14 couvre les criteres 1 a 25. Lecon utilisateur 2026-08-09 : la procedure 4c doit etre re-verifiee a chaque ajout de pattern) ; v0.2.26 : Pattern 15 - MODE MONO-LLM (apres l activation d un agent, l agent active est JOUE IMMEDIATEMENT dans le MEME tour - relecture fiche + corrections puis mission puis reactiver/activer le suivant ; l activation documente le role (3 fichiers de trace) mais ne transfere PAS l execution (0 sous-processus). Lecon utilisateur 2026-08-09 : 2 missions se sont arretees apres l activation de Themis - le LLM closait son tour alors que la carte c10 ordonne de continuer (suivant c7)) ; v0.2.27 : CORRECTION Pattern 15 - JAMAIS D ARRET DANS AUCUN MODE (l utilisateur a corrige la formulation v0.2.26 qui autorisait l arret en mode multi-LLM : les LLM travaillent EN PARALLELE chacun dans sa session - l activation documente le role de SA session uniquement, elle ne DELEGUE jamais l execution a un autre LLM, aucun mecanisme de relais n existe. L arret apres activation est TOUJOURS fautif : il bloque la mission, personne ne reprend)
@@ -392,7 +392,7 @@ python3 agents/tools/generateurs/generateurs-case/generateurs-case.py \
    v0.2.7) : `guider-parcours --liste` + `--reponses` sur chaque chemin +
    `valider-conformite-ascii`.
 
-## Patterns valides en production (v0.2.0, v0.2.4, v0.2.5, v0.2.6, v0.2.8, v0.2.13, v0.2.15, v0.2.16, v0.2.18, v0.2.19, v0.2.22, v0.2.23, v0.2.24, v0.2.27)
+## Patterns valides en production (v0.2.0, v0.2.4, v0.2.5, v0.2.6, v0.2.8, v0.2.13, v0.2.15, v0.2.16, v0.2.18, v0.2.19, v0.2.22, v0.2.23, v0.2.24, v0.2.27, v0.2.28)
 
 Les 15 patterns suivants ont ete valides par les parcours existants et sont
 OBLIGATOIRES pour tout nouveau parcours (Pattern 1 et 2 depuis v0.2.0,
@@ -1207,7 +1207,73 @@ du Pattern 13 : lire AVEC newline='' et ecrire AVEC newline='' (aucune
 conversion), ou reparer avec re.sub(r'\r+\n', '\r\n', txt). Preserver le
 format natif du fichier, jamais laisser Python convertir.
 
-## Procedure d'audit des 15 patterns (v0.2.1, v0.2.4, v0.2.5, v0.2.6, v0.2.8, v0.2.13, v0.2.15, v0.2.16, v0.2.18, v0.2.19, v0.2.22, v0.2.23, v0.2.24, v0.2.27)
+### Pattern 16 -- ALLEGEMENT DES CASES SURCHARGEES (references resolues + combos, anti-doublon) (v0.2.28)
+
+Le Probleme : une case peut devenir surchargee (valider-case : plus de 3
+indices, ou texte de regle de plus de 160 caracteres) quand on accumule des
+regles, des protocoles et des outils dans une meme case. La surcharge noie
+l'information : l'agent risque de ne pas tenir compte de tout.
+
+Le Principe : quand valider-case signale A ALLEGER, on ALLEGE la case en
+deplacant le contenu vers une source nommee (jamais suppression), puis la case
+porte une REFERENCE que guider-parcours RESOUT et AFFICHE dans la case
+courante (spec section 5 : case fournie a la demande, execution obligatoire).
+ZERO PERTE : rien n'est jete, tout est deplace et trace. PRISE EN COMPTE
+OBLIGATOIRE : l'information arrive RESOLUE avec la case, l'agent n'a pas a
+penser a aller la chercher.
+
+**Etape 1 -- DETECTER** : lancer valider-case sur le parcours ; toute case
+marquee A ALLEGER est candidate (seuils : > 3 indices, ou texte de regle
+> 160 caracteres).
+
+**Etape 2 -- TRIER** : identifier la NATURE de la surcharge :
+- Regle / protocole / texte long (une regle > 160 car.) -> LEVIER A :
+  reference resolue `{ "type": "ref", "ref": "<pattern-N | protocole-x |
+  regle-x>" }` (formats de resoudre_reference de guider-parcours).
+- Sequence d'outils / d'etapes (plus de 3 indices) -> LEVIER B : combo
+  (Pattern 3) qui encapsule le processus ; la case allegee ne garde qu'un
+  indice outil (le combo) + eventuellement une raison courte.
+
+**Etape 3 -- ANTI-DOUBLON (OBLIGATOIRE, avant tout deplacement)** : pour
+chaque contenu a deplacer, chercher avec `rechercher-texte` dans les sources
+candidates (protocoles de regles-immuables, patterns de CETTE spec, combos de
+tools/combos) si le contenu ou une version proche existe deja :
+- DEJA PRESENT -> referencer la source EXISTANTE, ne pas ajouter de doublon ;
+- PARTIEL (le contenu est presque la) -> enrichir la source existante avec la
+  partie manquante, puis referencer ;
+- ABSENT -> creer la source (protocole, pattern ou combo) avec le contenu.
+Le doublon est une faute : une meme regle ne doit vivre qu'a UN endroit.
+
+**Etape 4 -- DEPLACER (jamais supprimer)** : le contenu quitte la case vers
+sa source, la case garde la reference traceable. Verifier que le contenu
+deplace existe bien dans la source (anti-perte).
+
+**Etape 5 -- PRISE EN COMPTE OBLIGATOIRE** : guider-parcours resout la
+reference et affiche le contenu RESOLU dans la case courante (resoudre_reference
+v0.5.0). La case allegee reste lisible et complete pour l'agent au moment de
+l'execution.
+
+**Etape 6 -- VERIFIER** : valider-case doit rendre CONFORME (case allegee) ;
+verifier la resolvabilite de chaque reference (valider-case --references ou
+resoudre_reference) ; naviguer le parcours avec guider-parcours pour voir la
+case allegee avec ses references resolues affichees ; controler qu'aucune
+information n'a ete perdue (comparer avant/apres).
+
+**Exemple reel (janus, 2026-08-10)** : c8 (indice regle 201 car. sur le
+controle du travail de Buffy) -> reference `protocole-controle-buffy` (source
+existante) ; c11/c18 (4 indices identiques dupliques) -> combo partage qui
+encapsule la sequence (lire patterns + protocole + creer-fichier), eliminant
+aussi la duplication.
+
+**Lien avec les autres patterns** : complete le Pattern 3 (combo) et le
+Pattern 7 (modele compose) ; la reference resolue est le format defini par la
+spec-refonte-cartes-decision section 4.2 (indices alleges). A appliquer
+AVANT chaque migration de parcours v0.2.0 vers v0.3.x : les cases
+surchargees sont allegees pendant la migration, pas apres.
+
+---
+
+## Procedure d'audit des 16 patterns (v0.2.1, v0.2.4, v0.2.5, v0.2.6, v0.2.8, v0.2.13, v0.2.15, v0.2.16, v0.2.18, v0.2.19, v0.2.22, v0.2.23, v0.2.24, v0.2.27, v0.2.28)
 
 La procedure suivante a ete validee par l'audit de la serie des 11 parcours
 realise par Themis (evaluatrice croisee) le 2026-08-08. Elle est a appliquer a

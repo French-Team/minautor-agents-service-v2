@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-themis",
     "agent": "themis",
-    "version": "0.2.9",
+    "version": "0.3.0",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
   },
@@ -18,8 +18,8 @@
       "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
+          "type": "ref",
+          "ref": "pattern-2"
         }
       ],
       "branches": [
@@ -39,11 +39,11 @@
     },
     "c0b": {
       "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -91,15 +91,15 @@
     },
     "c2": {
       "titre": "Lire le contexte de la demande",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
           "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
         },
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher). Si l'outil n'existe pas -> je signale le besoin, je ne contourne pas."
+          "type": "ref",
+          "ref": "pattern-4"
         },
         {
           "type": "outil",
@@ -113,16 +113,8 @@
     },
     "c3": {
       "titre": "Lancer le combo audit-themis",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d'executer combos-moteur (ex: Je lance le combo combo-audit-themis : cerveau-projet/combos/combo-audit-themis/definition-combo.json)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
         {
           "type": "regle",
           "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (remplace la suite d'outils du chemin audit)."
@@ -170,33 +162,17 @@
     },
     "c9": {
       "titre": "Ecrire le rapport dans themis/rapports/",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX RAPPORTS D AUDIT : je cree uniquement des rapports d audit (dossier themis/rapports/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
           "nom": "corriger-symboles",
           "catalogue": "corriger-symboles",
           "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
-        },
-        {
-          "type": "regle",
-          "texte": "Format du rapport : # Rapport d'evaluation -- [DATE] / ## Contexte / ## Resultats (Structure, Conventions, Coherence, Agents avec scores /100) / ## Synthese (score global, etat de sante CONFORME ou NON CONFORME, problemes critiques/majeurs/mineurs) / ## Recommandations."
         },
         {
           "type": "outil",
@@ -210,19 +186,11 @@
     },
     "c12": {
       "titre": "Lecons et retour",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX RAPPORTS D AUDIT : je cree uniquement des rapports d audit (dossier themis/rapports/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de reactiver Cerberus, je declare dans mon message de reactivation la liste EXACTE des outils du cerveau utilises (nom de chaque outil)."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -244,11 +212,11 @@
     "c13": {
       "titre": "FIN - Reactiver Cerberus",
       "type": "fin",
-      "message": "Reactiver Cerberus avec le rapport d'evaluation et le bilan des outils utilises (REGLE ABSOLUE 6)."
+      "message": "Reactiver Cerberus (activation directe par Cerberus) avec le rapport d'evaluation et le bilan des outils utilises (REGLE ABSOLUE 6)."
     },
     "c14": {
       "titre": "Lire le contexte du doute",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -289,12 +257,8 @@
     },
     "c16": {
       "titre": "Lancer l'evaluateur adapte",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande evaluer-structure --reponses ...) au lieu de l ecrire en dur."
-        },
         {
           "type": "outil",
           "nom": "generateurs-commande",
@@ -303,33 +267,11 @@
           "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande evaluer-structure --reponses ..."
         },
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "regle",
-          "texte": "Choisir l'outil exact du domaine declare a la case precedente : evaluer-structure (arborescence), evaluer-conventions (nommage, ASCII, format), evaluer-coherence (liens, references croisees), evaluer-agents (respect des protocoles)."
-        },
-        {
           "type": "outil",
           "nom": "evaluer-structure",
           "catalogue": "evaluer-structure",
           "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-structure/",
           "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-structure/evaluer-structure.py"
-        },
-        {
-          "type": "outil",
-          "nom": "evaluer-conventions",
-          "catalogue": "evaluer-conventions",
-          "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-conventions/",
-          "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-conventions/evaluer-conventions.py"
-        },
-        {
-          "type": "outil",
-          "nom": "evaluer-coherence",
-          "catalogue": "evaluer-coherence",
-          "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-coherence/",
-          "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-coherence/evaluer-coherence.py"
         },
         {
           "type": "outil",
@@ -343,7 +285,7 @@
     },
     "c17": {
       "titre": "Croiser avec relecture et tableaux",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -368,7 +310,7 @@
     },
     "c18": {
       "titre": "RVAV -- phase Analyser",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -384,7 +326,7 @@
     },
     "c19": {
       "titre": "Executer le combo pour la phase Analyser",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -422,7 +364,7 @@
     },
     "c22": {
       "titre": "Activer l'agent habilite",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -451,11 +393,11 @@
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+          "type": "ref",
+          "ref": "pattern-6"
         },
         {
           "type": "outil",
@@ -478,12 +420,12 @@
       "question": "As-tu verifie (croisement mission / carte / deroulement reel) que l EXECUTION de la mission a suivi les ordres de la carte -- et pas seulement la structure du JSON ?",
       "indices": [
         {
-          "type": "regle",
-          "texte": "PATTERN 11 (spec v0.2.19) : la structure valide ne prouve PAS la stabilite. Une carte peut etre CONFORME et l execution avoir devie (Vulcain -> reactiver au lieu d activer Morpheus ; Cerberus -> analyser au lieu d activer Buffy). Verifier par CROISEMENT : mission recue + cases ordonnees par la carte + actions reelles (activation, fichiers modifies, rapports)."
+          "type": "ref",
+          "ref": "pattern-11"
         },
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir : le croisement mission / carte / deroulement reel (message d activation/reactivation, fichiers modifies via detecter-impacts, rapports) est la SEULE preuve de la conformite d execution."
+          "type": "ref",
+          "ref": "pattern-1"
         }
       ],
       "branches": [
@@ -504,8 +446,8 @@
       "question": "As-tu lance detecter-impacts sur un echantillon des fichiers modifies et verifie que TOUS les fichiers impactes sont a jour ?",
       "indices": [
         {
-          "type": "regle",
-          "texte": "PATTERN 14 + PROCEDURE 4l (spec v0.2.24) : chaque mission impacte plusieurs fichiers (outil, spec, catalogue, index-tools, fiches, parcours, corrections). TOUT impact NON mis a jour = NON CONFORME : documenter le fichier manquant dans le rapport avec l action de correction requise."
+          "type": "ref",
+          "ref": "pattern-14"
         },
         {
           "type": "outil",
@@ -537,8 +479,8 @@
       "question": "As-tu verifie pour CHAQUE fin du parcours audite que la fin est COHERENTE avec le type d activation (activation directe par Cerberus -> reactiver Cerberus ; maillon de chaine -> activer le suivant selon SA carte ; dernier maillon -> reactiver avec bilan consolide) et qu aucune fin de maillon ne reactive Cerberus au milieu ?",
       "indices": [
         {
-          "type": "regle",
-          "texte": "PATTERN 13 + PROCEDURE 4k (spec v0.2.23) : la fin de mission d un agent suit SA carte - activation directe -> reactiver Cerberus, maillon de chaine -> activer le suivant, dernier maillon -> reactiver Cerberus avec bilan consolide, la chaine ne retombe JAMAIS sur Cerberus au milieu. Toute fin incoherente = NON CONFORME."
+          "type": "ref",
+          "ref": "pattern-13"
         }
       ],
       "branches": [
@@ -559,19 +501,11 @@
     },
     "c23c": {
       "titre": "Creer l outil temporaire",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX RAPPORTS D AUDIT + EXCEPTION OUTIL TEMPORAIRE : je cree uniquement des rapports d audit et mes lecons (dossier de l agent, JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -603,19 +537,11 @@
     },
     "c25": {
       "titre": "Auditer pour un agent",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : la sortie est un RAPPORT D AUDIT - JAMAIS tools/, JAMAIS de modification des fichiers de la mission auditee. L audit est en LECTURE sur les fichiers audites."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE RVAV : je passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur l audit AVANT de reactiver l agent precedent."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -633,9 +559,9 @@
       "suivant": "c25b"
     },
     "c25b": {
-      "titre": "FIN - Reactiver l agent precedent avec son rapport",
+      "titre": "FIN - Activer l agent precedent avec son rapport",
       "type": "fin",
-      "message": "J ai audite sur demande. Je REACTIVE L AGENT PRECEDENT (maillon de chaine) : reactiver-agent-principal.py reactiver session-llm-1 <raison> <agent_precedent> - en lui fournissant mon rapport. L agent reprend SA mission avec le rapport."
+      "message": "J ai audite sur demande. Je ACTIVE L AGENT PRECEDENT (maillon de chaine) : activer-agent-principal.py activer session-llm-1 <agent_precedent> <raison> - en lui fournissant mon rapport. L agent reprend SA mission avec le rapport."
     }
   }
 }

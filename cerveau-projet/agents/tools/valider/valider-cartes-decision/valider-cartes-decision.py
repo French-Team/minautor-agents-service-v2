@@ -17,9 +17,9 @@ Validations d'un parcours :
   2. Le JSON est valide (json.load)
   3. Structure : cles top-level identite + parcours + cases presentes
   4. parcours.case_depart existe et designe une case reelle
-  5. Chaque case a un type valide (question/indice/controle/fin)
+  5. Chaque case a un type valide (question/indice/controle/fin/action)
   6. References valides : suivant et vers des branches pointent vers des cases
-  7. La case c0 est une question de relecture honnete (Pattern 4, spec v0.2.9)
+  7. La case c0 est une question de relecture honnete (Pattern 4, spec v0.5.0)
 
 Utilisation:
   valider-cartes-decision.py --agent <nom>
@@ -27,7 +27,7 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.3.0
+Version : 0.3.1
 Statut : prepare
 """
 
@@ -36,11 +36,11 @@ import json
 import os
 import sys
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 STATUT = "prepare"
 
 AGENTS_DIR = "cerveau-projet/agents"
-TYPES_VALIDES = ("question", "indice", "controle", "fin")
+TYPES_VALIDES = ("question", "indice", "controle", "fin", "action")
 
 
 def afficher_aide():
@@ -133,7 +133,7 @@ def valider_parcours(contenu, nom_display):
         print("   [OK] case_depart '%s' existe" % case_depart)
 
     # 4. Types de cases valides
-    print("4. Types de cases (question/indice/controle/fin)")
+    print("4. Types de cases (question/indice/controle/fin/action)")
     types_invalides = []
     for cid, case in cases.items():
         typ = case.get("type")

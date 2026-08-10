@@ -11,9 +11,9 @@ identite:
 
 | Dossier | Description | Plateforme |
 |---|---|---|
-| [conventions/](conventions/index-conventions.md) | Renommage, structures, liens | index-conventions.md |
+| [conventions/](../agents/conventions/index-conventions.md) | Renommage, structures, liens | index-conventions.md |
 | [specs/](specs/index-spec.md) | Definitions techniques et fonctionnelles | index-spec.md |
-| [regles-immuables/](regles-immuables/index-regles-immuables.md) | Process, hierarchie, RVAV | index-regles-immuables.md |
+| [regles-immuables/](../agents/regles-immuables/index-regles-immuables.md) | Process, hierarchie, RVAV | index-regles-immuables.md |
 
 ### Templates
 

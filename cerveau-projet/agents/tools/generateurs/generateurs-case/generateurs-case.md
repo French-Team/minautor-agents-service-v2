@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.3.1 |
+| **Version** | 0.4.0 |
 | **Statut** | ebauche |
 | **Categorie** | generateurs |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -194,6 +194,30 @@ python3 generateurs-case.py <parcours.json> supprimer c7
 
 ---
 
+### 6. Convertir en masse (mode batch) -- action `convertir` (v0.4.0)
+
+Migration de parcours : convertit TOUTES les cases `indice` en `action`
+(elles n attendent pas de reponse) et remplace les regles longues (> seuil,
+defaut 160 caracteres) par des references via un fichier de mapping JSON.
+
+    python3 generateurs-case.py <parcours.json> convertir [--refs <mapping.json>]
+                                [--seuil N] [--version-parcours <v>] [--dry-run]
+
+- `--refs <mapping.json>` : mapping des refs. Format :
+  { "motifs": [ {"contient": "<motif>", "ref": "pattern-2"}, ... ],
+    "cases": { "<case_id>": "protocole-tests" } }
+  Les refs par case_id ont priorite ; sinon premier motif contenu gagnant.
+- `--seuil` : longueur max d une regle avant remplacement par ref (defaut 160).
+- `--version-parcours <v>` : bump de la version du parcours.
+- `--dry-run` : simule et affiche le rapport SANS ecrire (dry/wet).
+- Rapport final : X cases converties, Y regles remplacees, Z avertissements
+  (regles longues sans mapping, cases > 3 indices) - l agent raccourcit ou
+  complete le mapping puis relance.
+
+Le recablage (suivant/branches) est conserve A L IDENTIQUE : une conversion
+indice -> action ne change pas la navigation. Validation auto lancee apres
+l ecriture (references + guider-parcours --liste + valider-case --modele).
+
 ## Garde-fou Pattern 5 (v0.1.1-beta) -- jamais de fin passive
 
 Quand on cree ou edite une case de type `fin` (ajouter/editer avec --message),
@@ -315,7 +339,7 @@ python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-cas
 3. Toute suppression recable les references vers la cible (suivant de la case ou --vers)
 4. Chaque operation lance la validation auto (json + references + guider-parcours --liste)
 5. Les actions sont testees en --dry-run avant toute modification reelle
-6. Format des cases : spec-guider-parcours v0.2.5 (types question/indice/controle/fin, indices, branches, suivant)
+6. Format des cases : spec-guider-parcours v0.5.0 (types question/indice/controle/fin/action, indices, branches, suivant)
 7. Garde-fou REGLES IMMUABLES (v0.2.1) : toute case d'ecriture rappelle ASCII (position 1) + RVAV ; toute fin de delegation rappelle la chaine bout-en-bout (spec v0.2.15)
 
 ---

@@ -18,7 +18,7 @@ Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
   - v0.3.1 : branchement generateurs-ligne (case c10d, branche 'ligne' dans c10b)
 
 Cas couverts:
-  1. Version du parcours = 0.3.1
+  1. Version du parcours = 0.3.3
   2. Types : 32 action / 7 question / 2 controle / 9 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -97,8 +97,8 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.3.1",
-                 d["parcours"].get("version") == "0.3.1",
+        verifier("1. Version du parcours = 0.3.3",
+                 d["parcours"].get("version") == "0.3.3",
                  d["parcours"].get("version"))
 
         # 2. Types

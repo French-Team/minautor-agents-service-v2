@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-010-generateurs-case.py
-Test formel de l outil generateurs-case v0.3.0 (categorie generateurs/).
+Test formel de l outil generateurs-case v0.4.0 (categorie generateurs/).
 
 Outil teste (cerveau-projet/agents/tools/generateurs/generateurs-case/):
   .py + .sh (wrapper pur exec python3) + .md + spec/ (creee a la refonte)
@@ -20,7 +20,7 @@ Refonte v0.3.0 (2026-08-09) :
   - Validation auto : appel interne valider-case --modele apres chaque commande.
 
 Cas couverts:
-  1. --version py/sh identiques v0.3.0 (parite)
+  1. --version py/sh identiques v0.4.0 (parite)
   2. --aide : usage complet avec les options cles (--ref, --branche, ajouter-bloc)
   3. ajouter-bloc modele compose complet : 3 branches (OUI/NON/PEUT_ETRE)
   4. Indices deviation/rejoint = references pattern-7 (0 texte inline)
@@ -96,7 +96,7 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-010-")
     try:
-        print("=== Test formel generateurs-case v0.3.0 (etape 3 refonte) ===")
+        print("=== Test formel generateurs-case v0.4.0 (etape 3 refonte) ===")
 
         # Copie de travail du parcours (jamais les vrais parcours)
         travail = os.path.join(tmp, "parcours.json")
@@ -105,9 +105,9 @@ def main():
         # 1. --version py/sh identiques (parite)
         r_py = run([PYTHON, OUTIL_PY, "x", "liste", "--version"])
         r_sh = run(["bash", OUTIL_SH, "x", "liste", "--version"])
-        verifier("1. --version py/sh identiques v0.3.1",
+        verifier("1. --version py/sh identiques v0.4.0",
                  r_py.returncode == 0 and r_sh.returncode == 0
-                 and "v0.3.1" in r_py.stdout
+                 and "v0.4.0" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 

@@ -23,7 +23,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.3.1"
+VERSION = "0.4.0"
 STATUT = "ebauche"
 
 # Racine du projet : 5 remontees depuis ce fichier
@@ -683,6 +683,132 @@ def action_supprimer(args):
 
 
 # ------------------------------------------------------------
+# Mode batch : convertir (migration indice -> action + regles -> refs)
+# ------------------------------------------------------------
+
+SEUIL_REGLE_DEFAUT = 160
+
+
+def charger_mapping_refs(chemin):
+    """Charge le mapping JSON des refs pour la conversion en masse.
+
+    Format du fichier :
+    {
+      "motifs": [
+        {"contient": "REGLE IMMUABLE ASCII", "ref": "pattern-2"},
+        {"contient": "CONTEXTE OBLIGATOIRE", "ref": "pattern-6"}
+      ],
+      "cases": {
+        "c15": "protocole-tests"
+      }
+    }
+    Les motifs sont appliques dans l'ordre du fichier (premier gagnant) ;
+    les refs par case_id ont PRIORITE sur les motifs.
+    """
+    chemin = Path(chemin)
+    if not chemin.exists():
+        print(_couleur("ERREUR: Fichier de mapping introuvable: %s" % chemin, "rouge"), file=sys.stderr)
+        sys.exit(1)
+    try:
+        with open(chemin, "r", encoding="utf-8") as f:
+            mapping = json.load(f)
+    except json.JSONDecodeError as e:
+        print(_couleur("ERREUR: Mapping JSON invalide: %s" % e, "rouge"), file=sys.stderr)
+        sys.exit(1)
+    return mapping
+
+
+def trouver_ref(mapping, case_id, texte):
+    """Retourne la ref pour (case_id, texte) selon le mapping, sinon None."""
+    if not mapping:
+        return None
+    ref_case = mapping.get("cases", {}).get(case_id)
+    if ref_case:
+        return ref_case
+    for entree in mapping.get("motifs", []):
+        if entree.get("contient") and entree["contient"] in texte:
+            return entree.get("ref")
+    return None
+
+
+def action_convertir(args):
+    """Mode batch : convertit en masse les cases type=indice en type=action
+    et remplace les regles longues (> seuil) par des refs via un mapping JSON.
+
+    Recablage automatique : suivant/branches sont conserves A L IDENTIQUE
+    (une conversion indice->action ne change pas la navigation).
+    """
+    donnees = charger_parcours(args.parcours)
+    cases = donnees["cases"]
+    mapping = charger_mapping_refs(args.refs) if args.refs else None
+    seuil = args.seuil
+
+    converties = []
+    remplacees = []
+    avertissements = []
+
+    for case_id in sorted(cases):
+        case = cases[case_id]
+
+        # 1) Conversion indice -> action (elles n'attendent pas de reponse)
+        if case.get("type") == "indice":
+            case["type"] = "action"
+            converties.append(case_id)
+
+        # 2) Regles longues -> refs (mapping) ou avertissement
+        indices = case.get("indices", [])
+        nouveaux = []
+        for indice in indices:
+            if indice.get("type") == "regle":
+                texte = indice.get("texte", "")
+                if len(texte) > seuil:
+                    ref = trouver_ref(mapping, case_id, texte)
+                    if ref:
+                        nouveaux.append({"type": "ref", "ref": ref})
+                        remplacees.append((case_id, len(texte), ref))
+                        continue
+                    avertissements.append(
+                        "case %s: regle de %d car depasse le seuil %d, aucune ref dans le mapping"
+                        % (case_id, len(texte), seuil)
+                    )
+            nouveaux.append(indice)
+        if nouveaux:
+            case["indices"] = nouveaux
+
+        # 3) Surcharge : > 3 indices apres traitement
+        if len(case.get("indices", [])) > 3:
+            avertissements.append(
+                "case %s: %d indices (> 3) - allegement requis" % (case_id, len(case["indices"]))
+            )
+
+    # 4) Version du parcours
+    if args.version_parcours:
+        donnees["parcours"]["version"] = args.version_parcours
+
+    # 5) Rapport
+    print("=== CONVERSION %s ===" % args.parcours)
+    print("  cases indice -> action : %d" % len(converties))
+    print("  regles remplacees par refs : %d" % len(remplacees))
+    print("  avertissements : %d" % len(avertissements))
+    if args.verbose:
+        for cid in converties:
+            print(_couleur("  [convertie] %s" % cid, "vert"))
+        for cid, longueur, ref in remplacees:
+            print(_couleur("  [remplacee] %s (%d car) -> ref %s" % (cid, longueur, ref), "vert"))
+    for a in avertissements:
+        print(_couleur("  [AVERTISSEMENT] %s" % a, "jaune"), file=sys.stderr)
+
+    if args.dry_run:
+        print(_couleur("[DRY-RUN] conversion simulee : rien n'a ete ecrit", "jaune"))
+        return 0
+
+    sauvegarder_parcours(args.parcours, donnees)
+    print(_couleur("[OK] Conversion appliquee a %s" % args.parcours, "vert"))
+    valider_auto(args, donnees)
+    return 0
+
+
+# ------------------------------------------------------------
 # Validation auto complete
 # ------------------------------------------------------------
 
@@ -780,6 +906,11 @@ def construire_parser():
     p_supprimer.add_argument("--vers", type=str, help="Cible de recablage (defaut: le suivant de la case supprimee)")
     p_supprimer.add_argument("--force", action="store_true", help="Forcer malgre les references (recablage auto quand meme)")
 
+    # convertir (mode batch : migration indice -> action + regles -> refs)
+    p_convertir = subparsers.add_parser("convertir", help="Mode batch : convertir en masse indice -> action et regles longues -> refs (migration)")
+    p_convertir.add_argument("--refs", type=str, help="Fichier JSON de mapping des refs (motifs + cases)")
+    p_convertir.add_argument("--seuil", type=int, default=SEUIL_REGLE_DEFAUT, help="Longueur max d'une regle avant remplacement par ref (defaut: %d)" % SEUIL_REGLE_DEFAUT)
+
     # ajouter-bloc (modele compose Pattern 7)
     p_bloc = subparsers.add_parser("ajouter-bloc", help="Ajouter un bloc MODELE COMPOSE (decision + deviation + rejoint, Pattern 7)")
     p_bloc.add_argument("--decision", dest="decision", type=str, help="Id de la case decision (defaut: prochain cN libre)")
@@ -800,6 +931,11 @@ def construire_parser():
         sub.add_argument("--dry-run", action="store_true", help="Simuler sans rien modifier")
         sub.add_argument("--verbose", action="store_true", help="Afficher les details")
         sub.add_argument("--version", action="version", version="generateurs-case v%s" % VERSION)
+    # convertir : --version = bump de version du PARCOURS (pas l'outil)
+    p_convertir.add_argument("--dry-run", action="store_true", help="Simuler sans rien modifier")
+    p_convertir.add_argument("--verbose", action="store_true", help="Afficher les details")
+    p_convertir.add_argument("--version", action="version", version="generateurs-case v%s" % VERSION)
+    p_convertir.add_argument("--version-parcours", dest="version_parcours", type=str, help="Nouvelle version du parcours (bump)")
     return parser
 
 
@@ -828,6 +964,8 @@ def main():
         return action_editer(args)
     elif args.action == "supprimer":
         return action_supprimer(args)
+    elif args.action == "convertir":
+        return action_convertir(args)
     elif args.action == "ajouter-bloc":
         return action_ajouter_bloc(args)
     else:

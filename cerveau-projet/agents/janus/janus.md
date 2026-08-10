@@ -73,7 +73,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.2.0)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.3.2)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -224,10 +224,12 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Protocoles applicables
 
+- [protocole-sante-fichiers-agents](../../agents/regles-immuables/general/protocole-sante-fichiers-agents/) -- sante periodique des fichiers agents (fiches, parcours, corrections)
 - [protocole-versionning-outils](../../agents/regles-immuables/general/protocole-versionning-outils/) -- cycle de vie des outils
 - [protocole-auto-correction](../../agents/regles-immuables/general/protocole-auto-correction/) -- auto-correction des agents
 - [regles-validation-rigoureuse](../../agents/regles-immuables/general/regles-validation-rigoureuse.md) -- validation rigoureuse
 - [protocole-controle-statuts](../../agents/regles-immuables/general/protocole-controle-statuts/) -- controle des transitions de statut
+- [protocole-controle-buffy](../../agents/regles-immuables/general/protocole-controle-buffy/) -- controle croise du travail de Buffy
 
 ---
 

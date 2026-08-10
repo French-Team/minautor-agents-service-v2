@@ -174,8 +174,8 @@ degradation conceptuelle (buffy 49 cases/45 Ko, 15 patterns, indices empiles).
 4. MODELE COMPOSE : decision + branches min 2 + deviation + rejoint genere en
    UNE commande par generateurs-case (generaliser ajouter-bloc Pattern 7).
 
-**Validations** : ASCII 0 (2 recits corriges -> 0) · LF pur · frontmatter
-(type: spec) OK · 10 sections · index-spec a jour ASCII 0 · 0 residu.
+**Validations** : ASCII 0 (2 recits corriges -> 0) - LF pur - frontmatter
+(type: spec) OK - 10 sections - index-spec a jour ASCII 0 - 0 residu.
 
 **Lecons** :
 1. Spec d abord = le concept est valide AVANT de coder (aucune ligne de code
@@ -206,7 +206,7 @@ action comme NOUVEAU type du modele cible.
 5. Critere 7 : le type action implemente dans guider-parcours (comportement
    identique a indice sans indices)
 
-**Validations** : ASCII 0 · LF pur · 10 sections intactes · index-spec inchange.
+**Validations** : ASCII 0 - LF pur - 10 sections intactes - index-spec inchange.
 
 **Lecons** :
 1. Un point mineur d audit se clarifie DANS la spec (source de verite) avant
@@ -229,3 +229,36 @@ action comme NOUVEAU type du modele cible.
 7. Non-regression : test-012 18/18 (resolution refs), test-013 22/22 (migration cerberus), detecter-decalages 112 conformes / 0 decalage
 
 **Preuve** : spec v0.5.0 avec principe documente + 4 refs transformees + 0 inline > 160 ; test-012/013 OK.
+
+## [LECON] 2026-08-10 -- PATTERN 16 ALLEGEMENT DOCUMENTE (spec-guider-parcours v0.6.0) (Promethee)
+
+**Mission** : documenter le Pattern 16 (ALLEGEMENT des cases surchargees,
+references resolues + combos, anti-doublon) dans la spec-guider-parcours,
+apres validation du concept par l'utilisateur (avant les migrations).
+
+**Modification** (spec-guider-parcours v0.5.0 -> v0.6.0) :
+- Nouveau "### Pattern 16 -- ALLEGEMENT DES CASES SURCHARGEES (v0.2.28)"
+  insere apres le Pattern 15, avec 6 etapes :
+  1. DETECTER (valider-case A ALLEGER : > 3 indices ou texte > 160 car.) ;
+  2. TRIER (regle/protocole longue -> reference resolue ; sequence d'outils
+     -> combo Pattern 3) ;
+  3. ANTI-DOUBLON OBLIGATOIRE (rechercher-texte dans les sources candidates :
+     deja present -> referencer l'existante, partiel -> enrichir, absent ->
+     creer) -- exigence utilisateur ;
+  4. DEPLACER jamais supprimer (zero perte) ;
+  5. PRISE EN COMPTE OBLIGATOIRE (guider-parcours resout et affiche) ;
+  6. VERIFIER (valider-case CONFORME + resolvabilite + navigation).
+- En-tete "Patterns valides en production" + "Procedure d'audit des 16
+  patterns" mis a jour (v0.2.28 ajoute).
+- Exemple reel documente (janus c8 -> protocole-controle-buffy ; c11/c18 ->
+  combo partage).
+
+**Lecons** :
+- Une spec d'outil se met a jour comme une spec : appliquer la meme rigueur
+  (structure, version, historique) que pour une creation.
+- Le Pattern 16 est le modele a appliquer PENDANT les migrations des parcours
+  v0.2.0 : allegement en cours de migration, pas apres.
+- Anti-doublon = etape 3 obligatoire : la regle ne vit qu'a UN endroit.
+
+**Outils utilises** : lire-fichier, editer-fichier, valider-conformite-ascii,
+valider-liens, activer-agent-principal.

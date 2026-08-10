@@ -7,7 +7,7 @@ identite:
 ---
 # valider-cartes-decision
 
-**Version :** 0.3.0
+**Version :** 0.3.1
 **Statut :** prepare
 **Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-cartes-decision/`
@@ -78,7 +78,7 @@ Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
 ### 4. Types de cases
 
 ```
-[ ] Chaque case a un type valide : question / indice / controle / fin
+[ ] Chaque case a un type valide : question / indice / controle / fin / action
 ```
 
 ### 5. References
@@ -108,7 +108,7 @@ Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
    [OK] Cles top-level presentes
 3. Case de depart (case_depart)
    [OK] case_depart 'c0' existe
-4. Types de cases (question/indice/controle/fin)
+4. Types de cases (question/indice/controle/fin/action)
    [OK] 41 cases, tous types valides
 5. References (suivant + branches.vers)
    [OK] Toutes les references pointent vers des cases existantes
@@ -129,7 +129,7 @@ Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
 | JSON invalide | Corriger la syntaxe du fichier parcours-<agent>.json |
 | Cles manquantes | Verifier identite + parcours + cases presentes |
 | case_depart introuvable | Verifier parcours.case_depart designe une case existante |
-| Type invalide | Utiliser question / indice / controle / fin |
+| Type invalide | Utiliser question / indice / controle / fin / action |
 | Reference cassee | Corriger suivant ou branche.vers qui pointe vers une case absente |
 | Case c0 absente | Ajouter la question de relecture honnete en case c0 (Pattern 4) |
 | Fichier .md passe en --fichier | La cible est le parcours JSON, pas la fiche allegee |
@@ -149,6 +149,7 @@ Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
 |---|---|---|
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0-py | 2026-08-06 | Portage Python (validait la section Carte de Decision des fiches) |
+| 0.3.1 | 2026-08-10 | Type action ajoute (modele cible de la refonte des cartes). Parite py/sh (wrapper) maintenue. Docstring spec v0.2.9 -> v0.5.0. |
 | 0.3.0 | 2026-08-08 | Cible changee : PARCOURS JSON (source de verite) au lieu de la section des fiches allegees. 6 controles : JSON, structure, case_depart, types, references, c0 de relecture. --tous scanne tous les agents avec parcours/. .sh = wrapper vers .py (parite stricte) |
 
 ---

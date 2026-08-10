@@ -6,7 +6,7 @@ identite:
 ---
 # generateurs-commande
 
-**Version :** 0.2.1
+**Version :** 0.2.2
 **Statut :** dev
 **Categorie :** Generateurs
 **Chemin :** `agents/tools/generateurs/generateurs-commande/`

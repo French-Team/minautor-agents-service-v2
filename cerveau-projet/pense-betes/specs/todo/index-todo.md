@@ -21,7 +21,7 @@ identite:
 
 - **Parent** : [index-spec.md](../index-spec.md)
 - **Specs** : [spec-template.md](../spec-template.md)
-- **Protocole composition** : [todo-protocole-composition](../../regles-immuables/general/protocole-composition/spec/todo/index-todo.md)
+- **Protocole composition** : [todo-protocole-composition](../../../agents/regles-immuables/general/protocole-composition/spec/todo/index-todo.md)
 
 ## Comment creer un todo
 

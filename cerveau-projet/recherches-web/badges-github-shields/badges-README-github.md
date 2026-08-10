@@ -199,5 +199,5 @@ du compte/repo lors de la configuration.
 ## Liens
 
 - **Index des recherches** : [index-recherches-web.md](../index-recherches-web.md)
-- **Convention** : [convention-protocoles](../agents/conventions/protocoles/convention-protocoles.md)
+- **Convention** : [convention-protocoles](../../agents/conventions/protocoles/convention-protocoles.md)
 

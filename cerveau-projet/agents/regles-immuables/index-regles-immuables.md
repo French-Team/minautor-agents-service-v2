@@ -18,9 +18,9 @@ identite:
 
 ## Navigation
 
-- **Parent** : [index-pense-bete.md](../index-pense-bete.md)
+- **Parent** : [index-pense-bete.md](../../pense-betes/index-pense-bete.md)
 - **Conventions** : [conventions/](../conventions/index-conventions.md)
-- **Specs** : [specs/](../specs/index-spec.md)
+- **Specs** : [specs/](../../pense-betes/specs/index-spec.md)
 
 ## Protocoles crees
 

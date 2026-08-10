@@ -47,6 +47,9 @@ identite:
 | [protocole-carte-decision/](protocole-carte-decision/) | Carte de decision pour les agents | ebauche |
 | [protocole-creation-combos/](protocole-creation-combos/) | Creation et mise en place des combos (quand/ou/comment, Pattern 3) | ebauche |
 | [protocole-purification/](protocole-purification/) | Purification des fichiers apres validation | ebauche |
+| [protocole-controle-buffy/](protocole-controle-buffy/) | Controle croise du travail de Buffy (Janus) | ebauche |
+| [protocole-audit-buffy/](protocole-audit-buffy/) | Audit de conformite du travail de Buffy (Themis) | ebauche |
+| [protocole-sante-fichiers-agents/](protocole-sante-fichiers-agents/) | Sante periodique des fichiers agents (Janus) | ebauche |
 
 ## Navigation
 

@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-clio",
     "agent": "clio",
-    "version": "0.1.6",
+    "version": "0.2.0",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Clio : corriger le README (journal, verifier, maj, insertion manuelle si nouvelle categorie, ASCII, lecons) et verifier le README. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
   },
@@ -18,8 +18,8 @@
       "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
+          "type": "ref",
+          "ref": "pattern-2"
         }
       ],
       "branches": [
@@ -39,11 +39,11 @@
     },
     "c0b": {
       "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -83,7 +83,7 @@
     },
     "c2": {
       "titre": "Lire la raison de l'activation",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "fichier",
@@ -102,7 +102,7 @@
     },
     "c3": {
       "titre": "Consulter les interventions recentes",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -120,12 +120,8 @@
     },
     "c4": {
       "titre": "Verifier l'etat reel",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande mettre-a-jour-readme --reponses ...) au lieu de l ecrire en dur."
-        },
         {
           "type": "outil",
           "nom": "generateurs-commande",
@@ -164,11 +160,11 @@
     },
     "c6": {
       "titre": "Corriger le texte du README",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "regle",
@@ -191,10 +187,6 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
           "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
         },
         {
@@ -205,7 +197,7 @@
         },
         {
           "type": "regle",
-          "texte": "Lecon Clio : --maj CORRIGE les categories existantes mais ne CREE PAS une categorie absente du README -- ajouter la ligne manuellement avec editer-fichier puis relancer --verifier."
+          "texte": "Lecon Clio : --maj CORRIGE les categories existantes mais ne cree pas les nouvelles - ajouter puis relancer --verifier."
         }
       ],
       "branches": [
@@ -221,19 +213,15 @@
     },
     "c8": {
       "titre": "Inserer la ligne de categorie manquante",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AU README ET AUX LECONS : je mets a jour uniquement le README et mes lecons (dossier de l agent, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "Format de ligne : | **Categorie (N)** | outils | usage |. Inserer a la bonne place alphabetique dans la table des outils."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -247,7 +235,7 @@
     },
     "c9": {
       "titre": "Verifier la conformite ASCII",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -265,19 +253,15 @@
     },
     "c10": {
       "titre": "Lecons et retour",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AU README ET AUX LECONS : je mets a jour uniquement le README et mes lecons (dossier de l agent, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "Ajouter les lecons dans corrections.md (protocole-auto-correction), passer la boucle RVAV, puis reactiver Cerberus."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -291,11 +275,11 @@
     },
     "c11": {
       "titre": "Verifier sans modifier",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+          "type": "ref",
+          "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md"
         },
         {
           "type": "regle",
@@ -314,7 +298,7 @@
     "c12": {
       "titre": "FIN - Reactiver Cerberus",
       "type": "fin",
-      "message": "Reactiver Cerberus avec le bilan (ecarts corriges ou README deja a jour) et la liste des outils utilises."
+      "message": "Reactiver Cerberus (activation directe par Cerberus) avec le bilan (ecarts corriges ou README deja a jour) et la liste des outils utilises."
     },
     "c13": {
       "titre": "Mission hors parcours",
@@ -338,7 +322,7 @@
     },
     "c14": {
       "titre": "Activer l'agent habilite",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -367,11 +351,11 @@
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+          "type": "ref",
+          "ref": "pattern-6"
         },
         {
           "type": "outil",
@@ -395,19 +379,11 @@
     },
     "c15c": {
       "titre": "Creer l outil temporaire",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AU README ET AUX LECONS + EXCEPTION OUTIL TEMPORAIRE : je mets a jour uniquement le README et mes lecons (dossier de l agent, JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -439,12 +415,8 @@
     },
     "c17": {
       "titre": "Activer Themis pour auditer",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : l audit est le ROLE DE THEMIS (evaluatrice) - je n audite JAMAIS moi-meme. Si j ai besoin d un audit de conformite, j ACTIVE Themis (maillon de chaine)."
-        },
         {
           "type": "regle",
           "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."

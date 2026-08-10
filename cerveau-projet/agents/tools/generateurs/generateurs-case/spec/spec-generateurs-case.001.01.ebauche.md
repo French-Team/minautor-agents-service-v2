@@ -6,12 +6,12 @@ identite:
 ---
 # Spec -- Generateurs-case (modele compose complet + references)
 
-**Version** : 0.3.0
+**Version** : 0.4.0
 **Statut** : ebauche
 **Date creation** : 2026-08-09
 **Agent** : Vulcain (refonte etape 3 spec-refonte-cartes-decision)
 **Historique** :
-- v0.3.0 (refonte modele compose complet + option --ref, 2026-08-09)
+- v0.4.0 (mode batch convertir : indice -> action en masse + regles -> refs via mapping, 2026-08-09)\n- v0.3.0 (refonte modele compose complet + option --ref, 2026-08-09)
 - v0.2.2 (generateurs-case pre-existant, sans spec dediee)
 
 ---

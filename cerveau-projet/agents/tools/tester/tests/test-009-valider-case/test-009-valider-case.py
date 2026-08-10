@@ -16,10 +16,10 @@ Cas couverts:
   2. --aide : usage complet (requis par detecter-decalages-catalogue)
   3. Execution sur parcours-cerberus (migre, etape 6) : verdict CONFORME
      (0 erreur, 0 surcharge, avertissement pattern de re-essai c5) +
-     temoin non migre (morpheus) : verdict A ALLEGER avec >= 10 surcharges
+     temoin a alleger (janus) : verdict A ALLEGER avec >= 3 surcharges
   4. --case c12b (existante) : CONFORME ; --case c13b (inexistante) : NON CONFORME
   5. --modele : pattern de re-essai (NON -> soi-meme) en AVERTISSEMENT, pas erreur
-  6. --surcharge : items signales sur le temoin non migre (>= 10)
+  6. --surcharge : items signales sur le temoin a alleger (>= 3)
   7. --references : CONFORME (aucune ref dans les parcours actuels)
   8. Rapport wet : fichier markdown cree avec en-tete + verdict + comptages
   9. Parcours inexistant : ERREUR claire + code non nul
@@ -52,10 +52,10 @@ OUTIL_MD = os.path.join(OUTIL_DIR, "valider-case.md")
 OUTIL_SPEC = os.path.join(OUTIL_DIR, "spec", "spec-valider-case.001.01.ebauche.md")
 PARCOURS_CERBERUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
                                  "cerberus", "parcours", "parcours-cerberus.json")
-# Parcours temoin encore NON migre (etapes 6-7 de la refonte : cerberus ET buffy
-# passent CONFORME, morpheus garde des surcharges -> temoin du verdict A ALLEGER)
+# Parcours temoin A ALLEGER (migration des parcours quasi terminee : tous
+# CONFORME sauf janus qui garde 3 surcharges -> temoin du verdict A ALLEGER)
 PARCOURS_SURCHARGE = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
-                                  "morpheus", "parcours", "parcours-morpheus.json")
+                                  "janus", "parcours", "parcours-janus.json")
 
 NB_POINTS = 0
 NB_OK = 0
@@ -127,10 +127,10 @@ def main():
                  r.stdout.strip()[:150])
         # 3e. Parcours temoin NON migre (morpheus) : verdict A ALLEGER toujours detecte
         r_sur = run([PYTHON, OUTIL_PY, PARCOURS_SURCHARGE, "--dry-run"])
-        verifier("3e. Temoin non migre (morpheus) : A ALLEGER avec >= 10 surcharges",
+        verifier("3e. Temoin a alleger (janus) : A ALLEGER avec >= 3 surcharges",
                  "A ALLEGER" in r_sur.stdout and "erreurs: 0" in r_sur.stdout
                  and "a alleger:" in r_sur.stdout
-                 and int(r_sur.stdout.split("a alleger:")[1].split("|")[0].strip()) >= 10,
+                 and int(r_sur.stdout.split("a alleger:")[1].split("|")[0].strip()) >= 3,
                  r_sur.stdout.strip()[:120])
 
         # 4. --case : existante CONFORME, inexistante NON CONFORME
@@ -153,9 +153,9 @@ def main():
 
         # 6. --surcharge : items signales sur le temoin non migre (>= 10)
         r_sur = run([PYTHON, OUTIL_PY, PARCOURS_SURCHARGE, "--surcharge", "--dry-run"])
-        verifier("6. --surcharge : items signales sur temoin non migre (>= 10)",
+        verifier("6. --surcharge : items signales sur temoin a alleger (>= 3)",
                  r_sur.returncode == 0
-                 and int(r_sur.stdout.split("a alleger:")[1].split("|")[0].strip()) >= 10,
+                 and int(r_sur.stdout.split("a alleger:")[1].split("|")[0].strip()) >= 3,
                  r_sur.stdout.strip()[:120])
 
         # 7. --references : refs resolvables (cerberus migre a des refs pattern/protocole)
@@ -164,7 +164,7 @@ def main():
                  r_ref.returncode == 0 and "CONFORME" in r_ref.stdout,
                  r_ref.stdout.strip()[:120])
 
-        # 8. Rapport wet : fichier markdown cree (sur le temoin non migre : A ALLEGER)
+        # 8. Rapport wet : fichier markdown cree (sur le temoin a alleger : A ALLEGER)
         rapport = os.path.join(tmp, "rapport-vc.md")
         r_wet = run([PYTHON, OUTIL_PY, PARCOURS_SURCHARGE, "--rapport", rapport])
         ok_rapport = os.path.isfile(rapport)

@@ -10,7 +10,7 @@ identite:
 
 protocole:
   nom: "protocole-tests"
-  version: "0.2.1"
+  version: "0.2.3"
   statut: "ebauche"
   cree: "2026-08-06"
 
@@ -173,6 +173,46 @@ REGLE IMMUABLE -- DELEGATION : SEUL MORPHEUS ECRIT ET EXECUTE LES TESTS.
   Morpheus dans la mission : test-XXX a creer/adapter + points a couvrir.
 - Morpheus donne son verdict uniquement via les tests executes et revient a
   l'agent qui l'a active (chaine bout-en-bout).
+
+### Garde-fous de non-regression
+
+REGLE IMMUABLE -- GARDE-FOU FIN DE PARCOURS : APRES TOUTE MODIFICATION D'UNE FIN
+DE PARCOURS, LE TEST-018 DOIT RESTER VERT.
+
+- Une fin de parcours = toute case de type `fin` (titre `FIN - Reactiver Cerberus`
+  ou `FIN - Activer X`) dans les 11 parcours agents (parcours-*.json).
+- Apres CHAQUE creation, edition ou suppression d'une fin de parcours (titre,
+  message, commande, suivant), executer :
+  `python3 cerveau-projet/agents/tools/tester/tests/test-018-fins-reactivation/test-018-fins-reactivation.py`
+- Le test-018 verifie : regle Pattern 13 (toute fin REACTIVER porte la condition
+  `activation directe par Cerberus` OU est le dernier maillon avec bilan
+  consolide), les 4 fins precisees (atlas c11, clio c12, minerve c10, themis
+  c13) et l'anti-regression du piege reactiver (aucune fin `Activer X` ne doit
+  contenir la commande reactiver).
+- Verdict attendu : 0 KO. Si KO, corriger la fin modifiee (condition manquante,
+  piege reactiver reintroduit) AVANT de valider la mission.
+- Ce garde-fou s'ajoute aux tests de navigation existants (test-013, test-016).
+
+REGLE IMMUABLE -- RE-SCAN COMPLET : APRES CHAQUE REFONTE D'OUTIL OU DE PARCOURS,
+RE-SCANNER TOUTE LA SUITE (TEST-009 A TEST-018) ET EXIGER 0 KO.
+
+- Une refonte d'outil = bump de version d'un .py/.sh/.md/spec, modification
+  d'interface (options, sous-commandes) ou de comportement.
+- Une refonte de parcours = migration (indices references + cases action),
+  ajout/suppression de cases ou de fins, changement de version du parcours.
+- Apres CHAQUE refonte, re-scanner TOUTE la suite formelle (test-009 a
+  test-018) :
+  `for d in cerveau-projet/agents/tools/tester/tests/test-0*/; do
+   python3 $d/$(basename $d).py || break; done`
+  (chaque test-0XX-nom/ contient test-0XX-nom.py a executer)
+- Verdict attendu : 0 KO partout. Si KO :
+  1. versions attendues obsoletes (lecon : verifier apres chaque bump
+     d'outil -- la version affichee par --version doit correspondre a celle
+     attendue par le test),
+  2. temoins de test obsoletes (lecon : verifier apres chaque migration de
+     parcours -- un temoin A ALLEGER peut devenir CONFORME).
+- Seul Morpheus adapte les tests obsoletes (REGLE IMMUABLE DELEGATION), et
+  ce AVANT de valider la mission.
 
 ## Checklist de validation
 

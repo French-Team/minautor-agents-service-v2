@@ -933,7 +933,7 @@ controle de l attraper.
 **Controle** : correctif garde-fou anti-pollution du rapport valider-case v1.0.1 + test-015 + test-009 maj.
 **Verdict** : VALIDE. 10 OK / 0 KO en controle croise independant.
 **Lecons** :
-1. Le defaut corrige : valider-case ecrivait son rapport par defaut dans le repertoire courant -- un agent lançant depuis la racine polluait le workspace (lecon reelle : rapport a la racine)
+1. Le defaut corrige : valider-case ecrivait son rapport par defaut dans le repertoire courant -- un agent lancant depuis la racine polluait le workspace (lecon reelle : rapport a la racine)
 2. Le garde-fou v1.0.1 : sans --rapport <fichier> explicite, AUCUN fichier n est cree ; --rapport ecrit exactement au chemin fourni ; --dry-run simule
 3. Tester le garde-fou depuis un DOSSIER VIDE different du projet (cwd) : preuve que rien ne tombe au mauvais endroit
 4. 5 fichiers a jour : py/sh/md/spec/test-009 (test-009 passe de 19 a 20 points, point 11b)
@@ -1152,3 +1152,608 @@ controle - la regle s'applique a la mission qui la materialise.
    Buffy (elle reactivait Cerberus en direct).
 3. La boucle est bouclee : la regle "Buffy passe par Janus" est maintenant
    testee par Janus lui-meme sur la carte qui la contient.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE ALLEGEMENT FICHE vulcain.md v0.5.0 (Janus)
+
+**Controle** : allegement pilote de la fiche vulcain.md (Buffy), 15 480 -> 10 902
+octets (-30%).
+**Verdict** : VALIDE -- 17/17 OK, 0 KO.
+**Lecons** :
+1. Verifier que l IDENTITE est intacte d abord (frontmatter type/appartient_a/
+   commun : lu par detecter-impacts et verifier-role-fichier) -- c est la
+   condition de non-regression d une fiche.
+2. Verifier la NON-PERTE des regles de fond : chaque REGLE ABSOLUE doit rester
+   presente (recherche de texte-cle), car c est l identite operationnelle de
+   l agent. Aller voir les doublons supprimes ne suffit pas : il faut prouver
+   que rien d essentiel n a disparu.
+3. La preuve finale = outils reels : ASCII, liens, navigation du parcours
+   (PARCOURS TERMINE). Un allegement qui casse la navigation est invalide meme
+   si la fiche est plus legere.
+4. Modele d allegement valide pour les 9 autres fiches : P0 -> ref index-tools,
+   doublons supprimes, historique comprime, regles conservees, version bumpee.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE COHERENCE PROFIL vulcain.md v0.5.1 (Janus)
+
+**Controle** : correction du profil YAML de vulcain.md (Buffy) : suppression
+des mentions "Tests rigoureux" / "Tests et validation des outils" incoherentes
+avec la REGLE DELEGATION DES TESTS.
+**Verdict** : VALIDE -- 14/14 OK, 0 KO.
+**Lecons** :
+1. Quand on verifie la disparition d une mention, SCOPER la verification au
+   bon perimetre : le frontmatter (lignes 1-53) pour le profil YAML, tandis
+   que l historique peut legitiment documenter l ancien -> nouveau. Un faux
+   negatif vient souvent d un perimetre trop large (ma 1re passe cherchait
+   dans tout le fichier et trouvait l historique).
+2. La coherence d une fiche avec les regles immuables est un critere de
+   controle : si une competence a ete transferee (tests -> Morpheus), chaque
+   mention de cette competence dans specialites/forces/limites doit etre
+   auditee. Ici 3 mentions etaient fausses : la specialite, la force ET la
+   limite -- les trois ont ete corrigees.
+3. Regles de non-regression identiques a l allegement : identite intacte,
+   regles conservees, ASCII, LF, liens, navigation PARCOURS TERMINE.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE FORCES/FAIBLESSES vulcain.md v0.5.2 (Janus)
+
+**Controle** : mise a jour du profil YAML de vulcain.md (Buffy) : force
+d'optimisation ajoutee, faiblesse contradictoire remplacee.
+**Verdict** : VALIDE -- 16/16 OK, 0 KO.
+**Lecons** :
+1. Verifier le COMPTAGE quand une liste grandit : ici 5 forces attendues (4
+   conservees + 1 ajoutee) -- un comptage par occurrence de '- "' est la
+   preuve que l'ajout n'a pas ecrase une force existante.
+2. Verifier le MIROIR force/faiblesse : la nouvelle force d'optimisation a son
+   pendant negatif en faiblesse ("trop de temps sur l'amelioration parfaite").
+   Un profil coherent a ses faiblesses derivees de ses forces, pas en
+   contradiction avec elles.
+3. Piege de mon propre script : signature de check() sans argument detail ->
+   TypeError. Les scripts de controle doivent etre testes avant usage (meme
+   lecon que pour les outils du cerveau).
+4. Non-regression identique : identite, specialites, ASCII, LF, liens,
+   navigation PARCOURS TERMINE.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE MIGRATION COMPLETE PROMETHEE (Janus)
+
+**Controle** : migration complete de Promethee par Buffy -- fiche v0.3.0
+(allegee + commande activer corrigee + Pattern 14) + parcours v0.2.0
+(18 actions, 15 refs).
+**Verdict** : VALIDE -- 23/23 OK, 0 KO.
+**Lecons** :
+1. Controle double artefact (fiche ET parcours) : chaque artefact a ses
+   criteres propres. La fiche : identite, version, Pattern 14, doublons,
+   commandes exactes, refs. Le parcours : structure migree (action/refs),
+   flux conserve (fins + branches), validations outils.
+2. Le flux conserve se verifie par la COMPARAISON avec le flux attendu :
+   5 fins + branches c1 = [creer, completer, autre] prouvent que la migration
+   n a rien reordonne. Verifier les branches/`suivant` d abord, avant les
+   validations de conformite.
+3. La commande activer corrigee (3 args -> 2 args apres session) est un point
+   de controle specifique : la fiche doit refleter la syntaxe reelle de l outil,
+   pas une syntaxe inventee. Un agent qui copie une mauvaise commande casse sa
+   reactivation.
+4. Modele de migration valide sur le 4e agent : athena, morpheus, cerberus,
+   promethee convergent (refs pattern-2/6/10/12, 0 PASSE PAR LE GENERATEUR,
+   regles 4/5/6 hors parcours, <= 3 indices). La generalisation est mecanique.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE MIGRATION COMPLETE MINERVE (Janus)
+
+**Controle** : migration complete de Minerve par Buffy -- fiche v0.3.0
+(allegee + Pattern 14) + parcours v0.2.0 (18 actions, 15 refs).
+**Verdict** : VALIDE -- 24/24 OK, 0 KO.
+**Lecons** :
+1. MINERVE = DERNIER MAILLON de la chaine Promethee -> Minerve -> Cerberus :
+   sa fin c10 est "FIN - Reactiver Cerberus (PHASE 9)", conforme Pattern 13.
+   Le controleur doit verifier la DIRECTION de la fin : un agent du milieu
+   active le suivant, le dernier reactiver Cerberus. Ici c'est correct.
+2. La commande reactiver etait DEJA correcte (3e argument obligatoire
+   present) : la lecon documentee precedemment a porte ses fruits -- on
+   verifie, on ne corrige pas inutilement. Un controleur doit distinguer
+   "a corriger" de "deja conforme, verifie seulement".
+3. Modele de migration valide sur le 5e agent : les parcours de production
+   (athena, promethee, minerve) sont STRUCTURELLEMENT IDENTIQUES (27 cases,
+   18 indice -> 18 action, 5 fins, memes branches c1). Seuls les outils
+   changent. La generalisation est un copier-coller de mapping + outils.
+4. Non-regression : 5 fins + branches c1 + navigation 7/7 + valider-case.
+## [LECON] 2026-08-09 -- CONTROLE CROISE CHAINE MODE BATCH generateurs-case v0.4.0 : VALIDE 21/21
+
+**Controle** : chaine complete (Vulcain -> Morpheus -> Janus) de la commande `convertir`
+(mode batch) de generateurs-case v0.4.0 + correction du test tester-generateurs-case.sh
+(4 echecs preexistants corriges + tests PT16-PT20 pour convertir).
+
+**Verdict** : VALIDE -- 21 controles OK / 0 KO.
+
+**Ce qui a ete verifie independamment** (aucune confiance dans les rapports) :
+1. Les 5 fichiers : py/sh/md/spec v0.4.0 alignes + entree catalogue v0.4.0
+2. La commande convertir presente (action_convertir) + options --refs/--seuil/
+   --version-parcours/--dry-run dans l aide
+3. ASCII 0 sur les 5 fichiers, LF pur (y compris le test), py_compile + bash -n OK
+4. Test complet : 28/28 VALIDE (aucun ECHEC)
+5. Lecons Vulcain + Morpheus documentees
+6. Test reel de convertir : dry-run OK, wet -> 0 indice restant + version bumpee
+
+**Lecons** :
+1. Verifier la conformite d execution : Vulcain a bien cree la commande, Morpheus a bien
+   corrige le test (regle DELEGATION DES TESTS respectee : Vulcain n a pas touche aux
+   tests), Janus a bien controle -- la chaine bout-en-bout a fonctionne sans coupure.
+2. Piege de parsing dans les controles : extraire une version d un .sh avec
+   '.replace("Version : ", "")' attrape le '#' du commentaire ('# Version : 0.4.0' ->
+   '# 0.4.0') : utiliser .split('Version : ')[1] pour prendre la valeur apres le prefixe.
+3. Le fichier tester-*.sh porte un nom de runner : valider-nommage le rejette mais c est
+   un bruit PREEXISTANT (convention propre test-NNN-* dans tests/, exclue par valider-
+   nommage ligne 87-88) -- ne pas le considerer comme une regression.
+## [LECON] 2026-08-09 -- CONTROLE CROISE RE-MIGRATION VULCAIN (OUTIL CONVERTIR) : VALIDE 16/16
+
+**Controle** : re-migration du parcours vulcain (v0.2.13 -> v0.3.0) realisee par Buffy avec
+la commande `convertir` de generateurs-case v0.4.0 (preuve du process, decision utilisateur
+apres le constat que les migrations precedentes avaient ete faites par scripts maison).
+
+**Verdict** : VALIDE -- 16 controles OK / 0 KO, verifies independamment (aucune confiance
+dans les rapports).
+
+**Ce qui a ete verifie** :
+1. Structure : v0.3.0, 32 cases, 17 actions / 0 indice / 2 controles c8/c14 / 7 fins
+2. Surcharge : 0 regle > 160, 0 case > 3 indices
+3. References : TOUTES resolvables (0 ERREUR sur --references) -- le bug c15
+   ('regle-perimetre-workspace' singulier) est corrige par le chemin complet
+   'cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md'
+4. valider-case complet : CONFORME 0 erreur 0 a alleger
+5. Navigation : 9/9 PARCOURS TERMINE (dont les 2 KO precedents, resolus par les bons
+   chemins NON|OUI des controles)
+6. Controles c8/c14 preserves (NON -> soi-meme, pattern de re-essai voulu)
+7. Flux c1 conserve (construire/modifier/autre), ASCII 0, LF pur
+8. Fiche vulcain.md Pattern 14 -> v0.3.0
+9. Non-regression : test generateurs-case 28/28 toujours VALIDE avec le parcours re-migre
+
+**Lecons** :
+1. La re-migration prouve que l'outil fait le travail : converti + rapport + validation
+   integree, avec un complement editorial (regles specifiques raccourcies, allegeage des
+   cases > 3 indices) -- c'est le process conforme desormais pour TOUS les parcours.
+2. Le backup de l'etat migre-script a servi de REFERENCE EDITORIALE (textes courts,
+   allegeages) : NE PAS le supprimer avant la fin de la migration.
+3. Les 2 navigations KO precedentes etaient des artefacts de chemins de test (NON des
+   controles rebouclant) : le parcours original naviguait deja correctement -- verifier
+   avec les bons chemins avant de conclure a un defaut du parcours.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE CHAINE generateurs-case-convertir (VERDICT VALIDE 21/21) (Janus)
+
+**Controle** : chaine Buffy (entree catalogue generateurs-case-convertir + fix regex generateur v0.2.2) -> Morpheus (test-005 26/26).
+
+**Verdict** : VALIDE - 21/21 OK, 0 KO.
+
+**Verifications independantes** :
+1. Catalogue : JSON valide, tri OK, v0.2.4, 115 entrees, entree generateurs-case-convertir avec modele 6 placeholders + 6 parametres (dry_run/verbose flags booleens), version 0.4.0.
+2. Generateur py+sh v0.2.2 : motif generique --[a-z0-9-]+ RETIRE de composer_commande (les 2 versions), remplace par le flag declare du parametre (re.escape(flag_param)).
+3. Generation reelle : T1 dry-run present/verbose absent, T2 vides retires + --seuil 160 defaut garde, T4 combinaison complete. Parite py/sh --version et generation identiques.
+4. Test-005 : 26 OK / 0 KO (les 3 KO prevus corriges : valeurs de version).
+
+**Lecons** :
+1. Le piege du regex generique : un motif --[a-z0-9-]+ peut capturer le flag d'un placeholder VOISIN deja genere (perte silencieuse). Toujours utiliser le flag declare du parametre.
+2. Distinguer dans un test : valeur attendue (a corriger lors d'un bump) vs reference historique dans les commentaires (a conserver) - le test-005 garde 1 reference v0.2.1 historique legitime.
+3. Verification independante = ne pas se fier aux rapports : j'ai re-genere moi-meme les commandes et relance le test.
+
+**Point de vigilance documente** : l'incident de troncature de corrections.md Buffy (ecriture ascii plantee apres ouverture 'w') - lecon Buffy ajoutee : construire tout le contenu en memoire PUIS ecrire, jamais 'w' ascii avant verification. 9 points medians U+00B7 preexistants corriges au passage (dette ASCII).
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE CARTE BUFFY v0.3.3 (VERDICT VALIDE 13/13) (Janus)
+
+**Controle** : correction de la carte Buffy (c10c utilise generateurs-case-convertir, commandes en dur retirees, version 0.3.3).
+
+**Verdict** : VALIDE - 13/13 OK, 0 KO.
+
+**Verifications independantes** :
+1. Parcours : version 0.3.3, JSON valide, ASCII 0, LF pur.
+2. c10c : 3 indices max, generateurs-case sans commande en dur (PASSE PAR LE GENERATEUR), generateurs-case-convertir present, pattern-2 conserve / pattern-12 retire (justifie : modification, pas creation).
+3. c10d : generateurs-ligne sans commande en dur.
+4. Transitions : c10b OUI->c10c, ligne->c10d, non->c11 intactes ; c10c/c10d->c37.
+5. valider-case CONFORME (0 erreur, 0 a alleger).
+6. fiche buffy.md v0.3.3 ASCII.
+7. Le catalogue contient generateurs-case-convertir et la generation reelle fonctionne (--dry-run present, flags vides retires).
+
+**Lecons** :
+1. Quand un outil devient generable (entree catalogue), les cartes doivent basculer de la commande en dur vers le format PASSE PAR LE GENERATEUR (nom + catalogue + chemin) - la carte Buffy est le premier exemple complet.
+2. L'ajout d'un outil peut pousser une case au-dela de 3 indices : verifier valider-case et alleger en retirant la ref la moins pertinente selon la nature de la case (creation vs modification).
+3. La verification des transitions (branches) est indispensable apres toute modification de zone de cases.
+
+## [LECON] 2026-08-09 -- CONTROLE CROISE GARDE-FOU RELECTURE (VERDICT VALIDE 14/14) (Janus)
+
+**Controle** : garde-fou relecture fiche mis en place par Cerberus (constat utilisateur : les agents relisent leurs corrections mais sautent la fiche).
+
+**Verdict** : VALIDE - 14/14 OK, 0 KO.
+
+**Verifications independantes** :
+1. Parcours-cerberus v0.3.1 : c6 et c10 portent l'indice regle GARDE-FOU RELECTURE (texte exact "RELIS TA FICHE PUIS TES CORRECTIONS"), 3 indices max respecte, outil activer-agent-principal conserve, valider-case CONFORME (0 erreur, 0 a alleger), ASCII 0, LF pur.
+2. Protocole-activation : 2 mentions du garde-fou (Etape 3 Relecture + section La mission), ASCII 0, LF pur.
+3. Fiche cerberus.md v0.3.1 (Pattern 14), ASCII 0.
+4. Lecon Cerberus documentee (incident + lecon technique generateurs-case editer qui REMPLACE les indices au lieu de les AJOUTER).
+
+**Lecons** :
+1. Le defaut de relecture etait dans l'EXECUTION, pas dans les regles : les cartes et le protocole exigeaient deja fiche + corrections, mais la RAISON d'activation ne le forcait pas. Le garde-fou dans la RAISON est la bonne correction.
+2. generateurs-case editer --indice-regle remplace les indices existants (piege : a verifier apres chaque editer).
+3. Appliquer le garde-fou soi-meme : j'ai relu MA fiche et MES corrections au demarrage de ce controle (application immediate de la regle).
+## [LECON] 2026-08-09 -- CONTROLE CROISE MIGRATION 4 PARCOURS (VERDICT VALIDE 32/32) (Janus)
+
+**Controle** : migration finale des parcours atlas/clio/janus/themis au format action + mise a jour test-005.
+**Verdict** : VALIDE (32/32 OK).
+
+**Lecons** :
+1. Les 4 parcours sont au format action (0 case type indice), JSON valide, versions a jour (atlas 0.2.0, clio 0.2.0, janus 0.3.0, themis 0.3.0), valider-case CONFORME 4/4, valider-cartes-decision CONFORME 4/4, navigations PARCOURS TERMINE, ASCII 0 + LF pur partout.
+2. test-005 : 26/26 OK - version atlas 0.1.10 -> 0.2.0, historique conserve, residu c30 documente.
+3. DECOUVERTE IMPORTANTE : les commandes en dur avec catalogue restantes dans clio/janus/themis (13/20/17) ne sont PAS un ecart de cette migration - c'est une dette GENERALISEE : TOUS les parcours sauf atlas (athena 14, buffy 27, cerberus 13, minerve 16, promethee 16, vulcain 9, morpheus 8) en ont. Atlas est le seul pilote strict nettoye (c30 documente). Le test-005 le documente.
+4. Lecon de methode : TOUJOURS verifier le niveau de reference avant de fixer un critere - mon premier controle (0 commande en dur attendu) etait faux, la norme reelle est "atlas = pilote strict, dette ailleurs". Comparer a l'existant AVANT de conclure KO.
+5. Observation hors perimetre : valider-cartes-decision.py ligne 22 mentionne "spec v0.2.9" alors que la spec est en v0.5.0 (mention stale preexistante dans un docstring) - a corriger plus tard.
+6. Prochaine piste logique (dette generalisee) : generaliser le PASSE PAR LE GENERATEUR aux commandes en dur restantes des 10 parcours (au lieu du pilote atlas seul) - a plannifier.
+
+**Fichiers controles** : 4 parcours + 2 fiches (janus.md, themis.md) + test-005 + corrections morpheus/buffy.
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE valider-cartes-decision v0.3.1 (VERDICT VALIDE 15/15) (Janus)
+
+**Mission** : second controle de la correction valider-cartes-decision v0.3.1 (type action ajoute,
+impact oublie de la migration des 11 parcours).
+
+**Resultats** : 15/15 OK. Le controle a detecte 1 point reel que la chaine avait manque :
+l'en-tete docstring du .py (Version : 0.3.0, ligne 30) n'avait pas ete mis a jour alors que
+VERSION = 0.3.1 l'etait - correction immediate.
+
+**Lecons** :
+1. Une version d'outil apparait a PLUSIEURS endroits d'un meme fichier : VERSION (code) ET
+   en-tete docstring (documentation) - les verifier tous les deux
+2. Dans un controle de version, distinguer les mentions ACTIVES des lignes d'HISTORIQUE
+   (tableau | 0.x.y | date |) qui sont legitimes - un critere naif 'aucune mention 0.3.0'
+   cree un faux KO
+3. La chaine Cerberus -> Vulcain -> Morpheus -> Janus a bien fonctionne : correction,
+   test formel (24/24), non-regression (11/11 + test-005 26/26), puis controle croise
+   independant (15/15) - le second controle reste la derniere ligne de defense
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE MENTIONS STALE (VERDICT VALIDE 13/13) (Janus)
+
+**Mission** : second controle de la correction des 2 mentions stale de version dans les .md
+des generateurs (generateurs-case.md ligne 342 spec v0.2.5, generateurs-carte.md ligne 195
+spec v0.2.13 -> toutes deux v0.5.0 + types question/indice/controle/fin/action).
+
+**Resultats** : 13/13 OK. Le controle a detecte 1 faux KO initial : la reference d'introduction
+Pattern 7 (spec-guider-parcours v0.2.13) dans generateurs-carte.md etait CENSEE sur 2 lignes
+(markdown wrap) -> la recherche mono-ligne ne la trouvait pas. Apres normalisation des fins de
+ligne, la reference est bien intacte (NON touchee par la correction).
+
+**Lecons** :
+1. Dans les .md, une reference peut etre coupee sur 2 lignes par le wrap markdown -
+   pour verifier la NON-REGRESSION d'une reference, normaliser les fins de ligne
+   (replace '\n' par ' ') avant la recherche, sinon faux KO
+2. La distinction references d'INTRODUCTION (legitimes, la spec les cite avec leur version)
+   vs VERSION COURANTE du format (stale si obsolete) est la cle du scan des mentions de
+   versions - Vulcain a bien conserve les unes et corrige les autres
+3. La chaine Cerberus (scan) -> Vulcain (correction ciblee 2 lignes) -> Janus (controle 13/13)
+   a fonctionne pour une correction DOCUMENTAIRE pure - le second controle reste utile meme
+   sans changement de code
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE 15 LIENS CASSES (VERDICT VALIDE 10/10) (Janus)
+
+**Mission** : second controle de la correction des 15 liens casses preexistants (observation
+Themis, evaluer-coherence 50/100 -> 75/100). Buffy a corrige 10 fichiers (chemins relatifs
+inexacts vers des cibles existantes).
+
+**Resultats** : 10/10 OK. Le controle a detecte 1 point reel manque par Buffy : la ligne 271
+de fiche-agent-template.md contenait un chemin `../tools/guider/guider-parcours/` en BACKTICKS
+(dans un tableau) - pas un lien markdown (donc invisible pour evaluer-coherence) mais un chemin
+relatif quand meme inexact depuis agents/ -> corrige par coherence.
+
+**Lecons** :
+1. Un chemin entre BACKTICKS n'est pas detecte par evaluer-coherence (ni par valider-liens) :
+   c'est une mention de chemin, pas un lien markdown - mais s'il est inexact il reste un
+   faux-fuyant a corriger pour la coherence globale (il ne casse aucun outil)
+2. Les fichiers de documentation d'exemples (valider-liens.md, corriger-liens.md,
+   convention-liens.md) utilisent des cibles FICTIVES differentes (fichier1.md, ancien.md,
+   chemin/fichier.md) - un controle qui verifie leur integrite doit chercher LEUR motif
+   caracteristique, pas un motif generique commun
+3. La preuve d'integrite la plus solide : git status vide sur les fichiers non concernes
+   (aucune modification) - plus fiable qu'un contenu attendu
+4. La correction de liens relatifs doit verifier TOUTES les formes : liens markdown
+   les liens markdown (texte entre crochets suivi d une cible entre parentheses) ET les mentions de chemins en backticks
+
+5. PIEGE markdown : un exemple de syntaxe de lien ecrit litteralement DANS une lecon
+   (texte entre crochets suivi d une cible entre parentheses) est interprete par
+   evaluer-coherence comme un VRAI lien et casse la coherence. Les backticks INLINE
+   ne protegent pas : la regex ne saute que les blocs fenced (trois backticks). Pour
+   montrer un exemple de syntaxe, le DECRIRE en toutes lettres ou le mettre dans un
+   bloc fenced - jamais en litteral inline
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE GARDE-FOU FORMAT LECONS (VERDICT VALIDE 11/11) (Janus)
+
+**Mission** : second controle du garde-fou format des lecons ajoute par Buffy (piege markdown :
+un exemple litteral de syntaxe de lien dans une lecon cassait evaluer-coherence).
+
+**Resultats** : 11/11 OK. Le garde-fou est present dans les 2 fichiers (protocole-auto-correction
++ corrections-template), mentionne le piege et la methode de protection (bloc fenced), et ne cree
+lui-meme AUCUN motif de lien litteral (verifie par regex + evaluer-coherence 0 lien casse).
+
+**Lecons** :
+1. Le test le plus important d'un garde-fou contre un motif : verifier que le garde-fou
+   LUI-MEME ne produit pas le motif qu'il interdit (regex sur les 2 fichiers modifies)
+2. Documenter une syntaxe sans la produire est une regle meta : elle s'applique au texte de
+   la regle elle-meme - Buffy l'a bien appliquee (decrit en toutes lettres, pas de crochets
+   suivis de parentheses)
+3. La chaine lecon (Janus) -> garde-fou (Buffy) -> controle (Janus) boucle l'apprentissage :
+   un piege decouvert devient une regle durable documentee dans le protocole
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE 2 PROTOCOLES DEDIES A BUFFY (VERDICT VALIDE 21/21) (Janus)
+
+**Mission** : second controle des 2 protocoles dedies a la verification du
+travail de Buffy, crees par Buffy : protocole-controle-buffy (controle croise
+de Janus, 10 etapes) et protocole-audit-buffy (audit de conformite de Themis,
+9 etapes), + index-regles-general (2 entrees) + fiches janus.md/themis.md
+(liens Protocoles applicables) + lecon Buffy.
+
+**Resultats** : 21/21 OK. Structure conforme (frontmatter + 7 sections
+standard), liens relatifs corrects (pattern protocole-creation-combos : 3
+niveaux pour conventions/ et tools/, 2 niveaux pour protocoles voisins),
+ASCII 0 + LF pur, valider-tableaux CONFORME, evaluer-coherence 0 lien casse,
+aucun motif markdown parasite dans les 2 protocoles, fichiers d exemples de
+doc intacts, perimetre exact (2 dossiers + 4 fichiers).
+
+**Lecons** :
+1. Un protocole dedie par agent est la bonne reponse quand les verifications
+   dependent de la NATURE du travail : outils (Vulcain) vs documents du
+   cerveau (Buffy) - le combo-controle-outil reste pour Vulcain, le nouveau
+   protocole-controle-buffy couvre liens, formats, conventions, lecons,
+   parcours et fiches
+2. Le pattern des chemins relatifs d un protocole dans regles-immuables/
+   general/protocole-XXX/ est maintenant capitalise : 3 niveaux (2 points x3)
+   pour conventions/ et tools/, 2 niveaux pour les protocoles voisins - ce
+   pattern devrait servir de reference pour TOUTE future creation de protocole
+3. La separation des responsabilites est nette : Janus controle (VALIDE/A
+   REVOIR/REJETE) via protocole-controle-buffy, Themis audite (CONFORME/NON
+   CONFORME) via protocole-audit-buffy - les 2 protocoles se referencent
+   mutuellement dans leurs Liens
+4. Le piege markdown (exemple de syntaxe de lien litteral) est maintenant
+   documente DANS les 2 protocoles eux-memes, ce qui les rend conformes a la
+   regle qu ils enoncent - une lecon technique peut devenir un piege du
+   protocole
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE BRANCHEMENT PROTOCOLE v0.3.1 (VERDICT VALIDE 15/15) (Janus)
+
+**Mission** : second controle du branchement du protocole-controle-buffy dans
+le parcours-janus v0.3.1 (Buffy) - PREMIERE APPLICATION REELLE du
+protocole-controle-buffy (etapes E1-E10) comme cas de test de la chaine
+complete Buffy -> Janus -> Themis.
+
+**Resultats** : 15/15 OK (apres correction du critere E2). Les 3 modifications
+sont presentes (c11/c18 : indice fichier protocole-controle-buffy ; c8 : regle
+des points E1-E10 ; version 0.3.1), JSON valide (32 cases intactes), ASCII 0 +
+LF pur, valider-cartes-decision --tous 11/11 CONFORME, navigation
+guider-parcours OK, evaluer-coherence 0 lien casse, lecon Buffy sans motif
+parasite.
+
+**Lecons** :
+1. LE PROTOCOLE-CONTROLE-BUFFY EST OPERATIONNEL : je l ai applique en reel
+   (E1 fichiers modifies, E2 integrite, E3 ASCII/LF/JSON, E4 modifications
+   presentes, E5 structure + lecons, E7 lien resolvable, E9 validations, E10
+   verdict) - la reference de ma case c11 m a conduit directement au protocole
+2. PIEGE E2 : un controle d integrite qui exige git status VIDE sur des
+   fichiers modifies par une mission PRECEDENTE produit un faux negatif. Le
+   bon critere : la mission actuelle n a modifie QUE ses fichiers attendus +
+   les fichiers de la mission precedente portent toujours leurs marqueurs
+   valides (preuve de non-regression)
+3. LA CHAINE COMPLETE EST OPERATIONNELLE : Buffy branche -> Janus controle en
+   appliquant protocole-controle-buffy -> Janus active Themis (case c31) ->
+   Themis audite avec protocole-audit-buffy (branche audit-agent) -> Themis
+   reactive Janus avec son rapport (c32) -> Janus reactive Cerberus
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE CORRECTION REACTIVER/ACTIVER (VERDICT VALIDE 19/19) (Janus)
+
+**Mission** : second controle de la correction par Buffy des 2 cases fausses
+(atlas c31b, themis c25b) qui disaient REACTIVER L AGENT PRECEDENT avec la
+commande reactiver (qui ramene TOUJOURS a Cerberus), + mise a jour du
+protocole-activation avec le Pattern 13 (3 modes).
+
+**Resultats** : 19/19 OK. Les 2 cases sont corrigees (titre ACTIVER + commande
+activer-agent-principal.py activer session-llm-1 <agent_precedent> <raison>),
+scan des 11 parcours : 0 case fausse restante, protocole-activation avec les
+3 modes (DIRECT / CHAINE / DERNIER MAILLON) + regle reactiver = toujours
+Cerberus documentee, JSON valides, cartes 11/11, ASCII + LF, lecon Buffy au
+format, evaluer-coherence 0 lien casse.
+
+**Lecons** :
+1. LA CORRECTION EST COMPLETE ET CHIRURGICALE : sur les 37 fins mentionnant
+   Cerberus, les 2 seules fausses sont corrigees - le scan confirme 0 reste
+   dans les 11 parcours
+2. LE COUPLE TEXTE + COMMANDE doit etre verifie ensemble dans une case :
+   le texte (ACTIVER l agent precedent) et la commande (activer <agent>)
+   sont maintenant coherents - c est la lecon de l incident Themis/Morpheus
+3. LE PROTOCOLE-ACTIVATION porte maintenant la regle de decision complete :
+   QUI m a active ? (Cerberus -> reactiver ; agent -> activer ; dernier
+   maillon -> reactiver avec bilan) - la regle est propagee de la spec vers
+   la source de verite de l activation
+4. La boucle est fermee : audit Themis (cause racine) -> correction Buffy ->
+   controle Janus (19/19) - le piege reactiver est elimine des cartes
+## [LECON] 2026-08-10 -- CONTROLE CROISE RECOMMANDATIONS MOYENNES (VERDICT VALIDE 27/27) (Janus)
+
+**Controle** : mission Buffy -- application des recommandations MOYENNE de l'audit reactiver/activer (4 fins de parcours + fiche morpheus + fiche atlas).
+
+**Verdict** : VALIDE (27/27).
+
+**Lecons** :
+1. **Le piege reactiver avait un 3e porteur invisible** : la fiche morpheus.md (ligne 165) donnait la commande `reactiver` pour " revenir a Vulcain " -- l'audit Themis ne scannant que les parcours JSON, il ne l'avait pas detecte. Le scan GLOBAL (fiches + parcours + protocoles) est indispensable pour les classes de bugs transverses.
+2. **La regle de decision " activation directe vs maillon de chaine " est desormais complete** : 4 fins REACTIVER-CERBERUS precisees (atlas c11, clio c12, minerve c10, themis c13) + morpheus c14 + janus c10 (deja correctes) = les 6 fins concernees portent leur condition.
+3. **Coherence fiche/parcours** : la fiche atlas.md etait la seule avec un FLUX contradictoire (" TOUJOURS reactiver Cerberus ") face a sa ligne Pattern 8 -- corrigee vers Pattern 13. A surveiller dans les futures revisions : les fiches doivent toujours refleter la carte.
+4. **Verification croisee** : JSON valides (v0.2.0/v0.3.0), cartes 11/11, evaluer-coherence 0 lien casse, ASCII 0 + LF pur sur les 6 fichiers, lecon Buffy presente.
+## [LECON] 2026-08-10 -- CONTROLE CROISE TEST-018-FINS-REACTIVATION (VERDICT VALIDE 26/26) (Janus)
+
+**Controle** : second controle croise du test-018-fins-reactivation cree par Morpheus (verification croisee independante) + coherence avec le protocole-tests v0.2.2.
+
+**Verdict** : VALIDE (26/26).
+
+**Lecons** :
+1. **Le test-018 est un vrai test de non-regression transverse** : il scanne les 11 parcours, verifie la regle Pattern 13 (toute fin REACTIVER porte la condition 'activation directe par Cerberus' OU est le dernier maillon avec bilan consolide), les 4 fins precisees (atlas c11, clio c12, minerve c10, themis c13) et l'anti-regression du piege reactiver (aucune fin Activer X avec la commande reactiver).
+2. **La recoupe independante confirme l'exactitude** : les 6 fins REACTIVER reelles (atlas, clio, janus, minerve, morpheus, themis) correspondent exactement aux attendues par le test -- la liste du test n'est pas une invention, elle reflete l'etat reel des 11 parcours.
+3. **Le protocole-tests v0.2.2 reference le test-018** : la regle GARDE-FOU FIN DE PARCOURS est coherente avec le test (meme commande, meme perimetre) -- le couple test + protocole forme un verrou de non-regression complet.
+4. **Les KO preexistants (test-013, test-016) sont hors perimetre** : ce sont des divergences de version (parcours avances, tests non re-adaptes), connues et documentees -- a traiter par Morpheus (seul habilite a toucher aux tests).
+## [LECON] 2026-08-10 -- CONTROLE CROISE PROTOCOLE-TESTS v0.2.3 (VERDICT VALIDE 23/23) (Janus)
+
+**Controle** : second controle croise du protocole-tests v0.2.3 (regle RE-SCAN COMPLET ajoutee par Morpheus apres le garde-fou FIN DE PARCOURS de la v0.2.2).
+
+**Verdict** : VALIDE (23/23).
+
+**Lecons** :
+1. **Le protocole-tests est un verrou de non-regression en 2 volets complementaires et bien ordonnes** : GARDE-FOU FIN DE PARCOURS (v0.2.2, cible : test-018, declencheur : modification de fin) puis RE-SCAN COMPLET (v0.2.3, cible : toute la suite test-009 a test-018, declencheur : refonte d outil ou de parcours). Les deux sont des REGLES IMMUABLES distinctes et sans doublon.
+2. **La regle RE-SCAN COMPLET est operationnelle** : elle documente le declencheur, la commande de scan en boucle, le verdict 0 KO, les 2 lecons types (versions attendues apres bump, temoins apres migration) et rappelle la delegation Morpheus.
+3. **La coherence entre les 2 garde-fous est validee** : le RE-SCAN COMPLET est place apres le FIN DE PARCOURS (les sections restent distinctes, la fin de la premiere regle sert de point de transition) -- pas de doublon ni de contradiction.
+4. **La suite test-009 a test-018 est 100% verte** (0 KO partout) au moment du controle : la regle est en phase avec l etat reel de la suite.
+
+## [NOTES] Protocole sante-fichiers-agents -- premier etat des lieux (2026-08-10, Janus)
+
+**Contexte** : premiere execution du protocole-sante-fichiers-agents (cree par Buffy,
+branche en c33 du parcours-janus v0.3.2). Etablissement de l'etat de sante des
+fichiers des 11 agents (fiche + parcours + corrections).
+
+**E1 Inventaire** : 11/11 OK (les 33 fichiers existent).
+
+**E2 Coherence fiche/parcours** : 10/11 A JOUR. 1 ecart :
+- janus : la fiche cite PARCOURS v0.3.0, le parcours reel est v0.3.2
+  (decalage deja present avant le bump c33 : 0.3.0 vs 0.3.1).
+
+**E3 Format des fiches** : 11/11 frontmatter OK. Sections standard presentes
+sur toutes les fiches (minerve et promethee plus compactes : 7 sections).
+- cerberus : conserve les sections anciennes 'Le cycle fondamental' et
+  'Agents disponibles' (philosophie pre-migration).
+
+**E4 Normes (ASCII + LF)** : 10/11 OK. 1 ecart :
+- promethee : corrections.md contient 8 non-ASCII (separateurs '\u00b7' lignes
+  177-178 et 209 des lecons historiques).
+
+**E5 Regles a jour (Pattern 13 -- la fin suit SA carte)** : 8/11 OK. 3 ecarts :
+- athena : aucune mention de la fin-suit-SA-carte NI de reactiver (regles a jour ?)
+- cerberus : mentionne 'reactiver' mais pas 'sa carte' (ancienne philosophie :
+  reactiver Cerberus systematique)
+- morpheus : le concept 'sa carte' est present mais jamais labellise Pattern 13
+
+**E6 Verdict global** : ETAT MOYEN -- 5 ecarts a traiter (2 regles, 1 fiche,
+1 fichier normes, 1 migration).
+
+**Actions recommandees** :
+1. [regle] Mettre a jour la fiche janus : PARCOURS v0.3.0 -> v0.3.2
+2. [normes] Corriger les 8 non-ASCII de promethee/corrections.md (separateurs)
+3. [regle] Ajouter le Pattern 13 dans la fiche athena (aucune mention)
+4. [fiche] Relire la fiche cerberus (sections anciennes + philosophie reactiver)
+5. [migration] Terminer la migration des 6 parcours v0.2.0 non migres
+   (athena, atlas, clio, minerve, morpheus, promethee) vers le format v0.3.x
+   (indices references + cases action) -- la cause racine de la derive
+
+**Lecon Janus** : le protocole sante est operationnel et a confirme la derive
+silencieuse des fichiers agents. La cause racine n'est pas les fiches mais la
+migration incomplete des parcours (6/11 encore en v0.2.0). A re-executer apres
+chaque migration pour verifier l'alignement fiche/parcours.
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE 4 CORRECTIONS PROTOCOLE SANTE (VERDICT VALIDE 21/21) (Janus)
+
+**Controle** : second controle croise des 4 corrections d'ecarts legers
+appliquees par Buffy apres le premier etat des lieux sante-fichiers-agents.
+
+**Verifications (21/21 VALIDE)** :
+- C1 (janus.md) : PARCOURS (v0.3.2) aligne sur la version reelle du parcours,
+  aucun residu v0.3.0/v0.3.1.
+- C2 (promethee/corrections.md) : 0 caractere U+00B7, 0 non-ASCII total,
+  separateurs "-" en place.
+- C3 (athena.md) : section "Pour terminer ma mission (la fin suit SA carte)"
+  presente, conforme a sa fin reelle (activer Promethee, pas reactiver
+  Cerberus), REGLE CHAIN PROMETHEE conservee.
+- C4 (cerberus.md) : relecture alignee Pattern 13 -- cycle fondamental
+  modernise (CERBERUS -> AGENT_1 -> ... -> CERBERUS), aucun residu de
+  l'ancien schema (CERBERUS -> JANUS -> CLIO), ligne Clio corrigee, frontmatter
+  cycle.sortie + specialites alignes, version 0.2.1, entree Historique.
+- C5 : ASCII 0 + LF pur sur les 4 fichiers, valider-cartes-decision 11/11.
+
+**Lecons** :
+- La relecture d'une fiche = verifier 3 plans : le cycle (schema), les
+  connexions (lignes du tableau agents) et l'historique (version + entree).
+- Le modele "Pour terminer ma mission (la fin suit SA carte)" est le standard
+  des fiches migrees : a verifier a chaque controle que la fin declaree
+  correspond a la fin reelle de la carte de l'agent.
+- Les 4 ecarts du premier etat des lieux sont tous corriges : le protocole
+  sante boucle (detecter -> corriger -> controler) fonctionne en reel.
+
+**Outils utilises** : lire-fichier, valider-conformite-ascii, activer-agent-principal.
+
+## [LECON] 2026-08-10 -- RE-AUDIT SANTE-FICHIERS-AGENTS (VERDICT A REVOIR LEGER, 4/4 ecarts resorbes) (Janus)
+
+**Audit** : re-execution du protocole sante-fichiers-agents apres les 4
+corrections de Buffy (controlees 21/21).
+
+**Resultats** :
+- E1 inventaire 11/11, E2 coherence fiche/parcours 11/11 A JOUR (janus v0.3.2),
+  E3 format 11/11 frontmatter, E4 normes 11/11 ASCII 0 + LF pur, E5 Pattern 13
+  10/11 (morpheus non formule explicitement).
+- Les 4 ecarts legers du premier etat des lieux sont RESORBES : janus v0.3.2,
+  promethee 0 non-ASCII, athena Pattern 13, cerberus relecture v0.2.1.
+
+**Lecons** :
+- La boucle detecter -> corriger -> controler du protocole sante fonctionne :
+  le re-audit confirme la resorption des 4 ecarts sans regression.
+- Nouveau point mineur detecte au re-audit : la fiche morpheus contient le
+  concept (REGLE DELEGATION, retour a Vulcain) mais ne formule pas le Pattern
+  13 explicitement -- a corriger au prochain passage (hors perimetre des 4
+  corrections demandees par l'utilisateur).
+- Le point majeur reste la migration des 6 parcours v0.2.0 (cause racine de la
+  derive) : a traiter comme prochaine etape, un agent a la fois.
+- Piege du re-audit : verifier les versions citees avec la forme exacte
+  (vX.Y.Z) car les regex partielles (vX.Y) creent des faux negatifs.
+
+**Outils utilises** : lire-fichier, lister-fichiers, valider-conformite-ascii,
+activer-agent-principal.
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE PATTERN 13 FICHE MORPHEUS (VERDICT VALIDE 19/19) (Janus)
+
+**Controle** : second controle croise de la formulation explicite du Pattern 13
+dans la fiche morpheus (point mineur du re-audit sante), ajoutee par Buffy.
+
+**Verifications (19/19 VALIDE)** :
+- C1 : sous-section "Pour terminer ma mission (la fin suit SA carte)" presente,
+  placee dans la section UTILISATION DE activer-agent-principal, apres le bloc
+  "Pour revenir a Vulcain", avant "## Structure des tests".
+- C2 : formulation conforme au modele (Pattern 8) : activation directe ->
+  reactiver Cerberus ; maillon de chaine -> activer le suivant selon SA carte ;
+  seul le DERNIER maillon reactiver Cerberus.
+- C3 : alignement avec la fin reelle de la carte morpheus : c10 FIN - Activer
+  Janus, c14 FIN - Reactiver Cerberus, retour VULCAIN (MODE CHAINE) -- tous
+  cites et conformes aux fins reelles du parcours.
+- C4 : REGLE DELEGATION (VULCAIN -> MORPHEUS -> VULCAIN) conservee intacte,
+  regle "Pour revenir a Vulcain" unique (pas de doublon), MODE CHAINE conserve.
+- C5 : ASCII 0 + LF pur, valider-cartes-decision 11/11.
+
+**Lecons** :
+- La formulation Pattern 13 d'une fiche doit citer les fins REELLES de la
+  carte (identifiants c10/c14 verifies dans le parcours) : le controle croise
+  croise fiche <-> parcours, pas seulement la presence de la phrase.
+- Une mission de formulation ne doit JAMAIS dupliquer ni contredire les regles
+  existantes (REGLE DELEGATION) : verifier l'unicite des blocs.
+- Le point mineur du re-audit sante est resorbe : E5 morpheus passe OUI.
+
+**Outils utilises** : lire-fichier, valider-conformite-ascii, activer-agent-principal.
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE PROTOCOLE SANTE v0.1.1 (VERDICT VALIDE 20/20) (Janus)
+
+**Controle** : second controle croise du renforcement de l etape E5 du
+protocole-sante-fichiers-agents (Pattern 13 verifie par croisement
+fiche/parcours) par Buffy.
+
+**Verifications (20/20 VALIDE)** :
+- C1 : version 0.1.1, tableau E1-E7 intact (7 lignes, ordonnees, aucun bloc
+  parasite entre les lignes).
+- C2 : E5 du tableau enrichi (CROISEMENT fiche/parcours, identifiants cX,
+  outil parcours-<agent>.json).
+- C3 : section "Detail E5" placee APRES le tableau (pas dans), sous-criteres
+  E5a (mention textuelle), E5b (croisement : chaque fin cX doit etre une case
+  de type fin dans le parcours, mention sans identifiant = INSUFFISANTE),
+  E5c (conformite du sens : direct -> reactiver Cerberus, maillon -> suivant,
+  dernier maillon -> Cerberus).
+- C4 : la lecon du re-audit est referencee (morpheus c10/c14).
+- C5 : ASCII 0 + LF pur, RVAV/Exemples/Notes intacts.
+
+**Lecons** :
+- Piege de controle : un comptage de lignes de tableau doit exclure la ligne
+  d en-tete ("| Etape | Action |...") qui commence par "| E" -- sinon faux
+  negatif. Verifier avec une regex ciblee ^\| E[0-9] \|.
+- Le protocole sante verifie desormais le Pattern 13 par CROISEMENT : la fiche
+  doit citer des identifiants cX reels du parcours (type fin + titre), ce qui
+  rend le controle resistant aux formulations textuelles vagues.
+- La lecon du re-audit est capitalisee dans le protocole : le prochain etat
+  des lieux appliquera E5b automatiquement.
+
+**Outils utilises** : lire-fichier, valider-conformite-ascii, activer-agent-principal.

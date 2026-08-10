@@ -17,8 +17,8 @@
       ],
       "indices": [
         {
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile.",
-          "type": "regle"
+          "type": "regle",
+          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire..."
         }
       ],
       "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
@@ -28,8 +28,8 @@
     "c0b": {
       "indices": [
         {
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais.",
-          "type": "regle"
+          "type": "regle",
+          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer (regle RELECTURE)."
         },
         {
           "catalogue": "lire-fichier",
@@ -48,13 +48,13 @@
       ],
       "suivant": "c0c",
       "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "indice"
+      "type": "action"
     },
     "c0c": {
       "indices": [
         {
-          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-6"
         },
         {
           "catalogue": "lire-activite-recente",
@@ -71,7 +71,7 @@
       ],
       "suivant": "c1",
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "indice"
+      "type": "action"
     },
     "c1": {
       "branches": [
@@ -108,7 +108,7 @@
       ],
       "suivant": "c11",
       "titre": "Verifier le systeme (modification)",
-      "type": "indice"
+      "type": "action"
     },
     "c11": {
       "indices": [
@@ -122,7 +122,7 @@
       ],
       "suivant": "c12",
       "titre": "Lire l'outil existant",
-      "type": "indice"
+      "type": "action"
     },
     "c12": {
       "indices": [
@@ -131,44 +131,23 @@
           "type": "ref"
         },
         {
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais.",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "texte": "CREATION LIMITEE AUX OUTILS (ROLE VULCAIN) : je cree des outils dans tools/ avec les 4 fichiers de l outil (py, sh, md, spec) - le fichier de test test-XXX est ECRIT PAR MORPHEUS, jamais par moi, uniquement sur mission de Cerberus. JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin).",
-          "type": "regle"
-        },
-        {
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme).",
-          "type": "regle"
-        },
-        {
-          "catalogue": "editer-fichier",
-          "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <fichier> <ancien> <nouveau>",
-          "nom": "editer-fichier",
-          "type": "outil"
-        },
-        {
-          "commande": "diff <(python3 <outil>.py --version | tr -d '\r') <(bash <outil>.sh --version | tr -d '\r')",
-          "nom": "verifier-parite-version",
-          "raison": "PARITE OBLIGATOIRE : verifier que le .py et le .sh affichent la meme version (lecon Morpheus T5) - si divergence, aligner le .sh (VERSION/STATUT) avant de continuer",
-          "type": "outil"
-        },
-        {
-          "texte": "REGLE DES 5 FICHIERS (lecon Vulcain, controle Janus) : apres TOUTE modification de version d un outil, verifier l alignement VERSION/STATUT dans les 5 fichiers du dossier outil (py, sh, md, spec + catalogue/index associe si present). DISTINGUER les versions propres : catalogue-commandes.json a SA version top-level, index-tools.md a la version de l index - pas celle de l outil.",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-12"
         }
       ],
       "suivant": "c13",
       "titre": "Modifier l'outil",
-      "type": "indice"
+      "type": "action"
     },
     "c13": {
       "indices": [
         {
-          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d'executer combos-moteur (ex: Je lance le combo combo-corriger-ascii : cerveau-projet/combos/combo-corriger-ascii/definition-combo.json).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-3"
         },
         {
           "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (correction des accents + validation ASCII).",
@@ -180,22 +159,17 @@
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json",
           "nom": "combos-moteur",
           "type": "outil"
-        },
-        {
-          "chemin": "cerveau-projet/combos/combo-corriger-ascii/definition-combo.json",
-          "raison": "Definition du combo corriger-ascii (Pattern 3) : corriger-accents --all --recursive -> valider-conformite-ascii",
-          "type": "fichier"
         }
       ],
       "suivant": "c13b",
       "titre": "Lancer le combo corriger-ascii",
-      "type": "indice"
+      "type": "action"
     },
     "c13b": {
       "indices": [
         {
-          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail AVANT d activer le maillon suivant de la chaine.",
-          "type": "regle"
+          "type": "regle",
+          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
         },
         {
           "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
@@ -205,7 +179,7 @@
       ],
       "suivant": "c14",
       "titre": "RVAV avant activation",
-      "type": "indice"
+      "type": "action"
     },
     "c14": {
       "branches": [
@@ -231,8 +205,8 @@
     "c15": {
       "indices": [
         {
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md"
         }
       ],
       "message": "CHAINES BOUT-EN-BOUT : outil modifie et valide (RVAV), MORPHEUS ACTIVE pour les tests. La chaine continue : Morpheus teste puis ACTIVE Janus (controle) qui REACTIVE Cerberus avec le bilan consolide.",
@@ -266,38 +240,27 @@
     "c16b": {
       "indices": [
         {
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission et mises a jour (ma fiche, mes corrections, mes lecons - dossier de l agent ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case -> je signale a Cerberus (case Signaler le besoin).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire).",
           "type": "regle"
-        },
-        {
-          "chemin": "cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py",
-          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py <fichier-modifie>",
-          "nom": "detecter-impacts",
-          "type": "outil"
-        },
-        {
-          "chemin": "cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
-          "type": "fichier"
         }
       ],
       "suivant": "c16c",
       "titre": "Documentation / Mise a jour de ma fiche",
-      "type": "indice"
+      "type": "action"
     },
     "c16c": {
       "indices": [
         {
-          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail AVANT d activer le maillon suivant.",
-          "type": "regle"
+          "type": "regle",
+          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
         },
         {
           "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
@@ -307,7 +270,7 @@
       ],
       "suivant": "c16d",
       "titre": "RVAV avant reactiver Cerberus",
-      "type": "indice"
+      "type": "action"
     },
     "c16d": {
       "message": "Documentation mise a jour et validee (RVAV + detecter-impacts). Je REACTIVE Cerberus avec le bilan consolide : commande reactiver session-llm-1 <raison> <agent_precedent> (le 3e argument est obligatoire).",
@@ -330,7 +293,7 @@
       ],
       "suivant": "c19",
       "titre": "Activer l'agent habilite",
-      "type": "indice"
+      "type": "action"
     },
     "c18": {
       "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Pour un OUTIL DURABLE : je le cree MOI-MEME (je suis Vulcain, protocole 5 fichiers, case Construire l outil) - pas besoin de signaler.",
@@ -357,31 +320,21 @@
     "c18c": {
       "indices": [
         {
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "texte": "CREATION LIMITEE + EXCEPTION OUTIL TEMPORAIRE : je cree des outils (durables dans tools/ avec protocole 5 fichiers OU temporaires via generateurs-outil-temporaire - script jetable .tmp-*.py dans le workspace, JAMAIS tools/ sauf promotion, supprime en fin de mission). JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire).",
           "type": "regle"
-        },
-        {
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/",
-          "nom": "generateurs-outil-temporaire",
-          "type": "outil"
-        },
-        {
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
-          "type": "fichier"
         }
       ],
       "suivant": "c18d",
       "titre": "Creer l outil temporaire",
-      "type": "indice"
+      "type": "action"
     },
     "c18d": {
       "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission.",
@@ -400,42 +353,23 @@
           "type": "regle"
         },
         {
-          "catalogue": "generateurs-commande",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
-          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande verifier-systeme --reponses ...",
-          "nom": "generateurs-commande",
-          "type": "outil"
-        },
-        {
           "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir.",
           "type": "regle"
         },
         {
           "texte": "ETAPE 1 OBLIGATOIRE : sans verification du systeme, je ne peux PAS choisir de technologie.",
           "type": "regle"
-        },
-        {
-          "catalogue": "verifier-systeme",
-          "chemin": "cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
-          "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
-          "nom": "verifier-systeme",
-          "type": "outil"
-        },
-        {
-          "chemin": "cerveau-projet/agents/classeur-variables/stockage/variables-actuelles.md",
-          "raison": "Consulter profil-systeme : .py si Python dispo, sinon .sh (protocole-technologies)",
-          "type": "fichier"
         }
       ],
       "suivant": "c3",
       "titre": "Verifier le systeme",
-      "type": "indice"
+      "type": "action"
     },
     "c20": {
       "indices": [
         {
-          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : l audit est le ROLE DE THEMIS (evaluatrice) - je n audite JAMAIS moi-meme. Si j ai besoin d un audit de conformite, j ACTIVE Themis (maillon de chaine).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-10"
         },
         {
           "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour.",
@@ -445,16 +379,11 @@
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
           "nom": "activer-agent-principal",
           "type": "outil"
-        },
-        {
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
-          "type": "fichier"
         }
       ],
       "suivant": "c21",
       "titre": "Activer Themis pour auditer",
-      "type": "indice"
+      "type": "action"
     },
     "c21": {
       "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni.",
@@ -493,32 +422,21 @@
     "c4": {
       "indices": [
         {
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais.",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "texte": "CREATION LIMITEE AUX OUTILS (ROLE VULCAIN) : je cree des outils dans tools/ avec les 5 fichiers (py sh md spec test), uniquement sur mission de Cerberus. JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "texte": "ETAPE 3 OBLIGATOIRE : j'utilise TOUJOURS outil-template pour standardiser la creation de tout nouvel outil.",
           "type": "regle"
-        },
-        {
-          "texte": "REGLE IMMUABLE DE NOMMAGE : le nom DOIT commencer par le prefixe du dossier de categorie (dossier 'lire/' -> outil 'lire-xxx').",
-          "type": "regle"
-        },
-        {
-          "catalogue": "copier-fichier",
-          "chemin": "cerveau-projet/agents/tools/copier/copier-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/copier/copier-fichier/copier-fichier.py cerveau-projet/agents/tools/outil-template.py cerveau-projet/agents/tools/[categorie]/[nom-outil]/[nom-outil].py",
-          "nom": "copier-fichier",
-          "type": "outil"
         }
       ],
       "suivant": "c5",
       "titre": "Copier le outil-template",
-      "type": "indice"
+      "type": "action"
     },
     "c5": {
       "branches": [
@@ -549,81 +467,42 @@
           "type": "ref"
         },
         {
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais.",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "texte": "CREATION LIMITEE AUX OUTILS (ROLE VULCAIN) : je cree des outils dans tools/ avec les 4 fichiers de l outil (py, sh, md, spec) - le fichier de test test-XXX est ECRIT PAR MORPHEUS, jamais par moi, uniquement sur mission de Cerberus. JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin).",
-          "type": "regle"
-        },
-        {
-          "texte": "REGLE IMMUABLE : 100% stdlib Python (aucune dependance externe).",
-          "type": "regle"
-        },
-        {
-          "chemin": "cerveau-projet/agents/tools/creer/ et ecrire/",
-          "commande": "python3 cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py <chemin> <contenu>",
-          "nom": "creer-fichier / ecrire-fichier",
-          "type": "outil"
-        },
-        {
-          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-outils/",
-          "raison": "Lire le protocole-outils avant de developper",
-          "type": "fichier"
-        },
-        {
-          "commande": "diff <(python3 <outil>.py --version | tr -d '\r') <(bash <outil>.sh --version | tr -d '\r')",
-          "nom": "verifier-parite-version",
-          "raison": "PARITE OBLIGATOIRE : verifier que le .py et le .sh affichent la meme version (lecon Morpheus T5) - si divergence, aligner le .sh (VERSION/STATUT) avant de continuer",
-          "type": "outil"
+          "type": "ref",
+          "ref": "pattern-12"
         }
       ],
       "suivant": "c7",
       "titre": "Developper l'outil",
-      "type": "indice"
+      "type": "action"
     },
     "c7": {
       "indices": [
         {
-          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d'executer combos-moteur (ex: Je lance le combo combo-corriger-ascii : cerveau-projet/combos/combo-corriger-ascii/definition-combo.json).",
-          "type": "regle"
+          "type": "ref",
+          "ref": "pattern-3"
         },
         {
           "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur.",
           "type": "regle"
         },
         {
-          "catalogue": "corriger-symboles",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-          "nom": "corriger-symboles",
-          "type": "outil"
-        },
-        {
           "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (correction des accents + validation ASCII).",
           "type": "regle"
-        },
-        {
-          "catalogue": "combos-moteur",
-          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json",
-          "nom": "combos-moteur",
-          "type": "outil"
-        },
-        {
-          "chemin": "cerveau-projet/combos/combo-corriger-ascii/definition-combo.json",
-          "raison": "Definition du combo corriger-ascii (Pattern 3) : corriger-accents --all --recursive -> valider-conformite-ascii",
-          "type": "fichier"
         }
       ],
       "suivant": "c7b",
       "titre": "Lancer le combo corriger-ascii",
-      "type": "indice"
+      "type": "action"
     },
     "c7b": {
       "indices": [
         {
-          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail AVANT d activer le maillon suivant de la chaine.",
-          "type": "regle"
+          "type": "regle",
+          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
         },
         {
           "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
@@ -633,7 +512,7 @@
       ],
       "suivant": "c8",
       "titre": "RVAV avant activation",
-      "type": "indice"
+      "type": "action"
     },
     "c8": {
       "branches": [
@@ -679,6 +558,6 @@
     "case_depart": "c0",
     "description": "v0.2.13 : ALLEGEMENT c8/c14 (point mineur audit Themis) - les regles de 341 caracteres sont remplacees par une reference vers protocole-tests v0.2.1 (section Delegation des tests) - la chaine (type controle + branches + question + indice outil) est inchangee. v0.2.12 : DELEGATION DES TESTS RENFORCEE (lecon recidive generateurs-amelioration) - c6/c12 interdisent de toucher a TOUT fichier test-XXX (creation OU mise a jour), c8/c14 verifient en 2 points (aucune ecriture de test par Vulcain + Morpheus active pour ECRIRE et EXECUTER). Parcours (jeu de piste) des missions de Vulcain : construire un outil, modifier un outil. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.4 : REGLE DES 5 FICHIERS ajoutee dans c12 (apres toute modification de version, verifier l alignement VERSION/STATUT dans py, sh, md, spec + distinguer les versions propres du catalogue et de l index - lecon Vulcain, controle Janus). v0.2.3 : verification PARITE --version py/sh OBLIGATOIRE apres creation (c6) et modification (c12) d outil (lecon Morpheus T5 / Vulcain) - diff <(python3 outil.py --version | tr -d '\r') <(bash outil.sh --version | tr -d '\r'), si divergence aligner le .sh (VERSION/STATUT) avant de continuer. v0.2.2 : lecons des cas reels integrees. v0.2.1 : boucle de delegation MORPHEUS MATERIALISEE (RELAIS c9a/c15a -> RETOUR c9b/c15b -> CLOTURE c9c/c15c -> FIN c9/c15) - la chaine ne casse plus apres l'activation de Morpheus. v0.2.0 : les cases c7/c13 (corriger accents + valider ASCII) pointent vers le combo combo-corriger-ascii (Pattern 3, spec-guider-parcours v0.2.4).",
     "nom": "parcours-vulcain",
-    "version": "0.2.13"
+    "version": "0.3.0"
   }
 }

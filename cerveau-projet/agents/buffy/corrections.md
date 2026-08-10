@@ -1072,8 +1072,8 @@ du design generateur d amelioration valide : integration Cerberus seul).
 - PAS de bump de version (ajout additif, precedent corriger-symboles)
 
 **Validations** : navigation reelle guider-parcours (chemin c0 -> c1 ->
-ameliorer -> c1b : regles + outil + LIRE AVANT USAGE affiches) OK · ASCII 0 ·
-CRLF 0 · diff minimal 29 insertions / 0 suppression · test-005 26/26 OK.
+ameliorer -> c1b : regles + outil + LIRE AVANT USAGE affiches) OK * ASCII 0 *
+CRLF 0 * diff minimal 29 insertions / 0 suppression * test-005 26/26 OK.
 
 **Lecons** :
 1. Le format de parcours-cerberus.json est **indent=1 SANS saut de ligne
@@ -1108,9 +1108,9 @@ RAISON de la reactivation).
      dynamique)
 - PAS de bump de version (ajout additif)
 
-**Validations** : round-trip indent=2/LF/saut final OK · structure c13d (message
-+ 3 indices) OK · ASCII 0 · CRLF 0 · diff 100% chirurgical (+17/-1, la seule
-suppression est la virgule du message car indices suit) · test-005 26/26 OK.
+**Validations** : round-trip indent=2/LF/saut final OK * structure c13d (message
++ 3 indices) OK * ASCII 0 * CRLF 0 * diff 100% chirurgical (+17/-1, la seule
+suppression est la virgule du message car indices suit) * test-005 26/26 OK.
 
 **Lecons** :
 1. Une FIN de parcours n est pas un simple stop : elle doit porter les indices
@@ -1361,3 +1361,347 @@ creation c8/c22/c27 reactivaient Cerberus directement.
    detaille reste dans le message de la fin et la description du parcours).
 4. La regle s'applique a la mission qui la materialise : ce changement de carte
    passe lui-meme par Janus (controle croise de ce fichier).
+
+## [LECON] 2026-08-09 -- ENTREE CATALOGUE generateurs-case-convertir + FIX BUG REGEX FLAGS (Buffy)
+
+**Mission** : ajouter l'entree catalogue generateurs-case-convertir (rendre la sous-commande convertir generable).
+
+**Livrables** :
+1. Entree generateurs-case-convertir ajoutee (catalogue v0.2.3 -> 0.2.4, 115 entrees, tri OK, ASCII 0, LF pur) : modele "{chemin} convertir --refs {refs} --seuil {seuil} --version-parcours {version_parcours} {dry_run} {verbose}", 6 parametres (chemin obligatoire, refs/seuil/version_parcours avec flag, dry_run/verbose en flags booleens).
+2. BUG REEL DECOUVERT et corrige dans le generateur (py + sh v0.2.1 -> 0.2.2) : le regex de retrait des flags vides "--[a-z0-9-]+\s+{cle}" etait TROP LARGE. Quand un placeholder voisin etait deja remplace par son flag (ex: {dry_run} -> --dry-run), le regex capturait le flag genere du placeholder adjacent et le retirait (commande T1 perdait --dry-run quand verbose vide). Fix : utiliser le flag DECLARE du parametre (re.escape(flag_param) + \s+ {cle}) au lieu d'un motif generique.
+3. PIEGE DOUBLE TIRET : mon premier fix ecrivait r"--%s..." % flag_param qui contient deja "--" -> pattern "----refs" qui ne matche jamais (T2/T4/T5 gardaient --refs sans valeur = commandes invalides). CORRIGE : r"%s..." directement (le flag declare contient ses tirets).
+
+**Tests reels** : T1 dry-run OUI/verbose NON -> --dry-run present; T2 minimal -> tout retire sauf --seuil 160 (defaut); T4/T5 combinaisons OK; non-regression activer-activer, valider-nommage, detecter-impacts, guider-parcours inchangees; parite py/sh v0.2.2 + generation identique; ASCII 0 + LF pur sur les 5 fichiers.
+
+**3 KO test-005** : valeurs de version figees (v0.2.1 attendu vs v0.2.2 reel, catalogue 0.2.3 vs 0.2.4) -> tests a mettre a jour par Morpheus (DELEGATION DES TESTS, je ne corrige pas les tests).
+
+**Lecons** :
+1. Les sous-commandes = entrees catalogue SEPAREES (activer-activer/reactiver) ; generateurs-case avait une entree generique {chemin} qui ne couvrait pas convertir -> creer l'entree dediee.
+2. Toujours tester la generation REELLE avec plusieurs combinaisons de reponses (vides + remplis + flags) : le bug n'apparait qu'avec un flag adjacent vide.
+3. Ne jamais ecrire "--%s" quand la valeur contient deja les tirets (double tiret silencieux).
+4. PIEGE ECRITURE ASCII : ne JAMAIS ouvrir un fichier existant en mode 'w' avec encoding ascii si le contenu source contient du non-ASCII (plantage -> fichier TRONQUE a 0 octet). Construire tout le contenu en memoire PUIS ecrire en utf-8, ou filtrer avant. Le fichier corrections.md contenait 9 points medians U+00B7 preexistants (HEAD) : corriges en '*' (dette ASCII preexistante corrigee au passage).
+
+## [LECON] 2026-08-09 -- CARTE BUFFY : c10c UTILISE generateurs-case-convertir (parcours v0.3.3) (Buffy)
+
+**Mission** : corriger ma carte pour que la conversion des parcours passe par la commande catalogue generateurs-case-convertir (creee dans la chaine precedente).
+
+**Livrables** :
+1. c10c (Gerer les cases) : indice outil generateurs-case -> format PASSE PAR LE GENERATEUR (commande en dur RETIREE, juste nom + catalogue + chemin), + NOUVEL indice outil generateurs-case-convertir (nom + catalogue + chemin) pour couvrir la conversion en masse.
+2. c10d (Gerer une ligne) : commande en dur generateurs-ligne retiree (coherence PASSE PAR LE GENERATEUR).
+3. ALLEGEMENT c10c : 4 indices (2 refs + 2 outils) depassaient le max 3 -> ref pattern-12 retiree (justification : c10c MODIFIE des cases d'un parcours existant, ce n'est PAS une case de creation d'outil - le Pattern 2 ecriture ASCII est conserve). valider-case CONFORME (0 erreur, 0 a alleger).
+4. Version parcours 0.3.2 -> 0.3.3 + fiche buffy.md mise a jour (Pattern 14).
+
+**Validations** : valider-case CONFORME, transitions c10b (OUI->c10c, ligne->c10d, non->c11) intactes, c10c/c10d->c37, JSON valide, ASCII 0, LF pur.
+
+**Lecons** :
+1. La commande generateurs-case-convertir est desormais generable : quand une carte modifie des parcours, elle doit la referencer (nom + catalogue + chemin) au lieu d'ecrire la ligne en dur.
+2. Ajouter un outil a une case existante peut depasser le max 3 indices -> verifier valider-case et alleger (retirer la ref la moins pertinente selon la nature de la case : creation vs modification).
+3. Toujours verifier les transitions apres modification d'une zone de branches (c10b) : le flux doit rester intact.
+## [LECON] 2026-08-09 -- MIGRATION 4 PARCOURS TERMINEE (atlas, clio, janus, themis)
+
+**Mission** : finir la migration des cartes au nouveau format (100% actions, 0 indices).
+**Resultat** : 4 parcours migres via generateurs-case convertir + mapping generique.
+
+**Lecons** :
+1. La migration utilise generateurs-case convertir avec un mapping generique {motifs: [{contient, ref}], cases: {}} - les motifs communs (RELECTURE, CONTEXTE, ASCII, CREATION LIMITEE, WORKSPACE, VALIDER) sont partages par tous les parcours
+2. Les refs resolvables sont soit pattern-N (verifie dans la spec-guider-parcours), soit chemins relatifs existants (protocoles/regles)
+3. valider-case en mode auto du wet est trop optimiste : la validation independante apres affinage est LA reference (atlas: 11 a alleger apres wet)
+4. Modele d'allegement standard pour les cases d'ecriture/creation : pattern-2 + pattern-12 + outil = 3 indices (modele athena/buffy c10c). Retirer pattern-12 quand la case ne cree pas d'outil durable
+5. Cas speciaux : c16 themis (5 evaluateurs) reduit a 3 outils cles + titre explicite ; regles specifiques > 160 car (ex: lecon Clio 180 car) a raccourcir en gardant le sens
+6. Apres migration : verifier valider-cartes-decision --agent <nom> = CONFORME + navigation PARCOURS TERMINE pour chaque parcours
+7. Les fiches peuvent deja etre a jour (atlas/clio v0.2.0 en fiche avant la migration du parcours) - la version du parcours rattrape la fiche, ne pas la casser
+8. Observations hors perimetre notees : valider-cartes-decision.py ligne 22 mentionne "spec v0.2.9" alors que la spec est en v0.5.0 (mention stale preexistante, docstring) - a corriger plus tard
+9. DELEGATION DES TESTS respectee : test-005 (versions atlas fige en v0.1.10) mis a jour par Morpheus, pas par Buffy
+
+**Fichiers modifies** : parcours-atlas v0.2.0, parcours-clio v0.2.0, parcours-janus v0.3.0, parcours-themis v0.3.0 (valider-case CONFORME + navigation OK), fiches janus.md/themis.md alignees.
+
+## [LECON] 2026-08-10 -- 15 LIENS CASSES CORRIGES (observation Themis, score coherence 50 -> 75)
+
+**Contexte** : evaluer-coherence (audit Themis 2026-08-10) signalait 15 liens internes casses
+preexistants (fichiers jamais modifies depuis le commit initial). Les cibles existaient TOUTES,
+seuls les chemins relatifs etaient inexacts.
+
+**Correction** (10 fichiers, 15 liens) :
+1. fiche-agent-template.md : lien placeholder parcours-<agent>.json mis en backticks (texte,
+   pas un lien markdown resolvable) + 2 liens ../tools/ -> tools/ (le ../ etait en trop depuis agents/)
+2. conventions/index-conventions.md + regles-immuables/index-regles-immuables.md : ../index-pense-bete.md
+   -> ../../pense-betes/index-pense-bete.md, ../specs/index-spec.md -> ../../pense-betes/specs/index-spec.md
+3. themis/themis.md : 2 liens rvav-workflow/ (dossier) -> rvav-workflow.md (fichier) + correction
+   du chemin relatif (../../agents/ -> ../ depuis agents/themis/)
+4. pense-betes/index-pense-bete.md : conventions/ -> ../agents/conventions/, regles-immuables/ -> ../agents/regles-immuables/
+5. pense-betes/specs/index-spec.md : ../conventions/... -> ../../agents/conventions/..., ../regles-immuables/... -> ../../agents/regles-immuables/...
+6. pense-betes/specs/todo/index-todo.md : ../../regles-immuables/ -> ../../../agents/regles-immuables/
+7. recherches-web/badges-github-shields/badges-README-github.md : ../agents/ -> ../../agents/
+8. janus/controles/controle-protocole-creation-combos-2026-08-08.md : protocole-creation-combos/
+   -> ../../regles-immuables/general/protocole-creation-combos/
+
+**Verifications** : evaluer-coherence : 15 liens casses -> 0 (score 50/100 -> 75/100), valider-liens
+0 invalide sur les fichiers modifies, ASCII 0 + LF pur sur les 10 fichiers.
+
+**Lecons** :
+1. evaluer-coherence a une liste MOTIFS_GENERIQUES (texte, chemin, ancien.md, fichier.md, index.md,
+   frere-a, ...) qui filtre les exemples de documentation : un lien vers une cible fictive
+   d'exemple n'est PAS compte - il faut reproduire cette logique pour savoir quels liens sont
+   reellement casses
+2. Un meme lien peut apparaitre a PLUSIEURS endroits d'un meme fichier (themis.md : rvav-workflow
+   en 2 occurrences) - scanner TOUTES les occurrences, pas seulement la premiere
+3. Les chemins relatifs depuis un dossier profond demandent de compter les ../ correctement :
+   depuis agents/ vers pense-betes/ il faut ../../ (agents/.. = cerveau-projet/, puis pense-betes/)
+4. Un lien vers un DOSSIER (rvav-workflow/) est casse si la cible est un FICHIER (.md) - verifier
+   l'existence reelle de la cible (fichier vs dossier)
+5. La correction de liens preexistants ne touche JAMAIS aux exemples volontaires de documentation
+   (convention-liens.md, valider-liens.md utilisent des cibles fictives legitimes)
+
+## [LECON] 2026-08-10 -- GARDE-FOU FORMAT DES LECONS AJOUTE (piege markdown, 2 fichiers)
+
+**Contexte** : lors de la correction des 15 liens casses, la lecon Janus dans corrections.md
+contenait un exemple litteral de syntaxe de lien (texte entre crochets suivi d'une cible entre
+parentheses) -> evaluer-coherence l'a interprete comme un VRAI lien casse (score 75 -> 50/100).
+Le format '## [LECON]' n'etait documente nulle part comme convention.
+
+**Ajout** (garde-fou du piege) dans 2 fichiers :
+1. protocole-auto-correction.001.01.ebauche.md : nouvelle section "Format d'ecriture des lecons
+   (garde-fou)" inseree avant "Types de corrections" (Etape 5) - regle de format + piege a eviter
+   + methode pour proteger un exemple de syntaxe
+2. corrections-template.md : bloc "FORMAT DES LECONS (garde-fou)" ajoute apres le PRINCIPE de la
+   section LECONS
+
+**Verifications** : ASCII 0 + LF pur sur les 2 fichiers, evaluer-coherence reste 0 lien casse
+(score 75/100) - le garde-fou est redige en DECRIVANT la syntaxe sans produire le motif
+interpretable (lecon du piege appliquee a la documentation elle-meme).
+
+**Lecons** :
+1. Documenter une regle de format demande d'appliquer la regle AU TEXTE DE LA REGLE : decrire la
+   syntaxe en toutes lettres, jamais l'ecrire en litteral
+2. Le format '## [LECON] <date> -- <titre>' est maintenant la convention documentee (protocole
+   + template) - il etait utilise en pratique sans etre ecrit
+3. Un piege decouvert en production doit devenir un garde-fou DOCUMENTE (pas seulement une lecon
+   chez un agent) : le protocole est le bon endroit pour les regles durables
+
+## [LECON] 2026-08-10 -- 2 PROTOCOLES DEDIES A LA VERIFICATION DU TRAVAIL DE BUFFY CREES
+
+**Mission** : creer 2 protocoles separes pour la verification du travail de
+Buffy (documents du cerveau-projet) : protocole-controle-buffy (Janus, second
+controle croise) et protocole-audit-buffy (Themis, audit de conformite).
+
+**Resultats** :
+- protocole-controle-buffy.001.01.ebauche.md cree (10 etapes E1-E10 : fichiers
+  modifies, preuve d integrite git status, doc complete, toutes les formes de
+  liens, piege markdown, lecons, conventions, separation, parcours/fiches,
+  verdict) + fichier d exemples (2 cas reels) + pieges courants
+- protocole-audit-buffy.001.01.ebauche.md cree (9 etapes E1-E9 : croisement
+  mission/carte/deroulement, conformite d execution, impact Pattern 14, fin
+  suit SA carte, reactiver R1-R5, qualite documentaire, parcours/fiches,
+  piege lecons, rapport) + exemples + pieges
+- index-regles-general.md : 2 entrees ajoutees (table Protocoles)
+- janus.md + themis.md : liens ajoutes dans Protocoles applicables
+- Verification : ASCII 0 + LF pur + valider-tableaux CONFORME (2/2) +
+  evaluer-coherence 0 lien casse (75/100) + 7 sections standard presentes
+  dans les 2 protocoles
+
+**Lecons** :
+1. LES CHEMINS RELATIFS D UN PROTOCOLE : depuis regles-immuables/general/
+   protocole-XXX/, le bon pattern est : 2 points + 2 points + 2 points pour
+   conventions/ et tools/ (protocole-creation-combos sert de reference), et
+   2 points + 2 points pour les protocoles voisins du meme dossier general/.
+   J avais d abord ecrit des chemins trop courts (2 niveaux au lieu de 3) :
+   evaluer-coherence a detecte 16 liens casses - corriger TOUJOURS en
+   resolvant les cibles reelles, pas a vue
+2. La verification croisee outil (evaluer-coherence) + resolution manuelle
+   (os.path) est la methode fiable pour les liens relatifs : l outil compte,
+   la resolution identifie
+3. Le piege markdown s applique aussi aux PROTOCOLES : decrire une syntaxe
+   de lien en toutes lettres sans produire le motif (texte entre crochets
+   suivi d une cible entre parentheses) - mes 2 protocoles en donnent
+   l exemple sans le produire (evaluer-coherence 0 lien casse)
+4. Les fiches janus.md et themis.md referencent maintenant leurs protocoles
+   dedies : la section Protocoles applicables est le point d entree naturel
+   pour les agents qui doivent appliquer un protocole
+
+## [LECON] 2026-08-10 -- PROTOCOLE-CONTROLE-BUFFY BRANCHE DANS LE PARCOURS-JANUS v0.3.1
+
+**Mission** : brancher le protocole-controle-buffy dans le parcours-janus pour
+que Janus l applique quand il controle le travail de Buffy (documents du
+cerveau), puis tester la chaine complete en reel (Buffy -> Janus -> Themis).
+
+**Resultats** :
+- parcours-janus.json : version 0.3.0 -> 0.3.1
+- case c11 (Ecrire la mission de controle AVANT) : indice fichier ajoute ->
+  protocole-controle-buffy (etapes E1-E10 si le controle porte sur le travail
+  de Buffy)
+- case c18 (Ecrire la mission de controle AVANT) : indice fichier identique
+- case c8 (Verdict du controle) : regle ajoutee -> les points de controle du
+  travail de Buffy sont ceux du protocole-controle-buffy
+- Verification : JSON valide (32 cases intactes, 0 echappement, ASCII strict,
+  LF pur), valider-cartes-decision --tous 11/11 CONFORME, navigation
+  guider-parcours 33 cases OK, evaluer-coherence 0 lien casse (75/100)
+
+**Lecons** :
+1. LE BRANCHEMENT D UN PROTOCOLE DANS UNE CARTE : les cases "Ecrire la mission
+   de controle AVANT" (c11/c18) sont le point d entree naturel : c est la
+   que l agent decide QUEL protocole appliquer selon la nature du travail
+   controle (outil Vulcain vs documents Buffy). La case de verdict (c8) porte
+   la regle de rappel
+2. json.dump REECRIT le fichier entier : le diff git peut etre large meme pour
+   une petite modification (56+120 lignes) si le working tree contenait deja
+   des changements non commites (ici la migration 0.2.7 -> 0.3.0). VERIFIER
+   l integrite par la structure (nb cases, type de chaque case, branches) et
+   non par la taille du diff
+3. La verification d un parcours modifie = 3 outils complementaires :
+   valider-cartes-decision --tous (structure + types), guider-parcours --liste
+   (navigation), evaluer-coherence (liens). Les 3 doivent etre verts avant
+   de conclure
+4. La chaine complete Buffy -> Janus -> Themis est maintenant operationnelle :
+   Buffy branche (protocole-controle-buffy), Janus controle en l appliquant,
+   Janus active Themis (case c31) qui audite avec le protocole-audit-buffy et
+   reactive Janus avec son rapport
+
+## [LECON] 2026-08-10 -- 2 CASES FAUSSES REACTIVER/ACTIVER CORRIGEES + PROTOCOLE-ACTIVATION PATTERN 13
+
+**Mission** : corriger les cases qui induisaient les agents en erreur sur la
+reactivation (recommandations HAUTE de l audit Themis) : atlas c31b et themis
+c25b donnaient la commande reactiver pour revenir a l agent precedent, mais
+reactiver ramene TOUJOURS a Cerberus (conception de l outil).
+
+**Resultats** :
+- atlas c31b : titre + message corriges - "FIN - Activer l agent precedent
+  avec sa carte" + commande activer-agent-principal.py activer session-llm-1
+  <agent_precedent> <raison>
+- themis c25b : idem - "FIN - Activer l agent precedent avec son rapport"
+- protocole-activation : ligne Fin de mission enrichie avec le Pattern 13 et
+  le tableau de decision a 3 modes : MODE DIRECT (active par Cerberus ->
+  reactiver), MODE CHAINE (active par un agent -> activer le suivant ou
+  l agent precedent), DERNIER MAILLON (reactiver avec bilan consolide)
+- Verification : 0 case fausse restante (scan des 11 parcours), cartes 11/11,
+  evaluer-coherence 0 lien casse, navigation OK, ASCII 0 + LF pur
+
+**Lecons** :
+1. UNE CASE DE FIN DOIT DONNER LA BONNE COMMANDE : le texte et la commande
+   doivent etre coherents. "REACTIVER l agent precedent" avec la commande
+   reactiver ramene a Cerberus - la bonne formulation est "ACTIVER l agent
+   precedent" avec la commande activer <agent> (accepte n importe quel agent)
+2. LE PATTERN 13 EST MAINTENANT PROPAGE : il ne suffit pas qu il soit dans la
+   spec-guider-parcours - le protocole-activation (source de verite de
+   l activation) doit porter la regle de decision (QUI m a active ?) et les
+   3 modes
+3. LA REGLE DE DECISION DANS UNE LIGNE : le critere unique est "qui m a
+   active ?" : Cerberus -> reactiver ; agent -> activer (suivant ou
+   precedent) ; dernier maillon -> reactiver avec bilan
+4. L audit Themis a ete chirurgical : sur 37 fins mentionnant Cerberus,
+   seulement 2 etaient fausses - le scan apres correction confirme 0 reste
+## [LECON] 2026-08-10 -- RECOMMANDATIONS MOYENNES AUDIT REACTIVER APPLIQUEES (Buffy)
+
+**Mission** : appliquer les recommandations MOYENNE de l'audit Themis reactiver/activer (regle de decision dans les fins de parcours + verifier les 11 fiches agents).
+
+**Actions realisees** :
+1. **4 fins de parcours** precisees  (activation directe par Cerberus)  : atlas c11, clio c12, minerve c10, themis c13 -- la condition de la fin REACTIVER-CERBERUS est desormais explicite (morpheus c14 et janus c10 l'avaient deja).
+2. **Fiche morpheus.md** : 2 corrections -- titre de section  Pour revenir a Vulcain  + commande du bloc code corrigee `reactiver` -> `activer <session> vulcain` (ligne 165). C'etait le MEME piege que les cases (reactiver ramene toujours a Cerberus) : c'etait la source reelle de l'erreur de Morpheus dans la chaine precedente.
+3. **Fiche atlas.md** : ligne 172  TOUJOURS reactiver Cerberus  corrigee en reference au Pattern 13 (fin = SA carte) -- la ligne 171 (Pattern 8) etait deja correcte.
+
+**Lecons** :
+1. **La regle des 5 fichiers s'applique aussi aux FICHES agents** : l'audit Themis ne scannait que les parcours JSON -- la fiche morpheus.md portait le piege reactiver sans etre detectee. Toujours scanner fiches + parcours + protocoles pour les classes de bugs transverses.
+2. **Le piege reactiver se propageait a 3 endroits distincts** (2 cases + 1 fiche) : apres correction d'une classe de bug, refaire un scan GLOBAL (pas seulement la cible initiale) pour trouver tous les porteurs.
+3. **Modification chirurgicale de JSON via json.dumps risque de reformater** : pour les parcours, passer par des remplacements de texte precis (str_replace sur les blocs JSON) ou verifier l'integrite apres (0 echappement \uXXXX, meme nombre de cases).
+4. **Verification finale** : cartes 11/11, evaluer-coherence 0 lien casse, ASCII 0 + LF pur sur les 6 fichiers modifies.
+## [LECON] 2026-08-10 -- PROTOCOLE-SANTE-FICHIERS-AGENTS CREE + BRANCHE PARCOURS-JANUS v0.3.2 (Buffy)
+
+**Mission** : creer le protocole sante-fichiers-agents pour Janus (verification periodique de l etat des fichiers agents) + le brancher dans le parcours-janus.
+
+**Actions realisees** :
+1. **Protocole cree** : `regles-immuables/general/protocole-sante-fichiers-agents/protocole-sante-fichiers-agents.001.01.ebauche.md` (modele protocole-controle-buffy, 7 etapes E1-E7 : inventaire, coherence fiche/parcours, format, normes, regles a jour, rapport, verdict). ASCII 0, LF pur.
+2. **Reference** : index-regles-general.md (entree) + fiche janus.md (section Protocoles applicables).
+3. **Parcours-janus v0.3.1 -> v0.3.2** : nouvelle case c33  Verifier l etat des fichiers agents  (action, 3 indices : ref pattern-2, fichier protocole-sante, outil creer-fichier pour le rapport) + branche  sante  dans c1 (Mission). Suivant : c8 (Verdict) pour rejoindre la boucle existante.
+
+**Lecons** :
+1. **valider-case impose 3 indices max** : ma premiere version de c33 avait 4 indices (ref pattern-2 + ref pattern-12 + fichier + outil) -> A ALLEGER. Retrait de la ref pattern-12 (redondante avec le fichier protocole qui porte deja la regle) -> 3 indices conformes.
+2. **Ne pas aggraver les surcharges preexistantes** : janus etait deja A ALLEGER 3 (c8 indice 201 chars, c11/c18 4 indices) avant ma mission -- ma case c33 est conforme, le verdict reste a 3 (preexistant), je n ajoute aucune surcharge.
+3. **Lien casse preexistant signale, pas corrige** : `spec-refonte-cartes-decision.001.01.ebauche.md` est supprime (D) dans le working tree -- le lien dans index-spec.md est casse. Hors perimetre de ma mission, a signaler dans le rapport (lien casse = lecon : verifier evaluer-coherence avant/apres).
+4. **La navigation c33 -> c8 -> c9 -> c10 (fin) fonctionne** : la nouvelle branche sante rejoint proprement la boucle de verdict existante.
+
+## [LECON] 2026-08-10 -- CORRECTION 4 ECARTS PROTOCOLE SANTE (Buffy)
+
+**Mission** : corriger les 4 ecarts legers detectes par Janus lors du premier
+etat des lieux sante-fichiers-agents.
+
+**Corrections appliquees** :
+1. janus.md : REGLE ABSOLUE -- PARCOURS (v0.3.0) -> (v0.3.2) -- seule mention
+   de version du parcours dans la fiche (la ligne Parcours n'a pas de version).
+2. promethee/corrections.md : 8 caracteres U+00B7 (point milieu) remplaces par
+   "-" (lecons historiques lignes 177, 178, 209) -- ASCII 0.
+3. athena.md : ajout de la section "Pour terminer ma mission (la fin suit SA
+   carte)" sur le modele des fiches migrees (clio.md), adaptee a sa fin reelle
+   : elle active Promethee (maillon de chaine), elle ne reactive pas Cerberus.
+4. cerberus.md : relecture alignee sur le Pattern 13 -- remplacement du
+   "cycle fondamental" (CERBERUS -> AGENT -> CERBERUS -> JANUS -> CERBERUS ->
+   CLIO, philosophie reactiver Cerberus systematique) par le nouveau schema
+   (CERBERUS -> AGENT_1 -> AGENT_2 -> ... -> CERBERUS, seul le dernier maillon
+   reactive Cerberus), ligne Clio "Agents disponibles" corrigee (activer Clio
+   quand la mise a jour du README est necessaire, plus "apres chaque mission"),
+   frontmatter cycle.sortie et specialites alignes, version fiche 0.2.1 +
+   entree Historique.
+
+**Lecons** :
+- La derive silencieuse des fiches agents se corrige avec des remplacements
+  chirurgiques : verifier TOUTES les mentions de version (ici une seule).
+- La section "Pour terminer ma mission (la fin suit SA carte)" est le modele
+  standard des fiches migrees : a copier-adapter a la fin reelle de chaque
+  agent (maillon de chaine vs activation directe).
+- La relecture d'une fiche = aligner le cycle, les connexions et l'historique
+  sur le paradigme actuel, pas seulement corriger une ligne.
+
+**Outils utilises** : lire-fichier, editer-fichier, valider-conformite-ascii,
+valider-cartes-decision, activer-agent-principal.
+
+## [LECON] 2026-08-10 -- PATTERN 13 FORMULE DANS FICHE MORPHEUS (Buffy)
+
+**Mission** : formuler explicitement le Pattern 13 (la fin suit SA carte) dans
+la fiche morpheus (point mineur du re-audit sante), en conservant sa REGLE
+DELEGATION et en alignant avec sa fin reelle de carte.
+
+**Modification** : ajout dans la section "UTILISATION DE
+activer-agent-principal" (apres le bloc "Pour revenir a Vulcain") de la
+sous-section "### Pour terminer ma mission (la fin suit SA carte)", adaptee
+aux fins reelles du parcours morpheus : c10 FIN - Activer Janus (second
+controle), c14 FIN - Reactiver Cerberus (activation directe), retour VULCAIN
+apres delegation (MODE CHAINE).
+
+**Lecons** :
+- La formulation Pattern 13 doit reflete les fins REELLES de la carte de
+  l'agent (verifiees dans parcours-<agent>.json), pas un modele generique :
+  chaque agent a ses maillons de chaine et ses fins propres.
+- La REGLE DELEGATION existante (VULCAIN -> MORPHEUS -> VULCAIN) et la regle
+  "Pour revenir a Vulcain" (MODE CHAINE, jamais reactiver) sont conservees
+  integralement : la nouvelle section les reference sans les dupliquer.
+- Verifications : ASCII 0 + LF pur + valider-cartes-decision 11/11.
+
+**Outils utilises** : lire-fichier, editer-fichier, valider-conformite-ascii,
+valider-cartes-decision, activer-agent-principal.
+
+## [LECON] 2026-08-10 -- PROTOCOLE SANTE E5 RENFORCE (CROISEMENT FICHE/PARCOURS) (Buffy)
+
+**Mission** : integrer la lecon du re-audit sante dans le protocole-sante :
+verifier le Pattern 13 en CROISANT la fiche avec les fins reelles de la carte
+(identifiants cX), pas seulement par une mention textuelle.
+
+**Modification** (protocole-sante-fichiers-agents v0.1.0 -> v0.1.1) :
+- E5 du tableau : Pattern 13 verifie par croisement fiche/parcours
+  (sous-criteres E5a/E5b/E5c) + outil parcours-<agent>.json ajoute.
+- Nouvelle section "### Detail E5 : verifier le Pattern 13 par croisement
+  fiche/parcours" apres le tableau des etapes :
+  - E5a : mention textuelle ("la fin suit SA carte" formulee explicitement) ;
+  - E5b : croisement fiche/parcours -- chaque fin citee (cX) doit correspondre
+    a une case de type fin dans parcours-<agent>.json avec le bon titre ;
+  - E5c : conformite du sens (fin declaree = fin reelle : direct -> reactiver
+    Cerberus ; maillon -> activer le suivant ; dernier maillon -> Cerberus).
+
+**Lecons** :
+- Piege d'insertion : NE JAMAIS inserer des blocs de citation (>) ou des
+  sous-sections (###) entre les lignes d'un tableau markdown -- cela casse le
+  tableau. Toujours inserer le detail APRES la derniere ligne du tableau.
+- Le veritable critere du Pattern 13 est le CROISEMENT fiche/carte : la fiche
+  doit citer des identifiants cX qui existent reellement dans le parcours avec
+  le bon type (fin) et le bon sens. Une simple phrase generique ne suffit pas.
+- La version du protocole doit etre bumpee a chaque evolution du contenu.
+
+**Outils utilises** : lire-fichier, editer-fichier, valider-conformite-ascii,
+valider-cartes-decision, activer-agent-principal.

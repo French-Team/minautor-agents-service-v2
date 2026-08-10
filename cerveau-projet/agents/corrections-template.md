@@ -53,6 +53,12 @@ types:
 > **PRINCIPE** : Chaque erreur detectee devient une lecon. Les lecons sont lues
 > a chaque activation et evitees lors des missions suivantes.
 
+> **FORMAT DES LECONS (garde-fou)** : chaque lecon commence par `## [LECON] <date> -- <titre>`.
+> NE JAMAIS ecrire un exemple de syntaxe de lien en LITTERAL (texte entre crochets suivi d'une
+> cible entre parentheses) : evaluer-coherence l'interprete comme un vrai lien casse. Pour montrer
+> une syntaxe, la DECRIRE en toutes lettres ou la mettre dans un bloc fenced (trois backticks) -
+> les backticks inline ne protegent pas. Lecon Janus 2026-08-10.
+
 ---
 
 ## CONFIG -- Configuration specifique

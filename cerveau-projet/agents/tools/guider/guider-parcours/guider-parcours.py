@@ -3,7 +3,7 @@
 # guider-parcours.py
 # Guide l'agent case par case (jeu de piste) : affiche la case courante
 # (question + indices outil/fichier/regle), suit les branches selon la reponse.
-# Version : 0.4.0
+# Version : 0.5.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -33,7 +33,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 STATUT = "ebauche"
 
 # Racine du projet : 6 remontees depuis ce fichier

@@ -131,6 +131,14 @@ agents/[nom-agent]/
 4. La correction sera appliquee automatiquement lors des prochaines sessions
 ```
 
+### Format d'ecriture des lecons (garde-fou)
+
+| Regle | Description |
+|---|---|
+| **Format des lecons** | Chaque lecon dans `corrections.md` commence par `## [LECON] <date> -- <titre>` puis decrit le contexte, les resultats et les lecons. |
+| **PIEGE markdown a eviter** | NE JAMAIS ecrire un exemple de syntaxe de lien en LITTERAL dans une lecon (texte entre crochets suivi d'une cible entre parentheses) : evaluer-coherence l'interprete comme un VRAI lien casse et fait regresser le score de coherence. Lecon Janus 2026-08-10 : la lecon contenait un tel exemple -> score 75 -> 50/100. |
+| **Proteger un exemple de syntaxe** | Pour montrer une syntaxe markdown, la DECRIRE en toutes lettres (ex : texte entre crochets suivi d'une cible entre parentheses) OU la mettre dans un bloc fenced (trois backticks). Les backticks INLINE ne protegent PAS : la regex d'evaluer-coherence ne saute que les blocs fenced. |
+
 ### Types de corrections
 
 | Type | Description | Emplacement |

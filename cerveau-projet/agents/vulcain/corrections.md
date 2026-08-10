@@ -952,9 +952,9 @@ index-tools/catalogue.
 - catalogue-commandes.json : entree triee (position 45), total 111 -> 112
 - Interface : `--theme <nom>` / `--reponses 'q1=...;q2=...'` / `--liste` / `--aide` / `--version`
 
-**Validations** : parite py/sh --version OK · interrogation 10/10 non-interactive
-OK · theme inconnu -> erreur OK · py_compile/bash -n OK · nommage OK · ASCII 0 ·
-LF pur · detecter-decalages-catalogue : 111 conformes / 0 decalage · test-005
+**Validations** : parite py/sh --version OK - interrogation 10/10 non-interactive
+OK - theme inconnu -> erreur OK - py_compile/bash -n OK - nommage OK - ASCII 0 -
+LF pur - detecter-decalages-catalogue : 111 conformes / 0 decalage - test-005
 26/26 OK.
 
 **Lecons** :
@@ -1002,10 +1002,10 @@ la CHAINE OBLIGATOIRE : apres la creation, activer Morpheus (tests) puis Janus
 surcharges, 1 avertissement) - la preuve objective de la degradation des
 cartes que la refonte doit corriger.
 
-**Validations** : parite py/sh --version v1.0.0 OK · py_compile/bash -n OK ·
+**Validations** : parite py/sh --version v1.0.0 OK - py_compile/bash -n OK -
 nommage 0 erreur (apres renommage validateur-case -> valider-case, voir lecons)
-· ASCII 0 · LF pur · detecter-decalages-catalogue 112 conformes / 0 decalage ·
-test-005 26/26 · 0 residu.
+- ASCII 0 - LF pur - detecter-decalages-catalogue 112 conformes / 0 decalage -
+test-005 26/26 - 0 residu.
 
 **Lecons** :
 1. LE NOMMAGE PRIME SUR LE CONCEPT : l outil s appelait validateur-case (concept
@@ -1032,7 +1032,7 @@ test-005 26/26 · 0 residu.
 3. Option `--ref <ref>` (repetable) ajoutee a `ajouter` et `editer` : pose des indices de type reference (cle `ref`, alignee sur `valider-case --references`).
 4. Validation auto enrichie : appel interne `valider-case <parcours> --modele --dry-run` apres chaque modification (spec-refonte 7.1) - un verdict NON CONFORME bloque l'operation.
 5. Regle des 5 fichiers : py + sh + md a jour (0.2.2 -> 0.3.0), SPEC CREE (spec-generateurs-case.001.01.ebauche.md, manquait - regle des 5 fichiers), index-tools ligne mise a jour.
-6. 1 caractere non-ASCII introduit pendant la refonte ("clé" dans un docstring) -> corrige immediatement (lecon : verifier ASCII des docstrings apres toute edition).
+6. 1 caractere non-ASCII introduit pendant la refonte ("cle" dans un docstring) -> corrige immediatement (lecon : verifier ASCII des docstrings apres toute edition).
 
 **Lecons** :
 1. Les indices de type REFERENCE (cle `ref`) sont le moyen d'alleger les cartes : un bloc compose genere par ajouter-bloc v0.3.0 ne produit AUCUNE surcharge (0 a alleger) alors que v0.2.2 en produisait 2 (textes inline > 160 car).
@@ -1124,7 +1124,7 @@ test-001-guider-parcours 14/14, test-005 26/26, test-010 25/25 (maj), test-011 1
 **Mission** : corriger le defaut de valider-case qui ecrivait son rapport par defaut dans le repertoire courant (lecon : rapport a la racine cree a 19:13 par Buffy).
 **Resultat** : v1.0.1, aucun fichier cree sans --rapport <fichier> explicite.
 **Lecons** :
-1. Le defaut : quand --rapport absent ET --dry-run absent, valider-case ecrivait rapport-valider-case-<date>.md dans le CWD relatif au repertoire de lancement -- un agent lançant depuis la racine pollue la racine
+1. Le defaut : quand --rapport absent ET --dry-run absent, valider-case ecrivait rapport-valider-case-<date>.md dans le CWD relatif au repertoire de lancement -- un agent lancant depuis la racine pollue la racine
 2. Le correctif : sans --rapport <fichier> explicite, AUCUN fichier n'est cree (message clair 'AUCUN RAPPORT ECRIT : utilise --rapport <fichier>') ; --rapport <fichier> ecrit exactement au chemin fourni ; --dry-run conserve la simulation
 3. Regle des 5 fichiers respectee : py (v1.0.1) + sh (Version 1.0.1) + md (historique + section rapport obsolete corrigee) + spec (Version + Historique) + test-009 (version + nouveau point 11b garde-fou)
 4. Le test-009 passe de 19 a 20 points : le point 11b verifie qu'une commande sans options ne cree aucun fichier dans le repertoire courant
@@ -1151,3 +1151,129 @@ test-001-guider-parcours 14/14, test-005 26/26, test-010 25/25 (maj), test-011 1
 **Validation** : py_compile OK, bash -n OK, parite --version py/sh = v0.1.0, ASCII 0 (4 fichiers), LF pur 0 CRLF, nommage 0, catalogue 114 trie, index-tools 104, bout en bout via generateurs-commande OK, ajout reel config defaut/config-1/config-3 -> valider-case CONFORME 0 erreur.
 
 **Conformite** : apres creation, j'active Morpheus (test-017-generateurs-ligne) conformement a ma carte c8.
+## [LECON] 2026-08-09 -- MODE BATCH CONVERTIR CREE : generateurs-case v0.4.0
+
+**Mission** : ajouter une sous-commande `convertir` (mode batch) a generateurs-case pour
+migrer les parcours avec l'outil au lieu de scripts maison (decision utilisateur apres
+constat : les migrations promethee/minerve/vulcain avaient ete faites par des scripts
+.zz-migration-* au lieu des generateurs).
+
+**Livraison** : generateurs-case v0.3.1 -> v0.4.0.
+- Nouvelle sous-commande `convertir` : convertit en masse les cases type=indice ->
+  type=action, remplace les regles longues (> seuil, defaut 160 car) par des refs via
+  un fichier de mapping JSON (--refs), rapport X converties / Y remplacees / Z
+  avertissements, --version-parcours pour bumper la version, --dry-run pour simuler.
+- Recablage (suivant/branches) conserve a l'identique : une conversion indice -> action
+  ne change pas la navigation.
+- Validation auto lancee apres l'ecriture : references + guider-parcours --liste +
+  valider-case --modele (verdict CONFORME 0 erreur 0 a alleger sur le test vulcain).
+- Mapping JSON : { "motifs": [ {"contient": "...", "ref": "pattern-2"}, ... ],
+  "cases": { "<case_id>": "protocole-tests" } } -- les refs par case_id ont priorite.
+- 5 fichiers a jour : py 0.4.0, sh 0.4.0 (wrapper, parite par construction), md 0.4.0
+  (section convertir), spec 0.4.0 (historique), catalogue (entree + version).
+
+**Tests reels** : py_compile OK, --version py/sh identiques, nommage OK, ASCII 0 sur
+les 5 fichiers, LF pur, dry-run = fichier inchange (version 0.2.13 intacte), wet =
+17 actions / 0 indice / 2 controles preserves / 7 fins / 23 refs / valider-case
+CONFORME.
+
+**Lecons** :
+1. La philosophie 'les generateurs doivent etre utilises' s'applique AUSSI aux outils
+   de maintenance : une migration de parcours se fait avec generateurs-case convertir,
+   pas avec un script maison. Le mode batch comble le manque qui poussait aux scripts.
+2. La non-regression des tests existants revele 4 ECHECS PREEXISTANTS (tester-
+   generateurs-case.sh attend 21 cases, le parcours vulcain en a 32 depuis plusieurs
+   versions) : prouve en relancant le test avec le parcours original HEAD (17/4 egalement).
+   Aucun de ces echecs ne vient de la commande convertir (tous les tests de comportement
+   existants de l outil passent). LA CORRECTION DES TESTS EST DELEGUEE A MORPHEUS
+   (regle DELEGATION DES TESTS : jamais corriger les tests soi-meme).
+3. Piege argparse : une sous-commande avec un flag --version (bump parcours) entre en
+   conflit avec le --version outil ajoute par la boucle commune -- le retirer de la
+   boucle et le declarer specifiquement (--version-parcours).
+4. Le seuil par defaut 160 car aligne generateurs-case sur le modele des parcours
+   migres (0 regle > 160) -- le mapping des regles SPECIFIQUES (RELECTURE, 5 FICHIERS,
+   etc.) reste une decision d edition par parcours (les raccourcir ou les mapper).
+
+## [LECON] 2026-08-10 -- valider-cartes-decision v0.3.1 : type action ajoute (impact oublie de la migration)
+
+**Contexte** : la migration des 11 parcours au format action (modele cible de la refonte) etait terminee
+(100% actions, valider-case CONFORME, test-005 26/26) MAIS valider-cartes-decision.py figeait
+TYPES_VALIDES = (question, indice, controle, fin) sans action -> NON CONFORME sur les 11 parcours.
+La spec-refonte ne mentionnait pas cet outil (impact oublie). Cerberus a detecte l'ecart via la
+validation finale.
+
+**Correction** :
+1. TYPES_VALIDES + action dans le .py (ligne 43) + mentions types dans docstring (ligne 20),
+   affichage (ligne 136) et .md (3 mentions + tableau erreurs)
+2. Docstring stale ligne 22 : spec v0.2.9 -> v0.5.0 (spec actuelle)
+3. Parite : .sh = wrapper (VERSION 0.3.0 -> 0.3.1), .md version + historique, test version figee
+4. Verification : 11/11 agents CONFORME, parite --version py/sh, ASCII 0 + LF pur
+
+**Lecons** :
+1. TOUTE migration de modele doit scanner les VALIDATEURS du modele (valider-case ET valider-cartes-decision)
+   - un validateur obsolete = la migration semble terminee mais le juge dit NON CONFORME
+2. La version d'un outil se propage a 4+ fichiers : py, sh (wrapper), md, tests (version figee)
+3. Un .sh wrapper ne duplique PAS la logique mais porte SA version -> parite --version obligatoire
+4. Valider avec --tous/--agent apres correction, pas seulement le fichier modifie (11 parcours ici)
+
+## [LECON] 2026-08-10 -- MENTIONS STALE DE VERSION CORRIGEES (2 .md generateurs, suite scan Cerberus)
+
+**Contexte** : apres la correction valider-cartes-decision v0.3.1 (spec v0.2.9 -> v0.5.0),
+Cerberus a lance un scan systematique des mentions de versions dans tous les outils.
+Le scan a distingue 2 classes :
+1. REFERENCES D'INTRODUCTION (LEGITIMES) : les mentions qui citent un pattern/regle avec SA
+   version d'introduction (ex : Pattern 5 spec v0.2.6, Pattern 9 v0.2.16, Piste C v0.2.20,
+   chaine bout-en-bout v0.2.15) - la spec v0.5.0 les documente ELLE-MEME avec ces versions
+   dans ses titres de patterns et son historique. A CONSERVER.
+2. VERSION COURANTE DU FORMAT (STALE) : les lignes "Format des cases : spec-guider-parcours
+   vX (types question/indice/controle/fin...)" - 2 trouvees :
+   - generateurs-case.md ligne 342 (spec v0.2.5)
+   - generateurs-carte.md ligne 195 (spec v0.2.13)
+   Toutes deux listaient les types SANS action et avec une version obsolete.
+
+**Correction** : 2 lignes seulement -> spec-guider-parcours v0.5.0 + types
+question/indice/controle/fin/action. Le .py de generateurs-case etait DEJA a jour
+(action present lignes 331/878/897 - non modifie).
+
+**Verifications** : ASCII 0 + LF pur, re-scan 0 mention stale, test-014 spec v0.5.0 12/12 OK,
+guider-parcours --liste OK.
+
+**Lecons** :
+1. UNE LEON HISTORIQUE (recit documentant l'etat d'une epoque) n'est PAS stale : elle decrit
+   le passe (ex : vulcain/corrections.md v0.3.0 listait les types sans action) - on ne la
+   modifie pas, comme on ne modifie pas un tableau d'historique
+2. Pour scanner les mentions stale, distinguer : version d'INTRODUCTION d'un pattern (legitime,
+   la spec la cite) vs VERSION COURANTE du format (stale si obsolete)
+3. Le bug "types sans action" etait dans PLUSIEURS .md d'outils (valider-cartes-decision,
+   generateurs-case, generateurs-carte) - un scan systematique est necessaire, pas une
+   correction au cas par cas
+
+## [LECON] 2026-08-10 -- DIVERGENCE GUIDER-PARCOURS CORRIGEE (spec 0.5.0 / py-sh-md 0.5.0)
+
+**Mission** : corriger la divergence de version guider-parcours (spec 0.5.0
+vs py/sh/md 0.4.0) detectee par Themis dans l audit de la chaine (recommandation
+regle des 5 fichiers).
+
+**Resultats** :
+- py : commentaire `# Version` + variable `VERSION = "0.5.0"` (la variable est
+  la VRAIE source pour --version, pas le commentaire)
+- sh : commentaire `# Version` -> 0.5.0 (le sh n a pas de variable de version
+  separee, il affiche la meme valeur)
+- md : `| **Version** | 0.5.0 |`
+- Verification : parite --version py/sh = v0.5.0/v0.5.0, detecter-divergences-
+  version : 0 DIVERGENTE (19 ALIGNEES), ASCII 0 + LF pur, navigation --liste OK,
+  evaluer-coherence 0 lien casse
+
+**Lecons** :
+1. LA DOUBLE SOURCE DE VERSION : un outil py a souvent DEUX endroits qui
+   portent la version - le commentaire d en-tete ET la variable VERSION lue par
+   --version. Corriger le commentaire seul ne change rien a --version :
+   verifier TOUJOURS la parite avec la commande reelle apres le bump
+2. La regle des 5 fichiers inclut la VERIFICATION PARITE py/sh --version
+   (etape obligatoire apres toute modification de version d un outil py+sh)
+3. La divergence guider-parcours etait purement un bump manquant (le py 0.4.0
+   contenait deja les fonctionnalites 0.5.0 : resolution des refs, type action)
+   - l etape 7 de la refonte (spec 0.5.0) n avait pas ete suivie du bump des
+   3 fichiers
+4. detecter-divergences-version est l outil de verification finale : 0
+   DIVERGENTE confirme l alignement des 5 fichiers

@@ -192,7 +192,7 @@ python3 cerveau-projet/agents/tools/generateurs/generateurs-carte/generateurs-ca
 3. Chaque operation de creation/duplication lance la validation auto (json + references + guider-parcours --liste)
 4. Les actions sont testees en --dry-run avant toute modification reelle
 5. L'analyse et la detection sont en LECTURE SEULE (aucune modification)
-6. Format des cases : spec-guider-parcours v0.2.13 (types question/indice/controle/fin, indices, branches, suivant, Pattern 7 modele compose)
+6. Format des cases : spec-guider-parcours v0.5.0 (types question/indice/controle/fin/action, indices, branches, suivant, Pattern 7 modele compose)
 
 ---
 

@@ -62,16 +62,16 @@ identite:
 | **Nom LLM** | llm-1 |
 | **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-09 |
+| **Derniere mise a jour** | 2026-08-10 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | janus (retour de mission) |
-| **Raison** | SECOND CONTROLE JANUS REGLE MATERIALISEE TERMINE : VERDICT VALIDE (6/6). P1 c8/c22/c27 = FIN - Activer Janus + regle IMMUABLE JANUS (< 160 car) ; P2 parcours v0.3.2 + fiche v0.3.2 ; P3 navigation -> c8/c22/c27 PARCOURS TERMINE avec fin Activer Janus atteinte ; P4 valider-case CONFORME 0 A ALLEGER ; P5 lecon Buffy documentee ; P6 ASCII 0 LF pur. LA REGLE UTILISATEUR EST DESORMAIS STRUCTURELLE dans la carte de Buffy : apres TOUTE mission (meme sans code), elle active Janus (second controle) qui reactive Cerberus. BOUCLE FERMEE : la regle est testee par Janus lui-meme sur la carte qui la contient. LECON Janus documentee. REACTIVATION : Cerberus reactive (agent_precedent=janus). |
+| **Active par** | cerberus (retour de mission) |
+| **Raison** | ETAPE 1 PATTERN 16 TERMINEE (Promethee) : spec-guider-parcours v0.5.0 -> v0.6.0. Pattern 16 "ALLEGEMENT DES CASES SURCHARGEES (v0.2.28)" ajoute apres le Pattern 15 : 6 etapes (DETECTER valider-case A ALLEGER, TRIER reference resolue / combo, ANTI-DOUBLON obligatoire via rechercher-texte avec 3 cas : present -> referencer, partiel -> enrichir, absent -> creer, DEPLACER jamais supprimer, PRISE EN COMPTE obligatoire par resolution affichee, VERIFIER valider-case CONFORME + resolvabilite + navigation). Exemple reel documente (janus c8 -> protocole-controle-buffy, c11/c18 -> combo partage). En-tetes patterns + procedure 16 patterns maj. VERIF : ASCII 0, LF pur, liens OK. Lecon Promethee ajoutee. ETAPE SUIVANTE : allegement janus (c8, c11, c18) par Buffy + Vulcain (combo), puis verification reelle. Reactivation Cerberus pour la suite (activation directe, Pattern 13). |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-09 21:55 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-10 19:07 |
 | session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
 | session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |

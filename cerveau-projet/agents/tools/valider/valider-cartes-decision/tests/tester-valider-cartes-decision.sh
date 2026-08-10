@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================================
-# TEST FORMEL -- valider-cartes-decision v0.3.0
+# TEST FORMEL -- valider-cartes-decision v0.3.1
 # Cible : parcours JSON (source de verite), plus les fiches allegees.
 # Ecrit par Morpheus (testeur dedie), livre par Vulcain.
 # Usage : bash tester-valider-cartes-decision.sh
@@ -32,7 +32,7 @@ run_py() {
     python3 "$PY_SCRIPT" "$@" 2>&1
 }
 
-echo "=== TEST FORMEL valider-cartes-decision v0.3.0 ==="
+echo "=== TEST FORMEL valider-cartes-decision v0.3.1 ==="
 echo ""
 
 # --- Preparation : parcours corrompu + zone temp (workspace uniquement)
@@ -49,10 +49,10 @@ cat > "$TMP/parcours-casse.json" << 'EOF'
 EOF
 
 # --- 1. Version
-verifier "1. --version py = 0.3.0" \
-    "[ '$(run_py --version | grep -o '0.3.0')' = '0.3.0' ]"
-verifier "2. --version sh = 0.3.0" \
-    "[ '$(bash "$SH_SCRIPT" --version | grep -o '0.3.0')' = '0.3.0' ]"
+verifier "1. --version py = 0.3.1" \
+    "[ '$(run_py --version | grep -o '0.3.1')' = '0.3.1' ]"
+verifier "2. --version sh = 0.3.1" \
+    "[ '$(bash "$SH_SCRIPT" --version | grep -o '0.3.1')' = '0.3.1' ]"
 
 # --- 2. --tous : 11/11 conformes (avant : 5/5 non conformes)
 verifier "3. --tous = 11 agents verifies" \

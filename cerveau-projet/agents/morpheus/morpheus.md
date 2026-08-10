@@ -159,13 +159,18 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 
 ## UTILISATION DE activer-agent-principal
 
-### Pour reactiver Vulcain (apres une delegation de tests)
+### Pour revenir a Vulcain (apres une delegation de tests)
 
 ```bash
-python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "Morpheus"
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> vulcain "<raison>" (MODE CHAINE - retour a Vulcain)
 ```
 
-> **REGLE** : Apres une delegation de Vulcain, je reactiver VULCAIN (sa carte a une case RETOUR c9b/c15b qui m'attend). Si j'ai ete active directement par Cerberus, je reactiver CERBERUS. Utiliser TOUJOURS cet outil. La chaine ne s'arrete jamais : je suis toujours le retour vers Cerberus.
+> **REGLE** : Apres une delegation de Vulcain, je REVIENS a VULCAIN avec activer <session> vulcain (MODE CHAINE - jamais reactiver qui ramene a Cerberus). Sa carte a une case RETOUR c9b/c15b qui m attend. Si j'ai ete active directement par Cerberus, je reactiver CERBERUS. Utiliser TOUJOURS cet outil. La chaine ne s'arrete jamais : je suis toujours le retour vers Cerberus.
+
+### Pour terminer ma mission (la fin suit SA carte)
+
+> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus (c14) ; maillon d'une chaine -> activer le suivant selon SA carte (retour VULCAIN apres delegation de tests, ou JANUS en second controle c10) ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> **FLUX** : Ma mission se termine selon MA carte : retour a **Vulcain** (delegation de tests, MODE CHAINE), activation de **Janus** (second controle) ou reactivation de **Cerberus** (activation directe) -- je ne decide jamais seul, la fin suit SA carte.
 
 ---
 

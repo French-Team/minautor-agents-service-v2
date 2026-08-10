@@ -18,9 +18,9 @@ identite:
 
 ## Navigation
 
-- **Parent** : [index-pense-bete.md](../index-pense-bete.md)
+- **Parent** : [index-pense-bete.md](../../pense-betes/index-pense-bete.md)
 - **Regles** : [regles-immuables/](../regles-immuables/index-regles-immuables.md)
-- **Specs** : [specs/](../specs/index-spec.md)
+- **Specs** : [specs/](../../pense-betes/specs/index-spec.md)
 
 ## Comment creer une nouvelle convention
 

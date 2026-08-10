@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-atlas",
     "agent": "atlas",
-    "version": "0.1.10",
+    "version": "0.2.0",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. PILOTE STRICT v0.1.2 : commandes composees via le generateur (catalogue), aucun fallback en dur."
   },
@@ -18,8 +18,8 @@
       "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
+          "type": "ref",
+          "ref": "pattern-2"
         }
       ],
       "branches": [
@@ -39,11 +39,11 @@
     },
     "c0b": {
       "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -97,15 +97,15 @@
     },
     "c2": {
       "titre": "Lister les dossiers",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
           "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
         },
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher)."
+          "type": "ref",
+          "ref": "pattern-4"
         },
         {
           "type": "outil",
@@ -118,7 +118,7 @@
     },
     "c3": {
       "titre": "Lister les fichiers",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -135,7 +135,7 @@
     },
     "c4": {
       "titre": "Lister les fonctions",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -152,7 +152,7 @@
     },
     "c5": {
       "titre": "Lister les appels",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -169,7 +169,7 @@
     },
     "c6": {
       "titre": "Lire le contenu des fichiers cles",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -186,7 +186,7 @@
     },
     "c7": {
       "titre": "Rechercher des patterns",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -203,11 +203,11 @@
     },
     "c8": {
       "titre": "Verifier la regle de relecture (systeme d'agents)",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis jamais les fichiers des autres agents."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -220,23 +220,15 @@
     },
     "c9": {
       "titre": "Documenter les decouvertes",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant d'ecrire."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/)."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -249,19 +241,15 @@
     },
     "c10": {
       "titre": "Lecons et retour",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de terminer, je declare dans mon message la liste EXACTE des outils du cerveau utilises (nom de chaque outil)."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -275,11 +263,11 @@
     "c11": {
       "titre": "FIN - Reactiver Cerberus",
       "type": "fin",
-      "message": "REACTIVER CERBERUS : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 '<raison>' atlas. Atlas ne delegue pas : il rend a Cerberus."
+      "message": "REACTIVER CERBERUS (activation directe par Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 '<raison>' atlas. Atlas ne delegue pas : il rend a Cerberus."
     },
     "c12": {
       "titre": "Formuler la requete (protocole-recherches-web)",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -295,7 +283,7 @@
     },
     "c13": {
       "titre": "Executer la recherche",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -310,19 +298,15 @@
     },
     "c14": {
       "titre": "Documenter la source",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant d'ecrire."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "fichier",
@@ -334,7 +318,7 @@
     },
     "c15": {
       "titre": "Identifier le public cible",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -349,7 +333,7 @@
     },
     "c16": {
       "titre": "Lister les fichiers existants",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -366,21 +350,13 @@
     },
     "c17": {
       "titre": "Analyser et decomposer la structure",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande analyser-structure --reponses ...) au lieu de l ecrire en dur."
-        },
         {
           "type": "outil",
           "nom": "generateurs-commande",
           "catalogue": "generateurs-commande",
           "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py"
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
         },
         {
           "type": "outil",
@@ -399,33 +375,17 @@
     },
     "c18": {
       "titre": "Creer la structure de documentation",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
           "nom": "corriger-symboles",
           "catalogue": "corriger-symboles",
           "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant de creer."
         },
         {
           "type": "outil",
@@ -438,27 +398,15 @@
     },
     "c19": {
       "titre": "Rediger le contenu",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant d'ecrire."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE PRIORISER L'ESSENTIEL : je ne documente pas chaque detail mineur, je vais a l'essentiel."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -471,7 +419,7 @@
     },
     "c20": {
       "titre": "Passer la boucle RVAV",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -487,7 +435,7 @@
     },
     "c21": {
       "titre": "Lister les fichiers",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -504,7 +452,7 @@
     },
     "c22": {
       "titre": "Lire le contenu des fichiers cles",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -521,7 +469,7 @@
     },
     "c23": {
       "titre": "Analyser la structure",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -538,7 +486,7 @@
     },
     "c24": {
       "titre": "Analyser les dependances",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -555,23 +503,15 @@
     },
     "c25": {
       "titre": "Creer la cartographie",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/). JAMAIS de creation d outil (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil ou un test manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE VALIDER AVANT DE MODIFIER : je ne modifie pas de fichiers sans validation explicite. Je demande confirmation avant d'ecrire."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -604,7 +544,7 @@
     },
     "c27": {
       "titre": "Activer l'agent habilite",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -632,11 +572,11 @@
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+          "type": "ref",
+          "ref": "pattern-6"
         },
         {
           "type": "outil",
@@ -654,15 +594,11 @@
     },
     "c30": {
       "titre": "Cartographier un parcours",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE PATTERN 9 - LIRE AVANT USAGE : lire cartographier-parcours.md AVANT d executer (l outil genere la cartographie d un parcours JSON en fichier markdown)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE PATTERN 12 - CREATION LIMITEE : la sortie est un RAPPORT DE MISSION dans le dossier du parcours audite (cartographie-<agent>.md), JAMAIS tools/. L outil est en LECTURE SEULE sur la source (ne modifie jamais le parcours)."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -686,19 +622,11 @@
     },
     "c29c": {
       "titre": "Creer l outil temporaire",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION + EXCEPTION OUTIL TEMPORAIRE : je cree uniquement des rapports de mission (dossier explorations/ ou .tmp-* du workspace, JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -729,25 +657,17 @@
       ]
     },
     "c31b": {
-      "titre": "FIN - Reactiver l agent precedent avec sa carte",
+      "titre": "FIN - Activer l agent precedent avec sa carte",
       "type": "fin",
-      "message": "J ai cree la cartographie (rapport cartographie-<parcours>.md dans le dossier du parcours audite). Je REACTIVE L AGENT PRECEDENT (maillon de chaine) : reactiver-agent-principal.py reactiver session-llm-1 <raison> <agent_precedent> - en lui fournissant ma carte. L agent reprend SA mission avec la carte."
+      "message": "J ai cree la cartographie (rapport cartographie-<parcours>.md dans le dossier du parcours audite). Je ACTIVE L AGENT PRECEDENT (maillon de chaine) : activer-agent-principal.py activer session-llm-1 <agent_precedent> <raison> - en lui fournissant ma carte. L agent reprend SA mission avec la carte."
     },
     "c31": {
       "titre": "Cartographier pour un agent",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE A LA DOCUMENTATION : la sortie est un RAPPORT DE MISSION (cartographie-<parcours>.md) dans le dossier du parcours audite, JAMAIS tools/. L outil est en LECTURE SEULE sur la source."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE RVAV : je passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur la cartographie AVANT de reactiver l agent precedent."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -764,12 +684,8 @@
     },
     "c32": {
       "titre": "Activer Themis pour auditer",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : l audit est le ROLE DE THEMIS (evaluatrice) - je n audite JAMAIS moi-meme. Si j ai besoin d un audit de conformite, j ACTIVE Themis (maillon de chaine)."
-        },
         {
           "type": "regle",
           "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."

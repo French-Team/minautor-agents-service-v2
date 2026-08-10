@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # generateurs-commande.py
 # Genere une commande complexe a lancer, en posant une question par parametre.
-# Version : 0.2.1
+# Version : 0.2.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -38,7 +38,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n est pas un terminal)
@@ -216,7 +216,11 @@ def composer_commande(commandes, reponses):
             # Flag a valeur en dur dans le modele (--cle {cle}) : retirer le flag ET le placeholder si la valeur est vide
             # (corrige 2026-08-09 : la condition etait inversee -> les flags optionnels non renseignes
             #  restaient vides dans la commande (--nombre sans valeur) et argparse les rejetait en erreur)
-            resultat = re.sub(r"--[a-z0-9-]+\s+\{%s\}" % re.escape(cle), "", resultat)
+            flag_param = parametre.get("flag", "") if parametre else ""
+            if flag_param:
+                # Retirer le flag DECLARE suivi du placeholder (--refs {refs} -> rien si vide)
+                resultat = re.sub(r"%s\s+\{%s\}" % (re.escape(flag_param), re.escape(cle)), "", resultat)
+            # Retirer le placeholder seul ({dry_run} -> rien si vide)
             resultat = re.sub(r"\s+\{%s\}" % re.escape(cle), "", resultat)
         resultat = resultat.replace("{%s}" % cle, composer_valeur(parametre, valeur))
 

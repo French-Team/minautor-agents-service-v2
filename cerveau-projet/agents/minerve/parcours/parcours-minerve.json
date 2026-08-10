@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-minerve",
     "agent": "minerve",
-    "version": "0.1.8",
+    "version": "0.2.0",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Minerve : redactrice de todos. 2 missions (creer un todo, completer un todo) couvrant les phases 0 a 9 du todo-template. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
   },
@@ -19,7 +19,7 @@
       "indices": [
         {
           "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
+          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire..."
         }
       ],
       "branches": [
@@ -39,11 +39,11 @@
     },
     "c0b": {
       "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer (regle RELECTURE)."
         },
         {
           "type": "outil",
@@ -57,7 +57,7 @@
           "nom": "lire-fichier",
           "catalogue": "lire-fichier",
           "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/minerve/minerve.md"
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/minerve/corrections.md"
         }
       ],
       "suivant": "c0c"
@@ -83,7 +83,7 @@
     },
     "c2": {
       "titre": "Rechercher les todos existants (ANTI-DOUBLON)",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -105,7 +105,7 @@
     },
     "c3": {
       "titre": "Lire la spec source",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -125,44 +125,15 @@
     },
     "c4": {
       "titre": "Generer le squelette du todo",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande generateurs-squelette-todo --reponses ...) au lieu de l ecrire en dur."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX TODOS : je cree uniquement des todos (dossier specs/todo/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "outil",
-          "nom": "generateurs-commande",
-          "catalogue": "generateurs-commande",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
-          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande generateurs-squelette-todo --reponses ..."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
-        },
-        {
-          "type": "outil",
-          "nom": "corriger-symboles",
-          "catalogue": "corriger-symboles",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE) : pour TOUTE operation, j'utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe (cat, grep, sed, python -c), JAMAIS d'outil de l'environnement (read_files, write_file, basher)."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -176,27 +147,15 @@
     },
     "c5": {
       "titre": "Remplir les phases 0 a 9",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX TODOS : je cree uniquement des todos (dossier specs/todo/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE PHASE 0 : la premiere action de tout todo est d'activer l'agent adapte (je documente cette phase)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE PHASE 9 : la derniere action de tout todo suit SA carte (Pattern 8) : reactiver Cerberus si je suis le dernier maillon du flux (ex: Promethee -> Minerve) ou activee directement, sinon activer le suivant. Je l'execute moi-meme."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -210,7 +169,7 @@
     },
     "c6": {
       "titre": "Verifier la conformite ASCII",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -228,7 +187,7 @@
     },
     "c7": {
       "titre": "Valider le fichier todo",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -236,7 +195,7 @@
         },
         {
           "type": "regle",
-          "texte": "La validation verifie : phases 0 a 9 presentes, obligations (phase 0 activation + phase 9 reactivation), conformite au todo-template."
+          "texte": "La validation verifie : phases 0 a 9 presentes, obligations (phase 0 activation, phase 9 reactivation)."
         },
         {
           "type": "outil",
@@ -250,28 +209,15 @@
     },
     "c8": {
       "titre": "Mettre a jour index-todo.md",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX TODOS : je cree uniquement des todos (dossier specs/todo/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE INDEX : apres creation, le todo est ajoute dans index-todo.md."
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/pense-betes/specs/todo/index-todo.md",
-          "raison": "Index des todos a mettre a jour avec le nouveau todo"
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -285,19 +231,15 @@
     },
     "c9": {
       "titre": "Lecons et retour",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX TODOS : je cree uniquement des todos (dossier specs/todo/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE) : avant de reactiver Cerberus, je declare dans mon message de reactivation la liste EXACTE des outils du cerveau utilises (nom de chaque outil)."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -305,13 +247,6 @@
           "catalogue": "ajouter-contenu-fichier",
           "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
           "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/minerve/corrections.md <lecon>"
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "catalogue": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> minerve"
         }
       ],
       "suivant": "c10"
@@ -319,11 +254,11 @@
     "c10": {
       "titre": "FIN - Reactiver Cerberus (PHASE 9)",
       "type": "fin",
-      "message": "Reactiver Cerberus avec le bilan des outils utilises (REGLE ABSOLUE 6). La Phase 9 (reactiver Cerberus) est OBLIGATOIRE : c'est la derniere action du todo."
+      "message": "Reactiver Cerberus (activation directe par Cerberus) avec le bilan des outils utilises (REGLE ABSOLUE 6). La Phase 9 (reactiver Cerberus) est OBLIGATOIRE : c'est la derniere action du todo."
     },
     "c11": {
       "titre": "Rechercher les todos existants (ANTI-DOUBLON)",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -331,7 +266,7 @@
         },
         {
           "type": "regle",
-          "texte": "REGLE ANTI-DOUBLON : avant de completer, je lance rechercher-todos pour verifier le theme et eviter les doublons."
+          "texte": "REGLE ANTI-DOUBLON : avant de completer, je lance rechercher-todos pour verifier qu'un todo au theme proche n'existe pas deja."
         },
         {
           "type": "outil",
@@ -345,7 +280,7 @@
     },
     "c12": {
       "titre": "Lire le todo existant",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -363,7 +298,7 @@
     },
     "c13": {
       "titre": "Verifier les conventions",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -379,23 +314,15 @@
     },
     "c14": {
       "titre": "Completer les phases manquantes",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX TODOS : je cree uniquement des todos (dossier specs/todo/, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE PHASE 0 : la premiere action de tout todo est d'activer l'agent adapte."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE PHASE 9 : la derniere action de tout todo suit SA carte (Pattern 8) : reactiver Cerberus (dernier maillon du flux ou activation directe) ou activer le suivant."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
@@ -409,7 +336,7 @@
     },
     "c15": {
       "titre": "Valider le todo",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -447,11 +374,11 @@
     },
     "c19": {
       "titre": "Activer l'agent habilite",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
-          "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Je ne cree des todos que depuis une spec source."
+          "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Je ne cree des todos que sur mission explicite."
         },
         {
           "type": "outil",
@@ -476,11 +403,11 @@
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+          "type": "ref",
+          "ref": "pattern-6"
         },
         {
           "type": "outil",
@@ -504,29 +431,22 @@
     },
     "c20c": {
       "titre": "Creer l outil temporaire",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX TODOS + EXCEPTION OUTIL TEMPORAIRE : je cree uniquement des todos (dossier specs/todo/, JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
           "nom": "generateurs-outil-temporaire",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+          "catalogue": "generateurs-outil-temporaire",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.py <besoin> (outil temporaire, jamais durable)"
         }
       ],
       "suivant": "c20d"
@@ -548,25 +468,20 @@
     },
     "c22": {
       "titre": "Activer Themis pour auditer",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : l audit est le ROLE DE THEMIS (evaluatrice) - je n audite JAMAIS moi-meme. Si j ai besoin d un audit de conformite, j ACTIVE Themis (maillon de chaine)."
+          "type": "ref",
+          "ref": "pattern-10"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
           "type": "outil",
           "nom": "activer-agent-principal",
           "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
         }
       ],
       "suivant": "c23"

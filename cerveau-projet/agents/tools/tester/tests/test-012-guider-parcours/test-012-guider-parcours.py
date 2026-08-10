@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-012-guider-parcours.py
-Test formel de l outil guider-parcours v0.4.0 (categorie guider/).
+Test formel de l outil guider-parcours v0.5.0 (categorie guider/).
 
 Outil teste (cerveau-projet/agents/tools/guider/guider-parcours/):
   .py + .sh (wrapper pur exec python3) + .md + spec/
@@ -19,7 +19,7 @@ Consolidation v0.4.0 (2026-08-09) :
   - generateurs-case v0.3.1 : type action ajoute aux choix ajouter/editer.
 
 Cas couverts:
-  1. --version py/sh identiques v0.4.0 (parite)
+  1. --version py/sh identiques v0.5.0 (parite)
   2. --liste : liste les cases d un squelette (sans naviguer)
   3. Resolution ref pattern-7 : [REFERENCE] + titre extrait de la spec
   4. Resolution ref chemin rvav : fichier existant
@@ -89,14 +89,14 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-012-")
     try:
-        print("=== Test formel guider-parcours v0.4.0 (etape 5 refonte) ===")
+        print("=== Test formel guider-parcours v0.5.0 (etape 5 refonte) ===")
 
         # 1. --version py/sh identiques (parite)
         r_py = run([PYTHON, OUTIL_PY, "--version"])
         r_sh = run(["bash", OUTIL_SH, "--version"])
-        verifier("1. --version py/sh identiques v0.4.0",
+        verifier("1. --version py/sh identiques v0.5.0",
                  r_py.returncode == 0 and r_sh.returncode == 0
-                 and "v0.4.0" in r_py.stdout
+                 and "v0.5.0" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 

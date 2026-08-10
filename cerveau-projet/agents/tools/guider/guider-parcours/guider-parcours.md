@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.4.0 |
+| **Version** | 0.5.0 |
 | **Statut** | ebauche |
 | **Categorie** | guider |
 | **Derniere mise a jour** | 2026-08-08 |

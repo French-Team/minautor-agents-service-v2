@@ -103,8 +103,8 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json
 ```
 
-**Parcours** : [cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json](parcours/parcours-<agent>.json)
-**Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
+**Parcours** : `cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json`
+**Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
 > la couverture des missions.
@@ -268,7 +268,7 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 | `AGENTS.md` | Fichier dynamique mis a jour a chaque session |
 | `index-cerveau.md` | Point d'entree du cerveau |
 | `parcours/parcours-<agent>.json` | **SOURCE DE VERITE du guidage** (jeu de piste) |
-| `../tools/guider/guider-parcours/` | L'outil qui fait avancer dans le parcours |
+| `tools/guider/guider-parcours/` | L'outil qui fait avancer dans le parcours |
 
 ### Protocoles applicables
 
@@ -279,7 +279,7 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 - [rvav-workflow](../agents/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
 - [regles-emojis-ascii](../agents/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
 - [regles-veracite](../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
-- [spec-guider-parcours](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours (v0.2.0)
+- [spec-guider-parcours](tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours (v0.2.0)
 
 ### Outils disponibles
 

@@ -60,6 +60,7 @@ CERBERUS -> IDENTIFIER -> LIRE -> ACTIVER -> TRAVAILLER -> REACTIVER -> [SECOND 
 A chaque activation ou reactivation, l'agent se pose la question :
 
 > **"As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer
+> **GARDE-FOU RELECTURE** : quand Cerberus active un agent, la RAISON doit ordonner explicitement : RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer (jamais seulement les corrections).
 > SANS relire ?"** -- je reponds la VERITE (regles-veracite).
 
 | Reponse (verite) | Action OBLIGATOIRE |
@@ -130,6 +131,7 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 ### La reponse a la question : comment l'agent reprend-il le controle ?
 
 1. Cerberus analyse le besoin et active l'agent (etape 4) avec la MISSION :
+   La RAISON commence TOUJOURS par : RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer (garde-fou anti-oubli de la fiche).
    le quoi, le pourquoi, les criteres de validation.
 2. L'agent active REPREND LE CONTROLE en lancant SON parcours :
    `guider-parcours.py cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json`
@@ -187,7 +189,11 @@ AVANT de terminer la session.
 | **Historique = lecture obligatoire** | Lire TOUJOURS l'historique (lire-activite-recente) + la section Sessions connues, meme en memoire -- le dynamique ne se memorise pas |
 | **Corrections = Ecriture** | TOUJOURS ecrire ; relire si la reponse n'est pas OUI |
 | **Documenter l'activation** | Raison et mission dans AGENTS.md |
-| **Fin de mission = SA carte** | La fin suit SA carte (Pattern 8) : reactiver Cerberus si activation directe, activer le suivant si maillon de chaine ; dernier maillon reactiver Cerberus avec bilan consolide |
+| **Fin de mission = SA carte** | La fin suit SA carte (Pattern 13) : la commande reactiver ramene TOUJOURS a Cerberus (conception de l outil). Regle de decision : QUI m a active ? |
+| **MODE DIRECT (active par Cerberus)** | Fin = reactiver <session> <raison> <mon-nom> : ramene a Cerberus (le retour normal) |
+| **MODE CHAINE (active par un agent)** | Fin = activer <session> <agent-suivant> <raison> pour enchainer, OU activer <session> <agent-precedent> <raison> pour le retour - l action activer accepte N IMPORTE QUEL agent |
+| **DERNIER MAILLON de la chaine** | Fin = reactiver <session> <raison> <mon-nom> avec le bilan consolide de la chaine |
+
 | **Pas de saut** | Ne jamais sauter une etape |
 | **Cerberus = orchestration** | Cerberus donne la MISSION (quoi + pourquoi + criteres), l'agent suit SA carte de decision (SON parcours) |
 | **Utiliser activer-agent-principal** | Pour toute modification d'AGENTS.md |

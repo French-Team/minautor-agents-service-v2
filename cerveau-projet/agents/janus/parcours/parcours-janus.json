@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-janus",
     "agent": "janus",
-    "version": "0.2.7",
+    "version": "0.3.2",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Janus : second controle (outil, statut, modification). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : les suites d'outils des chemins outil (c5-c7) et modification (c22-c26) sont remplacees par les combos combo-controle-outil et combo-controle-modification (Pattern 3, spec-guider-parcours v0.2.4)."
   },
@@ -18,8 +18,8 @@
       "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire sans retenir = inutile."
+          "type": "ref",
+          "ref": "pattern-2"
         }
       ],
       "branches": [
@@ -39,11 +39,11 @@
     },
     "c0b": {
       "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents : chacun lit les siens en prenant le relais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -82,42 +82,26 @@
         {
           "reponse": "autre",
           "vers": "c27"
+        },
+        {
+          "reponse": "sante",
+          "vers": "c33"
         }
       ]
     },
     "c2": {
       "titre": "Ecrire la mission de controle AVANT",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX MISSIONS DE CONTROLE ET AUX LECONS : je cree uniquement les missions de controle et mes lecons (dossier de l agent, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
           "nom": "corriger-symboles",
           "catalogue": "corriger-symboles",
           "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE 1 (corrections) : toujours rediger la mission de controle dans un fichier dedie AVANT le moindre controle."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne fais PAS confiance. Je VERIFIE tout."
         },
         {
           "type": "outil",
@@ -131,7 +115,7 @@
     },
     "c3": {
       "titre": "Lire la documentation",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "fichier",
@@ -150,7 +134,7 @@
     },
     "c4": {
       "titre": "Verifier les tests",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -166,31 +150,14 @@
     },
     "c5": {
       "titre": "Lancer le combo controle-outil",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande valider-ebauche --reponses ...) au lieu de l ecrire en dur."
-        },
         {
           "type": "outil",
           "nom": "generateurs-commande",
           "catalogue": "generateurs-commande",
           "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
           "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande valider-ebauche --reponses ..."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d'executer combos-moteur (ex: Je lance le combo combo-controle-outil : cerveau-projet/combos/combo-controle-outil/definition-combo.json)."
-        },
-        {
-          "type": "regle",
-          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (remplace la suite d'outils du controle d'outil)."
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/regles-immuables/general/regles-validation-rigoureuse.md",
-          "raison": "Regles de validation rigoureuse"
         },
         {
           "type": "outil",
@@ -205,11 +172,6 @@
           "catalogue": "combos-moteur",
           "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
           "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-controle-outil/definition-combo.json"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/combos/combo-controle-outil/definition-combo.json",
-          "raison": "Definition du combo controle-outil (Pattern 3) : valider-conformite-ascii -> valider-cartes-decision -> valider-liens"
         }
       ],
       "suivant": "c8"
@@ -226,6 +188,10 @@
         {
           "type": "regle",
           "texte": "Verdicts : VALIDE (tout conforme) / A REVOIR (problemes mineurs) / REJETE (problemes majeurs)."
+        },
+        {
+          "type": "regle",
+          "texte": "CONTROLE DU TRAVAIL DE BUFFY : les points de controle sont ceux du protocole-controle-buffy (etapes E1-E10) - appliquer ce protocole pour tout controle des documents du cerveau crees/modifies par Buffy"
         }
       ],
       "branches": [
@@ -241,19 +207,19 @@
     },
     "c9": {
       "titre": "Lecons et retour",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100%% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX MISSIONS DE CONTROLE ET AUX LECONS : je cree uniquement les missions de controle et mes lecons (dossier de l agent, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (Rechercher, Verifier, Analyser, Valider) sur mon travail AVANT de reactiver le maillon suivant de la chaine."
+          "type": "ref",
+          "ref": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md"
         }
       ],
       "suivant": "c10"
@@ -265,23 +231,20 @@
     },
     "c11": {
       "titre": "Ecrire la mission de controle AVANT",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX MISSIONS DE CONTROLE ET AUX LECONS : je cree uniquement les missions de controle et mes lecons (dossier de l agent, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE 1 (corrections) : toujours rediger la mission de controle dans un fichier dedie AVANT le moindre controle."
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-controle-buffy/protocole-controle-buffy.001.01.ebauche.md",
+          "raison": "Protocole de controle du travail de Buffy : si la mission controle le travail de Buffy (documents du cerveau : protocoles, conventions, fiches, lecons, index, parcours), appliquer les etapes E1-E10"
         },
         {
           "type": "outil",
@@ -295,7 +258,7 @@
     },
     "c12": {
       "titre": "Lister les fichiers par statut",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "outil",
@@ -316,7 +279,7 @@
     },
     "c13": {
       "titre": "Verifier la boucle RVAV",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -332,7 +295,7 @@
     },
     "c14": {
       "titre": "Detecter les erreurs de statut",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "fichier",
@@ -351,7 +314,7 @@
     },
     "c15": {
       "titre": "Verifier les liens",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "outil",
@@ -386,7 +349,7 @@
     },
     "c17": {
       "titre": "Changer le statut (apres validation)",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "outil",
@@ -400,23 +363,20 @@
     },
     "c18": {
       "titre": "Ecrire la mission de controle AVANT",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d'ecrire, verifier que le contenu est 100% ASCII - aucun accent, emoji ou caractere Unicode. Guillemets ASCII uniquement, jamais de guillemets francais."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX MISSIONS DE CONTROLE ET AUX LECONS : je cree uniquement les missions de controle et mes lecons (dossier de l agent, JAMAIS dans tools/). JAMAIS de creation d outil hors role, JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy). Si la mission necessite un outil, un test ou une case manquant -> je signale a Cerberus (case Signaler le besoin)."
+          "type": "ref",
+          "ref": "pattern-12"
         },
         {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais de fichier hors workspace, meme temporaire). ASCII 2 ALTERNATIVES : verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE 1 (corrections) : toujours rediger la mission de controle dans un fichier dedie AVANT le moindre controle."
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-controle-buffy/protocole-controle-buffy.001.01.ebauche.md",
+          "raison": "Protocole de controle du travail de Buffy : si la mission controle le travail de Buffy (documents du cerveau : protocoles, conventions, fiches, lecons, index, parcours), appliquer les etapes E1-E10"
         },
         {
           "type": "outil",
@@ -430,7 +390,7 @@
     },
     "c19": {
       "titre": "Lire l'ancienne version",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "outil",
@@ -444,7 +404,7 @@
     },
     "c20": {
       "titre": "Lire la nouvelle version",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "outil",
@@ -458,7 +418,7 @@
     },
     "c21": {
       "titre": "Verifier les impacts",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "fichier",
@@ -470,16 +430,8 @@
     },
     "c22": {
       "titre": "Lancer le combo controle-modification",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE TRACABILITE : CITER LE COMBO AVANT DE LE LANCER - annoncer le nom du combo + le chemin de sa definition avant d'executer combos-moteur (ex: Je lance le combo combo-controle-modification : cerveau-projet/combos/combo-controle-modification/definition-combo.json)."
-        },
-        {
-          "type": "regle",
-          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (remplace la suite d'outils du controle de modification)."
-        },
         {
           "type": "outil",
           "nom": "verifier-role-fichier",
@@ -524,7 +476,7 @@
     },
     "c28": {
       "titre": "Activer l'agent habilite",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
           "type": "regle",
@@ -553,11 +505,11 @@
     },
     "c0c": {
       "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- CONTEXTE TEMPS REEL (Pattern 6) : meme si je viens de lire l historique, je le RELIS TOUJOURS : c est le fil temps reel du cerveau (il change a chaque activation des autres LLM), le dynamique ne se memorise pas. Je lis aussi la section Sessions connues d AGENTS.md pour savoir que les autres LLM existent et voir leur derniere activite (evite les collisions)."
+          "type": "ref",
+          "ref": "pattern-6"
         },
         {
           "type": "outil",
@@ -581,19 +533,11 @@
     },
     "c29c": {
       "titre": "Creer l outil temporaire",
-      "type": "indice",
+      "type": "action",
       "indices": [
         {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, contenu 100% ASCII. Verifier avec valider-conformite-ascii -> [OK] continuer / [NON] lancer le combo combo-corriger-ascii (jamais corriger soi-meme)."
-        },
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX MISSIONS DE CONTROLE ET AUX LECONS + EXCEPTION OUTIL TEMPORAIRE : je cree uniquement les missions de controle et mes lecons (dossier de l agent, JAMAIS dans tools/) ET des outils TEMPORAIRES via generateurs-outil-temporaire (script jetable .tmp-*.py dans le workspace, JAMAIS tools/, supprime en fin de mission). JAMAIS d outil DURABLE (role Vulcain), JAMAIS de test (role Morpheus), JAMAIS de case de parcours (role Buffy)."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire)."
+          "type": "ref",
+          "ref": "pattern-2"
         },
         {
           "type": "outil",
@@ -625,12 +569,8 @@
     },
     "c31": {
       "titre": "Activer Themis pour auditer",
-      "type": "indice",
+      "type": "action",
       "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE UNE CARTE = UN ROLE (Pattern 10) : l audit est le ROLE DE THEMIS (evaluatrice) - je n audite JAMAIS moi-meme. Si j ai besoin d un audit de conformite, j ACTIVE Themis (maillon de chaine)."
-        },
         {
           "type": "regle",
           "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
@@ -652,6 +592,29 @@
       "titre": "FIN - Retour de Themis avec son rapport",
       "type": "fin",
       "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni."
+    },
+    "c33": {
+      "titre": "Verifier l etat des fichiers agents",
+      "type": "action",
+      "indices": [
+        {
+          "type": "ref",
+          "ref": "pattern-2"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-sante-fichiers-agents/protocole-sante-fichiers-agents.001.01.ebauche.md",
+          "raison": "Protocole de sante des fichiers agents : appliquer les etapes E1-E7 (inventaire, coherence fiche/parcours, format, normes, regles a jour, rapport, verdict) sur les 11 agents"
+        },
+        {
+          "type": "outil",
+          "nom": "creer-fichier",
+          "catalogue": "creer-fichier",
+          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/sante-fichiers-agents-<date>.md"
+        }
+      ],
+      "suivant": "c8"
     }
   }
 }

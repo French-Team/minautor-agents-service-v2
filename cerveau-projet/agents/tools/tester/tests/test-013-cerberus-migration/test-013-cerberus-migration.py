@@ -2,18 +2,18 @@
 # -*- coding: ascii -*-
 """
 test-013-cerberus-migration.py
-Test formel de la migration pilote du parcours-cerberus v0.3.0
+Test formel de la migration pilote du parcours-cerberus v0.3.1
 (nouveau format : indices REFERENCES + cases ACTION).
 
 Contexte (etape 6 de la spec-refonte-cartes-decision) :
   - parcours-cerberus passe de v0.2.3 (0 erreur / 15 a alleger) a
-    v0.3.0 (0 erreur / 0 a alleger / CONFORME valider-case)
+    v0.3.1 (0 erreur / 0 a alleger / CONFORME valider-case)
   - 13 indices longs migres : 6 refs resolvables + 7 textes courts
   - 18 cases de pilotage 'indice' -> 'action' (enchaine sans question)
   - 2 surcharges de nombre corrigees (c1b, c6 : 4 -> 3 indices)
 
 Cas couverts:
-  1. Version du parcours = 0.3.0
+  1. Version du parcours = 0.3.1
   2. Types : 18 action / 4 question / 4 controle / 2 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -90,13 +90,13 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-013-")
     try:
-        print("=== Test formel migration cerberus v0.3.0 ===")
+        print("=== Test formel migration cerberus v0.3.1 ===")
 
         # 1. Version du parcours
         with io.open(PARCOURS, encoding="utf-8") as fh:
             donnees = json.load(fh)
-        verifier("1. Parcours version 0.3.0",
-                 donnees.get("parcours", {}).get("version") == "0.3.0",
+        verifier("1. Parcours version 0.3.1",
+                 donnees.get("parcours", {}).get("version") == "0.3.1",
                  str(donnees.get("parcours", {}).get("version")))
 
         # 2. Types de cases : 18 action / 4 question / 4 controle / 2 fin / 0 indice

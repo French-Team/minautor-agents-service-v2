@@ -462,3 +462,84 @@ caracteres (> 160) -> A ALLEGER. Proposition : deplacer vers une reference
    un fichier de regles commun.
 4. Faux positif de mon script (apostrophe) : toujours verifier le contexte
    avant de conclure un KO.
+
+## [LECON] 2026-08-10 -- AUDIT CONFORMITE GLOBALE : VERDICT CONFORME 23/23 (migration + vcd v0.3.1 + mentions stale)
+
+**Mission** : auditer 3 perimetres : (1) migration des 11 parcours au format action, (2) valider-cartes-decision v0.3.1 (type action ajoute), (3) mentions stale de versions corrigees (generateurs-case.md, generateurs-carte.md).
+
+**Resultats** : 23/23 controles OK - VERDICT CONFORME. Audit independant (script dedie 23 points + combo audit-themis + suite d outils) : 11 parcours format action + versions exactes + ASCII/LF, vcd 11/11 + test 24/24, mentions stale corrigees + refs d introduction conservees, conformite d execution (chaine Vulcain->Morpheus->Janus->Cerberus tracee), verification d impact Pattern 14 (aucun impact oublie reel).
+
+**Lecons** :
+1. detecter-impacts signale des fichiers NON MIS A JOUR qui ne sont PAS des impacts : les lecons historiques, les rapports dates et les fiches qui CITENT un outil sans version sont des citations, pas des impacts - il faut verifier le contenu avant de conclure
+2. evaluer-coherence a repere 15 liens casses dans conventions/index-conventions.md (liens relatifs inexacts) - PRE-EXISTANT depuis le commit initial, hors perimetre de la migration mais a traiter (Buffy, responsable du cerveau-projet)
+3. Un audit global croise 3 sources : script dedie (structure), combo audit-themis (suite croisee), detecter-impacts (impact) - la triangulation confirme le verdict
+4. Le type action est maintenant pleinement integre : code (generateurs-case.py), validateur (valider-cartes-decision v0.3.1), documentation (2 .md a v0.5.0) - plus aucune liste de types sans action dans le cerveau
+
+## [LECON] 2026-08-10 -- AUDIT CHAINE COMPLETE BUFFY -> JANUS -> THEMIS : VERDICT CONFORME 21/21
+
+**Mission** : auditer le travail de Buffy (creation des 2 protocoles dedies +
+branchement protocole-controle-buffy dans parcours-janus v0.3.1) en
+appliquant le protocole-audit-buffy (E1-E9) - cas reel de la chaine complete
+et du critere reactiver (branche audit-agent c25/c25b).
+
+**Resultats** : 21/21 CONFORME (apres correction du critere E7c). Toutes les
+etapes E1-E9 conformes : carte Buffy respectee, lecons au format, impact
+verifie, fin suit SA carte, reactiver R1-R5 valide, qualite documentaire
+(ASCII 0, LF, tableaux), parcours v0.3.1 + cartes 11/11, aucun motif parasite.
+
+**Lecons** :
+1. LE PROTOCOLE-AUDIT-BUFFY EST OPERATIONNEL : applique en reel sur un cas
+   de chaine, avec le critere reactiver teste (Janus m a activee, je le
+   reactive avec mon rapport). La chaine Buffy -> Janus -> Themis -> retour
+   fonctionne bout en bout
+2. PIEGE E7c : detecter-divergences-version affiche 1 DIVERGENTE + 2 SANS
+   VERSION - compter les occurrences du mot divergence (2) est un faux
+   negatif. Le bon critere : utiliser la SYNTHESE de l outil (21 spec : 18
+   alignees, 1 divergente, 2 sans version) et verifier si la divergence est
+   preexistante (git status vide sur l outil = hors perimetre)
+3. OBSERVATION HORS PERIMETRE : divergence preexistante guider-parcours
+   (spec 0.5.0 vs py 0.4.0) a signaler a Cerberus pour correction par Vulcain
+4. La separation des responsabilites est confirmee : Janus controle (15/15),
+   Themis audite (21/21) - les 2 protocoles dedies fonctionnent et se
+   completent
+
+## [LECON] 2026-08-10 -- AUDIT REACTIVER/ACTIVER : 2 CASES FAUSSES IDENTIFIEES (atlas c31b, themis c25b)
+
+**Mission** : auditer pourquoi des cases et mentions induisent encore les
+agents en erreur sur la reactivation, alors que la philosophie a change
+(l agent active l agent suivant dans SA carte, Pattern 13, sans repasser par
+Cerberus entre les maillons).
+
+**Resultats** : cause racine identifiee. L outil reactiver ramene TOUJOURS a
+Cerberus (fonction reactiver_cerberus - c est sa conception). Les 2 cases qui
+disent "REACTIVER L AGENT PRECEDENT" (atlas c31b, themis c25b) donnent la
+commande reactiver - incoherence directe entre le texte et la commande : elles
+ramenent a Cerberus au lieu de l agent precedent. La bonne commande est
+`activer <session> <agent_precedent> <raison>` (l action activer accepte n
+importe quel agent). Sur 37 fins mentionnant Cerberus, seules 2 sont fausses.
+
+**Lecons** :
+1. LA COMMANDE REACTIVER NE RAMENE QU A CERBERUS : c est une conception de
+   l outil (fonction reactiver_cerberus). Pour revenir a un agent precedent
+   (maillon de chaine), utiliser ACTIVER avec le nom de l agent - jamais
+   reactiver
+2. UNE CASE PEUT DONNER UNE COMMANDE FAUSSE : le texte ("reactiver l agent
+   precedent") et la commande (reactiver -> Cerberus) peuvent se contredire.
+   L audit doit verifier le COUPLE texte+commande, pas seulement le texte
+3. LE PATTERN 13 N EST PAS PROPAGE : il est dans la spec-guider-parcours mais
+   le protocole-activation decrit encore le cycle simple CERBERUS -> AGENT ->
+   CERBERUS. La regle de decision (qui m a active ?) manque dans les cartes
+4. SEULEMENT 2 CASES FAUSSES SUR 37 : l audit a ete chirurgical - pas besoin
+   de tout reecrire, juste corriger les 2 cas + propager la regle dans le
+   protocole-activation
+## [LECON] 2026-08-10 -- AUDIT CONFORMITE NON-REGRESSION : VERDICT CONFORME 29/29 (Themis)
+
+**Mission** : audit de conformite globale (tests reverdis test-013/test-016, garde-fou test-018, protocole-tests v0.2.2).
+
+**Verdict** : CONFORME (29/29).
+
+**Lecons** :
+1. **La REGLE IMMUABLE de delegation a ete respectee** : seul Morpheus a touche aux fichiers de test (adaptation de version incluse) -- l'audit confirme qu'aucun autre agent n'est passe par-dessus le protocole-tests v0.2.2.
+2. **Les versions attendues des tests doivent etre verifiees apres chaque evolution de parcours** : la divergence etait purement cosmetique (compteurs de types deja alignes, seule la version n'avait pas ete bumpee) -- un scan des versions attendues de tous les tests (test-009 a test-018) apres chaque refonte de parcours eviterait ces KO preexistants.
+3. **Le couple test-018 + protocole-tests v0.2.2 est un verrou complet** : le test verifie les fins (Pattern 13, anti-regression reactiver), le protocole impose de le re-executer apres toute modification de fin -- les deux se renforcent.
+4. **Distinguer version historique et version courante dans les tests** : les mentions historiques (docstring) doivent etre conservees, seule la verification courante change -- l'adaptation chirurgicale de Morpheus est le bon modele.

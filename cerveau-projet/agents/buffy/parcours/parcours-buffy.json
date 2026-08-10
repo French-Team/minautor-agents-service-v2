@@ -150,14 +150,15 @@
           "type": "ref"
         },
         {
-          "ref": "pattern-12",
-          "type": "ref"
-        },
-        {
           "catalogue": "generateurs-case",
           "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-case/",
-          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py PARCOURS ajouter|editer|supprimer [--case ID] [--apres C] [--branche REP:VERS] [--suivant C]",
           "nom": "generateurs-case",
+          "type": "outil"
+        },
+        {
+          "catalogue": "generateurs-case-convertir",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-case/",
+          "nom": "generateurs-case-convertir",
           "type": "outil"
         }
       ],
@@ -178,7 +179,6 @@
         {
           "catalogue": "generateurs-ligne",
           "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-ligne/",
-          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-ligne/generateurs-ligne.py PARCOURS ajouter --config <defaut|config-1|config-2|config-3> [--point-attache CASE] [--reponse REP] [--rejoint CASE] [--titre T] [--force] [--dry-run]",
           "nom": "generateurs-ligne",
           "type": "outil"
         }
@@ -962,6 +962,6 @@
     "case_depart": "c0",
     "description": "v0.3.2 : REGLE JANUS MATERIALISEE (decision utilisateur) - les fins de creation c8/c22/c27 deviennent FIN - Activer Janus : Buffy passe par le second controle Janus apres TOUTE mission de creation/modification, MEME SANS MODIFIER DU CODE ; Janus reactive Cerberus avec son verdict. Parcours (jeu de piste) des missions de Buffy : creer/modifier les fichiers du cerveau, creer un agent/protocole, controler le cerveau, deleguer (Athena/Vulcain), sous-missions. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.1 : chemins combos (Pattern 3, spec-guider-parcours v0.2.4) : controler c28 combo-sante-tableaux, modifier c13b combo-controle-impacts, autre c34b combo-activation. v0.2.2 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : modifier c13c question erreurs hors mission (OUI c13d fin signalement a Cerberus / NON c14 flux principal).",
     "nom": "parcours-buffy",
-    "version": "0.3.2"
+    "version": "0.3.3"
   }
 }

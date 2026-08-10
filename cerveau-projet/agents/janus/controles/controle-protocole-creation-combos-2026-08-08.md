@@ -51,7 +51,7 @@ OK.
 ### Point 4 -- Index-regles-general
 
 OK. Ligne ajoutee dans la table Protocoles :
-`| [protocole-creation-combos/](protocole-creation-combos/) | Creation et mise en place des combos (quand/ou/comment, Pattern 3) | ebauche |`
+`| [protocole-creation-combos/](../../regles-immuables/general/protocole-creation-combos/) | Creation et mise en place des combos (quand/ou/comment, Pattern 3) | ebauche |`
 
 ### Point 5 -- ASCII
 

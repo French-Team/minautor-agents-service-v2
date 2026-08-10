@@ -169,7 +169,7 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 ```
 
 > La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
-> **FLUX** : Ma mission se termine TOUJOURS en **reactivant Cerberus** -- je ne delegue pas a un autre agent, je rends le resultat de mon exploration (activation directe par Cerberus).
+> **FLUX** : Ma mission se termine selon SA carte (Pattern 13) : reactiver Cerberus si activation directe par Cerberus, activer le suivant si maillon de chaine (ex : quand Buffy me demande de cartographier, je l active avec ma carte).
 
 ---
 

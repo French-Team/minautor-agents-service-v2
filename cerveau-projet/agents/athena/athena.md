@@ -168,6 +168,15 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 > **REGLE** : Utiliser TOUJOURS cet outil pour modifier AGENTS.md.
 > **CHAIN** : Ma mission se termine TOUJOURS en activant **Promethee** ([agents/promethee/promethee.md](../promethee/promethee.md)) pour la spec.
 
+### Pour terminer ma mission (la fin suit SA carte)
+
+```bash
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> "Promethee" "Pense-bete termine" "Creer la spec"
+```
+
+> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> **FLUX** : Ma mission se termine TOUJOURS en activant **Promethee** (maillon de chaine) pour la spec -- je ne reactive pas Cerberus directement.
+
 ---
 
 ## Style de travail

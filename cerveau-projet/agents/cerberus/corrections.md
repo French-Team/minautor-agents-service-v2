@@ -142,3 +142,48 @@ preferences:
 | `cerberus.md` | Ma fiche principale |
 | `AGENTS.md` | Fichier dynamique -- je le maintiens |
 | `../../index-cerveau.md` | Point d'entree du cerveau |
+## [LECON] 2026-08-09 -- ARRET TECHNIQUE D'AGENT : commandes bash trop complexes dans les spawns
+
+**Constat** : pendant la mission Morpheus (correction du test generateurs-case), Morpheus
+s'est arrete avant d'activer Janus. L'activation a ETE RETROUVEE au tour suivant (22:53,
+trace AGENTS-historique) -- la chaine Vulcain -> Morpheus -> Janus -> Cerberus a ete
+completee sans coupure. Mais l'arret apparent etait reel : 3 appels d'outils consecutifs
+ont echoue avec 'Invalid parameters for spawn_agents ... JSON Parse error'.
+
+**Cause racine** : les commandes bash de verification etaient trop complexes pour le
+parametrage des outils de spawn :
+- guillemets imbriques : python3 -c "...open('...')..." dans une commande bash
+- chemins MSYS (/tmp/...) a l'interieur du CODE python (non convertis par bash)
+- echappements multiples (guillemets + backslashes + apostrophes) qui cassent le JSON
+  du parametre 'command'
+
+Ces echecs repetes ont coupe le tour de l'assistant AVANT qu'il ne termine la mission
+(lecon + activation de l'agent suivant).
+
+**Regle operationnelle** : quand une commande bash contient des guillemets imbriques,
+des chemins MSYS dans du python inline, ou des echappements multiples :
+1. NE PAS inliner la commande dans le spawn : ecrire un SCRIPT .py temporaire
+   (.zz-*.py) et ne lancer que 'python3 .zz-script.py' dans le spawn.
+2. Pour les chemins /tmp dans du python, convertir via cygpath -m en variable
+   (BASE_WIN=$(cygpath -m "$BASE")) AVANT, jamais en dur dans le code.
+3. Apres 1 echec de spawn, changer de methode immediatement (script .py) au lieu de
+   re-tenter la meme forme : 3 echecs = arret du tour.
+
+**Preuve** : le tour suivant (continue utilisateur) a complete la mission avec succes
+en utilisant la methode script .py. Le piege cygpath est aussi documente dans la lecon
+Morpheus (TEST GENERATEURS-CASE CORRIGE 28/28).
+
+## [LECON] 2026-08-09 -- GARDE-FOU RELECTURE FICHE : RAISON D'ACTIVATION (Cerberus, parcours v0.3.1)
+
+**Constat utilisateur** : quand je passe le relais a un agent, il relit SES corrections mais SAUTE la fiche et la question c0 (relecture). La regle AGENTS.md ("SA fiche ET SES corrections") et le protocole-activation l'exigent, mais rien ne le FORCAIT dans la RAISON d'activation.
+
+**Cause racine** : le defaut est dans l'EXECUTION - quand je joue l'agent, je m'arrete a "je relis mes corrections" et je vais directement a la mission sans naviguer c0 (question honnete) ni lire la fiche.
+
+**Correction (garde-fou choisi par l'utilisateur)** :
+1. Parcours cerberus c6 (Activer l'agent habilite) + c10 (Activer l'agent) : nouvel indice regle "GARDE-FOU RELECTURE : ordonner dans la RAISON d'activation : RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer." (116 car, 3 indices max respecte).
+2. Protocole-activation : garde-fou documente a 2 endroits (Etape 3 Relecture + section La mission) : la RAISON commence TOUJOURS par la mention relecture fiche.
+3. Version parcours cerberus 0.3.0 -> 0.3.1 + fiche cerberus.md mise a jour (Pattern 14).
+
+**Lecon technique** : generateurs-case editer --indice-regle REMPLACE les indices au lieu de les AJOUTER (j'ai ecrase c6/c10 a 1 indice, restaure depuis HEAD puis ajout manuel en append). Toujours verifier le nombre d'indices apres un editer.
+
+**A partir de maintenant** : CHAQUE activation (script .tmp-activer-*.py) doit inclure dans la RAISON : "RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer." - et quand je joue l'agent, je commence par c0 (question honnete) puis fiche + corrections.
