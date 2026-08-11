@@ -1,6 +1,187 @@
 {
-  "version": "2.0.0",
+  "version": "2.2.0",
   "themes": [
+    {
+      "nom": "ameliorer-agent",
+      "description": "Checklist a parcourir avant toute amelioration du fonctionnement d'un agent (fiche, parcours, lecons, outillage) : diagnostic, impact, delegation, retour.",
+      "questions": [
+        {
+          "question": "Quel est le constat precis qui revele l'amelioration (observable, pas suppose) ?",
+          "raison": "Une amelioration sans constat part de l'invention plutot que du besoin."
+        },
+        {
+          "question": "Quel domaine est concerne : fiche, parcours (carte), lecons, outillage, protocole ?",
+          "raison": "Le domaine determine l'agent habilite a activer (Buffy pour fiche/parcours, Vulcain pour outil, Themis pour audit)."
+        },
+        {
+          "question": "La ligne d'auto-amelioration existe-t-elle dans ma carte ? Sinon, la creer (Pattern 17, anti-doublon).",
+          "raison": "Chaque agent doit avoir SA ligne pour declencher l'amelioration a la prochaine occasion."
+        },
+        {
+          "question": "Quel agent habilite vais-je activer et quelle est sa mission d'amelioration ?",
+          "raison": "Je ne fais PAS l'amelioration moi-meme : j'active l'agent habilite (Pattern 5/8 delegation)."
+        },
+        {
+          "question": "L'amelioration sera-t-elle documentee (lecon, fiche, version) et l'agent habilite me reactivera-t-il avec le bilan ?",
+          "raison": "Apprentissage continu + reprise du parcours (Pattern 13 : la fin suit SA carte)."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-carte",
+      "description": "Ameliorer la carte de decision (parcours JSON) d un agent : structure des cases, indices, refs, versions.",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Quelle case ou quelle partie de la carte est a ameliorer, exactement (constat observable) ?",
+          "raison": "Une amelioration part d un constat precis, pas d une impression."
+        },
+        {
+          "id": "q2",
+          "question": "Le changement respecte-t-il les Patterns de la spec-guider-parcours (versions, refs, fins, alternatives) ?",
+          "raison": "La spec-guider-parcours definit les patterns obligatoires (P1-P17)."
+        },
+        {
+          "id": "q3",
+          "question": "La carte est-elle generee/modifiee avec generateurs-carte ou generateurs-case (PASSE PAR LE GENERATEUR) ?",
+          "raison": "Les generateurs garantissent le format canonique et l anti-doublon."
+        },
+        {
+          "id": "q4",
+          "question": "La version du parcours (Pattern 14) et la fiche de l agent (PARCOURS vX) sont-elles synchronisees ?",
+          "raison": "La fiche agent doit refleter la version de sa carte (Pattern 14)."
+        },
+        {
+          "id": "q5",
+          "question": "La navigation reelle (guider-parcours) et valider-cartes-decision confirment-ils la conformite apres le changement ?",
+          "raison": "Tout changement de carte doit etre valide en navigation reelle + valider-cartes-decision."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-case",
+      "description": "Ameliorer une case du parcours : titre, type, question, branches, indices (outil, ref, regle, fichier).",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Quelle case (identifiant cX) est a ameliorer et quel est le defaut constate (question, branche, indice) ?",
+          "raison": "Toute amelioration part du constat d un defaut precis."
+        },
+        {
+          "id": "q2",
+          "question": "La case est-elle modifiee via generateurs-case (commande ajouter/editer/convertir) et non a la main ?",
+          "raison": "generateurs-case garantit le format canonique (lecon: ne pas editer les JSON a la main)."
+        },
+        {
+          "id": "q3",
+          "question": "Les branches pointent-elles vers des cases existantes (refs resolubles, pas de navigation cassee) ?",
+          "raison": "Une branche vers une case inexistante casse la navigation (lecon refs non resolubles)."
+        },
+        {
+          "id": "q4",
+          "question": "Les indices respectent-ils les types du modele (outil, ref, regle, fichier) sans doublon ?",
+          "raison": "Le modele compose des cases definit les types d indices autorises."
+        },
+        {
+          "id": "q5",
+          "question": "La case est-elle testee en navigation reelle (branche par branche) et la version bumpee si changement ?",
+          "raison": "Chaque modification de case doit etre testee en reel et versionnee (Pattern 14)."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-cerveau",
+      "description": "Ameliorer la structure globale du cerveau-projet : arborescence, index-cerveau, coherence inter-dossiers, classeur-variables.",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Quelle partie de la structure du cerveau-projet est a ameliorer (arborescence, index, dossier) et quel est le defaut ?",
+          "raison": "La structure du cerveau doit rester coherente et navigable."
+        },
+        {
+          "id": "q2",
+          "question": "Le changement respecte-t-il l arborescence canonique du cerveau-projet (agents, outils, regles, pense-betes, classeur) ?",
+          "raison": "L arborescence est la colonne vertebrale : tout dossier doit avoir une place canonique (lecon: rapport Themis a la racine)."
+        },
+        {
+          "id": "q3",
+          "question": "Les index (index-cerveau, index-tools, index-regles-general) sont-ils mis a jour apres le changement ?",
+          "raison": "Les index sont les portes d entree : un dossier sans index est invisible."
+        },
+        {
+          "id": "q4",
+          "question": "Le classeur-variables est-il impacte (variables ajoutees, modifiees ou obsoletes) ?",
+          "raison": "Le classeur-variables stocke les variables du cerveau - toute evolution doit y etre tracee."
+        },
+        {
+          "id": "q5",
+          "question": "La coherence globale est-elle verifiee apres le changement (evaluateurs, valider-liens, detecter-impacts) ?",
+          "raison": "La coherence du cerveau se verifie avec les outils de validation (evaluer-coherence, valider-liens)."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-combo",
+      "description": "Ameliorer un combo : definition JSON, encapsulation, moteur, referencement catalogue et parcours.",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Quel combo est a ameliorer et quel est le defaut (definition, moteur, usage, catalogue) ?",
+          "raison": "Constat precis avant amelioration."
+        },
+        {
+          "id": "q2",
+          "question": "La definition-combo.json est-elle valide (JSON, champs obligatoires) et le combo execute via combos-moteur ?",
+          "raison": "Tout combo passe par combos-moteur (encapsule) ou est un orchestrateur direct."
+        },
+        {
+          "id": "q3",
+          "question": "Le combo est-il reference dans le catalogue generateurs-commande et dans les parcours qui l utilisent ?",
+          "raison": "Un combo non reference dans le catalogue n est pas generable automatiquement (lecon combos Clio)."
+        },
+        {
+          "id": "q4",
+          "question": "Le combo est-il teste en --dry-run puis en execution reelle (parite avec les commandes qu il lance) ?",
+          "raison": "Le dry-run valide avant l execution reelle (sequence de securite)."
+        },
+        {
+          "id": "q5",
+          "question": "Les lecons d usage du combo sont-elles documentees (md associe, parcours de l agent habilite) ?",
+          "raison": "Un combo sans documentation d usage n est pas perenne."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-conventions",
+      "description": "Ameliorer les conventions du cerveau : conventions-protocoles, pense-betes, index-conventions, templates.",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Quelle convention est a ameliorer et quel est le defaut constate (non respectee, obsolete, incomplete) ?",
+          "raison": "Une convention non respectee ou obsolete doit etre corrigee ou retiree."
+        },
+        {
+          "id": "q2",
+          "question": "La convention est-elle referencee dans index-conventions.md et dans les parcours qui doivent l appliquer ?",
+          "raison": "Une convention non referencee n est pas appliquee (lecon: 15 liens casses dans index-conventions)."
+        },
+        {
+          "id": "q3",
+          "question": "Les templates (pense-bete, spec, todo) respectent-ils la convention mise a jour ?",
+          "raison": "Les templates sont la matiere premiere des agents redacteurs (trio)."
+        },
+        {
+          "id": "q4",
+          "question": "Le changement de convention est-il documente (version, lecon) et communique aux agents concernes ?",
+          "raison": "Une convention changee sans trace ni communication n est pas adoptee."
+        },
+        {
+          "id": "q5",
+          "question": "Les outils de validation (valider-conventions, evaluer-conventions) refletent-ils la convention mise a jour ?",
+          "raison": "Les validateurs automatiques doivent suivre les conventions qu ils controlent."
+        }
+      ]
+    },
     {
       "nom": "ameliorer-outil",
       "description": "Checklist a parcourir avant toute amelioration d un outil existant (diagnostic, anticipation de l evolution, coherence, impact, non-regression)",
@@ -74,6 +255,130 @@
           "id": "q14",
           "question": "La lecon de cette amelioration sera-t-elle documentee dans corrections.md ?",
           "raison": "Apprentissage continu : chaque amelioration enrichit le cerveau."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-parcours",
+      "description": "Ameliorer le parcours complet d un agent : flux, branches, fins, cases alternatives, conformite aux patterns.",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Quel flux du parcours est a ameliorer (entree, deroulement, fin) et quel est le defaut constate ?",
+          "raison": "Le parcours est un jeu de piste : chaque defaut de flux est observable en navigation."
+        },
+        {
+          "id": "q2",
+          "question": "Le parcours respecte-t-il la conformite globale (valider-cartes-decision --tous, 0 KO) ?",
+          "raison": "La conformite globale est verifiee par valider-cartes-decision sur les 11 parcours."
+        },
+        {
+          "id": "q3",
+          "question": "Les fins suivent-elles SA carte (Pattern 13) avec les identifiants cX reels des cases de fin ?",
+          "raison": "Chaque fin doit activer l agent suivant selon SA carte (Pattern 13, bloc FINS REELLES dans les fiches)."
+        },
+        {
+          "id": "q4",
+          "question": "Le parcours est-il allege (refs vers protocoles, combos encapsules) ou charge de regles dupliquees ?",
+          "raison": "Un parcours allege par des refs evite la duplication et la surcharge des cases."
+        },
+        {
+          "id": "q5",
+          "question": "La version du parcours est-elle bumpee et la fiche agent synchronisee (Pattern 14) ?",
+          "raison": "Toute evolution de parcours = bump de version + synchronisation fiche."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-protocole",
+      "description": "Ameliorer un protocole de regles-immuables : format, etapes, referencement index, application reelle.",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Quel protocole est a ameliorer et quel est le defaut constate (etapes, format, application) ?",
+          "raison": "Constat precis: une etape manquante, un piege non couvert, une reference obsolete."
+        },
+        {
+          "id": "q2",
+          "question": "Le protocole respecte-t-il la convention (frontmatter + 7 sections : Objectif, Prerequis, Etapes, RVAV, Exemples, Pieges, Liens) ?",
+          "raison": "La convention-protocoles impose le format canonique des protocoles."
+        },
+        {
+          "id": "q3",
+          "question": "Le protocole est-il reference dans index-regles-general.md et branche dans les parcours concernes ?",
+          "raison": "Un protocole non reference ni branche n est pas applique (lecon protocole-verification-coherence)."
+        },
+        {
+          "id": "q4",
+          "question": "Les etapes sont-elles testees en reel et les pieges documentes (lecons issues des controles) ?",
+          "raison": "Chaque etape doit etre applicable et testee; les pieges viennent des lecons reelles."
+        },
+        {
+          "id": "q5",
+          "question": "La version du protocole est-elle bumpee et la lecon documentee dans corrections.md ?",
+          "raison": "Toute amelioration de protocole = bump + lecon (protocole-autoameliorer-protocoles)."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-regles",
+      "description": "Ameliorer les regles immuables du cerveau : regles absolues, hierarchie, regles-general-global, index-regles-general.",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Quelle regle (ou quel groupe de regles) est a ameliorer et quel est le defaut constate (contradiction, vide, obsolete) ?",
+          "raison": "Une regle doit etre precise, non contradictoire et a jour."
+        },
+        {
+          "id": "q2",
+          "question": "La regle est-elle referencee dans index-regles-general.md et appliquee par les parcours concernes ?",
+          "raison": "Une regle non referencee ni appliquee est une regle morte (lecon protocole-verification-coherence)."
+        },
+        {
+          "id": "q3",
+          "question": "La regle respecte-t-elle la hierarchie des regles-immuables (general vs hierarchie) sans conflit ?",
+          "raison": "La hierarchie regles-immuables organise les regles par portee."
+        },
+        {
+          "id": "q4",
+          "question": "La modification de la regle a-t-elle un impact sur les protocoles, parcours ou outils qui la citent (detecter-impacts) ?",
+          "raison": "Toute regle modifiee impacte ses dependances - verifier avant de changer."
+        },
+        {
+          "id": "q5",
+          "question": "La version ou la lecon documente-t-elle le changement de regle (qui l a decide et pourquoi) ?",
+          "raison": "Toute regle immuable modifiee doit etre tracee (lecon + historique)."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-spec",
+      "description": "Ameliorer les specs et pense-betes (trio athena/promethee/minerve) : spec-template, index-spec, pense-betes, todos.",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Quelle spec, quel pense-bete ou quel todo est a ameliorer et quel est le defaut constate ?",
+          "raison": "Le trio produit specs, pense-betes et todos - constat precis avant amelioration."
+        },
+        {
+          "id": "q2",
+          "question": "Le document respecte-t-il son template canonique (spec-template, pense-bete-template, todo-template) et l index-spec ?",
+          "raison": "Les templates garantissent le format standard des documents du trio."
+        },
+        {
+          "id": "q3",
+          "question": "La spec est-elle a jour par rapport a son parcours d origine (lien spec -> parcours, statut ebauche/validee) ?",
+          "raison": "Toute spec doit rester liee a son parcours et a jour de ses evolutions."
+        },
+        {
+          "id": "q4",
+          "question": "Les criteres d acceptation et le statut de la spec (ebauche, validee, obsolette) sont-ils clairs ?",
+          "raison": "Une spec sans statut ni criteres clairs ne peut pas etre implementee."
+        },
+        {
+          "id": "q5",
+          "question": "Le trio (athena, promethee, minerve) est-il l habile pour ce changement, avec retour a l agent demandeur ?",
+          "raison": "Les specs sont la matiere des agents redacteurs - delegation obligatoire (Pattern 5/8)."
         }
       ]
     }

@@ -18,7 +18,7 @@
 # REGLE IMMUABLE DE NOMMAGE : dossier 'combos/' -> prefixe 'combos-'
 # ============================================================
 
-VERSION="0.2.0-beta"
+VERSION="0.3.0"
 STATUT="ebauche"
 
 # Verifier le nommage (regle immuable)
@@ -51,7 +51,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.2.0-beta"
+VERSION = "0.3.0"
 STATUT = "ebauche"
 
 class ErreurCombo(Exception):
@@ -76,6 +76,18 @@ def chemin_generateur():
         / "generateurs"
         / "generateurs-commande"
         / "generateurs-commande.py"
+    )
+
+
+def chemin_catalogue():
+    """Chemin du catalogue de commandes (source de verite des cles)."""
+    return (
+        chemin_racine()
+        / "agents"
+        / "tools"
+        / "generateurs"
+        / "generateurs-commande"
+        / "catalogue-commandes.json"
     )
 
 
@@ -143,6 +155,60 @@ def valider_definition(donnees):
             print("ERREUR: " + e, file=sys.stderr)
         sys.exit(1)
     return True
+
+
+def valider_cles_generateurs(donnees):
+    """GARDE-FOU v0.3.0 : verifie que les cles des entrees des cases generateur
+    correspondent EXACTEMENT aux parametres du catalogue de commandes.
+
+    Regle (spec-combos-moteur v0.2.1, lecon du KO test-003) : une definition-combo
+    ne doit JAMAIS inventer une cle. Chaque cle des `entrees` doit etre un
+    `parametre.cle` de la commande ciblee dans catalogue-commandes.json (source
+    de verite), et chaque parametre obligatoire du catalogue doit etre fourni.
+
+    Retourne la liste des erreurs (vide si tout est conforme).
+    """
+    erreurs = []
+    chemin = chemin_catalogue()
+    if not chemin.is_file():
+        erreurs.append("Catalogue introuvable pour la validation des cles: %s" % chemin)
+        return erreurs
+    try:
+        with chemin.open(encoding="utf-8") as fh:
+            catalogue = json.load(fh)
+    except (OSError, ValueError) as exc:
+        erreurs.append("Catalogue illisible pour la validation des cles: %s" % exc)
+        return erreurs
+    commandes = {c.get("nom"): c for c in catalogue.get("commandes", [])}
+    meta = donnees.get("combo", {})
+    nom_combo = meta.get("nom", "?")
+    for cid, case in donnees.get("cases", {}).items():
+        if case.get("type") != "generateur":
+            continue
+        catalogue_cible = case.get("catalogue")
+        if catalogue_cible not in commandes:
+            erreurs.append(
+                "combo '%s' case '%s': catalogue '%s' introuvable dans le catalogue de commandes"
+                % (nom_combo, cid, catalogue_cible)
+            )
+            continue
+        parametres = commandes[catalogue_cible].get("parametres", [])
+        cles_catalogue = [p.get("cle") for p in parametres]
+        entrees = case.get("entrees") or {}
+        inconnues = sorted(set(entrees.keys()) - set(cles_catalogue))
+        for cle in inconnues:
+            erreurs.append(
+                "combo '%s' case '%s': cle '%s' hors catalogue (la commande '%s' attend: %s)"
+                % (nom_combo, cid, cle, catalogue_cible, ", ".join(cles_catalogue))
+            )
+        obligatoires = [p.get("cle") for p in parametres if p.get("obligatoire")]
+        manquantes = sorted(set(obligatoires) - set(entrees.keys()))
+        for cle in manquantes:
+            erreurs.append(
+                "combo '%s' case '%s': parametre obligatoire '%s' manquant (commande '%s')"
+                % (nom_combo, cid, cle, catalogue_cible)
+            )
+    return erreurs
 
 
 def interpoler(texte, variables, contexte):
@@ -580,6 +646,12 @@ def main():
     try:
         donnees = charger_definition(definition)
         valider_definition(donnees)
+        # GARDE-FOU v0.3.0 : cles des entrees des cases generateur vs catalogue
+        erreurs_cles = valider_cles_generateurs(donnees)
+        if erreurs_cles:
+            for e in erreurs_cles:
+                print("[ERREUR] %s" % e, file=sys.stderr)
+            return 1
         if liste:
             return lister_cases(donnees)
         if variables_initiales is not None:

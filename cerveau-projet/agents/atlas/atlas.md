@@ -68,7 +68,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.2.0)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.3.1)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -168,8 +168,15 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "Atlas"
 ```
 
-> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
 > **FLUX** : Ma mission se termine selon SA carte (Pattern 13) : reactiver Cerberus si activation directe par Cerberus, activer le suivant si maillon de chaine (ex : quand Buffy me demande de cartographier, je l active avec ma carte).
+> **FINS REELLES DE MA CARTE v0.3.0 (E5b - croisement fiche/parcours)** :
+> - `c11` FIN - Reactiver Cerberus (mon retour standard)
+> - `c28` FIN - Delegation (j'active l'agent habilite)
+> - `c29` Signaler le besoin (fin - relais)
+> - `c29d` FIN - Outil temporaire
+> - `c31b` FIN - Activer l agent precedent avec sa carte (retour a Buffy apres cartographie)
+> - `c33` FIN - Retour de Themis avec son rapport
 
 ---
 

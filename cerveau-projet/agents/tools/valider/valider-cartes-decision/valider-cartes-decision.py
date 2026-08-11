@@ -20,6 +20,13 @@ Validations d'un parcours :
   5. Chaque case a un type valide (question/indice/controle/fin/action)
   6. References valides : suivant et vers des branches pointent vers des cases
   7. La case c0 est une question de relecture honnete (Pattern 4, spec v0.5.0)
+  8. AUCUN SUIVANT MORT (garde-fou v0.3.2) :
+     - case type 'fin' avec champ suivant -> la navigation s'arrete a la fin,
+       le suivant est ignore (mort)
+     - case avec branches non vides ET champ suivant -> les branches priment,
+       le suivant n'est jamais lu (mort)
+     Le suivant n'est legitime que sur une case SANS branches et NON-fin
+     (question/indice/action/controle qui enchaine).
 
 Utilisation:
   valider-cartes-decision.py --agent <nom>
@@ -27,7 +34,7 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.3.1
+Version : 0.3.2
 Statut : prepare
 """
 
@@ -36,7 +43,7 @@ import json
 import os
 import sys
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 STATUT = "prepare"
 
 AGENTS_DIR = "cerveau-projet/agents"
@@ -179,6 +186,32 @@ def valider_parcours(contenu, nom_display):
             print("   [ATTENTION] c0 est une question mais ne semble pas poser la question de relecture")
         controles_ok.append("6. Case c0 de relecture")
         print("   [OK] c0 est une question de relecture")
+
+    # 7. Garde-fou v0.3.2 : AUCUN SUIVANT MORT
+    #    Mecanique guider-parcours : (a) une case 'fin' arrete la navigation
+    #    (son 'suivant' est ignore) ; (b) les branches d'une case priment sur
+    #    son 'suivant' (jamais lu). Le 'suivant' n'est legitime que sur une
+    #    case SANS branches et NON-fin.
+    print("7. Garde-fou suivant mort (fin avec suivant / branches + suivant)")
+    suivants_morts = []
+    for cid, case in sorted(cases.items()):
+        suivant = case.get("suivant")
+        if not suivant:
+            continue
+        typ = case.get("type")
+        branches = case.get("branches") or []
+        if typ == "fin":
+            suivants_morts.append("%s (fin avec suivant -> la navigation s'arrete a la fin)" % cid)
+        elif branches:
+            suivants_morts.append("%s (branches + suivant -> les branches priment, le suivant n'est jamais lu)" % cid)
+    if suivants_morts:
+        print("   [ERREUR] Suivants morts detectes : %s" % "; ".join(suivants_morts[:5]))
+        if len(suivants_morts) > 5:
+            print("   [ERREUR] ... et %d autre(s)" % (len(suivants_morts) - 5))
+        erreurs.append("suivant_mort")
+    else:
+        controles_ok.append("7. Garde-fou suivant mort")
+        print("   [OK] Aucun suivant mort (0 fin avec suivant, 0 branches + suivant)")
 
     print("")
     if erreurs:

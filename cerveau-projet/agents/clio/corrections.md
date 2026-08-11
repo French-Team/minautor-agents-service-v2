@@ -109,3 +109,30 @@ preferences:
 | `../../agents/regles-immuables/general/regles-emojis-ascii.md` | **IMMUABLE** |
 | `../../agents/regles-immuables/general/regles-veracite.md` | **IMMUABLE** |
 | `../../agents/regles-immuables/general/rvav-workflow.md` | **OBLIGATOIRE** |
+
+## [LECON] 2026-08-10 -- TEST REEL DE LA GROSSE MAJ DU README (Clio) : VERDICT A JOUR
+
+**Mission** : effectuer la grosse MAJ conservative du README avec les nouveaux combos (carte v0.4.0).
+**Resultat** : README A JOUR - badge 119 == 119, Cartographier + Migrer ajoutes, ASCII 0, LF pur.
+
+**Deroulement** (parcours v0.4.0, chemin corriger -> GROSSE) :
+1. combos-analyse-projet : etat reel (15 agents, 119 outils) + ecarts README vs realite
+2. combos-maj-readme-massive : etapes 1-5 (analyse, verifier, --maj, correctifs, ASCII)
+3. Correctifs manuels : insertion des lignes Cartographier (1) et Migrer (1) + badge Outils-82 -> 117 -> 119
+4. Verification finale : --verifier 0 ecart (hors __pycache__ artefact), badge 119 == 119, verdict A JOUR
+
+**Lecons CLES (le test reel a revele 3 bugs du combo-analyse-projet, corriges) :
+1. CAPITALISATION : le README affiche les categories capitalisees (**Guider (1)**) mais le combo cherchait en minuscules -> faux positifs 'absente de la table'. Corrige : reproduire nom_categorie_affichable de mettre-a-jour-readme (capitaliser + 'Mettre a jour')
+2. COMPTAGE TESTER : mettre-a-jour-readme compte les PROTECTIONS (sous-dossiers de tester/protections/) = 3, pas les sous-dossiers de tester/ = 2. Corrige : cas special tester
+3. CATEGORIE VIRTUELLE TEMPLATES : mettre-a-jour-readme ajoute artificiellement la categorie templates (1 si tools/outil-template.md existe). Corrige : cas special templates
+4. Le total des outils doit TOUJOURS etre verifie contre mettre-a-jour-readme --outils (TOTAL) avant de declarer le README a jour - la source de verite est mettre-a-jour-readme
+5. Le --maj ne cree pas les nouvelles lignes de categories : insertion manuelle necessaire (lecon confirmee) + verifier le badge (le --maj le reconstruit avec l'ancien comptage, correction manuelle du badge apres)
+
+**Outils utilises** : combos-analyse-projet, combos-maj-readme-massive, mettre-a-jour-readme (--verifier, --maj), valider-conformite-ascii, editer-fichier (insertion manuelle), guider-parcours, activer-agent-principal
+
+## [LECON] 2026-08-10 -- CORRECTION AUDIT THEMIS COHERENCE README (Clio, 3 points resorbes)
+1. P6 : le total "83 outils" residuel dans l'ARBORESCENCE (ligne 54) etait la preuve d'une MAJ incomplette - le --maj corrige la table et le titre mais jamais l'arborescence commentee. TOUJOURS verifier l'arborescence apres une MAJ.
+2. P7 : la colonne outils de Tester (3) etait VIDE - lister les protections reelles (tester-protection-*) pour une table complete.
+3. P8 : Activer (1) etait hors ordre alphabetique + la table avait des inversions subtiles (Changer/Cartographier) - reordonner selon l ordre CANONIQUE de mettre-a-jour-readme (alphabetique + Combos/Templates en fin volontairement).
+4. L'ordre canonique place Combos et Templates en FIN de table (convention de mettre-a-jour-readme) - ne pas les trier alphabetiquement comme les autres categories.
+5. Verification croisee : combos-analyse-projet A JOUR + mettre-a-jour-readme --verifier 0 KO + ASCII 0 + LF pur.

@@ -1,563 +1,784 @@
 {
-  "cases": {
-    "c0": {
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c0c"
-        },
-        {
-          "reponse": "INCERTAIN",
-          "vers": "c0b"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c0b"
-        }
-      ],
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire..."
-        }
-      ],
-      "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-      "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-      "type": "question"
+ "cases": {
+  "c0": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
     },
-    "c0b": {
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer (regle RELECTURE)."
-        },
-        {
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/vulcain/corrections.md",
-          "nom": "lire-fichier",
-          "type": "outil"
-        },
-        {
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/vulcain/vulcain.md",
-          "nom": "lire-fichier",
-          "type": "outil"
-        }
-      ],
-      "suivant": "c0c",
-      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "action"
+    {
+     "reponse": "INCERTAIN",
+     "vers": "c0b"
     },
-    "c0c": {
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-6"
-        },
-        {
-          "catalogue": "lire-activite-recente",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
-          "nom": "lire-activite-recente",
-          "type": "outil"
-        },
-        {
-          "chemin": "AGENTS.md",
-          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel",
-          "type": "fichier"
-        }
-      ],
-      "suivant": "c1",
-      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "action"
-    },
-    "c1": {
-      "branches": [
-        {
-          "reponse": "construire",
-          "vers": "c2"
-        },
-        {
-          "reponse": "modifier",
-          "vers": "c10"
-        },
-        {
-          "reponse": "autre",
-          "vers": "c16"
-        }
-      ],
-      "question": "Quelle est la mission ?",
-      "titre": "Mission",
-      "type": "question"
-    },
-    "c10": {
-      "indices": [
-        {
-          "texte": "ETAPE 1 OBLIGATOIRE : verifier le systeme AVANT de modifier.",
-          "type": "regle"
-        },
-        {
-          "catalogue": "verifier-systeme",
-          "chemin": "cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
-          "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
-          "nom": "verifier-systeme",
-          "type": "outil"
-        }
-      ],
-      "suivant": "c11",
-      "titre": "Verifier le systeme (modification)",
-      "type": "action"
-    },
-    "c11": {
-      "indices": [
-        {
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin-outil>",
-          "nom": "lire-fichier",
-          "type": "outil"
-        }
-      ],
-      "suivant": "c12",
-      "titre": "Lire l'outil existant",
-      "type": "action"
-    },
-    "c12": {
-      "indices": [
-        {
-          "ref": "cerveau-projet/agents/regles-immuables/general/protocole-tests/protocole-tests.001.01.ebauche.md",
-          "type": "ref"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        }
-      ],
-      "suivant": "c13",
-      "titre": "Modifier l'outil",
-      "type": "action"
-    },
-    "c13": {
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-3"
-        },
-        {
-          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (correction des accents + validation ASCII).",
-          "type": "regle"
-        },
-        {
-          "catalogue": "combos-moteur",
-          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json",
-          "nom": "combos-moteur",
-          "type": "outil"
-        }
-      ],
-      "suivant": "c13b",
-      "titre": "Lancer le combo corriger-ascii",
-      "type": "action"
-    },
-    "c13b": {
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
-        },
-        {
-          "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
-          "raison": "Workflow RVAV obligatoire avant chaque activation",
-          "type": "fichier"
-        }
-      ],
-      "suivant": "c14",
-      "titre": "RVAV avant activation",
-      "type": "action"
-    },
-    "c14": {
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c15"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c14"
-        }
-      ],
-      "indices": [
-        {
-          "ref": "cerveau-projet/agents/regles-immuables/general/protocole-tests/protocole-tests.001.01.ebauche.md",
-          "type": "ref"
-        }
-      ],
-      "question": "As-tu ACTIVE MORPHEUS pour ECRIRE et EXECUTER les tests (creation ET mise a jour des test-XXX) SANS avoir toi-meme touche a AUCUN fichier de test ?",
-      "titre": "Deleguer les tests a Morpheus",
-      "type": "controle"
-    },
-    "c15": {
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md"
-        }
-      ],
-      "message": "CHAINES BOUT-EN-BOUT : outil modifie et valide (RVAV), MORPHEUS ACTIVE pour les tests. La chaine continue : Morpheus teste puis ACTIVE Janus (controle) qui REACTIVE Cerberus avec le bilan consolide.",
-      "titre": "FIN - Modifier un outil",
-      "type": "fin"
-    },
-    "c16": {
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c17"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c18b"
-        },
-        {
-          "reponse": "documentation",
-          "vers": "c16b"
-        },
-        {
-          "reponse": "audit",
-          "vers": "c20"
-        }
-      ],
-      "question": "La mission concerne-t-elle un domaine d'un autre agent (ex: tests -> Morpheus, audit -> Themis, README -> Clio) ?",
-      "suivant": "c18b",
-      "titre": "Mission hors parcours",
-      "type": "question"
-    },
-    "c16b": {
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire).",
-          "type": "regle"
-        }
-      ],
-      "suivant": "c16c",
-      "titre": "Documentation / Mise a jour de ma fiche",
-      "type": "action"
-    },
-    "c16c": {
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
-        },
-        {
-          "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
-          "raison": "Workflow RVAV obligatoire avant chaque activation",
-          "type": "fichier"
-        }
-      ],
-      "suivant": "c16d",
-      "titre": "RVAV avant reactiver Cerberus",
-      "type": "action"
-    },
-    "c16d": {
-      "message": "Documentation mise a jour et validee (RVAV + detecter-impacts). Je REACTIVE Cerberus avec le bilan consolide : commande reactiver session-llm-1 <raison> <agent_precedent> (le 3e argument est obligatoire).",
-      "titre": "FIN - Documentation",
-      "type": "fin"
-    },
-    "c17": {
-      "indices": [
-        {
-          "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine. J'active CET agent via Cerberus.",
-          "type": "regle"
-        },
-        {
-          "catalogue": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
-          "nom": "activer-agent-principal",
-          "type": "outil"
-        }
-      ],
-      "suivant": "c19",
-      "titre": "Activer l'agent habilite",
-      "type": "action"
-    },
-    "c18": {
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Pour un OUTIL DURABLE : je le cree MOI-MEME (je suis Vulcain, protocole 5 fichiers, case Construire l outil) - pas besoin de signaler.",
-      "suivant": "c18c",
-      "titre": "Signaler le besoin",
-      "type": "fin"
-    },
-    "c18b": {
-      "branches": [
-        {
-          "reponse": "TEMPORAIRE",
-          "vers": "c18c"
-        },
-        {
-          "reponse": "DURABLE",
-          "vers": "c18"
-        }
-      ],
-      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
-      "suivant": "c16b",
-      "titre": "Besoin d outil ?",
-      "type": "question"
-    },
-    "c18c": {
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire).",
-          "type": "regle"
-        }
-      ],
-      "suivant": "c18d",
-      "titre": "Creer l outil temporaire",
-      "type": "action"
-    },
-    "c18d": {
-      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission.",
-      "titre": "FIN - Outil temporaire",
-      "type": "fin"
-    },
-    "c19": {
-      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui).",
-      "titre": "FIN - Delegation",
-      "type": "fin"
-    },
-    "c2": {
-      "indices": [
-        {
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande verifier-systeme --reponses ...) au lieu de l ecrire en dur.",
-          "type": "regle"
-        },
-        {
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir.",
-          "type": "regle"
-        },
-        {
-          "texte": "ETAPE 1 OBLIGATOIRE : sans verification du systeme, je ne peux PAS choisir de technologie.",
-          "type": "regle"
-        }
-      ],
-      "suivant": "c3",
-      "titre": "Verifier le systeme",
-      "type": "action"
-    },
-    "c20": {
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-10"
-        },
-        {
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour.",
-          "type": "regle"
-        },
-        {
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "nom": "activer-agent-principal",
-          "type": "outil"
-        }
-      ],
-      "suivant": "c21",
-      "titre": "Activer Themis pour auditer",
-      "type": "action"
-    },
-    "c21": {
-      "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni.",
-      "titre": "FIN - Retour de Themis avec son rapport",
-      "type": "fin"
-    },
-    "c3": {
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c4"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c4"
-        }
-      ],
-      "indices": [
-        {
-          "chemin": "agents/tools/[categorie]/[nom-outil]/[nom-outil].md",
-          "raison": "Lire l'outil.md : comprendre le besoin AVANT de developper",
-          "type": "fichier"
-        },
-        {
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>",
-          "nom": "lire-fichier",
-          "type": "outil"
-        }
-      ],
-      "question": "L'outil a construire a-t-il une documentation .md ou une spec a lire ?",
-      "titre": "Lire l'outil a construire",
-      "type": "question"
-    },
-    "c4": {
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "texte": "ETAPE 3 OBLIGATOIRE : j'utilise TOUJOURS outil-template pour standardiser la creation de tout nouvel outil.",
-          "type": "regle"
-        }
-      ],
-      "suivant": "c5",
-      "titre": "Copier le outil-template",
-      "type": "action"
-    },
-    "c5": {
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c6"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c6"
-        }
-      ],
-      "indices": [
-        {
-          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-technologies/",
-          "raison": "Lire le protocole-technologies : criteres disponibilite/performance/facilite/portabilite",
-          "type": "fichier"
-        }
-      ],
-      "question": "Python est-il disponible sur le systeme (profil-systeme) ?",
-      "titre": "Choisir la technologie",
-      "type": "question"
-    },
-    "c6": {
-      "indices": [
-        {
-          "ref": "cerveau-projet/agents/regles-immuables/general/protocole-tests/protocole-tests.001.01.ebauche.md",
-          "type": "ref"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        }
-      ],
-      "suivant": "c7",
-      "titre": "Developper l'outil",
-      "type": "action"
-    },
-    "c7": {
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-3"
-        },
-        {
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur.",
-          "type": "regle"
-        },
-        {
-          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (correction des accents + validation ASCII).",
-          "type": "regle"
-        }
-      ],
-      "suivant": "c7b",
-      "titre": "Lancer le combo corriger-ascii",
-      "type": "action"
-    },
-    "c7b": {
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
-        },
-        {
-          "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
-          "raison": "Workflow RVAV obligatoire avant chaque activation",
-          "type": "fichier"
-        }
-      ],
-      "suivant": "c8",
-      "titre": "RVAV avant activation",
-      "type": "action"
-    },
-    "c8": {
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c9"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c8"
-        }
-      ],
-      "indices": [
-        {
-          "ref": "cerveau-projet/agents/regles-immuables/general/protocole-tests/protocole-tests.001.01.ebauche.md",
-          "type": "ref"
-        },
-        {
-          "catalogue": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 morpheus \"TESTER ...\"",
-          "nom": "activer-agent-principal",
-          "type": "outil"
-        }
-      ],
-      "question": "As-tu ACTIVE MORPHEUS pour ECRIRE et EXECUTER les tests (creation ET mise a jour des test-XXX) SANS avoir toi-meme touche a AUCUN fichier de test ?",
-      "titre": "Deleguer les tests a Morpheus",
-      "type": "controle"
-    },
-    "c9": {
-      "message": "CHAINES BOUT-EN-BOUT : outil cree et valide (RVAV), MORPHEUS ACTIVE pour les tests. La chaine continue : Morpheus teste puis ACTIVE Janus (controle) qui REACTIVE Cerberus avec le bilan consolide.",
-      "titre": "FIN - Construire un outil",
-      "type": "fin"
+    {
+     "reponse": "NON",
+     "vers": "c0b"
     }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire..."
+    }
+   ],
+   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+   "type": "question"
   },
-  "identite": {
-    "appartient_a": "vulcain",
-    "commun": false,
-    "type": "parcours"
+  "c0b": {
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer (regle RELECTURE)."
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/vulcain/corrections.md",
+     "nom": "lire-fichier",
+     "type": "outil"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/vulcain/vulcain.md",
+     "nom": "lire-fichier",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c0c",
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "action"
   },
-  "parcours": {
-    "agent": "vulcain",
-    "case_depart": "c0",
-    "description": "v0.2.13 : ALLEGEMENT c8/c14 (point mineur audit Themis) - les regles de 341 caracteres sont remplacees par une reference vers protocole-tests v0.2.1 (section Delegation des tests) - la chaine (type controle + branches + question + indice outil) est inchangee. v0.2.12 : DELEGATION DES TESTS RENFORCEE (lecon recidive generateurs-amelioration) - c6/c12 interdisent de toucher a TOUT fichier test-XXX (creation OU mise a jour), c8/c14 verifient en 2 points (aucune ecriture de test par Vulcain + Morpheus active pour ECRIRE et EXECUTER). Parcours (jeu de piste) des missions de Vulcain : construire un outil, modifier un outil. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.4 : REGLE DES 5 FICHIERS ajoutee dans c12 (apres toute modification de version, verifier l alignement VERSION/STATUT dans py, sh, md, spec + distinguer les versions propres du catalogue et de l index - lecon Vulcain, controle Janus). v0.2.3 : verification PARITE --version py/sh OBLIGATOIRE apres creation (c6) et modification (c12) d outil (lecon Morpheus T5 / Vulcain) - diff <(python3 outil.py --version | tr -d '\r') <(bash outil.sh --version | tr -d '\r'), si divergence aligner le .sh (VERSION/STATUT) avant de continuer. v0.2.2 : lecons des cas reels integrees. v0.2.1 : boucle de delegation MORPHEUS MATERIALISEE (RELAIS c9a/c15a -> RETOUR c9b/c15b -> CLOTURE c9c/c15c -> FIN c9/c15) - la chaine ne casse plus apres l'activation de Morpheus. v0.2.0 : les cases c7/c13 (corriger accents + valider ASCII) pointent vers le combo combo-corriger-ascii (Pattern 3, spec-guider-parcours v0.2.4).",
-    "nom": "parcours-vulcain",
-    "version": "0.3.0"
+  "c0c": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-6"
+    },
+    {
+     "catalogue": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
+     "nom": "lire-activite-recente",
+     "type": "outil"
+    },
+    {
+     "chemin": "AGENTS.md",
+     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel",
+     "type": "fichier"
+    }
+   ],
+   "suivant": "c1",
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type": "action"
+  },
+  "c1": {
+   "branches": [
+    {
+     "reponse": "construire",
+     "vers": "c2"
+    },
+    {
+     "reponse": "modifier",
+     "vers": "c10"
+    },
+    {
+     "reponse": "autre",
+     "vers": "c16"
+    }
+   ],
+   "question": "Quelle est la mission ?",
+   "titre": "Mission",
+   "type": "question"
+  },
+  "c10": {
+   "indices": [
+    {
+     "texte": "ETAPE 1 OBLIGATOIRE : verifier le systeme AVANT de modifier.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "verifier-systeme",
+     "chemin": "cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
+     "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
+     "nom": "verifier-systeme",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c11",
+   "titre": "Verifier le systeme (modification)",
+   "type": "action"
+  },
+  "c11": {
+   "indices": [
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin-outil>",
+     "nom": "lire-fichier",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c12",
+   "titre": "Lire l'outil existant",
+   "type": "action"
+  },
+  "c12": {
+   "indices": [
+    {
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-tests/protocole-tests.001.01.ebauche.md",
+     "type": "ref"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    }
+   ],
+   "suivant": "c12b",
+   "titre": "Modifier l'outil",
+   "type": "action"
+  },
+  "c13": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-3"
+    },
+    {
+     "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (correction des accents + validation ASCII).",
+     "type": "regle"
+    },
+    {
+     "catalogue": "combos-moteur",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+     "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json",
+     "nom": "combos-moteur",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c13b",
+   "titre": "Lancer le combo corriger-ascii",
+   "type": "action"
+  },
+  "c13b": {
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
+    },
+    {
+     "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
+     "raison": "Workflow RVAV obligatoire avant chaque activation",
+     "type": "fichier"
+    }
+   ],
+   "suivant": "c14",
+   "titre": "RVAV avant activation",
+   "type": "action"
+  },
+  "c14": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c15"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c14"
+    }
+   ],
+   "indices": [
+    {
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-tests/protocole-tests.001.01.ebauche.md",
+     "type": "ref"
+    }
+   ],
+   "question": "As-tu ACTIVE MORPHEUS pour ECRIRE et EXECUTER les tests (creation ET mise a jour des test-XXX) SANS avoir toi-meme touche a AUCUN fichier de test ?",
+   "titre": "Deleguer les tests a Morpheus",
+   "type": "controle"
+  },
+  "c15": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md"
+    }
+   ],
+   "message": "CHAINES BOUT-EN-BOUT : outil modifie et valide (RVAV), MORPHEUS ACTIVE pour les tests. La chaine continue : Morpheus teste puis ACTIVE Janus (controle) qui REACTIVE Cerberus avec le bilan consolide.",
+   "titre": "FIN - Modifier un outil",
+   "type": "fin"
+  },
+  "c16": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c17"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c18b"
+    },
+    {
+     "reponse": "documentation",
+     "vers": "c16b"
+    },
+    {
+     "reponse": "audit",
+     "vers": "c20"
+    }
+   ],
+   "question": "La mission concerne-t-elle un domaine d'un autre agent (ex: tests -> Morpheus, audit -> Themis, README -> Clio) ?",
+   "titre": "Mission hors parcours",
+   "type": "question"
+  },
+  "c16b": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire).",
+     "type": "regle"
+    }
+   ],
+   "suivant": "c16c",
+   "titre": "Documentation / Mise a jour de ma fiche",
+   "type": "action"
+  },
+  "c16c": {
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
+    },
+    {
+     "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
+     "raison": "Workflow RVAV obligatoire avant chaque activation",
+     "type": "fichier"
+    }
+   ],
+   "suivant": "c16d",
+   "titre": "RVAV avant reactiver Cerberus",
+   "type": "action"
+  },
+  "c16d": {
+   "message": "Documentation mise a jour et validee (RVAV + detecter-impacts). Je REACTIVE Cerberus avec le bilan consolide : commande reactiver session-llm-1 <raison> <agent_precedent> (le 3e argument est obligatoire).",
+   "titre": "FIN - Documentation",
+   "type": "fin"
+  },
+  "c17": {
+   "indices": [
+    {
+     "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine. J'active CET agent via Cerberus.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c19",
+   "titre": "Activer l'agent habilite",
+   "type": "action"
+  },
+  "c18": {
+   "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Pour un OUTIL DURABLE : je le cree MOI-MEME (je suis Vulcain, protocole 5 fichiers, case Construire l outil) - pas besoin de signaler.",
+   "titre": "Signaler le besoin",
+   "type": "fin"
+  },
+  "c18b": {
+   "branches": [
+    {
+     "reponse": "TEMPORAIRE",
+     "vers": "c18c"
+    },
+    {
+     "reponse": "DURABLE",
+     "vers": "c18"
+    }
+   ],
+   "question": "La mission necessite-t-elle un outil qui n existe pas ?",
+   "titre": "Besoin d outil ?",
+   "type": "question"
+  },
+  "c18c": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire).",
+     "type": "regle"
+    }
+   ],
+   "suivant": "c18d",
+   "titre": "Creer l outil temporaire",
+   "type": "action"
+  },
+  "c18d": {
+   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission.",
+   "titre": "FIN - Outil temporaire",
+   "type": "fin"
+  },
+  "c19": {
+   "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui).",
+   "titre": "FIN - Delegation",
+   "type": "fin"
+  },
+  "c2": {
+   "indices": [
+    {
+     "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande verifier-systeme --reponses ...) au lieu de l ecrire en dur.",
+     "type": "regle"
+    },
+    {
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir.",
+     "type": "regle"
+    },
+    {
+     "texte": "ETAPE 1 OBLIGATOIRE : sans verification du systeme, je ne peux PAS choisir de technologie.",
+     "type": "regle"
+    }
+   ],
+   "suivant": "c3",
+   "titre": "Verifier le systeme",
+   "type": "action"
+  },
+  "c20": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-10"
+    },
+    {
+     "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour.",
+     "type": "regle"
+    },
+    {
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c21",
+   "titre": "Activer Themis pour auditer",
+   "type": "action"
+  },
+  "c21": {
+   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni.",
+   "titre": "FIN - Retour de Themis avec son rapport",
+   "type": "fin"
+  },
+  "c3": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c4"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c4"
+    }
+   ],
+   "indices": [
+    {
+     "chemin": "agents/tools/[categorie]/[nom-outil]/[nom-outil].md",
+     "raison": "Lire l'outil.md : comprendre le besoin AVANT de developper",
+     "type": "fichier"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>",
+     "nom": "lire-fichier",
+     "type": "outil"
+    }
+   ],
+   "question": "L'outil a construire a-t-il une documentation .md ou une spec a lire ?",
+   "titre": "Lire l'outil a construire",
+   "type": "question"
+  },
+  "c4": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "texte": "ETAPE 3 OBLIGATOIRE : j'utilise TOUJOURS outil-template pour standardiser la creation de tout nouvel outil.",
+     "type": "regle"
+    }
+   ],
+   "suivant": "c5",
+   "titre": "Copier le outil-template",
+   "type": "action"
+  },
+  "c5": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c6"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c6"
+    }
+   ],
+   "indices": [
+    {
+     "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-technologies/",
+     "raison": "Lire le protocole-technologies : criteres disponibilite/performance/facilite/portabilite",
+     "type": "fichier"
+    }
+   ],
+   "question": "Python est-il disponible sur le systeme (profil-systeme) ?",
+   "titre": "Choisir la technologie",
+   "type": "question"
+  },
+  "c6": {
+   "indices": [
+    {
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-tests/protocole-tests.001.01.ebauche.md",
+     "type": "ref"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    }
+   ],
+   "suivant": "c6b",
+   "titre": "Developper l'outil",
+   "type": "action"
+  },
+  "c7": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-3"
+    },
+    {
+     "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur.",
+     "type": "regle"
+    },
+    {
+     "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (correction des accents + validation ASCII).",
+     "type": "regle"
+    }
+   ],
+   "suivant": "c7b",
+   "titre": "Lancer le combo corriger-ascii",
+   "type": "action"
+  },
+  "c7b": {
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
+    },
+    {
+     "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
+     "raison": "Workflow RVAV obligatoire avant chaque activation",
+     "type": "fichier"
+    }
+   ],
+   "suivant": "c8",
+   "titre": "RVAV avant activation",
+   "type": "action"
+  },
+  "c8": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c9"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c8"
+    }
+   ],
+   "indices": [
+    {
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-tests/protocole-tests.001.01.ebauche.md",
+     "type": "ref"
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 morpheus \"TESTER ...\"",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ],
+   "question": "As-tu ACTIVE MORPHEUS pour ECRIRE et EXECUTER les tests (creation ET mise a jour des test-XXX) SANS avoir toi-meme touche a AUCUN fichier de test ?",
+   "titre": "Deleguer les tests a Morpheus",
+   "type": "controle"
+  },
+  "c9": {
+   "message": "CHAINES BOUT-EN-BOUT : outil cree et valide (RVAV), MORPHEUS ACTIVE pour les tests. La chaine continue : Morpheus teste puis ACTIVE Janus (controle) qui REACTIVE Cerberus avec le bilan consolide.",
+   "titre": "FIN - Construire un outil",
+   "type": "fin"
+  },
+  "c9b": {
+   "titre": "Ameliorations possibles de mon fonctionnement ?",
+   "type": "question",
+   "question": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c9c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c9"
+    }
+   ]
+  },
+  "c9c": {
+   "titre": "Lancer le generateur d amelioration",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme."
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-amelioration",
+     "catalogue": "generateurs-amelioration",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
+     "raison": "Liste des themes de questions du generateur d amelioration"
+    }
+   ],
+   "suivant": "c9d"
+  },
+  "c9d": {
+   "titre": "Activer l'agent habilite pour l'amelioration",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ],
+   "suivant": "c9e"
+  },
+  "c9e": {
+   "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
+   "type": "fin",
+   "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
+   "suivant": null
+  },
+  "c15b": {
+   "titre": "Ameliorations possibles de mon fonctionnement ?",
+   "type": "question",
+   "question": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c15c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c15"
+    }
+   ]
+  },
+  "c15c": {
+   "titre": "Lancer le generateur d amelioration",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme."
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-amelioration",
+     "catalogue": "generateurs-amelioration",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
+     "raison": "Liste des themes de questions du generateur d amelioration"
+    }
+   ],
+   "suivant": "c15d"
+  },
+  "c15d": {
+   "titre": "Activer l'agent habilite pour l'amelioration",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ],
+   "suivant": "c15e"
+  },
+  "c15e": {
+   "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
+   "type": "fin",
+   "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
+   "suivant": null
+  },
+  "c6b": {
+   "titre": "L outil concerne est-il un COMBO ou le CATALOGUE ?",
+   "type": "question",
+   "question": "L outil que je viens de creer/modifier est-il une definition-combo (definition-combo.json) ou le catalogue de commandes (catalogue-commandes.json) ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c6c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c7"
+    }
+   ],
+   "indices": [
+    {
+     "texte": "GARDE-FOU CLES COMBOS : les entrees d un combo doivent utiliser les cles EXACTES du catalogue (spec v0.2.1).",
+     "type": "regle"
+    },
+    {
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json",
+     "raison": "Source de verite des cles : verifier les parametres.cle d une commande avant d ecrire les entrees d un combo",
+     "type": "fichier"
+    }
+   ]
+  },
+  "c6c": {
+   "titre": "Lancer le scan detecter-decalages-catalogue (section COMBOS)",
+   "type": "action",
+   "suivant": "c7",
+   "indices": [
+    {
+     "texte": "CREATION LIMITEE : le scan detecter-decalages-catalogue genere SON rapport (rapport-detecter-decalages-catalogue-<date>.md) - je ne cree AUCUN autre fichier dans le cerveau dans le cadre de ce scan.",
+     "type": "regle"
+    },
+    {
+     "texte": "PASSE PAR LE GENERATEUR : compose la commande du scan via le catalogue (--commande detecter-decalages-catalogue) au lieu de l ecrire en dur.",
+     "type": "regle"
+    },
+    {
+     "texte": "Le rapport doit afficher '0 problemes' : tout ecart de cles doit etre corrige avant de continuer.",
+     "type": "regle"
+    },
+    {
+     "nom": "detecter-decalages-catalogue",
+     "catalogue": "detecter-decalages-catalogue",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/detecter-decalages-catalogue.py",
+     "type": "outil"
+    }
+   ]
+  },
+  "c12b": {
+   "titre": "L outil concerne est-il un COMBO ou le CATALOGUE ?",
+   "type": "question",
+   "question": "L outil que je viens de creer/modifier est-il une definition-combo (definition-combo.json) ou le catalogue de commandes (catalogue-commandes.json) ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c12c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c13"
+    }
+   ],
+   "indices": [
+    {
+     "texte": "GARDE-FOU CLES COMBOS : les entrees d un combo doivent utiliser les cles EXACTES du catalogue (spec v0.2.1).",
+     "type": "regle"
+    },
+    {
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json",
+     "raison": "Source de verite des cles : verifier les parametres.cle d une commande avant d ecrire les entrees d un combo",
+     "type": "fichier"
+    }
+   ]
+  },
+  "c12c": {
+   "titre": "Lancer le scan detecter-decalages-catalogue (section COMBOS)",
+   "type": "action",
+   "suivant": "c13",
+   "indices": [
+    {
+     "texte": "CREATION LIMITEE : le scan detecter-decalages-catalogue genere SON rapport (rapport-detecter-decalages-catalogue-<date>.md) - je ne cree AUCUN autre fichier dans le cerveau dans le cadre de ce scan.",
+     "type": "regle"
+    },
+    {
+     "texte": "PASSE PAR LE GENERATEUR : compose la commande du scan via le catalogue (--commande detecter-decalages-catalogue) au lieu de l ecrire en dur.",
+     "type": "regle"
+    },
+    {
+     "texte": "Le rapport doit afficher '0 problemes' : tout ecart de cles doit etre corrige avant de continuer.",
+     "type": "regle"
+    },
+    {
+     "nom": "detecter-decalages-catalogue",
+     "catalogue": "detecter-decalages-catalogue",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/detecter-decalages-catalogue.py",
+     "type": "outil"
+    }
+   ]
   }
+ },
+ "identite": {
+  "appartient_a": "vulcain",
+  "commun": false,
+  "type": "parcours"
+ },
+ "parcours": {
+  "agent": "vulcain",
+  "case_depart": "c0",
+  "description": "v0.2.13 : ALLEGEMENT c8/c14 (point mineur audit Themis) - les regles de 341 caracteres sont remplacees par une reference vers protocole-tests v0.2.1 (section Delegation des tests) - la chaine (type controle + branches + question + indice outil) est inchangee. v0.2.12 : DELEGATION DES TESTS RENFORCEE (lecon recidive generateurs-amelioration) - c6/c12 interdisent de toucher a TOUT fichier test-XXX (creation OU mise a jour), c8/c14 verifient en 2 points (aucune ecriture de test par Vulcain + Morpheus active pour ECRIRE et EXECUTER). Parcours (jeu de piste) des missions de Vulcain : construire un outil, modifier un outil. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.4 : REGLE DES 5 FICHIERS ajoutee dans c12 (apres toute modification de version, verifier l alignement VERSION/STATUT dans py, sh, md, spec + distinguer les versions propres du catalogue et de l index - lecon Vulcain, controle Janus). v0.2.3 : verification PARITE --version py/sh OBLIGATOIRE apres creation (c6) et modification (c12) d outil (lecon Morpheus T5 / Vulcain) - diff <(python3 outil.py --version | tr -d '\r') <(bash outil.sh --version | tr -d '\r'), si divergence aligner le .sh (VERSION/STATUT) avant de continuer. v0.2.2 : lecons des cas reels integrees. v0.2.1 : boucle de delegation MORPHEUS MATERIALISEE (RELAIS c9a/c15a -> RETOUR c9b/c15b -> CLOTURE c9c/c15c -> FIN c9/c15) - la chaine ne casse plus apres l'activation de Morpheus. v0.2.0 : les cases c7/c13 (corriger accents + valider ASCII) pointent vers le combo combo-corriger-ascii (Pattern 3, spec-guider-parcours v0.2.4).",
+  "nom": "parcours-vulcain",
+  "version": "0.3.4"
+ }
 }

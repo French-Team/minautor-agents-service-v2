@@ -7,7 +7,7 @@ identite:
 ---
 # valider-cartes-decision
 
-**Version :** 0.3.1
+**Version :** 0.3.2
 **Statut :** prepare
 **Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-cartes-decision/`
@@ -95,6 +95,24 @@ Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
 [ ] ATTENTION (non bloquant) si la question ne semble pas poser la relecture
 ```
 
+### 7. Garde-fou : AUCUN SUIVANT MORT (v0.3.2)
+
+Le champ `suivant` n'est legitime que sur une case **SANS branches** et
+**NON-fin** (question/indice/action/controle qui enchaine). Deux cas sont
+detectes comme ERREUR (mecanique guider-parcours) :
+
+```
+[ ] Case type 'fin' avec champ suivant -> la navigation s'arrete a la fin,
+    le suivant est IGNORE (mort)
+[ ] Case avec branches non vides ET champ suivant -> les branches priment,
+    le suivant n'est JAMAIS lu (mort)
+```
+
+> **Pourquoi ?** Defaut decouvert par l'audit Themis du 2026-08-10 : 25
+> suivant morts sur 10 parcours (themis : 210 chemins fantomes -> 48 apres
+> correction). valider-cartes-decision v0.3.1 ne les detectait pas (references
+> valides mais logique morte). Ce garde-fou empeche la recurrence.
+
 ---
 
 ## Format de sortie
@@ -114,6 +132,8 @@ Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
    [OK] Toutes les references pointent vers des cases existantes
 6. Case c0 de relecture honnete (Pattern 4)
    [OK] c0 est une question de relecture
+7. Garde-fou suivant mort (fin avec suivant / branches + suivant)
+   [OK] Aucun suivant mort (0 fin avec suivant, 0 branches + suivant)
 
 === Resultat : CONFORME ===
 ```
@@ -132,6 +152,8 @@ Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
 | Type invalide | Utiliser question / indice / controle / fin / action |
 | Reference cassee | Corriger suivant ou branche.vers qui pointe vers une case absente |
 | Case c0 absente | Ajouter la question de relecture honnete en case c0 (Pattern 4) |
+| Suivant mort : fin avec suivant | Retirer le champ suivant de la case fin (la navigation s'arrete deja a la fin) |
+| Suivant mort : branches + suivant | Retirer le champ suivant de la case (les branches priment dans guider-parcours) |
 | Fichier .md passe en --fichier | La cible est le parcours JSON, pas la fiche allegee |
 
 ---
@@ -149,8 +171,9 @@ Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
 |---|---|---|
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0-py | 2026-08-06 | Portage Python (validait la section Carte de Decision des fiches) |
-| 0.3.1 | 2026-08-10 | Type action ajoute (modele cible de la refonte des cartes). Parite py/sh (wrapper) maintenue. Docstring spec v0.2.9 -> v0.5.0. |
 | 0.3.0 | 2026-08-08 | Cible changee : PARCOURS JSON (source de verite) au lieu de la section des fiches allegees. 6 controles : JSON, structure, case_depart, types, references, c0 de relecture. --tous scanne tous les agents avec parcours/. .sh = wrapper vers .py (parite stricte) |
+| 0.3.1 | 2026-08-10 | Type action ajoute (modele cible de la refonte des cartes). Parite py/sh (wrapper) maintenue. Docstring spec v0.2.9 -> v0.5.0. |
+| 0.3.2 | 2026-08-10 | GARDE-FOU SUIVANT MORT : controle 7 detecte (a) fin avec suivant et (b) branches + suivant (le suivant n'est legitime que sans branches et non-fin). Parite py/sh maintenue. |
 
 ---
 

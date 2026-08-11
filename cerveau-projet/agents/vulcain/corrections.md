@@ -1277,3 +1277,262 @@ regle des 5 fichiers).
    3 fichiers
 4. detecter-divergences-version est l outil de verification finale : 0
    DIVERGENTE confirme l alignement des 5 fichiers
+## [LECON] 2026-08-10 -- COMBO CONTROLE-BUFFY CREE (v0.1.0)
+
+**Mission** : creer le combo-controle-buffy pour alleger les cases c11/c18 du parcours janus (etape 2a du Pattern 16 - ALLEGEMENT).
+
+**Livrables** : cerveau-projet/agents/tools/combos/combo-controle-buffy/definition-combo.json (5 cases : c1 rappel pattern-2, c2 rappel pattern-12, c3 lire protocole-controle-buffy, c4 creer fichier de controle, c6 FIN).
+
+**Lecons** :
+1. La structure d'un combo (Pattern 3) = nom + version + description (avec les variables attendues --var) + cases. Le c1 doit rappeler la mission et les variables attendues.
+2. Le format des reponses de combos-moteur est `c1=OUI;c2=OUI` (separateur ;), PAS une liste d'arguments --reponses separes.
+3. Le test reel : navigation OUI/OUI -> fin c6 atteinte, fichier de controle cree. Teste avec un fichier temporaire dans .zz-test-combo puis nettoye.
+4. Les variables de combos doivent etre en forward slashes (piege Windows documente dans le protocole-creation-combos).
+5. Le combo cree dans l'esprit du Pattern 16 : il encapsule une SEQUENCE (rappel regles + lecture protocole + creation fichier) pour ramener c11/c18 de 4 indices a 1 indice combo.
+6. Outils utilises : combos-moteur (test navigation), valider-conformite-ascii (0 non-ASCII), controle CRLF (LF pur). Fichiers JSON valides (json.load OK).
+
+## [LECON] 2026-08-10 -- CREATION DES 3 COMBOS CLIO (Vulcain)
+
+**Mission** : creer les 3 combos de Clio (test reel avant la grosse MAJ du README).
+**Resultat** : 27/27 tests passent + dry-run des 2 chemins du combo encapsule.
+
+**Combos crees** :
+1. `combos-analyse-projet` (orchestre py/sh/md, v0.1.0) : etat reel du projet (agents, outils par categorie) + ecarts README vs realite + rapport clio/rapports/
+2. `combo-maj-readme` (encapsule definition-combo.json, v0.1.0, 5 cases) : PETITE MAJ - verifier -> maj (si ecarts) -> ASCII, pilote par combos-moteur
+3. `combos-maj-readme-massive` (orchestre py/sh/md, v0.1.0) : GROSSE MAJ conservative - analyse -> verifier -> maj -> correctifs de fond -> ASCII -> rapport
+
+**Lecons** :
+1. Piege accent : les docstrings/comments doivent etre ASCII strict - verifier apres ecriture (valider-conformite-ascii) car les accents echappent facilement dans les longues chaines
+2. Format reponses de combos-moteur : `--reponses 'c2=OUI'` (case=reponse), pas 'OUI' seul
+3. Parite .sh : le .sh delegue au .py (source de verite) - garder le fallback erreur propre
+4. Format definition encapsule : combo (nom, description, version, case_depart) + cases (outil/controle/fin) + identite - modele combo-controle-buffy
+5. Modele orchestre : verifier_nommage + argparse --version + couleurs ANSI + --rapport - modele combos-audit-general
+6. Les definitions vivent dans agents/tools/combos/combo-*/ (pas dans cerveau-projet/combos/ qui n'existe pas)
+7. Outils utilises : lire-fichier, activer-agent-principal ; tests via scripts temporaires nettoyes
+
+## [LECON] 2026-08-10 -- PROTOCOLE VERIFICATION COHERENCE CREE (Vulcain v0.1.0)
+1. Protocole cree a partir des lecons Themis du re-audit README : 7 sections (Objectif, Prerequis, Etapes E1-E7, RVAV, Exemples, Pieges, Liens) au format exact du modele protocole-audit-buffy.
+2. 4 pieges documentes : separateurs de table MULTIPLES (localiser l'en-tete PUIS le separateur), anciens totaux dans l'arborescence commentee (le --maj ne les touche pas), badges tous sur une ligne unique (compter img.shields.io/badge/), categories virtuelles sans dossier physique (templates = outil-template.md racine).
+3. Le tri automatique d'une table peut ECRASER l'en-tete sans erreur de contenu : la verification de STRUCTURE (E3) est obligatoire apres tout reordonnancement.
+4. Referencement dans index-regles-general.md (table Protocoles, statut ebauche) + normes ASCII 0 + LF pur.
+5. REGLE : ne jamais valider sur la seule base des compteurs de table - scanner les anciennes versions connues dans TOUT le fichier.
+
+## [LECON] 2026-08-10 -- 3 COMBOS CLIO AJOUTES AU CATALOGUE (Vulcain, v0.2.5)
+1. Les 3 combos Clio (combos-analyse-projet, combos-maj-readme-massive, combo-maj-readme) sont au catalogue generateurs-commande (118 commandes, v0.2.5, trie).
+2. Signature reelle des orchestres : [racine] nargs=? default=. + --rapport flag. Le combo encapsule s'execute via combos-moteur avec le chemin definition-combo.json en dur dans le modele.
+3. FORMAT DES REPONSES generateurs-commande : 'cle=valeur;cle2=valeur2' (separateur POINT-VIRGULE, pas le pipe) - mon premier test avec '|' a echoue avec 'Reponse mal formee'.
+4. Generation reelle validee : les 3 commandes generees sont executables (--version rc=0).
+5. detecter-decalages-catalogue : 115 conformes dont mes 3 combos, 2 decalages PREEXISTANTS (generateurs-case-convertir, generateurs-ligne), 1 non testable (le detecteur lui-meme) - aucun nouveau decalage.
+6. NOTA : test-005/007 (KO preexistants) attendent 109/108 commandes - le catalogue en a 118, le RE-SCAN Morpheus devra mettre a jour ces valeurs.
+
+## [LECON] 2026-08-10 -- 5 THEMES D AMELIORATION AJOUTES (Vulcain, themes-amelioration.json v2.1.0)
+
+**Contexte** : le generateur d amelioration ne couvrait que ameliorer-outil (14 q) et ameliorer-agent (5 q). La case c12d du Pattern 17 (pilote themis) peut deleguer 5 autres natures d amelioration : carte, case, combo, parcours, protocole.
+**Verdict** : VALIDE (generation reelle testee pour les 5 nouveaux themes, rc=0).
+**Lecons** :
+1. Format du JSON : {version, themes[]} avec chaque theme = {nom, description, questions[]} et chaque question = {id, question, raison} - ids uniques par theme
+2. Aligner les themes avec les protocoles-autoameliorer existants (6 protocoles : agents, cerveau, conventions, outils, protocoles, regles) - les themes couvrent les natures delegables par c12d
+3. Tester la GENERATION REELLE (--theme <nom>, rc=0, >= 100 caracteres) pas seulement la presence dans le JSON - et le theme inconnu doit retourner rc=1 avec message
+4. Le --liste doit afficher tous les themes avec leur description
+5. Le repertoire complet : ameliorer-outil (14), ameliorer-agent (5), ameliorer-carte (5), ameliorer-case (5), ameliorer-combo (5), ameliorer-parcours (5), ameliorer-protocole (5) = 7 themes, v2.1.0
+6. Normes : ASCII strict + LF pur + tri alphabetique des themes conserve
+
+## [LECON] 2026-08-10 -- 4 THEMES D AMELIORATION SUPPLEMENTAIRES (Vulcain, themes-amelioration.json v2.2.0)
+
+**Contexte** : audit de couverture - la liste des themes doit couvrir les 6 protocoles-autoameliorer officiels (regles-immuables/general) + la structure reelle du cerveau. Manquants detectes : regles, cerveau, conventions, spec.
+**Verdict** : VALIDE - 11 themes au total, couverture 6/6 des protocoles + spec (trio).
+**Lecons** :
+1. La source de verite des natures d amelioration = le dossier protocole-autoameliorer-* (6 protocoles : agents, cerveau, conventions, outils, protocoles, regles)
+2. ATTENTION singulier/pluriel : les protocoles sont au pluriel (agents, outils, protocoles), les themes au singulier (ameliorer-agent, ameliorer-outil, ameliorer-protocole) - verifier avec le mapping correct pour eviter les faux negatifs
+3. Le theme ameliorer-spec couvre le trio athena/promethee/minerve (pense-betes, specs, todos) - separe des agents du cerveau-projet
+4. Repertoire complet v2.2.0 : ameliorer-outil (14) + 10 themes de 5 questions = 64 questions
+5. Chaque theme doit avoir une question de DELEGATION (qui est l agent habilite, Pattern 5/8) et une de DOCUMENTATION (lecon/version) - le generateur garantit que l agent ne fait PAS l amelioration lui-meme
+## [LECON] 2026-08-10 -- GARDE-FOU SUIVANT MORT AJOUTE A valider-cartes-decision (Vulcain, v0.3.2)
+
+**Mission** : renforcer valider-cartes-decision pour detecter les suivant morts
+(recommandation de l'audit Themis du 2026-08-10 apres correction de 25 suivant
+morts sur 10 parcours).
+
+**Ce qui a ete fait** :
+1. Controle 7 ajoute dans valider-cartes-decision.py (v0.3.1 -> v0.3.2) : deux
+   cas de suivant mort detectes comme ERREUR :
+   - case type 'fin' avec champ suivant (la navigation s'arrete a la fin, le
+     suivant est ignore)
+   - case avec branches non vides ET champ suivant (les branches priment, le
+     suivant n'est jamais lu)
+2. Le suivant n'est legitime que sur une case SANS branches et NON-fin
+   (question/indice/action/controle qui enchaine)
+3. Mecanique verifiee dans guider-parcours.py : ligne 336 (fin -> break),
+   ligne 380 (branches -> reponse), ligne 385 (suivant seulement si pas de
+   branches)
+4. Parite py/sh maintenue (le .sh est un wrapper), doc .md mise a jour
+   (controle 7 + erreurs courantes + versionning)
+
+**Decouverte importante (la preuve de la valeur du garde-fou)** : le nouveau
+controle a revele 3 suivant morts RESIDUELS dans MON propre parcours
+(parcours-vulcain v0.3.2) : c8 (controle delegation tests, branches OUI/NON +
+suivant), c14 (idem), c18b (question besoin outil, branches TEMPORAIRE/DURABLE
++ suivant). Ces residus avaient echappe a la correction de Buffy (25 suivant
+morts) car valider-cartes-decision v0.3.1 ne les detectait pas. Correction :
+3 suivant retires, navigation intacte (cases toujours atteignables via
+branches), valider-cartes --tous = 11/11 CONFORME.
+
+**Lecons** :
+1. Un garde-fou qui ne detecte RIEN lors de son premier deploiement est
+   suspect : si le nouveau controle passe sur tous les parcours sans alerte,
+   verifier qu'il detecte bien au moins un cas reel (test negatif obligatoire)
+2. Les 'suivant morts' sont des residus de migration insidieux : ils ne
+   cassent pas la navigation (branches/fin priment) mais polluent la structure
+   (chemins fantomes dans le cartographe) et trompent les lecteurs de la carte
+3. Le controle 'fin avec suivant' + 'branches avec suivant' devrait etre ajoute
+   au detecteur-decalages-catalogue ou a la prochaine version de la
+   spec-guider-parcours comme pattern structurel
+4. REGLE DELEGATION DES TESTS respectee : je n'ai pas touche aux tests
+   (tester-valider-cartes-decision.sh points 1-2 attendent 0.3.1 -> 2 KO) ;
+   Morpheus doit mettre a jour les versions + ajouter un point de test pour le
+   nouveau controle 7
+
+**Tests attendus (Morpheus)** : tester-valider-cartes-decision.sh (0.3.1 ->
+0.3.2, + test du controle 7 : parcours infeste = NON CONFORME), et verification
+des references 0.3.1 dans test-004/005/010/012/016.
+## [LECON] 2026-08-11 -- COMBO-CREER-* CORRIGES (Vulcain, catalogue v0.2.6)
+
+**Mission** : corriger le KO preexistant test-003 (20 echecs sur les 3 combos
+creer-*).
+
+**Cause racine identifiee** : les definitions-combo utilisaient des CLES
+D ENTREES OBSOLETES par rapport au catalogue de commandes (source de verite) :
+1. valider-conventions + rechercher-fichier : les combos passaient la cle
+   'fichier' mais le catalogue attend 'chemin' -> ERREUR 'Parametre
+   obligatoire manquant : chemin'
+2. copier-dossier : le catalogue n exposait que 'chemin' alors que l outil
+   reel exige source + destination positionnels
+3. copier-fichier : le catalogue n exposait que 'forcer' alors que l outil
+   reel exige source + destination (+ option --forcer)
+4. combo-creer-agent c8 : creer-fichier exige 'contenu' obligatoire mais la
+   case c8 du combo ne le fournissait pas -> ERREUR 'Parametre obligatoire
+   manquant : contenu'
+
+**Corrections appliquees** :
+1. CATALOGUE (source de verite) v0.2.5 -> v0.2.6 :
+   - copier-dossier : modele {chemin} -> {source} {destination}, parametres
+     source (obligatoire) + destination (obligatoire)
+   - copier-fichier : modele --forcer -> {source} {destination} {forcer},
+     parametres source + destination + forcer (flag optionnel)
+2. COMBOS (3 definitions) :
+   - combo-creer-fichier-cerveau : c3 (valider-conventions) + c5
+     (rechercher-fichier) : cle 'fichier' -> 'chemin'
+   - combo-creer-protocole : c1 (valider-conventions) : cle 'fichier' ->
+     'chemin'
+   - combo-creer-agent : c8 (creer-fichier) : 'contenu' ajoute
+
+**Resultats** : les 3 combos naviguent en dry-run rc=0 avec COMBO TERMINE et
+les commandes generees correctes. test-003 passe de 20 echecs a 4 echecs
+(seul combo-creer-agent KO car le TEST ne fournit pas la variable contenu
+requise par creer-fichier).
+
+**Lecons** :
+1. Le CATALOGUE est la source de verite des commandes : les definitions-combo
+   doivent utiliser les cles EXACTES du catalogue (jamais inventer des cles)
+2. Un decalage catalogue/outil peut etre DANS LE CATALOGUE (modele incomplet
+   ne refleter pas les vrais parametres de l outil) : verifier l interface
+   reelle de l outil (add_argument / positionnels) avant de blamer les combos
+3. detecter-decalages-catalogue confirme la conformite : copier-dossier et
+   copier-fichier sont passes de decalage a CONFORME (114 conformes)
+4. Les 2 decalages restants (generateurs-case-convertir, generateurs-ligne)
+   sont des FAUX POSITIFS connus du detecteur (outils sans add_argument
+   standard : options reelles []) - preexistants, hors perimetre
+5. Le test-003 et le test-005 doivent etre adaptes par MORPHEUS :
+   - test-003 : combo-creer-agent vars doivent inclure contenu (creer-fichier
+     l exige)
+   - test-005 : point 14 catalogue version 0.2.5 -> 0.2.6
+
+**Tests attendus (Morpheus)** : test-003 (ajouter contenu aux vars de
+combo-creer-agent), test-005 (version catalogue 0.2.6), non-regression
+complete.
+## [LECON] 2026-08-11 -- SPEC-COMBO-MOTEUR v0.2.1 : REGLE DES CLES EXACTES DU CATALOGUE
+
+**Mission** : documenter dans la spec-combos-moteur que les entrees des cases
+generateur doivent utiliser les cles exactes du catalogue de commandes.
+
+**Ce qui a ete fait** :
+1. Version spec 0.2.0-beta -> 0.2.1 (date 2026-08-11)
+2. REGLE explicite ajoutee dans la section "Format de la definition" : les
+   cles des entrees d'une case generateur = cles EXACTES des parametres de la
+   commande ciblee dans catalogue-commandes.json (source de verite). Interdiction
+   d'inventer une cle.
+3. Pourquoi : le moteur appelle generateurs-commande --reponses "cle=valeur" ;
+   une cle inconnue est ignoree, un parametre obligatoire manquant -> ERREUR
+   'Parametre obligatoire manquant' qui fait echouer tout le combo (KO test-003)
+4. Comment connaitre les cles : lire catalogue-commandes.json (champ parametres.cle),
+   ou compter les questions du mode interactif ; les cles ne suivent AUCUNE
+   convention universelle (fichier/chemin/source/destination/type/contenu) ->
+   toujours verifier
+5. Contre-exemple + bon exemple (valider-conventions : fichier (MAUVAIS) vs
+   chemin (BON)) dans la section Format de la definition
+6. Tableau des types de cases : colonne generateur mise a jour
+7. Section Variables et interpolation : ajout de la REGLE v0.2.1 (valeur = var
+   interpolee OU valeur en dur, mais CLE = nom exact d'un parametre du catalogue)
+8. Table "Tests requis" : 2 nouveaux cas (cle hors catalogue -> ERREUR code 1 ;
+   cles exactes -> commande composee correctement)
+
+**Validations** : ASCII 0, CRLF 0, valider-conformite-ascii OK, structure
+conservee (311 lignes). test-002-combos-moteur : reference la spec par chemin
+(mention v0.1.0 contextuelle dans un commentaire, pas une verification de
+version) -> aucun impact attendu.
+
+**Lecons** :
+1. La spec d'un outil appartient au proprietaire de l'outil (ici Vulcain pour
+   combos-moteur) ; Promethee redige les specs du dossier pense-betes (trio
+   projets futurs) - ne pas confondre les deux perimetres
+2. Une lecon issue d'un KO doit etre REFLECTEE dans la spec de l'outil concerne
+   pour qu'elle devienne une regle durable et relue par les agents (pas seulement
+   une note dans corrections.md)
+3. La regle des cles exactes du catalogue est transverse : elle concerne TOUTES
+   les definitions-combo (combos creer-*, combo-tester-outil, etc.) - le
+   detecteur-decalages-catalogue et les futurs combos doivent la respecter
+## [LECON] 2026-08-11 -- GARDE-FOU CLES COMBOS VS CATALOGUE (Vulcain, moteur v0.3.0 + detecteur v0.1.1)
+
+**Mission** : ajouter un garde-fou anti-recurrence du defaut test-003 : les
+definitions-combo ne doivent jamais utiliser des cles d entrees inventees pour
+les cases generateur.
+
+**Ce qui a ete fait** :
+1. SCAN PREALABLE : 8 ecarts reels trouves dans les 3 combos creer-* (cles
+   dry_run x5 et recursive x2) - le garde-fou a servi IMMEDIATEMENT a sa
+   creation en revelant les ecarts a corriger
+2. COMBOS CORRIGES : 8 cles retirees (dry_run = cle morte car le moteur gere
+   --dry-run globalement ; recursive = inutile pour des validations ciblant un
+   fichier)
+3. combos-moteur.py v0.2.0-beta -> v0.3.0 : nouvelle fonction
+   valider_cles_generateurs(donnees) appelee au chargement APRES
+   valider_definition : verifie (a) le catalogue cible existe, (b) chaque cle
+   des entrees est un parametre exact du catalogue, (c) chaque parametre
+   obligatoire est fourni. En cas d ecart -> ERREUR claire (combo, case, cles)
+   code retour 1. Parite py/sh maintenue (le .sh embarque le code python).
+4. detecter-decalages-catalogue.py v0.1.0 -> v0.1.1 : section COMBOS ajoutee
+   au rapport (scan de combos/*/definition-combo.json, memes verifications) +
+   synthese "COMBOS: X scannes, Y problemes"
+5. Docs a jour (moteur v0.3.0 + garde-fou documente, detecteur v0.1.1)
+
+**Validations** : py/sh parite v0.3.0, combo infeste detecte (rc=1, 2 erreurs)
+dans py ET sh, 3 combos creer-* conformes, detecteur : 14 combos scannes 0
+probleme, bash -n OK, py_compile OK, normes ASCII 0 + LF partout.
+
+**Lecons** :
+1. Un garde-fou de validation AU CHARGEMENT est plus fort qu un scan externe :
+   le combo fautif echoue immediatement au lancement avec une erreur claire -
+   le scan preventif (detecteur) complete pour detecter AVANT l usage
+2. Les cles mortes s accumulent silencieusement dans les definitions (dry_run
+   ajoute avant que le moteur ne gere --dry-run globalement) : un scan
+   systematique des entrees vs catalogue doit etre lance regulierement
+3. La parite py/sh d un outil qui embarque du python (heredoc) exige de
+   synchroniser version ET logique dans les 2 blocs - le --version du .sh
+   revele immediatement une desynchronisation
+4. test-002 (combos-moteur) utilise des catalogues valides dans ses definitions
+   de test : le nouveau garde-fou ne doit pas les casser (a verifier par
+   Morpheus)
+
+**Tests attendus (Morpheus)** : test-002 (garde-fou actif sur definitions de
+test), test-003 (combos corriges), detecter-decalages-catalogue (section
+COMBOS), non-regression complete.

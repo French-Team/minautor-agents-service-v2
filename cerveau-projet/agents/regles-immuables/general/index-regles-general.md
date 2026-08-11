@@ -14,6 +14,7 @@ identite:
 | [regles-general-global.md](regles-general-global.md) | Regles globales du projet |
 | [rvav-workflow.md](rvav-workflow.md) | Workflow RVAVP (Rechercher-Verifier-Analyser-Valider-Purifier) |
 | [regles-choisir-agent.md](regles-choisir-agent.md) | **IMMUABLE** -- Choisir le bon agent |
+| [regles-groupes-agents.md](regles-groupes-agents.md) | **IMMUABLE** -- Groupes d'agents et domaines (coordination / cerveau-projet / trio projets futurs) |
 | [regles-validation-rigoureuse.md](regles-validation-rigoureuse.md) | **IMMUABLE** -- Validation rigoureuse |
 | [regles-emojis-ascii.md](regles-emojis-ascii.md) | **IMMUABLE** -- Bannissement des emojis, utilisation de ASCII (exceptions volontaires documentees dans le fichier) |
 | [regles-perimetre-workspace.md](regles-perimetre-workspace.md) | **IMMUABLE** -- Perimetre du workspace : ecriture dans le workspace uniquement, hors workspace en lecture seule |
@@ -50,6 +51,7 @@ identite:
 | [protocole-controle-buffy/](protocole-controle-buffy/) | Controle croise du travail de Buffy (Janus) | ebauche |
 | [protocole-audit-buffy/](protocole-audit-buffy/) | Audit de conformite du travail de Buffy (Themis) | ebauche |
 | [protocole-sante-fichiers-agents/](protocole-sante-fichiers-agents/) | Sante periodique des fichiers agents (Janus) | ebauche |
+| [protocole-verification-coherence/](protocole-verification-coherence/) | Verification de coherence des fichiers a compteurs/tables/badges (Themis, lecons re-audit README) | ebauche |
 
 ## Navigation
 

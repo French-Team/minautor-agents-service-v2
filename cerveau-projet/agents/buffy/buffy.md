@@ -70,7 +70,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.3.3)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.3.4)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -200,9 +200,20 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "AgentPrecedent"
 ```
 
-> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
 > Utiliser TOUJOURS l outil activer-agent-principal (jamais str_replace/write_file) pour AGENTS.md.
 > Ne JAMAIS utiliser `str_replace` ou `write_file` pour ce fichier.
+> **FINS REELLES DE MA CARTE v0.3.3 (E5b - croisement fiche/parcours)** :
+> - `c8` FIN - Activer Janus (mon controle croise standard apres modification)
+> - `c13d` FIN - Erreurs hors mission signalees a Cerberus
+> - `c22` FIN - Activer Janus
+> - `c27` FIN - Activer Janus
+> - `c35` Signaler le besoin (fin - relais : je signale et je m arrete)
+> - `c35d` FIN - Outil temporaire (apres creation d un outil temporaire)
+> - `c36` FIN - Delegation (j active l agent habilite)
+> - `c39` FIN - Retour d Atlas avec sa carte (apres cartographie)
+> - `c41` FIN - Retour de Themis avec son rapport (apres un audit demande)
+
 
 ---
 

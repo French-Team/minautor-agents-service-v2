@@ -159,7 +159,6 @@
         }
       ],
       "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
-      "suivant": "c16b",
       "titre": "Mission hors parcours",
       "type": "question"
     },
@@ -188,7 +187,6 @@
     },
     "c16": {
       "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission.",
-      "suivant": "c16c",
       "titre": "Signaler le besoin",
       "type": "fin"
     },
@@ -362,7 +360,7 @@
           "type": "outil"
         }
       ],
-      "suivant": "c9",
+      "suivant": "c8b",
       "titre": "Ajouter les lecons dans corrections.md",
       "type": "action"
     },
@@ -386,6 +384,66 @@
       "question": "Comment ai-je ete activee ?",
       "titre": "Retour : qui m'a delegue ?",
       "type": "question"
+    },
+    "c8b": {
+      "titre": "Ameliorations possibles de mon fonctionnement ?",
+      "type": "question",
+      "question": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c8c"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c9"
+        }
+      ]
+    },
+    "c8c": {
+      "titre": "Lancer le generateur d amelioration",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-amelioration",
+          "catalogue": "generateurs-amelioration",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
+          "raison": "Liste des themes de questions du generateur d amelioration"
+        }
+      ],
+      "suivant": "c8d"
+    },
+    "c8d": {
+      "titre": "Activer l'agent habilite pour l'amelioration",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+        }
+      ],
+      "suivant": "c8e"
+    },
+    "c8e": {
+      "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
+      "type": "fin",
+      "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
+      "suivant": null
     }
   },
   "identite": {
@@ -398,6 +456,6 @@
     "case_depart": "c0",
     "description": "v0.2.0 : MIGRATION AU NOUVEAU FORMAT (spec-refonte etape 6, pilote 2 apres cerberus) - cases indice -> action, regles > 160 car. -> references (patterns/protocoles), max 3 indices par case. Parcours (jeu de piste) des missions de Morpheus : tester un outil (ecrire + executer avec protections), valider, rapporter. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
     "nom": "parcours-morpheus",
-    "version": "0.2.0"
+    "version": "0.3.1"
   }
 }

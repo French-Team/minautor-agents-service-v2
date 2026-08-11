@@ -73,7 +73,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.3.2)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.3.4)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -187,8 +187,14 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "Janus"
 ```
 
-> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
 > **FLUX** : Je suis le DERNIER maillon des chaines (outil -> tests -> controle) : je reactiver Cerberus avec le BILAN CONSOLIDE.
+> **FINS REELLES DE MA CARTE v0.3.3 (E5b - croisement fiche/parcours)** :
+> - `c10` FIN - Reactiver Cerberus (mon retour standard : je reactiver Cerberus avec le bilan)
+> - `c29` Signaler le besoin (fin - relais : je signale et je m'arrete)
+> - `c29d` FIN - Outil temporaire (apres creation d'un outil temporaire)
+> - `c30` FIN - Delegation (j'active l'agent habilite)
+> - `c32` FIN - Retour de Themis avec son rapport (apres un audit demande)
 
 ---
 

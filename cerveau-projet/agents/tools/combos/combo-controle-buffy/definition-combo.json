@@ -1,0 +1,69 @@
+{
+  "combo": {
+    "nom": "combo-controle-buffy",
+    "description": "Preparation d'une mission de controle du travail de Buffy (Pattern 3, anciennes cases c11/c18 du parcours janus) : rappel des regles (pattern-2 ASCII, pattern-12 creation limitee) -> lecture du protocole-controle-buffy (etapes E1-E10) -> creation du fichier de controle. Variables attendues : --var fichier_controle=<chemin du fichier de controle a creer>.",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Rappel regle ASCII (pattern-2)",
+      "type": "controle",
+      "question": "Rappel pattern-2 (REGLE ASCII) : chaque case d'ecriture doit porter le rappel ASCII obligatoire. As-tu applique le rappel ASCII dans la mission de controle ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c2"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c5"
+        }
+      ]
+    },
+    "c2": {
+      "titre": "Rappel creation limitee (pattern-12)",
+      "type": "controle",
+      "question": "Rappel pattern-12 (CREATION LIMITEE, garde-fou une carte = un role) : si la mission de controle necessite de creer/modifier des fichiers, seul l'agent habilite le fait avec les outils de sa carte. Le controle signale, il ne cree pas hors perimetre. Conforme ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c3"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c5"
+        }
+      ]
+    },
+    "c3": {
+      "titre": "Lire le protocole-controle-buffy (E1-E10)",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/regles-immuables/general/protocole-controle-buffy/protocole-controle-buffy.001.01.ebauche.md",
+      "sortie": "protocole_buffy",
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Creer le fichier de controle",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py {fichier_controle}",
+      "sortie": "fichier_cree",
+      "suivant": "c6"
+    },
+    "c5": {
+      "titre": "FIN - regles non respectees",
+      "type": "fin",
+      "message": "REGLES NON RESPECTEES : le rappel ASCII (pattern-2) ou la creation limitee (pattern-12) ne sont pas conformes. Corriger avant de lancer le controle du travail de Buffy."
+    },
+    "c6": {
+      "titre": "FIN - controle prepare",
+      "type": "fin",
+      "message": "Controle du travail de Buffy prepare : regles rappelees (ASCII, creation limitee), protocole-controle-buffy lu (E1-E10), fichier de controle cree. Poursuivre avec les etapes du protocole dans le parcours janus."
+    }
+  },
+  "identite": {
+    "type": "combo",
+    "appartient_a": "commun",
+    "commun": true
+  }
+}

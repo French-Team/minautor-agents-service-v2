@@ -68,7 +68,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.3.0)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.3.3)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -216,8 +216,15 @@ Chaque rapport suit ce format :
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison du rapport" themis
 ```
 
-> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
 > Utiliser TOUJOURS l outil activer-agent-principal (jamais str_replace/write_file) pour AGENTS.md.
+> **FINS REELLES DE MA CARTE v0.3.0 (E5b - croisement fiche/parcours)** :
+> - `c13` FIN - Reactiver Cerberus (mon retour standard avec le rapport)
+> - `c23` Signaler le besoin (fin - relais : je signale et je m arrete)
+> - `c23d` FIN - Outil temporaire (apres creation d un outil temporaire)
+> - `c24` FIN - Delegation (j active l agent habilite)
+> - `c25b` FIN - Activer l agent precedent avec son rapport (retour apres audit demande)
+
 
 ---
 

@@ -1,103 +1,101 @@
 {
- "combo": {
-  "nom": "combo-creer-fichier-cerveau",
-  "version": "0.2.0",
-  "description": "Creation d'un fichier du cerveau : verifier le nommage, verifier la structure, verifier l'absence, creer le fichier (variable {chemin} {contenu}). Les commandes sont composees par le generateur de commandes.",
-  "case_depart": "c1"
- },
- "cases": {
-  "c1": {
-   "titre": "Generer la commande valider-nommage",
-   "type": "generateur",
-   "catalogue": "valider-nommage",
-   "entrees": {
-    "type": "outil",
-    "chemin": "{chemin}",
-    "recursive": "non"
-   },
-   "sortie": "cmd1",
-   "suivant": "c2"
+  "combo": {
+    "nom": "combo-creer-fichier-cerveau",
+    "version": "0.2.0",
+    "description": "Creation d'un fichier du cerveau : verifier le nommage, verifier la structure, verifier l'absence, creer le fichier (variable {chemin} {contenu}). Les commandes sont composees par le generateur de commandes.",
+    "case_depart": "c1"
   },
-  "c2": {
-   "titre": "Executer valider-nommage",
-   "type": "outil",
-   "commande": "{cmd1}",
-   "sortie": "resultat_nommage",
-   "suivant": "c3"
-  },
-  "c3": {
-   "titre": "Generer la commande valider-conventions",
-   "type": "generateur",
-   "catalogue": "valider-conventions",
-   "entrees": {
-    "fichier": "{chemin}"
-   },
-   "sortie": "cmd2",
-   "suivant": "c4"
-  },
-  "c4": {
-   "titre": "Executer valider-conventions",
-   "type": "outil",
-   "commande": "{cmd2}",
-   "sortie": "resultat_structure",
-   "suivant": "c5"
-  },
-  "c5": {
-   "titre": "Generer la commande rechercher-fichier",
-   "type": "generateur",
-   "catalogue": "rechercher-fichier",
-   "entrees": {
-    "fichier": "{chemin}"
-   },
-   "sortie": "cmd3",
-   "suivant": "c6"
-  },
-  "c6": {
-   "titre": "Executer rechercher-fichier",
-   "type": "outil",
-   "commande": "{cmd3}",
-   "sortie": "resultat_existence",
-   "suivant": "c7"
-  },
-  "c7": {
-   "titre": "CONTROLE : le fichier n'existe pas encore ?",
-   "type": "controle",
-   "question": "Les verifications (nommage, structure, absence) sont-elles OK ?",
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c8"
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande valider-nommage",
+      "type": "generateur",
+      "catalogue": "valider-nommage",
+      "entrees": {
+        "type": "outil",
+        "chemin": "{chemin}"
+      },
+      "sortie": "cmd1",
+      "suivant": "c2"
     },
-    {
-     "reponse": "NON",
-     "vers": "c10"
+    "c2": {
+      "titre": "Executer valider-nommage",
+      "type": "outil",
+      "commande": "{cmd1}",
+      "sortie": "resultat_nommage",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Generer la commande valider-conventions",
+      "type": "generateur",
+      "catalogue": "valider-conventions",
+      "entrees": {
+        "chemin": "{chemin}"
+      },
+      "sortie": "cmd2",
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Executer valider-conventions",
+      "type": "outil",
+      "commande": "{cmd2}",
+      "sortie": "resultat_structure",
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Generer la commande rechercher-fichier",
+      "type": "generateur",
+      "catalogue": "rechercher-fichier",
+      "entrees": {
+        "chemin": "{chemin}"
+      },
+      "sortie": "cmd3",
+      "suivant": "c6"
+    },
+    "c6": {
+      "titre": "Executer rechercher-fichier",
+      "type": "outil",
+      "commande": "{cmd3}",
+      "sortie": "resultat_existence",
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "CONTROLE : le fichier n'existe pas encore ?",
+      "type": "controle",
+      "question": "Les verifications (nommage, structure, absence) sont-elles OK ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c8"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c10"
+        }
+      ]
+    },
+    "c8": {
+      "titre": "Generer la commande creer-fichier",
+      "type": "generateur",
+      "catalogue": "creer-fichier",
+      "entrees": {
+        "fichier": "{chemin}",
+        "contenu": "{contenu}",
+        "forcer": "non"
+      },
+      "sortie": "cmd4",
+      "suivant": "c9"
+    },
+    "c9": {
+      "titre": "Executer creer-fichier",
+      "type": "outil",
+      "commande": "{cmd4}",
+      "sortie": "resultat_creation",
+      "suivant": "c10"
+    },
+    "c10": {
+      "titre": "FIN - fichier cree ou non conforme",
+      "type": "fin",
+      "message": "Creation terminee : soit le fichier a ete cree (resultat_creation), soit une verification a echoue (a corriger dans la carte : retour a la case de verification)."
     }
-   ]
-  },
-  "c8": {
-   "titre": "Generer la commande creer-fichier",
-   "type": "generateur",
-   "catalogue": "creer-fichier",
-   "entrees": {
-    "fichier": "{chemin}",
-    "contenu": "{contenu}",
-    "forcer": "non",
-    "dry_run": "non"
-   },
-   "sortie": "cmd4",
-   "suivant": "c9"
-  },
-  "c9": {
-   "titre": "Executer creer-fichier",
-   "type": "outil",
-   "commande": "{cmd4}",
-   "sortie": "resultat_creation",
-   "suivant": "c10"
-  },
-  "c10": {
-   "titre": "FIN - fichier cree ou non conforme",
-   "type": "fin",
-   "message": "Creation terminee : soit le fichier a ete cree (resultat_creation), soit une verification a echoue (a corriger dans la carte : retour a la case de verification)."
   }
- }
 }

@@ -1,0 +1,56 @@
+{
+  "combo": {
+    "nom": "combo-maj-readme",
+    "description": "PETITE mise a jour du README (Pattern 3, encadre les petites corrections de compteurs) : verifier l'etat reel (mettre-a-jour-readme --verifier) -> maj des compteurs (--maj) -> verification ASCII (valider-conformite-ascii). A utiliser quand l'analyse (combos-analyse-projet) montre PEU d'ecarts (1-2 compteurs). Pour une grosse MAJ, utiliser combos-maj-readme-massive.",
+    "version": "0.1.0",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Executer mettre-a-jour-readme --verifier",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier",
+      "sortie": "verifier_resultat",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Ecarts detectes ?",
+      "type": "controle",
+      "question": "Le --verifier signale-t-il des ecarts (OBSOLETE / MANQUANT) avec le README ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c3"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c4"
+        }
+      ]
+    },
+    "c3": {
+      "titre": "Executer mettre-a-jour-readme --maj",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --maj",
+      "sortie": "maj_resultat",
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Verifier la conformite ASCII",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py README.md",
+      "sortie": "resultat_ascii",
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "FIN - petite MAJ du README terminee",
+      "type": "fin",
+      "message": "Petite MAJ terminee : verifier + maj (si ecarts) + ASCII controle. Le README reflete l'etat reel des compteurs. Si l'analyse initiale montrait des ecarts de FOND (tables, sections, categories nouvelles), lancer combos-maj-readme-massive a la place."
+    }
+  },
+  "identite": {
+    "type": "definition-combo",
+    "appartient_a": "clio",
+    "commun": false
+  }
+}

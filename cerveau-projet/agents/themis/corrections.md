@@ -543,3 +543,94 @@ importe quel agent). Sur 37 fins mentionnant Cerberus, seules 2 sont fausses.
 2. **Les versions attendues des tests doivent etre verifiees apres chaque evolution de parcours** : la divergence etait purement cosmetique (compteurs de types deja alignes, seule la version n'avait pas ete bumpee) -- un scan des versions attendues de tous les tests (test-009 a test-018) apres chaque refonte de parcours eviterait ces KO preexistants.
 3. **Le couple test-018 + protocole-tests v0.2.2 est un verrou complet** : le test verifie les fins (Pattern 13, anti-regression reactiver), le protocole impose de le re-executer apres toute modification de fin -- les deux se renforcent.
 4. **Distinguer version historique et version courante dans les tests** : les mentions historiques (docstring) doivent etre conservees, seule la verification courante change -- l'adaptation chirurgicale de Morpheus est le bon modele.
+## [LECON] 2026-08-10 -- AUDIT SANTE E5 FICHE JANUS vs CARTE v0.3.3 (Themis, VERDICT A REVOIR)
+
+**Mission** : etape 3 - audit documentaire du protocole sante E5b sur la fiche janus apres l'allegement (carte v0.3.3, Pattern 16).
+
+**Verdict** : A REVOIR (2 points).
+
+**Lecons** :
+1. Pattern 14 viole : la fiche janus dit `PARCOURS (v0.3.2)` (ligne 76) alors que la carte est v0.3.3. Apres toute mise a jour de version de parcours, la fiche doit etre synchronisee (le protocole sante E5 detecte automatiquement cette divergence).
+2. E5b viole : la fiche formule le sens des fins (reactiver Cerberus, dernier maillon) mais ne cite AUCUN identifiant cX reel des fins de la carte v0.3.3 (c10, c29, c29d, c30, c32). La lecon du re-audit est explicite : "Une mention textuelle sans identifiant reel est INSUFFISANTE".
+3. PIEGE PERSONNEL : dans mon script d'audit, j'ai cherche les mauvaises fins (c14/c16d/c17/c19 de la version precedente) - la carte v0.3.3 a evolue (fins reelles : c10 Reactiver Cerberus, c29 Signaler, c29d Outil temporaire, c30 Delegation, c32 Retour de Themis). TOUJOURS lire les fins reelles du parcours AVANT de croiser.
+4. Moi-meme j'ai ecrit 12 non-ASCII (guillemets francais " " + accents) dans mon rapport - corriges via reecriture ASCII strict. Lecon : rediger directement en ASCII (le corriger-accents-zones-sensibles conserve les accents francais par conception "zones sensibles", il ne remplace pas " ").
+5. Correction confiee a Buffy (responsable des fichiers du cerveau) : mise a jour v0.3.3 + citation des fins cX.
+## [LECON] 2026-08-10 -- RE-AUDIT E5b FICHE JANUS CORRIGEE (Themis, VERDICT VALIDE 10/10)
+
+**Mission** : re-audit du protocole sante E5 sur la fiche janus corrigee (apres correction Buffy + controle Janus).
+
+**Verdict** : VALIDE 10/10 - les 2 points de l'audit precedent (Pattern 14 + E5b) sont resorbes.
+
+**Lecons** :
+1. Le cycle complet detecter -> corriger -> controler -> RE-AUDITER fonctionne : l'audit initial A REVOIR (2 KO), correction par Buffy, controle croise Janus 14/14, puis re-audit Themis 10/10 VALIDE.
+2. E5b est maintenant conforme : les 5 fins reelles de la carte v0.3.3 (c10, c29, c29d, c30, c32) sont citees par identifiant dans la fiche - le croisement fiche/parcours passe KO -> OK.
+3. Pattern 14 conforme : fiche PARCOURS (v0.3.3) == carte v0.3.3.
+4. Bonus applique pendant la correction : Pattern 8 -> Pattern 13 aligne dans la fiche (ma recommandation precedente).
+5. Le rapport d'audit a ete mis a jour avec le verdict final (A REVOIR -> VALIDE, date de correction) - un rapport d'audit n'est jamais fige, il documente l'evolution.
+## [LECON] 2026-08-10 -- AUDIT POST-MIGRATION (Themis, VERDICT A REVOIR : 5 points doc + 1 test)
+
+**Mission** : audit complet post-migration des 8 parcours du groupe cerveau-projet (v0.3.x).
+
+**Verdict** : A REVOIR - 5 points documentaires (Pattern 14 + E5b) + 1 test a adapter (test-014).
+
+**Lecons** :
+1. PATTERN 14 VULCAIN STALE : la fiche vulcain ligne 60 dit PARCOURS (v0.5.0) mais la carte est v0.3.0 - la version 0.5.0 vient de l'HISTORIQUE DE LA FICHE (version de fiche confondue avec version de parcours). Piege : verifier la REGLE ABSOLUE PARCOURS, pas seulement la ligne "Parcours" du haut de fiche.
+2. E5b non uniforme : seules atlas, clio, janus, morpheus citent leurs fins cX. buffy, cerberus, themis, vulcain (migres PLUS TOT) n'ont pas ete enrichis - la lecon E5b a ete appliquee seulement aux fiches touchees apres sa creation. Il faut une PASSE GLOBALE E5b sur les fiches du cerveau-projet.
+3. TEST-014 OBSOLETE : le test attend v0.5.0 de la spec-guider-parcours et 15 patterns, mais la spec est en v0.6.0 avec 16 patterns (Pattern 16 ALLEGEMENT ajoute par Buffy). Les tests doivent etre rescanne apres CHAQUE bump de version de spec (regle RE-SCAN COMPLET).
+4. NON-REGRESSION : 10/11 tests verts, seule l'adaptation de versions attendues est necessaire (pas de regression fonctionnelle). La suite test-009 a test-019 est fiable et reproductible.
+5. Correction confiee a Buffy (5 points doc) + Morpheus (test-014) - roles distincts.
+
+## [LECON] 2026-08-10 -- RE-AUDIT POST-MIGRATION : A REVOIR -> VALIDE (Themis)
+
+**Mission** : re-audit de confirmation du rapport d'audit post-migration (5 points doc + test-014).
+**Verdict** : 13/13 OK, passage A REVOIR -> VALIDE.
+
+**Verifications** :
+1. P1 vulcain Pattern 14 : fiche PARCOURS (v0.3.0) == carte 0.3.0, 0 reste v0.5.0
+2. P2 E5b : bloc FINS REELLES cX present et conforme sur buffy (9), cerberus (2), themis (5), vulcain (7)
+3. P3 test-014 : 12 OK / 0 KO (versions v0.6.0 + 16 patterns)
+4. P4 spec : titre v0.6.0 + Version 0.6.0 + 16 patterns coherents
+5. P5 refs documentaires v0.6.0 (guider-parcours.md + vulcain.md Spec du format)
+6. P6 normes : ASCII 0 + LF pur sur les 5 fichiers modifies
+
+**Lecons** :
+1. Le format de sortie du test-014 est `=== RESULTAT : X OK / Y KO (sur N points) ===` - extraire avec cette regex, pas `X/Y`
+2. La version JSON de parcours est sans prefixe v (0.3.3) vs fiche avec v (v0.3.3) - normaliser pour comparer
+3. Mettre a jour le rapport d'audit avec la mention explicite du re-audit et de l'evolution (un rapport documente l'evolution, il n'est jamais fige) - garder le verdict initial dans le titre (A REVOIR -> VALIDE)
+4. Verifier les normes (ASCII strict + LF pur) apres mise a jour du rapport
+
+## [LECON] 2026-08-10 -- AUDIT COHERENCE README POST-MAJ (Themis, VERDICT A REVOIR : 1 ecart reel + 2 mineurs)
+1. Le --maj de mettre-a-jour-readme corrige la table et le titre mais PAS l'arborescence commentee : le total 83 residuel (ligne 54) a survecu a la grosse MAJ (119). TOUJOURS scanner les anciens totaux dans TOUT le fichier, pas seulement les compteurs de table.
+2. Les badges shields sont TOUS sur une ligne unique (ligne 9 = 6 badges) : un grep par ligne les manque - compter les occurrences de "img.shields.io/badge/" dans la ligne, pas les lignes.
+3. Categorie VIRTUELLE templates=1 : pas de dossier physique (outil-template.md a la racine tools/) - le comptage manuel doit l'ajouter pour concordance (118 + 1 = 119).
+4. Une ligne d'arborescence avec un ancien total (83) est la preuve la plus rapide d'une MAJ incomplette - ajouter au protocole de relecture README.
+5. Outils utilises : combos-analyse-projet, mettre-a-jour-readme --verifier, valider-liens, valider-conformite-ascii, comptage manuel independant.
+
+## [LECON] 2026-08-10 -- RE-AUDIT COHERENCE README : A REVOIR -> VALIDE (Themis)
+1. Les 3 points resorbes par Clio (P6 83->119, P7 protections Tester, P8 Activer en tete + reordonnancement) sont confirmes par re-audit.
+2. PIEGE de re-audit : les separateurs de table '|---|---|---|' sont MULTIPLES dans le README (table des piliers, des agents, des outils) - un script qui cherche le premier separateur attrape celui d'une AUTRE table. TOUJOURS localiser l'en-tete '| Categorie |' PUIS le separateur juste apres.
+3. Le reordonnancement automatique d'une table peut ECRASER l'en-tete + separateur si le script remplace le bloc a partir de la ligne d'en-tete : la verification P8 (en-tete present + Activer en tete) l'a detecte et l'en-tete a ete restaure - la verification croisee de structure (pas seulement du contenu) est indispensable apres un tri.
+4. Sources de verite : combos-analyse-projet + mettre-a-jour-readme --verifier = 0 KO (hors __pycache__) confirment la coherence finale.
+
+## [LECON] 2026-08-10 -- AUDIT CONFORMITE GLOBALE PATTERN 17 (Themis, VERDICT CONFORME)
+
+**Contexte** : audit de conformite apres la generalisation du Pattern 17 aux 11 parcours + corrections Buffy + validation Morpheus.
+**Verdict** : CONFORME (7 points, 1 KO preexistant test-007 hors perimetre).
+**Lecons** :
+1. Verifier un pattern generalise case par case : les 12 flux P17 (11 parcours + vulcain x2) doivent porter Xb/Xc/Xd/Xe avec les 3 corrections (regles <= 160, sans commande en dur, Xb sans suivant)
+2. Le Pattern 13 (la fin suit SA carte) se verifie par la branche NON de Xb : elle doit pointer vers la fin qui EXISTAIT avant l insertion, jamais reactiver Cerberus par defaut
+3. Le Pattern 14 se verifie par croisement fiche vs carte : PARCOURS (vX) dans la fiche == version dans parcours-*.json
+4. Attention aux faux negatifs de valider-case : clio (c6b/c6c) et themis (c3) ont des elements a alleger PREE XISTANTS - verifier que les cases P17 elles-memes sont conformes (0 a alleger)
+5. Le test-007-figer-lf est un KO preexistant (catalogue 109 attendu, 118 actuel) - a traiter par une mission RE-SCAN ulterieure, hors perimetre P17
+## [LECON] 2026-08-10 -- CARTE THEMIS CASSEE : SUIVANT MORT REDONDANT (Themis)
+
+**Constat** : la carte themis a des champs suivant MORTS qui explosent la structure :
+1. Questions avec suivant redondant (deja dans leurs branches) : c21, c8, c8b, c8c - le suivant n est jamais lu (les branches priment dans guider-parcours) mais le cartographe le compte -> 210 chemins pour 32 cases (atlas sain : 44 cases / 45 chemins)
+2. Fin avec suivant : c23 (Signaler le besoin -> c23c) - la navigation s arrete a la fin, le suivant est un residu trompeur
+**Ampleur** : defaut GENERALISE sur 10 parcours (cerberus seul sain) : 14 cases a corriger (10 questions + 4 fins) - athena c18/c20, atlas c26/c29, buffy c10b/c33/c35/c35d, clio c13/c15, janus c27/c29, minerve c18/c20, morpheus c13/c16, promethee c18/c20, themis c21/c23/c8/c8b/c8c, vulcain c16/c18.
+**Lecons** :
+1. Le champ suivant sur une case qui A des branches est un DEFECT (suivant mort) - il doit etre retire, pas conserve
+2. Une fin ne doit JAMAIS avoir de suivant (residu trompeur)
+3. Le cartographe (nb chemins) est un excellent detecteur : 210 chemins pour 32 cases = anomalie flagrante (ratio ~1:1 attendu, ex atlas 44/45)
+4. valider-cartes-decision ne detecte PAS ce defaut (references valides mais logique morte) - renforcer le validateur pour detecter suivant redondant avec branches + fin avec suivant
+**Correction recommandee** : retirer le champ suivant des 14 cases concernees (la navigation reelle utilise deja les branches), verifier avec valider-cartes-decision --tous + cartographe (ratio chemins/cases normal) + non-regression.

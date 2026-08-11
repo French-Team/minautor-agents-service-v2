@@ -12,7 +12,7 @@ Outil teste (cerveau-projet/agents/tools/cartographier/cartographier-parcours/):
 
 Cas couverts:
   1. --version py/sh identiques v0.1.0
-  2. Generation reelle sur parcours-atlas (32 cases, 18 chemins) avec en-tete complet
+  2. Generation reelle sur parcours-atlas (44 cases, 39 chemins) avec en-tete complet
   3. Parite py/sh : fichiers generes IDENTIQUES (diff)
   4. --sortie vers un chemin personnalise (.tmp-*)
   5. --dry-run ne cree rien
@@ -113,8 +113,8 @@ def main():
         verifier("2b. En-tete complet (agent, version, depart, nb cases, nb chemins)",
                  ok_gen and all(m in contenu for m in
                                 ("| Agent | atlas |", "| Version du parcours |",
-                                 "| Case de depart | c0 |", "| Nombre de cases | 32 |",
-                                 "| Nombre de chemins (depart -> fins) | 18 |")),
+                                 "| Case de depart | c0 |", "| Nombre de cases | 44 |",
+                                 "| Nombre de chemins (depart -> fins) | 39 |")),
                  "en-tete partiel")
         verifier("2c. Sections presentes (arbre, impasses, boucles, chemins)",
                  ok_gen and all(m in contenu for m in

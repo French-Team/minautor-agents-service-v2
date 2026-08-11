@@ -60,18 +60,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-10 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | cerberus (retour de mission) |
-| **Raison** | ETAPE 1 PATTERN 16 TERMINEE (Promethee) : spec-guider-parcours v0.5.0 -> v0.6.0. Pattern 16 "ALLEGEMENT DES CASES SURCHARGEES (v0.2.28)" ajoute apres le Pattern 15 : 6 etapes (DETECTER valider-case A ALLEGER, TRIER reference resolue / combo, ANTI-DOUBLON obligatoire via rechercher-texte avec 3 cas : present -> referencer, partiel -> enrichir, absent -> creer, DEPLACER jamais supprimer, PRISE EN COMPTE obligatoire par resolution affichee, VERIFIER valider-case CONFORME + resolvabilite + navigation). Exemple reel documente (janus c8 -> protocole-controle-buffy, c11/c18 -> combo partage). En-tetes patterns + procedure 16 patterns maj. VERIF : ASCII 0, LF pur, liens OK. Lecon Promethee ajoutee. ETAPE SUIVANTE : allegement janus (c8, c11, c18) par Buffy + Vulcain (combo), puis verification reelle. Reactivation Cerberus pour la suite (activation directe, Pattern 13). |
+| **Nom Agent** | buffy |
+| **Role Agent** | Developpeur principal -- contenu et structures |
+| **Derniere mise a jour** | 2026-08-11 |
+| **Fiche** | [cerveau-projet/agents/buffy/buffy.md](cerveau-projet/agents/buffy/buffy.md) |
+| **Corrections** | [cerveau-projet/agents/buffy/corrections.md](cerveau-projet/agents/buffy/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | MISSION (Cerberus, demande utilisateur) : CORRIGER LES 16 ECARTS P12 (CREATION LIMITEE) DETECTES PAR LE SCAN SUR 7 PARCOURS - meme classe que c6c/c12c (cases qui ECRIVENT sans indice regle CREATION LIMITEE). LISTE EXACTE : GROUPE A (outil ecrit par defaut, ajouter indice regle CREATION LIMITEE adapte en tete des indices) : atlas c18 (structure doc creer-fichier), atlas c31 (cartographier-parcours), buffy c10c (generateurs-case), janus c2 (mission de controle creer-fichier), janus c33 (rapport sante-fichiers-agents), themis c9 (rapport evaluation), themis c12 (lecons - les autres agents ont P12 sur lecons), themis c19 (combos-audit-general), vulcain c10 (verifier-systeme ecrit variables-actuelles). GROUPE B (outil temporaire, ajouter la regle EXCEPTION OUTIL TEMPORAIRE comme buffy c35c) : atlas c29c, clio c15c, janus c29c, themis c23c. GROUPE C (clio role README, ajouter indice CREATION LIMITEE README uniquement) : clio c3, c4, c6. PUIS : bump de version de chaque parcours modifie (suivant l existant), synchroniser les fiches (Pattern 14 PARCOURS), re-audit par parcours (valider-cartes-decision --agent X CONFORME + navigation reelle du flux concerne + normes ASCII 0 + LF pur). Anti-doublon : verifier avant chaque ajout que l indice/la regle n existe pas deja. IMPORTANT : ne PAS toucher a activer-agent-principal (mecanisme central) ni aux combos corriger-*. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-10 19:07 |
+| session-llm-1 | llm-1 | buffy | 2026-08-11 07:53 |
 | session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
 | session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
 | session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |
@@ -136,6 +136,12 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 5. **Cerberus relit SA fiche et SES corrections** avant de poursuivre
 
 ---
+
+## Groupes d'agents (regles-groupes-agents)
+
+> **REGLE IMMUABLE** : [regles-groupes-agents.md](cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md) -- 3 groupes aux domaines separes :
+> **1) Coordination** : Cerberus. **2) Cerveau-projet** (gerent `cerveau-projet/` lui-meme : outils, parcours, fiches, protocoles, spec des outils, README) : **Buffy** (responsable), Vulcain, Morpheus, Janus, Atlas, Themis, Clio. **3) Trio projets futurs** (ecrivent `pense-betes/`, `specs/`, `todos/` pour le dev des apps futures) : Athena, Promethee, Minerve.
+> **REGLE** : le trio n'est JAMAIS utilise pour developper le cerveau-projet -- c'est Buffy la responsable.
 
 ## Liste des agents
 

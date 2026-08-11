@@ -57,7 +57,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.5.0)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.3.4)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -68,7 +68,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 ```
 
 **Parcours** : [cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json](parcours/parcours-vulcain.json) (v0.3.0)
-**Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) (v0.5.0)
+**Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) (v0.6.0)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
 > la couverture des missions.
@@ -183,11 +183,20 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "Vulcain"
 ```
 
-> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus
+> La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus
 > -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA
 > carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
 > **FLUX** : apres une delegation des tests a Morpheus, c'est Morpheus qui
 > active Janus ; je reactiver Cerberus avec le bilan consolide de la chaine (Pattern 8).
+> **FINS REELLES DE MA CARTE v0.3.0 (E5b - croisement fiche/parcours)** :
+> - `c9` FIN - Construire un outil
+> - `c15` FIN - Modifier un outil
+> - `c16d` FIN - Documentation
+> - `c18` Signaler le besoin (fin - relais : je signale et je m arrete)
+> - `c18d` FIN - Outil temporaire (apres creation d un outil temporaire)
+> - `c19` FIN - Delegation (j active l agent habilite)
+> - `c21` FIN - Retour de Themis avec son rapport (apres un audit demande)
+
 
 ## Connexions
 

@@ -1,107 +1,104 @@
 {
- "combo": {
-  "nom": "combo-creer-agent",
-  "version": "0.2.0",
-  "description": "Creation d'un agent : verifier le nom, creer le dossier, copier le template, creer les corrections (variable {agent}). Les commandes sont composees par le generateur de commandes.",
-  "case_depart": "c1"
- },
- "cases": {
-  "c1": {
-   "titre": "Generer la commande valider-nommage",
-   "type": "generateur",
-   "catalogue": "valider-nommage",
-   "entrees": {
-    "type": "outil",
-    "chemin": "cerveau-projet/agents/{agent}",
-    "recursive": "non"
-   },
-   "sortie": "cmd1",
-   "suivant": "c2"
+  "combo": {
+    "nom": "combo-creer-agent",
+    "version": "0.2.0",
+    "description": "Creation d'un agent : verifier le nom, creer le dossier, copier le template, creer les corrections (variable {agent}). Les commandes sont composees par le generateur de commandes.",
+    "case_depart": "c1"
   },
-  "c2": {
-   "titre": "Executer valider-nommage",
-   "type": "outil",
-   "commande": "{cmd1}",
-   "sortie": "resultat_nom",
-   "suivant": "c3"
-  },
-  "c3": {
-   "titre": "CONTROLE : le nom est-il valide ?",
-   "type": "controle",
-   "question": "Le nom de l'agent est-il valide (conventions de nommage) ?",
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c4"
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande valider-nommage",
+      "type": "generateur",
+      "catalogue": "valider-nommage",
+      "entrees": {
+        "type": "outil",
+        "chemin": "cerveau-projet/agents/{agent}"
+      },
+      "sortie": "cmd1",
+      "suivant": "c2"
     },
-    {
-     "reponse": "NON",
-     "vers": "c10"
+    "c2": {
+      "titre": "Executer valider-nommage",
+      "type": "outil",
+      "commande": "{cmd1}",
+      "sortie": "resultat_nom",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "CONTROLE : le nom est-il valide ?",
+      "type": "controle",
+      "question": "Le nom de l'agent est-il valide (conventions de nommage) ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c4"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c10"
+        }
+      ]
+    },
+    "c4": {
+      "titre": "Generer la commande copier-dossier",
+      "type": "generateur",
+      "catalogue": "copier-dossier",
+      "entrees": {
+        "source": "cerveau-projet/agents",
+        "destination": "cerveau-projet/agents/{agent}"
+      },
+      "sortie": "cmd2",
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Executer copier-dossier",
+      "type": "outil",
+      "commande": "{cmd2}",
+      "sortie": "resultat_dossier",
+      "suivant": "c6"
+    },
+    "c6": {
+      "titre": "Generer la commande copier-fichier (template)",
+      "type": "generateur",
+      "catalogue": "copier-fichier",
+      "entrees": {
+        "source": "cerveau-projet/agents/fiche-agent-template.md",
+        "destination": "cerveau-projet/agents/{agent}/{agent}.md",
+        "forcer": "non"
+      },
+      "sortie": "cmd3",
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Executer copier-fichier (template)",
+      "type": "outil",
+      "commande": "{cmd3}",
+      "sortie": "resultat_template",
+      "suivant": "c8"
+    },
+    "c8": {
+      "titre": "Generer la commande creer-fichier (corrections)",
+      "type": "generateur",
+      "catalogue": "creer-fichier",
+      "entrees": {
+        "fichier": "cerveau-projet/agents/{agent}/corrections.md",
+        "forcer": "non",
+        "contenu": "{contenu}"
+      },
+      "sortie": "cmd4",
+      "suivant": "c9"
+    },
+    "c9": {
+      "titre": "Executer creer-fichier (corrections)",
+      "type": "outil",
+      "commande": "{cmd4}",
+      "sortie": "resultat_corrections",
+      "suivant": "c10"
+    },
+    "c10": {
+      "titre": "FIN - agent cree ou nom invalide",
+      "type": "fin",
+      "message": "Creation terminee : soit l'agent a ete cree (dossier, fiche, corrections), soit le nom n'est pas valide (a corriger dans la carte)."
     }
-   ]
-  },
-  "c4": {
-   "titre": "Generer la commande copier-dossier",
-   "type": "generateur",
-   "catalogue": "copier-dossier",
-   "entrees": {
-    "source": "cerveau-projet/agents",
-    "destination": "cerveau-projet/agents/{agent}",
-    "dry_run": "non"
-   },
-   "sortie": "cmd2",
-   "suivant": "c5"
-  },
-  "c5": {
-   "titre": "Executer copier-dossier",
-   "type": "outil",
-   "commande": "{cmd2}",
-   "sortie": "resultat_dossier",
-   "suivant": "c6"
-  },
-  "c6": {
-   "titre": "Generer la commande copier-fichier (template)",
-   "type": "generateur",
-   "catalogue": "copier-fichier",
-   "entrees": {
-    "source": "cerveau-projet/agents/fiche-agent-template.md",
-    "destination": "cerveau-projet/agents/{agent}/{agent}.md",
-    "forcer": "non",
-    "dry_run": "non"
-   },
-   "sortie": "cmd3",
-   "suivant": "c7"
-  },
-  "c7": {
-   "titre": "Executer copier-fichier (template)",
-   "type": "outil",
-   "commande": "{cmd3}",
-   "sortie": "resultat_template",
-   "suivant": "c8"
-  },
-  "c8": {
-   "titre": "Generer la commande creer-fichier (corrections)",
-   "type": "generateur",
-   "catalogue": "creer-fichier",
-   "entrees": {
-    "fichier": "cerveau-projet/agents/{agent}/corrections.md",
-    "forcer": "non",
-    "dry_run": "non"
-   },
-   "sortie": "cmd4",
-   "suivant": "c9"
-  },
-  "c9": {
-   "titre": "Executer creer-fichier (corrections)",
-   "type": "outil",
-   "commande": "{cmd4}",
-   "sortie": "resultat_corrections",
-   "suivant": "c10"
-  },
-  "c10": {
-   "titre": "FIN - agent cree ou nom invalide",
-   "type": "fin",
-   "message": "Creation terminee : soit l'agent a ete cree (dossier, fiche, corrections), soit le nom n'est pas valide (a corriger dans la carte)."
   }
- }
 }

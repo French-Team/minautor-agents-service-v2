@@ -4,9 +4,9 @@ identite:
   appartient_a: commun
   commun: true
 ---
-# Spec -- Guide-Parcours (jeu de piste) v0.5.0
+# Spec -- Guide-Parcours (jeu de piste) v0.6.1
 
-**Version** : 0.6.0
+**Version** : 0.6.1
 **Statut** : ebauche
 **Date creation** : 2026-08-07
 **Agent** : Vulcain (creation + evolutions v0.2.0 : patterns multi-missions + rappel ASCII ; v0.2.1 : procedure d'audit des 2 patterns ; v0.2.2 : regle d'autonomie des parcours ; v0.2.3 : prototype vulcain documente comme cas legitime assume ; v0.2.4 : Pattern 3 - combo generateur -> execution, lien avec spec-combos-moteur ; v0.2.5 : Pattern 4 - case Question Honnete en case 0, standard de demarrage ; v0.2.6 : Pattern 5 - chaine de delegation ACTIVE, JAMAIS de fin passive ; v0.2.7 : regle de RE-AUDIT COMPLET des 5 patterns (lecon Themis : la procedure 4b seule ne teste que Pattern 5, c est la procedure 2 qui a revele les ecarts ASCII de vulcain) ; v0.2.8 : Pattern 6 - CONTEXTE TEMPS REEL : lecture OBLIGATOIRE de l historique a chaque activation, meme en memoire (le dynamique ne se memorise pas) ; v0.2.9 : MODE AGENT NON-BLOQUANT - les questions sont destinees a l AGENT, jamais a un input() clavier ; sans --reponses l outil affiche la question et s arrete proprement (cause : demarrage d un 2e LLM bloquait sur la saisie clavier) ; v0.2.12 : outil de reference generateurs-case documente (suite de l integration : l outil officiel pour creer/editer/supprimer des cases, recablage auto + validation auto) ; v0.2.13 : Pattern 7 - modele de case compose (decision a 2+ branches, solutions alternatives, deviations avec retour au flux principal ; philosophie agents/philosophie/) ; v0.2.14 : outil de reference generateurs-carte documente (carte complete : creer/analyser/detecter/dupliquer-chemin, complement de generateurs-case pour les cases) ; v0.2.17 : branche de verifier-documents-manquants v0.3.0 dans la procedure 4g (le .md deduit de CHAQUE indice outil est controle par L OUTIL - .sh ET .py couverts - au lieu d une verification manuelle) ; v0.2.18 : Pattern 10 - UNE CARTE = UN ROLE (une carte ne contient que des actions d activation/verification/decision propres a SON role, jamais d outils d analyse/execution d un autre role ; cas Cerberus = routeur pur, carte purgee des cases lister/lire qui glissent de lire pour choisir vers lire pour executer. Lecon utilisateur 2026-08-08 : Cerberus a lance des analyses lui-meme au lieu d activer Buffy) ; v0.2.19 : Pattern 11 - CONFORMITE D EXECUTION (l audit ne verifie pas seulement la STRUCTURE du JSON mais AUSSI si l EXECUTION de la mission a suivi les ordres de la carte : l agent a-t-il fait ce que sa carte ordonnait ? Lecon constat stabilite des cartes 2026-08-08 : les violations recentes - Vulcain reactive au lieu d activer Morpheus, Cerberus analyse lui-meme - laissent les JSON structurellement valides ; la conformite d execution est le SEUL vrai test de stabilite. Critere 22 + procedure 4i + integration dans le parcours-themis (case c8b entre verdict et rapport)) ; v0.2.22 : Pattern 12 - CREATION LIMITEE (garde-fou une carte = un role applique aux cases de creation : toute case qui cree/ecrit/documente porte un indice REGLE CREATION LIMITEE precisant le perimetre - rapports de mission dans le dossier de l agent ou .tmp-* du workspace, JAMAIS tools/ - et les roles exclus : outil -> Vulcain, test -> Morpheus, case de parcours -> Buffy ; besoin manquant -> case Signaler le besoin. Lecon incident Atlas 2026-08-09 : l explorateur a ecrit un outil dans son dossier explorations/ au lieu de signaler le besoin ; carte Atlas v0.1.3 portant le garde-fou en exemple) ; v0.2.23 : Pattern 13 - LA FIN SUIT SA CARTE (generalisation de la regle de retour : activation directe = reactiver Cerberus, maillon de chaine = activer le suivant, dernier maillon = reactiver Cerberus avec bilan consolide. Lecon utilisateur 2026-08-09 : l ancienne regle toujours reactiver Cerberus etait en conflit avec les cartes - Buffy a corrige 26 fichiers ; lecon technique double/triple CRLF - lire et ecrire avec newline='' pour preserver le format natif) ; v0.2.24 : Pattern 14 - VERIFICATION D IMPACT GENERALISEE (detecter-impacts v0.2.1 devient un pas OBLIGATOIRE de TOUTE procedure d audit Themis : pour chaque mission auditee, identifier les fichiers modifies puis lancer detecter-impacts sur un echantillon representatif et verifier que TOUS les fichiers impactes listes ont ete mis a jour. Lecon utilisateur 2026-08-09 : seul le rapport-audit-janus utilisait detecter-impacts, la verification d impact doit etre GENERALISEE a tous les audits) ; v0.2.25 : RE-AUDIT COMPLET GENERALISE A 14 PATTERNS (la procedure 4c listait 12 patterns et avait vieilli pendant que 4i/4k/4l s ajoutaient ; la liste des procedures est desormais complete 1-4l et le critere 14 couvre les criteres 1 a 25. Lecon utilisateur 2026-08-09 : la procedure 4c doit etre re-verifiee a chaque ajout de pattern) ; v0.2.26 : Pattern 15 - MODE MONO-LLM (apres l activation d un agent, l agent active est JOUE IMMEDIATEMENT dans le MEME tour - relecture fiche + corrections puis mission puis reactiver/activer le suivant ; l activation documente le role (3 fichiers de trace) mais ne transfere PAS l execution (0 sous-processus). Lecon utilisateur 2026-08-09 : 2 missions se sont arretees apres l activation de Themis - le LLM closait son tour alors que la carte c10 ordonne de continuer (suivant c7)) ; v0.2.27 : CORRECTION Pattern 15 - JAMAIS D ARRET DANS AUCUN MODE (l utilisateur a corrige la formulation v0.2.26 qui autorisait l arret en mode multi-LLM : les LLM travaillent EN PARALLELE chacun dans sa session - l activation documente le role de SA session uniquement, elle ne DELEGUE jamais l execution a un autre LLM, aucun mecanisme de relais n existe. L arret apres activation est TOUJOURS fautif : il bloque la mission, personne ne reprend)
@@ -1273,6 +1273,55 @@ surchargees sont allegees pendant la migration, pas apres.
 
 ---
 
+### Pattern 17 -- RAPPORT DE FIN AVEC DETECTION D'AMELIORATIONS (generateur d'abord, delegation, reprise) (v0.6.1)
+
+Le Probleme : quand un agent ecrit son rapport de fin et ses lecons, il peut
+avoir identifie des ameliorations possibles de SON fonctionnement (fiche,
+parcours, lecons, outils, protocoles). Sans case dediee, ces observations sont
+perdues : le rapport est archive et l'amelioration n'est jamais declenchee.
+Le cerveau a des protocoles-autoameliorer-* (agents, outils, regles,
+protocoles, conventions, cerveau) et un generateur d'amelioration
+(generateurs-amelioration --theme), mais AUCUN parcours ne les branche : ils
+existent sans point de declenchement. Ce pattern est le POINT DE
+DECLENCHEMENT de ces protocoles : la ligne d'auto-amelioration pointe vers
+le protocole-autoameliorer-<domaine> correspondant (voir Etape 2) et le
+generateur d'amelioration guide le diagnostic avant l'activation.
+
+Le Principe : la case SUIVANTE apres 'Lecons et retour' (ou apres l'ecriture
+du rapport de fin) est ALTERNATIVE. Si le rapport contient des ameliorations
+possibles de l'agent, on le dirige vers SA ligne d'auto-amelioration (a creer
+si elle n'existe pas encore), sinon il continue son parcours. Cela ne veut
+PAS dire que l'agent fait l'amelioration lui-meme : sa ligne lui fait
+1) lancer le GENERATEUR d'amelioration (questions par theme), 2) ACTIVER
+l'agent habilite selon la nature de l'amelioration (Vulcain pour un outil,
+Buffy pour fiche/parcours, Themis pour audit, etc.), 3) quand l'agent habilite
+a fini, il active l'agent precedent qui REPREND son parcours (Pattern 13 : la
+fin suit SA carte).
+
+**Etape 1 -- CASE ALTERNATIVE** : apres la case 'Lecons et retour', inserer
+une case question : 'Ameliorations possibles de mon fonctionnement ?' avec 2
+branches : OUI -> la ligne d'auto-amelioration, NON -> la fin normale (le
+suivant selon SA carte).
+
+**Etape 2 -- LIGNE D'AUTO-AMELIORATION** : si la ligne n'existe pas encore,
+la creer (2-3 cases) : cXd 'Lancer le generateur d amelioration' (indice outil
+generateurs-amelioration --theme <theme> + indice fichier
+themes-amelioration.json) puis cXe 'Activer l'agent habilite' (indice regle
+Pattern 5/8 delegation) puis cXf 'FIN - Reprise du parcours apres retour de
+l'agent habilite' (le suivant = la fin normale, Pattern 13). L'agent habilite
+reactive l'agent precedent avec le bilan, et l'agent precedent reprend SA carte.
+
+**Etape 3 -- ANTI-DOUBLON (OBLIGATOIRE)** : verifier avec rechercher-texte que
+la ligne d'auto-amelioration n'existe pas deja dans le parcours (case titree
+'amelioration' ou reference generateurs-amelioration) avant de creer.
+
+**Etape 4 -- GENERATEUR D'ABORD** : l'agent lance generateurs-amelioration
+--theme avant d'activer l'agent habilite : les questions guident le diagnostic
+et le choix du bon agent (Jamais d'activation sans questions posees).
+
+**Etape 5 -- REPRISE** : quand l'agent habilite a termine, il active l'agent
+precedent (Pattern 13 : la fin suit SA carte). L'agent precedent reprend son
+parcours a la case de reprise et continue vers sa fin normale.
 ## Procedure d'audit des 16 patterns (v0.2.1, v0.2.4, v0.2.5, v0.2.6, v0.2.8, v0.2.13, v0.2.15, v0.2.16, v0.2.18, v0.2.19, v0.2.22, v0.2.23, v0.2.24, v0.2.27, v0.2.28)
 
 La procedure suivante a ete validee par l'audit de la serie des 11 parcours

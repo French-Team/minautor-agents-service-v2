@@ -1,86 +1,84 @@
 {
- "combo": {
-  "nom": "combo-creer-protocole",
-  "version": "0.2.0",
-  "description": "Creation d'un protocole : verifier la convention, creer le dossier, creer le protocole (variable {chemin} {contenu}). Les commandes sont composees par le generateur de commandes.",
-  "case_depart": "c1"
- },
- "cases": {
-  "c1": {
-   "titre": "Generer la commande valider-conventions",
-   "type": "generateur",
-   "catalogue": "valider-conventions",
-   "entrees": {
-    "fichier": "{chemin}"
-   },
-   "sortie": "cmd1",
-   "suivant": "c2"
+  "combo": {
+    "nom": "combo-creer-protocole",
+    "version": "0.2.0",
+    "description": "Creation d'un protocole : verifier la convention, creer le dossier, creer le protocole (variable {chemin} {contenu}). Les commandes sont composees par le generateur de commandes.",
+    "case_depart": "c1"
   },
-  "c2": {
-   "titre": "Executer valider-conventions",
-   "type": "outil",
-   "commande": "{cmd1}",
-   "sortie": "resultat_convention",
-   "suivant": "c3"
-  },
-  "c3": {
-   "titre": "CONTROLE : la convention est-elle respectee ?",
-   "type": "controle",
-   "question": "Le format du protocole respecte-t-il la convention des protocoles ?",
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c4"
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande valider-conventions",
+      "type": "generateur",
+      "catalogue": "valider-conventions",
+      "entrees": {
+        "chemin": "{chemin}"
+      },
+      "sortie": "cmd1",
+      "suivant": "c2"
     },
-    {
-     "reponse": "NON",
-     "vers": "c8"
+    "c2": {
+      "titre": "Executer valider-conventions",
+      "type": "outil",
+      "commande": "{cmd1}",
+      "sortie": "resultat_convention",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "CONTROLE : la convention est-elle respectee ?",
+      "type": "controle",
+      "question": "Le format du protocole respecte-t-il la convention des protocoles ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c4"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c8"
+        }
+      ]
+    },
+    "c4": {
+      "titre": "Generer la commande copier-dossier",
+      "type": "generateur",
+      "catalogue": "copier-dossier",
+      "entrees": {
+        "source": "cerveau-projet/agents",
+        "destination": "cerveau-projet/agents/{chemin}"
+      },
+      "sortie": "cmd2",
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Executer copier-dossier",
+      "type": "outil",
+      "commande": "{cmd2}",
+      "sortie": "resultat_dossier",
+      "suivant": "c6"
+    },
+    "c6": {
+      "titre": "Generer la commande creer-fichier (protocole)",
+      "type": "generateur",
+      "catalogue": "creer-fichier",
+      "entrees": {
+        "fichier": "{chemin}",
+        "contenu": "{contenu}",
+        "forcer": "non"
+      },
+      "sortie": "cmd3",
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Executer creer-fichier (protocole)",
+      "type": "outil",
+      "commande": "{cmd3}",
+      "sortie": "resultat_protocole",
+      "suivant": "c8"
+    },
+    "c8": {
+      "titre": "FIN - protocole cree ou convention non respectee",
+      "type": "fin",
+      "message": "Creation terminee : soit le protocole a ete cree, soit la convention n'est pas respectee (a corriger dans la carte)."
     }
-   ]
-  },
-  "c4": {
-   "titre": "Generer la commande copier-dossier",
-   "type": "generateur",
-   "catalogue": "copier-dossier",
-   "entrees": {
-    "source": "cerveau-projet/agents",
-    "destination": "cerveau-projet/agents/{chemin}",
-    "dry_run": "non"
-   },
-   "sortie": "cmd2",
-   "suivant": "c5"
-  },
-  "c5": {
-   "titre": "Executer copier-dossier",
-   "type": "outil",
-   "commande": "{cmd2}",
-   "sortie": "resultat_dossier",
-   "suivant": "c6"
-  },
-  "c6": {
-   "titre": "Generer la commande creer-fichier (protocole)",
-   "type": "generateur",
-   "catalogue": "creer-fichier",
-   "entrees": {
-    "fichier": "{chemin}",
-    "contenu": "{contenu}",
-    "forcer": "non",
-    "dry_run": "non"
-   },
-   "sortie": "cmd3",
-   "suivant": "c7"
-  },
-  "c7": {
-   "titre": "Executer creer-fichier (protocole)",
-   "type": "outil",
-   "commande": "{cmd3}",
-   "sortie": "resultat_protocole",
-   "suivant": "c8"
-  },
-  "c8": {
-   "titre": "FIN - protocole cree ou convention non respectee",
-   "type": "fin",
-   "message": "Creation terminee : soit le protocole a ete cree, soit la convention n'est pas respectee (a corriger dans la carte)."
   }
- }
 }

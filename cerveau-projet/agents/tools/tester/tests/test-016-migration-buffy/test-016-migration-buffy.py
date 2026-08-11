@@ -18,7 +18,7 @@ Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
   - v0.3.1 : branchement generateurs-ligne (case c10d, branche 'ligne' dans c10b)
 
 Cas couverts:
-  1. Version du parcours = 0.3.3
+  1. Version du parcours = 0.3.4
   2. Types : 32 action / 7 question / 2 controle / 9 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -97,19 +97,19 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.3.3",
-                 d["parcours"].get("version") == "0.3.3",
+        verifier("1. Version du parcours = 0.3.4",
+                 d["parcours"].get("version") == "0.3.4",
                  d["parcours"].get("version"))
 
         # 2. Types
         types = {}
         for c in d["cases"].values():
             types[c.get("type")] = types.get(c.get("type"), 0) + 1
-        verifier("2a. 32 cases action (31 pilotage + c10d generateurs-ligne)",
-                 types.get("action") == 32, str(types))
-        verifier("2b. 7 questions + 2 controles + 9 fins",
-                 types.get("question") == 7 and types.get("controle") == 2
-                 and types.get("fin") == 9, str(types))
+        verifier("2a. 34 cases action (31 pilotage + c10d generateurs-ligne + c15c/c15d Pattern 17)",
+                 types.get("action") == 34, str(types))
+        verifier("2b. 8 questions + 2 controles + 10 fins (Pattern 17 ajoute c15b question + c15e fin)",
+                 types.get("question") == 8 and types.get("controle") == 2
+                 and types.get("fin") == 10, str(types))
         verifier("2c. 0 case indice restante (toutes converties en action)",
                  types.get("indice", 0) == 0, str(types))
 

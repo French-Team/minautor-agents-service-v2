@@ -53,7 +53,7 @@ COMBOS = {
     "combo-creer-agent": {
         "chemin": os.path.join(TOOLS_DIR, "combos", "combo-creer-agent", "definition-combo.json"),
         "controle": "c3",
-        "vars": ["agent=test-agent"],
+        "vars": ["agent=test-agent", "contenu=contenu"],
         "commandes_attendues": ["valider-nommage.py --type outil", "copier-dossier.py", "copier-fichier.py", "creer-fichier.py"],
         "doc": os.path.join(TOOLS_DIR, "combos", "combo-creer-agent", "combo-creer-agent.md"),
     },

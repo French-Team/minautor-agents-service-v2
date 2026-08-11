@@ -75,7 +75,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.2.0)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.3.1)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -169,8 +169,15 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Pour terminer ma mission (la fin suit SA carte)
 
-> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus (c14) ; maillon d'une chaine -> activer le suivant selon SA carte (retour VULCAIN apres delegation de tests, ou JANUS en second controle c10) ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus (c14) ; maillon d'une chaine -> activer le suivant selon SA carte (retour VULCAIN apres delegation de tests, ou JANUS en second controle c10) ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
 > **FLUX** : Ma mission se termine selon MA carte : retour a **Vulcain** (delegation de tests, MODE CHAINE), activation de **Janus** (second controle) ou reactivation de **Cerberus** (activation directe) -- je ne decide jamais seul, la fin suit SA carte.
+> **FINS REELLES DE MA CARTE v0.3.0 (E5b - croisement fiche/parcours)** :
+> - `c10` FIN - Activer Janus (second controle apres test)
+> - `c14` FIN - Reactiver Cerberus (mon retour standard)
+> - `c16` Signaler le besoin (fin - relais)
+> - `c16d` FIN - Outil temporaire
+> - `c17` FIN - Delegation (j'active l'agent habilite)
+> - `c19` FIN - Retour de Themis avec son rapport
 
 ---
 

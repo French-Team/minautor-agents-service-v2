@@ -189,6 +189,52 @@ _, stderr, rc = run([PYTHON, "-m", "py_compile", MOTEUR_PY])
 assert_eq("Test 12b: py_compile OK", rc, 0)
 
 # ============================================================
+# Test 13: GARDE-FOU v0.3.0 -- cles des entrees des cases generateur vs catalogue
+# ============================================================
+print("")
+print("=== Test 13: garde-fou cles generateur vs catalogue (v0.3.0) ===")
+import json
+# 13a: combo avec une cle hors catalogue -> REJETE (code 1 + erreur claire)
+def_combo_invalide = {
+    "combo": {"nom": "test-cles-invalide", "version": "0.1.0", "case_depart": "c1"},
+    "cases": {
+        "c1": {"titre": "Generateur avec cle inventee", "type": "generateur",
+               "catalogue": "valider-conventions",
+               "entrees": {"fichier": "x.md"},
+               "sortie": "cmd1", "suivant": "c2"},
+        "c2": {"titre": "FIN", "type": "fin", "message": "fin"}
+    }
+}
+fichier_invalide_cles = os.path.join(tmpdir, "definition-cles-invalide.json")
+with open(fichier_invalide_cles, "w", encoding="utf-8") as fh:
+    json.dump(def_combo_invalide, fh)
+stdout, stderr, rc = run_py([fichier_invalide_cles, "--liste"])
+assert_eq("Test 13a: cle hors catalogue -> code 1", rc, 1)
+assert_eq("Test 13b: erreur claire (hors catalogue)",
+          "hors catalogue" in (stderr + stdout), True)
+assert_eq("Test 13c: erreur cite la cle fautive et la commande",
+          "fichier" in (stderr + stdout) and "valider-conventions" in (stderr + stdout), True)
+# 13d: combo avec une cle conforme -> ACCEPTE (code 0)
+def_combo_conforme = {
+    "combo": {"nom": "test-cles-conforme", "version": "0.1.0", "case_depart": "c1"},
+    "cases": {
+        "c1": {"titre": "Generateur avec cle exacte", "type": "generateur",
+               "catalogue": "valider-conventions",
+               "entrees": {"chemin": "x.md"},
+               "sortie": "cmd1", "suivant": "c2"},
+        "c2": {"titre": "FIN", "type": "fin", "message": "fin"}
+    }
+}
+fichier_conforme = os.path.join(tmpdir, "definition-cles-conforme.json")
+with open(fichier_conforme, "w", encoding="utf-8") as fh:
+    json.dump(def_combo_conforme, fh)
+stdout, stderr, rc = run_py([fichier_conforme, "--liste"])
+assert_eq("Test 13d: cle exacte du catalogue -> code 0", rc, 0)
+# 13e: parite sh (le garde-fou est embarque dans le .sh aussi)
+stdout_sh, stderr_sh, rc_sh = run(["bash", MOTEUR_SH, fichier_invalide_cles, "--liste"])
+assert_eq("Test 13e: .sh rejette aussi la cle hors catalogue", rc_sh, 1)
+
+# ============================================================
 # Rapport final
 # ============================================================
 print("")

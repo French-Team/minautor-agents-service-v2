@@ -8,11 +8,11 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.2.0-beta |
+| **Version** | 0.3.0 |
 | **Statut** | ebauche |
 | **Categorie** | combos |
-| **Derniere mise a jour** | 2026-08-08 |
-| **Spec** | [spec-combos-moteur.001.01.ebauche.md](spec/spec-combos-moteur.001.01.ebauche.md) (v0.1.0) |
+| **Derniere mise a jour** | 2026-08-11 |
+| **Spec** | [spec-combos-moteur.001.01.ebauche.md](spec/spec-combos-moteur.001.01.ebauche.md) (v0.2.1) |
 
 ---
 
@@ -159,6 +159,30 @@ La case ne pose AUCUNE question : le moteur appelle `generateurs-commande`
 avec `--reponses "cle=valeur;..."` alimente par les `entrees` (elles-memes
 interpolees avec les variables precedentes). La commande composee est stockee
 dans la variable `sortie` et servira a la case `outil` suivante via `{cmd}`.
+
+### GARDE-FOU v0.3.0 : cles des entrees = cles exactes du catalogue
+
+> **REGLE (spec-combos-moteur v0.2.1, lecon du KO test-003)** : les cles des
+> `entrees` d'une case `generateur` DOIVENT etre les cles EXACTES des
+> `parametres` de la commande ciblee dans `catalogue-commandes.json` (source
+> de verite). Interdiction d'inventer une cle.
+
+Au CHARGEMENT de la definition, le moteur verifie pour chaque case
+`generateur` :
+
+```
+[ ] le catalogue cible existe dans catalogue-commandes.json
+[ ] chaque cle des entrees est un parametre exact du catalogue
+[ ] chaque parametre obligatoire du catalogue est fourni dans les entrees
+```
+
+En cas d'ecart -> ERREUR claire (combo, case, cles fautives) et code retour 1,
+avant toute execution. Ce garde-fou empeche la recurrence du defaut test-003
+(cles obsoletes `fichier`/`source`/`destination` vs catalogue).
+
+> **Rappel** : les cles ne suivent aucune convention universelle
+> (`fichier`/`chemin`/`source`/`destination`/`type`/`contenu`...) : toujours
+> verifier `catalogue-commandes.json`, jamais supposer.
 
 ### Case `critere` -- branchement automatique (v0.2.0)
 
@@ -321,6 +345,7 @@ Pattern 3, validation.
 
 | Version | Statut | Changements |
 |---|---|---|
+| 0.3.0 | ebauche | GARDE-FOU DES CLES : au chargement, validation des entrees des cases generateur contre le catalogue de commandes (cles exactes + obligatoires fournis) -> ERREUR claire code 1. Spec alignee v0.2.1. Py/sh parite maintenue |
 | 0.1.3 | ebauche | Ajout des variables initiales `--var cle=valeur` (repetable) : disponibles pour {var} des la case depart (ex: `--var fichier=...` pour combo-controle-impacts) |
 | 0.1.2 | ebauche | Ajout de la REGLE TRACABILITE (citer le combo avant de le lancer, protocole-creation-combos 9.5) |
 | 0.1.1 | ebauche | Clarification de l'emplacement canonique des definitions (cerveau-projet/combos/) vs outils (agents/tools/combos/) + reference au protocole-creation-combos |

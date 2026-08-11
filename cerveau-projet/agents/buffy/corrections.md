@@ -1705,3 +1705,215 @@ verifier le Pattern 13 en CROISANT la fiche avec les fins reelles de la carte
 
 **Outils utilises** : lire-fichier, editer-fichier, valider-conformite-ascii,
 valider-cartes-decision, activer-agent-principal.
+
+## [LECON] 2026-08-10 -- REGLES-GROUPES-AGENTS + PATTERN 16 REECRIT (CORRECTION D ASSIGNATION) (Buffy)
+
+**Contexte** : l utilisateur a clarifie l organisation du cerveau en 3 groupes
+et a signale une faute d assignation : Promethee (trio projets futurs) avait
+documente le Pattern 16 dans la spec-guider-parcours (outil du cerveau-projet).
+
+**Tache 1 -- Regle-immuable regles-groupes-agents** : cree
+cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md :
+1) Coordination : Cerberus ; 2) Cerveau-projet (gestion du dossier
+cerveau-projet lui-meme : outils, parcours, fiches, protocoles, spec des
+outils, README) : Buffy (RESPONSABLE), Vulcain, Morpheus, Janus, Atlas,
+Themis, Clio ; 3) Trio projets futurs (pense-betes/specs/todos pour le dev
+des apps futures) : Athena, Promethee, Minerve. REGLE ABSOLUE : le trio n est
+JAMAIS utilise pour developper le cerveau-projet. Referencee dans
+index-regles-general.md + section "Groupes d agents" dans AGENTS.md.
+
+**Tache 2 -- Pattern 16 reecrit** : suppression complete du bloc Pattern 16
+ecrit par Promethee (revert v0.5.0 : version, en-tetes patterns v0.2.28
+retires, procedure 15 patterns) puis re-ecriture ENTIERE du Pattern 16 par
+Buffy (responsable) : v0.6.0, 6 etapes (DETECTER / TRIER reference-combo /
+ANTI-DOUBLON obligatoire via rechercher-texte present-partiel-absent /
+DEPLACER jamais supprimer / PRISE EN COMPTE obligatoire par resolution
+affichee / VERIFIER), exemple janus c8-c11-c18, lien patterns 3-7 et
+spec-refonte 4.2.
+
+**Lecons** :
+- REGLE DE ROLE (lecon utilisateur) : ne JAMAIS assigner le trio (athena,
+  promethee, minerve) au developpement du cerveau-projet. Tout fichier de
+  cerveau-projet (y compris les spec des outils comme spec-guider-parcours)
+  est du domaine de Buffy (responsable) ou du groupe cerveau-projet.
+- La matrice regles-choisir-agent disait deja "Creer une spec -> Promethee",
+  mais cela concerne les SPECS DE PROJETS (pense-betes/specs/todos), PAS les
+  spec des outils du cerveau : distinguer spec de projet futur et spec d outil.
+- Correction d une erreur d assignation : supprimer completement le livrable
+  de l agent non habilite (revert), puis re-ecrire par l agent responsable.
+- Piege ASCII : la section ajoutee dans AGENTS.md contenait des accents
+  (gerent, lui-meme, utilise, developper, em-dash) -- corriger en ASCII strict.
+
+**Outils utilises** : lire-fichier, editer-fichier, creer-fichier,
+valider-conformite-ascii, valider-liens, activer-agent-principal.
+## [LECON] 2026-08-10 -- ALLEGEMENT PARCOURS JANUS (c8/c11/c18, Pattern 16) (Buffy)
+
+**Mission** : etape 2b du Pattern 16 - alleger les 3 cases surchargees du parcours janus avec anti-doublon.
+
+**Livrables** : parcours-janus v0.3.2 -> v0.3.3. c8 : indice regle 201 car. remplace par {ref: protocole-controle-buffy}. c11/c18 : 4 indices -> 3 indices (ref pattern-3 + outil combos-moteur avec --var fichier_controle differencie + fichier definition-combo). valider-case CONFORME, navigations reelles OK (c8 ref resolue, c11/c18 combo affiche), JSON valide, ASCII 0, LF pur.
+
+**Lecons** :
+1. ANTI-DOUBLON : avant de deplacer un contenu vers une source, verifier qu'il y existe DEJA (rechercher-texte / grep). Pour c8 : le contenu E1-E10 vit deja dans protocole-controle-buffy (10 etapes verifiees) -> rien a copier, juste une ref. Pour c11/c18 : le combo encapsule deja pattern-2 + pattern-12 + protocole + creer-fichier -> les 2 cases POINTENT vers le MEME combo, seule la variable fichier_controle differe.
+2. c11 et c18 ne sont PAS identiques (controle-statut vs controle-modification) : il faut garder la distinction par la variable --var fichier_controle dans la commande de l'indice outil, pas par un contenu duplique.
+3. Modele d'une case combo (vu dans les parcours existants) : indice ref pattern-3 + indice outil combos-moteur (commande complete avec --var) + indice fichier definition-combo.json (raison). PAS de type d'indice "combo" : c'est l'outil combos-moteur qui lance le combo.
+4. guider-parcours resout {ref: protocole-<x>} automatiquement (affiche [REFERENCE] + chemin) : une ref est plus leger et TOUJOURS a jour que le texte inline.
+5. La navigation de controle : trouver le chemin via BFS sur les branches (reponses reelles 'statut'/'modification'/'sante' pas OUI). c8 = OUI|sante, c11 = OUI|statut, c18 = OUI|modification.
+## [LECON] 2026-08-10 -- CORRECTION FICHE JANUS (Pattern 14 + E5b) APRES AUDIT THEMIS (Buffy)
+
+**Mission** : corriger les 2 points de l'audit Themis sur la fiche janus apres l'allegement (carte v0.3.3).
+
+**Corrections** :
+1. Pattern 14 : ligne 76 `PARCOURS (v0.3.2)` -> `PARCOURS (v0.3.3)`.
+2. E5b : ajout d'un bloc "FINS REELLES DE MA CARTE v0.3.3" citant les 5 fins avec leurs identifiants cX (c10 Reactiver Cerberus, c29 Signaler le besoin, c29d Outil temporaire, c30 Delegation, c32 Retour de Themis).
+3. Bonus (recommandation Themis) : alignement de la numerotation "Pattern 8" -> "Pattern 13" dans la regle fin-suit-SA-carte.
+
+**Verifications** : v0.3.2 residuel absent, 5 fins cX citees, Pattern 13 present / Pattern 8 absent, ASCII 0, LF pur.
+
+**Lecons** :
+1. Apres TOUTE mise a jour de version de parcours, la fiche agent doit etre synchronisee (Pattern 14) - le protocole sante E5 detecte la divergence automatiquement.
+2. E5b exige les identifiants cX REELS des fins : il faut lire le parcours JSON (fins de type 'fin') et les citer, pas seulement formuler le sens.
+3. L'audit Themis a aussi revele un Pattern 8 stale dans la fiche (numerotation ancienne de la spec) : quand on touche la regle fin-suit-SA-carte, en profiter pour aligner la numerotation sur la spec actuelle (Pattern 13).
+## [LECON] 2026-08-10 -- MIGRATION TERMINEE : ATLAS/CLIO/MORPHEUS v0.3.0 (Buffy)
+
+**Mission** : finir la migration des cartes de decision (demande utilisateur).
+
+**Resultat** : les 11 parcours sont maintenant migres au format v0.3.x. Les 3 derniers (atlas, clio, morpheus) passes de v0.2.0 a v0.3.0.
+
+**Lecons** :
+1. ETAT REEL : les 3 parcours etaient DEJA au format migre (0 case type=indice, 0 regle >160, refs pattern/protocole presentes, CONFORME). La migration restante etait surtout : bump version + synchronisation des fiches (Pattern 14 + E5b).
+2. Le trio (athena, minerve, promethee) reste en v0.2.0 VOLONTAIREMENT : reserve aux futurs projets (regle groupes-agents) - ne PAS migrer.
+3. Les refs avec chemin brut (ex : clio c11 regles-perimetre-workspace.md) sont un format VALIDE : vulcain c15 fait pareil, guider-parcours les resout ([REFERENCE] + chemin). Pas besoin de les convertir en protocole-<x>.
+4. Fin de migration = 3 actions : bump version parcours, Pattern 14 dans la fiche (PARCOURS (vX)), E5b (citer les fins reelles cX dans la fiche - modele janus).
+5. Navigation de controle : toujours lire les branches RELLES de c1 (clio : corriger/verifier/autre, PAS mettre-a-jour) avant de naviguer - une mauvaise reponse donne un code 1 trompeur.
+6. valider-cartes-decision --tous : 11/11 CONFORMES apres migration complete.
+
+## [LECON] 2026-08-10 -- CORRECTION 5 POINTS DOCUMENTAIRES POST-MIGRATION (Buffy)
+
+**Mission** : corriger les 5 points documentaires de l'audit Themis post-migration.
+**Resultat** : 9/9 VALIDE.
+
+**Corrections appliquees** :
+1. vulcain.md ligne 60 : PARCOURS (v0.5.0) -> PARCOURS (v0.3.0) (Pattern 14 : le v0.5.0 etait une version de fiche confondue avec la version de parcours)
+2. buffy.md : bloc FINS REELLES DE MA CARTE v0.3.3 (9 fins citees : c8, c13d, c22, c27, c35, c35d, c36, c39, c41)
+3. cerberus.md : bloc FINS REELLES DE MA CARTE v0.3.1 (2 fins : c20, c23) insere dans la section Le cycle fondamental apres le bloc Chaine complete
+4. themis.md : bloc FINS REELLES DE MA CARTE v0.3.0 (5 fins : c13, c23, c23d, c24, c25b)
+5. vulcain.md : bloc FINS REELLES DE MA CARTE v0.3.0 (7 fins : c9, c15, c16d, c18, c18d, c19, c21)
+
+**Lecons** :
+1. Le bloc FINS REELLES se place dans la section fin de mission (apres le bloc Pattern 13 / la ligne "Ne JAMAIS utiliser str_replace") ; pour cerberus (pas de section fin), se placer apres le bloc Chaine complete du cycle fondamental
+2. Chaque cX cite doit correspondre a une case de type fin reelle de la carte (croisement fiche/parcours E5b) - verifier titres ET exhaustivite (aucune fin oubliee)
+3. Piege regex : pour extraire un bloc de lignes blockquote, utiliser (?:> [^\n]*\n)+ et non un lookahead (?=\n\n|\n>) qui s'arrete au premier \n> 
+4. Toujours verifier les normes (ASCII strict + LF pur) apres insertion dans les fiches
+5. Outils utilises : lire-fichier, activer-agent-principal, valider-conformite-ascii ; insertion via script Python (jamais str_replace sur AGENTS.md)
+
+## [LECON] 2026-08-10 -- CORRECTION NUMEROTATION PATTERN 8 -> 13 DANS 8 FICHES (Buffy)
+
+**Mission** : corriger le decalage de numerotation dans le bloc fin de mission des fiches agents.
+**Resultat** : 17/17 VALIDE (9 remplacements sur 8 fiches).
+
+**Corrections appliquees** :
+1. 7 fiches : 'La fin de mission suit SA carte (Pattern 8)' -> '(Pattern 13)' : athena, atlas, buffy, clio, morpheus, themis, vulcain
+2. minerve : 2 occurrences 'Pattern 8/13' -> 'Pattern 13' (lignes 95 et 156)
+
+**Lecons** :
+1. Le pattern LA FIN SUIT SA CARTE est le Pattern 13 (v0.2.23) ; le Pattern 8 existe TOUJOURS dans la spec (Chaine de delegation BOUT-EN-BOUT) - la correction doit etre chirurgicale sur la phrase exacte, pas un remplacement global de 'Pattern 8'
+2. Preserver les references legitimes au Pattern 8 : vulcain ligne 190 'bilan consolide de la chaine (Pattern 8)' est une reference au Pattern 8 (bout-en-bout), NE PAS la toucher
+3. minerve utilisait le format composite 'Pattern 8/13' - simplifier en 'Pattern 13'
+4. Toujours verifier les normes (ASCII strict + LF pur) et l'absence de regressions apres modification des fiches
+5. Outils utilises : lire-fichier, activer-agent-principal ; insertion via script Python (jamais str_replace sur AGENTS.md)
+
+## [LECON] 2026-08-10 -- CARTE CLIO v0.4.0 ENRICHIE (branche ampleur + combos) (Buffy)
+
+**Mission** : donner plusieurs possibilites a Clio selon l'AMPLEUR de la mise a jour du README.
+**Resultat** : 21/21 + preuve navigation (cases c6b/c6c atteintes), valider-cartes-decision CONFORME.
+
+**Modifications** (parcours-clio.json v0.3.0 -> v0.4.0, 24 -> 27 cases) :
+1. c5 recablee : OUI -> c5a (au lieu de c6)
+2. Nouvelle c5a (question) : Ampleur de la correction ? PETITE -> c6b, GROSSE -> c6c
+3. Nouvelle c6b (action) : Executer combo-maj-readme (PETITE MAJ) - ref pattern-3 + outil combos-moteur + fichier definition-combo.json -> suivant c9
+4. Nouvelle c6c (action) : Executer combos-maj-readme-massive (GROSSE MAJ) - ref pattern-3 + outil combos-maj-readme-massive.py + fichier .md (LIRE AVANT USAGE) -> suivant c9
+
+**Lecons** :
+1. La navigation guider-parcours affiche les TITRES de cases, pas les identifiants cX - pour verifier qu'une case est atteinte, chercher le TITRE dans la sortie, pas l'id
+2. Le nombre de reponses de guider-parcours doit couvrir TOUTES les questions du chemin : 'OUI|corriger|OUI|PETITE' (4 reponses : c0, c1, c5, c5a) - un nombre insuffisant donne rc=1
+3. Les refs de type chemin de fichier (qui commencent par c comme 'cerveau-projet/...') ne doivent pas etre comptees comme references de cases dans la verification de refs mortes - exclure celles qui contiennent / ou backslash
+4. Anti-doublon : verifier qu'aucune case ne reference deja le combo avant d'ajouter (json.dumps + recherche du nom)
+5. generateurs-case v0.4.0 a les commandes ajouter/editer/supprimer/convertir/ajouter-bloc - l'ajout via script JSON direct est acceptable pour les parcours (pas AGENTS.md)
+6. Outils utilises : lire-fichier, guider-parcours, valider-cartes-decision, activer-agent-principal
+
+## [LECON] 2026-08-10 -- PATTERN 17 RAPPORT DE FIN AVEC AMELIORATIONS (Buffy, spec v0.6.1 + pilote themis v0.3.2)
+1. Pattern 17 ecrit dans spec-guider-parcours (v0.6.0 -> v0.6.1, 17 patterns) : la case apres 'Lecons et retour' est ALTERNATIVE - si le rapport contient des ameliorations possibles de l'agent, direction SA ligne d'auto-amelioration, sinon fin normale.
+2. La ligne d'auto-amelioration = GENERATEUR D'ABORD (generateurs-amelioration --theme) -> ACTIVATION de l'agent habilite (Vulcain/Buffy/Themis selon nature) -> REPRISE par l'agent precedent (Pattern 13).
+3. Pilote themis : c12b (question alternative, OUI->c12c NON->c13), c12c (generateur), c12d (activation agent habilite), c12e (FIN - Reprise du parcours). 32 cases, v0.3.2.
+4. Navigation verifiee : branche OUI affiche generateur + activation + c12e, branche NON -> c13 direct. valider-cartes-decision CONFORME.
+5. Le generateur d'amelioration n'avait qu'UN theme (ameliorer-outil) - le theme ameliorer-agent est reference par l'indice outil mais doit exister dans themes-amelioration.json (a verifier lors de la generalisation).
+6. Constat catalogue : seuls 5/11 parcours referencent generateurs-commande (atlas, buffy, clio, janus, themis) - la generalisation du catalogue et du Pattern 17 reste a faire.
+
+## [LECON] 2026-08-10 -- CARTE THEMIS c12d: REPERTOIRE 11 THEMES (Buffy, parcours v0.3.3)
+
+**Contexte** : themes-amelioration.json passe a v2.2.0 (11 themes, 64 questions, couverture 6/6 des protocoles-autoameliorer + spec trio). La regle de c12d (Activer l agent habilite) listait seulement 3 natures - mise a jour avec le repertoire complet et le mapping des agents habiles.
+**Verdict** : CONFORME (valider-cartes-decision) + navigation reelle OK + fiche synchronisee.
+**Lecons** :
+1. La regle de delegation c12d doit refleter le repertoire REEL du generateur (11 themes) sinon l agent ignore les natures disponibles
+2. Mapping des agents habiles par nature : Vulcain (outil/combo/protocole), Buffy (carte/case/parcours/cerveau/conventions), Janus (regles), trio athena/promethee/minerve (spec/pense-bete/todo)
+3. Toujours verifier la navigation reelle de la case modifiee + valider-cartes-decision + synchroniser la fiche (Pattern 14)
+
+## [LECON] 2026-08-10 -- PATTERN 17 GENERALISE AUX 10 PARCOURS (Buffy)
+
+**Contexte** : generalisation du Pattern 17 (rapport de fin -> ameliorations possibles -> ligne d auto-amelioration) sur les 10 parcours restants (themis etait le pilote v0.3.3). Modele themis : case lecons -> Xb (question alternative) -> OUI: Xc (generateur) -> Xd (activation agent habilite) -> Xe (FIN Reprise) ; NON -> la fin reelle de SA carte.
+**Verdict** : valider-cartes-decision 11/11 CONFORME + navigation reelle OUI/NON OK sur les 11 flux.
+**Lecons** :
+1. La mecanique des cases action : champ "suivant" explicite (pas de branches) - la case lecons pointe vers Xb, Xc -> Xd -> Xe, et Xb.suivant = la fin normale (branche NON)
+2. Chaque agent garde SA fin reelle (Pattern 13 : la fin suit SA carte) - jamais reactiver Cerberus par defaut : athena->Promethee, atlas->Cerberus, buffy->c16->Janus, cerberus->c20, clio->Cerberus, janus->Cerberus, minerve->Cerberus, morpheus->c9(Retour)->Janus/Cerberus, promethee->Minerve, vulcain c8->c9 et c14->c15
+3. Cas particulier morpheus : la case lecons c8 mene a c9 (question Retour qui m a delegue) qui est PRESERVEE - le Pattern 17 s insere avant elle (c8 -> c8b -> NON -> c9)
+4. Cas particulier vulcain : 2 flux (construire c8->c9 et modifier c14->c15) - 2 insertions P17 (c9b-e et c15b-e)
+5. Cas particulier cerberus : point d insertion c19 (Reprendre la coordination) -> c19b (il n a pas de case lecons classique mais termine sa coordination)
+6. Collision d identifiants verifiee sur les 10 parcours avant insertion (0 collision)
+7. Apres refonte de parcours : RE-SCAN des tests formels (protocole-tests) - test-013 cerberus 0.3.1->0.3.2, test-016 buffy 0.3.3->0.3.4, test-005 atlas 0.2.0->0.3.1 - delegation a Morpheus
+8. Pattern 14 : fiche agent synchronisee pour les 10 parcours (dont clio 0.3.0->0.4.1, rattrapage d un retard preexistant)
+
+## [LECON] 2026-08-10 -- CORRECTIONS P17 (regles longues + commandes + suivant) (Buffy)
+
+**Contexte** : la non-regression apres generalisation P17 (Morpheus) a revele 3 defauts introduits par la copie du pilote themis : 1) regles P17 de 172/492 caracteres > garde-fou valider-case (<= 160), 2) commandes en dur dans les indices outil (conflit avec le standard PASSE PAR LE GENERATEUR teste par test-005), 3) champ suivant sur les questions alternatives Xb (doublon c11 x2 dans le cartographe, car les questions standard n ont PAS de suivant).
+**Verdict** : corrige - valider-case CONFORME 11/11, valider-cartes-decision 11/11, non-regression 18/20 (2 KO preexistants).
+**Lecons** :
+1. REGLE <= 160 CARACTERES : toute regle inseree doit respecter le garde-fou valider-case - verifier avec valider-case --dry-run apres insertion
+2. FORMAT PASSE PAR LE GENERATEUR : les indices outil ne portent PAS de commande en dur (le guider la genere depuis le catalogue) - le pilote themis avait ce defaut latent, la generalisation l a propage
+3. QUESTIONS SANS SUIVANT : une case question a des branches mais PAS de champ suivant (c0/c1 n en ont pas) - le champ suivant sur Xb creait un doublon dans le cartographe (c11 x2)
+4. La copie d un pilote propage ses defauts - toujours valider le MODELE avant de le generaliser
+5. Tests adaptes en consequence : test-005 (catalogue 0.2.5 + chemins OUI|explorer|NON), test-006 (44 cases/45 chemins), test-013/016 (comptages), test-014 (spec v0.6.1 + 17 patterns)
+## [LECON] 2026-08-10 -- SUIVANTS MORTS RETIRES DES CARTES (Buffy, 10 parcours)
+
+**Mission** : retirer les champs suivant MORTS des cartes (questions avec suivant redondant deja dans leurs branches + fins avec suivant). Constat Themis : themis faisait 210 chemins pour 32 cases (ratio anormal).
+**Resultat** : 25/25 suivant retires sur 10 parcours (athena 2, atlas 2, buffy 4, clio 2, janus 2, minerve 2, morpheus 2, promethee 2, themis 5, vulcain 2). 0 anomalie residuelle.
+**Lecons** :
+1. Le champ suivant sur une question qui A des branches est un DEFECT (suivant mort : jamais lu, les branches priment) - il doit etre retire
+2. Une fin ne doit JAMAIS avoir de suivant
+3. Le cartographe (nb chemins) est le detecteur ideal : ratio chemins/cases ~1:1 attendu (atlas 44/45 avant -> 44/39 apres retrait des fantomes ; themis 210 -> 48)
+4. valider-cartes-decision ne detecte pas ce defaut (references valides mais logique morte) - renforcer le validateur : detecter suivant redondant avec branches + fin avec suivant
+5. Les cartographies generees par cartographier-parcours pendant un audit sont des RESIDUS a nettoyer (test-017 KO)
+6. La navigation reelle est INTACTE apres correction (les branches gerent deja tout) : PARCOURS TERMINE atteint, valider-cartes 11/11 CONFORME
+7. test-006 attendait 45 chemins atlas -> 39 apres correction (mise a jour Morpheus necessaire)
+
+## [LECON] 2026-08-11 -- Scan COMBOS branche dans parcours vulcain v0.3.3
+
+**Contexte** : brancher le scan detecter-decalages-catalogue (section COMBOS) dans le parcours de Vulcain pour un lancement regulier quand il cree/modifie un combo ou le catalogue.
+
+**Lecons** :
+1. Le scan COMBOS est un outil de CONTROLE pour Vulcain (proprietaire des combos et du catalogue) : il doit etre lance dans les 2 flux de construction ET de modification, PAS dans un combo de controle externe.
+2. Les branches des questions du parcours utilisent la cle `reponse` (pas `si`) : pour tester la navigation avec guider-parcours --reponses, il faut construire la sequence des reponses exactes case par case (ex: 'OUI|construire|OUI|OUI|OUI' pour atteindre c6b en construction).
+3. Les branches d'une question qui mene au meme endroit (OUI/NON -> meme case) sont legales mais il faut verifier que le flux NON saute bien la case d'action (test des 2 branches).
+4. Apres toute modification de parcours : valider-cartes-decision --agent <agent> (CONFORME) + navigation reelle des 3 branches (OUI/NON) + synchronisation de la fiche (Pattern 14 : PARCOURS vX) + verifier qu'aucun test formel ne reference l'ancienne version.
+5. Les regles des nouvelles cases ne doivent pas depasser 160 caracteres (garde-fou valider-case) : formuler les regles courtes et actionnables.
+6. normes : ASCII 0 + LF pur partout, pas de residu .tmp/.zz.
+
+## [LECON] 2026-08-11 -- CORRECTION ECART JANUS P12 (Buffy, parcours vulcain v0.3.4)
+
+**Contexte** : le second controle Janus a revele que les cases action c6c/c12c (Lancer le scan detecter-decalages-catalogue section COMBOS) ECRIVENT un rapport par defaut (rapport-detecter-decalages-catalogue-<date>.md sans --sortie) mais ne portaient pas d'indice regle CREATION LIMITEE (Pattern 12).
+
+**Lecons** :
+1. Toute case action qui lance un outil ecrivant un fichier PAR DEFAUT (rapport, sortie sans --sortie) DOIT porter un indice regle CREATION LIMITEE (Pattern 12) qui precise le perimetre de creation et le role exclu.
+2. Le modele est c20 : 'CREATION LIMITEE : ... je ne cree AUCUN autre fichier dans le cerveau' -- adapte au contexte de la case.
+3. L'indice CREATION LIMITEE se place EN TETE de la liste des indices de la case (comme le rappel ASCII du Pattern 2).
+4. La conformite de structure (valider-cartes CONFORME) ne suffit pas : croiser avec ce que fait RELLEMENT l'outil appele (ecrit-il un fichier par defaut ?) avant de valider une case.
+5. Toute modification de carte implique : bump de version (v0.3.3 -> v0.3.4) + synchronisation fiche (Pattern 14 PARCOURS) + re-audit (valider-cartes CONFORME + navigation 2 flux + normes ASCII/LF).

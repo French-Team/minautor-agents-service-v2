@@ -1757,3 +1757,234 @@ fiche/parcours) par Buffy.
   des lieux appliquera E5b automatiquement.
 
 **Outils utilises** : lire-fichier, valider-conformite-ascii, activer-agent-principal.
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE REGLES-GROUPES-AGENTS + PATTERN 16 REECRIT (VERDICT VALIDE 24/24) (Janus)
+
+**Controle** : second controle croise de la correction d'assignation de role :
+regle-immuable regles-groupes-agents creee par Buffy + Pattern 16 reecrit par
+Buffy (apres suppression de la version ecrite par Promethee).
+
+**Verifications (24/24 VALIDE)** :
+- C1 : la regle documente les 3 groupes (Coordination Cerberus / Cerveau-
+  projet 7 agents avec Buffy RESPONSABLE / Trio projets futurs Athena-
+  Promethee-Minerve) + REGLE ABSOLUE trio JAMAIS pour le cerveau.
+- C2 : referencee dans index-regles-general + AGENTS.md (section Groupes).
+- C3 : Pattern 16 unique, v0.6.0, 6 etapes (DETECTER / TRIER /
+  ANTI-DOUBLON present-partiel-absent / DEPLACER / PRISE EN COMPTE /
+  VERIFIER), exemple janus c8-c11-c18, liens patterns 3-7 + spec-refonte 4.2.
+- C4 : aucune trace que Promethee livre le Pattern 16 final (correction
+  d'assignation effective).
+- C5 : ASCII 0 + LF pur (regle, spec, AGENTS.md), procedure 16 patterns.
+
+**Lecons** :
+- Le trio (athena, promethee, minerve) est reserve aux projets futurs
+  (pense-betes/specs/todos) : ne JAMAIS l'assigner au developpement du
+  cerveau-projet. La regle regles-groupes-agents est maintenant IMMUABLE et
+  referencee partout.
+- Distinguer "spec de projet futur" (Promethee) et "spec d'outil du cerveau"
+  (Buffy/groupe cerveau-projet) -- la matrice regles-choisir-agent reste
+  valide pour les specs de projets.
+- Une erreur d'assignation se corrige par : suppression complete du livrable
+  de l'agent non habilite + reecriture par l'agent responsable + documentation
+  de la lecon de role.
+
+**Outils utilises** : lire-fichier, valider-conformite-ascii, activer-agent-principal.
+## [LECON] 2026-08-10 -- CONTROLE CROISE COMBO-CONTROLE-BUFFY + TEST-019 (VERDICT VALIDE 24/24) (Janus)
+
+**Mission** : second controle croise du combo-controle-buffy v0.1.0 (Vulcain) et de son test formel test-019 (Morpheus), dans le cadre de l'allegement des cases c11/c18 du parcours janus (Pattern 16).
+
+**Verdict** : VALIDE 24/24.
+
+**Lecons** :
+1. Le combo-controle-buffy est un bon exemple de combo d'allegement de type CONTROLE (Pattern 16, levier B) : c1 rappel pattern-2 ASCII, c2 rappel pattern-12 creation limitee, c3 lecture du protocole-controle-buffy, c4 creation du fichier de controle, c5/c6 fins. Les 2 garde-fous (OUI->suite / NON->c5 fin) sont corrects et testes.
+2. Le test-019 couvre les 2 navigations de secours (c1=NON et c1=OUI;c2=NON) : c'est le point qui distingue un bon test de combo d'un test superficiel.
+3. Le format special de nommage des tests (regex test-XXX + dossier parent test-*) est bien implemente dans valider-nommage : pas besoin de --type test (qui n'existe pas).
+4. Normes respectees partout : ASCII pur + LF pur (combo et test py/md).
+5. Prochaine etape prevue : etape 2b - Buffy branche le combo dans le parcours janus (c11/c18 -> 1 indice combo) avec anti-doublon (rechercher-texte avant de deplacer les contenus).
+## [LECON] 2026-08-10 -- CONTROLE CROISE ALLEGEMENT PARCOURS JANUS (VERDICT VALIDE 15/15) (Janus)
+
+**Mission** : second controle croise de l'allegement des cases c8/c11/c18 du parcours janus (v0.3.3, Pattern 16).
+
+**Verdict** : VALIDE 15/15.
+
+**Lecons** :
+1. L'allegement est complet : c8 (indice regle 201 car. -> ref protocole-controle-buffy), c11/c18 (4 indices -> 3 : ref pattern-3 + outil combos-moteur + fichier definition-combo). valider-case CONFORME.
+2. Anti-doublon respecte : c11/c18 pointent vers le MEME definition-combo (seule la variable fichier_controle differe : controle-statut vs controle-modification) - pas de duplication de contenu. Le contenu E1-E10 vit dans le protocole (10 etapes verifiees), la ref c8 ne copie rien.
+3. Resolvabilite verifiee en reel : guider-parcours affiche [REFERENCE] protocole-controle-buffy sur la navigation c8 (OUI|sante), et le combo sur c11 (OUI|statut) / c18 (OUI|modification) avec la bonne commande --var.
+4. Normes respectees : JSON valide, ASCII 0, LF pur.
+5. Ce modele (case combo = ref pattern-3 + outil combos-moteur avec --var + fichier definition) est le gabarit a reutiliser pour tout allegement futur (Pattern 16, levier B).
+## [LECON] 2026-08-10 -- CONTROLE CROISE FICHE JANUS CORRIGEE (VERDICT VALIDE 14/14) (Janus)
+
+**Mission** : second controle croise des 2 corrections de la fiche janus (Pattern 14 + E5b) apres l'audit Themis.
+
+**Verdict** : VALIDE 14/14.
+
+**Lecons** :
+1. Pattern 14 resorbe : fiche dit PARCOURS (v0.3.3), la carte est bien en 0.3.3, aucun v0.3.2 residuel.
+2. E5b resorbe : la fiche cite les 5 fins reelles avec leurs identifiants cX (c10, c29, c29d, c30, c32) - croisement avec le parcours verifie, chaque cX correspond a une case de type fin avec titre conforme.
+3. Bonus applique : numerotation alignee Pattern 8 -> Pattern 13 (recommandation Themis).
+4. Le controle croise E5b est maintenant robuste : il lit les fins RELLES du parcours (type == 'fin') et verifie que la fiche les cite par identifiant - c'est la mise en oeuvre exacte du protocole sante v0.1.1.
+5. Prochaine etape : re-audit E5b par Themis pour confirmer le passage KO -> OK (le rapport d'audit doit etre mis a jour).
+## [LECON] 2026-08-10 -- CONTROLE CROISE MIGRATION (VERDICT VALIDE 39/39) (Janus)
+
+**Mission** : second controle croise de la fin de migration (atlas, clio, morpheus v0.2.0 -> v0.3.0).
+
+**Verdict** : VALIDE 39/39.
+
+**Lecons** :
+1. MIGRATION COMPLETE : les 8 parcours du groupe cerveau-projet sont en v0.3.x (buffy 0.3.3, cerberus 0.3.1, janus 0.3.3, themis 0.3.0, vulcain 0.3.0 + atlas/clio/morpheus 0.3.0). Le trio (athena, minerve, promethee) reste VOLONTAIREMENT en v0.2.0 (reserve aux futurs projets - regle groupes-agents).
+2. Chaque fiche cite desormais ses fins reelles par identifiants cX (E5b) et la version du parcours (Pattern 14) - alignement complet fiche/carte.
+3. valider-cartes-decision --tous : 11/11 CONFORMES - l'ensemble du systeme de cartes est coherent.
+4. Les navigations reelles passent (code 0) sur les 3 parcours migres - les refs (pattern, protocole, chemins) sont resolues par guider-parcours.
+5. La migration est un processus iteratif : cerberus (pilote) -> buffy/vulcain (migration) -> les 3 derniers (atlas/clio/morpheus) etaient deja quasi migres, il restait bump + fiches. Le trio sera migre lors de la phase dev de nouveaux projets.
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE 5 POINTS DOCUMENTAIRES POST-MIGRATION (Janus)
+
+**Controle** : croisement fiche/parcours des 5 corrections Buffy (Pattern 14 + E5b sur 4 fiches).
+**Verdict** : VALIDE (9/9).
+
+**Resultats** :
+1. C1 vulcain Pattern 14 : fiche PARCOURS (v0.3.0) == carte 0.3.0, 0 reste v0.5.0
+2. C2 E5b croisement fiche/parcours : buffy 9/9, cerberus 2/2, themis 5/5, vulcain 7/7 fins citees, toutes reelles (existence, type fin, titre conforme, exhaustivite)
+3. C3 normes : ASCII 0 + LF pur sur les 4 fiches
+
+**Lecons** :
+1. La version dans le JSON de parcours est SANS prefixe v (0.3.3) alors que la fiche l'ecrit AVEC v (v0.3.3) - normaliser (lstrip v) pour comparer fiche/parcours sans faux negatif
+2. Le bloc FINS REELLES suit un format canonique : `> **FINS REELLES DE MA CARTE <v> (E5b - croisement fiche/parcours)** :` suivi de `> - \`cX\` <titre>` - un seul format, facile a verifier par regex
+3. Pour cerberus (fiche sans section fin de mission), le bloc se place dans Le cycle fondamental apres le bloc Chaine complete
+4. Le controle croise independant (regenerer la liste des fins depuis la carte, comparer avec la fiche) evite de recopier les erreurs de l'auteur
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE NUMEROTATION PATTERN 8 -> 13 (Janus)
+
+**Controle** : croisement des 9 remplacements Buffy sur 8 fiches (Pattern 8 -> 13 dans le bloc fin).
+**Verdict** : VALIDE (33/33).
+
+**Resultats** :
+1. C1 : les 10 fiches avec bloc fin (athena, atlas, buffy, cerberus, clio, janus, minerve, morpheus, themis, vulcain) citent toutes Pattern 13
+2. C2 : 0 occurrence parasite 'suit SA carte (Pattern 8)' sur les 11 fiches
+3. C3 : vulcain FLUX 'bilan consolide de la chaine (Pattern 8)' preserve (reference legitime au Pattern 8 bout-en-bout)
+4. C4 : normes ASCII 0 + LF pur sur les 11 fiches
+
+**Lecons** :
+1. promethee n'a pas de bloc fin dans la section > 100 (structure differente - trio reserve aux futurs projets) - non bloqueur
+2. La correction chirurgicale (phrase exacte) plutot que globale (tous les 'Pattern 8') preserve les references legitimes - verifier en C3
+3. Regenerer l'inventaire complet depuis les fichiers (pas depuis la memoire) evite les faux negatifs - verifier les 11 fiches meme celles non modifiees
+4. Le controle croise independant confirme l'homogeneite : un seul format (Pattern 13) dans tous les blocs fin
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE COMBOS CLIO + TEST-020 (Janus)
+
+**Controle** : conformite des 3 combos Clio v0.1.0 (Pattern 3) + test-020.
+**Verdict** : VALIDE (31/31 reels - le seul KO etait le script de controle lui-meme, artefact).
+
+**Resultats** :
+1. C1 : 7 fichiers des 3 combos existants (2 orchestres py/sh/md + 1 definition json)
+2. C2 : JSON encapsule conforme (nom, version 0.1.0, case_depart c1, 5 cases, branches c2 OUI->c3 NON->c4, c5 fin, description Pattern 3)
+3. C3 : versions 0.1.0 des 2 orchestres
+4. C4 : execution reelle combos-analyse-projet (ETAT REEL + ECARTS + verdict)
+5. C5 : test-020 present et vert (46/46)
+6. C6 : normes ASCII 0 + LF pur sur les 9 fichiers
+7. C7 : 0 residu temporaire (apres nettoyage)
+
+**Lecons** :
+1. Un controle qui compte les residus .zz-*.py se detecte lui-meme s'il est encore present a l'execution - l'exclure de la liste ou le nettoyer avant
+2. Le controle croise independant verifie la NAVIGATION du combo encapsule (branches c2) et pas seulement la structure JSON - c'est la conformite Pattern 3 reelle
+3. La non-regression test-009 a test-020 reste verte (12/12) apres creation des 3 combos - aucune regression
+4. Le combo-analyse-projet produit un verdict A CORRIGER/A JOUR - c'est la brique decisionnelle avant toute MAJ
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE CARTE CLIO v0.4.0 (Janus)
+
+**Controle** : carte Clio v0.4.0 enrichie (branche ampleur + 2 cases combos).
+**Verdict** : VALIDE (26/26).
+
+**Resultats** :
+1. C1 : version v0.4.0, 27 cases
+2. C2 : c5a question (PETITE->c6b, GROSSE->c6c), c6b action (pattern-3 + combos-moteur + suivant c9), c6c action (pattern-3 + massive + suivant c9)
+3. C3 : c5 recablee (OUI->c5a, NON->c9)
+4. C4 : 0 reference morte
+5. C5 : navigation PETITE (titre c6b affiche), GROSSE (titre c6c affiche), verifier - toutes PARCOURS TERMINE
+6. C6 : valider-cartes-decision --tous : 0 agent non conforme (11/11)
+7. C7 : normes ASCII 0 + LF pur
+
+**Lecons** :
+1. La verification de references mortes doit seulement suivre 'suivant' + branches 'vers' (pas les refs de fichiers) - le croisement avec les combos cree des chemins valides
+2. La navigation independante avec les TITRES de cases (pas les ids) est la preuve reelle du passage par c6b/c6c
+3. Le recablage c5 OUI->c5a cree une etape de decision intermediaire (ampleur) qui ne casse pas le chemin existant c5 NON->c9 (anti-regression)
+4. La carte v0.4.0 est coherente avec le test-020 (46/46) : les combos references existent et sont testes
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE CARTE THEMIS v0.3.1 (Janus, VERDICT VALIDE 6/6)
+1. Ref protocole-verification-coherence inseree dans c3 (Lancer le combo audit-themis) apres la regle Pattern 3 - resolue par guider-parcours vers regles-immuables/general/protocole-verification-coherence.
+2. Anti-doublon : la ref n'existe qu'une seule fois dans tout le parcours (1 occurrence).
+3. Pattern 14 verifie : fiche themis.md PARCOURS (v0.3.1) == carte 0.3.1 (la fiche avait ete mise a jour en meme temps).
+4. valider-cartes-decision --agent themis : CONFORME (28 cases, references valides).
+5. Normes : JSON valide + ASCII 0 + LF pur sur parcours + fiche.
+
+## [LECON] 2026-08-10 -- CONTROLE CROISE PROTOCOLE-VERIFICATION-COHERENCE (Janus, VERDICT VALIDE 6/6)
+1. Format conforme : frontmatter identite + 7 sections obligatoires (Objectif, Prerequis, Etapes E1-E7, RVAV, Exemples, Pieges courants, Liens) - version 0.1.0, statut Ebauche, agent Themis.
+2. Referencement index-regles-general.md present avec statut ebauche (ligne 54).
+3. Les 6 pieges des lecons Themis sont couverts : separateurs multiples, ancien total arborescence, badges ligne unique, categories virtuelles, tri qui ecrase l'en-tete, artefact __pycache__.
+4. Les etapes E1-E7 reprennent exactement les verifications du re-audit README (sources de verite croisees, scan anciennes versions, structure, badges, categories virtuelles, normes, verdict).
+5. Normes ASCII 0 + LF pur, liens du protocole vers des fichiers existants.
+6. PIEGE DE SCRIPT : regex non-greedy '.*?' sur une ligne de table markdown s'arrete au 1er '|' - verifier la ligne complete (grep) avant de conclure a un manque.
+
+## [LECON] 2026-08-10 -- Controle croise Pattern 17 (pilote themis)
+
+**Contexte** : controle croise du Pattern 17 (rapport de fin -> detection d ameliorations -> ligne d auto-amelioration) ecrit par Buffy dans la spec-guider-parcours v0.6.1 + pilote themis v0.3.2 (cases c12b/c12c/c12d/c12e).
+**Verdict final** : CONFORME (9/9 apres corrections).
+**Lecons** :
+1. Un controle croise sur un NOUVEAU pattern doit verifier la chaine complete : spec + parcours pilote + theme du generateur + generation reelle + validation carte + normes
+2. Le theme ameliorer-agent n existait PAS dans themes-amelioration.json (seul ameliorer-outil existait) -- le parcours c12c le referencait pourtant : risque d erreur a l execution. Mon controle a detecte l ecart AVANT l execution reelle
+3. La spec doit referencer les protocoles-autoameliorer-* existants (le Pattern 17 s appuie sur eux) -- la reference manquait, corrigee
+4. La generation reelle du theme (--theme ameliorer-agent, rc=0, 1460 caracteres) confirme que le theme est utilisable, pas seulement present dans le JSON
+5. Controle croise = 2eme paire d yeux : il a transforme A REVOIR (2 KO) en CONFORME (9/9)
+
+## [LECON] 2026-08-10 -- Controle croise carte themis c12d (11 themes, v0.3.3)
+
+**Contexte** : controle croise apres mise a jour de la regle c12d (repertoire complet des 11 themes du generateur d amelioration v2.2.0 + mapping agents habiles).
+**Verdict** : CONFORME 8/8.
+**Lecons** :
+1. Verifier la regle de delegation contre le REPERTOIRE REEL du generateur (11 themes, 0 manquant) et non contre une liste supposee
+2. Le mapping des agents habiles (Vulcain/Buffy/Janus/trio) doit etre explicite dans la regle pour que l agent sache QUI activer
+3. La navigation OUI/NON (branches du pilote Pattern 17) reste intacte apres modification d une case du milieu
+4. Controle croise complet : regle vs sources + navigation reelle + valider-cartes-decision + fiche (Pattern 14) + normes
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE PARCOURS VULCAIN v0.3.3 (Janus, VERDICT A REVOIR - 1 ecart)
+
+**Contexte** : second controle croise des 4 nouvelles cases scan COMBOS (c6b/c6c construction, c12b/c12c modification) ajoutees par Buffy au parcours vulcain v0.3.3.
+
+**Verdict** : A REVOIR - 1 ecart mineur (Pattern 12).
+
+**Conforme** :
+1. Format des 4 cases : questions avec branches cle `reponse`, actions avec indices regle/fichier/outil -- conforme au modele cible
+2. valider-cartes-decision --agent vulcain : CONFORME, 0 suivant mort
+3. Navigation reelle des 3 branches OK (construction OUI->c6c->c7, NON->c7 direct, modification OUI->c12c->c13)
+4. detecter-decalages-catalogue present au catalogue (source de verite)
+5. Pattern 14 : fiche vulcain.md synchronisee PARCOURS v0.3.3
+6. Normes : ASCII 0 + LF pur
+
+**ECART (1)** : les cases action c6c/c12c (Lancer le scan detecter-decalages-catalogue) ECRIVENT un rapport par defaut (rapport-detecter-decalages-catalogue-<date>.md sans --sortie) mais ne portent PAS d'indice regle CREATION LIMITEE (Pattern 12). La case c20 (Activer Themis pour auditer) porte l'indice -- modele a suivre.
+
+**Lecons** :
+1. Toute case action qui lance un outil ecrivant un fichier (rapport, sortie) DOIT porter l'indice regle CREATION LIMITEE qui precise le PERIMETRE de creation et les roles exclus.
+2. Ne pas se fier au titre seul de la case : verifier ce que fait reellement l'outil appele (defaut de l'outil : ecrit-il un fichier sans --sortie ?).
+3. La conformite de structure (valider-cartes CONFORME) ne garantit pas la conformite aux Patterns : le controle croise doit croiser les Patterns (12, 14) avec la realite de l'execution.
+4. Correction recommandee : Buffy (habilitation cartes) ajoute l'indice CREATION LIMITEE sur c6c/c12c (modele c20), puis re-audit.
+
+## [LECON] 2026-08-11 -- RE-AUDIT PARCOURS VULCAIN v0.3.4 (Janus, VERDICT VALIDE)
+
+**Contexte** : re-audit final apres la correction P12 de Buffy (indice regle CREATION LIMITEE ajoute en tete des cases c6c/c12c du parcours vulcain).
+
+**Verdict** : VALIDE - l'ecart du premier controle (A REVOIR) est resorbe.
+
+**Verifie** :
+1. R1 : CREATION LIMITEE presente en TETE des indices c6c/c12c (regle + regle + regle + outil)
+2. R2 : format des cases intact (c6/c12 -> suivant c6b/c12b, branches OUI->c6c/c12c NON->c7/c13, 4 indices conserves)
+3. R3 : valider-cartes-decision --agent vulcain CONFORME (0 suivant mort)
+4. R4 : navigation reelle 2 flux OK (construction OUI->c6c->c7, modification OUI->c12c->c13)
+5. R5 : Pattern 14 fiche vulcain.md PARCOURS v0.3.4 (synchronisee)
+6. R6 : normes ASCII 0 + LF pur
+
+**Lecons** :
+1. Le cycle controle croise -> correction -> re-audit fonctionne : un ecart detecte (P12 manquant) est corrige par l'agent habilite (Buffy) puis re-valide par le controleur (Janus) -> VALIDE.
+2. La correction P12 respecte le modele : indice regle CREATION LIMITEE en TETE des indices (comme le rappel ASCII Pattern 2), texte precisant le perimetre de creation et le role exclu.
+3. Le bump de version (0.3.3 -> 0.3.4) accompagne toute correction de carte : verifier la fiche (Pattern 14) apres chaque changement de version.
+4. Un verdict A REVOIR n'est pas un echec : c'est le declencheur du cycle de correction. Le re-audit clot le cycle avec un verdict VALIDE trace dans les corrections.

@@ -229,3 +229,257 @@ cartes-decision --tous 11/11, ASCII 0 + LF pur (3 fichiers), evaluer-coherence
 2. **La regle RE-SCAN COMPLET generalise la lecon du scan du jour** : les 3 KO detectes (test-010 version, test-012 version, test-009 temoin rebase) sont devenus les 2 cas types documentes (versions attendues + temoins) -- la prochaine refonte saura quoi chercher.
 3. **La commande de scan est simple et executable** : boucle bash sur les dossiers test-0*/ avec execution du .py -- 10 tests executes, 0 KO partout a la verification.
 4. **Verification finale** : protocole v0.2.3, ASCII 0, LF pur, scan complet 10/10 vert (test-009 a test-018).
+## [LECON] 2026-08-10 -- TEST-019 COMBO-CONTROLE-BUFFY CREE (Morpheus, VERDICT 11/11 VALIDE)
+
+**Mission** : tester formellement le combo-controle-buffy v0.1.0 (cree par Vulcain pour alleger c11/c18 du parcours janus, Pattern 16 ALLEGEMENT).
+
+**Livrables** : cerveau-projet/agents/tools/tester/tests/test-019-combos-controle-buffy/ (py + md), 11/11 points passes, ASCII 0 + LF pur.
+
+**Lecons** :
+1. Le format special de nommage des tests est reconnu automatiquement par valider-nommage (regex test-XXX-nom + dossier parent test-*) : pas besoin de --type test (type inconnu), le scan --recursive sur le dossier ne compte rien (Total 0) car le dossier test-XXX n'est pas une structure d'outil standard -- le nommage est valide par le format special.
+2. Le combo-controle-buffy couvre le rappel des regles (pattern-2 ASCII, pattern-12 creation limitee) + lecture du protocole-controle-buffy + creation du fichier de controle : c'est le gabarit type d'un combo d'allegement de cases de controle (Pattern 16, levier B).
+3. Navigation de secours a tester ABSOLUMENT : c1=NON et c1=OUI;c2=NON -> c5 FIN REGLES NON RESPECTEES (les garde-fous des 2 patterns sont preserves).
+4. Variable manquante {fichier_controle} -> erreur claire avec mention de la case c4 (teste).
+5. Piege Windows : chemin en FORWARD SLASHES pour --var (protocole-creation-combos).
+6. La suite de tests s'etend : test-019 ajoute (regle RE-SCAN COMPLET couvre maintenant test-009 a test-019).
+## [LECON] 2026-08-10 -- NON-REGRESSION POST-ALLEGEMENT JANUS (Morpheus, test-019 reverdi + test-009 corrige)
+
+**Mission** : etape 3 - relancer la suite apres l'allegement du parcours janus (c8/c11/c18, v0.3.3, Pattern 16).
+
+**Resultat** : test-019-combos-controle-buffy 11/11 VALIDE (reverdi sans changement), test-009-valider-case 20/20 VALIDE (CORRIGE : temoin artificiel).
+
+**Lecons** :
+1. Le test-019 ne depend PAS du parcours janus (il teste le combo directement) : reverdi sans modification. AUCUN autre test ne reference parcours-janus sauf test-009.
+2. DECOUVERTE IMPORTANTE : le test-009-valider-case utilisait le parcours janus comme TEMOIN REEL du verdict A ALLEGER (attendu >= 3 surcharges). Apres l'allegement (janus CONFORME), le test tombait a 17/20 avec 3 KO (3e, 6, 8b). C'est la preuve que l'allegement a bien resorbe les 3 surcharges reelles.
+3. SOLUTION DURABLE : fabriquer un TEMOIN ARTIFICIEL dans le dossier temp (copie de parcours-cerberus + 3 indices regle de 200 car. ajoutes a 3 cases) via la fonction fabriquer_temoin_surcharge() - le test ne depend plus de l'etat des parcours reels (aucun parcours n'est plus en surcharge dans le projet).
+4. Regle : un test qui depend d'un etat reel (ici un parcours en surcharge) casse des que cet etat change - toujours preferer un temoin artificiel genere dans tmp.
+5. valider-cartes-decision : 11/11 CONFORMES (janus inclus), re-confirme apres allegement.
+
+**Statut** : suite reverdie (test-009 + test-019), 0 regression. Prochaine etape : audit Themis (protocole sante E5b sur la fiche janus vs carte v0.3.3).
+## [LECON] 2026-08-10 -- TEST-014 CORRIGE + NON-REGRESSION 11/11 REVERDIE (Morpheus)
+
+**Mission** : adapter le test-014-spec-guider-parcours aux versions reelles (spec v0.6.0 + 16 patterns) puis reverdir la non-regression.
+
+**Resultat** : test-014 12/12 (corrige), non-regression test-009 a test-019 = 11/11 VALIDE, 0 KO.
+
+**Lecons** :
+1. Le test-014 attendait des versions OBSOLETES : spec v0.5.0 + 15 patterns. La spec est en v0.6.0 avec 16 patterns (Pattern 16 ALLEGEMENT ajoute par Buffy lors de sa reecriture).
+2. DECOUVERTE : la spec elle-meme avait une INCOHERENCE interne (titre ligne 7 = v0.5.0, Version ligne 9 = 0.6.0) - le titre n'avait pas ete bumpe lors de la reecriture du Pattern 16. Le test-014 (1a) l'a detectee : corrigee en v0.6.0.
+3. DECOUVERTE : les refs documentaires guider-parcours.md et vulcain.md (Spec du format) pointaient v0.5.0 - mises a jour en v0.6.0 (points 6a/6b du test). ATTENTION : vulcain.md ligne 60 (PARCOURS (v0.5.0)) est le point 1 de l'audit Themis RESERVE a Buffy (version de fiche vs version de parcours) - ne pas confondre avec la ligne 71 (Spec du format).
+4. Processus : corriger le test ET les fichiers qu'il verifie (spec, docs) ensemble - un test qui attend une version impose que les refs documentaires soient synchronisees.
+5. La non-regression complete (test-009 a test-019) est reverdie : 11/11 verts.
+
+## [LECON] 2026-08-10 -- TEST-020 COMBOS CLIO CREE (Morpheus, VERDICT 46/46 VALIDE)
+
+**Mission** : ecrire le test formel des 3 combos Clio v0.1.0 (Vulcain a cree, delegation des tests).
+**Resultat** : test-020-combos-clio : 46 OK / 0 KO. Non-regression test-009 a test-020 : 12/12 verts.
+
+**Combos testes** :
+1. combos-analyse-projet (orchestre py/sh/md) : etat reel + ecarts README vs realite
+2. combo-maj-readme (encapsule definition-combo.json, 5 cases) : petite MAJ
+3. combos-maj-readme-massive (orchestre py/sh/md) : grosse MAJ conservative
+
+**Cas couverts** : nommage (7 fichiers), versions 0.1.0, JSON valide (5 cases),
+execution reelle des 2 orchestres sans --rapport, combos-moteur --liste,
+dry-run c2=OUI (verifier->maj->ascii) et c2=NON (verifier->ascii), parite .sh,
+ASCII + LF sur les 7 fichiers.
+
+**Lecons** :
+1. Piege de test : la DESCRIPTION du combo encapsule mentionne --maj dans son
+   texte mais la navigation c2=NON ne l'EXECUTE pas - verifier l'absence dans
+   la partie apres [DRY-RUN] (out.split("DRY-RUN]")[1]) et non dans tout le
+   flux de sortie
+2. Les tests de combos doivent executer SANS --rapport (aucune creation de
+   fichier pendant les tests)
+3. Le dossier du test-019 s'appelle test-019-combos-controle-buffy (avec 's' a
+   combos) - le nouveau test est test-020 (dernier numero)
+4. Chaque combo orchestre est teste en execution reelle complete (les 5 etapes
+   de la grosse MAJ) - pas seulement --version
+5. Outils utilises : lire-fichier, activer-agent-principal ; execution via
+   subprocess dans le test (jamais de commande directe)
+
+## [LECON] 2026-08-10 -- Test reel pilote Pattern 17 (themis v0.3.2)
+
+**Contexte** : test reel du pilote Pattern 17 (rapport de fin -> detection d ameliorations -> ligne d auto-amelioration) dans le parcours themis v0.3.2 (cases c12b/c12c/c12d/c12e).
+**Verdict** : VALIDE 8/8.
+**Lecons** :
+1. Navigation branche OUI complete et visible : [29/32] Ameliorations possibles -> [30/32] generateur (commande reelle --theme ameliorer-agent generee + indice PASSE PAR LE GENERATEUR) -> [31/32] Activer l agent habilite -> [32/32] FIN Reprise
+2. Navigation branche NON directe : [29/32] -> FIN Reactiver Cerberus (pas de passage par le generateur)
+3. Generation reelle du theme ameliorer-agent : rc=0, 1460 caracteres, 5 questions
+4. Les 6 protocoles-autoameliorer (agents, cerveau, conventions, outils, protocoles, regles) existent tous dans regles-immuables/general
+5. Normes : ASCII 0 + LF pur sur spec v0.6.1, parcours v0.3.2, themes-amelioration.json
+6. Le pilote est pret pour la generalisation aux 10 autres parcours
+
+## [LECON] 2026-08-10 -- Test complet 11 themes generateur amelioration (Morpheus, VALIDE 6/6)
+
+**Contexte** : garde-fou non-regression sur themes-amelioration.json v2.2.0 (11 themes, 64 questions) - generation reelle de chacun, --liste, theme inconnu, normes, coherence carte themis c12d.
+**Verdict** : VALIDE 6/6.
+**Lecons** :
+1. Generation reelle confirmee pour les 11 themes : ameliorer-outil (14 questions) + 10 themes de 5 questions = 64 au total
+2. --liste rc=0 affiche exactement les 11 themes (affiches=11, correspondance avec le JSON)
+3. Theme inconnu -> rc=1 avec message (gestion d erreur correcte)
+4. Coherence transverse : la regle c12d de la carte themis reference bien les 11 themes et la couverture des 6 protocoles-autoameliorer est complete (singulier/pluriel : agent/outil/protocole)
+5. JSON v2.2.0 valide, tri alphabetique, ids uniques, ASCII 0 + LF pur
+6. Garde-fou non-regression : ce test de repere (VALIDE 6/6) sert de base pour les futures evolutions du generateur
+
+## [LECON] 2026-08-10 -- NON-REGRESSION APRES GENERALISATION PATTERN 17 (Morpheus)
+
+**Contexte** : mise a jour des versions attendues (test-013 cerberus 0.3.1->0.3.2, test-016 buffy 0.3.3->0.3.4, test-005 atlas 0.2.0->0.3.1) + comptages de cases (2a/2b) apres insertion P17, puis non-regression ciblee.
+**Verdict** : TESTS CORRIGES (versions + comptages) MAIS 1 PROBLEME DE FOND NON-TEST detecte : les regles P17 des cases Xc/Xd (copiees depuis themis c12c/c12d) font 172 et 492 caracteres - elles violent le garde-fou REEL "regle <= 160 caracteres" de valider-case (points 3b/3c/9 KO sur test-013 et test-016).
+**Lecons** :
+1. Le garde-fou valider-case impose regle <= 160 caracteres - les regles longues P17 doivent etre raccourcies dans les 11 parcours (themis inclus, c12c=172 et c12d=492) par Buffy (domaine cartes)
+2. Le modele themis P17 copie tel quel propage le defaut - la generalisation a duplique les regles trop longues
+3. test-013 : apres correction comptages, il reste 1 KO (3b) ; test-016 : 3 KO (3b/3c/9) - tous lies aux regles longues
+4. L avertissement cerberus c5 (pattern de re-essai NON->soi-meme) est un faux positif preexistant, voulu
+5. La sequence correcte : Buffy corrige les regles (<= 160 car) -> Morpheus relance la non-regression pour reverdir
+
+## [LECON] 2026-08-10 -- VALIDATION FINALE GENERALISATION PATTERN 17 (Morpheus, 18/20 OK)
+
+**Contexte** : validation finale de la non-regression complete (test-001 a test-020) apres la generalisation du Pattern 17 aux 11 parcours + corrections Buffy (regles <= 160 car, commandes en dur retirees, suivant retire des Xb).
+**Verdict** : CONFORME - 18/20 tests OK, 2 KO PREE XISTANTS hors perimetre P17.
+**Lecons** :
+1. Non-regression complete : 18 tests verts (dont test-005 26/26, test-006 19/19, test-013 22/22, test-014 12/12, test-016 20/20 - tous reverdis apres adaptation)
+2. Les 2 KO restants sont PREE XISTANTS et documentes : test-004 (parcours morpheus attend v0.1.3, actuel v0.3.1 - version obsolete depuis la migration morpheus) et test-007 (catalogue attend 109 commandes, actuel 118 - obsolete depuis l ajout des 3 combos Clio). Aucun lie a la mission P17
+3. valider-cartes-decision --tous : 11/11 CONFORME - toutes les cartes restent valides apres insertion P17
+4. La chaine complete est stable : 11 parcours avec Pattern 17 (case alternative Ameliorations possibles + ligne d auto-amelioration), chaque fin suivant SA carte (Pattern 13)
+## [LECON] 2026-08-10 -- CORRECTION KO PREEXISTANT test-007 (Morpheus)
+
+**Mission** : corriger les valeurs attendues obsoletes du test-007 (test-figer-lf) pour reverdir la non-regression complete.
+**Verdict** : VALIDE 15/15 - non-regression 19/20 OK (seul test-004 reste KO, preexistant documente).
+**Lecons** :
+1. Les valeurs attendues obsoletes etaient dans le test : catalogue 109 -> 118 commandes, index-tools total 108 -> 110 (le "| Corriger | 6 |" ligne 411 etait deja correct, seul le Total avait change)
+2. La correction doit couvrir TOUTES les occurrences (8 points : 4 x libelles + 4 x code/verifications) - ne pas seulement corriger le code, les libelles des verifier() doivent etre synchronises
+3. Avant de modifier un test, verifier les valeurs reelles dans les sources (catalogue-commandes.json version 0.2.5, index-tools.md Total ligne 436) - ne jamais deviner
+4. Normes respectees : ASCII 0, CRLF 0 sur le test modifie
+5. Le KO test-004 (parcours morpheus v0.1.3) est PREEXISTANT et hors perimetre : il necessite une mission dediee (mise a jour de la version attendue du parcours-morpheus, actuellement v0.3.1)
+## [LECON] 2026-08-10 -- CORRECTION DERNIER KO PREEXISTANT test-004 (Morpheus)
+
+**Mission** : corriger la version attendue obsoletes du test-004 (test-combos-tester-outil) pour atteindre 20/20 de non-regression complete.
+**Verdict** : VALIDE - NON-REGRESSION COMPLETE 20/20 OK (0 KO).
+**Lecons** :
+1. La version attendue du parcours morpheus etait obsolete : v0.1.3 -> v0.3.1 (verifiee dans parcours-morpheus.json)
+2. 3 occurrences synchronisees (libelle en-tete ligne 19, commentaire ligne 134, verification code ligne 137) - ne jamais corriger seulement le code, les libelles doivent suivre
+3. Normes respectees : ASCII 0, CRLF 0 sur le test modifie
+4. La non-regression complete est maintenant 20/20 : aucun KO preexistant ne subsiste dans la suite formelle (test-001 a test-020)
+5. Lecon transverse : la mise a jour des versions attendues doit etre faite par Morpheus (protocole-tests), jamais par un autre agent, meme pour une simple valeur
+## [LECON] 2026-08-10 -- TEST-006 ADAPTE APRES RETRAIT SUIVANTS MORTS (Morpheus)
+
+**Mission** : adapter test-006-cartographier-parcours au nouveau nombre de chemins atlas (45 -> 39) apres le retrait des suivant morts (6 chemins fantomes en moins).
+**Verdict** : VALIDE - NON-REGRESSION COMPLETE 20/20 OK.
+**Lecons** :
+1. Les suivant morts des cartes creaient des chemins FANTOMES comptes par le cartographe : le retrait les elimine (atlas 45 -> 39, themis 210 -> 48)
+2. Toute correction structurelle de cartes impacte le nb de chemins -> verifier test-006 et adapter la valeur attendue (2 occurrences : libelle ligne 15 + verification ligne 117)
+3. Les fichiers cartographie-*.md generes pendant un audit sont des RESIDUS a nettoyer (test-017 les detecte) - le cartographe les cree a chaque execution
+4. Normes respectees : ASCII 0, CRLF 0
+5. La non-regression complete est 20/20 : suite formelle entierement verte apres la correction
+## [LECON] 2026-08-10 -- GARDE-FOU SUIVANT MORT TESTE (Morpheus, VERDICT VALIDE)
+
+**Mission** : tester formellement valider-cartes-decision v0.3.2 apres l'ajout
+du garde-fou suivant mort (controle 7).
+
+**Ce qui a ete fait** :
+1. tester-valider-cartes-decision.sh mis a jour : versions 0.3.1 -> 0.3.2
+   (points 1-2, qui etaient les 2 KO) + 4 nouveaux points (25-28) testant le
+   controleur 7 sur un parcours infeste : NON CONFORME, erreur 'Suivants
+   morts' presente, 'fin avec suivant' detectee, 'branches priment' detectee.
+2. Test local : 28/28 VALIDE.
+3. Verification des references 0.3.1 dans les tests formels : les mentions
+   dans test-004 (parcours morpheus v0.3.1), test-005 (parcours atlas v0.3.1),
+   test-016 (parcours buffy v0.3.1) et test-010/012 (generateurs-case v0.3.1)
+   concernent D'AUTRES versions de parcours/outils, PAS valider-cartes-decision
+   -> AUCUNE modification requise (les appels a valider-cartes se font par
+   chemin sans verification de version).
+4. Non-regression complete : 19/20 OK.
+
+**KO restant : test-003-combos-creer (PREEXISTANT, hors perimetre)** :
+- Point 7a : 'dry-run retourne 0: attendu=0, obtenu=1'
+- Concerne combo-creer-protocole (createur-fichier en --dry-run), AUCUN lien
+  avec valider-cartes-decision (prouve : test-003 ne reference aucun des
+  fichiers modifies par cette mission)
+- A traiter dans une mission dediee (createur-fichier / combo-creer dry-run)
+
+**Lecons** :
+1. Quand un test affiche 'X KO' dans son resume, ne pas confondre le compteur
+   interne ('0 KO') avec un echec reel : le critere fiable est la presence de
+   'NON VALIDE' ou le code de sortie, pas la sous-chaine 'KO' (piege de
+   parsing)
+2. Toute nouvelle version d'outil cree un KO sur le test local si la version
+   attendue n'est pas synchronisee : la mise a jour des versions fait partie
+   du travail de test (Morpheus), pas du travail de construction (Vulcain)
+3. Les references de versions dans les tests formels peuvent concerner
+   d'autres composants : verifier le CONTEXTE avant de modifier (ex: 'v0.3.1'
+   = parcours morpheus/atlas/buffy, pas valider-cartes-decision)
+4. Verifier les fichiers .pyc dans git status : un __pycache__ modifie est un
+   artefact a nettoyer, jamais a committer
+## [LECON] 2026-08-11 -- TESTS ADAPTES APRES CORRECTION COMBO-CREER-* (Morpheus)
+
+**Mission** : adapter les tests apres la correction des combos creer-* et du
+catalogue (Vulcain, catalogue v0.2.6).
+
+**Ce qui a ete fait** :
+1. test-003-combos-creer : ajout de la variable 'contenu=contenu' aux vars de
+   combo-creer-agent (ligne 56) car la case c8 (creer-fichier) exige desormais
+   la variable contenu (la definition du combo passe {contenu}). Resultat :
+   89/89.
+2. test-005-generateurs-commande : point 14 catalogue version 0.2.5 -> 0.2.6
+   (label + verification). Resultat : 26/26.
+3. Non-regression complete : 20/20 OK, 0 KO.
+
+**Lecons** :
+1. Quand un combo evolue (ajout d'un parametre obligatoire comme contenu),
+   le test formel qui fournit les vars doit etre mis a jour EN MEME TEMPS que
+   la definition du combo - sinon le test echoue en 'Variable non trouvee'
+   (erreur de test, pas de l outil)
+2. La version du catalogue est testee par test-005 : toute modification du
+   catalogue (modele/parametres/version) entraine une adaptation du point 14
+3. La chaine complete Vulcain (correction) -> Morpheus (tests) a elimine le
+   KO preexistant test-003 qui durait depuis plusieurs missions : les 20
+   echecs initiaux (cles obsoletes fichier/source/destination vs catalogue)
+   sont resorbes
+4. La non-regression 20/20 est la base de confiance : toute future
+   modification de catalogue ou de combo doit re-verifier test-003 et test-005
+
+**Resultat** : NON-REGRESSION COMPLETE 20/20 OK, 0 KO.
+## [LECON] 2026-08-11 -- GARDE-FOU CLES COMBOS TESTE (Morpheus, VERDICT VALIDE)
+
+**Mission** : tester le garde-fou des cles des definitions-combo vs catalogue
+(combos-moteur v0.3.0 + detecter-decalages-catalogue v0.1.1).
+
+**Ce qui a ete fait** :
+1. test-002-combos-moteur : nouveau Test 13 (5 points) ajoute :
+   - 13a : combo avec cle hors catalogue (fichier au lieu de chemin pour
+     valider-conventions) -> REJETE code 1
+   - 13b : erreur claire 'hors catalogue' presente
+   - 13c : erreur cite la cle fautive ET la commande ciblee
+   - 13d : combo avec cle exacte (chemin) -> ACCEPTE code 0
+   - 13e : parite sh (le .sh embarque le garde-fou, rejette aussi)
+   Resultat : 36/36 REUSSI.
+2. test-003-combos-creer : 89/89 (les cles dry_run/recursive retirees par
+   Vulcain ne changent pas les commandes generees).
+3. Non-regression complete : 20/20 OK, 0 KO.
+
+**Lecons** :
+1. Un garde-fou de validation au chargement doit etre teste des deux cotes :
+   (a) le rejet (cle fautive -> code 1 + erreur claire) et (b) l acceptation
+   (cle conforme -> code 0) - sinon on ne prouve que la moitie du comportement
+2. La parite py/sh d un outil embarque (heredoc) doit etre testee pour le
+   NOUVEAU comportement aussi (13e : le .sh rejette comme le .py) - pas
+   seulement pour --liste/navigation
+3. Les definitions de test existantes de test-002 n utilisent pas de cases
+   generateur avec catalogue : le nouveau garde-fou ne les a pas cassees
+   (aucune adaptation necessaire, seul un ajout de points de test)
+4. Le detecteur-decalages-catalogue (v0.1.1) confirme 14 combos scannes / 0
+   probleme : la correction des 8 cles par Vulcain a assaini toutes les
+   definitions
+
+**Resultat** : NON-REGRESSION COMPLETE 20/20 OK, 0 KO.
+
+## [LECON] 2026-08-11 -- NON-REGRESSION PARCOURS VULCAIN v0.3.3 (Morpheus, VERDICT VALIDE)
+
+**Contexte** : Buffy a branche le scan COMBOS (detecter-decalages-catalogue section COMBOS) dans le parcours vulcain v0.3.3 (4 cases : c6b/c6c construction, c12b/c12c modification). Mission : confirmer que rien n'est casse.
+
+**Lecons** :
+1. Aucun test formel n'attend la version d'un parcours d'agent en dur : la non-regression (20/20 OK) passe sans adaptation meme apres un bump de version de carte (v0.3.2 -> v0.3.3).
+2. test-014 reference 'vulcain' mais uniquement pour les patterns de la spec-guider-parcours (Pattern 12/14 cites comme exemples) : ce n'est pas une reference a la version du parcours.
+3. La modification d'une carte de decision (ajout de cases alternatives) est sans impact sur les tests tant que la structure (valider-cartes CONFORME, navigation reelle OK) est respectee.
+4. Le verdict de non-regression se fait avec les 20 tests de la suite formelle (test-001 a test-020), en executant chaque test et en verifiant l'absence de [KO].

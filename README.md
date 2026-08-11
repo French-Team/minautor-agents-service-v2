@@ -6,7 +6,7 @@ identite:
 ---
 # Cerveau-Projet
 
-[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-82-blueviolet?style=flat)](https://img.shields.io/badge/Outils-82-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-119-blueviolet?style=flat)](https://img.shields.io/badge/Outils-119-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)
 
 
 ![Logo](cerveau-projet/assets/images/logo.jpg)
@@ -51,7 +51,7 @@ projet/
     |   |-- conventions/         # Renommage, structures, liens, protocoles
     |   |-- regles-immuables/    # Regles non negociables + protocoles + RVAV
     |   |-- classeur-variables/  # Stockage partage de variables
-    |   `-- tools/               # Boite a outils (83 outils + protections)
+    |   `-- tools/               # Boite a outils (119 outils + protections)
     |-- pense-betes/             # Idees, specs, todos, travail en cours
     |   |-- index-pense-bete.md
     |   |-- specs/               # Definitions techniques
@@ -78,6 +78,10 @@ projet/
 | **Clio** | Muse de l'histoire - README | Apres chaque mission (fichiers changes) |
 | **Themis** | Evaluatrice croisee du cerveau-projet | Audit, evaluation, coherence |
 
+| **Classeur-variables** | Agent | Selon sa carte de decision |
+| **Conventions** | Agent | Selon sa carte de decision |
+| **Philosophie** | Agent | Selon sa carte de decision |
+| **Regles-immuables** | Agent | Selon sa carte de decision |
 ### Le cycle fondamental (par session LLM)
 
 ```
@@ -111,41 +115,43 @@ Chaque agent a :
 
 ---
 
-## La boite a outils (87 outils)
+## La boite a outils (119 outils)
 
 Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 
 | Categorie | Outils | Usage |
 |---|---|---|
+| **Activer (1)** | activer-agent-principal | Activer/reactiver l agent principal par session (multi-session) |
 | **Ajouter (1)** | ajouter-contenu-fichier | Ajouter du contenu a la fin d'un fichier |
 | **Analyser (2)** | analyser-dependances, analyser-structure | Comprendre la structure et les dependances |
+| **Cartographier (1)** | cartographier-parcours | Cartographier le parcours d un agent (analyse rapide) |
 | **Changer (1)** | changer-statut | Changer le statut d'un fichier |
 | **Condenser (1)** | condenser-fichier | Reduire la taille des fichiers |
 | **Copier (2)** | copier-dossier, copier-fichier | Copier fichiers et dossiers |
-| **Corriger (5)** | corriger-accents-zones-sensibles, corriger-dictionnaire-accents, corriger-emojis, corriger-liens, corriger-nommage | Reparer et ameliorer |
+| **Corriger (6)** | corriger-accents-zones-sensibles, corriger-dictionnaire-accents, corriger-emojis, corriger-fins-de-ligne, corriger-liens, corriger-nommage | Reparer et ameliorer |
 | **Creer (4)** | creer-fichier, creer-remplir-pense-bete, creer-remplir-spec, creer-remplir-todo | Creer fichiers et contenus |
 | **Decomposer (1)** | decomposer-fichier | Decomposer les fichiers markdown |
 | **Deplacer (1)** | deplacer-fichier | Deplacer ou renommer un fichier |
-| **Detecter (4)** | detecter-erreur-statut, detecter-local-hors-fonction, detecter-surcharge-fichier, detecter-usage-outils-externes | Detecter les erreurs de statut, la surcharge et les local hors fonction |
+| **Detecter (7)** | detecter-decalages-catalogue, detecter-divergences-version, detecter-erreur-statut, detecter-impacts, detecter-local-hors-fonction, detecter-surcharge-fichier, detecter-usage-outils-externes | Detecter les erreurs de statut, la surcharge et les local hors fonction |
 | **Ecrire (1)** | ecrire-fichier | Ecrire ou ecraser un fichier |
 | **Editer (1)** | editer-fichier | Remplacer une chaine dans un fichier |
 | **Evaluer (4)** | evaluer-agents, evaluer-coherence, evaluer-conventions, evaluer-structure | Evaluer la coherence du cerveau |
-| **Generateurs (4)** | generateurs-commande, generateurs-squelette-pense-bete, generateurs-squelette-spec, generateurs-squelette-todo | Generer les squelettes conformes |
+| **Generateurs (10)** | generateurs-amelioration, generateurs-carte, generateurs-case, generateurs-commande, generateurs-ligne, generateurs-outil-temporaire, generateurs-regenerer-catalogue, generateurs-squelette-pense-bete, generateurs-squelette-spec, generateurs-squelette-todo | Generer les squelettes conformes |
 | **Gerer (1)** | gerer-sous-mission | Gerer les sorties/reentrees du flux |
 | **Guider (1)** | guider-parcours | Guider l agent case par case (jeu de piste) dans son parcours JSON |
 | **Inserer (1)** | inserer-contenu-fichier | Inserer du contenu a une position |
-| **Lire (3)** | lire-fichier, lire-frontmatter, lire-lignes | Lire le contenu des fichiers |
+| **Lire (4)** | lire-activite-recente, lire-fichier, lire-frontmatter, lire-lignes | Lire le contenu des fichiers |
 | **Lister (8)** | lister-agents, lister-appels, lister-dossiers, lister-fichiers, lister-fonctions, lister-outils, lister-prepares, lister-statuts | Decouvrir la structure |
-| **Activer (1)** | activer-agent-principal | Activer/reactiver l agent principal par session (multi-session) |
 | **Mettre a jour (1)** | mettre-a-jour-readme | Mettre a jour le README depuis les sources |
-| **Nettoyer (1)** | nettoyer-fichier | Purifier un fichier |
+| **Migrer (1)** | migrer-identite | Migrer l identite d un fichier |
+| **Nettoyer (2)** | nettoyer-fichier, nettoyer-sessions | Purifier un fichier |
 | **Rechercher (10)** | rechercher-accents-sensibles, rechercher-dossier, rechercher-extension-fichier, rechercher-fichier, rechercher-fichiers-vides, rechercher-pense-betes, rechercher-specs, rechercher-templates, rechercher-texte, rechercher-todos | Rechercher dans le cerveau |
 | **Remplacer (1)** | remplacer-texte | Remplacer des paires ancien->nouveau dans plusieurs fichiers (renommages massifs) |
 | **Supprimer (3)** | supprimer-dossier, supprimer-fichier, supprimer-ligne | Supprimer fichiers et dossiers |
-| **Valider (12)** | valider-cartes-decision, valider-conformite-ascii, valider-conventions, valider-ebauche, valider-liens, valider-nommage, valider-numerotation, valider-pense-bete, valider-relecture, valider-spec, valider-tableaux, valider-todo | Verifier la conformite |
-| **Verifier (4)** | verifier-documents-manquants, verifier-role-fichier, verifier-separation-preoccupations, verifier-systeme | Verifier l'etat reel |
 | **Tester (3)** |  | Securiser les tests |
-| **Combos (4)** | combos-audit-general, combos-corriger-non-ascii, combos-valider-cerveau, combos-moteur | Chainer des outils en sequences |
+| **Valider (13)** | valider-cartes-decision, valider-case, valider-conformite-ascii, valider-conventions, valider-ebauche, valider-liens, valider-nommage, valider-numerotation, valider-pense-bete, valider-relecture, valider-spec, valider-tableaux, valider-todo | Verifier la conformite |
+| **Verifier (5)** | verifier-documents-manquants, verifier-restauration-sure, verifier-role-fichier, verifier-separation-preoccupations, verifier-systeme | Verifier l'etat reel |
+| **Combos (20)** | combo-activation, combo-audit-themis, combo-controle-buffy, combo-controle-impacts, combo-controle-modification, combo-controle-outil, combo-corriger-ascii, combo-corriger-fichier, combo-creer-agent, combo-creer-fichier-cerveau, combo-creer-protocole, combo-maj-readme, combo-sante-tableaux, combo-tester-outil, combos-analyse-projet, combos-audit-general, combos-corriger-non-ascii, combos-maj-readme-massive, combos-moteur, combos-valider-cerveau | Chainer des outils en sequences |
 | **Templates (1)** | outil-template | Modele standard de creation d'outils |
 
 **Principe** : Les agents utilisent exclusivement leurs propres outils, pas des outils generiques. Chaque outil est assigne aux agents concernes dans leur carte de decision. Chaque outil existe en 2 versions (.sh et .py) : le choix se fait via le profil systeme stocke dans le classeur-variables (.py si Python dispo, sinon .sh).

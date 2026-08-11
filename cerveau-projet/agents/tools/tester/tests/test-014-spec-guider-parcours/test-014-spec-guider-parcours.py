@@ -2,26 +2,26 @@
 # -*- coding: ascii -*-
 """
 test-014-spec-guider-parcours.py
-Test formel de la spec-guider-parcours v0.5.0
+Test formel de la spec-guider-parcours v0.6.1
 (patterns REFERENCES, pas dupliques -- etape 7 de la spec-refonte-cartes-decision).
 
 Contexte :
-  - spec-guider-parcours passe a v0.5.0 : principe UNE PLACE POUR CHAQUE CHOSE
+  - spec-guider-parcours passe a v0.6.0 : principe UNE PLACE POUR CHAQUE CHOSE
     documente (les patterns sont LA source de verite, les cases y POINTENT via
     un indice {"type": "ref", "ref": "pattern-<N>"})
   - 4 exemples inline transformes en refs (pattern-5/9/10/11)
-  - incoherence de version corrigee (titre = Version = 0.5.0)
+  - incoherence de version corrigee (titre = Version = 0.6.1)
   - refs documentaires mises a jour (guider-parcours.md, vulcain.md)
 
 Cas couverts:
-  1. Version 0.5.0 coherente : titre ligne 7 == Version ligne 9
+  1. Version 0.6.1 coherente : titre ligne 7 == Version ligne 9
   2. Principe UNE PLACE POUR CHAQUE CHOSE documente
   3. Les 4 refs d exemple (pattern-5/9/10/11) resolvables (verifiees par
      valider-case sur un parcours qui les porte)
   4. Aucun indice regle > 160 caracteres dans les exemples de la spec
   5. Le type action documente dans les exemples (exemple minimal c2)
-  6. Refs documentaires : guider-parcours.md et vulcain.md pointent v0.5.0
-  7. Les 15 patterns toujours presents (aucun perdu)
+  6. Refs documentaires : guider-parcours.md et vulcain.md pointent v0.6.0
+  7. Les 17 patterns toujours presents (aucun perdu)
   8. Non-regression : valider-case + guider-parcours fonctionnent toujours
   9. ASCII strict : 0 non-ASCII (spec + doc + test)
  10. LF pur : 0 CRLF
@@ -89,17 +89,17 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-014-")
     try:
-        print("=== Test formel spec-guider-parcours v0.5.0 ===")
+        print("=== Test formel spec-guider-parcours v0.6.1 ===")
 
         with io.open(SPEC, encoding="utf-8") as fh:
             spec = fh.read()
         lignes = spec.split("\n")
 
         # 1. Version coherente : titre (ligne 7) == Version (ligne 9)
-        verifier("1a. Titre ligne 7 = v0.5.0", "v0.5.0" in lignes[6],
+        verifier("1a. Titre ligne 7 = v0.6.1", "v0.6.1" in lignes[6],
                  lignes[6][:80])
-        verifier("1b. Version ligne 9 = 0.5.0",
-                 lignes[8].strip().startswith("**Version** : 0.5.0"),
+        verifier("1b. Version ligne 9 = 0.6.1",
+                 lignes[8].strip().startswith("**Version** : 0.6.1"),
                  lignes[8].strip()[:60])
 
         # 2. Principe UNE PLACE POUR CHAQUE CHOSE
@@ -131,21 +131,21 @@ def main():
                  '"c2"' in spec and '"type": "action"' in spec
                  and '"ref": "pattern-9"' in spec)
 
-        # 6. Refs documentaires : guider-parcours.md et vulcain.md -> v0.5.0
+        # 6. Refs documentaires : guider-parcours.md et vulcain.md -> v0.6.0
         with io.open(DOC, encoding="utf-8") as fh:
             doc = fh.read()
         with io.open(FICHE_VULCAIN, encoding="utf-8") as fh:
             fiche = fh.read()
-        verifier("6a. guider-parcours.md : Spec (v0.5.0)",
-                 "(v0.5.0)" in doc and "spec-guider-parcours.001.01.ebauche.md" in doc,
+        verifier("6a. guider-parcours.md : Spec (v0.6.0)",
+                 "(v0.6.0)" in doc and "spec-guider-parcours.001.01.ebauche.md" in doc,
                  doc.strip()[-80:])
-        verifier("6b. vulcain.md : Spec du format (v0.5.0)",
-                 "(v0.5.0)" in fiche and "Spec du format" in fiche,
+        verifier("6b. vulcain.md : Spec du format (v0.6.0)",
+                 "(v0.6.0)" in fiche and "Spec du format" in fiche,
                  fiche.strip()[-80:])
 
-        # 7. Les 15 patterns toujours presents
+        # 7. Les 17 patterns toujours presents
         n_patterns = sum(1 for l in lignes if l.startswith("### Pattern "))
-        verifier("7. 15 patterns presents", n_patterns == 15,
+        verifier("7. 17 patterns presents", n_patterns == 17,
                  "patterns=%d" % n_patterns)
 
         # 8. Non-regression : guider-parcours navigue cerberus

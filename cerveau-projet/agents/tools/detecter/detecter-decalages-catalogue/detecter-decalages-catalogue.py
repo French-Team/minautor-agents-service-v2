@@ -4,7 +4,9 @@
 # Compare CHAQUE entree du catalogue du generateur a l interface reelle de son
 # outil (--aide puis --help en fallback) pour garantir 0 decalage modele/interface.
 # Cree par Vulcain le 2026-08-09 (institutionnalisation du scan ecrit par Atlas).
-# Version : 0.1.0
+# v0.1.1 : section COMBOS ajoutee (garde-fou des cles des definitions-combo vs
+# catalogue, anti-recurrence du KO test-003, spec-combos-moteur v0.2.1).
+# Version : 0.1.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -16,6 +18,10 @@ detecter-decalages-catalogue.py
 Detecte les decalages entre le catalogue du generateur (catalogue-commandes.json)
 et les interfaces reelles des outils (options --aide/--help).
 
+Depuis la v0.1.1, il scanne AUSSI les definitions-combo (combos/*/definition-
+combo.json) : les cles des entrees des cases generateur doivent correspondre
+EXACTEMENT aux parametres du catalogue (spec-combos-moteur v0.2.1).
+
 Usage:
   detecter-decalages-catalogue.py [--sortie CHEMIN] [--version]
 
@@ -25,6 +31,7 @@ Options:
   --version         Afficher la version
   --aide            Afficher cette aide
 """
+import glob
 import io
 import json
 import os
@@ -34,7 +41,8 @@ import sys
 import unicodedata
 from datetime import datetime
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
+COMBOS_GLOBE = "cerveau-projet/agents/tools/combos/*/definition-combo.json"
 CATALOGUE = "cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json"
 TIMEOUT = 8
 # detecter-decalages-catalogue.py est a: cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/
@@ -80,6 +88,43 @@ def lancer_aide(interpreteur, script):
     return None, "PAS D AIDE RECONNUE (--aide et --help rejetes ou sortie vide)", False
 
 
+def analyser_combos():
+    """GARDE-FOU v0.1.1 : verifie les cles des cases generateur des definitions-
+    combo contre le catalogue. Retourne (problemes, nb_combos)."""
+    with io.open(os.path.join(RACINE, CATALOGUE), encoding="utf-8") as fh:
+        cat = json.load(fh)
+    commandes = {e["nom"]: e for e in cat["commandes"]}
+    probleme = []
+    nb_combos = 0
+    for p in sorted(glob.glob(os.path.join(RACINE, COMBOS_GLOBE))):
+        nb_combos += 1
+        try:
+            with io.open(p, encoding="utf-8") as fh:
+                d = json.load(fh)
+        except (OSError, ValueError) as exc:
+            probleme.append((os.path.basename(os.path.dirname(p)), "?", "JSON INVALIDE: %s" % exc))
+            continue
+        nom = d.get("combo", {}).get("nom", "?")
+        for cid, case in d.get("cases", {}).items():
+            if case.get("type") != "generateur":
+                continue
+            cible = case.get("catalogue")
+            entrees = case.get("entrees") or {}
+            if cible not in commandes:
+                probleme.append((nom, cid, "catalogue '%s' absent du catalogue de commandes" % cible))
+                continue
+            parametres = commandes[cible].get("parametres", [])
+            cles_cat = [pp.get("cle") for pp in parametres]
+            oblig = [pp.get("cle") for pp in parametres if pp.get("obligatoire")]
+            inconnues = sorted(set(entrees.keys()) - set(cles_cat))
+            for cle in inconnues:
+                probleme.append((nom, cid, "cle '%s' hors catalogue (attendu: %s)" % (cle, ", ".join(cles_cat))))
+            manquantes = sorted(set(oblig) - set(entrees.keys()))
+            for cle in manquantes:
+                probleme.append((nom, cid, "parametre obligatoire '%s' manquant" % cle))
+    return probleme, nb_combos
+
+
 def analyser():
     with io.open(os.path.join(RACINE, CATALOGUE), encoding="utf-8") as fh:
         cat = json.load(fh)
@@ -111,12 +156,25 @@ def analyser():
     return resultats
 
 
-def formater(resultats, total):
+def formater(resultats, total, problemes_combos, nb_combos):
     L = []
     L.append("# Scan Systematique du Catalogue vs Interfaces Reelles")
     L.append("")
     L.append("**Date** : %s | **Catalogue** : v%s | **Entrees** : %d" % (
         datetime.now().strftime("%Y-%m-%d %H:%M"), "?", total))
+    L.append("")
+    L.append("## COMBOS (garde-fou v0.1.1 : cles des cases generateur vs catalogue)")
+    L.append("")
+    L.append("| Combos scannes | %d |" % nb_combos)
+    L.append("| Problemes de cles | %d |" % len(problemes_combos))
+    L.append("")
+    if problemes_combos:
+        for nom, cid, msg in problemes_combos:
+            L.append("- **%s** [%s] : %s" % (nom, cid, msg))
+        L.append("")
+    else:
+        L.append("Aucun probleme de cles detecte (toutes les entrees correspondent au catalogue).")
+        L.append("")
     L.append("")
     nb = len(resultats["conformes"])
     nb_dec = len(resultats["decalages"])
@@ -189,13 +247,16 @@ def main(argv):
     if sortie is None:
         sortie = "rapport-detecter-decalages-catalogue-%s.md" % datetime.now().strftime("%Y-%m-%d")
     resultats = analyser()
-    rapport = formater(resultats, len(resultats["conformes"]) + len(resultats["decalages"]) + len(resultats["non_testables"]))
+    problemes_combos, nb_combos = analyser_combos()
+    rapport = formater(resultats, len(resultats["conformes"]) + len(resultats["decalages"]) + len(resultats["non_testables"]),
+                       problemes_combos, nb_combos)
     with io.open(sortie, "w", encoding="utf-8", newline="") as fh:
         fh.write(rapport)
     print("RAPPORT ECRIT: %s" % os.path.abspath(sortie))
-    print("SYNTHESE: %d conformes / %d decalages / %d non testables / %d alertes" % (
+    print("SYNTHESE: %d conformes / %d decalages / %d non testables / %d alertes / COMBOS: %d scannes, %d problemes" % (
         len(resultats["conformes"]), len(resultats["decalages"]),
-        len(resultats["non_testables"]), len(resultats["alertes"])))
+        len(resultats["non_testables"]), len(resultats["alertes"]),
+        nb_combos, len(problemes_combos)))
     return 0
 
 

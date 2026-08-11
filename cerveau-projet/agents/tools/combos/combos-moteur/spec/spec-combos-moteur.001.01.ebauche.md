@@ -7,9 +7,9 @@ identite:
 # Specification -- combos-moteur
 
 **Statut :** ebauche
-**Version :** 0.2.0-beta
+**Version :** 0.2.1
 **Categorie :** combos
-**Date :** 2026-08-08
+**Date :** 2026-08-11
 
 ---
 
@@ -103,11 +103,55 @@ generateur n'est PAS modifie : c'est le moteur qui fait le lien.
 }
 ```
 
+### REGLE : les cles des `entrees` = cles EXACTES du catalogue (v0.2.1)
+
+> **REGLE (apprise du KO test-003, 2026-08-11)** : les cles de `entrees` d'une
+> case `generateur` DOIVENT etre les cles EXACTES des `parametres` de la commande
+> ciblee dans le catalogue de commandes (`catalogue-commandes.json`), qui est la
+> **source de verite** des commandes generees. Il est INTERDIT d'inventer une cle.
+
+**Pourquoi ?** le moteur appelle `generateurs-commande --commande <catalogue>
+--reponses "<cles>=<valeurs>"`. Le generateur compose la commande en utilisant
+UNIQUEMENT les cles declarees dans les `parametres` de la commande. Une cle
+inconnue (ex: `fichier` au lieu de `chemin`) est ignoree par la composition, et
+un parametre obligatoire non fourni (ex: `contenu` absent) provoque une ERREUR
+`Parametre obligatoire manquant` qui fait echouer tout le combo.
+
+**Comment connaitre les cles exactes ?**
+
+1. Lire `catalogue-commandes.json` : pour chaque commande, la liste des
+   `parametres` (champ `cle`) est la reference.
+2. En mode interactif, le generateur pose une question PAR parametre
+   (`[Question 1/n] ...`) : chaque question correspond a une cle.
+3. Les cles ne suivent aucune convention de nommage universelle (tantot
+   `fichier`, tantot `chemin`, `source`, `destination`, `type`, `contenu`...) :
+   toujours verifier, jamais supposer.
+
+**Contre-exemple (defaut du KO test-003)** :
+
+```json
+{
+  "type": "generateur",
+  "catalogue": "valider-conventions",
+  "entrees": { "fichier": "{chemin}" }   // MAUVAIS : le catalogue attend 'chemin'
+}
+```
+
+**Bon exemple** :
+
+```json
+{
+  "type": "generateur",
+  "catalogue": "valider-conventions",
+  "entrees": { "chemin": "{chemin}" }    // BON : cle exacte du catalogue
+}
+```
+
 ## Types de cases
 
 | Type | Champ(s) requis | Comportement | Sortie |
 |---|---|---|---|
-| `generateur` | `catalogue`, `entrees`, `sortie` | Appelle `generateurs-commande --commande <catalogue> --reponses "<entrees>"` | commande composee (texte) |
+| `generateur` | `catalogue`, `entrees`, `sortie` | Appelle `generateurs-commande --commande <catalogue> --reponses "<entrees>"` ; les cles des `entrees` DOIVENT etre les cles exactes des `parametres` du catalogue (v0.2.1) | commande composee (texte) |
 | `outil` | `commande`, `sortie` | Execute la commande (subprocess), capture stdout+stderr | resultat (texte) |
 | `critere` | `condition`, `vers-vrai`, `vers-faux` | Evalue une condition AUTOMATIQUEMENT et suit la branche sans question humaine | aucune (branche vers `vers-vrai`/`vers-faux`) |
 | `controle` | `question`, `branches` | Pose une question ; la reponse (via `--reponses` ou interaction) selectionne la branche | aucune (branche vers `vers`) |
@@ -172,6 +216,12 @@ composer la commande de l'outil suivant, une case `generateur` s'intercale.
 - Dans les `commande` et `entrees` des cases suivantes, `{nom}` est remplace
   par la valeur de la variable `nom`.
 - Une variable non trouvee -> erreur claire (code retour 1).
+- **REGLE v0.2.1** : dans une case `generateur`, la VALEUR d'une entree peut
+  etre une variable interpolee (`"{chemin}"`) ou une valeur en dur
+  (`"cerveau-projet/agents"`), mais la CLE doit toujours etre le nom exact
+  d'un `parametre` de la commande ciblee dans le catalogue (voir la REGLE de
+  la section "Format de la definition"). Les cles du catalogue ne sont pas
+  inventables : verifier `catalogue-commandes.json`.
 - Option `persistant: true` sur une sortie -> la valeur est ecrite dans le
   classeur-variables (`stockage/variables-actuelles.md`) apres execution.
 
@@ -228,6 +278,8 @@ themis c3, janus c5/c22, vulcain c7/c13, buffy c28.
 | Navigation | Les cases s'enchainent de `case_depart` jusqu'a une case `fin` |
 | Interpolation | `{var}` remplace par la valeur de la variable dans la commande |
 | Generateur AUTO | Le moteur appelle `generateurs-commande --reponses` et obtient la commande |
+| Entrees cles catalogue (v0.2.1) | Une case generateur avec une cle hors catalogue (ex: `fichier` pour une commande qui attend `chemin`) -> ERREUR claire, code retour 1 |
+| Entrees cles catalogue (v0.2.1) | Une case generateur avec toutes les cles exactes du catalogue -> commande composee correctement |
 | Critere fichier-existe | fichier present -> vers-vrai ; absent -> vers-faux |
 | Critere egalite/non-vide | variable == valeur -> vers-vrai ; sinon vers-faux |
 | Critere sortie-contient | source contient texte -> vers-vrai ; sinon vers-faux |

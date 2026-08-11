@@ -1,7 +1,8 @@
 #!/bin/bash
 # ============================================================================
-# TEST FORMEL -- valider-cartes-decision v0.3.1
+# TEST FORMEL -- valider-cartes-decision v0.3.2
 # Cible : parcours JSON (source de verite), plus les fiches allegees.
+# v0.3.2 : point 25 ajoute (garde-fou suivant mort, controle 7).
 # Ecrit par Morpheus (testeur dedie), livre par Vulcain.
 # Usage : bash tester-valider-cartes-decision.sh
 # ============================================================================
@@ -32,7 +33,7 @@ run_py() {
     python3 "$PY_SCRIPT" "$@" 2>&1
 }
 
-echo "=== TEST FORMEL valider-cartes-decision v0.3.1 ==="
+echo "=== TEST FORMEL valider-cartes-decision v0.3.2 ==="
 echo ""
 
 # --- Preparation : parcours corrompu + zone temp (workspace uniquement)
@@ -49,10 +50,10 @@ cat > "$TMP/parcours-casse.json" << 'EOF'
 EOF
 
 # --- 1. Version
-verifier "1. --version py = 0.3.1" \
-    "[ '$(run_py --version | grep -o '0.3.1')' = '0.3.1' ]"
-verifier "2. --version sh = 0.3.1" \
-    "[ '$(bash "$SH_SCRIPT" --version | grep -o '0.3.1')' = '0.3.1' ]"
+verifier "1. --version py = 0.3.2" \
+    "[ '$(run_py --version | grep -o '0.3.2')' = '0.3.2' ]"
+verifier "2. --version sh = 0.3.2" \
+    "[ '$(bash "$SH_SCRIPT" --version | grep -o '0.3.2')' = '0.3.2' ]"
 
 # --- 2. --tous : 11/11 conformes (avant : 5/5 non conformes)
 verifier "3. --tous = 11 agents verifies" \
@@ -90,12 +91,36 @@ verifier "14. erreur reference cassee detectee" \
 verifier "15. erreur c0 absente detectee" \
     "[ '$(run_py --fichier "$TMP/parcours-casse.json" | grep -c 'Case c0 absente')' -ge 1 ]"
 
-# --- 7. Fichier inexistant
+# --- 7. Garde-fou suivant mort (controle 7, v0.3.2)
+# Parcours infeste : c1 = fin avec suivant, c2 = branches + suivant
+cat > "$TMP/parcours-infeste.json" << 'EOF'
+{
+  "identite": {"type": "parcours", "appartient_a": "test", "commun": false},
+  "parcours": {"nom": "parcours-test", "agent": "test", "version": "0.1.0", "case_depart": "c0"},
+  "cases": {
+    "c0": {"type": "question", "question": "Relu ma fiche ?",
+          "branches": [{"reponse": "OUI", "vers": "c1"}, {"reponse": "NON", "vers": "c0"}],
+          "suivant": "c1"},
+    "c1": {"type": "fin", "titre": "Fin", "suivant": "c2"},
+    "c2": {"type": "fin", "titre": "Fin 2"}
+  }
+}
+EOF
+verifier "25. parcours infeste = NON CONFORME (suivants morts)" \
+    "[ '$(run_py --fichier "$TMP/parcours-infeste.json" | grep -c 'NON CONFORME')' -ge 1 ]"
+verifier "26. suivants morts detectes (fin + branches)" \
+    "[ '$(run_py --fichier "$TMP/parcours-infeste.json" | grep -c 'Suivants morts')' -ge 1 ]"
+verifier "27. fin avec suivant detectee" \
+    "[ '$(run_py --fichier "$TMP/parcours-infeste.json" | grep -c 'fin avec suivant')' -ge 1 ]"
+verifier "28. branches + suivant detectes" \
+    "[ '$(run_py --fichier "$TMP/parcours-infeste.json" | grep -c 'branches priment')' -ge 1 ]"
+
+# --- 8. Fichier inexistant
 compte_16=$(run_py --fichier "$TMP/absent.json" | grep -c "existe pas")
 verifier "16. fichier inexistant = ERREUR" \
     "[ '$compte_16' -ge 1 ]"
 
-# --- 8. Parite py/sh (CRLF normalise)
+# --- 9. Parite py/sh (CRLF normalise)
 parite() {
     local cible=$1
     diff <(run_py "$cible" | tr -d '\r') <(bash "$SH_SCRIPT" "$cible" 2>&1 | tr -d '\r') > /dev/null
@@ -105,7 +130,7 @@ verifier "18. parite --agent cerberus" "parite --agent cerberus"
 verifier "19. parite --fichier parcours" "parite --fichier $PARCOURS_BUFFY"
 verifier "20. parite --fichier .md" "parite --fichier cerveau-projet/agents/buffy/buffy.md"
 
-# --- 9. ASCII des 3 fichiers + nommage
+# --- 10. ASCII des 3 fichiers + nommage
 verifier "21. ASCII py" \
     "[ '$(python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py "$DOSSIER/valider-cartes-decision.py" | grep -c 'OK')' -ge 1 ]"
 verifier "22. ASCII sh" \

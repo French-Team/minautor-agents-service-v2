@@ -7,7 +7,7 @@
   "parcours": {
     "nom": "parcours-janus",
     "agent": "janus",
-    "version": "0.3.2",
+    "version": "0.3.4",
     "case_depart": "c0",
     "description": "Parcours (jeu de piste) des missions de Janus : second controle (outil, statut, modification). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : les suites d'outils des chemins outil (c5-c7) et modification (c22-c26) sont remplacees par les combos combo-controle-outil et combo-controle-modification (Pattern 3, spec-guider-parcours v0.2.4)."
   },
@@ -190,8 +190,8 @@
           "texte": "Verdicts : VALIDE (tout conforme) / A REVOIR (problemes mineurs) / REJETE (problemes majeurs)."
         },
         {
-          "type": "regle",
-          "texte": "CONTROLE DU TRAVAIL DE BUFFY : les points de controle sont ceux du protocole-controle-buffy (etapes E1-E10) - appliquer ce protocole pour tout controle des documents du cerveau crees/modifies par Buffy"
+          "type": "ref",
+          "ref": "protocole-controle-buffy"
         }
       ],
       "branches": [
@@ -222,7 +222,7 @@
           "ref": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md"
         }
       ],
-      "suivant": "c10"
+      "suivant": "c9b"
     },
     "c10": {
       "titre": "FIN - Reactiver Cerberus",
@@ -235,23 +235,19 @@
       "indices": [
         {
           "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-controle-buffy/protocole-controle-buffy.001.01.ebauche.md",
-          "raison": "Protocole de controle du travail de Buffy : si la mission controle le travail de Buffy (documents du cerveau : protocoles, conventions, fiches, lecons, index, parcours), appliquer les etapes E1-E10"
+          "ref": "pattern-3"
         },
         {
           "type": "outil",
-          "nom": "creer-fichier",
-          "catalogue": "creer-fichier",
-          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/controle-statut-<date>.md"
+          "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-controle-buffy/definition-combo.json --var fichier_controle=cerveau-projet/agents/janus/controles/controle-statut-<date>.md"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/combos/combo-controle-buffy/definition-combo.json",
+          "raison": "Definition du combo controle-buffy (Pattern 3) : rappel pattern-2 ASCII + pattern-12 creation limitee -> lecture protocole-controle-buffy E1-E10 -> creation du fichier de controle (allegement c11/c18, Pattern 16)"
         }
       ],
       "suivant": "c12"
@@ -367,23 +363,19 @@
       "indices": [
         {
           "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-controle-buffy/protocole-controle-buffy.001.01.ebauche.md",
-          "raison": "Protocole de controle du travail de Buffy : si la mission controle le travail de Buffy (documents du cerveau : protocoles, conventions, fiches, lecons, index, parcours), appliquer les etapes E1-E10"
+          "ref": "pattern-3"
         },
         {
           "type": "outil",
-          "nom": "creer-fichier",
-          "catalogue": "creer-fichier",
-          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/controle-modification-<date>.md"
+          "nom": "combos-moteur",
+          "catalogue": "combos-moteur",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-controle-buffy/definition-combo.json --var fichier_controle=cerveau-projet/agents/janus/controles/controle-modification-<date>.md"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/combos/combo-controle-buffy/definition-combo.json",
+          "raison": "Definition du combo controle-buffy (Pattern 3) : rappel pattern-2 ASCII + pattern-12 creation limitee -> lecture protocole-controle-buffy E1-E10 -> creation du fichier de controle (allegement c11/c18, Pattern 16)"
         }
       ],
       "suivant": "c19"
@@ -471,8 +463,7 @@
           "reponse": "audit",
           "vers": "c31"
         }
-      ],
-      "suivant": "c29b"
+      ]
     },
     "c28": {
       "titre": "Activer l'agent habilite",
@@ -495,8 +486,7 @@
     "c29": {
       "titre": "Signaler le besoin",
       "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission.",
-      "suivant": "c29c"
+      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
     },
     "c30": {
       "titre": "FIN - Delegation",
@@ -615,6 +605,66 @@
         }
       ],
       "suivant": "c8"
+    },
+    "c9b": {
+      "titre": "Ameliorations possibles de mon fonctionnement ?",
+      "type": "question",
+      "question": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c9c"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c10"
+        }
+      ]
+    },
+    "c9c": {
+      "titre": "Lancer le generateur d amelioration",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme."
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-amelioration",
+          "catalogue": "generateurs-amelioration",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
+          "raison": "Liste des themes de questions du generateur d amelioration"
+        }
+      ],
+      "suivant": "c9d"
+    },
+    "c9d": {
+      "titre": "Activer l'agent habilite pour l'amelioration",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+        }
+      ],
+      "suivant": "c9e"
+    },
+    "c9e": {
+      "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
+      "type": "fin",
+      "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
+      "suivant": null
     }
   }
 }

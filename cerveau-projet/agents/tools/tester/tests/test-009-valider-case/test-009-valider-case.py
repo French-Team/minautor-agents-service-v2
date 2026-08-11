@@ -16,10 +16,11 @@ Cas couverts:
   2. --aide : usage complet (requis par detecter-decalages-catalogue)
   3. Execution sur parcours-cerberus (migre, etape 6) : verdict CONFORME
      (0 erreur, 0 surcharge, avertissement pattern de re-essai c5) +
-     temoin a alleger (janus) : verdict A ALLEGER avec >= 3 surcharges
+     temoin ARTIFICIEL a alleger (genere dans tmp : cerberus + 3 indices
+     de 200 car.) : verdict A ALLEGER avec >= 3 surcharges
   4. --case c12b (existante) : CONFORME ; --case c13b (inexistante) : NON CONFORME
   5. --modele : pattern de re-essai (NON -> soi-meme) en AVERTISSEMENT, pas erreur
-  6. --surcharge : items signales sur le temoin a alleger (>= 3)
+  6. --surcharge : items signales sur le temoin artificiel a alleger (>= 3)
   7. --references : CONFORME (aucune ref dans les parcours actuels)
   8. Rapport wet : fichier markdown cree avec en-tete + verdict + comptages
   9. Parcours inexistant : ERREUR claire + code non nul
@@ -52,10 +53,27 @@ OUTIL_MD = os.path.join(OUTIL_DIR, "valider-case.md")
 OUTIL_SPEC = os.path.join(OUTIL_DIR, "spec", "spec-valider-case.001.01.ebauche.md")
 PARCOURS_CERBERUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
                                  "cerberus", "parcours", "parcours-cerberus.json")
-# Parcours temoin A ALLEGER (migration des parcours quasi terminee : tous
-# CONFORME sauf janus qui garde 3 surcharges -> temoin du verdict A ALLEGER)
-PARCOURS_SURCHARGE = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
-                                  "janus", "parcours", "parcours-janus.json")
+# Parcours temoin A ALLEGER : ARTIFICIEL (tous les parcours reels sont
+# CONFORME depuis l'allegement de janus - Pattern 16). On genere dans tmp
+# une copie de parcours-cerberus avec 3 indices regle > 160 car. pour forcer
+# le verdict A ALLEGER (>= 3 surcharges) sans dependre de l'etat des parcours.
+def fabriquer_temoin_surcharge(tmp, cerberus_chemin):
+    with io.open(cerberus_chemin, encoding="utf-8") as fh:
+        d = json.load(fh)
+    # 3 cases action existantes : on ajoute un indice regle de 200 caracteres
+    cibles = [k for k, c in d["cases"].items()
+              if c.get("type") in ("action", "controle")][:3]
+    gros_texte = ("REGLE SURCHARGE TEST (temoin artificiel) : "
+                  "ceci est un indice de regle volontairement tres long pour "
+                  "depasser le seuil de 160 caracteres et forcer le verdict "
+                  "A ALLEGER sur cette case du parcours temoin du test-009. ")
+    for k in cibles:
+        d["cases"][k].setdefault("indices", []).append(
+            {"type": "regle", "texte": gros_texte})
+    temoin = os.path.join(tmp, "parcours-temoin-surcharge.json")
+    with io.open(temoin, "w", encoding="utf-8") as fh:
+        json.dump(d, fh, ensure_ascii=True, indent=2)
+    return temoin
 
 NB_POINTS = 0
 NB_OK = 0
@@ -125,9 +143,11 @@ def main():
         verifier("3d. Pattern de re-essai c5 en AVERTISSEMENT",
                  "pattern de re-essai" in r.stdout and "c5" in r.stdout,
                  r.stdout.strip()[:150])
-        # 3e. Parcours temoin NON migre (morpheus) : verdict A ALLEGER toujours detecte
-        r_sur = run([PYTHON, OUTIL_PY, PARCOURS_SURCHARGE, "--dry-run"])
-        verifier("3e. Temoin a alleger (janus) : A ALLEGER avec >= 3 surcharges",
+        # 3e. Parcours temoin ARTIFICIEL : verdict A ALLEGER toujours detecte
+        #     (tous les parcours reels sont CONFORME depuis l'allegement de janus)
+        temoin_surcharge = fabriquer_temoin_surcharge(tmp, PARCOURS_CERBERUS)
+        r_sur = run([PYTHON, OUTIL_PY, temoin_surcharge, "--dry-run"])
+        verifier("3e. Temoin artificiel : A ALLEGER avec >= 3 surcharges",
                  "A ALLEGER" in r_sur.stdout and "erreurs: 0" in r_sur.stdout
                  and "a alleger:" in r_sur.stdout
                  and int(r_sur.stdout.split("a alleger:")[1].split("|")[0].strip()) >= 3,
@@ -151,9 +171,9 @@ def main():
                  "AVERTISSEMENT" in r_mod.stdout and "erreurs: 0" in r_mod.stdout,
                  r_mod.stdout.strip()[:150])
 
-        # 6. --surcharge : items signales sur le temoin non migre (>= 10)
-        r_sur = run([PYTHON, OUTIL_PY, PARCOURS_SURCHARGE, "--surcharge", "--dry-run"])
-        verifier("6. --surcharge : items signales sur temoin a alleger (>= 3)",
+        # 6. --surcharge : items signales sur le temoin artificiel (>= 3)
+        r_sur = run([PYTHON, OUTIL_PY, temoin_surcharge, "--surcharge", "--dry-run"])
+        verifier("6. --surcharge : items signales sur temoin artificiel (>= 3)",
                  r_sur.returncode == 0
                  and int(r_sur.stdout.split("a alleger:")[1].split("|")[0].strip()) >= 3,
                  r_sur.stdout.strip()[:120])
@@ -164,9 +184,9 @@ def main():
                  r_ref.returncode == 0 and "CONFORME" in r_ref.stdout,
                  r_ref.stdout.strip()[:120])
 
-        # 8. Rapport wet : fichier markdown cree (sur le temoin a alleger : A ALLEGER)
+        # 8. Rapport wet : fichier markdown cree (sur le temoin artificiel : A ALLEGER)
         rapport = os.path.join(tmp, "rapport-vc.md")
-        r_wet = run([PYTHON, OUTIL_PY, PARCOURS_SURCHARGE, "--rapport", rapport])
+        r_wet = run([PYTHON, OUTIL_PY, temoin_surcharge, "--rapport", rapport])
         ok_rapport = os.path.isfile(rapport)
         contenu = ""
         if ok_rapport:

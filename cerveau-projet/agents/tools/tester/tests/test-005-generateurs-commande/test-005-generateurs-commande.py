@@ -3,7 +3,7 @@
 """
 test-005-generateurs-commande.py
 Test formel du generateur de commande v0.2.2 (fiabilisation des flags optionnels)
-et du parcours Atlas v0.2.0 (migre au format action : references + cases action,
+et du parcours Atlas v0.3.1 (migre au format action : references + cases action,
 1 commande template residuelle c30 conservee et documentee).
 
 Objet (correction Buffy 2026-08-09) :
@@ -35,11 +35,11 @@ Cas couverts (22 points) :
  11. flag booleen ecrire-fichier backup=non : --backup ABSENT (py)
  12. parite py/sh : commande composee identique (CRLF normalise)
  13. catalogue JSON valide (json.load)
- 14. catalogue version = 0.2.4
+ 14. catalogue version = 0.2.6
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
-  PARCOURS ATLAS v0.2.0
- 17. parcours-atlas.json : json.load valide + version 0.2.0
+  PARCOURS ATLAS v0.3.1
+ 17. parcours-atlas.json : json.load valide + version 0.3.1
  18. 1 seul residu connu (c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
@@ -112,7 +112,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.2 + parcours-atlas v0.2.0 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.2 + parcours-atlas v0.3.1 ===")
     print("")
 
     # ---------- GENERATEUR v0.2.2 ----------
@@ -161,7 +161,7 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         verifier(13, "catalogue-commandes.json JSON valide", True)
-        verifier(14, "catalogue version = 0.2.4", cat.get("version") == "0.2.4", str(cat.get("version")))
+        verifier(14, "catalogue version = 0.2.6", cat.get("version") == "0.2.6", str(cat.get("version")))
     except Exception as e:
         verifier(13, "catalogue-commandes.json JSON valide", False, str(e))
         verifier(14, "catalogue version = 0.2.0", False, "")
@@ -173,14 +173,14 @@ def main():
     ok = cmd is not None and "creer-fichier.py x.md" in cmd and "hello" in cmd
     verifier(16, "non-regression creer-fichier composee correctement", ok, str(cmd))
 
-    # ---------- PARCOURS ATLAS v0.2.0 ----------
+    # ---------- PARCOURS ATLAS v0.3.1 ----------
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.2.0",
-                 p.get("parcours", {}).get("version") == "0.2.0", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.3.1",
+                 p.get("parcours", {}).get("version") == "0.3.1", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.2.0", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.3.1", False, str(e))
         p = {}
 
     # Residu connu et documente : case c30 (commande template cartographier-parcours.py {parcours}).
@@ -196,7 +196,7 @@ def main():
              n_commande == 1 and cases_commande == ["c30"],
              "restants=%d cases=%s" % (n_commande, cases_commande))
 
-    for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer"), (20, "autre+OUI", "OUI|autre|OUI")]:
+    for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer|NON"), (20, "autre+OUI", "OUI|autre|OUI|NON")]:
         c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", chemin])
         verifier(num, "navigation %s : PARCOURS TERMINE" % nom_chemin, "PARCOURS TERMINE" in out, out[-80:])
 
