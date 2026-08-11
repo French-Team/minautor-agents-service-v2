@@ -22,6 +22,32 @@ types:
 # Corrections et Surcharges
 ---
 
+
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE TEST-021 LIGNE TRIO (Janus, VERDICT VALIDE)
+
+**Mission** : second controle du test-021-ligne-trio cree par Morpheus (format, pertinence des 9 points, execution, normes).
+
+**Lecons** :
+1. J1 FORMAT : le test-021 respecte le format du protocole-tests (docstring contexte, main, NB_POINTS/NB_OK/NB_KO, verifier(), resultat final, retour 0/1, ASCII strict, LF pur).
+2. J2 PERTINENCE : les 9 points croisent EXACTEMENT les regles reelles des cartes (parcours-janus v0.3.6 : branche trio c1->cT1, types cT1..cT10, commandes exactes cT6..cT10, branches OUI->transmission cT6/cT7/c10 et NON->renvoi cT8/cT9/cT10 ; parcours trio v0.2.3 : boucle corriger->c9f->c10). Aucun point redondant, aucun manquant.
+3. J3 EXECUTION : test-021 9/9 OK (code 0), non-regression complete 21/21 OK (le nouveau test est auto-detecte par le glob test-0*).
+4. J4 NORMES : ASCII 0 + LF 0 sur le test + les 4 parcours + le protocole.
+5. Ce test verrouille la ligne trio : toute modification des cartes (fin cT sans commande, branche trio perdue, boucle corriger cassee) cassera la non-regression.
+6. La chaine Morpheus -> Janus est conforme a la REGLE IMMUABLE : Morpheus ecrit/execute les tests, Janus effectue le controle croise avant le retour a Cerberus.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE FINAL PLAN TRIO + VALIDATEUR v0.4.0 (Janus, VERDICT VALIDE)
+
+**Mission** : controle croise de l etape 5 (protocole-controle-trio + correction trio + valider-cartes-decision v0.4.0 + tests).
+
+**Lecons** :
+1. PROTOCOLE : protocole-controle-trio conforme (7 sections : Objectif, Prerequis, Etapes, RVAV, Exemples, Pieges courants, Liens), ASCII 0.
+2. TRIO : les 3 fins c10 (athena/promethee/minerve) portent 'FIN - Activer Janus' + commande exacte (insensible a la casse) + 'PAS reactiver' + REGLE IMMUABLE JANUS dans les indices + navigation reelle PARCOURS TERMINE + coherence fiche/parcours (v0.2.2). Le trio est maintenant branche sur le second controle Janus avant de revenir a Cerberus.
+3. VALIDATEUR v0.4.0 : les 3 points semantiques sont actifs et passent sur les 11 agents. Parite sh -> py conservee (--version identique). P10 (coherence fiche/parcours) ne s'applique qu'en mode --agent/--tous.
+4. TESTS : test-018 13/13 OK (FINS_ACTIVER_JANUS elargi a 6 agents), non-regression 20/20 OK.
+5. Le plan trio est complet : chaque agent du trio active Janus a sa fin (REPONSE utilisateur : 'janus doit etre active par chaque agent du trio'), et Janus a desormais un protocole dedie a leur tache determinante (pense-betes/specs/todos pour les projets futurs).
+6. Seule fin REACTIVER restante : janus c10 (dernier maillon legitime, bilan consolide).
+
 ## [REGLES] Regles specifiques
 
 ### [Regle 1] -- Toujours ecrire la mission avant de controler
@@ -1988,3 +2014,344 @@ Buffy (apres suppression de la version ecrite par Promethee).
 2. La correction P12 respecte le modele : indice regle CREATION LIMITEE en TETE des indices (comme le rappel ASCII Pattern 2), texte precisant le perimetre de creation et le role exclu.
 3. Le bump de version (0.3.3 -> 0.3.4) accompagne toute correction de carte : verifier la fiche (Pattern 14) apres chaque changement de version.
 4. Un verdict A REVOIR n'est pas un echec : c'est le declencheur du cycle de correction. Le re-audit clot le cycle avec un verdict VALIDE trace dans les corrections.
+
+## [LECON] 2026-08-11 -- SECOND CONTROLE PARCOURS BUFFY v0.3.6 (Janus, VERDICT VALIDE)
+
+**Controle** : case c11b (Modifier une fiche agent) ajoutee au parcours buffy v0.3.6 pour brancher editer-fichier-agents.
+
+**Verdict** : VALIDE.
+
+**Verifications effectuees** :
+1. CONFORMITE FORMAT c11b : 3 indices exactement (ref pattern-2, ref pattern-12, outil editer-fichier-agents PASSE PAR LE GENERATEUR avec commande catalogue) -- respect SEUIL_INDICES=3 de valider-case
+2. NAVIGATION reelle des 4 branches de c10b : fiche -> c11b -> c37 (combo corriger-fichier) -> suite ; non -> c9 (Modifier le fichier) ; OUI -> c7 (generateurs-case) ; ligne -> c10d (generateurs-ligne) -- AUCUNE branche cassee
+3. PATTERN 12 : ref pattern-12 resolue a la navigation (spec-guider-parcours ligne 997, Pattern 12 CREATION LIMITEE) + valider-case --references CONFORME
+4. PATTERN 14 : fiche buffy synchronisee v0.3.6 (ligne 73)
+5. OUTILS : valider-cartes CONFORME (0 suivant mort), valider-case CONFORME (0 erreur, 0 a alleger, 0 avertissement)
+6. NORMES : ASCII 0 + LF pur (parcours + fiche)
+
+**Lecons** :
+1. Le branchement d'une case via une nouvelle branche de question ne casse pas les autres branches -- verifier TOUTES les branches, pas seulement la nouvelle
+2. Les refs pattern-* sont resolues par guider-parcours.py depuis la spec-guider-parcours (pas depuis un dossier patterns/) -- la resolution reelle a la navigation est la preuve definitive
+3. Le format d'une case action conforme : pattern-2 (ASCII) + pattern-12 (CREATION LIMITEE) + outil PASSE PAR LE GENERATEUR -- exactement 3 indices, le modele standard
+4. L'outil branche doit etre compose via le catalogue generateurs-commande (PASSE PAR LE GENERATEUR) -- jamais de chemin en dur vers un script
+
+**Outils utilises** : sidentifier, lire-fichier, valider-cartes-decision, valider-case (avec --references), guider-parcours (navigation reelle), valider-conformite-ascii
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE FINAL REFONTE PAR ROLE (Janus, VERDICT VALIDE)
+
+**Controle** : refonte du template de fiche par role (noyau + variantes) + outil verifier-conformite-fiche v0.2.1 + 11 fiches corrigees.
+
+**Verifications (5/5 VALIDEES)** :
+1. TEMPLATE noyau v0.3.0 : 8 sections obligatoires dans l ordre (Vue d ensemble, PARCOURS, REGLES ABSOLUES, Outils de base, WORKFLOW RVAV, UTILISATION, Limites, Connexions), PAS de section Historique agent, modele par role documente en frontmatter
+2. VARIANTES : cerveau-projet (Forces + Style, 8 agents) et trio (Vue complement + Forces + Style + Limites complement, 3 agents), frontmatter famille present
+3. OUTIL v0.2.1 : --tous 11/11 CONFORME, --agent sans variante fonctionne (famille par defaut), --rapport OK
+4. FICHES : cle famille presente dans les 11 frontmatters (1 ecart detecte et corrige : buffy + clio n avaient pas la cle car deja conformes a l etape 4 -- ajoutee via editer-fichier-agents)
+5. NORMES : 0 ecart ASCII/LF sur 16 fichiers (template + 2 variantes + outil + 11 fiches + catalogue v0.2.9)
+
+**Lecons** :
+1. Les fiches DEJA CONFORMES peuvent ne pas avoir la cle famille : le controle croise doit verifier la cle dans TOUTES les fiches, pas seulement les corrigees (l outil passe grace a la famille par defaut, mais la coherence exige la cle partout)
+2. Le modele par role est operationnel et coherent : noyau unique + 2 variantes + outil qui verifie -- la source de verite de conformite fonctionne
+3. Les sections specifiques legitimes (cerberus cycle, janus Verdicts, morpheus tests, themis rapport, vulcain techno) sont en avertissement non bloquant -- c est le comportement voulu
+
+**Outils utilises** : lire-fichier, valider-conformite-ascii, verifier-conformite-fiche (v0.2.1), editer-fichier-agents, scripts .py temporaires
+## [LECON] 2026-08-11 -- CONTROLE CROISE CARTE CLIO v0.4.3 + TEST-018 (Janus, VERDICT VALIDE)
+
+**Mission** : second controle de la chaine Buffy (carte clio c12 -> FIN - Activer Janus) + Morpheus (test-018 adapte).
+
+**Verifications (6 points)** :
+1. J1 valider-cartes-decision --agent clio : CONFORME (0 suivant mort)
+2. J2 version v0.4.3 + c12 titre 'FIN - Activer Janus', type fin, indice regle
+3. J3 navigation flux principal (corriger|OUI|PETITE|NON) : fin c12 'FIN - Activer Janus'
+4. J3b navigation flux audit (autre|audit) : fin c18 'FIN - Retour de Themis avec son rapport'
+5. J4 fiche clio.md : Pattern 14 v0.4.3 + bloc FINS REELLES a jour (c12 redecrite, c10e ajoutee)
+6. J5 test-018 : 11/11 OK avec nouveaux points 4b/4c (garde-fou positif)
+7. J6 normes : 0 non-ASCII, 0 CRLF (parcours, fiche, test)
+
+**Verdict** : VALIDE.
+
+**Lecons** :
+1. La transformation d'une fin Reactiver -> Activer X exige la coherence a 4 niveaux : carte (case), fiche (Pattern 14 + FINS REELLES), test (test-018), et navigation reelle - les 4 ont ete verifies et sont alignes
+2. Le test-018 couvre desormais les 2 natures de fins : REACTIVER (5 agents) et le cas particulier clio Activer Janus (4b/4c) - bonne evolution du garde-fou
+3. La fiche clio portait un bloc FINS REELLES stale (v0.3.0) : Buffy l'a corrige au passage - ce bloc doit etre verifie a chaque modification de carte
+## [LECON] 2026-08-11 -- CONTROLE CROISE GENERALISATION JANUS (Janus, VERDICT VALIDE)
+
+**Mission** : second controle de la chaine Buffy (fins Reactiver -> Activer Janus pour atlas/themis/morpheus) + Morpheus (test-018 + tests de versions).
+
+**Verifications (5 points)** :
+1. J1 valider-cartes-decision : atlas CONFORME, themis CONFORME, morpheus CONFORME
+2. J2 navigation reelle --case : c11/c13/c14 -> PARCOURS TERMINE 'FIN - Activer Janus' (3/3)
+3. J3 coherence fiche/parcours : parcours sans prefixe v (0.3.3/0.3.5/0.3.2/0.4.3), fiches avec prefixe v (v0.3.3/...) - convention respectee
+4. J4 test-018 : 12/12 OK (1b = 2 fins REACTIVER restantes, 4d garde-fou positif present)
+5. J5 normes : 0 non-ASCII, 0 CRLF (6 fichiers)
+
+**Verdict** : VALIDE.
+
+**Lecons** :
+1. La generalisation REGLE IMMUABLE JANUS est complete : il ne reste que 2 fins REACTIVER (janus c10 legitime + minerve c10 trio) - le cerveau est aligne sur le modele 'apres TOUTE mission, j active JANUS'
+2. Le format des versions est desormais coherent sur les 11 parcours : sans 'v' dans le JSON, avec 'v' dans les fiches (Pattern 14) - une lecon transversale a retenir
+3. Le test-018 couvre maintenant les 2 natures de fins : REACTIVER (2 restantes) et Activer Janus (4 : clio c12, atlas c11, themis c13, morpheus c14) - garde-fou solide contre toute regression
+4. La cascade carte + fiche + test-018 + tests de version (test-004/test-005) a ete verifiee en entier : aucune regression, le modele est stable
+## [LECON] 2026-08-11 -- CONTROLE CROISE FINAL : PROBLEME FIN NE SUIT PAS LA CARTE CORRIGE (Janus, VERDICT VALIDE)
+
+**Mission** : second controle final apres la correction du probleme 'l'execution ne suit pas la carte' (cloture Morpheus ecrite 'reactiver Cerberus' alors que sa carte dit 'Activer Janus').
+
+**Verifications (5 points)** :
+1. J1 scan des 8 fins Activer Janus : 8/8 avec commande exacte (activer-agent-principal.py activer session-llm-1 janus) + mention PAS reactiver
+2. J2 valider-cartes-decision : atlas/buffy/clio/morpheus/themis CONFORME (5/5)
+3. J3 navigation reelle --case : c11/c12/c14/c13/c10 -> PARCOURS TERMINE 'FIN - Activer Janus' (5/5)
+4. J4 test-018 : 13/13 OK avec point 5b (garde-fou positif commande activer) vert
+5. J5 normes : 0 non-ASCII, 0 CRLF
+
+**Verdict** : VALIDE.
+
+**Lecons** :
+1. Le probleme 'l'execution ne suit pas la carte' a une cause racine simple : une fin qui ACTIVE un agent sans la COMMANDE EXACTE laisse l'executant libre de retomber sur le reflexe reactiver (qui ramene toujours a Cerberus)
+2. La correction en 2 couches est complete : (a) les 8 fins contiennent la commande exacte (correction Buffy), (b) le test-018 point 5b la verifie positivement (garde-fou Morpheus) - toute future fin Activer X sans commande fera echouer la non-regression
+3. Ce controle croise clot la chaine : Buffy (correction) -> Morpheus (garde-fou) -> Janus (validation). Le systeme est desormais protege contre la recurrence.
+## [LECON] 2026-08-11 -- CONTROLE CROISE TEST-005 AMELIORE + CONTRAT DOC (Janus, VERDICT VALIDE)
+
+**Controle** : test-005 ameliore par Morpheus (28 points, contrat documentation .md) + volet 1 Buffy (REGLE ABSOLUE LECTURE DOC + case c0d).
+
+**Verdict** : VALIDE.
+
+**Verifications** :
+- J1 : format conforme au protocole-tests (docstring, verifier, resultat final, retour 0/1, ASCII strict, LF pur) -- OK.
+- J2 : points 23-24 pertinents -- le point 23 croise la REGLE ABSOLUE LECTURE DOC reelle du protocole-outils (chaque commande du catalogue 138 a son .md), le point 24 verifie la composabilite reelle des 18 commandes de test. Les 14 .md de test (test-006 a test-021) sont tous presents -- OK.
+- J3 : test-005 28/28 OK + non-regression complete 33/33 OK -- OK.
+- J4 : normes 0/0 sur les 37 fichiers du perimetre -- OK.
+
+**Lecons** :
+1. Un test qui verifie un contrat (lecture .md) doit croiser la REGLE reelle du protocole, pas seulement verifier un format : le point 23 le fait (presence reelle des .md a cote des scripts).
+2. Les compteurs de types dans les tests de migration (test-013/016) bougent avec chaque case ajoutee aux parcours : verifier test-013 (21 actions) et test-016 (36 actions) en meme temps que les parcours.
+3. Chaque nouveau test de la suite doit avoir son .md cree au meme moment (contrat d'utilisation) -- desormais verifie par le test-005 point 23.
+## [LECON] 2026-08-11 -- SECOND CONTROLE DE MA PROPRE CARTE v0.3.8 : PISTE c9f/c9g CONFORME (Janus, VERDICT VALIDE)
+
+**Contexte** : apres l'ajout par Buffy de la piste 'defaut signale -> activer l'agent habilite' (c9f question + c9g action, modele boucle KO ligne trio cT8-cT10, fin c9e reutilisee), controle croise de ma propre carte.
+
+**Points controles** :
+1. FORMAT : c9 (suivant c9f), c9f (question + branches OUI->c9g / NON->c9b), c9g (action, indices regle + outil, suivant c9e), c9e (fin reutilisee sans duplication). 49 refs resolues, 0 reference morte, 0 suivant mort.
+2. NAVIGATION : 4 flux OK (defaut signale, pas de defaut, auto-amelioration, verdict direct c8->c9).
+3. PATTERN 12 : c9g ne cree AUCUN fichier (regle + outil uniquement) -- l'agent habilite cree son propre rapport.
+4. PATTERN 14 : fiche v0.3.8, plus de v0.3.7, 11 fins reelles toutes citees dans le bloc FINS REELLES.
+5. NORMES : 0 non-ASCII, 0 CRLF sur parcours + fiche + rapport.
+6. NON-REGRESSION : 21/21 OK (test-021 inclus).
+
+**Lecons** :
+1. Controleur sa propre carte est legitime quand la modification a ete faite par un autre agent (Buffy) -- le controle croise reste independant.
+2. La reutilisation d'une fin existante (c9e) evite la duplication et maintient test-018/test-021 verts.
+3. La piste 'defaut signale' complete la boucle : un rapport qui designe un coupable declenche maintenant l'activation immediate de l'agent habilite (plus de retour systematique a Cerberus).
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE BUDGET PONDERE DES INDICES : VERDICT VALIDE (Janus)
+
+**Mission** : controle croise de l'implementation du budget pondere des indices (valider-case v1.1.0 + generateurs-case v0.4.2), dernier maillon de la chaine Cerberus -> Vulcain -> Morpheus -> Janus.
+
+**Points controles (J1-J7)** :
+1. Coherence : SEUIL_COURT=100 + BUDGET_INDICES=3.0 + fonction poids_indices IDENTIQUES dans valider-case et generateurs-case
+2. Parite py/sh : valider-case v1.1.0 des 2 cotes
+3. Tests : test-009 23/23 (cas budget 3f/3g), test-010 25/25, test-015 10/10
+4. Versions : 1.1.0 (valider-case py/md/spec), 0.4.2 (generateurs-case py/md/catalogue)
+5. Specs : documentees (spec-valider-case section 3, spec-guider-parcours principe)
+6. Normes : 9 fichiers, 0 non-ASCII, 0 CRLF
+7. Non-regression : 21/21 OK
+=> VERDICT : VALIDE
+
+**Lecons** :
+1. Le modele pondere (court <= 100 = 0,5 / long > 100 = 1 / budget 3,0) est simple, coherent et facile a verifier croise (constantes + fonction partagees entre les outils)
+2. Les indices SANS texte (ref/outil) comptent 0,5 : coherent avec leur faible charge - 6 refs = 3,0 accepte
+3. Le plafond absolu 160 car. reste independant : il borne la TAILLE d'un indice, le budget pondere borne le NOMBRE - 2 garde-fous complementaires
+4. La chaine complete (Vulcain -> Morpheus -> Janus) fonctionne : les tests independants de Morpheus (7/7) confirment les cas de Vulcain, et le controle croise de Janus verifie la coherence globale
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE test-022-budget-pondere : VERDICT VALIDE (Janus)
+
+**Mission** : controle croise du test-022-budget-pondere cree par Morpheus.
+**Verdict** : VALIDE (7 points J1-J7 verts, non-regression 22/22).
+**Lecons** :
+1. Le test-022 verifie la frontiere exacte 3,0 du budget pondere avec des cas limites pertinents : 3,0 exact CONFORME (6 courts / 3 longs / 2 longs + 2 courts / 1 long + 4 courts), 3,5 KO, 4,0 KO, bornes du seuil court 100/101, plafond 160 independant, refs/outils = 0,5.
+2. La borne du seuil court est un cas limite cle : 6 x 100 car. exactement = 3,0 CONFORME (tous courts) ; 4 x 101 car. = 4,0 A ALLEGER (tous longs) -- le test couvre le point de bascule.
+3. Toute creation de test doit etre referencee dans le catalogue (140 commandes) et le compteur de test-007 synchronise, sinon la non-regression casse.
+4. Le rapport de controle est dans janus/controles/controle-test022-budget-pondere-2026-08-11.md.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE spec-refonte v0.1.3 BUDGET PONDERE : VERDICT VALIDE (Janus)
+
+**Mission** : controle croise de la documentation du budget pondere dans la spec-refonte (Promethee).
+**Verdict** : VALIDE (6 points J1-J6 verts, 1 observation non bloquante).
+**Lecons** :
+1. Le croisement spec <-> outil est le controle le plus efficace : verifier que les constantes documentees dans la spec (SEUIL_COURT 100, poids 0,5/1, budget 3,0, plafond 160) correspondent mot pour mot aux valeurs codees dans valider-case v1.1.0.
+2. L'ancienne regle ("> 3 indices ou texte > 160 car.") doit etre totalement absente : 0 occurrence confirme que les 3 endroits + la section generateurs sont tous alignes.
+3. Observation non bloquante : la section 7.1 de la spec-refonte titre encore generateurs-case v0.2.2 alors que l'outil est en v0.4.2 -- version stale preexistante, a traiter dans une passe de synchronisation (les sections "actuel" des spec echappent aux scans de versions).
+4. Rapport : janus/controles/controle-spec-refonte-v013-budget-pondere-2026-08-11.md.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE SCAN VERSIONS STALE SPECS : VERDICT VALIDE (Janus)
+
+**Mission** : controle croise du scan des versions stale dans les specs (Promethee) + adaptation test-014 (Morpheus).
+**Verdict** : VALIDE (J1-J6 verts, non-regression 22/22).
+**Lecons** :
+1. Le scan de reference est detecter-divergences-version (spec en-tete vs py) : 3 specs non bumpees alignees (combos-moteur 0.2.1->0.3.0, detecter-decalages 0.1.0->0.1.1, generateurs-case 0.4.0->0.4.2). Le seul DIVERGENT restant est le cas INVERSE guider-parcours (py 0.5.0 en retard sur spec 0.6.2) : observation pour une mission Vulcain, PAS une spec stale.
+2. Les mentions de versions dans le CORPS des specs (regles, conventions, historiques) sont aussi des sources de stale : valider-case v1.0.2 etait reference dans 4 specs (detecter-convention-nommage, generateurs-ligne x4, guider-parcours x2) et spec-refonte v0.1.1 dans 3 refs de spec-valider-case.
+3. Les references historiques (spec-combos-moteur v0.2.1 = version de la SPEC qui a etabli la regle KO test-003) sont LEGITIMES : ne pas les confondre avec la version du catalogue (0.2.9). Le py lui-meme reference "spec-combos-moteur v0.2.1" pour la regle.
+4. La correction de version dans une spec peut casser un test formel (test-014 verifie litteralement "valider-case v1.0.2" in spec) : la chaine spec -> test -> controle + non-regression complete est indispensable.
+5. Rapport : janus/controles/controle-scan-versions-stale-specs-2026-08-11.md.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE PATTERN 16 ALLEGEMENT BUDGET PONDERE : VERDICT VALIDE (Janus)
+
+**Mission** : controle croise de l'alignement du Pattern 16 (ALLEGEMENT) de spec-guider-parcours sur le budget pondere (Promethee).
+**Verdict** : VALIDE (J1-J7 verts, non-regression 22/22).
+**Lecons** :
+1. Le scan de coherence spec <-> spec est aussi important que spec <-> outil : le Pattern 16 decrivait encore l'ancienne regle ("plus de 3 indices") alors que le PRINCIPE UNE PLACE de la MEME spec documentait deja le budget pondere.
+2. La coherence des seuils est verifiable par un grep croise : 100 car. / 0,5 / 1 / 3,0 / 160 identiques dans spec-refonte v0.1.3, spec-valider-case v1.1.0 et spec-guider-parcours v0.6.2.
+3. Le bump de version d'un pattern (v0.2.28 -> v0.2.29) doit etre applique a TOUTES ses occurrences (titre + listes Patterns valides + Procedure d'audit).
+4. Les corrections documentaires de spec ne cassent pas les tests si aucun test formel ne verifie le texte modifie (test-014 ne depend pas du Pattern 16).
+5. Rapport : janus/controles/controle-pattern16-budget-pondere-2026-08-11.md.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE valider-case.md BUDGET PONDERE : VERDICT VALIDE (Janus)
+
+**Mission** : controle croise de l'alignement du .md de valider-case sur le budget pondere (Vulcain).
+**Verdict** : VALIDE (J1-J6 verts, non-regression 22/22).
+**Lecons** :
+1. Le .md d'un outil peut etre incoherent INTERNEment : valider-case.md avait l'historique v1.1.0 (budget pondere) a jour mais le tableau Allegement (l.55) avec l'ancienne regle. Verifier TOUTES les sections.
+2. Le scan complet des .md d'outils (grep "> 3 indices") confirme 0 residue : le budget pondere est documente partout (code + 3 specs + .md).
+3. guider-parcours.md (v0.5.0) ne documente pas la surcharge : ce n'est PAS un ecart (doc d usage du navigateur, hors perimetre). Ne pas corriger l'absence de contenu hors sujet.
+4. La chaine spec -> .md -> test -> controle (Janus) garantit la synchronisation complete des documents avec le modele implante.
+5. Rapport : janus/controles/controle-valider-case-md-budget-pondere-2026-08-11.md.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE PROTOCOLE V0.2.0 E7 BUDGET PONDERE : VERDICT VALIDE (Janus)
+
+Controle croise du travail Cerberus + Vulcain : le protocole-verification-
+coherence est passe en v0.2.0 avec l etape E7 (grep croise des seuils budget
+pondere 100/0,5/1/3,0/160 sur 6 fichiers) et le docstring de valider-case.py a
+ete corrige (l ancienne regle "> 3 indices" decrite en tete de fichier, alors
+que le code implemente le budget pondere depuis v1.1.0).
+
+Verifications J1-J6 : 0 ancienne regle dans les 6 fichiers, 5 valeurs presentes
+dans les 4 fichiers textes, constantes code alignees (SEUIL_COURT=100,
+BUDGET_INDICES=3.0, SEUIL_TEXTE=160), normes 0 non-ASCII/0 CRLF, non-regression
+22/22 OK, structure protocole 7 sections + v0.2.0. VERDICT VALIDE.
+
+Lecons :
+1. Le grep croise E7 est un garde-fou operationnel : il a detecte un ecart reel
+   des sa premiere utilisation (docstring .py), ce que specs et .md n avaient
+   pas vu.
+2. Les docstrings/en-tetes des fichiers .py font partie du perimetre de
+   coherence a croiser lors de tout changement de regle (pas seulement spec + .md).
+3. La chaine Cerberus (protocole) -> Vulcain (outil) -> Janus (controle) a
+   fonctionne sans accroc : protocole mis a jour, ecat corrige, verdict valide.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE TEST-023 GREP BUDGET PONDERE : VERDICT VALIDE (Janus)
+
+Controle croise du test-023-grep-budget-pondere cree par Morpheus : garde-fou
+non-regression materialisant l etape E7 du protocole-verification-coherence
+v0.2.0 (grep croise des seuils budget pondere 100/0,5/1/3,0/160 sur 6 fichiers
++ anti-recurrence de l ancienne regle).
+
+Verifications J1-J7 : catalogue 141 trie avec test-023, test-023 26/26 OK,
+test-007 15/15, non-regression 23/23 OK, pertinence (6 fichiers + 5 seuils +
+6 constantes + anti-recurrence), autonomie (stdlib : io/os/sys), format
+RESULTAT + return 1 si KO. VERDICT VALIDE.
+
+Lecons :
+1. Le grep croise E7 est desormais un test AUTOMATIQUE de la suite : toute
+   divergence de seuil ou retour de l ancienne regle fera KO au test-023.
+2. L ajout d une commande au catalogue doit toujours s accompagner de la mise
+   a jour de test-007 (compteur) dans la MEME mission.
+3. La chaine Cerberus (mission) -> Morpheus (test) -> Janus (controle) a
+   fonctionne sans accroc : test cree, catalogue mis a jour, verdict valide.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE TEST-023 PARCOURS VULCAIN v0.3.7 : VERDICT VALIDE (Janus)
+
+Controle croise du branchement du test-023-grep-budget-pondere dans le
+parcours vulcain v0.3.7 par Buffy : cases c6d (flux CONSTRUIRE) et c12d
+(flux MODIFIER) ajoutees (pattern c6c/c12c : CREATION LIMITEE + PASSE PAR
+LE GENERATEUR + indice outil, poids 2,0).
+
+Verifications J1-J7 : navigation c6c->c6d->c7 / c12c->c12d->c13 correcte,
+poids 2,0 (regles <= 100 car.), valider-cartes CONFORME, navigation reelle
+atteint c6d ([43/47]) et c12d ([46/47]), fiche 3x v0.3.7 / 0x v0.3.6,
+non-regression 23/23 OK, diff minimal (0 modification c6c/c12c par Buffy).
+VERDICT VALIDE.
+
+Lecons :
+1. Le branchement d un garde-fou dans un parcours passe par le pattern des
+   cases scan/controle existantes (c6c/c12c).
+2. Le budget pondere s applique AUSSI aux cases de parcours : 3 regles
+   longues + 1 outil = 3,5 > 3,0 -> textes <= 100 car. pour poids 0,5.
+3. Tout bump de parcours exige la mise a jour de la fiche dans la MEME
+   mission (valider-cartes-decision croise fiche/parcours).
+4. OBSERVATION preexistante : c6c/c12c ont un indice de 198 car. (> 160) ->
+   A ALLEGER preexistant (git HEAD deja NON CONFORME), a traiter dans une
+   mission ulterieure.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE REGISTRE D USAGE DES OUTILS : VERDICT VALIDE (Janus)
+
+Controle croise du registre d usage cree par Vulcain (enregistrer-usage-outil
+v0.1.0 + registre JSONL + journalisation auto generateurs-commande v0.2.3)
+et de l adaptation test-005 par Morpheus (v0.2.3 + parite .sh).
+
+Verifications J1-J8 : outil complet + normes, registre propre, journalisation
+auto (mode generateur) + outil dedie (mode combo), catalogue 142 + index-tools
+111, test-005 28/28 + parite py/sh, non-regression 23/23, registre purge.
+VERDICT VALIDE.
+
+Lecons :
+1. Le registre d usage cree la SOURCE DE VERITE manquante : les controles
+   pourront croiser les rapports de mission avec les traces reelles pour
+   detecter les contournements d outils (objectif utilisateur).
+2. OBSERVATION : la journalisation auto pollue le registre pendant la
+   NON-REGRESSION (les tests qui passent par le generateur ajoutent leurs
+   commandes : 88 lignes observees). RECOMMANDATION : passer --no-journal
+   aux tests de la suite (Morpheus) ou purger le registre en fin de
+   non-regression -- les entrees de test ne doivent pas polluer la source
+   de verite des usages reels.
+3. Le generateur a une implementation bash PARALLELE (VERSION en dur) :
+   tout bump de version doit toucher py ET sh (parite).
+## [LECON] 2026-08-11 -- CONTROLE CROISE --no-jOURNAL AUX TESTS : VERDICT VALIDE (Janus)
+
+**Objet** : verification croisee de l ajout de --no-journal aux 4 tests qui passent
+par le generateur (test-005 direct, test-002/003/004 via combos-moteur).
+
+**Controles** : J1 normes 4 tests (ASCII 0, CRLF 0, compile OK) ; J1b le .sh du
+generateur sans --no-journal ; J2 combos-moteur v0.3.1 propage (py+sh) ; J3
+generateurs-commande v0.2.3 accepte ; J4 verification reelle (pollution 0 par test,
+non-regression 23/23 OK, registre 0 ligne apres).
+
+**Verdict** : VALIDE.
+
+**Lecons** :
+1. La pollution du registre venait de 4 tests, pas 1 : la methode de detection par test
+   individuel (purge -> lancer -> compter les lignes) est indispensable pour trouver
+   TOUS les pollueurs (les tests de combos sont les moins evidents).
+2. Le .sh du generateur ne journalise pas : --no-journal ne doit etre ajoute qu aux
+   appels py directs, jamais au .sh (qui ne supporte pas l option).
+3. Le registre d usage est desormais une source de verite propre : la non-regression
+   complete (23/23) ne le pollue plus (0 ligne).
+## [LECON] 2026-08-11 -- CONTROLE CROISE REGISTRE D USAGE DANS LES 11 CARTES : VERDICT VALIDE (Janus)
+
+**Objet** : verification croisee de la nouvelle case dediee "Enregistrer mes usages d outils"
+(PASSE PAR LE GENERATEUR -> enregistrer-usage-outil) avant chaque fin de mission des 11 parcours.
+
+**Controles** : J1 13 nouvelles cases (action, PASSE PAR LE GENERATEUR, poids 1.0, suivant ->
+fin) ; J2 navigation reelle buffy/athena/cerberus passant par la case registre puis TERMINE ;
+J3 valider-cartes-decision 11/11 CONFORME ; J4 fiches Pattern 14 alignees ; J5 non-regression
+23/23 + registre 0 ligne ; J6 normes JSON/LF/ASCII.
+
+**Verdict** : VALIDE.
+
+**Lecons** :
+1. La ponderation d un indice outil PASSE PAR LE GENERATEUR (sans texte) = 0,5 ; une case avec
+   1 outil + 1 regle courte = 1.0 (budget 3.0 OK) : le modele "outil catalogue sans commande
+   en dur" est le format le plus leger pour brancher un outil dans une carte.
+2. Le nb de CHEMINS (depart -> fins) ne change pas quand la nouvelle case mene a une fin
+   existante : verifier les compteurs de cases ET de chemins dans les tests de cartographie.
+3. Les ecarts preexistants (vulcain c9e/c15e, c6c/c12c ; clio c6c) doivent etre confirmes via
+   git HEAD avant toute intervention - ils ne relevent pas de la mission courante.
+
+## [LECON] 2026-08-11 -- CONTROLE CROISE ANTI-REGRESSION HISTORIQUE + MAILLON MANQUANT CERBERUS : VERDICT VALIDE (Janus)
+
+**Controle** : mission anti-regression historique (19 fins PASSE PAR LE GENERATEUR activer-agent-principal sur 10 parcours) + maillon manquant Cerberus (c15b/c15c avant c16).
+**Verdict** : VALIDE (J1-J6 verts).
+**Lecons** :
+1. La cause racine de la regression AGENTS-historique etait les scripts temporaires de cloture qui court-circuitaient l outil central activer-agent-principal -> REGLE ABSOLUE : toute activation/reactivation passe par l outil central (jamais de script maison).
+2. Les 19 fins d activation portent desormais l indice outil activer-agent-principal PASSE PAR LE GENERATEUR (catalogue, sans commande en dur) : l agent ne peut plus recopier une commande obsolete ni court-circuiter la journalisation.
+3. Le maillon manquant : cerberus c15b (controle "Rapport de Janus : problemes a resoudre ?") + c15c (action activer l agent habilite, boucle de verification jusqu a rapport propre) - Cerberus traite les problemes signales au retour, sans attendre.
+4. Test-013 verifie les compteurs de types (action/controle) : tout ajout de case controle/action sur cerberus doit etre suivi d une adaptation du test par Morpheus.
+5. Rapport : janus/controles/controle-anti-regression-historique-2026-08-11.md.
+

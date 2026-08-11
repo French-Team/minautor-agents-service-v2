@@ -2,22 +2,27 @@
 # -*- coding: ascii -*-
 """
 test-009-valider-case.py
-Test formel de l'outil valider-case v1.0.1 (categorie valider/).
+Test formel de l'outil valider-case v1.1.0 (categorie valider/).
 
 Outil teste (cerveau-projet/agents/tools/valider/valider-case/):
   .py + .sh (wrapper pur exec python3) + .md + spec/
   Valide et ALLEGE une carte de decision (parcours JSON) : structure, modele
-  compose, surcharge des indices (> 3 ou texte > 160 car.), references, normes.
+  compose, surcharge des indices (BUDGET PONDERE : court <= 100 car. = 0,5 /
+  long > 100 = 1, budget 3,0 par case - 2 courts = 1 long ; texte > 160 car.
+  reste le plafond absolu d'un indice), references, normes.
   Verdict : CONFORME / A ALLEGER / NON CONFORME + rapport markdown.
   (Etape 2 de la spec-refonte-cartes-decision v0.1.1)
 
 Cas couverts:
-  1. --version py/sh identiques v1.0.1 (parite)
+  1. --version py/sh identiques v1.1.0 (parite)
   2. --aide : usage complet (requis par detecter-decalages-catalogue)
   3. Execution sur parcours-cerberus (migre, etape 6) : verdict CONFORME
      (0 erreur, 0 surcharge, avertissement pattern de re-essai c5) +
      temoin ARTIFICIEL a alleger (genere dans tmp : cerberus + 3 indices
      de 200 car.) : verdict A ALLEGER avec >= 3 surcharges
+  3f. BUDGET PONDERE v1.1.0 : temoin 6 indices COURTS (<= 100 car.) =
+     poids 3,0 -> CONFORME (6 courts acceptes) ; temoin 4 indices LONGS
+     (> 100 car.) = poids 4,0 -> A ALLEGER (2 courts = 1 long)
   4. --case c12b (existante) : CONFORME ; --case c13b (inexistante) : NON CONFORME
   5. --modele : pattern de re-essai (NON -> soi-meme) en AVERTISSEMENT, pas erreur
   6. --surcharge : items signales sur le temoin artificiel a alleger (>= 3)
@@ -26,6 +31,8 @@ Cas couverts:
   9. Parcours inexistant : ERREUR claire + code non nul
  10. JSON invalide : ERREUR claire + code non nul
  11. Protection : aucun fichier cree dans le dossier outil
+ 11c. Garde-fou positif v1.0.2 : ACCEPTATION d'un id cT* (convention etendue,
+      prefixe thematique majuscule - ligne Trio de Janus)
  12. ASCII strict : 0 non-ASCII sur les 4 fichiers de l outil
 
 Usage:
@@ -107,14 +114,14 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-009-")
     try:
-        print("=== Test formel valider-case v1.0.1 ===")
+        print("=== Test formel valider-case v1.0.2 ===")
 
         # 1. --version py/sh identiques (parite)
         r_py = run([PYTHON, OUTIL_PY, "--version"])
         r_sh = run(["bash", OUTIL_SH, "--version"])
-        verifier("1. --version py/sh identiques v1.0.1",
+        verifier("1. --version py/sh identiques v1.1.0",
                  r_py.returncode == 0 and r_sh.returncode == 0
-                 and "v1.0.1" in r_py.stdout
+                 and "v1.1.0" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 
@@ -152,6 +159,44 @@ def main():
                  and "a alleger:" in r_sur.stdout
                  and int(r_sur.stdout.split("a alleger:")[1].split("|")[0].strip()) >= 3,
                  r_sur.stdout.strip()[:120])
+
+        # 3f. BUDGET PONDERE v1.1.0 : 6 courts = 3,0 CONFORME ; 4 longs = 4,0 A ALLEGER
+        # Parcours minimal : case action c1 (SANS indices) enchaine vers la fin c9.
+        def fabriquer_temoin_budget(tmp, nb, taille):
+            indices = [{"type": "regle", "texte": "R" * taille} for _ in range(nb)]
+            dd = {
+                "parcours": {"agent": "test-budget", "version": "0.1.0",
+                             "case_depart": "c0"},
+                "cases": {
+                    "c0": {"type": "question", "titre": "Depart",
+                            "question": "Tester le budget ?",
+                            "branches": [
+                                {"reponse": "OUI", "vers": "c1"},
+                                {"reponse": "NON", "vers": "c1"}]},
+                    "c1": {"type": "action", "titre": "Case avec indices",
+                            "indices": indices, "suivant": "c9"},
+                    "c9": {"type": "fin", "titre": "Fin"},
+                },
+            }
+            t = os.path.join(tmp, "parcours-temoin-budget-%d-%d.json" % (nb, taille))
+            with io.open(t, "w", encoding="utf-8", newline="\n") as fh:
+                json.dump(dd, fh, ensure_ascii=True, indent=2)
+            return t
+        # 6 courts (50 car.) : poids = 0,5*6 = 3,0 -> CONFORME (nouvelle flexibilite)
+        t_courts = fabriquer_temoin_budget(tmp, 6, 50)
+        r_courts = run([PYTHON, OUTIL_PY, t_courts, "--dry-run"])
+        verifier("3f. 6 indices courts (<= 100 car.) = poids 3,0 : CONFORME",
+                 r_courts.returncode == 0 and "CONFORME" in r_courts.stdout
+                 and "a alleger: 0" in r_courts.stdout,
+                 r_courts.stdout.strip()[:120])
+        # 4 longs (120 car.) : poids = 1*4 = 4,0 -> A ALLEGER
+        t_longs = fabriquer_temoin_budget(tmp, 4, 120)
+        r_longs = run([PYTHON, OUTIL_PY, t_longs, "--dry-run"])
+        verifier("3g. 4 indices longs (> 100 car.) = poids 4,0 : A ALLEGER",
+                 "A ALLEGER" in r_longs.stdout and "erreurs: 0" in r_longs.stdout
+                 and "a alleger:" in r_longs.stdout
+                 and int(r_longs.stdout.split("a alleger:")[1].split("|")[0].strip()) >= 1,
+                 r_longs.stdout.strip()[:120])
 
         # 4. --case : existante CONFORME, inexistante NON CONFORME
         r_ok = run([PYTHON, OUTIL_PY, PARCOURS_CERBERUS, "--case", "c12b", "--dry-run"])
@@ -225,11 +270,36 @@ def main():
         avant_cwd = set(os.listdir(tmp))
         r_gf = run([PYTHON, OUTIL_PY, PARCOURS_CERBERUS])
         apres_cwd = set(os.listdir(tmp))
-        verifier("11b. Garde-fou v1.0.1 : sans --rapport, aucun fichier cree",
+        verifier("11b. Garde-fou v1.0.2 : sans --rapport, aucun fichier cree",
                  r_gf.returncode == 0 and avant_cwd == apres_cwd
                  and "AUCUN RAPPORT ECRIT" in r_gf.stdout,
                  "cree: %s | sortie: %s" % (apres_cwd - avant_cwd,
                                             r_gf.stdout.strip()[-80:]))
+
+        # 11c. GARDE-FOU POSITIF v1.0.2 (lecon Morpheus 2026-08-11) : la
+        #      convention etendue doit ACCEPTER les ids cT* (prefixe
+        #      thematique majuscule, ligne Trio de Janus). Parcours
+        #      artificiel minimal : depart c0 -> fin cT6.
+        ct = os.path.join(tmp, "parcours-ct.json")
+        with io.open(ct, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump({
+                "parcours": {"agent": "test-ct", "version": "0.1.0",
+                             "case_depart": "c0"},
+                "cases": {
+                    "c0": {"type": "question", "titre": "Depart",
+                            "question": "Tester la fin cT ?",
+                            "branches": [
+                                {"reponse": "OUI", "vers": "cT6"},
+                                {"reponse": "NON", "vers": "cT6"}]},
+                    "cT6": {"type": "fin", "titre": "Fin ligne Trio"},
+                },
+            }, fh, ensure_ascii=True, indent=2)
+        r_ct = run([PYTHON, OUTIL_PY, ct, "--dry-run"])
+        verifier("11c. Garde-fou positif : id cT6 ACCEPTE (0 erreur NOMMAGE)",
+                 r_ct.returncode == 0 and "CONFORME" in r_ct.stdout
+                 and "erreurs: 0" in r_ct.stdout
+                 and "NOMMAGE" not in r_ct.stdout,
+                 r_ct.stdout.strip()[:120])
 
         # 12. ASCII strict : 0 non-ASCII sur les 4 fichiers de l outil
         total_non_ascii = sum(ascii_count(f) for f in

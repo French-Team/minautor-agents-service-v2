@@ -22,6 +22,32 @@ types:
 # Corrections et Surcharges
 ---
 
+
+
+## [LECON] 2026-08-11 -- 18 COMMANDES DE TEST AJOUTEES AU CATALOGUE (Vulcain)
+
+**Mission** : ajouter les 18 commandes de test manquantes (test-004 a test-021) au catalogue generateurs-commande (120 -> 138 commandes).
+
+**Lecons** :
+1. Le catalogue ne reference que les 3 premiers tests (test-001/002/003) : les 18 autres existaient sur disque mais etaient invisibles pour la generation de commandes. Incoherence corrigee : le catalogue reference desormais TOUS les tests (test-001 a test-021).
+2. Format des entrees de test : {nom = nom du dossier, description = chemin relatif, interpreteur python3, script = chemin complet du .py, modele '{chemin}', parametres [{cle chemin, defaut .}]}. Suivre EXACTEMENT le modele test-002/test-003.
+3. Le catalogue doit rester TRIE par nom (assert noms == sorted(noms)) et le JSON valide : l'ajout via json.load -> append -> sort -> json.dump preserve tout.
+4. La generation reelle se fait avec --commande <nom> --reponses 'chemin=.' (le format 'chemin=.' seul passe par argparse et echoue : il faut --commande).
+5. Scan detecter-decalages-catalogue : 131 conformes / 2 decalages PREEXISTANTS (generateurs-case-convertir, generateurs-ligne - ni l un ni l autre ne vient de mon ajout) / 5 non testables (les tests sans --aide, comportement normal). Aucun decalage introduit.
+6. test-007-figer-lf exige exactement 120 commandes : il cassera avec 138 - PREVU, Morpheus l adaptera dans la mission suivante (REGLE IMMUABLE DELEGATION : seul Morpheus touche aux tests).
+
+## [LECON] 2026-08-11 -- VALIDER-CARTES-DECISION v0.4.0 : 3 POINTS SEMANTIQUES (Vulcain)
+
+**Mission** : ajouter P8 (commande activer exacte), P9 (format version sans v), P10 (coherence fiche/parcours) apres le garde-fou suivant mort.
+
+**Lecons** :
+1. Les 7 points structurels (JSON, cles, references, c0...) laissaient passer des defauts SEMANTIQUES : fin Activer X sans commande exacte, version avec prefixe v, fiche desynchronisee du parcours. La structure seule ne suffit pas.
+2. Piege de casse : le titre porte 'Janus' (majuscule) mais la commande reelle est 'janus' (minuscule). Toute comparaison de commande doit etre insensible a la casse (msg.lower()).
+3. Le regex de titre doit matcher exactement le format 'FIN - Activer <agent>' (les titres reels sont en ASCII pur, codes verifies).
+4. --fichier ne connait pas le nom de l'agent : P10 (coherence fiche/parcours) ne s'applique qu'en mode --agent/--tous. Le parametre agent a ete propage de verifier_agent -> verifier_parcours_fichier -> valider_parcours.
+5. Tests KO volontaires indispensables : P8+P9 detectes via --fichier (fin sans commande + version v), P10 detecte via --agent avec version modifiee temporairement (restauree ensuite). 3 preuves negatives reussies.
+6. Resultat final : 11/11 agents CONFORME, parite sh -> py conservee (wrapper), non-regression 19/20 avec le seul KO attendu = test-018 (minerve n'est plus une fin REACTIVER depuis la correction du trio, a adapter par Morpheus etape 4).
+
 ## [PHILOSOPHIE] Comment je fonctionne
 
 ### Philosophie 1 : La Portabilite d'Abord
@@ -1536,3 +1562,266 @@ probleme, bash -n OK, py_compile OK, normes ASCII 0 + LF partout.
 **Tests attendus (Morpheus)** : test-002 (garde-fou actif sur definitions de
 test), test-003 (combos corriges), detecter-decalages-catalogue (section
 COMBOS), non-regression complete.
+
+## [LECON] 2026-08-11 -- OUTIL EDITER-FICHIER-AGENTS CREE (Vulcain, v0.1.0-beta)
+
+**Contexte** : creation de l'outil editer-fichier-agents (editer ligne/bloc des fiches agents + correcteur ASCII integre) pour retirer les blocs "## Historique" obsoletes des 11 fiches.
+
+**Lecons** :
+1. Le gap reel : editer-fichier remplace un MOTIF texte, supprimer-ligne par NUMERO de ligne - aucun outil ne manipulait des BLOCS delimites par titre markdown (## X jusqu'au prochain ##) ni n'integrait l'ASCII. La valeur ajoutee est la fusion de ces 2 capacites.
+2. Le correcteur ASCII reutilise le dictionnaire de corriger-dictionnaire-accents (lignes 'accent|remplacement') : meme mecanique que corriger-symboles - ne pas reimplementer.
+3. Le separateur du generateur de commandes est ';' (PAS '|') pour --reponses : les tests de generation doivent utiliser 'cle=valeur;cle2=valeur2'.
+4. Le detecteur detecter-decalages-catalogue peut etre long sur tout le projet : lancer avec --sortie et timeout suffisant, ou cibler.
+5. Ajouter un outil au catalogue : entree triee (ordre alphabetique), bump de version mineure (0.2.6 -> 0.2.7), verifier tri + JSON + normes.
+6. IMPACT TESTS : test-005 verifie la version catalogue (0.2.6) et test-007 le nombre de commandes (118) - tous deux cassent apres ajout d'une commande. DELEGATION DES TESTS : Morpheus adapte.
+7. Les tests reels sur copie de test : suppression bloc Historique (dry + wet + backup), bloc inexistant -> ERREUR claire, ajout/remplacement/suppression de ligne, --ascii corrige accents+guillemets.
+
+## [LECON] 2026-08-11 -- OUTIL VERIFIER-CONFORMITE-FICHE CREE (Vulcain, v0.1.0)
+
+**Mission** : creer verifier-conformite-fiche (categorie verifier/) pour verifier la conformite des fiches agents au template fiche-agent-template.md. Decision utilisateur : OUTILLAGE D'ABORD + TEMPLATE PAR ROLE (la refonte viendra apres, mesuree par l'outil).
+
+**Capacites** :
+1. Cibles : --agent <nom> (1), --agents <a,b,c> (selection), --tous (11 fiches)
+2. Verification par fiche : frontmatter YAML (--- debut + cle agent + cloture), sections '## X' du template presentes, sections specifiques agent TOLEREES mais signalees, ordre des sections
+3. Sections du template lues DYNAMIQUEMENT (l'outil reste valide apres toute refonte du template)
+4. --rapport <fichier.md>, --dry-run, --verbose
+
+**Livrable** : rapport-impact-2026-08-11.md (conserve dans le dossier de l'outil) -- mesure initiale : 11/11 ECARTS.
+- Toutes les fiches : ## Historique manquant (template obsolete -- supprime des fiches le 2026-08-11)
+- Sections divergees : Vue d'ensemble 8/11, Forces et Faiblesses 3/11, Style de travail 5/11, Limites 8/11, WORKFLOW RVAV + UTILISATION manquantes sur cerberus
+- Sections specifiques tolerees : cerberus (cycle/agents), janus (Verdicts), morpheus (tests), themis (rapport), vulcain (techno)
+
+**Lecons** :
+1. Le template est la SOURCE DE VERITE : ajouter une section = mettre a jour le template, l'outil verifie ensuite toutes les fiches (lecture dynamique des '## ')
+2. Le frontmatter des fiches peut etre long (cloture > 30 lignes, ex buffy ligne 56) : chercher la cloture sur 100 lignes, pas 30
+3. Distinguer SECTIONS MANQUANTES (ecarts) de SECTIONS SPECIFIQUES (tolerees -- le role de l'agent) : le rapport devient actionable pour la refonte par role
+4. NE PAS corriger les fiches dans la mission outillage : le rapport mesure l'impact, la refonte est une mission separee
+5. Test reel 3 modes : --agent (1), --agents (selection), --tous (11) + generation via catalogue -- la boucle est complete
+
+**Outils utilises** : outil-template.py (modele), valider-nommage, valider-conformite-ascii, generateurs-commande (catalogue + generation), .zz- scripts temporaires
+
+## [LECON] 2026-08-11 -- VERIFIER-CONFORMITE-FICHE v0.2.0 : MODE PAR ROLE (Vulcain)
+
+**Mission** : etape 3 de la refonte par role -- enrichir verifier-conformite-fiche avec le mode noyau + variante.
+
+**Capacites ajoutees (v0.1.0 -> v0.2.0)** :
+1. Option --variante <cerveau-projet|trio> : verifie le noyau + les sections de la variante de famille
+2. Famille determinee par : --variante > frontmatter de la fiche (cle 'famille:') > defaut par agent (FAMILLES_DEFAUT)
+3. Sections de la variante manquantes = ECARTS (comme celles du noyau)
+4. Sections specifiques (ni noyau ni variante) : TOLEREES mais signalees
+5. Ordre verifie SEPAREMENT (noyau / variante) : les fiches peuvent intercaler leurs sections specifiques
+6. Compatibilite ascendante : --agent buffy sans --variante fonctionne (famille auto)
+
+**Tests reels** :
+- buffy --variante cerveau-projet : CONFORME (noyau 8 + variante 2 presentes)
+- minerve --variante trio : ECARTS avec 6 sections manquantes (a corriger etape 4)
+- themis sans --variante : famille cerveau-projet par defaut, manquantes Forces/Style + specifiques rapport tole rees
+- --tous : 2 CONFORME (buffy, clio) / 9 ECARTS -- le nouveau rapport d impact v020
+- Catalogue v0.2.9 (parametre variante ajoute), generation reelle OK, doc v0.2.0, sh v0.2.0 parite
+
+**Lecons** :
+1. Le modele par role : 3 sources de famille (option > frontmatter > defaut) -- l'ordre de precedence doit etre documente et teste
+2. L'ordre separe noyau/variante est indispensable : buffy a ses sections specifiques intercalees entre les sections du noyau (pas a la fin) -- exiger un ordre global casserait des fiches valides
+3. Les sections des variantes sont des fichiers SEPARES avec leur propre frontmatter -- l'outil lit leurs '## ' directement
+4. Compatibilite ascendante testee : le mode sans --variante doit continuer a fonctionner (famille auto par defaut par agent)
+5. Rapport d impact v020 conserve : 2 CONFORME / 9 ECARTS = la liste exacte des corrections de l etape 4
+
+**Outils utilises** : verifier-conformite-fiche (v0.2.0), generateurs-commande (catalogue v0.2.9), valider-conformite-ascii, valider-nommage, .zz- scripts temporaires
+## [LECON] 2026-08-11 -- CONVENTION NOMMAGE ETENDUE cT* (Vulcain, v1.0.2)
+
+**Mission** : etendre la convention de nommage des IDs de cases dans valider-case pour accepter les prefixes thematiques (format cT*) - la ligne trio de Janus utilise cT1..cT10.
+
+**Constat** : valider-case v1.0.1 (regex `c<numero>[a-z]?`) signalait 10 erreurs NOMMAGE sur le parcours-janus v0.3.7 (cases cT1..cT10, creation deliberate avec prefixe T = Trio). Les tests test-021/018 passaient car ils utilisent valider-cartes-decision (structure), pas valider-case (nommage) - le bug etait invisible.
+
+**Action** :
+1. valider-case.py v1.0.2 : regex `^c[A-Z]?<numero>[a-z]*$` - un prefixe alpha MAJUSCULE optionnel avant le numero (cT6, cT10), suffixe lettres minuscules conserve (c12b, c29d). Message d erreur + aide mis a jour.
+2. valider-case.md : convention documentee (prefixe thematique majuscule, ex: T = Trio) + version 1.0.2.
+
+**Verification** : janus passe de NON CONFORME (10 NOMMAGE) a A ALLEGER (0 erreur). 11 parcours : 0 NOMMAGE partout. Normes 0/0, py_compile OK.
+
+**Lecons** :
+1. Une convention de nommage stricte devient un faux positif quand un usage legitime diverge : avant de renommer les donnees, verifier si la convention doit etre ETENDUE (decision utilisateur : garder cT*).
+2. Le prefixe thematique MAJUSCULE est reserve aux lignes dediees (T = Trio) ; le suffixe lettre minuscule reste le mecanisme standard de derivation c<numero><lettre>.
+3. Deux validateurs different (valider-cartes = structure, valider-case = nommage) : un nommage non conforme peut passer l un et casser l autre - toujours lancer valider-case en plus de valider-cartes-decision.
+4. RELAIS : les 2 tests test-009/test-015 attendent la version v1.0.1 -> adaptation de tests releve de Morpheus (REGLE IMMUABLE DELEGATION).
+## [LECON] 2026-08-11 -- SPEC-GUIDER-PARCOURS v0.6.2 : REGLE 11 NOMMAGE DES IDS ETENDUE cT* (Vulcain)
+
+**Contexte** : l'extension de la convention de nommage (valider-case v1.0.2 : c[<prefixe-alpha-maj>]<numero>[a-z]?, prefixe thematique majuscule optionnel cT* pour la ligne Trio de Janus) n'etait documentee NI dans la spec-guider-parcours (section Regles du format : aucune mention nommage) NI dans un pattern. Les agents ne pouvaient pas connaitre la convention depuis la source de verite du format.
+
+**Lecon** :
+1. Toute convention de format (nommage, structure, type) doit etre documentee dans la SPEC du format, pas seulement dans l'outil qui la valide (valider-case). La spec-guider-parcours est la source de verite du format des cartes : une convention non documentee = invisible pour les agents et pour les futurs generateurs.
+2. La section "Regles du format" de la spec avait deja 10 regles (9 = Question Honnete c0, 10 = pas de boucle d'attente) : la nouvelle regle de nommage est la 11. Toujours verifier la numerotation existante avant d'inserer.
+3. Bump de version coherent sur 3 endroits (titre ligne 7, **Version** ligne 9, Historique ligne 13) + 2 references documentaires qui pointent vers l'ancienne version (guider-parcours.md et vulcain.md) -- le test-014 verifie ces 5 points (1a, 1b, 6a, 6b) : un bump de version de spec IMPLIQUE une adaptation du test-014 par Morpheus (REGLE IMMUABLE DELEGATION).
+4. La regle 11 doit citer valider-case v1.0.2 comme source de verite (regex exacte + message NOMMAGE) pour que la convention soit executable (verifiable par l'outil), pas seulement descriptive.
+## [LECON] 2026-08-11 -- GENERATEURS DE CASES ALIGNES SUR LA CONVENTION ETENDUE cT* (Vulcain)
+
+**Contexte** : la convention de nommage etendue cT* (valider-case v1.0.2, spec-guider-parcours v0.6.2 regle 11) n'etait documentee ni dans generateurs-ligne.md (qui citait seulement c<numero>[a-z]?) ni dans generateurs-case.md (aucune mention). Les 2 generateurs de cases etaient les derniers outils a ne pas etre alignes.
+
+**Lecon** :
+1. L'alignement documentaire d'une convention doit couvrir TOUS les outils qui la manipulent, pas seulement le validateur et la spec : generateurs-case et generateurs-ligne generent des ids de cases -> leurs .md doivent citer la convention etendue.
+2. generateurs-ligne.md : etendre la phrase existante (c<numero>[a-z]? -> c[<prefixe-alpha-maj>]<numero>[a-z]? avec cT1..cT10) ; generateurs-case.md : ajouter la mention dans la section Pourquoi cet outil (absente avant) + la precision que l'edition d'une case existante conserve son id.
+3. Bump de version DOCUMENTAIRE du .md (0.3.0 -> 0.3.1, 0.4.0 -> 0.4.1) SANS toucher au --version des scripts py/sh (la parite test-010/test-017 verifie les versions des scripts, pas celle du .md) : verifie en reel, les 2 tests restent 0 KO.
+4. Le fait qu'aucun test ne verifie le contenu des .md d'outils est une lacune connue : la conformite documentaire repose sur l'audit (Themis) et le protocole-sante, pas sur la non-regression.
+## [LECON] 2026-08-11 -- E1/E2/E3 CORRIGES : generateurs-ligne ENTIEREMENT ALIGNE SUR LA CONVENTION ETENDUE cT* (Vulcain)
+
+**Contexte** : l'audit Themis de la convention cT* (VERDICT A REVOIR, mineur) avait releve 3 ecarts documentaires dans la famille generateurs-ligne : generateurs-ligne.md:197, spec-generateurs-ligne (93/126/153/169) et generateurs-ligne.py (275/419-422/460) citaient encore l'ancienne convention c<numero>[a-z]? sans l'extension cT*.
+
+**Lecon** :
+1. Une correction de convention doit couvrir le .md, la SPEC ET les commentaires du code : l'audit Themis avait trouve les 8 mentions dans les 3 fichiers satellites pendant que le .md principal etait deja aligne.
+2. La bonne formulation : citer la convention ETENDUE une fois dans la phrase (c[<prefixe-alpha-maj>]<numero>[a-z]?, valider-case v1.0.2) puis mentionner le cas normal c<numero>[a-z]? comme PARTIE de cette convention -- c'est ce qui rend le scan anti-recurrence non-ambigue.
+3. Le re-scan naif ligne-par-ligne genere des faux positifs sur les mentions du cas normal quand la convention etendue est citee a la ligne precedente de la meme phrase : verifier le CONTEXTE (fenetre +/- 2 lignes) avant de conclure.
+4. Resultats : 8/8 mentions alignees, compile py OK, tests 010/017 0 KO, normes 0/0 -- aucun impact fonctionnel (commentaires uniquement).
+## [LECON] 2026-08-11 -- GARDE-FOU ANTI-RECURRENCE detecter-convention-nommage v0.1.0 CREE (Vulcain)
+
+**Contexte** : creation de l'outil qui scanne les .md/.py/.sh pour detecter les mentions de la convention c<numero>[a-z]? HORS contexte etendu cT* (recommandation Themis, audit 2026-08-11).
+
+**Lecon** :
+1. La methode CONTEXTE validee par Themis s'implante bien : fenetre +/- 2 lignes, mention conforme si c[<prefixe-alpha-maj>] ou cT1..cT10 (forme complete) OU cT* (forme abregee) est dans la fenetre.
+2. EXCLUSIONS NECESSAIRES pour eviter les faux positifs : corrections.md (lecons historiques), tests/ (verifient les ids GENERES), rapports/ + rapport-audit-* (documentent l'HISTORIQUE des ecarts). Sans elles, l'outil signale ses propres rapports d'audit et son propre .md.
+3. --aide doit etre un ALIAS d'argparse (add_argument action="help"), sinon l'outil echoue a --aide alors que --help marche.
+4. L'outil a DECOUVERT un ecart reel que l'audit Themis n'avait pas vu : docs-dev-cerveau-projet/spec-refonte-cartes-decision.001.01.ebauche.md:175 ("nommage des cases (c<numero>[a-z]?)" sans cT*) -- preuve que le garde-fou automatique va plus loin que l'audit cible. A traiter separement.
+5. L'ajout au catalogue (139 commandes) casse le test-007 qui attend 138 : l'adaptation du test releve de Morpheus (REGLE IMMUABLE DELEGATION) -- signale dans la reactivation.
+6. L'index-tools doit etre mis a jour a la creation d'un outil (ordre alphabetique) ; les non-ASCII preexistants (ligne generateurs-carte) ne sont PAS a corriger dans cette mission (hors perimetre, a signaler seulement).
+## [LECON] 2026-08-11 -- NON-ASCII PREEXISTANT DE index-tools.md CORRIGE (ligne generateurs-carte) (Vulcain)
+
+**Contexte** : correction du non-ASCII preexistant signale lors de la creation de detecter-convention-nommage.
+
+**Correction** : ligne 165, caractere U+00EE ('i' accentue) dans 'nait CONFORME' remplace par 'i' ASCII (1 remplacement).
+
+**Verifications reelles** :
+1. non-ASCII : 1 -> 0 dans index-tools.md
+2. CRLF : 0 (LF pur, 441 lignes)
+3. Integrite de la table intacte : Total 110, Corriger 6, entree detecter-convention-nommage et generateurs-carte presentes
+
+**Lecons** :
+1. Le second non-ASCII signale precedemment n'existait plus : un seul etait reel (ligne generateurs-carte) -- toujours re-scanner au moment de corriger (pas de correction aveugle sur un constat ancien).
+2. Correction ciblee d'un caractere (replace U+00EE -> i) plus sure qu'une reecriture de ligne entiere.
+3. Apres toute correction d'un fichier d'index, verifier l'integrite des totaux et entrees referencees (le fichier est controle par test-007).
+## [LECON] 2026-08-11 -- TRI DU CATALOGUE REPARE : detecter-convention-nommage replace a sa position alphabetique (Vulcain)
+
+**Contexte** : lors de la creation de detecter-convention-nommage, l'entree avait ete inseree en FIN de liste du catalogue generateurs-commande (position 138) au lieu de sa position alphabetique, cassant le tri (noms != sorted(noms)). Le test-007 (point 13 : len == 139 ET tri) l'a detecte.
+
+**Correction** : entree deplacee de la position 138 vers la position 35 (avant detecter-decalages-catalogue : convention < decalages). Format preserve exactement (json.dumps indent=2 + LF final, verifie par garde-fou round-trip avant ecriture).
+
+**Verifications reelles** :
+1. len 139 conserve, noms == sorted(noms) -> True
+2. test-007 : 0 KO (vert)
+3. Non-regression complete : 21/21 OK
+4. Normes catalogue : 0 non-ASCII, 0 CRLF, JSON valide
+
+**Lecons** :
+1. TOUTE insertion dans le catalogue generateurs-commande doit respecter l'ordre alphabetique des noms (le test-007 le verifie) -- inserer l'entree a la bonne position, jamais en fin de liste.
+2. Apres toute modification du catalogue, lancer le test-007 avant de reactiver (garde-fou immediat, pas d'attente du controle).
+3. Verifier le format du fichier avant reecriture (round-trip indent=2 + LF) pour ne pas creer un diff parasite.
+
+## [LECON] 2026-08-11 -- BUDGET PONDERE DES INDICES IMPLEMENTE (valider-case v1.1.0 + generateurs-case v0.4.2) (Vulcain)
+
+**Mission** : rendre les cartes plus flexibles sur le NOMBRE d'indices par case en ponderant leur taille (decision utilisateur : 2 indices courts = 1 indice long).
+
+**Modele implemente** :
+- Indice COURT (texte <= 100 car. ou sans texte) = poids 0,5
+- Indice LONG (texte > 100 car.) = poids 1
+- Budget par case = 3,0 unites (poids total)
+- Plafond absolu 160 car. par texte INCHANGE et independant
+- Effet : 6 courts (3,0) OK, 3 longs (3,0) OK, 2 longs + 2 courts (3,0) OK, 4 longs (4,0) signale
+
+**Fichiers modifies** :
+1. valider-case.py v1.0.2 -> v1.1.0 : constantes SEUIL_COURT=100 + BUDGET_INDICES=3.0 + fonction poids_indices() + 2 emplacements de verification (verifier_allegement + boucle principale)
+2. generateurs-case.py v0.4.0 -> v0.4.2 : meme fonction poids_indices + bloc de surcharge (etape 3 conversion)
+3. spec-valider-case v1.1.0 : section 3 documentee (budget pondere)
+4. spec-guider-parcours : section PRINCIPE UNE PLACE mise a jour (<= 100 car. + budget 3,0)
+5. generateurs-case.md v0.4.2 : version + ligne surcharge
+6. valider-case.md v1.1.0 : version + historique
+7. Catalogue generateurs-commande : generateurs-case 0.4.0 -> 0.4.2
+8. Tests : test-009 (23 points, + cas 3f/3g : 6 courts CONFORME / 4 longs A ALLEGER), test-010 (v0.4.2), test-015 (v1.1.0)
+
+**Lecons** :
+1. La regle binaire '3 indices' penalisait les cases avec beaucoup de rappels courts (c6/c14 de Cerberus) - le budget pondere donne de la flexibilite sans perdre le garde-fou anti-surcharge
+2. Les tests temoins doivent partir d'un parcours MINIMAL sans indices (ajouter 6 courts a une case de cerberus deja chargee depassait le budget)
+3. Parite py/sh maintenue : valider-case.sh et generateurs-case.sh sont des wrappers purs (pas de logique a dupliquer)
+
+**Verifications** : test-009 23/23, test-010 25/25, test-015 10/10, non-regression complete 21/21 OK, 0 non-ASCII, 0 CRLF.
+
+## [LECON] 2026-08-11 -- VALIDER-CASE.MD ALIGNE SUR LE BUDGET PONDERE (Vulcain)
+
+**Mission** : corriger l'ancienne regle dans le .md de valider-case (alignement doc outil avec les specs).
+**Resultat** : ligne 55 (tableau Allegement) corrigee : "> 3 indices OU texte > 160" -> budget pondere (COURT <= 100 car. = 0,5 / LONG > 100 = 1 / budget 3,0 / plafond 160). Scan des .md d'outils : valider-case.md etait le SEUL avec l'ancienne regle.
+**Lecons** :
+1. Le .md d'un outil peut contenir l'ancienne regle alors que son PROPRE historique documente deja le nouveau modele : verifier TOUTES les sections du .md (ligne 13 historique OK, ligne 55 tableau Allegement stale).
+2. Le scan complet (grep "> 3 indices" sur tous les .md de tools/) confirme qu'il ne reste AUCUN .md d'outil avec l'ancienne regle : le budget pondere est desormais documente partout (3 specs + .md valider-case).
+3. guider-parcours.md v0.5.0 ne documente pas la surcharge (doc d usage du navigateur) : c'est CORRECT, la surcharge est du domaine de valider-case. Ne pas ajouter de contenu hors sujet.
+4. La correction documentaire d'un .md ne casse pas les tests (test-009 23/23, test-015 10/10, non-regression 22/22) : le .md n'est pas verifie par les tests, mais confirmer quand meme.
+5. Les specs et les .md d'outils doivent rester synchronises : la chaine spec -> .md -> test -> controle (Janus) garantit l'absence de residue.
+
+## [LECON] 2026-08-11 -- COMMENTAIRE STALE BUDGET PONDERE CORRIGE DANS VALIDER-CASE.PY (Vulcain)
+
+L en-tete (docstring) de valider-case.py decrivait encore l ANCIENNE regle de
+surcharge ("> 3 indices ou texte > 160 caracteres") alors que le code
+(SEUIL_COURT = 100 / BUDGET_INDICES = 3.0 / SEUIL_TEXTE = 160) implemente le
+budget pondere depuis v1.1.0. Ecart detecte par le test reel du nouveau grep
+croise E7 du protocole-verification-coherence v0.2.0 (les 6 fichiers couverts
+doivent porter les 5 seuils 100/0,5/1/3,0/160 et AUCUNE trace de l ancienne
+regle).
+
+Correction : docstring aligne sur le budget pondere (indice COURT <= 100 car. =
+0,5 unite, LONG > 100 = 1 unite, budget 3,0 par case, texte > 160 car. =
+SIGNALEE). Scan complet : c etait la SEULE occurrence dans les 6 fichiers.
+
+Lecons :
+1. Apres un changement de regle dans le code, verifier AUSSI le docstring/en-tete
+   du fichier .py (pas seulement le .md et la spec) -- le grep croise E7 couvre
+   desormais les 6 fichiers.
+2. Le protocole-verification-coherence v0.2.0 (E7) est un garde-fou operationnel :
+   il a detecte un ecat reel des sa premiere utilisation reelle.
+3. Tests reverdis : test-009 (23/23), test-015 (10/10), test-022 (14/14),
+   non-regression complete 22/22 OK.
+
+## [LECON] 2026-08-11 -- REGISTRE D USAGE DES OUTILS CREE (enregistrer-usage-outil v0.1.0) (Vulcain)
+
+Creation de l outil enregistrer-usage-outil + registre JSONL
+(cerveau-projet/agents/traces/registre-usages-outils.jsonl) + integration
+de la journalisation automatique dans generateurs-commande v0.2.3.
+
+Ce qui a ete fait :
+- enregistrer-usage-outil.py/.sh/.md/spec : append JSONL (date, agent, outil,
+  mode generateur|direct|combo, commande, contexte). --dry-run. Ne VALIDE PAS
+  l outil (on enregistre l usage reel : c est ce qui permet de detecter les
+  commandes en dur ou les outils hors catalogue).
+- generateurs-commande v0.2.3 : journalise automatiquement chaque commande
+  generee (mode generateur) apres composer_commande. --agent optionnel
+  (defaut : agent actif lu dans AGENTS.md bloc session-llm-1), --no-journal
+  pour desactiver. Discret (stderr, jamais bloquant).
+- Catalogue : 141 -> 142 commandes. index-tools : categorie Enregistrer +1,
+  total 110 -> 111. test-007 mis a jour (15/15).
+
+Lecons :
+1. BUG CORRIGE : registre_defaut() remontait 4 niveaux au lieu de 3 (outil
+   dans tools/enregistrer/enregistrer-usage-outil/ -> agents/ = 3 remontees).
+2. BUG CORRIGE : _lire_agent_actif() coupait le bloc session-llm-1 sur le
+   premier "---" qui est le SEPARATEUR du tableau markdown (|---|---|) ->
+   couper sur "\n---" (fin de bloc) pour lire la ligne "Nom Agent".
+3. Le generateur compose la commande mais ne l execute pas : la journalisation
+   se fait a la composition (modele + parametres connus), avant le return.
+4. KO PREEXISTANT A TRAITER PAR MORPHEUS : test-005 attend la version v0.2.2
+   du generateur (modif preexistante non commitee) -> doit passer en v0.2.3.
+## [LECON] 2026-08-11 -- COMBOS-MOTEUR v0.3.1 : OPTION --no-journal PROPAGEE AU GENERATEUR (Vulcain)
+
+**Contexte** : le registre d usage des outils (source de verite) etait pollue par les
+tests qui passent par le generateur (88-150 lignes de test). Le combos-moteur appelait
+generateurs-commande sans moyen de desactiver la journalisation.
+
+**Modifications** (combos-moteur.py + .sh + .md + spec) :
+1. VERSION 0.3.0 -> 0.3.1 (py + sh en parite).
+2. Nouvelle option `--no-journal` (argparse py + parser manuel sh + aide + spec).
+3. Propagation : main -> executer() -> executer_case_generateur() : si no_journal,
+   `--no-journal` est ajoute a la commande du generateur (py ET sh).
+4. Piege evite : le .sh duplique TOUTE la logique par heredoc python -> il fallait
+   appliquer les 5 memes modifications dans le heredoc, sinon desynchronisation py/sh.
+5. Piege evite : variable no_journal initialisee a False dans le main du .sh (sinon
+   NameError quand --no-journal absent).
+
+**Tests reels** : --no-journal py = 0 ligne ajoutee ; sans = 1 ligne ajoutee ;
+--no-journal sh = 0 ligne ajoutee. Non-regression 23/23 OK.
+
+**Lecon** : quand on ajoute une option a un outil py, TOUJOURS verifier le .sh :
+s'il embarque la logique par heredoc, il faut reporter la modification (parite py/sh).

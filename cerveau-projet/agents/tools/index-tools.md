@@ -126,6 +126,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-surcharge-fichier` | Detecter les fichiers qui grossissent trop | [detecter/detecter-surcharge-fichier/](detecter/detecter-surcharge-fichier/) |
 | `detecter-local-hors-fonction` | Detecter les local utilises hors fonction dans les scripts bash | [detecter/detecter-local-hors-fonction/](detecter/detecter-local-hors-fonction/) |
 | `detecter-usage-outils-externes` | Detecter les traces d'outils externes dans les fichiers (CRLF, non-ASCII, BOM) | [detecter/detecter-usage-outils-externes/](detecter/detecter-usage-outils-externes/) |
+| `detecter-convention-nommage` | Detecter les mentions de la convention c<numero>[a-z]? hors contexte etendu cT* (garde-fou anti-recurrence) | [detecter/detecter-convention-nommage/](detecter/detecter-convention-nommage/) |
 | `detecter-decalages-catalogue` | Detecter les decalages entre le catalogue du generateur et les interfaces reelles des outils (--aide/--help) | [detecter/detecter-decalages-catalogue/](detecter/detecter-decalages-catalogue/) |
 | `detecter-divergences-version` | Detecter les spec/ dont la version diverge de leur .py (regle des 5 fichiers, formats de version varies) | [detecter/detecter-divergences-version/](detecter/detecter-divergences-version/) |
 | `detecter-impacts` | Detecter les fichiers impliques par la modification d'un fichier du cerveau (schema identite:) | [detecter/detecter-impacts/](detecter/detecter-impacts/) |
@@ -161,7 +162,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `generateurs-commande` | Composer et generer une commande complexe en posant une question par parametre | [generateurs/generateurs-commande/](generateurs/generateurs-commande/) |
 | `generateurs-amelioration` | Pose une checklist de questions par theme avant toute amelioration d un outil, combo, generateur ou carte | [generateurs/generateurs-amelioration/](generateurs/generateurs-amelioration/) |
 | `generateurs-case` | Ajouter, editer, supprimer une case OU ajouter un bloc modele compose COMPLET (decision + branches min 2 + deviation + rejoint, refs pattern-7) d'une carte de decision (parcours JSON) avec recablage auto, --ref (indices reference) et validation auto valider-case --modele | [generateurs/generateurs-case/](generateurs/generateurs-case/) |
-| `generateurs-carte` | Agir sur une carte COMPLETE (parcours JSON) : creer un squelette ALLEGE (indices = references, naît CONFORME 0 surcharge), analyser les chemins, detecter les anomalies (structure + delegation validateur-case), dupliquer un chemin (refs conservees) | [generateurs/generateurs-carte/](generateurs/generateurs-carte/) |
+| `generateurs-carte` | Agir sur une carte COMPLETE (parcours JSON) : creer un squelette ALLEGE (indices = references, nait CONFORME 0 surcharge), analyser les chemins, detecter les anomalies (structure + delegation validateur-case), dupliquer un chemin (refs conservees) | [generateurs/generateurs-carte/](generateurs/generateurs-carte/) |
 | `generateurs-ligne` | Ajouter une LIGNE (chemin de bout en bout) a une carte de decision via des gabarits de groupes de cases (configs : defaut, config-1 deviation, config-2 RVAV, config-3 action), apres verification de la carte Atlas (existence + mtime, blocage + invite a activer Atlas sinon), dry/wet | [generateurs/generateurs-ligne/](generateurs/generateurs-ligne/) |
 | `generateurs-outil-temporaire` | Generer un outil temporaire (script Python jetable) dans le workspace : en-tete standard (identite outil-temporaire, ASCII, LF), dry-run par defaut, question de promotion (2e utilisation -> activer Vulcain) | [generateurs/generateurs-outil-temporaire/](generateurs/generateurs-outil-temporaire/) |
 | `generateurs-regenerer-catalogue` | Regenerer/synchroniser le catalogue de commandes du generateur a partir des outils reels (descriptions extraites des en-tetes .py, 2 formats) | [generateurs/generateurs-regenerer-catalogue/](generateurs/generateurs-regenerer-catalogue/) |
@@ -415,6 +416,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Detecter | 6 |
 | Ecrire | 1 |
 | Editer | 1 |
+| Enregistrer | 1 |
 | Evaluer | 4 |
 | Generateurs | 7 |
 | Gerer | 1 |
@@ -433,7 +435,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Verifier | 5 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **110** |
+| **Total** | **111** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

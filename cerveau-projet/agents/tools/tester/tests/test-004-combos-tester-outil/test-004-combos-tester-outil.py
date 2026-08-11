@@ -16,7 +16,7 @@ Cas couverts:
   4. Variable commande_test manquante (apres c3=OUI) -> erreur claire (commande de la case c4)
   5. Navigation chemin OUI : fichier de test CREE + test EXECUTE + c6 FIN (COMBO TERMINE)
   6. Navigation chemin NON : c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE preservee)
-  7. Integration parcours morpheus v0.3.1 : guider-parcours affiche la case
+  7. Integration parcours morpheus v0.4.0 : guider-parcours affiche la case
      Lancer le combo tester-outil puis Verifier les resultats
   8. valider-cartes-decision --agent morpheus : CONFORME
   9. Nommage : definition-combo.json = bruit preexistant documente (identique aux 15 combos) - non bloquant
@@ -87,20 +87,21 @@ def main():
              set(d.get("cases", {}).keys()) == {"c1", "c2", "c3", "c4", "c5", "c6"})
 
     # --- 2. --liste
-    code, out = executer([PYTHON, MOTEUR_PY, COMBO, "--liste"])
+    code, out = executer([PYTHON, MOTEUR_PY, COMBO, "--liste", "--no-journal"])
     nb_cases_listees = sum(1 for l in out.splitlines() if "[c" in l)
     verifier("2. --liste affiche 6 cases (code 0)", code == 0 and nb_cases_listees == 6,
              "code=%s nb=%s" % (code, nb_cases_listees))
 
     # --- 3. Variable manquante (fichier_test, case c1)
-    code, out = executer([PYTHON, MOTEUR_PY, COMBO, "--var", "contenu_test=t"])
+    code, out = executer([PYTHON, MOTEUR_PY, COMBO, "--var", "contenu_test=t", "--no-journal"])
     verifier("3. fichier_test manquant -> erreur claire", "Variable non trouvee" in out and "{fichier_test}" in out)
 
     # --- 4. Variable manquante (commande_test, case c4)
     code, out = executer([PYTHON, MOTEUR_PY, COMBO,
                           "--var", "fichier_test=.tmp-test004/y.sh",
                           "--var", "contenu_test=t",
-                          "--reponses", "c3=OUI"])
+                          "--reponses", "c3=OUI",
+                          "--no-journal"])
     verifier("4. commande_test manquant (apres c3=OUI) -> erreur claire",
              "Variable non trouvee" in out and "{commande_test}" in out and "case c4" in out)
 
@@ -116,7 +117,8 @@ def main():
                           "--var", "contenu_test=echo test",
                           "--var", "commande_test=echo EXEC-OK",
                           "--reponses", "c3=OUI",
-                          "--verbose"])
+                          "--verbose",
+                          "--no-journal"])
     fichier_cree = os.path.isfile(fichier_test_abs)
     verifier("5a. Navigation OUI -> c6 FIN (COMBO TERMINE)", code == 0 and "Fin de combo atteinte : case 'c6'" in out)
     verifier("5b. Fichier de test CREE (forward slashes)", fichier_cree)
@@ -127,14 +129,15 @@ def main():
                           "--var", "fichier_test=" + os.path.join(tmp, "x.sh"),
                           "--var", "contenu_test=t",
                           "--var", "commande_test=echo ok",
-                          "--reponses", "c3=NON"])
+                          "--reponses", "c3=NON",
+                          "--no-journal"])
     verifier("6. Navigation NON -> c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE)",
              code == 0 and "Fin de combo atteinte : case 'c5'" in out and "PROTECTIONS MANQUANTES" in out)
 
-    # --- 7. Integration parcours morpheus v0.3.1
+    # --- 7. Integration parcours morpheus v0.4.0
     with io.open(PARCOURS, encoding="utf-8") as fh:
         p = json.load(fh)
-    verifier("7a. Parcours morpheus v0.3.1", p.get("parcours", {}).get("version") == "0.3.1")
+    verifier("7a. Parcours morpheus v0.4.0", p.get("parcours", {}).get("version") == "0.4.0")
     code, out = executer([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|tester"])
     verifier("7b. Case Lancer le combo tester-outil presente",
              "Lancer le combo tester-outil" in out)

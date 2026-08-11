@@ -12,7 +12,7 @@ identite:
 | **Statut** | ebauche |
 | **Categorie** | guider |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Spec** | [spec-guider-parcours.001.01.ebauche.md](spec/spec-guider-parcours.001.01.ebauche.md) (v0.6.0) |
+| **Spec** | [spec-guider-parcours.001.01.ebauche.md](spec/spec-guider-parcours.001.01.ebauche.md) (v0.6.2) |
 
 ---
 

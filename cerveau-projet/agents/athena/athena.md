@@ -13,6 +13,7 @@ agent:
   cree: "2026-08-06"
   statut-athena: "disponible"
   role_principal: false
+  famille: trio
   role_specifique: "Redactrice de pense-betes"
 
 profil:
@@ -67,9 +68,18 @@ surcharges:
 
 ---
 
+## Vue d'ensemble (complement famille trio)
+
+| Champ | Valeur |
+|---|---|
+| **Type d'agent** | Redaction (pense-betes / specs / todos) |
+| **Livrables** | Pense-betes, specs, todos pour la future team codeurs |
+
+---
+
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.2.1)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.3.0)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -79,13 +89,21 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/agents/athena/parcours/parcours-athena.json
 ```
 
-**Parcours** : [cerveau-projet/agents/athena/parcours/parcours-athena.json](parcours/parcours-athena.json) (v0.2.0)
+**Parcours** : [cerveau-projet/agents/athena/parcours/parcours-athena.json](parcours/parcours-athena.json) (v0.2.4)
 **Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
 > la couverture des missions.
 > **Case 0 commune** : `demarrer.md` -- tous les parcours demarrent apres
 > l'identification.
+
+> **FINS REELLES DE MA CARTE v0.2.4 (E5b - croisement fiche/parcours)** :
+> - `c9e` FIN - Reprise du parcours apres retour de l'agent habilite
+> - `c10` FIN - Activer Janus
+> - `c20` Signaler le besoin
+> - `c20d` FIN - Outil temporaire
+> - `c21` FIN - Delegation
+> - `c23` FIN - Retour de Themis avec son rapport
 
 ---
 
@@ -175,7 +193,17 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 ```
 
 > La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
-> **FLUX** : Ma mission se termine TOUJOURS en activant **Promethee** (maillon de chaine) pour la spec -- je ne reactive pas Cerberus directement.
+> **FLUX** : Ma mission se termine TOUJOURS en activant **Janus** (second controle, REGLE IMMUABLE JANUS) avec la commande exacte (activer-agent-principal.py activer session-llm-1 janus) -- je ne reactive pas Cerberus directement. La chaine du trio : athena (pense-bete) -> Janus -> Cerberus.
+
+---
+
+## Forces et Faiblesses
+
+| Force | Faiblesse |
+|---|---|
+| [Force 1] -- [Impact] | [Faiblesse 1] |
+| [Force 2] -- [Impact] | [Faiblesse 2] |
+| [Force 3] -- [Impact] | [Faiblesse 3] |
 
 ---
 
@@ -199,6 +227,14 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ---
 
+## Limites (complement famille trio)
+
+- [Limite 1]
+- [Limite 2]
+- [Limite 3]
+
+---
+
 ## Connexions
 
 | Fichier | Role |
@@ -219,9 +255,7 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ---
 
-## Historique
 
-| Date | Evenement | Details |
-|---|---|---|
-| 2026-08-06 | Creation | Fiche d'agent initialisee |
-| 2026-08-07 | v0.2.0 | Fiche allegee : le guidage des missions vit dans le parcours (jeu de piste), la fiche garde identite, regles absolues et connexions |
+
+
+

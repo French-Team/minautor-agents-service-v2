@@ -45,6 +45,26 @@ agents/tools/[categorie]/[nom-outil]/
 ## Dependances
 ```
 
+### REGLE ABSOLUE -- Lire la documentation avant utilisation
+
+> **REGLE ABSOLUE (lecture documentation)** : AVANT TOUTE UTILISATION d'un
+> outil, je LIS son fichier `.md` de documentation
+> (`agents/tools/<categorie>/<outil>/<outil>.md`) pour connaitre l'usage
+> exact, les parametres, les exemples et les pieges. Un outil utilise sans
+> avoir lu sa documentation = usage a risque (mauvais parametres, mauvaise
+> cible, effets inattendus).
+
+```
+1. Identifier l'outil (index-tools.md ou catalogue)
+2. LIRE le .md de l'outil (Objectif / Utilisation / Parametres / Pieges)
+3. Executer avec les bons parametres (--dry-run d'abord)
+4. Verifier le resultat
+```
+
+> Les agents qui executent un outil SANS lire sa documentation commettent une
+> ERREUR. La documentation est le CONTRAT d'utilisation : un usage sans
+> lecture = usage non garanti.
+
 ### Regle 2 -- Chaque outil est teste
 
 ```
@@ -289,8 +309,8 @@ conversion reelle.**
 
 ```
 1. Chercher dans index-tools.md
-2. Lire la documentation de l'outil
-3. Executer avec les bons parametres
+2. Lire la documentation de l'outil (REGLE ABSOLUE : le .md est le contrat d'utilisation)
+3. Executer avec les bons parametres (--dry-run d'abord)
 4. Verifier le resultat
 ```
 

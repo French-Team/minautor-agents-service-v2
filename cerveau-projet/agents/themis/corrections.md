@@ -634,3 +634,53 @@ importe quel agent). Sur 37 fins mentionnant Cerberus, seules 2 sont fausses.
 3. Le cartographe (nb chemins) est un excellent detecteur : 210 chemins pour 32 cases = anomalie flagrante (ratio ~1:1 attendu, ex atlas 44/45)
 4. valider-cartes-decision ne detecte PAS ce defaut (references valides mais logique morte) - renforcer le validateur pour detecter suivant redondant avec branches + fin avec suivant
 **Correction recommandee** : retirer le champ suivant des 14 cases concernees (la navigation reelle utilise deja les branches), verifier avec valider-cartes-decision --tous + cartographe (ratio chemins/cases normal) + non-regression.
+## [LECON] 2026-08-11 -- AUDIT PATTERN 14 COMPLET : TRIO SANS BLOC FINS (Themis, VERDICT A REVOIR)
+
+**Mission** : auditer la conformite globale du Pattern 14 (volets principal REGLE ABSOLUE PARCOURS vX + secondaire bloc FINS REELLES + lien Parcours vX) sur les 11 fiches, apres la correction Buffy du 2026-08-11.
+
+**Verdict** : A REVOIR -- 1 ecart reel.
+
+**Constat** :
+- P1 (REGLE ABSOLUE vX) : CONFORME 11/11 -- la correction Buffy est efficace.
+- P2 (bloc FINS REELLES version + fins) : CONFORME sur les 8 fiches qui l'ont (y compris cT6..cT10 de janus et les cXe du Pattern 17).
+- **P2b (ECART) : le TRIO (athena, minerve, promethee) n'a AUCUN bloc FINS REELLES** -- aucune fin reelle cX citee dans leurs fiches, alors que le protocole-sante E5b exige le croisement fiche/parcours (lecon du re-audit 2026-08-10). Leurs 6 fins reelles (c9e, c10, c20, c20d, c21, c23, v0.2.4) ne sont nulle part.
+- P3 (lien Parcours vX) : CONFORME 11/11. P4 (mentions stale) : CONFORME. P5 (normes) : CONFORME 0/0. P6 (valider-cartes 11/11 + test-018 13/13 + test-021 9/9) : CONFORME.
+
+**Lecons** :
+1. Le bloc FINS REELLES etait absent du trio depuis la migration v0.2.4 -- le protocole-sante E5b doit etre RENFORCE pour exiger le bloc sur TOUTES les fiches (pas seulement celles qui en ont deja un).
+2. Les IDs cT* (ligne trio) : les regex de scan doivent etre `[a-zA-Z]*\d+[a-z]*` (lettre MAJUSCULE au milieu) -- les regex `[a-z]?` creent des faux negatifs.
+3. Recommandation : Buffy ajoute le bloc FINS REELLES sur les 3 fiches du trio (format des 8 autres).
+## [LECON] 2026-08-11 -- AUDIT CONVENTION cT* : VERDICT A REVOIR (ecarts documentaires generateurs-ligne) (Themis)
+
+**Contexte** : audit de conformite globale de la convention de nommage etendue cT* (valider-case v1.0.2, spec-guider-parcours v0.6.2 regle 11, generateurs-ligne v0.3.1, generateurs-case v0.4.1, tests 009/014/015 reverdis).
+
+**Lecon** :
+1. La chaine FONCTIONNELLE est conforme (validation, documentation principale, generation, garde-fous positifs, non-regression 21/21, 0 NOMMAGE sur janus) mais le SCAN ANTI-RECURRENCE revele 3 ecarts DOCUMENTAIRES mineurs, tous dans la famille generateurs-ligne : .md ligne 197, spec (4 lignes : 93/126/153/169), commentaires .py (3 endroits : 275/419-422/460) citent encore l'ancienne convention c<numero>[a-z]? sans l'extension cT*. Un audit qui ne scanne que les fichiers modifies rate les mentions restantes dans les specs/commentaires voisins.
+2. Faux positifs a connaitre : les mentions c<numero>[a-z]? dans test-017 sont LEGITIMES (le test verifie les ids GENERES par l'outil, qui ne produit que des cas normaux -- c'est une verification de comportement, pas une documentation de convention). Un scan P4 doit exclure les tests qui verifient la generation.
+3. L'historique de spec-guider-parcours est une ligne unique de ~100 000 caracteres : une recherche dans les 2000 premiers caracteres apres **Historique** donne un FAUX NEGATIF -- toujours chercher dans TOUTE la ligne (str.find sur toute la chaine).
+4. L'audit structurel doit croiser 4 sources (validateur, spec, generateurs, tests) : la documentation etait alignee sur les fichiers principaux mais pas sur les 3 fichiers satellites de generateurs-ligne.
+## [LECON] 2026-08-11 -- RE-AUDIT cT* : A REVOIR -> VALIDE (E1/E2/E3 resorbes, 14/14 OK) (Themis)
+
+**Contexte** : re-audit cible de la convention cT* apres la correction Vulcain des 3 ecarts documentaires (E1 generateurs-ligne.md:197, E2 spec-generateurs-ligne 4 lignes, E3 generateurs-ligne.py 3 commentaires -- 8 mentions de l'ancienne convention sans l'extension cT*).
+
+**Lecon** :
+1. Le re-audit cible (R1-R5) sur les seuls ecarts precedents est suffisant quand la correction est documentee et verifiee par l'agent : 14/14 OK, verdict final VALIDE ajoute au rapport existant (mise a jour, pas de nouveau rapport).
+2. Le scan anti-recurrence par CONTEXTE (fenetre +/- 2 lignes contenant c[<prefixe-alpha-maj>] ou cT1..cT10) distingue proprement les mentions du cas normal COMME PARTIE de la convention etendue (conformes) des mentions isolees (ecarts) : c'est la bonne methode pour verifier une convention etendue.
+3. Le code n'a pas change (commentaires uniquement) : la non-regression (test-010, test-017, compile py) est la preuve que la correction est sans impact fonctionnel.
+4. Verdict final : la convention cT* est desormais documentee de facon coherente sur TOUTE la chaine (validateur -> spec -> generateurs .md/spec/code -> tests).
+## [LECON] 2026-08-11 -- SECOND CONTROLE DE MA PROPRE CARTE v0.3.7 : PISTE c12f/c12g CONFORME (Themis, VERDICT VALIDE)
+
+**Contexte** : apres l'ajout par Buffy de la piste 'defaut signale -> activer l'agent habilite' (c12f question + c12g action, modele Janus c9f/c9g + boucle KO ligne trio cT8-cT10, fin c12e reutilisee), controle croise de ma propre carte.
+
+**Points controles** :
+1. FORMAT : c12 (suivant c12f), c12f (question + branches OUI->c12g / NON->c12b), c12g (action, indices regle + outil, suivant c12e), c12e (fin reutilisee sans duplication). 34 refs resolues, 0 reference morte, 0 suivant mort.
+2. NAVIGATION : 3 flux OK (defaut signale, pas de defaut, auto-amelioration).
+3. PATTERN 12 : c12g ne cree AUCUN fichier (regle + outil uniquement) -- l'agent habilite cree son propre rapport.
+4. PATTERN 14 : fiche v0.3.7, plus de v0.3.6, 6 fins reelles toutes citees dans le bloc FINS REELLES (c12e, c13, c23, c23d, c24, c25b).
+5. NORMES : 0 non-ASCII, 0 CRLF sur parcours + fiche + rapport.
+6. NON-REGRESSION : 21/21 OK.
+
+**Lecons** :
+1. Le modele de piste 'defaut signale' est desormais present chez les DEUX agents de controle (Janus c9f/c9g et Themis c12f/c12g) -- meme structure, identifiants adaptes, fin de reprise reutilisee.
+2. Controleur sa propre carte est legitime quand la modification a ete faite par un autre agent (Buffy) -- le controle croise reste independant (regle de relecture + protocole de controle).
+3. Un rapport qui designe un coupable declenche maintenant l'activation immediate de l'agent habilite chez Themis comme chez Janus.

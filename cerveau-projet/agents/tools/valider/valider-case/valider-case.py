@@ -9,7 +9,8 @@
 #
 # Valide une carte de decision (parcours JSON) et ALLEGE les cases : structure,
 # modele compose (branches min 2, deviation = rejoint), surcharge des indices
-# (> 3 indices ou texte > 160 caracteres -> proposition de reference),
+# (budget pondere : indice COURT <= 100 car. = 0,5 unite, LONG > 100 = 1 unite,
+# budget 3,0 par case, texte > 160 car. = SIGNALEE -> proposition de reference),
 # references (chaque ref resolvable), normes (types, nommage, ASCII, LF).
 #
 # Spec de reference : pense-betes/specs/spec-refonte-cartes-decision.001.01.ebauche.md
@@ -24,12 +25,13 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "1.0.1"
+VERSION = "1.1.0"
 STATUT = "ebauche"
 
 TYPES_VALIDES = ("question", "controle", "indice", "action", "fin")
-SEUIL_INDICES = 3          # plus de 3 indices = surcharge
-SEUIL_TEXTE = 160          # texte de regle plus long que 160 car. = surcharge
+SEUIL_COURT = 100         # indice <= 100 car. = COURT (poids 0,5) ; > 100 = LONG (poids 1)
+BUDGET_INDICES = 3.0      # budget pondere par case (2 courts = 1 long) : > 3,0 = surcharge
+SEUIL_TEXTE = 160         # texte de regle plus long que 160 car. = surcharge (plafond absolu)
 
 RACINE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
@@ -188,15 +190,30 @@ def flux_revient(cases, origine, cible, profondeur=0, vus=None):
 # 3. ALLEGEMENT (surcharge)
 # --------------------------------------------------------------------------
 
+def poids_indices(indices):
+    """Poids pondere des indices : court (<= SEUIL_COURT car. ou sans texte)
+    = 0,5 ; long (> SEUIL_COURT car.) = 1. Budget = BUDGET_INDICES."""
+    poids = 0.0
+    for ind in indices:
+        texte = ind.get("texte", "")
+        if isinstance(texte, str) and len(texte) > SEUIL_COURT:
+            poids += 1.0
+        else:
+            poids += 0.5
+    return poids
+
+
 def verifier_allegement(parcours, allegements):
     cases = parcours.get("cases", {})
     for cid, case in cases.items():
         indices = case.get("indices") or []
-        if len(indices) > SEUIL_INDICES:
+        poids = poids_indices(indices)
+        if poids > BUDGET_INDICES:
             allegements.append(
-                "ALLEGER : case '%s' a %d indices (max %d) - regrouper dans un combo "
+                "ALLEGER : case '%s' a un poids de %.1f unites (budget %s - "
+                "court <= %d car. = 0,5 / long > %d = 1) - regrouper dans un combo "
                 "(Pattern 3) ou remplacer par des references"
-                % (cid, len(indices), SEUIL_INDICES))
+                % (cid, poids, BUDGET_INDICES, SEUIL_COURT, SEUIL_COURT))
         for ind in indices:
             texte = ind.get("texte", "")
             if isinstance(texte, str) and len(texte) > SEUIL_TEXTE:
@@ -254,10 +271,15 @@ def resoudre_reference(ref):
 
 def verifier_normes(parcours, erreurs):
     cases = parcours.get("cases", {})
-    pattern_id = re.compile(r"^c\d+[a-z]*$")
+    # Convention etendue v1.0.2 : c[<prefixe-alpha>]<numero>[a-z]?
+    #   - cas normal : c0, c12b, c29d (numero + suffixe lettres minuscules)
+    #   - prefixe thematique majuscule optionnel : cT1..cT10 (T = ligne Trio de
+    #     Janus, decision utilisateur 2026-08-11 : conserver les IDs cT*)
+    # Le prefixe est UNE LETTRE MAJUSCULE ; le suffixe reste en minuscules.
+    pattern_id = re.compile(r"^c[A-Z]?\d+[a-z]*$")
     for cid, case in cases.items():
         if not pattern_id.match(cid):
-            erreurs.append("NOMMAGE : id de case '%s' non conforme (attendu c<numero>[a-z]?)" % cid)
+            erreurs.append("NOMMAGE : id de case '%s' non conforme (attendu c[<prefixe-alpha-maj>]<numero>[a-z]?)" % cid)
         if "titre" not in case:
             erreurs.append("NORMES : case '%s' sans titre" % cid)
     # ASCII + LF sur le fichier (verifie dans main via ascii_count)
@@ -291,9 +313,11 @@ def verifier_case(cid, parcours, erreurs, allegements):
     if typ in ("indice", "action") and not suivant:
         erreurs.append("MODELE : case '%s' (%s) sans 'suivant'" % (cid, typ))
     indices = case.get("indices") or []
-    if len(indices) > SEUIL_INDICES:
-        allegements.append("ALLEGER : case '%s' a %d indices (max %d)"
-                           % (cid, len(indices), SEUIL_INDICES))
+    poids = poids_indices(indices)
+    if poids > BUDGET_INDICES:
+        allegements.append("ALLEGER : case '%s' a un poids de %.1f unites (budget %s - "
+                           "court <= %d car. = 0,5 / long > %d = 1)"
+                           % (cid, poids, BUDGET_INDICES, SEUIL_COURT, SEUIL_COURT))
     for ind in indices:
         texte = ind.get("texte", "")
         if isinstance(texte, str) and len(texte) > SEUIL_TEXTE:
@@ -374,6 +398,7 @@ def main(argv):
         print("  --surcharge      Verifier uniquement la surcharge des indices")
         print("  --modele         Verifier uniquement le modele compose")
         print("  --references     Verifier uniquement les references")
+        print("  Nommage (v1.0.2) : c[<prefixe-alpha-maj>]<numero>[a-z]? (c0, c12b, cT6, cT10)")
         print("  --dry-run        Simuler sans ecrire le rapport")
         print("  --rapport <fichier>  Rapport markdown (defaut: rapport-valider-case-<date>.md)")
         print("  --version / --aide")

@@ -38,7 +38,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.2.2"
+VERSION = "0.2.3"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n est pas un terminal)
@@ -312,9 +312,55 @@ def construire_parser():
     parser.add_argument("--reponses", type=str, help="Reponses fournies en une fois : cle=valeur;cle2=valeur2")
     parser.add_argument("--catalogue", type=str, help="Chemin du catalogue (defaut : a cote du script)")
     parser.add_argument("--dry-run", action="store_true", help="Afficher la commande sans l executer")
+    parser.add_argument("--agent", type=str, default="", help="Agent a journaliser (defaut : agent actif de AGENTS.md)")
+    parser.add_argument("--no-journal", action="store_true", help="Desactiver la journalisation d usage")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--version", action="version", version="generateurs-commande v%s" % VERSION)
     return parser
+
+
+def _lire_agent_actif():
+    """Lit l agent actif de la session session-llm-1 dans AGENTS.md.
+    Retourne 'inconnu' si introuvable (jamais d erreur bloquante)."""
+    try:
+        racine = os.path.dirname(os.path.abspath(sys.argv[0]))
+        while not os.path.isfile(os.path.join(racine, "AGENTS.md")):
+            parent = os.path.dirname(racine)
+            if parent == racine:
+                return "inconnu"
+            racine = parent
+        with open(os.path.join(racine, "AGENTS.md"), encoding="utf-8") as fh:
+            txt = fh.read()
+        bloc = txt.split("### Session : session-llm-1", 1)
+        if len(bloc) < 2:
+            return "inconnu"
+        # couper sur la ligne de fin de bloc (--- seul en debut de ligne)
+        segment = bloc[1].split("\n---", 1)[0]
+        for ligne in segment.splitlines():
+            if "Nom Agent" in ligne and "|" in ligne:
+                return ligne.split("|")[2].strip().lower() or "inconnu"
+        return "inconnu"
+    except Exception:
+        return "inconnu"
+
+
+def _journaliser_usage(agent, outil, commande_finale):
+    """Appelle enregistrer-usage-outil en mode generateur (discret : stderr).
+    Ne doit JAMAIS bloquer la generation (erreurs silencieuses)."""
+    try:
+        script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..",
+                              "enregistrer", "enregistrer-usage-outil",
+                              "enregistrer-usage-outil.py")
+        if not os.path.isfile(script):
+            return
+        import subprocess
+        subprocess.run(
+            [sys.executable, script, "--agent", agent, "--outil", outil,
+             "--mode", "generateur", "--commande", commande_finale],
+            capture_output=True, timeout=10,
+        )
+    except Exception:
+        pass
 
 
 def main():
@@ -381,6 +427,11 @@ def main():
     print(_couleur("=== COMMANDE A LANCER ===", "vert"))
     print(commande_finale)
     print("")
+
+    # Journalisation d usage (registre JSONL) : automatique sauf --no-journal
+    if not args.no_journal:
+        agent = args.agent or _lire_agent_actif()
+        _journaliser_usage(agent, commandes.get("nom", "?"), commande_finale)
 
     if args.verbose:
         print(_couleur("[DETAIL] Reponses recues :", "bleu"))

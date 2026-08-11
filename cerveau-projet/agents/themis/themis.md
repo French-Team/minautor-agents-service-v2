@@ -13,6 +13,7 @@ agent:
   cree: "2026-08-05"
   statut-themis: "disponible"
   role_principal: false
+  famille: cerveau-projet
   role_specifique: "Evaluatrice croisee"
 
 profil:
@@ -68,7 +69,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.3.3)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.0)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -218,13 +219,35 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 > La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
 > Utiliser TOUJOURS l outil activer-agent-principal (jamais str_replace/write_file) pour AGENTS.md.
-> **FINS REELLES DE MA CARTE v0.3.0 (E5b - croisement fiche/parcours)** :
-> - `c13` FIN - Reactiver Cerberus (mon retour standard avec le rapport)
+> **FINS REELLES DE MA CARTE v0.3.7 (E5b - croisement fiche/parcours)** :
+> - `c12e` FIN - Reprise du parcours apres retour de l'agent habilite
+> - `c13` FIN - Activer Janus (second controle, qui reactive Cerberus avec le rapport)
 > - `c23` Signaler le besoin (fin - relais : je signale et je m arrete)
 > - `c23d` FIN - Outil temporaire (apres creation d un outil temporaire)
 > - `c24` FIN - Delegation (j active l agent habilite)
 > - `c25b` FIN - Activer l agent precedent avec son rapport (retour apres audit demande)
 
+
+---
+
+## Forces et Faiblesses
+## Style de travail
+
+| Aspect | Preference |
+|---|---|
+| **Langage** | Francais |
+| **Ton** | [Formel / Professionnel / Amical] |
+| **Format** | Markdown |
+| **Detail** | [Minimal / Standard / Complet] |
+
+---
+
+
+| Force | Faiblesse |
+|---|---|
+| [Force 1] -- [Impact] | [Faiblesse 1] |
+| [Force 2] -- [Impact] | [Faiblesse 2] |
+| [Force 3] -- [Impact] | [Faiblesse 3] |
 
 ---
 
@@ -257,10 +280,6 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ---
 
-## Historique
 
-| Date | Evenement | Details |
-|---|---|---|
-| 2026-08-05 | Creation | Fiche d'agent initialisee |
-| 2026-08-07 | v0.2.0 | Fiche allegee : le guidage des missions vit dans le parcours (jeu de piste), la fiche garde identite, regles absolues et connexions |
-| 2026-08-09 | v0.2.1 | Verifications d audit documentees : bloc VERIFICATIONS D AUDIT OBLIGATOIRES (c8b critere 22, c8c critere 25, c8d critere 24) + outil detecter-impacts ajoute au tableau (suite parcours themis v0.2.5) |
+
+

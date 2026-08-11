@@ -262,3 +262,46 @@ apres validation du concept par l'utilisateur (avant les migrations).
 
 **Outils utilises** : lire-fichier, editer-fichier, valider-conformite-ascii,
 valider-liens, activer-agent-principal.
+## [LECON] 2026-08-11 -- SPEC-REFONTE v0.1.2 : CONVENTION ETENDUE cT* ALIGNEE (Promethee, ecart detecte par detecter-convention-nommage)
+
+**Contexte** : le nouvel outil detecter-convention-nommage v0.1.0 a detecte 1 ecart reel dans ma spec-refonte-cartes-decision (ligne 175 : "nommage des cases (c<numero>[a-z]?)" sans l'extension cT*). C'etait le SEUL fichier restant du cerveau-projet a citer l'ancienne convention.
+
+**Lecon** :
+1. Une spec de reference du cerveau doit citer la convention ETENDUE c[<prefixe-alpha-maj>]<numero>[a-z]? (cas normal + prefixe majuscule cT1..cT10, valider-case v1.0.2, spec-guider-parcours v0.6.2 regle 11) -- pas seulement la forme courte c<numero>[a-z]?.
+2. Le garde-fou automatique detecter-convention-nommage couvre TOUT le cerveau-projet (pas seulement les outils) : il a trouve cet ecart dans docs-dev-cerveau-projet/ que l'audit Themis cible (famille generateurs-ligne) n'avait pas couvert.
+3. Bump de version coherent : v0.1.1 -> v0.1.2 (titre ligne 9 + historique ligne 13) avec mention de l'alignement et de l'outil qui l'a detecte.
+4. Verification en reel : re-scan detecter-convention-nommage -> 0 ecart sur cerveau-projet (VERDICT CONFORME, code 0) ; normes 0 non-ASCII / 0 CRLF.
+
+## [LECON] 2026-08-11 -- SPEC-REFONTE v0.1.3 : BUDGET PONDERE DOCUMENTE (Promethee)
+
+**Mission** : documenter le budget pondere des indices dans la spec-refonte-cartes-decision (spec de reference des outils de cases).
+**Resultat** : spec v0.1.3, 3 endroits de l'ancienne regle alignes + mention dans la section 7.1 + version/historique.
+**Lecons** :
+1. La spec-refonte (spec de reference des outils de cases) doit refleter le modele implante dans valider-case/generateurs-case : court <= 100 car. = 0,5 unite, long > 100 car. = 1 unite, budget 3,0 unites par case, plafond absolu 160 car. inchange.
+2. Quand une regle evolue dans les outils, scanner la spec de reference pour trouver TOUTES les mentions de l'ancienne regle (usage, verifications, criteres d acceptation, section generateurs) -- ici 3 endroits + 1 bonus.
+3. Une version stale (valider-case v1.0.2 -> v1.1.0) peut subsister dans une section adjacente (bloc Normes convention ETENDUE) : la corriger pour la coherence avec la version implantee.
+4. Le diff vs HEAD peut inclure des changements non commites anterieurs (v0.1.2 convention cT*) : verifier uniquement que MES modifications sont minimales et coherentes, sans reformatage.
+5. Les lignes d'historique de version deviennent longues (> 120 car) : acceptable pour une ligne d'historique, mais verifier que les lignes de contenu restent raisonnables.
+
+## [LECON] 2026-08-11 -- SCAN VERSIONS STALE DANS LES SPECS (Promethee)
+
+**Mission** : scanner les specs pour detecter les versions "actuel" stale (classe section 7.1 spec-refonte) et les corriger.
+**Resultat** : 8 specs corrigees, 0 ancienne version restante, detecter-divergences-version passe de 4 a 1 DIVERGENT (guider-parcours = cas inverse, observation).
+**Lecons** :
+1. Les versions "actuel" dans les titres de sections des specs (ex: "generateurs-case (v0.2.2 actuel)") se periment quand l'outil est bumpe : verifier systematiquement avec la VERSION reelle du .py.
+2. L'outil detecter-divergences-version est le scan automatique de reference (spec en-tete vs py) : il a revele 3 specs non bumpees (combos-moteur 0.2.1->0.3.0, detecter-decalages 0.1.0->0.1.1, generateurs-case 0.4.0->0.4.2) - la spec est le fichier le plus souvent oublie lors d'un bump d'outil.
+3. Le cas INVERSE existe : guider-parcours spec 0.6.2 vs py 0.5.0 (le py est en retard) - ce n'est PAS une spec stale, c'est un bump de code a traiter par Vulcain.
+4. Attention aux references historiques legitimes : "spec-combos-moteur v0.2.1" dans le py = la version de la SPEC qui a etabli la regle (KO test-003), PAS la version du catalogue (0.2.9). Ne pas confondre.
+5. Les mentions de versions dans le CORPS des specs (ex: "valider-case v1.0.2" dans les conventions de nommage) sont aussi des sources de stale : spec-valider-case (3x spec-refonte v0.1.1), detecter-convention-nommage, generateurs-ligne (4x), guider-parcours (2x).
+6. CRITIQUE : corriger une version dans une spec peut CASSER un test formel qui verifie le texte exact (test-014 verifie litteralement "valider-case v1.0.2" in spec -> KO apres ma correction en v1.1.0). Toujours lancer la non-regression ciblee apres correction de spec ET signaler le KO a Morpheus (seul habilite pour les tests).
+
+## [LECON] 2026-08-11 -- PATTERN 16 ALLEGEMENT ALIGNE SUR LE BUDGET PONDERE (spec-guider-parcours) (Promethee)
+
+**Mission** : verifier la coherence budget pondere entre spec-refonte, spec-valider-case et spec-guider-parcours.
+**Resultat** : spec-valider-case et spec-guider-parcours (PRINCIPE UNE PLACE) etaient deja coherents ; le Pattern 16 (ALLEGEMENT) de spec-guider-parcours decrivait encore l'ANCIENNE regle a 3 endroits -> corrige, bump v0.2.28 -> v0.2.29.
+**Lecons** :
+1. Une meme regle peut etre documentee a PLUSIEURS endroits dans une meme spec : le Pattern 16 (methode d'allegement) utilisait encore "plus de 3 indices" alors que le PRINCIPE UNE PLACE (meme spec, lignes ~140) documentait deja le budget pondere. Toujours scanner la spec COMPLETE pour toutes les occurrences de l'ancienne regle.
+2. La verification de coherence (demande utilisateur) a revele l'ecart : spec-valider-case et spec-refonte etaient correctes, mais le Pattern 16 etait reste sur l'ancien modele. La verif croisee spec <-> spec est un controle utile (pas seulement spec <-> outil).
+3. Le bump de version d'un pattern (v0.2.28 -> v0.2.29) doit etre coheren t sur TOUTES ses occurrences : titre du pattern (l.1224) + liste "Patterns valides en production" (l.409) + liste "Procedure d'audit" (l.1339).
+4. Le test-014 ne verifie pas le texte du Pattern 16 (0 mention) : aucun risque de casser le test. Verifier AVANT de modifier qu'aucun test formel ne depend du texte change.
+5. Le diff vs HEAD peut inclure des changements non commites anterieurs (v0.6.2 convention cT* + budget pondere deja documente) : verifier que MES modifications sont minimales et coherentes.

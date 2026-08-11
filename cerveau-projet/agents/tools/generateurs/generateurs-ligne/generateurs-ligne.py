@@ -272,7 +272,9 @@ def valider_gabarit_externe(nom, description, cases):
 
 
 # ------------------------------------------------------------
-# Construction du bloc (numerotation conforme c<numero>[a-z]?)
+# Construction du bloc (numerotation conforme convention ETENDUE
+# c[<prefixe-alpha-maj>]<numero>[a-z]? -- valider-case v1.0.2 : cas normal
+# c<numero>[a-z]? + prefixe thematique majuscule optionnel cT1..cT10)
 # ------------------------------------------------------------
 
 _LETTRES = "abcdefghijklmnopqrstuvwxyz"
@@ -416,7 +418,9 @@ def detecter_groupe(cases, source, mode, branche=None):
 
 
 def cloner_groupe(cases, ids_groupe, liens, base_num, titre_base):
-    """Clone le groupe avec de nouveaux ids conformes c<numero>[a-z]?.
+    """Clone le groupe avec de nouveaux ids conformes a la convention ETENDUE
+    c[<prefixe-alpha-maj>]<numero>[a-z]? (valider-case v1.0.2) : cas normal
+    c<numero>[a-z]? + prefixe thematique majuscule optionnel cT1..cT10.
 
     Groupes jusqu a 27 cases : cX + suffixes lettres (cXa, cXb, ...).
     Groupes plus grands : numeros sequentiels c<base+i> (convention c<numero>
@@ -457,7 +461,9 @@ def cloner_groupe(cases, ids_groupe, liens, base_num, titre_base):
 def numeroter_bloc(spec, titre_base, rejoint, base_num):
     """Construit le bloc avec ids c<base_num>, c<base_num>a, c<base_num>b, ...
 
-    Convention de nommage valider-case : c<numero>[a-z]? (pas de point).
+    Convention de nommage valider-case v1.0.2 : c[<prefixe-alpha-maj>]<numero>[a-z]?
+    (pas de point) : cas normal c<numero>[a-z]? + prefixe thematique majuscule
+    optionnel cT1..cT10.
     La case REJOINT du bloc pointe TOUJOURS vers le rejoint externe.
     """
     bloc = {}

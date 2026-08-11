@@ -1,9 +1,9 @@
 # Specification -- detecter-decalages-catalogue
 
-**Version :** 0.1.0
+**Version :** 0.1.1
 **Statut :** ebauche
 **Categorie :** Detecter
-**Date :** 2026-08-09
+**Date :** 2026-08-11
 **Agent :** Vulcain
 **Pense-bete source :** scan systematique Atlas 2026-08-09 (scan-catalogue.py dans explorations/, institutionnalise)
 
@@ -51,4 +51,5 @@ du catalogue ou generalisation du pilote strict.
 
 | Version | Date | Description |
 |---|---|---|
+| 0.1.1 | 2026-08-11 | Section COMBOS ajoutee : garde-fou des cles des definitions-combo vs catalogue (KO test-003) |
 | 0.1.0 | 2026-08-09 | Creation - institutionnalisation du scan Atlas dans tools/detecter/ |

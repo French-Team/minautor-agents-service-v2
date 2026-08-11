@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.4.0 |
+| **Version** | 0.4.2 |
 | **Statut** | ebauche |
 | **Categorie** | generateurs |
 | **Derniere mise a jour** | 2026-08-08 |
@@ -29,7 +29,12 @@ json.load + references + case_depart + `guider-parcours --liste`.
 **Pourquoi cet outil ?** Buffy modifie regulierement les cartes de decision
 des agents. Un editeur naif casse les liens entre cases (suivant, vers). Ce
 generateur garantit l'integrite des references et le respect du format
-documente dans la spec-guider-parcours (v0.2.5, 4 patterns).
+documente dans la spec-guider-parcours. Les ids de cases sont generes
+conformes a la convention ETENDUE `c[<prefixe-alpha-maj>]<numero>[a-z]?`
+(valider-case v1.0.2) : cas normal `c<numero>[a-z]?` (`c0`, `c12b`) +
+prefixe thematique MAJUSCULE optionnel `cT1`..`cT10` (ligne Trio de Janus,
+spec-guider-parcours v0.6.2 regle 11). L'edition d'une case existante
+conserve son id.
 
 **Quand l'utiliser ?** Quand un agent doit ajouter, editer ou supprimer une
 case dans sa carte de decision. C'est Buffy qui utilise cet outil pour
@@ -211,7 +216,8 @@ defaut 160 caracteres) par des references via un fichier de mapping JSON.
 - `--version-parcours <v>` : bump de la version du parcours.
 - `--dry-run` : simule et affiche le rapport SANS ecrire (dry/wet).
 - Rapport final : X cases converties, Y regles remplacees, Z avertissements
-  (regles longues sans mapping, cases > 3 indices) - l agent raccourcit ou
+  (regles longues sans mapping, cases au-dessus du budget pondere 3,0 -
+  court <= 100 car. = 0,5 / long > 100 = 1) - l agent raccourcit ou
   complete le mapping puis relance.
 
 Le recablage (suivant/branches) est conserve A L IDENTIQUE : une conversion

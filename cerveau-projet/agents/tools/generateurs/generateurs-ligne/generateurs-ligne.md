@@ -11,7 +11,7 @@ existe et est a jour. Dry/wet pour valider l'ajout.
 | **Chemin** | `agents/tools/generateurs/generateurs-ligne/` |
 | **Python** | `generateurs-ligne.py` |
 | **Bash** | `generateurs-ligne.sh` (parite) |
-| **Version** | 0.3.0 |
+| **Version** | 0.3.1 |
 | **Statut** | ebauche |
 | **Spec** | `spec/spec-generateurs-ligne.001.01.ebauche.md` |
 | **Gabarits** | `gabarits-ligne.json` (configs externalisees) |
@@ -78,7 +78,10 @@ de groupes de cases sont disponibles par defaut :
 
 Chaque bloc se termine par une case REJOINT qui pointe vers la case de
 rejoint (retour au flux principal). Les ids sont generes automatiquement
-conformes a la convention `c<numero>[a-z]?` (valider-case).
+conformes a la convention ETENDUE `c[<prefixe-alpha-maj>]<numero>[a-z]?`
+(valider-case v1.0.2) : cas normal `c<numero>[a-z]?` (`c0`, `c12b`) +
+prefixe thematique MAJUSCULE optionnel `cT1`..`cT10` (ligne Trio de Janus,
+spec-guider-parcours v0.6.2 regle 11).
 
 ```
 python3 generateurs-ligne.py <parcours.json> lister-configs
@@ -191,8 +194,10 @@ existant et le reclone sur un point d'attache. Deux sources possibles :
 | `suite` | Copie le chemin qui part de la case source (sa suite) jusqu'au REJOINT ou a une fin |
 
 Le clone reutilise la structure (branches, deviations, rejoint) avec de
-NOUVEAUX ids conformes `c<numero>[a-z]?` (groupes jusqu'a 27 cases : cX +
-suffixes lettres ; groupes plus grands : numeros sequentiels). Les cases
+NOUVEAUX ids conformes a la convention ETENDUE `c[<prefixe-alpha-maj>]<numero>[a-z]?`
+(valider-case v1.0.2) : cas normal `c<numero>[a-z]?` (groupes jusqu'a 27
+cases : cX + suffixes lettres ; groupes plus grands : numeros sequentiels).
+Les cases
 REJOINT du groupe sont remplacees par la case de rejoint externe. Ensuite,
 `generateurs-case` permet d'editer les cases du clone finement.
 

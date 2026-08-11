@@ -6,11 +6,11 @@ identite:
 ---
 # Spec -- Validateur-case (valider et alleger les cartes de decision)
 
-**Version** : 1.0.1
+**Version** : 1.1.0
 **Statut** : ebauche
 **Date creation** : 2026-08-09
 **Agent** : Vulcain (creation)
-**Historique** : v1.0.1 (garde-fou rapport : sans --rapport explicite, aucun fichier cree -- lecon rapport a la racine, 2026-08-09) -> v1.0.0 (creation, 2026-08-09)
+**Historique** : v1.1.0 (BUDGET PONDERE des indices : indice COURT <= 100 car. = 0,5 unite, LONG > 100 = 1, budget 3,0 par case -- 2 courts = 1 long, decision utilisateur 2026-08-11 ; le plafond de 160 car. par texte reste inchange) -> v1.0.2 (convention de nommage ETENDUE aux prefixes thematiques majuscules `cT*` -- la ligne trio de Janus utilise cT1..cT10, decision utilisateur 2026-08-11 : conserver ces IDs) -> v1.0.1 (garde-fou rapport : sans --rapport explicite, aucun fichier cree -- lecon rapport a la racine, 2026-08-09) -> v1.0.0 (creation, 2026-08-09)
 
 ---
 
@@ -18,11 +18,12 @@ identite:
 
 Valider une **carte de decision** (parcours JSON) et **ALLEGER les cases** :
 structure, modele compose (branches min 2, deviation = rejoint), surcharge des
-indices (> 3 indices ou texte > 160 caracteres -> proposition de reference),
+indices (budget pondere : court <= 100 car. = 0,5 / long > 100 = 1, budget 3,0 ;
+ou texte > 160 caracteres -> proposition de reference),
 references (chaque `ref` resolvable), normes (types, nommage, ASCII, LF).
 Verdict : **CONFORME / A ALLEGER / NON CONFORME** + rapport markdown.
 
-**Source** : etape 2 de la spec-refonte-cartes-decision v0.1.1 (section 6) --
+**Source** : etape 2 de la spec-refonte-cartes-decision v0.1.3 (section 6) --
 l'outil qui rend les cartes largement plus lisibles et suivies, dans la vision
 utilisateur (catalogues de cases alleges, valider-case).
 
@@ -72,7 +73,7 @@ aucune divergence de logique possible entre les 2 versions.
 
 - ids de cases uniques (par construction du JSON)
 - types valides : `question`, `controle`, `indice`, `action`, `fin`
-  (`action` = NOUVEAU type du modele cible, spec-refonte v0.1.1, etape 5)
+  (`action` = NOUVEAU type du modele cible, spec-refonte v0.1.3, etape 5)
 - `case_depart` existe
 - chaque `fin` est joignable depuis la case de depart (BFS anti-boucle)
 
@@ -86,10 +87,14 @@ aucune divergence de logique possible entre les 2 versions.
 
 ### 3. Allegement (surcharge)
 
-- case avec **> 3 indices** = SIGNALEE (proposition : combo Pattern 3 ou
-  references)
+- **budget pondere** : chaque indice pese 0,5 unite s'il est COURT
+  (texte <= 100 car., ou sans texte) et 1 unite s'il est LONG (texte > 100
+  car.) ; une case dont le poids total depasse **3,0 unites** = SIGNALEE
+  (proposition : combo Pattern 3 ou references). 2 indices courts valent
+  1 indice long : 6 courts (3,0) OK, 3 longs (3,0) OK, 2 longs + 2 courts
+  (3,0) OK, 4 longs (4,0) SIGNALE.
 - texte de regle **> 160 caracteres** = SIGNALEE (proposition : reference
-  pattern/protocole)
+  pattern/protocole) -- plafond absolu d'un indice, independant du budget.
 
 ### 4. References
 
@@ -102,7 +107,9 @@ aucune divergence de logique possible entre les 2 versions.
 
 ### 5. Normes
 
-- nommage des cases : `c<numero>[a-z]?` (ex: c0, c12, c13b)
+- nommage des cases : `c[<prefixe-alpha-maj>]<numero>[a-z]?` -- cas normal
+  `c<numero>[a-z]?` (ex: c0, c12, c13b) + prefixe thematique MAJUSCULE
+  optionnel (ex: `cT1`..`cT10` pour la ligne Trio de Janus)
 - titre present sur chaque case
 - **ASCII strict** : tout caractere non-ASCII du parcours est signale
 
@@ -123,7 +130,7 @@ Le rapport markdown contient : en-tete, verdict, tableaux de comptage
 2. **ASCII strict** : tout contenu non-ASCII du parcours est signale.
 3. **LF** : tous les fichiers de l'outil en LF (standard projet).
 4. **Parite py/sh** : wrapper pur, memes resultats sur les memes arguments.
-5. **Spec de reference** : spec-refonte-cartes-decision v0.1.1 (etape 2).
+5. **Spec de reference** : spec-refonte-cartes-decision v0.1.3 (etape 2).
 6. **Regle des 5 fichiers** : py, sh, md, spec + enregistrements
    (index-tools.md, catalogue generateurs-commande).
 

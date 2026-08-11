@@ -1,570 +1,632 @@
 {
-  "identite": {
-    "type": "parcours",
-    "appartient_a": "clio",
-    "commun": false
-  },
-  "parcours": {
-    "nom": "parcours-clio",
-    "agent": "clio",
-    "version": "v0.4.1",
-    "case_depart": "c0",
-    "description": "Parcours (jeu de piste) des missions de Clio : corriger le README avec plusieurs possibilites selon l'AMPLEUR (PETITE MAJ via combo-maj-readme, GROSSE MAJ via combos-maj-readme-massive, analyse via combos-analyse-projet, verifier, journal, insertion manuelle si nouvelle categorie, ASCII, lecons). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
-  },
-  "cases": {
-    "c0": {
-      "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-      "type": "question",
-      "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c0c"
-        },
-        {
-          "reponse": "INCERTAIN",
-          "vers": "c0b"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c0b"
-        }
-      ]
-    },
-    "c0b": {
-      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/clio/corrections.md"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/clio/clio.md"
-        }
-      ],
-      "suivant": "c0c"
-    },
-    "c1": {
-      "titre": "Mission",
-      "type": "question",
-      "question": "Quelle est la mission ?",
-      "branches": [
-        {
-          "reponse": "corriger",
-          "vers": "c2"
-        },
-        {
-          "reponse": "verifier",
-          "vers": "c11"
-        },
-        {
-          "reponse": "autre",
-          "vers": "c13"
-        }
-      ]
-    },
-    "c2": {
-      "titre": "Lire la raison de l'activation",
-      "type": "action",
-      "indices": [
-        {
-          "type": "fichier",
-          "chemin": "AGENTS.md",
-          "raison": "Lire la raison de mon activation : savoir CE QUI A CHANGE"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md"
-        }
-      ],
-      "suivant": "c3"
-    },
-    "c3": {
-      "titre": "Consulter les interventions recentes",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "LE README EST LE LIVRE DU PROJET : je CORRIGE le texte existant, je n'ajoute JAMAIS de chronologie ni de lignes d'interventions."
-        },
-        {
-          "type": "outil",
-          "nom": "mettre-a-jour-readme",
-          "catalogue": "mettre-a-jour-readme",
-          "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
-          "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --journal 10"
-        }
-      ],
-      "suivant": "c4"
-    },
-    "c4": {
-      "titre": "Verifier l'etat reel",
-      "type": "action",
-      "indices": [
-        {
-          "type": "outil",
-          "nom": "generateurs-commande",
-          "catalogue": "generateurs-commande",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
-          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande mettre-a-jour-readme --reponses ..."
-        },
-        {
-          "type": "regle",
-          "texte": "Je ne suppose JAMAIS. Je VERIFIE les sources de verite (AGENTS-historique, agents/, tools/)."
-        },
-        {
-          "type": "outil",
-          "nom": "mettre-a-jour-readme",
-          "catalogue": "mettre-a-jour-readme",
-          "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
-          "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier"
-        }
-      ],
-      "suivant": "c5"
-    },
-    "c5": {
-      "titre": "Ecarts detectes ?",
-      "type": "question",
-      "question": "Le --verifier signale-t-il des ecarts (OBSOLETE / MANQUANT) avec le README ?",
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c5a"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c9"
-        }
-      ]
-    },
-    "c6": {
-      "titre": "Corriger le texte du README",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "regle",
-          "texte": "Je n'edite JAMAIS le README directement. mettre-a-jour-readme est mon UNIQUE outil de modification."
-        },
-        {
-          "type": "outil",
-          "nom": "mettre-a-jour-readme",
-          "catalogue": "mettre-a-jour-readme",
-          "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
-          "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --maj"
-        }
-      ],
-      "suivant": "c7"
-    },
-    "c7": {
-      "titre": "Nouvelle categorie manquante ?",
-      "type": "question",
-      "question": "Le --maj a-t-il corrige les compteurs mais laisse une NOUVELLE categorie absente de la table (ex: [MANQUANT] Guider) ?",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
-        },
-        {
-          "type": "outil",
-          "nom": "corriger-symboles",
-          "catalogue": "corriger-symboles",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
-        },
-        {
-          "type": "regle",
-          "texte": "Lecon Clio : --maj CORRIGE les categories existantes mais ne cree pas les nouvelles - ajouter puis relancer --verifier."
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c8"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c9"
-        }
-      ]
-    },
-    "c8": {
-      "titre": "Inserer la ligne de categorie manquante",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "outil",
-          "nom": "editer-fichier",
-          "catalogue": "editer-fichier",
-          "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
-          "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py README.md <ligne-avant> <ligne-avec-categorie>"
-        }
-      ],
-      "suivant": "c9"
-    },
-    "c9": {
-      "titre": "Verifier la conformite ASCII",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE IMMUABLE : ASCII strict (aucun accent, emoji ou caractere Unicode)."
-        },
-        {
-          "type": "outil",
-          "nom": "valider-conformite-ascii",
-          "catalogue": "valider-conformite-ascii",
-          "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
-          "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py README.md"
-        }
-      ],
-      "suivant": "c10"
-    },
-    "c10": {
-      "titre": "Lecons et retour",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "catalogue": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> clio"
-        }
-      ],
-      "suivant": "c10b"
-    },
-    "c11": {
-      "titre": "Verifier sans modifier",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md"
-        },
-        {
-          "type": "regle",
-          "texte": "Mission de verification : on ne modifie PAS le README, on rapporte si il est a jour ou non."
-        },
-        {
-          "type": "outil",
-          "nom": "mettre-a-jour-readme",
-          "catalogue": "mettre-a-jour-readme",
-          "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
-          "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier"
-        }
-      ],
-      "suivant": "c12"
-    },
-    "c12": {
-      "titre": "FIN - Reactiver Cerberus",
-      "type": "fin",
-      "message": "Reactiver Cerberus (activation directe par Cerberus) avec le bilan (ecarts corriges ou README deja a jour) et la liste des outils utilises."
-    },
-    "c13": {
-      "titre": "Mission hors parcours",
-      "type": "question",
-      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c14"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c15b"
-        },
-        {
-          "reponse": "audit",
-          "vers": "c17"
-        }
-      ]
-    },
-    "c14": {
-      "titre": "Activer l'agent habilite",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "catalogue": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
-        }
-      ],
-      "suivant": "c16"
-    },
-    "c15": {
-      "titre": "Signaler le besoin",
-      "type": "fin",
-      "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
-    },
-    "c16": {
-      "titre": "FIN - Delegation",
-      "type": "fin",
-      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
-    },
-    "c0c": {
-      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-6"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-activite-recente",
-          "catalogue": "lire-activite-recente",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
-        },
-        {
-          "type": "fichier",
-          "chemin": "AGENTS.md",
-          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
-        }
-      ],
-      "suivant": "c1"
-    },
-    "c15d": {
-      "titre": "FIN - Outil temporaire",
-      "type": "fin",
-      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
-    },
-    "c15c": {
-      "titre": "Creer l outil temporaire",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "outil",
-          "nom": "generateurs-outil-temporaire",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
-        }
-      ],
-      "suivant": "c15d"
-    },
-    "c15b": {
-      "titre": "Besoin d outil ?",
-      "type": "question",
-      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
-      "branches": [
-        {
-          "reponse": "TEMPORAIRE",
-          "vers": "c15c"
-        },
-        {
-          "reponse": "DURABLE",
-          "vers": "c15"
-        }
-      ]
-    },
-    "c17": {
-      "titre": "Activer Themis pour auditer",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
-        }
-      ],
-      "suivant": "c18"
-    },
-    "c18": {
-      "titre": "FIN - Retour de Themis avec son rapport",
-      "type": "fin",
-      "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni."
-    },
-    "c5a": {
-      "titre": "Ampleur de la correction ?",
-      "type": "question",
-      "question": "Quelle est l'ampleur de la mise a jour du README ? (PETITE = 1-2 compteurs/categories ; GROSSE = tables, badges, plusieurs categories)",
-      "branches": [
-        {
-          "reponse": "PETITE",
-          "vers": "c6b"
-        },
-        {
-          "reponse": "GROSSE",
-          "vers": "c6c"
-        }
-      ]
-    },
-    "c6b": {
-      "titre": "Executer combo-maj-readme (PETITE MAJ)",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-3"
-        },
-        {
-          "type": "regle",
-          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (petite MAJ : verifier -> maj -> ASCII)."
-        },
-        {
-          "type": "outil",
-          "nom": "combos-moteur",
-          "catalogue": "combos-moteur",
-          "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-          "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-maj-readme/definition-combo.json --reponses c2=OUI"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/combos/combo-maj-readme/definition-combo.json",
-          "raison": "Definition du combo combo-maj-readme (Pattern 3) : petite MAJ - verifier -> maj -> ASCII"
-        }
-      ],
-      "suivant": "c9"
-    },
-    "c6c": {
-      "titre": "Executer combos-maj-readme-massive (GROSSE MAJ)",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-3"
-        },
-        {
-          "type": "regle",
-          "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-maj-readme-massive execute la grosse MAJ conservative (analyse -> verifier -> maj -> correctifs de fond -> ASCII)."
-        },
-        {
-          "type": "outil",
-          "nom": "combos-maj-readme-massive",
-          "catalogue": "combos-maj-readme-massive",
-          "chemin": "cerveau-projet/agents/tools/combos/combos-maj-readme-massive/",
-          "commande": "python3 cerveau-projet/agents/tools/combos/combos-maj-readme-massive/combos-maj-readme-massive.py . --rapport"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/combos/combos-maj-readme-massive/combos-maj-readme-massive.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc du combo explique les 5 etapes et le mode conservatif"
-        }
-      ],
-      "suivant": "c9"
-    },
-    "c10b": {
-      "titre": "Ameliorations possibles de mon fonctionnement ?",
-      "type": "question",
-      "question": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c10c"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c12"
-        }
-      ]
-    },
-    "c10c": {
-      "titre": "Lancer le generateur d amelioration",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme."
-        },
-        {
-          "type": "outil",
-          "nom": "generateurs-amelioration",
-          "catalogue": "generateurs-amelioration",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
-          "raison": "Liste des themes de questions du generateur d amelioration"
-        }
-      ],
-      "suivant": "c10d"
-    },
-    "c10d": {
-      "titre": "Activer l'agent habilite pour l'amelioration",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "catalogue": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
-        }
-      ],
-      "suivant": "c10e"
-    },
-    "c10e": {
-      "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
-      "type": "fin",
-      "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
-      "suivant": null
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "clio",
+  "commun": false
+ },
+ "parcours": {
+  "nom": "parcours-clio",
+  "agent": "clio",
+  "version": "0.5.0",
+  "case_depart": "c0",
+  "description": "Parcours (jeu de piste) des missions de Clio : corriger le README avec plusieurs possibilites selon l'AMPLEUR (PETITE MAJ via combo-maj-readme, GROSSE MAJ via combos-maj-readme-massive, analyse via combos-analyse-projet, verifier, journal, insertion manuelle si nouvelle categorie, ASCII, lecons). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+ },
+ "cases": {
+  "c0": {
+   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+   "type": "question",
+   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
     }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "INCERTAIN",
+     "vers": "c0b"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0b"
+    }
+   ]
+  },
+  "c0b": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/clio/corrections.md"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/clio/clio.md"
+    }
+   ],
+   "suivant": "c0c"
+  },
+  "c1": {
+   "titre": "Mission",
+   "type": "question",
+   "question": "Quelle est la mission ?",
+   "branches": [
+    {
+     "reponse": "corriger",
+     "vers": "c2"
+    },
+    {
+     "reponse": "verifier",
+     "vers": "c11"
+    },
+    {
+     "reponse": "autre",
+     "vers": "c13"
+    }
+   ]
+  },
+  "c2": {
+   "titre": "Lire la raison de l'activation",
+   "type": "action",
+   "indices": [
+    {
+     "type": "fichier",
+     "chemin": "AGENTS.md",
+     "raison": "Lire la raison de mon activation : savoir CE QUI A CHANGE"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md"
+    }
+   ],
+   "suivant": "c3"
+  },
+  "c3": {
+   "titre": "Consulter les interventions recentes",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "CREATION LIMITEE AU README : mettre-a-jour-readme est mon UNIQUE outil - je ne touche a aucun autre fichier.",
+     "type": "regle"
+    },
+    {
+     "type": "regle",
+     "texte": "LE README EST LE LIVRE DU PROJET : je CORRIGE le texte existant, je n'ajoute JAMAIS de chronologie ni de lignes d'interventions."
+    },
+    {
+     "type": "outil",
+     "nom": "mettre-a-jour-readme",
+     "catalogue": "mettre-a-jour-readme",
+     "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
+     "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --journal 10"
+    }
+   ],
+   "suivant": "c4"
+  },
+  "c4": {
+   "titre": "Verifier l'etat reel",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "CREATION LIMITEE AU README : mettre-a-jour-readme est mon UNIQUE outil - je ne touche a aucun autre fichier.",
+     "type": "regle"
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-commande",
+     "catalogue": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande mettre-a-jour-readme --reponses ..."
+    },
+    {
+     "type": "regle",
+     "texte": "Je ne suppose JAMAIS. Je VERIFIE les sources de verite (AGENTS-historique, agents/, tools/)."
+    },
+    {
+     "type": "outil",
+     "nom": "mettre-a-jour-readme",
+     "catalogue": "mettre-a-jour-readme",
+     "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
+     "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier"
+    }
+   ],
+   "suivant": "c5"
+  },
+  "c5": {
+   "titre": "Ecarts detectes ?",
+   "type": "question",
+   "question": "Le --verifier signale-t-il des ecarts (OBSOLETE / MANQUANT) avec le README ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c5a"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c9"
+    }
+   ]
+  },
+  "c6": {
+   "titre": "Corriger le texte du README",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "CREATION LIMITEE AU README : mettre-a-jour-readme est mon UNIQUE outil - je ne touche a aucun autre fichier.",
+     "type": "regle"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "regle",
+     "texte": "Je n'edite JAMAIS le README directement. mettre-a-jour-readme est mon UNIQUE outil de modification."
+    },
+    {
+     "type": "outil",
+     "nom": "mettre-a-jour-readme",
+     "catalogue": "mettre-a-jour-readme",
+     "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
+     "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --maj"
+    }
+   ],
+   "suivant": "c7"
+  },
+  "c7": {
+   "titre": "Nouvelle categorie manquante ?",
+   "type": "question",
+   "question": "Le --maj a-t-il corrige les compteurs mais laisse une NOUVELLE categorie absente de la table (ex: [MANQUANT] Guider) ?",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur."
+    },
+    {
+     "type": "outil",
+     "nom": "corriger-symboles",
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
+    },
+    {
+     "type": "regle",
+     "texte": "Lecon Clio : --maj CORRIGE les categories existantes mais ne cree pas les nouvelles - ajouter puis relancer --verifier."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c8"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c9"
+    }
+   ]
+  },
+  "c8": {
+   "titre": "Inserer la ligne de categorie manquante",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "type": "outil",
+     "nom": "editer-fichier",
+     "catalogue": "editer-fichier",
+     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py README.md <ligne-avant> <ligne-avec-categorie>"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c9": {
+   "titre": "Verifier la conformite ASCII",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE : ASCII strict (aucun accent, emoji ou caractere Unicode)."
+    },
+    {
+     "type": "outil",
+     "nom": "valider-conformite-ascii",
+     "catalogue": "valider-conformite-ascii",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py README.md"
+    }
+   ],
+   "suivant": "c10"
+  },
+  "c10": {
+   "titre": "Lecons et retour",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> clio"
+    }
+   ],
+   "suivant": "c10b"
+  },
+  "c11": {
+   "titre": "Verifier sans modifier",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md"
+    },
+    {
+     "type": "regle",
+     "texte": "Mission de verification : on ne modifie PAS le README, on rapporte si il est a jour ou non."
+    },
+    {
+     "type": "outil",
+     "nom": "mettre-a-jour-readme",
+     "catalogue": "mettre-a-jour-readme",
+     "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/",
+     "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier"
+    }
+   ],
+   "suivant": "c19"
+  },
+  "c12": {
+   "titre": "FIN - Activer Janus",
+   "type": "fin",
+   "message": "MA MISSION DE MISE A JOUR DU README EST TERMINEE (ecarts corriges ou README deja a jour). J ACTIVE JANUS (second controle) avec le bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec le verdict consolide.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ]
+  },
+  "c13": {
+   "titre": "Mission hors parcours",
+   "type": "question",
+   "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c14"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c15b"
+    },
+    {
+     "reponse": "audit",
+     "vers": "c17"
+    }
+   ]
+  },
+  "c14": {
+   "titre": "Activer l'agent habilite",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+    }
+   ],
+   "suivant": "c16"
+  },
+  "c15": {
+   "titre": "Signaler le besoin",
+   "type": "fin",
+   "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
+  },
+  "c16": {
+   "titre": "FIN - Delegation",
+   "type": "fin",
+   "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
+  },
+  "c0c": {
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-6"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-activite-recente",
+     "catalogue": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+    },
+    {
+     "type": "fichier",
+     "chemin": "AGENTS.md",
+     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
+    }
+   ],
+   "suivant": "c0d"
+  },
+  "c15d": {
+   "titre": "FIN - Outil temporaire",
+   "type": "fin",
+   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
+  },
+  "c15c": {
+   "titre": "Creer l outil temporaire",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "EXCEPTION OUTIL TEMPORAIRE : creation d un outil TEMPORAIRE autorisee via generateurs-outil-temporaire (jamais dans tools/).",
+     "type": "regle"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-outil-temporaire",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c15d"
+  },
+  "c15b": {
+   "titre": "Besoin d outil ?",
+   "type": "question",
+   "question": "La mission necessite-t-elle un outil qui n existe pas ?",
+   "branches": [
+    {
+     "reponse": "TEMPORAIRE",
+     "vers": "c15c"
+    },
+    {
+     "reponse": "DURABLE",
+     "vers": "c15"
+    }
+   ]
+  },
+  "c17": {
+   "titre": "Activer Themis pour auditer",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c18"
+  },
+  "c18": {
+   "titre": "FIN - Retour de Themis avec son rapport",
+   "type": "fin",
+   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin : si aucun defaut, Themis me REACTIVE avec son rapport (evaluation ou audit) et je reprends ma mission avec le rapport fourni ; si un defaut est signale (boucle KO, carte Themis v0.3.7 c12f/c12g), Themis m active pour corriger et je la reactiverai avec mon bilan."
+  },
+  "c5a": {
+   "titre": "Ampleur de la correction ?",
+   "type": "question",
+   "question": "Quelle est l'ampleur de la mise a jour du README ? (PETITE = 1-2 compteurs/categories ; GROSSE = tables, badges, plusieurs categories)",
+   "branches": [
+    {
+     "reponse": "PETITE",
+     "vers": "c6b"
+    },
+    {
+     "reponse": "GROSSE",
+     "vers": "c6c"
+    }
+   ]
+  },
+  "c6b": {
+   "titre": "Executer combo-maj-readme (PETITE MAJ)",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-3"
+    },
+    {
+     "type": "regle",
+     "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (petite MAJ : verifier -> maj -> ASCII)."
+    },
+    {
+     "type": "outil",
+     "nom": "combos-moteur",
+     "catalogue": "combos-moteur",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+     "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-maj-readme/definition-combo.json --reponses c2=OUI"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/combos/combo-maj-readme/definition-combo.json",
+     "raison": "Definition du combo combo-maj-readme (Pattern 3) : petite MAJ - verifier -> maj -> ASCII"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c6c": {
+   "titre": "Executer combos-maj-readme-massive (GROSSE MAJ)",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-3"
+    },
+    {
+     "type": "regle",
+     "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-maj-readme-massive execute la grosse MAJ conservative (analyse -> verifier -> maj -> correctifs de fond -> ASCII)."
+    },
+    {
+     "type": "outil",
+     "nom": "combos-maj-readme-massive",
+     "catalogue": "combos-maj-readme-massive",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-maj-readme-massive/",
+     "commande": "python3 cerveau-projet/agents/tools/combos/combos-maj-readme-massive/combos-maj-readme-massive.py . --rapport"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-maj-readme-massive/combos-maj-readme-massive.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc du combo explique les 5 etapes et le mode conservatif"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c10b": {
+   "titre": "Ameliorations possibles de mon fonctionnement ?",
+   "type": "question",
+   "question": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c10c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c19"
+    }
+   ]
+  },
+  "c10c": {
+   "titre": "Lancer le generateur d amelioration",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme."
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-amelioration",
+     "catalogue": "generateurs-amelioration",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
+     "raison": "Liste des themes de questions du generateur d amelioration"
+    }
+   ],
+   "suivant": "c10d"
+  },
+  "c10d": {
+   "titre": "Activer l'agent habilite pour l'amelioration",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ],
+   "suivant": "c10e"
+  },
+  "c10e": {
+   "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
+   "type": "fin",
+   "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
+   "suivant": null
+  },
+  "c0d": {
+   "titre": "LIRE LA DOCUMENTATION DE L OUTIL avant utilisation",
+   "type": "action",
+   "suivant": "c1",
+   "branches": [],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je LIS le .md de l outil (agents/tools/<categorie>/<outil>/<outil>.md) avant toute utilisation - usage sans doc = erreur."
+    },
+    {
+     "type": "regle",
+     "texte": "La doc est le CONTRAT : je verifie le modele et les parametres avant d executer (--dry-run d abord si disponible)."
+    }
+   ]
+  },
+  "c19": {
+   "indices": [
+    {
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
+     "nom": "enregistrer-usage-outil",
+     "type": "outil"
+    },
+    {
+     "texte": "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL.",
+     "type": "regle"
+    }
+   ],
+   "message": "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=clio, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
+   "suivant": "c12",
+   "titre": "Enregistrer mes usages d outils",
+   "type": "action"
   }
+ }
 }

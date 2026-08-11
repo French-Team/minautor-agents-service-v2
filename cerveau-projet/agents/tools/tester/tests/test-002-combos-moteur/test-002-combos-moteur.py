@@ -59,9 +59,13 @@ def run(cmd, timeout=60):
 
 
 def run_py(args=None):
+    # --no-journal : ne pas polluer le registre d usage pendant les tests
+    # (combos-moteur v0.3.1 propage l option au generateur)
     cmd = [PYTHON, MOTEUR_PY]
     if args:
         cmd.extend(args)
+    if "--no-journal" not in cmd:
+        cmd.append("--no-journal")
     return run(cmd)
 
 
@@ -144,13 +148,13 @@ if not os.path.isfile(MOTEUR_SH):
     assert_eq("Test 9: fichier .sh present", False, True)
 else:
     stdout_py, _, rc_py = run_py([EXEMPLE, "--liste"])
-    stdout_sh, _, rc_sh = run(["bash", MOTEUR_SH, EXEMPLE, "--liste"])
+    stdout_sh, _, rc_sh = run(["bash", MOTEUR_SH, EXEMPLE, "--liste", "--no-journal"])
     assert_eq("Test 9a: .sh --liste retourne 0", rc_sh, 0)
     assert_eq("Test 9b: .py et .sh produisent la meme liste",
               stdout_py.strip() == stdout_sh.strip(), True)
 
     stdout_py, _, rc_py = run_py([EXEMPLE, "--reponses", "c3=OUI"])
-    stdout_sh, _, rc_sh = run(["bash", MOTEUR_SH, EXEMPLE, "--reponses", "c3=OUI"])
+    stdout_sh, _, rc_sh = run(["bash", MOTEUR_SH, EXEMPLE, "--reponses", "c3=OUI", "--no-journal"])
     assert_eq("Test 9c: .py et .sh meme navigation (chemin OUI)",
               stdout_py.strip() == stdout_sh.strip(), True)
 

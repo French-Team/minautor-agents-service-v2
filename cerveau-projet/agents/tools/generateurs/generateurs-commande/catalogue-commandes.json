@@ -1,5 +1,5 @@
 {
-  "version": "0.2.6",
+  "version": "0.2.9",
   "description": "Catalogue des commandes complexes du cerveau-projet. Source de verite : chaque commande (modele) est un copier-coller d un appel d outil deja ecrit, corrige et valide (agents/tools/). Le generateur pose une question par parametre, valide les reponses, puis compose la commande exacte a lancer.",
   "commandes": [
     {
@@ -892,6 +892,22 @@
       ]
     },
     {
+      "nom": "detecter-convention-nommage",
+      "description": "Detecte les mentions de la convention c<numero>[a-z]? hors contexte etendu cT* (garde-fou anti-recurrence, audit Themis 2026-08-11)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/detecter/detecter-convention-nommage/detecter-convention-nommage.py",
+      "modele": "--racine {racine}",
+      "parametres": [
+        {
+          "cle": "racine",
+          "question": "Racine du scan (defaut: cerveau-projet) ?",
+          "type": "texte",
+          "defaut": "cerveau-projet",
+          "obligatoire": false
+        }
+      ]
+    },
+    {
       "nom": "detecter-decalages-catalogue",
       "description": "Detecte les decalages entre le catalogue du generateur et les interfaces reelles des outils (--aide/--help)",
       "interpreteur": "python3",
@@ -1086,6 +1102,98 @@
       ]
     },
     {
+      "nom": "editer-fichier-agents",
+      "description": "Edite les fiches des agents (.md) : ligne ou bloc par titre markdown, supprimer/remplacer/ajouter, correcteur ASCII integre.",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/editer/editer-fichier-agents/editer-fichier-agents.py",
+      "modele": "{fichier} --bloc {bloc} {action}",
+      "parametres": [
+        {
+          "cle": "fichier",
+          "question": "Chemin de la fiche agent a editer ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "bloc",
+          "question": "Titre du bloc cible (ex: Historique) ou numero de ligne ?",
+          "type": "texte",
+          "obligatoire": true,
+          "flag": "--bloc"
+        },
+        {
+          "cle": "action",
+          "question": "Action : --supprimer, --remplacer <texte> ou --ajouter <texte> ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "ascii",
+          "question": "Corriger l ASCII apres l edition (--ascii) ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--ascii"
+        },
+        {
+          "cle": "dry_run",
+          "question": "Simuler sans modifier (--dry-run) ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--dry-run"
+        },
+        {
+          "cle": "backup",
+          "question": "Sauvegarder avant (--backup) ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--backup"
+        }
+      ],
+      "version": "0.1.0"
+    },
+    {
+      "nom": "enregistrer-usage-outil",
+      "description": "Enregistre un usage d outil dans le registre JSONL (traces/registre-usages-outils.jsonl)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py",
+      "modele": "--agent {agent} --outil {outil} --mode {mode} --commande {commande} --contexte {contexte}",
+      "parametres": [
+        {
+          "cle": "agent",
+          "question": "Nom de l agent ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "outil",
+          "question": "Nom de l'outil utilise ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "mode",
+          "question": "Mode (generateur/direct/combo) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "direct"
+        },
+        {
+          "cle": "commande",
+          "question": "Commande reelle (optionnel) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "contexte",
+          "question": "Contexte d usage (optionnel) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        }
+      ]
+    },
+    {
       "nom": "evaluer-agents",
       "description": "Evalue le comportement des agents.",
       "interpreteur": "python3",
@@ -1198,7 +1306,7 @@
           "defaut": "."
         }
       ],
-      "version": "0.4.0"
+      "version": "0.4.2"
     },
     {
       "nom": "generateurs-case-convertir",
@@ -2466,6 +2574,326 @@
       ]
     },
     {
+      "nom": "test-004-combos-tester-outil",
+      "description": "tester/tests/test-004-combos-tester-outil/test-004-combos-tester-outil.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-004-combos-tester-outil/test-004-combos-tester-outil.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-005-generateurs-commande",
+      "description": "tester/tests/test-005-generateurs-commande/test-005-generateurs-commande.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-005-generateurs-commande/test-005-generateurs-commande.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-006-cartographier-parcours",
+      "description": "tester/tests/test-006-cartographier-parcours/test-006-cartographier-parcours.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-006-cartographier-parcours/test-006-cartographier-parcours.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-007-figer-lf",
+      "description": "tester/tests/test-007-figer-lf/test-007-figer-lf.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-007-figer-lf/test-007-figer-lf.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-008-generateurs-amelioration",
+      "description": "tester/tests/test-008-generateurs-amelioration/test-008-generateurs-amelioration.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-008-generateurs-amelioration/test-008-generateurs-amelioration.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-009-valider-case",
+      "description": "tester/tests/test-009-valider-case/test-009-valider-case.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-009-valider-case/test-009-valider-case.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-010-generateurs-case",
+      "description": "tester/tests/test-010-generateurs-case/test-010-generateurs-case.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-010-generateurs-case/test-010-generateurs-case.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-011-generateurs-carte",
+      "description": "tester/tests/test-011-generateurs-carte/test-011-generateurs-carte.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-011-generateurs-carte/test-011-generateurs-carte.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-012-guider-parcours",
+      "description": "tester/tests/test-012-guider-parcours/test-012-guider-parcours.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-012-guider-parcours/test-012-guider-parcours.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-013-cerberus-migration",
+      "description": "tester/tests/test-013-cerberus-migration/test-013-cerberus-migration.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-013-cerberus-migration/test-013-cerberus-migration.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-014-spec-guider-parcours",
+      "description": "tester/tests/test-014-spec-guider-parcours/test-014-spec-guider-parcours.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-014-spec-guider-parcours/test-014-spec-guider-parcours.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-015-valider-case-garde-fou",
+      "description": "tester/tests/test-015-valider-case-garde-fou/test-015-valider-case-garde-fou.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-015-valider-case-garde-fou/test-015-valider-case-garde-fou.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-016-migration-buffy",
+      "description": "tester/tests/test-016-migration-buffy/test-016-migration-buffy.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-016-migration-buffy/test-016-migration-buffy.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-017-generateurs-ligne",
+      "description": "tester/tests/test-017-generateurs-ligne/test-017-generateurs-ligne.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-017-generateurs-ligne/test-017-generateurs-ligne.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-018-fins-reactivation",
+      "description": "tester/tests/test-018-fins-reactivation/test-018-fins-reactivation.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-018-fins-reactivation/test-018-fins-reactivation.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-019-combos-controle-buffy",
+      "description": "tester/tests/test-019-combos-controle-buffy/test-019-combos-controle-buffy.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-019-combos-controle-buffy/test-019-combos-controle-buffy.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-020-combos-clio",
+      "description": "tester/tests/test-020-combos-clio/test-020-combos-clio.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-020-combos-clio/test-020-combos-clio.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-021-ligne-trio",
+      "description": "tester/tests/test-021-ligne-trio/test-021-ligne-trio.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-021-ligne-trio/test-021-ligne-trio.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-022-budget-pondere",
+      "description": "tester/tests/test-022-budget-pondere/test-022-budget-pondere.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-022-budget-pondere/test-022-budget-pondere.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "test-023-grep-budget-pondere",
+      "description": "tester/tests/test-023-grep-budget-pondere/test-023-grep-budget-pondere.py",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tests/test-023-grep-budget-pondere/test-023-grep-budget-pondere.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Chemin cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": "."
+        }
+      ]
+    },
+    {
       "nom": "tester-protection-blocage",
       "description": "Protection qui encadre l'execution des tests pour detecter et stopper",
       "interpreteur": "python3",
@@ -2739,6 +3167,33 @@
           "question": "Valeur pour chemin ?",
           "type": "texte",
           "obligatoire": true
+        }
+      ]
+    },
+    {
+      "nom": "verifier-conformite-fiche",
+      "description": "Verifie la conformite des fiches agents au template (noyau + variante par famille, sections lues dynamiquement).",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/verifier/verifier-conformite-fiche/verifier-conformite-fiche.py",
+      "modele": "{cible} {variante} {rapport}",
+      "parametres": [
+        {
+          "cle": "cible",
+          "question": "Cible ? (--agent <nom> | --agents <a,b,c> | --tous)",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "variante",
+          "question": "Famille ? (--variante cerveau-projet | --variante trio | vide pour auto)",
+          "type": "texte",
+          "obligatoire": false
+        },
+        {
+          "cle": "rapport",
+          "question": "Ecrire un rapport markdown ? (--rapport <fichier> ou vide pour non)",
+          "type": "texte",
+          "obligatoire": false
         }
       ]
     },

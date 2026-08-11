@@ -6,12 +6,14 @@ identite:
 ---
 # Spec -- Generateurs-case (modele compose complet + references)
 
-**Version** : 0.4.0
+**Version** : 0.4.2
 **Statut** : ebauche
 **Date creation** : 2026-08-09
 **Agent** : Vulcain (refonte etape 3 spec-refonte-cartes-decision)
 **Historique** :
-- v0.4.0 (mode batch convertir : indice -> action en masse + regles -> refs via mapping, 2026-08-09)\n- v0.3.0 (refonte modele compose complet + option --ref, 2026-08-09)
+- v0.4.2 (budget pondere des indices : court <= 100 car. = 0,5 unite, long > 100 car. = 1 unite, budget 3,0 unites par case, plafond 160 car. inchange, 2026-08-11)
+- v0.4.0 (mode batch convertir : indice -> action en masse + regles -> refs via mapping, 2026-08-09)
+- v0.3.0 (refonte modele compose complet + option --ref, 2026-08-09)
 - v0.2.2 (generateurs-case pre-existant, sans spec dediee)
 
 ---

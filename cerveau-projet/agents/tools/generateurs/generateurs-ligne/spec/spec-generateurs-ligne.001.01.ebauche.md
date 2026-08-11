@@ -90,7 +90,9 @@ Liste les gabarits / detail d'un gabarit.
 3. Determine la case de rejoint (defaut : ancien suivant pour une
    action/indice ; obligatoire pour une question/controle).
 4. Construit le bloc de cases (ids `c<numero>`, `c<numero>a`, ... conformes
-   a la convention `c<numero>[a-z]?`).
+   a la convention ETENDUE `c[<prefixe-alpha-maj>]<numero>[a-z]?` (valider-case
+   v1.1.0) : cas normal `c<numero>[a-z]?` + prefixe thematique majuscule
+   optionnel `cT1`..`cT10`).
 5. Cable le point d'attache : branche ajoutee (question/controle) OU suivant
    recable (action/indice).
 6. Dry-run : affiche sans ecrire. Wet : ecrit + validation auto
@@ -123,8 +125,9 @@ Liste les gabarits / detail d'un gabarit.
    - mode `suite` : copie le chemin qui part de la source jusqu au REJOINT.
 3. Le groupe exclut les cases REJOINT (remplacees par la cible de rejoint
    externe) ; les liens internes sont re-mappes sur de NOUVEAUX ids conformes
-   `c<numero>[a-z]?` (groupes jusqu a 27 cases : cX + suffixes lettres ; plus
-   grands : numeros sequentiels c<base+i>).
+   a la convention ETENDUE `c[<prefixe-alpha-maj>]<numero>[a-z]?` (valider-case
+   v1.1.0) : cas normal `c<numero>[a-z]?` (groupes jusqu a 27 cases : cX +
+   suffixes lettres ; plus grands : numeros sequentiels c<base+i>).
 4. Memes garde-fous que `ajouter` : carte Atlas a jour (existence + mtime,
    blocage + invite Atlas sauf `--force`), cablage du point d attache
    (branche sur question/controle, suivant sur action/indice), rejoint par
@@ -150,7 +153,9 @@ Les gabarits vivent dans `gabarits-ligne.json` (externalises).
 1. ASCII strict (100%), LF pur.
 2. 100% stdlib Python.
 3. Nommage prefixe `generateurs-` controle au demarrage.
-4. Ids de cases conformes `c<numero>[a-z]?` (valider-case).
+4. Ids de cases conformes a la convention ETENDUE `c[<prefixe-alpha-maj>]<numero>[a-z]?`
+   (valider-case v1.1.0) : cas normal `c<numero>[a-z]?` + prefixe thematique
+   majuscule optionnel `cT1`..`cT10`.
 5. Validation auto apres ecriture (guider-parcours + valider-case).
 6. Insertion JSON programmatique (jamais de concatenation de lignes).
 7. Chaine Morpheus (tests) -> Janus (controle) OBLIGATOIRE apres creation.
@@ -166,7 +171,9 @@ Les gabarits vivent dans `gabarits-ligne.json` (externalises).
 6. ASCII + LF sur les 6 fichiers (py, sh, md, spec, gabarits-ligne.json, test).
 7. `ajouter-config` valide le gabarit avant insertion et gere dry/wet + conflit de nom.
 8. `copier` : 2 sources (--source/--config), 3 modes (complet/branche/suite),
-   clone conforme (ids uniques c<numero>[a-z]?), dry/wet, blocage carte Atlas.
+   clone conforme (ids uniques conformes a la convention ETENDUE
+   `c[<prefixe-alpha-maj>]<numero>[a-z]?`, valider-case v1.1.0), dry/wet,
+   blocage carte Atlas.
 
 ## 8. Emplacement des fichiers
 

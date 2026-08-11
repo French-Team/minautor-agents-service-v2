@@ -51,7 +51,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 STATUT = "ebauche"
 
 class ErreurCombo(Exception):
@@ -279,7 +279,7 @@ def extraire_commande_generateur(sortie, catalogue):
     )
 
 
-def executer_case_generateur(case, cid, variables, dry_run, verbose):
+def executer_case_generateur(case, cid, variables, dry_run, verbose, no_journal=False):
     """Case generateur : compose la commande via generateurs-commande --reponses."""
     catalogue = case.get("catalogue")
     if not catalogue:
@@ -306,6 +306,8 @@ def executer_case_generateur(case, cid, variables, dry_run, verbose):
         "--reponses",
         reponses,
     ]
+    if no_journal:
+        cmd.append("--no-journal")
     if dry_run:
         print("[DRY-RUN] " + " ".join(cmd))
     try:
@@ -498,7 +500,7 @@ def lister_cases(donnees):
     return 0
 
 
-def executer(donnees, reponses_predefinies, dry_run, verbose, variables_initiales=None):
+def executer(donnees, reponses_predefinies, dry_run, verbose, variables_initiales=None, no_journal=False):
     """Parcourt la definition case par case jusqu'a une case fin."""
     meta = donnees.get("combo", {})
     cases = donnees.get("cases", {})
@@ -534,7 +536,7 @@ def executer(donnees, reponses_predefinies, dry_run, verbose, variables_initiale
             print("--- [%s] %s ---" % (cid, titre))
 
         if typ == "generateur":
-            executer_case_generateur(case, cid, variables, dry_run, verbose)
+            executer_case_generateur(case, cid, variables, dry_run, verbose, no_journal)
         elif typ == "outil":
             executer_case_outil(case, cid, variables, dry_run, verbose)
         elif typ == "controle":
@@ -593,6 +595,7 @@ def main():
     reponses = None
     variables_initiales = None
     dry_run = False
+    no_journal = False
     verbose = False
     i = 0
     while i < len(args):
@@ -615,6 +618,8 @@ def main():
             variables_initiales.append(args[i])
         elif a == "--dry-run":
             dry_run = True
+        elif a == "--no-journal":
+            no_journal = True
         elif a == "--verbose":
             verbose = True
         elif a == "--version":
@@ -628,6 +633,7 @@ def main():
             print("  --reponses <liste>  Reponses des controles : case=reponse;case2=reponse2")
             print("  --var <cle=valeur>  Variable initiale (repetable, ex: --var fichier=...)")
             print("  --dry-run           Afficher les commandes sans les executer")
+            print("  --no-journal        Desactiver la journalisation d usage (generateur)")
             print("  --verbose           Afficher les details de chaque case")
             print("  --version           Afficher la version")
             return 0
@@ -656,7 +662,7 @@ def main():
             return lister_cases(donnees)
         if variables_initiales is not None:
             variables_initiales = parser_variables(variables_initiales)
-        return executer(donnees, reponses, dry_run, verbose, variables_initiales)
+        return executer(donnees, reponses, dry_run, verbose, variables_initiales, no_journal)
     except ErreurCombo as exc:
         print("[ERREUR] %s" % exc, file=sys.stderr)
         return 1

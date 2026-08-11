@@ -13,6 +13,7 @@ agent:
   cree: "2026-08-06"
   statut-morpheus: "disponible"
   role_principal: false
+  famille: cerveau-projet
   role_specifique: "Testeur"
 
 profil:
@@ -75,7 +76,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.3.1)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.0)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -85,7 +86,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json
 ```
 
-**Parcours** : [cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json](parcours/parcours-morpheus.json) (v0.2.0)
+**Parcours** : [cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json](parcours/parcours-morpheus.json) (v0.3.3)
 **Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
@@ -169,11 +170,12 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ### Pour terminer ma mission (la fin suit SA carte)
 
-> La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus (c14) ; maillon d'une chaine -> activer le suivant selon SA carte (retour VULCAIN apres delegation de tests, ou JANUS en second controle c10) ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
-> **FLUX** : Ma mission se termine selon MA carte : retour a **Vulcain** (delegation de tests, MODE CHAINE), activation de **Janus** (second controle) ou reactivation de **Cerberus** (activation directe) -- je ne decide jamais seul, la fin suit SA carte.
-> **FINS REELLES DE MA CARTE v0.3.0 (E5b - croisement fiche/parcours)** :
+> La fin de mission suit SA carte (Pattern 13) : maillon d'une chaine -> activer le suivant selon SA carte (retour VULCAIN apres delegation de tests, ou JANUS en second controle c10) ; meme active directement par Cerberus, je passe par JANUS (c14, REGLE IMMUABLE JANUS). Seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> **FLUX** : Ma mission se termine selon MA carte : retour a **Vulcain** (delegation de tests, MODE CHAINE) ou activation de **Janus** (second controle, c10 ou c14) -- je ne decide jamais seul, la fin suit SA carte.
+> **FINS REELLES DE MA CARTE v0.3.3 (E5b - croisement fiche/parcours)** :
+> - `c8e` FIN - Reprise du parcours apres retour de l'agent habilite
 > - `c10` FIN - Activer Janus (second controle apres test)
-> - `c14` FIN - Reactiver Cerberus (mon retour standard)
+> - `c14` FIN - Activer Janus (second controle, meme active par Cerberus)
 > - `c16` Signaler le besoin (fin - relais)
 > - `c16d` FIN - Outil temporaire
 > - `c17` FIN - Delegation (j'active l'agent habilite)
@@ -210,6 +212,17 @@ Avant de valider un test :
 ---
 
 ## Forces et Faiblesses
+## Style de travail
+
+| Aspect | Preference |
+|---|---|
+| **Langage** | Francais |
+| **Ton** | [Formel / Professionnel / Amical] |
+| **Format** | Markdown |
+| **Detail** | [Minimal / Standard / Complet] |
+
+---
+
 
 | Force | Faiblesse |
 |---|---|
@@ -245,9 +258,5 @@ Avant de valider un test :
 
 ---
 
-## Historique
 
-| Date | Evenement | Details |
-|---|---|---|
-| 2026-08-06 | Creation | Fiche d'agent initialisee |
-| 2026-08-07 | v0.2.0 | Fiche allegee : le guidage des missions vit dans le parcours (jeu de piste), la fiche garde identite, regles absolues et connexions |
+

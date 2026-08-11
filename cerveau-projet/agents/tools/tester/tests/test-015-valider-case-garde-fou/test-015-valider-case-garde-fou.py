@@ -2,19 +2,19 @@
 # -*- coding: ascii -*-
 """
 test-015-valider-case-garde-fou.py
-Test formel du garde-fou anti-pollution de valider-case v1.0.1
+Test formel du garde-fou anti-pollution de valider-case v1.1.0
 (lecon : rapport a la racine cree par une commande sans --rapport).
 
 Contexte :
   - valider-case v1.0.0 ecrivait son rapport par defaut
     (rapport-valider-case-<date>.md) dans le repertoire courant quand
     --rapport et --dry-run etaient absents.
-  - v1.0.1 : sans --rapport <fichier> explicite, AUCUN fichier n'est cree
+  - v1.0.2 : convention de nommage etendue (prefixe thematique cT* pour la ligne trio Janus) ; v1.0.1 : sans --rapport <fichier> explicite, AUCUN fichier n'est cree
     (message 'AUCUN RAPPORT ECRIT') ; --rapport <fichier> ecrit exactement
     au chemin fourni ; --dry-run simule sans ecrire.
 
 Cas couverts:
-  1. Parite --version py/sh v1.0.1
+  1. Parite --version py/sh v1.0.2
   2. Sans --rapport ni --dry-run (depuis un dossier vide) : aucun fichier cree
   3. Message 'AUCUN RAPPORT ECRIT' affiche
   4. --dry-run : aucun fichier cree
@@ -23,11 +23,14 @@ Cas couverts:
   7. Verdict CONFORME sur parcours-cerberus (non-regression)
   8. ASCII strict : 0 non-ASCII (outil + test)
   9. LF pur : 0 CRLF (outil + test)
+ 10. Garde-fou positif v1.0.2 : ACCEPTATION d'un id cT* (convention etendue,
+     prefixe thematique majuscule - ligne Trio de Janus)
 
 Usage:
   python3 test-015-valider-case-garde-fou.py
 """
 import io
+import json
 import os
 import shutil
 import subprocess
@@ -86,14 +89,14 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-015-")
     try:
-        print("=== Test formel valider-case v1.0.1 (garde-fou rapport) ===")
+        print("=== Test formel valider-case v1.1.0 (garde-fou rapport) ===")
 
-        # 1. Parite --version py/sh v1.0.1
+        # 1. Parite --version py/sh v1.0.2
         r_py = run([PYTHON, OUTIL_PY, "--version"])
         r_sh = run(["bash", OUTIL_SH, "--version"])
-        verifier("1. --version py/sh identiques v1.0.1",
+        verifier("1. --version py/sh identiques v1.0.2",
                  r_py.returncode == 0 and r_sh.returncode == 0
-                 and "v1.0.1" in r_py.stdout
+                 and "v1.1.0" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 
@@ -144,6 +147,31 @@ def main():
         verifier("7. Non-regression : cerberus CONFORME",
                  "CONFORME" in r_gf.stdout and "erreurs: 0" in r_gf.stdout,
                  r_gf.stdout.strip()[:100])
+
+        # 10. GARDE-FOU POSITIF v1.0.2 (lecon Morpheus 2026-08-11) : la
+        #      convention etendue doit ACCEPTER les ids cT* (prefixe
+        #      thematique majuscule, ligne Trio de Janus). Parcours
+        #      artificiel minimal : depart c0 -> fin cT10.
+        ct = os.path.join(tmp, "parcours-ct.json")
+        with io.open(ct, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump({
+                "parcours": {"agent": "test-ct", "version": "0.1.0",
+                             "case_depart": "c0"},
+                "cases": {
+                    "c0": {"type": "question", "titre": "Depart",
+                            "question": "Tester la fin cT ?",
+                            "branches": [
+                                {"reponse": "OUI", "vers": "cT10"},
+                                {"reponse": "NON", "vers": "cT10"}]},
+                    "cT10": {"type": "fin", "titre": "Fin ligne Trio"},
+                },
+            }, fh, ensure_ascii=True, indent=2)
+        r_ct = run([PYTHON, OUTIL_PY, ct, "--dry-run"])
+        verifier("10. Garde-fou positif : id cT10 ACCEPTE (0 erreur NOMMAGE)",
+                 r_ct.returncode == 0 and "CONFORME" in r_ct.stdout
+                 and "erreurs: 0" in r_ct.stdout
+                 and "NOMMAGE" not in r_ct.stdout,
+                 r_ct.stdout.strip()[:120])
 
         # 8. ASCII strict (outil 4 fichiers + test)
         total_non_ascii = sum(ascii_count(f) for f in

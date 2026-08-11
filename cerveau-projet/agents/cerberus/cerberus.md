@@ -13,6 +13,7 @@ agent:
   cree: "2026-08-05"
   statut-cerberus: "disponible"
   role_principal: true
+  famille: cerveau-projet
 
 profil:
   role-agent: "Cerberus -- gardien de l'entree, analyse les besoins et active les agents"
@@ -76,7 +77,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.3.2)** : Pour CHAQUE situation, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.1)** : Pour CHAQUE situation, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -86,7 +87,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json
 ```
 
-**Parcours** : [cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json](parcours/parcours-cerberus.json) (v0.3.1)
+**Parcours** : [cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json](parcours/parcours-cerberus.json) (v0.3.3)
 **Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
@@ -151,6 +152,27 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 
 ---
 
+## WORKFLOW RVAV (OBLIGATOIRE)
+## UTILISATION DE activer-agent-principal
+
+### Pour activer un agent
+
+```bash
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> "Agent" "Raison" "Mission"
+```
+
+### Pour terminer ma mission (la fin suit SA carte)
+
+```bash
+python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "AgentPrecedent"
+```
+
+> La fin de mission suit SA carte : reactiver Cerberus en fin directe, activer le suivant si maillon de chaine, seul le dernier maillon reactiver Cerberus.
+> **REGLE REDACTION DE MISSION (Pattern 13)** : quand je redige une mission pour un agent, je ne demande JAMAIS 'reactiver Cerberus' a la fin. Je demande a l'agent de suivre SA carte (ex. BUFFY/MORPHEUS : active JANUS pour le second controle, qui reactive Cerberus avec son verdict). Formule de fin de mission : 'A LA FIN : suis TA carte pour ta fin (Pattern 13).'
+> Utiliser TOUJOURS l outil activer-agent-principal (jamais str_replace/write_file) pour AGENTS.md.
+
+---
+
 ## Le cycle fondamental
 
 ```
@@ -166,10 +188,10 @@ CERBERUS -> AGENT_1 -> AGENT_2 -> ... -> CERBERUS
 | 4 | La fin suit SA carte (Pattern 13) : chaque agent active le suivant ; seul le DERNIER maillon reactive Cerberus avec le bilan consolide | Agent active |
 
 > **Chaine complete** : chaque mission peut enchainer `AGENT_1 -> AGENT_2 -> ...` (ex : Buffy -> Janus -> Cerberus, ou Agent -> Themis -> Cerberus). Cerberus n'est PAS reactive a chaque etape : la fin de chaque agent suit SA carte (Pattern 13).
-> **FINS REELLES DE MA CARTE v0.3.1 (E5b - croisement fiche/parcours)** :
+> **FINS REELLES DE MA CARTE v0.3.3 (E5b - croisement fiche/parcours)** :
+> - `c19e` FIN - Reprise du parcours apres retour de l'agent habilite
 > - `c20` FIN - Coordination terminee (ma fin de cycle : je reprends le controle)
 > - `c23` Signaler le besoin (fin - relais : je signale et je m arrete)
-
 
 ---
 
@@ -187,6 +209,16 @@ CERBERUS -> AGENT_1 -> AGENT_2 -> ... -> CERBERUS
 | **Minerve** | Redactrice de todos | Spec terminee -> todo |
 | **Clio** | Muse de l'histoire (README) | Quand la mise a jour du README est necessaire (selon SA carte) |
 | **Themis** | Evaluatrice croisee du cerveau-projet | Audit, evaluation, combos |
+
+---
+
+## Forces et Faiblesses
+
+| Force | Faiblesse |
+|---|---|
+| [Force 1] -- [Impact] | [Faiblesse 1] |
+| [Force 2] -- [Impact] | [Faiblesse 2] |
+| [Force 3] -- [Impact] | [Faiblesse 3] |
 
 ---
 
@@ -229,11 +261,3 @@ CERBERUS -> AGENT_1 -> AGENT_2 -> ... -> CERBERUS
 - [spec-guider-parcours](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours (v0.2.0)
 
 ---
-
-## Historique
-
-| Date | Evenement | Details |
-|---|---|---|
-| 2026-08-05 | Creation | Fiche d'agent initialisee |
-| 2026-08-07 | v0.2.0 | Fiche allegee : le guidage des missions vit dans le parcours (jeu de piste), la fiche garde identite, regles absolues et connexions |
-| 2026-08-10 | v0.2.1 | Relecture protocole-sante : cycle fondamental aligne sur le Pattern 13 (la fin suit SA carte), retrait de la philosophie reactiver Cerberus systematique |

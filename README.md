@@ -6,7 +6,7 @@ identite:
 ---
 # Cerveau-Projet
 
-[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-119-blueviolet?style=flat)](https://img.shields.io/badge/Outils-119-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-121-blueviolet?style=flat)](https://img.shields.io/badge/Outils-121-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)
 
 
 ![Logo](cerveau-projet/assets/images/logo.jpg)
@@ -51,7 +51,7 @@ projet/
     |   |-- conventions/         # Renommage, structures, liens, protocoles
     |   |-- regles-immuables/    # Regles non negociables + protocoles + RVAV
     |   |-- classeur-variables/  # Stockage partage de variables
-    |   `-- tools/               # Boite a outils (119 outils + protections)
+    |   `-- tools/               # Boite a outils (121 outils + protections)
     |-- pense-betes/             # Idees, specs, todos, travail en cours
     |   |-- index-pense-bete.md
     |   |-- specs/               # Definitions techniques
@@ -82,6 +82,7 @@ projet/
 | **Conventions** | Agent | Selon sa carte de decision |
 | **Philosophie** | Agent | Selon sa carte de decision |
 | **Regles-immuables** | Agent | Selon sa carte de decision |
+| **Traces** | Agent | Selon sa carte de decision |
 ### Le cycle fondamental (par session LLM)
 
 ```
@@ -115,7 +116,7 @@ Chaque agent a :
 
 ---
 
-## La boite a outils (119 outils)
+## La boite a outils (123 outils)
 
 Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 
@@ -132,9 +133,9 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Creer (4)** | creer-fichier, creer-remplir-pense-bete, creer-remplir-spec, creer-remplir-todo | Creer fichiers et contenus |
 | **Decomposer (1)** | decomposer-fichier | Decomposer les fichiers markdown |
 | **Deplacer (1)** | deplacer-fichier | Deplacer ou renommer un fichier |
-| **Detecter (7)** | detecter-decalages-catalogue, detecter-divergences-version, detecter-erreur-statut, detecter-impacts, detecter-local-hors-fonction, detecter-surcharge-fichier, detecter-usage-outils-externes | Detecter les erreurs de statut, la surcharge et les local hors fonction |
+| **Detecter (8)** | detecter-convention-nommage, detecter-decalages-catalogue, detecter-divergences-version, detecter-erreur-statut, detecter-impacts, detecter-local-hors-fonction, detecter-surcharge-fichier, detecter-usage-outils-externes | Detecter les erreurs de statut, la surcharge et les local hors fonction |
 | **Ecrire (1)** | ecrire-fichier | Ecrire ou ecraser un fichier |
-| **Editer (1)** | editer-fichier | Remplacer une chaine dans un fichier |
+| **Editer (2)** | editer-fichier, editer-fichier-agents | Remplacer une chaine dans un fichier |
 | **Evaluer (4)** | evaluer-agents, evaluer-coherence, evaluer-conventions, evaluer-structure | Evaluer la coherence du cerveau |
 | **Generateurs (10)** | generateurs-amelioration, generateurs-carte, generateurs-case, generateurs-commande, generateurs-ligne, generateurs-outil-temporaire, generateurs-regenerer-catalogue, generateurs-squelette-pense-bete, generateurs-squelette-spec, generateurs-squelette-todo | Generer les squelettes conformes |
 | **Gerer (1)** | gerer-sous-mission | Gerer les sorties/reentrees du flux |
@@ -150,7 +151,7 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Supprimer (3)** | supprimer-dossier, supprimer-fichier, supprimer-ligne | Supprimer fichiers et dossiers |
 | **Tester (3)** |  | Securiser les tests |
 | **Valider (13)** | valider-cartes-decision, valider-case, valider-conformite-ascii, valider-conventions, valider-ebauche, valider-liens, valider-nommage, valider-numerotation, valider-pense-bete, valider-relecture, valider-spec, valider-tableaux, valider-todo | Verifier la conformite |
-| **Verifier (5)** | verifier-documents-manquants, verifier-restauration-sure, verifier-role-fichier, verifier-separation-preoccupations, verifier-systeme | Verifier l'etat reel |
+| **Verifier (6)** | verifier-conformite-fiche, verifier-documents-manquants, verifier-restauration-sure, verifier-role-fichier, verifier-separation-preoccupations, verifier-systeme | Verifier l'etat reel |
 | **Combos (20)** | combo-activation, combo-audit-themis, combo-controle-buffy, combo-controle-impacts, combo-controle-modification, combo-controle-outil, combo-corriger-ascii, combo-corriger-fichier, combo-creer-agent, combo-creer-fichier-cerveau, combo-creer-protocole, combo-maj-readme, combo-sante-tableaux, combo-tester-outil, combos-analyse-projet, combos-audit-general, combos-corriger-non-ascii, combos-maj-readme-massive, combos-moteur, combos-valider-cerveau | Chainer des outils en sequences |
 | **Templates (1)** | outil-template | Modele standard de creation d'outils |
 

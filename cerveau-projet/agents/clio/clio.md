@@ -13,6 +13,7 @@ agent:
   cree: "2026-08-06"
   statut-clio: "disponible"
   role_principal: false
+  famille: cerveau-projet
   role_specifique: "Muse de l'histoire -- tient la chronique du projet a jour (README)"
 
 profil:
@@ -71,7 +72,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.4.1)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.5.0)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -161,8 +162,9 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 > La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
 > **FLUX** : Ma mission se termine en reactivant Cerberus (activation directe) ou en activant le suivant selon ma carte.
-> **FINS REELLES DE MA CARTE v0.3.0 (E5b - croisement fiche/parcours)** :
-> - `c12` FIN - Reactiver Cerberus (mon retour standard)
+> **FINS REELLES DE MA CARTE v0.4.4 (E5b - croisement fiche/parcours)** :
+> - `c10e` FIN - Reprise du parcours apres retour de l'agent habilite
+> - `c12` FIN - Activer Janus (second controle, qui reactive Cerberus)
 > - `c15` Signaler le besoin (fin - relais)
 > - `c15d` FIN - Outil temporaire
 > - `c16` FIN - Delegation (j'active l'agent habilite)
@@ -223,9 +225,4 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ---
 
-## Historique
 
-| Date | Evenement | Details |
-|---|---|---|
-| 2026-08-06 | Creation | Fiche d'agent initialisee |
-| 2026-08-07 | v0.2.0 | Fiche allegee : le guidage des missions vit dans le parcours (jeu de piste), la fiche garde identite, regles absolues et connexions |

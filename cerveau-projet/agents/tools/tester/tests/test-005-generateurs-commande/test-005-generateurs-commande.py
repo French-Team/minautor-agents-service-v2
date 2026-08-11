@@ -2,9 +2,10 @@
 # -*- coding: ascii -*-
 """
 test-005-generateurs-commande.py
-Test formel du generateur de commande v0.2.2 (fiabilisation des flags optionnels)
-et du parcours Atlas v0.3.1 (migre au format action : references + cases action,
-1 commande template residuelle c30 conservee et documentee).
+Test formel du generateur de commande v0.2.3 (fiabilisation des flags optionnels),
+du catalogue (chaque commande doit avoir sa documentation .md : REGLE ABSOLUE
+LECTURE DOC) et du parcours Atlas v0.4.0 (migre au format action : references +
+cases action, 1 commande template residuelle c30 conservee et documentee).
 
 Objet (correction Buffy 2026-08-09) :
   - composer_commande avait une condition INVERSEE : les flags optionnels non
@@ -19,11 +20,13 @@ Objet (correction Buffy 2026-08-09) :
     residuelle case c30 (cartographier-parcours.py {parcours}), connue et documentee.
   - parcours-atlas v0.1.10 -> v0.2.0 : migration format action (references + cases
     action). La commande template c30 est conservee comme residu connu (1 seule).
+  - parcours-atlas v0.3.3 -> v0.4.0 (2026-08-11) : ajout case c0d LIRE LA
+    DOCUMENTATION DE L OUTIL avant utilisation (garde-fou lecture .md).
 
-Cas couverts (22 points) :
-  GENERATEUR v0.2.2
-  1. --version py = v0.2.2
-  2. --version sh = v0.2.2
+Cas couverts (26 points) :
+  GENERATEUR v0.2.3
+  1. --version py = v0.2.3
+  2. --version sh = v0.2.3
   3. py_compile OK (generateurs-commande.py)
   4. bash -n OK (generateurs-commande.sh)
   5. composition lire-fichier (fichier=AGENTS.md;lignes=3) : SANS --debut/--fin vides
@@ -35,16 +38,20 @@ Cas couverts (22 points) :
  11. flag booleen ecrire-fichier backup=non : --backup ABSENT (py)
  12. parite py/sh : commande composee identique (CRLF normalise)
  13. catalogue JSON valide (json.load)
- 14. catalogue version = 0.2.6
+ 14. catalogue version = 0.2.9
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
-  PARCOURS ATLAS v0.3.1
- 17. parcours-atlas.json : json.load valide + version 0.3.1
+  PARCOURS ATLAS v0.4.0
+ 17. parcours-atlas.json : json.load valide + version 0.4.0
  18. 1 seul residu connu (c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
  21. valider-cartes-decision --agent atlas : CONFORME
  22. affichage case c3 : PASSE PAR LE GENERATEUR sans commande en dur
+  CATALOGUE - CONTRAT DOCUMENTATION (REGLE ABSOLUE LECTURE DOC)
+ 23. chaque commande du catalogue (138) a son .md a cote du script
+ 24. les commandes de test (test-004 a test-021) sont composables
+     via generateurs-commande (generation reelle en dry-run)
 
 Usage:
   python3 test-005-generateurs-commande.py
@@ -98,7 +105,9 @@ def composer(nom, reponses, sh=False):
         r = subprocess.run(["bash", GC_SH, "--commande", nom, "--reponses", reponses],
                            capture_output=True, text=True)
     else:
-        r = subprocess.run(["python3", GC_PY, "--commande", nom, "--reponses", reponses],
+        # --no-journal : ne pas polluer le registre d usage pendant les tests
+        # (le .sh du generateur ne journalise pas et ne supporte pas l option)
+        r = subprocess.run(["python3", GC_PY, "--commande", nom, "--reponses", reponses, "--no-journal"],
                            capture_output=True, text=True)
     lignes = ((r.stdout or "") + (r.stderr or "")).splitlines()
     for i, ligne in enumerate(lignes):
@@ -112,15 +121,15 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.2 + parcours-atlas v0.3.1 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.3 + catalogue 0.2.9 + parcours-atlas v0.4.0 ===")
     print("")
 
-    # ---------- GENERATEUR v0.2.2 ----------
+    # ---------- GENERATEUR v0.2.3 ----------
     code, out = exec_cmd("python3 %s --version" % GC_PY)
-    verifier(1, "generateurs-commande.py --version = v0.2.2", "v0.2.2" in out, out.strip())
+    verifier(1, "generateurs-commande.py --version = v0.2.3", "v0.2.3" in out, out.strip())
 
     code, out = exec_cmd("bash %s --version" % GC_SH)
-    verifier(2, "generateurs-commande.sh --version = v0.2.2", "v0.2.2" in out, out.strip())
+    verifier(2, "generateurs-commande.sh --version = v0.2.3", "v0.2.3" in out, out.strip())
 
     code, out = exec_cmd("python3 -m py_compile %s" % GC_PY)
     verifier(3, "py_compile generateurs-commande.py", code == 0, out.strip())
@@ -161,7 +170,7 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         verifier(13, "catalogue-commandes.json JSON valide", True)
-        verifier(14, "catalogue version = 0.2.6", cat.get("version") == "0.2.6", str(cat.get("version")))
+        verifier(14, "catalogue version = 0.2.9", cat.get("version") == "0.2.9", str(cat.get("version")))
     except Exception as e:
         verifier(13, "catalogue-commandes.json JSON valide", False, str(e))
         verifier(14, "catalogue version = 0.2.0", False, "")
@@ -173,14 +182,14 @@ def main():
     ok = cmd is not None and "creer-fichier.py x.md" in cmd and "hello" in cmd
     verifier(16, "non-regression creer-fichier composee correctement", ok, str(cmd))
 
-    # ---------- PARCOURS ATLAS v0.3.1 ----------
+    # ---------- PARCOURS ATLAS v0.3.3 ----------
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.3.1",
-                 p.get("parcours", {}).get("version") == "0.3.1", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.0",
+                 p.get("parcours", {}).get("version") == "0.4.0", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.3.1", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.0", False, str(e))
         p = {}
 
     # Residu connu et documente : case c30 (commande template cartographier-parcours.py {parcours}).
@@ -208,8 +217,42 @@ def main():
     ok = ("PASSE PAR LE GENERATEUR" in segment) and ("catalogue: lister-fichiers" in segment)
     verifier(22, "case c3 : PASSE PAR LE GENERATEUR sans commande en dur", ok, segment[:200])
 
+    # ---------- CONTRAT DOCUMENTATION (REGLE ABSOLUE LECTURE DOC) ----------
+    # Chaque commande du catalogue doit pointer vers un outil dont la documentation
+    # .md existe a cote du script : le .md est le contrat d utilisation (l agent
+    # DOIT le lire avant d utiliser l outil - REGLE ABSOLUE LECTURE DOC).
+    try:
+        with io.open(CATALOGUE, encoding="utf-8") as fh:
+            cat2 = json.load(fh)
+        sans_md = []
+        for e in cat2.get("commandes", []):
+            script = e.get("script", "")
+            if not script:
+                sans_md.append((e.get("nom"), "sans script"))
+                continue
+            md = script.rsplit(".", 1)[0] + ".md"
+            if not os.path.exists(md):
+                sans_md.append((e.get("nom"), script))
+        verifier(23, "chaque commande du catalogue (138) a son .md a cote du script",
+                 len(sans_md) == 0, "sans .md: %s" % sans_md[:5])
+    except Exception as e:
+        verifier(23, "chaque commande du catalogue (138) a son .md a cote du script", False, str(e))
+
+    # Les commandes de test (test-004 a test-021) doivent etre composables
+    # via generateurs-commande (generation reelle en dry-run).
+    tests_ko = []
+    for e in cat2.get("commandes", []):
+        nom = e.get("nom", "")
+        if not (nom.startswith("test-") and nom != "test-001" and nom != "test-002" and nom != "test-003"):
+            continue
+        cmd = composer(nom, "chemin=.")
+        if cmd is None:
+            tests_ko.append(nom)
+    verifier(24, "les commandes de test (test-004 a test-021) sont composables",
+             len(tests_ko) == 0, "non composables: %s" % tests_ko[:5])
+
     # ---------- ASCII ----------
-    for f, num in [(GC_PY, 23), (GC_SH, 24), (CATALOGUE, 25), (PARCOURS_ATLAS, 26)]:
+    for f, num in [(GC_PY, 25), (GC_SH, 26), (CATALOGUE, 27), (PARCOURS_ATLAS, 28)]:
         c, out = exec_cmd("python3 %s %s" % (ASCII, f))
         verifier(num, "ASCII 0 : %s" % os.path.basename(f), "validee" in out, out.strip())
 

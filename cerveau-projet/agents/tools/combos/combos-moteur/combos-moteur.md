@@ -68,6 +68,7 @@ Options :
   --reponses <liste> Reponses des controles d'un coup : case=reponse;case2=reponse2
   --var <cle=valeur> Variable initiale disponible pour {var} (repetable)
   --dry-run         Afficher les commandes a executer sans les lancer
+  --no-journal      Desactiver la journalisation d usage (generateur)
   --verbose         Afficher les details de chaque case
   --version         Afficher la version
   --help            Afficher l'aide

@@ -136,3 +136,10 @@ preferences:
 3. P8 : Activer (1) etait hors ordre alphabetique + la table avait des inversions subtiles (Changer/Cartographier) - reordonner selon l ordre CANONIQUE de mettre-a-jour-readme (alphabetique + Combos/Templates en fin volontairement).
 4. L'ordre canonique place Combos et Templates en FIN de table (convention de mettre-a-jour-readme) - ne pas les trier alphabetiquement comme les autres categories.
 5. Verification croisee : combos-analyse-projet A JOUR + mettre-a-jour-readme --verifier 0 KO + ASCII 0 + LF pur.
+
+## [LECON] 2026-08-11 -- PETITE MAJ DU README (Clio) : VERDICT A JOUR
+1. combos-analyse-projet est le juge : il a detecte l'ecart badge Outils 119 vs 121 avant que je ne touche au README
+2. combo-maj-readme (PETITE MAJ) corrige le titre de section mais PAS le badge ni l'arborescence : j'ai du completer avec editer-fichier --global (2 occurrences : badge ligne 9 + arborescence ligne 54)
+3. editer-fichier ne remplace que la PREMIERE occurrence sans --global : toujours verifier le nombre d'occurrences restantes apres chaque remplacement
+4. apres correction : re-lancer combos-analyse-projet pour confirmer le verdict README A JOUR (badge 121 == 121)
+5. la lecon precedente du 2026-08-10 s'applique toujours : verifier la structure (en-tete/separateur) apres tri de table et scanner les anciens totaux dans tout le fichier

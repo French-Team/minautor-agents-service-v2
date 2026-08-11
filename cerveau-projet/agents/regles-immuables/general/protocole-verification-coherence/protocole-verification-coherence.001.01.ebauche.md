@@ -7,10 +7,11 @@ identite:
 
 # Protocole de Verification de Coherence
 
-**Version** : 0.1.0
+**Version** : 0.2.0
 **Statut** : Ebauche
 **Date creation** : 2026-08-10
 **Agent** : Themis (evaluatrice croisee) -- generalisation des lecons du re-audit README
+**Historique** : v0.2.0 (ajout E8 : verification automatique de coherence des SEUILS BUDGET PONDERE entre specs et outils -- grep croise des 5 valeurs 100/0,5/1/3,0/160 sur 6 fichiers, lecon des audits de coherence budget pondere du 2026-08-11) -> v0.1.0 (creation, 2026-08-10)
 
 ---
 
@@ -19,6 +20,13 @@ identite:
 Definir la procedure de verification de coherence d'un fichier markdown a
 compteurs/tables/badges (typiquement le README) apres une mise a jour, pour
 garantir qu'il reflete l'etat reel du projet.
+
+**Perimetre etendu (v0.2.0)** : la meme exigence de coherence s'applique aux
+SEUILS du BUDGET PONDERE des indices de cases (100 / 0,5 / 1 / 3,0 / 160) :
+les specs, le .md d'outil et les codes (valider-case, generateurs-case)
+doivent tous porter les MEMES valeurs (E8). Une divergence de seuil entre deux
+fichiers = incoherence a corriger, meme si chaque fichier est coherent en
+interne.
 
 **Pourquoi ce protocole ?**
 - L'audit Themis du 2026-08-10 a revele que les compteurs de la table peuvent
@@ -40,6 +48,7 @@ garantir qu'il reflete l'etat reel du projet.
 | 2 | Sources de verite disponibles | L'outil qui compte l'etat reel (mettre-a-jour-readme, combos-analyse-projet, ou comptage manuel) |
 | 3 | Contexte de la MAJ | Savoir ce qui devait changer (totaux, categories, badges) |
 | 4 | Outils de controle | valider-conformite-ascii, valider-liens, grep/regex |
+| 5 | Fichiers BUDGET PONDERE (6) | spec-refonte-cartes-decision, spec-valider-case, spec-guider-parcours, valider-case.md, valider-case.py, generateurs-case.py |
 
 ---
 
@@ -48,8 +57,8 @@ garantir qu'il reflete l'etat reel du projet.
 ```
 SOURCES DE VERITE -> ANCIENS TOTAUX -> STRUCTURE -> BADGES -> CATEGORIES VIRTUELLES
         1                  2             3           4              5
--> NORMES -> VERDICT
-    6           7
+-> BUDGET PONDERE -> NORMES -> VERDICT
+        6               7          8
 ```
 
 | Etape | Action | Detail | Outils |
@@ -60,7 +69,8 @@ SOURCES DE VERITE -> ANCIENS TOTAUX -> STRUCTURE -> BADGES -> CATEGORIES VIRTUEL
 | E4 | Verifier les BADGES | Compter les occurrences 'img.shields.io/badge/' dans chaque LIGNE (une ligne peut porter 6 badges) -- ne pas filtrer par ligne contenant 'badge'. Comparer chaque valeur au total officiel | grep -o 'img.shields.io/badge/' + parse des valeurs |
 | E5 | Verifier les CATEGORIES VIRTUELLES | Certaines categories n'ont pas de dossier physique (ex : templates = outil-template.md a la racine tools/). Les ajouter au comptage manuel (118 dossiers + 1 virtuel = 119) | ls, comptage manuel |
 | E6 | Verifier les NORMES | ASCII strict 0 non-ASCII + LF pur (0 CRLF) | valider-conformite-ascii |
-| E7 | Verdict | VALIDE si 0 ecart sur E1-E6 ; sinon A REVOIR avec liste exacte des lignes concernees | - |
+| E7 | Croiser les SEUILS BUDGET PONDERE (grep croise) | Les 5 valeurs (100 car / 0,5 / 1 / 3,0 / 160) doivent etre IDENTIQUES dans les 6 fichiers. Fichiers TEXTES (3 specs + valider-case.md) : grep des valeurs dans chaque fichier. Codes : grep des constantes -- valider-case.py doit porter `SEUIL_COURT = 100`, `BUDGET_INDICES = 3.0`, `SEUIL_TEXTE = 160` ; generateurs-case.py `SEUIL_COURT = 100`, `BUDGET_INDICES = 3.0`, `SEUIL_REGLE_DEFAUT = 160`. Anti-recurrence : l'ancienne regle `> 3 indices` doit etre ABSENTE des 6 fichiers | grep croise des 5 valeurs sur les 6 fichiers |
+| E8 | Verdict | VALIDE si 0 ecart sur E1-E7 ; sinon A REVOIR avec liste exacte des fichiers/lignes concernes | - |
 
 ---
 
@@ -68,14 +78,15 @@ SOURCES DE VERITE -> ANCIENS TOTAUX -> STRUCTURE -> BADGES -> CATEGORIES VIRTUEL
 
 | Etape RVAV | Action pour ce protocole |
 |---|---|
-| [R]echercher | Rassembler le fichier, les sources de verite, les anciennes versions connues des totaux, la structure attendue des tables |
-| [V]erifier | Appliquer E1 a E6 : checklist complete (compteurs, anciens totaux, structure, badges, categories virtuelles, normes) |
+| [R]echercher | Rassembler le fichier, les sources de verite, les anciennes versions connues des totaux, la structure attendue des tables, les 6 fichiers du budget pondere |
+| [V]erifier | Appliquer E1 a E7 : checklist complete (compteurs, anciens totaux, structure, badges, categories virtuelles, budget pondere, normes) |
 | [A]nalyser | Distinguer les VRAIS ecarts des faux positifs (artefact __pycache__, separateur d'une AUTRE table, badge sur une ligne multi-badges) |
 | [V]alider | Verdict VALIDE / A REVOIR et rapport avec preuves chiffrees |
 
 > **REGLE ABSOLUE** : Ne jamais valider sur la seule base des compteurs de la
 > table. La coherence = compteurs ET structure ET absence d'anciens totaux dans
-> TOUT le fichier.
+> TOUT le fichier. Pour le budget pondere, un fichier coherent en interne mais
+> porteur d'un seuil different des autres = incoherence (E7).
 
 ---
 
@@ -90,6 +101,19 @@ Verification :
   E2 : grep '83' -> ligne 54 de l'arborescence : "Boite a outils (83 outils)"
        -> A REVOIR : le --maj ne touche pas l'arborescence commentee
   E7 : verdict A REVOIR (1 ecart reel : total 83 residuel ligne 54)
+```
+
+### Exemple 3 : seuil budget pondere divergent
+
+```
+Verification de coherence budget pondere (6 fichiers) :
+  E7 : grep croise 100/0,5/1/3,0/160
+       - spec-refonte, spec-valider-case, spec-guider-parcours : 5/5 valeurs OK
+       - valider-case.md : ligne Allegement -> '> 3 indices OU texte > 160'
+         (ancienne regle) -> 0,5 et 3,0 ABSENTS -> A REVOIR
+  Parade : corriger le .md avec les valeurs de la spec de reference (v0.1.3),
+           puis re-grep croise -> 5/5 OK partout
+  E8 : verdict A REVOIR tant qu'un fichier porte un seuil divergent
 ```
 
 ### Exemple 2 : en-tete ecrase par un tri
@@ -114,6 +138,9 @@ Tri alphabetique automatique de la table (32 lignes) :
 | **Categories virtuelles** | Comptage manuel inferieur d'1 (118 vs 119) car un dossier physique manque | Connaitre les categories virtuelles (templates = outil-template.md racine) |
 | **Tri qui ecrase l'en-tete** | Reordonnancement sans erreur de contenu mais structure cassee | Verifier en-tete + separateur positionnels (E3) apres tout tri |
 | **Artefact __pycache__** | Faux ecart "compteur introuvable (reel = 0)" | Ignorer par convention (artefact Python) |
+| **Seuil divergent entre .md et spec** | Le .md d'un outil porte l'ancienne regle (ex : > 3 indices) alors que sa spec est a jour | Croiser systematiquement les 6 fichiers du budget pondere (E7), pas seulement spec + code |
+| **Virgule vs point decimal** | Les fichiers textes ecrivent 0,5 et 3,0 (virgule) ; les codes Python ecrivent 0.5 et 3.0 (point) | Ne pas comparer brute : comparer la VALEUR (5 seuils) dans chaque registre, pas la graphie |
+| **Valeur a plusieurs usages** | 100 = seuil COURT mais aussi 100% ASCII ; 1 = poids LONG mais aussi numero d'agent | Cibler les occurrences CONTEXTUELLES (accompagnees de car./unite/budget), pas le chiffre nu |
 
 ---
 
@@ -128,3 +155,7 @@ Tri alphabetique automatique de la table (32 lignes) :
 | [mettre-a-jour-readme](../../../tools/mettre-a-jour/mettre-a-jour-readme/) | Source de verite des compteurs du README |
 | [combos-analyse-projet](../../../tools/combos/combos-analyse-projet/) | Source de verite croisee (ecarts README vs realite) |
 | [rapport-audit-coherence-readme](../../../themis/rapports/rapport-audit-coherence-readme-2026-08-10.md) | Cas reel ayant genere ce protocole |
+| [spec-refonte-cartes-decision](../../../docs-dev-cerveau-projet/spec-refonte-cartes-decision.001.01.ebauche.md) | Reference des seuils budget pondere (v0.1.3) |
+| [spec-valider-case](../../../tools/valider/valider-case/spec/spec-valider-case.001.01.ebauche.md) + [valider-case.md](../../../tools/valider/valider-case/valider-case.md) | Spec + doc d'outil a croiser (E7) |
+| [spec-guider-parcours](../../../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) | Spec Pattern 16 ALLEGEMENT a croiser (E7) |
+| [valider-case.py](../../../tools/valider/valider-case/valider-case.py) + [generateurs-case.py](../../../tools/generateurs/generateurs-case/generateurs-case.py) | Constantes code du budget pondere (SEUIL_COURT / BUDGET_INDICES / SEUIL_TEXTE) |

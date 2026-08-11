@@ -1,3 +1,40 @@
+
+
+
+## [LECON] 2026-08-11 -- TEST-007 ADAPTE 120 -> 138 COMMANDES (Morpheus, VERDICT VALIDE)
+
+**Mission** : adapter le point 13 du test-007-figer-lf apres l ajout des 18 commandes de test au catalogue generateurs-commande (Vulcain).
+
+**Lecons** :
+1. Le point 13 du test-007 exigeait exactement 120 commandes ; le catalogue passe a 138 apres l ajout de test-004 a test-021. Adaptation : 120 -> 138 + verification supplementaire de la presence de test-021-ligne-trio (garde-fou positif : le nouveau test est bien au catalogue).
+2. Le point 14 (index-tools total 110) est independant du catalogue : il compte les OUTILS, pas les commandes de test. Aucun impact.
+3. Le catalogue reference desormais TOUS les tests (test-001 a test-021) : generation de commandes complete pour la suite de tests.
+4. Resultat : test-007 reverdi (15/15), non-regression complete 21/21 OK, normes 0/0.
+5. Chaine conforme : Vulcain (catalogue) -> Morpheus (test-007) -> prochaine etape Janus (controle croise) avant le retour a Cerberus.
+
+## [LECON] 2026-08-11 -- TEST-021 LIGNE TRIO CREE (Morpheus, VERDICT VALIDE)
+
+**Mission** : creer le test-021 dedie a la ligne trio de Janus + boucle de correction, comme garde-fou non-regression.
+
+**Lecons** :
+1. Le test-021 couvre : structure statique (branche trio c1->cT1, types cT1..cT10), commandes exactes cT6..cT10 (garde-fou P8 insensible a la casse), navigation reelle OUI (athena->cT6, promethee->cT7, minerve->c10 Reactiver Cerberus), navigation KO (athena->cT8, promethee->cT9, minerve->cT10), boucle de correction (branche corriger + c9f -> c10 sur le trio), valider-cartes CONFORME, ASCII + LF.
+2. Le point ASCII a detecte 2 non-ASCII dans le PROTOCOLE-CONTROLE-TRIO (residu de la mission Buffy : 'recoit' et 'structure' accentues dans la REGLE D EXCELLENCE). Le test sert aussi de filet sur les autres fichiers du perimetre : il a rattrape un ecart laisse par la mission precedente.
+3. La non-regression passe de 20 a 21 tests : le script de detection par glob (test-0*/test-0*.py) inclut automatiquement le nouveau test.
+4. Convention respectee : seul Morpheus ecrit et execute les tests (REGLE IMMUABLE DELEGATION du protocole-tests).
+5. Resultat : test-021 9/9 OK, non-regression 21/21 OK, normes 0/0. La ligne trio est desormais verrouillee par un garde-fou automatique : toute modification des cartes (fin cT sans commande, branche trio perdue, boucle corriger cassee) cassera la non-regression.
+
+## [LECON] 2026-08-11 -- TEST-018 ADAPTE APRES MIGRATION DU TRIO VERS JANUS (Morpheus)
+
+**Mission** : adapter test-018 (fins reactivation) apres la correction du trio (etape 2) : minerve n'est plus une fin REACTIVER mais 'FIN - Activer Janus'.
+
+**Lecons** :
+1. Le trio (athena c10, promethee c10, minerve c10) a migre vers 'FIN - Activer Janus' : FINS_PRECISEES est desormais vide (janus est la seule fin REACTIVER restante, dernier maillon legitime).
+2. Le bloc FINS_ACTIVER_JANUS passe de 3 a 6 agents (atlas/themis/morpheus + athena/promethee/minerve) : garde-fou positif elargi.
+3. Point 1b adapte : 'La seule fin REACTIVER restante est janus (dernier maillon)' au lieu de 'Les 2 fins (janus, minerve)'.
+4. Point 4 adapte : nav_ok == 0 (aucune fin precisee restante) au lieu de 1.
+5. Faux positif de detection : mon script de non-regression comptait KO un test affichant '19/19 OK' car il cherchait '0 KO'. Le motif fiable est '[KO]' ou un compteur 'N KO' avec N > 0 (regex [1-9][0-9]* KO).
+6. Resultat : test-018 13/13 OK, non-regression 20/20 OK, normes 0/0.
+
 ## [LECON] 2026-08-09 -- GENERATEURS-LIGNE v0.2.0 TESTE (configs externalisees + ajouter-config)
 
 **Mission** : tester formellement l'evolution de generateurs-ligne v0.1.0 -> v0.2.0 (decision utilisateur + Cerberus) : gabarits EXTERNALISES dans gabarits-ligne.json (pattern themes-amelioration.json, une place pour chaque chose) + sous-commande ajouter-config (validation + dry/wet) pour que Buffy cree une nouvelle config reutilisable sans toucher au code de l'outil (Pattern 12 : creation limitee).
@@ -483,3 +520,348 @@ catalogue (Vulcain, catalogue v0.2.6).
 2. test-014 reference 'vulcain' mais uniquement pour les patterns de la spec-guider-parcours (Pattern 12/14 cites comme exemples) : ce n'est pas une reference a la version du parcours.
 3. La modification d'une carte de decision (ajout de cases alternatives) est sans impact sur les tests tant que la structure (valider-cartes CONFORME, navigation reelle OK) est respectee.
 4. Le verdict de non-regression se fait avec les 20 tests de la suite formelle (test-001 a test-020), en executant chaque test et en verifiant l'absence de [KO].
+
+## [LECON] 2026-08-11 -- TESTS ADAPTES APRES CORRECTION MASSIVE P12 (Morpheus, VERDICT VALIDE)
+
+**Contexte** : Buffy a corrige 16 ecarts P12 (CREATION LIMITEE) sur 7 parcours, avec bump de version (atlas 0.3.2, buffy 0.3.5, clio v0.4.2, janus 0.3.5, themis 0.3.4, vulcain 0.3.5). Impact tests : test-005 verifiait atlas v0.3.1 et test-016 verifiait buffy 0.3.4.
+
+**Lecons** :
+1. test-005 (generateurs-commande) : 8 occurrences de la version atlas (lignes 6, 41-42, 115, 176-183) - tout remplacer 0.3.1 -> 0.3.2.
+2. test-016 (migration-buffy) : 3 occurrences de la version buffy (lignes 21, 100-102) - remplacer 0.3.4 -> 0.3.5.
+3. PIEGE : ajouter un indice CREATION LIMITEE a une case deja a 3 indices la fait passer a 4 -> valider-case signale une SURCHARGE (SEUIL_INDICES=3) et le test-016 point 10 casse. Solution : fusionner les indices outil qui pointent vers le MEME script (generateurs-case + generateurs-case-convertir -> 1 seul indice avec sous-commande). Toujours verifier apres ajout : aucune case > 3 indices.
+4. test-009 et test-013 utilisent des TEMOINS ARTIFICIELS (fabriques dans le test) : ils ne verifient pas les vrais parcours, donc les surcharges des 6 parcours modifies ne les impactent pas.
+5. La non-regression complete (20/20 OK) est le verdict final : adapter les versions attendues + verifier le seuil d'indices sur les parcours modifies + relancer la suite.
+
+**Verdict** : VALIDE - 20/20 OK, 0 KO.
+
+## [LECON] 2026-08-11 -- TESTS ADAPTES APRES OUTIL EDITER-FICHIER-AGENTS (Morpheus, VERDICT VALIDE)
+
+**Contexte** : Vulcain a cree l outil editer-fichier-agents et l a ajoute au catalogue de commandes (version 0.2.6 -> 0.2.7, 118 -> 119 commandes).
+
+**Lecons** :
+1. Ajouter un outil au catalogue impacte 2 tests : test-005 (version catalogue 0.2.6, lignes 38 + 164) et test-007 (nombre de commandes 118, lignes 30 + 219-225).
+2. La valeur 118 apparait dans test-007 en 4 endroits (commentaire + condition + 2 messages de verifier) : tout remplacer.
+3. Apres adaptation, verifier qu'il ne reste AUCUNE occurrence des anciennes valeurs (grep 0.2.6 / 118) dans les tests (hors pyc).
+4. La non-regression complete (20/20 OK) est le verdict final apres toute modification du catalogue.
+5. Le detecteur detecter-decalages-catalogue peut etre long (timeout > 30s) : lancer avec --sortie et un timeout adapte.
+
+**Verdict** : VALIDE - 20/20 OK, 0 KO.
+
+## [LECON] 2026-08-11 -- TESTS ADAPTES APRES BRANCHEMENT EDITER-FICHIER-AGENTS (Morpheus, VERDICT VALIDE)
+
+**Contexte** : branchement de editer-fichier-agents dans le parcours buffy v0.3.6 (nouvelle case c11b, branche 'fiche' dans c10b).
+
+**Points adaptes dans test-016-migration-buffy** :
+1. Version attendue 0.3.5 -> 0.3.6 (docstring + verification)
+2. Nombre de cases action 34 -> 35 (message descriptif mis a jour avec c11b)
+3. Historique docstring : ligne v0.3.6 ajoutee
+
+**Lecons** :
+1. Toute nouvelle case dans un parcours peut casser le compteur de types (action/question/fin) d'un test formel -- verifier les tests qui comptent les cases
+2. La version du parcours est verifiee en dur dans test-016 : chaque bump de version exige l'adaptation du test (DELEGATION : Morpheus)
+3. Le message descriptif du point 2a doit lister les cases speciales (c10d, c11b, c15c/c15d) pour rester lisible
+4. NON-REGRESSION COMPLETE 20/20 OK apres adaptation -- la suite reste verte
+
+**Outils utilises** : lire-fichier, str_replace, .zz-nonreg (script temporaire de non-regression), valider-conformite-ascii
+
+## [LECON] 2026-08-11 -- TESTS ADAPTES APRES OUTIL VERIFIER-CONFORMITE-FICHE (Morpheus, VERDICT VALIDE)
+
+**Contexte** : ajout de verifier-conformite-fiche au catalogue generateurs-commande (v0.2.8, 120 commandes).
+
+**Points adaptes** :
+1. test-005-generateurs-commande : version catalogue 0.2.7 -> 0.2.8 (2 occurrences : docstring + verification)
+2. test-007-figer-lf : nombre de commandes 119 -> 120 (3 occurrences : docstring, ok_cat, messages -- dont 1 dans le bloc d'exception)
+
+**Lecons** :
+1. Le bloc d'exception d'un test peut contenir la meme valeur que la verification (message avec 119) -- verifier TOUTES les occurrences, pas seulement la condition
+2. Le format de sortie des tests differe (certains affichent 'RESULTAT', d'autres 'BILAN') -- ne pas grepper un motif unique pour verifier le succes, utiliser le code de retour
+3. Apres adaptation : NON-REGRESSION COMPLETE 20/20 OK -- la suite reste verte
+4. Aucun autre test ne reference 119 ou 0.2.7 (grep global confirme)
+
+**Outils utilises** : lire-fichier, str_replace, .zz-nonreg (script temporaire de non-regression), valider-conformite-ascii
+
+## [LECON] 2026-08-11 -- NON-REGRESSION APRES REFONTE PAR ROLE (Morpheus, VERDICT VALIDE)
+
+**Contexte** : refonte du template de fiche par role (noyau + variantes), outil verifier-conformite-fiche v0.2.1, 11 fiches corrigees, catalogue v0.2.9.
+
+**KO detecte et corrige** : test-005-generateurs-commande attendait la version catalogue 0.2.8 mais le bump a 0.2.9 (ajout parametre variante) avait ete fait par Vulcain sans adapter le test. Adapte : 0.2.8 -> 0.2.9 (2 occurrences : docstring + verification).
+
+**Validations finales** :
+1. test-005 : 26/26 OK
+2. NON-REGRESSION COMPLETE : 20/20 OK, 0 KO
+3. verifier-conformite-fiche --tous : 11/11 CONFORME (0 ecart)
+4. Normes : ASCII 0 + LF pur (test modifie)
+5. 0 occurrence restante de 0.2.8 dans la suite
+
+**Lecons** :
+1. Apres une refonte du catalogue (bump de version), RE-SCANNER la suite (test-005 verifie la version) -- c'est la regle RE-SCAN COMPLET du protocole-tests
+2. La verification finale croisee : non-regression + conformite des fiches -- deux angles complementaires (tests vs modele)
+3. Le modele par role est operationnel : 11/11 fiches conformes au noyau + variante, avec les sections specifiques legitimes en avertissement non bloquant
+
+**Outils utilises** : .zz-nonreg (script temporaire), valider-conformite-ascii, verifier-conformite-fiche (v0.2.1), str_replace
+## [LECON] 2026-08-11 -- TEST-018 ADAPTE : FIN CLIO C12 DEVENUE 'ACTIVER JANUS' (Morpheus, VERDICT VALIDE)
+
+**Mission** : adapter le test-018-fins-reactivation apres la transformation de la fin de clio (c12 : 'Reactiver Cerberus' -> 'Activer Janus', mission Buffy).
+
+**Actions** :
+1. Constat KO : 3 points cassaient (1b, 3, 4) car clio n'avait plus de fin REACTIVER-CERBERUS
+2. Adaptation du test :
+   - FINS_PRECISEES : clio retiree -> 3 agents (atlas c11, minerve c10, themis c13)
+   - Point 1b : 6 -> 5 fins REACTIVER (atlas, janus, minerve, morpheus, themis)
+   - Points 3 et 4 : '4 fins' -> '3 fins' (texte + compteurs)
+   - NOUVEAUX points 4b/4c : garde-fou que clio c12 est bien 'FIN - Activer Janus' (REGLE IMMUABLE JANUS) + navigation reelle PARCOURS TERMINE
+3. Verification : test-018 reverdi 11 OK / 0 KO + non-regression complete 20/20 + normes ASCII 0 / LF 0
+
+**Lecons** :
+1. Quand une fin change de nature (Reactiver -> Activer X), le test-018 exige une adaptation en 2 endroits : la liste des fins REACTIVER (1b) ET les fins precisees (3/4) - ne pas oublier le docstring de contexte
+2. Ajouter un garde-fou POSITIF (4b/4c) pour la nouvelle fin : le test verifie desormais la presence de la fin Activer Janus de clio et sa navigabilite - il couvre ainsi les 2 natures de fins
+3. guider-parcours --case c12 sur une fin Activer Janus retourne bien PARCOURS TERMINE sans 'activation directe' - c'est le comportement attendu pour une fin de chaine
+4. La non-regression complete (20 tests) reste le filet final avant de rendre le verdict
+## [LECON] 2026-08-11 -- TEST-018 GENERALISATION JANUS + NORMALISATION VERSIONS (Morpheus, VERDICT VALIDE)
+
+**Mission** : adapter le test-018-fins-reactivation apres la generalisation de la REGLE IMMUABLE JANUS (atlas c11, themis c13, morpheus c14 transformees en FIN - Activer Janus par Buffy).
+
+**Actions** :
+1. Constat KO : 3 points (1b, 3, 4) - les fins REACTIVER n'etaient plus que 2 (janus c10, minerve c10)
+2. Adaptation du test :
+   - fins REACTIVER attendues : 2 (janus + minerve) au lieu de 5
+   - FINS_PRECISEES : ne reste que minerve c10 (condition 'activation directe par Cerberus' conservee)
+   - navigation : 1 fin precisee (minerve)
+   - NOUVEAU garde-fou positif 4d : atlas c11 + themis c13 + morpheus c14 = fins 'FIN - Activer Janus' navigables (REGLE IMMUABLE JANUS)
+3. Normalisation des versions : les 4 parcours touches (atlas, clio, morpheus, themis) stockaient 'v0.3.3' (avec prefixe v) alors que la convention est SANS prefixe (buffy, cerberus, vulcain...) - corrige vers '0.3.3' etc. Les FICHES gardent le prefixe v dans Pattern 14 (convention : parcours sans v, fiches avec v)
+4. Tests de versions adaptes : test-004 (morpheus 0.3.1 -> 0.3.2), test-005 (atlas 0.3.2 -> 0.3.3)
+5. Verification : test-018 12/12 OK + non-regression complete 20/20 + normes 0/0
+
+**Lecons** :
+1. La normalisation de version est une lecon transversale : 4 parcours sur 11 stockaient leur version avec un prefixe 'v' (incoherent) - verifier le format (parcours sans v / fiches avec v) a chaque bump
+2. Le garde-fou 4d du test-018 verifie desormais la presence de TOUTES les fins Activer Janus (clio + atlas + themis + morpheus) : toute regression sur ces fins cassera le test
+3. Ne reste que 2 fins REACTIVER dans le cerveau : janus c10 (legitime, dernier maillon) et minerve c10 (trio, hors perimetre) - si on etend la regle au trio un jour, le test-018 devra etre re-adapte
+4. Chaque transformation de fin impose la verification en cascade : carte + fiche + test-018 + tests de version (test-004/test-005)
+## [LECON] 2026-08-11 -- GARDE-FOU POSITIF COMMANDE ACTIVER DANS TEST-018 (Morpheus, VERDICT VALIDE)
+
+**Mission** : renforcer le test-018 avec un garde-fou positif : toute fin 'FIN - Activer X' doit contenir la COMMANDE EXACTE d'activation (activer-agent-principal.py activer session-llm-1 <agent> '<raison>').
+
+**Contexte** : probleme detecte par l'utilisateur - l'execution reelle ne suivait pas la carte (cloture Morpheus ecrite 'je reactive Cerberus' alors que sa carte dit 'FIN - Activer Janus'). Cause racine : les 8 fins 'Activer Janus' ne contenaient pas la commande exacte, l'executant retombait sur reactiver (qui ramene toujours a Cerberus). Buffy a enrichi les 8 messages avec la commande exacte.
+
+**Action** : ajoute le point 5b dans la Passe 3 du test-018 : pour chaque fin 'FIN - Activer X' de tous les parcours, verification POSITIVE que le message contient 'activer-agent-principal.py activer' ET 'activer session-llm-1'. Le point 5 existant (anti-reactiver) est conserve.
+
+**Verifications** : test-018 13/13 OK (point 5b vert), non-regression complete 20/20, normes 0 non-ASCII / 0 CRLF.
+
+**Lecons** :
+1. Le test-018 verifie desormais les 2 faces de la regle : NEGATIVE (pas de reactiver dans une fin Activer X - point 5) et POSITIVE (la commande activer exacte doit etre presente - point 5b). C'est la bonne forme de garde-fou.
+2. Le point 5b aurait detecte le probleme avant qu'il n'arrive : toute fin 'Activer X' sans commande activer exacte fera echouer la non-regression
+3. Le reflexe reactiver (qui ramene toujours a Cerberus) est le piege principal des chaines Agent -> Agent -> Cerberus : la commande exacte dans la fin est la seule protection fiable
+## [LECON] 2026-08-11 -- TEST-005 AMELIORE + CONTRAT DOCUMENTATION .md (Morpheus)
+
+**Mission** : ameliorer test-005 (verification .md present pour chaque commande du catalogue + commandes de test composables) et reverdir la non-regression apres le volet 1 Buffy (case c0d lecture doc dans les 11 parcours).
+
+**Actions** :
+1. Test-005 passe de 22 a 28 points : ajout du point 23 (chaque commande du catalogue 138 a son .md a cote du script - contrat LECTURE DOC) et point 24 (les commandes de test test-004 a test-021 sont composables via generateurs-commande).
+2. Creation des 14 .md de test manquants (test-006 a test-021) au format standard : titre, testeur, date, objet extrait de la docstring, contexte, execution.
+3. Corrections de versions liees au bump c0d : test-004 (morpheus 0.3.3), test-013 (cerberus 0.3.3 + 21 cases action), test-016 (buffy 0.3.7 + 36 cases action), test-006 (atlas 45 cases).
+
+**Lecons** :
+1. La REGLE ABSOLUE LECTURE DOC impose que chaque commande du catalogue pointe vers un outil avec un .md a cote - le test-005 la verifie desormais en permanence.
+2. L'ajout d'une case action dans les parcours (c0d) fait monter les compteurs de types dans test-013 (20->21) et test-016 (35->36) : il faut mettre a jour les tests en meme temps que les parcours.
+3. Les .md de test sont le contrat d'utilisation : tout nouveau test doit avoir son .md cree au meme moment.
+## [LECON] 2026-08-11 -- TESTS 009/015 ADAPTES A VALIDER-CASE v1.0.2 (Morpheus)
+
+**Mission** : adapter les tests de valider-case a la nouvelle version v1.0.2 (convention de nommage etendue : prefixes thematiques majuscules cT* pour la ligne trio Janus) puis reverdir la non-regression.
+
+**Actions** :
+1. test-009-valider-case : version v1.0.1 -> v1.0.2 (docstring, libelles, --version) - 20/20 OK.
+2. test-015-valider-case-garde-fou : version v1.0.1 -> v1.0.2 (docstring, libelles, --version) - 9/9 OK.
+3. spec-valider-case.001.01.ebauche.md : version 1.0.1 -> 1.0.2 + convention de nommage documentee (c[<prefixe-alpha-maj>]<numero>[a-z]? avec exemple cT1..cT10).
+4. Non-regression complete : 33/33 OK. Normes 0/0.
+
+**Lecons** :
+1. Un bump de version d'un outil touche TOUJOURS ses tests (--version verifie) : adapter les tests dans la meme chaine (Morpheus), pas en retard.
+2. La spec de l'outil mentionne la convention de nommage : elle doit suivre le bump (2 fichiers outil : .md ET spec/).
+3. Aucun test de rejet cT* n'existait dans test-009/015 : le bug nommage etait invisible cote tests - penser a ajouter un point qui verifie l'ACCEPTATION d'un id cT* (garde-fou positif) lors d'une prochaine evolution.
+## [LECON] 2026-08-11 -- Garde-fou positif cT* dans test-009/015 (valider-case v1.0.2)
+
+**Contexte** : apres l'extension de la convention de nommage v1.0.2 (prefixe thematique majuscule cT* pour la ligne Trio de Janus, regex `^c[A-Z]?\d+[a-z]*$`), aucun test ne verifiait l'ACCEPTATION des ids cT* par valider-case -- seulement le rejet des ids invalides. Un futur retour en arriere de la regex (c\d+[a-z]*$) aurait passe la non-regression sans etre detecte.
+
+**Lecon** :
+1. Toute modification de convention (extension de regex, nouveau format) doit etre couverte par un GARDE-FOU POSITIF en plus des garde-fous negatifs : verifier que le nouveau format est ACCEPTE, pas seulement que l'ancien est rejete.
+2. Un parcours artificiel minimal (depart c0 question 2 branches -> fin cT*, sans indices ni refs) suffit pour isoler le controle de nommage : verdict CONFORME + 0 erreur NOMMAGE + retour 0.
+3. test-009 a gagne le point 11c (cT6 accepte), test-015 le point 10 (cT10 accepte) -- un id par test pour couvrir la plage sans dupliquer.
+4. Les parcours artificiels temporaires doivent etre ecrits en ASCII + LF dans tmp/ (newline="\n") pour ne pas polluer les normes.
+5. Non-regression complete reverdie : 21/21 tests OK (test-009 21/21, test-015 10/10).
+## [LECON] 2026-08-11 -- TEST-014 ADAPTE A LA SPEC v0.6.2 + GARDE-FOU POSITIF REGLE 11 (Morpheus)
+
+**Contexte** : Vulcain a documente la convention de nommage etendue cT* dans la spec-guider-parcours (bump v0.6.1 -> v0.6.2, regle 11 NOMMAGE DES IDS DE CASES, refs doc guider-parcours.md et vulcain.md passees a v0.6.2). Le test-014 etait KO sur 4 points (1a, 1b, 6a, 6b : versions 0.6.1/0.6.0).
+
+**Lecon** :
+1. REGLE IMMUABLE DELEGATION respectee : Vulcain a signale l'impact test sans y toucher, Cerberus a active Morpheus pour l'adaptation.
+2. L'adaptation couvre 5 endroits du test-014 : docstring (contexte + cas couverts), en-tete du print, point 1a (titre ligne 7), point 1b (Version ligne 9), points 6a/6b (refs doc) -- les versions sont verifiees en dur dans le test, pas lues depuis la spec (choix du test : figer la version attendue).
+3. GARDE-FOU POSITIF ajoute (point 11) : la regle 11 NOMMAGE DES IDS doit etre presente avec cT1/cT10 et la reference valider-case v1.0.2 -- un futur retrait de la convention passerait en KO (anti-recurrence, meme logique que le garde-fou positif cT* du test-009/015).
+4. Resultats : test-014 13/13 OK, non-regression complete 21/21 OK, normes 0 non-ASCII / 0 CRLF.
+## [LECON] 2026-08-11 -- TEST-007 ADAPTE A 139 COMMANDES + DECOUVERTE D'UN DEFAUT DE TRI DU CATALOGUE (Morpheus)
+
+**Contexte** : ajout de l'outil detecter-convention-nommage au catalogue generateurs-commande (138 -> 139 commandes).
+
+**Adaptation du test-007** (point 13) : 138 -> 139 (docstring, condition len(noms) == 139, messages). Point 14 (index-tools 110 + Corriger 6) deja conforme, inchange.
+
+**Lecons** :
+1. Apres adaptation du compte, le test-007 restait KO (nb=139) : la cause n'etait PAS le test mais le CATALOGUE lui-meme -- detecter-convention-nommage a ete insere en FIN de liste (position 138, apres verifier-systeme) au lieu de sa position alphabetique dans la famille detecter-*. Le test verifie noms == sorted(noms) : garde-fou legitime qui a fonctionne.
+2. REGLE DELEGATION inverse : Morpheus ne touche qu'aux tests. La reparation du tri du catalogue (deplacer detecter-convention-nommage entre detecter-decalages-catalogue et les autres detecter-*) releve de VULCAIN. Signale a Cerberus pour activation.
+3. Confirme la lecon RE-SCAN COMPLET : toute insertion dans le catalogue doit respecter le tri alphabetique (le test-007 le verifie) -- l'ordre d'insertion JSON n'est pas libre.
+4. Normes test-007 : 0 non-ASCII, 0 CRLF, 0 mention 138 restante (4 occurrences 139).
+
+## [LECON] 2026-08-11 -- BUDGET PONDERE DES INDICES TESTE EN REEL (valider-case v1.1.0, generateurs-case v0.4.2) (Morpheus)
+
+**Mission** : tester la non-regression apres l'implementation du budget pondere des indices par Vulcain (decision utilisateur : 2 indices courts = 1 indice long).
+
+**Tests independants realises (mes propres parcours temoins, pas ceux de Vulcain)** :
+1. 6 courts (50 car.) = poids 3,0 -> CONFORME
+2. 4 longs (120 car.) = poids 4,0 -> A ALLEGER
+3. 2 longs + 2 courts = poids 3,0 -> CONFORME
+4. 1 long + 4 courts = poids 3,0 -> CONFORME
+5. 1 texte > 160 car. = TOUJOURS signale (plafond absolu inchange)
+6. 5 courts + 1 long = poids 3,5 -> A ALLEGER (depassement mixte)
+7. 6 indices sans texte (ref) = poids 3,0 -> CONFORME
+=> 7/7 OK
+
+**Autres verifications** :
+- test-009 (23 points dont 3f/3g budget), test-010 (25), test-015 (10) : tous verts
+- Parite py/sh : valider-case v1.1.0 identique des 2 cotes ; generateurs-case exige ses arguments (comportement normal)
+- Non-regression complete : 21/21 OK
+- Normes : 0 non-ASCII, 0 CRLF
+
+**Lecons** :
+1. Le modele pondere est robuste : la frontiere 3,0 fonctionne pour tous les melanges (pur courts, pur longs, mixte)
+2. Les indices SANS texte (ref/outil) comptent comme courts (0,5) : 6 refs = 3,0 accepte - c'est coherent avec leur faible charge cognitive
+3. Le plafond absolu 160 car. reste le veritable garde-fou de la taille d'un indice : le budget pondere ne concerne que le NOMBRE
+
+## [LECON] 2026-08-11 -- test-022 budget pondere (Morpheus)
+
+**Mission** : creer un test formel dedie au budget pondere des indices (frontiere exacte 3,0).
+**Resultat** : test-022-budget-pondere cree (py + md), 14/14 OK.
+**Lecons** :
+1. La frontiere exacte du budget (3,0 OK / 3,5 KO) doit etre testee avec des cas aux limites : 3,0 exact (6 courts OU 3 longs OU 2 longs + 2 courts) passe, 3,5 (1 long + 5 courts) KO, 4,0 (4 longs) KO.
+2. Une case de test minimale sans indices existants evite les fausses surcharges lors de l'ajout d'indices temoins.
+3. Le plafond absolu de 160 caracteres reste independant du budget pondere : un indice > 160 est toujours signale.
+4. Les refs (indices de type reference) comptent comme indices courts (0,5) : a verifier dans les cas limites.
+5. Toute creation de test doit etre referencee dans le catalogue generateurs-commande (insertion triee, LF pur) et le compteur de test-007 (139 -> 140) doit etre mis a jour pour reverdir la non-regression.
+6. La plage documentaire des tests (test-001 a test-021 -> test-001 a test-022) doit etre mise a jour dans test-021.md.
+7. Le diff du catalogue vs HEAD peut etre large (changements non commites anterieurs) : verifier uniquement que l'insertion est minimale et triee.
+
+## [LECON] 2026-08-11 -- TEST-014 ADAPTE A valider-case v1.1.0 (Morpheus)
+
+**Mission** : adapter le test-014 apres la correction des versions stale dans les specs (valider-case v1.0.2 -> v1.1.0 par Promethee).
+**Resultat** : test-014 reverdi 13/13, non-regression complete 22/22.
+**Lecons** :
+1. Quand une spec corrige une version d'outil referencee (ex: valider-case v1.0.2 -> v1.1.0), les tests formels qui verifient le TEXTE EXACT de la spec cassent : test-014 verifie litteralement "valider-case v1.0.2" in spec (garde-fou positif regle 11). Le test doit suivre la version.
+2. La chaine correcte : Promethee (specs) -> Morpheus (tests) -> Janus (controle croise). Chaque maillon verifie sa partie AVANT d'activer le suivant.
+3. Le test-014 verifie aussi la version dans son en-tete documentaire (ligne 18 : "v1.0.2) ; refs doc passees a v0.6.2") : les 2 occurrences (en-tete + garde-fou) doivent etre mises a jour ensemble.
+4. La non-regression complete (22 tests) confirme qu'aucune autre spec corrigee (combos-moteur, detecter-decalages, generateurs-case, generateurs-ligne, detecter-convention-nommage, spec-refonte) ne casse de test.
+
+## [LECON] 2026-08-11 -- TEST-023 GREP CROISE BUDGET PONDERE CREE (Morpheus)
+
+Creation du test-023-grep-budget-pondere : garde-fou non-regression
+automatique materialisant l etape E7 du protocole-verification-coherence
+v0.2.0 (grep croise des seuils budget pondere sur les 6 fichiers).
+
+Perimetre (26 points) :
+- P1-P16 : les 4 valeurs textuelles ('100 car' / '0,5' / '3,0' / '160')
+  presentes dans CHACUN des 4 fichiers textes (spec-refonte,
+  spec-valider-case, spec-guider-parcours, valider-case.md)
+- P17-P19 : valider-case.py contient SEUIL_COURT = 100, BUDGET_INDICES = 3.0,
+  SEUIL_TEXTE = 160
+- P20-P22 : generateurs-case.py contient SEUIL_COURT = 100,
+  BUDGET_INDICES = 3.0, SEUIL_REGLE_DEFAUT = 160
+- P23-P24 : anti-recurrence : '> 3 indices' / 'plus de 3 indices' ABSENTS
+  des 6 fichiers
+- P25-P26 : normes du test (ASCII strict, LF pur)
+
+Autres travaux :
+- test-023 reference au catalogue generateurs-commande (140 -> 141 commandes,
+  trie, LF pur, 0 non-ASCII)
+- test-007-figer-lf mis a jour (point 13 : 140 -> 141 + entree test-023) :
+  15/15 VALIDE
+- Non-regression complete : 23/23 OK
+
+Lecons :
+1. Le grep croise E7 est desormais un test AUTOMATIQUE de la suite : toute
+   divergence de seuil ou retour de l ancienne regle fera KO au test-023.
+2. Toute commande ajoutee au catalogue impacte test-007 (compteur) : mettre a
+   jour le point 13 dans la MEME mission que l ajout au catalogue.
+
+## [LECON] 2026-08-11 -- TEST-005 ADAPTE A GENERATEURS-COMMANDE v0.2.3 (Morpheus)
+
+Adaptation du test-005-generateurs-commande apres le bump du generateur en
+v0.2.3 (journalisation d usage ajoutee par Vulcain) : 10 occurrences v0.2.2
+-> v0.2.3 (docstring, bloc GENERATEUR, points --version py/sh, ligne RESULTAT).
+
+Lecons :
+1. KO DE PARITE PY/SH DECOUVERT : le .sh de generateurs-commande est une
+   implementation bash PARALLELE (pas un simple wrapper) avec VERSION codee
+   en dur : Vulcain avait bump le .py sans le .sh -> --version .sh restait
+   v0.2.2. Corrige (2 occurrences) -> parite v0.2.3 py/sh. A retenir : tout
+   bump de version d un outil avec .sh parallele doit toucher LES DEUX.
+2. La modification preexistante du docstring test-005 (REGLE ABSOLUE LECTURE
+   DOC, Buffy 2026-08-09) a ete conservee intacte.
+3. test-005 reverdi : 28/28 OK. Non-regression complete : 23/23 OK.
+4. Le registre d usage (enregistrer-usage-outil v0.1.0 + registre JSONL)
+   est operationnel : la journalisation auto du generateur fonctionne
+   (mode generateur) et l outil dedie couvre les usages directs/combos.
+## [LECON] 2026-08-11 -- --no-journal AJOUTE AUX 4 TESTS QUI PASSENT PAR LE GENERATEUR (Morpheus)
+
+**Contexte** : le registre d usage des outils (source de verite) etait pollue par la
+non-regression (88 lignes de test). generateurs-commande v0.2.3 + combos-moteur v0.3.1
+supportent --no-journal. Restait a l ajouter aux tests.
+
+**Tests modifies** :
+1. test-005-generateurs-commande : composer() -> --no-journal sur l appel PY uniquement
+   (le .sh du generateur ne journalise pas et ne supporte pas l option).
+2. test-002-combos-moteur : run_py() centralise + 2 appels sh (--liste / --reponses).
+3. test-003-combos-creer : run_py() centralise + 2 appels sh (--liste / --dry-run args_sh).
+4. test-004-combos-tester-outil : 5 appels executer([PYTHON, MOTEUR_PY, ...]).
+
+**Methodes** : injection dans les fonctions centrales (run_py) quand elles existent,
+sinon sur chaque appel. Verif par test individuel (pollution 0) puis non-regression complete.
+
+**Resultats reels** : pollution test-003 = 0, test-004 = 0, non-regression 23/23 OK,
+registre a 0 ligne apres la non-regression (source de verite propre).
+
+**Lecon** : apres ajout d une option d outil, SCANNER tous les tests qui passent par
+l outil (direct ou via combos) et verifier la pollution par test un a un
+(identifier test par test) - la non-regression globale seule ne dit pas QUI pollue.
+## [LECON] 2026-08-11 -- 6 TESTS ADAPTES APRES BUMP DES 11 PARCOURS (Morpheus)
+
+**Contexte** : Buffy a branche le registre d usage dans les 11 cartes (nouvelle case dediee
+"Enregistrer mes usages d outils" avant chaque fin) + bump des versions (0.3.x/0.4.x -> 0.4.0/0.5.0,
+trio -> 0.3.0). Les tests qui verifiaient les versions ou les compteurs de cases sont devenus KO.
+
+**Tests adaptes** (6) :
+1. test-004 : morpheus v0.3.3 -> v0.4.0 (3 occ. texte + 1 condition).
+2. test-005 : atlas v0.3.4 -> v0.4.0 (4 occ. texte + 3 occ. description + 1 condition).
+3. test-013 : cerberus v0.3.3 -> v0.4.0 + compteur action 21 -> 22 (+ c24 registre usage).
+4. test-016 : buffy v0.3.7 -> v0.4.0 + compteur action 36 -> 37 (+ c42 registre usage).
+5. test-006 : parcours-atlas 45 -> 46 cases (la nouvelle case c34) - nb chemins inchange (39).
+6. test-021 : c9f.suivant c10 -> c24 (nouvelle case registre) puis c10 - la verification
+   structurelle doit suivre le nouveau chemin c9f -> c24 -> c10.
+
+**Resultats** : non-regression complete 23/23 OK, registre d usage a 0 ligne apres
+(source de verite propre, --no-journal deja en place).
+
+**Lecons** :
+1. Apres bump de versions de parcours, SCANNER tous les tests qui referencent ces versions
+   (grep 0.X.Y) ET les compteurs (nb cases, nb chemins, types) - la non-regression seule
+   revele les KO mais il faut anticiper les compteurs dans les tests formels.
+2. La navigation peut rester identique (la fin est toujours atteinte) mais la verification
+   STRUCTURELLE (c9f.suivant) doit suivre le nouveau chemin (insertion d une case intermediaire).
+3. Le nb de CHEMINS (depart -> fins) ne change pas quand la nouvelle case mene a une fin
+   existante : seul le nb de CASES augmente.
+
+## [LECON] 2026-08-11 -- TEST-013 ADAPTE APRES BUMP CERBERUS 0.4.1 (Morpheus)
+
+**Contexte** : mission anti-regression historique (19 fins PASSE PAR LE GENERATEUR + maillon manquant Cerberus c15b/c15c) -> bump cerberus 0.4.0 -> 0.4.1.
+
+**Actions** : test-013 adapte (9 remplacements) : version 0.4.0 -> 0.4.1, compteur cases action 22 -> 23 (c15c ajoutee), controles 4 -> 5 (c15b ajoutee), descriptions mises a jour. 22/22 OK. Non-regression complete 23/23 OK, registre 0 ligne.
+
+**LE CONS** :
+1. Quand une nouvelle case controle/action est ajoutee a un parcours, verifier le test de migration du parcours concerne (test-013 pour cerberus) : il verifie les compteurs de types (action/question/controle/fin) qui changent a chaque ajout.
+2. Les 3 chemins de navigation du test-013 ne passent pas par c15b -> ils restent verts ; seul le comptage de types est sensible.
+3. Ecrire le script de non-regression avec un comptage robuste des [KO] (regex) : un parsing fragile de la ligne RESULTAT produit des faux KO.

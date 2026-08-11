@@ -2,19 +2,18 @@
 # -*- coding: ascii -*-
 """
 test-013-cerberus-migration.py
-Test formel de la migration pilote du parcours-cerberus v0.3.2
+Test formel de la migration pilote du parcours-cerberus v0.4.1
 (nouveau format : indices REFERENCES + cases ACTION).
 
 Contexte (etape 6 de la spec-refonte-cartes-decision) :
   - parcours-cerberus passe de v0.2.3 (0 erreur / 15 a alleger) a
-    v0.3.2 (0 erreur / 0 a alleger / CONFORME valider-case)
+    v0.4.1 (0 erreur / 0 a alleger / CONFORME valider-case)
   - 13 indices longs migres : 6 refs resolvables + 7 textes courts
   - 18 cases de pilotage 'indice' -> 'action' (enchaine sans question)
   - 2 surcharges de nombre corrigees (c1b, c6 : 4 -> 3 indices)
 
-Cas couverts:
-  1. Version du parcours = 0.3.2
-  2. Types : 18 action / 4 question / 4 controle / 2 fin, 0 indice
+Cas couverts:   1. Version du parcours = 0.4.1
+  2. Types : 23 action / 5 question / 5 controle / 3 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
   5. Navigation chemin accueil -> PARCOURS TERMINE
@@ -90,25 +89,25 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-013-")
     try:
-        print("=== Test formel migration cerberus v0.3.2 ===")
+        print("=== Test formel migration cerberus v0.4.1 ===")
 
         # 1. Version du parcours
         with io.open(PARCOURS, encoding="utf-8") as fh:
             donnees = json.load(fh)
-        verifier("1. Parcours version 0.3.2",
-                 donnees.get("parcours", {}).get("version") == "0.3.2",
+        verifier("1. Parcours version 0.4.1",
+                 donnees.get("parcours", {}).get("version") == "0.4.1",
                  str(donnees.get("parcours", {}).get("version")))
 
-        # 2. Types de cases : 18 action / 4 question / 4 controle / 2 fin / 0 indice
+        # 2. Types de cases : 23 action / 5 question / 5 controle / 3 fin / 0 indice
         cases = donnees.get("cases", {})
         types = {}
         for c in cases.values():
             t = c.get("type", "?")
             types[t] = types.get(t, 0) + 1
-        verifier("2a. 20 cases action (18 pilotage + c19c/c19d Pattern 17)",
-                 types.get("action", 0) == 20, str(types.get("action")))
-        verifier("2b. 5 questions + 4 controles + 3 fins (Pattern 17 ajoute c19b question + c19e fin)",
-                 types.get("question", 0) == 5 and types.get("controle", 0) == 4
+        verifier("2a. 23 cases action (19 pilotage + c0d lecture doc + c19c/c19d Pattern 17 + c24 registre + c15c maillon rapport)",
+                 types.get("action", 0) == 23, str(types.get("action")))
+        verifier("2b. 5 questions + 5 controles + 3 fins (Pattern 17 c19b + maillon c15b ajoutent 2 controles)",
+                 types.get("question", 0) == 5 and types.get("controle", 0) == 5
                  and types.get("fin", 0) == 3, str(types))
         verifier("2c. Aucune case 'indice' restante",
                  types.get("indice", 0) == 0, str(types))

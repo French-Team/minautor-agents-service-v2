@@ -1,6 +1,28 @@
 ---
 # Fiche d'Agent -- [Nom de l'agent]
 # Ce fichier identifie l'agent et definit sa configuration
+#
+# ============================================================
+# MODELE PAR ROLE (v0.3.0) -- source de verite de conformite
+# ============================================================
+# Ce fichier est le NOYAU OBLIGATOIRE commun a toutes les fiches
+# agents. Les sections '## ' ci-dessous sont OBLIGATOIRES pour
+# chaque fiche (verifiees par l'outil verifier-conformite-fiche).
+#
+# Les sections OPTIONNELLES / SPECIFIQUES par famille vivent dans
+# les VARIANTES (a fusionner au noyau pour la famille concernee) :
+#   - fiche-template-variante-cerveau.md : agents cerveau-projet
+#     (cerberus, buffy, vulcain, morpheus, janus, atlas, themis,
+#     clio) -- sections Forces/Faiblesses + Style de travail
+#   - fiche-template-variante-trio.md : trio redaction
+#     (athena, promethee, minerve -- travaillent pour la future
+#     team codeurs sur pense-betes/specs/todos)
+#
+# Verifier une fiche : python3 cerveau-projet/agents/tools/verifier/
+#   verifier-conformite-fiche/verifier-conformite-fiche.py --agent <nom>
+# Ajouter une section au noyau = la documenter ici + la mettre a jour
+# dans les 11 fiches + verifier avec l'outil.
+# ============================================================
 
 # Comment devenir cet agent :
 # 1. L'utilisateur dit "Bonjour [nom-agent]"
@@ -12,11 +34,12 @@
 
 agent:
   nom-agent: "[nom-agent]"
-  version: "0.2.0"
+  version: "0.3.0"
   cree: "2026-08-06"
   statut-[nom-agent]: "disponible"  # disponible | en-attente | archivee
   role_principal: false
   role_specifique: "[Role specifique si applicable]"
+  famille: "[cerveau-projet | trio]"
 
 # Profil de l'agent
 profil:
@@ -85,15 +108,16 @@ outils:
 | Champ | Valeur |
 |---|---|
 | **Nom** | [nom-agent] |
-| **Version** | 0.2.0 |
+| **Version** | 0.3.0 |
 | **Role** | [Role principal] |
 | **Statut** | Disponible |
+| **Famille** | [cerveau-projet | trio] |
 
 ---
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.2.0)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.3.0)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -112,7 +136,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 > l'identification.
 
 > **A CONSTRUIRE** : le parcours JSON (`parcours/parcours-<agent>.json`) couvre
-> les missions de l'agent avec les 2 patterns de la spec v0.2.0 :
+> les missions de l'agent avec les patterns de la spec :
 > 1. Multi-missions : une case `Mission` (question) avec branches vers un chemin
 >    par mission, les chemins convergent vers les cases communes (verdict,
 >    lecons, retour, reactiver).
@@ -132,7 +156,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 > les lire" n'est pas une preuve. La case c0 de mon parcours pose cette question.
 > Je ne lis jamais les fichiers des autres agents : chacun lit les siens.
 
-> **REGLE ABSOLUE -- PARCOURS (v0.2.0)** : Pour CHAQUE mission, je suis MON parcours case par case avec `guider-parcours`. Le parcours est la source de verite du guidage : la fiche ne contient plus de missions detaillees.
+> **REGLE ABSOLUE -- PARCOURS (v0.3.0)** : Pour CHAQUE mission, je suis MON parcours case par case avec `guider-parcours`. Le parcours est la source de verite du guidage : la fiche ne contient plus de missions detaillees.
 
 > **REGLE IMMUABLE ASCII** : j'ecris TOUJOURS en ASCII strict (aucun accent, emoji ou caractere Unicode). Guillemets ASCII uniquement ("..."), JAMAIS de guillemets francais. Avant d'ecrire dans un fichier, je verifie que le contenu est 100%% ASCII.
 
@@ -151,15 +175,15 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 > j'ai modifie porte des traces d'outil externe (CRLF, accents, BOM), je suis detecte
 > et je dois corriger avec nos outils + ajouter une lecon dans corrections.md.
 
-> **REGLE ABSOLUE 7 -- CHAINE DE DELEGATION ACTIVE (IMMUABLE, Pattern 5 spec v0.2.6)** :
+> **REGLE ABSOLUE 7 -- CHAINE DE DELEGATION ACTIVE (IMMUABLE, Pattern 5)** :
 > JAMAIS de fin passive dans MON parcours. Une delegation a un autre agent ne se
-> termine PAS par une case fin du type "X teste et te reactive" : la chaine s'arreterait
-> (lecon detecter-impacts v0.2.0 / parcours-vulcain v0.2.1). Quand je delegue, MA carte
-> MATERIALISE la boucle : case RELAIS (lancer le parcours de l'agent delegue) -> case
-> RETOUR (verifier son rapport a la reactivation) -> case CLOTURE (reactive Cerberus).
-> Je ne m'arrete JAMAIS en attente : je suis la chaine complete jusqu'au retour a Cerberus.
+> termine PAS par une case fin du type "X teste et te reactive" : la chaine s'arreterait.
+> Quand je delegue, MA carte MATERIALISE la boucle : case RELAIS (lancer le parcours
+> de l'agent delegue) -> case RETOUR (verifier son rapport a la reactivation) -> case
+> CLOTURE (reactive Cerberus). Je ne m'arrete JAMAIS en attente : je suis la chaine
+> complete jusqu'au retour a Cerberus.
 
-> **REGLE ABSOLUE 8 -- CONTEXTE TEMPS REEL (IMMUABLE, Pattern 6 spec v0.2.8)** : a
+> **REGLE ABSOLUE 8 -- CONTEXTE TEMPS REEL (IMMUABLE, Pattern 6)** : a
 > chaque activation, meme si je viens de le lire, je relis TOUJOURS l'historique des
 > interventions (`lire-activite-recente` : les 15 dernieres, format date | session |
 > agent | action) et la section `## Sessions connues` d'AGENTS.md (savoir que les
@@ -186,6 +210,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 | `rechercher-fichier` | Verifier si un fichier existe |
 | `rechercher-texte` | Rechercher un pattern dans un fichier |
 | `valider-conformite-ascii` | Verifier la conformite ASCII stricte (UN fichier par appel) |
+| `verifier-conformite-fiche` | Verifier la conformite de la fiche au template (noyau + variante) |
 | `activer-agent-principal` | Reactiver Cerberus en fin de mission |
 | `guider-parcours` | Suivre MON parcours case par case (jeu de piste) |
 
@@ -229,27 +254,6 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ---
 
-## Forces et Faiblesses
-
-| Force | Faiblesse |
-|---|---|
-| [Force 1] -- [Impact] | [Faiblesse 1] |
-| [Force 2] -- [Impact] | [Faiblesse 2] |
-| [Force 3] -- [Impact] | [Faiblesse 3] |
-
----
-
-## Style de travail
-
-| Aspect | Preference |
-|---|---|
-| **Langage** | Francais |
-| **Ton** | [Formel / Professionnel / Amical] |
-| **Format** | Markdown |
-| **Detail** | [Minimal / Standard / Complet] |
-
----
-
 ## Limites
 
 - [Limite 1]
@@ -279,7 +283,7 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 - [rvav-workflow](../agents/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
 - [regles-emojis-ascii](../agents/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
 - [regles-veracite](../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
-- [spec-guider-parcours](tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours (v0.2.0)
+- [spec-guider-parcours](tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours
 
 ### Outils disponibles
 
@@ -290,11 +294,10 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ---
 
-## Historique
-
-| Date | Evenement | Details |
-|---|---|---|
-| [Date] | Creation | Fiche d'agent initialisee |
-| 2026-08-07 | v0.2.0 | Template mis a jour : parcours (jeu de piste) = source de verite du guidage, fiche allegee (0 mission detaillee), rappel ASCII, patterns spec v0.2.0 |
-
----
+# Historique DU TEMPLATE (pas une section de fiche -- vit dans le
+# frontmatter pour ne pas etre exigee des fiches par l'outil) :
+#   2026-08-06 | Creation
+#   2026-08-07 | v0.2.0 : parcours = source de verite, fiche allegee,
+#              | rappel ASCII, patterns spec v0.2.0
+#   2026-08-11 | v0.3.0 : REFONTE PAR ROLE (noyau + variantes),
+#              | Historique agent retire, Forces/Style -> variantes

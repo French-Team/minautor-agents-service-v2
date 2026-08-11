@@ -16,10 +16,11 @@ Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
   - fiche buffy mise a jour (Pattern 14 : parcours v0.3.1)
   - test-009 adapte : temoin A ALLEGER bascule de buffy vers morpheus
   - v0.3.1 : branchement generateurs-ligne (case c10d, branche 'ligne' dans c10b)
+  - v0.3.6 : branchement editer-fichier-agents (case c11b, branche 'fiche' dans c10b)
+  - v0.4.0 : ajout case c0d LIRE LA DOCUMENTATION DE L OUTIL (REGLE ABSOLUE LECTURE DOC)
 
-Cas couverts:
-  1. Version du parcours = 0.3.4
-  2. Types : 32 action / 7 question / 2 controle / 9 fin, 0 indice
+Cas couverts:   1. Version du parcours = 0.4.0
+  2. Types : 36 action / 8 question / 2 controle / 10 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
   5. Navigation chemin creation agent -> PARCOURS TERMINE
@@ -97,16 +98,16 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.3.4",
-                 d["parcours"].get("version") == "0.3.4",
+        verifier("1. Version du parcours = 0.4.0",
+                 d["parcours"].get("version") == "0.4.0",
                  d["parcours"].get("version"))
 
         # 2. Types
         types = {}
         for c in d["cases"].values():
             types[c.get("type")] = types.get(c.get("type"), 0) + 1
-        verifier("2a. 34 cases action (31 pilotage + c10d generateurs-ligne + c15c/c15d Pattern 17)",
-                 types.get("action") == 34, str(types))
+        verifier("2a. 37 cases action (32 pilotage + c0d lecture doc + c10d generateurs-ligne + c11b fiche agent + c15c/c15d Pattern 17 + c42 registre usage)",
+                 types.get("action") == 37, str(types))
         verifier("2b. 8 questions + 2 controles + 10 fins (Pattern 17 ajoute c15b question + c15e fin)",
                  types.get("question") == 8 and types.get("controle") == 2
                  and types.get("fin") == 10, str(types))

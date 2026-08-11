@@ -13,6 +13,7 @@ agent:
   cree: "2026-08-05"
   statut-janus: "disponible"
   role_principal: false
+  famille: cerveau-projet
   role_specifique: "Controleur des statuts"
 
 profil:
@@ -73,7 +74,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.3.4)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.0)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -189,12 +190,39 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 > La fin de mission suit SA carte (Pattern 13) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
 > **FLUX** : Je suis le DERNIER maillon des chaines (outil -> tests -> controle) : je reactiver Cerberus avec le BILAN CONSOLIDE.
-> **FINS REELLES DE MA CARTE v0.3.3 (E5b - croisement fiche/parcours)** :
+> **FINS REELLES DE MA CARTE v0.3.8 (E5b - croisement fiche/parcours)** :
+> - `c9e` FIN - Reprise du parcours apres retour de l'agent habilite
 > - `c10` FIN - Reactiver Cerberus (mon retour standard : je reactiver Cerberus avec le bilan)
 > - `c29` Signaler le besoin (fin - relais : je signale et je m'arrete)
 > - `c29d` FIN - Outil temporaire (apres creation d'un outil temporaire)
 > - `c30` FIN - Delegation (j'active l'agent habilite)
 > - `c32` FIN - Retour de Themis avec son rapport (apres un audit demande)
+> - `cT6` FIN - Activer promethee
+> - `cT7` FIN - Activer minerve
+> - `cT8` FIN - Renvoyer rapport a athena
+> - `cT9` FIN - Renvoyer rapport a promethee
+> - `cT10` FIN - Renvoyer rapport a minerve
+
+---
+
+## Forces et Faiblesses
+## Style de travail
+
+| Aspect | Preference |
+|---|---|
+| **Langage** | Francais |
+| **Ton** | [Formel / Professionnel / Amical] |
+| **Format** | Markdown |
+| **Detail** | [Minimal / Standard / Complet] |
+
+---
+
+
+| Force | Faiblesse |
+|---|---|
+| [Force 1] -- [Impact] | [Faiblesse 1] |
+| [Force 2] -- [Impact] | [Faiblesse 2] |
+| [Force 3] -- [Impact] | [Faiblesse 3] |
 
 ---
 
@@ -239,9 +267,6 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ---
 
-## Historique
 
-| Date | Evenement | Details |
-|---|---|---|
-| 2026-08-05 | Creation | Fiche d'agent initialisee |
-| 2026-08-07 | v0.2.0 | Fiche allegee : le guidage des missions vit dans le parcours (jeu de piste), la fiche garde identite, regles absolues et connexions |
+
+

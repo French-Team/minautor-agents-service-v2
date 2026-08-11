@@ -23,7 +23,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.4.0"
+VERSION = "0.4.2"
 STATUT = "ebauche"
 
 # Racine du projet : 5 remontees depuis ce fichier
@@ -688,6 +688,23 @@ def action_supprimer(args):
 
 SEUIL_REGLE_DEFAUT = 160
 
+# Budget pondere des indices (parite valider-case v1.1.0)
+SEUIL_COURT = 100          # indice <= 100 car. = COURT (poids 0,5) ; > 100 = LONG (poids 1)
+BUDGET_INDICES = 3.0       # budget pondere par case (2 courts = 1 long)
+
+
+def poids_indices(indices):
+    """Poids pondere des indices (meme modele que valider-case) :
+    court (<= SEUIL_COURT car. ou sans texte) = 0,5 ; long (> SEUIL_COURT) = 1."""
+    poids = 0.0
+    for ind in indices:
+        texte = ind.get("texte", "")
+        if isinstance(texte, str) and len(texte) > SEUIL_COURT:
+            poids += 1.0
+        else:
+            poids += 0.5
+    return poids
+
 
 def charger_mapping_refs(chemin):
     """Charge le mapping JSON des refs pour la conversion en masse.
@@ -775,10 +792,11 @@ def action_convertir(args):
         if nouveaux:
             case["indices"] = nouveaux
 
-        # 3) Surcharge : > 3 indices apres traitement
-        if len(case.get("indices", [])) > 3:
+        # 3) Surcharge : budget pondere apres traitement (2 courts = 1 long)
+        poids = poids_indices(case.get("indices", []))
+        if poids > BUDGET_INDICES:
             avertissements.append(
-                "case %s: %d indices (> 3) - allegement requis" % (case_id, len(case["indices"]))
+                "case %s: poids %.1f unites (> budget %s) - allegement requis" % (case_id, poids, BUDGET_INDICES)
             )
 
     # 4) Version du parcours

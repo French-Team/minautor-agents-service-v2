@@ -10,6 +10,8 @@
 
 ## Version
 
+- **1.1.0** (2026-08-11) : BUDGET PONDERE des indices par case -- indice COURT (<= 100 car.) = 0,5 unite, indice LONG (> 100 car.) = 1 unite, budget 3,0 (2 courts = 1 long). Le plafond absolu de 160 car. par texte reste inchange (decision utilisateur : flexibilite sur le NOMBRE, pas sur la TAILLE d'un indice).
+- **1.0.2** (2026-08-11) : convention de nommage ETENDUE aux prefixes thematiques majuscules `cT*` (la ligne trio de Janus utilise `cT1`..`cT10`, decision utilisateur : conserver ces IDs). Regex : `c[<prefixe-alpha-maj>]<numero>[a-z]?`.
 - **1.0.1** (2026-08-09) : garde-fou anti-pollution du rapport (lecon : rapport a la racine). Sans `--rapport <fichier>` explicite, aucun fichier n'est cree (jamais de rapport par defaut dans le repertoire courant).
 - **1.0.0** (2026-08-09) : creation. Conforme au contrat de la spec section 6.
 - Compatibilite : Python 3, Bash (wrapper pur). Parite py/sh par construction.
@@ -50,9 +52,9 @@ le `.py`.
 |---|---|
 | **Structure** | ids uniques, types valides (question/controle/indice/action/fin), case_depart existante, fins joignables (BFS) |
 | **Modele** | decision (question/controle) = branches min 2 ; indice/action = suivant requis ; aucune boucle directe ; impasses signalees ; deviation sans rejoint visible = avertissement |
-| **Allegement** | case avec > 3 indices OU texte de regle > 160 caracteres = SIGNALEE avec proposition de reference |
+| **Allegement** | budget pondere des indices : COURT (<= 100 car. ou sans texte) = 0,5 unite, LONG (> 100 car.) = 1 unite, budget 3,0 par case (6 courts = 3,0 OK) ; texte de regle > 160 caracteres = SIGNALEE avec proposition de reference |
 | **References** | chaque indice `{type: regle, ref: X}` doit resoudre (pattern-N -> spec-guider-parcours ; chemin -> fichier ; protocole-/regle- -> regles-immuables) |
-| **Normes** | nommage des cases (c<numero>[a-z]?), titre present, ASCII 0 |
+| **Normes** | nommage des cases (c[<prefixe-alpha-maj>]<numero>[a-z]? : c0, c12b, cT6, cT10), titre present, ASCII 0 |
 
 ## Verdict
 

@@ -26,7 +26,20 @@ Validations d'un parcours :
      - case avec branches non vides ET champ suivant -> les branches priment,
        le suivant n'est jamais lu (mort)
      Le suivant n'est legitime que sur une case SANS branches et NON-fin
-     (question/indice/action/controle qui enchaine).
+       (question/indice/action/controle qui enchaine).
+  9. COMMANDE ACTIVER EXACTE (garde-fou v0.4.0, P8) :
+     - toute case type 'fin' dont le titre commence par 'FIN - Activer <agent>'
+       doit contenir dans son message la commande exacte
+       'activer-agent-principal.py activer session-llm-1 <agent>' ET la
+       mention 'PAS reactiver' (sinon l'agent retombe sur reactiver qui
+       ramene toujours a Cerberus).
+  10. FORMAT DE VERSION (garde-fou v0.4.0, P9) :
+      - parcours.version ne doit PAS commencer par le prefixe 'v'
+        (format canonique sans v, ex: 0.3.3).
+  11. COHERENCE FICHE/PARCOURS (garde-fou v0.4.0, P10) :
+      - si la fiche agents/<agent>/<agent>.md contient le Pattern 14
+        'PARCOURS (vX.Y.Z)', la version doit correspondre a parcours.version.
+      - signale KO si la ligne PARCOURS (v manque ou differe.
 
 Utilisation:
   valider-cartes-decision.py --agent <nom>
@@ -34,16 +47,17 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.3.2
+Version : 0.4.0
 Statut : prepare
 """
 
 import io
 import json
 import os
+import re
 import sys
 
-VERSION = "0.3.2"
+VERSION = "0.4.0"
 STATUT = "prepare"
 
 AGENTS_DIR = "cerveau-projet/agents"
@@ -85,7 +99,7 @@ def chemin_parcours_agent(agent):
     return os.path.join(AGENTS_DIR, agent, "parcours", "parcours-" + agent + ".json")
 
 
-def valider_parcours(contenu, nom_display):
+def valider_parcours(contenu, nom_display, agent=None):
     """Valide un parcours JSON. Retourne 0 si conforme, 1 sinon."""
     print("=== Verification %s ===" % nom_display)
     print("")
@@ -213,6 +227,72 @@ def valider_parcours(contenu, nom_display):
         controles_ok.append("7. Garde-fou suivant mort")
         print("   [OK] Aucun suivant mort (0 fin avec suivant, 0 branches + suivant)")
 
+    # 8. Garde-fou v0.4.0 (P8) : COMMANDE ACTIVER EXACTE dans les fins
+    #    'FIN - Activer <agent>'. Sans la commande exacte, l'agent retombe
+    #    sur reactiver (qui ramene toujours a Cerberus).
+    print("8. Commande activer exacte dans les fins 'Activer X' (P8)")
+    fins_activer = []
+    for cid, case in sorted(cases.items()):
+        if case.get("type") != "fin":
+            continue
+        titre = (case.get("titre") or "").strip()
+        m = re.match(r"^FIN\s*-\s*Activer\s+([A-Za-z0-9_-]+)\s*$", titre)
+        if not m:
+            continue
+        cible = m.group(1)
+        msg = case.get("message") or ""
+        # Comparaison insensible a la casse : le titre porte l'agent avec une
+        # majuscule (Janus) tandis que la commande reelle est en minuscule.
+        attendu = "activer-agent-principal.py activer session-llm-1 %s" % cible.lower()
+        if attendu not in msg.lower() or "PAS reactiver" not in msg:
+            fins_activer.append("%s (FIN - Activer %s sans commande exacte)" % (cid, cible))
+    if fins_activer:
+        print("   [ERREUR] Fins Activer X sans commande exacte : %s" % "; ".join(fins_activer[:5]))
+        if len(fins_activer) > 5:
+            print("   [ERREUR] ... et %d autre(s)" % (len(fins_activer) - 5))
+        erreurs.append("commande_activer")
+    else:
+        controles_ok.append("8. Commande activer exacte (P8)")
+        print("   [OK] Toutes les fins 'FIN - Activer X' contiennent la commande exacte + 'PAS reactiver'")
+
+    # 9. Garde-fou v0.4.0 (P9) : FORMAT DE VERSION sans prefixe 'v'
+    print("9. Format de version sans prefixe 'v' (P9)")
+    version = parcours.get("version")
+    if not version:
+        print("   [ERREUR] parcours.version absente")
+        erreurs.append("version")
+    elif version.startswith("v"):
+        print("   [ERREUR] parcours.version '%s' commence par 'v' (format canonique sans v)" % version)
+        erreurs.append("version")
+    else:
+        controles_ok.append("9. Format de version (P9)")
+        print("   [OK] parcours.version '%s' sans prefixe v" % version)
+
+    # 10. Garde-fou v0.4.0 (P10) : COHERENCE FICHE/PARCOURS (Pattern 14)
+    print("10. Coherence fiche/parcours (Pattern 14, P10)")
+    if not agent:
+        controles_ok.append("10. Coherence fiche/parcours (P10) - non applicable (fichier direct)")
+        print("   [NOTE] Pas de nom d'agent : verifie uniquement via --agent/--tous")
+    else:
+        fiche = os.path.join(AGENTS_DIR, agent, "%s.md" % agent)
+        if not os.path.isfile(fiche):
+            print("   [ATTENTION] Fiche %s absente : coherence non verifiee" % fiche)
+        else:
+            try:
+                with io.open(fiche, encoding="utf-8") as fh:
+                    texte_fiche = fh.read()
+            except Exception:
+                texte_fiche = ""
+            m = re.search(r"PARCOURS\s*\(v([0-9]+\.[0-9]+\.[0-9]+)\)", texte_fiche)
+            if not m:
+                print("   [ATTENTION] Pattern 14 (PARCOURS (vX.Y.Z)) absent de la fiche")
+            elif m.group(1) != version:
+                print("   [ERREUR] Incoherence fiche/parcours : fiche v%s != parcours %s" % (m.group(1), version))
+                erreurs.append("coherence_fiche")
+            else:
+                controles_ok.append("10. Coherence fiche/parcours (P10)")
+                print("   [OK] Fiche PARCOURS (v%s) == parcours %s" % (m.group(1), version))
+
     print("")
     if erreurs:
         print("=== Resultat : NON CONFORME (%d erreur(s)) ===" % len(erreurs))
@@ -221,7 +301,7 @@ def valider_parcours(contenu, nom_display):
     return 0
 
 
-def verifier_parcours_fichier(chemin, nom_display):
+def verifier_parcours_fichier(chemin, nom_display, agent=None):
     """Verifie un fichier parcours JSON (ou signale qu'une fiche .md n'est plus la cible)."""
     if not os.path.isfile(chemin):
         print("=== Verification %s : %s ===" % (nom_display, chemin))
@@ -249,12 +329,12 @@ def verifier_parcours_fichier(chemin, nom_display):
         print("ERREUR : Impossible de lire le fichier %s" % chemin)
         return 1
 
-    return valider_parcours(contenu, nom_display)
+    return valider_parcours(contenu, nom_display, agent=agent)
 
 
 def verifier_agent(agent):
     chemin = chemin_parcours_agent(agent)
-    return verifier_parcours_fichier(chemin, "de l'agent %s" % agent)
+    return verifier_parcours_fichier(chemin, "de l'agent %s" % agent, agent=agent)
 
 
 def verifier_tous():

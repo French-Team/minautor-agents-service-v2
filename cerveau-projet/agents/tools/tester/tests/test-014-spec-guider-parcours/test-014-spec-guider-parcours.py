@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-014-spec-guider-parcours.py
-Test formel de la spec-guider-parcours v0.6.1
+Test formel de la spec-guider-parcours v0.6.2
 (patterns REFERENCES, pas dupliques -- etape 7 de la spec-refonte-cartes-decision).
 
 Contexte :
@@ -12,19 +12,25 @@ Contexte :
   - 4 exemples inline transformes en refs (pattern-5/9/10/11)
   - incoherence de version corrigee (titre = Version = 0.6.1)
   - refs documentaires mises a jour (guider-parcours.md, vulcain.md)
+  - v0.6.2 (2026-08-11) : regle 11 NOMMAGE DES IDS DE CASES ajoutee
+    (convention etendue c[<prefixe-alpha-maj>]<numero>[a-z]?, prefixe
+    thematique majuscule cT* - ligne Trio de Janus, alignement valider-case
+    v1.1.0) ; refs doc passees a v0.6.2
 
 Cas couverts:
-  1. Version 0.6.1 coherente : titre ligne 7 == Version ligne 9
+  1. Version 0.6.2 coherente : titre ligne 7 == Version ligne 9
   2. Principe UNE PLACE POUR CHAQUE CHOSE documente
   3. Les 4 refs d exemple (pattern-5/9/10/11) resolvables (verifiees par
      valider-case sur un parcours qui les porte)
   4. Aucun indice regle > 160 caracteres dans les exemples de la spec
   5. Le type action documente dans les exemples (exemple minimal c2)
-  6. Refs documentaires : guider-parcours.md et vulcain.md pointent v0.6.0
+  6. Refs documentaires : guider-parcours.md et vulcain.md pointent v0.6.2
   7. Les 17 patterns toujours presents (aucun perdu)
   8. Non-regression : valider-case + guider-parcours fonctionnent toujours
   9. ASCII strict : 0 non-ASCII (spec + doc + test)
  10. LF pur : 0 CRLF
+ 11. Garde-fou positif v0.6.2 : regle 11 NOMMAGE DES IDS DE CASES documentee
+     (convention etendue cT* presente)
 
 Usage:
   python3 test-014-spec-guider-parcours.py
@@ -89,17 +95,17 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-014-")
     try:
-        print("=== Test formel spec-guider-parcours v0.6.1 ===")
+        print("=== Test formel spec-guider-parcours v0.6.2 ===")
 
         with io.open(SPEC, encoding="utf-8") as fh:
             spec = fh.read()
         lignes = spec.split("\n")
 
         # 1. Version coherente : titre (ligne 7) == Version (ligne 9)
-        verifier("1a. Titre ligne 7 = v0.6.1", "v0.6.1" in lignes[6],
+        verifier("1a. Titre ligne 7 = v0.6.2", "v0.6.2" in lignes[6],
                  lignes[6][:80])
-        verifier("1b. Version ligne 9 = 0.6.1",
-                 lignes[8].strip().startswith("**Version** : 0.6.1"),
+        verifier("1b. Version ligne 9 = 0.6.2",
+                 lignes[8].strip().startswith("**Version** : 0.6.2"),
                  lignes[8].strip()[:60])
 
         # 2. Principe UNE PLACE POUR CHAQUE CHOSE
@@ -136,11 +142,11 @@ def main():
             doc = fh.read()
         with io.open(FICHE_VULCAIN, encoding="utf-8") as fh:
             fiche = fh.read()
-        verifier("6a. guider-parcours.md : Spec (v0.6.0)",
-                 "(v0.6.0)" in doc and "spec-guider-parcours.001.01.ebauche.md" in doc,
+        verifier("6a. guider-parcours.md : Spec (v0.6.2)",
+                 "(v0.6.2)" in doc and "spec-guider-parcours.001.01.ebauche.md" in doc,
                  doc.strip()[-80:])
-        verifier("6b. vulcain.md : Spec du format (v0.6.0)",
-                 "(v0.6.0)" in fiche and "Spec du format" in fiche,
+        verifier("6b. vulcain.md : Spec du format (v0.6.2)",
+                 "(v0.6.2)" in fiche and "Spec du format" in fiche,
                  fiche.strip()[-80:])
 
         # 7. Les 17 patterns toujours presents
@@ -168,6 +174,15 @@ def main():
                       + crlf_count(os.path.abspath(__file__)))
         verifier("10. LF pur : 0 CRLF (spec + doc + fiche + test)",
                  total_crlf == 0, "total CRLF = %d" % total_crlf)
+
+        # 11. GARDE-FOU POSITIF v0.6.2 : la regle 11 NOMMAGE DES IDS DE CASES
+        #     doit etre documentee (convention etendue cT* presente) - sinon un
+        #     futur retrait de la convention passerait la non-regression.
+        verifier("11. Regle 11 NOMMAGE DES IDS documentee (cT* present)",
+                 "11. **NOMMAGE DES IDS DE CASES (v0.6.2)**" in spec
+                 and "cT1" in spec and "cT10" in spec
+                 and "valider-case v1.1.0" in spec,
+                 "regle 11 absente ou incomplete")
 
         print("")
         print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))

@@ -6,11 +6,11 @@ identite:
 ---
 # Spec -- Refonte du concept des cartes de decision et des cases
 
-**Version** : 0.1.1
+**Version** : 0.1.3
 **Statut** : ebauche
 **Date creation** : 2026-08-09
 **Agent** : Promethee (spec)
-**Historique** : v0.1.0 (creation, 2026-08-09) ; v0.1.1 (clarification : type action declare NOUVEAU du modele cible, suite audit Themis 2026-08-09)
+**Historique** : v0.1.0 (creation, 2026-08-09) ; v0.1.1 (clarification : type action declare NOUVEAU du modele cible, suite audit Themis 2026-08-09) ; v0.1.2 (alignement convention de nommage ETENDUE cT*, decouverte detecter-convention-nommage 2026-08-11) ; v0.1.3 (documentation du BUDGET PONDERE des indices : court <= 100 car. = 0,5 unite, long > 100 car. = 1 unite, budget 3,0 unites par case, plafond absolu 160 car. inchange, suite implementation valider-case v1.1.0 / generateurs-case v0.4.2, 2026-08-11)
 
 ---
 
@@ -159,7 +159,7 @@ Nouvel outil `validateur-case` (categorie valider/) :
 validateur-case.py <parcours.json> [options]
   --complet      Valider TOUTES les cases (defaut)
   --case <id>    Valider UNE case
-  --surcharge    Signaler les indices surcharges (> 3 indices ou texte > 160 car.)
+  --surcharge    Signaler les cases hors BUDGET PONDERE (poids > 3,0 unites)
   --modele       Verifier le modele compose (branches min 2, rejoint present)
   --references   Verifier que chaque reference d indice est resolvable
   --dry-run / --rapport <fichier>
@@ -169,24 +169,33 @@ Verifications (garde-fous) :
 - **Structure** : id uniques, types valides, depart existante, fins joignables
 - **Modele** : decision = branches min 2 ; deviation = rejoint present ;
   aucune boucle directe ; impasses signalees
-- **Allegement** : toute case avec > 3 indices ou un texte > 160 caracteres
-  est SIGNALEE avec proposition de reference (pattern/protocole)
+- **Allegement** : BUDGET PONDERE des indices par case : indice COURT
+  (texte <= 100 caracteres, ou sans texte : ref/outil) = 0,5 unite ; indice
+  LONG (texte > 100 caracteres) = 1 unite ; budget = 3,0 unites par case ;
+  plafond absolu d un indice = 160 caracteres (independant du budget). Toute
+  case hors budget (poids > 3,0) ou avec un indice > 160 car. est SIGNALEE
+  avec proposition de reference (pattern/protocole)
 - **References** : chaque `ref` doit resoudre vers un fichier existant
-- **Normes** : ASCII, LF, nommage des cases (c<numero>[a-z]?)
+- **Normes** : ASCII, LF, nommage des cases (convention ETENDUE
+  `c[<prefixe-alpha-maj>]<numero>[a-z]?` : cas normal `c<numero>[a-z]?` +
+  prefixe majuscule optionnel `cT1`..`cT10` -- valider-case v1.1.0,
+  spec-guider-parcours v0.6.2 regle 11)
 
 Sortie : verdict CONFORME / A ALLEGER / NON CONFORME, rapport markdown.
 
 ## 7. Evolution des generateurs
 
-### 7.1 generateurs-case (v0.2.2 actuel)
+### 7.1 generateurs-case (v0.4.2 actuel)
 
 - Generaliser `ajouter-bloc` (Pattern 7) en **modele compose complet** :
   une commande cree decision + branches (min 2) + deviation + rejoint.
 - Ajouter l'option `--ref` pour poser des indices de type reference
   (au lieu du texte inline).
 - Verifier le modele apres chaque commande (appel interne au validateur-case).
+- Respecter le BUDGET PONDERE des indices : court <= 100 car. = 0,5 unite ;
+  long > 100 car. = 1 unite ; budget 3,0 unites par case ; plafond 160 car.
 
-### 7.2 generateurs-carte (v0.2.0 actuel)
+### 7.2 generateurs-carte (v0.3.0 actuel)
 
 - `creer` : squelette allege (indices = references de base uniquement).
 - `detecter` / `analyser` : reutiliser les verifications du validateur-case.
@@ -212,8 +221,9 @@ conformite manquee).
 
 1. Un agent active recit sa case une par une (guider-parcours) et n'a jamais
    besoin de lire la carte en entier pour trouver la case suivante.
-2. Aucune case du nouveau format ne porte plus de 3 indices ou un texte de
-   regle > 160 caracteres (les regles sont des references).
+2. Aucune case du nouveau format ne depasse le budget pondere des indices :
+   3,0 unites par case (indice court <= 100 car. = 0,5 ; indice long = 1 ;
+   plafond absolu d un indice = 160 car.) -- les regles sont des references.
 3. `validateur-case` detecte toute violation (modele, surcharge, reference
    morte) et rend un verdict exploitable.
 4. Le modele compose (decision + branches min 2 + deviation + rejoint) est

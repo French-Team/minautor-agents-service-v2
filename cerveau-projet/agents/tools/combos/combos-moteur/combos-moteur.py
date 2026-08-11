@@ -47,7 +47,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n'est pas un terminal)
@@ -324,7 +324,7 @@ def extraire_commande_generateur(sortie, catalogue):
     )
 
 
-def executer_case_generateur(case, cid, variables, dry_run, verbose):
+def executer_case_generateur(case, cid, variables, dry_run, verbose, no_journal=False):
     """Case generateur : compose la commande via generateurs-commande --reponses."""
     catalogue = case.get("catalogue")
     if not catalogue:
@@ -351,6 +351,8 @@ def executer_case_generateur(case, cid, variables, dry_run, verbose):
         "--reponses",
         reponses,
     ]
+    if no_journal:
+        cmd.append("--no-journal")
     if dry_run:
         print(_couleur("[DRY-RUN] ", "cyan") + " ".join(cmd))
     try:
@@ -550,7 +552,7 @@ def lister_cases(donnees):
     return 0
 
 
-def executer(donnees, reponses_predefinies, dry_run, verbose, variables_initiales=None):
+def executer(donnees, reponses_predefinies, dry_run, verbose, variables_initiales=None, no_journal=False):
     """Parcourt la definition case par case jusqu'a une case fin."""
     meta = donnees.get("combo", {})
     cases = donnees.get("cases", {})
@@ -586,7 +588,7 @@ def executer(donnees, reponses_predefinies, dry_run, verbose, variables_initiale
             print(_couleur("--- [%s] %s ---" % (cid, titre), "bleu"))
 
         if typ == "generateur":
-            executer_case_generateur(case, cid, variables, dry_run, verbose)
+            executer_case_generateur(case, cid, variables, dry_run, verbose, no_journal)
         elif typ == "outil":
             executer_case_outil(case, cid, variables, dry_run, verbose)
         elif typ == "controle":
@@ -621,6 +623,7 @@ def construire_parser():
     parser.add_argument("--reponses", type=str, default=None, help="Reponses des controles : case=reponse;case2=reponse2")
     parser.add_argument("--var", type=str, default=None, action="append", help="Variable initiale : cle=valeur (repetable)")
     parser.add_argument("--dry-run", action="store_true", help="Afficher les commandes sans les executer")
+    parser.add_argument("--no-journal", action="store_true", help="Desactiver la journalisation d usage (generateur)")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details de chaque case")
     parser.add_argument("--version", action="version", version="combos-moteur v%s" % VERSION)
     return parser
@@ -684,7 +687,7 @@ def main():
         if args.var is not None:
             variables_initiales = parser_variables(args.var)
 
-        return executer(donnees, reponses, args.dry_run, args.verbose, variables_initiales)
+        return executer(donnees, reponses, args.dry_run, args.verbose, variables_initiales, args.no_journal)
     except ErreurCombo as exc:
         print(_couleur("[ERREUR] %s" % exc, "rouge"), file=sys.stderr)
         return 1

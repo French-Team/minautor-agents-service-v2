@@ -1,770 +1,836 @@
 {
-  "identite": {
-    "type": "parcours",
-    "appartient_a": "atlas",
-    "commun": false
-  },
-  "parcours": {
-    "nom": "parcours-atlas",
-    "agent": "atlas",
-    "version": "0.3.1",
-    "case_depart": "c0",
-    "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. PILOTE STRICT v0.1.2 : commandes composees via le generateur (catalogue), aucun fallback en dur."
-  },
-  "cases": {
-    "c0": {
-      "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-      "type": "question",
-      "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        }
-      ],
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c0c"
-        },
-        {
-          "reponse": "INCERTAIN",
-          "vers": "c0b"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c0b"
-        }
-      ]
-    },
-    "c0b": {
-      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
-        }
-      ],
-      "suivant": "c0c"
-    },
-    "c1": {
-      "titre": "Mission",
-      "type": "question",
-      "question": "Quelle est la mission d'exploration ?",
-      "branches": [
-        {
-          "reponse": "explorer",
-          "vers": "c2"
-        },
-        {
-          "reponse": "web",
-          "vers": "c12"
-        },
-        {
-          "reponse": "documenter",
-          "vers": "c15"
-        },
-        {
-          "reponse": "analyser",
-          "vers": "c21"
-        },
-        {
-          "reponse": "autre",
-          "vers": "c26"
-        },
-        {
-          "reponse": "cartographier",
-          "vers": "c30"
-        },
-        {
-          "reponse": "cartographier-agent",
-          "vers": "c31"
-        }
-      ]
-    },
-    "c2": {
-      "titre": "Lister les dossiers",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-4"
-        },
-        {
-          "type": "outil",
-          "nom": "lister-dossiers",
-          "catalogue": "lister-dossiers",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-dossiers/"
-        }
-      ],
-      "suivant": "c3"
-    },
-    "c3": {
-      "titre": "Lister les fichiers",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "lister-fichiers",
-          "catalogue": "lister-fichiers",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
-        }
-      ],
-      "suivant": "c4"
-    },
-    "c4": {
-      "titre": "Lister les fonctions",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "lister-fonctions",
-          "catalogue": "lister-fonctions",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-fonctions/"
-        }
-      ],
-      "suivant": "c5"
-    },
-    "c5": {
-      "titre": "Lister les appels",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "lister-appels",
-          "catalogue": "lister-appels",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-appels/"
-        }
-      ],
-      "suivant": "c6"
-    },
-    "c6": {
-      "titre": "Lire le contenu des fichiers cles",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
-        }
-      ],
-      "suivant": "c7"
-    },
-    "c7": {
-      "titre": "Rechercher des patterns",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "rechercher-texte",
-          "catalogue": "rechercher-texte",
-          "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/"
-        }
-      ],
-      "suivant": "c8"
-    },
-    "c8": {
-      "titre": "Verifier la regle de relecture (systeme d'agents)",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "outil",
-          "nom": "valider-relecture",
-          "catalogue": "valider-relecture",
-          "chemin": "cerveau-projet/agents/tools/valider/valider-relecture/"
-        }
-      ],
-      "suivant": "c9"
-    },
-    "c9": {
-      "titre": "Documenter les decouvertes",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "outil",
-          "nom": "ecrire-fichier",
-          "catalogue": "ecrire-fichier",
-          "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
-        }
-      ],
-      "suivant": "c10"
-    },
-    "c10": {
-      "titre": "Lecons et retour",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "outil",
-          "nom": "ajouter-contenu-fichier",
-          "catalogue": "ajouter-contenu-fichier",
-          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/"
-        }
-      ],
-      "suivant": "c10b"
-    },
-    "c11": {
-      "titre": "FIN - Reactiver Cerberus",
-      "type": "fin",
-      "message": "REACTIVER CERBERUS (activation directe par Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 '<raison>' atlas. Atlas ne delegue pas : il rend a Cerberus."
-    },
-    "c12": {
-      "titre": "Formuler la requete (protocole-recherches-web)",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-recherches-web/",
-          "raison": "Protocole de recherche web obligatoire : formuler la requete selon le protocole"
-        }
-      ],
-      "suivant": "c13"
-    },
-    "c13": {
-      "titre": "Executer la recherche",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "regle",
-          "texte": "Je documente la source de chaque information : URL, date, fiabilite."
-        }
-      ],
-      "suivant": "c14"
-    },
-    "c14": {
-      "titre": "Documenter la source",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/recherches-web/templates/recherche-template.md",
-          "raison": "Documenter la recherche selon le template de recherche"
-        }
-      ],
-      "suivant": "c10"
-    },
-    "c15": {
-      "titre": "Identifier le public cible",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "regle",
-          "texte": "REGLE RVAV : je ne documente JAMAIS sans avoir verifie via la boucle RVAV (Rechercher, Verifier, Analyser, Valider)."
-        }
-      ],
-      "suivant": "c16"
-    },
-    "c16": {
-      "titre": "Lister les fichiers existants",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "lister-fichiers",
-          "catalogue": "lister-fichiers",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
-        }
-      ],
-      "suivant": "c17"
-    },
-    "c17": {
-      "titre": "Analyser et decomposer la structure",
-      "type": "action",
-      "indices": [
-        {
-          "type": "outil",
-          "nom": "generateurs-commande",
-          "catalogue": "generateurs-commande",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py"
-        },
-        {
-          "type": "outil",
-          "nom": "analyser-structure",
-          "catalogue": "analyser-structure",
-          "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/"
-        },
-        {
-          "type": "outil",
-          "nom": "decomposer-fichier",
-          "catalogue": "decomposer-fichier",
-          "chemin": "cerveau-projet/agents/tools/decomposer/decomposer-fichier/"
-        }
-      ],
-      "suivant": "c18"
-    },
-    "c18": {
-      "titre": "Creer la structure de documentation",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "outil",
-          "nom": "corriger-symboles",
-          "catalogue": "corriger-symboles",
-          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
-        },
-        {
-          "type": "outil",
-          "nom": "creer-fichier",
-          "catalogue": "creer-fichier",
-          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/"
-        }
-      ],
-      "suivant": "c19"
-    },
-    "c19": {
-      "titre": "Rediger le contenu",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "outil",
-          "nom": "ecrire-fichier",
-          "catalogue": "ecrire-fichier",
-          "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
-        }
-      ],
-      "suivant": "c20"
-    },
-    "c20": {
-      "titre": "Passer la boucle RVAV",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE RVAV : je ne documente JAMAIS sans avoir verifie via la boucle RVAV (Rechercher, Verifier, Analyser, Valider)."
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow/",
-          "raison": "Boucle RVAV obligatoire : Rechercher, Verifier, Analyser, Valider"
-        }
-      ],
-      "suivant": "c10"
-    },
-    "c21": {
-      "titre": "Lister les fichiers",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "lister-fichiers",
-          "catalogue": "lister-fichiers",
-          "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
-        }
-      ],
-      "suivant": "c22"
-    },
-    "c22": {
-      "titre": "Lire le contenu des fichiers cles",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "lire-fichier",
-          "catalogue": "lire-fichier",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
-        }
-      ],
-      "suivant": "c23"
-    },
-    "c23": {
-      "titre": "Analyser la structure",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "analyser-structure",
-          "catalogue": "analyser-structure",
-          "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/"
-        }
-      ],
-      "suivant": "c24"
-    },
-    "c24": {
-      "titre": "Analyser les dependances",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-        },
-        {
-          "type": "outil",
-          "nom": "analyser-dependances",
-          "catalogue": "analyser-dependances",
-          "chemin": "cerveau-projet/agents/tools/analyser/analyser-dependances/"
-        }
-      ],
-      "suivant": "c25"
-    },
-    "c25": {
-      "titre": "Creer la cartographie",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "outil",
-          "nom": "ecrire-fichier",
-          "catalogue": "ecrire-fichier",
-          "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
-        }
-      ],
-      "suivant": "c30"
-    },
-    "c26": {
-      "titre": "Mission hors perimetre",
-      "type": "question",
-      "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c27"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c29b"
-        },
-        {
-          "reponse": "audit",
-          "vers": "c32"
-        }
-      ]
-    },
-    "c27": {
-      "titre": "Activer l'agent habilite",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Si la mission releve d'un autre domaine, je signale et je laisse l'agent habilite agir."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "catalogue": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
-        }
-      ],
-      "suivant": "c28"
-    },
-    "c28": {
-      "titre": "FIN - Delegation",
-      "type": "fin",
-      "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
-    },
-    "c29": {
-      "titre": "Signaler le besoin",
-      "type": "fin",
-      "message": "SIGNALER A CERBERUS : besoin d outil DURABLE -> activer Vulcain directement (maillon de chaine, Vulcain reactive l agent precedent), besoin de test -> Morpheus, besoin de nouvelle case -> Buffy. Je ne cree rien moi-meme : je signale et j attends la mission."
-    },
-    "c0c": {
-      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-6"
-        },
-        {
-          "type": "outil",
-          "nom": "lire-activite-recente",
-          "catalogue": "lire-activite-recente",
-          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "AGENTS.md",
-          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
-        }
-      ],
-      "suivant": "c1"
-    },
-    "c30": {
-      "titre": "Cartographier un parcours",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-12"
-        },
-        {
-          "type": "outil",
-          "nom": "cartographier-parcours",
-          "catalogue": "cartographier-parcours",
-          "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/",
-          "commande": "python3 cerveau-projet/agents/tools/cartographier/cartographier-parcours/cartographier-parcours.py {parcours}"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/cartographier-parcours.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
-        }
-      ],
-      "suivant": "c31"
-    },
-    "c29d": {
-      "titre": "FIN - Outil temporaire",
-      "type": "fin",
-      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
-    },
-    "c29c": {
-      "titre": "Creer l outil temporaire",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "outil",
-          "nom": "generateurs-outil-temporaire",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
-        }
-      ],
-      "suivant": "c29d"
-    },
-    "c29b": {
-      "titre": "Besoin d outil ?",
-      "type": "question",
-      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
-      "branches": [
-        {
-          "reponse": "TEMPORAIRE",
-          "vers": "c29c"
-        },
-        {
-          "reponse": "DURABLE",
-          "vers": "c29"
-        }
-      ]
-    },
-    "c31b": {
-      "titre": "FIN - Activer l agent precedent avec sa carte",
-      "type": "fin",
-      "message": "J ai cree la cartographie (rapport cartographie-<parcours>.md dans le dossier du parcours audite). Je ACTIVE L AGENT PRECEDENT (maillon de chaine) : activer-agent-principal.py activer session-llm-1 <agent_precedent> <raison> - en lui fournissant ma carte. L agent reprend SA mission avec la carte."
-    },
-    "c31": {
-      "titre": "Cartographier pour un agent",
-      "type": "action",
-      "indices": [
-        {
-          "type": "ref",
-          "ref": "pattern-2"
-        },
-        {
-          "type": "outil",
-          "nom": "cartographier-parcours",
-          "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/cartographier-parcours.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
-        }
-      ],
-      "suivant": "c31b"
-    },
-    "c32": {
-      "titre": "Activer Themis pour auditer",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
-          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
-        }
-      ],
-      "suivant": "c33"
-    },
-    "c33": {
-      "titre": "FIN - Retour de Themis avec son rapport",
-      "type": "fin",
-      "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni."
-    },
-    "c10b": {
-      "titre": "Ameliorations possibles de mon fonctionnement ?",
-      "type": "question",
-      "question": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
-      "branches": [
-        {
-          "reponse": "OUI",
-          "vers": "c10c"
-        },
-        {
-          "reponse": "NON",
-          "vers": "c11"
-        }
-      ]
-    },
-    "c10c": {
-      "titre": "Lancer le generateur d amelioration",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme."
-        },
-        {
-          "type": "outil",
-          "nom": "generateurs-amelioration",
-          "catalogue": "generateurs-amelioration",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/"
-        },
-        {
-          "type": "fichier",
-          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
-          "raison": "Liste des themes de questions du generateur d amelioration"
-        }
-      ],
-      "suivant": "c10d"
-    },
-    "c10d": {
-      "titre": "Activer l'agent habilite pour l'amelioration",
-      "type": "action",
-      "indices": [
-        {
-          "type": "regle",
-          "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
-        },
-        {
-          "type": "outil",
-          "nom": "activer-agent-principal",
-          "catalogue": "activer-agent-principal",
-          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
-        }
-      ],
-      "suivant": "c10e"
-    },
-    "c10e": {
-      "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
-      "type": "fin",
-      "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
-      "suivant": null
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "atlas",
+  "commun": false
+ },
+ "parcours": {
+  "nom": "parcours-atlas",
+  "agent": "atlas",
+  "version": "0.4.0",
+  "case_depart": "c0",
+  "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. PILOTE STRICT v0.1.2 : commandes composees via le generateur (catalogue), aucun fallback en dur."
+ },
+ "cases": {
+  "c0": {
+   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+   "type": "question",
+   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
     }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "INCERTAIN",
+     "vers": "c0b"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0b"
+    }
+   ]
+  },
+  "c0b": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
+    }
+   ],
+   "suivant": "c0c"
+  },
+  "c1": {
+   "titre": "Mission",
+   "type": "question",
+   "question": "Quelle est la mission d'exploration ?",
+   "branches": [
+    {
+     "reponse": "explorer",
+     "vers": "c2"
+    },
+    {
+     "reponse": "web",
+     "vers": "c12"
+    },
+    {
+     "reponse": "documenter",
+     "vers": "c15"
+    },
+    {
+     "reponse": "analyser",
+     "vers": "c21"
+    },
+    {
+     "reponse": "autre",
+     "vers": "c26"
+    },
+    {
+     "reponse": "cartographier",
+     "vers": "c30"
+    },
+    {
+     "reponse": "cartographier-agent",
+     "vers": "c31"
+    }
+   ]
+  },
+  "c2": {
+   "titre": "Lister les dossiers",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-4"
+    },
+    {
+     "type": "outil",
+     "nom": "lister-dossiers",
+     "catalogue": "lister-dossiers",
+     "chemin": "cerveau-projet/agents/tools/lister/lister-dossiers/"
+    }
+   ],
+   "suivant": "c3"
+  },
+  "c3": {
+   "titre": "Lister les fichiers",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lister-fichiers",
+     "catalogue": "lister-fichiers",
+     "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
+    }
+   ],
+   "suivant": "c4"
+  },
+  "c4": {
+   "titre": "Lister les fonctions",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lister-fonctions",
+     "catalogue": "lister-fonctions",
+     "chemin": "cerveau-projet/agents/tools/lister/lister-fonctions/"
+    }
+   ],
+   "suivant": "c5"
+  },
+  "c5": {
+   "titre": "Lister les appels",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lister-appels",
+     "catalogue": "lister-appels",
+     "chemin": "cerveau-projet/agents/tools/lister/lister-appels/"
+    }
+   ],
+   "suivant": "c6"
+  },
+  "c6": {
+   "titre": "Lire le contenu des fichiers cles",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
+    }
+   ],
+   "suivant": "c7"
+  },
+  "c7": {
+   "titre": "Rechercher des patterns",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "rechercher-texte",
+     "catalogue": "rechercher-texte",
+     "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/"
+    }
+   ],
+   "suivant": "c8"
+  },
+  "c8": {
+   "titre": "Verifier la regle de relecture (systeme d'agents)",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "outil",
+     "nom": "valider-relecture",
+     "catalogue": "valider-relecture",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-relecture/"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c9": {
+   "titre": "Documenter les decouvertes",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "type": "outil",
+     "nom": "ecrire-fichier",
+     "catalogue": "ecrire-fichier",
+     "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
+    }
+   ],
+   "suivant": "c10"
+  },
+  "c10": {
+   "titre": "Lecons et retour",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "type": "outil",
+     "nom": "ajouter-contenu-fichier",
+     "catalogue": "ajouter-contenu-fichier",
+     "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/"
+    }
+   ],
+   "suivant": "c10b"
+  },
+  "c11": {
+   "titre": "FIN - Activer Janus",
+   "type": "fin",
+   "message": "MISSION DE CARTOGRAPHIE TERMINEE (carte a jour ou deja a jour). J ACTIVE JANUS (second controle) avec ma carte et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec le verdict consolide.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ]
+  },
+  "c12": {
+   "titre": "Formuler la requete (protocole-recherches-web)",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-recherches-web/",
+     "raison": "Protocole de recherche web obligatoire : formuler la requete selon le protocole"
+    }
+   ],
+   "suivant": "c13"
+  },
+  "c13": {
+   "titre": "Executer la recherche",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "Je documente la source de chaque information : URL, date, fiabilite."
+    }
+   ],
+   "suivant": "c14"
+  },
+  "c14": {
+   "titre": "Documenter la source",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/recherches-web/templates/recherche-template.md",
+     "raison": "Documenter la recherche selon le template de recherche"
+    }
+   ],
+   "suivant": "c10"
+  },
+  "c15": {
+   "titre": "Identifier le public cible",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE RVAV : je ne documente JAMAIS sans avoir verifie via la boucle RVAV (Rechercher, Verifier, Analyser, Valider)."
+    }
+   ],
+   "suivant": "c16"
+  },
+  "c16": {
+   "titre": "Lister les fichiers existants",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lister-fichiers",
+     "catalogue": "lister-fichiers",
+     "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
+    }
+   ],
+   "suivant": "c17"
+  },
+  "c17": {
+   "titre": "Analyser et decomposer la structure",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "generateurs-commande",
+     "catalogue": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py"
+    },
+    {
+     "type": "outil",
+     "nom": "analyser-structure",
+     "catalogue": "analyser-structure",
+     "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/"
+    },
+    {
+     "type": "outil",
+     "nom": "decomposer-fichier",
+     "catalogue": "decomposer-fichier",
+     "chemin": "cerveau-projet/agents/tools/decomposer/decomposer-fichier/"
+    }
+   ],
+   "suivant": "c18"
+  },
+  "c18": {
+   "titre": "Creer la structure de documentation",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "CREATION LIMITEE : je cree uniquement la structure de documentation de la mission - pas d autre fichier dans le cerveau.",
+     "type": "regle"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "outil",
+     "nom": "corriger-symboles",
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
+    },
+    {
+     "type": "outil",
+     "nom": "creer-fichier",
+     "catalogue": "creer-fichier",
+     "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/"
+    }
+   ],
+   "suivant": "c19"
+  },
+  "c19": {
+   "titre": "Rediger le contenu",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "type": "outil",
+     "nom": "ecrire-fichier",
+     "catalogue": "ecrire-fichier",
+     "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
+    }
+   ],
+   "suivant": "c20"
+  },
+  "c20": {
+   "titre": "Passer la boucle RVAV",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE RVAV : je ne documente JAMAIS sans avoir verifie via la boucle RVAV (Rechercher, Verifier, Analyser, Valider)."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow/",
+     "raison": "Boucle RVAV obligatoire : Rechercher, Verifier, Analyser, Valider"
+    }
+   ],
+   "suivant": "c10"
+  },
+  "c21": {
+   "titre": "Lister les fichiers",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lister-fichiers",
+     "catalogue": "lister-fichiers",
+     "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
+    }
+   ],
+   "suivant": "c22"
+  },
+  "c22": {
+   "titre": "Lire le contenu des fichiers cles",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
+    }
+   ],
+   "suivant": "c23"
+  },
+  "c23": {
+   "titre": "Analyser la structure",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "analyser-structure",
+     "catalogue": "analyser-structure",
+     "chemin": "cerveau-projet/agents/tools/analyser/analyser-structure/"
+    }
+   ],
+   "suivant": "c24"
+  },
+  "c24": {
+   "titre": "Analyser les dependances",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+    },
+    {
+     "type": "outil",
+     "nom": "analyser-dependances",
+     "catalogue": "analyser-dependances",
+     "chemin": "cerveau-projet/agents/tools/analyser/analyser-dependances/"
+    }
+   ],
+   "suivant": "c25"
+  },
+  "c25": {
+   "titre": "Creer la cartographie",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "type": "outil",
+     "nom": "ecrire-fichier",
+     "catalogue": "ecrire-fichier",
+     "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
+    }
+   ],
+   "suivant": "c30"
+  },
+  "c26": {
+   "titre": "Mission hors perimetre",
+   "type": "question",
+   "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c27"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c29b"
+    },
+    {
+     "reponse": "audit",
+     "vers": "c32"
+    }
+   ]
+  },
+  "c27": {
+   "titre": "Activer l'agent habilite",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je n'interviens que sur demande de Cerberus. Si la mission releve d'un autre domaine, je signale et je laisse l'agent habilite agir."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ],
+   "suivant": "c28"
+  },
+  "c28": {
+   "titre": "FIN - Delegation",
+   "type": "fin",
+   "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui)."
+  },
+  "c29": {
+   "titre": "Signaler le besoin",
+   "type": "fin",
+   "message": "SIGNALER A CERBERUS : besoin d outil DURABLE -> activer Vulcain directement (maillon de chaine, Vulcain reactive l agent precedent), besoin de test -> Morpheus, besoin de nouvelle case -> Buffy. Je ne cree rien moi-meme : je signale et j attends la mission."
+  },
+  "c0c": {
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-6"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-activite-recente",
+     "catalogue": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "AGENTS.md",
+     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
+    }
+   ],
+   "suivant": "c0d"
+  },
+  "c30": {
+   "titre": "Cartographier un parcours",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-12"
+    },
+    {
+     "type": "outil",
+     "nom": "cartographier-parcours",
+     "catalogue": "cartographier-parcours",
+     "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/",
+     "commande": "python3 cerveau-projet/agents/tools/cartographier/cartographier-parcours/cartographier-parcours.py {parcours}"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/cartographier-parcours.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c31"
+  },
+  "c29d": {
+   "titre": "FIN - Outil temporaire",
+   "type": "fin",
+   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
+  },
+  "c29c": {
+   "titre": "Creer l outil temporaire",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "EXCEPTION OUTIL TEMPORAIRE : creation d un outil TEMPORAIRE autorisee via generateurs-outil-temporaire (jamais dans tools/).",
+     "type": "regle"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-outil-temporaire",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c29d"
+  },
+  "c29b": {
+   "titre": "Besoin d outil ?",
+   "type": "question",
+   "question": "La mission necessite-t-elle un outil qui n existe pas ?",
+   "branches": [
+    {
+     "reponse": "TEMPORAIRE",
+     "vers": "c29c"
+    },
+    {
+     "reponse": "DURABLE",
+     "vers": "c29"
+    }
+   ]
+  },
+  "c31b": {
+   "titre": "FIN - Activer l agent precedent avec sa carte",
+   "type": "fin",
+   "message": "J ai cree la cartographie (rapport cartographie-<parcours>.md dans le dossier du parcours audite). Je ACTIVE L AGENT PRECEDENT (maillon de chaine) : activer-agent-principal.py activer session-llm-1 <agent_precedent> <raison> - en lui fournissant ma carte. L agent reprend SA mission avec la carte.",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ]
+  },
+  "c31": {
+   "titre": "Cartographier pour un agent",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "CREATION LIMITEE : cartographier-parcours genere SA cartographie (parcours-*.md) - je ne cree aucun autre fichier.",
+     "type": "regle"
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "outil",
+     "nom": "cartographier-parcours",
+     "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/cartographier/cartographier-parcours/cartographier-parcours.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c31b"
+  },
+  "c32": {
+   "titre": "Activer Themis pour auditer",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "CREATION LIMITEE AUX FICHIERS DU CERVEAU : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c33"
+  },
+  "c33": {
+   "titre": "FIN - Retour de Themis avec son rapport",
+   "type": "fin",
+   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin : si aucun defaut, Themis me REACTIVE avec son rapport (evaluation ou audit) et je reprends ma mission avec le rapport fourni ; si un defaut est signale (boucle KO, carte Themis v0.3.7 c12f/c12g), Themis m active pour corriger et je la reactiverai avec mon bilan."
+  },
+  "c10b": {
+   "titre": "Ameliorations possibles de mon fonctionnement ?",
+   "type": "question",
+   "question": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c10c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c34"
+    }
+   ]
+  },
+  "c10c": {
+   "titre": "Lancer le generateur d amelioration",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme."
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-amelioration",
+     "catalogue": "generateurs-amelioration",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
+     "raison": "Liste des themes de questions du generateur d amelioration"
+    }
+   ],
+   "suivant": "c10d"
+  },
+  "c10d": {
+   "titre": "Activer l'agent habilite pour l'amelioration",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ],
+   "suivant": "c10e"
+  },
+  "c10e": {
+   "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
+   "type": "fin",
+   "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
+   "suivant": null
+  },
+  "c0d": {
+   "titre": "LIRE LA DOCUMENTATION DE L OUTIL avant utilisation",
+   "type": "action",
+   "suivant": "c1",
+   "branches": [],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je LIS le .md de l outil (agents/tools/<categorie>/<outil>/<outil>.md) avant toute utilisation - usage sans doc = erreur."
+    },
+    {
+     "type": "regle",
+     "texte": "La doc est le CONTRAT : je verifie le modele et les parametres avant d executer (--dry-run d abord si disponible)."
+    }
+   ]
+  },
+  "c34": {
+   "indices": [
+    {
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
+     "nom": "enregistrer-usage-outil",
+     "type": "outil"
+    },
+    {
+     "texte": "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL.",
+     "type": "regle"
+    }
+   ],
+   "message": "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=atlas, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
+   "suivant": "c11",
+   "titre": "Enregistrer mes usages d outils",
+   "type": "action"
   }
+ }
 }

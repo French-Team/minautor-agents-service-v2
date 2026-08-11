@@ -69,7 +69,7 @@
      "type": "fichier"
     }
    ],
-   "suivant": "c1",
+   "suivant": "c0d",
    "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
    "type": "action"
   },
@@ -94,6 +94,10 @@
   },
   "c10": {
    "indices": [
+    {
+     "texte": "CREATION LIMITEE : verifier-systeme met a jour SON profil dans variables-actuelles - je ne cree aucun autre fichier.",
+     "type": "regle"
+    },
     {
      "texte": "ETAPE 1 OBLIGATOIRE : verifier le systeme AVANT de modifier.",
      "type": "regle"
@@ -185,7 +189,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c15"
+     "vers": "c23"
     },
     {
      "reponse": "NON",
@@ -383,7 +387,7 @@
    "type": "action"
   },
   "c21": {
-   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni.",
+   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin : si aucun defaut, Themis me REACTIVE avec son rapport (evaluation ou audit) et je reprends ma mission avec le rapport fourni ; si un defaut est signale (boucle KO, carte Themis v0.3.7 c12f/c12g), Themis m active pour corriger et je la reactiverai avec mon bilan.",
    "titre": "FIN - Retour de Themis avec son rapport",
    "type": "fin"
   },
@@ -515,7 +519,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c9"
+     "vers": "c22"
     },
     {
      "reponse": "NON",
@@ -555,7 +559,7 @@
     },
     {
      "reponse": "NON",
-     "vers": "c9"
+     "vers": "c22"
     }
    ]
   },
@@ -615,7 +619,7 @@
     },
     {
      "reponse": "NON",
-     "vers": "c15"
+     "vers": "c23"
     }
    ]
   },
@@ -693,7 +697,7 @@
   "c6c": {
    "titre": "Lancer le scan detecter-decalages-catalogue (section COMBOS)",
    "type": "action",
-   "suivant": "c7",
+   "suivant": "c6d",
    "indices": [
     {
      "texte": "CREATION LIMITEE : le scan detecter-decalages-catalogue genere SON rapport (rapport-detecter-decalages-catalogue-<date>.md) - je ne cree AUCUN autre fichier dans le cerveau dans le cadre de ce scan.",
@@ -712,6 +716,32 @@
      "catalogue": "detecter-decalages-catalogue",
      "chemin": "cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/",
      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/detecter-decalages-catalogue.py",
+     "type": "outil"
+    }
+   ]
+  },
+  "c6d": {
+   "titre": "Lancer le test-023-grep-budget-pondere (coherence budget pondere)",
+   "type": "action",
+   "suivant": "c7",
+   "indices": [
+    {
+     "texte": "CREATION LIMITEE : ce test ne genere AUCUN fichier (sortie console uniquement).",
+     "type": "regle"
+    },
+    {
+     "texte": "PASSE PAR LE GENERATEUR : commande via le catalogue (--commande test-023-grep-budget-pondere).",
+     "type": "regle"
+    },
+    {
+     "texte": "Le test doit afficher '26 OK / 0 KO' : toute divergence est a corriger avant de continuer.",
+     "type": "regle"
+    },
+    {
+     "nom": "test-023-grep-budget-pondere",
+     "catalogue": "test-023-grep-budget-pondere",
+     "chemin": "cerveau-projet/agents/tools/tester/tests/test-023-grep-budget-pondere/",
+     "commande": "python3 cerveau-projet/agents/tools/tester/tests/test-023-grep-budget-pondere/test-023-grep-budget-pondere.py",
      "type": "outil"
     }
    ]
@@ -745,7 +775,7 @@
   "c12c": {
    "titre": "Lancer le scan detecter-decalages-catalogue (section COMBOS)",
    "type": "action",
-   "suivant": "c13",
+   "suivant": "c12d",
    "indices": [
     {
      "texte": "CREATION LIMITEE : le scan detecter-decalages-catalogue genere SON rapport (rapport-detecter-decalages-catalogue-<date>.md) - je ne cree AUCUN autre fichier dans le cerveau dans le cadre de ce scan.",
@@ -767,6 +797,84 @@
      "type": "outil"
     }
    ]
+  },
+  "c12d": {
+   "titre": "Lancer le test-023-grep-budget-pondere (coherence budget pondere)",
+   "type": "action",
+   "suivant": "c13",
+   "indices": [
+    {
+     "texte": "CREATION LIMITEE : ce test ne genere AUCUN fichier (sortie console uniquement).",
+     "type": "regle"
+    },
+    {
+     "texte": "PASSE PAR LE GENERATEUR : commande via le catalogue (--commande test-023-grep-budget-pondere).",
+     "type": "regle"
+    },
+    {
+     "texte": "Le test doit afficher '26 OK / 0 KO' : toute divergence est a corriger avant de continuer.",
+     "type": "regle"
+    },
+    {
+     "nom": "test-023-grep-budget-pondere",
+     "catalogue": "test-023-grep-budget-pondere",
+     "chemin": "cerveau-projet/agents/tools/tester/tests/test-023-grep-budget-pondere/",
+     "commande": "python3 cerveau-projet/agents/tools/tester/tests/test-023-grep-budget-pondere/test-023-grep-budget-pondere.py",
+     "type": "outil"
+    }
+   ]
+  },
+  "c0d": {
+   "titre": "LIRE LA DOCUMENTATION DE L OUTIL avant utilisation",
+   "type": "action",
+   "suivant": "c1",
+   "branches": [],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je LIS le .md de l outil (agents/tools/<categorie>/<outil>/<outil>.md) avant toute utilisation - usage sans doc = erreur."
+    },
+    {
+     "type": "regle",
+     "texte": "La doc est le CONTRAT : je verifie le modele et les parametres avant d executer (--dry-run d abord si disponible)."
+    }
+   ]
+  },
+  "c22": {
+   "indices": [
+    {
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
+     "nom": "enregistrer-usage-outil",
+     "type": "outil"
+    },
+    {
+     "texte": "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL.",
+     "type": "regle"
+    }
+   ],
+   "message": "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=vulcain, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
+   "suivant": "c9",
+   "titre": "Enregistrer mes usages d outils",
+   "type": "action"
+  },
+  "c23": {
+   "indices": [
+    {
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
+     "nom": "enregistrer-usage-outil",
+     "type": "outil"
+    },
+    {
+     "texte": "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL.",
+     "type": "regle"
+    }
+   ],
+   "message": "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=vulcain, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
+   "suivant": "c15",
+   "titre": "Enregistrer mes usages d outils",
+   "type": "action"
   }
  },
  "identite": {
@@ -779,6 +887,6 @@
   "case_depart": "c0",
   "description": "v0.2.13 : ALLEGEMENT c8/c14 (point mineur audit Themis) - les regles de 341 caracteres sont remplacees par une reference vers protocole-tests v0.2.1 (section Delegation des tests) - la chaine (type controle + branches + question + indice outil) est inchangee. v0.2.12 : DELEGATION DES TESTS RENFORCEE (lecon recidive generateurs-amelioration) - c6/c12 interdisent de toucher a TOUT fichier test-XXX (creation OU mise a jour), c8/c14 verifient en 2 points (aucune ecriture de test par Vulcain + Morpheus active pour ECRIRE et EXECUTER). Parcours (jeu de piste) des missions de Vulcain : construire un outil, modifier un outil. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.4 : REGLE DES 5 FICHIERS ajoutee dans c12 (apres toute modification de version, verifier l alignement VERSION/STATUT dans py, sh, md, spec + distinguer les versions propres du catalogue et de l index - lecon Vulcain, controle Janus). v0.2.3 : verification PARITE --version py/sh OBLIGATOIRE apres creation (c6) et modification (c12) d outil (lecon Morpheus T5 / Vulcain) - diff <(python3 outil.py --version | tr -d '\r') <(bash outil.sh --version | tr -d '\r'), si divergence aligner le .sh (VERSION/STATUT) avant de continuer. v0.2.2 : lecons des cas reels integrees. v0.2.1 : boucle de delegation MORPHEUS MATERIALISEE (RELAIS c9a/c15a -> RETOUR c9b/c15b -> CLOTURE c9c/c15c -> FIN c9/c15) - la chaine ne casse plus apres l'activation de Morpheus. v0.2.0 : les cases c7/c13 (corriger accents + valider ASCII) pointent vers le combo combo-corriger-ascii (Pattern 3, spec-guider-parcours v0.2.4).",
   "nom": "parcours-vulcain",
-  "version": "0.3.4"
+  "version": "0.4.0"
  }
 }

@@ -7,9 +7,10 @@ identite:
 # Specification -- combos-moteur
 
 **Statut :** ebauche
-**Version :** 0.2.1
+**Version :** 0.3.1
 **Categorie :** combos
 **Date :** 2026-08-11
+**Historique :** v0.2.1 (regle des cles des entrees = cles EXACTES du catalogue, lecon KO test-003) ; v0.3.0 (garde-fou IMPLEMENTE dans le moteur : verification au chargement des cles des cases generateur vs catalogue, `_verifier_cles_catalogue` / case `verification_generateur`)
 
 ---
 
@@ -109,6 +110,11 @@ generateur n'est PAS modifie : c'est le moteur qui fait le lien.
 > case `generateur` DOIVENT etre les cles EXACTES des `parametres` de la commande
 > ciblee dans le catalogue de commandes (`catalogue-commandes.json`), qui est la
 > **source de verite** des commandes generees. Il est INTERDIT d'inventer une cle.
+>
+> **GARDE-FOU v0.3.0 (implemente)** : le moteur verifie au chargement que les
+> cles des cases `generateur` correspondent aux `parametres` de la commande
+> ciblee (fonction `_verifier_cles_catalogue`, mode `verification_generateur`) ;
+> une cle inconnue -> erreur claire, code retour 1.
 
 **Pourquoi ?** le moteur appelle `generateurs-commande --commande <catalogue>
 --reponses "<cles>=<valeurs>"`. Le generateur compose la commande en utilisant
@@ -228,8 +234,8 @@ composer la commande de l'outil suivant, une case `generateur` s'intercale.
 ## Interface
 
 ```bash
-python3 combos-moteur.py <definition-combo.json> [--liste] [--reponses 'cle=valeur;...'] [--dry-run] [--version]
-bash combos-moteur.sh <definition-combo.json> [--liste] [--reponses 'cle=valeur;...'] [--dry-run] [--version]
+python3 combos-moteur.py <definition-combo.json> [--liste] [--reponses 'cle=valeur;...'] [--dry-run] [--no-journal] [--version]
+bash combos-moteur.sh <definition-combo.json> [--liste] [--reponses 'cle=valeur;...'] [--dry-run] [--no-journal] [--version]
 ```
 
 | Option | Description | Defaut |
@@ -238,6 +244,7 @@ bash combos-moteur.sh <definition-combo.json> [--liste] [--reponses 'cle=valeur;
 | `--liste` | Lister les cases sans executer | false |
 | `--reponses 'a=b;c=d'` | Reponses des controles fournies en une fois | - |
 | `--dry-run` | Afficher les commandes sans les executer | false |
+| `--no-journal` | Desactiver la journalisation d usage (generateur) | false |
 | `--verbose` | Afficher les details de chaque case | false |
 | `--version` | Afficher la version | - |
 
