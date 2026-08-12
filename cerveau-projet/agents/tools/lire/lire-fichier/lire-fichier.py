@@ -21,17 +21,29 @@ Options:
 
 Retour: 0 si succes, 1 si erreur.
 
+Securite (round 3) :
+  - octet nul dans le chemin -> refus explicite (exit 1)
+  - lecture robuste : UTF-8 (BOM nettoye) puis fallback latin-1, jamais de crash
+  - stdout force en UTF-8 : plus d'UnicodeEncodeError cp1252 sous Windows
+
 Proprietaire : Buffy (outil partage)
-Version : 0.2.0-py
-Statut : beta
+Version : 0.4.1
+Statut : prepare
 """
 
 import argparse
 import os
 import sys
 
-VERSION = "0.2.0-py"
-STATUT = "beta"
+VERSION = "0.4.2"
+STATUT = "prepare"
+
+# Securite (round 3) : force la sortie en UTF-8 pour ne jamais crasher sur
+# l'encodage de la console (cp1252 sous Windows avec des caracteres non-ASCII).
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except AttributeError:
+    pass  # Python < 3.7 : la console gere l'encodage comme elle peut
 
 # Couleurs ANSI
 RED = "\033[0;31m"
@@ -48,6 +60,23 @@ def verifier_nommage(nom_script):
         print(RED + "[ERREUR] Nom de fichier invalide : " + nom_script + NC)
         print(YELLOW + "  Attendu : " + attendu + NC)
         sys.exit(2)
+
+
+def verifier_chemin_sur(chemin):
+    """Securite (round 3) : refuse un chemin contenant un octet nul."""
+    if "\x00" in chemin:
+        print(RED + "[ERREUR] Chemin non sur (octet nul present)" + NC)
+        sys.exit(1)
+
+
+def decoder_ligne(octets):
+    """Decode une ligne sans jamais crasher : UTF-8-sig (BOM nettoye) puis
+    latin-1 en secours (decode toujours). Les lignes purement ASCII sont
+    identiques dans les deux encodages : le resultat est donc exact."""
+    try:
+        return octets.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        return octets.decode("latin-1")
 
 
 def construire_parser():
@@ -90,36 +119,73 @@ def main(argv=None):
         return 1
 
     fichier = args.fichier
+    verifier_chemin_sur(fichier)
+
     if not os.path.isfile(fichier):
         print(RED + "[ERREUR] Fichier non trouve: " + fichier + NC)
         return 1
 
+    # Robustesse (round 4) : validation de la plage AVANT toute lecture.
+    # Une plage invalide (--debut > --fin, ou borne < 1) est refusee avec un
+    # message explicite : jamais de 0 silencieux avec une sortie vide.
+    if args.lignes is not None and args.lignes < 1:
+        print(RED + "[ERREUR] Plage invalide : --lignes doit etre >= 1 (recu: " +
+              str(args.lignes) + ")" + NC)
+        return 1
+    if args.debut is not None and args.debut < 1:
+        print(RED + "[ERREUR] Plage invalide : --debut doit etre >= 1 (recu: " +
+              str(args.debut) + ")" + NC)
+        return 1
+    if args.fin is not None and args.fin < 1:
+        print(RED + "[ERREUR] Plage invalide : --fin doit etre >= 1 (recu: " +
+              str(args.fin) + ")" + NC)
+        return 1
+    if (args.debut is not None and args.fin is not None
+            and args.debut > args.fin):
+        print(RED + "[ERREUR] Plage invalide : --debut (" + str(args.debut) +
+              ") > --fin (" + str(args.fin) + ")" + NC)
+        return 1
+
+    # LECTURE PARESSEUSE (performance round 2) : on ne lit que la plage
+    # demandee, ligne par ligne, au lieu de charger tout le fichier en
+    # memoire. --lignes 5 sur un fichier de 200k lignes ne lit que 5 lignes.
+    # Securite (round 3) : iteration binaire + decodage robuste par ligne
+    # (utf-8-sig puis latin-1), plus aucun crash d'encodage possible.
+    if args.lignes is not None:
+        # --lignes N : lire les N premieres lignes puis s'arreter
+        debut, fin = 1, args.lignes
+    elif args.debut is not None and args.fin is not None:
+        debut, fin = args.debut, args.fin
+    elif args.debut is not None:
+        debut, fin = args.debut, None  # jusqu'a la fin
+    elif args.fin is not None:
+        debut, fin = 1, args.fin
+    else:
+        debut, fin = 1, None
+
+    if args.verbose:
+        # Compter les lignes uniquement si demande (lecture complete a ce
+        # moment la, mais c'est explicite)
+        try:
+            with open(fichier, "rb") as f:
+                total_lignes = sum(1 for _ in f)
+            print(BLUE + "[INFO] Fichier: " + fichier +
+                  " (" + str(total_lignes) + " lignes)" + NC)
+        except OSError as e:
+            print(RED + "[ERREUR] Lecture impossible: " + str(e) + NC)
+            return 1
+
     try:
-        with open(fichier, encoding="utf-8", errors="replace") as f:
-            lignes = f.read().split("\n")
+        with open(fichier, "rb") as f:
+            for num, ligne in enumerate(f, 1):
+                if num < debut:
+                    continue
+                if fin is not None and num > fin:
+                    break
+                print(decoder_ligne(ligne).rstrip("\r\n"))
     except OSError as e:
         print(RED + "[ERREUR] Lecture impossible: " + str(e) + NC)
         return 1
-
-    total_lignes = len(lignes)
-    if args.verbose:
-        print(BLUE + "[INFO] Fichier: " + fichier +
-              " (" + str(total_lignes) + " lignes)" + NC)
-
-    # Construire la plage de lecture
-    debut, fin = 1, total_lignes
-    if args.lignes is not None:
-        fin = min(args.lignes, total_lignes)
-    elif args.debut is not None and args.fin is not None:
-        debut = max(args.debut, 1)
-        fin = min(args.fin, total_lignes)
-    elif args.debut is not None:
-        debut = max(args.debut, 1)
-    elif args.fin is not None:
-        fin = min(args.fin, total_lignes)
-
-    for i in range(debut - 1, min(fin, total_lignes)):
-        print(lignes[i])
 
     return 0
 

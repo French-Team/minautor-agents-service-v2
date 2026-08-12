@@ -3,7 +3,7 @@
 # generateurs-case.py
 # Genere, edite et supprime des cases d'une carte de decision (parcours JSON)
 # avec recablage automatique des references et validation auto complete.
-# Version : 0.3.1
+# Version : 0.4.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -959,6 +959,13 @@ def construire_parser():
 
 def main():
     verifier_nommage(sys.argv[0])
+    # round 9 : --version au niveau RACINE (usage standard). Avant, le flag
+    # n existait que sur les sous-parsers : 'generateurs-case.py --version'
+    # repondait rc=2 'arguments required: parcours, action'. Les sous-parsers
+    # gardent leur --version pour la parite py/sh (test-010 lance 'x liste --version').
+    if "--version" in sys.argv:
+        print("generateurs-case v%s" % VERSION)
+        return 0
     if "--aide" in sys.argv or "-h" in sys.argv or "--help" in sys.argv:
         parser = construire_parser()
         # --aide peut cibler un sous-parser (ex: <parcours> ajouter-bloc --aide)

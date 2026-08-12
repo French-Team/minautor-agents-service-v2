@@ -22,7 +22,8 @@
       "type": "outil",
       "commande": "{cmd1}",
       "sortie": "resultat_nom",
-      "suivant": "c3"
+      "suivant": "c3",
+      "echec_ok": true
     },
     "c3": {
       "titre": "CONTROLE : le nom est-il valide ?",

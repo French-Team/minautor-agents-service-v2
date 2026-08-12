@@ -11,21 +11,24 @@
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py cerveau-projet/agents",
       "sortie": "resultat_ascii",
-      "suivant": "c2"
+      "suivant": "c2",
+      "echec_ok": true
     },
     "c2": {
       "titre": "Executer valider-cartes-decision",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --tous",
       "sortie": "resultat_cartes",
-      "suivant": "c3"
+      "suivant": "c3",
+      "echec_ok": true
     },
     "c3": {
       "titre": "Executer valider-liens",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-liens/valider-liens.py",
       "sortie": "resultat_liens",
-      "suivant": "c4"
+      "suivant": "c4",
+      "echec_ok": true
     },
     "c4": {
       "titre": "FIN - controle outil termine",

@@ -6,7 +6,7 @@ identite:
 ---
 # nettoyer-sessions
 
-**Version :** 0.1.1
+**Version :** 0.1.2
 **Statut :** prepare
 **Categorie :** nettoyer
 **Chemin :** `agents/tools/nettoyer/nettoyer-sessions/`
@@ -66,9 +66,15 @@ Version bash equivalente : `nettoyer-sessions.sh` (meme logique).
 
 ### 1. AGENTS.md
 
-Supprime, en PRESERVANT le frontmatter `identite:` et le reste du fichier :
-- tous les blocs `### Session : session-llm-N` (section `## Sessions LLM`)
+Supprime, en PRESERVANT le frontmatter `identite:`, l'en-tete `## Sessions LLM`
+et le reste du fichier :
+- tous les blocs `### Session : session-llm-N` (sous la section `## Sessions LLM`)
 - la section `## Sessions connues` (la table `| Session | Nom LLM | ... |`)
+
+L'en-tete `## Sessions LLM` est CONSERVE : c'est lui qui permet a
+`activer-agent-principal.py sidentifier <id>` de recreer le bloc session a neuf
+apres le nettoyage (v0.1.2 : l'en-tete etait supprime a tort, ce qui cassait la
+re-identification).
 
 ### 2. Classeur-variables
 
@@ -78,6 +84,7 @@ Supprime toutes les lignes `profil-session-*` (les variables de profil de sessio
 
 - `AGENTS-historique.md` (le journal d'activation : traces et temoignages)
 - le frontmatter, l'entete et les sections non-session de AGENTS.md
+- l'en-tete de section `## Sessions LLM` (preserve pour la re-identification)
 - les autres variables du classeur
 
 ---
@@ -130,5 +137,6 @@ rien et retourne `code 0` (les sections absentes ne sont pas recreees).
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.1.2 | 2026-08-12 | Bug corrige : l'en-tete `## Sessions LLM` est desormais PRESERVE (seuls les blocs `### Session : session-llm-N` et la section `## Sessions connues` sont supprimes). L'ancienne version supprimait l'en-tete, ce qui cassait `sidentifier` apres un nettoyage ('Section ## Sessions LLM introuvable'). Parite py/sh conservee |
 | 0.1.1 | 2026-08-08 | Parite stricte des sorties py/sh : le .sh affiche desormais le message final complet 'Nettoyage termine : N lignes supprimees' (total AGENTS + classeur) et '[DRY-RUN] Total : N lignes a supprimer (aucune modification reelle)' en dry-run, identique au .py. Harmonisation '0 ligne' -> '0 lignes' dans le message classeur vide |
 | 0.1.0 | 2026-08-08 | Creation initiale : supprime les blocs session-llm + Sessions connues (AGENTS.md) et les lignes profil-session-* (classeur), preserve le frontmatter et le journal historique. Parite py/sh, --dry-run, --verbose |

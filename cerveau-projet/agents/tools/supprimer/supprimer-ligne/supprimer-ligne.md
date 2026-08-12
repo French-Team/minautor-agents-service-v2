@@ -6,7 +6,7 @@ identite:
 ---
 # supprimer-ligne
 
-**Version :** 0.2.0
+**Version :** 0.3.2
 **Statut :** prepare
 **Categorie :** supprimer
 **Chemin :** `agents/tools/supprimer/supprimer-ligne/`
@@ -15,6 +15,8 @@ identite:
 ## Description
 
 Supprimer une ligne (ou une plage de lignes) par numero dans un fichier. Outil de precision, complement de `supprimer-fichier` quand on veut retirer uniquement certaines lignes (par exemple apres un `rechercher-texte` qui a localise le probleme).
+
+**Echec explicite** : si la ligne demandee n'existe pas dans le fichier, l'outil retourne un code non nul (1) avec un message clair - jamais 0 silencieux.
 
 ## Utilisation
 
@@ -40,6 +42,7 @@ Version bash equivalente : `supprimer-ligne.sh` (meme logique).
 
 | Option | Description | Defaut |
 |---|---|---|
+| `--backup` | Creer une sauvegarde .bak avant | false |
 | `--dry-run` | Simuler sans modifier | false |
 | `--verbose` | Afficher les details | false |
 | `--help` | Afficher l'aide | - |
@@ -99,5 +102,8 @@ $ supprimer-ligne.sh --verbose fichier.md 2
 | 0.1.0 | 2026-08-06 | Creation initiale |
 | 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
 | 0.2.0-py | 2026-08-07 | Version Python creee (supprimer-ligne.py), basee sur outil-template.py. Suppression ligne/plage avec validations + --dry-run |
+| 0.3.0 | 2026-08-12 | Qualite pro : echec explicite (ligne inexistante -> code 1), protection nommage, option --backup, parite py/sh |
+| 0.3.1 | 2026-08-12 | SECURITE (round 3) : refus de modifier a travers un lien symbolique, refus octet nul, lecture robuste utf-8-sig + fallback latin-1 |
+| 0.3.2 | 2026-08-12 | ROBUSTESSE (round 4) : pluriel correct dans le message ligne inexistante (1 ligne vs N lignes) - parite py/sh |
 
 ---

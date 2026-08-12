@@ -2,9 +2,9 @@
 # -*- coding: ascii -*-
 """
 test-005-generateurs-commande.py
-Test formel du generateur de commande v0.2.3 (fiabilisation des flags optionnels),
+Test formel du generateur de commande v0.2.4 (fiabilisation des flags optionnels),
 du catalogue (chaque commande doit avoir sa documentation .md : REGLE ABSOLUE
-LECTURE DOC) et du parcours Atlas v0.4.0 (migre au format action : references +
+LECTURE DOC) et du parcours Atlas v0.4.1 (migre au format action : references +
 cases action, 1 commande template residuelle c30 conservee et documentee).
 
 Objet (correction Buffy 2026-08-09) :
@@ -20,13 +20,13 @@ Objet (correction Buffy 2026-08-09) :
     residuelle case c30 (cartographier-parcours.py {parcours}), connue et documentee.
   - parcours-atlas v0.1.10 -> v0.2.0 : migration format action (references + cases
     action). La commande template c30 est conservee comme residu connu (1 seule).
-  - parcours-atlas v0.3.3 -> v0.4.0 (2026-08-11) : ajout case c0d LIRE LA
+  - parcours-atlas v0.3.3 -> v0.4.1 (2026-08-11) : ajout case c0d LIRE LA
     DOCUMENTATION DE L OUTIL avant utilisation (garde-fou lecture .md).
 
 Cas couverts (26 points) :
-  GENERATEUR v0.2.3
-  1. --version py = v0.2.3
-  2. --version sh = v0.2.3
+  GENERATEUR v0.2.4
+  1. --version py = v0.2.4
+  2. --version sh = v0.2.4
   3. py_compile OK (generateurs-commande.py)
   4. bash -n OK (generateurs-commande.sh)
   5. composition lire-fichier (fichier=AGENTS.md;lignes=3) : SANS --debut/--fin vides
@@ -41,8 +41,8 @@ Cas couverts (26 points) :
  14. catalogue version = 0.2.9
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
-  PARCOURS ATLAS v0.4.0
- 17. parcours-atlas.json : json.load valide + version 0.4.0
+  PARCOURS ATLAS v0.4.1
+ 17. parcours-atlas.json : json.load valide + version 0.4.1
  18. 1 seul residu connu (c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
@@ -121,15 +121,15 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.3 + catalogue 0.2.9 + parcours-atlas v0.4.0 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.4 + catalogue 0.2.9 + parcours-atlas v0.4.1 ===")
     print("")
 
-    # ---------- GENERATEUR v0.2.3 ----------
+    # ---------- GENERATEUR v0.2.4 ----------
     code, out = exec_cmd("python3 %s --version" % GC_PY)
-    verifier(1, "generateurs-commande.py --version = v0.2.3", "v0.2.3" in out, out.strip())
+    verifier(1, "generateurs-commande.py --version = v0.2.4", "v0.2.4" in out, out.strip())
 
     code, out = exec_cmd("bash %s --version" % GC_SH)
-    verifier(2, "generateurs-commande.sh --version = v0.2.3", "v0.2.3" in out, out.strip())
+    verifier(2, "generateurs-commande.sh --version = v0.2.4", "v0.2.4" in out, out.strip())
 
     code, out = exec_cmd("python3 -m py_compile %s" % GC_PY)
     verifier(3, "py_compile generateurs-commande.py", code == 0, out.strip())
@@ -186,10 +186,10 @@ def main():
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.0",
-                 p.get("parcours", {}).get("version") == "0.4.0", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.1",
+                 p.get("parcours", {}).get("version") == "0.4.1", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.0", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.1", False, str(e))
         p = {}
 
     # Residu connu et documente : case c30 (commande template cartographier-parcours.py {parcours}).

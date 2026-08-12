@@ -23,7 +23,7 @@
 
 ## Observations
 
-- **guider-parcours.md v0.5.0** : aucune mention de surcharge/allègement. C'est CORRECT : la doc d'usage du navigateur ne couvre pas la surcharge (domaine de valider-case). Rien a corriger.
+- **guider-parcours.md v0.5.0** : aucune mention de surcharge/allegement. C'est CORRECT : la doc d'usage du navigateur ne couvre pas la surcharge (domaine de valider-case). Rien a corriger.
 - La version du .md guider-parcours (0.5.0) est alignee sur le py (0.5.0) ; la spec est en 0.6.2 (cas inverse connu : py en retard, observation pour une mission Vulcain).
 
 ## Lecons

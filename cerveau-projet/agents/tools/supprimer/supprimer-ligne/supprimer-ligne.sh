@@ -1,14 +1,14 @@
 #!/bin/bash
 # supprimer-ligne.sh
 # Supprimer une ligne (ou une plage) par numero dans un fichier
-# Version : 0.2.0
+# Version : 0.3.0
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
-STATUT="ebauche"
+VERSION="0.3.2"
+STATUT="prepare"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -27,6 +27,7 @@ afficher_aide() {
     echo "  [ligne-fin]     Derniere ligne de la plage a supprimer (defaut = ligne)"
     echo ""
     echo "Options :"
+    echo "  --backup        Creer une sauvegarde .bak avant"
     echo "  --dry-run       Simuler sans modifier"
     echo "  --verbose       Afficher les details"
     echo "  --help          Afficher cette aide"
@@ -42,6 +43,7 @@ main() {
     local fichier=""
     local ligne=""
     local ligne_fin=""
+    local backup="false"
     local dry_run="false"
     local verbose="false"
     local help="false"
@@ -49,6 +51,7 @@ main() {
     while [[ $# -gt 0 ]]; do
         case $1 in
             --dry-run) dry_run="true"; shift ;;
+            --backup) backup="true"; shift ;;
             --verbose) verbose="true"; shift ;;
             --help) help="true"; shift ;;
             *)
@@ -111,8 +114,13 @@ main() {
     local total_lignes=$(wc -l < "$fichier")
     
     if [ "$ligne" -gt "$total_lignes" ]; then
-        echo -e "${YELLOW}[INFO] Le fichier n'a que $total_lignes lignes, ligne $ligne inexistante${NC}"
-        exit 0
+        # Robustesse (round 4) : pluriel correct ("1 ligne" vs "N lignes")
+        local mot="lignes"
+        if [ "$total_lignes" -eq 1 ]; then
+            mot="ligne"
+        fi
+        echo -e "${RED}[ERREUR] Le fichier n'a que $total_lignes $mot, ligne $ligne inexistante${NC}"
+        exit 1
     fi
     
     if [ "$ligne_fin" -gt "$total_lignes" ]; then
@@ -132,6 +140,14 @@ main() {
         echo "Lignes qui seraient supprimees :"
         sed -n "${ligne},${ligne_fin}p" "$fichier"
         exit 0
+    fi
+    
+    # Sauvegarde
+    if [ "$backup" = "true" ]; then
+        cp "$fichier" "${fichier}.bak"
+        if [ "$verbose" = "true" ]; then
+            echo -e "${BLUE}[INFO] Sauvegarde: ${fichier}.bak${NC}"
+        fi
     fi
     
     # Supprimer les lignes avec sed (fichier temporaire puis remplacement)

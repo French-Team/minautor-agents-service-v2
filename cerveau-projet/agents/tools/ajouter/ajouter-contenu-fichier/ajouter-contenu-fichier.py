@@ -21,8 +21,8 @@ import os
 import sys
 from pathlib import Path
 
-VERSION = "0.2.0"
-STATUT = "ebauche"
+VERSION = "0.3.0"
+STATUT = "prepare"
 
 _COULEURS = {
     "rouge": "\033[0;31m",
@@ -81,6 +81,7 @@ def construire_parser():
     parser.add_argument("cible", nargs="?", type=str, help="Fichier a completer")
     parser.add_argument("contenu", nargs="?", type=str, help="Chaine a ajouter")
     parser.add_argument("--fichier", type=str, dest="source", help="Ajouter le contenu d'un fichier source")
+    parser.add_argument("--backup", action="store_true", help="Creer une sauvegarde .bak avant")
     parser.add_argument("--dry-run", action="store_true", help="Simuler sans modifier")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--version", action="version", version="ajouter-contenu-fichier v%s" % VERSION)
@@ -97,6 +98,7 @@ def main():
     cible = args.cible
     contenu = args.contenu
     source = args.source
+    backup = args.backup
     dry_run = args.dry_run
     verbose = args.verbose
 
@@ -139,6 +141,11 @@ def main():
         return 0
 
     try:
+        if backup:
+            import shutil
+            shutil.copy2(cible, cible + ".bak")
+            if verbose:
+                print(_couleur("[INFO] Sauvegarde: %s.bak" % cible, "bleu"))
         # S'assurer que le fichier se termine par un retour a la ligne
         with open(cible, "r", encoding="utf-8") as f:
             contenu_cible = f.read()

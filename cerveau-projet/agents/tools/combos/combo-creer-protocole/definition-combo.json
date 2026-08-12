@@ -21,7 +21,8 @@
       "type": "outil",
       "commande": "{cmd1}",
       "sortie": "resultat_convention",
-      "suivant": "c3"
+      "suivant": "c3",
+      "echec_ok": true
     },
     "c3": {
       "titre": "CONTROLE : la convention est-elle respectee ?",

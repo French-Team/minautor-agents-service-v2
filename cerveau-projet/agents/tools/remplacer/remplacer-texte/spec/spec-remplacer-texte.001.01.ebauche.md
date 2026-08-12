@@ -6,10 +6,10 @@ identite:
 ---
 # Specification -- remplacer-texte
 
-**Statut :** ebauche
-**Version :** 0.1.0-beta
+**Statut :** prepare
+**Version :** 0.3.1
 **Categorie :** remplacer
-**Date :** 2026-08-07
+**Date :** 2026-08-12
 
 ---
 
@@ -30,6 +30,9 @@ Fournir un outil permanent de remplacement massif de textes dans plusieurs fichi
 | 7 | Dry-run | `--dry-run` : affiche les fichiers qui SERAIENT modifies sans rien ecrire |
 | 8 | Rapport | Nombre de fichiers analyses, modifies, liste des fichiers modifies |
 | 9 | Idempotence | Re-executer ne casse rien (le nouveau texte ne contient plus l'ancien) |
+| 10 | Echec explicite | Aucune paire matchee -> code 1 avec message clair (jamais 0 silencieux) |
+| 11 | Performance | La version .sh delegue a UN SEUL appel python3 (plus de 60 process par paire x fichier) |
+| 12 | Securite | Liens symboliques ignores, lecture robuste (utf-8-sig puis latin-1), refus octet nul |
 
 ## Interface
 
@@ -51,6 +54,7 @@ Options : `--dry-run`, `--ext`, `--exclu-fichier`, `--exclu-dossier`, `--verbose
 | Nommage | valider-nommage OK (dossier remplacer/ -> prefixe remplacer-) |
 | ASCII | 0 caractere non-ASCII |
 | Syntaxe | bash -n OK, python3 -m py_compile OK |
+| Securite | Fichier latin-1 lu sans crash, lien symbolique ignore, octet nul refuse (code 1) |
 
 ## Livrables
 

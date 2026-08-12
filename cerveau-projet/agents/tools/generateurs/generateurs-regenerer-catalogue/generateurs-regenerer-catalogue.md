@@ -2,7 +2,7 @@
 
 > Outil de maintenance du catalogue de commandes du generateur.
 > **Categorie** : generateurs | **Type** : outil | **Statut** : ebauche
-> **Version** : 1.1.0
+> **Version** : 1.1.1
 
 ---
 
@@ -77,5 +77,6 @@ Certaines entrees ont un modele manuel (le parsing d'aide est imperfectible) :
 
 | Version | Date | Changement |
 |---|---|---|
+| 1.1.1 | 2026-08-12 | ROBUSTESSE (round 6) : catalogue introuvable ou JSON invalide -> message d'erreur clair + code 1 (plus aucun traceback brut). |
 | 1.1.0 | 2026-08-09 | GARDE-FOU cles dupliquees dans parametres (refus d'ecriture si doublon, rapport en dry-run) + option --catalogue <chemin> (tests) + ecriture LF pur (standard projet). |
 | 1.0.0 | 2026-08-08 | Creation : remplacant durable du script temporaire regen-catalogue3.py (piste A). Extraction des descriptions depuis les en-tetes .py (2 formats), synchronisation preservant l'existant, entrees speciales, CRLF uniforme. |

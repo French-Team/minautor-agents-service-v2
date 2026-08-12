@@ -15,21 +15,44 @@ Arguments:
   [ligne-fin]     Derniere ligne de la plage a supprimer (defaut = ligne)
 
 Options:
+  --backup        Creer une sauvegarde .bak avant
   --dry-run       Simuler sans modifier
   --verbose       Afficher les details
   --help          Afficher cette aide
+  --version       Afficher la version
+
+Retour : 0 si succes, 1 si erreur ou si la ligne demandee n'existe pas
+         (echec explicite : jamais 0 silencieux).
 
 Proprietaire : Buffy (outil partage)
-Version : 0.2.0-py
+Version : 0.3.1
 Statut : prepare
 """
 
 import io
 import os
+import shutil
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.3.2"
 STATUT = "prepare"
+
+NOM_ATTENDU = "supprimer-ligne.py"
+
+# Securite (round 3) : force la sortie en UTF-8 pour ne jamais crasher sur
+# l'encodage de la console (cp1252 sous Windows avec des caracteres non-ASCII).
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except AttributeError:
+    pass  # Python < 3.7 : la console gere l'encodage comme elle peut
+
+
+def verifier_nommage(nom_script):
+    """Refuse l'execution si le script est renomme (protection du nommage)."""
+    if nom_script != NOM_ATTENDU:
+        print("[ERREUR] Nom de fichier invalide : %s" % nom_script)
+        print("  Attendu : %s" % NOM_ATTENDU)
+        sys.exit(2)
 
 
 def afficher_aide():
@@ -43,15 +66,22 @@ def afficher_aide():
     print("  [ligne-fin]     Derniere ligne de la plage a supprimer (defaut = ligne)")
     print("")
     print("Options :")
+    print("  --backup        Creer une sauvegarde .bak avant")
     print("  --dry-run       Simuler sans modifier")
     print("  --verbose       Afficher les details")
     print("  --help          Afficher cette aide")
+    print("  --version       Afficher la version")
+    print("")
+    print("Retour : 0 si succes, 1 si erreur ou si la ligne n'existe pas.")
 
 
 def main(argv):
+    verifier_nommage(os.path.basename(sys.argv[0]))
+
     fichier = ""
     ligne = ""
     ligne_fin = ""
+    backup = False
     dry_run = False
     verbose = False
     help_demande = False
@@ -59,6 +89,8 @@ def main(argv):
     for arg in argv:
         if arg == "--dry-run":
             dry_run = True
+        elif arg == "--backup":
+            backup = True
         elif arg in ("--verbose", "-v"):
             verbose = True
         elif arg in ("--help", "--aide", "-h"):
@@ -87,6 +119,17 @@ def main(argv):
         afficher_aide()
         return 1
 
+    # Securite (round 3) : octet nul dans le chemin -> refus explicite
+    if "\x00" in fichier:
+        print("[ERREUR] Chemin non sur (octet nul present)")
+        return 1
+
+    # Securite (round 3) : refus de modifier a travers un lien symbolique
+    # (l'ecriture suivrait le lien vers la cible a l'insu de l'agent)
+    if os.path.islink(fichier):
+        print("[ERREUR] Chemin est un lien symbolique (refus securite): %s" % fichier)
+        return 1
+
     if not os.path.isfile(fichier):
         print("[ERREUR] Fichier non trouve: %s" % fichier)
         return 1
@@ -113,18 +156,26 @@ def main(argv):
         print("[ERREUR] La ligne de fin (%d) doit etre >= a la ligne (%d)" % (fin, debut))
         return 1
 
+    # Lecture robuste (round 3) : UTF-8-sig puis fallback latin-1, jamais de crash
     try:
-        with io.open(fichier, "r", encoding="utf-8", errors="replace") as fh:
+        with io.open(fichier, "r", encoding="utf-8-sig") as fh:
             toutes = fh.readlines()
-    except IOError:
-        print("[ERREUR] Impossible de lire le fichier: %s" % fichier)
-        return 1
+    except (UnicodeDecodeError, IOError):
+        try:
+            with io.open(fichier, "r", encoding="latin-1") as fh:
+                toutes = fh.readlines()
+        except IOError:
+            print("[ERREUR] Impossible de lire le fichier: %s" % fichier)
+            return 1
 
     total_lignes = len(toutes)
 
     if debut > total_lignes:
-        print("[INFO] Le fichier n'a que %d lignes, ligne %d inexistante" % (total_lignes, debut))
-        return 0
+        # Robustesse (round 4) : pluriel correct ("1 ligne" vs "N lignes")
+        mot = "ligne" if total_lignes == 1 else "lignes"
+        print("[ERREUR] Le fichier n'a que %d %s, ligne %d inexistante"
+              % (total_lignes, mot, debut))
+        return 1
 
     if fin > total_lignes:
         fin = total_lignes
@@ -142,6 +193,11 @@ def main(argv):
         for i in range(debut - 1, fin):
             print(toutes[i].rstrip("\r\n"))
         return 0
+
+    if backup:
+        shutil.copy2(fichier, fichier + ".bak")
+        if verbose:
+            print("[INFO] Sauvegarde: %s.bak" % fichier)
 
     # Supprimer les lignes (fichier temporaire puis remplacement)
     resultat = toutes[:debut - 1] + toutes[fin:]

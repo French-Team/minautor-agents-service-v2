@@ -369,3 +369,6 @@ python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-cas
 | 0.2.0 | ebauche | Action ajouter-bloc : bloc MODELE COMPOSE (Pattern 7) cree d'un coup (decision 2 branches + deviation + rejoint), spec-guider-parcours v0.2.13 |
 | 0.2.1 | ebauche | Garde-fou REGLES IMMUABLES : a la creation/edition d'une case d'ecriture ou d'une fin, rappel ASCII (Pattern 2, position 1) + RVAV + delegation (chaine bout-en-bout spec-guider-parcours v0.2.15 : tests -> Morpheus, controle -> Janus, bilan consolide a Cerberus) |
 | 0.2.2 | ebauche | Pattern 9 (spec-guider-parcours v0.2.16) : tout `--indice-outil` ajoute automatiquement l'indice fichier du `.md` de l'outil (LIRE AVANT USAGE) si la doc existe -- portee SYSTEMATIQUE, decision utilisateur 2026-08-08 |
+| 0.3.0 | ebauche | Integration validateur-case v0.3.0 (spec-refonte 7.1) : validation auto complete du modele apres chaque commande |
+| 0.4.0 | ebauche | Action `convertir` : mode batch (indice -> action, regles longues -> refs via mapping JSON, budget pondere) |
+| 0.4.2 | ebauche | Round 9 : `--version` au niveau racine (avant : seulement sur les sous-parsers -> rc=2) ; alignement des versions en-tete py/sh/md |

@@ -6,7 +6,7 @@ identite:
 ---
 # lire-fichier
 
-**Version :** 0.2.0
+**Version :** 0.4.2
 **Statut :** prepare
 **Categorie :** Lire
 **Chemin :** `agents/tools/lire/lire-fichier/`
@@ -73,6 +73,9 @@ lire-fichier.sh --debut 20 fichier.md
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (lecture complete, --lignes, --debut/--fin, fichier inexistant), categorie corrigee (Explorer -> Lire), promotion prepare |
 | 0.2.0-py | 2026-08-07 | Version Python creee (--debut/--fin/--lignes, --version) |
+| 0.3.0 | 2026-08-12 | Qualite pro : version coherente py/sh (0.3.0), promotion prepare |
+| 0.4.0 | 2026-08-12 | PERFORMANCE (round 2) : lecture paresseuse - --lignes N et --debut/--fin ne chargent plus le fichier entier en memoire (iteration + arret precoce) |
+| 0.4.1 | 2026-08-12 | SECURITE (round 3) : plus aucun crash d'encodage (BOM nettoye via utf-8-sig, fallback latin-1, stdout force en UTF-8) + refus explicite si octet nul dans le chemin |\n| 0.4.2 | 2026-08-12 | ROBUSTESSE (round 4) : plage invalide refusee explicitement (--debut > --fin, ou borne < 1) avec message clair - fin du 0 silencieux avec sortie vide |
 
 ## Notes de creation
 

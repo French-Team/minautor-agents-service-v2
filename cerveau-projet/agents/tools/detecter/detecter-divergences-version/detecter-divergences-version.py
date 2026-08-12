@@ -3,8 +3,12 @@
 # detecter-divergences-version.py
 # Detecte les spec/ dont la version diverge de celle du .py associe
 # (regle des 5 fichiers, lecon Vulcain / controle Janus 2026-08-09).
-# Version : 0.1.0
+# Version : 0.2.0
 # Statut : ebauche
+# v0.2.0 : champ spec 'Version outil' prioritaire (cas spec de conventions
+# dont la version documente des patterns au-dela de l outil, ex: guider-
+# parcours spec 0.6.2 / outil 0.5.0) ; constante VERSION ajoutee (resout
+# le SANS VERSION de sa propre spec). Round 11 coherence documentaire.
 # identite:
 #   type: outil
 #   appartient_a: commun
@@ -29,6 +33,11 @@ Lecons Janus integrees :
   2. Distinguer divergence de BASE vs de SUFFIXE.
   3. Cas particulier guider-parcours (spec versionne les patterns,
      pas l'outil) : le rapporter mais ne pas conclure seul.
+
+v0.2.0 (round 11) : une spec peut declarer **Version outil** : X.Y.Z pour
+comparer la version du .py contre la version de l OUTIL (au lieu de la
+version de la spec, qui documente les conventions/patterns). Si le champ
+est present, il PRIME sur la version de la spec pour le verdict.
 """
 
 import argparse
@@ -37,11 +46,18 @@ import os
 import re
 import sys
 
+VERSION = "0.2.0"
+
 
 def extraire_version_spec(chemin_spec):
     """Version declaree dans une spec (formats multiples).
 
     Ordre de priorite (lecon Janus) :
+      0. **Version outil** : X.Y.Z (v0.2.0, round 11) : champ explicite
+         declarant la version de l OUTIL associe (spec de conventions dont
+         la version documente des patterns au-dela de l outil, ex:
+         guider-parcours spec 0.6.2 / outil 0.5.0). Il PRIME sur la version
+         de la spec pour le verdict.
       1. En-tete : **Version :** X / **Version** : X / Version: X
       2. Tableau frontmatter : | **Version** | X |
       3. Section Versionning : | Version | Date | / 1re ligne X | ...
@@ -54,6 +70,15 @@ def extraire_version_spec(chemin_spec):
     except (IOError, OSError):
         return None
     lignes = txt.split('\n')
+
+    # 0) Version outil (30 premieres lignes, v0.2.0) : PRIME sur la version
+    #    de la spec (cas spec de conventions, ex: guider-parcours)
+    for l in lignes[:30]:
+        m = re.search(
+            r'\*{0,2}Version outil\*{0,2}\s*:?\s*\*{0,2}\s*'
+            r'([0-9]+\.[0-9]+\.[0-9]+[0-9a-zA-Z_.-]*)', l)
+        if m:
+            return m.group(1)
 
     # 1) En-tete (30 premieres lignes)
     for l in lignes[:30]:
@@ -188,7 +213,7 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        print('detecter-divergences-version v0.1.0')
+        print('detecter-divergences-version v%s' % VERSION)
         return 0
 
     if not os.path.isdir(args.racine):

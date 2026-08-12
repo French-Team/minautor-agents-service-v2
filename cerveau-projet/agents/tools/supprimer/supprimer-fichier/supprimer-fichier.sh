@@ -1,14 +1,14 @@
 #!/bin/bash
 # supprimer-fichier.sh
 # Supprimer un fichier avec verification
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.3.0
+# Statut : prepare
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
+VERSION="0.3.1"
 STATUT="prepare"
 
 RED='\033[0;31m'
@@ -23,6 +23,7 @@ afficher_aide() {
     echo "Usage: $0 [OPTIONS] <fichier>"
     echo ""
     echo "Options :"
+    echo "  --backup         Creer une sauvegarde .bak avant suppression"
     echo "  --forcer         Supprimer sans confirmer"
     echo "  --dry-run        Simuler sans supprimer"
     echo "  --verbose        Afficher les details"
@@ -33,6 +34,7 @@ afficher_aide() {
 # Main
 main() {
     local fichier=""
+    local backup="false"
     local forcer="false"
     local dry_run="false"
     local verbose="false"
@@ -41,6 +43,7 @@ main() {
     while [[ $# -gt 0 ]]; do
         case $1 in
             --forcer) forcer="true"; shift ;;
+            --backup) backup="true"; shift ;;
             --dry-run) dry_run="true"; shift ;;
             --verbose) verbose="true"; shift ;;
             --help) help="true"; shift ;;
@@ -60,13 +63,21 @@ main() {
     fi
     
     if [ ! -f "$fichier" ]; then
-        echo -e "${YELLOW}[INFO] Fichier inexistant: $fichier${NC}"
-        exit 0
+        echo -e "${RED}[ERREUR] Fichier inexistant: $fichier${NC}"
+        exit 1
     fi
     
     if [ "$dry_run" = "true" ]; then
         echo -e "${YELLOW}[DRY-RUN] Suppression: $fichier${NC}"
         exit 0
+    fi
+    
+    # Sauvegarde
+    if [ "$backup" = "true" ]; then
+        cp "$fichier" "${fichier}.bak"
+        if [ "$verbose" = "true" ]; then
+            echo -e "${BLUE}[INFO] Sauvegarde: ${fichier}.bak${NC}"
+        fi
     fi
     
     rm "$fichier"

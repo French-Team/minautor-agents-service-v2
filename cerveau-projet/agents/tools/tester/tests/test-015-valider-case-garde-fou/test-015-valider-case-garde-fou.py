@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-015-valider-case-garde-fou.py
-Test formel du garde-fou anti-pollution de valider-case v1.1.0
+Test formel du garde-fou anti-pollution de valider-case v1.1.1
 (lecon : rapport a la racine cree par une commande sans --rapport).
 
 Contexte :
@@ -89,14 +89,14 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-015-")
     try:
-        print("=== Test formel valider-case v1.1.0 (garde-fou rapport) ===")
+        print("=== Test formel valider-case v1.1.1 (garde-fou rapport) ===")
 
         # 1. Parite --version py/sh v1.0.2
         r_py = run([PYTHON, OUTIL_PY, "--version"])
         r_sh = run(["bash", OUTIL_SH, "--version"])
         verifier("1. --version py/sh identiques v1.0.2",
                  r_py.returncode == 0 and r_sh.returncode == 0
-                 and "v1.1.0" in r_py.stdout
+                 and "v1.1.1" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 

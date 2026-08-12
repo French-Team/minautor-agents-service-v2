@@ -76,7 +76,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.4.0)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.2)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -185,16 +185,28 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ## Structure des tests
 
+> **REGLE (audit 2026-08-12)** : le TEMPLATE est LA reference pour chaque
+> nouveau test (`tester/template-test.md` v0.2.0), PAS les tests precedents.
+> Un test ancien peut porter des derives (coding utf-8, marqueur [ECHEC],
+> format bash) : il est corrige separement. La case c3 de mon parcours
+> impose de lire le template AVANT d'ecrire un nouveau test.
+
 ```
 tests/
-  protections/
-    tester-protection-boucles-infinies/
-    tester-protection-erreurs-silencieuses/
-    tester-protection-blocage/
-  test-001-nom-outil/
-    test-001-outil.md
-    test-001-outil.sh
+  test-0XX-nom-du-test/
+    test-0XX-nom-du-test.py   # format Python canonique (template-test.md)
 ```
+
+Structure OBLIGATOIRE de chaque test-0XX.py (template-test.md v0.2.0) :
+
+- Shebang `#!/usr/bin/env python3` + `# -*- coding: ascii -*-` (JAMAIS utf-8)
+- Docstring : nom du test + contexte/lecon qui motive le test
+- Constantes globales : `NB_POINTS`, `NB_OK`, `NB_KO`
+- Fonction `verifier(nom, condition, detail)` : affiche `[OK]` ou `[KO]`
+- Fonction `run(cmd, timeout)` : subprocess fiable
+- Fonction `main()` : points numerotes + bilan `RESULTAT : N OK / M KO`
+- `sys.exit(main())` : code retour fiable (le lanceur compte les [KO])
+- ASCII strict (0 non-ASCII) + LF pur (0 CRLF)
 
 ---
 
@@ -202,11 +214,12 @@ tests/
 
 Avant de valider un test :
 
-- [ ] Les protections sont chargees
-- [ ] Chaque test est numerote
-- [ ] Le timeout est configure
-- [ ] Les erreurs sont capturees
-- [ ] Le rapport est genere
+- [ ] Structure copiee depuis template-test.md (PAS depuis un test precedent)
+- [ ] coding ascii (JAMAIS utf-8) + shebang python3
+- [ ] Marqueurs [OK] et [KO] (le lanceur de non-regression compte les [KO])
+- [ ] Bilan final `RESULTAT : N OK / M KO` + `sys.exit(main())`
+- [ ] ASCII strict + LF pur sur le test
+- [ ] Le test est affecte a une serie dans tester-lancer-non-regression.py
 - [ ] Les problemes sont identifies
 
 ---

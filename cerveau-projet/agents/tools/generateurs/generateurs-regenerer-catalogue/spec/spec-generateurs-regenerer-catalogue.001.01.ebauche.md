@@ -1,11 +1,11 @@
 ---
 # Spec: regenerer-catalogue
-# Version : 1.1.0
+# Version : 1.1.1
 # Statut : ebauche
 
 spec:
   nom: "spec-regenerer-catalogue"
-  version: "1.1.0"
+  version: "1.1.1"
   statut: "ebauche"
   classe: "01"
   numero: "01"
@@ -15,7 +15,7 @@ spec:
   auteur: "Vulcain"
 ---
 
-# Spec generateurs-regenerer-catalogue v1.1.0
+# Spec generateurs-regenerer-catalogue v1.1.1
 
 ## Objectif
 

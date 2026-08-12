@@ -184,6 +184,7 @@
     },
     {
       "nom": "ameliorer-outil",
+      "agent_habilite": "vulcain",
       "description": "Checklist a parcourir avant toute amelioration d un outil existant (diagnostic, anticipation de l evolution, coherence, impact, non-regression)",
       "questions": [
         {

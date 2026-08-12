@@ -6,7 +6,7 @@ identite:
 ---
 # deplacer-fichier
 
-**Version :** 0.2.0
+**Version :** 0.3.1
 **Statut :** prepare
 **Categorie :** deplacer
 **Chemin :** `agents/tools/deplacer/deplacer-fichier/`
@@ -15,6 +15,8 @@ identite:
 ## Description
 
 Deplacer ou renommer un fichier vers une nouvelle destination. Verifie que la source existe, que la destination n'est pas identique, et cree le dossier parent de destination si besoin. Attention : `changer-statut` reste l'outil dedie au renommage de statut (ebauche -> prepare).
+
+**Protection destination** : si la destination existe deja, l'outil REFUSE (code 1) sauf avec `--forcer` - plus jamais d'ecrasement silencieux. `--backup` sauvegarde la destination en .bak avant ecrasement.
 
 ## Utilisation
 
@@ -46,6 +48,8 @@ deplacer-fichier.sh --dry-run source.md destination.md
 
 | Option | Description | Defaut |
 |---|---|---|
+| `--forcer` | Ecraser la destination existante | false |
+| `--backup` | Sauvegarder la destination en .bak avant ecrasement | false |
 | `--dry-run` | Simuler sans deplacer | false |
 | `--verbose` | Afficher les details | false |
 | `--help` | Afficher l'aide | - |
@@ -102,5 +106,7 @@ Destination : dst/nouveau.md
 | 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
 | 0.1.0 | 2026-08-06 | Creation initiale |
 | 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.3.0 | 2026-08-12 | Qualite pro : protection destination existante (refus sans --forcer), option --backup |
+| 0.3.1 | 2026-08-12 | SECURITE (round 3) : refus si source OU destination est un lien symbolique, refus octet nul |
 
 ---

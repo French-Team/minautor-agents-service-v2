@@ -1,14 +1,14 @@
 #!/bin/bash
 # deplacer-fichier.sh
 # Deplacer ou renommer un fichier vers une nouvelle destination
-# Version : 0.2.0
+# Version : 0.3.0
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
-STATUT="ebauche"
+VERSION="0.3.1"
+STATUT="prepare"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -26,6 +26,8 @@ afficher_aide() {
     echo "  <destination>   Nouveau chemin du fichier"
     echo ""
     echo "Options :"
+    echo "  --forcer        Ecraser la destination si elle existe deja"
+    echo "  --backup        Sauvegarder la destination en .bak avant ecrasement"
     echo "  --dry-run       Simuler sans deplacer"
     echo "  --verbose       Afficher les details"
     echo "  --help          Afficher cette aide"
@@ -40,12 +42,16 @@ afficher_aide() {
 main() {
     local source=""
     local destination=""
+    local forcer="false"
+    local backup="false"
     local dry_run="false"
     local verbose="false"
     local help="false"
     
     while [[ $# -gt 0 ]]; do
         case $1 in
+            --forcer) forcer="true"; shift ;;
+            --backup) backup="true"; shift ;;
             --dry-run) dry_run="true"; shift ;;
             --verbose) verbose="true"; shift ;;
             --help) help="true"; shift ;;
@@ -86,7 +92,17 @@ main() {
     fi
     
     if [ -e "$destination" ]; then
-        echo -e "${YELLOW}[INFO] La destination existe deja, elle sera ecrasee: $destination${NC}"
+        if [ "$forcer" != "true" ]; then
+            echo -e "${RED}[ERREUR] La destination existe deja: $destination${NC}"
+            echo -e "${YELLOW}[INFO] Utiliser --forcer pour ecraser, ou --backup pour sauvegarder avant${NC}"
+            exit 1
+        fi
+        if [ "$backup" = "true" ]; then
+            cp "$destination" "${destination}.bak"
+            if [ "$verbose" = "true" ]; then
+                echo -e "${BLUE}[INFO] Sauvegarde: ${destination}.bak${NC}"
+            fi
+        fi
     fi
     
     if [ "$verbose" = "true" ]; then

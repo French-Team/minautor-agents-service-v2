@@ -25,7 +25,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 STATUT = "ebauche"
 
 TYPES_VALIDES = ("question", "controle", "indice", "action", "fin")
@@ -93,6 +93,19 @@ def verifier_structure(parcours, erreurs):
     depart = parcours.get("parcours", {}).get("case_depart")
     if depart and depart not in cases:
         erreurs.append("STRUCTURE : case_depart '%s' inexistante" % depart)
+    # references mortes : chaque 'suivant' et chaque branche 'vers' doit pointer
+    # vers une case EXISTANTE (corrige round 7 : le BFS ignorait silencieusement
+    # les refs inexistantes et valider-case repondait CONFORME sur une carte cassee)
+    for cid, case in cases.items():
+        suivant = case.get("suivant")
+        if suivant and suivant not in cases:
+            erreurs.append("STRUCTURE : reference morte - case '%s' 'suivant' -> '%s' inexistante"
+                           % (cid, suivant))
+        for b in case.get("branches", []):
+            vers = b.get("vers")
+            if vers and vers not in cases:
+                erreurs.append("STRUCTURE : reference morte - case '%s' branche '%s' -> '%s' inexistante"
+                               % (cid, b.get("reponse", "?"), vers))
     # fins joignables : chaque fin doit etre atteignable depuis le depart (BFS)
     atteignables = cases_atteignables(cases, depart)
     for cid, case in cases.items():
@@ -302,7 +315,15 @@ def verifier_case(cid, parcours, erreurs, allegements):
     suivant = case.get("suivant")
     if typ not in TYPES_VALIDES:
         erreurs.append("STRUCTURE : case '%s' type invalide '%s'" % (cid, typ))
+    # references mortes (round 7) : suivant et branches.vers vers case inexistante
+    if suivant and suivant not in cases:
+        erreurs.append("STRUCTURE : reference morte - case '%s' 'suivant' -> '%s' inexistante"
+                       % (cid, suivant))
     for b in branches:
+        vers = b.get("vers")
+        if vers and vers not in cases:
+            erreurs.append("STRUCTURE : reference morte - case '%s' branche '%s' -> '%s' inexistante"
+                           % (cid, b.get("reponse", "?"), vers))
         if b.get("vers") == cid:
             if typ == "controle" and (b.get("reponse") or "").lower() == "non":
                 pass  # pattern de re-essai volontaire (controle NON -> soi-meme)

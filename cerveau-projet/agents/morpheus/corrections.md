@@ -1,6 +1,56 @@
 
 
 
+## [LECON] 2026-08-12 -- ROUND 10b : PARALLELE PAR DEFAUT TESTE (Morpheus)
+
+**Mission** : adapter les tests apres le passage du lanceur en parallele par defaut (v0.1.3, Vulcain round 10b).
+
+**Resultat** : test-024 13/13 (v0.1.3), test-027 11/11 (v0.1.3 + 2 nouveaux points), non-regression 27/27 identique en mode defaut (parallele) et en --serial.
+
+**Lecons** :
+1. UN CHANGEMENT DE MODE PAR DEFAUT DOIT ETRE TESTE DES DEUX COTES : test-027 verifie desormais (a) que sans option le lanceur passe par la structure Serie A (defaut = parallele) ET (b) que --serial redonne la structure serie (echelon de secours fonctionnel). Le defaut n est pas un detail - il se verifie.
+2. L HERITAGE DU FILTRE EST UNE REGRESSION SILENCIEUSE SI NON TESTE : --tests test-003 sans option doit lancer UN SEUL test (1 OK / 0 KO sur 1 tests) - si le filtre n etait pas herite par les sous-processus, toute la serie A partirait.
+3. STRUCTURE DE SORTIE = SIGNATURE DU MODE : RESULTAT Serie X = parallele ; RESULTAT : (sans libelle) = serie. La structure de sortie est le moyen fiable de distinguer les 2 modes dans un test.
+
+## [LECON] 2026-08-12 -- ROUND 11 : GARDE-FOU COHERENCE DOCUMENTAIRE (Morpheus)
+
+**Mission** : creer le garde-fou test-028 (specs vs outils + catalogue vs interfaces) apres les corrections Vulcain du round 11.
+
+**Resultat** : test-028 8/8 OK, serie D 6 tests, non-regression 28/28, normes 0/0.
+
+**Lecons** :
+1. UN NOUVEAU TEST DOIT ETRE AFFECTE A UNE SERIE : test-028 etait hors-serie a sa creation (test-027 KO : couverture 100% exigee). Ajout a la serie D du lanceur (constantes SERIES) - test-027 lit les constantes par import, donc il est reste vert sans modification.
+2. UN TEST DE GARDE-FOU NE REIMPLEMENTE PAS LA DETECTION : mon premier point 4 cherchait 'Version' dans les 2000 premiers caracteres - faux KO sur 3 specs qui mettent leur version dans le tableau historique en fin de fichier. Correction : croiser la SORTIE de l outil avec la presence d un .py associe (se fier a l outil, pas re-inventer sa logique).
+3. LE CHAMP **Version outil** EST LE CONTRAT DES SPECS DE CONVENTIONS : une spec qui versionne des patterns (guider-parcours 0.6.2) au-dela de l outil (0.5.0) doit le declarer explicitement - le garde-fou le verifie.
+
+## [LECON] 2026-08-12 -- ROUND 10c : SERIE D ALLEGEE 29s -> 5s (Morpheus)
+
+**Mission** : reduire le temps de la serie D de la non-regression (demande utilisateur).
+
+**Diagnostic** : serie D = 29s dont test-027 = 26s (les 4 autres tests <= 1s). Cause : test-027 lancait 3 fois le lanceur avec --tests test-003-combos-creer (89 points, ~6s par execution).
+
+**Correction** : remplacement de test-003-combos-creer par test-001-evaluer-agents-coherence (0s, lecteur pur, dans la serie A) dans les points 6a/6b/7/8 + libelles + docstring. Logique inchangee : isolation, defaut=parallele, --serial prouves avec un test leger.
+
+**Resultat mesure** : test-027 26s -> 2s (11/11), serie D 29s -> 5s, non-regression complete 47s -> 23s (27/27).
+
+**Lecons** :
+1. UN TEST DE GARDE-FOU QUI LANCE UN TEST LOURD EST UN PIEGE DE PERFORMANCE : test-027 executait test-003 (89 points de combos) a travers le lanceur - le garde-fou devenait plus cher que ce qu il verifiait. Le test de preuve doit utiliser le test LE PLUS LEGER de la serie (test-001 : lecteur pur 0s).
+2. LA PREUVE DE FILTRAGE N A PAS BESOIN D UN GROS TEST : l isolation (--series a vs c), le defaut parallele et --serial se prouvent avec n importe quel test de la serie - la valeur du test est la STRUCTURE de sortie, pas la taille du test lance.
+3. MESURER AVANT D OPTIMISER : le chrono par test a montre que test-027 (26s) etait le vrai coupable, pas test-024 comme suppose - toujours mesurer chaque composant avant de choisir la cible.
+
+## [LECON] 2026-08-12 -- ROUND 10 : TEST-027 SERIES + TEST-024 ADAPTE (Morpheus)
+
+**Mission** : tester le nouveau --series/--parallele du lanceur de non-regression v0.1.2 (Vulcain round 10).
+
+**Resultat** : test-024 adapte (13/13), test-027 cree (9/9), non-regression 27/27 OK en mode serie ET en mode --parallele (A=6, B=10, C=6, D=5) - parite complete, registre 0 ligne.
+
+**Lecons** :
+1. VERSION FIGEE DANS UN TEST : test-024 verifiait la version du lanceur en dur (v0.1.1) -> le bump v0.1.2 l a fait KO. Adaptation : libelle + assertion en v0.1.2. Un bump d outil doit toujours etre croise avec les tests qui figent sa version (grep des versions avant validation).
+2. PIEGE STDERR ARGPARSE : quand argparse rejette une option (--series z), le message usage part sur STDERR, pas stdout. Un test qui verifie le message sur stdout est KO a tort (rc=2 etait bon, le message etait sur stderr). Toujours concatener stdout + stderr pour verifier un message d erreur.
+3. GARDE-FOU COUVERTURE DES SERIES : le test-027 verifie que CHAQUE test-0XX du disque appartient a une serie du lanceur (par import de la constante SERIES) - un futur test-028 non affecte fera KO + avertissement hors-serie a l execution : anti-recurrence de l oubli d affectation.
+4. PIEGE RECURSION : un test de garde-fou du lanceur ne doit JAMAIS lancer le lanceur sans filtre --tests qui l inclurait lui-meme (test-027 est dans la serie D). Toute invocation combine --series <X> + --tests <test hors D>.
+5. PARITE SERIE/PARALLELE : la non-regression complete donne 27/27 dans les 2 modes avec des bilans par serie identiques - la preuve que le decoupage ne perd aucun test et que le parallelisme ne casse rien.
+
 ## [LECON] 2026-08-11 -- TEST-007 ADAPTE 120 -> 138 COMMANDES (Morpheus, VERDICT VALIDE)
 
 **Mission** : adapter le point 13 du test-007-figer-lf apres l ajout des 18 commandes de test au catalogue generateurs-commande (Vulcain).
@@ -865,3 +915,251 @@ trio -> 0.3.0). Les tests qui verifiaient les versions ou les compteurs de cases
 1. Quand une nouvelle case controle/action est ajoutee a un parcours, verifier le test de migration du parcours concerne (test-013 pour cerberus) : il verifie les compteurs de types (action/question/controle/fin) qui changent a chaque ajout.
 2. Les 3 chemins de navigation du test-013 ne passent pas par c15b -> ils restent verts ; seul le comptage de types est sensible.
 3. Ecrire le script de non-regression avec un comptage robuste des [KO] (regex) : un parsing fragile de la ligne RESULTAT produit des faux KO.
+
+## [LECON] 2026-08-11 -- TEST-007 ADAPTE + GARDE-FOU TEST-024 ANTI-SCRIPTS-TEMPORAIRES (Morpheus)
+
+**Contexte** : mission anti-scripts-temporaires (Vulcain a cree lancer-non-regression, editer-parcours, detecter-usage-scripts-temporaires + registre v0.2.0 mode script-temporaire + catalogue 142->145 + index 108->111).
+
+**Actions** :
+1. test-007 adapte : catalogue 142 -> 145, index-tools 110 -> 111 (6 remplacements). 15/15 VALIDE.
+2. test-024-scripts-temporaires cree : garde-fou anti-recurrence qui verifie (12 points) : aucun .zz-*/.tmp-* a la racine, les 3 outils + registre v0.2.0 operationnels, catalogue 145, index 4 lignes (incluant editer-fichier-agents qui manquait), ASCII/LF. 12/12 OK.
+3. Non-regression complete lancee avec le NOUVEL OUTIL lancer-non-regression (au lieu d'un script maison) : 24/24 OK, registre 0 ligne.
+
+**LE CONS** :
+1. La premiere utilisation d'un nouvel outil doit se faire dans la mission qui le cree (ex : lancer-non-regression pour la non-regression) - c'est la preuve reelle de son fonctionnement.
+2. Tout ajout de commande au catalogue casse test-007 (compteur) : l'adapter dans la meme chaine.
+3. Le garde-fou test-024 verifie l'absence de scripts temporaires a la racine : c'est le filet qui empechera la regression (un agent qui laisse un .zz-*.py cassera la non-regression).
+
+## [LECON] 2026-08-11 -- 3 TESTS DE VERSION ADAPTES + REGLE DECLARATION RACCOURCIE (Morpheus, 2e passage)
+
+**Contexte** : 2e passage de la chaine anti-scripts-temporaires. Buffy a renforce les cartes (10 fins outil-temporaire + editer-parcours branche + bumps versions) ce qui a casse test-004/005/016.
+
+**Actions** :
+1. test-004 (morpheus 0.4.0 -> 0.4.1, 4 occurrences), test-005 (atlas 0.4.0 -> 0.4.1, 8 occurrences), test-016 (buffy 0.4.0 -> 0.4.1, 4 occurrences) : 16/16, 28/28, 20/20 OK.
+2. **BUG DECOUVERT** : la regle DECLARATION ajoutee par Buffy dans les 10 fins outil-temporaire faisait 200 caracteres (> 160) -> valider-case A ALLEGER + test-016 3 KO. Racourcie a 93 caracteres dans les 10 parcours : "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)." -> buffy CONFORME, test-016 20/20.
+3. Non-regression complete : 24/24 OK avec l OUTIL lancer-non-regression, registre 0 ligne.
+
+**LE CONS** :
+1. TOUTE regle ajoutee dans une case doit rester <= 160 caracteres (valider-case A ALLEGER au-dessus) - verifier la longueur a l ajout, pas seulement a la validation.
+2. Le diagnostic test par test (3b/3c/9 du test-016) a revele le probleme de surcharge : toujours lancer le test de migration du parcours concerne apres une modif de carte.
+3. L'outil lancer-non-regression est stable : 24/24 en 2e utilisation, registre toujours 0.
+
+## [LECON] 2026-08-12 -- TEST-001 v0.1.2 ADAPTE + GARDE-FOU TEST-025 NETTOYER-SESSIONS (Morpheus)
+
+**Contexte** : chaine Vulcain -> Morpheus -> Janus. Vulcain a corrige nettoyer-sessions v0.1.2 (bug : l en-tete ## Sessions LLM etait supprime a tort, ce qui cassait sidentifier apres un nettoyage).
+
+**Actions** :
+1. test-001-nettoyer-sessions.sh v0.1.0 -> v0.1.2 : version attendue 0.1.1 -> 0.1.2, ASSERTION 4b INVERSEE (l en-tete ## Sessions LLM doit etre PRESERVE = 1, plus supprime = 0), + 3 tests d INTEGRATION 7c/7d/7e (apres le nettoyage reel, sidentifier sur la copie AGENTS_FILE/AGENTS_HISTORIQUE/CLASSEUR_STOCKAGE doit recreer le bloc session). Resultat : 35/35 VALIDE.
+2. test-025-nettoyer-sessions-garde-fou cree (py + md, 11 points) : garde-fou anti-recurrence de la boucle COMPLETE sur copies (nettoyage -> en-tete conserve -> sidentifier recreer le bloc) + parite py/sh + normes. Resultat : 11/11 OK.
+3. Non-regression complete : 25/25 OK avec l OUTIL lancer-non-regression, registre 0 ligne.
+
+**Lecons** :
+1. Les tests figent l ANCIEN comportement : le test-001 verifiait '## Sessions LLM supprimee = 0' (le bug). Quand le comportement documente change, le test doit etre INVERSE en meme temps que l outil, sinon il protege l erreur.
+2. TEST D INTEGRATION = la boucle complete : le bug sidentifier n etait visible qu en enchainant nettoyage PUIS sidentifier sur copies. Les tests 7c/7d/7e + le garde-fou test-025 verrouillent cette boucle.
+3. PIEGE SYNTAXE BASH : une ligne de continuation de verifier a perdu son guillemet fermant lors de l insertion -> 'syntax error near unexpected token'. Relire la zone inseree (bash -n) AVANT d executer.
+4. Le test-024 (garde-fou precedent) n est PAS au catalogue : meme convention pour test-025 (pas d entree catalogue) -> test-007 (145) et test-024 point 8 restent verts sans adaptation.
+5. Le glob de lancer-non-regression inclut automatiquement le nouveau test-025 : la non-regression passe de 24 a 25 tests sans modifier l outil.
+
+## [LECON] 2026-08-12 -- TEST-001 DETECTER-CABLAGES-MANQUANTS + GARDE-FOU TEST-026 (Morpheus)
+
+**Contexte** : chaine Vulcain -> Morpheus -> Janus (reprise de mission par decision utilisateur). Vulcain a finalise detecter-cablages-manquants v0.1.1 (cases orphelines, boucles bloquantes, references mortes) + corrige les orphelines clio (c6/c6a/c7/c8 vestiges retires, parcours-clio 0.5.2 -> 0.5.3).
+
+**Actions** :
+1. test-001-detecter-cablages-manquants.sh cree (8 points) : version v0.1.1, parcours sain (cerberus) PROPRE sans CAS_ORPHELINE/REF_MORTE/BOUCLE_BLOQUANTE, bug simule (1 orpheline + 1 boucle indirecte z1->z2 SANS sortie dans le graphe atteignable + 1 ref morte) = detection 100%, --tous PROPRE sur 11 parcours, --rapport ecrit. Resultat : 8/8 VALIDE.
+2. test-026-detecter-cablages-manquants-garde-fou cree (py + md, 10 points) : garde-fou anti-recurrence du bug des questions orphelines -- les 11 parcours doivent avoir 0 CAS_ORPHELINE, 0 BOUCLE_BLOQUANTE, 0 REF_MORTE, 0 CASE_DEPART, 0 FIN_NON_JOIGNABLE + --tous PROPRE + normes. Resultat : 10/10 OK.
+3. test-007 adapte (catalogue 145 -> 146 + index-tools Total 111 -> 115, entree detecter-cablages-manquants) + test-024 point 8 adapte (145 -> 146 + nouvelle entree).
+4. Non-regression complete : 26/26 OK avec l OUTIL lancer-non-regression, registre 0 ligne.
+
+**Lecons** :
+1. UN GARDE-FOU NE DOIT PAS CASSER QUAND LE PARCOURS S AMELIORE : le test-001 utilise une copie du vrai parcours cerberus (source de verite) -> il reste vert tant que le cablage est sain, et detecte toute regression.
+2. LA BOUCLE INDIRECTE DOIT ETRE INJECTEE DANS LE GRAPHE ATTEIGNABLE : une boucle z1->z2 hors graphe est classee CAS_ORPHELINE, pas BOUCLE_BLOQUANTE -- brancher la boucle depuis une case atteignable (c15c.suivant=z1) pour tester la detection de cycle.
+3. TOUT AJOUT DE COMMANDE AU CATALOGUE CASSE 2 TESTS (test-007 point 13/14 ET test-024 point 8) : les adapter dans la meme chaine, pas au coup par coup.
+4. Le glob de lancer-non-regression inclut automatiquement le nouveau test-026 : la non-regression passe de 25 a 26 tests sans modifier l outil.
+
+## [LECON] 2026-08-12 -- NON-REGRESSION 26/26 APRES CORRECTION CATALOGUE (generateurs-ligne) : AUCUNE ADAPTATION NECESSAIRE (Morpheus)
+
+**Contexte** : chaine Cerberus -> Vulcain -> Morpheus (-> Janus). Vulcain a corrige le doublon de parametres de l entree generateurs-ligne du catalogue (cles dupliquees branche/mode/source) qui bloquait regenerer-catalogue, + README (badge Shields Outils-121 -> 126 + categorie enregistrer ajoutee).
+
+**Actions** : non-regression complete 26/26 OK (aucun test casse : test-005 generateurs-commande, test-007 13/14, test-017 generateurs-ligne, test-024 point 8 tous verts - le catalogue reste a 146 commandes triees, le doublon n affectait pas les compteurs), regenerer-catalogue --dry-run = 0 cle dupliquee (OK), garde-fous test-025 11/11 et test-026 10/10 verts, normes ASCII 0 sur catalogue/README.
+
+**Lecons** :
+1. UN DOUBLON DE PARAMETRES DANS LE CATALOGUE NE CASSE PAS LES TESTS DE COMPTAGE : test-007/024 verifient le NOMBRE de commandes et le tri, pas l integrite interne des parametres - seul regenerer-catalogue (garde-fou) le detectait. Le garde-fou est indispensable : sans lui, la corruption serait passee inapercue.
+2. QUAND AUCUN TEST NE CASSE, NE RIEN ADAPTER : la tentation d une adaptation prophylactique est une regression silencieuse - verifier d abord que le KO existe reellement (ici 0 KO, donc 0 adaptation).
+3. Les garde-fous specifiques (test-025, test-026) sont relances individuellement en plus de la non-regression : ils verrouillent des comportements que les tests de comptage ne couvrent pas.
+## [LECON] 2026-08-12 -- APRES AMELIORATION 5 OUTILS D EDITION (Morpheus)
+
+**Contexte** : Vulcain a ameliore la qualite pro des outils d edition texte (editer-fichier, inserer-contenu-fichier, ajouter-contenu-fichier, remplacer-texte, supprimer-ligne) : echec explicite (code 1 quand rien n est fait), --apres <motif> + --indent, --backup. Parcours cerberus bumped v0.4.3 (garde-fou c1) + themes-amelioration.json agent_habilite vulcain.
+
+**Actions** : non-regression complete 26/26 OK (test-013 adapte 0.4.2->0.4.3 vert, les 5 outils ne cassent aucun test de comptage), regenerer-catalogue --dry-run = 0 cle dupliquee + 0 a ajouter, normes ASCII/LF 0/0 sur les 21 fichiers modifies.
+
+**Lecons** :
+1. AMELIORER UN OUTIL SANS CHANGER SON INTERFACE NE CASSE RIEN : les 5 bumps de version n ont affecte aucun test (parcours, combos, catalogue utilisent les memes commandes). La retrocompatibilite argparse est la regle d or.
+2. LA NON-REGRESSION PROUVE LA SECURITE DES BUMPS : 26/26 verts apres 5 bumps = les interfaces sont stables. Un KO aurait signale une interface cassee.
+3. Les garde-fous (test-025, test-026) restent verts : les modifications n ont pas touche aux mecanismes de protection.
+## [LECON] 2026-08-12 -- APRES EXTENSION QUALITE PRO 5 OUTILS FICHIERS (Morpheus)
+
+**Contexte** : Vulcain a homogeneise la qualite pro des 5 outils fichiers de base (creer/supprimer/deplacer/lire/ecrire-fichier) tous en 0.3.0 : echec explicite (fichier inexistant/destination existante -> code 1), protection nommage, --backup, promotion prepare.
+
+**Actions** : non-regression complete 26/26 OK (aucun test casse - les 5 bumps ne changent aucun compteur), regenerer-catalogue --dry-run = 0 cle dupliquee + 0 a ajouter, normes ASCII/LF 0/0.
+
+**Lecons** :
+1. DEUXIEME VAGUE D OUTILS AMELIORES, ZERO TEST CASSE : la regle retrocompat (interfaces conservees) tient - la qualite pro est desormais un standard applique a 10 outils (5 edition + 5 fichiers).
+2. LA NON-REGRESSION EST LE THERMOMETRE DE LA STABILITE : 26/26 verts apres 10 bumps cumules = les interfaces sont eprouvees. Le systeme absorbe les ameliorations sans regression.
+3. Un KO serait un signal d interface cassee ; 0 KO = les garde-fous (test-025/026) et les compteurs sont intacts.
+## [LECON] 2026-08-12 -- APRES ROUND 2 PERFORMANCE (Morpheus)
+
+**Contexte** : Vulcain a corrige 3 goulots de performance mesures (remplacer-texte.sh 8.5s->0.55s par delegation a un seul process python3, lire-fichier lecture paresseuse, editer-fichier une seule passe).
+
+**Actions** : non-regression complete 26/26 OK (aucun test casse - les versions 0.3.0/0.4.0 ne sont verifiees par aucun test, les interfaces argparse sont inchangees), regenerer-catalogue --dry-run = 0 cle dupliquee + 0 a ajouter, normes ASCII/LF 0/0.
+
+**Lecons** :
+1. LES OPTIMISATIONS DE PERFORMANCE NE CASSENT RIEN QUAND L INTERFACE NE CHANGE PAS : 3 outils modifies en profondeur (boucle, lecture, scan) et 26/26 tests verts - la non-regression prouve que le comportement externe est identique.
+2. LA MESURE AVANT/APRES EST LA SEULE PREUVE : 8.5s -> 0.55s (15x) est un chiffre, pas une opinion. Le theme performance doit toujours fournir des mesures.
+3. Un benchmark temporaire propre (fichiers crees puis supprimes) est le bon outil pour prouver un gain - aucun residu, aucune modification des vrais fichiers.
+
+## [LECON] 2026-08-12 -- APRES ROUND 3 SECURITE (Morpheus)
+
+**Contexte** : Vulcain a renforce la securite de 9 outils fichiers/edition (encodages robustes, refus octet nul, refus symlink, backup binaire) avec bumps 0.3.1/0.4.1.
+
+**Actions** : non-regression complete 26/26 OK (les bumps 0.3.1/0.4.1 ne sont verifies par aucun test), regenerer-catalogue --dry-run = 0 a ajouter + 0 doublon, normes ASCII/LF 0/0 sur les 9 .py.
+
+**Lecons** :
+1. TROISIEME VAGUE D OUTILS AMELIORES, ZERO TEST CASSE : la regle retrocompat tient encore - 15 outils a qualite pro (10 qualite + 3 performance + 9 securite, certains cumules) sans aucun changement d interface.
+2. LA SECURITE SERT AUSSI LA NON-REGRESSION : des outils qui ne crashent plus sur des fichiers exotiques (BOM, latin-1) protegent les tests futurs eux-memes.
+
+## [LECON] 2026-08-12 -- APRES ROUND 4 ROBUSTESSE (Morpheus)
+
+**Contexte** : Vulcain a corrige 3 echecs silencieux (ecrire-fichier v0.3.2 troncature contenu vide, lire-fichier v0.4.2 validation plage, supprimer-ligne v0.3.2 pluriel).
+
+**Actions** : non-regression complete 26/26 OK (aucun test ne verifiait --lignes 0 ni le comportement contenu vide - les changements de comportement sont compatibles), regenerer-catalogue --dry-run = 0 a ajouter + 0 doublon, normes ASCII/LF 0/0 sur 10 fichiers.
+
+**Lecons** :
+1. QUATRIEME VAGUE, ZERO TEST CASSE : la regle retrocompat tient - les 3 corrections changent des comportements SILENCIEUX vers des comportements EXPLICITES, et aucun test ne dependait du comportement silencieux.
+2. LE PASSAGE SILENCIEUX -> EXPLICITE EST TOUJOURS SANS RISQUE POUR LES TESTS : transformer un no-op muet en erreur ou message documente ne peut pas casser un test qui verifie le comportement utile.
+3. LE GARDE-FOU TEST-024 N A RIEN DETECTE CETTE FOIS : Vulcain a range ses scripts de test dans .robustesse/ (pas a la racine) - le protocole creation-scripts-temporaires est applique.
+## [LECON] 2026-08-12 -- APRES ROUND 6 GENERATEURS (Morpheus)
+
+**Contexte** : Vulcain a corrige 3 faiblesses sur les generateurs : generateurs-commande v0.2.4 (flag du MODELE sans champ flag declare laisse orphelin quand valeur vide - 95 entrees du catalogue concernees), generateurs-regenerer-catalogue v1.1.1 (catalogue introuvable/JSON invalide -> message ERREUR propre + rc 1, plus de traceback), generateurs-amelioration v2.1.0 (--version/--liste affichent la version des themes v2.2.0).
+
+**Actions** : non-regression complete : 24 OK / 2 KO attendus au premier passage (test-005 version generateurs-commande v0.2.3 en dur, test-008 version generateurs-amelioration v2.0.0 en dur + sortie --version). Adaptation : test-005 v0.2.3 -> v0.2.4 (docstring + 2 asserts + en-tete), test-008 v2.0.0 -> v2.1.0 + assert 'themes v2.2.0' dans --version. Apres adaptation : 26/26 OK. regenerer-catalogue --dry-run : 0 a ajouter + garde-fou 0 cle dupliquee. Normes ASCII/LF 0/0 sur 11 fichiers.
+
+**Lecons** :
+1. IMPACT PREVU vs IMPACT IMPREVU : la mission annoncait l impact exact (test-005 KO sur la version en dur) - le premier passage 24/2 a confirme la prediction, aucun KO surprise. Quand l impact est predit, l adapter fait partie de la mission, pas une surprise.
+2. LES TESTS DE VERSION EN DUR SONT FRAGILES PAR NATURE : test-005 et test-008 verifient des versions en dur - chaque bump de version d un outil les casse. C est un signal, pas un bug : la version du test DOIT suivre la version de l outil.
+3. LA PARITE PY/SH RESTE GARANTIE PAR LE WRAPPER : test-008 verifie py/sh identiques sur --version/--liste - le wrapper pur exec python3 a transmis la nouvelle sortie themes sans divergence.
+4. LE CATALOGUE N A PAS BOUGE : 146 entrees intactes apres le round (0 ajout, 0 modification) - la correction du flag orphelin se fait dans le generateur, pas dans les donnees.
+
+## [LECON] 2026-08-12 -- APRES ROUND 5 COMBOS (Morpheus)
+
+**Contexte** : Vulcain a corrige le combos-moteur v0.3.2 (py + sh, parite) : arret immediat si une case outil echoue (exit != 0), champ optionnel echec_ok:true pour les cases dont le code non-nul est un resultat legitime, + echec_ok ajoute aux 30 cases outil de controle des 10 combos declaratifs.
+
+**Actions** : non-regression complete 26/26 OK (test-002 navigation + test-020 dry-run restent verts - l arret sur echec ne les affecte pas), regenerer-catalogue --dry-run = 0 a ajouter + 0 doublon, normes ASCII/LF 0/0 sur 16 fichiers.
+
+**Lecons** :
+1. CINQUIEME VAGUE, ZERO TEST CASSE : la regle retrocompat tient - l arret sur echec est un changement de comportement par defaut, mais les tests ne lancent que des combos qui reussissent (ou des dry-run).
+2. LE MOTEUR DE COMBOS EST MAINTENANT FIABLE : un combo qui echoue une etape ne se termine plus en faux succes (rc=0) - le resultat est remonte a l agent qui l a lance.
+
+
+## [LECON] 2026-08-12 -- ROUND 7 VALIDER : NON-REGRESSION (Morpheus)
+
+**Contexte** : non-regression complete apres les corrections Vulcain du round 7
+valider (refs mortes valider-case v1.1.1, versions alignees, valider-nommage
+v0.3.3 categorie + formats speciaux, renommage lancer-non-regression ->
+tester-lancer-non-regression).
+
+**KO constates (3, tous des impacts attends annonces par Vulcain)** :
+1. test-007 : catalogue 146 mais NON TRIE (le renommage en place de
+   lancer-non-regression -> tester-lancer-non-regression avait deplace la ligne
+   hors de l ordre alphabetique : tester- vient apres valider-). Correction :
+   re-tri du catalogue par nom (146, trie, normes 0/0).
+2. test-009 : verifiait valider-case v1.1.0 en dur (4 endroits docstring +
+   assert) -> bump 1.1.1 attendu, adapte.
+3. test-015 : idem (v1.1.0 dans docstring + assert) -> adapte 1.1.1.
+
+**Lecons** :
+1. UN RENOMMAGE DANS UN FICHIER TRIE (catalogue JSON, index, listes) CREE UN
+   DESORDRE SILENCIEUX : remplacer le nom sans re-trier laisse le fichier
+   invalide aux yeux des tests de tri, sans erreur visible a l oeil. Apres tout
+   renommage, verifier tri + compteurs + presence.
+2. LES TESTS QUI VERIFIENT UNE VERSION EN DUR SONT DES SISMOMETRES : ils ont
+   detecte instantanement le bump 1.1.1. Les adapter est l impact ATTENDU,
+   jamais une surprise - mais verifier qu il n y a PAS d autres occurences de
+   l ancienne version dans le test (grep complet avant de relancer).
+3. test-024 (garde-fou anti-scripts-temporaires) verifie deja le NOUVEAU chemin
+   de l outil renomme (adapte par Vulcain) : 12/12. La mise a jour des garde-fous
+   doit accompagner le renommage, sinon la non-regression casse a la chaine.
+
+**Validations** : non-regression 26/26, catalogue 146 trie + dry-run 0 a
+ajouter + garde-fou 0 cle dupliquee, valider-nommage --recursive tools/
+335/335 (0 erreur), test-007 15/15, test-009 23/23, test-015 10/10, normes 0/0
+sur 18 fichiers.
+
+
+## [LECON] 2026-08-12 -- ROUND 8 REGISTRE/TRACES : NON-REGRESSION (Morpheus)
+
+**Contexte** : non-regression complete apres les corrections Vulcain du round 8
+(archivage du registre au lieu de purge, filtre detecteur, garde-fous
+enregistrer, versions alignees).
+
+**Verifications** :
+1. NON-REGRESSION : 26/26 OK (aucun KO - test-024 avait deja ete adapte par
+   Vulcain : versions v0.1.1/v0.2.1 + nouveau point 13 garde-fou memoire).
+2. IDEMPOTENCE DE L ARCHIVAGE : lancements successifs de la non-regression ->
+   l historique passe de 7 a 10 lignes (3 usages Vulcain archives) puis reste
+   stable a 10 (pas de doublon). Le dedoublonnage par ligne exacte fonctionne.
+3. DETECTEUR : plus de .tmp-eol-test/.tmp-gc-test/.tmp-morpheus-test (faux
+   positifs elimines par le filtre .py/.sh). Les 8 scripts restants non
+   declares sont de VRAIS scripts historiques (ecart honnete, ils n ont
+   jamais ete declares au registre).
+4. CATALOGUE : dry-run 0 a ajouter, 0 cle dupliquee.
+5. NORMES : 0/0 sur 10 fichiers.
+
+**Lecons** :
+
+1. L IDEMPOTENCE SE TESTE PAR LA REPETITION : une fonction d archivage qui
+   dedoublonne doit etre verifiee sur DEUX lancements consecutifs (7 -> 10 ->
+   10), pas sur un seul. Le premier lancement ajoute, le second ne doit rien
+   ajouter.
+
+2. UN GARDE-FOU DE LA MEMOIRE SE VERIFIE PAR LA PRESENCE DE L HISTORIQUE :
+   le point 13 de test-024 (l historique du registre existe) protege contre
+   le retour de la purge pure : si quelqu un retablit fh.write('') sans
+   archiver, le test KO. La non-regression ne teste pas seulement le code,
+   elle teste la POLITIQUE de retention des donnees.
+
+3. UNE NON-REGRESSION QUI PASSE 26/26 SANS AUCUN KO APRES UNE MISSION QUI
+   CHANGE LA POLITIQUE DE DONNEES (purge -> archivage) EST UN BON SIGNE :
+   les tests avaient ete mis a jour par Vulcain AVANT (test-024 13/13
+   verifie en amont), donc pas de surprise au lancement. La chaine
+   correction -> adaptation des tests -> non-regression fonctionne.
+
+**Validations** : non-regression 26/26, test-024 13/13, catalogue dry-run 0 a
+ajouter, detecteur sans faux positifs de dossiers, historique idempotent
+(7 -> 10 -> 10), normes 0/0 sur 10 fichiers.
+
+## [LECON] 2026-08-12 -- VALIDATION FIX SIDENTIFIER v0.5.1 (Morpheus)
+
+**Contexte** : Vulcain a corrige le bug de demarrage (sidentifier ecrasait le profil classeur avec Cerberus en dur). Mission : reverdir la non-regression + verifier que l identite de la session est coherente.
+
+**Lecons** :
+
+1. LA PREUVE D UN FIX DE DEMARRAGE, C EST LE DEMARRAGE LUI-MEME : le test decisif n est pas le code mais sidentifier llm-1 qui doit afficher l agent reel du bloc (morpheus apres activation, pas Cerberus). Verification faite en conditions reelles : 'agent principal : morpheus' + classeur coherent.
+
+2. UN PARCOURS PROPRE N IMPLIQUE PAS UN DEMARRAGE PROPRE : detecter-cablages-manquants donnait 30/30 atteignables et la navigation fonctionnait, pourtant l agent s arretait. Le cycle d identification (sidentifier -> classeur) est une 3e source de verite a part entiere, hors du parcours.
+
+3. LA NON-REGRESSION NE COUVRE PAS LA COHERENCE CROISEE DES SOURCES : aucun test ne comparait AGENTS.md vs classeur sur l agent actif. Un garde-fou possible : un test qui verifie que sidentifier rend l agent du bloc.
+
+**Validations** : non-regression 26/26, catalogue dry-run 0 a ajouter, parcours morpheus PROPRE (30/30), sidentifier -> morpheus, classeur coherent, normes 0/0 sur 7 fichiers.
+
+## [LECON] 2026-08-12 -- AUDIT MORPHEUS : LE TEMPLATE EST LA REFERENCE (Morpheus)
+
+**Mission** : audit de mes pratiques de creation de tests (demande utilisateur). Constat : je ne suivais pas le template-test.md (obsolete v0.1.0 bash/protections) mais les tests precedents - derive prouvee : test-001/002 en coding utf-8 + marqueur [ECHEC] invisible pour le lanceur qui compte les [KO].
+
+**Resultat** : template-test.md v0.2.0 (format Python canonique), migration de test-001/002/003 (utf-8 + [ECHEC] -> ascii + [OK]/[KO] + NB_POINTS/verifier/main/RESULTAT), fiche + carte morpheus v0.4.2 (case c3 : indice obligatoire LIRE template-test.md), garde-fou test-029 (14 points : invariants vitaux de CHAQUE test-0XX) affecte a la serie D, test-004 adapte (morpheus 0.4.2), non-regression 29/29, normes 0/0.
+
+**Lecons** :
+1. LE TEMPLATE EST LA REFERENCE, PAS LES TESTS PRECEDENTS : un test ancien peut porter des derives (utf-8, [ECHEC], bash). Copier un test precedent = reproduire ses derives. Chaque nouveau test part du template.
+2. UN MARQUEUR INVISIBLE EST PIRE QU AUCUN : [ECHEC] n etait pas compte par le lanceur de non-regression (regex [KO]) - un echec pouvait passer inapercu si le returncode etait mal gere. Les marqueurs [OK]/[KO] sont le contrat avec le lanceur.
+3. UN GARDE-FOU NE DOIT PAS S AUTO-INCRIMINER : test-029 verifie l absence de [ECHEC] - son propre code en mentionnait le motif (concatenation + retrait docstring/commentaires requis).
+4. UN NOUVEAU TEST DOIT ETRE AFFECTE A UNE SERIE (lecon round 11) : test-029 affecte a la serie D.
+5. UN BUMP DE PARCOURS CASCADE SUR LES TESTS : morpheus 0.4.1->0.4.2 a casse test-004 (verifiait 0.4.1) - adapte.

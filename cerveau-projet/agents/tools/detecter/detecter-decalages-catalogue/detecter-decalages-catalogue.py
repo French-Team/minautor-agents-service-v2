@@ -6,7 +6,12 @@
 # Cree par Vulcain le 2026-08-09 (institutionnalisation du scan ecrit par Atlas).
 # v0.1.1 : section COMBOS ajoutee (garde-fou des cles des definitions-combo vs
 # catalogue, anti-recurrence du KO test-003, spec-combos-moteur v0.2.1).
-# Version : 0.1.1
+# v0.2.0 : SCAN DES SOUS-COMMANDES argparse (round 11 coherence documentaire) :
+# quand l aide racine expose un bloc {sous-cmd1,sous-cmd2,...}, l outil lance
+# l aide de CHAQUE sous-commande et fusionne les options -- corrige les faux
+# positifs generateurs-case-convertir / generateurs-ligne (flags de sous-
+# commandes absents de l aide racine).
+# Version : 0.2.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -21,6 +26,12 @@ et les interfaces reelles des outils (options --aide/--help).
 Depuis la v0.1.1, il scanne AUSSI les definitions-combo (combos/*/definition-
 combo.json) : les cles des entrees des cases generateur doivent correspondre
 EXACTEMENT aux parametres du catalogue (spec-combos-moteur v0.2.1).
+
+Depuis la v0.2.0, il scanne AUSSI les SOUS-COMMANDES argparse : quand l aide
+racine contient un bloc {sous-cmd1,sous-cmd2,...}, l outil lance l aide de
+chaque sous-commande (script <sous-cmd> --help) et fusionne toutes les options
+-- corrige les faux positifs des outils a sous-commandes (generateurs-case,
+generateurs-ligne).
 
 Usage:
   detecter-decalages-catalogue.py [--sortie CHEMIN] [--version]
@@ -41,7 +52,7 @@ import sys
 import unicodedata
 from datetime import datetime
 
-VERSION = "0.1.1"
+VERSION = "0.2.0"
 COMBOS_GLOBE = "cerveau-projet/agents/tools/combos/*/definition-combo.json"
 CATALOGUE = "cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json"
 TIMEOUT = 8
@@ -66,11 +77,61 @@ def flags_du_modele(modele):
     return flags, placeholders
 
 
+def extraire_sous_commandes(aide):
+    """Extrait les sous-commandes argparse du bloc {sous-cmd1,sous-cmd2,...}
+    de l aide racine (v0.2.0). Retourne une liste triee."""
+    sous_cmd = set()
+    for m in re.finditer(r'\{([a-z][a-z0-9-]*(?:\s*,\s*[a-z][a-z0-9-]*)+)\}', aide):
+        for partie in m.group(1).split(','):
+            nom = partie.strip()
+            if re.match(r'^[a-z][a-z0-9-]*$', nom):
+                sous_cmd.add(nom)
+    return sorted(sous_cmd)
+
+
+def lancer_aide_sous_commande(interpreteur, script, sous_cmd):
+    """Lance l aide d UNE sous-commande et retourne le texte le plus riche.
+
+    Deux variantes sont tentees (v0.2.0, piege generateurs-case) :
+      A. script <sous-cmd> --aide/--help   (outils dont la sous-commande
+         vient apres les options, ex: generateurs-ligne)
+      B. script x <sous-cmd> --aide/--help (outils dont le parser racine
+         consomme <sous-cmd> comme un argument positionnel, ex:
+         generateurs-case <parcours> convertir --refs ...)
+    Le candidat avec le PLUS d options longues gagne (le piege A renvoie
+    l aide racine, pauvre en options)."""
+    chemin = os.path.join(RACINE, script)
+    candidats = []
+    for prefixe in ((), ("x",)):
+        for flag in ("--aide", "--help", "-h"):
+            try:
+                cmd = [interpreteur, chemin] + list(prefixe) + [sous_cmd, flag]
+                r = subprocess.run(cmd, capture_output=True, text=True, timeout=TIMEOUT)
+                sortie = (r.stdout or "") + (r.stderr or "")
+                reconnue = ("Option inconnue" not in sortie
+                            and "unrecognized arguments" not in sortie
+                            and "invalid choice" not in sortie
+                            and ("usage:" in sortie.lower() or "Options" in sortie or "--" in sortie))
+                if reconnue:
+                    candidats.append(sortie)
+                    break
+            except (subprocess.TimeoutExpired, OSError):
+                continue
+    if not candidats:
+        return None
+    return max(candidats, key=lambda s: (len(extraire_options(s)), len(s)))
+
+
 def lancer_aide(interpreteur, script):
-    """Lance le script avec --aide puis --help. Retourne (aide, err, reconnue)."""
+    """Lance le script avec --aide puis --help. Retourne (aide, err, reconnue).
+
+    v0.2.0 : si l aide racine expose des sous-commandes argparse
+    ({sous-cmd1,...}), l aide de CHAQUE sous-commande est lancee et le texte
+    est FUSIONNE (options racine + options de toutes les sous-commandes)."""
     chemin = os.path.join(RACINE, script)
     if not os.path.isfile(chemin):
         return None, "SCRIPT ABSENT: %s" % script, False
+    aide_racine = None
     for flag in ("--aide", "--help"):
         try:
             cmd = [interpreteur, chemin, flag]
@@ -80,12 +141,21 @@ def lancer_aide(interpreteur, script):
                         and "unrecognized arguments" not in sortie
                         and ("usage" in sortie.lower() or "Options" in sortie or "--" in sortie))
             if reconnue:
-                return sortie, None, True
+                aide_racine = sortie
+                break
         except subprocess.TimeoutExpired:
             return None, "TIMEOUT (interactif ?)", False
         except OSError as e:
             return None, "OSERROR: %s" % e, False
-    return None, "PAS D AIDE RECONNUE (--aide et --help rejetes ou sortie vide)", False
+    if aide_racine is None:
+        return None, "PAS D AIDE RECONNUE (--aide et --help rejetes ou sortie vide)", False
+    # v0.2.0 : fusion avec les sous-commandes
+    parties = [aide_racine]
+    for sous_cmd in extraire_sous_commandes(aide_racine):
+        aide_sc = lancer_aide_sous_commande(interpreteur, script, sous_cmd)
+        if aide_sc:
+            parties.append(aide_sc)
+    return "\n".join(parties), None, True
 
 
 def analyser_combos():
@@ -163,7 +233,7 @@ def formater(resultats, total, problemes_combos, nb_combos):
     L.append("**Date** : %s | **Catalogue** : v%s | **Entrees** : %d" % (
         datetime.now().strftime("%Y-%m-%d %H:%M"), "?", total))
     L.append("")
-    L.append("## COMBOS (garde-fou v0.1.1 : cles des cases generateur vs catalogue)")
+    L.append("## COMBOS (garde-fou : cles des cases generateur vs catalogue)")
     L.append("")
     L.append("| Combos scannes | %d |" % nb_combos)
     L.append("| Problemes de cles | %d |" % len(problemes_combos))
@@ -231,7 +301,7 @@ def main(argv):
             print(__doc__)
             return 0
         if a == "--version":
-            print("detecter-decalages-catalogue v%s (prepare)" % VERSION)
+            print("detecter-decalages-catalogue v%s (ebauche)" % VERSION)
             return 0
         if a == "--sortie":
             continue

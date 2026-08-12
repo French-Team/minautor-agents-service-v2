@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-minerve",
   "agent": "minerve",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Minerve : redactrice de todos. 2 missions (creer un todo, completer un todo) couvrant les phases 0 a 9 du todo-template. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
  },
@@ -441,7 +441,19 @@
   "c20d": {
    "titre": "FIN - Outil temporaire",
    "type": "fin",
-   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
+   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "enregistrer-usage-outil",
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/"
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)."
+    }
+   ]
   },
   "c20c": {
    "titre": "Creer l outil temporaire",

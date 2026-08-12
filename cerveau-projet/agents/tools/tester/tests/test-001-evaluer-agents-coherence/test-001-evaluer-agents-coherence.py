@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# -*- coding: ascii -*-
 """
-test-001-evaluer-agents-coherence.sh
+test-001-evaluer-agents-coherence.py
 Test des corrections apportees a evaluer-agents et evaluer-coherence.
 
 Corrections testees:
@@ -9,15 +9,17 @@ Corrections testees:
   2. evaluer-coherence utilise le projet root pour cible_racine
   3. evaluer-coherence exclut les commandes systeme (cat, grep, sed, basher)
 
-Usage:
-  python3 cervel-projet/agents/tools/tester/tests/test-001-evaluer-agents-coherence/test-001-evaluer-agents-coherence.py
+Contexte : ce test a ete migre au format template-test.md v0.2.0 (audit
+Morpheus 2026-08-12 : le TEMPLATE est la reference, pas les tests precedents).
+L ancien format utilisait coding utf-8 et le marqueur [ECHEC] invisible pour
+le lanceur de non-regression (qui compte les [KO]).
 """
+import io
+import json
 import os
 import re
 import subprocess
 import sys
-import tempfile
-import json
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
@@ -26,158 +28,100 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
 
-passed = 0
-failed = 0
-results = []
+EVALUER_AGENTS_PY = os.path.join(TOOLS_DIR, "evaluer", "evaluer-agents", "evaluer-agents.py")
+EVALUER_COHERENCE_PY = os.path.join(TOOLS_DIR, "evaluer", "evaluer-coherence", "evaluer-coherence.py")
+
+NB_POINTS = 0
+NB_OK = 0
+NB_KO = 0
 
 
-def assert_eq(name, actual, expected):
-    global passed, failed
-    if actual == expected:
-        passed += 1
-        results.append(f"  [OK] {name}")
+def verifier(nom, condition, detail=""):
+    global NB_POINTS, NB_OK, NB_KO
+    NB_POINTS += 1
+    if condition:
+        NB_OK += 1
+        print("  [OK] %s" % nom)
     else:
-        failed += 1
-        results.append(f"  [ECHEC] {name}: attendu={expected}, obtenu={actual}")
+        NB_KO += 1
+        print("  [KO] %s %s" % (nom, ("-- " + detail) if detail else ""))
 
 
-def run_tool(tool_path, args=None):
-    """Execute un outil .py et retourne (stdout, code_retour)."""
-    cmd = [PYTHON, tool_path]
-    if args:
-        cmd.extend(args)
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-    return proc.stdout, proc.stderr, proc.returncode
+def run(cmd, timeout=120):
+    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
 
 
-# ============================================================
-# PARTIE 1: Tests de evaluer-agents
-# ============================================================
+def ascii_count(chemin):
+    with io.open(chemin, encoding="utf-8", errors="replace") as fh:
+        return sum(1 for c in fh.read() if ord(c) > 127)
 
-print("=== Tests evaluer-agents ===")
-print("")
 
-evaluer_agents_py = os.path.join(TOOLS_DIR, "evaluer", "evaluer-agents", "evaluer-agents.py")
+def crlf_count(chemin):
+    with open(chemin, "rb") as fh:
+        return fh.read().count(b"\r\n")
 
-# Test 1: evaluer-agents doit exclure __pycache__ des faux positifs
-stdout, stderr, rc = run_tool(evaluer_agents_py)
-nb_pycache_erreurs = stdout.count("Outil __pycache__")
-assert_eq(
-    "Test 1: evaluer-agents exclut __pycache__ des erreurs",
-    nb_pycache_erreurs,
-    0,
-)
-print(f"  [INFO] Faux positifs __pycache__ detectes: {nb_pycache_erreurs}")
 
-# Test 2: score evaluer-agents doit etre > 50/100 (era 23/100 avant correction)
-m = re.search(r"Score agents : (\d+)/100", stdout)
-if m:
-    score = int(m.group(1))
-    assert_eq(
-        "Test 2: score evaluer-agents > 50/100 (corrige de 23)",
-        score > 50,
-        True,
-    )
-    print(f"  [INFO] Score evaluer-agents: {score}/100")
-else:
-    failed += 1
-    results.append("  [ECHEC] Test 2: score evaluer-agents non trouve dans la sortie")
+def main():
+    print("=== test-001 : corrections evaluer-agents / evaluer-coherence ===")
 
-# Test 3: evaluer-agents doit toujours signaler generateurs-commande (outil incomplet reel)
-assert_eq(
-    "Test 3: evaluer-agents signale generateur-commande (outil incomplet)",
-    "generateurs-commande" in stdout,
-    True,
-)
+    # 1-4. Tests de evaluer-agents
+    r = run([PYTHON, EVALUER_AGENTS_PY])
+    stdout = r.stdout
 
-# Test 4: pas de faux avertissement "Agent actif 'themis'" dans le score (c'est normal)
-#    On verifie que l'outil fonctionne sans crash
-assert_eq(
-    "Test 4: evaluer-agents execute sans crash",
-    rc,
-    0,
-)
+    nb_pycache = stdout.count("Outil __pycache__")
+    verifier("1. evaluer-agents exclut __pycache__ des erreurs",
+             nb_pycache == 0, "nb_pycache=%d" % nb_pycache)
 
-print("")
-print("  Resultats:")
-for r in results[:4]:
-    print(r)
+    m = re.search(r"Score agents : (\d+)/100", stdout)
+    if m:
+        score = int(m.group(1))
+        verifier("2. score evaluer-agents > 50/100 (corrige de 23)",
+                 score > 50, "score=%d" % score)
+    else:
+        verifier("2. score evaluer-agents > 50/100", False,
+                 "score introuvable dans la sortie")
 
-# ============================================================
-# PARTIE 2: Tests de evaluer-coherence
-# ============================================================
+    verifier("3. evaluer-agents signale generateurs-commande (outil incomplet)",
+             "generateurs-commande" in stdout, "")
 
-print("")
-print("=== Tests evaluer-coherence ===")
-print("")
+    verifier("4. evaluer-agents execute sans crash", r.returncode == 0,
+             "rc=%d" % r.returncode)
 
-evaluer_coherence_py = os.path.join(TOOLS_DIR, "evaluer", "evaluer-coherence", "evaluer-coherence.py")
+    # 5-8. Tests de evaluer-coherence
+    r2 = run([PYTHON, EVALUER_COHERENCE_PY])
+    stdout2 = r2.stdout
 
-# Test 5: evaluer-coherence doit exclure cat, grep, sed, basher des outils casses
-stdout2, stderr2, rc2 = run_tool(evaluer_coherence_py)
+    cmd_systeme = [c for c in ("cat", "grep", "sed", "basher")
+                   if ("`%s` reference par" % c) in stdout2]
+    verifier("5. evaluer-coherence exclut cat/grep/sed/basher des outils casses",
+             len(cmd_systeme) == 0, "signales=%s" % cmd_systeme)
 
-# Compter les faux positifs commandes-systeme
-cmd_systeme_signales = []
-for cmd in ("cat", "grep", "sed", "basher"):
-    pattern = f"`{cmd}` reference par"
-    if pattern in stdout2:
-        cmd_systeme_signales.append(cmd)
+    verifier("6. evaluer-coherence dit 'Tous les outils references existent'",
+             "Tous les outils references existent" in stdout2, "")
 
-assert_eq(
-    "Test 5: evaluer-coherence exclut cat/grep/sed/basher des outils casses",
-    len(cmd_systeme_signales),
-    0,
-)
-if cmd_systeme_signales:
-    print(f"  [INFO] Commandes systeme encore signalees: {cmd_systeme_signales}")
+    liens = ["agents/conventions/structures/convention-classeur-variables.md",
+             "agents/conventions/structures/convention-structures.md"]
+    liens_casses = [l for l in liens if l in stdout2]
+    verifier("7. faux positifs liens structures resolus (existe sous cerveau-projet/)",
+             len(liens_casses) == 0, "encore=%s" % liens_casses)
 
-# Test 6: evaluer-coherence doit signaler 'Tous les outils references existent'
-assert_eq(
-    "Test 6: evaluer-coherence dit 'Tous les outils references existent'",
-    "Tous les outils references existent" in stdout2,
-    True,
-)
+    verifier("8. evaluer-coherence execute sans crash", r2.returncode == 0,
+             "rc=%d" % r2.returncode)
 
-# Test 7: le faux positif lien 'agents/conventions/structures/' doit etre resolu
-#    (ces fichiers existent sous cerveau-projet/pense-betes/...)
-liens_faux_positifs = [
-    "agents/conventions/structures/convention-classeur-variables.md",
-    "agents/conventions/structures/convention-structures.md",
-]
-liens_still_casses = [l for l in liens_faux_positifs if l in stdout2]
-assert_eq(
-    "Test 7: faux positifs liens structures resolus (existe sous cerveau-projet/)",
-    len(liens_still_casses),
-    0,
-)
-if liens_still_casses:
-    print(f"  [INFO] Liens faux positifs encore detects: {liens_still_casses}")
+    # 9-10. Normes ASCII strict + LF pur sur les fichiers concernes
+    fichiers = [EVALUER_AGENTS_PY, EVALUER_COHERENCE_PY,
+                os.path.abspath(__file__)]
+    total_non_ascii = sum(ascii_count(f) for f in fichiers)
+    verifier("9. ASCII strict : 0 non-ASCII (outils + test)",
+             total_non_ascii == 0, "total=%d" % total_non_ascii)
+    total_crlf = sum(crlf_count(f) for f in fichiers)
+    verifier("10. LF pur : 0 CRLF (outils + test)",
+             total_crlf == 0, "total=%d" % total_crlf)
 
-# Test 8: evaluer-coherence doit toujours fonctionner sans crash
-assert_eq(
-    "Test 8: evaluer-coherence execute sans crash",
-    rc2,
-    0,
-)
+    print("")
+    print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
+    return 1 if NB_KO else 0
 
-print("")
-print("  Resultats:")
-for r in results[4:]:
-    print(r)
 
-# ============================================================
-# PARTIE 3: Score global
-# ============================================================
-
-print("")
-print("=== Rapport final ===")
-total = passed + failed
-print(f"Total: {total}")
-print(f"Reussis: {passed}")
-print(f"Echecs: {failed}")
-if failed == 0:
-    print("VERDICT: REUSSI (toutes les corrections sont efficaces)")
-else:
-    print("VERDICT: ECHEC (des corrections ne sont pas efficaces)")
-
-sys.exit(0 if failed == 0 else 1)
+if __name__ == "__main__":
+    sys.exit(main())

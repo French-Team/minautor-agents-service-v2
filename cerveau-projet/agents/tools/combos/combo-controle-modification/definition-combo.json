@@ -22,21 +22,24 @@
       "type": "outil",
       "commande": "{cmd1}",
       "sortie": "resultat_nommage",
-      "suivant": "c3"
+      "suivant": "c3",
+      "echec_ok": true
     },
     "c3": {
       "titre": "Executer valider-liens",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-liens/valider-liens.py",
       "sortie": "resultat_liens",
-      "suivant": "c4"
+      "suivant": "c4",
+      "echec_ok": true
     },
     "c4": {
       "titre": "Executer verifier-separation-preoccupations",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-separation-preoccupations/verifier-separation-preoccupations.py cerveau-projet/agents",
       "sortie": "resultat_separation",
-      "suivant": "c5"
+      "suivant": "c5",
+      "echec_ok": true
     },
     "c5": {
       "titre": "Generer la commande combos-valider-cerveau",
@@ -55,28 +58,32 @@
       "type": "outil",
       "commande": "{cmd2}",
       "sortie": "resultat_sante",
-      "suivant": "c7"
+      "suivant": "c7",
+      "echec_ok": true
     },
     "c7": {
       "titre": "Executer valider-tableaux",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py",
       "sortie": "resultat_tableaux",
-      "suivant": "c8"
+      "suivant": "c8",
+      "echec_ok": true
     },
     "c8": {
       "titre": "Executer detecter-surcharge-fichier",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/detecter-surcharge-fichier.py cerveau-projet/agents",
       "sortie": "resultat_surcharge",
-      "suivant": "c9"
+      "suivant": "c9",
+      "echec_ok": true
     },
     "c9": {
       "titre": "Executer detecter-usage-outils-externes",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py cerveau-projet",
       "sortie": "resultat_traces",
-      "suivant": "c10"
+      "suivant": "c10",
+      "echec_ok": true
     },
     "c10": {
       "titre": "FIN - controle modification termine",

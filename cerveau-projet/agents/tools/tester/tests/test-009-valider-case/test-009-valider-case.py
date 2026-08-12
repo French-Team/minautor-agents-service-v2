@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-009-valider-case.py
-Test formel de l'outil valider-case v1.1.0 (categorie valider/).
+Test formel de l'outil valider-case v1.1.1 (categorie valider/).
 
 Outil teste (cerveau-projet/agents/tools/valider/valider-case/):
   .py + .sh (wrapper pur exec python3) + .md + spec/
@@ -14,13 +14,13 @@ Outil teste (cerveau-projet/agents/tools/valider/valider-case/):
   (Etape 2 de la spec-refonte-cartes-decision v0.1.1)
 
 Cas couverts:
-  1. --version py/sh identiques v1.1.0 (parite)
+  1. --version py/sh identiques v1.1.1 (parite)
   2. --aide : usage complet (requis par detecter-decalages-catalogue)
   3. Execution sur parcours-cerberus (migre, etape 6) : verdict CONFORME
      (0 erreur, 0 surcharge, avertissement pattern de re-essai c5) +
      temoin ARTIFICIEL a alleger (genere dans tmp : cerberus + 3 indices
      de 200 car.) : verdict A ALLEGER avec >= 3 surcharges
-  3f. BUDGET PONDERE v1.1.0 : temoin 6 indices COURTS (<= 100 car.) =
+  3f. BUDGET PONDERE v1.1.1 : temoin 6 indices COURTS (<= 100 car.) =
      poids 3,0 -> CONFORME (6 courts acceptes) ; temoin 4 indices LONGS
      (> 100 car.) = poids 4,0 -> A ALLEGER (2 courts = 1 long)
   4. --case c12b (existante) : CONFORME ; --case c13b (inexistante) : NON CONFORME
@@ -119,9 +119,9 @@ def main():
         # 1. --version py/sh identiques (parite)
         r_py = run([PYTHON, OUTIL_PY, "--version"])
         r_sh = run(["bash", OUTIL_SH, "--version"])
-        verifier("1. --version py/sh identiques v1.1.0",
+        verifier("1. --version py/sh identiques v1.1.1",
                  r_py.returncode == 0 and r_sh.returncode == 0
-                 and "v1.1.0" in r_py.stdout
+                 and "v1.1.1" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 
@@ -160,7 +160,7 @@ def main():
                  and int(r_sur.stdout.split("a alleger:")[1].split("|")[0].strip()) >= 3,
                  r_sur.stdout.strip()[:120])
 
-        # 3f. BUDGET PONDERE v1.1.0 : 6 courts = 3,0 CONFORME ; 4 longs = 4,0 A ALLEGER
+        # 3f. BUDGET PONDERE v1.1.1 : 6 courts = 3,0 CONFORME ; 4 longs = 4,0 A ALLEGER
         # Parcours minimal : case action c1 (SANS indices) enchaine vers la fin c9.
         def fabriquer_temoin_budget(tmp, nb, taille):
             indices = [{"type": "regle", "texte": "R" * taille} for _ in range(nb)]

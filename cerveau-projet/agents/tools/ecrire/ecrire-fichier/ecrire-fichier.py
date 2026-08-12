@@ -26,16 +26,24 @@ Exemples:
 Retour: 0 si succes, 1 si erreur.
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.0-py
-Statut : beta
+Version : 0.3.2
+Statut : prepare
 """
 
 import argparse
 import os
+import shutil
 import sys
 
-VERSION = "0.2.0-py"
-STATUT = "beta"
+VERSION = "0.3.2"
+STATUT = "prepare"
+
+# Securite (round 3) : force la sortie en UTF-8 pour ne jamais crasher sur
+# l'encodage de la console (cp1252 sous Windows avec des caracteres non-ASCII).
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except AttributeError:
+    pass  # Python < 3.7 : la console gere l'encodage comme elle peut
 
 # Couleurs ANSI
 RED = "\033[0;31m"
@@ -94,6 +102,19 @@ def main(argv=None):
         return 1
 
     fichier = args.fichier
+
+    # Securite (round 3) : octet nul dans le chemin -> refus explicite
+    if "\x00" in fichier:
+        print(RED + "[ERREUR] Chemin non sur (octet nul present)" + NC)
+        return 1
+
+    # Securite (round 3) : refus d'ecrire a travers un lien symbolique
+    # (l'ecriture suivrait le lien vers la cible a l'insu de l'agent)
+    if os.path.islink(fichier):
+        print(RED + "[ERREUR] Chemin est un lien symbolique (refus securite): " +
+              fichier + NC)
+        return 1
+
     contenu = args.contenu
 
     # Lire le contenu depuis stdin si "-" ou si stdin est un pipe
@@ -104,30 +125,35 @@ def main(argv=None):
         print(YELLOW + "[DRY-RUN] Ecriture dans: " + fichier + NC)
         return 0
 
-    # Sauvegarde si demandee et le fichier existe
+    # Sauvegarde si demandee et le fichier existe. Copie BINAIRE (shutil) :
+    # une copie texte pourrait corrompre un fichier non-UTF-8 (latin-1).
     if args.backup and os.path.isfile(fichier):
         backup_path = fichier + ".bak"
-        with open(fichier, "r", encoding="utf-8", errors="replace") as fsrc, \
-                open(backup_path, "w", encoding="utf-8", newline="") as fdst:
-            fdst.write(fsrc.read())
+        shutil.copy2(fichier, backup_path)
         if args.verbose:
             print(BLUE + "[INFO] Sauvegarde creee: " + backup_path + NC)
 
-    # Ecrire
+    # Ecrire. Contenu vide = fichier TRONQUE a zero octet (jamais de no-op
+    # silencieux : vider un fichier est une action explicite et le message
+    # le confirme). L'ecriture d'un contenu vide cree le fichier s'il
+    # n'existe pas (comportement naturel d'un ecrire).
     try:
         if contenu:
             # FIGER LF : newline='' evite la traduction CRLF Windows
             with open(fichier, "w", encoding="utf-8", newline="") as f:
                 f.write(contenu)
+            if args.verbose:
+                print(GREEN + "[OK] Fichier ecrit: " + fichier + NC)
         else:
-            open(fichier, "a", encoding="utf-8", newline="").close()
+            # Troncature explicite (le .sh fait la meme chose avec > fichier)
+            with open(fichier, "w", encoding="utf-8", newline="") as f:
+                pass
+            print(YELLOW + "[INFO] Contenu vide : fichier tronque a zero octet: " +
+                  fichier + NC)
     except OSError as e:
         print(RED + "[ERREUR] Impossible d'ecrire " + fichier +
               " : " + str(e) + NC)
         return 1
-
-    if args.verbose:
-        print(GREEN + "[OK] Fichier ecrit: " + fichier + NC)
 
     return 0
 

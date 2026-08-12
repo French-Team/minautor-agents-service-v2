@@ -2332,3 +2332,36 @@ puis la fin.
 **Verifications reelles** : valider-cartes-decision 11/11 CONFORME, valider-case cerberus CONFORME (0 erreur, 0 a alleger), navigation reelle des 2 flux (OUI -> c15c -> retour c15b ; NON -> c16), poids budget 21/21 OK. Ecarts vulcain/clio = preexistants (confirme via git HEAD). Test-013 : 3 KO attendus (version 0.4.1 + compteurs) -> mission Morpheus.
 
 **LE CON (regle absolue)** : pour TOUTE activation/reactivation d'agent, utiliser l'OUTIL CENTRAL activer-agent-principal (commande exacte, PASSE PAR LE GENERATEUR). JAMAIS de script temporaire maison qui modifie AGENTS.md/AGENTS-historique directement. C'est l'outil central qui garantit la trace dans AGENTS-historique et le classeur. Un script de cloture temporaire = regression silencieuse (historique non journalise + corruption de structure).
+
+## [LECON] 2026-08-11 -- CARTES RENFORCEES ANTI-SCRIPTS-TEMPORAIRES (Buffy)
+
+**Contexte** : mission anti-scripts-temporaires (3 outils crees par Vulcain, garde-fou test-024 par Morpheus). Renforcement des cartes pour que le Pattern outil-temporaire soit reellement suivi.
+
+**Actions** :
+1. 10 fins "FIN - Outil temporaire" (athena c20d, atlas c29d, buffy c35d, clio c15d, janus c29d, minerve c20d, morpheus c16d, promethee c20d, themis c23d, vulcain c18d) : ajout de l'indice outil enregistrer-usage-outil PASSE PAR LE GENERATEUR + regle DECLARATION (tout outil temporaire cree est declare au registre en mode script-temporaire). Poids 1.5 <= 3.0 partout.
+2. buffy c10b : outil editer-parcours branche (modification de parcours via l outil au lieu d un script maison).
+3. Bumps : athena/minerve/promethee 0.3.1, atlas/buffy/janus/morpheus/themis/vulcain 0.4.1, clio 0.5.1. Fiches Pattern 14 alignees (10/10).
+
+**Verifications** : valider-cartes-decision 11/11 CONFORME, normes 10 fiches + 11 JSON OK.
+
+**LE CONS** :
+1. Le maillon manquant etait la DECLARATION : les cases creaient l'outil temporaire mais ne journalisaient pas sa creation. Maintenant la fin exige enregistrer-usage-outil --mode script-temporaire AVANT suppression.
+2. Le circuit est complet : creer (generateurs-outil-temporaire) -> declarer (enregistrer-usage-outil) -> supprimer (0 residu) -> detecter (detecter-usage-scripts-temporaires croise le registre).
+3. Les bumps de versions cassent les tests de version (test-004/005/016) : a adapter par Morpheus dans la meme chaine.
+
+## [LECON] 2026-08-12 -- FIN DU CYCLE VICIEUX DES ECARTS PRE-EXISTANTS (Buffy)
+
+**Mission** : corriger MAINTENANT les 5 ecarts pre-existants signales depuis plusieurs missions Janus sans jamais etre corriges.
+
+**Causes identifiees** :
+1. vulcain c9e/c15e non joignables : les questions c9b/c15b (Ameliorations possibles) etaient ORPHELINES - c22.suivant pointait la fin c9 directement, et c9b.NON pointait c22 (boucle). Recablage correct (modele morpheus c8->c8b->c9) : c22.suivant=c9b, c9b.NON=c9 ; c23.suivant=c15b, c15b.NON=c15.
+2. vulcain c6c/c12c : indice regle CREATION LIMITEE de 198 car (> 160) - raccourci a 125 car.
+3. clio c6c : indice regle PATTERN 3 de 175 car (> 160) - raccourci a 130 car.
+
+**Verifications reelles** : valider-case vulcain CONFORME + clio CONFORME (0 erreur, 0 a alleger), valider-cartes-decision 11/11 CONFORME, navigation reelle c9b->c9 (NON), c9b->c9e (OUI), c15b->c15 (NON), non-regression 24/24 OK (outil lancer-non-regression), registre 0 ligne apres tests.
+
+**Lecons** :
+1. Un Pattern 17 mal cable (question orpheline + boucle NON) rend des fins injoignables SANS erreur visible de navigation quotidienne - seul valider-case le detecte. Toujours verifier la joignabilite de TOUTES les fins apres insertion de cases.
+2. Les ecarts pre-existants signales dans les rapports doivent etre corriges a la mission suivante, pas accumules : chaque rapport doit transmettre la liste des ecarts ouverts a Cerberus.
+3. La regle des 160 caracteres est un plafond dur : les indices regle doivent etre concis, l'info detaillee va dans le protocole reference, pas dans la case.
+

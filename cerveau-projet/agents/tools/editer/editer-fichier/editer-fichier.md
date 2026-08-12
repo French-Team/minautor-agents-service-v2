@@ -6,7 +6,7 @@ identite:
 ---
 # editer-fichier
 
-**Version :** 0.2.0-py
+**Version :** 0.4.1
 **Statut :** prepare
 **Categorie :** Editer
 **Chemin :** `agents/tools/editer/editer-fichier/`
@@ -15,6 +15,8 @@ identite:
 ## Description
 
 Remplacer une chaine par une autre dans un fichier. Version generique de corriger-liens et corriger-nommage.
+
+**Echec explicite** : si AUCUNE occurrence n'est trouvee, l'outil retourne un code non nul (1) avec un message clair - jamais 0 silencieux. L'agent ne continue jamais en croyant a tort que l'edition a eu lieu.
 
 ## Utilisation
 
@@ -55,6 +57,8 @@ editer-fichier.sh --global fichier.md "texte" "remplacement"
 |---|---|---|
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (premiere occurrence, --global, --dry-run, fichier inexistant), promotion prepare |
+| 0.3.0 | 2026-08-12 | Qualite pro : echec explicite (0 occurrence -> code 1, jamais 0 silencieux), protection nommage, message d'aide enrichi |
+| 0.4.0 | 2026-08-12 | PERFORMANCE (round 2) : une seule passe (test d'existence + replace, plus de double scan count puis replace) |\n| 0.4.1 | 2026-08-12 | SECURITE (round 3) : refus de modifier a travers un lien symbolique, refus octet nul, lecture robuste utf-8-sig + fallback latin-1 (plus de crash sur BOM/latin-1) |
 
 ## Notes de creation
 

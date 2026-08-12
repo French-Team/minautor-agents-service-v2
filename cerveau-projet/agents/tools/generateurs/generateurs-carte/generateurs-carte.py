@@ -621,7 +621,18 @@ def main():
         print("generateurs-carte v%s" % VERSION)
         return 0
     if "--aide" in sys.argv or "-h" in sys.argv or "--help" in sys.argv:
-        construire_parser().print_help()
+        parser = construire_parser()
+        # round 9 : --aide peut cibler un sous-parser (ex: creer --aide) - avant,
+        # l aide RACINE s affichait toujours (l agent ne voyait pas les options
+        # de la sous-commande). Mecanisme porte depuis generateurs-case.
+        sous = None
+        if len(sys.argv) >= 2:
+            action = sys.argv[1]
+            for act in parser._actions:
+                if isinstance(act, argparse._SubParsersAction) and action in act.choices:
+                    sous = act.choices[action]
+                    break
+        (sous or parser).print_help()
         return 0
     parser = construire_parser()
     args = parser.parse_args()

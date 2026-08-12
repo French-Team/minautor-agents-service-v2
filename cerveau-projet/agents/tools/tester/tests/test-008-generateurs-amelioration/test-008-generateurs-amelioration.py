@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-008-generateurs-amelioration.py
-Test formel de l'outil generateurs-amelioration v2.0.0 (categorie generateurs/).
+Test formel de l'outil generateurs-amelioration v2.1.0 (categorie generateurs/).
 
 Outil teste (cerveau-projet/agents/tools/generateurs/generateurs-amelioration/):
   .py + .sh (wrapper pur exec python3) + .md + spec/ + themes-amelioration.json
@@ -11,7 +11,7 @@ Outil teste (cerveau-projet/agents/tools/generateurs/generateurs-amelioration/):
   --liste | --aide | --version. AUCUN fichier cree (reflexion en session).
 
 Cas couverts:
-  1. --version py/sh identiques v2.0.0 (parite)
+  1. --version py/sh identiques v2.1.0 + themes affiches (parite)
   2. --liste : theme ameliorer-outil affiche (14 questions)
   3. themes-amelioration.json : JSON valide + structure (version, themes,
      questions avec id/question/raison)
@@ -79,14 +79,15 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-008-")
     try:
-        print("=== Test formel generateurs-amelioration v2.0.0 ===")
+        print("=== Test formel generateurs-amelioration v2.1.0 ===")
 
-        # 1. --version py/sh identiques (parite)
+        # 1. --version py/sh identiques (parite) + version des themes affichee
         r_py = run([PYTHON, OUTIL_PY, "--version"])
         r_sh = run(["bash", OUTIL_SH, "--version"])
-        verifier("1. --version py/sh identiques v2.0.0",
+        verifier("1. --version py/sh identiques v2.1.0 + themes affiches",
                  r_py.returncode == 0 and r_sh.returncode == 0
-                 and "v2.0.0" in r_py.stdout
+                 and "v2.1.0" in r_py.stdout
+                 and "themes v2.2.0" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 

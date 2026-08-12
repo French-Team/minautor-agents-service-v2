@@ -47,7 +47,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n'est pas un terminal)
@@ -383,7 +383,16 @@ def executer_case_generateur(case, cid, variables, dry_run, verbose, no_journal=
 
 
 def executer_case_outil(case, cid, variables, dry_run, verbose):
-    """Case outil : execute la commande (interpolee) en subprocess."""
+    """Case outil : execute la commande (interpolee) en subprocess.
+
+    ROBUSTESSE (round 5) : le code retour est verifie. Un echec (exit != 0)
+    ARRETE le combo avec un message explicite (case, commande, code, sortie) :
+    un agent ne doit jamais croire qu'un combo a reussi alors qu'une etape a
+    echoue. Exception : la case peut declarer `"echec_ok": true` quand le code
+    non nul est un RESULTAT legitime (outil de controle/detection qui signale
+    un ecart par exit 1) - le resultat est alors stocke normalement et le
+    combo continue.
+    """
     commande_brute = case.get("commande")
     if not commande_brute:
         raise ErreurCombo("Case outil '%s' sans 'commande'" % cid)
@@ -413,6 +422,17 @@ def executer_case_outil(case, cid, variables, dry_run, verbose):
         raise ErreurCombo("Echec d'execution (case %s): %s" % (cid, exc))
 
     resultat = (proc.stdout or "") + (proc.stderr or "")
+    # ROBUSTESSE (round 5) : echec = arret, sauf echec_ok declare
+    if proc.returncode != 0 and not case.get("echec_ok"):
+        raise ErreurCombo(
+            "La commande de la case '%s' a echoue (code %d):\n  %s\n%s"
+            % (cid, proc.returncode, commande, resultat.strip()[:500])
+        )
+    if proc.returncode != 0 and case.get("echec_ok") and verbose:
+        print(_couleur(
+            "  -> code %d (echec_ok: resultat conserve)" % proc.returncode,
+            "jaune",
+        ))
     variables[case["sortie"]] = resultat.strip()
     if verbose:
         print("  -> sortie: %s" % resultat.strip()[:200])

@@ -325,6 +325,16 @@ def naviguer(donnees, case_debut, reponses_predefinies, interactif=False):
     position = 0
     # position de la case de depart dans l'ordre du dictionnaire
     ordre = list(cases.keys())
+    # round 9 : une case de depart inexistante (--case c999) provoquait un
+    # KeyError traceback brut - l agent perdu doit etre GUIDE, pas crash.
+    if cid not in cases:
+        dispo = ", ".join(list(cases.keys())[:12])
+        if len(cases) > 12:
+            dispo += ", ..."
+        print(_couleur("ERREUR: la case de depart '%s' n'existe pas dans le parcours" % cid, "rouge"),
+              file=sys.stderr)
+        print("Cases disponibles : %s" % dispo, file=sys.stderr)
+        return 1
     try:
         position = ordre.index(cid) + 1
     except ValueError:

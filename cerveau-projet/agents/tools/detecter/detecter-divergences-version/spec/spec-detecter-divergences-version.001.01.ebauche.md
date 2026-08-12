@@ -1,10 +1,11 @@
 # Specification -- detecter-divergences-version
 
-**Version :** 0.1.0
+**Version :** 0.2.0
 **Statut :** ebauche
 **Categorie :** Detecter
 **Date :** 2026-08-09
 **Agent :** Vulcain
+**Historique :** v0.2.0 (round 11 coherence documentaire : champ spec 'Version outil' prioritaire pour les specs de conventions dont la version documente des patterns au-dela de l outil -- ex: guider-parcours spec 0.6.2 / outil 0.5.0 ; constante VERSION ajoutee, resout le SANS VERSION de sa propre spec) -> v0.1.0 (creation, lecon Vulcain regle des 5 fichiers + controle Janus 2026-08-09)
 **Pense-bete source :** lecon Vulcain regle des 5 fichiers + controle Janus 2026-08-09 (scan temporaire)
 
 ## Objectif

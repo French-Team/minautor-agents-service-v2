@@ -6,7 +6,7 @@ identite:
 ---
 # Cerveau-Projet
 
-[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-121-blueviolet?style=flat)](https://img.shields.io/badge/Outils-121-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-126-blueviolet?style=flat)](https://img.shields.io/badge/Outils-121-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)
 
 
 ![Logo](cerveau-projet/assets/images/logo.jpg)
@@ -116,7 +116,7 @@ Chaque agent a :
 
 ---
 
-## La boite a outils (123 outils)
+## La boite a outils (126 outils)
 
 Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 
@@ -133,9 +133,10 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Creer (4)** | creer-fichier, creer-remplir-pense-bete, creer-remplir-spec, creer-remplir-todo | Creer fichiers et contenus |
 | **Decomposer (1)** | decomposer-fichier | Decomposer les fichiers markdown |
 | **Deplacer (1)** | deplacer-fichier | Deplacer ou renommer un fichier |
-| **Detecter (8)** | detecter-convention-nommage, detecter-decalages-catalogue, detecter-divergences-version, detecter-erreur-statut, detecter-impacts, detecter-local-hors-fonction, detecter-surcharge-fichier, detecter-usage-outils-externes | Detecter les erreurs de statut, la surcharge et les local hors fonction |
+| **Detecter (10)** | detecter-cablages-manquants, detecter-convention-nommage, detecter-decalages-catalogue, detecter-divergences-version, detecter-erreur-statut, detecter-impacts, detecter-local-hors-fonction, detecter-surcharge-fichier, detecter-usage-outils-externes, detecter-usage-scripts-temporaires | Detecter les erreurs de statut, la surcharge et les local hors fonction |
 | **Ecrire (1)** | ecrire-fichier | Ecrire ou ecraser un fichier |
-| **Editer (2)** | editer-fichier, editer-fichier-agents | Remplacer une chaine dans un fichier |
+| **Editer (3)** | editer-fichier, editer-fichier-agents, editer-parcours | Remplacer une chaine dans un fichier |
+| **Enregistrer (1)** | enregistrer-usage-outil | Enregistrer les usages d outils au registre |
 | **Evaluer (4)** | evaluer-agents, evaluer-coherence, evaluer-conventions, evaluer-structure | Evaluer la coherence du cerveau |
 | **Generateurs (10)** | generateurs-amelioration, generateurs-carte, generateurs-case, generateurs-commande, generateurs-ligne, generateurs-outil-temporaire, generateurs-regenerer-catalogue, generateurs-squelette-pense-bete, generateurs-squelette-spec, generateurs-squelette-todo | Generer les squelettes conformes |
 | **Gerer (1)** | gerer-sous-mission | Gerer les sorties/reentrees du flux |

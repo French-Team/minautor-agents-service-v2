@@ -1,10 +1,11 @@
 # Specification -- detecter-decalages-catalogue
 
-**Version :** 0.1.1
+**Version :** 0.2.0
 **Statut :** ebauche
 **Categorie :** Detecter
 **Date :** 2026-08-11
 **Agent :** Vulcain
+**Historique :** v0.2.0 (round 11 coherence documentaire : SCAN DES SOUS-COMMANDES argparse -- quand l aide racine expose un bloc {sous-cmd1,...}, l outil lance l aide de CHAQUE sous-commande et fusionne les options ; corrige les faux positifs generateurs-case-convertir / generateurs-ligne) -> v0.1.1 (section COMBOS : cles des cases generateur vs catalogue, spec-combos-moteur v0.2.1) -> v0.1.0 (creation)
 **Pense-bete source :** scan systematique Atlas 2026-08-09 (scan-catalogue.py dans explorations/, institutionnalise)
 
 ## Objectif

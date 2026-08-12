@@ -6,6 +6,7 @@ identite:
 ---
 # Specification -- verifier-restauration-sure
 
+**Version :** 0.1.0
 **Statut :** prepare
 **ID :** 001
 **Class :** 01

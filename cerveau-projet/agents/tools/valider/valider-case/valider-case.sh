@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # valider-case.sh
 # Wrapper pur : transmet les arguments au .py (parite garantie par construction).
-# Version : 1.0.1
+# Version : 1.1.1
 # identite:
 #   type: outil
 #   appartient_a: commun

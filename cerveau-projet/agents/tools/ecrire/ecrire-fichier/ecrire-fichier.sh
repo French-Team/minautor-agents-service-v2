@@ -1,14 +1,14 @@
 #!/bin/bash
 # ecrire-fichier.sh
 # Ecrire/echraser le contenu d'un fichier
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.3.0
+# Statut : prepare
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
+VERSION="0.3.2"
 STATUT="prepare"
 
 RED='\033[0;31m'
@@ -89,15 +89,17 @@ main() {
         fi
     fi
     
-    # Ecrire
+    # Ecrire. Contenu vide = fichier tronque a zero octet (jamais de no-op
+    # silencieux : vider un fichier est une action explicite et le message
+    # le confirme). Le .py fait la meme chose.
     if [ -n "$contenu" ]; then
         echo "$contenu" > "$fichier"
+        if [ "$verbose" = "true" ]; then
+            echo -e "${GREEN}[OK] Fichier ecrit: $fichier${NC}"
+        fi
     else
-        touch "$fichier"
-    fi
-    
-    if [ "$verbose" = "true" ]; then
-        echo -e "${GREEN}[OK] Fichier ecrit: $fichier${NC}"
+        : > "$fichier"
+        echo -e "${YELLOW}[INFO] Contenu vide : fichier tronque a zero octet: $fichier${NC}"
     fi
     
     exit 0

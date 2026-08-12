@@ -46,7 +46,7 @@ import subprocess
 import sys
 import unicodedata
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 STATUT = "ebauche"
 
 CATALOGUE = "cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json"
@@ -301,6 +301,25 @@ def chemin_catalogue():
     return CATALOGUE
 
 
+def charger_catalogue(catalogue):
+    """Charge et parse le catalogue JSON. Message d erreur clair si le fichier
+    est introuvable ou le JSON invalide (jamais de traceback brut).
+    Retourne le dict, ou None si erreur (message deja affiche sur stderr)."""
+    try:
+        with io.open(catalogue, encoding="utf-8", newline="") as fh:
+            txt = fh.read()
+    except OSError as e:
+        print("ERREUR: catalogue illisible : %s (%s)" % (catalogue, e), file=sys.stderr)
+        return None
+    # Normaliser LF en memoire (piege CRLF parasite) puis ecrire en LF pur (standard projet)
+    txt_normalise = txt.replace("\r\n", "\n")
+    try:
+        return json.loads(txt_normalise)
+    except ValueError as e:
+        print("ERREUR: catalogue invalide (JSON) : %s (%s)" % (catalogue, e), file=sys.stderr)
+        return None
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -313,11 +332,9 @@ def main():
         return
     catalogue = chemin_catalogue()
 
-    with io.open(catalogue, encoding="utf-8", newline="") as fh:
-        txt = fh.read()
-    # Normaliser LF en memoire (piege CRLF parasite) puis ecrire en LF pur (standard projet)
-    txt_normalise = txt.replace("\r\n", "\n")
-    d = json.loads(txt_normalise)
+    d = charger_catalogue(catalogue)
+    if d is None:
+        sys.exit(1)
     commandes_existantes = {e["nom"]: e for e in d["commandes"]}
     outils = scan_outils()
 

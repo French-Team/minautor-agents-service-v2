@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # generateurs-amelioration.sh
 # Wrapper pur : transmet les arguments au .py (parite garantie par construction).
-# Version : 2.0.0
+# Version : 2.1.0
 # identite:
 #   type: outil
 #   appartient_a: commun

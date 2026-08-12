@@ -1,14 +1,14 @@
 #!/bin/bash
 # lire-fichier.sh
 # Lire le contenu complet d'un fichier
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.3.0
+# Statut : prepare
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
+VERSION="0.4.2"
 STATUT="prepare"
 
 RED='\033[0;31m'
@@ -69,6 +69,26 @@ main() {
     
     if [ ! -f "$fichier" ]; then
         echo -e "${RED}[ERREUR] Fichier non trouve: $fichier${NC}"
+        exit 1
+    fi
+    
+    # Robustesse (round 4) : validation de la plage AVANT toute lecture.
+    # Une plage invalide est refusee avec un message explicite : jamais de
+    # 0 silencieux avec une sortie vide. (parite avec le .py)
+    if [ -n "$lignes" ] && [ "$lignes" -lt 1 ]; then
+        echo -e "${RED}[ERREUR] Plage invalide : --lignes doit etre >= 1 (recu: $lignes)${NC}"
+        exit 1
+    fi
+    if [ -n "$debut" ] && [ "$debut" -lt 1 ]; then
+        echo -e "${RED}[ERREUR] Plage invalide : --debut doit etre >= 1 (recu: $debut)${NC}"
+        exit 1
+    fi
+    if [ -n "$fin" ] && [ "$fin" -lt 1 ]; then
+        echo -e "${RED}[ERREUR] Plage invalide : --fin doit etre >= 1 (recu: $fin)${NC}"
+        exit 1
+    fi
+    if [ -n "$debut" ] && [ -n "$fin" ] && [ "$debut" -gt "$fin" ]; then
+        echo -e "${RED}[ERREUR] Plage invalide : --debut ($debut) > --fin ($fin)${NC}"
         exit 1
     fi
     

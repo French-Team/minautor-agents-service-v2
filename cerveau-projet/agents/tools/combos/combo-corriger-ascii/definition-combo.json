@@ -29,7 +29,8 @@
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py cerveau-projet/agents",
       "sortie": "resultat_ascii",
-      "suivant": "c4"
+      "suivant": "c4",
+      "echec_ok": true
     },
     "c4": {
       "titre": "FIN - correction ascii terminee",

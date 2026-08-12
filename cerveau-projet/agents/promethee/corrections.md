@@ -305,3 +305,24 @@ valider-liens, activer-agent-principal.
 3. Le bump de version d'un pattern (v0.2.28 -> v0.2.29) doit etre coheren t sur TOUTES ses occurrences : titre du pattern (l.1224) + liste "Patterns valides en production" (l.409) + liste "Procedure d'audit" (l.1339).
 4. Le test-014 ne verifie pas le texte du Pattern 16 (0 mention) : aucun risque de casser le test. Verifier AVANT de modifier qu'aucun test formel ne depend du texte change.
 5. Le diff vs HEAD peut inclure des changements non commites anterieurs (v0.6.2 convention cT* + budget pondere deja documente) : verifier que MES modifications sont minimales et coherentes.
+
+## [LECON] 2026-08-11 -- PROTOCOLE CREATION-SCRIPTS-TEMPORAIRES CREE (Promethee)
+
+**Contexte** : mission anti-scripts-temporaires (3 outils + cartes renforcees + garde-fou test-024). Creation du protocole qui encadre l'usage des scripts temporaires.
+
+**Protocole cree** : regles-immuables/general/protocole-creation-scripts-temporaires/ v0.1.0 ebauche, format 7 sections (Objectif, Prerequis, Etapes, RVAV, Exemples, Pieges courants, Liens).
+
+**Cycle encadre (CREER/DECLARER/SUPPRIMER/PROMOUVOIR/DETECTER)** :
+1. BESOIN ponctuel non couvert -> VERIFIER le catalogue d'abord
+2. CREER via generateurs-outil-temporaire (jamais de script a la racine)
+3. DECLARER au registre : enregistrer-usage-outil --mode script-temporaire
+4. UTILISER puis SUPPRIMER (0 residu, test-024 vert)
+5. PROMOUVOIR : 2e utilisation -> outil durable (Vulcain)
+6. CONTROLER : Janus/Themis lancent detecter-usage-scripts-temporaires
+
+**Verifications** : ASCII 0, LF 0, 7 sections, referencement index-regles-general (1 ligne), valider-ebauche OK.
+
+**LE CONS** :
+1. Le format 7 sections est la convention des protocoles de regles-immuables/general (Objectif, Prerequis, Etapes, RVAV, Exemples, Pieges courants, Liens).
+2. L'index-regles-general.md doit etre mis a jour (ligne alphab?tique) des la creation d'un protocole.
+3. Le cycle ferme la boucle du diagnostic : chaque script temporaire a une declaration, un controleur peut croiser les sources (racine/git/lecons) avec le registre.

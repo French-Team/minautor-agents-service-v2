@@ -22,7 +22,8 @@
       "type": "outil",
       "commande": "{cmd1}",
       "sortie": "resultat_nommage",
-      "suivant": "c3"
+      "suivant": "c3",
+      "echec_ok": true
     },
     "c3": {
       "titre": "Generer la commande valider-conventions",
@@ -39,7 +40,8 @@
       "type": "outil",
       "commande": "{cmd2}",
       "sortie": "resultat_structure",
-      "suivant": "c5"
+      "suivant": "c5",
+      "echec_ok": true
     },
     "c5": {
       "titre": "Generer la commande rechercher-fichier",
@@ -56,7 +58,8 @@
       "type": "outil",
       "commande": "{cmd3}",
       "sortie": "resultat_existence",
-      "suivant": "c7"
+      "suivant": "c7",
+      "echec_ok": true
     },
     "c7": {
       "titre": "CONTROLE : le fichier n'existe pas encore ?",

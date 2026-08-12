@@ -6,11 +6,11 @@ identite:
 ---
 # Spec -- Validateur-case (valider et alleger les cartes de decision)
 
-**Version** : 1.1.0
+**Version** : 1.1.1
 **Statut** : ebauche
 **Date creation** : 2026-08-09
 **Agent** : Vulcain (creation)
-**Historique** : v1.1.0 (BUDGET PONDERE des indices : indice COURT <= 100 car. = 0,5 unite, LONG > 100 = 1, budget 3,0 par case -- 2 courts = 1 long, decision utilisateur 2026-08-11 ; le plafond de 160 car. par texte reste inchange) -> v1.0.2 (convention de nommage ETENDUE aux prefixes thematiques majuscules `cT*` -- la ligne trio de Janus utilise cT1..cT10, decision utilisateur 2026-08-11 : conserver ces IDs) -> v1.0.1 (garde-fou rapport : sans --rapport explicite, aucun fichier cree -- lecon rapport a la racine, 2026-08-09) -> v1.0.0 (creation, 2026-08-09)
+**Historique** : v1.1.1 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 1.1.1) -> v1.1.0 (BUDGET PONDERE des indices : indice COURT <= 100 car. = 0,5 unite, LONG > 100 = 1, budget 3,0 par case -- 2 courts = 1 long, decision utilisateur 2026-08-11 ; le plafond de 160 car. par texte reste inchange) -> v1.0.2 (convention de nommage ETENDUE aux prefixes thematiques majuscules `cT*` -- la ligne trio de Janus utilise cT1..cT10, decision utilisateur 2026-08-11 : conserver ces IDs) -> v1.0.1 (garde-fou rapport : sans --rapport explicite, aucun fichier cree -- lecon rapport a la racine, 2026-08-09) -> v1.0.0 (creation, 2026-08-09)
 
 ---
 

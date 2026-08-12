@@ -1,10 +1,11 @@
 #!/bin/bash
 # test-001-nettoyer-sessions.sh
-# Tests formels v0.1.0 : nettoyer-sessions
+# Tests formels v0.1.2 : nettoyer-sessions
 # Perimetre (decision utilisateur - etats actifs uniquement) :
 #   - AGENTS.md          : blocs '### Session : session-llm-N' + section '## Sessions connues'
 #   - classeur-variables : lignes 'profil-session-*'
-# Preserve : frontmatter, entete, Configuration Active, Liste des agents.
+# Preserve : frontmatter, en-tete '## Sessions LLM', Configuration Active, Liste des agents.
+# v0.1.2 : l'en-tete '## Sessions LLM' est PRESERVE (bug sidentifier corrige) - tests 4b + 7c/7d/7e.
 # AGENTS-historique.md (le journal) JAMAIS modifie.
 # Tests sur COPIES : variables AGENTS_FILE + CLASSEUR_STOCKAGE redirigees.
 
@@ -156,7 +157,7 @@ EOF
 }
 
 # ===========================================================================
-echo "=== TEST 001 -- NETTOYER-SESSIONS v0.1.0 (etats actifs uniquement) ==="
+echo "=== TEST 001 -- NETTOYER-SESSIONS v0.1.2 (etats actifs uniquement) ==="
 echo ""
 
 # --- Test 1 : compilation + version ---
@@ -166,8 +167,8 @@ verifier "1b. bash -n OK" \
     "bash -n '$OUTIL_SH' 2>&1"
 PY_VERSION=$(python3 "$OUTIL_PY" --version 2>&1)
 SH_VERSION=$(bash "$OUTIL_SH" --version 2>&1)
-verifier "2. --version py = v0.1.1" \
-    "[ \"\$PY_VERSION\" = 'nettoyer-sessions v0.1.1 (prepare)' ]"
+verifier "2. --version py = v0.1.2" \
+    "[ \"\$PY_VERSION\" = 'nettoyer-sessions v0.1.2 (prepare)' ]"
 verifier "2b. --version sh = identique a py" \
     "[ \"\$PY_VERSION\" = \"\$SH_VERSION\" ]"
 
@@ -187,8 +188,8 @@ verifier "3c. dry-run: aucun fichier modifie (classeur identique)" \
 SORTIE=$(AGENTS_FILE="$ESPACE/AGENTS.md" CLASSEUR_STOCKAGE="$ESPACE/classeur.md" python3 "$OUTIL_PY" 2>&1)
 verifier "4. Nettoyage: blocs ### Session supprimes (0)" \
     "NB=\$(grep -c '^### Session :' '$ESPACE/AGENTS.md' 2>/dev/null); [ \"\$NB\" = '0' ]"
-verifier "4b. Nettoyage: section ## Sessions LLM supprimee" \
-    "NB=\$(grep -c '^## Sessions LLM\$' '$ESPACE/AGENTS.md' 2>/dev/null); [ \"\$NB\" = '0' ]"
+verifier "4b. Nettoyage: en-tete ## Sessions LLM PRESERVE (bug v0.1.2)" \
+    "NB=\$(grep -c '^## Sessions LLM\$' '$ESPACE/AGENTS.md' 2>/dev/null); [ \"\$NB\" = '1' ]"
 verifier "4c. Nettoyage: section ## Sessions connues supprimee" \
     "NB=\$(grep -c '^## Sessions connues\$' '$ESPACE/AGENTS.md' 2>/dev/null); [ \"\$NB\" = '0' ]"
 verifier "4d. Nettoyage: lignes profil-session-* supprimees (0)" \
@@ -216,6 +217,16 @@ verifier "7. Idempotence: 2e execution AGENTS.md = 0 ligne" \
     "echo \"\$SORTIE2\" | grep 'AGENTS.md' | grep -q '0 ligne'"
 verifier "7b. Idempotence: 2e execution classeur = 0 ligne" \
     "echo \"\$SORTIE2\" | grep 'Classeur' | grep -q '0 ligne'"
+
+# --- Test 7c-7e : INTEGRATION nettoyage -> re-identification (bug v0.1.2) ---
+ACTIVER_PY="$RACINE/cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py"
+SORTIE_SID=$(AGENTS_FILE="$ESPACE/AGENTS.md" AGENTS_HISTORIQUE="$ESPACE/historique.md" CLASSEUR_STOCKAGE="$ESPACE/classeur.md" python3 "$ACTIVER_PY" sidentifier llm-1 2>&1)
+verifier "7c. Integration: sidentifier fonctionne apres nettoyage (bug v0.1.2)" \
+    "echo \"\$SORTIE_SID\" | grep -q 'session-llm-1'"
+verifier "7d. Integration: bloc session recree par sidentifier" \
+    "NB=\$(grep -c '^### Session : session-llm-1' '$ESPACE/AGENTS.md' 2>/dev/null); [ \"\$NB\" = '1' ]"
+verifier "7e. Integration: en-tete ## Sessions LLM toujours present apres re-identification" \
+    "NB=\$(grep -c '^## Sessions LLM\$' '$ESPACE/AGENTS.md' 2>/dev/null); [ \"\$NB\" = '1' ]"
 
 # --- Test 8 : parite py/sh (fichiers resultants identiques) ---
 preparer "$ESPACE/py"

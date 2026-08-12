@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-atlas",
   "agent": "atlas",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. PILOTE STRICT v0.1.2 : commandes composees via le generateur (catalogue), aucun fallback en dur."
  },
@@ -632,7 +632,19 @@
   "c29d": {
    "titre": "FIN - Outil temporaire",
    "type": "fin",
-   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
+   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "enregistrer-usage-outil",
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/"
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)."
+    }
+   ]
   },
   "c29c": {
    "titre": "Creer l outil temporaire",

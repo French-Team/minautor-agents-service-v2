@@ -14,7 +14,14 @@
 
 - **1.0.0** (2026-08-09) : creation. Theme `ameliorer-outil` (10 questions).
 - **2.0.0** (2026-08-09) : theme `ameliorer-outil` reformule (14 questions) : 5 RAPPELS STRATEGIQUES en tete (diagnostic de l existant, horloge, formats, ameliorer vs evoluer, perimetre) + 9 questions techniques. Les premiers rappels poussent l agent a reflechir a CE qui doit etre ameliore et a anticiper l EVOLUTION plutot que de patcher puis refondre (ex : une horloge pensee heure+minute doit anticiper secondes/chronometre ; une fonction mp3 doit penser aux autres formats).
+- **2.1.0** (2026-08-12) : `--version` et `--liste` affichent desormais la version du fichier de themes (`themes vX.Y.Z`, lue du JSON) a cote de la version de l outil - fin de la divergence silencieuse outil/donnees (l outil affichait v2.0.0 alors que themes-amelioration.json etait passe en 2.2.0 avec 11 themes).
 - Compatibilite : Python 3, Bash (wrapper pur). Parite py/sh par construction.
+
+## Fichier de themes (themes-amelioration.json)
+
+> **Version du fichier** : 2.2.0 (11 themes). La version du fichier est affichee
+> par l outil (`--version`, `--liste`) : elle est independante de la version de
+> l outil lui-meme et evolue a chaque ajout/modification de theme.
 
 ## Pourquoi cet outil ?
 

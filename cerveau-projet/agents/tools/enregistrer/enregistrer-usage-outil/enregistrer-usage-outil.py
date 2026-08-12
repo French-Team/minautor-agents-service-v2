@@ -10,11 +10,16 @@
 # comment. Sans registre, aucun controle ne peut detecter qu'un agent
 # contourne nos outils (ex : outils tiers) ou compose des commandes en dur.
 #
+# Depuis v0.2.0 : le mode "script-temporaire" permet de DECLARER la creation
+# d'un script temporaire (.zz-*.py / .tmp-*.py). Cette declaration alimente
+# le croisement de detecter-usage-scripts-temporaires : tout script trouve
+# sur disque / dans git / dans les lecons doit avoir sa declaration ici.
+#
 # Champs par entree :
 #   date     : YYYY-MM-DD HH:MM:SS
 #   agent    : nom de l'agent (obligatoire)
 #   outil    : nom de l'outil utilise (obligatoire)
-#   mode     : generateur | direct | combo (defaut : direct)
+#   mode     : generateur | direct | combo | script-temporaire (defaut : direct)
 #   commande : commande reelle lancee (optionnel)
 #   contexte : contexte de l'usage (optionnel)
 #
@@ -22,9 +27,11 @@
 #   python3 enregistrer-usage-outil.py --agent morpheus --outil valider-case --mode direct
 #   python3 enregistrer-usage-outil.py --agent vulcain --outil test-023-grep-budget-pondere \
 #       --mode generateur --commande "python3 ...py" --contexte "refonte spec"
+#   python3 enregistrer-usage-outil.py --agent buffy --outil .zz-insertion-parcours.py \
+#       --mode script-temporaire --contexte "inserer case c42 dans parcours buffy"
 #   python3 enregistrer-usage-outil.py --agent morpheus --outil valider-case --dry-run
 #
-# Version : 0.1.0
+# Version : 0.2.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -41,7 +48,7 @@ import os
 import sys
 from datetime import datetime
 
-VERSION = "0.1.0"
+VERSION = "0.2.1"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -65,6 +72,41 @@ def registre_defaut():
     return os.path.join(agents_dir, "traces", "registre-usages-outils.jsonl")
 
 
+def valider_champs(agent, outil):
+    """Valide les champs obligatoires (round 8 : un agent/outil vide est une
+    entree inexploitable, silencieusement acceptee avant). Retourne (ok, msg)."""
+    if not agent or not agent.strip():
+        return False, "champ '--agent' vide (obligatoire)"
+    if not outil or not outil.strip():
+        return False, "champ '--outil' vide (obligatoire)"
+    return True, ""
+
+
+def verifier_registre(registre):
+    """Verifie l integrite du registre avant ajout (round 8). Retourne
+    (lignes_invalides, deja_present) : signale les lignes non-JSON et les
+    doublons sans bloquer l ajout (un usage peut etre legitiment rejoue)."""
+    invalides = 0
+    deja = set()
+    if not os.path.isfile(registre):
+        return 0, deja
+    try:
+        fh = io.open(registre, encoding="utf-8")
+    except Exception:
+        return 0, deja
+    with fh:
+        for l in fh:
+            if not l.strip():
+                continue
+            try:
+                e = json.loads(l)
+                deja.add((e.get("agent"), e.get("outil"), e.get("mode"),
+                          e.get("commande", ""), e.get("contexte", "")))
+            except ValueError:
+                invalides += 1
+    return invalides, deja
+
+
 def ajouter_entree(registre, agent, outil, mode, commande, contexte, dry_run=False):
     """Ajoute une entree JSON (une ligne) au registre. Retourne le dict cree."""
     entree = {
@@ -80,6 +122,14 @@ def ajouter_entree(registre, agent, outil, mode, commande, contexte, dry_run=Fal
         print(_couleur("[DRY-RUN] Ligne a enregistrer :", "jaune"))
         print(ligne)
         return entree
+    # integrite + doublons (round 8)
+    invalides, deja = verifier_registre(registre)
+    if invalides:
+        print(_couleur("[AVERTISSEMENT] %d ligne(s) non-JSON dans le registre (corrompu ?)"
+                       % invalides, "jaune"))
+    cle = (agent, outil, mode, commande or "", contexte or "")
+    if cle in deja:
+        print(_couleur("[AVERTISSEMENT] entree identique deja presente (usage rejoue ?)", "jaune"))
     dossier = os.path.dirname(registre)
     if dossier and not os.path.isdir(dossier):
         os.makedirs(dossier, exist_ok=True)
@@ -95,14 +145,19 @@ def main():
     parser.add_argument("--agent", type=str, required=True, help="Nom de l'agent (obligatoire)")
     parser.add_argument("--outil", type=str, required=True, help="Nom de l'outil utilise (obligatoire)")
     parser.add_argument("--mode", type=str, default="direct",
-                        choices=["generateur", "direct", "combo"],
-                        help="Mode d'usage (defaut : direct)")
+                        choices=["generateur", "direct", "combo", "script-temporaire"],
+                        help="Mode d'usage (defaut : direct ; script-temporaire = declaration d'un script jetable)")
     parser.add_argument("--commande", type=str, default="", help="Commande reelle lancee (optionnel)")
     parser.add_argument("--contexte", type=str, default="", help="Contexte de l'usage (optionnel)")
     parser.add_argument("--registre", type=str, default="", help="Chemin du registre (defaut : fixe)")
     parser.add_argument("--dry-run", action="store_true", help="Afficher la ligne sans l'ecrire")
     parser.add_argument("--version", action="version", version="enregistrer-usage-outil v%s" % VERSION)
     args = parser.parse_args()
+
+    ok, msg = valider_champs(args.agent, args.outil)
+    if not ok:
+        print(_couleur("[ERREUR] %s" % msg, "rouge"))
+        return 1
 
     registre = args.registre or registre_defaut()
     ajouter_entree(registre, args.agent, args.outil, args.mode, args.commande, args.contexte,

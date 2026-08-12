@@ -1,7 +1,7 @@
 #!/bin/bash
 # valider-nommage.sh
 # Verifier que le nommage est correct selon les conventions
-# Version: 0.3.2
+# Version: 0.3.3
 # identite:
 #   type: outil
 #   appartient_a: commun
@@ -16,8 +16,8 @@
 # JSON identite/agent/profil.
 
 # Configuration
-VERSION="0.3.2"
-DATE="2026-08-08"
+VERSION="0.3.3"
+DATE="2026-08-12"
 
 # Couleurs pour la sortie
 RED='\033[0;31m'
@@ -276,17 +276,34 @@ valider_outil() {
     # Formats speciaux LEGITIMES (conventions dediees, hors nom-outil.sh/py/md) :
     #   - definition-combo.json : fichier canonique d'un combo (dossier combos/combo-*/)
     #   - test-XXX-nom-outil.(py|sh|md) : fichier de test formel (dossier tests/test-XXX-*/)
+    #   - combo-*.md : documentation d'un combo (dossier combos/combo-*/)
+    #   - tester-*-v0xx.(sh|py) : scripts de test VERSIONNES (lecon verifier-documents-manquants)
+    #   - rapport-*.md : rapports documentaires (round 7 : traces legitimes)
     local dossier_parent=$(basename "$(dirname "$fichier")")
     local format_special_combo=false
     local format_special_test=false
+    local format_special_combo_md=false
+    local format_special_test_versionne=false
+    local format_special_rapport=false
     if [[ "$basename" == "definition-combo.json" ]] && [[ "$dossier_parent" == "combo-"* ]]; then
         format_special_combo=true
     fi
     if [[ "$basename" =~ ^test-[0-9]+-[a-z0-9-]+\.(py|sh|md)$ ]] && [[ "$dossier_parent" == "test-"* ]]; then
         format_special_test=true
     fi
+    if [[ "$basename" =~ ^combo-[a-z0-9-]+\.md$ ]] && [[ "$dossier_parent" == "combo-"* ]]; then
+        format_special_combo_md=true
+    fi
+    if [[ "$basename" =~ ^tester-[a-z0-9-]+-v[0-9]+\.(sh|py)$ ]]; then
+        format_special_test_versionne=true
+    fi
+    if [[ "$basename" =~ ^rapport-[a-z0-9-]+(-v[0-9]+)?(-[0-9]{4}-[0-9]{2}-[0-9]{2})?\.md$ ]]; then
+        format_special_rapport=true
+    fi
 
-    if [[ "$format_special_combo" == true ]] || [[ "$format_special_test" == true ]]; then
+    if [[ "$format_special_combo" == true ]] || [[ "$format_special_test" == true ]] \
+        || [[ "$format_special_combo_md" == true ]] || [[ "$format_special_test_versionne" == true ]] \
+        || [[ "$format_special_rapport" == true ]]; then
         echo -e "  ${GREEN}[OK] Format special reconnu : ${basename}${NC}"
         if [[ "$verbose" == "true" ]]; then
             echo -e "  ${GREEN}[OK] Prefixe dossier respecte : ${dossier_parent}/${NC}"
@@ -491,6 +508,24 @@ if [[ "$RECURSIVE" == "true" ]]; then
     total=0
     ok=0
     ko=0
+    # Round 7 : si le dossier passe est une CATEGORIE (tools/<categorie>/, ses
+    # sous-dossiers directs sont des outils avec nom.py/.sh), scanner au niveau 1.
+    est_categorie=false
+    premier_sous=""
+    for premier_sous in "$FICHIER"/*/; do
+        [[ -d "$premier_sous" ]] || continue
+        nom_test=$(basename "$premier_sous")
+        [[ " $SOUS_DOSSERS_COMPOSANTS " == *" $nom_test "* ]] && continue
+        if [[ -f "${premier_sous}${nom_test}.py" ]] || [[ -f "${premier_sous}${nom_test}.sh" ]]; then
+            est_categorie=true
+            break
+        fi
+    done
+    if [[ "$est_categorie" == true ]]; then
+        profondeur_min=1
+    else
+        profondeur_min=2
+    fi
     while IFS= read -r dossier_outil; do
         categorie=$(basename "$(dirname "$dossier_outil")")
         nom_outil=$(basename "$dossier_outil")
@@ -515,8 +550,11 @@ if [[ "$RECURSIVE" == "true" ]]; then
             [[ $? -eq 0 ]] && ok=$((ok + 1)) || ko=$((ko + 1))
             echo ""
         done
-    done < <(find "$FICHIER" -mindepth 2 -maxdepth 2 -type d 2>/dev/null \
+    done < <(find "$FICHIER" -mindepth $profondeur_min -maxdepth $profondeur_min -type d 2>/dev/null \
         | grep -vE "/(tests|spec|protections|__pycache__)(/|$)" | sort)
+    if [[ $total -eq 0 ]] && [[ "$est_categorie" != "true" ]]; then
+        echo "AVERTISSEMENT : aucun outil trouve (structure attendue tools/<categorie>/<outil>/)"
+    fi
     echo -e "${BLUE}=== Resume ===${NC}"
     echo -e "  Total : ${total}"
     echo -e "  ${GREEN}OK : ${ok}${NC}"

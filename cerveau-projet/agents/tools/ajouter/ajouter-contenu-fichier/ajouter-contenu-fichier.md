@@ -6,7 +6,7 @@ identite:
 ---
 # ajouter-contenu-fichier
 
-**Version :** 0.2.0
+**Version :** 0.3.0
 **Statut :** prepare
 **Categorie :** ajouter
 **Chemin :** `agents/tools/ajouter/ajouter-contenu-fichier/`
@@ -37,6 +37,7 @@ ajouter-contenu-fichier.sh --dry-run fichier.md "contenu"
 | Option | Description | Defaut |
 |---|---|---|
 | `--fichier <src>` | Ajouter le contenu d'un fichier source | - |
+| `--backup` | Creer une sauvegarde .bak avant | false |
 | `--dry-run` | Simuler sans modifier | false |
 | `--verbose` | Afficher les details | false |
 | `--help` | Afficher l'aide | - |
@@ -92,5 +93,6 @@ Lignes ajoutees : 1
 | 0.1.0 | 2026-08-06 | Creation initiale |
 | 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
 | 0.2.0-py | 2026-08-07 | Version Python creee (ajouter-contenu-fichier.py) - LOT 1/25 de la conversion alphabetique. Meme logique que le .sh, 100% stdlib, testee (compilation, dry-run, ajout reel, ajout source) |
+| 0.3.0 | 2026-08-12 | Qualite pro : option --backup, promotion prepare, parite py/sh |
 
 ---

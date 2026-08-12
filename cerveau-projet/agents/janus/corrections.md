@@ -1,3 +1,13 @@
+## [LECON] 2026-08-12 -- ROUND 11 COHERENCE DOCUMENTAIRE (Janus, VERDICT VALIDE)
+
+**Controle croise** : 8 specs divergentes corrigees (7 bumps + guider-parcours cas de conventions), 2 detecteurs ameliores (divergences-version v0.2.0 : constante VERSION + champ Version outil ; decalages-catalogue v0.2.0 : scan des sous-commandes argparse), garde-fou test-028 cree et affecte a la serie D.
+
+**Verdict** : VALIDE (J1-J7) : 0 spec divergente (23 alignees), 0 decalage catalogue (139 conformes), test-028 8/8 + test-027 11/11, non-regression 28/28, catalogue 0 a ajouter, normes 0/0, registre coherent.
+
+**Lecons** :
+1. UNE DIVERGENCE SPEC/OUTIL EST TOUJOURS UN SYMPTOME, JAMAIS LE MAL : les 7 specs en retard etaient des OUBLIS DE BUMP en cascade -- l outil detecter-divergences-version existait mais n etait jamais lance. Un detecteur non branche dans le cycle est invisible (rappel : verifier-documents-manquants v0.2.17). Le garde-fou test-028 le branche dans la non-regression.
+2. SPEC DE CONVENTIONS VS SPEC D OUTIL : la spec guider-parcours versionne les patterns (0.6.2), pas l outil (0.5.0) -- la regle explicite **Version outil** rend le contrat lisible par le detecteur et par les controles. Sans elle, une divergence legitime etait rapportee a tort.
+3. LES FAUX POSITIFS D UN DETECTEUR SONT AUSSI DANGEREUX QUE SES FAUX NEGATIFS : detecter-decalages-catalogue ne scannait que l aide racine et criait au decalage pour des flags de sous-commandes -- il fallait scanner CHAQUE sous-commande (avec la variante de prefixe pour les parsers positionnels). Un rapport d ecart errone entraine des corrections inutiles et de la mefiance.
 ---
 identite:
   type: corrections
@@ -23,6 +33,40 @@ types:
 ---
 
 
+
+## [LECON] 2026-08-12 -- CONTROLE CROISE ROUND 10c SERIE D ALLEGEE (Janus, VERDICT VALIDE)
+
+**Objet** : verifier l allegement de la serie D (test-027 : test-003 -> test-001, Morpheus).
+
+**Verdict** : VALIDE (J1-J6) : 0 reference test-003 restante, logique de filtrage conservee (serie a 1 test / serie c rc 2 / defaut Serie A / --serial serie), test-027 11/11, non-regression 27/27 en 23s (47s avant), catalogue 0, normes 0/0 (une cedille dans la lecon Morpheus detectee et corrigee - rappel : ASCII strict jusque dans les lecons).
+
+**Lecons** :
+1. L ALLEGEMENT NE DOIT PAS REDUIRE LA PREUVE : les 4 comportements (isolation, defaut parallele, --serial) sont toujours verifies - seule la taille du test lance change. Un test de garde-fou doit prouver la STRUCTURE, pas se payer le luxe d un gros test.
+2. MESURER PAR COMPOSANT : le chrono par test a montre que test-027 (26s) etait le coupable, pas test-024 - l optimisation ciblee sans mesure aurait ete dans le vide.
+3. RAPPORT : janus/controles/controle-round10c-serie-d-allegee-2026-08-12.md
+
+## [LECON] 2026-08-12 -- CONTROLE CROISE ROUND 10b PARALLELE PAR DEFAUT (Janus, VERDICT VALIDE)
+
+**Objet** : verifier le passage du lanceur de non-regression en parallele par defaut (v0.1.3, Vulcain) + adaptation test-024/test-027 (Morpheus).
+
+**Verdict** : VALIDE (J1-J7 verts) : sans option la sortie est en structure Serie A/B/C/D (defaut = parallele), --serial redonne la structure serie (27/27), le filtre --tests test-003 est herite (1 OK / 0 KO sur 1 tests), test-024 13/13 + test-027 11/11, 27/27 dans les 2 modes, catalogue 0 a ajouter, normes 0/0.
+
+**Lecons** :
+1. UN CHANGEMENT DE MODE PAR DEFAUT EST VERIFIE PAR LA STRUCTURE DE SORTIE : RESULTAT Serie X = parallele, RESULTAT : (sans libelle) = serie - la structure distingue les 2 modes sans chronometrer.
+2. L HERITAGE DU FILTRE EST LE POINT CRITIQUE DU PARALLELISME PAR DEFAUT : --tests doit produire 1 OK / 0 KO (sur 1 tests), jamais la serie complete - c est la regression silencieuse type.
+3. RAPPORT : janus/controles/controle-round10b-parallele-defaut-2026-08-12.md
+
+## [LECON] 2026-08-12 -- CONTROLE CROISE ROUND 10 SERIES (Janus, VERDICT VALIDE)
+
+**Objet** : verifier le decoupage en series du lanceur de non-regression v0.1.2 (--series/--parallele, Vulcain) + test-024 adapte + test-027 cree (Morpheus).
+
+**Verdict** : VALIDE (J1-J7 verts) : 27 tests couverts par les 4 series (A=6, B=10, C=6, D=5) sans doublon, --series z code 2 sans traceback, test-024 13/13 + test-027 9/9, non-regression 27/27 identique en mode serie et en mode --parallele, catalogue 0 a ajouter, normes 0/0, pas de .sh a synchroniser.
+
+**Lecons** :
+1. LA PARITE SERIE/PARALLELE EST LA PREUVE DU DECOUPAGE : si les bilans globaux sont identiques dans les 2 modes (27/27), aucun test n est perdu par l affectation en series - c est le critere de validation n 1 d un decoupage.
+2. UN GARDE-FOU DE COUVERTURE VERROUILLE L AFFECTATION : test-027 fait KO des qu un test-0XX du disque n appartient a aucune serie - les nouvelles series et nouveaux tests resteront couverts par construction.
+3. LA SERIE D (REGISTRE ET GARDE-FOUS) DOIT RESTER SEQUENTIELLE : test-024 verifie l absence de .tmp- a la racine et l etat du registre - elle ne doit jamais tourner en parallele (ordre A/B/C puis D).
+4. RAPPORT : janus/controles/controle-round10-series-2026-08-12.md
 
 ## [LECON] 2026-08-11 -- CONTROLE CROISE TEST-021 LIGNE TRIO (Janus, VERDICT VALIDE)
 
@@ -2355,3 +2399,219 @@ J3 valider-cartes-decision 11/11 CONFORME ; J4 fiches Pattern 14 alignees ; J5 n
 4. Test-013 verifie les compteurs de types (action/controle) : tout ajout de case controle/action sur cerberus doit etre suivi d une adaptation du test par Morpheus.
 5. Rapport : janus/controles/controle-anti-regression-historique-2026-08-11.md.
 
+## [LECON] 2026-08-11 -- CONTROLE CROISE CHAINE ANTI-SCRIPTS-TEMPORAIRES : VERDICT VALIDE (Janus)
+
+**Controle** : chaine anti-scripts-temporaires (3 outils + registre v0.2.0 + 10 fins renforcees + protocole + test-024).
+**Verdict** : VALIDE (J1-J6 verts).
+**Lecons** :
+1. La PREUVE du dispositif : pendant le controle, mon propre script temporaire de verification a ete detecte par test-024 (1 KO) puis tout est revenu vert apres suppression. Le garde-fou fonctionne reellement.
+2. Le cycle complet : CREER (generateurs-outil-temporaire) -> DECLARER (enregistrer-usage-outil mode script-temporaire) -> SUPPRIMER (0 residu) -> DETECTER (detecter-usage-scripts-temporaires + test-024).
+3. Les trous d outils etaient la cause racine des scripts temporaires : lancer-non-regression et editer-parcours les comblent (les agents n ont plus a ecrire de scripts pour ces 2 operations frequentes).
+4. Tout script temporaire de travail doit etre declare au registre (mode script-temporaire) : c est la tracabilite qui permettra aux controles de croiser les sources (racine/git/lecons) avec les declarations.
+5. Rapport : janus/controles/controle-anti-scripts-temporaires-2026-08-11.md.
+
+## [LECON] 2026-08-12 -- CONTROLE CROISE CORRECTION ECARTS PRE-EXISTANTS : VERDICT VALIDE (Janus)
+
+**Objet** : controle croise de la correction par Buffy des 5 ecarts pre-existants (vulcain c9e/c15e non joignables + c6c/c12c 198 car + clio c6c 175 car).
+
+**Verifications** : valider-case 2 CONFORME, recablage c22->c9b->c9 et c23->c15b->c15 conforme au modele morpheus, indices raccourcis sous 160, versions v0.4.2/v0.5.2 + fiches alignees, test-018 13/13, navigations reelles 3/3 fins atteintes, normes ASCII/LF 5/5, registre 5 declarations Buffy, non-regression 24/24.
+
+**Lecons** :
+1. Un Pattern 17 mal cable (question orpheline + branche NON en boucle) rend des fins injoignables sans signe visible en navigation quotidienne - seul valider-case les detecte. Le controle croise doit TOUJOURS verifier la joignabilite de TOUTES les fins.
+2. Le cycle vicieux des ecarts pre-existants est termine : Cerberus active l'agent habilite immediatement quand un rapport signale un ecart, au lieu de laisser trainer.
+3. Le registre d'usage fonctionne : les declarations Buffy sont retrouvees par le controle croise et croisables avec le rapport de mission.
+
+
+## [LECON] 2026-08-12 -- CONTROLE CROISE BUG NETTOYER-SESSIONS (en-tete ## Sessions LLM) : VERDICT VALIDE (Janus)
+
+**Objet** : controle croise de la chaine Vulcain (nettoyer-sessions v0.1.2) -> Morpheus (test-001 35/35 + garde-fou test-025 11/11).
+
+**Verdict** : VALIDE (J1-J6 verts). La boucle complete nettoyage -> sidentifier est desormais verrouillee par les tests.
+
+**Lecons** :
+1. Un bug qui ne se manifeste qu APRES une etape (re-identification) exige un test d INTEGRATION de la boucle complete, pas seulement un test unitaire du nettoyage : c est ce que test-001 7c/7d/7e et test-025 verrouillent.
+2. Quand le comportement documente et le test divergent, le test fige l ANCIEN comportement : l assertion 4b (en-tete supprime) protegeait le bug -- Morpheus l a inversee en meme temps que la correction.
+3. Les garde-fous recents (test-024, test-025) ne sont pas au catalogue : convention stable qui evite de casser test-007 (145) et test-024 point 8.
+4. Rapport : janus/controles/controle-bug-nettoyer-sessions-2026-08-12.md.
+
+## [LECON] 2026-08-12 -- CONTROLE CROISE DETECTER-CABLAGES-MANQUANTS (reprise) : VERDICT VALIDE (Janus)
+
+**Objet** : controle croise de la chaine Vulcain (detecter-cablages-manquants v0.1.1 + orphelines clio c6/c6a/c7/c8 retires, parcours-clio 0.5.3) -> Morpheus (test-001 8/8 + garde-fou test-026 10/10 + test-007/024 adaptes + non-regression 26/26).
+
+**Verdict** : VALIDE (J1-J6 verts). L outil a prouve sa valeur des la premiere execution : il a revele les 4 cases vestiges de parcours-clio (invisibles pour valider-case car non-fins).
+
+**Lecons** :
+1. UN OUTIL DE DETECTION NEUVE REVELE DES BUGS LATENTS : le scan --tous de detecter-cablages-manquants a decouvert les orphelines clio (c6/c6a/c7/c8) que valider-case ne voyait pas - un controle croise doit executer le NOUVEL outil sur tout le perimetre, pas seulement sur les cas nominaux.
+2. DISTINGUER BOUCLE BLOQUANTE vs RE-TRAVAIL : un cycle avec sortie (NON -> soi-meme puis OUI) est voulu (re-essai), un cycle sans sortie est un defaut. Le controle valide que les 8 boucles signalees ont toutes une sortie (buffy c37->c13b..., cerberus c25->c26, themis c3->c8->c8b...).
+3. REGENERER-CATALOGUE PEUT ETRE BLOQUE PAR UN GARDE-FOU PRE-EXISTANT : les cles dupliquees de generateurs-ligne (branche/mode/source) empechent la regeneration - l entree catalogue a ete ajoutee a la main. A corriger en mission dediee (Vulcain).
+4. CONCURRENCE MULTI-SESSION SUR LE README : le badge 127 a ete reecrit a 126 en cours de mission (probablement une autre session LLM) - le controle croise doit REVERIFIER les compteurs de synchro au moment du verdict, pas seulement a la fin de chaque maillon.
+5. Rapport : janus/controles/controle-detecter-cablages-manquants-2026-08-12.md.
+
+## [LECON] 2026-08-12 -- CONTROLE CROISE CORRECTION CATALOGUE (generateurs-ligne) : VERDICT VALIDE + LECON C15B APPLIQUEE (Janus)
+
+**Objet** : controle croise de la chaine Cerberus -> Vulcain (correction doublon parametres generateurs-ligne, deblocage regenerer-catalogue + README) -> Morpheus (non-regression 26/26).
+
+**Verdict** : VALIDE (J1-J6 verts). Catalogue 146 entrees 0 doublon, regenerer-catalogue debloque, README A JOUR, non-regression 26/26, lecons documentees, delegation respectee.
+
+**Lecons** :
+1. LA LECON C15B/C15C EST APPLIQUEE ET PROUVE SA VALEUR : cette correction a ete declenchee parce que Cerberus a active immediatement l agent habilite apres le signalement du rapport Janus (au lieu d attendre la prochaine mission). La boucle rapport -> correction est desormais refermee : c est un changement de comportement verifiable, pas une intention.
+2. UN GARDE-FOU DE REGENERATION A EVITE UNE CORRUPTION SILENCIEUSE : sans le blocage de regenerer-catalogue, le doublon de parametres serait passe inapercu (les tests de comptage test-007/024 ne verifient que le nombre de commandes). Le garde-fou est une protection, pas une gene.
+3. LE BADGE README 'REECRIT' ETAIT LA BONNE VALEUR : la lecon precedente supposait une concurrence multi-session ; en realite mon 127 etait faux (realite 126 via combos-analyse-projet). Ne jamais corriger un compteur sans la source de verite.
+4. Rapport : janus/controles/controle-catalogue-generateurs-ligne-2026-08-12.md.
+## [LECON] 2026-08-12 -- CONTROLE CHAINE AMELIORATION OUTILS (Janus)
+
+**Contexte** : controle croise de la chaine Cerberus -> Vulcain -> Morpheus -> Janus (amelioration des 5 outils d edition texte + garde-fou c1 sur la carte cerberus).
+
+**Verdict** : VALIDE (J1-J7 verts) - carte cerberus v0.4.3 avec garde-fou c1 (151 car), themes-amelioration.json agent_habilite=vulcain, 5 outils bumpees avec echecs explicites prouves en reel (4/4 exit 1), test-013 adapte + non-regression 26/26, normes 0/0, catalogue intact.
+
+**Lecons** :
+1. UN DECLENCHEUR SANS INDICE NE SE DECLENCHE JAMAIS : la branche ameliorer existait depuis longtemps dans c1 mais sans indice, la classification tombait par defaut en autre/inventaire. L indice GARDE-FOU C1 ferme la boucle - meme pattern que c15b.
+2. LA VISION UTILISATEUR EST MESURABLE : echec explicite (code 1 quand rien n est fait), ciblage par contenu (--apres <motif>), indentation auto (--indent) - chacun de ces comportements est verifiable par un test reel.
+3. UN BON CONTROLE VERIFIE LE COMPORTEMENT, PAS SEULEMENT LES FICHIERS : J3b (lancer les outils sur des cas d echec) a prouve les echecs explicites - plus fort qu une simple lecture de code.
+4. Rapport : janus/controles/controle-amelioration-outils-2026-08-12.md.
+## [LECON] 2026-08-12 -- CONTROLE EXTENSION QUALITE PRO OUTILS FICHIERS (Janus)
+
+**Contexte** : controle croise de la 2e vague qualite pro (5 outils fichiers) apres la 1re (5 outils edition). Chaine Cerberus -> Vulcain -> Morpheus -> Janus, declenchee par le garde-fou c1.
+
+**Verdict** : VALIDE (J1-J7 verts) - 5 outils en 0.3.0, echecs explicites prouves en reel (4/4 exit 1), protections --backup/--forcer en place, non-regression 26/26, normes 0/0, catalogue intact.
+
+**Lecons** :
+1. LE GARDE-FOU C1 FONCTIONNE EN CONDITIONS REELLES : cette chaine a ete declenchee par la branche ameliorer sans relance - la correction de la carte cerberus v0.4.3 porte ses fruits des la 1re demande.
+2. LA QUALITE PRO EST UN STANDARD REPRODUCTIBLE : 2 vagues de 5 outils appliquent exactement les memes principes (echec explicite, protection nommage, --backup, ASCII/LF). Un modele stable = une famille coherente.
+3. LA PROTECTION CONTRE L ECRASEMENT EST AUSSI IMPORTANTE QUE L ECHEC EXPLICITE : deplacer-fichier ecrasait en silence - desormais refus + --forcer/--backup. Un outil pro ne detruit jamais de donnees sans le dire.
+4. Rapport : janus/controles/controle-amelioration-outils-fichiers-2026-08-12.md.
+## [LECON] 2026-08-12 -- CONTROLE ROUND 2 PERFORMANCE (Janus)
+
+**Contexte** : controle croise du 2e round qualite pro (theme performance) : 3 goulots mesures et corriges par Vulcain, valides par Morpheus (26/26).
+
+**Verdict** : VALIDE (J1-J7 verts) - remplacer-texte.sh 8.5s->0.58s (delegation 1 process), lire-fichier lecture paresseuse, editer-fichier une passe. Versions coherentes, normes 0/0, catalogue intact.
+
+**Lecons** :
+1. LE CONTROLE DE PERFORMANCE RE-MESURE, IL NE RELIT PAS : J2 a relance le benchmark (0.58s) au lieu de croire le rapport - la preuve est dans la mesure, pas dans le texte.
+2. UNE VERIFICATION TROP STRICTE PEUT FAUSSEMENT ALARMER : le grep sur read().split a trouve un COMMENTAIRE (ligne 99) et non du code - il faut toujours verifier la nature de la correspondance avant de conclure KO.
+3. LE THEME PERFORMANCE EST UN THEME MESURABLE : chaque goulot a un avant/apres chiffre (15x, memoire, 1 passe) - c est le modele a suivre pour tout round futur.
+4. Rapport : janus/controles/controle-round2-performance-2026-08-12.md.
+
+## [LECON] 2026-08-12 -- CONTROLE ROUND 3 SECURITE (Janus)
+
+**Contexte** : controle croise du 3e round qualite pro (theme securite) : 9 outils fichiers/edition renforces (encodages robustes, refus octet nul, refus symlink, backup binaire).
+
+**Verdict** : VALIDE (J1-J7 verts) - versions 0.4.1/0.3.1 coherentes, crashs d encodage reelement elimines (re-mesure), octet nul refuse partout, non-regression 26/26, normes 0/0, catalogue intact.
+
+**Lecons** :
+1. LE GARDE-FOU TEST-024 A ATTRAPE MES PROPRES SCRIPTS TEMPORAIRES : la non-regression a fait 25/26 car j avais laisse .tmp-janus-* a la racine pendant mes tests - le filet ne distingue pas l auteur de l erreur. Nettoyage immediat puis 26/26. PREUVE REELLE du fonctionnement du garde-fou anti-scripts-temporaires.
+2. LE CONTROLE RE-MESURE, IL NE RELIT PAS : J2 a recree les fichiers BOM/latin-1/octets invalides au lieu de croire le rapport - les crashs etaient bien elimines.
+3. LA SECURITE PROTEGE AUSSI LA NON-REGRESSION : des outils qui ne crashent plus sur des fichiers exotiques securisent les tests futurs eux-memes.
+
+## [LECON] 2026-08-12 -- CONTROLE ROUND 4 ROBUSTESSE (Janus)
+
+**Contexte** : controle croise du 4e round qualite pro (theme robustesse) : 3 echecs silencieux corriges par Vulcain (ecrire-fichier v0.3.2 troncature contenu vide, lire-fichier v0.4.2 validation plage, supprimer-ligne v0.3.2 pluriel), valides par Morpheus (26/26).
+
+**Verdict** : VALIDE (J1-J7 verts) apres correction d un ecart J1 : ecrire-fichier.sh etait reste en 0.3.1 (corps corrige, version passee a la trappe) - corrige en 0.3.2.
+
+**Lecons** :
+1. LA REGLE DES 5 FICHIERS EST VERIFIEE PAR LE CONTROLE, PAS PAR LA CONFIANCE : seul J1 (verification py/sh/md) a vu l ecart de version .sh - aucun test ne le detecte. Le controleur croise est la derniere ligne de defense de la parite.
+2. LE CONTROLE RE-MESURE, IL NE RELIT PAS : J2 a re-cree les 3 cas limites au lieu de croire le rapport de Vulcain - les corrections etaient bien en place.
+3. UNE VERSION OUBLIEE N EST PAS UN BUG FONCTIONNEL MAIS UN BUG LATENT : l outil marchait parfaitement en 0.3.1, seul le versionning etait incoherent - ce sont exactement les ecarts que detecter-divergences-version et le controle croise doivent attraper.
+## [LECON] 2026-08-12 -- CONTROLE ROUND 5 COMBOS (Janus)
+
+**Contexte** : controle croise du 5e round qualite pro (theme combos) : arret sur echec du combos-moteur v0.3.2 (une case outil qui echoue n est plus ignoree), champ echec_ok pour les validateurs, 30 cases marquees sur 10 combos declaratifs.
+
+**Verdict** : VALIDE (J1-J7 verts) - versions 0.3.2 coherentes, arret sur echec re-mesure (rc=1, message, pas de FIN), echec_ok continue jusqu a la fin, parite .sh, non-regression 26/26, normes 0/0, catalogue intact.
+
+**Lecons** :
+1. UN MOTEUR D ENCHAINEMENT DOIT REMONTER LES ECHECS DE SES ETAPES : un combo qui echoue une etape et se termine en rc=0 est pire qu un echec franc - l agent croit au succes. L arret sur echec par defaut + echec_ok explicite pour les resultats legitimes est le bon compromis.
+2. RE-MESURER AVEC DES DEFINITIONS TEMPORAIRES : le contrat de format des definitions est strictement valide (cle combo, cle sortie) - construire des definitions invalides a revele la robustesse du moteur.
+
+
+## [LECON] 2026-08-12 -- ROUND 7 VALIDER : CONTROLE CROISE (Janus)
+
+**Contexte** : controle croise du round 7 (faux positifs/negatifs des
+validateurs). Verdict : VALIDE (J1-J7 verts). 4 faiblesses corrigees par
+Vulcain + 1 renommage (decision utilisateur) + 3 tests adaptes par Morpheus.
+
+**Lecons** :
+
+1. LE PLUS DANGEREUX N EST PAS UNE ERREUR, C EST UN SILENCE : valider-case
+   repondait CONFORME rc=0 sur une carte avec ref morte (le BFS ignorait les
+   refs inexistantes). Controle croise = toujours rejouer le BUG (copie
+   corrompue) et verifier la REPONSE, pas lire le code.
+
+2. UN RENOMMAGE EN PLACE DANS UN FICHIER TRIE CASSE LE TRI SANS BRUIT : le
+   remplacement de la cle dans catalogue-commandes.json a rendu le fichier
+   non trie (tester- > valider-), detecte par test-007. Tout renommage dans
+   un JSON/liste trie impose le re-tri + re-verification du compteur.
+
+3. LE NOUVEAU NOM CONTIENT L ANCIEN : tester-lancer-non-regression contient
+   lancer-non-regression. Un grep naif de l ancien nom donne des faux positifs.
+   Pattern a utiliser : (?<!tester-)lancer-non-regression (negative lookbehind).
+
+4. LE TEST QUI VERIFIE UNE VERSION EN DUR EST UN SISMOMETRE : test-009 et
+   test-015 ont detecte le bump 1.1.1 immediatement. Les adapter = impact
+   attendu annonce, jamais une surprise. Mais le grep complet de l ancienne
+   version dans le test est obligatoire avant de relancer.
+
+**Validations** : J1 refs mortes 4/4, J2 versions 5/5, J3 nommage 4/4 (py+sh),
+J4 renommage 3/3, J5 non-regression 26/26 + test-024 12/12, J6 catalogue 146
+trie 0 doublon, J7 normes 0/0 sur 19 fichiers.
+
+
+## [LECON] 2026-08-12 -- ROUND 8 REGISTRE/TRACES : CONTROLE CROISE (Janus)
+
+**Contexte** : controle croise du round 8 (fiabilite de la journalisation).
+Verdict : VALIDE (J1-J7 verts). 4 faiblesses corrigees par Vulcain + 1
+decision utilisateur (ARCHIVER AU LIEU DE PURGER) + test-024 renforce.
+
+**Lecons** :
+
+1. LA PURGE D UNE SOURCE DE VERITE EST UNE SUPPRESSION DE PREUVE : le
+   registre purge a chaque non-regression rendait le detecteur aveugle au
+   passe (12 faux ecarts permanents). Controle croise : verifier la RETENTION
+   (l historique existe, est enrichi, idempotent), pas seulement l ecriture.
+
+2. L IDEMPOTENCE SE MESURE PAR DEUX LANCEMENTS CONSECUTIFS : 13 -> 13 (pas
+   13 -> 26). Une fonction d archivage qui dedoublonne doit etre verifiee
+   par la REPETITION - un seul lancement ne prouve que l ajout, pas la
+   stabilite.
+
+3. UN GARDE-FOU DE LA MEMOIRE SE VERIFIE PAR LA PRESENCE DE L HISTORIQUE :
+   le nouveau point 13 de test-024 (l historique existe) protege contre le
+   retour de la purge pure. La non-regression teste la POLITIQUE de
+   retention, pas seulement le code.
+
+4. FILTRER PAR PREFIXE SANS L EXTENSION = COMPTER DES DOSSIERS COMME DES
+   SCRIPTS : .tmp-eol-test/ etait un dossier de tests, pas un script jetable.
+   Le filtre basename + .py/.sh a elimine 4 faux positifs. Un scan qui
+   matche un prefixe doit toujours preciser ce qu il compte.
+
+5. UN OUTIL QUI ACCEPTE --agent VIDE PRODUIT DES ENTREES INEXPLOITABLES :
+   le registre est la base des controles - une entree sans agent ne peut etre
+   croisee avec rien. Refuser les champs obligatoires vides (code 1) est un
+   garde-fou de fiabilite, pas une mesquinerie.
+
+**Validations** : J1 archivage 4/4 (idempotence reelle), J2 detecteur 7/7,
+J3 garde-fous 5/5, J4 versions 3/3, J5 non-regression 26/26 + test-024 13/13,
+J6 catalogue 146 trie 0 doublon, J7 normes 0/0 sur 12 fichiers.
+
+## [LECON] 2026-08-12 -- CONTROLE CROISE FIX SIDENTIFIER v0.5.1 (Janus)
+
+**Contexte** : controle croise du bug de demarrage Morpheus (sidentifier ecrasait le profil classeur avec Cerberus en dur). Verdict VALIDE (J1-J7).
+
+**Lecons** :
+
+1. VERIFIER LA SOURCE DOUBLE CROISEE : quand un outil maintient DEUX sources de verite (AGENTS.md + classeur), le controle doit comparer les DEUX sur la meme valeur (agent actif), pas les verifier separement. sidentifier llm-1 affichant Cerberus alors que AGENTS.md disait morpheus etait la contradiction parfaite a detecter.
+
+2. LE CODE EN DUR DANS UNE FONCTION QUI ECRIT UNE SOURCE DERIVEE EST TOUJOURS SUSPECT : agent_actif_bloc() remplace la valeur en dur par une lecture du bloc ; la regle a retenir : toute valeur ecrite dans le classeur doit provenir d une source lue, jamais d une constante.
+
+3. LE PARCOURS N EST PAS LA SEULE PORTE DE DEMARRAGE : la verification d un fix de demarrage doit passer par sidentifier lui-meme (le demarrage reel), pas seulement par la navigation du parcours.
+
+## [LECON] 2026-08-12 -- AUDIT MORPHEUS TEMPLATE (Janus, VERDICT VALIDE)
+
+**Controle croise** : audit des fichiers de tests de Morpheus (demande utilisateur : pourquoi le template n est pas utilise). Cause racine : template-test.md v0.1.0 obsolete (bash/protections) vs tests .py reels [OK]/[KO] + aucune case de carte ne le referencait. Corrections : template v0.2.0 Python canonique, migration test-001/002/003, carte morpheus v0.4.2 (indice template en c3), garde-fou test-029 (14 points), test-004 adapte.
+
+**Verdict** : VALIDE (J1-J7) : template v0.2.0 present, test-029 14/14, carte reference template, test-004 VALIDE, non-regression 29/29, normes 0/0, registre 3 declarations Morpheus dans l historique.
+
+**Lecons** :
+1. UNE REFERENCE OBSOLETE EST PIRE QU ABSENTE : un template qui decrit un monde disparu pousse les agents a se caler sur les tests precedents. Mettre a jour la reference AVANT d exiger la conformite.
+2. UNE DERIVE DE TEST EST INVISIBLE SANS GARDE-FOU : test-001/002/003 derivent depuis longtemps - le garde-fou test-029 verifie les invariants de chaque test a chaque non-regression.
+3. UN BUMP DE PARCOURS CASCADE : morpheus 0.4.1 -> 0.4.2 a casse test-004 - adapter les tests d integration a chaque bump.

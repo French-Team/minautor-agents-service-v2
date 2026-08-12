@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.0
+Version : 0.5.1
 Statut : prepare
 """
 
@@ -34,7 +34,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.5.0"
+VERSION = "0.5.1"
 STATUT = "prepare"
 
 AGENTS_FILE = os.environ.get("AGENTS_FILE", "AGENTS.md")
@@ -524,6 +524,21 @@ def mettre_a_jour_profil_session(session, agent, llm_id=None):
     return 0
 
 
+def agent_actif_bloc(contenu, session_id):
+    """Retourner l'agent REEL du bloc de session (champ Nom Agent), ou Cerberus
+    si le champ est absent. CORRECTION v0.5.1 : sidentifier ecrivait Cerberus
+    en dur, ce qui falsifiait le profil classeur quand un AUTRE agent (ex:
+    morpheus) etait actif -> double source contradictoire -> l agent s arretait
+    au demarrage."""
+    for sid, bloc in extraire_blocs_session(contenu):
+        if sid == session_id:
+            m = re.search(r"\*\*(?:Nom Agent|Nom)\*\* \| ([^|]+)", bloc)
+            if m and m.group(1).strip():
+                return m.group(1).strip()
+            return "Cerberus"
+    return "Cerberus"
+
+
 def sidentifier(llm_id=None):
     """Creer/choisir la session du LLM (agent principal = Cerberus).
     REGLE UTILISATEUR (mode ID) : chaque LLM possede SON id (donne par
@@ -548,8 +563,9 @@ def sidentifier(llm_id=None):
         session_liee = trouver_session_par_id(llm_id)
         if session_liee:
             session = session_liee
-            print("Session retrouvee pour id %s : %s (agent principal : Cerberus)"
-                  % (llm_id, session))
+            agent_actif = agent_actif_bloc(contenu, session)
+            print("Session retrouvee pour id %s : %s (agent principal : %s)"
+                  % (llm_id, session, agent_actif))
         else:
             # REGLE ALIGNEMENT (v0.4.0) : id llm-N -> session-llm-N
             cible = session_cible_pour_id(llm_id)
@@ -584,9 +600,10 @@ def sidentifier(llm_id=None):
         contenu = poser_nom_llm_bloc(contenu, session, llm_id)
         ecrire_agents(contenu)
 
+    agent_actif = agent_actif_bloc(contenu, session)
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-    ajouter_historique(timestamp, session, "Cerberus", "Identification LLM - demarrage de session")
-    mettre_a_jour_profil_session(session, "Cerberus", llm_id)
+    ajouter_historique(timestamp, session, agent_actif, "Identification LLM - demarrage de session")
+    mettre_a_jour_profil_session(session, agent_actif, llm_id)
     actualiser_sessions_connues()
     return 0
 

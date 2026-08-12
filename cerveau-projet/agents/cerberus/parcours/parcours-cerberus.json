@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-cerberus",
   "agent": "cerberus",
-  "version": "0.4.1",
+  "version": "0.4.3",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de coordination de Cerberus : accueillir, activer un agent, gerer le retour (second controle + README), inventaire. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : retour c12a question erreurs hors mission signalees (OUI c12b deviation reactiver Buffy -> c12c rejoint -> c13 / NON c13 flux principal)."
  },
@@ -86,6 +86,12 @@
     {
      "reponse": "autre",
      "vers": "c18"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : ameliorer/optimiser un outil -> ameliorer -> c1b (generateurs-amelioration AVANT activation). Liste visant une amelioration = ameliorer."
     }
    ]
   },
@@ -651,6 +657,10 @@
     {
      "type": "regle",
      "texte": "REGLE MAILLON : je LIS le rapport de controle (janus/controles/) AVANT de continuer. Probleme signale -> OUI."
+    },
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C15B : TOUT probleme signale (meme hors perimetre) -> OUI -> activer l agent habilite TOUT DE SUITE (jamais a plus tard)."
     }
    ],
    "branches": [

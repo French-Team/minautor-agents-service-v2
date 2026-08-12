@@ -187,3 +187,25 @@ Morpheus (TEST GENERATEURS-CASE CORRIGE 28/28).
 **Lecon technique** : generateurs-case editer --indice-regle REMPLACE les indices au lieu de les AJOUTER (j'ai ecrase c6/c10 a 1 indice, restaure depuis HEAD puis ajout manuel en append). Toujours verifier le nombre d'indices apres un editer.
 
 **A partir de maintenant** : CHAQUE activation (script .tmp-activer-*.py) doit inclure dans la RAISON : "RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer." - et quand je joue l'agent, je commence par c0 (question honnete) puis fiche + corrections.
+
+## [LECON] 2026-08-12 -- CERBERUS A COURT-CIRCUITE SA PROPRE CARTE c15b/c15c : PROBLEMES SIGNALES MAIS PAS CORRIGES (Cerberus)
+
+**Constat utilisateur** : apres la chaine detecter-cablages-manquants (Vulcain -> Morpheus -> Janus -> Cerberus), le rapport Janus signalait 2 problemes a resoudre (regenerer-catalogue bloque par generateurs-ligne cles dupliquees ; badge README reecrit a 126 par concurrence multi-session). Cerberus a rendu le bilan a l utilisateur et attendu sa prochaine mission au lieu d activer l agent habilite - exactement le comportement que la lecon Janus du jour condamnait (activer immediatement quand un rapport signale un ecart).
+
+**Cause racine (3 couches)** :
+1. CLASSIFICATION ERRONEE : j ai etiquete les 2 problemes "hors perimetre de la mission" -> donc "plus tard". Or la case c15b de MA carte dit explicitement "defauts hors mission, observations, corrections demandees" - la carte ne distingue PAS perimetre/non-perimetre. Probleme signale = OUI = activation immediate.
+2. REFLEXE DE PASSIVITE : en fin de chaine j ai rendu la main a l utilisateur ("en attente de ta prochaine mission") au lieu de suivre le flux de controle de ma carte (c15 -> c15b -> c15c).
+3. RECEPTION FAIBLIE : la transmission etait parfaite (rapport ecrit, lecons, bilan) - c est la RECEPTION qui a failli : Cerberus a recu le rapport mais n a pas execute sa propre case.
+
+**GARDE-FOU A GRAVER** : a chaque retour de Janus (ou de tout agent de controle), je lis le rapport PUIS je reponds a la question de la case c15b : "problemes a resoudre ?" - si OUI, j active l agent habilite TOUT DE SUITE (c15c), meme si les problemes sont "hors perimetre" de la mission initiale. Le cycle ne se referme que si CERBERUS execute SA carte - pas seulement si les agents transmettent bien. Un probleme signale qui reste "a corriger plus tard" est un ecart pre-existent en train de naitre.
+## [LECON] 2026-08-12 -- GARDE-FOU C1 : DECLENCHEUR AMELIORATION (Cerberus)
+
+**Contexte** : demande utilisateur d ameliorer la qualite pro des outils simples (editer-fichier et al.). Le parcours avait deja la branche ameliorer (c1 -> c1b -> generateurs-amelioration) mais elle ne s est JAMAIS declenchee : la case c1 n avait AUCUN indice -> classification libre -> demande classee inventaire (autre -> c18) au lieu d ameliorer.
+
+**Cause racine** : meme trou que c15b - la case existe mais rien ne force l execution. c1.indices = [] (vide). Le generateur d amelioration (generateurs-amelioration, theme ameliorer-outil 14 questions) existait deja.
+
+**Garde-fou ajoute (carte v0.4.3)** : indice GARDE-FOU C1 (151 car) : toute demande d ameliorer/optimiser un outil -> branche ameliorer -> c1b -> generateurs-amelioration AVANT d activer l agent habilite. Une demande qui commence par une liste mais vise une amelioration = ameliorer, PAS autre.
+
+**Complement** : themes-amelioration.json - le theme ameliorer-outil n avait pas de champ agent_habilite (pourtant attendu par c19d) -> ajoute : agent_habilite=vulcain (constructeur d outils).
+
+**Lecon a graver** : a chaque demande utilisateur, verifier SI la carte a une branche dediee (lire c1 et ses branches AVANT de classer). Ne jamais classer par defaut en autre/inventaire si une branche specifique existe.

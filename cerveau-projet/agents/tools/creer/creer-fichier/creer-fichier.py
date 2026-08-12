@@ -1,18 +1,25 @@
 #!/usr/bin/env python3
 # creer-fichier.py
 # Creer un nouveau fichier avec verification
-# Version : 0.2.0-py
-# Statut : beta
+# Version : 0.3.1
+# Statut : prepare
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION = "0.2.0-py"
-STATUT = "beta"
+VERSION = "0.3.1"
+STATUT = "prepare"
 
 import sys
 from pathlib import Path
+
+# Securite (round 3) : force la sortie en UTF-8 pour ne jamais crasher sur
+# l'encodage de la console (cp1252 sous Windows avec des caracteres non-ASCII).
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except AttributeError:
+    pass  # Python < 3.7 : la console gere l'encodage comme elle peut
 
 # Couleurs ANSI (desactivees si la sortie n'est pas un terminal)
 if sys.stdout.isatty():
@@ -47,12 +54,24 @@ def main():
     parser.add_argument("fichier", help="Chemin du fichier a creer")
     parser.add_argument("contenu", nargs="?", default="", help="Contenu du fichier (optionnel)")
     parser.add_argument("--forcer", action="store_true", help="Ecraser si le fichier existe deja")
+    parser.add_argument("--backup", action="store_true", help="Sauvegarder le fichier existant en .bak avant ecrasement")
     parser.add_argument("--dry-run", action="store_true", help="Simuler sans creer")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--version", action="version", version="creer-fichier " + VERSION + " (" + STATUT + ")")
     args = parser.parse_args()
 
     fichier = Path(args.fichier)
+
+    # Securite (round 3) : octet nul dans le chemin -> refus explicite
+    if "\x00" in args.fichier:
+        print(RED + "[ERREUR] Chemin non sur (octet nul present)" + NC)
+        return 1
+
+    # Securite (round 3) : refus de creer/ecraser a travers un lien symbolique
+    if fichier.is_symlink():
+        print(RED + "[ERREUR] Chemin est un lien symbolique (refus securite): " +
+              args.fichier + NC)
+        return 1
 
     # Verifier si le fichier existe deja
     if fichier.is_file() and not args.forcer:
@@ -74,6 +93,17 @@ def main():
                 print(BLUE + "[INFO] Repertoire cree: " + str(fichier.parent) + NC)
         except OSError as e:
             print(RED + "[ERREUR] Impossible de creer le repertoire: " + str(e) + NC)
+            return 1
+
+    # Sauvegarde avant ecrasement (--forcer + --backup)
+    if fichier.is_file() and args.forcer and args.backup:
+        try:
+            import shutil
+            shutil.copy2(str(fichier), str(fichier) + ".bak")
+            if args.verbose:
+                print(BLUE + "[INFO] Sauvegarde: " + str(fichier) + ".bak" + NC)
+        except OSError as e:
+            print(RED + "[ERREUR] Sauvegarde impossible: " + str(e) + NC)
             return 1
 
     # Creer le fichier

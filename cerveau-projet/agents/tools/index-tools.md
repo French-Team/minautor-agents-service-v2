@@ -130,6 +130,8 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-decalages-catalogue` | Detecter les decalages entre le catalogue du generateur et les interfaces reelles des outils (--aide/--help) | [detecter/detecter-decalages-catalogue/](detecter/detecter-decalages-catalogue/) |
 | `detecter-divergences-version` | Detecter les spec/ dont la version diverge de leur .py (regle des 5 fichiers, formats de version varies) | [detecter/detecter-divergences-version/](detecter/detecter-divergences-version/) |
 | `detecter-impacts` | Detecter les fichiers impliques par la modification d'un fichier du cerveau (schema identite:) | [detecter/detecter-impacts/](detecter/detecter-impacts/) |
+| `detecter-usage-scripts-temporaires` | Mesurer l usage des scripts temporaires (.zz-*/.tmp-*) par les agents et le croiser avec le registre | [detecter/detecter-usage-scripts-temporaires/](detecter/detecter-usage-scripts-temporaires/) |
+| `detecter-cablages-manquants` | Detecter les cablages manquants des cartes de decision : cases orphelines, boucles indirectes, references mortes, fins non joignables (complete valider-case) | [detecter/detecter-cablages-manquants/](detecter/detecter-cablages-manquants/) |
 
 ### Ecrire
 
@@ -142,6 +144,8 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `editer-fichier` | Remplacer une chaine par une autre dans un fichier | [editer/editer-fichier/](editer/editer-fichier/) |
+| `editer-fichier-agents` | Editer les fiches agents (ligne/bloc, ajouter/supprimer, correcteur ASCII) | [editer/editer-fichier-agents/](editer/editer-fichier-agents/) |
+| `editer-parcours` | Editer les parcours de decision JSON de maniere sure (insertion/retrait case, branche, suivant, bump) | [editer/editer-parcours/](editer/editer-parcours/) |
 
 ### Evaluer
 
@@ -367,6 +371,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 
 ---
 
+| `tester-lancer-non-regression` | Lancer tous les tests formels avec bilan OK/KO et registre protege | [tester/tester-lancer-non-regression/](tester/tester-lancer-non-regression/) |
 ## Templates
 
 | Template | Description | Chemin |
@@ -413,7 +418,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Creer | 4 |
 | Decomposer | 1 |
 | Deplacer | 1 |
-| Detecter | 6 |
+| Detecter | 10 |
 | Ecrire | 1 |
 | Editer | 1 |
 | Enregistrer | 1 |
@@ -435,7 +440,7 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Verifier | 5 |
 | Protections | 3 |
 | Templates | 1 |
-| **Total** | **111** |
+| **Total** | **115** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

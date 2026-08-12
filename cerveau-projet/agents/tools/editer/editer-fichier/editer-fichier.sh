@@ -1,14 +1,14 @@
 #!/bin/bash
 # editer-fichier.sh
 # Remplacer une chaine par une autre dans un fichier
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.3.0
+# Statut : prepare
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
+VERSION="0.4.1"
 STATUT="prepare"
 
 RED='\033[0;31m'
@@ -86,8 +86,9 @@ main() {
     local nb=$(grep -c "$ancien" "$fichier" 2>/dev/null || echo "0")
     
     if [ "$nb" = "0" ]; then
-        echo -e "${YELLOW}[INFO] Aucune occurrence de '$ancien' dans $fichier${NC}"
-        exit 0
+        echo -e "${RED}[ERREUR] Aucune occurrence de '$ancien' dans $fichier${NC}"
+        echo -e "${YELLOW}  (verifiez l'indentation exacte et le contenu de la chaine)${NC}"
+        exit 1
     fi
     
     if [ "$dry_run" = "true" ]; then

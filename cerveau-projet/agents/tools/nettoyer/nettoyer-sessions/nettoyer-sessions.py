@@ -10,7 +10,9 @@ nettoyer-sessions.py
 Supprime TOUTES les sessions LLM existantes (etats actifs uniquement) :
   - AGENTS.md          : blocs '### Session : session-llm-N' + section '## Sessions connues'
   - classeur-variables : lignes 'profil-session-*'
-Le frontmatter, l'entete et le reste de chaque fichier sont PRESERVES.
+Le frontmatter, l'en-tete de section '## Sessions LLM' et le reste de chaque
+fichier sont PRESERVES : l'en-tete conserve permet a activer-agent-principal
+(sidentifier) de recreer un bloc session a neuf apres le nettoyage.
 AGENTS-historique.md (le journal) n'est JAMAIS modifie : c'est un temoignage.
 
 Actions:
@@ -26,7 +28,7 @@ Variables d'environnement (tests sur copies) :
   CLASSEUR_STOCKAGE    - surcharger le chemin du classeur-variables
 
 Proprietaire : Vulcain
-Version : 0.1.1
+Version : 0.1.2
 Statut : prepare
 """
 
@@ -35,7 +37,7 @@ import os
 import re
 import sys
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 STATUT = "prepare"
 
 AGENTS_FILE = os.environ.get("AGENTS_FILE", "AGENTS.md")
@@ -43,8 +45,10 @@ CLASSEUR_STOCKAGE = os.environ.get(
     "CLASSEUR_STOCKAGE", "cerveau-projet/agents/classeur-variables/stockage/variables-actuelles.md"
 )
 
-# Section dont on supprime TOUT le contenu dans AGENTS.md (jusqu'a la section suivante)
-SECTIONS_A_SUPPRIMER = ("## Sessions LLM", "## Sessions connues")
+# Sections entierement supprimees dans AGENTS.md (en-tete compris)
+SECTIONS_A_SUPPRIMER = ("## Sessions connues",)
+# Section dont on PRESERVE l'en-tete mais dont on supprime les blocs session
+SECTION_SESSIONS_LLM = "## Sessions LLM"
 
 
 def verifier_ascii(chaine):
@@ -62,25 +66,38 @@ def nettoyer_agents(dry_run=False, verbose=False):
         lignes = fh.readlines()
 
     sortie = []
-    dans_section = False
-    section_courante = ""
+    dans_section = False          # section entierement supprimee (Sessions connues)
+    dans_sessions_llm = False     # on garde l'en-tete, on supprime les blocs session
+    dans_bloc_session = False     # dans le corps d'un bloc session (a supprimer)
     nb_supprime = 0
     for ligne in lignes:
         entete = ligne.strip()
         if re.match(r"^## ", entete):
+            # Nouvelle section : mettre a jour les drapeaux
             dans_section = entete in SECTIONS_A_SUPPRIMER
-            section_courante = entete
+            dans_sessions_llm = (entete == SECTION_SESSIONS_LLM)
+            dans_bloc_session = False
             if dans_section:
                 nb_supprime += 1
                 continue
-        elif re.match(r"^### Session : session-llm-", ligne) or entete.startswith("## Sessions"):
-            if not dans_section:
-                dans_section = True
-                section_courante = "## Sessions LLM"
-            nb_supprime += 1
+            sortie.append(ligne)
             continue
         if dans_section:
             nb_supprime += 1
+            continue
+        if dans_sessions_llm:
+            if re.match(r"^### Session : session-llm-", ligne):
+                dans_bloc_session = True
+                nb_supprime += 1
+                continue
+            if dans_bloc_session:
+                if re.match(r"^### ", ligne):
+                    # autre type de bloc : ne plus etre dans un bloc session
+                    dans_bloc_session = False
+                else:
+                    nb_supprime += 1
+                    continue
+            sortie.append(ligne)
             continue
         sortie.append(ligne)
 

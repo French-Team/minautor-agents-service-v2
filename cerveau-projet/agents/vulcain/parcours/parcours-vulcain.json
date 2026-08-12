@@ -338,9 +338,21 @@
    "type": "action"
   },
   "c18d": {
-   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission.",
+   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
    "titre": "FIN - Outil temporaire",
-   "type": "fin"
+   "type": "fin",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "enregistrer-usage-outil",
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/"
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)."
+    }
+   ]
   },
   "c19": {
    "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui).",
@@ -559,7 +571,7 @@
     },
     {
      "reponse": "NON",
-     "vers": "c22"
+     "vers": "c9"
     }
    ]
   },
@@ -619,7 +631,7 @@
     },
     {
      "reponse": "NON",
-     "vers": "c23"
+     "vers": "c15"
     }
    ]
   },
@@ -700,7 +712,7 @@
    "suivant": "c6d",
    "indices": [
     {
-     "texte": "CREATION LIMITEE : le scan detecter-decalages-catalogue genere SON rapport (rapport-detecter-decalages-catalogue-<date>.md) - je ne cree AUCUN autre fichier dans le cerveau dans le cadre de ce scan.",
+     "texte": "CREATION LIMITEE : le scan genere SON rapport (rapport-detecter-decalages-catalogue-<date>.md) - aucun autre fichier a creer.",
      "type": "regle"
     },
     {
@@ -778,7 +790,7 @@
    "suivant": "c12d",
    "indices": [
     {
-     "texte": "CREATION LIMITEE : le scan detecter-decalages-catalogue genere SON rapport (rapport-detecter-decalages-catalogue-<date>.md) - je ne cree AUCUN autre fichier dans le cerveau dans le cadre de ce scan.",
+     "texte": "CREATION LIMITEE : le scan genere SON rapport (rapport-detecter-decalages-catalogue-<date>.md) - aucun autre fichier a creer.",
      "type": "regle"
     },
     {
@@ -854,7 +866,7 @@
     }
    ],
    "message": "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=vulcain, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
-   "suivant": "c9",
+   "suivant": "c9b",
    "titre": "Enregistrer mes usages d outils",
    "type": "action"
   },
@@ -872,7 +884,7 @@
     }
    ],
    "message": "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=vulcain, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
-   "suivant": "c15",
+   "suivant": "c15b",
    "titre": "Enregistrer mes usages d outils",
    "type": "action"
   }
@@ -887,6 +899,6 @@
   "case_depart": "c0",
   "description": "v0.2.13 : ALLEGEMENT c8/c14 (point mineur audit Themis) - les regles de 341 caracteres sont remplacees par une reference vers protocole-tests v0.2.1 (section Delegation des tests) - la chaine (type controle + branches + question + indice outil) est inchangee. v0.2.12 : DELEGATION DES TESTS RENFORCEE (lecon recidive generateurs-amelioration) - c6/c12 interdisent de toucher a TOUT fichier test-XXX (creation OU mise a jour), c8/c14 verifient en 2 points (aucune ecriture de test par Vulcain + Morpheus active pour ECRIRE et EXECUTER). Parcours (jeu de piste) des missions de Vulcain : construire un outil, modifier un outil. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.4 : REGLE DES 5 FICHIERS ajoutee dans c12 (apres toute modification de version, verifier l alignement VERSION/STATUT dans py, sh, md, spec + distinguer les versions propres du catalogue et de l index - lecon Vulcain, controle Janus). v0.2.3 : verification PARITE --version py/sh OBLIGATOIRE apres creation (c6) et modification (c12) d outil (lecon Morpheus T5 / Vulcain) - diff <(python3 outil.py --version | tr -d '\r') <(bash outil.sh --version | tr -d '\r'), si divergence aligner le .sh (VERSION/STATUT) avant de continuer. v0.2.2 : lecons des cas reels integrees. v0.2.1 : boucle de delegation MORPHEUS MATERIALISEE (RELAIS c9a/c15a -> RETOUR c9b/c15b -> CLOTURE c9c/c15c -> FIN c9/c15) - la chaine ne casse plus apres l'activation de Morpheus. v0.2.0 : les cases c7/c13 (corriger accents + valider ASCII) pointent vers le combo combo-corriger-ascii (Pattern 3, spec-guider-parcours v0.2.4).",
   "nom": "parcours-vulcain",
-  "version": "0.4.0"
+  "version": "0.4.2"
  }
 }

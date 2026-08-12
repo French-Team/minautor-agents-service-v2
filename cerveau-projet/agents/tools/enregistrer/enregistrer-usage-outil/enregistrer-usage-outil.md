@@ -1,7 +1,7 @@
 # enregistrer-usage-outil
 
 **Categorie** : Enregistrer
-**Version** : 0.1.0
+**Version** : 0.2.1
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-11
@@ -45,7 +45,7 @@ python3 enregistrer-usage-outil.py --agent morpheus --outil valider-case --dry-r
 |---|---|---|---|
 | `--agent` | OUI | - | Nom de l'agent (ex : morpheus) |
 | `--outil` | OUI | - | Nom de l'outil utilise |
-| `--mode` | NON | `direct` | `generateur` / `direct` / `combo` |
+| `--mode` | NON | `direct` | `generateur` / `direct` / `combo` / `script-temporaire` |
 | `--commande` | NON | vide | Commande reelle lancee |
 | `--contexte` | NON | vide | Contexte de l'usage (mission, etape) |
 | `--registre` | NON | chemin fixe | Chemin du registre JSONL |
@@ -63,6 +63,26 @@ Chaque ligne du registre est un objet JSON :
 - Append en fin de fichier (creation si absent)
 - ASCII strict + LF pur (chaque ligne se termine par `\n`)
 - Le registre vit dans `cerveau-projet/agents/traces/registre-usages-outils.jsonl`
+- Depuis v0.2.1 : garde-fous de fiabilite - `--agent`/`--outil` vides
+  refuses (code 1), doublons signales en avertissement, lignes non-JSON
+  du registre signalees avant ajout
+
+## Garde-fous (v0.2.1)
+
+- `--agent` vide ou `--outil` vide : `[ERREUR]` + code 1 (une entree sans
+  agent ni outil est inexploitable)
+- Entree identique deja presente (agent+outil+mode+commande+contexte) :
+  `[AVERTISSEMENT]` (l'usage peut etre legitiment rejoue, on ne bloque pas)
+- Registre cible avec des lignes non-JSON : `[AVERTISSEMENT]` avant l'ajout
+  (le fichier est probablement corrompu, on ne l'ecrase jamais)
+
+## Historique
+
+| Version | Date | Changement |
+|---|---|---|
+| 0.2.1 | 2026-08-12 | Round 8 : garde-fous de fiabilite (champs vides refuses, doublons et registre corrompu signales) |
+| 0.2.0 | 2026-08-11 | Mode script-temporaire : declaration des scripts jetables .zz-*/.tmp-* pour le croisement du detecteur |
+| 0.1.0 | 2026-08-11 | Creation : registre JSONL des usages d'outils |
 
 ## Integration avec le generateur-commande
 

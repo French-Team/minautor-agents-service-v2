@@ -1,14 +1,14 @@
 #!/bin/bash
 # inserer-contenu-fichier.sh
 # Inserer du contenu a une position precise dans un fichier
-# Version : 0.2.0
+# Version : 0.3.0
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
-STATUT="ebauche"
+VERSION="0.3.1"
+STATUT="prepare"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -19,7 +19,7 @@ NC='\033[0m'
 afficher_aide() {
     echo "=== inserer-contenu-fichier v${VERSION} ==="
     echo ""
-    echo "Usage: $0 [OPTIONS] <fichier> <position> [contenu]"
+    echo "Usage: $0 [OPTIONS] <fichier> <position|--apres MOTIF> [contenu]"
     echo ""
     echo "Arguments :"
     echo "  <fichier>       Fichier a modifier"
@@ -27,7 +27,9 @@ afficher_aide() {
     echo "  [contenu]       Chaine a inserer (ou --fichier source)"
     echo ""
     echo "Options :"
+    echo "  --apres <motif> Inserer apres la premiere ligne contenant le motif"
     echo "  --fichier <src> Inserer le contenu d'un fichier source"
+    echo "  --backup        Creer une sauvegarde .bak avant"
     echo "  --dry-run       Simuler sans modifier"
     echo "  --verbose       Afficher les details"
     echo "  --help          Afficher cette aide"
@@ -44,13 +46,17 @@ main() {
     local position=""
     local contenu=""
     local source=""
+    local motif=""
+    local backup="false"
     local dry_run="false"
     local verbose="false"
     local help="false"
     
     while [[ $# -gt 0 ]]; do
         case $1 in
+            --apres) motif="$2"; shift 2 ;;
             --fichier) source="$2"; shift 2 ;;
+            --backup) backup="true"; shift ;;
             --dry-run) dry_run="true"; shift ;;
             --verbose) verbose="true"; shift ;;
             --help) help="true"; shift ;;
@@ -76,8 +82,26 @@ main() {
         exit 0
     fi
     
-    if [ -z "$fichier" ] || [ -z "$position" ]; then
-        echo -e "${RED}[ERREUR] Fichier et position obligatoires${NC}"
+    if [ -z "$fichier" ]; then
+        echo -e "${RED}[ERREUR] Fichier obligatoire${NC}"
+        afficher_aide
+        exit 1
+    fi
+
+    # Ciblage par contenu : --apres <motif> remplace la position numerique
+    if [ -n "$motif" ]; then
+        position=$(grep -n -- "$motif" "$fichier" 2>/dev/null | head -1 | cut -d: -f1)
+        if [ -z "$position" ]; then
+            echo -e "${RED}[ERREUR] Motif introuvable dans $fichier : $motif${NC}"
+            exit 1
+        fi
+        if [ "$verbose" = "true" ]; then
+            echo -e "${BLUE}[INFO] Motif trouve ligne $position${NC}"
+        fi
+    fi
+
+    if [ -z "$position" ]; then
+        echo -e "${RED}[ERREUR] Position ou --apres <motif> obligatoire${NC}"
         afficher_aide
         exit 1
     fi
@@ -119,6 +143,14 @@ main() {
     if [ "$dry_run" = "true" ]; then
         echo -e "${YELLOW}[DRY-RUN] Insertion simulee apres la ligne $position dans $fichier${NC}"
         exit 0
+    fi
+
+    # Sauvegarde
+    if [ "$backup" = "true" ]; then
+        cp "$fichier" "${fichier}.bak"
+        if [ "$verbose" = "true" ]; then
+            echo -e "${BLUE}[INFO] Sauvegarde: ${fichier}.bak${NC}"
+        fi
     fi
     
     # Construire le contenu a inserer dans un fichier temporaire

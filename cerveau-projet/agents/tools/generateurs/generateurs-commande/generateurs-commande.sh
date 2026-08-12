@@ -1,7 +1,7 @@
 #!/bin/bash
 # generateurs-commande.sh
 # Genere une commande complexe a lancer, en posant une question par parametre.
-# Version : 0.2.3
+# Version : 0.2.4
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -15,7 +15,7 @@
 #   - --reponses "a=b;c=d" : reponses fournies en une fois (mode non interactif)
 #   - mode interactif   : menu de choix + une question par parametre
 
-VERSION="0.2.3"
+VERSION="0.2.4"
 STATUT="ebauche"
 
 RED='\033[0;31m'
@@ -218,10 +218,14 @@ for parametre in commande.get("parametres", []):
     if valeur == "":
         # Flag a valeur en dur dans le modele (--cle {cle}) : retirer le flag ET le placeholder si la valeur est vide
         # (corrige 2026-08-09 : parite avec le .py - les flags optionnels vides n etaient jamais retires)
+        # (corrige 2026-08-12 round 6 : le flag du MODELE sans champ flag declare restait orphelin - parite .py)
         flag_param = parametre.get("flag", "") if parametre else ""
         if flag_param:
             # Retirer le flag DECLARE suivi du placeholder (--refs {refs} -> rien si vide)
             modele = re.sub(r"%s\s+\{%s\}" % (re.escape(flag_param), re.escape(cle)), "", modele)
+        else:
+            # Retirer le flag du MODELE suivi du placeholder (--commande {commande} -> rien si vide)
+            modele = re.sub(r"--[a-z0-9-]+\s+\{%s\}" % re.escape(cle), "", modele)
         # Retirer le placeholder seul ({dry_run} -> rien si vide)
         modele = re.sub(r"\s+\{%s\}" % re.escape(cle), "", modele)
     modele = modele.replace("{%s}" % cle, composer_valeur(parametre, valeur))

@@ -3,14 +3,16 @@
 # Supprime TOUTES les sessions LLM (etats actifs uniquement) :
 #   - AGENTS.md          : blocs '### Session : session-llm-N' + section '## Sessions connues'
 #   - classeur-variables : lignes 'profil-session-*'
-# Le frontmatter, l'entete et le reste de chaque fichier sont PRESERVES.
+# Le frontmatter, l'en-tete de section '## Sessions LLM' et le reste de chaque
+# fichier sont PRESERVES : l'en-tete conserve permet a activer-agent-principal
+# (sidentifier) de recreer un bloc session a neuf apres le nettoyage.
 # AGENTS-historique.md (le journal) n'est JAMAIS modifie : c'est un temoignage.
 # Proprietaire : Vulcain
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.1.1"
+VERSION="0.1.2"
 STATUT="prepare"
 
 AGENTS_FILE="${AGENTS_FILE:-AGENTS.md}"
@@ -46,23 +48,38 @@ dry = os.environ.get('DRY', '0') == '1'
 with io.open(fichier, encoding='utf-8', errors='replace') as fh:
     lignes = fh.readlines()
 sortie = []
-dans = False
+dans_section = False
+dans_sessions_llm = False
+dans_bloc_session = False
 nb = 0
-sections = ('## Sessions LLM', '## Sessions connues')
+sections = ('## Sessions connues',)
+en_tete_sessions_llm = '## Sessions LLM'
 for ligne in lignes:
     entete = ligne.strip()
     if entete.startswith('## '):
-        dans = entete in sections
-        if dans:
+        dans_section = entete in sections
+        dans_sessions_llm = (entete == en_tete_sessions_llm)
+        dans_bloc_session = False
+        if dans_section:
             nb += 1
             continue
-    elif ligne.startswith('### Session : session-llm-') or entete.startswith('## Sessions'):
-        if not dans:
-            dans = True
+        sortie.append(ligne)
+        continue
+    if dans_section:
         nb += 1
         continue
-    if dans:
-        nb += 1
+    if dans_sessions_llm:
+        if ligne.startswith('### Session : session-llm-'):
+            dans_bloc_session = True
+            nb += 1
+            continue
+        if dans_bloc_session:
+            if ligne.startswith('### '):
+                dans_bloc_session = False
+            else:
+                nb += 1
+                continue
+        sortie.append(ligne)
         continue
     sortie.append(ligne)
 finale = []

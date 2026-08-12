@@ -17,9 +17,9 @@ Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
   - test-009 adapte : temoin A ALLEGER bascule de buffy vers morpheus
   - v0.3.1 : branchement generateurs-ligne (case c10d, branche 'ligne' dans c10b)
   - v0.3.6 : branchement editer-fichier-agents (case c11b, branche 'fiche' dans c10b)
-  - v0.4.0 : ajout case c0d LIRE LA DOCUMENTATION DE L OUTIL (REGLE ABSOLUE LECTURE DOC)
+  - v0.4.1 : ajout case c0d LIRE LA DOCUMENTATION DE L OUTIL (REGLE ABSOLUE LECTURE DOC)
 
-Cas couverts:   1. Version du parcours = 0.4.0
+Cas couverts:   1. Version du parcours = 0.4.1
   2. Types : 36 action / 8 question / 2 controle / 10 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -98,8 +98,8 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.4.0",
-                 d["parcours"].get("version") == "0.4.0",
+        verifier("1. Version du parcours = 0.4.1",
+                 d["parcours"].get("version") == "0.4.1",
                  d["parcours"].get("version"))
 
         # 2. Types

@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.3.0 |
+| **Version** | 0.3.2 |
 | **Statut** | ebauche |
 | **Categorie** | combos |
 | **Derniere mise a jour** | 2026-08-11 |
@@ -217,6 +217,39 @@ donnees (fichiers, variables, sorties).
 
 L'interpolation `{var}` fonctionne dans tous les champs des conditions.
 
+### ROBUSTESSE v0.3.2 : echec = arret, sauf `echec_ok` declare
+
+> **REGLE (round 5)** : le code retour de chaque case `outil` est verifie.
+> Un echec (exit != 0) ARRETE le combo avec un message explicite (case,
+> commande, code, sortie) : un agent ne doit jamais croire qu'un combo a
+> reussi alors qu'une etape a echoue (lecon round 4 : jamais de 0 silencieux).
+
+Exception : une case peut declarer `"echec_ok": true` quand le code non nul
+est un RESULTAT legitime -- les outils de controle/detection (valider-*,
+detecter-*, verifier-*, rechercher-*) signalent un ecart par exit 1. Le
+resultat est alors stocke normalement et le combo continue (l'agent analyse
+les ecarts dans la case fin).
+
+```json
+{
+  "titre": "Executer valider-conformite-ascii",
+  "type": "outil",
+  "commande": "python3 .../valider-conformite-ascii.py cerveau-projet/agents",
+  "sortie": "resultat_ascii",
+  "echec_ok": true,
+  "suivant": "c2"
+}
+```
+
+Les 10 combos de controle du cerveau (controle-outil, controle-impacts,
+sante-tableaux, audit-themis, controle-modification, corriger-ascii,
+maj-readme, creer-agent, creer-fichier-cerveau, creer-protocole) ont leurs
+cases outil de controle marquees `echec_ok: true`. Les combos d'action
+(activation, corriger-fichier, tester-outil, controle-buffy) ne le sont pas :
+leur echec doit arreter le combo.
+
+---
+
 ### Case `controle` -- branches
 
 ```json
@@ -347,6 +380,8 @@ Pattern 3, validation.
 | Version | Statut | Changements |
 |---|---|---|
 | 0.3.0 | ebauche | GARDE-FOU DES CLES : au chargement, validation des entrees des cases generateur contre le catalogue de commandes (cles exactes + obligatoires fournis) -> ERREUR claire code 1. Spec alignee v0.2.1. Py/sh parite maintenue |
+| 0.3.2 | ebauche | ROBUSTESSE (round 5) : verification du code retour de chaque case outil - un echec (exit != 0) ARRETE le combo avec message explicite (case, commande, code, sortie) ; nouveau champ optionnel `echec_ok: true` pour les outils de controle/detection dont le code non nul est un resultat legitime. 30 cases marquees sur 10 combos de controle. Fin de la propagation silencieuse des echecs. Py/sh parite maintenue |
+| 0.3.2 | ebauche | ROBUSTESSE (round 5) : verification du code retour de chaque case outil - un echec (exit != 0) ARRETE le combo avec message explicite (case, commande, code, sortie) ; nouveau champ optionnel `echec_ok: true` pour les outils de controle/detection dont le code non nul est un resultat legitime. 30 cases marquees sur 10 combos de controle. Fin de la propagation silencieuse des echecs. Py/sh parite maintenue |
 | 0.1.3 | ebauche | Ajout des variables initiales `--var cle=valeur` (repetable) : disponibles pour {var} des la case depart (ex: `--var fichier=...` pour combo-controle-impacts) |
 | 0.1.2 | ebauche | Ajout de la REGLE TRACABILITE (citer le combo avant de le lancer, protocole-creation-combos 9.5) |
 | 0.1.1 | ebauche | Clarification de l'emplacement canonique des definitions (cerveau-projet/combos/) vs outils (agents/tools/combos/) + reference au protocole-creation-combos |

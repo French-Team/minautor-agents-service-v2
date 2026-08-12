@@ -11,14 +11,16 @@
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py {fichier}",
       "sortie": "resultat_impacts",
-      "suivant": "c2"
+      "suivant": "c2",
+      "echec_ok": true
     },
     "c2": {
       "titre": "Executer valider-liens",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-liens/valider-liens.py",
       "sortie": "resultat_liens",
-      "suivant": "c3"
+      "suivant": "c3",
+      "echec_ok": true
     },
     "c3": {
       "titre": "FIN - controle des impacts termine",

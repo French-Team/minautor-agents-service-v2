@@ -892,6 +892,14 @@
       ]
     },
     {
+      "nom": "detecter-cablages-manquants",
+      "description": "Detecte les cablages manquants des cartes de decision : cases orphelines, boucles indirectes, references mortes, fins non joignables (complete valider-case)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py",
+      "modele": "--tous",
+      "parametres": []
+    },
+    {
       "nom": "detecter-convention-nommage",
       "description": "Detecte les mentions de la convention c<numero>[a-z]? hors contexte etendu cT* (garde-fou anti-recurrence, audit Themis 2026-08-11)",
       "interpreteur": "python3",
@@ -1059,6 +1067,31 @@
       ]
     },
     {
+      "nom": "detecter-usage-scripts-temporaires",
+      "description": "Mesure l usage des scripts temporaires (.zz-*/.tmp-*) par les agents : scan racine, git, lecons + croisement registre",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/detecter/detecter-usage-scripts-temporaires/detecter-usage-scripts-temporaires.py",
+      "modele": "--rapport {rapport} --verbose",
+      "parametres": [
+        {
+          "cle": "rapport",
+          "question": "Valeur pour rapport ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--rapport",
+          "defaut": ""
+        },
+        {
+          "cle": "verbose",
+          "question": "Activer --verbose ?",
+          "type": "bool",
+          "obligatoire": false,
+          "flag": "--verbose",
+          "defaut": false
+        }
+      ]
+    },
+    {
       "nom": "ecrire-fichier",
       "description": "Ecrire ou ecraser le contenu d'un fichier. Supporte l'ecriture depuis un",
       "interpreteur": "python3",
@@ -1150,6 +1183,85 @@
         }
       ],
       "version": "0.1.0"
+    },
+    {
+      "nom": "editer-parcours",
+      "description": "Edite les parcours de decision JSON de maniere sure : insertion/retrait de case, branche, suivant, bump version (dry-run par defaut)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/editer/editer-parcours/editer-parcours.py",
+      "modele": "--agent {agent} --inserer-case {inserer_case} --retirer-case {retirer_case} --vers {vers} --branche {branche} --reponse {reponse} --suivant {suivant} --cible {cible} --bump --wet",
+      "parametres": [
+        {
+          "cle": "agent",
+          "question": "Nom de l agent ?",
+          "type": "texte",
+          "obligatoire": true
+        },
+        {
+          "cle": "inserer_case",
+          "question": "JSON de la case a inserer ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--inserer-case",
+          "defaut": ""
+        },
+        {
+          "cle": "retirer_case",
+          "question": "Id de la case a retirer ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--retirer-case",
+          "defaut": ""
+        },
+        {
+          "cle": "vers",
+          "question": "Cible de re-pointage ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--vers",
+          "defaut": ""
+        },
+        {
+          "cle": "branche",
+          "question": "Case dont une branche change ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--branche",
+          "defaut": ""
+        },
+        {
+          "cle": "reponse",
+          "question": "Reponse de la branche ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--reponse",
+          "defaut": ""
+        },
+        {
+          "cle": "suivant",
+          "question": "Case dont le suivant change ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--suivant",
+          "defaut": ""
+        },
+        {
+          "cle": "cible",
+          "question": "Nouvelle cible ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--cible",
+          "defaut": ""
+        },
+        {
+          "cle": "bump",
+          "question": "Incrementer la version ?",
+          "type": "bool",
+          "obligatoire": false,
+          "flag": "--bump",
+          "defaut": false
+        }
+      ]
     },
     {
       "nom": "enregistrer-usage-outil",
@@ -1505,32 +1617,6 @@
             "suite"
           ],
           "defaut": "complet"
-        },
-        {
-          "cle": "branche",
-          "question": "Branche a copier (mode branche) ?",
-          "type": "texte",
-          "obligatoire": false,
-          "defaut": ""
-        },
-        {
-          "cle": "source",
-          "question": "Case source de la ligne a copier (ou laisser vide) ?",
-          "type": "texte",
-          "obligatoire": false,
-          "defaut": ""
-        },
-        {
-          "cle": "mode",
-          "question": "Mode de detection (complet / branche / suite) ?",
-          "type": "choix",
-          "obligatoire": false,
-          "choix": [
-            "complet",
-            "branche",
-            "suite"
-          ],
-          "defaut": ""
         },
         {
           "cle": "branche",
@@ -2890,6 +2976,31 @@
           "type": "texte",
           "obligatoire": false,
           "defaut": "."
+        }
+      ]
+    },
+    {
+      "nom": "tester-lancer-non-regression",
+      "description": "Lance tous les tests formels (test-0XX) en parallele par defaut (4 series, --serial pour le mode serie) avec bilan OK/KO fiable et registre protege (--no-journal par defaut)",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py",
+      "modele": "--tests {tests} --rapport {rapport}",
+      "parametres": [
+        {
+          "cle": "tests",
+          "question": "Tests a filtrer (separes par virgules) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--tests",
+          "defaut": ""
+        },
+        {
+          "cle": "rapport",
+          "question": "Chemin du rapport ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--rapport",
+          "defaut": ""
         }
       ]
     },

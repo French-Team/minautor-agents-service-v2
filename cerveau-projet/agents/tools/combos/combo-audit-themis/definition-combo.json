@@ -22,14 +22,16 @@
       "type": "outil",
       "commande": "{cmd1}",
       "sortie": "resultat_audit",
-      "suivant": "c3"
+      "suivant": "c3",
+      "echec_ok": true
     },
     "c3": {
       "titre": "Executer valider-relecture",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-relecture/valider-relecture.py",
       "sortie": "resultat_relecture",
-      "suivant": "c4"
+      "suivant": "c4",
+      "echec_ok": true
     },
     "c4": {
       "titre": "Generer la commande combos-valider-cerveau",
@@ -48,28 +50,32 @@
       "type": "outil",
       "commande": "{cmd2}",
       "sortie": "resultat_sante",
-      "suivant": "c6"
+      "suivant": "c6",
+      "echec_ok": true
     },
     "c6": {
       "titre": "Executer valider-tableaux",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py",
       "sortie": "resultat_tableaux",
-      "suivant": "c7"
+      "suivant": "c7",
+      "echec_ok": true
     },
     "c7": {
       "titre": "Executer detecter-local-hors-fonction",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-local-hors-fonction/detecter-local-hors-fonction.py cerveau-projet",
       "sortie": "resultat_local",
-      "suivant": "c8"
+      "suivant": "c8",
+      "echec_ok": true
     },
     "c8": {
       "titre": "Executer detecter-usage-outils-externes",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py cerveau-projet",
       "sortie": "resultat_traces",
-      "suivant": "c9"
+      "suivant": "c9",
+      "echec_ok": true
     },
     "c9": {
       "titre": "FIN - audit croise termine",

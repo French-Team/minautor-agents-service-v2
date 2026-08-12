@@ -32,7 +32,7 @@ Options:
   --mots-seuls        Verifier la regle fondamentale 'aucun mot seul'
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.3.1-py
+Version : 0.3.3-py
 Statut : prepare
 """
 
@@ -42,7 +42,7 @@ import os
 import re
 import sys
 
-VERSION = "0.3.2-py"
+VERSION = "0.3.3-py"
 STATUT = "prepare"
 
 STATUTS_VALIDES = ("ebauche", "prepare", "dev", "test", "valide")
@@ -205,14 +205,34 @@ def valider_outil(fichier, verbose, categorie=None):
     # Formats speciaux LEGITIMES (conventions dediees, hors nom-outil.sh/py/md) :
     #   - definition-combo.json : fichier canonique d'un combo (dossier combos/combo-*/)
     #   - test-XXX-nom-outil.(py|sh|md) : fichier de test formel (dossier tests/test-XXX-*/)
+    #   - combo-*.md : documentation d'un combo (dossier combos/combo-*/)
+    #   - tester-*-v0xx.(sh|py) : scripts de test VERSIONNES (lecon verifier-documents-manquants)
+    #   - rapport-*.md : rapports documentaires (round 7 : traces legitimes)
     dossier_parent = os.path.basename(os.path.dirname(os.path.abspath(fichier)))
     format_special_combo = (basename == "definition-combo.json" and dossier_parent.startswith("combo-"))
     format_special_test = (re.match(r"^test-\d+-[a-z0-9-]+\.(py|sh|md)$", basename)
                            and dossier_parent.startswith("test-"))
+    format_special_combo_md = (re.match(r"^combo-[a-z0-9-]+\.md$", basename)
+                               and dossier_parent.startswith("combo-"))
+    format_special_test_versionne = (re.match(r"^tester-[a-z0-9-]+-v\d+\.(sh|py)$", basename))
+    format_special_rapport = re.match(r"^rapport-[a-z0-9-]+(-v\d+)?(-\d{4}-\d{2}-\d{2})?\.md$", basename)
 
-    if format_special_combo or format_special_test:
-        print("  [OK] Format special reconnu : %s (convention %s)" % (
-            basename, "definition-combo.json" if format_special_combo else "test-XXX-nom-outil"))
+    format_special = (format_special_combo or format_special_test
+                      or format_special_combo_md or format_special_test_versionne
+                      or format_special_rapport)
+
+    if format_special:
+        if format_special_combo:
+            convention = "definition-combo.json"
+        elif format_special_test:
+            convention = "test-XXX-nom-outil"
+        elif format_special_combo_md:
+            convention = "combo-XXX.md (dossier combo-*/)"
+        elif format_special_test_versionne:
+            convention = "tester-XXX-vNNN (script de test versionne)"
+        else:
+            convention = "rapport-XXX-vNNN.md (rapport documentaire)"
+        print("  [OK] Format special reconnu : %s (convention %s)" % (basename, convention))
         if verbose:
             print("  [OK] Prefixe dossier respecte : %s/" % dossier_parent)
         return erreurs
@@ -240,6 +260,29 @@ def valider_outil(fichier, verbose, categorie=None):
 
 
 
+def _est_categorie(dossier):
+    """Detecte si un dossier passe directement est une CATEGORIE
+    (tools/<categorie>/ : ses sous-dossiers directs sont des OUTILS avec
+    un fichier <nom>.py/.sh, pas des categories).
+    Round 7 : --recursive sur une categorie retournait Total 0 silencieux."""
+    try:
+        sous = sorted(os.listdir(dossier))
+    except OSError:
+        return False
+    if not sous:
+        return False
+    for nom in sous:
+        if nom in SOUS_DOSSERS_COMPOSANTS:
+            continue
+        chemin = os.path.join(dossier, nom)
+        if not os.path.isdir(chemin):
+            continue
+        if os.path.isfile(os.path.join(chemin, nom + ".py")) or \
+           os.path.isfile(os.path.join(chemin, nom + ".sh")):
+            return True
+    return False
+
+
 def valider_recursif(dossier, verbose):
     total = 0
     ok = 0
@@ -248,42 +291,71 @@ def valider_recursif(dossier, verbose):
     print("=== Validation recursive des outils dans : %s ===" % dossier)
     print("")
 
-    # Structure: tools/categorie/outil/
     if not os.path.isdir(dossier):
         print("Erreur: '%s' n'est pas un dossier" % dossier)
         return 1
 
-    try:
-        entrees = sorted(os.listdir(dossier))
-    except OSError:
-        print("Erreur: Impossible de lire le dossier '%s'" % dossier)
-        return 1
+    # Structure attendue: tools/<categorie>/<outil>/  (ou une categorie passee directement)
+    est_categorie = _est_categorie(dossier)
 
-    for categorie_nom in entrees:
-        if categorie_nom in SOUS_DOSSERS_COMPOSANTS:
-            continue
-        chemin_cat = os.path.join(dossier, categorie_nom)
-        if not os.path.isdir(chemin_cat):
-            continue
+    if est_categorie:
+        # tools/<categorie>/ : chaque sous-dossier direct est un outil
         try:
-            sous = sorted(os.listdir(chemin_cat))
+            sous = sorted(os.listdir(dossier))
         except OSError:
-            continue
+            print("Erreur: Impossible de lire le dossier '%s'" % dossier)
+            return 1
         for outil_nom in sous:
             if outil_nom in SOUS_DOSSERS_COMPOSANTS:
                 continue
-            chemin_outil = os.path.join(chemin_cat, outil_nom)
+            chemin_outil = os.path.join(dossier, outil_nom)
             if not os.path.isdir(chemin_outil):
                 continue
             for f in sorted(os.listdir(chemin_outil)):
                 if f.endswith((".sh", ".py", ".md")):
                     total += 1
-                    code = valider_outil(os.path.join(chemin_outil, f), verbose, categorie_nom)
+                    code = valider_outil(os.path.join(chemin_outil, f), verbose, os.path.basename(dossier))
                     if code == 0:
                         ok += 1
                     else:
                         ko += 1
                     print("")
+    else:
+        # tools/ : chaque sous-dossier est une categorie
+        try:
+            entrees = sorted(os.listdir(dossier))
+        except OSError:
+            print("Erreur: Impossible de lire le dossier '%s'" % dossier)
+            return 1
+
+        for categorie_nom in entrees:
+            if categorie_nom in SOUS_DOSSERS_COMPOSANTS:
+                continue
+            chemin_cat = os.path.join(dossier, categorie_nom)
+            if not os.path.isdir(chemin_cat):
+                continue
+            try:
+                sous = sorted(os.listdir(chemin_cat))
+            except OSError:
+                continue
+            for outil_nom in sous:
+                if outil_nom in SOUS_DOSSERS_COMPOSANTS:
+                    continue
+                chemin_outil = os.path.join(chemin_cat, outil_nom)
+                if not os.path.isdir(chemin_outil):
+                    continue
+                for f in sorted(os.listdir(chemin_outil)):
+                    if f.endswith((".sh", ".py", ".md")):
+                        total += 1
+                        code = valider_outil(os.path.join(chemin_outil, f), verbose, categorie_nom)
+                        if code == 0:
+                            ok += 1
+                        else:
+                            ko += 1
+                        print("")
+
+    if total == 0 and not est_categorie:
+        print("AVERTISSEMENT : aucun outil trouve (structure attendue tools/<categorie>/<outil>/)")
 
     print("=== Resume ===")
     print("  Total : %d" % total)

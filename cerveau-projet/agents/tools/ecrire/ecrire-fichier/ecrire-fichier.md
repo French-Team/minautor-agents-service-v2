@@ -6,7 +6,7 @@ identite:
 ---
 # ecrire-fichier
 
-**Version :** 0.2.0
+**Version :** 0.3.2
 **Statut :** prepare
 **Categorie :** Ecrire
 **Chemin :** `agents/tools/ecrire/ecrire-fichier/`
@@ -64,6 +64,9 @@ ecrire-fichier.sh --backup fichier.md "# Nouveau"
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (ecriture contenu, stdin, --dry-run), promotion prepare |
 | 0.2.0-py | 2026-08-07 | Version Python creee (ecriture, ecrasement, --backup, --dry-run, stdin) |
+| 0.3.0 | 2026-08-12 | Qualite pro : version coherente py/sh (0.3.0), promotion prepare |
+| 0.3.1 | 2026-08-12 | SECURITE (round 3) : refus d ecrire a travers un lien symbolique, refus octet nul, backup en copie binaire (shutil) pour ne pas corrompre les fichiers non-UTF-8 |
+| 0.3.2 | 2026-08-12 | ROBUSTESSE (round 4) : contenu vide = troncature explicite a zero octet avec message INFO (plus de no-op silencieux) - parite py/sh |
 
 ## Notes de creation
 

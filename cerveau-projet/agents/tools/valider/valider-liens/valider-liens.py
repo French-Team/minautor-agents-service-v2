@@ -20,7 +20,7 @@ Options:
   --racine RACINE     Racine du projet (defaut: .)
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.0-py
+Version : 0.4.0-py
 Statut : prepare
 """
 
@@ -29,7 +29,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.4.0-py"
 STATUT = "prepare"
 
 PATTERN_LIEN = re.compile(r"\[([^\]]*)\]\(([^)]*)\)")

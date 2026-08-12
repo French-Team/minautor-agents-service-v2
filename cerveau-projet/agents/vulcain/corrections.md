@@ -24,6 +24,71 @@ types:
 
 
 
+## [LECON] 2026-08-12 -- ROUND 11 : COHERENCE DOCUMENTAIRE SPECS/CATALOGUE (Vulcain)
+
+**Mission** : corriger les 8 specs divergentes + les 2 decalages catalogue detectes par le pre-audit (demande utilisateur round 11).
+
+**Diagnostic** : detecter-divergences-version trouvait 8 DIVERGENTES + 2 SANS VERSION ; detecter-decalages-catalogue trouvait 2 decalages. Cause racine : les specs n avaient pas ete bumpees quand les outils l avaient ete (oublis de bump en cascade), et le detecteur de decalages ne scannait QUE l aide racine (pas les sous-commandes argparse).
+
+**Corrections** :
+1. 7 specs bumpees a la version reelle de leur outil (activer-agent-principal 0.5.1, combos-moteur 0.3.2, enregistrer-usage-outil 0.2.1, generateurs-amelioration 2.1.0, generateurs-commande 0.2.4, generateurs-regenerer-catalogue 1.1.1, valider-case 1.1.1) + spec detecter-decalages-catalogue 0.2.0.
+2. guider-parcours : cas particulier documente -- la spec (0.6.2) versionne les PATTERNS/conventions au-dela de l outil (0.5.0). Nouveau champ **Version outil** dans la spec + detecter-divergences-version v0.2.0 le lit en PRIORITE.
+3. detecter-divergences-version v0.1.0 -> v0.2.0 : constante VERSION ajoutee (resolvait son propre SANS VERSION) + champ Version outil.
+4. detecter-decalages-catalogue v0.1.1 -> v0.2.0 : SCAN DES SOUS-COMMANDES argparse (variante avec prefixe x pour les parsers qui consomment la sous-commande comme positional).
+5. verifier-restauration-sure : spec sans version en tete -> ligne **Version :** 0.1.0 ajoutee.
+6. .md de guider-parcours : sections CLI 0.2.0-py/0.2.0-sh -> 0.5.0 (incoherence interne).
+
+**Resultat** : 0 DIVERGENTE (23 alignees), 0 decalage catalogue (139 conformes), test-005 28/28, test-007 15/15, non-regression 27/27, normes 0/0.
+
+**Lecons** :
+1. UN BUMP D OUTIL SANS BUMP DE SA SPEC EST UNE DETTE DOCUMENTAIRE : 7 specs etaient en retard (jusqu a 0.1.0 vs 0.2.1) sans que personne ne le voie -- l outil detecter-divergences-version existait mais n etait JAMAIS lance. Un detecteur non branche = invisible (deja lecon v0.2.17 de verifier-documents-manquants).
+2. UNE SPEC DE CONVENTIONS N EST PAS UNE SPEC D OUTIL : guider-parcours versionne les patterns (0.6.2) independamment de l outil (0.5.0) -- le champ explicite **Version outil** rend le contrat visible au detecteur au lieu de conclure a tort a une divergence.
+3. UN DETECTEUR QUI SCANNE L AIDE RACINE SEULE CREE DES FAUX POSITIFS : les outils a sous-commandes argparse (generateurs-case, generateurs-ligne) cachent leurs flags dans les sous-commandes -- il faut scanner CHAQUE sous-commande, avec une variante de prefixe pour les parsers qui consomment la sous-commande comme argument positionnel.
+
+## [LECON] 2026-08-12 -- ROUND 10b : --parallele PAR DEFAUT + HERITAGE DU FILTRE (Vulcain)
+
+**Contexte** : demande utilisateur - le mode parallele devient le DEFAut du lanceur de non-regression (v0.1.2 -> v0.1.3).
+
+**Failles evitees / decisions** :
+1. HERITAGE DU FILTRE OBLIGATOIRE : en passant le parallele en defaut, un --tests test-003 aurait lance TOUTE la serie A (les sous-processus ne recevaient pas le filtre) - regression silencieuse. Correction : cmd += ["--tests", args.tests] quand le filtre est fourni. Prouve par : --tests test-003 sans option -> 1 OK / 0 KO (sur 1 tests) en structure Serie A.
+2. ECHELON DE SECOURS --serial : rendre un mode rapide par defaut impose de garder l ancien comportement accessible pour le debug - --serial force le mode serie complet, le defaut est parallele = args.parallele or not args.serial.
+3. VERSIONS FIGEES : test-024 ET test-027 verifient v0.1.2 en dur -> 2 KO attendus apres bump, Morpheus les adaptera (toujours grep les versions avant bump).
+4. PARITE DES DEUX MODES : defaut (parallele) et --serial donnent le MEME verdict global (25/25 + 2 KO versions = 27) - le changement de mode ne change pas le resultat.
+
+**Lecons** : (1) rendre un mode parallele par defaut exige d auditer TOUS les chemins d options (le filtre --tests est le premier piege) ; (2) toujours garder un echelon --serial pour le debug ; (3) un changement de mode par defaut est invisible pour l utilisateur -> le verifier par un test dedie (Morpheus : point defaut=parallele dans test-027).
+
+## [LECON] 2026-08-12 -- ROUND 10 : --series + --parallele SUR LE LANCEUR NON-REGRESSION (Vulcain)
+
+**Contexte** : 10e round qualite (demande utilisateur) : la suite de non-regression (26 tests, ~45s en serie) allait devenir tres longue a mesure du dev. Ajout de --series <a|b|c|d|tous> et --parallele au lanceur (v0.1.1 -> v0.1.2) : 4 series thematiques, A/B/C en sous-processus isoles puis D (registre et garde-fous) en serie.
+
+**Failles evitees / decisions** :
+1. ANALYSE DES RESSOURCES PARTAGEES D ABORD : j ai cartographie qui ecrit quoi avant de fixer les series. Resultat : personne n ecrit le VRAI AGENTS.md (test-025 travaille sur copies via AGENTS_FILE), personne n ecrit le registre pendant les tests (le parent l archive + efface au depart), seuls test-004/006/019 creent des .tmp- a noms uniques. La serie D (test-024 verifie 0 .tmp- + registre) doit TOUJOURS etre la derniere, jamais en parallele.
+2. LE PARENT EST L UNIQUE PROPRIETAIRE DU REGISTRE : les sous-processus series tournent avec --journal, l archivage est fait UNE seule fois par le processus parent. Preuve par l accident : en lancant serie et parallele en meme temps (2 commandes), test-024 a vu des .tmp- transitoires -> KO parasite. Deux executions simultanees du meme workspace s interferent.
+3. PARENTHESES = PIEGE DE PARSING : mon regex d agregation (RESULTAT[^(]*) s arretait a la parenthese du libelle Serie A (Combos et coherence) -> bilan global faux (3 OK / 4 KO au lieu de 25 OK / 1 KO). Corrige avec RESULTAT[^:]* : le libelle d une serie ne doit JAMAIS contenir de deux-points (le premier : est le separateur du bilan).
+4. VERSION FIGEE DANS UN TEST : test-024 verifie la version du lanceur en dur (v0.1.1) -> le bump a 0.1.2 casse ce test (KO ATTENDU, Morpheus l adapte). Toujours grep les versions des tests AVANT un bump.
+5. SERIE INVALIDE : argparse choices -> message usage clair + code 2 (jamais de traceback).
+6. GAIN MESURE : 45s -> 21s (~2x) sur Windows. Le parallelisme aide mais l I/O Windows borne le gain (les tests sont rapides, la creation de processus domine).
+
+**Lecons** : (1) le parallelisme d une suite de tests se decide par l ANALYSE DES RESSOURCES PARTAGEES (fichiers ecrits, registre, fichiers temp), pas par le nombre de tests ; (2) un test garde-fou qui verifie l absence de fichiers temp doit tourner SEUL en dernier ; (3) le format de sortie machine-parsable doit rester simple (pas de parenthese ni de deux-points dans les libelles) sinon l agregation casse ; (4) un bump de version doit toujours etre croise avec les tests qui figent la version en dur.
+
+
+## [LECON] 2026-08-12 -- ROUND 6 GENERATEURS : FLAG ORPHELIN MASSIF + TRACEBACK + DIVERGENCE THEMES (Vulcain)
+
+**Contexte** : 6e round qualite pro sur le theme GENERATEURS (generateurs-commande, generateurs-regenerer-catalogue, generateurs-amelioration). Diagnostic reel : le catalogue est sain (146/146 entrees, 0 script mort, 0 cle dupliquee, 0 placeholder orphelin) mais 3 faiblesses mesurees.
+
+**Failles detectees et corrigees** :
+1. generateurs-commande v0.2.4 (py+sh, parite) : flag du MODELE sans champ flag declare reste ORPHELIN quand la valeur est vide. Le code ne retirait le flag+placeholder que si le parametre avait un champ 'flag' (flags booleens/declares). Pour un parametre texte optionnel avec '--commande {commande}' dans le modele, la valeur vide retirait le placeholder mais LAISSAIT '--commande' seul, qui absorbait l'option suivante (--commande --contexte test). Impact MASSIF : 95 entrees du catalogue sur 146 ont ce motif (parametre texte optionnel precede d'un flag). Correction : branche else qui retire '--flag {cle}' quand la valeur est vide. Non-regression des cas test-005 conservee (flags declares, booleens oui/non, optionnels renseignes).
+2. generateurs-regenerer-catalogue v1.1.1 : catalogue introuvable ou JSON invalide -> TRACEBACK BRUT (FileNotFoundError/JSONDecodeError) au lieu d'un message propre. Correction : fonction charger_catalogue avec try/except OSError + ValueError -> message 'ERREUR: catalogue illisible/invalide (chemin + cause)' + sys.exit(1). Le dry-run sur catalogue sain reste 0 a ajouter.
+3. generateurs-amelioration v2.1.0 : divergence outil/donnees silencieuse - l'outil affichait v2.0.0 alors que themes-amelioration.json etait en 2.2.0 (11 themes). Correction : --version et --liste affichent desormais la version des themes (lue du JSON, 'themes v2.2.0') - jamais de divergence silencieuse entre l'outil et ses donnees.
+
+**Lecons** :
+1. LE FLAG ORPHELIN EST UNE FAMILLE, PAS UN CAS : le motif '--flag {cle}' avec valeur vide existe dans 95/146 entrees du catalogue. Un bug de composition touche presque TOUT le catalogue - la verification doit porter sur le MOTIF, pas sur une entree.
+2. LA REGLE DU FLAG S'APPLIQUE AU MODELE, PAS AU CHAMP : le champ 'flag' ne couvre que les flags declares. Les flags TEXTE du modele (--commande {commande}) ne sont pas declares - le retrait doit detecter le flag dans le MODELE (regex --[a-z0-9-]+ {cle}).
+3. DIVERGENCE OUTIL/DONNEES : quand un outil lit un fichier de donnees qui a sa propre version (themes 2.2.0 vs outil 2.0.0), l'outil doit AFFICHER la version des donnees - sinon l'agent croit consulter des themes d'une autre version.
+4. TRACEBACK BRUT = OUTIL NON FINI : un outil du cerveau ne doit JAMAIS laisser passer un traceback Python a l'agent - chaque entree utilisateur (fichier absent, JSON casse) doit produire un message ERREUR clair avec chemin + cause + code 1.
+5. VERSIONNER ET ALIGNER ENSEMBLE : bump py/sh/md simultanes (0.2.4, 1.1.1, 2.1.0) + en-tetes + tables de versionning - le md de generateurs-commande etait reste en 0.2.2/Statut dev/Catalogue v0.2.2 alors que le code etait 0.2.3 et le catalogue 0.2.9/146.
+
+
 ## [LECON] 2026-08-11 -- 18 COMMANDES DE TEST AJOUTEES AU CATALOGUE (Vulcain)
 
 **Mission** : ajouter les 18 commandes de test manquantes (test-004 a test-021) au catalogue generateurs-commande (120 -> 138 commandes).
@@ -1825,3 +1890,366 @@ generateurs-commande sans moyen de desactiver la journalisation.
 
 **Lecon** : quand on ajoute une option a un outil py, TOUJOURS verifier le .sh :
 s'il embarque la logique par heredoc, il faut reporter la modification (parite py/sh).
+
+## [LECON] 2026-08-11 -- 3 OUTILS ANTI-SCRIPTS-TEMPORAIRES + REGISTRE ENRICHIT (Vulcain)
+
+**Contexte** : l'utilisateur a constate que les agents preferent les scripts temporaires jetables (.zz-*/.tmp-*) a nos outils. Diagnostic : le registre d usage est a 0 ligne (les scripts ne passent pas par le generateur), 4 categories de scripts (transformation parcours JSON = TROU, non-regression = TROU, controles croises = combos partiels, remplacements texte = outils ignores).
+
+**Outils crees (3)** :
+1. **lancer-non-regression** (tester/) : lance tous les tests test-0XX, bilan OK/KO fiable (regex [KO]), registre protege (--no-journal par defaut, purge avant + verifie 0 apres). Teste en reel : 3 tests cibles OK, registre 0.
+2. **editer-parcours** (editer/) : insertion/retrait de case avec re-pointage automatique des suivant/branches, modification branche/suivant, bump version. Dry-run par defaut, backup .bak, JSON/LF/ASCII preserves. Teste en reel : dry-run ne modifie pas, wet modifie (version 0.4.1->0.4.2->0.4.3 puis restauree a 0.4.1).
+3. **detecter-usage-scripts-temporaires** (detecter/) : scan racine (.zz-*/.tmp-*), git log (--diff-filter=A), lecons/corrections, croise avec le registre (mode script-temporaire) -> ecart = scripts non declares. Teste en reel : 10 scripts detectes non declares (verdict ECART DETECTE).
+
+**Registre enrichi** : enregistrer-usage-outil v0.1.0 -> v0.2.0, nouveau mode "script-temporaire" (choix ajoute) pour DECLARER la creation d'un script temporaire. Cette declaration alimente le croisement de detecter-usage-scripts-temporaires.
+
+**Catalogue + index** : catalogue 142 -> 145 commandes (3 ajoutees, triees), index-tools mis a jour (4 lignes : les 3 nouveaux + editer-fichier-agents qui manquait).
+
+**LE CONS** :
+1. TESTER chaque outil en reel (--version, dry-run, cas reel) avant de le declarer fonctionnel.
+2. Le dry-run d'editer-parcours ne modifie rien ; le wet modifie reellement (faire attention a restaurer apres les tests).
+3. Les scripts temporaires sont DETECTABLES : racine + git log + lecons. Le registre seul ne suffit pas (il ne capture que ce qui passe par le generateur).
+4. Toujours verifier que l'index-tools contient les nouveaux outils (editer-fichier-agents manquait depuis sa creation - trou a combler).
+
+## [LECON] 2026-08-12 -- NETTOYER-SESSIONS v0.1.2 : EN-TETE ## Sessions LLM PRESERVE (bug sidentifier casse)
+
+**Contexte** : au nettoyage de session du 2026-08-12, sidentifier a echoue ('Section ## Sessions LLM introuvable dans AGENTS.md') : nettoyer-sessions supprimait l'EN-TETE de section ## Sessions LLM alors que le perimetre documente (etats actifs = blocs session-llm + table Sessions connues) ne le prevoit pas. Le nettoyage rendait la re-identification impossible.
+
+**Correction** : SECTIONS_A_SUPPRIMER ne contient plus que '## Sessions connues' ; l'en-tete '## Sessions LLM' est PRESERVE, seuls les blocs '### Session : session-llm-N' (titre + contenu) sont supprimes. Parite py/sh (logique du heredoc du .sh alignee), doc .md a jour, bump 0.1.1 -> 0.1.2.
+
+**Tests reels (sur copies, AUCUN fichier de test touche)** : py_compile + bash -n OK ; --version py/sh 0.1.2 ; nettoyage sur copie (18 lignes) : blocs session 0 restant, EN-TETE conserve (1), Sessions connues 0, profil-session 0, frontmatter preserve ; INTEGRATION : sidentifier sur la copie nettoyee recreer le bloc session (le bug etait invisible sans cette etape) ; parite py/sh fichiers + sorties identiques.
+
+**Lecons** :
+1. PERIMETRE vs IMPLEMENTATION : le code supprimait l'en-tete de section (un etat structurel) alors que le perimetre documente est 'etats actifs uniquement' -- verifier que l'implementation colle au perimetre documente, pas seulement aux tests existants.
+2. TEST D'INTEGRATION indispensable : le bug ne se voyait qu'a la re-identification (nettoyage PUIS sidentifier) -- un test unitaire de nettoyage seul ne suffit pas.
+3. Les tests figent le comportement : le test-001 verifiait l'ANCIEN comportement ('## Sessions LLM supprimee' = 0) -- quand comportement documente et test divergent, c'est le test qui fige l'erreur. Morpheus inversera l'assertion 4b et creera le garde-fou test-025 (boucle complete nettoyage -> sidentifier sur copies).
+
+## [LECON] 2026-08-12 -- DETECTER-CABLAGES-MANQUANTS v0.1.1 FINALISE + ORPHELINES CLIO CORRIGEES (Vulcain)
+
+**Contexte** : reprise (decision utilisateur) de la mission detecter-cablages-manquants purgee par le nettoyage de session. Le .py v0.1.0 existait deja (code complet des 5 detections) mais sans doc, sans catalogue, sans index, sans tests. La reprise a aussi revele un bug reel latent : 3 CAS_ORPHELINE dans parcours-clio.
+
+**Actions** :
+1. OUTIL FINALISE : doc .md creee (modele detecter-usage-scripts-temporaires), bump 0.1.0 -> 0.1.1, entree catalogue generateurs-commande ajoutee a la main (145 -> 146, modele --tous, tri alphabetique respecte) car regenerer-catalogue est BLOQUE par une erreur pre-existante (generateurs-ligne : cles dupliquees branche/mode/source - a signaler a Morpheus/Janus), entree index-tools (Detecter 9 -> 10, Total 111 -> 115), badge README 126 -> 127.
+2. ORPHELINES CLIO CORRIGEES : c6/c6a/c7/c8 = vestiges de l'ancien flux manuel (avant les combos maj-readme), c6a etait une case VIDE {}. Retrait via editer-parcours (0 pointeur vers chacune) + bump parcours-clio 0.5.2 -> 0.5.3 + fiche clio.md Pattern 14 a jour. valider-case CONFORME + valider-cartes-decision --tous 11/11 CONFORME.
+3. TESTS REELS : --tous = 0 probleme bloquant sur 11 parcours (8 boucles de re-travail = cycles AVEC sortie, voulues : cerberus c15b->c15c rapport Janus, themis c3->c8->c8b flux d evaluation) ; bug simule sur copie (cas orpheline + ref morte + boucle indirecte z1->z2 SANS sortie dans le graphe atteignable) = detection 100% ; --version v0.1.1 ; --rapport markdown fonctionnel.
+
+**Lecons** :
+1. UNE MISSION PURGEE PEUT ETRE REPRISE SANS PERTE : le travail sur disque (.py) etait a 85% - l'evaluation avant abandon (compile + --version + scan reel) a montre que la reprise etait presque gratuite. TOUJOURS evaluer le fichier avant de trancher abandon.
+2. L OUTIL REVELE DES BUGS DES SA PREMIERE EXECUTION : le scan --tous a decouvert les orphelines clio (invisibles pour valider-case qui ne verifie que les fins) - c est la preuve de sa valeur, pas un obstacle.
+3. RETRAIT DE CASE VESTIGE : verifier d abord que PERSONNE ne pointe vers la case (editer-parcours affiche le nombre de pointeurs), et que le contenu n est pas une instruction unique perdue (c6/c7/c8 etaient remplacees par les combos, c6a etait vide).
+4. REGENERER-CATALOGUE BLOQUE : le garde-fou des cles dupliquees (generateurs-ligne) empeche toute regeneration - ajout manuel trie requis en attendant la correction pre-existante.
+
+## [LECON] 2026-08-12 -- GENERATEURS-LIGNE CATALOGUE : DOUBLON DE PARAMETRES CORRIGE + REGENERER-CATALOGUE DEBLOQUE (Vulcain)
+
+**Contexte** : le garde-fou de regenerer-catalogue refusait toute regeneration ('ERREUR generateurs-ligne cles dupliquees: branche, mode, source'). Decouvert lors de la mission detecter-cablages-manquants (entree catalogue ajoutee a la main), reporte au rapport Janus, puis corrige dans cette mission (lecon Cerberus c15b/c15c : activer immediatement l agent habilite).
+
+**Diagnostic** : l entree generateurs-ligne de catalogue-commandes.json (146 commandes) contenait un bloc de parametres DUPLIQUE : source/mode/branche apparaissaient DEUX FOIS a la suite (index 8/9/10 identiques a 11/12/13, dont un 'mode' avec defaut "" au lieu de "complet"). Le garde-fou de regenerer-catalogue scanne les cles dupliquees dans les parametres et REFUSE d ecrire.
+
+**Correction** : retrait du bloc duplique (16 parametres -> 13) via editer-fichier avec une ancre unique (le 'defaut': "complet" du premier mode). Scan complet du catalogue : 0 doublon restant sur les 146 entrees.
+
+**Verifications** : regenerer-catalogue --dry-run = 'GARDE-FOU : 0 cle dupliquee (OK)' + 0 a ajouter ; regeneration reelle sur copie = APPLIQUE 0 outil + copie IDENTIQUE a l original ; generateurs-commande --commande generateurs-ligne compose toujours la commande correctement. POINT ANNEXE : combos-analyse-projet a revele que le badge README 127 que j avais pose etait FAUX (realite 126) - le badge Shields Outils-121 etait l ecart reel (corrige a 126) + categorie enregistrer absente de la table README (ajoutee). Verdict final : README A JOUR (0 ecart).
+
+**Lecons** :
+1. UN GARDE-FOU DE REGENERATION EST UNE BONNE CHOSE : il a empeche d ecraser le catalogue avec des cles dupliquees. Le blocage n etait pas un bug de l outil mais une donnee fautive du catalogue - scanner TOUTES les entrees, pas seulement la signalee.
+2. L ANCRE D EDITION DOIT ETRE UNIQUE : le 'defaut': "complet" (premier bloc) vs 'defaut': "" (second) a permis de cibler le doublon sans ambiguite.
+3. VERIFIER LA REALITE AVANT DE CORRIGER UN COMPTEUR : j avais mis le badge README a 127 alors que la realite etait 126 - la source de verite est combos-analyse-projet, pas ma supposition. Un badge 'reecrit' n est pas forcement une concurrence : c etait la bonne valeur.
+## [LECON] 2026-08-12 -- QUALITE PRO DES OUTILS D EDITION (Vulcain)
+
+**Contexte** : demande utilisateur : nos outils doivent etre professionnels, l agent fournit le QUOI et l outil fait le COMMENT (indentation, cas limites, validation). Les 5 outils d edition texte etaient trop simples : echec silencieux (return 0 meme quand rien n est modifie), indentation exacte exigee de l agent, ciblage par numero de ligne, normes disparates.
+
+**Corrections (v0.3.0 sauf remplacer-texte 0.2.0)** :
+1. editer-fichier : 0 occurrence -> return 1 (echec explicite, jamais 0 silencieux) + protection nommage.
+2. inserer-contenu-fichier : ciblage par CONTENU --apres <motif> (l agent n a plus a compter les lignes) + --indent (indentation auto alignee sur la ligne cible) + echec explicite si motif introuvable.
+3. ajouter-contenu-fichier : --backup.
+4. remplacer-texte : protection nommage + echec explicite si aucune paire ne matche.
+5. supprimer-ligne : ligne inexistante -> return 1 + protection nommage + --backup.
+
+**Tests reels** : les 5 outils compilent, echecs explicites prouves (exit 1), indentation auto prouvee (bloc aligne sur 2 espaces), retrocompat argparse conservee (parcours/combos/catalogue intacts).
+
+**Lecons** :
+1. L ECHEC SILENCIEUX EST LE PIRE DEFAUT D UN OUTIL : un return 0 mensonger fait croire a l agent que l edition a eu lieu. Tout outil doit retourner un code non nul quand il n a rien pu faire.
+2. CIBLER PAR CONTENU, PAS PAR NUMERO : l agent connait le motif (le QUOI), pas le numero de ligne (le COMMENT). --apres <motif> + indentation auto = l outil fait le travail.
+3. UNE VISION UTILISATEUR : l outil professionnel est celui qui absorbe la complexite (indentation, localisation, validation) pour que l agent ne fournisse que l intention.
+## [LECON] 2026-08-12 -- QUALITE PRO EXTENSION AUX 5 OUTILS FICHIERS (Vulcain)
+
+**Contexte** : extension de la qualite pro aux 5 outils fichiers de base (creer-fichier, supprimer-fichier, deplacer-fichier, lire-fichier, ecrire-fichier) apres la chaine precedente sur les outils d edition.
+
+**Corrections (tous en 0.3.0)** :
+1. supprimer-fichier : fichier inexistant -> return 1 (echec explicite, avant: return 0 silencieux) + protection nommage + --backup.
+2. deplacer-fichier : destination existante -> REFUS (code 1) sauf --forcer + --backup avant ecrasement (avant: ecrasement silencieux).
+3. creer-fichier : --backup avant ecrasement (--forcer), promotion prepare.
+4. lire-fichier + ecrire-fichier : homogeneisation version 0.3.0 + promotion prepare.
+
+**Tests reels** : 5/5 compilent, echecs explicites prouves (creer existant->1, supprimer absent->1, deplacer dest existe->1, lire absent->1), nominaux->0, backup crees, normes 0/0, retrocompat parcours/combos/catalogue conservee.
+
+**Lecons** :
+1. L ECRASEMENT SILENCIEUX EST AUSSI GRAVE QUE L ECHEC SILENCIEUX : deplacer-fichier ecrasait une destination existante sans rien dire - desormais refus explicite + --forcer/--backup.
+2. LA QUALITE PRO EST UNE FAMILLE, PAS UN CAS PAR CAS : chaque vague d outils (edition puis fichiers) homogeneise les memes principes (echec explicite, protection nommage, --backup, ASCII/LF). Le modele est stable, il suffit de l appliquer.
+3. RETROCOMPAT = SECURITE : les interfaces argparse conservees font que les parcours/combos/catalogue n ont pas change - la qualite monte sans rien casser.
+## [LECON] 2026-08-12 -- ROUND 2 PERFORMANCE : 3 GOULOTS MESURES ET CORRIGES (Vulcain)
+
+**Contexte** : 2e round qualite pro sur le theme PERFORMANCE. Mesure reelle avant de corriger (jamais d optimisation aveugle).
+
+**Goulots et corrections** :
+1. remplacer-texte.sh : 8.5s vs .py 0.16s (54x) car la boucle bash lanchait python3 PAR PAIRE x PAR FICHIER (2 paires x 30 fichiers = 60 process). Correction : delegation a UN SEUL appel python3 (le .sh appelle le .py du meme dossier). Resultat : 0.55s (15x), parite py/sh par construction, echec explicite conserve.
+2. lire-fichier.py : --lignes 5 chargeait TOUT le fichier (read().split) - 0.18s sur 200k lignes. Correction : lecture paresseuse (iteration ligne par ligne + arret precoce). Memoire minimale, plus de chargement integral inutile.
+3. editer-fichier.py : double scan (contenu.count puis contenu.replace). Correction : test d existence puis replace(1) - une seule passe.
+
+**Lecons** :
+1. MESURER AVANT D OPTIMISER : le goulot n 1 (54x) etait invisible sans benchmark - la confiance dans un .sh qui fonctionne peut cacher un massacre de performance.
+2. LES PROCESS MULTIPLES DANS UNE BOUCLE SONT LE PIRE ENNEMI : chaque lancement python3 coute ~50ms de demarrage. 60 lancements = 3s+ de pur gaspillage. Un seul process par fichier (ou par tache) est la regle.
+3. LA LECTURE PARESSEUSE EST UNE VERTU : ne charger que ce qui est demande (--lignes 5 = 5 lignes, pas 200k). Le chargement integral est un cout cache permanent.
+4. LA PARITE PAR DELEGATION : le .sh qui appelle le .py du meme dossier garantit comportement ET performance identiques - mieux qu une reimplementation bash fragile.
+
+## [LECON] 2026-08-12 -- ROUND 3 SECURITE : ENCODAGES, SYMLINKS, CHEMINS NON SURS (Vulcain)
+
+**Contexte** : 3e round qualite pro sur le theme SECURITE. Diagnostic reel avant correction (jamais de securite par opinion).
+
+**Failles detectees par le diagnostic** :
+1. ENCODAGES : lire-fichier CRASHAIT avec traceback sur BOM UTF-8, fichier latin-1 et octets invalides - cause racine double : (a) print() vers une console cp1252 sous Windows (UnicodeEncodeError), (b) BOM non nettoye + errors=replace produisant des U+FFFD non encodables en cp1252.
+2. OCTET NUL : un chemin contenant   levait ValueError embedded null character non gere (traceback).
+3. SYMLINK : non testable sur ce systeme (WinError 1314) mais les outils d ecriture ecriraient a travers le lien vers la cible a l insu de l agent.
+
+**Corrections (9 outils)** :
+1. stdout force en UTF-8 (sys.stdout.reconfigure errors=replace, protege par try AttributeError) dans les 9 outils.
+2. lecture robuste : utf-8-sig (BOM nettoye) puis fallback latin-1 - plus jamais de crash d encodage (lire, editer, inserer, supprimer-ligne, remplacer).
+3. garde-fou octet nul : tout chemin contenant   refuse avec message explicite (exit 1) dans les 9 outils.
+4. garde-fou symlink : outils d ECRITURE refusent les liens (ecrire, editer, creer, deplacer source+dest, inserer, supprimer-ligne, remplacer ignore les liens) ; lire et supprimer peuvent traverser (lecture seule / os.remove ne touche que le lien).
+5. backup binaire (shutil.copy2) dans ecrire-fichier (une copie texte corrompait les fichiers latin-1).
+
+**Bug de parcours** : le bloc sys.stdout.reconfigure doit etre APRES les imports (NameError sinon) - j ai du le deplacer dans creer-fichier et deplacer-fichier.
+
+**Tests reels** : 29/29 verts - BOM/latin-1/octets invalides sans crash, octet nul refuse partout (6 outils, exit 1, message propre), comportements nominaux conserves (echecs explicites inclus). Normes 0/0 sur 27 fichiers. Spec remplacer-texte realignee 0.3.1.
+
+## [LECON] 2026-08-12 -- ROUND 4 ROBUSTESSE : 3 ECHECS SILENCIEUX CORRIGES (Vulcain)
+
+**Contexte** : 4e round qualite pro sur le theme ROBUSTESSE (messages d erreur, dry-run, cas limites). Diagnostic reel : la base etait solide (messages avec chemin + conseils 6/6, dry-run reellement non-destructif 8/8, cas limites corrects) mais 3 echecs SILENCIEUX subsistaient.
+
+**Failles detectees et corrigees** :
+1. ecrire-fichier : contenu vide sur fichier existant = no-op silencieux (fichier inchange, aucun message, exit 0). Correction : contenu vide = TRONCATURE explicite a zero octet + message INFO (parite py/sh : open w vs : > fichier). Un agent peut desormais vider un fichier et sait ce qui s est passe.
+2. lire-fichier : plage inverse (--debut 5 --fin 2) = exit 0 avec sortie vide, silencieux. Correction : validation de plage AVANT lecture - --debut > --fin, ou borne < 1 (--debut/--fin/--lignes) -> erreur explicite exit 1 (parite py/sh).
+3. supprimer-ligne : message "le fichier n a que 1 lignes" (pluriel faux). Correction : pluriel correct (1 ligne vs N lignes) (parite py/sh).
+
+**Lecons** :
+1. LE 0 SILENCIEUX EST L ENNEMI N 1 DE LA ROBUSTESSE : un agent qui ne recoit ni effet ni message ne peut pas decider - chaque cas inapplicable doit refuser ou informer explicitement.
+2. LA PARITE PY/SH SE TESTE DES DEUX COTES : les 3 corrections ont ete verifiees en .py ET en .sh (les deux partagent les memes pieges de no-op : open append vs touch).
+3. LE DIAGNOSTIC CONFIRME AUSSI CE QUI VA BIEN : dry-run reellement non-destructif (8/8, backup non cree en dry-run) et messages avec chemin + conseils (6/6) - la qualite pro des rounds precedents tient.
+
+**Tests reels** : 18/18 py + 5/5 sh verts (3 corrections prouvees + non-regression comportementale : plage valide, dry-run, nominaux). Normes 0/0 sur 9 fichiers. Aucun script temporaire laisse (garde-fou test-024 respecte).
+
+## [LECON] 2026-08-12 -- ROUND 5 COMBOS : FIN DE LA PROPAGATION SILENCIEUSE DES ECHECS (Vulcain)
+
+**Contexte** : 5e round qualite pro sur le theme COMBOS (enchainements d outils fluides et sans friction). Le diagnostic reel a revele une faille critique du combos-moteur v0.3.1 : le code retour des cases outil n etait JAMAIS verifie.
+
+**Faille critique** : une case outil qui echoue (exit != 0) laissait le moteur continuer jusqu a la case fin avec code retour 0. Un agent lancant un combo croyait que tout avait reussi alors qu une etape avait echoue - le pire des echecs silencieux, au niveau de l orchestration elle-meme.
+
+**Corrections** :
+1. combos-moteur v0.3.2 (py + sh, parite) : verification du returncode de chaque case outil - un echec ARRETE le combo avec message explicite (case, commande, code, sortie).
+2. Nouveau champ optionnel `echec_ok: true` : pour les outils de CONTROLE/DETECTION (valider-*, detecter-*, verifier-*, rechercher-*) dont le code non nul est un RESULTAT legitime (ecart signale par exit 1) - le resultat est stocke et le combo continue.
+3. Audit et marquage des 14 combos : 30 cases `echec_ok: true` sur 10 combos de controle (controle-outil, controle-impacts, sante-tableaux, audit-themis, controle-modification, corriger-ascii, maj-readme, creer-agent, creer-fichier-cerveau, creer-protocole). Les 4 combos d action (activation, corriger-fichier, tester-outil, controle-buffy) restent sans echec_ok : leur echec doit arreter.
+4. Versions alignees 0.3.2 (py/sh/md) + documentation de la regle dans combos-moteur.md.
+
+**Lecons** :
+1. L ORCHESTRATEUR DOIT VERIFIER SES SOUS-PROCESSUS : un moteur qui enchaine des outils sans regarder leurs codes retour propage les echecs silencieusement - pire que l outil lui-meme.
+2. IL FAUT DISTINGUER ECHEC et RESULTAT NON NUL : un validateur qui retourne 1 a trouve un ecart - c est un RESULTAT. Un createur qui retourne 1 a echoue - c est un ECHEC. Le champ echec_ok rend cette distinction EXPLICITE dans la definition.
+3. LE CONTROLE CROISE (Janus) et la NON-REGRESSION (Morpheus) sont la garantie que le changement de comportement (arret sur echec) ne casse aucun combo existant.
+
+**Tests reels** : 5/5 py (arret sur echec rc=1 + message, echec_ok continue rc=0, 14/14 combos chargent, dry-run non destructif, 30 cases marquees) + 4/4 sh (parite). Normes 0/0 sur 17 fichiers. Aucun script temporaire laisse.
+
+
+## [LECON] 2026-08-12 -- ROUND 7 VALIDER : FAUX POSITIFS/NEGATIFS (Vulcain)
+
+**Contexte** : round 7 qualite pro, theme VALIDER (faux positifs/negatifs des
+validateurs). Diagnostic reel (mesures sur copies temporaires, pas opinions) :
+4 faiblesses + 1 decision utilisateur (renommage complet).
+
+**Faiblesses corrigees** :
+
+A. valider-case v1.1.1 : FAUX NEGATIF GRAVE - les references mortes n etaient
+   PAS detectees (le BFS faisait 'if suivant and suivant in cases', une ref
+   inexistante etait ignoree silencieusement -> CONFORME rc=0 sur une carte
+   cassee). Correction : verifier_structure signale chaque 'suivant' et chaque
+   branche 'vers' pointant vers une case inexistante + meme verif en mode
+   --case <id>. py/sh/md 1.1.1.
+
+B. Versions alignees (regle des 5 fichiers) : valider-cartes-decision.sh
+   0.3.2 -> 0.4.0 ; valider-liens.py 0.2.0-py -> 0.4.0-py.
+
+C. valider-nommage v0.3.3 : --recursive sur une CATEGORIE (tools/valider/)
+   rendait Total: 0 silencieux (faux negatif : on croit que tout est valide,
+   rien n est scanne). Correction : detection de categorie (un sous-dossier
+   outil a un .py/.sh a son nom) -> profondeur de scan 1 au lieu de 2.
+   Parite portee dans le .sh (implementation parallele, pas un wrapper).
+
+D1-D3. valider-nommage : formats speciaux LEGITIMES reconnus (faux positifs du
+   scan global elimines) : combo-*.md (4), tester-*-v0xx.sh (2), rapport-*.md
+   (3, regex etendu au suffixe date v010-2026-08-11). Scan global tools/ :
+   11 erreurs -> 0 erreur (335 fichiers).
+
+D4. RENOMMAGE COMPLET (decision utilisateur) : lancer-non-regression ->
+    tester-lancer-non-regression (le dossier tester/ exige le prefixe tester-,
+    c etait le seul ecart de nommage de la boite). Dossier deplace + fichiers
+    renommes + catalogue + index-tools + test-024 + protocole + auto-refs.
+
+**Lecons** :
+
+1. UN VALIDATEUR QUI REPOND CONFORME SUR UNE CARTE CASSEE EST PIRE QUE PAS DE
+   VALIDATEUR : la confiance tue la detection. Toujours tester les validateurs
+   sur des copies CORROMPUES (ref morte, case orpheline) avant de les valider.
+
+2. PIEGE DU TEST : cibler 'suivant == c2' sans verifier qu une case a ce champ
+   top-level = modification silencieuse sans effet (le flux passait par des
+   branches). Le test semblait KO alors que l outil etait bon. Verifier QUE la
+   mutation a eu lieu (assert sur la cible) avant d interpreter le resultat.
+
+3. LE LOCAL HORS FONCTION en bash (bloc --recursive top-level) fait planter le
+   .sh alors que le .py marche : a chaque portage py -> sh, re-verifier la
+   validite bash -n et la parite de sortie, pas seulement le code.
+
+4. UN RENOMMAGE COMPLET demande un grep de l ANCIEN NOM dans TOUT le repo avec
+   exclusion des documents figes (corrections.md, controles/, historique) : le
+   nouveau nom contient l ancien (tester-lancer-non-regression contient
+   lancer-non-regression) - un grep naif donne des faux positifs.
+
+**Validations** : 16/16 retests (A py/sh/--case, B versions, C py/sh,
+D scan 0 erreur + renommage), test-024 12/12, valider-cartes-decision --tous
+11/11, verifier-conformite-fiche --tous 11/11, normes 0/0, 0 residu ancien nom.
+
+
+## [LECON] 2026-08-12 -- ROUND 8 REGISTRE/TRACES : LA MEMOIRE (Vulcain)
+
+**Contexte** : round 8 qualite pro, theme REGISTRE ET TRACES (fiabilite de la
+journalisation). Diagnostic reel : 4 faiblesses + 1 decision utilisateur
+(ARCHIVER AU LIEU DE PURGER).
+
+**Faiblesses corrigees** :
+
+A. tester-lancer-non-regression v0.1.1 : la purge du registre a chaque
+   non-regression (--no-journal ecrivait fh.write('')) DETRUISAIT la memoire
+   des declarations -> detecter-usage-scripts-temporaires devenait aveugle au
+   passe et signalait des faux ecarts permanents. Correction : archivage vers
+   registre-usages-outils.historique.jsonl (append, dedoublonnage par ligne
+   exacte, idempotent) puis vidage du registre courant. Message de fin
+   indique 'archive dans l historique : N'.
+
+B. detecter-usage-scripts-temporaires v0.1.1 : (1) croisement avec le registre
+   COURANT + l HISTORIQUE (les declarations archivees restent verifiables) ;
+   (2) FILTRE est_script_temporaire : un script est un FICHIER .py/.sh dont
+   le basename commence par .zz-/.tmp- - les dossiers de tests (.tmp-eol-test/,
+   .tmp-gc-test/, .tmp-morpheus-test/) et les .md/.json n en sont pas
+   (faux positifs elimines) ; (3) scan git et racine filtres pareillement.
+
+C. enregistrer-usage-outil v0.2.1 : garde-fous de fiabilite - --agent vide ou
+   --outil vide -> [ERREUR] + code 1 (avant : accepte silencieusement rc=0) ;
+   doublon (agent+outil+mode+commande+contexte identiques) -> [AVERTISSEMENT] ;
+   lignes non-JSON dans le registre -> [AVERTISSEMENT] avant ajout.
+
+D. Versions alignees : tester-lancer 0.1.1, detecter 0.1.1, enregistrer 0.2.1
+   (py/sh/md coherents - enregistrer md etait en 0.1.0 alors que le py etait
+   deja en 0.2.0, divergence pre-existante).
+
+**Lecons** :
+
+1. UNE SOURCE DE VERITE QUE L ON PURGE N EST PLUS UNE SOURCE DE VERITE :
+   la purge silencieuse du registre a chaque non-regression a cree 12 faux
+   ecarts permanents (le detecteur comparait le present avec un passe
+   efface). La memoire doit etre ARCHIVEE (append, jamais ecrase) pour que
+   les controles restent verifiables dans le temps.
+
+2. UN SCAN GIT QUI MATCHE LE PREFIXE SANS L EXTENSION COMPTE DES DOSSIERS
+   ET DES .md/.json COMME DES SCRIPTS : .tmp-eol-test/ etait un dossier de
+   tests, pas un script jetable. Toujours filtrer par basename + extension
+   (.py/.sh) pour distinguer un script d un artefact de test.
+
+3. UN OUTIL QUI ACCEPTE --agent VIDE (rc=0) PRODUIT DES ENTREES
+   INEXPLOITABLES : le registre est la base des controles - une entree sans
+   agent ne peut etre croisee avec rien. Refuser les champs obligatoires
+   vides, signaler doublons et corruption sans bloquer (un usage peut etre
+   legitiment rejoue).
+
+4. LA REGLE DES 5 FICHIERS SE VERIFIE AUSSI POUR LES VERSIONS md : le .md
+   d enregistrer-usage-outil etait reste en 0.1.0 alors que le .py etait en
+   0.2.0 (le mode script-temporaire du round precedent n avait pas bumpe le
+   md). Un bump py sans bump md = divergence silencieuse.
+
+**Validations** : 19/19 retests (A archivage idempotent, B filtre + croisement
+historique, C garde-fous, D versions), test-024 13/13 (adaptes + nouveau
+garde-fou memoire : l historique existe), non-regression 26/26, catalogue
+146 intact + 0 a ajouter, normes 0/0 sur 10 fichiers, registre courant 0
+ligne + historique 7 lignes (usages Janus/Cerberus du round 7 archives).
+
+
+## [LECON] 2026-08-12 -- ROUND 9 GUIDAGE/NAVIGATION : L AGENT QUI SE PERD (Vulcain)
+
+**Contexte** : round 9 qualite pro, theme GUIDAGE ET NAVIGATION (guider-parcours,
+generateurs-carte, generateurs-case). Diagnostic reel (mesures, pas opinions) :
+4 faiblesses.
+
+**Faiblesses corrigees** :
+
+A. guider-parcours (0.5.0) : une case de depart INEXISTANTE (--case c999)
+   provoquait un KeyError TRACEBACK BRUT (case = cases[cid]) - l agent qui se
+   trompe de case recoit un crash Python au lieu d etre guide. Correction :
+   dans naviguer(), verification cid in cases AVANT la boucle -> message
+   'la case de depart <id> n existe pas' + liste des ids disponibles + code 1.
+   Le cas case_depart du parcours inexistant etait deja couvert par
+   valider_parcours ('introuvable dans cases', code 1) - pas de double emploi.
+
+B. generateurs-case (0.4.2) : --version au niveau RACINE casse (le flag
+   n existait QUE sur les sous-parsers -> 'generateurs-case.py --version'
+   repondait rc=2 'arguments required: parcours, action'). Correction :
+   interception 'if --version in sys.argv' dans main() avant parse_args
+   (comme generateurs-carte), sous-parsers conserves pour la parite py/sh.
+
+C. generateurs-case : VERSIONS DIVERGENTES (regle des 5 fichiers) - py
+   VERSION=0.4.2, en-tete py=0.3.1, sh=0.4.0, md=0.4.2 (3 valeurs !).
+   Correction : en-tete py + sh alignes sur 0.4.2, md completer avec
+   l historique 0.3.0/0.4.0/0.4.2 manquant.
+
+D. generateurs-carte (0.3.0) : --aide des sous-commandes (creer --aide,
+   dupliquer-chemin --aide) affichait l AIDE RACINE au lieu du sous-parser.
+   Correction : port du mecanisme de ciblage de generateurs-case (boucle sur
+   parser._actions pour trouver le sous-parser).
+
+**Lecons** :
+
+1. L AGENT QUI SE PERD DOIT ETRE GUIDE, PAS CRASH : un KeyError sur une case
+   inexistante est le pire comportement pour un outil de navigation. Toujours
+   verifier les entrees utilisateur (case de depart, --case) AVANT de boucler
+   et afficher les choix possibles (liste des ids).
+
+2. --version EST UN CONTRAT : TOUS les outils doivent repondre a --version au
+   niveau racine (usage standard de verification). Un sous-commande qui cache
+   le flag (parcours positionnel obligatoire avant) casse ce contrat
+   silencieusement : il faut l intercepter AVANT parse_args.
+
+3. LA REGLE DES 5 FICHIERS SE DIVISE EN 3 : en-tete py, VERSION py, sh, md -
+   ici 3 valeurs differentes sur 4 emplacements (0.3.1/0.4.2/0.4.0/0.4.2).
+   Chaque bump doit mettre a jour les 4 emplacements + la table Versionning
+   du md (qui s arretait a 0.2.2 alors que l outil etait en 0.4.2).
+
+4. UN MECANISME QUI EXISTE DANS UN OUTIL (ciblage --aide de generateurs-case)
+   DOIT ETRE PORTE : generateurs-carte avait le meme besoin (sous-commandes)
+   mais affichait l aide racine. Reutiliser les solutions deja validees de la
+   boite au lieu de re-inventer.
+
+**Validations** : 14/14 retests (A case inexistante py/sh/parcours corrompu,
+B --version racine + sous-parser + sh, C versions 4 emplacements, D --aide
+sous-commandes), test-010 25/25, test-014 13/13, test-004 16/16,
+non-regression 26/26, catalogue 146 intact + 0 a ajouter, normes 0/0 sur
+5 fichiers.
+
+## [LECON] 2026-08-12 -- CORRECTION BUG DEMARRAGE SIDENTIFIER v0.5.1 (Vulcain)
+
+**Contexte** : l utilisateur a signale que Morpheus s arretait a chaque activation (rounds 8 et 9). Diagnostic Cerberus : le parcours de Morpheus etait PROPRE (30/30 atteignables, detecter-cablages-manquants OK, navigation OK) et tous les outils existaient. La vraie cause etait dans activer-agent-principal.py sidentifier : il ECRASAIT le profil classeur avec 'agent: Cerberus' code en dur + affichait '(agent principal : Cerberus)' dans les 4 messages, MEME quand la session retrouvee avait un AUTRE agent actif (morpheus). Resultat : AGENTS.md disait morpheus, le classeur disait Cerberus -> double source CONTRADICTOIRE -> l agent qui demarrait (Morpheus lance sidentifier selon sa fiche) recevait une identite fausse et s arretait.
+
+**Correction** : fonction agent_actif_bloc() (py + sh) qui lit l agent REEL du bloc (champ Nom Agent) ; session retrouvee -> affiche + ecrit le profil + l historique avec l agent reel ; nouvelle session -> Cerberus par defaut conserve. Bump 0.5.0 -> 0.5.1 (py/sh/md + table Versionning).
+
+**Lecons** :
+
+1. UNE SESSION QUI S ARRETE AU DEMARRAGE N EST PAS UN PROBLEME DE PARCOURS : quand un agent ne demarre pas, verifier d abord le cycle d identification (sidentifier) avant de suspecter les cases. Le parcours etait sain.
+
+2. LA SOURCE DOUBLE DOIT ETRE VERIFIEE CROISEE : AGENTS.md et le classeur disent TOUS DEUX qui est l agent actif. Une ecriture en dur (Cerberus) dans l un des deux cree une contradiction silencieuse : aucun test ne detectait le classeur faux parce que sidentifier re-ecrivait le mensonge a chaque appel.
+
+3. LE CLASSEUR EST DERIVE, PAS UNE CONSTANTE : il doit refletet l etat du bloc AGENTS.md a chaque instant. Toute valeur codee en dur (agent, role, date) dans une fonction qui ECRIT le classeur est un bug potentiel.
+
+**Validations** : sidentifier llm-1 affiche 'agent principal : vulcain' + classeur 'agent: vulcain' (py ET sh identiques) ; normes 0/0 sur 5 fichiers ; test-025 11/11, test-018 13/13, test-021 9/9, test-002 REUSSI ; catalogue dry-run 0 a ajouter ; non-regression 26/26.

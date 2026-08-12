@@ -11,7 +11,8 @@
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier",
       "sortie": "verifier_resultat",
-      "suivant": "c2"
+      "suivant": "c2",
+      "echec_ok": true
     },
     "c2": {
       "titre": "Ecarts detectes ?",
@@ -40,7 +41,8 @@
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py README.md",
       "sortie": "resultat_ascii",
-      "suivant": "c5"
+      "suivant": "c5",
+      "echec_ok": true
     },
     "c5": {
       "titre": "FIN - petite MAJ du README terminee",

@@ -52,7 +52,7 @@ CASE N+1 : ... jusqu'a la case FIN
 
 ## Utilisation
 
-### CLI Python (version 0.2.0-py)
+### CLI Python (version 0.5.0-py)
 
 ```
 python3 guider-parcours.py <parcours.json> [options]
@@ -79,7 +79,7 @@ Options :
 > reposer la question honnete c0). C'est le comportement du jeu de piste :
 > 1 case a la fois, l'agent repond puis relance depuis la case courante.
 
-### CLI bash (version 0.2.0-sh)
+### CLI bash (version 0.5.0-sh)
 
 ```
 bash guider-parcours.sh <parcours.json> [options]

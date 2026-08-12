@@ -6,11 +6,11 @@ identite:
 ---
 # Spec -- Generateurs-amelioration (checklist de questions par theme)
 
-**Version** : 2.0.0
+**Version** : 2.1.0
 **Statut** : ebauche
 **Date creation** : 2026-08-09
 **Agent** : Vulcain (creation)
-**Historique** : v1.0.0 (creation, 2026-08-09). v2.0.0 (2026-08-09) -- theme `ameliorer-outil` reformule (10 -> 14 questions) : 5 RAPPELS STRATEGIQUES en tete (q1 diagnostic de l existant, q2 horloge = anticiper les extensions naturelles, q3 formats = couvrir la famille de cas, q4 ameliorer vs evoluer = eviter patch puis refonte, q5 perimetre) + 9 questions techniques renumerees (q6-q14). Principe utilisateur : les questions doivent pousser l agent a reflechir a CE qui doit etre ameliore et a anticiper l evolution plutot que de patcher aujourd hui et refondre plus tard.
+**Historique** : v2.1.0 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 2.1.0) -> v1.0.0 (creation, 2026-08-09). v2.0.0 (2026-08-09) -- theme `ameliorer-outil` reformule (10 -> 14 questions) : 5 RAPPELS STRATEGIQUES en tete (q1 diagnostic de l existant, q2 horloge = anticiper les extensions naturelles, q3 formats = couvrir la famille de cas, q4 ameliorer vs evoluer = eviter patch puis refonte, q5 perimetre) + 9 questions techniques renumerees (q6-q14). Principe utilisateur : les questions doivent pousser l agent a reflechir a CE qui doit etre ameliore et a anticiper l evolution plutot que de patcher aujourd hui et refondre plus tard.
 
 ---
 

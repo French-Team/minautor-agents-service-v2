@@ -14,67 +14,23 @@ identite:
 
 ## Sessions LLM
 
-### Session : session-llm-4
-
-| Champ | Valeur |
-|---|---|
-| **Nom LLM** | llm-2 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Identification |
-| **Raison** | Identification LLM - demarrage de session |
-
-
-### Session : session-llm-3
-
-| Champ | Valeur |
-|---|---|
-| **Nom LLM** | kilo-llm |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Identification |
-| **Raison** | Identification LLM - demarrage de session |
-
-
-### Session : session-llm-2
-
-| Champ | Valeur |
-|---|---|
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-08 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Identification |
-| **Raison** | Identification LLM - demarrage de session |
-
-
 ### Session : session-llm-1
 
 | Champ | Valeur |
 |---|---|
+| **Nom LLM** | llm-1 |
 | **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-11 |
+| **Derniere mise a jour** | 2026-08-12 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | cerberus (retour de mission) |
-| **Raison** | BILAN CONSOLIDE (Janus, mission Cerberus) : anti-regression historique + maillon manquant VERDICT VALIDE (J1-J6 verts). 19 fins PASSE PAR LE GENERATEUR (activer-agent-principal) sur 10 parcours, cerberus c15b/c15c (lire rapport Janus + activer l agent habilite) v0.4.1, test-013 adapte 22/22, non-regression 23/23, registre 0 ligne. Rapport : janus/controles/controle-anti-regression-historique-2026-08-11.md. Lecon Janus enregistree. |
+| **Active par** | janus (retour de mission) |
+| **Raison** | BILAN CONSOLIDE (Janus, mission Cerberus) : AUDIT MORPHEUS TEMPLATE VERDICT VALIDE (J1-J7 verts). Cause racine : template-test.md v0.1.0 obsolete (bash/protections) vs tests .py reels [OK]/[KO] + aucune case de carte ne le referencait - Morpheus calait sur les tests precedents (derive : test-001/002/003 coding utf-8 + [ECHEC] invisible pour le lanceur). Corrections : template-test.md v0.2.0 (format Python canonique : ascii, NB_POINTS, verifier, main, RESULTAT), migration test-001 (10/10) + test-002 (37/37) + test-003 (91/91), fiche morpheus.md (Structure des tests -> Python + template), carte morpheus v0.4.2 (case c3 : indice obligatoire LIRE template-test.md), garde-fou test-029-conformite-template 14/14 (invariants vitaux de CHAQUE test-0XX) affecte a la serie D, test-004 adapte (morpheus 0.4.2). Resultats : non-regression 29/29, valider-cartes 11/11, normes 0/0, registre declarations Morpheus + Janus. Rapport : janus/controles/controle-audit-morpheus-template-2026-08-12.md. Lecon Janus enregistree. Fin de mission. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-11 23:36 |
-| session-llm-2 | - | Cerberus | 2026-08-08 17:55 |
-| session-llm-3 | kilo-llm | Cerberus | 2026-08-08 18:17 |
-| session-llm-4 | llm-2 | Cerberus | 2026-08-07 16:03 |
-| session-llm-5 | llm-3 | Cerberus | 2026-08-07 16:04 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-12 22:55 |
 ## Configuration Active
 
 ### Regles specifiques a Cerberus

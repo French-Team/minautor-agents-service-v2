@@ -33,7 +33,7 @@ import json
 import os
 import sys
 
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 STATUT = "ebauche"
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
@@ -47,14 +47,14 @@ def couleur(texte, code):
 
 
 def charger_themes():
-    """Charge themes-amelioration.json. Retourne (themes, erreur)."""
+    """Charge themes-amelioration.json. Retourne (donnees, erreur)."""
     try:
         with io.open(THEMES, encoding="utf-8") as fh:
             d = json.load(fh)
         themes = d.get("themes", [])
         if not isinstance(themes, list) or not themes:
             return None, "Aucun theme dans %s" % THEMES
-        return themes, None
+        return d, None
     except Exception as e:
         return None, "Impossible de lire %s : %s" % (THEMES, e)
 
@@ -66,8 +66,8 @@ def trouver_theme(themes, nom):
     return None
 
 
-def lister_themes(themes):
-    print("=== Themes d'amelioration disponibles (%d) ===" % len(themes))
+def lister_themes(themes, version_themes="?"):
+    print("=== Themes d'amelioration disponibles (%d) - themes v%s ===" % (len(themes), version_themes))
     for t in themes:
         nom = t.get("nom", "?")
         desc = t.get("description", "")
@@ -105,26 +105,32 @@ def recapituler(reponses, questions):
 
 def main():
     args = sys.argv[1:]
-    if "--version" in args:
-        print("generateurs-amelioration v%s (%s)" % (VERSION, STATUT))
-        return 0
-
-    themes, erreur = charger_themes()
+    donnees, erreur = charger_themes()
     if erreur:
+        # --version ne depend pas du fichier de themes (jamais de blocage)
+        if "--version" in args:
+            print("generateurs-amelioration v%s (%s) - themes v?" % (VERSION, STATUT))
+            return 0
         print("ERREUR : %s" % erreur)
         return 1
+    themes = donnees["themes"]
+    version_themes = donnees.get("version", "?")
+
+    if "--version" in args:
+        print("generateurs-amelioration v%s (%s) - themes v%s" % (VERSION, STATUT, version_themes))
+        return 0
 
     if "--aide" in args or "-h" in args or "--help" in args:
-        print("generateurs-amelioration v%s (%s)" % (VERSION, STATUT))
+        print("generateurs-amelioration v%s (%s) - themes v%s" % (VERSION, STATUT, version_themes))
         print("USAGE : generateurs-amelioration.py --theme <nom> [--reponses 'q1=...;q2=...']")
         print("        generateurs-amelioration.py --liste")
         print("        generateurs-amelioration.py --aide")
         print("")
-        lister_themes(themes)
+        lister_themes(themes, version_themes)
         return 0
 
     if "--liste" in args:
-        lister_themes(themes)
+        lister_themes(themes, version_themes)
         return 0
 
     # Extraction du theme
@@ -137,13 +143,13 @@ def main():
         print("USAGE : generateurs-amelioration.py --theme <nom> [--reponses 'q1=...;q2=...']")
         print("        generateurs-amelioration.py --liste")
         print("        generateurs-amelioration.py --version")
-        lister_themes(themes)
+        lister_themes(themes, version_themes)
         return 1
 
     theme = trouver_theme(themes, theme_nom)
     if theme is None:
         print("ERREUR : theme '%s' inconnu." % theme_nom)
-        lister_themes(themes)
+        lister_themes(themes, version_themes)
         return 1
 
     questions = theme.get("questions", [])

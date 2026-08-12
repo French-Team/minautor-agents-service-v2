@@ -7,7 +7,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.5.0
+**Version** : 0.5.1
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -270,6 +270,7 @@ La colonne session identifie quel LLM a effectue l'action.
 | 0.4.0 | 2026-08-07 | REGLE ALIGNEMENT : id llm-N -> session-llm-N (le numero de session porte le numero de l'id). Champ `**Id LLM**` ajoute dans chaque bloc AGENTS.md (reconnaissance directe par lecture). SOURCE DOUBLE : liaison cherchee dans AGENTS.md (champ Id LLM) puis classeur. CONFLIT gere : si session-llm-N deja liee a un autre id, message + prochaine libre. sidentifier absorbe une session-llm-N orpheline (sans id). demarrer.md revu : demarrage par 'bonjour llm-1, lire demarrer.md' -> verifier AGENTS.md pour SON bloc |
 | 0.4.1 | 2026-08-08 | SESSIONS CONNUES (contexte temps reel) : nouvelle section `## Sessions connues` dans AGENTS.md reconstruite a chaque sidentifier/activer/reactiver depuis le classeur (profil-session-*) -- table | Session | Nom LLM | Agent actif | Derniere activite |. Chaque LLM qui demarre voit immediatement que les autres sessions existent et leur derniere activite (evite les collisions multi-LLM). py + sh + doc |
 | 0.5.0 | 2026-08-08 | CONVENTION IDENTIFICATION : aucun mot seul. Blocs de session : `**Nom LLM**` (l'id) EN TETE, `**Nom Agent**` au lieu de `**Nom**`, `**Role Agent**` au lieu de `**Role**`. Migration automatique des anciens blocs (Nom -> Nom Agent, Role -> Role Agent, Id LLM -> Nom LLM) lors de chaque edition + reconstruction complete du bloc en ordre canonique. Table Sessions connues : colonne `Nom LLM`. py + sh + tests + doc |
+| 0.5.1 | 2026-08-12 | CORRECTION BUG DE DEMARRAGE (cause racine blocage Morpheus rounds 8/9) : sidentifier ecrivait `agent: Cerberus` en dur dans le profil classeur + affichait `(agent principal : Cerberus)` dans les messages, MEME quand la session retrouvee avait un AUTRE agent actif (ex: morpheus). Resultat : AGENTS.md et classeur en CONTRADICTION -> l agent qui demarrait (sidentifier obligatoire selon sa fiche) recevait une identite fausse et s arretait. Correction py + sh : nouvelle fonction agent_actif_bloc() lit l agent REEL du bloc (champ Nom Agent) ; session retrouvee -> affiche + ecrit le profil + l historique avec l agent reel ; nouvelle session -> Cerberus par defaut conserve |
 | Renommage | 2026-08-07 | Deplacement dans le dossier activer/ + renommage de mettre-a-jour-agents-md vers activer-agent-principal (l outil sert a activer/reactiver l agent principal dans AGENTS.md). ~120 references mises a jour dans 31 fichiers + spec + boucle retro-action |
 
 ---

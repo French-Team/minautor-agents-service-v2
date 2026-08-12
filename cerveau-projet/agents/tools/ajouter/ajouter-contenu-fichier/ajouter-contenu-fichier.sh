@@ -1,14 +1,14 @@
 #!/bin/bash
 # ajouter-contenu-fichier.sh
 # Ajouter du contenu a la fin d'un fichier (append)
-# Version : 0.2.0
+# Version : 0.3.0
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
-STATUT="ebauche"
+VERSION="0.3.0"
+STATUT="prepare"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -27,6 +27,7 @@ afficher_aide() {
     echo ""
     echo "Options :"
     echo "  --fichier <src> Ajouter le contenu d'un fichier source"
+    echo "  --backup        Creer une sauvegarde .bak avant"
     echo "  --dry-run       Simuler sans modifier"
     echo "  --verbose       Afficher les details"
     echo "  --help          Afficher cette aide"
@@ -42,6 +43,7 @@ main() {
     local cible=""
     local contenu=""
     local source=""
+    local backup="false"
     local dry_run="false"
     local verbose="false"
     local help="false"
@@ -49,6 +51,7 @@ main() {
     while [[ $# -gt 0 ]]; do
         case $1 in
             --fichier) source="$2"; shift 2 ;;
+            --backup) backup="true"; shift ;;
             --dry-run) dry_run="true"; shift ;;
             --verbose) verbose="true"; shift ;;
             --help) help="true"; shift ;;
@@ -108,6 +111,14 @@ main() {
     if [ "$dry_run" = "true" ]; then
         echo -e "${YELLOW}[DRY-RUN] $nb_lignes ligne(s) seraient ajoutees a $cible${NC}"
         exit 0
+    fi
+    
+    # Sauvegarde
+    if [ "$backup" = "true" ]; then
+        cp "$cible" "${cible}.bak"
+        if [ "$verbose" = "true" ]; then
+            echo -e "${BLUE}[INFO] Sauvegarde: ${cible}.bak${NC}"
+        fi
     fi
     
     # S'assurer que le fichier se termine par un retour a la ligne

@@ -11,14 +11,16 @@
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-documents-manquants/verifier-documents-manquants.py cerveau-projet/agents",
       "sortie": "resultat_documents",
-      "suivant": "c2"
+      "suivant": "c2",
+      "echec_ok": true
     },
     "c2": {
       "titre": "Executer rechercher-fichiers-vides",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-fichiers-vides/rechercher-fichiers-vides.py cerveau-projet",
       "sortie": "resultat_vides",
-      "suivant": "c3"
+      "suivant": "c3",
+      "echec_ok": true
     },
     "c3": {
       "titre": "Generer la commande combos-valider-cerveau",
@@ -37,14 +39,16 @@
       "type": "outil",
       "commande": "{cmd1}",
       "sortie": "resultat_sante",
-      "suivant": "c5"
+      "suivant": "c5",
+      "echec_ok": true
     },
     "c5": {
       "titre": "Executer valider-tableaux",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py",
       "sortie": "resultat_tableaux",
-      "suivant": "c6"
+      "suivant": "c6",
+      "echec_ok": true
     },
     "c6": {
       "titre": "FIN - controle sante termine",

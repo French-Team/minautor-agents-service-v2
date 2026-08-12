@@ -6,7 +6,7 @@ identite:
 ---
 # inserer-contenu-fichier
 
-**Version :** 0.2.0
+**Version :** 0.3.1
 **Statut :** prepare
 **Categorie :** inserer
 **Chemin :** `agents/tools/inserer/inserer-contenu-fichier/`
@@ -14,29 +14,37 @@ identite:
 
 ## Description
 
-Inserer du contenu a une position precise dans un fichier (apres un numero de ligne donne). Complement de `editer-fichier` (remplacement) et `ajouter-contenu-fichier` (fin de fichier) pour les insertions au milieu.
+Inserer du contenu a une position precise dans un fichier (apres un numero de ligne OU apres une ligne contenant un motif). Complement de `editer-fichier` (remplacement) et `ajouter-contenu-fichier` (fin de fichier) pour les insertions au milieu.
+
+**Vision utilisateur** : l'agent fournit le QUOI (le motif du contexte), l'outil fait le COMMENT (il localise la ligne, gere l'indentation, et refuse si le motif est introuvable - echec explicite, jamais 0 silencieux).
 
 ## Utilisation
 
 ```bash
-# Inserer une ligne apres la ligne 5
-inserer-contenu-fichier.sh fichier.md 5 "Contenu a inserer"
-
-# Version Python (recommandee)
+# Inserer une ligne apres la ligne 5 (par numero)
 python3 inserer-contenu-fichier.py fichier.md 5 "Contenu a inserer"
 
+# Inserer apres la ligne contenant un motif (ciblage par contenu, recommande)
+python3 inserer-contenu-fichier.py --apres "cle: valeur" fichier.yml "nouvelle: entree"
+
+# Inserer avec indentation automatique (alignee sur la ligne cible)
+python3 inserer-contenu-fichier.py --apres "section A" --indent fichier.yml "  sous: bloc"
+
 # Inserer le contenu d'un fichier source apres la ligne 10
-inserer-contenu-fichier.sh fichier.md 10 --fichier bloc.md
+python3 inserer-contenu-fichier.py fichier.md 10 --fichier bloc.md
 
 # Simuler sans modifier
-inserer-contenu-fichier.sh --dry-run fichier.md 5 "contenu"
+python3 inserer-contenu-fichier.py --dry-run fichier.md 5 "contenu"
 ```
 
 ## Options
 
 | Option | Description | Defaut |
 |---|---|---|
+| `--apres <motif>` | Inserer apres la premiere ligne contenant le motif | - |
+| `--indent` | Aligner le bloc sur l'indentation de la ligne cible | false |
 | `--fichier <src>` | Inserer le contenu d'un fichier source | - |
+| `--backup` | Creer une sauvegarde .bak avant | false |
 | `--dry-run` | Simuler sans modifier | false |
 | `--verbose` | Afficher les details | false |
 | `--help` | Afficher l'aide | - |
@@ -92,5 +100,6 @@ Position : apres la ligne 5
 | 0.1.0 | 2026-08-06 | Creation initiale |
 | 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
 | 0.2.0-py | 2026-08-07 | Version Python creee (insertion ligne N / debut, --fichier source, --dry-run, --version) |
+| 0.3.0 | 2026-08-12 | Qualite pro : ciblage par contenu `--apres <motif>`, indentation automatique `--indent`, echec explicite si motif introuvable, option --backup |\n| 0.3.1 | 2026-08-12 | SECURITE (round 3) : refus de modifier a travers un lien symbolique (fichier et source), refus octet nul, lecture robuste utf-8-sig + fallback latin-1 |
 
 ---

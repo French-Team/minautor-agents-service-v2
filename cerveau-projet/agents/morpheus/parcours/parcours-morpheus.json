@@ -246,9 +246,21 @@
    "type": "action"
   },
   "c16d": {
-   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission.",
+   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
    "titre": "FIN - Outil temporaire",
-   "type": "fin"
+   "type": "fin",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "enregistrer-usage-outil",
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/"
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)."
+    }
+   ]
   },
   "c17": {
    "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si activite directement par lui).",
@@ -305,6 +317,11 @@
   },
   "c3": {
    "indices": [
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/tester/template-test.md",
+     "raison": "REGLE (audit 2026-08-12) : lire le TEMPLATE de test AVANT d ecrire un nouveau test - le template est LA reference, pas les tests precedents (un test ancien peut porter des derives)."
+    },
     {
      "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-tests/",
      "raison": "Lire le protocole-tests : comment ecrire et executer les tests, cas limites, protections obligatoires",
@@ -528,6 +545,6 @@
   "case_depart": "c0",
   "description": "v0.2.0 : MIGRATION AU NOUVEAU FORMAT (spec-refonte etape 6, pilote 2 apres cerberus) - cases indice -> action, regles > 160 car. -> references (patterns/protocoles), max 3 indices par case. Parcours (jeu de piste) des missions de Morpheus : tester un outil (ecrire + executer avec protections), valider, rapporter. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
   "nom": "parcours-morpheus",
-  "version": "0.4.0"
+  "version": "0.4.2"
  }
 }

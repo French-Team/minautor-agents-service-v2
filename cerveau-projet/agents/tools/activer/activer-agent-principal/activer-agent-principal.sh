@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.0"
+VERSION="0.5.1"
 
 # Configuration
 AGENTS_FILE="${AGENTS_FILE:-AGENTS.md}"
@@ -503,7 +503,37 @@ ajouter_historique() {
     echo "Historique mis a jour dans $AGENTS_HISTORIQUE"
 }
 
-# S'identifier : creer/choisir sa session (agent principal = Cerberus)
+# Retourner l'agent REEL du bloc de session (champ Nom Agent), ou Cerberus
+# si absent. CORRECTION v0.5.1 : sidentifier ecrivait Cerberus en dur, ce qui
+# falsifiait le profil classeur quand un AUTRE agent (ex: morpheus) etait actif
+# -> double source contradictoire -> l agent s arretait au demarrage.
+agent_actif_bloc() {
+    local session=$1
+    if [ ! -f "$AGENTS_FILE" ]; then
+        echo "Cerberus"
+        return 0
+    fi
+    awk -v cible="$session" '
+        /^### Session : / {
+            if (session != "") {
+                if (session == cible) { print nom; exit }
+            }
+            session = $0
+            sub(/^### Session : /, "", session)
+            nom = "Cerberus"
+            next
+        }
+        /^\| \*\*(Nom Agent|Nom)\*\* \| / {
+            nom = $0
+            sub(/^\| \*\*(Nom Agent|Nom)\*\* \| /, "", nom)
+            sub(/ \|$/, "", nom)
+        }
+        END { if (session == cible) { print nom } }
+    ' "$AGENTS_FILE"
+}
+
+# S'identifier : creer/choisir sa session (agent principal = agent reel du bloc,
+# Cerberus pour une nouvelle session)
 sidentifier() {
     local llm_id=$1
     local session=""
@@ -513,7 +543,8 @@ sidentifier() {
         # MODE ID : chercher si cet id est deja lie (AGENTS.md champ Nom LLM + classeur)
         session=$(trouver_session_par_id "$llm_id")
         if [ -n "$session" ]; then
-            echo "Session retrouvee pour id $llm_id : $session (agent principal : Cerberus)"
+            local agent_affiche=$(agent_actif_bloc "$session")
+            echo "Session retrouvee pour id $llm_id : $session (agent principal : $agent_affiche)"
         else
             # REGLE ALIGNEMENT (v0.4.0) : id llm-N -> session-llm-N
             local cible=$(session_cible_pour_id "$llm_id")
@@ -558,9 +589,10 @@ sidentifier() {
         poser_nom_llm_bloc "$session" "$llm_id"
     fi
 
+    local agent_actif=$(agent_actif_bloc "$session")
     local timestamp=$(get_timestamp)
-    ajouter_historique "$timestamp" "$session" "Cerberus" "Identification LLM - demarrage de session"
-    mettre_a_jour_profil_session "$session" "Cerberus" "$llm_id"
+    ajouter_historique "$timestamp" "$session" "$agent_actif" "Identification LLM - demarrage de session"
+    mettre_a_jour_profil_session "$session" "$agent_actif" "$llm_id"
     mettre_a_jour_sessions_connues
 }
 

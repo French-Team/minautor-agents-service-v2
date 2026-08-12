@@ -10,6 +10,7 @@
 
 ## Version
 
+- **1.1.1** (2026-08-12) : REFERENCES MORTES detectees (round 7) - chaque 'suivant' et chaque branche 'vers' pointant vers une case inexistante est desormais une ERREUR STRUCTURE (le BFS les ignorait silencieusement et le parcours passait CONFORME a tort).
 - **1.1.0** (2026-08-11) : BUDGET PONDERE des indices par case -- indice COURT (<= 100 car.) = 0,5 unite, indice LONG (> 100 car.) = 1 unite, budget 3,0 (2 courts = 1 long). Le plafond absolu de 160 car. par texte reste inchange (decision utilisateur : flexibilite sur le NOMBRE, pas sur la TAILLE d'un indice).
 - **1.0.2** (2026-08-11) : convention de nommage ETENDUE aux prefixes thematiques majuscules `cT*` (la ligne trio de Janus utilise `cT1`..`cT10`, decision utilisateur : conserver ces IDs). Regex : `c[<prefixe-alpha-maj>]<numero>[a-z]?`.
 - **1.0.1** (2026-08-09) : garde-fou anti-pollution du rapport (lecon : rapport a la racine). Sans `--rapport <fichier>` explicite, aucun fichier n'est cree (jamais de rapport par defaut dans le repertoire courant).
@@ -50,7 +51,7 @@ le `.py`.
 
 | Domaine | Controle |
 |---|---|
-| **Structure** | ids uniques, types valides (question/controle/indice/action/fin), case_depart existante, fins joignables (BFS) |
+| **Structure** | ids uniques, types valides (question/controle/indice/action/fin), case_depart existante, references mortes (suivant/branches.vers vers case inexistante), fins joignables (BFS) |
 | **Modele** | decision (question/controle) = branches min 2 ; indice/action = suivant requis ; aucune boucle directe ; impasses signalees ; deviation sans rejoint visible = avertissement |
 | **Allegement** | budget pondere des indices : COURT (<= 100 car. ou sans texte) = 0,5 unite, LONG (> 100 car.) = 1 unite, budget 3,0 par case (6 courts = 3,0 OK) ; texte de regle > 160 caracteres = SIGNALEE avec proposition de reference |
 | **References** | chaque indice `{type: regle, ref: X}` doit resoudre (pattern-N -> spec-guider-parcours ; chemin -> fichier ; protocole-/regle- -> regles-immuables) |

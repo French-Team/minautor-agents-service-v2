@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # generateurs-case.sh
 # Wrapper bash vers generateurs-case.py (parite stricte par construction).
-# Version : 0.4.0
+# Version : 0.4.2
 # Statut : ebauche
 # identite:
 #   type: outil

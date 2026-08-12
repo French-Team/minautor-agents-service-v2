@@ -1,14 +1,14 @@
 #!/bin/bash
 # creer-fichier.sh
 # Creer un nouveau fichier avec verification
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.3.0
+# Statut : prepare
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
+VERSION="0.3.1"
 STATUT="prepare"
 
 RED='\033[0;31m'
@@ -24,6 +24,7 @@ afficher_aide() {
     echo ""
     echo "Options :"
     echo "  --forcer         Ecraser si le fichier existe deja"
+    echo "  --backup         Sauvegarder le fichier existant en .bak avant ecrasement"
     echo "  --dry-run        Simuler sans creer"
     echo "  --verbose        Afficher les details"
     echo "  --help           Afficher cette aide"
@@ -40,6 +41,7 @@ main() {
     local fichier=""
     local contenu=""
     local forcer="false"
+    local backup="false"
     local dry_run="false"
     local verbose="false"
     local help="false"
@@ -47,6 +49,7 @@ main() {
     while [[ $# -gt 0 ]]; do
         case $1 in
             --forcer) forcer="true"; shift ;;
+            --backup) backup="true"; shift ;;
             --dry-run) dry_run="true"; shift ;;
             --verbose) verbose="true"; shift ;;
             --help) help="true"; shift ;;
@@ -85,6 +88,14 @@ main() {
             echo -e "${YELLOW}[DRY-RUN] Contenu: $contenu${NC}"
         fi
         exit 0
+    fi
+    
+    # Sauvegarde avant ecrasement (--forcer + --backup)
+    if [ -f "$fichier" ] && [ "$forcer" = "true" ] && [ "$backup" = "true" ]; then
+        cp "$fichier" "${fichier}.bak"
+        if [ "$verbose" = "true" ]; then
+            echo -e "${BLUE}[INFO] Sauvegarde: ${fichier}.bak${NC}"
+        fi
     fi
     
     # Creer le repertoire parent si necessaire

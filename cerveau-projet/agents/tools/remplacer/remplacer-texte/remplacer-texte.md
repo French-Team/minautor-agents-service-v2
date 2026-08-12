@@ -6,8 +6,8 @@ identite:
 ---
 # remplacer-texte
 
-**Version :** 0.1.0-beta
-**Statut :** ebauche
+**Version :** 0.3.1
+**Statut :** prepare
 **Categorie :** remplacer
 **Chemin :** `agents/tools/remplacer/remplacer-texte/`
 **Proprietaire :** outil partage
@@ -15,6 +15,8 @@ identite:
 ## Description
 
 Remplacer une liste de paires `ancien -> nouveau` dans plusieurs fichiers d'un dossier (recursif). Cree pour les renommages massifs (ex: renommer un outil et ses ~120 references) sans re-ecrire un script temporaire a chaque fois.
+
+**Echec explicite** : si AUCUNE paire n'a matche dans le dossier, l'outil retourne un code non nul (1) avec un message clair - jamais 0 silencieux.
 
 ## Utilisation
 
@@ -67,6 +69,9 @@ remplacer-texte.py --dry-run dossier 'ancien=nouveau'
 | Version | Date | Changements |
 |---|---|---|
 | 0.1.0-beta | 2026-08-07 | Creation : remplacement massif multi-fichiers (paires, exclusions, dry-run, rapport). Inspire du script temporaire eprouve lors du renommage de mettre-a-jour-agents-md vers activer-agent-principal |
+| 0.2.0 | 2026-08-12 | Qualite pro : echec explicite si aucune paire ne matche (code 1), protection nommage, promotion prepare |
+| 0.3.0 | 2026-08-12 | PERFORMANCE (round 2) : la version .sh deleguait a python3 par paire x fichier (60 process, 8.5s) - desormais UN SEUL appel python3 (0.55s, ~15x). Parite py/sh par construction |
+| 0.3.1 | 2026-08-12 | SECURITE (round 3) : liens symboliques ignores (jamais d'ecriture a travers un lien), lecture robuste utf-8-sig + fallback latin-1, refus octet nul dans le dossier |
 
 ## Notes de creation
 

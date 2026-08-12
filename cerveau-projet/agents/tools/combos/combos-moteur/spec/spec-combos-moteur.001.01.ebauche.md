@@ -7,10 +7,10 @@ identite:
 # Specification -- combos-moteur
 
 **Statut :** ebauche
-**Version :** 0.3.1
+**Version :** 0.3.2
 **Categorie :** combos
 **Date :** 2026-08-11
-**Historique :** v0.2.1 (regle des cles des entrees = cles EXACTES du catalogue, lecon KO test-003) ; v0.3.0 (garde-fou IMPLEMENTE dans le moteur : verification au chargement des cles des cases generateur vs catalogue, `_verifier_cles_catalogue` / case `verification_generateur`)
+**Historique :** v0.3.2 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version du moteur 0.3.2) ; v0.2.1 (regle des cles des entrees = cles EXACTES du catalogue, lecon KO test-003) ; v0.3.0 (garde-fou IMPLEMENTE dans le moteur : verification au chargement des cles des cases generateur vs catalogue, `_verifier_cles_catalogue` / case `verification_generateur`)
 
 ---
 

@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-themis",
   "agent": "themis",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
  },
@@ -512,7 +512,19 @@
   "c23d": {
    "titre": "FIN - Outil temporaire",
    "type": "fin",
-   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission."
+   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "enregistrer-usage-outil",
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/"
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)."
+    }
+   ]
   },
   "c23c": {
    "titre": "Creer l outil temporaire",
