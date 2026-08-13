@@ -6,7 +6,7 @@ identite:
 ---
 # evaluer-agents
 
-**Version :** 0.2.2
+**Version :** 0.2.3
 **Statut :** prepare
 **Categorie :** evaluer
 **Chemin :** `agents/tools/evaluer/evaluer-agents/`

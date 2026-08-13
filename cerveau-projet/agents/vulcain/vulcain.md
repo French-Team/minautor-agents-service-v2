@@ -70,7 +70,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.4.2)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.6)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -80,7 +80,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json
 ```
 
-**Parcours** : [cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json](parcours/parcours-vulcain.json) (v0.3.7)
+**Parcours** : [cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json](parcours/parcours-vulcain.json) (v0.4.4)
 **Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) (v0.6.2)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier

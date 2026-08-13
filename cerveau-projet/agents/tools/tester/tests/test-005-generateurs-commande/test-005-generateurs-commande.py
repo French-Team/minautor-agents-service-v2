@@ -5,7 +5,7 @@ test-005-generateurs-commande.py
 Test formel du generateur de commande v0.2.4 (fiabilisation des flags optionnels),
 du catalogue (chaque commande doit avoir sa documentation .md : REGLE ABSOLUE
 LECTURE DOC) et du parcours Atlas v0.4.1 (migre au format action : references +
-cases action, 1 commande template residuelle c30 conservee et documentee).
+cases action, 2 commandes templates residuelles c30 + c11a conservees et documentees).
 
 Objet (correction Buffy 2026-08-09) :
   - composer_commande avait une condition INVERSEE : les flags optionnels non
@@ -17,10 +17,11 @@ Objet (correction Buffy 2026-08-09) :
   - parcours-atlas v0.1.1 -> v0.1.2 : 24 commandes en dur retirees des indices
     outil avec catalogue (ne restent que type/nom/catalogue/chemin).
   - parcours-atlas v0.1.2 -> v0.1.10 : pilote strict - 1 commande template
-    residuelle case c30 (cartographier-parcours.py {parcours}), connue et documentee.
+    residuelles cases c30 (cartographier-parcours.py {parcours}) + c11a (activer themis), connues et documentees.
   - parcours-atlas v0.1.10 -> v0.2.0 : migration format action (references + cases
-    action). La commande template c30 est conservee comme residu connu (1 seule).
+    action). Les commandes templates c30 et c11a sont conservees comme residus connus (2).
   - parcours-atlas v0.3.3 -> v0.4.1 (2026-08-11) : ajout case c0d LIRE LA
+  - parcours-atlas v0.4.1 -> v0.4.2 (2026-08-13) : Themis maillon (c11a/c11b)
     DOCUMENTATION DE L OUTIL avant utilisation (garde-fou lecture .md).
 
 Cas couverts (26 points) :
@@ -42,8 +43,8 @@ Cas couverts (26 points) :
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
   PARCOURS ATLAS v0.4.1
- 17. parcours-atlas.json : json.load valide + version 0.4.1
- 18. 1 seul residu connu (c30) dans les indices outil avec catalogue
+ 17. parcours-atlas.json : json.load valide + version 0.4.2
+ 18. 2 residus connus (c30 + c11a) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
  21. valider-cartes-decision --agent atlas : CONFORME
@@ -57,6 +58,7 @@ Usage:
   python3 test-005-generateurs-commande.py
 """
 
+import importlib.util
 import io
 import json
 import os
@@ -66,6 +68,19 @@ import sys
 import tempfile
 
 RACINE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..", ".."))
+TOOLS_DIR = os.path.join(RACINE, "cerveau-projet", "agents", "tools")
+
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 GC_PY = os.path.join(RACINE, "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py")
 GC_SH = os.path.join(RACINE, "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.sh")
 CATALOGUE = os.path.join(RACINE, "cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json")
@@ -89,25 +104,25 @@ def verifier(numero, description, condition, detail=""):
 
 
 def exec_cmd(ligne):
-    r = subprocess.run(ligne, shell=True, capture_output=True, text=True)
+    r = PROTECTIONS.lancer_protege(ligne, shell=True, capture_output=True, text=True)
     return r.returncode, (r.stdout or "") + (r.stderr or "")
 
 
 def exec_list(args):
     """Execute sans shell (fiable sous Windows pour les pipes dans les arguments)."""
-    r = subprocess.run(args, capture_output=True, text=True)
+    r = PROTECTIONS.lancer_protege(args, capture_output=True, text=True)
     return r.returncode, (r.stdout or "") + (r.stderr or "")
 
 
 def composer(nom, reponses, sh=False):
     """Compose via le generateur (py ou sh) et retourne la commande generee."""
     if sh:
-        r = subprocess.run(["bash", GC_SH, "--commande", nom, "--reponses", reponses],
+        r = PROTECTIONS.lancer_protege(["bash", GC_SH, "--commande", nom, "--reponses", reponses],
                            capture_output=True, text=True)
     else:
         # --no-journal : ne pas polluer le registre d usage pendant les tests
         # (le .sh du generateur ne journalise pas et ne supporte pas l option)
-        r = subprocess.run(["python3", GC_PY, "--commande", nom, "--reponses", reponses, "--no-journal"],
+        r = PROTECTIONS.lancer_protege(["python3", GC_PY, "--commande", nom, "--reponses", reponses, "--no-journal"],
                            capture_output=True, text=True)
     lignes = ((r.stdout or "") + (r.stderr or "")).splitlines()
     for i, ligne in enumerate(lignes):
@@ -121,7 +136,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.4 + catalogue 0.2.9 + parcours-atlas v0.4.1 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.4 + catalogue 0.2.9 + parcours-atlas v0.4.2 ===")
     print("")
 
     # ---------- GENERATEUR v0.2.4 ----------
@@ -186,10 +201,10 @@ def main():
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.1",
-                 p.get("parcours", {}).get("version") == "0.4.1", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.2",
+                 p.get("parcours", {}).get("version") == "0.4.2", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.1", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.2", False, str(e))
         p = {}
 
     # Residu connu et documente : case c30 (commande template cartographier-parcours.py {parcours}).
@@ -201,11 +216,11 @@ def main():
             if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
                 n_commande += 1
                 cases_commande.append(k)
-    verifier(18, "1 seul residu connu (c30) dans les indices avec catalogue",
-             n_commande == 1 and cases_commande == ["c30"],
+    verifier(18, "2 residus connus (c30 + c11a) dans les indices avec catalogue",
+             n_commande == 2 and cases_commande == ["c30", "c11a"],
              "restants=%d cases=%s" % (n_commande, cases_commande))
 
-    for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer|NON"), (20, "autre+OUI", "OUI|autre|OUI|NON")]:
+    for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer|NON|OUI"), (20, "autre+OUI", "OUI|autre|OUI|NON|OUI")]:
         c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", chemin])
         verifier(num, "navigation %s : PARCOURS TERMINE" % nom_chemin, "PARCOURS TERMINE" in out, out[-80:])
 

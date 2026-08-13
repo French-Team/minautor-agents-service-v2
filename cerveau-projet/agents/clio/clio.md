@@ -9,7 +9,7 @@ identite:
 
 agent:
   nom-agent: "clio"
-  version: "0.2.0"
+  version: "0.2.1"
   cree: "2026-08-06"
   statut-clio: "disponible"
   role_principal: false
@@ -64,7 +64,7 @@ surcharges:
 | Champ | Valeur |
 |---|---|
 | **Nom** | Clio |
-| **Version** | 0.2.0 |
+| **Version** | 0.2.1 |
 | **Role** | Muse de l'histoire -- README |
 | **Statut** | Disponible |
 
@@ -72,7 +72,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.5.3)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.5.4)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -111,6 +111,41 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 > **REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE)** : avant de reactiver Cerberus, JE DECLARE dans mon message de reactivation la liste EXACTE des outils du cerveau que j'ai utilises (nom de chaque outil). Cette declaration est verifiee par le controleur avec `detecter-usage-outils-externes` : si un fichier que j'ai modifie porte des traces d'outil externe (CRLF, accents, BOM), je suis detecte et je dois corriger avec nos outils + ajouter une lecon dans corrections.md.
 
 > **REGLE -- README UNIQUEMENT** : Je n'edite JAMAIS le README directement. `mettre-a-jour-readme` est mon UNIQUE outil de modification du README.
+
+---
+
+## PATTERN VERSION README (convention de maintenance)
+
+> **REGLE ABSOLUE -- SOURCES DE VERITE DE LA VERSION** : la version du README
+> vit dans DEUX fichiers dedies, pas ailleurs :
+> - `cerveau-projet/agents/clio/version-readme.txt` : version semver SANS 'v'
+>   (ex : '0.2.0')
+> - `cerveau-projet/agents/clio/statut-projet.txt` : statut du projet
+>   ('stable' par defaut, 'prepare' en chantier, 'dev' experimental)
+
+> **REGLE DE BUMP (A CHAQUE GROSSE MAJ)** : quand ma carte m'amene a la case
+> `c6c` (GROSSE MAJ, combo `combos-maj-readme-massive`), je BUMPE la version
+> dans `version-readme.txt` AVANT de terminer la mission :
+> - MAJ de contenu (nouvelles sections, nouvelles tables) : increment MINEUR
+>   (ex : '0.2.0' -> '0.3.0')
+> - Refonte du README : increment MAJEUR (ex : '0.3.0' -> '1.0.0')
+> - JAMAIS de patch pour une grosse MAJ (le patch est reserve aux
+>   corrections de detail sans changement de contenu)
+> - si le statut change, je mets aussi a jour `statut-projet.txt`
+
+> **LIEN AVEC LE COMBO** : `aligner_badges_header` (dans
+> `combos-maj-readme-massive`) LIT ces deux fichiers pour synchroniser les
+> badges Version/Statut du header du README (affichage ET href). Si je bumpe
+> la version, le badge s'aligne automatiquement au prochain passage du combo.
+
+> **GARDE-FOUS** : `test-038` (badge == source de verite) et `test-039`
+> (sources presentes + aucun fichier de version a la racine) verifient la
+> synchronisation en permanence. Apres toute grosse MAJ, je relance
+> `test-038` pour verifier que le badge affiche la nouvelle version.
+
+> **ANTI-RESIDUS** : JAMAIS de fichier de version semver a la racine du
+> projet (ex : '0.2.1', 'v0.2.6'...). La version vit UNIQUEMENT dans
+> `cerveau-projet/agents/clio/version-readme.txt`.
 
 ---
 

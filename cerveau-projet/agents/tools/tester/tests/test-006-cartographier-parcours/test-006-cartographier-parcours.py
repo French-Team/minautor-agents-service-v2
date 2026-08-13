@@ -26,6 +26,7 @@ Cas couverts:
 Usage:
   python3 test-006-cartographier-parcours.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -40,6 +41,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 OUTIL_DIR = os.path.join(TOOLS_DIR, "cartographier", "cartographier-parcours")
 OUTIL_PY = os.path.join(OUTIL_DIR, "cartographier-parcours.py")
@@ -67,7 +79,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, timeout=60):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout)
 
 
 def ascii_count(chemin):
@@ -113,7 +125,7 @@ def main():
         verifier("2b. En-tete complet (agent, version, depart, nb cases, nb chemins)",
                  ok_gen and all(m in contenu for m in
                                 ("| Agent | atlas |", "| Version du parcours |",
-                                 "| Case de depart | c0 |", "| Nombre de cases | 46 |",
+                                 "| Case de depart | c0 |", "| Nombre de cases | 48 |",
                                  "| Nombre de chemins (depart -> fins) | 39 |")),
                  "en-tete partiel")
         verifier("2c. Sections presentes (arbre, impasses, boucles, chemins)",

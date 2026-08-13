@@ -9,7 +9,7 @@
     "c1": {
       "titre": "Detecter les impacts du fichier modifie",
       "type": "outil",
-      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py {fichier}",
+      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py '{fichier}'",
       "sortie": "resultat_impacts",
       "suivant": "c2",
       "echec_ok": true

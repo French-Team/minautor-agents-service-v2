@@ -8,10 +8,10 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.3.2 |
+| **Version** | 0.3.3 |
 | **Statut** | ebauche |
 | **Categorie** | combos |
-| **Derniere mise a jour** | 2026-08-11 |
+| **Derniere mise a jour** | 2026-08-13 |
 | **Spec** | [spec-combos-moteur.001.01.ebauche.md](spec/spec-combos-moteur.001.01.ebauche.md) (v0.2.1) |
 
 ---
@@ -281,6 +281,49 @@ composer la commande de l'outil suivant, une case `generateur` s'intercale.
 - Option `persistant: true` sur une case `outil` -> la sortie est ecrite dans
   le classeur-variables (`stockage/variables-actuelles.md`) apres execution.
 
+### ECHAPPEMENT DES VALEURS (regle anti-echappement, v0.3.3)
+
+> **REGLE** : l'interpolation `{var}` fait un remplacement BRUT de la valeur
+> dans la commande, puis le moteur decoupe la commande avec `shlex.split`.
+> Toute valeur contenant une **apostrophe non echappee** (ou des espaces non
+> quotes) CASSE le decoupage -> `ValueError: Commande invalide (case X)`.
+> Le catalogue (149 commandes) et les commandes actuelles des combos sont
+> propres, mais la regle protege le futur.
+
+**Regle d or** : dans le `commande` d'une case `outil`, TOUJOURS quoter les
+variables avec des guillemets simples autour de `{var}`. Exemples :
+
+```
+MAUVAIS  : "commande": "python3 outil.py --raison {raison}"
+           -> avec raison = "d'activation", shlex.split casse (apostrophe)
+
+BON      : "commande": "python3 outil.py --raison '{raison}'"
+           -> l'apostrophe est a l'interieur des guillemets, shlex.split OK
+
+BON      : "commande": "python3 outil.py --raison {raison}"
+           -> si la valeur ne contient JAMAIS d'apostrophe ni d'espace
+```
+
+**Cas des valeurs avec apostrophes** : si une variable peut contenir une
+apostrophe (ex: une raison d'activation), NE PAS l'inserer nue dans une
+commande : soit la quoter dans le modele (`'{var}'`), soit utiliser une
+valeur sans apostrophe. Le message `Commande invalide` signale le cas.
+
+**Application aux commandes bash des combos** : la meme regle vaut pour les
+`.sh` des combos et pour les commandes du catalogue
+(`generateurs-commande`) : toute valeur interpolee doit etre quotee, jamais
+inseree brute quand elle peut contenir apostrophe ou espace.
+
+```json
+{
+  "type": "outil",
+  "commande": "python3 mon-outil.py --fichier '{fichier}' --raison '{raison}'",
+  "sortie": "resultat",
+  "persistant": true,
+  "suivant": "c4"
+}
+```
+
 ```json
 {
   "type": "outil",
@@ -379,6 +422,7 @@ Pattern 3, validation.
 
 | Version | Statut | Changements |
 |---|---|---|
+| 0.3.3 | ebauche | ECHAPPEMENT (round anti-echappement) : doc de la regle d or - quoter {var} dans les commandes des cases outil (interpolation brute + shlex.split -> une apostrophe non echappee casse). Application aux commandes bash des combos et du catalogue. Spec et py/sh INCHANGES (documentation seule) |
 | 0.3.0 | ebauche | GARDE-FOU DES CLES : au chargement, validation des entrees des cases generateur contre le catalogue de commandes (cles exactes + obligatoires fournis) -> ERREUR claire code 1. Spec alignee v0.2.1. Py/sh parite maintenue |
 | 0.3.2 | ebauche | ROBUSTESSE (round 5) : verification du code retour de chaque case outil - un echec (exit != 0) ARRETE le combo avec message explicite (case, commande, code, sortie) ; nouveau champ optionnel `echec_ok: true` pour les outils de controle/detection dont le code non nul est un resultat legitime. 30 cases marquees sur 10 combos de controle. Fin de la propagation silencieuse des echecs. Py/sh parite maintenue |
 | 0.3.2 | ebauche | ROBUSTESSE (round 5) : verification du code retour de chaque case outil - un echec (exit != 0) ARRETE le combo avec message explicite (case, commande, code, sortie) ; nouveau champ optionnel `echec_ok: true` pour les outils de controle/detection dont le code non nul est un resultat legitime. 30 cases marquees sur 10 combos de controle. Fin de la propagation silencieuse des echecs. Py/sh parite maintenue |

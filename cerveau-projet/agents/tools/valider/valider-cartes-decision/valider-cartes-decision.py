@@ -47,7 +47,7 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.0
+Version : 0.4.1
 Statut : prepare
 """
 
@@ -57,7 +57,8 @@ import os
 import re
 import sys
 
-VERSION = "0.4.0"
+VERSION = "0.4.1"
+REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "prepare"
 
 AGENTS_DIR = "cerveau-projet/agents"
@@ -358,6 +359,34 @@ def verifier_tous():
     return 0
 
 
+def verifier_residus_racine():
+    """GARDE-FOU ANTI-RESIDUS : detecter dans le repertoire courant les fichiers
+    nommes comme des versions semver pures (ex: 0.2.1, v0.2.6). Ces fichiers
+    sont des residus probables de redirections accidentelles de sortie d une
+    commande precedente (souvent la sortie d un outil du cerveau). Anti-residu :
+    les supprimer - les sources de verite de version vivent dans
+    cerveau-projet/agents/clio/ (version-readme.txt, statut-projet.txt),
+    JAMAIS a la racine."""
+    try:
+        residus = sorted(n for n in os.listdir(".")
+                         if os.path.isfile(n) and REGEX_RESIDU.match(n))
+    except OSError:
+        return
+    if not residus:
+        return
+    print("=" * 60)
+    print("!!! WARNING GARDE-FOU (v%s) !!!" % VERSION)
+    print("Des fichiers nommes comme des versions semver sont presents dans le")
+    print("repertoire courant (residus probables de redirections accidentelles")
+    print("de sortie) :")
+    for n in residus[:10]:
+        print("    - %s" % n)
+    print("ANTI-RESIDU : supprimez-les. Les sources de verite de version vivent")
+    print("dans cerveau-projet/agents/clio/ (version-readme.txt,")
+    print("statut-projet.txt), JAMAIS a la racine.")
+    print("=" * 60)
+
+
 def main(argv):
     if not argv:
         afficher_aide()
@@ -370,6 +399,8 @@ def main(argv):
     if argv[0] == "--version":
         print("valider-cartes-decision v%s (%s)" % (VERSION, STATUT))
         return 0
+
+    verifier_residus_racine()
 
     if argv[0] == "--agent":
         if len(argv) < 2:

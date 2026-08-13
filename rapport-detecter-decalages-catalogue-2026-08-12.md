@@ -1,6 +1,6 @@
 # Scan Systematique du Catalogue vs Interfaces Reelles
 
-**Date** : 2026-08-12 22:54 | **Catalogue** : v? | **Entrees** : 146
+**Date** : 2026-08-12 23:59 | **Catalogue** : v? | **Entrees** : 147
 
 ## COMBOS (garde-fou : cles des cases generateur vs catalogue)
 
@@ -14,7 +14,7 @@ Aucun probleme de cles detecte (toutes les entrees correspondent au catalogue).
 
 | Classe | Nombre |
 |---|---|
-| CONFORME | 139 |
+| CONFORME | 140 |
 | DECALAGE | 0 |
 | NON TESTABLE | 7 |
 
@@ -36,7 +36,7 @@ Aucun decalage detecte.
 
 Aucune alerte.
 
-## Conformes (139)
+## Conformes (140)
 
 - activer-activer
 - activer-agent-principal
@@ -157,6 +157,7 @@ Aucune alerte.
 - tester-protection-blocage
 - tester-protection-boucles-infinies
 - tester-protection-erreurs-silencieuses
+- tester-protections
 - valider-cartes-decision
 - valider-case
 - valider-conformite-ascii

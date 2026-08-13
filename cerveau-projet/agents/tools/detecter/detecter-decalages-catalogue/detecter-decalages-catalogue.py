@@ -11,7 +11,12 @@
 # l aide de CHAQUE sous-commande et fusionne les options -- corrige les faux
 # positifs generateurs-case-convertir / generateurs-ligne (flags de sous-
 # commandes absents de l aide racine).
-# Version : 0.2.0
+# v0.2.1 : PERFORMANCE (goulot test-028) : les aides des commandes du catalogue
+# sont lancees en PARALLELE (pool de threads, min(16, nb commandes)) au lieu
+# d une boucle serie (~85s -> ~8s sur 147 commandes) + CACHE des aides par
+# (interpreteur, script) : un script reference par plusieurs commandes n est
+# lance qu une seule fois (ex: activer-agent-principal 5x -> 1 lancement).
+# Version : 0.2.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -33,6 +38,12 @@ chaque sous-commande (script <sous-cmd> --help) et fusionne toutes les options
 -- corrige les faux positifs des outils a sous-commandes (generateurs-case,
 generateurs-ligne).
 
+Depuis la v0.2.1, les aides sont lancees en PARALLELE (pool de threads,
+min(16, nb commandes)) avec un CACHE par (interpreteur, script) : un script
+partage par plusieurs commandes du catalogue n est lance qu une seule fois.
+Objectif : abaisser le temps du goulot de la suite anti-regression (test-028,
+~85s en serie -> ~8s en parallele).
+
 Usage:
   detecter-decalages-catalogue.py [--sortie CHEMIN] [--version]
 
@@ -50,12 +61,24 @@ import re
 import subprocess
 import sys
 import unicodedata
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
+# v0.2.1 : pool de threads pour lancer les aides des commandes en parallele.
+# min(16, nb) : surcharge le lanceur de tests qui utilise deja un pool a part.
+MAX_WORKERS = 16
+# v0.2.1 : TIMEOUT porte a 30s (au lieu de 8s) : en pool 16 workers, la
+# contention au demarrage des interpretes Python (lecteur reseau) faisait
+# depasser 8s a des outils qui repondent en 6-9s seuls -> verdict instable
+# (test-017 CONFORME seul / TIMEOUT sous charge). 30s absorbe la contention
+# sans penaliser les vrais non-testables (qui repondent vite ou jamais).
+# v0.2.1 : cache des aides par (interpreteur, script) -- un script reference
+# par plusieurs commandes du catalogue n est lance qu une seule fois.
+CACHE_AIDES = {}
 COMBOS_GLOBE = "cerveau-projet/agents/tools/combos/*/definition-combo.json"
 CATALOGUE = "cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json"
-TIMEOUT = 8
+TIMEOUT = 30
 # detecter-decalages-catalogue.py est a: cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/
 RACINE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
@@ -158,6 +181,19 @@ def lancer_aide(interpreteur, script):
     return "\n".join(parties), None, True
 
 
+def lancer_aide_cachee(interpreteur, script):
+    """Lance l aide avec CACHE par (interpreteur, script) (v0.2.1).
+
+    Un script reference par plusieurs commandes du catalogue (ex:
+    activer-agent-principal 5x) n est lance qu une seule fois : le resultat
+    est memorise et reutilise. Thread-safe : le cache est rempli une fois par
+    cle (chaque cle n est demandee que par un seul worker du pool)."""
+    cle = (interpreteur, script)
+    if cle not in CACHE_AIDES:
+        CACHE_AIDES[cle] = lancer_aide(interpreteur, script)
+    return CACHE_AIDES[cle]
+
+
 def analyser_combos():
     """GARDE-FOU v0.1.1 : verifie les cles des cases generateur des definitions-
     combo contre le catalogue. Retourne (problemes, nb_combos)."""
@@ -200,6 +236,9 @@ def analyser():
         cat = json.load(fh)
     commandes = cat["commandes"]
     resultats = {"conformes": [], "decalages": [], "non_testables": [], "alertes": []}
+    # v0.2.1 : pre-calcul des commandes a sonder (hors pool : le calcul des
+    # placeholders est CPU pur, instantane)
+    sondes = []
     for e in commandes:
         nom = e.get("nom", "?")
         modele = e.get("modele", "")
@@ -208,9 +247,27 @@ def analyser():
         placeholders_cat = set(p["cle"] for p in e.get("parametres", []) if p.get("obligatoire"))
         placeholders_modele = set(re.findall(r"\{([a-z_0-9]+)\}", modele))
         manquants_oblig = sorted(placeholders_cat - placeholders_modele)
+        sondes.append((nom, modele, script, interpreteur, manquants_oblig))
+    # v0.2.1 : lancement PARALLELE des aides (pool de threads). Chaque sonde
+    # demande l aide de son script (cachee) : un script partage n est lance
+    # qu une seule fois par le pool entier.
+    aides = {}
+    with ThreadPoolExecutor(max_workers=min(MAX_WORKERS, len(sondes))) as pool:
+        futures = {}
+        for idx, s in enumerate(sondes):
+            _, _, script, interpreteur, _ = s
+            if not script:
+                continue
+            futures[pool.submit(lancer_aide_cachee, interpreteur, script)] = idx
+        for fut in futures:
+            aides[futures[fut]] = fut.result()
+    for idx, (nom, modele, script, interpreteur, manquants_oblig) in enumerate(sondes):
         if manquants_oblig:
             resultats["alertes"].append((nom, "placeholder obligatoire absent du modele: %s" % manquants_oblig))
-        aide, err, reconnue = lancer_aide(interpreteur, script) if script else (None, "PAS DE SCRIPT", False)
+        if not script:
+            resultats["non_testables"].append((nom, "PAS DE SCRIPT", script))
+            continue
+        aide, err, reconnue = aides[idx]
         if err or not reconnue:
             resultats["non_testables"].append((nom, err or "AIDE NON RECONNUE", script))
             continue

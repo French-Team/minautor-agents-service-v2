@@ -18,9 +18,10 @@ Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
   - v0.3.1 : branchement generateurs-ligne (case c10d, branche 'ligne' dans c10b)
   - v0.3.6 : branchement editer-fichier-agents (case c11b, branche 'fiche' dans c10b)
   - v0.4.1 : ajout case c0d LIRE LA DOCUMENTATION DE L OUTIL (REGLE ABSOLUE LECTURE DOC)
+  - v0.4.2 (2026-08-13) : Themis maillon automatique (actions c8a/c22a/c27a Activer Themis + controles c8b/c22b/c27b Retour de Themis)
 
-Cas couverts:   1. Version du parcours = 0.4.1
-  2. Types : 36 action / 8 question / 2 controle / 10 fin, 0 indice
+Cas couverts:   1. Version du parcours = 0.4.2
+  2. Types : 40 action / 8 question / 5 controle / 10 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
   5. Navigation chemin creation agent -> PARCOURS TERMINE
@@ -38,6 +39,7 @@ Cas couverts:   1. Version du parcours = 0.4.1
 Usage:
   python3 test-016-migration-buffy.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -52,6 +54,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 OUTIL_DIR = os.path.join(TOOLS_DIR, "valider", "valider-case")
 OUTIL_PY = os.path.join(OUTIL_DIR, "valider-case.py")
@@ -77,7 +90,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, timeout=90):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout)
 
 
 def ascii_count(chemin):
@@ -98,18 +111,18 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.4.1",
-                 d["parcours"].get("version") == "0.4.1",
+        verifier("1. Version du parcours = 0.4.2",
+                 d["parcours"].get("version") == "0.4.2",
                  d["parcours"].get("version"))
 
         # 2. Types
         types = {}
         for c in d["cases"].values():
             types[c.get("type")] = types.get(c.get("type"), 0) + 1
-        verifier("2a. 37 cases action (32 pilotage + c0d lecture doc + c10d generateurs-ligne + c11b fiche agent + c15c/c15d Pattern 17 + c42 registre usage)",
-                 types.get("action") == 37, str(types))
-        verifier("2b. 8 questions + 2 controles + 10 fins (Pattern 17 ajoute c15b question + c15e fin)",
-                 types.get("question") == 8 and types.get("controle") == 2
+        verifier("2a. 40 cases action (37 anterieures + c8a/c22a/c27a Activer Themis)",
+                 types.get("action") == 40, str(types))
+        verifier("2b. 8 questions + 5 controles + 10 fins (Themis c8b/c22b/c27b)",
+                 types.get("question") == 8 and types.get("controle") == 5
                  and types.get("fin") == 10, str(types))
         verifier("2c. 0 case indice restante (toutes converties en action)",
                  types.get("indice", 0) == 0, str(types))

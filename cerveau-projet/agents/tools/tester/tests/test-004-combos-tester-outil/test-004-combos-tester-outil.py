@@ -16,7 +16,7 @@ Cas couverts:
   4. Variable commande_test manquante (apres c3=OUI) -> erreur claire (commande de la case c4)
   5. Navigation chemin OUI : fichier de test CREE + test EXECUTE + c6 FIN (COMBO TERMINE)
   6. Navigation chemin NON : c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE preservee)
-  7. Integration parcours morpheus v0.4.2 : guider-parcours affiche la case
+  7. Integration parcours morpheus v0.4.5 : guider-parcours affiche la case
      Lancer le combo tester-outil puis Verifier les resultats
   8. valider-cartes-decision --agent morpheus : CONFORME
   9. Nommage : definition-combo.json = bruit preexistant documente (identique aux 15 combos) - non bloquant
@@ -25,6 +25,7 @@ Cas couverts:
 Usage:
   python3 test-004-combos-tester-outil.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -38,6 +39,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 MOTEUR_PY = os.path.join(TOOLS_DIR, "combos", "combos-moteur", "combos-moteur.py")
 VALIDER_CARTES = os.path.join(TOOLS_DIR, "valider", "valider-cartes-decision", "valider-cartes-decision.py")
@@ -65,12 +77,12 @@ def verifier(nom, condition, detail=""):
 
 def executer(cmd, cwd=None):
     try:
-        proc = subprocess.run(
+        proc = PROTECTIONS.lancer_protege(
             cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
             timeout=300, cwd=cwd,
         )
         return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
-    except subprocess.TimeoutExpired:
+    except PROTECTIONS.ArretProtection:
         return -1, "TIMEOUT"
 
 
@@ -137,7 +149,7 @@ def main():
     # --- 7. Integration parcours morpheus v0.4.1
     with io.open(PARCOURS, encoding="utf-8") as fh:
         p = json.load(fh)
-    verifier("7a. Parcours morpheus v0.4.2", p.get("parcours", {}).get("version") == "0.4.2")
+    verifier("7a. Parcours morpheus v0.4.5", p.get("parcours", {}).get("version") == "0.4.5")
     code, out = executer([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|tester"])
     verifier("7b. Case Lancer le combo tester-outil presente",
              "Lancer le combo tester-outil" in out)

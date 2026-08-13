@@ -40,6 +40,7 @@ Points couverts:
 Usage:
   python3 test-023-grep-budget-pondere.py
 """
+import importlib.util
 import io
 import os
 import sys
@@ -47,6 +48,19 @@ import sys
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
     PROJECT_ROOT = os.path.dirname(PROJECT_ROOT)
+
+TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
+
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
 
 FICHIERS_TEXTES = [
     os.path.join(PROJECT_ROOT, "cerveau-projet", "docs-dev-cerveau-projet",

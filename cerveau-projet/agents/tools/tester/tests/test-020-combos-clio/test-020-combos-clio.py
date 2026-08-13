@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-020-combos-clio.py
-Test formel des 3 combos Clio v0.1.0 (Pattern 3, crees pour le test reel de la
+Test formel des 3 combos Clio (Pattern 3, crees pour le test reel de la
 grosse mise a jour conservative du README : savoir CE QUI A CHANGE puis
 corriger compteurs, tables et badges).
 
@@ -11,8 +11,9 @@ Combos testes (cerveau-projet/agents/tools/combos/):
      (agents, outils par categorie) + ecarts README vs realite
   2. combo-maj-readme (encapsule definition-combo.json, v0.1.0, 5 cases) :
      PETITE MAJ - verifier -> maj (si ecarts) -> ASCII
-  3. combos-maj-readme-massive (orchestre py/sh/md, v0.1.0) : GROSSE MAJ
+  3. combos-maj-readme-massive (orchestre py/sh/md, v0.1.3) : GROSSE MAJ
      conservative - analyse -> verifier -> maj -> correctifs -> ASCII
+     (badge header Outils-N affichage + href alignes automatiquement)
 
 Cas couverts:
   1. Nommage : py/sh/md des 2 orchestres + definition-combo.json du encapsule
@@ -32,6 +33,7 @@ Cas couverts:
 Usage:
   python3 test-020-combos-clio.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -44,6 +46,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 MOTEUR_PY = os.path.join(TOOLS_DIR, "combos", "combos-moteur", "combos-moteur.py")
 ANALYSE_PY = os.path.join(TOOLS_DIR, "combos", "combos-analyse-projet", "combos-analyse-projet.py")
@@ -75,7 +88,7 @@ def check(cond, nom, detail=""):
 
 
 def run(cmd, timeout=300):
-    return subprocess.run(cmd, capture_output=True, text=True,
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True,
                           encoding="utf-8", errors="replace", timeout=timeout)
 
 
@@ -88,8 +101,8 @@ r = run([PYTHON, ANALYSE_PY, "--version"])
 check(r.returncode == 0 and "combos-analyse-projet 0.1.0" in (r.stdout or r.stderr),
       "version combos-analyse-projet 0.1.0")
 r = run([PYTHON, MASSIVE_PY, "--version"])
-check(r.returncode == 0 and "combos-maj-readme-massive 0.1.0" in (r.stdout or r.stderr),
-      "version combos-maj-readme-massive 0.1.0")
+check(r.returncode == 0 and "combos-maj-readme-massive 0.1.3" in (r.stdout or r.stderr),
+      "version combos-maj-readme-massive 0.1.3")
 
 # 3. JSON valide
 try:

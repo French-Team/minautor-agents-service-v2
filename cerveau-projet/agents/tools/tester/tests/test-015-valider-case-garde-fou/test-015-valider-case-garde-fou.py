@@ -29,6 +29,7 @@ Cas couverts:
 Usage:
   python3 test-015-valider-case-garde-fou.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -43,6 +44,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 OUTIL_DIR = os.path.join(TOOLS_DIR, "valider", "valider-case")
 OUTIL_PY = os.path.join(OUTIL_DIR, "valider-case.py")
@@ -69,7 +81,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, cwd=None, timeout=60):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout,
                           cwd=cwd)
 
 

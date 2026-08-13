@@ -7,7 +7,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.5.1
+**Version** : 0.5.2
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -49,6 +49,24 @@ Version bash equivalente : `activer-agent-principal.sh` (meme logique).
 **REGLE UTILISATEUR (identification)** : au demarrage, la section sessions de AGENTS.md est VIDE. Le 1er LLM qui devient Cerberus recoit `session-llm-1`. Tout LLM suivant recoit AUTOMATIQUEMENT la prochaine session libre (`session-llm-2`, `session-llm-3`...) -- un numero deja attribue n est JAMAIS repris. Appeler `sidentifier` SANS argument au demarrage : l'outil attribue la session correcte. Si une session est demandee explicitement alors qu'elle est deja attribuee, l'outil attribue la prochaine libre et l'affiche clairement.
 
 Variable d'environnement pour les tests : `AGENTS_FILE` (surcharger le chemin de AGENTS.md) et `AGENTS_HISTORIQUE`.
+
+---
+
+## Ne jamais rediriger la sortie
+
+> **REGLE ANTI-RESIDUS (v0.5.2)** : ne JAMAIS rediriger ni capturer la sortie
+> de cet outil vers un fichier (`>` ou `tee`). Une redirection accidentelle
+> vers un fichier nomme comme une version (ex: `0.2.1`, `v0.2.6`) cree un
+> RESIDU a la racine du projet. La preuve d une activation/reactivation est
+> dans `AGENTS-historique.md` et le profil de session dans le classeur-
+> variables : aucun fichier de sortie n est necessaire.
+
+**Garde-fou integre** : au demarrage de chaque action (sidentifier/activer/
+reactiver/sessions), l outil detecte les fichiers nommes comme des versions
+semver pures (ex: `0.2.1`, `v0.2.6`) dans le repertoire courant et affiche un
+WARNING les signalant comme residus probables de redirections accidentelles.
+Les sources de verite de version vivent dans `cerveau-projet/agents/clio/`
+(version-readme.txt, statut-projet.txt), JAMAIS a la racine.
 
 ---
 
@@ -271,6 +289,7 @@ La colonne session identifie quel LLM a effectue l'action.
 | 0.4.1 | 2026-08-08 | SESSIONS CONNUES (contexte temps reel) : nouvelle section `## Sessions connues` dans AGENTS.md reconstruite a chaque sidentifier/activer/reactiver depuis le classeur (profil-session-*) -- table | Session | Nom LLM | Agent actif | Derniere activite |. Chaque LLM qui demarre voit immediatement que les autres sessions existent et leur derniere activite (evite les collisions multi-LLM). py + sh + doc |
 | 0.5.0 | 2026-08-08 | CONVENTION IDENTIFICATION : aucun mot seul. Blocs de session : `**Nom LLM**` (l'id) EN TETE, `**Nom Agent**` au lieu de `**Nom**`, `**Role Agent**` au lieu de `**Role**`. Migration automatique des anciens blocs (Nom -> Nom Agent, Role -> Role Agent, Id LLM -> Nom LLM) lors de chaque edition + reconstruction complete du bloc en ordre canonique. Table Sessions connues : colonne `Nom LLM`. py + sh + tests + doc |
 | 0.5.1 | 2026-08-12 | CORRECTION BUG DE DEMARRAGE (cause racine blocage Morpheus rounds 8/9) : sidentifier ecrivait `agent: Cerberus` en dur dans le profil classeur + affichait `(agent principal : Cerberus)` dans les messages, MEME quand la session retrouvee avait un AUTRE agent actif (ex: morpheus). Resultat : AGENTS.md et classeur en CONTRADICTION -> l agent qui demarrait (sidentifier obligatoire selon sa fiche) recevait une identite fausse et s arretait. Correction py + sh : nouvelle fonction agent_actif_bloc() lit l agent REEL du bloc (champ Nom Agent) ; session retrouvee -> affiche + ecrit le profil + l historique avec l agent reel ; nouvelle session -> Cerberus par defaut conserve |
+| 0.5.2 | 2026-08-13 | GARDE-FOU ANTI-RESIDUS : verifier_residus_racine (py + sh) detecte les fichiers nommes comme des versions semver a la racine (residus de redirections accidentelles de sortie) et emet un WARNING ; section doc "Ne jamais rediriger la sortie" (interdiction > et tee) |
 | Renommage | 2026-08-07 | Deplacement dans le dossier activer/ + renommage de mettre-a-jour-agents-md vers activer-agent-principal (l outil sert a activer/reactiver l agent principal dans AGENTS.md). ~120 references mises a jour dans 31 fichiers + spec + boucle retro-action |
 
 ---

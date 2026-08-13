@@ -209,3 +209,13 @@ Morpheus (TEST GENERATEURS-CASE CORRIGE 28/28).
 **Complement** : themes-amelioration.json - le theme ameliorer-outil n avait pas de champ agent_habilite (pourtant attendu par c19d) -> ajoute : agent_habilite=vulcain (constructeur d outils).
 
 **Lecon a graver** : a chaque demande utilisateur, verifier SI la carte a une branche dediee (lire c1 et ses branches AVANT de classer). Ne jamais classer par defaut en autre/inventaire si une branche specifique existe.
+
+## [LECON] 2026-08-13 -- CERBERUS N EXECUTE JAMAIS LES TESTS LUI-MEME (derive du gardien)
+
+**Contexte (demande utilisateur)** : l utilisateur a remarque que j avais lance la non-regression complete moi-meme pour mesurer le nouveau temps (round performance, 43.8s) alors que ce n est pas mon role. Question : probleme dans ma carte ?
+
+**Diagnostic (veridique)** : MA CARTE EST CORRECTE. Aucun outil de test n y est assigne (0 occurrence de tester-lancer-non-regression, chrono, reference dans mes cases). Mes outils sont : lire-fichier, lire-activite-recente, lister-agents, activer-agent-principal, generateurs-amelioration, enregistrer-usage-outil. La carte prevoit EXACTEMENT ce cas : c5 Identifier l agent habilite -> c6 Activer l agent habilite. La derive vient de MON EXECUTION : j ai utilise un outil hors carte (tester-lancer-non-regression = domaine Morpheus ; modification du lanceur = domaine Vulcain/Morpheus) au lieu de suivre ma carte c5/c6.
+
+**Bonne chaine** : demande de mesure -> c5 identifier -> MORPHEUS (testeur dedie : ecrire et EXECUTER des tests) lance la non-regression -> Morpheus active JANUS (controle) -> Janus reactiver Cerberus avec le bilan.
+
+**Lecon a graver** : CERBERUS COORDONNE, IL N EXECUTE PAS. Toute operation de test (lancer la non-regression, chrono, reference, mesurer) est le domaine de MORPHEUS (creation/execution de tests) et JANUS (controle croise). Si un besoin ne correspond a aucun de mes outils assignes, c est que l agent habilite doit etre active (c5/c6), jamais que je dois contourner avec un outil hors carte. Meme derive que Morpheus (la fin suit la carte, jamais la consigne) mais cote gardien : l outil suit la carte, jamais le reflexe.

@@ -971,6 +971,21 @@
       ]
     },
     {
+      "nom": "detecter-evaluations-incompletes",
+      "description": "Scan anti-recurrence : mentions residuelles d un motif dans les 4 sources (validateur, spec, generateurs, tests).",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/detecter/detecter-evaluations-incompletes/detecter-evaluations-incompletes.py",
+      "modele": "--motif {motif}",
+      "parametres": [
+        {
+          "cle": "motif",
+          "question": "Motif a rechercher ?",
+          "type": "texte",
+          "obligatoire": true
+        }
+      ]
+    },
+    {
       "nom": "detecter-impacts",
       "description": "Detecter les fichiers impliques par la modification d un fichier du cerveau (schema identite:)",
       "interpreteur": "python3",
@@ -1347,6 +1362,21 @@
           "question": "Valeur pour dossier ?",
           "type": "texte",
           "obligatoire": true
+        }
+      ]
+    },
+    {
+      "nom": "evaluer-processus",
+      "description": "Detecte les derives de processus (fins, outils hors carte, coherence fiche/carte).",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/evaluer/evaluer-processus/evaluer-processus.py",
+      "modele": "{agent}",
+      "parametres": [
+        {
+          "cle": "agent",
+          "question": "Agent a analyser (vide = tous) ?",
+          "type": "texte",
+          "obligatoire": false
         }
       ]
     },
@@ -2981,11 +3011,19 @@
     },
     {
       "nom": "tester-lancer-non-regression",
-      "description": "Lance tous les tests formels (test-0XX) en parallele par defaut (4 series, --serial pour le mode serie) avec bilan OK/KO fiable et registre protege (--no-journal par defaut)",
+      "description": "Lance tous les tests formels (test-0XX) en pool de workers par defaut (--workers, min cpu 16) avec bilan OK/KO fiable, registre protege, chrono + reference de temps (--seuil, --rebase-reference)",
       "interpreteur": "python3",
       "script": "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py",
-      "modele": "--tests {tests} --rapport {rapport}",
+      "modele": "--workers {workers} --tests {tests} --rapport {rapport}",
       "parametres": [
+        {
+          "cle": "workers",
+          "question": "Nombre de workers paralleles (defaut : min(cpu_count, 16)) ?",
+          "type": "nombre",
+          "obligatoire": false,
+          "flag": "--workers",
+          "defaut": ""
+        },
         {
           "cle": "tests",
           "question": "Tests a filtrer (separes par virgules) ?",
@@ -3001,6 +3039,14 @@
           "obligatoire": false,
           "flag": "--rapport",
           "defaut": ""
+        },
+        {
+          "cle": "seuil",
+          "question": "Seuil de depassement en pourcent avant SIGNAL de ralentissement (defaut 25) ?",
+          "type": "nombre",
+          "obligatoire": false,
+          "flag": "--seuil",
+          "defaut": "25"
         }
       ]
     },
@@ -3048,6 +3094,14 @@
           "obligatoire": true
         }
       ]
+    },
+    {
+      "nom": "tester-protections",
+      "description": "Point d entree unique importable des protections de tests : lancer_protege (timeout + tuer arbre + erreurs silencieuses) et protection STOP fail-fast (verifier_critique/ArretProtection). Chaque test-0XX charge ce module.",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/tester/tester-protections/tester-protections.py",
+      "modele": "",
+      "parametres": []
     },
     {
       "nom": "valider-cartes-decision",

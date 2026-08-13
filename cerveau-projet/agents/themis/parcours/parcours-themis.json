@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-themis",
   "agent": "themis",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
  },
@@ -65,7 +65,7 @@
   "c1": {
    "titre": "Mission",
    "type": "question",
-   "question": "Quelle est la demande d'evaluation ?",
+   "question": "Quelle est la demande ? (audit a la demande de Cerberus / audit de fin de mission declenche par un agent qui me reactivera via c25b / doute / rvav / autre / audit-agent)",
    "branches": [
     {
      "reponse": "audit",
@@ -85,6 +85,10 @@
     },
     {
      "reponse": "audit-agent",
+     "vers": "c25"
+    },
+    {
+     "reponse": "audit-fin-mission",
      "vers": "c25"
     }
    ]
@@ -583,7 +587,8 @@
      "raison": "Definition du combo audit-themis (Pattern 3) : suite complete d outils d audit (audit-general -> valider-relecture -> combos-valider-cerveau -> valider-tableaux -> detecteurs)"
     }
    ],
-   "suivant": "c25b"
+   "suivant": "c25b",
+   "message": "Audit declenche par la FIN DE MISSION d'un agent (nouveau declencheur axe D) ou par une demande ciblee. J audite le travail de l'agent et je rends mon rapport. A MA fin : je REACTIVE l'agent precedent (c25b) avec le rapport - il reprend SA carte vers sa fin Janus (le dernier maillon). Si j ai ete activee a la demande de Cerberus, je vais vers ma fin normale c13 (FIN - Activer Janus)."
   },
   "c25b": {
    "titre": "FIN - Activer l agent precedent avec son rapport",

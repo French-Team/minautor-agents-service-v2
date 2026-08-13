@@ -1,11 +1,11 @@
 # Specification -- detecter-decalages-catalogue
 
-**Version :** 0.2.0
+**Version :** 0.2.1
 **Statut :** ebauche
 **Categorie :** Detecter
 **Date :** 2026-08-11
 **Agent :** Vulcain
-**Historique :** v0.2.0 (round 11 coherence documentaire : SCAN DES SOUS-COMMANDES argparse -- quand l aide racine expose un bloc {sous-cmd1,...}, l outil lance l aide de CHAQUE sous-commande et fusionne les options ; corrige les faux positifs generateurs-case-convertir / generateurs-ligne) -> v0.1.1 (section COMBOS : cles des cases generateur vs catalogue, spec-combos-moteur v0.2.1) -> v0.1.0 (creation)
+**Historique :** v0.2.1 (PERFORMANCE 2026-08-13 : aides des commandes lancees en PARALLELE -- pool de threads min(16, nb) + CACHE par (interpreteur, script) ; ~85s en serie -> ~14s, goulot test-028 de la suite anti-regression) -> v0.2.0 (round 11 coherence documentaire : SCAN DES SOUS-COMMANDES argparse -- quand l aide racine expose un bloc {sous-cmd1,...}, l outil lance l aide de CHAQUE sous-commande et fusionne les options ; corrige les faux positifs generateurs-case-convertir / generateurs-ligne) -> v0.1.1 (section COMBOS : cles des cases generateur vs catalogue, spec-combos-moteur v0.2.1) -> v0.1.0 (creation)
 **Pense-bete source :** scan systematique Atlas 2026-08-09 (scan-catalogue.py dans explorations/, institutionnalise)
 
 ## Objectif
@@ -32,15 +32,16 @@ du catalogue ou generalisation du pilote strict.
 
 | # | Fonctionnalite | Detail |
 |---|---|---|
-| 1 | Scan complet | Parcourt les 106 entrees du catalogue (defaut : chemin fixe du catalogue) |
+| 1 | Scan complet | Parcourt les entrees du catalogue (defaut : chemin fixe du catalogue) |
 | 2 | Interface reelle | Lance chaque script avec `--aide` puis `--help` en fallback (timeout 8s) |
 | 3 | Classification | CONFORME / DECALAGE / NON TESTABLE / ALERTE (placeholder obligatoire absent du modele) |
 | 4 | Rapport | Rapport markdown avec synthese + detail des decalages + non testables justifies |
 | 5 | Sortie parametrable | `--sortie CHEMIN` (defaut : rapport date dans le dossier courant) |
+| 6 | Performance | (v0.2.1) Aides lancees en PARALLELE (pool de threads min(16, nb)) + CACHE par (interpreteur, script) : ~85s en serie -> ~14s sur 147 commandes |
 
 ## Criteres d'acceptation
 
-1. `python3 detecter-decalages-catalogue.py --version` affiche 0.1.0
+1. `python3 detecter-decalages-catalogue.py --version` affiche 0.2.1
 2. `python3 detecter-decalages-catalogue.py --aide` affiche l'aide
 3. Execution sans argument : rapport ecrit, synthese imprimee (conformes/decalages/non testables/alertes)
 4. RACINE calculee correctement (6 niveaux depuis tools/detecter/detecter-decalages-catalogue/) : le scan trouve le catalogue
@@ -52,5 +53,6 @@ du catalogue ou generalisation du pilote strict.
 
 | Version | Date | Description |
 |---|---|---|
+| 0.2.1 | 2026-08-13 | PERFORMANCE : aides lancees en parallele (pool de threads min(16, nb)) + CACHE par (interpreteur, script) - goulot test-028 85s -> 14s |
 | 0.1.1 | 2026-08-11 | Section COMBOS ajoutee : garde-fou des cles des definitions-combo vs catalogue (KO test-003) |
 | 0.1.0 | 2026-08-09 | Creation - institutionnalisation du scan Atlas dans tools/detecter/ |

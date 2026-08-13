@@ -1,7 +1,7 @@
 # editer-parcours
 
 **Categorie** : Editer
-**Version** : 0.1.0
+**Version** : 0.1.1
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-11
@@ -62,3 +62,8 @@ python3 editer-parcours.py --agent vulcain --bump --wet
 - **Backup automatique** : `parcours-*.json.bak` avant toute modification
 - **JSON/LF/ASCII preserves** : ecriture en LF pur, `ensure_ascii=True`
 - Apres modification, lancer `valider-case` pour verifier la joignabilite
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.1 | 2026-08-13 | GARDE-FOU ANTI-RESIDUS : verifier_residus_racine() detecte les fichiers nommes comme des versions semver a la racine (residus de redirections accidentelles de sortie) et affiche un WARNING - sources de verite de version dans cerveau-projet/agents/clio/, JAMAIS a la racine |

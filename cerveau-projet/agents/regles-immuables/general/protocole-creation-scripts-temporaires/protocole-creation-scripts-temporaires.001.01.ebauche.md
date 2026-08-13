@@ -7,11 +7,11 @@ identite:
 
 # Protocole de Creation des Scripts Temporaires
 
-**Version** : 0.1.0
+**Version** : 0.2.1
 **Statut** : ebauche
 **Categorie** : General
 **Agent** : Promethee
-**Date** : 2026-08-11
+**Date** : 2026-08-13
 
 Cadre l'utilisation des **scripts temporaires** par les agents : quand un
 besoin ponctuel ne peut pas etre couvert par un outil existant, l'agent passe
@@ -103,6 +103,66 @@ Besoin : analyser un format de fichier inedit (une seule fois).
 generateur -> anomalie detectee par test-024 et detecter-usage-scripts-
 temporaires.
 ```
+
+
+## Commandes spawn_agents : eviter les erreurs d echappement JSON
+
+### Regle d or
+
+**TOUTE commande complexe passe par un script temporaire ecrit avec
+write_file** -- jamais une commande inline imbriquee dans spawn_agents.
+
+Le moteur spawn_agents transmet la commande dans un JSON : tout guillemet
+imbrique, backslash, apostrophe dans un texte, chevron, pipe ou heredoc
+dans la commande inline provoque une erreur de parsing JSON (dizaines
+d erreurs `Invalid parameters for spawn_agents` observees sur les missions).
+La methode fiable, eprouvee sur des dizaines de missions :
+
+1. **ECRIRE** : `write_file` cree `.tmp-<agent>-<sujet>.py` (coding ascii,
+   contenu libre, aucun probleme d echappement).
+2. **EXECUTER** : `basher` avec une commande simple :
+   `cd /z/analyste-in-console && python3 .tmp-xxx.py && rm -f .tmp-xxx.py`
+   (la suppression est DANS la commande : 0 residu meme en cas de re-essai).
+3. **VERIFIER** : `ls .tmp-*.py .zz-*` -> 0 residu attendu.
+
+### Cas a risque (interdits en inline)
+
+- Guillemets imbriques (quotes dans des commandes avec quotes).
+- Backslashes multiples (regex, chemins Windows).
+- Apostrophes dans des textes melanges aux quotes.
+- Chevrons (`<`, `>`) : redirections, heredocs.
+- Pipes et sous-commandes imbriquees (`$(...)`, boucles).
+- Multi-commandes avec echappements JSON imbriques.
+
+### Procedure valide
+
+```
+1. write_file : .tmp-morpheus-diag.py  (contenu Python libre, coding ascii)
+2. basher : cd /z/analyste-in-console && python3 .tmp-morpheus-diag.py && rm -f .tmp-morpheus-diag.py
+3. verification : ls .tmp-*.py .zz-*  (0 residu)
+```
+
+### Pieges connus
+
+1. **test-024 auto-incrimination** : lancer test-024 depuis un script
+   temporaire `.tmp-*.py` a la racine -> le garde-fou detecte le script qui
+   le lance et casse (KO auto-inflige). TOUJOURS lancer test-024 en commande
+   directe, jamais depuis un script temporaire.
+2. **Residu en cas de timeout** : si le basher timeout avant le `rm -f`,
+   nettoyer a la main avant de relancer (sinon test-024 KO).
+3. **Ne pas lancer de test depuis un script temporaire** : tout test qui
+   scanne la racine (test-024, detecter-usage-scripts-temporaires) se voit
+   lui-meme -> toujours commande directe.
+
+### Commandes bash des combos (meme regle, v0.2.1)
+
+> **REGLE** : les commandes des combos (`combos-moteur`, definitions
+> `definition-combo.json`) et du catalogue (`generateurs-commande`) suivent
+> la MEME regle anti-echappement. L'interpolation `{var}` fait un
+> remplacement BRUT puis `shlex.split` decoupe : toute valeur avec apostrophe
+> non echappee casse la commande (`Commande invalide`). TOUJOURS quoter les
+> variables dans les commandes (`--raison '{raison}'`), jamais les inserer
+> brutes quand elles peuvent contenir apostrophe ou espace.
 
 ## Pieges courants
 

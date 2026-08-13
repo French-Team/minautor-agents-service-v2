@@ -12,7 +12,7 @@
 #      l execution et ici en KO - anti-recurrence de l oubli d affectation).
 #   2. Aucun test n appartient a deux series (pas de chevauchement).
 #   3. test-027 lui-meme est affecte a la serie D (registre et garde-fous).
-#   4. --version affiche v0.1.3.
+#   4. --version affiche v0.1.6.
 #   5. --series z (inconnue) : code 2 + message usage, jamais de traceback.
 #   6. Isolation : --series a --tests test-001 ne lance que test-001 ;
 #      --series c --tests test-001 ne trouve aucun test (filtre de serie actif).
@@ -52,6 +52,17 @@ LANCER_DOC = os.path.join(TOOLS_DIR, "tester", "tester-lancer-non-regression",
                           "tester-lancer-non-regression.md")
 
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 MOI = os.path.basename(__file__)
 
 NB_POINTS = 0
@@ -71,7 +82,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, timeout=120):
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    proc = PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout)
     return proc
 
 
@@ -128,8 +139,8 @@ def main():
 
     # 4. Version du lanceur.
     r = run([PYTHON, LANCER, "--version"])
-    verifier("4. --version v0.1.3",
-             r.returncode == 0 and "v0.1.3" in r.stdout, r.stdout.strip()[-60:])
+    verifier("4. --version v0.2.0",
+             r.returncode == 0 and "v0.2.0" in r.stdout, r.stdout.strip()[-60:])
 
     # 5. Serie inconnue : code 2 + message usage, sans traceback.
     # (argparse ecrit le message usage sur stderr, pas sur stdout)
@@ -144,7 +155,7 @@ def main():
     r = run([PYTHON, LANCER, "--series", "a", "--journal",
              "--tests", "test-001-evaluer-agents-coherence"])
     ok6a = (r.returncode == 0 and "RESULTAT Serie A" in r.stdout
-            and "1 OK / 0 KO (sur 1 tests)" in r.stdout)
+            and "1 OK / 0 KO (sur 1 tests, 0 non lances)" in r.stdout)
     verifier("6a. --series a --tests test-001 : 1 seul test lance",
              ok6a, r.stdout.strip()[-80:])
 
@@ -155,18 +166,20 @@ def main():
     verifier("6b. --series c exclut test-001 (aucun test trouve)",
              ok6b, "rc=%d %s" % (r.returncode, r.stdout.strip()[-60:]))
 
-    # 7. Defaut = parallele (round 10b) : sans option, le filtre --tests est
-    #    herite et le test passe par la structure Serie A.
+    # 7. Defaut = pool de workers (round 12) : sans option, le filtre --tests
+    #    est herite et le test passe par la structure Pool.
     r = run([PYTHON, LANCER, "--journal", "--tests", "test-001-evaluer-agents-coherence"])
-    ok7 = (r.returncode == 0 and "RESULTAT Serie A" in r.stdout
-           and "1 OK / 0 KO (sur 1 tests)" in r.stdout)
-    verifier("7. Defaut = parallele (structure Serie A + filtre herite)",
+    ok7 = (r.returncode == 0 and "Pool de workers" in r.stdout
+           and "RESULTAT Pool" in r.stdout
+           and "1 OK / 0 KO (sur 1 tests, 0 non lances)" in r.stdout)
+    verifier("7. Defaut = pool de workers (structure Pool + filtre herite)",
              ok7, r.stdout.strip()[-80:])
 
     # 8. --serial force l ancien mode serie.
     r = run([PYTHON, LANCER, "--serial", "--journal", "--tests", "test-001-evaluer-agents-coherence"])
-    ok8 = (r.returncode == 0 and "RESULTAT : 1 OK / 0 KO (sur 1 tests)" in r.stdout
-           and "RESULTAT Serie" not in r.stdout)
+    ok8 = (r.returncode == 0 and "RESULTAT : 1 OK / 0 KO (sur 1 tests, 0 non lances)" in r.stdout
+           and "RESULTAT Serie" not in r.stdout
+           and "Pool de workers" not in r.stdout)
     verifier("8. --serial force le mode serie",
              ok8, r.stdout.strip()[-80:])
 

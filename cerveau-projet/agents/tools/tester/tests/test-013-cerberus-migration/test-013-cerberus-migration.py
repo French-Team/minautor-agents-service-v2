@@ -31,6 +31,7 @@ Cas couverts:   1. Version du parcours = 0.4.3
 Usage:
   python3 test-013-cerberus-migration.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -45,6 +46,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 GUIDER = os.path.join(TOOLS_DIR, "guider", "guider-parcours", "guider-parcours.py")
 VALIDER_CASE = os.path.join(TOOLS_DIR, "valider", "valider-case", "valider-case.py")
@@ -70,7 +82,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, timeout=90):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout)
 
 
 def ascii_count(chemin):

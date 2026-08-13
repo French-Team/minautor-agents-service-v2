@@ -6,7 +6,7 @@ identite:
 ---
 # Cerveau-Projet
 
-[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-126-blueviolet?style=flat)](https://img.shields.io/badge/Outils-121-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-128-blueviolet?style=flat)](https://img.shields.io/badge/Outils-128-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)](https://img.shields.io/badge/Version-v0.2.0-blue?style=flat)
 
 
 ![Logo](cerveau-projet/assets/images/logo.jpg)
@@ -69,14 +69,14 @@ projet/
 | **Cerberus** | Gardien de l'entree, coordonne les sessions | Toujours (debut et fin) |
 | **Buffy** | Developpeur principal du cerveau | Creation, modification de contenu |
 | **Atlas** | Explorateur et documentaliste | Recherche, decouverte, analyse |
-| **Janus** | Second controle (statuts, outils, modifications) | Par Cerberus, si la mission est dans la liste definie |
+| **Janus** | Second controle (statuts, outils, modifications) - SEUL a lancer la non-regression complete | Par Cerberus, si la mission est dans la liste definie |
 | **Vulcain** | Constructeur d'outils reels | Transformer un outil.md en outil |
-| **Morpheus** | Testeur dedie (avec protections) | Ecrire et executer des tests |
+| **Morpheus** | Testeur dedie (avec protections) - tests individuels uniquement | Ecrire et executer des tests (jamais la non-regression complete) |
 | **Athena** | Redactrice de pense-betes | Demande de pense-bete |
 | **Promethee** | Redacteur de specs | Pense-bete termine -> spec |
 | **Minerve** | Redactrice de todos | Spec terminee -> todo |
 | **Clio** | Muse de l'histoire - README | Apres chaque mission (fichiers changes) |
-| **Themis** | Evaluatrice croisee du cerveau-projet | Audit, evaluation, coherence |
+| **Themis** | Evaluatrice croisee du cerveau-projet - maillon automatique de la chaine | Audit, evaluation, coherence (activee systematiquement en fin de mission) |
 
 | **Classeur-variables** | Agent | Selon sa carte de decision |
 | **Conventions** | Agent | Selon sa carte de decision |
@@ -116,7 +116,33 @@ Chaque agent a :
 
 ---
 
-## La boite a outils (126 outils)
+### Les garde-fous (qualite et protection)
+
+Le cerveau-projet se protege par des tests dedies, organises en suite de
+non-regression :
+
+- **Non-regression complete (37 tests)** : lancee UNIQUEMENT par **Janus**
+  (controleur final), en parallele sur plusieurs series, avec chrono et
+  comparaison au temps de reference.
+- **Seul Janus lance la non-regression** (test-037) : les autres agents
+  (dont Morpheus) executent uniquement des tests individuels.
+- **Anti-scripts-temporaires** (test-024) : aucun residu `.tmp-*`/`.zz-*`
+  a la racine, meme quand la non-regression est lancee depuis un script
+  d orchestration (le parent legitime est exclu automatiquement).
+- **Cerberus sans outils de test** (test-034) : le gardien ne lance jamais
+  de test lui-meme, il active l agent habilite.
+- **Cartes conformes** : chaque parcours JSON est valide (valider-case,
+  valider-cartes-decision, detecter-cablages-manquants) et les 11 cartes
+  ont des identites distinctes (meme construction, roles differents).
+
+La qualite des outils passe par des rondes d amelioration continues :
+robustesse, performance (parallele), securite des chemins, messages
+d erreur, combos fluides, generateurs fiables et journalisation du
+registre d usages.
+
+
+
+## La boite a outils (128 outils)
 
 Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 
@@ -133,11 +159,11 @@ Les outils sont organises par **action** (chaque dossier = ce que fait l'outil).
 | **Creer (4)** | creer-fichier, creer-remplir-pense-bete, creer-remplir-spec, creer-remplir-todo | Creer fichiers et contenus |
 | **Decomposer (1)** | decomposer-fichier | Decomposer les fichiers markdown |
 | **Deplacer (1)** | deplacer-fichier | Deplacer ou renommer un fichier |
-| **Detecter (10)** | detecter-cablages-manquants, detecter-convention-nommage, detecter-decalages-catalogue, detecter-divergences-version, detecter-erreur-statut, detecter-impacts, detecter-local-hors-fonction, detecter-surcharge-fichier, detecter-usage-outils-externes, detecter-usage-scripts-temporaires | Detecter les erreurs de statut, la surcharge et les local hors fonction |
+| **Detecter (11)** | detecter-cablages-manquants, detecter-convention-nommage, detecter-decalages-catalogue, detecter-divergences-version, detecter-erreur-statut, detecter-evaluations-incompletes, detecter-impacts, detecter-local-hors-fonction, detecter-surcharge-fichier, detecter-usage-outils-externes, detecter-usage-scripts-temporaires | Detecter les erreurs de statut, la surcharge et les local hors fonction |
 | **Ecrire (1)** | ecrire-fichier | Ecrire ou ecraser un fichier |
 | **Editer (3)** | editer-fichier, editer-fichier-agents, editer-parcours | Remplacer une chaine dans un fichier |
 | **Enregistrer (1)** | enregistrer-usage-outil | Enregistrer les usages d outils au registre |
-| **Evaluer (4)** | evaluer-agents, evaluer-coherence, evaluer-conventions, evaluer-structure | Evaluer la coherence du cerveau |
+| **Evaluer (5)** | evaluer-agents, evaluer-coherence, evaluer-conventions, evaluer-processus, evaluer-structure | Evaluer la coherence du cerveau |
 | **Generateurs (10)** | generateurs-amelioration, generateurs-carte, generateurs-case, generateurs-commande, generateurs-ligne, generateurs-outil-temporaire, generateurs-regenerer-catalogue, generateurs-squelette-pense-bete, generateurs-squelette-spec, generateurs-squelette-todo | Generer les squelettes conformes |
 | **Gerer (1)** | gerer-sous-mission | Gerer les sorties/reentrees du flux |
 | **Guider (1)** | guider-parcours | Guider l agent case par case (jeu de piste) dans son parcours JSON |

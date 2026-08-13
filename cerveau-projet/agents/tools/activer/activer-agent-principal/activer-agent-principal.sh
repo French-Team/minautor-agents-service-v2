@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.1"
+VERSION="0.5.2"
 
 # Configuration
 AGENTS_FILE="${AGENTS_FILE:-AGENTS.md}"
@@ -115,6 +115,29 @@ with io.open(sys.argv[1], encoding='utf-8', errors='replace') as fh:
 sys.exit(1 if nb > 0 else 0)
 " "$fichier"
     return $?
+}
+
+# GARDE-FOU (v0.5.2) : detecter dans le repertoire courant les fichiers nommes
+# comme des versions semver pures (ex: 0.2.1, v0.2.6) - residus probables de
+# redirections accidentelles de sortie d une commande precedente (souvent la
+# sortie de cet outil). Anti-residu : les supprimer, les sources de verite de
+# version vivent dans cerveau-projet/agents/clio/.
+verifier_residus_racine() {
+    local residus
+    residus=$(ls -p 2>/dev/null | grep -v '/' | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -10)
+    if [ -z "$residus" ]; then
+        return 0
+    fi
+    echo "============================================================"
+    echo "!!! WARNING GARDE-FOU (activer-agent-principal v$VERSION) !!!"
+    echo "Des fichiers nommes comme des versions semver sont presents dans le"
+    echo "repertoire courant (residus probables de redirections accidentelles"
+    echo "de sortie) :"
+    echo "$residus" | sed 's/^/    - /'
+    echo "ANTI-RESIDU : supprimez-les. Les sources de verite de version vivent"
+    echo "dans cerveau-projet/agents/clio/ (version-readme.txt,"
+    echo "statut-projet.txt), JAMAIS a la racine."
+    echo "============================================================"
 }
 
 # Migrer l'ancienne structure mono-session (## Agent Principal Actuel)
@@ -718,6 +741,13 @@ afficher_aide() {
 }
 
 # Point d'entree principal
+# GARDE-FOU (v0.5.2) : les actions reelles declenchent la detection des residus
+case $1 in
+    "sidentifier"|"activer"|"reactiver"|"sessions")
+        verifier_residus_racine
+        ;;
+esac
+
 case $1 in
     "sidentifier")
         sidentifier "$2"

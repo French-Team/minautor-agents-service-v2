@@ -3,7 +3,7 @@
 # guider-parcours.py
 # Guide l'agent case par case (jeu de piste) : affiche la case courante
 # (question + indices outil/fichier/regle), suit les branches selon la reponse.
-# Version : 0.5.0
+# Version : 0.5.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -33,7 +33,8 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.5.0"
+VERSION = "0.5.1"
+REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "ebauche"
 
 # Racine du projet : 6 remontees depuis ce fichier
@@ -429,10 +430,40 @@ def construire_parser():
     return parser
 
 
+def verifier_residus_racine():
+    """GARDE-FOU ANTI-RESIDUS : detecter dans le repertoire courant les fichiers
+    nommes comme des versions semver pures (ex: 0.2.1, v0.2.6). Ces fichiers
+    sont des residus probables de redirections accidentelles de sortie d une
+    commande precedente (souvent la sortie d un outil du cerveau). Anti-residu :
+    les supprimer - les sources de verite de version vivent dans
+    cerveau-projet/agents/clio/ (version-readme.txt, statut-projet.txt),
+    JAMAIS a la racine."""
+    try:
+        residus = sorted(n for n in os.listdir(".")
+                         if os.path.isfile(n) and REGEX_RESIDU.match(n))
+    except OSError:
+        return
+    if not residus:
+        return
+    print("=" * 60)
+    print("!!! WARNING GARDE-FOU (v%s) !!!" % VERSION)
+    print("Des fichiers nommes comme des versions semver sont presents dans le")
+    print("repertoire courant (residus probables de redirections accidentelles")
+    print("de sortie) :")
+    for n in residus[:10]:
+        print("    - %s" % n)
+    print("ANTI-RESIDU : supprimez-les. Les sources de verite de version vivent")
+    print("dans cerveau-projet/agents/clio/ (version-readme.txt,")
+    print("statut-projet.txt), JAMAIS a la racine.")
+    print("=" * 60)
+
+
 def main():
     verifier_nommage(sys.argv[0])
     parser = construire_parser()
     args = parser.parse_args()
+
+    verifier_residus_racine()
 
     donnees = charger_parcours(args.parcours)
     valider_parcours(donnees)

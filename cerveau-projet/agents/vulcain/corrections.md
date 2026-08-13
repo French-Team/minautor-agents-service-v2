@@ -2253,3 +2253,74 @@ non-regression 26/26, catalogue 146 intact + 0 a ajouter, normes 0/0 sur
 3. LE CLASSEUR EST DERIVE, PAS UNE CONSTANTE : il doit refletet l etat du bloc AGENTS.md a chaque instant. Toute valeur codee en dur (agent, role, date) dans une fonction qui ECRIT le classeur est un bug potentiel.
 
 **Validations** : sidentifier llm-1 affiche 'agent principal : vulcain' + classeur 'agent: vulcain' (py ET sh identiques) ; normes 0/0 sur 5 fichiers ; test-025 11/11, test-018 13/13, test-021 9/9, test-002 REUSSI ; catalogue dry-run 0 a ajouter ; non-regression 26/26.
+
+## [LECON] 2026-08-12 -- POINT D ENTREE PROTECTIONS + PROTECTION STOP (Vulcain)
+
+**Mission** : creer le point d entree importable des protections de tests (demande utilisateur : chaque test DOIT importer les protections) + la protection STOP (fail-fast).
+
+**Resultat** : tester-protections v0.1.0 (module importable via importlib depuis chaque test-0XX) : lancer_protege (timeout + tuer l arbre cross-platform + erreurs silencieuses), verifier_critique (STOP : leve ArretProtection si condition fausse), ArretProtection, CLI --version/--liste. Tests reels : import OK, lancer_protege OK, STOP verifier_critique OK, STOP timeout (boucle infinie arretee en 3s) OK. Doc .md + catalogue 147 + index-tools 116. Normes 0/0.
+
+**Lecons** :
+1. UNE PROTECTION NON IMPORTABLE EST UNE PROTECTION MORTE : les 3 anciennes protections (wrappers shell=True) n etaient jamais chargees par les 29 tests. Le point d entree unique importable rend la protection reelle.
+2. FAIL-FAST > CONTINUER BETEMENT : la protection STOP (ArretProtection) arrete le test au premier echec critique - un test qui continue apres un KO produit des erreurs en cascade illisibles.
+3. ASCII STRICT PIEGE : un accent typographique (enchainer) a ete detecte par la norme - toujours verifier apres ecriture.
+
+## [LECON] 2026-08-13 -- CHRONO + REFERENCE DE TEMPS NON-REGRESSION (Vulcain)
+
+**Mission** : repondre a l utilisateur qui avait l impression que le parallele ne gagnait rien (mesures reelles : parallele 1m53 vs serie 2m17 = gain 24s/17%, mais goulot = serie D en serie apres A/B/C). Ajouter un chrono global + reference de temps au lanceur (v0.1.4 -> v0.1.5).
+
+**Resultat** : chrono demarre au debut de la premiere serie et s arrete a la fin de la derniere (time.monotonic), affiche a la fin de chaque passe (mono-serie sans reference, suite complete avec reference). Reference persistee dans temps-reference.json (dossier de l outil, .gitignore) : creee si absente, MISE A JOUR AUTOMATIQUE quand le temps est meilleur, SIGNAL de ralentissement si depassement > --seuil (defaut 25%), --rebase-reference force, --no-reference pour les sous-processus paralleles. Sous-processus A/B/C passent --no-reference (jamais de course sur le fichier). Tests reels : creation reference 113.6s, 2e run 113.5s -> temps ameliore reference mise a jour, SIGNAL prouve (reference artificielle 0.001s -> +196441%), rebase force, no-reference inchange. Non-regression 30/30, normes 0/0, catalogue 147 (--seuil ajoute).
+
+**Lecons** :
+1. MESURER AVANT DE JUGER : l utilisateur croyait le parallele inutile - les mesures (1m53 vs 2m17) ont montre un gain reel de 17% mais masque par la serie D (goulot en serie). Le chrono rend le gain visible et compare a une reference.
+2. UNE REFERENCE ECRITE PAR UN APPEL INTERNE EST UNE REFERENCE FAUSSE : test-027 lance le lanceur lui-meme (avec filtre) et avait cree une reference partielle de 0.4s - regle : la reference globale n est geree QUE par le run complet sans --tests.
+3. LA REFERENCE NE DOIT JAMAIS ECRASER UN MEILLEUR TEMPS PAR UN PLUS LENT : on n ecrit que si le nouveau temps est meilleur (ou rebase force) - sinon le SIGNAL serait perdu.
+4. UNE DONNEE MACHINE-DEPENDANTE N EST PAS UN LIVRABLE : temps-reference.json va dans .gitignore - la reference est locale a la machine, chaque machine a ses performances.
+
+## [LECON] 2026-08-13 -- POOL DE WORKERS NON-REGRESSION (Vulcain, round 3 etapes)
+
+**Mission** : reduire le temps total de la suite anti-regression (demande utilisateur : suites paralleles contenant les tests longs, estimation du nombre de workers). Diagnostic : machine 16 coeurs, test-028 = 88s (LE goulot, 60% du temps, lecteur pur), 30 autres tests <= 9s.
+
+**Resultat** : lanceur v0.2.0 refondu : POOL DE WORKERS par defaut (--workers N, defaut min(cpu,16)), tests tries par duree decroissante (les plus longs partent en premier), garde-fous globaux (test-023/024/025/027 : registre, sessions, scripts temporaires) en serie finale (jamais en parallele), --serial/--workers 1 = mode serie. Gain reel mesure : 119.9s -> 91.2s (-24%) pour 31 tests. Tests adaptes : test-024/027/031 (v0.2.0 + structure Pool), doc, catalogue 147. Non-regression 31/31, normes 0/0, reference mise a jour 91.2s.
+
+**Lecons** :
+1. DEADLOCK DU PIPE STDOUT : un Popen(stdout=PIPE) non lu se bloque au-dela de 64 Ko de sortie (poll() ne passe jamais a None) - le pool semblait bloque a 500s+ alors que c etait le pipe. Solution : rediriger la sortie de chaque test vers un FICHIER temp unique.
+2. TOUT NE SE PARALLELISE PAS : les garde-fous qui verifient l etat global (registre, sessions, scripts temporaires) doivent rester EN SERIE - les lancer en parallele produit des faux positifs (ou des conflits d ecriture sur fichiers partages).
+3. MESURER AVANT D ESTIMER : la reponse a la question utilisateur (combien de workers ?) repose sur le profil reel : 16 coeurs, goulot 88s -> plafond theorique ~90s, atteint a 91.2s. Sans le chrono+reference du round 11, ce gain serait invisible.
+4. LE TRI PAR DUREE DECROISSANTE EST CRUCIAL : les tests longs partent en premier sur les workers, les courts remplissent les creneaux - sans tri, le temps total est le max des sommes arbitraires.
+
+## [LECON] 2026-08-13 -- GOULOT TEST-028 ABATTU : DECALAGES-CATALOGUE EN PARALLELE (Vulcain)
+
+**Demande utilisateur** : optimiser test-028 en interne (88s, LE goulot de la suite) pour abaisser le plafond de temps total.
+
+**Diagnostic** (mesure reelle) : test-028 lance 4 sous-processus : DIV_PY --version (rapide), DEC_PY --version (rapide), DIV_PY --racine (scan specs = 1s), DEC_PY (scan catalogue = ~85s). Le goulot est 100% detecter-decalages-catalogue : il lance l aide de CHACUNE des 147 commandes du catalogue EN SERIE (~294 sous-processus Python, 2 flags par commande, ~0.3s chacun sur cette VM lecteur Z:).
+
+**Correction** (detecter-decalages-catalogue v0.2.0 -> v0.2.1) :
+1. POOL DE THREADS : les aides sont lancees en parallele (ThreadPoolExecutor, max_workers = min(16, nb commandes)) au lieu d une boucle serie. Chaque lancement d aide est un sous-processus independant (lecture seule) : thread-safe sans verrou.
+2. CACHE PAR (interpreteur, script) : un script reference par plusieurs commandes du catalogue n est lance qu une seule fois (activer-agent-principal 5x -> 1 lancement ; 8 scripts partages identifies).
+3. PIEGE EVITE : ne pas utiliser la sonde (tuple contenant une LISTE manquants_oblig) comme cle de dict -> unhashable (TypeError). Cle = index de la sonde.
+
+**Resultat** (mesures reelles) : DEC seul 85s -> 14s (-83%) ; test-028 88s -> 22s (-75%) ; suite anti-regression complete 92.2s -> 52.3s (-43%) pour 32 tests. Mise a jour : test-028 (version v0.2.1 + docstring), doc .md, spec (en-tete + historique + critere 1), catalogue inchange (pas de version). Normes 0/0.
+
+**Correctif fiabilite (trouve par Morpheus pendant la validation)** : avec le pool 16, la contention au demarrage des interpretes Python (lecteur reseau) faisait depasser le TIMEOUT=8s a des outils qui repondent en 6-9s seuls (test-017 CONFORME seul / TIMEOUT sous charge -> verdict instable, 8 vs 9 non testables selon les runs). TIMEOUT porte a 30s : verdict STABLE (2 runs identiques : 141 conformes / 0 decalage / 6 non testables) et plus precis (test-003/005/017 correctement classifies CONFORME). Suite complete : 57.2s (+9% vs 52.3s, conforme).
+
+**Lecons** :
+1. UN SCAN DOCUMENTAIRE PEUT ETRE LE GOUTLOT CACHE : test-028 etait range dans le pool comme test long, mais on l a traite comme une boite noire. Relire le code a revele que 96% de son temps etait un sous-outil qui lancait ~300 sous-processus en serie.
+2. PARALLELISER A L INTERIEUR D UN OUTIL : le pool de workers du lanceur parallellise LES TESTS, mais un test qui lance 294 sous-processus en serie reste un goulot. La parallelisation doit aussi descendre DANS les outils (ici : ThreadPoolExecutor sur des sous-processus independants).
+3. LE CACHE DE SOUS-PROCESSUS : quand le catalogue reference le meme script plusieurs fois (activer 5x), le cache (interpreteur, script) supprime les lancements redondants - gain cumulatif avec le pool.
+4. BUMP DE VERSION = MISE A JOUR EN CHAINE : header py + VERSION + doc .md + spec (en-tete, historique, criteres) + test qui verifie --version. Oublier la spec = KO test-028 point 3 (detecter-divergences-version le signale).
+5. PARALLELISME = VERDICT STABLE OBLIGATOIRE : un outil parallelise ne doit JAMAIS changer de verdict selon la charge. Les timeouts doivent absorber la contention (durees mesurees seules x2 minimum), et la stabilite doit etre prouvee par 2 runs identiques avant de valider.
+
+## [LECON] 2026-08-13 -- THEMIS : 2 NOUVEAUX OUTILS + ROUND QUALITE EVALUATEURS (Vulcain)
+
+**Mission** : ameliorer Themis et ses outils (demande utilisateur, 4 axes : A outiller ses lecons, B rounds qualite evaluateurs, C evaluateur processus, D carte/declencheurs par Buffy apres).
+
+**Resultat** : AXE C evaluer-processus v0.2.0 (detecte les derives : fins de mission erronees, outils hors carte, coherence fiche/carte) + AXE A detecter-evaluations-incompletes v0.1.0 (scan anti-recurrence 4 sources : validateur, spec, generateurs, tests) + AXE B rounds qualite sur les 4 evaluateurs (--rapport, --verbose, couleurs ANSI desactivees hors tty, versions sync 5 fichiers).
+
+**Lecons** :
+1. LA SOURCE FIABLE DES USAGES EST LE REGISTRE, PAS LES LECONS : une premiere version d evaluer-processus croisait les lecons (corrections.md) -> 198 faux positifs (les lecons mentionnent les outils des autres agents et des audits). Le registre (registre-usages-outils.jsonl, alimente par enregistrer-usage-outil) est la seule source des outils RELLEMENT utilises par chaque agent.
+2. UN OUTIL DE DETECTION QUI CRIE 198 FOIS EST INUTILE : la valeur d un detecteur est sa precision, pas sa sensibilite. Corriger le bruit (source + exclusions P0/transverses) AVANT de livrer, pas apres.
+3. LA CARTE DOIT REFLETER LES USAGES REELS : evaluer-processus a revele que tester-lancer-non-regression (outil principal de Morpheus !) n etait assigne dans AUCUNE case de sa carte - ni dans celles de vulcain/janus qui le lancent pourtant. Lacunes corrigees (morpheus c12/c7, vulcain c8, janus c4) + bumps de parcours et fiches (Pattern 14).
+4. UN SCAN ANTI-RECURRENCE DOIT CROISER LES 4 SOURCES : la lecon Themis (audit qui ne scanne que les fichiers modifies rate 8 mentions) est resolue par detecter-evaluations-incompletes avec motif/filtre/contexte - la regex cT1([^0-9*]|$) distingue les mentions conformes des residuelles.
+5. COULEURS ANSI = POLLUTION EN REDIRECTION : les evaluateurs emettaient des codes de couleur meme captures (combo, tests) - desactivation auto via sys.stdout.isatty() + option --rapport pour ecrire un rapport propre.
+6. BUMP DE VERSION = SYNCHRONISATION .py/.sh/.md + FICHE (Pattern 14) : oublier la fiche (v0.4.2 vs parcours 0.4.3) = KO valider-cartes-decision. Toujours verifier fiche ET parcours apres bump.

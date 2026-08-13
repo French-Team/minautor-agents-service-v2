@@ -72,6 +72,8 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `combo-creer-agent` | Creation d'un agent (chemin agent du parcours buffy, v0.3.0) : valider-nommage -> [CONTROLE] -> copier-dossier -> copier-fichier template -> creer-fichier corrections. Agent passe en --var agent=<nom> | [combos/combo-creer-agent/](combos/combo-creer-agent/) |
 | `combo-creer-protocole` | Creation d'un protocole (chemin protocole du parcours buffy, v0.3.0) : valider-conventions -> [CONTROLE] -> copier-dossier -> creer-fichier. Chemin passe en --var chemin=<chemin> --var contenu=<contenu> | [combos/combo-creer-protocole/](combos/combo-creer-protocole/) |
 | `combo-tester-outil` | Chemin de test de Morpheus encapsule (anciennes cases c4-c6 du parcours morpheus) : ecrire le fichier de test via creer-fichier -> verifier les protections (REGLE ABSOLUE : jamais de test sans protections) -> executer le test. Variables : fichier_test, contenu_test, commande_test | [combos/combo-tester-outil/](combos/combo-tester-outil/) |
+| `combos-maj-readme-massive` | Combo grosse MAJ conservative du README : analyse -> verifier -> maj -> correctifs tables/badges -> ASCII | [combos/combos-maj-readme-massive/](combos/combos-maj-readme-massive/) |
+| `combos-analyse-projet` | Combo analyse-projet : etat reel du projet + ecarts README vs realite (compteurs, categories, badges) | [combos/combos-analyse-projet/](combos/combos-analyse-projet/) |
 
 ### Condenser
 
@@ -128,6 +130,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-usage-outils-externes` | Detecter les traces d'outils externes dans les fichiers (CRLF, non-ASCII, BOM) | [detecter/detecter-usage-outils-externes/](detecter/detecter-usage-outils-externes/) |
 | `detecter-convention-nommage` | Detecter les mentions de la convention c<numero>[a-z]? hors contexte etendu cT* (garde-fou anti-recurrence) | [detecter/detecter-convention-nommage/](detecter/detecter-convention-nommage/) |
 | `detecter-decalages-catalogue` | Detecter les decalages entre le catalogue du generateur et les interfaces reelles des outils (--aide/--help) | [detecter/detecter-decalages-catalogue/](detecter/detecter-decalages-catalogue/) |
+| `detecter-evaluations-incompletes` | Scan anti-recurrence : mentions residuelles d'un motif dans les 4 sources (validateur, spec, generateurs, tests) | [detecter/detecter-evaluations-incompletes/](detecter/detecter-evaluations-incompletes/) |
 | `detecter-divergences-version` | Detecter les spec/ dont la version diverge de leur .py (regle des 5 fichiers, formats de version varies) | [detecter/detecter-divergences-version/](detecter/detecter-divergences-version/) |
 | `detecter-impacts` | Detecter les fichiers impliques par la modification d'un fichier du cerveau (schema identite:) | [detecter/detecter-impacts/](detecter/detecter-impacts/) |
 | `detecter-usage-scripts-temporaires` | Mesurer l usage des scripts temporaires (.zz-*/.tmp-*) par les agents et le croiser avec le registre | [detecter/detecter-usage-scripts-temporaires/](detecter/detecter-usage-scripts-temporaires/) |
@@ -154,7 +157,16 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `evaluer-agents` | Verifier que les agents suivent leurs protocoles | [evaluer/evaluer-agents/](evaluer/evaluer-agents/) |
 | `evaluer-coherence` | Verifier les liens et references croisees | [evaluer/evaluer-coherence/](evaluer/evaluer-coherence/) |
 | `evaluer-conventions` | Verifier le nommage, l'ASCII, le format | [evaluer/evaluer-conventions/](evaluer/evaluer-conventions/) |
+| `evaluer-processus` | Detecter les derives de processus (fins, outils hors carte, coherence fiche/carte) | [evaluer/evaluer-processus/](evaluer/evaluer-processus/) |
 | `evaluer-structure` | Verifier l'arborescence et les fichiers critiques | [evaluer/evaluer-structure/](evaluer/evaluer-structure/) |
+
+### Enregistrer
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `enregistrer-usage-outil` | Enregistre un usage d outil dans le registre JSONL (traces/registre-usages-outils.jsonl) | [enregistrer/enregistrer-usage-outil/](enregistrer/enregistrer-usage-outil/) |
+
+---
 
 ### Generateurs
 
@@ -286,6 +298,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `verifier-separation-preoccupations` | Verifier la separation des preoccupations | [verifier/verifier-separation-preoccupations/](verifier/verifier-separation-preoccupations/) |
 | `verifier-systeme` | Verifier le systeme utilisateur | [verifier/verifier-systeme/](verifier/verifier-systeme/) |
 | `verifier-restauration-sure` | Detecter les fichiers non commites avant restauration git | [verifier/verifier-restauration-sure/](verifier/verifier-restauration-sure/) |
+| `verifier-conformite-fiche` | Verifie la conformite des fiches agents au template (noyau + variante par famille, sections lues dynamiquement). | [verifier/verifier-conformite-fiche/](verifier/verifier-conformite-fiche/) |
 
 ---
 
@@ -368,40 +381,62 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | `tester-protection-blocage` | Protection contre les tests qui bloquent | [tester/protections/tester-protection-blocage/](tester/protections/tester-protection-blocage/) |
 | `tester-protection-boucles-infinies` | Protection contre les boucles infinies | [tester/protections/tester-protection-boucles-infinies/](tester/protections/tester-protection-boucles-infinies/) |
 | `tester-protection-erreurs-silencieuses` | Protection contre les erreurs silencieuses | [tester/protections/tester-protection-erreurs-silencieuses/](tester/protections/tester-protection-erreurs-silencieuses/) |
+| `tester-protections` | Point d entree unique importable des protections (lancer_protege + protection STOP fail-fast) | [tester/tester-protections/](tester/tester-protections/) |
 
 ---
 
 | `tester-lancer-non-regression` | Lancer tous les tests formels avec bilan OK/KO et registre protege | [tester/tester-lancer-non-regression/](tester/tester-lancer-non-regression/) |
+
+### Tests (tester/tests/)
+
+| Test | Description | Chemin |
+|---|---|---|
+| `test-001-evaluer-agents-coherence` | Test des corrections apportees a evaluer-agents et evaluer-coherence. | [tester/tests/test-001-evaluer-agents-coherence/](tester/tests/test-001-evaluer-agents-coherence/) |
+| `test-002-combos-moteur` | Test de l outil combos-moteur (etape 2 du plan combo-orchestrateur). | [tester/tests/test-002-combos-moteur/](tester/tests/test-002-combos-moteur/) |
+| `test-003-combos-creer` | Test formel des 3 combos creer-* (cases generateur -> outil, Pattern 3). | [tester/tests/test-003-combos-creer/](tester/tests/test-003-combos-creer/) |
+| `test-004-combos-tester-outil` | Test formel du combo tester-outil v0.1.0 (Pattern 3, chemin de test de Morpheus encapsule). | [tester/tests/test-004-combos-tester-outil/](tester/tests/test-004-combos-tester-outil/) |
+| `test-005-generateurs-commande` | Test formel du generateur de commande v0.2.4 (fiabilisation des flags optionnels), | [tester/tests/test-005-generateurs-commande/](tester/tests/test-005-generateurs-commande/) |
+| `test-006-cartographier-parcours` | Test formel de l'outil cartographier-parcours v0.1.0 (categorie cartographier/). | [tester/tests/test-006-cartographier-parcours/](tester/tests/test-006-cartographier-parcours/) |
+| `test-007-figer-lf` | Test formel de la mission 1 du plan FIGER LF. | [tester/tests/test-007-figer-lf/](tester/tests/test-007-figer-lf/) |
+| `test-008-generateurs-amelioration` | Test formel de l'outil generateurs-amelioration v2.1.0 (categorie generateurs/). | [tester/tests/test-008-generateurs-amelioration/](tester/tests/test-008-generateurs-amelioration/) |
+| `test-009-valider-case` | Test formel de l'outil valider-case v1.1.1 (categorie valider/). | [tester/tests/test-009-valider-case/](tester/tests/test-009-valider-case/) |
+| `test-010-generateurs-case` | Test formel de l outil generateurs-case v0.4.2 (categorie generateurs/). | [tester/tests/test-010-generateurs-case/](tester/tests/test-010-generateurs-case/) |
+| `test-011-generateurs-carte` | Test formel de l outil generateurs-carte v0.3.0 (categorie generateurs/). | [tester/tests/test-011-generateurs-carte/](tester/tests/test-011-generateurs-carte/) |
+| `test-012-guider-parcours` | Test formel de l outil guider-parcours v0.5.0 (categorie guider/). | [tester/tests/test-012-guider-parcours/](tester/tests/test-012-guider-parcours/) |
+| `test-013-cerberus-migration` | Test formel de la migration pilote du parcours-cerberus v0.4.3 | [tester/tests/test-013-cerberus-migration/](tester/tests/test-013-cerberus-migration/) |
+| `test-014-spec-guider-parcours` | Test formel de la spec-guider-parcours v0.6.2 | [tester/tests/test-014-spec-guider-parcours/](tester/tests/test-014-spec-guider-parcours/) |
+| `test-015-valider-case-garde-fou` | Test formel du garde-fou anti-pollution de valider-case v1.1.1 | [tester/tests/test-015-valider-case-garde-fou/](tester/tests/test-015-valider-case-garde-fou/) |
+| `test-016-migration-buffy` | Test formel de la migration du parcours-buffy v0.3.0 | [tester/tests/test-016-migration-buffy/](tester/tests/test-016-migration-buffy/) |
+| `test-017-generateurs-ligne` | Test formel de l'outil generateurs-ligne v0.3.0 (categorie generateurs/). | [tester/tests/test-017-generateurs-ligne/](tester/tests/test-017-generateurs-ligne/) |
+| `test-018-fins-reactivation` | Test formel des fins REACTIVER-CERBERUS precisees dans les 11 parcours. | [tester/tests/test-018-fins-reactivation/](tester/tests/test-018-fins-reactivation/) |
+| `test-019-combos-controle-buffy` | Test formel du combo controle-buffy v0.1.0 (Pattern 3, preparation d'une mission | [tester/tests/test-019-combos-controle-buffy/](tester/tests/test-019-combos-controle-buffy/) |
+| `test-020-combos-clio` | Test formel des 3 combos Clio (Pattern 3, crees pour le test reel de la | [tester/tests/test-020-combos-clio/](tester/tests/test-020-combos-clio/) |
+| `test-021-ligne-trio` | Test formel de la LIGNE TRIO de Janus + boucle de correction du trio. | [tester/tests/test-021-ligne-trio/](tester/tests/test-021-ligne-trio/) |
+| `test-022-budget-pondere` | Test formel du BUDGET PONDERE des indices par case (valider-case v1.1.0). | [tester/tests/test-022-budget-pondere/](tester/tests/test-022-budget-pondere/) |
+| `test-023-grep-budget-pondere` | Test formel du GREP CROISE des seuils BUDGET PONDERE (protocole-verification- | [tester/tests/test-023-grep-budget-pondere/](tester/tests/test-023-grep-budget-pondere/) |
+| `test-024-scripts-temporaires` | Test formel du garde-fou anti-scripts-temporaires v0.1.0 | [tester/tests/test-024-scripts-temporaires/](tester/tests/test-024-scripts-temporaires/) |
+| `test-025-nettoyer-sessions-garde-fou` | Test formel du garde-fou anti-recurrence : en-tete ## Sessions LLM PRESERVE | [tester/tests/test-025-nettoyer-sessions-garde-fou/](tester/tests/test-025-nettoyer-sessions-garde-fou/) |
+| `test-026-detecter-cablages-manquants-garde-fou` | Garde-fou anti-recurrence du bug des cases ORPHELINES (lecon 2026-08-12). | [tester/tests/test-026-detecter-cablages-manquants-garde-fou/](tester/tests/test-026-detecter-cablages-manquants-garde-fou/) |
+| `test-027-series-garde-fou` | mod = importlib.util.module_from_spec(spec) | [tester/tests/test-027-series-garde-fou/](tester/tests/test-027-series-garde-fou/) |
+| `test-028-coherence-documentaire` | Garde-fou anti-recurrence des ecarts documentaires (lecon 2026-08-12, round 11). | [tester/tests/test-028-coherence-documentaire/](tester/tests/test-028-coherence-documentaire/) |
+| `test-029-conformite-template` | GARDE-FOU : chaque test-0XX doit respecter la structure du TEMPLATE de test | [tester/tests/test-029-conformite-template/](tester/tests/test-029-conformite-template/) |
+| `test-030-protections-importees` | GARDE-FOU : chaque test-0XX DOIT importer les protections via le point | [tester/tests/test-030-protections-importees/](tester/tests/test-030-protections-importees/) |
+| `test-031-chrono-reference` | GARDE-FOU : le lanceur de non-regression affiche un chrono global et gere | [tester/tests/test-031-chrono-reference/](tester/tests/test-031-chrono-reference/) |
+| `test-032-pool-workers` | GARDE-FOU : le lanceur de non-regression utilise un POOL DE WORKERS par | [tester/tests/test-032-pool-workers/](tester/tests/test-032-pool-workers/) |
+| `test-033-passage-janus-obligatoire` | GARDE-FOU ANTI-RECURRENCE : la fin de mission de Morpheus passe OBLIGATOIREMENT | [tester/tests/test-033-passage-janus-obligatoire/](tester/tests/test-033-passage-janus-obligatoire/) |
+| `test-034-cerberus-sans-outils-tests` | GARDE-FOU ANTI-RECURRENCE : la carte de Cerberus n assigne AUCUN outil de test | [tester/tests/test-034-cerberus-sans-outils-tests/](tester/tests/test-034-cerberus-sans-outils-tests/) |
+| `test-035-evaluer-processus` | GARDE-FOU : evaluer-processus detecte les derives de processus (fins de | [tester/tests/test-035-evaluer-processus/](tester/tests/test-035-evaluer-processus/) |
+| `test-036-detecter-evaluations-incompletes` | GARDE-FOU : detecter-evaluations-incompletes scan les 4 sources | [tester/tests/test-036-detecter-evaluations-incompletes/](tester/tests/test-036-detecter-evaluations-incompletes/) |
+| `test-037-seul-janus-lance-non-regression` | GARDE-FOU ANTI-RECURRENCE : SEUL la carte de Janus assigne | [tester/tests/test-037-seul-janus-lance-non-regression/](tester/tests/test-037-seul-janus-lance-non-regression/) |
+| `test-038-badge-readme-synchronise` | GARDE-FOU ANTI-RECURRENCE : le badge Outils-N du README (header) doit etre | [tester/tests/test-038-badge-readme-synchronise/](tester/tests/test-038-badge-readme-synchronise/) |
+| `test-039-residus-version-racine` | GARDE-FOU ANTI-RECURRENCE : aucun fichier de version accidentel a la racine | [tester/tests/test-039-residus-version-racine/](tester/tests/test-039-residus-version-racine/) |
+
 ## Templates
 
 | Template | Description | Chemin |
 |---|---|---|
-| `outil-template` | Modele standard de creation d'outils (script + doc) | [outil-template.md](outil-template.md) + [outil-template.sh](outil-template.sh) |
-
----
-
-## Comment utiliser le outil-template
-
-Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
-- `outil-template.md` : modele de documentation
-- `outil-template.sh` : modele de script
-
-1. Copier `outil-template.md` et `outil-template.sh` vers `agents/tools/[categorie]/[nom-outil]/`
-2. Renommer les fichiers avec le nom reel de l'outil (`[nom-outil].md`, `[nom-outil].sh`)
-3. Remplacer les marqueurs `[nom-outil]` dans les deux fichiers
-4. Completer la logique du script et la documentation
-5. Ajouter l'outil dans cet index
-6. Tester en `--dry-run` avant toute utilisation
-
----
-
-## Documents de reference
-
-| Document | Description | Chemin |
-|---|---|---|
-| `outils-base.md` | Analyse des outils de base : inventaire des 18 outils P0/P1/P2 (tous crees) | [outils-base.md](outils-base.md) |
-
----
+| `outil-template` | Modele standard de creation d outils (script + doc) | [outil-template.md](outil-template.md) |
+| `outils-base.md` | Analyse des outils de base : inventaire des outils P0/P1/P2 | [outils-base.md](outils-base.md) |
 
 ## Statistiques
 
@@ -411,19 +446,19 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Analyser | 2 |
 | Cartographier | 1 |
 | Changer | 1 |
-| Combos | 15 |
+| Combos | 18 |
 | Condenser | 1 |
 | Copier | 2 |
 | Corriger | 6 |
 | Creer | 4 |
 | Decomposer | 1 |
 | Deplacer | 1 |
-| Detecter | 10 |
+| Detecter | 11 |
 | Ecrire | 1 |
-| Editer | 1 |
+| Editer | 3 |
 | Enregistrer | 1 |
-| Evaluer | 4 |
-| Generateurs | 7 |
+| Evaluer | 5 |
+| Generateurs | 10 |
 | Gerer | 1 |
 | Guider | 1 |
 | Inserer | 1 |
@@ -436,11 +471,11 @@ Le `outil-template` est constitue de deux fichiers a la racine de `tools/` :
 | Rechercher | 10 |
 | Remplacer | 1 |
 | Supprimer | 3 |
-| Valider | 12 |
-| Verifier | 5 |
-| Protections | 3 |
-| Templates | 1 |
-| **Total** | **115** |
+| Valider | 13 |
+| Verifier | 6 |
+| Protections | 5 |
+| Tests | 39 |
+| **Total** | **166** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

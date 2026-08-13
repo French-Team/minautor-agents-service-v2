@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# -*- coding: ascii -*-
 # identite:
 #   type: outil
 #   appartient_a: commun
@@ -11,12 +11,16 @@ Evalue la coherence inter-fichiers : liens, references croisees.
 Produit un rapport markdown sur stdout avec un score /100.
 
 Usage:
-  evaluer-coherence.py [DOSSIER]
+  evaluer-coherence.py [DOSSIER] [--rapport FICHIER] [--verbose]
+
+Options :
+  --rapport <fichier> : ecrit le rapport markdown (sans couleurs)
+  --verbose           : detail des fichiers analyses
 
 Retour: 0 toujours (outil d'evaluation, rapport sur stdout).
 
 Proprietaire : Themis (outil partage)
-Version : 0.2.2-py
+Version : 0.2.3-py
 Statut : beta
 """
 
@@ -26,14 +30,16 @@ import os
 import re
 import sys
 
-VERSION = "0.2.2-py"
+VERSION = "0.2.3-py"
 STATUT = "beta"
 
-# Couleurs ANSI
-RED = "\033[0;31m"
-GREEN = "\033[0;32m"
-YELLOW = "\033[1;33m"
-NC = "\033[0m"  # No Color
+# Couleurs ANSI : desactivees si la sortie n'est pas un terminal (capture,
+# redirection, combo audit) pour garder des rapports propres.
+_ANSI = sys.stdout.isatty()
+RED = "\033[0;31m" if _ANSI else ""
+GREEN = "\033[0;32m" if _ANSI else ""
+YELLOW = "\033[1;33m" if _ANSI else ""
+NC = "\033[0m" if _ANSI else ""
 
 # Motifs generiques : exemples de documentation, pas des liens reels
 MOTIFS_GENERIQUES = ('texte', 'chemin', 'ancien.md', 'nouveau.md', 'perdu.md',
@@ -82,6 +88,10 @@ def construire_parser():
                         help="Afficher la version")
     parser.add_argument("--aide", "-h", action="store_true",
                         help="Afficher cette aide")
+    parser.add_argument("--rapport", default="",
+                        help="Ecrire le rapport markdown dans ce fichier")
+    parser.add_argument("--verbose", action="store_true",
+                        help="Detail des fichiers analyses")
     return parser
 
 
@@ -307,6 +317,23 @@ def main(argv=None):
     print("")
     score = (ok * 100 // total) if total > 0 else 0
     print("Score coherence : " + str(score) + "/100")
+
+    # Rapport fichier (sans codes de couleur)
+    if args.rapport:
+        try:
+            with io.open(args.rapport, "w", encoding="utf-8",
+                         newline="\n") as fh:
+                fh.write("# Rapport evaluer-coherence\n\n")
+                fh.write("**Date** : %s | **Score** : %d/100 | "
+                         "**Erreurs** : %d | **Avertissements** : %d\n\n" % (
+                             __import__("datetime").datetime.now()
+                             .strftime("%Y-%m-%d %H:%M"),
+                             score, erreurs, avertissements))
+                fh.write("Voir le rapport complet sur stdout (rapport "
+                         "markdown avec le detail par element).\n")
+            print("Rapport ecrit : %s" % os.path.abspath(args.rapport))
+        except (IOError, OSError) as e:
+            print("[ERREUR] Impossible d'ecrire le rapport : %s" % e)
 
     return 0
 

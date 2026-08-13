@@ -1163,3 +1163,351 @@ ajouter, detecteur sans faux positifs de dossiers, historique idempotent
 3. UN GARDE-FOU NE DOIT PAS S AUTO-INCRIMINER : test-029 verifie l absence de [ECHEC] - son propre code en mentionnait le motif (concatenation + retrait docstring/commentaires requis).
 4. UN NOUVEAU TEST DOIT ETRE AFFECTE A UNE SERIE (lecon round 11) : test-029 affecte a la serie D.
 5. UN BUMP DE PARCOURS CASCADE SUR LES TESTS : morpheus 0.4.1->0.4.2 a casse test-004 (verifiait 0.4.1) - adapte.
+
+## [LECON] 2026-08-12 -- PROTECTIONS IMPORTEES + FAIL-FAST (Morpheus)
+
+**Mission** : brancher les protections dans TOUS les tests (demande utilisateur : chaque test DOIT importer les protections via un point d entree unique + protection STOP fail-fast).
+
+**Resultat** : 29 tests migres (bloc PROTECTIONS = charger_protections() + subprocess.run -> PROTECTIONS.lancer_protege), template-test.md v0.2.1 (import OBLIGATOIRE + verifier_critique/ArretProtection dans le canevas), protocole-tests v0.3.0 (Python + protections importables + STOP), lanceur v0.1.4 avec --fail-fast (prouve reellement : test KO -> suite stoppee, tests suivants non lances), garde-fou test-030 (10 points : import dans chaque test, 0 subprocess.run restant, STOP verifiee reellement) affecte a la serie D. Non-regression 30/30, normes 0/0.
+
+**Lecons** :
+1. UNE PROTECTION NON IMPORTABLE EST UNE PROTECTION MORTE : les 3 anciennes protections etaient des wrappers shell=True jamais charges. Le module importable (charger_protections via importlib) rend la protection reelle et verifiable.
+2. LA MIGRATION DE 29 TESTS CASCADE SUR LES COMPTEURS : bump catalogue 147 + index 116 + lanceur 0.1.4 + template 0.2.1 -> test-007/024/027/029 a adapter (compteurs + versions + formats de bilan).
+3. UN GARDE-FOU NE DOIT PAS S AUTO-INCRIMINER (lecon repetee) : test-030 mentionnait subprocess.run et [KO] dans son propre code - concatenation du motif + exclusion du fichier garde-fou + redirection stdout requises.
+4. FAIL-FAST PROUVABLE : la preuve reelle (test KO au milieu -> message suite STOPPEE + tests non lances) est indispensable - un test qui passe sans preuve ne prouve rien.
+5. L ORDRE DES SERIES EST TRIE : un test simule test-999 n etait pas capture par le glob test-0* - utiliser un numero test-0XX pour les simulations.
+
+## [LECON] 2026-08-13 -- CHRONO + REFERENCE DE TEMPS : GARDE-FOU test-031 (Morpheus)
+
+**Mission** : tester le chrono + reference de temps du lanceur (v0.1.5 de Vulcain) et creer le garde-fou test-031.
+
+**Resultat** : non-regression 30/30 avec v0.1.5 confirmee, garde-fou test-031-chrono-reference cree (10 points : --version v0.1.6, options --seuil/--rebase-reference/--no-reference dans --help, chrono affiche, run cible ne cree PAS la reference si absente, run cible ne modifie PAS la reference existante, regle statique reference_globale = not args.tests, normes). Serie D 8 -> 9 tests. Bump lanceur 0.1.5 -> 0.1.6 : ajout du re-basage automatique quand le nombre de tests change (30 -> 31 : nouvelle base sans SIGNAL - anti-faux positif). Tests adaptes : test-024, test-027 (v0.1.6). Non-regression 31/31 OK, normes 0/0, reference finale 119.9s (31 tests), catalogue 147 trie.
+
+**Lecons** :
+1. UNE REFERENCE COMPAREE A UNE SUITE DIFFERENTE EST UN FAUX POSITIF : la reference etait a 30 tests quand la suite en comptait 31 - la comparaison n aurait pas eu de sens. Le re-basage automatique sur changement de nb_tests est indispensable.
+2. UN GARDE-FOU SUR UNE DONNEE PERSISTEE DOIT ETRE NON POLLUANT : test-031 sauvegarde/restaure la reference (etat initial) et ne lance que des runs cibles (jamais le run complet de 2 min) - un garde-fou ne doit jamais corrompre la donnee qu il protege.
+3. LE TEST DE NON-ECRITURE EST LA PREUVE LA PLUS FORTE D UNE REGLE DE SECURITE : pour verifier que la reference n est geree que par le run complet, la preuve reelle est un run cible qui ne cree/ne modifie PAS le fichier - pas une simple lecture du code.
+4. TEST-031 VERIFIE LA REGLE DU RUN CIBLE : le lanceur doit distinguer run complet (reference) vs run cible --tests (jamais de reference) - c est la regle anti-reference-partielle.
+5. .GITIGNORE POUR DONNEES MACHINE-DEPENDANTES : temps-reference.json est local (performances machine) - il ne doit pas etre versionne, chaque machine a sa propre reference.
+
+## [LECON] 2026-08-13 -- POOL DE WORKERS : GARDE-FOU test-032 (Morpheus)
+
+**Mission** : tester le pool de workers du lanceur (v0.2.0 de Vulcain) et creer le garde-fou test-032.
+
+**Resultat** : non-regression 31/31 avec v0.2.0 confirmee, garde-fou test-032-pool-workers cree (10 points : --version v0.2.0, defaut = Pool, --serial/--workers 1 = serie, GARDE_FOUS_GLOBAUX 023/024/025/027, anti-deadlock fichier, --workers dans --help, PREUVE DE GAIN 8.8s pool vs 22.6s serie sur test-001..008, normes). Serie D 9 -> 10 tests. Non-regression 32/32 OK, temps 92.2s (re-basage auto 31 -> 32), normes 0/0.
+
+**Lecons** :
+1. UN GARDE-FOU DE PERFORMANCE DOIT PROUVER LE GAIN, PAS JUSTE LA STRUCTURE : le point 7 mesure un sous-ensemble en serie vs pool (8.8s vs 22.6s, seuil large x2.5 pour la variabilite machine) - un test qui verifie seulement la presence du pool ne prouve pas qu il accelere.
+2. AUTO-INCRIMINATION (lecon repetee, 3e fois) : test-032 detectait stdout=PIPE... y compris dans le commentaire qui documente la lecon anti-deadlock - motif affine (, stdout=PIPE) pour ne matcher que le vrai usage Popen.
+3. LE RE-BASAGE AUTO DE LA REFERENCE EST UNE SECURITE, PAS UNE PERTE : 31 -> 32 tests = nouvelle base sans SIGNAL - le chrono s adapte a la suite qui change.
+4. UN GARDE-FOU DE PERFORMANCE DOIT ETRE LEGER : test-032 cible test-001 (2 sous-runs) et un sous-ensemble de 8 tests pour la preuve de gain - jamais la suite complete (2 min) dans un test de serie D.
+5. LE GARDE-FOU VERIFIE LA REGLE ANTI-DEADLOCK : la sortie vers fichier temp unique est un invariant critique - sans elle, le pool se bloque silencieusement (deadlock 64 Ko du pipe stdout).
+
+## [LECON] 2026-08-13 -- VALIDATION GOULOT TEST-028 : PARALLELISME + FIABILITE DU VERDICT (Morpheus)
+
+**Mission** (suite Vulcain) : valider l optimisation de detecter-decalages-catalogue v0.2.1 (pool de threads + cache) qui abat le goulot test-028 (88s -> 22s) et la suite (92.2s -> 52.3s).
+
+**Verifications** : test-028 8/8 en direct, non-regression complete 32/32 (57.2s, +9% vs 52.3s conforme), normes 0/0, verdict DEC 0 decalage.
+
+**DECOUVERTE MAJEURE (defaut de fiabilite) : le verdict du scan parallele peut DEPENDRE DE LA CHARGE.** En comparant les syntheses avant vs apres : 139/8 non testables (v0.2.1 run a froid) vs 138/9 (run sous charge) - test-017-generateurs-ligne (6s seul avec --aide) basculait CONFORME -> TIMEOUT quand 16 interpretes Python demarraient en meme temps sur le lecteur reseau. Le parallelisme ne doit JAMAIS changer le verdict.
+
+**Correction** (avec Vulcain) : TIMEOUT porte de 8s a 30s (absorbe la contention au demarrage des interpretes, sans penaliser les vrais non-testables qui repondent vite ou jamais). Resultat : verdict STABLE sur 2 runs consecutifs (141 conformes / 0 decalage / 6 non testables identiques) et PLUS PRECIS (test-003/005/017, qui repondaient en 9s > timeout 8s, sont maintenant correctement CONFORME). Suite complete : 32/32 OK, 57.2s, reference conservee.
+
+**Lecons** :
+1. UNE OPTIMISATION DE PERFORMANCE DOIT PRESERVER LE VERDICT : avant de valider, comparer la synthese du scan avec et sans charge, et prouver la stabilite par 2 runs identiques.
+2. TIMEOUT = MESURE REELLE x 2 minimum : un timeout calibre sur le temps a froid (8s) casse sous contention pool (6s seul -> >8s en pool 16). 30s = marge fiable sans perte.
+3. NE JAMAIS LANCER UNE MESURE DE PERFORMANCE EN PARALLELE AVEC LE RUN COMPLET : test-028 lance en meme temps que la non-regression a fausse le chrono (+20% au lieu de +9%). Les mesures de gain se font seules, les validations ensuite.
+
+## [LECON] 2026-08-13 -- LA FIN DE MISSION SUIT LA CARTE, JAMAIS LA CONSIGNE (Morpheus)
+
+**Contexte** : demande utilisateur - pourquoi je ne lancais plus Janus ? Janus a diagnostique : ma carte etait CORRECTE (c10/c14 = FIN - Activer Janus) mais les consignes des 3 missions recentes (chrono, pool workers, goulot test-028) portaient reactiver Cerberus au lieu de activer JANUS, et j ai suivi la consigne au lieu de relire MA carte. Pire : ma fiche portait une REGLE DELEGATION avec la clause erronee Je ne reactive CERBERUS que si j ai ete active directement par Cerberus - qui legitimait la derive et contredisait c14.
+
+**Corrections** : 1) REGLE ABSOLUE -- PASSAGE PAR JANUS ajoutee a ma fiche (apres TOUTE mission, meme active directement par Cerberus : ACTIVER JANUS, JAMAIS reactiver Cerberus directement ; commande exacte activer session-llm-1 janus) ; 2) clause erronee RETIREE de la REGLE DELEGATION (seule exception legitime : reactiver VULCAIN quand il attend mon rapport en milieu de mission) ; 3) garde-fou test-033-passage-janus-obligatoire cree (9 points : carte c10/c14, REGLE ABSOLUE, clause retiree, normes) affecte a la serie D ; 4) non-regression 33/33 (56.2s, re-basage auto 32->33).
+
+**Lecons** :
+1. LA CONSIGNE N EST JAMAIS LA REFERENCE : quand une mission dit reactiver Cerberus mais que MA carte dit Activer Janus, c est la CARTE qui gagne (Pattern 8). Relire sa carte a CHAQUE fin de mission, pas seulement au debut.
+2. UNE REGLE DE FICHE ERRONEE EST UNE DETTE : la clause Je ne reactive CERBERUS que si... legitimait silencieusement la derive pendant 3 missions. Une regle qui contredit la carte doit etre detectee et retiree - le garde-fou test-033 l interdit desormais.
+3. LE GARDE-FOU TEST-033 PROUVE L ETAT, PAS L INTENTION : il verifie la carte (c10/c14 = activer janus), la fiche (REGLE ABSOLUE + JAMAIS reactiver) et l absence de la clause erronee - c est la seule facon de rendre le passage par Janus incontournable.
+4. CETTE FOIS JE RESPECTE LA REGLE : fin de mission = activer JANUS pour le controle croise du garde-fou (commande exacte activer session-llm-1 janus).
+
+## [LECON] 2026-08-13 -- GARDE-FOU DU GARDIEN : TEST-034 CERBERUS SANS OUTILS DE TEST (Morpheus)
+
+**Mission** (activee par Cerberus - et c est deja une correction en soi : Cerberus a identifie l agent habilite au lieu d executer) : creer le garde-fou qui verifie que la carte de Cerberus n assigne aucun outil de test.
+
+**Contexte** : l utilisateur a remarque que Cerberus avait lance la non-regression lui-meme (round performance 43.8s). Diagnostic : la carte de Cerberus est CORRECTE (aucun outil de test assigne ; c5/c6 prevues pour identifier puis activer l agent habilite) mais l execution a derive (outil hors carte). Lecon Cerberus enregistree.
+
+**Livrable** : test-034-cerberus-sans-outils-tests 6/6 (carte sans outils de test dans les indices, cases c5/c6 presentes, fiche porte la REGLE ABSOLUE -- CERBERUS N EXECUTE JAMAIS LES TESTS, normes) affecte a la serie D. Non-regression 34/34 (41.9s, nouveau record - re-basage auto 33->34).
+
+**Lecons** :
+1. LE GARDE-FOU VERIFIE LA FICHE, PAS LES CORRECTIONS : comme test-033 (fiche morpheus), test-034 verifie la fiche cerberus.md - la regle doit vivre dans la fiche (reference de l agent), pas seulement dans corrections.md (historique des lecons). J ai d abord mis la lecon dans corrections.md puis j ai du enrichir la fiche.
+2. LES APOSTROPHES DE LA CARTE PIEGENT LES TESTS : les titres c5/c6 portent l apostrophe (Identifier l'agent) - normaliser en remplacant l apostrophe par un ESPACE (pas en la supprimant, sinon lagent != l agent).
+3. TOUT LE MONDE DERIVE, MEME LE GARDIEN : la derive n est pas propre a un agent - Cerberus a utilise un outil hors carte par reflexe. La carte est la reference pour CHAQUE agent, et le garde-fou qui verifie la carte de Cerberus est aussi legitime que celui qui verifie ma carte.
+
+## [LECON] 2026-08-13 -- GARDE-FOUS TEST-035/036 : OUTILS THEMIS (Morpheus)
+
+**Mission** : tester les 2 outils crees par Vulcain pour Themis (evaluer-processus + detecter-evaluations-incompletes) : garde-fous + non-regression complete.
+
+**Resultat** : test-035-evaluer-processus 8/8 + test-036-detecter-evaluations-incompletes 8/8 (serie D), non-regression 36/36 en 41.9s (+1% conforme, base 34->36 recalee).
+
+**Lecons** :
+1. UN NOUVEL OUTIL REVELE LES LACUNES DE SA PROPRE CARTE : test-035 (scan global 0 probleme) a d abord KO car Vulcain utilisait evaluer-processus/detecter-evaluations-incompletes sans les avoir dans SA carte - l outil se detectait lui-meme ! Correction : indices ajoutes a la case c10 de vulcain + bump 0.4.4. L auto-application de l outil a ses propres regles est la preuve qu il fonctionne.
+2. UN TEST QUI CHERCHE UN MOTIF NE DOIT PAS LE CONTENIR LUI-MEME : test-036 cherchait zzz-motif-inexistant-zzz et le scan des tests le trouvait DANS LE TEST (auto-reference, 131 fichiers scannes). Construire le motif par CONCATENATION (zzz-inexistant- + 9f4a2c7e) pour qu il n existe jamais litteralement dans le fichier.
+3. CHAQUE TEST PASSE PAR lancer_protege : test-030 exige que tout subprocess.run soit remplace par PROTECTIONS.lancer_protege - les 2 nouveaux tests utilisaient subprocess.run brut (KO) puis ont ete adaptes (le py_compile aussi).
+4. LES COMPTEURS DE LA NON-REGRESSION SUIVENT LE CATALOGUE : 2 nouveaux outils = catalogue 147->149, index-tools 116->118, parcours morpheus v0.4.2->0.4.3 - test-004/007/024 verifient ces compteurs en dur et doivent etre adaptes a chaque ajout (test-007 fige aussi le total index-tools).
+
+
+## [LECON] 2026-08-13 -- TESTS ADAPTES AXE D THEMIS + NON-REGRESSION 36/36 (Morpheus)
+
+**Contexte** : mission Cerberus (suite axe D Themis, demande utilisateur) - adapter les tests de version casses par les bumps des parcours (Buffy avait insere Themis comme maillon automatique) puis lancer la non-regression complete.
+
+**Adaptations realisees** :
+1. test-004 : morpheus v0.4.3 -> v0.4.4 (2 occurrences).
+2. test-016 : buffy v0.4.1 -> v0.4.2 + compteurs recalcules depuis le parcours reel : action 37 -> 40 (c8a/c22a/c27a Activer Themis), controle 2 -> 5 (c8b/c22b/c27b Retour de Themis), question 8 + fin 10 inchangees.
+3. test-005 : atlas v0.4.1 -> v0.4.2 (doc + verification) + 2 KO lies aux nouvelles cases atlas c11a/c11b : le residu catalogue passe de 1 (c30) a 2 (c30 + c11a commande activer themis), et les navigations ajoutent un OUI final pour le controle c11b (Retour de Themis recu).
+4. test-006 : atlas Nombre de cases 46 -> 48 (c11a/c11b ajoutees).
+5. test-017 : 3 KO - cause racine : generateurs-ligne n affiche que les 6 dernieres lignes de valider-case ; depuis l axe D le parcours buffy a 3 avertissements de re-essai Themis (c8b/c22b/c27b) + 1 deviation = le verdict CONFORME sort de la fenetre. Adaptation : verifier le contrat reel de l outil ('[OK] valider-case : conforme' emis seulement si returncode 0) au lieu du verdict pousse hors fenetre.
+
+**Lecon** : quand un test verifie une sortie d outil qui re-affiche un sous-ensemble de lignes d un validateur, la robustesse exige de verifier le message de succes FINAL de l outil (present uniquement si tout passe), pas une ligne de verdict qui peut etre poussee hors de la fenetre par de nouveaux avertissements.
+
+**Verifications** : non-regression complete 36/36 OK (pool-16, 41.5 s, chrono conforme/mis a jour), normes ASCII/LF 0/0 sur les 5 tests modifies, 0 residu temporaire, usages declares au registre.
+
+
+## [LECON] 2026-08-13 -- GARDE-FOU TEST-037 SEUL JANUS LANCE LA NON-REGRESSION (Morpheus)
+
+**Contexte** : mission Buffy (regle gouvernance demande utilisateur) - SEUL
+Janus lance la non-regression complete (tester-lancer-non-regression) : sur une
+ligne de travail multi-agents, c est Janus a la fin qui la lance. Philosophie
+utilisateur : agents construits de la meme facon (meme template) mais chacun a
+SON identite et SON role - jamais de parcours identiques en contenu.
+
+**Actions** : 1) cree test-037-seul-janus-lance-non-regression (serie d,
+registre et garde-fous) : verifie que SEUL la carte janus contient
+tester-lancer-non-regression, que la fiche morpheus porte la REGLE ABSOLUE --
+NON-REGRESSION JANUS, que les 11 cartes ont des signatures de CONTENU toutes
+distinctes (identite), normes ASCII/LF. 2) affecte le test a la serie d +
+DUREES_CONNUES dans le lanceur. 3) execute individuellement : 5/5 OK ; serie d
+via lanceur : 15/15 OK.
+
+**Lecon** : le test a d abord compare les signatures d IDS seuls et a signale
+faussement le trio athena/promethee/minerve comme identiques - mais ils
+partagent VOLONTAIREMENT la meme structure d ids (meme construction) avec des
+contenus differents (identites distinctes). La bonne mesure d identite est la
+signature de CONTENU complet, pas la liste d ids. Distinguer construction
+(ids partages, voulu) et identite (contenu, jamais duplique).
+
+**Verifications** : test-037 5/5 OK, serie d 15/15 OK, normes 0/0, usages
+declares. FIN : activer THEMIS (maillon automatique) puis JANUS pour le
+controle croise final qui lancera la non-regression complete.
+
+
+## [LECON] 2026-08-13 -- ANTI-ARTEFACT TEST-024 (Morpheus)
+
+**Contexte** : demande utilisateur - ameliorer le lanceur de non-regression
+pour eviter l artefact test-024 quand on lance la suite depuis un script
+temporaire (scenario KO 3 fois pendant la mission seule-janus : le .tmp-*.py
+orchestrateur existait a la racine pendant l execution, test-024 le detectait
+comme residu a tort).
+
+**Implementation** : 1) tester-lancer-non-regression.py : fonction
+detecter_parent_temporaire() - lit os.getppid() puis la ligne de commande du
+processus parent (/proc/<pid>/cmdline sur Unix, Get-CimInstance Win32_Process
+via powershell sur Windows) ; si le parent est un script .tmp-*/.zz-* a la
+racine (en cours d execution = legitime, PAS un residu), il est declare dans
+os.environ NON_REGRESSION_EXCLUSIONS (herite par tous les sous-processus) avec
+un message [INFO]. 2) test-024 : lit NON_REGRESSION_EXCLUSIONS et exclut ces
+noms du scan (zz/tmp = [n for n in listdir if n not in exclusions]).
+
+**Tests (individuels, regle NON-REGRESSION JANUS respectee)** : CAS 1
+exclusion -> 13/13 OK ; CAS 2 sans exclusion -> 12/13 KO (le .tmp-* est
+detecte, protection intacte) ; CAS 3 residu reel non exclu -> KO (efficace) ;
+CAS 4 residu exclu -> OK ; INTEGRATION reelle : non-regression --series d
+lancee depuis .tmp-integration-parent.py -> [INFO] parent exclu + 15/15 OK.
+
+**Lecon** : le scan d un garde-fou doit pouvoir distinguer un script
+temporaire EN COURS D EXECUTION (orchestrateur legitime du lancement) d un
+RESIDU (plus utilise par aucun processus). Le processus parent direct est la
+signature fiable de l orchestrateur ; tout le reste reste detecte.
+## [LECON] 2026-08-13 -- GARDE-FOU test-038 BADGE README SYNCHRONISE (Morpheus)
+
+**Contexte** : lecon Clio/Janus (badge affichage 128 mais href 121) - Buffy a
+ameliore combos-maj-readme-massive v0.1.1 (aligner_badge_header). Mon role :
+creer le garde-fou anti-recurrence test-038-badge-readme-synchronise.
+
+**Test cree** : verifie (1) presence du badge Outils-N dans le header,
+(2) affichage == compte reel (compter_outils importe via importlib depuis
+combos-analyse-projet - source de verite partagee), (3) href == compte reel
+(pas de divergence display/href), (4) normes ASCII/LF. Affecte a la serie d
+(garde-fous) + DUREES_CONNUES dans les 2 blocs du lanceur.
+
+**Tests** : 4/4 OK sur README sain ; preuve negative (href 121 desynchronise)
+-> 3 OK / 1 KO detecte (RC 1) ; serie d 16/16 OK avec test-038 integre.
+
+**Lecon** : le lanceur de non-regression contient les SERIES et
+DUREES_CONNUES en DOUBLE (2 blocs) - toute affectation de nouveau test doit
+modifier les deux blocs pour rester coherent.
+## [LECON] 2026-08-13 -- TEST-038 ETENDU + TEST-039 RESIDUS VERSION (Morpheus)
+
+**Contexte** : Buffy a generalise aligner_badges_header v0.1.2 (Outils +
+Version + Statut avec sources de verite clio/) et supprime les residus
+accidentels 0.2.1/v0.2.6 a la racine. Mon role : etendre les garde-fous.
+
+**Tests** :
+- test-038 etendu : 7 points (Outils affichage/href, Version == v+source,
+  Statut == source, badges statiques coherents, normes). 7/7 OK.
+- test-039 cree : aucun fichier de version semver pure (^v?X.Y.Z$) a la
+  racine + sources presentes + normes. 4/4 OK + preuve negative (0.2.1
+  recree -> KO detecte).
+- Affectation serie d (2 blocs) + DUREES : serie d 17/17 OK.
+
+**Lecon** : la regex de capture du badge Version recupere la valeur SANS le
+prefixe v (le v est dans le motif) - comparer l occurrence au semver brut
+de la source, pas a "v"+source. Piege classique des regex avec prefixe.
+## [LECON] 2026-08-13 -- GARDE-FOU test-040 CATALOGUE->DOC->INDEX (Morpheus)
+
+**Contexte** : demande utilisateur - chaque outil ajoute au catalogue doit
+avoir sa doc et son entree index-tools. Buffy a tout indexe (27 entrees,
+stats 118 -> 166). Mon role : le garde-fou permanent.
+
+**Test cree** : test-040-catalogue-index-synchronise : (0) catalogue JSON
+charge (149 commandes -> 137 scripts uniques dedoublonnes), (1) chaque
+script existe sur disque, (2) chaque outil a sa doc .md (meme dossier),
+(3) chaque outil a son entree index-tools (backticks ou chemin), (4)
+normes. 5/5 OK sur etat sain ; preuve negative (retrait de combos-moteur
+de l index) -> KO detecte (135/137).
+
+**Affectation** : serie d + DUREES (2 blocs) : serie d 18/18 OK.
+
+**Lecon** : plusieurs commandes du catalogue peuvent pointer vers le meme
+script (ex : activer-agent-principal 5x) - le dedoublonnage par script
+unique est indispensable pour compter les outils reels.
+
+## [LECON] 2026-08-13 -- NON-REGRESSION 5 SERIES TESTEE (Morpheus)
+
+**Contexte** : Buffy a decoupe la suite non-regression de 4 a 5 series
+(a=14u, b=13u, c=14u, d=13u=test-023..027,030,031 / 7 tests,
+e=13u=test-028,029,032..040 / 11 tests) dans tester-lancer-non-regression.py
+(2 copies modifiees a l identique) + doc md a jour.
+
+**Tests effectues** :
+- test-027 : 11/11 OK (invariants intacts SANS modification du test :
+  couverture, absence de doublons, test-027 affecte a la serie D)
+- --series a : 6/6 OK (12.9s), b : 10/10 OK (8.0s), c : 6/6 OK (15.0s),
+  d : 7/7 OK (13.9s), e : 11/11 OK (44.3s)
+- NON-REGRESSION COMPLETE : 40/40 OK (pool 36/36 + garde-fous globaux 4/4),
+  44.7 s - temps AMELIORE vs reference 45.2 s -> reference mise a jour
+
+**Lecon durable** : un decoupage en series equilibre (durees unitaires
+DUREES_CONNUES ~13-14 par serie) preserve les invariants du test-027 qui
+protege le decoupage : tout nouvel ajout de test doit etre affecte a une
+serie, sans doublon, et test-027 doit rester en serie D. Le mode pool
+repartit les tests par duree decroissante independamment des series.
+
+## [LECON] 2026-08-13 -- FICHE CLIO v0.2.1 VERIFIEE (PATTERN VERSION README) (Morpheus)
+
+**Contexte** : Buffy a ajoute dans clio.md la section dediee
+"## PATTERN VERSION README (convention de maintenance)" (sources de verite
+version-readme.txt + statut-projet.txt, regle de bump a chaque grosse MAJ,
+lien aligner_badges_header, garde-fous test-038/039, anti-residus) et bumpe
+la fiche 0.2.0 -> 0.2.1.
+
+**Verifications** :
+- verifier-conformite-fiche --agent clio = CONFORME (section specifique
+  toleree, non bloquante)
+- test-038 (badge == source) : 7/7 OK
+- test-039 (sources + anti-residus racine) : 4/4 OK
+- test-018 (fins reactivation) : 13/13 OK
+- test-004 : 0 OK, test-016 (versions) : 20/20 OK
+- normes ASCII/LF 0/0 sur clio.md + corrections Buffy
+
+**Lecon durable** : une modification de fiche agent (documentation de
+convention) n'impacte PAS les tests de versions/parcours tant qu'on ne touche
+ni au parcours JSON ni aux compteurs : la conformite de fiche
+(verifier-conformite-fiche) + les garde-fous badges (038/039) suffisent a
+valider le changement cible.
+
+## [LECON] 2026-08-13 -- BUMP VERSION COMBO MASSIVE TESTE (Morpheus)
+
+**Contexte** : Buffy a ajoute le bump de version dans combos-maj-readme-massive
+v0.1.3 (bumper_version : increment mineur X.Y.Z -> X.(Y+1).0 dans
+clio/version-readme.txt quand le README change, AVANT aligner_badges_header ;
+rapport = etape 3b + synthese + Contexte fichier).
+
+**Tests effectues** :
+- test-020 : 46/46 OK (adapte 0.1.2 -> 0.1.3)
+- test-038 (badge == source) : 7/7 OK ; test-039 (sources + anti-residus) : 4/4 OK
+- Simulation sandbox : README change -> bump 0.2.0 -> 0.3.0 ; README inchange
+  -> pas de bump (source inchangee)
+- Execution reelle --rapport sur projet a jour : "Version README : inchangee
+  (0.2.0)" en console ET dans le rapport fichier ; version-readme.txt intact
+- Normes ASCII/LF 0/0 sur .py/.sh/.md + test-020
+
+**Lecon durable** : le bump est CONDITIONNEL (README modifie par --maj) :
+un lancement idempotent ne doit jamais incrementer la version. La mention de
+la version dans le rapport (console + fichier) donne la visibilite demandee :
+quand le README change, le rapport montre ancienne -> nouvelle.
+
+## [LECON] 2026-08-13 -- VERIFICATION GARDE-FOU ANTI-RESIDUS v0.5.2 (Morpheus)
+
+**Controle** : tests du garde-fou anti-residus de activer-agent-principal (v0.5.2,
+ajoute par Buffy : verifier_residus_racine py + sh, WARNING sur fichiers semver a la
+racine + regle anti-residu, section doc Ne jamais rediriger la sortie).
+
+**Tests** : test-007 22/22 VALIDE, test-039 4/4 (aucun fichier de version a la racine +
+sources clio presentes), test-024 13/13 (en commande directe), preuve sandbox
+INDEPENDANTE 4/4 (positif py/sh : WARNING + action executee, negatif : silence),
+--version v0.5.2, detecter-divergences-version spec/py ALIGNE 0.5.2, normes ASCII/LF
+0/0 sur les 4 fichiers modifies.
+
+**Lecons** :
+1. ARTEFACT RECURRENT : lancer test-024 depuis un script temporaire .tmp-*.py a la
+   racine = KO auto-incrimine (le garde-fou detecte le script qui le lance). Toujours
+   lancer test-024 en COMMANDE DIRECTE (glob bash), jamais depuis un .tmp-*.py.
+2. detecter-divergences-version : usage reel = --racine (defaut cerveau-projet), PAS
+   --tous (argparse rc=2). L option --tous n existe pas pour cet outil.
+3. Un garde-fou proactif dans l outil (point d entree) + un garde-fou reactif dans la
+   suite (test-039) = double protection : l accident est visible immediatement ET
+   surveille en continu.
+
+## [LECON] 2026-08-13 -- VERIFICATION GARDE-FOU ETENDU 3 OUTILS (Morpheus)
+
+**Controle** : tests du garde-fou anti-residus etendu par Buffy a guider-parcours
+(v0.5.1), valider-cartes-decision (v0.4.1), editer-parcours (v0.1.1).
+
+**Adaptation des tests (bumps)** :
+- test-028 : 3 occurrences (Version outil 0.5.0 -> 0.5.1) -> 8/8 OK
+- test-024 : 2 occurrences (editer-parcours --version v0.1.0 -> v0.1.1) -> 13/13 OK
+  (lance en COMMANDE DIRECTE, jamais depuis un script temporaire - artefact connu)
+- test-012 : 5 occurrences (v0.5.0 -> v0.5.1 : titre, commentaire, libelle, VALEUR
+  "v0.5.0" in r_py.stdout) -> 18/18 OK. Lecon : toujours verifier TOUTES les
+  occurrences (le libelle ET la valeur figeante) - un test peut figer la version
+  dans plusieurs formes.
+
+**Verifications** : preuve sandbox INDEPENDANTE 6/6 (3 outils x positif/negatif),
+detecter-divergences-version guider-parcours ALIGNE (0.5.1 = 0.5.1), normes 0/0
+(9 fichiers outils + 3 tests).
+
+**Lecon durable** : le pattern "wrapper pur" (.sh -> exec python3) fait que le garde-
+fou du .py couvre AUSSI le .sh - verifier le mode de delegation avant de dupliquer
+du code bash. La parite est garantie par construction.
+
+## [LECON] 2026-08-13 -- TEST-041 GARDE-FOU OUTILS CRITIQUES ANTI-RESIDUS + INCIDENT DE DUPLICATION (Morpheus)
+
+**Mission** : creer test-041 qui verifie que les outils critiques (activer-agent-principal, guider-parcours, valider-cartes-decision, editer-parcours) integrent TOUS verifier_residus_racine (grep structurel : def presente, REGEX_RESIDU, appel, normes ASCII/LF). 18/18 OK.
+
+**Incident majeur** : mon edition du lanceur via subprocess str_replace a DUPLIQUE tout le fichier (395 -> 1329 lignes, 2 blocs SERIES). Le second bloc (execute en dernier en Python) ecrasait le premier et ne contenait PAS test-041 -> le garde-fou aurait ete silencieusement ignore. DETECTION : grep des blocs SERIES + wc -l vs HEAD. CORRECTION : reconstruction a partir du second bloc (complet, avec if __name__) + application propre des 2 modifs (serie e + DUREES). Fichier repare : 669 lignes, 1 bloc.
+
+**Lecons** : (1) apres toute edition d un fichier .py, verifier l absence de duplication (grep -c '^SERIES = {' ou wc -l vs HEAD) ; (2) preferer les editions par write de blocs delimites plutot que les remplacements globaux de chaines courtes ; (3) test-029 (conformite template) couvre les 41 tests : 14/14 OK.
+
+**Preuves** : test-041 18/18, test-029 14/14, test-028 8/8, test-040 5/5, lanceur --tests test-041 1/1, normes 0/0, 41 tests.
+
+## [LECON] 2026-08-13 -- TEST-042 COMBOS-VARIABLES-QUOTEES + CORRECTION 8 COMMANDES (Morpheus)
+
+**Mission** : creer test-042 (garde-fou : dans les definitions-combo.json, chaque {var} d une commande de case outil doit etre quote - sauf commande = exactement {var}, commande entiere generee) + corriger les 8 commandes existantes non conformes.
+
+**Analyse** (Cerberus) : 14 definitions, 51 commandes outil : 22 = exactement {var} (OK), 21 sans variable, 8 avec {var} NON quote (corrigees : combo-controle-buffy c4, combo-controle-impacts c1, combo-corriger-fichier c1-c6).
+
+**Correction** : remplacement cible de la chaine exacte (preserve le formatage JSON) -> '{fichier}' autour des variables. JSON valides, normes 0/0.
+
+**Test** : test-042 4/4 OK, preuve negative 9/9 (commande entiere OK, non quote detecte, 2 var dont 1 non quote detecte), test-029 42 tests conformes, test-028 8/8, test-041 18/18, lanceur sain (1 bloc SERIES verifie apres edition - lecon dedoublement appliquee).
+
+**Lecon** : la regle de distinction (commande = exactement {var} vs argument {var}) est la cle - quoter une commande entiere aurait casse les 22 commandes generees. Le test la formalise. Anti-recurrence : un futur combo avec {var} non quote est signale a la non-regression.

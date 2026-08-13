@@ -38,6 +38,7 @@ Cas couverts:
 Usage:
   python3 test-017-generateurs-ligne.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -53,6 +54,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 OUTIL_DIR = os.path.join(TOOLS_DIR, "generateurs", "generateurs-ligne")
 OUTIL_PY = os.path.join(OUTIL_DIR, "generateurs-ligne.py")
@@ -81,7 +93,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, timeout=90):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout)
 
 
 def ascii_count(chemin):
@@ -235,7 +247,7 @@ def main():
         verifier("9b. Branche 'ligne' ajoutee sur c1",
                  branche_ligne, str(d_apres["cases"]["c1"].get("branches")))
         verifier("9c. Validation auto : CONFORME (0 erreur)",
-                 "CONFORME" in r_wet.stdout and "erreurs: 0" in r_wet.stdout,
+                 "[OK] valider-case : conforme" in r_wet.stdout and "erreurs: 0" in r_wet.stdout,
                  r_wet.stdout.strip()[-120:])
 
         # 10. ajouter config-1 (wet) : deviation + rejoint
@@ -252,7 +264,7 @@ def main():
                  d_c1["cases"]["c0b"].get("suivant") != "c0c",
                  "suivant=%s" % d_c1["cases"]["c0b"].get("suivant"))
         verifier("10c. config-1 : CONFORME",
-                 "CONFORME" in r_c1.stdout, r_c1.stdout.strip()[-120:])
+                 "[OK] valider-case : conforme" in r_c1.stdout, r_c1.stdout.strip()[-120:])
 
         # 11. ajouter config-2 (wet) : controle RVAV
         dst11, _c11 = creer_parcours_test(tmp, "scenario-config2")
@@ -266,7 +278,7 @@ def main():
                  r_c2.returncode == 0 and len(nouvelles2) == 4,
                  "nouvelles=%s | %s" % (nouvelles2, r_c2.stdout.strip()[-120:]))
         verifier("11b. config-2 : CONFORME",
-                 "CONFORME" in r_c2.stdout, r_c2.stdout.strip()[-120:])
+                 "[OK] valider-case : conforme" in r_c2.stdout, r_c2.stdout.strip()[-120:])
 
         # 12. ajouter config-3 (wet) : action simple
         dst12, _c12 = creer_parcours_test(tmp, "scenario-config3")
@@ -279,7 +291,7 @@ def main():
                  r_c3.returncode == 0 and len(nouvelles3) == 2,
                  "nouvelles=%s | %s" % (nouvelles3, r_c3.stdout.strip()[-120:]))
         verifier("12b. config-3 : CONFORME",
-                 "CONFORME" in r_c3.stdout, r_c3.stdout.strip()[-120:])
+                 "[OK] valider-case : conforme" in r_c3.stdout, r_c3.stdout.strip()[-120:])
 
         # 13. ajouter SANS carte a jour : BLOQUE + invite Atlas (dossier propre)
         tmp_bloc = os.path.join(tmp, "scenario-bloque")
@@ -357,7 +369,7 @@ def main():
         d_c4 = json.load(io.open(dst16, encoding="utf-8"))
         nouvelles4 = [k for k in d_c4["cases"] if k not in d_base["cases"]]
         verifier("16d. ajouter --config config-4 : bloc cree (4 cases) + CONFORME",
-                 r_c4.returncode == 0 and len(nouvelles4) == 4 and "CONFORME" in r_c4.stdout,
+                 r_c4.returncode == 0 and len(nouvelles4) == 4 and "[OK] valider-case : conforme" in r_c4.stdout,
                  "nouvelles=%s | %s" % (nouvelles4, r_c4.stdout.strip()[-150:]))
 
         # 16e. gabarit invalide (branche unique) rejete
@@ -428,7 +440,7 @@ def main():
         nouvelles_cop = [k for k in d_cop["cases"] if k not in d_prep["cases"]]
         verifier("17c. copier (wet) : [OK] + clone de 4 cases + CONFORME",
                  r_cop.returncode == 0 and "[OK]" in r_cop.stdout
-                 and len(nouvelles_cop) == 4 and "CONFORME" in r_cop.stdout,
+                 and len(nouvelles_cop) == 4 and "[OK] valider-case : conforme" in r_cop.stdout,
                  "nouvelles=%s | %s" % (nouvelles_cop, r_cop.stdout.strip()[-120:]))
         verifier("17d. copier : ids conformes c<numero>[a-z]? sans doublon",
                  all("." not in k and k.startswith("c") for k in nouvelles_cop)
@@ -444,7 +456,7 @@ def main():
         nouvelles_cfg = [k for k in d_copcfg["cases"] if k not in d_base17["cases"]]
         verifier("17e. copier --config config-2 : clone de 4 cases + CONFORME",
                  r_copcfg.returncode == 0 and len(nouvelles_cfg) == 4
-                 and "CONFORME" in r_copcfg.stdout,
+                 and "[OK] valider-case : conforme" in r_copcfg.stdout,
                  "nouvelles=%s | %s" % (nouvelles_cfg, r_copcfg.stdout.strip()[-120:]))
 
         # 17f. copier --mode branche (decision du clone) + --mode suite

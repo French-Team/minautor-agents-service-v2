@@ -15,22 +15,27 @@ Contexte :
     VERSION + champ spec **Version outil** prioritaire pour les specs de
     conventions), detecter-decalages-catalogue v0.2.0 (scan des sous-commandes
     argparse avec variante de prefixe), 8 specs bumpees.
+  - v0.2.1 (2026-08-13) : detecter-decalages-catalogue passe en PARALLELE
+    (pool de threads min(16, nb) + cache par (interpreteur, script)) : ce
+    garde-fou passait de 88s a 22s, la suite anti-regression de 92.2s a 52.3s.
   - Ce garde-fou verifie : 0 spec divergente, 0 spec sans version avec .py,
     0 decalage catalogue, et le cas guider-parcours documente.
 
 Cas couverts:
   1. detecter-divergences-version --version = v0.2.0
-  2. detecter-decalages-catalogue --version = v0.2.0
+  2. detecter-decalages-catalogue --version = v0.2.1 (v0.2.1 : aides en
+     parallele + cache, goulot 85s -> 8s)
   3. detecter-divergences-version : 0 DIVERGENTE
   4. detecter-divergences-version : 0 SANS VERSION (avec .py present)
   5. detecter-decalages-catalogue : 0 decalage
-  6. spec guider-parcours : champ **Version outil** : 0.5.0 present
+  6. spec guider-parcours : champ **Version outil** : 0.5.1 present
   7. ASCII strict : 0 non-ASCII (outils + docs + specs + test)
   8. LF pur : 0 CRLF (outils + docs + specs + test)
 
 Usage:
   python3 test-028-coherence-documentaire.py
 """
+import importlib.util
 import io
 import os
 import subprocess
@@ -42,6 +47,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 DIV_DIR = os.path.join(TOOLS_DIR, "detecter", "detecter-divergences-version")
 DIV_PY = os.path.join(DIV_DIR, "detecter-divergences-version.py")
@@ -69,7 +85,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, timeout=180):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout)
 
 
 def ascii_count(chemin):
@@ -112,8 +128,8 @@ def main():
     verifier("1. detecter-divergences-version --version = v0.2.0",
              "v0.2.0" in r.stdout, r.stdout.strip())
     r = run([PYTHON, DEC_PY, "--version"])
-    verifier("2. detecter-decalages-catalogue --version = v0.2.0",
-             "v0.2.0" in r.stdout, r.stdout.strip())
+    verifier("2. detecter-decalages-catalogue --version = v0.2.1",
+             "v0.2.1" in r.stdout, r.stdout.strip())
 
     # 3-4. Divergences de versions (scan cerveau-projet)
     r = run([PYTHON, DIV_PY, "--racine", "cerveau-projet"])
@@ -145,7 +161,7 @@ def main():
     with io.open(SPEC_GUIDER, encoding="utf-8", errors="replace") as fh:
         spec_guider = fh.read()
     verifier("6. spec guider-parcours : **Version outil** : 0.5.0 present",
-             "**Version outil** : 0.5.0" in spec_guider)
+             "**Version outil** : 0.5.1" in spec_guider)
 
     # 7-8. Normes sur les fichiers des outils + ce test
     fichiers = [DIV_PY, DIV_MD, DEC_PY, DEC_MD, SPEC_GUIDER,

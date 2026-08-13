@@ -684,3 +684,197 @@ importe quel agent). Sur 37 fins mentionnant Cerberus, seules 2 sont fausses.
 1. Le modele de piste 'defaut signale' est desormais present chez les DEUX agents de controle (Janus c9f/c9g et Themis c12f/c12g) -- meme structure, identifiants adaptes, fin de reprise reutilisee.
 2. Controleur sa propre carte est legitime quand la modification a ete faite par un autre agent (Buffy) -- le controle croise reste independant (regle de relecture + protocole de controle).
 3. Un rapport qui designe un coupable declenche maintenant l'activation immediate de l'agent habilite chez Themis comme chez Janus.
+
+## [LECON] 2026-08-13 -- AUDIT REGISTRE vs CARTES : 15 LACUNES + 1 REFERENCE MORTE (Themis)
+
+**Mission** : auditer le registre des usages (courant 21 lignes + historique 75) pour verifier que tous les outils reellement utilises sont assignes aux cartes (demande utilisateur).
+
+**Resultat** : rapport themis/rapports/audit-registre-cartes-2026-08-13.md - 1 reference morte (verifier-cartes-decision, typo janus), 15 usages legitimes hors carte (janus 4, morpheus 4, vulcain 6), Cerberus 0 correction (derives corrigees par test-034).
+
+**Lecons** :
+1. L AUDIT MANUEL COMPLET REVELE PLUS QUE LE SCAN AUTO : evaluer-processus (registre courant seul) donne 0 probleme mais l historique (75 lignes, archive par la non-regression) contient les usages anciens - lire les DEUX sources pour un audit complet.
+2. QUALIFIER AVANT DE CORRIGER : les ecarts de Cerberus (tester-lancer-non-regression, generateurs-*) sont des DERIVES CORRIGEES - les re-assigner annulerait test-034. Un ecart n est pas toujours une lacune : il faut lire le contexte de la declaration.
+3. UNE REFERENCE MORTE DANS LE REGISTRE EST UNE DETTE SILENCIEUSE : verifier-cartes-decision (typo de valider-cartes-decision) pointe vers un outil inexistant - le registre doit pointer vers des outils reels, sinon les audits croises sont fausses.
+4. LE WILDCARD NE MATCHE PAS LE NOM REEL : la carte morpheus reference tester-protection-* mais l outil s appelle tester-protections - un nom d outil doit etre EXACT dans les indices, pas un pattern approximatif.
+
+
+## [LECON] 2026-08-13 -- AUDIT MISSION MORPHEUS AXE D THEMIS (Themis, VERDICT VALIDE)
+
+**Controle** (mission Morpheus, maillon automatique axe D) : verification T1-T4
+de l adaptation des 5 tests de version. RESULTAT : VALIDE - versions exactes
+(test-004 morpheus 0.4.4, test-016 buffy 0.4.2 action 40 controle 5, test-005
+atlas 0.4.2 residus c30+c11a, test-006 48 cases, test-017 contrat outil 7x),
+compteurs egaux au parcours reel, normes 0/0, non-regression 36/36 OK.
+LE CON INFIRMEE : le KO test-024 lors de l audit etait un artefact (script
+.tmp-audit lance depuis la racine) - relance propre = 36/36.
+FIN : rapport themis/rapports/audit-morpheus-tests-axe-d-2026-08-13.md + reactiver
+JANUS pour le controle croise final.
+
+
+## [LECON] 2026-08-13 -- AUDIT TEST-037 SEUL JANUS NON-REGRESSION (Themis, VERDICT VALIDE)
+
+**Controle** (mission Morpheus, maillon automatique) : T1-T5 verts - test-037
+couvre les invariants (seul janus, regle fiche, identite contenu, 10 cartes,
+normes), cartes corrigees coherentes (seul janus garde l outil), integration
+serie d OK, normes 0/0. LE CON : distinguer construction (ids partages par le
+trio = meme structure voulue) et identite (contenu toujours distinct) lors des
+verifications d unicite des parcours. Rapport : themis/rapports/audit-test-037-
+2026-08-13.md. FIN : activer JANUS pour le controle croise final.
+
+
+## [LECON] 2026-08-13 -- AUDIT ANTI-ARTEFACT TEST-024 (Themis, VERDICT VALIDE)
+
+**Controle** (mission Morpheus, maillon automatique) : T1-T4 verts - code
+portable (os.getppid + /proc + powershell fallback, fallback = aucune
+exclusion), protection intacte (un vrai residu non exclu reste KO), normes
+0/0, integration reelle OK (parent unique exclu -> serie d 15/15 OK).
+LE CON : le scan d un garde-fou doit distinguer le script temporaire EN COURS
+D EXECUTION (parent direct, orchestrateur legitime) d un RESIDU (plus utilise
+par aucun processus) - le parent est la signature fiable, tout le reste est
+detecte. Rapport : themis/rapports/audit-anti-artefact-test024-2026-08-13.md.
+FIN : activer JANUS pour le controle croise final.
+## [LECON] 2026-08-13 -- AUDIT BADGE README AUTO (Themis, VERDICT VALIDE)
+
+**Audit** de la mission badge header : combo massive v0.1.1 (aligner_badge_header
+via importlib, source de verite compter_outils) + garde-fou test-038
+(synchronisation affichage + href du badge). T1-T5 verts : aucun ecart.
+
+**Verification cle** : aligner_badge_header sur README sain retourne False
+(aucune fausse correction - important pour le mode conservatif) et la preuve
+negative du test-038 (href desynchronise) detecte bien le KO.
+
+**Lecon** : un correctif automatique doit etre verifie dans les 2 sens :
+rien a faire (idempotence) ET correction effective (desynchronisation).
+## [LECON] 2026-08-13 -- AUDIT BADGES HEADER GENERALISES (Themis, VERDICT VALIDE)
+
+**Audit** de la mission badges : combo massive v0.1.2 (aligner_badges_header :
+Outils via compter_outils, Version via clio/version-readme.txt, Statut via
+clio/statut-projet.txt, badges statiques href-alignes) + garde-fous
+test-038 etendu (7 points) et test-039 (residus de version a la racine).
+T1-T5 verts : aucun ecart.
+
+**Verification cle** : les sources de verite de version/statut vivent dans
+cerveau-projet/agents/clio/ (jamais a la racine - les fichiers 0.2.1/v0.2.6
+etaient des residus accidentels de redirections).
+
+**Lecon** : une synchronisation de badges est complete quand chaque badge
+dynamique a UNE source de verite nommee et que les garde-fous verifient
+affichage ET href (2 occurrences par badge).
+## [LECON] 2026-08-13 -- AUDIT CATALOGUE-INDEX (Themis, VERDICT VALIDE)
+
+**Audit** de la mission catalogue-index : Buffy a indexe les 137 outils du
+catalogue (4 outils reels + section Tests 39) avec stats recalculees
+(total 118 -> 166, le total etait faux depuis longtemps) ; Morpheus a cree
+test-040 (script + doc + index). T1-T5 verts : aucun ecart.
+
+**Verification cle** : le badge README (128) compte les dossiers reels
+(compter_outils) et non les lignes d index - il reste inchange quand l index
+gagne des lignes. Deux compteurs differents a ne pas confondre.
+
+**Lecon** : le total de l index-tools etait obselete (outils ajoutes sans
+mise a jour des stats) - le garde-fou test-040 detecte les manques de
+script/doc/index, et test-007 verifie le total des stats.
+
+## [LECON] 2026-08-13 -- CONTROLE CROISE NON-REGRESSION 5 SERIES (Themis, VERDICT VALIDE)
+
+**Audit** (mission Morpheus, apres Buffy) : passage de 4 a 5 series dans
+tester-lancer-non-regression.py. Verification T1-T5 : 5/5 verts.
+- T1 : les 2 copies du lanceur modifiees a l identique (5 cles SERIES,
+  SERIES_ORDRE a-e, choices 6 valeurs) - la copie 2 (avec __main__ final)
+  est celle executee, la coherence des 2 est indispensable
+- T2 : doc md a jour (tableau 5 series + option --series <a,b,c,d,e,tous>)
+- T3 : test-027 11/11 sans modification (couverture + doublons + test-027
+  en serie D) - l invariant du decoupage reste vert
+- T5 : aucune reference residuelle a|b|c|d ou "4 series" dans l ecosysteme
+  (index-tools, README, catalogue)
+
+**Lecon durable** : un changement de structure (decoupage en series) doit
+etre verifie dans les 2 sens : le code (2 copies identiques) ET la doc
+associee (tableau + options), avec le garde-fou qui protege la structure
+(test-027) passe sans modification.
+
+## [LECON] 2026-08-13 -- CONTROLE CROISE PATTERN VERSION README CLIO (Themis, VERDICT VALIDE)
+
+**Audit** (mission Morpheus, apres Buffy) : documentation de la convention de
+bump de version dans clio.md v0.2.1. T1-T5 : 5/5 verts.
+- T1 : section PATTERN VERSION README complete (sources de verite exactes,
+  regle de bump MINEUR/MAJEUR, lien aligner_badges_header, garde-fous
+  test-038/039, anti-residus fichiers de version a la racine)
+- T2 : version fiche 0.2.1 (frontmatter + tableau) - plus de 0.2.0
+- T3 : verifier-conformite-fiche CONFORME - la section specifique est
+  TOLEREE (non bloquante)
+- T5 : parcours clio intact + sources version/statut intactes (0.2.0 / stable)
+
+**Lecon durable** : documenter une convention de maintenance dans la fiche
+de l'agent responsable (section specifique toleree) ne touche NI au parcours
+NI aux sources - la verification cible (conformite + garde-fous badges)
+suffit a valider. La convention transforme une source de verite technique
+en comportement reel de l'agent.
+
+## [LECON] 2026-08-13 -- CONTROLE CROISE BUMP VERSION COMBO MASSIVE (Themis, VERDICT VALIDE)
+
+**Audit** (mission Morpheus, apres Buffy) : combos-maj-readme-massive v0.1.3
+bumpe la version du README quand le contenu change. T1-T5 : 5/5 verts.
+- T1 : bumper_version (increment MINEUR X.Y.Z -> X.(Y+1).0) + lire_version +
+  snapshot du README + bump AVANT aligner_badges_header (le badge Version
+  s aligne sur la nouvelle version)
+- T2 : rapport complet (etape 3b + synthese console + Contexte fichier)
+- T4 : version-readme.txt reel intact (0.2.0) - le bump est CONDITIONNEL
+  (README modifie), pas d inflation de version sur un projet a jour
+
+**Lecon durable** : la source de verite de version doit etre bumpee par
+L OUTIL qui modifie le contenu (pas seulement par l agent) - et le bump doit
+preceder l alignement des badges pour eviter un badge obsolette. Le rapport
+est la preuve visible : il montre ancienne -> nouvelle quand le README change,
+et "inchangee" quand rien n a bouge.
+
+## [LECON] 2026-08-13 -- AUDIT GARDE-FOU ANTI-RESIDUS v0.5.2 (Themis, VERDICT VALIDE)
+
+**Audit** : garde-fou anti-residus de activer-agent-principal (v0.5.2, Buffy +
+verifications Morpheus). 24/24 OK : presence py+sh + declenchement actions reelles,
+preuve positive/negative sandbox, section doc, versions 0.5.2 partout, normes 0/0,
+test-007 22/22, test-039 4/4, registre a jour.
+
+**Lecon** : la double protection (garde-fou proactif dans l outil au point d entree +
+garde-fou reactif test-039 dans la suite) est la bonne reponse a une classe d accident
+dont la cause est dans la COMMANDE D APPEL (impossible a corriger dans le code de
+l outil). Quand la cause racine est externe, on protege le point d entree.
+
+## [LECON] 2026-08-13 -- AUDIT GARDE-FOU ETENDU 3 OUTILS (Themis, VERDICT VALIDE)
+
+**Audit** : extension du garde-fou anti-residus a guider-parcours (v0.5.1),
+valider-cartes-decision (v0.4.1), editer-parcours (v0.1.1). 25/25 OK : garde-fou
+present + preuve sandbox, versions partout (py/sh/doc/spec), tests 012/024/028
+verts, normes 0/0, catalogue et parcours intacts.
+
+**Lecon** : l ARTEFACT D AUTO-INCRIMINATION de test-024 s est reproduit une 3e
+fois : lancer test-024 depuis un script .tmp-*.py a la racine = KO (le garde-fou
+detecte le script qui le lance). C est devenu un reflexe : TOUJOURS lancer test-024
+en commande directe, jamais depuis un script temporaire. Un audit qui lance les
+garde-fous depuis son propre script temporaire s auto-incrimine.
+
+## [LECON] 2026-08-13 -- AUDIT TEST-041 + LANCEUR DEDOUBLE (Themis, VERDICT VALIDE)
+
+**Audit** (mission Morpheus, demande utilisateur) : test-041 garde-fou outils critiques anti-residus + reparation du lanceur dedouble. 13/13 VALIDE.
+
+**Observation** : la reparation du lanceur (669 lignes, 1 bloc SERIES) est saine. Le garde-fou test-041 verifie bien la presence de verifier_residus_racine dans les 4 outils critiques (activer, guider, valider, editer).
+
+**Lecon recurrente confirmee** : l artefact d auto-incrimination de test-024 (lancer le garde-fou depuis un script temporaire .tmp-*.py a la racine -> KO auto-inflige) s est reproduit. Reflexe documente : TOUJOURS lancer test-024 en commande directe depuis un bash sans residu.
+
+## [LECON] 2026-08-13 -- AUDIT REGLE ANTI-ECHAPPEMENT JSON (Themis, VERDICT VALIDE)
+
+**Audit** (mission Buffy, demande utilisateur) : regle anti-echappement JSON documentee dans protocole-creation-scripts-temporaires v0.2.0. 9/9 VALIDE.
+
+**Observation** : la regle d or (TOUTE commande complexe = script temporaire via write_file, jamais inline) et le piege test-024 auto-incrimination sont maintenant formels. Les dizaines d erreurs JSON passees ne devraient plus se reproduire.
+
+## [LECON] 2026-08-13 -- AUDIT REGLE ANTI-ECHAPPEMENT COMBOS (Themis, VERDICT VALIDE)
+
+**Audit** (mission Buffy, demande utilisateur) : regle anti-echappement etendue aux commandes bash des combos. 12/12 VALIDE.
+
+**Observation** : le piege (interpolation brute {var} + shlex.split -> apostrophe casse la commande) est maintenant documente dans la doc du moteur ET le protocole. Les 52 commandes actuelles sont propres, la regle protege le futur.
+
+## [LECON] 2026-08-13 -- AUDIT TEST-042 COMBOS-VARIABLES-QUOTEES (Themis, VERDICT VALIDE)
+
+**Audit** (mission Morpheus, demande utilisateur) : garde-fou test-042 + correction 8 commandes. 9/9 VALIDE.
+
+**Observation** : la distinction cle (commande = exactement {var} -> ne pas quoter, vs argument {var} -> quoter) est formalisee dans le test. Les 22 commandes entieres generees restent intactes, les 8 arguments sont corriges.

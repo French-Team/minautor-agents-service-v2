@@ -143,3 +143,26 @@ preferences:
 3. editer-fichier ne remplace que la PREMIERE occurrence sans --global : toujours verifier le nombre d'occurrences restantes apres chaque remplacement
 4. apres correction : re-lancer combos-analyse-projet pour confirmer le verdict README A JOUR (badge 121 == 121)
 5. la lecon precedente du 2026-08-10 s'applique toujours : verifier la structure (en-tete/separateur) apres tri de table et scanner les anciens totaux dans tout le fichier
+## [LECON] 2026-08-13 -- GROSSE MAJ README (Clio)
+
+**Contexte** : demande utilisateur de grosse mise a jour du README apres
+de nombreuses evolutions (garde-fous, regle seule-janus, Themis maillon
+automatique, cartes bumpees, anti-artefact test-024).
+
+**Deroulement** : combo combos-maj-readme-massive (tables de categories
++ badge), correction manuelle du badge du header (Outils-126 -> Outils-128,
+le combo ne touchait pas le badge en dur ligne 9), puis enrichissement
+des sections de fond : regle "SEUL Janus lance la non-regression" dans la
+table des agents, Morpheus "tests individuels uniquement", Themis "maillon
+automatique", et nouvelle sous-section "Les garde-fous" documentant la
+suite de non-regression (37 tests, chrono, anti-scripts-temporaires).
+
+**Verifications** : combos-analyse-projet verdict README A JOUR (128 == 128),
+test-028 coherence documentaire 8/8 OK, normes ASCII 0 + LF pur.
+
+**Lecon** : le combo maj-readme-massive reconstruit les tables mais ne
+corrige pas le badge en dur du header -- verifier le badge manuellement
+apres un combo. Les evolutions de fond (regles, garde-fous) ne sont pas
+detectees par l analyse de compteurs : une grosse MAJ doit aussi relire
+les sections narratives.
+

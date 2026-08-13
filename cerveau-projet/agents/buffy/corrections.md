@@ -2365,3 +2365,313 @@ puis la fin.
 2. Les ecarts pre-existants signales dans les rapports doivent etre corriges a la mission suivante, pas accumules : chaque rapport doit transmettre la liste des ecarts ouverts a Cerberus.
 3. La regle des 160 caracteres est un plafond dur : les indices regle doivent etre concis, l'info detaillee va dans le protocole reference, pas dans la case.
 
+
+
+## [LECON] 2026-08-13 -- AXE D : THEMIS MAILLON AUTOMATIQUE DE LA CHAINE (Buffy)
+
+**Contexte** : demande utilisateur (axe D de la mission Themis) - Themis avait une
+faiblesse declaree 'Depend de Cerberus pour etre activee' : les agents avaient une
+case 'Activer Themis pour auditer' mais AUCUNE fin de mission ne l activait
+systematiquement (seulement la branche 'audit' de la mission hors parcours).
+
+**Decisions** :
+1. POINT D INSERTION : Themis AVANT Janus (evaluation puis controle croise). La
+   REGLE IMMUABLE JANUS exige que Janus soit le dernier maillon qui reactive
+   Cerberus (test-018 : seule fin REACTIVER-CERBERUS = janus c10) -> Themis ne peut
+   PAS passer apres. Nouvelle chaine : Cerberus -> Agent -> Themis -> Agent -> Janus
+   -> Cerberus. Themis reactive l'agent precedent avec son rapport (c25b deja prevu)
+   et l'agent reprend vers sa fin Janus.
+2. MECANIQUE DE CASE : impossible de mettre un 'suivant' sur une fin (garde-fou
+   suivant mort de valider-cartes : 0 fin avec suivant dans les 11 parcours).
+   Solution : 2 nouvelles cases avant CHAQUE fin de mission - action 'Activer Themis
+   pour auditer ma mission' (commande exacte activer session-llm-1 themis) -> controle
+   'Retour de Themis recu ?' (OUI -> fin existante / NON -> soi-meme = pattern de
+   re-essai natif, la boucle d attente est legitime).
+3. PERIMETRE : buffy (c8/c22/c27), vulcain (c9/c15), morpheus (c10/c14), atlas (c11),
+   clio (c12). janus N EST PAS modifie (sa fin c10 est REACTIVER Cerberus, il est le
+   dernier maillon - la mission la listait par erreur). La carte themis v0.4.2 est
+   elargie : branche 'audit-fin-mission' dans c1 -> c25 (Auditer pour un agent) +
+   message c25 enrichi.
+4. FICHE THEMIS : faiblesse 'Depend de Cerberus' remplacee par une FORCE (activee
+   automatiquement en fin de mission) + declenchement enrichi + Pattern 14 v0.4.2.
+
+**Lecons** :
+1. Une fin avec un 'suivant' est IMPOSSIBLE (garde-fou suivant mort) : la reprise
+   apres une delegation se modele par un CONTROLE de re-essai (NON -> soi-meme),
+   pattern natif deja autorise par valider-case et detecter-cablages.
+2. Les fins 'FIN - Activer Janus' ne changent PAS : on insere l'etape Themis AVANT,
+   ce qui preserve test-018 (fins Activer Janus en place) et test-033 (morpheus
+   c10/c14 inchanges). Seuls les compteurs de version/cases des tests changent
+   (test-004 morpheus 0.4.3->0.4.4, test-016 buffy 0.4.1->0.4.2 + 3 actions/3
+   controles en plus) : a adapter par Morpheus.
+3. La commande activer themis exacte (PAS reactiver) doit etre dans le message de
+   l'action, comme pour les fins Activer Janus - le piege reactiver reste elimine.
+4. Verification : 6/6 valider-case CONFORME + valider-cartes CONFORME + detecter
+   PROPRE, navigation reelle c22a -> c22b (OUI) -> c22 FIN, normes 0/0, 0 residu
+   temporaire. Themis n'est plus une option : c'est un maillon automatique.
+
+## [LECON] 2026-08-13 -- CONTEXTE RECOLTE AVANT MODIFICATION DE CARTES (Buffy)
+
+**Lecons** :
+1. AVANT de modifier des cartes, recolter : les ids de cases existants (choisir des
+   ids libres : c8a/c8b libres chez buffy mais c9b/c15b pris chez vulcain -> c9f/c9g),
+   les predecesseurs exacts de chaque fin (suivant ET branches), les regles des
+   validateurs (garde-fou suivant mort, seuil 160 car sur les indices regle).
+2. Le seuil de 160 caracteres s'applique AUSSI aux nouvelles cases : mon premier
+   indice REGLE THEMIS faisait 176 caracteres -> raccourci a 151.
+3. Les messages de fin des agents ne sont pas tous 'FIN - Activer Janus' : vulcain
+   c9/c15 sont 'FIN - Construire/Modifier un outil' qui activent MORPHEUS (pas
+   Janus) - la mission Cerberus les avait identifies par erreur ; l'insertion
+   Themis reste pertinente (evaluation avant la chaine Morpheus -> Janus).
+
+
+## [LECON] 2026-08-13 -- SEUL JANUS LANCE LA NON-REGRESSION (Buffy)
+
+**Contexte** : demande utilisateur - verifier que SEUL Janus a le droit de lancer
+la non-regression (tester-lancer-non-regression) : sur une ligne de travail
+multi-agents, c est Janus a la fin qui la lance (dernier maillon avant
+Cerberus). Philosophie enoncee : les agents sont construits de la meme facon
+(meme template) mais chacun a SON identite et SON role - aucun interet a avoir
+des parcours identiques.
+
+**Actions** : 1) AUDIT Cerberus : signatures d ids des 11 cartes TOUTES
+distinctes (principe identite deja respecte). 2) parcours-morpheus v0.4.5 :
+case c12 completement adaptee - titre Completer et executer les tests de l
+outil, indice tester-lancer-non-regression RETIRE, regle sous 160 car (152) :
+Morpheus execute les tests INDIVIDUELS (python3 test-XXX.py + protections),
+la non-regression COMPLETE appartient a JANUS. 3) parcours-vulcain v0.4.6 :
+case c8 - indice residuel tester-lancer-non-regression RETIRE (la case delegue
+via activer-agent-principal). 4) fiche morpheus.md : REGLE ABSOLUE --
+NON-REGRESSION JANUS ajoutee (seul Janus lance la complete). 5) test-004 adapte
+(morpheus 0.4.4 -> 0.4.5).
+
+**Verifications** : valider-case 2/2 CONFORME, valider-cartes 2/2 CONFORME,
+detecter-cablages PROPRE, test-004 16/16, test-033/test-018 verts, seul janus
+(3) reference la non-regression dans les cartes, normes 0/0.
+
+**Lecon** : la separation des roles est un garde-fou de gouvernance : chaque
+agent execute SES outils de role (Morpheus = tests individuels, Janus =
+non-regression complete finale). Un indice outil residuel dans une carte
+(vulcain c8) est une derive a detecter par audit, pas seulement par les tests.
+## [LECON] 2026-08-13 -- BADGE HEADER AUTO DANS combos-maj-readme-massive v0.1.1 (Buffy)
+
+**Contexte** : lecon Clio/Janus - le combo maj-readme-massive reconstruisait
+les tables mais pas le badge Outils-N en dur du header, et le lien href
+pouvait rester obsolete (ex : affichage 128, lien 121).
+
+**Correction** : nouvelle fonction aligner_badge_header(racine) qui importe
+compter_outils (source de verite de combos-analyse-projet) via importlib
+(le nom du module source contient des tirets : import direct impossible) et
+remplace l affichage ET le href du badge Outils-N (regex badge/Outils-([0-9]+)-).
+Appel dans l Etape 4. Bump 0.1.0 -> 0.1.1 + doc a jour + test-020 adapte.
+
+**Tests** : README deja aligne -> aucune correction (False) ; README
+desynchronise (display 120 / href 99) -> realise sur 128 affichage + href
+(True) ; test-020 46/46 OK (execution reelle du combo incluse).
+
+**Lecon** : tout import inter-fichiers doit passer par importlib quand le nom
+du module source contient des tirets (convention de nommage des outils).
+## [LECON] 2026-08-13 -- BADGES HEADER GENERALISES v0.1.2 (Buffy)
+
+**Contexte** : demande utilisateur d etendre la synchronisation des badges
+du header au-dela d Outils. Decisions : version = fichier dedie
+clio/version-readme.txt (semver sans v, maintenu par Clio), statut =
+clio/statut-projet.txt, suppression des residus accidentels 0.2.1/v0.2.6
+a la racine (sorties de activer-agent-principal).
+
+**Correction** : aligner_badge_header -> aligner_badges_header generalisee :
+regex generique badge/Nom-(valeur)-(couleur) (re.sub global affichage + href)
+pour Outils (compter_outils), Version (v+contenu), Statut (contenu), et
+alignement du href sur l affichage pour les badges statiques (Plateforme,
+Fait_avec, Langages) en cas de divergence. Bump 0.1.2 + doc + test-020.
+
+**Tests** : idempotence (README sain -> aucune correction), desynchronisation
+(version 0.2.9 + statut dev + href 121 -> realignes affichage+href), test-020
+46/46 OK.
+
+**Lecon** : les fichiers de version accidentels a la racine (noms de type
+"0.2.1" / "v0.2.6") provenaient de redirections de sortie - les sources de
+verite de version doivent vivre dans le cerveau-projet (clio/), jamais a la
+racine.
+## [LECON] 2026-08-13 -- TOUS LES OUTILS DU CATALOGUE INDEXES (Buffy)
+
+**Contexte** : demande utilisateur - chaque outil ajoute au catalogue doit
+avoir sa doc et son entree index-tools. Etat initial : 137 scripts uniques
+(0 script manquant, 0 doc manquante) mais 27 entrees index-tools absentes
+(4 outils reels + 23 tests). Decision utilisateur : tout indexer.
+
+**Actions** : ajoute combos-analyse-projet + combos-maj-readme-massive
+(section Combos), enregistrer-usage-outil (section Enregistrer creee),
+verifier-conformite-fiche (section Verifier), et nouvelle section Tests
+(tester/tests/) avec les 39 tests (descriptions depuis les docstrings, 2e
+ligne du docstring = vraie description). Stats recalculees : total 118 -> 166.
+Test-007 adapte (15/15). Badge README inchange (128, compte les dossiers).
+
+**Lecon** : le total de l index-tools etait faux depuis longtemps (les
+compteurs ne couvraient pas tous les outils) - le garde-fou a venir
+(test-040 Morpheus) verifiera en permanence catalogue -> doc + index.
+Les descriptions du catalogue pour les tests contenaient des chemins de
+scripts (mauvaise qualite) - les docstrings des tests sont la source fiable.
+
+## [LECON] 2026-08-13 -- NON-REGRESSION PASSEE A 5 SERIES (Buffy)
+
+**Contexte** : demande utilisateur - la serie d de la non-regression grossissait
+(18 tests, 26 unites) vs 13-14 pour a/b/c. Objectif : equilibrer en 5 series.
+
+**Changement** : tester-lancer-non-regression.py passe de 4 a 5 series.
+- nouvelle serie e = [test-028, 029, 032..040] (11 tests, 13 unites) :
+  coherence documentaire + anti-recurrence (test-028 le plus lourd en tete)
+- serie d reduite a [test-023..027, 030, 031] (7 tests, 13 unites) :
+  registre + garde-fous globaux conserves (invariant test-027)
+- equilibre final : a=14, b=13, c=14, d=13, e=13 (67 unites, 0 manquant,
+  0 doublon)
+- les 2 copies du lanceur (copie 2 executee via __main__ final) modifiees
+  a l'identique : SERIES, SERIES_NOMS, SERIES_ORDRE, choices argparse,
+  commentaires d'en-tete ; doc .md (tableau + option --series)
+
+**Verifications** : py_compile OK, --series d = 7/7 OK (13.9s),
+--series e = 11/11 OK (44.3s), test-027 11/11 (invariants intacts sans
+modification du test), test-031 10/10, test-032 10/10, normes 0/0.
+
+**Lecon durable** : un decoupage en series doit rester EQUILIBRE en durees
+unitaires (DUREES_CONNUES) : une serie qui concentre les tests lourds devient
+le goulet d'etranglement du mode mono-serie. Le test-027 (couverture + absence
+de doublons + affectation de test-027 en d) est l'invariant qui protege le
+decoupage : tout nouvel ajout de test doit etre affecte a une serie.
+
+## [LECON] 2026-08-13 -- PATTERN VERSION README DOCUMENTE DANS LA FICHE CLIO (Buffy)
+
+**Contexte** : demande utilisateur - les sources de verite de la version du
+README existaient (clio/version-readme.txt = 0.2.0, clio/statut-projet.txt =
+stable) et le combo combos-maj-readme-massive les lisait, mais la fiche clio
+ne documentait PAS la convention de bump : Clio n'avait aucun moyen de savoir
+qu'elle doit maintenir version-readme.txt a chaque grosse MAJ (case c6c).
+
+**Changement** : ajout dans clio.md (v0.2.0 -> v0.2.1) d'une section dediee
+"## PATTERN VERSION README (convention de maintenance)" - section SPECIFIQUE
+toleree par verifier-conformite-fiche (non bloquante) - qui documente :
+- les 2 fichiers sources de verite (version semver sans v, statut
+  stable/prepare/dev)
+- la REGLE DE BUMP : a chaque GROSSE MAJ (case c6c, combo massive),
+  increment MINEUR pour une MAJ de contenu, MAJEUR pour une refonte,
+  JAMAIS de patch pour une grosse MAJ
+- le lien avec aligner_badges_header (le badge s'aligne automatiquement)
+- les garde-fous test-038 (badge == source) + test-039 (sources + anti-residus)
+- l'anti-residus : JAMAIS de fichier de version semver a la racine
+
+**Verifications** : verifier-conformite-fiche --agent clio = CONFORME
+(section specifique toleree), normes ASCII/LF 0/0, test-028 8/8 OK,
+aucun test ne fige la version de la fiche clio.
+
+**Lecon durable** : une source de verite n'est utile que si le gardien de la
+source sait QU'IL doit la maintenir ET COMMENT (quand bumper, quel increment).
+Documenter la convention dans la fiche de l'agent responsable est le maillon
+qui transforme une source technique en comportement reel. Les sections
+specifiques des fiches (tolerees) sont le bon endroit pour ces conventions
+de maintenance propres a un agent.
+
+## [LECON] 2026-08-13 -- COMBO MASSIVE BUMPE LA VERSION DU README (Buffy)
+
+**Contexte** : demande utilisateur - le combo combos-maj-readme-massive lisait
+la version (clio/version-readme.txt) pour aligner le badge Version du header,
+mais ne BUMPAIT jamais la source quand le README changeait, et le rapport ne
+mentionnait ni la version ni le bump (contraire a la convention Pattern
+version README documentee dans la fiche clio).
+
+**Changement** (v0.1.2 -> v0.1.3) :
+- fonction bumper_version(racine) : incremente la version MINEURE
+  (semver X.Y.Z -> X.(Y+1).0, jamais de patch pour une grosse MAJ) dans
+  clio/version-readme.txt ; retourne (ancienne, nouvelle) ou None
+- fonction lire_version(racine) : lit la version courante
+- dans main() : SNAPSHOT du README au debut ; apres l etape --maj, si le
+  README a change, bump AVANT aligner_badges_header (le badge Version
+  s aligne sur la NOUVELLE version)
+- rapport : etape 3b (bump), synthese console + Contexte du fichier --rapport
+  mentionnent ancienne -> nouvelle ou "inchangee"
+- doc .md + .sh mis a jour (version + mention bump) ; test-020 adapte
+  (0.1.2 -> 0.1.3)
+
+**Verifications** : py_compile, bumper_version testee en sandbox (bump,
+absent, illisible, lecture), preuve fonctionnelle README modifie -> 0.2.0 ->
+0.3.0, test-020 46/46, version-readme.txt reel intact (0.2.0, pas de bump car
+README a jour), normes 0/0.
+
+**Lecon durable** : une source de verite de version doit etre bumpee par
+l OUTIL qui modifie le contenu (pas seulement par l agent) : le combo detecte
+le changement (snapshot) et incremente AVANT d aligner les badges, sinon le
+badge afficherait l ancienne version. Le bump est conditionnel (README change)
+pour eviter une inflation de version a chaque lancement idempotent.
+
+## [LECON] 2026-08-13 -- GARDE-FOU ANTI-RESIDUS ACTIVER-AGENT-PRINCIPAL v0.5.2 (Buffy)
+
+**Contexte** : demande utilisateur - corriger la cause racine des residus 0.2.1/v0.2.6
+(supprimes, surveilles par test-039). Diagnostic : le code de l outil (.sh + .py) etait
+PROPRE (aucune redirection, verifie sur tout l historique git) - les residus venaient de
+la COMMANDE D APPEL (redirection > / tee de la sortie de reactiver vers des fichiers
+nommes comme des versions du contexte). Decision utilisateur : garde-fou PROACTIF dans
+l outil + regle documentee (pas de capture auto, pas de suppression auto).
+
+**Correction** : v0.5.1 -> v0.5.2 (py + sh + doc + spec).
+- verifier_residus_racine() (py) / verifier_residus_racine (sh, parite ls -p) : scanne le
+  repertoire courant, detecte les fichiers nommes comme des versions semver pures
+  (regex ^v?X.Y.Z$), affiche un WARNING encadre (===) listant les residus + la regle
+  anti-residu (supprimer, sources de verite de version dans clio/, JAMAIS a la racine).
+- Declenche au debut de chaque action reelle (sidentifier/activer/reactiver/sessions),
+  pas pour aide/--version (sorties propres conservees).
+- Doc .md : nouvelle section "Ne jamais rediriger la sortie" (interdiction > et tee,
+  la preuve d une activation est dans AGENTS-historique.md) + bump table versionning.
+- Spec : bump parite (detecter-divergences-version).
+
+**Tests** : preuves fonctionnelles sandbox 6/6 (positif py/sh : WARNING + action executee,
+negatif : silence, --version/aide non contamines), test-007 22/22 VALIDE, evaluer-coherence
+"Tous les outils references exist" (pas de faux positif backticks - lecon clio respectee),
+normes ASCII/LF 0/0 sur 4 fichiers.
+
+**Lecon durable** : un garde-fou REACTIF (test-039 detecte le residu a la non-regression)
+n empeche pas l accident - un garde-fou PROACTIF au point d entree (l outil qui s execute
+a chaque debut/fin de session) rend l accident VISIBLE immediatement, avant qu il ne soit
+committe. Un outil ne peut pas empecher son appelant de rediriger sa sortie, mais il peut
+rendre le resultat de l accident impossible a ignorer.
+
+## [LECON] 2026-08-13 -- GARDE-FOU ANTI-RESIDUS ETENDU AUX 3 OUTILS CRITIQUES (Buffy)
+
+**Contexte** : extension du garde-fou anti-residus (verifier_residus_racine, cree dans
+activer-agent-principal v0.5.2) aux outils qui s executent souvent : guider-parcours
+(v0.5.0 -> 0.5.1), valider-cartes-decision (v0.4.0 -> 0.4.1), editer-parcours
+(v0.1.0 -> 0.1.1). Convention : auto-contenu (duplication du helper, comme
+verifier_ascii) - pas de module partage entre outils.
+
+**Correction** : verifier_residus_racine() + REGEX ^v?X.Y.Z$ + appel apres parse_args
+(guider, editer) ou apres le bloc --version (valider) - les actions reelles declenchent
+la detection, --version/aide restent propres. Les .sh de guider et valider sont des
+WRAPPERS PURS (exec python3) : le garde-fou du .py les couvre, seul le bump de version
+du .sh est necessaire. Docs : bump header + ligne versionning + mention du garde-fou
+(editer.md n avait pas de table -> section Versionning creee). Spec guider : bump du
+champ **Version outil** (la version de la SPEC v0.6.2 ne change pas).
+
+**Tests** : preuves sandbox 6/6 (positif : WARNING + action executee pour les 3 outils ;
+negatif : silence), --version des 3 propres, compile + bash -n OK, normes 0/0 sur 9
+fichiers, evaluer-coherence "Tous les outils references existent".
+
+**IMPACTS TESTS (a adapter par Morpheus)** : test-028 point 6 fige "Version outil :
+0.5.0" -> 0.5.1 ; test-024 point 5 fige "editer-parcours --version v0.1.0" -> 0.1.1.
+
+**Lecon durable** : le pattern "wrapper pur" (exec python3 dans le .sh) rend la parite
+de sortie garantie PAR CONSTRUCTION et permet de n ajouter le garde-fou qu au point
+d entree .py - verifier si le .sh est wrapper avant d y dupliquer du code.
+
+## [LECON] 2026-08-13 -- REGLE ANTI-ECHAPPEMENT JSON DOCUMENTEE (Buffy)
+
+**Mission** (Cerberus, demande utilisateur) : documenter la regle anti-echappement JSON des spawn_agents. Le piege (guillemets imbriques, backslashes, apostrophes, chevrons, pipes, heredocs dans les commandes inline) etait RECURRENT - lecons dans 5 corrections.md mais aucune regle formelle.
+
+**Action** : enrichi protocole-creation-scripts-temporaires v0.2.0 avec la section 'Commandes spawn_agents : eviter les erreurs d echappement JSON' : regle d or (TOUTE commande complexe = script temporaire via write_file, jamais inline), cas a risque, procedure valide (1. write_file .tmp-*.py coding ascii, 2. basher cd + python3 + rm -f, 3. verifier 0 residu), pieges connus (test-024 auto-incrimination = commande directe toujours, residu en cas de timeout, ne pas lancer de test depuis un script temp). Index-regles-general mis a jour.
+
+**Lecon** : la methode fiable eprouvee sur des dizaines de missions (write_file puis basher simple avec rm -f dans la commande) est maintenant la regle officielle. Les erreurs JSON ont coute des dizaines de spawn echoues - elles ne devraient plus se reproduire. Normes 0/0.
+
+## [LECON] 2026-08-13 -- REGLE ANTI-ECHAPPEMENT ETENDUE AUX COMBOS (Buffy)
+
+**Mission** (Cerberus, demande utilisateur) : etendre la regle anti-echappement aux commandes bash des combos. Mecanisme identifie : combos-moteur.py fait un remplacement BRUT de {var} (interpoler L249) puis shlex.split (L408) - une valeur avec apostrophe non echappee casse la commande en ValueError.
+
+**Action** : combos-moteur.md v0.3.3 + section 'ECHAPPEMENT DES VALEURS' (regle d or : quoter {var} dans les commandes des cases outil, exemples MAUVAIS/BON, cas des valeurs avec apostrophes, application aux commandes bash des combos et du catalogue). Protocole-creation-scripts-temporaires v0.2.1 + section 'Commandes bash des combos (meme regle)' dans les pieges.
+
+**Lecon** : le catalogue (149) et les 52 commandes des combos sont propres aujourd hui mais la regle protege le futur - un futur combo avec une raison contenant une apostrophe aurait casse en pleine chaine. Documenter le piege AVANT l'accident est la lecon de cette serie de missions anti-echappement. Normes 0/0.

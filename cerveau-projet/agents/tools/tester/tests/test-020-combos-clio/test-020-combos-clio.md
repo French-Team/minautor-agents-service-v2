@@ -9,7 +9,7 @@ identite:
 **Version :** 1.0
 **Proprietaire :** Morpheus (protocole-tests)
 **Cree le :** 2026-08-10
-**Cible :** les 3 combos Clio v0.1.0 (test reel de la grosse MAJ du README)
+**Cible :** les 3 combos Clio (massive v0.1.1) (test reel de la grosse MAJ du README)
 
 ## Description
 
@@ -19,12 +19,12 @@ Test formel des 3 combos crees pour Clio (Pattern 3) :
 |---|---|---|
 | `combos-analyse-projet` | orchestre py/sh/md | etat reel du projet + ecarts README vs realite |
 | `combo-maj-readme` | encapsule definition-combo.json (5 cases) | PETITE MAJ (verifier -> maj -> ascii) |
-| `combos-maj-readme-massive` | orchestre py/sh/md | GROSSE MAJ conservative |
+| `combos-maj-readme-massive` | orchestre py/sh/md | GROSSE MAJ conservative (badge auto) |
 
 ## Cas couverts (11)
 
 1. Nommage : py/sh/md des 2 orchestres + definition-combo.json
-2. Versions 0.1.0 des 3 combos
+2. Versions des 3 combos (0.1.0 / 0.1.1)
 3. JSON valide (nom, version, case_depart c1, 5 cases)
 4. combos-analyse-projet : execution reelle (ETAT REEL + ECARTS + agents + outils)
 5. combos-maj-readme-massive : execution reelle (etapes 1-5 + synthese conservative)

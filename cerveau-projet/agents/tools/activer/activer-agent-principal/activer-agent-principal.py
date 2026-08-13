@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.1
+Version : 0.5.2
 Statut : prepare
 """
 
@@ -34,8 +34,9 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.5.1"
+VERSION = "0.5.2"
 STATUT = "prepare"
+REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
 AGENTS_FILE = os.environ.get("AGENTS_FILE", "AGENTS.md")
 AGENTS_HISTORIQUE = os.environ.get("AGENTS_HISTORIQUE", "AGENTS-historique.md")
@@ -106,6 +107,33 @@ def verifier_fichier_ascii(fichier):
     except IOError:
         pass
     return nb == 0
+
+
+def verifier_residus_racine():
+    """GARDE-FOU (v0.5.2) : detecter dans le repertoire courant les fichiers
+    nommes comme des versions semver pures (ex: 0.2.1, v0.2.6). Ces fichiers
+    sont des residus probables de redirections accidentelles de sortie (une
+    commande precedente a redirige sa sortie, souvent celle de cet outil, vers
+    un fichier nomme comme une version). Anti-residu : les supprimer - les
+    sources de verite de version vivent dans cerveau-projet/agents/clio/."""
+    try:
+        residus = sorted(n for n in os.listdir(".")
+                         if os.path.isfile(n) and REGEX_RESIDU.match(n))
+    except OSError:
+        return
+    if not residus:
+        return
+    print("=" * 60)
+    print("!!! WARNING GARDE-FOU (activer-agent-principal v%s) !!!" % VERSION)
+    print("Des fichiers nommes comme des versions semver sont presents dans le")
+    print("repertoire courant (residus probables de redirections accidentelles")
+    print("de sortie) :")
+    for n in residus[:10]:
+        print("    - %s" % n)
+    print("ANTI-RESIDU : supprimez-les. Les sources de verite de version vivent")
+    print("dans cerveau-projet/agents/clio/ (version-readme.txt,")
+    print("statut-projet.txt), JAMAIS a la racine.")
+    print("=" * 60)
 
 
 def lire_agents():
@@ -736,6 +764,9 @@ def main(argv):
         return 0
 
     action = argv[0]
+
+    if action not in ("aide", "--help", "-h", "--version"):
+        verifier_residus_racine()
 
     if action in ("aide", "--help", "-h"):
         afficher_aide()

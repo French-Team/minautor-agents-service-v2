@@ -2615,3 +2615,293 @@ J6 catalogue 146 trie 0 doublon, J7 normes 0/0 sur 12 fichiers.
 1. UNE REFERENCE OBSOLETE EST PIRE QU ABSENTE : un template qui decrit un monde disparu pousse les agents a se caler sur les tests precedents. Mettre a jour la reference AVANT d exiger la conformite.
 2. UNE DERIVE DE TEST EST INVISIBLE SANS GARDE-FOU : test-001/002/003 derivent depuis longtemps - le garde-fou test-029 verifie les invariants de chaque test a chaque non-regression.
 3. UN BUMP DE PARCOURS CASCADE : morpheus 0.4.1 -> 0.4.2 a casse test-004 - adapter les tests d integration a chaque bump.
+
+## [LECON] 2026-08-12 -- PROTECTIONS IMPORTEES + FAIL-FAST (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Morpheus, demande utilisateur : chaque test doit importer les protections via un point d entree unique + protection STOP fail-fast).
+
+**Verdict** : VALIDE (J1-J8) : module tester-protections importable (VERSION 1.0.0), 30/30 tests avec bloc PROTECTIONS + 0 subprocess.run restant, template-test.md v0.2.1 (import OBLIGATOIRE), protocole-tests v0.3.0 (Python + protections importables + verifier_critique), lanceur v0.1.4 --fail-fast prouve reellement (test KO -> suite stoppee, tests suivants non lances), garde-fou test-030 10/10 (serie D), non-regression 30/30, normes 0/0, rapport janus/controles/controle-protections-importees-2026-08-12.md.
+
+**Lecons** :
+1. UNE PROTECTION NON BRANCHEE N EXISTE PAS : 3 protections existaient mais 0 import dans les 29 tests - elles encadraient des commandes, elles n etaient pas des modules. Le point d entree importable (lancer_protege compatible subprocess.run) est ce qui rend la protection reelle.
+2. UN TEST GARDE-FOU PEUT S AUTO-INCRIMINER : test-030 detectait subprocess.run partout y compris dans son propre code de verification - il faut exclure le garde-fou lui-meme (lecon deja apprise sur test-029).
+3. UN BILAN DE LANCEUR EST UN CONTRAT : ajouter les tests non lances au bilan a casse test-027 (format exact) et le bump de version a casse test-024 - chaque evolution du lanceur cascade vers ses tests.
+
+## [LECON] 2026-08-13 -- LA FIN DE MISSION SUIT LA CARTE, JAMAIS LA CONSIGNE (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Cerberus, demande utilisateur : pourquoi Morpheus ne lance plus Janus ?).
+
+**Cause racine identifiee** : la carte de Morpheus est CORRECTE (c10/c14 = FIN - Activer Janus, commande exacte activer session-llm-1 janus, PAS reactiver - verifie par test-018 13/13). La derive vient des CONSIGNES : a partir du 2026-08-13 00:08 (mission chrono), les missions Morpheus ont ete redigees avec reactiver Cerberus au lieu de activer JANUS pour le controle croise (3 missions : chrono, pool workers, goulot test-028). Morpheus a suivi la consigne ecrite au lieu de relire SA carte - derive analogue au template (il cale sur ce qu on lui donne).
+
+**Verifications** (J1-J6 verts) : test-032 10/10 (pool workers v0.2.0), test-028 8/8 + verdict DEC STABLE 2 runs identiques (141/0/6, v0.2.1), non-regression 32/32 (54.8s conforme), normes 0/0, bascule de consigne datee au 13/08 00:08, carte conforme test-018.
+
+**Recommandation (renforcement garde-fou)** : 1) REGLE ABSOLUE dans fiche morpheus.md (apres TOUTE mission, meme active directement, ACTIVER JANUS - jamais reactiver Cerberus directement) ; 2) garde-fou test-033 (serie D) verifiant carte c10/c14 = activer janus + fiche porte la regle + echantillon AGENTS-historique sans reactiver Cerberus pour morpheus.
+
+**Lecon** : LA FIN SUIT LA CARTE, PAS LA CONSIGNE. La carte est la reference absolue (Pattern 8), la consigne n est qu un declencheur. Quand une consigne contredit la carte, la carte gagne. Un controle croise qui n a pas lieu est un trou dans la chaine - les 2 rounds non controles (pool workers, goulot) ont ete controles retroactivement.
+
+## [LECON] 2026-08-13 -- RENFORCEMENT VERIFIE : LE PASSAGE PAR JANUS EST DEVENU UN GARDE-FOU (Janus, VERDICT VALIDE)
+
+**Controle croise** (dernier maillon, active par Morpheus - la regle est respectee des maintenant) du renforcement : REGLE ABSOLUE -- PASSAGE PAR JANUS ajoutee a la fiche morpheus (apres TOUTE mission, meme active directement par Cerberus : ACTIVER JANUS, JAMAIS reactiver Cerberus directement) + clause erronee retiree de la REGLE DELEGATION + garde-fou test-033 (9 points) en serie D.
+
+**Verifications** (J1-J6 verts) : test-033 9/9, REGLE ABSOLUE presente + clause erronee 0 occurrence, test-018 13/13 (seule fin REACTIVER legitime = janus), non-regression 33/33 (45.6s, temps ameliore - reference mise a jour 56.2 -> 45.6), normes 0/0.
+
+**Lecons** :
+1. UNE DERIVE DE CHAINE SE REPARE PAR UN GARDE-FOU VERIFIABLE : la simple re-ecriture d une regle n aurait pas suffi - test-033 prouve l etat (carte + fiche + clause retiree) a chaque non-regression. C est l anti-recurrence.
+2. LA CHAINE DOIT REVENIR A SA FORME : cette mission s est terminee comme prevu (Morpheus -> activer Janus -> Janus controle -> reactiver Cerberus avec bilan). La regle est demontree par l execution, pas seulement par le texte.
+3. UNE REGLE DE FICHE QUI CONTREDIT LA CARTE EST UNE BOMBE A RETARDEMENT : la clause Je ne reactive CERBERUS que si... a cote de la carte c14 pendant 3 missions sans que personne ne la conteste. Verifier la coherence fiche/carte fait partie du controle croise.
+
+## [LECON] 2026-08-13 -- GARDE-FOU DU GARDIEN VALIDE : LA DERIVE PEUT TOUCHER N IMPORTE QUEL AGENT (Janus, VERDICT VALIDE)
+
+**Controle croise** (dernier maillon) du garde-fou test-034 (Cerberus sans outils de test) - suite a la remarque utilisateur : Cerberus avait lance la non-regression lui-meme.
+
+**Verifications** (J1-J6 verts) : test-034 6/6 (carte sans outil de test, c5/c6 presentes, fiche porte CERBERUS N EXECUTE JAMAIS LES TESTS), regression test-033 9/9 + test-018 13/13, non-regression 34/34 (41.8s, temps ameliore - reference 41.9->41.8), normes 0/0.
+
+**Lecons** :
+1. LA DERIVE N EST PAS UNE MALADIE D UN SEUL AGENT : apres Morpheus (consignes reactiver au lieu d activer janus), c est le GARDIEN lui-meme qui a execute des tests hors carte par reflexe. Le pattern est generique : tout agent qui utilise un outil hors de sa carte derive. Les garde-fous de carte (test-033, test-034) sont la seule prevention systemique.
+2. UNE CARTE CORRECTE N EMPECHE PAS UNE EXECUTION ERRONEE : la carte de Cerberus etait parfaite (aucun outil de test, c5/c6 prevues) et la derive a quand meme eu lieu - la carte dit quoi faire, elle ne controle pas l execution. C est pourquoi le garde-fou doit VERIFIER L ETAT (indices de la carte, contenu de la fiche), pas seulement l intention.
+3. LE CYCLE CORRIGE PAR L EXEMPLE : cette mission s est deroulee comme la carte le prescrit (Cerberus identifie Morpheus au lieu d executer -> Morpheus active Janus -> Janus reactiver Cerberus). La correction de la derive du gardien a ete faite EN respectant le garde-fou du gardien.
+
+## [LECON] 2026-08-13 -- CONTROLE OUTILS THEMIS : VERDICT VALIDE (Janus)
+
+**Controle croise** (mission Themis axes A/B/C, Vulcain -> Morpheus -> Janus) : 2 nouveaux outils (evaluer-processus v0.2.0, detecter-evaluations-incompletes v0.1.0) + rounds qualite des 4 evaluateurs + 2 garde-fous (test-035/036).
+
+**Verification J1-J6** : test-035 8/8, test-036 8/8, valider-cartes morpheus/vulcain/janus 3/3 CONFORME, catalogue 149 + index 118, non-regression 36/36 (42.0s), normes 0/0, evaluer-processus global 0 probleme.
+
+**Lecons** :
+1. L AUTO-APPLICATION EST LA PREUVE D UN OUTIL : test-035 a KO au premier run car Vulcain utilisait ses 2 nouveaux outils sans les avoir dans SA carte - evaluer-processus se detectait lui-meme. L outil qui verifie ses propres regles etait si sensible qu il a attrape sa propre lacune au premier garde-fou.
+2. LE REGISTRE EST LA SOURCE DE VERITE DES USAGES : une derive d outil hors carte se prouve par le registre (usages declares) croise avec les indices de la carte - pas par les lecons (bruit) ni par l intention.
+3. UNE CHAINE COMPLETE SE TERMINE PAR LE CONTROLE : Vulcain (outils) -> Morpheus (tests + garde-fous) -> Janus (controle) - chaque maillon a active le suivant selon SA carte, la regle du passage par Janus a ete respectee a chaque fois. Axe D (carte/declencheurs de Themis) reste a faire par Buffy apres ce controle.
+
+## [LECON] 2026-08-13 -- CONTROLE AUDIT REGISTRE vs CARTES : VALIDE (Janus)
+
+**Controle croise** (demande utilisateur : tous les outils utilises assignes aux cartes ?) de l audit Themis : registre courant (21 lignes) + historique (75) croises avec cartes + P0.
+
+**Verification J1-J5** : rapport exact (0 non-ASCII), reference morte verifier-cartes-decision confirmee (typo de valider-cartes-decision), echantillon lacune valide (valider-case hors carte janus), test-034 6/6 (derives Cerberus non re-assignees), liste des corrections produite (15 lacunes + 1 typo).
+
+**Lecons** :
+1. UNE REFERENCE MORTE DANS LE REGISTRE SE VERIFIE PAR L EXISTENCE DE L OUTIL : verifier-cartes-decision n existe pas dans tools/ - la preuve d une typo est l absence de l outil, pas l intention de l agent qui a declare.
+2. DERIVE CORRIGEE vs LACUNE REELLE : la qualite d un audit tient a cette distinction - re-assigner les derives corrigees de Cerberus (test-034 les interdit) serait une regression ; ignorer les 15 lacunes reelles de janus/morpheus/vulcain serait un aveuglement. Le contexte de chaque declaration tranche.
+3. L AUDIT COMPLET LIT LE REGISTRE COURANT ET L HISTORIQUE : evaluer-processus (courant seul) = 0 probleme mais l historique contient les usages anciens - la non-regression archive les declarations, un audit fiable lit les DEUX.
+
+
+## [LECON] 2026-08-13 -- CONTROLE CROISE AXE D THEMIS (Janus, VERDICT VALIDE)
+
+**Controle** : J1-J7 verts (6 valider-case CONFORME, 6 valider-cartes CONFORME,
+detecter PROPRE, navigation c22a-c22b-c22 PARCOURS TERMINE, test-018 13/13 +
+test-033 9/9, normes 0/0, fiches Pattern 14 a jour).
+
+**Lecons** :
+1. La REGLE IMMUABLE JANUS contraint le design : Themis ne peut PAS passer apres
+   Janus (Janus est le seul a reactiver Cerberus, test-018). Themis AVANT Janus est
+   la seule chaine coherente : Cerberus -> Agent -> Themis -> Agent -> Janus ->
+   Cerberus.
+2. Le garde-fou 'suivant mort' de valider-cartes interdit une fin avec un suivant :
+   la reprise apres une delegation se modele par un CONTROLE de re-essai (NON ->
+   soi-meme), pattern natif accepte par valider-case et detecter-cablages.
+3. On preserve les fins 'FIN - Activer Janus' en inserant l etape Themis AVANT :
+   test-018 et test-033 restent verts, seuls les tests de version (test-004,
+   test-016) sont KO attendus - a adapter par Morpheus.
+4. La mission listait janus c10 par erreur (sa fin est REACTIVER Cerberus, pas
+   Activer Janus) : verifier la nature reelle des fins avant de les modifier.
+
+
+## [LECON] 2026-08-13 -- CONTROLE CROISE MISSION MORPHEUS AXE D (Janus, VERDICT VALIDE)
+
+**Controle croise final** (mission Morpheus, dernier maillon) : J1-J5 verts.
+Les 5 tests adaptes sont exacts (test-004 morpheus 0.4.4, test-005 atlas 0.4.2,
+test-006 48 cases, test-016 action 40 controle 5, test-017 contrat outil),
+compteurs egaux aux parcours reels, normes 0/0, non-regression 36/36 OK.
+LE CON : un KO test-024 pendant l audit etait un artefact (script .tmp lance
+depuis la racine) - la relance directe sans script temporaire donne 36/36.
+Rapport : janus/controles/controle-morpheus-tests-axe-d-2026-08-13.md.
+FIN : reactiver Cerberus avec le bilan consolide.
+
+
+## [LECON] 2026-08-13 -- CONTROLE SEUL JANUS LANCE LA NON-REGRESSION (Janus, VERDICT VALIDE)
+
+**Controle croise final** (mission Buffy + Morpheus, dernier maillon) : J1-J5
+verts. test-037 5/5 OK (serie d), seul janus garde tester-lancer-non-regression
+dans les 11 cartes, cartes morpheus v0.4.5 / vulcain v0.4.6 corrigees + fiches
+a jour + regle NON-REGRESSION JANUS, normes 0/0, NON-REGRESSION COMPLETE 37/37
+OK (42.4 s) - lancee PAR JANUS, conformement a la regle etablie.
+LE CON : le KO test-024 en cours de controle etait l artefact classique
+(non-regression lancee depuis un script .tmp a la racine) - relance directe
+sans residu = 37/37. Rapport : janus/controles/controle-seul-janus-non-
+regression-2026-08-13.md. FIN : reactiver Cerberus avec le bilan consolide.
+
+
+## [LECON] 2026-08-13 -- CONTROLE ANTI-ARTEFACT TEST-024 (Janus, VERDICT VALIDE)
+
+**Controle croise final** (mission Morpheus, dernier maillon) : J1-J5 verts.
+Code portable (os.getppid + /proc + powershell fallback), protection intacte
+(residu non exclu -> KO), normes 0/0, NON-REGRESSION COMPLETE 37/37 OK lancee
+DEPUIS un script temporaire (.tmp-janus3-controle.py) : [INFO] parent exclu +
+test-024 OK = l artefact qui KO 3 fois est elimine de bout en bout.
+LE CON : distinguer script temporaire en cours d execution (parent direct,
+orchestrateur) et residu (plus utilise) - le parent est la signature fiable.
+Rapport : janus/controles/controle-anti-artefact-test024-2026-08-13.md.
+FIN : reactiver Cerberus avec le bilan consolide.
+## [LECON] 2026-08-13 -- CONTROLE MAJ README (Janus, VERDICT VALIDE)
+
+**Controle croise** de la grosse MAJ README de Clio : J1 badge/compteurs
+(128 == 128, README A JOUR), J2 sections de fond (regle seule-janus,
+garde-fous, roles agents), J3 normes 0/0, J4 non-regression 37/37 OK
+(44.7 s, conforme +5%).
+
+**Lecon** : le combo maj-readme-massive reconstruit les tables mais pas le
+badge en dur du header -- verification manuelle obligatoire apres combo.
+L analyse de compteurs ne couvre pas les sections narratives : les relire
+explicitement lors d une grosse MAJ.
+## [LECON] 2026-08-13 -- CONTROLE BADGE README AUTO (Janus, VERDICT VALIDE)
+
+**Controle croise** de la mission badge header : combo massive v0.1.1
+(aligner_badge_header) + garde-fou test-038 (serie d). J1-J4 verts,
+non-regression complete 38/38 OK (44.5 s, nouvelle base chrono).
+
+**Verification cle** : le nombre de tests de la suite change (37 -> 38) :
+le chrono a enregistre une nouvelle base - comportement attendu et gere par
+le lanceur.
+
+**Lecon** : chaque nouveau garde-fou ajoute un test a la suite - verifier
+que le chrono passe bien en mode "nouvelle base" (pas de faux comparatif).
+## [LECON] 2026-08-13 -- CONTROLE BADGES HEADER GENERALISES (Janus, VERDICT VALIDE)
+
+**Controle croise** de la mission badges : combo massive v0.1.2
+(aligner_badges_header) + garde-fous test-038 etendu (7 points) et
+test-039 (residus de version a la racine). J1-J4 verts, non-regression
+complete 39/39 OK (44.3 s, nouvelle base chrono avec test-039).
+
+**Verification cle** : les residus 0.2.1/v0.2.6 (sorties accidentelles de
+redirections) sont supprimes et le garde-fou test-039 verifie en permanence
+qu aucun fichier de version semver pure n apparait a la racine.
+
+**Lecon** : toute sortie de commande redirigee vers un fichier nomme comme
+une version est un accident - les sources de verite vivent dans le
+cerveau-projet (clio/), jamais a la racine.
+## [LECON] 2026-08-13 -- CONTROLE CATALOGUE-INDEX (Janus, VERDICT VALIDE)
+
+**Controle croise** de la mission catalogue-index : Buffy a indexe les
+137 outils du catalogue (stats 118 -> 166), Morpheus a cree test-040.
+J1-J4 verts, non-regression complete 40/40 OK (45.3 s, nouvelle base avec
+test-040).
+
+**Verification cle** : le badge README (128, dossiers reels) est inchange
+alors que l index passe a 166 entrees - deux compteurs distincts : le
+badge compte les outils deployes, l index les references documentaires
+(incluant les 39 tests).
+
+**Lecon** : 137 scripts uniques pour 149 commandes (dedoublonnage) - le
+nombre de commandes du catalogue n est pas le nombre d outils.
+
+## [LECON] 2026-08-13 -- CONTROLE CROISE NON-REGRESSION 5 SERIES (Janus, VERDICT VALIDE)
+
+**Controle final** (mission Cerberus, chaine Buffy -> Morpheus -> Themis) :
+passage de 4 a 5 series de la non-regression. J1-J5 verts.
+- J1 : les 2 copies du lanceur modifiees a l identique (SERIES 5 cles,
+  SERIES_ORDRE a-e, choices 6 valeurs) - la copie 2 est executee (__main__
+  final), la copie 1 doit rester coherente
+- J5 : non-regression complete 40/40 OK (45.2s, conforme a la reference
+  44.7s) - pas de regression malgre le decoupage
+
+**Lecon durable** : le chrono-reference confirme l absence de regression
+temporelle apres une restructuration : comparer le temps reel a la reference
+(+1%) plutot que de relancer les series une a une. Le test-027 protege le
+decoupage (couverture + doublons + test-027 en D) : tout ajout de test doit
+etre affecte a une serie sans doublon.
+
+## [LECON] 2026-08-13 -- CONTROLE CROISE PATTERN VERSION README + CORRECTIF FAUX POSITIFS (Janus, VERDICT VALIDE)
+
+**Controle final** (mission Cerberus, chaine Buffy -> Morpheus -> Themis) :
+documentation de la convention de bump de version dans clio.md v0.2.1.
+J1-J5 verts, mais DECOUVERTE en cours de route : 3 KO en cascade.
+
+**Le bug** : la section PATTERN VERSION README contenait des valeurs entre
+backticks (`v`, `stable`, `prepare`, `dev`) - evaluer-coherence scanne les
+fiches avec le pattern `[a-z-]+` et verifie que chaque nom backtick est un
+outil existant. Ces valeurs n'etaient PAS des outils -> references par
+`clio` mais introuvables -> test-001 KO -> cascade test-027/test-032.
+
+**Le correctif** : valeurs (versions, statuts) passees en guillemets simples
+('0.2.0', 'stable', 'prepare', 'dev') dans la section ; seuls les VRAIS noms
+d'outils (combos-maj-readme-massive) restent entre backticks.
+
+**Lecon durable** : dans les fiches agents, les backticks sont RESERVES aux
+noms d'outils reels - toute valeur litterale (version, statut, exemple)
+doit etre entre guillemets, sinon evaluer-coherence la signale comme outil
+introuvable et la non-regression KO en cascade. Un KO de test-001 peut
+degrader test-027 et test-032 (ils relancent test-001 en sous-processus) :
+toujours remonter a la CAUSE RACINE avant de corriger.
+
+## [LECON] 2026-08-13 -- CONTROLE CROISE BUMP VERSION COMBO MASSIVE (Janus, VERDICT VALIDE)
+
+**Controle final** (mission Cerberus, chaine Buffy -> Morpheus -> Themis) :
+combos-maj-readme-massive v0.1.3 bumpe la version du README quand le contenu
+change. J1-J5 verts.
+
+**Incident** : 2 scripts temporaires (.tmp-buffy-bump*.py) laisses par des
+echos SyntaxError - le `&& rm -f` ne s execute pas quand la commande precedente
+echoue. test-024 les a detectes -> 1er run 39/40 -> suppression -> 40/40 OK.
+
+**Lecon durable** : un script temporaire qui echoue en SyntaxError peut
+laisser un RESIDU si le nettoyage est chaine au `&&` (jamais execute apres un
+echec). Toujours nettoyer les scripts temporaires avec une commande
+independante (rm en propre, pas en chaine apres l execution). Le garde-fou
+test-024 demontre son role : il attrape les residus avant qu ils ne polluent.
+
+## [LECON] 2026-08-13 -- CONTROLE GARDE-FOU ANTI-RESIDUS v0.5.2 (Janus, VERDICT VALIDE)
+
+**Controle croise final** de la mission garde-fou anti-residus (Buffy -> Morpheus ->
+Themis -> Janus). J1-J4 : 13/13 OK. J5 : non-regression complete 40/40 OK (45.2 s,
++1% vs reference 44.7 s - conforme).
+
+**Lecons** :
+1. Diagnostic racine : le code de l outil etait propre - la cause etait dans la
+   COMMANDE D APPEL (redirection > / tee de la sortie de reactiver). Quand la cause
+   racine est externe au code, la bonne correction est de proteger le point d entree
+   (garde-fou proactif dans l outil) + documenter la regle + garder la surveillance
+   reactive (test-039). Double protection = l accident est visible immediatement
+   (avant commit) et surveille en continu.
+2. Le compteur de verifications doit compter les verif() reellement appelees (ne pas
+   coder un denominateur en dur - erreur de libelle 13/16 vs 13/13, sans impact sur
+   le verdict mais source de confusion).
+
+## [LECON] 2026-08-13 -- CONTROLE GARDE-FOU ETENDU 3 OUTILS (Janus, VERDICT VALIDE)
+
+**Controle croise final** de l extension du garde-fou anti-residus (Buffy -> Morpheus
+-> Themis -> Janus). J1-J4 : 13/13 OK. J5 : non-regression complete 40/40 OK (45.6 s,
++2% vs reference 44.7 s - conforme).
+
+**Lecons** :
+1. Le pattern d extension d un garde-fou a N outils : auto-contenu (duplication du
+   helper dans chaque .py), .sh wrappers purs couverts par le .py (exec python3),
+   bumps de version mineurs, adaptation des tests qui figent les versions (verifier
+   TOUTES les occurrences : libelles ET valeurs).
+2. L artefact d auto-incrimination de test-024 (lancer depuis un script temporaire)
+   s est reproduit 3 fois dans cette mission - la lecon est maintenant un REFLEXE :
+   commande directe pour test-024, toujours.
+
+## [LECON] 2026-08-13 -- CONTROLE FINAL TEST-041 + LANCEUR DEDOUBLE (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Morpheus/Themis, demande utilisateur) : garde-fou test-041 outils critiques anti-residus + reparation du lanceur dedouble. J1-J4 11/11 + J5 non-regression 41/41 OK.
+
+**Point notable** : le dedoublement du lanceur (introduit par une edition) aurait silencieusement ignore test-041 (second bloc SERIES ecrasant le premier). La non-regression complete l a detecte : 40 tests au lieu de 41 attendus + chrono nouvelle base. La verification structurelle (grep SERIES + wc -l vs HEAD) doit etre un reflexe apres toute edition d un outil de test.
+
+**Lecon recurrente** : test-024 doit TOUJOURS etre lance en commande directe sans script temporaire a la racine (artefact d auto-incrimination). Confirme une fois de plus.
+
+## [LECON] 2026-08-13 -- CONTROLE FINAL REGLE ANTI-ECHAPPEMENT JSON (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Buffy/Themis, demande utilisateur) : regle anti-echappement JSON documentee dans protocole-creation-scripts-temporaires v0.2.0. J1-J4 7/7 + J5 non-regression 41/41 OK (conforme reference +0%).
+
+**Point notable** : cette regle est le fruit direct des dizaines d erreurs JSON observees dans cette session - la methode write_file + basher simple (rm -f dans la commande) est maintenant formelle. Le piege test-024 auto-incrimination y est documente comme regle, plus seulement comme lecon.
+
+## [LECON] 2026-08-13 -- CONTROLE FINAL REGLE ANTI-ECHAPPEMENT COMBOS (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Buffy/Themis, demande utilisateur) : regle anti-echappement etendue aux commandes bash des combos. J1-J4 7/7 + J5 non-regression 41/41 OK (44.4s, record - reference mise a jour).
+
+**Point notable** : la regle (interpolation brute {var} + shlex.split -> apostrophe casse) est documentee dans la doc du moteur ET le protocole, sans modification du code - un futur combo avec une raison contenant une apostrophe sera ecrit en connaissance de cause. Documentation preventive avant l'accident.
+
+## [LECON] 2026-08-13 -- CONTROLE FINAL TEST-042 COMBOS-VARIABLES-QUOTEES (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Morpheus/Themis, demande utilisateur) : garde-fou test-042 + correction 8 commandes. J1-J4 8/8 + J5 non-regression 42/42 OK.
+
+**Point notable** : la regle anti-echappement des combos est maintenant APPLIQUEE (8 commandes corrigees) ET SURVEILLEE (test-042 en serie e). Un futur combo avec {var} non quote sera signale a la non-regression - le cycle documenter/corriger/surveiller est boucle.

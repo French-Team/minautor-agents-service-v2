@@ -2,7 +2,7 @@
 # guider-parcours.sh
 # Guide l'agent case par case (jeu de piste) : affiche la case courante
 # (question + indices outil/fichier/regle), suit les branches selon la reponse.
-# Version : 0.5.0
+# Version : 0.5.1
 # Statut : ebauche
 # identite:
 #   type: outil

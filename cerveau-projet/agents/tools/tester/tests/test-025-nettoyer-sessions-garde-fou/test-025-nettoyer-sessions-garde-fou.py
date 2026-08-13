@@ -33,6 +33,7 @@ Cas couverts:
 Usage:
   python3 test-025-nettoyer-sessions-garde-fou.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -47,6 +48,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 OUTIL_DIR = os.path.join(TOOLS_DIR, "nettoyer", "nettoyer-sessions")
 OUTIL_PY = os.path.join(OUTIL_DIR, "nettoyer-sessions.py")
@@ -77,7 +89,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, env=None, timeout=60):
-    return subprocess.run(cmd, capture_output=True, text=True, env=env,
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, env=env,
                           timeout=timeout)
 
 

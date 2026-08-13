@@ -21,7 +21,7 @@ Cas couverts:
   2. Aucun fichier .tmp-* a la racine du projet
   3. detecter-usage-scripts-temporaires : executable + --version v0.1.1
   4. detecter-usage-scripts-temporaires : sortie sans ERREUR
-  5. editer-parcours : --version v0.1.0
+  5. editer-parcours : --version v0.1.1
   6. tester-lancer-non-regression : --version v0.1.1
   7. enregistrer-usage-outil : mode script-temporaire accepte (--version v0.2.1)
   8. Catalogue : les 3 nouvelles commandes presentes (145 total)
@@ -35,6 +35,7 @@ Usage:
   python3 test-024-scripts-temporaires.py
 """
 import glob
+import importlib.util
 import io
 import os
 import subprocess
@@ -46,6 +47,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 DETECTER = os.path.join(TOOLS_DIR, "detecter", "detecter-usage-scripts-temporaires",
                         "detecter-usage-scripts-temporaires.py")
@@ -74,7 +86,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, timeout=60):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout)
 
 
 def ascii_count(chemin):
@@ -93,8 +105,19 @@ def main():
 
     # 1-2. Aucun script temporaire a la racine
     racine = PROJECT_ROOT
-    zz = [n for n in os.listdir(racine) if n.startswith(".zz-")]
-    tmp = [n for n in os.listdir(racine) if n.startswith(".tmp-")]
+    # Anti-artefact (lecon 2026-08-13) : le lanceur de non-regression peut
+    # declarer via l environnement le script temporaire PARENT qui l a lance
+    # (script en cours d execution, legitime, pas un residu). Exclure ces noms
+    # du scan : un vrai residu n est jamais declare -> il reste KO.
+    exclusions = set()
+    for e in os.environ.get("NON_REGRESSION_EXCLUSIONS", "").split(","):
+        e = e.strip()
+        if e:
+            exclusions.add(e)
+    zz = [n for n in os.listdir(racine)
+          if n.startswith(".zz-") and n not in exclusions]
+    tmp = [n for n in os.listdir(racine)
+           if n.startswith(".tmp-") and n not in exclusions]
     verifier("1. Aucun fichier .zz-* a la racine", len(zz) == 0, str(zz[:5]))
     verifier("2. Aucun fichier .tmp-* a la racine", len(tmp) == 0, str(tmp[:5]))
 
@@ -109,25 +132,25 @@ def main():
     # 5-6. editer-parcours + tester-lancer-non-regression
     r = run([PYTHON, EDITER_PARCOURS, "--version"])
     verifier("5. editer-parcours --version v0.1.0",
-             r.returncode == 0 and "v0.1.0" in r.stdout, r.stdout.strip()[-60:])
+             r.returncode == 0 and "v0.1.1" in r.stdout, r.stdout.strip()[-60:])
     r = run([PYTHON, LANCER, "--version"])
-    verifier("6. tester-lancer-non-regression --version v0.1.3",
-             r.returncode == 0 and "v0.1.3" in r.stdout, r.stdout.strip()[-60:])
+    verifier("6. tester-lancer-non-regression --version v0.2.0",
+             r.returncode == 0 and "v0.2.0" in r.stdout, r.stdout.strip()[-60:])
 
     # 7. enregistrer-usage-outil v0.2.1 (mode script-temporaire + garde-fous)
     r = run([PYTHON, ENREGISTRER, "--version"])
     verifier("7. enregistrer-usage-outil --version v0.2.1",
              r.returncode == 0 and "v0.2.1" in r.stdout, r.stdout.strip()[-60:])
 
-    # 8. Catalogue : 146 commandes + les nouvelles
+    # 8. Catalogue : 149 commandes + les nouvelles
     import json as json_mod
     with io.open(CATALOGUE, encoding="utf-8") as fh:
         cat = json_mod.load(fh)
     noms = [e.get("nom") for e in cat.get("commandes", [])]
-    ok_cat = (len(noms) == 146 and "tester-lancer-non-regression" in noms
+    ok_cat = (len(noms) == 149 and "tester-lancer-non-regression" in noms
               and "editer-parcours" in noms and "detecter-usage-scripts-temporaires" in noms
-              and "detecter-cablages-manquants" in noms)
-    verifier("8. catalogue : 146 commandes + nouvelles presentes",
+              and "detecter-cablages-manquants" in noms and "tester-protections" in noms)
+    verifier("8. catalogue : 149 commandes + nouvelles presentes",
              ok_cat, "nb=%d" % len(noms))
 
     # 9. index-tools : les 4 lignes presentes

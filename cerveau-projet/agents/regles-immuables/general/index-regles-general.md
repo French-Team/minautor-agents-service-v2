@@ -47,7 +47,7 @@ identite:
 | [protocole-controle-statuts/](protocole-controle-statuts/) | Controle des statuts (Janus) | ebauche |
 | [protocole-carte-decision/](protocole-carte-decision/) | Carte de decision pour les agents | ebauche |
 | [protocole-creation-combos/](protocole-creation-combos/) | Creation et mise en place des combos (quand/ou/comment, Pattern 3) | ebauche |
-| [protocole-creation-scripts-temporaires/](protocole-creation-scripts-temporaires/) | Encadrer l utilisation des scripts temporaires (creer/declarer/supprimer/promouvoir/detecter, anti-regression) | ebauche |
+| [protocole-creation-scripts-temporaires/](protocole-creation-scripts-temporaires/) | Encadrer l utilisation des scripts temporaires (creer/declarer/supprimer/promouvoir/detecter, anti-regression, commandes spawn_agents sans echappement JSON) | ebauche |
 | [protocole-purification/](protocole-purification/) | Purification des fichiers apres validation | ebauche |
 | [protocole-controle-buffy/](protocole-controle-buffy/) | Controle croise du travail de Buffy (Janus) | ebauche |
 | [protocole-audit-buffy/](protocole-audit-buffy/) | Audit de conformite du travail de Buffy (Themis) | ebauche |

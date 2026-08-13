@@ -3,7 +3,7 @@
 """
 test-029-conformite-template.py
 GARDE-FOU : chaque test-0XX doit respecter la structure du TEMPLATE de test
-(tester/template-test.md v0.2.0, format Python canonique).
+(tester/template-test.md v0.2.1, format Python canonique).
 
 Contexte (audit Morpheus 2026-08-12, demande utilisateur) :
   - Le template-test.md (v0.1.0) etait obsolete (format bash avec protections)
@@ -25,6 +25,7 @@ Invariants verifies (pour chaque test-0XX) :
   7. AUCUN marqueur [ECHEC] (ancien format, invisible pour le lanceur)
   8. Normes : ASCII strict (0 non-ASCII) + LF pur (0 CRLF) sur chaque test
 """
+import importlib.util
 import io
 import os
 import re
@@ -98,19 +99,22 @@ def lister_tests():
 
 
 def main():
-    print("=== test-029 : conformite au template-test.md v0.2.0 ===")
+    print("=== test-029 : conformite au template-test.md v0.2.1 ===")
 
     tests = lister_tests()
     verifier("1. Le dossier tests/ contient des tests (test-0XX)",
              len(tests) > 0, "nb=%d" % len(tests))
 
-    # 2. Le template de reference existe et est en v0.2.0 (format Python)
+    # 2. Le template de reference existe et est en v0.2.1 (format Python
+    #    + bloc d import OBLIGATOIRE des protections)
     template_ok = os.path.isfile(TEMPLATE)
     if template_ok:
         with io.open(TEMPLATE, encoding="utf-8", errors="replace") as fh:
             contenu_template = fh.read()
-        template_ok = "Version : 0.2.0" in contenu_template and "python" in contenu_template
-    verifier("2. template-test.md existe en v0.2.0 (reference Python)",
+        template_ok = ("Version : 0.2.1" in contenu_template
+                       and "python" in contenu_template
+                       and "PROTECTIONS = charger_protections()" in contenu_template)
+    verifier("2. template-test.md existe en v0.2.1 (reference Python + protections)",
              template_ok, "chemin=%s" % TEMPLATE)
 
     # 3. Le template est reference dans la carte de Morpheus

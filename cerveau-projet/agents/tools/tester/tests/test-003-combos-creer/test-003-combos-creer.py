@@ -26,6 +26,7 @@ Morpheus 2026-08-12 : le TEMPLATE est la reference, pas les tests precedents).
 L ancien format utilisait le marqueur [ECHEC] invisible pour le lanceur de
 non-regression (qui compte les [KO]).
 """
+import importlib.util
 import io
 import json
 import os
@@ -39,6 +40,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 MOTEUR_PY = os.path.join(TOOLS_DIR, "combos", "combos-moteur", "combos-moteur.py")
 MOTEUR_SH = os.path.join(TOOLS_DIR, "combos", "combos-moteur", "combos-moteur.sh")
@@ -99,7 +111,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, timeout=120):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout)
 
 
 def run_py(args=None):

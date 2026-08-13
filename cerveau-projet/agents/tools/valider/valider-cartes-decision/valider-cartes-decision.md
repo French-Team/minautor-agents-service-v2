@@ -7,7 +7,7 @@ identite:
 ---
 # valider-cartes-decision
 
-**Version :** 0.4.0
+**Version :** 0.4.1
 **Statut :** prepare
 **Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-cartes-decision/`
@@ -216,6 +216,7 @@ coherente avec le parcours :
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.4.1 | 2026-08-13 | GARDE-FOU ANTI-RESIDUS : verifier_residus_racine() detecte les fichiers nommes comme des versions semver a la racine (residus de redirections accidentelles de sortie) et affiche un WARNING - sources de verite de version dans cerveau-projet/agents/clio/, JAMAIS a la racine |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0-py | 2026-08-06 | Portage Python (validait la section Carte de Decision des fiches) |
 | 0.3.0 | 2026-08-08 | Cible changee : PARCOURS JSON (source de verite) au lieu de la section des fiches allegees. 6 controles : JSON, structure, case_depart, types, references, c0 de relecture. --tous scanne tous les agents avec parcours/. .sh = wrapper vers .py (parite stricte) |

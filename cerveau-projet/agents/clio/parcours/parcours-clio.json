@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-clio",
   "agent": "clio",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Clio : corriger le README avec plusieurs possibilites selon l'AMPLEUR (PETITE MAJ via combo-maj-readme, GROSSE MAJ via combos-maj-readme-massive, analyse via combos-analyse-projet, verifier, journal, insertion manuelle si nouvelle categorie, ASCII, lecons). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
  },
@@ -557,9 +557,49 @@
     }
    ],
    "message": "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=clio, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
-   "suivant": "c12",
+   "suivant": "c12a",
    "titre": "Enregistrer mes usages d outils",
    "type": "action"
+  },
+  "c12a": {
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>"
+    }
+   ],
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
+   "suivant": "c12b",
+   "titre": "Activer Themis pour auditer ma mission",
+   "type": "action"
+  },
+  "c12b": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c12"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c12b"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue."
+    }
+   ],
+   "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
+   "titre": "Retour de Themis recu ?",
+   "type": "controle"
   }
  }
 }

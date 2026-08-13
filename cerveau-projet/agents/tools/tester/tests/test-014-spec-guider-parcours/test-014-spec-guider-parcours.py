@@ -35,6 +35,7 @@ Cas couverts:
 Usage:
   python3 test-014-spec-guider-parcours.py
 """
+import importlib.util
 import io
 import os
 import shutil
@@ -48,6 +49,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 SPEC = os.path.join(TOOLS_DIR, "guider", "guider-parcours", "spec",
                     "spec-guider-parcours.001.01.ebauche.md")
@@ -76,7 +88,7 @@ def verifier(nom, condition, detail=""):
 
 
 def run(cmd, timeout=90):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, timeout=timeout)
 
 
 def ascii_count(chemin):

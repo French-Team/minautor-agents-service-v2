@@ -339,7 +339,7 @@
     },
     {
      "reponse": "non",
-     "vers": "c8"
+     "vers": "c8a"
     }
    ],
    "indices": [
@@ -366,7 +366,7 @@
      "type": "outil"
     }
    ],
-   "suivant": "c8",
+   "suivant": "c8a",
    "titre": "Activer Athena (pense-bete)",
    "type": "action"
   },
@@ -556,7 +556,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c27"
+     "vers": "c27a"
     },
     {
      "reponse": "NON",
@@ -610,7 +610,7 @@
      "type": "fichier"
     }
    ],
-   "suivant": "c8",
+   "suivant": "c8a",
    "titre": "Lancer le combo sante-tableaux",
    "type": "action"
   },
@@ -651,7 +651,7 @@
      "type": "outil"
     }
    ],
-   "suivant": "c8",
+   "suivant": "c8a",
    "titre": "Activer Vulcain (outil)",
    "type": "action"
   },
@@ -952,7 +952,7 @@
      "type": "outil"
     }
    ],
-   "suivant": "c8",
+   "suivant": "c8a",
    "titre": "Ajouter les lecons si necessaire",
    "type": "action"
   },
@@ -1099,9 +1099,129 @@
     }
    ],
    "message": "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=buffy, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
-   "suivant": "c22",
+   "suivant": "c22a",
    "titre": "Enregistrer mes usages d outils",
    "type": "action"
+  },
+  "c8a": {
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>"
+    }
+   ],
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
+   "suivant": "c8b",
+   "titre": "Activer Themis pour auditer ma mission",
+   "type": "action"
+  },
+  "c8b": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c8"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c8b"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue."
+    }
+   ],
+   "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
+   "titre": "Retour de Themis recu ?",
+   "type": "controle"
+  },
+  "c22a": {
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>"
+    }
+   ],
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
+   "suivant": "c22b",
+   "titre": "Activer Themis pour auditer ma mission",
+   "type": "action"
+  },
+  "c22b": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c22"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c22b"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue."
+    }
+   ],
+   "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
+   "titre": "Retour de Themis recu ?",
+   "type": "controle"
+  },
+  "c27a": {
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>"
+    }
+   ],
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
+   "suivant": "c27b",
+   "titre": "Activer Themis pour auditer ma mission",
+   "type": "action"
+  },
+  "c27b": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c27"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c27b"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue."
+    }
+   ],
+   "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
+   "titre": "Retour de Themis recu ?",
+   "type": "controle"
   }
  },
  "identite": {
@@ -1114,6 +1234,6 @@
   "case_depart": "c0",
   "description": "v0.3.2 : REGLE JANUS MATERIALISEE (decision utilisateur) - les fins de creation c8/c22/c27 deviennent FIN - Activer Janus : Buffy passe par le second controle Janus apres TOUTE mission de creation/modification, MEME SANS MODIFIER DU CODE ; Janus reactive Cerberus avec son verdict. Parcours (jeu de piste) des missions de Buffy : creer/modifier les fichiers du cerveau, creer un agent/protocole, controler le cerveau, deleguer (Athena/Vulcain), sous-missions. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.1 : chemins combos (Pattern 3, spec-guider-parcours v0.2.4) : controler c28 combo-sante-tableaux, modifier c13b combo-controle-impacts, autre c34b combo-activation. v0.2.2 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : modifier c13c question erreurs hors mission (OUI c13d fin signalement a Cerberus / NON c14 flux principal).",
   "nom": "parcours-buffy",
-  "version": "0.4.1"
+  "version": "0.4.2"
  }
 }

@@ -46,7 +46,7 @@
     "c4": {
       "titre": "Creer le fichier de controle",
       "type": "outil",
-      "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py {fichier_controle}",
+      "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py '{fichier_controle}'",
       "sortie": "fichier_cree",
       "suivant": "c6"
     },

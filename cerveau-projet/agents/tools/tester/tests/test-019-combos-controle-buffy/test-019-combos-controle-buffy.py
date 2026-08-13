@@ -26,6 +26,7 @@ Cas couverts:
 Usage:
   python3 test-019-combos-controle-buffy.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -39,6 +40,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 MOTEUR_PY = os.path.join(TOOLS_DIR, "combos", "combos-moteur", "combos-moteur.py")
 COMBO = os.path.join(TOOLS_DIR, "combos", "combo-controle-buffy", "definition-combo.json")
@@ -61,12 +73,12 @@ def verifier(nom, condition, detail=""):
 
 def executer(cmd, cwd=None):
     try:
-        proc = subprocess.run(
+        proc = PROTECTIONS.lancer_protege(
             cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
             timeout=300, cwd=cwd,
         )
         return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
-    except subprocess.TimeoutExpired:
+    except PROTECTIONS.ArretProtection:
         return -1, "TIMEOUT"
 
 

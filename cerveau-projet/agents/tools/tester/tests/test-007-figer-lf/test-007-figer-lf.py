@@ -27,13 +27,14 @@ Cas couverts:
  10. ASCII 0 sur les 4 fichiers outils
  11. valider-nommage --type outil OK
  12. Parite py/sh : memes resultats (wrapper pur)
-13. Catalogue : JSON valide, 146 commandes triees, entree presente
-14. index-tools : total 115, categorie Corriger 6
+13. Catalogue : JSON valide, 149 commandes triees, entree presente
+14. index-tools : total 166, categorie Corriger 6
  15. Protection : aucun fichier residuel dans le workspace
 
 Usage:
   python3 test-007-figer-lf.py
 """
+import importlib.util
 import io
 import json
 import os
@@ -48,6 +49,17 @@ while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+
 
 OUTIL_DIR = os.path.join(TOOLS_DIR, "corriger", "corriger-fins-de-ligne")
 OUTIL_PY = os.path.join(OUTIL_DIR, "corriger-fins-de-ligne.py")
@@ -78,7 +90,7 @@ def verifier(nom, condition, detail=""):
 
 
 def lancer(cmd, cwd=None):
-    return subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
+    return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True, cwd=cwd)
 
 
 def stats_eol(chemin):
@@ -217,27 +229,27 @@ def main():
         with open(CATALOGUE, encoding="utf-8") as f:
             cat = json.load(f)
         noms = [e["nom"] for e in cat["commandes"]]
-        ok_cat = (len(noms) == 146 and noms == sorted(noms)
+        ok_cat = (len(noms) == 149 and noms == sorted(noms)
                   and "corriger-fins-de-ligne" in noms
                   and "test-022-budget-pondere" in noms
                   and "test-023-grep-budget-pondere" in noms
                   and "enregistrer-usage-outil" in noms
                   and "detecter-cablages-manquants" in noms)
-        verifier("13. catalogue JSON valide 146 trie + entree enregistrer-usage-outil", ok_cat,
+        verifier("13. catalogue JSON valide 149 trie + entree enregistrer-usage-outil", ok_cat,
                  "nb=%d" % len(noms))
     except Exception as e:
-        verifier("13. catalogue JSON valide 146 trie + entree enregistrer-usage-outil", False, str(e))
+        verifier("13. catalogue JSON valide 147 trie + entree enregistrer-usage-outil", False, str(e))
 
     # 14. index-tools
     try:
         with open(INDEX_TOOLS, encoding="utf-8") as f:
             idx = f.read()
-        verifier("14. index-tools total 115 + Corriger 6",
-                 "| **Total** | **115** |" in idx and "| Corriger | 6 |" in idx
+        verifier("14. index-tools total 166 + Corriger 6",
+                 "| **Total** | **166** |" in idx and "| Corriger | 6 |" in idx
                  and "corriger-fins-de-ligne" in idx
                  and "detecter-cablages-manquants" in idx)
     except OSError as e:
-        verifier("14. index-tools total 115 + Corriger 6", False, str(e))
+        verifier("14. index-tools total 166 + Corriger 6", False, str(e))
 
     # 15. Protection : aucun residu de CE test dans le workspace
     shutil.rmtree(tmp, ignore_errors=True)
