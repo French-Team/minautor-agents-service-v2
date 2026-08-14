@@ -7,7 +7,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.5.2
+**Version** : 0.5.5
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -290,6 +290,8 @@ La colonne session identifie quel LLM a effectue l'action.
 | 0.5.0 | 2026-08-08 | CONVENTION IDENTIFICATION : aucun mot seul. Blocs de session : `**Nom LLM**` (l'id) EN TETE, `**Nom Agent**` au lieu de `**Nom**`, `**Role Agent**` au lieu de `**Role**`. Migration automatique des anciens blocs (Nom -> Nom Agent, Role -> Role Agent, Id LLM -> Nom LLM) lors de chaque edition + reconstruction complete du bloc en ordre canonique. Table Sessions connues : colonne `Nom LLM`. py + sh + tests + doc |
 | 0.5.1 | 2026-08-12 | CORRECTION BUG DE DEMARRAGE (cause racine blocage Morpheus rounds 8/9) : sidentifier ecrivait `agent: Cerberus` en dur dans le profil classeur + affichait `(agent principal : Cerberus)` dans les messages, MEME quand la session retrouvee avait un AUTRE agent actif (ex: morpheus). Resultat : AGENTS.md et classeur en CONTRADICTION -> l agent qui demarrait (sidentifier obligatoire selon sa fiche) recevait une identite fausse et s arretait. Correction py + sh : nouvelle fonction agent_actif_bloc() lit l agent REEL du bloc (champ Nom Agent) ; session retrouvee -> affiche + ecrit le profil + l historique avec l agent reel ; nouvelle session -> Cerberus par defaut conserve |
 | 0.5.2 | 2026-08-13 | GARDE-FOU ANTI-RESIDUS : verifier_residus_racine (py + sh) detecte les fichiers nommes comme des versions semver a la racine (residus de redirections accidentelles de sortie) et emet un WARNING ; section doc "Ne jamais rediriger la sortie" (interdiction > et tee) |
+| 0.5.5 | 2026-08-14 | FIX bug de recollement : reconstruire_bloc recolait les anciennes continuations de la Raison (blocs DEMARRAGE) a chaque nouvelle raison -> accumulation a chaque cycle activer/reactiver (AGENTS.md corrompu : 21 blocs dupliques). Desormais un champ REMPLACE ignore son ancienne suite (y compris Raison) |
+| 0.5.4 | 2026-08-14 | DEMARRAGE OBLIGATOIRE automatique : activer ajoute a la Raison l instruction de lancement du parcours depuis c0 (--reponses OUI), sauf pour Cerberus et reactiver ; fix bug latent : reconstruire_bloc preservait pas la Raison multiligne (mission perdue a la reactivation) |
 | Renommage | 2026-08-07 | Deplacement dans le dossier activer/ + renommage de mettre-a-jour-agents-md vers activer-agent-principal (l outil sert a activer/reactiver l agent principal dans AGENTS.md). ~120 references mises a jour dans 31 fichiers + spec + boucle retro-action |
 
 ---

@@ -2,15 +2,15 @@
 # detecter-usage-outils-externes.sh
 # Detecte les traces d'utilisation d'outils externes (CRLF, non-ASCII, BOM)
 # dans les fichiers du cerveau-projet.
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.1.1
+# Statut : prepare
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.1.0-beta"
-STATUT="ebauche"
+VERSION="0.1.1"
+STATUT="prepare"
 
 # Verifier la regle de nommage
 NOM_FICHIER=$(basename "$0" .sh)
@@ -45,11 +45,20 @@ else
     FICHIERS=$(find "$CIBLE" -maxdepth 1 -type f \( -name '*.md' -o -name '*.sh' -o -name '*.py' -o -name '*.txt' -o -name '*.json' \) 2>/dev/null)
 fi
 
+# Exclusions par defaut : fichiers/chemins volontairement non conformes
+# (dictionnaires d accents/emojis a corriger, exemples pedagogiques de
+# tests, documents externes fournis par l utilisateur).
+EXCLURE_DEFAUT="corriger-dictionnaire-accents.txt|dictionnaire-emojis.txt|/exemples/|docs-dev-cerveau-projet"
+
 TOTAL_FICHIERS=0
 SUSPECTS=0
 TOTAL_SIGNES=0
 
 for f in $FICHIERS; do
+    # Ignorer les exclusions par defaut (sous-chaine de chemin)
+    if echo "$f" | tr '\\' '/' | grep -Eq "$EXCLURE_DEFAUT"; then
+        continue
+    fi
     TOTAL_FICHIERS=$((TOTAL_FICHIERS + 1))
     SIGNE=""
     # BOM UTF-8 : EF BB BF en tete (od + tr pour fiabilite Git Bash)

@@ -1,2 +1,10 @@
 # Reference de temps locale du lanceur de non-regression (machine-dependante)
 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/temps-reference.json
+
+# Dossiers temporaires de mission des agents (tmp-<agent>/, supprimes en fin de mission)
+tmp-*/
+
+# Dossier workspace (futur espace de travail) : contenu ignore,
+# seul le README reste versionne (documentation du dossier)
+workspace/*
+!workspace/README.md

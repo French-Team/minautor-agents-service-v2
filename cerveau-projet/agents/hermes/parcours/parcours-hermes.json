@@ -1,0 +1,409 @@
+{
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "hermes",
+  "commun": false
+ },
+ "parcours": {
+  "nom": "parcours-hermes",
+  "agent": "hermes",
+  "version": "0.1.0",
+  "case_depart": "c0",
+  "description": "Parcours (jeu de piste) des missions de Hermes, agent de la langue (dieu grec de l eloquence) : relecture -> detection des fautes d orthographe -> verification du contexte -> correction tracee -> extension du dictionnaire -> rapport. Decision utilisateur 2026-08-14 : creer un agent dedie au vocabulaire et aux fautes, place comme nos outils ASCII, premiere mission = corriger readme-dev:264 (enchannements)."
+ },
+ "cases": {
+  "c0": {
+   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
+   "type": "question",
+   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "INCERTAIN",
+     "vers": "c0b"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0b"
+    }
+   ]
+  },
+  "c0b": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/hermes/corrections.md"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/hermes/hermes.md"
+    }
+   ],
+   "suivant": "c0c"
+  },
+  "c0c": {
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type": "action",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-6"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-activite-recente",
+     "catalogue": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+    },
+    {
+     "type": "fichier",
+     "chemin": "AGENTS.md",
+     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite)"
+    }
+   ],
+   "suivant": "c1"
+  },
+  "c1": {
+   "titre": "Mission",
+   "type": "question",
+   "question": "Quelle est la mission de correction orthographique ?",
+   "branches": [
+    {
+     "reponse": "corriger",
+     "vers": "c2"
+    },
+    {
+     "reponse": "scan",
+     "vers": "c4"
+    },
+    {
+     "reponse": "dictionnaire",
+     "vers": "c7"
+    },
+    {
+     "reponse": "autre",
+     "vers": "c29"
+    }
+   ]
+  },
+  "c2": {
+   "titre": "SCAN OBLIGATOIRE : detecter les fautes du projet",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "detecter-fautes-orthographe",
+     "catalogue": "detecter-fautes-orthographe",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py --tous --verbose"
+    }
+   ],
+   "suivant": "c3"
+  },
+  "c3": {
+   "titre": "Des fautes sont-elles detectees ?",
+   "type": "controle",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "detecter-fautes-orthographe",
+     "catalogue": "detecter-fautes-orthographe",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/"
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c4"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c30"
+    }
+   ]
+  },
+  "c4": {
+   "titre": "Classer les fautes par fichier",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "detecter-fautes-orthographe",
+     "catalogue": "detecter-fautes-orthographe",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py --tous --verbose"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/hermes/corrections.md",
+     "raison": "Lecons des fautes deja relevees : ne pas les re-signaler, verifier les nouvelles"
+    }
+   ],
+   "suivant": "c5"
+  },
+  "c5": {
+   "titre": "Une faute est-elle un mot anglais legitime ou un faux positif ?",
+   "type": "question",
+   "question": "Avant de corriger : le mot signale est-il reellement une faute francaise (verifier le contexte de la ligne) ? Un mot anglais legitime (ex: success dans un contexte technique) n est pas une faute. Un mot ASCII correct (probleme, etre, deja) n est jamais signale.",
+   "indices": [
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py",
+     "raison": "Dictionnaire FAUTES : verifier que la correction proposee est juste"
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "NON",
+     "vers": "c6"
+    },
+    {
+     "reponse": "OUI",
+     "vers": "cH1"
+    }
+   ]
+  },
+  "c6": {
+   "titre": "CORRIGER : remplacer fautif par correct (trace)",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "editer-fichier",
+     "catalogue": "editer-fichier",
+     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <fichier> <fautif> <correct>"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/hermes/corrections.md",
+     "raison": "Documenter chaque correction (fichier, ligne, fautif -> correct)"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c7": {
+   "titre": "EXTENDRE le dictionnaire de fautes",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "editer-fichier",
+     "catalogue": "editer-fichier",
+     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py '<fautif>: <correct>,' \"'<fautif>': '<correct>',\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py",
+     "raison": "Le dictionnaire FAUTES grossit a chaque nouvelle faute (anti-recurrence)"
+    }
+   ],
+   "suivant": "c8"
+  },
+  "c8": {
+   "titre": "RESCAN : 0 faute restante ?",
+   "type": "controle",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "detecter-fautes-orthographe",
+     "catalogue": "detecter-fautes-orthographe",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py --tous --verbose"
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OK",
+     "vers": "c10"
+    },
+    {
+     "reponse": "KO",
+     "vers": "c6"
+    }
+   ]
+  },
+  "c9": {
+   "titre": "Lecon : documenter la correction dans corrections.md",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "editer-fichier",
+     "catalogue": "editer-fichier",
+     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/agents/hermes/corrections.md"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/hermes/corrections.md",
+     "raison": "Lecon datee : fichier, ligne, fautif -> correct, contexte"
+    }
+   ],
+   "suivant": "c8"
+  },
+  "c10": {
+   "titre": "Conformite ASCII + normes des fichiers modifies",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "valider-conformite-ascii",
+     "catalogue": "valider-conformite-ascii",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>"
+    }
+   ],
+   "suivant": "c11"
+  },
+  "c11": {
+   "titre": "Rapport de correction orthographique",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "creer-fichier",
+     "catalogue": "creer-fichier",
+     "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/hermes/rapports/rapport-orthographe-<date>.md <contenu>"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/hermes/rapports/",
+     "raison": "Rapport : fichier, ligne, fautif -> correct pour chaque correction (contenu en ARGUMENT POSITIONNEL, pas stdin)"
+    }
+   ],
+   "suivant": "c12"
+  },
+  "c12": {
+   "titre": "Lecons et retour",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "enregistrer-usage-outil",
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
+     "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent hermes --outil <outil> --contexte '<contexte>'"
+    }
+   ],
+   "suivant": "c13"
+  },
+  "c13": {
+   "titre": "FIN - Activer Janus (second controle)",
+   "type": "fin",
+   "message": "MISSION DE CORRECTION ORTHOGRAPHIQUE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan complet (fautes detectees et corrigees, dictionnaire etendu, rapport, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus verifie ma tracabilite (rapport + rescan 0 faute) puis reactive Cerberus avec son verdict.",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ]
+  },
+  "c29": {
+   "titre": "Mission hors parcours",
+   "type": "question",
+   "branches": [
+    {
+     "reponse": "deleguer",
+     "vers": "c29a"
+    },
+    {
+     "reponse": "outil",
+     "vers": "c29b"
+    }
+   ]
+  },
+  "c29a": {
+   "titre": "FIN - Delegation",
+   "type": "fin",
+   "message": "MISSION HORS PARCOURS : je delegue a l agent habilite selon ma carte."
+  },
+  "c29b": {
+   "titre": "Besoin d un outil ?",
+   "type": "question",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c29c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c29e"
+    }
+   ]
+  },
+  "c29c": {
+   "titre": "Creer l outil temporaire",
+   "type": "action",
+   "indices": [
+    {
+     "type": "outil",
+     "nom": "generateurs-outil-temporaire",
+     "catalogue": "generateurs-outil-temporaire",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
+    }
+   ],
+   "suivant": "c29d"
+  },
+  "c29d": {
+   "titre": "FIN - Outil temporaire",
+   "type": "fin",
+   "message": "OUTIL TEMPORAIRE CREE : declaration au registre (enregistrer-usage-outil --mode script-temporaire), duree de vie courte, suppression en fin de mission (protocole-creation-scripts-temporaires)."
+  },
+  "c29e": {
+   "titre": "FIN - Signaler le besoin",
+   "type": "fin",
+   "message": "BESOIN SIGNALE : je documente l outil manquant dans corrections.md et je le signale a Cerberus."
+  },
+  "c30": {
+   "titre": "Aucune faute : rien a corriger",
+   "type": "action",
+   "indices": [
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/hermes/corrections.md",
+     "raison": "Documenter le scan OK (0 faute) et passer a la cloture"
+    }
+   ],
+   "suivant": "c11"
+  },
+  "cH1": {
+   "titre": "Faux positif : verifier le contexte et eventuellement corriger le dictionnaire",
+   "type": "action",
+   "indices": [
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py",
+     "raison": "Si le mot signale n est pas une faute francaise (mot anglais legitime), retirer l entree du dictionnaire ou la rendre contextuelle"
+    }
+   ],
+   "suivant": "c9"
+  }
+ }
+}

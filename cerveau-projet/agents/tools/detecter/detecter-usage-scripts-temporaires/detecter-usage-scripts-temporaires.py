@@ -74,12 +74,10 @@ def registre_defaut(racine):
     return os.path.join(racine, "cerveau-projet", "agents", "traces", "registre-usages-outils.jsonl")
 
 
-def registre_historique(racine):
-    """Historique du registre (round 8 : les declarations archivees lors des
-    non-regressions restent verifiables, sinon le detecteur devient aveugle
-    au passe et signale de faux ecarts permanents)."""
-    return os.path.join(racine, "cerveau-projet", "agents", "traces",
-                        "registre-usages-outils.historique.jsonl")
+# registre_historique SUPPRIME (decision utilisateur 2026-08-14) : l archive
+# registre-usages-outils.historique.jsonl est supprimee, les 12 entrees
+# script-temporaire ont ete fusionnees dans le registre actif. Le detecteur
+# lit UNIQUEMENT registre-usages-outils.jsonl.
 
 
 def est_script_temporaire(nom):
@@ -146,10 +144,10 @@ def scanner_dossiers(racine, dossiers, pattern):
 
 
 def scanner_registre(racine):
-    """Entrees mode script-temporaire du registre COURANT et de l HISTORIQUE
-    (round 8 : les declarations archivees restent verifiables)."""
+    """Entrees mode script-temporaire du registre COURANT (decision
+    utilisateur 2026-08-14 : plus d historique, un seul registre)."""
     entrees = []
-    for chemin in (registre_defaut(racine), registre_historique(racine)):
+    for chemin in (registre_defaut(racine),):
         if not os.path.isfile(chemin):
             continue
         try:

@@ -60,7 +60,7 @@ verifier_python() {
 analyser_fichier() {
     local fichier="$1"
     python - "$fichier" << 'PYEOF'
-# -*- coding: utf-8 -*-
+# -*- coding: ascii -*-
 # Parseur brace-tracking: detecte les 'local' hors fonction
 import io
 import os

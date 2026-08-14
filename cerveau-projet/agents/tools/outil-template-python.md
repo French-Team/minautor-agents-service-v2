@@ -7,7 +7,7 @@ identite:
 # outil-template-python
 
 **Categorie** : Template
-**Version** : 0.1.0-beta
+**Version** : 0.2.0-beta
 **Statut** : ebauche
 **Chemin** : `agents/tools/outil-template-python.md`
 **Proprietaire** : Vulcain (constructeur d'outils)
@@ -48,6 +48,22 @@ Controle automatique par `verifier_nommage()` au demarrage du script.
 
 ---
 
+## REGLE IMMUABLE : protections + options on/off + chrono (v0.1.1)
+
+> **REGLE ABSOLUE (demande utilisateur 2026-08-13)** : TOUT outil Python DOIT
+> embarquer le TRIPLET (voir protocole-outils Regle 9) :
+>
+> 1. **Protections** : `verifier_nommage`, validation des arguments, `--dry-run`
+> 2. **Options on/off** : flags pour isoler/desactiver une fonction ou un workflow
+>    complet (`--activer`/`--desactiver`, `--isoler N`) sans toucher au code
+> 3. **Chrono** : option standard `--chrono` (mesure de duree d execution,
+>    bilan en fin) ; `--no-chrono` pour couper
+>
+> Les durees mesurees alimenteront les futurs outils de suivi. Le template
+> `outil-template.py` fournit `--chrono` dans `construire_parser()`.
+
+---
+
 ## Structure du fichier .py
 
 ```
@@ -55,13 +71,13 @@ Controle automatique par `verifier_nommage()` au demarrage du script.
 # -*- coding: ascii -*-
 # [nom-outil].py
 # [Description courte]
-# Version : 0.1.0-beta
+# Version : 0.2.0-beta
 # Statut : ebauche
 
 import argparse, os, sys
 from pathlib import Path
 
-VERSION = "0.1.0-beta"
+VERSION = "0.2.0-beta"
 STATUT = "ebauche"
 
 def _couleur(texte, nom): ...      # couleurs ANSI optionnelles
@@ -84,6 +100,7 @@ if __name__ == "__main__":
 | `--verbose` | Afficher les details |
 | `--help` | Afficher l'aide |
 | `--version` | Afficher la version |
+| `--chrono` | Mesurer la duree d execution (bilan en fin ; `--no-chrono` pour couper) |
 
 Les options specifiques de chaque outil s'ajoutent dans `construire_parser()`.
 
@@ -113,6 +130,8 @@ python3 agents/tools/[categorie]/[nom-outil]/[nom-outil].py [OPTIONS] [ARGUMENTS
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.0-beta | 2026-08-14 | REGLE IMMUABLE documentation obligatoire : bloc DOC OBLIGATOIRE (verifier_doc_presente + exiger_confirmation_doc + --doc + --confirme-doc) - demande utilisateur, severite bloquante |
+| 0.1.1-beta | 2026-08-13 | REGLE IMMUABLE protections + options on/off + chrono : option standard `--chrono` (mesure de duree, bilan en fin) - demande utilisateur |
 | 0.1.0-beta | 2026-08-07 | Creation initiale : template Python generique (argparse, nommage, couleurs, dry-run) |
 
 ---

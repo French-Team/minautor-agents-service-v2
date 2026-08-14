@@ -6,7 +6,7 @@ identite:
 ---
 # Specification -- activer-agent-principal
 
-**Version :** 0.5.2
+**Version :** 0.5.5
 **Statut :** prepare
 **ID :** 001
 **Class :** 01
@@ -289,5 +289,7 @@ Tests manuels sur le dossier `exemples/` avec des fichiers de test.
 | 2026-08-07 | 0.3.3 | REGLE UTILISATEUR : session occupee -> attribution automatique de la prochaine libre (1er LLM = llm-1) |
 | 2026-08-07 | 0.3.4 | MODE ID : sidentifier <llm-id> (comparaison id -> session, liaison dans le classeur) |
 | 2026-08-07 | 0.3.2 | Vulcain | Regle de derivation du nommage (profil-session-<id> sans double prefixe) - correction du verdict A REVOIR de Janus |
+| 2026-08-14 | 0.5.5 | Vulcain | FIX bug de recollement : reconstruire_bloc recolait les anciennes continuations de la Raison a chaque nouvelle raison -> accumulation (AGENTS.md corrompu). Un champ REMPLACE ignore son ancienne suite (y compris Raison) |
+| 2026-08-14 | 0.5.4 | Vulcain | DEMARRAGE OBLIGATOIRE automatique : activer ajoute a la Raison l instruction de lancement du parcours depuis c0 (--reponses OUI), sauf pour Cerberus et reactiver ; fix bug latent : reconstruire_bloc preservait pas la Raison multiligne |
 | 2026-08-12 | 0.5.1 | Vulcain | Alignement spec/outil (round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 0.5.1) |
 | 2026-08-08 | 0.5.0 | Vulcain | CONVENTION IDENTIFICATION : blocs de session en Nom LLM (tete) / Nom Agent / Role Agent, migration automatique des anciens champs, table Sessions connues en Nom LLM |

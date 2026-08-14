@@ -1,0 +1,70 @@
+{
+  "combo": {
+    "nom": "combo-nettoyage-hygie",
+    "version": "0.1.0",
+    "description": "Cycle de nettoyage de Hygie : snapshot (preuve) -> detection des residus par zone -> verdict (propre / residus a supprimer). La suppression est ensuite executee par Hygie (seul habilite) avec supprimer-fichier/dossier, puis rapport et rotation des snapshots.",
+    "case_depart": "c1"
+  },
+  "cases": {
+    "c1": {
+      "titre": "Generer la commande snapshot-nettoyage",
+      "type": "generateur",
+      "catalogue": "snapshot-nettoyage",
+      "entrees": {
+        "commande": "creer"
+      },
+      "sortie": "cmd1",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Executer le snapshot (preuve de tracabilite)",
+      "type": "outil",
+      "commande": "{cmd1}",
+      "sortie": "resultat_snapshot",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Generer la commande detecter-residus",
+      "type": "generateur",
+      "catalogue": "detecter-residus",
+      "entrees": {
+        "zone": "tous",
+        "detail": true
+      },
+      "sortie": "cmd2",
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Executer la detection par zone",
+      "type": "outil",
+      "commande": "{cmd2}",
+      "sortie": "resultat_detection",
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "CONTROLE : des residus ont-ils ete detectes ?",
+      "type": "controle",
+      "question": "La detection a-t-elle trouve des residus (fichiers temp, rapports egare, fichiers de version, caches) ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c6"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c7"
+        }
+      ]
+    },
+    "c6": {
+      "titre": "FIN - Residus a supprimer (par Hygie)",
+      "type": "fin",
+      "message": "Des residus ont ete detectes et le snapshot est pris (preuve). Hygie (seul habilite) execute maintenant la suppression avec supprimer-fichier / supprimer-dossier, puis relance detecter-residus pour verifier la disparition, redige le rapport dans hygie/rapports/ et applique la rotation 7 jours des snapshots."
+    },
+    "c7": {
+      "titre": "FIN - Workspace propre",
+      "type": "fin",
+      "message": "Aucun residu detecte et le snapshot est pris (preuve de l etat verifie). Hygie peut conclure : workspace propre, rapport de nettoyage et rotation 7 jours."
+    }
+  }
+}

@@ -34,7 +34,7 @@ identite:
 | [protocole-outils/](protocole-outils/) | **IMMUABLE** -- Boite a outils | ebauche |
 | [protocole-technologies/](protocole-technologies/) | Choix des technologies pour creer les outils | ebauche |
 | [protocole-versionning-outils/](protocole-versionning-outils/) | Versionning des outils (beta -> tests -> production) | ebauche |
-| [protocole-tests/](protocole-tests/) | Tests des outils avec protections | ebauche |
+| [protocole-tests/](protocole-tests/) | Tests des outils avec protections + REGLE IMMUABLE (protections + options on/off + chrono) | ebauche |
 | [protocole-boucles-dynamiques/](protocole-boucles-dynamiques/) | Boucles dynamiques (sous-missions) | ebauche |
 | [protocole-auto-correction/](protocole-auto-correction/) | Auto-correction des agents | ebauche |
 | [protocole-autoameliorer-cerveau/](protocole-autoameliorer-cerveau/) | Auto-amelioration du cerveau | ebauche |
@@ -49,9 +49,11 @@ identite:
 | [protocole-creation-combos/](protocole-creation-combos/) | Creation et mise en place des combos (quand/ou/comment, Pattern 3) | ebauche |
 | [protocole-creation-scripts-temporaires/](protocole-creation-scripts-temporaires/) | Encadrer l utilisation des scripts temporaires (creer/declarer/supprimer/promouvoir/detecter, anti-regression, commandes spawn_agents sans echappement JSON) | ebauche |
 | [protocole-purification/](protocole-purification/) | Purification des fichiers apres validation | ebauche |
+| [protocole-nettoyage/](protocole-nettoyage/) | Nettoyage du workspace (Hygie) : snapshot -> detection (detecter-residus par zone) -> verdict -> suppression exclusive -> rapport | ebauche |
 | [protocole-controle-buffy/](protocole-controle-buffy/) | Controle croise du travail de Buffy (Janus) | ebauche |
 | [protocole-audit-buffy/](protocole-audit-buffy/) | Audit de conformite du travail de Buffy (Themis) | ebauche |
 | [protocole-sante-fichiers-agents/](protocole-sante-fichiers-agents/) | Sante periodique des fichiers agents (Janus) | ebauche |
+| [protocole-fin-mission/](protocole-fin-mission/) | Fin de mission : CHAQUE maillon documente SON controle (lecon + verdict) AVANT de transmettre (anti-derive bilans sans preuve) | ebauche |
 | [protocole-verification-coherence/](protocole-verification-coherence/) | Verification de coherence des fichiers a compteurs/tables/badges (Themis, lecons re-audit README) | ebauche |
 
 ## Navigation

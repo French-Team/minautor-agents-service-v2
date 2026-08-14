@@ -28,7 +28,7 @@
 #   --verbose           : detail des outils assignes par carte
 #   --version
 #
-# Version : 0.1.0
+# Version : 0.1.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -45,7 +45,9 @@ import os
 import re
 import sys
 
-VERSION = "0.1.0"
+FENETRE_JOURS = 1  # fenetre de verification des usages recents (v0.1.2) : le jour courant
+
+VERSION = "0.1.2"
 
 # Agents du cerveau-projet (famille cerveau-projet : cercles de controle).
 AGENTS_CERVE = ["cerberus", "buffy", "vulcain", "morpheus", "janus",
@@ -125,7 +127,13 @@ def dernieres_missions_agent(racine, agent):
 
 def detecter_fins_erronees(racine):
     """Pour chaque agent dont la carte impose Activer Janus, verifier que la
-    derniere mission ecrite ne porte pas reactiver Cerberus en fin."""
+    derniere mission ecrite ne porte pas reactiver Cerberus en fin.
+
+    FIX v0.1.1 (2026-08-14, KO test-035) : les missions sont lues dans l ordre
+    du fichier (AGENTS.md puis AGENTS-historique, du plus RECENT au plus
+    ancien). On examine donc les 3 missions les PLUS RECENTES (missions[:3]) et
+    non les 3 dernieres de la liste (qui seraient les plus anciennes -> faux
+    positif sur une mission historique legitime a l epoque)."""
     problemes = []
     for agent in AGENTS_CERVE:
         parcours = charger_parcours(racine, agent)
@@ -137,9 +145,8 @@ def detecter_fins_erronees(racine):
         missions = dernieres_missions_agent(racine, agent)
         if not missions:
             continue
-        # On examine la mission la PLUS RECENTE (derniere du fichier principal)
-        # et les 3 dernieres toutes sources confondues (recence croissante).
-        dernieres = missions[-3:]
+        # Les 3 missions les PLUS RECENTES (liste en ordre decroissant).
+        dernieres = missions[:3]
         for source, texte in dernieres:
             if "reactiver cerberus" in texte.lower() and "activer janus" not in texte.lower():
                 problemes.append({
@@ -173,13 +180,29 @@ def outils_p0_de_la_fiche(racine, agent):
 
 
 def usages_registre(racine):
-    """Lit le registre JSONL et retourne {agent: [outils,...]}."""
+    """Lit le registre JSONL et retourne {agent: [outils,...]}.
+
+    FIX v0.1.1 (2026-08-14, KO test-035) : ignore les entrees au mode
+    "script-temporaire" (protocole creation-scripts-temporaires) : un script
+    temporaire legitime (ex tmp-buffy/xxx.py) n est PAS un outil de la carte
+    et ne doit jamais etre signale OUTIL_HORS_CARTE.
+    FIX v0.1.2 (2026-08-14, demande utilisateur registre CUMULATIF) : le
+    registre devient la memoire des usages reels (plafond 100). Seuls les
+    usages de la FENETRE RECENTE (FENETRE_JOURS, defaut 1) sont verifies :
+    les usages historiques (avant les changements de cartes et de regles,
+    ex tester-lancer-non-regression avant la regle seul Janus) sont des
+    faits passes a ignorer. La comparaison porte sur la DATE calendaire :
+    un usage du jour (ou des FENETRE_JOURS-1 jours precedents) est verifie,
+    tout usage plus ancien est ignore."""
     chemin = os.path.join(racine, "cerveau-projet", "agents", "traces",
                           "registre-usages-outils.jsonl")
     usages = {}
     if not os.path.isfile(chemin):
         return usages
     try:
+        import datetime as _dt
+        limite = (_dt.date.today() - _dt.timedelta(days=FENETRE_JOURS - 1))
+        limite_s = limite.strftime("%Y-%m-%d")
         with io.open(chemin, encoding="utf-8", errors="replace") as fh:
             for ligne in fh:
                 ligne = ligne.strip()
@@ -189,6 +212,12 @@ def usages_registre(racine):
                     d = json.loads(ligne)
                 except ValueError:
                     continue
+                if d.get("mode") == "script-temporaire":
+                    continue
+                date = d.get("date", "")
+                jour = date[:10]
+                if len(jour) != 10 or jour < limite_s:
+                    continue  # usage historique (hors fenetre) : ignore
                 agent = d.get("agent", "")
                 outil = d.get("outil", "")
                 if agent and outil:

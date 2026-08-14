@@ -42,6 +42,7 @@ index, README.
 | **Atlas** | Explorateur | Explorer, chercher, documenter, analyser (information) |
 | **Themis** | Evaluatrice croisee | Audit, evaluation, coherence, combos d'audit |
 | **Clio** | Muse de l'histoire | Mettre a jour le README quand necessaire |
+| **Hygie** | Agent de nettoyage | Nettoyer le workspace (snapshot, detection par zone, suppression tracee) - SEUL habilite a TOUT le workspace et a supprimer sans demande prealable |
 
 > **REGLE** : Toute tache de dev/amelioration du cerveau-projet (outils,
 > parcours, fiches, protocoles, SPEC DES OUTILS comme spec-guider-parcours)
@@ -64,6 +65,82 @@ ecrivent dans les dossiers `pense-betes/`, `specs/`, `todos/`.
 > parcours, fiches, protocoles, ou spec des outils du cerveau). Il est reserve
 > a la phase "dev de nouveaux projets". La documentation des outils du cerveau
 > (spec-guider-parcours, spec des outils) appartient au groupe 2.
+
+---
+
+## Regles de gouvernance exclusives (IMMUABLE)
+
+Certaines actions sont **EXCLUSIVES a un agent** : aucun autre agent ne peut
+les executer, ni dans sa carte, ni dans ses declarations au registre. Ces
+exclusivites sont mecanisees par des garde-fous (test-0XX) qui verifient LES
+DEUX plans : la carte (le droit) et le registre (l'usage reel).
+
+### SEUL HYGIE SUPPRIME (IMMUABLE)
+
+> **REGLE** : **Hygie est le SEUL agent habilite a SUPPRIMER sans demande
+> prealable** (fichiers et dossiers). Aucun autre agent ne possede
+> `supprimer-fichier` / `supprimer-dossier` dans SA carte de decision ni ne
+> declare ces outils dans le registre d'usage. Hygie ne supprime QUE des
+> **residus PROUVES** (fichiers temporaires, rapports egare, fichiers de
+> version a la racine, dossiers residuels), jamais un fichier de travail
+> legitime sans preuve d'honnetete (snapshot + avis). La chaine complete est
+> documentee dans [protocole-nettoyage/](protocole-nettoyage/).
+>
+> **Garde-fou** : [test-045-hygie-garde-fou](../../tools/tester/tests/test-045-hygie-garde-fou/test-045-hygie-garde-fou.py)
+> (points 8b/8c : cartes + registre, point 8d : protocole documente).
+>
+> **Nuance (detection vs suppression)** : `detecter-residus` (detection) peut
+> etre utilise par d'autres agents en CONTROLE (ex: Janus c21 "Verifier les
+> impacts" - il DETECTE sans supprimer). L'exclusivite porte uniquement sur
+> la SUPPRESSION, jamais sur la detection.
+
+### SEUL JANUS LANCE LA NON-REGRESSION (IMMUABLE)
+
+> **REGLE** : **Janus est le SEUL agent habilite a lancer la non-regression
+> complete** (`tester-lancer-non-regression`). Aucun autre agent ne possede
+> cet outil dans SA carte ni ne le declare dans le registre. Les autres
+> agents ne lancent pas la suite : ils l'executent uniquement si Janus (ou
+> Cerberus via la carte de Janus) le leur demande comme etape d'une mission
+> de test.
+>
+> **Garde-fou** : [test-037-seul-janus-lance-non-regression](../../tools/tester/tests/test-037-seul-janus-lance-non-regression/test-037-seul-janus-lance-non-regression.py)
+> (points 2 + 2b : cartes + registre).
+
+### SEUL MORPHEUS ECRIT ET EXECUTE LES TESTS (IMMUABLE)
+
+> **REGLE** : **Morpheus est le SEUL agent habilite a CREER, ADAPTER et
+> EXECUTER les fichiers de test** (`tester/tests/test-XXX.py`). Aucun autre
+> agent ne cree, ne modifie ni ne lance les tests de la non-regression :
+> ceux-ci sont la propriete du testeur dedie. Les autres agents signalent
+> un besoin de test a Morpheus (ex: Vulcain active Morpheus apres avoir
+> cree/modifie un outil - la boucle est dans SA carte c8/c14) ; ils
+> n'ecrivent jamais de test eux-memes.
+>
+> **REGLE IMMUABLE DELEGATION (protocole-tests)** : la delegation de test
+> suit le cycle VULCAIN -> MORPHEUS -> VULCAIN (Morpheus reactive
+> l'agent qui l'a active apres son verdict).
+>
+> **Garde-fou** : [test-037-seul-janus-lance-non-regression](../../tools/tester/tests/test-037-seul-janus-lance-non-regression/test-037-seul-janus-lance-non-regression.py)
+> (point 3 : fiche morpheus REGLE ABSOLUE -- NON-REGRESSION JANUS ;
+> delegation documentee dans [protocole-tests/](protocole-tests/)).
+
+### SEUL CLIO MET A JOUR LE README (IMMUABLE)
+
+> **REGLE** : **Clio est le SEUL agent habilite a METTRE A JOUR le README**
+> (README.md public + readme-dev.md). Les outils de mise a jour
+> (`combos-maj-readme-massive`, `combo-maj-readme`, `mettre-a-jour-readme`)
+> sont EXCLUSIFS a SA carte : aucun autre agent ne possede ces outils ni ne
+> les declare dans le registre. Un agent qui constate un README obsolete
+> signale le besoin a Cerberus (qui active Clio) - il ne corrige pas
+> lui-meme.
+>
+> **Nuance (controle vs action)** : Themis CONTROLE la VERACITE des README
+> (case c30, responsabilite README - verifier AVANT de valider) sans les
+> mettre a jour. L'exclusivite porte sur la MISE A JOUR, jamais sur le
+> controle.
+>
+> **Garde-fou** : test-020-combos-clio (verifie la carte Clio) +
+> test-038-badge-readme-synchronise (badge synchro avec le compte reel).
 
 ---
 

@@ -137,8 +137,11 @@ def main():
     verifier("5c. Test EXECUTE (sortie EXEC-OK, vue via --verbose)", "EXEC-OK" in out and "-> sortie: EXEC-OK" in out)
 
     # --- 6. Navigation NON : c5 FIN PROTECTIONS MANQUANTES
+    # PIEGE WINDOWS (cf. point 5) : chemin en FORWARD SLASHES sinon
+    # shlex.split mange les backslashes et le fichier part a la racine.
+    fichier_test_x = os.path.join(tmp, "x.sh").replace("\\", "/")
     code, out = executer([PYTHON, MOTEUR_PY, COMBO,
-                          "--var", "fichier_test=" + os.path.join(tmp, "x.sh"),
+                          "--var", "fichier_test=" + fichier_test_x,
                           "--var", "contenu_test=t",
                           "--var", "commande_test=echo ok",
                           "--reponses", "c3=NON",

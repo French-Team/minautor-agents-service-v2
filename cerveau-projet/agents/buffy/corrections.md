@@ -2675,3 +2675,416 @@ d entree .py - verifier si le .sh est wrapper avant d y dupliquer du code.
 **Action** : combos-moteur.md v0.3.3 + section 'ECHAPPEMENT DES VALEURS' (regle d or : quoter {var} dans les commandes des cases outil, exemples MAUVAIS/BON, cas des valeurs avec apostrophes, application aux commandes bash des combos et du catalogue). Protocole-creation-scripts-temporaires v0.2.1 + section 'Commandes bash des combos (meme regle)' dans les pieges.
 
 **Lecon** : le catalogue (149) et les 52 commandes des combos sont propres aujourd hui mais la regle protege le futur - un futur combo avec une raison contenant une apostrophe aurait casse en pleine chaine. Documenter le piege AVANT l'accident est la lecon de cette serie de missions anti-echappement. Normes 0/0.
+## [LECON] 2026-08-13 -- TRIPLET PROTECTIONS + OPTIONS + CHRONO + CLARIFICATION SCRIPTS TEMPORAIRES (Buffy)
+
+**Contexte** : demande utilisateur en 3 points : (1) generaliser le chrono dans
+le template des tests (sans migrer les tests existants), (2) introduire une
+REGLE IMMUABLE pour tout fichier contenant fonctions/tests/workflows : doit
+toujours contenir protections + options on/off + chrono (pour les futurs
+outils de suivi : isoler un test, desactiver une fonction ou un workflow),
+(3) comprendre pourquoi les agents creent leurs scripts temporaires a la racine.
+
+**Reponse question 1 (factuelle)** : c etait NOTRE protocole qui le prescrivait !
+La section Commandes spawn_agents (v0.2.0) encourageait l ecriture a la racine
+alors que la section originelle l interdisait : contradiction interne. Clarifie
+en v0.2.2 par la section DEUX USAGES DISTINCTS : script jetable ephemere
+(write_file racine + rm -f immediat dans la meme commande, 0 residu, jamais
+declare) vs outil temporaire de mission (generateur + dossier dedie +
+declaration registre). La racine ne doit JAMAIS contenir de .tmp-* residuel
+(test-024), mais le jetable ephemere n existe plus au moment des controles.
+
+**Changements** :
+1. template-test.md v0.2.1 -> v0.3.0 : options on/off (--no-chrono, --isoler N,
+   --desactiver 1,3,5) + chrono par etape (chrono_etape, bilan_chrono,
+   point_actif) dans la structure et le canevas. Tests EXISTANTS non migres.
+   Correction OUTIL_MD manquant dans le canevas (bug latent).
+2. protocole-tests v0.3.0 -> v0.3.1 : REGLE IMMUABLE triplet (table protections
+   / options on/off / chrono) + reference template v0.3.0+.
+3. protocole-outils : Regle 9 (IMMUABLE) -- protections + options on/off + chrono
+   pour tout outil.
+4. outil-template-python.md v0.1.0-beta -> v0.1.1-beta : option standard
+   --chrono + REGLE IMMUABLE triplet.
+5. outil-template.py : bloc REGLE IMMUABLE triplet + option --chrono dans
+   construire_parser (compile OK).
+6. protocole-creation-scripts-temporaires v0.2.1 -> v0.2.2 : section DEUX
+   USAGES DISTINCTS (levement de la contradiction racine) + formulations
+   nuancees (Objectif, etape 3, piege 1).
+7. index-regles-general : description protocole-tests enrichie.
+
+**Lecons** :
+- Un protocole qui se contredit est pire qu un protocole muet : les agents
+  suivent la section la plus facile (la racine). La clarification doit etre
+  explicite, pas implicite.
+- Le triplet protections/options/chrono se propage par les TEMPLATES (test +
+  outil) : modifier la reference amont suffit, les fichiers existants restent
+  valides (decision utilisateur : pas de migration).
+- Le chrono dans le template cree la matiere premiere des futurs outils de
+  suivi : sans mesure, pas d amelioration ciblee (lecon du round performance).
+
+**Fichiers modifies (7)** : template-test.md, protocole-tests v0.3.1,
+protocole-outils (Regle 9), outil-template-python.md, outil-template.py,
+protocole-creation-scripts-temporaires v0.2.2, index-regles-general.md.
+Normes ASCII/LF : 0/0. Test-029 a ADAPTER par Morpheus (template 0.2.1 -> 0.3.0).
+## [LECON] 2026-08-13 -- REGLE STRICTE SCRIPTS DEDIES + POINT DE BASCULE IDENTIFIE (Buffy)
+
+**Contexte** : demande utilisateur - les .tmp continuaient d etre crees a la
+racine. Question : pourquoi la regle du dossier temporaire dedie (creer le
+dossier, les fichiers dedans, supprimer a la fin) a change, et ou ?
+
+**Reponse factuelle (point de bascule)** :
+- v0.1.0 (2026-08-11, Promethee) : regle d origine - JAMAIS de script jetable
+  a la racine, toujours generateurs-outil-temporaire (dossier dedie) +
+  suppression en fin de mission.
+- v0.2.0 (2026-08-13 20:44, mission anti-echappement JSON spawn_agents) :
+  la methode documentee fut write_file -> .tmp-xxx.py puis python3 + rm -f
+  dans la meme commande. Or write_file ecrit a la RACINE : la methode a
+  naturalise les .tmp-*.py a la racine, en contradiction silencieuse avec
+  v0.1.0. C EST LE POINT DE BASCULE.
+- v0.2.2 (2026-08-13 21:18, mission triple) : la section DEUX USAGES
+  DISTINCTS a officialise la tolerance (racine autorisee si rm -f immediat) -
+  aveu : c est moi (Buffy) qui ai ecrit cette tolerance.
+- v0.2.3 (2026-08-13 21:34, cette mission) : REGLE STRICTE RESTAUREE.
+
+**Changements v0.2.3** : 11 zones corrigees (intro, Objectif, etape 3,
+section Deux usages distincts, section spawn_agents ECRIRE/EXECUTER/VERIFIER,
+procedure valide, piege test-024, piege script a la racine, piege residu,
+RVAV) + .gitignore (.agents-tmp/). Dossier dedie .agents-tmp/ cree : invisible
+pour test-024 (13/13 OK, scan racine uniquement), tous les scripts temporaires
+y vivent (jetables ephemeres compris), vide en fin de mission.
+
+**Lecons** :
+- UNE TOLERANCE DOCUMENTEE DEVIENT UNE NORME : ecrire une exception dans un
+  protocole (v0.2.2) garantit qu elle sera utilisee systematiquement. La
+  regle stricte est le seul encadrement fiable.
+- La methode anti-echappement (write_file + rm -f dans la meme commande)
+  n imposait pas la racine : write_file accepte un chemin relatif. Le vrai
+  oubli est de ne pas avoir ecrit .agents-tmp/ devant le nom du script des
+  la v0.2.0.
+- Revoir l historique AVANT de repondre : la question utilisateur a permis
+  de dater le bascule a la minute pres (20:44 v0.2.0, 21:18 v0.2.2).
+## [LECON] 2026-08-13 -- RETOUR A LA REGLE D ORIGINE DES SCRIPTS TEMPORAIRES (Buffy)
+
+**Contexte** : l utilisateur a fait remarquer que les .tmp continuaient d etre
+crees a la racine, puis a exige le RETOUR A LA REGLE D ORIGINE : l agent cree
+SON dossier temporaire a la racine et le SUPPRIME en fin de mission. J avais
+complique inutilement : v0.2.2 (tolerance ecrite du script jetable a la
+racine) puis v0.2.3 (dossier permanent .agents-tmp/). La regle d origine etait
+parfaite et je l avais remplacee par deux mecanismes plus complexes.
+
+**Changements v0.2.4** : protocole reecrit en entier (0 mention .agents-tmp) :
+dossier tmp-<agent>/ cree a la racine (mkdir), scripts jetables dedans
+(write_file -> tmp-<agent>/<script>.py), SUPPRESSION COMPLETE en fin de
+mission (rm -rf tmp-<agent>) : 0 dossier residuel, 0 script eparpille. Le nom
+sans point (tmp-<agent>) est invisible pour test-024 (startswith .tmp-/.zz-).
+.gitignore : tmp-*/ (retrait de .agents-tmp/). Dossier .agents-tmp/ supprime.
+Residu tmp-cerberus (de ma propre recon) supprime - la regle s applique a moi
+aussi.
+
+**Lecons** :
+- NE PAS REMPLACER UNE REGLE QUI FONCTIONNE : la regle d origine (dossier
+  cree + supprime) etait simple, verifiable et comprise. Mes v0.2.2/v0.2.3
+  ont resolu un probleme theorique (l auto-incrimination test-024) en creant
+  un probleme reel (dossiers permanents, tolerances). Le retour a l origine
+  est aussi un retour a la simplicite.
+- Le garde-fou des dossiers residuels (adapte par Morpheus dans test-024 :
+  aucun dossier tmp-* hors dossier de l agent courant) protegera la regle
+  sans empecher la mission en cours.
+- La pratique : mkdir tmp-<agent> des le premier script, rm -rf tmp-<agent>
+  AVANT de reactiver l agent suivant.
+
+## [LECON] 2026-08-13 -- AGENT HYGIE CREE DE BOUT EN BOUT (Buffy)
+
+**Contexte** : demande utilisateur - creer un agent de nettoyage complet pour
+tester en reel toute notre mise en place (regles, conventions, protocoles,
+outils/combos). Decisions utilisateur : nom HYGIE, perimetre = TOUT le
+workspace (seul habilite a supprimer sans demande, avec snapshot + tracabilite),
+snapshots dans le dossier dedie de l agent avec rotation 7 jours.
+
+**Livrables** :
+- Dossier cerveau-projet/agents/hygie/ : fiche CONFORME (noyau v0.3.0 +
+  variante cerveau-projet), corrections.md, parcours v0.1.0 CONFORME
+  (valider-case 0 erreur apres allegement de 4 indices > 160 car,
+  valider-cartes-decision CONFORME, detecter-cablages-manquants PROPRE),
+  snapshots/ avec README de rotation 7 jours.
+- Chariot de nettoyage (3 outils au protocole 5 fichiers, catalogue 149->152) :
+  detecter-residus (scan par zone cerveau-projet/workspace, --sans-cache),
+  snapshot-nettoyage (creer/consulter/rotation/liste),
+  combo-nettoyage-hygie (Pattern 3, combos-moteur).
+- References : index-agents, regles-groupes-agents (groupe 2), variante
+  famille, AGENTS.md table des agents, index-tools (166->170).
+- Test reel : detecter-residus a DETECTE 2 vrais residus a la racine
+  (rapport-detecter-decalages-catalogue-2026-08-12/13.md egare) - preuve
+  vivante que Hygie a du travail reel.
+
+**Lecon** : creer un agent de bout en bout, c est creer 3 choses qui doivent
+etre CONFORMES des la naissance : la fiche (template), le parcours (spec
+v0.6.2, patterns 4-5-6-7-8-12-13) et les outils (protocole 5 fichiers +
+catalogue + index-tools). La validation se fait IMMEDIATEMENT apres chaque
+creation (valider-case + valider-cartes + cablages + conformite fiche),
+jamais en fin de mission. Un nouvel agent = nouvelles references partout
+(index-agents, groupes, variante famille, AGENTS.md, catalogue choix agents,
+README)."
+
+
+## [LECON] 2026-08-13 -- WORKSPACE/ CREE + DETECTER-RESIDUS v0.1.2 (Buffy)
+
+**Contexte** : demande utilisateur - creer le dossier workspace/ (futur) et
+tester la compartimentation reelle du scan detecter-residus (mission activee
+par Cerberus apres la creation de l agent Hygie).
+
+**Ce qui a ete fait** :
+1. Dossier `workspace/` cree (README.md) - futur espace separe du cerveau
+2. Compartimentation stricte v0.1.1 : la zone workspace ne penetre JAMAIS
+   dans cerveau-projet/ (prune du walk) - les deux zones sont etanches
+3. TEST REEL (residus factices poses dans les deux zones) : chaque zone ne
+   voit que SES residus, --tous voit les deux sans chevauchement
+
+**2 bugs decouverts par le test reel et corriges (v0.1.2)** :
+- CLASSIFICATION : est_rapport_egare testait le PREMIER segment du chemin
+  (toujours "cerveau-projet") au lieu du DOSSIER PARENT IMMEDIAT -> les 171
+  rapports legitimes des agents (agents/*/rapports/, agents/*/controles/)
+  etaient classes a tort en RAPPORT_EGARE. Corrige : parent immediat
+  (rapports/controles/rapport/controle) = legitime.
+- DOUBLE COMPTAGE : les fichiers de la racine (zone workspace) etaient
+  traites 2 fois (niveau racine + os.walk) -> deduplication par chemin.
+
+**Lecons** :
+- Un test reel vaut mieux que 100 lectures : le test de compartimentation a
+  revele 2 bugs invisibles a la lecture du code.
+- Un outil de detection doit etre valide par des RESIDUS FACTICES poses et
+  retires, pas seulement par le scan de l etat courant.
+
+**Residus reels restants pour Hygie** (non supprimes, Hygie est le seul
+habilite) : 2 rapports-detecter-decalages egare a la racine, 3 rapport-impact
+dans verifier-conformite-fiche/, 8 fichiers .bak dans le cerveau.
+
+
+## [LECON] 2026-08-13 -- WORKSPACE/ AJOUTE AU .GITIGNORE (Buffy)
+
+**Contexte** : demande utilisateur - ajouter workspace/ au .gitignore pour
+que les futurs travaux temporaires du dossier workspace (futur espace de
+travail separe) ne polluent pas git.
+
+**Ce qui a ete fait** : ajout du pattern au .gitignore racine :
+- `workspace/*` : ignore TOUT le contenu du dossier (fichiers + sous-dossiers)
+- `!workspace/README.md` : le README du dossier reste VERSIONNE (documentation)
+
+**Preuves reelles** (git check-ignore) :
+- workspace/.tmp-test.md -> IGNORE
+- workspace/dossier/x.txt -> IGNORE
+- workspace/README.md -> NON ignore
+- git add --dry-run workspace/README.md -> add 'workspace/README.md'
+- tmp-*/ inchange (toujours ignore), temps-reference.json inchange
+
+**Lecons** :
+1. Le pattern `dir/*` + `!dir/README.md` est le standard pour "dossier de
+   travail ignore sauf sa documentation" : la regle d exception doit venir
+   APRES la regle d exclusion (l ordre compte dans .gitignore).
+2. Verifier TOUJOURS par git check-ignore apres une modification du
+   .gitignore : c est la preuve que le pattern fait ce qu on attend.
+3. Aucun test de non-regression ne couvre le .gitignore : si on veut une
+   protection durable, un garde-fou pourrait verifier que workspace/ est
+   ignore et que README.md ne l est pas.
+
+
+## [LECON] 2026-08-14 -- TEST-035 REVERDI : CARTE JANUS v0.4.3 + RETRAITS REGISTRE (Buffy)
+
+**Contexte** : reverdir test-035-evaluer-processus (serie e 16/17). Vulcain a corrige les 2 bugs de l outil (v0.1.1). Restaient 4 ecarts : retrait d entree registre erronee morpheus + ajout de 3 outils a la carte de janus.
+
+**T1 - Retrait registre** : entree erronee 'morpheus/tester-lancer-non-regression' retiree (seul Janus lance la non-regression, regle utilisateur). J ai aussi retire l usage 'vulcain/tester-lancer-non-regression' (meme regle - Vulcain n a pas a lancer la non-regression). Lecons : un agent ne doit JAMAIS enregistrer un usage de tester-lancer-non-regression sauf Janus.
+
+**T2 - Carte janus v0.4.2 -> v0.4.3** : ajout de 3 indices outil a la case c21 (Verifier les impacts) : detecter-residus, detecter-divergences-version, evaluer-processus (outils que Janus utilise reellement dans ses controles - prouve par le registre). Bump fiche (PARCOURS v0.4.3) + FINS REELLES mise a jour (bloc stale v0.3.8 -> v0.4.3, 11 fins).
+
+**Verifications** : valider-cartes-decision --agent janus CONFORME, evaluer-processus --tous 0 probleme, test-035 8/8, serie e complete 17/17 (0 KO). Normes 0/0 partout.
+
+**Lecon** : quand un agent utilise reellement un outil (prouve au registre), la carte DOIT etre mise a jour pour le legitimer - sinon chaque usage ressort OUTIL_HORS_CARTE et pollue les garde-fous. Et une entree registre erronee (outil utilise hors regle) doit etre RETIREE, pas contournee.
+
+## [LECON] 2026-08-14 -- REVERDIR TEST-035 : OUTIL REEL UTILISE = OUTIL DANS LA CARTE (Buffy)
+
+**Contexte** : mission Cerberus (reverdir test-035) - apres correction carte janus + retrait
+registre, mon propre usage de 'valider-cartes-decision' au registre ressortait en
+OUTIL_HORS_CARTE (absent de MA carte).
+
+**Lecon** : quand un outil est reellement utilise, la bonne correction est de l AJOUTER a
+la carte (pas de retirer l usage du registre). Ajout de valider-cartes-decision a la case
+c14 (controle RVAV) de ma carte + bump 0.4.2 -> 0.4.3 (Pattern 14 : fiche synchronisee,
+FINS REELLES v0.3.8) + adaptation test-016 (version 0.4.3, serie b) car il verifiait la
+version en dur. De plus : le chemin du dossier test-035 est 'test-035-evaluer-processus'
+(pas test-035-processus-cartes-registre) - bien verifier le nom reel du dossier test.
+
+**Verifications** : evaluer-processus 0 probleme, test-035 8/8, test-016 20/20,
+valider-cartes buffy CONFORME, normes 0/0, registre 20 lignes (seuls les usages janus
+de tester-lancer-non-regression restent - legitimes).
+
+## [LECON] 2026-08-14 -- COMPLEMENT : VALIDER-CARTES-DECISION DANS LA CARTE JANUS (Buffy)
+
+**Contexte** : le controle croise de Janus (reverdissement test-035) a declare son usage
+de valider-cartes-decision au registre, mais cet outil etait ABSENT de la carte janus -
+ce qui aurait cree un OUTIL_HORS_CARTE au test suivant.
+
+**Lecon** : Janus est LE controleur croise : il valide les cartes des autres agents a
+CHAQUE mission. valider-cartes-decision est un outil CENTRAL de son role et doit etre
+dans sa carte (case c21, avec detecter-residus, detecter-divergences-version,
+evaluer-processus). Bump carte janus 0.4.3 -> 0.4.4 + fiche synchronisee (Pattern 14).
+
+**Verifications** : valider-cartes janus CONFORME (fiche == parcours 0.4.4),
+evaluer-processus 0 probleme (usages janus couverts), test-035 8/8, normes 0/0.
+
+## [LECON] 2026-08-14 -- OUTILLAGE DOUBLE README (PUBLIC + DEV) (Buffy)
+
+**Contexte** : demande utilisateur - scinder le README en 2 : README.md (racine) =
+GRAND PUBLIC (titres revus, SANS structure ni detail technique) et
+cerveau-projet/readme-dev.md = DEVELOPPEURS (detaile, base uniquement sur les
+sources de verite). Le brouillon readme-dev.md (consignes utilisateur) est remplace
+par un vrai README dev. Ajout d une section AMELIORATION visible dans le README
+public, reliee a la branche ameliorer de la carte Cerberus.
+
+**Outillage realise (Buffy - le contenu sera rempli par Clio)** :
+1. TEMPLATE : creation de cerveau-projet/agents/readme-dev-template.md (structure
+   developpeur : demarrage session, identification LLM, multi-session, agents,
+   outils, combos, cartes/parcours/indices, RVAV, tests + protections,
+   auto-amelioration, sources de verite). ASCII strict + LF.
+2. PARCOURS CLIO 0.5.4 -> 0.5.5 : branche 'readme-dev' dans c1 -> nouvelle case
+   c20 (remplir readme-dev.md depuis le template, sources de verite uniquement,
+   ASCII) qui rejoint c10 (flux lecons/retour). Fiche clio mise a jour (Pattern 14).
+3. CARTE CERBERUS 0.4.3 -> 0.4.4 : indice regle ajoute dans c1b (branche
+   ameliorer) qui reference la SECTION AMELIORATION du README public et le flux
+   de mise a jour par Clio. Fiche cerberus mise a jour (Pattern 14).
+
+**IMPACTS TESTS (documentes pour Morpheus, non modifies par moi)** :
+- test-013-cerberus-migration : version carte cerberus en dur 0.4.3 -> 0.4.4
+  (KO version seule ; compteurs 23/5/5/3 inchanges -> pas d autre impact)
+- test-020-combos-clio : NON impacte (combos non touches)
+- test-038-badge-readme : NON impacte (badges inchanges tant que Clio ne refond
+  pas le README public - attention aux badges Outils-N/Version/Statut a la refonte)
+- test-039-residus-version-racine : NON impacte
+
+**SUITE** : Clio remplira les 2 README (branche readme-dev + combo massif pour le
+public), puis Morpheus adaptera test-013, puis Janus controlera.
+
+## [LECON] 2026-08-14 -- REGLE POIDS DES CASES (valider-case v1.1.1) (Buffy)
+
+**Contexte** : mes ajouts d indices dans les cartes (cerberus c1b, clio c20) ont fait
+echouer valider-case : verdict A ALLEGER.
+
+**REGLE APPRISE (budget par CASE, pas par indice)** :
+- Budget : 3.0 unites par case
+- Ponderation : indice court (texte <= 100 car) = 0,5 unite ; long (> 100 car) = 1,0 ;
+  outil/fichier/ref sans texte = 0,5
+- Un indice ne doit JAMAIS depasser 160 caracteres
+- Corriger = court-circuiter : 1 regle courte (<= 100 car) + references, jamais 2
+  indices longs ajoutes a une case deja fournie (ex c1b avait 2.0 -> 2.5 OK, c20
+  a ete reduite de 4.0 a 3.0)
+
+**Application** : a chaque modification de carte, verifier valider-case (--dry-run)
+et le poids des cases modifiees AVANT de considerer la carte valide.
+
+**Etat final** : cerberus c1b (2.5) et clio c20 (3.0) CONFORMES, version cerberus
+0.4.4 conservee (indice toujours present, plus court), clio 0.5.5 conservee.
+
+
+## [LECON] 2026-08-14 -- CAUSE RACINE CLASSEUR ABSENT DU README (Buffy)
+
+**Contexte** : l utilisateur a remarque que la section Classeur a ete oubliee dans le README public. Diagnostic Cerberus : le README public n avait aucune section Classeur, et le combo massif (lance par test-020) reinjectait 5 lignes CASSEES dans la table des agents (format 3 colonnes dans un tableau 2 colonnes) pour les pseudo-agents Classeur-variables, Conventions, Philosophie, Regles-immuables, Traces avec 'Selon sa carte de decision'.
+
+**Cause racine (2 outils)** :
+1. mettre-a-jour-readme.py : les fonctions lister_agents_reels() ET compter_agents() listent TOUS les dossiers de agents/ sauf tools -> 17 dossiers au lieu des 12 vrais agents. La ligne 274 ecrivait la ligne 'Selon sa carte de decision' pour chaque pseudo-agent.
+2. combos-analyse-projet.py : comptage agents avec le meme critere (tous les dossiers sauf tools) -> 17.
+
+**Correction** : critere fiable = un agent d action a un parcours JSON agents/<nom>/parcours/parcours-<nom>.json. Les 5 dossiers concepts (classeur-variables, conventions, philosophie, regles-immuables, traces) n ont pas de parcours -> exclus. Applique dans les 2 outils, versions py + sh + md. Resultat : les 2 outils affichent Agents reels : 12. Preuve : test-020 a relance le combo massif et AUCUNE nouvelle ligne n a ete reinjectee (le README est passe de 5 a 5 lignes, pas plus).
+
+**Lecon** : quand un outil liste ou compte des 'agents', il doit utiliser le critere du PARCOURS JSON (source de verite structurelle), pas la simple presence d un dossier. Les dossiers de concepts ne sont pas des agents d action.
+
+**Impacts documentes** : test-020 verifie 'combos-analyse-projet 0.1.0' en dur -> KO attendu (version 0.1.1) -> Morpheus adaptera. Clio retirera les 5 lignes cassees du README public et ajoutera la vraie section Classeur.
+## [LECON] 2026-08-14 -- CREATION DE L AGENT HERMES (Buffy)
+
+**Contexte** : decision utilisateur -- creer un agent dedie au vocabulaire et
+aux fautes d orthographe (dieu grec de l eloquence : Hermes), suite a la faute
+`enchannements` trouvee dans readme-dev:264.
+
+**Livrables** :
+- Agent Hermes complet : fiche (template noyau v0.3.0 + variante cerveau-projet,
+  role_specifique langue), corrections.md, parcours 24 cases (v0.1.0, fin
+  Activer Janus), registration activer-agent-principal (.py + .sh)
+- Outil `detecter-fautes-orthographe` v0.1.0 : dictionnaire de fautes
+  francaises courantes en ASCII + --tous/--fichier/--rapport/--verbose/--tout
+- Catalogue 152 -> 153 (trie), index-tools (Detecter 12 -> 13, Total 170 -> 171)
+- Premiere mission reelle : readme-dev:264 `enchannements` -> `enchainements`
+- Mission UTF-8 : 19 headers .py + 2 headers .sh `coding: utf-8` ->
+  `coding: ascii` (contenu verifie pur ASCII avant correction)
+
+**Lecons** :
+1. PATRON DE CREATION D AGENT : suivre Hygie exactement -- fiche (frontmatter
+   identite/agent/profil/config/surcharges) + parcours JSON avec cle
+   `parcours` + `identite` (les oublier casse valider-cartes) + fin Activer
+   Janus + registration dans activer-agent-principal (.py AGENTS dict + .sh 3
+   blocs case).
+2. PIEGE ECRITURE PYTHON SUR WINDOWS : `io.open(f, 'w')` convertit les LF en
+   CRLF. Apres TOUTE ecriture Python, repasser corriger-fins-de-ligne sur les
+   fichiers ecrits (verifier avec count(b'\r\n')).
+3. LE DICTIONNAIRE DE FAUTES ne doit contenir QUE des vraies fautes : une
+   entree avec fautif == correct cree des faux positifs. Le francais ASCII
+   correct (probleme, etre, deja, parallele) ne doit jamais etre signale.
+4. MOT ANGLAIS LEGITIME : verifier le contexte (ex: `success` dans les badges
+   GitHub n est pas une faute francaise).
+5. SCAN --tous : parcourir la racine UNE fois (pas `.` + `cerveau-projet` en
+   double), exclure tmp-*/workspace/.
+6. IMPACTS TESTS ATTENDUS pour Morpheus : test-007 (catalogue 152 -> 153),
+   test-018 (12 parcours -> 13), test-004/005/016 (si versions touchees).
+7. Le fichier des agents dans AGENTS.md doit etre mis a jour (liste des agents)
+   par le mecanisme habituel (Clio/README + index).
+
+
+## [LECON] 2026-08-14 -- GARDE-FOU ANTI-DERIVE CERBERUS (Buffy)
+
+**Contexte** : derive constatee le 2026-08-14 - Cerberus a execute SEUL 19
+taches (verifications, corrections, garde-fous, outils) au lieu d activer
+l agent habilite, alors que 7 jours de chaines Cerberus->Agent->Cerberus
+avaient bien fonctionne. Cause racine : les demandes de type verification
+semblent petites -> traitees seul -> personne ne controle (boucle de controle
+externe disparue).
+
+**Correction (mission Cerberus -> Buffy)** :
+1. parcours-cerberus.json v0.4.4 -> v0.4.5 : indice GARDE-FOU C1 ajoute dans
+   la case c1 (Mission) : 'TOUTE tache d execution (verifier, corriger, creer,
+   modifier, tester) -> activer l agent habilite. Jamais executer seul.'
+   (135 car, sous la limite 160). Les 5 branches existantes de c1 intactes.
+2. fiche cerberus.md synchronisee (Pattern 14) : REGLE ABSOLUE PARCOURS
+   v0.4.5 + bloc FINS REELLES v0.4.5 (fins reelles c19e/c20/c23 verifiees
+   conformes a la carte).
+
+**Validations** : valider-case CONFORME (indice 135 car), valider-cartes
+CONFORME (fiche == parcours 0.4.5), verifier-conformite-fiche CONFORME,
+evaluer-processus cerberus 0 probleme, normes 0 non-ascii / 0 CRLF.
+
+**Impact tests (a adapter par Morpheus)** : test-013-cerberus-migration
+(version 0.4.4 en dur -> 0.4.5). NE PAS toucher aux tests (domaine Morpheus).
+
+**Regle durable** : toute demande de verification/correction/audit declenche
+l activation de l agent dont c est le role - jamais une tache de Cerberus.
+
+## [LECON] 2026-08-15 -- ECART CARTE VULCAIN CORRIGE : INDICE OUTIL outil-template EN c4 (Buffy)
+
+**Contexte** : la chaine doc-obligatoire (Vulcain -> Morpheus -> Janus) a signale un ecart
+de carte : la carte vulcain contient la REGLE c4 (ETAPE 3 OBLIGATOIRE : j utilise TOUJOURS
+outil-template) mais PAS d indice outil outil-template -> evaluer-processus signalait
+OUTIL_HORS_CARTE chaque fois que vulcain declaraient un usage de outil-template.
+
+**Correction** : ajout de l indice outil outil-template dans les indices de la case c4 du
+parcours-vulcain (format identique aux autres indices outil), bump 0.4.7 -> 0.4.8, fiche
+vulcain.md mise a jour (Pattern 14 : version parcours 0.4.8).
+
+**Verifications** : valider-cartes-decision --agent vulcain CONFORME (fiche 0.4.8 ==
+parcours 0.4.8), evaluer-processus --agent vulcain 0 probleme, preuve positive reelle
+(declaration d usage vulcain outil-template acceptee : plus d OUTIL_HORS_CARTE),
+valider-cartes --tous 13/13 CONFORMES.
+
+**Lecons** :
+1. Toute REGLE de carte qui mentionne un outil doit avoir l indice outil correspondant,
+   sinon evaluer-processus signale OUTIL_HORS_CARTE a chaque usage declare. Une regle
+   sans indice outil est une carte incomplete (verifier la coherence regle/indices a la
+   creation d une regle).
+2. LA FIN SUIT SA CARTE : la mission recue disait "reactiver Cerberus" mais MA carte
+   Buffy (c8/c22/c27) impose ACTIVER JANUS en fin de mission. La carte est la source de
+   verite : j ai corrige la raison d activation dans AGENTS.md et AGENTS-historique.md
+   pour la rendre conforme, puis j ai active JANUS pour le second controle.

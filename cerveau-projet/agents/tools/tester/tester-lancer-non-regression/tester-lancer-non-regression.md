@@ -1,7 +1,7 @@
 # tester-lancer-non-regression
 
 **Categorie** : Tester
-**Version** : 0.2.0
+**Version** : 0.3.1
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-11
@@ -15,10 +15,14 @@ et produit un bilan OK/KO fiable avec comptage robuste des `[OK]`/`[KO]`.
 
 Remplacer les **scripts temporaires de non-regression** (`.zz-nonreg-*.py`)
 que les agents ecrivaient a la main. Une commande, un bilan fiable, et le
-**registre d'usage protege** : par defaut l'outil ARCHIVE le registre courant
-vers `registre-usages-outils.historique.jsonl` (append, jamais ecrase) puis le
-vide (`--no-journal`) - la memoire des declarations passees est conservee et
-le detecteur-usage-scripts-temporaires reste verifiable.
+**registre d'usage en rotation** : par defaut l'outil applique une ROTATION
+(`--no-journal`) qui CUMULE les usages reels des agents (memoire longue,
+decision utilisateur 2026-08-14) jusqu'a un plafond de **100 entrees
+normales** -- les plus anciennes sont retirees au-dela, les entrees
+`script-temporaire` sont toujours preservees et ne comptent pas dans le
+plafond. Le registre est donc la SOURCE DE VERITE des usages (plus jamais
+vide) : evaluer-processus (test-035) ne verifie que la fenetre recente
+(7 jours) pour ignorer les usages historiques.
 
 ## Chrono et reference de temps (round 11)
 
@@ -111,6 +115,7 @@ python3 tester-lancer-non-regression.py --journal
 | Option | Description |
 |---|---|
 | `--series <a,b,c,d,e,tous>` | Ne lancer qu'une serie (defaut : tous) |
+| `--agent <nom>` | Nom de l'agent qui lance les tests : journalise CHAQUE test execute dans `registre-tests.jsonl` (date, agent, serie, test, verdict, duree) - sans `--agent`, aucune trace |
 | `--workers <N>` | Nombre de workers paralleles (defaut : min(cpu_count, 16)) |
 | `--parallele` | Mode pool de workers (defaut : distribue les tests, longs d abord) |
 | `--serial` | Force le mode serie complet (ancien comportement) |
@@ -118,7 +123,7 @@ python3 tester-lancer-non-regression.py --journal
 | `--rebase-reference` | Force la mise a jour de la reference de temps |
 | `--no-reference` | Ne pas lire/ecrire la reference (sous-processus paralleles) |
 | `--tests <a,b>` | Filtrer par noms de tests (separes par des virgules) |
-| `--no-journal` | Archive le registre dans l'historique + vide le courant (par defaut) |
+| `--no-journal` | Rotation du registre avant les tests (cumul <= 100 usages normaux, par defaut) |
 | `--journal` | Ne touche pas au registre |
 | `--rapport <f>` | Ecrit le bilan markdown dans un fichier |
 | `--version` | Affiche la version |
@@ -133,11 +138,13 @@ python3 tester-lancer-non-regression.py --journal
 
 | Version | Date | Changement |
 |---|---|---|
+| 0.3.1 | 2026-08-14 | TRI du registre-tests par date/heure DECROISSANT apres chaque ajout (le plus recent en premier, meme regle que registre-usages-outils) - lignes non-JSON conservees en fin. FIX (controle Janus) : rotation_registre re-trie globalement par date apres rotation (les scripts temporaires gardes en tete cassaient le tri global du registre-usages) |
+| 0.3.0 | 2026-08-14 | REGISTRE-TESTS : option `--agent <nom>` - chaque test execute est journalise dans `cerveau-projet/agents/traces/registre-tests.jsonl` (date, agent, serie, test, verdict OK/KO/ERREUR, duree secondes) sur les 2 chemins (serie et pool). Registre distinct de `registre-usages-outils.jsonl`. Sans `--agent` : aucune trace |
 | 0.2.0 | 2026-08-13 | Round 12 : POOL DE WORKERS (defaut) - tests tries par duree decroissante distribues sur N workers (--workers, defaut min(cpu,16)), garde-fous globaux (test-023/024/025/027) en serie finale, anti-deadlock pipe (sortie vers fichier temp unique par test). Gain reel mesure : 119,9s -> 91,2s (-24%) |
 | 0.1.6 | 2026-08-13 | Round 11b : si le nombre de tests change, nouvelle base enregistree sans SIGNAL (anti-faux positif) |
 | 0.1.5 | 2026-08-12 | Round 11 : chrono global (debut premiere serie -> fin derniere) + reference de temps persistee (temps-reference.json, mise a jour auto quand meilleur, SIGNAL si depassement > --seuil, --rebase-reference, --no-reference sous-processus) |
 | 0.1.4 | 2026-08-12 | Protection STOP --fail-fast : des le premier test KO, la suite est stoppee (tests restants non lances) |
 | 0.1.3 | 2026-08-12 | Round 10b : le mode parallele devient le DEFAUT (--serial force l'ancien mode serie) + le filtre --tests est herite par les sous-processus paralleles |
 | 0.1.2 | 2026-08-12 | Round 10 : series thematiques (--series a/b/c/d/tous) + execution parallele (--parallele) - A/B/C en sous-processus isoles (--journal), D en serie en dernier, registre protege par le parent, hors-serie signale |
-| 0.1.1 | 2026-08-12 | Round 8 : archive au lieu de purger (registre-usages-outils.historique.jsonl, append dedoublonne) - la memoire des declarations est conservee |
+| 0.1.1 | 2026-08-12 | Round 8 : archive au lieu de purger (registre-usages-outils.historique.jsonl) - SUPPRIME le 14/08 (decision utilisateur : un seul registre) |
 | 0.1.0 | 2026-08-11 | Creation : non-regression complete, --no-journal protege le registre |

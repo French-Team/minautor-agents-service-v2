@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-clio",
   "agent": "clio",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Clio : corriger le README avec plusieurs possibilites selon l'AMPLEUR (PETITE MAJ via combo-maj-readme, GROSSE MAJ via combos-maj-readme-massive, analyse via combos-analyse-projet, verifier, journal, insertion manuelle si nouvelle categorie, ASCII, lecons). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
  },
@@ -78,6 +78,10 @@
     {
      "reponse": "autre",
      "vers": "c13"
+    },
+    {
+     "reponse": "readme-dev",
+     "vers": "c20"
     }
    ]
   },
@@ -600,6 +604,42 @@
    "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
    "titre": "Retour de Themis recu ?",
    "type": "controle"
+  },
+  "c20": {
+   "titre": "Remplir readme-dev.md depuis le template",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "SOURCE DE VERITE : chaque affirmation doit etre verifiable (AGENTS.md, tools/, regles-immuables/)."
+    },
+    {
+     "type": "regle",
+     "texte": "DOUBLE README : README.md = grand public ; readme-dev.md = developpeurs (depuis le template)."
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/readme-dev-template.md"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/readme-dev-template.md",
+     "raison": "Le template de reference a suivre pour structurer readme-dev.md"
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/readme-dev.md",
+     "raison": "Le fichier a remplir (remplace le brouillon de consignes)"
+    },
+    {
+     "type": "regle",
+     "texte": "ASCII strict + LF pur (valider-conformite-ascii)."
+    }
+   ],
+   "suivant": "c10"
   }
  }
 }

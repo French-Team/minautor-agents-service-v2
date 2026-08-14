@@ -299,6 +299,13 @@
      "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier> (UN fichier par appel)",
      "nom": "valider-conformite-ascii",
      "type": "outil"
+    },
+    {
+     "catalogue": "valider-cartes-decision",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-cartes-decision/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --agent <agent>",
+     "nom": "valider-cartes-decision",
+     "type": "outil"
     }
    ],
    "question": "La modification respecte-t-elle la boucle RVAV complete (nommage, liens, ASCII, coherence) ?",
@@ -1234,6 +1241,6 @@
   "case_depart": "c0",
   "description": "v0.3.2 : REGLE JANUS MATERIALISEE (decision utilisateur) - les fins de creation c8/c22/c27 deviennent FIN - Activer Janus : Buffy passe par le second controle Janus apres TOUTE mission de creation/modification, MEME SANS MODIFIER DU CODE ; Janus reactive Cerberus avec son verdict. Parcours (jeu de piste) des missions de Buffy : creer/modifier les fichiers du cerveau, creer un agent/protocole, controler le cerveau, deleguer (Athena/Vulcain), sous-missions. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.1 : chemins combos (Pattern 3, spec-guider-parcours v0.2.4) : controler c28 combo-sante-tableaux, modifier c13b combo-controle-impacts, autre c34b combo-activation. v0.2.2 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : modifier c13c question erreurs hors mission (OUI c13d fin signalement a Cerberus / NON c14 flux principal).",
   "nom": "parcours-buffy",
-  "version": "0.4.2"
+  "version": "0.4.3"
  }
 }

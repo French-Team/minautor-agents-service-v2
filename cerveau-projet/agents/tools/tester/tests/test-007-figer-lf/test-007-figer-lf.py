@@ -27,8 +27,8 @@ Cas couverts:
  10. ASCII 0 sur les 4 fichiers outils
  11. valider-nommage --type outil OK
  12. Parite py/sh : memes resultats (wrapper pur)
-13. Catalogue : JSON valide, 149 commandes triees, entree presente
-14. index-tools : total 166, categorie Corriger 6
+13. Catalogue : JSON valide, 153 commandes triees, entree presente
+14. index-tools : total 171, categorie Corriger 6
  15. Protection : aucun fichier residuel dans le workspace
 
 Usage:
@@ -229,27 +229,37 @@ def main():
         with open(CATALOGUE, encoding="utf-8") as f:
             cat = json.load(f)
         noms = [e["nom"] for e in cat["commandes"]]
-        ok_cat = (len(noms) == 149 and noms == sorted(noms)
+        ok_cat = (len(noms) == 154 and noms == sorted(noms)
+                  and "executer-script-temporaire" in noms
                   and "corriger-fins-de-ligne" in noms
                   and "test-022-budget-pondere" in noms
                   and "test-023-grep-budget-pondere" in noms
                   and "enregistrer-usage-outil" in noms
-                  and "detecter-cablages-manquants" in noms)
-        verifier("13. catalogue JSON valide 149 trie + entree enregistrer-usage-outil", ok_cat,
+                  and "detecter-cablages-manquants" in noms
+                  and "detecter-residus" in noms
+                  and "detecter-fautes-orthographe" in noms
+                  and "snapshot-nettoyage" in noms
+                  and "combo-nettoyage-hygie" in noms)
+        verifier("13. catalogue JSON valide 154 trie + entree enregistrer-usage-outil", ok_cat,
                  "nb=%d" % len(noms))
     except Exception as e:
-        verifier("13. catalogue JSON valide 147 trie + entree enregistrer-usage-outil", False, str(e))
+        verifier("13. catalogue JSON valide 152 trie + entree enregistrer-usage-outil", False, str(e))
 
     # 14. index-tools
     try:
         with open(INDEX_TOOLS, encoding="utf-8") as f:
             idx = f.read()
-        verifier("14. index-tools total 166 + Corriger 6",
-                 "| **Total** | **166** |" in idx and "| Corriger | 6 |" in idx
+        verifier("14. index-tools total 172 + Corriger 6",
+                 "| **Total** | **172** |" in idx and "| Corriger | 6 |" in idx
+                 and "executer-script-temporaire" in idx
                  and "corriger-fins-de-ligne" in idx
-                 and "detecter-cablages-manquants" in idx)
+                 and "detecter-cablages-manquants" in idx
+                 and "detecter-residus" in idx
+                 and "detecter-fautes-orthographe" in idx
+                 and "snapshot-nettoyage" in idx
+                 and "combo-nettoyage-hygie" in idx)
     except OSError as e:
-        verifier("14. index-tools total 166 + Corriger 6", False, str(e))
+        verifier("14. index-tools total 168 + Corriger 6", False, str(e))
 
     # 15. Protection : aucun residu de CE test dans le workspace
     shutil.rmtree(tmp, ignore_errors=True)

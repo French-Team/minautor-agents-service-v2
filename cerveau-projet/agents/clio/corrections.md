@@ -166,3 +166,41 @@ apres un combo. Les evolutions de fond (regles, garde-fous) ne sont pas
 detectees par l analyse de compteurs : une grosse MAJ doit aussi relire
 les sections narratives.
 
+## [LECON] 2026-08-13 -- README SYNCHRONISE APRES L AGENT HYGIE (Clio)
+
+**Contexte** : mission apres la creation de l agent de nettoyage Hygie et de
+son chariot (detecter-residus, snapshot-nettoyage, combo-nettoyage-hygie).
+
+**Corrections appliquees au README** :
+- badge Outils 128 -> 131 (alignement sur la realite via combos-analyse-projet)
+- table agents : + Hygie (12 agents, seul habilite a tout le workspace)
+- boite a outils 128 -> 131 outils : Detecter 12 (detecter-residus),
+  Nettoyer 3 (snapshot-nettoyage), Combos 21 (combo-nettoyage-hygie)
+- compteurs : 44 tests, 12 cartes
+- version-readme.txt 0.2.0 -> 0.3.0 (grosse MAJ : nouvel agent + 3 outils)
+
+**Ecart pre-existent corrige** : la table Combos de index-tools omettait
+combo-controle-buffy et combo-maj-readme (19 listes vs 21 reels) - l index
+doit TOUJOURS etre re-compte sur les dossiers reels (lister-dossiers), jamais
+recopie.
+
+**Lecon** : un nouvel agent entraine TOUJOURS des mises a jour en cascade du
+README (table agents, table outils, badge, compteurs, version). La source de
+verite est la REALITE (dossiers reels), mesuree par combos-analyse-projet :
+badge OK = 131 == 131, verdict README A JOUR.
+
+## [LECON] 2026-08-14 -- DOUBLE README (PUBLIC + DEV) + INCIDENT ECRASEMENT (Clio)
+
+**Verdict** : VALIDE (verifie par Janus - non-regression 46/46, badges v1.0.0, normes 0/0)
+## [LECON] 2026-08-14 -- SECTION CLASSEUR AJOUTEE AU README PUBLIC (Clio)
+
+**Verdict** : VALIDE (cause racine corrigee par Buffy, validee par Janus, section ajoutee)
+## [LECON] 2026-08-14 -- SECTION FONDATIONS DU SYSTEME DANS LE README PUBLIC (Clio)
+
+**Verdict** : VALIDE (section ajoutee, normes ASCII + LF propres)
+## [LECON] 2026-08-14 -- SECTION COMMENCER DU README PUBLIC REEXPLIQUEE (Clio)
+
+**Verdict** : VALIDE (guide reel verifie, sans jargon)
+## [LECON] 2026-08-14 -- HERMES AJOUTE AUX DEUX README (Clio, via reprise Cerberus)
+
+**Verdict** : VALIDE (relais Cerberus - README public + readme-dev a jour, badges 132/132, verifie par le controle croise)

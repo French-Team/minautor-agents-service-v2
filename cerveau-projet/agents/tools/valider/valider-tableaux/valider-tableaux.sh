@@ -94,7 +94,7 @@ DETAIL_PY=0
 # Logique Python (fiable pour le parsing des tableaux markdown)
 # ============================================================
 python3 - "$CIBLE" "$DETAIL_PY" "$RACINE" <<'PYEOF'
-# -*- coding: utf-8 -*-
+# -*- coding: ascii -*-
 import io, re, os, sys, glob
 
 cible = sys.argv[1]

@@ -18,7 +18,7 @@ Contexte (demande utilisateur 2026-08-13) :
     temp unique - un Popen(stdout=PIPE) non lu se bloque au-dela de 64 Ko.
 
 Invariants verifies :
-  1. --version affiche v0.2.0
+  1. --version affiche v0.3.1
   2. Le mode par defaut utilise le pool (Pool de workers dans la sortie)
   3. --serial ou --workers 1 force le mode serie (pas de Pool)
   4. GARDE_FOUS_GLOBAUX identifie test-023/024/025/027 dans le code
@@ -90,10 +90,10 @@ def main():
     global NB_POINTS, NB_OK, NB_KO
     print("=== test-032 : pool de workers non-regression ===")
     try:
-        # 1. Version du lanceur (round 12 : v0.2.0)
+        # 1. Version du lanceur (round 12 : v0.3.1 tri registre-tests)
         r = run([PYTHON, LANCER, "--version"])
-        verifier("1. --version v0.2.0",
-                 r.returncode == 0 and "v0.2.0" in r.stdout,
+        verifier("1. --version v0.3.1",
+                 r.returncode == 0 and "v0.3.1" in r.stdout,
                  r.stdout.strip()[-60:])
 
         # 2. Le mode par defaut utilise le pool de workers (filtre 1 test).

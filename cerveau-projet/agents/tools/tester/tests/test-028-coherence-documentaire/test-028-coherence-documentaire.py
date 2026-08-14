@@ -152,7 +152,20 @@ def main():
              len(sans_version_reels) == 0, "sans version: %s" % sans_version_reels)
 
     # 5. Decalages catalogue (scan complet, timeout long)
-    r = run([PYTHON, DEC_PY], timeout=240)
+    # CAUSE RACINE DU RESIDU : sans --sortie, l outil ecrit son rapport par
+    # defaut dans le dossier courant (la racine) -> chaque non-regression
+    # regenere rapport-detecter-decalages-catalogue-<date>.md. On passe
+    # --sortie vers un fichier temporaire, supprime en try/finally garanti.
+    import tempfile
+    fd, chemin_rapport = tempfile.mkstemp(suffix=".md", prefix="rapport-test028-")
+    os.close(fd)
+    try:
+        r = run([PYTHON, DEC_PY, "--sortie", chemin_rapport], timeout=240)
+    finally:
+        try:
+            os.remove(chemin_rapport)
+        except OSError:
+            pass
     out = r.stdout + r.stderr
     verifier("5. detecter-decalages-catalogue : 0 decalage",
              "/ 0 decalages " in out or "0 decalages" in out, out[-200:])

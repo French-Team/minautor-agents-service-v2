@@ -77,7 +77,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.4.3)** : Pour CHAQUE situation, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.5)** : Pour CHAQUE situation, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -148,6 +148,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 | `lister-outils` | Lister les outils disponibles |
 | `activer-agent-principal` | Activer un agent / reactiver Cerberus |
 | `guider-parcours` | Suivre MON parcours case par case (jeu de piste) |
+| `executer-script-temporaire` | ENTONNOIR : normaliser + controler + executer tout script temporaire (protocole-creation-scripts-temporaires) |
 
 > **REGLE** : Pour toute operation de base sur les fichiers, j'utilise CES outils, jamais les outils du systeme.
 
@@ -189,7 +190,7 @@ CERBERUS -> AGENT_1 -> AGENT_2 -> ... -> CERBERUS
 | 4 | La fin suit SA carte (Pattern 13) : chaque agent active le suivant ; seul le DERNIER maillon reactive Cerberus avec le bilan consolide | Agent active |
 
 > **Chaine complete** : chaque mission peut enchainer `AGENT_1 -> AGENT_2 -> ...` (ex : Buffy -> Janus -> Cerberus, ou Agent -> Themis -> Cerberus). Cerberus n'est PAS reactive a chaque etape : la fin de chaque agent suit SA carte (Pattern 13).
-> **FINS REELLES DE MA CARTE v0.3.3 (E5b - croisement fiche/parcours)** :
+> **FINS REELLES DE MA CARTE v0.4.5 (E5b - croisement fiche/parcours)** :
 > - `c19e` FIN - Reprise du parcours apres retour de l'agent habilite
 > - `c20` FIN - Coordination terminee (ma fin de cycle : je reprends le controle)
 > - `c23` Signaler le besoin (fin - relais : je signale et je m arrete)

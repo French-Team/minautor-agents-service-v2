@@ -1,7 +1,7 @@
 #!/bin/bash
 # [nom-outil].sh
 # [Description courte de ce que fait l'outil]
-# Version : 0.1.0-beta
+# Version : 0.2.0-beta
 # Statut : ebauche
 
 # ============================================================
@@ -27,7 +27,7 @@
 #   (Ne pas supprimer ce bloc lors de la creation de l'outil)
 
 # Configuration
-VERSION="0.1.0-beta"
+VERSION="0.2.0-beta"
 STATUT="ebauche"
 
 # Couleurs
@@ -88,6 +88,64 @@ verifier_nommage() {
 
 # Fonction principale de l'outil
 # [Description de ce que fait cette fonction]
+# PROTECTION DOC (regle immuable) : le .md doit exister a cote du script.
+verifier_doc_presente() {
+    local script="$0"
+    local doc="${script%.*}.md"
+    if [ ! -f "$doc" ]; then
+        echo -e "${RED}[ERREUR]${NC} Documentation manquante : ${doc}" >&2
+        echo "  Le .md de l outil est OBLIGATOIRE (regle immuable, protocole-outils)." >&2
+        exit 2
+    fi
+}
+
+# Affiche la section Utilisation du .md (auto-affichage en cas de refus).
+afficher_section_utilisation() {
+    local script="$0"
+    local doc="${script%.*}.md"
+    if [ ! -f "$doc" ]; then
+        return
+    fi
+    local dans_usage="false"
+    while IFS= read -r ligne; do
+        if [[ "$ligne" == "## "* ]]; then
+            case "$ligne" in
+                "## Utilisation"*|"## UTILISATION"*|"## utilisation"*)
+                    dans_usage="true"
+                    ;;
+                *)
+                    dans_usage="false"
+                    ;;
+            esac
+            continue
+        fi
+        if [ "$dans_usage" = "true" ] && [ -n "$ligne" ]; then
+            echo "  $ligne"
+        fi
+    done < "$doc"
+}
+
+# PROTECTION DOC : le mode reel exige --confirme-doc (lecture du .md).
+exiger_confirmation_doc() {
+    local dry_run="$1"
+    local confirme_doc="$2"
+    if [ "$dry_run" = "true" ]; then
+        return 0  # le dry-run est le mode de decouverte, libre
+    fi
+    if [ "$confirme_doc" = "true" ]; then
+        return 0  # l agent a confirme la lecture de la documentation
+    fi
+    verifier_doc_presente
+    echo -e "${YELLOW}=== DOCUMENTATION OBLIGATOIRE ===${NC}"
+    echo "  Cet outil exige la lecture de sa documentation avant usage reel."
+    echo "  Section Utilisation de $0.md :"
+    echo ""
+    afficher_section_utilisation
+    echo ""
+    echo -e "${RED}[REFUS]${NC} Relancez avec --confirme-doc apres lecture de la doc." >&2
+    exit 2
+}
+
 executer() {
     local cible="$1"
     
@@ -107,6 +165,8 @@ main() {
     local dry_run="false"
     local verbose="false"
     local help="false"
+    local doc="false"
+    local confirme_doc="false"
     local cible=""
     
     # Parser les arguments
@@ -124,6 +184,14 @@ main() {
                 help="true"
                 shift
                 ;;
+            --doc)
+                doc="true"
+                shift
+                ;;
+            --confirme-doc)
+                confirme_doc="true"
+                shift
+                ;;
             *)
                 cible="$1"
                 shift
@@ -131,11 +199,27 @@ main() {
         esac
     done
     
+    # Verifier la regle immuable de nommage (au demarrage)
+    verifier_nommage
+    
+    # PROTECTION DOC : le .md doit exister
+    verifier_doc_presente
+    
     # Afficher l'aide
     if [ "$help" = "true" ]; then
         afficher_aide
         exit 0
     fi
+    
+    # --doc : afficher la documentation complete et sortir
+    if [ "$doc" = "true" ]; then
+        local md="${0%.*}.md"
+        cat "$md"
+        exit 0
+    fi
+    
+    # PROTECTION DOC : le mode reel exige --confirme-doc
+    exiger_confirmation_doc "$dry_run" "$confirme_doc"
     
     # Verifier les arguments obligatoires
     verifier_argument "$cible" "cible"

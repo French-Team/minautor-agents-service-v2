@@ -6,7 +6,7 @@ identite:
 ---
 # mettre-a-jour-readme
 
-**Version :** 0.4.0
+**Version :** 0.4.1
 **Statut :** prepare
 **Categorie :** mettre-a-jour
 **Chemin :** `agents/tools/mettre-a-jour/mettre-a-jour-readme/`
@@ -142,4 +142,5 @@ Utilisez --maj pour corriger le texte du README.
 | 0.2.0 | 2026-08-07 | Promotion prepare : passage v2 final |
 | 0.2.0-py | 2026-08-07 | Version Python creee (mettre-a-jour-readme.py), basee sur outil-template.py. Portage fidele : verifier/maj/journal/agents/outils, cas speciaux tester/combos/templates, reconstruction des lignes outils en 3 colonnes |
 | 0.3.0 | 2026-08-07 | Ajout option `--logo CHEMIN` : inserer une image (logo) en tete du README, apres le titre H1. Idempotent (aucun doublon), fichier manquant et absence de H1 geres (exit 1). Ajoute dans les versions Python (0.3.0-py) et bash (0.3.0) |
+| 0.4.1 | 2026-08-14 | Filtre agents : seul un dossier avec parcours JSON (agents/<nom>/parcours/parcours-<nom>.json) est un agent d action. Les dossiers concepts (classeur-variables, conventions, philosophie, regles-immuables, traces) ne sont plus listes ni ajoutes a la table des agents du README. |
 | 0.4.0 | 2026-08-07 | Ajout option `--badges SPEC` : inserer des badges statiques Shields en tete du README (format `label=message:couleur;...`), apres le titre H1. Images Markdown liees (clic) `img.shields.io/badge/...?style=flat`. Encodage espace/tiret, validation ASCII stricte (label, message, couleur), idempotent, spec invalide et absence de H1 geres (exit 1). Base : recherche Atlas (recherches-web/badges-github-shields/). Versions Python (0.4.0-py) et bash (0.4.0) |

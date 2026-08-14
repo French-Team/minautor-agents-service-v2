@@ -45,25 +45,38 @@ agents/tools/[categorie]/[nom-outil]/
 ## Dependances
 ```
 
-### REGLE ABSOLUE -- Lire la documentation avant utilisation
+### REGLE ABSOLUE -- Lire la documentation avant utilisation (MECANISEE)
 
-> **REGLE ABSOLUE (lecture documentation)** : AVANT TOUTE UTILISATION d'un
-> outil, je LIS son fichier `.md` de documentation
-> (`agents/tools/<categorie>/<outil>/<outil>.md`) pour connaitre l'usage
-> exact, les parametres, les exemples et les pieges. Un outil utilise sans
-> avoir lu sa documentation = usage a risque (mauvais parametres, mauvaise
-> cible, effets inattendus).
+> **REGLE ABSOLUE (lecture documentation MECANISEE, v0.2.0, demande
+> utilisateur)** : AVANT TOUTE UTILISATION d'un outil, je LIS son fichier
+> `.md` de documentation (`agents/tools/<categorie>/<outil>/<outil>.md`)
+> pour connaitre l'usage exact, les parametres, les exemples et les pieges.
+> Un outil utilise sans avoir lu sa documentation = usage a risque.
+>
+> **MECANISATION (severite bloquante)** : depuis le template v0.2.0, TOUT
+> outil embarque le bloc **DOC OBLIGATOIRE** :
+> - `verifier_doc_presente` : le .md du meme dossier doit exister, sinon
+>   refus de fonctionner (code 2) ;
+> - `exiger_confirmation_doc` : le mode reel (sans `--dry-run`) est BLOQUE
+>   tant que l'agent n'a pas passe `--confirme-doc` (confirmation explicite
+>   de lecture) ; au refus, l'outil affiche la section Utilisation de son
+>   .md (l'agent lit TOUJOURS la sortie de la commande) ;
+> - `--doc` : affiche le .md complet dans stdout (lecture directe).
 
 ```
 1. Identifier l'outil (index-tools.md ou catalogue)
 2. LIRE le .md de l'outil (Objectif / Utilisation / Parametres / Pieges)
-3. Executer avec les bons parametres (--dry-run d'abord)
+   ou lancer l'outil avec --doc pour l'afficher dans stdout
+3. Executer avec les bons parametres : --dry-run d'abord, puis mode reel
+   avec --confirme-doc (confirmation de lecture)
 4. Verifier le resultat
 ```
 
 > Les agents qui executent un outil SANS lire sa documentation commettent une
 > ERREUR. La documentation est le CONTRAT d'utilisation : un usage sans
-> lecture = usage non garanti.
+> lecture = usage non garanti. Depuis v0.2.0, la lecture est MECANISEE :
+> le mode reel est bloque sans `--confirme-doc` (le dry-run reste libre,
+> c'est le mode de decouverte).
 
 ### Regle 2 -- Chaque outil est teste
 
@@ -185,6 +198,43 @@ grep -rn "\\K" agents/tools/ --include="*.sh"              # doit etre vide
 >
 > **Application verifiable** : cette regle est renforcee par le cycle A+B+C ci-dessous
 > (missions structurees + detection par traces + bilan outils obligatoire).
+
+### Regle 9 -- Protections + Options on/off + Chrono (IMMUABLE)
+
+> **REGLE ABSOLUE (demande utilisateur 2026-08-13)** : TOUT outil (et tout
+> fichier contenant des fonctions, des tests ou des workflows) DOIT embarquer
+> le TRIPLET :
+>
+> | Element | Exigence | Exemple |
+> |---|---|---|
+> | **Protections** | Anti-erreurs : validation des arguments, verification des chemins, dry-run avant application | `--dry-run`, controle des cibles |
+> | **Options on/off** | Activer/desactiver une fonction ou un workflow complet, isoler un cas | `--activer X` / `--desactiver Y`, `--isoler N` |
+> | **Chrono** | Mesure de duree d execution + bilan en fin | `--chrono` (defaut : actif), `--no-chrono` pour couper |
+>
+> Les durees mesurees alimenteront les futurs outils de suivi (detecter les
+> lenteurs, ameliorer les procedures). Le outil-template-python v0.2.0-beta
+> fournit `--chrono` dans ses options standard : tout nouvel outil copie le
+> template embarque le triplet par construction.
+
+### Regle 10 -- Choix de primitive de template : string.Template (IMMUABLE)
+
+> **REGLE (lecon 2026-08-14, generateurs-outil-temporaire v0.2.0)** : quand un
+> outil GENERE du code (template + substitution), choisir la primitive en
+> fonction du contenu du code cible :
+>
+> | Code genere contient | Primitive | Pourquoi |
+> |---|---|---|
+> | `%` (formats `%.2fs`, `%s`) | **`string.Template`** (`$nom` + `.substitute()`) | Les `%` du code cible restent LITTERAUX - AUCUN echappement, AUCUN doublement |
+> | `$` (regex, shell) | `str.format` / concatenation | Les `$` de `string.Template` collisionneraient avec le code cible |
+> | Ni l un ni l autre | `% {...}` ou `str.format` | Aucun conflit possible |
+>
+> **SIGNAL D ALERTE** : si la construction du template exige d ECHAPPER des
+> caracteres du code cible (doubler `%%`, echapper `\"\"\"`...), c est que la
+> primitive est mal choisie : ameliorer l OUTIL (changer de primitive), jamais
+> documenter l echappement comme une convention. Exemple vecu : le template de
+> generateurs-outil-temporaire utilisait `% {...}` et forcait le doublement de
+> TOUS les `%` du code genere (2 bugs) ; le passage a `string.Template` a
+> supprime toute la complexite en une operation.
 
 ---
 

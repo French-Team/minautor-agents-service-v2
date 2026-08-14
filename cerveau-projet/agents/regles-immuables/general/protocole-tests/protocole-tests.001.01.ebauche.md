@@ -10,7 +10,7 @@ identite:
 
 protocole:
   nom: "protocole-tests"
-  version: "0.3.0"
+  version: "0.3.2"
   statut: "ebauche"
   cree: "2026-08-06"
 
@@ -35,6 +35,24 @@ des qu une erreur critique survient.
 > **REGLE ABSOLUE** : Les tests doivent etre ENVELOPPES par des protections qui
 > controlent, analysent et interviennent sur leur deroulement. Un test sans
 > protection (timeout, arret de l arbre, STOP fail-fast) n est pas un test.
+
+## REGLE IMMUABLE : PROTECTIONS + OPTIONS ON/OFF + CHRONO (v0.3.2)
+
+> **REGLE ABSOLUE (demande utilisateur 2026-08-13)** : TOUT fichier contenant
+> des fonctions, des tests ou des workflows DOIT embarquer le TRIPLET :
+>
+> | Element | Exigence | Leviers |
+> |---|---|---|
+> | **Protections** | Anti-erreurs : timeout, tuer l arbre, STOP fail-fast | `tester-protections` (lancer_protege, verifier_critique) |
+> | **Options on/off** | Isoler un test, une fonction ou un workflow complet SANS toucher au code | `--isoler N`, `--desactiver 1,3,5` |
+> | **Chrono** | Mesure de duree par etape + bilan en fin de test | `--no-chrono` (defaut : actif), `chrono_etape`, `bilan_chrono` |
+>
+> Les durees mesurees alimenteront les futurs outils de suivi (detecter les
+> lenteurs, ameliorer les procedures). Le template-test.md v0.3.0 impose ce
+> triplet dans son canevas : chaque NOUVEAU test copie `point_actif`,
+> `chrono_etape`, `bilan_chrono`. Les tests EXISTANTS ne sont PAS migres
+> (decision utilisateur) : ils restent valides sans chrono, mais tout test
+> cree apres la v0.3.0 DOIT embarquer le triplet.
 
 ## Structure des tests
 
@@ -123,7 +141,7 @@ except PROTECTIONS.ArretProtection as e:
     NB_KO += 1
 ```
 
-La structure complete est dans `tester/template-test.md` (v0.2.1+) : le TEMPLATE
+La structure complete est dans `tester/template-test.md` (v0.3.0+) : le TEMPLATE
 est LA reference pour chaque nouveau test, pas les tests precedents.
 
 ### Protection STOP (fail-fast)
@@ -155,6 +173,31 @@ attrape l exception, affiche le bilan et retourne 1.
 - [ ] Identifier les problemes
 - [ ] Documenter les erreurs
 - [ ] Proposer des corrections
+
+### 4. Preuve negative OBLIGATOIRE (v0.3.2, demande utilisateur 2026-08-14)
+
+REGLE IMMUABLE -- PREUVE NEGATIVE : TOUT GARDE-FOU DOIT PROUVER QU IL
+ATTRAPE SA VIOLATION, PAS SEULEMENT QU IL PASSE SUR L ETAT SAIN.
+
+Un test qui passe sur l etat sain peut ne RIEN detecter : la seule facon de
+prouver qu un garde-fou attrape reellement ce qu il doit attraper est
+D INSERER TEMPORAIREMENT la violation qu il surveille et de constater le KO.
+
+- Apres avoir cree ou renforce un garde-fou, inserer UNE violation reelle du
+  type surveille (declaration fautive au registre, outil interdit dans une
+  carte, case orpheline, trace CRLF, faute d orthographe...).
+- Executer le test : le point dedie doit passer de OK a KO.
+- RETIRER la violation : le test doit revenir a OK.
+- Documenter la preuve dans la lecon de mission : "preuve negative : violation
+  X inseree -> KO sur le point Y, retiree -> OK".
+- Un garde-fou sans preuve negative documentee est CONSIDERE NON VERIFIE :
+  il faut le prouver avant de valider la mission.
+
+EXEMPLE (test-037 point 2b, 2026-08-14) : fausse declaration
+`themis -> tester-lancer-non-regression` inseree au registre -> point 2b KO
+(5 OK / 1 KO) -> declaration retiree -> 6 OK / 0 KO. La preuve a revele que
+le garde-fou attrapait bien la violation (et que le TROU initial - le point
+2b n existait pas - laissait passer les declarations fautives).
 
 ## Codes de retour des protections
 
@@ -235,3 +278,6 @@ Avant de valider un test :
 - [ ] La protection STOP est utilisee sur les points critiques
 - [ ] Le rapport est genere (bilan RESULTAT : N OK / M KO)
 - [ ] Les problemes sont identifies
+- [ ] PREUVE NEGATIVE : une violation du type surveille a ete inseree, le
+  KO constate sur le point dedie, puis la violation retiree et le vert
+  retabli (v0.3.2, REGLE IMMUABLE PREUVE NEGATIVE)

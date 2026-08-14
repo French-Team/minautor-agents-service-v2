@@ -5,7 +5,7 @@
 # pour obtenir la structure complete d'une fiche de cette famille.
 #
 # FAMILLE CONCERNEE : cerberus, buffy, vulcain, morpheus, janus, atlas,
-# themis, clio (agents qui travaillent sur le dossier cerveau-projet).
+# themis, clio, hygie (agents qui travaillent sur le dossier cerveau-projet).
 #
 # UTILISATION : l'outil verifier-conformite-fiche (etape 3) verifiera
 # noyau + variante selon la famille declaree dans le frontmatter de la

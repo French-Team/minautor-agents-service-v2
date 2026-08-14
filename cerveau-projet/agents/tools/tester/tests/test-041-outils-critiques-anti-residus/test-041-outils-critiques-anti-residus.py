@@ -52,6 +52,8 @@ OUTILS_CRITIQUES = [
     ("valider-cartes-decision", os.path.join("valider", "valider-cartes-decision",
                                              "valider-cartes-decision.py")),
     ("editer-parcours", os.path.join("editer", "editer-parcours", "editer-parcours.py")),
+    ("executer-script-temporaire", os.path.join("executer", "executer-script-temporaire",
+                                                "executer-script-temporaire.py")),
 ]
 
 NB_POINTS = 0

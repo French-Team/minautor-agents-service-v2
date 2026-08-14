@@ -2324,3 +2324,269 @@ non-regression 26/26, catalogue 146 intact + 0 a ajouter, normes 0/0 sur
 4. UN SCAN ANTI-RECURRENCE DOIT CROISER LES 4 SOURCES : la lecon Themis (audit qui ne scanne que les fichiers modifies rate 8 mentions) est resolue par detecter-evaluations-incompletes avec motif/filtre/contexte - la regex cT1([^0-9*]|$) distingue les mentions conformes des residuelles.
 5. COULEURS ANSI = POLLUTION EN REDIRECTION : les evaluateurs emettaient des codes de couleur meme captures (combo, tests) - desactivation auto via sys.stdout.isatty() + option --rapport pour ecrire un rapport propre.
 6. BUMP DE VERSION = SYNCHRONISATION .py/.sh/.md + FICHE (Pattern 14) : oublier la fiche (v0.4.2 vs parcours 0.4.3) = KO valider-cartes-decision. Toujours verifier fiche ET parcours apres bump.
+
+
+## [LECON] 2026-08-13 -- BUG 'AGENT INCONNU HYGIE' CORRIGE (Vulcain)
+
+**Contexte** : la creation de l agent Hygie (mission bout-en-bout 2026-08-13)
+a ajoute Hygie au catalogue, a l index-tools et a AGENTS.md mais PAS dans la
+liste interne AGENTS de l outil activer-agent-principal (.py + .sh) -> toute
+activation de Hygie echouait avec 'ERREUR: Agent inconnu'.
+
+**Cause racine** : deux sources de liste d agents coexistent - le catalogue
+generateurs-commande (commande activer-activer, choix des agents) ET le
+dictionnaire/case de l outil d activation. La mission de creation n a mis a
+jour que la premiere.
+
+**Correction (v0.5.2 -> v0.5.3)** : ajout de hygie (role/fiche/corrections)
+dans le dictionnaire AGENTS du .py + les 3 blocs case du .sh. Preuves
+reelles : activer hygie OK, reactiver Cerberus OK, sh --version v0.5.3,
+get_agent_role hygie OK, normes 0/0.
+
+**Lecons** :
+1. Quand on cree un agent, la liste des agents connus existe en PLUSIEURS
+   endroits : catalogue (activer-activer), index-agents, AGENTS.md, ET
+   activer-agent-principal (.py + .sh). TOUT mettre a jour ou le premier
+   usage reel echoue.
+2. Le test en conditions reelles (1ere activation de Hygie) a revele le bug
+   immediatement - jamais supposer qu une creation est complete sans tester
+   l usage reel du nouvel element.
+3. Aucun test de non-regression ne verifie la liste des agents connus de
+   l outil : a signaler pour un eventuel garde-fou (ex: chaque agent de
+   index-agents doit etre activable).
+
+
+## [LECON] 2026-08-14 -- EVALUER-PROCESSUS v0.1.1 : 2 BUGS CORRIGES (Vulcain)
+
+**Contexte** : test-035 KO (serie e 16/17). Diagnostic Cerberus : 2 des 5 problemes etaient des BUGS de mon outil evaluer-processus.
+
+**BUG 1 - FIN_MISSION_ERRONEE faux positif** : `detecter_fins_erronees` faisait `missions[-3:]` sur une liste en ordre DECROISSANT (missions recentes en tete : AGENTS.md puis AGENTS-historique du recent a l ancien) -> il examinait les 3 missions les PLUS ANCIENNES au lieu des 3 plus recentes. La mission chrono de morpheus (00:08, consigne 'reactiver Cerberus' LEGITIME a l epoque) etait faussement signalee. FIX : `missions[:3]` (les 3 plus recentes). Le commentaire original disait deja "la mission la PLUS RECENTE".
+
+**BUG 2 - OUTIL_HORS_CARTE faux positif** : `usages_registre` comptait toutes les entrees du registre, y compris les scripts temporaires legitimes (mode="script-temporaire", ex tmp-buffy/xxx.py). Un script temporaire n est PAS un outil de la carte. FIX : ignorer les entrees mode="script-temporaire".
+
+**Lecon** : les outils de detection doivent comprendre le sens des DONNEES qu ils lisent (ordre des listes, modes du registre), pas seulement les parcourir naivement. Un faux positif qui signale une mission historique legitime et un script temporaire legitime cree du bruit qui masque les vrais ecarts.
+
+**Verifications** : apres fix : morpheus 0 FIN_MISSION_ERRONEE, buffy 0 probleme. Restent les VRAIS ecarts (4) a traiter : morpheus tester-lancer-non-regression (retrait registre - seul Janus lance la non-regression), janus detecter-residus + detecter-divergences-version + evaluer-processus (ajout carte Janus). v0.1.1 py+md, normes 0/0, py_compile OK.
+
+
+## [LECON] 2026-08-14 -- DEMARRAGE AUTOMATIQUE + FIX RAISON MULTILIGNE (Vulcain, v0.5.4)
+
+**Contexte** : demande utilisateur - comprendre et corriger le bug d arret au
+demarrage des agents (vu 2x pour Themis et Morpheus : l agent active reste
+bloque a sa case c0).
+
+**Diagnostic (3 causes)** :
+1. guider-parcours est CONCU pour s arreter proprement sur une question en mode
+   agent (return 0) - l agent doit relancer avec --reponses.
+2. Aucune mission d activation du 14/08 ne contenait l instruction de demarrage
+   (--reponses) alors que celles du 13/08 la contenaient.
+3. AGENTS.md etape 4 dit execute sa mission mais jamais COMMENT demarrer.
+
+**BONUS (bug latent decouvert en testant)** : reconstruire_bloc (py) et
+emettre_bloc (sh awk) perdent la Raison MULTILIGNE a chaque reactivation - la
+mission de l agent etait tronquee a la 1re ligne + une ligne parasite
+'| **Classeur-variables** | Agent |' apparaissait. PROUVE par test reel sur copie.
+
+**Fait (v0.5.4)** :
+1. activer_agent (py + sh) : ajoute DEMARRAGE OBLIGATOIRE a la Raison quand un
+   agent != cerberus est active (avec le chemin du parcours et --case c0
+   --reponses OUI). Pas pour reactiver ni pour cerberus.
+2. Fix multiligne : capture des lignes de continuation de la Raison +
+   recollement + reemission en lignes brutes (py et sh).
+3. Doc .md : version 0.5.4 + entree changelog.
+4. Tests : py A/B/C/D True, sh A/B True, 7 tests internes de l outil VALIDES,
+   test-025 11/11, test-013 22/22, test-018 13/13, test-034 6/6.
+
+**Lecon** : (a) quand on corrige un bug de demarrage, tester sur COPIE avec
+AGENTS_FILE surcharge (jamais sur le vrai fichier) ; (b) verifier la parite
+py/sh et la survie des champs MULTILIGNES (le format AGENTS.md supporte les
+retours a la ligne dans Raison - les reconstructions doivent les preserver).
+
+
+## [LECON] 2026-08-14 -- REGISTRE-TESTS : TRACE DES LANCEMENTS DE TESTS (Vulcain)
+
+**Contexte** : demande utilisateur - comme le registre-usages-outils.jsonl trace
+l utilisation des outils, chaque lancement de tests par un agent doit laisser
+une trace dans un registre dedie. Mission reprise apres suspension par la
+derive de gouvernance (corrigee : la chaine Cerberus->Vulcain->Morpheus->Janus
+est respectee).
+
+**Implementation (tester-lancer-non-regression v0.2.0 -> v0.3.0)** :
+1. Option --agent <nom> (optionnel, vide par defaut).
+2. CHAQUE test execute est journalise dans cerveau-projet/agents/traces/
+   registre-tests.jsonl (une entree par test : date, agent, serie, test,
+   verdict OK/KO/ERREUR, duree secondes) - sur les 2 chemins :
+   executer_lot (serie) et executer_pool (parallele).
+3. Dans le pool, la serie de CHAQUE test est deduite de son nom
+   (serie_du_test) - les garde-fous globaux portent la serie 'globaux'.
+4. Registre DISTINCT de registre-usages-outils.jsonl (jamais melanges).
+5. Doc .md maj (version 0.3.0 + option --agent + historique) + catalogue
+   generateurs-commande (parametre agent optionnel).
+
+**Preuves reelles** : serie a avec --agent vulcain -> 6 entrees correctes
+(verdict + duree) ; run complet pool avec --agent -> 51 tests journalises
+(series a/b/c/d/e/globaux distribuees) ; --version 0.3.0 ; normes 0/0.
+
+**Impact tests** : 4 tests figent la version 0.2.0 du lanceur en dur
+(test-031, test-032, test-024, test-027) - adaptes par Morpheus (maillon
+de chaine), qui cree aussi le garde-fou test-051.
+
+**Regle durable** : les outils qui s executent souvent (comme le lanceur de
+non-regression) doivent journaliser leurs executions - le registre-tests est
+la memoire des lancements, le registre-usages-outils la memoire des usages.
+
+
+## [LECON] 2026-08-14 -- TRI DU REGISTRE-USAGES-OUTILS PAR DATE/HEURE DECROISSANT (Vulcain)
+
+**Contexte** : demande utilisateur - le registre-usages-outils.jsonl etait
+ecrit en append (ordre d ecriture, dates melangees). Il doit etre trie par
+date puis heure, affiche en DECROISSANT (le plus recent en premier).
+
+**Implementation (enregistrer-usage-outil v0.2.1 -> v0.3.0)** :
+1. Fonction trier_registre(registre) : relit toutes les lignes JSON, les trie
+   par date (cle 'date', format YYYY-MM-DD HH:MM:SS, tri lexicographique =
+   chronologique) DECROISSANT, reecrit le fichier (LF, ASCII).
+2. Les lignes non-JSON sont PRESERVEES (signalees, jamais perdues) et placees
+   en fin de fichier - compatibilite verifier_registre conservee.
+3. Appelee APRES chaque ajout_entree : le registre est TOUJOURS trie.
+4. Doc .md maj (version 0.3.0 + tri documente + historique).
+
+**Preuves reelles** : registre 117 entrees non triees avant -> ajout d une
+entree -> trie decroissant (premier = plus recent 22:09:35, dernier = plus
+ancien 18:45:11). Retrait de l entree de test -> toujours trie.
+
+**Impact tests** : test-024 point 7 fige la version 0.2.1 de
+enregistrer-usage-outil -> KO previsible, adapte par Morpheus (maillon de
+chaine).
+
+**Regle durable** : un registre JSONL doit rester trie par date decroissante -
+la lecture est plus lisible et l historique se lit du plus recent au plus
+ancien. Les lignes invalides ne sont jamais perdues (conservees en fin).
+
+
+## [LECON] 2026-08-14 -- TRI DU REGISTRE-TESTS PAR DATE/HEURE DECROISSANT (Vulcain)
+
+**Contexte** : demande utilisateur - etendre au registre-tests.jsonl (trace
+des lancements de tests) la regle de tri deja appliquee au
+registre-usages-outils : tri par date/heure DECROISSANT (le plus recent en
+premier).
+
+**Implementation (tester-lancer-non-regression v0.3.0 -> v0.3.1)** :
+1. Fonction trier_registre_tests(registre) : relit les lignes JSON, trie par
+   date decroissante, lignes non-JSON conservees en fin (jamais perdues).
+2. journaliser_test : apres chaque ecriture en append, trie le registre.
+3. Doc .md maj (version 0.3.1 + tri documente + historique).
+
+**Preuves reelles** : registre-tests 318 entrees non triees -> run serie a
+avec --agent -> 319 entrees TRIEES decroissant (premier = plus recent 22:17:19,
+dernier = plus ancien 22:01:01). Entree de preuve retiree ensuite (318).
+
+**Impact tests** : les tests 031/032/024/027/051 figent la version 0.3.0 du
+lanceur -> KO previsible, adaptes par Morpheus (maillon de chaine).
+
+**Regle durable** : TOUS les registres JSONL du projet (usages + tests) sont
+tries par date/heure decroissante - la regle est maintenant uniforme.
+
+
+## [LECON] 2026-08-14 -- FIX BUG DE RECOLLEMENT + AGENTS.md REPARE (Vulcain)
+
+**Contexte** : l utilisateur a signale AGENTS.md corrompu. Diagnostic :
+le bloc session-llm-1 avait une Raison tronquee + 21 blocs DEMARRAGE
+accumules + une mission egaree + un tableau orphelin.
+
+**Cause racine** : activer-agent-principal.py v0.5.4, reconstruire_bloc -
+le recollement des continuations faisait une EXCEPTION pour la Raison
+(champ_c != Raison -> continue) donc les anciennes suites de la Raison
+(blocs DEMARRAGE) etaient RECOLLEES a chaque nouvelle raison -> accumulation
+a chaque cycle activer/reactiver.
+
+**Fix v0.5.5** : un champ REMPLACE (present dans champs) ignore son ancienne
+suite, Y COMPRIS la Raison. Le recollage ne sert plus que si la Raison n est
+pas remplacee (ex: migration sans nouvelle raison).
+
+**Reparation AGENTS.md** : relancer l activation avec l outil corrige a
+reconstruit le bloc proprement (22 -> 1 bloc DEMARRAGE). Le tableau orphelin
+(Classeur-variables/Conventions/...) etait un residu des anciennes lignes
+cassees du bug classeur (pseudo-agents) - supprime (aucune section legitime).
+
+**Lecon d echappement (rappel)** : la Raison tronquee venait d une apostrophe
+mal echappee dans la commande de reactivation - TOUJOURS passer les raisons
+via un script temp (subprocess.list2cmdline) jamais en inline shell.
+
+**Preuves** : test-008 v0.5.5 cree (9/9 : bloc corrompu -> 1 DEMARRAGE, Raison
+proprement remplacee, reactiver 0 bloc, Nom LLM preserve, normes). test-007
+22/22 (regression). test-013 22/22, test-025 11/11. AGENTS.md 1 DEMARRAGE,
+0 non-ascii, 0 crlf. Spec alignee 0.5.5.
+
+
+## [LECON] 2026-08-14 -- DECLARATION USAGES MECANISEE DANS LE GENERATEUR (Vulcain)
+
+**Contexte** : l utilisateur a constate que depuis 22:17:51 plus AUCUNE declaration
+d usage n apparaissait au registre alors que 3 missions completes ont tourne
+(fix recollement AGENTS.md, nettoyage test-051, garde-fou test-052) : les lecons
+etaient documentees mais ni les scripts temp tmp-*/fin-*.py (mode script-temporaire)
+ni les outils utilises n etaient declares. Cause racine : les scripts de fin de
+mission etaient ecrits a la main sans le bloc de declaration, et le generateur
+generateurs-outil-temporaire ne generait AUCUNE declaration d usage.
+
+**Actions** :
+1. generateurs-outil-temporaire v0.2.1 (.py + .sh en parite) : le squelette genere
+   embarque le bloc DECLARATION USAGES - variable AGENT + fonctions racine_projet(),
+   declarer_usage(), declarer_usages() qui appellent enregistrer-usage-outil
+   --mode script-temporaire pour le script lui-meme et chaque outil utilise.
+   Appel en fin de main(), erreur explicite si AGENT non renseigne (le script
+   refuse de s executer sans declaration).
+2. Doc .md mise a jour (comportement 9, historique 0.2.1).
+3. Protocole-creation-scripts-temporaires v0.2.7 : etape 4 renforcee (TOUT script
+   temp de mission declare + CHAQUE outil utilise) + nouvelle section
+   "La declaration des usages (v0.2.7, anti-recurrence registre a 0 ligne)".
+
+**Preuves reelles** : script genere avec AGENT=vulcain -> declaration automatique
+au registre (entree tmp-test-declaration.py verifiee). Parite .py/.sh verifiee
+(scripts generes identiques hors nom/description/date).
+
+**KO attendus pour Morpheus** : test-050 2 KO - (1) version 0.2.0 figee en dur
+(4 occurrences) ; (2) la preuve du point 5 execute le script genere sans
+renseigner AGENT (le bloc refuse desormais de s executer -> renseigner AGENT
+dans la preuve). Le nouveau garde-fou anti-recurrence doit verifier que le
+squelette du generateur contient le bloc declarer_usages et que le protocole
+l exige.
+
+
+## [LECON] 2026-08-14 -- PROTECTION DOC OBLIGATOIRE DANS LE TEMPLATE OUTIL v0.2.0 (Vulcain)
+
+**Contexte** : demande utilisateur - les agents n utilisent pas les outils
+correctement car ils ne lisent pas le .md de documentation qui accompagne
+chaque outil. La REGLE ABSOLUE du protocole-outils et celle des 11 cartes
+existaient mais n etaient PAS mecanisees : aucune protection dans le template
+ne les imposait. DECISION UTILISATEUR : severite BLOQUANTE - le mode reel
+exige --confirme-doc.
+
+**Actions** :
+1. outil-template.py v0.2.0-beta : bloc DOC OBLIGATOIRE - verifier_doc_presente()
+   (le .md du meme dossier doit exister, sinon refus code 2),
+   exiger_confirmation_doc() (mode reel sans --confirme-doc : affiche la
+   section Utilisation du .md + refus code 2), options --doc (affiche le .md
+   complet) et --confirme-doc, appel en tete de main().
+2. outil-template.sh v0.2.0-beta : meme bloc en bash (parite verifiee sur les
+   4 cas : refus 2, confirme 0, dry-run 0, --doc affiche).
+3. outil-template.md + outil-template-python.md : section REGLE IMMUABLE
+   documentation obligatoire + options + historique 0.2.0.
+4. protocole-outils : REGLE ABSOLUE de lecture MECANISEE (v0.2.0, severite
+   bloquante, --confirme-doc requis en mode reel).
+
+**Preuves reelles** : sans --confirme-doc -> rc=2 ; avec -> rc=0 ; --dry-run
+libre -> rc=0 ; --doc affiche le .md ; preuve negative : .md manquant ->
+rc=2 (documentation manquante). Parite .py/.sh validee.
+
+**Lecon (bug v0.1)**: j ai d abord ecrit exiger_confirmation_doc(script, dry_run)
+sans le flag confirme_doc -> --confirme-doc ne passait PAS la protection
+(rc=2 au lieu de 0). Le test reel immediat a revele le bug avant transmission.
+Lecon : une protection doit TOUJOURS etre testee dans ses 4 etats (refus,
+confirmation, dry-run, cas negatif) avant de la valider.
+
+**Pour Morpheus** : creer le garde-fou test-054 (anti-recurrence) : le
+template outil-template.py ET .sh contiennent le bloc DOC OBLIGATOIRE
+(verifier_doc_presente, exiger_confirmation_doc, --confirme-doc) + preuve
+negative (bloc retire -> KO). Aucun test existant (029/050) ne touche
+outil-template : pas d adaptation necessaire de mon cote.

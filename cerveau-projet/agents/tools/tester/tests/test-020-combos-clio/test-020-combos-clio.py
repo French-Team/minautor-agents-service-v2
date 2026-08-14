@@ -7,7 +7,7 @@ grosse mise a jour conservative du README : savoir CE QUI A CHANGE puis
 corriger compteurs, tables et badges).
 
 Combos testes (cerveau-projet/agents/tools/combos/):
-  1. combos-analyse-projet (orchestre py/sh/md, v0.1.0) : etat reel du projet
+  1. combos-analyse-projet (orchestre py/sh/md, v0.1.1) : etat reel du projet
      (agents, outils par categorie) + ecarts README vs realite
   2. combo-maj-readme (encapsule definition-combo.json, v0.1.0, 5 cases) :
      PETITE MAJ - verifier -> maj (si ecarts) -> ASCII
@@ -98,8 +98,8 @@ for nom, p in FICHIERS:
 
 # 2. Versions
 r = run([PYTHON, ANALYSE_PY, "--version"])
-check(r.returncode == 0 and "combos-analyse-projet 0.1.0" in (r.stdout or r.stderr),
-      "version combos-analyse-projet 0.1.0")
+check(r.returncode == 0 and "combos-analyse-projet 0.1.1" in (r.stdout or r.stderr),
+      "version combos-analyse-projet 0.1.1")
 r = run([PYTHON, MASSIVE_PY, "--version"])
 check(r.returncode == 0 and "combos-maj-readme-massive 0.1.3" in (r.stdout or r.stderr),
       "version combos-maj-readme-massive 0.1.3")

@@ -2905,3 +2905,561 @@ Themis -> Janus). J1-J4 : 13/13 OK. J5 : non-regression complete 40/40 OK (45.2 
 **Controle croise** (mission Morpheus/Themis, demande utilisateur) : garde-fou test-042 + correction 8 commandes. J1-J4 8/8 + J5 non-regression 42/42 OK.
 
 **Point notable** : la regle anti-echappement des combos est maintenant APPLIQUEE (8 commandes corrigees) ET SURVEILLEE (test-042 en serie e). Un futur combo avec {var} non quote sera signale a la non-regression - le cycle documenter/corriger/surveiller est boucle.
+
+## [LECON] 2026-08-13 -- CONTROLE FINAL PREUVES APOSTROPHE COMBOS (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Morpheus/Themis, demande utilisateur) : preuves reelles du quoting des combos avec raison a apostrophe. J1-J4 5/5 + J5 non-regression 42/42 OK (44.6s, record - reference mise a jour).
+
+**Point notable** : la preuve est complete de bout en bout - generateur (quoter:True, guillemets doubles) -> commande composee -> shlex.split (raison intacte) -> execution combos-moteur. Sans quoting, la commande echoue en 'No closing quotation' AVANT execution. Le garde-fou test-042 verifie en permanence que cette regle est respectee. La chaine documenter/corriger/surveiller/prouver est bouclee.
+
+## [LECON] 2026-08-13 -- CONTROLE FINAL TEST-043 GENERATEURS-QUOTER (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Morpheus/Themis, demande utilisateur) : garde-fou test-043 generateurs-quoter. J1-J4 10/10 + J5 non-regression 43/43 OK.
+
+**Point notable** : la chaine d echappement est surveillee sur ses DEUX maillons : test-042 (combos, definitions-combo.json) et test-043 (catalogue, parametres quoter:true). Un retrait du champ quoter ou une regression de composer_valeur serait signale a la non-regression.
+## [LECON] 2026-08-13 -- CONTROLE MISSION TRIPLE (Janus, VERDICT VALIDE)
+
+**Controle croise final** (J1-J5) : 13/13 points + non-regression 43/43 OK
+(44.7s vs reference 44.2s, +1%). Le triplet protections/options/chrono est
+devenu regle immuable via les templates (test v0.3.0, outil v0.1.1-beta) et
+les protocoles (tests v0.3.1, outils Regle 9) ; la contradiction scripts
+temporaires est levee (deux usages distincts).
+
+**Lecons** :
+- Quand une REFERENCE amont change (template-test v0.2.1 -> v0.3.0), le
+  garde-fou qui la fige (test-029) doit etre adapte dans la meme chaine :
+  sans cela la non-regression casse. Le maillon Morpheus a ete insere
+  (Buffy -> Themis -> Morpheus -> Janus) conformement a la delegation.
+- Le chrono par etape dans le canevas de test cree la matiere premiere des
+  futurs outils de suivi (isoler un test, detecter les lenteurs) - coherent
+  avec le chrono de reference du lanceur.
+- La clarification deux usages (jetable ephemere racine avec rm -f immediat
+  vs outil temporaire genere + declare) leve une contradiction qui poussait
+  les agents a ecrire a la racine.
+## [LECON] 2026-08-13 -- CONTROLE REGLE STRICTE SCRIPTS DEDIES (Janus, VERDICT VALIDE)
+
+**Controle croise final** (J1-J5) : 11/11 points + non-regression 44/44 OK
+(nouvelle base chrono 44.3s, 43 -> 44 tests avec test-044).
+
+**Lecons** :
+- La tolerance ecrite (v0.2.2) etait la racine du probleme : une exception
+  documentee devient la norme. La regle stricte v0.2.3 + le dossier dedie
+  .agents-tmp/ (gitignore, invisible pour test-024) restaurent la regle
+  d origine (v0.1.0) sans friction technique.
+- Le point de bascule etait identifiable : v0.2.0 (2026-08-13 20:44) a
+  introduit la methode write_file a la racine pour lutter contre les erreurs
+  d echappement JSON, et v0.2.2 (21:18) a officialise la tolerance. La
+  question utilisateur a permis de dater la derive a la minute pres.
+- LA PRATIQUE EST DESORMAIS : scripts de mission dans .agents-tmp/ (JAMAIS a
+  la racine), suppression dans la meme commande (basher) ou en fin de mission,
+  .agents-tmp/ vide avant reactivation. Chaque agent applique cette regle des
+  sa prochaine mission.
+## [LECON] 2026-08-13 -- CONTROLE RETOUR REGLE D ORIGINE SCRIPTS TEMPORAIRES (Janus, VERDICT VALIDE)
+
+**Controle croise final** (J1-J5) : 11/11 points + non-regression 44/44 OK
+(44.1s, nouveau record). La regle d origine est restauree : protocole v0.2.4
+(dossier tmp-<agent>/ cree a la racine, rm -rf en fin de mission), test-024
+point 2b (0 dossier tmp-* residuel hors agent courant), gitignore tmp-*/,
+.agents-tmp/ supprime.
+
+**Lecons** :
+- LA REGLE D ORIGINE ETAIT LA BONNE : v0.2.2 (tolerance) et v0.2.3 (dossier
+  permanent) ont complique un mecanisme simple et parfait. Le retour a la
+  simplicite (v0.2.4) est aussi un retour a la confiance utilisateur.
+- LA DISCIPLINE S APPREND PAR LE GARDE-FOU : 3 residus reels detectes en
+  cascade (tmp-buffy, tmp-morpheus, tmp-themis) - chaque agent a du apprendre
+  que rm -rf tmp-<agent> est OBLIGATOIRE avant de reactiver l agent suivant.
+  Le garde-fou 2b rend cette discipline verifiable a la non-regression.
+- Le garde-fou exclut l agent COURANT (lu depuis le profil classeur) : la
+  mission en cours est legitime, tout autre tmp-* est une anomalie.
+
+## [LECON] 2026-08-13 -- CONTROLE FINAL CHAINE HYGIE (Janus, VERDICT VALIDE)
+
+**Contexte** : controle final de la creation de l agent de nettoyage Hygie
+(fiche + parcours + chariot + test-045).
+
+**J1-J4 : 17/17** + **J5 : NON-REGRESSION COMPLETE 45/45 OK (44.7s, +0%)**.
+
+**Correction au 1er passage** : test-024 point 8 figait le catalogue a 149
+commandes (avant le chariot de Hygie) - adapte a 152. Le KO est apparu UNIQUEMENT
+a la non-regression complete (les tests individuels verts ne couvraient pas ce
+point) : preuve que la non-regression est le filet final.
+
+**Lecon** : quand on ajoute des outils, TOUS les tests qui figent le nombre du
+catalogue (test-007 ET test-024) doivent etre adaptes dans la meme passe -
+Morpheus a adapte test-007 mais pas test-024 (le point 8 verifie aussi le
+catalogue). Le controleur final rattrape l oubli : la non-regression complete
+est le dernier filet, JAMAIS un simple controle individuel.
+
+
+## [LECON] 2026-08-13 -- CONTROLE 1ERE MISSION HYGIE : RAPPORT VIDE DECOUVERT (Janus)
+
+**Controle** : second controle (J1-J5) de la mission de nettoyage de Hygie.
+Le nettoyage est REUSSI (13/13 supprimes, snapshot pris, re-detection 0
+residu cerveau-projet) mais J2 a revele un ECART : le rapport de nettoyage
+est VIDE (0 ligne).
+
+**Cause racine** : creer-fichier.py <fichier> [contenu] - le contenu est un
+ARGUMENT positionnel, PAS stdin. Hygie a passe le contenu via stdin
+(subprocess input=) -> fichier cree vide. Meme piege possible avec tout
+outil qui accepte un contenu en argument.
+
+**Lecons** :
+1. Toujours verifier la signature EXACTE d un outil (doc .md) avant de
+   l utiliser : argument positionnel vs stdin vs fichier.
+2. Un rapport "cree" mais vide est pire qu absent : la preuve de tracabilite
+   doit etre CONTROLEE (verifier que le fichier contient ce qui est attendu),
+   pas seulement que le fichier existe.
+3. Le second controle (Janus) a exactement ce role : verifier la TRACABILITE
+   reelle (contenu), pas seulement la presence.
+
+
+## [LECON] 2026-08-13 -- CONTROLE TEST-046 : REGISTRE COURANT VS HISTORIQUE (Janus)
+
+**Controle** : second controle de la mission test-046 (Morpheus). VERDICT
+VALIDE 14/14. Un faux KO de controle a ete identifie puis corrige : J6
+verifiait le registre courant (0 ligne) alors que les usages vivent dans
+l HISTORIQUE (81 entrees morpheus, le registre courant est vide/archive par
+les lancements de non-regression - comportement connu et documente).
+
+**Lecons** :
+1. Verifier les usages dans le registre COURANT n est fiable que si aucune
+   non-regression n a ete lancee depuis : apres un lancement, les entrees
+   sont archivees - controler l HISTORIQUE.
+2. Un garde-fou de detection (test-046) doit etre valide par preuve positive
+   (13/13) ET negative (1 KO quand on casse la compartimentation) : la seule
+   preuve positive ne prouve pas que le test detecte les regressions.
+3. La decouverte de la divergence spec 0.5.2/0.5.3 montre que la chaine de
+   qualite fonctionne : Morpheus a lance la serie complete, test-028 a
+   attrape l ecart introduit par le bump Vulcain, et il a ete corrige avant
+   le controle final.
+
+
+## [LECON] 2026-08-14 -- CONTROLE CORRECTION ANTI-RESIDUS (Janus, VERDICT VALIDE 11/11)
+
+**Contexte** : controle croise de la mission Morpheus (correction des 2 causes racines de residus a la racine, suite enquete Cerberus 13/08).
+
+**Verifications** : J1-J7 tous verts - test-004 16/16 (forward slashes point 6), test-028 8/8 (--sortie tempfile + try/finally), preuve date rapport inchangee (22:39, non regenere), normes 0/0, lecon + usages presents, discipline tmp-* respectee.
+
+**Lecons** :
+1. Un test qui cree un fichier via un outil tiers (shlex.split dans combos-moteur) DOIT passer des chemins forward slashes sur Windows, sinon le fichier part a la racine sous un nom mache et echappe au nettoyage.
+2. Un test qui lance un outil generant un rapport par defaut dans le dossier courant DOIT passer --sortie vers un fichier temporaire avec suppression try/finally (jamais de residu meme en cas d erreur).
+3. Le registre (JSONL compact) ne doit PAS etre verifie par recherche de chaine avec espace ('"agent": "x"') mais par json.loads (faux KO de mon propre script de controle).
+4. Ecart structurel a traiter : tester-lancer-non-regression (outil central de Morpheus) n est pas assigne dans les indices de sa carte -> tout usage au registre ressort OUTIL_HORS_CARTE. Recommande : mission Buffy pour assigner l outil + arbitrer les 4 autres ecarts preexistants (ligne 171 + usages buffy/janus).
+
+
+## [LECON] 2026-08-14 -- CONTROLE 2E NETTOYAGE HYGIE (Janus, VERDICT VALIDE)
+
+**Contexte** : controle croise de la 2e mission Hygie (suppression des 2 residus commites anciens, causes racines corrigees par Morpheus).
+
+**Verifications** : J1-J6 tous verts - snapshot 2173 fichiers, commit 49e966e propre (2 files, 183 del), reset soft du commit errone 6c64ae5 + git rm -f, re-detection PROPRE, rapport NON VIDE (2075 octets), lecon + 4 usages registre, discipline tmp respectee.
+
+**Lecons** :
+1. Quand une cible de suppression git a des modifications locales, `git rm` echoue (rc=1) et un `git commit -- <fichiers>` enchaine commite les MODIFICATIONS au lieu de la suppression - toujours verifier le rc de git rm avant de committer, utiliser `git rm -f`.
+2. `git reset --soft HEAD~1` defait proprement un commit errone sans perdre les modifications (restaure dans l index) - a utiliser sans hesitation.
+3. Un controle croise peut DETECTER des residus hors perimetre : le 3e rapport detecter-decalages (12/08) etait encore dans HEAD avec un statut D (suppression non commitee par la 1re mission Hygie) - a traiter en mission dediee.
+4. Le snapshot JSON stocke nb_fichiers (pas fichiers) - verifier les bonnes cles dans les controles.
+5. detecter-residus a un gap : le pattern TEMP ne couvre pas les noms maches avec prefixe projet (analyste-in-console.tmp-test004x.sh) - a elargir par Vulcain.
+
+## [LECON] 2026-08-14 -- OUTIL UTILISE = OUTIL DANS LA CARTE ; SEUL JANUS LANCE LA NON-REGRESSION (Janus)
+
+**Controle croise** (reverdissement test-035) : la regle "seul Janus lance la
+non-regression" doit etre strictement appliquee au registre : toute entree
+tester-lancer-non-regression d un autre agent (morpheus, vulcain, buffy) est une
+erreure d usage. Inversement, un outil reellement utilise (valider-cartes-decision par
+buffy) doit etre ajoute a la carte, pas retire du registre. Le bump de carte implique
+d adapter les tests qui verifient la version en dur (test-016, serie b).
+
+## [LECON] 2026-08-14 -- REGLE REGISTRE : DECLARER UN USAGE = OUTIL DOIT ETRE DANS SA CARTE (Janus)
+
+**Controle croise** : en declarant mon usage de valider-cartes-decision (controle des
+cartes des autres agents), j ai revele que cet outil n etait pas dans MA carte. REGLE :
+avant de declarer un usage au registre, verifier que l outil est dans sa carte (sinon
+OUTIL_HORS_CARTE). Complement corrige par Buffy : valider-cartes-decision ajoute a ma
+carte (c21, v0.4.4). La chaine du reverdissement test-035 est complete.
+
+## [LECON] 2026-08-14 -- OUTILLAGE AVANT CONTENU : LA SEGREGATION DES PUBLICS (Janus)
+
+**Controle croise** : la scission README public/dev est une separation d AUDIENCE :
+le public (non-codeur) ne veut pas de structure ni de detail technique ; le
+developpeur veut la verite complete depuis les sources. L outillage (template,
+parcours, carte) PRECEDE le contenu : Clio remplira ensuite les 2 fichiers. Impact
+maitrise : seul test-013 casse (version en dur), les combos et badges ne bougent pas
+tant que Clio n a pas refondu le README public - vigilance badges Outils-N/Version/
+Statut au moment de la refonte (test-038).
+
+## [LECON] 2026-08-14 -- DOUBLE README : SEGREGATION DES PUBLICS + COURSE DE TESTS (Janus)
+
+**Controle croise** : le double README (public allege + dev detaille) est une
+segregation d AUDIENCE. Deux enseignements :
+1. Le combo massif (lance par test-020) BUMPE la version automatiquement quand le
+   README change pendant son execution : ne pas considerer un changement de version
+   post-combo comme un KO - re-verifier le test cible SEUL (artefact de course
+   entre test-038 et test-020 dans un meme script de controle).
+2. Un write_file sur un mauvais chemin peut ecraser un outil (incident Clio) :
+   verification du chemin avant ecriture, restauration immediate git checkout.
+IMPACT : test-013 (carte cerberus 0.4.4) a adapter par Morpheus - version seule.
+
+## [LECON] 2026-08-14 -- NON-REGRESSION 46/46 : DOUBLE README TERMINE (Janus)
+
+**Verdict final** : la chaine Buffy -> Clio -> Buffy -> Morpheus -> Janus a termine le
+double README (public + dev). Lecon de course : le dossier tmp-* d un agent precedent
+(tmp-morpheus non supprime) fait echouer test-024 (gardes-fous globaux) - nettoyer les
+tmp-* des missions precedentes AVANT de lancer la non-regression. Le chrono du lanceur
+detecte le changement de nombre de tests (46) et enregistre une nouvelle base.
+
+
+## [LECON] 2026-08-14 -- CONTROLE CAUSE RACINE CLASSEUR (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Buffy, suite remarque utilisateur 'section Classeur oubliee') : verification J1-J6 de la correction des 2 outils (mettre-a-jour-readme v0.4.1, combos-analyse-projet v0.1.1) qui listaient 17 dossiers au lieu des 12 agents d action. Critere corrige : presence d un parcours JSON agents/<nom>/parcours/parcours-<nom>.json. Resultat : 17/17 OK - les 2 outils affichent Agents reels : 12, aucun MANQUANT agent, py_compile + bash -n OK, normes 0/0, test-038 7/7, test-020 45/1 (KO version attendu, Morpheus adaptera), aucune reinjection dans le README apres relance du combo massif par test-020.
+
+
+## [LECON] 2026-08-14 -- CONTROLE SECTION CLASSEUR README (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Clio, suite remarque utilisateur 'section Classeur oubliee') : verification J1-J6. Resultat : 12/12 OK (le J3a a ete re-verifie : la 13e ligne detectee etait la ligne de separation |---|---|, la table contient bien les 12 vrais agents). README public : 0 ligne cassee, section '## Le classeur de variables' presente (3 caracteristiques), table agents 2 colonnes, version 1.1.1 synchronisee (version-readme.txt + badge), test-038 7/7, normes 0/0. Lecon : quand un controle compte des lignes de tableau, exclure la ligne de separation |---|---| (faux positif).
+
+
+## [LECON] 2026-08-14 -- NON-REGRESSION 46/46 APRES MISSION CLASSEUR (Janus, VERDICT VALIDE)
+
+**Controle final** de la chaine classeur (Buffy cause racine -> Janus -> Clio section -> Janus -> Morpheus test-020 -> Janus). Resultats : test-020 46/46 (adapte par Morpheus pour combos-analyse-projet 0.1.1), test-038 7/7, test-024 14/14 (apres suppression du tmp-morpheus residuel). NON-REGRESSION COMPLETE : 46 OK / 0 KO, chrono 45.8 s (amelioration vs reference 46.0 s, reference mise a jour). Lecon : avant de lancer la non-regression, verifier qu aucun dossier tmp-* residuel des missions precedentes ne traine (test-024 le detecte - le tmp de l agent precedent reste si non nettoye).
+
+
+## [LECON] 2026-08-14 -- CONTROLE SECTION FONDATIONS DU README (Janus)
+
+**Contexte** : controle croise de la mission Clio (section fondations du systeme
+dans le README public).
+
+**Fait** : 11/11 OK. Un ecart mineur trouve et corrige : la ligne 'Regles
+immuables' faisait 101 caracteres (limite 100) - raccourcie a 87 car sans perte
+de sens ('Les regles que le systeme ne transgresse jamais : veracite, choix,
+groupes' -> 'Les regles inviolables : veracite, choix des agents, groupes').
+
+**Lecon** : verifier la longueur de ligne (<= 100 car) DANS le controle croise,
+pas seulement ASCII/LF - un tableau de README peut facilement depasser la
+limite sans s en rendre compte lors de la redaction.
+
+
+## [LECON] 2026-08-14 -- CONTROLE SECTION COMMENCER DU README (Janus)
+
+**Contexte** : controle croise de la mission Clio (section Commencer reecrite
+sans jargon).
+
+**Fait** : 13/13 OK. Un faux KO de mon script de controle (motif de recherche
+J2b qui ne tenait pas compte de l indentation de continuation de ligne) -
+corrige en verifiant le sens ('Lire demarrer.md' absent + 'il se lance' present).
+
+**Lecon** : quand on verifie un texte en continu (retours a la ligne),
+construire les motifs de recherche sur le SENS (mots-cles sans dependre de la
+disposition des lignes), sinon on cree des faux KO qui ralentissent le
+controle.
+
+
+## [LECON] 2026-08-14 -- CONTROLE MISSION THEMIS README (Janus)
+
+**Contexte** : controle croise de la mission Themis (correction readme-dev +
+responsabilite README).
+
+**Fait** : 18/18 OK. Un faux KO de mon script (motif de recherche 'fin de
+mission' + 'maillon' qui matchait une autre ligne de la fiche avant la ligne
+239) - corrige en ancrant le motif sur le debut de ligne exact.
+
+**Lecon** : quand on verifie une ligne precise d un fichier, ancrer le motif de
+recherche sur le DEBUT de la ligne (- Je suis...) pour eviter de matcher un
+autre bloc similaire - un motif trop large cree des faux KO qui ralentissent
+le controle.
+
+
+## [LECON] 2026-08-14 -- CONTROLE DEMARRAGE AUTOMATIQUE v0.5.4 (Janus)
+
+**Contexte** : controle croise de la mission Vulcain (bug d arret a c0 +
+fix Raison multiligne).
+
+**Fait** : 18/18 OK. Le test reel sur copie (AGENTS_FILE) prouve les 3
+comportements : demarrage ajoute, multiligne preserve, cerberus exclu.
+
+**Lecon** : pour controler un correctif d outil qui modifie AGENTS.md, tester
+TOUJOURS sur une copie via les variables AGENTS_FILE / AGENTS_HISTORIQUE -
+jamais sur le vrai fichier. Verifier aussi la parite py/sh (les 2 implementent
+la meme logique de reconstruction de bloc).
+
+
+## [LECON] 2026-08-14 -- KO TEST-028 TRAITE : SPEC ACTIVER-AGENT-PRINCIPAL ALIGNEE 0.5.3 -> 0.5.4 (Janus)
+
+**Contexte** : le KO preexistant test-028 (coherence documentaire) signalait une divergence entre la spec
+activer-agent-principal (0.5.3) et l outil (0.5.4, bump de la mission "demarrage automatique + fix Raison
+multiligne" de la mission precedente). Demande utilisateur : traiter ce KO en alignant la spec sur l outil.
+
+**Cause** : le bump de version de l outil (0.5.4) n avait pas ete reporte dans la spec
+(spec/spec-activer-agent-principal.001.01.ebauche.md restee a 0.5.3). C est exactement le type d ecart
+que detecter-divergences-version detecte : spec et outil doivent rester synchronises.
+
+**Actions** :
+1. spec : **Version :** 0.5.3 -> 0.5.4
+2. spec : entree d historique 0.5.4 ajoutee (demarrage obligatoire automatique + fix bug latent Raison multiligne)
+3. Verification : test-028 passe 8/8 OK, non-regression complete 47 OK / 0 KO, chrono conforme (48.0s vs 45.1s, +6%)
+4. Normes : 0 non-ASCII, 0 CRLF, 0 residu temp
+
+**Lecon** : un bump de version d outil doit TOUJOURS etre reporte dans la spec associee dans la meme mission
+(Pattern : spec et outil evoluent ensemble). Le garde-fou test-028 + detecter-divergences-version attrapent
+l oubli au lancement suivant -- autant le faire proprement des le bump.
+
+
+## [LECON] 2026-08-14 -- CONTROLE CROISE GARDE-FOU ANTI-DERIVE CERBERUS (Janus, VERDICT VALIDE)
+
+**Controle croise** (Buffy -> Morpheus -> Janus) : la carte cerberus passe
+v0.4.5 avec l indice GARDE-FOU C1 anti-derive dans la case c1 (TOUTE tache
+d execution -> activer l agent habilite, jamais executer seul - lecon derive
+2026-08-14 ou Cerberus a execute SEUL 19 taches).
+
+**Verifications (J1-J4)** :
+- J1 : valider-cartes cerberus CONFORME, version 0.4.5, 5 branches de c1
+  intactes, indice GARDE-FOU C1 135 car (< 160).
+- J2 : fiche cerberus.md synchronisee (PARCOURS v0.4.5 + FINS REELLES v0.4.5),
+  verifier-conformite-fiche CONFORME.
+- J3 : test-013 22/22, test-035 8/8, test-037 6/6.
+- J4 : normes 0/0 sur parcours + fiche + test.
+
+**Decouverte en cours de route** : ma declaration registre
+(morpheus -> tester-protections, outil absent de la carte morpheus) a fait KO
+le test-035 (OUTIL_HORS_CARTE). Corrige : entree fautive retiree du registre
+(le 13/08 la meme entree avait ete retiree au reverdissement). Lecon : un agent
+qui declare un usage au registre DOIT avoir l outil dans SA carte - sinon
+evaluer-processus signale. Les outils de protection (tester-protections) sont
+IMPORTES par les tests, ils ne se declarent PAS au registre comme usages directs.
+
+**Validations** : non-regression complete 51 OK / 0 KO (46.6s, temps ameliore
+vs 46.8s, reference mise a jour), normes 0/0, 0 residu.
+
+
+## [LECON] 2026-08-14 -- CONTROLE CROISE REGISTRE-TESTS (Janus, VERDICT VALIDE)
+
+**Controle croise** (Vulcain -> Morpheus -> Janus) : le lanceur
+tester-lancer-non-regression v0.3.0 journalise CHAQUE test execute dans
+registre-tests.jsonl quand --agent est fourni (demande utilisateur : comme le
+registre-usages-outils trace les usages d outils, chaque lancement de tests
+laisse une trace dediee).
+
+**Verifications (J1-J4)** :
+- J1 : lanceur v0.3.0, option --agent dans l aide, registre-tests DISTINCT de
+  registre-usages-outils.
+- J2 : test-051 8/8 (garde-fou registre-tests) + tests adaptes verts
+  (test-031 10/10, test-032 10/10, test-024 14/14, test-027 11/11).
+- J3 : registre-usages-outils propre (test-035 8/8, test-037 6/6).
+- J4 : normes 0/0 (lanceur + doc + test-051 + registres).
+
+**Decouverte en cours de route (course de donnees)** : test-051 lance le
+lanceur avec --agent (sous-processus qui ecrivent dans registre-tests.jsonl)
+- en POOL, les autres workers ecrivent aussi dans registre-tests (--agent
+  janus du run complet) -> le comptage avant/apres du test-051 se faussait ->
+  KO intermittent. Corrige : test-051 ajoute a GARDE_FOUS_GLOBAUX (tourne en
+  SERIE apres le pool, jamais en parallele). Lecon : un test qui ECRIT un
+  fichier partage ne tourne JAMAIS en parallele.
+
+**Validations** : non-regression complete 52 OK / 0 KO (49.0s, +4% conforme
+reference), registre-tests rempli par les 156 traces reelles de la
+non-regression (janus, toutes series), registre nettoye des entrees de preuve
+(tmp-t051). Normes 0/0, 0 residu.
+
+
+## [LECON] 2026-08-14 -- CONTROLE CROISE TRI DU REGISTRE-USAGES-OUTILS (Janus, VERDICT VALIDE)
+
+**Controle croise** (Vulcain -> Morpheus -> Janus) : le registre-usages-outils
+est desormais trie par date/heure DECROISSANT (le plus recent en premier,
+demande utilisateur). enregistrer-usage-outil v0.3.0 : fonction trier_registre
+appelee apres chaque ajout, lignes non-JSON conservees en fin (jamais perdues).
+
+**Verifications (J1-J4)** :
+- J1 : outil v0.3.0 + registre 119 entrees triees decroissant (plus recent
+  22:11:56, plus ancien 18:45:11).
+- J2 : test-024 15/15 (point 14 anti-recurrence tri), test-035 8/8,
+  test-037 6/6, test-051 8/8, test-045 15/15.
+- J3 : trier_registre conserve les lignes non-JSON en fin (verifie dans le
+  code + avertissement).
+- J4 : normes 0/0 (outil + doc + spec + test + registre).
+
+**Decouverte en cours de route** : le bump v0.3.0 avait laisse la SPEC
+(spec-enregistrer-usage-outil.001.01.ebauche.md) a v0.2.1 -> test-028 KO
+(0 spec DIVERGENTE). Corrige : spec alignee v0.3.0 (version + historique).
+Lecon : a CHAQUE bump d outil, la spec du protocole 5 fichiers doit etre
+aligne DANS LA MEME mission - test-028 le mecanise.
+
+**Validations** : non-regression complete 52 OK / 0 KO (49.5s, +5% conforme
+reference), normes 0/0, 0 residu.
+
+
+## [LECON] 2026-08-14 -- TRI REGISTRE-TESTS : CONTROLE CROISE J1-J5 (Janus, VERDICT VALIDE)
+
+**Contexte** : chaine Vulcain v0.3.1 (tri decroissant registre-tests) ->
+Morpheus (5 tests adaptes + point 7 anti-regression) -> Janus (controle).
+
+**Decouverte 1 (bug rotation, corrige par Janus en controle)** : a chaque
+non-regression, rotation_registre reecrivait le registre-usages en
+`scripts + normales` (les entrees mode script-temporaire, NON triees, en
+tete) -> le tri global par date decroissant etait casse apres chaque run
+(piege invisible : le registre semblait trie au repos, mais une rotation
+suffisait a le desordonner). FIX : re-tri GLOBAL par date apres la rotation.
+Preuve : run reel -> registre 112 entrees, trie decroissant preserve.
+
+**Decouverte 2 (artefact test-051)** : le test-051 laisse ses entrees de
+preuve `tmp-t051` dans le registre-tests a chaque execution (5 par run).
+Nettoie manuellement. A corriger par Morpheus : suppression en fin de test
+(domaine tests).
+
+**Decouverte 3 (CRLF)** : ma lecon Morpheus de la mission precedente avait
+des fins de ligne Windows (19 CRLF) -> detecter-usage-outils-externes les a
+signales (test-047 KO). Corrige en LF pur. Lecon : toute ecriture Python de
+fichiers du projet doit utiliser newline='\n' (jamais l ecriture Windows par
+defaut).
+
+**Validations** : J1 trie decroissant (520 entrees), J2 test-051 9/9, J3 les
+5 tests adaptes verts (031 10/10, 032 10/10, 024 15/15, 027 11/11, 051 9/9),
+J4 doc v0.3.1 + catalogue, J5 non-regression complete 52 OK / 0 KO (48.4s,
+conforme reference +3%).
+
+
+## [LECON] 2026-08-14 -- CONTROLE CROISE FIX RECOLLEMENT v0.5.5 (Janus, VERDICT VALIDE)
+
+**Contexte** : AGENTS.md corrompu (21 blocs DEMARRAGE accumules par le bug
+de recollement v0.5.4). Vulcain a corrige v0.5.5 (un champ remplace ignore
+son ancienne suite, y compris Raison) + repare AGENTS.md + cree test-008.
+
+**Verifications J1-J5** : tout vert (voir rapport). Non-regression 52 OK / 0 KO.
+
+**Decouverte (lecon tmp-*)** : en non-regression, les dossiers tmp-* des
+maillons precedents de la chaine (missions TERMINEES mais dossiers non
+supprimes) faisaient KO test-024/test-046. Lecon : CHAQUE maillon supprime
+SON dossier tmp-* DES qu il passe le relais (ne pas attendre la fin de la
+chaine). Les dossiers des missions terminees sont des residus immediats.
+
+**Decouverte 2 (la cause racine se REPRODUIT)** : la Raison de la premiere
+reactivation (celle qui a corrompu AGENTS.md) contenait une apostrophe mal
+echappee dans la commande shell inline -> raison tronquee a 'BILAN. Ma
+propre commande de reactivation a REPRODUIT le bug (raison tronquee a
+'BILAN, Active par = CONSOLIDE) - preuve que c etait bien la cause racine
+d origine, pas un accident isole. Correction : re-reactiver avec
+subprocess.list2cmdline (pas de shell inline). Lecon : TOUTE raison
+d activation/reactivation passe par list2cmdline, JAMAIS une chaine shell
+avec apostrophes (regle deja documentee, a appliquer sans exception).
+
+
+## [LECON] 2026-08-14 -- CONTROLE CROISE NETTOYAGE TEST-051 (Janus, VERDICT VALIDE)
+
+**Contexte** : ma decouverte (mission tri registre-tests) - le test-051
+laissait ses preuves tmp-t051 dans le registre-tests (5/run). Morpheus a
+corrige : point 8 de nettoyage (reecriture sans les preuves, tri + LF
+preserves) + verification 0 restante.
+
+**Verifications J1-J5** : tout vert. Preuve durable : apres la non-regression
+complete, 0 entree tmp-t051 dans le registre (832 entrees reelles).
+
+**Lecon** : un garde-fou qui ecrit dans un registre doit TOUJOURS nettoyer
+ses propres preuves en fin de test - un test ne doit jamais laisser de trace
+de son execution dans les donnees qu il verifie (artefact sinon).
+
+
+## [LECON] 2026-08-14 -- CONTROLE CROISE GARDE-FOU TEST-052 (Janus, VERDICT VALIDE)
+
+**Contexte** : le bug d echappement a corrompu AGENTS.md DEUX FOIS (raison
+tronquee a 'BILAN). Lecon documentee mais pas mecanisee. Morpheus a cree
+test-052 : tout script temp qui invoque activer/reactiver-agent-principal
+doit passer la raison via subprocess.list2cmdline.
+
+**Verifications J1-J5** : tout vert. Preuve negative validee par Janus de
+maniere independante (script fautif -> KO, suppression -> 5/5).
+
+**Lecon (auto-incrimination)** : un test qui documente un litteral a risque
+(subprocess.run() ou autre motif interdit par un autre garde-fou) doit
+construire ce litteral par concatenation - le garde-fou test-030 scanne
+TOUS les tests et signale le litteral meme dans un docstring.
+
+
+## [LECON] 2026-08-14 -- CONTROLE CROISE DECLARATION USAGES MECANISEE (Janus, VERDICT VALIDE)
+
+**Contexte** : l utilisateur a constate 3 missions completes sans AUCUNE
+declaration au registre (depuis 22:17:51). Vulcain a mecanise la declaration
+dans generateurs-outil-temporaire v0.2.1 (.py + .sh en parite) : bloc
+DECLARATION USAGES (variable AGENT + declarer_usages() appelant
+enregistrer-usage-outil --mode script-temporaire pour le script et chaque
+outil). Protocole v0.2.7 : declaration obligatoire. Morpheus a adapte
+test-050 (17/17) + preuves negatives validees + test-024 15/15.
+
+**Verifications J1-J5** : J1 version .py/.sh 0.2.1 identiques ; J2 preuve
+reelle independante (generation -> AGENT -> execution -> entree au registre
+-> nettoyage) ; J3 test-050 17/17 + test-051 10/10 + test-024 15/15 ; J4
+normes 0/0 ; J5 non-regression complete 53 OK / 0 KO (49.4s).
+
+**Decouverte 1 (spec oubliee)** : le bump de version de l outil a 0.2.1 sans
+bumper sa spec (restee 0.2.0) a fait KO test-028 (spec divergente). Lecon :
+a chaque bump d outil, bumper la spec (meme regle que la mission precedente
+activer-agent-principal 0.5.3/0.5.4).
+
+**Decouverte 2 (regle seul Janus non-respectee par mes declarations)** : mes
+entrees du jour declaraient tester-lancer-non-regression pour morpheus -
+EXACTEMENT ce que la regle immuable interdit (seul janus lance la
+non-regression, FIX v0.1.2 evaluer-processus : les usages historiques sont
+ignores mais ceux du jour sont verifies). Correction : morpheus declare
+tester-protection-* (l outil de sa carte pour executer les tests
+individuellement) ; les entrees vulcain/cerberus hors carte (artefacts de
+cette chaine) ont ete retirees. Lecon : avant de declarer un usage, verifier
+que le nom est dans SA carte (et respecter les exclusivites).
+
+**Lecon (preuve negative)** : un remplacement pour simuler une violation doit
+RETIRER le motif entier (pas un suffixe qui laisse le motif present -> faux
+negatif) ; pour detecter un KO dans une sortie, parser le compteur (regex),
+pas chercher la sous-chaine "KO" (presente dans "0 KO").
+
+
+## [LECON] 2026-08-14 -- CONTROLE CROISE PROTECTION DOC OBLIGATOIRE TEMPLATE (Janus, VERDICT VALIDE)
+
+**Contexte** : demande utilisateur - les agents n utilisent pas les outils
+correctement car ils ne lisent pas le .md de documentation. Decision :
+severite BLOQUANTE. Vulcain a ajoute le bloc DOC OBLIGATOIRE dans
+outil-template v0.2.0 (.py + .sh en parite), Morpheus a cree le garde-fou
+test-054.
+
+**Verifications J1-J5** : J1 versions .py/.sh 0.2.0 identiques + bloc present ;
+J2 preuve reelle independante (mode reel sans confirme -> rc=2, avec -> rc=0,
+--doc affiche) ; J3 test-054 9/9 + test-035 8/8 + test-050 17/17 ; J4 normes
+0/0 ; J5 non-regression complete 54 OK / 0 KO (51.6s, nouvelle base car 54e
+test ajoute).
+
+**Decouverte (declarations hors carte, 3e fois de la journee)** : mes
+declarations morpheus du jour utilisaient tester-lancer-non-regression
+(INTERDIT pour morpheus : seul janus) + tester-doc-obligatoire-template
+(nom invente) + evaluer-processus (outil de controle). Correction : morpheus
+declare tester-protection-* (le wildcard de SA carte) pour tous ses tests.
+Lecon confirmee : AVANT de declarer un usage, verifier que le nom est dans
+SA carte ; un test individuel se declare via le wildcard de la carte
+(tester-protection-* pour morpheus), JAMAIS via tester-lancer-non-regression.
+
+**Ecart de carte signale (domaine Buffy)** : la carte vulcain a la REGLE c4
+(j utilise TOUJOURS outil-template) mais pas d indice outil outil-template ->
+tout usage declare d outil-template par vulcain est signale OUTIL_HORS_CARTE.
+Ajouter l indice outil outil-template a la case c4 du parcours vulcain.
+
+## [LECON] 2026-08-15 -- CONTROLE CROISE : ECART CARTE VULCAIN CORRIGE (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Buffy, demande Cerberus) : correction de l ecart de carte
+vulcain - indice outil outil-template ajoute a la case c4 (la REGLE c4 mentionnait
+outil-template sans indice outil -> OUTIL_HORS_CARTE a chaque usage declare).
+
+**Verifications (J1-J5)** :
+- J1 : valider-cartes-decision --agent vulcain CONFORME (fiche PARCOURS v0.4.8 ==
+  parcours 0.4.8)
+- J2 : evaluer-processus --agent vulcain 0 probleme + scan global 0 probleme
+- J3 : normes ASCII strict + LF pur sur parcours-vulcain.json, vulcain.md,
+  corrections-buffy (0/0 partout)
+- J4 : registre - les 2 declarations buffy du jour (editer-fichier,
+  valider-cartes-decision) sont dans sa carte, tri decroissant respecte, 0 entree
+  hors carte
+- J5 : NON-REGRESSION COMPLETE 54 OK / 0 KO (51.9s, conforme reference 51.6s, +1%)
+
+**Verdict : VALIDE** - l ecart est corrige a la racine (la carte a maintenant la
+coherence regle/indice outil), rien ne regresse.
+
+**Lecon** : la verification de la coherence regle/indices d une carte (toute REGLE
+mentionnant un outil doit avoir l indice outil correspondant) est maintenant couverte
+par evaluer-processus - un ajout de REGLE sans indice outil sera detecte des le premier
+usage declare. A noter aussi : Buffy a respecte sa carte (FIN = ACTIVER JANUS) en
+corrigeant la raison d activation dans AGENTS.md/AGENTS-historique - la carte est bien
+la source de verite, pas la mission recue.

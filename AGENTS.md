@@ -21,16 +21,16 @@ identite:
 | **Nom LLM** | llm-1 |
 | **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-13 |
+| **Derniere mise a jour** | 2026-08-15 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
 | **Active par** | cerberus (retour de mission) |
-| **Raison** | CONTROLE FINAL TERMINE : garde-fou test-042 (combos-variables-quotees) VALIDE. Morpheus a cree test-042 (4/4, conforme template test-029 42 tests) + CORRIGE les 8 commandes non quotees des definitions-combo.json (combo-controle-buffy c4, combo-controle-impacts c1, combo-corriger-fichier c1-c6 : {fichier} -> '{fichier}'). Distinction cle : commande = exactement {var} -> OK (22 commandes entieres generees intactes), argument {var} -> quote obligatoire. Lanceur sain (1 bloc, test-042 en serie e + DUREES, compile). Themis audit 9/9 VALIDE (rapport themis/rapports/audit-test-042-combos-variables-quotees-2026-08-13.md). Janus J1-J4 8/8 + non-regression complete 42/42 OK (nouvelle base chrono 45.9s). Rapport : janus/controles/controle-test-042-combos-variables-quotees-2026-08-13.md. Fin de mission. |
+| **Raison** | BILAN CONSOLIDE (Janus, mission Cerberus) : ecart carte vulcain corrige par Buffy - indice outil outil-template ajoute a la case c4, parcours 0.4.8, fiche vulcain a jour. VERDICT VALIDE (J1-J5) : valider-cartes vulcain CONFORME, evaluer-processus 0 probleme (agent + global), normes 0/0, registre propre (2 declarations buffy du jour dans sa carte), non-regression 54 OK / 0 KO (51.9s, +1% reference). Plus aucun OUTIL_HORS_CARTE pour outil-template. Lecon Janus enregistree. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-13 21:01 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-15 00:07 |
 ## Configuration Active
 
 ### Regles specifiques a Cerberus
@@ -95,7 +95,7 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 ## Groupes d'agents (regles-groupes-agents)
 
 > **REGLE IMMUABLE** : [regles-groupes-agents.md](cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md) -- 3 groupes aux domaines separes :
-> **1) Coordination** : Cerberus. **2) Cerveau-projet** (gerent `cerveau-projet/` lui-meme : outils, parcours, fiches, protocoles, spec des outils, README) : **Buffy** (responsable), Vulcain, Morpheus, Janus, Atlas, Themis, Clio. **3) Trio projets futurs** (ecrivent `pense-betes/`, `specs/`, `todos/` pour le dev des apps futures) : Athena, Promethee, Minerve.
+> **1) Coordination** : Cerberus. **2) Cerveau-projet** (gerent `cerveau-projet/` lui-meme : outils, parcours, fiches, protocoles, spec des outils, README) : **Buffy** (responsable), Vulcain, Morpheus, Janus, Atlas, Themis, Clio, Hygie, Hermes. **3) Trio projets futurs** (ecrivent `pense-betes/`, `specs/`, `todos/` pour le dev des apps futures) : Athena, Promethee, Minerve.
 > **REGLE** : le trio n'est JAMAIS utilise pour developper le cerveau-projet -- c'est Buffy la responsable.
 
 ## Liste des agents
@@ -120,6 +120,8 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 | [Promethee](cerveau-projet/agents/promethee/promethee.md) | cerveau-projet/agents/promethee/ | Redacteur de specs | Disponible (en attente) | Agent dedie aux specs |
 | [Minerve](cerveau-projet/agents/minerve/minerve.md) | cerveau-projet/agents/minerve/ | Redactrice de todos | Disponible (en attente) | Agent dedie aux todos |
 | [Clio](cerveau-projet/agents/clio/clio.md) | cerveau-projet/agents/clio/ | Muse de l'histoire -- README | Disponible (en attente) | Agent dedie au README |
+| [Hygie](cerveau-projet/agents/hygie/hygie.md) | cerveau-projet/agents/hygie/ | Agent de nettoyage du workspace | Disponible (en attente) | SEUL habilite a TOUT le workspace et a supprimer sans demande prealable |
+| [Hermes](cerveau-projet/agents/hermes/hermes.md) | cerveau-projet/agents/hermes/ | Agent de la langue (orthographe, vocabulaire, fautes) | Disponible (en attente) | Agent dedie aux fautes de francais |
 
 ---
 

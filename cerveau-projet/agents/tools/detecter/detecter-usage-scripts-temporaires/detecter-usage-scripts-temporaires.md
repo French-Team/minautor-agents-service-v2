@@ -29,16 +29,17 @@ generateur). Cet outil ferme la boucle : il scanne les sources de traces
 | 1 | Racine du projet | Fichiers `.zz-*` / `.tmp-*` (.py/.sh) presents |
 | 2 | Git (`git log --diff-filter=A`) | Scripts .py/.sh crees un jour (historique) |
 | 3 | Corrections/lecons | Mentions `\.zz-` / `\.tmp-` dans les `.md` |
-| 4 | Registre d'usage + historique | Declarations `mode: script-temporaire` (courantes ET archivees) |
+| 4 | Registre d'usage | Declarations `mode: script-temporaire` (registre courant, un seul fichier) |
 
 > **Filtre v0.1.1** : un script temporaire est un FICHIER `.py`/`.sh` dont
 > le basename commence par `.zz-` ou `.tmp-`. Les dossiers de tests
 > (`.tmp-eol-test/`, `.tmp-gc-test/`) et les fichiers `.md`/`.json` ne sont
 > PAS des scripts : ils ne sont plus comptes (faux positifs elimines).
 
-> **Memoire v0.1.1** : le detecteur croise aussi avec
-> `registre-usages-outils.historique.jsonl` (les declarations archivees par
-> tester-lancer-non-regression restent verifiables).
+> **Memoire** : le detecteur croise avec le registre courant
+> `registre-usages-outils.jsonl` (un seul fichier depuis la decision
+> utilisateur 2026-08-14 : plus d archive historique, entrees
+> script-temporaire fusionnees dans le registre actif).
 
 ## Utilisation
 
@@ -55,7 +56,7 @@ python3 detecter-usage-scripts-temporaires.py --verbose
 
 ## Retour
 
-- `0` : aucun ecart (tous les scripts detectes sont declares au registre ou a l'historique)
+- `0` : aucun ecart (tous les scripts detectes sont declares au registre)
 - `1` : au moins un script detecte sans declaration (contournement)
 
 ## Historique

@@ -22,7 +22,7 @@ Options:
   --help             Afficher cette aide
 
 Proprietaire : Clio (agent dedie au README)
-Version : 0.4.0-py
+Version : 0.4.1-py
 Statut : prepare
 """
 
@@ -31,7 +31,7 @@ import os
 import re
 import sys
 
-VERSION = "0.4.0-py"
+VERSION = "0.4.1-py"
 STATUT = "prepare"
 
 README = "README.md"
@@ -43,12 +43,16 @@ CATEGORIES_EXCLUES = {"combos"}
 
 
 def compter_agents():
-    """Compter les agents reels (dossiers dans agents/, hors tools)."""
+    """Compter les agents d action (dossier avec parcours JSON)."""
     nb = 0
     if not os.path.isdir(AGENTS_DIR):
         return 0
     for nom in os.listdir(AGENTS_DIR):
-        if os.path.isdir(os.path.join(AGENTS_DIR, nom)) and nom != "tools":
+        dossier = os.path.join(AGENTS_DIR, nom)
+        if not (os.path.isdir(dossier) and nom != "tools"):
+            continue
+        # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
+        if os.path.isfile(os.path.join(dossier, "parcours", "parcours-" + nom + ".json")):
             nb += 1
     return nb
 
@@ -59,7 +63,12 @@ def lister_agents_reels():
     if not os.path.isdir(AGENTS_DIR):
         return resultat
     for nom in os.listdir(AGENTS_DIR):
-        if os.path.isdir(os.path.join(AGENTS_DIR, nom)) and nom != "tools":
+        dossier = os.path.join(AGENTS_DIR, nom)
+        if not (os.path.isdir(dossier) and nom != "tools"):
+            continue
+        # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
+        parcours_dir = os.path.join(dossier, "parcours")
+        if os.path.isdir(parcours_dir) and os.path.isfile(os.path.join(parcours_dir, "parcours-" + nom + ".json")):
             resultat.append(nom)
     return resultat
 

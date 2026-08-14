@@ -31,7 +31,7 @@
 #       --mode script-temporaire --contexte "inserer case c42 dans parcours buffy"
 #   python3 enregistrer-usage-outil.py --agent morpheus --outil valider-case --dry-run
 #
-# Version : 0.2.0
+# Version : 0.3.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -48,7 +48,7 @@ import os
 import sys
 from datetime import datetime
 
-VERSION = "0.2.1"
+VERSION = "0.3.0"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -107,6 +107,38 @@ def verifier_registre(registre):
     return invalides, deja
 
 
+def trier_registre(registre):
+    """Trie le registre par date puis heure, DECROISSANT (le plus recent en
+    premier, demande utilisateur 2026-08-14). Les lignes non-JSON sont
+    PRESERVEES (signalees, jamais perdues) et placees en fin de fichier.
+    Retourne le nombre de lignes triees."""
+    if not os.path.isfile(registre):
+        return 0
+    try:
+        with io.open(registre, encoding="utf-8") as fh:
+            lignes = [l.rstrip("\n") for l in fh if l.strip()]
+    except Exception:
+        return 0
+    valides = []
+    invalides = []
+    for l in lignes:
+        try:
+            e = json.loads(l)
+            valides.append((e.get("date", ""), l))
+        except ValueError:
+            invalides.append(l)
+    # tri decroissant par date (format YYYY-MM-DD HH:MM:SS - tri lexicographique
+    # equivalent au tri chronologique)
+    valides.sort(key=lambda paire: paire[0], reverse=True)
+    triees = [l for _, l in valides] + invalides
+    with io.open(registre, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write("\n".join(triees) + "\n")
+    if invalides:
+        print(_couleur("[AVERTISSEMENT] %d ligne(s) non-JSON conservees en fin de registre"
+                       % len(invalides), "jaune"))
+    return len(valides)
+
+
 def ajouter_entree(registre, agent, outil, mode, commande, contexte, dry_run=False):
     """Ajoute une entree JSON (une ligne) au registre. Retourne le dict cree."""
     entree = {
@@ -135,6 +167,8 @@ def ajouter_entree(registre, agent, outil, mode, commande, contexte, dry_run=Fal
         os.makedirs(dossier, exist_ok=True)
     with io.open(registre, "a", encoding="utf-8", newline="\n") as fh:
         fh.write(ligne + "\n")
+    # tri par date/heure DECROISSANT apres chaque ajout (demande utilisateur)
+    trier_registre(registre)
     print(_couleur("[OK] Usage enregistre : %s -> %s (mode %s)" % (agent, outil, mode), "vert"))
     print("Registre : %s" % registre)
     return entree

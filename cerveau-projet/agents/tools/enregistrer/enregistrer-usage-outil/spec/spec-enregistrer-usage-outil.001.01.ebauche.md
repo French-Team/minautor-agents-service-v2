@@ -1,8 +1,8 @@
 # Specification -- enregistrer-usage-outil
 
-**Version :** 0.2.1
+**Version :** 0.3.0
 **Statut :** ebauche
-**Historique :** v0.2.1 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 0.2.1) -> v0.1.0 (creation, 2026-08-11)
+**Historique :** v0.3.0 (2026-08-14, tri du registre par date/heure DECROISSANT apres chaque ajout, lignes non-JSON conservees en fin) -> v0.2.1 (alignement spec/outil, round 11 coherence documentaire) -> v0.1.0 (creation, 2026-08-11)
 **Categorie :** Enregistrer
 **Date :** 2026-08-11
 **Agent :** Vulcain

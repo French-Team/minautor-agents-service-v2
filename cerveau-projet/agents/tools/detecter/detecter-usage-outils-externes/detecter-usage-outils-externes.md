@@ -7,7 +7,7 @@ identite:
 # detecter-usage-outils-externes
 
 **Categorie** : Detecter
-**Version** : 0.1.0
+**Version** : 0.1.1
 **Statut** : prepare
 **Date creation** : 2026-08-07
 **Proprietaire** : Vulcain (outil partage)
@@ -31,7 +31,7 @@ Detecter les traces d'utilisation d'outils externes dans les fichiers du cerveau
 
 ```bash
 # Version Python (recommandee)
-python3 detecter-usage-outils-externes.py [CIBLE] [--recursive]
+python3 detecter-usage-outils-externes.py [CIBLE] [--recursive] [--exclure MOTIF]
 
 # Version bash equivalente
 bash detecter-usage-outils-externes.sh [CIBLE] [--recursive]
@@ -42,12 +42,28 @@ bash detecter-usage-outils-externes.sh [CIBLE] [--recursive]
 |---|---|
 | `CIBLE` | Fichier ou dossier a analyser (defaut: `.`) |
 | `--recursive` | Scanner recursivement les sous-dossiers |
+| `--exclure` | Motif supplementaire a exclure (sous-chaine de chemin, python uniquement) |
 
 **Exit code :**
 | Code | Signification |
 |---|---|
 | `0` | Aucun signe d'outil externe -- conformite OK |
 | `1` | Traces detectees (CRLF, non-ASCII, BOM) OU cible introuvable |
+
+---
+
+## Exclusions par defaut
+
+Certains fichiers sont volontairement non conformes aux traces d'outil externe :
+
+| Chemin | Raison |
+|---|---|
+| `corriger-dictionnaire-accents.txt` | Dictionnaire de CORRECTION : contient par nature les caracteres accents a corriger (non-ASCII volontaire) |
+| `dictionnaire-emojis.txt` | Idem pour les emojis |
+| `exemples/` | Jeux de tests pedagogiques (test-emojis, test-accents-zones-sensibles...) : DOIVENT contenir du non-ASCII pour prouver que les correcteurs fonctionnent |
+| `docs-dev-cerveau-projet/` | Documents externes fournis par l utilisateur (analyses) qui ne suivent pas nos normes |
+
+Un motif matche des qu'il apparait dans le chemin (sous-chaine). L'option `--exclure MOTIF` ajoute des exclusions supplementaires.
 
 ---
 

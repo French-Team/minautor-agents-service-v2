@@ -4,8 +4,8 @@
 # Detecte les traces d'utilisation d'outils externes (CRLF, non-ASCII, BOM)
 # dans les fichiers du cerveau-projet. Nos outils ecrivent en ASCII strict,
 # LF et sans BOM : toute trace differente signale un outil externe.
-# Version : 0.1.0-beta
-# Statut : ebauche
+# Version : 0.1.1
+# Statut : prepare
 # identite:
 #   type: outil
 #   appartient_a: commun
@@ -21,8 +21,8 @@ import os
 import sys
 from pathlib import Path
 
-VERSION = "0.1.0-beta"
-STATUT = "ebauche"
+VERSION = "0.1.1"
+STATUT = "prepare"
 
 _COULEURS = {
     "rouge": "\033[0;31m",
@@ -61,6 +61,36 @@ def verifier_nommage(script_path):
 
 
 EXTENSIONS = (".md", ".sh", ".py", ".txt", ".json")
+
+# ============================================================
+# EXCLUSIONS PAR DEFAUT : fichiers/chemins volontairement NON
+# conformes aux traces d'outil externe, donc legitimes.
+#   - corriger-dictionnaire-accents.txt / dictionnaire-emojis.txt :
+#     dictionnaires de CORRECTION qui contiennent par nature les
+#     caracteres accents/emojis a corriger (non-ASCII volontaire).
+#   - exemples/ : jeux de tests pedagogiques (test-emojis,
+#     test-accents-zones-sensibles...) qui DOIVENT contenir du
+#     non-ASCII pour prouver que les correcteurs fonctionnent.
+#   - docs-dev-cerveau-projet/ : documents externes fournis par
+#     l utilisateur (analyses) qui ne suivent pas nos normes.
+# Un motif matche des qu il apparait dans le chemin (sous-chaine).
+# ============================================================
+EXCLUSIONS_PAR_DEFAUT = (
+    "corriger-dictionnaire-accents.txt",
+    "dictionnaire-emojis.txt",
+    os.path.join("exemples", ""),
+    os.path.join("docs-dev-cerveau-projet", ""),
+)
+
+
+def est_exclu(chemin, exclusions):
+    """Retourne True si le chemin correspond a une exclusion (sous-chaine)."""
+    chaine = str(chemin).replace("\\", "/")
+    for motif in exclusions:
+        m = str(motif).replace("\\", "/")
+        if m and m in chaine:
+            return True
+    return False
 
 
 def analyser_fichier(chemin):
@@ -114,9 +144,13 @@ def main():
                         help="Fichier ou dossier a analyser (defaut: .)")
     parser.add_argument("--recursive", action="store_true",
                         help="Scanner recursivement les sous-dossiers")
+    parser.add_argument("--exclure", action="append", default=[],
+                        help="Motif supplementaire a exclure (sous-chaine de chemin)")
     parser.add_argument("--version", action="version",
                         version="detecter-usage-outils-externes v%s" % VERSION)
     args = parser.parse_args()
+
+    exclusions = list(EXCLUSIONS_PAR_DEFAUT) + args.exclure
 
     cible = Path(args.cible)
     if not cible.exists():
@@ -148,6 +182,8 @@ def main():
     fichiers_suspects = 0
 
     for f in fichiers:
+        if est_exclu(f, exclusions):
+            continue
         signes = analyser_fichier(f)
         if signes:
             fichiers_suspects += 1

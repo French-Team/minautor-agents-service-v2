@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-janus",
   "agent": "janus",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Janus : second controle (outil, statut, modification). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : les suites d'outils des chemins outil (c5-c7) et modification (c22-c26) sont remplacees par les combos combo-controle-outil et combo-controle-modification (Pattern 3, spec-guider-parcours v0.2.4)."
  },
@@ -144,20 +144,20 @@
      "type": "regle",
      "texte": "Verifier que les tests existent, sont numerotes et couvrent les cas limites (protocole-versionning-outils)."
     },
-  {
-   "type": "fichier",
-   "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-versionning-outils/",
-   "raison": "Protocole de versionning : cycle de vie des outils"
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-versionning-outils/",
+     "raison": "Protocole de versionning : cycle de vie des outils"
+    },
+    {
+     "type": "outil",
+     "nom": "tester-lancer-non-regression",
+     "chemin": "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/",
+     "commande": "python3 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py --journal"
+    }
+   ],
+   "suivant": "c5"
   },
-  {
-   "type": "outil",
-   "nom": "tester-lancer-non-regression",
-   "chemin": "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/",
-   "commande": "python3 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py --journal"
-  }
- ],
- "suivant": "c5"
-},
   "c5": {
    "titre": "Lancer le combo controle-outil",
    "type": "action",
@@ -434,6 +434,34 @@
      "type": "fichier",
      "chemin": "cerveau-projet/agents/regles-immuables/general/regles-validation-rigoureuse.md",
      "raison": "Regles de validation rigoureuse : verifier les impacts de la modification"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-residus",
+     "catalogue": "detecter-residus",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --tous --sans-cache"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-divergences-version",
+     "catalogue": "detecter-divergences-version",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-divergences-version/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-divergences-version/detecter-divergences-version.py --racine cerveau-projet"
+    },
+    {
+     "type": "outil",
+     "nom": "evaluer-processus",
+     "catalogue": "evaluer-processus",
+     "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-processus/",
+     "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-processus/evaluer-processus.py"
+    },
+    {
+     "catalogue": "valider-cartes-decision",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-cartes-decision/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --agent <agent>",
+     "nom": "valider-cartes-decision",
+     "type": "outil"
     }
    ],
    "suivant": "c22"

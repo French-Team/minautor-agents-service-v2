@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.2
+Version : 0.5.5
 Statut : prepare
 """
 
@@ -34,7 +34,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.5.2"
+VERSION = "0.5.5"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -80,6 +80,12 @@ AGENTS = {
     "themis": ("Evaluatrice croisee -- evaluation et audit",
                "cerveau-projet/agents/themis/themis.md",
                "cerveau-projet/agents/themis/corrections.md"),
+    "hygie": ("Agent de nettoyage -- seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable",
+              "cerveau-projet/agents/hygie/hygie.md",
+              "cerveau-projet/agents/hygie/corrections.md"),
+    "hermes": ("Agent de la langue -- orthographe, vocabulaire et fautes de francais commises par les agents",
+               "cerveau-projet/agents/hermes/hermes.md",
+               "cerveau-projet/agents/hermes/corrections.md"),
 }
 
 
@@ -134,6 +140,21 @@ def verifier_residus_racine():
     print("dans cerveau-projet/agents/clio/ (version-readme.txt,")
     print("statut-projet.txt), JAMAIS a la racine.")
     print("=" * 60)
+
+
+def instruction_demarrage(agent):
+    """Bloc DEMARRAGE OBLIGATOIRE pour un agent active (sauf Cerberus).
+    v0.5.4 : corrige le bug d arret a c0 - l agent sait comment lancer son
+    parcours depuis la case de depart."""
+    return (
+        "DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :\n"
+        "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \\n"
+        "  cerveau-projet/agents/%s/parcours/parcours-%s.json --case c0 --reponses OUI\n"
+        "(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance\n"
+        "avec --reponses NON pour relire d abord ; suis ensuite les branches case\n"
+        "par case ; si tu reprends apres une interruption, reprends a la case courante\n"
+        "avec --case <cid> --reponses '<reponse>')."
+    ) % (agent, agent)
 
 
 def lire_agents():
@@ -318,14 +339,28 @@ def editer_champs_session(contenu, session_id, champs):
              "Fiche", "Corrections", "Active par", "Raison"]
 
     def reconstruire_bloc(bloc, champs):
-        """Analyser les lignes d'un bloc, appliquer les champs, reemettre dans l'ordre."""
+        """Analyser les lignes d'un bloc, appliquer les champs, reemettre dans l'ordre.
+        v0.5.4 : la Raison peut etre MULTILIGNE (les lignes suivantes sans '| **')
+        sont des continuations de la Raison - elles sont conservees et recollees."""
         valeurs = {}
-        for ligne in bloc:
+        continuations = {}
+        i = 0
+        while i < len(bloc):
+            ligne = bloc[i]
             m = re.match(r"^\| \*\*([^*]+)\*\* \| (.*) \|$", ligne)
             if not m:
+                i += 1
                 continue
             champ = m.group(1).strip()
             valeur = m.group(2).strip()
+            # capturer les lignes de continuation de ce champ (Raison multiligne)
+            suivantes = []
+            j = i + 1
+            while j < len(bloc) and not re.match(r"^\| \*\*([^*]+)\*\* \|", bloc[j]):
+                suivantes.append(bloc[j])
+                j += 1
+            if suivantes:
+                continuations[champ] = suivantes
             # Migration anciens noms
             if champ == "Nom":
                 champ = "Nom Agent"
@@ -339,13 +374,32 @@ def editer_champs_session(contenu, session_id, champs):
                 if mm:
                     valeur = mm.group(2)
             valeurs[champ] = valeur
+            i = j
         valeurs.update(champs)
+        # Recollement des continuations (Raison multiligne) sur le champ mis a jour.
+        # v0.5.5 : si le champ a ETE REMPLACE (present dans champs), l'ancienne
+        # suite est IGNOREE (y compris la Raison) - le bug v0.5.4 faisait une
+        # exception pour la Raison et recolait les anciennes continuations
+        # (blocs DEMARRAGE) a chaque nouvelle raison -> accumulation infinie.
+        for champ_c, suite in continuations.items():
+            if champ_c in champs:
+                # champ remplace par un nouveau : ignorer l'ancienne suite
+                continue
+            if champ_c in valeurs:
+                valeurs[champ_c] = valeurs[champ_c] + "\n" + "\n".join(suite)
         nouvelles = ["", "| Champ | Valeur |", "|---|---|"]
         for champ in ORDRE:
             if champ in valeurs:
                 v = valeurs[champ]
                 if champ in ("Fiche", "Corrections"):
                     nouvelles.append("| **%s** | [%s](%s) |" % (champ, v, v))
+                elif champ == "Raison" and "\n" in v:
+                    # Raison multiligne : premiere ligne dans la cellule, les
+                    # suivantes en lignes brutes (format historique de AGENTS.md)
+                    lignes_raison = v.split("\n")
+                    nouvelles.append("| **%s** | %s |" % (champ, lignes_raison[0]))
+                    for suite in lignes_raison[1:]:
+                        nouvelles.append(suite)
                 else:
                     nouvelles.append("| **%s** | %s |" % (champ, v))
         # Champs inconnus conserves (s'ils existaient dans le bloc)
@@ -659,6 +713,11 @@ def activer_agent(session, agent, raison, mission=None):
 
     role, fiche, corrections = info
     date = datetime.now().strftime("%Y-%m-%d")
+    # v0.5.4 : ajouter l'instruction de demarrage a la Raison quand un agent
+    # (autre que Cerberus) est active - anti-bug d arret a la case c0.
+    raison_finale = raison
+    if agent.lower() != "cerberus" and "DEMARRAGE OBLIGATOIRE" not in raison:
+        raison_finale = raison + "\n\n" + instruction_demarrage(agent)
     champs = {
         "Nom Agent": agent,
         "Role Agent": role,
@@ -666,13 +725,13 @@ def activer_agent(session, agent, raison, mission=None):
         "Fiche": fiche,
         "Corrections": corrections,
         "Active par": "Cerberus (automatique)",
-        "Raison": raison,
+        "Raison": raison_finale,
     }
     contenu = editer_champs_session(contenu, session, champs)
     ecrire_agents(contenu)
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-    ajouter_historique(timestamp, session, agent, raison)
+    ajouter_historique(timestamp, session, agent, raison_finale)
     mettre_a_jour_profil_session(session, agent)
     actualiser_sessions_connues()
     print("Session %s : agent %s active avec succes" % (session, agent))

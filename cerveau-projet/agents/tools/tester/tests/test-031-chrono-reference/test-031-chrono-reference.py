@@ -21,7 +21,7 @@ Contexte (demande utilisateur 2026-08-13) :
     reference partielle fausserait la comparaison).
 
 Invariants verifies :
-  1. --version affiche v0.2.0
+  1. --version affiche v0.3.1
   2. Les options --seuil, --rebase-reference, --no-reference existent (--help)
   3. Le chrono est affiche (Temps ecoule) en fin de run cible
   4. Un run cible NE CREE PAS la reference si absente (preuve reelle)
@@ -101,10 +101,10 @@ def main():
     print("=== test-031 : chrono + reference de temps non-regression ===")
     etat_initial = lire_fichier(REFERENCE)
     try:
-        # 1. Version du lanceur (round 12 : v0.2.0)
+        # 1. Version du lanceur (round 12 : v0.3.1 tri registre-tests)
         r = run([PYTHON, LANCER, "--version"])
-        verifier("1. --version v0.2.0",
-                 r.returncode == 0 and "v0.2.0" in r.stdout,
+        verifier("1. --version v0.3.1",
+                 r.returncode == 0 and "v0.3.1" in r.stdout,
                  r.stdout.strip()[-60:])
 
         # 2. Options du round 11 presentes dans l aide

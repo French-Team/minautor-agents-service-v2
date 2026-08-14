@@ -14,7 +14,7 @@ Contexte (2026-08-13) :
   - Il a aussi enonce une philosophie : les agents sont construits de la meme
     facon (meme template) mais chacun a SON identite et SON role - aucun
     interet a avoir des parcours identiques.
-  - Audit Cerberus : les 11 cartes ont des signatures d ids TOUTES distinctes
+  - Audit Cerberus : les 12 cartes ont des signatures d ids TOUTES distinctes
     (principe identite deja respecte) ; 2 derives corrigees par Buffy :
     morpheus c12 (lanceur non-regression retire, tests individuels uniquement)
     et vulcain c8 (indice residuel retire). janus c4 Verifier les tests reste
@@ -27,9 +27,13 @@ Invariants verifies :
      dans ses indices outil (Janus = controle final)
   2. AUCUNE des 10 autres cartes ne contient tester-lancer-non-regression dans
      ses indices outil (ni dans le texte des cases)
+  2b. Le REGISTRE ne contient AUCUNE declaration de tester-lancer-non-regression
+     par un agent autre que janus (anti-recurrence : la declaration fautive
+     cerberus du 2026-08-14 passait le point 2 car elle ne touchait pas les
+     cartes - seul evaluer-processus l a attrapee indirectement)
   3. La fiche morpheus.md contient la REGLE ABSOLUE -- NON-REGRESSION JANUS
      (anti-recurrence : Morpheus n execute que des tests individuels)
-  4. Les 11 cartes ont des signatures de CONTENU TOUTES distinctes (identite
+  4. Les 12 cartes ont des signatures de CONTENU TOUTES distinctes (identite
      des agents : meme construction - ids standards partages - mais jamais de
      parcours identiques en contenu). NB : le trio athena/promethee/minerve
      partage volontairement la MEME structure d ids (meme construction) avec
@@ -60,6 +64,8 @@ AGENTS = [
 
 OUTIL_NON_REGRESSION = "tester-lancer-non-regression"
 FICHE_MORPHEUS = os.path.join(AGENTS_DIR, "morpheus", "morpheus.md")
+REGISTRE = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "traces",
+                       "registre-usages-outils.jsonl")
 
 NB_POINTS = 0
 NB_OK = 0
@@ -138,6 +144,40 @@ def main():
     verifier("2. Aucune des 10 autres cartes ne contient tester-lancer-non-regression",
              len(derivees) == 0, "derivees=%s" % derivees)
 
+    # 2b. LE REGISTRE : seule janus peut DECLARER avoir lance la non-regression
+    # (anti-recurrence : la declaration fautive cerberus -> tester-lancer-
+    # non-regression du 2026-08-14 passait le point 2 car elle ne touchait pas
+    # les cartes - seul evaluer-processus l a attrapee indirectement)
+    # Fenetre temporelle : seuls les usages du JOUR COURANT comptent (regle
+    # registre CUMULATIF 2026-08-14 - les usages historiques avant les regles
+    # de gouvernance, ex tester-lancer-non-regression par buffy/themis/
+    # morpheus le 2026-08-13, sont des faits passes a ignorer).
+    import datetime as _dt037
+    jour_courant = _dt037.date.today().strftime("%Y-%m-%d")
+    derivees_registre = []
+    try:
+        with io.open(REGISTRE, encoding="utf-8") as fh:
+            for ligne in fh:
+                ligne = ligne.strip()
+                if not ligne:
+                    continue
+                try:
+                    entree = json.loads(ligne)
+                except Exception:
+                    continue
+                if entree.get("outil") != OUTIL_NON_REGRESSION:
+                    continue
+                date = str(entree.get("date", ""))
+                if not date.startswith(jour_courant):
+                    continue  # usage historique : ignore
+                agent = entree.get("agent", "?")
+                if agent != "janus":
+                    derivees_registre.append("%s (%s)" % (agent, date))
+    except Exception as e:
+        derivees_registre.append("ERR %s" % e)
+    verifier("2b. Registre : seule la carte janus declare tester-lancer-non-regression (aucun autre agent)",
+             len(derivees_registre) == 0, "derivees=%s" % derivees_registre)
+
     # 3. Fiche morpheus : REGLE ABSOLUE -- NON-REGRESSION JANUS
     try:
         fiche = io.open(FICHE_MORPHEUS, encoding="utf-8").read()
@@ -164,7 +204,7 @@ def main():
                 signatures[sig] = agent
         except Exception as e:
             doublons.append("%s(ERR %s)" % (agent, e))
-    verifier("4. Les 11 cartes ont des signatures de CONTENU TOUTES distinctes (identite)",
+    verifier("4. Les 12 cartes ont des signatures de CONTENU TOUTES distinctes (identite)",
              len(doublons) == 0 and len(signatures) == 11,
              "doublons=%s nb_sig=%d" % (doublons, len(signatures)))
 

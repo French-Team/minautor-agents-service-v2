@@ -1511,3 +1511,477 @@ du code bash. La parite est garantie par construction.
 **Test** : test-042 4/4 OK, preuve negative 9/9 (commande entiere OK, non quote detecte, 2 var dont 1 non quote detecte), test-029 42 tests conformes, test-028 8/8, test-041 18/18, lanceur sain (1 bloc SERIES verifie apres edition - lecon dedoublement appliquee).
 
 **Lecon** : la regle de distinction (commande = exactement {var} vs argument {var}) est la cle - quoter une commande entiere aurait casse les 22 commandes generees. Le test la formalise. Anti-recurrence : un futur combo avec {var} non quote est signale a la non-regression.
+
+## [LECON] 2026-08-13 -- PREUVE RELLE APOSTROPHE DANS LES COMBOS (Morpheus, 2/2 OK)
+
+**Mission** : prouver par un test reel que le quoting des combos fonctionne avec une valeur a apostrophe (raison d activation).
+
+**Preuves (sandbox hors racine, 0 residu)** :
+- PREUVE 1 (generateur) : generateurs-commande activer-reactiver avec raison 'reprise d activation de la mission' -> commande composee avec guillemets doubles (quoter:True), shlex.split OK -> raison en UN SEUL argument intact. SANS quoting : shlex.split ECHEC 'No closing quotation' (preuve que le quoting est NECESSAIRE).
+- PREUVE 2a (moteur, quote double) : combos-moteur execute le combo, sortie = 'RAISON:reprise d activation de la mission' -> raison INTACTE.
+- PREUVE 2b (moteur, sans quote) : combos-moteur ECHOUE '[ERREUR] Commande invalide (case c1): No closing quotation'.
+
+**Lecons** :
+- La sortie d une case outil est CAPTUREE SILENCIEUSEMENT par combos-moteur (stockee en variable) - pour la verifier, utiliser --verbose (affiche la sortie de chaque case).
+- Le quoting (guillemets doubles autour de {var}) protege les apostrophes ET les espaces ; le generateur le fait deja via quoter:True pour les raisons.
+- Sans quoting, une apostrophe casse la commande avant meme execution (shlex.split) - d ou la necessite du garde-fou test-042.
+
+## [LECON] 2026-08-13 -- TEST-043 GENERATEURS-QUOTER (Morpheus, 10/10 OK)
+
+**Mission** : creer test-043 (garde-fou : generateurs-commande doit quoter les parametres quoter:true du catalogue).
+
+**Test** : (1) verifie les 5 parametres quoter:true presents (activer-activer/raison, activer-reactiver/raison, remplacer-texte/paire1+paire2, remplir-pense-bete/contenu), (2) composer_valeur quote (guillemets doubles), (3) shlex.split -> raison intacte en 1 argument, (4) composer_commande -> commande shlex.split-able avec raison a apostrophe, (5) normes ASCII/LF. 10/10 OK.
+
+**Preuves** : sans quoting, shlex.split leve 'No closing quotation' (valeur seule ET commande complete) ; avec quoting la raison 'reprise d activation de la mission' reste intacte. Conformite : test-029 43 tests conformes, test-028 8/8, test-042 4/4, normes 0/0, lanceur sain (1 bloc SERIES, test-043 en serie e + DUREES).
+
+**Lecon** : composer_valeur quote AUTOMATIQUEMENT des qu une valeur contient un espace (pas seulement quoter:true) - une preuve 'sans quoter' avec une valeur a espaces quote quand meme. La preuve decisive est la commande complete sans quoting (echoue en ValueError). Le garde-fou couvre maintenant le cote CATALOGUE (test-043) en plus du cote COMBOS (test-042) : les deux maillons de la chaine d echappement sont surveilles.
+## [LECON] 2026-08-13 -- ADAPTATION TEST-029 AU TEMPLATE V0.3.0 (Morpheus)
+
+**Contexte** : le template-test.md est passe en v0.3.0 (regle immuable
+protections + options on/off + chrono, demande utilisateur 2026-08-13).
+Le test-029 figeait le template en v0.2.1 : adaptation obligatoire.
+
+**Changements** (4 remplacements) :
+1. Docstring : template v0.2.1 -> v0.3.0 (+ mention regle immuable triplet).
+2. En-tete affiche : conformite template-test.md v0.3.0.
+3. Commentaire du point 2 : v0.3.0 + options on/off + chrono.
+4. Point 2 : verifie 'Version : 0.3.0' + presence de point_actif et
+   bilan_chrono dans le template (le garde-fou suit la nouvelle reference).
+
+**Preuves** : test-029 14/14 OK (43 tests conformes au template v0.3.0),
+test-030 10/10 (protections importees intactes), test-028 8/8, normes 0/0.
+
+**Lecons** :
+- Quand la REFERENCE amont change (template), le garde-fou qui la fige doit
+  etre adapte dans la MEME mission, sinon la non-regression casse. Le template
+  v0.3.0 impose desormais le triplet (protections + options on/off + chrono)
+  aux futurs tests ; les tests existants non migres restent conformes car les
+  invariants 4a-4h (shebang, coding, verifier, OK/KO, bilan, exit) sont
+  inchanges.
+- La verification du point 2 verifie maintenant la PRESENCE des fonctions de
+  chrono (point_actif/bilan_chrono) : si un futur template retirait le chrono,
+  test-029 le signalerait immediatement.
+## [LECON] 2026-08-13 -- TEST-044 TRIPLET TEMPLATE + DECOUVERTE BUG LATENT DU CANEVAS (Morpheus)
+
+**Contexte** : demande utilisateur - creer un garde-fou qui verifie que le
+template-test.md v0.3.0 impose bien le TRIPLET (protections + options on/off
++ chrono) aux futurs tests. test-044-triplet-template cree (14 points) :
+version 0.3.0, 3 fonctions (point_actif/chrono_etape/bilan_chrono),
+constantes (CHRONO_ACTIF/ISOLE/DESACTIVES/DEBUT_TEST/ETAPES), options
+documentees (--no-chrono/--isoler/--desactiver), usage reel dans le canevas
+(appels dans main), structure + checklist, coherence aval (protocole-tests
+v0.3.1 + protocole-outils Regle 9), normes.
+
+**DECOUVERTE MAJEURE - BUG LATENT DU CANEVAS** : le premier test conforme au
+template v0.3.0 a plante en fin d execution : UnboundLocalError sur NB_KO.
+Cause : le canevas du template (v0.2.1 ET v0.3.0) avait `NB_KO += 1` dans le
+bloc except de main() SANS `global NB_POINTS, NB_OK, NB_KO` en tete de main()
+-> Python traite NB_KO comme locale et le bilan final levait UnboundLocalError
+(quand le except ne s etait pas execute). Les 43 tests existants avaient tous
+le fix (`global NB`) sans que le template ne le documente : le canevas n avait
+jamais ete execute a la lettre. CORRIGE : `global NB_POINTS, NB_OK, NB_KO` en
+tete de main() dans le canevas du template (historique 0.3.0 mis a jour) ET
+dans test-044.
+
+**Preuves** : positif 14/14, preuve negative (retrait de def bilan_chrono(
+-> 13 OK / 1 KO detecte, restauration identique, reverification 14/14),
+passage lanceur 1/1, test-029 14/14 (44 tests conformes), test-030 10/10,
+1 seul bloc SERIES, normes 0/0.
+
+**Lecons** :
+- Le triplet du template doit etre SURVEILLE (test-044) mais le canevas doit
+  aussi etre EXECUTABLE tel quel : un template theorique cree des tests
+  theoriques. Le premier test conforme a joue son role en revelant le bug.
+- Toujours ecrire `global NB_POINTS, NB_OK, NB_KO` en tete de main() des
+  tests qui incrementent NB_KO dans un except (pattern standard des 44 tests).
+## [LECON] 2026-08-13 -- TEST-024 ADAPTE : GARDE-FOU DES DOSSIERS TEMPORAIRES RESIDUELS (Morpheus)
+
+**Contexte** : retour a la REGLE D ORIGINE (protocole v0.2.4) : chaque agent
+cree SON dossier tmp-<agent>/ a la racine et le SUPPRIME en fin de mission.
+test-024 detectait les scripts .tmp-*/.zz-* eparpilles mais PAS les dossiers
+tmp-<agent> residuels. Adaptation : nouveau point 2b - aucun dossier tmp-*
+a la racine HORS dossier de l agent courant (lu depuis le profil classeur
+variables-actuelles.md, champ agent:).
+
+**Preuves** : positif 14/14 (tmp-morpheus courant exclu), NEGATIF (faux
+dossier tmp-zz -> KO detecte sur 2b, suppression), reverification 14/14,
+conformite test-029 (44 tests) + test-030, normes 0/0.
+
+**DECOUVERTE VIVANTE** : le premier run du test adapte a detecte un RESIDU
+REEL : le dossier tmp-buffy de la mission precedente (Buffy avait active
+Morpheus sans supprimer son dossier). Le garde-fou a prouve sa valeur des la
+naissance - et la regle s applique a tous : chaque agent supprime SON dossier
+AVANT de reactiver l agent suivant.
+
+**Lecons** :
+- Le dossier tmp-<agent> de la mission COURANTE est legitime (invisible pour
+  test-024) mais tout tmp-* RESIDUEL est une anomalie : le point 2b le
+  detecte en excluant uniquement l agent courant via le profil classeur.
+- Un garde-fou qui protege une regle d usage DOIT exclure l usage courant
+  legitime, sinon il s auto-incrimine pendant les missions.
+
+## [LECON] 2026-08-13 -- GARDE-FOU TEST-045 + 12E AGENT (Morpheus)
+
+**Contexte** : creation de l agent Hygie (nettoyage) - adaptation des tests
+qui figent les compteurs + creation du garde-fou test-045.
+
+**Adaptations (11 -> 12 agents)** :
+- test-007 : catalogue 149 -> 152 (detecter-residus, snapshot-nettoyage,
+  combo-nettoyage-hygie) + index-tools 166 -> 170
+- test-018 : 11 -> 12 parcours ; test-026 : 11 -> 12 ; test-037 : 11 -> 12 cartes
+
+**Decouverte** : test-018 a REVELE que la fin de Hygie ne devait PAS etre
+REACTIVER Cerberus mais FIN - Activer Janus (REGLE IMMUABLE JANUS : second
+controle apres toute mission - d autant plus vital pour un agent qui
+SUPPRIME des fichiers). Le garde-fou a corrige la carte avant la livraison :
+preuve que les garde-fous compteurs fonctionnent.
+
+**test-045-hygie-garde-fou** (10 points) : fiche CONFORME, parcours valide +
+CONFORME + 0 cablage, chariot sur disque + catalogue + index-tools,
+snapshots/ existe, normes. Preuve negative : retrait de detecter-residus du
+catalogue -> 1 KO detecte -> restauration identique -> 10/10.
+
+**Lecon** : un nouveau test DOIT importer les protections des sa naissance
+(bloc PROTECTIONS = charger_protections() + PROTECTIONS.lancer_protege) -
+test-030 a bloque test-045 au premier run (8/10) ; la correction est
+immediate (modele test-044). Le template est LA reference, pas les tests
+precedents.
+
+
+## [LECON] 2026-08-13 -- GARDE-FOU TEST-046 COMPARTIMENTATION RESIDUS (Morpheus)
+
+**Contexte** : demande utilisateur - creer un test garde-fou qui verifie la
+compartimentation de detecter-residus (zone etanche + deduplication), apres
+les 2 bugs corriges en v0.1.2 (classification RAPPORT_EGARE par dossier
+parent, double comptage racine).
+
+**Ce qui a ete fait** :
+- test-046-compartimentation-residus.py : pose des residus factices dans les
+  DEUX zones (workspace/ + cerveau-projet/) avec nettoyage try/finally
+  garanti, puis verifie : (1) zone workspace ne voit QUE ses residus,
+  (2) zone cerveau-projet ne voit QUE les siens, (3) un fichier de la racine
+  est compte UNE seule fois (deduplication), (4) un rapport dans un dossier
+  parent `controles` est LEGITIME (correctif v0.1.2), (5) --tous voit les
+  deux zones, (6) nettoyage 0 residu restant, (7-8) normes ASCII/LF.
+- 13/13 OK en positif. PREUVE NEGATIVE : retrait temporaire du prune
+  cerveau-projet -> 1 KO detecte (chevauchement) -> restauration -> 13/13 OK.
+- Enregistre dans le lanceur : serie e + DUREES (0s, test rapide).
+- Verifs : test-029 (template) 14/14, test-030 (protections) 10/10, serie e
+  complete 17/17 OK.
+
+**Decouverte en cours de route** : la serie e etait 16/17 a cause de test-028
+KO (DIVERGENT) - la spec de activer-agent-principal etait restee en 0.5.2
+alors que le .py etait en 0.5.3 (bump de la mission Vulcain qui corrigeait le
+bug Agent inconnu hygie, sans mettre a jour la spec). Corrige : spec 0.5.2 ->
+0.5.3. Lecon : tout bump de version .py doit mettre a jour la spec en meme
+temps (test-028 detecte les divergences - garde-fou efficace).
+
+**Lecon pour la suite** : le pattern du test-046 (residus factices poses puis
+retires avec try/finally) est reutilisable pour tout garde-fou de detection :
+tester l OUTIL avec des etats controles, pas seulement l etat courant.
+
+
+## [LECON] 2026-08-14 -- CAUSES RACINES DES 2 RESIDUS CORRIGEES (Morpheus)
+
+**Contexte** : l enquete Cerberus (2026-08-13) a identifie 2 residus a la racine regeneres a chaque non-regression, malgre le nettoyage Hygie. Mission : corriger les CAUSES RACINES dans les tests.
+
+**CORRECTION 1 - test-004-combos-tester-outil (residu 'analyste-in-console.tmp-test004x.sh')**
+Cause : le POINT 6 passait --var fichier_test=os.path.join(tmp, "x.sh") avec un chemin WINDOWS A BACKSLASHES. Le point 5 documente le piege (shlex.split posix mange les backslashes -> fichier cree sous un nom mache A LA RACINE, hors du dossier .tmp-test004/ nettoie par rmtree). Fix : forward slashes comme le point 5 (.replace("\\", "/")). Test 16/16 OK, aucun .sh ne part a la racine.
+
+**CORRECTION 2 - test-028-coherence-documentaire (residu 'rapport-detecter-decalages-catalogue-<date>.md')**
+Cause : le POINT 5 appelait detecter-decalages-catalogue SANS --sortie -> l outil ecrit son rapport par defaut dans le dossier courant (la racine), regenere a chaque non-regression. Fix : --sortie vers tempfile.mkstemp + suppression GARANTIE en try/finally. Test 8/8 OK, preuve : l ancien rapport (22:39 hier) n est PAS regenere par la run corrigee (age 9h, date inchangee).
+
+**KO test-035 PRE-EXISTANT (documente, NON lie a cette mission)**
+La serie e complete (--series e) : 16 OK / 1 KO (test-035-evaluer-processus). Les 4 problemes detectes sont PRE-EXISTANTS (dates prouvees) et hors de mon perimetre :
+1. FIN_MISSION_ERRONEE morpheus (AGENTS-historique ligne 171) : mission chrono de 00:08 porte 'reactiver Cerberus' mais la carte impose Activer Janus - cette consigne etait LEGITIME a l epoque (carte renforcee a 17:54) -> faux positif retroactif a arbitrer (evaluer-processus vs historique).
+2. OUTIL_HORS_CARTE buffy : 'tmp-buffy/ajouter-workspace-gitignore.py' au registre (22:43) - script temporaire declare comme outil.
+3. OUTIL_HORS_CARTE janus : 'detecter-divergences-version' (22:41) et 'detecter-residus' (22:41) au registre.
+A traiter par les agents proprietaires (Buffy/Janus/Vulcain) lors d une prochaine mission dediee.
+
+**DECOUVERTE COMPLEMENTAIRE (ecart structurel a arbitrer)**
+En enregistrant mon usage legitime de tester-lancer-non-regression (serie e), evaluer-processus l a signale OUTIL_HORS_CARTE : cet outil CENTRAL du role de testeur n est assigne dans AUCUN indice outil de la carte morpheus (10 outils assignes, P0 fiche 14 sans lui). Ce n est pas un probleme de cette mission (l usage est reel et honnete) mais un ecart de CARTE : tester-lancer-non-regression devrait etre assigne a Morpheus (ex. case c12 non-regression ou c7 verdict) par Buffy (proprietaire des cartes). L ecart n apparait que quand l usage est dans le registre courant au moment du scan (vide a chaque non-regression complete -> hier serie e verte 17/17). A traiter dans une mission dediee (bump carte morpheus + eventuel adaptateur test-035).
+
+## [LECON] 2026-08-14 -- ADAPTER UN TEST DE VERSION : GARDER L INDENTATION (Morpheus)
+
+**Contexte** : bump carte cerberus 0.4.3 -> 0.4.4 (double README, indice amelioration
+dans c1b) -> test-013-cerberus-migration KO version seule. Adaptation : docstring
+(v0.4.3 -> v0.4.4, 2 occurrences + cas couverts), print, verifier version + entree
+changelog v0.4.4.
+
+**PIEGE RENCONTRE (lecon)** : mon remplacement str_replace du bloc verifier a ecrase
+l INDENTATION des lignes (8 espaces du bloc try) -> SyntaxError 'expected except or
+finally'. VERIFIER avec py_compile (ou python3 -m py_compile) apres chaque adaptation
+de test, pas seulement en lancant le test. Correction : re-indenter les 3 lignes.
+
+**VERIFICATIONS** : test-013 22/22, test-038 7/7 (badge v1.1.0), test-020 46/46,
+normes 0/0. SUITE : Janus peut lancer la non-regression complete (seul habilite).
+
+
+## [LECON] 2026-08-14 -- TEST-020 ADAPTE APRES BUMP COMBOS-ANALYSE-PROJET 0.1.1 (Morpheus)
+
+**Contexte** : la mission classeur (Buffy a corrige la cause racine : outils listant 17 dossiers au lieu de 12 agents) a bumpe combos-analyse-projet v0.1.0 -> v0.1.1. Le test-020 verifiait 'combos-analyse-projet 0.1.0' en dur -> 1 KO.
+
+**Action** : adapte la ligne 101-102 (version 0.1.0 -> 0.1.1) + l en-tete ligne 10 (v0.1.0 -> v0.1.1). NE PAS toucher a la ligne 111 (version 0.1.0 du definition-combo.json de combo-maj-readme qui reste en 0.1.0 - combo distinct non bumpe).
+
+**Verification** : test-020 46/46 OK, test-038 7/7, test-024 14/14, normes 0/0, plus aucune reference 'combos-analyse-projet 0.1.0' dans les tests.
+
+**Lecon** : quand un outil est bumpe, adapter le test qui verifie sa version SANS confondre avec les autres outils/combo de meme numero de version (verifier le nom complet de l outil dans chaque check).
+## [LECON] 2026-08-14 -- ADAPTATION TESTS APRES CREATION HERMES + GARDE-FOU TEST-046 (Morpheus)
+
+**Contexte** : creation de l agent Hermes (langue/orthographe) par Buffy +
+mise a jour des README par Clio. Adapter les tests de non-regression et creer
+le garde-fou anti-fautes.
+
+**Adaptations realisees** :
+- test-007 : catalogue 152 -> 153 (ajout detecter-fautes-orthographe), index
+  Total 170 -> 171 -> 15/15 VALIDE
+- test-018 : 12 parcours -> 13 (hermes ajoute au glob) -> 13/13 OK
+- test-026 : 12 parcours -> 13 -> 10/10 OK
+- test-024 : catalogue 152 -> 153 + detecter-fautes-orthographe -> 14/14 OK
+- test-035 : 2 KO dus a MES missions (clio/morpheus portaient 'reactiver
+  Cerberus' sans 'activer janus' -> evaluer-processus les signalait comme
+  FIN_MISSION_ERRONEE). Correction : reformuler les missions pour dire
+  'j ACTIVE JANUS ... qui reactive Cerberus' -> 0 probleme -> 8/8 OK
+
+**Garde-fou cree** : test-046-hermes-fautes (10 points) :
+1. fiche hermes CONFORME, 2. parcours valide (valider-case), 3. parcours
+   CONFORME (valider-cartes), 4. 13 parcours existent, 5. outil au catalogue,
+   6. outil dans index-tools, 7. dictionnaire sans faux positif (fautif !=
+   correct), 8. 0 faute reelle hors historique (detecter --tous), 9. ASCII
+   strict, 10. LF pur.
+
+**Lecons** :
+1. EXCLUSIONS DE L OUTIL DETECTER-FAUTES : AGENTS-historique.md, AGENTS.md,
+   corrections.md et la doc de l outil lui-meme citent LEGITIMEMENT les fautes
+   (journal, missions, exemples du dictionnaire) : ils doivent etre exclus par
+   defaut, sinon --tous signale des citations comme des fautes.
+2. PIEGE EVALUER-PROCESSUS : une mission portant 'reactiver Cerberus' sans
+   'activer janus' est signalee FIN_MISSION_ERRONEE meme si c est une citation
+   du flux de chaine. Toujours formuler : 'j ACTIVE JANUS ... qui reactive
+   Cerberus' (phrase exacte attendue).
+3. PIEGE ECRITURE PYTHON SUR WINDOWS : io.open en 'w' convertit LF en CRLF.
+   Apres TOUTE ecriture Python sur AGENTS.md/AGENTS-historique, repasser
+   corriger-fins-de-ligne (verifie 2 fois : le 2e passage test-024 l a attrape).
+4. test-028 reste KO PREEXISTANT (spec activer-agent-principal 0.5.3 vs outil
+   0.5.4, bump Vulcain precedent) : hors perimetre Hermes, a traiter par
+   Vulcain dans la prochaine mission.
+
+
+## [LECON] 2026-08-14 -- TEST-013 ADAPTE APRES BUMP CERBERUS 0.4.5 (Morpheus)
+
+**Contexte** : Buffy a ajoute le GARDE-FOU C1 anti-derive dans la case c1 de
+parcours-cerberus (TOUTE tache d execution -> activer l agent habilite, jamais
+executer seul - lecon derive 2026-08-14) + bump 0.4.4 -> 0.4.5.
+
+**Correction test-013-cerberus-migration** :
+1. KO constate : 21 OK / 1 KO - UNIQUEMENT la version (attendu 0.4.4,
+   reel 0.4.5).
+2. Remplacement global 0.4.4 -> 0.4.5 (7 occurrences : docstring + code).
+3. Changelog : entree v0.4.5 (garde-fou C1 anti-derive, indice 135 car).
+4. Compteurs INCHANGES : l ajout d un indice dans c1 ne change ni le nombre
+   de cases (23 action / 5 question / 5 controle / 3 fin) ni le point 2c
+   (0 case 'indice').
+
+**Validations** : test-013 22/22, test-035 8/8 (evaluer-processus), test-037
+6/6 (seul janus lance la non-regression), normes 0 non-ascii / 0 CRLF.
+NON-REGRESSION COMPLETE NON LANCEE (seul Janus - regle absolue).
+
+**Fin de mission** : activer JANUS (second controle) selon ma carte.
+
+
+## [LECON] 2026-08-14 -- REGISTRE-TESTS : 4 TESTS ADAPTES + GARDE-FOU TEST-051 (Morpheus)
+
+**Contexte** : mission Vulcain registre-tests terminee (lanceur v0.3.0 avec
+l option --agent). Adaptation des 4 tests qui figeaient la version 0.2.0 du
+lanceur + creation du garde-fou test-051.
+
+**Corrections** :
+1. test-031 + test-032 : --version v0.2.0 -> v0.3.0 (docstring + code).
+2. test-024 : point 6 version lanceur v0.3.0 (attention : l occurrence
+   enregistrer-usage-outil v0.2.0 ligne 13 est UN AUTRE outil - pas touchee).
+3. test-027 : point 4 version v0.3.0.
+4. test-051 cree (8 points) : lanceur v0.3.0 + option --agent dans l aide +
+   registre-tests DISTINCT de registre-usages-outils + PREUVE REELLE positive
+   (run --series a --agent X -> entrees creees avec agent/serie/champs) +
+   PREUVE NEGATIVE (run sans --agent -> aucune entree) + normes.
+5. Lanceur : test-051 ajoute a la serie e + duree connue (5s).
+
+**Decouverte (lecon registre, deja rencontree) : TOUTE declaration d usage au
+registre doit correspondre a un outil de SA carte.** Mes declarations
+morpheus -> tester-lancer-non-regression et vulcain -> editer-fichier ont fait
+KO test-035/test-037 (evaluer-processus OUTIL_HORS_CARTE + anti-recurrence
+janus). Corrige : entrees fautives retirees du registre.
+
+**Validations** : test-031 10/10, test-032 10/10, test-024 14/14, test-027
+11/11, test-035 8/8, test-037 6/6, test-051 8/8, serie e 23/23 (avec test-051).
+NON-REGRESSION COMPLETE NON LANCEE (seul Janus - regle absolue).
+
+**Fin de mission** : activer JANUS (second controle) selon ma carte.
+
+
+## [LECON] 2026-08-14 -- TEST-024 ADAPTE + POINT TRI REGISTRE (Morpheus)
+
+**Contexte** : Vulcain a trie le registre-usages-outils par date/heure
+DECROISSANT (enregistrer-usage-outil v0.3.0, fonction trier_registre appelee
+apres chaque ajout). Impact : test-024 point 7 figeait la version 0.2.1.
+
+**Corrections** :
+1. test-024 point 7 : version enregistrer-usage-outil 0.2.1 -> 0.3.0
+   (docstring + code).
+2. test-024 : NOUVEAU point 14 anti-recurrence - le registre-usages-outils
+   doit etre trie par date/heure DECROISSANT (verifie toutes les entrees).
+
+**Preuve negative** (protocole-tests v0.3.2) : registre inverse (croissant) ->
+point 14 KO (14/1) -> restaure decroissant -> 15/15 OK. Le garde-fou attrape
+bien la violation du tri.
+
+**Validations** : test-024 15/15, test-035 8/8, test-037 6/6, test-051 8/8,
+test-045 15/15, normes 0/0. NON-REGRESSION COMPLETE NON LANCEE (seul Janus).
+
+**Fin de mission** : activer JANUS (second controle) selon ma carte.
+
+
+## [LECON] 2026-08-14 -- TRI REGISTRE-TESTS : ADAPTATION TEST-051 (Morpheus)
+
+**Contexte** : Vulcain a etendu le tri decroissant par date au registre-tests
+(lanceur v0.3.1). 5 tests figeaient la version 0.3.0 (031/032/024/027/051).
+
+**Le piege du tri** : le point 4 du test-051 verifiait la DERNIERE ligne du
+registre (valable en mode append). Avec le tri decroissant, la derniere ligne
+est la PLUS ANCIENNE -> KO. Correction : chercher l entree de l agent de test
+parmi toutes les lignes (la plus recente grace au tri), au lieu de lignes[-1].
+
+**Apport anti-recurrence** : point 7 ajoute au test-051 -- verifie que le
+registre-tests est trie decroissant par date (le meme garde-fou que le point 14
+du test-024 pour le registre-usages-outils). Les 5 tests ont ete adaptes a la
+version 0.3.1 du lanceur, sans toucher a enregistrer-usage-outil (reste 0.3.0).
+
+**Preuves reelles** : test-051 9/9, test-031 10/10, test-032 10/10,
+test-024 15/15, test-027 11/11. Entrees de preuve tmp-t051 nettoyees (9).
+
+
+## [LECON] 2026-08-14 -- VERIF POST-FIX RECOLLEMENT v0.5.5 (Morpheus)
+
+**Contexte** : Vulcain a corrige activer-agent-principal v0.5.5 (bug de
+recollement : les anciennes continuations de la Raison etaient recollees a
+chaque reactivation -> AGENTS.md corrompu a 21 blocs DEMARRAGE, repare).
+
+**Verifications** : test-008 v0.5.5 (garde-fou de l outil, 9/9 : bloc
+corrompu -> 1 DEMARRAGE, Raison proprement remplacee, reactiver 0 bloc,
+Nom LLM preserve, normes). test-007 22/22 (regression). Aucune version
+0.5.4 fige dans les tests de la non-regression. Catalogue/index sans
+version en dur. AGENTS.md repare : test-013 22/22, test-025 11/11,
+test-033 9/9, test-018 13/13, test-021 9/9, test-035 8/8.
+
+**Constat** : le fix v0.5.5 n impose AUCUNE adaptation de test - le
+garde-fou test-008 vit dans tests/ de l outil (pas dans la non-regression,
+comme ses predecesseurs test-001..007). Aucun KO preexistant.
+
+
+## [LECON] 2026-08-14 -- TEST-051 : NETTOYAGE PREUVES tmp-t051 (Morpheus)
+
+**Contexte** : decouverte Janus (mission tri registre-tests) - le test-051
+laissait ses preuves tmp-t051 dans registre-tests.jsonl a chaque execution
+(5 entrees par run, nettoyees manuellement). Artefact polluant le registre
+a chaque non-regression.
+
+**Correction** : point 8 ajoute au test-051 - apres les preuves (points 4-6)
+et le tri (point 7), le test REEFFACE ses propres entrees tmp-t051 en
+preservant le tri decroissant et le LF pur, puis VERIFIE que 0 preuve reste.
+Le test passe de 9 a 10 points (normes decalees en 9/10).
+
+**Piege du format JSON** : le lanceur ecrit avec espaces apres les deux
+points ("agent": "tmp-t051") - un filtre sur la chaine compacte
+("agent":"tmp-t051") ratait les entrees. Correction : detection par
+json.loads().get("agent") - robuste aux deux formats.
+
+**Preuves** : test-051 10/10 (2 runs consecutifs), 0 entree tmp-t051
+restante apres chaque run, registre 780 entrees triees decroissant,
+test-024 15/15, test-031 10/10, test-032 10/10. Historique nettoye (6
+entrees anciennes retirees).
+
+
+## [LECON] 2026-08-14 -- GARDE-FOU TEST-052 ANTI-ECHAPPEMENT ACTIVATION (Morpheus)
+
+**Contexte** : le bug d echappement a corrompu AGENTS.md DEUX FOIS (raison
+tronquee a 'BILAN par une apostrophe mal echappee dans une commande shell
+inline passant activer/reactiver-agent-principal). Lecon documentee mais
+PAS mecanisee : aucune commande du projet n utilisait list2cmdline.
+
+**Garde-fou cree** : test-052-anti-echappement-activation.py (5 points) -
+scanne les scripts temp (tmp-*/ et .tmp-*.py a la racine) qui invoquent
+activer/reactiver-agent-principal et exige subprocess.list2cmdline pour
+passer la raison. Enregistre en serie e + garde-fou global (jamais en
+parallele : scanne les scripts temp).
+
+**Pieges de detection evites** :
+1. Le faux script coupait le motif sur 2 lignes -> la detection ne le
+   voyait pas : remis sur une ligne (comme un vrai script fautif).
+2. Le mot 'list2cmdline' dans un COMMENTAIRE suffisait a faire passer un
+   script fautif a tort : detection par l appel reel qualifie
+   subprocess.list2cmdline( (ou from subprocess import) - pas le mot seul.
+
+**Preuves** : preuve negative reelle validee (script fautif -> KO point 2,
+puis suppression -> 5/5), test-052 5/5, serie e 24/24, test-029 14/14,
+test-027 11/11, normes 0/0.
+
+
+## [LECON] 2026-08-14 -- TEST-050 ADAPTE 0.2.1 + GARDE-FOU DECLARATION USAGES (Morpheus)
+
+**Contexte** : Vulcain a mecanise la declaration des usages dans
+generateurs-outil-temporaire v0.2.1 (bloc DECLARATION USAGES : variable AGENT
++ declarer_usages() appelant enregistrer-usage-outil --mode script-temporaire).
+Le test-050 attendait v0.2.0 en dur et la preuve du point 5 executait le script
+genere sans AGENT (le bloc refuse desormais de s executer).
+
+**Actions** :
+1. test-050 adapte (13 -> 17 points) : version 0.2.1 partout ; la preuve
+   renseigne AGENT = "test-050" dans le script genere avant les executions 5/7
+   (le bloc DECLARATION refuse sinon) ; nouveaux points 14 (squelette .py :
+   bloc DECLARATION USAGES), 15 (parite .sh : meme bloc), 16 (protocole v0.2.7 :
+   declaration imposee), 17 (nettoyage : le test retire ses preuves
+   tmp-t050-preuve du registre-usages - meme regle que test-051).
+2. Preuves negatives reelles : bloc declarer_usages retire -> point 14 KO ;
+   section protocole renommee -> point 16 KO ; restauration -> OK.
+
+**Lecon (piege de preuve negative)** : un remplacement de motif pour simuler
+une violation doit RETIRER le motif entier (def declarer_usages(): -> def
+rien_ici():), pas le renommer avec un suffixe (declarer_usages_SUPPRIME contient
+encore "declarer_usages" -> faux negatif). Et pour detecter un KO dans une
+sortie, chercher le compteur "X OK / Y KO" (regex), pas la sous-chaine "KO"
+(presente dans "0 KO" -> faux positif).
+
+
+## [LECON] 2026-08-14 -- GARDE-FOU TEST-054 DOC OBLIGATOIRE TEMPLATE (Morpheus)
+
+**Contexte** : Vulcain a ajoute le bloc DOC OBLIGATOIRE dans outil-template
+v0.2.0 (.py + .sh en parite) : verifier_doc_presente (le .md doit exister
+sinon refus), exiger_confirmation_doc (mode reel bloque sans --confirme-doc,
+affiche la section Utilisation du .md), options --doc et --confirme-doc.
+Protocole-outils : REGLE ABSOLUE de lecture MECANISEE. Decision utilisateur :
+severite bloquante.
+
+**Actions** :
+1. test-054 cree (9/9) : bloc DOC OBLIGATOIRE present dans outil-template.py
+   (definitions verifiees : def verifier_doc_presente, def
+   exiger_confirmation_doc, def afficher_section_utilisation, --confirme-doc,
+   --doc) + outil-template.sh (verifier_doc_presente(), exiger_
+   confirmation_doc(), afficher_section_utilisation(), --confirme-doc),
+   preuves reelles .py ET .sh (sans confirme -> rc=2, avec -> rc=0), preuve
+   negative (def retiree -> KO), normes.
+2. Integre au lanceur : serie e + garde-fou global + DUREES (test-054: 3).
+3. Serie e reverdie : 25 OK / 0 KO (apres correction du registre).
+
+**Lecon (faux negatif des preuves negatives, 3e occurrence)** : renommer une
+DEFINITION (def exiger_confirmation_doc -> def rien_ici) laisse les APPELS
+(exiger_confirmation_doc(...)) dans main() -> la sous-chaine reste presente ->
+faux negatif. Correction : verifier les DEFINITIONS (motif 'def ') et retirer
+TOUTES les occurrences (def + appels) dans la preuve negative. Meme piege
+que test-050 (declarer_usages_SUPPRIME) et la lecon Janus precedente : la
+detection par sous-chaine est piegee par les appels residuels.
+
+**Ecart de carte signale (domaine Buffy/Vulcain, pas tests)** : la carte
+vulcain contient la REGLE c4 (j utilise TOUJOURS outil-template) mais PAS
+d indice outil outil-template -> tout usage declare d outil-template par
+vulcain est signale OUTIL_HORS_CARTE par evaluer-processus. L indice outil
+outil-template devrait etre ajoute a la case c4 du parcours vulcain.

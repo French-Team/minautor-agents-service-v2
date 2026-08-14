@@ -7,7 +7,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 STATUT = "prepare"
 
 import datetime
@@ -71,7 +71,14 @@ def compter_agents(racine):
     agents_dir = Path(racine) / "cerveau-projet" / "agents"
     if not agents_dir.is_dir():
         return 0
-    return sum(1 for d in agents_dir.iterdir() if d.is_dir() and d.name != "tools")
+    # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
+    nb = 0
+    for d in agents_dir.iterdir():
+        if not (d.is_dir() and d.name != "tools"):
+            continue
+        if (d / "parcours" / ("parcours-" + d.name + ".json")).is_file():
+            nb += 1
+    return nb
 
 
 def lire_README(racine):

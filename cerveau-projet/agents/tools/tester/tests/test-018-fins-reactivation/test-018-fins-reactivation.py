@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-018-fins-reactivation.py
-Test formel des fins REACTIVER-CERBERUS precisees dans les 11 parcours.
+Test formel des fins REACTIVER-CERBERUS precisees dans les 13 parcours.
 
 Contexte (missions 2026-08-10 / 2026-08-11) :
   - La mission Buffy a precise la condition 'activation directe par Cerberus'
@@ -28,7 +28,7 @@ Regle verifiee (Pattern 13 de la spec-guider-parcours) :
   le dernier maillon de chaine (bilan consolide).
 
 Cas couverts:
-  1. Chaque parcours des 11 agents contient au plus une fin REACTIVER-CERBERUS
+  1. Chaque parcours des 12 agents contient au plus une fin REACTIVER-CERBERUS
   2. Toute fin REACTIVER-CERBERUS porte 'activation directe' dans son message
      OU est le dernier maillon (bilan consolide) : regle Pattern 13
   3. Plus aucune fin REACTIVER precisee hors janus : le trio
@@ -44,8 +44,8 @@ Cas couverts:
       (garde-fou positif de la generalisation)
   5. Anti-regression : aucune fin 'Activer l agent precedent' ne contient
      la commande reactiver (le piege corrige reste elimine)
-  6. ASCII strict : 0 non-ASCII (test + 11 parcours)
-  7. LF pur : 0 CRLF (test + 11 parcours)
+  6. ASCII strict : 0 non-ASCII (test + 13 parcours)
+  7. LF pur : 0 CRLF (test + 13 parcours)
 
 Usage:
   python3 test-018-fins-reactivation.py
@@ -134,10 +134,10 @@ def main():
     global NB_POINTS, NB_OK, NB_KO
 
     parcours_liste = sorted(glob.glob(PARCOURS_GLOB))
-    verifier("0. 11 parcours trouves",
-             len(parcours_liste) == 11, str(len(parcours_liste)))
+    verifier("0. 13 parcours trouves",
+             len(parcours_liste) == 13, str(len(parcours_liste)))
 
-    print("=== Test formel fins reactivation (11 parcours) ===")
+    print("=== Test formel fins reactivation (13 parcours) ===")
 
     # --- Passe 1 : analyse statique des fins REACTIVER-CERBERUS ---
     fins_reactiver = {}  # agent -> (case_id, titre, message)
@@ -281,10 +281,10 @@ def main():
     # --- Passe 4 : ASCII + LF ---
     fichiers = [os.path.abspath(__file__)] + parcours_liste
     total_non_ascii = sum(ascii_count(f) for f in fichiers)
-    verifier("6. ASCII strict: 0 non-ASCII (test + 11 parcours)",
+    verifier("6. ASCII strict: 0 non-ASCII (test + 13 parcours)",
              total_non_ascii == 0, "total = %d" % total_non_ascii)
     total_crlf = sum(crlf_count(f) for f in fichiers)
-    verifier("7. LF pur: 0 CRLF (test + 11 parcours)",
+    verifier("7. LF pur: 0 CRLF (test + 13 parcours)",
              total_crlf == 0, "total = %d" % total_crlf)
 
     print("")

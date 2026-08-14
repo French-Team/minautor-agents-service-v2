@@ -1,7 +1,7 @@
 # enregistrer-usage-outil
 
 **Categorie** : Enregistrer
-**Version** : 0.2.1
+**Version** : 0.3.0
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-11
@@ -60,12 +60,16 @@ Chaque ligne du registre est un objet JSON :
 ```
 
 - 1 ligne = 1 usage
+- Trie par date puis heure en DECROISSANT apres chaque ajout (le plus recent
+  en premier, depuis v0.3.0)
 - Append en fin de fichier (creation si absent)
 - ASCII strict + LF pur (chaque ligne se termine par `\n`)
 - Le registre vit dans `cerveau-projet/agents/traces/registre-usages-outils.jsonl`
 - Depuis v0.2.1 : garde-fous de fiabilite - `--agent`/`--outil` vides
   refuses (code 1), doublons signales en avertissement, lignes non-JSON
   du registre signalees avant ajout
+- Depuis v0.3.0 : tri par date/heure DECROISSANT - les lignes non-JSON sont
+  conservees en fin de fichier (jamais perdues)
 
 ## Garde-fous (v0.2.1)
 
@@ -80,6 +84,7 @@ Chaque ligne du registre est un objet JSON :
 
 | Version | Date | Changement |
 |---|---|---|
+| 0.3.0 | 2026-08-14 | Tri du registre par date/heure DECROISSANT apres chaque ajout (le plus recent d abord) + lignes non-JSON conservees en fin de fichier |
 | 0.2.1 | 2026-08-12 | Round 8 : garde-fous de fiabilite (champs vides refuses, doublons et registre corrompu signales) |
 | 0.2.0 | 2026-08-11 | Mode script-temporaire : declaration des scripts jetables .zz-*/.tmp-* pour le croisement du detecteur |
 | 0.1.0 | 2026-08-11 | Creation : registre JSONL des usages d'outils |

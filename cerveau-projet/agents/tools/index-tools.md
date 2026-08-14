@@ -62,6 +62,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `combos-moteur` | Moteur generique de combos declaratifs : execute une definition-combo.json case par case (generateur/outil/controle/fin), variables + interpolation | [combos/combos-moteur/](combos/combos-moteur/) |
 | `combo-activation` | Cycle d'activation complet d'une session LLM : sidentifier -> activer -> reactiver (le cycle le plus repete du cerveau, 11 parcours concernes) | [combos/combo-activation/](combos/combo-activation/) |
 | `combo-audit-themis` | Suite d'audit croise de Themis (chemin audit du parcours themis) : audit-general -> valider-relecture -> combos-valider-cerveau -> valider-tableaux -> detecteurs | [combos/combo-audit-themis/](combos/combo-audit-themis/) |
+| `combo-controle-buffy` | Suite de controle de la mission Buffy (Pattern 3) : mission ecrite, protocole lu, preuve de l etat des fichiers |
 | `combo-controle-impacts` | Controle des impacts d'une modification : detecter-impacts (fichiers impliques + statut) -> valider-liens (references croisees). Fichier passe en --var fichier=<chemin> | [combos/combo-controle-impacts/](combos/combo-controle-impacts/) |
 | `combo-controle-modification` | Suite de validation d'une modification (chemin modification du parcours janus) : nommage recursif -> liens -> separation -> sante+tableaux -> surcharge -> traces externes | [combos/combo-controle-modification/](combos/combo-controle-modification/) |
 | `combo-controle-outil` | Suite de validation d'un outil (chemin outil du parcours janus) : valider-conformite-ascii -> valider-cartes-decision --tous -> valider-liens | [combos/combo-controle-outil/](combos/combo-controle-outil/) |
@@ -72,8 +73,10 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `combo-creer-agent` | Creation d'un agent (chemin agent du parcours buffy, v0.3.0) : valider-nommage -> [CONTROLE] -> copier-dossier -> copier-fichier template -> creer-fichier corrections. Agent passe en --var agent=<nom> | [combos/combo-creer-agent/](combos/combo-creer-agent/) |
 | `combo-creer-protocole` | Creation d'un protocole (chemin protocole du parcours buffy, v0.3.0) : valider-conventions -> [CONTROLE] -> copier-dossier -> creer-fichier. Chemin passe en --var chemin=<chemin> --var contenu=<contenu> | [combos/combo-creer-protocole/](combos/combo-creer-protocole/) |
 | `combo-tester-outil` | Chemin de test de Morpheus encapsule (anciennes cases c4-c6 du parcours morpheus) : ecrire le fichier de test via creer-fichier -> verifier les protections (REGLE ABSOLUE : jamais de test sans protections) -> executer le test. Variables : fichier_test, contenu_test, commande_test | [combos/combo-tester-outil/](combos/combo-tester-outil/) |
+| `combo-maj-readme` | Petite mise a jour du README (compteurs et textes cibles) |
 | `combos-maj-readme-massive` | Combo grosse MAJ conservative du README : analyse -> verifier -> maj -> correctifs tables/badges -> ASCII | [combos/combos-maj-readme-massive/](combos/combos-maj-readme-massive/) |
 | `combos-analyse-projet` | Combo analyse-projet : etat reel du projet + ecarts README vs realite (compteurs, categories, badges) | [combos/combos-analyse-projet/](combos/combos-analyse-projet/) |
+| `combo-nettoyage-hygie` | Cycle de nettoyage de Hygie (Pattern 3) : snapshot (preuve) -> detection des residus par zone -> verdict propre / residus a supprimer | [combos/combo-nettoyage-hygie/](combos/combo-nettoyage-hygie/) |
 
 ### Condenser
 
@@ -130,11 +133,13 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-usage-outils-externes` | Detecter les traces d'outils externes dans les fichiers (CRLF, non-ASCII, BOM) | [detecter/detecter-usage-outils-externes/](detecter/detecter-usage-outils-externes/) |
 | `detecter-convention-nommage` | Detecter les mentions de la convention c<numero>[a-z]? hors contexte etendu cT* (garde-fou anti-recurrence) | [detecter/detecter-convention-nommage/](detecter/detecter-convention-nommage/) |
 | `detecter-decalages-catalogue` | Detecter les decalages entre le catalogue du generateur et les interfaces reelles des outils (--aide/--help) | [detecter/detecter-decalages-catalogue/](detecter/detecter-decalages-catalogue/) |
+| `detecter-fautes-orthographe` | Detecter les fautes d orthographe francaise courantes (dictionnaire extensible, agent Hermes) | [detecter/detecter-fautes-orthographe/](detecter/detecter-fautes-orthographe/) |
 | `detecter-evaluations-incompletes` | Scan anti-recurrence : mentions residuelles d'un motif dans les 4 sources (validateur, spec, generateurs, tests) | [detecter/detecter-evaluations-incompletes/](detecter/detecter-evaluations-incompletes/) |
 | `detecter-divergences-version` | Detecter les spec/ dont la version diverge de leur .py (regle des 5 fichiers, formats de version varies) | [detecter/detecter-divergences-version/](detecter/detecter-divergences-version/) |
 | `detecter-impacts` | Detecter les fichiers impliques par la modification d'un fichier du cerveau (schema identite:) | [detecter/detecter-impacts/](detecter/detecter-impacts/) |
 | `detecter-usage-scripts-temporaires` | Mesurer l usage des scripts temporaires (.zz-*/.tmp-*) par les agents et le croiser avec le registre | [detecter/detecter-usage-scripts-temporaires/](detecter/detecter-usage-scripts-temporaires/) |
 | `detecter-cablages-manquants` | Detecter les cablages manquants des cartes de decision : cases orphelines, boucles indirectes, references mortes, fins non joignables (complete valider-case) | [detecter/detecter-cablages-manquants/](detecter/detecter-cablages-manquants/) |
+| `detecter-residus` | Detecter les residus du workspace, compartimente par zone (cerveau-projet / workspace / tous) : fichiers temp, version egaree, sauvegardes, rapports egare, caches | [detecter/detecter-residus/](detecter/detecter-residus/) |
 
 ### Ecrire
 
@@ -165,6 +170,12 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `enregistrer-usage-outil` | Enregistre un usage d outil dans le registre JSONL (traces/registre-usages-outils.jsonl) | [enregistrer/enregistrer-usage-outil/](enregistrer/enregistrer-usage-outil/) |
+
+### Executer
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `executer-script-temporaire` | ENTONNOIR : normalise puis execute un script temporaire (BOM, CRLF, accents) - transparent pour l agent | [executer/executer-script-temporaire/](executer/executer-script-temporaire/) |
 
 ---
 
@@ -242,6 +253,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 |---|---|---|
 | `nettoyer-fichier` | Purifier un fichier en supprimant le contenu non essentiel | [nettoyer/nettoyer-fichier/](nettoyer/nettoyer-fichier/) |
 | `nettoyer-sessions` | Supprimer TOUTES les sessions LLM (AGENTS.md blocs + Sessions connues, classeur profil-session-*), le journal historique est conserve | [nettoyer/nettoyer-sessions/](nettoyer/nettoyer-sessions/) |
+| `snapshot-nettoyage` | Snapshot de l etat du workspace avant nettoyage (agent Hygie) : creer / consulter / rotation 7 jours / liste - preuve de tracabilite | [nettoyer/snapshot-nettoyage/](nettoyer/snapshot-nettoyage/) |
 
 ### Rechercher
 
@@ -446,14 +458,14 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Analyser | 2 |
 | Cartographier | 1 |
 | Changer | 1 |
-| Combos | 18 |
+| Combos | 21 |
 | Condenser | 1 |
 | Copier | 2 |
 | Corriger | 6 |
 | Creer | 4 |
 | Decomposer | 1 |
 | Deplacer | 1 |
-| Detecter | 11 |
+| Detecter | 13 |
 | Ecrire | 1 |
 | Editer | 3 |
 | Enregistrer | 1 |
@@ -467,7 +479,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Migrer | 1 |
 | Mettre a jour | 1 |
 | Activer | 1 |
-| Nettoyer | 2 |
+| Nettoyer | 3 |
 | Rechercher | 10 |
 | Remplacer | 1 |
 | Supprimer | 3 |
@@ -475,7 +487,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Verifier | 6 |
 | Protections | 5 |
 | Tests | 39 |
-| **Total** | **166** |
+| **Total** | **172** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

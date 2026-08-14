@@ -13,7 +13,7 @@ import sys
 import time
 from datetime import datetime
 
-VERSION = "0.2.0"
+VERSION = "0.3.1"
 STATUT = "ebauche"
 
 # Round 10 : 5 series thematiques. Chaque test appartient a une serie par son
@@ -27,7 +27,7 @@ SERIES = {
     "d": ["test-023", "test-024", "test-025", "test-026", "test-027",
           "test-030", "test-031"],
     "e": ["test-028", "test-029", "test-032", "test-033", "test-034", "test-035",
-          "test-036", "test-037", "test-038", "test-039", "test-040", "test-041", "test-042"],
+          "test-036", "test-037", "test-038", "test-039", "test-040", "test-041", "test-042", "test-043", "test-044", "test-045", "test-046", "test-047", "test-048", "test-049", "test-050", "test-051", "test-052", "test-054"],
 }
 SERIES_NOMS = {
     "a": "Combos et coherence",
@@ -46,7 +46,15 @@ SERIES_PARALLELES = ["a", "b", "c"]
 # (registre vide, absence de scripts temporaires, sessions) et ne doivent
 # JAMAIS tourner en parallele avec d autres tests (faux positifs assures).
 # Ils sont toujours lances en serie, apres le pool de workers.
-GARDE_FOUS_GLOBAUX = ["test-023", "test-024", "test-025", "test-027"]
+GARDE_FOUS_GLOBAUX = ["test-023", "test-024", "test-025", "test-027",
+                     "test-051", "test-052", "test-054"]
+
+# Round 14 (lecon 2026-08-14) : tests qui ECRIVENT des fichiers partages
+# (README, catalogue...) et ne doivent JAMAIS tourner en parallele avec les
+# tests qui LISENT ces fichiers (ex: test-020 modifie le README en reel
+# pendant que test-038 lit le badge -> KO intermittent en pool). Ils sont
+# lances en serie finale avec les garde-fous globaux.
+TESTS_SERIE_EXCLUSIFS = ["test-020"]
 
 # Round 12 : durees mesurees (profil individuel 2026-08-13, machine 16 coeurs)
 # pour le tri decroissant du pool - les tests longs partent en premier sur
@@ -61,7 +69,7 @@ DUREES_CONNUES = {
     "test-011": 1, "test-008": 1, "test-007": 1, "test-029": 0,
     "test-033": 0, "test-034": 0, "test-035": 0, "test-036": 0,
     "test-037": 0, "test-038": 0, "test-039": 0, "test-040": 0,
-    "test-023": 0, "test-014": 0, "test-001": 0, "test-041": 0, "test-042": 0,
+    "test-023": 0, "test-014": 0, "test-001": 0, "test-041": 0, "test-042": 0, "test-043": 0, "test-044": 0, "test-045": 0, "test-046": 0, "test-047": 0, "test-048": 0, "test-051": 5, "test-052": 2, "test-054": 3,
 }
 
 _COULEURS = {
@@ -92,44 +100,55 @@ def registre_defaut(racine):
     return os.path.join(racine, "cerveau-projet", "agents", "traces", "registre-usages-outils.jsonl")
 
 
-def registre_historique(racine):
-    """Chemin de l historique du registre (append, jamais ecrase)."""
-    return os.path.join(racine, "cerveau-projet", "agents", "traces",
-                        "registre-usages-outils.historique.jsonl")
-
-
-def archiver_registre(racine):
-    """Deplace les lignes du registre courant vers l historique (round 8 :
-    la purge pure perdait la memoire des declarations, le detecteur devenait
-    aveugle au passe). Les lignes deja presentes dans l historique ne sont
-    pas re-ajoutees (dedoublonnage par ligne exacte)."""
+def rotation_registre(racine, max_usages=100):
+    """ROTATION du registre courant (decision utilisateur 2026-08-14) :
+    le registre est CUMULATIF (memoire des usages reels des agents) mais
+    plafonne a `max_usages` entrees normales (direct/generateur).
+    Les entrees mode script-temporaire sont TOUJOURS preservees (memoire
+    des declarations, decision precedente) et ne comptent pas dans le
+    plafond.
+    - registre < 100 usages normaux : AUCUNE suppression (la memoire vit)
+    - registre > 100 : les usages normaux les PLUS ANCIENS sont retires
+      pour revenir a 100 (les script-temporaire restent).
+    Retourne le nombre de lignes normales conservees."""
     registre = registre_defaut(racine)
-    historique = registre_historique(racine)
     if not os.path.isfile(registre):
-        return
+        return 0
     try:
         with io.open(registre, encoding="utf-8") as fh:
-            lignes = [l for l in fh if l.strip()]
+            lignes = [l.rstrip("\n") for l in fh if l.strip()]
     except Exception:
-        return
-    if not lignes:
-        return
-    deja = set()
-    if os.path.isfile(historique):
+        return 0
+    normales = []
+    scripts = []
+    for l in lignes:
         try:
-            with io.open(historique, encoding="utf-8") as fh:
-                deja = set(l for l in fh if l.strip())
-        except Exception:
-            deja = set()
-    nouveaux = [l for l in lignes if l not in deja]
-    if not nouveaux:
-        return
-    dossier = os.path.dirname(historique)
-    if dossier and not os.path.isdir(dossier):
-        os.makedirs(dossier, exist_ok=True)
-    with io.open(historique, "a", encoding="utf-8", newline="\n") as fh:
-        for l in nouveaux:
-            fh.write(l.rstrip("\n") + "\n")
+            e = json.loads(l)
+            if e.get("mode") == "script-temporaire":
+                scripts.append(l)
+            else:
+                normales.append(l)
+        except ValueError:
+            normales.append(l)
+    # trier les normales par date (plus recente d abord) si possible
+    def _date(l):
+        try:
+            return json.loads(l).get("date", "")
+        except ValueError:
+            return ""
+    normales.sort(key=_date, reverse=True)
+    if len(normales) > max_usages:
+        normales = normales[:max_usages]
+    conservees = scripts + normales
+    # Re-tri GLOBAL par date decroissante : la rotation ne doit PAS casser
+    # le tri du registre (les scripts temporaires gardes en tete casseraient
+    # l ordre chronologique global - regle de tri v0.3.0). Les lignes sans
+    # date (non-JSON ou date vide) restent en fin.
+    conservees.sort(key=_date, reverse=True)
+    with io.open(registre, "w", encoding="utf-8", newline="\n") as fh:
+        for l in conservees:
+            fh.write(l + "\n")
+    return len(normales)
 
 
 def trouver_tests(racine, filtre=None):
@@ -145,6 +164,67 @@ def trouver_tests(racine, filtre=None):
 
 def compter_ko(sortie):
     return len(re.findall(r"\[KO\]", sortie))
+
+
+def serie_du_test(nom):
+    """Retourne la serie (a|b|c|d|e) d un test par son prefixe test-0XX."""
+    for s in SERIES_ORDRE:
+        if any(nom.startswith(p) for p in SERIES[s]):
+            return s
+    return "hors-serie"
+
+
+def registre_tests_defaut(racine):
+    """Chemin du registre des lancements de tests (distinct du registre
+    d usage d outils - jamais melanges)."""
+    return os.path.join(racine, "cerveau-projet", "agents", "traces",
+                        "registre-tests.jsonl")
+
+
+def trier_registre_tests(registre):
+    """Trie le registre-tests par date puis heure, DECROISSANT (le plus recent
+    en premier - meme regle que registre-usages-outils, demande utilisateur
+    2026-08-14). Les lignes non-JSON sont PRESERVEES (conservees en fin)."""
+    if not os.path.isfile(registre):
+        return
+    try:
+        with io.open(registre, encoding="utf-8") as fh:
+            lignes = [l.rstrip("\n") for l in fh if l.strip()]
+    except Exception:
+        return
+    valides = []
+    invalides = []
+    for l in lignes:
+        try:
+            e = json.loads(l)
+            valides.append((e.get("date", ""), l))
+        except ValueError:
+            invalides.append(l)
+    valides.sort(key=lambda paire: paire[0], reverse=True)
+    triees = [l for _, l in valides] + invalides
+    with io.open(registre, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write("\n".join(triees) + "\n")
+
+
+def journaliser_test(racine, agent, serie, nom_test, verdict, duree):
+    """Ajoute UNE entree dans registre-tests.jsonl (date, agent, serie, test,
+    verdict OK/KO/ERREUR, duree secondes). No-op si agent est vide (aucune
+    trace sans --agent explicite). Le registre est TRIE par date/heure
+    DECROISSANT apres chaque ajout (le plus recent en premier)."""
+    if not agent:
+        return
+    registre = registre_tests_defaut(racine)
+    entree = {
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "agent": agent,
+        "serie": serie,
+        "test": nom_test,
+        "verdict": verdict,
+        "duree": round(duree, 3),
+    }
+    with io.open(registre, "a", encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps(entree, ensure_ascii=True) + "\n")
+    trier_registre_tests(registre)
 
 
 def assigner_series(tests, serie="tous"):
@@ -172,12 +252,16 @@ def assigner_series(tests, serie="tous"):
     return par_serie, hors_serie
 
 
-def executer_lot(racine, tests, libelle="", header=True, fail_fast=False):
+def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
+                 agent="", serie=""):
     """Execute une liste de tests en serie. Retourne (ok, ko, ko_liste).
 
     fail_fast (protection STOP, option --fail-fast) : des le premier test KO
     (ou ERREUR), la suite est STOPPEE - les tests restants ne sont pas lances
     et sont comptes comme non-lances.
+
+    Registre-tests : si agent est fourni (--agent), CHAQUE test execute est
+    journalise dans registre-tests.jsonl (verdict + duree).
     """
     if header:
         print(_couleur("=== %s : %d tests ===" % (libelle or "Non-regression", len(tests)), "bleu"))
@@ -185,16 +269,21 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False):
     non_lances = 0
     ko_liste = []
     for i, t in enumerate(tests):
+        t_debut = time.monotonic()
         try:
             r = subprocess.run([sys.executable, t], capture_output=True, text=True, timeout=180)
             nb_ko = compter_ko(r.stdout)
             if nb_ko == 0 and r.returncode == 0:
                 ok += 1
                 print("  %-50s %s" % (os.path.basename(t), _couleur("OK", "vert")))
+                journaliser_test(racine, agent, serie, os.path.basename(t),
+                                 "OK", time.monotonic() - t_debut)
             else:
                 ko += 1
                 ko_liste.append((os.path.basename(t), nb_ko))
                 print("  %-50s %s (%d [KO])" % (os.path.basename(t), _couleur("KO", "rouge"), nb_ko))
+                journaliser_test(racine, agent, serie, os.path.basename(t),
+                                 "KO", time.monotonic() - t_debut)
                 if fail_fast:
                     non_lances = len(tests) - i - 1
                     if non_lances > 0:
@@ -205,6 +294,8 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False):
             ko += 1
             ko_liste.append((os.path.basename(t), -1))
             print("  %-50s %s (%s)" % (os.path.basename(t), _couleur("ERREUR", "rouge"), str(e)[:40]))
+            journaliser_test(racine, agent, serie, os.path.basename(t),
+                             "ERREUR", time.monotonic() - t_debut)
             if fail_fast:
                 non_lances = len(tests) - i - 1
                 if non_lances > 0:
@@ -220,7 +311,7 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False):
     return ok, ko, ko_liste, non_lances
 
 
-def executer_pool(racine, tests, workers, fail_fast=False):
+def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
     """Execute une liste de tests sur un pool de workers paralleles.
 
     Round 12 : les tests sont tries par DUREE DECROISSANTE (les plus longs
@@ -230,12 +321,15 @@ def executer_pool(racine, tests, workers, fail_fast=False):
 
     fail_fast : des le premier KO, le pool est stoppe - les tests restants
     ne sont pas lances (non_lances > 0).
+
+    Registre-tests : si agent est fourni (--agent), CHAQUE test execute est
+    journalise dans registre-tests.jsonl (verdict + duree).
     """
     if not tests:
         return 0, 0, [], 0
     if workers <= 1:
         return executer_lot(racine, tests, libelle="Serie unique",
-                            fail_fast=fail_fast)
+                            fail_fast=fail_fast, agent=agent, serie=serie)
 
     def cle(t):
         return -DUREES_CONNUES.get(os.path.basename(t)[:8], 0)
@@ -298,13 +392,19 @@ def executer_pool(racine, tests, workers, fail_fast=False):
             except Exception:
                 pass
             nb_ko = compter_ko(sortie)
+            duree = time.monotonic() - a[2]
+            serie_test = serie if serie != "tous" else serie_du_test(os.path.basename(t))
             if nb_ko == 0 and p.returncode == 0:
                 ok += 1
                 print("  %-50s %s" % (os.path.basename(t), _couleur("OK", "vert")))
+                journaliser_test(racine, agent, serie_test, os.path.basename(t),
+                                 "OK", duree)
             else:
                 ko += 1
                 ko_liste.append((os.path.basename(t), nb_ko))
                 print("  %-50s %s (%d [KO])" % (os.path.basename(t), _couleur("KO", "rouge"), nb_ko))
+                journaliser_test(racine, agent, serie_test, os.path.basename(t),
+                                 "KO", duree)
                 if fail_fast:
                     stoppe = True
     if stoppe:
@@ -337,16 +437,11 @@ def afficher_etat_registre(racine):
             lignes = sum(1 for l in fh if l.strip())
     else:
         lignes = 0
-    hist = registre_historique(racine)
-    n_hist = 0
-    if os.path.isfile(hist):
-        with io.open(hist, encoding="utf-8") as fh:
-            n_hist = sum(1 for l in fh if l.strip())
-    ligne_reg = "=== Registre d usage apres : %d lignes (archive dans l historique : %d) ===" % (lignes, n_hist)
+    # Les entrees mode script-temporaire sont PRESERVEES par la rotation
+    # (decision utilisateur 2026-08-14) et les usages normaux CUMULENT jusqu
+    # a 100 (memoire des usages reels) : ce n est pas une pollution.
+    ligne_reg = "=== Registre d usage apres : %d lignes (cumul <= 100) ===" % lignes
     print(_couleur(ligne_reg, "vert" if lignes == 0 else "jaune"))
-    if lignes != 0:
-        print(_couleur("[AVERTISSEMENT] Des tests polluent le registre : "
-                       "ajouter --no-journal a leurs appels generateurs-commande", "jaune"))
     return lignes
 
 
@@ -520,11 +615,13 @@ def main():
     parser.add_argument("--tests", type=str, default="",
                         help="Filtrer par noms de test separes par des virgules")
     parser.add_argument("--no-journal", action="store_true",
-                        help="Purge le registre d usage avant et verifie 0 apres (defaut)")
+                        help="Rotation du registre d usage avant (plafond 100 usages normaux, defaut)")
     parser.add_argument("--journal", action="store_true",
                         help="Ne touche pas au registre d usage")
     parser.add_argument("--rapport", type=str, default="",
                         help="Chemin du rapport markdown (optionnel)")
+    parser.add_argument("--agent", type=str, default="",
+                        help="Nom de l agent qui lance les tests (journalise chaque test dans registre-tests.jsonl)")
     parser.add_argument("--version", action="version", version="tester-lancer-non-regression v%s" % VERSION)
     args = parser.parse_args()
 
@@ -558,13 +655,12 @@ def main():
             return 2
         protege = not args.journal
         if protege:
-            archiver_registre(racine)
-            if os.path.exists(registre_defaut(racine)):
-                with io.open(registre_defaut(racine), "w", encoding="utf-8", newline="\n") as fh:
-                    fh.write("")
+            rotation_registre(racine)
         ok, ko, ko_liste, non_lances = executer_lot(racine, selection,
                                                     libelle="Serie %s (%s)" % (args.series.upper(), SERIES_NOMS[args.series]),
-                                                    fail_fast=args.fail_fast)
+                                                    fail_fast=args.fail_fast,
+                                                    agent=args.agent,
+                                                    serie=args.series)
         duree = time.monotonic() - t0
         afficher_chrono(racine, duree, "serie-%s" % args.series, len(selection),
                         seuil=args.seuil, rebase=args.rebase_reference,
@@ -581,12 +677,12 @@ def main():
         return 1 if (ko or non_lances) else 0
 
     # Mode tous : protection du registre faite UNE fois par le parent.
+    # (decision utilisateur 2026-08-14 : plus d archivage historique, purge
+    # simple qui PRESERVE les entrees mode script-temporaire, memoire des
+    # declarations conservee dans le registre actif).
     protege = not args.journal
     if protege:
-        archiver_registre(racine)
-        if os.path.exists(registre_defaut(racine)):
-            with io.open(registre_defaut(racine), "w", encoding="utf-8", newline="\n") as fh:
-                fh.write("")
+        rotation_registre(racine)
 
     par_serie, hors_serie = assigner_series(tests, "tous")
     ko_liste = []
@@ -604,19 +700,22 @@ def main():
         workers = min(os.cpu_count() or 1, 16)
     parallele = (workers > 1) and not args.serial
     if parallele:
-        # Separation : tests paralleles vs garde-fous globaux (serie finale).
+        # Separation : tests paralleles vs garde-fous globaux + exclusifs
+        # (serie finale). Les tests exclusifs ECRIVENT des fichiers partages
+        # (README, catalogue) - jamais en parallele avec ceux qui les lisent.
+        exclu_ou_global = GARDE_FOUS_GLOBAUX + TESTS_SERIE_EXCLUSIFS
         tests_pool = [t for t in tests
                       if not any(os.path.basename(t).startswith(g)
-                                 for g in GARDE_FOUS_GLOBAUX)]
+                                 for g in exclu_ou_global)]
         tests_globaux = [t for t in tests
                          if any(os.path.basename(t).startswith(g)
-                                for g in GARDE_FOUS_GLOBAUX)]
+                                for g in exclu_ou_global)]
         if hors_serie:
             print(_couleur("[AVERTISSEMENT] %d test(s) sans serie affectee, lances avec le pool : %s"
                            % (len(hors_serie), ", ".join(os.path.basename(h) for h in hors_serie)), "jaune"))
         ok_p, ko_p, ko_liste_p, non_lances_p = executer_pool(
             racine, tests_pool + hors_serie, workers,
-            fail_fast=args.fail_fast)
+            fail_fast=args.fail_fast, agent=args.agent, serie="tous")
         tot_ok += ok_p
         tot_ko += ko_p
         tot_non_lances += non_lances_p
@@ -625,8 +724,8 @@ def main():
         if tests_globaux and non_lances_p == 0:
             ok_g, ko_g, ko_liste_g, non_lances_g = executer_lot(
                 racine, tests_globaux,
-                libelle="Garde-fous globaux (registre, sessions, scripts temporaires)",
-                fail_fast=args.fail_fast)
+                libelle="Garde-fous globaux + exclusifs (registre, sessions, scripts temp, README)",
+                fail_fast=args.fail_fast, agent=args.agent, serie="globaux")
             tot_ok += ok_g
             tot_ko += ko_g
             tot_non_lances += non_lances_g
@@ -634,7 +733,9 @@ def main():
     else:
         # Mode serie complet (--serial ou --workers 1 : ancien comportement).
         ok, ko, ko_liste, non_lances = executer_lot(racine, tests, libelle="",
-                                                    fail_fast=args.fail_fast)
+                                                    fail_fast=args.fail_fast,
+                                                    agent=args.agent,
+                                                    serie="tous")
         tot_ok, tot_ko = ok, ko
         tot_non_lances = non_lances
 

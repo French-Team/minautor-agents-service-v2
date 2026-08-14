@@ -878,3 +878,178 @@ garde-fous depuis son propre script temporaire s auto-incrimine.
 **Audit** (mission Morpheus, demande utilisateur) : garde-fou test-042 + correction 8 commandes. 9/9 VALIDE.
 
 **Observation** : la distinction cle (commande = exactement {var} -> ne pas quoter, vs argument {var} -> quoter) est formalisee dans le test. Les 22 commandes entieres generees restent intactes, les 8 arguments sont corriges.
+
+## [LECON] 2026-08-13 -- AUDIT PREUVES APOSTROPHE COMBOS (Themis, VERDICT VALIDE)
+
+**Audit** (mission Morpheus, demande utilisateur) : preuves reelles du quoting des combos avec raison a apostrophe. 8/8 VALIDE.
+
+**Observations** :
+- Le quoting fonctionne : la raison 'reprise d activation de la mission' traverse generateur + shlex.split + execution intacte.
+- Sans quoting, la commande echoue en 'No closing quotation' AVANT execution - preuve que le garde-fou test-042 est necessaire.
+- La sortie d une case outil est capturee silencieusement par combos-moteur : utiliser --verbose pour la verifier.
+
+## [LECON] 2026-08-13 -- AUDIT TEST-043 GENERATEURS-QUOTER (Themis, VERDICT VALIDE)
+
+**Audit** (mission Morpheus, demande utilisateur) : garde-fou test-043 generateurs-quoter. 12/12 VALIDE.
+
+**Observation** : la chaine d echappement est maintenant surveillee sur ses DEUX maillons : test-042 cote combos (definitions-combo.json) et test-043 cote catalogue (parametres quoter:true de generateurs-commande). Un retrait du champ quoter ou une regression de composer_valeur serait signale a la non-regression.
+## [LECON] 2026-08-13 -- AUDIT MISSION TRIPLE CHRONO/REGLE/SCRIPTS (Themis, VERDICT VALIDE)
+
+**Controle croise** (mission Buffy, demande utilisateur) : 20/20 points OK.
+V1) versions/sections presentes (template v0.3.0, protocole-tests v0.3.1,
+Regle 9, outil-template-python v0.1.1-beta, protocole scripts v0.2.2) ;
+V2) canevas complet (point_actif/chrono_etape/bilan_chrono) + outil-template.py
+compile avec --chrono ; V3) normes 0/0 sur les 7 fichiers + lecon ;
+V4) 0 residu racine (commande directe - l artefact d auto-incrimination est
+recurrent quand un audit lance lui-meme le scan) ; V5) references coherentes.
+
+**Lecons** :
+- Le triplet protections + options on/off + chrono est desormais la REGLE
+  IMMUABLE de creation de tout fichier (fonctions/tests/workflows) : il se
+  propage par les templates (test v0.3.0 + outil v0.1.1-beta) et les
+  protocoles (tests v0.3.1 + outils Regle 9). Les futures mesures de duree
+  alimenteront les outils de suivi.
+- La contradiction scripts temporaires est levee : jetable ephemere racine
+  (rm -f immediat) vs outil temporaire de mission (generateur + registre).
+- Chaque audit Themis qui scanne la racine DOIT confirmer T4 en commande
+  directe (artefact d auto-incrimination recurrent).
+## [LECON] 2026-08-13 -- AUDIT TEST-044 TRIPLET TEMPLATE (Themis, VERDICT VALIDE)
+
+**Controle croise** (mission Morpheus, demande utilisateur) : 15/15 points OK.
+test-044-triplet-template : 14/14 (positif), preuve negative rejouee (perte
+de bilan_chrono detectee, restauration identique), serie e + DUREES, 1 bloc
+SERIES, conformite 029 (44 tests) + 030, normes 0/0, correction du template
+(global NB en tete de main du canevas) verifiee.
+
+**Lecons** :
+- Le triplet du template est desormais SURVEILLE en permanence : un futur
+  template appauvri serait signale a la non-regression. Le garde-fou a
+  prouve sa valeur des la creation en revelant le bug latent du canevas
+  (UnboundLocalError NB_KO).
+- La regle de creation de fichier (protections + options on/off + chrono)
+  s applique aussi aux GARDE-FOUS eux-memes : test-044 est le premier test
+  qui affiche un bilan CHRONO.
+## [LECON] 2026-08-13 -- AUDIT REGLE STRICTE SCRIPTS DEDIES (Themis, VERDICT VALIDE)
+
+**Controle croise** (mission Buffy, demande utilisateur) : 15/15 points OK.
+Protocole v0.2.3 : regle stricte (JAMAIS de script temporaire a la racine),
+aucune tolerance residuelle, dossier dedie .agents-tmp/ partout (deux usages +
+spawn_agents + procedure + pieges + RVAV) ; .gitignore a jour ; test-024
+13/13 (dossier invisible pour le scan racine) ; test-039/041 verts ; normes 0/0.
+
+**Lecons** :
+- La nouvelle pratique est EN PLACE et SURVEILLABLE : racine 0 .tmp en
+  permanence (test-024), .agents-tmp/ vide en fin de mission. Tous les
+  agents (moi comprise) utilisent .agents-tmp/ desormais.
+- L artefact d audit s est deplace dans .agents-tmp/ : un audit qui scanne
+  .agents-tmp/ doit se verifier en commande directe apres suppression de son
+  propre script (meme lecon que pour la racine).
+## [LECON] 2026-08-13 -- AUDIT RETOUR REGLE D ORIGINE + RESIDUS EN CASCADE (Themis, VERDICT VALIDE)
+
+**Controle croise** (mission Buffy -> Morpheus, demande utilisateur) : 15/15
+points OK apres re-audit. Protocole v0.2.4 (regle d origine : dossier
+tmp-<agent>/ cree a la racine, rm -rf en fin de mission), 0 mention
+.agents-tmp, test-024 point 2b (0 dossier tmp-* residuel hors agent courant),
+gitignore tmp-*/, .agents-tmp/ supprime, conformite 029/030, normes 0/0.
+
+**Decouverte majeure** : le garde-fou 2b a detecte DEUX residus reels en
+cascade : tmp-buffy (Buffy a active Morpheus sans supprimer son dossier) puis
+tmp-morpheus (Morpheus a active Themis sans supprimer son dossier). LA
+DISCIPLINE n est pas encore automatique chez les agents : la regle exige
+rm -rf tmp-<agent> AVANT de reactiver l agent suivant. Le garde-fou protege
+la regle, mais chaque agent doit l appliquer - y compris Themis (qui a du
+supprimer tmp-morpheus pendant son propre audit).
+
+**Lecons** :
+- Un garde-fou qui protege une regle d usage DOIT exclure l usage courant
+  legitime (agent courant via le profil classeur) sinon il s auto-incrimine
+  pendant les missions.
+- La verification des residus se fait en commande directe, apres suppression
+  du dossier de l agent courant : l audit Themis a du re-auditer apres
+  suppression de tmp-morpheus.
+- Passer la main (activer l agent suivant) SANS supprimer son dossier
+  temporaire = anomalie detectee par test-024. La chaine entiere applique
+  desormais la regle.
+
+## [LECON] 2026-08-13 -- AUDIT DE LA CHAINE HYGIE (Themis, VERDICT VALIDE)
+
+**Contexte** : audit croise de la creation de l agent de nettoyage Hygie
+(fiche + parcours + chariot + test-045).
+
+**Points cles** :
+- 18/18 au premier passage + T6 confirme apres suppression du dossier
+  tmp-themis (artefact d auto-incrimination classique : mon propre dossier
+  de mission present pendant le scan).
+- RESIDUS REELS DECOUVERTS : les dossiers tmp-buffy/tmp-cerberus/tmp-clio/
+  tmp-morpheus n avaient pas ete supprimes en fin de mission - la discipline
+  v0.2.4 impose a CHAQUE agent de supprimer SON dossier avant de passer la
+  main. Themis a applique la discipline.
+- Le registre courant est vide a chaque non-regression (garde-fous globaux) :
+  les usages sont lus dans registre-usages-outils.historique.jsonl.
+
+**Lecon** : un audit doit verifier la REALITE (fichiers presents, registre
+archive) et pas seulement les declarations - et l auditeur s applique la
+discipline a lui-meme en premier (supprimer son dossier de mission).
+
+
+## [LECON] 2026-08-14 -- RESPONSABILITE README + CORRECTION INCOHERENCES (Themis)
+
+**Contexte** : decision utilisateur - Themis devient responsable de la VERACITE
+des README (public + dev). L utilisateur a signale que readme-dev racontait
+n importe quoi (Janus active "par Cerberus" alors qu il est le dernier maillon
+de la chaine ; 44 tests au lieu de 46). Investigation : la fausse phrase venait
+du commit beta, recopiee sans verification ; personne n avait la responsabilite
+explicite du contenu factuel des README.
+
+**Fait** :
+1. Corrige readme-dev.md : ligne 139 (Janus active par les agents en fin de
+   mission) + ligne 309 (44 -> 46 tests, verifie par comptage reel).
+2. Corrige la cause racine janus.md (limites 239-240 : regles contradictoires
+   avec la pratique reelle - 35 occurrences 'activer janus' dans l historique).
+3. Ajoute ma responsabilite README : fiche v0.3.0 (role + section
+   RESPONSABILITE README avec sources de verite et grille) + parcours v0.4.3
+   (case c30 branchee sur c1, branche 'readme').
+4. Validations : valider-cartes CONFORME, valider-case CONFORME,
+   verifier-conformite-fiche CONFORME, test-038 7/7, normes 0/0.
+
+**Lecon** : la veracite d un README ne se verifie pas avec des compteurs
+structuraux - il faut CROISER le contenu avec les sources de verite (fiches,
+AGENTS-historique, git log). C est maintenant ma grille obligatoire.
+## [LECON] 2026-08-14 -- SUPPRESSION REGISTRE HISTORIQUE + FUSION 12 ENTREES (Themis, en relais)
+
+**Contexte** : decision utilisateur -- supprimer le registre-usages-outils.
+historique.jsonl (percu comme residu : ne recoit plus d ecritures depuis 08:52)
+et ne garder qu UN SEUL registre. Verite etablie avant d agir : l historique
+n etait PAS un residu inerte -- le lanceur non-regression l ecrivait a chaque
+lancement via archiver_registre (round 8, 395 lignes). Mais la decision
+utilisateur est claire : un seul registre. Simplification executee.
+
+**Actions realisees** :
+1. FUSION : les 12 entrees mode script-temporaire de l historique (vulcain 2,
+   hygie 6, morpheus 3, buffy 1) ont ete ajoutees au registre actif
+   registre-usages-outils.jsonl (dedoublonnage par agent+outil+mode, 0 doublon)
+2. SUPPRESSION : registre-usages-outils.historique.jsonl supprime
+3. detecter-usage-scripts-temporaires.py : scanner_registre ne lit plus que le
+   registre actif (registre_historique supprime)
+4. tester-lancer-non-regression.py : archiver_registre supprime, remplace par
+   purger_registre qui PRESERVE les entrees script-temporaire (memoire des
+   declarations conservee dans le registre actif) + message sans avertissement
+5. test-024 : point 13 remplace -- verifie que le registre actif contient les
+   12 entrees script-temporaire + que le fichier historique n existe pas
+6. Docs detecter-usage-scripts-temporaires.md + tester-lancer-non-regression.md
+   mises a jour (plus d historique)
+
+**Lecons** :
+1. VERITE AVANT SUPPRESSION : un fichier qui ne recoit plus d ecritures n est
+   pas forcement un residu -- verifier qui le LIT (grep) avant de conclure.
+   Ici l historique etait ecrit par le lanceur a chaque non-regression.
+2. PURGE QUI PRESERVE : quand le lanceur vide le registre avant les tests, il
+   doit PRESERVER les entrees mode script-temporaire sinon la memoire des
+   declarations est perdue a chaque non-regression (et le detecteur devient
+   aveugle). purger_registre = garde les script-temporaire, purge le reste.
+3. UN SEUL FICHIER : la decision utilisateur simplifie -- un seul registre
+   actif, la memoire script-temporaire y vit, plus de double fichier.
+4. NON-REGRESSION : 46/47, seul test-028 preexistant KO (spec activer-agent-
+   principal 0.5.3 vs outil 0.5.4, bump Vulcain a traiter).
+5. Les 15 scripts non declares du detecteur sont des mentions HISTORIQUES
+   (lecons/git) preexistantes, pas liees a la fusion.

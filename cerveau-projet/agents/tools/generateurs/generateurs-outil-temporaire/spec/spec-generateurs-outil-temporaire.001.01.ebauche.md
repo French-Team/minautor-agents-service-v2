@@ -7,7 +7,7 @@ identite:
 # Specification -- generateurs-outil-temporaire
 
 **Statut :** ebauche
-**Version :** 0.1.0
+**Version :** 0.2.1
 **Categorie :** generateurs
 **Date :** 2026-08-09
 
@@ -39,6 +39,7 @@ Fournir un generateur d'**outil temporaire** (script Python jetable) utilisable 
 | 7 | Question promotion | Affichee a la fin (mode non-bloquant, destinee a l'agent) : besoin recurrent (2e utilisation) ? -> OUI = activer Vulcain |
 | 8 | Directive promotion | OUI : activer Vulcain (maillon de chaine), Vulcain cree l'outil durable, Vulcain reactive l'agent precedent |
 | 9 | Parite .py/.sh | Meme comportement dans les deux versions (dry-run, workspace, promotion, refus ecrasement) |
+| 10 | DECLARATION USAGES (v0.2.1) | Le script genere embarque le bloc DECLARATION : variable `AGENT` + fonctions `declarer_usage()` / `declarer_usages()` qui appellent `enregistrer-usage-outil --mode script-temporaire` pour le script lui-meme et chaque outil utilise (appele en fin de main, erreur si AGENT non renseigne) |
 
 ## Interface
 

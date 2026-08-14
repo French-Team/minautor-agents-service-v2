@@ -1,6 +1,6 @@
 # [nom-outil]
 
-**Version :** 0.1.0-beta
+**Version :** 0.2.0-beta
 **Statut :** ebauche
 **Categorie :** [ajouter | analyser | changer | combos | condenser | copier | corriger | creer | decomposer | deplacer | detecter | ecrire | editer | evaluer | generateurs | gerer | inserer | lire | lister | mettre-a-jour | nettoyer | rechercher | supprimer | valider | verifier]
 **Chemin :** `agents/tools/[categorie]/[nom-outil]/`
@@ -73,6 +73,28 @@
 | `--dry-run` | Simuler sans appliquer les modifications | false |
 | `--verbose` | Afficher les details | false |
 | `--help` | Afficher l'aide | - |
+| `--doc` | Afficher le .md de documentation complet et sortir | false |
+| `--confirme-doc` | Confirmer la lecture de la documentation (requis en mode reel) | false |
+
+## REGLE IMMUABLE : documentation obligatoire (v0.2.0)
+
+> **REGLE IMMUABLE (lecture documentation mecanisee, demande utilisateur)** :
+> L'agent doit LIRE le .md de l'outil avant de l'utiliser. Le mode reel
+> (sans `--dry-run`) est **BLOQUE** tant que l'agent n'a pas passe
+> `--confirme-doc` (confirmation explicite de lecture). Le .md du MEME
+> dossier doit exister : un outil sans documentation = usage a risque
+> (le contrat d'utilisation n'existe pas) -> refus de fonctionner.
+
+| Protection | Comportement |
+|---|---|
+| `verifier_doc_presente` | Le .md du meme dossier doit exister, sinon refus (code 2) |
+| `exiger_confirmation_doc` | Mode reel sans `--confirme-doc` : affiche la section Utilisation du .md + refus (code 2) |
+| `--doc` | Affiche le .md complet dans stdout (lecture directe, sans ouvrir le fichier) |
+| `--dry-run` | Libre (mode de decouverte : permet d'essayer sans confirmation) |
+
+> L'agent lit TOUJOURS la sortie de la commande qu'il execute :
+> l'auto-affichage de la section Utilisation au refus garantit qu'il voit
+> le contrat avant de relancer avec `--confirme-doc`.
 
 ## Ce que l'outil fait
 
@@ -109,6 +131,8 @@ $ [nom-outil].sh [argument 1]
 
 ## Notes de creation
 
+- [ ] L'outil embarque le bloc DOC OBLIGATOIRE (verifier_doc_presente + exiger_confirmation_doc + --doc + --confirme-doc)
+- [ ] L'outil a ete teste : sans `--confirme-doc` en mode reel -> refus (code 2) ; avec -> OK
 - [ ] L'outil a ete teste en `--dry-run` avant application
 - [ ] L'outil est conforme ASCII (aucun accent, aucun emoji) -- valider avec `valider-conformite-ascii`
 - [ ] L'outil est reference dans `index-tools.md`

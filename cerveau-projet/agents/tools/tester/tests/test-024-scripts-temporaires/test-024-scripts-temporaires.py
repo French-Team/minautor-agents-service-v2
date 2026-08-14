@@ -19,17 +19,21 @@ Contexte (mission anti-scripts-temporaires, 2026-08-11) :
 Cas couverts:
   1. Aucun fichier .zz-* a la racine du projet
   2. Aucun fichier .tmp-* a la racine du projet
+  2b. Aucun dossier tmp-* residuel a la racine (hors dossier de l agent
+      courant, regle d origine v0.2.4 : dossier cree + supprime en fin)
   3. detecter-usage-scripts-temporaires : executable + --version v0.1.1
   4. detecter-usage-scripts-temporaires : sortie sans ERREUR
   5. editer-parcours : --version v0.1.1
   6. tester-lancer-non-regression : --version v0.1.1
-  7. enregistrer-usage-outil : mode script-temporaire accepte (--version v0.2.1)
+  7. enregistrer-usage-outil : mode script-temporaire accepte (--version v0.3.0)
   8. Catalogue : les 3 nouvelles commandes presentes (145 total)
   9. index-tools : les 4 nouvelles lignes presentes (3 outils + editer-fichier-agents)
  10. ASCII strict : 0 non-ASCII (outils + test)
  11. LF pur : 0 CRLF (outils + test)
  12. Protection : le test lui-meme ne cree aucun fichier a la racine
- 13. Garde-fou memoire : l'historique du registre (registre-usages-outils.historique.jsonl) existe (round 8 : archiver au lieu de purger)
+ 13. Garde-fou fusion : le registre actif contient les 12 entrees script-temporaire
+     (decision utilisateur 2026-08-14 : plus d historique, les entrees ont ete
+     fusionnees dans registre-usages-outils.jsonl)
 
 Usage:
   python3 test-024-scripts-temporaires.py
@@ -37,7 +41,9 @@ Usage:
 import glob
 import importlib.util
 import io
+import json
 import os
+import re
 import subprocess
 import sys
 
@@ -121,6 +127,30 @@ def main():
     verifier("1. Aucun fichier .zz-* a la racine", len(zz) == 0, str(zz[:5]))
     verifier("2. Aucun fichier .tmp-* a la racine", len(tmp) == 0, str(tmp[:5]))
 
+    # 2b. Aucun dossier temporaire RESIDUEL tmp-* a la racine (regle
+    #     d origine v0.2.4) : le dossier tmp-<agent> de la mission COURANTE
+    #     est legitime (cree en debut, supprime en fin) et exclu ; tout
+    #     AUTRE dossier tmp-* = residu = KO.
+    agent_courant = ""
+    profil = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                          "classeur-variables", "stockage",
+                          "variables-actuelles.md")
+    if os.path.isfile(profil):
+        with io.open(profil, encoding="utf-8", errors="replace") as fh:
+            for ligne in fh:
+                if "profil-session-llm-1" in ligne:
+                    m = re.search(r"agent:\s*([A-Za-z0-9_-]+)", ligne)
+                    if m:
+                        agent_courant = m.group(1)
+                    break
+    dossiers_residuels = [n for n in os.listdir(racine)
+                          if n.startswith("tmp-")
+                          and os.path.isdir(os.path.join(racine, n))
+                          and n != ("tmp-%s" % agent_courant)
+                          and n not in exclusions]
+    verifier("2b. Aucun dossier tmp-* residuel a la racine (hors agent courant)",
+             len(dossiers_residuels) == 0, str(dossiers_residuels[:5]))
+
     # 3-4. detecter-usage-scripts-temporaires
     r = run([PYTHON, DETECTER, "--version"])
     verifier("3. detecter --version v0.1.1",
@@ -134,23 +164,24 @@ def main():
     verifier("5. editer-parcours --version v0.1.0",
              r.returncode == 0 and "v0.1.1" in r.stdout, r.stdout.strip()[-60:])
     r = run([PYTHON, LANCER, "--version"])
-    verifier("6. tester-lancer-non-regression --version v0.2.0",
-             r.returncode == 0 and "v0.2.0" in r.stdout, r.stdout.strip()[-60:])
+    verifier("6. tester-lancer-non-regression --version v0.3.1",
+             r.returncode == 0 and "v0.3.1" in r.stdout, r.stdout.strip()[-60:])
 
-    # 7. enregistrer-usage-outil v0.2.1 (mode script-temporaire + garde-fous)
+    # 7. enregistrer-usage-outil v0.3.0 (mode script-temporaire + garde-fous + tri)
     r = run([PYTHON, ENREGISTRER, "--version"])
-    verifier("7. enregistrer-usage-outil --version v0.2.1",
-             r.returncode == 0 and "v0.2.1" in r.stdout, r.stdout.strip()[-60:])
+    verifier("7. enregistrer-usage-outil --version v0.3.0",
+             r.returncode == 0 and "v0.3.0" in r.stdout, r.stdout.strip()[-60:])
 
     # 8. Catalogue : 149 commandes + les nouvelles
     import json as json_mod
     with io.open(CATALOGUE, encoding="utf-8") as fh:
         cat = json_mod.load(fh)
     noms = [e.get("nom") for e in cat.get("commandes", [])]
-    ok_cat = (len(noms) == 149 and "tester-lancer-non-regression" in noms
+    ok_cat = (len(noms) == 154 and "tester-lancer-non-regression" in noms
               and "editer-parcours" in noms and "detecter-usage-scripts-temporaires" in noms
-              and "detecter-cablages-manquants" in noms and "tester-protections" in noms)
-    verifier("8. catalogue : 149 commandes + nouvelles presentes",
+              and "detecter-cablages-manquants" in noms and "tester-protections" in noms
+              and "detecter-fautes-orthographe" in noms)
+    verifier("8. catalogue : 154 commandes + nouvelles presentes",
              ok_cat, "nb=%d" % len(noms))
 
     # 9. index-tools : les 4 lignes presentes
@@ -178,11 +209,48 @@ def main():
     verifier("12. Le test ne cree aucun fichier a la racine",
              avant == apres, "cree: %s" % (apres - avant))
 
-    # 13. Garde-fou memoire (round 8) : l'historique du registre existe
+    # 13. Garde-fou fusion (decision utilisateur 2026-08-14) : le registre
+    # actif contient les 12 entrees script-temporaire (fusion de l ancienne
+    # archive). Aucun fichier historique ne doit exister.
     historique = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "traces",
                               "registre-usages-outils.historique.jsonl")
-    verifier("13. historique du registre present (memoire conservee)",
-             os.path.isfile(historique), "absent")
+    registre = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "traces",
+                            "registre-usages-outils.jsonl")
+
+    # 14. Anti-recurrence (demande utilisateur 2026-08-14) : le registre
+    # d usage est TRIE par date/heure DECROISSANT (le plus recent d abord).
+    dates = []
+    try:
+        with io.open(registre, encoding="utf-8") as fh:
+            for l in fh:
+                if not l.strip():
+                    continue
+                try:
+                    dates.append(json.loads(l).get("date", ""))
+                except ValueError:
+                    pass
+    except OSError:
+        dates = []
+    trie = all(dates[i] >= dates[i + 1] for i in range(len(dates) - 1))
+    verifier("14. registre-usages-outils trie par date/heure decroissant",
+             trie, "entrees=%d" % len(dates))
+    nb_st = 0
+    try:
+        with io.open(registre, encoding="utf-8") as fh:
+            for l in fh:
+                if not l.strip():
+                    continue
+                try:
+                    e = json.loads(l)
+                    if e.get("mode") == "script-temporaire":
+                        nb_st += 1
+                except ValueError:
+                    pass
+    except (IOError, OSError):
+        pass
+    verifier("13. registre actif contient les 12 entrees script-temporaire (fusion)",
+             nb_st >= 12 and not os.path.isfile(historique),
+             "nb_st=%d historique_present=%s" % (nb_st, os.path.isfile(historique)))
 
     print("")
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))

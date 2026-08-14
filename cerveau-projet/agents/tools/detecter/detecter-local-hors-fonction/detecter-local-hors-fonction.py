@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# -*- coding: ascii -*-
 # identite:
 #   type: outil
 #   appartient_a: commun

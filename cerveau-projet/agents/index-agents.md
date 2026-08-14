@@ -24,6 +24,7 @@ identite:
 | [Promethee](promethee/promethee.md) | promethee/promethee.md | promethee/corrections.md | Redacteur de specs | Disponible (en attente) | Agent dedie aux specs |
 | [Minerve](minerve/minerve.md) | minerve/minerve.md | minerve/corrections.md | Redactrice de todos | Disponible (en attente) | Agent dedie aux todos |
 | [Clio](clio/clio.md) | clio/clio.md | clio/corrections.md | Muse de l'histoire -- README | Disponible (en attente) | Agent dedie au README |
+| [Hygie](hygie/hygie.md) | hygie/hygie.md | hygie/corrections.md | Agent de nettoyage du workspace | Disponible (en attente) | SEUL habilite a tout le workspace + suppression |
 | [Janus](janus/janus.md) | janus/janus.md | janus/corrections.md | Controleur des statuts | Disponible (sur demande) | Assigne comme controleur |
 | [Morpheus](morpheus/morpheus.md) | morpheus/morpheus.md | morpheus/corrections.md | Testeur | Disponible (en attente) | Agent dedie aux tests |
 | [Vulcain](vulcain/vulcain.md) | vulcain/vulcain.md | vulcain/corrections.md | Constructeur d'outils | Disponible (en attente) | Cree pour construire les outils reels |

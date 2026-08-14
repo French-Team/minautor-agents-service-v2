@@ -6,7 +6,8 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.2"
+VERSION="0.5.5"
+STATUT="prepare"
 
 # Configuration
 AGENTS_FILE="${AGENTS_FILE:-AGENTS.md}"
@@ -41,6 +42,8 @@ get_agent_role() {
         "Minerve"|"minerve") echo "Redactrice de todos -- organisation des taches" ;;
         "Clio"|"clio") echo "Muse de l'histoire -- mise a jour du README" ;;
         "Themis"|"themis") echo "Evaluatrice croisee -- evaluation et audit" ;;
+        "Hygie"|"hygie") echo "Agent de nettoyage -- seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable" ;;
+        "Hermes"|"hermes") echo "Agent de la langue -- orthographe, vocabulaire et fautes de francais commises par les agents" ;;
         *) echo "Agent inconnu" ;;
     esac
 }
@@ -60,6 +63,8 @@ get_agent_fiche() {
         "Minerve"|"minerve") echo "cerveau-projet/agents/minerve/minerve.md" ;;
         "Clio"|"clio") echo "cerveau-projet/agents/clio/clio.md" ;;
         "Themis"|"themis") echo "cerveau-projet/agents/themis/themis.md" ;;
+        "Hygie"|"hygie") echo "cerveau-projet/agents/hygie/hygie.md" ;;
+        "Hermes"|"hermes") echo "cerveau-projet/agents/hermes/hermes.md" ;;
         *) echo "cerveau-projet/agents/inconnu/inconnu.md" ;;
     esac
 }
@@ -79,6 +84,8 @@ get_agent_corrections() {
         "Minerve"|"minerve") echo "cerveau-projet/agents/minerve/corrections.md" ;;
         "Clio"|"clio") echo "cerveau-projet/agents/clio/corrections.md" ;;
         "Themis"|"themis") echo "cerveau-projet/agents/themis/corrections.md" ;;
+        "Hygie"|"hygie") echo "cerveau-projet/agents/hygie/corrections.md" ;;
+        "Hermes"|"hermes") echo "cerveau-projet/agents/hermes/corrections.md" ;;
         *) echo "cerveau-projet/agents/inconnu/corrections.md" ;;
     esac
 }
@@ -297,9 +304,9 @@ editer_bloc_session() {
     local nom_llm=$9
     awk -v session="$session" -v nom="$nom" -v role="$role" -v date="$date" \
         -v fiche="$fiche" -v corrections="$corrections" -v active_par="$active_par" -v raison="$raison" -v nom_llm="$nom_llm" '
-        function emettre_bloc(   i, ligne, v_nom, v_role, v_date, v_fiche, v_corr, v_actif, v_raison, v_llm, autres, na, a) {
+        function emettre_bloc(   i, ligne, v_nom, v_role, v_date, v_fiche, v_corr, v_actif, v_raison, v_llm, v_suite, autres, na, a) {
             v_nom = ""; v_role = ""; v_date = ""; v_fiche = ""; v_corr = ""
-            v_actif = ""; v_raison = ""; v_llm = ""; na = 0
+            v_actif = ""; v_raison = ""; v_llm = ""; v_suite = ""; na = 0
             for (i in bloc) {
                 ligne = bloc[i]
                 if (ligne ~ /^\| \*\*(Id LLM|Nom LLM)\*\* \| /) { sub(/^\| \*\*(Id LLM|Nom LLM)\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); v_llm = ligne }
@@ -311,6 +318,7 @@ editer_bloc_session() {
                 else if (ligne ~ /^\| \*\*Active par\*\* \| /) { sub(/^\| \*\*Active par\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); v_actif = ligne }
                 else if (ligne ~ /^\| \*\*Raison\*\* \| /) { sub(/^\| \*\*Raison\*\* \| /, "", ligne); sub(/ \|$/, "", ligne); v_raison = ligne }
                 else if (ligne ~ /^\| \*\*/) { autres[na++] = ligne }
+                else if (v_raison != "") { v_suite = v_suite ligne "\n" }
             }
             if (nom != "") v_nom = nom
             if (role != "") v_role = role
@@ -320,6 +328,7 @@ editer_bloc_session() {
             if (active_par != "") v_actif = active_par
             if (raison != "") v_raison = raison
             if (nom_llm != "") v_llm = nom_llm
+            if (v_suite != "") v_raison = v_raison "\n" substr(v_suite, 1, length(v_suite) - 1)
             print ""
             print "| Champ | Valeur |"
             print "|---|---|"
@@ -330,7 +339,11 @@ editer_bloc_session() {
             if (v_fiche != "") print "| **Fiche** | [" v_fiche "](" v_fiche ") |"
             if (v_corr != "") print "| **Corrections** | [" v_corr "](" v_corr ") |"
             if (v_actif != "") print "| **Active par** | " v_actif " |"
-            if (v_raison != "") print "| **Raison** | " v_raison " |"
+            if (v_raison != "") {
+                n = split(v_raison, lignes_r, "\n")
+                print "| **Raison** | " lignes_r[1] " |"
+                for (k = 2; k <= n; k++) print lignes_r[k]
+            }
             for (a = 0; a < na; a++) print autres[a]
         }
         BEGIN { dans_bloc = 0; nb = 0 }
@@ -648,9 +661,22 @@ activer_agent() {
 
     local fiche=$(get_agent_fiche "$agent")
     local corrections=$(get_agent_corrections "$agent")
-    editer_bloc_session "$session" "$agent" "$role" "$date" "$fiche" "$corrections" "Cerberus (automatique)" "$raison"
+    # v0.5.4 : instruction de demarrage automatique (anti-bug arret a c0)
+    local raison_finale="$raison"
+    if [ "$agent" != "cerberus" ] && [[ "$raison" != *"DEMARRAGE OBLIGATOIRE"* ]]; then
+        raison_finale="$raison
 
-    ajouter_historique "$timestamp" "$session" "$agent" "$raison"
+DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \\
+  cerveau-projet/agents/$agent/parcours/parcours-$agent.json --case c0 --reponses OUI
+(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
+avec --reponses NON pour relire d abord ; suis ensuite les branches case par
+case ; si tu reprends apres une interruption, reprends a la case courante
+avec --case <cid> --reponses '<reponse>')."
+    fi
+    editer_bloc_session "$session" "$agent" "$role" "$date" "$fiche" "$corrections" "Cerberus (automatique)" "$raison_finale"
+
+    ajouter_historique "$timestamp" "$session" "$agent" "$raison_finale"
     mettre_a_jour_profil_session "$session" "$agent"
     mettre_a_jour_sessions_connues
     echo "Session $session : agent $agent active avec succes"
@@ -775,7 +801,7 @@ case $1 in
         afficher_aide
         ;;
     "--version")
-        echo "activer-agent-principal v$VERSION"
+        echo "activer-agent-principal v$VERSION ($STATUT)"
         ;;
     *)
         echo "ERREUR: Action inconnue '$1'"

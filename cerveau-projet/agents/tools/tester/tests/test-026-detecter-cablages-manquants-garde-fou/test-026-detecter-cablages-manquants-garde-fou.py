@@ -12,18 +12,18 @@ Contexte :
   - detecter-cablages-manquants (v0.1.1, outil dedie) complete valider-case :
     CAS_ORPHELINE (toute case jamais atteignable), BOUCLE_BLOQUANTE (cycle
     sans sortie), REF_MORTE (suivant/branche vers case inexistante).
-  - Ce garde-fou verifie que les 11 parcours des agents ont 0 cas orphelin,
+  - Ce garde-fou verifie que les 13 parcours des agents ont 0 cas orphelin,
     0 boucle bloquante et 0 reference morte : toute regression du cablage
     (case orpheline, boucle sans issue, reference cassee) fait KO.
 
 Cas couverts:
   1. detecter-cablages-manquants --version = v0.1.1
   2. Parcours sain (cerberus) : verdict PROPRE
-  3. Les 11 parcours : 0 CAS_ORPHELINE au total
-  4. Les 11 parcours : 0 BOUCLE_BLOQUANTE au total
-  5. Les 11 parcours : 0 REF_MORTE au total
-  6. Les 11 parcours : 0 CASE_DEPART manquante
-  7. Les 11 parcours : 0 FIN_NON_JOIGNABLE
+  3. Les 13 parcours : 0 CAS_ORPHELINE au total
+  4. Les 13 parcours : 0 BOUCLE_BLOQUANTE au total
+  5. Les 13 parcours : 0 REF_MORTE au total
+  6. Les 13 parcours : 0 CASE_DEPART manquante
+  7. Les 13 parcours : 0 FIN_NON_JOIGNABLE
   8. --tous : verdict global PROPRE
   9. ASCII strict : 0 non-ASCII (outil + doc + test)
  10. LF pur : 0 CRLF (outil + doc + test)
@@ -104,7 +104,7 @@ def lister_parcours():
 
 
 def main():
-    print("=== Garde-fou : cablages manquants des 11 parcours ===")
+    print("=== Garde-fou : cablages manquants des 13 parcours ===")
 
     # 1. Version
     r = run([PYTHON, OUTIL_PY, "--version"])
@@ -112,8 +112,8 @@ def main():
              "v0.1.1" in r.stdout, r.stdout.strip())
 
     parcours = lister_parcours()
-    verifier("2. 11 parcours d agents trouves",
-             len(parcours) == 11, "nb=%d" % len(parcours))
+    verifier("2. 13 parcours d agents trouves",
+             len(parcours) == 13, "nb=%d" % len(parcours))
 
     # 3-7. Scan de chaque parcours : cumul des problemes bloquants
     total_orphelines = 0
@@ -130,15 +130,15 @@ def main():
         total_departs += compter(out, "[CASE_DEPART]")
         total_fins += compter(out, "[FIN_NON_JOIGNABLE]")
 
-    verifier("3. 0 CAS_ORPHELINE sur les 11 parcours (anti-recurrence)",
+    verifier("3. 0 CAS_ORPHELINE sur les 12 parcours (anti-recurrence)",
              total_orphelines == 0, "total=%d" % total_orphelines)
-    verifier("4. 0 BOUCLE_BLOQUANTE sur les 11 parcours",
+    verifier("4. 0 BOUCLE_BLOQUANTE sur les 12 parcours",
              total_boucles == 0, "total=%d" % total_boucles)
-    verifier("5. 0 REF_MORTE sur les 11 parcours",
+    verifier("5. 0 REF_MORTE sur les 12 parcours",
              total_refs == 0, "total=%d" % total_refs)
     verifier("6. 0 CASE_DEPART manquante/inexistante",
              total_departs == 0, "total=%d" % total_departs)
-    verifier("7. 0 FIN_NON_JOIGNABLE sur les 11 parcours",
+    verifier("7. 0 FIN_NON_JOIGNABLE sur les 12 parcours",
              total_fins == 0, "total=%d" % total_fins)
 
     # 8. --tous : verdict global PROPRE (les boucles de re-travail sont des

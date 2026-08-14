@@ -1,7 +1,7 @@
 #!/bin/bash
 # mettre-a-jour-readme.sh
 # Outil pour corriger le README afin qu'il reflete l'etat reel du projet
-# Version : 0.4.0
+# Version : 0.4.1
 # Statut : ebauche
 # Proprietaire : Clio (agent dedie au README)
 
@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.4.0"
+VERSION="0.4.1"
 STATUT="ebauche"
 README="README.md"
 HISTORIQUE="AGENTS-historique.md"
@@ -55,9 +55,10 @@ compter_agents() {
     for d in "$AGENTS_DIR"/*/; do
         [ -d "$d" ] || continue
         local nom=$(basename "$d")
-        if [ "$nom" != "tools" ]; then
-            nb=$((nb + 1))
-        fi
+        [ "$nom" != "tools" ] || continue
+        # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
+        [ -f "$AGENTS_DIR/$nom/parcours/parcours-$nom.json" ] || continue
+        nb=$((nb + 1))
     done
     echo "$nb"
 }
@@ -67,9 +68,10 @@ lister_agents_reels() {
     for d in "$AGENTS_DIR"/*/; do
         [ -d "$d" ] || continue
         local nom=$(basename "$d")
-        if [ "$nom" != "tools" ]; then
-            echo "$nom"
-        fi
+        [ "$nom" != "tools" ] || continue
+        # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
+        [ -f "$AGENTS_DIR/$nom/parcours/parcours-$nom.json" ] || continue
+        echo "$nom"
     done
 }
 

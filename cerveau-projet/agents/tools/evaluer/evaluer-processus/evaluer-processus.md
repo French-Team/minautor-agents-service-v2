@@ -66,7 +66,7 @@ Code de retour : 0 si aucun probleme, 1 sinon (utilisable en garde-fou).
 
 ## Version
 
-- v0.1.0 : creation (2026-08-13). Detection sur lecons (faux positifs).
+- v0.1.1 : creation (2026-08-13). Detection sur lecons (faux positifs).
 - v0.2.0 : detection OUTIL_HORS_CARTE basee sur le REGISTRE (source
   fiable), outils P0 de la fiche et transverses exclus. Corrections des
   lacunes de cartes revelees (morpheus c12/c7, vulcain c8, janus c4).
