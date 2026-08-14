@@ -1,7 +1,7 @@
 # tester-lancer-non-regression
 
 **Categorie** : Tester
-**Version** : 0.3.1
+**Version** : 0.3.2
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-11
@@ -125,8 +125,18 @@ python3 tester-lancer-non-regression.py --journal
 | `--tests <a,b>` | Filtrer par noms de tests (separes par des virgules) |
 | `--no-journal` | Rotation du registre avant les tests (cumul <= 100 usages normaux, par defaut) |
 | `--journal` | Ne touche pas au registre |
-| `--rapport <f>` | Ecrit le bilan markdown dans un fichier |
+| `--rapport <f>` | Ecrit le bilan markdown dans un fichier (inclut les details [KO] de chaque test en echec) |
 | `--version` | Affiche la version |
+
+## Details des KO (round 16, demande utilisateur)
+
+Quand la suite se termine avec des KO, le lanceur imprime une section
+`=== DETAILS DES KO (pour action immediate) ===` : pour CHAQUE test en
+echec, le nom + le nombre de points KO + les lignes `[KO]` detaillees
+(avec le detail apres `--`). L agent sait immediatement POURQUOI chaque
+test a echoue, sans relancer les tests individuellement. La meme
+information est ecrite dans le rapport markdown (`--rapport`, section
+`Tests en echec (details)`).
 
 ## Retour
 

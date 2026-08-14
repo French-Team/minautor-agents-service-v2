@@ -15,11 +15,12 @@
 - **1.0.0** (2026-08-09) : creation. Theme `ameliorer-outil` (10 questions).
 - **2.0.0** (2026-08-09) : theme `ameliorer-outil` reformule (14 questions) : 5 RAPPELS STRATEGIQUES en tete (diagnostic de l existant, horloge, formats, ameliorer vs evoluer, perimetre) + 9 questions techniques. Les premiers rappels poussent l agent a reflechir a CE qui doit etre ameliore et a anticiper l EVOLUTION plutot que de patcher puis refondre (ex : une horloge pensee heure+minute doit anticiper secondes/chronometre ; une fonction mp3 doit penser aux autres formats).
 - **2.1.0** (2026-08-12) : `--version` et `--liste` affichent desormais la version du fichier de themes (`themes vX.Y.Z`, lue du JSON) a cote de la version de l outil - fin de la divergence silencieuse outil/donnees (l outil affichait v2.0.0 alors que themes-amelioration.json etait passe en 2.2.0 avec 11 themes).
+- **themes 2.3.0** (2026-08-15) : theme `ameliorer-test` ajoute (12 questions) - le domaine TESTS (fichiers test-0XX, template-test, tester-protections, tester-lancer-non-regression, garde-fous) a desormais sa propre checklist d amelioration, agent habilite morpheus (regle immuable : seul Morpheus ecrit les tests).
 - Compatibilite : Python 3, Bash (wrapper pur). Parite py/sh par construction.
 
 ## Fichier de themes (themes-amelioration.json)
 
-> **Version du fichier** : 2.2.0 (11 themes). La version du fichier est affichee
+> **Version du fichier** : 2.3.0 (12 themes). La version du fichier est affichee
 > par l outil (`--version`, `--liste`) : elle est independante de la version de
 > l outil lui-meme et evolue a chaque ajout/modification de theme.
 
@@ -78,6 +79,12 @@ le `.py`.
   cas, q4 ameliorer vs evoluer - eviter patch puis refonte, q5 perimetre) puis
   9 questions techniques (index/catalogue, interface, 5 fichiers, parite,
   ASCII/LF, tests, impacts, garde-fous, lecon).
+- Le theme `ameliorer-test` a 12 questions, dedie au domaine TESTS (agent
+  habilite : morpheus) : 5 RAPPELS STRATEGIQUES (diagnostic, horloge, formats,
+  ameliorer vs evoluer, perimetre) puis 7 questions techniques (template-test
+  v0.3.0 + protections importees, preuve negative reelle, bump de version +
+  tests de version, garde-fou anti-recurrence, seul Janus lance la
+  non-regression, normes + registre, lecon).
 
 ## Regles
 

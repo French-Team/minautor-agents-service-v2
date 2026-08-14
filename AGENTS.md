@@ -25,12 +25,12 @@ identite:
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
 | **Active par** | cerberus (retour de mission) |
-| **Raison** | BILAN CONSOLIDE (Janus, mission Cerberus) : ecart carte vulcain corrige par Buffy - indice outil outil-template ajoute a la case c4, parcours 0.4.8, fiche vulcain a jour. VERDICT VALIDE (J1-J5) : valider-cartes vulcain CONFORME, evaluer-processus 0 probleme (agent + global), normes 0/0, registre propre (2 declarations buffy du jour dans sa carte), non-regression 54 OK / 0 KO (51.9s, +1% reference). Plus aucun OUTIL_HORS_CARTE pour outil-template. Lecon Janus enregistree. |
+| **Raison** | BILAN JANUS (mission rapport details KO) : VERDICT VALIDE J1-J5. Lanceur v0.3.2 (extraire_lignes_ko + afficher_details_ko + section DETAILS DES KO en fin de suite + rapport markdown enrichi). BUG COMPTER_KO CORRIGE (comptait [KO] n importe ou -> ne compte que les lignes commencant par [KO]). 6 tests adaptes (031/032/024/027/051 lanceur, 008 themes 2.3.0), garde-fou test-051 point 9 anti-recurrence avec preuve negative. NON-REGRESSION COMPLETE 55 OK / 0 KO en UN lancement (51.4s, reference amelioree). Normes 0/0, 0 residu, registre propre. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-15 00:07 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-15 00:52 |
 ## Configuration Active
 
 ### Regles specifiques a Cerberus

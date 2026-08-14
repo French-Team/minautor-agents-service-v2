@@ -1985,3 +1985,122 @@ vulcain contient la REGLE c4 (j utilise TOUJOURS outil-template) mais PAS
 d indice outil outil-template -> tout usage declare d outil-template par
 vulcain est signale OUTIL_HORS_CARTE par evaluer-processus. L indice outil
 outil-template devrait etre ajoute a la case c4 du parcours vulcain.
+
+## [LECON] 2026-08-15 -- GARDE-FOU test-055 COHERENCE REGLE/INDICE OUTIL CREE (Morpheus)
+
+**Contexte** : l ecart carte vulcain c4 (regle mentionnant outil-template sans indice
+outil -> OUTIL_HORS_CARTE) a revele un trou dans les garde-fous : aucune verification
+automatique de la coherence regle/indice outil sur les cartes. Demande utilisateur :
+creer un garde-fou qui la verifie automatiquement sur TOUTES les cartes.
+
+**Creation test-055-coherence-regle-indice-outil** :
+- Regle : pour chaque parcours (13 agents), chaque case, chaque indice type regle :
+  tout nom d outil canonique mentionne dans le texte (frontiere de mot) doit avoir un
+  indice type outil dans la MEME case, sinon KO (agent, case, outil).
+- Liste canonique : noms du catalogue generateurs-commande (154) + outil-template
+  (hors catalogue : le template de creation n est pas une commande).
+- Structure : template-test v0.3.0 (protections importees via tester-protections,
+  triplet point_actif/chrono_etape/bilan_chrono, --isoler/--desactiver/--chrono).
+
+**Preuves** :
+- Etat actuel : 8 OK / 1 KO - le point 3 detecte EXACTEMENT les 6 ecarts connus
+  (sonde Cerberus) : buffy c10c generateurs-case, clio c20 valider-conformite-ascii,
+  janus c16 changer-statut, vulcain c2 verifier-systeme, vulcain c7 corriger-symboles
+  + combos-moteur. Preuve reelle de detection.
+- Preuve positive vulcain c4 (mention outil-template couverte par son indice) OK.
+- Preuves logiques synthetiques : mention sans indice -> detectee ; avec indice ->
+  non detectee (les deux sens, sans toucher aux fichiers reels).
+- Integration lanceur : serie e + garde-fous globaux + duree 1s.
+
+**Lecon** : un garde-fou de coherence de CARTES (etat global) se construit en deux
+temps : (1) le test detecte l etat incoherent (preuve reelle de detection documentee),
+(2) l agent cartier corrige les cartes pour le reverdir - le test reste identique,
+c est l etat qui change. La liste canonique doit couvrir les outils HORS catalogue
+(outil-template) sinon l ecart fondateur ne serait jamais detecte.
+
+## [LECON] 2026-08-15 -- TEST-016 ADAPTE + DECOUVERTE INDICE FANTOME c10c (Morpheus)
+
+**Contexte** : apres le bump du parcours buffy 0.4.3 -> 0.4.4 (chaine garde-fou
+test-055), la non-regression (Janus) montrait un KO : test-016 figeait la version.
+
+**Adaptation test-016** : version 0.4.3 -> 0.4.4 (docstring + cas couverts + point 1),
+nouvelle ligne de changelog v0.4.4 (indice outil generateurs-case en c10c). Compteurs
+de types inchanges (aucune case ajoutee/retiree, seul un indice a change).
+
+**DECOUVERTE (cause racine du KO "plus de 3 indices")** : la case c10c contenait deja
+un indice generateurs-case SANS le champ "type" (un INDICE FANTOME, invisible pour la
+detection type=='outil' et donc pour evaluer-processus). L ajout par Buffy d un indice
+en double a fait passer la case a 4 indices (KO test-016). Correction : type:'outil'
+ajoute a l indice d origine (conserve sa commande), doublon retire -> 3 indices.
+Scan des 13 cartes : UN SEUL indice fantome (buffy c10c) - les autres cartes sont
+propres.
+
+**Lecons** :
+1. Un indice outil SANS champ type est un fantome : il ne compte ni pour test-055
+   (type=='outil'), ni pour evaluer-processus, ni pour le guidage. La correction d un
+   ecart regle/indice doit d abord VERIFIER si l indice existe deja (eventuellement
+   incomplet) avant d en ajouter un nouveau.
+2. Le garde-fou test-055 a bien joue son role : il a signale la case c10c alors que
+   l indice y etait - mais en fantome (type absent). L anti-recurrence complet
+   devrait detecter les fantomes (indice avec nom sans type) - a considerer pour une
+   future extension.
+
+**Verifications** : test-016 20/20, test-055 9/9, valider-cartes buffy CONFORME,
+normes 0/0.
+
+## [LECON] 2026-08-15 -- TEST-055 ETENDU AUX INDICES FANTOMES (Morpheus)
+
+**Contexte** : demande utilisateur - etendre test-055 (coherence regle/indice outil) a
+la detection des INDICES FANTOMES (indice avec champ nom mais SANS champ type). La
+lecon c10c (generateurs-case sans type, invisible pour la detection) a montre ce trou.
+
+**Extension test-055 (9 -> 12 points)** :
+- detecter_fantomes(cases) : renvoie (cid, nom) pour tout indice avec nom et sans type
+- scanner_fantomes() : scan des 13 cartes
+- Points ajoutes : 8. 0 fantome sur les 13 cartes (reel, etat propre - 344 indices avec
+  nom, tous type outil) ; 9. preuve negative logique (indice {nom} sans type ->
+  detecte, synthetique) ; 10. preuve positive logique (indice {nom, type outil} ->
+  non detecte, synthetique). Normes renumerotees 11-12.
+
+**PREUVE NEGATIVE REELLE (protocole)** : fantome {nom} insere dans la case reelle
+vulcain c4 (backup) -> test-055 11 OK / 1 KO (point 8 KO, fantome detecte) ->
+restauration -> 12 OK / 0 KO. Le parcours est intact (valider-cartes CONFORME).
+
+**Lecon** : l extension complete le garde-fou : (1) tout outil mentionne dans une
+regle doit avoir son indice outil type dans la meme case ; (2) tout indice portant un
+nom doit porter le champ type outil. Les deux trous (regle sans indice, indice sans
+type) sont desormais couverts - un fantome est invisible pour evaluer-processus et le
+guidage, donc aussi dangereux qu une regle non couverte.
+
+## [LECON] 2026-08-15 -- RAPPORT DE NON-REGRESSION : DETAILS DES KO (Morpheus)
+
+**Contexte** : demande utilisateur - le rapport de non-regression doit fournir les
+informations detaillees quand il y a des KO, pour que l agent sache immediatement ce
+qui a echoue, quand la suite est terminee. Ligne amelioration respectee : theme
+ameliorer-test cree par Vulcain (themes 2.3.0), checklist 12/12 validee, activation.
+
+**Lanceur v0.3.2** (tester-lancer-non-regression) :
+- extraire_lignes_ko(sortie) : lignes [KO] detaillees (avec le detail apres --)
+- executer_lot + executer_pool : ko_liste porte desormais (nom, nb_ko, details)
+- afficher_details_ko(ko_liste) : section "=== DETAILS DES KO (pour action
+  immediate) ===" imprimee a la fin de la suite (mono-serie + mode tous) quand il y
+  a des KO
+- ecrire_rapport : section "Tests en echec (details)" avec les lignes [KO] de chaque
+  test en echec dans le rapport markdown --rapport
+
+**Tests adaptes** : test-031/032/024/027/051 (lanceur 0.3.1 -> 0.3.2) + test-008
+(themes v2.2.0 -> v2.3.0, suite a la creation du theme ameliorer-test par Vulcain).
+
+**Garde-fou anti-recurrence** : test-051 point 9 - le lanceur doit embarquer
+extraire_lignes_ko + afficher_details_ko + "DETAILS DES KO" (preuve negative reelle :
+def retiree -> KO -> restauration).
+
+**Preuves reelles** : (1) console - test-008 en KO reel -> section DETAILS DES KO
+imprimee avec la ligne detaillee ; (2) rapport markdown - KO volontaire -> section
+"Tests en echec (details)" avec la ligne [KO] ; (3) preuve negative point 9 -> KO ->
+restauration. 0 residu, normes 0/0.
+
+**Lecon** : la ligne amelioration (generateur d abord, theme dedie par domaine) a
+porte sa promesse : le theme ameliorer-test a guide la checklist (preuve negative,
+garde-fou, seul Janus, bump + tests de version) et l amelioration du lanceur est
+verrouillee par un garde-fou qui protege le comportement.

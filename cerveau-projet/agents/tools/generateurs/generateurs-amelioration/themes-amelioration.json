@@ -1,5 +1,5 @@
 {
-  "version": "2.2.0",
+  "version": "2.3.0",
   "themes": [
     {
       "nom": "ameliorer-agent",
@@ -380,6 +380,73 @@
           "id": "q5",
           "question": "Le trio (athena, promethee, minerve) est-il l habile pour ce changement, avec retour a l agent demandeur ?",
           "raison": "Les specs sont la matiere des agents redacteurs - delegation obligatoire (Pattern 5/8)."
+        }
+      ]
+    },
+    {
+      "nom": "ameliorer-test",
+      "agent_habilite": "morpheus",
+      "description": "Checklist a parcourir avant toute amelioration du domaine tests (fichiers test-0XX, template-test, tester-protections, tester-lancer-non-regression, garde-fous) : diagnostic, impact, non-regression.",
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Rappel : qu est-ce qui doit etre ameliore, exactement ? Decris le defaut ou la limite constate en usage reel d un test, du template, des protections ou du lanceur de non-regression (pas ce que tu veux ajouter, mais ce qui existe et coince).",
+          "raison": "Diagnostiquer l existant avant tout ajout : une amelioration sans constat part de l invention plutot que du besoin."
+        },
+        {
+          "id": "q2",
+          "question": "Rappel de l horloge : cette amelioration est-elle pensee DES MAINTENANT pour les evolutions previsibles de l objet (options, series, registre, rapport) ?",
+          "raison": "Anticiper l extension naturelle des la conception : une fonction pensee pour grandir evite de la recouvrir de patches un par un."
+        },
+        {
+          "id": "q3",
+          "question": "Rappel des formats : la solution couvre-t-elle TOUTE la famille de cas (fichier test-0XX, template-test, tester-protections, lanceur de non-regression, rapport) ou seulement un cas etroit ?",
+          "raison": "Eviter la fonction trop etroite : un cas unique aujourd hui devient un retro-equipement douloureux quand la famille arrive."
+        },
+        {
+          "id": "q4",
+          "question": "Rappel ameliorer vs evoluer : vaut-il mieux ameliorer cet objet telle quelle, ou le faire EVOLUER maintenant (refonte ciblee) plutot que de le patcher aujourd hui et le refondre plus tard ? Compare le cout des deux chemins.",
+          "raison": "Une amelioration passee sur un objet a refondre est du travail jete : choisir le bon moment pour evoluer."
+        },
+        {
+          "id": "q5",
+          "question": "Rappel perimetre : quelles sont les limites explicites de CETTE iteration (ce qu on fait, ce qu on reporte volontairement) ?",
+          "raison": "Cadrer l iteration sans derive : savoir ce qu on ne fait PAS est aussi important que ce qu on fait."
+        },
+        {
+          "id": "q6",
+          "question": "Le template-test v0.3.0 est-il respecte : triplet point_actif/chrono_etape/bilan_chrono + protections importees via le point d entree unique tester-protections (lancer_protege + verifier_critique) ?",
+          "raison": "Chaque test doit porter les protections et le chrono (regle immuable template-test) : les anciens tests autonomes ne sont pas importables."
+        },
+        {
+          "id": "q7",
+          "question": "La PREUVE NEGATIVE reelle est-elle faite (inserer une violation -> constater le KO -> restaurer -> OK) pour tout garde-fou cree ou renforce ?",
+          "raison": "Un garde-fou sans preuve negative ne prouve pas la detection : sans elle, on ne sait pas s il detecte vraiment (protocole de creation des garde-fous)."
+        },
+        {
+          "id": "q8",
+          "question": "Si un OUTIL du tester est modifie (lanceur, template, protections, generateur), la version est-elle bumpee (py/sh/md/spec/catalogue) et les tests de version adaptes par Morpheus ?",
+          "raison": "Toute modification d outil impacte la documentation et les tests qui figeent la version : ne pas oublier la chaine d adaptation."
+        },
+        {
+          "id": "q9",
+          "question": "La modification est-elle couverte par un garde-fou anti-recurrence (un test qui verifie le comportement attendu) ?",
+          "raison": "Une amelioration sans garde-fou peut etre defaite par la prochaine mission : la verrouiller des maintenant."
+        },
+        {
+          "id": "q10",
+          "question": "Rappel gouvernance : seul JANUS lance la non-regression complete - je ne la lance JAMAIS moi-meme (j execute uniquement des tests individuels) ?",
+          "raison": "La non-regression est le controle final de Janus : la lancer soi-meme est une violation de gouvernance (test-037)."
+        },
+        {
+          "id": "q11",
+          "question": "Normes : ASCII strict + LF pur sur tous les fichiers modifies/crees, et declaration des usages au registre (enregistrer-usage-outil) ?",
+          "raison": "Les normes du cerveau sont non negociables (verifier_residus_racine, protocole-outils) et la trace des usages est mecanisee."
+        },
+        {
+          "id": "q12",
+          "question": "La lecon de cette amelioration sera-t-elle documentee dans corrections.md ?",
+          "raison": "La lecon capitalise l experience pour les prochaines missions."
         }
       ]
     }

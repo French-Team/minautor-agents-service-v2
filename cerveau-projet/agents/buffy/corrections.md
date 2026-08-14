@@ -3088,3 +3088,27 @@ valider-cartes --tous 13/13 CONFORMES.
    Buffy (c8/c22/c27) impose ACTIVER JANUS en fin de mission. La carte est la source de
    verite : j ai corrige la raison d activation dans AGENTS.md et AGENTS-historique.md
    pour la rendre conforme, puis j ai active JANUS pour le second controle.
+
+## [LECON] 2026-08-15 -- 6 ECARTS REGLE/INDICE OUTIL CORRIGES SUR 4 CARTES (Buffy)
+
+**Contexte** : le garde-fou test-055 (Morpheus) a detecte 6 incoherences regle/indice
+outil (outil mentionne dans une regle sans indice outil dans la meme case) sur 4 cartes.
+
+**Corrections** (edition JSON sure avec backup, format identique aux autres indices) :
+- buffy c10c : + indice outil generateurs-case (parcours 0.4.3 -> 0.4.4)
+- clio c20 : + indice outil valider-conformite-ascii (parcours 0.5.5 -> 0.5.6)
+- janus c16 : + indice outil changer-statut (parcours 0.4.4 -> 0.4.5)
+- vulcain c2 : + indice outil verifier-systeme ; c7 : + corriger-symboles (script reel
+  corriger-accents-zones-sensibles) + combos-moteur (parcours 0.4.8 -> 0.4.9)
+Fiches mises a jour (Pattern 14) : buffy/clio/janus/vulcain.
+
+**Verifications** : valider-cartes-decision CONFORME x4 + --tous 13/13 CONFORMES,
+evaluer-processus global 0 probleme, test-055 9/9 (garde-fou reverdi), normes ASCII/LF
+0/0 sur parcours + fiches, 0 .bak residuel.
+
+**Lecon** : la decouverte corriger-symboles (commande du catalogue dont le script reel
+est corriger-accents-zones-sensibles) montre que le CHEMIN d un indice outil doit
+pointer vers le script REEL de la commande, pas vers un nom suppose : quand le nom de
+commande differe du dossier, verifier le champ "script" du catalogue. A NOTER POUR
+CERBERUS : le test-016 (migration buffy) fige la version 0.4.3 du parcours buffy ->
+mon bump 0.4.4 le rend KO attendu, adaptation par Morpheus.

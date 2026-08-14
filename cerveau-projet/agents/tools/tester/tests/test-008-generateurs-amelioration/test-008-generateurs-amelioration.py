@@ -99,7 +99,7 @@ def main():
         verifier("1. --version py/sh identiques v2.1.0 + themes affiches",
                  r_py.returncode == 0 and r_sh.returncode == 0
                  and "v2.1.0" in r_py.stdout
-                 and "themes v2.2.0" in r_py.stdout
+                 and "themes v2.3.0" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 

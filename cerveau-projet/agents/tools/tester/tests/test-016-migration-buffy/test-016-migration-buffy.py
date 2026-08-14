@@ -19,8 +19,10 @@ Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
   - v0.3.6 : branchement editer-fichier-agents (case c11b, branche 'fiche' dans c10b)
   - v0.4.1 : ajout case c0d LIRE LA DOCUMENTATION DE L OUTIL (REGLE ABSOLUE LECTURE DOC)   - v0.4.2 (2026-08-13) : Themis maillon automatique (actions c8a/c22a/c27a Activer Themis + controles c8b/c22b/
    - v0.4.3 (2026-08-14) : ajout indice outil valider-cartes-decision (case c14 RVAV)c27b Retour de Themis)
+   - v0.4.4 (2026-08-15) : ajout indice outil generateurs-case (case c10c, coherence
+     regle/indice outil - garde-fou test-055)
 
-Cas couverts:   1. Version du parcours = 0.4.3
+Cas couverts:   1. Version du parcours = 0.4.4
   2. Types : 40 action / 8 question / 5 controle / 10 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -111,8 +113,8 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.4.3",
-                 d["parcours"].get("version") == "0.4.3",
+        verifier("1. Version du parcours = 0.4.4",
+                 d["parcours"].get("version") == "0.4.4",
                  d["parcours"].get("version"))
 
         # 2. Types

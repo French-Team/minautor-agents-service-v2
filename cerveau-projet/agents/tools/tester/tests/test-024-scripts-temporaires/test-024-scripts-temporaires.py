@@ -164,8 +164,8 @@ def main():
     verifier("5. editer-parcours --version v0.1.0",
              r.returncode == 0 and "v0.1.1" in r.stdout, r.stdout.strip()[-60:])
     r = run([PYTHON, LANCER, "--version"])
-    verifier("6. tester-lancer-non-regression --version v0.3.1",
-             r.returncode == 0 and "v0.3.1" in r.stdout, r.stdout.strip()[-60:])
+    verifier("6. tester-lancer-non-regression --version v0.3.2",
+             r.returncode == 0 and "v0.3.2" in r.stdout, r.stdout.strip()[-60:])
 
     # 7. enregistrer-usage-outil v0.3.0 (mode script-temporaire + garde-fous + tri)
     r = run([PYTHON, ENREGISTRER, "--version"])

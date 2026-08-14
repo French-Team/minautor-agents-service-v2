@@ -139,8 +139,8 @@ def main():
 
     # 4. Version du lanceur.
     r = run([PYTHON, LANCER, "--version"])
-    verifier("4. --version v0.3.1",
-             r.returncode == 0 and "v0.3.1" in r.stdout, r.stdout.strip()[-60:])
+    verifier("4. --version v0.3.2",
+             r.returncode == 0 and "v0.3.2" in r.stdout, r.stdout.strip()[-60:])
 
     # 5. Serie inconnue : code 2 + message usage, sans traceback.
     # (argparse ecrit le message usage sur stderr, pas sur stdout)

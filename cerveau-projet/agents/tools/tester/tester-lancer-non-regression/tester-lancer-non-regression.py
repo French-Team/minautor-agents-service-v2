@@ -13,7 +13,7 @@ import sys
 import time
 from datetime import datetime
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 STATUT = "ebauche"
 
 # Round 10 : 5 series thematiques. Chaque test appartient a une serie par son
@@ -27,7 +27,7 @@ SERIES = {
     "d": ["test-023", "test-024", "test-025", "test-026", "test-027",
           "test-030", "test-031"],
     "e": ["test-028", "test-029", "test-032", "test-033", "test-034", "test-035",
-          "test-036", "test-037", "test-038", "test-039", "test-040", "test-041", "test-042", "test-043", "test-044", "test-045", "test-046", "test-047", "test-048", "test-049", "test-050", "test-051", "test-052", "test-054"],
+          "test-036", "test-037", "test-038", "test-039", "test-040", "test-041", "test-042", "test-043", "test-044", "test-045", "test-046", "test-047", "test-048", "test-049", "test-050", "test-051", "test-052", "test-054", "test-055"],
 }
 SERIES_NOMS = {
     "a": "Combos et coherence",
@@ -47,7 +47,7 @@ SERIES_PARALLELES = ["a", "b", "c"]
 # JAMAIS tourner en parallele avec d autres tests (faux positifs assures).
 # Ils sont toujours lances en serie, apres le pool de workers.
 GARDE_FOUS_GLOBAUX = ["test-023", "test-024", "test-025", "test-027",
-                     "test-051", "test-052", "test-054"]
+                     "test-051", "test-052", "test-054", "test-055"]
 
 # Round 14 (lecon 2026-08-14) : tests qui ECRIVENT des fichiers partages
 # (README, catalogue...) et ne doivent JAMAIS tourner en parallele avec les
@@ -69,7 +69,7 @@ DUREES_CONNUES = {
     "test-011": 1, "test-008": 1, "test-007": 1, "test-029": 0,
     "test-033": 0, "test-034": 0, "test-035": 0, "test-036": 0,
     "test-037": 0, "test-038": 0, "test-039": 0, "test-040": 0,
-    "test-023": 0, "test-014": 0, "test-001": 0, "test-041": 0, "test-042": 0, "test-043": 0, "test-044": 0, "test-045": 0, "test-046": 0, "test-047": 0, "test-048": 0, "test-051": 5, "test-052": 2, "test-054": 3,
+    "test-023": 0, "test-014": 0, "test-001": 0, "test-041": 0, "test-042": 0, "test-043": 0, "test-044": 0, "test-045": 0,    "test-046": 0, "test-047": 0, "test-048": 0, "test-051": 5, "test-052": 2, "test-054": 3, "test-055": 1,
 }
 
 _COULEURS = {
@@ -163,7 +163,27 @@ def trouver_tests(racine, filtre=None):
 
 
 def compter_ko(sortie):
-    return len(re.findall(r"\[KO\]", sortie))
+    """Compte les points KO d une sortie de test : seules les lignes qui
+    COMMENCENT par [KO] (apres indentation) sont des echecs. Un libelle
+    [OK] contenant la sous-chaine "[KO]" (ex "details [KO] presents")
+    n est JAMAIS un echec - lecon du round 16 : test-051 point 9 etait
+    compte a tort par l ancienne detection (sous-chaine n importe ou)."""
+    return sum(1 for ligne in (sortie or "").splitlines()
+               if ligne.strip().startswith("[KO]"))
+
+
+def extraire_lignes_ko(sortie):
+    """Extrait les lignes [KO] detaillees d une sortie de test (avec le
+    detail apres '--' si present). Round 16 (demande utilisateur) : le
+    rapport de non-regression doit fournir les informations detaillees des
+    KO quand la suite est terminee - l agent sait immediatement POURQUOI
+    chaque test a echoue, sans relancer les tests individuellement."""
+    # Seules les lignes qui COMMENCENT par [KO] (apres indentation) sont
+    # des echecs : un libelle [OK] contenant la sous-chaine "[KO]" (ex
+    # "details [KO] presents") ne doit jamais etre capture (lecon du
+    # round 16 : premier passage capturait les [OK] a tort).
+    return [ligne.strip() for ligne in (sortie or "").splitlines()
+            if ligne.strip().startswith("[KO]")]
 
 
 def serie_du_test(nom):
@@ -280,7 +300,8 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
                                  "OK", time.monotonic() - t_debut)
             else:
                 ko += 1
-                ko_liste.append((os.path.basename(t), nb_ko))
+                ko_liste.append((os.path.basename(t), nb_ko,
+                                 extraire_lignes_ko(r.stdout)))
                 print("  %-50s %s (%d [KO])" % (os.path.basename(t), _couleur("KO", "rouge"), nb_ko))
                 journaliser_test(racine, agent, serie, os.path.basename(t),
                                  "KO", time.monotonic() - t_debut)
@@ -292,7 +313,7 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
                     break
         except Exception as e:
             ko += 1
-            ko_liste.append((os.path.basename(t), -1))
+            ko_liste.append((os.path.basename(t), -1, []))
             print("  %-50s %s (%s)" % (os.path.basename(t), _couleur("ERREUR", "rouge"), str(e)[:40]))
             journaliser_test(racine, agent, serie, os.path.basename(t),
                              "ERREUR", time.monotonic() - t_debut)
@@ -401,7 +422,8 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
                                  "OK", duree)
             else:
                 ko += 1
-                ko_liste.append((os.path.basename(t), nb_ko))
+                ko_liste.append((os.path.basename(t), nb_ko,
+                                 extraire_lignes_ko(sortie)))
                 print("  %-50s %s (%d [KO])" % (os.path.basename(t), _couleur("KO", "rouge"), nb_ko))
                 journaliser_test(racine, agent, serie_test, os.path.basename(t),
                                  "KO", duree)
@@ -417,6 +439,26 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
                    % (ok, ko, len(tries) - non_lances, non_lances),
                    "vert" if ko == 0 else "rouge"))
     return ok, ko, ko_liste, non_lances
+
+
+def afficher_details_ko(ko_liste):
+    """Imprime les DETAILS des tests en echec (lignes [KO] avec leur
+    detail) a la fin de la suite : l agent sait immediatement ce qui a
+    echoue et pourquoi, sans relancer les tests individuellement (round 16,
+    demande utilisateur)."""
+    if not ko_liste:
+        return
+    print("")
+    print(_couleur("=== DETAILS DES KO (pour action immediate) ===", "rouge"))
+    for entree in ko_liste:
+        nom, nb, details = (list(entree) + [None, []])[:3]
+        if nb == -1:
+            print("  %s : ERREUR d execution (le test n a pas pu tourner)" % nom)
+            continue
+        print("  %s : %d [KO]" % (nom, nb))
+        for ligne in details or []:
+            print("      %s" % ligne)
+    print("")
 
 
 def extraire_bilan(sortie):
@@ -453,9 +495,12 @@ def ecrire_rapport(chemin, titre, bilan, ko_liste, lignes_registre):
         fh.write("Date : %s\n\n" % datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         fh.write("## Bilan\n\n%s\n\n" % bilan)
         if ko_liste:
-            fh.write("## Tests en echec\n\n")
-            for nom, nb in ko_liste:
+            fh.write("## Tests en echec (details)\n\n")
+            for entree in ko_liste:
+                nom, nb, details = (list(entree) + [None, []])[:3]
                 fh.write("- %s : %d [KO]\n" % (nom, nb))
+                for ligne in details or []:
+                    fh.write("  - %s\n" % ligne)
         if lignes_registre is not None:
             fh.write("\nRegistre d usage apres : %d lignes\n" % lignes_registre)
     print(_couleur("[OK] Rapport ecrit : %s" % chemin, "vert"))
@@ -665,6 +710,8 @@ def main():
         afficher_chrono(racine, duree, "serie-%s" % args.series, len(selection),
                         seuil=args.seuil, rebase=args.rebase_reference,
                         no_reference=True)
+        if ko:
+            afficher_details_ko(ko_liste)
         lignes = None
         if protege:
             lignes = afficher_etat_registre(racine)
@@ -747,6 +794,8 @@ def main():
         bilan = "=== RESULTAT GLOBAL : %d OK / %d KO (sur %d tests) ===" % (tot_ok, tot_ko, len(tests))
     print("")
     print(_couleur(bilan, "vert" if tot_ko == 0 else "rouge"))
+    if tot_ko:
+        afficher_details_ko(ko_liste)
     # La reference globale n est geree QUE par le run complet sans filtre :
     # un run cible (--tests) ou un appel interne ne doit jamais la lire ni
     # l ecrire (sinon une reference partielle fausserait la comparaison).

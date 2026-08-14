@@ -2590,3 +2590,30 @@ template outil-template.py ET .sh contiennent le bloc DOC OBLIGATOIRE
 (verifier_doc_presente, exiger_confirmation_doc, --confirme-doc) + preuve
 negative (bloc retire -> KO). Aucun test existant (029/050) ne touche
 outil-template : pas d adaptation necessaire de mon cote.
+
+## [LECON] 2026-08-15 -- THEME ameliorer-test CREE (Vulcain, ligne amelioration)
+
+**Contexte** : demande utilisateur - le domaine TESTS n avait pas de theme
+d amelioration dedie dans generateurs-amelioration (seul ameliorer-outil existait).
+La ligne amelioration de Cerberus (c19b -> c19c generateur d abord -> c19d agent
+habilite) a ete respectee : checklist ameliorer-outil validee (14/14) puis activation.
+
+**Creation** : theme `ameliorer-test` ajoute dans themes-amelioration.json
+(version 2.2.0 -> 2.3.0, 12 themes) : agent_habilite morpheus (regle immuable :
+seul Morpheus ecrit les tests), 12 questions (5 rappels strategiques + 7 techniques
+domaine tests : template-test v0.3.0 + protections importees, preuve negative reelle,
+bump version + tests de version, garde-fou anti-recurrence, seul Janus lance la
+non-regression, normes + registre, lecon). Doc generateurs-amelioration.md a jour
+(12 themes, historique themes 2.3.0).
+
+**Verifications** : --liste 12 themes, --version themes v2.3.0, structure du theme
+valide (12 questions id/question/raison), normes 0/0.
+
+**Impact documente (adaptation Morpheus)** : test-008 point 1 fige 'themes v2.2.0'
+dans --version -> KO ATTENDU (18 OK / 1 KO), a adapter vers v2.3.0. Les points 3c/3d
+(ameliorer-outil 14 questions) restent verts.
+
+**Lecon** : la ligne amelioration est le bon chemin pour TOUTE demande d amelioration
+- un theme dedie par domaine (tests vs outil) permet a la checklist du generateur de
+porter les regles specifiques du domaine (ici : template-test, preuve negative,
+gouvernance seul Janus). Ne jamais court-circuiter le generateur d abord (Pattern 17).

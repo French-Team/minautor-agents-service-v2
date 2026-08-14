@@ -3,7 +3,7 @@
 """
 test-051-registre-tests.py
 GARDE-FOU : le registre-tests (trace des lancements de tests par les agents)
-existe et fonctionne. Le lanceur tester-lancer-non-regression v0.3.1 journalise
+existe et fonctionne. Le lanceur tester-lancer-non-regression v0.3.2 journalise
 CHAQUE test execute dans cerveau-projet/agents/traces/registre-tests.jsonl
 (date, agent, serie, test, verdict, duree) quand --agent est fourni - et
 UNIQUEMENT dans ce cas. Le registre-tests est DISTINCT de
@@ -12,10 +12,10 @@ registre-usages-outils.jsonl (jamais melanges).
 Contexte (demande utilisateur 2026-08-14) : comme le registre-usages-outils
 trace l utilisation des outils, chaque lancement de tests par un agent doit
 laisser une trace dans un registre dedie. La mission a ete realisee par
-Vulcain (outil v0.3.1) puis verifiee ici.
+Vulcain (outil v0.3.2) puis verifiee ici.
 
 Cas couverts:
-  1. Le lanceur est v0.3.1 (--version)
+  1. Le lanceur est v0.3.2 (--version)
   2. L aide contient l option --agent
   3. Le registre-tests est DISTINCT de registre-usages-outils (chemins differents)
   4. PREUVE REELLE positive : run --series a --agent X -> des entrees creees
@@ -121,7 +121,7 @@ def main():
 
     # 1. Version du lanceur
     out = run([sys.executable, LANCER, "--version"])
-    verifier("1. lanceur v0.3.1 (--version)", "v0.3.1" in out, out.strip())
+    verifier("1. lanceur v0.3.2 (--version)", "v0.3.2" in out, out.strip())
 
     # 2. Option --agent dans l aide
     out = run([sys.executable, LANCER, "--help"])
@@ -186,7 +186,7 @@ def main():
     # 8. Nettoyage : le test NE DOIT PAS laisser ses preuves tmp-t051 dans le
     # registre (artefact a chaque run, decouverte Janus 2026-08-14 : 5 entrees
     # par non-regression). On reecrit le registre sans les lignes de l agent
-    # de test, en preservant le tri decroissant (regle v0.3.1) et le LF pur.
+    # de test, en preservant le tri decroissant (regle v0.3.2) et le LF pur.
     # Detection par json.loads (robuste au format espaces/sans espaces).
     lignes = [l for l in io.open(REG_TESTS, encoding="utf-8") if l.strip()]
 
@@ -205,13 +205,24 @@ def main():
     verifier("8. le test nettoie ses preuves tmp-t051 (0 restante)",
              apres_nettoyage == 0, "restantes=%d" % apres_nettoyage)
 
-    # 9-10. Normes
+    # 9. Garde-fou anti-recurrence (round 16, demande utilisateur) : le
+    #    lanceur doit embarquer l extraction et l affichage des details [KO]
+    #    (rapport detaille en fin de suite - l agent sait immediatement
+    #    pourquoi un test a echoue, sans relancer les tests).
+    src_lanceur = io.open(LANCER, encoding="utf-8").read()
+    ok_details = ("def extraire_lignes_ko" in src_lanceur
+                  and "def afficher_details_ko" in src_lanceur
+                  and "DETAILS DES KO" in src_lanceur)
+    verifier("9. lanceur : extraction + affichage des details [KO] presents",
+             ok_details)
+
+    # 10-11. Normes
     fichiers = [os.path.abspath(__file__), LANCER]
     na = sum(compter_non_ascii(f) for f in fichiers)
     cr = sum(compter_crlf(f) for f in fichiers)
-    verifier("9. ASCII strict : 0 non-ASCII (test + lanceur)", na == 0,
+    verifier("10. ASCII strict : 0 non-ASCII (test + lanceur)", na == 0,
              "na=%d" % na)
-    verifier("10. LF pur : 0 CRLF (test + lanceur)", cr == 0, "crlf=%d" % cr)
+    verifier("11. LF pur : 0 CRLF (test + lanceur)", cr == 0, "crlf=%d" % cr)
 
     if args.chrono:
         chrono_etape("test-051 registre-tests", time.time() - t0)

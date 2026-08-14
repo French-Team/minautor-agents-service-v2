@@ -3463,3 +3463,115 @@ par evaluer-processus - un ajout de REGLE sans indice outil sera detecte des le 
 usage declare. A noter aussi : Buffy a respecte sa carte (FIN = ACTIVER JANUS) en
 corrigeant la raison d activation dans AGENTS.md/AGENTS-historique - la carte est bien
 la source de verite, pas la mission recue.
+
+## [LECON] 2026-08-15 -- VERIFICATION SYNCHRO PARCOURS VULCAIN 0.4.8 (Janus, VERDICT VALIDE)
+
+**Contexte** : demande Cerberus - verifier que le parcours-vulcain 0.4.8 (indice outil
+outil-template ajoute en c4) est synchrone avec la fiche et les tests qui le referencent.
+
+**Verifications** :
+- Fiche vulcain.md : 3 references 0.4.8 (PARCOURS v0.4.8, ligne Parcours v0.4.8) ==
+  version reelle du parcours (0.4.8, 55 cases)
+- Aucune reference stale 0.4.7 dans fiche/catalogue/tests (seule la description
+  historique d une case dans le JSON, normale)
+- Aucun test ne fige la version 0.4.8 du parcours vulcain (test-014 spec guider-
+  parcours, test-026 garde-fou 11 parcours, test-035 indices outils, test-037
+  gouvernance, test-052 anti-echappement - tous sans figeage de version)
+- Garde-fous cibles relances : test-026 10/10 (11 parcours dont vulcain : 0 orpheline,
+  0 boucle, 0 ref morte), test-028 8/8 (coherence documentaire fiche/parcours/spec),
+  test-035 8/8 (usages vs cartes)
+
+**Verdict : VALIDE** - parcours 0.4.8, fiche et tests parfaitement synchronises, aucune
+regression. La non-regression complete (54 OK / 0 KO) avait deja ete lancee par Janus
+apres la correction - confirmation par les garde-fous cibles.
+
+## [LECON] 2026-08-15 -- CONTROLE CROISE GARDE-FOU test-055 + 6 ECARTS CORRIGES (Janus)
+
+**Contexte** : chaine Cerberus -> Morpheus (test-055 cree) -> Buffy (6 ecarts regle/
+indice outil corriges sur 4 cartes) -> Janus (controle croise).
+
+**Verifications (J1-J5)** :
+- J1 : les 6 indices outil ajoutes sont presents (buffy c10c generateurs-case, clio
+  c20 valider-conformite-ascii, janus c16 changer-statut, vulcain c2 verifier-systeme,
+  vulcain c7 corriger-symboles + combos-moteur), versions 0.4.4/0.5.6/0.4.5/0.4.9
+- J2 : test-055 9/9 (garde-fou reverdi apres correction)
+- J3 : normes ASCII/LF 0/0 sur parcours + fiches
+- J4 : valider-cartes CONFORME x4 + --tous 13/13, evaluer-processus 0 probleme
+- J5 : non-regression 54 OK / 1 KO - l UNIQUE KO est test-016-migration-buffy qui
+  fige la version 0.4.3 du parcours buffy (mon bump l a portee a 0.4.4) : KO ATTENDU,
+  adaptation par Morpheus (domaine tests). test-024 reverdi apres purge du residu
+  tmp-buffy (regle : dossier du maillon supprime quand la mission passe le relais).
+
+**Lecon** : le cycle complet du garde-fou de coherence de cartes est valide : (1) le
+test detecte l etat incoherent, (2) l agent cartier corrige les cartes, (3) le test
+reverdit. La preuve de detection du test-055 est desormais SYNTHETIQUE (independante
+de l etat reel) : elle reste verte apres correction - c est la bonne conception pour
+un garde-fou d etat global. Reste : adaptation test-016 (version buffy 0.4.4).
+
+## [LECON] 2026-08-15 -- CHAINE GARDE-FOU test-055 TERMINEE : NON-REGRESSION 55/55 (Janus)
+
+**Contexte** : chaine complete Cerberus -> Morpheus (test-055) -> Buffy (6 ecarts
+corriges) -> Janus (controle, KO test-016 identifie) -> Morpheus (test-016 adapte +
+indice fantome c10c corrige) -> Janus (controle final).
+
+**Verifications finales** :
+- test-055 9/9 (garde-fou coherence regle/indice outil reverdi)
+- test-016 20/20 (adapte 0.4.3 -> 0.4.4, indice fantome c10c corrige : le champ type
+  manquait - doublon retire, 3 indices)
+- NON-REGRESSION COMPLETE : 55 OK / 0 KO (52.1s, nouvelle reference - temps ameliore)
+- valider-cartes --tous 13/13 CONFORMES, evaluer-processus 0 probleme
+- normes 0/0, 0 residu, registre propre
+
+**Verdict : VALIDE** - le garde-fou test-055 (anti-recurrence des ecarts regle/indice
+outil, type vulcain c4) est en place sur les 13 cartes, les 6 ecarts reels sont
+corriges a la racine (dont le fantome c10c : un indice outil SANS champ type est
+invisible pour la detection). Le cycle detecter -> corriger -> reverdir est valide.
+
+**Piste future (signalee par Morpheus)** : etendre le garde-fou a la detection des
+INDICES FANTOMES (indice avec nom mais sans champ type) - l ecart c10c etait de cette
+nature. A traiter dans une prochaine mission.
+
+## [LECON] 2026-08-15 -- EXTENSION FANTOMES test-055 VALIDEE : NON-REGRESSION 55/55 (Janus)
+
+**Contexte** : demande utilisateur - etendre test-055 a la detection des indices
+fantomes (nom sans type). Chaine : Cerberus -> Morpheus (extension) -> Janus
+(controle final).
+
+**Verifications (J1-J4)** :
+- J1 : test-055 12/12 (9 points initiaux + 8. 0 fantome reel, 9. preuve negative
+  fantome, 10. preuve positive fantome)
+- J2 : valider-cartes --tous 13/13 CONFORMES, evaluer-processus 0 probleme
+- J3 : normes 0/0 (test-055), 0 residu
+- J4 : NON-REGRESSION COMPLETE 55 OK / 0 KO (51.9s, reference amelioree)
+
+**Verdict : VALIDE** - la detection des fantomes (indice avec nom sans champ type,
+lecon c10c) est desormais couverte par le garde-fou test-055, avec preuve negative
+reelle (fantome insere dans vulcain c4 -> KO -> restauration). Les deux trous de la
+coherence regle/indice sont colmates : regle sans indice outil ET indice sans type.
+
+
+## [LECON] 2026-08-14 -- RAPPORT DETAILS KO v0.3.2 VALIDE + BUG COMPTER_KO CORRIGE (Janus)
+
+**Controle croise** (mission Morpheus, demande utilisateur : le rapport de non-regression
+doit fournir les details quand il y a des KO) : Morpheus a ajoute extraire_lignes_ko +
+afficher_details_ko + section DETAILS DES KO en fin de suite + rapport markdown enrichi
+(v0.3.1 -> v0.3.2).
+
+**J1-J5** : lanceur v0.3.2 (py + md synchrones), section DETAILS DES KO affichee en reel
+(preuve : test-008 en KO reel pendant la mission -> details imprimes), rapport markdown
+avec section "Tests en echec (details)", 6 tests de version adaptes (031/032/024/027/051
+lanceur, 008 themes 2.3.0), garde-fou anti-recurrence (test-051 point 9 : extraire_lignes_ko
+et afficher_details_ko presents dans le source, preuve negative validee).
+
+**BUG RACINE TROUVE** : compter_ko comptait la sous-chaine "[KO]" N IMPORTE OU dans la
+sortie, y compris dans les libelles de points [OK] contenant la sous-chaine (ex : le libelle
+"details [KO] presents" d un point [OK] faisait KO le test). Correction : compter_ko ne
+compte que les lignes qui COMMENCENT par "[KO]" (meme semantique que extraire_lignes_ko).
+Preuve : test-051 passait 11/11 mais etait compte KO -> apres correction 0 faux KO.
+
+**VERDICT FINAL : non-regression complete 55 OK / 0 KO en UN seul lancement (51.4s,
+reference amelioree 51.9 -> 51.4)**. Aucun residu, normes 0/0.
+
+**Lecon** : toute verification du lanceur doit utiliser la meme semantique (ligne qui
+commence par le marqueur) entre le comptage et l extraction des details, sinon faux KO.
+
