@@ -18,6 +18,14 @@
 # REGLE IMMUABLE : ASCII strict (aucun accent, emoji ou Unicode).
 # ============================================================
 
+"""
+generateurs-ligne.py
+generateurs-ligne
+
+Usage:
+  generateurs-ligne.py [OPTIONS]
+"""
+
 import argparse
 import json
 import re

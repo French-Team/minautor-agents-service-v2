@@ -68,6 +68,18 @@
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier de
 # categorie (proteger-).
 # =============================================================================
+"""
+proteger-verrou-habilitation.py
+proteger-verrou-habilitation
+
+Usage:
+  proteger-verrou-habilitation.py [OPTIONS]
+
+Options:
+  --version            Afficher la version
+  --aide, -h           Afficher cette aide
+"""
+
 import argparse
 import datetime
 import io
@@ -315,6 +327,8 @@ def main():
     parser.add_argument("--liste", action="store_true", help="affiche la table outil -> agents habilites")
     parser.add_argument("--verbose", action="store_true", help="detail du verdict")
     parser.add_argument("--version", action="store_true", help="affiche la version")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if args.version:

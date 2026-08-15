@@ -52,6 +52,18 @@
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier de
 # categorie (detecter-).
 # =============================================================================
+"""
+detecter-donnees-en-dur.py
+detecter-donnees-en-dur
+
+Usage:
+  detecter-donnees-en-dur.py [OPTIONS]
+
+Options:
+  --version            Afficher la version
+  --aide, -h           Afficher cette aide
+"""
+
 import argparse
 import io
 import os

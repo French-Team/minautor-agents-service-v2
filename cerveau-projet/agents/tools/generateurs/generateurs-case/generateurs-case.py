@@ -17,6 +17,14 @@
 # REGLE IMMUABLE : ASCII strict (aucun accent, emoji ou Unicode).
 # ============================================================
 
+"""
+generateurs-case.py
+generateurs-case
+
+Usage:
+  generateurs-case.py [OPTIONS]
+"""
+
 import argparse
 import json
 import subprocess

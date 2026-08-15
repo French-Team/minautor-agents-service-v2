@@ -877,7 +877,7 @@ def main(argv):
     if action not in ("aide", "--help", "-h", "--version"):
         verifier_residus_racine()
 
-    if action in ("aide", "--help", "-h"):
+    if action in ("aide", "--aide", "--help", "-h"):
         afficher_aide()
         return 0
 

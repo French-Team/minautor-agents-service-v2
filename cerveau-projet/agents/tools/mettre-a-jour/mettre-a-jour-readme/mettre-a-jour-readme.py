@@ -529,7 +529,7 @@ def afficher_aide():
 
 
 def main(argv):
-    if "--help" in argv or "-h" in argv or not argv:
+    if "--help" in argv or "-h" in argv or "--aide" in argv or not argv:
         afficher_aide()
         return 0
 

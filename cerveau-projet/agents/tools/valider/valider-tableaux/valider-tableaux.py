@@ -227,7 +227,7 @@ def main(argv):
     i = 0
     while i < len(argv):
         arg = argv[i]
-        if arg in ("--help", "-h"):
+        if arg in ("--aide", "--help", "-h"):
             afficher_aide()
             return 0
         if arg == "--version":

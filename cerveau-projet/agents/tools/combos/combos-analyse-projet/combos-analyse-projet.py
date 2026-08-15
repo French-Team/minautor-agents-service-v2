@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # combos-analyse-projet.py
 # Combo analyse-projet : analyser la structure reelle du projet et produire le
 # rapport des ecarts README vs realite (compteurs, categories, agents, outils)
@@ -7,6 +8,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+combos-analyse-projet.py
+combos-analyse-projet
+
+Usage:
+  combos-analyse-projet.py [OPTIONS]
+"""
+
 VERSION = "0.1.2"
 STATUT = "prepare"
 
@@ -120,6 +129,8 @@ def main():
                         help="Sauvegarder le rapport dans clio/rapports/")
     parser.add_argument("--version", action="version",
                         version="combos-analyse-projet " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = Path(args.racine)

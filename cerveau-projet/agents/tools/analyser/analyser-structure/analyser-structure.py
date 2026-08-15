@@ -16,6 +16,14 @@
 # 100% stdlib, ASCII strict, compatible Windows/Git Bash.
 # ============================================================
 
+"""
+analyser-structure.py
+analyser-structure
+
+Usage:
+  analyser-structure.py [OPTIONS]
+"""
+
 import argparse
 import os
 import sys
@@ -224,6 +232,8 @@ def main():
     verifier_nommage(sys.argv[0])
 
     parser = construire_parser()
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     return analyser_structure(args.chemin, args.verbose, args.profondeur)

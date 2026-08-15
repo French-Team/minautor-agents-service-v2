@@ -31,6 +31,14 @@
 #   python3 generateurs-commande.py --commande remplir-pense-bete --reponses "fichier=...;section=idee;contenu=Mon idee"
 # ============================================================
 
+"""
+generateurs-commande.py
+generateurs-commande
+
+Usage:
+  generateurs-commande.py [OPTIONS]
+"""
+
 import argparse
 import json
 import os
@@ -371,6 +379,8 @@ def _journaliser_usage(agent, outil, commande_finale):
 def main():
     verifier_nommage(sys.argv[0])
     parser = construire_parser()
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     dossier_script = os.path.dirname(os.path.abspath(sys.argv[0]))

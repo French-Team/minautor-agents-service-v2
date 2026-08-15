@@ -251,8 +251,8 @@ def main():
     verifier("5. editer-parcours --version v0.1.3",
              r.returncode == 0 and "v0.1.3" in r.stdout, r.stdout.strip()[-60:])
     r = run([PYTHON, LANCER, "--version"])
-    verifier("6. tester-lancer-non-regression --version v0.4.5",
-             r.returncode == 0 and "v0.4.5" in r.stdout, r.stdout.strip()[-60:])
+    verifier("6. tester-lancer-non-regression --version v0.5.0",
+             r.returncode == 0 and "v0.5.0" in r.stdout, r.stdout.strip()[-60:])
 
     # 7. enregistrer-usage-outil v0.3.0 (mode script-temporaire + garde-fous + tri)
     r = run([PYTHON, ENREGISTRER, "--version"])
@@ -264,11 +264,11 @@ def main():
     with io.open(CATALOGUE, encoding="utf-8") as fh:
         cat = json_mod.load(fh)
     noms = [e.get("nom") for e in cat.get("commandes", [])]
-    ok_cat = (len(noms) == 161 and "tester-lancer-non-regression" in noms
+    ok_cat = (len(noms) == 162 and "tester-lancer-non-regression" in noms
               and "editer-parcours" in noms and "detecter-usage-scripts-temporaires" in noms
               and "detecter-cablages-manquants" in noms and "tester-protections" in noms
               and "detecter-fautes-orthographe" in noms)
-    verifier("8. catalogue : 161 commandes + nouvelles presentes",
+    verifier("8. catalogue : 162 commandes + nouvelles presentes",
              ok_cat, "nb=%d" % len(noms))
 
     # 9. index-tools : les 4 lignes presentes

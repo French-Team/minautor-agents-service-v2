@@ -6,6 +6,7 @@
 #   commun: true
 """
 verifier-restauration-sure.py
+verifier-restauration-sure
 
 Detecte les fichiers non commites avant toute restauration git (git status
 automatique). Applique la regle Restauration securisee (regles-general-global.md
@@ -17,7 +18,7 @@ Mode --fichier <chemin> : verifie si LE fichier cible a des modifications non
 Mode global (sans --fichier) : liste tous les fichiers non commites du workspace
   et rend un verdict (OK si aucun, ATTENTION sinon avec rappel de la regle).
 
-Utilisation:
+Usage:
   verifier-restauration-sure.py [OPTIONS]
 
 Options:

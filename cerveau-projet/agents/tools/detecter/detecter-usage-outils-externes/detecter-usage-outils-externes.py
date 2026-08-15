@@ -16,6 +16,14 @@
 # du dossier de categorie (detecter-).
 # ============================================================
 
+"""
+detecter-usage-outils-externes.py
+detecter-usage-outils-externes
+
+Usage:
+  detecter-usage-outils-externes.py [OPTIONS]
+"""
+
 import argparse
 import os
 import sys
@@ -148,6 +156,8 @@ def main():
                         help="Motif supplementaire a exclure (sous-chaine de chemin)")
     parser.add_argument("--version", action="version",
                         version="detecter-usage-outils-externes v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     exclusions = list(EXCLUSIONS_PAR_DEFAUT) + args.exclure

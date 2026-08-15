@@ -103,6 +103,8 @@ def main():
     parser.add_argument('--verbose', action='store_true')
     parser.add_argument('--help', action='store_true')
     parser.add_argument('--version', action='store_true')
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if args.help:

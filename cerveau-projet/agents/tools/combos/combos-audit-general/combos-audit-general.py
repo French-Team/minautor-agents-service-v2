@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # combos-audit-general.py
 # Combo audit-general : chainage des 4 evaluateurs + synthese
 # Proprietaire : Themis (outil partage)
@@ -6,6 +7,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+combos-audit-general.py
+combos-audit-general
+
+Usage:
+  combos-audit-general.py [OPTIONS]
+"""
+
 VERSION = "0.2.1-py"
 STATUT = "beta"
 
@@ -107,6 +116,8 @@ def main():
     parser.add_argument("dossier", nargs="?", default=".", help="Dossier a auditer (defaut: .)")
     parser.add_argument("--rapport", action="store_true", help="Sauvegarder le rapport dans themis/rapports/")
     parser.add_argument("--version", action="version", version="combos-audit-general " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     dossier = args.dossier

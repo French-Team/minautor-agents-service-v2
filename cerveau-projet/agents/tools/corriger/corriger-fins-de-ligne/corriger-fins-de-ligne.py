@@ -9,6 +9,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+corriger-fins-de-ligne.py
+corriger-fins-de-ligne
+
+Usage:
+  corriger-fins-de-ligne.py [OPTIONS]
+"""
+
 VERSION = "0.1.1"
 STATUT = "prepare"
 
@@ -117,6 +125,8 @@ def main():
                         help="Afficher le detail de chaque fichier")
     parser.add_argument("--version", action="store_true",
                         help="Afficher la version")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if args.version:

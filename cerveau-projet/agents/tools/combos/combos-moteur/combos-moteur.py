@@ -38,6 +38,14 @@
 # REGLE IMMUABLE : ASCII strict (aucun accent, emoji, caractere Unicode)
 # ============================================================
 
+"""
+combos-moteur.py
+combos-moteur
+
+Usage:
+  combos-moteur.py [OPTIONS]
+"""
+
 import argparse
 import datetime
 import json
@@ -684,6 +692,8 @@ def parser_variables(chaine):
 def main():
     verifier_nommage(sys.argv[0])
     parser = construire_parser()
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     try:

@@ -5,7 +5,7 @@
   "cerveau-projet/agents/athena/parcours/parcours-athena.json": "4c8ecf894227f99315af87451f694d245a31504f9c99072080338721eb11dfd1",
   "cerveau-projet/agents/atlas/parcours/parcours-atlas.json": "1ee0a44614116ed86e43c214b5893274987a4c1e64a0fca9dd88202f77e94bed",
   "cerveau-projet/agents/buffy/parcours/parcours-buffy.json": "74bbb73900d69581425e6e809326168b250a72538226a40e75cee22c43840199",
-  "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json": "e728d52b5c2eb64d120324f2322f7e3422bdbd2416379181c1b094111801c125",
+  "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json": "d745497a69a731f6ec8b9263a5d45fff8cead4adfd605fa942296acc4493e0d7",
   "cerveau-projet/agents/clio/parcours/parcours-clio.json": "4fa52be2e304c5afc462324ec3ea1ee07d2fca8efe07b3c87543991fb46ad2f0",
   "cerveau-projet/agents/gardien/parcours/parcours-gardien.json": "21ce351c14a5798ca27426897c6d7b90a8d54711daf02c3ca4af3fe9ad597682",
   "cerveau-projet/agents/hermes/parcours/parcours-hermes.json": "0436536639639dfdc0267c6b327eb8c896c9d124c65c97ebc5df5ea6f1d7a554",
@@ -15,6 +15,6 @@
   "cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json": "82a91a701a3dafadc977b245d93974f2d6f17c4a527dca1a7e8e77fd9df48db2",
   "cerveau-projet/agents/promethee/parcours/parcours-promethee.json": "190c210b3dd9065a326b8ca02c354057c528f7f38e6dcac88c471fe74a3fee51",
   "cerveau-projet/agents/themis/parcours/parcours-themis.json": "56095dd2b844a6a35e63d3cf2612caf47ad599a45774a03788f2a894f4d72dab",
-  "cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json": "e964914a46bfbd807e44619a96544a4c89915454dcc299f1a3c3759c7d0660b6"
+  "cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json": "fa17afae8e5fe139146c8b3be47b1f143e1a19058705ac4106cb76e1ffd3f7f6"
  }
 }

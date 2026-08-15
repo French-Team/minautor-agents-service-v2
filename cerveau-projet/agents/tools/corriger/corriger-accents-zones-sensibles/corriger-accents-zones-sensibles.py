@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # corriger-accents-zones-sensibles.py
 # Outil pour corriger les accents dans les zones sensibles
 # Mode standard --all : purge totale (texte francais et titres inclus)
@@ -10,6 +11,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+corriger-accents-zones-sensibles.py
+corriger-accents-zones-sensibles
+
+Usage:
+  corriger-accents-zones-sensibles.py [OPTIONS]
+"""
+
 VERSION = "0.2.2-py"
 STATUT = "beta"
 
@@ -180,6 +189,8 @@ def main():
     parser.add_argument("--dictionnaire", default=None, help="Chemin vers le dictionnaire")
     parser.add_argument("--version", action="version",
                         version="corriger-accents-zones-sensibles " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if args.dictionnaire:

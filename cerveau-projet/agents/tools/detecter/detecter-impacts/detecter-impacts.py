@@ -46,6 +46,18 @@
 # REGLE IMMUABLE : ASCII strict (aucun accent, emoji, caractere Unicode)
 # ============================================================
 
+"""
+detecter-impacts.py
+detecter-impacts
+
+Usage:
+  detecter-impacts.py [OPTIONS]
+
+Options:
+  --version            Afficher la version
+  --aide, -h           Afficher cette aide
+"""
+
 import argparse
 import os
 import re
@@ -273,6 +285,8 @@ def main():
                         help="Racine du scan (defaut : cerveau-projet du projet)")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--version", action="version", version="detecter-impacts v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     modifie = Path(args.fichier)

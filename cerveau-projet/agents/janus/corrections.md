@@ -4569,3 +4569,135 @@ fichier, ou la sortie est lue directement.
 **Proposition** : creer un garde-fou de numerotation unique des tests (verifier
 qu aucun numero test-0XX n est duplique) pour empecher la recurrence - a
 etudier avec Morpheus.
+
+## [LECON] 2026-08-15 -- OUTIL DE RATING VERIFIE : NON-REGRESSION 61 OK (Janus, VERDICT VALIDE)
+
+**Controle** (mission Vulcain -> Morpheus -> Janus) : evaluer-rating v0.1.0
+(note ponderee /100 par profil test/serie/outil/script-temp/fiche) +
+protection 'rating' tester-protections v0.2.0 + template-test v0.4.0 +
+lanceur v0.4.6 (rating des series + general en fin de run).
+
+**Verification finale** : NON-REGRESSION COMPLETE 61 OK / 0 KO, 5 barrieres
+franchies, 61 tests (nouvelle base chrono 108.9s). Le RATING s affiche en fin
+de run : RATING DES SERIES (evaluer-rating) + RATING GENERAL serie 75.8/100
+(BIEN) + RATING GENERAL test 97.2/100 (EXCELLENT).
+
+**1 KO trouve et corrige pendant le controle** : test-060 pincait les compteurs
+index-tools/catalogue avant la renumeration (Total 179 -> 180, catalogue
+161 -> 162) - adapte (12/12). C est le garde-fou qui a bien fonctionne : il a
+bloque la barriere A avant la fin pour signaler le decalage.
+
+**Preuve de bout en bout** : test-062 (11/11) affiche son propre rating
+(67.5/100 MOYEN) - la protection 'rating' fonctionne dans un vrai test.
+Le lanceur affiche le rating des series + general en fin de run.
+
+**Lecon** : la reference chrono a change (60 -> 61 tests, 108.9s) - c est
+normal, le nombre de tests a evolue avec test-062. Le systeme de reference
+gere ce cas sans faux signal (nouvelle base enregistree sans comparaison).
+
+## [LECON] 2026-08-15 -- LANCEUR v0.4.7 VERIFIE : NON-REGRESSION 61 OK (Janus, VERDICT VALIDE)
+
+**Controle** (mission Vulcain -> Morpheus -> Janus) : tester-lancer-
+non-regression aligne sur le modele standard (shebang + coding ascii +
+docstring Usage + --aide) -> v0.4.6 -> v0.4.7. Conformite outil 100% selon
+evaluer-rating (20% -> 100%).
+
+**Verification finale** : NON-REGRESSION COMPLETE 61 OK / 0 KO, 5 barrieres
+franchies, 109.7s conforme (+1%). RATING affiche en fin de run : series
+76.9/100 (BIEN), tests 97.2/100 (EXCELLENT). Le lanceur aligne ne casse RIEN :
+le verrou d habilitation fonctionne (sans --agent refuse, agent non habilite
+BLOQUE), les barrieres passent, le rating s affiche.
+
+**Preuve de l outil de rating** : c est evaluer-rating qui a DECOUVERT l ecart
+de conformite du lanceur (note FAIBLE). Le round suivant l a corrige (v0.4.7)
+et le rating confirme la correction (conformite 100%). La boucle est
+vertueuse : le rating objective les ecarts, les agents corrigent, le rating
+verifie.
+
+## [LECON] 2026-08-16 -- NON-REGRESSION 62 TESTS : 2 KO BARRIERE E (Janus)
+
+**Contexte** : mission Morpheus (test-063 profils + adaptation 6 tests v0.5.0). Non-regression complete : barriere E bloquee avec 2 KO reels.
+
+**KO 1 (test-028)** : 1 decalage catalogue repertorie par detecter-decalages-catalogue : verifier-restauration-sure. CAUSE : le round alignement 71 outils (Vulcain) a insere une NOUVELLE docstring de module courte ("Usage: [OPTIONS]") DEVANT la vraie docstring (avec les options --fichier/--verbose/--version/--aide). La 1re docstring devient __doc__, la vraie devient une chaine morte -> --aide n affiche plus --fichier -> decalage vs catalogue. Les autres fichiers a 4 triplets (detecter-divergences-version, tester-protections, verifier-conformite-fiche) utilisent argparse natif (pas de bug). Correction : Vulcain (outil) - fusionner/supprimer la docstring morte.
+
+**KO 2 (test-035)** : evaluer-processus scan global : 2 OUTIL_HORS_CARTE pour vulcain : 'evaluer-rating' et 'tester-lancer-non-regression' declares au registre (20:09 et 20:25, rounds alignement+profils) mais ABSENTS des indices outil de la carte vulcain (v0.4.17). CAUSE : Vulcain a utilise ces 2 outils sans que sa carte soit mise a jour (Buffy est la seule habilitee a corriger les cartes). Correction : Buffy (carte vulcain, ajouter les 2 indices).
+
+**Lecons** :
+- L alignement des marqueurs (coding/Usage/--aide) doit PRESERVER la docstring de module existante : verifier qu il n y a pas de double docstring apres application.
+- Un usage registre sans indice carte = ecart detecte par evaluer-processus : toujours faire bump/ajout carte quand on utilise un nouvel outil.
+
+**Verifications** : barriere E 4 OK / 2 KO, autres barrieres non lancees (stop), rapport detaille fourni par le lanceur (section DETAILS DES KO).
+
+## [LECON] 2026-08-16 -- RELANCE NON-REGRESSION : BARRIERE D BLOQUEE, test-063 HORS SERIE (Janus)
+
+**Contexte** : apres correction des KO1/KO2 (Vulcain + Buffy), relance de la non-regression complete : barriere E FRANCHIE (6/6, les 2 KO corriges), barriere C FRANCHIE (15/15), mais barriere D BLOQUEE.
+
+**KO (test-027)** : test-063-profils-tests-garde-fou (cree par Morpheus au round profils) est "hors-serie" : il n a pas ete ajoute a la definition SERIES du lanceur tester-lancer-non-regression. CAUSE : lors de la creation du mode profil (Vulcain), le nouveau test-063 a ete mappe dans profils-tests.json (outils+tests) mais PAS ajoute a la liste SERIES du lanceur (les 5 series a-e).
+
+**Correction** : Vulcain (outil) - ajouter test-063 a la SERIES la plus appropriee (proposition : serie A "Fondations" a cote de test-062 rating, ou serie E anti-recurrence). Bump du lanceur si le test-027 verifie une version.
+
+**Lecons** :
+- Toute creation de nouveau test (Morpheus) doit etre accompagnee de son ajout dans la SERIES du lanceur (par Vulcain) - c est le garde-fou test-027 qui l a detecte (couverture series).
+- La chaine correction KO -> relance est iterative : chaque barriere franchie revele potentiellement le maillon suivant (E ok, C ok, D bloque).
+
+## [LECON] 2026-08-16 -- RELANCE 2 : BARRIERE B BLOQUEE, CONFLIT test-037 (Janus)
+
+**Contexte** : apres la correction test-063 hors-serie (Vulcain), relance complete : barrieres E (6/6), D (11/11), C (15/15), A (15/15) FRANCHIES - barriere B bloquee (14 OK / 1 KO) sur test-037.
+
+**KO test-037 (2 points)** : (2) la carte vulcain contient DESORMAIS tester-lancer-non-regression (ajoute par ma correction KO2 Buffy) ; (2b) le registre contient la declaration fautive vulcain -> tester-lancer-non-regression du 2026-08-15 20:25:54 (dans la fenetre du jour courant).
+
+**Cause racine** : conflit entre 2 regles - (a) test-035 evaluer-processus : tout usage registre doit etre dans la carte de l agent ; (b) test-037 : AUCUNE carte autre que janus ne doit contenir tester-lancer-non-regression + AUCUNE declaration registre de cet outil par un autre agent. MA CORRECTION KO2 ETAIT TROP LARGE : j ai ajoute tester-lancer-non-regression a la carte vulcain pour satisfaire (a), mais cet outil est EXCLUSIF janus (verrou d habilitation) - vulcain ne l a JAMAIS reellement lance (l usage registre du 20:25 etait une declaration a tort pendant le developpement du mode profil, le verrou l aurait bloque).
+
+**Correction (Buffy)** : 1) retirer l entree registre vulcain/tester-lancer-non-regression du 2026-08-15 20:25:54 (declaration fautive, usage jamais reel) ; 2) retirer l indice tester-lancer-non-regression de la case c10 de la carte vulcain (ajoute par erreur au KO2) ; 3) GARDER evaluer-rating (usage legitime du 20:09, verifie par le registre et la carte). Verifier test-037 + test-035 + evaluer-processus 0 probleme.
+
+**Lecons** :
+- L exclusivite d un outil (seul janus lance la non-regression) PRIME sur la regle usage-registre-dans-carte : un agent qui n est pas habilite ne doit pas declarer un usage d un outil verrouille.
+- Une declaration registre fautive doit etre RETIREE du registre (pas ajoutee a la carte) - c est la regle 2b de test-037.
+- MA correction KO2 a cree ce conflit : ajouter un outil exclusif a une carte pour satisfaire un test en casse un autre - toujours verifier les garde-fous d exclusivite avant d ajouter un indice.
+
+## [LECON] 2026-08-16 -- NON-REGRESSION FINALE : 62 OK / 0 KO, 5 BARRIERES FRANCHIES (Janus)
+
+**Contexte** : apres la correction du conflit test-037 (Buffy : retrait declaration registre fautive + indice carte vulcain), relance finale complete.
+
+**RESULTAT** : 62 OK / 0 KO (sur 62 tests), 5 barrieres 100% vertes (E 6/6, D 11/11, B 15/15, C 15/15, A 15/15), 113.5s (nouvelle base chrono : 61 -> 62 tests), rating series 83.0/100 BIEN + tests 97.3/100 EXCELLENT.
+
+**Bilan du round profils** : 
+- test-063 (garde-fou profils) cree par Morpheus : 11/11 + preuve negative.
+- 6 tests adaptes v0.4.7 -> v0.5.0 (Morpheus).
+- 3 corrections en cascade decouvertes par les barrieres : (1) verifier-restauration-sure double docstring (Vulcain), (2) carte vulcain indices manquants (Buffy), (3) test-063 hors-serie dans SERIES (Vulcain) + conflit test-037 (Buffy).
+- Lecon : chaque barriere franchie peut reveler le maillon suivant - le mode barrieres a fonctionne exactement comme prevu (stop + rapport + correction + relance).
+
+**Verifications** : normes 0/0, 0 residu, lecons enregistrees (Morpheus, Vulcain x2, Buffy x2, Janus x3).
+
+## [LECON] 2026-08-16 -- NON-REGRESSION : 62 OK / 0 KO APRES DECLARATION_FAUTIVE (Janus)
+
+**Contexte** : mission DECLARATION_FAUTIVE (demande utilisateur) : evaluer-processus v0.1.3 distingue les usages registre d outils EXCLUSIFS declares par un non-proprietaire (a retirer) des OUTIL_HORS_CARTE (a ajouter). Vulcain a enrichi l outil, Morpheus a etendu test-035 (10/10 + preuve negative).
+
+**RESULTAT** : non-regression complete 62 OK / 0 KO, 5 barrieres 100% vertes (E 6/6, D 11/11, B 15/15, C 15/15, A 15/15), 114.7s conforme a la reference (113.5s, +1%), rating series 84.0/100 BIEN + tests 97.3/100 EXCELLENT.
+
+**Bilan** : l enrichissement DECLARATION_FAUTIVE est valide sans regression. Le mode barrieres a de nouveau prouve son efficacite : suite lancee une fois, 5/5 barrieres passees sans correction intermediaire.
+
+**Verifications** : normes 0/0, 0 residu, lecons enregistrees (Vulcain, Morpheus, Janus).
+
+## [LECON] 2026-08-16 -- NON-REGRESSION : 63 OK / 0 KO APRES GARDE-FOU EXCLUSIVITES (Janus)
+
+**Contexte** : mission coherence exclusivites (audit Cerberus + demande utilisateur) : test-064 cree par Morpheus (7 points), faux positif valider-conventions revele, corrige par Vulcain (evaluer-processus v0.1.4).
+
+**RESULTAT** : non-regression complete 63 OK / 0 KO, 5 barrieres 100% vertes (E 6/6, D 11/11, B 15/15, C 15/15, A 16/16 avec test-064), 117.2s (nouvelle base chrono 62 -> 63 tests), rating series 92.2/100 EXCELLENT (progression vs 84.0) + tests 97.3/100 EXCELLENT.
+
+**Bilan** : le garde-fou de coherence a directement prouve sa valeur : il a revele le faux positif valider-conventions (derive exclusif->buffy mais aussi chez athena trio) qui a ete corrige dans evaluer-processus v0.1.4 (scan de tous les agents, 43->60 exclusifs corrects). La source de verite de l exclusivite = table du verrou (tous agents).
+
+**Verifications** : normes 0/0, 0 residu, lecons enregistrees (Morpheus, Vulcain, Janus).
+
+
+## [LECON] 2026-08-16 -- TEST REEL RELEVE MEME ROUND REUSSI + NON-REGRESSION 63/63 (Janus)
+
+**Contexte** : dernier maillon du test reel de la regle immuable RELEVE MEME ROUND (gravee par Buffy, auditee par Themis, controlee par Janus). La chaine Buffy -> Themis -> Janus s est deroulee dans le MEME ROUND sans relance utilisateur - la regle fonctionne (cycle cerberus -> agents <-> agents <-> themis + janus -> cerberus).
+
+**Verifications (Janus)** :
+1. Regle RELEVE MEME ROUND presente dans regles-groupes-agents.md + marbre intact (test-057 24/24 CONFORME).
+2. NON-REGRESSION COMPLETE : 63 OK / 0 KO, 5 barrieres franchies (E 6, D 11, B 15, C 15, A 16), chrono 118.9s conforme (+1% vs 117.2s), rating Series 92.2/100 EXCELLENT, Tests 97.3/100 EXCELLENT.
+
+**Lecon** :
+- La preuve de la regle RELEVE MEME ROUND est un ROUND REEL : activer un agent et voir sa mission s executer immediatement, puis le maillon suivant prendre le relais, sans relance utilisateur. C est le comportement attendu desormais.
+- Le cycle complet : cerberus active -> agent execute -> fin suit SA carte -> agent suivant -> ... -> themis (audit) ou janus (controle) -> cerberus (bilan consolide). Seul le dernier maillon reactive Cerberus.

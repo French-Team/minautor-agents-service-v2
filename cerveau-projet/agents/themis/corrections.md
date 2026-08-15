@@ -1077,3 +1077,19 @@ les series par frequence de KO.
 CARTES (ou les outils) est INEFFECTIVE - c est exactement le bug de
 non-activation de Themis. Verifier que toute regle "automatique" est meca-
 nisee dans les parcours/outils, pas seulement ecrite.
+
+
+## [LECON] 2026-08-16 -- AUDIT REGLE RELEVE MEME ROUND CONFORME (Themis)
+
+**Contexte** : test reel de la regle immuable RELEVE MEME ROUND gravee par Buffy dans regles-groupes-agents.md (zone marbre, porte UTILISATEUR). Mission Themis : auditer la regle + prouver que la chaine se deroule dans le meme round.
+
+**Verdict : CONFORME (5/5)** :
+1. Section presente (ligne 197) + cycle exact `cerberus -> agents <-> agents <-> themis + janus -> cerberus` (ligne 202).
+2. Marbre intact : test-057 24/24 CONFORME.
+3. 4 imperatifs presents : JAMAIS d arret apres activation, JAMAIS retour Cerberus en milieu de chaine, Seul le DERNIER maillon reactive Cerberus, utilisateur n a PAS a relancer.
+4. Coherence cartes : themis a FIN - Activer Janus (c13), janus a Activer Themis pour auditer + FIN - Retour de Themis - les deux agents sont DANS le cycle.
+5. Normes 0/0 ASCII + LF, valider-cartes themis CONFORME.
+
+**Preuve du test reel** : l activation de Themis a declenche IMMEDIATEMENT l execution de l audit dans le meme round, sans relance utilisateur - la regle fonctionne.
+
+**Lecon** : le cycle de releve est une CHAINE agents <-> agents avec themis (audit) et janus (controle) integres ; chaque fin de mission active le maillon suivant, seul le dernier reactive Cerberus.

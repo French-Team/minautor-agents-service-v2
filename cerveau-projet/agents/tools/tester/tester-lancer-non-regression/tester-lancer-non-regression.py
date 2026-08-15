@@ -1,3 +1,37 @@
+#!/usr/bin/env python3
+# -*- coding: ascii -*-
+"""
+tester-lancer-non-regression.py
+Lance la non-regression complete des tests formels (mode barrieres par
+defaut, series classees par importance, chrono + reference de temps,
+verrou d habilitation : seul janus peut lancer la suite).
+
+Usage:
+  tester-lancer-non-regression.py --agent janus
+  tester-lancer-non-regression.py --agent janus --series a,e
+  tester-lancer-non-regression.py --agent janus --tests test-001,test-002
+  tester-lancer-non-regression.py --agent janus --profil cartes
+  tester-lancer-non-regression.py --agent janus --fichiers README.md,tools/creer/creer-fichier/creer-fichier.py
+  tester-lancer-non-regression.py --version
+  tester-lancer-non-regression.py --aide
+
+Options principales:
+  --agent <nom>       OBLIGATOIRE (verrou d habilitation : seul janus lance)
+  --series <a,b,c..>  Series a lancer (defaut: tous)
+  --tests <liste>     Filtrer par noms de tests
+  --profil <nom>      Forcer un profil (cartes, outils, tests, fiches-agents, docs, registre)
+  --fichiers <liste>  Fichiers modifies (virgules) : deduit automatiquement le(s) profil(s)
+  --desactiver <N>    Desactiver des tests par numero (persistant)
+  --activer <N>       Reactiver des tests par numero (persistant)
+  --etat-tests        Afficher la config persistante des tests
+  --rapport <fichier> Ecrire le rapport markdown
+  --parallele         Mode pool de workers
+  --serial            Mode serie complet
+  --version           Afficher la version
+  --aide, -h          Afficher cette aide
+
+Retour: 0 si tous les tests passent, 1 si KO, 2 si erreur de lancement.
+"""
 # =============================================================================
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier de
 # categorie (tester-).
@@ -13,7 +47,7 @@ import sys
 import time
 from datetime import datetime
 
-VERSION = "0.4.5"
+VERSION = "0.5.0"
 STATUT = "ebauche"
 
 # Round 18 (2026-08-15) : BARRIERES DE PASSAGE (demande utilisateur) - la
@@ -32,7 +66,7 @@ STATUT = "ebauche"
 SERIES = {
     "a": ["test-007", "test-029", "test-030", "test-042", "test-043", "test-044",
           "test-049", "test-050", "test-052", "test-054", "test-055", "test-056",
-          "test-060"],
+          "test-060", "test-062", "test-063", "test-064"],
     "b": ["test-009", "test-012", "test-013", "test-014", "test-015", "test-016",
           "test-018", "test-021", "test-026", "test-033", "test-034", "test-037",
           "test-048", "test-058", "test-059"],
@@ -51,6 +85,30 @@ SERIES_NOMS = {
     "e": "Anti-recurrence et garde-fous specifiques",
 }
 SERIES_ORDRE = ["a", "b", "c", "d", "e"]
+
+
+def afficher_rating_fin_de_run(racine):
+    """Affiche le RATING des series et le RATING GENERAL du run (demande
+    utilisateur 2026-08-15) via l outil evaluer-rating. No-op silencieux si
+    l outil est introuvable ou en echec (jamais bloquant pour la suite)."""
+    outil = os.path.join(racine, "cerveau-projet", "agents", "tools",
+                         "evaluer", "evaluer-rating", "evaluer-rating.py")
+    if not os.path.exists(outil):
+        return
+    try:
+        p = subprocess.run([sys.executable, outil, "--profil", "serie",
+                            "--tous", "--no-chrono"],
+                           capture_output=True, text=True, timeout=60)
+        if p.stdout:
+            print(_couleur("=== RATING DES SERIES (evaluer-rating) ===", "bleu"))
+            print(p.stdout.rstrip())
+        p2 = subprocess.run([sys.executable, outil, "--profil", "test",
+                             "--general", "--no-chrono"],
+                            capture_output=True, text=True, timeout=60)
+        if p2.stdout:
+            print(p2.stdout.rstrip())
+    except Exception:
+        pass
 
 
 def ordre_series_par_ko(racine, nb_derniers=5):
@@ -839,6 +897,102 @@ def detecter_parent_temporaire(racine):
 
 
 
+
+def chemin_profils_tests(racine):
+    """Chemin du fichier de definition des profils de tests."""
+    return os.path.join(racine, "cerveau-projet", "agents", "tools", "tester",
+                        "tester-lancer-non-regression", "profils-tests.json")
+
+
+def charger_profils_tests(racine):
+    """Charge profils-tests.json. Retourne (liste_profils, erreur)."""
+    chemin = chemin_profils_tests(racine)
+    if not os.path.isfile(chemin):
+        return None, "fichier introuvable : %s" % chemin
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except ValueError as e:
+        return None, "JSON invalide : %s" % e
+    profils = data.get("profils", [])
+    if not profils:
+        return None, "aucun profil dans %s" % chemin
+    return profils, None
+
+
+def _normaliser_glob(g):
+    """Normalise un glob : separateur /, sans ./ initial, dossier -> prefixe."""
+    g = g.replace("\\", "/").lstrip("./")
+    if g.endswith("/"):
+        g = g[:-1]
+    return g
+
+
+def _matche_glob(chemin, glob_pat):
+    """Matche un chemin contre un glob.
+
+    - Glob sans '*' : prefixe de dossier (tout le sous-arbre) ou egalite.
+    - Glob avec '*' : fnmatch segment par segment (fnmatch gere * sans /).
+    """
+    g = _normaliser_glob(glob_pat)
+    if "*" not in g:
+        return chemin == g or chemin.startswith(g + "/")
+    import fnmatch
+    return fnmatch.fnmatch(chemin, g)
+
+
+def deduire_profils(fichiers, profils, racine):
+    """Deduit le(s) profil(s) pertinent(s) a partir des fichiers modifies.
+
+    Chaque fichier est matche contre les globs 'fichiers_detectes' de chaque
+    profil (chemins relatifs a la racine, separes par /). Les globs sans '*'
+    matchent tout le sous-arbre du dossier (ex: 'cerveau-projet/agents/tools/'
+    -> tout ce qui est sous tools/). Le champ optionnel 'fichiers_exclus'
+    retire un profil quand le fichier matche un de ses globs d exclusion.
+    Un fichier peut declencher plusieurs profils ; on retourne la liste
+    (ordonnee comme dans le JSON) des profils retenus.
+    """
+    touches = set()
+    for f in fichiers:
+        f = f.strip()
+        if not f:
+            continue
+        f_norm = f.replace("\\", "/").lstrip("./")
+        base = os.path.basename(f_norm)
+        for p in profils:
+            # exclusion : si le fichier matche un glob d exclusion, ce profil
+            # ne s applique pas (ex: un test .py est 'tests', pas 'outils').
+            exclu = False
+            for e in p.get("fichiers_exclus", []):
+                e_norm = e.replace("\\", "/").lstrip("./")
+                if _matche_glob(f_norm, e_norm) or _matche_glob(base, e_norm):
+                    exclu = True
+                    break
+            if exclu:
+                continue
+            for glob_pat in p.get("fichiers_detectes", []):
+                if _matche_glob(f_norm, glob_pat) or _matche_glob(base, glob_pat):
+                    touches.add(p["nom"])
+                    break
+    return [p["nom"] for p in profils if p["nom"] in touches]
+
+
+def tests_du_profil(noms_profils, profils):
+    """Fusionne les tests de plusieurs profils (dedoublonnage, tri)."""
+    tests = set()
+    for p in profils:
+        if p["nom"] in noms_profils:
+            tests.update(p.get("tests", []))
+    return sorted(tests)
+
+
+def filtrer_tests_par_profils(tests, profils_choisis, profils_cfg):
+    """Retourne les tests (chemins) restreints aux numeros des profils choisis."""
+    numeros = tests_du_profil(profils_choisis, profils_cfg)
+    return [t for t in tests
+            if os.path.basename(t)[:8] in numeros], numeros
+
+
 def main():
     # AFFICHAGE EN DIRECT (lecon 2026-08-15, demande utilisateur) : en sortie
     # redirigee (pipe, entonnoir, combo) Python bufferise stdout et ne
@@ -871,6 +1025,10 @@ def main():
                         help="Ne pas lire ni ecrire la reference de temps (sous-processus paralleles)")
     parser.add_argument("--tests", type=str, default="",
                         help="Filtrer par noms de test separes par des virgules")
+    parser.add_argument("--fichiers", type=str, default="",
+                        help="Liste de fichiers modifies (separes par des virgules) : deduit automatiquement le(s) profil(s) de tests a lancer (mode profil)")
+    parser.add_argument("--profil", type=str, default="",
+                        help="Forcer un profil de tests (ex: --profil cartes,outils) - profils: cartes, outils, tests, fiches-agents, docs, registre")
     parser.add_argument("--desactiver", type=str, default="",
                         help="Desactiver des tests par numero (ex: --desactiver 24,28 pour test-024,test-028). PERSISTANT : enregistre dans config-tests.json et herite au prochain lancement.")
     parser.add_argument("--activer", type=str, default="",
@@ -888,6 +1046,7 @@ def main():
     parser.add_argument("--agent", type=str, default="",
                         help="Nom de l agent qui lance les tests (journalise chaque test dans registre-tests.jsonl)")
     parser.add_argument("--version", action="version", version="tester-lancer-non-regression v%s" % VERSION)
+    parser.add_argument("--aide", action="help", help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     # VERROU D HABILITATION (regle immuable : seul janus lance la
@@ -918,6 +1077,47 @@ def main():
     if not tests:
         print(_couleur("[ERREUR] Aucun test trouve", "rouge"))
         return 2
+
+    # MODE PROFIL (demande utilisateur 2026-08-16) : Janus choisit le profil
+    # selon les fichiers modifies (--fichiers, auto) ou manuellement
+    # (--profil). Le mode profil PREND LE PAS sur --series/--tests : on ne
+    # lance que les tests des profils choisis. Sans --fichiers ni --profil,
+    # comportement historique inchange.
+    mode_profil = bool(args.fichiers or args.profil)
+    profils_choisis = []
+    if mode_profil:
+        profils_cfg, err = charger_profils_tests(racine)
+        if err:
+            print(_couleur("[ERREUR] Profils de tests indisponibles : %s" % err, "rouge"))
+            return 2
+        if args.profil:
+            profils_choisis = [x.strip() for x in args.profil.split(",") if x.strip()]
+            connus = [p["nom"] for p in profils_cfg]
+            inconnus = [n for n in profils_choisis if n not in connus]
+            if inconnus:
+                print(_couleur("[ERREUR] Profil(s) inconnu(s) : %s (disponibles : %s)"
+                               % (", ".join(inconnus), ", ".join(connus)), "rouge"))
+                return 2
+        else:
+            fichiers = [f.strip() for f in args.fichiers.split(",") if f.strip()]
+            if not fichiers:
+                print(_couleur("[ERREUR] --fichiers est vide : fournir au moins un chemin", "rouge"))
+                return 2
+            profils_choisis = deduire_profils(fichiers, profils_cfg, racine)
+            if not profils_choisis:
+                print(_couleur("[ERREUR] Aucun profil ne couvre les fichiers fournis : %s"
+                               % ", ".join(fichiers), "rouge"))
+                print(_couleur("  Profils disponibles : %s"
+                               % ", ".join(p["nom"] for p in profils_cfg), "jaune"))
+                return 2
+        tests_filtres, numeros_profils = filtrer_tests_par_profils(tests, profils_choisis, profils_cfg)
+        if not tests_filtres:
+            print(_couleur("[ERREUR] Aucun test trouve pour le(s) profil(s) : %s"
+                           % ", ".join(profils_choisis), "rouge"))
+            return 2
+        print(_couleur("[PROFIL] %s : %d tests couverts / %d total"
+                       % (", ".join(profils_choisis), len(tests_filtres), len(tests)), "cyan"))
+        tests = tests_filtres
 
     # CONFIGURATION PERSISTANTE DES TESTS (demande utilisateur 2026-08-15) :
     # Janus peut activer/desactiver des tests par numero (--activer/
@@ -1084,6 +1284,9 @@ def main():
             print(_couleur("=== RESULTAT : %d OK / %d KO (sur %d tests, %d non lances) ==="
                            % (total_ok, total_ko, total_ok + total_ko + total_non - total_non, total_non),
                            "vert" if total_ko == 0 else "rouge"))
+        if profils_choisis:
+            print(_couleur("[PROFIL] Lance avec le(s) profil(s) : %s"
+                           % ", ".join(profils_choisis), "cyan"))
         lignes = None
         if protege:
             lignes = afficher_etat_registre(racine)
@@ -1235,6 +1438,9 @@ def main():
         bilan = "=== RESULTAT GLOBAL : %d OK / %d KO (sur %d tests) ===" % (tot_ok, tot_ko, len(tests))
     print("")
     print(_couleur(bilan, "vert" if tot_ko == 0 else "rouge"))
+    if profils_choisis:
+        print(_couleur("[PROFIL] Lance avec le(s) profil(s) : %s"
+                       % ", ".join(profils_choisis), "cyan"))
     if nb_desactives:
         print(_couleur("Tests desactives (config persistante) : %s"
                        % ", ".join(sorted(tests_desactives)), "jaune"))
@@ -1253,6 +1459,12 @@ def main():
     afficher_chrono(racine, duree, mode_chrono, len(tests),
                     seuil=args.seuil, rebase=args.rebase_reference,
                     no_reference=args.no_reference or not reference_globale)
+
+    # RATING DES SERIES ET RATING GENERAL (demande utilisateur 2026-08-15) :
+    # le lanceur evalue chaque serie (critere temps + fiabilite) et le run
+    # complet via evaluer-rating. Affichage en fin de run, apres le chrono.
+    if args.agent:
+        afficher_rating_fin_de_run(racine)
 
     lignes = None
     if protege:

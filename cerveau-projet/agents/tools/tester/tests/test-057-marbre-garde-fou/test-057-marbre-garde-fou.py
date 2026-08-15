@@ -179,7 +179,7 @@ def main():
         r = lancer([PYTHON, VERROU_PY, "--version"])
         verifier("   verrou --version", "0.1.0" in r.stdout, r.stdout[-100:])
         r = lancer([PYTHON, MODIF_PY, "--version"])
-        verifier("   modifier --version", "0.1.0" in r.stdout, r.stdout[-100:])
+        verifier("   modifier --version", "0.1.1" in r.stdout, r.stdout[-100:])
         chrono_etape("1. outils", t)
 
     # --- 2. manifeste marbre.json

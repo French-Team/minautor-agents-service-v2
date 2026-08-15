@@ -19,6 +19,14 @@
 # Verdict : CONFORME / A ALLEGER / NON CONFORME + rapport markdown.
 # =============================================================================
 
+"""
+valider-case.py
+valider-case
+
+Usage:
+  valider-case.py [OPTIONS]
+"""
+
 import io
 import os
 import re

@@ -2,7 +2,7 @@
 
 Point d entree UNIQUE des protections de tests (format Python canonique).
 
-- Version : 0.1.0
+- Version : 0.2.0
 - Statut : prepare
 - Proprietaire : Morpheus (outil partage)
 - Emplacement : `cerveau-projet/agents/tools/tester/tester-protections/tester-protections.py`
@@ -133,4 +133,5 @@ def main():
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.0 | 2026-08-15 | PROTECTION RATING (demande utilisateur) : ajout de la protection 'rating' dans LISTE_PROTECTIONS (deploiement automatique sur tous les tests qui importent le module) + fonction afficher_rating(nom_test) qui appelle evaluer-rating en sous-processus - le test affiche sa note /100 et le rating general |
 | 0.1.0 | 2026-08-12 | Creation : point d entree unique importable (fusion des 3 protections + protection STOP fail-fast) |

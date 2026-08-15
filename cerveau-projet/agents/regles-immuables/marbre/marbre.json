@@ -61,9 +61,9 @@
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",
    "type": "fichier",
    "raison": "Regle immuable des groupes d agents et des domaines separes",
-   "empreinte": "bd985644df870860a87e71eb85bba7acbd43f5bc6af6beb3a467586deb3d6c2c",
-   "modifie_le": "2026-08-15 16:53:45",
-   "raison_modification": "demande utilisateur: etendre le modele de confiance - garde-fou Morpheus test-059 cree (reference test-037 -> test-059 dans la regle SEUL MORPHEUS)"
+   "empreinte": "08c963050c49b1325ae049361a86f11932b3a7a8f910546d185b1676ff7bec75",
+   "modifie_le": "2026-08-15 21:59:09",
+   "raison_modification": "demande utilisateur (validee) : graver la REGLE IMMUABLE RELEVE MEME ROUND - toute activation d un agent declenche immediatement l execution dans le meme round ; cycle cerberus -> agents <-> agents <-> themis + janus -> cerberus ; seul le dernier maillon reactive Cerberus"
   }
  }
 }

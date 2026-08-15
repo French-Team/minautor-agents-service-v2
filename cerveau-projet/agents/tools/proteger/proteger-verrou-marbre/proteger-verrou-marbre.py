@@ -44,6 +44,14 @@
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier de
 # categorie (proteger-).
 # =============================================================================
+"""
+proteger-verrou-marbre.py
+proteger-verrou-marbre
+
+Usage:
+  proteger-verrou-marbre.py [OPTIONS]
+"""
+
 import argparse
 import hashlib
 import io
@@ -146,6 +154,8 @@ def main():
     parser.add_argument("--liste", action="store_true", help="Lister les zones protegees")
     parser.add_argument("--verbose", action="store_true", help="Detail du verdict")
     parser.add_argument("--version", action="version", version="proteger-verrou-marbre v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = racine_projet()

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # combos-maj-readme-massive.py
 # Combo maj-readme-massive : GROSSE mise a jour conservative du README
 # (analyse complete -> verifier -> maj -> correctifs de fond -> ASCII -> rapport)
@@ -7,6 +8,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+combos-maj-readme-massive.py
+combos-maj-readme-massive
+
+Usage:
+  combos-maj-readme-massive.py [OPTIONS]
+"""
+
 VERSION = "0.1.5"
 STATUT = "prepare"
 
@@ -225,6 +234,8 @@ def main():
                         help="Sauvegarder le rapport dans clio/rapports/")
     parser.add_argument("--version", action="version",
                         version="combos-maj-readme-massive " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     # VERROU D HABILITATION (regle immuable : seul clio met a jour le README).

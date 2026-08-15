@@ -1560,6 +1560,21 @@
    ]
   },
   {
+   "nom": "evaluer-rating",
+   "description": "Evalue la qualite et la performance (note ponderee /100) des tests, series, outils, scripts temporaires et fiches.",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/evaluer/evaluer-rating/evaluer-rating.py",
+   "modele": "--profil {profil} --tous",
+   "parametres": [
+    {
+     "cle": "profil",
+     "question": "Profil de notation (test, serie, outil, script-temp, fiche) ?",
+     "type": "texte",
+     "obligatoire": true
+    }
+   ]
+  },
+  {
    "nom": "evaluer-structure",
    "description": "Evalue la structure du cerveau-projet.",
    "interpreteur": "python3",
@@ -3314,7 +3329,7 @@
    "description": "Lance tous les tests formels (test-0XX) en mode BARRIERES par defaut (series classees par importance, 100% verte pour franchir chaque barriere, STOP fail-fast au premier KO) avec bilan OK/KO fiable, chrono + reference de temps (--seuil, --rebase-reference) ; --parallele pour l ancien pool de workers",
    "interpreteur": "python3",
    "script": "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py",
-   "modele": "--tests {tests} --rapport {rapport} --seuil {seuil}",
+   "modele": "--tests {tests} --rapport {rapport} --seuil {seuil} --profil {profil} --fichiers {fichiers}",
    "parametres": [
     {
      "cle": "tests",
@@ -3346,6 +3361,22 @@
      "type": "texte",
      "obligatoire": false,
      "flag": "--agent",
+     "defaut": ""
+    },
+    {
+     "cle": "profil",
+     "question": "Profil de tests a forcer (cartes, outils, tests, fiches-agents, docs, registre) ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--profil",
+     "defaut": ""
+    },
+    {
+     "cle": "fichiers",
+     "question": "Fichiers modifies (separes par virgules) pour deduire le profil automatiquement ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--fichiers",
      "defaut": ""
     }
    ]

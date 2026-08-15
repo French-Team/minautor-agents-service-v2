@@ -186,6 +186,8 @@ def main():
     parser.add_argument("--registre", type=str, default="", help="Chemin du registre (defaut : fixe)")
     parser.add_argument("--dry-run", action="store_true", help="Afficher la ligne sans l'ecrire")
     parser.add_argument("--version", action="version", version="enregistrer-usage-outil v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     ok, msg = valider_champs(args.agent, args.outil)

@@ -262,6 +262,8 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Simule sans ecrire")
     parser.add_argument("--wet", action="store_true", help="Ecrit reellement")
     parser.add_argument("--version", action="version", version="editer-parcours v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     verifier_residus_racine()

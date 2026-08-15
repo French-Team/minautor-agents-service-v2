@@ -40,6 +40,14 @@
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier de
 # categorie (detecter-).
 # =============================================================================
+"""
+detecter-cablages-manquants.py
+detecter-cablages-manquants
+
+Usage:
+  detecter-cablages-manquants.py [OPTIONS]
+"""
+
 import argparse
 import glob
 import io
@@ -232,6 +240,8 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Detail des graphes")
     parser.add_argument("--version", action="version",
                         version="detecter-cablages-manquants v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = racine_projet()

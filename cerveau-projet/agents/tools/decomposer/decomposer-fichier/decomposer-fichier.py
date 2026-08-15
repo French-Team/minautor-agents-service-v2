@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # decomposer-fichier.py
 # Outil de decomposition des fichiers markdown
 # Permet de voir uniquement ce dont on a besoin
@@ -7,6 +8,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+decomposer-fichier.py
+decomposer-fichier
+
+Usage:
+  decomposer-fichier.py [OPTIONS]
+"""
+
 VERSION = "0.2.0-py"
 STATUT = "beta"
 
@@ -151,6 +160,8 @@ def main():
     parser.add_argument("--json", action="store_true", help="Sortie JSON")
     parser.add_argument("--verbose", action="store_true", help="Details supplementaires")
     parser.add_argument("--version", action="version", version="decomposer-fichier " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     fichier = Path(args.fichier)

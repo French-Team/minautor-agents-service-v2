@@ -6,6 +6,14 @@
 #   commun: true
 """
 tester-protections.py
+tester-protections
+
+Usage:
+  tester-protections.py [OPTIONS]
+"""
+
+"""
+tester-protections.py
 
 POINT D ENTREE UNIQUE des protections de tests (format Python canonique).
 
@@ -49,7 +57,7 @@ import subprocess
 import sys
 from types import SimpleNamespace
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 STATUT = "prepare"
 
 # Les protections actives par ce point d entree (fusion des 3 anciennes)
@@ -84,6 +92,9 @@ LISTE_PROTECTIONS = [
     {"nom": "options-on-off", "type": "outil",
      "deploiement": "amont",
      "description": "--isoler N / --desactiver 1,3,5 : isoler un test ou desactiver des points sans toucher au code"},
+    {"nom": "rating", "type": "chrono",
+     "deploiement": "aval",
+     "description": "Affiche en fin de test le rating GENERAL des tests et le rating du test (evaluer-rating, demande utilisateur 2026-08-15)"},
 ]
 
 TIMEOUT_DEFAUT = 120
@@ -218,6 +229,32 @@ def verifier_critique(nom, condition, detail=""):
         type_protection="stop")
 
 
+def afficher_rating(nom_test, profil="test", verbose=False):
+    """Affiche le rating du test courant et le rating general (protection
+    'rating', demande utilisateur 2026-08-15). Appelle l outil evaluer-rating
+    en sous-processus. No-op silencieux si l outil est introuvable ou en
+    echec (jamais bloquant pour le test)."""
+    racine = os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
+    outil = os.path.join(racine, "cerveau-projet", "agents", "tools",
+                         "evaluer", "evaluer-rating", "evaluer-rating.py")
+    if not os.path.exists(outil):
+        return
+    try:
+        p = subprocess.run([sys.executable, outil, "--profil", profil,
+                            "--cible", nom_test, "--no-chrono"],
+                           capture_output=True, text=True, timeout=60)
+        if p.stdout:
+            print(p.stdout.rstrip())
+        p2 = subprocess.run([sys.executable, outil, "--profil", "test",
+                             "--general", "--no-chrono"],
+                            capture_output=True, text=True, timeout=60)
+        if p2.stdout:
+            print(p2.stdout.rstrip())
+    except Exception:
+        pass
+
+
 def charger_protections():
     """Helper pour les tests : charge CE module et retourne le module.
 
@@ -243,6 +280,8 @@ def _cli():
                                 % (VERSION, STATUT))
     parser.add_argument("--liste", action="store_true",
                         help="Affiche la liste des protections actives")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
     if args.liste:
         print("LISTE CENTRALE DES PROTECTIONS (%d) :" % len(LISTE_PROTECTIONS))

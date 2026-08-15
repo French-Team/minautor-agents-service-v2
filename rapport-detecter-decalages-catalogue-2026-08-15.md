@@ -1,6 +1,6 @@
 # Scan Systematique du Catalogue vs Interfaces Reelles
 
-**Date** : 2026-08-15 12:59 | **Catalogue** : v? | **Entrees** : 157
+**Date** : 2026-08-15 22:04 | **Catalogue** : v? | **Entrees** : 162
 
 ## COMBOS (garde-fou : cles des cases generateur vs catalogue)
 
@@ -14,7 +14,7 @@ Aucun probleme de cles detecte (toutes les entrees correspondent au catalogue).
 
 | Classe | Nombre |
 |---|---|
-| CONFORME | 151 |
+| CONFORME | 156 |
 | DECALAGE | 0 |
 | NON TESTABLE | 6 |
 
@@ -35,7 +35,7 @@ Aucun decalage detecte.
 
 Aucune alerte.
 
-## Conformes (151)
+## Conformes (156)
 
 - activer-activer
 - activer-agent-principal
@@ -44,7 +44,9 @@ Aucune alerte.
 - activer-sidentifier
 - ajouter-contenu-fichier
 - analyser-dependances
+- analyser-performance-tests
 - analyser-structure
+- analyser-tokens
 - audit-general
 - cartographier-parcours
 - changer-statut
@@ -96,6 +98,7 @@ Aucune alerte.
 - evaluer-coherence
 - evaluer-conventions
 - evaluer-processus
+- evaluer-rating
 - evaluer-structure
 - executer-script-temporaire
 - generateurs-amelioration
@@ -129,7 +132,9 @@ Aucune alerte.
 - migrer-identite
 - nettoyer-fichier
 - nettoyer-sessions
+- proteger-modifier-marbre
 - proteger-verrou-habilitation
+- proteger-verrou-marbre
 - rechercher-accents-sensibles
 - rechercher-dossier
 - rechercher-extension-fichier

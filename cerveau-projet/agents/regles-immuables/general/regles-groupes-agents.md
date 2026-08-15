@@ -194,6 +194,30 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 
 ---
 
+### RELEVE MEME ROUND (IMMUABLE)
+
+> **REGLE** : toute activation d un agent declenche IMMEDIATEMENT l execution
+> de sa mission dans le MEME ROUND, sans arret ni attente de l utilisateur.
+>
+> Le cycle de releve : `cerberus -> agents <-> agents <-> themis + janus -> cerberus`.
+> - Cerberus ACTIVE l agent habilite.
+> - Les agents se transmettent la releve entre eux (<->) selon SA carte :
+>   chaque fin de mission active le maillon suivant.
+> - THEMIS (audit) et JANUS (controle) sont DANS le cycle : selon la mission,
+>   l un d eux prend le relais avant le retour.
+> - Seul le DERNIER maillon de la chaine REACTIVE Cerberus avec le bilan
+>   consolide.
+>
+> - JAMAIS d arret apres une activation : l agent active execute dans la
+>   continuite du round, il ne s arrete jamais pour attendre.
+> - JAMAIS de retour a Cerberus en milieu de chaine : la transmission se fait
+>   d agent a agent selon la carte de chacun.
+> - L utilisateur n a PAS a relancer : un round qui commence par une
+>   activation se termine par le bilan Cerberus du dernier maillon.
+
+
+---
+
 ## Comment choisir le groupe
 
 1. Identifier la cible de la tache :

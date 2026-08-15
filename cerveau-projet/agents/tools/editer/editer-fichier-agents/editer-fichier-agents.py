@@ -13,6 +13,14 @@
 # REGLE IMMUABLE : 100% stdlib Python, ASCII strict (0-127).
 # ============================================================
 
+"""
+editer-fichier-agents.py
+editer-fichier-agents
+
+Usage:
+  editer-fichier-agents.py [OPTIONS]
+"""
+
 import argparse
 import io
 import os
@@ -201,6 +209,8 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Simuler sans rien modifier")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--version", action="version", version="editer-fichier-agents v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     chemin = Path(args.fichier)

@@ -22,6 +22,14 @@
 #   appartient_a: commun
 #   commun: true
 
+"""
+executer-script-temporaire.py
+executer-script-temporaire
+
+Usage:
+  executer-script-temporaire.py [OPTIONS]
+"""
+
 import argparse
 import io
 import os
@@ -289,6 +297,8 @@ def main():
     parser.add_argument("--no-chrono", action="store_true",
                         help="Desactiver le chrono (affichage par defaut)")
     parser.add_argument("--version", action="version", version="executer-script-temporaire " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     # CHRONO AFFICHE PAR DEFAUT (demande utilisateur 2026-08-15 : le chrono

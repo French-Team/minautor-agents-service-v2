@@ -28,6 +28,14 @@
 #     AUCUN fichier cree (decision utilisateur : la reflexion reste en session).
 # =============================================================================
 
+"""
+generateurs-amelioration.py
+generateurs-amelioration
+
+Usage:
+  generateurs-amelioration.py [OPTIONS]
+"""
+
 import io
 import json
 import os

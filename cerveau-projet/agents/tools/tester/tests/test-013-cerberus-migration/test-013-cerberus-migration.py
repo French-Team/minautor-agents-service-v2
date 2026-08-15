@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-013-cerberus-migration.py
-Test formel de la migration pilote du parcours-cerberus v0.4.7
+Test formel de la migration pilote du parcours-cerberus v0.4.8
 (nouveau format : indices REFERENCES + cases ACTION).
 
 Contexte (etape 6 de la spec-refonte-cartes-decision) :
@@ -18,8 +18,11 @@ Contexte (etape 6 de la spec-refonte-cartes-decision) :
      c10 (usage reel Pattern 17, KO test-035 OUTIL_HORS_CARTE)
    - v0.4.7 (2026-08-15) : + indice outil combos-analyse-projet dans la case
      c17 (usage reel Pattern 17, KO test-035 OUTIL_HORS_CARTE)
+   - v0.4.8 (2026-08-16) : GARDE-FOUS C1/C5/C18 renforces (VERIFICATION/AUDIT/
+     ANALYSE -> Themis c22, jamais analyser avant activer) - lecon derive 2026-08-16
+     (Cerberus analysait lui-meme au lieu d activer)
  
- Cas couverts:   1. Version du parcours = 0.4.7
+ Cas couverts:   1. Version du parcours = 0.4.8
   2. Types : 23 action / 5 question / 5 controle / 3 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -155,13 +158,13 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-013-")
     try:
-        print("=== Test formel migration cerberus v0.4.7 ===")
+        print("=== Test formel migration cerberus v0.4.8 ===")
 
         # 1. Version du parcours
         with io.open(PARCOURS, encoding="utf-8") as fh:
             donnees = json.load(fh)
-        verifier("1. Parcours version 0.4.7",
-                 donnees.get("parcours", {}).get("version") == "0.4.7",
+        verifier("1. Parcours version 0.4.8",
+                 donnees.get("parcours", {}).get("version") == "0.4.8",
                  str(donnees.get("parcours", {}).get("version")))
 
         # 2. Types de cases : 23 action / 5 question / 5 controle / 3 fin / 0 indice

@@ -70,3 +70,14 @@ Code de retour : 0 si aucun probleme, 1 sinon (utilisable en garde-fou).
 - v0.2.0 : detection OUTIL_HORS_CARTE basee sur le REGISTRE (source
   fiable), outils P0 de la fiche et transverses exclus. Corrections des
   lacunes de cartes revelees (morpheus c12/c7, vulcain c8, janus c4).
+- v0.1.3 (2026-08-16, demande utilisateur) : distinction
+  DECLARATION_FAUTIVE / OUTIL_HORS_CARTE pour les OUTILS EXCLUSIFS (outil
+  present dans une seule carte = verrouille a son proprietaire) : un usage
+  registre d un outil exclusif declare par un agent non proprietaire est
+  signale comme declaration fautive (a retirer du registre), pas comme un
+  indice manquant a ajouter.
+- v0.1.4 (2026-08-16, garde-fou test-064) : outils_exclusifs scanne
+  TOUS les agents avec parcours (trio athena/promethee/minerve + hygie
+  inclus), pas seulement AGENTS_CERVE - correction du faux positif
+  valider-conventions (buffy + athena = partage legitime, plus derive
+  exclusif).

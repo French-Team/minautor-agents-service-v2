@@ -516,6 +516,8 @@ def main():
                         help="Detail des motifs remplaces")
     parser.add_argument("--version", action="version",
                         version="mettre-a-jour-versions v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = racine_projet()

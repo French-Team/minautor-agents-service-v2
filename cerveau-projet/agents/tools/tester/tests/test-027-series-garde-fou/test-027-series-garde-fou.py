@@ -186,8 +186,8 @@ def main():
 
     # 4. Version du lanceur.
     r = run([PYTHON, LANCER, "--version"])
-    verifier("4. --version v0.4.5",
-             r.returncode == 0 and "v0.4.5" in r.stdout, r.stdout.strip()[-60:])
+    verifier("4. --version v0.5.0",
+             r.returncode == 0 and "v0.5.0" in r.stdout, r.stdout.strip()[-60:])
 
     # 5. Serie inconnue : code 2 + message explicite, sans traceback.
     #    (v0.4.2 : choices argparse retire, validation manuelle -> message

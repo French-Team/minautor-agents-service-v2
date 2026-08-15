@@ -20,6 +20,14 @@
 # REGLE IMMUABLE : ASCII strict (aucun accent, emoji ou Unicode).
 # ============================================================
 
+"""
+cartographier-parcours.py
+cartographier-parcours
+
+Usage:
+  cartographier-parcours.py [OPTIONS]
+"""
+
 import argparse
 import json
 import sys
@@ -331,6 +339,8 @@ def construire_parser():
 def main():
     verifier_nommage(sys.argv[0])
     parser = construire_parser()
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
     return action_cartographier(args)
 

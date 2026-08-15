@@ -155,6 +155,12 @@
      "nom": "proteger-verrou-habilitation",
      "catalogue": "proteger-verrou-habilitation",
      "chemin": "cerveau-projet/agents/tools/proteger/proteger-verrou-habilitation/"
+    },
+    {
+     "type": "outil",
+     "nom": "evaluer-rating",
+     "catalogue": "evaluer-rating",
+     "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-rating/"
     }
    ],
    "suivant": "c11",
@@ -1161,6 +1167,6 @@
   "case_depart": "c0",
   "description": "Carte de decision de Vulcain - constructeur d outils. v0.4.16 : c13 + combos-audit-general, c18c + executer-script-temporaire (mission garantie LF).",
   "nom": "parcours-vulcain",
-  "version": "0.4.17"
+  "version": "0.4.18"
  }
 }

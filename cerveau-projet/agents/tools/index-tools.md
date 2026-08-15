@@ -166,6 +166,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `evaluer-coherence` | Verifier les liens et references croisees | [evaluer/evaluer-coherence/](evaluer/evaluer-coherence/) |
 | `evaluer-conventions` | Verifier le nommage, l'ASCII, le format | [evaluer/evaluer-conventions/](evaluer/evaluer-conventions/) |
 | `evaluer-processus` | Detecter les derives de processus (fins, outils hors carte, coherence fiche/carte) | [evaluer/evaluer-processus/](evaluer/evaluer-processus/) |
+| `evaluer-rating` | Evaluer la qualite et la performance (note ponderee /100 : tests, series, outils, scripts temp, fiches) | [evaluer/evaluer-rating/](evaluer/evaluer-rating/) |
 | `evaluer-structure` | Verifier l'arborescence et les fichiers critiques | [evaluer/evaluer-structure/](evaluer/evaluer-structure/) |
 
 ### Enregistrer
@@ -481,7 +482,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Ecrire | 1 |
 | Editer | 3 |
 | Enregistrer | 1 |
-| Evaluer | 5 |
+| Evaluer | 6 |
 | Generateurs | 10 |
 | Gerer | 1 |
 | Guider | 1 |
@@ -500,7 +501,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Verifier | 6 |
 | Protections | 5 |
 | Tests | 39 |
-| **Total** | **179** |
+| **Total** | **180** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

@@ -3293,3 +3293,73 @@ A adapter : 0.4.7 -> 0.4.8 (ligne 155 + docstring ligne 19). Les references
    verifier les references dans les tests et documenter l impact pour Morpheus.
 2. Le bug d arret (mission non relue au demarrage) touche TOUS les agents
    reactives, pas seulement Morpheus - le garde-fou c0 est le bon remede.
+
+## [LECON] 2026-08-16 -- CORRECTION KO2 TEST-035 : INDICES MANQUANTS CARTE VULCAIN (Buffy)
+
+**Contexte** : la non-regression (Janus) a bloque la barriere E : test-035 (evaluer-processus) signalait 2 OUTIL_HORS_CARTE pour vulcain : 'evaluer-rating' et 'tester-lancer-non-regression' declares au registre (2026-08-15 20:09 et 20:25) mais absents des indices de la carte vulcain (v0.4.17).
+
+**Correction** (Buffy, seule habilitee a corriger les cartes) :
+1. Ajout des 2 indices outil a la case c10 "Verifier le systeme (modification)" de parcours-vulcain.json (format modele : type/nom/catalogue/chemin), en plus de verifier-systeme/evaluer-processus/detecter-* existants.
+2. Bump parcours 0.4.17 -> 0.4.18.
+3. Fiche vulcain.md synchronisee (Pattern 14 : REGLE ABSOLUE PARCOURS + lien Parcours v0.4.18).
+
+**Verifications** : JSON valide, evaluer-processus 0 probleme, valider-cartes --agent vulcain CONFORME, valider-cartes --tous 14/14, test-035 8/8, test-013 22/22, test-055 12/12, normes 0/0 ASCII + LF.
+
+**Lecons** :
+- Un usage registre sans indice carte = ecart detecte par evaluer-processus : quand un agent utilise un nouvel outil, la carte doit etre mise a jour (par Buffy) au meme round.
+- La case "Verifier le systeme" (c10 vulcain) est le bon endroit pour les outils de verification/rating.
+- valider-cartes --agent detecte l incoherence fiche/parcours (fiche v0.4.17 != parcours 0.4.18) : toujours synchroniser la fiche (Pattern 14) apres un bump de parcours.
+
+## [LECON] 2026-08-16 -- CORRECTION CONFLIT TEST-037 : RETRAIT DECLARATION FALCATIVE + INDICE (Buffy)
+
+**Contexte** : la relance 2 de non-regression (Janus) a franchi 4 barrieres (E, D, C, A) mais bloque sur la barriere B : test-037 KO sur 2 points - la carte vulcain contenait tester-lancer-non-regression ET le registre contenait la declaration fautive vulcain (2026-08-15 20:25:54).
+
+**Cause racine** : MA correction KO2 (round precedent) etait TROP LARGE - j ai ajoute tester-lancer-non-regression a la carte vulcain pour satisfaire test-035 (usage registre dans la carte), mais cet outil est EXCLUSIF janus (verrou d habilitation) : vulcain ne l a JAMAIS reellement lance (l usage registre etait une declaration a tort pendant le developpement du mode profil).
+
+**Correction** :
+1. Registre : suppression de la ligne exacte vulcain/tester-lancer-non-regression (2026-08-15 20:25:54) - 116 -> 115 lignes.
+2. Carte vulcain c10 : retrait de l indice tester-lancer-non-regression (10 -> 9 indices) - evaluer-rating conserve (legitime).
+
+**Verifications** : test-037 6/6, test-035 8/8, evaluer-processus 0 probleme, valider-cartes --agent vulcain CONFORME, test-058 6/6, normes 0/0 ASCII + LF, 0 residu.
+
+**Lecons** :
+- Ne JAMAIS ajouter un outil EXCLUSIF a une carte pour satisfaire un test de coherence : l exclusivite (seul janus lance la non-regression) PRIME.
+- Une declaration registre fautive (usage jamais reel) se RETIRE du registre - c est la regle 2b de test-037.
+- La boucle d auto-correction doit verifier les GARDE-FOUS D EXCLUSIVITE (test-037, 058, 059...) avant de valider une correction de carte : satisfaire test-035 peut casser test-037.
+
+
+## [LECON] 2026-08-16 -- RENFORCEMENT REGLES CERBERUS C1/C5/C18 (Buffy)
+
+**Contexte** : l'enquete (derive Cerberus qui analyse lui-meme au lieu d'activer) a abouti a la decision utilisateur : GARDER combos-analyse-projet dans c10 mais RENFORCER les regles. Le blocage cartes-lock (divergent) avait ete corrige par Vulcain (proteger-modifier-marbre v0.1.1 + resync des 2 cartes).
+
+**Correction (Buffy, via editer-parcours --modifier-case uniquement)** :
+1. c1 : GARDE-FOU C1 renforce - VERIFICATION/AUDIT/ANALYSE -> branche AUTRE -> c18 -> c22 (Themis) ; Execution -> ACCUEIL -> c5 -> c6 ; JAMAIS analyser avant activer.
+2. c5 : GARDE-FOU C5 - VERIF/AUDIT/ANALYSE -> Themis (c22) ; Execution -> activer la matrice ; aucune analyse avant activation.
+3. c18 : question elargie aux VERIFICATIONS (croiser/verifier/comparer) + GARDE-FOU C18 - OUI -> c22 (Themis audite), NON -> c23, jamais d analyse par Cerberus.
+4. Bump parcours 0.4.7 -> 0.4.8 + fiche cerberus Pattern 14 synchronisee.
+
+**Verifications** : valider-case CONFORME (0 erreur, 0 a alleger - indices raccourcis sous 160 car apres 2e passe), valider-cartes --agent cerberus CONFORME, valider-cartes --tous 14/14, test-034 6/6, test-013 20/22 (KO version 0.4.7 en dur + verdict -> a adapter par Morpheus).
+
+**Lecons** :
+- Les indices regle des cartes doivent rester sous 160 caracteres (valider-case ALLEGER) : formuler concis des la 1re passe.
+- Renforcer une carte = editer-parcours --modifier-case (jamais JSON direct), le lock se met a jour automatiquement depuis la correction Vulcain v0.1.1.
+- Un bump de carte casse les tests qui pincent la version en dur : anticiper l adaptation Morpheus.
+
+
+## [LECON] 2026-08-16 -- REGLE IMMUABLE RELEVE MEME ROUND GRAVEE (Buffy)
+
+**Contexte** : demande utilisateur - les agents actives ne se declenchent plus dans le meme round (il faut relancer manuellement). L utilisateur veut une regle immuable : toute activation declenche l execution immediate dans le MEME ROUND.
+
+**Proposition validee par l utilisateur (2 iterations)** :
+- v1 rejetee : le cycle 'cerberus -> agent -> cerberus' est trompeur (les agents communiquent aussi entre eux).
+- v2 validee : le cycle reel est `cerberus -> agents <-> agents <-> themis + janus -> cerberus` - Themis (audit) et Janus (controle) sont DANS le cycle, pas seulement Cerberus en bout de chaine.
+
+**Gravure (porte du marbre)** :
+1. Insertion de la section '### RELEVE MEME ROUND (IMMUABLE)' dans regles-groupes-agents.md apres LE MODELE DE CONFIANCE (via inserer-contenu-fichier + supprimer-ligne pour corriger un premier placement erronne).
+2. Porte du marbre : proteger-modifier-marbre --zone regles-groupes-agents --autorisation UTILISATEUR -> empreinte bd98... -> 08c9... journalisee (21:59:09).
+3. test-057 marbre 24/24 CONFORME (la zone gravee est verifiee par le garde-fou).
+
+**Lecons** :
+- Le cycle de releve n est PAS un aller-retour binaire : c est une CHAINE agents <-> agents avec Themis et Janus dans le cycle, seul le dernier maillon reactive Cerberus.
+- Toute regle immuable gravee dans regles-groupes-agents.md passe par la porte du marbre (autorisation UTILISATEUR obligatoire) + test-057 verifie l integrite.
+- Bien verifier l emplacement avant insertion : inserer-contenu-fichier --apres cible le motif, pas la fin d un bloc (corrige par supprimer-ligne + reinsertion).

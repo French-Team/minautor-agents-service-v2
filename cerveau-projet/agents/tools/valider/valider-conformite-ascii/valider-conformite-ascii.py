@@ -112,7 +112,7 @@ def main(argv):
             if i + 1 < len(argv):
                 exclure_extra = argv[i + 1]
                 i += 1
-        elif arg in ("--help", "-h"):
+        elif arg in ("--aide", "--help", "-h"):
             afficher_aide()
             return 0
         elif arg == "--version":

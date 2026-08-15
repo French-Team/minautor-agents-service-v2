@@ -16,6 +16,14 @@
 # 100% stdlib, ASCII strict, compatible Windows/Git Bash.
 # ============================================================
 
+"""
+ajouter-contenu-fichier.py
+ajouter-contenu-fichier
+
+Usage:
+  ajouter-contenu-fichier.py [OPTIONS]
+"""
+
 import argparse
 import os
 import sys
@@ -93,6 +101,8 @@ def main():
     verifier_nommage(sys.argv[0])
 
     parser = construire_parser()
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     cible = args.cible

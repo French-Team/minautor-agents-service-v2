@@ -16,6 +16,14 @@
 # 100% stdlib, ASCII strict, compatible Windows/Git Bash.
 # ============================================================
 
+"""
+analyser-dependances.py
+analyser-dependances
+
+Usage:
+  analyser-dependances.py [OPTIONS]
+"""
+
 import argparse
 import os
 import re

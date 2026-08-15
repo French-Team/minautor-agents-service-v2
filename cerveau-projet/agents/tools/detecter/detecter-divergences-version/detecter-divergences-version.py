@@ -14,6 +14,14 @@
 #   appartient_a: commun
 #   commun: true
 
+"""
+detecter-divergences-version.py
+detecter-divergences-version
+
+Usage:
+  detecter-divergences-version.py [OPTIONS]
+"""
+
 """detecter-divergences-version.py
 
 Scanne les dossiers spec/ sous une racine, extrait la version declaree
@@ -210,6 +218,8 @@ def main():
                         help='Exporter le rapport en markdown')
     parser.add_argument('--version', action='store_true',
                         help='Afficher la version')
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if args.version:

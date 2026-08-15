@@ -41,6 +41,14 @@
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier de
 # categorie (proteger-).
 # =============================================================================
+"""
+proteger-modifier-marbre.py
+proteger-modifier-marbre
+
+Usage:
+  proteger-modifier-marbre.py [OPTIONS]
+"""
+
 import argparse
 import datetime
 import importlib.util
@@ -49,7 +57,55 @@ import json
 import os
 import sys
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
+
+
+def empreinte_fichier_lock(chemin):
+    """Empreinte SHA-256 normalisee du FICHIER CARTE COMPLET (LF + rstrip),
+    strictement identique a celle d editer-parcours (cartes-lock.json).
+    La porte du marbre modifie une case -> la carte complete change -> il
+    faut resynchroniser l empreinte du fichier dans cartes-lock.json, sinon
+    l anti-contournement (barrage n3) bloque toute modification ulterieure
+    (lecon 2026-08-16 : reconstruction c10 sans resync lock).
+    """
+    with io.open(chemin, "r", encoding="utf-8", errors="replace") as fh:
+        texte = fh.read().replace("\r\n", "\n").replace("\r", "\n")
+    texte = "\n".join(l.rstrip() for l in texte.split("\n"))
+    import hashlib
+    return hashlib.sha256(texte.encode("utf-8")).hexdigest()
+
+
+def chemin_lock_cartes(racine):
+    return os.path.join(racine, "cerveau-projet", "agents", "regles-immuables",
+                        "marbre", "cartes-lock.json")
+
+
+def resynchroniser_lock_carte(racine, zone):
+    """Apres mise a jour d une zone CASE de carte (marbre), resynchronise
+    l empreinte du fichier carte complet dans cartes-lock.json. Les zones
+    non-case (fichier entier, marqueurs, regles) ne touchent pas une carte :
+    rien a synchroniser.
+    """
+    if zone.get("type") != "case":
+        return 0
+    chemin_lock = chemin_lock_cartes(racine)
+    if not os.path.isfile(chemin_lock):
+        return 0
+    relatif = zone["fichier"].replace("\\", "/")
+    chemin_carte = os.path.join(racine, relatif)
+    if not os.path.isfile(chemin_carte):
+        return 0
+    try:
+        with io.open(chemin_lock, "r", encoding="utf-8") as fh:
+            lock = json.load(fh)
+    except (ValueError, IOError):
+        return 0
+    lock.setdefault("cartes", {})[relatif] = empreinte_fichier_lock(chemin_carte)
+    with io.open(chemin_lock, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(lock, fh, ensure_ascii=True, indent=1)
+        fh.write("\n")
+    print("    resynchronise cartes-lock.json : %s" % relatif)
+    return 1
 
 
 def racine_projet():
@@ -118,6 +174,8 @@ def main():
     parser.add_argument("--autorisation", type=str, default="", help="Preuve d autorisation de l utilisateur (OBLIGATOIRE)")
     parser.add_argument("--log", action="store_true", help="Afficher l historique des modifications")
     parser.add_argument("--version", action="version", version="proteger-modifier-marbre v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = racine_projet()
@@ -175,6 +233,11 @@ def main():
     }
     with io.open(chemin_log(racine), "a", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps(entree, ensure_ascii=True) + "\n")
+
+    # FIX v0.1.1 (2026-08-16, enquete Buffy) : une zone CASE de carte modifie
+    # le fichier carte complet -> resynchroniser cartes-lock.json, sinon
+    # l anti-contournement bloque les modifications ulterieures.
+    resynchroniser_lock_carte(racine, zone)
 
     print("[OK] Marbre mis a jour : %s (autorisation: %s)" % (args.zone, args.autorisation))
     print("    ancienne : %s" % ancienne[:16])

@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # combos-valider-cerveau.py
 # Combo de validation : etat de sante du cerveau-projet en une commande
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+combos-valider-cerveau.py
+combos-valider-cerveau
+
+Usage:
+  combos-valider-cerveau.py [OPTIONS]
+"""
+
 VERSION = "0.2.0-py"
 STATUT = "beta"
 
@@ -95,6 +104,8 @@ def main():
     parser.add_argument("--detail", action="store_true", help="Afficher la sortie complete des 3 outils")
     parser.add_argument("--stop", action="store_true", help="Arreter au premier echec")
     parser.add_argument("--version", action="version", version="combos-valider-cerveau " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = trouver_racine()

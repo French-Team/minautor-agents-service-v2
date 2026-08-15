@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # condenser-fichier.py
 # Outil pour condenser les fichiers markdown
 # Proprietaire : Buffy (outil partage)
@@ -6,6 +7,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+condenser-fichier.py
+condenser-fichier
+
+Usage:
+  condenser-fichier.py [OPTIONS]
+"""
+
 VERSION = "0.2.0-py"
 STATUT = "beta"
 
@@ -153,6 +162,8 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--backup", action="store_true", help="Creer une copie de sauvegarde")
     parser.add_argument("--version", action="version", version="condenser-fichier " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if not Path(args.fichier).is_file():

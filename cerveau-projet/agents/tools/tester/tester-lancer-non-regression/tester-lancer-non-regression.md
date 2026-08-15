@@ -1,7 +1,7 @@
 # tester-lancer-non-regression
 
 **Categorie** : Tester
-**Version** : 0.4.5
+**Version** : 0.5.0
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-11
@@ -202,6 +202,9 @@ information est ecrite dans le rapport markdown (`--rapport`, section
 | Version | Date | Changement |
 |---|---|---|
 | 0.4.5 | 2026-08-15 | Config persistante des tests : --activer/--desactiver par numero dans config-tests.json (gitignore), heritee au lancement suivant, --etat-tests pour l'afficher, tests desactives = NON LANCE dans le bilan |
+| 0.5.0 | 2026-08-16 | PROFILS DE TESTS (demande utilisateur) : option --fichiers (auto) et --profil (manuel) - Janus choisit le profil selon les fichiers modifies (cartes, outils, tests, fiches-agents, docs, registre), definition dans profils-tests.json, affichage du profil en debut et fin de run |
+| 0.4.7 | 2026-08-15 | ALIGNEMENT MODELE STANDARD (decouvert par evaluer-rating) : ajout du shebang, coding ascii, docstring Usage et option --aide - conformite outil 100% (le lanceur etait note FAIBLE par le rating) |
+| 0.4.6 | 2026-08-15 | RATING DES SERIES (demande utilisateur) : le lanceur affiche en fin de run le rating de chaque serie (evaluer-rating --profil serie) et le rating GENERAL du run (--profil test --general) - criteres temps + fiabilite, note ponderee /100 |
 | 0.4.4 | 2026-08-15 | GOUVERNANCE : test-057 ajoute a la serie e (marbre, garde-fous specifiques) + aux GARDE_FOUS_GLOBAUX (il ecrit temporairement parcours-cerberus -> jamais en parallele) ; test-058 ajoute a la serie b (SEUL BUFFY CORRIGE LES FICHIERS DES AGENTS, separation des pouvoirs - cartes + registre) |
 | 0.4.3 | 2026-08-15 | VERROU D HABILITATION (demande utilisateur) : --agent OBLIGATOIRE + appel a proteger-verrou-habilitation AVANT toute action - seul janus peut lancer la suite, tout autre agent est bloque avec la commande d activation (regle immuable mecanisee a la source). |
 | 0.4.0 | 2026-08-15 | Round 18 : BARRIERES DE PASSAGE (demande utilisateur) - series classees par IMPORTANCE (FONDATIONS D ABORD : a=nommage/ASCII-LF/template/protections, b=parcours/validateurs, c=outils/combos, d=registre/traces, e=anti-recurrence), mode serie stricte par defaut avec barriere 100% verte entre les series (STOP fail-fast au premier KO, rapport de la serie pour constater/analyser/reparer), rapport GLOBAL POSITIF quand toutes les barrieres sont passees. --parallele conserve le pool de workers, --serial passe serie simple. |

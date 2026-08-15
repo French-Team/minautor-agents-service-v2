@@ -46,6 +46,14 @@
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier de
 # categorie (analyser-).
 # =============================================================================
+"""
+analyser-tokens.py
+analyser-tokens
+
+Usage:
+  analyser-tokens.py [OPTIONS]
+"""
+
 import argparse
 import glob
 import io
@@ -220,6 +228,8 @@ def main():
                         help="Couper le chrono de l outil")
     parser.add_argument("--version", action="version",
                         version="analyser-tokens v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = racine_projet()

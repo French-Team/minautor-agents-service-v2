@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # corriger-nommage.py
 # Corriger le nommage des fichiers selon les conventions
 # Version : 0.2.0-py
@@ -8,6 +9,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+corriger-nommage.py
+corriger-nommage
+
+Usage:
+  corriger-nommage.py [OPTIONS]
+"""
+
 VERSION = "0.2.0-py"
 STATUT = "beta"
 
@@ -145,6 +154,8 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Simuler sans modifier")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--version", action="version", version="corriger-nommage " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     fichier = Path(args.fichier)

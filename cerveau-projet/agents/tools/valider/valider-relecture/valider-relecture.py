@@ -171,7 +171,7 @@ def main(argv):
                 i += 1
         elif arg == "--verbose":
             verbose = True
-        elif arg in ("--help", "-h"):
+        elif arg in ("--aide", "--help", "-h"):
             afficher_aide()
             return 0
         elif arg == "--version":

@@ -16,7 +16,8 @@
           "poids": 35,
           "source": "registre-tests.jsonl",
           "mode": "plus-rapide-mieux",
-          "description": "Duree d execution du dernier run : plus rapide = meilleur score. Base = mediane des durees du run."
+          "base": 3.0,
+          "description": "Duree d execution du dernier run : plus rapide = meilleur score. Bareme absolu : 100 si <= 3s, decroit ensuite (40 points par multiple de 3s)."
         },
         {
           "nom": "fiabilite",
@@ -56,7 +57,8 @@
           "poids": 50,
           "source": "registre-tests.jsonl",
           "mode": "plus-rapide-mieux",
-          "description": "Duree totale de la serie sur le dernier run : plus rapide = meilleur score. Base = duree totale du run / nombre de series."
+          "base": 25.0,
+          "description": "Duree totale de la serie sur le dernier run : plus rapide = meilleur score. Bareme absolu : 100 si <= 25s, decroit ensuite."
         },
         {
           "nom": "fiabilite",

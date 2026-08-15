@@ -27,6 +27,18 @@
 #   appartient_a: commun
 #   commun: true
 
+"""
+detecter-fautes-orthographe.py
+detecter-fautes-orthographe
+
+Usage:
+  detecter-fautes-orthographe.py [OPTIONS]
+
+Options:
+  --version            Afficher la version
+  --aide, -h           Afficher cette aide
+"""
+
 import argparse
 import io
 import os
@@ -243,6 +255,8 @@ def main():
                         help="Lever les exclusions (corrections, tests, rapports)")
     parser.add_argument("--version", action="store_true",
                         help="Afficher la version")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if args.version:

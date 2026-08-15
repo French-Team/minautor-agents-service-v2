@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # corriger-emojis.py
 # Detecte et remplace les emojis par des symboles ASCII
 # Proprietaire : Vulcain (outil partage)
@@ -9,6 +10,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+corriger-emojis.py
+corriger-emojis
+
+Usage:
+  corriger-emojis.py [OPTIONS]
+"""
+
 VERSION = "0.2.0-py"
 STATUT = "beta"
 
@@ -107,6 +116,8 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Afficher les changements sans les appliquer")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--version", action="version", version="corriger-emojis " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     dict_file = Path(__file__).resolve().parent / "dictionnaire-emojis.txt"

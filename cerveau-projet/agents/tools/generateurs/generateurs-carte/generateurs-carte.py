@@ -19,6 +19,14 @@
 # REGLE IMMUABLE : ASCII strict (aucun accent, emoji ou Unicode).
 # ============================================================
 
+"""
+generateurs-carte.py
+generateurs-carte
+
+Usage:
+  generateurs-carte.py [OPTIONS]
+"""
+
 import argparse
 import json
 import subprocess

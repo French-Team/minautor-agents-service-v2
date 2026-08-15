@@ -28,7 +28,7 @@
 #   --verbose           : detail des outils assignes par carte
 #   --version
 #
-# Version : 0.1.2
+# Version : 0.1.4
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -38,6 +38,14 @@
 # REGLE IMMUABLE DE NOMMAGE : le nom commence par le prefixe du dossier de
 # categorie (evaluer-).
 # =============================================================================
+"""
+evaluer-processus.py
+evaluer-processus
+
+Usage:
+  evaluer-processus.py [OPTIONS]
+"""
+
 import argparse
 import io
 import json
@@ -45,9 +53,9 @@ import os
 import re
 import sys
 
-FENETRE_JOURS = 1  # fenetre de verification des usages recents (v0.1.2) : le jour courant
+FENETRE_JOURS = 1  # fenetre de verification des usages recents (v0.1.3) : le jour courant
 
-VERSION = "0.1.2"
+VERSION = "0.1.4"
 
 # Agents du cerveau-projet (famille cerveau-projet : cercles de controle).
 AGENTS_CERVE = ["cerberus", "buffy", "vulcain", "morpheus", "janus",
@@ -186,7 +194,7 @@ def usages_registre(racine):
     "script-temporaire" (protocole creation-scripts-temporaires) : un script
     temporaire legitime (ex tmp-buffy/xxx.py) n est PAS un outil de la carte
     et ne doit jamais etre signale OUTIL_HORS_CARTE.
-    FIX v0.1.2 (2026-08-14, demande utilisateur registre CUMULATIF) : le
+    FIX v0.1.3 (2026-08-14, demande utilisateur registre CUMULATIF) : le
     registre devient la memoire des usages reels (plafond 100). Seuls les
     usages de la FENETRE RECENTE (FENETRE_JOURS, defaut 1) sont verifies :
     les usages historiques (avant les changements de cartes et de regles,
@@ -227,15 +235,65 @@ def usages_registre(racine):
     return usages
 
 
+def tous_agents_parcours(racine):
+    """Liste TOUS les agents avec une carte de decision (cerveau-projet
+    + trio athena/promethee/minerve + hygie), comme la table du verrou.
+    FIX v0.1.4 (2026-08-16, garde-fou test-064) : AGENTS_CERVE ne suffit
+    pas - le trio utilise des outils communs (ex valider-conventions chez
+    athena) qui etaient declares exclusifs a tort.
+    """
+    base = os.path.join(racine, "cerveau-projet", "agents")
+    resultats = []
+    if not os.path.isdir(base):
+        return resultats
+    for nom in sorted(os.listdir(base)):
+        if os.path.isdir(os.path.join(base, nom, "parcours")):
+            resultats.append(nom)
+    return resultats
+
+
+def outils_exclusifs(racine):
+    """Derive les OUTILS EXCLUSIFS : un outil present dans EXACTEMENT une
+    carte de TOUS les agents (cerveau-projet + trio + hygie) est exclusif
+    a son agent proprietaire (lecon test-037 : seul janus lance la
+    non-regression - un outil verrouille ne doit etre declare au registre
+    que par son proprietaire).
+
+    FIX v0.1.4 (2026-08-16, garde-fou test-064) : scanne TOUS les agents
+    avec parcours (comme la table du verrou), pas seulement AGENTS_CERVE -
+    le trio partage des outils communs (valider-conventions chez buffy +
+    athena) qui n auraient pas du etre declares exclusifs.
+
+    Retourne {outil: proprietaire}. Un outil absent de toute carte ou
+    present dans plusieurs cartes n est pas exclusif.
+    """
+    presence = {}
+    for agent in tous_agents_parcours(racine):
+        parcours = charger_parcours(racine, agent)
+        if not parcours:
+            continue
+        for outil in outils_de_la_carte(parcours):
+            presence.setdefault(outil, []).append(agent)
+    return {outil: agents[0]
+            for outil, agents in presence.items() if len(agents) == 1}
+
+
 def detecter_outils_hors_carte(racine):
     """Croise les usages DECLARES au registre (source fiable des outils
     reellement utilises par chaque agent) vs les outils assignes aux cartes
     et les outils P0 de la fiche : un usage declare hors carte et hors P0
     est une derive (lecon Cerberus 2026-08-13 : outils de test utilises hors
     carte). Les lecons (corrections.md) ne sont PAS une source : elles
-    mentionnent les outils des autres agents et des audits (bruit)."""
+    mentionnent les outils des autres agents et des audits (bruit).
+
+    FIX v0.1.3 (2026-08-16, demande utilisateur) : un usage registre d un
+    OUTIL EXCLUSIF (present dans une seule carte) declare par un agent qui
+    n est PAS le proprietaire est une DECLARATION_FAUTIVE (l agent n avait
+    pas le droit d utiliser l outil verrouille - usage jamais reel), pas un
+    simple OUTIL_HORS_CARTE (indice manquant a ajouter)."""
     problemes = []
     usages = usages_registre(racine)
+    exclusifs = outils_exclusifs(racine)
     for agent in AGENTS_CERVE:
         parcours = charger_parcours(racine, agent)
         if not parcours:
@@ -249,6 +307,21 @@ def detecter_outils_hors_carte(racine):
             # activer-agent-principal et enregistrer-usage-outil sont
             # transverses (cycle Cerberus + trace), jamais hors carte.
             if outil in ("activer-agent-principal", "enregistrer-usage-outil"):
+                continue
+            # OUTIL EXCLUSIF declare par un agent non proprietaire :
+            # declaration fautive (l outil est verrouille a son proprietaire).
+            proprietaire = exclusifs.get(outil)
+            if proprietaire and proprietaire != agent:
+                problemes.append({
+                    "type": "DECLARATION_FAUTIVE",
+                    "agent": agent,
+                    "source": "registre-usages-outils.jsonl",
+                    "detail": "usage declare de '%s' au registre : outil "
+                              "EXCLUSIF a %s (verrou d habilitation) - "
+                              "declaration fautive, usage jamais reel, "
+                              "retirer l entree du registre"
+                              % (outil, proprietaire),
+                })
                 continue
             problemes.append({
                 "type": "OUTIL_HORS_CARTE",
@@ -342,6 +415,8 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Detail complet")
     parser.add_argument("--version", action="version",
                         version="evaluer-processus v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = racine_projet()

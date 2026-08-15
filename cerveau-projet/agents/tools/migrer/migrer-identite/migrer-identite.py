@@ -33,6 +33,14 @@
 # REGLE IMMUABLE : ASCII strict (aucun accent ni caractere Unicode).
 # ============================================================
 
+"""
+migrer-identite.py
+migrer-identite
+
+Usage:
+  migrer-identite.py [OPTIONS]
+"""
+
 import argparse
 import json
 import os
@@ -409,6 +417,8 @@ def main() -> int:
     parser.add_argument("--force", action="store_true",
                         help="reinserer meme si le bloc est deja present")
     parser.add_argument("--version", action="version", version=VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = Path(args.racine)

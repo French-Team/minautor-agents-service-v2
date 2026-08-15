@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # changer-statut.py
 # Change le statut d'un fichier en le renommant selon la convention
 # Proprietaire : Janus (outil partage)
@@ -6,6 +7,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+changer-statut.py
+changer-statut
+
+Usage:
+  changer-statut.py [OPTIONS]
+"""
+
 VERSION = "0.2.0-py"
 STATUT = "beta"
 
@@ -115,6 +124,8 @@ def construire_parser():
 def main():
     verifier_nommage()
     parser = construire_parser()
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     fichier = Path(args.fichier)

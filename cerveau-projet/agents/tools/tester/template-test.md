@@ -273,6 +273,9 @@ def main():
     print("")
     bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
+    # RATING (protection 'rating', demande utilisateur 2026-08-15) : le test
+    # affiche le rating GENERAL des tests et le rating du test courant.
+    PROTECTIONS.afficher_rating(os.path.basename(__file__).replace(".py", ""))
     return 1 if NB_KO else 0
 
 
@@ -297,6 +300,7 @@ if __name__ == "__main__":
   ArretProtection` dans main (protection STOP)
 - [ ] Chaque point est numerote et affiche `[OK]`/`[KO]`
 - [ ] Le bilan `=== RESULTAT : N OK / M KO ===` et le retour `1 if NB_KO else 0`
+- [ ] Le bloc rating `PROTECTIONS.afficher_rating(...)` en fin de main() (protection 'rating' : le test affiche sa note /100 + le rating general)
 - [ ] ASCII strict : 0 caractere non-ASCII
 - [ ] LF pur : 0 CRLF
 - [ ] Le test est affecte a une serie dans tester-lancer-non-regression.py
@@ -316,6 +320,7 @@ sont la matiere premiere des futurs outils de suivi de performance.
 | Version | Date | Changements |
 |---|---|---|
 | 0.3.0 | 2026-08-13 | REGLE IMMUABLE PROTECTIONS + OPTIONS + CHRONO (demande utilisateur) : options on/off `--isoler`/`--desactiver` + chrono par etape `--no-chrono`/`chrono_etape`/`bilan_chrono`/`point_actif` dans le canevas et la checklist. Les tests EXISTANTS ne sont PAS migres (decision utilisateur) ; le triplet s impose aux FUTURS tests. Ajout OUTIL_MD manquant dans le canevas. CORRECTION BUG LATENT (decouvert par le premier test conforme test-044) : `global NB_POINTS, NB_OK, NB_KO` en tete de main() - sans lui, `NB_KO += 1` dans le except rendait NB_KO local et le bilan final levait UnboundLocalError |
+| 0.4.0 | 2026-08-15 | PROTECTION RATING (demande utilisateur) : ajout du bloc `PROTECTIONS.afficher_rating(...)` en fin de main() - chaque futur test affiche le rating GENERAL des tests et le rating du test. Protection 'rating' ajoutee a LISTE_PROTECTIONS de tester-protections v0.2.0 (deploiement automatique). Le lanceur affiche le rating des SERIES et le rating GENERAL du run. |
 | 0.2.1 | 2026-08-12 | Import OBLIGATOIRE des protections via le point d entree unique tester-protections (lancer_protege + protection STOP verifier_critique/ArretProtection) - demande utilisateur : chaque test DOIT etre protege |
 | 0.2.0 | 2026-08-12 | Format PYTHON canonique (audit Morpheus, demande utilisateur : le template est LA reference, pas les tests precedents). Les tests reels sont des .py purs avec [OK]/[KO] ; l ancien format bash/protections (v0.1.0) etait obsolete et inutilisable |
 | 0.1.0 | 2026-08-06 | Creation : format bash avec protections (tester-protection-*) |

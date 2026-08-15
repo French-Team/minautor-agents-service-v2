@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # creer-remplir-todo.py
 # Remplit une section d'un todo sans ouvrir le fichier
 # Version : 0.2.0-py
@@ -8,6 +9,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+creer-remplir-todo.py
+creer-remplir-todo
+
+Usage:
+  creer-remplir-todo.py [OPTIONS]
+"""
+
 VERSION = "0.2.0-py"
 STATUT = "beta"
 
@@ -161,6 +170,8 @@ def main():
     parser.add_argument("contenu", help="Contenu a inserer")
     parser.add_argument("--dry-run", action="store_true", help="Afficher ce qui serait fait sans modifier")
     parser.add_argument("--version", action="version", version="creer-remplir-todo " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     return remplir_section(args.fichier, args.section, args.contenu, args.dry_run)

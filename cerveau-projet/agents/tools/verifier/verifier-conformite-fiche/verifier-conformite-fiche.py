@@ -2,6 +2,14 @@
 # -*- coding: ascii -*-
 """
 verifier-conformite-fiche.py
+verifier-conformite-fiche
+
+Usage:
+  verifier-conformite-fiche.py [OPTIONS]
+"""
+
+"""
+verifier-conformite-fiche.py
 Verifie qu'une fiche agent (agents/<agent>/<agent>.md) est conforme au
 template de fiche (agents/fiche-agent-template.md).
 
@@ -204,6 +212,8 @@ def main():
                         help="Afficher les details")
     parser.add_argument("--version", action="store_true",
                         help="Afficher la version")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if args.version:

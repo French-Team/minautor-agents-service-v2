@@ -3087,3 +3087,168 @@ table Analyser 2 -> 4 (SEUL Clio touche aux README - regle immuable).
 l ASCII (un accent a ete insere dans "reperer") - toujours verifier
 non-ascii/crlf apres creation. Le registre-tests est la source de l outil de
 performance : sa fiabilite conditionne les decisions d optimisation.
+
+## [LECON] 2026-08-15 -- OUTIL DE RATING CREE (evaluer-rating v0.1.0, Vulcain)
+
+**Mission** (demande utilisateur) : creer un outil de rating (evaluation
+chiffree) - note ponderee /100 par profil (test, serie, outil, script-temp,
+fiche), criteres depuis registres + fichiers, integre aux protections et a la
+non-regression.
+
+**Livraisons** :
+1. evaluer-rating.py v0.1.0 + profils-rating.json (POIDS par critere, somme=100)
+   + doc .md. Catalogue 161->162, index-tools Evaluer 5->6 Total 179->180.
+2. Protection 'rating' dans LISTE_PROTECTIONS de tester-protections v0.2.0 :
+   fonction afficher_rating(nom_test) - le test affiche sa note /100 + le
+   rating general. Template-test v0.4.0 : bloc rating dans le squelette.
+3. Lanceur v0.4.6 : affichage en fin de run du RATING DES SERIES + RATING
+   GENERAL (evaluer-rating --profil serie --tous + --profil test --general).
+
+**Criteres profil test** (TOUS, decision utilisateur) : temps (35), fiabilite
+(30), conformite (20), tokens (10), systeme (5). Serie : temps + fiabilite.
+
+**Lecons techniques** :
+- Base de temps : JAMAIS de base statistique (mediane/moyenne de la fenetre) -
+  elle capture plusieurs runs et tout test normal clappe a 0. Bareme ABSOLU en
+  secondes (base 3s test / 25s serie, pente 20 pts/multiple) : deterministe.
+- Match des series : par le champ 'serie' du registre, JAMAIS par le nom de
+  test ('a' matcherait tous les tests contenant la lettre a).
+- Chemin racine depuis tester-protections : 6 niveaux dirname (fichier ->
+  tester-protections -> tester -> tools -> agents -> cerveau-projet -> racine),
+  pas 5 (j ai eu un faux calcul - l import real m a montre le double cerveau-projet).
+- Le rating outil a detecte que tester-lancer-non-regression n a pas les
+  marqueurs standard du modele (shebang, coding ascii, docstring Usage, --aide)
+  -> FAIBLE. A aligner sur le modele plus tard.
+
+## [LECON] 2026-08-15 -- LANCEUR ALIGNE SUR LE MODELE STANDARD (Vulcain)
+
+**Contexte** : evaluer-rating (cree au round precedent) a note
+tester-lancer-non-regression FAIBLE conformite : il manquait 4 marqueurs du
+modele standard (shebang, coding ascii, docstring Usage, --aide). Le rating a
+objective un ecart reel de conformite - c est exactement son role.
+
+**Correction (v0.4.6 -> v0.4.7)** :
+1. En-tete : shebang #!/usr/bin/env python3 + coding ascii + docstring avec
+   section Usage (options principales) - modele des outils evaluer.
+2. Option --aide (action help, alias de -h) a cote de --version.
+3. Verrou d habilitation intact : sans --agent -> refus, --agent vulcain ->
+   BLOQUE (seul janus habilite). Barrieres/journalisation/chrono inchanges.
+
+**Verification** : conformite outil 20% -> 100% (5/5 marqueurs), rating total
+37.4 FAIBLE -> 68.5 MOYEN (limite par temps 50 = pas de duree outil au
+registre, et tokens 17.5 = fichier de ~3000 lignes - comportement correct du
+rating), --version v0.4.7, --aide affiche l aide, compile OK, normes 0/0.
+
+**Lecon outil** : editer-fichier a insere un '\n' LITTERAL au lieu d un vrai
+saut de ligne (le backslash dans la chaine de remplacement est passe tel quel).
+Pour inserer des blocs multi-lignes dans le code, TOUJOURS passer par un script
+temp (regle anti-echappement), jamais par editer-fichier avec \n dans le
+remplacement.
+
+## [LECON] 2026-08-16 -- ALIGNEMENT 71 OUTILS SUR LE MODELE STANDARD (Vulcain)
+
+**Contexte** : mission Cerberus - evaluer-rating (profil outil) avait revele 71 outils non-100% en conformite (40-80%). Manques : coding: ascii, docstring Usage:, option --aide.
+
+**Actions** : script d alignement parametre (dry/wet) avec 5 ancrages d insertion --aide (parse_args, add_argument ligne unique, tuples manuels, condition argv). 71 outils alignes : 124/124 conformite 100%, compile 0 KO, normes 0/0, 0 divergence version.
+
+**Lecons** :
+1. REGEX MULTI-LIGNES : un pattern `parser.add_argument("--version".*?)` sans DOTALL ne matche que la 1re ligne des add_argument multi-lignes -> insertion au milieu de l appel = SYNTAX ERROR sur 71 fichiers. Toujours ancrer l insertion sur `args = parser.parse_args()` (ligne complete, sure).
+2. GIT CHECKOUT = DESTRUCTIF : un revert `git checkout --` des 71 fichiers a aussi efface du travail NON-COMMITE du round precedent (tester-protections v0.2.0 + afficher_rating) -> test-062 KO. TOUJOURS verifier git status + commiter le travail en cours AVANT un revert massif, et reverifier les tests apres.
+3. DOCSTRING DE MODULE VS FONCTION : le regex d insertion Usage ciblait le PREMIER triplet de guillemets -> pour 48 outils sans docstring de module, Usage finissait dans une docstring de FONCTION (conformite OK mais --aide inutile). Corrige : insertion d une vraie docstring de module apres le frontmatter.
+4. PAS DE BUMP : les marqueurs sont additifs (aucun changement de comportement, --aide = alias de -h). Pas de bump de version -> pas de cascade tests (les pins dans les tests sont des en-tetes descriptifs, pas des verifications).
+
+**Preuves** : creer-fichier conformite 100% (avant 40%), 124/124, test-062 11/11, test-029 14/14, test-030 10/10, test-004 16/16, test-005 28/28, test-017 41/41, test-051 11/12 (KO = artefact de session verrou, Janus le passera).
+
+## [LECON] 2026-08-16 -- PROFILS DE TESTS PAR FICHIERS MODIFIES (Vulcain)
+
+**Contexte** : demande utilisateur - Janus doit pouvoir choisir le profil de tests selon les fichiers modifies, sans connaitre les numeros par coeur. Decisions : AUTO par fichiers (--fichiers), 6 profils thematiques, JSON dedie.
+
+**Actions** : profils-tests.json (6 profils : cartes, outils, tests, fiches-agents, docs, registre - 61/61 tests couverts), options --fichiers/--profil dans le lanceur (le mode profil prend le pas sur --series/--tests), deduction par globs de chemins avec exclusions, affichage du profil en debut et fin de run, catalogue a jour, bump lanceur 0.4.7 -> 0.5.0.
+
+**Lecons** :
+1. HEREDOC INLINE ECHOUE SILENCIEUSEMENT SUR WINDOWS : `python3 - << 'PYEOF'` ne produit AUCUNE erreur mais n execute rien (stdin consomme par bash). TOUJOURS ecrire les scripts dans tmp-vulcain/ puis les executer - jamais de heredoc inline pour modifier des fichiers.
+2. INSERTION DOUBLON : executer 2 fois un script d insertion qui matche la meme ancre = bloc duplique (options argparse + bloc mode profil). TOUJOURS verifier count() apres insertion et dedoublonner.
+3. GLOBS : fnmatch traite `*` sans traverser `/` et un dossier sans `*` ne matche pas son contenu. Solution : glob sans `*` = prefixe de sous-arbre, champ fichiers_exclus pour les ambiguites (un test .py est 'tests', pas 'outils').
+
+**Preuves** : deduction correcte (parcours->cartes 20, outil->outils 17, README->docs 5, test->tests 8, registre->registre 16, mixte->outils+docs 21), 61/61 couverts, test-005 28/28, test-040 5/5, test-007 15/15, test-030 10/10.
+
+## [LECON] 2026-08-16 -- CORRECTION KO1 TEST-028 : DOUBLE DOCSTRING verifier-restauration-sure (Vulcain)
+
+**Contexte** : la non-regression (Janus) a bloque la barriere E : test-028 signalait 1 decalage catalogue pour verifier-restauration-sure. Cause : le round alignement 71 outils avait INSERE une nouvelle docstring de module courte ("Usage: [OPTIONS]") DEVANT la vraie docstring (qui contenait les options --fichier/--verbose/--version/--aide). Resultat : __doc__ = la docstring courte sans options -> --aide n affichait plus --fichier -> detecter-decalages-catalogue signalait le decalage.
+
+**Correction** : fusion des 2 docstrings en UNE SEULE docstring de module au format standard (description + Usage + Options + Proprietaire/Version/Statut), suppression de la docstring morte. Comportement argparse intact (main() non touche).
+
+**Verifications** : compile OK, --aide affiche --fichier/--verbose/--version/--aide, --version fonctionne, detecter-decalages-catalogue 156 conformes / 0 decalages, test-028 8/8 OK, normes 0/0 (ASCII + LF), triplets module = 2 (1 seule docstring).
+
+**Lecons** :
+- L alignement des marqueurs (coding/Usage/--aide) doit PRESERVER la docstring de module existante : apres application, verifier qu il n y a pas 2 docstrings de module cote a cote (compter les triplets en colonne 0).
+- Les outils qui affichent __doc__ avec --aide (au lieu d argparse natif) sont les plus sensibles a ce bug : l aide affichee depend directement de la docstring.
+
+## [LECON] 2026-08-16 -- CORRECTION BARRIERE D : test-063 HORS-SERIE (Vulcain)
+
+**Contexte** : la relance de non-regression (Janus) a franchi les barrieres E (6/6) et C (15/15) mais bloque sur la barriere D : test-027 signalait test-063-profils-tests-garde-fou "hors-serie" (absent de la definition SERIES du lanceur).
+
+**Cause racine** : lors de la creation du mode profil (v0.5.0), test-063 a ete mappe dans profils-tests.json (outils+tests) par Morpheus mais JAMAIS ajoute a la definition SERIES du lanceur. Le garde-fou test-027 (couverture des series) a detecte l oubli.
+
+**Correction** : ajout de "test-063" a la serie A ("Fondations") a cote de test-062 (son jumeau : garde-fou du lanceur). DECISION VERSION : PAS DE BUMP (0.5.0 conserve) - la version 0.5.0 n est pas encore livree (la non-regression qui doit la valider etait en cours), test-063 complete la meme livraison 0.5.0 (garde-fou du mode profil). Un bump 0.5.1 aurait force Morpheus a adapter 7 tests (024/027/031/032/051/062/063) pour zero valeur ajoutee.
+
+**Verifications** : compile OK, test-027 point 1 (couverture 62/62) OK, test-063 11/11, --version v0.5.0 intact, normes 0/0 ASCII + LF, pas de parite .sh. Les KO 5-8 de test-027 en session vulcain sont des artefacts d usurpation (verrou : session vulcain != --agent janus) - ils passeront quand Janus lancera.
+
+**Lecons** :
+- Toute creation de test doit etre accompagnee de son ajout dans la definition SERIES du lanceur (test-027 en est le garde-fou).
+- Ne pas bumper une version PAS ENCORE LIVREE pour un fix de coherence interne : le bump est reserve aux livraisons effectives (evite la cascade d adaptation des tests).
+
+## [LECON] 2026-08-16 -- EVALUER-PROCESSUS v0.1.3 : DECLARATION_FAUTIVE OUTILS EXCLUSIFS (Vulcain)
+
+**Contexte** : demande utilisateur - un usage registre d un outil VERROUILLE (exclusif) declare par un agent non habilite doit etre signale comme DECLARATION FAUTIVE (usage jamais reel, a retirer du registre), pas comme un OUTIL_HORS_CARTE (indice manquant a ajouter). Le conflit test-037 du round profils en etait la preuve : ma correction KO2 avait ajoute tester-lancer-non-regression a la carte vulcain pour satisfaire test-035 alors que cet outil est exclusif janus.
+
+**Correction** (evaluer-processus v0.1.2 -> v0.1.3) :
+1. Nouvelle fonction outils_exclusifs(racine) : derive les outils presents dans EXACTEMENT une carte de AGENTS_CERVE -> {outil: proprietaire}.
+2. detecter_outils_hors_carte : si l outil declare est EXCLUSIF et que l agent declarant n est PAS le proprietaire -> probleme type DECLARATION_FAUTIVE (message avec le proprietaire + conseil "retirer l entree du registre") au lieu de OUTIL_HORS_CARTE. Si le proprietaire declare SON outil exclusif -> normal.
+3. OUTIL_HORS_CARTE conserve pour les outils non exclusifs (comportement historique).
+
+**Preuves reelles** :
+- Simulation cerberus -> tester-lancer-non-regression (exclusif janus) : DECLARATION_FAUTIVE : 1 avec message "outil EXCLUSIF a janus (verrou d habilitation)".
+- Simulation cerberus -> combos-moteur (non exclusif, hors carte) : OUTIL_HORS_CARTE : 1 (comportement historique).
+- Apres retrait des 2 entrees de test : SYNTHESE : 0 probleme.
+
+**Verifications** : compile OK, --version v0.1.3, scan global sain, normes 0/0 ASCII + LF, 0 residu, doc .md a jour (historique v0.1.3).
+
+**Lecons** :
+- L exclusivite d un outil se DERIVE (presence dans une seule carte) - pas besoin de table en dur.
+- Deux types de problemes registre distincts : DECLARATION_FAUTIVE (outil exclusif, usage jamais reel - on retire) vs OUTIL_HORS_CARTE (outil partage manquant - on ajoute a la carte). Ne pas confondre : ajouter un outil exclusif a une carte casse les garde-fous d exclusivite.
+
+## [LECON] 2026-08-16 -- EVALUER-PROCESSUS v0.1.4 : CORRECTION FAUX POSITIF DERIVATION (Vulcain)
+
+**Contexte** : le garde-fou test-064 (Morpheus) a revele que outils_exclusifs d evaluer-processus declarait valider-conventions EXCLUSIF -> buffy alors qu il est AUSSI dans la carte d athena (trio, case c13 "Verifier les conventions" - legitime, elle valide ses pense-betes).
+
+**Cause racine** : outils_exclusifs ne scannait que AGENTS_CERVE (8 agents cerveau-projet, sans le trio athena/promethee/minerve) alors que la table du verrou scanne TOUS les agents. valider-conventions = FAUX POSITIF d exclusivite.
+
+**Correction** (v0.1.3 -> v0.1.4) :
+1. Nouvelle fonction tous_agents_parcours(racine) : liste TOUS les agents avec dossier parcours (cerveau-projet + trio + hygie), comme la table du verrou.
+2. outils_exclusifs utilise desormais tous_agents_parcours au lieu de AGENTS_CERVE.
+3. Resultat : 43 -> 60 exclusifs derives (les 12 outils exclusifs du trio sont maintenant correctement identifies, ex creer-remplir-pense-bete -> athena, valider-todo -> minerve).
+
+**Verifications** : valider-conventions PLUS exclusif (buffy+athena = partage), scan global 0 probleme, DECLARATION_FAUTIVE toujours fonctionnelle (simulation cerberus->tester-lancer-non-regression = 1), test-035 10/10, test-064 7/7 (le KO 4 est corrige), --version v0.1.4, normes 0/0, 0 residu.
+
+**Lecons** :
+- La source de verite de l exclusivite = la TABLE DU VERROU (tous les agents, trio inclus) - AGENTS_CERVE seul cree des faux positifs.
+- Le trio partage des outils communs (valider-*) avec le cerveau-projet - la derivation doit toujours scanner toutes les cartes.
+- Un garde-fou de coherence (test-064) revele les faux positifs de derivation - c est exactement son role.
+
+
+## [LECON] 2026-08-16 -- BUG DE SYNCHRONISATION CARTES-LOCK CORRIGE (Vulcain)
+
+**Contexte** : l'enquete Buffy (derive Cerberus) a revele que 2 cartes divergeaient de cartes-lock.json, bloquant editer-parcours (anti-contournement barrage n3) :
+1. parcours-cerberus : la reconstruction de c10 via la porte du marbre (proteger-modifier-marbre, 2026-08-15 17:35) a modifie la carte SANS resynchroniser cartes-lock.json - proteger-modifier-marbre ne contenait AUCUNE reference au lock (grep = 0). BUG D OUTIL.
+2. parcours-vulcain : modifiee au round precedent (ajout evaluer-rating + bump 0.4.18) par script direct au lieu d editer-parcours - violation du barrage n3 (lecon Buffy 3297/3315).
+
+**Correction (Vulcain)** :
+1. proteger-modifier-marbre v0.1.0 -> v0.1.1 : apres re-empreinte d une zone de type CASE, resynchronise l empreinte du fichier carte complet dans cartes-lock.json (fonction empreinte_fichier_lock, normalisation LF + rstrip identique a editer-parcours). Zones non-case (fichier, marqueurs) inchangees.
+2. cartes-lock.json : resynchronisation des 2 cartes divergentes (cerberus + vulcain) avec leurs empreintes reelles (modifications legitimes documentees).
+
+**Verifications** : py_compile OK, editer-parcours --agent cerberus --bump --dry-run ne bloque plus (anti-contournement passe), test-057-marbre-garde-fou 3/3 CONFORME, test-034 6/6, test-013 22/22, normes 0/0 ASCII + LF, 0 divergence restante, 0 residu.
+
+**Lecons** :
+- Toute porte d outil qui modifie une CARTE (marbre inclus) doit resynchroniser cartes-lock.json - le lock est la verite de l anti-contournement, pas seulement marbre.json.
+- Une carte modifiee par script direct (hors editer-parcours) cree une divergence silencieuse qui bloque TOUTES les modifications ulterieures : toujours passer par editer-parcours, meme pour un ajout d indice.

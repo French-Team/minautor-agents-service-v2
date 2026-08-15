@@ -183,6 +183,8 @@ def main():
     parser.add_argument("--rapport", default="", help="Chemin du rapport markdown")
     parser.add_argument("--verbose", action="store_true", help="Detail des fichiers scannes")
     parser.add_argument("--version", action="version", version="detecter-evaluations-incompletes v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if not args.motif:

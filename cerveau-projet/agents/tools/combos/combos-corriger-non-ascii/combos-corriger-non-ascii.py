@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # combos-corriger-non-ascii.py
 # Combo corriger-non-ascii : detecte et corrige les accents et emojis
 # Ressource partagee : utilise par Themis, Buffy, ou tout autre agent
@@ -6,6 +7,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+combos-corriger-non-ascii.py
+combos-corriger-non-ascii
+
+Usage:
+  combos-corriger-non-ascii.py [OPTIONS]
+"""
+
 VERSION = "0.2.1-py"
 STATUT = "beta"
 
@@ -92,6 +101,8 @@ def main():
     parser.add_argument("--all", action="store_true", help="Corriger TOUS les accents (texte francais et titres)")
     parser.add_argument("--rapport", action="store_true", help="Sauvegarder un rapport dans themis/rapports/")
     parser.add_argument("--version", action="version", version="combos-corriger-non-ascii " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     dossier = args.dossier.rstrip("/")

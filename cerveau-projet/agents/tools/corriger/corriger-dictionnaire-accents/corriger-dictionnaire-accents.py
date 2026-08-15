@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: ascii -*-
 # corriger-dictionnaire-accents.py
 # Outil pour detecter et corriger les accents et caracteres non-ASCII
 # Conforme a la regle regles-emojis-ascii.md
@@ -9,6 +10,14 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
+"""
+corriger-dictionnaire-accents.py
+corriger-dictionnaire-accents
+
+Usage:
+  corriger-dictionnaire-accents.py [OPTIONS]
+"""
+
 VERSION = "0.2.2-py"
 STATUT = "beta"
 
@@ -68,6 +77,8 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--dictionnaire", default=None, help="Chemin vers le dictionnaire (defaut: celui de l'outil)")
     parser.add_argument("--version", action="version", version="corriger-dictionnaire-accents " + VERSION + " (" + STATUT + ")")
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     if args.dictionnaire:

@@ -21,6 +21,14 @@
 #   appartient_a: commun
 #   commun: true
 
+"""
+detecter-convention-nommage.py
+detecter-convention-nommage
+
+Usage:
+  detecter-convention-nommage.py [OPTIONS]
+"""
+
 import argparse
 import io
 import os

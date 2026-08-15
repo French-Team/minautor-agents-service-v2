@@ -3,7 +3,7 @@
 """
 test-051-registre-tests.py
 GARDE-FOU : le registre-tests (trace des lancements de tests par les agents)
-existe et fonctionne. Le lanceur tester-lancer-non-regression v0.4.5 journalise
+existe et fonctionne. Le lanceur tester-lancer-non-regression v0.5.0 journalise
 CHAQUE test execute dans cerveau-projet/agents/traces/registre-tests.jsonl
 (date, agent, serie, test, verdict, duree) quand --agent est fourni - et
 UNIQUEMENT dans ce cas. Le registre-tests est DISTINCT de
@@ -15,7 +15,7 @@ laisser une trace dans un registre dedie. La mission a ete realisee par
 Vulcain (outil v0.4.1) puis verifiee ici.
 
 Cas couverts:
-  1. Le lanceur est v0.4.5 (--version)
+  1. Le lanceur est v0.5.0 (--version)
   2. L aide contient l option --agent
   3. Le registre-tests est DISTINCT de registre-usages-outils (chemins differents)
   4. PREUVE REELLE positive : run --series c --agent X -> des entrees creees
@@ -121,7 +121,7 @@ def main():
 
     # 1. Version du lanceur
     out = run([sys.executable, LANCER, "--version"])
-    verifier("1. lanceur v0.4.5 (--version)", "v0.4.5" in out, out.strip())
+    verifier("1. lanceur v0.5.0 (--version)", "v0.5.0" in out, out.strip())
 
     # 2. Option --agent dans l aide
     out = run([sys.executable, LANCER, "--help"])

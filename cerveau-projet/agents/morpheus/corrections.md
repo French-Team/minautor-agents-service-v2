@@ -2658,3 +2658,120 @@ registre) sont conservees telles quelles.
 **Lecon** : avant de creer un nouveau test, verifier que le numero n existe pas
 deja (uniq sur les prefixes). A generaliser par un garde-fou de numerotation
 unique (proposition a Janus/Cerberus).
+
+## [LECON] 2026-08-15 -- GARDE-FOU TEST-062 RATING + ADAPTATIONS VERSIONS (Morpheus)
+
+**Contexte** (mission Vulcain -> Morpheus) : outil evaluer-rating v0.1.0 cree
+(note ponderee /100 par profil), protection 'rating' dans tester-protections
+v0.2.0, template-test v0.4.0 (bloc PROTECTIONS.afficher_rating), lanceur
+v0.4.6 (rating des series + general en fin de run). Catalogue 161->162,
+index-tools 179->180.
+
+**Travail fait** :
+1. Adapte les 5 tests pincant la version du lanceur v0.4.5 -> v0.4.6 :
+   test-024, test-027, test-031, test-032, test-051 (occurrences actives
+   uniquement, commentaires historiques 'round 20' conserves).
+2. Adapte test-024 (catalogue 161->162) et test-007 (catalogue 161->162,
+   index-tools 179->180) suite a l ajout d evaluer-rating.
+3. Cree test-062-rating-protection (11 points) : protection 'rating' dans
+   LISTE_PROTECTIONS, def afficher_rating, bloc template-test, evaluer-rating
+   v0.1.0 compile + options --profil/--cible/--tous/--general, lanceur v0.4.6
+   + afficher_rating_fin_de_run, preuve reelle --general, 5 profils poids=100,
+   normes, doc. Ajoute a la serie a (14 tests). 61 tests disque = 61 en series.
+4. Preuve negative : retirer la protection 'rating' -> test-062 KO (detecte),
+   restauration OK. Le test affiche son propre rating (67.5/100 MOYEN) -> la
+   protection fonctionne de bout en bout.
+
+**Lecons** :
+- Le bug UnboundLocalError (global NB_POINTS/NB_OK/NB_KO manquant en tete de
+  main()) documente dans le template v0.3.0 est REEL : je l ai reproduit sur
+  test-062. Toujours mettre le global en tete de main().
+- --aide d un outil affiche le docstring : ajouter les nouvelles options
+  (--general) au docstring quand on les ajoute a argparse.
+- Les KO des tests qui appellent le lanceur reel (027/031/032) en session
+  morpheus sont des artefacts du verrou : seuls les points --version passent.
+  Janus les passera tous quand il lancera la suite.
+
+## [LECON] 2026-08-15 -- VERSIONS LANCEUR ADAPTEES v0.4.6 -> v0.4.7 (Morpheus)
+
+**Contexte** (mission Vulcain) : tester-lancer-non-regression aligne sur le
+modele standard (shebang + coding ascii + docstring Usage + --aide) -> bump
+v0.4.6 -> v0.4.7. Conformite outil 100% (evaluer-rating).
+
+**Travail fait** : adapte les 6 tests pincant v0.4.6 -> v0.4.7 : test-024,
+test-027, test-031, test-032, test-051 (occurrences actives uniquement,
+commentaires historiques conserves) + test-062 (5 occurrences : docstring,
+invariants, point 6).
+
+**Verification** : test-062 11/11 OK (point 6 v0.4.7), test-029/030/044
+templates verts, points version de 031/032 OK, normes 0/0. Les KO des tests
+qui appellent le lanceur reel (027/031/032) restent des artefacts du verrou
+(session morpheus) - Janus les passera.
+
+## [LECON] 2026-08-16 -- PROFILS DE TESTS : TEST-063 GARDE-FOU + ADAPTATION VERSIONS (Morpheus)
+
+**Contexte** : Vulcain a livre le mode profil du lanceur (v0.5.0, profils-tests.json avec 6 profils : cartes/outils/tests/fiches-agents/docs/registre, options --profil/--fichiers, deduction auto par fichiers modifies). Mission Morpheus : adapter les 6 tests pincent la version 0.4.7 -> 0.5.0 et creer le garde-fou test-063.
+
+**Ce qui a ete fait** :
+1. Adaptation de 6 tests (024, 027, 031, 032, 051, 062) : v0.4.7 -> v0.5.0, occurrences actives uniquement (21 remplacements). test-013/016 pincent la version du PARCOURS (cerberus/buffy 0.4.7) -> non touches.
+2. Creation test-063-profils-tests-garde-fou : 11 points (json valide, 6 profils, noms exacts, completude, couverture 62/62, zero reference morte, options --profil/--fichiers, 4 fonctions, deduction auto 5 cas reels + inconnu vide, normes ASCII/LF). 11/11 OK.
+3. Preuve negative reelle : retrait de test-063 des profils -> KO point 5 (couverture) detecte, puis restauration.
+4. Correction decouverte au passage : profils-tests.json etait en CRLF (161) -> corriger-fins-de-ligne (LF pur 0 CRLF).
+5. test-063 ajoute aux profils outils+tests du JSON (comme test-062).
+
+**Lecons** :
+- Le JSON profils-tests.json stocke les PREFIXES test-0XX (8 premiers caracteres), pas les noms complets de dossiers - meme format que filtrer_tests_par_profils (basename[:8]).
+- json.dump sous Windows ecrit des CRLF (newline par defaut) - toujours newline='\n' pour un fichier projet.
+- Toujours verifier que le nouveau test lui-meme est mappe dans les profils (anti-orphan) - c'est le point 5 du garde-fou qui l'a revele au premier run.
+
+**Verifications** : test-063 11/11 + preuve negative, test-029 14/14, test-044 15/15, test-030 10/10, test-007 15/15, normes 0/0 ASCII/LF, 0 residu temp.
+
+## [LECON] 2026-08-16 -- TEST-035 ETENDU : DECLARATION_FAUTIVE OUTILS EXCLUSIFS (Morpheus)
+
+**Contexte** : Vulcain a enrichi evaluer-processus v0.1.3 (DECLARATION_FAUTIVE pour les outils exclusifs). Mission Morpheus : adapter test-035 pour verifier le nouveau comportement.
+
+**Ce qui a ete fait** :
+1. Nouveau point 5 : simulation d une entree registre TEMPORAIRE fautive (cerberus -> tester-lancer-non-regression, exclusif janus, date du jour), verification que evaluer-processus affiche DECLARATION_FAUTIVE (et PAS OUTIL_HORS_CARTE), retrait en try/finally garanti (0 residu).
+2. Nouveau point 6 : l outil exclusif declare par SON proprietaire (janus -> tester-lancer-non-regression) reste sain (rc=0).
+3. Numerotation decalee (normes 7/8), docstring mise a jour (v0.1.3).
+4. PREUVE NEGATIVE reelle : desactivation temporaire de la branche DECLARATION_FAUTIVE dans l outil (remplacement du type par OUTIL_HORS_CARTE) -> point 5 KO (fautive=False) ; restauration -> 10/10.
+
+**Verifications** : test-035 10/10 + preuve negative, test-029 14/14, test-044 15/15, normes 0/0 ASCII + LF, 0 residu registre (aucune ligne TEST-035 preuve restante).
+
+**Lecons** :
+- Simuler une entree registre fautive avec date du jour = seule facon de tester la fenetre temporelle de usages_registre (FENETRE_JOURS=1).
+- Le try/finally garantit le retrait meme si evaluer-processus leve une exception - jamais de residu de test dans le registre.
+- La preuve negative (desactiver la branche -> KO) prouve que le point 5 depend bien de la detection, pas d un faux positif.
+
+## [LECON] 2026-08-16 -- TEST-064 EXCLUSIVITES COHERENCE : REVELE UN FAUX POSITIF (Morpheus)
+
+**Contexte** : audit Cerberus (43 outils exclusifs) -> creation d un garde-fou de coherence globale (demande utilisateur) : regles de gouvernance documentees vs table du verrou vs cartes.
+
+**Ce qui a ete fait** :
+1. Creation test-064-exclusivites-coherence : 7 points (outils cles des 5 regles dans les cartes du proprietaire, 7 outils cles dans la table du verrou, exclusifs veritables verrouilles (14 outils testes), aucun faux positif vs TOUTES les cartes (trio inclus), preuve reelle cerberus->guider-parcours BLOQUE, normes).
+2. test-064 ajoute aux profils-tests.json (outils+tests) ET a la SERIES A du lanceur.
+3. Le point 4 a REVELE UN BUG REEL : valider-conventions derive exclusif -> buffy par evaluer-processus mais en realite AUSSI dans la carte d athena (trio, case c13 "Verifier les conventions" - legitime, elle valide ses pense-betes).
+
+**Cause du bug** : la fonction outils_exclusifs d evaluer-processus ne scanne que AGENTS_CERVE (8 agents cerveau-projet, sans le trio athena/promethee/minerve) alors que la table du verrou scanne TOUS les agents. -> valider-conventions est un FAUX POSITIF d exclusivite.
+
+**Verifications** : test-064 6/7 (le KO 4 est le bug reel a corriger par Vulcain), test-063 11/11, test-027 point 1 couverture OK, normes 0/0, 0 residu.
+
+**Lecons** :
+- La source de verite de l exclusivite est la TABLE DU VERROU (tous les agents, trio inclus), pas la derivation AGENTS_CERVE seule.
+- Un garde-fou de coherence revele les faux positifs de derivation - c est son role exact.
+- Le trio (athena/promethee/minerve) utilise des outils communs (valider-*) - l exclusivite derivee doit toujours etre recoupee avec toutes les cartes.
+
+
+## [LECON] 2026-08-16 -- ADAPTATION TEST-013 (0.4.8) + TEST-057 (0.1.1) (Morpheus)
+
+**Contexte** : la chaine de correction de la derive Cerberus (Buffy a renforce c1/c5/c18, bump carte cerberus 0.4.8 ; Vulcain a corrige proteger-modifier-marbre v0.1.1) a casse 2 tests qui pincent des versions en dur.
+
+**Correction (Morpheus)** :
+1. test-013-cerberus-migration : version 0.4.7 -> 0.4.8 (en-tete, cas couverts, verifier point 1) + ligne d historique v0.4.8 documentee (GARDE-FOUS C1/C5/C18 renforces).
+2. test-057-marbre-garde-fou : point 'modifier --version' 0.1.0 -> 0.1.1 (bump proteger-modifier-marbre par Vulcain).
+
+**Verifications** : test-013 22/22, test-057 24/24 CONFORME, test-034 6/6, normes 0/0 ASCII + LF, 0 residu. Le verrou d habilitation a bloque ma tentative de lancer la serie A (seul janus lance la non-regression) - comportement CORRECT, la suite complete revient a Janus.
+
+**Lecons** :
+- Tout bump de version (carte ou outil) casse les tests qui pincent la version en dur : verifier test-013 (cartes) et test-057 (marbre) systematiquement apres un bump.
+- Un test qui passe localement ne suffit pas : le verrou garantit que SEUL Janus valide la non-regression - la verification complete revient au controleur.

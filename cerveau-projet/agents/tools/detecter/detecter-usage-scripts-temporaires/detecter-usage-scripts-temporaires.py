@@ -174,6 +174,8 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Detail par source")
     parser.add_argument("--version", action="version",
                         version="detecter-usage-scripts-temporaires v%s" % VERSION)
+    parser.add_argument("--aide", action="help",
+                  help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
     racine = racine_projet()

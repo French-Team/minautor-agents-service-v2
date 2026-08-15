@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-cerberus",
   "agent": "cerberus",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "case_depart": "c0",
   "description": "v0.4.6 : + indice outil c10 combos-analyse-projet (usage reel registre, garde-fou test-035)"
  },
@@ -91,7 +91,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "GARDE-FOU C1 : TOUTE tache d execution (verifier, corriger, creer, modifier, tester) -> activer l agent habilite. Jamais executer seul."
+     "texte": "GARDE-FOU C1 : VERIFICATION/AUDIT/ANALYSE -> AUTRE -> c18 -> c22 (Themis). Execution -> ACCUEIL -> c5 -> c6. JAMAIS analyser avant activer."
     }
    ]
   },
@@ -137,6 +137,10 @@
    "type": "controle",
    "question": "L'agent habilite est-il identifie (matrice regles-choisir-agent) ?",
    "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C5 : VERIF/AUDIT/ANALYSE -> Themis (c22). Execution -> activer la matrice. Aucune analyse avant activation."
+    },
     {
      "type": "fichier",
      "chemin": "cerveau-projet/agents/regles-immuables/general/regles-choisir-agent.md",
@@ -393,7 +397,7 @@
   "c18": {
    "titre": "Inventaire / audit ?",
    "type": "question",
-   "question": "La demande est-elle un inventaire, un audit ou une analyse du cerveau-projet ?",
+   "question": "La demande est-elle un inventaire, un audit, une analyse ou une VERIFICATION (croiser/verifier/comparer) du cerveau-projet ?",
    "branches": [
     {
      "reponse": "OUI",
@@ -402,6 +406,12 @@
     {
      "reponse": "NON",
      "vers": "c23"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C18 : OUI -> c22 (Themis audite, jamais moi). NON -> c23. Je n analyse jamais : j active."
     }
    ]
   },

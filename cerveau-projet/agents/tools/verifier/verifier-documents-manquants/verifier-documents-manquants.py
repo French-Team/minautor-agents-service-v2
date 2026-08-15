@@ -127,7 +127,7 @@ def main(argv):
             dry_run = True
         elif arg == "--verbose":
             verbose = True
-        elif arg in ("--help", "-h"):
+        elif arg in ("--aide", "--help", "-h"):
             help_demande = True
         elif arg == "--version":
             print("verifier-documents-manquants v%s (%s)" % (VERSION, STATUT))
