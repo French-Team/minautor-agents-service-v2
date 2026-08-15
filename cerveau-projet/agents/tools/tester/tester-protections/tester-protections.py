@@ -60,6 +60,32 @@ PROTECTIONS_ACTIVES = [
     "stop",
 ]
 
+# LISTE CENTRALE DES PROTECTIONS (deploiement dynamique, demande utilisateur
+# 2026-08-15) : ajouter une protection ICI la deploie automatiquement sur TOUS
+# les tests qui importent ce module (template-test.md comme constructeur).
+# Chaque entree : nom, type (stop / signal / chrono), deploiement
+# (amont = au debut du test, aval = en fin de test), description.
+LISTE_PROTECTIONS = [
+    {"nom": "boucles-infinies", "type": "stop",
+     "deploiement": "amont",
+     "description": "Depassement de delai : arret force de l arbre (timeout)"},
+    {"nom": "erreurs-silencieuses", "type": "signal",
+     "deploiement": "aval",
+     "description": "stderr non vide / mots-cles d erreur : signalement (le test juge)"},
+    {"nom": "blocage", "type": "stop",
+     "deploiement": "amont",
+     "description": "Pas de reponse pendant X sec : arret force + STOP"},
+    {"nom": "stop", "type": "stop",
+     "deploiement": "aval",
+     "description": "Point critique en echec : arret immediat du test (fail-fast)"},
+    {"nom": "chrono", "type": "chrono",
+     "deploiement": "amont+aval",
+     "description": "Mesure des durees par etape (point_actif / chrono_etape / bilan_chrono) + option --no-chrono"},
+    {"nom": "options-on-off", "type": "outil",
+     "deploiement": "amont",
+     "description": "--isoler N / --desactiver 1,3,5 : isoler un test ou desactiver des points sans toucher au code"},
+]
+
 TIMEOUT_DEFAUT = 120
 MOTS_CLES_ERREUR = ("error", "erreur", "failed", "echec", "exception", "fatal")
 
@@ -219,9 +245,10 @@ def _cli():
                         help="Affiche la liste des protections actives")
     args = parser.parse_args()
     if args.liste:
-        print("Protections actives (%d) :" % len(PROTECTIONS_ACTIVES))
-        for nom in PROTECTIONS_ACTIVES:
-            print("  - %s" % nom)
+        print("LISTE CENTRALE DES PROTECTIONS (%d) :" % len(LISTE_PROTECTIONS))
+        for p in LISTE_PROTECTIONS:
+            print("  - %-18s [%-6s] %-9s %s" % (p["nom"], p["type"],
+                                                p["deploiement"], p["description"]))
         return 0
     return 0
 

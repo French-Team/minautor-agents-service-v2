@@ -6,7 +6,7 @@ identite:
 ---
 # detecter-divergences-version
 
-**Version :** 0.1.0
+**Version :** 0.2.0
 **Statut :** ebauche
 **Categorie :** Detecter
 **Chemin :** `agents/tools/detecter/detecter-divergences-version/`

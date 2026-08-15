@@ -1,7 +1,7 @@
 #!/bin/bash
 # inserer-contenu-fichier.sh
 # Inserer du contenu a une position precise dans un fichier
-# Version : 0.3.0
+# Version : 0.3.1
 
 # identite:
 #   type: outil

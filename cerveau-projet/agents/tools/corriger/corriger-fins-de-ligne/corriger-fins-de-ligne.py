@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # corriger-fins-de-ligne.py
 # Convertit les fins de ligne CRLF vers LF sur un fichier ou un dossier (--recursive)
-# Version : 0.1.0
+# Version : 0.1.1
 # Statut : prepare
 
 # identite:

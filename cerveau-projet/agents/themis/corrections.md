@@ -1053,3 +1053,27 @@ utilisateur est claire : un seul registre. Simplification executee.
    principal 0.5.3 vs outil 0.5.4, bump Vulcain a traiter).
 5. Les 15 scripts non declares du detecteur sont des mentions HISTORIQUES
    (lecons/git) preexistantes, pas liees a la fusion.
+
+
+## [LECON] 2026-08-15 -- AUDIT CHRONO + DIAGNOSTIC NON-ACTIVATION THEMIS (Themis)
+
+**Contexte** : 3 demandes utilisateur - (1) verifier la generalisation du
+triplet chrono, (2) comprendre pourquoi Themis ne s active plus, (3) reclasser
+les series par frequence de KO.
+
+**Resultats de l audit** :
+1. CHRONO : le triplet est PRESENT dans 12/56 tests (21%) et 1/119 outils .py
+   (1%) - il n est PAS generalise. Decision connue : le template v0.3.0
+   l impose aux NOUVEAUX tests, les existants ne sont pas migres. Le vrai trou
+   est dans les OUTILS (1% seulement).
+2. THEMIS : cause racine = l axe D (declencheur automatique avant Janus) est
+   documente dans la FICHE mais PAS branche dans les CARTES. Toutes les fins
+   principales vont directement a Janus (FIN - Activer Janus). Themis est hors
+   de la route de fin de mission.
+3. SERIES : ordre fixe a,b,c,d,e ; donnees KO disponibles dans le registre-tests
+   pour un reclassement dynamique par taux de KO.
+
+**Lecon** : une regle documentee dans une FICHE sans etre branchee dans les
+CARTES (ou les outils) est INEFFECTIVE - c est exactement le bug de
+non-activation de Themis. Verifier que toute regle "automatique" est meca-
+nisee dans les parcours/outils, pas seulement ecrite.

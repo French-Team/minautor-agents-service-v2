@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # ajouter-contenu-fichier.py
 # Ajouter du contenu a la fin d'un fichier (append)
-# Version : 0.2.0
+# Version : 0.3.0
 # Statut : ebauche
 # identite:
 #   type: outil

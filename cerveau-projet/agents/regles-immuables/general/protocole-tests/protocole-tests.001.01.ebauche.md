@@ -10,7 +10,7 @@ identite:
 
 protocole:
   nom: "protocole-tests"
-  version: "0.3.2"
+  version: "0.3.4"
   statut: "ebauche"
   cree: "2026-08-06"
 
@@ -35,6 +35,46 @@ des qu une erreur critique survient.
 > **REGLE ABSOLUE** : Les tests doivent etre ENVELOPPES par des protections qui
 > controlent, analysent et interviennent sur leur deroulement. Un test sans
 > protection (timeout, arret de l arbre, STOP fail-fast) n est pas un test.
+
+## REGLE IMMUABLE : BANNIR LES TIMEOUTS EXTERIEURS (v0.3.3, demande utilisateur 2026-08-15)
+
+> **REGLE ABSOLUE** : AUCUN timeout exterieur autour de l execution des tests
+> (jamais de `timeout <s>` autour de la commande, jamais de timeout impose par
+> un script appelant). La seule gestion du delai est INTERNE : les protections
+> `lancer_protege` (timeout + tuer l arbre) dans chaque test, et le timeout du
+> lanceur (tester-lancer-non-regression) comme DETECTEUR d erreur silencieuse.
+>
+> La logique ternaire, pour UN test, UNE serie, LA SUITE (demande utilisateur) :
+>
+> 1. **REUSSITE** -> afficher immediatement (le lanceur ne JAMAIS attendre la
+>    fin du timeout pour continuer : des que le test rend la main, on avance) ;
+> 2. **ERREUR** -> stop immediat (protection STOP fail-fast) ;
+> 3. **TIMEOUT** (fin du delai programme SANS reponse ni erreur directe) ->
+>    c est une ERREUR SILENCIEUSE a trouver/a resoudre : le lanceur affiche
+>    `ERREUR SILENCIEUSE (timeout)` et l agent RELANCE le script ou fichier
+>    corrige. Un timeout exterieur couperait la suite sans rien expliquer :
+>    banni.
+
+## REGLE IMMUABLE : ZERO TIMEOUT EXTERNE D ORCHESTRATION (v0.3.4, decision utilisateur 2026-08-15)
+
+> **REGLE ABSOLUE (decision utilisateur)** : les outils d ORCHESTRATION (les
+> commandes qui lancent les tests depuis le terminal) n imposent AUCUN
+> timeout externe sur l execution des tests et scripts conformes : l attente
+> est INDEFINIE, et c est L UTILISATEUR qui est le DERNIER RECOURS (il
+> interrompt manuellement si besoin).
+>
+> Les protections INTERNES sont les SEULES a trancher un blocage :
+>
+> - `lancer_protege` (timeout + tuer l arbre) dans chaque test ;
+> - le timeout du lanceur comme DETECTEUR d erreur silencieuse (verdict
+>   `ERREUR SILENCIEUSE (timeout)`) ;
+> - le triplet des outils temporaires (dry-run, gestion erreur).
+>
+> Un timeout d orchestration dimensionne au plus juste peut tuer un test
+> legitime (machine chargee, pool, execution plus lente que prevu) au
+> detriment des agents : AUCUN. L utilisateur observe et intervient.
+
+## REGLE IMMUABLE : PROTECTIONS + OPTIONS ON/OFF + CHRONO (v0.3.2)
 
 ## REGLE IMMUABLE : PROTECTIONS + OPTIONS ON/OFF + CHRONO (v0.3.2)
 

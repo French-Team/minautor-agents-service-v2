@@ -6,7 +6,7 @@ identite:
 ---
 # generateurs-commande
 
-**Version :** 0.2.4
+**Version :** 0.2.5
 **Statut :** ebauche
 **Categorie :** Generateurs
 **Chemin :** `agents/tools/generateurs/generateurs-commande/`
@@ -20,6 +20,10 @@ C'est un menu interactif concu pour un agent (sans interface graphique) : l'outi
 **Source de verite** : chaque commande du catalogue (`catalogue-commandes.json`) est un copier-coller d'un appel d'outil **deja ecrit, corrige et valide** dans `agents/tools/`. Le generateur ne reinvente jamais une commande : il reutilise les modeles valides.
 
 **Catalogue v0.2.9** : **146 commandes** couvrant les outils reels du cerveau-projet (outils + combos + tests). Chaque entree contient le script, le modele compose et les parametres (texte, choix, flag) avec leurs questions.
+
+## Correctif v0.2.5 (2026-08-15, lecon Janus)
+
+**Journalisation du registre** : le generateur journalise son PROPRE NOM (`generateurs-commande`) dans le registre des usages, et non plus le nom de la COMMANDE du catalogue (ex `activer-activer`). Avant v0.2.5, chaque activation via le generateur creait une entree `activer-activer` (OUTIL_HORS_CARTE artificiel, garde-fou test-035) que Janus corrigeait manuellement a chaque tour. La commande generee complete reste dans le champ `commande` du registre (veracite preservee).
 
 ## REGLE IMMUABLE : prefixe du dossier
 

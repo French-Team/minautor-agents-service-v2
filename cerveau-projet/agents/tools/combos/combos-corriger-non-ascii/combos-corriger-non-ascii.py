@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION = "0.2.0-py"
+VERSION = "0.2.1-py"
 STATUT = "beta"
 
 import datetime
@@ -186,7 +186,7 @@ def main():
             "- Fichiers accents corriges : " + nb_accents,
         ]
         try:
-            rapport_file.write_text("\n".join(contenu) + "\n", encoding="utf-8")
+            rapport_file.write_text("\n".join(contenu) + "\n", encoding="utf-8", newline="")
             print("")
             print(GREEN + "Rapport sauvegarde : " + str(rapport_file) + NC)
         except OSError as e:

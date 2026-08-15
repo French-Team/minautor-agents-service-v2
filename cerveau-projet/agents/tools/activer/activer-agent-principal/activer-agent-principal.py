@@ -24,17 +24,18 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.5
+Version : 0.5.7
 Statut : prepare
 """
 
 import io
 import os
 import re
+import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.5.5"
+VERSION = "0.5.7"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -86,6 +87,9 @@ AGENTS = {
     "hermes": ("Agent de la langue -- orthographe, vocabulaire et fautes de francais commises par les agents",
                "cerveau-projet/agents/hermes/hermes.md",
                "cerveau-projet/agents/hermes/corrections.md"),
+    "gardien": ("Gardien du marbre -- propose la modification des zones protegees (l utilisateur valide), verifie l integrite du noyau",
+                 "cerveau-projet/agents/gardien/gardien.md",
+                 "cerveau-projet/agents/gardien/corrections.md"),
 }
 
 
@@ -97,6 +101,30 @@ def get_agent_info(agent):
 def verifier_ascii(chaine):
     """Retourner True si la chaine est 100% ASCII."""
     return all(ord(c) < 128 for c in chaine)
+
+
+def verrouiller_constitution():
+    """Verrou du marbre : refuser l ecriture si la zone constitution diverge.
+
+    Active uniquement en mode reel (AGENTS_FILE non surcharge par les tests).
+    Le verrou-marbre est la source unique du calcul d empreinte.
+    """
+    if os.environ.get("AGENTS_FILE"):
+        return True  # mode test : copies temporaires, marbre non applicable
+    outil = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..",
+                         "proteger", "proteger-verrou-marbre", "proteger-verrou-marbre.py")
+    try:
+        rc = subprocess.call([sys.executable, outil, "--zone", "constitution"])
+    except OSError as e:
+        print("[AVERTISSEMENT] verrou-marbre injoignable : %s" % e)
+        return True
+    if rc != 0:
+        print("")
+        print("[BLOQUE] MARBRE : la zone constitution a ete modifiee sans protocole.")
+        print("  Refus d ecrire dans AGENTS.md : le marbre protege la Constitution.")
+        print("  Protocole : cerveau-projet/agents/regles-immuables/general/protocole-securite-marbre.md")
+        return False
+    return True
 
 
 def verifier_fichier_ascii(fichier):
@@ -442,20 +470,38 @@ def ajouter_historique(timestamp, session, agent, raison):
     with io.open(AGENTS_HISTORIQUE, "r", encoding="utf-8", errors="replace") as fh:
         lignes = fh.readlines()
 
+    # v0.5.7 : anti-accumulation - quand une entree est purgee (au-dela de la
+    # limite MAX_ENTREES_HISTORIQUE), ses CONTINUATIONS (blocs DEMARRAGE,
+    # raisons multi-lignes) sont purgees AVEC elle. Le bug v0.5.4 conservait
+    # les lignes non-\| date \| sans limite : les continuations orphelines
+    # s accumulaient a la fin du fichier (1183 lignes de parasite).
     sortie = []
     insere = False
     compteur = 0
-    for ligne in lignes:
+    i = 0
+    while i < len(lignes):
+        ligne = lignes[i]
         if re.match(r"^\| 20[0-9][0-9]-", ligne):
             if not insere:
                 sortie.append(nouvelle_ligne + "\n")
                 insere = True
                 compteur += 1
             if compteur < MAX_ENTREES_HISTORIQUE:
+                # entree conservee : garder la ligne + ses continuations
                 sortie.append(ligne)
                 compteur += 1
+                i += 1
+                while i < len(lignes) and not re.match(r"^\| 20[0-9][0-9]-", lignes[i]):
+                    sortie.append(lignes[i])
+                    i += 1
+                continue
+            # entree au-dela de la limite : purger la ligne + ses continuations
+            i += 1
+            while i < len(lignes) and not re.match(r"^\| 20[0-9][0-9]-", lignes[i]):
+                i += 1
             continue
         sortie.append(ligne)
+        i += 1
     if not insere:
         sortie.append(nouvelle_ligne + "\n")
 
@@ -507,14 +553,18 @@ def mettre_a_jour_sessions_connues(contenu):
     for session, llm_id, agent, date in lignes:
         table += "| %s | %s | %s | %s |\n" % (session, llm_id, agent, date)
 
-    # Retirer une section existante (jusqu'a la prochaine section ##)
+    # Retirer une section existante (jusqu'a la prochaine section ## OU un
+    # marqueur du marbre <!-- MARBRE: --> : les outils ne doivent JAMAIS
+    # avaler les bornes des zones protegees - bug detecte par le marbre
+    # 2026-08-15 (le DEBUT de la zone constitution a ete mange par cette boucle)
     ls = contenu.split("\n")
     sortie = []
     i = 0
     while i < len(ls):
         if ls[i].strip() == "## Sessions connues":
             i += 1
-            while i < len(ls) and not ls[i].startswith("## "):
+            while i < len(ls) and not ls[i].startswith("## ") \
+                    and not ls[i].startswith("<!-- MARBRE:"):
                 i += 1
             continue
         sortie.append(ls[i])
@@ -834,6 +884,10 @@ def main(argv):
     if action == "--version":
         print("activer-agent-principal v%s (%s)" % (VERSION, STATUT))
         return 0
+
+    if action in ("sidentifier", "identifier", "activer", "reactiver"):
+        if not verrouiller_constitution():
+            return 1
 
     if action in ("sidentifier", "identifier"):
         session = argv[1] if len(argv) > 1 else None

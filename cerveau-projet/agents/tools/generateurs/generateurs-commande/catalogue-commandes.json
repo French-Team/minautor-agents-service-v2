@@ -176,6 +176,31 @@
    ]
   },
   {
+   "nom": "analyser-performance-tests",
+   "description": "Analyser la performance des tests (dernier run, du plus gros consommateur au moins)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/analyser/analyser-performance-tests/analyser-performance-tests.py",
+   "modele": "--top {top} --rapport {rapport}",
+   "parametres": [
+    {
+     "cle": "top",
+     "question": "Top N consommateurs ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--top",
+     "defaut": ""
+    },
+    {
+     "cle": "rapport",
+     "question": "Chemin du rapport markdown ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--rapport",
+     "defaut": ""
+    }
+   ]
+  },
+  {
    "nom": "analyser-structure",
    "description": "Analyser la structure du projet",
    "interpreteur": "python3",
@@ -194,6 +219,31 @@
      "type": "texte",
      "obligatoire": false,
      "flag": "--profondeur",
+     "defaut": ""
+    }
+   ]
+  },
+  {
+   "nom": "analyser-tokens",
+   "description": "Mesurer les tokens de la session (envoyes, recus, encombrement de la fenetre)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/analyser/analyser-tokens/analyser-tokens.py",
+   "modele": "--session {session} --rapport {rapport}",
+   "parametres": [
+    {
+     "cle": "session",
+     "question": "Session analysee ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--session",
+     "defaut": ""
+    },
+    {
+     "cle": "rapport",
+     "question": "Chemin du rapport markdown ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--rapport",
      "defaut": ""
     }
    ]
@@ -958,6 +1008,14 @@
    ]
   },
   {
+   "nom": "detecter-donnees-en-dur",
+   "description": "Detecte les donnees en dur (nombres magiques, chemins, URLs, versions, compteurs) sources de bugs caches et recommande le meilleur format de stockage",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/detecter/detecter-donnees-en-dur/detecter-donnees-en-dur.py",
+   "modele": "--tous",
+   "parametres": []
+  },
+  {
    "nom": "detecter-erreur-statut",
    "description": "Detecte les fichiers dont le statut ne correspond pas a leur contenu.",
    "interpreteur": "python3",
@@ -1306,10 +1364,10 @@
   },
   {
    "nom": "editer-parcours",
-   "description": "Edite les parcours de decision JSON de maniere sure : insertion/retrait de case, branche, suivant, bump version (dry-run par defaut)",
+   "description": "Edite les parcours de decision JSON de maniere sure : insertion/retrait de case, branche, suivant, contenu de case, bump version (dry-run par defaut, verrou anti-contournement)",
    "interpreteur": "python3",
    "script": "cerveau-projet/agents/tools/editer/editer-parcours/editer-parcours.py",
-   "modele": "--agent {agent} --inserer-case {inserer_case} --retirer-case {retirer_case} --vers {vers} --branche {branche} --reponse {reponse} --suivant {suivant} --cible {cible} --bump --wet",
+   "modele": "--agent {agent} --inserer-case {inserer_case} --retirer-case {retirer_case} --vers {vers} --branche {branche} --reponse {reponse} --suivant {suivant} --cible {cible} --modifier-case {modifier_case} --contenu {contenu} --bump --wet",
    "parametres": [
     {
      "cle": "agent",
@@ -1380,6 +1438,22 @@
      "obligatoire": false,
      "flag": "--bump",
      "defaut": false
+    },
+    {
+     "cle": "modifier_case",
+     "question": "Id de la case a remplacer ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--modifier-case",
+     "defaut": ""
+    },
+    {
+     "cle": "contenu",
+     "question": "Nouveau contenu JSON de la case ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--contenu",
+     "defaut": ""
     }
    ]
   },
@@ -2436,6 +2510,29 @@
    ]
   },
   {
+   "nom": "mettre-a-jour-versions",
+   "description": "Bump systematique et coherent des versions (le bumper) : outil, parcours, protocole, catalogue, version-readme",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-versions/mettre-a-jour-versions.py",
+   "modele": "{cible}",
+   "parametres": [
+    {
+     "cle": "cible",
+     "question": "Cible (dossier outil, fichier) ou option : --parcours <agent> / --protocole <chemin> / --version-readme / --catalogue ?",
+     "type": "texte",
+     "obligatoire": false,
+     "defaut": "--catalogue"
+    },
+    {
+     "cle": "mode",
+     "question": "Mode ? (defaut : dry-run ; --wet applique)",
+     "type": "texte",
+     "obligatoire": false,
+     "defaut": ""
+    }
+   ]
+  },
+  {
    "nom": "migrer-identite",
    "description": "Migrer les fichiers vers le schema hybride v0.2.0 de detecter-impacts",
    "interpreteur": "python3",
@@ -2503,6 +2600,61 @@
    "interpreteur": "python3",
    "script": "cerveau-projet/agents/tools/nettoyer/nettoyer-sessions/nettoyer-sessions.py",
    "modele": "",
+   "parametres": []
+  },
+  {
+   "nom": "proteger-modifier-marbre",
+   "description": "Protocole de modification du marbre : re-empreinte une zone protegee avec autorisation utilisateur obligatoire + journal",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/proteger/proteger-modifier-marbre/proteger-modifier-marbre.py",
+   "modele": "--zone <nom> --raison <texte> --autorisation <cle>",
+   "parametres": []
+  },
+  {
+   "nom": "proteger-verrou-habilitation",
+   "description": "Verrou d habilitation : bloque l utilisation d un outil par un agent non habilite + verifie l identite reelle de la session + journalise chaque usage (espionnage)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/proteger/proteger-verrou-habilitation/proteger-verrou-habilitation.py",
+   "modele": "--agent <agent> --outil <outil> [--audit]",
+   "parametres": [
+    {
+     "nom": "--agent",
+     "requis": true,
+     "description": "Nom de l agent appelant"
+    },
+    {
+     "nom": "--outil",
+     "requis": true,
+     "description": "Nom de l outil a utiliser"
+    },
+    {
+     "nom": "--audit",
+     "requis": false,
+     "description": "Mode tests : table sans identite reelle (reserve aux preuves formelles)"
+    },
+    {
+     "nom": "--liste",
+     "requis": false,
+     "description": "Affiche la table outil -> agents habilites"
+    },
+    {
+     "nom": "--verbose",
+     "requis": false,
+     "description": "Detail du verdict"
+    },
+    {
+     "nom": "--version",
+     "requis": false,
+     "description": "Affiche la version"
+    }
+   ]
+  },
+  {
+   "nom": "proteger-verrou-marbre",
+   "description": "Verrou du marbre : verifie l integrite des zones protegees (Constitution + cases critiques) via le manifeste marbre.json",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/proteger/proteger-verrou-marbre/proteger-verrou-marbre.py",
+   "modele": "--tous | --zone <nom> | --agent <nom>",
    "parametres": []
   },
   {
@@ -3159,19 +3311,11 @@
   },
   {
    "nom": "tester-lancer-non-regression",
-   "description": "Lance tous les tests formels (test-0XX) en pool de workers par defaut (--workers, min cpu 16) avec bilan OK/KO fiable, registre protege, chrono + reference de temps (--seuil, --rebase-reference)",
+   "description": "Lance tous les tests formels (test-0XX) en mode BARRIERES par defaut (series classees par importance, 100% verte pour franchir chaque barriere, STOP fail-fast au premier KO) avec bilan OK/KO fiable, chrono + reference de temps (--seuil, --rebase-reference) ; --parallele pour l ancien pool de workers",
    "interpreteur": "python3",
    "script": "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py",
-   "modele": "--workers {workers} --tests {tests} --rapport {rapport}",
+   "modele": "--tests {tests} --rapport {rapport} --seuil {seuil}",
    "parametres": [
-    {
-     "cle": "workers",
-     "question": "Nombre de workers paralleles (defaut : min(cpu_count, 16)) ?",
-     "type": "nombre",
-     "obligatoire": false,
-     "flag": "--workers",
-     "defaut": ""
-    },
     {
      "cle": "tests",
      "question": "Tests a filtrer (separes par virgules) ?",

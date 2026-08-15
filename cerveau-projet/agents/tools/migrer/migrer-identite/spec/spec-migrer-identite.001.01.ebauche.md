@@ -4,12 +4,12 @@ identite:
   appartient_a: commun
   commun: true
 ---
-# SPEC - migrer-identite v0.2.2 (ebauche)
+# SPEC - migrer-identite v0.2.3 (ebauche)
 
 | Champ | Valeur |
 |---|---|
 | **Nom** | migrer-identite |
-| **Version** | 0.2.2 |
+| **Version** | 0.2.3 |
 | **Statut** | ebauche |
 | **Categorie** | Migrer |
 | **Proprietaire** | outil partage (Vulcain) |

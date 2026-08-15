@@ -204,3 +204,7 @@ badge OK = 131 == 131, verdict README A JOUR.
 ## [LECON] 2026-08-14 -- HERMES AJOUTE AUX DEUX README (Clio, via reprise Cerberus)
 
 **Verdict** : VALIDE (relais Cerberus - README public + readme-dev a jour, badges 132/132, verifie par le controle croise)
+## [LECON] 2026-08-15 -- REGLE ENTONNOIR DANS LES DOCS (Clio)
+
+**Contexte** : demande utilisateur - verifier que les docs refletent la regle entonnoir obligatoire. MAJ : readme-dev section 6 (ligne Executer + principe ENTONNOIR + compteur 32 -> 33 categories), fiche clio P0 + executer-script-temporaire, README public garde-fou enrichi (controle automatique des scripts temp, version grand public). Constat : les fiches des 6 autres agents ne referencent pas encore l entonnoir en P0 (transmission : chaque agent lors de sa prochaine mission, Pattern 14).
+VERDICT : VALIDE - readme-dev (Executer + principe ENTONNOIR + 33 categories), fiche clio P0, README public enrichis ; normes 0/0, test-046 10/10, test-021 9/9.

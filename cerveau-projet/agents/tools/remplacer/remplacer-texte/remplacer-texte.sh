@@ -1,7 +1,7 @@
 #!/bin/bash
 # remplacer-texte.sh
 # Remplacer une liste de paires ancien->nouveau dans plusieurs fichiers d'un dossier.
-# Version : 0.3.0
+# Version : 0.3.1
 # Statut : prepare
 #
 # PERFORMANCE (round 2) : l'ancienne boucle bash lancait python3 par paire x

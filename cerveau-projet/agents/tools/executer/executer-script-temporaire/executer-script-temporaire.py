@@ -31,7 +31,7 @@ import tempfile
 import time
 from pathlib import Path
 
-VERSION = "0.1.0"
+VERSION = "0.1.2"
 STATUT = "ebauche"
 
 # GARDE-FOU ANTI-RESIDUS : fichiers nommes comme des versions semver pures a
@@ -126,7 +126,8 @@ def normaliser(chemin, dictionnaire=None, dry_run=False, verbose=False):
         brut = brut[3:]
         rapports.append(("BOM", "BOM UTF-8 retire"))
 
-    # 2. CRLF -> LF
+    # 2. CRLF -> LF (brut_original conserve pour la comparaison d ecriture)
+    brut_original = brut
     nb_crlf = brut.count(b"\r\n")
     if nb_crlf:
         brut = brut.replace(b"\r\n", b"\n")
@@ -159,9 +160,9 @@ def normaliser(chemin, dictionnaire=None, dry_run=False, verbose=False):
     if dry_run:
         return texte, rapports
 
-    # 6. Ecriture si modification
+    # 6. Ecriture si modification (comparaison sur le brut ORIGINAL)
     nouveau = texte.encode("ascii", errors="replace")
-    if nouveau != brut:
+    if nouveau != brut_original:
         try:
             with open(chemin, "wb") as fh:
                 fh.write(nouveau)
@@ -170,6 +171,82 @@ def normaliser(chemin, dictionnaire=None, dry_run=False, verbose=False):
             return None, [("ERREUR", "ecriture impossible: %s" % e)]
 
     return texte, rapports
+
+
+EXTENSIONS_TEXTE = {".md", ".py", ".sh", ".json", ".jsonl", ".txt"}
+
+
+def controler_triplet(texte):
+    """Controle la presence du TRIPLET (regle immuable protocole-
+    creation-scripts-temporaires v0.2.6, demande utilisateur 2026-08-15) :
+    PROTECTIONS (--dry-run / gestion erreur), OPTIONS ON/OFF (--isoler /
+    --desactiver), CHRONO (--no-chrono / chrono_etape / bilan_chrono).
+
+    Retourne la liste des manquants (vide si le script est conforme).
+    Le script ne bloque PAS l execution (les scripts de mission legitimes
+    peuvent etre simples) mais SIGNALE le manque pour action ulterieure.
+    """
+    manquants = []
+    if "--dry-run" not in texte and "--dry" not in texte:
+        manquants.append("protections (--dry-run)")
+    if "--isoler" not in texte and "--desactiver" not in texte:
+        manquants.append("options on/off (--isoler/--desactiver)")
+    if "chrono_etape" not in texte and "bilan_chrono" not in texte \
+            and "--no-chrono" not in texte and "CHRONO" not in texte:
+        manquants.append("chrono (--no-chrono)")
+    return manquants
+
+
+def racine_projet():
+    """Detecte la racine du projet en remontant jusqu a trouver AGENTS.md."""
+    courant = Path(__file__).resolve().parent
+    for ancetre in courant.parents:
+        if (ancetre / "AGENTS.md").is_file():
+            return ancetre
+    return Path.cwd()
+
+
+def normaliser_fichiers_modifies(depart, racine, verbose=False):
+    """Protection de sortie LF : normalise les fichiers du projet modifies
+    pendant la fenetre d execution du script (mtime >= depart).
+
+    Cause racine : un append direct (open en mode a sans newline="") traduit
+    LF en CRLF sur Windows. L entonnoir normalisait le script AVANT execution
+    mais pas les fichiers ecrits PAR le script au runtime. Cette protection
+    ferme la boucle : apres execution, tout fichier du projet touche est
+    re-normalise (CRLF -> LF, BOM, accents).
+
+    Retourne la liste des fichiers re-ecrits normalises.
+    """
+    reecrits = []
+    try:
+        fichier_racine = racine_projet()
+    except OSError:
+        fichier_racine = Path.cwd()
+    try:
+        for chemin in fichier_racine.rglob("*"):
+            if not chemin.is_file():
+                continue
+            if chemin.suffix.lower() not in EXTENSIONS_TEXTE:
+                continue
+            if "__pycache__" in chemin.parts or ".git" in chemin.parts:
+                continue
+            try:
+                if chemin.stat().st_mtime < depart:
+                    continue
+            except OSError:
+                continue
+            texte, rapports = normaliser(chemin, verbose=verbose)
+            if texte is None:
+                continue
+            for niveau, msg in rapports:
+                if niveau == "ECRIT":
+                    reecrits.append(str(chemin))
+                    if verbose:
+                        print(GREEN + "[SORTIE-LF] %s : %s" % (chemin, msg) + NC)
+    except OSError:
+        pass
+    return reecrits
 
 
 def controler_compilation(contenu):
@@ -207,11 +284,19 @@ def main():
                         help="Normaliser et controler SANS executer ni ecrire (affiche les changements)")
     parser.add_argument("--dictionnaire", default=None, help="Chemin vers un dictionnaire alternatif")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
-    parser.add_argument("--chrono", action="store_true", help="Afficher le temps ecoule (triplet template v0.3.0)")
+    parser.add_argument("--chrono", action="store_true",
+                        help="(compat) Afficher le temps ecoule - desormais AFFICHE PAR DEFAUT")
+    parser.add_argument("--no-chrono", action="store_true",
+                        help="Desactiver le chrono (affichage par defaut)")
     parser.add_argument("--version", action="version", version="executer-script-temporaire " + VERSION + " (" + STATUT + ")")
     args = parser.parse_args()
 
+    # CHRONO AFFICHE PAR DEFAUT (demande utilisateur 2026-08-15 : le chrono
+    # doit etre visible en haut, a chaque execution) - --no-chrono le coupe.
+    chrono_actif = not args.no_chrono
     depart = time.time()
+    if chrono_actif:
+        print(GREEN + "[CHRONO] %.2fs (entonnoir)" % (time.time() - depart) + NC)
 
     if not args.script:
         parser.print_help()
@@ -248,10 +333,18 @@ def main():
         return 1
     print(GREEN + "[CONTROLE OK] compilation valide" + NC)
 
+    # CONTROLE TRIPLET (regle immuable v0.2.6) : protections + options + chrono
+    manquants = controler_triplet(contenu)
+    if manquants:
+        print(YELLOW + "[TRIPLET] WARNING : le script n embarque pas le triplet complet" + NC)
+        print(YELLOW + "  manquants : " + ", ".join(manquants) + NC)
+        print(YELLOW + "  regle : protocole-creation-scripts-temporaires v0.2.6" + NC)
+        print(YELLOW + "  (--dry-run / --isoler / --desactiver / --no-chrono, chrono_etape, bilan_chrono)" + NC)
+
     if args.dry_run:
         print("[DRY-RUN] aucune ecriture ni execution")
-        if args.chrono:
-            print("[CHRONO] %.2fs" % (time.time() - depart))
+        if chrono_actif:
+            print("[CHRONO] %.2fs (total)" % (time.time() - depart))
         return 0
 
     # Execution
@@ -260,8 +353,13 @@ def main():
         print("[EXEC] " + " ".join(cmd))
     try:
         res = subprocess.run(cmd, timeout=600)
-        if args.chrono:
-            print("[CHRONO] %.2fs" % (time.time() - depart))
+        # PROTECTION DE SORTIE LF : normalise les fichiers du projet modifies
+        # par le script pendant la fenetre d execution (CRLF -> LF).
+        reecrits = normaliser_fichiers_modifies(depart, Path.cwd(), verbose=args.verbose)
+        if reecrits:
+            print(GREEN + "[SORTIE-LF] %d fichier(s) re-normalise(s) en LF pur" % len(reecrits) + NC)
+        if chrono_actif:
+            print(GREEN + "[CHRONO] %.2fs (total)" % (time.time() - depart) + NC)
         return res.returncode
     except subprocess.TimeoutExpired:
         print(RED + "[EXEC] timeout (600s)" + NC)

@@ -11,6 +11,12 @@
 # des erreurs (suivant auto-reference, cases non joignables). Cet outil
 # centralise ces operations avec backup, dry-run et validation.
 #
+# Barrage n3 (anti-contournement, 2026-08-15) : toute modification de carte
+# passe PAR CET OUTIL (regle SEUL BUFFY). Le manifeste cartes-lock.json
+# (empreintes SHA-256 des cartes) detecte toute ecriture directe HORS
+# editer-parcours : une carte divergente est REFUSEE jusqu a restauration
+# (git checkout) ou passage par le protocole.
+#
 # Options :
 #   --agent <nom>              : parcours cible (ex : cerberus)
 #   --inserer-case <json>      : JSON de la case a ajouter (id, titre, type, ...)
@@ -18,6 +24,7 @@
 #   --vers <id>                : cible de re-pointage (avec --retirer-case)
 #   --branche <case> <reponse> --vers <cible> : modifie une branche
 #   --suivant <case> --vers <cible>           : modifie le suivant
+#   --modifier-case <id> --contenu <json>      : remplace le contenu d une case
 #   --bump                     : incremente la version mineure (x.y.z -> x.y.z+1)
 #   --backup                   : sauvegarde .bak avant modification (defaut)
 #   --no-backup                : desactive le backup
@@ -32,7 +39,7 @@
 #   python3 editer-parcours.py --agent cerberus --suivant c15c --vers c15b --wet
 #   python3 editer-parcours.py --agent vulcain --bump --wet
 #
-# Version : 0.1.1
+# Version : 0.1.3
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -43,6 +50,7 @@
 # categorie (editer-).
 # =============================================================================
 import argparse
+import hashlib
 import io
 import json
 import os
@@ -50,7 +58,7 @@ import re
 import shutil
 import sys
 
-VERSION = "0.1.1"
+VERSION = "0.1.3"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "ebauche"
 
@@ -116,6 +124,98 @@ def trouver_suivants(cases, cible):
     return resultat
 
 
+def verifier_cases_protegees(racine, agent, donnees):
+    """Verrou du marbre : refuser l ecriture si une case protegee de l agent
+    a change (empreinte differente du manifeste marbre.json).
+    """
+    manifeste = os.path.join(racine, "cerveau-projet", "agents", "regles-immuables",
+                             "marbre", "marbre.json")
+    if not os.path.isfile(manifeste):
+        return True  # marbre absent : rien a verifier
+    try:
+        with io.open(manifeste, "r", encoding="utf-8") as fh:
+            zones = json.load(fh).get("zones", {})
+    except (ValueError, IOError):
+        return True
+    cibles = [z for z in zones.values()
+              if z.get("type") == "case" and z.get("agent") == agent]
+    if not cibles:
+        return True
+    for zone in cibles:
+        cid = zone.get("cid")
+        case = donnees.get("cases", {}).get(cid)
+        if case is None:
+            print(_couleur("[BLOQUE] MARBRE : la case protegee %s.%s a ete SUPPRIMEE sans protocole." % (agent, cid), "rouge"))
+            return False
+        texte = json.dumps(case, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+        h = hashlib.sha256(texte.encode("utf-8")).hexdigest()
+        if h != zone.get("empreinte"):
+            print(_couleur("[BLOQUE] MARBRE : la case protegee %s.%s a ete MODIFIEE sans protocole." % (agent, cid), "rouge"))
+            print(_couleur("  Protocole : cerveau-projet/agents/regles-immuables/general/protocole-securite-marbre.md", "rouge"))
+            return False
+    return True
+
+
+def chemin_lock(racine):
+    """Chemin du manifeste cartes-lock.json (empreintes des cartes).
+    Anti-contournement (barrage n3, 2026-08-15) : toute carte dont l
+    empreinte diverge du lock a ete modifiee HORS editer-parcours.
+    """
+    return os.path.join(racine, "cerveau-projet", "agents", "regles-immuables",
+                        "marbre", "cartes-lock.json")
+
+
+def empreinte_fichier(chemin):
+    """Empreinte SHA-256 normalisee (LF + pas d espace en fin de ligne)."""
+    with io.open(chemin, "r", encoding="utf-8", errors="replace") as fh:
+        texte = fh.read().replace("\r\n", "\n").replace("\r", "\n")
+    texte = "\n".join(l.rstrip() for l in texte.split("\n"))
+    return hashlib.sha256(texte.encode("utf-8")).hexdigest()
+
+
+def verifier_lock_carte(racine, chemin):
+    """Refuser l ecriture si la carte a ete modifiee HORS editer-parcours
+    (empreinte divergente du cartes-lock.json). Carte non enregistree =
+    premiere ecriture legitime (la modification l enregistrera).
+    """
+    lock = chemin_lock(racine)
+    if not os.path.isfile(lock):
+        return True
+    try:
+        with io.open(lock, "r", encoding="utf-8") as fh:
+            cartes = json.load(fh).get("cartes", {})
+    except (ValueError, IOError):
+        return True
+    relatif = os.path.relpath(chemin, racine).replace("\\", "/")
+    attendue = cartes.get(relatif)
+    if attendue is None:
+        return True
+    actuelle = empreinte_fichier(chemin)
+    if actuelle != attendue:
+        print(_couleur("[BLOQUE] ANTI-CONTOURNEMENT : la carte %s a ete modifiee HORS" % relatif, "rouge"))
+        print(_couleur("  editer-parcours (empreinte divergente du cartes-lock.json).", "rouge"))
+        print(_couleur("  Toute modification de carte passe par editer-parcours (regle SEUL BUFFY).", "rouge"))
+        return False
+    return True
+
+
+def mettre_a_jour_lock_carte(racine, chemin):
+    """Mettre a jour l empreinte de la carte dans cartes-lock.json apres une
+    ecriture legitime via editer-parcours.
+    """
+    lock = chemin_lock(racine)
+    try:
+        with io.open(lock, "r", encoding="utf-8") as fh:
+            manifeste = json.load(fh)
+    except (ValueError, IOError):
+        manifeste = {"version": "0.1.0", "cartes": {}}
+    relatif = os.path.relpath(chemin, racine).replace("\\", "/")
+    manifeste.setdefault("cartes", {})[relatif] = empreinte_fichier(chemin)
+    with io.open(lock, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(manifeste, fh, ensure_ascii=True, indent=1)
+        fh.write("\n")
+
+
 def verifier_residus_racine():
     """GARDE-FOU ANTI-RESIDUS : detecter dans le repertoire courant les fichiers
     nommes comme des versions semver pures (ex: 0.2.1, v0.2.6). Ces fichiers
@@ -154,6 +254,8 @@ def main():
     parser.add_argument("--reponse", type=str, default="", help="Reponse de la branche a modifier")
     parser.add_argument("--suivant", type=str, default="", nargs="?", help="Case dont le suivant change")
     parser.add_argument("--cible", type=str, default="", help="Nouvelle cible (pour --branche/--suivant)")
+    parser.add_argument("--modifier-case", type=str, default="", help="Id de la case a remplacer")
+    parser.add_argument("--contenu", type=str, default="", help="Nouveau contenu JSON de la case (avec --modifier-case)")
     parser.add_argument("--bump", action="store_true", help="Incremente la version mineure")
     parser.add_argument("--backup", action="store_true", help="Sauvegarde .bak avant modification (defaut)")
     parser.add_argument("--no-backup", action="store_true", help="Desactive le backup")
@@ -214,6 +316,27 @@ def main():
         del cases[ident]
         modifications.append("DELETE case %s (repointe %d pointeur(s) -> %s)" % (ident, len(pointeurs), cible))
 
+    # --- modification du contenu d une case (--modifier-case + --contenu)
+    if args.modifier_case:
+        ident = args.modifier_case
+        if ident not in cases:
+            print(_couleur("[ERREUR] Case %s absente" % ident, "rouge"))
+            return 2
+        if not args.contenu:
+            print(_couleur("[ERREUR] --modifier-case exige --contenu <json>", "rouge"))
+            return 2
+        try:
+            contenu = json.loads(args.contenu)
+        except ValueError as e:
+            print(_couleur("[ERREUR] JSON invalide pour --contenu : %s" % e, "rouge"))
+            return 2
+        if not isinstance(contenu, dict):
+            print(_couleur("[ERREUR] --contenu doit etre un objet JSON (la case)", "rouge"))
+            return 2
+        contenu.pop("id", None)
+        cases[ident] = contenu
+        modifications.append("MODIFY case %s (contenu remplace)" % ident)
+
     # --- modification de branche
     if args.branche:
         if not args.reponse or not args.cible:
@@ -270,12 +393,19 @@ def main():
         print("   - %s" % mod)
 
     if ecriture:
+        if not verifier_cases_protegees(racine, args.agent, d):
+            print(_couleur("[BLOQUE] Ecriture refusee : le marbre protege cette carte.", "rouge"))
+            return 1
+        if not verifier_lock_carte(racine, chemin):
+            print(_couleur("[BLOQUE] Ecriture refusee : anti-contournement (carte modifiee hors editer-parcours).", "rouge"))
+            return 1
         backup = args.backup and not args.no_backup
         if backup:
             shutil.copyfile(chemin, chemin + ".bak")
             print(_couleur("[OK] Backup : %s.bak" % chemin, "vert"))
         sauver(chemin, d)
-        print(_couleur("[OK] Parcours ecrit : %s (JSON/LF preserves)" % chemin, "vert"))
+        mettre_a_jour_lock_carte(racine, chemin)
+        print(_couleur("[OK] Parcours ecrit : %s (JSON/LF preserves, lock mis a jour)" % chemin, "vert"))
     return 0
 
 

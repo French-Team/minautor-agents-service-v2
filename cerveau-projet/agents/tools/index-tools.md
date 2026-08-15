@@ -39,6 +39,8 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 |---|---|---|
 | `analyser-dependances` | Analyser les dependances | [analyser/analyser-dependances/](analyser/analyser-dependances/) |
 | `analyser-structure` | Analyser la structure du projet | [analyser/analyser-structure/](analyser/analyser-structure/) |
+| `analyser-performance-tests` | Analyser la performance des tests (dernier run) | [analyser/analyser-performance-tests/](analyser/analyser-performance-tests/) |
+| `analyser-tokens` | Mesurer les tokens de la session (envoyes/recus/encombrement) | [analyser/analyser-tokens/](analyser/analyser-tokens/) |
 
 ### Cartographier
 
@@ -133,6 +135,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-usage-outils-externes` | Detecter les traces d'outils externes dans les fichiers (CRLF, non-ASCII, BOM) | [detecter/detecter-usage-outils-externes/](detecter/detecter-usage-outils-externes/) |
 | `detecter-convention-nommage` | Detecter les mentions de la convention c<numero>[a-z]? hors contexte etendu cT* (garde-fou anti-recurrence) | [detecter/detecter-convention-nommage/](detecter/detecter-convention-nommage/) |
 | `detecter-decalages-catalogue` | Detecter les decalages entre le catalogue du generateur et les interfaces reelles des outils (--aide/--help) | [detecter/detecter-decalages-catalogue/](detecter/detecter-decalages-catalogue/) |
+| `detecter-donnees-en-dur` | Detecter les donnees en dur (nombres magiques, chemins, URLs, versions, compteurs) sources de bugs caches + recommander le meilleur format de stockage | [detecter/detecter-donnees-en-dur/](detecter/detecter-donnees-en-dur/) |
 | `detecter-fautes-orthographe` | Detecter les fautes d orthographe francaise courantes (dictionnaire extensible, agent Hermes) | [detecter/detecter-fautes-orthographe/](detecter/detecter-fautes-orthographe/) |
 | `detecter-evaluations-incompletes` | Scan anti-recurrence : mentions residuelles d'un motif dans les 4 sources (validateur, spec, generateurs, tests) | [detecter/detecter-evaluations-incompletes/](detecter/detecter-evaluations-incompletes/) |
 | `detecter-divergences-version` | Detecter les spec/ dont la version diverge de leur .py (regle des 5 fichiers, formats de version varies) | [detecter/detecter-divergences-version/](detecter/detecter-divergences-version/) |
@@ -245,6 +248,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `mettre-a-jour-readme` | Mettre a jour le README depuis les sources de verite (agents, outils, chronologie) | [mettre-a-jour/mettre-a-jour-readme/](mettre-a-jour/mettre-a-jour-readme/) |
+| `mettre-a-jour-versions` | Bump systematique et coherent des versions (le bumper) | [mettre-a-jour/mettre-a-jour-versions/](mettre-a-jour/mettre-a-jour-versions/) |
 
 
 ### Nettoyer
@@ -254,6 +258,14 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `nettoyer-fichier` | Purifier un fichier en supprimant le contenu non essentiel | [nettoyer/nettoyer-fichier/](nettoyer/nettoyer-fichier/) |
 | `nettoyer-sessions` | Supprimer TOUTES les sessions LLM (AGENTS.md blocs + Sessions connues, classeur profil-session-*), le journal historique est conserve | [nettoyer/nettoyer-sessions/](nettoyer/nettoyer-sessions/) |
 | `snapshot-nettoyage` | Snapshot de l etat du workspace avant nettoyage (agent Hygie) : creer / consulter / rotation 7 jours / liste - preuve de tracabilite | [nettoyer/snapshot-nettoyage/](nettoyer/snapshot-nettoyage/) |
+
+### Proteger
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `proteger-verrou-habilitation` | Verrou d habilitation : bloque l utilisation d un outil par un agent non habilite (source : cartes de decision) | [proteger/proteger-verrou-habilitation/](proteger/proteger-verrou-habilitation/) |
+| `proteger-modifier-marbre` | Modifie une zone du marbre (autorisation utilisateur obligatoire + journal) | [proteger/proteger-modifier-marbre/](proteger/proteger-modifier-marbre/) |
+| `proteger-verrou-marbre` | Verifie l integrite des zones protegees du marbre (Constitution + cases critiques) | [proteger/proteger-verrou-marbre/](proteger/proteger-verrou-marbre/) |
 
 ### Rechercher
 
@@ -455,7 +467,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Categorie | Nombre d'outils |
 |---|---|
 | Ajouter | 1 |
-| Analyser | 2 |
+| Analyser | 4 |
 | Cartographier | 1 |
 | Changer | 1 |
 | Combos | 21 |
@@ -477,9 +489,10 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Lire | 4 |
 | Lister | 8 |
 | Migrer | 1 |
-| Mettre a jour | 1 |
+| Mettre a jour | 2 |
 | Activer | 1 |
 | Nettoyer | 3 |
+| Proteger | 3 |
 | Rechercher | 10 |
 | Remplacer | 1 |
 | Supprimer | 3 |
@@ -487,7 +500,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Verifier | 6 |
 | Protections | 5 |
 | Tests | 39 |
-| **Total** | **172** |
+| **Total** | **179** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

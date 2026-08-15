@@ -326,3 +326,8 @@ valider-liens, activer-agent-principal.
 1. Le format 7 sections est la convention des protocoles de regles-immuables/general (Objectif, Prerequis, Etapes, RVAV, Exemples, Pieges courants, Liens).
 2. L'index-regles-general.md doit etre mis a jour (ligne alphab?tique) des la creation d'un protocole.
 3. Le cycle ferme la boucle du diagnostic : chaque script temporaire a une declaration, un controleur peut croiser les sources (racine/git/lecons) avec le registre.
+
+## [LECON] 2026-08-15 -- PROTOCOLE SCRIPTS-TEMP v0.2.10 (Promethee)
+
+**Contexte** : demande utilisateur - renforcer la regle entonnoir dans le protocole-creation-scripts-temporaires. La regle jamais python3 direct existait deja (v0.2.5) mais n a pas ete respectee : des scripts de fin en python3 direct ont reintroduit des CRLF (lecon 2026-08-15). Renforce v0.2.10 : PROTECTION DE SORTIE LF de l entonnoir v0.1.1 documentee (re-scanne les fichiers modifies pendant la fenetre) + POURQUOI JAMAIS python3 DIRECT explicite (append io.open a sans newline traduit LF en CRLF sur Windows) comme anti-recurrence.
+VERDICT : VALIDE - protocole v0.2.10 documente, normes 0/0, test-049 11/11, test-024 16/16.

@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.1.2"
+VERSION="0.1.3"
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # supprimer-ligne.sh
 # Supprimer une ligne (ou une plage) par numero dans un fichier
-# Version : 0.3.0
+# Version : 0.3.2
 
 # identite:
 #   type: outil

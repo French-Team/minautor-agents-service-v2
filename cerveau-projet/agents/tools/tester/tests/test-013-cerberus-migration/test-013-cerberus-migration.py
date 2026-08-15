@@ -2,20 +2,24 @@
 # -*- coding: ascii -*-
 """
 test-013-cerberus-migration.py
-Test formel de la migration pilote du parcours-cerberus v0.4.5
+Test formel de la migration pilote du parcours-cerberus v0.4.7
 (nouveau format : indices REFERENCES + cases ACTION).
 
 Contexte (etape 6 de la spec-refonte-cartes-decision) :
   - parcours-cerberus passe de v0.2.3 (0 erreur / 15 a alleger) a
-    v0.4.5 (0 erreur / 0 a alleger / CONFORME valider-case)
+    v0.4.6 (0 erreur / 0 a alleger / CONFORME valider-case)
   - 13 indices longs migres : 6 refs resolvables + 7 textes courts
   - 18 cases de pilotage 'indice' -> 'action' (enchaine sans question)   - 2 surcharges de nombre corrigees (c1b, c6 : 4 -> 3 indices)
    - v0.4.5 (2026-08-14) : GARDE-FOU C1 anti-derive - indice ajoute dans la
      case c1 (TOUTE tache d execution -> activer l agent habilite, jamais
      executer seul, 135 car - CONFORME) - lecon derive 2026-08-14
      (Cerberus a execute seul 19 taches)
+   - v0.4.6 (2026-08-15) : + indice outil generateurs-commande dans la case
+     c10 (usage reel Pattern 17, KO test-035 OUTIL_HORS_CARTE)
+   - v0.4.7 (2026-08-15) : + indice outil combos-analyse-projet dans la case
+     c17 (usage reel Pattern 17, KO test-035 OUTIL_HORS_CARTE)
  
- Cas couverts:   1. Version du parcours = 0.4.5
+ Cas couverts:   1. Version du parcours = 0.4.7
   2. Types : 23 action / 5 question / 5 controle / 3 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -59,6 +63,53 @@ def charger_protections():
     return mod
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 
 GUIDER = os.path.join(TOOLS_DIR, "guider", "guider-parcours", "guider-parcours.py")
@@ -104,13 +155,13 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-013-")
     try:
-        print("=== Test formel migration cerberus v0.4.5 ===")
+        print("=== Test formel migration cerberus v0.4.7 ===")
 
         # 1. Version du parcours
         with io.open(PARCOURS, encoding="utf-8") as fh:
             donnees = json.load(fh)
-        verifier("1. Parcours version 0.4.5",
-                 donnees.get("parcours", {}).get("version") == "0.4.5",
+        verifier("1. Parcours version 0.4.7",
+                 donnees.get("parcours", {}).get("version") == "0.4.7",
                  str(donnees.get("parcours", {}).get("version")))
 
         # 2. Types de cases : 23 action / 5 question / 5 controle / 3 fin / 0 indice
@@ -232,6 +283,7 @@ def main():
                  total_crlf == 0, "total CRLF = %d" % total_crlf)
 
         print("")
+        bilan_chrono()
         print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

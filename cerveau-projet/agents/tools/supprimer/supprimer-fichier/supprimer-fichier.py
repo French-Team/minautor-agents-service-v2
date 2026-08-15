@@ -21,7 +21,7 @@ Retour : 0 si succes, 1 si erreur ou si le fichier n'existe pas
          (echec explicite : jamais 0 silencieux).
 
 Proprietaire : Buffy (outil partage)
-Version : 0.3.1
+Version : 0.3.2
 Statut : prepare
 """
 
@@ -29,7 +29,7 @@ import os
 import shutil
 import sys
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 STATUT = "prepare"
 
 NOM_ATTENDU = "supprimer-fichier.py"
@@ -66,17 +66,48 @@ def afficher_aide():
     print("Retour : 0 si succes, 1 si erreur ou si le fichier n'existe pas.")
 
 
+def verrouiller_habilitation(agent, outil, audit=False):
+    """Appelle proteger-verrou-habilitation et retourne (code, message).
+    Source de verite : les cartes de decision (aucune liste en dur).
+    audit=True (v0.2.0) : mode tests - pas de verification d identite reelle."""
+    courant = os.path.dirname(os.path.abspath(__file__))
+    while True:
+        if os.path.isfile(os.path.join(courant, "AGENTS.md")):
+            break
+        parent = os.path.dirname(courant)
+        if parent == courant:
+            return (2, "[ERREUR] Racine du projet introuvable (AGENTS.md absent)")
+        courant = parent
+    verrou = os.path.join(
+        courant, "cerveau-projet", "agents", "tools", "proteger",
+        "proteger-verrou-habilitation", "proteger-verrou-habilitation.py")
+    if not os.path.isfile(verrou):
+        return (2, "[ERREUR] Verrou introuvable : %s" % verrou)
+    import subprocess
+    cmd = [sys.executable, verrou, "--agent", agent, "--outil", outil]
+    if audit:
+        cmd.append("--audit")
+    r = subprocess.run(cmd, capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    message = (r.stdout + r.stderr).strip()
+    return (r.returncode, message)
+
+
 def main(argv):
     verifier_nommage(os.path.basename(sys.argv[0]))
 
     fichier = ""
+    agent = ""
     backup = False
     forcer = False
     dry_run = False
     verbose = False
     help_demande = False
+    audit = False
 
-    for arg in argv:
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
         if arg == "--forcer":
             forcer = True
         elif arg == "--backup":
@@ -87,11 +118,20 @@ def main(argv):
             verbose = True
         elif arg in ("--help", "--aide", "-h"):
             help_demande = True
+        elif arg == "--audit":
+            audit = True
+        elif arg == "--agent":
+            if i + 1 >= len(argv):
+                print("[ERREUR] --agent requiert un nom d agent")
+                return 2
+            agent = argv[i + 1]
+            i += 1
         elif arg == "--version":
             print("supprimer-fichier v%s (%s)" % (VERSION, STATUT))
             return 0
         else:
             fichier = arg
+        i += 1
 
     if help_demande:
         afficher_aide()
@@ -101,6 +141,19 @@ def main(argv):
         print("[ERREUR] Aucun fichier specifie")
         afficher_aide()
         return 1
+
+    # VERROU D HABILITATION (regle immuable : seul hygie supprime). --agent
+    # est OBLIGATOIRE et le verrou est appele AVANT toute action : si l agent
+    # n est pas habilite, la suppression est refusee et le message indique
+    # QUI est habilite (cycle Cerberus -> agent).
+    if not agent:
+        print("[ERREUR] --agent est OBLIGATOIRE : l outil doit connaitre "
+              "l agent appelant (verrou d habilitation).")
+        return 2
+    code, message = verrouiller_habilitation(agent, "supprimer-fichier", audit=audit)
+    if code != 0:
+        print(message)
+        return 1 if code == 1 else 2
 
     # Securite (round 3) : octet nul dans le chemin -> refus explicite
     if "\x00" in fichier:

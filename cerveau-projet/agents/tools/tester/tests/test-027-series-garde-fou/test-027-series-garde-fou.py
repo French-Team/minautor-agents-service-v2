@@ -62,6 +62,53 @@ def charger_protections():
     return mod
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 MOI = os.path.basename(__file__)
 
@@ -139,44 +186,44 @@ def main():
 
     # 4. Version du lanceur.
     r = run([PYTHON, LANCER, "--version"])
-    verifier("4. --version v0.3.2",
-             r.returncode == 0 and "v0.3.2" in r.stdout, r.stdout.strip()[-60:])
+    verifier("4. --version v0.4.5",
+             r.returncode == 0 and "v0.4.5" in r.stdout, r.stdout.strip()[-60:])
 
-    # 5. Serie inconnue : code 2 + message usage, sans traceback.
-    # (argparse ecrit le message usage sur stderr, pas sur stdout)
-    r = run([PYTHON, LANCER, "--series", "z"])
+    # 5. Serie inconnue : code 2 + message explicite, sans traceback.
+    #    (v0.4.2 : choices argparse retire, validation manuelle -> message
+    #    "Serie(s) inconnue(s)" sur stdout, plus de "usage:")
+    r = run([PYTHON, LANCER, "--agent", "janus", "--series", "z"])
     sortie = r.stdout + r.stderr
     sans_traceback = "Traceback" not in sortie
-    verifier("5. --series z : code 2 + usage sans traceback",
-             r.returncode == 2 and "usage:" in sortie and sans_traceback,
+    verifier("5. --series z : code 2 + message serie inconnue sans traceback",
+             r.returncode == 2 and "inconnue" in sortie and sans_traceback,
              "rc=%d" % r.returncode)
 
     # 6a. Isolation : --series a --tests test-001 ne lance que test-001.
-    r = run([PYTHON, LANCER, "--series", "a", "--journal",
+    r = run([PYTHON, LANCER, "--series", "c", "--agent", "janus", "--journal",
              "--tests", "test-001-evaluer-agents-coherence"])
-    ok6a = (r.returncode == 0 and "RESULTAT Serie A" in r.stdout
+    ok6a = (r.returncode == 0 and "RESULTAT Serie C" in r.stdout
             and "1 OK / 0 KO (sur 1 tests, 0 non lances)" in r.stdout)
-    verifier("6a. --series a --tests test-001 : 1 seul test lance",
+    verifier("6a. --series c --tests test-001 : 1 seul test lance (serie C)",
              ok6a, r.stdout.strip()[-80:])
 
     # 6b. Isolation : --series c filtre test-001 (aucun test trouve).
-    r = run([PYTHON, LANCER, "--series", "c", "--journal",
+    r = run([PYTHON, LANCER, "--series", "a", "--agent", "janus", "--journal",
              "--tests", "test-001-evaluer-agents-coherence"])
     ok6b = (r.returncode == 2 and "Aucun test trouve" in r.stdout)
-    verifier("6b. --series c exclut test-001 (aucun test trouve)",
+    verifier("6b. --series a exclut test-001 (aucun test trouve, serie C)",
              ok6b, "rc=%d %s" % (r.returncode, r.stdout.strip()[-60:]))
 
-    # 7. Defaut = pool de workers (round 12) : sans option, le filtre --tests
-    #    est herite et le test passe par la structure Pool.
-    r = run([PYTHON, LANCER, "--journal", "--tests", "test-001-evaluer-agents-coherence"])
-    ok7 = (r.returncode == 0 and "Pool de workers" in r.stdout
-           and "RESULTAT Pool" in r.stdout
+    # 7. Defaut = BARRIERES (round 18) : sans option, le filtre --tests
+    #    est herite et le test passe par la structure BARRIERE (serie stricte).
+    r = run([PYTHON, LANCER, "--agent", "janus", "--journal", "--tests", "test-001-evaluer-agents-coherence"])
+    ok7 = (r.returncode == 0 and "BARRIERE" in r.stdout
            and "1 OK / 0 KO (sur 1 tests, 0 non lances)" in r.stdout)
-    verifier("7. Defaut = pool de workers (structure Pool + filtre herite)",
+    verifier("7. Defaut = BARRIERES (structure BARRIERE + filtre herite)",
              ok7, r.stdout.strip()[-80:])
 
     # 8. --serial force l ancien mode serie.
-    r = run([PYTHON, LANCER, "--serial", "--journal", "--tests", "test-001-evaluer-agents-coherence"])
+    r = run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal", "--tests", "test-001-evaluer-agents-coherence"])
     ok8 = (r.returncode == 0 and "RESULTAT : 1 OK / 0 KO (sur 1 tests, 0 non lances)" in r.stdout
            and "RESULTAT Serie" not in r.stdout
            and "Pool de workers" not in r.stdout)
@@ -198,6 +245,7 @@ def main():
              ko_crlf == 0, "nb=%d" % ko_crlf)
 
     print("")
+    bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
     return 1 if NB_KO else 0
 

@@ -27,7 +27,7 @@ Securite (round 3) :
   - stdout force en UTF-8 : plus d'UnicodeEncodeError cp1252 sous Windows
 
 Proprietaire : Buffy (outil partage)
-Version : 0.4.1
+Version : 0.4.2
 Statut : prepare
 """
 

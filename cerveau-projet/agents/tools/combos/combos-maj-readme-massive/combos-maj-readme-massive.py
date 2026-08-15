@@ -7,7 +7,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION = "0.1.3"
+VERSION = "0.1.5"
 STATUT = "prepare"
 
 import datetime
@@ -140,7 +140,7 @@ def aligner_badges_header(racine):
                 texte = nouveau
 
     if modifie:
-        readme.write_text(texte, encoding="utf-8")
+        readme.write_text(texte, encoding="utf-8", newline="")
         print(GREEN + "  [OK] Badges du header alignes (affichage + href)." + NC)
         return True
     print(GREEN + "  [OK] Badges du header deja a jour." + NC)
@@ -170,7 +170,7 @@ def bumper_version(racine):
         print(YELLOW + "  [AVERT] Version illisible (%r), bump annule." % v + NC)
         return None
     nouvelle = "%s.%d.0" % (parties[0], mineure)
-    f_version.write_text(nouvelle + "\n", encoding="utf-8")
+    f_version.write_text(nouvelle + "\n", encoding="utf-8", newline="")
     print(GREEN + "  [BUMP] Version README : " + v + " -> " + nouvelle
           + " (source version-readme.txt)." + NC)
     return (v, nouvelle)
@@ -185,6 +185,30 @@ def lire_version(racine):
             return v
     return None
 
+def verrouiller_habilitation(agent, outil, audit=False):
+    """Verrou d habilitation : appelle proteger-verrou-habilitation et
+    retourne (code, message). Le verrou lit les cartes de decision comme
+    source de verite - aucune table en dur ici. audit=True (v0.2.0) : mode
+    tests/preuves formelles - l identite reelle de la session n est pas
+    verifiee (reserve aux tests ; en production jamais utilise)."""
+    racine = Path.cwd()
+    while not (racine / "AGENTS.md").is_file():
+        if racine == racine.parent:
+            return (2, "[ERREUR] Racine du projet introuvable (AGENTS.md absent)")
+        racine = racine.parent
+    verrou = racine / "cerveau-projet" / "agents" / "tools" / "proteger" / \
+        "proteger-verrou-habilitation" / "proteger-verrou-habilitation.py"
+    if not verrou.is_file():
+        return (2, "[ERREUR] Verrou introuvable : %s" % verrou)
+    cmd = [sys.executable, str(verrou), "--agent", agent, "--outil", outil]
+    if audit:
+        cmd.append("--audit")
+    r = subprocess.run(cmd, capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    message = (r.stdout + r.stderr).strip()
+    return (r.returncode, message)
+
+
 def main():
     verifier_nommage()
     import argparse
@@ -194,11 +218,28 @@ def main():
         description="Combo maj-readme-massive : grosse mise a jour conservative du README.",
     )
     parser.add_argument("racine", nargs="?", default=".", help="Racine du projet (defaut: .)")
+    parser.add_argument("--agent", help="Nom de l agent appelant (OBLIGATOIRE, verrou d habilitation)")
+    parser.add_argument("--audit", action="store_true",
+                        help="Mode tests : verrou sans verification d identite reelle (reserve aux preuves formelles)")
     parser.add_argument("--rapport", action="store_true",
                         help="Sauvegarder le rapport dans clio/rapports/")
     parser.add_argument("--version", action="version",
                         version="combos-maj-readme-massive " + VERSION + " (" + STATUT + ")")
     args = parser.parse_args()
+
+    # VERROU D HABILITATION (regle immuable : seul clio met a jour le README).
+    # --agent est OBLIGATOIRE et le verrou est appele AVANT la moindre etape :
+    # si l agent n est pas habilite, le combo refuse et le message indique QUI
+    # est habilite (cycle Cerberus -> agent).
+    if not args.agent:
+        print("[ERREUR] --agent est OBLIGATOIRE : le combo doit connaitre "
+              "l agent appelant (verrou d habilitation).")
+        return 2
+    code, message = verrouiller_habilitation(args.agent, "combos-maj-readme-massive",
+                                             audit=args.audit)
+    if code != 0:
+        print(message)
+        return 1 if code == 1 else 2
 
     racine = Path(args.racine)
     print(BLUE + "=== combos-maj-readme-massive v" + VERSION + " ===" + NC)
@@ -321,7 +362,7 @@ def main():
             "- Racine : " + str(racine.resolve()),
             "",
         ] + rapport
-        rapport_file.write_text("\n".join(contenu) + "\n", encoding="utf-8")
+        rapport_file.write_text("\n".join(contenu) + "\n", encoding="utf-8", newline="")
         print("")
         print(GREEN + "Rapport sauvegarde : " + str(rapport_file) + NC)
 

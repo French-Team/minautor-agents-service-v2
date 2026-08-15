@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.5"
+VERSION="0.5.6"
 STATUT="prepare"
 
 # Configuration
@@ -512,8 +512,12 @@ ajouter_historique() {
         return 1
     fi
 
+    # v0.5.6 : anti-accumulation - quand une entree est purgeee (au-dela de la
+    # limite max), ses CONTINUATIONS (blocs DEMARRAGE, raisons multi-lignes)
+    # sont purgees AVEC elle. Le bug v0.5.4 conservait les lignes non-| date |
+    # sans limite : les continuations orphelines s accumulaient a la fin.
     awk -v ligne="$nouvelle_ligne" -v max="$MAX_ENTREES_HISTORIQUE" '
-        BEGIN { insere = 0; compteur = 0 }
+        BEGIN { insere = 0; compteur = 0; sauter = 0 }
         {
             if (index($0, "| 20") == 1) {
                 if (insere == 0) {
@@ -524,10 +528,15 @@ ajouter_historique() {
                 if (compteur < max) {
                     print $0
                     compteur++
+                    sauter = 0
+                } else {
+                    sauter = 1
                 }
                 next
             }
-            print $0
+            if (sauter == 0) {
+                print $0
+            }
         }
         END { if (insere == 0) print ligne }
     ' "$AGENTS_HISTORIQUE" > "$AGENTS_HISTORIQUE.tmp" && mv "$AGENTS_HISTORIQUE.tmp" "$AGENTS_HISTORIQUE"

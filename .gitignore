@@ -1,5 +1,7 @@
-# Reference de temps locale du lanceur de non-regression (machine-dependante)
+# Reference de temps locale + config persistante des tests du lanceur de
+# non-regression (machine-dependantes)
 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/temps-reference.json
+cerveau-projet/agents/tools/tester/tester-lancer-non-regression/config-tests.json
 
 # Dossiers temporaires de mission des agents (tmp-<agent>/, supprimes en fin de mission)
 tmp-*/

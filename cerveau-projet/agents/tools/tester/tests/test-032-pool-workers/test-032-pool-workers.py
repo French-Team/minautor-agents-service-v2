@@ -18,7 +18,7 @@ Contexte (demande utilisateur 2026-08-13) :
     temp unique - un Popen(stdout=PIPE) non lu se bloque au-dela de 64 Ko.
 
 Invariants verifies :
-  1. --version affiche v0.3.2
+  1. --version affiche v0.4.5
   2. Le mode par defaut utilise le pool (Pool de workers dans la sortie)
   3. --serial ou --workers 1 force le mode serie (pas de Pool)
   4. GARDE_FOUS_GLOBAUX identifie test-023/024/025/027 dans le code
@@ -59,6 +59,53 @@ def charger_protections():
 
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 
 def verifier(nom, condition, detail=""):
@@ -90,27 +137,27 @@ def main():
     global NB_POINTS, NB_OK, NB_KO
     print("=== test-032 : pool de workers non-regression ===")
     try:
-        # 1. Version du lanceur (round 12 : v0.3.2 tri registre-tests)
+        # 1. Version du lanceur (round 20 : v0.4.5 ordre dynamique par KO)
         r = run([PYTHON, LANCER, "--version"])
-        verifier("1. --version v0.3.2",
-                 r.returncode == 0 and "v0.3.2" in r.stdout,
+        verifier("1. --version v0.4.5",
+                 r.returncode == 0 and "v0.4.5" in r.stdout,
                  r.stdout.strip()[-60:])
 
-        # 2. Le mode par defaut utilise le pool de workers (filtre 1 test).
-        r = run([PYTHON, LANCER, "--journal", "--tests", "test-001"])
-        verifier("2. Defaut = pool de workers (Pool de workers affiche)",
-                 "Pool de workers" in r.stdout and "RESULTAT Pool" in r.stdout,
+        # 2. Le mode par defaut utilise les BARRIERES (filtre 1 test).
+        r = run([PYTHON, LANCER, "--agent", "janus", "--journal", "--tests", "test-001"])
+        verifier("2. Defaut = BARRIERES (structure BARRIERE affichee)",
+                 "BARRIERE" in r.stdout,
                  r.stdout.strip()[-120:])
 
         # 3. --serial et --workers 1 forcent le mode serie (pas de Pool).
-        r = run([PYTHON, LANCER, "--serial", "--journal", "--tests", "test-001"])
+        r = run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal", "--tests", "test-001"])
         ok_serial = (r.returncode == 0 and "Pool de workers" not in r.stdout)
         verifier("3a. --serial : mode serie (pas de Pool)",
                  ok_serial, r.stdout.strip()[-80:])
-        r = run([PYTHON, LANCER, "--workers", "1", "--journal",
-                 "--tests", "test-001"])
+        r = run([PYTHON, LANCER, "--parallele", "--workers", "1", "--agent", "janus",
+                 "--journal", "--tests", "test-001"])
         ok_w1 = (r.returncode == 0 and "Pool de workers" not in r.stdout)
-        verifier("3b. --workers 1 : mode serie (pas de Pool)",
+        verifier("3b. --parallele --workers 1 : mode serie (pas de Pool)",
                  ok_w1, r.stdout.strip()[-80:])
 
         # 4. Les garde-fous globaux sont identifies dans le code.
@@ -134,15 +181,20 @@ def main():
         verifier("6. --workers present dans --help",
                  "--workers" in (r.stdout + r.stderr), "")
 
-        # 7. Preuve de gain : sous-ensemble (test-001..008) en pool <= serie.
+        # 7. Preuve de gain : sous-ensemble en pool <= serie. OPTIMISE
+        #    2026-08-15 (goulot de la suite) : le sous-ensemble etait
+        #    test-001..008 (~20.8s en serie + ~15s en pool = ~36s sur les
+        #    38.7s du test). Reduit a 4 tests (test-001/002/003/004) qui
+        #    incluent le LONG test-003 (~7.5s) : la preuve de gain reste
+        #    valide (un test long demontre le benefice du pool) pour ~19s.
         #    Seuil large (2.5x) pour absorber la variabilite machine : on
         #    verifie que le pool n est PAS plus lent que le serie x 2.5.
-        subset = ",".join(["test-00%d" % i for i in range(1, 9)])
+        subset = "test-001,test-002,test-003,test-004"
         t0 = time.time()
-        run([PYTHON, LANCER, "--serial", "--journal", "--tests", subset])
+        run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal", "--tests", subset])
         duree_serie = time.time() - t0
         t0 = time.time()
-        run([PYTHON, LANCER, "--workers", "4", "--journal", "--tests", subset])
+        run([PYTHON, LANCER, "--parallele", "--workers", "4", "--agent", "janus", "--journal", "--tests", subset])
         duree_pool = time.time() - t0
         verifier("7. Preuve de gain : pool (%.1fs) <= serie (%.1fs) x 2.5"
                  % (duree_pool, duree_serie),
@@ -162,6 +214,7 @@ def main():
              total_crlf == 0, "total=%d" % total_crlf)
 
     print("")
+    bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
     return 1 if NB_KO else 0
 

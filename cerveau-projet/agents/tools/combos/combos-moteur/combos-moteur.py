@@ -3,7 +3,7 @@
 # combos-moteur.py
 # Moteur generique de combos declaratifs : execute une definition-combo.json
 # case par case, avec passage de variables et interpolation {var}.
-# Version : 0.1.0-beta
+# Version : 0.3.3
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -47,7 +47,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n'est pas un terminal)
@@ -296,7 +296,7 @@ def persister_variable(nom, valeur):
             texte = texte[:index] + "\n" + ligne + "\n" + texte[index:]
 
     try:
-        chemin.write_text(texte, encoding="utf-8")
+        chemin.write_text(texte, encoding="utf-8", newline="")
     except OSError as exc:
         raise ErreurCombo("Impossible d'ecrire le classeur: %s" % exc)
     print(_couleur("[PERSISTANT] %s = %s" % (nom, valeur_plate), "jaune"))

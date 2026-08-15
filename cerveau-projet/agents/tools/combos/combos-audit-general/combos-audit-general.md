@@ -6,7 +6,7 @@ identite:
 ---
 # combos-audit-general
 
-**Version :** 0.2.0
+**Version :** 0.2.1
 **Statut :** prepare
 **Categorie :** combos
 **Chemin :** `agents/tools/combos/combos-audit-general/`

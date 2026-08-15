@@ -50,6 +50,7 @@ identite:
 | [protocole-creation-scripts-temporaires/](protocole-creation-scripts-temporaires/) | Encadrer l utilisation des scripts temporaires (creer/declarer/supprimer/promouvoir/detecter, anti-regression, commandes spawn_agents sans echappement JSON) | ebauche |
 | [protocole-purification/](protocole-purification/) | Purification des fichiers apres validation | ebauche |
 | [protocole-nettoyage/](protocole-nettoyage/) | Nettoyage du workspace (Hygie) : snapshot -> detection (detecter-residus par zone) -> verdict -> suppression exclusive -> rapport | ebauche |
+| [protocole-securite-marbre/](protocole-securite-marbre/) | **IMMUABLE** -- Securite du code : zones protegees (marbre) verrouillees, modification uniquement via autorisation utilisateur (Gardien propose, utilisateur valide) | ebauche |
 | [protocole-controle-buffy/](protocole-controle-buffy/) | Controle croise du travail de Buffy (Janus) | ebauche |
 | [protocole-audit-buffy/](protocole-audit-buffy/) | Audit de conformite du travail de Buffy (Themis) | ebauche |
 | [protocole-sante-fichiers-agents/](protocole-sante-fichiers-agents/) | Sante periodique des fichiers agents (Janus) | ebauche |

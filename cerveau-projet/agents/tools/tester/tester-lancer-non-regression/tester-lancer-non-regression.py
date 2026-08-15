@@ -13,48 +13,101 @@ import sys
 import time
 from datetime import datetime
 
-VERSION = "0.3.2"
+VERSION = "0.4.5"
 STATUT = "ebauche"
 
-# Round 10 : 5 series thematiques. Chaque test appartient a une serie par son
-# prefixe test-0XX. Un test trouve sur disque sans prefixe de serie est lance
-# en queue avec un avertissement (il n est jamais oublie).
+# Round 18 (2026-08-15) : BARRIERES DE PASSAGE (demande utilisateur) - la
+# philosophie de la suite change : les series sont classees par IMPORTANCE
+# (FONDATIONS D ABORD) et chaque serie doit etre 100% VERTE pour FRANCHIR la
+# barriere vers la suivante. Si une serie a un KO, la barriere appelle la
+# protection STOP : la suite s arrete, le rapport de la serie est fourni pour
+# constater, analyser et reparer. Quand toutes les barrieres sont passees :
+# rapport GLOBAL POSITIF.
+# Niveaux (importance decroissante) :
+#   a = FONDATIONS (nommage, ASCII/LF, template, protections, structure)
+#   b = PARCOURS ET VALIDATEURS (le coeur : valider-cartes, guider, migrations)
+#   c = OUTILS ET COMBOS (generateurs, combos, outils utilises souvent)
+#   d = REGISTRE ET TRACES (registres usages/tests, sessions, chrono)
+#   e = ANTI-RECURRENCE ET GARDE-FOUS SPECIFIQUES
 SERIES = {
-    "a": ["test-001", "test-002", "test-003", "test-004", "test-019", "test-020"],
-    "b": ["test-006", "test-009", "test-012", "test-013", "test-014", "test-015",
-          "test-016", "test-018", "test-021", "test-022"],
-    "c": ["test-005", "test-007", "test-008", "test-010", "test-011", "test-017"],
-    "d": ["test-023", "test-024", "test-025", "test-026", "test-027",
-          "test-030", "test-031"],
-    "e": ["test-028", "test-029", "test-032", "test-033", "test-034", "test-035",
-          "test-036", "test-037", "test-038", "test-039", "test-040", "test-041", "test-042", "test-043", "test-044", "test-045", "test-046", "test-047", "test-048", "test-049", "test-050", "test-051", "test-052", "test-054", "test-055"],
+    "a": ["test-007", "test-029", "test-030", "test-042", "test-043", "test-044",
+          "test-049", "test-050", "test-052", "test-054", "test-055", "test-056",
+          "test-060"],
+    "b": ["test-009", "test-012", "test-013", "test-014", "test-015", "test-016",
+          "test-018", "test-021", "test-026", "test-033", "test-034", "test-037",
+          "test-048", "test-058", "test-059"],
+    "c": ["test-001", "test-002", "test-003", "test-004", "test-005", "test-006",
+          "test-008", "test-010", "test-011", "test-017", "test-019", "test-020",
+          "test-022", "test-023", "test-040"],
+    "d": ["test-025", "test-027", "test-031", "test-036", "test-038", "test-039",
+          "test-045", "test-046", "test-047", "test-051", "test-061"],
+    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057"],
 }
 SERIES_NOMS = {
-    "a": "Combos et coherence",
+    "a": "Fondations (nommage, ASCII/LF, template, protections)",
     "b": "Parcours et validateurs",
-    "c": "Generateurs et catalogue",
-    "d": "Registre et garde-fous",
-    "e": "Coherence et anti-recurrence",
+    "c": "Outils et combos",
+    "d": "Registre et traces",
+    "e": "Anti-recurrence et garde-fous specifiques",
 }
 SERIES_ORDRE = ["a", "b", "c", "d", "e"]
-# La serie D porte les GARDE-FOUS GLOBAUX (registre, sessions, scripts
-# temporaires) - ils tournent toujours en serie apres le pool de workers,
-# jamais en parallele avec les autres tests.
-SERIES_PARALLELES = ["a", "b", "c"]
+
+
+def ordre_series_par_ko(racine, nb_derniers=5):
+    """Classe les series par TAUX DE KO DECROISSANT (demande utilisateur
+    2026-08-15) : les series qui produisent le plus de KO passent en premier
+    pour que les problemes remontent vite. Base : le registre-tests.jsonl
+    (chaque test journalise serie + verdict). Si pas assez de donnees
+    (moins de nb_derniers lancements complets par serie), garde l ordre fixe.
+    Retourne la liste des series dans l ordre choisi."""
+    registre = os.path.join(racine, "cerveau-projet", "agents", "traces",
+                            "registre-tests.jsonl")
+    ko_par_serie = {s: 0 for s in SERIES_ORDRE}
+    total_par_serie = {s: 0 for s in SERIES_ORDRE}
+    if os.path.isfile(registre):
+        for ligne in io.open(registre, encoding="utf-8", errors="replace"):
+            try:
+                e = json.loads(ligne)
+            except (ValueError, TypeError):
+                continue
+            s = e.get("serie")
+            if s not in ko_par_serie:
+                continue
+            total_par_serie[s] += 1
+            if e.get("verdict") == "KO":
+                ko_par_serie[s] += 1
+    # Seuil de confiance : une serie n est RECLASSEE que si elle a au moins
+    # nb_derniers lancements (sinon sa position d origine est conservee - pas
+    # assez de donnees pour juger). Les series avec donnees suffisantes sont
+    # triees par taux de KO decroissant, les autres restent en place.
+    # Seuil de confiance : une serie n est RECLASSEE que si elle a au moins
+    # nb_derniers lancements (sinon sa position d origine est conservee - pas
+    # assez de donnees pour juger). Les series avec donnees suffisantes sont
+    # triees par taux de KO decroissant, les autres restent en place.
+    fiables = [s for s in SERIES_ORDRE if total_par_serie[s] >= nb_derniers]
+    if not fiables:
+        return list(SERIES_ORDRE)
+    fiables_tries = sorted(fiables, key=lambda s: (-ko_par_serie[s], s))
+    return fiables_tries + [s for s in SERIES_ORDRE if s not in fiables_tries]
 
 # Round 12 : garde-fous GLOBAUX - ils verifient l etat global du projet
 # (registre vide, absence de scripts temporaires, sessions) et ne doivent
 # JAMAIS tourner en parallele avec d autres tests (faux positifs assures).
 # Ils sont toujours lances en serie, apres le pool de workers.
 GARDE_FOUS_GLOBAUX = ["test-023", "test-024", "test-025", "test-027",
-                     "test-051", "test-052", "test-054", "test-055"]
+                     "test-051", "test-052", "test-054", "test-055", "test-056",
+                     "test-057"]
 
 # Round 14 (lecon 2026-08-14) : tests qui ECRIVENT des fichiers partages
-# (README, catalogue...) et ne doivent JAMAIS tourner en parallele avec les
-# tests qui LISENT ces fichiers (ex: test-020 modifie le README en reel
-# pendant que test-038 lit le badge -> KO intermittent en pool). Ils sont
-# lances en serie finale avec les garde-fous globaux.
-TESTS_SERIE_EXCLUSIFS = ["test-020"]
+# (README, catalogue, temps-reference...) et ne doivent JAMAIS tourner en
+# parallele avec les tests qui LISENT ces fichiers (ex: test-020 modifie le
+# README en reel pendant que test-038 lit le badge ; test-031 supprime/restaure
+# temps-reference.json pendant que le lanceur parent la gere -> KO intermittent
+# en pool). Ils sont lances en serie finale avec les garde-fous globaux.
+# Round 15 (2026-08-15, lecon Janus) : test-061 pose des residus factices dans
+# le workspace partage pendant que test-006 (serie b) verifie 'aucun fichier
+# residuel dans le workspace' -> course en pool (KO intermittent 5b).
+TESTS_SERIE_EXCLUSIFS = ["test-020", "test-031", "test-061"]
 
 # Round 12 : durees mesurees (profil individuel 2026-08-13, machine 16 coeurs)
 # pour le tri decroissant du pool - les tests longs partent en premier sur
@@ -69,7 +122,8 @@ DUREES_CONNUES = {
     "test-011": 1, "test-008": 1, "test-007": 1, "test-029": 0,
     "test-033": 0, "test-034": 0, "test-035": 0, "test-036": 0,
     "test-037": 0, "test-038": 0, "test-039": 0, "test-040": 0,
-    "test-023": 0, "test-014": 0, "test-001": 0, "test-041": 0, "test-042": 0, "test-043": 0, "test-044": 0, "test-045": 0,    "test-046": 0, "test-047": 0, "test-048": 0, "test-051": 5, "test-052": 2, "test-054": 3, "test-055": 1,
+    "test-023": 0, "test-014": 0, "test-001": 0, "test-041": 0, "test-042": 0, "test-043": 0, "test-044": 0, "test-045": 0,    "test-046": 0, "test-061": 0, "test-047": 0, "test-048": 0, "test-051": 5, "test-052": 2, "test-054": 3, "test-055": 1,
+    "test-057": 0, "test-058": 0, "test-059": 0,
 }
 
 _COULEURS = {
@@ -83,6 +137,24 @@ _COULEURS = {
 
 def _couleur(texte, nom="neutre"):
     return "%s%s%s" % (_COULEURS.get(nom, _COULEURS["neutre"]), texte, _COULEURS["neutre"])
+
+
+def verrouiller_habilitation(agent, outil):
+    """Verrou d habilitation : appelle proteger-verrou-habilitation et
+    retourne (code, message). Le verrou lit les cartes de decision comme
+    source de verite - aucune table en dur ici. Code 0 = habilite, 1 =
+    bloque, 2 = erreur d utilisation."""
+    racine = racine_projet()
+    verrou = os.path.join(
+        racine, "cerveau-projet", "agents", "tools", "proteger",
+        "proteger-verrou-habilitation", "proteger-verrou-habilitation.py")
+    if not os.path.isfile(verrou):
+        return (2, "[ERREUR] Verrou introuvable : %s" % verrou)
+    r = subprocess.run(
+        [sys.executable, verrou, "--agent", agent, "--outil", outil],
+        capture_output=True, text=True, encoding="utf-8", errors="replace")
+    message = (r.stdout + r.stderr).strip()
+    return (r.returncode, message)
 
 
 def racine_projet():
@@ -273,8 +345,11 @@ def assigner_series(tests, serie="tous"):
 
 
 def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
-                 agent="", serie=""):
-    """Execute une liste de tests en serie. Retourne (ok, ko, ko_liste).
+                 agent="", serie="", timeout_test=0):
+    """Execute une liste de tests en serie.
+    Retourne (ok, ko, ko_liste, non_lances, durees) : durees est une liste de
+    couples (nom_test, duree_secondes) pour CHAQUE test execute (round 17 :
+    le rapport doit fournir le chrono par test pour aider aux optimisations).
 
     fail_fast (protection STOP, option --fail-fast) : des le premier test KO
     (ou ERREUR), la suite est STOPPEE - les tests restants ne sont pas lances
@@ -288,35 +363,59 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
     ok = ko = 0
     non_lances = 0
     ko_liste = []
+    durees = []
     for i, t in enumerate(tests):
         t_debut = time.monotonic()
         try:
-            r = subprocess.run([sys.executable, t], capture_output=True, text=True, timeout=180)
+            r = subprocess.run([sys.executable, t], capture_output=True, text=True,
+                               timeout=timeout_test if timeout_test > 0 else 180)
             nb_ko = compter_ko(r.stdout)
+            duree = time.monotonic() - t_debut
+            durees.append((os.path.basename(t), round(duree, 2)))
             if nb_ko == 0 and r.returncode == 0:
                 ok += 1
                 print("  %-50s %s" % (os.path.basename(t), _couleur("OK", "vert")))
                 journaliser_test(racine, agent, serie, os.path.basename(t),
-                                 "OK", time.monotonic() - t_debut)
+                                 "OK", duree)
             else:
                 ko += 1
                 ko_liste.append((os.path.basename(t), nb_ko,
                                  extraire_lignes_ko(r.stdout)))
                 print("  %-50s %s (%d [KO])" % (os.path.basename(t), _couleur("KO", "rouge"), nb_ko))
                 journaliser_test(racine, agent, serie, os.path.basename(t),
-                                 "KO", time.monotonic() - t_debut)
+                                 "KO", duree)
                 if fail_fast:
                     non_lances = len(tests) - i - 1
                     if non_lances > 0:
                         print(_couleur("  [FAIL-FAST] Test en erreur : la suite est STOPPEE, "
                                        "%d test(s) non lance(s)" % non_lances, "rouge"))
                     break
+        except subprocess.TimeoutExpired:
+            # PROTECTION ERREUR-SILENCIEUSE (demande utilisateur 2026-08-15) :
+            # le timeout a expire SANS reponse ni erreur directe -> ce n est
+            # PAS un KO banal mais une ERREUR SILENCIEUSE a trouver/a resoudre,
+            # puis l agent RELANCE le script ou fichier corrige.
+            duree = time.monotonic() - t_debut
+            durees.append((os.path.basename(t), round(duree, 2)))
+            ko += 1
+            ko_liste.append((os.path.basename(t), -2, []))
+            print("  %-50s %s" % (os.path.basename(t), _couleur("ERREUR SILENCIEUSE (timeout)", "rouge")))
+            journaliser_test(racine, agent, serie, os.path.basename(t),
+                             "TIMEOUT", duree)
+            if fail_fast:
+                non_lances = len(tests) - i - 1
+                if non_lances > 0:
+                    print(_couleur("  [FAIL-FAST] Erreur silencieuse : la suite est STOPPEE, "
+                                   "%d test(s) non lance(s)" % non_lances, "rouge"))
+                break
         except Exception as e:
+            duree = time.monotonic() - t_debut
+            durees.append((os.path.basename(t), round(duree, 2)))
             ko += 1
             ko_liste.append((os.path.basename(t), -1, []))
             print("  %-50s %s (%s)" % (os.path.basename(t), _couleur("ERREUR", "rouge"), str(e)[:40]))
             journaliser_test(racine, agent, serie, os.path.basename(t),
-                             "ERREUR", time.monotonic() - t_debut)
+                             "ERREUR", duree)
             if fail_fast:
                 non_lances = len(tests) - i - 1
                 if non_lances > 0:
@@ -329,16 +428,19 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
     print(_couleur("=== RESULTAT%s : %d OK / %d KO (sur %d tests, %d non lances) ==="
                    % (suffixe, ok, ko, lance_total, non_lances),
                    "vert" if ko == 0 else "rouge"))
-    return ok, ko, ko_liste, non_lances
+    return ok, ko, ko_liste, non_lances, durees
 
 
-def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
+def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie="",
+                  timeout_test=0):
     """Execute une liste de tests sur un pool de workers paralleles.
 
     Round 12 : les tests sont tries par DUREE DECROISSANTE (les plus longs
     partent en premier sur les workers, les courts remplissent les creneaux
     restants) puis distribues sur `workers` sous-processus simultanes.
-    Retourne (ok, ko, ko_liste, non_lances).
+    Retourne (ok, ko, ko_liste, non_lances, durees) : durees liste de couples
+    (nom_test, duree_secondes) pour CHAQUE test execute (round 17 : chrono
+    par test dans le rapport pour aider aux optimisations).
 
     fail_fast : des le premier KO, le pool est stoppe - les tests restants
     ne sont pas lances (non_lances > 0).
@@ -347,7 +449,7 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
     journalise dans registre-tests.jsonl (verdict + duree).
     """
     if not tests:
-        return 0, 0, [], 0
+        return 0, 0, [], 0, []
     if workers <= 1:
         return executer_lot(racine, tests, libelle="Serie unique",
                             fail_fast=fail_fast, agent=agent, serie=serie)
@@ -363,11 +465,13 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
     # le sous-processus se bloque en ecrivant (poll() ne passe jamais a None).
     # Chaque test redirige sa sortie vers un FICHIER temp unique, lu apres
     # terminaison : aucun pipe, aucun blocage possible.
-    TIMEOUT_POOL = 300  # secondes par test (protection anti-blocage : un test
-    # qui se bloque (verrou fichier, attente) est tue apres ce delai).
+    TIMEOUT_POOL = timeout_test if timeout_test > 0 else 300
+    # secondes par test (protection anti-blocage : un test qui se bloque
+    # (verrou fichier, attente) est tue apres ce delai).
     ok = ko = 0
     non_lances = 0
     ko_liste = []
+    durees = []
     actifs = []
     index = 0
     stoppe = False
@@ -382,7 +486,8 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
             with io.open(fic_sortie, "w", encoding="utf-8", newline="\n") as fh:
                 p = subprocess.Popen([sys.executable, t], cwd=racine,
                                      stdout=fh, stderr=subprocess.STDOUT)
-            actifs.append([p, t, time.monotonic(), fic_sortie])
+            # [p, t, debut, fichier_sortie, tue_par_timeout]
+            actifs.append([p, t, time.monotonic(), fic_sortie, False])
         # Attendre qu AU MOINS un processus se termine (ou depasse le timeout).
         finis = []
         for a in actifs:
@@ -394,6 +499,7 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
                     p.kill()
                 except Exception:
                     pass
+                a[4] = True  # marque : tue par timeout (erreur silencieuse)
                 finis.append(a)
         if not finis:
             if not actifs:
@@ -402,7 +508,7 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
             continue
         for a in finis:
             actifs.remove(a)
-            p, t, _, fic_sortie = a
+            p, t, _, fic_sortie, tue_timeout = a
             try:
                 with io.open(fic_sortie, encoding="utf-8", errors="replace") as fh:
                     sortie = fh.read()
@@ -414,8 +520,20 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
                 pass
             nb_ko = compter_ko(sortie)
             duree = time.monotonic() - a[2]
+            durees.append((os.path.basename(t), round(duree, 2)))
             serie_test = serie if serie != "tous" else serie_du_test(os.path.basename(t))
-            if nb_ko == 0 and p.returncode == 0:
+            if tue_timeout:
+                # PROTECTION ERREUR-SILENCIEUSE (demande utilisateur 2026-08-15) :
+                # timeout expire SANS reponse ni erreur directe -> a trouver/a
+                # resoudre, puis l agent RELANCE le script ou fichier corrige.
+                ko += 1
+                ko_liste.append((os.path.basename(t), -2, []))
+                print("  %-50s %s" % (os.path.basename(t), _couleur("ERREUR SILENCIEUSE (timeout)", "rouge")))
+                journaliser_test(racine, agent, serie_test, os.path.basename(t),
+                                 "TIMEOUT", duree)
+                if fail_fast:
+                    stoppe = True
+            elif nb_ko == 0 and p.returncode == 0:
                 ok += 1
                 print("  %-50s %s" % (os.path.basename(t), _couleur("OK", "vert")))
                 journaliser_test(racine, agent, serie_test, os.path.basename(t),
@@ -438,7 +556,7 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie=""):
     print(_couleur("=== RESULTAT Pool : %d OK / %d KO (sur %d tests, %d non lances) ==="
                    % (ok, ko, len(tries) - non_lances, non_lances),
                    "vert" if ko == 0 else "rouge"))
-    return ok, ko, ko_liste, non_lances
+    return ok, ko, ko_liste, non_lances, durees
 
 
 def afficher_details_ko(ko_liste):
@@ -452,12 +570,31 @@ def afficher_details_ko(ko_liste):
     print(_couleur("=== DETAILS DES KO (pour action immediate) ===", "rouge"))
     for entree in ko_liste:
         nom, nb, details = (list(entree) + [None, []])[:3]
+        if nb == -2:
+            print("  %s : ERREUR SILENCIEUSE (timeout) - le test n a ni reussi ni "
+                  "echoue directement : a trouver/a resoudre, puis RELANCER le "
+                  "script ou fichier corrige" % nom)
+            continue
         if nb == -1:
             print("  %s : ERREUR d execution (le test n a pas pu tourner)" % nom)
             continue
         print("  %s : %d [KO]" % (nom, nb))
         for ligne in details or []:
             print("      %s" % ligne)
+    print("")
+
+
+def afficher_tests_lents(durees, top=10):
+    """Affiche le top des tests les plus lents (chrono par test, round 17,
+    demande utilisateur : aider aux optimisations). Trie par duree
+    DECROISSANTE. N affiche rien si aucune duree collectee."""
+    if not durees:
+        return
+    tries = sorted(durees, key=lambda paire: paire[1], reverse=True)
+    print("")
+    print(_couleur("=== TESTS LES PLUS LENTS (top %d, chrono par test) ===" % min(top, len(tries)), "jaune"))
+    for nom, duree in tries[:top]:
+        print("  %-50s %6.2f s" % (nom, duree))
     print("")
 
 
@@ -487,8 +624,9 @@ def afficher_etat_registre(racine):
     return lignes
 
 
-def ecrire_rapport(chemin, titre, bilan, ko_liste, lignes_registre):
-    """Ecrit le rapport markdown du bilan."""
+def ecrire_rapport(chemin, titre, bilan, ko_liste, lignes_registre, durees=None):
+    """Ecrit le rapport markdown du bilan (+ top des tests les plus lents si
+    les durees par test sont fournies - round 17, chrono par test)."""
     with io.open(chemin, "w", encoding="utf-8", newline="\n") as fh:
         fh.write("# Rapport non-regression\n\n")
         fh.write("Titre : %s\n\n" % titre)
@@ -498,12 +636,75 @@ def ecrire_rapport(chemin, titre, bilan, ko_liste, lignes_registre):
             fh.write("## Tests en echec (details)\n\n")
             for entree in ko_liste:
                 nom, nb, details = (list(entree) + [None, []])[:3]
+                if nb == -2:
+                    fh.write("- %s : ERREUR SILENCIEUSE (timeout) - a resoudre puis relancer\n" % nom)
+                    continue
                 fh.write("- %s : %d [KO]\n" % (nom, nb))
                 for ligne in details or []:
                     fh.write("  - %s\n" % ligne)
+        if durees:
+            fh.write("\n## Tests les plus lents (chrono par test, top 10)\n\n")
+            for nom, duree in sorted(durees, key=lambda paire: paire[1], reverse=True)[:10]:
+                fh.write("- %s : %.2f s\n" % (nom, duree))
         if lignes_registre is not None:
             fh.write("\nRegistre d usage apres : %d lignes\n" % lignes_registre)
     print(_couleur("[OK] Rapport ecrit : %s" % chemin, "vert"))
+
+
+def chemin_config_tests(racine):
+    """Chemin du fichier de configuration persistante des tests actifs/
+    desactives (machine-dependante, gitignore, comme temps-reference.json)."""
+    return os.path.join(racine, "cerveau-projet", "agents", "tools", "tester",
+                        "tester-lancer-non-regression", "config-tests.json")
+
+
+def lire_config_tests(racine):
+    """Lit la configuration persistante des tests desactives (demande
+    utilisateur 2026-08-15 : Janus active/desactive des tests par numero et
+    demarre au lancement suivant avec les regles de l utilisation
+    precedente). Format JSON : {"desactives": ["test-024", ...]}. Retourne
+    la liste des noms test-0XX desactives (vide si fichier absent)."""
+    chemin = chemin_config_tests(racine)
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            d = json.load(fh)
+        desactives = d.get("desactives", [])
+        return [str(x) for x in desactives if str(x).strip()]
+    except (IOError, OSError, ValueError):
+        return []
+
+
+def ecrire_config_tests(racine, desactives):
+    """Ecrit la configuration persistante des tests desactives (JSON, LF,
+    ASCII strict). Cree le fichier s il n existe pas."""
+    chemin = chemin_config_tests(racine)
+    try:
+        entree = {
+            "desactives": sorted(set(desactives)),
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        with io.open(chemin, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(entree, ensure_ascii=True, indent=1) + "\n")
+        return True
+    except (IOError, OSError):
+        return False
+
+
+def appliquer_config_tests(tests, desactives):
+    """Retire de la liste les tests desactives (par nom test-0XX). Retourne
+    (actifs, desactives_trouves) : la liste des tests a lancer et ceux qui
+    ont ete retires (pour affichage distinct NON LANCE)."""
+    if not desactives:
+        return tests, []
+    actifs = []
+    retires = []
+    for t in tests:
+        nom = os.path.basename(t)
+        if any(nom.startswith(d) for d in desactives):
+            retires.append(nom)
+        else:
+            actifs.append(t)
+    return actifs, retires
 
 
 def chemin_reference(racine):
@@ -639,10 +840,19 @@ def detecter_parent_temporaire(racine):
 
 
 def main():
+    # AFFICHAGE EN DIRECT (lecon 2026-08-15, demande utilisateur) : en sortie
+    # redirigee (pipe, entonnoir, combo) Python bufferise stdout et ne
+    # l affiche qu a la fin - on ne voit RIEN pendant des dizaines de
+    # secondes. Le line_buffering force chaque ligne a s afficher des qu
+    # elle est emise : le passage des barrieres se voit EN DIRECT.
+    try:
+        sys.stdout.reconfigure(line_buffering=True)
+        sys.stderr.reconfigure(line_buffering=True)
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(description="Lance la non-regression complete des tests formels")
     parser.add_argument("--series", type=str, default="tous",
-                        choices=["a", "b", "c", "d", "e", "tous"],
-                        help="Ne lancer qu une serie (a|b|c|d|e) ou toutes (tous, defaut)")
+                        help="Series a lancer (a|b|c|d|e, liste separee par des virgules ex: a,c, ou tous par defaut)")
     parser.add_argument("--workers", type=int, default=0,
                         help="Nombre de workers paralleles (defaut : min(cpu_count, 16))")
     parser.add_argument("--parallele", action="store_true",
@@ -651,6 +861,8 @@ def main():
                         help="Force le mode serie complet (ancien comportement)")
     parser.add_argument("--fail-fast", action="store_true",
                         help="PROTECTION STOP : des le premier test KO, la suite est stoppee (les tests restants ne sont pas lances)")
+    parser.add_argument("--timeout-test", type=int, default=0,
+                        help="Timeout INTERNE par test en secondes (defaut : 180 serie / 300 pool) - jamais de timeout exterieur (regle immuable)")
     parser.add_argument("--seuil", type=float, default=25.0,
                         help="Pourcentage de depassement tolere avant SIGNAL de ralentissement (defaut 25)")
     parser.add_argument("--rebase-reference", action="store_true",
@@ -659,6 +871,14 @@ def main():
                         help="Ne pas lire ni ecrire la reference de temps (sous-processus paralleles)")
     parser.add_argument("--tests", type=str, default="",
                         help="Filtrer par noms de test separes par des virgules")
+    parser.add_argument("--desactiver", type=str, default="",
+                        help="Desactiver des tests par numero (ex: --desactiver 24,28 pour test-024,test-028). PERSISTANT : enregistre dans config-tests.json et herite au prochain lancement.")
+    parser.add_argument("--activer", type=str, default="",
+                        help="Reactiver des tests par numero (ex: --activer 24 pour test-024). PERSISTANT : retire de config-tests.json.")
+    parser.add_argument("--etat-tests", action="store_true",
+                        help="Affiche la configuration persistante (tests actifs/desactives) puis quitte sans lancer")
+    parser.add_argument("--ordre-fixe", action="store_true",
+                        help="Forcer l ordre historique des series (a,b,c,d,e) au lieu du classement dynamique par taux de KO")
     parser.add_argument("--no-journal", action="store_true",
                         help="Rotation du registre d usage avant (plafond 100 usages normaux, defaut)")
     parser.add_argument("--journal", action="store_true",
@@ -669,6 +889,20 @@ def main():
                         help="Nom de l agent qui lance les tests (journalise chaque test dans registre-tests.jsonl)")
     parser.add_argument("--version", action="version", version="tester-lancer-non-regression v%s" % VERSION)
     args = parser.parse_args()
+
+    # VERROU D HABILITATION (regle immuable : seul janus lance la
+    # non-regression). --agent est OBLIGATOIRE : sans lui, impossible de
+    # verifier qui appelle (le verrou refuse rc=2). L appel au verrou se fait
+    # AVANT toute action : si l agent n est pas habilite, la suite n est pas
+    # lancee et le message indique QUI est habilite et COMMENT l activer.
+    if not args.agent:
+        print(_couleur("[ERREUR] --agent est OBLIGATOIRE : le lanceur doit "
+                       "connaitre l agent appelant (verrou d habilitation).", "rouge"))
+        return 2
+    code, message = verrouiller_habilitation(args.agent, "tester-lancer-non-regression")
+    if code != 0:
+        print(_couleur(message, "rouge"))
+        return 1 if code == 1 else 2
 
     racine = racine_projet()
     # Anti-artefact test-024 (lecon 2026-08-13) : si le lanceur est execute
@@ -685,43 +919,181 @@ def main():
         print(_couleur("[ERREUR] Aucun test trouve", "rouge"))
         return 2
 
+    # CONFIGURATION PERSISTANTE DES TESTS (demande utilisateur 2026-08-15) :
+    # Janus peut activer/desactiver des tests par numero (--activer/
+    # --desactiver N). La config est PERSISTEE dans config-tests.json et
+    # HERITEE au lancement suivant : la suite demarre avec les regles de
+    # l utilisation precedente, puis les overrides de la commande courante
+    # sont appliques. --etat-tests affiche l etat sans lancer.
+    desactives_config = lire_config_tests(racine)
+    tests_desactives = []
+
+    if args.etat_tests:
+        actifs, retires = appliquer_config_tests(tests, desactives_config)
+        print(_couleur("=== ETAT CONFIGURATION DES TESTS (persistante) ===", "cyan"))
+        print("Fichier : %s" % chemin_config_tests(racine))
+        print(_couleur("Tests ACTIFS (%d) :" % len(actifs), "vert"))
+        for t in actifs:
+            print("  %s" % os.path.basename(t))
+        print(_couleur("Tests DESACTIVES (%d) :" % len(retires), "rouge"))
+        for nom in sorted(retires):
+            print("  %s (NON LANCE)" % nom)
+        return 0
+
+    def _normaliser_numero(n):
+        """Accepte 24 ou test-024, retourne test-0XX (ou None si invalide)."""
+        n = n.strip()
+        if n.startswith("test-"):
+            n = n[len("test-"):]
+        if not n.isdigit():
+            return None
+        return "test-%03d" % int(n)
+
+    if args.desactiver:
+        nums = [_normaliser_numero(n) for n in args.desactiver.split(",") if n.strip()]
+        invalides = [n for n in nums if n is None]
+        if invalides:
+            print(_couleur("[ERREUR] Numero(s) invalide(s) : %s (attendu 24 ou test-024)"
+                           % args.desactiver, "rouge"))
+            return 2
+        for n_clean in nums:
+            if n_clean not in desactives_config:
+                desactives_config.append(n_clean)
+        if ecrire_config_tests(racine, desactives_config):
+            print(_couleur("[CONFIG] Tests desactives et persistes : %s"
+                           % ", ".join(sorted(set(desactives_config))), "jaune"))
+        else:
+            print(_couleur("[ERREUR] Impossible d ecrire config-tests.json", "rouge"))
+            return 2
+
+    if args.activer:
+        nums = [_normaliser_numero(n) for n in args.activer.split(",") if n.strip()]
+        invalides = [n for n in nums if n is None]
+        if invalides:
+            print(_couleur("[ERREUR] Numero(s) invalide(s) : %s (attendu 24 ou test-024)"
+                           % args.activer, "rouge"))
+            return 2
+        for n_clean in nums:
+            if n_clean in desactives_config:
+                desactives_config.remove(n_clean)
+        if ecrire_config_tests(racine, desactives_config):
+            print(_couleur("[CONFIG] Tests reactives et persistes : %s"
+                           % ", ".join(sorted(set(desactives_config))), "vert"))
+        else:
+            print(_couleur("[ERREUR] Impossible d ecrire config-tests.json", "rouge"))
+            return 2
+
+    # Applique la configuration (persistee + overrides) : les tests desactives
+    # sont retires AVANT le decoupage en series, affiches distinctement
+    # (NON LANCE) dans le bilan. On conserve la liste BRUTE (avant
+    # desactivation) pour distinguer plus bas une serie vide par FILTRE
+    # (comportement historique rc=2 "Aucun test trouve") d une serie vide
+    # uniquement par DESACTIVATION (skip legitime).
+    tests_bruts = list(tests)
+    tests, tests_desactives = appliquer_config_tests(tests, desactives_config)
+    if tests_desactives:
+        print(_couleur("[CONFIG] %d test(s) desactive(s) (herite de config-tests.json) : %s"
+                       % (len(tests_desactives), ", ".join(sorted(tests_desactives))), "jaune"))
+    if not tests:
+        print(_couleur("[ERREUR] Aucun test actif apres application de la configuration", "rouge"))
+        return 2
+
     # Round 11 (chrono) : le chrono demarre au debut de la premiere serie et
     # s arrete a la fin de la derniere. En mode mono-serie, il couvre la serie
     # (sans toucher a la reference globale).
     t0 = time.monotonic()
 
     if args.series != "tous":
-        # Mode mono-serie : une passe en serie (comportement historique),
-        # avec protection du registre si demandee.
-        selection, _ = assigner_series(tests, args.series)
-        selection = selection[args.series]
-        if not selection:
-            print(_couleur("[ERREUR] Aucun test trouve pour la serie %s" % args.series, "rouge"))
+        # Mode series selectionnees (demande utilisateur 2026-08-15) :
+        # --series accepte une liste (ex: a,c) en plus du mono (a) et de
+        # tous. Les series sont lancees dans l ORDRE D IMPORTANCE (A
+        # Fondations d abord) ; si une serie a un KO, la suivante ne se
+        # lance pas (philosophie barriere entre series). La protection du
+        # registre se fait UNE fois (comme --tous).
+        series_demandees = [s.strip().lower() for s in args.series.split(",") if s.strip()]
+        series_inconnues = [s for s in series_demandees if s not in SERIES]
+        if series_inconnues:
+            print(_couleur("[ERREUR] Serie(s) inconnue(s) : %s (valides : a,b,c,d,e)"
+                           % ", ".join(sorted(series_inconnues)), "rouge"))
             return 2
+        # Ordre d importance : trier les demandees selon SERIES_ORDRE
+        ordre = [s for s in SERIES_ORDRE if s in series_demandees]
         protege = not args.journal
         if protege:
             rotation_registre(racine)
-        ok, ko, ko_liste, non_lances = executer_lot(racine, selection,
-                                                    libelle="Serie %s (%s)" % (args.series.upper(), SERIES_NOMS[args.series]),
-                                                    fail_fast=args.fail_fast,
-                                                    agent=args.agent,
-                                                    serie=args.series)
+        if args.timeout_test > 0:
+            # Le timeout INTERNE reste le seul delai (jamais de timeout
+            # exterieur - regle immuable) : il devient parametrable pour les
+            # tests lents ou les preuves rapides.
+            TIMEOUT_POOL = args.timeout_test
+        total_ok = total_ko = total_non = 0
+        ko_liste_globale = []
+        durees_globales = []
+        libelles = []
+        for serie in ordre:
+            selection, _ = assigner_series(tests, serie)
+            selection = selection[serie]
+            if not selection:
+                # Serie vide : distinguer la cause.
+                # 1) FILTRE --tests : la serie ne contient aucun test du
+                #    filtre -> comportement historique rc=2 "Aucun test
+                #    trouve pour la serie" (verifie par test-027 6b).
+                # 2) DESACTIVATION : tous les tests de la serie sont
+                #    desactives par la config -> skip legitime (le but meme
+                #    de la desactivation : controle cible sans relancer les
+                #    tests inutiles).
+                selection_brute, _ = assigner_series(tests_bruts, serie)
+                if not selection_brute[serie]:
+                    print(_couleur("[ERREUR] Aucun test trouve pour la serie %s"
+                                   % serie.upper(), "rouge"))
+                    return 2
+                print(_couleur("[CONFIG] Serie %s : aucun test actif (tous desactives), serie sautee"
+                               % serie.upper(), "jaune"))
+                continue
+            ok, ko, ko_liste, non_lances, durees = executer_lot(racine, selection,
+                                                                libelle="Serie %s (%s)" % (serie.upper(), SERIES_NOMS[serie]),
+                                                                fail_fast=args.fail_fast,
+                                                                agent=args.agent,
+                                                                serie=serie,
+                                                                timeout_test=args.timeout_test)
+            total_ok += ok
+            total_ko += ko
+            total_non += non_lances
+            ko_liste_globale.extend(ko_liste)
+            durees_globales.extend(durees)
+            libelles.append(serie.upper())
+            if ko or non_lances:
+                break  # fail-fast entre series (philosophie barriere)
         duree = time.monotonic() - t0
-        afficher_chrono(racine, duree, "serie-%s" % args.series, len(selection),
+        libelle_series = "Series %s" % ",".join(libelles)
+        afficher_chrono(racine, duree, "series-%s" % ",".join(libelles).lower(),
+                        total_ok + total_ko + total_non + len(tests_desactives),
                         seuil=args.seuil, rebase=args.rebase_reference,
                         no_reference=True)
-        if ko:
-            afficher_details_ko(ko_liste)
+        if total_ko:
+            afficher_details_ko(ko_liste_globale)
+        afficher_tests_lents(durees_globales)
+        print("")
+        if tests_desactives:
+            print(_couleur("=== RESULTAT : %d OK / %d KO (sur %d tests, %d desactives NON LANCES) ==="
+                           % (total_ok, total_ko, total_ok + total_ko + total_non,
+                              len(tests_desactives)), "vert" if total_ko == 0 else "rouge"))
+            print(_couleur("Tests desactives (config persistante) : %s"
+                           % ", ".join(sorted(tests_desactives)), "jaune"))
+        else:
+            print(_couleur("=== RESULTAT : %d OK / %d KO (sur %d tests, %d non lances) ==="
+                           % (total_ok, total_ko, total_ok + total_ko + total_non - total_non, total_non),
+                           "vert" if total_ko == 0 else "rouge"))
         lignes = None
         if protege:
             lignes = afficher_etat_registre(racine)
         if args.rapport:
             ecrire_rapport(args.rapport,
-                           "Serie %s (%s)" % (args.series.upper(), SERIES_NOMS[args.series]),
+                           libelle_series,
                            "=== RESULTAT : %d OK / %d KO (sur %d tests, %d non lances) ==="
-                           % (ok, ko, len(selection) - non_lances, non_lances),
-                           ko_liste, lignes)
-        return 1 if (ko or non_lances) else 0
+                           % (total_ok, total_ko, total_ok + total_ko + total_non - total_non, total_non),
+                           ko_liste_globale, lignes, durees_globales)
+        return 1 if (total_ko or total_non) else 0
 
     # Mode tous : protection du registre faite UNE fois par le parent.
     # (decision utilisateur 2026-08-14 : plus d archivage historique, purge
@@ -735,21 +1107,35 @@ def main():
     ko_liste = []
     tot_ok = tot_ko = 0
     tot_non_lances = 0
+    durees_total = []
 
-    # Round 12 : POOL DE WORKERS (le DEFAUT). Les tests hors garde-fous
-    # globaux sont tries par duree decroissante et distribues sur N workers
-    # paralleles ; les garde-fous globaux (test-023/024/025/027 : registre,
-    # sessions, scripts temporaires) tournent en SERIE a la fin, jamais en
-    # parallele. --serial ou --workers 1 force le mode serie complet.
-    if args.workers and args.workers > 0:
-        workers = args.workers
-    else:
-        workers = min(os.cpu_count() or 1, 16)
-    parallele = (workers > 1) and not args.serial
-    if parallele:
-        # Separation : tests paralleles vs garde-fous globaux + exclusifs
-        # (serie finale). Les tests exclusifs ECRIVENT des fichiers partages
-        # (README, catalogue) - jamais en parallele avec ceux qui les lisent.
+    # Round 18 : BARRIERES DE PASSAGE = NOUVEAU DEFAUT (demande utilisateur).
+    # Les series s executent dans l ORDRE D IMPORTANCE (fondations d abord).
+    # Chaque serie doit etre 100% VERTE pour FRANCHIR la barriere vers la
+    # suivante. Si une serie a un KO (ou un non-lance), la barriere appelle la
+    # protection STOP : la suite s ARRETE, le rapport de la serie est fourni
+    # pour constater/analyser/reparer, puis on relance. Quand toutes les
+    # barrieres sont passees : rapport GLOBAL POSITIF.
+    # --parallele conserve l ancien pool de workers (option) ; --serial force
+    # une passe serie simple sans barrieres (ancien comportement de secours).
+    if args.serial:
+        # Mode serie simple (ancien comportement de secours, sans barrieres).
+        ok, ko, ko_liste, non_lances, durees_total = executer_lot(racine, tests, libelle="",
+                                                                 fail_fast=args.fail_fast,
+                                                                 agent=args.agent,
+                                                                 serie="tous",
+                                                                 timeout_test=args.timeout_test)
+        tot_ok, tot_ko = ok, ko
+        tot_non_lances = non_lances
+    elif args.parallele:
+        # POOL DE WORKERS (option --parallele, comportement historique).
+        # Les tests hors garde-fous globaux sont tries par duree decroissante
+        # et distribues sur N workers ; les garde-fous globaux (registre,
+        # sessions, scripts temporaires) tournent en SERIE a la fin.
+        if args.workers and args.workers > 0:
+            workers = args.workers
+        else:
+            workers = min(os.cpu_count() or 1, 16)
         exclu_ou_global = GARDE_FOUS_GLOBAUX + TESTS_SERIE_EXCLUSIFS
         tests_pool = [t for t in tests
                       if not any(os.path.basename(t).startswith(g)
@@ -760,47 +1146,110 @@ def main():
         if hors_serie:
             print(_couleur("[AVERTISSEMENT] %d test(s) sans serie affectee, lances avec le pool : %s"
                            % (len(hors_serie), ", ".join(os.path.basename(h) for h in hors_serie)), "jaune"))
-        ok_p, ko_p, ko_liste_p, non_lances_p = executer_pool(
+        ok_p, ko_p, ko_liste_p, non_lances_p, durees_p = executer_pool(
             racine, tests_pool + hors_serie, workers,
-            fail_fast=args.fail_fast, agent=args.agent, serie="tous")
+            fail_fast=args.fail_fast, agent=args.agent, serie="tous",
+            timeout_test=args.timeout_test)
         tot_ok += ok_p
         tot_ko += ko_p
         tot_non_lances += non_lances_p
         ko_liste.extend(ko_liste_p)
+        durees_total.extend(durees_p)
         # Garde-fous globaux en serie finale (jamais en parallele).
         if tests_globaux and non_lances_p == 0:
-            ok_g, ko_g, ko_liste_g, non_lances_g = executer_lot(
+            ok_g, ko_g, ko_liste_g, non_lances_g, durees_g = executer_lot(
                 racine, tests_globaux,
                 libelle="Garde-fous globaux + exclusifs (registre, sessions, scripts temp, README)",
-                fail_fast=args.fail_fast, agent=args.agent, serie="globaux")
+                fail_fast=args.fail_fast, agent=args.agent, serie="globaux",
+                timeout_test=args.timeout_test)
             tot_ok += ok_g
             tot_ko += ko_g
             tot_non_lances += non_lances_g
             ko_liste.extend(ko_liste_g)
+            durees_total.extend(durees_g)
     else:
-        # Mode serie complet (--serial ou --workers 1 : ancien comportement).
-        ok, ko, ko_liste, non_lances = executer_lot(racine, tests, libelle="",
-                                                    fail_fast=args.fail_fast,
-                                                    agent=args.agent,
-                                                    serie="tous")
-        tot_ok, tot_ko = ok, ko
-        tot_non_lances = non_lances
+        # BARRIERES (NOUVEAU DEFAUT) : chaque serie dans l ordre d importance,
+        # barriere 100% verte avant la suivante, STOP au premier KO.
+        # FIL DE PROGRESSION EN DIRECT (demande utilisateur 2026-08-15) : la
+        # ligne [BARRIERES ...] se complete a CHAQUE barriere franchie - on
+        # voit le parcours se construire sans attendre la fin.
+        barriere_bloquee = None
+        fil = []
+        # ORDRE DYNAMIQUE (demande utilisateur 2026-08-15) : les series avec
+        # le plus de KO passent en premier (sauf --ordre-fixe). Le classement
+        # est affiche pour transparence.
+        ordre_execution = (list(SERIES_ORDRE) if args.ordre_fixe
+                           else ordre_series_par_ko(racine, nb_derniers=5))
+        print(_couleur("[ORDRE SERIES] %s" % " > ".join(s.upper() for s in ordre_execution),
+                       "cyan"))
+        for s in ordre_execution:
+            selection = par_serie[s]
+            if not selection:
+                continue
+            print(_couleur("[BARRIERE %s] %s : lancement..." % (s.upper(), SERIES_NOMS[s]), "bleu"))
+            ok_s, ko_s, ko_liste_s, non_lances_s, durees_s = executer_lot(
+                racine, selection,
+                libelle="BARRIERE %s - %s" % (s.upper(), SERIES_NOMS[s]),
+                fail_fast=args.fail_fast, agent=args.agent, serie=s,
+                timeout_test=args.timeout_test)
+            tot_ok += ok_s
+            tot_ko += ko_s
+            tot_non_lances += non_lances_s
+            ko_liste.extend(ko_liste_s)
+            durees_total.extend(durees_s)
+            if ko_s > 0 or non_lances_s > 0:
+                barriere_bloquee = s
+                fil.append("%s X" % s.upper())
+                print(_couleur(
+                    "[BARRIERE BLOQUEE] Serie %s non 100%% verte : la suite est STOPPEE. "
+                    "Reparer les KO puis relancer pour franchir la barriere."
+                    % s.upper(), "rouge"))
+                print(_couleur("[PROGRESSION] %s" % " > ".join(fil), "jaune"))
+                break
+            fil.append("%s V" % s.upper())
+            print(_couleur("[BARRIERE FRANCHIE] Serie %s : 100%% verte, passage autorise."
+                           % s.upper(), "vert"))
+            print(_couleur("[PROGRESSION] %s" % " > ".join(fil), "vert"))
+        if barriere_bloquee is None and hors_serie:
+            print(_couleur("[AVERTISSEMENT] %d test(s) sans serie affectee, lances en queue : %s"
+                           % (len(hors_serie), ", ".join(os.path.basename(h) for h in hors_serie)), "jaune"))
+            ok_h, ko_h, ko_liste_h, non_lances_h, durees_h = executer_lot(
+                racine, hors_serie, libelle="Tests hors-serie (queue)",
+                fail_fast=args.fail_fast, agent=args.agent, serie="hors-serie",
+                timeout_test=args.timeout_test)
+            tot_ok += ok_h
+            tot_ko += ko_h
+            tot_non_lances += non_lances_h
+            ko_liste.extend(ko_liste_h)
+            durees_total.extend(durees_h)
 
     duree = time.monotonic() - t0
+    nb_desactives = len(tests_desactives)
     if tot_non_lances:
-        bilan = "=== RESULTAT GLOBAL : %d OK / %d KO (sur %d tests, %d non lances - FAIL-FAST) ===" \
+        bilan = "=== RESULTAT GLOBAL : %d OK / %d KO (sur %d tests, %d non lances - STOP) ===" \
                 % (tot_ok, tot_ko, len(tests) - tot_non_lances, tot_non_lances)
+    elif nb_desactives:
+        bilan = "=== RESULTAT GLOBAL : %d OK / %d KO (sur %d tests, %d desactives NON LANCES) ===" \
+                % (tot_ok, tot_ko, len(tests), nb_desactives)
     else:
         bilan = "=== RESULTAT GLOBAL : %d OK / %d KO (sur %d tests) ===" % (tot_ok, tot_ko, len(tests))
     print("")
     print(_couleur(bilan, "vert" if tot_ko == 0 else "rouge"))
+    if nb_desactives:
+        print(_couleur("Tests desactives (config persistante) : %s"
+                       % ", ".join(sorted(tests_desactives)), "jaune"))
     if tot_ko:
         afficher_details_ko(ko_liste)
-    # La reference globale n est geree QUE par le run complet sans filtre :
-    # un run cible (--tests) ou un appel interne ne doit jamais la lire ni
-    # l ecrire (sinon une reference partielle fausserait la comparaison).
-    reference_globale = not args.tests
-    mode_chrono = "pool-%d" % workers if parallele else "serie"
+    afficher_tests_lents(durees_total)
+    # La reference globale n est geree QUE par un run COMPLET sans filtre ET
+    # 100% VERT : un run cible (--tests), un appel interne, OU une suite
+    # ARRETEE par une barriere (KO) ne doivent jamais la lire ni l ecrire
+    # (sinon une reference partielle fausserait la comparaison - lecon
+    # 2026-08-15 : une barriere bloquee en B avait enregistre 15.4 s pour
+    # 23/55 tests, faussant le SIGNAL suivant a +531%).
+    reference_globale = not args.tests and tot_ko == 0 and tot_non_lances == 0
+    mode_chrono = "barrieres" if not (args.serial or args.parallele) else \
+                  ("pool-%d" % workers if args.parallele else "serie")
     afficher_chrono(racine, duree, mode_chrono, len(tests),
                     seuil=args.seuil, rebase=args.rebase_reference,
                     no_reference=args.no_reference or not reference_globale)
@@ -810,7 +1259,8 @@ def main():
         lignes = afficher_etat_registre(racine)
 
     if args.rapport:
-        ecrire_rapport(args.rapport, "Non-regression globale", bilan, ko_liste, lignes)
+        ecrire_rapport(args.rapport, "Non-regression globale", bilan, ko_liste,
+                       lignes, durees_total)
 
     return 1 if (tot_ko or tot_non_lances) else 0
 

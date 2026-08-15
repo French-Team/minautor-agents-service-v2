@@ -136,6 +136,25 @@
      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-evaluations-incompletes/detecter-evaluations-incompletes.py --motif <motif>",
      "nom": "detecter-evaluations-incompletes",
      "type": "outil"
+    },
+    {
+     "catalogue": "detecter-residus",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py",
+     "nom": "detecter-residus",
+     "type": "outil"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-donnees-en-dur",
+     "catalogue": "detecter-donnees-en-dur",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-donnees-en-dur/"
+    },
+    {
+     "type": "outil",
+     "nom": "proteger-verrou-habilitation",
+     "catalogue": "proteger-verrou-habilitation",
+     "chemin": "cerveau-projet/agents/tools/proteger/proteger-verrou-habilitation/"
     }
    ],
    "suivant": "c11",
@@ -171,7 +190,7 @@
      "type": "ref"
     }
    ],
-   "suivant": "c12b",
+   "suivant": "c12a",
    "titre": "Modifier l'outil",
    "type": "action"
   },
@@ -268,6 +287,13 @@
      "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
      "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json",
      "nom": "combos-moteur",
+     "type": "outil"
+    },
+    {
+     "catalogue": "combos-audit-general",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-audit-general/",
+     "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py",
+     "nom": "combos-audit-general",
      "type": "outil"
     }
    ],
@@ -370,6 +396,13 @@
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
      "nom": "activer-agent-principal",
+     "type": "outil"
+    },
+    {
+     "catalogue": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande <cmd> --reponses <cle=valeur;...>",
+     "nom": "generateurs-commande",
      "type": "outil"
     }
    ],
@@ -560,6 +593,13 @@
     {
      "texte": "REGLE WORKSPACE : ecriture = workspace seul (jamais hors workspace, meme temporaire).",
      "type": "regle"
+    },
+    {
+     "catalogue": "executer-script-temporaire",
+     "chemin": "cerveau-projet/agents/tools/executer/executer-script-temporaire/",
+     "commande": "python3 cerveau-projet/agents/tools/executer/executer-script-temporaire/executer-script-temporaire.py",
+     "nom": "executer-script-temporaire",
+     "type": "outil"
     }
    ],
    "suivant": "c18d",
@@ -764,7 +804,7 @@
      "type": "ref"
     }
    ],
-   "suivant": "c6b",
+   "suivant": "c6a",
    "titre": "Developper l'outil",
    "type": "action"
   },
@@ -871,6 +911,13 @@
      "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
      "nom": "combos-moteur",
      "type": "outil"
+    },
+    {
+     "catalogue": "corriger-fins-de-ligne",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-fins-de-ligne/",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-fins-de-ligne/corriger-fins-de-ligne.py",
+     "nom": "corriger-fins-de-ligne",
+     "type": "outil"
     }
    ],
    "suivant": "c7b",
@@ -887,6 +934,26 @@
      "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
      "raison": "Workflow RVAV obligatoire avant chaque activation",
      "type": "fichier"
+    },
+    {
+     "catalogue": "detecter-divergences-version",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-divergences-version/",
+     "nom": "detecter-divergences-version",
+     "type": "outil"
+    },
+    {
+     "catalogue": "detecter-cablages-manquants",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py --tous",
+     "nom": "detecter-cablages-manquants",
+     "type": "outil"
+    },
+    {
+     "catalogue": "valider-cartes-decision",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-cartes-decision/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --agent vulcain",
+     "nom": "valider-cartes-decision",
+     "type": "outil"
     }
    ],
    "suivant": "c8",
@@ -1048,6 +1115,40 @@
    "suivant": "c9b",
    "titre": "Ajouter les lecons dans corrections.md",
    "type": "action"
+  },
+  "c12a": {
+   "titre": "Bumper l outil (mettre-a-jour-versions)",
+   "type": "action",
+   "suivant": "c12b",
+   "indices": [
+    {
+     "catalogue": "mettre-a-jour-versions",
+     "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-versions/",
+     "nom": "mettre-a-jour-versions",
+     "type": "outil"
+    },
+    {
+     "texte": "BUMP SYSTEMATIQUE : apres TOUTE creation/modification d outil, lancer mettre-a-jour-versions sur la cible (dry-run puis --wet) pour synchroniser TOUTES les versions (en-tete, constante, sh, md, spec).",
+     "type": "regle"
+    }
+   ]
+  },
+  "c6a": {
+   "titre": "Bumper l outil (mettre-a-jour-versions)",
+   "type": "action",
+   "suivant": "c6b",
+   "indices": [
+    {
+     "catalogue": "mettre-a-jour-versions",
+     "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-versions/",
+     "nom": "mettre-a-jour-versions",
+     "type": "outil"
+    },
+    {
+     "texte": "BUMP SYSTEMATIQUE : apres TOUTE creation/modification d outil, lancer mettre-a-jour-versions sur la cible (dry-run puis --wet) pour synchroniser TOUTES les versions (en-tete, constante, sh, md, spec).",
+     "type": "regle"
+    }
+   ]
   }
  },
  "identite": {
@@ -1058,8 +1159,8 @@
  "parcours": {
   "agent": "vulcain",
   "case_depart": "c0",
-  "description": "v0.4.9 : + indices outil c2 verifier-systeme, c7 corriger-symboles + combos-moteur (coherence regle/indice outil, garde-fou test-055)",
+  "description": "Carte de decision de Vulcain - constructeur d outils. v0.4.16 : c13 + combos-audit-general, c18c + executer-script-temporaire (mission garantie LF).",
   "nom": "parcours-vulcain",
-  "version": "0.4.9"
+  "version": "0.4.17"
  }
 }

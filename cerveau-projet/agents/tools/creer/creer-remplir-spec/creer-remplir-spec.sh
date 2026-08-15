@@ -1,7 +1,7 @@
 #!/bin/bash
 # creer-remplir-spec.sh
 # Remplit une section d'une spec sans ouvrir le fichier
-# Version : 0.1.0-beta
+# Version : 0.2.0-beta
 # Statut : ebauche
 
 # Configuration

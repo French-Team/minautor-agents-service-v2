@@ -3,7 +3,7 @@
 """
 test-051-registre-tests.py
 GARDE-FOU : le registre-tests (trace des lancements de tests par les agents)
-existe et fonctionne. Le lanceur tester-lancer-non-regression v0.3.2 journalise
+existe et fonctionne. Le lanceur tester-lancer-non-regression v0.4.5 journalise
 CHAQUE test execute dans cerveau-projet/agents/traces/registre-tests.jsonl
 (date, agent, serie, test, verdict, duree) quand --agent est fourni - et
 UNIQUEMENT dans ce cas. Le registre-tests est DISTINCT de
@@ -12,13 +12,13 @@ registre-usages-outils.jsonl (jamais melanges).
 Contexte (demande utilisateur 2026-08-14) : comme le registre-usages-outils
 trace l utilisation des outils, chaque lancement de tests par un agent doit
 laisser une trace dans un registre dedie. La mission a ete realisee par
-Vulcain (outil v0.3.2) puis verifiee ici.
+Vulcain (outil v0.4.1) puis verifiee ici.
 
 Cas couverts:
-  1. Le lanceur est v0.3.2 (--version)
+  1. Le lanceur est v0.4.5 (--version)
   2. L aide contient l option --agent
   3. Le registre-tests est DISTINCT de registre-usages-outils (chemins differents)
-  4. PREUVE REELLE positive : run --series a --agent X -> des entrees creees
+  4. PREUVE REELLE positive : run --series c --agent X -> des entrees creees
      avec le bon agent et la bonne serie
   5. PREUVE REELLE negative : run sans --agent -> AUCUNE nouvelle entree
   6. Les entrees ont les champs attendus (date, agent, serie, test, verdict, duree)
@@ -121,7 +121,7 @@ def main():
 
     # 1. Version du lanceur
     out = run([sys.executable, LANCER, "--version"])
-    verifier("1. lanceur v0.3.2 (--version)", "v0.3.2" in out, out.strip())
+    verifier("1. lanceur v0.4.5 (--version)", "v0.4.5" in out, out.strip())
 
     # 2. Option --agent dans l aide
     out = run([sys.executable, LANCER, "--help"])
@@ -134,10 +134,18 @@ def main():
     verifier("3. registre-tests distinct de registre-usages-outils",
              distinct, "%s vs %s" % (REG_TESTS, REG_USAGES))
 
-    # 4-6. Preuves reelles : run --series a avec et sans --agent
+    # 4-6. Preuves reelles : run --series c (test-001 y est) avec et sans --agent.
+    # nom_tmp = "janus" : c est l agent REEL de la non-regression (le verrou
+    # v0.2.0 verifie l identite reelle de la session - seul janus peut lancer
+    # le lanceur). Pour ne PAS supprimer les VRAIES entrees janus au
+    # nettoyage (bug decouvert 2026-08-15 : le point 8 effacait toutes les
+    # entrees agent==janus du run complet), on memorise les lignes AVANT la
+    # preuve et on ne nettoiera que les NOUVELLES lignes ajoutees.
     avant = nb_entrees(REG_TESTS)
-    nom_tmp = "tmp-t051"
-    out = run([sys.executable, LANCER, "--series", "a", "--agent", nom_tmp,
+    nom_tmp = "janus"
+    lignes_avant_preuve = set(l for l in io.open(REG_TESTS, encoding="utf-8")
+                              if l.strip())
+    out = run([sys.executable, LANCER, "--series", "c", "--agent", nom_tmp,
                "--journal", "--tests", "test-001"])
     apres = nb_entrees(REG_TESTS)
     ok = apres > avant
@@ -152,7 +160,7 @@ def main():
             e = trouves[0]  # la plus recente (tri decroissant)
             champs = all(k in e for k in
                          ("date", "agent", "serie", "test", "verdict", "duree"))
-            ok = (e.get("serie") == "a" and champs)
+            ok = (e.get("serie") == "c" and champs)
             detail = "entree agent=%s serie=%s" % (e.get("agent"),
                                                    e.get("serie"))
         else:
@@ -162,7 +170,7 @@ def main():
 
     # 5. Preuve negative : run SANS --agent -> aucune nouvelle entree
     avant = nb_entrees(REG_TESTS)
-    out = run([sys.executable, LANCER, "--series", "a", "--journal",
+    out = run([sys.executable, LANCER, "--series", "c", "--journal",
                "--tests", "test-001"])
     apres = nb_entrees(REG_TESTS)
     verifier("5. run sans --agent : aucune nouvelle entree",
@@ -183,18 +191,31 @@ def main():
     verifier("7. registre-tests trie decroissant par date", trie,
              "%d entrees" % len(dates))
 
-    # 8. Nettoyage : le test NE DOIT PAS laisser ses preuves tmp-t051 dans le
-    # registre (artefact a chaque run, decouverte Janus 2026-08-14 : 5 entrees
-    # par non-regression). On reecrit le registre sans les lignes de l agent
-    # de test, en preservant le tri decroissant (regle v0.3.2) et le LF pur.
-    # Detection par json.loads (robuste au format espaces/sans espaces).
+    # 8. Nettoyage : le test NE DOIT PAS laisser ses preuves dans le registre
+    # (artefact a chaque run, decouverte Janus 2026-08-14 : 5 entrees par
+    # non-regression). On ne supprime QUE les NOUVELLES lignes ajoutees par la
+    # preuve du point 4 (difference avant/apres) - JAMAIS les entrees janus
+    # pre-existantes (bug decouvert 2026-08-15 : supprimer toutes les
+    # agent==janus vidait le registre des vraies entrees du run complet).
+    # On reecrit en preservant le tri decroissant (regle v0.4.1) et le LF pur.
     lignes = [l for l in io.open(REG_TESTS, encoding="utf-8") if l.strip()]
 
     def est_preuve(l):
+        # preuve = ligne NOUVELLE (absente avant le point 4) ET correspondant
+        # a la preuve reelle : le point 4 lance --series c --tests test-001,
+        # donc la preuve est l entree du test-001-evaluer-agents-coherence en
+        # serie c. C est robuste en parallele : les autres tests de la serie
+        # D journalisent LEURS propres noms (jamais test-001, qui est en
+        # serie C) - leurs nouvelles entrees ne sont PAS des preuves et sont
+        # conservees.
         try:
-            return json.loads(l).get("agent") == nom_tmp
+            e = json.loads(l)
         except ValueError:
             return False
+        return (l.strip() and l not in lignes_avant_preuve
+                and e.get("agent") == nom_tmp
+                and e.get("serie") == "c"
+                and "test-001-evaluer-agents-coherence" in e.get("test", ""))
 
     gardees = [l for l in lignes if not est_preuve(l)]
     if len(gardees) != len(lignes):
@@ -202,7 +223,7 @@ def main():
             fh.write("\n".join(gardees) + ("\n" if gardees else ""))
     apres_nettoyage = sum(1 for l in io.open(REG_TESTS, encoding="utf-8")
                           if l.strip() and est_preuve(l))
-    verifier("8. le test nettoie ses preuves tmp-t051 (0 restante)",
+    verifier("8. le test nettoie ses preuves (0 restante, vraies entrees janus conservees)",
              apres_nettoyage == 0, "restantes=%d" % apres_nettoyage)
 
     # 9. Garde-fou anti-recurrence (round 16, demande utilisateur) : le
@@ -216,6 +237,17 @@ def main():
     verifier("9. lanceur : extraction + affichage des details [KO] presents",
              ok_details)
 
+    # 9b. Garde-fou anti-recurrence (round 17/18, demande utilisateur) : le
+    #     lanceur doit TOUJOURS afficher la section TESTS LES PLUS LENTS
+    #     (chrono par test) - la fonction afficher_tests_lents existe, la
+    #     section est imprimee, et l appel est present dans main() (mono-
+    #     serie ET suite complete).
+    ok_lents = ("def afficher_tests_lents" in src_lanceur
+                and "TESTS LES PLUS LENTS" in src_lanceur
+                and src_lanceur.count("afficher_tests_lents(") >= 3)
+    verifier("9b. lanceur : section TESTS LES PLUS LENTS affichee (fonction + main)",
+             ok_lents)
+
     # 10-11. Normes
     fichiers = [os.path.abspath(__file__), LANCER]
     na = sum(compter_non_ascii(f) for f in fichiers)
@@ -224,13 +256,24 @@ def main():
              "na=%d" % na)
     verifier("11. LF pur : 0 CRLF (test + lanceur)", cr == 0, "crlf=%d" % cr)
 
-    if args.chrono:
+    if "--no-chrono" not in sys.argv:
         chrono_etape("test-051 registre-tests", time.time() - t0)
     print("")
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO,
                                                                NB_POINTS))
     return 0 if NB_KO == 0 else 1
 
+
+
+
+def bilan_chrono():
+    # Bilan des durees : total depuis le depart (regle immuable v0.3.0)
+    try:
+        _total = __import__("time").monotonic() - T_START
+    except Exception:
+        _total = 0.0
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
 
 if __name__ == "__main__":
     sys.exit(main())

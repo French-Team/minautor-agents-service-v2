@@ -1,7 +1,7 @@
 #!/bin/bash
 # combos-moteur.sh
 # Moteur generique de combos declaratifs (definition-combo.json) : version bash.
-# Version : 0.1.0-beta
+# Version : 0.3.3
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -18,7 +18,7 @@
 # REGLE IMMUABLE DE NOMMAGE : dossier 'combos/' -> prefixe 'combos-'
 # ============================================================
 
-VERSION="0.3.2"
+VERSION="0.3.3"
 STATUT="ebauche"
 
 # Verifier le nommage (regle immuable)
@@ -51,7 +51,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 STATUT = "ebauche"
 
 class ErreurCombo(Exception):
@@ -256,7 +256,7 @@ def persister_variable(nom, valeur):
             texte = texte[:index] + "\n" + ligne + "\n" + texte[index:]
 
     try:
-        chemin.write_text(texte, encoding="utf-8")
+        chemin.write_text(texte, encoding="utf-8", newline="")
     except OSError as exc:
         raise ErreurCombo("Impossible d'ecrire le classeur: %s" % exc)
     print("[PERSISTANT] %s = %s" % (nom, valeur_plate))

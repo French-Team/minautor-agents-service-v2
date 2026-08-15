@@ -26,7 +26,7 @@ Cas couverts:
   5. editer-parcours : --version v0.1.1
   6. tester-lancer-non-regression : --version v0.1.1
   7. enregistrer-usage-outil : mode script-temporaire accepte (--version v0.3.0)
-  8. Catalogue : les 3 nouvelles commandes presentes (145 total)
+  8. Catalogue : les nouvelles commandes presentes (157 total)
   9. index-tools : les 4 nouvelles lignes presentes (3 outils + editer-fichier-agents)
  10. ASCII strict : 0 non-ASCII (outils + test)
  11. LF pur : 0 CRLF (outils + test)
@@ -63,6 +63,53 @@ def charger_protections():
     return mod
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 
 DETECTER = os.path.join(TOOLS_DIR, "detecter", "detecter-usage-scripts-temporaires",
@@ -106,6 +153,22 @@ def crlf_count(chemin):
         return fh.read().count(b"\r\n")
 
 
+def lire_tmpignore():
+    """Lit cerveau-projet/agents/traces/.tmpignore et retourne les noms EXACTS
+    de dossiers temporaires autorises (derrogation ciblee v0.1.3). Fichier
+    absent ou vide = aucune derrogation. Format : un nom par ligne, # commentaire."""
+    chemin = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "traces",
+                          ".tmpignore")
+    noms = set()
+    if os.path.isfile(chemin):
+        with io.open(chemin, encoding="utf-8", errors="replace") as fh:
+            for ligne in fh:
+                nom = ligne.strip()
+                if nom and not nom.startswith("#"):
+                    noms.add(nom)
+    return noms
+
+
 def main():
     global NB_POINTS, NB_OK, NB_KO
 
@@ -120,6 +183,12 @@ def main():
         e = e.strip()
         if e:
             exclusions.add(e)
+    # Derrogation ciblee (v0.1.3, decision utilisateur 2026-08-15) : le
+    # fichier cerveau-projet/agents/traces/.tmpignore liste des noms EXACTS
+    # de dossiers temporaires autorises a rester. Un nom liste est exclu du
+    # scan, tout AUTRE dossier temp reste un residu (la protection reste forte).
+    for nom in lire_tmpignore():
+        exclusions.add(nom)
     zz = [n for n in os.listdir(racine)
           if n.startswith(".zz-") and n not in exclusions]
     tmp = [n for n in os.listdir(racine)
@@ -129,7 +198,8 @@ def main():
 
     # 2b. Aucun dossier temporaire RESIDUEL tmp-* a la racine (regle
     #     d origine v0.2.4) : le dossier tmp-<agent> de la mission COURANTE
-    #     est legitime (cree en debut, supprime en fin) et exclu ; tout
+    #     est legitime (cree en debut, supprime en fin) et exclu, ainsi que
+    #     les dossiers listes dans le .tmpignore (derrogation ciblee) ; tout
     #     AUTRE dossier tmp-* = residu = KO.
     agent_courant = ""
     profil = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
@@ -151,6 +221,23 @@ def main():
     verifier("2b. Aucun dossier tmp-* residuel a la racine (hors agent courant)",
              len(dossiers_residuels) == 0, str(dossiers_residuels[:5]))
 
+    # 2c. Format du .tmpignore (derrogation ciblee) : fichier present dans
+    #     traces/, ASCII strict, LF, lignes non vides hors commentaires = noms
+    #     EXACTS (aucun motif global de type tmp-*).
+    tmpignore_chemin = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                                    "traces", ".tmpignore")
+    format_ok = os.path.isfile(tmpignore_chemin)
+    if format_ok:
+        with io.open(tmpignore_chemin, encoding="utf-8", errors="replace") as fh:
+            contenu = fh.read()
+        format_ok = (ascii_count(tmpignore_chemin) == 0
+                     and crlf_count(tmpignore_chemin) == 0
+                     and all("*" not in ligne
+                             for ligne in contenu.splitlines()
+                             if ligne.strip() and not ligne.strip().startswith("#")))
+    verifier("2c. .tmpignore present dans traces/, ASCII + LF, noms EXACTS sans motif",
+             format_ok, os.path.basename(tmpignore_chemin) if not format_ok else "")
+
     # 3-4. detecter-usage-scripts-temporaires
     r = run([PYTHON, DETECTER, "--version"])
     verifier("3. detecter --version v0.1.1",
@@ -161,27 +248,27 @@ def main():
 
     # 5-6. editer-parcours + tester-lancer-non-regression
     r = run([PYTHON, EDITER_PARCOURS, "--version"])
-    verifier("5. editer-parcours --version v0.1.0",
-             r.returncode == 0 and "v0.1.1" in r.stdout, r.stdout.strip()[-60:])
+    verifier("5. editer-parcours --version v0.1.3",
+             r.returncode == 0 and "v0.1.3" in r.stdout, r.stdout.strip()[-60:])
     r = run([PYTHON, LANCER, "--version"])
-    verifier("6. tester-lancer-non-regression --version v0.3.2",
-             r.returncode == 0 and "v0.3.2" in r.stdout, r.stdout.strip()[-60:])
+    verifier("6. tester-lancer-non-regression --version v0.4.5",
+             r.returncode == 0 and "v0.4.5" in r.stdout, r.stdout.strip()[-60:])
 
     # 7. enregistrer-usage-outil v0.3.0 (mode script-temporaire + garde-fous + tri)
     r = run([PYTHON, ENREGISTRER, "--version"])
     verifier("7. enregistrer-usage-outil --version v0.3.0",
              r.returncode == 0 and "v0.3.0" in r.stdout, r.stdout.strip()[-60:])
 
-    # 8. Catalogue : 149 commandes + les nouvelles
+    # 8. Catalogue : 157 commandes + les nouvelles
     import json as json_mod
     with io.open(CATALOGUE, encoding="utf-8") as fh:
         cat = json_mod.load(fh)
     noms = [e.get("nom") for e in cat.get("commandes", [])]
-    ok_cat = (len(noms) == 154 and "tester-lancer-non-regression" in noms
+    ok_cat = (len(noms) == 161 and "tester-lancer-non-regression" in noms
               and "editer-parcours" in noms and "detecter-usage-scripts-temporaires" in noms
               and "detecter-cablages-manquants" in noms and "tester-protections" in noms
               and "detecter-fautes-orthographe" in noms)
-    verifier("8. catalogue : 154 commandes + nouvelles presentes",
+    verifier("8. catalogue : 161 commandes + nouvelles presentes",
              ok_cat, "nb=%d" % len(noms))
 
     # 9. index-tools : les 4 lignes presentes
@@ -253,6 +340,7 @@ def main():
              "nb_st=%d historique_present=%s" % (nb_st, os.path.isfile(historique)))
 
     print("")
+    bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
     return 1 if NB_KO else 0
 

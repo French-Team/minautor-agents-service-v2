@@ -7,7 +7,7 @@ identite:
 # Specification -- generateurs-outil-temporaire
 
 **Statut :** ebauche
-**Version :** 0.2.1
+**Version :** 0.2.2
 **Categorie :** generateurs
 **Date :** 2026-08-09
 
@@ -40,6 +40,7 @@ Fournir un generateur d'**outil temporaire** (script Python jetable) utilisable 
 | 8 | Directive promotion | OUI : activer Vulcain (maillon de chaine), Vulcain cree l'outil durable, Vulcain reactive l'agent precedent |
 | 9 | Parite .py/.sh | Meme comportement dans les deux versions (dry-run, workspace, promotion, refus ecrasement) |
 | 10 | DECLARATION USAGES (v0.2.1) | Le script genere embarque le bloc DECLARATION : variable `AGENT` + fonctions `declarer_usage()` / `declarer_usages()` qui appellent `enregistrer-usage-outil --mode script-temporaire` pour le script lui-meme et chaque outil utilise (appele en fin de main, erreur si AGENT non renseigne) |
+| 11 | CHRONO EN HAUT (v0.2.2) | BUFFER TOTAL (decision utilisateur 2026-08-15) : toute la sortie du script (y compris les sous-processus de declaration captures via `capture_output`) est retenue en memoire, le chrono `=== CHRONO ===` est affiche EN PREMIER puis le contenu - le chrono est TOUJOURS la premiere ligne |
 
 ## Interface
 

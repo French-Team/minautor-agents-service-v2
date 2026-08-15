@@ -32,7 +32,7 @@ Options:
 Retour: 0 si succes, 1 si erreur.
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.1
+Version : 0.2.2
 Statut : beta
 """
 
@@ -43,7 +43,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 STATUT = "beta"
 
 # Couleurs ANSI
@@ -181,6 +181,8 @@ def racine_projet():
 
 def declarer_usage(agent, outil, contexte):
     # Declare un usage au registre (mode script-temporaire par defaut)
+    # La sortie du sous-processus est CAPTUREE puis bufferisee (le chrono
+    # reste la premiere ligne - decision utilisateur 2026-08-15)
     import subprocess as _sp
     racine = racine_projet()
     if not racine:
@@ -191,7 +193,11 @@ def declarer_usage(agent, outil, contexte):
                                "enregistrer-usage-outil.py")
     cmd = [sys.executable, enregistrer, "--agent", agent, "--outil", outil,
            "--mode", "script-temporaire", "--contexte", contexte]
-    _sp.run(cmd, check=False)
+    _res = _sp.run(cmd, check=False, capture_output=True, text=True)
+    if _res.stdout:
+        print(_res.stdout, end="")
+    if _res.stderr:
+        print(_res.stderr, end="")
 
 
 def declarer_usages():
@@ -239,7 +245,8 @@ def chrono_etape(nom, t_debut):
 
 
 def bilan_chrono():
-    # Affiche le bilan des durees : total + detail par etape
+    # Affiche le bilan des durees : total + detail par etape (EN PREMIER,
+    # avant le contenu bufferise - decision utilisateur 2026-08-15)
     if not CHRONO_ACTIF:
         return
     total = time.monotonic() - DEBUT
@@ -249,18 +256,27 @@ def bilan_chrono():
 
 def main():
     verifier_nommage()
-    if DRY_RUN:
-        print("[DRY-RUN] aucune action reelle")
-        return 0
-    # A COMPLETER : logique du besoin (decouper en fonctions 1., 2., ...)
-    # Exemple de squelette avec point_actif + chrono :
-    if point_actif(1):
-        t = time.monotonic()
-        print("$nom : logique a completer")
-        chrono_etape("1. logique", t)
-    # DECLARATION OBLIGATOIRE (regle immuable) : le script et ses usages
-    declarer_usages()
-    bilan_chrono()
+    # BUFFER TOTAL (decision utilisateur 2026-08-15) : TOUTE la sortie du
+    # script (y compris les sous-processus de declaration) est retenue en
+    # memoire, le chrono est affiche EN PREMIER puis le contenu - le chrono
+    # est TOUJOURS la premiere ligne, visible a chaque execution.
+    import contextlib as _cl
+    import io as _io_mod
+    tampon = _io_mod.StringIO()
+    with _cl.redirect_stdout(tampon):
+        if DRY_RUN:
+            print("[DRY-RUN] aucune action reelle")
+        else:
+            # A COMPLETER : logique du besoin (decouper en fonctions 1., 2., ...)
+            # Exemple de squelette avec point_actif + chrono :
+            if point_actif(1):
+                t = time.monotonic()
+                print("$nom : logique a completer")
+                chrono_etape("1. logique", t)
+            # DECLARATION OBLIGATOIRE (regle immuable) : le script et ses usages
+            declarer_usages()
+    bilan_chrono()  # CHRONO EN PREMIER (demande utilisateur)
+    sys.stdout.write(tampon.getvalue())  # puis le contenu bufferise
     return 0
 
 

@@ -7,11 +7,11 @@ grosse mise a jour conservative du README : savoir CE QUI A CHANGE puis
 corriger compteurs, tables et badges).
 
 Combos testes (cerveau-projet/agents/tools/combos/):
-  1. combos-analyse-projet (orchestre py/sh/md, v0.1.1) : etat reel du projet
+  1. combos-analyse-projet (orchestre py/sh/md, v0.1.2) : etat reel du projet
      (agents, outils par categorie) + ecarts README vs realite
   2. combo-maj-readme (encapsule definition-combo.json, v0.1.0, 5 cases) :
      PETITE MAJ - verifier -> maj (si ecarts) -> ASCII
-  3. combos-maj-readme-massive (orchestre py/sh/md, v0.1.3) : GROSSE MAJ
+  3. combos-maj-readme-massive (orchestre py/sh/md, v0.1.5) : GROSSE MAJ
      conservative - analyse -> verifier -> maj -> correctifs -> ASCII
      (badge header Outils-N affichage + href alignes automatiquement)
 
@@ -56,6 +56,53 @@ def charger_protections():
     return mod
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 
 MOTEUR_PY = os.path.join(TOOLS_DIR, "combos", "combos-moteur", "combos-moteur.py")
@@ -98,11 +145,11 @@ for nom, p in FICHIERS:
 
 # 2. Versions
 r = run([PYTHON, ANALYSE_PY, "--version"])
-check(r.returncode == 0 and "combos-analyse-projet 0.1.1" in (r.stdout or r.stderr),
-      "version combos-analyse-projet 0.1.1")
+check(r.returncode == 0 and "combos-analyse-projet 0.1.2" in (r.stdout or r.stderr),
+      "version combos-analyse-projet 0.1.2")
 r = run([PYTHON, MASSIVE_PY, "--version"])
-check(r.returncode == 0 and "combos-maj-readme-massive 0.1.3" in (r.stdout or r.stderr),
-      "version combos-maj-readme-massive 0.1.3")
+check(r.returncode == 0 and "combos-maj-readme-massive 0.1.5" in (r.stdout or r.stderr),
+      "version combos-maj-readme-massive 0.1.5")
 
 # 3. JSON valide
 try:
@@ -122,8 +169,10 @@ check("ETAT REEL" in out and "ECARTS" in out, "analyse-projet sortie (ETAT REEL 
 check("Agents reels" in out, "analyse-projet agents reels detectes")
 check("Outils reels" in out, "analyse-projet outils reels detectes")
 
-# 5. combos-maj-readme-massive execution reelle
-r = run([PYTHON, MASSIVE_PY, PROJECT_ROOT], timeout=600)
+# 5. combos-maj-readme-massive execution reelle (mode --audit : la session
+# porte l agent qui lance la non-regression, pas clio ; le mode audit du
+# combo verifie la table d habilitation sans l identite reelle - v0.2.0)
+r = run([PYTHON, MASSIVE_PY, PROJECT_ROOT, "--agent", "clio", "--audit"], timeout=600)
 out = (r.stdout or "") + (r.stderr or "")
 check(r.returncode == 0, "maj-readme-massive code 0", str(r.returncode))
 for etape in ("Etape 1/5", "Etape 2/5", "Etape 3/5", "Etape 4/5", "Etape 5/5"):
@@ -167,6 +216,7 @@ for nom, p in FICHIERS:
     check(na == 0, "ascii %s" % nom, "non-ASCII=%d" % na)
     check(crlf == 0, "lf pur %s" % nom, "CRLF=%d" % crlf)
 
+bilan_chrono()
 print()
 print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (TOTAL - KO, KO, TOTAL))
 sys.exit(1 if KO else 0)

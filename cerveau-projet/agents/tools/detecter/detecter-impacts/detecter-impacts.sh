@@ -1,7 +1,7 @@
 #!/bin/bash
 # detecter-impacts.sh
 # Detecte les fichiers impliques par la modification d'un fichier du cerveau.
-# Version : 0.1.0
+# Version : 0.2.1
 # Statut : ebauche
 # identite:
 #   type: outil

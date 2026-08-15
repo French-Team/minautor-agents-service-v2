@@ -1,7 +1,7 @@
 #!/bin/bash
 # deplacer-fichier.sh
 # Deplacer ou renommer un fichier vers une nouvelle destination
-# Version : 0.3.0
+# Version : 0.3.1
 
 # identite:
 #   type: outil

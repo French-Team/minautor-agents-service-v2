@@ -25,7 +25,7 @@ identite:
 | **Point d'entree** | `demarrer.md` (a lire en premier) |
 | **Fichiers racine** | `AGENTS.md` (sessions), `README.md` (public), `cerveau-projet/` (le cerveau) |
 | **Agents** | 13 agents + classeur-variables (voir section 4) |
-| **Outils** | 132 outils dans 32 categories (voir section 6) |
+| **Outils** | 134 outils dans 34 categories (voir section 6) |
 | **Cartes de decision** | 13 parcours JSON (voir section 5) |
 
 ---
@@ -54,7 +54,7 @@ projet/
     |   |-- [agent]/[agent].md   # Fiche de chaque agent
     |   |-- [agent]/corrections.md  # Corrections et lecons de l'agent
     |   |-- regles-immuables/    # Regles non negociables + protocoles
-    |   `-- tools/               # Boite a outils (132 outils)
+    |   `-- tools/               # Boite a outils (134 outils)
     |-- pense-betes/             # Idees, specs, todos
     |-- recherches-web/          # Historique des recherches
     `-- exemples/                # Tests et exemples d'utilisation
@@ -213,7 +213,7 @@ Chaque case porte les indices exacts a appliquer :
 Boite a outils partagee, organisee par **action** (chaque dossier = ce que
 fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 
-**132 outils dans 32 categories** :
+**134 outils dans 34 categories** :
 
 | Categorie | Nb | Exemples |
 |---|---|---|
@@ -234,19 +234,21 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Editer | 3 | editer-fichier, editer-parcours |
 | Enregistrer | 1 | enregistrer-usage-outil |
 | Evaluer | 5 | evaluer-processus, evaluer-agents |
+| Executer | 1 | executer-script-temporaire (ENTONNOIR) |
 | Generateurs | 10 | generateurs-commande, generateurs-amelioration |
 | Gerer | 1 | gerer-sous-mission |
 | Guider | 1 | guider-parcours |
 | Inserer | 1 | inserer-contenu-fichier |
 | Lire | 4 | lire-fichier, lire-activite-recente |
 | Lister | 8 | lister-agents, lister-outils |
-| Mettre a jour | 1 | mettre-a-jour-readme |
+| Mettre a jour | 2 | mettre-a-jour-readme, mettre-a-jour-versions |
 | Migrer | 1 | migrer-identite |
 | Nettoyer | 3 | nettoyer-fichier, snapshot-nettoyage |
 | Rechercher | 10 | rechercher-texte, rechercher-fichier |
 | Remplacer | 1 | remplacer-texte |
 | Supprimer | 3 | supprimer-fichier, supprimer-ligne |
-| Tester | 4 | tester-lancer-non-regression, tester-protections |
+| Templates | 1 | outil-template |
+| Tester | 3 | tester-protection-blocage, tester-protection-boucles-infinies, tester-protection-erreurs-silencieuses |
 | Valider | 13 | valider-cartes-decision, valider-case |
 | Verifier | 6 | verifier-conformite-fiche, verifier-systeme |
 
@@ -257,6 +259,10 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
   le profil systeme stocke dans le classeur-variables (`.py` si Python dispo,
   sinon `.sh`).
 - Chaque outil est assigne aux agents concernes dans leur carte de decision.
+- **ENTONNOIR obligatoire** : tout script temporaire passe par
+  `executer-script-temporaire` avant execution (normalisation BOM/CRLF/accents +
+  controle compilation + protection de sortie LF) - jamais de `python3` direct
+  sur un script de `tmp-<agent>/` (protocole-creation-scripts-temporaires v0.2.10).
 
 ---
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # copier-fichier.sh
 # Copier un fichier vers une destination
-# Version : 0.1.0-beta
+# Version : 0.2.0-beta
 # Statut : ebauche
 
 # identite:

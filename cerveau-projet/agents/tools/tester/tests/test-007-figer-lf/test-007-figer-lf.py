@@ -27,8 +27,8 @@ Cas couverts:
  10. ASCII 0 sur les 4 fichiers outils
  11. valider-nommage --type outil OK
  12. Parite py/sh : memes resultats (wrapper pur)
-13. Catalogue : JSON valide, 153 commandes triees, entree presente
-14. index-tools : total 171, categorie Corriger 6
+13. Catalogue : JSON valide, 161 commandes triees, entree presente
+14. index-tools : total 179, categorie Corriger 6
  15. Protection : aucun fichier residuel dans le workspace
 
 Usage:
@@ -59,6 +59,53 @@ def charger_protections():
     return mod
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 
 OUTIL_DIR = os.path.join(TOOLS_DIR, "corriger", "corriger-fins-de-ligne")
@@ -229,37 +276,43 @@ def main():
         with open(CATALOGUE, encoding="utf-8") as f:
             cat = json.load(f)
         noms = [e["nom"] for e in cat["commandes"]]
-        ok_cat = (len(noms) == 154 and noms == sorted(noms)
+        ok_cat = (len(noms) == 161 and noms == sorted(noms)
                   and "executer-script-temporaire" in noms
                   and "corriger-fins-de-ligne" in noms
                   and "test-022-budget-pondere" in noms
                   and "test-023-grep-budget-pondere" in noms
                   and "enregistrer-usage-outil" in noms
                   and "detecter-cablages-manquants" in noms
+                  and "detecter-donnees-en-dur" in noms
+                  and "proteger-verrou-habilitation" in noms
                   and "detecter-residus" in noms
                   and "detecter-fautes-orthographe" in noms
                   and "snapshot-nettoyage" in noms
-                  and "combo-nettoyage-hygie" in noms)
-        verifier("13. catalogue JSON valide 154 trie + entree enregistrer-usage-outil", ok_cat,
+                  and "combo-nettoyage-hygie" in noms
+                  and "mettre-a-jour-versions" in noms)
+        verifier("13. catalogue JSON valide 161 trie + entree detecter-donnees-en-dur", ok_cat,
                  "nb=%d" % len(noms))
     except Exception as e:
-        verifier("13. catalogue JSON valide 152 trie + entree enregistrer-usage-outil", False, str(e))
+        verifier("13. catalogue JSON valide 161 trie + entree detecter-donnees-en-dur", False, str(e))
 
     # 14. index-tools
     try:
         with open(INDEX_TOOLS, encoding="utf-8") as f:
             idx = f.read()
-        verifier("14. index-tools total 172 + Corriger 6",
-                 "| **Total** | **172** |" in idx and "| Corriger | 6 |" in idx
+        verifier("14. index-tools total 179 + Corriger 6 + detecter-donnees-en-dur",
+                 "| **Total** | **179** |" in idx and "| Corriger | 6 |" in idx
                  and "executer-script-temporaire" in idx
                  and "corriger-fins-de-ligne" in idx
                  and "detecter-cablages-manquants" in idx
+                 and "detecter-donnees-en-dur" in idx
+                 and "proteger-verrou-habilitation" in idx
                  and "detecter-residus" in idx
                  and "detecter-fautes-orthographe" in idx
                  and "snapshot-nettoyage" in idx
-                 and "combo-nettoyage-hygie" in idx)
+                 and "combo-nettoyage-hygie" in idx
+                 and "mettre-a-jour-versions" in idx)
     except OSError as e:
-        verifier("14. index-tools total 168 + Corriger 6", False, str(e))
+        verifier("14. index-tools total 179 + Corriger 6 + detecter-donnees-en-dur", False, str(e))
 
     # 15. Protection : aucun residu de CE test dans le workspace
     shutil.rmtree(tmp, ignore_errors=True)
@@ -280,6 +333,8 @@ def main():
         return 1
     return 0
 
+
+bilan_chrono()
 
 if __name__ == "__main__":
     sys.exit(main())

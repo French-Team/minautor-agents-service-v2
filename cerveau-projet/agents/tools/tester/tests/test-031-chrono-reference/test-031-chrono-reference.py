@@ -21,7 +21,7 @@ Contexte (demande utilisateur 2026-08-13) :
     reference partielle fausserait la comparaison).
 
 Invariants verifies :
-  1. --version affiche v0.3.2
+  1. --version affiche v0.4.5
   2. Les options --seuil, --rebase-reference, --no-reference existent (--help)
   3. Le chrono est affiche (Temps ecoule) en fin de run cible
   4. Un run cible NE CREE PAS la reference si absente (preuve reelle)
@@ -62,6 +62,53 @@ def charger_protections():
 
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 
 def verifier(nom, condition, detail=""):
@@ -101,10 +148,10 @@ def main():
     print("=== test-031 : chrono + reference de temps non-regression ===")
     etat_initial = lire_fichier(REFERENCE)
     try:
-        # 1. Version du lanceur (round 12 : v0.3.2 tri registre-tests)
+        # 1. Version du lanceur (round 20 : v0.4.5 ordre dynamique par KO)
         r = run([PYTHON, LANCER, "--version"])
-        verifier("1. --version v0.3.2",
-                 r.returncode == 0 and "v0.3.2" in r.stdout,
+        verifier("1. --version v0.4.5",
+                 r.returncode == 0 and "v0.4.5" in r.stdout,
                  r.stdout.strip()[-60:])
 
         # 2. Options du round 11 presentes dans l aide
@@ -119,7 +166,7 @@ def main():
 
         # 3. Le chrono est affiche a la fin d un run cible (Temps ecoule).
         #    Le run cible (--tests) ne doit PAS toucher a la reference.
-        r = run([PYTHON, LANCER, "--serial", "--journal",
+        r = run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal",
                  "--tests", "test-010"])
         verifier("3. Le chrono est affiche (Temps ecoule)",
                  "Temps ecoule" in r.stdout, r.stdout.strip()[-120:])
@@ -128,7 +175,7 @@ def main():
         sauvee = lire_fichier(REFERENCE)
         if sauvee is not None:
             os.remove(REFERENCE)
-        r = run([PYTHON, LANCER, "--serial", "--journal",
+        r = run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal",
                  "--tests", "test-010"])
         creee = os.path.isfile(REFERENCE)
         verifier("4. Run cible : la reference absente n est PAS creee",
@@ -140,7 +187,7 @@ def main():
         if sauvee is not None:
             with io.open(REFERENCE, "w", encoding="utf-8", newline="\n") as fh:
                 fh.write(sauvee)
-        r = run([PYTHON, LANCER, "--serial", "--journal",
+        r = run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal",
                  "--tests", "test-010"])
         apres = lire_fichier(REFERENCE)
         if sauvee is not None:
@@ -180,6 +227,7 @@ def main():
              total_crlf == 0, "total=%d" % total_crlf)
 
     print("")
+    bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
     return 1 if NB_KO else 0
 

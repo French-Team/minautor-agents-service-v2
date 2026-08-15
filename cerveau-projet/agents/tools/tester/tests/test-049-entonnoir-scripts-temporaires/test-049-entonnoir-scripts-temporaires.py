@@ -58,6 +58,53 @@ def charger_protections():
 
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 OUTIL = os.path.join(TOOLS_DIR, "executer", "executer-script-temporaire",
                      "executer-script-temporaire.py")
@@ -139,9 +186,9 @@ def main():
         noms = [e["nom"] for e in cat["commandes"]]
         entree = next((e for e in cat["commandes"] if e["nom"] == "executer-script-temporaire"), None)
         ok = entree is not None and entree.get("script", "").endswith("executer-script-temporaire.py")
-        verifier("1. executer-script-temporaire au catalogue (154)", ok, "trouvee=%s" % (entree is not None))
+        verifier("1. executer-script-temporaire au catalogue (155)", ok, "trouvee=%s" % (entree is not None))
     except Exception as e:
-        verifier("1. executer-script-temporaire au catalogue (154)", False, str(e))
+        verifier("1. executer-script-temporaire au catalogue (155)", False, str(e))
 
     # 2. index-tools
     try:
@@ -206,7 +253,7 @@ def main():
 
     # 8. --version
     out = run(["python3", OUTIL, "--version"])
-    ok = "executer-script-temporaire" in out and "0.1.0" in out
+    ok = "executer-script-temporaire" in out and "0.1.2" in out
     verifier("8. --version", ok)
 
     # 9. Preuve negative : python3 direct ne normalise PAS
@@ -225,6 +272,30 @@ def main():
     verifier("9. preuve negative : direct laisse la non-conformite, entonnoir corrige", ok,
              "reste_non_conforme=%s" % reste)
 
+    # 9b. CONTROLE TRIPLET (lecon 2026-08-15 : un script de mission ecrit a
+    # la main SANS triplet - dry-run/wet, options, chrono - doit etre
+    # SIGNALE par l entonnoir, pas execute en silence).
+    sans_triplet = os.path.join(dossier_test, "sans-triplet.py")
+    with io.open(sans_triplet, "w", encoding="ascii", newline="\n") as fh:
+        fh.write('print("bonjour")\n')
+    res = PROTECTIONS.lancer_protege(["python3", OUTIL, sans_triplet], timeout=60)
+    sortie = (res.stdout or "") if res is not None else ""
+    verifier("9b. script SANS triplet -> entonnoir signale [TRIPLET] WARNING",
+             "TRIPLET" in sortie and "WARNING" in sortie, sortie[-150:])
+    # script avec triplet -> aucun warning
+    avec_triplet = os.path.join(dossier_test, "avec-triplet.py")
+    with io.open(avec_triplet, "w", encoding="ascii", newline="\n") as fh:
+        fh.write('import sys\nCHRONO_ACTIF = "--no-chrono" not in sys.argv\n'
+                 'def chrono_etape(a, b): pass\ndef bilan_chrono(): pass\n'
+                 'parser.add_argument("--dry-run")  # protection\n'
+                 'parser.add_argument("--isoler")  # options on/off\n'
+                 'parser.add_argument("--desactiver")  # options on/off\n'
+                 'print("ok")\n')
+    res2 = PROTECTIONS.lancer_protege(["python3", OUTIL, avec_triplet], timeout=60)
+    sortie2 = (res2.stdout or "") if res2 is not None else ""
+    verifier("   script AVEC triplet -> aucun warning", "TRIPLET" not in sortie2,
+             sortie2[-150:])
+
     # 10-11. Normes ASCII + LF
     fichiers = [OUTIL, OUTIL_SH, OUTIL_MD, os.path.abspath(__file__), PROTOCOLE]
     na = sum(compter_non_ascii(f) for f in fichiers)
@@ -238,6 +309,7 @@ def main():
     if args.chrono:
         chrono_etape("test-049 entonnoir", time.time() - t0)
     print("")
+    bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
     return 0 if NB_KO == 0 else 1
 

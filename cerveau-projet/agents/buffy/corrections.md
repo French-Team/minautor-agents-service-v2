@@ -3112,3 +3112,184 @@ pointer vers le script REEL de la commande, pas vers un nom suppose : quand le n
 commande differe du dossier, verifier le champ "script" du catalogue. A NOTER POUR
 CERBERUS : le test-016 (migration buffy) fige la version 0.4.3 du parcours buffy ->
 mon bump 0.4.4 le rend KO attendu, adaptation par Morpheus.
+
+
+## [LECON] 2026-08-15 -- BRANCHER LE BUMPER DANS LA CARTE VULCAIN (Buffy)
+
+**Contexte** : demande utilisateur - brancher le bumper (mettre-a-jour-versions) dans les cartes des agents : case de bump systematique apres chaque modification d outil.
+
+**Analyse Cerberus** : seul VULCAIN modifie des outils (construction c6->c9 et modification c12->c15). Buffy delegue les outils via c31, Morpheus ne fait que les tests, Themis audite. Donc la carte cible est vulcain (2 chemins).
+
+**Actions realisees** :
+1. Inserer dans parcours-vulcain.json (v0.4.9 -> v0.4.10) via editer-parcours :
+   - c6a 'Bumper l outil (mettre-a-jour-versions)' entre c6 et c6b (c6.suivant=c6a, c6a.suivant=c6b) - chemin construction
+   - c12a idem entre c12 et c12b (c12.suivant=c12a, c12a.suivant=c12b) - chemin modification
+   Chaque case porte l indice outil mettre-a-jour-versions (catalogue + chemin + nom + type) + indice regle BUMP SYSTEMATIQUE.
+2. Fiche vulcain.md : PARCOURS (v0.4.10) - bloc FINS REELLES inchange (aucune fin ajoutee).
+
+**Validations** : valider-cartes-decision vulcain CONFORME, detecter-cablages 0 probleme (57 cases, 57 atteignables), test-055 12/12 (coherence regle/indice outil), test-026 10/10, navigation reelle c6 -> c6a (case Bumper affichee), normes 0/0 ASCII + LF.
+
+**Lecon** : editer-parcours n accepte qu UN SEUL --inserer-case par appel (le dernier ecrase le premier si on en met 2 dans la meme commande) - il faut 2 appels separes (insertion + re-pointage). Le titre d une case qui contient un nom d outil du catalogue DOIT avoir l indice outil correspondant (garde-fou test-055) - verifie avant de nommer une case.
+
+
+## [LECON] 2026-08-15 -- ECART CARTES DETECTER-CABLAGES-MANQUANTS CORRIGE (Buffy)
+
+**Contexte** : KO preexistant test-035 - buffy et janus avaient declare 'detecter-cablages-manquants' au registre (usages legitimes de controle pendant la mission bumper cartes) mais l outil etait ABSENT des indices outil de leurs cartes.
+
+**Actions** :
+1. Carte buffy : indice outil detecter-cablages-manquants ajoute a c10 'Verifier les dependances' (le bon endroit : apres modification d un parcours on verifie les dependances/cablages). PAS a c14 (RVAV) : c14 avait deja 3 indices et la case verifie surtout ASCII/cartes - le deplacer a c10 evite de depasser le budget d indices.
+2. Carte janus : indice ajoute a c33 'Verifier l etat des fichiers agents' (controle des parcours).
+3. Bump des versions avec l OUTIL bumper (mettre-a-jour-versions --parcours <agent> --wet) : buffy 0.4.4 -> 0.4.5, janus 0.4.5 -> 0.4.6 (parcours + fiche en un seul passage, verification post-bump OK).
+
+**Validations** : valider-cartes buffy + janus CONFORMES, cablages 2 parcours PROPRE, test-035 8/8 (0 probleme de processus), test-055 12/12, normes 0/0 ASCII + LF, test-016 : 1 seul KO restant = VERSION (0.4.4 -> 0.4.5) a adapter par Morpheus (le point 10 'plus de 3 indices' passe car c14 est revenu a 3).
+
+**Lecon** : (1) quand on ajoute un outil de controle a une carte, choisir la case de VERIFICATION DES DEPENDANCES (c10) plutot que la case RVAV finale (c14) qui a deja son budget d indices ; (2) le bumper fait parcours + fiche d un coup (aucune spec oubliee) ; (3) verifier test-016 apres bump d une carte (il fige la version).
+
+
+## [LECON] 2026-08-15 -- ASSIGNATION BUMPER + EVALUER-PROCESSUS A MA CARTE (Buffy)
+
+**Contexte** : test-035 KO - j avais declare au registre 2 usages REELS (mettre-a-jour-versions pour bumper, evaluer-processus pour le scan global) sans que ces outils soient dans MA carte -> OUTIL_HORS_CARTE.
+
+**Actions** : indice outil mettre-a-jour-versions ajoute a c10b (parcours a modifier : apres editer-parcours, bumper le parcours) + indice evaluer-processus ajoute a c26 (Passer par RVAV). Version 0.4.5 -> 0.4.6 avec le bumper (parcours + fiche d un coup).
+
+**Validations** : valider-cartes buffy CONFORME, test-035 8/8 (0 probleme de processus), test-055 12/12, normes 0/0. test-016 : 1 seul KO = version (0.4.4 -> 0.4.6) a adapter par Morpheus.
+
+**Lecon** : quand un nouvel outil est branche dans le systeme (le bumper), il faut l assigner a TOUTES les cartes des agents qui l utilisent reellement (vulcain pour construire, MAIS AUSSI buffy qui modifie des parcours/fiches). La carte doit refleter les usages reels avant qu ils soient declares au registre, sinon evaluer-processus signale OUTIL_HORS_CARTE.
+
+
+## [LECON] 2026-08-15 -- DETECTER-DIVERGENCES-VERSION ASSIGNE A LA CARTE VULCAIN (Buffy)
+
+**Contexte** : test-035 KO - vulcain a declare detecter-divergences-version au registre (usage REEL de verification des versions apres la correction des 30 en-tetes par --tous) mais l outil etait ABSENT des indices outil de sa carte -> OUTIL_HORS_CARTE.
+
+**Actions** : indice outil detecter-divergences-version ajoute a c7b 'RVAV avant activation' (carte vulcain, 2 -> 3 indices), bump 0.4.10 -> 0.4.11 avec le bumper (parcours + fiche d un coup).
+
+**Validations** : valider-cartes vulcain CONFORME, test-035 8/8 (0 probleme de processus), test-055 12/12, test-013 22/22, test-016 20/20, normes 0/0.
+
+**Lecon** : la verification des versions (detecter-divergences-version) est un outil naturel de la carte de VULCAIN (constructeur d outils qui bump des versions) - il doit etre assigne AVANT son premier usage declare au registre. Meme piege que le bumper : un outil utilise par un agent doit etre dans SA carte.
+
+
+## [LECON] 2026-08-15 -- BUMPER JANUS + GENERATEURS-COMMANDE CARTE CERBERUS (Buffy)
+
+**Contexte** : mission Cerberus - ajouter l outil mettre-a-jour-versions (bumper) a la carte janus
+(usage reel Janus rescan --tous pendant son controle, KO test-035 OUTIL_HORS_CARTE).
+
+**Travail effectue** :
+1. Carte janus c33 (Verifier l etat des fichiers agents) : + indice outil mettre-a-jour-versions
+   (commande --tous). Parcours janus 0.4.6 -> 0.4.7, fiche a jour (Pattern 14). CONFORME, cablages 50/50.
+2. DECOUVERTE en route : mon activation via generateurs-commande a revele un 2e KO test-035 -
+   Cerberus utilise generateurs-commande (Pattern 17 PASSE PAR LE GENERATEUR) mais l outil etait
+   ABSENT de sa carte, et le generateur journalise le NOM DE COMMANDE (activer-activer) au lieu de
+   son propre nom dans le registre. Corrections : + indice outil generateurs-commande a la carte
+   cerberus c10 (Activer l agent), parcours cerberus 0.4.5 -> 0.4.6, fiche a jour. Entree registre
+   cerberus corrigee (activer-activer -> generateurs-commande, veracite).
+3. Garde-fous : test-035 reverdi 8/8, test-055 12/12, cablages PROPRE 13 parcours, normes 0/0.
+
+**Lecon** : (a) quand un agent utilise un GENERATEUR (Pattern 17), l outil du generateur doit etre
+dans SA carte (le generateur journalise le nom de COMMANDE du catalogue, pas le nom de l outil -
+ecart de journalisation a transmettre a Vulcain pour ameliorer generateurs-commande) ; (b) chaque
+activation par generateur peut creer une entree registre OUTIL_HORS_CARTE - verifier test-035 apres
+toute activation.
+
+**KO attendu transmis** : test-013 fige cerberus 0.4.5 -> a adapter par Morpheus (0.4.6).
+
+
+## [LECON] 2026-08-15 -- CARTE MORPHEUS TESTER-PROTECTIONS + CARTE BUFFY GUIDER-PARCOURS (Buffy)
+
+**Contexte** : mission Cerberus (bilan Janus) - KO test-035 restant : morpheus 'tester-protections'
+absent de la carte (matcher exact d evaluer-processus vs pattern 'tester-protection-*').
+
+**Travail effectue** :
+1. Carte morpheus c12 (Completer et executer les tests de l outil) : + indice outil tester-protections
+   (chemin tester/tester-protections/, catalogue tester-protections). Parcours morpheus 0.4.5 -> 0.4.6,
+   fiche a jour (Pattern 14). CONFORME.
+2. DECOUVERTE en route : mes propres usages Buffy de guider-parcours (P0 de MA fiche, ligne 167 :
+   'Suivre MON parcours case par case') etaient absents de MA carte -> indice ajoute a ma case c0.
+   Parcours buffy 0.4.6 -> 0.4.7, fiche a jour. CONFORME.
+3. Le generateur a journalise UNE 3e entree cerberus 'activer-activer' lors de MON activation
+   (bug de journalisation generateurs-commande : il journalise le NOM DE COMMANDE au lieu de son
+   propre nom) -> entree corrigee vers generateurs-commande (veracite).
+
+**Lecon** : (a) un outil utilise par un agent DOIT etre dans SA carte - verifier test-035 apres
+chaque mission (les usages declares au registre creent des OUTIL_HORS_CARTE) ; (b) le bug de
+journalisation de generateurs-commande se reproduit a CHAQUE activation (3 occurrences aujourd hui) -
+correction a la racine necessaire par Vulcain : journaliser 'generateurs-commande' au lieu du nom
+de commande du catalogue.
+
+**KO attendus transmis a Morpheus** : test-016 fige buffy 0.4.6 (bump -> 0.4.7) ; test-004 fige
+morpheus 0.4.5 (bump -> 0.4.6).
+
+
+## [LECON] 2026-08-15 -- CARTE VULCAIN : 2 INDICES RVAV AJOUTES (Buffy)
+
+**Contexte** : mission Cerberus (bilan Janus) - KO test-035 : Vulcain declare un usage REEL de
+detecter-cablages-manquants et valider-cartes-decision (son RVAV) mais absents de sa carte.
+
+**Travail effectue** : case c7b (RVAV avant activation) de la carte vulcain : + indices outil
+detecter-cablages-manquants et valider-cartes-decision. Parcours vulcain 0.4.12 -> 0.4.13, fiche
+a jour (Pattern 14). Verifications : test-035 8/8, test-055 12/12, carte CONFORME, cablages
+PROPRE 13 parcours, normes 0/0.
+
+**Lecon** : le RVAV d un agent utilise des outils de validation (valider-cartes-decision,
+detecter-cablages-manquants) qui doivent etre dans SA carte des que declares au registre - le
+garde-fou test-035 verifie le croisement registre/carte a chaque mission.
+
+
+## [LECON] 2026-08-15 -- CARTE JANUS : TESTER-PROTECTIONS AJOUTE (Buffy)
+
+**Contexte** : mission Cerberus (bilan Janus) - KO test-035 : Janus declare un usage REEL de
+tester-protections (importe dans ses tests de controle) mais absent de sa carte.
+
+**Travail effectue** : case c4 (Verifier les tests) de la carte janus : + indice outil
+tester-protections. Parcours janus 0.4.7 -> 0.4.8, fiche a jour (Pattern 14). Verifications :
+test-035 8/8, test-055 12/12, carte CONFORME, cablages 50/50, normes 0/0, aucun test ne fige janus.
+
+**Lecon** : les protections importees (tester-protections) sont un outil comme les autres - tout
+agent qui les importe dans ses tests de controle doit les avoir dans SA carte (garde-fou test-035).
+
+## [LECON] 2026-08-15 -- CARTE VULCAIN c10 + DETECTER-RESIDUS (Buffy)
+
+**Contexte** : mission .tmpignore - Vulcain a declare un usage reel de detecter-residus au registre (preuve derogation ciblee) mais l outil manquait a sa carte. Ajoute a c10 (Verifier le systeme - modification) + bump vulcain 0.4.14.
+
+## [LECON] 2026-08-15 -- CARTE VULCAIN c7 + CORRIGER-FINS-DE-LIGNE (Buffy)
+
+**Contexte** : mission protection LF - Vulcain a corrige des CRLF reintroduits avec corriger-fins-de-ligne (usage reel) mais l outil manquait a sa carte. Ajoute a c7 (Lancer le combo corriger-ascii) + bump vulcain 0.4.15.
+
+## [LECON] 2026-08-15 -- CARTE VULCAIN +2 INDICES LF (Buffy)
+
+**Contexte** : mission garantie LF - Vulcain a utilise combos-audit-general (preuve rapport LF) et executer-script-temporaire (preuve entonnoir) sans les avoir dans sa carte. Ajoutes : c13 + combos-audit-general, c18c + executer-script-temporaire. Bump vulcain 0.4.16.
+
+
+## [LECON] 2026-08-15 -- INDICE ANTI-ARRET C0 MORPHEUS (Buffy)
+
+**Contexte** : demande utilisateur - corriger le bug "Morpheus casse le round"
+(diagnostic Janus : la mission confiee dans AGENTS.md n est pas relue au
+demarrage du parcours, case c1 ouverte). Decision utilisateur : corriger
+SEULEMENT la carte de Morpheus.
+
+**Fait** :
+1. Ajout d un indice 'regle' dans la case c0 de parcours-morpheus.json :
+   "REGLE ANTI-ARRET : je lis MA Raison (mission confiee) dans AGENTS.md avant
+   la case Mission." (91 car, COURT <= 100 -> budget pondere c0 = 1,0/3,0 OK)
+2. Bump parcours 0.4.7 -> 0.4.8 + fiche morpheus.md synchronisee (Pattern 14,
+   1 occurrence).
+3. Validations : valider-cartes morpheus CONFORME, --tous 13/13, valider-case
+   OK (seuls avertissements legitimes de boucles voulues c10b/c14b), cablages
+   PROPRE 34/34, normes 0/0.
+
+**Incident (transparence)** : la chaine s est encore brisee - Buffy activee
+mais mission non executee (0 trace). Reprise par l agent actif (pattern des
+rounds precedents) : c est le MEME bug d arret qui touche Morpheus, cette fois
+applique a Buffy. Le garde-fou anti-arret ajoute a c0 de Morpheus devrait
+reduire ce pattern pour Morpheus ; il faudra l etendre aux autres agents si le
+bug persiste.
+
+**Impact test (mission Morpheus, seul habilite)** : test-004-combos-tester-outil
+point 7a fige la version parcours morpheus 0.4.7 -> KO constate (1 KO sur 10).
+A adapter : 0.4.7 -> 0.4.8 (ligne 155 + docstring ligne 19). Les references
+0.4.7 dans corrections.md sont de l historique (a conserver).
+
+**Lecon** :
+1. Bumper un parcours peut casser les tests qui figent sa version - toujours
+   verifier les references dans les tests et documenter l impact pour Morpheus.
+2. Le bug d arret (mission non relue au demarrage) touche TOUS les agents
+   reactives, pas seulement Morpheus - le garde-fou c0 est le bon remede.

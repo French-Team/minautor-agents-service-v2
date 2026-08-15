@@ -22,7 +22,7 @@ Invariants verifies (sur le TEMPLATE, pas sur les tests existants) :
   4. Options documentees : --no-chrono, --isoler, --desactiver
   5. Usage reel dans le canevas (appels dans main)
   6. Structure OBLIGATOIRE + checklist mentionnent le triplet
-  7. Coherence aval : protocole-tests v0.3.2 (avec PREUVE NEGATIVE) + protocole-outils Regle 9
+  7. Coherence aval : protocole-tests v0.3.4 (avec PREUVE NEGATIVE + BANNIR TIMEOUTS + ZERO TIMEOUT) + protocole-outils Regle 9
   8. Normes : ASCII strict + LF pur (template + test)
 """
 import importlib.util
@@ -212,8 +212,8 @@ def main():
             proto_outils = fh.read()
         if point_actif(11):
             t = time.monotonic()
-            verifier("11. protocole-tests v0.3.2 + REGLE triplet + preuve negative",
-                     'version: "0.3.2"' in proto_tests
+            verifier("11. protocole-tests v0.3.4 + REGLE triplet + preuve negative + BANNIR + ZERO TIMEOUT",
+                     'version: "0.3.4"' in proto_tests
                      and "PROTECTIONS + OPTIONS ON/OFF + CHRONO" in proto_tests
                      and "PREUVE NEGATIVE" in proto_tests)
             verifier("12. protocole-outils : Regle 9 (IMMUABLE)",

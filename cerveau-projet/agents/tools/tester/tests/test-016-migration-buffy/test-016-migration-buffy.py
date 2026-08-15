@@ -21,8 +21,12 @@ Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
    - v0.4.3 (2026-08-14) : ajout indice outil valider-cartes-decision (case c14 RVAV)c27b Retour de Themis)
    - v0.4.4 (2026-08-15) : ajout indice outil generateurs-case (case c10c, coherence
      regle/indice outil - garde-fou test-055)
+   - v0.4.6 (2026-08-15) : assignation bumper (case c10b, mettre-a-jour-versions) + evaluer-processus
+     (case c26) - OUTIL_HORS_CARTE teste par evaluer-processus (garde-fou test-035)
+   - v0.4.7 (2026-08-15) : ajout indice outil guider-parcours (case c0, P0 de la fiche
+     absent de la carte - OUTIL_HORS_CARTE teste par evaluer-processus, garde-fou test-035)
 
-Cas couverts:   1. Version du parcours = 0.4.4
+Cas couverts:   1. Version du parcours = 0.4.7
   2. Types : 40 action / 8 question / 5 controle / 10 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -66,6 +70,53 @@ def charger_protections():
     return mod
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 
 OUTIL_DIR = os.path.join(TOOLS_DIR, "valider", "valider-case")
@@ -113,8 +164,8 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.4.4",
-                 d["parcours"].get("version") == "0.4.4",
+        verifier("1. Version du parcours = 0.4.7",
+                 d["parcours"].get("version") == "0.4.7",
                  d["parcours"].get("version"))
 
         # 2. Types
@@ -228,6 +279,7 @@ def main():
                  raw.count(b"\r\n") == 0, "CRLF = %d" % raw.count(b"\r\n"))
 
         print("")
+        bilan_chrono()
         print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

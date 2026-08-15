@@ -12,18 +12,18 @@ Contexte :
   - detecter-cablages-manquants (v0.1.1, outil dedie) complete valider-case :
     CAS_ORPHELINE (toute case jamais atteignable), BOUCLE_BLOQUANTE (cycle
     sans sortie), REF_MORTE (suivant/branche vers case inexistante).
-  - Ce garde-fou verifie que les 13 parcours des agents ont 0 cas orphelin,
+  - Ce garde-fou verifie que les 14 parcours des agents ont 0 cas orphelin,
     0 boucle bloquante et 0 reference morte : toute regression du cablage
     (case orpheline, boucle sans issue, reference cassee) fait KO.
 
 Cas couverts:
   1. detecter-cablages-manquants --version = v0.1.1
   2. Parcours sain (cerberus) : verdict PROPRE
-  3. Les 13 parcours : 0 CAS_ORPHELINE au total
-  4. Les 13 parcours : 0 BOUCLE_BLOQUANTE au total
-  5. Les 13 parcours : 0 REF_MORTE au total
-  6. Les 13 parcours : 0 CASE_DEPART manquante
-  7. Les 13 parcours : 0 FIN_NON_JOIGNABLE
+  3. Les 14 parcours : 0 CAS_ORPHELINE au total
+  4. Les 14 parcours : 0 BOUCLE_BLOQUANTE au total
+  5. Les 14 parcours : 0 REF_MORTE au total
+  6. Les 14 parcours : 0 CASE_DEPART manquante
+  7. Les 14 parcours : 0 FIN_NON_JOIGNABLE
   8. --tous : verdict global PROPRE
   9. ASCII strict : 0 non-ASCII (outil + doc + test)
  10. LF pur : 0 CRLF (outil + doc + test)
@@ -53,6 +53,53 @@ def charger_protections():
     return mod
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 
 OUTIL_DIR = os.path.join(TOOLS_DIR, "detecter", "detecter-cablages-manquants")
@@ -113,7 +160,7 @@ def main():
 
     parcours = lister_parcours()
     verifier("2. 13 parcours d agents trouves",
-             len(parcours) == 13, "nb=%d" % len(parcours))
+             len(parcours) == 14, "nb=%d" % len(parcours))
 
     # 3-7. Scan de chaque parcours : cumul des problemes bloquants
     total_orphelines = 0
@@ -157,6 +204,7 @@ def main():
              total_crlf == 0, "total=%d" % total_crlf)
 
     print("")
+    bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
     return 1 if NB_KO else 0
 

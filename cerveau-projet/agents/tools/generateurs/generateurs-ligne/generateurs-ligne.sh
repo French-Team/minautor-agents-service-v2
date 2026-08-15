@@ -5,7 +5,7 @@
 # gabarits de groupes de cases (configs), apres verification de la carte
 # cartographique d'Atlas. Dry/wet pour valider. Les configs sont
 # externalisees dans gabarits-ligne.json et extensibles via ajouter-config.
-# Version : 0.2.0
+# Version : 0.3.0
 # Statut : ebauche
 
 set -euo pipefail

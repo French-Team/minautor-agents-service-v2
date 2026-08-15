@@ -558,6 +558,19 @@
      "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/janus/controles/sante-fichiers-agents-<date>.md",
      "nom": "creer-fichier",
      "type": "outil"
+    },
+    {
+     "catalogue": "detecter-cablages-manquants",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/",
+     "nom": "detecter-cablages-manquants",
+     "type": "outil"
+    },
+    {
+     "catalogue": "mettre-a-jour-versions",
+     "chemin": "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-versions/",
+     "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-versions/mettre-a-jour-versions.py --tous",
+     "nom": "mettre-a-jour-versions",
+     "type": "outil"
     }
    ],
    "suivant": "c8",
@@ -597,6 +610,20 @@
      "chemin": "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/",
      "commande": "python3 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py --journal",
      "nom": "tester-lancer-non-regression",
+     "type": "outil"
+    },
+    {
+     "catalogue": "tester-protections",
+     "chemin": "cerveau-projet/agents/tools/tester/tester-protections/",
+     "commande": "python3 cerveau-projet/agents/tools/tester/tester-protections/tester-protections.py",
+     "nom": "tester-protections",
+     "type": "outil"
+    },
+    {
+     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <fichier> '<ancien>' '<nouveau>'",
+     "catalogue": "editer-fichier",
+     "nom": "editer-fichier",
      "type": "outil"
     }
    ],
@@ -923,8 +950,8 @@
  "parcours": {
   "agent": "janus",
   "case_depart": "c0",
-  "description": "v0.4.5 : + indice outil c16 changer-statut (coherence regle/indice outil, garde-fou test-055)",
+  "description": "v0.4.8 : + indice outil c4 tester-protections (usage reel controle, garde-fou test-035)",
   "nom": "parcours-janus",
-  "version": "0.4.5"
+  "version": "0.4.9"
  }
 }

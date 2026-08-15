@@ -18,7 +18,7 @@ Cas couverts:
   1. La fiche hermes.md est CONFORME (verifier-conformite-fiche)
   2. Le parcours hermes est valide (valider-case : 0 erreur)
   3. Le parcours hermes est CONFORME (valider-cartes-decision)
-  4. Les 13 parcours existent (glob cerveau-projet/agents/*/parcours/)
+  4. Les 14 parcours existent (glob cerveau-projet/agents/*/parcours/)
   5. L outil detecter-fautes-orthographe est au catalogue generateurs-commande
   6. L outil detecter-fautes-orthographe est dans index-tools.md
   7. Le dictionnaire de l outil ne contient que de VRAIES fautes (fautif != correct)
@@ -165,15 +165,15 @@ def main():
              (r or "")[-120:])
     chrono_etape("3. parcours conforme", time.time() - t3)
 
-    # 4. Les 13 parcours existent (glob)
+    # 4. Les 14 parcours existent (glob)
     t4 = time.time()
     import glob as _glob
     parcours = sorted(_glob.glob(os.path.join(PROJECT_ROOT,
                                               "cerveau-projet", "agents", "*",
                                               "parcours", "parcours-*.json")))
-    verifier("4. 13 parcours existent (glob agents/*/parcours/)",
-             len(parcours) == 13, "nb=%d" % len(parcours))
-    chrono_etape("4. 13 parcours", time.time() - t4)
+    verifier("4. 14 parcours existent (glob agents/*/parcours/)",
+             len(parcours) == 14, "nb=%d" % len(parcours))
+    chrono_etape("4. 14 parcours", time.time() - t4)
 
     # 5. Outil au catalogue
     t5 = time.time()
@@ -253,6 +253,17 @@ def main():
           % (NB_OK, NB_KO, NB_POINTS))
     return 0 if NB_KO == 0 else 1
 
+
+
+
+def bilan_chrono():
+    # Bilan des durees : total depuis le depart (regle immuable v0.3.0)
+    try:
+        _total = __import__("time").monotonic() - T_START
+    except Exception:
+        _total = 0.0
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
 
 if __name__ == "__main__":
     sys.exit(main())

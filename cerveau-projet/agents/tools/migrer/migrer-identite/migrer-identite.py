@@ -3,7 +3,7 @@
 # migrer-identite.py
 # Migrer les fichiers vers le schema hybride v0.2.0 de detecter-impacts
 # (bloc identite: type/appartient_a/commun dans chaque fichier du cerveau).
-# Version : 0.1.0
+# Version : 0.2.3
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -39,7 +39,7 @@ import os
 import sys
 from pathlib import Path
 
-VERSION = "0.2.2"
+VERSION = "0.2.3"
 STATUT = "ebauche"
 
 # Chemin racine par defaut : le dossier agents/tools/ du cerveau-projet.
@@ -327,7 +327,7 @@ def _migrer_fichier(chemin: Path, racine: Path, appartient_a: str,
                 return "erreur:non-ascii"
             if nouveau == contenu:
                 return "inchange"
-            chemin.write_text(nouveau, encoding="utf-8")
+            chemin.write_text(nouveau, encoding="utf-8", newline="")
             return "reparer"
         if dry_run:
             return "migre(dry-run)"
@@ -369,7 +369,7 @@ def _migrer_fichier(chemin: Path, racine: Path, appartient_a: str,
         return "erreur:non-ascii"
     if chemin.read_text(encoding="utf-8") == nouveau:
         return "inchange"
-    chemin.write_text(nouveau, encoding="utf-8")
+    chemin.write_text(nouveau, encoding="utf-8", newline="")
     return "migre"
 
 

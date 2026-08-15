@@ -271,5 +271,14 @@ def main():
     return 0 if NB_KO == 0 else 1
 
 
+def bilan_chrono():
+    # Bilan des durees : total depuis le depart (regle immuable v0.3.0)
+    try:
+        _total = __import__("time").monotonic() - T_START
+    except Exception:
+        _total = 0.0
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+
 if __name__ == "__main__":
     sys.exit(main())

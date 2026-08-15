@@ -16,7 +16,7 @@ Cas couverts:
   4. Variable commande_test manquante (apres c3=OUI) -> erreur claire (commande de la case c4)
   5. Navigation chemin OUI : fichier de test CREE + test EXECUTE + c6 FIN (COMBO TERMINE)
   6. Navigation chemin NON : c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE preservee)
-  7. Integration parcours morpheus v0.4.5 : guider-parcours affiche la case
+  7. Integration parcours morpheus v0.4.8 : guider-parcours affiche la case
      Lancer le combo tester-outil puis Verifier les resultats
   8. valider-cartes-decision --agent morpheus : CONFORME
   9. Nommage : definition-combo.json = bruit preexistant documente (identique aux 15 combos) - non bloquant
@@ -49,6 +49,53 @@ def charger_protections():
     return mod
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 
 MOTEUR_PY = os.path.join(TOOLS_DIR, "combos", "combos-moteur", "combos-moteur.py")
@@ -152,7 +199,7 @@ def main():
     # --- 7. Integration parcours morpheus v0.4.1
     with io.open(PARCOURS, encoding="utf-8") as fh:
         p = json.load(fh)
-    verifier("7a. Parcours morpheus v0.4.5", p.get("parcours", {}).get("version") == "0.4.5")
+    verifier("7a. Parcours morpheus v0.4.8", p.get("parcours", {}).get("version") == "0.4.8")
     code, out = executer([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|tester"])
     verifier("7b. Case Lancer le combo tester-outil presente",
              "Lancer le combo tester-outil" in out)
@@ -185,6 +232,8 @@ def main():
     print("COMBO TESTER-OUTIL v0.1.0 : NON VALIDE (%d KO)" % NB_KO)
     return 1
 
+
+bilan_chrono()
 
 if __name__ == "__main__":
     sys.exit(main())

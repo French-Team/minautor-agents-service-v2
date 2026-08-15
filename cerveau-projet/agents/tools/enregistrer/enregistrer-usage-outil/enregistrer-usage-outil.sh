@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # enregistrer-usage-outil.sh
 # Wrapper pur : delegue au .py (parite par construction).
-# Version : 0.2.1
+# Version : 0.3.0
 # Statut : ebauche
 # identite:
 #   type: outil

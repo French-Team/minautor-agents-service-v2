@@ -2104,3 +2104,557 @@ restauration. 0 residu, normes 0/0.
 porte sa promesse : le theme ameliorer-test a guide la checklist (preuve negative,
 garde-fou, seul Janus, bump + tests de version) et l amelioration du lanceur est
 verrouillee par un garde-fou qui protege le comportement.
+
+
+## [LECON] 2026-08-15 -- CHRONO PAR TEST DANS LE RAPPORT (round 17, Morpheus)
+
+**Mission** (Cerberus, ligne amelioration, theme ameliorer-test) : ajouter le
+detail des tests lents dans le rapport de non-regression pour aider aux
+optimisations.
+
+**Fait** : le lanceur v0.3.3 collecte la duree de CHAQUE test (executer_lot et
+executer_pool retournent desormais une liste durees de couples (nom, secondes)),
+affiche en fin de suite la section "=== TESTS LES PLUS LENTS (top 10, chrono
+par test) ===" (tri par duree DECROISSANTE) et l ajoute au rapport markdown
+("## Tests les plus lents (chrono par test, top 10)"). Doc .md mise a jour
+(section "Chrono par test (round 17)").
+
+**Preuve reelle** : lancement complet -> la section s affiche avec le top 10
+(test-032 38.55s, test-028 20.43s, test-003 18.51s, test-005 16.80s,
+test-031 16.50s, test-017 12.67s...) : les agents ciblent desormais les vrais
+goulots. Les 5 tests de version adaptes (024/027/031/032/051 : v0.3.2 ->
+v0.3.3).
+
+**LEcON IMPORTANTE (residu CRLF) : mon script temp de fin ecrit la lecon dans
+corrections.md en mode texte -> sur Windows, io.open en mode 'a' traduit \n en
+\r\n (27 lignes CRLF creees), ce que detecter-usage-outils-externes a detecte
+(test-047 KO). Correction avec corriger-fins-de-ligne. REGLE : ecrire les
+fichiers avec newline="\n" EXPLICITE dans tout script temp (jamais le mode
+texte par defaut sur Windows), et verifier corriger-fins-de-ligne sur tout
+fichier modifie avant de passer le relais.
+
+**Suite** : Janus lance la non-regression complete (55 tests) et controle.
+
+
+
+## [LECON] 2026-08-15 -- BANNIR TIMEOUTS EXTERIEURS + ERREUR SILENCIEUSE (Morpheus)
+
+**Mission** (Cerberus, ligne amelioration, theme ameliorer-test, demande
+utilisateur) : bannir les timeouts exterieurs autour de l execution des tests
+et ajouter la protection ERREUR-SILENCIEUSE correlee au STOP et au statut
+final. Logique ternaire : 1) ERREUR -> stop immediat, 2) REUSSITE -> afficher
+immediatement (le lanceur n attend JAMAIS la fin du timeout pour continuer),
+3) TIMEOUT (fin du delai programme sans reponse ni erreur directe) -> ERREUR
+SILENCIEUSE a trouver/a resoudre, puis RELANCER le script ou fichier corrige.
+
+**Fait** : lanceur v0.3.4 - verdict distinct ERREUR SILENCIEUSE (timeout)
+dans executer_lot (except subprocess.TimeoutExpired) et executer_pool (flag
+tue_timeout), affichage details (nb == -2) avec message explicite "a trouver/a
+resoudre, puis RELANCER le script ou fichier corrige", rapport markdown
+adapte, option --timeout-test (timeout INTERNE parametrable, jamais externe),
+doc .md a jour (section Protection ERREUR-SILENCIEUSE round 18). Protocole-tests
+v0.3.3 : REGLE IMMUABLE BANNIR LES TIMEOUTS EXTERIEURS (aucun timeout autour
+des commandes de test - seule la gestion interne lancer_protege + timeout du
+lanceur). 5 tests de version adaptes (024/027/031/032/051).
+
+**Preuve reelle** : test-056 temp (sleep 30s) lance avec --timeout-test 2 ->
+"ERREUR SILENCIEUSE (timeout)" affiche (pas un KO banal) + detail "a trouver/a
+resoudre, puis RELANCER" -> restaure (0 residu).
+
+**Lecon technique** : subprocess.run leve TimeoutExpired (test tue sans sortie
+exploitable) -> il faut l attraper SEPAREMENT de Exception pour distinguer
+l erreur silencieuse de l erreur d execution ; dans le pool, Popen ne leve
+rien -> marquer a[4] (tue_par_timeout) au moment du kill. Le timeout du
+lanceur est un DETECTEUR d erreur silencieuse, pas un simple filet.
+
+
+
+## [LECON] 2026-08-15 -- TEST-032 OPTIMISE 38.7s -> 22s (Morpheus)
+
+**Mission** (Cerberus, ligne amelioration, theme ameliorer-test, demande
+utilisateur) : optimiser test-032 en interne (38.7s, LE goulot de la suite,
+1er du classement TESTS LES PLUS LENTS du lanceur).
+
+**Diagnostic** : le point 7 ("Preuve de gain") executait le sous-ensemble
+test-001..008 DEUX FOIS (serie ~20.8s + pool ~15s = ~36s sur les 38.7s du
+test), incluant les tests longs test-003 (7.5s) et test-005 (6.0s).
+
+**Correctif** : sous-ensemble reduit a test-001/002/003/004 (4 tests gardant
+le LONG test-003 ~7.5s pour demontrer le benefice du pool) -> ~19s au lieu
+de ~36s. La preuve de gain reste valide : pool (8.0s) <= serie (11.8s) x 2.5.
+Seuil large (2.5x + 5s) et points 1-6/8-9 inchanges.
+
+**Resultat mesure** : test-032 38.7s -> 21.9s / 22.0s (2 runs stables, gain
+-17s soit -44%). 10/10 OK. Le plafond de la suite complete devrait passer
+sous ~35s (prochaine mesure par Janus).
+
+**LEcon** : un test qui VERIFIE la performance du lanceur ne doit pas lancer
+des sous-ensembles exhaustifs - un sous-ensemble MINIMAL avec au moins un
+test long suffit a prouver le gain du pool. La section TESTS LES PLUS LENTS
+(round 17) permet de cibler ces goulots avec precision.
+
+
+
+## [LECON] 2026-08-15 -- GARDE-FOU SECTION TESTS LES PLUS LENTS (Morpheus)
+
+**Mission** (Cerberus, ligne amelioration, theme ameliorer-test, demande
+utilisateur) : ajouter un garde-fou qui verifie que le lanceur affiche
+toujours la section TESTS LES PLUS LENTS.
+
+**Fait** : test-051-registre-tests point 9b ajoute (12/12) - le source du
+lanceur doit contenir "def afficher_tests_lents" + "TESTS LES PLUS LENTS" +
+au moins 3 appels "afficher_tests_lents(" (fonction + mono-serie + suite
+complete). Reutilise le point 9 existant (details KO, round 16) comme modele.
+
+**Preuve negative reelle** (protocole) : motif "TESTS LES PLUS LENTS" retire
+temporairement du lanceur -> point 9b KO (11 OK / 1 KO) -> restauration ->
+12 OK / 0 KO. Le garde-fou detecte bien la perte de la section.
+
+**Note version** : la demande mentionnait v0.3.3 mais le lanceur est passe a
+v0.3.4 (round 18, erreur silencieuse) - le garde-fou est sur v0.3.4.
+
+
+
+## [LECON] 2026-08-15 -- BANNIR TIMEOUTS EXTERIEURS ETENDU AUX SCRIPTS TEMP (Morpheus)
+
+**Mission** (Cerberus, ligne amelioration, theme ameliorer-test, demande
+utilisateur) : etendre la regle "bannir les timeouts exterieurs" aux scripts
+temporaires (elle ne couvrait que les tests).
+
+**Fait** : protocole-creation-scripts-temporaires v0.2.7 -> v0.2.8 - nouvelle
+section "Bannir les timeouts exterieurs (v0.2.8)" apres le triplet : AUCUN
+timeout exterieur autour de l execution d un script temp (jamais de
+timeout <s> autour de la commande), logique ternaire identique a
+protocole-tests v0.3.3 (reussite -> affichage immediat, erreur -> stop,
+delai depasse sans reponse -> erreur silencieuse a resoudre puis relancer).
+Lien croise vers protocole-tests present (1 occurrence).
+
+**Verifications** : test-049 11/11, test-050 18/18 (aucun ne fige la version
+du protocole - ils verifient les sections entonnoir/triplet), index-regles
+reference le protocole, normes 0/0, 0 residu.
+
+**Lecon** : les regles transverses (timeouts, triplet, declaration) doivent
+etre documentees dans CHAQUE protocole concerne avec un lien croise - une
+regle qui ne couvre que les tests laisse les scripts temporaires sans garde.
+
+
+
+## [LECON] 2026-08-15 -- ZERO TIMEOUT EXTERNE D ORCHESTRATION (Morpheus)
+
+**Mission** (Cerberus, ligne amelioration, theme ameliorer-test, DECISION
+UTILISATEUR) : bannir TOUT timeout externe d orchestration sur l execution
+des tests et scripts temporaires - l utilisateur est le DERNIER RECOURS.
+
+**Contexte** : l utilisateur a constate que les commandes portaient un timeout
+externe (ex "(2m timeout)") qui tuait des tests/scripts legitimes (machine
+chargee, pool) au detriment des agents - contradiction avec la regle bannir
+timeouts exterieurs deja en place.
+
+**Fait** : protocole-tests v0.3.3 -> v0.3.4 (section "ZERO TIMEOUT EXTERNE
+D ORCHESTRATION") + protocole-creation-scripts-temporaires v0.2.8 -> v0.2.9
+(meme section). L attente d orchestration est INDEFINIE, les protections
+INTERNES (lancer_protege, timeout du lanceur, triplet) sont les SEULES a
+trancher un blocage, l utilisateur observe et interrompt manuellement.
+
+**Precision importante (question utilisateur)** : on bannit UNIQUEMENT le
+timeout EXTERNE d orchestration. Les timeouts INTERNES des protections sont
+CONSERVES (lancer_protege timeout + tuer l arbre, TIMEOUT_POOL du lanceur,
+verdict ERREUR SILENCIEUSE) - ce sont eux qui detectent les blocages reels.
+
+**Tests adaptes** : test-044 point 11 (protocole-tests 0.3.3 -> 0.3.4 + ZERO
+TIMEOUT), 15/15. test-049 11/11, test-050 18/18 inchanges (0.2.7 de la
+section declaration toujours present). Normes 0/0, 0 residu.
+
+
+
+## [LECON] 2026-08-15 -- CORRIGER KO PREEXISTANT test-031 EN POOL (Morpheus)
+
+**Contexte** : non-regression 54 OK / 1 KO - test-031 passe seul (10/10) et en pool mono-test mais KO dans le pool complet.
+
+**Cause racine (identifiee par Janus)** : course sur le fichier partage temps-reference.json. test-031 (dans le pool) supprime/restaure la reference (points 4-5) pendant que le lanceur parent (run complet) gere la meme reference -> KO intermittent. Meme classe que test-020 (README partage).
+
+**Correctif** : ajouter 'test-031' a TESTS_SERIE_EXCLUSIFS dans tester-lancer-non-regression.py (+ commentaire du bloc mis a jour : fichiers partages = README, catalogue, temps-reference).
+
+**Validations** : py_compile OK, normes 0/0 ASCII + LF, reference temps-reference.json intacte (39.8s, 55 tests), test-031 place en serie finale (Garde-fous globaux + exclusifs, hors pool), test-051 12/12 + test-031 10/10 (tests individuels).
+
+**Lecon** : un test qui manipule un fichier partage avec le lanceur parent (reference, README, catalogue) doit TOUJOURS etre en TESTS_SERIE_EXCLUSIFS - jamais dans le pool. Diagnostic : le test passe seul mais KO en pool complet = signature de course sur fichier partage.
+
+
+## [LECON] 2026-08-15 -- ADAPTER TEST-016 APRES ASSIGNATION BUMPER (Morpheus)
+
+**Contexte** : la carte buffy a ete bump 0.4.4 -> 0.4.6 (assignation mettre-a-jour-versions c10b + evaluer-processus c26). test-016 figeait la version 0.4.4 -> KO.
+
+**Actions** : adaptation test-016-migration-buffy.py : version 0.4.4 -> 0.4.6 dans la doc (ligne 22-25) + point 1 (ligne 116-117) + mention du changement v0.4.6 dans l historique du test.
+
+**Validations** : test-016 20/20 (le point 10 'plus de 3 indices' reste OK : c10b 2 indices, c26 2 indices), py_compile OK, normes 0/0 ASCII + LF.
+
+**Lecon** : apres chaque bump de carte, verifier les tests qui figent la version (test-016 pour buffy, test-013 pour cerberus, test-004 pour morpheus). L'ajout d'indices outil aux cases doit respecter le budget d'indices verifie par test-016 (<= 3).
+
+
+## [LECON] 2026-08-15 -- TEST-013 ADAPTE + COURSE POOL TEST-046 CORRIGEE (Morpheus)
+
+**Contexte** : mission Cerberus (bilan Janus) - traiter 2 KO de la non-regression :
+(1) test-013 figeait cerberus 0.4.5 (bump Buffy vers 0.4.6, ajout indice generateurs-commande c10) ;
+(2) test-046 KO intermittent en pool (passe seul 13/13) : course sur le workspace partage avec test-006.
+
+**Travail effectue** :
+1. test-013 : version fige 0.4.5 -> 0.4.6 (doc + point 1 + titre), entree v0.4.6 ajoutee dans le doc.
+   Compteurs de types de cases VERIFIES inchanges (23 action / 5 question / 5 controle / 3 fin -
+   l ajout d un indice ne cree pas de case). Test reverdi 22/22.
+2. tester-lancer-non-regression : test-046 ajoute a TESTS_SERIE_EXCLUSIFS (ligne 58) + commentaire
+   Round 15. Cause racine : test-006 (serie b) verifie 'aucun fichier residuel dans le workspace'
+   pendant que test-046 (serie e) pose ses factices workspace/.tmp-factice-046.py -> le factice
+   disparait au point 5b. Meme classe que test-020/test-031 (fichiers partages).
+
+**Lecon** : les tests qui manipulent le WORKSPACE partage (pose + nettoyage de factices) doivent
+etre en serie finale (TESTS_SERIE_EXCLUSIFS) des qu un autre test VERIFIE la vacuite de ce meme
+workspace en parallele - la detection de residus legitimes cree des courses invisibles.
+
+**Verifications** : test-013 22/22, test-046 13/13, test-051 12/12, normes ASCII + LF 0/0.
+
+
+## [LECON] 2026-08-15 -- TEST-016 + TEST-004 ADAPTES (Bumps cartes buffy/morpheus) (Morpheus)
+
+**Contexte** : mission Cerberus (bilan Janus) - la non-regression 53 OK / 2 KO avait exactement
+2 KO de versions figees apres les bumps de cartes de Buffy.
+
+**Travail effectue** :
+1. test-016 : version buffy fige 0.4.6 -> 0.4.7 (Buffy a ajoute guider-parcours a sa case c0 -
+   P0 de sa fiche absent de sa carte). Doc + point 1 adaptes, entree v0.4.7 ajoutee. 20/20.
+2. test-004 : version morpheus fige 0.4.5 -> 0.4.6 (Buffy a ajoute tester-protections a la case c12).
+   Point 7a + doc adaptes. 16/16 VALIDE.
+
+**Lecon** : les bumps de cartes (ajout d indices outil pour le garde-fou test-035) cassent
+systematiquement les tests de migration qui figent les versions - a chaque bump, verifier test-004,
+test-013, test-016 (les 3 tests de migration) avant la non-regression.
+
+
+## [LECON] 2026-08-15 -- CONTROLE TESTS GENERATEURS-COMMANDE v0.2.5 (Morpheus)
+
+**Contexte** : maillon de la chaine Vulcain (correctif generateurs-commande v0.2.5) -> Morpheus
+(tests) -> Janus (controle). J execute UNIQUEMENT des tests individuels (regle absolue).
+
+**Verifications** : test-029 14/14, test-055 12/12. test-035 7/8 - KO : 2 OUTIL_HORS_CARTE
+detectes pour VULCAIN (detecter-cablages-manquants + valider-cartes-decision) - usages REELS
+de Vulcain (RVAV : valider sa carte + verifier les cablages) mais absents de sa carte.
+
+**Ecart transmis a Buffy** : ajouter les 2 indices outil a la carte vulcain (case de validation
+RVAV c7b ou case appropriee) + bump version (0.4.12 -> 0.4.13). Ce sont des usages reels, on ne
+les retire pas du registre - on assigne les outils a la carte.
+
+**Lecon** : quand un agent utilise des outils de VALIDATION dans son RVAV (valider-cartes-decision,
+detecter-cablages-manquants), ces outils doivent etre dans SA carte - le garde-fou test-035 le
+verifie des qu ils sont declares au registre.
+
+
+## [LECON] 2026-08-15 -- TEST-005 ADAPTE (generateurs-commande v0.2.5) (Morpheus)
+
+**Contexte** : mission Cerberus (bilan Janus) - KO test-005 : version generateurs-commande fige
+0.2.4, le bump Vulcain v0.2.5 (correctif journalisation) le cassait.
+
+**Travail effectue** : test-005 adapte - toutes les references 0.2.4 -> 0.2.5 (titre, doc cas
+couverts, print, points 1-2 py/sh). 0 occurrence 0.2.4 restante. Test reverdi 28/28. Normes 0/0.
+
+**Lecon** : a chaque bump de generateurs-commande, adapter test-005 DANS LA MEME CHAINE que le
+bump - le test fige la version du generateur (.py + .sh) et tout bump le casse.
+
+
+## [LECON] 2026-08-15 -- TEST-024 ADAPTE AU .TMPIGNORE (Morpheus)
+
+**Contexte** : maillon de la chaine Vulcain (creation .tmpignore + detecter-residus v0.1.3) ->
+Morpheus (garde-fou test-024) -> Janus (controle).
+
+**Travail effectue** : test-024 adapte au .tmpignore :
+- fonction lire_tmpignore() : lit cerveau-projet/agents/traces/.tmpignore (noms EXACTS autorises)
+- les noms listes sont ajoutes aux exclusions du point 2b (dossiers tmp-* residuels)
+- nouveau point 2c : garde-fou du format (.tmpignore present dans traces/, ASCII + LF, noms
+  EXACTS sans motif global de type tmp-*)
+
+**Preuve negative** : dossier temp NON liste -> KO 2b (15/16) ; ajoute au .tmpignore -> OK
+(16/16). La derrogation est CIBLEE : seul le nom exact liste est autorise, tout autre temp reste
+un residu KO. Fichier nettoye apres la preuve (0 nom liste, pret a l usage).
+
+**Lecon** : un garde-fou anti-residus avec derrogation ciblee se prouve en 2 temps : (1) le
+defaut reste KO (dossier non liste), (2) la derrogation liste fait passer OK - c est la preuve
+que la protection n est pas affaiblie.
+
+## [LECON] 2026-08-15 -- TESTS ENTONNOIR v0.1.1 (Morpheus)
+
+**Contexte** : protection de sortie LF (Vulcain) - l entonnoir re-normalise les fichiers modifies pendant la fenetre d execution. Verification : test-047 10/10, test-024 16/16, test-030 10/10, test-049 11/11 (version figee 0.1.0 -> 0.1.1 adaptee au point 8).
+
+## [LECON] 2026-08-15 -- TESTS GARANTIE LF (Morpheus)
+
+**Contexte** : garantie LF generalisee (Vulcain) - 7 outils modifies. Verification : test-002 37/37, test-020 46/46 (versions figees 0.1.1/0.1.3 -> 0.1.2/0.1.4 adaptees), test-042 4/4.
+
+## [LECON] 2026-08-15 -- TESTS SPECS ALIGNEES (Morpheus)
+
+**Contexte** : alignement des 2 specs (Vulcain). Verification : test-028 8/8, test-002 37/37 verts.
+
+
+## [LECON] 2026-08-15 -- CONTROLE ANTI-ACCUMULATION HISTORIQUE + SOMME COMPTES (Morpheus)
+
+**Contexte** : mission de controle (suite Vulcain, chaine anti-accumulation historique) - verifier
+les corrections : AGENTS-historique nettoye (150 entrees, 0 parasite, entrees de la matinee
+reconstruites apres incident) + protection v0.5.6 (ajouter_historique purge les continuations
+avec l entree depassee) + mettre-a-jour-readme v0.4.2 (verifier_somme_comptes sur le tableau
+readme-dev).
+
+**Verifications (toutes vertes)** : test-025 11/11, test-028 8/8, test-020 46/46, test-038 7/7,
+detecter-divergences-version 0 DIVERGENTES (spec/outil 0.5.6 alignes), valider-cartes-decision
+13/13 CONFORMES, normes ASCII/LF 0/0 sur les 9 fichiers modifies, 0 residu racine (tmp-vulcain
+purge + .tmp-hist-test.md supprime).
+
+**Lecon** : un controle croise doit aussi verifier l absence de RESIDU (les tests de la mission
+avaient laisse .tmp-hist-test.md a la racine - supprime) et la coherence spec/outil apres bump
+(activer-agent-principal 0.5.6 aligne py/sh/md/spec).
+
+VERDICT : VALIDE - corrections Vulcain conformes, tests de controle verts, normes 0/0, 0 residu.
+
+FIN : lecon Morpheus + activer Janus (c10/c14) pour le controle final + non-regression complete.
+
+## [LECON] 2026-08-15 -- TEST-007 ADAPTE 155->156 / 173->174 (Morpheus, VERDICT VALIDE)
+
+**Mission** : adapter test-007 apres la creation de detecter-donnees-en-dur v0.1.0 (Vulcain, chaine c9) : catalogue 155 -> 156, index-tools 173 -> 174.
+
+**Resultat** : test-007 15/15 VALIDE, test-028 8/8, valider-cartes 13/13 CONFORMES, divergences 0, normes 0/0.
+
+**Lecons** :
+1. L OUTIL editer-fichier n accepte pas les 
+ dans le texte de remplacement : mes 2 insertions de liste (noms/idx) ont insere un 
+ LITTERAL dans le code Python -> compilation cassee. Correction via script temp passe par l entonnoir (remplacement exact old/new avec comptage). Lecon anti-echappement confirmee : pour inserer une NOUVELLE LIGNE dans un .py, passer par un script temp (jamais de 
+ dans editer-fichier).
+2. test-007 a 2 zones a adapter quand le catalogue grossit : le docstring (lignes 30-31, valeurs historiques 153/171 obsoletes) ET les verifications (points 13-14) : total + libelles + liste de presence. Le docstring documente l historique - mettre a jour la valeur courante.
+3. Garde-fou positif : ajouter la nouvelle entree (detecter-donnees-en-dur) dans les 2 listes de presence (noms + idx) - sinon le test verifie le total mais pas la presence reelle.
+4. REGLE NON-REGRESSION JANUS respectee : SEUL Janus lance tester-lancer-non-regression. Morpheus execute uniquement des tests individuels (test-007, test-028) puis active Janus pour le controle croise + la non-regression complete.
+
+## [LECON] 2026-08-15 -- 5 TESTS ADAPTES AUX BARRIERES v0.4.0 (Morpheus, VERDICT VALIDE)
+
+**Mission** : adapter les 5 tests impactes par le passage du lanceur aux BARRIERES DE PASSAGE (v0.3.4 -> v0.4.0, Vulcain round 18) : test-027, test-032, test-031, test-024, test-051. La chaine s etait de nouveau brisee au demarrage de Morpheus (agent actif mais non execute) - reprise du travail dans le round suivant.
+
+**Adaptations** :
+1. test-027 : point 4 (version v0.4.0), point 6a (--series a -> --series c car test-001 est passe en serie C Outils/Combos), point 6b (--series c -> --series a, inverse), point 7 (Defaut = pool de workers -> Defaut = BARRIERES : structure BARRIERE + filtre herite).
+2. test-032 : point 1 (version), point 2 (Defaut = pool -> Defaut = BARRIERES), point 3b (--workers 1 -> --parallele --workers 1 car --workers sans --parallele n a plus d effet), point 7 (preuve de gain : --workers 4 -> --parallele --workers 4).
+3. test-031 : point 1 (version) + commentaires.
+4. test-024 : point 6 (version).
+5. test-051 : point 1 (version) + point 4/5 (--series a -> --series c car test-001 n est plus en serie A).
+
+**Resultat** : test-027 11/11, test-031 10/10, test-024 16/16, test-051 12/12, test-032 10/10. valider-cartes 13/13 CONFORMES. Normes 0/0 (5 tests). 0 residu.
+
+**Lecons** :
+1. LE CHANGEMENT DE CLASSIFICATION DES SERIES CASCADE SUR TOUS LES TESTS QUI LANCENT --series avec un test precis : test-001 a change de serie (A -> C) -> test-027 (6a/6b) ET test-051 (4/5) ont du etre inverses. Un test qui utilise --series <X> --tests <T> doit verifier QUE T EST DANS X (sinon Aucun test trouve -> KO).
+2. --workers SANS --parallele n a PLUS d effet depuis les barrieres (le pool est option) : test-032 point 3b et 7 ont du ajouter --parallele. Un test qui verifiait l ancien defaut pool doit maintenant verifier le defaut BARRIERES (structure BARRIERE dans la sortie).
+3. LE BUMP DE VERSION EST A 2 ENDROITS : la constante VERSION du .py ET la doc .md ET le catalogue. J avais adapte les tests en v0.4.0 mais le lanceur affichait encore v0.3.4 (VERSION non bumpee par Vulcain) -> 5 KO simultanes. TOUJOURS verifier --version de l outil AVANT de figer les tests.
+4. Les references historiques (v0.3.4 dans docstrings) peuvent etre conservees si elles documentent le passe, mais les VALEURS ATTENDUES (verifier) doivent suivre la version courante.
+## [LECON] 2026-08-15 -- GARDE-FOU TEST-056 VERROU + COMPTEURS (Morpheus, round 19)
+
+**Contexte** : apres Vulcain (outil proteger-verrou-habilitation cree, catalogue
+156->157, index-tools 174->175, categorie Proteger), reprise de la mission
+(la chaine s etait de nouveau brisee au demarrage de Morpheus : test-056
+absent, compteurs non adaptes).
+
+**Fait** :
+1. test-056-verrou-habilitation cree (template v0.3.0 : triplet point_actif/
+   chrono_etape/bilan_chrono + protections importees) : 8 points - version,
+   preuve positive (janus->non-regression rc=0), preuve negative (cerberus->
+   non-regression rc=1 + commande d activation), exclusivite suppression
+   (hygie rc=0 / cerberus rc=1), --agent manquant rc=2, outil non assigne
+   rc=1, normes ASCII/LF. RESULTAT 8 OK / 0 KO.
+2. test-007 adapte : catalogue 156->157 + index-tools 174->175 (5 zones :
+   compteur, liste presence, 2 libelles, 2 branches except, docstring).
+   RESULTAT 15/15.
+3. test-024 adapte : catalogue 156->157 (compteur + libelle + docstring).
+   RESULTAT 16/16.
+4. Lanceur : test-056 affecte a la serie A (Fondations) + GARDE_FOUS_GLOBAUX
+   (il verifie l etat global - le verrou). Couverture 55/55, 0 hors-serie.
+
+**Lecons** :
+1. CONVENTION --version : l outil affichait 'proteger-verrou-habilitation
+   0.1.0' SANS le 'v' - la convention des autres outils est 'vX.Y.Z'
+   (detecter-donnees-en-dur 'v0.1.0'). Corrige dans l outil, pas dans le test
+   (le test reflete la convention, il ne la cree pas).
+2. INDEX-TOOLS ne liste QUE les tests jusqu a test-039 : les tests 040+ ne
+   sont PAS references (comportement existant, test-055 absent aussi) - ne
+   pas ajouter test-056 a l index (assert a protege le fichier).
+3. EDITER-FICHIER multi-remplacements : les remplacements simples marchent
+   bien ; les insertions multi-lignes ont echoue dans le passe - passer par
+   script temp (entonnoir) pour les cas complexes (docstring + except).
+4. CHAINE BRISEE (anti-recurrence) : l agent actif = morpheus mais rien
+   n avait ete execute - reprise de la mission dans le round (comme au round
+   precedent). La cause racine (activation sans execution) est suivie par
+   test-033/passage-janus - a surveiller.
+
+**A faire par Janus** : controle croise + non-regression complete en mode
+barrieres (seul habile). Badge README 135->136 : mission Clio (regle exclusive).
+
+**A noter pour Cerberus** : le verrou n est assigne a AUCUNE carte (protection
+transversale) - l assignation sera decidee plus tard (demande utilisateur).
+
+
+## [LECON] 2026-08-15 -- 5 TESTS ADAPTES AU VERROU HABILITATION (Morpheus, VERDICT VALIDE)
+
+**Contexte** : Vulcain a branche proteger-verrou-habilitation dans les 4 outils
+critiques (--agent OBLIGATOIRE, rc=0/1/2). Les tests qui appelaient ces outils
+SANS --agent cassaient (le verrou bloque rc=2 : message OBLIGATOIRE).
+
+**Adaptations (5 tests, tous reverdis)** :
+1. test-020 (46/46) : version combos-maj-readme-massive 0.1.4 -> 0.1.5 +
+   --agent clio sur l execution reelle (seul clio habilite pour le README).
+2. test-024 (16/16) : version lanceur v0.4.0 -> v0.4.1.
+3. test-027 (11/11) : version v0.4.0 -> v0.4.1 + --agent janus sur les 4
+   appels reels du lanceur (6a, 6b, 7, 8).
+4. test-031 (10/10) : version v0.4.0 -> v0.4.1 + --agent janus sur l appel
+   reel (point 3). Les references 0.4.0 restantes (docstring/commentaires)
+   mises a jour pour la coherence (0 residu).
+5. test-051 (12/12) : version v0.4.0 -> v0.4.1 + point 4 : l agent temporaire
+   'tmp-t051' est BLOQUE par le verrou (non habilite) -> remplacer par 'janus'
+   (seul habilite pour le lanceur). Le point 5 (sans --agent : aucune entree)
+   reste valide : le verrou bloque rc=2 AVANT la journalisation.
+
+**Non-casse confirmee** : test-037 6/6, test-045 15/15, test-056 8/8,
+test-029/030/034 (deja verts). Normes 0/0 sur les 5 tests. Badge README 136
+stable (le combo clio du test-020 re-synchronise sans changement).
+
+**Lecons** :
+1. Le verrou change le CONTRAT des outils : --agent devient obligatoire pour
+   toute action reelle. Les tests doivent utiliser un agent HABILITE
+   (janus/hygie/clio selon l outil), jamais un agent fictif (tmp-t051 est
+   bloque). Le verrou est une preuve negative utile : un agent inconnu est
+   refuse rc=2 (test-056 le couvre).
+2. Les appels --version/--help ne passent PAS par le verrou (argparse les
+   traite avant) : seule la version figee dans le test change.
+3. Demande utilisateur en attente (mission Vulcain) : permettre de lancer
+   PLUSIEURS series d un coup (--series a,c au lieu de mono a|b|c|d|e) pour
+   controler une petite zone sans lancer la suite complete - la boucle
+   souhaitee : KO -> corriger -> relancer LA serie -> si passe -> suite
+   complete. Le mono-serie existe deja (test-027 le prouve).
+
+
+## [LECON] 2026-08-15 -- TEST-004 ADAPTE AU BUMP PARCOURS MORPHEUS 0.4.8 (Morpheus)
+
+**Contexte** : Buffy a ajoute l indice anti-arret dans c0 de parcours-morpheus
++ bump 0.4.7 -> 0.4.8. Impact test-004 (pointe 7a figeait 0.4.7).
+
+**Fait** : 2 remplacements dans test-004-combos-tester-outil.py :
+- docstring ligne 19 : v0.4.7 -> v0.4.8
+- ligne 155 : verifier "7a. Parcours morpheus v0.4.8" == "0.4.8"
+Resultat : COMBO TESTER-OUTIL VALIDE (10/10).
+
+**Lecon** : le bump d un parcours casse systematiquement les tests qui figent
+sa version - verifier les references dans les tests AVANT de bumper (lecon deja
+connue, re-confirmee).
+
+
+## [LECON] 2026-08-15 -- TEST-027 + TEST-032 ADAPTES AU --series MULTI 0.4.2 (Morpheus)
+
+**Contexte** : Vulcain a ajoute --series MULTI (a,c) au lanceur (0.4.2).
+Choices argparse retire -> message serie inconnue change.
+
+**Fait** :
+1. test-027 (9 -> 11 OK) :
+   - point 4 : version 0.4.1 -> 0.4.2
+   - point 5 : --series z attendait "usage:" (argparse choices) -> "inconnue"
+     + rc=2 ; ET cause racine : l appel n avait PAS --agent janus -> le verrou
+     bloquait AVANT la validation de serie (message --agent OBLIGATOIRE).
+     Ajoute --agent janus a l appel + nouveau message attendu.
+2. test-032 (9 -> 10 OK) : point 1 version 0.4.1 -> 0.4.2 (3 remplacements).
+
+**Lecon** : quand un test verifie une ERREUR d un outil, verifier que l appel
+passe bien le verrou (--agent) AVANT de tester la validation - sinon le verrou
+masque l erreur testee. Le message d erreur a change (choices retire) mais le
+comportement rc=2 est conserve.
+
+
+## [LECON] 2026-08-15 -- 5 TESTS DE VERSION ADAPTES AU LANCEUR 0.4.3 (Morpheus)
+
+**Contexte** : Vulcain a ajoute l ordre dynamique des series (taux de KO) au
+lanceur (0.4.2 -> 0.4.3).
+
+**Fait** : adaptation des 5 tests figeant la version lanceur 0.4.2 -> 0.4.3 :
+- test-024 (16/16), test-027 (11/11), test-031 (10/10), test-032 (10/10),
+  test-051 (12/12). Les tests 005/010/016/022 referencent 0.4.2 d AUTRES
+  outils (atlas, generateurs-case) - non touches (verifie).
+
+**Lecon** : le bump de version du lanceur impacte systematiquement 5 tests
+(024/027/031/032/051) - verifier TOUS les tests qui figent la version via grep
+AVANT de conclure le bump. La reference documentaire (commentaire "v0.4.2 :
+choices argparse retire") est HISTORIQUE - a conserver.
+
+## [LECON] 2026-08-15 -- 5 TESTS DE VERSION ADAPTES AU LANCEUR v0.4.5 (Morpheus)
+
+**Contexte** : Vulcain a ajoute la config persistante des tests au lanceur
+(--activer/--desactiver par numero dans config-tests.json gitignore, --etat-tests,
+tests desactives = NON LANCE) et bumper v0.4.4 -> v0.4.5. Ma mission : adapter les
+tests qui pincent la version du lanceur.
+
+**Adaptes** (v0.4.4 -> v0.4.5) : test-024, test-027, test-031, test-032, test-051.
+test-016 n etait PAS concerne (son v0.4.4 est la version du PARCOURS buffy, pas du
+lanceur).
+
+**Lecon** : l outil editer-fichier ne remplace qu UNE occurrence par appel - pour
+plusieurs occurrences il faut re-appeler avec des chaines plus precises. Test-031/032
+avaient 3 occurrences (docstring, commentaire, verification), test-051 en avait 3.
+
+**Verification** : test-024 16/16 OK. test-027/031/032/051 KO en session morpheus
+UNIQUEMENT car le verrou v0.2.0 verifie l IDENTITE REELLE (agent actif de la
+session) - ils passent --agent janus et passent quand JANUS lance la suite (session
+= janus, comme au round precedent 59 OK / 0 KO). Ce n est pas un bug : c est la
+mecanique du verrou. --version passe avant le verrou (action argparse), d ou le
+16/16 de test-024 meme en session morpheus.
+
+## [LECON] 2026-08-15 -- TEST-007/051 ADAPTES + GARDE-FOU TEST-060 OUTILS ANALYSE (Morpheus)
+
+**Contexte** : Vulcain a cree 2 outils d analyse (analyser-performance-tests +
+analyser-tokens) + ajoute le bloc tokens aux templates. Ma mission : adapter les
+tests + corriger le bug critique du registre-tests + creer le garde-fou.
+
+**1. test-007 adapte** : catalogue 159->161 commandes (2 nouveaux outils), index-tools
+177->179 (Analyser 2->4). Le catalogue devait aussi etre RETRIE (mon insertion apres
+analyser-structure cassait le tri) - trie par nom, 15/15 VALIDE.
+
+**2. BUG CRITIQUE CORRIGE (test-051)** : le point 8 supprimait TOUTES les entrees
+agent == "janus" du registre-tests - y compris les VRAIES entrees du run complet de
+la non-regression (le registre ne gardait que l entree de test-051 lui-meme, 106
+entrees au lieu de milliers). Correction : capturer les lignes avant la preuve et ne
+supprimer QUE les nouvelles lignes correspondant a la preuve (agent=janus, serie=c,
+test-001-evaluer-agents-coherence) - robuste en parallele (les autres tests de la
+serie D journalisent leurs propres noms). Preuve ciblee : 1 seule preuve supprimee,
+3 vraies entrees conservees.
+
+**3. GARDE-FOU test-060 cree** : verifie l existence, la compilation, la version
+v0.1.0, les options cles, les docs .md, index-tools (Analyser 4 / Total 179), le
+catalogue (161 trie) des 2 outils + preuves reelles d execution + preuve negative
+(outil fantome absent). 12/12 OK. Ajoute a la serie A du lanceur.
+
+**4. DECOUVERTE PREEXISTANTE (a signaler a Janus)** : doublon test-046 - deux
+fichiers portent le numero 046 (test-046-compartimentation-residus cree 17:06 et
+test-046-hermes-fautes cree 17:16). Le lanceur glob les trouve tous les deux (60
+fichiers pour 59 numeros uniques). A renumeroter (le 2e en test-061 ou numeros
+suivants) par la mission qui les gere.
+
+**Lecon** : la difference avant/apres (ensemble de lignes) est le bon motif pour
+nettoyer des preuves dans un registre partage - jamais un filtre par valeur commune
+(agent) qui touche les donnees reelles.
+
+## [LECON] 2026-08-15 -- DOUBLON TEST-046 RENUMEROTE EN TEST-061 (Morpheus)
+
+**Contexte** : deux dossiers portaient le numero 046 (test-046-hermes-fautes cree
+14/08 + test-046-compartimentation-residus cree 15/08) -> 60 fichiers pour 59
+numeros uniques. Le lanceur matche par prefixe (startswith) : les deux tournaient
+mais la numerotation etait ambiguE (--desactiver 46 touchait les deux).
+
+**Correction** : le plus ANCIEN (hermes-fautes) garde 046 ; le plus RECENT
+(compartimentation-residus) passe a test-061 (libre). Renommage mv du dossier +
+du .py + remplacement interne global 046->061 (remplacer-texte v0.3.1) + purge
+__pycache__. Lanceur : serie d += test-061, TESTS_SERIE_EXCLUSIFS test-046 ->
+test-061 (c est compartimentation qui pose des residus factices -> reste
+exclusif ; hermes-fautes lecture seule sort de l exclusif), DUREES_CONNUES +=
+test-061:0.
+
+**Verification** : 60 dossiers / 60 numeros uniques (plus de doublon), compile
+OK, normes 0/0, tests individuels 2/2 (test-046 10/10, test-061 13/13), 0 residu
+factice restant. Les references historiques (snapshots, rapports, lecons,
+registre) sont conservees telles quelles.
+
+**Lecon** : avant de creer un nouveau test, verifier que le numero n existe pas
+deja (uniq sur les prefixes). A generaliser par un garde-fou de numerotation
+unique (proposition a Janus/Cerberus).

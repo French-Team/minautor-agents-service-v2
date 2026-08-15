@@ -19,7 +19,7 @@ Protections:
   - Dry-run par defaut : il faut --force pour supprimer reellement
 
 Proprietaire : Buffy (outil partage)
-Version : 0.2.0-py
+Version : 0.2.1-py
 Statut : prepare
 """
 
@@ -27,7 +27,7 @@ import os
 import shutil
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.2.1-py"
 STATUT = "prepare"
 
 CHEMINS_SENSIBLES = {"", "/", ".", "..", "./", "../"}
@@ -52,8 +52,37 @@ def afficher_aide():
     print("  supprimer-dossier.py --force dossier-temporaire  # Suppression reelle")
 
 
+def verrouiller_habilitation(agent, outil, audit=False):
+    """Appelle proteger-verrou-habilitation et retourne (code, message).
+    Source de verite : les cartes de decision (aucune liste en dur).
+    audit=True (v0.2.0) : mode tests - pas de verification d identite reelle."""
+    import subprocess
+    courant = os.path.dirname(os.path.abspath(__file__))
+    while True:
+        if os.path.isfile(os.path.join(courant, "AGENTS.md")):
+            break
+        parent = os.path.dirname(courant)
+        if parent == courant:
+            return (2, "[ERREUR] Racine du projet introuvable (AGENTS.md absent)")
+        courant = parent
+    verrou = os.path.join(
+        courant, "cerveau-projet", "agents", "tools", "proteger",
+        "proteger-verrou-habilitation", "proteger-verrou-habilitation.py")
+    if not os.path.isfile(verrou):
+        return (2, "[ERREUR] Verrou introuvable : %s" % verrou)
+    cmd = [sys.executable, verrou, "--agent", agent, "--outil", outil]
+    if audit:
+        cmd.append("--audit")
+    r = subprocess.run(cmd, capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    message = (r.stdout + r.stderr).strip()
+    return (r.returncode, message)
+
+
 def main(argv):
     dossier = ""
+    agent = ""
+    audit = False
     force = False
     verbose = False
     help_demande = False
@@ -73,6 +102,17 @@ def main(argv):
             help_demande = True
             i += 1
             continue
+        if arg == "--audit":
+            audit = True
+            i += 1
+            continue
+        if arg == "--agent":
+            if i + 1 >= len(argv):
+                print("[ERREUR] --agent requiert un nom d agent")
+                return 2
+            agent = argv[i + 1]
+            i += 2
+            continue
         if arg == "--version":
             print("supprimer-dossier v%s (%s)" % (VERSION, STATUT))
             return 0
@@ -91,6 +131,19 @@ def main(argv):
         print("[ERREUR] Aucun dossier specifie")
         afficher_aide()
         return 1
+
+    # VERROU D HABILITATION (regle immuable : seul hygie supprime). --agent
+    # est OBLIGATOIRE et le verrou est appele AVANT toute action : si l agent
+    # n est pas habilite, la suppression est refusee et le message indique
+    # QUI est habilite (cycle Cerberus -> agent).
+    if not agent:
+        print("[ERREUR] --agent est OBLIGATOIRE : l outil doit connaitre "
+              "l agent appelant (verrou d habilitation).")
+        return 2
+    code, message = verrouiller_habilitation(agent, "supprimer-dossier", audit=audit)
+    if code != 0:
+        print(message)
+        return 1 if code == 1 else 2
 
     if not os.path.isdir(dossier):
         print("[ERREUR] Dossier non trouve ou pas un dossier: %s" % dossier)

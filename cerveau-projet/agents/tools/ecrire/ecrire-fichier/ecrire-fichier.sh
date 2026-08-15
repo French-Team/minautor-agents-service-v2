@@ -1,7 +1,7 @@
 #!/bin/bash
 # ecrire-fichier.sh
 # Ecrire/echraser le contenu d'un fichier
-# Version : 0.3.0
+# Version : 0.3.2
 # Statut : prepare
 
 # identite:

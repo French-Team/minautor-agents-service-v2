@@ -3,7 +3,7 @@
 """
 test-050-triplet-outils-temporaires.py
 GARDE-FOU : le triplet (protections + options on/off + chrono) est generalise
-dans les OUTILS TEMPORAIRES. generateurs-outil-temporaire v0.2.1 genere des
+dans les OUTILS TEMPORAIRES. generateurs-outil-temporaire v0.2.2 genere des
 scripts qui embarquent le meme triplet que le template-test v0.3.0.
 
 Contexte (demande utilisateur 2026-08-14 "generaliser les protections et les
@@ -11,7 +11,7 @@ chrono dans les outils temporaires") :
   - Avant : le template genere etait un simple main() sans protections ni
     chrono - un script temporaire pouvait tourner sans dry-run, sans options
     on/off, sans mesure de duree.
-  - Maintenant : generateurs-outil-temporaire v0.2.1 integre le triplet + le
+  - Maintenant : generateurs-outil-temporaire v0.2.2 integre le triplet + le
     bloc DECLARATION USAGES dans
     le template genere (verifier_nommage, --dry-run, --isoler, --desactiver,
     --no-chrono, chrono_etape, bilan_chrono).
@@ -19,7 +19,7 @@ chrono dans les outils temporaires") :
     un outil temporaire SANS triplet doit etre regenere avec le generateur.
 
 Cas couverts:
-  1. Le generateur est v0.2.1 (--version)
+  1. Le generateur est v0.2.2 (--version)
   2. Le template dans le code contient point_actif / chrono_etape / bilan_chrono
   3. Le template contient les options --isoler / --desactiver / --no-chrono / --dry-run
   4. PREUVE REELLE : generation d un outil temporaire -> le script genere
@@ -28,9 +28,9 @@ Cas couverts:
   6. --isoler N du script genere : fonction isolee
   7. --no-chrono du script genere : chrono coupe
   8. Le protocole-creation-scripts-temporaires contient la REGLE TRIPLET (v0.2.6)
-  9. La doc du generateur est v0.2.1 + mentionne le triplet
+  9. La doc du generateur est v0.2.2 + mentionne le triplet
   10. Normes : ASCII strict + LF pur (test + generateur + protocole)
-  11. PARITE .sh v0.2.1 : le wrapper bash embarque le meme triplet dans son template
+  11. PARITE .sh v0.2.2 : le wrapper bash embarque le meme triplet dans son template
   14. Le squelette .py contient le bloc DECLARATION USAGES (declarer_usages +
       AGENT + appel enregistrer-usage-outil) - anti-recurrence registre a 0 ligne
   15. PARITE .sh : le wrapper bash embarque le bloc DECLARATION USAGES
@@ -137,8 +137,8 @@ def main():
 
     # 1. Version du generateur
     out = run([sys.executable, GEN_PY, "--version"])
-    ok = "0.2.1" in out
-    verifier("1. generateurs-outil-temporaire v0.2.1 (--version)", ok, out.strip())
+    ok = "0.2.2" in out
+    verifier("1. generateurs-outil-temporaire v0.2.2 (--version)", ok, out.strip())
 
     # 2-3. Template dans le code source
     code = io.open(GEN_PY, encoding="utf-8", errors="replace").read()
@@ -199,13 +199,13 @@ def main():
     except OSError as e:
         verifier("8. protocole-creation-scripts-temporaires : REGLE TRIPLET", False, str(e))
 
-    # 9. Doc du generateur v0.2.1 + triplet
+    # 9. Doc du generateur v0.2.2 + triplet
     try:
         md = io.open(GEN_MD, encoding="utf-8").read()
-        ok = "0.2.1" in md and "TRIPLET" in md
-        verifier("9. doc generateur : v0.2.1 + TRIPLET documente", ok)
+        ok = "0.2.2" in md and "TRIPLET" in md
+        verifier("9. doc generateur : v0.2.2 + TRIPLET documente", ok)
     except OSError as e:
-        verifier("9. doc generateur : v0.2.1 + TRIPLET", False, str(e))
+        verifier("9. doc generateur : v0.2.2 + TRIPLET", False, str(e))
 
     # 10. Normes
     fichiers = [os.path.abspath(__file__), GEN_PY, GEN_SH, PROTOCOLE]
@@ -218,8 +218,8 @@ def main():
     sh_src = io.open(GEN_SH, encoding="utf-8", errors="replace").read()
     triplet_sh = ["def point_actif", "def chrono_etape", "def bilan_chrono",
                   "def verifier_nommage", "--isoler", "--desactiver"]
-    ok = ("0.2.1" in sh_src and all(f in sh_src for f in triplet_sh))
-    verifier("12. parite .sh : v0.2.1 + triplet dans le template bash", ok)
+    ok = ("0.2.2" in sh_src and all(f in sh_src for f in triplet_sh))
+    verifier("12. parite .sh : v0.2.2 + triplet dans le template bash", ok)
 
     # 12. PARITE REELLE : scripts generes identiques (.py vs .sh, hors date)
     dossier_sh = os.path.join(dossier_test, "sh")
@@ -295,7 +295,7 @@ def main():
 
     shutil.rmtree(dossier_test, ignore_errors=True)
 
-    if args.chrono:
+    if "--no-chrono" not in sys.argv:
         chrono_etape("test-050 triplet outils temporaires", time.time() - t0)
     print("")
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))

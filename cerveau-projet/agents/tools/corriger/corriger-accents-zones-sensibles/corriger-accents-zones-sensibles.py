@@ -3,7 +3,7 @@
 # Outil pour corriger les accents dans les zones sensibles
 # Mode standard --all : purge totale (texte francais et titres inclus)
 # Conforme a la regle regles-emojis-ascii.md
-# Version : 0.2.0-py
+# Version : 0.2.2-py
 # Statut : beta
 
 # identite:

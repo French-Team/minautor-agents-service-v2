@@ -1,1247 +1,1272 @@
 {
- "cases": {
-  "c0": {
-   "branches": [
+ "cases" : {
+  "c0" : {
+   "branches" : [
     {
-     "reponse": "OUI",
-     "vers": "c0c"
+     "reponse" : "OUI",
+     "vers" : "c0c"
     },
     {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
+     "reponse" : "INCERTAIN",
+     "vers" : "c0b"
     },
     {
-     "reponse": "NON",
-     "vers": "c0b"
+     "reponse" : "NON",
+     "vers" : "c0b"
     }
    ],
-   "indices": [
+   "indices" : [
     {
-     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la memorisation : relire sans retenir = inutile.",
-     "type": "regle"
+     "texte" : "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la memorisation : relire sans retenir = inutile.",
+     "type" : "regle"
+    },
+    {
+     "catalogue" : "guider-parcours",
+     "chemin" : "cerveau-projet/agents/tools/guider/guider-parcours/",
+     "commande" : "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py cerveau-projet/agents/buffy/parcours/parcours-buffy.json",
+     "nom" : "guider-parcours",
+     "type" : "outil"
     }
    ],
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question"
+   "question" : "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "titre" : "Relecture : ta fiche et tes corrections en memoire ?",
+   "type" : "question"
   },
-  "c0b": {
-   "indices": [
+  "c0b" : {
+   "indices" : [
     {
-     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents.",
-     "type": "regle"
+     "texte" : "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents.",
+     "type" : "regle"
     },
     {
-     "catalogue": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/corrections.md",
-     "nom": "lire-fichier",
-     "type": "outil"
+     "catalogue" : "lire-fichier",
+     "chemin" : "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/corrections.md",
+     "nom" : "lire-fichier",
+     "type" : "outil"
     },
     {
-     "catalogue": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/buffy.md",
-     "nom": "lire-fichier",
-     "type": "outil"
+     "catalogue" : "lire-fichier",
+     "chemin" : "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/buffy/buffy.md",
+     "nom" : "lire-fichier",
+     "type" : "outil"
     }
    ],
-   "suivant": "c0c",
-   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-   "type": "action"
+   "suivant" : "c0c",
+   "titre" : "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type" : "action"
   },
-  "c0c": {
-   "indices": [
+  "c0c" : {
+   "indices" : [
     {
-     "ref": "pattern-6",
-     "type": "ref"
+     "ref" : "pattern-6",
+     "type" : "ref"
     },
     {
-     "catalogue": "lire-activite-recente",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
-     "nom": "lire-activite-recente",
-     "type": "outil"
+     "catalogue" : "lire-activite-recente",
+     "chemin" : "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande" : "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
+     "nom" : "lire-activite-recente",
+     "type" : "outil"
     },
     {
-     "chemin": "AGENTS.md",
-     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel",
-     "type": "fichier"
+     "chemin" : "AGENTS.md",
+     "raison" : "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c0d",
-   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-   "type": "action"
+   "suivant" : "c0d",
+   "titre" : "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type" : "action"
   },
-  "c0d": {
-   "branches": [],
-   "indices": [
+  "c0d" : {
+   "branches" : [],
+   "indices" : [
     {
-     "texte": "REGLE ABSOLUE : je LIS le .md de l outil (agents/tools/<categorie>/<outil>/<outil>.md) avant toute utilisation - usage sans doc = erreur.",
-     "type": "regle"
+     "texte" : "REGLE ABSOLUE : je LIS le .md de l outil (agents/tools/<categorie>/<outil>/<outil>.md) avant toute utilisation - usage sans doc = erreur.",
+     "type" : "regle"
     },
     {
-     "texte": "La doc est le CONTRAT : je verifie le modele et les parametres avant d executer (--dry-run d abord si disponible).",
-     "type": "regle"
+     "texte" : "La doc est le CONTRAT : je verifie le modele et les parametres avant d executer (--dry-run d abord si disponible).",
+     "type" : "regle"
     }
    ],
-   "suivant": "c1",
-   "titre": "LIRE LA DOCUMENTATION DE L OUTIL avant utilisation",
-   "type": "action"
+   "suivant" : "c1",
+   "titre" : "LIRE LA DOCUMENTATION DE L OUTIL avant utilisation",
+   "type" : "action"
   },
-  "c1": {
-   "branches": [
+  "c1" : {
+   "branches" : [
     {
-     "reponse": "creer",
-     "vers": "c2"
+     "reponse" : "creer",
+     "vers" : "c2"
     },
     {
-     "reponse": "modifier",
-     "vers": "c9"
+     "reponse" : "modifier",
+     "vers" : "c9"
     },
     {
-     "reponse": "agent",
-     "vers": "c18"
+     "reponse" : "agent",
+     "vers" : "c18"
     },
     {
-     "reponse": "protocole",
-     "vers": "c23"
+     "reponse" : "protocole",
+     "vers" : "c23"
     },
     {
-     "reponse": "controler",
-     "vers": "c28"
+     "reponse" : "controler",
+     "vers" : "c28"
     },
     {
-     "reponse": "autre",
-     "vers": "c33"
+     "reponse" : "autre",
+     "vers" : "c33"
     }
    ],
-   "question": "Quelle est la mission ?",
-   "titre": "Mission",
-   "type": "question"
+   "question" : "Quelle est la mission ?",
+   "titre" : "Mission",
+   "type" : "question"
   },
-  "c10": {
-   "indices": [
+  "c10" : {
+   "indices" : [
     {
-     "chemin": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md",
-     "raison": "Regles de veracite : verifier les dependances avant de modifier",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/regles-immuables/general/regles-veracite.md",
+     "raison" : "Regles de veracite : verifier les dependances avant de modifier",
+     "type" : "fichier"
     },
     {
-     "catalogue": "rechercher-texte",
-     "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/",
-     "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>",
-     "nom": "rechercher-texte",
-     "type": "outil"
+     "catalogue" : "rechercher-texte",
+     "chemin" : "cerveau-projet/agents/tools/rechercher/rechercher-texte/",
+     "commande" : "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>",
+     "nom" : "rechercher-texte",
+     "type" : "outil"
+    },
+    {
+     "catalogue" : "detecter-cablages-manquants",
+     "chemin" : "cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/",
+     "nom" : "detecter-cablages-manquants",
+     "type" : "outil"
     }
    ],
-   "suivant": "c10b",
-   "titre": "Verifier les dependances",
-   "type": "action"
+   "suivant" : "c10b",
+   "titre" : "Verifier les dependances",
+   "type" : "action"
   },
-  "c10b": {
-   "branches": [
+  "c10b" : {
+   "branches" : [
     {
-     "reponse": "fiche",
-     "vers": "c11b"
+     "reponse" : "fiche",
+     "vers" : "c11b"
     },
     {
-     "reponse": "OUI",
-     "vers": "c10c"
+     "reponse" : "OUI",
+     "vers" : "c10c"
     },
     {
-     "reponse": "non",
-     "vers": "c11"
+     "reponse" : "non",
+     "vers" : "c11"
     },
     {
-     "reponse": "ligne",
-     "vers": "c10d"
+     "reponse" : "ligne",
+     "vers" : "c10d"
     }
    ],
-   "indices": [
+   "indices" : [
     {
-     "catalogue": "editer-parcours",
-     "chemin": "cerveau-projet/agents/tools/editer/editer-parcours/",
-     "nom": "editer-parcours",
-     "type": "outil"
+     "catalogue" : "editer-parcours",
+     "chemin" : "cerveau-projet/agents/tools/editer/editer-parcours/",
+     "nom" : "editer-parcours",
+     "type" : "outil"
+    },
+    {
+     "catalogue" : "mettre-a-jour-versions",
+     "chemin" : "cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-versions/",
+     "nom" : "mettre-a-jour-versions",
+     "type" : "outil"
     }
    ],
-   "question": "Le fichier a modifier est-il une carte de decision (parcours JSON) ?",
-   "titre": "Question : parcours a modifier ?",
-   "type": "question"
+   "question" : "Le fichier a modifier est-il une carte de decision (parcours JSON) ?",
+   "titre" : "Question : parcours a modifier ?",
+   "type" : "question"
   },
-  "c10c": {
-   "indices": [
+  "c10c" : {
+   "indices" : [
     {
-     "texte": "CREATION LIMITEE : generateurs-case modifie les parcours JSON (mon role cartes) - je ne cree aucun autre fichier.",
-     "type": "regle"
+     "texte" : "CREATION LIMITEE : generateurs-case modifie les parcours JSON (mon role cartes) - je ne cree aucun autre fichier.",
+     "type" : "regle"
     },
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "catalogue": "generateurs-case",
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-case/",
-     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py {chemin} [convertir --refs <mapping> --version-parcours <v>]",
-     "nom": "generateurs-case",
-     "type": "outil"
+     "catalogue" : "generateurs-case",
+     "chemin" : "cerveau-projet/agents/tools/generateurs/generateurs-case/",
+     "commande" : "python3 cerveau-projet/agents/tools/generateurs/generateurs-case/generateurs-case.py {chemin} [convertir --refs <mapping> --version-parcours <v>]",
+     "nom" : "generateurs-case",
+     "type" : "outil"
     }
    ],
-   "suivant": "c37",
-   "titre": "Gerer les cases de parcours avec generateurs-case",
-   "type": "action"
+   "suivant" : "c37",
+   "titre" : "Gerer les cases de parcours avec generateurs-case",
+   "type" : "action"
   },
-  "c10d": {
-   "indices": [
+  "c10d" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "catalogue": "generateurs-ligne",
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-ligne/",
-     "nom": "generateurs-ligne",
-     "type": "outil"
+     "catalogue" : "generateurs-ligne",
+     "chemin" : "cerveau-projet/agents/tools/generateurs/generateurs-ligne/",
+     "nom" : "generateurs-ligne",
+     "type" : "outil"
     }
    ],
-   "suivant": "c37",
-   "titre": "GERER UNE LIGNE DE PARCOURS AVEC GENERATEURS-LIGNE",
-   "type": "action"
+   "suivant" : "c37",
+   "titre" : "GERER UNE LIGNE DE PARCOURS AVEC GENERATEURS-LIGNE",
+   "type" : "action"
   },
-  "c11": {
-   "indices": [
+  "c11" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "catalogue": "editer-fichier",
-     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin> <ancien> <nouveau>",
-     "nom": "editer-fichier",
-     "type": "outil"
+     "catalogue" : "editer-fichier",
+     "chemin" : "cerveau-projet/agents/tools/editer/editer-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin> <ancien> <nouveau>",
+     "nom" : "editer-fichier",
+     "type" : "outil"
     }
    ],
-   "suivant": "c37",
-   "titre": "Modifier le fichier",
-   "type": "action"
+   "suivant" : "c37",
+   "titre" : "Modifier le fichier",
+   "type" : "action"
   },
-  "c11b": {
-   "indices": [
+  "c11b" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "catalogue": "editer-fichier-agents",
-     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier-agents/",
-     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande editer-fichier-agents --reponses 'fichier=<chemin>;bloc=<bloc>;action=<action>' (PASSE PAR LE GENERATEUR)",
-     "nom": "editer-fichier-agents",
-     "type": "outil"
+     "catalogue" : "editer-fichier-agents",
+     "chemin" : "cerveau-projet/agents/tools/editer/editer-fichier-agents/",
+     "commande" : "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande editer-fichier-agents --reponses 'fichier=<chemin>;bloc=<bloc>;action=<action>' (PASSE PAR LE GENERATEUR)",
+     "nom" : "editer-fichier-agents",
+     "type" : "outil"
     }
    ],
-   "suivant": "c37",
-   "titre": "Modifier une fiche agent (.md)",
-   "type": "action"
+   "suivant" : "c37",
+   "titre" : "Modifier une fiche agent (.md)",
+   "type" : "action"
   },
-  "c13b": {
-   "indices": [
+  "c13b" : {
+   "indices" : [
     {
-     "ref": "pattern-3",
-     "type": "ref"
+     "ref" : "pattern-3",
+     "type" : "ref"
     },
     {
-     "catalogue": "combos-moteur",
-     "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-     "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json --var fichier=<fichier-modifie>",
-     "nom": "combos-moteur",
-     "type": "outil"
+     "catalogue" : "combos-moteur",
+     "chemin" : "cerveau-projet/agents/tools/combos/combos-moteur/",
+     "commande" : "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json --var fichier=<fichier-modifie>",
+     "nom" : "combos-moteur",
+     "type" : "outil"
     },
     {
-     "chemin": "cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json",
-     "raison": "Definition du combo controle-impacts (Pattern 3) : detecter-impacts -> valider-liens",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/tools/combos/combo-controle-impacts/definition-combo.json",
+     "raison" : "Definition du combo controle-impacts (Pattern 3) : detecter-impacts -> valider-liens",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c13c",
-   "titre": "Lancer le combo controle-impacts",
-   "type": "action"
+   "suivant" : "c13c",
+   "titre" : "Lancer le combo controle-impacts",
+   "type" : "action"
   },
-  "c13c": {
-   "branches": [
+  "c13c" : {
+   "branches" : [
     {
-     "reponse": "OUI",
-     "vers": "c13d"
+     "reponse" : "OUI",
+     "vers" : "c13d"
     },
     {
-     "reponse": "NON",
-     "vers": "c14"
+     "reponse" : "NON",
+     "vers" : "c14"
     }
    ],
-   "question": "Des erreurs HORS MISSION ont-elles ete detectees pendant le travail ?",
-   "titre": "Erreurs hors mission detectees ?",
-   "type": "question"
+   "question" : "Des erreurs HORS MISSION ont-elles ete detectees pendant le travail ?",
+   "titre" : "Erreurs hors mission detectees ?",
+   "type" : "question"
   },
-  "c13d": {
-   "indices": [
+  "c13d" : {
+   "indices" : [
     {
-     "texte": "SIGNALEMENT OBLIGATOIRE : les erreurs HORS MISSION detectees pendant la mission sont transmises a Cerberus DANS LA RAISON de la reactivation.",
-     "type": "regle"
+     "texte" : "SIGNALEMENT OBLIGATOIRE : les erreurs HORS MISSION detectees pendant la mission sont transmises a Cerberus DANS LA RAISON de la reactivation.",
+     "type" : "regle"
     },
     {
-     "texte": "PASSE PAR LE GENERATEUR : composer la commande de reactivation via le catalogue (--commande activer-agent-principal --reponses ...) au lieu de l'ecrire en dur.",
-     "type": "regle"
+     "texte" : "PASSE PAR LE GENERATEUR : composer la commande de reactivation via le catalogue (--commande activer-agent-principal --reponses ...) au lieu de l'ecrire en dur.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "message": "Signaler a Cerberus les erreurs hors mission detectees : il decide reparation immediate ou differee. Ma mission s arrete ici, je reviens apres sa decision.",
-   "titre": "FIN - Erreurs hors mission signalees a Cerberus",
-   "type": "fin"
+   "message" : "Signaler a Cerberus les erreurs hors mission detectees : il decide reparation immediate ou differee. Ma mission s arrete ici, je reviens apres sa decision.",
+   "titre" : "FIN - Erreurs hors mission signalees a Cerberus",
+   "type" : "fin"
   },
-  "c14": {
-   "branches": [
+  "c14" : {
+   "branches" : [
     {
-     "reponse": "OUI",
-     "vers": "c15"
+     "reponse" : "OUI",
+     "vers" : "c15"
     },
     {
-     "reponse": "NON",
-     "vers": "c11"
+     "reponse" : "NON",
+     "vers" : "c11"
     }
    ],
-   "indices": [
+   "indices" : [
     {
-     "texte": "REGLE ABSOLUE : je ne valide JAMAIS un fichier sans avoir passe la boucle RVAV complete.",
-     "type": "regle"
+     "texte" : "REGLE ABSOLUE : je ne valide JAMAIS un fichier sans avoir passe la boucle RVAV complete.",
+     "type" : "regle"
     },
     {
-     "catalogue": "valider-conformite-ascii",
-     "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
-     "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier> (UN fichier par appel)",
-     "nom": "valider-conformite-ascii",
-     "type": "outil"
+     "catalogue" : "valider-conformite-ascii",
+     "chemin" : "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
+     "commande" : "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier> (UN fichier par appel)",
+     "nom" : "valider-conformite-ascii",
+     "type" : "outil"
     },
     {
-     "catalogue": "valider-cartes-decision",
-     "chemin": "cerveau-projet/agents/tools/valider/valider-cartes-decision/",
-     "commande": "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --agent <agent>",
-     "nom": "valider-cartes-decision",
-     "type": "outil"
+     "catalogue" : "valider-cartes-decision",
+     "chemin" : "cerveau-projet/agents/tools/valider/valider-cartes-decision/",
+     "commande" : "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --agent <agent>",
+     "nom" : "valider-cartes-decision",
+     "type" : "outil"
     }
    ],
-   "question": "La modification respecte-t-elle la boucle RVAV complete (nommage, liens, ASCII, coherence) ?",
-   "titre": "Valider le resultat (RVAV)",
-   "type": "controle"
+   "question" : "La modification respecte-t-elle la boucle RVAV complete (nommage, liens, ASCII, coherence) ?",
+   "titre" : "Valider le resultat (RVAV)",
+   "type" : "controle"
   },
-  "c15": {
-   "indices": [
+  "c15" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "catalogue": "ajouter-contenu-fichier",
-     "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>",
-     "nom": "ajouter-contenu-fichier",
-     "type": "outil"
+     "catalogue" : "ajouter-contenu-fichier",
+     "chemin" : "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>",
+     "nom" : "ajouter-contenu-fichier",
+     "type" : "outil"
     }
    ],
-   "suivant": "c15b",
-   "titre": "Ajouter les lecons dans corrections.md",
-   "type": "action"
+   "suivant" : "c15b",
+   "titre" : "Ajouter les lecons dans corrections.md",
+   "type" : "action"
   },
-  "c15b": {
-   "branches": [
+  "c15b" : {
+   "branches" : [
     {
-     "reponse": "OUI",
-     "vers": "c15c"
+     "reponse" : "OUI",
+     "vers" : "c15c"
     },
     {
-     "reponse": "NON",
-     "vers": "c16"
+     "reponse" : "NON",
+     "vers" : "c16"
     }
    ],
-   "question": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
-   "titre": "Ameliorations possibles de mon fonctionnement ?",
-   "type": "question"
+   "question" : "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, parcours, lecons, outils, protocoles) ?",
+   "titre" : "Ameliorations possibles de mon fonctionnement ?",
+   "type" : "question"
   },
-  "c15c": {
-   "indices": [
+  "c15c" : {
+   "indices" : [
     {
-     "texte": "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme.",
-     "type": "regle"
+     "texte" : "PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite. Je ne fais PAS l'amelioration moi-meme.",
+     "type" : "regle"
     },
     {
-     "catalogue": "generateurs-amelioration",
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/",
-     "nom": "generateurs-amelioration",
-     "type": "outil"
+     "catalogue" : "generateurs-amelioration",
+     "chemin" : "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/",
+     "nom" : "generateurs-amelioration",
+     "type" : "outil"
     },
     {
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
-     "raison": "Liste des themes de questions du generateur d amelioration",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json",
+     "raison" : "Liste des themes de questions du generateur d amelioration",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c15d",
-   "titre": "Lancer le generateur d amelioration",
-   "type": "action"
+   "suivant" : "c15d",
+   "titre" : "Lancer le generateur d amelioration",
+   "type" : "action"
   },
-  "c15d": {
-   "indices": [
+  "c15d" : {
+   "indices" : [
     {
-     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan.",
-     "type": "regle"
+     "texte" : "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "suivant": "c15e",
-   "titre": "Activer l'agent habilite pour l'amelioration",
-   "type": "action"
+   "suivant" : "c15e",
+   "titre" : "Activer l'agent habilite pour l'amelioration",
+   "type" : "action"
   },
-  "c15e": {
-   "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
-   "suivant": null,
-   "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
-   "type": "fin"
+  "c15e" : {
+   "message" : "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
+   "suivant" : null,
+   "titre" : "FIN - Reprise du parcours apres retour de l'agent habilite",
+   "type" : "fin"
   },
-  "c16": {
-   "branches": [
+  "c16" : {
+   "branches" : [
     {
-     "reponse": "pense-bete",
-     "vers": "c17"
+     "reponse" : "pense-bete",
+     "vers" : "c17"
     },
     {
-     "reponse": "outil",
-     "vers": "c31"
+     "reponse" : "outil",
+     "vers" : "c31"
     },
     {
-     "reponse": "non",
-     "vers": "c8a"
+     "reponse" : "non",
+     "vers" : "c8a"
     }
    ],
-   "indices": [
+   "indices" : [
     {
-     "texte": "REGLE ABSOLUE : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME (Vulcain). JE N'ECRIS PAS LES PENSE-BETES (Athena).",
-     "type": "regle"
+     "texte" : "REGLE ABSOLUE : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME (Vulcain). JE N'ECRIS PAS LES PENSE-BETES (Athena).",
+     "type" : "regle"
     }
    ],
-   "question": "La mission concerne-t-elle un pense-bete ou un outil ?",
-   "titre": "Verifier la delegation (pense-bete / outil)",
-   "type": "question"
+   "question" : "La mission concerne-t-elle un pense-bete ou un outil ?",
+   "titre" : "Verifier la delegation (pense-bete / outil)",
+   "type" : "question"
   },
-  "c17": {
-   "indices": [
+  "c17" : {
+   "indices" : [
     {
-     "texte": "CHAINE COMPLETE : Athena -> Promethee (spec) -> Minerve (todo) -> Cerberus.",
-     "type": "regle"
+     "texte" : "CHAINE COMPLETE : Athena -> Promethee (spec) -> Minerve (todo) -> Cerberus.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 athena <raison>",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande" : "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 athena <raison>",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "suivant": "c8a",
-   "titre": "Activer Athena (pense-bete)",
-   "type": "action"
+   "suivant" : "c8a",
+   "titre" : "Activer Athena (pense-bete)",
+   "type" : "action"
   },
-  "c18": {
-   "indices": [
+  "c18" : {
+   "indices" : [
     {
-     "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-identification/",
-     "raison": "Protocole d'identification : verifier le nom de l'agent",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/regles-immuables/general/protocole-identification/",
+     "raison" : "Protocole d'identification : verifier le nom de l'agent",
+     "type" : "fichier"
     },
     {
-     "catalogue": "valider-nommage",
-     "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/",
-     "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <nom-agent>",
-     "nom": "valider-nommage",
-     "type": "outil"
+     "catalogue" : "valider-nommage",
+     "chemin" : "cerveau-projet/agents/tools/valider/valider-nommage/",
+     "commande" : "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <nom-agent>",
+     "nom" : "valider-nommage",
+     "type" : "outil"
     }
    ],
-   "suivant": "c19",
-   "titre": "Verifier le nom de l'agent",
-   "type": "action"
+   "suivant" : "c19",
+   "titre" : "Verifier le nom de l'agent",
+   "type" : "action"
   },
-  "c19": {
-   "indices": [
+  "c19" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "chemin": "cerveau-projet/agents/conventions/structures/convention-structures.md",
-     "raison": "Convention des structures : dossier agents/<agent>/",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/conventions/structures/convention-structures.md",
+     "raison" : "Convention des structures : dossier agents/<agent>/",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c20",
-   "titre": "Creer le dossier de l'agent",
-   "type": "action"
+   "suivant" : "c20",
+   "titre" : "Creer le dossier de l'agent",
+   "type" : "action"
   },
-  "c2": {
-   "indices": [
+  "c2" : {
+   "indices" : [
     {
-     "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande valider-nommage --reponses ...) au lieu de l ecrire en dur.",
-     "type": "regle"
+     "texte" : "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande valider-nommage --reponses ...) au lieu de l ecrire en dur.",
+     "type" : "regle"
     },
     {
-     "catalogue": "generateurs-commande",
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
-     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande valider-nommage --reponses ...",
-     "nom": "generateurs-commande",
-     "type": "outil"
+     "catalogue" : "generateurs-commande",
+     "chemin" : "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py",
+     "commande" : "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande valider-nommage --reponses ...",
+     "nom" : "generateurs-commande",
+     "type" : "outil"
     },
     {
-     "catalogue": "valider-nommage",
-     "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/",
-     "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <chemin>",
-     "nom": "valider-nommage",
-     "type": "outil"
+     "catalogue" : "valider-nommage",
+     "chemin" : "cerveau-projet/agents/tools/valider/valider-nommage/",
+     "commande" : "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py <chemin>",
+     "nom" : "valider-nommage",
+     "type" : "outil"
     }
    ],
-   "suivant": "c3",
-   "titre": "Verifier le nommage",
-   "type": "action"
+   "suivant" : "c3",
+   "titre" : "Verifier le nommage",
+   "type" : "action"
   },
-  "c20": {
-   "indices": [
+  "c20" : {
+   "indices" : [
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "catalogue": "copier-fichier",
-     "chemin": "cerveau-projet/agents/tools/copier/copier-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/copier/copier-fichier/copier-fichier.py fiche-agent-template.md agents/<agent>/<agent>.md",
-     "nom": "copier-fichier",
-     "type": "outil"
+     "catalogue" : "copier-fichier",
+     "chemin" : "cerveau-projet/agents/tools/copier/copier-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/copier/copier-fichier/copier-fichier.py fiche-agent-template.md agents/<agent>/<agent>.md",
+     "nom" : "copier-fichier",
+     "type" : "outil"
     },
     {
-     "catalogue": "creer-fichier",
-     "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py agents/<agent>/corrections.md",
-     "nom": "creer-fichier",
-     "type": "outil"
+     "catalogue" : "creer-fichier",
+     "chemin" : "cerveau-projet/agents/tools/creer/creer-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py agents/<agent>/corrections.md",
+     "nom" : "creer-fichier",
+     "type" : "outil"
     }
    ],
-   "suivant": "c21",
-   "titre": "Copier le template + creer corrections",
-   "type": "action"
+   "suivant" : "c21",
+   "titre" : "Copier le template + creer corrections",
+   "type" : "action"
   },
-  "c21": {
-   "indices": [
+  "c21" : {
+   "indices" : [
     {
-     "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md",
-     "type": "ref"
+     "ref" : "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md",
+     "type" : "ref"
     },
     {
-     "texte": "Mettre a jour la liste des agents dans AGENTS.md avec le nouvel agent.",
-     "type": "regle"
+     "texte" : "Mettre a jour la liste des agents dans AGENTS.md avec le nouvel agent.",
+     "type" : "regle"
     }
    ],
-   "suivant": "c42",
-   "titre": "Mettre a jour AGENTS.md",
-   "type": "action"
+   "suivant" : "c42",
+   "titre" : "Mettre a jour AGENTS.md",
+   "type" : "action"
   },
-  "c22": {
-   "indices": [
+  "c22" : {
+   "indices" : [
     {
-     "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
-     "type": "regle"
+     "texte" : "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : creation de l'agent terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation de l'agent. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
-   "titre": "FIN - Activer Janus",
-   "type": "fin"
+   "message" : "CHAINE BOUT-EN-BOUT : creation de l'agent terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation de l'agent. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
+   "titre" : "FIN - Activer Janus",
+   "type" : "fin"
   },
-  "c22a": {
-   "indices": [
+  "c22a" : {
+   "indices" : [
     {
-     "texte": "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus.",
-     "type": "regle"
+     "texte" : "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande" : "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
-   "suivant": "c22b",
-   "titre": "Activer Themis pour auditer ma mission",
-   "type": "action"
+   "message" : "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
+   "suivant" : "c22b",
+   "titre" : "Activer Themis pour auditer ma mission",
+   "type" : "action"
   },
-  "c22b": {
-   "branches": [
+  "c22b" : {
+   "branches" : [
     {
-     "reponse": "OUI",
-     "vers": "c22"
+     "reponse" : "OUI",
+     "vers" : "c22"
     },
     {
-     "reponse": "NON",
-     "vers": "c22b"
+     "reponse" : "NON",
+     "vers" : "c22b"
     }
    ],
-   "indices": [
+   "indices" : [
     {
-     "texte": "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue.",
-     "type": "regle"
+     "texte" : "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue.",
+     "type" : "regle"
     }
    ],
-   "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
-   "titre": "Retour de Themis recu ?",
-   "type": "controle"
+   "question" : "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
+   "titre" : "Retour de Themis recu ?",
+   "type" : "controle"
   },
-  "c23": {
-   "indices": [
+  "c23" : {
+   "indices" : [
     {
-     "chemin": "cerveau-projet/agents/conventions/protocoles/convention-protocoles.md",
-     "raison": "Convention des protocoles : verifier le format attendu",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/conventions/protocoles/convention-protocoles.md",
+     "raison" : "Convention des protocoles : verifier le format attendu",
+     "type" : "fichier"
     },
     {
-     "catalogue": "valider-conventions",
-     "chemin": "cerveau-projet/agents/tools/valider/valider-conventions/",
-     "commande": "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>",
-     "nom": "valider-conventions",
-     "type": "outil"
+     "catalogue" : "valider-conventions",
+     "chemin" : "cerveau-projet/agents/tools/valider/valider-conventions/",
+     "commande" : "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>",
+     "nom" : "valider-conventions",
+     "type" : "outil"
     }
    ],
-   "suivant": "c24",
-   "titre": "Verifier la convention des protocoles",
-   "type": "action"
+   "suivant" : "c24",
+   "titre" : "Verifier la convention des protocoles",
+   "type" : "action"
   },
-  "c24": {
-   "indices": [
+  "c24" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "chemin": "cerveau-projet/agents/conventions/structures/convention-structures.md",
-     "raison": "Convention des structures : dossier du protocole",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/conventions/structures/convention-structures.md",
+     "raison" : "Convention des structures : dossier du protocole",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c25",
-   "titre": "Creer le dossier du protocole",
-   "type": "action"
+   "suivant" : "c25",
+   "titre" : "Creer le dossier du protocole",
+   "type" : "action"
   },
-  "c25": {
-   "indices": [
+  "c25" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "catalogue": "creer-fichier",
-     "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin-protocole> <contenu>",
-     "nom": "creer-fichier",
-     "type": "outil"
+     "catalogue" : "creer-fichier",
+     "chemin" : "cerveau-projet/agents/tools/creer/creer-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin-protocole> <contenu>",
+     "nom" : "creer-fichier",
+     "type" : "outil"
     }
    ],
-   "suivant": "c26",
-   "titre": "Creer le protocole",
-   "type": "action"
+   "suivant" : "c26",
+   "titre" : "Creer le protocole",
+   "type" : "action"
   },
-  "c26": {
-   "branches": [
+  "c26" : {
+   "branches" : [
     {
-     "reponse": "OUI",
-     "vers": "c27a"
+     "reponse" : "OUI",
+     "vers" : "c27a"
     },
     {
-     "reponse": "NON",
-     "vers": "c25"
+     "reponse" : "NON",
+     "vers" : "c25"
     }
    ],
-   "indices": [
+   "indices" : [
     {
-     "chemin": "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
-     "raison": "Workflow RVAV obligatoire",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/regles-immuables/general/rvav-workflow.md",
+     "raison" : "Workflow RVAV obligatoire",
+     "type" : "fichier"
+    },
+    {
+     "catalogue" : "evaluer-processus",
+     "chemin" : "cerveau-projet/agents/tools/evaluer/evaluer-processus/",
+     "nom" : "evaluer-processus",
+     "type" : "outil"
     }
    ],
-   "question": "Le protocole respecte-t-il la boucle RVAV complete ?",
-   "titre": "Passer par RVAV",
-   "type": "controle"
+   "question" : "Le protocole respecte-t-il la boucle RVAV complete ?",
+   "titre" : "Passer par RVAV",
+   "type" : "controle"
   },
-  "c27": {
-   "indices": [
+  "c27" : {
+   "indices" : [
     {
-     "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
-     "type": "regle"
+     "texte" : "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : creation du protocole terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation du protocole. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
-   "titre": "FIN - Activer Janus",
-   "type": "fin"
+   "message" : "CHAINE BOUT-EN-BOUT : creation du protocole terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation du protocole. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
+   "titre" : "FIN - Activer Janus",
+   "type" : "fin"
   },
-  "c27a": {
-   "indices": [
+  "c27a" : {
+   "indices" : [
     {
-     "texte": "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus.",
-     "type": "regle"
+     "texte" : "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande" : "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
-   "suivant": "c27b",
-   "titre": "Activer Themis pour auditer ma mission",
-   "type": "action"
+   "message" : "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
+   "suivant" : "c27b",
+   "titre" : "Activer Themis pour auditer ma mission",
+   "type" : "action"
   },
-  "c27b": {
-   "branches": [
+  "c27b" : {
+   "branches" : [
     {
-     "reponse": "OUI",
-     "vers": "c27"
+     "reponse" : "OUI",
+     "vers" : "c27"
     },
     {
-     "reponse": "NON",
-     "vers": "c27b"
+     "reponse" : "NON",
+     "vers" : "c27b"
     }
    ],
-   "indices": [
+   "indices" : [
     {
-     "texte": "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue.",
-     "type": "regle"
+     "texte" : "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue.",
+     "type" : "regle"
     }
    ],
-   "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
-   "titre": "Retour de Themis recu ?",
-   "type": "controle"
+   "question" : "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
+   "titre" : "Retour de Themis recu ?",
+   "type" : "controle"
   },
-  "c28": {
-   "indices": [
+  "c28" : {
+   "indices" : [
     {
-     "ref": "pattern-3",
-     "type": "ref"
+     "ref" : "pattern-3",
+     "type" : "ref"
     },
     {
-     "catalogue": "combos-moteur",
-     "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-     "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-sante-tableaux/definition-combo.json",
-     "nom": "combos-moteur",
-     "type": "outil"
+     "catalogue" : "combos-moteur",
+     "chemin" : "cerveau-projet/agents/tools/combos/combos-moteur/",
+     "commande" : "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-sante-tableaux/definition-combo.json",
+     "nom" : "combos-moteur",
+     "type" : "outil"
     },
     {
-     "chemin": "cerveau-projet/combos/combo-sante-tableaux/definition-combo.json",
-     "raison": "Definition du combo sante-tableaux (Pattern 3) : documents manquants -> fichiers vides -> combos-valider-cerveau -> valider-tableaux",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/combos/combo-sante-tableaux/definition-combo.json",
+     "raison" : "Definition du combo sante-tableaux (Pattern 3) : documents manquants -> fichiers vides -> combos-valider-cerveau -> valider-tableaux",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c8a",
-   "titre": "Lancer le combo sante-tableaux",
-   "type": "action"
+   "suivant" : "c8a",
+   "titre" : "Lancer le combo sante-tableaux",
+   "type" : "action"
   },
-  "c3": {
-   "indices": [
+  "c3" : {
+   "indices" : [
     {
-     "chemin": "cerveau-projet/agents/conventions/structures/convention-structures.md",
-     "raison": "Convention des structures : verifier la structure attendue",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/conventions/structures/convention-structures.md",
+     "raison" : "Convention des structures : verifier la structure attendue",
+     "type" : "fichier"
     },
     {
-     "catalogue": "valider-conventions",
-     "chemin": "cerveau-projet/agents/tools/valider/valider-conventions/",
-     "commande": "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>",
-     "nom": "valider-conventions",
-     "type": "outil"
+     "catalogue" : "valider-conventions",
+     "chemin" : "cerveau-projet/agents/tools/valider/valider-conventions/",
+     "commande" : "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <chemin>",
+     "nom" : "valider-conventions",
+     "type" : "outil"
     }
    ],
-   "suivant": "c4",
-   "titre": "Verifier la structure",
-   "type": "action"
+   "suivant" : "c4",
+   "titre" : "Verifier la structure",
+   "type" : "action"
   },
-  "c31": {
-   "indices": [
+  "c31" : {
+   "indices" : [
     {
-     "texte": "REGLE ABSOLUE : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME. Vulcain est le SEUL habilite a creer, modifier et tester les outils.",
-     "type": "regle"
+     "texte" : "REGLE ABSOLUE : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME. Vulcain est le SEUL habilite a creer, modifier et tester les outils.",
+     "type" : "regle"
     },
     {
-     "texte": "CHAINE COMPLETE : Vulcain -> Janus (second controle) -> Clio (README) -> Cerberus.",
-     "type": "regle"
+     "texte" : "CHAINE COMPLETE : Vulcain -> Janus (second controle) -> Clio (README) -> Cerberus.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 vulcain <raison>",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande" : "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 vulcain <raison>",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "suivant": "c8a",
-   "titre": "Activer Vulcain (outil)",
-   "type": "action"
+   "suivant" : "c8a",
+   "titre" : "Activer Vulcain (outil)",
+   "type" : "action"
   },
-  "c32": {
-   "indices": [
+  "c32" : {
+   "indices" : [
     {
-     "texte": "FLUX ORIENTE : je sors du flux principal, je resous la sous-mission, puis je REVIENS au flux principal. La sous-mission n'est jamais une fin.",
-     "type": "regle"
+     "texte" : "FLUX ORIENTE : je sors du flux principal, je resous la sous-mission, puis je REVIENS au flux principal. La sous-mission n'est jamais une fin.",
+     "type" : "regle"
     },
     {
-     "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-boucles-dynamiques/",
-     "raison": "Protocole des boucles dynamiques : sous-missions",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/regles-immuables/general/protocole-boucles-dynamiques/",
+     "raison" : "Protocole des boucles dynamiques : sous-missions",
+     "type" : "fichier"
     },
     {
-     "catalogue": "gerer-sous-mission",
-     "chemin": "cerveau-projet/agents/tools/gerer/gerer-sous-mission/",
-     "commande": "python3 cerveau-projet/agents/tools/gerer/gerer-sous-mission/gerer-sous-mission.py <action>",
-     "nom": "gerer-sous-mission",
-     "type": "outil"
+     "catalogue" : "gerer-sous-mission",
+     "chemin" : "cerveau-projet/agents/tools/gerer/gerer-sous-mission/",
+     "commande" : "python3 cerveau-projet/agents/tools/gerer/gerer-sous-mission/gerer-sous-mission.py <action>",
+     "nom" : "gerer-sous-mission",
+     "type" : "outil"
     }
    ],
-   "suivant": "c33",
-   "titre": "Gerer les sous-missions",
-   "type": "action"
+   "suivant" : "c33",
+   "titre" : "Gerer les sous-missions",
+   "type" : "action"
   },
-  "c33": {
-   "branches": [
+  "c33" : {
+   "branches" : [
     {
-     "reponse": "sous-mission",
-     "vers": "c32"
+     "reponse" : "sous-mission",
+     "vers" : "c32"
     },
     {
-     "reponse": "autre-agent",
-     "vers": "c34"
+     "reponse" : "autre-agent",
+     "vers" : "c34"
     },
     {
-     "reponse": "non",
-     "vers": "c35b"
+     "reponse" : "non",
+     "vers" : "c35b"
     },
     {
-     "reponse": "cartographier",
-     "vers": "c38"
+     "reponse" : "cartographier",
+     "vers" : "c38"
     },
     {
-     "reponse": "audit",
-     "vers": "c40"
+     "reponse" : "audit",
+     "vers" : "c40"
     }
    ],
-   "question": "La mission concerne-t-elle une sous-mission ou un domaine d'un autre agent ?",
-   "titre": "Mission hors parcours",
-   "type": "question"
+   "question" : "La mission concerne-t-elle une sous-mission ou un domaine d'un autre agent ?",
+   "titre" : "Mission hors parcours",
+   "type" : "question"
   },
-  "c34": {
-   "indices": [
+  "c34" : {
+   "indices" : [
     {
-     "texte": "REGLE ABSOLUE : je n'execute JAMAIS une mission qui ne releve pas de mon domaine.",
-     "type": "regle"
+     "texte" : "REGLE ABSOLUE : je n'execute JAMAIS une mission qui ne releve pas de mon domaine.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande" : "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "suivant": "c34b",
-   "titre": "Activer l'agent habilite",
-   "type": "action"
+   "suivant" : "c34b",
+   "titre" : "Activer l'agent habilite",
+   "type" : "action"
   },
-  "c34b": {
-   "indices": [
+  "c34b" : {
+   "indices" : [
     {
-     "ref": "pattern-3",
-     "type": "ref"
+     "ref" : "pattern-3",
+     "type" : "ref"
     },
     {
-     "catalogue": "combos-moteur",
-     "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-     "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json",
-     "nom": "combos-moteur",
-     "type": "outil"
+     "catalogue" : "combos-moteur",
+     "chemin" : "cerveau-projet/agents/tools/combos/combos-moteur/",
+     "commande" : "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json",
+     "nom" : "combos-moteur",
+     "type" : "outil"
     },
     {
-     "chemin": "cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json",
-     "raison": "Definition du combo activation (Pattern 3) : sidentifier -> activer -> reactiver",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/tools/combos/combo-activation/definition-combo.json",
+     "raison" : "Definition du combo activation (Pattern 3) : sidentifier -> activer -> reactiver",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c36",
-   "titre": "Lancer le combo activation",
-   "type": "action"
+   "suivant" : "c36",
+   "titre" : "Lancer le combo activation",
+   "type" : "action"
   },
-  "c35": {
-   "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus). Je ne cree rien moi-meme : je signale et j attends la mission.",
-   "titre": "Signaler le besoin",
-   "type": "fin"
+  "c35" : {
+   "message" : "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus). Je ne cree rien moi-meme : je signale et j attends la mission.",
+   "titre" : "Signaler le besoin",
+   "type" : "fin"
   },
-  "c35b": {
-   "branches": [
+  "c35b" : {
+   "branches" : [
     {
-     "reponse": "TEMPORAIRE",
-     "vers": "c35c"
+     "reponse" : "TEMPORAIRE",
+     "vers" : "c35c"
     },
     {
-     "reponse": "DURABLE",
-     "vers": "c35"
+     "reponse" : "DURABLE",
+     "vers" : "c35"
     }
    ],
-   "question": "La mission necessite-t-elle un outil qui n existe pas ?",
-   "titre": "Besoin d outil ?",
-   "type": "question"
+   "question" : "La mission necessite-t-elle un outil qui n existe pas ?",
+   "titre" : "Besoin d outil ?",
+   "type" : "question"
   },
-  "c35c": {
-   "indices": [
+  "c35c" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "texte": "EXCEPTION OUTIL TEMPORAIRE : creation d'un outil TEMPORAIRE autorisee via generateurs-outil-temporaire (jamais dans tools/).",
-     "type": "regle"
+     "texte" : "EXCEPTION OUTIL TEMPORAIRE : creation d'un outil TEMPORAIRE autorisee via generateurs-outil-temporaire (jamais dans tools/).",
+     "type" : "regle"
     },
     {
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/",
-     "nom": "generateurs-outil-temporaire",
-     "type": "outil"
+     "chemin" : "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/",
+     "nom" : "generateurs-outil-temporaire",
+     "type" : "outil"
     }
    ],
-   "suivant": "c35d",
-   "titre": "Creer l outil temporaire",
-   "type": "action"
+   "suivant" : "c35d",
+   "titre" : "Creer l outil temporaire",
+   "type" : "action"
   },
-  "c35d": {
-   "indices": [
+  "c35d" : {
+   "indices" : [
     {
-     "catalogue": "enregistrer-usage-outil",
-     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
-     "nom": "enregistrer-usage-outil",
-     "type": "outil"
+     "catalogue" : "enregistrer-usage-outil",
+     "chemin" : "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
+     "nom" : "enregistrer-usage-outil",
+     "type" : "outil"
     },
     {
-     "texte": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire).",
-     "type": "regle"
+     "texte" : "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire).",
+     "type" : "regle"
     }
    ],
-   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
-   "titre": "FIN - Outil temporaire",
-   "type": "fin"
+   "message" : "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
+   "titre" : "FIN - Outil temporaire",
+   "type" : "fin"
   },
-  "c36": {
-   "message": "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui).",
-   "titre": "FIN - Delegation",
-   "type": "fin"
+  "c36" : {
+   "message" : "L agent active execute sa mission puis active le maillon suivant de la chaine (ou reactive Cerberus si active directement par lui).",
+   "titre" : "FIN - Delegation",
+   "type" : "fin"
   },
-  "c37": {
-   "indices": [
+  "c37" : {
+   "indices" : [
     {
-     "ref": "pattern-3",
-     "type": "ref"
+     "ref" : "pattern-3",
+     "type" : "ref"
     },
     {
-     "catalogue": "combos-moteur",
-     "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
-     "commande": "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json --var fichier=<chemin>",
-     "nom": "combos-moteur",
-     "type": "outil"
+     "catalogue" : "combos-moteur",
+     "chemin" : "cerveau-projet/agents/tools/combos/combos-moteur/",
+     "commande" : "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json --var fichier=<chemin>",
+     "nom" : "combos-moteur",
+     "type" : "outil"
     },
     {
-     "chemin": "cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json",
-     "raison": "Definition du combo a lancer (cases outil + fin)",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/tools/combos/combo-corriger-fichier/definition-combo.json",
+     "raison" : "Definition du combo a lancer (cases outil + fin)",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c13b",
-   "titre": "Lancer le combo corriger-fichier",
-   "type": "action"
+   "suivant" : "c13b",
+   "titre" : "Lancer le combo corriger-fichier",
+   "type" : "action"
   },
-  "c38": {
-   "indices": [
+  "c38" : {
+   "indices" : [
     {
-     "texte": "REGLE UNE CARTE = UN ROLE : la cartographie est le ROLE D'ATLAS - je ne cartographie JAMAIS moi-meme, j'ACTIVE Atlas et il me fournit son rapport a son retour.",
-     "type": "regle"
+     "texte" : "REGLE UNE CARTE = UN ROLE : la cartographie est le ROLE D'ATLAS - je ne cartographie JAMAIS moi-meme, j'ACTIVE Atlas et il me fournit son rapport a son retour.",
+     "type" : "regle"
     },
     {
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     },
     {
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
-     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
+     "raison" : "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c39",
-   "titre": "Activer Atlas pour cartographier",
-   "type": "action"
+   "suivant" : "c39",
+   "titre" : "Activer Atlas pour cartographier",
+   "type" : "action"
   },
-  "c39": {
-   "message": "Atlas a ete active pour cartographier (maillon de chaine). A SA fin, Atlas me REACTIVE en me fournissant sa carte (rapport cartographie-<parcours>.md). A mon retour, je reprends ma mission avec la carte fournie.",
-   "titre": "FIN - Retour d Atlas avec sa carte",
-   "type": "fin"
+  "c39" : {
+   "message" : "Atlas a ete active pour cartographier (maillon de chaine). A SA fin, Atlas me REACTIVE en me fournissant sa carte (rapport cartographie-<parcours>.md). A mon retour, je reprends ma mission avec la carte fournie.",
+   "titre" : "FIN - Retour d Atlas avec sa carte",
+   "type" : "fin"
   },
-  "c4": {
-   "indices": [
+  "c4" : {
+   "indices" : [
     {
-     "catalogue": "rechercher-fichier",
-     "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-fichier/rechercher-fichier.py <chemin>",
-     "nom": "rechercher-fichier",
-     "type": "outil"
+     "catalogue" : "rechercher-fichier",
+     "chemin" : "cerveau-projet/agents/tools/rechercher/rechercher-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/rechercher/rechercher-fichier/rechercher-fichier.py <chemin>",
+     "nom" : "rechercher-fichier",
+     "type" : "outil"
     }
    ],
-   "suivant": "c5",
-   "titre": "Verifier que le fichier n'existe pas",
-   "type": "action"
+   "suivant" : "c5",
+   "titre" : "Verifier que le fichier n'existe pas",
+   "type" : "action"
   },
-  "c40": {
-   "indices": [
+  "c40" : {
+   "indices" : [
     {
-     "texte": "REGLE UNE CARTE = UN ROLE : l'audit est le ROLE DE THEMIS - je n'audite JAMAIS moi-meme, j'ACTIVE Themis et elle me fournit son rapport.",
-     "type": "regle"
+     "texte" : "REGLE UNE CARTE = UN ROLE : l'audit est le ROLE DE THEMIS - je n'audite JAMAIS moi-meme, j'ACTIVE Themis et elle me fournit son rapport.",
+     "type" : "regle"
     },
     {
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     },
     {
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
-     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
-     "type": "fichier"
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.md",
+     "raison" : "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser",
+     "type" : "fichier"
     }
    ],
-   "suivant": "c41",
-   "titre": "Activer Themis pour auditer",
-   "type": "action"
+   "suivant" : "c41",
+   "titre" : "Activer Themis pour auditer",
+   "type" : "action"
   },
-  "c41": {
-   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin : si aucun defaut, Themis me REACTIVE avec son rapport (evaluation ou audit) et je reprends ma mission avec le rapport fourni ; si un defaut est signale (boucle KO, carte Themis v0.3.7 c12f/c12g), Themis m active pour corriger et je la reactiverai avec mon bilan.",
-   "titre": "FIN - Retour de Themis avec son rapport",
-   "type": "fin"
+  "c41" : {
+   "message" : "Themis a ete active pour auditer (maillon de chaine). A SA fin : si aucun defaut, Themis me REACTIVE avec son rapport (evaluation ou audit) et je reprends ma mission avec le rapport fourni ; si un defaut est signale (boucle KO, carte Themis v0.3.7 c12f/c12g), Themis m active pour corriger et je la reactiverai avec mon bilan.",
+   "titre" : "FIN - Retour de Themis avec son rapport",
+   "type" : "fin"
   },
-  "c42": {
-   "indices": [
+  "c42" : {
+   "indices" : [
     {
-     "catalogue": "enregistrer-usage-outil",
-     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
-     "nom": "enregistrer-usage-outil",
-     "type": "outil"
+     "catalogue" : "enregistrer-usage-outil",
+     "chemin" : "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
+     "nom" : "enregistrer-usage-outil",
+     "type" : "outil"
     },
     {
-     "texte": "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL.",
-     "type": "regle"
+     "texte" : "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL.",
+     "type" : "regle"
     }
    ],
-   "message": "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=buffy, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
-   "suivant": "c22a",
-   "titre": "Enregistrer mes usages d outils",
-   "type": "action"
+   "message" : "Avant de cloturer ma mission, j enregistre CHAQUE outil que j ai utilise dans le registre JSONL (source de verite des usages) : un appel a enregistrer-usage-outil par outil, via le generateur (PASSE PAR LE GENERATEUR). Parametres : agent=buffy, outil=<nom de l outil>, mode=<generateur/direct/combo>, contexte=<ma mission>. Le registre permettra aux controles (Janus/Themis) de croiser mes traces avec mon rapport de mission.",
+   "suivant" : "c22a",
+   "titre" : "Enregistrer mes usages d outils",
+   "type" : "action"
   },
-  "c5": {
-   "indices": [
+  "c5" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "catalogue": "creer-fichier",
-     "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin> <contenu>",
-     "nom": "creer-fichier",
-     "type": "outil"
+     "catalogue" : "creer-fichier",
+     "chemin" : "cerveau-projet/agents/tools/creer/creer-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py <chemin> <contenu>",
+     "nom" : "creer-fichier",
+     "type" : "outil"
     }
    ],
-   "suivant": "c6",
-   "titre": "Creer le fichier",
-   "type": "action"
+   "suivant" : "c6",
+   "titre" : "Creer le fichier",
+   "type" : "action"
   },
-  "c6": {
-   "indices": [
+  "c6" : {
+   "indices" : [
     {
-     "ref": "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md",
-     "type": "ref"
+     "ref" : "cerveau-projet/agents/regles-immuables/general/regles-perimetre-workspace.md",
+     "type" : "ref"
     },
     {
-     "texte": "Chaque fichier cree doit etre reference dans son index (index-cerveau.md ou index de la categorie).",
-     "type": "regle"
+     "texte" : "Chaque fichier cree doit etre reference dans son index (index-cerveau.md ou index de la categorie).",
+     "type" : "regle"
     }
    ],
-   "suivant": "c7",
-   "titre": "Mettre a jour l'index",
-   "type": "action"
+   "suivant" : "c7",
+   "titre" : "Mettre a jour l'index",
+   "type" : "action"
   },
-  "c7": {
-   "indices": [
+  "c7" : {
+   "indices" : [
     {
-     "ref": "pattern-2",
-     "type": "ref"
+     "ref" : "pattern-2",
+     "type" : "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
+     "ref" : "pattern-12",
+     "type" : "ref"
     },
     {
-     "catalogue": "ajouter-contenu-fichier",
-     "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>",
-     "nom": "ajouter-contenu-fichier",
-     "type": "outil"
+     "catalogue" : "ajouter-contenu-fichier",
+     "chemin" : "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>",
+     "nom" : "ajouter-contenu-fichier",
+     "type" : "outil"
     }
    ],
-   "suivant": "c8a",
-   "titre": "Ajouter les lecons si necessaire",
-   "type": "action"
+   "suivant" : "c8a",
+   "titre" : "Ajouter les lecons si necessaire",
+   "type" : "action"
   },
-  "c8": {
-   "indices": [
+  "c8" : {
+   "indices" : [
     {
-     "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
-     "type": "regle"
+     "texte" : "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : creation terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan (fichier cree, index mis a jour, lecons ajoutees). COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
-   "titre": "FIN - Activer Janus",
-   "type": "fin"
+   "message" : "CHAINE BOUT-EN-BOUT : creation terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan (fichier cree, index mis a jour, lecons ajoutees). COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
+   "titre" : "FIN - Activer Janus",
+   "type" : "fin"
   },
-  "c8a": {
-   "indices": [
+  "c8a" : {
+   "indices" : [
     {
-     "texte": "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus.",
-     "type": "regle"
+     "texte" : "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus.",
+     "type" : "regle"
     },
     {
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
-     "nom": "activer-agent-principal",
-     "type": "outil"
+     "catalogue" : "activer-agent-principal",
+     "chemin" : "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande" : "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
+     "nom" : "activer-agent-principal",
+     "type" : "outil"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
-   "suivant": "c8b",
-   "titre": "Activer Themis pour auditer ma mission",
-   "type": "action"
+   "message" : "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
+   "suivant" : "c8b",
+   "titre" : "Activer Themis pour auditer ma mission",
+   "type" : "action"
   },
-  "c8b": {
-   "branches": [
+  "c8b" : {
+   "branches" : [
     {
-     "reponse": "OUI",
-     "vers": "c8"
+     "reponse" : "OUI",
+     "vers" : "c8"
     },
     {
-     "reponse": "NON",
-     "vers": "c8b"
+     "reponse" : "NON",
+     "vers" : "c8b"
     }
    ],
-   "indices": [
+   "indices" : [
     {
-     "texte": "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue.",
-     "type": "regle"
+     "texte" : "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime du retour de Themis, voulue.",
+     "type" : "regle"
     }
    ],
-   "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
-   "titre": "Retour de Themis recu ?",
-   "type": "controle"
+   "question" : "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
+   "titre" : "Retour de Themis recu ?",
+   "type" : "controle"
   },
-  "c9": {
-   "indices": [
+  "c9" : {
+   "indices" : [
     {
-     "catalogue": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>",
-     "nom": "lire-fichier",
-     "type": "outil"
+     "catalogue" : "lire-fichier",
+     "chemin" : "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande" : "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin>",
+     "nom" : "lire-fichier",
+     "type" : "outil"
     }
    ],
-   "suivant": "c10",
-   "titre": "Lire le fichier",
-   "type": "action"
+   "suivant" : "c10",
+   "titre" : "Lire le fichier",
+   "type" : "action"
   }
  },
- "identite": {
-  "appartient_a": "buffy",
-  "commun": false,
-  "type": "parcours"
+ "identite" : {
+  "appartient_a" : "buffy",
+  "commun" : false,
+  "type" : "parcours"
  },
- "parcours": {
-  "agent": "buffy",
-  "case_depart": "c0",
-  "description": "v0.4.4 : + indice outil c10c generateurs-case (coherence regle/indice outil, garde-fou test-055)",
-  "nom": "parcours-buffy",
-  "version": "0.4.4"
+ "parcours" : {
+  "agent" : "buffy",
+  "case_depart" : "c0",
+  "description" : "v0.4.7 : + indice outil c0 guider-parcours (P0 fiche, usage reel, garde-fou test-035)",
+  "nom" : "parcours-buffy",
+  "version" : "0.4.7"
  }
 }

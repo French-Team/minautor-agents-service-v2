@@ -39,6 +39,16 @@ Tester [ce que le test verifie : l outil, le garde-fou, la regle].
 > mesures alimenteront les futurs outils de suivi (detecter les lenteurs,
 > ameliorer les procedures). Le TEMPLATE impose le triplet ci-dessous.
 
+> **CONSTRUCTEUR + DEPLOIEMENT DYNAMIQUE (demande utilisateur 2026-08-15)** :
+> le template agit comme un CONSTRUCTEUR : il importe la liste centrale des
+> protections ([liste-protections.md](tester-protections/liste-protections.md))
+> via le point d entree unique `tester-protections.py` et DEPLOIE les
+> protections AUTOMATIQUEMENT en amont (debut du test) et en aval (fin).
+> Ajouter une protection dans `LISTE_PROTECTIONS` la deploie sur TOUS les
+> tests sans toucher a leur code : les nouveaux tests ET scripts temporaires
+> sont directement proteges par les nouvelles protections. Le triplet
+> (protections + options on/off + chrono) fait partie de ce deploiement.
+
 ## Emplacement
 
 ```
@@ -86,6 +96,25 @@ test, desactiver une fonction ou un workflow complet).
     `bilan_chrono()` PUIS `=== RESULTAT : N OK / M KO (sur P points) ===`
     et retourne `1 if NB_KO else 0`
 11. `if __name__ == "__main__": sys.exit(main())`
+
+## Mesure des tokens (PILOTE, migration progressive v0.1 - optionnel)
+
+> Volet "mesure de la fenetre de contexte" (demande utilisateur 2026-08-15).
+> Les futurs tests peuvent rendre compte de leur consommation de tokens via
+> l outil `analyser-tokens` (modele hybride : registres locaux + compteurs
+> API si disponibles). La migration est PROGRESSIVE : ce bloc est un PILOTE
+> optionnel - aucun test existant n est migre tant que le pilote n est pas
+> valide par un test dedie.
+>
+> Utilisation dans un test (optionnel) :
+> ```
+> # en fin de main(), apres bilan_chrono() :
+> subprocess.run([sys.executable, "cerveau-projet/agents/tools/analyser/"
+>                 "analyser-tokens/analyser-tokens.py", "--no-chrono"],
+>                capture_output=True, text=True)
+> ```
+> L estimation est honnete : la source fiable est l API (TOKENS_SESSION ou
+> metadonnees-session-*.json), sinon l outil signale l estimation locale.
 
 ## Canevas complet (a copier et remplir)
 

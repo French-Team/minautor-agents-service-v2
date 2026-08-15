@@ -1,7 +1,7 @@
 #!/bin/bash
 # lire-fichier.sh
 # Lire le contenu complet d'un fichier
-# Version : 0.3.0
+# Version : 0.4.2
 # Statut : prepare
 
 # identite:

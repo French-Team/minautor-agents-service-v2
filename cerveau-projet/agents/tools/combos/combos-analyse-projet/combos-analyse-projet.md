@@ -6,7 +6,7 @@ identite:
 ---
 # combos-analyse-projet
 
-**Version :** 0.1.1
+**Version :** 0.1.2
 **Statut :** prepare
 **Categorie :** combos
 **Chemin :** `agents/tools/combos/combos-analyse-projet/`

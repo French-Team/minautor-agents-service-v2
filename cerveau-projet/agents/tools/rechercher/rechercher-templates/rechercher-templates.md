@@ -6,7 +6,7 @@ identite:
 ---
 # rechercher-templates
 
-**Version :** 0.1.0-beta
+**Version :** 0.2.0-beta
 **Statut :** ebauche
 **Categorie :** Rechercher
 **Chemin :** `agents/tools/rechercher/rechercher-templates/`

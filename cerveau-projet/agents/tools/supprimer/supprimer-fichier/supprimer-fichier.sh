@@ -1,7 +1,7 @@
 #!/bin/bash
 # supprimer-fichier.sh
 # Supprimer un fichier avec verification
-# Version : 0.3.0
+# Version : 0.3.1
 # Statut : prepare
 
 # identite:

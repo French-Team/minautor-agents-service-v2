@@ -20,7 +20,7 @@
 # historiques citant d anciennes fautes), tests/ (verifient des contenus),
 # rapports*/ (documentent l historique).
 #
-# Version : 0.1.0
+# Version : 0.1.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -34,7 +34,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -223,7 +223,7 @@ def _ecrire_rapport(resultats, chemin_rapport):
     else:
         lignes.append("**KO** : %d faute(s) detectee(s)." % total)
     lignes.append("")
-    with io.open(chemin_rapport, "w", encoding="utf-8") as fh:
+    with io.open(chemin_rapport, "w", encoding="utf-8", newline="") as fh:
         fh.write("\n".join(lignes) + "\n")
 
 

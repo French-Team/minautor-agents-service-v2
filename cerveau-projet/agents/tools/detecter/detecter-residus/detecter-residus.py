@@ -34,7 +34,7 @@
 #   python3 detecter-residus.py --zone cerveau-projet --detail
 #   python3 detecter-residus.py --rapport rapport-residus.md
 #
-# Version : 0.1.1
+# Version : 0.1.3
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -52,7 +52,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -76,6 +76,30 @@ def racine_projet():
             break
         d = parent
     return d
+
+
+def lire_tmpignore(racine):
+    """Lit le fichier .tmpignore (cerveau-projet/agents/traces/.tmpignore) et
+    retourne l ensemble des noms EXACTS de dossiers temporaires autorises.
+    Derrogation CIBLEE (decision utilisateur 2026-08-15) : seul un dossier
+    dont le nom est liste ici est ignore - tout autre dossier temporaire
+    reste un residu TEMP. Format : un nom exact par ligne, # = commentaire,
+    ASCII strict, LF. Fichier absent ou vide = aucune derrogation."""
+    autorises = set()
+    chemin = os.path.join(racine, "cerveau-projet", "agents", "traces",
+                          ".tmpignore")
+    if not os.path.isfile(chemin):
+        return autorises
+    try:
+        with io.open(chemin, encoding="utf-8", errors="replace") as fh:
+            for ligne in fh:
+                nom = ligne.strip()
+                if not nom or nom.startswith("#"):
+                    continue
+                autorises.add(nom)
+    except OSError:
+        pass
+    return autorises
 
 
 PATTERN_SEMVER = re.compile(r"^v?\d+\.\d+(\.\d+)?([._-].*)?$")
@@ -136,6 +160,7 @@ def scanner_zone(racine, zone):
     comptage entre les deux zones."""
     resultats = {}
     EXCLUS = {".git", "__pycache__"}
+    deroges = lire_tmpignore(racine)  # .tmpignore : noms EXACTS autorises
 
     def ajouter(type_res, rel):
         # v0.1.2 : deduplication par chemin - un fichier de la racine est
@@ -155,7 +180,8 @@ def scanner_zone(racine, zone):
         # scan complet de cerveau-projet : fichier par fichier
         for dirpath, dossiers, fichiers in os.walk(base):
             dossiers[:] = [d for d in dossiers
-                           if not est_dossier_temp(d) and d not in EXCLUS]
+                           if not est_dossier_temp(d) and d not in EXCLUS
+                           and d not in deroges]
             for nom in fichiers:
                 chemin = os.path.join(dirpath, nom)
                 rel = os.path.relpath(chemin, racine)
@@ -184,7 +210,7 @@ def scanner_zone(racine, zone):
         chemin = os.path.join(racine, nom)
         rel = os.path.relpath(chemin, racine)
         if os.path.isdir(chemin):
-            if est_dossier_temp(nom):
+            if est_dossier_temp(nom) and nom not in deroges:
                 ajouter("TEMP", rel)
         else:
             if est_fichier_temp(nom):
@@ -207,6 +233,7 @@ def scanner_zone(racine, zone):
                        if d != "cerveau-projet"
                        and d != ".git"
                        and not est_dossier_temp(d)
+                       and d not in deroges
                        and d != "__pycache__"]
         for nom in fichiers:
             chemin = os.path.join(dirpath, nom)

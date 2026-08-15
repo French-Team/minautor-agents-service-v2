@@ -120,9 +120,13 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 > suit le cycle VULCAIN -> MORPHEUS -> VULCAIN (Morpheus reactive
 > l'agent qui l'a active apres son verdict).
 >
-> **Garde-fou** : [test-037-seul-janus-lance-non-regression](../../tools/tester/tests/test-037-seul-janus-lance-non-regression/test-037-seul-janus-lance-non-regression.py)
-> (point 3 : fiche morpheus REGLE ABSOLUE -- NON-REGRESSION JANUS ;
-> delegation documentee dans [protocole-tests/](protocole-tests/)).
+> **Garde-fou** : [test-059-seul-morpheus-ecrit-les-tests](../../tools/tester/tests/test-059-seul-morpheus-ecrit-les-tests/test-059-seul-morpheus-ecrit-les-tests.py)
+> (points 1 a 7 : carte morpheus proprietaire de tester-protections, seuls
+> morpheus + janus l ont en carte (janus = non-regression), registre du jour
+> sans declaration non-morpheus, domaine tester/ reference, regle documentee,
+> fiche morpheus REGLE ABSOLUE -- NON-REGRESSION JANUS, normes). Complement :
+> test-037 (point 3) verifie la fiche morpheus ; la delegation est documentee
+> dans [protocole-tests/](protocole-tests/).
 
 ### SEUL CLIO MET A JOUR LE README (IMMUABLE)
 
@@ -141,6 +145,52 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 >
 > **Garde-fou** : test-020-combos-clio (verifie la carte Clio) +
 > test-038-badge-readme-synchronise (badge synchro avec le compte reel).
+
+### SEUL BUFFY CORRIGE LES FICHIERS DES AGENTS (IMMUABLE)
+
+> **REGLE** : **Buffy est le SEUL agent habilite a CORRIGER les fichiers
+> STRUCTURELS des agents** : fiches (`*/*.md` d agent), cartes de decision
+> (`parcours/*.json`), index, conventions, regles, protocoles, spec des
+> outils, demarrer.md. Les outils dedies (`editer-parcours`,
+> `editer-fichier-agents`, `verifier-conformite-fiche`) sont EXCLUSIFS a SA
+> carte : aucun autre agent ne possede ces outils ni ne les declare dans le
+> registre. Un agent qui a un probleme dans SA fiche ou SA carte ne corrige
+> PAS lui-meme : il signale le besoin (Cerberus active Buffy, Buffy corrige
+> via ses outils dedies, l agent reprend). La cause de la regle : quand un
+> agent corrige SES fichiers, il se simplifie la tache pour finir sa mission
+> (suppression du modele de confiance) - c est la source historique de
+> nombreuses derives.
+>
+> **Nuance (lecons OK)** : chaque agent garde le droit d ECRIRE SES lecons
+> dans SON `corrections.md` (protocole-fin-mission) et de declarer ses
+> usages au registre. L exclusivite porte sur les fichiers STRUCTURELS
+> (fiche, parcours, index, regles, protocoles), jamais sur les lecons
+> personnelles.
+>
+> **Garde-fou** : test-058-seul-buffy-corrige-fichiers-agents (cartes +
+> registre : editer-parcours / editer-fichier-agents exclusifs a Buffy,
+> aucune declaration non-Buffy).
+
+### LE MODELE DE CONFIANCE (IMMUABLE)
+
+> **REGLE** : le cerveau-projet repose sur la SEPARATION DES POUVOIRS :
+> celui qui EXECUTE ne se corrige ni ne se verifie JAMAIS lui-meme.
+>
+> ```
+> CERBERUS (assigne) <-> confiance mutuelle exclusive <-> JANUS (verifie)
+>       |                                              |
+>       +--- AGENTS (executent, sans auto-correction ni auto-verification)
+> ```
+>
+> - Cerberus ne fait confiance qu a JANUS pour la verification finale
+>   (non-regression, controle des statuts) ; Janus ne fait confiance qu a
+>   CERBERUS pour l assignation des missions.
+> - Un agent n est JAMAIS juge de sa propre mission : ses fichiers sont
+>   corriges par Buffy (exclusivite ci-dessus), son travail est verifie par
+>   Janus, son README est mis a jour par Clio, ses tests sont ecrits par
+>   Morpheus.
+> - Toute exception (ex: un agent corrige un fichier structurel en
+>   urgence) exige une autorisation explicite de l utilisateur.
 
 ---
 

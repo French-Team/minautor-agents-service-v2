@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: ascii -*-
 """
-test-046-compartimentation-residus.py
+test-061-compartimentation-residus.py
 GARDE-FOU : la compartimentation de detecter-residus reste etanche et sans
 double comptage.
 
@@ -49,22 +49,69 @@ def charger_protections():
 
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 DETECTEUR = os.path.join(TOOLS_DIR, "detecter", "detecter-residus",
                          "detecter-residus.py")
 
 # --- Residus factices poses par le test (nettoyage try/finally garanti) ---
 RESIDUS_WORKSPACE = [
-    "workspace/.tmp-factice-046.py",       # TEMP
+    "workspace/.tmp-factice-061.py",       # TEMP
     "workspace/0.1.9",                     # VERSION (semver)
     "workspace/rapport-egare-factice.md",  # RAPPORT_EGARE (racine workspace)
     "workspace/sous-dossier/note.bak",     # SAUVEGARDE (recursif)
 ]
 RESIDUS_CERVEAU = [
-    "cerveau-projet/agents/tools/.tmp-factice-interne-046.py",  # TEMP interne
+    "cerveau-projet/agents/tools/.tmp-factice-interne-061.py",  # TEMP interne
 ]
-RAPPORT_RACINE = "rapport-factice-046.md"   # a la RACINE (deduplication)
-RAPPORT_LEGITIME = "workspace/controles/rapport-factice-legitime-046.md"
+RAPPORT_RACINE = "rapport-factice-061.md"   # a la RACINE (deduplication)
+RAPPORT_LEGITIME = "workspace/controles/rapport-factice-legitime-061.md"
 
 NB_POINTS = 0
 NB_OK = 0
@@ -99,7 +146,7 @@ def creer_residus():
         chemin = os.path.join(PROJECT_ROOT, rel)
         os.makedirs(os.path.dirname(chemin), exist_ok=True)
         with io.open(chemin, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write("# factice 046\n")
+            fh.write("# factice 061\n")
 
 
 def nettoyer_residus():
@@ -129,7 +176,7 @@ def lancer_zone(zone):
 
 
 def main():
-    print("=== test-046 : garde-fou compartimentation detecter-residus ===")
+    print("=== test-061 : garde-fou compartimentation detecter-residus ===")
 
     # --- ETAPE PREPARATOIRE : poser les residus factices ---
     creer_residus()
@@ -157,15 +204,15 @@ def main():
                                  if os.path.basename(r) not in out_w])
         # voit le rapport de la racine (zone workspace = racine + workspace/)
         verifier("1b. Zone workspace voit le rapport factice de la racine",
-                 "rapport-factice-046" in out_w)
+                 "rapport-factice-061" in out_w)
         # ne voit PAS le residu interne de cerveau-projet
         verifier("1c. Zone workspace NE VOIT PAS le residu de cerveau-projet",
-                 ".tmp-factice-interne-046" not in out_w,
+                 ".tmp-factice-interne-061" not in out_w,
                  "chevauchement: cerveau-projet vu par workspace")
 
         # --- 2. COMPARTIMENTATION : zone cerveau-projet ---
         verifier("2a. Zone cerveau-projet voit son residu factice interne",
-                 ".tmp-factice-interne-046" in out_c)
+                 ".tmp-factice-interne-061" in out_c)
         ok_cp_ignore = all(os.path.basename(rel) not in out_c
                            for rel in RESIDUS_WORKSPACE + [RAPPORT_RACINE])
         verifier("2b. Zone cerveau-projet NE VOIT PAS les residus workspace/racine",
@@ -174,18 +221,18 @@ def main():
                              + [RAPPORT_RACINE] if os.path.basename(r) in out_c])
 
         # --- 3. DEDUPLICATION : le rapport de la racine compte UNE seule fois ---
-        occurrences = out_w.count("rapport-factice-046.md")
+        occurrences = out_w.count("rapport-factice-061.md")
         verifier("3. Deduplication : rapport racine compte 1 fois", occurrences == 1,
                  "occurrences=%d" % occurrences)
 
         # --- 4. CLASSIFICATION : rapport dans un dossier parent `controles` ---
         verifier("4. Rapport dans `controles` est LEGITIME (pas RAPPORT_EGARE)",
-                 "rapport-factice-legitime-046" not in out_w,
+                 "rapport-factice-legitime-061" not in out_w,
                  "rapport legitime classe a tort en egare")
 
         # --- 5. --tous : voit les deux zones ---
         verifier("5a. --tous voit le residu de cerveau-projet",
-                 ".tmp-factice-interne-046" in out_t)
+                 ".tmp-factice-interne-061" in out_t)
         verifier("5b. --tous voit les residus de workspace",
                  all(os.path.basename(rel) in out_t
                      for rel in RESIDUS_WORKSPACE),
@@ -205,6 +252,7 @@ def main():
     verifier("8. LF pur : 0 CRLF (test)", crlf_count(__file__) == 0)
 
     print("")
+    bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
     return 1 if NB_KO else 0
 

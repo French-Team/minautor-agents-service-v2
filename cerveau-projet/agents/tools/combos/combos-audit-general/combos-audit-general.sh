@@ -2,7 +2,7 @@
 # combos-audit-general.sh
 # Combo audit-general : chainage des 4 evaluateurs + synthese
 # Proprietaire : Themis (outil partage)
-# Version : 0.2.0
+# Version : 0.2.1
 #
 # Ce combo execute les 4 evaluateurs en sequence et produit une synthese.
 # Chaque evaluateur enrichit le contexte pour le suivant.
@@ -11,7 +11,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
+VERSION="0.2.1"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

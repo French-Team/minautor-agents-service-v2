@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # generateurs-commande.py
 # Genere une commande complexe a lancer, en posant une question par parametre.
-# Version : 0.2.4
+# Version : 0.2.5
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -38,7 +38,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.2.4"
+VERSION = "0.2.5"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n est pas un terminal)
@@ -433,10 +433,15 @@ def main():
     print(commande_finale)
     print("")
 
-    # Journalisation d usage (registre JSONL) : automatique sauf --no-journal
+    # Journalisation d usage (registre JSONL) : automatique sauf --no-journal.
+    # FIX v0.2.5 (2026-08-15, lecon Janus, 4 occurrences) : journaliser SON PROPRE NOM
+    # (generateurs-commande) au lieu du nom de COMMANDE du catalogue (ex activer-activer)
+    # - une entree 'activer-activer' cree un OUTIL_HORS_CARTE artificiel (test-035 KO) que
+    #   Janus devait corriger manuellement a chaque activation. La commande generee complete
+    #   reste dans le champ 'commande' du registre (veracite preservee).
     if not args.no_journal:
         agent = args.agent or _lire_agent_actif()
-        _journaliser_usage(agent, commandes.get("nom", "?"), commande_finale)
+        _journaliser_usage(agent, "generateurs-commande", commande_finale)
 
     if args.verbose:
         print(_couleur("[DETAIL] Reponses recues :", "bleu"))

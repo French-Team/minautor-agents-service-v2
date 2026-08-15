@@ -2617,3 +2617,473 @@ dans --version -> KO ATTENDU (18 OK / 1 KO), a adapter vers v2.3.0. Les points 3
 - un theme dedie par domaine (tests vs outil) permet a la checklist du generateur de
 porter les regles specifiques du domaine (ici : template-test, preuve negative,
 gouvernance seul Janus). Ne jamais court-circuiter le generateur d abord (Pattern 17).
+
+
+## [LECON] 2026-08-15 -- CHRONO EN HAUT DES SCRIPTS TEMPORAIRES v0.2.2 (Vulcain)
+
+**Mission** (Cerberus, ligne amelioration, theme ameliorer-outil, decision
+utilisateur BUFFER TOTAL) : le chrono des scripts temporaires doit etre
+affiche TOUT EN HAUT, visible a chaque execution.
+
+**Fait** : generateurs-outil-temporaire v0.2.2 (.py + .sh, parite) - le squelette
+genere utilise desormais un BUFFER TOTAL : toute la sortie est retenue en memoire
+(StringIO + redirect_stdout), le chrono === CHRONO === est affiche EN PREMIER,
+puis le contenu. Detail important : redirect_stdout ne capture PAS les
+sous-processus (ils heritent du descripteur terminal) -> declarer_usage capture
+la sortie d enregistrer-usage-outil (capture_output=True) et la bufferise, sinon
+les lignes [OK] Usage enregistre sortaient AVANT le chrono.
+
+**Preuve reelle** : script genere + execute -> === CHRONO : total Xs === est la
+TOUTE PREMIERE ligne, puis la logique, puis la declaration. test-050 adapte
+(v0.2.2 + point 5b : CHRONO premiere ligne, 18/18), test-049 11/11, test-024
+15/15, scan global 0 suspect, normes 0/0, 0 residu.
+
+**Lecon technique** : quand un script bufferise sa sortie pour reordonner
+l affichage, il faut aussi capturer la sortie de SES sous-processus (sinon ils
+percent le buffer). Le triplet (point_actif/chrono_etape/bilan_chrono) et les
+options (--no-chrono/--isoler/--desactiver/--dry-run) restent fonctionnels.
+
+## [LECON] 2026-08-15 -- METTRE-A-JOUR-VERSIONS : LE BUMPER SYSTEMATIQUE (Vulcain)
+
+**Contexte** : demande utilisateur "les agents aussi ont le droit a un bumper".
+Les bumps de version etaient manuels, partiels et repetitifs (spec oubliee,
+en-tete perime, compteurs de tests casses).
+
+**Outil cree** : cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-versions/
+(py + md, entree catalogue 154->155, entree index-tools Mettre a jour 1->2,
+total 172->173). Formats supportes : .py (en-tete + constante), .sh (en-tete +
+variable), .md/spec (**Version :**), parcours JSON, fiche PARCOURS (vX.Y.Z),
+protocole (frontmatter), version-readme.txt, catalogue JSON.
+
+**Decouvertes** :
+1. INCOHERENCES GENERALISEES : la quasi-totalite des outils ont un en-tete
+   `# Version :` PERIME vs la constante VERSION a jour (ex : editer-fichier
+   sh en-tete 0.3.0 vs variable 0.4.1 ; ajouter-contenu-fichier en-tete 0.2.0
+   vs constante 0.3.0 ; detecter-usage-scripts-temporaires en-tete 0.1.0 vs
+   0.1.1). Le bumper les DETECTE et refuse de bump avant correction : c'est
+   exactement le service attendu. A traiter : un scan --tous futur pour
+   lister et corriger ces ecarts pre-existants.
+2. Les en-tetes .py sont dans un docstring `Version : X.Y.Z` (sans #) alors
+   que les .sh ont `# Version :` : le motif doit accepter les deux formes.
+3. Le champ version des protocoles est INDENTE (`  version: "X.Y.Z"`) : le
+   motif doit accepter l indentation.
+4. Le test-007 fige les compteurs catalogue (154) et index-tools (172) :
+   ajouter un outil casse le point 13/14 -> adaptation Morpheus obligatoire
+   (mission pre-vue).
+5. Lecon de conception : utiliser des regex nommees (dict MOTIFS) plutot
+   qu'une liste indexee par position (bug d index MOTIFS[5]/[6] corrige en
+   cours de route).
+
+
+## [LECON] 2026-08-15 -- OPTION --TOUS DU BUMPER + CORRECTION DES EN-TETES PERIMES (Vulcain)
+
+**Contexte** : demande utilisateur - lancer un scan --tous du bumper pour corriger les en-tetes de version perimes.
+
+**Ajout au bumper (mettre-a-jour-versions v0.1.0 -> v0.1.1)** :
+- Option --tous : scanne TOUS les dossiers outils (cerveau-projet/agents/tools/*/*/), audite les incoherences
+  de version par outil (dry-run par defaut), --wet corrige.
+- Reference = constante VERSION du .py (source de verite a jour) ; en-tetes .py/.sh et doc .md alignes dessus.
+- Ne scanne QUE les fichiers principaux (basename == nom du dossier) : tester-*.sh, *-test.md, spec/ exclus
+  (versions documentaires = faux positifs).
+- Suffixes -py/-sh/-beta : regex elargies (groupe 1 = version pure, suffixe conserve par le remplacement).
+
+**Corrections appliquees (--tous --wet)** : 30 outils avec en-tetes perimes alignes sur leur constante
+(ex : combos-moteur 0.1.0 -> 0.3.2, migrer-identite 0.1.0 -> 0.2.2, editer-fichier .sh 0.3.0 -> 0.4.1).
+
+**Faux positifs decouverts et corriges dans le bumper** :
+1. .md documentaires : les exemples de code ('# Version : 0.1.0', '"version": "0.1.0"') etaient detectes
+   comme versions -> filtre par type de fichier (detecter_versions_type : seuls les motifs du type).
+2. Tableaux de doc : '**Version :** 0.4.1' en exemple -> regex md exige le DEBUT DE LIGNE.
+3. Ma propre doc bumper : exemples de format utilisaient de VRAIES versions (0.4.1/0.4.5) -> remplacees
+   par X.Y.Z fictives (meilleure pratique).
+
+**Validations** : rescan --tous 0 incoherence, detecter-divergences-version 0 DIVERGENTE (23 ALIGNEES),
+py_compile OK sur tous les outils, normes 0/0 ASCII + LF, test-007 15/15, test-024 15/15, test-028 8/8,
+test-040 5/5, detecter-usage-outils-externes 0 signe.
+
+**Lecon** : un scan de versions doit distinguer la version RELLE d'un fichier (en-tete, constante, champ doc
+en debut de ligne) des EXEMPLES de format dans la documentation. La constante du .py est la source de verite ;
+les en-tetes perimes sont un symptome de bump sans bumper (exactement ce que la case c6a/c12a systematise desormais).
+
+
+## [LECON] 2026-08-15 -- BUG JOURNALISATION GENERATEURS-COMMANDE CORRIGE (Vulcain)
+
+**Contexte** : le bug s etait reproduit 4 fois (lecon Janus) - generateurs-commande journalisait
+le NOM DE COMMANDE du catalogue au lieu de son propre nom, chaque activation via le generateur
+creait un OUTIL_HORS_CARTE artificiel (activer-activer) corrige manuellement par Janus.
+
+**Correctif v0.2.4 -> v0.2.5** : _journaliser_usage passe maintenant 'generateurs-commande' (son
+propre nom) au lieu de commandes.get('nom') - le champ 'commande' du registre conserve la commande
+generee complete (veracite). Preuve reelle : generation de test -> entree registre
+outil=generateurs-commande, 0 occurrence activer-activer restante dans le registre.
+
+**Decouverte en route** : ma propre generation de test (mode generateur, agent=vulcain) a cree une
+entree generateurs-commande pour vulcain absent de sa carte -> indice outil ajoute a la case c15d
+(Activer l agent habilite pour l amelioration, Pattern 17), parcours vulcain 0.4.11 -> 0.4.12.
+Carte CONFORME, cablages 57/57, test-035 8/8, test-055 12/12.
+
+**Lecon** : quand on corrige un generateur, TOUJOURS le tester reellement (generation + verifier
+l entree registre creee) - le test prouve que la correction agit sur le registre, pas seulement
+sur le code. Et toute generation cree une entree pour l agent actif : verifier test-035 apres.
+
+
+## [LECON] 2026-08-15 -- FICHIER .TMPIGNORE + DETECTER-RESIDUS v0.1.3 (Vulcain)
+
+**Contexte** : demande utilisateur - les dossiers temporaires de mission tmp-<agent> doivent
+pouvoir etre autorises a rester sans declencher les tests, via un fichier .tmpignore.
+
+**Decision utilisateur** : derrogation CIBLEE (noms EXACTS autorises) + emplacement
+cerveau-projet/agents/traces/.tmpignore (a cote des registres).
+
+**Travail effectue** :
+1. Creation de cerveau-projet/agents/traces/.tmpignore (format documente : un nom exact par
+   ligne, # commentaires, ASCII strict, LF, usage mission courante uniquement).
+2. detecter-residus v0.1.2 -> v0.1.3 : fonction lire_tmpignore(racine) + integration dans les
+   3 points de scan (niveau racine zone workspace, prune du walk zone cerveau-projet, prune du
+   walk zone workspace) - un dossier liste est ignore, tout autre temp reste TEMP.
+
+**Preuve reelle (derrogation ciblee)** : dossier tmp-test-ignore cree + liste dans le .tmpignore
+-> detecter-residus ne le signale plus ; retire du .tmpignore -> redetecte (TEMP 2). La
+protection anti-residus reste forte : seul le nom exact liste est autorise.
+
+**Lecon** : une derrogation ciblee (liste de noms exacts) preserve la force du garde-fou tout en
+offrant l assouplissement demande - a la difference d un motif global (ex tmp-*) qui affaiblirait
+la detection de vrais residus.
+
+## [LECON] 2026-08-15 -- PROTECTION DE SORTIE LF DANS L ENTONNOIR (Vulcain)
+
+**Contexte** : demande utilisateur - des CRLF reapparaissaient malgre la regle LF obligatoire. Cause racine : les appends directs dans les scripts temp (io.open f a sans newline) traduisent LF en CRLF sur Windows - l outil ajouter-contenu-fichier est protege mais pas les scripts temp.
+
+**Correctif** : entonnoir v0.1.1 - apres l execution, normaliser_fichiers_modifies scanne les fichiers du projet modifies pendant la fenetre d execution et les re-normalise (CRLF -> LF). BUG LATENT corrige au passage : normaliser() re-assignait brut apres le replace CRLF, donc la comparaison nouveau != brut ne declenchait JAMAIS l ecriture quand il n y avait que des CRLF.
+
+**Preuves reelles** : script temp avec append non protege -> [SORTIE-LF] 1 fichier re-normalise, CRLF 0 / LF 2 (via .py et .sh). Preuve negative vivante : mes propres scripts de fin de la mission .tmpignore (lances en python3 direct, pas par l entonnoir) avaient reintroduit des CRLF dans janus/corrections.md - d ou la lecon : TOUJOURS passer par l entonnoir.
+
+## [LECON] 2026-08-15 -- GARANTIE LF GENERALISEE AUX OUTILS (Vulcain)
+
+**Contexte** : demande utilisateur - generaliser la protection LF a tous les outils qui ecrivent dans le projet (suite a la lecon entonnoir : write_text sans newline traduit LF en CRLF sur Windows).
+
+**Correctif** : 13 write_text + 1 io.open sans newline corriges dans combos-analyse-projet, combos-audit-general, combos-corriger-non-ascii, combos-maj-readme-massive, combos-moteur (py+sh), migrer-identite (py+sh), detecter-fautes-orthographe. Bumps : analyse-projet 0.1.2, audit-general 0.2.1, corriger-non-ascii 0.2.1, maj-readme-massive 0.1.4, moteur 0.3.3, migrer-identite 0.2.3, fautes-orthographe 0.1.1.
+
+**Preuve reelle** : write_text sans newline -> CRLF=2 LF=2 sur Windows ; avec newline vide -> CRLF=0 LF=2. combos-audit-general --rapport produit un rapport en LF pur (CRLF 0 / LF 335).
+
+## [LECON] 2026-08-15 -- SPECS ALIGNEES GARANTIE LF (Vulcain)
+
+**Contexte** : les bumps de la mission garantie LF ont ete appliques aux outils mais PAS aux specs - test-028 signalait 2 DIVERGENTES. Alignees : combos-moteur spec 0.3.2 -> 0.3.3, migrer-identite spec 0.2.2 -> 0.2.3 (version + historique). Lecon : le bump d un outil DOIT TOUJOURS inclure la spec dans le meme round (Pattern 14) - la non-regression test-028 le verifie a chaque run.
+
+
+## [LECON] 2026-08-15 -- ANTI-ACCUMULATION HISTORIQUE v0.5.6 + SOMME COMPTES README-DEV (Vulcain)
+
+**Contexte** : demande Cerberus (suite constat utilisateur : AGENTS-historique rempli de doublons,
+118 blocs DEMARRAGE pour 150 entrees). Le bug v0.5.4 de recollement avait colle les anciennes
+raisons d activation derriere les entrees ; le fix v0.5.5 a repere AGENTS.md mais PAS
+AGENTS-historique (1183 lignes de parasite : blocs DEMARRAGE en exces, missions entieres collees,
+continuations orphelines des entrees purgees par la limite 150).
+
+**Partie 1a - Nettoyage** : script nettoyer-historique (150 entrees conservees, 1 bloc DEMARRAGE
+par MISSION avec le BON parcours, 0 bloc pour les BILAN Cerberus, 0 parasite). Validation sur
+copie, puis application.
+
+**INCIDENT (honnetete)**: un test unitaire de ajouter_historique (MAX=2) a execute la fonction
+REELLE sur le VRAI fichier (variable globale non patchee) -> fichier tronque a 2 entrees, puis un
+git checkout de restauration a ramene un HEAD plus ancien (00:52) que le working tree nettoye
+(10:52) : les entrees de la matinee (missions bumper/LF/entonnoir/badges + activations) ont ete
+perdues du fichier. RECONSTRUCTION factuelle depuis le registre des usages (heures+agents+contextes)
++ lecons corrections.md + AGENTS.md/tmp-cerberus (raison exacte mission actuelle) : 33 entrees
+reconstruites, inserees en tete (ordre decroissant), 150 total, normes 0/0. LECON : JAMAIS de test
+qui execute la fonction reelle sur le vrai fichier - toujours patcher la variable globale ou
+utiliser une COPIE (variable d env AGENTS_HISTORIQUE).
+
+**Partie 1b - Protection v0.5.6** : ajouter_historique (py + sh) purge desormais les continuations
+(blocs DEMARRAGE, raisons multi-lignes) AVEC l entree depassee (limite 150). Avant : les lignes
+non-| date | etaient conservees sans limite -> accumulation. Test en memoire : nouvelle entree en
+tete, 3 max, 0 continuation orpheline. Bump py/sh/md/spec 0.5.5 -> 0.5.6, test-028 8/8,
+detecter-divergences 0 DIVERGENTES.
+
+**Partie 2 - mettre-a-jour-readme v0.4.2** : anti-recurrence du bug Clio (compteurs 132 vs 134 :
+une categorie manquante + une sur-comptee passaient inapercues car chaque ligne etait verifiee
+separement). Nouvelle verifier_somme_comptes() : somme des compteurs du tableau readme-dev
+(section 6) = total reel calcule + comparaison ligne par ligne. Branche dans --verifier et --maj
+(controle final). PREUVE NEGATIVE : Detecter 13->12 -> [ECART] detecte + [ECART SOMME] 133 vs 134,
+restauration -> [OK] 134. Bump py/sh/md 0.4.1 -> 0.4.2.
+
+**Verifications** : test-025 11/11, test-028 8/8, test-020 46/46, test-038 7/7, normes 0/0,
+0 residu.
+
+VERDICT : VALIDE - AGENTS-historique propre (150 entrees, 0 parasite, 1 bloc/MISSION),
+protection v0.5.6 testee, somme comptes readme-dev verifiee avec preuve negative.
+
+FIN : lecon Vulcain + activer Morpheus (ma carte c15, chaine) pour tests de controle.
+
+## [LECON] 2026-08-15 -- DETECTER-DONNEES-EN-DUR v0.1.0 (Vulcain)
+
+**Contexte** : demande utilisateur (Cerberus) - creer un outil qui detecte les donnees en dur (nombres magiques, chemins, URLs, versions, compteurs/seuils) sources de bugs caches, avec recommandation du meilleur format de stockage (constante nommee en haut de fichier, JSON de configuration, liste dediee). Assignation decidee plus tard.
+
+**Outil cree** : cerveau-projet/agents/tools/detecter/detecter-donnees-en-dur/ (py + md). Detections par type : NOMBRES_MAGIQUES, CHEMINS_EN_DUR, URLS_EN_DUR, VERSIONS_EN_DUR, COMPTEURS_SEUILS. Usage : 1+ chemins, --tous (scan projet), --rapport (markdown), --verbose, --version. Verdict SIGNAL/OK avec compteur. Catalogue 155 -> 156, index-tools 173 -> 174 (categorie Detecter).
+
+**Lecons apprises** :
+1. Heuristiques trop larges = faux positifs massifs : premier scan --tous donnait 23627 doutes (COMPTEURS_SEUILS matchait 'max'/'total' n importe ou, CHEMINS matchait 'OK / 0 KO'). Il a fallu resserrer : COMPTEURS_SEUILS = affectation directe nom = nombre ; CHEMINS/URLS restreints aux fichiers de code (.py/.sh) hors commentaires ; dates exclues des NOMBRES_MAGIQUES. Resultat final : 954 doutes sur 874 fichiers = signal raisonnable.
+2. Le .md documentaire utilise des liens relatifs legitimes : ne pas signaler chemins/URLs dans la doc, seulement versions repetees (desynchronisation possible).
+3. Toujours passer les fichiers sources par l entonnoir (ASCII strict) : un accent introduit en ecriture directe a casse la compilation.
+4. test-007 fige le total catalogue (155) et index-tools (173) : 2 KO attendus apres ajout d un outil - Morpheus doit adapter (155->156, 173->174).
+5. Preuve reelle indispensable : echantillon temp avec 5 types de donnees en dur (2048 seuil, chemin, URL, version v0.7.3, timeout 30) -> detection 5/5, puis suppression (0 residu).
+
+**Decision de conception** : l outil est un SIGNAL (avertissement), pas une erreur bloquante - les donnees en dur sont parfois legitimes (limite de parcours), le doute doit inciter l agent a verifier et choisir le bon format de stockage.
+
+## [LECON] 2026-08-15 -- BARRIERES DE PASSAGE NON-REGRESSION v0.4.0 (Vulcain)
+
+**Contexte** : demande utilisateur - revoir la philosophie de la suite anti-regression : des BARRIERES DE PASSAGE entre les series. Ordre par IMPORTANCE (FONDATIONS D ABORD, decision utilisateur) + mode SERIE STRICTE (decision utilisateur : plus direct, plus lisible qu un pool).
+
+**Outils modifies** : tester-lancer-non-regression v0.3.4 -> v0.4.0 (py + md + catalogue).
+- SERIES reorganisees par fondations : a=FONDATIONS (nommage/ASCII-LF/template/protections : test-007/029/030/042/043/044/049/050/052/054/055), b=PARCOURS ET VALIDATEURS (test-009/012/013/014/015/016/018/021/026/033/034/037/048), c=OUTILS ET COMBOS (test-001/002/003/004/005/006/008/010/011/017/019/020/022/023/040), d=REGISTRE ET TRACES (test-025/027/031/036/038/039/045/046/047/051), e=ANTI-RECURRENCE (test-024/028/032/035/041). Couverture 55 tests, 0 hors-serie, 0 doublon.
+- NOUVEAU DEFAUT = mode BARRIERES : chaque serie s execute (executer_lot), il faut 100% VERT pour FRANCHIR la barriere (message BARRIERE FRANCHIE), si KO la barriere appelle la protection STOP (fail-fast) -> la suite s ARRETE (message BARRIERE BLOQUEE, series suivantes non lancees), rapport de la serie fourni pour constater/analyser/reparer, on relance. Toutes les barrieres passees -> rapport GLOBAL POSITIF.
+- Options conservees : --parallele (ancien pool de workers round 12), --serial (passe serie simple sans barrieres, echelon de secours).
+
+**Preuves realisees** (faux tests temporaires, jamais les vrais - regle delegation) :
+1. Couverture : 55 tests, 0 hors-serie, 0 doublon (script temp d import des constantes).
+2. Preuve serie verte : 1 OK / 0 KO, 0 non-lance.
+3. Preuve KO en serie : fail_fast -> STOP, 1 non-lance.
+4. Preuve flux global : KO en serie C -> A/B franchies, C BLOQUEE, D/E non lancees ; tout vert -> 5 barrieres franchies.
+5. Normes 0/0 (py + md + catalogue), catalogue 156, py_compile OK.
+
+**Lecons** :
+1. LA PHILOSOPHIE BARRIERE : le KO doit ARRETER la suite immediatement (constater, analyser, reparer) au lieu de continuer betement - c est la protection STOP appliquee au niveau SERIE (et non plus seulement au niveau test).
+2. IMPORTANCE > THEMATIQUE : les series etaient thematiques (combos, parcours...) ; elles sont desormais classees par FONDATIONS - ce qui protege la BASE (nommage, ASCII/LF, template, protections) passe en premier car si une fondation casse, tout est invalide.
+3. SERIE STRICTE > POOL pour la lisibilite : l utilisateur a choisi la serie stricte (plus longue mais plus directe) - le pool reste en option --parallele, le mode par defaut change (decision utilisateur 2026-08-15).
+4. TESTS A ADAPTER (Morpheus, liste fournie) : test-027 (point 4 version + point 7 Defaut = pool -> Defaut = barrieres), test-032 (point 2 Defaut = pool -> barrieres), test-031 (point 1 version), test-024 (point 6 version), test-051 (point 1 version). VERSION BUMP : 0.3.4 -> 0.4.0 (grep dans les 6 tests qui figent la version).
+5. EDITER-FICHIER ne supporte pas les gros blocs multi-lignes avec accents dans la cible : utiliser un script temp passe par l entonnoir (ancre ASCII + decoupe par positions) pour remplacer une section entiere de doc.
+## [LECON] 2026-08-15 -- VERROU D HABILITATION proteger-verrou-habilitation (Vulcain, round 19)
+
+**Contexte** : demande utilisateur - une protection 'verrou' : quand un agent
+utilise un outil, s il n est pas dans la liste des agents autorises, il est
+prevenu qu il n est pas habilite et doit activer l agent habilite. Choix
+utilisateur : verrou DIRECT (bloquant) + --agent obligatoire.
+
+**Outil cree** : cerveau-projet/agents/tools/proteger/proteger-verrou-habilitation/
+(.py + .md, categorie Proteger). Le verrou lit les CARTES de decision
+(indices outil des parcours) comme source de verite - aucune liste en dur
+(anti-derive, philosophie test-035/037/045). Verdict : OK (rc=0) si l outil
+est dans la carte de l agent, BLOQUE (rc=1) sinon avec la liste des habilites
+et la commande exacte d activation (cycle Cerberus -> agent habilite).
+
+**Preuves reelles** : janus->non-regression OK, cerberus->non-regression
+BLOQUE (rc=1 + commande d activation), hygie->supprimer-fichier OK (seule
+carte avec supprimer-*), cerberus->supprimer-fichier BLOQUE, outil inconnu
+BLOQUE, --agent manquant rc=2, --liste table complete, test-035 8/8 (aucun
+OUTIL_HORS_CARTE : le verrou est une protection transversale, assignation
+decidee plus tard), normes 0/0.
+
+**Lecons** :
+1. LA CARTE EST LA REGLE : le verrou ne stocke AUCUNE liste en dur - il lit
+   les parcours a chaque appel. Une regle exclusive qui change = une carte qui
+   change ; le verrou suit automatiquement (anti-derive).
+2. DIRECT BLOQUANT > ALTERNATIVE : chaque fois qu un choix etait laisse a
+   l agent (continuer quand meme), l agent a derive. Le verrou bloque sans
+   option de contournement et donne LA commande d activation de l agent
+   habilite (transformer un blocage en action correcte).
+3. CODE DE SORTIE SIGNIFIANT : rc=0 OK / rc=1 BLOQUE / rc=2 usage - les
+   combos et scripts peuvent brancher le verrou en preambule et arreter net
+   (protection STOP) si rc != 0.
+4. CATEGORIE NOUVELLE Proteger : l index-tools et le catalogue acceptent une
+   categorie supplementaire (sections alphabetiques, stats, total 174->175,
+   catalogue 156->157) - verifier les tests qui figent les compteurs
+   (test-007, test-024) + le badge README (135->136, mission Clio).
+
+**A faire par Morpheus** : garde-fou test (le verrou existe, compile, bloque
+un agent non habilite en PREUVE NEGATIVE, laisse passer l habilite) +
+adaptation test-007 (156->157, 174->175) et test-024 (156->157). Badge README
+135->136 : mission Clio (regle exclusive). Non-regression : Janus.
+
+
+## [LECON] 2026-08-15 -- VERROU HABILITATION BRANCHE DANS LES OUTILS CRITIQUES (Vulcain)
+
+**Contexte** : demande utilisateur - chaque outil critique exige --agent et
+appelle proteger-verrou-habilitation AVANT d agir (verrou DIRECT bloquant,
+decision utilisateur : direct + --agent obligatoire).
+
+**Outils branches (4 fichiers, source de verite = cartes, aucun doublon de
+table)** :
+1. tester-lancer-non-regression 0.4.0 -> 0.4.1 : --agent deja present
+   (journalisation), ajout appel verrou au debut de main() AVANT toute action.
+2. supprimer-fichier 0.3.1 -> 0.3.2 : --agent OBLIGATOIRE ajoute (parsing
+   manuel restructure en boucle indexee) + verrou avant la suppression.
+3. supprimer-dossier 0.2.0-py -> 0.2.1-py : idem (boucle indexee existante).
+4. combos-maj-readme-massive 0.1.4 -> 0.1.5 : --agent ajoute a argparse +
+   verrou avant l etape 1.
+
+**Patterns reutilises** : fonction verrouiller_habilitation(agent, outil) qui
+appelle le verrou via subprocess ([sys.executable, verrou, --agent, --outil]),
+detecte la racine AGENTS.md en remontant depuis __file__, rc 0 = habilite,
+1 = bloque (affiche la sortie du verrou : qui est habilite + commande
+d activation), 2 = --agent absent.
+
+**Preuves reelles (rc attendus)**
+- lanceur : janus rc=0 / cerberus rc=1 BLOQUE + commande / absent rc=2
+- supprimer-fichier : hygie rc=0 / cerberus rc=1 / absent rc=2
+- supprimer-dossier : hygie rc=0 / cerberus rc=1 / absent rc=2
+- combos-maj : clio rc=0 (combo execute, badge README 133->136 aligne
+  automatiquement) / buffy rc=1 / absent rc=2
+- valider-cartes 13/13 CONFORME, test-056 8/8, test-037 6/6, test-045 15/15
+  (verts : utilisent le verrou correctement)
+
+**Impacts tests (mission Morpheus, seul habite a ecrire les tests)** :
+les tests qui appellent les outils branches SANS --agent cassent (verrou rc=2) :
+- test-020 (8 KO : version 0.1.4->0.1.5 + appels combos-maj sans --agent)
+- test-024 (1 KO), test-027 (5 KO), test-031 (2 KO), test-051 (2 KO)
+Les tests VERTs (ne pas casser) : test-029, 030, 034, 037, 045, 056.
+
+**Lecons** :
+1. Le catalogue ne porte la version que de 3 commandes (editer-fichier-agents,
+   generateurs-case, generateurs-case-convertir) - les 4 outils branches n y
+   sont pas versionnes, la version vit dans .py/.md. Ne pas chercher a bumper
+   le catalogue pour eux.
+2. Une seule mention d outil dans un message (combos-analyse-projet,
+   generateurs-outil-temporaire) n est PAS un appel - verifier subprocess/run
+   reel avant de craindre une casse de chaine.
+3. Le verrou bloque aussi les tests qui appellent les outils sans --agent :
+   c est le comportement voulu (l agent appelant doit etre connu). Les tests
+   doivent passer --agent (janus/hygie/clio) - adaptation Morpheus.
+4. --version/--help restent accessibles SANS --agent (innocents) ; toute
+   action reelle exige --agent (rc=2 si absent).
+
+
+## [LECON] 2026-08-15 -- --series MULTI AU LANCEUR DE NON-REGRESSION (Vulcain)
+
+**Contexte** : demande utilisateur - Janus doit pouvoir ne lancer que les
+series necessaires (pas toujours la suite complete). Mono --series a deja
+existe ; ajout du MULTI (--series a,c).
+
+**Fait (tester-lancer-non-regression 0.4.1 -> 0.4.2)** :
+1. --series accepte une liste separee par des virgules (a,c) en plus de mono
+   et de tous. Choix argparse retire (validation manuelle -> serie inconnue =
+   rc=2 avec message explicite).
+2. Les series sont lancees dans l ORDRE D IMPORTANCE (SERIES_ORDRE : A
+   Fondations d abord) quel que soit l ordre saisi (--series c,a lance A puis C).
+3. FAIL-FAST entre series : si une serie a un KO ou des non-lances, la suivante
+   ne se lance pas (philosophie barriere, meme que --tous).
+4. Protection du registre UNE fois (comme --tous), pas par serie.
+5. Chrono couvre toutes les series ; no_reference=True (comportement mono).
+6. Rapport combine (libelle "Series A,C").
+
+**Preuves reelles** :
+- --series z : rc=2 "Serie(s) inconnue(s) : z (valides : a,b,c,d,e)"
+- --series a (mono) : rc=0 12/12 (regression)
+- --series a,c (multi) : rc=0, lance A (12) PUIS C (15)
+- --series c,a : lance A PUIS C (ordre d importance)
+- --series e,a : lance A PUIS E
+- test-032 : 9 OK / 1 KO (seul le point version fige 0.4.1 -> a adapter)
+
+**Impacts tests (mission Morpheus)** :
+- test-027 : point 4 version 0.4.1 -> 0.4.2 ; point 5 --series z : attendait
+  "usage:" d argparse (choices retire) -> attendre maintenant "Serie(s)
+  inconnue(s)" + rc=2 (le message d erreur a change, le comportement rc=2 est
+  conserve)
+- test-032 : point 1 version 0.4.1 -> 0.4.2 (1 KO)
+
+**Lecon** : retirer choices d argparse change le message d erreur des tests qui
+verifiaient l ancien message "usage:" - verifier les tests qui testent les
+valeurs invalides lors d un changement de parsing.
+
+**Chaine** : ce round demontre la regle rehabilitee (tout dans le meme round) :
+Cerberus -> Vulcain (implemente + preuves) -> Morpheus (tests) -> Janus
+(non-regression) -> Cerberus, SANS arret entre les maillons.
+
+
+## [LECON] 2026-08-15 -- ORDRE DYNAMIQUE DES SERIES PAR TAUX DE KO (Vulcain)
+
+**Contexte** : demande utilisateur - les series qui produisent le plus de KO
+doivent passer en premier (critere de classement = frequence de KO, pas
+l ordre historique).
+
+**Fait (tester-lancer-non-regression 0.4.2 -> 0.4.3)** :
+1. Fonction ordre_series_par_ko(racine, nb_derniers=5) : lit le registre-tests
+   (serie + verdict par test), calcule le taux de KO par serie, classe par KO
+   decroissant. Seuil de confiance : une serie n est reclassee que si elle a
+   >= 5 lancements (sinon position historique conservee - pas assez de donnees
+   pour juger).
+2. Option --ordre-fixe : force l ordre historique (a,b,c,d,e).
+3. Mode barriere : utilise l ordre dynamique (ou fixe), affiche
+   "[ORDRE SERIES] X > Y > ..." pour transparence.
+4. Mono/multi/fail-fast : conserves (regression test-027/032).
+
+**Preuves reelles** :
+- Ordre dynamique (registre : e=3 KO/106, c=2 KO/11) : [ORDRE SERIES] E > C > A > B > D
+  -> E et C (les plus de KO) passent en premier, A/B/D (pas assez de donnees)
+  restent en ordre historique. REPOND EXACTEMENT a la demande.
+- --ordre-fixe : [ORDRE SERIES] A > B > C > D > E
+- mono --series a : 12/12 (regression) ; multi --series a,c : A puis C (regression)
+
+**Impacts tests (mission Morpheus)** : 5 tests figent la version lanceur 0.4.2
+-> a adapter 0.4.3 : test-024, test-027, test-031, test-032, test-051.
+Les tests 005/010/016/022 referencent 0.4.2 d AUTRES outils (atlas,
+generateurs-case) - NE PAS y toucher.
+
+**Lecon** : le classement par taux de KO utilise le registre-tests comme source
+de verite - les donnees s accumulent a chaque run, l ordre evolue naturellement
+vers les series a risque en premier.
+
+## [LECON] 2026-08-15 -- CONFIG PERSISTANTE DES TESTS (tester-lancer-non-regression v0.4.5, Vulcain)
+
+**Contexte** : demande utilisateur - Janus doit pouvoir activer/desactiver des tests par
+numero pour ne lancer que les series utiles au controle en cours (ex : on travaille la
+fleur rouge, le test de la fleur bleue n a pas besoin d etre lance).
+
+**Implementation** :
+1. Fichier persistant `config-tests.json` (gitignore, machine-independante comme
+   temps-reference.json) stocke la liste des numeros de tests desactives.
+2. Options `--desactiver <a,b>` / `--activer <a,b>` (numeros) + `--etat-tests`
+   (affiche l etat de tous les tests puis sort sans rien lancer).
+3. Au lancement, la config est lue et les tests desactives sont exclus AVANT le
+   decoupage en series -> une serie ne devient jamais vide fautivement.
+4. Bilan : les tests desactives apparaissent en `NON LANCE` dans les 2 modes
+   (tous + series demandees).
+5. Les fonctions pures (charger/sauver/filtrer) sont testables sans le verrou.
+
+**Lecon** : la persistance par fichier gitignore (comme temps-reference.json) est le
+bon pattern pour une configuration machine-dependante heritee entre lancements. Les
+fonctions pures detachees du flux principal permettent un test unitaire rapide sans
+passer par le verrou d habilitation.
+
+**Attention** : 6 tests pincent la version v0.4.4 du lanceur (016, 024, 027, 031, 032,
+051) - Morpheus les adaptera a v0.4.5.
+
+## [LECON] 2026-08-15 -- 2 OUTILS D ANALYSE : PERFORMANCE DES TESTS + TOKENS (Vulcain)
+
+**Contexte** : demande utilisateur - (1) un outil de performance qui classe les
+tests du plus gros consommateur au moins pour optimiser la suite anti-regression ;
+(2) un outil de mesure des tokens (envoyes/recus/encombrement de la fenetre) +
+integration templates + migration progressive.
+
+**Outils crees** (categorie analyser) :
+1. `analyser-performance-tests` v0.1.0 : lit registre-tests.jsonl, isole le
+   DERNIER RUN (fenetre 10 min autour de la date max, --fenetre-minutes),
+   classe du plus gros consommateur au moins (--top), rapport markdown avec
+   duree cumulee (--rapport). Preuve : registre simule 5 tests -> 032 (38.7s)
+   > 028 (25.2s) > 031 (6.3s) > 024 (3.1s) > 001 (1.2s), ordre exact.
+2. `analyser-tokens` v0.1.0 : MODELE HYBRIDE (decision utilisateur) - compteurs
+   API reels en priorite (TOKENS_SESSION ou metadonnees-session-*.json),
+   sinon estimation locale (registres + traces, ~4 car/token, 60/40). Sortie :
+   envoyes, recus, total, encombrement %. Preuve : TOKENS_SESSION simule ->
+   45000/12000 -> 44.5% sur 128k ; sans metadonnees -> estimation signalee.
+
+**BUG CRITIQUE DECOUVERT (a corriger par Morpheus)** : test-051 (point 8)
+nettoie ses preuves en supprimant TOUTES les entrees agent == "janus" du
+registre-tests - y compris les VRAIES entrees du run complet de la
+non-regression ! Le registre ne garde que l entree de test-051 lui-meme
+(journalisee apres son nettoyage). C est pourquoi le registre-tests n a que
+106 entrees (dont 105 morpheus isolees) au lieu de milliers. L outil
+analyser-performance-tests ne pourra pas analyser les runs complets tant que
+ce bug n est pas corrige.
+
+**Templates mis a jour** (bloc tokens PILOTE optionnel, migration progressive) :
+template-test.md, outil-template.md, outil-template-python.md,
+fiche-agent-template.md, protocole-creation-scripts-temporaires. Tests 029
+(14/14) et 044 (15/15) toujours verts - ajout additif sans casser le triplet.
+
+**A adapter par Morpheus** : test-007 (catalogue 159->161, index-tools
+177->179). **A faire par Clio** : badge README Outils-138 -> 140 + readme-dev
+table Analyser 2 -> 4 (SEUL Clio touche aux README - regle immuable).
+
+**Lecon** : ecrire un .py en write_file avec intention ASCII ne garantit pas
+l ASCII (un accent a ete insere dans "reperer") - toujours verifier
+non-ascii/crlf apres creation. Le registre-tests est la source de l outil de
+performance : sa fiabilite conditionne les decisions d optimisation.

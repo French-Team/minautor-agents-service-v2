@@ -6,7 +6,7 @@ identite:
 ---
 # supprimer-fichier
 
-**Version :** 0.3.1
+**Version :** 0.3.2
 **Statut :** prepare
 **Categorie :** Supprimer
 **Chemin :** `agents/tools/supprimer/supprimer-fichier/`
@@ -49,6 +49,7 @@ Version bash equivalente : `supprimer-fichier.sh` (meme logique).
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (suppression, fichier inexistant, --dry-run), promotion prepare |
 | 0.2.0-py | 2026-08-07 | Version Python creee (supprimer-fichier.py), basee sur outil-template.py. Suppression avec --dry-run/--forcer/--verbose |
 | 0.3.0 | 2026-08-12 | Qualite pro : echec explicite (fichier inexistant -> code 1), protection nommage, option --backup |
+| 0.3.2 | 2026-08-15 | VERROU D HABILITATION (demande utilisateur) : --agent OBLIGATOIRE + appel a proteger-verrou-habilitation AVANT la suppression - seul hygie peut supprimer, tout autre agent est bloque avec la commande d activation. |
 | 0.3.1 | 2026-08-12 | SECURITE (round 3) : refus octet nul dans le chemin (la suppression d un lien symbolique reste sure : os.remove ne touche que le lien, jamais la cible) |
 
 ## Notes de creation

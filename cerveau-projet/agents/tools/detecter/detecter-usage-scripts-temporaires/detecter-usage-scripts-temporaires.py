@@ -24,7 +24,7 @@
 #   python3 detecter-usage-scripts-temporaires.py
 #   python3 detecter-usage-scripts-temporaires.py --rapport rapport-scripts-temp.md
 #
-# Version : 0.1.0
+# Version : 0.1.1
 # Statut : ebauche
 # identite:
 #   type: outil

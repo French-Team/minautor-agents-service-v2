@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-005-generateurs-commande.py
-Test formel du generateur de commande v0.2.4 (fiabilisation des flags optionnels),
+Test formel du generateur de commande v0.2.5 (fiabilisation des flags optionnels),
 du catalogue (chaque commande doit avoir sa documentation .md : REGLE ABSOLUE
 LECTURE DOC) et du parcours Atlas v0.4.1 (migre au format action : references +
 cases action, 2 commandes templates residuelles c30 + c11a conservees et documentees).
@@ -25,9 +25,9 @@ Objet (correction Buffy 2026-08-09) :
     DOCUMENTATION DE L OUTIL avant utilisation (garde-fou lecture .md).
 
 Cas couverts (26 points) :
-  GENERATEUR v0.2.4
-  1. --version py = v0.2.4
-  2. --version sh = v0.2.4
+  GENERATEUR v0.2.5
+  1. --version py = v0.2.5
+  2. --version sh = v0.2.5
   3. py_compile OK (generateurs-commande.py)
   4. bash -n OK (generateurs-commande.sh)
   5. composition lire-fichier (fichier=AGENTS.md;lignes=3) : SANS --debut/--fin vides
@@ -80,6 +80,53 @@ def charger_protections():
     return mod
 
 PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
 
 GC_PY = os.path.join(RACINE, "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py")
 GC_SH = os.path.join(RACINE, "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.sh")
@@ -136,15 +183,15 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.4 + catalogue 0.2.9 + parcours-atlas v0.4.2 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.5 + catalogue 0.2.9 + parcours-atlas v0.4.2 ===")
     print("")
 
-    # ---------- GENERATEUR v0.2.4 ----------
+    # ---------- GENERATEUR v0.2.5 ----------
     code, out = exec_cmd("python3 %s --version" % GC_PY)
-    verifier(1, "generateurs-commande.py --version = v0.2.4", "v0.2.4" in out, out.strip())
+    verifier(1, "generateurs-commande.py --version = v0.2.5", "v0.2.5" in out, out.strip())
 
     code, out = exec_cmd("bash %s --version" % GC_SH)
-    verifier(2, "generateurs-commande.sh --version = v0.2.4", "v0.2.4" in out, out.strip())
+    verifier(2, "generateurs-commande.sh --version = v0.2.5", "v0.2.5" in out, out.strip())
 
     code, out = exec_cmd("python3 -m py_compile %s" % GC_PY)
     verifier(3, "py_compile generateurs-commande.py", code == 0, out.strip())
@@ -275,6 +322,8 @@ def main():
     print("=== RESULTAT : %d OK / %d KO ===" % (REUSSIS, ECHECS))
     return 1 if ECHECS else 0
 
+
+bilan_chrono()
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -6,7 +6,7 @@ identite:
 ---
 # Specification -- activer-agent-principal
 
-**Version :** 0.5.5
+**Version :** 0.5.7
 **Statut :** prepare
 **ID :** 001
 **Class :** 01
@@ -289,6 +289,8 @@ Tests manuels sur le dossier `exemples/` avec des fichiers de test.
 | 2026-08-07 | 0.3.3 | REGLE UTILISATEUR : session occupee -> attribution automatique de la prochaine libre (1er LLM = llm-1) |
 | 2026-08-07 | 0.3.4 | MODE ID : sidentifier <llm-id> (comparaison id -> session, liaison dans le classeur) |
 | 2026-08-07 | 0.3.2 | Vulcain | Regle de derivation du nommage (profil-session-<id> sans double prefixe) - correction du verdict A REVOIR de Janus |
+| 2026-08-15 | 0.5.7 | Vulcain | VERROU DU MARBRE : verrouiller_constitution() appelle proteger-verrou-marbre --zone constitution avant toute ecriture (sidentifier/activer/reactiver) et refuse si la Constitution a diverge sans protocole ; desactive en mode test (AGENTS_FILE) ; agent Gardien ajoute au dictionnaire AGENTS ; FIX MARQUEURS : la boucle de retrait de la section Sessions connues s arrete aussi sur les bornes `<!-- MARBRE:` (avant : elle avalait le marqueur DEBUT de la zone constitution) |
+| 2026-08-15 | 0.5.6 | Vulcain | ANTI-ACCUMULATION HISTORIQUE : ajouter_historique purge les continuations AVEC l entree depassee (limite 150) - anti-recurrence du parasite de 1183 lignes dans AGENTS-historique. Fichier nettoye + entrees de la matinee reconstruites (incident) |
 | 2026-08-14 | 0.5.5 | Vulcain | FIX bug de recollement : reconstruire_bloc recolait les anciennes continuations de la Raison a chaque nouvelle raison -> accumulation (AGENTS.md corrompu). Un champ REMPLACE ignore son ancienne suite (y compris Raison) |
 | 2026-08-14 | 0.5.4 | Vulcain | DEMARRAGE OBLIGATOIRE automatique : activer ajoute a la Raison l instruction de lancement du parcours depuis c0 (--reponses OUI), sauf pour Cerberus et reactiver ; fix bug latent : reconstruire_bloc preservait pas la Raison multiligne |
 | 2026-08-12 | 0.5.1 | Vulcain | Alignement spec/outil (round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 0.5.1) |

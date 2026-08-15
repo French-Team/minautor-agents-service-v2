@@ -7,7 +7,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 STATUT = "prepare"
 
 import datetime
@@ -222,7 +222,7 @@ def main():
         lignes.append("")
         lignes.append("## Verdict")
         lignes.append("A CORRIGER (" + str(len(ecarts)) + " ecart(s))" if ecarts else "A JOUR")
-        rapport_file.write_text("\n".join(lignes) + "\n", encoding="utf-8")
+        rapport_file.write_text("\n".join(lignes) + "\n", encoding="utf-8", newline="")
         print("")
         print(GREEN + "Rapport sauvegarde : " + str(rapport_file) + NC)
 

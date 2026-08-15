@@ -6,7 +6,7 @@ identite:
 ---
 # generateurs-outil-temporaire
 
-**Version :** 0.2.1
+**Version :** 0.2.2
 **Statut :** prepare
 **Categorie :** Generateurs
 **Chemin :** `agents/tools/generateurs/generateurs-outil-temporaire/`
@@ -59,6 +59,7 @@ generateurs-outil-temporaire.py --nom mesurer-taille-dossiers --force
 | 7 | **Parite .py/.sh** | Les deux versions ont le meme comportement (dry-run, workspace, promotion) |
 | 8 | **TRIPLET (v0.2.0)** | Le script genere embarque les PROTECTIONS (nommage, dry-run, gestion erreur) + OPTIONS ON/OFF (--isoler/--desactiver) + CHRONO (--chrono par defaut, --no-chrono) - meme triplet que le template-test v0.3.0 |
 | 9 | **DECLARATION USAGES (v0.2.1)** | Le script genere embarque le bloc DECLARATION : variable AGENT + fonctions `declarer_usage()` / `declarer_usages()` qui appellent `enregistrer-usage-outil --mode script-temporaire` pour le script lui-meme et chaque outil utilise (appele en fin de main, erreur si AGENT non renseigne) |
+| 10 | **CHRONO EN HAUT (v0.2.2)** | BUFFER TOTAL (decision utilisateur 2026-08-15) : toute la sortie du script (y compris les sous-processus de declaration, dont la sortie est capturee) est retenue en memoire, le chrono `=== CHRONO ===` est affiche EN PREMIER puis le contenu - le chrono est TOUJOURS la premiere ligne, visible a chaque execution |
 
 ## Cycle de vie de l'outil temporaire
 
@@ -88,6 +89,7 @@ Mission -> besoin -> outil existe ?
 
 | Version | Date | Changement |
 |---|---|---|
+| 0.2.2 | 2026-08-15 | Template : CHRONO EN HAUT (buffer total) - toute la sortie retenue, chrono affiche en premier, sous-processus de declaration captures |
 | 0.2.1 | 2026-08-14 | Template enrichi : bloc DECLARATION USAGES dans le script genere (anti-recurrence registre a 0 ligne) |
 | 0.2.0 | 2026-08-14 | Template enrichi : triplet (protections + options on/off + chrono) dans le script genere |
 | 0.1.0 | 2026-08-09 | Creation : generateur d'outil temporaire (dry-run, workspace, question promotion, parite py/sh) |

@@ -164,6 +164,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 | `mettre-a-jour-readme` | Outil UNIQUE de mise a jour du README (journal, verifier, maj, logo, badges) |
 | `valider-conformite-ascii` | Verifier la conformite ASCII du README |
 | `activer-agent-principal` | Reactiver Cerberus en fin de mission |
+| `executer-script-temporaire` | ENTONNOIR : normaliser + controler + executer tout script temporaire (jamais python3 direct) |
 | `guider-parcours` | Suivre MON parcours case par case (jeu de piste) |
 
 > **REGLE** : Pour toute operation de base sur les fichiers, j'utilise CES outils, jamais les outils du systeme.

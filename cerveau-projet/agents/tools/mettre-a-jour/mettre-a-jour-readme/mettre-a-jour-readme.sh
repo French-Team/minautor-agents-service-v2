@@ -1,7 +1,7 @@
 #!/bin/bash
 # mettre-a-jour-readme.sh
 # Outil pour corriger le README afin qu'il reflete l'etat reel du projet
-# Version : 0.4.1
+# Version : 0.4.2
 # Statut : ebauche
 # Proprietaire : Clio (agent dedie au README)
 
@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.4.1"
+VERSION="0.4.2"
 STATUT="ebauche"
 README="README.md"
 HISTORIQUE="AGENTS-historique.md"

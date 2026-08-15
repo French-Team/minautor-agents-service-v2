@@ -1,7 +1,7 @@
 #!/bin/bash
 # corriger-fins-de-ligne.sh
 # Convertit les fins de ligne CRLF vers LF sur un fichier ou un dossier (--recursive)
-# Version : 0.1.0
+# Version : 0.1.1
 # identite:
 #   type: outil
 #   appartient_a: commun

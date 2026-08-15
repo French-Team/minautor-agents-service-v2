@@ -7,7 +7,7 @@ identite:
 
 # Protocole de Creation des Scripts Temporaires
 
-**Version** : 0.2.7
+**Version** : 0.2.10
 **Statut** : ebauche
 **Categorie** : General
 **Agent** : Promethee
@@ -243,16 +243,83 @@ La methode fiable, eprouvee sur des dizaines de missions :
 > Un outil temporaire SANS triplet doit etre REGENERE avec le generateur
 > v0.2.0 (jamais ecrit a la main sans protections/chrono).
 
-## L entonnoir (normalisation transparente, v0.2.5)
+## Mesure des tokens dans les scripts temp (PILOTE, v0.1 - optionnel)
 
-> **REGLE ENTONNOIR** : TOUT script temporaire passe par
-> `executer-script-temporaire` (categorie Executer) avant execution - jamais
-> de `python3` direct sur un script de `tmp-<agent>/`. L entonnoir
-> **normalise automatiquement** (BOM, CRLF -> LF, accents via le dictionnaire
-> de `corriger-dictionnaire-accents`), **controle la compilation** (une erreur
-> de syntaxe bloque l execution avant tout lancement) puis **execute**. Le
-> script est re-ecrit normalise sur disque : il devient conforme pour toute
-> utilisation ulterieure.
+> Volet "mesure de la fenetre de contexte" (demande utilisateur 2026-08-15).
+> Les scripts temporaires peuvent rendre compte de leur consommation via
+> l outil `analyser-tokens` (modele hybride : registres locaux + compteurs
+> API si disponibles). PILOTE optionnel : aucun script existant n est migre
+> tant que le pilote n est pas valide.
+>
+> Utilisation (optionnel, en fin de script) :
+> ```
+> subprocess.run([sys.executable, "cerveau-projet/agents/tools/analyser/"
+>                 "analyser-tokens/analyser-tokens.py", "--no-chrono"],
+>                capture_output=True, text=True)
+> ```
+> L estimation est HONNETE : source fiable = API (TOKENS_SESSION ou
+> metadonnees-session-*.json), sinon estimation locale signalee.
+
+## Bannir les timeouts exterieurs (v0.2.8, demande utilisateur 2026-08-15)
+
+> **REGLE ABSOLUE** : AUCUN timeout exterieur autour de l execution d un
+> script temporaire (jamais de `timeout <s>` autour de la commande, jamais
+> de delai impose par le script appelant). La seule gestion du delai est
+> INTERNE : les protections du triplet (dry-run, gestion erreur) et, pour
+> les tests, le timeout du lanceur. Un script temp qui progresse ne doit
+> JAMAIS etre coupe par un timeout exterieur.
+>
+> La logique ternaire, identique a protocole-tests v0.3.3 (demande
+> utilisateur 2026-08-15) :
+> 1. **REUSSITE** -> afficher immediatement (l agent ne JAMAIS attendre la
+>    fin d un timeout pour continuer) ;
+> 2. **ERREUR** -> stop immediat (protection erreur du triplet) ;
+> 3. **DELAI DEPASSE SANS REPONSE NI ERREUR** -> c est une ERREUR
+>    SILENCIEUSE a trouver/a resoudre, puis l agent RELANCE le script
+>    corrige. Un timeout exterieur couperait le script sans rien expliquer :
+>    banni.
+
+## ZERO TIMEOUT EXTERNE D ORCHESTRATION (v0.2.9, decision utilisateur 2026-08-15)
+
+> **REGLE ABSOLUE (decision utilisateur)** : les outils d ORCHESTRATION (les
+> commandes qui lancent les scripts temporaires depuis le terminal) n imposent
+> AUCUN timeout externe sur l execution des scripts conformes : l attente est
+> INDEFINIE, et c est L UTILISATEUR qui est le DERNIER RECOURS (il interrompt
+> manuellement si besoin).
+>
+> Les protections INTERNES du triplet sont les SEULES a trancher un blocage
+> (dry-run, gestion erreur) ; les timeouts internes (lancer_protege, timeout
+> du lanceur pour les tests) sont CONSERVES - on ne bannit que le timeout
+> exterieur d orchestration, jamais les protections. Un timeout d
+> orchestration dimensionne au plus juste tuerait un script legitime : AUCUN.
+
+## L entonnoir (normalisation transparente, v0.2.5 -> v0.2.10)
+
+> **REGLE ENTONNOIR (v0.2.10, anti-recurrence lecon 2026-08-15)** : TOUT
+> script temporaire passe par `executer-script-temporaire` (categorie
+> Executer) avant execution - **jamais de `python3` direct** sur un script
+> de `tmp-<agent>/`, MEME pour un script qui ne fait qu un append. L
+> entonnoir **normalise automatiquement** (BOM, CRLF -> LF, accents via le
+> dictionnaire de `corriger-dictionnaire-accents`), **controle la
+> compilation** (une erreur de syntaxe bloque l execution avant tout
+> lancement) puis **execute**. Le script est re-ecrit normalise sur disque :
+> il devient conforme pour toute utilisation ulterieure.
+>
+> **PROTECTION DE SORTIE LF (entonnoir v0.1.1)** : l entonnoir ne normalise
+> pas seulement le script AVANT execution - apres l execution, il re-scanne
+> les fichiers du projet modifies pendant la fenetre d execution (mtime >=
+> depart) et les re-normalise (CRLF -> LF, BOM, accents). Sortie :
+> `[SORTIE-LF] N fichier(s) re-normalise(s) en LF pur`.
+>
+> **POURQUOI JAMAIS python3 DIRECT (lecon 2026-08-15)** : un append direct
+> dans un script temp (`io.open(f, "a")` sans `newline=""`) traduit LF en
+> CRLF sur Windows - l outil du projet `ajouter-contenu-fichier` est protege
+> (`newline=""`) mais les scripts temp ne l etaient pas. Le 2026-08-15, des
+> scripts de fin de mission lances en `python3` direct ont reintroduit des
+> CRLF dans `janus/corrections.md` (detectes par test-047). La regle est
+> donc ABSOLUE : python3 direct sur un script temp = violation, quel que
+> soit le script. L entonnoir protege a l entree (script) ET a la sortie
+> (fichiers ecrits au runtime).
 >
 > **Transparence** : l agent n a RIEN a changer dans sa facon d ecrire - il
 > ecrit son script comme d habitude (meme avec accents ou retours Windows),

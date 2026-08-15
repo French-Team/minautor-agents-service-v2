@@ -64,6 +64,14 @@ Controle automatique par `verifier_nommage()` au demarrage du script.
 
 ---
 
+## Mesure des tokens (PILOTE, migration progressive v0.1 - optionnel)
+
+> Volet "mesure de la fenetre de contexte" (demande utilisateur 2026-08-15).
+> Les outils Python peuvent rendre compte de leur consommation de tokens via
+> `analyser-tokens` (modele hybride : registres locaux + compteurs API si
+> disponibles). PILOTE optionnel : aucun outil existant n est migre tant que
+> le pilote n est pas valide par un test dedie.
+
 ## Structure du fichier .py
 
 ```

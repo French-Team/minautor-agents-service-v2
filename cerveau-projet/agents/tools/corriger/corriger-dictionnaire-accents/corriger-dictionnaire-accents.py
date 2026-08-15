@@ -2,7 +2,7 @@
 # corriger-dictionnaire-accents.py
 # Outil pour detecter et corriger les accents et caracteres non-ASCII
 # Conforme a la regle regles-emojis-ascii.md
-# Version : 0.2.0-py
+# Version : 0.2.2-py
 # Statut : beta
 
 # identite:

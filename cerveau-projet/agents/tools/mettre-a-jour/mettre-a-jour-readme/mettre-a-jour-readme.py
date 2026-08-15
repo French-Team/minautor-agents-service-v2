@@ -31,10 +31,11 @@ import os
 import re
 import sys
 
-VERSION = "0.4.1-py"
+VERSION = "0.4.2-py"
 STATUT = "prepare"
 
 README = "README.md"
+README_DEV = "cerveau-projet/readme-dev.md"
 HISTORIQUE = "AGENTS-historique.md"
 AGENTS_DIR = "cerveau-projet/agents"
 TOOLS_DIR = "cerveau-projet/agents/tools"
@@ -188,6 +189,48 @@ def lire_readme():
         return fh.read()
 
 
+def verifier_somme_comptes():
+    """Verifier que la SOMME des compteurs du tableau readme-dev (section 6)
+    = le total reel calcule. Anti-recurrence du bug Clio (compteurs 132 vs
+    134 : une categorie manquante + une sur-comptee passaient inapercues
+    car chaque ligne etait verifiee separement).
+
+    Retourne le nombre d'ecarts (0 = coherent).
+    """
+    ecarts = 0
+    if not os.path.isfile(README_DEV):
+        print("  [MANQUANT] readme-dev introuvable : %s" % README_DEV)
+        return 1
+    with io.open(README_DEV, "r", encoding="utf-8", errors="replace") as fh:
+        contenu = fh.read()
+    total = compter_total_outils()
+    somme = 0
+    nb_lignes = 0
+    for ligne in contenu.split("\n"):
+        m = re.match(r"^\| ([A-Z][^|]*?) \| (\d+) \|", ligne)
+        if not m:
+            continue
+        nom = m.group(1).strip()
+        if nom == "Categorie":
+            continue
+        nb = int(m.group(2))
+        somme += nb
+        nb_lignes += 1
+        # Comparer le compte du tableau au compte reel (meme logique que
+        # compter_outils_categorie, par dossier de categorie).
+        cle = nom.lower().replace(" ", "-")
+        reel = compter_outils_categorie(cle)
+        if reel != nb:
+            print("  [ECART] %s : tableau dit %d, reel = %d" % (nom, nb, reel))
+            ecarts += 1
+    if somme != total:
+        print("  [ECART SOMME] readme-dev tableau : somme = %d, total reel = %d" % (somme, total))
+        ecarts += 1
+    if ecarts == 0:
+        print("  [OK] readme-dev tableau : %d categories, somme %d = total reel %d" % (nb_lignes, somme, total))
+    return ecarts
+
+
 def verifier():
     """Verifier l'etat reel et comparer avec le README."""
     total = compter_total_outils()
@@ -247,6 +290,11 @@ def verifier():
             nom = outil.split(": ")[-1]
             if nom and nom not in ligne_readme:
                 print("  [MANQUANT] %s : outil '%s' absent de la liste" % (cat, nom))
+
+    # Somme des compteurs du readme-dev (anti-recurrence bug Clio 132 vs 134)
+    print("")
+    print("=== README-DEV (tableau des categories, section 6) ===")
+    verifier_somme_comptes()
 
     print("")
     print("Utilisez --maj pour corriger le texte du README.")
@@ -314,6 +362,12 @@ def mettre_a_jour():
 
     print("")
     print("[OK] README corrige pour refleter l'etat reel.")
+    print("")
+    print("=== CONTROLE FINAL : somme des compteurs readme-dev ===")
+    if verifier_somme_comptes() == 0:
+        print("[OK] somme des compteurs = total reel (readme-dev coherent).")
+    else:
+        print("[ECART] readme-dev incoherent - corriger le tableau (section 6) avant de conclure.")
 
 
 def encoder_badge(texte):

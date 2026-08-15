@@ -1,0 +1,69 @@
+{
+ "version": "0.1.0",
+ "description": "Manifeste du marbre : zones protegees du noyau. Toute modification d une zone sans passer par proteger-modifier-marbre (autorisation utilisateur) est une violation (verrou avant + garde-fou test-057 apres).",
+ "zones": {
+  "cerberus.c0": {
+   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
+   "type": "case",
+   "agent": "cerberus",
+   "cid": "c0",
+   "raison": "Case de relecture obligatoire (comportement anti-arret de Cerberus)",
+   "empreinte": "66334c8f855c42b627f70b95aad71a0b59047cad182cb39c25048dd8995936ff",
+   "modifie_le": "2026-08-15 16:40"
+  },
+  "cerberus.c0b": {
+   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
+   "type": "case",
+   "agent": "cerberus",
+   "cid": "c0b",
+   "raison": "RELIRE OBLIGATOIRE : corrections puis fiche (anti-arret)",
+   "empreinte": "f4c2625c8e5f29229c7a7da98fee7ee8cf25b4135ca223ab2e4b8784562cbfbe",
+   "modifie_le": "2026-08-15 16:40"
+  },
+  "cerberus.c10": {
+   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
+   "type": "case",
+   "agent": "cerberus",
+   "cid": "c10",
+   "raison": "Activer l agent : le geste fondamental de la coordination",
+   "empreinte": "b60e06bbb60aee1e67b36c7772e43df762bfa60bfec80bafe1033edde53c59a9",
+   "modifie_le": "2026-08-15 17:35:58",
+   "raison_modification": "reconstruction de la case c10 apres ecrasement accidentel par git checkout (la v0.4.7 non commitee contenait l indice combos-analyse-projet declare au registre par cerberus et exige par test-035 OUTIL_HORS_CARTE)"
+  },
+  "cerberus.c14": {
+   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
+   "type": "case",
+   "agent": "cerberus",
+   "cid": "c14",
+   "raison": "Activer Janus (second controle) : la chaine de fin de mission",
+   "empreinte": "137a88eac693c58a0b11ebef130d4b1152611109e3b85c8644872f28229955df",
+   "modifie_le": "2026-08-15 16:40"
+  },
+  "cerberus.c20": {
+   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
+   "type": "case",
+   "agent": "cerberus",
+   "cid": "c20",
+   "raison": "FIN - Coordination terminee : la fin legitime du cycle Cerberus",
+   "empreinte": "00d0d0eb5ea6f36904b61c5923890d17425a442d10dd459393063895b0c6d296",
+   "modifie_le": "2026-08-15 16:40"
+  },
+  "constitution": {
+   "fichier": "AGENTS.md",
+   "type": "marqueurs",
+   "marqueur_debut": "<!-- MARBRE:DEBUT constitution -->",
+   "marqueur_fin": "<!-- MARBRE:FIN constitution -->",
+   "raison": "Constitution du cerveau-projet : Configuration Active + cycle fondamental (regles immuables du comportement de Cerberus)",
+   "empreinte": "abc67871fb36053c82fe6b3561ded3a3531f6fc92d5b9018cf0867a207a9e576",
+   "modifie_le": "2026-08-15 16:40"
+  },
+  "regles-groupes-agents": {
+   "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",
+   "type": "fichier",
+   "raison": "Regle immuable des groupes d agents et des domaines separes",
+   "empreinte": "bd985644df870860a87e71eb85bba7acbd43f5bc6af6beb3a467586deb3d6c2c",
+   "modifie_le": "2026-08-15 16:53:45",
+   "raison_modification": "demande utilisateur: etendre le modele de confiance - garde-fou Morpheus test-059 cree (reference test-037 -> test-059 dans la regle SEUL MORPHEUS)"
+  }
+ }
+}

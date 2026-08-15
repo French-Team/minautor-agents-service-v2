@@ -1,7 +1,7 @@
 #!/bin/bash
 # rechercher-fichier.sh
 # Verifier si un fichier existe
-# Version : 0.1.0-beta
+# Version : 0.2.0-beta
 # Statut : ebauche
 
 # identite:

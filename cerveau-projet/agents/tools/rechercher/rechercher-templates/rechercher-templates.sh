@@ -1,7 +1,7 @@
 #!/bin/bash
 # rechercher-templates.sh
 # Outil pour rechercher les fichiers template dans le projet
-# Version : 0.1.0-beta
+# Version : 0.2.0-beta
 # Statut : ebauche
 
 # Configuration
@@ -9,7 +9,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.1.0-beta"
+VERSION="0.2.0-beta"
 STATUT="ebauche"
 
 # Couleurs

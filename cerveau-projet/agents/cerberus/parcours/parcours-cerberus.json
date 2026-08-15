@@ -7,9 +7,9 @@
  "parcours": {
   "nom": "parcours-cerberus",
   "agent": "cerberus",
-  "version": "0.4.5",
+  "version": "0.4.7",
   "case_depart": "c0",
-  "description": "Parcours (jeu de piste) des missions de coordination de Cerberus : accueillir, activer un agent, gerer le retour (second controle + README), inventaire. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. v0.2.0 : modele compose (Pattern 7, spec-guider-parcours v0.2.13) : retour c12a question erreurs hors mission signalees (OUI c12b deviation reactiver Buffy -> c12c rejoint -> c13 / NON c13 flux principal)."
+  "description": "v0.4.6 : + indice outil c10 combos-analyse-projet (usage reel registre, garde-fou test-035)"
  },
  "cases": {
   "c0": {
@@ -236,6 +236,13 @@
     {
      "type": "regle",
      "texte": "GARDE-FOU RELECTURE : ordonner dans la RAISON d'activation : RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer."
+    },
+    {
+     "type": "outil",
+     "nom": "combos-analyse-projet",
+     "catalogue": "combos-analyse-projet",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-analyse-projet/",
+     "commande": "python3 cerveau-projet/agents/tools/combos/combos-analyse-projet/combos-analyse-projet.py"
     }
    ],
    "suivant": "c7"

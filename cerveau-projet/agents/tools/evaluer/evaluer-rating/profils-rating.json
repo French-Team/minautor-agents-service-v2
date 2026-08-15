@@ -1,0 +1,156 @@
+{
+  "version": "1.0",
+  "echelle": "note ponderee 0-100 par critere, somme des poids = 100",
+  "verdicts": {
+    "EXCELLENT": 85,
+    "BIEN": 70,
+    "MOYEN": 50,
+    "FAIBLE": 0
+  },
+  "profils": {
+    "test": {
+      "description": "Tests de la suite de non-regression (test-0XX)",
+      "criteres": [
+        {
+          "nom": "temps",
+          "poids": 35,
+          "source": "registre-tests.jsonl",
+          "mode": "plus-rapide-mieux",
+          "description": "Duree d execution du dernier run : plus rapide = meilleur score. Base = mediane des durees du run."
+        },
+        {
+          "nom": "fiabilite",
+          "poids": 30,
+          "source": "registre-tests.jsonl",
+          "mode": "ko-historique",
+          "description": "Verdicts historiques : 0 KO sur les derniers lancements = 100, chaque KO retire des points."
+        },
+        {
+          "nom": "conformite",
+          "poids": 20,
+          "source": "fichier du test",
+          "mode": "presence-marqueurs",
+          "description": "Conformite au template : protections importees (charger_protections), triplet (point_actif/chrono_etape/bilan_chrono), shebang, coding ascii, marqueurs OK/KO, RESULTAT final."
+        },
+        {
+          "nom": "tokens",
+          "poids": 10,
+          "source": "registre-tokens (hybride)",
+          "mode": "moins-tokens-mieux",
+          "description": "Consommation de tokens estimee : plus le fichier est leger, meilleur le score. Base = taille du fichier + entrees analyser-tokens si disponibles."
+        },
+        {
+          "nom": "systeme",
+          "poids": 5,
+          "source": "classeur variables-actuelles.md (profil-systeme)",
+          "mode": "environnement",
+          "description": "Coherence de l environnement (profil-systeme present et exploitable) : note de base 100, penalite si absent."
+        }
+      ]
+    },
+    "serie": {
+      "description": "Series de la suite de non-regression (A-E, mode barrieres)",
+      "criteres": [
+        {
+          "nom": "temps",
+          "poids": 50,
+          "source": "registre-tests.jsonl",
+          "mode": "plus-rapide-mieux",
+          "description": "Duree totale de la serie sur le dernier run : plus rapide = meilleur score. Base = duree totale du run / nombre de series."
+        },
+        {
+          "nom": "fiabilite",
+          "poids": 50,
+          "source": "registre-tests.jsonl",
+          "mode": "ko-historique",
+          "description": "Verdicts historiques des tests de la serie : 0 KO = 100, chaque KO retire des points."
+        }
+      ]
+    },
+    "outil": {
+      "description": "Outils du cerveau (agents/tools/*)",
+      "criteres": [
+        {
+          "nom": "conformite",
+          "poids": 40,
+          "source": "fichiers de l outil",
+          "mode": "presence-marqueurs",
+          "description": "Conformite aux modeles : shebang, coding ascii, docstring usage, options --version/--aide, normes ASCII/LF des fichiers."
+        },
+        {
+          "nom": "temps",
+          "poids": 30,
+          "source": "registre usages (duree execution)",
+          "mode": "plus-rapide-mieux",
+          "description": "Temps d execution mesure lors des usages enregistres : plus rapide = meilleur score."
+        },
+        {
+          "nom": "tokens",
+          "poids": 20,
+          "source": "taille des fichiers",
+          "mode": "moins-tokens-mieux",
+          "description": "Legere te du code source : un outil compact est plus maintenable. Base = taille totale des fichiers .py/.sh."
+        },
+        {
+          "nom": "usage",
+          "poids": 10,
+          "source": "registre-usages-outils.jsonl",
+          "mode": "utilise",
+          "description": "L outil est-il reellement utilise par les agents : presence d entrees au registre = 100, jamais utilise = note basse."
+        }
+      ]
+    },
+    "script-temp": {
+      "description": "Scripts temporaires (dossier tmp-<agent>/)",
+      "criteres": [
+        {
+          "nom": "conformite",
+          "poids": 60,
+          "source": "fichier du script",
+          "mode": "presence-marqueurs",
+          "description": "Conformite a l entonnoir : shebang, coding ascii, triplet (point_actif/chrono_etape/bilan_chrono), protections, options --no-chrono, LF pur."
+        },
+        {
+          "nom": "tokens",
+          "poids": 20,
+          "source": "taille du fichier",
+          "mode": "moins-tokens-mieux",
+          "description": "Legere te du script : plus compact, meilleur le score."
+        },
+        {
+          "nom": "nettoyage",
+          "poids": 20,
+          "source": "etat du dossier tmp-<agent>",
+          "mode": "propre",
+          "description": "Le dossier temp est-il purge en fin de mission : 0 residu = 100."
+        }
+      ]
+    },
+    "fiche": {
+      "description": "Fiches des agents (agents/<agent>/<agent>.md)",
+      "criteres": [
+        {
+          "nom": "conformite",
+          "poids": 50,
+          "source": "fichier de la fiche",
+          "mode": "presence-marqueurs",
+          "description": "Conformite au template de fiche (verifier-conformite-fiche) : sections noyau presentes, frontmatter identite, normes ASCII/LF."
+        },
+        {
+          "nom": "synchro",
+          "poids": 30,
+          "source": "fiche + parcours + AGENTS.md",
+          "mode": "synchro",
+          "description": "Coherence fiche/parcours/AGENTS.md : version du parcours, FINS REELLES, bloc session a jour."
+        },
+        {
+          "nom": "tokens",
+          "poids": 20,
+          "source": "taille du fichier",
+          "mode": "moins-tokens-mieux",
+          "description": "Fiche concise et lisible : plus legere, meilleur le score."
+        }
+      ]
+    }
+  }
+}

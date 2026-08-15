@@ -6,7 +6,7 @@ identite:
 ---
 # combos-maj-readme-massive
 
-**Version :** 0.1.3
+**Version :** 0.1.5
 **Statut :** prepare
 **Categorie :** combos
 **Chemin :** `agents/tools/combos/combos-maj-readme-massive/`

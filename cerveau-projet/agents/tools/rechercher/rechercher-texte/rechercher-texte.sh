@@ -1,7 +1,7 @@
 #!/bin/bash
 # rechercher-texte.sh
 # Rechercher un pattern dans un fichier
-# Version : 0.1.0-beta
+# Version : 0.2.0-beta
 # Statut : ebauche
 
 # identite:

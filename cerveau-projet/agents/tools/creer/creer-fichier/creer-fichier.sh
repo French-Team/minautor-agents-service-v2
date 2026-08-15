@@ -1,7 +1,7 @@
 #!/bin/bash
 # creer-fichier.sh
 # Creer un nouveau fichier avec verification
-# Version : 0.3.0
+# Version : 0.3.1
 # Statut : prepare
 
 # identite:

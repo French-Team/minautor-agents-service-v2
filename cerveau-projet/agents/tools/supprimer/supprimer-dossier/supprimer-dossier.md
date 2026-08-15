@@ -93,6 +93,7 @@ $ supprimer-dossier.sh --force dossier-temporaire
 |---|---|---|
 | 0.1.0 | 2026-08-06 | Creation initiale |
 | 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.1-py | 2026-08-15 | VERROU D HABILITATION (demande utilisateur) : --agent OBLIGATOIRE + appel a proteger-verrou-habilitation AVANT la suppression - seul hygie peut supprimer, tout autre agent est bloque avec la commande d activation. |
 | 0.2.0-py | 2026-08-07 | Version Python creee (supprimer-dossier.py), basee sur outil-template.py. Suppression recursive avec dry-run par defaut, protections chemins sensibles + racine + tools/, --force pour executer |
 
 ---

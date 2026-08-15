@@ -76,6 +76,14 @@
 | `--doc` | Afficher le .md de documentation complet et sortir | false |
 | `--confirme-doc` | Confirmer la lecture de la documentation (requis en mode reel) | false |
 
+## Mesure des tokens (PILOTE, migration progressive v0.1 - optionnel)
+
+> Volet "mesure de la fenetre de contexte" (demande utilisateur 2026-08-15).
+> Les outils peuvent rendre compte de leur consommation de tokens via
+> `analyser-tokens` (modele hybride : registres locaux + compteurs API si
+> disponibles). PILOTE optionnel : aucun outil existant n est migre tant que
+> le pilote n est pas valide par un test dedie.
+
 ## REGLE IMMUABLE : documentation obligatoire (v0.2.0)
 
 > **REGLE IMMUABLE (lecture documentation mecanisee, demande utilisateur)** :

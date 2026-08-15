@@ -25,7 +25,7 @@ Retour : 0 si succes, 1 si erreur ou si la ligne demandee n'existe pas
          (echec explicite : jamais 0 silencieux).
 
 Proprietaire : Buffy (outil partage)
-Version : 0.3.1
+Version : 0.3.2
 Statut : prepare
 """
 

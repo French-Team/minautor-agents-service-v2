@@ -1,7 +1,7 @@
 # executer-script-temporaire
 
 **Categorie** : Executer
-**Version** : 0.1.0
+**Version** : 0.1.2
 **Statut** : ebauche
 **Agent** : Cerberus
 **Date** : 2026-08-14
@@ -55,6 +55,7 @@ python3 executer-script-temporaire.py --version
 |---|---|---|
 | 1. **NORMALISER** | BOM retire, CRLF -> LF, accents corriges via dictionnaire | Rapport des corrections (ou CONFORME si 0) |
 | 2. **CONTROLER** | Compilation Python (`py_compile`) | CONTROLE OK / CONTROLE KO (blocage) |
+| 2b. **CONTROLER TRIPLET** | Presence du triplet (protections `--dry-run`, options `--isoler`/`--desactiver`, chrono `--no-chrono`/`chrono_etape`/`bilan_chrono`) | `[TRIPLET] WARNING` (regle immuable v0.2.6) |
 | 3. **EXECUTER** | Lancement du script avec ses arguments | Code retour du script |
 
 En `--dry-run`, les etapes 1-2 sont realisees mais rien n est ecrit ni execute.
@@ -101,6 +102,22 @@ $ python3 executer-script-temporaire.py tmp-buffy/ko.py
 SyntaxError: invalid syntax
 (exit 1 - rien n est execute)
 ```
+
+## Protection de sortie LF (v0.1.1)
+
+> **REGLE** : l entonnoir ne normalise pas seulement le script AVANT
+execution : apres l execution, il **re-scanne les fichiers du projet modifies
+pendant la fenetre d execution** (mtime >= depart) et les re-normalise
+(CRLF -> LF, BOM, accents).
+>
+> **Cause racine (lecon 2026-08-15)** : un append direct dans un script
+temporaire (`io.open(f, "a")` sans `newline=""`) traduit LF en CRLF sur
+Windows - l outil du projet `ajouter-contenu-fichier` est protege
+(`newline=""`) mais les scripts temp ne l etaient pas. Cette protection
+ferme la boucle : meme si un script ecrit des CRLF, le fichier cible est
+re-normalise en LF pur des la fin de l execution.
+>
+> Exemple de sortie : `[SORTIE-LF] 1 fichier(s) re-normalise(s) en LF pur`.
 
 ## Pieges
 

@@ -6,7 +6,7 @@ identite:
 ---
 # detecter-residus
 
-**Version :** 0.1.2
+**Version :** 0.1.3
 **Statut :** ebauche
 **Categorie :** detecter
 **Chemin :** `agents/tools/detecter/detecter-residus/`
@@ -63,6 +63,22 @@ Version bash equivalente : `detecter-residus.sh` (meme logique).
 | Type | Description | Exemples |
 |---|---|---|
 | `TEMP` | Scripts/dossiers temporaires | `tmp-*`, `.tmp-*.py`, `.zz-*` |
+
+---
+
+## Derrogation ciblee : le fichier .tmpignore (v0.1.3)
+
+Depuis v0.1.3 (2026-08-15, demande utilisateur), un fichier
+`cerveau-projet/agents/traces/.tmpignore` peut lister des noms EXACTS de
+dossiers temporaires autorises a rester a la racine sans etre signales `TEMP`.
+
+- Format : un nom de dossier exact par ligne, `#` pour les commentaires, ASCII strict, LF
+- **Derrogation CIBLEE** : seul un dossier dont le nom est liste est ignore ;
+  tout autre dossier temporaire reste un residu `TEMP` (la protection
+  anti-residus reste forte)
+- A usage de la mission courante uniquement : en fin de mission, l'agent
+  supprime son dossier `tmp-<agent>` et retire son nom du fichier si la
+  derrogation n'est plus necessaire
 | `VERSION` | Fichiers de version semver a la racine | `0.2.1`, `v0.2.6` |
 | `SAUVEGARDE` | Fichiers de sauvegarde | `*.bak`, `*~`, `*.orig` |
 | `RAPPORT_EGARE` | Rapports/audits/controles egare | `rapport-*.md` a la racine |

@@ -1,7 +1,7 @@
 #!/bin/bash
 # creer-remplir-todo.sh
 # Remplit une section d'un todo sans ouvrir le fichier
-# Version : 0.1.0-beta
+# Version : 0.2.0-beta
 # Statut : ebauche
 
 # Configuration

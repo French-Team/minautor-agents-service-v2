@@ -1,80 +1,122 @@
-{"date":"2026-08-15 00:52:12","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"janus controle croise rapport details KO v0.3.2"}
-{"date":"2026-08-15 00:52:12","agent":"janus","outil":"enregistrer-usage-outil","mode":"direct","commande":"","contexte":"janus declaration usages fin mission rapport details KO"}
-{"date":"2026-08-15 00:45:49","agent":"morpheus","outil":"tester-protection-*","mode":"direct","commande":"","contexte":"morpheus ameliore le rapport de non-regression (details KO, lanceur v0.3.2) + adapte 6 tests"}
-{"date":"2026-08-15 00:39:35","agent":"vulcain","outil":"generateurs-amelioration","mode":"direct","commande":"","contexte":"vulcain cree le theme ameliorer-test (ligne amelioration, themes 2.3.0)"}
-{"date":"2026-08-15 00:32:24","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"janus lance la non-regression finale (55 OK / 0 KO, extension fantomes test-055)"}
-{"date":"2026-08-15 00:31:08","agent":"morpheus","outil":"tester-protection-*","mode":"direct","commande":"","contexte":"morpheus etend test-055 a la detection des indices fantomes (12 points)"}
-{"date":"2026-08-15 00:28:35","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"janus lance la non-regression finale (55 OK / 0 KO)"}
-{"date":"2026-08-15 00:27:16","agent":"morpheus","outil":"tester-protection-*","mode":"direct","commande":"","contexte":"morpheus adapte test-016 (buffy 0.4.4) et corrige l indice fantome c10c"}
-{"date":"2026-08-15 00:25:37","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"janus controle croise : valider-cartes 13/13 + test-055 9/9"}
-{"date":"2026-08-15 00:25:37","agent":"janus","outil":"evaluer-processus","mode":"direct","commande":"","contexte":"janus controle croise : evaluer-processus global 0 probleme"}
-{"date":"2026-08-15 00:25:37","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"janus lance la non-regression (54 OK / 1 KO, test-016 KO attendu)"}
-{"date":"2026-08-15 00:23:05","agent":"buffy","outil":"editer-parcours","mode":"direct","commande":"","contexte":"buffy corrige les 6 ecarts regle/indice outil (indices outils + bumps)"}
-{"date":"2026-08-15 00:23:04","agent":"buffy","outil":"editer-fichier","mode":"direct","commande":"","contexte":"buffy met a jour les 4 fiches (Pattern 14, versions parcours)"}
-{"date":"2026-08-15 00:23:04","agent":"buffy","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"buffy verifie les 4 parcours CONFORMES + --tous 13/13"}
-{"date":"2026-08-15 00:18:29","agent":"morpheus","outil":"tester-protection-*","mode":"direct","commande":"","contexte":"morpheus cree et execute le garde-fou test-055 coherence regle/indice outil"}
-{"date":"2026-08-15 00:10:53","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"janus verification ciblee synchro parcours vulcain 0.4.8 (test-026/028/035)"}
-{"date":"2026-08-15 00:07:25","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"janus controle croise : valider-cartes vulcain CONFORME (0.4.8)"}
-{"date":"2026-08-15 00:07:25","agent":"janus","outil":"evaluer-processus","mode":"direct","commande":"","contexte":"janus controle croise : evaluer-processus vulcain 0 probleme + scan global"}
-{"date":"2026-08-15 00:07:25","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"janus lance la non-regression complete apres correction carte vulcain"}
-{"date":"2026-08-15 00:05:31","agent":"buffy","outil":"editer-fichier","mode":"direct","commande":"","contexte":"buffy met a jour fiche vulcain (Pattern 14, version parcours 0.4.8)"}
-{"date":"2026-08-15 00:05:31","agent":"buffy","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"buffy verifie parcours vulcain CONFORME + --tous 13/13"}
-{"date": "2026-08-15 00:00:58", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "non-regression complete 54 OK / 0 KO (seul habilite)"}
-{"date": "2026-08-15 00:00:58", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "controle croise garde-fou test-054"}
-{"date": "2026-08-15 00:00:58", "agent": "janus", "outil": "evaluer-processus", "mode": "direct", "commande": "", "contexte": "scan global 0 probleme apres correction registre"}
-{"date": "2026-08-15 00:00:58", "agent": "janus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "lecture template, tests, registre"}
-{"date": "2026-08-14 23:58:00", "agent": "morpheus", "outil": "tester-protection-*", "mode": "direct", "commande": "", "contexte": "creation garde-fou test-054 (9/9) + preuve negative"}
-{"date": "2026-08-14 23:58:00", "agent": "morpheus", "outil": "tester-protection-*", "mode": "direct", "commande": "", "contexte": "serie e reverdie 25/25 + integration test-054"}
-{"date": "2026-08-14 23:58:00", "agent": "morpheus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "lecture template, protocole, lanceur, registre"}
-{"date": "2026-08-14 23:50:56", "agent": "vulcain", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "lecture template, protocole, index-tools"}
-{"date": "2026-08-14 23:50:56", "agent": "vulcain", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "declaration des usages de la mission"}
-{"date": "2026-08-14 23:29:12", "agent": "janus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "lecture generateur, protocole, tests, registre"}
-{"date": "2026-08-14 23:29:12", "agent": "janus", "outil": "generateurs-outil-temporaire", "mode": "direct", "commande": "", "contexte": "preuve reelle independante du bloc DECLARATION"}
-{"date": "2026-08-14 23:29:11", "agent": "janus", "outil": "evaluer-processus", "mode": "direct", "commande": "", "contexte": "controle croise declaration usages : scan global 0 probleme"}
-{"date": "2026-08-14 23:29:11", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "non-regression complete 53 OK / 0 KO (seul habilite)"}
-{"date": "2026-08-14 23:18:02", "agent": "morpheus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "lecture test-050/051, generateur, protocole"}
-{"date": "2026-08-14 23:18:01", "agent": "morpheus", "outil": "tester-protection-*", "mode": "direct", "commande": "", "contexte": "adaptation test-050 v0.2.1 + garde-fou declaration usages"}
-{"date": "2026-08-14 23:18:01", "agent": "morpheus", "outil": "generateurs-outil-temporaire", "mode": "direct", "commande": "", "contexte": "verification squelette v0.2.1 + preuves negatives"}
-{"date": "2026-08-14 23:18:01", "agent": "morpheus", "outil": "tester-protection-*", "mode": "direct", "commande": "", "contexte": "reverdir test-024 apres suppression des dossiers tmp precedents"}
-{"date": "2026-08-14 23:15:10", "agent": "vulcain", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "preuve reelle : declaration automatique du script genere"}
-{"date": "2026-08-14 23:15:10", "agent": "vulcain", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "lecture generateur, doc, protocole, test-050"}
+{"date":"2026-08-15 19:13:42","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:13:32","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:13:24","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:13:22","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:13:19","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:13:18","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:13:18","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:13:17","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:13:16","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:13:16","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:12:35","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:12:23","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:12:22","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:12:21","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:12:20","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:12:04","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:11:42","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:11:30","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:11:30","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:11:29","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:11:28","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:11:14","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:52","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:42","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:33","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:31","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:29","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:28","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:27","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:27","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:26","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:10:26","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:09:47","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:09:35","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:09:34","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:09:34","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:09:33","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:09:18","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:09:05","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:55","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:46","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:44","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:42","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:41","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:40","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:40","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:39","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:39","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:08:00","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:48","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:47","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:47","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:46","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:31","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:17","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:05","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:04","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:03","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:07:03","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:06:48","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:56","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:46","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:37","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:35","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:33","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:32","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:31","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:31","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:30","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 19:00:29","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:59:51","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:59:39","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:59:38","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:59:37","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:59:37","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:59:22","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:59:06","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:56","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:47","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:45","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:43","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:42","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:41","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:41","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:40","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:39","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:58:01","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:57:49","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:57:48","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:57:47","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:57:46","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:57:32","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:34","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:25","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:23","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:21","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:20","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:19","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:19","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:18","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:17","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:16","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:09","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:56:00","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:55:58","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:55:56","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:55:55","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:55:54","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:55:53","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:55:53","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:55:52","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:55:43","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:54:55","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:54:43","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 18:54:43","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-15 01:56:58","agent":"janus","outil":"tmp-janus/fin-bumper.py","mode":"script-temporaire","commande":"","contexte":"fin de controle bumper (Janus)"}
+{"date":"2026-08-15 01:53:22","agent":"vulcain","outil":"tmp-vulcain/fin-bumper.py","mode":"script-temporaire","commande":"","contexte":"fin de mission bumper (Vulcain)"}
+{"date":"2026-08-15 01:46:28","agent":"cerberus","outil":"tmp-cerberus/activer-vulcain-bumper.py","mode":"script-temporaire","commande":"","contexte":"activation Vulcain mission bumper (script temporaire Cerberus)"}
 {"date": "2026-08-14 23:13:05", "agent": "vulcain", "outil": "tmp-test-declaration.py", "mode": "script-temporaire", "commande": "", "contexte": "outil temporaire de mission"}
-{"date": "2026-08-14 23:08:16", "agent": "cerberus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "diagnostic registre test manuel"}
-{"date": "2026-08-14 22:17:51", "agent": "vulcain", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "vulcain etend le tri decroissant au registre-tests (lanceur v0.3.1)"}
-{"date": "2026-08-14 22:15:57", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "janus non-regression complete 52/52 apres tri registre"}
-{"date": "2026-08-14 22:15:57", "agent": "janus", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "janus documente lecon tri registre + aligne spec v0.3.0"}
-{"date": "2026-08-14 22:11:56", "agent": "morpheus", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "morpheus adapte test-024 (v0.3.0) + point 14 tri registre decroissant"}
-{"date": "2026-08-14 22:10:37", "agent": "vulcain", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "vulcain trie le registre-usages-outils par date/heure decroissant (v0.3.0)"}
-{"date": "2026-08-14 22:04:38", "agent": "janus", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "janus documente lecon registre-tests"}
-{"date": "2026-08-14 22:04:38", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "janus non-regression complete 52/52 avec --agent janus (traces registre-tests)"}
-{"date": "2026-08-14 22:00:02", "agent": "morpheus", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "morpheus documente lecon registre-tests + garde-fou test-051"}
-{"date": "2026-08-14 21:47:46", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "janus non-regression complete 51/51 (seul habilite)"}
-{"date": "2026-08-14 21:47:46", "agent": "janus", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "janus controle croise carte cerberus v0.4.5 (garde-fou anti-derive)"}
-{"date": "2026-08-14 21:45:46", "agent": "morpheus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "morpheus adapte test-013 : version cerberus 0.4.4 -> 0.4.5 (garde-fou anti-derive)"}
-{"date": "2026-08-14 21:44:17", "agent": "buffy", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "buffy valide la carte cerberus v0.4.5 (garde-fou anti-derive)"}
-{"date": "2026-08-14 21:44:17", "agent": "buffy", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "buffy ajoute le garde-fou anti-derive (indice c1) dans parcours-cerberus v0.4.5"}
-{"date": "2026-08-14 21:21:22", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus renforce test-044 point 12b + preuve negative"}
-{"date": "2026-08-14 21:21:22", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus documente la Regle 10 (string.Template) dans protocole-outils"}
-{"date": "2026-08-14 21:15:42", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus valide le refactor (test-050, test-024, non-regression 51/51)"}
-{"date": "2026-08-14 21:15:42", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus auto-ameliore generateurs-outil-temporaire : string.Template remplace le formatage % (plus aucun doublement)"}
-{"date": "2026-08-14 21:12:28", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus cree le garde-fou test-050 (triplet outils temporaires) + preuve negative"}
-{"date": "2026-08-14 21:12:28", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus met a jour protocole-creation-scripts-temporaires v0.2.6 (REGLE TRIPLET) + doc/spec generateur"}
-{"date": "2026-08-14 21:12:27", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus enrichit generateurs-outil-temporaire v0.2.0 : template avec triplet (protections + on/off + chrono)"}
-{"date": "2026-08-14 21:05:21", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus renforce test-045 point 8e : triple synchro fiche/protocole/regle verifiee + preuve negative"}
-{"date": "2026-08-14 21:05:21", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus ajoute regles-groupes-agents + protocole-nettoyage dans la fiche hygie (triple synchro)"}
-{"date": "2026-08-14 21:02:51", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus renforce test-045 point 8e avec le lien croise + preuve negative"}
-{"date": "2026-08-14 21:02:51", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus ajoute la reference regles-groupes-agents.md dans protocole-nettoyage (lien croise fiche/protocole/regle)"}
-{"date": "2026-08-14 21:00:31", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus renforce test-045 avec le point 8f (toutes les exclusivites verifiees) + preuve negative"}
-{"date": "2026-08-14 21:00:31", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus documente SEUL MORPHEUS (tests) + SEUL CLIO (README) au niveau regle immuable dans regles-groupes-agents.md"}
-{"date": "2026-08-14 20:56:46", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus renforce test-045 avec le point 8e (regle immuable verifiee) + preuve negative"}
-{"date": "2026-08-14 20:56:46", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus ajoute la section regles de gouvernance exclusives dans regles-groupes-agents.md (SEUL HYGIE + SEUL JANUS)"}
-{"date": "2026-08-14 20:54:21", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus reference protocole-nettoyage dans index-regles + renforce test-045 point 8d"}
-{"date": "2026-08-14 20:54:21", "agent": "cerberus", "outil": "creer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus cree le protocole-nettoyage (chaine snapshot -> detection -> suppression Hygie)"}
-{"date": "2026-08-14 20:49:04", "agent": "cerberus", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "cerberus declare les usages de la mission entonnoir"}
-{"date": "2026-08-14 20:49:04", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus adapte index-tools, catalogue, protocole, fiches, lanceur"}
-{"date": "2026-08-14 20:49:04", "agent": "cerberus", "outil": "creer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus cree l outil entonnoir executer-script-temporaire (py/sh/md)"}
-{"date": "2026-08-14 20:35:55", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus remplace la purge du registre par rotation cumul 100 et adapte les garde-fous (test-037 point 2b, test-044)"}
-{"date": "2026-08-14 20:21:34", "agent": "cerberus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "cerberus ajoute preuve negative systematique au protocole-tests v0.3.2"}
 {"date": "2026-08-13 22:43:02", "agent": "buffy", "outil": "tmp-buffy/ajouter-workspace-gitignore.py", "mode": "script-temporaire", "commande": "", "contexte": "ajout workspace/ au .gitignore + verifs git check-ignore", "horodatage": "2026-08-14 00:00:00"}
 {"date": "2026-08-13 22:40:28", "agent": "morpheus", "outil": "tmp-morpheus/corriger-spec-053.py", "mode": "script-temporaire", "commande": "", "contexte": "correction spec activer-agent-principal 0.5.3 (divergence)", "horodatage": "2026-08-14 00:00:00"}
 {"date": "2026-08-13 22:40:28", "agent": "morpheus", "outil": "tmp-morpheus/enregistrer-test046.py", "mode": "script-temporaire", "commande": "", "contexte": "enregistrement test-046 dans le lanceur", "horodatage": "2026-08-14 00:00:00"}
@@ -87,29 +129,3 @@
 {"date": "2026-08-13 22:28:17", "agent": "hygie", "outil": "tmp-hygie/c0b-relire.py", "mode": "script-temporaire", "commande": "", "contexte": "relecture corrections + fiche (c0b)", "horodatage": "2026-08-14 00:00:00"}
 {"date": "2026-08-13 22:25:52", "agent": "vulcain", "outil": "tmp-vulcain/exec-preuve-hygie.py", "mode": "script-temporaire", "commande": "", "contexte": "preuves reelles activation hygie (script temporaire mission Vulcain)", "horodatage": "2026-08-14 00:00:00"}
 {"date": "2026-08-13 22:25:52", "agent": "vulcain", "outil": "tmp-vulcain/corriger-agent-hygie.py", "mode": "script-temporaire", "commande": "", "contexte": "correction bug agent inconnu hygie (script temporaire mission Vulcain)", "horodatage": "2026-08-14 00:00:00"}
-{"date": "2026-08-13 21:00:03", "agent": "themis", "outil": "verifier-cartes-decision", "mode": "direct", "commande": "", "contexte": "themis audit test-042 combos variables quotees"}
-{"date": "2026-08-13 20:59:30", "agent": "morpheus", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "morpheus corrige 8 commandes non quotees des combos"}
-{"date": "2026-08-13 20:59:30", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "morpheus enregistre test-042 au lanceur"}
-{"date": "2026-08-13 20:59:30", "agent": "morpheus", "outil": "tester-creer-test", "mode": "direct", "commande": "", "contexte": "morpheus cree test-042 combos variables quotees"}
-{"date": "2026-08-13 20:54:04", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "janus lance non-regression complete 41/41 (J5)"}
-{"date": "2026-08-13 20:54:04", "agent": "janus", "outil": "verifier-cartes-decision", "mode": "direct", "commande": "", "contexte": "janus controle final regle anti-echappement combos"}
-{"date": "2026-08-13 20:52:47", "agent": "themis", "outil": "verifier-cartes-decision", "mode": "direct", "commande": "", "contexte": "themis audit regle anti-echappement combos v0.3.3/v0.2.1"}
-{"date": "2026-08-13 20:52:20", "agent": "buffy", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "buffy etend regle anti-echappement aux combos (combos-moteur.md v0.3.3 + protocole v0.2.1)"}
-{"date": "2026-08-13 20:47:31", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "janus lance non-regression complete 41/41 (J5)"}
-{"date": "2026-08-13 20:47:31", "agent": "janus", "outil": "verifier-cartes-decision", "mode": "direct", "commande": "", "contexte": "janus controle final regle anti-echappement JSON"}
-{"date": "2026-08-13 20:46:13", "agent": "themis", "outil": "verifier-cartes-decision", "mode": "direct", "commande": "", "contexte": "themis audit regle anti-echappement JSON protocole v0.2.0"}
-{"date": "2026-08-13 20:45:47", "agent": "buffy", "outil": "editer-fichier", "mode": "direct", "commande": "", "contexte": "buffy enrichit protocole-creation-scripts-temporaires section spawn_agents anti-echappement JSON"}
-{"date": "2026-08-13 20:32:59", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "janus lance non-regression complete 41/41 (J5)"}
-{"date": "2026-08-13 20:32:59", "agent": "janus", "outil": "verifier-cartes-decision", "mode": "direct", "commande": "", "contexte": "janus controle final test-041 garde-fou outils critiques"}
-{"date": "2026-08-13 20:31:09", "agent": "themis", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "themis audit reparation lanceur dedouble"}
-{"date": "2026-08-13 20:31:09", "agent": "themis", "outil": "verifier-cartes-decision", "mode": "direct", "commande": "", "contexte": "themis audit test-041 garde-fou outils critiques"}
-{"date": "2026-08-13 20:30:26", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "morpheus enregistre test-041 au lanceur + reparation dedoublement"}
-{"date": "2026-08-13 20:30:26", "agent": "morpheus", "outil": "tester-creer-test", "mode": "direct", "commande": "", "contexte": "morpheus cree test-041 garde-fou outils critiques anti-residus"}
-{"date": "2026-08-13 20:23:06", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "non-regression complete apres garde-fou etendu 3 outils (janus)"}
-{"date": "2026-08-13 20:21:20", "agent": "themis", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "audit garde-fou etendu 3 outils (themis)"}
-{"date": "2026-08-13 20:20:15", "agent": "morpheus", "outil": "detecter-divergences-version", "mode": "direct", "commande": "", "contexte": "verif spec/py guider 0.5.1 (morpheus)"}
-{"date": "2026-08-13 20:20:15", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "tests cibles 012/024/028 apres bumps (morpheus)"}
-{"date": "2026-08-13 20:17:51", "agent": "buffy", "outil": "editer-parcours", "mode": "direct", "commande": "", "contexte": "garde-fou anti-residus v0.1.1 (buffy)"}
-{"date": "2026-08-13 20:17:51", "agent": "buffy", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "garde-fou anti-residus v0.4.1 (buffy)"}
-{"date": "2026-08-13 20:17:51", "agent": "buffy", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "garde-fou anti-residus v0.5.1 (buffy)"}
-{"date": "2026-08-13 20:11:17", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "non-regression complete apres garde-fou anti-residus v0.5.2 (janus)"}

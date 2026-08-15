@@ -1,7 +1,7 @@
 #!/bin/bash
 # editer-fichier.sh
 # Remplacer une chaine par une autre dans un fichier
-# Version : 0.3.0
+# Version : 0.4.1
 # Statut : prepare
 
 # identite:

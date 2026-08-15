@@ -6,7 +6,7 @@ identite:
 ---
 # detecter-fautes-orthographe
 
-**Version :** 0.1.0
+**Version :** 0.1.1
 **Statut :** ebauche
 **Categorie :** detecter
 **Chemin :** `agents/tools/detecter/detecter-fautes-orthographe/`

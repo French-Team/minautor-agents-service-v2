@@ -16,6 +16,19 @@ etaient des wrappers autonomes (sous-processus `shell=True`), NON IMPORTABLES
 depuis un test .py. Aucune protection STOP (fail-fast) n existait : quand un
 point echouait, le test continuait betement les points suivants.
 
+## Liste centrale (deploiement dynamique, v0.2.0)
+
+Les protections vivent dans la **liste centrale**
+[liste-protections.md](liste-protections.md) et sont deployees
+AUTOMATIQUEMENT dans chaque test qui importe ce module (template-test.md
+comme constructeur, demande utilisateur 2026-08-15) : ajouter une
+protection dans `LISTE_PROTECTIONS` (tester-protections.py) la deploie
+sur TOUS les tests sans toucher a leur code.
+
+```bash
+python3 tester-protections.py --liste   # affiche la liste vivante
+```
+
 Ce module fusionne les protections en une **API unique importable** :
 
 | Protection | Detection | Action |
