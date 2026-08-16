@@ -843,3 +843,25 @@ non-regression 51 OK / 0 KO (47.7s, +2%), normes 0/0, 0 residu.
 **Recommandation** : traiter les 34 .sh autonomes a risque (conversion en
 wrapper ou deprecation) dans une mission dediee - le catalogue ne les
 utilisant pas, la priorite est basse mais le risque de derive est reel.
+## [LECON] 2026-08-16 -- CHRONO EN PREMIERE LIGNE DE L ENTONNOIR (Cerberus)
+
+**Contexte** : demande utilisateur - le chrono des scripts temporaires doit
+etre ACTIVE et affiche TOUT EN HAUT de la reponse pour etre vu a chaque
+execution. Verification de fonctionnalite.
+
+**Etat reel** : executer-script-temporaire (entonnoir) affichait deja le
+chrono PAR DEFAUT en premier dans le code, MAIS avec une sortie piped
+(lancement depuis mes outils), le buffer du sous-processus passait DEVANT
+et le chrono disparaissait en bas de la reponse.
+
+**Correction** (v0.1.2 -> 0.1.3) : flush immediat (flush=True) apres
+l impression du chrono - il est maintenant la PREMIERE ligne visible,
+meme en sortie piped. --no-chrono le coupe toujours.
+
+**Preuve reelle** : sortie piped -> premiere ligne = '[CHRONO] 0.00s
+(entonnoir)' avant le corps du script.
+
+**Lecon** : 'affiche par defaut en haut' ne suffit pas : sans flush
+immediat, l ordre reel des lignes depend du buffering de stdout quand la
+sortie est piped. Tout outil qui veut garantir l ordre de ses messages
+doit flush() avant de lancer un sous-processus.

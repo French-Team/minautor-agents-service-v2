@@ -478,6 +478,26 @@
      "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/vulcain/corrections.md <lecon>",
      "nom": "ajouter-contenu-fichier",
      "type": "outil"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-usage-outils-externes",
+     "catalogue": "detecter-usage-outils-externes",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <cible> --recursive"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-surcharge-fichier",
+     "catalogue": "detecter-surcharge-fichier",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/detecter-surcharge-fichier.py cerveau-projet/agents --seuil 500 --recursive"
     }
    ],
    "message": "J ecris MA lecon dans corrections.md : ## [LECON] <date> -- <titre> (Vulcain) avec **Contexte** (mission, origine), **Actions** (ce que j ai fait) et **Verdict** (VALIDE / A REVOIR / CONFORME / KO). Le protocole-fin-mission impose lecon + verdict AVANT de transmettre : sans cette documentation, le garde-fou test-048 fera KO et le bilan ne sera pas accepte.",
@@ -1115,6 +1135,12 @@
      "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/vulcain/corrections.md <lecon>",
      "nom": "ajouter-contenu-fichier",
      "type": "outil"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ],
    "message": "J ecris MA lecon dans corrections.md : ## [LECON] <date> -- <titre> (Vulcain) avec **Contexte** (mission, origine), **Actions** (ce que j ai fait) et **Verdict** (VALIDE / A REVOIR / CONFORME / KO). Le protocole-fin-mission impose lecon + verdict AVANT de transmettre : sans cette documentation, le garde-fou test-048 fera KO et le bilan ne sera pas accepte.",
@@ -1167,6 +1193,6 @@
   "case_depart": "c0",
   "description": "Carte de decision de Vulcain - constructeur d outils. v0.4.16 : c13 + combos-audit-general, c18c + executer-script-temporaire (mission garantie LF).",
   "nom": "parcours-vulcain",
-  "version": "0.4.18"
+  "version": "0.4.20"
  }
 }

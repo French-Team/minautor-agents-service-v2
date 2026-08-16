@@ -701,6 +701,19 @@
     {
      "ref": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md",
      "type": "ref"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-usage-outils-externes",
+     "catalogue": "detecter-usage-outils-externes",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <cible> --recursive"
     }
    ],
    "suivant": "c9f",
@@ -952,6 +965,6 @@
   "case_depart": "c0",
   "description": "v0.4.8 : + indice outil c4 tester-protections (usage reel controle, garde-fou test-035)",
   "nom": "parcours-janus",
-  "version": "0.4.9"
+  "version": "0.4.11"
  }
 }

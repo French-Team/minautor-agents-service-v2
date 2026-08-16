@@ -52,7 +52,7 @@
 #   python3 mettre-a-jour-versions.py --catalogue --nouvelle 0.3.0
 #   python3 mettre-a-jour-versions.py --protocole <chemin> --mineure
 #
-# Version : 0.1.1
+# Version : 0.1.3
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -70,7 +70,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.1.1"
+VERSION = "0.1.3"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -106,7 +106,9 @@ _RE_SUFFIXE = r"(?:-[A-Za-z0-9.]+)?"
 _RE_EN_TETE = re.compile(r"(?m)^\s*#?\s*Version : (\d+\.\d+\.\d+)" + _RE_SUFFIXE)
 _RE_CONSTANTE = re.compile(r"VERSION = \"(\d+\.\d+\.\d+)" + _RE_SUFFIXE + r"\"")
 _RE_VARIABLE = re.compile(r"VERSION=\"(\d+\.\d+\.\d+)" + _RE_SUFFIXE + r"\"")
-_RE_MD_VERSION = re.compile(r"(?m)^\s*\*\*Version :\*\* (\d+\.\d+\.\d+)")
+# Round bumper (2026-08-16) : 24 docs utilisent '**Version** :' (espace
+# avant le deux-points) vs 92 '**Version :**' - le motif couvre les 2 formats.
+_RE_MD_VERSION = re.compile(r"(?m)^\s*\*\*Version(?:\*\* :|\*? :\*\*|\*\*:| :\*\*)\s*(\d+\.\d+\.\d+)")
 _RE_JSON_VERSION = re.compile(r"\"version\"\s*:\s*\"(\d+\.\d+\.\d+)\"")
 _RE_FICHE_PARCOURS = re.compile(r"PARCOURS \(v(\d+\.\d+\.\d+)\)")
 _RE_PROTOCOLE_FRONT = re.compile(r"(?m)^\s*version:\s*\"(\d+\.\d+\.\d+)\"")
@@ -271,6 +273,48 @@ def version_reference_outil(versions_par_fichier, fichiers):
         for ver in versions_par_fichier.get(chemin, {}).values():
             toutes.add(ver)
     return max(toutes) if toutes else None
+
+
+def detecter_compagnons(racine, nom_outil, ancienne, fichiers_deja_traites):
+    """Detecte les FICHIERS COMPAGNONS : fichiers du projet qui referencent
+    le nom de l outil bumpe ET l ancienne version (avec ou sans prefixe v).
+
+    Round bumper (2026-08-16, demande utilisateur) : quand on bump un outil,
+    les tests/docs/corrections qui pincent son ancienne version doivent etre
+    mis a jour aussi - sinon KO en cascade a la non-regression (8 tests
+    casses a chaque bump du lanceur). Le bumper les SIGNALE (ne les modifie
+    pas : chaque type a son format d adaptation) avec verdict KO.
+
+    Retourne : liste triee de (chemin_relatif, nb_occurrences)."""
+    base = os.path.join(racine, "cerveau-projet")
+    if not os.path.isdir(base):
+        return []
+    deja = set(os.path.abspath(c) for c in fichiers_deja_traites)
+    cibles_v = [ancienne, "v" + ancienne, "V" + ancienne]
+    compagnons = []
+    for action, _sous, fichiers in os.walk(base):
+        if "__pycache__" in action or ".git" in action:
+            continue
+        for nom in fichiers:
+            chemin = os.path.join(action, nom)
+            # EXCLUSION des corrections.md (lecons des agents) : ce sont des
+            # MENTIONS HISTORIQUES (lecons passees qui documentent les versions
+            # d epoque), jamais des pins a adapter - exclues pour ne pas
+            # polluer la liste des compagnons (faux positifs, round 0.5.2).
+            if nom == "corrections.md":
+                continue
+            if os.path.abspath(chemin) in deja:
+                continue
+            try:
+                texte = lire_fichier(chemin)
+            except Exception:
+                continue
+            if nom_outil not in texte:
+                continue
+            nb = sum(texte.count(c) for c in cibles_v)
+            if nb:
+                compagnons.append((rel(chemin, racine), nb))
+    return sorted(compagnons)
 
 
 def traiter_tous(args, racine):
@@ -642,16 +686,56 @@ def main():
                            % ecarts, "rouge"))
             sys.exit(1)
 
+    # --- 4b. FICHIERS COMPAGNONS (round bumper, demande utilisateur 2026-08-16) :
+    # apres un bump, signaler les fichiers du projet qui referencent encore
+    # l ANCIENNE version de l outil (tests, docs, corrections) pour ne plus
+    # oublier de les adapter. Verdict KO si des compagnons existent.
+    nom_outil = ""
+    if args.parcours:
+        nom_outil = args.parcours
+    elif args.catalogue:
+        nom_outil = "catalogue-commandes"
+    elif args.version_readme:
+        nom_outil = "version-readme"
+    elif args.protocole:
+        nom_outil = os.path.basename(os.path.dirname(os.path.abspath(args.protocole)))
+    elif fichiers:
+        premier = os.path.abspath(fichiers[0])
+        if os.path.isdir(premier):
+            nom_outil = os.path.basename(premier)
+        elif args.cible and os.path.isdir(os.path.abspath(args.cible)):
+            nom_outil = os.path.basename(os.path.abspath(args.cible))
+        else:
+            nom_outil = os.path.basename(premier).rsplit(".", 1)[0]
+
+    compagnons = []
+    if nom_outil:
+        compagnons = detecter_compagnons(racine, nom_outil, ancienne, fichiers)
+        if compagnons:
+            print(_couleur("\n=== FICHIERS COMPAGNONS A METTRE A JOUR (ancienne version %s) ==="
+                           % ancienne, "jaune"))
+            print(_couleur("  %d fichier(s) referencent encore '%s' (nom de l outil + ancienne version) :"
+                           % (len(compagnons), nom_outil), "jaune"))
+            for rp, nb in compagnons:
+                print("     - %s (%d occurrence(s))" % (rp, nb))
+            print(_couleur("  -> Les adapter (tests : Morpheus ; docs/fiches : agent concerne) "
+                           "avant de relancer la non-regression.", "jaune"))
+            print(_couleur("  RAPPEL OBLIGATOIRE : lancer ce bumper sur CHAQUE outil bumpe AVANT "
+                           "la non-regression pour adapter les compagnons (sinon KO en "
+                           "cascade a la suite - lecon 2026-08-16, 5 KO).", "rouge"))
+
     # --- 5. verdict global
     nb_ko = len(incoherents)
-    if nb_ko == 0:
+    if nb_ko == 0 and not compagnons:
         verdict = "OK"
         couleur = "vert"
     else:
         verdict = "KO"
         couleur = "rouge"
-    print(_couleur("  Verdict : %s -- %d fichier(s) mis a jour, %d remplacement(s), %d fichier(s) sans version"
-                   % (verdict, len(fichiers_modifies), total_remplacements, nb_ko), couleur))
+    print(_couleur("  Verdict : %s -- %d fichier(s) mis a jour, %d remplacement(s), %d fichier(s) sans version%s"
+                   % (verdict, len(fichiers_modifies), total_remplacements, nb_ko,
+                      ", %d compagnon(s) a adapter" % len(compagnons) if compagnons else ""),
+                   couleur))
 
     if args.rapport:
         with io.open(args.rapport, "w", encoding="utf-8", newline="\n") as fh:
@@ -668,6 +752,10 @@ def main():
                 fh.write("\n## Fichiers sans version\n\n")
                 for rp in incoherents:
                     fh.write("- %s\n" % rp)
+            if compagnons:
+                fh.write("\n## Fichiers compagnons a mettre a jour\n\n")
+                for rp, nb in compagnons:
+                    fh.write("- %s (%d occurrence(s))\n" % (rp, nb))
         print(_couleur("[OK] Rapport ecrit : %s" % args.rapport, "vert"))
 
     return 1 if nb_ko else 0

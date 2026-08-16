@@ -24,9 +24,9 @@ identite:
 | **Langages** | Bash, Python, Markdown |
 | **Point d'entree** | `demarrer.md` (a lire en premier) |
 | **Fichiers racine** | `AGENTS.md` (sessions), `README.md` (public), `cerveau-projet/` (le cerveau) |
-| **Agents** | 13 agents + classeur-variables (voir section 4) |
-| **Outils** | 134 outils dans 34 categories (voir section 6) |
-| **Cartes de decision** | 13 parcours JSON (voir section 5) |
+| **Agents** | 15 agents + classeur-variables (voir section 4) |
+| **Outils** | 144 outils dans 36 categories (voir section 6) |
+| **Cartes de decision** | 15 parcours JSON (voir section 5) |
 
 ---
 
@@ -146,6 +146,8 @@ Source : `AGENTS.md` (liste des agents) + chaque fiche `[agent].md`.
 | **Themis** | Evaluatrice croisee - maillon automatique de la chaine | Audit, evaluation, coherence |
 | **Hygie** | Agent de nettoyage du workspace | Nettoyage : snapshot, detection, suppression tracee |
 | **Hermes** | Agent de la langue - orthographe, vocabulaire, fautes | Correction orthographique, veille vocabulaire |
+| **Gardien** | Gardien du marbre - securite du code (zones protegees) | Modification de zone marbre (porte du marbre) |
+| **Argus** | Detecteur de contradictions - cases, regles, protocoles, historique git | Doute sur la coherence des regles / protocoles / cases |
 
 > **Note** : le dossier `cerveau-projet/agents/classeur-variables/` est un
 > agent-stockage (variables partagees), pas un agent d'action.
@@ -213,13 +215,13 @@ Chaque case porte les indices exacts a appliquer :
 Boite a outils partagee, organisee par **action** (chaque dossier = ce que
 fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 
-**134 outils dans 34 categories** :
+**144 outils dans 36 categories** :
 
 | Categorie | Nb | Exemples |
 |---|---|---|
 | Activer | 1 | activer-agent-principal |
 | Ajouter | 1 | ajouter-contenu-fichier |
-| Analyser | 2 | analyser-dependances, analyser-structure |
+| Analyser | 5 | analyser-dependances, analyser-io-tests, analyser-structure, analyser-performance-tests, analyser-tokens |
 | Cartographier | 1 | cartographier-parcours |
 | Changer | 1 | changer-statut |
 | Combos | 21 | combos-moteur, combo-maj-readme, combos-analyse-projet |
@@ -229,11 +231,11 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Creer | 4 | creer-fichier, creer-remplir-* |
 | Decomposer | 1 | decomposer-fichier |
 | Deplacer | 1 | deplacer-fichier |
-| Detecter | 13 | detecter-cablages-manquants, detecter-residus, detecter-fautes-orthographe |
+| Detecter | 15 | detecter-cablages-manquants, detecter-residus, detecter-fautes-orthographe |
 | Ecrire | 1 | ecrire-fichier |
 | Editer | 3 | editer-fichier, editer-parcours |
 | Enregistrer | 1 | enregistrer-usage-outil |
-| Evaluer | 5 | evaluer-processus, evaluer-agents |
+| Evaluer | 6 | evaluer-processus, evaluer-agents |
 | Executer | 1 | executer-script-temporaire (ENTONNOIR) |
 | Generateurs | 10 | generateurs-commande, generateurs-amelioration |
 | Gerer | 1 | gerer-sous-mission |
@@ -244,6 +246,8 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Mettre a jour | 2 | mettre-a-jour-readme, mettre-a-jour-versions |
 | Migrer | 1 | migrer-identite |
 | Nettoyer | 3 | nettoyer-fichier, snapshot-nettoyage |
+| Proteger | 3 | proteger-verrou-habilitation, proteger-verrou-marbre, proteger-modifier-marbre |
+| Purifier | 1 | purifier-rvav |
 | Rechercher | 10 | rechercher-texte, rechercher-fichier |
 | Remplacer | 1 | remplacer-texte |
 | Supprimer | 3 | supprimer-fichier, supprimer-ligne |

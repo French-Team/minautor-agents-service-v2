@@ -24,6 +24,7 @@ Ces regles s'appliquent a **tous** les agents et **tous** les fichiers du cervea
 | **Lire avant d'agir** | Activer un agent sans lire sa fiche est inutile. |
 | **Outils partages** | Utiliser exclusivement nos outils, pas des outils generiques. |
 | **Auto-correction** | Chaque erreur detectee devient une lecon dans `corrections.md`. |
+| **Anti-valeurs-magiques (REGLE D OR)** | Le code ne doit jamais CONNAITRE les valeurs, il doit savoir OU aller pour les trouver. La logique CONSOMME les variables, elle ne les CONTIENT pas. Hierarchie : (1) CONSTANTE NOMMEE pour les valeurs immuables (constants.py, MAJUSCULES), (2) CONFIG (config.json/YAML) pour les valeurs changeantes (URLs, timeouts), (3) VARIABLE D ENVIRONNEMENT (.env) pour les secrets (cles API, mots de passe). Ne jamais ecrire de valeur en dur (nombre magique, chemin, URL, version, cle). Outil : detecter-donnees-en-dur. |
 
 ## Hierarchie des regles
 

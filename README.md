@@ -6,7 +6,7 @@ identite:
 ---
 # Cerveau-Projet
 
-[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-141-blueviolet?style=flat)](https://img.shields.io/badge/Outils-141-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v1.3.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.3.0-blue?style=flat)
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-144-blueviolet?style=flat)](https://img.shields.io/badge/Outils-144-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v1.4.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.4.0-blue?style=flat)
 
 
 ![Logo](cerveau-projet/assets/images/logo.jpg)
@@ -59,6 +59,7 @@ Le cerveau-projet est anime par des agents IA, chacun avec un role et une carte 
 | **Hermes** | Agent de la langue - orthographe, vocabulaire et fautes de francais |
 | **Gardien** | Gardien du marbre - securite du code (zones protegees, l utilisateur valide) |
 
+| **Argus** | Detecteur de contradictions -- trouve et compare les incoherences dans les cases, les regles, les protocoles et l historique git | Selon sa carte de decision |
 ### Le cycle fondamental (par session)
 
 ```

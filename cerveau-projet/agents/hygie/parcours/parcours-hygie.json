@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-hygie",
   "agent": "hygie",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Hygie, agent de nettoyage du workspace : snapshot -> detection par zone -> preuve d honnetete -> suppression tracee -> rapport. Seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable (avec tracabilite). Decisions utilisateur 2026-08-13 : nom Hygie, perimetre tout workspace, snapshots dans le dossier dedie de l agent avec rotation 7 jours."
  },
@@ -265,7 +265,7 @@
      "commande": "python3 cerveau-projet/agents/tools/supprimer/supprimer-dossier/supprimer-dossier.py <residu-dossier>"
     }
    ],
-   "suivant": "c10"
+   "suivant": "c9b"
   },
   "c10": {
    "titre": "Tous les residus ont-ils disparu ?",
@@ -314,6 +314,19 @@
      "type": "fichier",
      "chemin": "cerveau-projet/agents/hygie/snapshots/",
      "raison": "Le rapport reference le snapshot pris avant nettoyage (preuve de tracabilite)"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-usage-scripts-temporaires",
+     "catalogue": "detecter-usage-scripts-temporaires",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-scripts-temporaires/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-scripts-temporaires/detecter-usage-scripts-temporaires.py --rapport <rapport> --verbose"
     }
    ],
    "suivant": "c12"
@@ -333,6 +346,19 @@
     {
      "type": "ref",
      "ref": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-usage-outils-externes",
+     "catalogue": "detecter-usage-outils-externes",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <cible> --recursive"
     }
    ],
    "suivant": "c34"
@@ -539,6 +565,31 @@
    "titre": "Signaler le besoin",
    "type": "fin",
    "message": "Besoin d outil DURABLE : je signale a Cerberus (besoin d outil -> activer Vulcain ; besoin de test -> Morpheus ; besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
+  },
+  "c9b": {
+   "titre": "Purifier les fichiers surcharges (RVAV)",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE RVAV ANTI-PERTE : jamais de perte - l archive recoit les lecons anciennes, ecrite AVANT le principal."
+    },
+    {
+     "type": "outil",
+     "nom": "purifier-rvav",
+     "catalogue": "purifier-rvav",
+     "chemin": "cerveau-projet/agents/tools/purifier/purifier-rvav/",
+     "commande": "python3 cerveau-projet/agents/tools/purifier/purifier-rvav/purifier-rvav.py --agent <agent> --dry-run --rapport <rapport>"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-surcharge-fichier",
+     "catalogue": "detecter-surcharge-fichier",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/detecter-surcharge-fichier.py cerveau-projet/agents --seuil 500 --recursive"
+    }
+   ],
+   "suivant": "c10"
   }
  }
 }

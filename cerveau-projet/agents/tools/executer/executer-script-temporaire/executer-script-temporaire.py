@@ -15,7 +15,7 @@
 #   python3 executer-script-temporaire.py --dry-run <script.py> [args...]
 #   python3 executer-script-temporaire.py --version
 #
-# Version : 0.1.0
+# Version : 0.1.3
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -39,7 +39,7 @@ import tempfile
 import time
 from pathlib import Path
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 STATUT = "ebauche"
 
 # GARDE-FOU ANTI-RESIDUS : fichiers nommes comme des versions semver pures a
@@ -306,7 +306,11 @@ def main():
     chrono_actif = not args.no_chrono
     depart = time.time()
     if chrono_actif:
-        print(GREEN + "[CHRONO] %.2fs (entonnoir)" % (time.time() - depart) + NC)
+        # FLUSH IMMEDIAT : le chrono doit etre la PREMIERE ligne visible de
+        # la reponse, meme quand stdout est piped (sinon le buffer du
+        # sous-processus passe devant et le chrono disparait en bas).
+        print(GREEN + "[CHRONO] %.2fs (entonnoir)" % (time.time() - depart) + NC,
+              flush=True)
 
     if not args.script:
         parser.print_help()

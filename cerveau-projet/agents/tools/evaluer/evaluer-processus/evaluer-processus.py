@@ -85,12 +85,26 @@ def charger_parcours(racine, agent):
         return None
 
 
+# Outils P0 PARTAGES : outils de base communs a TOUS les agents (navigation
+# de parcours, lecture de contexte) - references dans les fiches P0 mais pas
+# systematiquement dans les indices outil des cartes. Ils ne sont PAS des
+# exclusivites (lecon Vulcain 2026-08-15 : guider-parcours etait derive
+# 'exclusif buffy' a tort - fausse exclusivite declenchant test-035).
+OUTILS_P0_PARTAGES = frozenset([
+    "guider-parcours",
+    "lire-activite-recente",
+])
+
+
 def outils_de_la_carte(parcours):
-    """Tous les outils assignes dans les indices des cases de la carte."""
+    """Tous les outils assignes dans les indices des cases de la carte,
+    HORS outils P0 partages (OUTILS_P0_PARTAGES)."""
     outils = set()
     for c in parcours.get("cases", {}).values():
         for ind in c.get("indices", []):
             if isinstance(ind, dict) and ind.get("type") == "outil" and ind.get("nom"):
+                if ind["nom"] in OUTILS_P0_PARTAGES:
+                    continue
                 outils.add(ind["nom"])
     return outils
 

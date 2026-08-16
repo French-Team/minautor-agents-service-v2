@@ -26,10 +26,13 @@
 #      un en-tete (hors source de verite de version du fichier lui-meme).
 #   5. COMPTEURS_SEUILS  : nombre qui devrait etre calcule ou nomme (delai,
 #      timeout, limite, total, nb_*, seuil, max, min).
+#   6. SECRETS_EN_DUR     : affectation d une chaine a un nom evoquant un
+#      secret (api_key, password, token, cle) - a deplacer dans .env.
 #
 # Exclusions legitimes : 0/1/-1/100, valeurs de test (fixtures), exemples de
 # documentation, entrees d historique (AGENTS-historique), valeurs deja
-# issues d une constante nommee (MAJUSCULES).
+# issues d une constante nommee (MAJUSCULES), placeholders (xxx, exemple,
+# demo), lectures os.environ / os.getenv.
 #
 # Usage :
 #   python3 detecter-donnees-en-dur.py <chemin-fichier-ou-dossier> [autres...]
@@ -42,7 +45,7 @@
 #   --verbose           : detail des fichiers et des motifs
 #   --version
 #
-# Version : 0.1.0
+# Version : 0.1.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -71,7 +74,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -136,6 +139,19 @@ def mot_est_parametrable(mot):
     return any(k in m for k in MOTS_PARAMETRABLES)
 
 
+# v0.1.1 (2026-08-16, REGLE D OR anti-valeurs-magiques gravee au marbre) :
+# noms de variables evocateurs d un SECRET. Une affectation de chaine non vide
+# a l un de ces noms est signalee SECRETS_EN_DUR (a deplacer dans .env).
+_MOTS_SECRETS = ("api_key", "apikey", "api-key", "password", "passwd", "pwd",
+                  "secret", "token", "cle", "clef", "auth", "bearer")
+
+
+def nom_est_secret(nom):
+    n = nom.lower().strip().strip("_")
+    n = n.replace("_", "").replace("-", "")
+    return any(mot in n for mot in _MOTS_SECRETS) and len(n) <= 30
+
+
 def recommander_format(valeur, type_doute):
     """Recommander le meilleur format de stockage pour eviter la valeur en dur."""
     if type_doute == "NOMBRES_MAGIQUES" or type_doute == "COMPTEURS_SEUILS":
@@ -153,6 +169,10 @@ def recommander_format(valeur, type_doute):
         return ("Version centralisee dans une SOURCE DE VERITE (fichier de "
                 "version dedie ou VERSION = \"...\" en tete du fichier) - "
                 "jamais repetee dans les messages ou la doc.")
+    if type_doute == "SECRETS_EN_DUR":
+        return ("SECRET (cle API / mot de passe / token) : NE JAMAIS le coder "
+                "en dur. Le placer dans une VARIABLE D ENVIRONNEMENT (.env "
+                "lu au demarrage) - jamais dans le code ni le git.")
     return "Constante nommee en haut du fichier ou JSON de configuration."
 
 
@@ -262,6 +282,29 @@ def analyser_contenu(chemin, texte, verbose):
                 # ligne de comparaison pure (pas de nom parametrable associe)
                 doutes.append(("NOMBRES_MAGIQUES", num, extrait,
                                recommander_format(extrait, "NOMBRES_MAGIQUES")))
+        # --- 5. SECRETS_EN_DUR (v0.1.1, REGLE D OR) : affectation d une
+        # chaine non vide a un nom evoquant un secret (api_key, password,
+        # token, cle...). A deplacer dans .env. Exclusions : commentaires,
+        # os.environ.get / os.getenv (lecture legitime), chaine vide /
+        # placeholder (xxx, exemple, demo, TODO).
+        if est_code and not ligne.strip().startswith(("#", "//")):
+            if re.search(r"os\.environ|os\.getenv|environ\.get", ligne):
+                continue
+            for m in re.finditer(
+                    r"(?P<nom>[A-Za-z_][A-Za-z0-9_]*)\s*[:=]\s*[\"'](?P<val>[^\"']+)[\"']",
+                    ligne):
+                nom = m.group("nom")
+                val = m.group("val")
+                if not nom_est_secret(nom):
+                    continue
+                if len(val) < 4:
+                    continue
+                val_bas = val.lower()
+                if any(p in val_bas for p in ("xxx", "exemple", "demo", "todo",
+                                              "placeholder", "changeme")):
+                    continue
+                doutes.append(("SECRETS_EN_DUR", num, "%s = %s" % (nom, val[:40]),
+                               recommander_format(val, "SECRETS_EN_DUR")))
     return doutes
 
 

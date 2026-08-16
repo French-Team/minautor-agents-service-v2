@@ -151,7 +151,7 @@ def lister_parcours():
 
 
 def main():
-    print("=== Garde-fou : cablages manquants des 13 parcours ===")
+    print("=== Garde-fou : cablages manquants des 15 parcours ===")
 
     # 1. Version
     r = run([PYTHON, OUTIL_PY, "--version"])
@@ -159,8 +159,8 @@ def main():
              "v0.1.1" in r.stdout, r.stdout.strip())
 
     parcours = lister_parcours()
-    verifier("2. 13 parcours d agents trouves",
-             len(parcours) == 14, "nb=%d" % len(parcours))
+    verifier("2. 15 parcours d agents trouves",
+             len(parcours) == 15, "nb=%d" % len(parcours))
 
     # 3-7. Scan de chaque parcours : cumul des problemes bloquants
     total_orphelines = 0
@@ -177,15 +177,15 @@ def main():
         total_departs += compter(out, "[CASE_DEPART]")
         total_fins += compter(out, "[FIN_NON_JOIGNABLE]")
 
-    verifier("3. 0 CAS_ORPHELINE sur les 12 parcours (anti-recurrence)",
+    verifier("3. 0 CAS_ORPHELINE sur les 15 parcours (anti-recurrence)",
              total_orphelines == 0, "total=%d" % total_orphelines)
-    verifier("4. 0 BOUCLE_BLOQUANTE sur les 12 parcours",
+    verifier("4. 0 BOUCLE_BLOQUANTE sur les 15 parcours",
              total_boucles == 0, "total=%d" % total_boucles)
-    verifier("5. 0 REF_MORTE sur les 12 parcours",
+    verifier("5. 0 REF_MORTE sur les 15 parcours",
              total_refs == 0, "total=%d" % total_refs)
     verifier("6. 0 CASE_DEPART manquante/inexistante",
              total_departs == 0, "total=%d" % total_departs)
-    verifier("7. 0 FIN_NON_JOIGNABLE sur les 12 parcours",
+    verifier("7. 0 FIN_NON_JOIGNABLE sur les 15 parcours",
              total_fins == 0, "total=%d" % total_fins)
 
     # 8. --tous : verdict global PROPRE (les boucles de re-travail sont des

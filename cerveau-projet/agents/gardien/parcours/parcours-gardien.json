@@ -7,9 +7,10 @@
  "parcours": {
   "nom": "parcours-gardien",
   "agent": "gardien",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "case_depart": "c0",
-  "description": "Parcours (jeu de piste) des missions du Gardien, agent de la securite du marbre : relecture -> verification de l integrite des zones protegees (proteger-verrou-marbre) -> proposition de modification (proteger-modifier-marbre, autorisation utilisateur obligatoire) -> lecon et rapport. Le Gardien est le SEUL agent habilite a proposer la modification d une zone gravee dans le marbre : il propose, l UTILISATEUR valide, il execute."
+  "description": "Parcours (jeu de piste) des missions du Gardien, agent de la securite du marbre : relecture -> verification de l integrite des zones protegees (proteger-verrou-marbre) -> proposition de modification (proteger-modifier-marbre, autorisation utilisateur obligatoire) -> lecon et rapport. Le Gardien est le SEUL agent habilite a proposer la modification d une zone gravee dans le marbre : il propose, l UTILISATEUR valide, il execute.",
+  "version_precedente": "0.1.1"
  },
  "cases": {
   "c0": {
@@ -44,8 +45,22 @@
   "c0b": {
    "indices": [
     {
-     "texte": "RELIRE OBLIGATOIRE : corrections PUIS fiche (jamais l inverse, jamais les fichiers des autres agents).",
-     "type": "regle"
+     "type": "regle",
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "nom": "lire-fichier",
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/gardien/corrections.md"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "nom": "lire-fichier",
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/gardien/gardien.md"
     }
    ],
    "suivant": "c0c",
@@ -127,6 +142,12 @@
     {
      "texte": "VIOLATION : zone protegee modifiee sans protocole. Documenter (zone, divergence) et activer l agent responsable.",
      "type": "regle"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ],
    "suivant": "c7",
@@ -200,6 +221,12 @@
     {
      "texte": "LECON : documenter dans corrections.md ce qui a ete fait (proposition, validation, execution) + enregistrer mes usages d outils.",
      "type": "regle"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ],
    "suivant": "c8",

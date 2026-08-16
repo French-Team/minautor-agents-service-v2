@@ -6,7 +6,7 @@ identite:
 ---
 # combos-analyse-projet
 
-**Version :** 0.1.2
+**Version :** 0.1.3
 **Statut :** prepare
 **Categorie :** combos
 **Chemin :** `agents/tools/combos/combos-analyse-projet/`
@@ -15,8 +15,9 @@ identite:
 ## Description
 
 Combo d'analyse qui mesure l'etat reel du projet (agents, outils par categorie)
-et le compare au README (badge Outils, compteur agents, table des categories)
-pour produire un rapport d'ecarts. C'est la PREMIERE etape avant toute mise a
+et le compare aux README : badge Outils et compteur agents dans README.md,
+table des categories dans readme-dev.md section 6 (la table a quitte le README
+public lors de la refonte grand public). Produit un rapport d'ecarts. C'est la PREMIERE etape avant toute mise a
 jour du README : savoir CE QUI A CHANGE avec precision (Pattern 3).
 
 ## Utilisation
@@ -32,8 +33,8 @@ bash agents/tools/combos/combos-analyse-projet/combos-analyse-projet.sh [RACINE]
 ## Sorties
 
 - **Etat reel** : agents reels, outils reels, outils par categorie
-- **Ecarts README vs realite** : badge Outils, compteur agents, categories
-  (absente ou compteur different)
+- **Ecarts README vs realite** : badge Outils + compteur agents (README.md),
+  categories absentes ou compteur different (readme-dev.md section 6)
 - **Verdict** : A CORRIGER (avec liste des ecarts) ou A JOUR
 
 ## Enchainer

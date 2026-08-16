@@ -74,7 +74,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.4.9)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.11)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -181,6 +181,56 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 ---
 
 ## UTILISATION DE activer-agent-principal
+## UTILISATION DE tester-lancer-non-regression (MON OUTIL EXCLUSIF)
+
+> JE SUIS LE SEUL AGENT HABILITE A LANCER LA NON-REGRESSION (regle immuable + verrou). Toute autre demande de lancement est un signal de probleme a remonter a Cerberus.
+
+### Usage de base
+
+```bash
+python3 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py --agent janus
+```
+
+- Mode par defaut : **BARRIERES** (serie stricte) - 5 series classees par importance (A=Fondations, B=Parcours/validateurs, C=Outils/combos, D=Registre/traces, E=Anti-recurrence).
+- Chaque serie doit etre **100% verte pour FRANCHIR la barriere** : au premier KO, la protection STOP arrete la suite et le rapport de la serie est fourni (details des KO) pour constater, analyser, reparer.
+- Quand toutes les barrieres sont passees : rapport GLOBAL POSITIF. Le passage des barrieres se voit EN DIRECT (A V > B V > ...).
+
+### Options essentielles
+
+| Option | Usage |
+|---|---|
+| `--series a,c` | Lancer uniquement certaines series (controle cible apres une petite modif) |
+| `--profil cartes` | Profils : cartes, outils, tests, fiches-agents, docs, registre - choisir selon les fichiers modifies |
+| `--fichiers chemin1,chemin2` | Deduit automatiquement le(s) profil(s) a partir des fichiers modifies |
+| `--desactiver 24,28` / `--activer 24` | Desactiver/reactiver des tests par numero (PERSISTANT, herite au prochain lancement) |
+| `--etat-tests` | Afficher la configuration persistante (actifs/desactives) sans lancer |
+| `--parallele` | Mode pool de workers (tests longs d abord) - mesure reelle ~91s |
+| `--serial` | Passe serie simple sans barrieres (echelon de secours) |
+| `--rapport <fichier>` | Ecrire le rapport markdown (details des KO + tests les plus lents) |
+| `--relancer-ko` | Revalider UNIQUEMENT les tests KO du dernier run (run_id journalise dans registre-tests.jsonl) - OBLIGATOIRE avant toute relance de la suite complete apres un correctif |
+| `--timeout-test <s>` | Timeout INTERNE par test (jamais de timeout exterieur - regle immuable) |
+| `--rebase-reference` | Rebaser la reference de temps apres une amelioration de performance |
+
+### La reference de temps (chrono)
+
+- La suite mesure le temps reel et le compare a une **reference** (fichier reference) : `conforme` si dans le seuil (defaut 25%), sinon SIGNAL de ralentissement.
+- Affiche en fin de run : chrono pool, comparaison, RATING des series et des tests, TESTS LES PLUS LENTS.
+
+### WORKFLOW KO OBLIGATOIRE (immuable, mecanise par --relancer-ko)
+
+> **REGLE** : apres un KO, je ne relance JAMAIS la suite complete tant que le correctif n a pas ete revalide en cible. Chaque etape doit etre validee avant de passer a la suivante.
+
+1. **KO detecte** : je lis le rapport (details des KO : point, message, contexte) et les tests les plus lents (base des optimisations).
+2. **Je ne corrige jamais moi-meme** : je rapporte a Cerberus qui active l agent habilite (Morpheus pour les tests). Le correctif est applique hors de ma mission.
+3. **REVALIDATION CIBLEE (--relancer-ko)** : apres le retour du correctif, je lance `--relancer-ko` : l outil deduit la liste des tests KO du dernier run (champ run_id de registre-tests.jsonl) et ne relance QUE ceux-la - quelques secondes au lieu de ~90s. Si encore KO : retour etape 2.
+4. **VALIDATION DE LA SERIE (--series X)** : quand --relancer-ko est 100% vert, je valide la serie concernee par le KO (`--series X`) : elle doit etre 100% verte pour franchir la barriere.
+5. **SUITE COMPLETE EN DERNIER** : SEULEMENT quand toutes les series sont validees separement, je lance la suite complete. Le cycle est : barriere STOP -> rapport -> correctif -> --relancer-ko -> --series X -> suite complete.
+
+> **Interdit** : relancer la suite complete apres un correctif NON confirme (c est le comportement qui perdait ~90s a chaque KO). La revalidation ciblee est la SEULE voie de retour apres un correctif.
+
+### Journalisation
+
+Chaque test lance est journalise dans `registre-tests.jsonl` (--agent janus obligatoire).
 
 ### Pour terminer ma mission (la fin suit SA carte)
 
@@ -204,6 +254,7 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 > - `cT10` FIN - Renvoyer rapport a minerve
 
 ## Forces et Faiblesses
+
 ## Style de travail
 
 | Aspect | Preference |

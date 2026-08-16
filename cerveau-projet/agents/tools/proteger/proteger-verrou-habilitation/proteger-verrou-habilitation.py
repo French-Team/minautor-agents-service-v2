@@ -134,6 +134,18 @@ def lister_parcours():
     return resultats
 
 
+# Outils P0 PARTAGES : outils de base communs a TOUS les agents (navigation
+# de parcours, lecture de contexte) qui ne sont PAS des exclusivites. Ils sont
+# references dans les fiches (P0) mais pas systematiquement dans les indices
+# outil des cartes - le verrou ne les bloque jamais (lecon Vulcain
+# 2026-08-15 : guider-parcours etait derive 'exclusif buffy' a tort, fausse
+# exclusivite declenchant test-035).
+OUTILS_P0_PARTAGES = frozenset([
+    "guider-parcours",
+    "lire-activite-recente",
+])
+
+
 def extraire_indices_outils(parcours):
     """Extrait les noms d outils des indices de type 'outil' de toutes les cases."""
     outils = set()
@@ -155,12 +167,17 @@ def extraire_indices_outils(parcours):
 
 
 def construire_table():
-    """Construit la table outil -> set(agents habilites) depuis les cartes."""
+    """Construit la table outil -> set(agents habilites) depuis les cartes.
+    Les outils P0 partages (OUTILS_P0_PARTAGES) sont ajoutes a TOUS les
+    agents : ce sont des outils de base communs, pas des exclusivites."""
     table = {}
+    tous = set()
     for nom_agent, chemin in lister_parcours():
-        parcours = charger_parcours(chemin)
-        for outil in extraire_indices_outils(parcours):
+        tous.add(nom_agent)
+        for outil in extraire_indices_outils(charger_parcours(chemin)):
             table.setdefault(outil, set()).add(nom_agent)
+    for outil in OUTILS_P0_PARTAGES:
+        table[outil] = set(tous)
     return table
 
 

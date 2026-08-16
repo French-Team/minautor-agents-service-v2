@@ -22,7 +22,7 @@ Options:
   --help             Afficher cette aide
 
 Proprietaire : Clio (agent dedie au README)
-Version : 0.4.1-py
+Version : 0.4.2-py
 Statut : prepare
 """
 

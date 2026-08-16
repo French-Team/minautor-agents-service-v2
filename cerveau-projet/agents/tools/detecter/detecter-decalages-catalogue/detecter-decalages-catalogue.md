@@ -1,6 +1,6 @@
 # detecter-decalages-catalogue
 
-**Version :** 0.2.1
+**Version :** 0.2.2
 **Categorie :** detecter
 **Statut :** ebauche
 
@@ -48,6 +48,7 @@ Le rapport (markdown) contient :
 4. (v0.2.0) Un outil a SOUS-COMMANDES argparse (ex: generateurs-case, generateurs-ligne) cache ses flags dans les sous-commandes : l'aide racine seule cree des FAUX POSITIFS. Depuis la v0.2.0, le scan lance aussi l'aide de chaque sous-commande (bloc `{sous-cmd1,...}` de l'aide racine) et fusionne les options
 5. (v0.2.1) PERFORMANCE : les aides sont lancees en parallele (pool de threads) avec cache par script -- ne jamais revenir a la boucle serie (~85s), c'est le goulot de la suite anti-regression (test-028)
 6. (v0.2.1) FIABILITE DU VERDICT SOUS CHARGE : avec un pool 16 workers, la contention au demarrage des interpretes Python (lecteur reseau) fait depasser le timeout a des outils qui repondent en 6-9s seuls (ex: test-017) -> verdict instable (CONFORME seul / TIMEOUT sous charge). TIMEOUT porte a 30s pour absorber la contention : le verdict ne doit JAMAIS dependre de la charge
+7. (v0.2.2) PERFORMANCE : ne sonder le --aide QUE des commandes avec >= 1 flag dans le modele (99/165 sans flag, dont 23 commandes-test qui n ont pas de vrai --aide et s executeraient ENTIERES). Gain mesure : 12.6s -> 4.6s sur test-028.
 
 ## Historique
 

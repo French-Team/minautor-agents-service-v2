@@ -6,7 +6,7 @@ identite:
 ---
 # evaluer-coherence
 
-**Version :** 0.2.3
+**Version :** 0.2.4
 **Statut :** prepare
 **Categorie :** evaluer
 **Chemin :** `agents/tools/evaluer/evaluer-coherence/`
@@ -57,5 +57,6 @@ Rapport markdown sur stdout avec score /100.
 | 0.2.1 | 2026-08-07 | Correction faux positifs: (1) resolution des liens ../ depuis le projet root (dossier) en plus de cerveau-projet/, (2) exclusion des commandes systeme (cat, grep, sed, basher) du scan des outils casses. Score coherence corrige de 25/100 a 50/100 (1 lien casse reel: badges-README-github.md). |
 | 0.2.1-py | 2026-08-07 | Version Python corrigee (parite sh/py) |
 | 0.2.2 | 2026-08-09 | Correction faux positifs : scan des outils references limite aux 11 agents officiels (AGENTS_ATTENDUS) au lieu de tous les dossiers de agents/ - classeur-variables/ et ses variables (statut-mission, contexte, resultats, erreurs) ne sont plus interpretees comme des outils inexistants. Parite py/sh maintenue |
+| 0.2.3 | 2026-08-15 | Correction faux positifs (lecon Janus, non-regression barriere E) : (1) options de ligne de commande --xx exclues du scan (--parallele, --serial, --etat-tests), (2) mots francais simples entre backticks (conforme, success, probleme) exclus - un nom d outil du cerveau contient un tiret ou est connu des dossiers reels, (3) AGENTS_ATTENDUS passe de 11 a 15 agents (ajout hygie, hermes, gardien, argus) |
 
 ---

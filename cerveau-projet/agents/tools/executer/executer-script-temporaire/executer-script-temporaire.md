@@ -1,7 +1,7 @@
 # executer-script-temporaire
 
 **Categorie** : Executer
-**Version** : 0.1.2
+**Version** : 0.1.3
 **Statut** : ebauche
 **Agent** : Cerberus
 **Date** : 2026-08-14

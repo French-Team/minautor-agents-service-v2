@@ -1,13 +1,13 @@
 #!/bin/bash
 # supprimer-dossier.sh
 # Supprimer un dossier recursivement (avec protections)
-# Version : 0.2.0
+# Version : 0.2.1
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
+VERSION="0.2.1"
 STATUT="ebauche"
 
 RED='\033[0;31m'

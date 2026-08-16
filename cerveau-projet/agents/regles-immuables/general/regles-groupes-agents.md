@@ -43,6 +43,7 @@ index, README.
 | **Themis** | Evaluatrice croisee | Audit, evaluation, coherence, combos d'audit |
 | **Clio** | Muse de l'histoire | Mettre a jour le README quand necessaire |
 | **Hygie** | Agent de nettoyage | Nettoyer le workspace (snapshot, detection par zone, suppression tracee) - SEUL habilite a TOUT le workspace et a supprimer sans demande prealable |
+| **Argus** | Detecteur de contradictions | Trouver et comparer les contradictions (cases, regles, protocoles, historique git git log --all) - DETECTE et SIGNALE, ne corrige jamais (l agent habilite corrige) |
 
 > **REGLE** : Toute tache de dev/amelioration du cerveau-projet (outils,
 > parcours, fiches, protocoles, SPEC DES OUTILS comme spec-guider-parcours)
@@ -105,6 +106,8 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 >
 > **Garde-fou** : [test-037-seul-janus-lance-non-regression](../../tools/tester/tests/test-037-seul-janus-lance-non-regression/test-037-seul-janus-lance-non-regression.py)
 > (points 2 + 2b : cartes + registre).
+>
+> Le protocole de lancement est documente dans [protocole-tests/](protocole-tests/).
 
 ### SEUL MORPHEUS ECRIT ET EXECUTE LES TESTS (IMMUABLE)
 
@@ -145,6 +148,10 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 >
 > **Garde-fou** : test-020-combos-clio (verifie la carte Clio) +
 > test-038-badge-readme-synchronise (badge synchro avec le compte reel).
+>
+> La mecanique de verification de coherence documentaire (controle de la
+> veracite des README) est documentee dans
+> [protocole-verification-coherence/](protocole-verification-coherence/).
 
 ### SEUL BUFFY CORRIGE LES FICHIERS DES AGENTS (IMMUABLE)
 
@@ -170,6 +177,9 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 > **Garde-fou** : test-058-seul-buffy-corrige-fichiers-agents (cartes +
 > registre : editer-parcours / editer-fichier-agents exclusifs a Buffy,
 > aucune declaration non-Buffy).
+>
+> Le protocole de controle croise de Buffy est documente dans
+> [protocole-controle-buffy/](protocole-controle-buffy/).
 
 ### LE MODELE DE CONFIANCE (IMMUABLE)
 
@@ -191,6 +201,10 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 >   Morpheus.
 > - Toute exception (ex: un agent corrige un fichier structurel en
 >   urgence) exige une autorisation explicite de l utilisateur.
+>
+> La mecanique du second controle (Janus verifie le travail des agents,
+> controle des statuts et verdict) est documentee dans
+> [protocole-controle-statuts/](protocole-controle-statuts/).
 
 ---
 
@@ -214,7 +228,38 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 >   d agent a agent selon la carte de chacun.
 > - L utilisateur n a PAS a relancer : un round qui commence par une
 >   activation se termine par le bilan Cerberus du dernier maillon.
+>
+> Le cycle complet de releve et ses regles sont documentes dans
+> [protocole-activation/](protocole-activation/).
 
+
+---
+
+### RELIRE SA FICHE AVANT MISSION (IMMUABLE)
+
+> **REGLE** : a chaque activation ou reactivation, l agent relit SA fiche
+> et SES corrections JUSTE AVANT de commencer sa mission. Il doit etre
+> SUR d incarner le bon agent au moment ou il est active et lance sa
+> mission. La COHERENCE de trois elements le rend pret a demarrer sa
+> mission a la lettre, sans derive :
+>
+> 1. **SA fiche** (qui il est, son role, sa carte de decision) ;
+> 2. **SES corrections** (ses garde-fous personnels, ses lecons passees) ;
+> 3. **SA mission** (la raison d activation : quoi, pourquoi, criteres).
+>
+> **Mecanisme** : la case c0 de chaque parcours pose la question honnete
+> (OUI = memorisation prouvee -> c0c contexte obligatoire -> mission ;
+> INCERTAIN/NON -> c0b RELIRE OBLIGATOIRE corrections puis fiche). La RAISON d activation de Cerberus
+> ordonne explicitement : RELIS TA FICHE PUIS TES CORRECTIONS avant de
+> commencer (garde-fou relecture, protocole-activation).
+>
+> **Consequence** : un agent qui agit SANS avoir relu SA fiche + SES
+> corrections + SA mission agit SANS COHERENCE : il incarne le mauvais
+> agent, sa mission derive. Le controle (Janus) verifie la relecture
+> avant de valider.
+>
+> **Garde-fou** : cases cerberus.c0/c0b protegees dans le marbre
+> (test-057 marbre intact) + GARDE-FOU RELECTURE du protocole-activation.
 
 ---
 
@@ -240,3 +285,6 @@ La migration des parcours v0.2.0 -> v0.3.x concerne les agents du groupe 2
 dont le parcours est en v0.2.0 (atlas, clio, morpheus). Les parcours du trio
 (athena, promethee, minerve) ne sont PAS migres dans cette phase : ils seront
 prepares lors de la phase "dev de nouveaux projets".
+
+
+

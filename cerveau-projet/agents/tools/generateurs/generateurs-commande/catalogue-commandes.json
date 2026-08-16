@@ -176,6 +176,35 @@
    ]
   },
   {
+   "nom": "analyser-io-tests",
+   "description": "Mesurer la lecture/ecriture disque pendant l execution des tests (I/O par test)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/analyser/analyser-io-tests/analyser-io-tests.py",
+   "modele": "{tests} --serie {serie} --rapport {rapport}",
+   "parametres": [
+    {
+     "cle": "tests",
+     "question": "Noms des tests a mesurer (ex: test-032, test-028) ?",
+     "type": "texte",
+     "obligatoire": false
+    },
+    {
+     "cle": "serie",
+     "question": "Serie(s) a mesurer (a,b,c,d,e) ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--serie"
+    },
+    {
+     "cle": "rapport",
+     "question": "Rapport markdown ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--rapport"
+    }
+   ]
+  },
+  {
    "nom": "analyser-performance-tests",
    "description": "Analyser la performance des tests (dernier run, du plus gros consommateur au moins)",
    "interpreteur": "python3",
@@ -956,6 +985,14 @@
    "description": "Detecte les cablages manquants des cartes de decision : cases orphelines, boucles indirectes, references mortes, fins non joignables (complete valider-case)",
    "interpreteur": "python3",
    "script": "cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py",
+   "modele": "--tous",
+   "parametres": []
+  },
+  {
+   "nom": "detecter-contradictions",
+   "description": "Croise les sources du cerveau-projet pour detecter les contradictions : cases (parcours JSON), regles/protocoles (regles-immuables), historique git (git log --all, lecture seule) - rapport classe par gravite",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/detecter/detecter-contradictions/detecter-contradictions.py",
    "modele": "--tous",
    "parametres": []
   },
@@ -2673,6 +2710,44 @@
    "parametres": []
   },
   {
+   "nom": "purifier-rvav",
+   "description": "Purification RVAV : reduire les fichiers surcharges sans perte (deplacement vers une archive cote a cote).",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/purifier/purifier-rvav/purifier-rvav.py",
+   "modele": "{cible} --seuil {seuil} --dry-run --rapport {rapport}",
+   "parametres": [
+    {
+     "cle": "cible",
+     "question": "Cible ? (--tous, --agent <nom> ou --fichier <chemin>)",
+     "type": "texte",
+     "obligatoire": true
+    },
+    {
+     "cle": "seuil",
+     "question": "Seuil de lignes ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--seuil",
+     "defaut": ""
+    },
+    {
+     "cle": "executer",
+     "question": "Appliquer reellement (--executer) ?",
+     "type": "flag",
+     "obligatoire": false,
+     "flag": "--executer"
+    },
+    {
+     "cle": "rapport",
+     "question": "Fichier rapport markdown ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--rapport",
+     "defaut": ""
+    }
+   ]
+  },
+  {
    "nom": "rechercher-accents-sensibles",
    "description": "Recherche les caracteres non-ASCII dans les ZONES SENSIBLES uniquement : - frontmatter YAML (bl",
    "interpreteur": "python3",
@@ -3326,10 +3401,10 @@
   },
   {
    "nom": "tester-lancer-non-regression",
-   "description": "Lance tous les tests formels (test-0XX) en mode BARRIERES par defaut (series classees par importance, 100% verte pour franchir chaque barriere, STOP fail-fast au premier KO) avec bilan OK/KO fiable, chrono + reference de temps (--seuil, --rebase-reference) ; --parallele pour l ancien pool de workers",
+   "description": "Lance la non-regression (test-0XX) en mode BARRIERES (series classees par importance, 100% verte pour franchir, STOP fail-fast) avec bilan OK/KO fiable, chrono + reference (--seuil) ; --relancer-ko ne relance que les tests en KO du dernier run (isolation + revalidation rapide, sans relancer la suite complete)",
    "interpreteur": "python3",
    "script": "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py",
-   "modele": "--tests {tests} --rapport {rapport} --seuil {seuil} --profil {profil} --fichiers {fichiers}",
+   "modele": "--relancer-ko {relancer_ko} --tests {tests} --rapport {rapport} --seuil {seuil} --profil {profil} --fichiers {fichiers}",
    "parametres": [
     {
      "cle": "tests",
@@ -3378,6 +3453,14 @@
      "obligatoire": false,
      "flag": "--fichiers",
      "defaut": ""
+    },
+    {
+     "cle": "relancer_ko",
+     "question": "Relancer uniquement les tests en KO du dernier run ? (--relancer-ko) - combine a --series X, ne relance que les KO de la serie X",
+     "type": "boolean",
+     "obligatoire": false,
+     "flag": "--relancer-ko",
+     "defaut": "false"
     }
    ]
   },

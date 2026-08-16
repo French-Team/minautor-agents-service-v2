@@ -1,16 +1,16 @@
 #!/bin/bash
 # test-008-activer-agent-principal-v055.sh
-# Tests formels v0.5.5 : FIX BUG DE RECOLLEMENT (anti-accumulation).
+# Tests formels v0.5.7 : FIX BUG DE RECOLLEMENT (anti-accumulation).
 #   - Bug v0.5.4 : reconstruire_bloc faisait une EXCEPTION pour la Raison et
 #     RECOLLAIT les anciennes continuations (blocs DEMARRAGE) a chaque nouvelle
 #     raison -> AGENTS.md corrompu (21 blocs dupliques, mission egaree).
-#   - Fix v0.5.5 : un champ REMPLACE (y compris Raison) ignore son ancienne suite.
+#   - Fix v0.5.7 : un champ REMPLACE (y compris Raison) ignore son ancienne suite.
 # Tests :
 #   1. Raison corrompue (3 blocs DEMARRAGE en continuations) -> activer remplace
 #      proprement : bloc UNIQUE, plus aucun DEMARRAGE recolle
 #   2. Reactiver remplace aussi proprement (la Raison multiligne du bilan est
 #      conservee telle quelle, sans accumulation)
-#   3. Version v0.5.5 (--version, py + sh)
+#   3. Version v0.5.7 (--version, py + sh)
 #   4. Normes : AGENTS.md ASCII + LF
 # + regression v0.5.0 (Nom LLM en tete preserve par le fix)
 
@@ -103,13 +103,13 @@ raison_bloc() {
     ' "$AGENTS_FILE"
 }
 
-echo "=== TEST 008 -- FIX BUG DE RECOLLEMENT (v0.5.5) ==="
+echo "=== TEST 008 -- FIX BUG DE RECOLLEMENT (v0.5.7) ==="
 
-# --- Test 1 : version v0.5.5 (py + sh) ---
-V_PY=$(python3 "$OUTIL_PY" --version 2>&1 | grep -o 'v0\.5\.5' | head -1)
-check "1. --version py = v0.5.5 (lu=$V_PY)" "$([ "$V_PY" = "v0.5.5" ]; echo $?)"
-V_SH=$(bash "$OUTIL_SH" --version 2>&1 | grep -o 'v0.5\.5' | head -1)
-check "1b. --version sh = v0.5.5 (lu=$V_SH)" "$([ "$V_SH" = "v0.5.5" ]; echo $?)"
+# --- Test 1 : version v0.5.7 (py + sh) ---
+V_PY=$(python3 "$OUTIL_PY" --version 2>&1 | grep -o 'v0\.5\.7' | head -1)
+check "1. --version py = v0.5.7 (lu=$V_PY)" "$([ "$V_PY" = "v0.5.7" ]; echo $?)"
+V_SH=$(bash "$OUTIL_SH" --version 2>&1 | grep -o 'v0\.5\.7' | head -1)
+check "1b. --version sh = v0.5.7 (lu=$V_SH)" "$([ "$V_SH" = "v0.5.7" ]; echo $?)"
 
 # --- Test 2 : corruption avec 3 blocs DEMARRAGE -> activer remplace proprement ---
 # Injecter un bloc session-llm-1 corrompu (Raison + 3 continuations DEMARRAGE)

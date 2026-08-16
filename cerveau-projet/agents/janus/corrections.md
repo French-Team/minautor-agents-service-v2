@@ -4701,3 +4701,337 @@ verifie.
 **Lecon** :
 - La preuve de la regle RELEVE MEME ROUND est un ROUND REEL : activer un agent et voir sa mission s executer immediatement, puis le maillon suivant prendre le relais, sans relance utilisateur. C est le comportement attendu desormais.
 - Le cycle complet : cerberus active -> agent execute -> fin suit SA carte -> agent suivant -> ... -> themis (audit) ou janus (controle) -> cerberus (bilan consolide). Seul le dernier maillon reactive Cerberus.
+
+
+## [LECON] 2026-08-15 -- NON-REGRESSION : BARRIERE E BLOQUEE (4 KO DIAGNOSTIQUES, Janus)
+
+**Contexte** : controle final de la chaine Argus - la non-regression complete (mode barrieres) s arrete a la barriere E (serie anti-recurrence) : 2 OK / 4 KO.
+
+**Diagnostic des 4 KO** :
+1. test-024 : catalogue 162 -> 163 (meme adaptation que test-007) - MORPHEUS.
+2. test-032 : le test-001 execute en isolation KO au point 6 (cause racine, voir 4) - la chaine de KO remonte.
+3. test-035 : 2 DECLARATION_FAUTIVE reelles au registre : vulcain a declare 'detecter-contradictions' (EXCLUSIF argus) et 'guider-parcours' (EXCLUSIF buffy) - VULCAIN (retirer les declarations fautives du registre).
+4. test-057 : carte argus absente de cartes-lock.json (la creation d Argus n a pas resynchronise le lock) - VULCAIN.
+
+**Cause racine du KO test-001 (point 6)** : evaluer-coherence signale 5 outils introuvables dont 3 options  referencees par janus (documentees dans la section UTILISATION de tester-lancer-non-regression que j ai ajoutee a janus.md au round precedent). Le scan  capture les options --xx comme des outils. BUG PREEXISTANT d evaluer-coherence revele par la doc. CORRECTION (Vulcain) : exclure les options commencant par -- (tiret-tiret = option, pas outil) + mettre a jour AGENTS_ATTENDUS (11 -> 15 agents : ajouter hygie, hermes, gardien, argus).
+
+**En plus** : evaluer-coherence signale 10 liens internes casses (dont index-regles-general.md, regles-groupes-agents.md, protocole-purification) - la plupart preexistants, certains lies a des chemins relatifs mal resolus.
+
+**Action** : reactiver Cerberus avec le bilan -> activer Vulcain (correction evaluer-coherence + registre + lock) puis Morpheus (test-024) puis relancer la non-regression.
+
+
+## [LECON] 2026-08-15 -- CHAINE ARGUS : NON-REGRESSION COMPLETE VERTE (Janus)
+
+**Controle** : lancement complet en mode barrieres apres creation de l agent Argus (15e agent) et corrections Vulcain/Morpheus.
+
+**Deux passes necessaires** :
+- Passe 1 : barriere D bloquee (test-046 14 parcours -> 15). Corrige sur place (adaptation de test, meme motif que test-026/018).
+- Passe 2 : barriere A bloquee (test-060 catalogue 162->163 + test-064 preuve guider-parcours 'exclusif buffy' obsolete). test-064 corrige : la preuve utilise desormais editer-fichier-agents (vrai exclusif buffy, guider-parcours est P0 partage).
+- Passe 3 : **63 OK / 0 KO**, toutes barrieres franchies (E V > C V > D V > A V > B V), chrono 121.4s conforme a la reference (+4%).
+
+**Lecons** :
+- Chaque nouvel agent ajoute (argus = 15e) casse tous les compteurs en dur (parcours, catalogue) : test-024/026/018/046/060. La solution structurelle serait un compteur dynamique (glob) au lieu de valeurs en dur.
+- La correction P0 partages (guider-parcours) a rendu obsolete la preuve negative du test-064 : quand on change le verrou, il faut AUSSI verifier les preuves negatives des tests qui l utilisent.
+- La chaine Argus est COMPLETE : Cerberus -> Buffy (agent) -> Vulcain (outil detecter-contradictions) -> Morpheus (tests) -> Janus (controle + non-regression) -> retour Cerberus.
+
+## [LECON] 2026-08-15 -- CHAINE PURIFIER-RVAV : NON-REGRESSION 64 OK / 0 KO (Janus)
+
+**Controle** : lancement complet en mode barrieres apres creation de purifier-rvav (catalogue 164, index-tools 181).
+
+**Trois passes necessaires** :
+- Passe 1 : barriere E bloquee - test-035 (3 KO) : declarations registre fautives (morpheus/vulcain/buffy ont declare des outils absents de leurs cartes : purifier-rvav non assigne, detecter-surcharge-fichier, editer-fichier). Nettoyage : 4 lignes retirees du registre.
+- Passe 2 : barriere E - test-024 (2b) : le dossier tmp-morpheus de test-065 restait a la racine. Correction test-065 : dossier tmp-test065 + purge complete en fin (nettoyer puis makedirs).
+- Passe 3 : test-063 : test-065 absent des profils-tests.json. Ajout au profil outils + tests. Puis 64 OK / 0 KO, toutes barrieres (E V > C V > D V > A V > B V), nouvelle base chrono 118.5s (63 -> 64 tests).
+
+**Lecons** :
+- Un NOUVEL OUTIL non assigne a une carte cree des declarations fautives au registre : les agents ne doivent declarer QUE les outils de leur carte. Assigner purifier-rvav a une carte (decision Buffy/Cerberus a prendre : probablement tous les agents ou Hygie).
+- Un nouveau test doit etre couvert : (1) ajoute a une SERIE du lanceur, (2) ajoute aux profils-tests.json - sinon test-063 KO.
+- Le dossier temp d un test ne doit JAMAIS porter le nom de l agent courant (quand Janus lance, tmp-morpheus est un residu) : utiliser un dossier dedie tmp-test0XX supprime en fin.
+## [LECON] 2026-08-16 -- NON-REGRESSION 64 OK / 0 KO (Janus)
+
+**Contexte** : mission assignation purifier-rvav a Hygie + README a jour. Janus lance la non-regression : 3 KO successifs en barriere (test-035, test-020, test-047, test-048) - chacun repare en chaine (Buffy/Vulcain/Morpheus).
+
+**VERDICT** : VALIDE (64 OK / 0 KO, barrieres E>C>D>B>A franchies, 127.8s).
+
+**Lecons** :
+1. test-035 (evaluer-processus) : une declaration registre d un outil de ROLE absent de la carte = KO - corriger par AJOUT D INDICE (cause racine), pas par retrait de declaration. Les usages ponctuels (verification/modification) ne se declarent pas.
+2. test-020 : un bump de version d outil pince par un test oblige l adaptation du test (Morpheus).
+3. test-047 : toute lecon avec caractere non-ASCII (ex: pincait) = SUSPECT outils externes - TOUJOURS verifier les normes apres un append.
+4. test-048 : le protocole-fin-mission exige lecon + VERDICT - mes 5 lecons de mission en etaient depourvues. Ajouter systematiquement **VERDICT** dans chaque lecon.
+## [LECON] 2026-08-16 -- DIAGNOSTIC PERFORMANCE SUITE (Janus, outil analyser-io-tests)
+
+**Contexte** : demande utilisateur - la suite est trop longue (~128s), creer un outil de mesure I/O disque pendant les tests puis trouver pourquoi et optimiser.
+
+**VERDICT** : VALIDE (diagnostic complet - 5 causes racines identifiees).
+
+**Causes racines (par gain potentiel)** :
+1. detecter-decalages-catalogue = 12.6s (goulot de test-028) : il sonde le --aide des 165 commandes du catalogue, dont 99 SANS flag dans le modele (la sonde ne sert a rien) et 23 qui sont des TESTS (les tests n ont pas de vrai --aide : la sonde EXECUTE LE TEST ENTIER, ex test-003 = 7.4s en aide). Correction : ne sonder que les commandes avec >= 1 flag -> ~3s.
+2. test-032 = 29.5s : la preuve de gain (point 7) relance test-001..004 en SERIE puis en POOL (~21s). Reduction possible du sous-ensemble.
+3. test-017 = 4.4s : 34 lancements python3 (~104ms chacun = ~3.5s de spawn).
+4. test-005 = 5.9s : CPU pur interne (0 subprocess).
+5. Cout de demarrage python ~104-150ms x centaines de lancements = plancher structurel.
+
+**Mesures** : les goulots ont quasi 0 I/O disque (psutil) -> la suite est CPU/spawn-bound, PAS I/O-bound.
+## [LECON] 2026-08-16 -- CAUSE RACINE STRUCTURELLE : BARRIERES EN SERIE PURE (Janus)
+
+**Contexte** : suite a 127.8s - mesure reelle : le mode barrieres (defaut) lance CHAQUE serie avec executer_lot (SERIE PURE), le pool (executer_pool) n est utilise que par --parallele (qui avec --series retombe AUSSI dans la branche barrieres).
+
+**VERDICT** : VALIDE (preuve : pool global 64 tests = 56.9s vs mode barrieres 127.8s - plus de 2x plus rapide ; les 2 seuls KO du pool sont test-007 [compteur catalogue 164->165, adaptation Morpheus attendue] et test-035 [interference registre : le scan du registre est perturbe par les ecritures des autres tests en parallele]).
+
+**Correction a faire (Vulcain)** : mode barrieres -> executer_pool PAR SERIE (garde-fous globaux + exclusifs en serie) + ajouter test-035 a TESTS_SERIE_EXCLUSIFS. Gain estime : 127.8s -> ~60s.
+
+**Lecons** :
+1. Le mode barrieres a remplace le pool par du sequentiel (executer_lot) : le --workers n a AUCUN effet dans ce mode. Les barrieres (seq entre series) n interdisent PAS le parallelisme intra-serie.
+2. test-005 avait un chrono interne a 0.0s alors que son temps reel est 6.3s (chrono bugge du test) : toujours mesurer avec un chrono externe.
+3. Le pool global a revele les tests sensibles a la concurrence (fichiers partages) : test-035 (registre). Les exclusifs existants (020/031/061) ne suffisaient pas.
+
+## [LECON] 2026-08-16 -- OPTIMISATION POOL INTRA-SERIE : 127.8s -> 70.2s (Janus, VERDICT VALIDE)
+
+**Contexte** : demande utilisateur (la suite est trop longue, outil de mesure I/O). Analyse : le mode barrieres (defaut) lancait chaque serie en SERIE PURE (executer_lot), le pool n etait utilise que par --parallele. Pool global mesure : 56.9s vs 127.8s.
+
+**Cause racine double** :
+1. detecter-decalages-catalogue sondait l aide de 165 commandes dont 99 sans flag (et 23 tests executes en entier) -> 12.6s (corrige par Vulcain : sondage selectif, 4.6s).
+2. Mode barrieres sequentiel pur -> corrige par Vulcain : pool intra-serie (executer_pool PAR serie, garde-fous + exclusifs en serie) + test-035 en exclusif (registre partage).
+
+**Resultat mesure** : 64 OK / 0 KO, chrono 70.2s (reference mise a jour depuis 118.5s). Gain total : -45%.
+
+**Lecons** :
+- La mesure precede l optimisation : le chrono a revele que le mode par defaut n etait pas la meilleure implementation.
+- Les tests exclusifs (fichiers partages : README, registre, temps-reference) doivent rester en serie meme dans un mode parallele.
+- Un bump de version du lanceur impacte 8+ tests qui pincent la version (024/027/031/032/051/060/062/007) - anticiper l adaptation.
+
+**VERDICT** : VALIDE (64 OK / 0 KO, 70.2s).
+
+## [LECON] 2026-08-16 -- VALIDATION ROUND BUMPER : 65 OK / 0 KO (Janus, VERDICT VALIDE)
+
+**Contexte** : round bumper (demande utilisateur) - mettre-a-jour-versions v0.1.2 signale les fichiers compagnons, motif md 2 formats, 11 outils realignes (--tous --wet), garde-fou test-066 cree.
+
+**Deroulement** :
+- test-030 a bloque : le nouveau test-066 n importait PAS les protections (bloc PROTECTIONS = charger_protections() + lancer_protege) - corrige par Morpheus avant la suite.
+- Les 11 alignements d outils (supprimer-fichier .sh 0.3.2, combos-analyse-projet .sh 0.1.3, etc.) sont compatibles avec les tests existants (test-020 46/46).
+
+**Resultat** : 65 OK / 0 KO (72.7s, base re-enregistree car nombre de tests change 64 -> 65).
+
+**Lecon** : un nouveau test DOIT importer les protections des sa creation - c est le premier point que test-030 verifie. Ajouter le bloc PROTECTIONS avant meme de tester les invariants fonctionnels.
+
+**VERDICT** : VALIDE (65 OK / 0 KO).
+
+## [LECON] 2026-08-16 -- VALIDATION test-067 AUDIT BUMPER : 66 OK / 0 KO (Janus, VERDICT VALIDE)
+
+**Contexte** : institutionnalisation du bumper --tous apres chaque round (demande utilisateur) - garde-fou test-067 ajoute a la serie a.
+
+**Resultat** : 66 OK / 0 KO (72.8s, base re-enregistree 65 -> 66 tests). test-067 passe dans la serie a (13 tests pool + 4 exclusifs).
+
+**Lecon** : l audit des versions est maintenant AUTOMATIQUE a chaque non-regression - les incoherences de version (comme les 11 ecarts caches du round bumper) seront detectees des le prochain round, sans action manuelle.
+
+**VERDICT** : VALIDE (66 OK / 0 KO).
+
+## [LECON] 2026-08-16 -- VALIDATION REGLE D OR AU MARBRE : 67 OK / 0 KO (Janus, VERDICT VALIDE)
+
+**Contexte** : decision utilisateur - graver la REGLE D OR anti-valeurs-magiques dans le marbre + detecter-donnees-en-dur v0.1.1 (secrets .env). Chaine : Buffy (regle) -> Vulcain (porte --ajouter + secrets) -> Morpheus (test-068) -> Janus.
+
+**KO repares en route** :
+- test-035 : declaration registre fautive (vulcain->proteger-modifier-marbre, outil exclusif gardien) retiree + FIN_MISSION_ERRONEE (mission Buffy disait reactiver Cerberus au lieu de Activer Janus) corrigee dans AGENTS-historique.
+- test-057 : version proteger-modifier-marbre 0.1.1 -> 0.1.2.
+
+**Resultat** : 67 OK / 0 KO (74.1s, base 66 -> 67).
+
+**Lecon** : la REGLE D OR a 3 couches verifiees par test-068 : le texte de la regle (regles-general-global.md), sa protection (zone marbre + empreinte), son outil (detection secrets). Une decision utilisateur a 3 volets = un garde-fou a 3 volets.
+
+**VERDICT** : VALIDE (67 OK / 0 KO).
+
+## [LECON] 2026-08-16 -- NON-REGRESSION 68/68 + 2 KO REPARES EN ROUTE (Janus)
+
+**Contexte** : garde-fou test-069 (detecter-contradictions v0.1.1) ajoute a la serie A. Non-regression complete demandee.
+
+**Deroule** : 1er run -> barriere E bloquee (test-024 : tmp-argus/ residuel) -> activation Hygie qui purge avec snapshot -> 2e run -> KO test-047 (3 corrections.md suspects : argus/morpheus/vulcain avec CRLF, dont vulcain avec 2 OCTETS NULS \x00 qui le faisaient classer binaire par corriger-fins-de-ligne) -> correction des fins de ligne (outil projet) + retrait des octets nuls (vulcain) -> 3e run : 68 OK / 0 KO, toutes barrieres franchies (E, A, D, C, B), base temps 75.0 s enregistree (67 -> 68 tests).
+
+**Lecons** :
+- Les appends io.open en mode texte sous Windows traduisent 
+ en \r\n : TOUJOURS ouvrir avec newline="
+" (ou corriger-fins-de-ligne juste apres, avant tout autre verrou).
+- Les fichiers corrections.md peuvent accumuler des octets nuls (\x00) apres des mois d edits : corriger-fins-de-ligne les classe binaire et refuse -> retirer les \x00 puis corriger le CRLF.
+- Une non-regression peut necessiter plusieurs runs : le cycle KO -> agent habilite -> relance fait partie du processus normal (test-024 -> Hygie, test-047 -> correction normes).
+
+## [LECON] 2026-08-16 -- NON-REGRESSION 68/68 VALIDATION SEQUENCE ARGUS (Janus)
+
+**Contexte** : validation finale de la sequence Argus (protocole, parcours v0.1.3 avec case nettoyage c31, fiche, templates REGLE ABSOLUE 9 / point 12 / regle 7, purge tmp-argus par Hygie).
+
+**Deroule** : 1er run -> barriere E bloquee (test-035 KO) : mes 3 missions Buffy de la sequence se terminaient par "reactiver Cerberus" alors que la carte de Buffy impose ACTIVER JANUS (maillon final). Correction : les 3 entrees d AGENTS-historique.md portent desormais la fin correcte. 2e run : 68 OK / 0 KO, toutes barrieres franchies (E A D C B).
+
+**Lecons** :
+- test-035 (evaluateur de processus) verifie la FIN DE MISSION dans les raisons d activation des 3 missions les plus recentes de chaque agent : une mission Buffy doit porter ACTIVER JANUS, pas reactiver Cerberus (c est le maillon de chaine). Cerberus doit donc ecrire les bonnes fins dans les raisons (lecon : toujours verifier la carte de l agent avant de rediger une raison d activation).
+- Le garde-fou fonctionne : la derive (courcircuit Buffy -> Cerberus au lieu de Buffy -> Janus -> Cerberus) a ete detectee et corrigee avant validation.
+## [LECON] 2026-08-16 -- CONTROLE FINAL MISSION REELLE ARGUS : PARCOURS SANS BLOCAGE (Janus, VERDICT VALIDE)
+
+**Controle** (maillon de chaine, carte argus c13) : verifier la mission reelle d Argus - parcours v0.1.3 suivi case par case.
+
+**Verifications J1-J4** :
+- J1 : mission en lecture + preuve negative uniquement - seul corrections.md modifie (lecon ajoutee, autorisee), parcours v0.1.3 (23 cases) et fiche v0.1.2 inchanges
+- J2 : 0 residu tmp-* a la racine (nettoyage c31 effectif)
+- J3 : normes 0 non-ascii / 0 crlf / 0 octet nul sur corrections.md et argus.md
+- J4 : valider-cartes argus CONFORME (Pattern 14 : fiche == parcours 0.1.3)
+
+**Verdict : VALIDE** - le parcours v0.1.3 a correctement guide la mission reelle (audit -> croisement double source -> preuve negative -> nettoyage -> fin). Aucun fichier projet modifie par la mission (lecture seule + tmp purges).
+
+**Lecon de controle** : quand une mission est en lecture seule avec preuve temporaire, le controle se concentre sur : 1) la lecon (seule ecriture attendue), 2) le 0 residu apres nettoyage, 3) les normes du fichier de lecon. Le dossier argus/ est entierement non-suivi git (creation recente jamais commitee) - etat pre-existant, hors perimetre.
+## [LECON] 2026-08-16 -- CONTROLE FINAL CORRECTION C29E ARGUS : 93 FINS SCANNEES, 0 AUTO-REACTIVATION (Janus, VERDICT VALIDE)
+
+**Controle** (maillon de chaine, carte de Buffy) : verifier la correction du bug de fin qui stoppait le round - argus c29e reactivait argus (auto) au lieu de cerberus.
+
+**Verifications J1-J4** :
+- J1 : carte argus v0.1.4, c29e = reactiver session-llm-1 ... cerberus (cible correcte)
+- J2 : valider-cartes --tous 15/15 CONFORMES
+- J3 : scan de TOUTES les fins (93 au total) : 0 auto-reactivation dans les 15 cartes
+- J4 : normes 0/0 (parcours, fiche, corrections buffy), 0 residu
+
+**Verdict : VALIDE** - le bug d auto-reactivation est corrige et ne se retrouve dans aucune autre carte. La cause : faute de frappe (message disait Cerberus, commande reactivait argus).
+
+**Lecon de controle** : le scan des fins doit verifier la CIBLE de la commande reactiver (le dernier argument), pas seulement la presence du mot - c est la que se cache l auto-reactivation qui stoppe le round. Un scan de 93 fins prend < 1s : il devrait faire partie des controles de carte automatises.
+## [LECON] 2026-08-16 -- CONTROLE FINAL LACUNES ARGUS : DELEGATION BOUCLEE + INDICES (Janus, VERDICT VALIDE)
+
+**Controle** (maillon de chaine, carte de Buffy) : verifier la correction des lacunes du parcours Argus vs les agents principaux.
+
+**Verifications J1-J4** :
+- J1 : parcours argus v0.1.6, c29a transformee en ACTION delegation -> cR1 (reprise), indices c0 guider-parcours / c4 valider-cartes-decision + valider-conformite-ascii / c5 valider-nommage
+- J2 : valider-cartes --tous 15/15 CONFORMES
+- J3 : 0 reference morte, boucle de delegation complete (c29a -> cR1 -> c31 -> c13, avec cR1 NON -> cD1 boucle de correction)
+- J4 : normes 0/0, 0 residu
+
+**Verdict : VALIDE** - la lacune critique (delegation sans retour) est corrigee : quand l agent delegue reactive Argus avec son bilan, la case cR1 (RETOUR) dit quoi faire au lieu de retomber au debut.
+
+**Lecon de controle** : le diagnostic des lacunes d un agent jeune passe par la comparaison structurale avec les agents matures : 1) les boucles de delegation (action activer -> case de reprise), 2) le nombre et le type de fins, 3) les outils branches dans les CASES vs seulement en P0, 4) la couverture des cas de gestion (erreurs hors mission, retours d agents). La correction ciblee sur la boucle de delegation est la plus a forte valeur : c est elle qui empeche le round de deriver.
+## [LECON] 2026-08-16 -- NON-REGRESSION 69 OK / 0 KO : GARDE-FOU test-070 VALIDE (Janus)
+
+**Controle** : non-regression complete apres la creation du garde-fou test-070 anti-auto-reactivation (Morpheus, serie a + profil cartes).
+
+**Resultat** : 69 OK / 0 KO, toutes barrieres franchies (E -> A -> D -> C -> B), 77.3s conforme reference (+3%). RATING GENERAL serie 80.7/100 (BIEN), test 97.3/100 (EXCELLENT).
+
+**Ce que test-070 a verifie en passant** : 0 auto-reactivation dans les 15 cartes, 0 incoherence message/commande, fins 'FIN - Activer X' sans commande reactiver, preuve negative (injection detectee), normes. Le bug argus c29e est maintenant verrouille par un garde-fou qui scanne TOUTES les cartes en < 0.1s.
+
+**Lecon de controle** : le verrou d habilitation a bloque ma premiere tentative de lancer la serie avec --agent morpheus ('seul janus lance la non-regression') - c est le comportement attendu : le lanceur lui-meme est protege. La chaine Cerberus -> Morpheus -> Janus -> Cerberus s est deroulee dans le meme round sans brisure.
+## [LECON] 2026-08-16 -- NON-REGRESSION 69 OK / 0 KO : BRANCHAGE CORRIGER-SYMBOLES VALIDE (Janus)
+
+**Controle** : non-regression complete apres le branchage de corriger-symboles dans 28 cases de 15 cartes (Buffy) + adaptation des tests (Morpheus).
+
+**Resultat** : 69 OK / 0 KO, toutes barrieres franchies, 77.7s conforme reference (+3%).
+
+**1 KO decouvert et corrige en route** : test-005 pincait aussi la version du parcours-atlas (0.4.2 -> 0.4.3, bump Buffy) - adapte par mes soins (28/28 OK) puisque la carte de Morpheus n etait pas impliquee.
+
+**Lecon de controle** : quand un bump de version touche PLUSIEURS cartes, les tests qui pincent les versions sont disperses (test-013 cerberus, test-004 morpheus, test-016 buffy, test-005 atlas) - il faut un grep systematique des versions avant/apres dans TOUS les tests, pas seulement ceux identifies par Morpheus. La non-regression complete reste le filet final : elle a attrape le 4e test manque.
+## [LECON] 2026-08-16 -- NON-REGRESSION 70 OK / 0 KO : GARDE-FOU test-071 VALIDE (Janus)
+
+**Controle** : non-regression complete apres la creation du garde-fou test-071 (cases lecons avec outil de correction).
+
+**Resultat** : 70 OK / 0 KO, toutes barrieres franchies, 81.3s - nouvelle base enregistree (le lanceur detecte le changement de nombre de tests 69 -> 70 et re-base la reference, comportement attendu).
+
+**Ce que test-071 verifie** : les 20 cases d'ecriture de lecons/rapports des 15 cartes referencent toutes un outil de correction d accents - l anti-recurrence du bug 'corriger a la main' est verrouille.
+
+**Lecon de controle** : quand le nombre de tests change, le chrono re-base la reference (81.3s) au lieu de comparer a l ancienne - c est le comportement correct : comparer des durees sur des perimetres differents n aurait pas de sens. La chaine Cerberus -> Morpheus -> Janus -> Cerberus dans le meme round sans brisure.
+## [LECON] 2026-08-16 -- NON-REGRESSION 70 OK / 0 KO : OUTILS DE CONTROLE BRANCHES + 3 KO REPARES (Janus)
+
+**Controle** : non-regression complete apres le branchage des 6 outils de controle sous-branches dans 15 cases de 9 cartes (Buffy) + adaptation test-004 (Morpheus).
+
+**Resultat** : 70 OK / 0 KO, toutes barrieres franchies, 82.6s conforme reference (+2%).
+
+**3 KO repares en route** :
+1. test-024 : tmp-buffy/ residuel (mes scripts de travail de Buffy pas purges avant l activation de Janus) - purge + 16/16 OK. LECON : purger les dossiers tmp de travail AVANT d activer l agent de controle.
+2. test-016 : buffy v0.4.8 -> v0.4.9 (le bump outils de controle avait depasse la version adaptee precedemment) - adapte, 20/20 OK.
+3. test-023 : le fichier spec-refonte-cartes-decision.001.01.ebauche.md etait SUPPRIME du working tree (statut git D) sans commit - le test le reference. Restaure depuis HEAD (git restore) - 26/26 OK. LECON : une suppression de fichier reference par un test doit etre accompagnee de l adaptation du test, sinon KO a la non-regression.
+
+**Lecon de controle** : la non-regression complete est le filet final qui attrape : 1) les residus de travail (tmp-*), 2) les versions depassees par un bump ulterieur, 3) les fichiers supprimes sans adaptation des tests qui les reference. Les 3 types etaient presents dans ce round.
+## [LECON] 2026-08-16 -- CONTROLE GRAVURE RELIRE SA FICHE AVANT MISSION (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Buffy) : J1 section gravee dans regles-groupes-agents.md apres RELEVE MEME ROUND (ligne 222, contenu complet : regle, 3 elements de coherence, mecanisme c0/c0b, consequence, garde-fou) ; J2 porte du marbre : proteger-modifier-marbre zone regles-groupes-agents, empreinte manifeste == empreinte journalisee (364a9171), autorisation UTILISATEUR explicite ; J3 verrou marbre rc=0 + test-057 24/24 + normes 0/0 sur les 4 fichiers ; J4 0 residu + index regle deja IMMUABLE (aucune modif index necessaire).
+
+**Lecon** : la gravure d une regle de comportement suit un triptyque verifiable : 1) le contenu (section IMMUABLE dans le fichier grave), 2) la porte (empreinte mise a jour + journalisee avec autorisation utilisateur), 3) le verrou (test-057 + proteger-verrou-marbre). Controle les 3, pas seulement le texte.
+## [LECON] 2026-08-16 -- NON-REGRESSION 71/71 + VERIF GARDE-FOU c0/c0b (Janus)
+
+**Controle final** (mission Morpheus + Buffy) : test-072-c0-c0b-relecture cree et vert (10/10 isolation, serie a + profil cartes), 5 cartes c0b corrigees (argus, gardien, promethee, minerve, atlas) + fiches synchronisees, test-005 adapte (atlas v0.4.4, 3 cas commande en dur documentes). NON-REGRESSION COMPLETE : 71 OK / 0 KO (85.0s, nouvelle base 71 tests enregistree). RATING general 91.4/100 (EXCELLENT).
+
+**Lecon** : le garde-fou c0/c0b verrouille le mecanisme de relecture obligatoire dans les 15 parcours - c est la mechanisation de la regle RELIRE SA FICHE AVANT MISSION gravee dans le marbre. Le verrou d habilitation fonctionne (le lanceur exige --agent, seul janus est autorise). La chaine Buffy -> Morpheus -> Janus -> Cerberus s est deroulee dans le meme round, sans brisure.
+## [LECON] 2026-08-16 -- CONTROLE CROISE RELIRE (Janus, VERDICT : 1 CONTRADICTION CONFIRMEE)
+
+**Controle croise** (fin de mission Argus) : J1 ecart reel confirme - la regle gravee (regles-groupes-agents.md ligne 235) dit "OUI = memorisation prouvee -> mission" alors que le protocole-activation (ligne 92-93) dit "c0 -> c0c contexte obligatoire -> mission" et que les 15 cartes ont OUI -> c0c (verifie 15/15). J2 : la correction est du ressort de Buffy via la porte du marbre (zone regles-groupes-agents, autorisation utilisateur).
+
+**Lecon** : le controle croise Argus a deja prouve sa valeur : il detecte une contradiction que les tests structurels ne voient pas. test-072 verifie la STRUCTURE des cartes (c0/c0b conformes) mais pas la COHERENCE du texte grave avec le mecanisme reel. La regle gravee doit decrire le flux COMPLET (OUI -> c0c -> mission) - elle sera corrigee par Buffy avec autorisation utilisateur.
+## [LECON] 2026-08-16 -- NON-REGRESSION 72/72 + AUDIT COHERENCE (Janus)
+
+**Controle final** (mission Vulcain + Morpheus) : detecter-contradictions v0.1.2 avec l audit --coherence (regle gravee <-> protocole associe), test-069 adapte (v0.1.2 + point 2c), garde-fou test-073 cree (7/7, serie a + profil cartes). NON-REGRESSION COMPLETE : 72 OK / 0 KO (86.7s, nouvelle base 72 tests enregistree).
+
+**Lecon** : la detection de la contradiction c0c (regle gravee OUI -> mission vs protocole OUI -> c0c -> mission) est maintenant MECANISEE - plus besoin du controle manuel Argus. L ecart reste present dans l etat reel (signale en MAJEUR par l audit, comportement attendu) : sa correction est une mission Buffy via la porte du marbre avec autorisation utilisateur. La chaine Vulcain -> Morpheus -> Janus -> Cerberus s est deroulee dans le meme round, sans brisure.
+## [LECON] 2026-08-16 -- CONTROLE 3 REFERENCES PROTOCOLE (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission Buffy) : J1 les 3 references sont presentes (protocole-activation ligne 225, protocole-tests lignes 110/132, protocole-controle-buffy ligne 178) au format modele [protocole-X/](protocole-X/) ; J2 porte du marbre : empreinte manifeste == empreinte journalisee (0f8b3d68), autorisation UTILISATEUR ; J3 verrou marbre rc=0 + audit --coherence ne signale plus QUE le MAJEUR c0c connu (les 3 REGLE_SANS_REFERENCE ont disparu) + test-073 7/7 + test-057 24/24 + normes 0/0 ; J4 0 residu.
+
+**Lecon** : le triptyque du marbre (contenu + porte + verrou) s applique aussi aux petites corrections (3 references) : modification du fichier grave, re-empreinte via proteger-modifier-marbre, verification par l audit qui confirme la disparition des alertes. L audit --coherence est l outil de verification : avant 4 resultats (1 majeur + 3 mineurs), apres 1 seul (le majeur c0c connu, mission separee).
+## [LECON] 2026-08-16 -- NON-REGRESSION 72/72 APRES CORRECTION c0c (Janus)
+
+**Controle final** (mission Buffy + Morpheus) : regle gravee RELIRE corrigee (OUI -> c0c -> mission) via porte du marbre (autorisation UTILISATEUR) + protocole-activation ligne 75 corrige (meme erreur) - l audit --coherence est PROPRE (0 contradiction). test-069 (point 2c -> PROPRE) et test-073 (point 4 -> 0 ecart) adaptes et reverdis. NON-REGRESSION COMPLETE : 72 OK / 0 KO (85.4s).
+
+**Lecon** : la correction de la regle gravee a revele une 2e erreur identique dans le protocole (ligne 75) - preuve que la coherence regle+protocole+cartes doit etre verifiee en CHAINE : le triptyque est maintenant aligne (OUI -> c0c -> mission dans les 3 sources). L audit --coherence, passe de 1 MAJEUR a PROPRE, confirme la correction de bout en bout. La chaine Buffy -> Morpheus -> Janus -> Cerberus s est deroulee dans le meme round, sans brisure.
+## [LECON] 2026-08-16 -- VERDICT VALIDE : TABLE REGLE_PROTOCOLE 8/8 (Janus)
+
+**Controle croise** (Vulcain -> Morpheus -> Janus) : detecter-contradictions v0.1.3 croise desormais 8/8 regles IMMUABLE (SEUL CLIO -> protocole-verification-coherence, LE MODELE DE CONFIANCE -> protocole-controle-statuts ajoutes). Verification J1-J4 : (J1) en-tete version .py alignee 0.1.3 + doc .md 0.1.3 + VERSION 0.1.3, (J2) test-069 10/10 (0 MAJEUR + 2 MINEUR REGLE_SANS_REFERENCE documentes), test-073 7/7, (J3) normes 0/0 (py + md + tests), (J4) 0 residu.
+
+**Verdict** : VALIDE. Non-regression complete 72 OK / 0 KO (89.9s, conforme a la reference 85.4s, +5%), toutes barrieres franchies.
+
+**Lecon** : la couverture de l audit --coherence est totale (8/8 regles) - les 2 MINEUR REGLE_SANS_REFERENCE restants sont des ecarts CONNUS du marbre (les regles SEUL CLIO et LE MODELE DE CONFIANCE ne citent pas leurs protocoles) : correction Buffy via porte du marbre, mission separee. Les tests documentent cet etat intermediaire (rc in (0,1) + contenu) et seront re-adaptes apres la correction.
+## [LECON] 2026-08-16 -- VERDICT VALIDE : PREUVE NEGATIVE COTE PROTOCOLE (Janus)
+
+**Controle croise** (Morpheus -> Janus) : test-073 enrichi avec la preuve negative cote protocole (mini-racine temp avec protocole-activation TRONQUE OUI -> mission sans c0c, appel reel de auditer_coherence_regles, detection du REGLE_PROTOCOLE flux-contradiction, purge 0 trace). Verification J1-J4 : (J1) test-073 9/9 en isolation (points 3b/3c verts), (J2) la mini-racine temp est SUPPRIMEE (0 residu a la racine), (J3) normes 0/0, (J4) non-regression complete 72 OK / 0 KO (88.0s, conforme reference 85.4s, +3%).
+
+**Verdict** : VALIDE.
+
+**Lecon** : la preuve negative bidirectionnelle (regle tronquee ET protocole tronque) verrouille le check 4 de auditer_coherence_regles dans les 2 sens - une regression du cote protocole (retour de la ligne OUI -> mission) serait detectee immediatement par test-073. La mini-racine temp est la technique propre pour prouver un comportement sans toucher aux fichiers reels (marbre, protocoles).
+## [LECON] 2026-08-16 -- VERDICT VALIDE : 2 REFERENCES MARBRE AJOUTEES, AUDIT --COHERENCE PROPRE (Janus)
+
+**Controle croise** (Buffy -> Morpheus -> Janus) : les 2 references protocole manquantes (SEUL CLIO -> protocole-verification-coherence ligne 154, LE MODELE DE CONFIANCE -> protocole-controle-statuts ligne 207) ont ete ajoutees dans regles-groupes-agents.md via la porte du marbre (autorisation UTILISATEUR, empreinte c782ba8c). Verification J1-J4 : (J1) audit --coherence PROPRE (0 contradiction, plus aucun REGLE_SANS_REFERENCE), (J2) verrou marbre rc=0 + test-057, (J3) test-069 10/10 (re-adapte a PROPRE) + test-073 9/9, (J4) normes 0/0 + 0 residu.
+
+**Verdict** : VALIDE. Non-regression complete 72 OK / 0 KO (89.6s, conforme reference 85.4s, +5%).
+
+**Lecon** : le cycle de l audit --coherence est boucle : Argus detecte -> table REGLE_PROTOCOLE complete (Vulcain) -> references marbre ajoutees (Buffy via porte) -> tests re-adaptes a PROPRE (Morpheus) -> non-regression verte (Janus). L audit est desormais PROPRE sur les 8 regles croisees : plus aucun ecart ouvert de coherence regle/protocole. La table REGLE_PROTOCOLE (8/8) et les references marbre sont le contrat complet : toute nouvelle regle IMMUABLE devra avoir son protocole associe ET sa reference citee.
+## [LECON] 2026-08-16 -- NON-REGRESSION : 2 KO DETECTES PAR LA BARRIERE E (Janus)
+
+**Contexte** : apres la mecanisation KO (--relancer-ko v0.5.2, Vulcain) + tests adaptes (Morpheus), lancement de la non-regression complete. La BARRIERE E a STOPE la suite au 2e KO (protection STOP fonctionnelle).
+
+**KO detectes** :
+1. test-024-scripts-temporaires point 6 : pince encore 'tester-lancer-non-regression v0.5.1' alors que le lanceur est 0.5.2 (adaptation ratee lors du bump).
+2. test-066-bumper-compagnons point 4 : bumpe LANCER_DIR vers --nouvelle 0.5.2 et attend '0.5.1 -> 0.5.2' mais le lanceur est DEJA 0.5.2 (cible a passer a 0.5.3, attente '0.5.2 -> 0.5.3').
+
+**Verdict** : KO - 2 tests a corriger par MORPHEUS (exclusivite tests). Puis relance ciblee avec --relancer-ko (la mecanisation fraichement creee : ne relancer QUE test-024 + test-066, pas la suite complete).
+
+**Lecon** : la barriere E anti-recurrence a attrape 2 adaptations de version incompletes - le bumper 0.5.2 devait signaler test-024 et test-066 comme COMPAGNONS (le test-066 verifie justement cette detection des compagnons). Le cycle va maintenant demontrer --relancer-ko en conditions reelles : KO -> correction -> relance ciblee -> serie -> suite complete.
+## [LECON] 2026-08-16 -- VERDICT VALIDE : MECANISATION KO DEMONTREE EN REEL (Janus)
+
+**Controle croise** (Vulcain -> Morpheus -> Janus) : l option --relancer-ko v0.5.2 du lanceur a ete demontree en conditions reelles sur 3 cycles de KO. Verification J1-J4 : (J1) --relancer-ko a revalide UNIQUEMENT les tests corriges a chaque cycle (2 KO 024/066 -> relance 2, 2 KO 074/062 -> relance 2, 1 KO 051 -> relance 1) en quelques secondes au lieu de 90s+, (J2) la suite complete finale : 73 OK / 0 KO (89.1s, toutes barrieres franchies E>A>D>C>B), (J3) le run_id est journalise dans registre-tests.jsonl et identifie chaque lancement, (J4) 0 residu + normes 0/0.
+
+**Verdict** : VALIDE.
+
+**Lecon** : le cycle KO est maintenant MECANISE : barriere STOP -> Janus rapporte -> Morpheus corrige -> --relancer-ko revalide en cible -> suite complete. Les 5 KO de ce round (024, 066, 074, 062, 051) etaient tous des adaptations de version 0.5.2 - le bumper aurait du les signaler comme compagnons en amont : verification de TOUS les pinneurs de version avant la suite est la vraie prevention. La valeur de --relancer-ko est prouvee : 3 revalidations ciblees (~5s chacune) au lieu de 3 fois la suite complete (~90s).
+## [LECON] 2026-08-16 -- VERDICT VALIDE : BUMPER v0.1.3 PRECISION COMPAGNONS (Janus)
+
+**Controle croise** (Vulcain -> Morpheus -> Janus) : le bumper v0.1.3 exclut les corrections.md des compagnons (mentions historiques, jamais adaptees - faux positifs) + affiche un RAPPEL OBLIGATOIRE (lancer le bumper AVANT la non-regression). Verification J1-J4 : (J1) la detection est precise : bump du lanceur = 8 compagnons (tous des tests reels) au lieu de 13 (5 corrections en moins), (J2) le rappel obligatoire s affiche, (J3) test-066 11/11 + test-067 8/8 (adaptes v0.1.3, NB_POINTS corriges), (J4) non-regression complete 73 OK / 0 KO (90.6s, conforme +2%) + 0 residu + normes 0/0.
+
+**Verdict** : VALIDE.
+
+**Lecon** : la distinction PINS A ADAPTER vs MENTIONS HISTORIQUES est la cle de la precision des compagnons : les tests cassent au bump (pins), les corrections documentent le passe (ne se modifient jamais). Le bumper signale desormais les vrais compagnons + ordonne le lancement AVANT la suite - la prevention des KO en cascade est complete : bump -> bumper -> adapter les compagnons -> suite.
+## [LECON] 2026-08-16 -- FILTRE SERIE --RELANCER-KO DEMONTRE (Janus)
+
+**Contexte** : demande utilisateur - etendre --relancer-ko a
+--relancer-ko --series X. Vulcain v0.5.3 (filtre serie dans le bloc
+relancer_ko), Morpheus (test-075 + 7 tests adaptes a 0.5.3 + test-066
+cible 0.5.4).
+
+**Deroulement reel** : la barriere E a bloque sur test-066 (cible 0.5.3
+deja atteinte -> Morpheus a corrige a 0.5.4). J ai demontre le nouveau
+filtre serie : --relancer-ko --series e a revalide UNIQUEMENT test-066
+(serie E) en 0.7s - les KO des autres series n ont pas ete relances.
+Puis suite complete : 74 OK / 0 KO (91.6s, nouvelle base - le nombre de
+tests est passe de 73 a 74 avec test-075).
+
+**Lecon** : le filtre serie est la variante ciblee du workflow KO grave
+dans ma fiche : KO detecte -> analyser -> --relancer-ko --series X (la
+serie qui contient le KO) -> valider la serie -> suite complete. Pas
+besoin de revalider les KO des autres series quand le correctif ne les
+concerne pas.

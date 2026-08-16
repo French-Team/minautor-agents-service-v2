@@ -37,7 +37,7 @@ Invariants verifies :
      est verrouille : appel du verrou par un non-proprietaire -> BLOQUE (rc=1)
   4. Aucun faux positif : la derivation evaluer-processus ne doit pas
      declarer exclusif un outil present chez un autre agent (trio inclus)
-  5. Preuve reelle : cerberus -> guider-parcours (exclusif buffy) BLOQUE
+  5. Preuve reelle : cerberus -> editer-fichier-agents (exclusif buffy) BLOQUE
   6. Normes : ASCII strict + LF pur (outils + test)
 """
 import importlib.util
@@ -309,13 +309,13 @@ def main():
                      "; ".join(faux))
             chrono_etape("4. faux positifs", t0)
 
-        # 5. Preuve reelle : cerberus -> guider-parcours (exclusif buffy)
+        # 5. Preuve reelle : cerberus -> editer-fichier-agents (exclusif buffy)
         if point_actif(5):
             t0 = time.monotonic()
             r = lancer([PYTHON, VERROU_PY, "--agent", "cerberus",
-                        "--outil", "guider-parcours", "--audit"], timeout=30)
+                        "--outil", "editer-fichier-agents", "--audit"], timeout=30)
             ok = (r.returncode == 1 and "BLOQUE" in r.stdout)
-            verifier("5. Preuve : cerberus -> guider-parcours (exclusif "
+            verifier("5. Preuve : cerberus -> editer-fichier-agents (exclusif "
                      "buffy) BLOQUE", ok, "rc=%d out=%s" %
                      (r.returncode, r.stdout.strip()[-60:]))
             chrono_etape("5. preuve", t0)

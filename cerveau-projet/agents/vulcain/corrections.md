@@ -2006,13 +2006,13 @@ s'il embarque la logique par heredoc, il faut reporter la modification (parite p
 
 **Failles detectees par le diagnostic** :
 1. ENCODAGES : lire-fichier CRASHAIT avec traceback sur BOM UTF-8, fichier latin-1 et octets invalides - cause racine double : (a) print() vers une console cp1252 sous Windows (UnicodeEncodeError), (b) BOM non nettoye + errors=replace produisant des U+FFFD non encodables en cp1252.
-2. OCTET NUL : un chemin contenant   levait ValueError embedded null character non gere (traceback).
+2. OCTET NUL : un chemin contenant  levait ValueError embedded null character non gere (traceback).
 3. SYMLINK : non testable sur ce systeme (WinError 1314) mais les outils d ecriture ecriraient a travers le lien vers la cible a l insu de l agent.
 
 **Corrections (9 outils)** :
 1. stdout force en UTF-8 (sys.stdout.reconfigure errors=replace, protege par try AttributeError) dans les 9 outils.
 2. lecture robuste : utf-8-sig (BOM nettoye) puis fallback latin-1 - plus jamais de crash d encodage (lire, editer, inserer, supprimer-ligne, remplacer).
-3. garde-fou octet nul : tout chemin contenant   refuse avec message explicite (exit 1) dans les 9 outils.
+3. garde-fou octet nul : tout chemin contenant  refuse avec message explicite (exit 1) dans les 9 outils.
 4. garde-fou symlink : outils d ECRITURE refusent les liens (ecrire, editer, creer, deplacer source+dest, inserer, supprimer-ligne, remplacer ignore les liens) ; lire et supprimer peuvent traverser (lecture seule / os.remove ne touche que le lien).
 5. backup binaire (shutil.copy2) dans ecrire-fichier (une copie texte corrompait les fichiers latin-1).
 
@@ -3252,3 +3252,247 @@ remplacement.
 **Lecons** :
 - Toute porte d outil qui modifie une CARTE (marbre inclus) doit resynchroniser cartes-lock.json - le lock est la verite de l anti-contournement, pas seulement marbre.json.
 - Une carte modifiee par script direct (hors editer-parcours) cree une divergence silencieuse qui bloque TOUTES les modifications ulterieures : toujours passer par editer-parcours, meme pour un ajout d indice.
+
+
+## [LECON] 2026-08-15 -- VERIFICATION OUTILS DE LA RELEVE : ACTIVATION + GUIDAGE (Vulcain)
+
+**Contexte** : demande utilisateur - la chaine se brise apres chaque activation. Verifier les 2 outils critiques de la releve : activer-agent-principal (activation) et guider-parcours (distribution de la case suivante).
+
+**VERDICT : les 2 outils sont FONCTIONNELS** (preuves reelles) :
+1. activer-agent-principal : l instruction DEMARRAGE OBLIGATOIRE (v0.5.4) est bien gravee dans AGENTS.md a chaque activation - l agent active sait comment lancer son parcours depuis c0.
+2. guider-parcours : demarre a c0, affiche la case (titre, indices, question, branches), enchainement automatique avec --reponses OUI (c0 -> c0c CONTEXTE OBLIGATOIRE), mode agent propre (jamais d input bloquant, relance depuis la case courante).
+
+**Ecart corrige** : divergence de version .py 0.5.7 vs .sh 0.5.6 (meme correctif anti-accumulation, seul le numero etait en retard) -> .sh bumpe a 0.5.7. Test local v055 adapte (0.5.5 -> 0.5.7, 9 occurrences dont le motif grep echappe) : 9/9 VALIDE.
+
+**Lacune detectee (a corriger plus tard)** : detecter-divergences-version ne compare QUE spec vs .py - il ne couvre PAS les .sh. C est CETTE lacune qui a laisse la divergence .sh passer inapercue. A etendre au .sh (parite py/sh, regle des 5 fichiers).
+
+
+
+## [LECON] 2026-08-15 -- MISSION CATALOGUE SUSPENDUE (Vulcain, decision utilisateur)
+
+**Contexte** : la mission catalogue (audit complet + ajouts, decision utilisateur) etait en cours. L utilisateur a donne une nouvelle mission PRIORITAIRE : creer l agent ARGUS (detection de contradictions dans les cases, regles, protocoles + lecture du depot git). Decision utilisateur : SUSPENDRE le catalogue au profit de la creation d Argus.
+
+**Etat de suspension** : catalogue a 162 commandes, 0 decalage detecte, sain. La mission reprendra apres la creation d Argus (audit complet + ajouts : tester-lancer-non-regression avec ses options --series/--profil/--fichiers/--desactiver/--activer/--etat-tests, generateurs-regenerer-catalogue, evaluer-rating, detecter-residus, verrou-habilitation, bumper).
+
+
+
+## [LECON] 2026-08-15 -- OUTIL DETECTER-CONTRADICTIONS CREE (Vulcain, etape 2/3 Argus)
+
+**Contexte** : creation de l agent Argus (etape 1 Buffy) - l outil detecter-contradictions reference dans le parcours argus (c2/c3) etait INTROUVABLE. Mission : le creer.
+
+**Ce qui a ete fait** :
+1. Outil cree : cerveau-projet/agents/tools/detecter/detecter-contradictions/ (.py + .md). 3 audits : --cases (parcours JSON : fins non joignables, cases orphelines, boucles bloquantes, refs mortes - base detecter-cablages-manquants), --regles (refs cassees, titres dupliques hors titres generiques), --git (git log --all en LECTURE SEULE : evolutions vraies et fausses, residus temp commites). Rapport markdown classe par gravite (critique/majeur/mineur) avec preuves.
+2. Affinage anti-faux-positif : les titres GENERIQUES communs a tous les fichiers de regles (Principe Fondamental, Application, Liens, Navigation, Verification, Pieges courants...) sont EXCLUS du TITRE_DOUBLON - ils ne sont pas des contradictions (structure du template).
+3. Catalogue 162 -> 163 + index-tools.md (categorie Detecter) + doc .md.
+4. Preuve negative reelle : REF_MORTE injectee dans parcours-argus (c2 -> c999) -> DETECTEE a 100% (MAJEUR, verdict KO), restauration -> PROPRE, 0 residu.
+
+**Resultat reel** : detecter-contradictions --tous sur le projet = PROPRE (0 contradiction : les 18 faux positifs TITRE_DOUBLON generiques ont ete elimines par l affinage).
+
+**A faire** : Morpheus (etape 3) adapter test-007 (catalogue 162 -> 163) + tests nombre agents (test-037 11, test-026 11 parcours, test-018 12).
+
+
+
+## [LECON] 2026-08-15 -- CORRECTIONS BARRIERE E (Vulcain, suite non-regression)
+
+**Contexte** : la non-regression (Janus) s arretait a la barriere E - 4 KO diagnostiques. Corrections apportees :
+
+1. **evaluer-coherence v0.2.4** : 3 corrections anti-faux-positifs - (a) options --xx exclues du scan (--parallele, --serial, --etat-tests documentes dans janus.md), (b) mots francais simples entre backticks (conforme, success, probleme) exclus - un nom d outil contient un tiret ou est connu des dossiers reels, (c) AGENTS_ATTENDUS 11 -> 15 agents (ajout hygie, hermes, gardien, argus). test-001 10/10 OK.
+
+2. **proteger-verrou-habilitation** : ajout OUTILS_P0_PARTAGES (guider-parcours, lire-activite-recente) - outils de base communs a TOUS les agents, references dans les fiches P0 mais pas dans les indices outil des cartes. Avant, guider-parcours etait derive EXCLUSIF buffy (seule carte avec l indice) - fausse exclusivite. Meme exception ajoutee dans evaluer-processus (outils_de_la_carte).
+
+3. **Registre** : retrait des 2 declarations fautives de vulcain (detecter-contradictions pendant la creation + guider-parcours pendant la verification de la releve) - ce sont des declarations de TEST, pas des usages de mission. test-035 10/10 OK.
+
+4. **cartes-lock.json** : ajout de l empreinte de la carte argus (normalisation LF+rstrip) - 14 -> 15 cartes.
+
+5. **Marbre** : zone regles-groupes-agents divergente (ajout Argus sans porte) - porte ouverte avec autorisation UTILISATEUR (creation validee). test-057 24/24 CONFORME.
+
+**Lecon** : quand on cree un agent, il faut : ajouter la carte au cartes-lock.json + ouvrir la porte du marbre si une zone marbre est modifiee (regles-groupes-agents) + verifier que l outil cree n est pas une fausse exclusivite.
+
+
+## [LECON] 2026-08-13 -- CHAINE ARGUS : CORRECTIONS BARRIERE E (Vulcain)
+
+**Contexte** : barriere E bloquee par 4 KO apres la creation de l agent Argus (15e agent, catalogue 163). Corrections d outil -> Vulcain.
+
+**Corrections apportees** :
+1. evaluer-coherence v0.2.4 : (a) exclusions des options --xx (precedent bug : `--etat-tests`, `--parallele`, `--serial` pris pour des outils), (b) exiger format nom d outil (>= 2 segments ou present dans noms_outils) pour eviter les faux positifs de mots francais (`conforme`, `success`, `probleme`), (c) AGENTS_ATTENDUS 11 -> 15 agents.
+2. proteger-verrou-habilitation : ajout OUTILS_P0_PARTAGES (guider-parcours, lire-activite) - la table derivee des indices cartes creait une FAUSSE exclusivite (guider-parcours est l outil P0 de navigation de TOUS les agents, mais seul buffy a l indice dans sa carte).
+3. evaluer-processus : meme exception OUTILS_P0_PARTAGES pour rester coherent avec le verrou.
+4. Registre : retrait des 2 declarations fautives (detecter-contradictions declare par vulcain alors que l outil est assigne a argus, guider-parcours).
+5. cartes-lock.json : resync a 15 cartes (argus ajoutee) + porte du marbre ouverte pour la divergence legitime regles-groupes-agents (ajout argus au roster).
+
+**Lecons** :
+- Une table d habilitation DERIVEE des indices cartes cree des fausses exclusivites pour les outils P0 implicites (navigation). Distinguer P0 partages vs outils assignes.
+- Le verrou et evaluer-processus doivent partager la MEME logique d exceptions (2 sources = 2 divergences).
+- detecter-divergences-version ne couvre pas les .sh (lacune a traiter).
+- RVAV purification : 40 fichiers en surcharge (janus 4703 lignes, buffy 3420) - le protocole existe mais aucun outil de purification mecanise.
+
+## [LECON] 2026-08-15 -- OUTIL PURIFIER-RVAV (Vulcain)
+
+**Contexte** : protocole rvav-workflow etape 5 [purifier] abandone et perime (decision utilisateur) - besoins listes par Buffy (spec-purification-rvav.md). Creation de l outil de purification anti-perte.
+
+**Outil cree** : purifier-rvav v0.1.0 (nouvelle categorie Purifier). Deplace les lecons/entrees les plus anciennes vers une archive cote a cote (<agent>-historique.md, AGENTS-historique-archive.md). Options : --tous/--agent/--fichier/--seuil/--dry-run (defaut)/--executer/--rapport/--verbose/--version. Quotas : corrections.md 1000, historique 800.
+
+**Tests reels passes** : dry-run sans modification (plan affiche) ; executer 333->200 lignes (2 passes) ; accumulation dans l archive existante (2e passe PREFIXE les nouveaux blocs, jamais ecrase) ; rapport markdown ; --tous dry-run plan 16 fichiers.
+
+**2 bugs graves trouves et corriges pendant le dev (preuve de l importance du test reel)** :
+1. ECRASEMENT : une 2e purification ECRASAIT l archive et perdait 5 lecons (14 -> 9). Correction : accumulation anti-perte (prefixer les nouveaux blocs devant le contenu existant) + test en 2 passes.
+2. PERTE SUR PLANTAGE : un plantage entre l ecriture du principal et de l archive perdait les blocs. Correction : construire les 2 contenus en memoire, ecrire l ARCHIVE EN PREMIER (si elle echoue, le principal reste intact).
+3. Logique d archivage corrigee : on archive TANT QUE le fichier reste au-dessus du seuil (le precedent calcul s arretait un bloc trop tot).
+
+**Lecons** :
+- Un outil de modification de fichiers DOIT etre teste avec une veritable preuve de non-perte (somme des blocs avant == apres). Les 2 bugs etaient invisibles en dry-run.
+- Quand un outil ecrit 2 fichiers, l ordre d ecriture est critique : ecrire d abord le fichier de sauvegarde (archive), jamais le fichier principal en premier.
+- Le test reel sur promethee (petit fichier, 14 lecons) a suffi a reveiller les 2 bugs - toujours tester sur un fichier de petite taille avant les gros.
+- Catalogue 163 -> 164, index-tools 180 -> 181 (Total + Purifier 1). Tests a adapter : test-007 (163 + Total 180), test-024 (163), test-060 (163). Badge README Outils-143 perime (a faire par Clio).
+## [LECON] 2026-08-16 -- COMBOS-ANALYSE-PROJET v0.1.3 : TABLE CATEGORIES VERS README-DEV (Vulcain)
+
+**Contexte** : lors de la refonte grand public du README (2026-08-14), la table des categories d outils a quitte README.md pour readme-dev.md section 6. combos-analyse-projet cherchait encore la table dans README.md -> verdict "A CORRIGER" en boucle (toutes categories absentes) qui bloquait la verification de Clio.
+**VERDICT** : VALIDE (preuve : apres correction, exactement les 5 vrais ecarts readme-dev, 0 faux positif)
+
+**Correction** : lecture de readme-dev.md (fonction lire_README_dev) pour la table des categories (format "| Cat | n |"), repli sur README.md si absent. Le badge Outils et le compteur agents restent lus dans README.md.
+
+**Preuve** : avant correction = 36 MANQUANT (faux positifs) ; apres = exactement les 5 vrais ecarts (analyser 2->4, detecter 13->15, evaluer 5->6, proteger et purifier absents).
+## [LECON] 2026-08-16 -- OUTIL ANALYSER-IO-TESTS v0.1.0 (Vulcain)
+
+**Contexte** : demande utilisateur - la suite anti-regression est trop longue, on cree un outil qui capture la lecture/ecriture disque PENDANT chaque test pour trouver pourquoi, puis on optimise.
+
+**VERDICT** : VALIDE (outil compile, teste reellement : test-029 0.1s/2.5 Mo lus, serie e 7 tests mesures).
+
+**Actions** : outil analyser-io-tests (analyser) - execute un/des test(s) et mesure via psutil.io_counters (process + enfants, poll 20ms) : duree, octets lus/ecrits, operations. Options : noms de tests, --serie (definition SERIES lue dans le lanceur = synchro auto), --tous, --rapport, --verbose, --version. psutil en dependance douce. Catalogue 165 + index-tools (Analyser 5, Total 182).
+
+**Premier constat (analyse serie e)** : test-028 (13.4s) et test-032 ont quasi ZERO I/O disque mesure -> la suite est CPU/spawn-bound (demarrage sous-processus Python), PAS I/O-bound. Piste d optimisation : reduire le nombre de lancements python3, pas l I/O.
+
+**Lecons** :
+1. Bug de dedup classique : `vus, fichiers = set(), []` re-assigne la liste AVANT d iterer sur `set(fichiers)` -> on itere sur la liste vide. Toujours iterer sur une COPIE.
+2. detecter-decalages-catalogue ecrit son rapport a la racine par defaut - supprimer le residu apres usage (bug racine deja connu).
+3. Un test en isolation peut se comporter differemment (test-032 KO rapide seul vs 29.5s dans la suite) : croiser avec le registre-tests.
+## [LECON] 2026-08-16 -- OPTIMISATION DETECTER-DECALAGES-CATALOGUE v0.2.2 (Vulcain)
+
+**Contexte** : diagnostic performance Janus - detecter-decalages-catalogue = 12.6s (goulot de test-028). Cause : il sondait le --aide des 165 commandes du catalogue, dont 99 SANS flag dans le modele (rien a valider) et 23 commandes-TEST qui n ont pas de vrai --aide (la sonde EXECUTAIT LE TEST ENTIER, ex test-003 = 7.4s en aide).
+
+**VERDICT** : VALIDE (preuve : 12.6s -> 4.6s, verdict 165 conformes / 0 non testables, aucun decalage).
+
+**Correction** : ne sonder le --aide QUE des commandes avec >= 1 flag (flags_modele non vide) ; les commandes sans flag sont classees conformes par structure sans lancer le script. Bump 0.2.2 + doc.
+
+**Lecon** : une sonde qui lance un script pour lire son aide ne doit s appliquer que si le modele a des flags a verifier - sinon le script s execute entierement (les tests n ont pas d argparse --aide). Verifier ce qu un outil sonde AVANT de le laisser tout executer.
+
+## [LECON] 2026-08-16 -- POOL INTRA-SERIE DANS LES BARRIERES (Vulcain)
+
+**Contexte** : mission optimisation performance (demande utilisateur : la suite est trop longue). Janus a mesure : mode barrieres = 127.8s vs pool global = 56.9s. Cause racine : le mode barrieres (defaut) lancait chaque serie en SERIE PURE via executer_lot, le pool n etait utilise que par --parallele.
+
+**Correction** (tester-lancer-non-regression v0.5.0 -> v0.5.1) :
+1. Boucle barrieres : chaque serie scinde sa selection en tests pool (executer_pool, tri duree decroissante, workers) + tests exclusifs (executer_lot en serie).
+2. test-035 ajoute a TESTS_SERIE_EXCLUSIFS : il ecrit/lit le registre des usages pendant que d autres tests accedent au meme fichier -> KO intermittent en pool.
+
+**Lecon** : quand on a un mode "defaut" et une option "avancee" qui font la meme tache, le defaut doit etre la meilleure implementation, pas la plus simple. La mesure (127.8 vs 56.9) a revele que l option parallele avait la bonne logique mais n etait jamais activee par defaut.
+
+**VERDICT** : VALIDE (compile, normes 0/0, v0.5.1, test reel par Janus a venir).
+
+## [LECON] 2026-08-16 -- ROUND BUMPER : FICHIERS COMPAGNONS + MOTIF MD (Vulcain)
+
+**Contexte** : demande utilisateur - quand on bump un fichier, les autres fichiers qui devraient l etre aussi doivent etre SIGNALES par le bumper (pour ne plus oublier : 8 tests cassaient a chaque bump du lanceur).
+
+**Corrections** (mettre-a-jour-versions v0.1.1 -> v0.1.2) :
+1. detecter_compagnons(racine, nom_outil, ancienne, fichiers_deja) : scanne cerveau-projet/ pour les fichiers contenant le nom de l outil + l ancienne version (avec/sans v), les affiche et passe le verdict en KO (l agent doit les adapter : tests -> Morpheus, docs -> agent concerne).
+2. Motif md : couvrait seulement '**Version :**' mais 24 docs utilisent '**Version** :' (espace avant :) -> les 2 formats sont maintenant detectes.
+
+**Decouverte majeure** : le bump --tous --wet a revele et corrige **11 outils incoherents** (19 remplacements) qui etaient invisibles a cause du motif md trop strict (supprimer-fichier .sh 0.3.1 vs .py 0.3.2, combos-analyse-projet .sh 0.1.2 vs .py 0.1.3, etc.). test-020 46/46 OK apres.
+
+**Lecon** : un motif trop strict n est pas juste un detail - il masque des incoherences reelles pendant des semaines. La detection des compagnons a double valeur : prevention (signaler les fichiers a adapter) + audit (--tous revele les ecarts caches).
+
+**VERDICT** : VALIDE (preuve reelle 11 compagnons detectes, 0 incoherence restante, test-020 46/46).
+
+## [LECON] 2026-08-16 -- PORTE DU MARBRE : --ajouter (Vulcain)
+
+**Contexte** : decision utilisateur (cle ADMIN) de graver la REGLE D OR anti-valeurs-magiques dans le marbre. La porte proteger-modifier-marbre ne savait que RE-EMPREINTER une zone existante - impossible d AJOUTER une nouvelle zone.
+
+**Correction** (proteger-modifier-marbre v0.1.1 -> v0.1.2) : option --ajouter <nom> --fichier <chemin> --type <type> --raison --autorisation. Verifie la zone n existe pas, calcule l empreinte via empreinte_zone (type fichier = empreinte_fichier), ajoute au manifeste + journalise (action "ajout"). Les zones case conservent la resynchronisation cartes-lock.
+
+**Preuve reelle** : zone "regles-general-global" ajoutee (fichier regles-general-global.md, type fichier) avec autorisation ADMIN, puis re-empreintee apres gravure de la regle. Verrou-marbre --tous : 9/9 conforme.
+
+**Lecon** : le marbre protege APRES coup - pour ajouter une zone il faut d abord etendre la porte, sinon on serait tente d editer marbre.json a la main (interdit). Toujours etendre l outil avant de modifier le manifeste.
+
+**VERDICT** : VALIDE (zone ajoutee, 9/9 conforme).
+
+## [LECON] 2026-08-16 -- DETECTER-DONNEES-EN-DUR v0.1.1 : SECRETS (Vulcain)
+
+**Contexte** : REGLE D OR anti-valeurs-magiques gravee au marbre (decision utilisateur). Le niveau 3 de la hierarchie (.env pour les secrets) manquait a l outil : aucun secret n etait detecte.
+
+**Correction** : type SECRETS_EN_DUR - affectation d une chaine (>= 4 car) a un nom evoquant un secret (api_key, password, token, cle, auth...) = doute, avec recommandation .env. Exclusions : os.environ.get/os.getenv (lecture legitime), placeholders (xxx, exemple, demo, TODO, changeme), commentaires.
+
+**Preuve reelle** : fichier test avec API_KEY = sk-... (detecte), PASSWORD = ... (detecte), TOKEN = os.environ.get (exclu), DEMO_KEY = exemple (exclu). 0 faux positif, purge apres.
+
+**Lecon** : la detection des secrets doit distinguer l AFFECTATION (doute) de la LECTURE (legitime) - c est l exclusion os.environ qui evite les faux positifs massifs sur les codes qui chargent deja leur .env.
+
+**VERDICT** : VALIDE (preuve concluante, normes 0/0).
+
+## [LECON] 2026-08-16 -- ARGUS BRANCHE A L ACTIVATION (Vulcain)
+
+**Contexte** : Argus (detecteur de contradictions, cree le 2026-08-15) etait cree partout (fiche, parcours 22 cases, regles-groupes-agents, AGENTS.md, outil au catalogue + index-tools) mais ABSENT de la liste AGENTS de activer-agent-principal.py -> l outil refusait de l activer (cause racine identifiee par Cerberus : creation d agent sans branchement).
+
+**Correction** : ajout de l entree "argus" (role, fiche, corrections) au dictionnaire AGENTS + bump 0.5.7 -> 0.5.8 (py en-tete + constante, sh, md version + historique, spec). Preuve : get_agent_info("argus") resolue, bumper --tous 132/132 coherents, normes 0/0.
+
+**Lecon** : la creation d un agent comporte un maillon OUBLIE : le branchement a l outil d activation (liste AGENTS). Une fiche + un parcours + une entree AGENTS.md ne suffisent pas - sans la liste AGENTS, l agent est inactivable et donc jamais testable. A verifier dans le template de creation d agent (etape a ajouter si absente).
+
+## [LECON] 2026-08-16 -- DETECTER-CONTRADICTIONS v0.1.1 : 3 AMELIORATIONS (Vulcain)
+
+**Contexte** : suite au test de comportement reel d Argus (2026-08-16), 3 limites a corriger : scan fixe des parcours, audit regles superficiel, audit git limite.
+
+**Ameliorations** : 1) option --fichier <chemin> pour auditer UN parcours JSON arbitraire (copie, preuve negative) + libelle des resultats = nom reel du fichier (plus le champ nom du JSON), 2) audit regles CROISE sur le contenu : extraction des affirmations reglementaires (SEUL/JAMAIS/TOUJOURS/PEUT/OBLIGATOIRE...), normalisation sans accents, detection des contradictions entre 2 FICHIERS DIFFERENTS (exclusif vs permissif, exclusif vs negatif, permissif vs negatif) + doublons de formulation, 3) audit git enrichi : GIT_RESIDU_ACTUEL (residus PRESENTS a la racine : tmp-*/, .tmp-*, fichiers de version) en plus de GIT_RESIDU_TEMP.
+
+**Anti-faux-positif (lecons de calibration)** : sauter les lignes tableau (|), les liens markdown (](), les lignes mixtes (permissif+negatif simultanes = affirmation nuancee), seuil de similarite durei a 0.7 pour exclusif-vs-negatif (meme sujet requis), tokens communs >= 4, et CONTRADICTION_REGLE uniquement inter-fichiers (regle DOUBLE SOURCE d Argus : une redite intra-fichier n est pas une contradiction). Le premier run naif a produit 25 faux positifs -> 0 apres calibration (etat reel PROPRE sur les regles, seuls les 2 residus reels signales).
+
+**Preuves** : --fichier detecte REF_MORTE + CAS_ORPHELINE injectees ; injection de 3 regles (SEUL/PEUT/JAMAIS) detectee avec le bon conflit seul ; --tous sur l etat reel = 2 GIT_RESIDU_ACTUEL reels + 2 GIT_RESIDU_TEMP historiques, 0 faux positif.
+## [LECON] 2026-08-16 -- AUDIT COHERENCE REGLE/PROTOCOLE dans detecter-contradictions v0.1.2 (Vulcain)
+
+**Contexte** : le controle croise Argus a decouvert manuellement que la regle gravee RELIRE SA FICHE AVANT MISSION dit OUI -> mission alors que le protocole-activation et les 15 cartes disent OUI -> c0c -> mission. Demande utilisateur : mechaniser cette detection.
+
+**Action** : ajout de l audit --coherence (AUDIT 2ter) dans detecter-contradictions v0.1.2 : croise chaque section ### X (IMMUABLE) de regles-groupes-agents.md avec son protocole associe (table REGLE_PROTOCOLE). 3 verifications : (1) mots-mecanisme OBLIGATOIRES PAR REGLE (table MOTS_PAR_REGLE : seule les regles de type mecanisme portent c0/c0b/OUI/INCERTAIN/NON - evite les faux positifs sur les regles d exclusivite SEUL X), (2) flux OUI -> cible (omission c0c = REGLE_PROTOCOLE majeur), (3) reference croisee regle->protocole (mineur). Preuve reelle : l audit DETECTE l ecart c0c actuel (1 MAJEUR) + 3 references manquantes (MINEUR) + 0 faux positif sur les exclusivites.
+
+**Lecon** : un audit de coherence texte/texte demande une table de correspondance regle->protocole et des mots obligatoires PAR TYPE de regle : les regles d exclusivite (SEUL X) n ont pas de mecanisme de parcours, exiger c0/OUI partout cree des faux positifs. Le MAJEUR c0c detecte = la preuve que l outil fonctionne ; la correction de la regle gravee reste a faire par Buffy via la porte du marbre.
+## [LECON] 2026-08-16 -- TABLE REGLE_PROTOCOLE COMPLETE dans detecter-contradictions v0.1.3 (Vulcain)
+
+**Contexte** : 2 regles IMMUABLE de regles-groupes-agents.md n avaient pas de protocole associe dans la table REGLE_PROTOCOLE (SEUL CLIO, LE MODELE DE CONFIANCE) - l audit --coherence les ignorait.
+
+**Action** : association des 2 protocoles manquants : SEUL CLIO -> protocole-verification-coherence (le protocole de coherence README), LE MODELE DE CONFIANCE -> protocole-controle-statuts (le second controle Janus). Bump v0.1.3 + doc .md a jour. L audit croise desormais les 8 regles : il signale 2 REGLE_SANS_REFERENCE (mineur) car les regles ne citent pas encore leurs protocoles - SIGNALE, non corrige (zone marbre, mission Buffy).
+
+**Lecon** : completer la table de croisement a immediatement revele que les 2 regles ne referencent pas leurs protocoles - le croisement est plus complet, la couverture est totale (8/8 regles auditees). Les protocoles choisis sont ceux qui portent la MECANIQUE de la regle (verification-coherence pour le README, controle-statuts pour la confiance), meme si l agent principal du protocole est different (Themis/Janus) - c est le CONTENU qui compte, pas l agent.
+## [LECON] 2026-08-16 -- MECANISATION KO : OPTION --RELANCER-KO v0.5.2 (Vulcain)
+
+**Contexte** : demande utilisateur - Janus relance la suite complete (90s+) a chaque KO au lieu d isoler le test KO, de le revalider, de valider la serie, puis de relancer la suite complete en dernier. Les options existaient (--tests, --series, --activer/--desactiver) mais rien ne mecanisait la deduction de la liste des tests a relancer - Janus ne la deduisait pas.
+
+**Action** : (1) champ run_id dans journaliser_test (timestamp du debut du run, genere UNE fois au demarrage du main, passe aux 2 fonctions d execution et a tous les appels journaliser_test) pour identifier le lancement auquel appartient chaque test, (2) fonction ko_du_dernier_run(racine, registre='') : lit registre-tests.jsonl (trie par date decroissante), trouve le run_id le plus recent, collecte les tests KO/ERREUR/TIMEOUT de CE run, (3) option --relancer-ko : deduit la liste, affiche le run_id et les tests, remplit args.tests (le filtre existant fait le reste), (4) si le dernier run n a pas de KO : message clair + rc 0, (5) bump v0.5.2 + doc (table + historique) + catalogue (parametre boolean --relancer-ko, modele). Tests internes : 4 cas valides (KO du dernier run uniquement, run sans KO, run_id le plus recent prime sur un ancien, anciennes entrees sans run_id -> date max).
+
+**Lecon** : mecaniser la deduction au lieu d eduquer - quand un agent ne deduit pas une liste (ici les tests KO a relancer), l outil doit la CALCULER : l option --relancer-ko transforme le workflow en 4 commandes simples (KO -> analyser -> --relancer-ko -> --series X -> suite complete) sans raisonnement. Le run_id (timestamp) est la cle d identification d un lancement : chaque entree du registre-tests porte le run auquel elle appartient. Le parametre optionnel registre='' rend la fonction testable sur un fichier arbitraire (garde-fou).
+## [LECON] 2026-08-16 -- PRECISION DES COMPAGNONS DU BUMPER v0.1.3 (Vulcain)
+
+**Contexte** : verification (demande utilisateur) - le bumper DETECTAIT deja tous les pinneurs (13 fichiers dont les 5 tests KO du round 0.5.2) mais 2 lacunes : corrections.md signales comme compagnons (faux positifs : lecons historiques, jamais adaptees) et pas de rappel de lancer le bumper AVANT la suite.
+
+**Action** : (1) exclusion des corrections.md dans detecter_compagnons (les pins reels sont les tests/docs/catalogue/index), (2) RAPPEL OBLIGATOIRE dans le rapport : lancer le bumper sur chaque outil bumpe AVANT la non-regression (lecon 5 KO), (3) bump v0.1.3 (py + md). Preuve : le bump du lanceur liste maintenant 8 compagnons (tous des tests) au lieu de 13 (5 corrections historiques en moins) + le rappel s affiche.
+
+**Lecon** : la detection des compagnons doit distinguer les PINS A ADAPTER (tests, docs, specs - a mettre a jour au bump) des MENTIONS HISTORIQUES (corrections.md - documentent les versions d epoque, ne se modifient JAMAIS : les reecrire falsifierait l historique des lecons). Un compagnon est un fichier qui CASSERA si on ne l adapte pas : les tests cassent, les corrections ne cassent pas. La vraie prevention des KO en cascade : lancer le bumper AVANT la suite (le rappel le rend obligatoire).
+## [LECON] 2026-08-16 -- FILTRE SERIE --RELANCER-KO (Vulcain)
+
+**Contexte** : demande utilisateur - etendre --relancer-ko a un mode
+--relancer-ko --series X pour revalider UNIQUEMENT les KO d une serie donnee
+(sans relancer les KO des autres series).
+
+**Implementation** (tester-lancer-non-regression 0.5.2 -> 0.5.3) :
+- Dans le bloc if args.relancer_ko : si args.series est fourni et != tous,
+  filtrer tests_ko via serie_du_test(nom) == args.series - les KO des autres
+  series sont AFFICHES puis ECARTES (transparence), args.tests ne contient
+  que les KO de la serie demandee ; aucun KO dans la serie -> message clair
+  (AUCUN KO en serie X - rien a relancer) et return 0.
+- Comportement sans --series : conserve (tous les KO du dernier run).
+- Help argparse enrichi + doc .md (version, table, historique) + catalogue
+  (question du parametre --relancer-ko).
+
+**Lecon** : le champ serie du registre-tests.jsonl (deja journalise par
+journaliser_test) permet de filtrer les KO par serie sans nouvelle
+journalisation - la deduplication par serie_du_test (table SERIES) est la
+source de verite, PAS le champ serie des entrees (qui peut diverger).
+
+**Tests reels** : 4/4 internes (dernier run 3 KO repartis series c/e/d,
+filtre e -> test-024, filtre d -> test-051, filtre a sans KO -> vide),
+--version v0.5.3. 8 tests pincent 0.5.2 (024/027/031/032/051/062/066/074)
+- a adapter par Morpheus.

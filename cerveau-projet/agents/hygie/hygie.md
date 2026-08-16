@@ -74,7 +74,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.1.0)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.1.3)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -84,7 +84,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
   cerveau-projet/agents/hygie/parcours/parcours-hygie.json
 ```
 
-**Parcours** : [cerveau-projet/agents/hygie/parcours/parcours-hygie.json](parcours/parcours-hygie.json) (v0.1.0)
+**Parcours** : [cerveau-projet/agents/hygie/parcours/parcours-hygie.json](parcours/parcours-hygie.json) (v0.1.1)
 **Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier

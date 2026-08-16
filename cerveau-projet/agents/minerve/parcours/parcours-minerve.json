@@ -7,9 +7,10 @@
  "parcours": {
   "nom": "parcours-minerve",
   "agent": "minerve",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "case_depart": "c0",
-  "description": "Parcours (jeu de piste) des missions de Minerve : redactrice de todos. 2 missions (creer un todo, completer un todo) couvrant les phases 0 a 9 du todo-template. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses."
+  "description": "Parcours (jeu de piste) des missions de Minerve : redactrice de todos. 2 missions (creer un todo, completer un todo) couvrant les phases 0 a 9 du todo-template. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
+  "version_precedente": "0.3.2"
  },
  "cases": {
   "c0": {
@@ -57,7 +58,7 @@
      "nom": "lire-fichier",
      "catalogue": "lire-fichier",
      "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/minerve/corrections.md"
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/minerve/minerve.md"
     }
    ],
    "suivant": "c0c"
@@ -251,6 +252,12 @@
      "catalogue": "ajouter-contenu-fichier",
      "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
      "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/minerve/corrections.md <lecon>"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ],
    "suivant": "c9b"
@@ -590,6 +597,12 @@
     {
      "type": "regle",
      "texte": "BOUCLE KO : apres correction, j active JANUS (commande activer, PAS reactiver) pour qu il revalide mon travail."
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ]
   },

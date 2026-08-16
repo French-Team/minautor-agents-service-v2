@@ -3363,3 +3363,201 @@ A adapter : 0.4.7 -> 0.4.8 (ligne 155 + docstring ligne 19). Les references
 - Le cycle de releve n est PAS un aller-retour binaire : c est une CHAINE agents <-> agents avec Themis et Janus dans le cycle, seul le dernier maillon reactive Cerberus.
 - Toute regle immuable gravee dans regles-groupes-agents.md passe par la porte du marbre (autorisation UTILISATEUR obligatoire) + test-057 verifie l integrite.
 - Bien verifier l emplacement avant insertion : inserer-contenu-fichier --apres cible le motif, pas la fin d un bloc (corrige par supprimer-ligne + reinsertion).
+
+
+## [NOTE] 2026-08-16 -- BRISURE DE CHAINE : DIAGNOSTIC + MISSION INTERROMPUE (Buffy)
+
+**Situation** : mission Buffy 'eduquer Janus a la non-regression' activee par Cerberus, execution commencee (lecture fiche janus + options lanceur), puis INTERROMPUE par l utilisateur : 'le plus important, c est de revenir a cerberus et de reparer la chaine'.
+
+**Diagnostic de la brisure (constat reel des rounds precedents)** :
+- Chaque activation d agent (activer-agent-principal) est un appel d outil : apres l appel, le tour se termine et l agent active ne continue PAS automatiquement dans le meme round - l utilisateur doit relancer.
+- La regle RELEVE MEME ROUND est gravee (marbre), mais le MECANISME d execution ne la suit pas encore : il manque le comportement 'apres avoir active, ENCHAINER immediatement en tant qu agent active' (activation + execution dans le MEME message).
+- Dans les rounds reussis, le pattern etait : Cerberus active -> puis CONTINUATION dans le meme tour (l agent devient actif et execute). Ici, apres l activation de Buffy, le tour s est arrete avec un bilan au lieu d enchainer l execution.
+
+**Cause racine** : la discipline de releve n est pas mecanisee dans le geste d activation lui-meme - l agent qui active doit SAVOIR qu il ne termine pas son tour : il devient l agent active et execute immediatement.
+
+**Etat de la mission Buffy (a reprendre apres reparation)** : fiche janus lue (sections trouvees, insertion prevue apres ligne 185 'Pour terminer ma mission'), options du lanceur recoltees (--series, --profil, --fichiers, --desactiver, --activer, --etat-tests, barrieres, chrono, rating). Section 'UTILISATION DE tester-lancer-non-regression' A INSERER dans janus.md + verification carte janus (case c4 non-regression).
+
+
+## [LECON] 2026-08-15 -- MECANISER LA RELEVE DANS LE PROTOCOLE-ACTIVATION (Buffy)
+
+**Contexte** : derive recurrente - apres une activation, l agent active s arrete et l utilisateur doit relancer. Cerberus a decide (demande utilisateur) de mecaniser la releve dans le protocole-activation.
+
+**Modifications** (protocole-activation.001.02.prepare.md) :
+1. Regles d Or : ajout de la regle RELEVE MEME ROUND (IMMUABLE) - apres activation, l agent actif EXECUTE IMMEDIATEMENT dans le meme round.
+2. Etape 5 : le point 4 precise que l activation EST l ordre d execution (jamais d arret, jamais de bilan intermediaire pour attendre l utilisateur).
+3. Pieges Courants : ajout du piege 'S arreter apres une activation (brisure de chaine)' - l activation EST l ordre d execution.
+4. Derniere mise a jour : 2026-08-15.
+
+**Lecon** : la chaine se brise quand l agent produit un bilan intermediaire au lieu d executer. Le protocole grave maintenant le comportement : activation = ordre d execution, dans le meme round. Reference : regles-groupes-agents.md (RELEVE MEME ROUND, marbre).
+
+
+
+## [LECON] 2026-08-15 -- EDUQUER JANUS A LA NON-REGRESSION (Buffy)
+
+**Contexte** : la fiche janus.md ne contenait AUCUNE mention de tester-lancer-non-regression alors que Janus est le SEUL habilite a lancer la suite (regle immuable + verrou). Un outil ameliore ne sert a rien si son utilisateur exclusif ne sait pas l utiliser.
+
+**Modification** : section 'UTILISATION DE tester-lancer-non-regression (MON OUTIL EXCLUSIF)' inseree dans janus.md apres la section activer-agent-principal : usage de base (--agent janus), mode BARRIERES (5 series par importance, 100% vert pour franchir), options essentielles (--series, --profil, --fichiers, --desactiver/--activer, --etat-tests, --parallele, --serial, --rapport, --timeout-test, --rebase-reference), reference de temps (chrono + seuil 25% + rating + tests lents), lecture du rapport en cas de KO (relancer la serie concernee avant la suite complete), journalisation registre-tests.jsonl. Correction mineure : ligne vide entre '## Forces et Faiblesses' et '## Style de travail'.
+
+**Verifications** : verifier-conformite-fiche --agent janus = 1 CONFORME / 0 ECARTS, normes ASCII 0 + LF 0, 0 residu.
+
+
+
+## [LECON] 2026-08-15 -- CREATION DE L AGENT ARGUS (Buffy, etape 1/3)
+
+**Contexte** : demande utilisateur - creer l agent ARGUS (detecteur de contradictions dans les cases, les regles, les protocoles et l historique git). Decision utilisateur : nom Argus + suspendre le catalogue.
+
+**Ce qui a ete fait** :
+1. Fiche argus.md creee DEPUIS LE TEMPLATE fiche-agent-template.md (noyau v0.3.0 + variante cerveau-projet) - PAS depuis un autre agent (regle : le template est la reference, pas les fiches existantes). verifier-conformite-fiche --agent argus : 1 CONFORME / 0 ECARTS.
+2. Parcours argus.json cree (22 cases) : c0/c0b/c0c communes, c1 Mission (auditer/git/autre), c2 AUDIT CONTRADICTIONS, c3 LECTURE GIT (lecture seule), c5 croisement double source, c6 classement gravite, c7 rapport, c8 controle (quel agent habilite corrige), cD1/cD2/cD3 RELAIS (Buffy/Vulcain/Morpheus), cR1 RETOUR, c13 FIN - Activer Janus, c29 hors parcours. valider-cartes --agent argus : CONFORME.
+3. Roster regles-groupes-agents.md (groupe 2) + AGENTS.md (liste agents secondaires) : Argus ajoute.
+4. Navigation reelle guider-parcours : c0 OUI -> c0c -> c1 -> c2 OK.
+
+**A faire par la suite** :
+- VULCAIN (etape 2) : creer l outil detecter-contradictions (reference dans le parcours c2/c3, INTROUVABLE actuellement) + lecture git en lecture seule + catalogue + index-tools.
+- MORPHEUS (etape 3) : adapter les tests qui pincent le nombre d agents (test-037 11 agents, test-026 11 parcours, test-018 12 agents) + garde-fou.
+- Le role Argus : DETECTE et SIGNALE, ne corrige JAMAIS (l agent habilite corrige).
+
+
+## [LECON] 2026-08-15 -- REVITALISATION PURIFICATION RVAV (Buffy)
+
+**Contexte** : decision utilisateur - le protocole rvav-workflow.md etait ABANDONNE et PERIME (etape 5 [purifier] orientee fichiers de contenu, jamais appliquee aux fichiers du cerveau). Constat : 40 fichiers en surcharge (janus/corrections.md 4736 lignes !).
+
+**Audit des besoins reels** :
+- corrections.md des agents : 14 a 275 lecons, ~17-21 lignes/lecon. Critiques : janus 4736, buffy 3421, vulcain 3328, morpheus 2826.
+- AGENTS-historique.md : 150 entrees, 1565 lignes.
+- Fiches agents (255-314) et protocoles (262-384) : structure template/documentaire, signaler seulement.
+
+**Principe adopte (anti-perte)** : on ne supprime JAMAIS d information - les lecons sont la memoire des erreurs (anti-repetition). La purification DEPLACE les lecons/entrees les plus anciennes vers un fichier d archive cote a cote (<agent>-historique.md, AGENTS-historique-archive.md). Quotas : corrections.md 1000 lignes, AGENTS-historique.md 800.
+
+**Livre** : protocole rvav-workflow.md etape 5 reecrite (quotas par type + procedure dry-run -> rapport -> validation -> execution + lien outil purifier-rvav) ; spec complete de l outil dans tmp-buffy/audit-purification-rvav.md (transmise a Vulcain).
+
+**Lecon** : condenser-fichier (l outil existant) est un faux outil : lignes_apres == lignes_avant, il ne condense RIEN (copie + backup sans transformation). A remplacer/supprimer au profit de purifier-rvav.
+## [LECON] 2026-08-16 -- ASSIGNATION PURIFIER-RVAV A HYGIE (Buffy)
+
+**Contexte** : decision utilisateur - purifier-rvav est assigne a HYGIE SEULEMENT (c est son chariot de nettoyage). Clio mettra le README a jour ensuite.
+**VERDICT** : VALIDE (carte hygie v0.1.1 CONFORME, valider-case 0 erreur, cablages PROPRE)
+
+**Actions** : via editer-parcours (barrage n3) - insertion case c9b "Purifier les fichiers surcharges (RVAV)" (indice outil purifier-rvav + regle anti-perte), re-pointage c9.suivant -> c9b, bump 0.1.0 -> 0.1.1. Fiche hygie.md Pattern 14 synchronisee.
+
+**Lecons** :
+1. Le marbre ne verrouille que les cases de cerberus + constitution + regles-groupes - les autres cartes se modifient via editer-parcours sans porte.
+2. editer-parcours re-empreinte cartes-lock.json automatiquement apres chaque ecriture legitime (verifie : lock mis a jour sans action manuelle).
+3. L aide de editer-parcours (docstring) dit --vers mais le parser attend --cible pour --suivant - documenter l ecart.
+4. Indice regle limite a 160 caracteres (valider-case A ALLEGER) : mon texte initial de 165 car a du etre raccourci.
+## [LECON] 2026-08-16 -- INDICE COMBOS-ANALYSE-PROJET AJOUTE A LA CARTE CLIO (Buffy)
+
+**Contexte** : KO test-035 (evaluer-processus) pendant la non-regression Janus - la declaration registre clio->combos-analyse-projet etait signalee OUTIL_HORS_CARTE : le combo de verification README n etait PAS dans les indices de la carte clio (seuls combos-moteur et combos-maj-readme-massive y etaient).
+**VERDICT** : VALIDE (carte clio v0.5.7 CONFORME, evaluer-processus 0 probleme)
+
+**Correction** : ajout de l indice outil combos-analyse-projet a la case c4 "Verifier l etat reel" (son role exact) via editer-parcours --modifier-case + bump clio 0.5.6 -> 0.5.7 + fiche Pattern 14.
+
+**Lecons** :
+1. Les 2 autres declarations fautives (buffy->valider-case, vulcain->combos-analyse-projet) ont ete retirees du registre : usages ponctuels de verification/modification, PAS des outils de role - ne pas les declarer.
+2. Quand un agent utilise un outil de ROLE (recurrent), l outil DOIT etre dans sa carte (indice outil) - sinon test-035 KO. Le retrait de declaration masque l ecart ; l ajout d indice corrige la cause.
+
+## [LECON] 2026-08-16 -- PROTOCOLE + PARCOURS ARGUS (Buffy)
+
+**Contexte** : le re-test d Argus (v0.1.1) recommande de formaliser son fonctionnement : protocole de signalement en 4 elements + parcours type par cas.
+
+**Livraisons** :
+1. PROTOCOLE : protocole-argus-contradictions/001.01.ebauche.md (v0.1.0) : R1 les 4 elements OBLIGATOIRES d un signalement (type, gravite, fichier+ligne, 2 sources croisees), R2 JE DETECTE JE NE CORRIGE PAS + table des agents habilites (Buffy/Vulcain/Morpheus/Hygie), R3 cas types (--cases/--fichier/--regles/--git/--tous), R4 PREUVE NEGATIVE (copie + injection + --fichier quand soupcon malgre 0 contradiction), R5 cycle signalement -> activation agent habilite -> controle au retour -> Cerberus. Reference dans index-regles-general.md (apres protocole-fin-mission).
+2. PARCOURS argus v0.1.0 -> v0.1.1 (via editer-parcours, barrage n 3 respecte) : case c30 enrichie (preuve negative --fichier avant de conclure "rien a signaler" : copie + injection + detection), case c7 enrichie (indice protocole-argus-contradictions R1 4 elements).
+3. FICHE argus.md : version 0.1.1 (frontmatter + tableau + PARCOURS v0.1.1), protocole ajoute dans Protocoles applicables.
+
+**Validations** : valider-cartes argus CONFORME, --tous 15/15, test-028 8/8, test-029 14/14, normes 0/0.
+
+**Lecon** : un outil fonctionnel ne suffit pas - il faut son protocole d utilisation (quand/signaler comment) et son parcours a jour. Le rapport de comportement d un agent est la matiere premiere de ses protocoles.
+
+## [LECON] 2026-08-16 -- OUBLI DE NETTOYAGE CORRIGE : PARCOURS ARGUS v0.1.3 (Buffy)
+
+**Contexte** : verification Cerberus (demande utilisateur "argus va-t-il nettoyer ses tmp ?") : le parcours argus v0.1.1 que j avais livre avait UNE case qui CREE tmp-argus (c30 preuve negative) mais AUCUNE case de nettoyage en fin de mission. Morpheus/Vulcain/Buffy ont tous une case "FIN - Outil temporaire" (c16d/c18d/c35d) - Argus etait le seul sans.
+
+**Correction** : via editer-parcours : insertion de la case c31 "NETTOYER tmp-argus (0 residu)" (indices : regle protocole-creation-scripts-temporaires + enregistrer-usage-outil --mode script-temporaire), re-pointage c30.suivant -> c31, cR1 OUI -> c31, c8 controle final -> c31, c31 -> c13, bump 0.1.1 -> 0.1.3. Fiche mise a jour (PARCOURS v0.1.3, Pattern 14). Verifie : valider-cartes argus CONFORME, --tous 15/15, 0 reference morte, normes 0/0.
+
+**Incident technique** : le premier --inserer-case a echoue (JSON sans champ "id") MAIS les re-pointages vers c31 ont reussi -> 3 references mortes temporaires. Corrige en re-inserant c31 avec "id":"c31" (les re-pointages sont devenus valides). Lecon : TOUJOURS verifier l etat du parcours (refs mortes) APRES chaque operation editer-parcours, et verifier le format attendu (champ id) avant d inserer.
+
+**Lecon principale** : quand une carte d agent a une case qui CREE des fichiers/dossiers temporaires, elle DOIT avoir la case de nettoyage correspondante avant la fin (regle anti-scripts 0 residu + test-024). A verifier pour chaque agent qui manipule des fichiers temp.
+
+## [LECON] 2026-08-16 -- REGLE DE NETTOYAGE GRAVEE DANS LES TEMPLATES (Buffy)
+
+**Contexte** : apres la correction de la carte argus (case c31 de nettoyage), verification Cerberus (demande utilisateur) : la regle de nettoyage existait dans protocole-creation-scripts-temporaires mais AUCUN template ne l imposait -> c est pourquoi l oubli a pu arriver.
+
+**Corrections** :
+1. fiche-agent-template.md : REGLE ABSOLUE 9 NETTOYAGE DES TEMPORAIRES (IMMUABLE) : toute case qui cree des fichiers/dossiers temporaires doit etre suivie d une case de nettoyage avant la fin (0 residu + declaration registre mode script-temporaire). Reference a la lecon argus.
+2. template-test.md : point 12 NETTOYAGE DES PREUVES TEMPORAIRES (IMMUABLE) : toute preuve creee par un test (tmp-testNNN-) est SUPPRIMEE en fin de test (bloc finally), 0 residu (lecon test-051).
+3. protocole-carte-decision : regle 7 CASE DE NETTOYAGE OBLIGATOIRE pour toute carte qui cree des fichiers temp.
+
+**Validations** : test-029 14/14, test-044 15/15 (triplet intact), normes 0/0.
+
+**Lecon** : une regle qui vit uniquement dans un protocole (qu on ne relit pas) ne protege pas : c est le TEMPLATE (relu a chaque creation) qui doit porter la regle. Regle de conception : toute contrainte de structure doit etre dans le template, pas seulement dans le protocole.
+## [LECON] 2026-08-16 -- CORRECTION C29E ARGUS (AUTO-REACTIVATION) + SYNCHRO FICHE (Buffy)
+
+**Contexte** : demande utilisateur de revoir les cases de fin d Argus qui stoppent le round. Le scan Cerberus de TOUTES les fins de TOUTES les cartes a trouve UN SEUL bug : argus c29e (FIN - Signaler le besoin) executait reactiver session-llm-1 '<raison>' argus = AUTO-REACTIVATION (boucle infinie qui stoppe le round) au lieu de reactiver cerberus. Cause : faute de frappe lors de la creation du parcours (le message disait 'signaler a Cerberus' mais la commande reactivait argus).
+
+**Corrections** : 1) carte argus via editer-parcours (barrage n3) : c29e reactiver -> cerberus, bump v0.1.3 -> v0.1.4, 2) fiche argus.md : PARCOURS (v0.1.3) -> (v0.1.4) (Pattern 14).
+
+**Validations** : valider-cartes argus CONFORME, normes 0/0, test-037 non impacte (liste d agents seulement), scan complet : aucune autre auto-reactivation dans les 15 cartes (les FIN - Delegation descriptives sont le modele standard - l agent active continue la chaine).
+
+**Lecons** : 1) le message d une fin et sa commande doivent TOUJOURS viser le meme agent (le message disait Cerberus, la commande reactivait argus - incoherence interne), 2) apres correction de carte, verifier immediatement le Pattern 14 (valider-cartes signale fiche != parcours), 3) le scan des fins doit verifier la CIBLE de reactiver (pas seulement la presence du mot) - c est la que se cache l auto-reactivation.
+## [LECON] 2026-08-16 -- LACUNES PARCOURS ARGUS CORRIGEES : DELEGATION AVEC RETOUR + INDICES OUTILS (Buffy)
+
+**Contexte** : demande utilisateur - trouver les lacunes qui font qu Argus n est pas optimal vs les agents principaux (Buffy/Vulcain). Diagnostic Cerberus : 1) CRITIQUE - c29a (FIN - Delegation) etait une fin SANS CASE DE RETOUR : quand l agent delegue reactivait Argus avec son bilan, aucune case ne disait comment reprendre ; 2) carte courte (23 cases vs 57-63) ; 3) outils de validation presents en P0 mais absents des cases.
+
+**Corrections** (parcours argus v0.1.4 -> v0.1.6, via editer-parcours barrage n3) :
+1) c29a transformee de FIN en ACTION 'DELEGATION - Activer l agent habilite' avec suivant -> cR1 (la case RETOUR existante joue la reprise : verifier le rapport de l agent a la reactivation) - la boucle est bouclee : c29a -> cR1 -> c31 -> c13
+2) indices ajoutes : c0 -> guider-parcours, c4 (controle RVAV) -> valider-cartes-decision + valider-conformite-ascii, c5 (croisement) -> valider-nommage
+3) fiche argus.md synchronisee (Pattern 14 : v0.1.6)
+
+**Validations** : valider-cartes argus CONFORME + --tous 15/15, test-055 12/12, test-069 8/8, normes 0/0, 11 outils uniques tous au catalogue (vs 7 avant).
+
+**Lecons** : 1) une fin de delegation DOIT etre suivie d une case de reprise (soit une fin dediee c15e/c9e, soit une case RETOUR existante comme cR1) - sinon l agent delegue qui revient retombe au debut et le round derive ; 2) les outils de validation (valider-cartes-decision, valider-conformite-ascii, valider-nommage) doivent etre branches dans les CASES du parcours, pas seulement listes en P0 de la fiche - le parcours est la source de verite du guidage ; 3) verifier apres chaque modification : validateur + test-055 (coherence regle/indice) + test-069 (garde-fou outil).
+## [LECON] 2026-08-16 -- GRAVER LA REGLE RELIRE SA FICHE AVANT MISSION (Buffy)
+
+**Contexte** : demande utilisateur - la regle de relecture existait en 3 couches (AGENTS.md REGLE DE RELECTURE, protocole-activation GARDE-FOU RELECTURE, cerberus.c0/c0b dans le marbre) mais PAS au niveau regle immuable du fichier grave.
+
+**Action** : ajout de la section "RELIRE SA FICHE AVANT MISSION (IMMUABLE)" dans regles-groupes-agents.md (apres RELEVE MEME ROUND) : chaque agent relit SA fiche + SES corrections juste avant SA mission ; coherence fiche + corrections + mission = demarrage a la lettre sans derive ; mecanisme c0/c0b + GARDE-FOU RELECTURE du protocole-activation. Porte du marbre ouverte avec proteger-modifier-marbre (zone regles-groupes-agents, autorisation UTILISATEUR explicite) - empreinte mise a jour + journalisee.
+
+**Lecon** : une regle de comportement n est IMMUABLE que si elle est gravee dans le marbre (regles-groupes-agents.md + empreinte + verrou test-057). Les couches protocole/AGENTS.md ne suffisent pas : un agent peut les contourner. La gravure + la porte + le verrou forment le triptyque complet.
+## [LECON] 2026-08-16 -- CORRECTION c0b ARGUS/GARDIEN (Buffy)
+
+**Contexte** : demande utilisateur - creer un garde-fou verifiant c0/c0b sur les 15 parcours. Scan prealable : 13/15 conformes mais argus c0b avait des indices type "fichier" au lieu du modele outil lire-fichier, et gardien c0b n avait QUE la regle (aucun outil).
+
+**Action** : correction des 2 cases c0b au modele exact (regle ACTION OBLIGATOIRE + outil lire-fichier vers corrections.md + outil lire-fichier vers fiche.md, suivant c0c) via editer-parcours + bump argus v0.1.8->v0.1.9 et gardien v0.1.1->v0.1.2 + fiches synchronisees (Pattern 14). Validation : valider-cartes 15/15, test-055 12/12, normes 0/0.
+
+**Lecon** : le scan structurel des cartes avant un garde-fou revele les ecarts au modele (2 cartes avaient c0b sans outil de lecture). Le garde-fou seul aurait KO - il faut CORRIGER les cartes AVANT de creer le test, sinon le test verrouille un etat defectueux. Toujours scanner la cible avant d ecrire le garde-fou.
+## [LECON] 2026-08-16 -- CORRECTION c0b ATLAS/MINERVE/PROMETHEE (Buffy)
+
+**Contexte** : le garde-fou test-072 (Morpheus) a detecte des ecarts c0b : promethee (2e lire-fichier vers corrections.md au lieu de la fiche), minerve (idem), atlas (2 outils lire-fichier SANS commande du tout).
+
+**Action** : correction des 3 c0b au modele exact (commande lire-fichier corrections.md + lire-fichier <agent>.md) + bumps atlas v0.4.3->v0.4.4, minerve v0.3.2->v0.3.3, promethee v0.3.2->v0.3.3 + fiches synchronisees. Validation : 15/15 cartes conformes, scan c0b 15/15 OK, test-072 10/10, normes 0/0.
+
+**Lecon** : un garde-fou bien ecrit DECOUVRE des ecarts reels que le scan humain avait manques (atlas sans commande, minerve/promethee doublon corrections). Le scan complet systematique (toutes les cartes d un coup) est plus efficace que la correction au cas par cas - scanner TOUT, corriger TOUT, puis reverifier.
+## [LECON] 2026-08-16 -- 3 REFERENCES PROTOCOLE AJOUTEES (Buffy, zone marbre)
+
+**Contexte** : l audit --coherence de detecter-contradictions v0.1.2 signalait 3 REGLE_SANS_REFERENCE (mineur) dans regles-groupes-agents.md : RELEVE MEME ROUND (sans protocole-activation), SEUL JANUS (sans protocole-tests), SEUL BUFFY (sans protocole-controle-buffy).
+
+**Action** : ajout des 3 references au format du modele existant ([protocole-X/](protocole-X/)) SANS toucher au texte des regles + porte du marbre ouverte (proteger-modifier-marbre zone regles-groupes-agents, autorisation UTILISATEUR explicite, empreinte 0f8b3d68 journalisee). Verification : verrou marbre rc=0, audit --coherence ne signale plus QUE le MAJEUR c0c connu, test-073 7/7, test-069 9/9, test-057 24/24, normes 0/0.
+
+**Lecon** : une regle IMMUABLE doit CITER son protocole associe - c est la reference croisee qui rend l ensemble navigable et auditable. L audit --coherence detecte automatiquement ces oublis (mineur) et la porte du marbre permet de les corriger sans casser le verrou. Les 3 references ajoutees suivent exactement le modele des 2 deja presentes (HYGIE -> nettoyage, MORPHEUS -> tests) : format [protocole-X/](protocole-X/).
+## [LECON] 2026-08-16 -- CORRECTION BRANCHE OUI -> c0c (Buffy, zone marbre + protocole)
+
+**Contexte** : l audit --coherence signalait en MAJEUR que la regle gravee RELIRE disait OUI -> mission au lieu de OUI -> c0c -> mission (le protocole et les 15 cartes passent par c0c).
+
+**Action** : correction de la regle gravee (ligne 243 : OUI -> c0c contexte obligatoire -> mission) + porte du marbre (autorisation UTILISATEUR, empreinte 0e4f25c2). MAIS l audit a alors revele une 2e incoherence : le protocole-activation lui-meme disait OUI -> mission (ligne 75) alors que ligne 92-93 il dit c0 -> c0c -> mission - le protocole etait incoherent EN INTERNE. Correction de la ligne 75 du protocole (OUI -> c0c contexte -> mission). Resultat : audit --coherence PROPRE (0 contradiction).
+
+**Lecon** : corriger la regle gravee a revele que le PROTOCOLE avait la meme erreur de flux - l audit compare la regle au premier match de flux du protocole, donc un protocole incoherent en interne produit des faux conflits. La correction en chaine (regle PUIS protocole) a rendu les 2 sources coherentes entre elles ET avec les 15 cartes. L audit --coherence est l outil qui verifie la coherence COMPLETE du triptyque regle + protocole + cartes.
+## [LECON] 2026-08-16 -- 2 REFERENCES MARBRE AJOUTEES : AUDIT --COHERENCE PROPRE (Buffy)
+
+**Contexte** : demande utilisateur - les regles SEUL CLIO et LE MODELE DE CONFIANCE ne citaient pas leur protocole (2 MINEUR REGLE_SANS_REFERENCE signales par l audit --coherence apres la table 8/8 de Vulcain).
+
+**Action** : ajout des 2 references dans regles-groupes-agents.md au format modele [protocole-X/](protocole-X/) : SEUL CLIO -> protocole-verification-coherence (ligne 154, mecanique de verification de coherence documentaire), LE MODELE DE CONFIANCE -> protocole-controle-statuts (ligne 207, mecanique du second controle Janus). Porte du marbre ouverte (autorisation UTILISATEUR, empreinte c782ba8c journalisee). Verifications : audit --coherence PROPRE (0 contradiction), verrou rc=0, normes 0/0.
+
+**Lecon** : la table REGLE_PROTOCOLE de detecter-contradictions est un contrat bidirectionnel : ajouter une association cote outil revele les references manquantes cote marbre, et corriger le marbre fait disparaitre les mineurs automatiquement - l audit sert de preuve de correction. Le format de reference est uniforme ([protocole-X/](protocole-X/)) et l insertion se fait en fin de section (apres Garde-fou ou apres la derniere puce) avant la section suivante.
+## [LECON] 2026-08-16 -- WORKFLOW KO OBLIGATOIRE GRAVE DANS LA FICHE DE JANUS (Buffy)
+
+**Contexte** : l option --relancer-ko v0.5.2 (mecanisation des KO) existait dans l outil mais la fiche de Janus ne la mentionnait pas - la section KO disait seulement "je RELANCE la serie concernee", trop vague, Janus ne l appliquait pas (demande utilisateur : graver le workflow).
+
+**Action** : remplacement de la section par le WORKFLOW KO OBLIGATOIRE en 5 etapes imperatives : (1) KO detecte -> lire le rapport, (2) JAMAIS relancer la suite complete apres un KO - rapporter a Cerberus qui active l agent habilite, (3) REVALIDATION CIBLEE avec --relancer-ko (l outil deduit la liste du dernier run), (4) validation de la serie --series X, (5) suite complete en dernier. + ajout de --relancer-ko a la table des options essentielles. Pas de bump : la fiche reference le parcours v0.4.11, non modifie.
+
+**Lecon** : un outil mecanise ne sert a rien si la fiche de l agent qui doit l utiliser ne documente pas le WORKFLOW d usage : l outil (--relancer-ko) et la fiche (workflow KO en 5 etapes) forment le couple complet - l outil deduit, la fiche ordonne. La formulation imperatives ("JAMAIS", "OBLIGATOIRE", "Interdit") est celle qui contraint vraiment l agent, pas les suggestions.

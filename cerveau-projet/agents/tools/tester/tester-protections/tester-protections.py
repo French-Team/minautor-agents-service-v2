@@ -46,7 +46,7 @@ Usage direct (CLI) :
   python3 tester-protections.py --help
 
 Proprietaire : Morpheus (outil partage)
-Version : 0.1.0
+Version : 0.2.0
 Statut : prepare
 """
 

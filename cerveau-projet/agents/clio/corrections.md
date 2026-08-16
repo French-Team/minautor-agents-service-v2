@@ -208,3 +208,29 @@ badge OK = 131 == 131, verdict README A JOUR.
 
 **Contexte** : demande utilisateur - verifier que les docs refletent la regle entonnoir obligatoire. MAJ : readme-dev section 6 (ligne Executer + principe ENTONNOIR + compteur 32 -> 33 categories), fiche clio P0 + executer-script-temporaire, README public garde-fou enrichi (controle automatique des scripts temp, version grand public). Constat : les fiches des 6 autres agents ne referencent pas encore l entonnoir en P0 (transmission : chaque agent lors de sa prochaine mission, Pattern 14).
 VERDICT : VALIDE - readme-dev (Executer + principe ENTONNOIR + 33 categories), fiche clio P0, README public enrichis ; normes 0/0, test-046 10/10, test-021 9/9.
+## [LECON] 2026-08-16 -- README-DEV SYNCHRONISE (143 OUTILS / 36 CATEGORIES) (Clio)
+
+**Contexte** : assignation purifier-rvav a Hygie - Clio met le README a jour. Le badge README.md etait deja OK (143==143 via combos-analyse-projet) ; le vrai retard etait dans readme-dev.md (134 outils/34 categories, compteurs agents 13 vs 15 reels).
+**VERDICT** : VALIDE (combos-analyse-projet : README A JOUR, 0 ecart)
+
+**Actions** : readme-dev.md - ligne recap (15 agents / 143 outils / 15 parcours), section 6 (143 outils dans 36 categories : Analyser 2->4, Detecter 13->15, Evaluer 5->6, + lignes Proteger 3 et Purifier 1), section 4 (+ Gardien et Argus, 13->15 agents).
+
+**Lecons** :
+1. Depuis la refonte grand public, la table des categories vit dans readme-dev.md section 6 - combos-analyse-projet v0.1.3 (corrige par Vulcain) la verifie la. Le badge Outils et le compteur agents restent dans README.md.
+2. Verifier AUSSI les compteurs annexes (agents, parcours) quand on met a jour un README : 13 agents listes pour 15 reels = incoherence silencieuse.
+3. Pas de bump de version pour une petite MAJ (la convention bumpe a la case c6c grosse MAJ).
+
+## [LECON] 2026-08-16 -- SYNCHRONISATION readme-dev (analyser-io-tests) (Clio, VERDICT VALIDE)
+
+**Contexte** : Vulcain a ajoute analyser-io-tests (categorie Analyser). readme-dev etait en retard (Analyser 4, 143 outils).
+
+**Corrections** (3 lignes) :
+1. Ligne 28 : "143 outils dans 36 categories" -> "144 outils dans 36 categories"
+2. Ligne 218 : idem (header section 6)
+3. Ligne 224 : "| Analyser | 4 | ..." -> "| Analyser | 5 | + analyser-io-tests"
+
+**Verification** : combos-analyse-projet verdict README A JOUR (0 ecart, Badge 144 == 144), test-046 (Hermes) 10/10, normes 0/0.
+
+**Lecon** : le badge du README public etait DEJA juste (144 == 144) - le retard etait uniquement dans readme-dev (table des categories). Toujours verifier les 2 documents avec combos-analyse-projet avant de conclure.
+
+**VERDICT** : VALIDE (0 ecart).

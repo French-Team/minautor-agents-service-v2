@@ -21,6 +21,8 @@ Objet (correction Buffy 2026-08-09) :
   - parcours-atlas v0.1.10 -> v0.2.0 : migration format action (references + cases
     action). Les commandes templates c30 et c11a sont conservees comme residus connus (2).
   - parcours-atlas v0.3.3 -> v0.4.1 (2026-08-11) : ajout case c0d LIRE LA
+  - parcours-atlas v0.4.2 -> v0.4.3 (2026-08-16) : branchage corriger-symboles
+  - parcours-atlas v0.4.3 -> v0.4.4 (2026-08-16) : c0b relecture avec commandes lire-fichier (corrections puis fiche) - 3e cas commande en dur documente
   - parcours-atlas v0.4.1 -> v0.4.2 (2026-08-13) : Themis maillon (c11a/c11b)
     DOCUMENTATION DE L OUTIL avant utilisation (garde-fou lecture .md).
 
@@ -43,8 +45,8 @@ Cas couverts (26 points) :
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
   PARCOURS ATLAS v0.4.1
- 17. parcours-atlas.json : json.load valide + version 0.4.2
- 18. 2 residus connus (c30 + c11a) dans les indices outil avec catalogue
+17. parcours-atlas.json : json.load valide + version 0.4.4
+18. 3 commandes en dur connues (c0b relecture + c30 + c11a) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
  21. valider-cartes-decision --agent atlas : CONFORME
@@ -183,7 +185,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.5 + catalogue 0.2.9 + parcours-atlas v0.4.2 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.5 + catalogue 0.2.9 + parcours-atlas v0.4.4 ===")
     print("")
 
     # ---------- GENERATEUR v0.2.5 ----------
@@ -248,10 +250,10 @@ def main():
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.2",
-                 p.get("parcours", {}).get("version") == "0.4.2", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.4",
+                 p.get("parcours", {}).get("version") == "0.4.4", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.2", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.4", False, str(e))
         p = {}
 
     # Residu connu et documente : case c30 (commande template cartographier-parcours.py {parcours}).
@@ -263,8 +265,8 @@ def main():
             if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
                 n_commande += 1
                 cases_commande.append(k)
-    verifier(18, "2 residus connus (c30 + c11a) dans les indices avec catalogue",
-             n_commande == 2 and cases_commande == ["c30", "c11a"],
+    verifier(18, "3 commandes en dur connues (c0b relecture + c30 + c11a) dans les indices avec catalogue",
+             n_commande == 4 and sorted(cases_commande) == ["c0b", "c0b", "c11a", "c30"],
              "restants=%d cases=%s" % (n_commande, cases_commande))
 
     for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer|NON|OUI"), (20, "autre+OUI", "OUI|autre|OUI|NON|OUI")]:

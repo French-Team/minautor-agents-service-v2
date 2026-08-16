@@ -8,7 +8,7 @@ identite:
 
 # detecter-donnees-en-dur
 
-**Version :** 0.1.0
+**Version :** 0.1.1
 **Statut :** ebauche
 **Categorie :** detecter
 
@@ -29,7 +29,9 @@ doute est emis, l'agent doit se demander :
    **fichier de configuration JSON**.
 3. S agit-il d une collection / liste ? -> **tableau ou liste dans un autre
    fichier** (JSON/CSV).
-4. S agit-il d une valeur purement documentaire ? -> **documentation (.md)**.
+4. S agit-il d un SECRET (cle API, mot de passe, token) ? -> **variable
+   d environnement (.env)** lue au demarrage - JAMAIS dans le code ni le git.
+5. S agit-il d une valeur purement documentaire ? -> **documentation (.md)**.
 
 Cet outil aide l agent a POSER LA QUESTION qui emet le doute : il detecte les
 valeurs en dur probables et recommande le meilleur format de stockage.
@@ -43,6 +45,7 @@ valeurs en dur probables et recommande le meilleur format de stockage.
 | `CHEMINS_EN_DUR` | Chemin de fichier/dossier ecrit en dur dans le code | `dossier = "cerveau-projet/agents"` |
 | `URLS_EN_DUR` | URL / endpoint ecrit en dur | `url = "https://api.exemple.com/v2"` |
 | `VERSIONS_EN_DUR` | Version repetee dans un message ou la doc | `"module v0.7.3 en cours"` |
+| `SECRETS_EN_DUR` (v0.1.1) | Secret (cle API, mot de passe, token) affecte a un nom evoquant un secret | `API_KEY = "sk-..."` |
 
 ### Exclusions legitimes
 
@@ -51,7 +54,10 @@ valeurs en dur probables et recommande le meilleur format de stockage.
 - Les valeurs de test (fixtures) et les exemples de documentation ;
 - Les fichiers `.md` et `.json` de parcours/configuration : leurs chemins et
   commandes sont DOCUMENTAIRES (liens relatifs, commandes `python3 ...`) ;
-- Les commentaires (`#`, `//`) : pas une valeur active.
+- Les commentaires (`#`, `//`) : pas une valeur active ;
+- Les lectures d environnement (`os.environ.get`, `os.getenv`) : legitimes ;
+- Les placeholders (`xxx`, `exemple`, `demo`, `TODO`, `changeme`) : pas un
+  vrai secret.
 
 ## Usage
 
@@ -97,7 +103,7 @@ Verdict final : `OK` si aucun doute, `SIGNAL - N doutes` sinon (code retour 1).
 ## Exemple de sortie
 
 ```
-=== RESULTAT detecter-donnees-en-dur v0.1.0 ===
+=== RESULTAT detecter-donnees-en-dur v0.1.1 ===
 Fichiers analyses : 874 | fichiers avec doutes : 250 | total doutes : 954
 Doutes par type :
   CHEMINS_EN_DUR     : 408

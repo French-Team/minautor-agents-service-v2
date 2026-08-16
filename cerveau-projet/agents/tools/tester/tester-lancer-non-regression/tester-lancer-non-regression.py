@@ -47,7 +47,7 @@ import sys
 import time
 from datetime import datetime
 
-VERSION = "0.5.0"
+VERSION = "0.5.3"
 STATUT = "ebauche"
 
 # Round 18 (2026-08-15) : BARRIERES DE PASSAGE (demande utilisateur) - la
@@ -66,7 +66,9 @@ STATUT = "ebauche"
 SERIES = {
     "a": ["test-007", "test-029", "test-030", "test-042", "test-043", "test-044",
           "test-049", "test-050", "test-052", "test-054", "test-055", "test-056",
-          "test-060", "test-062", "test-063", "test-064"],
+          "test-060", "test-062", "test-063", "test-064", "test-067", "test-068",
+          "test-069", "test-070", "test-071", "test-072", "test-073",
+          "test-074", "test-075"],
     "b": ["test-009", "test-012", "test-013", "test-014", "test-015", "test-016",
           "test-018", "test-021", "test-026", "test-033", "test-034", "test-037",
           "test-048", "test-058", "test-059"],
@@ -75,7 +77,7 @@ SERIES = {
           "test-022", "test-023", "test-040"],
     "d": ["test-025", "test-027", "test-031", "test-036", "test-038", "test-039",
           "test-045", "test-046", "test-047", "test-051", "test-061"],
-    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057"],
+    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057", "test-065", "test-066"],
 }
 SERIES_NOMS = {
     "a": "Fondations (nommage, ASCII/LF, template, protections)",
@@ -165,7 +167,10 @@ GARDE_FOUS_GLOBAUX = ["test-023", "test-024", "test-025", "test-027",
 # Round 15 (2026-08-15, lecon Janus) : test-061 pose des residus factices dans
 # le workspace partage pendant que test-006 (serie b) verifie 'aucun fichier
 # residuel dans le workspace' -> course en pool (KO intermittent 5b).
-TESTS_SERIE_EXCLUSIFS = ["test-020", "test-031", "test-061"]
+# Round 19 (2026-08-16, lecon Janus) : test-035 (evaluer-processus) ecrit et
+# lit le registre des usages pendant que d autres tests lisent/ecrivent le
+# meme fichier -> KO intermittent en pool. Ajoute aux exclusifs (serie seule).
+TESTS_SERIE_EXCLUSIFS = ["test-020", "test-031", "test-035", "test-061"]
 
 # Round 12 : durees mesurees (profil individuel 2026-08-13, machine 16 coeurs)
 # pour le tri decroissant du pool - les tests longs partent en premier sur
@@ -356,11 +361,13 @@ def trier_registre_tests(registre):
         fh.write("\n".join(triees) + "\n")
 
 
-def journaliser_test(racine, agent, serie, nom_test, verdict, duree):
-    """Ajoute UNE entree dans registre-tests.jsonl (date, agent, serie, test,
-    verdict OK/KO/ERREUR, duree secondes). No-op si agent est vide (aucune
-    trace sans --agent explicite). Le registre est TRIE par date/heure
-    DECROISSANT apres chaque ajout (le plus recent en premier)."""
+def journaliser_test(racine, agent, serie, nom_test, verdict, duree, run_id=""):
+    """Ajoute UNE entree dans registre-tests.jsonl (date, run_id, agent,
+    serie, test, verdict OK/KO/ERREUR, duree secondes). No-op si agent est
+    vide (aucune trace sans --agent explicite). Le registre est TRIE par
+    date/heure DECROISSANT apres chaque ajout (le plus recent en premier).
+    run_id (timestamp du debut du run) identifie le lancement auquel
+    appartient chaque test : c est la base de --relancer-ko."""
     if not agent:
         return
     registre = registre_tests_defaut(racine)
@@ -372,9 +379,55 @@ def journaliser_test(racine, agent, serie, nom_test, verdict, duree):
         "verdict": verdict,
         "duree": round(duree, 3),
     }
+    if run_id:
+        entree["run_id"] = run_id
     with io.open(registre, "a", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps(entree, ensure_ascii=True) + "\n")
     trier_registre_tests(registre)
+
+
+def ko_du_dernier_run(racine, registre=""):
+    """Retourne la liste des tests en KO du DERNIER run journalise (--relancer-ko).
+
+    Methode : le registre-tests.jsonl est trie par date DECROISSANT (le plus
+    recent en premier). Le dernier run = le run_id le plus recent present
+    (ou, a defaut de run_id, le groupe de la date la plus recente). On
+    collecte les tests dont le verdict est KO/ERREUR/TIMEOUT dans CE run.
+    Retourne (run_id, liste_noms_tests_ko) - liste vide si le dernier run
+    n a aucun KO ou si le registre est illisible. Le parametre registre
+    (chemin) permet de tester sur un fichier arbitraire (garde-fou)."""
+    if not registre:
+        registre = registre_tests_defaut(racine)
+    entrees = []
+    if os.path.isfile(registre):
+        for ligne in io.open(registre, encoding="utf-8", errors="replace"):
+            try:
+                entrees.append(json.loads(ligne))
+            except (ValueError, TypeError):
+                continue
+    if not entrees:
+        return "", []
+    # run_id le plus recent (les entrees sont triees par date decroissante)
+    run_id = None
+    for e in entrees:
+        if e.get("run_id"):
+            run_id = e.get("run_id")
+            break
+    if not run_id:
+        # Anciennes entrees sans run_id : on prend la date la plus recente
+        date_max = max((e.get("date", "") for e in entrees), default="")
+        run_id = "date:%s" % date_max
+    ko = []
+    for e in entrees:
+        if e.get("run_id") and e.get("run_id") != run_id:
+            continue
+        if not e.get("run_id") and not e.get("date", "").startswith(run_id[len("date:"):]):
+            continue
+        if e.get("verdict") in ("KO", "ERREUR", "TIMEOUT"):
+            nom = e.get("test", "")
+            if nom and nom not in ko:
+                ko.append(nom)
+    return run_id, ko
 
 
 def assigner_series(tests, serie="tous"):
@@ -403,7 +456,7 @@ def assigner_series(tests, serie="tous"):
 
 
 def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
-                 agent="", serie="", timeout_test=0):
+                 agent="", serie="", timeout_test=0, run_id=""):
     """Execute une liste de tests en serie.
     Retourne (ok, ko, ko_liste, non_lances, durees) : durees est une liste de
     couples (nom_test, duree_secondes) pour CHAQUE test execute (round 17 :
@@ -434,14 +487,14 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
                 ok += 1
                 print("  %-50s %s" % (os.path.basename(t), _couleur("OK", "vert")))
                 journaliser_test(racine, agent, serie, os.path.basename(t),
-                                 "OK", duree)
+                                 "OK", duree, run_id)
             else:
                 ko += 1
                 ko_liste.append((os.path.basename(t), nb_ko,
                                  extraire_lignes_ko(r.stdout)))
                 print("  %-50s %s (%d [KO])" % (os.path.basename(t), _couleur("KO", "rouge"), nb_ko))
                 journaliser_test(racine, agent, serie, os.path.basename(t),
-                                 "KO", duree)
+                                 "KO", duree, run_id)
                 if fail_fast:
                     non_lances = len(tests) - i - 1
                     if non_lances > 0:
@@ -459,7 +512,7 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
             ko_liste.append((os.path.basename(t), -2, []))
             print("  %-50s %s" % (os.path.basename(t), _couleur("ERREUR SILENCIEUSE (timeout)", "rouge")))
             journaliser_test(racine, agent, serie, os.path.basename(t),
-                             "TIMEOUT", duree)
+                             "TIMEOUT", duree, run_id)
             if fail_fast:
                 non_lances = len(tests) - i - 1
                 if non_lances > 0:
@@ -473,7 +526,7 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
             ko_liste.append((os.path.basename(t), -1, []))
             print("  %-50s %s (%s)" % (os.path.basename(t), _couleur("ERREUR", "rouge"), str(e)[:40]))
             journaliser_test(racine, agent, serie, os.path.basename(t),
-                             "ERREUR", duree)
+                             "ERREUR", duree, run_id)
             if fail_fast:
                 non_lances = len(tests) - i - 1
                 if non_lances > 0:
@@ -490,7 +543,7 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
 
 
 def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie="",
-                  timeout_test=0):
+                  timeout_test=0, run_id=""):
     """Execute une liste de tests sur un pool de workers paralleles.
 
     Round 12 : les tests sont tries par DUREE DECROISSANTE (les plus longs
@@ -510,7 +563,8 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie="",
         return 0, 0, [], 0, []
     if workers <= 1:
         return executer_lot(racine, tests, libelle="Serie unique",
-                            fail_fast=fail_fast, agent=agent, serie=serie)
+                            fail_fast=fail_fast, agent=agent, serie=serie,
+                            run_id=run_id)
 
     def cle(t):
         return -DUREES_CONNUES.get(os.path.basename(t)[:8], 0)
@@ -588,21 +642,21 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie="",
                 ko_liste.append((os.path.basename(t), -2, []))
                 print("  %-50s %s" % (os.path.basename(t), _couleur("ERREUR SILENCIEUSE (timeout)", "rouge")))
                 journaliser_test(racine, agent, serie_test, os.path.basename(t),
-                                 "TIMEOUT", duree)
+                                 "TIMEOUT", duree, run_id)
                 if fail_fast:
                     stoppe = True
             elif nb_ko == 0 and p.returncode == 0:
                 ok += 1
                 print("  %-50s %s" % (os.path.basename(t), _couleur("OK", "vert")))
                 journaliser_test(racine, agent, serie_test, os.path.basename(t),
-                                 "OK", duree)
+                                 "OK", duree, run_id)
             else:
                 ko += 1
                 ko_liste.append((os.path.basename(t), nb_ko,
                                  extraire_lignes_ko(sortie)))
                 print("  %-50s %s (%d [KO])" % (os.path.basename(t), _couleur("KO", "rouge"), nb_ko))
                 journaliser_test(racine, agent, serie_test, os.path.basename(t),
-                                 "KO", duree)
+                                 "KO", duree, run_id)
                 if fail_fast:
                     stoppe = True
     if stoppe:
@@ -1025,6 +1079,8 @@ def main():
                         help="Ne pas lire ni ecrire la reference de temps (sous-processus paralleles)")
     parser.add_argument("--tests", type=str, default="",
                         help="Filtrer par noms de test separes par des virgules")
+    parser.add_argument("--relancer-ko", action="store_true",
+                        help="Mecanisation KO (demande utilisateur 2026-08-16) : relancer UNIQUEMENT les tests en KO du DERNIER run journalise (registre-tests.jsonl, run_id) - isole le probleme, valide le test, puis la serie, avant de relancer la suite complete. Combine a --series X, ne relance QUE les KO de la serie X.")
     parser.add_argument("--fichiers", type=str, default="",
                         help="Liste de fichiers modifies (separes par des virgules) : deduit automatiquement le(s) profil(s) de tests a lancer (mode profil)")
     parser.add_argument("--profil", type=str, default="",
@@ -1064,6 +1120,56 @@ def main():
         return 1 if code == 1 else 2
 
     racine = racine_projet()
+    # run_id du run courant (demande utilisateur 2026-08-16) : timestamp du
+    # debut, journalise avec CHAQUE test dans registre-tests.jsonl pour
+    # identifier le lancement auquel appartient chaque test (base de
+    # --relancer-ko : relancer uniquement les KO du dernier run).
+    run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+    # MECANISATION KO (demande utilisateur 2026-08-16) : --relancer-ko lit le
+    # registre-tests.jsonl, trouve le dernier run (run_id le plus recent),
+    # recupere les tests en KO de CE run et ne lance QUE ceux-la. Janus n a
+    # plus a deduire la liste : l outil la calcule. Le workflow devient :
+    #   1. KO detecte -> analyser le rapport
+    #   2. --relancer-ko -> rejouer UNIQUEMENT les tests KO (validation du
+    #      correctif, pas de relance de la suite complete)
+    #   3. une fois vert -> lancer la serie concernee (--series X)
+    #   4. puis seulement -> la suite complete
+    #   Variante (demande utilisateur 2026-08-16) : --relancer-ko --series X
+    #   filtre les KO sur LA serie X seulement (revalider uniquement les KO
+    #   d une serie donnee sans toucher aux autres series).
+    if args.relancer_ko:
+        dern_run, tests_ko = ko_du_dernier_run(racine)
+        if args.series and args.series != "tous":
+            tests_ko_serie = [t for t in tests_ko
+                              if serie_du_test(os.path.basename(t)) == args.series]
+            ecartes = [t for t in tests_ko
+                       if serie_du_test(os.path.basename(t)) != args.series]
+            if ecartes:
+                print(_couleur("[RELANCER-KO] Filtre serie %s : %d KO ecartes "
+                               "(appartenant a d autres series) :"
+                               % (args.series.upper(), len(ecartes)), "jaune"))
+                for nom in ecartes:
+                    print("  - %s" % nom)
+            tests_ko = tests_ko_serie
+        if not tests_ko:
+            print(_couleur("[RELANCER-KO] Dernier run (%s) : AUCUN KO %s- rien a relancer."
+                           % (dern_run,
+                              ("en serie %s " % args.series.upper())
+                              if args.series and args.series != "tous" else ""),
+                           "vert"))
+            print(_couleur("[RELANCER-KO] Suite complete disponible (--agent %s)."
+                           % args.agent, "jaune"))
+            return 0
+        print(_couleur("[RELANCER-KO] Dernier run : %s - relance UNIQUEMENT %d test(s) en KO%s :"
+                       % (dern_run, len(tests_ko),
+                          (" (serie %s)" % args.series.upper())
+                          if args.series and args.series != "tous" else ""),
+                       "cyan"))
+        for nom in tests_ko:
+            print("  - %s" % nom)
+        args.tests = ",".join(t for t in tests_ko)
+
     # Anti-artefact test-024 (lecon 2026-08-13) : si le lanceur est execute
     # DEPUIS un script temporaire legitime (.tmp-*/.zz-* parent direct), le
     # declarer en exclusion pour test-024 (via l environnement, herite par
@@ -1255,7 +1361,8 @@ def main():
                                                                 fail_fast=args.fail_fast,
                                                                 agent=args.agent,
                                                                 serie=serie,
-                                                                timeout_test=args.timeout_test)
+                                                                timeout_test=args.timeout_test,
+                                                                run_id=run_id)
             total_ok += ok
             total_ko += ko
             total_non += non_lances
@@ -1327,7 +1434,8 @@ def main():
                                                                  fail_fast=args.fail_fast,
                                                                  agent=args.agent,
                                                                  serie="tous",
-                                                                 timeout_test=args.timeout_test)
+                                                                 timeout_test=args.timeout_test,
+                                                                 run_id=run_id)
         tot_ok, tot_ko = ok, ko
         tot_non_lances = non_lances
     elif args.parallele:
@@ -1352,7 +1460,7 @@ def main():
         ok_p, ko_p, ko_liste_p, non_lances_p, durees_p = executer_pool(
             racine, tests_pool + hors_serie, workers,
             fail_fast=args.fail_fast, agent=args.agent, serie="tous",
-            timeout_test=args.timeout_test)
+            timeout_test=args.timeout_test, run_id=run_id)
         tot_ok += ok_p
         tot_ko += ko_p
         tot_non_lances += non_lances_p
@@ -1364,7 +1472,7 @@ def main():
                 racine, tests_globaux,
                 libelle="Garde-fous globaux + exclusifs (registre, sessions, scripts temp, README)",
                 fail_fast=args.fail_fast, agent=args.agent, serie="globaux",
-                timeout_test=args.timeout_test)
+                timeout_test=args.timeout_test, run_id=run_id)
             tot_ok += ok_g
             tot_ko += ko_g
             tot_non_lances += non_lances_g
@@ -1390,11 +1498,46 @@ def main():
             if not selection:
                 continue
             print(_couleur("[BARRIERE %s] %s : lancement..." % (s.upper(), SERIES_NOMS[s]), "bleu"))
-            ok_s, ko_s, ko_liste_s, non_lances_s, durees_s = executer_lot(
-                racine, selection,
-                libelle="BARRIERE %s - %s" % (s.upper(), SERIES_NOMS[s]),
-                fail_fast=args.fail_fast, agent=args.agent, serie=s,
-                timeout_test=args.timeout_test)
+            # POOL INTRA-SERIE (round 19, optimisation performance 2026-08-16) :
+            # les tests de la serie tournent en parallele sur le pool de
+            # workers ; les tests exclusifs (fichiers partages : README,
+            # registre, temps-reference) tournent en serie a la fin pour
+            # eviter les courses. Gain mesure : 127.8s -> ~57s.
+            exclu_ou_global = GARDE_FOUS_GLOBAUX + TESTS_SERIE_EXCLUSIFS
+            sel_pool = [t for t in selection
+                        if not any(os.path.basename(t).startswith(g)
+                                   for g in exclu_ou_global)]
+            sel_exclusifs = [t for t in selection
+                             if any(os.path.basename(t).startswith(g)
+                                    for g in exclu_ou_global)]
+            ok_s = ko_s = non_lances_s = 0
+            ko_liste_s = []
+            durees_s = []
+            if sel_pool:
+                if args.workers and args.workers > 0:
+                    workers = args.workers
+                else:
+                    workers = min(os.cpu_count() or 1, 16)
+                ok_p, ko_p, ko_liste_p, non_lances_p, durees_p = executer_pool(
+                    racine, sel_pool, workers,
+                    fail_fast=args.fail_fast, agent=args.agent, serie=s,
+                    timeout_test=args.timeout_test, run_id=run_id)
+                ok_s += ok_p
+                ko_s += ko_p
+                non_lances_s += non_lances_p
+                ko_liste_s.extend(ko_liste_p)
+                durees_s.extend(durees_p)
+            if sel_exclusifs:
+                ok_e, ko_e, ko_liste_e, non_lances_e, durees_e = executer_lot(
+                    racine, sel_exclusifs,
+                    libelle="BARRIERE %s - exclusifs (serie)" % s.upper(),
+                    fail_fast=args.fail_fast, agent=args.agent, serie=s,
+                    timeout_test=args.timeout_test, run_id=run_id)
+                ok_s += ok_e
+                ko_s += ko_e
+                non_lances_s += non_lances_e
+                ko_liste_s.extend(ko_liste_e)
+                durees_s.extend(durees_e)
             tot_ok += ok_s
             tot_ko += ko_s
             tot_non_lances += non_lances_s
@@ -1419,7 +1562,7 @@ def main():
             ok_h, ko_h, ko_liste_h, non_lances_h, durees_h = executer_lot(
                 racine, hors_serie, libelle="Tests hors-serie (queue)",
                 fail_fast=args.fail_fast, agent=args.agent, serie="hors-serie",
-                timeout_test=args.timeout_test)
+                timeout_test=args.timeout_test, run_id=run_id)
             tot_ok += ok_h
             tot_ko += ko_h
             tot_non_lances += non_lances_h

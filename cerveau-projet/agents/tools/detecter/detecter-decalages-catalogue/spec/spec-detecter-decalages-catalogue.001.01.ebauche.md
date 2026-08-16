@@ -1,6 +1,6 @@
 # Specification -- detecter-decalages-catalogue
 
-**Version :** 0.2.1
+**Version :** 0.2.2
 **Statut :** ebauche
 **Categorie :** Detecter
 **Date :** 2026-08-11
@@ -53,6 +53,7 @@ du catalogue ou generalisation du pilote strict.
 
 | Version | Date | Description |
 |---|---|---|
+| 0.2.2 | 2026-08-16 | PERFORMANCE : sondage SELECTIF - seules les commandes avec flags sont sondees (99 commandes sans flag + 23 tests du catalogue non executes) - goulot detecter-decalages 12.6s -> 4.6s |
 | 0.2.1 | 2026-08-13 | PERFORMANCE : aides lancees en parallele (pool de threads min(16, nb)) + CACHE par (interpreteur, script) - goulot test-028 85s -> 14s |
 | 0.1.1 | 2026-08-11 | Section COMBOS ajoutee : garde-fou des cles des definitions-combo vs catalogue (KO test-003) |
 | 0.1.0 | 2026-08-09 | Creation - institutionnalisation du scan Atlas dans tools/detecter/ |

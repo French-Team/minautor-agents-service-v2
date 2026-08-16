@@ -1,7 +1,7 @@
 # mettre-a-jour-versions
 
 **Categorie** : Mettre a jour
-**Version** : 0.1.1
+**Version** : 0.1.3
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-15
@@ -26,7 +26,7 @@ d'une cible portent la MEME version, avant et apres le bump.
 |---|---|
 | Outil .py : en-tete + constante | `# Version : X.Y.Z` + `VERSION = "X.Y.Z"` |
 | Outil .sh : en-tete + variable | `# Version : X.Y.Z` + `VERSION="X.Y.Z"` |
-| Outil .md / spec .md | `**Version :** X.Y.Z` |
+| Outil .md / spec .md | `**Version :** X.Y.Z` ou `**Version** : X.Y.Z` (les 2 formats sont couverts) |
 | Parcours JSON | `"version": "X.Y.Z"` |
 | Fiche agent | `PARCOURS (vX.Y.Z)` |
 | Protocole (frontmatter) | `version: "X.Y.Z"` |
@@ -106,4 +106,6 @@ les `.sh` et la doc `.md` doivent etre alignes dessus.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.1.3 | 2026-08-16 | PRECISION DES COMPAGNONS : exclusion des corrections.md (lecons des agents = mentions historiques, jamais des pins a adapter - faux positifs du round 0.5.2) + RAPPEL OBLIGATOIRE dans le rapport : lancer le bumper sur chaque outil bumpe AVANT la non-regression (lecon : 5 KO en cascade car le bump 0.5.2 n avait pas ete precede du bumper) |
+| 0.1.2 | 2026-08-16 | FICHIERS COMPAGNONS : apres un bump, signale les fichiers du projet qui referencent l ancienne version (tests, docs, corrections) avec verdict KO + detection des 2 formats de doc ('**Version :**' et '**Version** :') - a revele et corrige 11 outils incoherents (19 remplacements) |
 | 0.1.0 | 2026-08-15 | Creation : bumper systematique multi-formats (outil, parcours, protocole, catalogue, version-readme) |

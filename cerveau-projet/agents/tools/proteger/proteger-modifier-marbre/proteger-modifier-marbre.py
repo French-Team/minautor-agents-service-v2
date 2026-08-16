@@ -31,7 +31,7 @@
 #   1 : BLOQUE - autorisation absente ou zone inconnue
 #   2 : erreur d utilisation
 #
-# Version : 0.1.0
+# Version : 0.1.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -57,7 +57,7 @@ import json
 import os
 import sys
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 
 
 def empreinte_fichier_lock(chemin):
@@ -170,6 +170,12 @@ def afficher_log(racine):
 def main():
     parser = argparse.ArgumentParser(description="Modification du marbre (protocole a autorisation utilisateur)")
     parser.add_argument("--zone", type=str, default="", help="Zone a re-empreinter")
+    parser.add_argument("--ajouter", type=str, default="",
+                        help="AJOUTER une nouvelle zone (nom) au manifeste (avec --fichier et --type)")
+    parser.add_argument("--fichier", type=str, default="",
+                        help="Chemin relatif du fichier protege (avec --ajouter, type fichier)")
+    parser.add_argument("--type", type=str, default="",
+                        help="Type de zone (avec --ajouter) : fichier (defaut) ou case/marqueurs")
     parser.add_argument("--raison", type=str, default="", help="Justification de la modification")
     parser.add_argument("--autorisation", type=str, default="", help="Preuve d autorisation de l utilisateur (OBLIGATOIRE)")
     parser.add_argument("--log", action="store_true", help="Afficher l historique des modifications")
@@ -183,19 +189,75 @@ def main():
     if args.log:
         return afficher_log(racine)
 
-    if not args.zone or not args.raison:
-        parser.print_help()
-        return 2
-
     if not args.autorisation:
         print("[BLOQUE] Autorisation utilisateur manquante : le marbre est IMMUABLE pour les agents.")
         print("  Le gardien propose, l UTILISATEUR valide, puis :")
-        print("  proteger-modifier-marbre --zone %s --raison \"...\" --autorisation <cle>" % args.zone)
+        print("  proteger-modifier-marbre --zone %s --raison \"...\" --autorisation <cle>" % (args.zone or args.ajouter))
         return 1
 
     chemin = chemin_manifeste(racine)
     with io.open(chemin, "r", encoding="utf-8") as fh:
         manifeste = json.load(fh)
+
+    verrou = charger_verrou()
+
+    # --- MODE AJOUT (v0.1.2, 2026-08-16) : nouvelle zone dans le marbre ---
+    if args.ajouter:
+        if not args.raison:
+            parser.print_help()
+            return 2
+        if args.ajouter in manifeste["zones"]:
+            print("[ERREUR] Zone deja protegee : %s" % args.ajouter)
+            return 2
+        typ = args.type or "fichier"
+        if typ not in ("fichier", "case", "marqueurs"):
+            print("[ERREUR] Type de zone invalide : %s (fichier|case|marqueurs)" % typ)
+            return 2
+        if not args.fichier and typ == "fichier":
+            print("[ERREUR] --fichier obligatoire pour une zone de type fichier")
+            return 2
+        zone = {
+            "fichier": args.fichier.replace("\\", "/"),
+            "type": typ,
+            "raison": args.raison,
+        }
+        try:
+            nouvelle = verrou.empreinte_zone(zone, racine)
+        except (ValueError, IOError) as e:
+            print("[BLOQUE] Impossible de calculer l empreinte du fichier %s : %s" % (args.fichier, e))
+            return 1
+        zone["empreinte"] = nouvelle
+        zone["modifie_le"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        zone["raison_modification"] = args.raison
+        manifeste["zones"][args.ajouter] = zone
+
+        with io.open(chemin, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(manifeste, fh, ensure_ascii=True, indent=1)
+            fh.write("\n")
+
+        entree = {
+            "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "zone": args.ajouter,
+            "action": "ajout",
+            "raison": args.raison,
+            "autorise_par": args.autorisation,
+            "ancienne_empreinte": "",
+            "nouvelle_empreinte": nouvelle,
+        }
+        with io.open(chemin_log(racine), "a", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(entree, ensure_ascii=True) + "\n")
+
+        print("[OK] Zone AJOUTEE au marbre : %s (type %s, autorisation: %s)" % (
+            args.ajouter, typ, args.autorisation))
+        print("    fichier   : %s" % zone["fichier"])
+        print("    empreinte : %s" % nouvelle[:16])
+        print("    journalise dans marbre-log.jsonl")
+        return 0
+
+    # --- MODE RE-EMPREINTE (comportement historique) ---
+    if not args.zone or not args.raison:
+        parser.print_help()
+        return 2
 
     zone = manifeste["zones"].get(args.zone)
     if zone is None:
@@ -203,7 +265,6 @@ def main():
         print("Zones protegees : %s" % ", ".join(sorted(manifeste["zones"])))
         return 2
 
-    verrou = charger_verrou()
     try:
         nouvelle = verrou.empreinte_zone(zone, racine)
     except (ValueError, IOError) as e:

@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-cerberus",
   "agent": "cerberus",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "case_depart": "c0",
   "description": "v0.4.6 : + indice outil c10 combos-analyse-projet (usage reel registre, garde-fou test-035)"
  },
@@ -268,6 +268,12 @@
      "type": "fichier",
      "chemin": "cerveau-projet/agents/cerberus/corrections.md",
      "raison": "Mes corrections (a relire en priorite)"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ],
    "suivant": "c12"

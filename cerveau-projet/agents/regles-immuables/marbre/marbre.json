@@ -61,9 +61,17 @@
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",
    "type": "fichier",
    "raison": "Regle immuable des groupes d agents et des domaines separes",
-   "empreinte": "08c963050c49b1325ae049361a86f11932b3a7a8f910546d185b1676ff7bec75",
-   "modifie_le": "2026-08-15 21:59:09",
-   "raison_modification": "demande utilisateur (validee) : graver la REGLE IMMUABLE RELEVE MEME ROUND - toute activation d un agent declenche immediatement l execution dans le meme round ; cycle cerberus -> agents <-> agents <-> themis + janus -> cerberus ; seul le dernier maillon reactive Cerberus"
+   "empreinte": "c782ba8cf4198a088b939227c5586855c6d290b8929dd5f3283a3bef088cbba2",
+   "modifie_le": "2026-08-16 12:58:50",
+   "raison_modification": "Ajout des 2 references protocole manquantes (SEUL CLIO, LE MODELE DE CONFIANCE) - demande utilisateur"
+  },
+  "regles-general-global": {
+   "fichier": "cerveau-projet/agents/regles-immuables/general/regles-general-global.md",
+   "type": "fichier",
+   "raison": "REGLE D OR anti-valeurs-magiques gravee dans les regles globales (decision utilisateur 2026-08-16)",
+   "empreinte": "8bbb188ebcecfb1a69d099a0ebb80781d4489863192f20b5129f5bd21209ac0a",
+   "modifie_le": "2026-08-16 10:07:11",
+   "raison_modification": "Gravure de la REGLE D OR anti-valeurs-magiques (hierarchie constante -> config -> .env) dans regles-general-global.md"
   }
  }
 }

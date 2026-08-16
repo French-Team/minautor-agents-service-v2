@@ -253,8 +253,21 @@ def main():
 
     # 8. --version
     out = run(["python3", OUTIL, "--version"])
-    ok = "executer-script-temporaire" in out and "0.1.2" in out
+    ok = "executer-script-temporaire" in out and "0.1.3" in out
     verifier("8. --version", ok)
+
+    # 8b. Le chrono est affiche PAR DEFAUT et en PREMIERE ligne de la
+    # reponse (demande utilisateur 2026-08-15 : visible en haut, a chaque
+    # execution) - y compris quand la sortie est piped (flush immediat).
+    sain = os.path.join(dossier_test, "sain.py")
+    with io.open(sain, "w", encoding="ascii", newline="\n") as fh:
+        fh.write('print("corps du script")\n')
+    res3 = PROTECTIONS.lancer_protege(["python3", OUTIL, sain], timeout=60)
+    sortie3 = (res3.stdout or "") if res3 is not None else ""
+    premieres = [l for l in sortie3.splitlines() if l.strip()][:1]
+    verifier("8b. chrono affiche PAR DEFAUT en PREMIERE ligne (sortie piped)",
+             premieres and "[CHRONO]" in premieres[0],
+             "premiere ligne = %s" % (premieres[0] if premieres else "<vide>"))
 
     # 9. Preuve negative : python3 direct ne normalise PAS
     direct = os.path.join(dossier_test, "direct.py")

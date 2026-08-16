@@ -2,7 +2,7 @@
 # executer-script-temporaire.sh
 # ENTONNOIR (parite bash) : normalise puis execute un script temporaire.
 # Usage : bash executer-script-temporaire.sh <script.py> [args...]
-# Version : 0.1.1
+# Version : 0.1.3
 # Statut : ebauche
 
 set -u

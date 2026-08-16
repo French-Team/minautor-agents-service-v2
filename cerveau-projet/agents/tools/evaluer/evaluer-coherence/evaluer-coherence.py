@@ -20,7 +20,7 @@ Options :
 Retour: 0 toujours (outil d'evaluation, rapport sur stdout).
 
 Proprietaire : Themis (outil partage)
-Version : 0.2.3-py
+Version : 0.2.4-py
 Statut : beta
 """
 
@@ -30,7 +30,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.3-py"
+VERSION = "0.2.4-py"
 STATUT = "beta"
 
 # Couleurs ANSI : desactivees si la sortie n'est pas un terminal (capture,
@@ -49,8 +49,9 @@ MOTIFS_GENERIQUES = ('texte', 'chemin', 'ancien.md', 'nouveau.md', 'perdu.md',
 
 PATTERN_LIEN = re.compile(r"\[[^]]+\]\(([^)]+)\)")
 
-AGENTS_ATTENDUS = ["cerberus", "buffy", "athena", "atlas", "clio", "janus",
-                   "minerve", "morpheus", "promethee", "vulcain", "themis"]
+AGENTS_ATTENDUS = ["argus", "cerberus", "buffy", "athena", "atlas", "clio",
+                   "janus", "minerve", "morpheus", "promethee", "vulcain",
+                   "themis", "hygie", "hermes", "gardien"]
 
 # Prefixes qui vivent dans agents/conventions/ et agents/regles-immuables/ et ne sont pas des outils
 PREFIXES_NON_OUTILS = ("convention-", "protocole-", "regles-", "rvav-",
@@ -284,6 +285,11 @@ def main(argv=None):
                 outil = outil.strip("`")
                 if not outil:
                     continue
+                # Les options de ligne de commande (--parallele, --serial,
+                # --etat-tests...) sont des OPTIONS, pas des outils : elles
+                # sont exclues du scan (lecon Janus 2026-08-15, doc janus.md).
+                if outil.startswith("--"):
+                    continue
                 if outil.startswith(PREFIXES_NON_OUTILS):
                     continue
                 if outil in COMMANDES_SYSTEME:
@@ -291,6 +297,12 @@ def main(argv=None):
                 if outil.endswith("-template") or outil.startswith("template-"):
                     continue
                 if outil.startswith("combos-combos-"):
+                    continue
+                # Un nom d outil du cerveau contient un tiret (action-outil) ou
+                # est connu des dossiers reels. Un mot francais simple entre
+                # backticks (conforme, success, probleme...) n est PAS un outil
+                # (lecon Janus 2026-08-15 : faux positifs des fiches).
+                if "-" not in outil and outil not in noms_outils:
                     continue
                 if outil not in noms_outils:
                     if outil not in outils_casses:

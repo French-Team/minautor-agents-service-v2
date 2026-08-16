@@ -195,6 +195,14 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 > **ETAPE SYSTEME (choix .py/.sh)** : avant d'executer un outil, je consulte le profil systeme stocke (classeur-variables, variable profil-systeme) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
 > **ETAPE SESSION (profil-session -- MODE ID)** : au demarrage, je lance `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>` -- mon id m'est donne par l'utilisateur -- l'outil compare mon id aux sessions enregistrees et me rend MA session (id deja lie = retrouvee, id inconnu = prochaine libre + liaison). Je ne deduis JAMAIS ma session d'AGENTS.md. Puis je consulte le profil de MA session dans le classeur (variable `profil-session-<session-id>`) pour connaitre mon agent principal actuel et la session (session-llm-N).
 
+> **REGLE ABSOLUE 9 -- NETTOYAGE DES TEMPORAIRES (IMMUABLE, anti-recurrence lecon 2026-08-16)** :
+> TOUTE case de mon parcours qui CREE des fichiers/dossiers temporaires (`tmp-<agent>/`, scripts, preuves)
+> DOIT etre suivie d'une case de NETTOYAGE avant la fin de mission : suppression du dossier
+> (0 residu, protocole-creation-scripts-temporaires) + declaration au registre
+> (`enregistrer-usage-outil --mode script-temporaire`). Une carte sans case de nettoyage
+> quand elle cree des fichiers temp est INCOMPLETE (lecon : carte argus v0.1.1 sans
+> nettoyage, test-024 bloque).
+
 ---
 
 ## Outils de base (P0) -- disponibles dans toutes les missions

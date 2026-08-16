@@ -18,13 +18,16 @@ Contexte :
   - v0.2.1 (2026-08-13) : detecter-decalages-catalogue passe en PARALLELE
     (pool de threads min(16, nb) + cache par (interpreteur, script)) : ce
     garde-fou passait de 88s a 22s, la suite anti-regression de 92.2s a 52.3s.
+  - v0.2.2 (2026-08-16) : sondage SELECTIF (seules les commandes avec flags
+    sont sondees, les 99 commandes sans flag et les 23 tests du catalogue ne
+    sont plus executes) : goulot detecter-decalages 12.6s -> 4.6s.
   - Ce garde-fou verifie : 0 spec divergente, 0 spec sans version avec .py,
     0 decalage catalogue, et le cas guider-parcours documente.
 
 Cas couverts:
   1. detecter-divergences-version --version = v0.2.0
-  2. detecter-decalages-catalogue --version = v0.2.1 (v0.2.1 : aides en
-     parallele + cache, goulot 85s -> 8s)
+  2. detecter-decalages-catalogue --version = v0.2.2 (v0.2.2 : sondage
+     selectif des commandes avec flags, goulot 12.6s -> 4.6s)
   3. detecter-divergences-version : 0 DIVERGENTE
   4. detecter-divergences-version : 0 SANS VERSION (avec .py present)
   5. detecter-decalages-catalogue : 0 decalage
@@ -175,8 +178,8 @@ def main():
     verifier("1. detecter-divergences-version --version = v0.2.0",
              "v0.2.0" in r.stdout, r.stdout.strip())
     r = run([PYTHON, DEC_PY, "--version"])
-    verifier("2. detecter-decalages-catalogue --version = v0.2.1",
-             "v0.2.1" in r.stdout, r.stdout.strip())
+    verifier("2. detecter-decalages-catalogue --version = v0.2.2",
+             "v0.2.2" in r.stdout, r.stdout.strip())
 
     # 3-4. Divergences de versions (scan cerveau-projet)
     r = run([PYTHON, DIV_PY, "--racine", "cerveau-projet"])

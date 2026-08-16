@@ -21,16 +21,16 @@ identite:
 | **Nom LLM** | llm-1 |
 | **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-15 |
+| **Derniere mise a jour** | 2026-08-16 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
 | **Active par** | cerberus (retour de mission) |
-| **Raison** | TEST REEL DE LA RELEVE REUSSI : la chaine Buffy -> Themis -> Janus s est deroulee dans le MEME ROUND sans relance utilisateur - la regle immuable RELEVE MEME ROUND fonctionne. Bilan consolide : (1) REGLE GRAVEE par Buffy dans regles-groupes-agents.md (zone marbre, porte UTILISATEUR validee, empreinte 08c9..., cycle exact 'cerberus -> agents <-> agents <-> themis + janus -> cerberus', 4 imperatifs), (2) AUDIT Themis CONFORME 5/5 (section ligne 197, marbre 24/24, coherence cartes themis/janus), (3) NON-REGRESSION Janus 63 OK / 0 KO, 5 barrieres franchies, chrono 118.9s conforme (+1%), rating Series 92.2/100 EXCELLENT. Lecons enregistrees (Buffy, Themis, Janus). Normes 0/0, 0 residu. |
+| **Raison** | NON-REGRESSION 74 OK / 0 KO (91.6s nouvelle base) - filtre serie --relancer-ko v0.5.3 demontre en conditions reelles |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-15 22:03 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-16 13:44 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -124,6 +124,7 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 | [Hygie](cerveau-projet/agents/hygie/hygie.md) | cerveau-projet/agents/hygie/ | Agent de nettoyage du workspace | Disponible (en attente) | SEUL habilite a TOUT le workspace et a supprimer sans demande prealable |
 | [Hermes](cerveau-projet/agents/hermes/hermes.md) | cerveau-projet/agents/hermes/ | Agent de la langue (orthographe, vocabulaire, fautes) | Disponible (en attente) | Agent dedie aux fautes de francais |
 | [Gardien](cerveau-projet/agents/gardien/gardien.md) | cerveau-projet/agents/gardien/ | Gardien du marbre (securite du code) | Disponible (en attente) | SEUL a proposer la modification des zones protegees (l utilisateur valide) |
+| [Argus](cerveau-projet/agents/argus/argus.md) | cerveau-projet/agents/argus/ | Detecteur de contradictions | Disponible (en attente) | DETECTE et SIGNALE les incoherences (cases, regles, protocoles, git) - ne corrige jamais |
 
 ---
 

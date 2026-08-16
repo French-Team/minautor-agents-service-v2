@@ -56,10 +56,11 @@ PYTHON = sys.executable
 
 AGENTS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents")
 
-# Les 11 agents (ordre stable pour la lecture)
+# Les 15 agents (ordre stable pour la lecture)
 AGENTS = [
     "cerberus", "buffy", "vulcain", "morpheus", "janus", "atlas",
     "themis", "clio", "athena", "promethee", "minerve",
+    "hygie", "hermes", "gardien", "argus",
 ]
 
 OUTIL_NON_REGRESSION = "tester-lancer-non-regression"
@@ -251,11 +252,11 @@ def main():
                 signatures[sig] = agent
         except Exception as e:
             doublons.append("%s(ERR %s)" % (agent, e))
-    verifier("4. Les 12 cartes ont des signatures de CONTENU TOUTES distinctes (identite)",
-             len(doublons) == 0 and len(signatures) == 11,
+    verifier("4. Les 15 cartes ont des signatures de CONTENU TOUTES distinctes (identite)",
+             len(doublons) == 0 and len(signatures) == 15,
              "doublons=%s nb_sig=%d" % (doublons, len(signatures)))
 
-    # 5. Normes : ASCII strict + LF pur (11 cartes + fiche morpheus + test)
+    # 5. Normes : ASCII strict + LF pur (15 cartes + fiche morpheus + test)
     normes_ko = []
     for f in [chemin_parcours(a) for a in AGENTS] + [FICHE_MORPHEUS, os.path.abspath(__file__)]:
         try:
@@ -267,7 +268,7 @@ def main():
                 normes_ko.append("%s crlf" % os.path.basename(f))
         except Exception as e:
             normes_ko.append("%s ERR %s" % (os.path.basename(f), e))
-    verifier("5. Normes ASCII strict + LF pur (11 cartes + fiche + test)",
+    verifier("5. Normes ASCII strict + LF pur (15 cartes + fiche + test)",
              len(normes_ko) == 0, "ko=%s" % normes_ko)
 
     print()

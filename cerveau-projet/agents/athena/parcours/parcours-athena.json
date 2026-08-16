@@ -494,6 +494,12 @@
      "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/athena/corrections.md <lecon>",
      "nom": "ajouter-contenu-fichier",
      "type": "outil"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ],
    "suivant": "c9b",
@@ -573,6 +579,12 @@
     {
      "type": "regle",
      "texte": "BOUCLE KO : apres correction, j active JANUS (commande activer, PAS reactiver) pour qu il revalide mon travail."
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ]
   },
@@ -621,6 +633,6 @@
   "case_depart": "c0",
   "description": "v0.2.0 : MIGRATION AU NOUVEAU FORMAT (spec-refonte etape 6, 3e parcours apres cerberus et morpheus) - cases indice -> action, regles > 160 car. -> references (patterns/protocoles/regles), max 3 indices par case. Parcours (jeu de piste) des missions d'Athena : redactrice de pense-betes. 2 missions (creer un pense-bete, completer un pense-bete). A la fin de chaque mission, j'active Promethee pour la spec (CHAIN). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
   "nom": "parcours-athena",
-  "version": "0.3.1"
+  "version": "0.3.2"
  }
 }

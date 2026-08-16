@@ -16,7 +16,7 @@ Usage:
   combos-analyse-projet.py [OPTIONS]
 """
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 STATUT = "prepare"
 
 import datetime
@@ -92,6 +92,16 @@ def compter_agents(racine):
 
 def lire_README(racine):
     p = Path(racine) / "README.md"
+    if not p.is_file():
+        return None
+    return p.read_text(encoding="utf-8", errors="replace")
+
+
+def lire_README_dev(racine):
+    """Lire readme-dev.md (documentation developpeur). Depuis la refonte grand
+    public du README (2026-08-14), la table des categories d outils vit dans
+    readme-dev.md section 6, plus dans le README public (par design)."""
+    p = Path(racine) / "cerveau-projet" / "readme-dev.md"
     if not p.is_file():
         return None
     return p.read_text(encoding="utf-8", errors="replace")
@@ -176,17 +186,23 @@ def main():
         ecarts.append("Compteur agents : README dit %d, realite %d" % (cpt_agents, nb_agents))
         print(YELLOW + "  [ECART] Compteur agents : README=%d realite=%d" % (cpt_agents, nb_agents) + NC)
 
-    # categories manquantes dans le README (table boite a outils)
+    # categories manquantes dans readme-dev.md (table boite a outils) : la table
+    # a quitte le README public (refonte grand public) pour readme-dev.md section 6.
+    readme_dev = lire_README_dev(racine)
     for cat in sorted(categories):
-        # chercher la ligne "**<Cat> (n)**" (nom capitalise, meme logique que mettre-a-jour-readme)
+        # chercher la ligne "| <Cat> | <n> |" dans readme-dev (nom capitalise,
+        # meme logique que mettre-a-jour-readme) ; repli sur README.md si absent
         cat_aff = nom_categorie_affichable(cat)
-        m = re.search(r"\*\*" + re.escape(cat_aff) + r"\s*\((\d+)\)\*\*", readme)
+        if readme_dev is not None:
+            m = re.search(r"^\| " + re.escape(cat_aff) + r" \| (\d+) \|", readme_dev, re.M)
+        else:
+            m = re.search(r"\*\*" + re.escape(cat_aff) + r"\s*\((\d+)\)\*\*", readme)
         if m is None:
-            ecarts.append("Categorie %s absente de la table README (realite %d)" % (cat, categories[cat]))
-            print(YELLOW + "  [MANQUANT] Categorie '%s' absente de la table README" % cat + NC)
+            ecarts.append("Categorie %s absente de la table readme-dev (realite %d)" % (cat, categories[cat]))
+            print(YELLOW + "  [MANQUANT] Categorie '%s' absente de la table readme-dev" % cat + NC)
         elif int(m.group(1)) != categories[cat]:
-            ecarts.append("Categorie %s : README dit %d, realite %d" % (cat, int(m.group(1)), categories[cat]))
-            print(YELLOW + "  [ECART] Categorie %s : README=%d realite=%d" % (cat, int(m.group(1)), categories[cat]) + NC)
+            ecarts.append("Categorie %s : readme-dev dit %d, realite %d" % (cat, int(m.group(1)), categories[cat]))
+            print(YELLOW + "  [ECART] Categorie %s : readme-dev=%d realite=%d" % (cat, int(m.group(1)), categories[cat]) + NC)
 
     # 3. Synthese
     print("")

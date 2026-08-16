@@ -1,5 +1,5 @@
 # proteger-modifier-marbre
-**Version :** 0.1.0
+**Version :** 0.1.2
 **Statut :** ebauche
 **Categorie :** Proteger
 ## Pourquoi cet outil ?
@@ -20,16 +20,31 @@ les agents.
 ## Usage
 ```
 python3 proteger-modifier-marbre.py --zone <nom> --raison <texte> --autorisation <cle>
+python3 proteger-modifier-marbre.py --ajouter <nom> --fichier <chemin> --type <type> --raison <texte> --autorisation <cle>
 python3 proteger-modifier-marbre.py --log
 ```
 ## Options
 | Option | Description |
 |---|---|
 | `--zone <nom>` | Zone a re-empreinter (ex : `cerberus.c0`) |
+| `--ajouter <nom>` | AJOUTER une nouvelle zone au marbre (v0.1.2) |
+| `--fichier <chemin>` | Chemin relatif du fichier protege (avec --ajouter, type fichier) |
+| `--type <type>` | Type de zone (avec --ajouter) : `fichier` (defaut), `case`, `marqueurs` |
 | `--raison <texte>` | Justification de la modification (OBLIGATOIRE) |
 | `--autorisation <cle>` | Preuve d autorisation de l utilisateur (OBLIGATOIRE) |
 | `--log` | Affiche l historique des modifications du marbre |
 | `--version` | Affiche la version |
+
+## Ajouter une nouvelle zone (v0.1.2)
+Pour protege un NOUVEAU fichier de regles dans le marbre (ex :
+`regles-general-global`) :
+```
+python3 proteger-modifier-marbre.py --ajouter regles-general-global \
+  --fichier cerveau-projet/agents/regles-immuables/general/regles-general-global.md \
+  --type fichier --raison "..." --autorisation ADMIN
+```
+La zone est creee avec son empreinte SHA-256, ajoutee au manifeste et
+journalisee (action `ajout`). L autorisation utilisateur reste obligatoire.
 ## Codes de sortie
 | Code | Signification |
 |---|---|

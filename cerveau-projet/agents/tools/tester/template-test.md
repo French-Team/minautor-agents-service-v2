@@ -96,6 +96,12 @@ test, desactiver une fonction ou un workflow complet).
     `bilan_chrono()` PUIS `=== RESULTAT : N OK / M KO (sur P points) ===`
     et retourne `1 if NB_KO else 0`
 11. `if __name__ == "__main__": sys.exit(main())`
+12. **NETTOYAGE DES PREUVES TEMPORAIRES (IMMUABLE, lecon test-051/2026-08-16)** :
+    TOUTE preuve temporaire creee par le test (dossiers `tmp-testNNN-*`,
+    fichiers injectes, copies de parcours) est SUPPRIMEE en fin de test
+    (bloc `finally: shutil.rmtree(tmp, ignore_errors=True)`) : 0 residu a la
+    racine en fin de test (test-024/024b verifie). Un test qui laisse des
+    preuves derriere lui est INCOMPLET.
 
 ## Mesure des tokens (PILOTE, migration progressive v0.1 - optionnel)
 

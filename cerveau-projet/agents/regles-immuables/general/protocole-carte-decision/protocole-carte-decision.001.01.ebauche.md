@@ -106,6 +106,13 @@ Details, schema JSON et procedure d'audit : spec-guider-parcours v0.2.13
 4. Le parcours est la **source de verite** du guidage (remplace les tableaux de missions de la fiche)
 5. Une mission hors parcours : branche vers l'activation de l'agent habilite ou signalement du besoin
 6. Les lecons des corrections peuvent devenir des **cases** du parcours (ex: parcours-clio case c7)
+7. **CASE DE NETTOYAGE OBLIGATOIRE (IMMUABLE, lecon 2026-08-16) :** toute carte
+   qui contient une case CREANT des fichiers/dossiers temporaires (`tmp-<agent>/`,
+   preuves, scripts) DOIT avoir une case de NETTOYAGE avant la fin (suppression
+   du dossier 0 residu + declaration registre `enregistrer-usage-outil
+   --mode script-temporaire`). Une carte sans nettoyage alors qu'elle cree des
+   fichiers temp est INCOMPLETE (anti-recurrence : carte argus v0.1.1 sans case
+   de nettoyage, bloquee par test-024).
 
 > Le contenu ci-dessous (sections historiques) documente la carte de decision
 > statique qui a precede le parcours. Il est conserve comme reference historique

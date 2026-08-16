@@ -16,7 +16,7 @@
 # d une boucle serie (~85s -> ~8s sur 147 commandes) + CACHE des aides par
 # (interpreteur, script) : un script reference par plusieurs commandes n est
 # lance qu une seule fois (ex: activer-agent-principal 5x -> 1 lancement).
-# Version : 0.2.1
+# Version : 0.2.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -64,7 +64,7 @@ import unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 # v0.2.1 : pool de threads pour lancer les aides des commandes en parallele.
 # min(16, nb) : surcharge le lanceur de tests qui utilise deja un pool a part.
 MAX_WORKERS = 16
@@ -247,32 +247,39 @@ def analyser():
         placeholders_cat = set(p["cle"] for p in e.get("parametres", []) if p.get("obligatoire"))
         placeholders_modele = set(re.findall(r"\{([a-z_0-9]+)\}", modele))
         manquants_oblig = sorted(placeholders_cat - placeholders_modele)
-        sondes.append((nom, modele, script, interpreteur, manquants_oblig))
-    # v0.2.1 : lancement PARALLELE des aides (pool de threads). Chaque sonde
-    # demande l aide de son script (cachee) : un script partage n est lance
-    # qu une seule fois par le pool entier.
+        flags_modele, _ = flags_du_modele(modele)
+        sondes.append((nom, modele, script, interpreteur, manquants_oblig, flags_modele))
+    # v0.2.2 : NE SONDER QUE les commandes dont le modele a AU MOINS UN flag.
+    # Une commande sans flag (ex: "{chemin}" des tests) n a RIEN a valider via
+    # l aide : la sonder executerait le script ENTIER (les tests n ont pas de
+    # vrai --aide) -> goulot majeur (detecter-decalages ~12.6s, 99/165 commandes
+    # sans flag dont 23 commandes-test). Gain mesure : ~12.6s -> ~3s.
     aides = {}
-    with ThreadPoolExecutor(max_workers=min(MAX_WORKERS, len(sondes))) as pool:
+    sondables = [(idx, s) for idx, s in enumerate(sondes)
+                 if s[2] and s[5]]  # script present ET flags_modele non vide
+    with ThreadPoolExecutor(max_workers=min(MAX_WORKERS, len(sondables))) as pool:
         futures = {}
-        for idx, s in enumerate(sondes):
-            _, _, script, interpreteur, _ = s
-            if not script:
-                continue
+        for idx, s in sondables:
+            _, _, script, interpreteur, _, _ = s
             futures[pool.submit(lancer_aide_cachee, interpreteur, script)] = idx
         for fut in futures:
             aides[futures[fut]] = fut.result()
-    for idx, (nom, modele, script, interpreteur, manquants_oblig) in enumerate(sondes):
+    for idx, (nom, modele, script, interpreteur, manquants_oblig, flags_modele) in enumerate(sondes):
         if manquants_oblig:
             resultats["alertes"].append((nom, "placeholder obligatoire absent du modele: %s" % manquants_oblig))
         if not script:
             resultats["non_testables"].append((nom, "PAS DE SCRIPT", script))
+            continue
+        if not flags_modele:
+            # aucune validation d aide possible/necessaire (pas de flag dans le
+            # modele) : conforme par structure, sans lancer le script
+            resultats["conformes"].append((nom, script))
             continue
         aide, err, reconnue = aides[idx]
         if err or not reconnue:
             resultats["non_testables"].append((nom, err or "AIDE NON RECONNUE", script))
             continue
         options_reelles = extraire_options(aide)
-        flags_modele, _ = flags_du_modele(modele)
         manquants = sorted(f for f in flags_modele if f not in options_reelles)
         if manquants:
             md_chemin = os.path.join(RACINE, os.path.dirname(script), os.path.basename(os.path.dirname(script)) + ".md")

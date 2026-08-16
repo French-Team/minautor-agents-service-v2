@@ -26,8 +26,8 @@ boucle sans issue, reference cassee) fait **KO** la non-regression.
 ## Points verifies (10)
 
 1. `detecter-cablages-manquants --version` = v0.1.1
-2. 11 parcours d'agents trouves
-3. **0 CAS_ORPHELINE** sur les 11 parcours (anti-recurrence)
+2. 15 parcours d'agents trouves
+3. **0 CAS_ORPHELINE** sur les 15 parcours (anti-recurrence)
 4. 0 BOUCLE_BLOQUANTE
 5. 0 REF_MORTE
 6. 0 CASE_DEPART manquante

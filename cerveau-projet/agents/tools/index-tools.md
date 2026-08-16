@@ -38,6 +38,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `analyser-dependances` | Analyser les dependances | [analyser/analyser-dependances/](analyser/analyser-dependances/) |
+| `analyser-io-tests` | Mesurer la lecture/ecriture disque pendant les tests (I/O) | [analyser/analyser-io-tests/](analyser/analyser-io-tests/) |
 | `analyser-structure` | Analyser la structure du projet | [analyser/analyser-structure/](analyser/analyser-structure/) |
 | `analyser-performance-tests` | Analyser la performance des tests (dernier run) | [analyser/analyser-performance-tests/](analyser/analyser-performance-tests/) |
 | `analyser-tokens` | Mesurer les tokens de la session (envoyes/recus/encombrement) | [analyser/analyser-tokens/](analyser/analyser-tokens/) |
@@ -143,6 +144,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-usage-scripts-temporaires` | Mesurer l usage des scripts temporaires (.zz-*/.tmp-*) par les agents et le croiser avec le registre | [detecter/detecter-usage-scripts-temporaires/](detecter/detecter-usage-scripts-temporaires/) |
 | `detecter-cablages-manquants` | Detecter les cablages manquants des cartes de decision : cases orphelines, boucles indirectes, references mortes, fins non joignables (complete valider-case) | [detecter/detecter-cablages-manquants/](detecter/detecter-cablages-manquants/) |
 | `detecter-residus` | Detecter les residus du workspace, compartimente par zone (cerveau-projet / workspace / tous) : fichiers temp, version egaree, sauvegardes, rapports egare, caches | [detecter/detecter-residus/](detecter/detecter-residus/) |
+| `detecter-contradictions` | Croiser les sources (cases, regles, protocoles, git log --all) pour detecter les contradictions - outil d Argus, rapport classe par gravite | [detecter/detecter-contradictions/](detecter/detecter-contradictions/) |
 
 ### Ecrire
 
@@ -267,6 +269,13 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `proteger-verrou-habilitation` | Verrou d habilitation : bloque l utilisation d un outil par un agent non habilite (source : cartes de decision) | [proteger/proteger-verrou-habilitation/](proteger/proteger-verrou-habilitation/) |
 | `proteger-modifier-marbre` | Modifie une zone du marbre (autorisation utilisateur obligatoire + journal) | [proteger/proteger-modifier-marbre/](proteger/proteger-modifier-marbre/) |
 | `proteger-verrou-marbre` | Verifie l integrite des zones protegees du marbre (Constitution + cases critiques) | [proteger/proteger-verrou-marbre/](proteger/proteger-verrou-marbre/) |
+
+### Purifier
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `purifier-rvav` | Purification RVAV : reduire les fichiers surcharges sans perte (deplacement vers une archive cote a cote) | [purifier/purifier-rvav/](purifier/purifier-rvav/) |
+
 
 ### Rechercher
 
@@ -468,7 +477,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Categorie | Nombre d'outils |
 |---|---|
 | Ajouter | 1 |
-| Analyser | 4 |
+| Analyser | 5 |
 | Cartographier | 1 |
 | Changer | 1 |
 | Combos | 21 |
@@ -493,6 +502,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Mettre a jour | 2 |
 | Activer | 1 |
 | Nettoyer | 3 |
+| Purifier | 1 |
 | Proteger | 3 |
 | Rechercher | 10 |
 | Remplacer | 1 |
@@ -501,7 +511,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Verifier | 6 |
 | Protections | 5 |
 | Tests | 39 |
-| **Total** | **180** |
+| **Total** | **182** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

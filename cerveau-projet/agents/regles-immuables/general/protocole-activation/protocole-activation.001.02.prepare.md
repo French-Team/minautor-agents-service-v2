@@ -11,7 +11,7 @@ identite:
 **Portee :** Tous les agents du cerveau-projet
 **Prerequis :** AGENTS.md, fiche de l'agent, corrections de l'agent
 **Statut :** prepare (class 02)
-**Derniere mise a jour :** 2026-08-05
+**Derniere mise a jour :** 2026-08-15
 
 ---
 
@@ -72,7 +72,7 @@ A chaque activation ou reactivation, l'agent se pose la question :
 > **REGLE FONDAMENTALE** : Seul OUI prouve la memorisation. Dire "je viens de les
 > lire" n'est PAS une preuve de memorisation -- la lecture est un fait passe, la
 > memorisation est un etat present. La case c0 de chaque parcours pose cette
-> question automatiquement au demarrage (OUI -> mission, INCERTAIN/NON -> c0b
+> question automatiquement au demarrage (OUI -> c0c contexte -> mission, INCERTAIN/NON -> c0b
 > RELIRE obligatoire).
 
 ### CONTEXTE TEMPS REEL -- lecture OBLIGATOIRE de l'historique (meme en memoire)
@@ -138,7 +138,10 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 3. SA carte de decision le guide case par case : chaque case donne l'indice
    exact (outil a lancer, fichier a lire, regle a appliquer) et les branches
    selon ses reponses. C'est LUI qui decide, pas Cerberus.
-4. L'agent termine sa mission et reactive Cerberus (etape 6).
+4. L'agent EXECUTE IMMEDIATEMENT apres l'activation, DANS LE MEME ROUND
+   (regle RELEVE MEME ROUND) : jamais d'arret, jamais de bilan intermediaire
+   pour attendre l'utilisateur. L'activation EST l'ordre d'execution.
+5. L'agent termine sa mission et reactive Cerberus (etape 6).
 
 ### La todolist de Cerberus = orchestration UNIQUEMENT
 
@@ -184,7 +187,7 @@ AVANT de terminer la session.
 
 | Regle | Description |
 |---|---|
-| **Activation = Question** | A chaque activation, se poser la question de relecture et repondre la VERITE |
+| **RELEVE MEME ROUND (IMMUABLE)** | Apres activation, l agent active EXECUTE IMMEDIATEMENT dans le meme round (activation + execution dans le meme message) : jamais d arret pour attendre l utilisateur. Il suit SA carte, active le maillon suivant, seul le dernier maillon reactive Cerberus. Reference : regles-groupes-agents.md (RELEVE MEME ROUND) |
 | **OUI seulement continue** | Seul OUI (memorisation prouvee) permet de continuer sans relire |
 | **Historique = lecture obligatoire** | Lire TOUJOURS l'historique (lire-activite-recente) + la section Sessions connues, meme en memoire -- le dynamique ne se memorise pas |
 | **Corrections = Ecriture** | TOUJOURS ecrire ; relire si la reponse n'est pas OUI |
@@ -213,6 +216,7 @@ AVANT de terminer la session.
 | Lire apres avoir agi | Lire AVANT de commencer |
 | Cerberus detaille les etapes internes de l'agent dans sa todolist | La carte de decision devient inutile : Cerberus ne prepare QUE l'orchestration, les etapes internes vivent dans le parcours de l'agent |
 | Oublier le 3e argument de reactiver (`agent_precedent`) | La commande affiche l aide et ECHOUE EN SILENCE : le bloc session reste sur l agent -- verifier `Session ... : Cerberus reactive avec succes` |
+| S arreter apres une activation (brisure de chaine) | L activation EST l ordre d execution (regle RELEVE MEME ROUND) : l agent active enchainE IMMEDIATEMENT SA mission dans le meme round -- jamais de bilan intermediaire, jamais de retour a Cerberus en milieu de chaine |
 
 ---
 
@@ -221,3 +225,4 @@ AVANT de terminer la session.
 - **Protocole parent** : `demarrer.md` -- protocole de demarrage
 - **Convention** : `convention-protocoles` -- comment creer des protocoles
 - **Regle** : `regles-choisir-agent` -- comment choisir le bon agent
+

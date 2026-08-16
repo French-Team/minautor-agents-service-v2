@@ -57,7 +57,31 @@ Decision finale apres RVAV :
 - **Reculer** -> statut -= 1, class += 1, retour au travail precedent
 
 ### 5. [purifier]
-Nettoyer le fichier apres validation :
+Nettoyer le fichier apres validation (mise a jour 2026-08-15, decision utilisateur :
+le protocole avait ete abandonne et n etait plus a jour - besoins listes par Buffy) :
+
+**Principe (anti-perte) : on ne supprime JAMAIS d information.** La purification
+DEPLACE vers un fichier d historique a cote (archive), elle ne tronque pas.
+
+**Quotas par type de fichier (detecter-surcharge-fichier, seuil 250)** :
+
+| Type | Quota (lignes) | Action |
+|---|---|---|
+| `corrections.md` d agent | 1000 | archiver les lecons les plus anciennes dans `<agent>-historique.md` |
+| `AGENTS-historique.md` | 800 | archiver les entrees les plus anciennes dans AGENTS-historique-archive.md |
+| fiches agents | 320 | signaler seulement (structure template) |
+| protocoles | 400 | signaler seulement (structure documentaire) |
+
+**Procedure (outil dedie `purifier-rvav`, cree par Vulcain)** :
+1. `purifier-rvav --tous --dry-run --rapport plan.md` : detecter les fichiers en
+   surcharge, afficher le plan (lignes avant/apres, sections a archiver)
+2. Relire le rapport, valider le plan
+3. `purifier-rvav --tous --executer` : appliquer (deplacement vers l archive,
+   jamais de suppression)
+4. Verifier : fichier principal sous le quota, archive creee, aucune perte
+   (somme des lignes conservee), LF pur + ASCII strict
+
+**Pour les fichiers de contenu (pense-betes, specs, protocoles)** :
 - [ ] Supprimer les blockquotes explicatifs inutiles
 - [ ] Reduire les exemples au minimum
 - [ ] Supprimer les notes historiques

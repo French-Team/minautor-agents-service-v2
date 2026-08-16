@@ -2775,3 +2775,335 @@ qui appellent le lanceur reel (027/031/032) restent des artefacts du verrou
 **Lecons** :
 - Tout bump de version (carte ou outil) casse les tests qui pincent la version en dur : verifier test-013 (cartes) et test-057 (marbre) systematiquement apres un bump.
 - Un test qui passe localement ne suffit pas : le verrou garantit que SEUL Janus valide la non-regression - la verification complete revient au controleur.
+
+
+## [LECON] 2026-08-15 -- TESTS ADAPTES POUR L AGENT ARGUS (Morpheus, etape 3/3)
+
+**Contexte** : creation de l agent Argus (13e agent avec parcours) + outil detecter-contradictions (catalogue 163). Les tests qui pincent les compteurs etaient en retard.
+
+**Adaptations** :
+1. test-007-figer-lf : catalogue 162 -> 163 + entree detecter-contradictions exigee (point 13). Decouverte : le catalogue n etait PAS trie (detecter-contradictions ajoute en fin par Vulcain) -> tri applique (position 39). 15/15 VALIDE.
+2. test-026-detecter-cablages-manquants-garde-fou : 13 -> 15 parcours (verification == 14 -> == 15) + messages (py + .md). 10/10.
+3. test-018-fins-reactivation : 13 -> 15 parcours (== 14 -> == 15) + messages. 13/13.
+4. test-037-seul-janus-lance-non-regression : liste AGENTS 11 -> 15 (ajout hygie, hermes, gardien, argus) + signatures == 15 + messages. 6/6.
+
+**Verifications** : test-005 28/28, test-029 14/14, test-054 9/9, test-055 12/12, valider-cartes --tous 15/15 CONFORMES (dont argus), normes ASCII 0 + LF 0 sur tous les fichiers modifies.
+
+**Lecon** : a chaque creation d agent, les tests suivants pincent les compteurs : test-007 (catalogue), test-026/018 (nb parcours), test-037 (liste agents). Les ajouter au protocole de creation d agent.
+
+
+
+## [LECON] 2026-08-15 -- CONSTAT PURIFICATION RVAV (Morpheus, signalement)
+
+**Contexte** : demande utilisateur - le protocole RVAV (etape 5 [purifier]) n est plus utilise depuis un moment, on a probablement commence a surcharger les fichiers.
+
+**Constat reel** (detecter-surcharge-fichier --recursive, seuil 250 lignes) : **40 fichiers en surcharge sur 576 analyses**.
+Les plus critiques :
+- janus/corrections.md : 4703 lignes
+- buffy/corrections.md : 3420 lignes
+- morpheus/corrections.md : 2793 lignes
+- AGENTS-historique.md : 1578 lignes
+- clio/rapports/maj-readme-massive-2026-08-15-14-50.md : 389 lignes
+- 13 fiches agents > 250 lignes (argus 269, athena 261, buffy 293, cerberus 265, clio 264, hygie 278, janus 314, minerve 256, fiche-agent-template 303, ...)
+
+**Cause** : l etape 5 [purifier] du protocole RVAV existe mais AUCUN outil de purification dedie n est mecanise - les agents creent/edirent sans reduire (accumulation de lecons, rapports, historiques).
+
+**Recommandation** : creer un outil de purification (ou brancher detecter-surcharge-fichier dans la boucle RVAV) pour que chaque fichier modifie soit verifie et reduit sous le seuil. A traiter par Vulcain (outil) + Buffy (purification des fichiers existants) dans une mission dediee.
+
+
+## [LECON] 2026-08-15 -- CHAINE ARGUS : ADAPTATION TESTS BARRIERE E (Morpheus)
+
+**Contexte** : barriere E bloquee apres la creation de l agent Argus (15e agent, catalogue 163). Corrections de tests -> Morpheus.
+
+**Adaptations faites** :
+1. test-024 : catalogue 162 -> 163 + detecter-contradictions ajoute aux nouvelles presentes. RESULTAT 16/16 OK.
+2. test-032 : 3 KO dus a un NameError `parcours` NON DEFINI dans proteger-verrou-habilitation (construire_table appelait extraire_indices_outils(parcours) sans charger le JSON depuis le chemin - regression introduite par le correctif Vulcain OUTILS_P0_PARTAGES). Correction outil (editer-fichier) : extraire_indices_outils(charger_parcours(chemin)). Apres correction : verrou fonctionne (guider-parcours partage 15 agents), test-035 10/10, test-057 24/24. test-032 ne peut etre relance que par JANUS (verrou : seul janus habilite pour tester-lancer-non-regression) - c est le comportement voulu, pas un bug.
+
+**Lecons** :
+- Une correction d outil qui touche le verrou doit TOUJOURS etre re-testee par le verrou lui-meme (--liste) : le NameError plantait construire_table et le verrou laissait TOUT passer (fausse securite).
+- test-032 verifie le verrou : quand lance par un agent non habilite, les KO sont le verrou qui fonctionne, pas un bug de test.
+- La chaine Argus continue : Janus lance la barriere E puis la suite complete.
+
+## [LECON] 2026-08-15 -- CHAINE PURIFIER-RVAV : TESTS ADAPTES + GARDE-FOU test-065 (Morpheus)
+
+**Contexte** : creation de l outil purifier-rvav par Vulcain (categorie Purifier, catalogue 163->164, index-tools 180->181). Adaptations de tests + garde-fou anti-perte.
+
+**Adaptations faites** :
+1. test-007 : len(noms)==163->164 + purifier-rvav ajoute aux nouvelles presentes + Total index 180->181. 15/15 OK.
+2. test-024 : len==163->164 + purifier-rvav ajoute. 16/16 OK.
+3. test-060 : len==163->164 + Total 180->181 (2 occurrences de verification). 12/12 OK.
+
+**Garde-fou cree** : test-065-purifier-rvav-garde-fou (8 points). Verifie : outil existe/compile/version, dry-run sans modification, 1re purification sous seuil + archive + NON-PERTE (somme lecons), 2e purification ACCUMULATION (archive jamais ecrasee), archive frontmatter + normes, purge sans residu, normes test+outil. RESULTAT 8/8 OK.
+
+**Lecons** :
+- Le fichier de test doit DEPASSER le seuil sinon l outil ne purge rien (12 lecons x 25 lignes ~= 310 lignes pour un seuil 200).
+- L archive generee par purifier-rvav porte le nom du DOSSIER PARENT (tmp-morpheus-historique.md) : le test doit la chercher par glob, pas par nom fixe.
+- Chaque nouvel outil au catalogue casse les compteurs en dur de 3+ tests (007/024/060) : un compteur dynamique serait plus robuste.
+## [LECON] 2026-08-16 -- TEST-020 ADAPTE : COMBOS-ANALYSE-PROJET 0.1.3 (Morpheus)
+
+**Contexte** : KO test-020 serie C - le test pincait la version 0.1.2 de combos-analyse-projet, bumpee a 0.1.3 par Vulcain (correction lecture table categories dans readme-dev.md).
+**VERDICT** : VALIDE (test-020 46/46 OK, normes 0/0)
+
+**Action** : 3 occurrences 0.1.2 -> 0.1.3 (docstring ligne 10, checks lignes 148-149). Test 46/46 OK, normes 0/0.
+
+**Lecon** : quand un outil pinne dans un test est bumpe, verifier TOUTES les occurrences (docstring incluse) - le check de version est sur la sortie du .py (ligne 148 : "combos-analyse-projet 0.1.3" dans stdout).
+## [LECON] 2026-08-16 -- OPTIMISATION TESTS GOULOTS (Morpheus)
+
+**Contexte** : diagnostic performance Janus - test-032 = 29.5s (preuve de gain qui relance un sous-ensemble en serie+pool), test-017 = 4.4s (34 lancements CLI), test-005 = 5.9s en suite.
+
+**VERDICT** : VALIDE (test-032 optimise : preuve reduite de test-001..004 a test-003,test-029 -> ~15s au lieu de ~21s pour le point 7 ; test-032 passe de 29.5s a ~23.5s dans la suite).
+
+**Actions** : test-032 point 7 - sous-ensemble reduit (le long test-003 suffit a demontrer le benefice du pool, serie ~7.6s pool ~7.5s, seuil 2.5x conserve). test-017 : non modifie (30 lancements CLI structurels, gain marginal risque). test-005 : NON un goulot - 0.1s en isolation, ses 5.9s en suite = contention du pool 16 workers (a verifier par Janus).
+
+**Lecons** :
+1. En isolation, le verrou d habilitation bloque les tests qui lancent le lanceur (session morpheus != janus) : ces points KO en isolation ne sont PAS des regressions.
+2. La duree registre d un test en SUITE inclut la contention du pool - croiser avec la duree isolee pour distinguer goulot reel vs contention.
+
+## [LECON] 2026-08-16 -- ADAPTATION test-024 APRES BUMP LANCEUR v0.5.1 (Morpheus)
+
+**Contexte** : Vulcain a optimise les barrieres de la non-regression (pool intra-serie, v0.5.0 -> v0.5.1) et ajoute l outil analyser-io-tests (catalogue 164 -> 165).
+
+**Adaptations** : test-024 - version lanceur 0.5.0 -> 0.5.1 (point 6) + compteur catalogue 164 -> 165 avec verification analyser-io-tests present (point 8).
+
+**VERDICT** : VALIDE (16/16 OK, normes 0/0). Retour a Janus pour la relance mesuree.
+
+## [LECON] 2026-08-16 -- ADAPTATIONS COMPTEURS APRES analyser-io-tests (Morpheus)
+
+**Contexte** : Vulcain a ajoute l outil analyser-io-tests (mesure I/O disque pendant les tests) + optimise le lanceur (pool intra-serie v0.5.1). Les compteurs pincaient les anciennes valeurs.
+
+**Adaptations** :
+- test-060 : index-tools Analyser 4 -> 5, Total 181 -> 182, catalogue 164 -> 165 (points 6/7 + docstring)
+- test-007 : catalogue 164 -> 165 (point 13) + index-tools Total 181 -> 182 (point 14)
+- test-062 : lanceur v0.5.0 -> v0.5.1 (point 6 + docstring)
+
+**VERDICT** : VALIDE (test-060 12/12, test-007 15/15, test-062 11/11, normes 0/0).
+
+## [LECON] 2026-08-16 -- ADAPTATIONS v0.5.1 SUR 3 TESTS (Morpheus)
+
+**Contexte** : le lanceur est passe en v0.5.1 (pool intra-serie). test-027/031/051 pincaient v0.5.0.
+
+**Adaptations** : 3 tests x version lanceur 0.5.0 -> 0.5.1 (lignes verifier + docstrings).
+
+**Lecon CRLF** : une ecriture Python avec io.open(f,'w') sur Windows cree des CRLF (newline par defaut). TOUJOURS reecrire avec newline='
+' ou passer par corriger-fins-de-ligne apres. Verifie par le point LF pur de test-027.
+
+**VERDICT** : VALIDE (adaptations OK, CRLF 0 apres correction).
+
+## [LECON] 2026-08-16 -- GARDE-FOU test-066 COMPAGNONS BUMPER (Morpheus)
+
+**Contexte** : Vulcain a enrichi mettre-a-jour-versions v0.1.2 (detection des fichiers compagnons + motif md 2 formats). Creer le garde-fou qui verrouille la nouvelle garantie.
+
+**test-066** : 5 points - outil present/compile/v0.1.2, motif md couvre '**Version :**' ET '**Version** :', PREUVE REELLE (bump dry-run du lanceur affiche la section FICHIERS COMPAGNONS avec au moins 1 test + verdict KO), option --nouvelle, normes ASCII/LF. Ajoute a la serie e + profils outils/tests.
+
+**Lecon** : pour verifier une regex de motif, ne PAS recopier la regex dans le test (fragile, erreurs d echappement) - charger le module et tester la regex directement (importlib + _RE_MD_VERSION.search). 1er essai KO sur une regex mal echappee.
+
+**VERDICT** : VALIDE (11 OK / 0 KO).
+
+## [LECON] 2026-08-16 -- GARDE-FOU test-067 AUDIT BUMPER --TOUS (Morpheus)
+
+**Contexte** : demande utilisateur - lancer le bumper --tous apres chaque round pour detecter les incoherences caches PLUS TOT. Institutionnalise par un garde-fou dans la non-regression (que Janus lance apres chaque round).
+
+**test-067** : 4 points - outil v0.1.2, --tous dry-run = 0 incoherent (verdict OK), PREUVE NEGATIVE (injection d un .md desynchronise 9.9.9 -> KO detecte -> restauration -> 0 incoherent), normes. Serie a (Fondations) + profils outils/tests.
+
+**Lecon** : la preuve negative (injecter une violation, constater le KO, restaurer) est obligatoire pour un garde-fou d audit - elle prouve que le test detecte VRAIMENT les ecarts (pas juste qu il passe). Protocole creation garde-fous : toujours injecter/restaurer en try/finally.
+
+**VERDICT** : VALIDE (8 OK / 0 KO, preuve negative concluante).
+
+## [LECON] 2026-08-16 -- GARDE-FOU test-068 VALEURS-MAGIQUES (Morpheus)
+
+**Contexte** : decision utilisateur - graver la REGLE D OR anti-valeurs-magiques dans le marbre (hierarchie constante -> config -> .env) + detecter-donnees-en-dur v0.1.1 (secrets).
+
+**test-068** : 4 points - regle gravee dans regles-general-global.md (constante+config+.env), zone DANS LE MARBRE (verrou conforme), detecter v0.1.1 + SECRETS_EN_DUR (API_KEY detecte, os.environ exclu, placeholder exclu), normes. Serie a + profils outils/tests.
+
+**Lecon** : le garde-fou verifie les 3 couches de la decision : la regle (texte), sa protection (marbre), son outil (detection) - une decision utilisateur a 3 volets doit avoir un garde-fou a 3 volets.
+
+**VERDICT** : VALIDE (9 OK / 0 KO).
+
+## [LECON] 2026-08-16 -- ADAPTATION test-057 APRES --ajouter (Morpheus)
+
+**Contexte** : Vulcain a etendu proteger-modifier-marbre v0.1.1 -> v0.1.2 (option --ajouter pour graver la REGLE D OR au marbre). test-057 pincait v0.1.1.
+
+**Adaptation** : test-057 ligne 182 : modifier --version 0.1.1 -> 0.1.2.
+
+**VERDICT** : VALIDE (test-057 CONFORME, normes 0/0).
+
+## [LECON] 2026-08-16 -- GARDE-FOU TEST-069 DETECTER-CONTRADICTIONS v0.1.1 (Morpheus)
+
+**Contexte** : Vulcain a ameliore detecter-contradictions (--fichier, regles croisees, GIT_RESIDU_ACTUEL). Garde-fou a creer pour verrouiller les 3 fonctionnalites + non-regression complete.
+
+**Creation** : test-069 (template v0.3.0, triplet + protections importees) : 1) --version v0.1.1, 2) --fichier : copie de parcours avec REF_MORTE + CAS_ORPHELINE injectees -> detectees (preuve negative), 3) regles croisees : 2 fichiers a affirmations opposees (SEUL vs PEUT) -> CONTRADICTION_REGLE via les fonctions internes, 4) --git : residu injecte a la racine -> GIT_RESIDU_ACTUEL puis suppression (0 trace), 5) normes ASCII/LF. 8 OK / 0 KO. Ajoute a la SERIE a + profils outils/tests.
+
+**Lecons** :
+- Le nom du residu injecte doit matcher le motif reconnu par l outil (tmp-[a-z]+$) : tmp-residutest oui, tmp-test069-residu NON (chiffres) - verifier le motif reel de l outil avant d injecter.
+- Les protections (lancer_protege) tronquent la sortie au premier mot-cle (ex: "erreur") : pour verifier une sortie contenant ce mot, cibler un marqueur affiche AVANT la troncature ou utiliser un nom sans collision.
+- Un garde-fou d outil verifie le comportement REEL (preuve negative) : sans injection, on ne prouve rien.
+## [LECON] 2026-08-16 -- GARDE-FOU test-070 ANTI-AUTO-REACTIVATION CREE (Morpheus)
+
+**Contexte** : le bug argus c29e (reactiver argus sur lui-meme = boucle infinie qui stoppe le round) a revele qu il fallait mechaniser le scan des fins de cartes. Le scan manuel de 93 fins prend < 1s.
+
+**Test cree** : test-070-anti-auto-reactivation (7 OK / 0 KO, serie a + profil cartes) :
+1. scan de TOUTES les cartes : 0 auto-reactivation (reactiver session-llm-1 ... <agent> ne vise jamais l agent de la carte)
+2. 0 incoherence message/commande (message dit Cerberus, commande vise autre chose)
+3. fins 'FIN - Activer X' : jamais de COMMANDE reactiver
+4. preuve negative : auto-reactivation injectee dans une copie -> DETECTEE puis copie SUPPRIMEE (0 residu)
+5. normes ASCII + LF
+
+**Lecon importante (faux positif evite)** : la detection du point 3 doit chercher la COMMANDE reactiver session-llm-1, PAS le mot 'reactiver' seul - les messages des fins 'FIN - Activer X' expliquent souvent la regle ('commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus') et contiennent legitiment le mot. Chercher le mot seul = faux positifs sur buffy c22 et autres.
+
+**Lecon de conception** : un garde-fou de structure (scan de toutes les cartes) est rapide (< 0.1s) et doit vivre dans la serie a (fondations) - il protege TOUTES les cartes en une passe. La preuve negative est obligatoire : sans elle, un test qui ne detecte rien ne prouve pas qu il sait detecter.
+## [LECON] 2026-08-16 -- TESTS ADAPTES APRES BUMPS (branchage corriger-symboles) (Morpheus)
+
+**Contexte** : Buffy a branche corriger-symboles dans 28 cases de lecons de 15 cartes + bump versions + fiches synchronisees. Resultat : 3 tests pincaient les versions de cartes.
+
+**Tests adaptes** :
+- test-013 : cerberus v0.4.8 -> v0.4.9 (22/22)
+- test-004 : morpheus v0.4.8 -> v0.4.9 (VALIDE)
+- test-016 : buffy v0.4.7 -> v0.4.8 (20/20)
+
+**KO supplementaire decouvert et corrige (test-016 point 10)** : la regle 'max 3 indices par case' de la carte de Buffy etait violee - l ajout de corriger-symboles portait c15/c7/c20 a 4 indices. Correction : retrait d une ref redondante (pattern-12, deja referencee dans 10+ autres cases) pour revenir a 3 indices avec corriger-symboles present.
+
+**Lecon** : 1) quand on bump des versions de cartes, verifier TOUS les tests qui pincent ces versions (grep des versions avant/apres), 2) les regles structurelles propres a une carte (max 3 indices buffy) peuvent etre violees par un ajout d indice - verifier apres chaque modification de carte, 3) retirer une ref redondante plutot que de supprimer l outil ajoute (l outil de correction etait l objectif de la mission).
+## [LECON] 2026-08-16 -- GARDE-FOU test-071 CASES LECONS AVEC OUTIL DE CORRECTION CREE (Morpheus)
+
+**Contexte** : les agents corrigeaient les accents a la main car leurs cases de lecons ne referenceaient aucun outil. Apres le branchage corriger-symboles dans 28 cases (Buffy), on verrouille l anti-recurrence.
+
+**Test cree** : test-071-cases-lecons-outil-correction (7 OK / 0 KO, serie a + profils cartes/outils) :
+1. scan des 15 cartes : 0 case lecon/rapport sans outil de correction
+2. scan non vide (20 cases d'ecriture detectees)
+3. cases de lecture EXCLUES (c0b RELIRE, Classer, rien a corriger = faux positifs evites)
+4. preuve negative : lecon sans outil injectee -> DETECTEE puis copie SUPPRIMEE
+5. normes ASCII + LF
+
+**Lecon de conception** : distinguer case d'ECRITURE de lecon (titre 'lecon' / corrections.md en indice fichier / 'rapport' + fichier rapport) des cases de LECTURE (RELIRE OBLIGATOIRE, Classer, rien a corriger) - c est la qu etaient les faux positifs du scan manuel precedent. La liste des outils de correction valides (corriger-symboles, corriger-accents-zones-sensibles, corriger-dictionnaire-accents, corriger-fins-de-ligne) doit etre maintenue dans le test.
+## [LECON] 2026-08-16 -- TEST-004 ADAPTE APRES BUMP MORPHEUS 0.4.10 (Morpheus)
+
+**Contexte** : audit Cerberus des outils sous-branches - 6 outils de controle (verifier-conformite-fiche, valider-case, detecter-usage-outils-externes, detecter-usage-scripts-temporaires, detecter-surcharge-fichier, valider-numerotation) ont ete branches dans 15 cases de 9 cartes par Buffy. Bump morpheus v0.4.9 -> v0.4.10.
+
+**Test adapte** : test-004 (morpheus v0.4.9 -> v0.4.10, lignes 19 et 202) - VALIDE apres adaptation.
+
+**Verifications faites** : test-013 (cerberus v0.4.9 non bumper), test-020 (combos-analyse-projet v0.1.3 = version outil), test-035/024/025/027 (versions d autres outils) - aucun impact.
+
+**Lecon** : apres un bump de carte, verifier systematiquement TOUS les tests qui pincent la version de CETTE carte (grep du numero de version exact dans tous les tests) avant de lancer la non-regression - test-004 a ete attrape par le grep cible cette fois (lecon du bump multi-cartes precedent ou test-005 avait ete manque).
+## [LECON] 2026-08-16 -- GARDE-FOU c0/c0b test-072 (Morpheus)
+
+**Contexte** : demande utilisateur - garde-fou verifiant que chaque carte a c0/c0b (question honnete + RELIRE obligatoire) sur les 15 parcours, apres la gravure de la regle RELIRE SA FICHE AVANT MISSION dans le marbre.
+
+**Action** : creation test-072 (modele test-070/071, protections importees, triplet chrono, preuve negative) verifiant : c0 present type question + motif EN MEMOIRE, branches OUI->c0c / INCERTAIN->c0b / NON->c0b, c0b action + titre RELIRE + suivant c0c + 2 outils lire-fichier (corrections puis fiche). Le scan a DECOUVERT 5 cartes en ecart (argus, gardien, promethee, minerve, atlas) corrigees par Buffy. Adaptation test-005 : atlas v0.4.4 + point 18 (3 cas commande en dur : c0b relecture + c30 + c11a, le c0b etant un cas legitime identique aux 14 autres cartes).
+
+**Lecon** : un garde-fou cree AVANT la correction des ecarts est plus utile qu apres : il DECOUVRE les vraies lacunes (5 cartes c0b defectueuses). Deuxieme lecon : quand une correction legitime fait evoluer un invariant structurel (commande en dur), il faut ADAPTER le test en documentant le nouveau cas, pas forcer l ancien invariant.
+## [LECON] 2026-08-16 -- GARDE-FOU COHERENCE REGLE/PROTOCOLE test-073 (Morpheus)
+
+**Contexte** : Vulcain a enrichi detecter-contradictions v0.1.2 avec l audit --coherence (croise chaque section IMMUABLE de regles-groupes-agents.md avec son protocole). Mission : adapter test-069 (version 0.1.1->0.1.2 + verification --coherence) et creer le garde-fou test-073.
+
+**Action** : test-069 adapte (9 OK / 0 KO : version v0.1.2 + point 2c --coherence detecte l ecart c0c actuel). test-073 cree (7 OK / 0 KO, serie a + profil cartes) : version v0.1.2, branchement de l audit, preuve negative (regle tronquee sans c0c vs protocole avec c0c), etat reel (l audit signale l ecart RELIRE c0c sans erreur), anti-faux-positif (0 mot-mecanisme sur les regles SEUL X), normes.
+
+**Lecon** : un garde-fou d audit de coherence doit verifier 3 choses : (1) la DETECTION (preuve negative par injection), (2) l ETAT REEL (l audit tourne et signale l ecart connu SANS erreur), (3) l ANTI-FAUX-POSITIF (les regles d exclusivite ne declenchent pas de fausses alertes de mecanisme). NB_POINTS corrige (9 verifications reelles vs 9 annonces - le test originel annoncait 9 pour 8 verifications).
+## [LECON] 2026-08-16 -- ADAPTATION test-069/073 APRES CORRECTION c0c (Morpheus)
+
+**Contexte** : Buffy a corrige la branche OUI de la regle gravee RELIRE (OUI -> c0c -> mission) + le protocole-activation ligne 75 (meme erreur). L audit --coherence est passe de "1 MAJEUR" a "PROPRE (0 contradiction)". test-069 point 2c et test-073 point 4 attendaient l ecart PRESENT -> KO.
+
+**Action** : adaptation des 2 tests : test-069 point 2c -> "l etat reel est PROPRE", test-073 point 4 -> "0 REGLE_PROTOCOLE RELIRE" (la preuve negative du point 3 est conservee : la detection fonctionne toujours sur une regle tronquee). Resultat : test-069 9/9, test-073 7/7, normes 0/0. Verification : test-011/test-013 mentionnent protocole-activation comme reference resolvable (pas de contenu pince) - non impactes.
+
+**Lecon** : un garde-fou qui verifie la DETECTION d un ecart doit evoluer quand l ecart est CORRIGE : la verification "l ecart est present" devient "l etat est propre" mais la preuve negative (injection) reste pour prouver que la detection fonctionne toujours. Le garde-fou verrouille l ETAT CORRIGE, pas la presence de l erreur.
+## [LECON] 2026-08-16 -- TABLE REGLE_PROTOCOLE 8/8 : TESTS ADAPTES (Morpheus)
+
+**Contexte** : Vulcain a complete la table REGLE_PROTOCOLE de detecter-contradictions v0.1.3 (SEUL CLIO -> protocole-verification-coherence, LE MODELE DE CONFIANCE -> protocole-controle-statuts). Consequence : l audit --coherence signale desormais 2 MINEUR REGLE_SANS_REFERENCE (les regles du marbre ne citent pas encore leurs protocoles - correction Buffy via porte du marbre, mission separee).
+
+**Action** : adaptation de test-069 (v0.1.3, point 2c reformule : 0 MAJEUR REGLE_PROTOCOLE + 2 MINEUR connus documentes, NB_POINTS 9->10) et test-073 (v0.1.3). Correction de l en-tete de version du .py (0.1.2 -> 0.1.3, incoherence detectee au passage).
+
+**Lecon** : le rc de detecter-contradictions est 1 des que des contradictions sont detectees (meme des mineurs) - un test qui attend rc==0 sur --coherence produit un faux KO quand l etat reel a des mineurs connus. Accepter rc in (0,1) et verifier le CONTENU (0 MAJEUR + mineurs documentes) plutot que le code de retour seul. Les tests suivent l etat reel documente : les 2 mineurs sont attendus jusqu a la correction marbre, puis le test sera re-adapte (comme pour les 3 references precedentes).
+## [LECON] 2026-08-16 -- PREUVE NEGATIVE COTE PROTOCOLE DANS test-073 (Morpheus)
+
+**Contexte** : demande utilisateur - ajouter une preuve negative qui injecte une incoherence dans le PROTOCOLE lui-meme (ligne OUI -> mission sans c0c) et verifie que l audit la detecte. Le point 3 existant testait le sens REGLE tronquee; il manquait le sens PROTOCOLE tronque (le check 4 de auditer_coherence_regles est bidirectionnel : flux_regle[0] != flux_proto[0]).
+
+**Action** : ajout des points 3b/3c dans test-073 : construction d une mini-racine temp (tmp-test073-proto-) avec la structure exacte attendue par _texte_protocole (racine/cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md + protocole-activation/protocole-activation.md TRONQUE), appel reel de dc.auditer_coherence_regles(mini), verification qu un REGLE_PROTOCOLE 'contredit le protocole' est detecte, puis purge de la mini-racine avec verification 0 trace. NB_POINTS 7 -> 9. Resultat : 9 OK / 0 KO.
+
+**Lecon** : pour une preuve negative bidirectionnelle, ne pas simuler les flux a la main - construire une MINI-RACINE temp avec la structure attendue par la fonction et l appeler pour de vrai : c est la preuve la plus forte (meme code de production execute). L ecriture se fait uniquement dans le dossier temp (jamais dans le vrai protocole ni la vraie regle), et la verification de suppression (point 3c) garantit 0 residu. Le check 4 detecte les 2 sens (regle tronquee OU protocole tronque) - la correction d un cote revele l incoherence de l autre, c est le mecanisme qui a decouvert la ligne 75 incoherente du protocole-activation.
+## [LECON] 2026-08-16 -- TEST-069 RE-ADAPTE A L ETAT PROPRE APRES CORRECTION MARBRE (Morpheus)
+
+**Contexte** : Buffy a ajoute les 2 references protocole manquantes dans regles-groupes-agents.md (SEUL CLIO -> protocole-verification-coherence, LE MODELE DE CONFIANCE -> protocole-controle-statuts) via la porte du marbre. L audit --coherence est passe de 2 MINEUR a PROPRE (0 contradiction).
+
+**Action** : re-adaptation de test-069 : point 2c reformule (etat reel PROPRE : Aucune contradiction detectee + PROPRE + 0 MAJEUR), point 2d remplace (0 REGLE_SANS_REFERENCE, table 8/8 complete) au lieu d attendre les 2 mineurs. Resultat : 10 OK / 0 KO. test-073 non impacte (9/9, les preuves negatives 3/3b sont des injections temp).
+
+**Lecon** : un test qui verifie l etat reel doit suivre les corrections : quand un ecart connu est corrige, le test est re-adapte a l etat PROPRE (comme pour les 3 references precedentes et le MAJEUR c0c). Le cycle est : ecart signale -> test documente l ecart -> correction -> test re-adapte a PROPRE -> non-regression. Les preuves negatives par injection (mini-racine temp) restent vertes car elles ne dependent pas de l etat reel.
+## [LECON] 2026-08-16 -- TESTS ADAPTES v0.5.2 + GARDE-FOU test-074 RELANCER-KO (Morpheus)
+
+**Contexte** : Vulcain a ajoute --relancer-ko v0.5.2 au lanceur (run_id dans registre-tests.jsonl + fonction ko_du_dernier_run(racine, registre="")) pour mecaniser la relance des tests KO du dernier run (demande utilisateur : Janus relancait la suite complete a chaque KO).
+
+**Action** : (1) adaptation des 3 tests pincant 0.5.1 -> 0.5.2 : test-027 (ligne 189-190), test-031 (lignes 24/153-154), test-032 (lignes 21/142-143), (2) creation de test-074-relancer-ko (8 points) : version 0.5.2, option --relancer-ko dans --aide, fonction testable avec parametre registre, PREUVE NEGATIVE (registre temp avec run recent 2 KO + run ancien 1 KO -> seuls les 2 KO du run recent retournes), run sans KO -> liste vide, purge du registre temp, normes ASCII/LF, (3) ajout de test-074 a la serie a du lanceur + au profil cartes de profils-tests.json.
+
+**Lecon** : (a) un nouveau test doit ETRE AJOUTE A LA SERIE du lanceur sinon test-027 couverture KO - c est le garde-fou qui verifie l affectation, (b) les artefacts du verrou d habilitation (session morpheus vs janus) produisent des faux KO en isolation sur les tests qui lancent le lanceur : ils passent quand l agent habilite (janus) lance la suite - ne pas "corriger" ces faux KO, (c) la preuve negative avec registre temp (parametre registre optionnel) verifie la logique SANS toucher au vrai registre - la fonction testable est la cle du garde-fou.
+## [LECON] 2026-08-16 -- CORRECTION DES 2 KO DE LA BARRIERE E APRES BUMP 0.5.2 (Morpheus)
+
+**Contexte** : la non-regression (bump 0.5.2) a ete STOPPEE par la barriere E : 2 KO reels - test-024 (point 6 pincait v0.5.1) et test-066 (point 4 bumpe LANCER_DIR avec --nouvelle 0.5.2 mais le lanceur etait DEJA 0.5.2).
+
+**Action** : (1) test-024 point 6 : v0.5.1 -> v0.5.2, (2) test-066 point 4 : cible --nouvelle 0.5.3 + attente 0.5.2 -> 0.5.3, (3) correction NB_POINTS de test-066 (5 -> 11, le compte etait faux : 11 verifications reelles). Verifie : le bumper est dry-run par defaut (seul --wet applique) - la version du lanceur est RESTEE 0.5.2 apres le test (preuve). Resultat : test-024 16/16, test-066 11/11.
+
+**Lecon** : (a) le bumper 0.5.2 aurait DU signaler test-024 et test-066 comme COMPAGNONS a adapter - le test-066 verifie exactement cette detection, la barriere E a rattrape ce que le bumper n a pas signale en temps reel, (b) un test qui bumpe une version DOIT cibler une version SUPERIEURE a l actuelle (--nouvelle 0.5.3 quand l outil est 0.5.2) sinon l attente 0.5.1 -> 0.5.2 devient obsolete, (c) NB_POINTS doit toujours refleter le nombre reel de verifier() (ici 11, pas 5) - un compte faux masque les verifications manquantes.
+## [LECON] 2026-08-16 -- KO SERIE A CORRIGES : test-074 PROTECTIONS + test-062 v0.5.2 (Morpheus)
+
+**Contexte** : la non-regression (2e passe) a franchi la barriere E (KO 024/066 corriges) mais la barriere A a STOPE sur 2 KO : test-030 (mon test-074 utilisait subprocess.run brut) et test-062 (pincait lanceur v0.5.1).
+
+**Action** : (1) test-074 : remplacement de subprocess.run par PROTECTIONS.lancer_protege (regle test-030 : chaque test passe ses executions par les protections importees), (2) test-062 : 4 occurrences v0.5.1 -> v0.5.2 (docstring + point 6). Resultat : test-074 8/8, test-030 10/10, test-062 11/11.
+
+**Lecon** : (a) TOUT nouveau test doit passer par PROTECTIONS.lancer_protege des sa creation - c est la regle structurelle verifiee par test-030, un test qui la viole KO la serie A entiere, (b) la barriere A (fondations) attrape les tests qui ne respectent pas le template - la creation d un test doit verifier la conformite AVANT l integration en serie, (c) le cycle barriere fonctionne parfaitement : E -> A -> (arret) -> correction ciblee -> relance.
+## [LECON] 2026-08-16 -- KO SERIE D CORRIGE : test-051 v0.5.2 (Morpheus)
+
+**Contexte** : la 3e passe de non-regression a franchi E + A mais la barriere D a STOPE sur test-051 (pincait lanceur v0.5.1).
+
+**Action** : 3 occurrences v0.5.1 -> v0.5.2 dans test-051 (docstring ligne 6, invariant ligne 18, verifier ligne 124). Verification exhaustive : grep des 0.5.1 restants dans tous les tests -> seul test-012 (guider-parcours v0.5.1, non lie au lanceur, 18/18 OK). Resultat : test-051 12/12.
+
+**Lecon** : apres un bump de version du lanceur, le grep systematique 'v0.5.X' sur TOUS les tests evite les allers-retours barriere par barriere : les tests qui pincent la version sont detectables d un coup. Les barrieres E -> A -> D ont chacune attrape une adaptation ratee (024/066, 074/062, 051) : le processus fonctionne, mais le bumper 0.5.2 aurait du les signaler comme compagnons en amont - la lecon reste : verifier TOUS les pinneurs de version AVANT de lancer la suite.
+## [LECON] 2026-08-16 -- TEST-066 ADAPTE v0.1.3 BUMPER (Morpheus)
+
+**Contexte** : Vulcain a bumpe le bumper mettre-a-jour-versions v0.1.2 -> v0.1.3 (exclusion des corrections.md des compagnons + rappel obligatoire bumper-avant-suite). test-066 pincait la version 0.1.2.
+
+**Action** : 3 occurrences v0.1.2 -> v0.1.3 (docstring ligne 5, invariant ligne 19, verifier 1c lignes 115-116). Verification : le point 3 (compagnons du lanceur listes, verdict KO) reste vert avec la nouvelle version - les tests restent listes (seuls les corrections.md sont exclus). Resultat : 11 OK / 0 KO.
+
+**Lecon** : un bump du bumper (outil qui signale les compagnons) doit lui-meme etre verifie par son garde-fou (test-066) : le test pince la version de l outil qu il surveille - c est un pinneur de premier ordre qui doit etre adapte a chaque bump. Le cycle : bump outil -> bumper le signale comme compagnon -> test adapte -> suite verte.
+## [LECON] 2026-08-16 -- TEST-067 ADAPTE v0.1.3 BUMPER + NB_POINTS CORRIGE (Morpheus)
+
+**Contexte** : le bump du bumper v0.1.2 -> v0.1.3 (Vulcain) a casse test-067 (2 points : --version 1c et preuve negative 3 qui injectait le motif 0.1.2 dans la doc).
+
+**Action** : (1) 4 occurrences 0.1.2 -> 0.1.3 (invariant ligne 18, verifier 1c lignes 108-109, cible de la preuve negative ligne 122, message d echec ligne 137 - la ligne 10 est un exemple d un AUTRE outil, non touchee), (2) NB_POINTS 4 -> 8 (le compte affichait 4 mais 8 verifications reelles). Resultat : 8 OK / 0 KO.
+
+**Lecon** : un test qui utilise le bumper a 2 types d occurrences de version : les PINS (--version, invariants - a adapter) et les MOTIFS DE TEST (la preuve negative injecte la version de la doc dans le replace - a adapter aussi sinon le motif 0.1.2 devient introuvable). NB_POINTS doit refleter le nombre reel de verifications executees (8, pas 4). Verifier par grep que TOUS les tests pincant la version bumpee sont adaptes avant de relancer la suite (lecon deja apprise au round precedent).
+## [LECON] 2026-08-16 -- FILTRE SERIE --RELANCER-KO v0.5.3 (Morpheus)
+
+**Contexte** : demande utilisateur - etendre --relancer-ko a
+--relancer-ko --series X (filtre serie). Vulcain a bumpe le lanceur
+0.5.2 -> 0.5.3 avec le filtre dans le bloc if args.relancer_ko.
+
+**Adaptations** : 7 tests pincent v0.5.2 du lanceur -> 0.5.3
+(test-024, 027, 031, 032, 051, 062, 074). test-066 pincent en realite
+le BUMPER (0.5.2 -> 0.5.3 = sa preuve dry-run) : non touche - attention
+au grep aveugle, toujours verifier le contexte (quelle version et quel
+outil).
+
+**Garde-fou cree** : test-075 (11 points, serie A + profil cartes) :
+version 0.5.3, --aide mentionne la combinaison, filtre serie fonctionnel
+via serie_du_test (registre temp trie decroissant, KO repartis test-001
+serie c / test-024 serie e / test-051 serie d), sans filtre -> tous les
+KO conserves, preuve negative (run vert -> vide), purge, normes 0/0.
+
+**Lecons** :
+1. La source de verite de la serie d un test est la table SERIES
+   (serie_du_test par nom), PAS le champ serie des entrees du registre.
+2. Les tests qui lancent le lanceur avec --agent ont des KO d ARTEFACT
+   en isolation (session morpheus != janus -> verrou rc=2) : ils
+   passeront quand Janus lancera la suite - ne pas les corriger.
+3. Toujours verifier le contexte d un grep de version avant de remplacer
+   (test-066 aurait ete casse par un remplacement aveugle).
+## [LECON] 2026-08-16 -- TEST-066 CIBLE DEPASSEE (Morpheus, 2e passage)
+
+**Contexte** : la barriere E a bloque sur test-066 point 4 : le test
+demandait au bumper un dry-run '0.5.2 -> 0.5.3' sur le lanceur, mais le
+lanceur est DEJA a 0.5.3 (bump du filtre serie) : la cible doit etre
+future pour que le bumper affiche une transition.
+
+**Correction** : cible 0.5.3 -> 0.5.4 (dry-run, ne modifie rien).
+
+**Lecon** : un test qui pince une version cible de bump doit utiliser une
+version FUTURE superieure a la version courante - jamais la version
+courante (le bumper n affiche pas de transition si la cible est deja
+atteinte). C est un pierege recurrent apres chaque bump d outil.

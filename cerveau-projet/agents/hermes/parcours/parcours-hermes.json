@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-hermes",
   "agent": "hermes",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Hermes, agent de la langue (dieu grec de l eloquence) : relecture -> detection des fautes d orthographe -> verification du contexte -> correction tracee -> extension du dictionnaire -> rapport. Decision utilisateur 2026-08-14 : creer un agent dedie au vocabulaire et aux fautes, place comme nos outils ASCII, premiere mission = corriger readme-dev:264 (enchannements)."
  },
@@ -200,6 +200,12 @@
      "type": "fichier",
      "chemin": "cerveau-projet/agents/hermes/corrections.md",
      "raison": "Documenter chaque correction (fichier, ligne, fautif -> correct)"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ],
    "suivant": "c9"
@@ -261,6 +267,12 @@
      "type": "fichier",
      "chemin": "cerveau-projet/agents/hermes/corrections.md",
      "raison": "Lecon datee : fichier, ligne, fautif -> correct, contexte"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ],
    "suivant": "c8"
@@ -294,6 +306,12 @@
      "type": "fichier",
      "chemin": "cerveau-projet/agents/hermes/rapports/",
      "raison": "Rapport : fichier, ligne, fautif -> correct pour chaque correction (contenu en ARGUMENT POSITIONNEL, pas stdin)"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
     }
    ],
    "suivant": "c12"
@@ -308,6 +326,19 @@
      "catalogue": "enregistrer-usage-outil",
      "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
      "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent hermes --outil <outil> --contexte '<contexte>'"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-usage-outils-externes",
+     "catalogue": "detecter-usage-outils-externes",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <cible> --recursive"
     }
    ],
    "suivant": "c13"
