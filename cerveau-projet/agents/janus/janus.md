@@ -74,7 +74,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.4.11)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.12)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -284,6 +284,30 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 | **A REVOIR** | Problemes mineurs | Corriger et re-valider |
 
 ---
+
+## Environnement de travail (Systeme)
+
+> Environnement REEL detecte par verifier-systeme (--bloc-fiche).
+> Je le verifie avant toute commande systeme : je suis sur Windows, PAS sur Linux.
+
+| Element | Valeur |
+|---|---|
+| **OS** | Windows 10.0.19044 (AMD64) |
+| **Shell** | Bash 5.2.37 |
+| **Python** | 3.14.4 |
+| **Node.js** | 24.14.1 |
+| **Git** | 2.53.0 |
+| **Racine projet** | Z:\analyste-in-console |
+
+**Differences Windows vs Linux a ne jamais oublier** :
+
+- Ce systeme est WINDOWS avec bash MSYS/Git Bash : les commandes sont POSIX (ls, mv, rm, cp, grep), jamais cmd.exe ni PowerShell.
+- Les chemins ont DEUX formes : POSIX /z/analyste-in-console (commandes bash) et natif Z:\analyste-in-console (outils/scripts Windows).
+- Fins de ligne : LF OBLIGATOIRE (jamais CRLF) - un append sans corriger-fins-de-ligne introduit du CRLF.
+- python3 est disponible (Python 3.14.4) : les outils du cerveau s executent avec python3.
+- Les fichiers s ecrivent en ASCII strict : tout script temp passe par l entonnoir (protection de sortie LF + ASCII).
+
+> Source : verifier-systeme --bloc-fiche janus (v0.2.2-py)
 
 ## Limites
 

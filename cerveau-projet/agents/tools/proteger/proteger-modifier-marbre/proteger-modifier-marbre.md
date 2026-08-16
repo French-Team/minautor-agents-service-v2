@@ -1,5 +1,5 @@
 # proteger-modifier-marbre
-**Version :** 0.1.2
+**Version :** 0.1.3
 **Statut :** ebauche
 **Categorie :** Proteger
 ## Pourquoi cet outil ?
@@ -17,6 +17,19 @@ Un agent ne peut JAMAIS modifier le marbre seul. Le flux impose :
 4. Le gardien execute la commande avec l autorisation.
 Sans `--autorisation`, l outil refuse (code 1) : le marbre est immuable pour
 les agents.
+
+## Relecture OBLIGATOIRE avant gravure (v0.1.3, demande utilisateur 2026-08-16)
+Toute modification ou ajout d une zone de REGLES (fichier dans
+`regles-immuables/`) exige EN PLUS une relecture automatique : la porte lance
+`detecter-contradictions --regles` (audit Argus : doublons de titres,
+references cassees, concordance source/protocole) AVANT d accepter
+l autorisation. Si l audit n est pas PROPRE, la modification est REFUSEE
+(code 1) MEME avec `--autorisation` : il faut corriger les contradictions,
+relancer l audit, puis repasser la porte.
+
+Le champ `relecture: Argus PROPRE` est journalise dans `marbre-log.jsonl`.
+`--no-audit` existe pour les zones NON-regles (cartes, cases) - jamais pour
+une zone regles.
 ## Usage
 ```
 python3 proteger-modifier-marbre.py --zone <nom> --raison <texte> --autorisation <cle>
@@ -33,6 +46,7 @@ python3 proteger-modifier-marbre.py --log
 | `--raison <texte>` | Justification de la modification (OBLIGATOIRE) |
 | `--autorisation <cle>` | Preuve d autorisation de l utilisateur (OBLIGATOIRE) |
 | `--log` | Affiche l historique des modifications du marbre |
+| `--no-audit` | Desactive l audit Argus (zones NON-regles uniquement, jamais une zone regles) |
 | `--version` | Affiche la version |
 
 ## Ajouter une nouvelle zone (v0.1.2)

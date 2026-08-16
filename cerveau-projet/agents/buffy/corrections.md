@@ -3561,3 +3561,233 @@ A adapter : 0.4.7 -> 0.4.8 (ligne 155 + docstring ligne 19). Les references
 **Action** : remplacement de la section par le WORKFLOW KO OBLIGATOIRE en 5 etapes imperatives : (1) KO detecte -> lire le rapport, (2) JAMAIS relancer la suite complete apres un KO - rapporter a Cerberus qui active l agent habilite, (3) REVALIDATION CIBLEE avec --relancer-ko (l outil deduit la liste du dernier run), (4) validation de la serie --series X, (5) suite complete en dernier. + ajout de --relancer-ko a la table des options essentielles. Pas de bump : la fiche reference le parcours v0.4.11, non modifie.
 
 **Lecon** : un outil mecanise ne sert a rien si la fiche de l agent qui doit l utiliser ne documente pas le WORKFLOW d usage : l outil (--relancer-ko) et la fiche (workflow KO en 5 etapes) forment le couple complet - l outil deduit, la fiche ordonne. La formulation imperatives ("JAMAIS", "OBLIGATOIRE", "Interdit") est celle qui contraint vraiment l agent, pas les suggestions.
+## [LECON] 2026-08-16 -- COMMANDES CORRIGER-SYMBOLES --all + RESYNC LOCK (Buffy)
+
+**Contexte** : diagnostic Cerberus - Morpheus corrige les accents a la main
+car les indices corriger-symboles des cartes n avaient AUCUN champ
+commande (l agent ne savait pas comment appeler l outil) et l outil SANS
+--all conserve les accents du corps de texte.
+
+**Correction** : ajout du champ commande avec --all aux 32 indices
+corriger-symboles des 15 cartes (via editer-parcours --modifier-case,
+jamais d ecriture JSON directe - barrage n 3). Chaque commande :
+'python3 .../corriger-accents-zones-sensibles.py
+cerveau-projet/agents/<agent>/corrections.md --all'.
+
+**Decouverte importante** : 5 cartes (argus, atlas, gardien, minerve,
+promethee) avaient une empreinte PERIMEE dans cartes-lock.json - elles
+avaient ete modifiees anterieurement sans passage par editer-parcours, le
+lock n ayant jamais ete resynchronise. editer-parcours refusait d ecrire
+(blocage circulaire : on ne peut pas ecrire car le lock diverge, et le
+lock ne se met a jour qu apres une ecriture). Solution : verifier les 5
+cartes (valider-cartes 5/5 CONFORME) puis resynchroniser le lock
+(maintenance legitime du manifeste, documentee au registre).
+
+**Lecons** :
+1. Un indice outil sans champ commande est INUTILE pour l agent : le nom
+   et le chemin ne suffisent pas, la commande exacte doit etre dans la
+   carte (lecon deja apprise pour d autres indices, reappliquee ici).
+2. Le mode standard de corriger-accents-zones-sensibles est --all (la doc
+   le dit) - une commande sans --all conserve les accents du corps et
+   pousse l agent a corriger a la main.
+3. cartes-lock.json peut devenir perime silencieusement : test-057
+   verifie la couverture mais PAS la conformite des empreintes - angle
+   mort a signaler (un garde-fou de conformite serait utile).
+
+## [LECON] 2026-08-16 -- INDICE DETECTER-TRONCATURES CARTE VULCAIN (Buffy)
+
+**Contexte** : non-regression 76 tests - test-035 evaluer-processus signalait
+OUTIL_HORS_CARTE : la declaration registre de creation de detecter-troncatures
+par Vulcain etait legitime mais la carte vulcain n avait pas l indice (les
+autres detecter-* crees par Vulcain sont en case c10).
+
+**Action** : via editer-parcours --modifier-case (barrage n3 respecte, jamais
+d ecriture JSON directe), ajout de l indice detecter-troncatures a la case
+c10 de parcours-vulcain (nom/chemin/commande --tous) + bump 0.4.20 -> 0.4.21
++ synchro fiche (Pattern 14).
+
+**Verifications** : valider-cartes vulcain CONFORME, --tous 15/15, evaluer-
+processus --agent vulcain 0 probleme, scan global 0 probleme, normes 0/0.
+
+**Lecon** : quand Vulcain cree un outil detecter-*, l indice doit etre ajoute
+a SA carte (case c10) des la creation - sinon la declaration registre de
+creation devient OUTIL_HORS_CARTE et la barriere test-035 bloque. C est une
+modification de carte -> Buffy (via editer-parcours + bump + synchro fiche).
+
+
+## [LECON] 2026-08-16 -- INDICES ANALYSER-NOMS-MAJ/CORRIGER-NOMS-MAJ CARTE VULCAIN (Buffy)
+
+**Contexte** : la non-regression (barriere E) etait bloquee par test-035
+(2 OUTIL_HORS_CARTE) : Vulcain a declare l usage des 2 nouveaux outils au
+registre mais sa carte n avait pas encore les indices.
+
+**Correction** : ajout des 2 indices outil (analyser-noms-maj,
+corriger-noms-maj) dans la case c10 de parcours-vulcain via
+editer-parcours --modifier-case --bump (0.4.21 -> 0.4.22), fiche synchro
+(Pattern 14). Resultat : valider-cartes CONFORME, evaluer-processus 0 probleme.
+
+**Lecons** :
+1. Tout outil CREE et DECLARE au registre exige son indice dans la carte
+   de l agent qui le cree : la declaration registre sans indice carte =
+   OUTIL_HORS_CARTE (test-035).
+2. editer-parcours --contenu attend le JSON COMPLET de la case (pas un
+   diff) : reconstruire la case entiere puis la passer a --modifier-case.
+3. Le cwd d un subprocess Python sous Windows doit etre un chemin absolu
+   natif (Z:\\...) : un chemin POSIX (/z/...) leve NotADirectoryError.
+
+
+## [LECON] 2026-08-16 -- SECTION ENVIRONNEMENT DE TRAVAIL DANS LES FICHES (Buffy)
+
+**Contexte** (demande utilisateur) : chaque fiche agent doit contenir les
+infos de l environnement reel (OS, shell, langages, racine projet) pour
+que les agents sachent toujours sur quel systeme ils travaillent et
+n oublient jamais les differences Windows vs Linux.
+
+**Actions** :
+1. Template fiche-agent-template.md : section OBLIGATOIRE `## Environnement
+   de travail (Systeme)` ajoutee entre UTILISATION et Limites - verifier-
+   conformite-fiche la lit DYNAMIQUEMENT, elle devient exigee partout.
+2. Les 15 fiches agents : bloc genere par verifier-systeme --bloc-fiche
+   <agent> insere avant ## Limites (Windows reel + differences Windows vs
+   Linux : chemins POSIX/natifs, bash MSYS, LF jamais CRLF, python3, ASCII
+   via entonnoir).
+3. Verifications : verifier-conformite-fiche 11/11 CONFORME (cerveau-
+   projet) + athena/gardien CONFORMES (trio + nouveaux), test-016 20/20,
+   test-045 15/15, test-046 10/10, normes 0/0 sur 16 fichiers.
+
+**Lecons** :
+1. verifier-conformite-fiche est DYNAMIQUE (sections lues du template) :
+   ajouter une section au template suffit a l exiger partout - aucun
+   compteur a adapter.
+2. subprocess Python sous Windows : cwd natif (Z:\\...) obligatoire,
+   un chemin POSIX (/z/...) leve NotADirectoryError.
+3. Le template a ete ecrit par le 1er run AVANT l erreur cwd : verifier
+   l etat reEL apres un run partiel avant de conclure.
+
+## [LECON] 2026-08-16 -- JOURNALISATION ET REDIRECTIONS : JAMAIS DE /tmp SYSTEME (Buffy)
+
+**Contexte** : constat utilisateur - les agents redirigeaient leurs .log vers le
+/tmp du systeme (ex: > /tmp/nr.log) au lieu du dossier tmp-AGENT/ du workspace.
+Le protocole creation-scripts-temporaires ne couvrait que les SCRIPTS jetables,
+rien sur les journaux et captures de sortie : c etait le trou.
+
+**Correction (protocole v0.2.11)** : nouvelle section Journalisation et
+redirections de sortie - le dossier tmp-AGENT/ est le SEUL endroit ou ecrire
+pendant une mission, y compris les journaux. Toute redirection d ecriture
+(> fichier.log, tee, captures) va dans tmp-AGENT/fichier.log, JAMAIS vers le
+/tmp systeme ni ailleurs hors workspace. Le journal disparait avec le dossier
+en fin de mission (rm -rf tmp-AGENT) : 0 residu.
+
+**Dette legacy documentee** : 13 vieux .sh de tests d outils (activer-agent-
+principal test-001..008, detecter-impacts, detecter-usage-outils-externes)
+utilisent encore /tmp pour leur espace de test - hors suite non-regression,
+a migrer ou retirer dans une mission ulterieure (ne pas laisser la regle
+nouvelle s appliquer a du code mort).
+
+## [LECON] 2026-08-16 -- CARTE CERBERUS v0.5.0 : HABILITATIONS LIMITEES (Buffy)
+
+**Contexte** : verdict Themis (rapport themis/rapports/rapport-audit-
+carte-cerberus-habilitations-2026-08-16.md) - la case c10 de la carte de
+Cerberus contenait combos-analyse-projet (outil d ANALYSE avec rapport
+ecrit, proprietaire Clio) : le trou par lequel Cerberus a derive (audit
+au lieu d activer Themis). Demandes utilisateur : habilitations de
+Cerberus limitees a la coordination et a la lecture.
+
+**Correction (porte du marbre, autorisation utilisateur)** :
+- c10 : indice combos-analyse-projet RETIRE (reste activer-agent-principal)
+- c0b : indice lire-fichier dedoublonne (1 au lieu de 2)
+- version 0.4.9 -> 0.5.0 + fiche cerberus.md (Pattern 14)
+- valider-cartes CONFORME, valider-case OK, lock cartes resynchronise
+
+**Lecon protocole marbre pour une CASE protegee** : editer-parcours
+refuse de modifier une case protegee (hash nouveau != empreinte). La
+sequence correcte : (1) l UTILISATEUR autorise la porte ; (2) ecrire la
+case modifiee directement (cadre protocole marbre, backup avant) ;
+(3) proteger-modifier-marbre --zone --autorisation re-empreinte le
+manifeste ET resynchronise cartes-lock.json (FIX v0.1.1) ; (4) les
+verrous passent ensuite. Ne pas contourner : toujours la porte d abord.
+
+## [LECON] 2026-08-16 -- CARTE JANUS v0.4.12 : RETRAIT EDITER-FICHIER DE C4 (Buffy)
+
+**Contexte** : Janus a corrige des fichiers de tests au lieu de les renvoyer a
+Morpheus. Cause racine : la case c4 'Verifier les tests' de parcours-janus.json
+contenait un indice outil editer-fichier - Janus avait donc l habilitation de
+modifier les fichiers qu il devait seulement VERIFIER.
+
+**Correction** (via editer-parcours uniquement) : retrait de l indice
+editer-fichier de c4, bump 0.4.11 -> 0.4.12, fiche janus.md synchronisee,
+valider-cartes CONFORME, normes 0/0.
+
+**Verification bumper** : l outil bumper = mettre-a-jour-versions (nom de
+catalogue), il etait DEJA present en c33 de la carte de Janus - l audit initial
+cherchait le mot 'bumper' au lieu du nom reel.
+
+**Lecon** : une case 'VERIFIER X' ne doit JAMAIS porter un outil de modification
+de X - l habilitation suit le principe de separation verification/modification.
+Et pour auditer un outil, chercher son NOM DE CATALOGUE reel (mettre-a-jour-versions),
+pas son surnom (bumper).
+
+## [LECON] 2026-08-16 -- SYNCHRONISATION REGLES SOURCE/PROTOCOLE (Buffy, test-083)
+
+**Contexte** : le nouveau garde-fou test-083 (regles exclusives IMMUABLE de
+regles-groupes-agents.md synchronisees avec leur protocole associe) a detecte
+3 ecarts reels : 1) protocole-tests ne citait JAMAIS JANUS (alors que la
+section SEUL JANUS LANCE LA NON-REGRESSION le reference) ; 2)
+protocole-verification-coherence ne citait JAMAIS CLIO (l Agent du protocole
+etait Themis) ; 3) les sections LE MODELE DE CONFIANCE et RELEVE MEME ROUND
+n avaient pas de garde-fou test-XXX cite.
+
+**Corrections** :
+- protocole-tests : section REGLE IMMUABLE SEUL JANUS LANCE LA NON-REGRESSION
+  (janus seul habite, morpheus tests individuels uniquement, garde-fou test-037)
+- protocole-verification-coherence : mention CLIO seul habite a mettre a jour
+  le README (Themis verifie, Janus controle croise, garde-fou test-020)
+- regles-groupes-agents.md : garde-fous ajoutes aux 2 sections (MODELE DE
+  CONFIANCE -> test-056 verrou + test-057 marbre ; RELEVE MEME ROUND ->
+  test-056 verrou + protocole-activation) - passage de la PORTE DU MARBRE
+  (autorisation utilisateur) car le fichier est grave.
+
+**Lecon** : une regle exclusive dupliquee dans un protocole doit nommer
+l AGENT exclusif dans le protocole (pas seulement dans la source). La porte
+du marbre est OBLIGATOIRE pour regles-groupes-agents.md (zone gravee) : ne
+jamais l oublier apres une modification, sinon test-057 casse.
+
+## [LECON] 2026-08-16 -- PROTOCOLE-SECURITE-MARBRE v0.1.1 : RELECTURE AVANT GRAVURE (Buffy)
+
+**Demande utilisateur** : graver la relecture obligatoire avant toute nouvelle
+regle immuable - audit Argus (doublons + concordance source/protocole) AVANT
+la porte du marbre.
+
+**Correction** : protocole-securite-marbre v0.1.1 - le flux de la porte ajoute
+l etape 4 RELECTURE OBLIGATOIRE : toute zone de REGLES (fichier dans
+regles-immuables/) exige detecter-contradictions --regles PROPRE avant
+l autorisation (non PROPRE = refus meme avec autorisation). Une nouvelle
+regle immuable majeure DOIT entrer au marbre via cette porte apres relecture
+Argus PROPRE.
+
+**Lecon** : un protocole de securite documente le FLUX, mais seule la
+MECANISATION (outil v0.1.3 de Vulcain) rend la relecture ineluctable - le
+protocole et l outil doivent rester synchronises (le protocole decrit ce que
+l outil applique).
+
+
+## [LECON] 2026-08-16 -- CARTE HYGIE C4 + DETECTION PROCESSUS (Buffy)
+
+**Contexte** : suite mission Vulcain (combo-nettoyage-hygie v0.1.1) - la case
+c4 Detection compartimentee de la carte hygie doit aussi scanner les
+processus residuels.
+
+**Modifie** (via editer-parcours, --modifier-case) :
+- c4 : ajout de l indice outil detecter-processus-residuels (commande
+  --detail) apres detecter-residus, avant combos-analyse-projet.
+- Bump parcours hygie 0.1.4 -> 0.1.5 + fiche hygie.md synchronisee (Pattern 14).
+
+**Preuves** : valider-cartes-decision --agent hygie CONFORME, verrou --audit
+hygie detecter-processus-residuels OK, normes 0/0.
+
+**Lecon** : la detection complete de Hygie couvre maintenant 3 leviers dans c4
+(fichiers detecter-residus, processus detecter-processus-residuels, analyse
+combos-analyse-projet) - le combo v0.1.1 fait la meme chose cote execution.
+
+**APRES** : activer MORPHEUS (adapter test-005 0.2.5 -> 0.2.6, verifier
+test-045 chariot hygie inclut detecter-processus-residuels) puis JANUS.

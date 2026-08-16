@@ -7,7 +7,7 @@ identite:
 
 # Protocole de Creation des Scripts Temporaires
 
-**Version** : 0.2.10
+**Version** : 0.2.11
 **Statut** : ebauche
 **Categorie** : General
 **Agent** : Promethee
@@ -69,6 +69,24 @@ controles). Ce protocole ferme la boucle :
 | **EXECUTER** | **ENTONNOIR** : `python3 cerveau-projet/agents/tools/executer/executer-script-temporaire/executer-script-temporaire.py tmp-<agent>/<script>.py` (normalise + controle + execute ; puis `rm -f` du script dans la meme commande si jetable) | Diagnostic ponctuel |
 | **SUPPRIMER** | `rm -rf tmp-<agent>` | **EN FIN DE MISSION** - avant de reactiver l agent suivant |
 
+## Journalisation et redirections de sortie (v0.2.11, demande utilisateur 2026-08-16)
+
+> **REGLE (anti-recurrence constat utilisateur)** : le dossier `tmp-<agent>/`
+> est le SEUL endroit ou ecrire pendant une mission - y compris pour les
+> JOURNAUX et les captures de sortie. Toute redirection d ecriture
+> (`> fichier.log`, `2>&1 | tee`, captures de sortie) va dans
+> `tmp-<agent>/<fichier>.log`, JAMAIS vers le `/tmp` du systeme ni aucun
+> autre emplacement hors du workspace.
+>
+> - **AUTORISE** : `python3 outil.py ... > tmp-janus/nr.log 2>&1` (le journal
+>   vit dans le dossier temporaire de mission, supprime avec lui).
+> - **INTERDIT** : `> /tmp/nr.log`, `/tmp/ascii-out.txt`, tout fichier ecrit
+>   dans le `/tmp` systeme : c est ecrire HORS du workspace, invisible pour
+>   les garde-fous et laisse une trace hors projet.
+>
+> Le dossier `tmp-<agent>/` est supprime en fin de mission (`rm -rf
+> tmp-<agent>`) : le journal disparait avec lui, 0 residu.
+
 ## Etapes
 
 1. **BESOIN** : l'agent identifie une operation ponctuelle non couverte par
@@ -115,6 +133,8 @@ controles). Ce protocole ferme la boucle :
   supprime - garde-fou des dossiers residuels).
 - `detecter-usage-scripts-temporaires` retourne `0` (aucun ecart).
 - La promotion en outil durable est actee des la 2e utilisation.
+- Aucun journal / redirection de sortie vers le `/tmp` systeme : toute
+  capture de sortie est dans `tmp-<agent>/` (regle v0.2.11).
 
 ## Exemples
 
@@ -343,6 +363,10 @@ La methode fiable, eprouvee sur des dizaines de missions :
 5. **Le registre ne capture que ce qui passe par le generateur** : c'est
    pourquoi la declaration manuelle (mode script-temporaire) est obligatoire
    pour les OUTILS TEMPORAIRES DE MISSION.
+6. **Journal dans le /tmp systeme** : toute capture de sortie redirigee
+   vers `/tmp/...` = ecriture HORS workspace (regle v0.2.11). Les journaux
+   vont dans `tmp-<agent>/fichier.log`, supprimes avec le dossier en fin de
+   mission.
 
 ## Liens
 

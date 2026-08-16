@@ -179,7 +179,7 @@ def main():
         r = lancer([PYTHON, VERROU_PY, "--version"])
         verifier("   verrou --version", "0.1.0" in r.stdout, r.stdout[-100:])
         r = lancer([PYTHON, MODIF_PY, "--version"])
-        verifier("   modifier --version", "0.1.2" in r.stdout, r.stdout[-100:])
+        verifier("   modifier --version", "0.1.3" in r.stdout, r.stdout[-100:])
         chrono_etape("1. outils", t)
 
     # --- 2. manifeste marbre.json
@@ -305,18 +305,26 @@ def main():
         import tempfile
         tmp = None
         tmp_hist = None
+        tmp_classeur = None
         try:
             fd, tmp = tempfile.mkstemp(suffix=".md")
             os.close(fd)
             shutil.copyfile(os.path.join(PROJECT_ROOT, "AGENTS.md"), tmp)
             fd2, tmp_hist = tempfile.mkstemp(suffix=".md")
             os.close(fd2)
+            fd3, tmp_classeur = tempfile.mkstemp(suffix=".md")
+            os.close(fd3)
+            shutil.copyfile(os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                                         "classeur-variables", "stockage",
+                                         "variables-actuelles.md"), tmp_classeur)
             env = dict(os.environ)
             env["AGENTS_FILE"] = tmp
             env["AGENTS_HISTORIQUE"] = tmp_hist
-            env["CLASSEUR_STOCKAGE"] = os.path.join(PROJECT_ROOT, "cerveau-projet",
-                                                    "agents", "classeur-variables",
-                                                    "stockage", "variables-actuelles.md")
+            # Le classeur doit lui aussi etre un fichier TEMP : la reactivation
+            # reecrit le profil de session (bug 2026-08-16 : pointer vers le
+            # VRAI variables-actuelles.md reecrivait agent: Cerberus pendant
+            # la non-regression et cassait test-024 point 2b).
+            env["CLASSEUR_STOCKAGE"] = tmp_classeur
             r = lancer([PYTHON, ACTIVER_PY, "reactiver", "session-llm-1",
                         "test marbre", "janus"], timeout=90, env=env)
             contenu = lire(tmp)
@@ -334,6 +342,11 @@ def main():
             if tmp_hist:
                 try:
                     os.unlink(tmp_hist)
+                except OSError:
+                    pass
+            if tmp_classeur:
+                try:
+                    os.unlink(tmp_classeur)
                 except OSError:
                     pass
         chrono_etape("10. anti-recurrence", t)

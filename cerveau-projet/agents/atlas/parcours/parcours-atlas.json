@@ -264,7 +264,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/atlas/corrections.md --all"
     }
    ],
    "suivant": "c10b"
@@ -410,7 +411,8 @@
      "type": "outil",
      "nom": "corriger-symboles",
      "catalogue": "corriger-symboles",
-     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/"
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/atlas/corrections.md --all"
     },
     {
      "type": "outil",
@@ -443,7 +445,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/atlas/corrections.md --all"
     }
    ],
    "suivant": "c20"

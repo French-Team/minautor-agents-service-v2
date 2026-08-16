@@ -298,7 +298,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/janus/corrections.md --all"
     },
     {
      "catalogue": "creer-fichier",
@@ -618,13 +619,6 @@
      "commande": "python3 cerveau-projet/agents/tools/tester/tester-protections/tester-protections.py",
      "nom": "tester-protections",
      "type": "outil"
-    },
-    {
-     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <fichier> '<ancien>' '<nouveau>'",
-     "catalogue": "editer-fichier",
-     "nom": "editer-fichier",
-     "type": "outil"
     }
    ],
    "suivant": "c5",
@@ -706,7 +700,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/janus/corrections.md --all"
     },
     {
      "type": "outil",
@@ -965,6 +960,6 @@
   "case_depart": "c0",
   "description": "v0.4.8 : + indice outil c4 tester-protections (usage reel controle, garde-fou test-035)",
   "nom": "parcours-janus",
-  "version": "0.4.11"
+  "version": "0.4.12"
  }
 }

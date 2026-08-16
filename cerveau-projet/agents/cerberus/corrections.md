@@ -865,3 +865,33 @@ meme en sortie piped. --no-chrono le coupe toujours.
 immediat, l ordre reel des lignes depend du buffering de stdout quand la
 sortie est piped. Tout outil qui veut garantir l ordre de ses messages
 doit flush() avant de lancer un sous-processus.
+
+## [LECON] 2026-08-16 -- PARCOURS D AMELIORATION NON SUIVI (Cerberus)
+
+**Controle utilisateur** : avant d activer Vulcain pour le round
+d amelioration de detecter-troncatures, devais-je passer par le parcours
+d amelioration de MA carte ? REPONSE : OUI - et je ne l ai PAS fait.
+
+**Preuves de l ecart** :
+1. Ma carte a la case c19c (Pattern 17 : GENERATEUR D ABORD) : lancer
+   generateurs-amelioration AVANT d activer l agent habilite.
+2. La case c1b porte la regle : 'toute demande d ameliorer/optimiser un
+   outil declenche la checklist du generateur d amelioration AVANT
+   d activer l agent habilite'.
+3. Registre : generateurs-amelioration = 0 occurrence (jamais declare).
+4. Le round a ete fait correctement (diagnostic Cerberus, mission Vulcain,
+   garde-fou Morpheus, non-regression Janus) MAIS sans la checklist.
+
+**Checklist a posteriori (theme ameliorer-outil, 14 questions)** : 12/14
+couverts par le round, 2 non couverts :
+- q8 NON : l outil n a PAS de spec/ (les 5 fichiers py/sh/md/spec/catalogue
+  ne sont pas tous couverts).
+- q2/q3 (anticipation) : non verifies a priori (le round a bien pense aux
+  binaires et aux zones de documentation, mais via le diagnostic, pas via
+  la checklist).
+
+**Lecon** : pour TOUTE demande d amelioration d outil, lancer
+generateurs-amelioration --theme ameliorer-outil AVANT d activer l agent
+(Pattern 17, case c19c). La checklist force l anticipation (q2/q3) et la
+completude des 5 fichiers (q8). Le generateur a ete lance a posteriori
+pour ce round : q8 (spec manquante) est le seul vrai residu.

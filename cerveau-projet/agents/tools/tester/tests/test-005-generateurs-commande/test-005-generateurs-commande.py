@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-005-generateurs-commande.py
-Test formel du generateur de commande v0.2.5 (fiabilisation des flags optionnels),
+Test formel du generateur de commande v0.2.6 (fiabilisation des flags optionnels),
 du catalogue (chaque commande doit avoir sa documentation .md : REGLE ABSOLUE
 LECTURE DOC) et du parcours Atlas v0.4.1 (migre au format action : references +
 cases action, 2 commandes templates residuelles c30 + c11a conservees et documentees).
@@ -23,13 +23,14 @@ Objet (correction Buffy 2026-08-09) :
   - parcours-atlas v0.3.3 -> v0.4.1 (2026-08-11) : ajout case c0d LIRE LA
   - parcours-atlas v0.4.2 -> v0.4.3 (2026-08-16) : branchage corriger-symboles
   - parcours-atlas v0.4.3 -> v0.4.4 (2026-08-16) : c0b relecture avec commandes lire-fichier (corrections puis fiche) - 3e cas commande en dur documente
+  - parcours-atlas v0.4.4 -> v0.4.5 (2026-08-16) : commandes corriger-symboles --all ajoutees aux indices (c10, c18, c19) - 7 commandes en dur connues documentees
   - parcours-atlas v0.4.1 -> v0.4.2 (2026-08-13) : Themis maillon (c11a/c11b)
     DOCUMENTATION DE L OUTIL avant utilisation (garde-fou lecture .md).
 
 Cas couverts (26 points) :
-  GENERATEUR v0.2.5
-  1. --version py = v0.2.5
-  2. --version sh = v0.2.5
+  GENERATEUR v0.2.6
+  1. --version py = v0.2.6
+  2. --version sh = v0.2.6
   3. py_compile OK (generateurs-commande.py)
   4. bash -n OK (generateurs-commande.sh)
   5. composition lire-fichier (fichier=AGENTS.md;lignes=3) : SANS --debut/--fin vides
@@ -46,7 +47,7 @@ Cas couverts (26 points) :
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
   PARCOURS ATLAS v0.4.1
 17. parcours-atlas.json : json.load valide + version 0.4.4
-18. 3 commandes en dur connues (c0b relecture + c30 + c11a) dans les indices outil avec catalogue
+18. 7 commandes en dur connues (c0b x2 + c10/c18/c19 corriger-symboles + c11a + c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
  21. valider-cartes-decision --agent atlas : CONFORME
@@ -185,15 +186,15 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.5 + catalogue 0.2.9 + parcours-atlas v0.4.4 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.6 + catalogue 0.2.9 + parcours-atlas v0.4.4 ===")
     print("")
 
-    # ---------- GENERATEUR v0.2.5 ----------
+    # ---------- GENERATEUR v0.2.6 ----------
     code, out = exec_cmd("python3 %s --version" % GC_PY)
-    verifier(1, "generateurs-commande.py --version = v0.2.5", "v0.2.5" in out, out.strip())
+    verifier(1, "generateurs-commande.py --version = v0.2.6", "v0.2.6" in out, out.strip())
 
     code, out = exec_cmd("bash %s --version" % GC_SH)
-    verifier(2, "generateurs-commande.sh --version = v0.2.5", "v0.2.5" in out, out.strip())
+    verifier(2, "generateurs-commande.sh --version = v0.2.6", "v0.2.6" in out, out.strip())
 
     code, out = exec_cmd("python3 -m py_compile %s" % GC_PY)
     verifier(3, "py_compile generateurs-commande.py", code == 0, out.strip())
@@ -256,8 +257,10 @@ def main():
         verifier(17, "parcours-atlas.json JSON valide + version 0.4.4", False, str(e))
         p = {}
 
-    # Residu connu et documente : case c30 (commande template cartographier-parcours.py {parcours}).
-    # Toute commande en dur SUPPLEMENTAIRE = regression a signaler (KO).
+    # Commandes en dur connues et documentees : c30 (template
+    # cartographier-parcours.py {parcours}), c11a (activer themis), c0b x2
+    # (relecture lire-fichier), c10/c18/c19 (corriger-symboles --all ajoutees
+    # par Buffy 2026-08-16). Toute commande SUPPLEMENTAIRE = regression.
     n_commande = 0
     cases_commande = []
     for k, c in p.get("cases", {}).items():
@@ -265,9 +268,9 @@ def main():
             if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
                 n_commande += 1
                 cases_commande.append(k)
-    verifier(18, "3 commandes en dur connues (c0b relecture + c30 + c11a) dans les indices avec catalogue",
-             n_commande == 4 and sorted(cases_commande) == ["c0b", "c0b", "c11a", "c30"],
-             "restants=%d cases=%s" % (n_commande, cases_commande))
+    verifier(18, "7 commandes en dur connues (c0b x2 + c10/c18/c19 + c11a + c30) dans les indices avec catalogue",
+             n_commande == 7 and sorted(cases_commande) == ["c0b", "c0b", "c10", "c11a", "c18", "c19", "c30"],
+             "restants=%d cases=%s" % (n_commande, sorted(cases_commande)))
 
     for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer|NON|OUI"), (20, "autre+OUI", "OUI|autre|OUI|NON|OUI")]:
         c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", chemin])

@@ -1093,3 +1093,28 @@ nisee dans les parcours/outils, pas seulement ecrite.
 **Preuve du test reel** : l activation de Themis a declenche IMMEDIATEMENT l execution de l audit dans le meme round, sans relance utilisateur - la regle fonctionne.
 
 **Lecon** : le cycle de releve est une CHAINE agents <-> agents avec themis (audit) et janus (controle) integres ; chaque fin de mission active le maillon suivant, seul le dernier reactive Cerberus.
+
+## [LECON] 2026-08-16 -- AUDIT CARTE CERBERUS : HABILITATIONS LIMITEES (Themis)
+
+**Contexte** : derive utilisateur - Cerberus a fait un diagnostic/audit
+(convention des scripts temporaires) alors que c est le travail de
+Themis. Demande : verifier la carte de Cerberus pour limiter ses
+habilitations a la coordination et a la lecture.
+
+**Verdict d audit** : la carte v0.4.9 est globalement CONFORME - les
+garde-fous c1/c5/c18/c22 (VERIF/AUDIT/ANALYSE -> Themis c22, jamais
+Cerberus) sont presents et bien branches. MAIS 1 correction majeure :
+la case c10 contient combos-analyse-projet (outil d ANALYSE avec
+ecriture de rapport, proprietaire Clio) - c est le trou par lequel la
+derive est passee. Retirer cet outil de la carte de Cerberus.
+
+**Lecon** : les garde-fous de comportement ne suffisent pas si la
+carte contient encore l OUTIL de la tentation. Une habilitation se
+verifie par l inventaire des indices outils : coordination
+(activer-agent-principal), lecture (lister-agents, lire-fichier,
+lire-activite-recente), declaration (enregistrer-usage-outil) - et
+RIEN d autre. Tout outil d analyse/audit dans une carte autre que
+Themis est un ecart.
+
+**Rapport** : themis/rapports/rapport-audit-carte-cerberus-
+habilitations-2026-08-16.md

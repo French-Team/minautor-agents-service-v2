@@ -12,10 +12,10 @@
 # LF, 100% stdlib) et se termine par la question de PROMOTION : si le besoin
 # se reproduit (2e utilisation), l'agent ACTIVE VULCAIN pour creer l'outil
 # durable (protocole 5 fichiers) ; Vulcain reactive ensuite l'agent precedent.
-# Version : 0.2.2
+# Version : 0.2.3
 # Statut : beta
 
-VERSION="0.2.2"
+VERSION="0.2.3"
 STATUT="beta"
 
 RED="\033[0;31m"
@@ -262,6 +262,8 @@ def declarer_usage(agent, outil, contexte):
     # Declare un usage au registre (mode script-temporaire par defaut)
     # La sortie du sous-processus est CAPTUREE puis bufferisee (le chrono
     # reste la premiere ligne - decision utilisateur 2026-08-15)
+    # Redirection possible : CERVEAU_REGISTRE_USAGES (env) -> --registre
+    # (utilisee par les tests pour isoler leurs preuves du registre reel)
     import subprocess as _sp
     racine = racine_projet()
     if not racine:
@@ -272,6 +274,9 @@ def declarer_usage(agent, outil, contexte):
                                "enregistrer-usage-outil.py")
     cmd = [sys.executable, enregistrer, "--agent", agent, "--outil", outil,
            "--mode", "script-temporaire", "--contexte", contexte]
+    registre_alt = os.environ.get("CERVEAU_REGISTRE_USAGES", "")
+    if registre_alt:
+        cmd += ["--registre", registre_alt]
     _res = _sp.run(cmd, check=False, capture_output=True, text=True)
     if _res.stdout:
         print(_res.stdout, end="")

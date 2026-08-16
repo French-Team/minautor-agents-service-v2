@@ -5035,3 +5035,422 @@ dans ma fiche : KO detecte -> analyser -> --relancer-ko --series X (la
 serie qui contient le KO) -> valider la serie -> suite complete. Pas
 besoin de revalider les KO des autres series quand le correctif ne les
 concerne pas.
+## [LECON] 2026-08-16 -- BILAN KO TEST-005 (Janus, passage partiel)
+
+**Contexte** : non-regression apres --all par defaut de
+corriger-accents-zones-sensibles (v0.2.3) + test-076. La barriere C a
+bloque : 59 OK / 1 KO.
+
+**KO** : test-005 point 18 - la liste des 'commandes en dur connues' de la
+carte ATLAS attendait 4 cases (c0b, c0b, c11a, c30) mais la mission Buffy
+(a commandes corriger-symboles --all ajoutees) en a cree 3 nouvelles
+(c10, c18, c19) : total 7.
+
+**Decision** : adaptation de test-005 = travail Morpheus (exclusivite
+tests). Je reactive Morpheus avec la liste exacte, puis je relancerai
+--relancer-ko + suite complete.
+## [LECON] 2026-08-16 -- VALIDATION --ALL PAR DEFAUT (Janus)
+
+**Contexte** : demande utilisateur - --all est le mode par defaut de
+corriger-accents-zones-sensibles (v0.2.3, Vulcain) + garde-fou test-076
+(Morpheus, serie A + profil outils).
+
+**Deroulement** : la barriere C a bloque sur test-005 point 18 (la liste
+des commandes en dur de la carte ATLAS etait passee de 4 a 7 cases apres
+les commandes corriger-symboles --all ajoutees par Buffy). Morpheus a
+adapte la liste exacte. J ai revalide test-005 via --relancer-ko (1 test,
+7.3s) puis suite complete : 75 OK / 0 KO (93.6s, conforme reference +1%).
+
+**Lecon** : le cycle KO -> --relancer-ko -> suite complete a fonctionne
+en 2 passages : la barriere a stoppe au 1er KO (pas de cascade), la
+revalidation ciblee a pris 7s au lieu de 93s, la suite complete est
+repartie une seule fois une fois le correctif confirme.
+
+## [LECON] 2026-08-16 -- NON-REGRESSION FINALE 76 OK (Janus)
+
+**Contexte** : creation de l outil detecter-troncatures v0.1.0 (Vulcain) +
+garde-fou test-077 (Morpheus). La non-regression a bloque 3 fois sur des
+KO en cascade (cycle KO -> correction -> relance) avant d aboutir :
+1. Barriere E : test-024 (catalogue 165->166) + test-035 (2 declarations
+   fautives registre) -> Morpheus.
+2. Barriere A : test-060 (compteurs 182->183, 165->166) -> Morpheus.
+3. Barriere D : test-047 (CRLF dans vulcain/corrections.md apres append de
+   lecon) -> corriger-fins-de-ligne ; test-038 (badge Outils 144->145) ->
+   Clio.
+
+**Lecons apprises** :
+1. La creation d un outil casse TOUS les compteurs figes d un coup :
+   catalogue (test-007, test-024, test-060), index-tools (test-007,
+   test-060), badge README (test-038). Chercher par grep '165|182|Outils-'
+   AVANT de lancer la suite evite 3 allers-retours de barriere.
+2. Toute lecon appendee dans corrections.md doit etre suivie de
+   corriger-fins-de-ligne (les appends python3 ecrivent en LF mais le
+   fichier deja en LF partiel peut melanger - verifier CRLF apres).
+3. Le workflow KO fonctionne : --relancer-ko revalide les KO cibles en
+   quelques secondes avant de relancer la suite complete une seule fois.
+
+## [LECON] 2026-08-16 -- NON-REGRESSION ROUND AMELIORATION DETECTER-TRONCATURES (Janus)
+
+**Contexte** : round amelioration detecter-troncatures v0.2.0 (Vulcain) +
+test-077 adapte (Morpheus, 15/15). Non-regression 76 tests : 1 barriere
+bloquee (test-035), KO = declaration fautive corriger-fins-de-ligne par
+morpheus (outil EXCLUSIF a vulcain). Registre nettoye, relance ciblee,
+suite complete verte.
+
+**Resultat** : 76 OK / 0 KO, chrono 96.6s vs reference 100.6s ->
+**TEMPS AMELIORE, reference mise a jour** (le round a aussi gagne 4s).
+
+**Lecons apprises** :
+1. corriger-fins-de-ligne est EXCLUSIF a Vulcain : Morpheus/les autres ne
+   doivent JAMAIS le declarer au registre (DECLARATION_FAUTIVE detectee
+   par evaluer-processus). Utiliser l outil sans le declarer, ou le faire
+   declarer par Vulcain.
+2. Les verifications de normes (corriger-fins-de-ligne, corriger-symboles)
+   sont des outils EXCLUSIFS : verifier le verrou d habilitation avant de
+   declarer son usage au registre.
+3. Le workflow KO fonctionne a nouveau : relance ciblee du KO (0.7s) puis
+   suite complete une seule fois (96.6s).
+
+
+## [LECON] 2026-08-16 -- VALIDATION GARDE-FOU TEST-078 : NON-REGRESSION 77 OK (Janus)
+
+**Contexte** : Cerberus a demande le garde-fou verifiant que toute activation
+d amelioration est precedee d un passage generateurs-amelioration (la
+derive du round detecter-troncatures 15:03 sans checklist). Morpheus a cree
+test-078 (7/7 vert) puis m a reactive pour la non-regression complete.
+
+**Verdict** : NON-REGRESSION 77 OK / 0 KO - toutes les barrieres franchies
+(E, A, D, C, B dans cet ordre). test-078 integre (76 -> 77 tests), nouvelle
+reference chrono enregistree : 97.0 s. Le test-027 (artefact verrou) et le
+test-035 (declarations fautives nettoyees par Morpheus) sont verts.
+
+**Lecon** : le garde-fou croise AGENTS-historique x registre avec
+comparaison MINUTE-LEVEL (une declaration a posteriori le meme jour ne
+compte pas) et reference au lendemain de la creation (les ecarts historiques
+sont documentes, seule la derive future est KO). Preuve negative : une
+activation fictive SANS declaration est bien detectee.
+
+
+## [LECON] 2026-08-16 -- VALIDATION OUTILS NOMS-MAJ : NON-REGRESSION 78 OK (Janus)
+
+**Contexte** : la chaine Vulcain (2 outils analyser-noms-maj +
+corriger-noms-maj) -> Morpheus (garde-fou test-079) -> Buffy (indices carte
+vulcain) a produit 2 vagues de KO en barriere E puis A.
+
+**Verdict** : NON-REGRESSION 78 OK / 0 KO - toutes les barrieres franchies.
+Les corrections en cascade ont fonctionne : test-024 (catalogue 168,
+Morpheus), test-035 (indices carte vulcain v0.4.22, Buffy), test-060
+(compteurs Analyser 6 / Total 185, adaptation), test-079 (seuil registre
+trop rigide 130 -> validite JSONL pure, adaptation).
+
+**Lecon** : trois tests pincent les compteurs du catalogue/index
+(test-007, test-024, test-060) - chaque ajout d outil exige l adaptation
+des trois, plus le garde-fou du nouvel outil. La revalidation ciblee
+(--serie) isole les KO avant la suite complete, comme prevu par le
+workflow KO de ma fiche.
+
+## [LECON] 2026-08-16 -- KO CRITIQUE : CORRIGER-NOMS-MAJ A CORROMPU LE REGISTRE (Janus)
+
+**KO constate** : non-regression barriere E -> test-078 KO (CRASH : min() sur
+liste vide). Le registre-usages-outils.jsonl n a PLUS AUCUNE entree
+generateurs-amelioration (test-078 passe a 15:32/15:53/15:54/15:55, puis le
+registre a ete reecrit et l entree a disparu).
+
+**Diagnostic (preuves reelles)** :
+1. git diff : le registre est passe de 131 entrees (HEAD, commit 13:47) a 124
+   entrees (working tree) - 130 lignes HEAD n ont plus leur jumeau exact.
+2. Le bloc 13:14-13:43 (115 entrees auto-journalisation verrou) present dans
+   HEAD est ABSENT du working tree (116 lignes supprimees, 9 ajoutees).
+3. Les declarations analyser-noms-maj + corriger-noms-maj (Vulcain ~15:43,
+   qui ont fait passer test-035 au vert) sont AUSSI absentes du registre.
+4. generateurs-amelioration (15:22:59, Cerberus, documentee dans la lecon
+   Cerberus PARCOURS D AMELIORATION NON SUIVI) : ABSENTE.
+5. Cause racine : corriger-noms-maj reecrit les lignes par INDEX de ligne
+   (idx = no-1, no = numero d entree PARSEE qui ignore les lignes vides et
+   invalides) applique a la liste BRUTE des lignes : tout decalage (ligne
+   vide, ligne invalide, CRLF) ecrase/decale des entrees et l ecriture est
+   PERTEUSE (aucune garde de compte avant/apres).
+6. Le bilan 16:03 (78 OK / 0 KO) a ete rendu AVANT la reecriture fautive :
+   le registre a ete corrompu APRES ce bilan (le fichier a ete modifie entre
+   la fin de la non-regression et maintenant).
+
+**Constat** : c est la 2e corruption du registre en 2 rounds (la 1ere : les
+17 entrees chemin normalisees). Le registre est UNE SOURCE CROISEE pour de
+nombreux garde-fous (test-035, test-078, test-079) : toute reecriture doit
+etre INCREMENTALE (append) ou gardee par un compte avant/apres strict.
+
+**Action requise (Vulcain)** : (1) reparer corriger-noms-maj : reecriture par
+POSITIONS DE LIGNES BRUTES (pas par index d entrees parsees), garde de compte
+avant/apres (refuser si le compte diminue), jamais perdre une ligne ; (2)
+RESTAURER le registre : re-ajouter le bloc 13:14-13:43 (recuperable depuis
+git HEAD) + les declarations generateurs-amelioration (15:22:59 cerberus) +
+analyser-noms-maj + corriger-noms-maj (vulcain ~15:43-15:50, contexte
+documente) ; (3) prouver : analyser-noms-maj --zone registre = PROPRE,
+test-078 + test-035 verts, compte >= 131 + entrees documentees. FIN : lecon
+Vulcain + reactiver JANUS pour revalidation ciblee puis suite complete.
+
+## [LECON] 2026-08-16 -- ROTATION_REGISTRE DESTRUCTIVE DU LANCEUR (Janus, DIAGNOSTIC KO)
+
+**Contexte** : apres la restauration du registre (226 entrees, bloc HEAD 13:14-13:43
+re-ajoute + 3 declarations reconstruites dont generateurs-amelioration), le KO
+test-078 est REVENU au lancement suivant : generateurs-amelioration nb=0, registre
+re-tombe a 119 entrees (mtime 16:40:57 = mon lancement).
+
+**Cause racine** : tester-lancer-non-regression contient rotation_registre(racine,
+max_usages=100) appelee a CHAQUE lancement (lignes 1330 et 1415). Quand le registre
+depasse 100 usages normaux (direct/generateur/verrou-auto), elle SUPPRIME les plus
+anciens pour revenir a 100. Effets :
+1. Le bloc 13:14-13:43 (104 entrees, les plus anciennes du 16/08) est rogne.
+2. Les 3 declarations reconstruites (mode direct) comptent comme normales -> rognees
+   aussi, dont generateurs-amelioration exigee par test-078.
+3. TOUTE restauration du registre est annulee au lancement suivant de la suite.
+
+**Lecon** : un plafond de rotation qui SUPPRIME des entrees d un registre-source-de-verite
+est incompatible avec les garde-fous qui le lisent (test-078/035, evaluer-processus,
+analyser-noms-maj). La rotation doit PRESERVER les entrees (archivage vers un registre
+d archive au lieu de la suppression) ou etre supprimee. Meme philosophie que corriger-noms-maj
+v0.1.1 : jamais perdre une ligne. Decision : l outil (Vulcain) transforme la rotation en
+ARCHIVAGE non destructif, puis restaure le registre (union WT+HEAD+reconstruites).
+
+## [LECON] 2026-08-16 -- KO RECIDIVANT TEST-078 : CAUSE RACINE ROTATION + CHAINE (Janus, VERDICT VALIDE)
+
+**Contexte** : le KO test-078 (generateurs-amelioration absente du registre) est
+revenu deux fois : (1) apres la premiere restauration (rotation v0.5.3 l a rogne),
+(2) le lanceur l a re-rogne a chaque lancement de la suite. Cause racine : la
+rotation_registre du lanceur SUPPRIMAIT les usages normaux anciens quand le registre
+depassait 100 - les declarations mode direct (dont generateurs-amelioration) etaient
+considerees comme du bruit.
+
+**Correctif (Vulcain v0.5.4)** : rotation NON DESTRUCTIVE - seules les entrees
+verrou-auto (bruit d auto-journalisation) sont plafonnees ; les verites
+(direct/generateur/script-temporaire) ne sont JAMAIS retirees. Preuve : rotation
+2x = compte identique (idempotente), generateurs-amelioration preservee.
+
+**Missions en chaine (meme round)** :
+1. Vulcain : rotation v0.5.4 + restauration registre (227) + lecon.
+2. Morpheus : 8 tests 0.5.3 -> 0.5.4 (test-066 piege : cible future 0.5.5) + lecon.
+3. Janus : revalidation -> 2 KO serie A : test-075 (9e test oublie, 0.5.3) + test-079
+   (entree tmp-test-declaration.py revenue avec la restauration, corrigee par
+   corriger-noms-maj 0.1.1). Declarations fautives retirees (vulcain
+   tester-lancer-non-regression + morpheus test-024).
+4. Morpheus : test-075 adapte (0.5.4, 11/11).
+5. Janus : NON-REGRESSION COMPLETE 79 OK / 0 KO (5 barrieres, 103.8s).
+
+**Lecons** :
+1. UN PLAFOND DE ROTATION QUI SUPPRIME DES ENTREES D UN REGISTRE SOURCE-DE-VERITE
+   EST INCOMPATIBLE AVEC LES GARDE-FOUS : distinguer BRUIT (verrou-auto,
+   re-journalisable) vs VERITE (declarations documentees) - rogner le bruit, jamais
+   la verite.
+2. UNE RESTAURATION DE FICHIER PEUT RAPPORTER D ANCIENS ARTEFACTS (tmp-test-declaration
+   de HEAD) - toujours re-verifier avec les analyseurs apres restauration.
+3. UN BUMP D OUTIL PILIER IMPREIGNE UN NOMBRE INCONNU DE TESTS : le scan exhaustif
+   (grep ancienne version sur TOUS les tests) est la seule garantie - test-075 a ete
+   oublie au premier passage.
+4. LA DECLARATION REGISTRE EST SOUMISE AUX EXCLUSIVITES : vulcain/morpheus ne peuvent
+   pas declarer tester-lancer-non-regression (exclusif janus) ni test-024 (hors carte).
+
+## [LECON] 2026-08-16 -- SERIE KO PRIORITAIRE VALIDEE (Janus, VERDICT VALIDE)
+
+**Contexte** : demande utilisateur - Janus perdait du temps a relancer la suite
+complete a chaque correction de KO. Vulcain a ajoute la serie KO prioritaire au
+lanceur v0.5.5 : ko-tests.json persistant, --ko <nouveau|reprendre> (defaut
+reprendre), --etat-ko, barriere KO en premier avec purge des fantomes et
+idempotence (test valide par la serie KO non relance dans sa serie).
+
+**Verification (Janus)** :
+1. --etat-ko : affiche le fichier (vide -> serie A directe).
+2. --ko nouveau serie A : 31 OK / 0 KO (test-081 inclus), fichier vide apres.
+3. NON-REGRESSION COMPLETE : 80 OK / 0 KO (5 barrieres, 108.9s).
+4. ko-tests.json vide, registre propre (verites preserves), 0 residu.
+
+**Lecons** :
+1. La serie KO tient sa promesse : Janus peut revalider UNIQUEMENT les KO
+   (--ko reprendre, barriere KO en premier) sans relancer la suite complete -
+   le gain de productivite est structurel, pas seulement optionnel.
+2. Le verrou d identite protege bien la suite : en test unitaire (session
+   morpheus), le lanceur bloque sur usurpation - la preuve de test-081 verifie
+   la structure (fichier consomme) sans dependre du rc.
+3. L ajout d un nouveau test (test-081) implique serie + profil + couverture
+   test-027 : le scan de couverture a valide l ajout au premier essai.
+
+## [LECON] 2026-08-16 -- CHAINE ANTI /tmp SYSTEME VALIDEE (Janus, 81 OK / 0 KO)
+
+**Mission** : constat utilisateur - les agents redirigeaient leurs .log
+vers le /tmp systeme au lieu du dossier tmp-AGENT/ du workspace.
+
+**Chaine executee (meme round)** :
+1. BUFFY : protocole creation-scripts-temporaires v0.2.11 - section
+   Journalisation et redirections de sortie (toute capture .log va dans
+   tmp-AGENT/, JAMAIS /tmp systeme) + RVAV + piege.
+2. MORPHEUS : violation reelle corrigee (tester-protection-erreurs-
+   silencieuses ecrivait dans /tmp/test-logs -> logs dans <racine>/
+   cerveau-projet/agents/traces/protection-logs/, .py 0.2.1-py / .sh
+   0.1.1) + garde-fou test-082 (9/9, scan production hors tests/,
+   preuves negatives A/B/C, serie A + profil outils).
+3. MORPHEUS (2e passage) : test-057 corrompait le VRAI profil classeur
+   (CLASSEUR_STOCKAGE vers le vrai variables-actuelles.md pendant un
+   reactiver) -> classeur temp comme AGENTS_FILE (profil intact, prouve
+   par md5 avant/apres).
+4. JANUS : 2 declarations superflues retirees du registre (une fautive
+   tester-lancer-non-regression, une orpheline tester-protection-
+   erreurs-silencieuses hors scan un niveau), registre PROPRE.
+
+**Resultat** : NON-REGRESSION 81 OK / 0 KO, 107.0 s (reference mise a
+jour, ancienne 108.9 s), ko-tests.json vide, verites du registre
+preservees, 0 residu.
+
+**Lecons** : (1) ne jamais declarer un outil MODIFIE mais non EXECUTE
+(declaration superflue = OUTIL_ORPHELIN) ; (2) tout test qui simule une
+activation doit temper les TROIS fichiers (AGENTS_FILE, AGENTS_HISTORIQUE,
+CLASSEUR_STOCKAGE).
+
+## [LECON] 2026-08-16 -- CARTE JANUS v0.4.12 + CLE EXCLUSIVE MORPHEUS (Janus, VERDICT VALIDE)
+
+**Contexte (demande utilisateur)** : Janus corrigeait des fichiers de tests au
+lieu de les renvoyer a Morpheus. Cause racine : case c4 'Verifier les tests'
+de la carte de Janus portait editer-fichier (habilitation de modification sur
+des fichiers a seulement VERIFIER). La regle immuable SEUL MORPHEUS ECRIT LES
+TESTS existait mais le verrou ne verifiait que l outil, pas la CIBLE.
+
+**Corrections en chaine** :
+- Buffy : carte janus v0.4.12 - retrait editer-fichier de c4 (via
+  editer-parcours), fiche synchronisee. Verifie : le bumper (mettre-a-jour-
+  versions) etait DEJA en c33 (mon audit cherchait le mauvais nom).
+- Vulcain : verrou v0.2.1 - option --cible + zone protegee tester/tests/
+  (OUTILS_MODIF + GARDIEN_TESTS = morpheus) : l exclusivite DEPASSE la table
+  des cartes. editer-fichier v0.4.2 branche le verrou (--agent obligatoire).
+  Spec generateurs 0.2.3 alignee (KO test-028).
+- Morpheus : test-056 v0.2.1 - preuves 11/11b/11c (buffy bloque sur test,
+  morpheus ouvre, hors zone = carte).
+- Janus : KO test-037 (ma declaration fautive retiree), editer-fichier .sh
+  re-synchronise (0.4.2), bumper 0 incoherent.
+
+**Lecon Janus** : VERIFIER != MODIFIER. Une case 'Verifier X' ne doit jamais
+porter un outil de modification de X. Quand un test signale une declaration
+fautive de MA propre mission, je la retire du registre et je relance - pas de
+correction de code par moi.
+
+## [LECON] 2026-08-16 -- GARDE-FOU TEST-083 SYNCHRONISATION REGLES (Janus, VERDICT VALIDE)
+
+**Mission** : ajouter un garde-fou verifiant la synchronisation des regles en
+double (regles-groupes-agents.md vs protocoles associes).
+
+**Chaine** : Morpheus cree test-083 (9 points, 8 sections exclusives verifiees
+: presence, protocole cite, garde-fou cite, concordance termes cles
+source/protocole, preuve negative) -> 3 ecarts REELS detectes -> Buffy corrige
+(protocole-tests cite JANUS, protocole-verification-coherence cite CLIO,
+garde-fous des sections MODELE DE CONFIANCE + RELEVE MEME ROUND, porte du
+marbre pour regles-groupes-agents) -> Morpheus ajoute test-083 au lanceur
+(serie A + profil regles).
+
+**Resultat** : NON-REGRESSION 82 OK / 0 KO (112.4s), registre propre, ko-tests
+vide, 0 residu.
+
+**Lecon Janus** : un garde-fou de synchronisation vaut par sa preuve negative
+(injecter une divergence et constater la detection) ET par des termes cles
+robustes (agent + action) evitant les faux positifs de formulation. La porte
+du marbre est obligatoire apres toute modification de regles-groupes-agents.md
+(zone gravee) - l oubli casse test-057.
+
+## [LECON] 2026-08-16 -- RELECTURE OBLIGATOIRE AVANT GRAVURE (Janus, VERDICT VALIDE)
+
+**Mission** : graver la relecture obligatoire avant toute nouvelle regle
+immuable - audit Argus (doublons + concordance source/protocole) AVANT la
+porte du marbre.
+
+**Chaine** : Vulcain (porte v0.1.3 : est_zone_regles -> audit
+detecter-contradictions --regles PROPRE obligatoire, BLOQUE meme avec
+--autorisation si non PROPRE, champ relecture journalise) -> Buffy
+(protocole-securite-marbre v0.1.1, etape 4 RELECTURE OBLIGATOIRE) ->
+Morpheus (test-057 adapte 24/24 + test-084 cree 8/8 avec preuve negative).
+
+**Preuve negative** : doublon exact de titre IMMUABLE injecte dans
+regles-groupes-agents.md -> Argus 1 CONTRADICTION -> porte BLOQUE rc=1
+'relecture Argus' malgre l autorisation utilisateur, fichier restaure.
+
+**Resultat** : NON-REGRESSION 83 OK / 0 KO (112.8s), registre propre,
+ko-tests vide, 0 residu.
+
+**Lecon Janus** : une regle immuable n est vraiment protegee que si SA
+MODIFICATION elle-meme est controlee - la porte du marbre verifie desormais
+la SANTE de toutes les regles (audit Argus) avant d autoriser la gravure :
+on ne peut plus graver une regle qui contredit le corpus existant.
+
+## [LECON] 2026-08-16 -- AUDIT OBLIGATOIRE POUR --AJOUTER (Janus, VERDICT VALIDE)
+
+**Mission** : verifier que l audit Argus est aussi obligatoire pour les
+NOUVELLES zones ajoutees au marbre (mode --ajouter) avec preuve dans test-084.
+
+**Resultat** : la porte v0.1.3 couvrait deja --ajouter (construit zone_audit
+depuis --fichier). test-084 etendu a 11 points avec 3 preuves : ajout zone
+REGLE -> audit Argus lance ; ajout zone NON-regle -> pas d audit ; nettoyage
+des zones test du marbre.json (0 residuelle).
+
+**Validation** : NON-REGRESSION 83 OK / 0 KO (113.5s, conforme reference
++1%), marbre 8 zones intact, registre propre, ko-tests vide, 0 residu.
+
+**Lecon Janus** : une garantie de securite vaut par sa COUVERTURE COMPLETE -
+verifier les deux chemins d entree de la porte (modification --zone ET
+ajout --ajouter) prouve qu une nouvelle regle immuable ne peut pas contourner
+la relecture Argus.
+
+
+## [LECON] 2026-08-16 -- NON-REGRESSION FINALE PROCESSUS-RESIDUELS (Janus)
+
+**Contexte** : validation finale de la mission processus-residuels (2 outils
+creees par Vulcain, carte hygie par Buffy, garde-fou test-085 par Morpheus).
+
+**Deroulement** :
+1. Premier run : barriere E bloquee (test-024 catalogue 168 perime) -> Morpheus
+   corrige (170). KO residuels test-060/079 (meme compteur) -> Morpheus corrige
+   (170 + Total index-tools 187). KO test-085 detecteur : faux positifs en pool
+   (les processus des autres tests, parents VIVANTS, etaient classes PROJET).
+   -> Correction de conception Vulcain : un RESIDUEL est un processus dont le
+   PARENT EST MORT (orphelin). Le critere PROJET seul cree des faux positifs en
+   pool parallele. detecteur + nettoyeur passes a v0.1.1.
+2. KO test-007 (Total 185 perime) -> corrige 187. KO test-038 (badge README
+   147 != 149) -> Clio corrige le badge. ko-tests vide a chaque correction.
+3. Run final : 84 OK / 0 KO, toutes barrieres franchies (E > A > D > C > B).
+
+**Etats verifies** : 0 residu, ko-tests vide, registre +2 declarations
+(processus-residuels), verrou hygie OK / buffy BLOQUE, test-085 8/8 en pool.
+
+**Lecons** :
+1. Le critere de residu processus doit etre ORPHELIN (parent mort), pas
+   commande projet seule - sinon les autres tests du pool (parents vivants)
+   sont des faux positifs.
+2. Chaque ajout d outil impacte 4 compteurs synchronises : catalogue (168),
+   index-tools Total (185), badge README (147), tests qui les verifient.
+   Le lanceur KO les attrape un par un - la boucle reparer/revalider est le
+   workflow correct (jamais relancer la complete avant de reverdir les KO).
+
+**APRES** : reactiver CERBERUS avec le bilan consolide.
+
+
+## [LECON] 2026-08-16 -- NON-REGRESSION FINALE COMBO NETTOYAGE HYGIE (Janus)
+
+**Contexte** : validation finale de la mission combo-nettoyage-hygie (Vulcain
+combo v0.1.1 + generateurs v0.2.6 booleens, Buffy carte hygie c4 v0.1.5,
+Morpheus test-005/045).
+
+**Deroulement** :
+1. Premier run : barriere E bloquee - test-028 (spec generateurs-commande 0.2.5
+   DIVERGENTE vs outil 0.2.6 -> spec alignee 0.2.6 + historique) et test-035
+   (DECLARATION_FAUTIVE : j avais declare janus -> detecter-processus-residuels
+   au registre alors que l outil est EXCLUSIF hygie - retiree, registre sain).
+2. Run final : 84 OK / 0 KO, toutes barrieres franchies (E > A > D > C > B),
+   119.5s.
+
+**Etats verifies** : 0 residu, ko-tests vide, registre OK (150 lignes),
+le VRAI residu signale : docs-dev-cerveau-projet/rapport-diagnostic-convention-
+scripts-temporaires-2026-08-16.md (RAPPORT_EGARE) - a nettoyer par Hygie.
+
+**Lecons** :
+1. Ne JAMAIS declarer au registre un outil EXCLUSIF (verrou) par un agent non
+   habilite - evaluer-processus le signale comme DECLARATION_FAUTIVE et
+   test-035 KO. Verifier l habilitation (verrou --audit) avant de declarer.
+2. Apres bump d un outil a spec, aligner TOUJOURS la spec (regle des 5
+   fichiers) - test-028 le verifie (DIVERGENTE).
+
+**APRES** : reactiver CERBERUS avec le bilan consolide (incluant le residu a
+nettoyer par Hygie).

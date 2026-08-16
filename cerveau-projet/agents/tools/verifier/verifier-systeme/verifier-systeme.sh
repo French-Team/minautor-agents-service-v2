@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.1"
+VERSION="0.2.2"
 DATE="2026-08-05"
 
 # Couleurs pour la sortie
@@ -325,6 +325,11 @@ while [[ $# -gt 0 ]]; do
         --version)
             echo "verifier-systeme v${VERSION}"
             exit 0
+            ;;
+        --bloc-fiche)
+            # Delegue au .py : le bloc Environnement de travail est genere
+            # par le moteur Python (parite garantie avec le .py)
+            exec python3 "$(dirname "${BASH_SOURCE[0]}")/verifier-systeme.py" --bloc-fiche "$2"
             ;;
         *)
             echo "Option inconnue: $1"

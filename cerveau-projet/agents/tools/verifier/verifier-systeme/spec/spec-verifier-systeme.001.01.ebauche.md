@@ -77,6 +77,15 @@ Tous les agents du cerveau-projet, en particulier Vulcain (constructeur d'outils
 | **Critere d'acceptation** | Le format JSON est parseable, le resume est lisible |
 | **Dependances** | Exigences 01 a 03 |
 
+### 3.5 Exigence 05 -- Generer le bloc Environnement de travail (--bloc-fiche)
+
+| Champ | Description |
+|---|---|
+| **Priorite** | Haute |
+| **Description** | Genere le bloc markdown `## Environnement de travail (Systeme)` pret a inserer dans la fiche de l agent (demande utilisateur 2026-08-16 : chaque fiche doit contenir les infos de l environnement reel pour ne jamais oublier les differences Windows vs Linux) |
+| **Critere d'acceptation** | Le bloc contient le tableau (OS, Shell, Python, Node.js, Git, Racine projet) et la section `Differences Windows vs Linux` (chemins POSIX vs natifs, bash MSYS, LF jamais CRLF, python3, ASCII via entonnoir) |
+| **Dependances** | Exigences 01 a 04 |
+
 ---
 
 ## 4. Exigences Non-Fonctionnelles
@@ -122,6 +131,7 @@ Le script detecte le systeme via le module `platform`, verifie la presence des s
 
 ```bash
 verifier-systeme.sh [--format table|json|resume] [--detail standard|complet]
+verifier-systeme.py --bloc-fiche cerberus
 ```
 
 ### 5.5 Flux / Workflows
@@ -133,7 +143,8 @@ verifier-systeme.sh [--format table|json|resume] [--detail standard|complet]
 4. Verifier les outils (git, npm)
 5. Assembler le rapport
 6. Formater selon --format
-7. Retourner le resultat
+7. --bloc-fiche NOM : assembler le bloc Environnement de travail
+8. Retourner le resultat
 ```
 
 ---
@@ -214,7 +225,7 @@ Execution reelle sur le systeme de l'utilisateur + fichiers de test dans `exempl
 
 - [rechercher] -- references rassemblees (platform, commandes systeme, conventions)
 - [verifier] -- structure complete (sections 1-10 presentes)
-- [analyser] -- coherent avec l'outil existant (v0.2.1-py)
+- [analyser] -- coherent avec l'outil existant (v0.2.2-py)
 - [valider] -- pret pour le statut prepare
 
 ---
@@ -226,3 +237,4 @@ Execution reelle sur le systeme de l'utilisateur + fichiers de test dans `exempl
 | 2026-08-05 | 0.1.0 | Vulcain | Creation initiale |
 | 2026-08-07 | 0.2.0 | Promethee | Refonte selon spec-template, version outil 0.2.0 |
 | 2026-08-09 | 0.2.1-py | Vulcain | Alignement regle des 5 fichiers (py 0.2.1-py) |
+| 2026-08-16 | 0.2.2-py | Vulcain | Option --bloc-fiche (environnement de travail pour les fiches agents) |

@@ -58,7 +58,7 @@
 #   2 : erreur d utilisation (agent/outil manquant, agent inconnu,
 #       identite de session indeterminable)
 #
-# Version : 0.2.0
+# Version : 0.2.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -88,7 +88,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 AGENTS_DIR = None          # racine/cerveau-projet/agents (detectee)
 PROJECT_ROOT = None        # racine du projet (contient AGENTS.md)
@@ -305,11 +305,45 @@ def journaliser(agent, outil, verdict_str, agent_reel=""):
         pass
 
 
-def verdict(agent, outil, table, verbose):
+# REGLE IMMUABLE CLE EXCLUSIVE (v0.2.1) : SEUL MORPHEUS ECRIT/ADAPTE LES
+# TESTS (regles-groupes-agents.md). Meme si un outil figure dans la carte d un
+# autre agent, la MODIFICATION d un fichier de test (zone tester/tests/) est
+# BLOQUEE hors morpheus. Les autres agents passent par lui (cycle activer).
+# Outils de modification couverts par la zone protegee :
+OUTILS_MODIF = frozenset([
+    "editer-fichier", "editer-parcours", "creer-fichier", "ecrire-fichier",
+    "supprimer-fichier", "supprimer-dossier", "corriger-symboles",
+    "corriger-fins-de-ligne", "corriger-accents-zones-sensibles",
+])
+ZONE_TESTS = "tester/tests/"
+GARDIEN_TESTS = frozenset(["morpheus"])
+
+
+def est_zone_tests(cible):
+    """Vrai si la cible pointe un fichier de test de la non-regression."""
+    if not cible:
+        return False
+    normalise = cible.replace("\\", "/")
+    return ZONE_TESTS in normalise
+
+
+def verdict(agent, outil, table, verbose, cible=""):
     """Verifie l habilitation et renvoie (code, message).
     Comparaison INSENSIBLE A LA CASSE : l agent actif lu dans AGENTS.md porte
     la casse du nom (ex 'Cerberus') alors que les parcours sont minuscules
-    (parcours-cerberus.json) - les deux doivent matcher."""
+    (parcours-cerberus.json) - les deux doivent matcher.
+    v0.2.1 : si cible est un fichier de test ET outil de modification, seul
+    morpheus est habilite (cle exclusive, depasse la table des cartes)."""
+    if est_zone_tests(cible) and outil in OUTILS_MODIF:
+        if agent.lower() in [g.lower() for g in GARDIEN_TESTS]:
+            return (0, "OK : l agent '" + agent + "' est habilite (cle exclusive tests) pour '"
+                       + outil + "' sur " + cible + ".")
+        session = trouver_session_agent(agent)
+        return (1, "BLOQUE : la modification d un fichier de test est EXCLUSIVE a morpheus "
+                   "(regle immuable - meme si l outil est dans ta carte).\n"
+                   "  Cible : " + cible + "\n"
+                   "  Action requise : activez morpheus puis redemandez.\n"
+                   "  Commande : " + commande_activation("morpheus", session))
     habiles = table.get(outil)
     if habiles is None:
         return (1, "BLOQUE : l outil '" + outil + "' n est assigne a AUCUNE carte "
@@ -339,6 +373,8 @@ def main():
         description="Verrou d habilitation : bloque l utilisation d un outil par un agent non habilite.")
     parser.add_argument("--agent", metavar="NOM", help="nom de l agent appelant (obligatoire)")
     parser.add_argument("--outil", metavar="NOM", help="nom de l outil a utiliser (obligatoire)")
+    parser.add_argument("--cible", metavar="CHEMIN", default="",
+                        help="fichier cible (permet la cle exclusive tests : tester/tests/ = morpheus seul)")
     parser.add_argument("--audit", action="store_true",
                         help="mode audit/tests : table d habilitation sans verifier l identite reelle")
     parser.add_argument("--liste", action="store_true", help="affiche la table outil -> agents habilites")
@@ -393,7 +429,7 @@ def main():
             sys.stdout.write(msg + "\n")
             sys.exit(1)
 
-    code, msg = verdict(args.agent, args.outil, table, args.verbose)
+    code, msg = verdict(args.agent, args.outil, table, args.verbose, args.cible)
     sys.stdout.write(msg + "\n")
     if not args.audit:
         journaliser(args.agent, args.outil, "OK" if code == 0 else "BLOQUE", agent_reel)

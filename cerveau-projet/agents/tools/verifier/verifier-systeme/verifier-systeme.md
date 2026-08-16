@@ -7,7 +7,7 @@ identite:
 # verifier-systeme
 
 **Categorie** : Verifier
-**Version** : 0.2.1-py
+**Version** : 0.2.2-py
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : outil partage
@@ -40,6 +40,7 @@ Verifier le systeme de l'utilisateur pour collecter ce qui est deja installe.
 | `--format FORMAT` | Format de sortie: table, json, resume |
 | `--detail DETAIL` | Niveau de detail: standard, complet |
 | `--enregistrer` | Ecrire le profil systeme dans le classeur-variables (variable `profil-systeme`) |
+| `--bloc-fiche NOM` | Generer le bloc markdown `Environnement de travail (Systeme)` a inserer dans la fiche de l agent NOM (avec les differences Windows vs Linux) |
 | `--version` | Afficher la version |
 
 ---
@@ -140,6 +141,7 @@ npm --version
 | 0.1.1-beta | 2026-08-05 | Ajout du script executable |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (table, resume, json), doublons du resume corriges (Python/Node.js sans redondance), promotion prepare |
 | 0.2.0-py | 2026-08-07 | Portage Python : analyse du systeme (3 formats) |
+| 0.2.2-py | 2026-08-16 | Option `--bloc-fiche NOM` : genere le bloc Environnement de travail a inserer dans les fiches agents (demande utilisateur : ne pas oublier Windows vs Linux) |
 | 0.2.1-py | 2026-08-07 | Option `--enregistrer` (sh + py) : ecrit le profil systeme dans le classeur-variables |
 
 ---

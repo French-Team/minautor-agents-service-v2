@@ -76,6 +76,11 @@ Code de retour : 0 si aucun probleme, 1 sinon (utilisable en garde-fou).
   registre d un outil exclusif declare par un agent non proprietaire est
   signale comme declaration fautive (a retirer du registre), pas comme un
   indice manquant a ajouter.
+- v0.1.5 (2026-08-16, KO test-035 decouvert par Janus) : fins_de_la_carte
+  reconnait les fins de REACTIVATION legitimes ("Activer l agent precedent",
+  ex: Themis c25b audit sur demande, Atlas) et detecter_fins_erronees ne
+  signale plus les missions reactiver Cerberus quand la carte autorise cette
+  fin (la carte est la reference, pas l heuristique).
 - v0.1.4 (2026-08-16, garde-fou test-064) : outils_exclusifs scanne
   TOUS les agents avec parcours (trio athena/promethee/minerve + hygie
   inclus), pas seulement AGENTS_CERVE - correction du faux positif

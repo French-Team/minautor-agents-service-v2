@@ -31,7 +31,7 @@
 #   1 : BLOQUE - autorisation absente ou zone inconnue
 #   2 : erreur d utilisation
 #
-# Version : 0.1.2
+# Version : 0.1.3
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -57,7 +57,7 @@ import json
 import os
 import sys
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 
 
 def empreinte_fichier_lock(chemin):
@@ -167,6 +167,34 @@ def afficher_log(racine):
     return 0
 
 
+def est_zone_regles(zone, racine):
+    """Vrai si la zone protegee porte sur un fichier de REGLES (dans
+    regles-immuables/). Ces zones exigent l audit Argus AVANT gravure."""
+    fichier = zone.get("fichier", "") if isinstance(zone, dict) else ""
+    normalise = fichier.replace("\\", "/")
+    return "regles-immuables/" in normalise
+
+
+def audit_regles_propre(racine):
+    """Lance detecter-contradictions --regles (audit Argus) et retourne
+    (ok, message). RELECTURE OBLIGATOIRE avant toute gravure d une zone de
+    regles (demande utilisateur 2026-08-16) : doublons + concordance
+    source/protocole + contradictions detectees = BLOQUE."""
+    chemin = os.path.join(racine, "cerveau-projet", "agents", "tools",
+                          "detecter", "detecter-contradictions",
+                          "detecter-contradictions.py")
+    if not os.path.isfile(chemin):
+        return (False, "[ERREUR] Outil detecter-contradictions introuvable : %s" % chemin)
+    import subprocess
+    r = subprocess.run([sys.executable, chemin, "--regles"],
+                       capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    sortie = (r.stdout + r.stderr).strip()
+    if "PROPRE" in sortie and "0 contradiction" in sortie:
+        return (True, "audit Argus PROPRE (0 contradiction, relecture OK)")
+    return (False, "audit Argus NON PROPRE - relecture obligatoire AVANT gravure :\n" + sortie[-500:])
+
+
 def main():
     parser = argparse.ArgumentParser(description="Modification du marbre (protocole a autorisation utilisateur)")
     parser.add_argument("--zone", type=str, default="", help="Zone a re-empreinter")
@@ -178,6 +206,8 @@ def main():
                         help="Type de zone (avec --ajouter) : fichier (defaut) ou case/marqueurs")
     parser.add_argument("--raison", type=str, default="", help="Justification de la modification")
     parser.add_argument("--autorisation", type=str, default="", help="Preuve d autorisation de l utilisateur (OBLIGATOIRE)")
+    parser.add_argument("--no-audit", action="store_true",
+                        help="Desactiver l audit Argus pour une zone NON-regles (jamais pour une zone regles)")
     parser.add_argument("--log", action="store_true", help="Afficher l historique des modifications")
     parser.add_argument("--version", action="version", version="proteger-modifier-marbre v%s" % VERSION)
     parser.add_argument("--aide", action="help",
@@ -200,6 +230,26 @@ def main():
         manifeste = json.load(fh)
 
     verrou = charger_verrou()
+
+    # --- RELECTURE OBLIGATOIRE (v0.1.3, demande utilisateur 2026-08-16) :
+    # toute zone de REGLES exige l audit Argus (detecter-contradictions
+    # --regles) PROPRE AVANT la gravure - doublons + contradictions + non
+    # concordance source/protocole = BLOQUE, meme avec autorisation.
+    zone_audit = None
+    if args.zone and args.zone in manifeste["zones"]:
+        zone_audit = manifeste["zones"][args.zone]
+    elif args.ajouter and args.fichier:
+        zone_audit = {"fichier": args.fichier}
+    if zone_audit is not None and est_zone_regles(zone_audit, racine) and not args.no_audit:
+        ok_audit, msg_audit = audit_regles_propre(racine)
+        print("[RELECTURE] " + msg_audit)
+        if not ok_audit:
+            print("[BLOQUE] La relecture Argus n est pas PROPRE : modification de la "
+                  "zone de regles REFUSEE (meme avec autorisation utilisateur).")
+            print("  Corrigez les contradictions/doublons signales, relancez l audit,"
+                  " puis repassez la porte du marbre.")
+            return 1
+        print("[RELECTURE] Zone de regles : audit Argus PROPRE, gravure autorisee.")
 
     # --- MODE AJOUT (v0.1.2, 2026-08-16) : nouvelle zone dans le marbre ---
     if args.ajouter:
@@ -243,6 +293,7 @@ def main():
             "autorise_par": args.autorisation,
             "ancienne_empreinte": "",
             "nouvelle_empreinte": nouvelle,
+            "relecture": "Argus PROPRE" if (est_zone_regles(zone, racine) and not args.no_audit) else "-",
         }
         with io.open(chemin_log(racine), "a", encoding="utf-8", newline="\n") as fh:
             fh.write(json.dumps(entree, ensure_ascii=True) + "\n")
@@ -291,6 +342,7 @@ def main():
         "autorise_par": args.autorisation,
         "ancienne_empreinte": ancienne,
         "nouvelle_empreinte": nouvelle,
+        "relecture": "Argus PROPRE" if (est_zone_regles(zone, racine) and not args.no_audit) else "-",
     }
     with io.open(chemin_log(racine), "a", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps(entree, ensure_ascii=True) + "\n")

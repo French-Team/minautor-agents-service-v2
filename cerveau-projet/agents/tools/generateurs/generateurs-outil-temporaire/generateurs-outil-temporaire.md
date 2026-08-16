@@ -6,7 +6,7 @@ identite:
 ---
 # generateurs-outil-temporaire
 
-**Version :** 0.2.2
+**Version :** 0.2.3
 **Statut :** prepare
 **Categorie :** Generateurs
 **Chemin :** `agents/tools/generateurs/generateurs-outil-temporaire/`
@@ -89,6 +89,7 @@ Mission -> besoin -> outil existe ?
 
 | Version | Date | Changement |
 |---|---|---|
+| 0.2.3 | 2026-08-16 | Template : env var CERVEAU_REGISTRE_USAGES - si definie, declarer_usage ajoute --registre (redirection du registre pour les tests, elimine la course test-050/test-079) |
 | 0.2.2 | 2026-08-15 | Template : CHRONO EN HAUT (buffer total) - toute la sortie retenue, chrono affiche en premier, sous-processus de declaration captures |
 | 0.2.1 | 2026-08-14 | Template enrichi : bloc DECLARATION USAGES dans le script genere (anti-recurrence registre a 0 ligne) |
 | 0.2.0 | 2026-08-14 | Template enrichi : triplet (protections + options on/off + chrono) dans le script genere |

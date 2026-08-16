@@ -205,6 +205,47 @@
    ]
   },
   {
+   "nom": "analyser-noms-maj",
+   "description": "Analyser la casse et la forme des noms references (orphelins, erreurs min/MAJ) dans registre, historique, catalogue, index",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/analyser/analyser-noms-maj/analyser-noms-maj.py",
+   "modele": "{zone} {tous} {rapport} {verbose}",
+   "parametres": [
+    {
+     "cle": "zone",
+     "question": "Zone a analyser (registre|historique|catalogue|index) ?",
+     "type": "choix",
+     "obligatoire": false,
+     "choix": [
+      "registre",
+      "historique",
+      "catalogue",
+      "index"
+     ]
+    },
+    {
+     "cle": "tous",
+     "question": "Analyser toutes les zones (--tous) ?",
+     "type": "flag",
+     "obligatoire": false,
+     "flag": "--tous"
+    },
+    {
+     "cle": "rapport",
+     "question": "Fichier de rapport markdown (--rapport) ?",
+     "type": "texte",
+     "obligatoire": false
+    },
+    {
+     "cle": "verbose",
+     "question": "Detail (--verbose) ?",
+     "type": "flag",
+     "obligatoire": false,
+     "flag": "--verbose"
+    }
+   ]
+  },
+  {
    "nom": "analyser-performance-tests",
    "description": "Analyser la performance des tests (dernier run, du plus gros consommateur au moins)",
    "interpreteur": "python3",
@@ -791,6 +832,28 @@
    ]
   },
   {
+   "nom": "corriger-noms-maj",
+   "description": "Corriger la casse et la forme des noms references : normalise le champ outil du registre (chemin/extension -> nom kebab-case)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/corriger/corriger-noms-maj/corriger-noms-maj.py",
+   "modele": "{dry_run} {rapport}",
+   "parametres": [
+    {
+     "cle": "dry_run",
+     "question": "Apercu sans ecrire (--dry-run) ?",
+     "type": "flag",
+     "obligatoire": false,
+     "flag": "--dry-run"
+    },
+    {
+     "cle": "rapport",
+     "question": "Fichier de rapport markdown (--rapport) ?",
+     "type": "texte",
+     "obligatoire": false
+    }
+   ]
+  },
+  {
    "nom": "corriger-symboles",
    "description": "Corriger les symboles non-ASCII (fleches, box drawing, espace inse cable, guillemets francais) - mode --all, regle immuable",
    "interpreteur": "python3",
@@ -1184,6 +1247,31 @@
    ]
   },
   {
+   "nom": "detecter-processus-residuels",
+   "description": "Detecte les processus residuels (python/node/bash) dont la commande reference le projet ou orphelins (parent mort), liste blanche protegee (freebuff, unsloth)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/detecter/detecter-processus-residuels/detecter-processus-residuels.py",
+   "modele": "--detail --rapport {rapport}",
+   "parametres": [
+    {
+     "cle": "detail",
+     "question": "Activer --detail ?",
+     "type": "bool",
+     "obligatoire": false,
+     "flag": "--detail",
+     "defaut": false
+    },
+    {
+     "cle": "rapport",
+     "question": "Chemin du rapport markdown ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--rapport",
+     "defaut": ""
+    }
+   ]
+  },
+  {
    "nom": "detecter-residus",
    "description": "Detecte les residus du workspace, compartimente par zone (cerveau-projet / workspace / tous) : fichiers temp, version egaree, sauvegardes, rapports egare, caches",
    "interpreteur": "python3",
@@ -1256,6 +1344,47 @@
      "type": "flag",
      "obligatoire": false,
      "flag": "--recursive"
+    }
+   ]
+  },
+  {
+   "nom": "detecter-troncatures",
+   "description": "Detecte les elements tronques donc illisibles : fichiers trop longs a lire (binaires ignores), blocs non fermes (JSON/Python/bash invalides), marqueurs de troncature (zones de documentation ignorees), option --exclure",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/detecter/detecter-troncatures/detecter-troncatures.py",
+   "modele": "--tous --exclure snapshots",
+   "parametres": [
+    {
+     "cle": "tous",
+     "question": "Scanner tous les fichiers de cerveau-projet/ ? (--tous)",
+     "type": "boolean",
+     "obligatoire": false,
+     "flag": "--tous",
+     "defaut": "false"
+    },
+    {
+     "cle": "seuil_lignes",
+     "question": "Seuil de lignes pour FICHIER_TROUQUE ? (--seuil-lignes, defaut 2000)",
+     "type": "entier",
+     "obligatoire": false,
+     "flag": "--seuil-lignes",
+     "defaut": "2000"
+    },
+    {
+     "cle": "rapport",
+     "question": "Chemin du rapport markdown ? (--rapport, optionnel)",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--rapport",
+     "defaut": ""
+    },
+    {
+     "cle": "exclure",
+     "question": "Motif de chemin a exclure ? (--exclure, repeteble, ex: snapshots)",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--exclure",
+     "defaut": ""
     }
    ]
   },
@@ -2643,6 +2772,38 @@
      "question": "Valeur pour chemin ?",
      "type": "texte",
      "obligatoire": true
+    }
+   ]
+  },
+  {
+   "nom": "nettoyer-processus-residuels",
+   "description": "Termine les processus residuels detectes (exclusif Hygie via verrou-habilitation, dry-run par defaut, liste blanche protegee)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/nettoyer/nettoyer-processus-residuels/nettoyer-processus-residuels.py",
+   "modele": "--agent {agent} --tous --force",
+   "parametres": [
+    {
+     "cle": "agent",
+     "question": "Nom de l agent appelant ?",
+     "type": "texte",
+     "obligatoire": true,
+     "flag": "--agent"
+    },
+    {
+     "cle": "tous",
+     "question": "Tuer tous les residuels detectes (--tous) ?",
+     "type": "bool",
+     "obligatoire": false,
+     "flag": "--tous",
+     "defaut": false
+    },
+    {
+     "cle": "force",
+     "question": "Confirmer sans relance (--force) ?",
+     "type": "bool",
+     "obligatoire": false,
+     "flag": "--force",
+     "defaut": false
     }
    ]
   },

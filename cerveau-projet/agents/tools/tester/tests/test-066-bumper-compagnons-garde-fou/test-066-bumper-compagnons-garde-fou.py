@@ -151,13 +151,13 @@ def main():
     chrono_etape("3. preuve compagnons", t0)
 
     # 4. Option --nouvelle : bump dry-run du lanceur vers une version
-    #    FUTURE (0.5.4) - le lanceur est deja a 0.5.3 (v0.5.3), la cible
+    #    FUTURE (0.5.6) - le lanceur est deja a 0.5.5 (v0.5.5), la cible
     #    doit etre superieure pour que le bumper affiche la transition
     #    (le dry-run NE MODIFIE rien : seule la version affichee compte).
     t0 = time.monotonic()
-    code, out = run([PYTHON, BUMPER_PY, LANCER_DIR, "--nouvelle", "0.5.4"], timeout=90)
-    verifier("4. option --nouvelle fonctionne (0.5.3 -> 0.5.4 dry-run)",
-             code == 0 and "0.5.3 -> 0.5.4" in out, out.strip()[-60:])
+    code, out = run([PYTHON, BUMPER_PY, LANCER_DIR, "--nouvelle", "0.5.6"], timeout=90)
+    verifier("4. option --nouvelle fonctionne (0.5.5 -> 0.5.6 dry-run)",
+             code == 0 and "0.5.5 -> 0.5.6" in out, out.strip()[-60:])
     chrono_etape("4. --nouvelle", t0)
 
     # 5. Normes ASCII + LF

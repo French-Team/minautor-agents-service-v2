@@ -1,7 +1,7 @@
 #!/bin/bash
 # tester-protection-erreurs-silencieuses.sh
 # Protection contre les erreurs silencieuses
-# Version : 0.1.0
+# Version : 0.1.1
 # Statut : ebauche
 
 # Configuration
@@ -9,7 +9,10 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-PROTECTION_LOG_DIR=${PROTECTION_LOG_DIR:-/tmp/test-logs}
+# Regle v0.2.11 protocole-creation-scripts-temporaires : les logs vont
+# dans le workspace (jamais /tmp systeme), surclassable par env.
+_PROTECTION_RACINE=$(cd "$(dirname "$0")/../../../../../.." && pwd)
+PROTECTION_LOG_DIR=${PROTECTION_LOG_DIR:-$_PROTECTION_RACINE/cerveau-projet/agents/traces/protection-logs}
 PROTECTION_VERIFY_OUTPUT=${PROTECTION_VERIFY_OUTPUT:-true}
 
 # Couleurs

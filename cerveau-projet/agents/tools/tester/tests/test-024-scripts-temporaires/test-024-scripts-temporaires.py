@@ -26,7 +26,7 @@ Cas couverts:
   5. editer-parcours : --version v0.1.1
   6. tester-lancer-non-regression : --version v0.1.1
   7. enregistrer-usage-outil : mode script-temporaire accepte (--version v0.3.0)
-  8. Catalogue : les nouvelles commandes presentes (157 total)
+  8. Catalogue : les nouvelles commandes presentes (170 total)
   9. index-tools : les 4 nouvelles lignes presentes (3 outils + editer-fichier-agents)
  10. ASCII strict : 0 non-ASCII (outils + test)
  11. LF pur : 0 CRLF (outils + test)
@@ -251,8 +251,8 @@ def main():
     verifier("5. editer-parcours --version v0.1.3",
              r.returncode == 0 and "v0.1.3" in r.stdout, r.stdout.strip()[-60:])
     r = run([PYTHON, LANCER, "--version"])
-    verifier("6. tester-lancer-non-regression --version v0.5.3",
-             r.returncode == 0 and "v0.5.3" in r.stdout, r.stdout.strip()[-60:])
+    verifier("6. tester-lancer-non-regression --version v0.5.5",
+             r.returncode == 0 and "v0.5.5" in r.stdout, r.stdout.strip()[-60:])
 
     # 7. enregistrer-usage-outil v0.3.0 (mode script-temporaire + garde-fous + tri)
     r = run([PYTHON, ENREGISTRER, "--version"])
@@ -264,12 +264,15 @@ def main():
     with io.open(CATALOGUE, encoding="utf-8") as fh:
         cat = json_mod.load(fh)
     noms = [e.get("nom") for e in cat.get("commandes", [])]
-    ok_cat = (len(noms) == 165 and "tester-lancer-non-regression" in noms
+    ok_cat = (len(noms) == 170 and "tester-lancer-non-regression" in noms
               and "editer-parcours" in noms and "detecter-usage-scripts-temporaires" in noms
               and "detecter-cablages-manquants" in noms and "tester-protections" in noms
               and "detecter-fautes-orthographe" in noms and "detecter-contradictions" in noms
-              and "purifier-rvav" in noms and "analyser-io-tests" in noms)
-    verifier("8. catalogue : 165 commandes + nouvelles presentes",
+              and "purifier-rvav" in noms and "analyser-io-tests" in noms
+              and "analyser-noms-maj" in noms and "corriger-noms-maj" in noms
+              and "detecter-processus-residuels" in noms
+              and "nettoyer-processus-residuels" in noms)
+    verifier("8. catalogue : 170 commandes + nouvelles presentes",
              ok_cat, "nb=%d" % len(noms))
 
     # 9. index-tools : les 4 lignes presentes

@@ -257,7 +257,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/promethee/corrections.md --all"
     }
    ],
    "suivant": "c9b"
@@ -602,7 +603,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/promethee/corrections.md --all"
     }
    ]
   },

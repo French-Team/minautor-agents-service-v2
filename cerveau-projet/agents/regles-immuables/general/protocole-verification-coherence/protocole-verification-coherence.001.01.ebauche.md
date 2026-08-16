@@ -11,6 +11,15 @@ identite:
 **Statut** : Ebauche
 **Date creation** : 2026-08-10
 **Agent** : Themis (evaluatrice croisee) -- generalisation des lecons du re-audit README
+
+> **REGLE IMMUABLE (synchronisation 2026-08-16)** : **CLIO est le SEUL agent
+> habilite a METTRE A JOUR le README** (regle immuable regles-groupes-agents.md,
+> section SEUL CLIO MET A JOUR LE README). Ce protocole documente la
+> VERIFICATION de coherence du README (apres une mise a jour) - il ne donne
+> PAS le droit de mise a jour : seul Clio edite le README, Themis le
+> verifie, Janus le controle croise.
+>
+> **Garde-fou** : [test-020-combos-clio](../../../tools/tester/tests/test-020-combos-clio/test-020-combos-clio.py) (carte Clio) + verrou `proteger-verrou-habilitation`.
 **Historique** : v0.2.0 (ajout E8 : verification automatique de coherence des SEUILS BUDGET PONDERE entre specs et outils -- grep croise des 5 valeurs 100/0,5/1/3,0/160 sur 6 fichiers, lecon des audits de coherence budget pondere du 2026-08-11) -> v0.1.0 (creation, 2026-08-10)
 
 ---

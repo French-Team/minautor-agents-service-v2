@@ -3107,3 +3107,512 @@ future pour que le bumper affiche une transition.
 version FUTURE superieure a la version courante - jamais la version
 courante (le bumper n affiche pas de transition si la cible est deja
 atteinte). C est un pierege recurrent apres chaque bump d outil.
+## [LECON] 2026-08-16 -- GARDE-FOU --ALL PAR DEFAUT (Morpheus)
+
+**Contexte** : demande utilisateur - --all est le mode par defaut de
+corriger-accents-zones-sensibles (v0.2.3, Vulcain) : une commande sans
+option purge desormais TOUS les accents (y compris le corps du texte),
+--zones-seules = ancien comportement ponctuel, --all = compat.
+
+**Garde-fou cree** : test-076 (9 points, serie A + profil outils) :
+version 0.2.3-py, option --zones-seules dans --aide, PREUVE RELLE (fichier
+temp 6 accents -> sans option 0 restant, --zones-seules 6 conserves,
+--all 0 restant), dry-run = fichier inchange, purge, normes 0/0.
+
+**Lecons** :
+1. Le defaut d un outil doit refleter la regle immuable documentee - le
+   garde-fou verrouille le COMPORTEMENT (purge sans option), pas seulement
+   la version.
+2. Ajoute test-076 a la serie A + profil outils pour que la couverture
+   (test-027) reste verte.
+## [LECON] 2026-08-16 -- TEST-005 COMMANDES EN DUR (Morpheus)
+
+**Contexte** : la barriere C a bloque sur test-005 point 18 : la liste
+des commandes en dur connues de la carte ATLAS attendait 4 cases mais la
+mission Buffy (commandes corriger-symboles --all) en a ajoute 3 (c10,
+c18, c19) -> total 7.
+
+**Correction** : verifie la liste EXACTE (7 cases : c0b x2, c10, c11a,
+c18, c19, c30), adapte le point 18 (n_commande == 7 + liste triee),
+la docstring (ligne 49) et l historique (v0.4.4 -> v0.4.5).
+
+**Lecon** : un test qui verrouille une liste de 'commandes en dur
+connues' est un GARDE-FOU de non-regression : quand une mission legitime
+ajoute des commandes (ex: corriger-symboles --all), la liste doit etre
+mise a jour avec la liste EXACTE - jamais un compteur flou.
+
+## [LECON] 2026-08-16 -- GARDE-FOU TEST-077 DETECTER-TRONCATURES (Morpheus)
+
+**Contexte** : creation de l outil detecter-troncatures v0.1.0 par Vulcain
+(demande utilisateur : detecter les elements tronques donc illisibles).
+Morpheus cree le garde-fou test-077 + adapte test-007.
+
+**Garde-fou cree** : test-077-detecter-troncatures (12 OK / 0 KO) :
+- --version 0.1.0, --aide liste --tous et --seuil-lignes
+- fichier sain = PROPRE, fichier long = FICHIER_TROUQUE, JSON invalide =
+  BLOC_NON_FERME, marqueur [tronque] = MARQUEUR_TRONCATURE
+- PREUVE NEGATIVE : sans marqueur = PROPRE, apres injection (coupe ici)
+  = detecte
+- --rapport ecrit le markdown, parite .sh --version identique
+- purge du dossier temp, normes ASCII + LF sur test et outil py/sh/md
+- Protections importees (PROTECTIONS = charger_protections + lancer_protege)
+- Ajoute a la serie A du lanceur + profil outils
+
+**test-007 adapte** : catalogue 165->166 (entree detecter-troncatures),
+index-tools Total 182->183.
+
+**Lecons apprises** :
+1. Un garde-fou d outil doit prevoir la semantique de code retour de
+   l outil : detecter-troncatures renvoie rc=1 quand des problemes SONT
+   detectes (comportement prevu), pas seulement rc=0. Le test doit
+   accepter rc in (0, 1) pour les points de detection.
+2. Utiliser un marqueur REEL de l outil dans la preuve negative
+   ('coupe ici') : '[suite manquante]' n etait pas dans la regex des
+   marqueurs (erreur de test, corrigee).
+3. Toujours verifier test-029 (conformite template) et test-030
+   (protections importees) apres creation d un test : le template v0.3.0
+   exige le triplet (point_actif/chrono_etape/bilan_chrono) ET l import
+   des protections (lancer_protege), jamais subprocess.run brut.
+4. test-007 (figer-lf) pince les compteurs catalogue/index-tools : toute
+   creation d outil l impactera (165->166, 182->183 a ce jour).
+
+## [LECON] 2026-08-16 -- CORRECTION KO NON-REGRESSION (Morpheus, 2e passage)
+
+**Contexte** : la non-regression (76 tests) a bloque sur test-024 (catalogue
+165->166 apres l ajout de detecter-troncatures par Vulcain) et test-035
+(2 declarations fautives au registre faites par Morpheus au round precedent).
+
+**Corrections** :
+1. test-024 adapte : compteur catalogue 165 -> 166 (+ messages).
+2. Registre nettoye : 2 declarations fautives morpheus retirees
+   (tester-lancer-non-regression EXCLUSIF a janus = DECLARATION_FAUTIVE ;
+   detecter-troncatures absent de la carte morpheus = OUTIL_HORS_CARTE).
+
+**Lecons apprises** :
+1. NE PAS declarer au registre des outils EXCLUSIFS (tester-lancer-non-
+   regression appartient a janus) ni des outils absents de sa carte : le
+   test-035 evaluer-processus les detecte et la barriere bloque.
+2. Les outils crees par Vulcain doivent etre AJOUTES A SA CARTE (case c10
+   pour les detecter-* : detecter-cablages-manquants, detecter-donnees-en-
+   dur, detecter-residus y sont) sinon la declaration registre de creation
+   devient OUTIL_HORS_CARTE. detecter-troncatures manque -> Buffy doit
+   l ajouter.
+3. Apres TOUTE creation d outil, verifier les compteurs figes : catalogue
+   (test-007 ET test-024), index-tools (test-007). Deux tests pincent les
+   memes compteurs - toujours les chercher par grep avant de valider.
+
+## [LECON] 2026-08-16 -- ADAPTATION TEST-060 COMPTEURS (Morpheus, 3e passage)
+
+**Contexte** : la creation de detecter-troncatures par Vulcain a fait passer
+le catalogue a 166 commandes et l index-tools a Total 183. Plusieurs tests
+figent ces compteurs : test-007 (adapte), test-024 (adapte), test-060
+(adapte ici : point 6 Total 182->183, point 7 catalogue 165->166).
+
+**Lecon** : avant de lancer la non-regression apres creation d outil,
+chercher TOUS les tests qui pincent les compteurs (grep '165|182|Total'
+dans tests/) : test-007, test-024 ET test-060 les figeaient. Chercher par
+grep evite les allers-retours barriere par barriere.
+
+## [LECON] 2026-08-16 -- ADAPTATION TEST-077 v0.2.0 (Morpheus)
+
+**Contexte** : round amelioration detecter-troncatures v0.2.0 par Vulcain
+(binaires ignores, --exclure, marqueurs des zones de documentation ignores,
+analyse parallele). test-077 adapte : version 0.1.0 -> 0.2.0 + nouvelles
+preuves (binaire octets NUL PROPRE, marqueur en docstring NON detecte,
+--exclure exclut reellement, preuve negative conservee). 15/15 OK.
+
+**Lecons apprises** :
+1. Pour prouver --exclure, utiliser un DOSSIER DEDIE : le dossier temp
+   commun contient deja des fichiers marques des points precedents - le
+   scan trouve leurs marqueurs et l assertion PROPRE echoue.
+2. Une ligne de preuve ne doit contenir QU UN marqueur : '[tronque] coupe
+   ici' = 2 motifs differents -> l outil v0.2.0 le classe comme enumeration
+   documentee (zone doc) et ne le detecte pas. Un seul marqueur par ligne.
+3. A chaque round d outil, adapter le garde-fou en ajoutant les preuves
+   des NOUVELLES options (binaire, exclure, docstring) - le garde-fou doit
+   couvrir le contrat complet de la version, pas seulement l ancien.
+
+
+## [LECON] 2026-08-16 -- GARDE-FOU TEST-078 : CHECKLIST AMELIORATION AVANT ACTIVATION (Morpheus)
+
+**Contexte** (demande utilisateur, suite controle Cerberus) : le round
+d amelioration de detecter-troncatures avait active Vulcain a 15:03 SANS
+passer par generateurs-amelioration (la checklist Pattern 17 des cases
+c19c/c1b de la carte cerberus). La declaration au registre n a ete faite
+qu a 15:22, a posteriori. Demande : un garde-fou qui verifie que TOUTE
+activation d amelioration est precedee d un passage generateurs-
+amelioration declare au registre.
+
+**Garde-fou cree** : test-078-amelioration-checklist-obligatoire (7 points,
+serie A + profils registre/fiches-agents). Croise AGENTS-historique.md x
+registre-usages-outils : chaque ligne d activation dont la raison contient
+un motif d amelioration (ROUND D AMELIORATION, AMELIORER...) doit avoir une
+declaration generateurs-amelioration au registre avec un timestamp <= celui
+de l activation. Le passe (avant 2026-08-17) est documente comme ECRAT
+HISTORIQUE (pas KO bloquant) ; seule la derive future est KO. Preuve
+negative : une activation fictive SANS declaration est detectee.
+
+**Lecons techniques de la creation** :
+1. Comparaison MINUTE-LEVEL, pas jour : une declaration a posteriori le
+   meme jour (15:22 pour une activation 15:03) masquerait l ecart si on ne
+   compare que le jour. decl_avant compare les timestamps complets [:16].
+2. DATE_REFERENCE = lendemain de la creation : les activations du jour de
+   creation (dont le round fautif) sont des ecarts historiques documentes,
+   pas des KO bloquants - sinon le garde-fou serait KO des sa creation.
+3. Preuve negative : la date fictive doit etre la VEILLE de la premiere
+   declaration (aucune declaration avant) - une activation fictive le meme
+   jour a 23:59 serait encore masquee par la declaration de 15:22.
+4. Une fonction qui recoit du TEXTE ne doit JAMAIS recevoir un chemin :
+   les appels passaient HISTORIQUE (chemin) a activations_amelioration
+   (qui attend le texte) -> retournait [] silencieusement (le bug
+   os.path.exists sur une chaine de 176k caracteres avait deja ete corrige,
+   mais les APPELS passaient encore le chemin).
+5. NB_POINTS doit egaler le nombre reel de verifier() (7, pas 9).
+
+
+## [LECON] 2026-08-16 -- GARDE-FOU TEST-079 : OUTILS NOMS-MAJ (Morpheus)
+
+**Contexte** (demande utilisateur) : les conventions de nommage verifiaient
+le nommage des FICHIERS mais jamais la casse/forme des NOMS references dans
+le contenu. Vulcain a cree analyser-noms-maj + corriger-noms-maj et corrige
+les 17 entrees chemin du registre (champ outil normalise en kebab-case).
+
+**Garde-fou cree** : test-079-noms-maj (15 points, serie A + profil outils) :
+versions 0.1.0 py+sh parite, registre reel PROPRE (les 17 corriges), preuve
+negative (registre temp avec entree chemin injectee -> dry-run la detecte,
+dry-run non destructif, application reelle normalise, entrees saines
+conservees), catalogue 168 trie, index-tools 185 (Analyser 6, Corriger 7),
+normes ASCII/LF, 0 residu, registre JSONL valide.
+
+**Lecons** :
+1. Le tri du catalogue est EXIGE par test-007 : toute entree ajoutee doit
+   etre inseree a la bonne position (ou le catalogue re-trie ensuite) -
+   j ai du re-trier apres l ajout des 2 commandes par Vulcain.
+2. test-007 pince AUSSI les compteurs de l index (total, categories) : une
+   adaptation de test-007 accompagne TOUT ajout d outil au catalogue.
+3. Les outils qui normalisent doivent TOUJOURS proposer --dry-run : la
+   preuve non-destructrice est un invariant de securite (avant == apres).
+
+
+## [LECON] 2026-08-16 -- ADAPTATION TEST-024 : CATALOGUE 168 (Morpheus)
+
+**Contexte** : la non-regression (barriere E) etait bloquee par test-024
+(pince le catalogue a 166, les 2 nouveaux outils analyser-noms-maj +
+corriger-noms-maj l ont porte a 168).
+
+**Correction** : test-024 passe a 168 et verifie la presence des 2 nouveaux
+outils. Au passage : le KO 2b (dossier tmp-* residuel) etait le dossier
+tmp-janus/ laisse par Janus (note de suivi) - purge avant relance.
+
+**Lecon** : test-007 et test-024 pincent TOUS LES DEUX le catalogue - toute
+adaptation de compteur apres ajout d outil doit verifier les deux.
+
+
+## [LECON] 2026-08-16 -- GARDE-FOU TEST-080 : ENVIRONNEMENT DE TRAVAIL (Morpheus)
+
+**Contexte** (demande utilisateur) : chaque fiche agent doit contenir les
+infos de l environnement reel pour ne jamais oublier les differences
+Windows vs Linux. Vulcain a ajoute verifier-systeme --bloc-fiche (v0.2.2),
+Buffy a ajoute la section au template et aux 15 fiches.
+
+**Garde-fou cree** : test-080-environnement-fiches (11 points, serie A +
+profil cartes) : version 0.2.2 py+sh, --bloc-fiche genere le bloc attendu
+(Environnement + Windows + Racine projet + Differences), template et 15
+fiches contiennent la section AVANT ## Limites, verifier-conformite-fiche
+--tous 11 CONFORME (via subprocess), normes ASCII/LF (test + verifier-
+systeme py/sh/md + 15 fiches), 0 residu.
+
+**Lecons** :
+1. NB_POINTS doit egaler le nombre reel de verifier() (11, pas 13).
+2. Un garde-fou de CONFORMITE de fiches peut verifier les 15 fiches par
+   simple lecture de fichiers (pas de subprocess par fiche) : lecture +
+   positions + normes, c est rapide (0.1s) et robuste.
+
+## [LECON] 2026-08-16 -- TEST-079 ADAPTE AU BUMP CORRIGER-NOMS-MAJ 0.1.1 (Morpheus)
+
+**Contexte** : Janus a trouve un KO CRITIQUE (corriger-noms-maj v0.1.0 avait
+corrompu le registre-usages-outils : ~115 entrees perdues, test-078 crash).
+Vulcain a repare l outil (v0.1.1, reecriture ligne par ligne + garde de
+compte avant/apres) et restaure le registre (225 entrees). Il restait 2 KO
+sur test-079 : les points 2 et 4 pincent la version 0.1.0 de
+corriger-noms-maj (py + sh parite) alors que l outil est desormais 0.1.1.
+
+**Correction** : test-079 adapte - docstring (lignes 10, 20) et verifier
+(points 2 et 4) : 0.1.0 -> 0.1.1 pour corriger-noms-maj UNIQUEMENT
+(analyser-noms-maj reste en 0.1.0). test-079 vert 15/15, test-078 7/7,
+test-035 10/10, normes ASCII/LF 0/0.
+
+**Lecon** : quand un outil corrige un bug critique et bump, le test qui
+pince sa version doit etre adapte dans la MEME chaine (Vulcain -> Morpheus
+-> Janus) : le KO de version n est pas une regression, c est la
+synchronisation attendue du bump. Toujours distinguer corriger vs analyser
+quand 2 outils jumeaux ont des versions differentes.
+
+## [LECON] 2026-08-16 -- ADAPTATION 8 TESTS AU BUMP LANCEUR 0.5.3 -> 0.5.4 (Morpheus)
+
+**Contexte** : Vulcain a corrige la rotation destructive du registre dans
+tester-lancer-non-regression (v0.5.4 : seule le bruit verrou-auto est plafonne,
+les verites direct/generateur/script-temporaire ne sont jamais retirees) - le KO
+test-078 recidivait car la rotation supprimait generateurs-amelioration. 8 tests
+pincent la version 0.5.3 via --version.
+
+**Adaptations** :
+1. test-024 (2 occ), test-027 (2), test-031 (3), test-032 (3), test-051 (4),
+   test-062 (7), test-074 (7) : remplacement simple 0.5.3 -> 0.5.4.
+2. test-066 : PIEGE - il teste le bump dry-run du lanceur vers une version
+   FUTURE (--nouvelle 0.5.4 avec lanceur a 0.5.3). Apres le bump reel a 0.5.4,
+   la cible future doit devenir 0.5.5 (sinon le bumper ne voit pas de
+   transition). Toujours verifier le SENS de la version dans chaque test.
+
+**Verification** : 062 11/11, 066 11/11, 074 8/8 verts ; 024/027/031/032/051 :
+seul l artefact verrou habituel (session morpheus != janus pour les appels au
+lanceur) - plus aucune occurrence 0.5.3. Normes 0/0, purge 0 residu.
+
+**Lecon** : un bump de version d un outil pilier (le lanceur) impregne 8 tests -
+l adaptation doit verifier le CONTEXTE de chaque occurrence (une version peut
+etre une CIBLE future, pas l etat courant). Le piege test-066 : remplacer
+aveuglement 0.5.3 -> 0.5.4 aurait casse la logique du test.
+
+## [LECON] 2026-08-16 -- TEST-075 OUBLIE AU BUMP LANCEUR 0.5.4 (Morpheus, complement)
+
+**Contexte** : la non-regression complete a revele un KO test-075-filtre-serie-relancer-ko
+qui pincait encore la version 0.5.3 (7 occurrences) - il n etait pas dans la liste
+des 8 tests adaptes au premier passage. Correctif : 0.5.3 -> 0.5.4, test vert 11/11.
+
+**Lecon** : la liste des tests a adapter a un bump doit etre VERIFIEE PAR UN SCAN
+GLOBAL (grep de l ancienne version sur TOUS les tests), pas par une liste memoire
+- le premier passage de 8 tests avait oublie test-075. Un bump d un outil pilier
+peut impregner un nombre inconnu de tests ; le scan exhaustif est la seule garantie.
+
+## [LECON] 2026-08-16 -- BUMP LANCEUR 0.5.5 + GARDE-FOU TEST-081 SERIE KO (Morpheus)
+
+**Contexte** : Vulcain a ajoute la serie KO prioritaire au lanceur (v0.5.5) :
+ko-tests.json persistant, --ko <nouveau|reprendre>, --etat-ko. 9 tests pincent
+la version 0.5.4 (test-024, 027, 031, 032, 051, 062, 066, 074, 075).
+
+**Adaptations** : 0.5.4 -> 0.5.5 sur les 9 tests ; test-066 : la cible future
+du bumper passe de 0.5.5 a 0.5.6 (le lanceur est maintenant 0.5.5).
+
+**Garde-fou test-081 (10 points, serie A + profil tests)** :
+1-6. Options --ko/--etat-ko dans --aide, version 0.5.5, fonctions pures
+     lire/ecrire_ko_tests (filtre test-0XX, dedoublonnage, tri, creation).
+7. PREUVE NEGATIVE : un fantome (test-999) + un test reel (test-007) dans
+   ko-tests.json, --ko reprendre -> le fantome est PURGE.
+8. Le fichier KO est consomme par --ko reprendre (test reel + fantome sortis).
+9. Normes ASCII + LF. 10. Dossier temp supprime.
+
+**Lecon** : (1) un test garde-fou qui appelle le lanceur avec --agent janus est
+BLOQUE par le verrou d identite quand la session n est pas janus - la preuve doit
+verifier la STRUCTURE (le fichier est consomme) sans dependre du rc du lanceur ;
+(2) le scan exhaustif des versions (deja appris au round precedent) a fonctionne :
+les 9 tests ont ete trouves du premier coup.
+
+## [LECON] 2026-08-16 -- GARDE-FOU ANTI /tmp SYSTEME : test-082 (Morpheus)
+
+**Contexte** : constat utilisateur - les agents redirigeaient leurs .log
+vers le /tmp du systeme au lieu du dossier tmp-AGENT/ du workspace.
+Buffy a renforce le protocole creation-scripts-temporaires (v0.2.11 :
+toute capture de sortie va dans tmp-AGENT/, jamais hors workspace).
+
+**Violation reelle trouvee et corrigee** : tester-protection-erreurs-
+silencieuses ecrivait ses logs dans /tmp/test-logs (parite .py et .sh).
+Corrige : les logs vont maintenant dans <racine>/cerveau-projet/agents/
+traces/protection-logs/ (surclassable par PROTECTION_LOG_DIR). Versions
+bumpees : .py 0.2.0-py -> 0.2.1-py, .sh 0.1.0 -> 0.1.1.
+
+**Garde-fou cree** : test-082-pas-de-tmp-systeme-garde-fou (9/9) -
+scan du code de PRODUCTION (outils .py/.sh + combos .json, hors
+dossiers tests/ legacy) pour les 3 motifs d ecriture vers /tmp
+systeme : '> /tmp', '"/tmp', ':-/tmp'. Preuves negatives A/B/C : .py
+truque detecte, .sh truque detecte, .sh dans tests/ IGNORE. Ajoute a
+la serie A + profil outils.
+
+**Dette legacy** : 13 vieux .sh de tests d outils (activer-agent-
+principal, detecter-impacts...) utilisent encore /tmp - EXCLUS du
+scan (dossier tests/), a migrer ou retirer ulterieurement.
+
+## [LECON] 2026-08-16 -- TEST-057 : CLASSEUR TEMP OBLIGATOIRE (Morpheus)
+
+**Contexte** : bug decouvert en non-regression - test-057 point 10
+(anti-recurrence marqueurs) faisait un reactiver session-llm-1 avec
+AGENTS_FILE et AGENTS_HISTORIQUE vers des fichiers temp, MAIS
+CLASSEUR_STOCKAGE pointait vers le VRAI variables-actuelles.md. La
+reactivation reecrivait le profil avec agent: Cerberus PENDANT la
+suite, ce qui cassait test-024 point 2b (dossier tmp-janus non
+reconnu car le profil disait Cerberus au lieu de janus).
+
+**Correction** : le point 10 copie maintenant le vrai
+variables-actuelles.md vers un fichier temp (comme AGENTS_FILE) et
+pointe CLASSEUR_STOCKAGE vers ce temp, supprime dans le finally.
+Le test ne modifie PLUS le profil classeur (md5 avant/apres
+identiques, prouve). test-057 vert 24/24.
+
+**Lecon** : tout test qui simule une activation/reactivation doit
+passer les TROIS fichiers (AGENTS_FILE, AGENTS_HISTORIQUE,
+CLASSEUR_STOCKAGE) vers des fichiers temp - jamais le vrai profil.
+
+## [LECON] 2026-08-16 -- TEST-013 ADAPTE CARTE CERBERUS v0.5.0 (Morpheus)
+
+**Contexte** : verdict Themis - la case c10 de la carte de Cerberus
+contenait combos-analyse-projet (outil d analyse, proprietaire Clio),
+le trou de la derive (Cerberus auditait au lieu d activer Themis).
+Buffy a corrige la carte (porte du marbre, autorisation utilisateur) :
+combos-analyse-projet retire de c10, lire-fichier dedoublonne en c0b,
+version 0.4.9 -> 0.5.0.
+
+**Adaptation** : test-013 point 1 (version du parcours 0.4.9 -> 0.5.0)
+dans le code actif ; l historique du docstring (v0.4.6/v0.4.7/v0.4.8/
+v0.4.9) est conserve tel quel. Les 21 autres points etaient deja verts
+(structure inchangee : 23 actions, 5 questions, 5 controles, 3 fins).
+test-016 (carte buffy, toujours 0.4.9) reste vert : rien a faire.
+
+Verification : test-013 22/22 OK, normes 0/0.
+
+## [LECON] 2026-08-16 -- TEST-050 REDIRECTION REGISTRE (Morpheus, generateur v0.2.3)
+
+**Contexte** : KO flaky test-079 point 5 en serie A - test-050 executait le script
+genere qui declaraait tmp-t050-preuve.py dans le REGISTRE REEL pendant que test-079
+analysait le registre en parallele (OUTIL_CHEMIN transitoire). Registre propre apres
+(point 17 nettoyait), d ou le caractere intermittent.
+
+**Correction** : generateur v0.2.3 (Vulcain) a ajoute l env var CERVEAU_REGISTRE_USAGES
+au squelette declarer_usage. test-050 la definit (4c) vers un registre TEMP dans son
+dossier_test avant les executions 5/6/7 : les preuves vont au registre temp, le registre
+reel reste exempt. Point 17 -> verifie le reel EXEMPT, point 18 -> verifie le temp
+contient les preuves (preuve positive de redirection).
+
+**Preuve** : test-050 18/18, test-079 15/15 PROPRE, et les deux lances EN PARALLELE
+passent (rc=0/0) - la course est eliminee. Registre reel 144 lignes, 0 residu.
+
+**Lecon** : quand un test execute un script qui declare au registre, TOUJOURS
+rediriger la declaration vers un registre temp (env var) - la preuve reelle d un
+test ne doit JAMAIS polluer le registre reel pendant le pool. Bump de test : ne
+jamais oublier les references 0.2.2 -> 0.2.3 (points 1/9/12 + docstring).
+
+## [LECON] 2026-08-16 -- TEST-056 v0.2.1 : CLE EXCLUSIVE MORPHEUS (Morpheus)
+
+**Contexte** : Janus corrigeait des fichiers de tests au lieu de les renvoyer
+a Morpheus. Le verrou proteger-verrou-habilitation v0.2.1 (Vulcain) ajoute
+--cible : toute modification d un fichier tester/tests/ est EXCLUSIVE a
+morpheus, meme si l outil est dans la carte d un autre agent.
+
+**Adaptation test-056** : version 0.2.0 -> 0.2.1 (point 1 + docstring) + 3
+nouvelles preuves (points 11/11b/11c) :
+  11. buffy -> editer-fichier sur tester/tests/ = BLOQUE (rc=1, EXCLUSIVE a
+      morpheus + commande d activation)
+  11b. morpheus meme cible = OUVERT (rc=0, cle exclusive)
+  11c. buffy -> editer-fichier sur fichier normal = OUVERT (carte)
+
+**Preuve** : test-056 15/15 vert, normes 0/0.
+
+**Lecon** : un garde-fou de verrou doit toujours avoir une preuve NEGATIVE de
+la zone protegee (autre agent bloque) ET une preuve POSITIVE (le gardien
+ouvre) ET une preuve de non-debordement (hors zone, la carte s applique).
+
+## [CONSTAT] 2026-08-16 -- TEST-083 : ECARTS DE SYNCHRONISATION DETECTES (Morpheus)
+
+Le garde-fou test-083 (regles exclusives source/protocole) a detecte 3 ecarts
+REELS de synchronisation dans regles-groupes-agents.md / protocoles :
+
+1. Sections sans garde-fou test-XXX cite : LE MODELE DE CONFIANCE et
+   RELEVE MEME ROUND (les autres 6 sections citent leur garde-fou)
+2. protocole-tests ne cite JAMAIS JANUS (0 occurrence) alors que la section
+   SEUL JANUS LANCE LA NON-REGRESSION le reference comme protocole de
+   lancement - la regle exclusive n est pas dupliquee dans son protocole
+3. protocole-verification-coherence ne cite JAMAIS CLIO (0 occurrence,
+   l Agent du protocole est Themis) alors que la section SEUL CLIO MET A
+   JOUR LE README le reference
+
+A CORRIGER (domaine Buffy, protocoles) avant de reverdir test-083 :
+- protocole-tests : ajouter la mention que JANUS est le seul habilite a
+  lancer la non-regression complete
+- protocole-verification-coherence : ajouter CLIO (proprietaire du README,
+  sections SEUL CLIO + mise a jour README)
+- regles-groupes-agents.md : ajouter les garde-fous manquants (MODELE DE
+  CONFIANCE + RELEVE MEME ROUND) OU documenter pourquoi ils n en ont pas
+
+## [LECON] 2026-08-16 -- TEST-083 GARDE-FOU SYNCHRONISATION REGLES (Morpheus)
+
+**Demande utilisateur** : verifier la synchronisation des regles en double
+(regles-groupes-agents.md vs protocoles associes).
+
+**Test cree** (9 points) : liste les 8 sections exclusives IMMUABLE de
+regles-groupes-agents.md et verifie pour chacune :
+  1. section presente (8 attendues)
+  2. protocole associe cite + garde-fou test-XXX cite (aucune orpheline)
+  3. concordance : le protocole associe contient les TERMES CLES de la section
+     (agent + action) - la regle est dupliquee de facon coherente
+  4. le protocole cite l agent concerne
+  5. preuve negative : une divergence agent dans un protocole est reperable
+  6. normes ASCII + LF (regles + protocoles + test)
+
+**Ecarts detectes (reels) et corriges par Buffy** : protocole-tests ne citait
+jamais JANUS, protocole-verification-coherence ne citait jamais CLIO, 2
+sections sans garde-fou. Test passe 9/9 apres correction + porte du marbre.
+
+**Lecon** : le test doit utiliser des TERMES CLES ROBUSTES (nom de l agent +
+mot de l action) et non des phrases exactes - sinon faux positifs de
+formulation (ex: 'fichiers des agents' vs 'fichiers du cerveau-projet').
+Toujours inclure une preuve negative (divergence injectee) pour prouver que
+le garde-fou detecte reellement une desynchronisation.
+
+## [LECON] 2026-08-16 -- TEST-084 RELECTURE AVANT GRAVURE (Morpheus)
+
+**Demande utilisateur** : graver la relecture obligatoire avant toute nouvelle
+regle immuable - audit Argus (doublons + concordance source/protocole) AVANT
+la porte du marbre.
+
+**Chaine** : Vulcain mecanise la porte v0.1.3 (est_zone_regles -> audit
+detecter-contradictions --regles PROPRE obligatoire avant gravure, BLOQUE
+meme avec autorisation) ; Buffy documente protocole-securite-marbre v0.1.1 ;
+Morpheus adapte test-057 (0.1.2 -> 0.1.3) + cree test-084.
+
+**Test-084** (8 points) : fonctions de relecture presentes, version 0.1.3,
+audit lance sur zone regle (PROPRE = OK), PREUVE NEGATIVE (doublon exact de
+titre IMMUABLE injecte -> porte BLOQUE rc=1 'relecture Argus', fichier
+restaure), protocole v0.1.1 documente, normes.
+
+**Lecon** : une preuve negative sur une zone GRAVEE doit TOUJOURS sauvegarder
+le fichier, injecter, verifier le blocage, PUIS restaurer ET resynchroniser
+le marbre (sinon test-057 casse) - la restauration se fait dans un finally.
+Et le doublon injecte doit etre un DOUBLON EXACT de titre (TITRE_DOUBLON),
+pas une section contradictoire au texte different.
+
+## [LECON] 2026-08-16 -- TEST-084 ETENDU : AUDIT OBLIGATOIRE POUR --AJOUTER (Morpheus)
+
+**Demande utilisateur** : verifier que l audit Argus est aussi obligatoire
+pour les NOUVELLES zones ajoutees au marbre (mode --ajouter) avec preuve.
+
+**Verification** : la porte v0.1.3 couvrait deja --ajouter (le bloc relecture
+construit zone_audit via elif args.ajouter and args.fichier) - mais test-084
+ne le prouvait pas. 3 points ajoutes :
+  5b. --ajouter zone REGLE (regles-general-global.md) -> audit Argus lance
+      (RELECTURE + audit Argus PROPRE dans la sortie)
+  5b2. --ajouter zone NON-regle (buffy.md) -> PAS d audit (RELECTURE absente)
+  5c. nettoyage : zones test retirees de marbre.json (0 restante)
+
+**Lecon** : toute preuve qui AJOUTE une zone au marbre doit la RETIRER en
+fin de test (finally) - le marbre est un manifeste sensible, une zone
+residuelle casserait les compteurs. Et tester le mode --ajouter prouve que
+la porte traite une NOUVELLE zone de regles comme une zone existante.
+
+
+## [LECON] 2026-08-16 -- ADAPTATION TEST-005/045 APRES COMBO + BOOLEENS (Morpheus)
+
+**Contexte** : suite mission combo-nettoyage-hygie (Vulcain v0.1.1 + generateurs
+v0.2.6 booleens, Buffy carte hygie c4 + detecter-processus-residuels).
+
+**Adapte** :
+- test-005-generateurs-commande : version generateurs-commande 0.2.5 -> 0.2.6
+  (4 references + le .sh de parite restait a 0.2.5 -> bumpe). 28/28 OK.
+- test-045-hygie-garde-fou : CHARIOT etendu avec detecter-processus-residuels
+  + nettoyer-processus-residuels. 15/15 OK.
+
+**Preuves** : bumper --tous 0 incoherent, normes 0/0, test-004 16/16,
+test-042 4/4, test-043 10/10, test-085 8/8.
+
+**Lecon** : quand le generateur bump, il faut bump AUSSI le .sh de parite
+(generateurs-commande.py ET .sh) - sinon test-005 (qui verifie les 2 versions)
+KO. Le bumper dry-run signale les incoherences.
+
+**APRES** : activer JANUS (non-regression complete 84 tests).

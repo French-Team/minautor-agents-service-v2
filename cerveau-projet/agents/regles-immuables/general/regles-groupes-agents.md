@@ -205,6 +205,8 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 > La mecanique du second controle (Janus verifie le travail des agents,
 > controle des statuts et verdict) est documentee dans
 > [protocole-controle-statuts/](protocole-controle-statuts/).
+>
+> **Garde-fou** : [test-056-verrou-habilitation](../../tools/tester/tests/test-056-verrou-habilitation/test-056-verrou-habilitation.py) (le verrou exige l agent reel de la session - un agent qui se corrige/verifie lui-meme est bloque) + [test-057-marbre-garde-fou](../../tools/tester/tests/test-057-marbre-garde-fou/test-057-marbre-garde-fou.py) (la constitution et les zones gravees sont protegees).
 
 ---
 
@@ -231,6 +233,8 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 >
 > Le cycle complet de releve et ses regles sont documentes dans
 > [protocole-activation/](protocole-activation/).
+>
+> **Garde-fou** : [test-056-verrou-habilitation](../../tools/tester/tests/test-056-verrou-habilitation/test-056-verrou-habilitation.py) (l activation exige la chaine Cerberus -> agent : un agent qui se reactive seul est bloque par le verrou d identite) + protocole-activation (cycle complet de releve, section RELEVE MEME ROUND).
 
 
 ---

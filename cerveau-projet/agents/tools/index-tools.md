@@ -42,6 +42,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `analyser-structure` | Analyser la structure du projet | [analyser/analyser-structure/](analyser/analyser-structure/) |
 | `analyser-performance-tests` | Analyser la performance des tests (dernier run) | [analyser/analyser-performance-tests/](analyser/analyser-performance-tests/) |
 | `analyser-tokens` | Mesurer les tokens de la session (envoyes/recus/encombrement) | [analyser/analyser-tokens/](analyser/analyser-tokens/) |
+| `analyser-noms-maj` | Analyser la casse et la forme des noms references (orphelins, erreurs min/MAJ) dans registre, historique, catalogue, index | [analyser/analyser-noms-maj/](analyser/analyser-noms-maj/) |
 
 ### Cartographier
 
@@ -104,6 +105,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `corriger-liens` | Corriger les liens casses | [corriger/corriger-liens/](corriger/corriger-liens/) |
 | `corriger-fins-de-ligne` | Convertir les fins de ligne CRLF vers LF (strategie FIGER LF) | [corriger/corriger-fins-de-ligne/](corriger/corriger-fins-de-ligne/) |
 | `corriger-nommage` | Corriger le nommage | [corriger/corriger-nommage/](corriger/corriger-nommage/) |
+| `corriger-noms-maj` | Corriger la casse et la forme des noms references (normalise le champ outil du registre) | [corriger/corriger-noms-maj/](corriger/corriger-noms-maj/) |
 
 ### Creer
 
@@ -145,6 +147,8 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-cablages-manquants` | Detecter les cablages manquants des cartes de decision : cases orphelines, boucles indirectes, references mortes, fins non joignables (complete valider-case) | [detecter/detecter-cablages-manquants/](detecter/detecter-cablages-manquants/) |
 | `detecter-residus` | Detecter les residus du workspace, compartimente par zone (cerveau-projet / workspace / tous) : fichiers temp, version egaree, sauvegardes, rapports egare, caches | [detecter/detecter-residus/](detecter/detecter-residus/) |
 | `detecter-contradictions` | Croiser les sources (cases, regles, protocoles, git log --all) pour detecter les contradictions - outil d Argus, rapport classe par gravite | [detecter/detecter-contradictions/](detecter/detecter-contradictions/) |
+| `detecter-troncatures` | Detecter les elements tronques donc illisibles : fichiers trop longs a lire (binaires ignores), blocs non fermes (JSON/Python/bash invalides), marqueurs de troncature (zones de documentation ignorees), option --exclure | [detecter/detecter-troncatures/](detecter/detecter-troncatures/) |
+| `detecter-processus-residuels` | Detecter les processus residuels (python/node/bash) dont la commande reference le projet ou orphelins (parent mort), liste blanche protegee (freebuff, unsloth) | [detecter/detecter-processus-residuels/](detecter/detecter-processus-residuels/) |
 
 ### Ecrire
 
@@ -261,6 +265,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `nettoyer-fichier` | Purifier un fichier en supprimant le contenu non essentiel | [nettoyer/nettoyer-fichier/](nettoyer/nettoyer-fichier/) |
 | `nettoyer-sessions` | Supprimer TOUTES les sessions LLM (AGENTS.md blocs + Sessions connues, classeur profil-session-*), le journal historique est conserve | [nettoyer/nettoyer-sessions/](nettoyer/nettoyer-sessions/) |
 | `snapshot-nettoyage` | Snapshot de l etat du workspace avant nettoyage (agent Hygie) : creer / consulter / rotation 7 jours / liste - preuve de tracabilite | [nettoyer/snapshot-nettoyage/](nettoyer/snapshot-nettoyage/) |
+| `nettoyer-processus-residuels` | Terminer les processus residuels detectes (exclusif Hygie via verrou-habilitation, dry-run par defaut, liste blanche protegee) | [nettoyer/nettoyer-processus-residuels/](nettoyer/nettoyer-processus-residuels/) |
 
 ### Proteger
 
@@ -477,17 +482,17 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Categorie | Nombre d'outils |
 |---|---|
 | Ajouter | 1 |
-| Analyser | 5 |
+| Analyser | 6 |
 | Cartographier | 1 |
 | Changer | 1 |
 | Combos | 21 |
 | Condenser | 1 |
 | Copier | 2 |
-| Corriger | 6 |
+| Corriger | 7 |
 | Creer | 4 |
 | Decomposer | 1 |
 | Deplacer | 1 |
-| Detecter | 13 |
+| Detecter | 15 |
 | Ecrire | 1 |
 | Editer | 3 |
 | Enregistrer | 1 |
@@ -501,7 +506,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Migrer | 1 |
 | Mettre a jour | 2 |
 | Activer | 1 |
-| Nettoyer | 3 |
+| Nettoyer | 4 |
 | Purifier | 1 |
 | Proteger | 3 |
 | Rechercher | 10 |
@@ -511,7 +516,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Verifier | 6 |
 | Protections | 5 |
 | Tests | 39 |
-| **Total** | **182** |
+| **Total** | **187** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

@@ -2,6 +2,7 @@
 # non-regression (machine-dependantes)
 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/temps-reference.json
 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/config-tests.json
+cerveau-projet/agents/tools/tester/tester-lancer-non-regression/ko-tests.json
 
 # Dossiers temporaires de mission des agents (tmp-<agent>/, supprimes en fin de mission)
 tmp-*/

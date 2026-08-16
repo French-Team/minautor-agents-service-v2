@@ -30,6 +30,17 @@ des qu une erreur critique survient.
 > importables, jamais chargees par les tests). Le garde-fou test-030 verifie
 > que chaque test-0XX importe les protections.
 
+## REGLE IMMUABLE : SEUL JANUS LANCE LA NON-REGRESSION (synchronisation 2026-08-16)
+
+> **REGLE** : **JANUS est le SEUL agent habilite a lancer la non-regression
+> complete** (`tester-lancer-non-regression`). Morpheus ecrit et execute des
+> tests INDIVIDUELS ; il ne lance JAMAIS la suite complete (verrou
+> d habilitation + regle immuable regles-groupes-agents.md, section SEUL
+> JANUS LANCE LA NON-REGRESSION). Les autres agents signalent un besoin de
+> validation a Janus via la chaine Cerberus -> agent -> Janus.
+>
+> **Garde-fou** : [test-037-seul-janus-lance-non-regression](../../../tools/tester/tests/test-037-seul-janus-lance-non-regression/test-037-seul-janus-lance-non-regression.py) + verrou `proteger-verrou-habilitation` (carte janus).
+
 ## Principe fondamental
 
 > **REGLE ABSOLUE** : Les tests doivent etre ENVELOPPES par des protections qui

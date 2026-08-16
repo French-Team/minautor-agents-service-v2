@@ -7,10 +7,10 @@ identite:
 # Specification -- generateurs-commande
 
 **Statut :** ebauche
-**Version :** 0.2.5
+**Version :** 0.2.6
 **Categorie :** generateurs
 **Date :** 2026-08-07
-**Historique :** v0.2.4 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 0.2.4) -> v0.2.2 (creation/derniere version documentee, 2026-08-07)
+**Historique :** v0.2.6 (booleens des combos : composer_commande accepte True/False, flag du modele gouverne, 2026-08-16) -> v0.2.4 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 0.2.4) -> v0.2.2 (creation/derniere version documentee, 2026-08-07)
 
 ---
 

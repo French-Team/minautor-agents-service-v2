@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # generateurs-commande.py
 # Genere une commande complexe a lancer, en posant une question par parametre.
-# Version : 0.2.5
+# Version : 0.2.6
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -46,7 +46,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.2.5"
+VERSION = "0.2.6"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n est pas un terminal)
@@ -192,7 +192,15 @@ def valider_reponse(parametre, reponse):
 
 
 def composer_valeur(parametre, valeur):
-    """Encapsule la valeur pour la commande (guillemets si besoin)."""
+    """Encapsule la valeur pour la commande (guillemets si besoin).
+    v0.2.x : les BOOLEENS sont acceptes - True (flag present, ex --detail)
+    devient la chaine du flag, False devient vide (flag retire). C etait un
+    bug : composer_commande recevait True/False des entrees des combos
+    (ex combo-nettoyage-hygie c3 detail=true) et re.search plantait sur un
+    bool (TypeError: expected string)."""
+    if isinstance(valeur, bool):
+        flag = parametre.get("flag", "")
+        return flag if valeur else ""
     if valeur == "":
         return ""
     quoter = parametre.get("quoter", False)
@@ -220,6 +228,21 @@ def composer_commande(commandes, reponses):
             if p.get("cle") == cle:
                 parametre = p
                 break
+        if isinstance(valeur, bool):
+            # BOOLEEN (v0.2.x, corrige bug des combos) : le flag du modele
+            # gouverne. Si le modele contient le placeholder {cle}, on le
+            # remplace par le flag (True) ou on le retire (False). Si le
+            # modele contient deja le flag EN DUR (--detail sans placeholder,
+            # convention detecter-*), on ne fait RIEN : le flag du modele
+            # reste tel quel (True) ou on le retire (False).
+            flag_param = parametre.get("flag", "") if parametre else ""
+            if flag_param and valeur:
+                resultat = resultat.replace("{%s}" % cle, flag_param)
+            elif flag_param and not valeur:
+                # Retirer le placeholder seul + le flag en dur du modele.
+                resultat = re.sub(r"%s(?:\s+\{%s\})?" % (re.escape(flag_param), re.escape(cle)), "", resultat)
+                resultat = re.sub(r"\s+\{%s\}" % re.escape(cle), "", resultat)
+            continue
         if valeur == "":
             # Flag a valeur en dur dans le modele (--cle {cle}) : retirer le flag ET le placeholder si la valeur est vide
             # (corrige 2026-08-09 : la condition etait inversee -> les flags optionnels non renseignes
@@ -444,7 +467,7 @@ def main():
     print("")
 
     # Journalisation d usage (registre JSONL) : automatique sauf --no-journal.
-    # FIX v0.2.5 (2026-08-15, lecon Janus, 4 occurrences) : journaliser SON PROPRE NOM
+    # FIX v0.2.6 (2026-08-15, lecon Janus, 4 occurrences) : journaliser SON PROPRE NOM
     # (generateurs-commande) au lieu du nom de COMMANDE du catalogue (ex activer-activer)
     # - une entree 'activer-activer' cree un OUTIL_HORS_CARTE artificiel (test-035 KO) que
     #   Janus devait corriger manuellement a chaque activation. La commande generee complete

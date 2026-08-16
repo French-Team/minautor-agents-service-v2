@@ -28,7 +28,7 @@
 #   --verbose           : detail des outils assignes par carte
 #   --version
 #
-# Version : 0.1.4
+# Version : 0.1.5
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -55,7 +55,7 @@ import sys
 
 FENETRE_JOURS = 1  # fenetre de verification des usages recents (v0.1.3) : le jour courant
 
-VERSION = "0.1.4"
+VERSION = "0.1.5"
 
 # Agents du cerveau-projet (famille cerveau-projet : cercles de controle).
 AGENTS_CERVE = ["cerberus", "buffy", "vulcain", "morpheus", "janus",
@@ -121,7 +121,9 @@ def fins_de_la_carte(parcours):
         titre = c.get("titre", "")
         if "Activer Janus" in titre or "activer session-llm-1 janus" in msg:
             a_janus = True
-        if "Reactiver Cerberus" in titre or "reactiver session-llm-1" in msg:
+        if ("Reactiver Cerberus" in titre or "reactiver session-llm-1" in msg
+                or "Activer l agent precedent" in titre
+                or "Activer l agent precedent avec son rapport" in titre):
             a_reactiver = True
     return a_janus, a_reactiver
 
@@ -163,6 +165,13 @@ def detecter_fins_erronees(racine):
             continue
         a_janus, a_reactiver = fins_de_la_carte(parcours)
         if not a_janus:
+            continue
+        if a_reactiver:
+            # FIX v0.1.5 (2026-08-16) : la carte a une fin de REACTIVATION
+            # legitime (ex: Themis c25b "Activer l agent precedent" pour un
+            # audit sur demande, Atlas) -> les missions qui reactivent
+            # Cerberus sont autorisees par la carte : l heuristique ne
+            # s applique pas (la carte est la reference, pas l heuristique).
             continue
         missions = dernieres_missions_agent(racine, agent)
         if not missions:

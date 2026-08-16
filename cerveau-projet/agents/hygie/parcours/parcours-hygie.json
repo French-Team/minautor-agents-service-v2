@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-hygie",
   "agent": "hygie",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Hygie, agent de nettoyage du workspace : snapshot -> detection par zone -> preuve d honnetete -> suppression tracee -> rapport. Seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable (avec tracabilite). Decisions utilisateur 2026-08-13 : nom Hygie, perimetre tout workspace, snapshots dans le dossier dedie de l agent avec rotation 7 jours."
  },
@@ -128,6 +128,13 @@
      "commande": "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py creer"
     },
     {
+     "type": "outil",
+     "nom": "nettoyer-processus-residuels",
+     "catalogue": "nettoyer-processus-residuels",
+     "chemin": "cerveau-projet/agents/tools/nettoyer/nettoyer-processus-residuels/",
+     "commande": "python3 cerveau-projet/agents/tools/nettoyer/nettoyer-processus-residuels/nettoyer-processus-residuels.py --agent hygie --tous --force"
+    },
+    {
      "type": "fichier",
      "chemin": "cerveau-projet/agents/hygie/snapshots/",
      "raison": "Dossier dedie des snapshots : consulter les snapshots existants (rotation 7 jours)"
@@ -167,6 +174,13 @@
      "catalogue": "detecter-residus",
      "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --tous"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-processus-residuels",
+     "catalogue": "detecter-processus-residuels",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-processus-residuels/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-processus-residuels/detecter-processus-residuels.py --detail"
     },
     {
      "type": "outil",
@@ -270,7 +284,7 @@
   "c10": {
    "titre": "Tous les residus ont-ils disparu ?",
    "type": "controle",
-   "question": "Apres suppression, la re-detection confirme-t-elle la disparition de tous les residus classes ?",
+   "question": "Apres suppression, la re-detection confirme-t-elle la disparition de tous les residus classes (fichiers ET processus) ?",
    "indices": [
     {
      "type": "outil",
@@ -278,6 +292,13 @@
      "catalogue": "detecter-residus",
      "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --tous"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-processus-residuels",
+     "catalogue": "detecter-processus-residuels",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-processus-residuels/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-processus-residuels/detecter-processus-residuels.py --detail"
     }
    ],
    "branches": [
@@ -319,7 +340,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hygie/corrections.md --all"
     },
     {
      "type": "outil",
@@ -351,7 +373,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hygie/corrections.md --all"
     },
     {
      "type": "outil",

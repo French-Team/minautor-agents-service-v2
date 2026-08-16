@@ -234,3 +234,29 @@ VERDICT : VALIDE - readme-dev (Executer + principe ENTONNOIR + 33 categories), f
 **Lecon** : le badge du README public etait DEJA juste (144 == 144) - le retard etait uniquement dans readme-dev (table des categories). Toujours verifier les 2 documents avec combos-analyse-projet avant de conclure.
 
 **VERDICT** : VALIDE (0 ecart).
+
+## [LECON] 2026-08-16 -- BADGE OUTILS 144 -> 145 (Clio)
+
+**Contexte** : creation de l outil detecter-troncatures (Vulcain) -> compte
+reel 145 outils. Le badge Outils du header README (ligne 9) affichait
+encore 144 (affichage + href) -> test-038 KO (barriere D).
+
+**Action** : via editer-fichier puis str_replace pour le href : les 2
+occurrences (affichage + href) passees a 145. Lecon : editer-fichier ne
+remplace que la PREMIERE occurrence - pour un badge avec affichage ET href,
+verifier les 2 occurrences (grep Outils-N avant/apres).
+
+**Verifications** : test-038 7/7, badge 2x145, normes 0/0.
+
+
+## [LECON] 2026-08-16 -- BADGE README OUTILS 145 -> 147 (Clio)
+
+**Contexte** : la non-regression Janus signalait test-038 KO (badge
+README affichage + href a 145, compte reel 147 apres ajout des 2 outils
+analyser-noms-maj + corriger-noms-maj).
+
+**Correction** : editer-fichier --global README.md 'Outils-145' 'Outils-147'
+(les 2 occurrences affichage + href sont sur la meme ligne). test-038 vert.
+
+**Lecon** : l option de remplacement global d editer-fichier est --global
+(pas --tout) - verifier l aide de l outil avant usage.

@@ -11,6 +11,15 @@ plus l IDENTITE REELLE de l appelant (agent actif de la session lu dans
 AGENTS.md) et journalise lui-meme chaque usage :
   - usage AUTORISE  -> registre-usages-outils.jsonl (mode verrou-auto)
   - tentative BLOQUEE -> registre-tentatives-bloquees.jsonl (espionnage)
+
+v0.2.1 (2026-08-16, demande utilisateur "cle exclusive morpheus") : le verrou
+verifie la CIBLE (--cible <chemin>) : toute modification d un fichier de test
+(chemin contenant tester/tests/) est EXCLUSIVE a morpheus (regle immuable
+SEUL MORPHEUS ECRIT LES TESTS), meme si l outil est dans la carte d un autre
+agent. Preuve : buffy -> editer-fichier sur tester/tests/ = BLOQUE, morpheus
+meme cible = OK.
+  - usage AUTORISE  -> registre-usages-outils.jsonl (mode verrou-auto)
+  - tentative BLOQUEE -> registre-tentatives-bloquees.jsonl (espionnage)
 Les preuves de TABLE passent en --audit (table d habilitation pure, sans
 identite reelle) ; une preuve d IDENTITE REELLE adaptative verifie que
 l agent reel de la session ouvre (outil de sa carte) et qu un autre agent
@@ -32,7 +41,7 @@ Contexte :
     d identite) / rc=2 erreur d usage (--agent manquant, agent inconnu).
 
 Invariants verifies :
-  1. L outil existe, se compile, --version affiche v0.2.0
+  1. L outil existe, se compile, --version affiche v0.2.1
   2. Table (--audit) POSITIVE : janus -> tester-lancer-non-regression rc=0
   3. Table (--audit) NEGATIVE : cerberus -> tester-lancer-non-regression
      rc=1 ET message : agent habilite (janus) + commande d activation
@@ -217,14 +226,14 @@ def autres_agents():
 
 def main():
     global NB_POINTS, NB_OK, NB_KO
-    print("=== Test formel verrou-habilitation v0.2.0 ===")
+    print("=== Test formel verrou-habilitation v0.2.1 ===")
     try:
         # 1. L outil existe + compile + version
         if point_actif(1):
             t = time.monotonic()
             r = run([PYTHON, OUTIL_PY, "--version"])
-            verifier("1. --version affiche v0.2.0",
-                     "v0.2.0" in r.stdout, r.stdout.strip())
+            verifier("1. --version affiche v0.2.1",
+                     "v0.2.1" in r.stdout, r.stdout.strip())
             chrono_etape("1. version", t)
 
         # 2. Table (--audit) POSITIVE : janus -> non-regression (seul habilite)
@@ -387,6 +396,39 @@ def main():
             verifier("10b. LF pur : 0 CRLF (outil + doc + test)",
                      total_crlf == 0, "total=%d" % total_crlf)
             chrono_etape("10. normes", t)
+
+        # 11. CLE EXCLUSIVE MORPHEUS (v0.2.1) : toute modification d un
+        # fichier de test (tester/tests/) est EXCLUSIVE a morpheus, meme si
+        # l outil est dans la carte d un autre agent.
+        if point_actif(11):
+            t = time.monotonic()
+            cible_test = os.path.join("cerveau-projet", "agents", "tools",
+                                      "tester", "tests", "test-050-triplet-outils-temporaires",
+                                      "test-050-triplet-outils-temporaires.py")
+            r_buffy = run([PYTHON, OUTIL_PY, "--agent", "buffy",
+                           "--outil", "editer-fichier", "--cible", cible_test,
+                           "--audit"])
+            sortie = r_buffy.stdout + r_buffy.stderr
+            ok = (r_buffy.returncode == 1 and "EXCLUSIVE a morpheus" in sortie
+                  and "morpheus" in sortie)
+            verifier("11. CLE EXCLUSIVE : buffy -> editer-fichier sur test = "
+                     "BLOQUE (rc=1, exclusif morpheus)", ok,
+                     r_buffy.stdout.strip())
+            r_morph = run([PYTHON, OUTIL_PY, "--agent", "morpheus",
+                           "--outil", "editer-fichier", "--cible", cible_test,
+                           "--audit"])
+            ok2 = (r_morph.returncode == 0 and "OK" in r_morph.stdout
+                   and "cle exclusive" in r_morph.stdout)
+            verifier("11b. CLE EXCLUSIVE : morpheus meme cible = OUVERT (rc=0)",
+                     ok2, r_morph.stdout.strip())
+            r_normal = run([PYTHON, OUTIL_PY, "--agent", "buffy",
+                            "--outil", "editer-fichier",
+                            "--cible", "cerveau-projet/agents/README.md",
+                            "--audit"])
+            ok3 = (r_normal.returncode == 0 and "OK" in r_normal.stdout)
+            verifier("11c. cible NON-test : buffy -> editer-fichier = OUVERT "
+                     "(carte, pas de zone protegee)", ok3, r_normal.stdout.strip())
+            chrono_etape("11. cle exclusive", t)
     except PROTECTIONS.ArretProtection as e:
         print("  [KO] ARRET PROTECTION : %s" % e.message)
         NB_KO += 1

@@ -4,7 +4,7 @@
 # Outil pour corriger les accents dans les zones sensibles
 # Mode standard --all : purge totale (texte francais et titres inclus)
 # Conforme a la regle regles-emojis-ascii.md
-# Version : 0.2.2-py
+# Version : 0.2.3-py
 # Statut : beta
 
 # identite:
@@ -19,7 +19,7 @@ Usage:
   corriger-accents-zones-sensibles.py [OPTIONS]
 """
 
-VERSION = "0.2.2-py"
+VERSION = "0.2.3-py"
 STATUT = "beta"
 
 import re
@@ -179,7 +179,10 @@ def main():
     )
     parser.add_argument("cible", help="Fichier ou dossier a corriger")
     parser.add_argument("--dry-run", action="store_true", help="Afficher les changements sans les appliquer")
-    parser.add_argument("--all", action="store_true", help="Corriger TOUS les accents (mode standard, regle immuable)")
+    parser.add_argument("--all", action="store_true",
+                        help="(compat) Corriger TOUS les accents - desormais le MODE PAR DEFAUT (regle immuable : aucun caractere non-ASCII tolere)")
+    parser.add_argument("--zones-seules", action="store_true",
+                        help="Mode ponctuel : ne corriger QUE les zones sensibles (frontmatter, blocs, code, liens, noms) - les accents du corps du texte sont CONSERVES (usage exceptionnel uniquement)")
     parser.add_argument("--zones", default="frontmatter,noms,blocs,code,liens", help="Zones a corriger")
     parser.add_argument("--recursive", action="store_true", help="Traiter recursivement les sous-dossiers")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
@@ -207,10 +210,14 @@ def main():
         print(RED + "[ERREUR] Dictionnaire non trouve: " + str(dict_file) + NC)
         return 1
 
-    if args.all:
-        print("[INFO] Correction de TOUS les accents (mode --all)")
+    # MODE PAR DEFAUT = --all (purge totale, regle immuable) - l option
+    # --zones-seules force l ancien comportement ponctuel (zones sensibles
+    # uniquement). --all reste accepte (compat, explicite).
+    all_mode = not args.zones_seules
+    if all_mode:
+        print("[INFO] Correction de TOUS les accents (mode par defaut --all)")
     else:
-        print("[INFO] Correction intelligente des accents dans les zones sensibles")
+        print("[INFO] Correction intelligente des accents dans les zones sensibles (--zones-seules)")
     print("Cible: " + args.cible)
     print("Zones: " + args.zones)
     print("Dictionnaire: " + str(dict_file))
@@ -262,7 +269,7 @@ def main():
         if args.verbose:
             print(GREEN + "[INFO] Traitement: " + chemin + NC)
 
-        changes, conserve = corriger_fichier(fichier, replacements, args.dry_run, args.verbose, args.zones, args.all)
+        changes, conserve = corriger_fichier(fichier, replacements, args.dry_run, args.verbose, args.zones, all_mode)
         total_corrections += changes
         total_conserve += conserve
 

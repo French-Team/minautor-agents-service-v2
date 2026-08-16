@@ -25,12 +25,12 @@ identite:
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
 | **Active par** | cerberus (retour de mission) |
-| **Raison** | NON-REGRESSION 74 OK / 0 KO (91.6s nouvelle base) - filtre serie --relancer-ko v0.5.3 demontre en conditions reelles |
+| **Raison** | BILAN CONSOLIDE (Janus, nettoyage Hygie) : le residu DOUBLE a ete elimine - le dossier docs-dev-cerveau-projet/ duplique A LA RACINE + son rapport egare (rapport-diagnostic-convention-scripts-temporaires-2026-08-16.md) ont ete supprimes par Hygie (snapshot 4642 fichiers, supprimer-dossier --agent hygie, rapport ecrit, lecon 0 non-ASCII, registre 3 declarations). Le VRAI dossier cerveau-projet/docs-dev-cerveau-projet/ est INTACT (amelioration-philosophie.md, analyse-externe.md, spec-refonte-cartes-decision.001.01.ebauche.md). Detection finale : PROPRE (0 residu). Fin de mission. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-16 13:44 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-16 20:45 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

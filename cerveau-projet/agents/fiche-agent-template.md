@@ -262,6 +262,27 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ---
 
+## Environnement de travail (Systeme)
+
+> Section GENEREe par `verifier-systeme --bloc-fiche <agent>` (v0.2.2+).
+> Chaque fiche contient l environnement REEL (OS, shell, langages,
+> racine projet) pour ne jamais oublier les differences Windows vs
+> Linux. Regenerer avec l outil si l environnement change.
+
+| Element | Valeur |
+|---|---|
+| **OS** | [detecte] |
+| **Shell** | [detecte] |
+| **Python** | [detecte] |
+| **Node.js** | [detecte] |
+| **Git** | [detecte] |
+| **Racine projet** | [detecte] |
+
+**Differences Windows vs Linux a ne jamais oublier** : voir le bloc
+genere par `verifier-systeme --bloc-fiche <agent>`.
+
+---
+
 ## Limites
 
 - [Limite 1]

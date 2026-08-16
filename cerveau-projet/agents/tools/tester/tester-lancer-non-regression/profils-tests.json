@@ -35,7 +35,8 @@
     "test-072",
     "test-073",
     "test-074",
-    "test-075"
+    "test-075",
+    "test-080"
    ]
   },
   {
@@ -76,7 +77,14 @@
     "test-067",
     "test-068",
     "test-069",
-    "test-071"
+    "test-071",
+    "test-076",
+    "test-077",
+    "test-079",
+    "test-082",
+    "test-083",
+    "test-084",
+    "test-085"
    ]
   },
   {
@@ -103,7 +111,8 @@
     "test-066",
     "test-067",
     "test-068",
-    "test-069"
+    "test-069",
+    "test-081"
    ]
   },
   {
@@ -114,24 +123,7 @@
     "AGENTS-historique.md",
     "cerveau-projet/agents/classeur-variables/",
     "cerveau-projet/agents/regles-immuables/"
-   ],
-   "tests": [
-    "test-001",
-    "test-013",
-    "test-016",
-    "test-018",
-    "test-019",
-    "test-020",
-    "test-021",
-    "test-025",
-    "test-033",
-    "test-034",
-    "test-037",
-    "test-048",
-    "test-055",
-    "test-058",
-    "test-059"
-   ]
+   ],   "tests": ["test-001", "test-013", "test-016", "test-018", "test-019", "test-020", "test-021", "test-025", "test-033", "test-034", "test-037", "test-048", "test-055", "test-058", "test-059", "test-078"]
   },
   {
    "nom": "docs",
@@ -156,25 +148,7 @@
     "cerveau-projet/agents/traces/",
     "cerveau-projet/agents/hygie/snapshots/",
     "cerveau-projet/agents/tools/proteger/"
-   ],
-   "tests": [
-    "test-024",
-    "test-025",
-    "test-027",
-    "test-031",
-    "test-035",
-    "test-036",
-    "test-037",
-    "test-039",
-    "test-041",
-    "test-045",
-    "test-046",
-    "test-047",
-    "test-051",
-    "test-056",
-    "test-057",
-    "test-061"
-   ]
+   ],   "tests": ["test-024", "test-025", "test-027", "test-031", "test-035", "test-036", "test-037", "test-039", "test-041", "test-045", "test-046", "test-047", "test-051", "test-056", "test-057", "test-061", "test-078"]
   }
  ]
 }

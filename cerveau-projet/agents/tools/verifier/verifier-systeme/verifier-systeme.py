@@ -22,10 +22,12 @@ Options:
   --format FORMAT     Format de sortie: table, json, resume (defaut: table)
   --detail DETAIL     Niveau de detail: standard, complet (defaut: standard)
   --enregistrer       Ecrire le profil systeme dans le classeur-variables
+  --bloc-fiche NOM    Generer le bloc markdown Environnement de travail
+                      (Systeme) a inserer dans la fiche de l agent NOM
   --version           Afficher la version
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.1-py
+Version : 0.2.2-py
 Statut : prepare
 """
 
@@ -38,7 +40,7 @@ import shutil
 import subprocess
 import sys
 
-VERSION = "0.2.1-py"
+VERSION = "0.2.2-py"
 STATUT = "prepare"
 
 
@@ -55,6 +57,8 @@ def afficher_aide():
     print("  --format FORMAT     Format de sortie: table, json, resume (defaut: table)")
     print("  --detail DETAIL     Niveau de detail: standard, complet (defaut: standard)")
     print("  --enregistrer       Ecrire le profil systeme dans le classeur-variables")
+    print("  --bloc-fiche NOM    Generer le bloc markdown Environnement de travail")
+    print("                      (Systeme) a inserer dans la fiche de l agent NOM")
     print("  --version           Afficher la version")
     print("")
     print("Exemples:")
@@ -62,6 +66,7 @@ def afficher_aide():
     print("  verifier-systeme.py --format json")
     print("  verifier-systeme.py --format resume --detail complet")
     print("  verifier-systeme.py --enregistrer")
+    print("  verifier-systeme.py --bloc-fiche cerberus")
 
 
 def detecter_os():
@@ -194,6 +199,58 @@ def afficher_resume():
     print("**Outils** : Git %s" % git["version"])
 
 
+def bloc_fiche(agent):
+    """Genere le bloc markdown Environnement de travail (Systeme) a inserer
+    dans la fiche de l agent (demande utilisateur 2026-08-16 : chaque fiche
+    doit contenir les infos de l environnement reel pour ne jamais oublier
+    les differences Windows vs Linux). Sortie ASCII strict + LF."""
+    os_nom, version_os, arch = informations_systeme()
+    bash = verifier_outil("bash")
+    python = verifier_outil("python3")
+    node = verifier_outil("node")
+    git = verifier_outil("git")
+    # racine du projet (AGENTS.md)
+    base = os.path.abspath(__file__)
+    for _ in range(8):
+        base = os.path.dirname(base)
+        if os.path.isfile(os.path.join(base, "AGENTS.md")):
+            break
+    racine = os.path.normpath(base)
+    est_windows = (os_nom == "Windows")
+
+    lignes = []
+    lignes.append("## Environnement de travail (Systeme)")
+    lignes.append("")
+    lignes.append("> Environnement REEL detecte par verifier-systeme (--bloc-fiche).")
+    lignes.append("> Je le verifie avant toute commande systeme : je suis sur %s, PAS sur Linux." % os_nom)
+    lignes.append("")
+    lignes.append("| Element | Valeur |")
+    lignes.append("|---|---|")
+    lignes.append("| **OS** | %s %s (%s) |" % (os_nom, version_os, arch))
+    lignes.append("| **Shell** | Bash %s |" % extraire_version(bash["version"]))
+    lignes.append("| **Python** | %s |" % extraire_version(python["version"]))
+    lignes.append("| **Node.js** | %s |" % extraire_version(node["version"]))
+    lignes.append("| **Git** | %s |" % extraire_version(git["version"]))
+    lignes.append("| **Racine projet** | %s |" % racine)
+    lignes.append("")
+    lignes.append("**Differences Windows vs Linux a ne jamais oublier** :")
+    lignes.append("")
+    if est_windows:
+        lignes.append("- Ce systeme est WINDOWS avec bash MSYS/Git Bash : les commandes sont POSIX (ls, mv, rm, cp, grep), jamais cmd.exe ni PowerShell.")
+        lignes.append("- Les chemins ont DEUX formes : POSIX /z/analyste-in-console (commandes bash) et natif Z:\\analyste-in-console (outils/scripts Windows).")
+        lignes.append("- Fins de ligne : LF OBLIGATOIRE (jamais CRLF) - un append sans corriger-fins-de-ligne introduit du CRLF.")
+        lignes.append("- python3 est disponible (Python %s) : les outils du cerveau s executent avec python3." % extraire_version(python["version"]))
+        lignes.append("- Les fichiers s ecrivent en ASCII strict : tout script temp passe par l entonnoir (protection de sortie LF + ASCII).")
+    else:
+        lignes.append("- Ce systeme est LINUX : chemins POSIX uniquement, bash natif.")
+        lignes.append("- Fins de ligne : LF OBLIGATOIRE (jamais CRLF).")
+        lignes.append("- python3 est disponible (Python %s) : les outils du cerveau s executent avec python3." % extraire_version(python["version"]))
+        lignes.append("- Les fichiers s ecrivent en ASCII strict : tout script temp passe par l entonnoir.")
+    lignes.append("")
+    lignes.append("> Source : verifier-systeme --bloc-fiche %s (v%s)" % (agent, VERSION))
+    return "\n".join(lignes)
+
+
 def valeur_profil():
     """Construit la valeur compacte de la variable profil-systeme."""
     os_nom, version_os, arch = informations_systeme()
@@ -300,6 +357,7 @@ def main(argv):
     format_sortie = "table"
     detail = "standard"
     enregistrer = False
+    agent_bloc = None
 
     i = 0
     while i < len(argv):
@@ -320,6 +378,13 @@ def main(argv):
                 i += 1
         elif arg == "--enregistrer":
             enregistrer = True
+        elif arg == "--bloc-fiche":
+            if i + 1 < len(argv):
+                agent_bloc = argv[i + 1]
+                i += 1
+            else:
+                print("Option --bloc-fiche requiert un nom d agent")
+                return 1
         else:
             print("Option inconnue: %s" % arg)
             print("Utilisez --aide pour l'aide")
@@ -328,6 +393,10 @@ def main(argv):
 
     if enregistrer:
         return enregistrer_profil()
+
+    if agent_bloc:
+        print(bloc_fiche(agent_bloc))
+        return 0
 
     if format_sortie not in ("table", "json", "resume"):
         print("Format inconnu: %s" % format_sortie)

@@ -3,12 +3,12 @@
 # Outil pour corriger les accents dans les zones sensibles
 # Mode standard --all : purge totale (texte francais et titres inclus)
 # Conforme a la regle regles-emojis-ascii.md
-# Version : 0.2.2
+# Version : 0.2.3
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.2"
+VERSION="0.2.3"
 
 set -e
 
@@ -28,7 +28,8 @@ utilisation() {
     echo ""
     echo "Options:"
     echo "  --dry-run        Afficher les changements sans les appliquer"
-    echo "  --all            Corriger TOUS les accents (mode standard, regle immuable)"
+    echo "  --all            (compat) Corriger TOUS les accents - desormais le MODE PAR DEFAUT (regle immuable)"
+    echo "  --zones-seules   Mode ponctuel : zones sensibles uniquement (accents du corps CONSERVES)"
     echo "  --zones          Zones a corriger (defaut: frontmatter,noms,blocs,code,liens)"
     echo "  --recursive      Traiter recursivement les sous-dossiers"
     echo "  --verbose        Afficher les details"
@@ -42,7 +43,7 @@ utilisation() {
 DRY_RUN=0
 VERBOSE=0
 RECURSIVE=0
-ALL_MODE=0
+ALL_MODE=1  # MODE PAR DEFAUT = --all (purge totale, regle immuable)
 ZONES="frontmatter,noms,blocs,code,liens"
 DICTIONNAIRE="$DICTIONNAIRE_DEFAUT"
 CIBLE=""
@@ -53,6 +54,7 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         --dry-run) DRY_RUN=1; shift ;;
         --all) ALL_MODE=1; shift ;;
+        --zones-seules) ALL_MODE=0; shift ;;
         --zones) ZONES="$2"; shift 2 ;;
         --recursive) RECURSIVE=1; shift ;;
         --verbose) VERBOSE=1; shift ;;
@@ -82,9 +84,9 @@ if [[ ! -f "$DICTIONNAIRE" ]]; then
 fi
 
 if [[ "$ALL_MODE" -eq 1 ]]; then
-    echo "[INFO] Correction de TOUS les accents (mode --all)"
+    echo "[INFO] Correction de TOUS les accents (mode par defaut --all)"
 else
-    echo "[INFO] Correction intelligente des accents dans les zones sensibles"
+    echo "[INFO] Correction intelligente des accents dans les zones sensibles (--zones-seules)"
 fi
 echo "Cible: $CIBLE"
 echo "Zones: $ZONES"

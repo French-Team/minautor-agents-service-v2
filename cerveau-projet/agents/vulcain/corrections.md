@@ -3496,3 +3496,394 @@ source de verite, PAS le champ serie des entrees (qui peut diverger).
 filtre e -> test-024, filtre d -> test-051, filtre a sans KO -> vide),
 --version v0.5.3. 8 tests pincent 0.5.2 (024/027/031/032/051/062/066/074)
 - a adapter par Morpheus.
+## [LECON] 2026-08-16 -- --all MODE PAR DEFAUT DE CORRIGER-ACCENTS (Vulcain)
+
+**Contexte** : diagnostic Cerberus (suite Morpheus accents) - la doc de
+corriger-accents-zones-sensibles dit 'le mode standard est --all (regle
+immuable)' mais le defaut de l outil ne l appliquait pas : une commande
+sans --all CONSERVAIT les accents du corps de texte ('Aucune correction
+necessaire') et poussait les agents a corriger a la main.
+
+**Implementation** (0.2.2 -> 0.2.3, py + sh + doc) :
+- MODE PAR DEFAUT = purge totale (all_mode = not args.zones_seules) :
+  une commande sans option purge desormais TOUS les accents.
+- Nouvelle option --zones-seules : ancien comportement ponctuel (zones
+  sensibles uniquement, accents du corps conserves).
+- --all reste accepte (compat, explicite - meme comportement que le defaut).
+- Messages INFO mis a jour ('mode par defaut --all' / '--zones-seules').
+- Le modele du catalogue '{recursif} {cible} --all' reste correct
+  (--all explicite = comportement par defaut).
+
+**Preuves reelles** : sans option = 6 corriges / 0 conserve ; --zones-seules
+= 0 corrige / 6 conserves ; --all = purge totale ; dry-run = fichier
+inchange ; parite .sh confirmee (5 corriges defaut, 4 conserves zones-seules).
+
+**Lecon** : quand une doc dit 'mode standard', le defaut du code DOIT
+l appliquer - une incoherence doc/code pousse les agents a contourner
+l outil. Inverser le defaut + option inverse explicite est plus sur que
+d exiger un flag de chaque appel.
+
+## [LECON] 2026-08-16 -- CREATION DETECTER-TRONCATURES v0.1.0 (Vulcain)
+
+**Contexte** : demande utilisateur - creer un outil dedie aux elements qui
+pourraient etre tronques donc illisibles (fichiers trop longs, blocs non
+fermes, marqueurs de troncature). Perimetre valide par l utilisateur :
+fichiers trop longs a lire + blocs non fermes + marqueurs de troncature,
+cible parametrable + --tous.
+
+**Outil cree** : cerveau-projet/agents/tools/detecter/detecter-troncatures/
+(.py 0.1.0 + .sh parite + .md doc). Detecte :
+- FICHIER_TROUQUE : fichiers > seuil lignes (defaut 2000, --seuil-lignes)
+- BLOC_NON_FERME : JSON invalide (json.loads), Python invalide (compile),
+  bash invalide (bash -n) - methode structurelle fiable, pas de comptage
+  naif de delimiteurs (la 1ere version comptait text.count() et produisait
+  295 faux positifs : codes ANSI, chaines, regex)
+- MARQUEUR_TRONCATURE : marqueurs litteraux de coupure ([tronque], [cut],
+  [contenu tronque], [suite manquante]) - hors points de suspension
+  legitimes (...) qui produisaient 39 faux positifs
+
+**Lecons apprises** :
+1. Le comptage brut de delimiteurs (texte.count('(') etc.) est inutile
+   sur du code : parentheses dans les chaines, regex, codes ANSI creent des
+   centaines de faux positifs. Verifier la COMPILABILITE (json.loads,
+   compile, bash -n) est la methode fiable : un fichier tronque ne compile
+   pas. 355 faux positifs -> 61 puis 13 problemes reels.
+2. Les points de suspension en fin de ligne (phrases...) sont des ellipses
+   legitimes frequentes : les exclure des marqueurs (39 faux positifs).
+3. Un outil qui documente ses propres motifs dans son en-tete ou sa doc se
+   detecte lui-meme : exclure TOUT LE DOSSIER de l outil, pas seulement le
+   .py (le .md documente aussi les marqueurs).
+4. Les fichiers de snapshot Hygie et corrections.md desagents depassent
+   2000 lignes : signal reel (12 fichiers) qui alimentera la purification
+   RVAV.
+
+## [LECON] 2026-08-16 -- ROUND AMELIORATION DETECTER-TRONCATURES v0.2.0 (Vulcain)
+
+**Contexte** : round d amelioration de detecter-troncatures (demande
+utilisateur). Diagnostic Cerberus : (A) binaire jpg compte FICHIER_TROUQUE
+a 2613 lignes (faux positif massif), (B) le garde-fou test-077 et les
+lecons corrections.md documentent les marqueurs et se detectent eux-memes
+(24 problemes au lieu de 13), (C) aucune option --exclure, (D) scan 3.7s
+(goulot : 134 sous-processus bash -n sequentiels).
+
+**Ameliorations v0.2.0** :
+1. Binaires ignores (octets NUL dans les 1024 premiers octets) : le jpg
+   est PROPRE, les fichiers binaires n ont pas de lignes lisibles.
+2. Option --exclure <motif> repeteble (en plus des exclusions par defaut).
+3. MARQUEUR_TRONCATURE affine : les marqueurs CITES dans les zones de
+   documentation (docstrings Python, blocs de code markdown, commentaires,
+   citations entre quotes, lignes qui documentent le motif, enumerations
+   de 2+ motifs) ne sont pas des troncatures. test-077 et corrections.md
+   ne sont plus auto-detectes. Le vrai marqueur [tronque] est TOUJOURS
+   detecte (preuve negative conservee).
+4. Analyse parallele (ThreadPoolExecutor 16 workers) : scan --tous
+   3.7s -> 2.7s.
+
+**Lecons apprises** :
+1. Un outil qui DETECTE des motifs documente ses motifs (en-tete, doc,
+   lecons, garde-fous) : sans exclusion des zones de documentation, il se
+   detecte lui-meme. Les exclusions ne doivent pas couvrir seulement le
+   dossier de l outil, mais aussi les citations/docstrings/commentaires.
+2. ThreadPoolExecutor aide pour les sous-processus (bash -n) et les I/O,
+   mais pas pour le CPU-bound pur (json.loads, compile) : le GIL
+   serialise. 8 workers -> 16 : gain marginal (le plafond est le GIL).
+3. bash -n multi-fichiers (bash -n a.sh b.sh) est SILENCIEUX (rc=0 meme
+   avec un fichier invalide) : ne pas l utiliser pour grouper - verifier
+   fichier par fichier.
+4. Un scan de detection sur 976 fichiers avec 134 sous-processus bash
+   passe de 3.7s a 2.7s par la parallelisation : le gain reel vient des
+   sous-processus, pas du parsing.
+
+
+## [LECON] 2026-08-16 -- OUTILS ANALYSER-NOMS-MAJ + CORRIGER-NOMS-MAJ (Vulcain)
+
+**Contexte** (demande utilisateur) : les conventions de nommage verifiaient
+le nommage des FICHIERS mais jamais la casse/forme des NOMS REFERENCES dans
+le contenu. Le diagnostic Cerberus a revele : 17 entrees du registre avec le
+champ outil = chemin de script temp (tmp-buffy/resync-lock-et-appliquer.py)
+au lieu d un nom kebab-case, et l historique citant des noms de fonctions.
+
+**Outils crees** :
+- analyser-noms-maj (Analyser) : detecte OUTIL_CHEMIN, OUTIL_ORPHELIN,
+  OUTIL_CASSE, AGENT_INCONNU, FONCTION_DANS_COMMANDE (avertissement) sur
+  4 zones (registre, historique, catalogue, index), --tous/--zone/--rapport.
+- corriger-noms-maj (Corriger) : normalise le champ outil du registre
+  (chemin/extension/prefixe temp -> kebab-case), --dry-run, --rapport.
+
+**Preuves reelles** : analyser a detecte les 17 OUTIL_CHEMIN ; corriger a
+applique 17 corrections (dry-run puis reel) ; re-analyse PROPRE ; registre
+JSONL valide 133 lignes, normes 0/0 ; test-035 toujours vert (10/10).
+Au passage l analyse index a revele que tester/protections/ est une
+sous-categorie imbriquee (les liens y pointent bien).
+
+**Lecons** :
+1. Un outil qui verifie des NOMS doit verifier la forme ET la cible : un
+   nom kebab-case sans dossier reel est un orphelin (OUTIL_ORPHELIN).
+2. Les liens markdown de l index sont RELATIFS au dossier de l index, pas
+   a la racine : resolution via os.path.dirname(chemin).
+3. Les chemins de scripts temp ne doivent jamais entrer dans le champ outil
+   du registre : le nom du script (sans chemin ni extension) suffit.
+4. --dry-run puis application : la correction reelle est identique a
+   l apercu (aucune surprise).
+
+
+## [LECON] 2026-08-16 -- VERIFIER-SYSTEME --BLOC-FICHE (Vulcain)
+
+**Contexte** (demande utilisateur) : chaque fiche agent doit contenir les
+infos de l environnement reel (OS, shell, langages, racine projet) pour
+que les agents sachent toujours sur quel systeme ils travaillent et
+n oublient jamais les differences Windows vs Linux.
+
+**Modification** : option --bloc-fiche <agent> ajoutee a verifier-systeme
+(v0.2.1 -> 0.2.2) : genere le bloc markdown `## Environnement de travail
+(Systeme)` avec le tableau des elements reels detectes (OS, Shell, Python,
+Node, Git, Racine projet) et une section Differences Windows vs Linux
+(chemins POSIX vs natifs, bash MSYS, LF jamais CRLF, python3, ASCII via
+l entonnoir). Le .sh delegue au .py pour garantir la parite.
+
+**Lecons** :
+1. Le .sh de verifier-systeme etait une implementation AUTONOME (pas un
+   delegateur) : toute nouvelle option doit soit y etre ajoutee, soit
+   deleguer au .py (choisi ici : exec python3 ... --bloc-fiche) - sinon
+   le .sh et le .py divergent.
+2. Echappement des backslashes : dans une chaine Python, un chemin natif
+   Windows s ecrit 'Z:\\analyste...' (double) pour afficher un seul
+   backslash - j ai du corriger une sortie a double backslash.
+3. Le bloc genere est teste sur une fiche temp : insertion avant
+   ## Connexions, ordre verifie, 0 non-ASCII, 0 CRLF.
+
+
+## [LECON] 2026-08-16 -- SPEC VERIFIER-SYSTEME V0.2.2 (Vulcain)
+
+**Contexte** : la non-regression Janus etait bloquee par test-028 (spec
+DIVERGENTE) : l outil verifier-systeme avait ete enrichi avec --bloc-fiche
+(v0.2.2) mais la spec spec-verifier-systeme.001.01.ebauche.md documentait
+encore v0.2.1-py sans la nouvelle option.
+
+**Correction** : spec mise a jour - exigence 05 (--bloc-fiche : bloc
+Environnement de travail a inserer dans les fiches agents), interface API,
+flux (etape 7), alignement v0.2.2-py, historique. test-028 vert (8/8).
+
+**Lecon** : TOUTE modification d un outil qui a une spec/ doit aligner la
+spec (version + options + flux) AVANT de passer a Janus - test-028 est le
+garde-fou qui verifie cette coherence. L oubli de la spec est le KO le plus
+frequent des rounds d outils.
+
+## [LECON] 2026-08-16 -- CORRIGER-NOMS-MAJ PERTEUSE : REPARE + REGISTRE RESTAURE (Vulcain)
+
+**KO signale par Janus** : la non-regression a revele que corriger-noms-maj
+v0.1.0 avait CORROMPU le registre-usages-outils.jsonl : ~115 entrees perdues
+(bloc 13:14-13:43 auto-journalisation verrou, recuperable depuis git HEAD)
++ les declarations generateurs-amelioration (15:22:59), analyser-noms-maj et
+corriger-noms-maj absentes -> test-078 CRASHAIT (plus aucune entree
+generateurs-amelioration).
+
+**Cause racine** : l application reecrivait les lignes par INDEX D ENTREE
+PARSEE (no-1) applique a la liste BRUTE des lignes : tout decalage (ligne
+vide, invalide, CRLF) ecrasait/decollait des entrees, et AUCUNE garde de
+compte avant/apres -> ecriture PERTEUSE silencieuse.
+
+**Corrections** :
+1. corriger-noms-maj v0.1.1 : reecriture LIGNE PAR LIGNE sur les lignes
+   brutes (json.loads par ligne, preservation des vides/invalides), GARDE DE
+   COMPTE avant/apres (si apres != avant -> REFUS d ecriture, code 1).
+2. Registre RESTAURE : union(WT 124, HEAD 131, reconstruites 3) = 225
+   entrees apres dedoublonnage (le script union avait cree 1 doublon
+   test-declaration : WT normalise + HEAD tmp-* -> corrige).
+3. Preuves : test-078 7/7, test-035 10/10, evaluer-processus 0 probleme,
+   analyser-noms-maj --zone registre PROPRE, normes 0/0.
+
+**Lecon** : JAMAIS reecrire un fichier JSONL par index calcule sur des
+entrees parsees - toujours reecrire ligne par ligne sur les lignes brutes et
+GARDER le compte avant/apres. Un registre/trace est une source croisee pour
+de nombreux garde-fous : toute perte de ligne est une corruption silencieuse
+qui casse des tests sans rapport apparent. Le script de restauration a ete
+prepare par Janus (tmp-janus/restaurer-registre.py) : le diagnostic du
+controleur etait exact.
+
+## [LECON] 2026-08-16 -- ROTATION_REGISTRE NON DESTRUCTIVE (Vulcain, v0.5.4)
+
+**Contexte** : le KO test-078 etait RECIDIVANT - apres la restauration du registre
+(226 entrees), le lanceur de non-regression a rogne le registre au lancement suivant
+(119 entrees), perdant le bloc HEAD 13:14-13:43 et les declarations reconstruites
+(dont generateurs-amelioration exigee par test-078).
+
+**Cause racine** : tester-lancer-non-regression v0.5.3 contenait rotation_registre
+(max_usages=100) qui SUPPRIMAIT les usages normaux les plus anciens a chaque
+lancement de la suite. Les declarations mode direct (generateurs-amelioration,
+creation d outils) etaient considerees comme du bruit rognable.
+
+**Correctif (v0.5.4)** : rotation NON DESTRUCTIVE - seules les entrees mode
+verrou-auto (bruit d auto-journalisation du verrou) sont plafonnees a 100.
+Les entrees de VERITE (mode direct, generateur, script-temporaire) ne sont
+JAMAIS retirees. Preuves :
+1. Rotation lancee 2x : total identique (124) = IDEMPOTENT.
+2. generateurs-amelioration (1), analyser-noms-maj (1), corriger-noms-maj (2)
+   preserves apres rotation.
+3. test-078 7/7, test-035 10/10, normes 0/0.
+4. Registre restaure a 124 entrees (100 verrou-auto + 5 direct + 19
+   script-temporaire) apres la rotation.
+
+**Lecon** : un plafond de rotation qui SUPPRIME des entrees d un registre
+source-de-verite est incompatible avec les garde-fous qui le lisent. La
+distinction BRUIT (verrou-auto, re-journalisable) vs VERITE (declarations
+documentees) est la bonne frontiere : on peut rogner le bruit, jamais la verite.
+
+## [LECON] 2026-08-16 -- SERIE KO PRIORITAIRE v0.5.5 (Vulcain)
+
+**Contexte** : demande utilisateur - Janus perd du temps a revalider les KO en
+relancant la suite complete a chaque correction. Design valide par l utilisateur :
+serie KO persistante et PRIORITAIRE avec sa barriere.
+
+**Implementation (tester-lancer-non-regression v0.5.5)** :
+1. ko-tests.json (persistant, gitignore, cree au premier lancement) : liste des
+   tests en KO entre les lancements.
+2. Option --ko <nouveau|reprendre> (defaut : reprendre) + --etat-ko.
+3. Mode NOUVEAU : vide le fichier, lance les series normalement (A-E), collecte
+   les KO du run dans ko-tests.json.
+4. Mode REPRENDRE : lance D ABORD la serie KO (tests du fichier) avec SA barriere.
+   Les tests qui passent sortent du fichier et NE SONT PAS relances dans leur
+   serie d origine (idempotence). Si un KO persiste, la barriere KO BLOQUE la
+   suite. Les fantomes (tests introuvables) sont purges.
+5. Ordre : KO -> A -> B -> C -> D -> E, chaque serie en parallele.
+
+**Preuves reelles** :
+- --etat-ko : affiche le fichier (vide -> serie A directe).
+- --ko nouveau sur serie C (15 tests) : 15 OK, fichier vide apres.
+- --ko reprendre avec test-007 + fantome : barriere KO en premier, test-007 passe
+  et sort du fichier (non relance dans sa serie), fantome purge.
+- --ko reprendre avec test-032 en KO persistant : barriere KO BLOQUEE, suite
+  stoppee, KO conserve dans le fichier.
+
+**Lecon** : (1) la collecte des KO doit stocker les NOMS COMPLETS des tests
+(basename avec suffixe .py) pour matcher les chemins - les noms courts creent des
+faux 'introuvables' ; (2) la barriere KO doit purger les fantomes (tests du fichier
+qui n existent plus) pour ne pas bloquer eternellement ; (3) l idempotence
+(test valide par la serie KO non relance dans sa serie) est le coeur du gain de
+temps pour Janus.
+
+## [LECON] 2026-08-16 -- EVALUER-PROCESSUS v0.1.5 : FINS DE REACTIVATION (Vulcain)
+
+**Contexte** : KO test-035 decouvert par Janus - la mission Themis
+(audit sur demande de Cerberus, fin legitime c25b 'Activer l agent
+precedent') etait signalee FIN_MISSION_ERRONEE a tort.
+
+**Bug double** : (1) fins_de_la_carte ne detectait a_reactiver que
+pour 'Reactiver Cerberus' dans le titre ou 'reactiver session-llm-1'
+dans le message - les fins 'Activer l agent precedent' (themis c25b,
+atlas) n etaient pas reconnues ; (2) meme quand a_reactiver etait
+calcule, detecter_fins_erronees ne l utilisait JAMAIS dans sa boucle
+(dead variable depuis v0.1.1).
+
+**Correction v0.1.5** : (1) fins_de_la_carte detecte 'Activer l agent
+precedent' (+ variante 'avec son rapport') comme a_reactiver=True ;
+(2) detecter_fins_erronees saute l agent si a_reactiver est vrai :
+la carte autorise une fin de reactivation -> l heuristique ne
+s applique pas (la carte est la reference, pas l heuristique).
+
+**Verification** : evaluer-processus 0 probleme, test-035 10/10,
+test-016 20/20, test-037 6/6, test-055 12/12, test-064 7/7,
+normes 0/0.
+
+**Lecon** : une variable calculee mais jamais utilisee dans la boucle
+est un bug silencieux - verifier que chaque sortie de fonction de
+detection est reellement consommee par son appelant.
+
+## [LECON] 2026-08-16 -- ENV VAR CERVEAU_REGISTRE_USAGES (Vulcain, generation v0.2.3)
+
+**Contexte** : KO flaky en non-regression (serie A) - test-079 point 5 detectait
+OUTIL_CHEMIN transitoire. Cause : test-050 et test-079 sont dans la MEME serie.
+test-050 execute le script genere (points 5/6/7) dont le squelette declarer_usage
+appelle enregistrer-usage-outil SANS --registre -> declaration tmp-t050-preuve.py
+dans le REGISTRE REEL pendant que test-079 analyse le registre en parallele.
+
+**Correction** : ajout d une variable d environnement CERVEAU_REGISTRE_USAGES au
+squelette genere (generateurs-outil-temporaire.py + .sh, parite) : si definie,
+declarer_usage ajoute --registre <valeur> a la commande enregistrer-usage-outil.
+Preuve reelle : sans env -> registre reel +1 ligne ; avec env -> reel inchange,
+declaration dans le registre alternatif. Bump 0.2.2 -> 0.2.3 (py + sh + md).
+
+**Lecon** : quand un test execute un script qui declare au registre, la declaration
+doit etre REDIRIGEABLE (env var) pour que les preuves reelles des tests ne polluent
+jamais le registre reel pendant la suite - meme regle que le classeur temp de
+test-057. Verifier la parite .sh a chaque ajout de comportement au squelette.
+
+## [LECON] 2026-08-16 -- CLE EXCLUSIVE MORPHEUS DANS LE VERROU (Vulcain v0.2.1)
+
+**Contexte** : Janus corrigeait des fichiers de tests au lieu de les renvoyer a
+Morpheus (REGLE 4). La regle immuable 'SEUL MORPHEUS ECRIT/ADAPTE LES TESTS'
+existait mais le verrou d habilitation se basait UNIQUEMENT sur les cartes :
+tant que editer-fichier etait dans une carte, l exclusivite etait contournable.
+
+**Correction** : proteger-verrou-habilitation v0.2.1 ajoute --cible <chemin> :
+si la cible contient 'tester/tests/' ET l outil est dans OUTILS_MODIF
+(editer-fichier, editer-parcours, creer-fichier, ecrire-fichier, supprimer-*,
+corriger-*), SEUL morpheus est habilite (GARDIEN_TESTS) - la cle exclusive
+DEPASSE la table des cartes. editer-fichier v0.4.2 branche le verrou avec
+--cible (option --agent obligatoire desormais pour toute cible).
+
+**Preuves** : verrou --audit : buffy sur tester/tests/ = BLOQUE avec commande
+d activation de morpheus ; morpheus = OK ; buffy sur fichier normal = OK
+(carte). test-028 vert (spec generateurs 0.2.3 alignee, elle aussi corrigee).
+
+**Lecon** : une exclusivite n est reelle que si le verrou verifie la CIBLE,
+pas seulement l outil - les cartes donnent l habilitation GENERALE, la zone
+protegee donne l exclusivite SPECIFIQUE. Toute regle 'seul X' doit avoir sa
+zone protegee dans le verrou, sinon elle est contournable par n importe quelle
+carte qui porte l outil.
+
+## [LECON] 2026-08-16 -- RELECTURE OBLIGATOIRE AVANT GRAVURE (Vulcain, porte marbre v0.1.3)
+
+**Demande utilisateur** : graver la relecture obligatoire avant toute nouvelle
+regle immuable - audit Argus (detecter-contradictions --regles) AVANT la porte
+du marbre.
+
+**Correction** : proteger-modifier-marbre v0.1.3 - toute zone dont le fichier
+est dans regles-immuables/ (est_zone_regles) lance automatiquement l audit
+Argus AVANT d accepter l autorisation : non PROPRE = BLOQUE (rc=1) meme avec
+--autorisation. Champ relecture journalise dans marbre-log.jsonl. --no-audit
+pour zones non-regles uniquement.
+
+**Preuves** : zone regle + audit PROPRE = OK (gravure autorisee) ; doublon de
+titre IMMUABLE injecte -> Argus 1 CONTRADICTION -> BLOQUE malgre l autorisation
+utilisateur, fichier restaure, marbre resynchronise.
+
+**Lecon** : une contradiction injectee EN FIN de fichier (hors zone 'Regles de
+gouvernance exclusives') n est PAS vue par l audit des sections IMMUABLE - la
+preuve negative doit injecter un DOUBLON EXACT de titre de section. Et apres
+toute preuve negative qui modifie le fichier d une zone gravee, TOUJOURS
+restaurer PUIS resynchroniser le marbre (sinon test-057 casse).
+
+
+## [LECON] 2026-08-16 -- COMBO NETTOYAGE HYGIE + BOOLEENS GENERATEUR (Vulcain)
+
+**Contexte** : demande utilisateur - ajouter le scan processus-residuels a la
+mission de nettoyage complete de Hygie (combiner detecter-residus fichiers +
+detecter-processus-residuels).
+
+**Modifie** :
+- combo-nettoyage-hygie v0.1.0 -> v0.1.1 : etapes c4b (generateur
+  detecter-processus-residuels detail=true) + c4c (execution), controle c5
+  elargi (fichiers OU processus), fin c6 (suppression fichiers + terminaison
+  processus via nettoyer-processus-residuels) + doc .md synchronisee.
+- generateurs-commande v0.2.5 -> v0.2.6 : CORRECTION BUG - composer_commande
+  plantait (TypeError: expected string, got bool) quand un parametre BOOLEEN
+  etait fourni dans les entrees d un combo (ex detail=true). Le flag du modele
+  gouverne : True -> flag (--detail), False -> retire flag + placeholder.
+
+**Preuves** :
+- mini-combo processus teste reellement : generateur -> outil -> fin, sans
+  erreur (detecter-processus-residuels --detail execute).
+- tests non-regression combos/generateurs verts : test-002 37/37, test-005
+  28 OK (1 KO = version 0.2.5 a adapter par Morpheus), test-017 41/41,
+  test-042 4/4, test-043 10/10.
+- normes 0/0 sur combo, doc et generateur.
+
+**Decouvert** : un VRAI residu existe (docs-dev-cerveau-projet/
+rapport-diagnostic-convention-scripts-temporaires-2026-08-16.md, RAPPORT_EGARE)
+- a signaler a Hygie pour nettoyage.
+
+**APRES** : activer BUFFY (indice outil detecter-processus-residuels dans la
+case c4 Detection compartimentee de la carte hygie + bump parcours) puis
+MORPHEUS (adapter test-005 0.2.5 -> 0.2.6, verifier test-045 chariot) puis
+JANUS (non-regression).

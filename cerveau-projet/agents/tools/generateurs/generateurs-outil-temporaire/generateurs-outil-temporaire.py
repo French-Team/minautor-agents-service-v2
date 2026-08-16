@@ -32,7 +32,7 @@ Options:
 Retour: 0 si succes, 1 si erreur.
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.2
+Version : 0.2.3
 Statut : beta
 """
 
@@ -43,7 +43,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.2"
+VERSION = "0.2.3"
 STATUT = "beta"
 
 # Couleurs ANSI
@@ -183,6 +183,8 @@ def declarer_usage(agent, outil, contexte):
     # Declare un usage au registre (mode script-temporaire par defaut)
     # La sortie du sous-processus est CAPTUREE puis bufferisee (le chrono
     # reste la premiere ligne - decision utilisateur 2026-08-15)
+    # Redirection possible : CERVEAU_REGISTRE_USAGES (env) -> --registre
+    # (utilisee par les tests pour isoler leurs preuves du registre reel)
     import subprocess as _sp
     racine = racine_projet()
     if not racine:
@@ -193,6 +195,9 @@ def declarer_usage(agent, outil, contexte):
                                "enregistrer-usage-outil.py")
     cmd = [sys.executable, enregistrer, "--agent", agent, "--outil", outil,
            "--mode", "script-temporaire", "--contexte", contexte]
+    registre_alt = os.environ.get("CERVEAU_REGISTRE_USAGES", "")
+    if registre_alt:
+        cmd += ["--registre", registre_alt]
     _res = _sp.run(cmd, check=False, capture_output=True, text=True)
     if _res.stdout:
         print(_res.stdout, end="")

@@ -6,7 +6,7 @@ identite:
 ---
 # corriger-accents-zones-sensibles
 
-**Version :** 0.2.2
+**Version :** 0.2.3
 **Statut :** prepare
 **Categorie :** corriger
 **Chemin :** `agents/tools/corriger/corriger-accents-zones-sensibles/`
@@ -32,13 +32,14 @@ Caracteres couverts (via le dictionnaire partage `corriger-dictionnaire-accents.
 
 ## Utilisation
 
-### CLI Python (version 0.2.2-py)
+### CLI Python (version 0.2.3-py)
 
 ```
 python3 corriger-accents-zones-sensibles.py [OPTIONS] <fichier|dossier>
 
 Options :
-  --all             Corriger TOUS les accents (mode standard, regle immuable)
+  --all             (compat) Corriger TOUS les accents - desormais le MODE PAR DEFAUT (regle immuable)
+  --zones-seules    Mode ponctuel : zones sensibles uniquement (accents du corps CONSERVES)
   --dry-run         Simuler sans appliquer
   --zones           Zones a corriger (defaut: frontmatter,noms,blocs,code,liens)
   --recursive       Traiter recursivement les sous-dossiers
@@ -52,20 +53,20 @@ Options :
 ### CLI bash (version originale)
 
 ```bash
-# Corriger TOUS les accents (mode standard, regle immuable)
-corriger-accents-zones-sensibles.sh --all fichier.md
+# MODE PAR DEFAUT : purge totale (aucun caractere non-ASCII tolere)
+corriger-accents-zones-sensibles.sh fichier.md
 
 # Apercu des changements
-corriger-accents-zones-sensibles.sh --all --dry-run fichier.md
+corriger-accents-zones-sensibles.sh --dry-run fichier.md
 
-# Zones specifiques (usage ponctuel)
-corriger-accents-zones-sensibles.sh --zones frontmatter,liens fichier.md
+# Mode ponctuel : zones sensibles uniquement (accents du corps conserves)
+corriger-accents-zones-sensibles.sh --zones-seules fichier.md
 
 # Tout le dossier
-corriger-accents-zones-sensibles.sh --recursive --all cerveau-projet/
+corriger-accents-zones-sensibles.sh --recursive cerveau-projet/
 
-# Mode cible : zones sensibles uniquement (usage ponctuel)
-corriger-accents-zones-sensibles.sh fichier.md
+# --all reste accepte (compat, explicite - le comportement par defaut)
+corriger-accents-zones-sensibles.sh --all fichier.md
 ```
 
 ## Options
@@ -157,6 +158,7 @@ Le dossier `cerveau-projet/exemples/` est **exclu automatiquement** : c'est la z
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.3-py | 2026-08-16 | MODE PAR DEFAUT = --all (purge totale, regle immuable) : une commande sans option purge desormais TOUS les accents, y compris le corps du texte - nouvelle option --zones-seules pour l ancien comportement ponctuel (zones sensibles uniquement). Motif : les agents lancaient l outil sans --all, voyaient 'Aucune correction necessaire' (accents du corps conserves) et corrigeaient a la main |
 | 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py, lit le dictionnaire existant) |
 | 0.2.1-py | 2026-08-09 | Guillemets francais U+00AB/U+00BB ajoutes au dictionnaire partage (corriger-dictionnaire-accents.txt) -> guillemet droit double, coherent avec les guillemets courbes U+201C/U+201D |
 | 0.2.2-py | 2026-08-09 | Fleches verticales et doubles (U+2191/U+2193/U+2194/U+21D0/U+21D2/U+21D4), box drawing (U+2500/U+2502/U+250C/U+2510/U+2514/U+2518/U+251C/U+2524) et espace inse cable U+00A0 ajoutes au dictionnaire partage |

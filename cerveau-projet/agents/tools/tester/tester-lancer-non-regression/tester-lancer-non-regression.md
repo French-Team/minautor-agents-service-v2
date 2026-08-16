@@ -1,7 +1,7 @@
 # tester-lancer-non-regression
 
 **Categorie** : Tester
-**Version** : 0.5.3
+**Version** : 0.5.5
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-11
@@ -174,6 +174,8 @@ python3 tester-lancer-non-regression.py --tests test-013-cerberus-migration,test
 | `--no-reference` | Ne pas lire/ecrire la reference (sous-processus paralleles) |
 | `--tests <a,b>` | Filtrer par noms de tests (separes par des virgules) |
 | `--relancer-ko` | MECANISATION KO : relance UNIQUEMENT les tests en KO du DERNIER run journalise (`registre-tests.jsonl`, champ `run_id` ajoute a chaque entree). Workflow : KO -> analyser -> `--relancer-ko` (revalider le correctif sans relancer la suite) -> `--series X` (valider la serie) -> suite complete. Combinaison `--relancer-ko --series X` : ne relance QUE les KO de la serie X (les KO des autres series sont affiches puis ecartes). |
+| `--ko <nouveau\|reprendre>` | SERIE KO PRIORITAIRE (v0.5.5) : fichier persistant `ko-tests.json` qui garde les tests en KO entre les lancements. `reprendre` (defaut) lance D ABORD la serie KO avec SA barriere - les tests qui passent sortent du fichier et ne sont PAS relances dans leur serie d origine ; `nouveau` vide le fichier et lance les series normalement (les KO du run sont collectes pour le prochain `reprendre`). Ordre : KO -> A -> B -> C -> D -> E. |
+| `--etat-ko` | Affiche le contenu de la serie KO persistante (`ko-tests.json`) puis sort sans lancer |
 | `--desactiver <a,b>` | Desactiver des tests par numero (ex : 24,32) - persiste dans `config-tests.json`, herite par le lancement suivant |
 | `--activer <a,b>` | Reactiver des tests par numero (retire de la config) |
 | `--etat-tests` | Affiche l'etat actif/desactive de tous les tests puis sort (ne lance rien) |
@@ -203,6 +205,8 @@ information est ecrite dans le rapport markdown (`--rapport`, section
 | Version | Date | Changement |
 |---|---|---|
 | 0.4.5 | 2026-08-15 | Config persistante des tests : --activer/--desactiver par numero dans config-tests.json (gitignore), heritee au lancement suivant, --etat-tests pour l'afficher, tests desactives = NON LANCE dans le bilan |
+| 0.5.5 | 2026-08-16 | SERIE KO PRIORITAIRE (demande utilisateur) : fichier persistant ko-tests.json + option --ko <nouveau|reprendre>. 'reprendre' (defaut) lance D ABORD la serie KO (tests du fichier) avec SA barriere - ceux qui passent sortent du fichier et ne sont PAS relances dans leur serie ; 'nouveau' vide le fichier et lance les series normalement (les KO du run sont collectes). Option --etat-ko pour afficher la serie KO persistante. Ordre : KO -> A -> B -> C -> D -> E, chaque serie en parallele, barriere entre chaque. |
+| 0.5.4 | 2026-08-16 | ROTATION NON DESTRUCTIVE (KO test-078 recidivant) : la rotation ne plafonne QUE les entrees mode verrou-auto (bruit d auto-journalisation) ; les entrees de VERITE (mode direct, generateur, script-temporaire) ne sont JAMAIS retirees - le bloc 13:14-13:43 et les declarations reconstruites (generateurs-amelioration) ne peuvent plus etre rognes par le lanceur |
 | 0.5.3 | 2026-08-16 | FILTRE SERIE (demande utilisateur) : `--relancer-ko --series X` revalide UNIQUEMENT les KO de la serie X du dernier run (les KO des autres series sont affiches puis ecartes) ; sans `--series`, comportement 0.5.2 conserve (tous les KO du dernier run) |
 | 0.5.2 | 2026-08-16 | MECANISATION KO (demande utilisateur) : option `--relancer-ko` relance UNIQUEMENT les tests en KO du dernier run - champ `run_id` ajoute a chaque entree de `registre-tests.jsonl` (timestamp du debut du run) pour identifier le lancement ; Janus n a plus a deduire la liste, l outil la calcule (isoler -> revalider -> serie -> suite complete) |
 | 0.5.1 | 2026-08-16 | POOL INTRA-SERIE DANS LES BARRIERES (optimisation performance) : chaque serie lance ses tests sur le pool de workers (tri duree decroissante) sauf les exclusifs (test-035 ajoute : registre partage) qui tournent en serie - gain mesure 127.8s -> ~57s |

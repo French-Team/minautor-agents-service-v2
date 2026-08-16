@@ -161,6 +161,27 @@
      "nom": "evaluer-rating",
      "catalogue": "evaluer-rating",
      "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-rating/"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-troncatures",
+     "catalogue": "detecter-troncatures",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-troncatures/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-troncatures/detecter-troncatures.py --tous"
+    },
+    {
+     "type": "outil",
+     "nom": "analyser-noms-maj",
+     "catalogue": "analyser-noms-maj",
+     "chemin": "cerveau-projet/agents/tools/analyser/analyser-noms-maj/",
+     "commande": "python3 cerveau-projet/agents/tools/analyser/analyser-noms-maj/analyser-noms-maj.py --tous"
+    },
+    {
+     "type": "outil",
+     "nom": "corriger-noms-maj",
+     "catalogue": "corriger-noms-maj",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-noms-maj/",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-noms-maj/corriger-noms-maj.py --dry-run"
     }
    ],
    "suivant": "c11",
@@ -483,7 +504,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/vulcain/corrections.md --all"
     },
     {
      "type": "outil",
@@ -930,7 +952,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/vulcain/corrections.md --all"
     },
     {
      "catalogue": "combos-moteur",
@@ -1140,7 +1163,8 @@
      "catalogue": "corriger-symboles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "nom": "corriger-symboles",
-     "type": "outil"
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/vulcain/corrections.md --all"
     }
    ],
    "message": "J ecris MA lecon dans corrections.md : ## [LECON] <date> -- <titre> (Vulcain) avec **Contexte** (mission, origine), **Actions** (ce que j ai fait) et **Verdict** (VALIDE / A REVOIR / CONFORME / KO). Le protocole-fin-mission impose lecon + verdict AVANT de transmettre : sans cette documentation, le garde-fou test-048 fera KO et le bilan ne sera pas accepte.",
@@ -1193,6 +1217,6 @@
   "case_depart": "c0",
   "description": "Carte de decision de Vulcain - constructeur d outils. v0.4.16 : c13 + combos-audit-general, c18c + executer-script-temporaire (mission garantie LF).",
   "nom": "parcours-vulcain",
-  "version": "0.4.20"
+  "version": "0.4.22"
  }
 }

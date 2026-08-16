@@ -5,7 +5,7 @@ identite:
   commun: true
 ---
 # Protocole de Securite du Marbre
-**Version** : 0.1.0
+**Version** : 0.1.1
 **Statut** : ebauche
 **Categorie** : General
 **Agent** : Gardien
@@ -50,9 +50,16 @@ directement. Le flux impose :
 2. **Le GARDIEN propose** : zone concernee, raison, impact, alternative.
 3. **L UTILISATEUR valide** explicitement (aucun agent ne peut se
    debloquer seul).
-4. **Le gardien execute** :
+4. **RELECTURE OBLIGATOIRE (v0.1.1, demande utilisateur 2026-08-16)** :
+   pour toute zone de REGLES (fichier dans `regles-immuables/`), la porte
+   lance AUTOMATIQUEMENT `detecter-contradictions --regles` (audit Argus :
+   doublons de titres, references cassees, concordance source/protocole)
+   AVANT d accepter l autorisation. Non PROPRE = REFUS (code 1), meme avec
+   `--autorisation` : corriger les contradictions, relancer l audit, puis
+   repasser la porte. Le champ `relecture: Argus PROPRE` est journalise.
+5. **Le gardien execute** :
    `python3 proteger-modifier-marbre.py --zone <nom> --raison "<...>" --autorisation <cle>`
-5. L empreinte est mise a jour dans marbre.json + la modification est
+6. L empreinte est mise a jour dans marbre.json + la modification est
    journalisee dans `marbre-log.jsonl` (date, zone, raison, autorise_par).
 ## Regles d or
 - Une zone du marbre modifiee SANS passer par la porte = VIOLATION :
@@ -61,9 +68,17 @@ directement. Le flux impose :
 - L autorisation est HUMAINE : un agent ne peut pas re-empreinter une zone
   qu il vient de modifier lui-meme sans validation de l utilisateur.
 - Ajouter une NOUVELLE zone au marbre = meme porte : le gardien propose,
-  l utilisateur valide, la zone est ajoutee avec sa raison.
+  l utilisateur valide, la zone est ajoutee avec sa raison (une zone de
+  regles exige aussi la relecture Argus PROPRE).
+- Une nouvelle regle immuable qui n est pas gravee n a AUCUNE protection :
+  toute regle immuable majeure DOIT entrer au marbre via cette porte,
+  apres relecture Argus PROPRE.
 ## Raccords
 - Outils : `proteger-verrou-marbre`, `proteger-modifier-marbre`
   (categorie Proteger, assignes au Gardien).
 - Garde-fou : test-057 (marbre intact dans la non-regression).
 - Regle immuable : regles-groupes-agents.md (groupes et domaines separes).
+- Relecture : `detecter-contradictions` (audit Argus, outil Argus) - doublons,
+  contradictions, concordance source/protocole.
+- Garde-fou : test-084 (relecture obligatoire avant gravure) - la porte
+  exige l audit Argus PROPRE pour les zones de regles.

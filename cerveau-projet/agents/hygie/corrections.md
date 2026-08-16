@@ -155,3 +155,23 @@ Verdict final : PROPRE (0 residu). Rapport : hygie/rapports/nettoyage-2026-08-13
 3. GAP DE DETECTION detecter-residus : le nom mache 'analyste-in-console.tmp-test004x.sh' (residu de test-004) n est PAS detecte par l outil car il ne commence pas par tmp-/.tmp-/.zz-. Le pattern TEMP ne couvre pas les noms maches avec prefixe projet. A SIGNALER a Vulcain : elargir le pattern TEMP (ex. detecter aussi les fichiers contenant .tmp- ou .zz- en leur sein, pas seulement en prefixe).
 4. CREER-FICHIER : le contenu en ARGUMENT POSITIONNEL fonctionne (rapport 2075 octets, non vide) - la lecon de la 1re mission (jamais en stdin) est confirmee.
 5. Le processus complet tient encore en conditions reelles avec git : snapshot -> detection -> provenance -> git rm -f -> commit -> re-detection -> rapport.
+
+
+## [LECON] 2026-08-16 -- NETTOYAGE DOSSIER DUPLIQUE docs-dev (Hygie)
+
+**Contexte** : l utilisateur a constate que le dossier docs-dev-cerveau-projet
+existait en DOUBLE : a la racine (residu, ne contenant que
+rapport-diagnostic-convention-scripts-temporaires-2026-08-16.md) et dans
+cerveau-projet/ (le vrai dossier avec les 3 specs).
+
+**Actions** : snapshot (4642 fichiers) -> detection 1 RAPPORT_EGARE ->
+supprimer-dossier --agent hygie --force -> detection PROPRE. Le vrai dossier
+cerveau-projet/docs-dev-cerveau-projet/ est conserve intact.
+
+**Lecon** :
+1. Un residu peut etre DOUBLE (dossier + fichier) : quand detecter-residus
+   signale un RAPPORT_EGARE dans un dossier a la racine, verifier si le dossier
+   entier est un doublon d un dossier legitime du cerveau-projet.
+2. Le verrou exige --agent sur supprimer-dossier : toujours le passer (hygie).
+
+**APRES** : reactiver JANUS (verification finale).

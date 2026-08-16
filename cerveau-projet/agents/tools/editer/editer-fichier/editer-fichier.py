@@ -25,7 +25,7 @@ Retour : 0 si succes, 1 si erreur ou si AUCUNE occurrence trouvee
          (echec explicite : jamais 0 silencieux).
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.1
+Version : 0.4.2
 Statut : prepare
 """
 
@@ -34,7 +34,7 @@ import os
 import shutil
 import sys
 
-VERSION = "0.4.1"
+VERSION = "0.4.2"
 STATUT = "prepare"
 
 NOM_ATTENDU = "editer-fichier.py"
@@ -75,6 +75,34 @@ def afficher_aide():
     print("Retour : 0 si succes, 1 si erreur ou si AUCUNE occurrence trouvee.")
 
 
+def verrouiller_habilitation(agent, cible, audit=False):
+    """Appelle proteger-verrou-habilitation (v0.2.1) avec la CIBLE : si le
+    fichier est dans tester/tests/, seule morpheus peut le modifier (cle
+    exclusive - regle immuable). Retourne (code, message)."""
+    courant = os.path.dirname(os.path.abspath(__file__))
+    while True:
+        if os.path.isfile(os.path.join(courant, "AGENTS.md")):
+            break
+        parent = os.path.dirname(courant)
+        if parent == courant:
+            return (2, "[ERREUR] Racine du projet introuvable (AGENTS.md absent)")
+        courant = parent
+    verrou = os.path.join(
+        courant, "cerveau-projet", "agents", "tools", "proteger",
+        "proteger-verrou-habilitation", "proteger-verrou-habilitation.py")
+    if not os.path.isfile(verrou):
+        return (2, "[ERREUR] Verrou introuvable : %s" % verrou)
+    import subprocess
+    cmd = [sys.executable, verrou, "--agent", agent, "--outil", "editer-fichier",
+           "--cible", cible]
+    if audit:
+        cmd.append("--audit")
+    r = subprocess.run(cmd, capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    message = (r.stdout + r.stderr).strip()
+    return (r.returncode, message)
+
+
 def main(argv):
     verifier_nommage(os.path.basename(sys.argv[0]))
 
@@ -86,6 +114,7 @@ def main(argv):
     dry_run = False
     verbose = False
     help_demande = False
+    agent = ""
 
     i = 0
     while i < len(argv):
@@ -98,6 +127,10 @@ def main(argv):
             dry_run = True
         elif arg == "--verbose":
             verbose = True
+        elif arg == "--agent":
+            if i + 1 < len(argv):
+                agent = argv[i + 1]
+                i += 1
         elif arg in ("--aide", "--help", "-h"):
             help_demande = True
         elif arg == "--version":
@@ -124,6 +157,15 @@ def main(argv):
         print("[ERREUR] Arguments manquants")
         afficher_aide()
         return 1
+
+    # VERROU D HABILITATION (v0.2.1) : la modification d un fichier de test
+    # (tester/tests/) est EXCLUSIVE a morpheus. --agent est OBLIGATOIRE pour
+    # toute cible (le verrou verifie aussi la carte). Appele AVANT toute action.
+    if agent:
+        code_verrou, msg_verrou = verrouiller_habilitation(agent, fichier)
+        if code_verrou != 0:
+            print(msg_verrou)
+            return 1
 
     # Securite (round 3) : octet nul dans le chemin -> refus explicite
     if "\x00" in fichier:

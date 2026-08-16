@@ -16,8 +16,14 @@ Utilisation:
   tester-protection-erreurs-silencieuses.py "<commande>" [nom] [exit-attendu]
 
 Proprietaire : Morpheus (outil partage)
-Version : 0.2.0-py
+Version : 0.2.1-py
 Statut : prepare
+
+Regle v0.2.11 du protocole creation-scripts-temporaires (demande
+utilisateur 2026-08-16) : JAMAIS d ecriture vers le /tmp du systeme.
+Les logs de cette protection vont dans le workspace :
+<racine>/cerveau-projet/agents/traces/protection-logs/ (surclassable par
+la variable d environnement PROTECTION_LOG_DIR).
 """
 
 import datetime
@@ -28,11 +34,35 @@ import signal
 import subprocess
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.2.1-py"
 STATUT = "prepare"
 
-LOG_DIR = "/tmp/test-logs"
 MOTS_CLES_ERREUR = ("error", "erreur", "failed", "echec", "exception", "fatal")
+
+
+def racine_projet():
+    """Remonte depuis le dossier de l outil jusqu a la racine (AGENTS.md)."""
+    chemin = os.path.dirname(os.path.abspath(__file__))
+    while True:
+        if os.path.isfile(os.path.join(chemin, "AGENTS.md")):
+            return chemin
+        parent = os.path.dirname(chemin)
+        if parent == chemin:
+            return None
+        chemin = parent
+
+
+def log_dir():
+    """Dossier des logs : TOUJOURS dans le workspace (jamais /tmp systeme)."""
+    override = os.environ.get("PROTECTION_LOG_DIR")
+    if override:
+        return override
+    racine = racine_projet()
+    if racine:
+        return os.path.join(racine, "cerveau-projet", "agents", "traces",
+                            "protection-logs")
+    return os.path.join(os.getcwd(), "cerveau-projet", "agents", "traces",
+                        "protection-logs")
 
 
 def tuer_arbre(pid):
@@ -71,11 +101,12 @@ def executer_test_securise(test_cmd, test_name, expected_exit):
     """Executer un test avec verification des erreurs silencieuses."""
     print("[PROTECTION] Test securise: %s" % test_name)
 
-    os.makedirs(LOG_DIR, exist_ok=True)
+    dossier_logs = log_dir()
+    os.makedirs(dossier_logs, exist_ok=True)
     nom_clean = test_name.replace(" ", "_")
-    log_file = os.path.join(LOG_DIR, nom_clean + ".log")
-    stdout_file = os.path.join(LOG_DIR, nom_clean + "_stdout.log")
-    stderr_file = os.path.join(LOG_DIR, nom_clean + "_stderr.log")
+    log_file = os.path.join(dossier_logs, nom_clean + ".log")
+    stdout_file = os.path.join(dossier_logs, nom_clean + "_stdout.log")
+    stderr_file = os.path.join(dossier_logs, nom_clean + "_stderr.log")
 
     # Initialiser le log
     lignes_log = []

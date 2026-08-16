@@ -47,7 +47,7 @@ import sys
 import time
 from datetime import datetime
 
-VERSION = "0.5.3"
+VERSION = "0.5.5"
 STATUT = "ebauche"
 
 # Round 18 (2026-08-15) : BARRIERES DE PASSAGE (demande utilisateur) - la
@@ -68,7 +68,9 @@ SERIES = {
           "test-049", "test-050", "test-052", "test-054", "test-055", "test-056",
           "test-060", "test-062", "test-063", "test-064", "test-067", "test-068",
           "test-069", "test-070", "test-071", "test-072", "test-073",
-          "test-074", "test-075"],
+          "test-074", "test-075", "test-076", "test-077", "test-078",
+          "test-079", "test-080", "test-081", "test-082", "test-083", "test-084",
+          "test-085"],
     "b": ["test-009", "test-012", "test-013", "test-014", "test-015", "test-016",
           "test-018", "test-021", "test-026", "test-033", "test-034", "test-037",
           "test-048", "test-058", "test-059"],
@@ -235,17 +237,62 @@ def registre_defaut(racine):
     return os.path.join(racine, "cerveau-projet", "agents", "traces", "registre-usages-outils.jsonl")
 
 
+def ko_tests_defaut(racine):
+    """Chemin du fichier persistant de la serie KO (dossier du lanceur)."""
+    return os.path.join(racine, "cerveau-projet", "agents", "tools", "tester",
+                        "tester-lancer-non-regression", "ko-tests.json")
+
+
+def lire_ko_tests(racine):
+    """Lit la liste des tests en KO du fichier persistant ko-tests.json.
+    Retourne une liste de noms de tests (test-0XX) - vide si fichier absent
+    ou illisible (la serie KO vide est le comportement par defaut)."""
+    chemin = ko_tests_defaut(racine)
+    if not os.path.isfile(chemin):
+        return []
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            data = json.load(fh)
+        ko = data.get("ko", [])
+        return [k for k in ko if isinstance(k, str) and k.startswith("test-")]
+    except (IOError, ValueError):
+        return []
+
+
+def ecrire_ko_tests(racine, noms_ko):
+    """Ecrit la liste des tests en KO dans ko-tests.json (persistant).
+    Les noms sont tries, dedoublonnes, filtres sur test-0XX. Le fichier est
+    cree s il n existe pas (demande utilisateur 2026-08-16 : cree au premier
+    lancement)."""
+    chemin = ko_tests_defaut(racine)
+    noms = sorted(set(n for n in noms_ko if n.startswith("test-")))
+    data = {"ko": noms, "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+    dossier = os.path.dirname(chemin)
+    if dossier and not os.path.isdir(dossier):
+        os.makedirs(dossier, exist_ok=True)
+    with io.open(chemin, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(data, fh, ensure_ascii=True, indent=1)
+        fh.write("\n")
+    return noms
+
+
 def rotation_registre(racine, max_usages=100):
-    """ROTATION du registre courant (decision utilisateur 2026-08-14) :
+    """ROTATION NON DESTRUCTIVE du registre courant (v0.5.4, 2026-08-16) :
     le registre est CUMULATIF (memoire des usages reels des agents) mais
-    plafonne a `max_usages` entrees normales (direct/generateur).
-    Les entrees mode script-temporaire sont TOUJOURS preservees (memoire
-    des declarations, decision precedente) et ne comptent pas dans le
-    plafond.
-    - registre < 100 usages normaux : AUCUNE suppression (la memoire vit)
-    - registre > 100 : les usages normaux les PLUS ANCIENS sont retires
-      pour revenir a 100 (les script-temporaire restent).
-    Retourne le nombre de lignes normales conservees."""
+    plafonne a `max_usages` entrees de BRUIT d auto-journalisation.
+    Les entrees de VERITE ne sont JAMAIS retirees :
+      - mode script-temporaire : memoire des declarations (decision 14/08)
+      - mode direct / generateur : declarations manuelles documentees
+        (generateurs-amelioration, creation d outils...) - lecon 2026-08-16 :
+        la rotation a rogne generateurs-amelioration et casse test-078.
+    Seules les entrees mode verrou-auto (bruit d auto-journalisation du
+    verrou d habilitation) sont plafonnees : les plus anciennes sont
+    retirees pour revenir a `max_usages` (le verrou re-journalise les
+    usages recents a chaque appel, la memoire vive reste a jour).
+    - registre < 100 entrees verrou-auto : AUCUNE suppression (memoire vit)
+    - registre > 100 : les verrou-auto les PLUS ANCIENS sont retires
+      pour revenir a 100 (les verites restent).
+    Retourne le nombre d entrees verrou-auto conservees."""
     registre = registre_defaut(racine)
     if not os.path.isfile(registre):
         return 0
@@ -254,36 +301,36 @@ def rotation_registre(racine, max_usages=100):
             lignes = [l.rstrip("\n") for l in fh if l.strip()]
     except Exception:
         return 0
-    normales = []
-    scripts = []
+    verites = []
+    bruit = []
     for l in lignes:
         try:
             e = json.loads(l)
-            if e.get("mode") == "script-temporaire":
-                scripts.append(l)
+            if e.get("mode") in ("script-temporaire", "direct", "generateur"):
+                verites.append(l)
             else:
-                normales.append(l)
+                bruit.append(l)
         except ValueError:
-            normales.append(l)
-    # trier les normales par date (plus recente d abord) si possible
+            # ligne non-JSON : jamais perdue (philosophie corriger-noms-maj)
+            verites.append(l)
+    # trier le bruit par date (plus recente d abord) si possible
     def _date(l):
         try:
             return json.loads(l).get("date", "")
         except ValueError:
             return ""
-    normales.sort(key=_date, reverse=True)
-    if len(normales) > max_usages:
-        normales = normales[:max_usages]
-    conservees = scripts + normales
+    bruit.sort(key=_date, reverse=True)
+    if len(bruit) > max_usages:
+        bruit = bruit[:max_usages]
+    conservees = verites + bruit
     # Re-tri GLOBAL par date decroissante : la rotation ne doit PAS casser
-    # le tri du registre (les scripts temporaires gardes en tete casseraient
-    # l ordre chronologique global - regle de tri v0.3.0). Les lignes sans
+    # le tri du registre (regle de tri v0.3.0). Les lignes sans
     # date (non-JSON ou date vide) restent en fin.
     conservees.sort(key=_date, reverse=True)
     with io.open(registre, "w", encoding="utf-8", newline="\n") as fh:
         for l in conservees:
             fh.write(l + "\n")
-    return len(normales)
+    return len(bruit)
 
 
 def trouver_tests(racine, filtre=None):
@@ -1081,6 +1128,10 @@ def main():
                         help="Filtrer par noms de test separes par des virgules")
     parser.add_argument("--relancer-ko", action="store_true",
                         help="Mecanisation KO (demande utilisateur 2026-08-16) : relancer UNIQUEMENT les tests en KO du DERNIER run journalise (registre-tests.jsonl, run_id) - isole le probleme, valide le test, puis la serie, avant de relancer la suite complete. Combine a --series X, ne relance QUE les KO de la serie X.")
+    parser.add_argument("--ko", type=str, default="reprendre", choices=["nouveau", "reprendre"],
+                        help="Serie KO persistante prioritaire (demande utilisateur 2026-08-16) : 'reprendre' (defaut) lance D ABORD la serie KO (tests de ko-tests.json) avec sa barriere - ceux qui passent sortent du fichier et ne sont PAS relances dans leur serie d origine ; 'nouveau' vide le fichier ko-tests.json et lance les series normalement (les KO du run sont collectes dans ko-tests.json).")
+    parser.add_argument("--etat-ko", action="store_true",
+                        help="Affiche le contenu de la serie KO persistante (ko-tests.json) puis quitte sans lancer")
     parser.add_argument("--fichiers", type=str, default="",
                         help="Liste de fichiers modifies (separes par des virgules) : deduit automatiquement le(s) profil(s) de tests a lancer (mode profil)")
     parser.add_argument("--profil", type=str, default="",
@@ -1244,6 +1295,20 @@ def main():
         print(_couleur("Tests DESACTIVES (%d) :" % len(retires), "rouge"))
         for nom in sorted(retires):
             print("  %s (NON LANCE)" % nom)
+        return 0
+
+    if args.etat_ko:
+        ko_actuels = lire_ko_tests(racine)
+        print(_couleur("=== ETAT SERIE KO PERSISTANTE (ko-tests.json) ===", "cyan"))
+        print("Fichier : %s" % ko_tests_defaut(racine))
+        print(_couleur("Tests en KO (%d) :" % len(ko_actuels), "rouge" if ko_actuels else "vert"))
+        if ko_actuels:
+            for nom in sorted(ko_actuels):
+                print("  %s (serie %s, relance prioritaire au prochain --ko reprendre)"
+                      % (nom, serie_du_test(nom).upper()))
+        else:
+            print("  (aucun - la serie KO est vide, la suite demarre directement par A)")
+        print("Mode actuel : %s" % args.ko)
         return 0
 
     def _normaliser_numero(n):
@@ -1419,6 +1484,155 @@ def main():
     tot_non_lances = 0
     durees_total = []
 
+    # =====================================================================
+    # SERIE KO PRIORITAIRE (demande utilisateur 2026-08-16, v0.5.5) :
+    # fichier persistant ko-tests.json qui garde les tests en KO entre les
+    # lancements. Deux modes :
+    #   --ko nouveau   : vide ko-tests.json, lance les series normalement
+    #                    (A->E avec barrieres), puis COLLECTE les tests en
+    #                    KO dans ko-tests.json pour le prochain run.
+    #   --ko reprendre (defaut) : lance D ABORD la serie KO (les tests du
+    #                    fichier) avec SA barriere. Les tests KO qui PASSENT
+    #                    sont RETIRES du fichier et NE SONT PAS relances dans
+    #                    leur serie d origine (marques valides pour ce run).
+    #                    Si un test de la serie KO ECHOUE encore, la barriere
+    #                    KO est BLOQUEE et la suite s arrete (Janus corrige
+    #                    puis relance en --ko reprendre). Une fois la barriere
+    #                    KO franchie, les series A->E s executent SANS les
+    #                    tests deja valides, et les nouveaux KO rejoignent
+    #                    ko-tests.json. Idempotent : un test valide par la
+    #                    serie KO ne tourne qu UNE fois par run.
+    # La serie KO s applique UNIQUEMENT au mode barrieres (defaut), pas aux
+    # modes --serial / --parallele (qui gardent leur comportement historique).
+    # =====================================================================
+    ko_valides_run = set()      # tests valides par la serie KO (a ne pas relancer)
+    ko_fichier = lire_ko_tests(racine)
+    ko_restants = []            # tests KO non valides apres la barriere KO
+    mode_ko = "barrieres"
+    if not (args.serial or args.parallele) and not mode_profil:
+        if args.ko == "nouveau":
+            ecrire_ko_tests(racine, [])
+            ko_fichier = []
+            print(_couleur("[SERIE KO] Mode NOUVEAU : ko-tests.json vide - les series A-E "
+                           "s executent normalement, les KO seront collectes.", "cyan"))
+        elif ko_fichier:
+            print(_couleur("[SERIE KO] Mode REPRENDRE : %d test(s) en KO du fichier, "
+                           "relance prioritaire avant les series A-E :"
+                           % len(ko_fichier), "cyan"))
+            for nom in sorted(ko_fichier):
+                print(_couleur("  - %s (serie %s)" % (nom, serie_du_test(nom).upper()), "jaune"))
+        else:
+            print(_couleur("[SERIE KO] Mode REPRENDRE : serie KO vide - la suite demarre "
+                           "par la serie A.", "cyan"))
+        if ko_fichier:
+            # La serie KO a SA propre barriere : tests en parallele (pool),
+            # puis serie si KO persistant -> barriere bloquee.
+            print(_couleur("[BARRIERE KO] Serie KO persistante : lancement...", "bleu"))
+            ko_chemin = [t for t in tests if os.path.basename(t) in ko_fichier]
+            manquants = [nom for nom in ko_fichier
+                         if nom not in {os.path.basename(t) for t in tests}]
+            if manquants:
+                print(_couleur("[SERIE KO] %d test(s) du fichier introuvable(s) "
+                               "(deplaces, desactives ou supprimes) - retires : %s"
+                               % (len(manquants), ", ".join(sorted(manquants))), "jaune"))
+            ko_restants = []
+            ko_ok = ko_ko = ko_non = 0
+            ko_ko_liste = []
+            ko_durees = []
+            if ko_chemin:
+                if args.workers and args.workers > 0:
+                    workers = args.workers
+                else:
+                    workers = min(os.cpu_count() or 1, 16)
+                ko_pool = [t for t in ko_chemin
+                           if not any(os.path.basename(t).startswith(g)
+                                      for g in GARDE_FOUS_GLOBAUX + TESTS_SERIE_EXCLUSIFS)]
+                ko_exclusifs = [t for t in ko_chemin
+                                if any(os.path.basename(t).startswith(g)
+                                       for g in GARDE_FOUS_GLOBAUX + TESTS_SERIE_EXCLUSIFS)]
+                if ko_pool:
+                    ok_k, ko_k, ko_l_k, non_k, dur_k = executer_pool(
+                        racine, ko_pool, workers,
+                        fail_fast=args.fail_fast, agent=args.agent, serie="ko",
+                        timeout_test=args.timeout_test, run_id=run_id)
+                    ko_ok += ok_k
+                    ko_ko += ko_k
+                    ko_non += non_k
+                    ko_ko_liste.extend(ko_l_k)
+                    ko_durees.extend(dur_k)
+                if ko_exclusifs:
+                    ok_k, ko_k, ko_l_k, non_k, dur_k = executer_lot(
+                        racine, ko_exclusifs,
+                        libelle="BARRIERE KO - exclusifs (serie)",
+                        fail_fast=args.fail_fast, agent=args.agent, serie="ko",
+                        timeout_test=args.timeout_test, run_id=run_id)
+                    ko_ok += ok_k
+                    ko_ko += ko_k
+                    ko_non += non_k
+                    ko_ko_liste.extend(ko_l_k)
+                    ko_durees.extend(dur_k)
+                # Les tests KO qui PASSENT sortent du fichier et sont marques
+                # valides (pas de re-lancement dans leur serie d origine).
+                noms_ok_ko = [os.path.basename(t) for t in ko_pool + ko_exclusifs
+                              if os.path.basename(t) not in {k[0] for k in ko_ko_liste}]
+                ko_valides_run.update(noms_ok_ko)
+                # ko_restants = KO persistants NON valides (les introuvables
+                # ont deja ete retires de la liste manquants).
+                noms_ko_lances = {os.path.basename(t) for t in ko_chemin}
+                ko_restants = [nom for nom in ko_fichier
+                               if nom in noms_ko_lances and nom not in ko_valides_run]
+            tot_ok += ko_ok
+            tot_ko += ko_ko
+            tot_non_lances += ko_non
+            ko_liste.extend(ko_ko_liste)
+            durees_total.extend(ko_durees)
+            if ko_ko > 0 or ko_non > 0:
+                ecrire_ko_tests(racine, ko_restants or ko_fichier)
+                print(_couleur(
+                    "[BARRIERE KO BLOQUEE] La serie KO a encore %d KO : la suite "
+                    "est STOPPEE. Reparer puis relancer en --ko reprendre."
+                    % (ko_ko + ko_non), "rouge"))
+                print(_couleur("[SERIE KO] Reste en KO : %s"
+                               % ", ".join(sorted(ko_restants or ko_fichier)), "jaune"))
+                barriere_ko_bloquee = True
+            else:
+                ecrire_ko_tests(racine, ko_restants)
+                if ko_restants:
+                    print(_couleur("[SERIE KO] KO valides et retires du fichier : %s"
+                                   % ", ".join(sorted(ko_valides_run)), "vert"))
+                print(_couleur("[BARRIERE KO FRANCHIE] Serie KO : 100%% verte, "
+                               "passage aux series A-E.", "vert"))
+
+    # SORTIE ANTICIPEE si la barriere KO est bloquee (STOP avant A-E).
+    if not (args.serial or args.parallele) and not mode_profil and \
+       args.ko != "nouveau" and "barriere_ko_bloquee" in dir() and barriere_ko_bloquee:
+        duree = time.monotonic() - t0
+        nb_desactives = len(tests_desactives)
+        bilan = "=== RESULTAT GLOBAL : %d OK / %d KO (sur %d tests, %d non lances - STOP barriere KO) ===" \
+                % (tot_ok, tot_ko, len(tests) - tot_non_lances, tot_non_lances)
+        print("")
+        print(_couleur(bilan, "rouge"))
+        if tot_ko:
+            afficher_details_ko(ko_liste)
+        afficher_tests_lents(durees_total)
+        if args.rapport:
+            ecrire_rapport(args.rapport, "Non-regression globale", bilan, ko_liste,
+                           None, durees_total)
+        return 1
+
+    # Exclusion des tests deja valides par la serie KO : ils ne doivent PAS
+    # etre relances dans leur serie d origine (idempotence du run).
+    if ko_valides_run:
+        noms_a_garder = [t for t in tests
+                         if os.path.basename(t) not in ko_valides_run]
+        ecartes_ko = len(tests) - len(noms_a_garder)
+        if ecartes_ko:
+            print(_couleur("[SERIE KO] %d test(s) deja valide(s) par la serie KO, "
+                           "non relances dans leur serie : %s"
+                           % (ecartes_ko, ", ".join(sorted(ko_valides_run))), "vert"))
+        tests = noms_a_garder
+        par_serie, hors_serie = assigner_series(tests, "tous")
+
     # Round 18 : BARRIERES DE PASSAGE = NOUVEAU DEFAUT (demande utilisateur).
     # Les series s executent dans l ORDRE D IMPORTANCE (fondations d abord).
     # Chaque serie doit etre 100% VERTE pour FRANCHIR la barriere vers la
@@ -1568,6 +1782,37 @@ def main():
             tot_non_lances += non_lances_h
             ko_liste.extend(ko_liste_h)
             durees_total.extend(durees_h)
+
+    # COLLECTE DES KO DANS LA SERIE KO PERSISTANTE (fin de run, mode barrieres
+    # uniquement) : les tests en KO du run rejoignent ko-tests.json pour le
+    # prochain --ko reprendre. En mode NOUVEAU, le fichier a ete vide en debut
+    # de run : il ne contient donc que les KO de CE run (comportement attendu :
+    # 'nouveau' oublie les KO precedents et collecte les nouveaux). En mode
+    # REPRENDRE, les KO restants (non valides par la barriere KO) + les
+    # nouveaux KO du run sont fusionnes. Seuls les tests reellement KO ou
+    # non lances (STOP) sont collectes - un test valide par la serie KO n y
+    # figure pas. Les noms stockes sont les NOMS COMPLETS (basename avec
+    # suffixe, ex: test-032-pool-workers.py) pour matcher les chemins.
+    if not (args.serial or args.parallele) and not mode_profil:
+        noms_ko_run = sorted({k[0] for k in ko_liste})
+        # En mode reprendre, on conserve les KO restants du fichier (ceux qui
+        # n ont pas passe la barriere KO n existent plus : la suite s est
+        # arretee avant) - on repart donc de la collecte du run courant.
+        nouveau_fichier_ko = sorted(set(noms_ko_run) | set(ko_restants))
+        if noms_ko_run or ko_restants or args.ko == "nouveau":
+            ecrire_ko_tests(racine, nouveau_fichier_ko)
+            if noms_ko_run:
+                print(_couleur("[SERIE KO] %d test(s) en KO collecte(s) dans ko-tests.json "
+                               "(relance prioritaire au prochain --ko reprendre) :"
+                               % len(noms_ko_run), "jaune"))
+                for nom in noms_ko_run:
+                    print("  - %s (serie %s)" % (nom, serie_du_test(nom).upper()))
+            elif ko_restants:
+                print(_couleur("[SERIE KO] ko-tests.json conserve %d test(s) en KO."
+                               % len(ko_restants), "jaune"))
+
+
+
 
     duree = time.monotonic() - t0
     nb_desactives = len(tests_desactives)
