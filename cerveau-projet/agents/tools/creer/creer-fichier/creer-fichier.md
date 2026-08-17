@@ -6,7 +6,7 @@ identite:
 ---
 # creer-fichier
 
-**Version :** 0.3.1
+**Version :** 0.3.2
 **Statut :** prepare
 **Categorie :** Creer
 **Chemin :** `agents/tools/creer/creer-fichier/`
@@ -71,6 +71,7 @@ creer-fichier.sh --forcer fichier.md
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.3.2 | 2026-08-17 | MESSAGES INFORMATIONNELS : rappels apres creation (outil -> index-tools+catalogue+doc+assignation ; rapport -> dossier agent jamais racine) - regle immuable v0.3.0 |
 | 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (fichier vide, contenu, refus si existe, --forcer, --dry-run), promotion prepare |

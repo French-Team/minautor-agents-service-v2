@@ -30,6 +30,7 @@ Invariants verifies :
   3. La commande passe la raison via list2cmdline (sinon KO)
   4. Preuve negative : un script temp a apostrophe SANS list2cmdline fait KO
   5. Normes : ASCII strict + LF pur (test + fichiers scannes)
+Tags: securite, scripts-temp, garde-fou, anti-recurrence
 """
 import glob
 import importlib.util

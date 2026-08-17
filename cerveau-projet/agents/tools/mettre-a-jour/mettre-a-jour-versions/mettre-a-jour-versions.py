@@ -52,7 +52,7 @@
 #   python3 mettre-a-jour-versions.py --catalogue --nouvelle 0.3.0
 #   python3 mettre-a-jour-versions.py --protocole <chemin> --mineure
 #
-# Version : 0.1.3
+# Version : 0.1.4
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -70,7 +70,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -108,7 +108,20 @@ _RE_CONSTANTE = re.compile(r"VERSION = \"(\d+\.\d+\.\d+)" + _RE_SUFFIXE + r"\"")
 _RE_VARIABLE = re.compile(r"VERSION=\"(\d+\.\d+\.\d+)" + _RE_SUFFIXE + r"\"")
 # Round bumper (2026-08-16) : 24 docs utilisent '**Version** :' (espace
 # avant le deux-points) vs 92 '**Version :**' - le motif couvre les 2 formats.
-_RE_MD_VERSION = re.compile(r"(?m)^\s*\*\*Version(?:\*\* :|\*? :\*\*|\*\*:| :\*\*)\s*(\d+\.\d+\.\d+)")
+# Round bumper v0.1.4 (2026-08-17, demande utilisateur audit croise) : le
+# motif ne couvrait QUE le champ standard en debut de ligne -> les .md en
+# format TABLEAU ('| **Version** |'), BLOCKQUOTE ('> **Version** :'), LISTE
+# ('- Version :' / '- **X.Y.Z**') ou section '## Version' etaient INVISIBLES
+# et declares 'coherent' sans verification (2 vrais ecarts caches :
+# generateurs-carte/generateurs-ligne). Le motif couvre desormais les 4
+# formats, avec priorite au champ standard (toujours en tete de fichier).
+_RE_MD_VERSION = re.compile(
+    r"(?m)^\s*(?:"
+    r"\*\*Version(?:\*\* :|\*? :\*\*|\*\*:| :\*\*)\s*"      # standard
+    r"|>\s*\*\*Version(?:\*\* :|\*? :\*\*|\*\*:| :\*\*)\s*"  # blockquote
+    r"|\|\s*\*\*Version\*\*\s*\|\s*"                         # tableau
+    r"|-\s*Version\s*:\s*"                                      # liste '- Version :'
+    r"|-\s*\*\*?v?)(\d+\.\d+\.\d+)" + _RE_SUFFIXE)
 _RE_JSON_VERSION = re.compile(r"\"version\"\s*:\s*\"(\d+\.\d+\.\d+)\"")
 _RE_FICHE_PARCOURS = re.compile(r"PARCOURS \(v(\d+\.\d+\.\d+)\)")
 _RE_PROTOCOLE_FRONT = re.compile(r"(?m)^\s*version:\s*\"(\d+\.\d+\.\d+)\"")

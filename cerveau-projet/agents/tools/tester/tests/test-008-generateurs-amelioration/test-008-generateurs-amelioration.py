@@ -25,6 +25,7 @@ Cas couverts:
 
 Usage:
   python3 test-008-generateurs-amelioration.py
+Tags: outils, generateurs
 """
 import importlib.util
 import io

@@ -6,6 +6,7 @@ identite:
 ---
 # Specification -- verifier-systeme
 
+**Version :** 0.2.3-py
 **Statut :** prepare
 **ID :** 001
 **Class :** 01
@@ -238,3 +239,4 @@ Execution reelle sur le systeme de l'utilisateur + fichiers de test dans `exempl
 | 2026-08-07 | 0.2.0 | Promethee | Refonte selon spec-template, version outil 0.2.0 |
 | 2026-08-09 | 0.2.1-py | Vulcain | Alignement regle des 5 fichiers (py 0.2.1-py) |
 | 2026-08-16 | 0.2.2-py | Vulcain | Option --bloc-fiche (environnement de travail pour les fiches agents) |
+| 2026-08-17 | 0.2.3-py | Vulcain | Ressources RAM totale/dispo + disque libre + charge CPU (config adaptative) |

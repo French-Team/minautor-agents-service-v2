@@ -32,6 +32,7 @@ Cas couverts:
 
 Usage:
   python3 test-025-nettoyer-sessions-garde-fou.py
+Tags: registre-traces, garde-fou, anti-recurrence
 """
 import importlib.util
 import io

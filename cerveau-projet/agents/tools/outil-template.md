@@ -1,6 +1,6 @@
 # [nom-outil]
 
-**Version :** 0.2.0-beta
+**Version :** 0.3.0-beta
 **Statut :** ebauche
 **Categorie :** [ajouter | analyser | changer | combos | condenser | copier | corriger | creer | decomposer | deplacer | detecter | ecrire | editer | evaluer | generateurs | gerer | inserer | lire | lister | mettre-a-jour | nettoyer | rechercher | supprimer | valider | verifier]
 **Chemin :** `agents/tools/[categorie]/[nom-outil]/`
@@ -84,6 +84,30 @@
 > disponibles). PILOTE optionnel : aucun outil existant n est migre tant que
 > le pilote n est pas valide par un test dedie.
 
+## REGLE IMMUABLE : messages informationnels (v0.3.0)
+
+> **REGLE ABSOLUE (demande utilisateur 2026-08-17)** : TOUT outil qui
+> ecrit/modifie dans le projet DOIT afficher des MESSAGES INFORMATIONNELS
+> dans sa sortie, aux endroits importants : l agent voit TOUJOURS les
+> consequences de son action (fichiers compagnons a mettre a jour, regles
+> a respecter, etapes suivantes).
+
+Le template fournit `afficher_messages_info` (Python) / `afficher_messages_info`
+(bash) : section `=== MESSAGES POUR L AGENT ===`, une ligne ` > ` par
+message. L appel est OBLIGATOIRE en fin de main() apres une action reussie
+(non dry-run). Les messages sont TOUJOURS affiches (pas une option).
+
+Exemple de sortie :
+
+```
+=== MESSAGES POUR L AGENT ===
+  > fichier modifie : indexer dans index-tools.md
+  > fichier modifie : adapter les tests (Morpheus)
+```
+
+Precedents : `mettre-a-jour-versions` (FICHIERS COMPAGNONS),
+`generateurs-case` (RAPPEL ASCII/RVAV/DELEGATION).
+
 ## REGLE IMMUABLE : documentation obligatoire (v0.2.0)
 
 > **REGLE IMMUABLE (lecture documentation mecanisee, demande utilisateur)** :
@@ -139,6 +163,7 @@ $ [nom-outil].sh [argument 1]
 
 ## Notes de creation
 
+- [ ] L'outil affiche ses MESSAGES INFORMATIONNELS en fin d action reussie (afficher_messages_info)
 - [ ] L'outil embarque le bloc DOC OBLIGATOIRE (verifier_doc_presente + exiger_confirmation_doc + --doc + --confirme-doc)
 - [ ] L'outil a ete teste : sans `--confirme-doc` en mode reel -> refus (code 2) ; avec -> OK
 - [ ] L'outil a ete teste en `--dry-run` avant application

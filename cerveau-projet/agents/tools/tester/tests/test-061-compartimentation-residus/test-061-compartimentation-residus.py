@@ -25,6 +25,7 @@ Cas couverts:
   6. Nettoyage garanti : 0 residu factice restant meme en cas d echec
   7. ASCII strict : 0 non-ASCII (test)
   8. LF pur : 0 CRLF (test)
+Tags: registre-traces, residus, compartimentation, garde-fou
 """
 import importlib.util
 import io

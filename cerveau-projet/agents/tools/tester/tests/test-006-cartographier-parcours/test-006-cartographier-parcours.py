@@ -12,7 +12,7 @@ Outil teste (cerveau-projet/agents/tools/cartographier/cartographier-parcours/):
 
 Cas couverts:
   1. --version py/sh identiques v0.1.0
-  2. Generation reelle sur parcours-atlas (44 cases, 39 chemins) avec en-tete complet
+  2. Generation reelle sur parcours-atlas (48 cases, 13 chemins) avec en-tete complet
   3. Parite py/sh : fichiers generes IDENTIQUES (diff)
   4. --sortie vers un chemin personnalise (.tmp-*)
   5. --dry-run ne cree rien
@@ -25,6 +25,7 @@ Cas couverts:
 
 Usage:
   python3 test-006-cartographier-parcours.py
+Tags: outils, parcours, cartographier
 """
 import importlib.util
 import io
@@ -173,7 +174,7 @@ def main():
                  ok_gen and all(m in contenu for m in
                                 ("| Agent | atlas |", "| Version du parcours |",
                                  "| Case de depart | c0 |", "| Nombre de cases | 48 |",
-                                 "| Nombre de chemins (depart -> fins) | 39 |")),
+                                 "| Nombre de chemins (depart -> fins) | 13 |")),
                  "en-tete partiel")
         verifier("2c. Sections presentes (arbre, impasses, boucles, chemins)",
                  ok_gen and all(m in contenu for m in
@@ -226,8 +227,11 @@ def main():
         c0_fois = zone_arbre.count("[c0]")
         c11_fois = zone_arbre.count("[c11]")
         convergence = "[convergence]" in zone_arbre
-        verifier("6a. Chaque case apparait UNE fois dans l arbre (c0 x1, c11 x1)",
-                 c0_fois == 1 and c11_fois == 1, "c0 x%d c11 x%d" % (c0_fois, c11_fois))
+        # La boucle de relecture (c0 -> c0b -> NON -> c0, migration 2026-08-16)
+        # fait apparaitre c0 2 fois dans l arbre : racine + [convergence].
+        # Les cases hors cycle (c11) restent affichees UNE seule fois.
+        verifier("6a. Cases hors cycle une fois (c0 x2 max relecture, c11 x1)",
+                 c0_fois <= 2 and c11_fois == 1, "c0 x%d c11 x%d" % (c0_fois, c11_fois))
         verifier("6b. Convergences marquees [convergence]", convergence)
         verifier("6c. Fin visible (FIN - Reactiver Cerberus / Signaler le besoin)",
                  "FIN - Reactiver Cerberus" in zone_arbre or "Signaler le besoin" in zone_arbre,

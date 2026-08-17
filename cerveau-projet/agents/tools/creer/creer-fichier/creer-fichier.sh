@@ -1,14 +1,14 @@
 #!/bin/bash
 # creer-fichier.sh
 # Creer un nouveau fichier avec verification
-# Version : 0.3.1
+# Version : 0.3.2
 # Statut : prepare
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.3.1"
+VERSION="0.3.2"
 STATUT="prepare"
 
 RED='\033[0;31m'

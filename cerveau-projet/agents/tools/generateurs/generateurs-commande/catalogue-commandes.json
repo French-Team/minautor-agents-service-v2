@@ -1,5 +1,5 @@
 {
- "version": "0.2.9",
+ "version": "0.2.10",
  "description": "Catalogue des commandes complexes du cerveau-projet. Source de verite : chaque commande (modele) est un copier-coller d un appel d outil deja ecrit, corrige et valide (agents/tools/). Le generateur pose une question par parametre, valide les reponses, puis compose la commande exacte a lancer.",
  "commandes": [
   {
@@ -176,6 +176,28 @@
    ]
   },
   {
+   "nom": "analyser-fonctions",
+   "description": "Profile un script cible (cProfile) et affiche les fonctions les plus couteuses (goulots internes)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/analyser/analyser-fonctions/analyser-fonctions.py",
+   "modele": "{cible} --sort {sort}",
+   "parametres": [
+    {
+     "cle": "cible",
+     "question": "Script a profiler (chemin) ?",
+     "type": "texte",
+     "obligatoire": true
+    },
+    {
+     "cle": "sort",
+     "question": "Cle de tri (cumtime|tottime|ncalls) ?",
+     "type": "texte",
+     "obligatoire": false,
+     "defaut": "cumtime"
+    }
+   ]
+  },
+  {
    "nom": "analyser-io-tests",
    "description": "Mesurer la lecture/ecriture disque pendant l execution des tests (I/O par test)",
    "interpreteur": "python3",
@@ -271,6 +293,21 @@
    ]
   },
   {
+   "nom": "analyser-round",
+   "description": "Resume l activite d un round (agents actives, outils utilises, tests lances)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/analyser/analyser-round/analyser-round.py",
+   "modele": "{fenetre}",
+   "parametres": [
+    {
+     "cle": "fenetre",
+     "question": "Fenetre du round en minutes (defaut 60) ?",
+     "type": "texte",
+     "obligatoire": false
+    }
+   ]
+  },
+  {
    "nom": "analyser-structure",
    "description": "Analyser la structure du projet",
    "interpreteur": "python3",
@@ -315,6 +352,27 @@
      "obligatoire": false,
      "flag": "--rapport",
      "defaut": ""
+    }
+   ]
+  },
+  {
+   "nom": "analyser-workers",
+   "description": "Etude d echelle : temps de la suite a differents nombres de workers paralleles (optimum reel)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/analyser/analyser-workers/analyser-workers.py",
+   "modele": "--tests {tests} {workers}",
+   "parametres": [
+    {
+     "cle": "tests",
+     "question": "Tests a mesurer (virgule, ex: test-028,test-032) ?",
+     "type": "texte",
+     "obligatoire": true
+    },
+    {
+     "cle": "workers",
+     "question": "Liste des workers a tester (ex: 1,2,4,8) - defaut 1,2,4,8,16 ?",
+     "type": "texte",
+     "obligatoire": false
     }
    ]
   },
@@ -596,6 +654,22 @@
      "type": "flag",
      "obligatoire": false,
      "flag": "--backup"
+    }
+   ]
+  },
+  {
+   "nom": "configurer-environnement",
+   "description": "Genere la configuration d environnement adaptative (workers, timeouts) a partir des ressources reelles (CPU/RAM/disque/charge)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/configurer/configurer-environnement/configurer-environnement.py",
+   "modele": "--generer {verbose}",
+   "parametres": [
+    {
+     "cle": "verbose",
+     "question": "Activer --verbose (detail du calcul) ?",
+     "type": "flag",
+     "obligatoire": false,
+     "flag": "--verbose"
     }
    ]
   },
@@ -1270,6 +1344,14 @@
      "defaut": ""
     }
    ]
+  },
+  {
+   "nom": "detecter-recherches-obsoletes",
+   "description": "Detecte les recherches-web obsoletes (age > 30 jours ou date invalidite passee) pour garantir des souvenirs vrais et a jour.",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/detecter/detecter-recherches-obsoletes/detecter-recherches-obsoletes.py",
+   "modele": "",
+   "parametres": []
   },
   {
    "nom": "detecter-residus",
@@ -2714,6 +2796,45 @@
    ]
   },
   {
+   "nom": "migrer-cases-relecture",
+   "description": "Migrer les parcours vers la relecture obligatoire (c0 action RELIRE + c0b question confirmation)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/migrer/migrer-cases-relecture/migrer-cases-relecture.py",
+   "modele": "--tous",
+   "parametres": [
+    {
+     "cle": "tous",
+     "question": "Migrer tous les parcours ?",
+     "type": "flag",
+     "obligatoire": false,
+     "flag": "--tous"
+    },
+    {
+     "cle": "agent",
+     "question": "Agent(s) a migrer (nom, separes par espaces) ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--agent",
+     "defaut": ""
+    },
+    {
+     "cle": "dry_run",
+     "question": "Mode dry-run (afficher sans ecrire) ?",
+     "type": "flag",
+     "obligatoire": false,
+     "flag": "--dry-run"
+    },
+    {
+     "cle": "rapport",
+     "question": "Rapport markdown (chemin) ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--rapport",
+     "defaut": ""
+    }
+   ]
+  },
+  {
    "nom": "migrer-identite",
    "description": "Migrer les fichiers vers le schema hybride v0.2.0 de detecter-impacts",
    "interpreteur": "python3",
@@ -3057,6 +3178,61 @@
      "question": "Valeur pour theme ?",
      "type": "texte",
      "obligatoire": false,
+     "defaut": ""
+    }
+   ]
+  },
+  {
+   "nom": "rechercher-web",
+   "description": "Recherche web et lecture de page (acces web reel pour les agents). Mode recherche : <requete>. Mode lecture : --url <url>.",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/rechercher/rechercher-web/rechercher-web.py",
+   "modele": "--agent {agent} \"{requete}\"",
+   "parametres": [
+    {
+     "cle": "agent",
+     "question": "Agent appelant (verrou d habilitation) ?",
+     "type": "texte",
+     "obligatoire": true
+    },
+    {
+     "cle": "requete",
+     "question": "Requete de recherche ?",
+     "type": "texte",
+     "obligatoire": true,
+     "quoter": true
+    }
+   ]
+  },
+  {
+   "nom": "recommander-series",
+   "description": "Croiser tags des tests + durees (registre-tests) pour recommander une reorganisation des series de la non-regression",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/tester/recommander-series/recommander-series.py",
+   "modele": "--max-par-serie 10 --max-duree 60",
+   "parametres": [
+    {
+     "cle": "max_par_serie",
+     "question": "Max tests par serie ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--max-par-serie",
+     "defaut": "10"
+    },
+    {
+     "cle": "max_duree",
+     "question": "Max duree par serie (s) ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--max-duree",
+     "defaut": "60"
+    },
+    {
+     "cle": "rapport",
+     "question": "Rapport markdown (chemin) ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--rapport",
      "defaut": ""
     }
    ]

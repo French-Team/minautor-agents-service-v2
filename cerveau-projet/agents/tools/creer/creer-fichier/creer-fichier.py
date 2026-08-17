@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # creer-fichier.py
 # Creer un nouveau fichier avec verification
-# Version : 0.3.1
+# Version : 0.3.2
 # Statut : prepare
 
 # identite:
@@ -17,7 +17,7 @@ Usage:
   creer-fichier.py [OPTIONS]
 """
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 STATUT = "prepare"
 
 import sys
@@ -131,6 +131,13 @@ def main():
 
     if args.verbose:
         print(GREEN + "[OK] Fichier cree: " + args.fichier + NC)
+
+    # MESSAGES INFORMATIONNELS (regle immuable v0.3.0)
+    print("")
+    print(YELLOW + "=== MESSAGES POUR L AGENT ===" + NC)
+    print("  > fichier cree : s il s agit d un OUTIL, ajouter l entree index-tools.md + catalogue + .md de doc obligatoire + assignation a un agent")
+    print("  > fichier cree : s il s agit d un RAPPORT, le placer dans le dossier de l agent (jamais a la racine)")
+    print("  > fichier cree : verifier les fichiers qui le referencent (tests, index, docs)")
 
     return 0
 

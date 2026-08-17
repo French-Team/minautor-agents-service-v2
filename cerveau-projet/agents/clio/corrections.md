@@ -260,3 +260,68 @@ analyser-noms-maj + corriger-noms-maj).
 
 **Lecon** : l option de remplacement global d editer-fichier est --global
 (pas --tout) - verifier l aide de l outil avant usage.
+## [LECON] 2026-08-16 -- MISE A JOUR README PUBLIC + DEV (Clio)
+
+**Contexte** : demande utilisateur (mise a jour des readmes). Mission confiee
+par Cerberus (case c17) apres un diagnostic des compteurs.
+
+**Travail realise** :
+1. readme-dev.md : tableau des outils resynchronise sur la realite
+   (combos-analyse-projet = source de verite). Les compteurs Analyser 5->6,
+   Corriger 6->7, Detecter 15->17, Nettoyer 3->4 etaient perimes. Les
+   exemples de colonnes Corriger/Nettoyer/Evaluer etaient incomplets.
+2. README public : ligne Argus du tableau des agents re-formatee (elle etait
+   sortie du tableau, avec une 3e colonne inexistante, collant au titre suivant).
+
+**Verification** : combos-analyse-projet verdict "README A JOUR (0 ecart)",
+test-038 7/7 (badge 149 == 149), normes 0 non-ascii / 0 CRLF sur les 2 fichiers.
+
+**Lecon** :
+- La source de verite des compteurs d outils est combos-analyse-projet
+  (compter_outils = dossiers reels), pas l index-tools (qui compte aussi
+  protections/tests/templates -> 187 avec une convention differente).
+- Toujours verifier le format des tableaux markdown apres un ajout de ligne
+  (ligne Argus mal formatee : colonnes manquantes + titre colle).
+## [LECON] 2026-08-16 -- BADGE 150 + MIGRER DANS README-DEV (Clio)
+
+**Contexte** : migration relecture obligatoire (Vulcain) -> nouvel outil
+migrer-cases-relecture -> compte reel d outils 149 -> 150. test-038 KO
+(badge affiche 149, reel 150).
+
+**Travail realise** :
+1. Badge README 149 -> 150 (2 occurrences : affichage ET href du header).
+   Lecons du passage : editer-fichier n a remplace que la PREMIERE
+   occurrence de la ligne ; le href (2e occurrence) est reste a 149 ->
+   verification grep des 2 occurrences + test-038 7/7.
+2. readme-dev.md : categorie Migrer 1 -> 2 (migrer-identite +
+   migrer-cases-relecture) dans le tableau de la section 6.
+3. combos-analyse-projet : README A JOUR (0 ecart), normes 0/0.
+
+**Lecon** :
+- Un nouvel outil = +1 au compte reel = badge ET tableau readme-dev a
+  synchroniser dans la meme mission. Le badge a 2 occurrences (affichage +
+  href) : toujours verifier les 2 (grep Outils-<n> et test-038).
+- combos-analyse-projet est la source de verite : il liste les ecarts
+  categorie par categorie (il a detecte Migrer 1 vs 2).
+
+
+## [LECON] 2026-08-16 -- BADGE OUTILS README 150 -> 152 (Clio)
+
+**Contexte** : KO test-038 (badge-readme-synchronise) detecte par Janus en
+barriere KO. Vulcain a cree 2 outils web (rechercher-web +
+detecter-recherches-obsoletes) : le compte reel des outils est passe de 150
+a 152 mais le badge en dur du README affichait encore 150 (affichage + href).
+
+**Fait** :
+- Badge en dur ligne 9 du README : affichage (Outils-152) PUIS href
+  (Outils-152) - 2 occurrences distinctes (editer-fichier 150 -> 152 x2).
+- test-038 : 7/7 OK (affichage == compte reel == href).
+
+**Lecons** :
+- Le badge README a DEUX occurrences du nombre (affichage + href) : corriger
+  les deux, sinon test-038 reste KO (verifie les deux separement).
+- editer-fichier remplace la PREMIERE occurrence : pour un badge en dur avec
+  2 memes valeurs, relancer avec un motif plus precis (badge/Outils-150...)
+  pour la 2e. Toujours verifier avec grep -o | sort | uniq -c apres.
+- Le KO a ete detecte par la barriere serie KO de Janus (nouveau workflow) :
+  le cycle KO -> agent habilite (Clio) -> revalidation est fluide.

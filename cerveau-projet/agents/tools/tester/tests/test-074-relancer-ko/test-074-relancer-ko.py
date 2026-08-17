@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-074-relancer-ko.py
-GARDE-FOU : l option --relancer-ko de tester-lancer-non-regression (v0.5.5)
+GARDE-FOU : l option --relancer-ko de tester-lancer-non-regression (v0.6.2)
 doit relancer UNIQUEMENT les tests en KO du DERNIER run journalise
 (registre-tests.jsonl, champ run_id) - mecanisation du workflow KO
 (demande utilisateur 2026-08-16) : isole le probleme, revalide le test,
@@ -14,13 +14,13 @@ Contexte :
     registre-tests.jsonl (timestamp du debut du run) + fonction
     ko_du_dernier_run(racine, registre="") qui collecte les tests
     KO/ERREUR/TIMEOUT du run le plus recent.
-  - Ce test verrouille : version 0.5.5, option dans --aide, fonction
+  - Ce test verrouille : version 0.6.2, option dans --aide, fonction
     ko_du_dernier_run testable (parametre registre), preuve negative
     (un run avec 2 KO prime sur un run ancien avec 1 KO), run sans KO
     -> liste vide, purge du registre temp (0 trace).
 
 Invariants verifies :
-  1. tester-lancer-non-regression --version = v0.5.5
+  1. tester-lancer-non-regression --version = v0.6.2
   2. L option --relancer-ko est presente dans --aide.
   3. La fonction ko_du_dernier_run existe et accepte un parametre registre
      (testable sur un fichier arbitraire, jamais sur le vrai registre).
@@ -30,6 +30,7 @@ Invariants verifies :
   5. Un run sans KO -> liste vide (rien a relancer).
   6. Le registre temp est SUPPRIME en fin de test (0 trace).
   7. Normes : ASCII strict + LF pur (test + lanceur).
+Tags: performance, relancer-ko, garde-fou
 """
 import importlib.util
 import io
@@ -116,13 +117,13 @@ def run(cmd, timeout=120):
 
 
 def main():
-    print("=== Garde-fou : --relancer-ko de tester-lancer-non-regression v0.5.5 ===")
+    print("=== Garde-fou : --relancer-ko de tester-lancer-non-regression v0.6.2 ===")
 
-    # 1. Version v0.5.5
+    # 1. Version v0.6.2
     t0 = time.monotonic()
     code, out = run([sys.executable, LANCEUR_PY, "--version"])
-    verifier("1. tester-lancer-non-regression --version v0.5.5",
-             code == 0 and "v0.5.5" in out, out.strip()[-40:])
+    verifier("1. tester-lancer-non-regression --version v0.6.2",
+             code == 0 and "v0.6.2" in out, out.strip()[-40:])
     chrono_etape("1. version", t0)
 
     # 2. Option --relancer-ko presente dans --aide

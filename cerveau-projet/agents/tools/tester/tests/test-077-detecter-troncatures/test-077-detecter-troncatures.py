@@ -37,6 +37,7 @@ Invariants verifies (fichiers temp, jamais le vrai depot) :
   9. Parite .sh : --version identique (0.2.0).
  10. Le dossier temp est SUPPRIME en fin de test (0 trace).
  11. Normes : ASCII strict + LF pur (test + outil py/sh/md).
+Tags: outils, detecter, troncatures, garde-fou
 """
 import importlib.util
 import io

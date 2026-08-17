@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.8"
+VERSION="0.5.11"
 STATUT="prepare"
 
 # Configuration

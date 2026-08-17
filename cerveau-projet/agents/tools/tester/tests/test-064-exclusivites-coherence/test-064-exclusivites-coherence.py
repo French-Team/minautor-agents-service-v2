@@ -39,6 +39,7 @@ Invariants verifies :
      declarer exclusif un outil present chez un autre agent (trio inclus)
   5. Preuve reelle : cerberus -> editer-fichier-agents (exclusif buffy) BLOQUE
   6. Normes : ASCII strict + LF pur (outils + test)
+Tags: agents, garde-fou, exclusivites, anti-recurrence
 """
 import importlib.util
 import io

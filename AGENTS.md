@@ -21,16 +21,16 @@ identite:
 | **Nom LLM** | llm-1 |
 | **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-16 |
+| **Derniere mise a jour** | 2026-08-17 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | cerberus (retour de mission) |
-| **Raison** | BILAN CONSOLIDE (Janus, nettoyage Hygie) : le residu DOUBLE a ete elimine - le dossier docs-dev-cerveau-projet/ duplique A LA RACINE + son rapport egare (rapport-diagnostic-convention-scripts-temporaires-2026-08-16.md) ont ete supprimes par Hygie (snapshot 4642 fichiers, supprimer-dossier --agent hygie, rapport ecrit, lecon 0 non-ASCII, registre 3 declarations). Le VRAI dossier cerveau-projet/docs-dev-cerveau-projet/ est INTACT (amelioration-philosophie.md, analyse-externe.md, spec-refonte-cartes-decision.001.01.ebauche.md). Detection finale : PROPRE (0 residu). Fin de mission. |
+| **Active par** | janus (retour de mission) |
+| **Raison** | REPARATION BOUCLE BRISEE : retour a Cerberus. DIAGNOSTIC : derive de l IA - depuis l activation de janus (19:47, non-regression finale round performance), le travail a continue en solo (optimisations test-032/005/031/085) sans activations formelles via activer-agent-principal. AGENTS.md et l historique etaient figes sur janus. Cycle Cerberus -> agent -> Cerberus retabli. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-16 20:45 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-17 21:02 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -125,6 +125,7 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 | [Hermes](cerveau-projet/agents/hermes/hermes.md) | cerveau-projet/agents/hermes/ | Agent de la langue (orthographe, vocabulaire, fautes) | Disponible (en attente) | Agent dedie aux fautes de francais |
 | [Gardien](cerveau-projet/agents/gardien/gardien.md) | cerveau-projet/agents/gardien/ | Gardien du marbre (securite du code) | Disponible (en attente) | SEUL a proposer la modification des zones protegees (l utilisateur valide) |
 | [Argus](cerveau-projet/agents/argus/argus.md) | cerveau-projet/agents/argus/ | Detecteur de contradictions | Disponible (en attente) | DETECTE et SIGNALE les incoherences (cases, regles, protocoles, git) - ne corrige jamais |
+| [Chiron](cerveau-projet/agents/chiron/chiron.md) | cerveau-projet/agents/chiron/ | Educateur des agents -- formation continue | Disponible (en attente) | Re-edue les agents quand les outils/regles/protocoles changent |
 
 ---
 

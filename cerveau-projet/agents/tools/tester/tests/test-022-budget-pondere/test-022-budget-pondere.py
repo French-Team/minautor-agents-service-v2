@@ -37,6 +37,7 @@ Cas couverts:
 
 Usage:
   python3 test-022-budget-pondere.py
+Tags: conventions, budget, parcours
 """
 import importlib.util
 import io

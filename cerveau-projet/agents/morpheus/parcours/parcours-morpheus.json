@@ -1,39 +1,12 @@
 {
  "cases": {
   "c0": {
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c0c"
-    },
-    {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c0b"
-    }
-   ],
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "action",
    "indices": [
-    {
-     "texte": "REGLE VERACITE : reponds la VERITE (OUI si c'est le cas, NON sinon), jamais ce qu'on attend de toi.",
-     "type": "regle"
-    },
     {
      "type": "regle",
-     "texte": "REGLE ANTI-ARRET : je lis MA Raison (mission confiee) dans AGENTS.md avant la case Mission."
-    }
-   ],
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question"
-  },
-  "c0b": {
-   "indices": [
-    {
-     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche (jamais celles des autres) avant de commencer.",
-     "type": "regle"
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
     },
     {
      "catalogue": "lire-fichier",
@@ -50,9 +23,28 @@
      "type": "outil"
     }
    ],
-   "suivant": "c0c",
-   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-   "type": "action"
+   "suivant": "c0b"
+  },
+  "c0b": {
+   "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+   "type": "question",
+   "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture (c0). Reponds la VERITE."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    }
+   ]
   },
   "c0c": {
    "indices": [
@@ -97,7 +89,7 @@
    "type": "question"
   },
   "c10": {
-   "message": "CHAINE BOUT-EN-BOUT : tests termines et VERDICT rendu (RVAV passe sur mon travail). J ACTIVE JANUS (controle) avec le rapport de tests et le verdict. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec le bilan consolide.",
+   "message": "CHAINE BOUT-EN-BOUT : tests termines et VERDICT rendu (RVAV passe sur mon travail). J ACTIVE JANUS (controle) avec le rapport de tests et le verdict. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec le bilan consolide.",
    "titre": "FIN - Activer Janus",
    "type": "fin",
    "indices": [
@@ -184,7 +176,7 @@
   "c14": {
    "titre": "FIN - Activer Janus",
    "type": "fin",
-   "message": "TESTS TERMINES et VERDICT rendu (RVAV passe sur mon travail). MEME ACTIVE DIRECTEMENT PAR CERBERUS, je passe par JANUS (second controle) : j ACTIVE JANUS avec le rapport de tests et le verdict. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec le bilan consolide.",
+   "message": "TESTS TERMINES et VERDICT rendu (RVAV passe sur mon travail). MEME ACTIVE DIRECTEMENT PAR CERBERUS, je passe par JANUS (second controle) : j ACTIVE JANUS avec le rapport de tests et le verdict. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec le bilan consolide.",
    "indices": [
     {
      "type": "regle",
@@ -305,7 +297,7 @@
    "type": "action"
   },
   "c19": {
-   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin : si aucun defaut, Themis me REACTIVE avec son rapport (evaluation ou audit) et je reprends ma mission avec le rapport fourni ; si un defaut est signale (boucle KO, carte Themis v0.3.7 c12f/c12g), Themis m active pour corriger et je la reactiverai avec mon bilan.",
+   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin : si aucun defaut, Themis me RE-ACTIVE (commande activer) avec son rapport (evaluation ou audit) et je reprends ma mission avec le rapport fourni ; si un defaut est signale (boucle KO, carte Themis v0.3.7 c12f/c12g), Themis m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
    "titre": "FIN - Retour de Themis avec son rapport",
    "type": "fin"
   },
@@ -585,7 +577,7 @@
      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
    "suivant": "c10b",
    "titre": "Activer Themis pour auditer ma mission",
    "type": "action"
@@ -625,7 +617,7 @@
      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me REACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je la reactiverai avec mon bilan.",
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
    "suivant": "c14b",
    "titre": "Activer Themis pour auditer ma mission",
    "type": "action"
@@ -662,6 +654,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c16c executer-script-temporaire (usage reel entonnoir, garde-fou test-035)",
   "nom": "parcours-morpheus",
-  "version": "0.4.10"
+  "version": "0.4.12"
  }
 }

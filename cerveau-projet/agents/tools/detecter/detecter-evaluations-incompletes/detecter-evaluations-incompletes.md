@@ -1,4 +1,5 @@
 # detecter-evaluations-incompletes
+**Version** : 0.1.0
 
 Scan ANTI-RECURRENCE apres correction d'une convention ou d'un pattern :
 trouve les mentions residuelles d'un MOTIF dans les 4 sources documentaires

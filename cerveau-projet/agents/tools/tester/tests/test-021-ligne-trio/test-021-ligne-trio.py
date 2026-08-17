@@ -31,6 +31,7 @@ Cas couverts:
 
 Usage:
   python3 test-021-ligne-trio.py
+Tags: agents, janus, parcours
 """
 import importlib.util
 import io

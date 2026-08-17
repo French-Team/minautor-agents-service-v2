@@ -39,7 +39,7 @@
 #   python3 editer-parcours.py --agent cerberus --suivant c15c --vers c15b --wet
 #   python3 editer-parcours.py --agent vulcain --bump --wet
 #
-# Version : 0.1.3
+# Version : 0.1.4
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -58,7 +58,7 @@ import re
 import shutil
 import sys
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "ebauche"
 
@@ -244,6 +244,17 @@ def verifier_residus_racine():
     print("=" * 60)
 
 
+def afficher_messages_info(messages):
+    """MESSAGES INFORMATIONNELS (regle immuable v0.3.0) : section
+    '=== MESSAGES POUR L AGENT ===' avec une ligne ' > ' par message."""
+    if not messages:
+        return
+    print("")
+    print(_couleur("=== MESSAGES POUR L AGENT ===", "jaune"))
+    for message in messages:
+        print("  > %s" % message)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Edite les parcours de decision JSON de maniere sure")
     parser.add_argument("--agent", type=str, required=True, help="Nom de l'agent (obligatoire)")
@@ -275,6 +286,7 @@ def main():
         return 2
 
     d = charger(chemin)
+    version_avant = d.get("parcours", {}).get("version", "")
     cases = d.get("cases", {})
     modifications = []
 
@@ -408,6 +420,18 @@ def main():
         sauver(chemin, d)
         mettre_a_jour_lock_carte(racine, chemin)
         print(_couleur("[OK] Parcours ecrit : %s (JSON/LF preserves, lock mis a jour)" % chemin, "vert"))
+        # MESSAGES INFORMATIONNELS (regle immuable v0.3.0)
+        if d.get("parcours", {}).get("version") != version_avant:
+            afficher_messages_info([
+                "carte modifiee : synchroniser la fiche de l agent (Pattern 14, PARCOURS (vX.Y.Z))",
+                "carte modifiee : verifier valider-cartes-decision --agent <agent>",
+                "carte modifiee : les tests qui pinent la version (test-004/005/013/016/018...) doivent etre adaptes par Morpheus",
+            ])
+        else:
+            afficher_messages_info([
+                "carte modifiee : verifier valider-cartes-decision --agent <agent>",
+                "carte modifiee : si la version a change, synchroniser la fiche (Pattern 14)",
+            ])
     return 0
 
 

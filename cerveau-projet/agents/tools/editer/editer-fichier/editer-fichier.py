@@ -25,7 +25,7 @@ Retour : 0 si succes, 1 si erreur ou si AUCUNE occurrence trouvee
          (echec explicite : jamais 0 silencieux).
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.2
+Version : 0.4.3
 Statut : prepare
 """
 
@@ -34,7 +34,7 @@ import os
 import shutil
 import sys
 
-VERSION = "0.4.2"
+VERSION = "0.4.3"
 STATUT = "prepare"
 
 NOM_ATTENDU = "editer-fichier.py"
@@ -73,6 +73,17 @@ def afficher_aide():
     print("  editer-fichier.py --global fichier.md \"texte\" \"remplacement\"")
     print("")
     print("Retour : 0 si succes, 1 si erreur ou si AUCUNE occurrence trouvee.")
+
+
+def afficher_messages_info(messages):
+    """MESSAGES INFORMATIONNELS (regle immuable v0.3.0) : section
+    '=== MESSAGES POUR L AGENT ===' avec une ligne ' > ' par message."""
+    if not messages:
+        return
+    print("")
+    print("=== MESSAGES POUR L AGENT ===")
+    for message in messages:
+        print("  > %s" % message)
 
 
 def verrouiller_habilitation(agent, cible, audit=False):
@@ -233,6 +244,21 @@ def main(argv):
 
     if verbose:
         print("[OK] %d occurrence(s) remplacee(s) dans %s" % (nb, fichier))
+
+    # MESSAGES INFORMATIONNELS (regle immuable v0.3.0) : selon le type de
+    # fichier modifie, rappeler les fichiers compagnons a mettre a jour.
+    nom_base = os.path.basename(fichier)
+    messages = []
+    if nom_base.endswith(".py") or nom_base.endswith(".sh"):
+        messages.append("script modifie : bumpe la version (mettre-a-jour-versions) + .md de l outil a jour")
+        messages.append("script modifie : adapter les tests qui pinent la version (Morpheus)")
+    elif nom_base.endswith(".json") and "parcours" in fichier:
+        messages.append("carte modifiee : verifier valider-cartes-decision + synchroniser la fiche (Pattern 14)")
+    elif nom_base.endswith(".md"):
+        messages.append("document modifie : verifier la coherence avec index-tools.md / README si outil")
+    else:
+        messages.append("fichier modifie : verifier les fichiers qui le referencent (tests, index, docs)")
+    afficher_messages_info(messages)
 
     return 0
 

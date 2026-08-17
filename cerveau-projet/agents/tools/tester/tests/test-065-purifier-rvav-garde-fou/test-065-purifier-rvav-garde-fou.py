@@ -30,6 +30,7 @@ Invariants verifies :
   6. Purge : aucun fichier temporaire laisse (fichier de test et archive
      supprimes a la fin)
   7. Normes : ASCII strict + LF pur (outil + test)
+Tags: outils, purifier, garde-fou
 """
 import glob
 import importlib.util

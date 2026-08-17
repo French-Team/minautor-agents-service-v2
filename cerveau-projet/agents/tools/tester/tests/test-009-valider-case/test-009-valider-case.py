@@ -37,6 +37,7 @@ Cas couverts:
 
 Usage:
   python3 test-009-valider-case.py
+Tags: outils, parcours, valider
 """
 import importlib.util
 import io

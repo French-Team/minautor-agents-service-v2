@@ -7,44 +7,19 @@
  "parcours": {
   "nom": "parcours-promethee",
   "agent": "promethee",
-  "version": "0.3.3",
+  "version": "0.3.5",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Promethee : redacteur de specs. 2 missions (creer une spec, completer une spec). A la fin de chaque mission, j'active Minerve pour le todo (FLUX). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
   "version_precedente": "0.3.2"
  },
  "cases": {
   "c0": {
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question",
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE -- RELECTURE : a chaque activation ou reactivation, je me pose la question de la relecture. Seul OUI prouve la memorisation : relire..."
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c0c"
-    },
-    {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c0b"
-    }
-   ]
-  },
-  "c0b": {
    "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
    "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer (regle RELECTURE)."
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
     },
     {
      "type": "outil",
@@ -61,7 +36,28 @@
      "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/promethee/promethee.md"
     }
    ],
-   "suivant": "c0c"
+   "suivant": "c0b"
+  },
+  "c0b": {
+   "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+   "type": "question",
+   "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture (c0). Reponds la VERITE."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    }
+   ]
   },
   "c1": {
    "titre": "Mission",
@@ -266,7 +262,7 @@
   "c10": {
    "titre": "FIN - Activer Janus",
    "type": "fin",
-   "message": "SPEC TERMINEE (creee depuis le pense-bete source). J ACTIVE JANUS (second controle) avec le bilan de la spec. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec le verdict consolide.",
+   "message": "SPEC TERMINEE (creee depuis le pense-bete source). J ACTIVE JANUS (second controle) avec le bilan de la spec. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec le verdict consolide.",
    "indices": [
     {
      "type": "regle",
@@ -523,7 +519,7 @@
   "c23": {
    "titre": "FIN - Retour de Themis avec son rapport",
    "type": "fin",
-   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin : si aucun defaut, Themis me REACTIVE avec son rapport (evaluation ou audit) et je reprends ma mission avec le rapport fourni ; si un defaut est signale (boucle KO, carte Themis v0.3.7 c12f/c12g), Themis m active pour corriger et je la reactiverai avec mon bilan."
+   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin : si aucun defaut, Themis me RE-ACTIVE (commande activer) avec son rapport (evaluation ou audit) et je reprends ma mission avec le rapport fourni ; si un defaut est signale (boucle KO, carte Themis v0.3.7 c12f/c12g), Themis m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan."
   },
   "c9b": {
    "titre": "Ameliorations possibles de mon fonctionnement ?",

@@ -31,6 +31,7 @@ Invariants verifies :
   6. Coherence href des badges statiques (Plateforme, Fait_avec,
      Langages) : l affichage et le href sont identiques
   7. Normes : ASCII strict + LF pur (README + test)
+Tags: conventions, readme, garde-fou, anti-recurrence
 """
 import importlib.util
 import io

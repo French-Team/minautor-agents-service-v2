@@ -5,7 +5,7 @@
 # conforme aux patterns 4-5-6-7, analyser les chemins de case_depart aux fins,
 # detecter les anomalies (boucles, cases inatteignables, references cassees),
 # dupliquer un chemin (groupe de cases) avec recablage et prefixe.
-# Version : 0.3.0
+# Version : 0.3.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -34,7 +34,7 @@ import sys
 from collections import deque
 from pathlib import Path
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 STATUT = "ebauche"
 
 # Racine du projet : 5 remontees depuis ce fichier
@@ -186,26 +186,14 @@ def valider_auto(chemin, donnees):
 
 def squelette_carte(agent, nom, version, description):
     """Construit le squelette d'une carte conforme aux patterns 4-5-6-7-8-10-3."""
+    # Nouvelle structure (migration relecture obligatoire 2026-08-16) :
+    #   c0  [action]   RELIRE OBLIGATOIRE : corrections puis fiche   -> c0b
+    #   c0b [question] Confirmation : as-tu lu ?  OUI -> c0c, NON -> c0
+    #   c0c [action]   CONTEXTE obligatoire (inchange)
     cases = {
         "c0": {
-            "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-            "type": "question",
-            "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-            "indices": [
-                {
-                    "type": "ref",
-                    "ref": "protocole-activation",
-                }
-            ],
-            "branches": [
-                {"reponse": "OUI", "vers": "c0c"},
-                {"reponse": "INCERTAIN", "vers": "c0b"},
-                {"reponse": "NON", "vers": "c0b"},
-            ],
-        },
-        "c0b": {
             "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-            "type": "indice",
+            "type": "action",
             "indices": [
                 {
                     "type": "ref",
@@ -224,7 +212,22 @@ def squelette_carte(agent, nom, version, description):
                     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/%s/%s.md" % (agent, agent),
                 },
             ],
-            "suivant": "c0c",
+            "suivant": "c0b",
+        },
+        "c0b": {
+            "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+            "type": "question",
+            "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+            "indices": [
+                {
+                    "type": "ref",
+                    "ref": "protocole-activation",
+                }
+            ],
+            "branches": [
+                {"reponse": "OUI", "vers": "c0c"},
+                {"reponse": "NON", "vers": "c0"},
+            ],
         },
         "c0c": {
             "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",

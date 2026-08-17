@@ -1,4 +1,5 @@
 # tester-protections
+**Version** : 0.2.0
 
 Point d entree UNIQUE des protections de tests (format Python canonique).
 

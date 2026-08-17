@@ -1,4 +1,5 @@
 # evaluer-processus
+**Version** : 0.1.5
 
 Detecte les DERIVES DE PROCESSUS dans le cerveau-projet : un agent qui
 utilise un outil hors de sa carte, une mission qui finit par reactiver

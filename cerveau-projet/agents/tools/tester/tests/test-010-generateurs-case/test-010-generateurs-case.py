@@ -35,6 +35,7 @@ Cas couverts:
 
 Usage:
   python3 test-010-generateurs-case.py
+Tags: outils, generateurs
 """
 import importlib.util
 import io

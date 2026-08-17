@@ -24,6 +24,7 @@ Invariants verifies (sur le TEMPLATE, pas sur les tests existants) :
   6. Structure OBLIGATOIRE + checklist mentionnent le triplet
   7. Coherence aval : protocole-tests v0.3.4 (avec PREUVE NEGATIVE + BANNIR TIMEOUTS + ZERO TIMEOUT) + protocole-outils Regle 9
   8. Normes : ASCII strict + LF pur (template + test)
+Tags: conventions, template, garde-fou
 """
 import importlib.util
 import io

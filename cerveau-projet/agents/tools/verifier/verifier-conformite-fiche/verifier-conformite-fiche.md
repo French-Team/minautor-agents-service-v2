@@ -1,4 +1,5 @@
 # verifier-conformite-fiche
+**Version** : 0.2.1
 
 Outil de verification de la conformite des fiches agents au template
 [fiche-agent-template.md](../../../fiche-agent-template.md), selon le

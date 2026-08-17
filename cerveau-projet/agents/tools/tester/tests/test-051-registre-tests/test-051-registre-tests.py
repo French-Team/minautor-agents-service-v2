@@ -3,7 +3,7 @@
 """
 test-051-registre-tests.py
 GARDE-FOU : le registre-tests (trace des lancements de tests par les agents)
-existe et fonctionne. Le lanceur tester-lancer-non-regression v0.5.5 journalise
+existe et fonctionne. Le lanceur tester-lancer-non-regression v0.6.2 journalise
 CHAQUE test execute dans cerveau-projet/agents/traces/registre-tests.jsonl
 (date, agent, serie, test, verdict, duree) quand --agent est fourni - et
 UNIQUEMENT dans ce cas. Le registre-tests est DISTINCT de
@@ -15,7 +15,7 @@ laisser une trace dans un registre dedie. La mission a ete realisee par
 Vulcain (outil v0.4.1) puis verifiee ici.
 
 Cas couverts:
-  1. Le lanceur est v0.5.5 (--version)
+  1. Le lanceur est v0.6.2 (--version)
   2. L aide contient l option --agent
   3. Le registre-tests est DISTINCT de registre-usages-outils (chemins differents)
   4. PREUVE REELLE positive : run --series c --agent X -> des entrees creees
@@ -23,6 +23,7 @@ Cas couverts:
   5. PREUVE REELLE negative : run sans --agent -> AUCUNE nouvelle entree
   6. Les entrees ont les champs attendus (date, agent, serie, test, verdict, duree)
   7. Normes : ASCII strict + LF pur (test + lanceur + registre)
+Tags: registre-traces, registre, garde-fou
 """
 import importlib.util
 import io
@@ -121,7 +122,7 @@ def main():
 
     # 1. Version du lanceur
     out = run([sys.executable, LANCER, "--version"])
-    verifier("1. lanceur v0.5.5 (--version)", "v0.5.5" in out, out.strip())
+    verifier("1. lanceur v0.6.2 (--version)", "v0.6.2" in out, out.strip())
 
     # 2. Option --agent dans l aide
     out = run([sys.executable, LANCER, "--help"])
@@ -148,7 +149,10 @@ def main():
     out = run([sys.executable, LANCER, "--series", "c", "--agent", nom_tmp,
                "--journal", "--tests", "test-001"])
     apres = nb_entrees(REG_TESTS)
-    ok = apres > avant
+    # >= et non > : le registre est PLAFONNE (500 entrees, v0.6.2) - une
+    # entree ajoutee au plafond remplace la plus ancienne (apres == avant).
+    # La verification de l entree reelle (trouves) confirme l ajout.
+    ok = apres >= avant
     detail = "avant=%d apres=%d" % (avant, apres)
     if ok:
         # verifier l entree de l agent de test (le registre est trie

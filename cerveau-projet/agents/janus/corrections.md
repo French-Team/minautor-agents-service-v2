@@ -5454,3 +5454,291 @@ scripts-temporaires-2026-08-16.md (RAPPORT_EGARE) - a nettoyer par Hygie.
 
 **APRES** : reactiver CERBERUS avec le bilan consolide (incluant le residu a
 nettoyer par Hygie).
+## [LECON] 2026-08-16 -- VALIDATION MAJ README PUBLIC + DEV (Janus)
+
+**Contexte** : mission Clio (mise a jour des README) terminee, retour a Janus
+pour la non-regression finale.
+
+**Controle effectue** :
+1. readme-dev.md : tableau des outils resynchronise sur combos-analyse-projet
+   (149 outils, compteurs Analyser 6 / Corriger 7 / Detecter 17 / Nettoyer 4),
+   exemples de colonnes completes (Corriger, Nettoyer, Evaluer).
+2. README public : ligne Argus re-integree dans le tableau des agents
+   (elle etait hors tableau, 3e colonne inexistante, titre colle).
+3. combos-analyse-projet : "README A JOUR (0 ecart)", badge 149 == 149.
+4. test-038 7/7, normes 0 non-ascii / 0 CRLF sur les 2 fichiers.
+
+**Resultat** : NON-REGRESSION 84 OK / 0 KO (120.9s).
+
+**Lecon** :
+- Un dossier tmp-<agent> laisse a la racine par l agent precedent fait KO
+  test-024 au lancement suivant : toujours purger son dossier temp avant de
+  reactiver l agent suivant (Clio avait laisse tmp-clio).
+- Le lanceur exige --agent (verrou d habilitation) : sans lui, il refuse de
+  demarrer - c est le comportement voulu.
+## [LECON] 2026-08-16 -- VALIDATION MIGRATION RELECTURE OBLIGATOIRE (Janus)
+
+**Contexte** : migration (Vulcain) des 15 parcours vers la relecture
+obligatoire : c0 = action RELIRE OBLIGATOIRE (corrections puis fiche) -> c0b,
+c0b = question confirmation (OUI -> c0c, NON -> c0). Chainage complet
+Vulcain -> Buffy -> Morpheus -> Clio -> Janus.
+
+**Non-regression finale** : 84 OK / 0 KO (130.1s, barrieres franchies).
+Marbre rc=0, bumper 0 incoherent, valider-cartes 15/15, 0 residu.
+
+**Points decouverts pendant la validation** :
+1. test-057 (marbre) : la migration a modifie les zones protegees
+   cerberus.c0/c0b -> porte du marbre ouverte (autorisation utilisateur) pour
+   re-empreinter, puis le LOCK des cartes (cartes-lock.json) etait en
+   divergence sur 14 cartes (migration hors editer-parcours) -> resynchronise
+   avec l empreinte normalisee identique a editer-parcours (LF + rstrip).
+2. test-035 : la declaration registre de migrer-cases-relecture par vulcain
+   etait OUTIL_HORS_CARTE -> indice branche dans la carte vulcain (c7b) via
+   editer-parcours + bump 0.4.24 + fiche synchronisee.
+3. test-017/006 : la boucle de relecture (c0->c0b->c0) change le
+   comportement des outils de navigation/cartographie :
+   - generateurs-ligne : un point d attache sur une QUESTION (c0b) est
+     refuse ("question sans suivant") -> les tests attachent sur c0 (action).
+   - cartographier : c0 apparait 2x dans l arbre (racine + [convergence]) -
+     legitime, assertions adaptees (c0 <= 2, c11 == 1).
+
+**Lecon** :
+- Une migration de structure de PARCOURS touche plus que les parcours :
+  marbre (zones + lock), registre/cartes (outil -> indice), generateurs
+  (points d attache), cartographie (boucles), versions (fiches + tests).
+  La non-regression est le filet qui revele chaque impact - les traiter
+  UN PAR UN (barrieres) et relancer.
+- La porte du marbre (autorisation utilisateur) est le bon canal pour une
+  migration validee : re-empreinte zones + resync lock dans la meme passe.
+
+## [LECON] 2026-08-16 -- ROUND CATEGORIES PAR TAGS + LISTE BLANCHE DEVELOPPEUR (Janus, VERDICT VALIDE)
+
+**Contexte** : non-regression finale du round categories par tags (demande
+utilisateur) + liste blanche developpeur vulcain (demande utilisateur).
+
+**Bilan** : 85 OK / 0 KO (127.8s, toutes barrieres franchies). 3 relances
+necessaires : test-066 (pin de transition perime -> rendu dynamique), 7
+tests aux pins de version perimes (027/031/051/062/074/075/081 : 0.5.5 ->
+0.5.7), 2 KO consequences de test-087 (protections non importees -> bloc
+standard ajoute ; absent des profils -> ajoute au profil outils).
+
+**Verifications** : bumper 0 incoherent, 0 residu, registre-tests journalise.
+
+**Lecons** :
+- Le bilan "8 OK / 1 KO" du premier run etait TROMPEUR : l affichage du
+  lanceur (tail de sortie) ne montrait que le dernier bloc. Toujours lire la
+  ligne RESULTAT GLOBAL complete (et les details KO) avant de conclure.
+- Les artefacts du verrou (identite reelle) font KO les tests qui lancent le
+  lanceur quand la session n est pas janus : attendu, reverdis en session
+  janus. Ne jamais corriger un test pour ces artefacts.
+- La cascade des pins de version (5 KO dans un round) est la 3e occurrence :
+  apres CHAQUE bump d outil, il faut grep -rn '<ancienne-version>' dans les
+  tests, pas seulement suivre les compagnons du bumper (qui ne detecte que
+  la version courante).
+
+
+## [LECON] 2026-08-16 -- CHAINE OUTILS WEB : WORKFLOW SERIE KO + EDUCATION (Janus)
+
+**Contexte** : chaine complete outils web (Vulcain -> Buffy -> Morpheus ->
+Clio -> Janus) avec l education de Janus en cours de route (demande
+utilisateur : "ediquer Janus sur les dernieres ameliorations de la suite").
+
+**Le nouveau workflow a marche en conditions reelles** :
+- `--etat-ko` : constater la serie KO persistante avant de lancer.
+- `--ko reprendre` (defaut) : la serie KO passe EN PREMIER avec SA barriere.
+  Chaque KO corrige par l agent habilite est revalide EN CIBLE (0.8s au lieu
+  de ~90s) puis sort du fichier : test-024 (catalogue), test-038 (badge
+  README par Clio), test-035 (FIN_MISSION_ERRONEE).
+- Le cycle : barriere KO STOP -> rapport detaille -> agent habilite ->
+  --relancer-ko -> suite complete. Le STOP immediat evite de perdre ~90s a
+  chaque KO.
+
+**Les 3 KO reels traites** :
+1. test-024/007/060/079 : pins catalogue 172 -> 174 + index-tools 187 -> 195
+   (Morpheus).
+2. test-005 : parcours-atlas 0.4.5 -> 0.4.6 (libelle ET comparaison) +
+   commandes en dur 7 -> 9 (c12/c13) (Morpheus).
+3. test-038 : badge Outils README 150 -> 152 (affichage + href) (Clio) +
+   FIN_MISSION_ERRONEE (la mission Clio disait reactiver Cerberus, sa carte
+   impose Activer Janus - corrigee dans AGENTS-historique.md).
+
+**Education** : ma fiche (section UTILISATION) et ma carte (case c4 v0.4.14)
+ont ete mises a jour par Buffy avec le workflow serie KO + les options
+--tags/--categorie/--etat-categories/--ordre-fixe/--ko. La lecon : ameliorer
+un outil sans mettre a jour la fiche + la carte de son utilisateur =
+amelioration morte.
+
+**Lecons techniques** :
+- La commande `reactiver` ramene TOUJOURS a Cerberus : pour reactiver un
+  agent intermediaire, utiliser `activer` (le message de la carte c22 de
+  Buffy le documente).
+- Verifier que la barriere KO est VIDE avant de conclure : la suite collecte
+  les KO du run dans ko-tests.json, un KO non traite bloque le passage.
+- Bilan : 86 OK / 0 KO (126.7s, toutes barrieres franchies), 0 residu,
+  bumper coherent, registre journalise (run 20260816-231642, 87/87).
+
+## [LECON] 2026-08-16 -- VALIDATION FINALE GARDE-FOU REACTIVER (Janus, VERDICT VALIDE)
+
+**Contexte** : controle croise de la mission reactiver (Buffy 31 cases +
+6 residuelles, Morpheus test-070 v2 etendu + pins). Non regression complete
+en mode barrieres.
+
+**Deroulement** :
+- Barriere KO bloquee sur test-035 : FIN_MISSION_ERRONEE sur la mission
+  Morpheus (la consigne contenait 'FIN - Reactiver Cerberus' comme exemple
+  d exception, le scan d evaluer-processus le prenait pour une vraie fin).
+  Correction : reformuler la consigne dans AGENTS-historique.md (eliminer la
+  sequence 'reactiver cerberus').
+- Apres correction : test-035 10/10, --ko reprendre valide la barriere KO,
+  puis suite complete : 86 OK / 0 KO, toutes les barrieres franchies
+  (E, A, D, C, B), chrono 128.8s (nouvelle base enregistree : 85 -> 86
+  tests), bumper 0 incoherent, 0 residu.
+
+**Lecon** : une consigne de mission ne doit JAMAIS contenir la sequence
+'reactiver cerberus' meme dans un exemple (le scan d evaluer-processus la
+detecte). Le mode barrieres fonctionne : un KO en serie KO stoppe la suite
+(0.8s au lieu de 90s), on corrige, --ko reprendre valide, puis on relance.
+
+
+## [LECON] 2026-08-17 -- VALIDATION BUMPER v0.1.4 (Janus, VERDICT VALIDE)
+
+**Controle final** (chaine Vulcain -> Morpheus -> Janus, demande utilisateur
+audit croise des .md) : le bumper mettre-a-jour-versions a ete etendu aux
+formats .md invisibles (tableau/blockquote/liste/## Version) et bumpe
+0.1.3 -> 0.1.4. Verification : non-regression complete en mode barrieres.
+
+**Resultats** :
+- Barriere E : 7+3 OK (anti-recurrence + exclusifs) - 1 KO initial :
+  test-035 (evaluer-processus) detectait une DECLARATION FAUTIVE de ma
+  mission Vulcain (editer-fichier declare au registre sans etre utilise ni
+  dans la carte) - entree retiree du registre, test vert 10/10.
+- Barrieres A, D, C : 100% vertes.
+- Barriere B : 1 KO initial test-048 (lecon Janus en cours sans verdict) -
+  artefact de session, resolu en terminant la mission.
+- Bumper --tous : 141 outils, 0 incoherent (les 17 formats autrefois
+  invisibles sont desormais verifies).
+- 0 residu, normes ASCII/LF 0/0.
+
+**Lecon** : une declaration registre doit correspondre a un usage REEL d un
+outil de la carte - declarer un outil non utilise (ou hors carte) cree un
+OUTIL_HORS_CARTE detecte par evaluer-processus au scan global.
+
+## [LECON] 2026-08-17 -- VALIDATION FINALE --KO-PUIS-STOP (Janus, VERDICT VALIDE)
+
+**Contexte** : chaine complete (Vulcain -> Morpheus x3 -> Buffy -> Janus) pour
+implementer --ko-puis-stop (cycle rapide KO) dans tester-lancer-non-regression
+v0.5.9. Resultat final : 86 OK / 0 KO, toutes les barrieres franchies
+(E V > A V > D V > C V > B V), bumper 0 incoherent, 0 residu, registre propre.
+
+**Lecon 1 - le cycle rapide fonctionne en reel** : --ko reprendre --ko-puis-stop
+a revalide les KO corriges (test-081, test-026) en QUELQUES SECONDES, avec le
+rapport 'VALIDATION FINALE REQUISE' - exactement l objectif : ne payer la suite
+complete (~90s) qu une fois la serie KO verte.
+
+**Lecon 2 - le verrou d identite reelle cache les KO partiels** : plusieurs
+tests (027, 031, 032, 051) lancent le lanceur avec --agent janus et ne peuvent
+etre pleinement verts QUE quand la session est janus. Quand Morpheus les
+lance, ils affichent des KO lies a l usurpation (pas au contenu) - il ne faut
+pas chercher a les reparer dans cet etat : c est la validation Janus qui
+tranche.
+
+**Lecon 3 - le plus gros KO etait dans MA propre carte** : la barriere B a
+revele un CAS_ORPHELINE sur parcours-janus (case c5) : ma case c4 avait perdu
+son champ suivant lors de la mission composition ciblee (editer-parcours
+--contenu ecrase la case, Buffy avait restaure type/titre/indices mais pas le
+suivant). C est detecter-cablages-manquants qui l a attrape (test-026) - la
+preuve que le garde-fou fonctionne sur les vrais cas. Correction par Buffy
+(c4.suivant=c5, carte v0.4.18 CONFORME).
+
+**Verdict** : chaine ko-puis-stop VALIDEE - 86/86, cycle de correction passe
+de ~90s a ~5s par KO revalide. Bilan consolide a Cerberus.
+
+
+## [LECON] 2026-08-17 -- CHIRON CREE, NON-REGRESSION 86/86 (Janus, VERDICT VALIDE)
+
+**Controle croise** (mission de creation de l agent Chiron, demande
+utilisateur) : VERDICT VALIDE.
+
+**Verifications (J1-J6)** :
+- J1 suite complete en barrieres : 86 OK / 0 KO (toutes barrieres franchies,
+  chrono 138.7 s, reference amelioree)
+- J2 valider-cartes --tous : 16/16 CONFORME (Chiron inclus)
+- J3 0 residu (aucun tmp-* / .zz-* a la racine)
+- J4 bumper --tous : 0 incoherence
+- J5 normes ASCII/LF sur les fichiers crees et modifies (chiron.md, carte,
+  protocole-education-continue, tests adaptes)
+- J6 registre d usage : 190 lignes (cumul <= 100)
+
+**Chaine completee dans le meme round** :
+Cerberus -> Buffy (creation Chiron : fiche + parcours + corrections +
+protocole-education-continue + inscription AGENTS.md/index) -> Morpheus
+(adaptation des compteurs 15->16 + renforcement test-070 anti-auto-reactivation
++ test-024 anti-scripts) -> Janus (non-regression) -> Buffy (correction carte
+Chiron test-058 : retrait editer-fichier-agents, JE DETECTE JE NE CORRIGE PAS)
+-> Janus (revalidation 86/86).
+
+**Lecon Janus** : quand une non-regression bloque sur un KO d exclusivite
+(test-058), le fix appartient TOUJOURS a l agent habilite (Buffy pour les
+fichiers d agents), jamais a Janus. Le cycle rapide (--ko reprendre
+--ko-puis-stop) a valide le KO test-058 en 0.1 s au lieu de relancer 138 s.
+
+
+## [LECON] 2026-08-17 -- CYCLE KO v0.6.0 (balayage + KO terminal), VERDICT VALIDE (Janus)
+
+**Controle croise** (mission cycle KO, demande utilisateur) : VERDICT VALIDE.
+
+**Verifications (J1-J6)** :
+- J1 suite complete en barrieres : 86 OK / 0 KO (toutes barrieres franchies,
+  chrono 137.8 s, reference amelioree). Les tests 027/031/032/051 (qui lancent
+  le lanceur avec --agent janus) sont VERTS en session janus (le verrou
+  d identite est le comportement attendu).
+- J2 valider-cartes --tous : 16/16 CONFORME.
+- J3 0 residu (aucun tmp-* / .zz-* a la racine).
+- J4 bumper --tous : 0 incoherence.
+- J5 normes ASCII/LF sur lanceur, doc, tests adaptes, fiche janus.
+- J6 registre d usage : 190 lignes (cumul <= 100).
+
+**Chaine completee dans le meme round** :
+Cerberus (analyse + decision utilisateur) -> Vulcain (lanceur v0.6.0 : balayage
++ CONTROLE TERMINE) -> Morpheus (41 pins 0.5.9->0.6.0 sur 9 tests + test-081
+point 1b) -> Buffy (education fiche janus : WORKFLOW CYCLE KO) -> Janus
+(non-regression 86/86).
+
+**Lecon Janus** : le nouveau cycle KO est documente dans MA fiche (je l ai
+relue) : passe 1 --ko nouveau (balayage complet, totalite des KO), passe 2
+--ko reprendre --ko-puis-stop (serie KO verte = CONTROLE TERMINE), suite
+complete conditionnelle (seulement si code partage touche - ma decision).
+
+
+## [LECON] 2026-08-17 -- ROUND PERFORMANCE : VERDICT VALIDE 85/85 (Janus)
+
+**Controle croise** (round performance, demande utilisateur) : valider la
+fondation de configuration adaptative + les 3 nouveaux analyseurs de Vulcain.
+
+**Chaine** : Cerberus (analyse + decision) -> Vulcain (config adaptative +
+3 analyseurs) -> Morpheus (pins 0.6.0->0.6.1, catalogue 174->178, index 195->199)
+-> Janus (non-regression 85 OK / 0 KO, verrou identite leve en session janus).
+
+**Verifications (J1-J5)** :
+- J1 config adaptative : verifier-systeme RAM/disque/charge OK, configurer-
+  environnement ecrit config-environnement.json (16 workers, 180s), lanceur
+  v0.6.1 lit la config via lire_workers_config (3 min(cpu_count,16) en dur
+  remplaces).
+- J2 analyseurs : analyser-workers (dry-run + recommandation), analyser-
+  fonctions (cProfile + profil nettoye), analyser-round (croisement registres)
+  - tous compile + ASCII/LF 0.
+- J3 catalogue 178 (v0.2.10) + index-tools 199 (categorie Configurer 1,
+  Analyser 6->9).
+- J4 coherence documentaire : 0 spec divergente (alignees verifier-systeme
+  0.2.3-py et activer-agent-principal 0.5.11) + bumper --tous 0 incoherent
+  (aligne .sh/.py header de activer-agent-principal et verifier-systeme).
+- J5 README badge Outils 152->156 + non-regression 85/85 verte.
+
+**KO rencontres et corriges** : test-028 (2 specs divergentes), test-067
+(bumper 2 incoherences), test-080 (pin verifier-systeme 0.2.2->0.2.3),
+test-038 (badge 152->156). Les KO d identite (test-031/032) etaient le verrou
+(session vulcain) - verts une fois Janus actif.
+
+**Lecon** : un bump de version d un outil a 3 compagnons a synchroniser (.py
+en-tete, .sh variable, spec) + les tests qui pinnent - le bumper --tous et
+detecter-divergences-version sont les 2 outils qui les revelent d un coup.

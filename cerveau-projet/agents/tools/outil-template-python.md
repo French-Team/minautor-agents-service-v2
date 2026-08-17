@@ -7,7 +7,7 @@ identite:
 # outil-template-python
 
 **Categorie** : Template
-**Version** : 0.2.0-beta
+**Version** : 0.3.0-beta
 **Statut** : ebauche
 **Chemin** : `agents/tools/outil-template-python.md`
 **Proprietaire** : Vulcain (constructeur d'outils)
@@ -61,6 +61,39 @@ Controle automatique par `verifier_nommage()` au demarrage du script.
 >
 > Les durees mesurees alimenteront les futurs outils de suivi. Le template
 > `outil-template.py` fournit `--chrono` dans `construire_parser()`.
+
+---
+
+## REGLE IMMUABLE : messages informationnels (v0.3.0, demande utilisateur)
+
+> **REGLE ABSOLUE (demande utilisateur 2026-08-17)** : TOUT outil qui
+> ecrit/modifie dans le projet DOIT afficher des MESSAGES INFORMATIONNELS
+> dans sa sortie, aux endroits importants : l agent voit TOUJOURS les
+> consequences de son action (fichiers compagnons a mettre a jour, regles
+> a respecter, etapes suivantes) sans avoir a les deviner.
+>
+> Le template fournit `afficher_messages_info(messages)` :
+> - affiche une section `=== MESSAGES POUR L AGENT ===` avec une ligne
+>   ` > ` par message ;
+> - l appel est OBLIGATOIRE en fin de main() apres une action reussie
+>   (et non dry-run) ;
+> - les messages sont TOUJOURS affiches (pas une option) : c est le
+>   contrat informationnel.
+
+Exemple (outil qui modifie un fichier) :
+
+```python
+if not args.dry_run:
+    afficher_messages_info([
+        "fichier modifie : indexer dans index-tools.md",
+        "fichier modifie : adapter les tests (Morpheus)",
+        "fichier modifie : mettre a jour la version (bumper)",
+    ])
+```
+
+Le precedent existe deja : `mettre-a-jour-versions` affiche
+`FICHIERS COMPAGNONS A METTRE A JOUR`, `generateurs-case` affiche des
+`RAPPEL ASCII/RVAV/DELEGATION`.
 
 ---
 
@@ -138,6 +171,7 @@ python3 agents/tools/[categorie]/[nom-outil]/[nom-outil].py [OPTIONS] [ARGUMENTS
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.3.0-beta | 2026-08-17 | REGLE IMMUABLE messages informationnels : fonction afficher_messages_info (section MESSAGES POUR L AGENT, lignes ' > ') - demande utilisateur, les outils passent des messages contextuels aux agents dans leur sortie |
 | 0.2.0-beta | 2026-08-14 | REGLE IMMUABLE documentation obligatoire : bloc DOC OBLIGATOIRE (verifier_doc_presente + exiger_confirmation_doc + --doc + --confirme-doc) - demande utilisateur, severite bloquante |
 | 0.1.1-beta | 2026-08-13 | REGLE IMMUABLE protections + options on/off + chrono : option standard `--chrono` (mesure de duree, bilan en fin) - demande utilisateur |
 | 0.1.0-beta | 2026-08-07 | Creation initiale : template Python generique (argparse, nommage, couleurs, dry-run) |

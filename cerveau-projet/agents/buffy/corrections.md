@@ -3791,3 +3791,261 @@ combos-analyse-projet) - le combo v0.1.1 fait la meme chose cote execution.
 
 **APRES** : activer MORPHEUS (adapter test-005 0.2.5 -> 0.2.6, verifier
 test-045 chariot hygie inclut detecter-processus-residuels) puis JANUS.
+## [LECON] 2026-08-16 -- SYNCHRO FICHES APRES MIGRATION RELECTURE (Buffy)
+
+**Contexte** : Vulcain a migre les 15 parcours vers la relecture obligatoire
+(c0 action RELIRE + c0b question confirmation) et bumpe les versions. Les
+15 fiches portaient encore l ancienne version -> valider-cartes 15 NON
+CONFORME (incoherence fiche/parcours, Pattern 14).
+
+**Travail realise** : mise a jour du bloc "REGLE ABSOLUE -- PARCOURS (vX.Y.Z)"
+des 15 fiches (argus 0.1.10, athena 0.3.3, atlas 0.4.5, buffy 0.4.10,
+cerberus 0.5.1, clio 0.5.10, gardien 0.1.3, hermes 0.1.3, hygie 0.1.6,
+janus 0.4.13, minerve 0.3.4, morpheus 0.4.11, promethee 0.3.4, themis 0.4.6,
+vulcain 0.4.23). Resultat : valider-cartes --tous = 15 CONFORME.
+
+**Lecon** :
+- Toute migration de parcours (bump de version) doit synchroniser les fiches
+  dans la MEME chaine, sinon valider-cartes bloque immediatement (Pattern 14).
+- La version vit dans le parcours JSON ; la fiche la REFLETE : jamais editer
+  la fiche avant d avoir bumpe le parcours.
+
+
+## [LECON] 2026-08-16 -- BRANCHEMENT OUTILS WEB DANS LA CARTE ATLAS (Buffy)
+
+**Contexte** : suite de la mission Vulcain (rechercher-web + detecter-recherches-obsoletes
+creees). Buffy branche les 2 indices outil dans le parcours atlas et synchronise
+la fiche.
+
+**Fait** :
+- c13 "Executer la recherche" : + indice outil `rechercher-web` (commande avec
+  --agent {agent} et requete quotee) - la case n avait AUCUN outil avant.
+- c12 "Formuler la requete" : + indice outil `detecter-recherches-obsoletes`
+  (verifier la fraicheur des recherches existantes AVANT de re-chercher -
+  aligne avec l etape 2 du protocole : chercher dans le cerveau d abord).
+- Bump parcours atlas 0.4.5 -> 0.4.6 (via editer-parcours, l outil sanctionne).
+- Fiche atlas synchronisee (Pattern 14 : PARCOURS v0.4.6).
+- Verifie : valider-cartes --agent atlas CONFORME, verrou ouvert pour atlas
+  (les 2 outils), navigation c12 -> c13 -> c14 -> c10, normes ASCII + LF.
+- Registre : 4 declarations (editer-parcours, valider-cartes-decision,
+  mettre-a-jour-versions) - la declaration guider-parcours a ete RETIREE
+  (outil non assigne a une carte : pas d indice outil, usage via fiche).
+
+**Lecons** :
+- Le verrou lit les CARTES comme source de verite : un outil non branche
+  bloque TOUT agent (meme le proprietaire prevu) tant que l indice n est pas
+  dans le parcours. L ordre de la chaine est donc : outil cree (Vulcain) ->
+  carte branchee (Buffy) -> mission reelle (Atlas).
+- Une fin de mission doit TOUJOURS suivre SA carte : la carte Buffy impose
+  "Activer Janus" (c8/c22/c27), jamais "reactiver Cerberus" - evaluer-processus
+  detecte les FIN_MISSION_ERRONEE. Verifier la carte avant d ecrire la raison
+  d activation (corrige en cours de mission).
+- guider-parcours n est un indice outil d AUCUNE carte : ne pas le declarer
+  au registre en mode direct (risque OUTIL_HORS_CARTE test-035). Les usages
+  via fiche (bloc code) ne se declarent pas.
+- Les indices outil ont le format {type, nom, catalogue, chemin, commande} :
+  respecter les 5 cles pour le verrou et test-035.
+
+
+## [LECON] 2026-08-16 -- EDUQUER JANUS SUR LA SUITE DE NON-REGRESSION (Buffy)
+
+**Contexte** : demande utilisateur URGENTE - Janus lance encore la suite de
+non-regression comme avant alors que le lanceur a beaucoup evolue (serie KO
+persistante, categories/tags, classement dynamique par taux de KO). L outil
+s est ameliore mais la fiche et la carte de Janus (ce qu il lit en mission)
+n avaient pas suivi.
+
+**Fait** :
+- fiche janus.md : ajout des options manquantes au tableau (--ko reprendre/
+  nouveau, --etat-ko, --tags, --categorie, --desactiver-categorie/--activer-
+  categorie, --etat-categories, --ordre-fixe, --relancer-ko --series X) +
+  nouveau paragraphe WORKFLOW SERIE KO PRIORITAIRE (constater --etat-ko ->
+  --ko reprendre en premier avec barriere -> series normales -> suite complete)
+  + note ciblage par --tags/--profil selon la zone de mission.
+- carte parcours-janus.json : case c4 "Verifier les tests" + regle workflow
+  serie KO (indice regle), bump 0.4.13 -> 0.4.14, fiche synchronisee
+  (Pattern 14), valider-cartes CONFORME, normes ASCII + LF.
+
+**Lecons** :
+- Ameliorer un outil SANS mettre a jour la fiche + la carte de son utilisateur
+  = amelioration morte : Janus lit SA fiche et SA carte, pas le --aide du
+  lanceur. L education fait partie du livrable d une amelioration d outil.
+- Verifier l ecart par la VRAIE source de Janus : sa fiche (section UTILISATION)
+  et sa carte (indices outil) - pas seulement le code du lanceur.
+- L utilisateur a raison : "on ameliore l outil mais Janus ne sait pas l
+  utiliser" - a chaque nouvelle option majeure du lanceur, l education de
+  Janus doit etre planifiee dans le round (Morpheus ne suffit pas).
+
+## [LECON] 2026-08-16 -- CORRECTION DES CASES REACTIVER FAUTIVES (Buffy)
+
+**Contexte** : demande utilisateur (le garde-fou anti-auto-reactivation ne
+fonctionne pas : test-070 ne scanne que les cases de type 'fin', toutes les
+cases d'action/regle echappent au scan).
+
+**Constats** :
+- La commande `reactiver <session> <raison> <agent>` ramene TOUJOURS a
+  Cerberus (le 3e argument est informatif, pas la cible).
+- 31 cases fautives sur 11 parcours : titres et messages qui affirmaient
+  "reactiver X" avec X != Cerberus (ex: cerberus c12b "reactiver Buffy",
+  argus c29a "il me reactivera", les boucles KO Janus/Themis "je le/la
+  reactiverai avec mon bilan", "Themis me REACTIVE").
+
+**Corrections** (via editer-parcours, barrage n3, + bump + fiche Pattern 14) :
+- "reactiver X (X != cerberus)" -> "activer X" (commande activer).
+- "je le/la reactiverai avec mon bilan" -> "je l ACTIVE (commande activer)
+  pour re-controle/re-audit avec mon bilan".
+- "Themis me REACTIVE" -> "Themis me RE-ACTIVE (commande activer)".
+- argus c29a : "il reactivera Cerberus avec le bilan".
+
+**Lecon** : tout message de carte qui mentionne une relance d'agent doit
+utiliser la commande `activer` (sauf si la cible est Cerberus, alors
+`reactiver`). Le mot "reactive" est surcharge (verbe general vs commande) :
+pour lever l'ambiguite, toujours preciser "(commande activer)" ou
+"reactiver Cerberus".
+
+**Preuves** : valider-cartes 15/15 CONFORME, bumper 0 incoherent, normes
+ASCII/LF 0 ecart, rescan 0 forme fautive restante.
+
+## [LECON] 2026-08-16 -- CASES REACTIVER RESIDUELLES CORRIGEES (Buffy)
+
+**Contexte** : suite de la correction des 31 cases reactiver fautives. Le
+garde-fou etendu test-070 v2 (scan de TOUTES les cases, plus seulement les
+fins) a detecte 3 cas majeurs que le scan initial avait rates car ils
+utilisent le PRESENT 'me REACTIVE' (pas le futur ni la commande) :
+  - buffy c39 'Atlas me REACTIVE' -> 'Atlas me RE-ACTIVE (commande activer)'
+  - cerberus c15c 'Janus recontrole et me reactive' -> 'Janus recontrole
+    puis REACTIVE Cerberus avec son rapport'
+  - janus c32 'Themis me REACTIVE' -> 'Themis me RE-ACTIVE (commande activer)'
+  + 3 cas mineurs d ambiguite (janus cT8/cT9/cT10 'me reactive (boucle KO)'
+    -> 'me RE-ACTIVE (commande activer) pour re-controle (boucle KO)').
+
+**Lecon** : la forme PRESENT 'me REACTIVE' (ou 'reactiver X') est aussi
+fautive que la commande : reactiver ramene TOUJOURS a Cerberus. La
+formulation sans ambiguite est 'RE-ACTIVE (commande activer)' quand la
+cible est un autre agent, ou 'REACTIVE Cerberus' quand la cible est
+Cerberus. Les garde-fous doivent scanner TOUTES les cases (action, regle,
+controle), pas seulement les fins : c etait la faille de test-070 v1.
+
+**Preuves** : test-070 11 OK / 0 KO, valider-cartes 15/15, bumper 0
+incoherent, normes ASCII/LF 0 ecart.
+
+
+## [LECON] 2026-08-17 -- EDUQUER JANUS A LA COMPOSITION CIBLEE DE LA SUITE (Buffy)
+
+**Contexte** : demande utilisateur - Janus lancait encore la suite complete
+par reflexe meme pour un petit controle. La suite avait toutes les briques
+(--fichiers, --profil, --tags, --categorie, --desactiver/--activer,
+--etat-tests/--etat-categories, --series) mais ni la fiche ni la carte de
+Janus n ordonnaient la DECISION de composition.
+
+**Lecons techniques** :
+1. editer-parcours --contenu REMPLACE TOUTE la case : il faut fournir le
+   JSON COMPLET (type + titre + indices), pas seulement le champ modifie.
+   J ai perdu le champ type de c4 (-> c4:None, NON CONFORME) puis restaure
+   a la passe suivante (v0.4.17). Toujours verifier valider-cartes apres.
+2. Un workflow immuable doit etre dans la FICHE (detail) ET la CARTE
+   (resume dans la case outil) pour que l agent le lise pendant la mission.
+3. La composition ciblee se resume en 6 pas : identifier fichiers modifies
+   -> choisir le mode le plus leger (--fichiers/--profil/--tags/--series)
+   -> desactiver les tests inutiles (--desactiver, persistant)
+   -> valider les series concernees -> reactiver en fin (--activer)
+   -> suite complete UNIQUEMENT en validation finale.
+
+**Preuves** : carte janus v0.4.17 CONFORME, valider-cartes --tous 15/15,
+bumper --tous 0 incoherent, normes ASCII/LF 0/0.
+
+## [LECON] 2026-08-17 -- C4 JANUS SUIVANT PERDU + EDITER-PARCOURS CIBLE (Buffy)
+
+**Contexte** : la barriere B a bloque sur test-026 (detecter-cablages) : la
+case c5 de la carte janus etait ORPHELINE. Cause racine : MA mission
+composition ciblee (carte janus v0.4.17) avait ecrase la case c4 avec
+editer-parcours --contenu (incident deja documente : type perdu puis restaure)
+MAIS le champ suivant avait aussi ete perdu sans etre restaure - c4 n avait
+NI suivant NI branches, c5 devenait orpheline. Les 6 indices etaient presents
+(le fix --suivant c4 --cible c5 a suffi, aucun contenu a reconstruire).
+Correction : c4.suivant=c5 (via --suivant/--cible, l option CHIRURGICALE),
+bump janus 0.4.17 -> 0.4.18, fiche synchronisee. Verdict : carte CONFORME,
+detecter-cablages PROPRE, test-026 10/10.
+
+**Lecon 1 - editer-parcours deduit la CIBLE de --agent, pas de la session** :
+j ai lance --suivant c4 --cible c5 --wet avec --agent buffy (pour respecter la
+regle SEUL BUFFY) et l outil a modifie PARCOURS-BUFFY, pas parcours-janus !
+Pour editer la carte d un AUTRE agent, il faut --agent <agent-cible> (janus
+ici). Les 2 operations (--suivant + --bump) ont touche la carte buffy : le
+--suivant etait IDEMPOTENT (c4.suivant deja c5) mais le --bump a monte la
+version 0.4.12 -> 0.4.13 SANS raison. REPARATION : version remise a 0.4.12 +
+empreinte SHA-256 recalculee dans cartes-lock.json (meme fonction que
+editer-parcours) pour que le barrage n3 reste coherent.
+
+**Lecon 2 - un --bump sans modification reelle = pollution** : le bump ne doit
+suivre qu une modification de contenu. Un bump parasite desynchronise la fiche
+(Pattern 14) et pollue l historique. TOUJOURS verifier quel fichier l outil a
+ecrit dans sa sortie ([OK] Parcours ecrit : <chemin>) AVANT de poursuivre.
+
+**Lecon 3 - le verrou anti-contournement se re-synchronise par le lock** : une
+reparation d erreur (retour de version) peut se faire sans casser le barrage
+n3 SI on recalcule l empreinte avec la fonction EXACTE de l outil
+(SHA-256 du contenu normalise LF + lignes sans espace final).
+
+
+## [LECON] 2026-08-17 -- CHIRON : JE DETECTE JE NE CORRIGE PAS (Buffy)
+
+**Contexte** : la non-regression de Janus a bloque sur test-058 (barriere D) :
+la carte de Chiron (creee precedemment) utilisait editer-fichier-agents, outil
+EXCLUSIF a Buffy, dans c10 (corriger les incoherences simples) et c12 (ecrire
+les lecons dans les corrections de l agent cible).
+
+**Cause racine** : lors de la creation de Chiron, sa carte a ete ecrite avec un
+script Python direct (au lieu d editer-parcours) et a copie le modele d un
+agent correcteur, alors que Chiron est un EDUCATEUR qui DETECTE et SIGNALE
+(comme Argus : JE DETECTE JE NE CORRIGE PAS).
+
+**Correction** (via editer-parcours --agent chiron --modifier-case, le seul
+outil habilite) :
+- c9  : OUI -> c10 "documenter les corrections proposees" (plus "corriger")
+- c10 : retrait d editer-fichier-agents -> "documenter le rapport puis
+        SIGNALER a Buffy" (corrections simples ET complexes vont a Buffy)
+- c12 : retrait d editer-fichier-agents -> "ecrire MES lecons dans MES
+        corrections uniquement" (jamais les fichiers des autres agents)
+- c13 : bumper MA fiche uniquement (jamais celle des autres)
+- fiche chiron.md : REGLE ABSOLUE 1 = JE DETECTE JE NE CORRIGE PAS, retrait
+  d editer-fichier-agents de la table P0, du workflow Purifier et des Limites
+
+**Verifications** : valider-cartes chiron CONFORME, test-058 6/6, test-055
+12/12, test-071 7/7, test-072 10/10, verifier-conformite-fiche CONFORME,
+normes ASCII 0 + LF pur sur carte et fiche.
+
+**Lecon Buffy** : un nouvel agent correcteur ne doit JAMAIS heriter des outils
+exclusifs d un autre role. L exclusivite (SEUL BUFFY CORRIGE LES FICHIERS DES
+AGENTS) est verifiee par test-058 sur le TEXTE des cartes (pas seulement les
+indices outil) : toute mention d editer-fichier-agents ou editer-parcours hors
+de la carte buffy est un KO. Toujours creer les cartes via editer-parcours
+(jamais de script Python direct) pour que le lock cartes-lock.json soit
+coherent des la premiere ecriture.
+
+
+## [LECON] 2026-08-17 -- EDUCATION JANUS : CYCLE KO v0.6.0 (Buffy)
+
+**Contexte** : l utilisateur a constate que --ko-puis-stop (v0.5.9) n etait
+pas documente dans la fiche de Janus (0 occurrence) et ne correspondait pas a
+son modele de travail. Vulcain a corrige le lanceur (v0.6.0 : --ko nouveau =
+balayage complet, --ko-puis-stop = CONTROLE TERMINE), Morpheus a adapte les
+tests, je devais eduquer la fiche de Janus.
+
+**Corrections dans janus.md** :
+- Tableau Options essentielles : ajout de --ko-puis-stop + reformulation de
+  --ko nouveau (MODE BALAYAGE COMPLET).
+- Nouvelle section WORKFLOW CYCLE KO (v0.6.0) : passe 1 balayage (--ko
+  nouveau, totalite des KO), passe 2 revalidation ciblee (--ko reprendre
+  --ko-puis-stop), serie KO verte = CONTROLE TERMINE, suite complete
+  conditionnelle (seulement si code partage touche - decision Janus).
+- Harmonisation des sections WORKFLOW KO OBLIGATOIRE et COMPOSITION CIBLEE
+  (la "suite complete en dernier" devient "suite complete conditionnelle").
+
+**Verifications** : janus.md CONFORME (verifier-conformite-fiche 1/1), normes
+ASCII 0 + LF pur.
+
+**Lecon Buffy** : quand un outil evolue (nouvelle option), la fiche de l agent
+utilisateur doit etre mise a jour dans la MEME chaine (Vulcain -> Morpheus ->
+Buffy -> Janus). Une option sans education = un agent qui continue d utiliser
+l ancien comportement, exactement le bug signale par l utilisateur.

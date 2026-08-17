@@ -7,7 +7,7 @@ identite:
 # verifier-systeme
 
 **Categorie** : Verifier
-**Version** : 0.2.2-py
+**Version** : 0.2.3-py
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : outil partage

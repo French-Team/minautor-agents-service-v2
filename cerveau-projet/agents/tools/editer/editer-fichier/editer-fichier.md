@@ -6,7 +6,7 @@ identite:
 ---
 # editer-fichier
 
-**Version :** 0.4.2
+**Version :** 0.4.3
 **Statut :** prepare
 **Categorie :** Editer
 **Chemin :** `agents/tools/editer/editer-fichier/`
@@ -55,6 +55,7 @@ editer-fichier.sh --global fichier.md "texte" "remplacement"
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.4.3 | 2026-08-17 | MESSAGES INFORMATIONNELS : messages contextuels selon le type de fichier modifie (.py/.sh -> bumper+tests, parcours -> valider-cartes+fiche, .md -> coherence index/README) - regle immuable v0.3.0 |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (premiere occurrence, --global, --dry-run, fichier inexistant), promotion prepare |
 | 0.3.0 | 2026-08-12 | Qualite pro : echec explicite (0 occurrence -> code 1, jamais 0 silencieux), protection nommage, message d'aide enrichi |

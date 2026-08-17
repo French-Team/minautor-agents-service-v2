@@ -26,6 +26,7 @@ Invariants verifies :
      (preuve : fichier temporaire avec API_KEY -> detecte, os.environ ->
      exclu, placeholder -> exclu)
   4. Normes : ASCII strict + LF pur (outil + test)
+Tags: conventions, valeurs-magiques, garde-fou
 """
 import importlib.util
 import io

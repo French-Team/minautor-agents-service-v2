@@ -16,7 +16,7 @@ Usage:
   combos-maj-readme-massive.py [OPTIONS]
 """
 
-VERSION = "0.1.5"
+VERSION = "0.1.6"
 STATUT = "prepare"
 
 import datetime
@@ -376,6 +376,13 @@ def main():
         rapport_file.write_text("\n".join(contenu) + "\n", encoding="utf-8", newline="")
         print("")
         print(GREEN + "Rapport sauvegarde : " + str(rapport_file) + NC)
+
+    # MESSAGES INFORMATIONNELS (regle immuable v0.3.0)
+    print("")
+    print(YELLOW + "=== MESSAGES POUR L AGENT ===" + NC)
+    print("  > README modifie : verifier version-readme.txt (bump via mettre-a-jour-versions --version-readme)")
+    print("  > README modifie : verifier le badge Outils (aligner_badge_header) + index-tools.md")
+    print("  > README modifie : verifier test-020 (combos-clio) et test-038 (badge README) - Clio seule habilitee pour le README")
 
     return 0
 

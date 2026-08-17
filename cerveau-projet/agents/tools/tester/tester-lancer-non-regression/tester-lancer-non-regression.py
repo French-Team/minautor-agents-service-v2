@@ -4,7 +4,9 @@
 tester-lancer-non-regression.py
 Lance la non-regression complete des tests formels (mode barrieres par
 defaut, series classees par importance, chrono + reference de temps,
-verrou d habilitation : seul janus peut lancer la suite).
+verrou d habilitation : seul janus lance la suite en production ; vulcain
+est autorise en liste blanche developpeur (v0.2.2) pour VALIDER ses
+modifications du lanceur sans attendre janus).
 
 Usage:
   tester-lancer-non-regression.py --agent janus
@@ -12,15 +14,24 @@ Usage:
   tester-lancer-non-regression.py --agent janus --tests test-001,test-002
   tester-lancer-non-regression.py --agent janus --profil cartes
   tester-lancer-non-regression.py --agent janus --fichiers README.md,tools/creer/creer-fichier/creer-fichier.py
+  tester-lancer-non-regression.py --agent janus --tags securite,conventions
+  tester-lancer-non-regression.py --agent janus --categorie performance
+  tester-lancer-non-regression.py --agent janus --desactiver-categorie performance
   tester-lancer-non-regression.py --version
   tester-lancer-non-regression.py --aide
 
 Options principales:
-  --agent <nom>       OBLIGATOIRE (verrou d habilitation : seul janus lance)
+  --agent <nom>       OBLIGATOIRE (verrou d habilitation : seul janus lance ;
+                      vulcain autorise en liste blanche developpeur pour ses essais)
   --series <a,b,c..>  Series a lancer (defaut: tous)
   --tests <liste>     Filtrer par noms de tests
   --profil <nom>      Forcer un profil (cartes, outils, tests, fiches-agents, docs, registre)
   --fichiers <liste>  Fichiers modifies (virgules) : deduit automatiquement le(s) profil(s)
+  --tags <t1,t2>      Ne lancer que les tests portant ces tags (OR, bloc Tags: des docstrings)
+  --categorie <nom>   Lancer une categorie predefinie (categories-tests.json)
+  --desactiver-categorie <nom>  Desactiver une categorie (persistant)
+  --activer-categorie <nom>     Reactiver une categorie (persistant)
+  --etat-categories   Afficher les categories et leur etat
   --desactiver <N>    Desactiver des tests par numero (persistant)
   --activer <N>       Reactiver des tests par numero (persistant)
   --etat-tests        Afficher la config persistante des tests
@@ -47,7 +58,7 @@ import sys
 import time
 from datetime import datetime
 
-VERSION = "0.5.5"
+VERSION = "0.6.2"
 STATUT = "ebauche"
 
 # Round 18 (2026-08-15) : BARRIERES DE PASSAGE (demande utilisateur) - la
@@ -79,7 +90,7 @@ SERIES = {
           "test-022", "test-023", "test-040"],
     "d": ["test-025", "test-027", "test-031", "test-036", "test-038", "test-039",
           "test-045", "test-046", "test-047", "test-051", "test-061"],
-    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057", "test-065", "test-066"],
+    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057", "test-065", "test-066", "test-087", "test-088"],
 }
 SERIES_NOMS = {
     "a": "Fondations (nommage, ASCII/LF, template, protections)",
@@ -243,6 +254,35 @@ def ko_tests_defaut(racine):
                         "tester-lancer-non-regression", "ko-tests.json")
 
 
+def config_environnement_defaut(racine):
+    """Chemin du fichier de configuration d environnement adaptative
+    (config-environnement.json, gere par configurer-environnement)."""
+    return os.path.join(racine, "cerveau-projet", "agents", "tools", "tester",
+                        "tester-lancer-non-regression", "config-environnement.json")
+
+
+def lire_workers_config(racine):
+    """CONFIGURATION ADAPTATIVE (demande utilisateur 2026-08-17) : lit le
+    nombre de workers recommande depuis config-environnement.json. Si le
+    fichier est absent ou illisible, retombe sur min(cpu_count, 16) (comportement
+    historique). Retourne (workers, timeout_test) - timeout 0 = defaut."""
+    workers_defaut = min(os.cpu_count() or 1, 16)
+    timeout_defaut = 0
+    chemin = config_environnement_defaut(racine)
+    if not os.path.isfile(chemin):
+        return workers_defaut, timeout_defaut
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            data = json.load(fh)
+        workers = int(data.get("workers_recommandes", workers_defaut))
+        timeout = int(data.get("timeout_test_recommande", 0))
+        if workers < 1:
+            workers = workers_defaut
+        return workers, timeout
+    except (IOError, ValueError, TypeError):
+        return workers_defaut, timeout_defaut
+
+
 def lire_ko_tests(racine):
     """Lit la liste des tests en KO du fichier persistant ko-tests.json.
     Retourne une liste de noms de tests (test-0XX) - vide si fichier absent
@@ -344,6 +384,94 @@ def trouver_tests(racine, filtre=None):
     return tests
 
 
+def lire_tags_test(chemin):
+    """Extrait le bloc 'Tags:' de la docstring d un test (demande
+    utilisateur 2026-08-16 : chaque test porte des tags de categorisation
+    dans son en-tete, source unique lisible par le lanceur).
+    Retourne une liste de tags (minuscules, sans doublon). Format attendu
+    dans la docstring : 'Tags: securite, conventions, anti-recurrence'.
+    """
+    tags = []
+    try:
+        with io.open(chemin, encoding="utf-8", errors="replace") as fh:
+            tete = fh.read(4096)
+    except (IOError, OSError):
+        return tags
+    # Meme format que le garde-fou test-087 : 'Tags: a, b, c' en docstring
+    # OU '# Tags: a, b, c' en commentaire (test-027). Deux formats acceptes.
+    m = re.search(r"^#?\s*Tags:\s*(.+)$", tete, re.M)
+    if m:
+        for t in m.group(1).split(","):
+            t = t.strip().lower()
+            if t and t not in tags:
+                tags.append(t)
+    return tags
+
+
+def tags_par_test(tests):
+    """Retourne {chemin: [tags]} pour la liste de tests (lecture une fois)."""
+    return {t: lire_tags_test(t) for t in tests}
+
+
+def chemin_categories_tests(racine):
+    """Chemin du fichier categories-tests.json (nom de categorie -> tags)."""
+    return os.path.join(racine, "cerveau-projet", "agents", "tools", "tester",
+                        "tester-lancer-non-regression", "categories-tests.json")
+
+
+def charger_categories_tests(racine):
+    """Charge categories-tests.json. Format : {"categories": {"securite":
+    ["marbre", ...], ...}}. Retourne (dict nom -> [tags], erreur)."""
+    chemin = chemin_categories_tests(racine)
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            d = json.load(fh)
+        return d.get("categories", {}), None
+    except (IOError, OSError, ValueError) as e:
+        return {}, "fichier %s illisible: %s" % (chemin, str(e)[-80:])
+
+
+def filtrer_tests_par_tags(tests, tags_voulus):
+    """Filtre la liste de tests : ne garde que ceux portant AU MOINS UN des
+    tags voulus (combinaison OR). Tags compares en minuscules."""
+    carte = tags_par_test(tests)
+    voulus = set(t.lower() for t in tags_voulus)
+    gardes = []
+    for t in tests:
+        if voulus & set(carte.get(t, [])):
+            gardes.append(t)
+    return gardes, carte
+
+
+def lire_config_categories(racine):
+    """Lit les categories DESACTIVEES persistantes depuis config-tests.json."""
+    chemin = chemin_config_tests(racine)
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            d = json.load(fh)
+        return [str(x) for x in d.get("desactivees_categories", []) if str(x).strip()]
+    except (IOError, OSError, ValueError):
+        return []
+
+
+def ecrire_config_categories(racine, desactivees_categories, desactives=None):
+    """Ecrit la config persistante (tests + categories desactivees)."""
+    chemin = chemin_config_tests(racine)
+    if desactives is None:
+        desactives = lire_config_tests(racine)
+    try:
+        entree = {
+            "desactives": sorted(set(desactives)),
+            "desactivees_categories": sorted(set(desactivees_categories)),
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        with io.open(chemin, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(entree, ensure_ascii=True, indent=1) + "\n")
+        return True
+    except (IOError, OSError):
+        return False
+
+
 def compter_ko(sortie):
     """Compte les points KO d une sortie de test : seules les lignes qui
     COMMENCENT par [KO] (apres indentation) sont des echecs. Un libelle
@@ -383,10 +511,19 @@ def registre_tests_defaut(racine):
                         "registre-tests.jsonl")
 
 
+PLAFOND_REGISTRE_TESTS = 500
+
+
 def trier_registre_tests(registre):
     """Trie le registre-tests par date puis heure, DECROISSANT (le plus recent
     en premier - meme regle que registre-usages-outils, demande utilisateur
-    2026-08-14). Les lignes non-JSON sont PRESERVEES (conservees en fin)."""
+    2026-08-14). Les lignes non-JSON sont PRESERVEES (conservees en fin).
+
+    ROTATION (v0.6.2, demande performance 2026-08-17) : le fichier est
+    PLAFONNE a PLAFOND_REGISTRE_TESTS entrees valides (les plus recentes
+    sont conservees). Sans plafond, le fichier grandissait sans limite
+    (12k+ lignes, 1.9 Mo) et le re-tri integral a chaque journalisation
+    coutait ~8s par lancement (goulot reel de test-032)."""
     if not os.path.isfile(registre):
         return
     try:
@@ -403,6 +540,8 @@ def trier_registre_tests(registre):
         except ValueError:
             invalides.append(l)
     valides.sort(key=lambda paire: paire[0], reverse=True)
+    if len(valides) > PLAFOND_REGISTRE_TESTS:
+        valides = valides[:PLAFOND_REGISTRE_TESTS]
     triees = [l for _, l in valides] + invalides
     with io.open(registre, "w", encoding="utf-8", newline="\n") as fh:
         fh.write("\n".join(triees) + "\n")
@@ -835,11 +974,21 @@ def lire_config_tests(racine):
 
 def ecrire_config_tests(racine, desactives):
     """Ecrit la configuration persistante des tests desactives (JSON, LF,
-    ASCII strict). Cree le fichier s il n existe pas."""
+    ASCII strict). PRESERVE les categories desactivees (desactivees_categories)
+    si deja enregistrees. Cree le fichier s il n existe pas."""
     chemin = chemin_config_tests(racine)
     try:
+        ancien = {}
+        try:
+            with io.open(chemin, encoding="utf-8") as fh:
+                ancien = json.load(fh)
+        except (IOError, OSError, ValueError):
+            ancien = {}
+        categories = [str(x) for x in ancien.get("desactivees_categories", [])
+                      if str(x).strip()]
         entree = {
             "desactives": sorted(set(desactives)),
+            "desactivees_categories": sorted(set(categories)),
             "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
         with io.open(chemin, "w", encoding="utf-8", newline="\n") as fh:
@@ -1109,7 +1258,7 @@ def main():
     parser.add_argument("--series", type=str, default="tous",
                         help="Series a lancer (a|b|c|d|e, liste separee par des virgules ex: a,c, ou tous par defaut)")
     parser.add_argument("--workers", type=int, default=0,
-                        help="Nombre de workers paralleles (defaut : min(cpu_count, 16))")
+                        help="Nombre de workers paralleles (defaut : config-environnement.json, sinon min(cpu_count, 16))")
     parser.add_argument("--parallele", action="store_true",
                         help="Mode pool de workers (defaut : distribue les tests, longs d abord)")
     parser.add_argument("--serial", action="store_true",
@@ -1129,13 +1278,25 @@ def main():
     parser.add_argument("--relancer-ko", action="store_true",
                         help="Mecanisation KO (demande utilisateur 2026-08-16) : relancer UNIQUEMENT les tests en KO du DERNIER run journalise (registre-tests.jsonl, run_id) - isole le probleme, valide le test, puis la serie, avant de relancer la suite complete. Combine a --series X, ne relance QUE les KO de la serie X.")
     parser.add_argument("--ko", type=str, default="reprendre", choices=["nouveau", "reprendre"],
-                        help="Serie KO persistante prioritaire (demande utilisateur 2026-08-16) : 'reprendre' (defaut) lance D ABORD la serie KO (tests de ko-tests.json) avec sa barriere - ceux qui passent sortent du fichier et ne sont PAS relances dans leur serie d origine ; 'nouveau' vide le fichier ko-tests.json et lance les series normalement (les KO du run sont collectes dans ko-tests.json).")
+                        help="Serie KO persistante prioritaire (demande utilisateur 2026-08-16, revue 2026-08-17) : 'reprendre' (defaut) lance D ABORD la serie KO (tests de ko-tests.json) avec sa barriere - ceux qui passent sortent du fichier et ne sont PAS relances dans leur serie d origine ; 'nouveau' = MODE BALAYAGE COMPLET : vide ko-tests.json puis lance TOUTES les series SANS arret pour collecter la TOTALITE des KO (ils deviendront la serie KO a revalider).")
     parser.add_argument("--etat-ko", action="store_true",
                         help="Affiche le contenu de la serie KO persistante (ko-tests.json) puis quitte sans lancer")
+    parser.add_argument("--ko-puis-stop", action="store_true",
+                        help="CYCLE RAPIDE KO (demande utilisateur 2026-08-17, revu) : avec --ko reprendre, la suite valide UNIQUEMENT la serie KO persistante puis s ARRETE des que la barriere KO est franchie (100%% verte) - sans relancer les series A-E. Le rapport indique 'SERIE KO VERTE = CONTROLE TERMINE' (la suite complete finale n est relancee que si un code partage a ete touche - decision Janus). Si la barriere KO est bloquee, comportement existant (STOP + retour 1). Si ko-tests.json est vide, l option est ignoree (avertissement) et la suite se lance normalement.")
     parser.add_argument("--fichiers", type=str, default="",
                         help="Liste de fichiers modifies (separes par des virgules) : deduit automatiquement le(s) profil(s) de tests a lancer (mode profil)")
     parser.add_argument("--profil", type=str, default="",
                         help="Forcer un profil de tests (ex: --profil cartes,outils) - profils: cartes, outils, tests, fiches-agents, docs, registre")
+    parser.add_argument("--tags", type=str, default="",
+                        help="Ne lancer que les tests portant CES tags (ex: --tags securite,performance, combinaison OR). Tags lus dans le bloc 'Tags:' de la docstring de chaque test.")
+    parser.add_argument("--categorie", type=str, default="",
+                        help="Lancer une categorie predefinie de tests (ex: --categorie securite). Categories definies dans categories-tests.json (nom -> liste de tags).")
+    parser.add_argument("--desactiver-categorie", type=str, default="",
+                        help="Desactiver une categorie (ex: --desactiver-categorie performance). PERSISTANT : herite au prochain lancement (les tests de la categorie ne sont pas lances).")
+    parser.add_argument("--activer-categorie", type=str, default="",
+                        help="Reactiver une categorie (ex: --activer-categorie performance). PERSISTANT.")
+    parser.add_argument("--etat-categories", action="store_true",
+                        help="Affiche les categories (tags) et leur etat actif/desactive puis quitte sans lancer")
     parser.add_argument("--desactiver", type=str, default="",
                         help="Desactiver des tests par numero (ex: --desactiver 24,28 pour test-024,test-028). PERSISTANT : enregistre dans config-tests.json et herite au prochain lancement.")
     parser.add_argument("--activer", type=str, default="",
@@ -1157,8 +1318,10 @@ def main():
     args = parser.parse_args()
 
     # VERROU D HABILITATION (regle immuable : seul janus lance la
-    # non-regression). --agent est OBLIGATOIRE : sans lui, impossible de
-    # verifier qui appelle (le verrou refuse rc=2). L appel au verrou se fait
+    # non-regression en production ; vulcain a une liste blanche developpeur
+    # (verrou v0.2.2) pour valider ses modifications du lanceur).
+    # --agent est OBLIGATOIRE : sans lui, impossible de verifier qui appelle
+    # (le verrou refuse rc=2). L appel au verrou se fait
     # AVANT toute action : si l agent n est pas habilite, la suite n est pas
     # lancee et le message indique QUI est habilite et COMMENT l activer.
     if not args.agent:
@@ -1171,6 +1334,15 @@ def main():
         return 1 if code == 1 else 2
 
     racine = racine_projet()
+    # CONFIGURATION ADAPTATIVE (demande utilisateur 2026-08-17) : lire la
+    # config-environnement.json (generee par configurer-environnement) pour
+    # auto-regler les workers et le timeout par test selon les ressources
+    # reelles de la machine. Les options CLI --workers et --timeout-test
+    # restent prioritaires : la config ne s applique que si elles sont
+    # absentes (valeur 0 = non fournie).
+    workers_config, timeout_config = lire_workers_config(racine)
+    if args.timeout_test <= 0 and timeout_config > 0:
+        args.timeout_test = timeout_config
     # run_id du run courant (demande utilisateur 2026-08-16) : timestamp du
     # debut, journalise avec CHAQUE test dans registre-tests.jsonl pour
     # identifier le lancement auquel appartient chaque test (base de
@@ -1276,6 +1448,56 @@ def main():
                        % (", ".join(profils_choisis), len(tests_filtres), len(tests)), "cyan"))
         tests = tests_filtres
 
+    # FILTRE PAR TAGS / CATEGORIE (demande utilisateur 2026-08-16) : Janus
+    # peut lancer uniquement les tests portant certains tags (--tags) ou une
+    # categorie predefinie (--categorie, categories-tests.json). Le filtre
+    # s applique apres le mode profil, avant la config des tests.
+    categories_cfg, err_cat = charger_categories_tests(racine)
+    tags_voulus = []
+    if args.categorie:
+        noms_cat = [c.strip().lower() for c in args.categorie.split(",") if c.strip()]
+        inconnues = [c for c in noms_cat if c not in categories_cfg]
+        if inconnues:
+            print(_couleur("[ERREUR] Categorie(s) inconnue(s) : %s (disponibles : %s)"
+                           % (", ".join(inconnues), ", ".join(sorted(categories_cfg))),
+                           "rouge"))
+            return 2
+        for c in noms_cat:
+            tags_voulus.extend(categories_cfg[c])
+    if args.tags:
+        tags_voulus.extend([t.strip().lower() for t in args.tags.split(",") if t.strip()])
+    if tags_voulus:
+        tests_tags, _carte_tags = filtrer_tests_par_tags(tests, tags_voulus)
+        if not tests_tags:
+            print(_couleur("[ERREUR] Aucun test ne porte les tags : %s"
+                           % ", ".join(tags_voulus), "rouge"))
+            return 2
+        print(_couleur("[TAGS] %s : %d tests portent les tags / %d total"
+                       % (", ".join(sorted(set(tags_voulus))), len(tests_tags), len(tests)),
+                       "cyan"))
+        tests = tests_tags
+
+    # CATEGORIES DESACTIVEES (persistantes) : les tests des categories
+    # desactivees sont retires de la liste (comme la config des tests).
+    desactivees_cat = lire_config_categories(racine)
+    if desactivees_cat:
+        tags_exclus = set()
+        for c in desactivees_cat:
+            tags_exclus.update(categories_cfg.get(c, [c]))
+        if tags_exclus:
+            carte = tags_par_test(tests)
+            gardes = []
+            retires_cat = []
+            for t in tests:
+                if set(carte.get(t, [])) & tags_exclus:
+                    retires_cat.append(os.path.basename(t))
+                else:
+                    gardes.append(t)
+            if retires_cat:
+                print(_couleur("[CATEGORIES] Desactivees : %s - %d test(s) NON LANCES"
+                               % (", ".join(desactivees_cat), len(retires_cat)), "jaune"))
+            tests = gardes
+
     # CONFIGURATION PERSISTANTE DES TESTS (demande utilisateur 2026-08-15) :
     # Janus peut activer/desactiver des tests par numero (--activer/
     # --desactiver N). La config est PERSISTEE dans config-tests.json et
@@ -1350,6 +1572,57 @@ def main():
         if ecrire_config_tests(racine, desactives_config):
             print(_couleur("[CONFIG] Tests reactives et persistes : %s"
                            % ", ".join(sorted(set(desactives_config))), "vert"))
+        else:
+            print(_couleur("[ERREUR] Impossible d ecrire config-tests.json", "rouge"))
+            return 2
+
+    # CATEGORIES : desactiver / reactiver une categorie (persistant) +
+    # --etat-categories (affichage sans lancer).
+    if args.etat_categories:
+        print(_couleur("=== ETAT DES CATEGORIES (tags, persistante) ===", "cyan"))
+        print("Fichier : %s" % chemin_categories_tests(racine))
+        desactivees_cat = lire_config_categories(racine)
+        for nom in sorted(categories_cfg):
+            etat = "DESACTIVEE" if nom in desactivees_cat else "active"
+            couleur = "rouge" if nom in desactivees_cat else "vert"
+            print(_couleur("  %-14s [%s] tags: %s"
+                           % (nom, etat, ", ".join(categories_cfg[nom])), couleur))
+        return 0
+
+    if args.desactiver_categorie:
+        noms_cat = [c.strip().lower() for c in args.desactiver_categorie.split(",") if c.strip()]
+        inconnues = [c for c in noms_cat if c not in categories_cfg]
+        if inconnues:
+            print(_couleur("[ERREUR] Categorie(s) inconnue(s) : %s (disponibles : %s)"
+                           % (", ".join(inconnues), ", ".join(sorted(categories_cfg))),
+                           "rouge"))
+            return 2
+        desactivees_cat = lire_config_categories(racine)
+        for c in noms_cat:
+            if c not in desactivees_cat:
+                desactivees_cat.append(c)
+        if ecrire_config_categories(racine, desactivees_cat):
+            print(_couleur("[CATEGORIES] Desactivees et persistees : %s"
+                           % ", ".join(sorted(set(desactivees_cat))), "jaune"))
+        else:
+            print(_couleur("[ERREUR] Impossible d ecrire config-tests.json", "rouge"))
+            return 2
+
+    if args.activer_categorie:
+        noms_cat = [c.strip().lower() for c in args.activer_categorie.split(",") if c.strip()]
+        inconnues = [c for c in noms_cat if c not in categories_cfg]
+        if inconnues:
+            print(_couleur("[ERREUR] Categorie(s) inconnue(s) : %s (disponibles : %s)"
+                           % (", ".join(inconnues), ", ".join(sorted(categories_cfg))),
+                           "rouge"))
+            return 2
+        desactivees_cat = lire_config_categories(racine)
+        for c in noms_cat:
+            if c in desactivees_cat:
+                desactivees_cat.remove(c)
+        if ecrire_config_categories(racine, desactivees_cat):
+            print(_couleur("[CATEGORIES] Reactivees et persistees : %s"
+                           % ", ".join(sorted(set(desactivees_cat))), "vert"))
         else:
             print(_couleur("[ERREUR] Impossible d ecrire config-tests.json", "rouge"))
             return 2
@@ -1509,12 +1782,15 @@ def main():
     ko_fichier = lire_ko_tests(racine)
     ko_restants = []            # tests KO non valides apres la barriere KO
     mode_ko = "barrieres"
+    balayage = args.ko == "nouveau" and not (args.serial or args.parallele) and not mode_profil
     if not (args.serial or args.parallele) and not mode_profil:
         if args.ko == "nouveau":
             ecrire_ko_tests(racine, [])
             ko_fichier = []
-            print(_couleur("[SERIE KO] Mode NOUVEAU : ko-tests.json vide - les series A-E "
-                           "s executent normalement, les KO seront collectes.", "cyan"))
+            print(_couleur("[SERIE KO] Mode NOUVEAU (BALAYAGE COMPLET) : ko-tests.json "
+                           "vide - TOUTES les series s executent SANS arret pour "
+                           "collecter la TOTALITE des KO, puis la serie KO devient "
+                           "la seule a revalider.", "cyan"))
         elif ko_fichier:
             print(_couleur("[SERIE KO] Mode REPRENDRE : %d test(s) en KO du fichier, "
                            "relance prioritaire avant les series A-E :"
@@ -1524,6 +1800,10 @@ def main():
         else:
             print(_couleur("[SERIE KO] Mode REPRENDRE : serie KO vide - la suite demarre "
                            "par la serie A.", "cyan"))
+            if args.ko_puis_stop:
+                print(_couleur("[SERIE KO] --ko-puis-stop IGNORE : ko-tests.json est vide, "
+                               "il n y a rien a revalider - la suite complete se lance "
+                               "normalement.", "jaune"))
         if ko_fichier:
             # La serie KO a SA propre barriere : tests en parallele (pool),
             # puis serie si KO persistant -> barriere bloquee.
@@ -1543,7 +1823,7 @@ def main():
                 if args.workers and args.workers > 0:
                     workers = args.workers
                 else:
-                    workers = min(os.cpu_count() or 1, 16)
+                    workers = workers_config
                 ko_pool = [t for t in ko_chemin
                            if not any(os.path.basename(t).startswith(g)
                                       for g in GARDE_FOUS_GLOBAUX + TESTS_SERIE_EXCLUSIFS)]
@@ -1602,6 +1882,7 @@ def main():
                                    % ", ".join(sorted(ko_valides_run)), "vert"))
                 print(_couleur("[BARRIERE KO FRANCHIE] Serie KO : 100%% verte, "
                                "passage aux series A-E.", "vert"))
+                barriere_ko_bloquee = False
 
     # SORTIE ANTICIPEE si la barriere KO est bloquee (STOP avant A-E).
     if not (args.serial or args.parallele) and not mode_profil and \
@@ -1619,6 +1900,40 @@ def main():
             ecrire_rapport(args.rapport, "Non-regression globale", bilan, ko_liste,
                            None, durees_total)
         return 1
+
+    # SORTIE ANTICIPEE --ko-puis-stop (cycle rapide KO, demande utilisateur
+    # 2026-08-17) : la barriere KO est FRANCHIE (100% verte) et l utilisateur
+    # ne veut valider QUE les tests en KO du fichier avant de corriger la
+    # suite : la suite s ARRETE ICI, sans relancer les series A-E (gain du
+    # temps de correction). Le rapport indique clairement qu une validation
+    # FINALE (suite complete) est requise. Le chrono ne touche JAMAIS la
+    # reference globale (run partiel).
+    if (not (args.serial or args.parallele) and not mode_profil and
+            args.ko != "nouveau" and args.ko_puis_stop and
+            "barriere_ko_bloquee" in dir() and not barriere_ko_bloquee):
+        duree = time.monotonic() - t0
+        nb_desactives = len(tests_desactives)
+        bilan = ("=== RESULTAT : SERIE KO VALIDEE : %d OK / %d KO - suite "
+                 "STOPPEE (--ko-puis-stop) ===\n"
+                 "=== SERIE KO VERTE = CONTROLE TERMINE ===\n"
+                 "=== Si le correctif a touche du code partage (outil/carte "
+                 "pinne par plusieurs tests), relancer la suite complete "
+                 "pour la garantie anti-cascade (decision Janus) ==="
+                 % (tot_ok, tot_ko))
+        print("")
+        print(_couleur(bilan, "vert" if tot_ko == 0 else "rouge"))
+        print(_couleur("[SERIE KO] %d test(s) valide(s) et retire(s) du fichier : %s"
+                       % (len(ko_valides_run), ", ".join(sorted(ko_valides_run))), "vert"))
+        if tot_ko:
+            afficher_details_ko(ko_liste)
+        afficher_tests_lents(durees_total)
+        if args.rapport:
+            ecrire_rapport(args.rapport, "Serie KO (--ko-puis-stop)", bilan,
+                           ko_liste, None, durees_total)
+        afficher_chrono(racine, duree, "barriere-ko", len(tests),
+                        seuil=args.seuil, rebase=args.rebase_reference,
+                        no_reference=True)
+        return 0 if tot_ko == 0 else 1
 
     # Exclusion des tests deja valides par la serie KO : ils ne doivent PAS
     # etre relances dans leur serie d origine (idempotence du run).
@@ -1660,7 +1975,7 @@ def main():
         if args.workers and args.workers > 0:
             workers = args.workers
         else:
-            workers = min(os.cpu_count() or 1, 16)
+            workers = workers_config
         exclu_ou_global = GARDE_FOUS_GLOBAUX + TESTS_SERIE_EXCLUSIFS
         tests_pool = [t for t in tests
                       if not any(os.path.basename(t).startswith(g)
@@ -1731,7 +2046,7 @@ def main():
                 if args.workers and args.workers > 0:
                     workers = args.workers
                 else:
-                    workers = min(os.cpu_count() or 1, 16)
+                    workers = workers_config
                 ok_p, ko_p, ko_liste_p, non_lances_p, durees_p = executer_pool(
                     racine, sel_pool, workers,
                     fail_fast=args.fail_fast, agent=args.agent, serie=s,
@@ -1758,8 +2073,19 @@ def main():
             ko_liste.extend(ko_liste_s)
             durees_total.extend(durees_s)
             if ko_s > 0 or non_lances_s > 0:
-                barriere_bloquee = s
                 fil.append("%s X" % s.upper())
+                if balayage:
+                    # MODE BALAYAGE (--ko nouveau, demande utilisateur
+                    # 2026-08-17) : PAS de STOP au premier KO - on continue
+                    # TOUTES les series pour collecter la totalite des KO,
+                    # qui deviendront la serie KO a revalider ensuite.
+                    print(_couleur(
+                        "[BALAYAGE] Serie %s : %d KO - suite du balayage "
+                        "(collecte totale des KO, pas d arret)."
+                        % (s.upper(), ko_s + non_lances_s), "jaune"))
+                    print(_couleur("[PROGRESSION] %s" % " > ".join(fil), "jaune"))
+                    continue
+                barriere_bloquee = s
                 print(_couleur(
                     "[BARRIERE BLOQUEE] Serie %s non 100%% verte : la suite est STOPPEE. "
                     "Reparer les KO puis relancer pour franchir la barriere."
@@ -1816,7 +2142,13 @@ def main():
 
     duree = time.monotonic() - t0
     nb_desactives = len(tests_desactives)
-    if tot_non_lances:
+    if balayage:
+        bilan = ("=== BALAYAGE COMPLET : %d OK / %d KO (totalite des KO "
+                 "collectes dans ko-tests.json) ===\n"
+                 "=== PASSER A LA REVALIDATION : --ko reprendre valide UNIQUEMENT "
+                 "la serie KO (les autres tests restent verts) ==="
+                 % (tot_ok, tot_ko))
+    elif tot_non_lances:
         bilan = "=== RESULTAT GLOBAL : %d OK / %d KO (sur %d tests, %d non lances - STOP) ===" \
                 % (tot_ok, tot_ko, len(tests) - tot_non_lances, tot_non_lances)
     elif nb_desactives:

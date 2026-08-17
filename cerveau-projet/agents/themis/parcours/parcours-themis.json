@@ -7,43 +7,18 @@
  "parcours": {
   "nom": "parcours-themis",
   "agent": "themis",
-  "version": "0.4.5",
+  "version": "0.4.7",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
  },
  "cases": {
   "c0": {
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question",
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "indices": [
-    {
-     "type": "ref",
-     "ref": "pattern-2"
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c0c"
-    },
-    {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c0b"
-    }
-   ]
-  },
-  "c0b": {
    "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
    "type": "action",
    "indices": [
     {
-     "type": "ref",
-     "ref": "pattern-2"
+     "type": "regle",
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
     },
     {
      "type": "outil",
@@ -60,7 +35,28 @@
      "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/themis/themis.md"
     }
    ],
-   "suivant": "c0c"
+   "suivant": "c0b"
+  },
+  "c0b": {
+   "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+   "type": "question",
+   "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture (c0). Reponds la VERITE."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    }
+   ]
   },
   "c1": {
    "titre": "Mission",
@@ -238,7 +234,7 @@
   "c13": {
    "titre": "FIN - Activer Janus",
    "type": "fin",
-   "message": "MISSION D EVALUATION / AUDIT TERMINEE. J ACTIVE JANUS (second controle) avec mon rapport et la liste des outils utilises. COMMANDE EXACTE (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je le reactiverai avec mon bilan ; sinon il REACTIVE Cerberus avec le verdict consolide.",
+   "message": "MISSION D EVALUATION / AUDIT TERMINEE. J ACTIVE JANUS (second controle) avec mon rapport et la liste des outils utilises. COMMANDE EXACTE (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec le verdict consolide.",
    "indices": [
     {
      "type": "regle",

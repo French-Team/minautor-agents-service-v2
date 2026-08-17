@@ -1,4 +1,5 @@
 # valider-case
+**Version** : 1.1.1
 
 > Valide une **carte de decision** (parcours JSON) et **ALLEGE les cases** :
 > structure, modele compose, surcharge des indices, references, normes.

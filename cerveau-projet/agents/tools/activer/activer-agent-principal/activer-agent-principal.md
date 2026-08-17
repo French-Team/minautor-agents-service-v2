@@ -7,7 +7,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.5.8
+**Version** : 0.5.11
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -274,6 +274,8 @@ La colonne session identifie quel LLM a effectue l'action.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.5.11 | 2026-08-17 | CORRECTION MESSAGE TROMPEUR : le rappel apres activer disait "reactiver Cerberus si activation directe" (a induit des missions ecrites avec reactiver Cerberus alors que la carte dit Activer Janus) - remplace par la REGLE RELEVE MEME ROUND : activer le maillon suivant selon SA carte, seul le DERNIER maillon reactive Cerberus avec le bilan consolide. |
+| 0.5.10 | 2026-08-17 | MESSAGES INFORMATIONNELS : apres activer -> rappel RELEVE MEME ROUND (enchainer immediatement) ; apres reactiver -> rappel relecture Cerberus - regle immuable v0.3.0 |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0-beta | 2026-08-06 | Historique : horodatage HH:MM + ordre decroissant + limite 150 |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels avec protections (activation, reactivation, limite 150, ordre decroissant), VERSION ajoutee au script, promotion prepare |
@@ -291,6 +293,7 @@ La colonne session identifie quel LLM a effectue l'action.
 | 0.5.1 | 2026-08-12 | CORRECTION BUG DE DEMARRAGE (cause racine blocage Morpheus rounds 8/9) : sidentifier ecrivait `agent: Cerberus` en dur dans le profil classeur + affichait `(agent principal : Cerberus)` dans les messages, MEME quand la session retrouvee avait un AUTRE agent actif (ex: morpheus). Resultat : AGENTS.md et classeur en CONTRADICTION -> l agent qui demarrait (sidentifier obligatoire selon sa fiche) recevait une identite fausse et s arretait. Correction py + sh : nouvelle fonction agent_actif_bloc() lit l agent REEL du bloc (champ Nom Agent) ; session retrouvee -> affiche + ecrit le profil + l historique avec l agent reel ; nouvelle session -> Cerberus par defaut conserve |
 | 0.5.2 | 2026-08-13 | GARDE-FOU ANTI-RESIDUS : verifier_residus_racine (py + sh) detecte les fichiers nommes comme des versions semver a la racine (residus de redirections accidentelles de sortie) et emet un WARNING ; section doc "Ne jamais rediriger la sortie" (interdiction > et tee) |
 | 0.5.8 | 2026-08-16 | ARGUS BRANCHE A L ACTIVATION : agent Argus (detecteur de contradictions) ajoute au dictionnaire AGENTS de l outil (fiche + corrections) - il etait cree (fiche, parcours, regles, AGENTS.md) mais ABSENT de la liste AGENTS, donc inactivable (cause racine identifiee par Cerberus) |
+| 0.5.9 | 2026-08-16 | MESSAGE DEMARRAGE ALIGNE SUR LA RELECTURE OBLIGATOIRE : c0 = RELIRE (corrections puis fiche), confirmation c0b (OUI/NON) - l ancien message demandait de repondre OUI a c0 sans lire |
 | 0.5.7 | 2026-08-15 | VERROU DU MARBRE (securite du noyau) : verrouiller_constitution() appelle proteger-verrou-marbre --zone constitution AVANT toute ecriture dans AGENTS.md (sidentifier/activer/reactiver) et REFUSE d ecrire si la zone Constitution a diverge sans protocole. Desactive en mode test (AGENTS_FILE surcharge) + agent Gardien ajoute au dictionnaire AGENTS. FIX MARQUEURS (bug detecte par le marbre) : la boucle de retrait de la section Sessions connues s arrete desormais aussi sur les bornes `<!-- MARBRE:` -- avant, elle avalait le marqueur DEBUT de la zone constitution (les outils ne doivent JAMAIS manger les bornes des zones protegees) |
 | 0.5.6 | 2026-08-15 | ANTI-ACCUMULATION HISTORIQUE : ajouter_historique purge desormais les continuations (blocs DEMARRAGE, raisons multi-lignes) AVEC l entree depassee (limite 150) - le bug v0.5.4 conservait les lignes non-| date | sans limite -> 1183 lignes de parasite dans AGENTS-historique. Correction du fichier pollue (150 entrees, 1 bloc DEMARRAGE/MISSION) + reconstruction des entrees perdues apres incident |
 | 0.5.5 | 2026-08-14 | FIX bug de recollement : reconstruire_bloc recolait les anciennes continuations de la Raison (blocs DEMARRAGE) a chaque nouvelle raison -> accumulation a chaque cycle activer/reactiver (AGENTS.md corrompu : 21 blocs dupliques). Desormais un champ REMPLACE ignore son ancienne suite (y compris Raison) |

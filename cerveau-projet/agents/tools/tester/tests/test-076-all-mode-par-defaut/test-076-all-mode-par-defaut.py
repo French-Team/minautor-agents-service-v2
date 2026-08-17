@@ -26,6 +26,7 @@ Invariants verifies (fichier temp, jamais le vrai registre) :
   6. --dry-run = fichier INCHANGE (aucune ecriture).
   7. Le fichier temp est SUPPRIME en fin de test (0 trace).
   8. Normes : ASCII strict + LF pur (test + outil py/sh/md).
+Tags: outils, corriger, garde-fou
 """
 import importlib.util
 import io

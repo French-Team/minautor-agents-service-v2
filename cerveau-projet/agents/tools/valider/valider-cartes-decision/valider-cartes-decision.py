@@ -47,7 +47,7 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.1
+Version : 0.4.2
 Statut : prepare
 """
 
@@ -57,7 +57,7 @@ import os
 import re
 import sys
 
-VERSION = "0.4.1"
+VERSION = "0.4.2"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "prepare"
 
@@ -186,21 +186,45 @@ def valider_parcours(contenu, nom_display, agent=None):
         controles_ok.append("5. References")
         print("   [OK] Toutes les references pointent vers des cases existantes")
 
-    # 6. Case c0 = question de relecture honnete (Pattern 4)
-    print("6. Case c0 de relecture honnete (Pattern 4)")
+    # 6. Relecture obligatoire (Pattern 4 v2, migration 2026-08-16) :
+    #    c0 = action RELIRE OBLIGATOIRE (corrections puis fiche) -> c0b ;
+    #    c0b = question confirmation (OUI -> c0c, NON -> c0).
+    print("6. Relecture obligatoire (c0 action RELIRE + c0b confirmation)")
     c0 = cases.get("c0")
-    if c0 is None:
+    c0b = cases.get("c0b")
+    if not isinstance(c0, dict):
         print("   [ERREUR] Case c0 absente")
         erreurs.append("c0")
-    elif c0.get("type") != "question":
-        print("   [ERREUR] c0 doit etre de type question (relecture)")
+    elif c0.get("type") != "action":
+        print("   [ERREUR] c0 doit etre de type action (RELIRE OBLIGATOIRE)")
+        erreurs.append("c0")
+    elif "RELIRE" not in (c0.get("titre") or "").upper():
+        print("   [ERREUR] le titre de c0 doit contenir RELIRE")
         erreurs.append("c0")
     else:
-        question = (c0.get("question") or "").lower()
-        if "memoire" not in question:
-            print("   [ATTENTION] c0 est une question mais ne semble pas poser la question de relecture")
-        controles_ok.append("6. Case c0 de relecture")
-        print("   [OK] c0 est une question de relecture")
+        lecteurs = [i for i in c0.get("indices", [])
+                    if i.get("type") == "outil" and i.get("nom") == "lire-fichier"]
+        if len(lecteurs) < 2:
+            print("   [ATTENTION] c0 doit porter au moins 2 outils lire-fichier (corrections + fiche)")
+        controles_ok.append("6. Relecture c0")
+        print("   [OK] c0 est une action RELIRE OBLIGATOIRE")
+    if not isinstance(c0b, dict):
+        print("   [ERREUR] Case c0b (confirmation) absente")
+        erreurs.append("c0b")
+    elif c0b.get("type") != "question":
+        print("   [ERREUR] c0b doit etre de type question (confirmation de lecture)")
+        erreurs.append("c0b")
+    else:
+        vers_oui = [b.get("vers") for b in c0b.get("branches", [])
+                    if b.get("reponse") == "OUI"]
+        vers_non = [b.get("vers") for b in c0b.get("branches", [])
+                    if b.get("reponse") == "NON"]
+        if vers_oui != ["c0c"] or vers_non != ["c0"]:
+            print("   [ERREUR] c0b doit avoir OUI -> c0c et NON -> c0")
+            erreurs.append("c0b")
+        else:
+            controles_ok.append("6. Confirmation c0b")
+            print("   [OK] c0b est une question de confirmation (OUI -> c0c, NON -> c0)")
 
     # 7. Garde-fou v0.3.2 : AUCUN SUIVANT MORT
     #    Mecanique guider-parcours : (a) une case 'fin' arrete la navigation

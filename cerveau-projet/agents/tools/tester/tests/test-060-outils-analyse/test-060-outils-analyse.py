@@ -14,7 +14,7 @@ GARDE-FOU : les 2 outils d analyse crees par Vulcain (demande utilisateur
 Contexte :
   - Les 2 outils ont ete crees par Vulcain (categorie analyser) avec doc .md,
   - entree catalogue generateurs-commande (168 commandes) et index-tools
-    (Analyser 6, Total 187).
+    (Analyser 9, Total 199).
   - Ce garde-fou verifie leur existence reelle, leur version, leurs options,
     leur preuve d execution (sans planter sur les donnees reelles) et leur
     referencement - anti-recurrence d un outil oublie du catalogue.
@@ -25,13 +25,14 @@ Invariants verifies :
      la performance ; --session/--fenetre-total/--rapport pour les tokens)
   3. Les 2 docs .md existent avec la categorie Analyser et la version 0.1.0
   4. index-tools.md : les 2 outils listes dans la section Analyser, compteur
-     Analyser = 6, Total = 187
+     Analyser = 9, Total = 199
   5. Catalogue : les 2 noms presents, 168 commandes triees
   6. Preuve reelle : analyser-performance-tests --version + execution sur le
      registre reel (ne plante pas, retourne 0) ; analyser-tokens --version +
      execution estimation locale (affiche ENVOYES/RECUS/ENCOMBREMENT)
   7. Preuve negative : un nom d outil invalide n existe pas dans index-tools
   8. Normes : ASCII strict + LF pur (2 outils + 2 docs + test)
+Tags: outils, analyse, garde-fou
 """
 import glob
 import importlib.util
@@ -215,29 +216,29 @@ def main():
             verifier("5. docs .md : categorie Analyser + version 0.1.0", ok, "")
             chrono_etape("5. docs", t0)
 
-        # 6. index-tools : les 2 outils + compteurs Analyser 6 / Total 187
+        # 6. index-tools : les 2 outils + compteurs Analyser 9 / Total 199
         if point_actif(6):
             t0 = time.monotonic()
             idx = io.open(INDEX, encoding="utf-8", errors="replace").read()
             ok = ("`analyser-performance-tests`" in idx
                   and "`analyser-tokens`" in idx
-                  and "| Analyser | 6 |" in idx
-                  and "| **Total** | **187** |" in idx)
-            verifier("6. index-tools : 2 outils + Analyser 6 + Total 187", ok,
+                  and "| Analyser | 9 |" in idx
+                  and "| **Total** | **199** |" in idx)
+            verifier("6. index-tools : 2 outils + Analyser 9 + Total 199", ok,
                      "perf=%s tokens=%s" % ("`analyser-performance-tests`" in idx,
                                             "`analyser-tokens`" in idx))
             chrono_etape("6. index-tools", t0)
 
-        # 7. Catalogue : 170 commandes triees + les 2 noms presents
+        # 7. Catalogue : 172 commandes triees + les 2 noms presents
         if point_actif(7):
             t0 = time.monotonic()
             with io.open(CATALOGUE, encoding="utf-8") as fh:
                 cat = json.load(fh)
             noms = [e["nom"] for e in cat["commandes"]]
-            ok = (len(noms) == 170 and noms == sorted(noms)
+            ok = (len(noms) == 178 and noms == sorted(noms)
                   and "analyser-performance-tests" in noms
                   and "analyser-tokens" in noms)
-            verifier("7. catalogue : 170 trie + 2 outils presents", ok,
+            verifier("7. catalogue : 172 trie + 2 outils presents", ok,
                      "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
             chrono_etape("7. catalogue", t0)
 

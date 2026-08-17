@@ -29,6 +29,7 @@ Invariants verifies :
   5. PREUVE NEGATIVE : un protocole temp avec une version DIVERGENTE (agent
      remplace par un autre) est detecte comme incoherent
   6. Normes : ASCII strict + LF pur (regles + protocoles + test)
+Tags: securite, regles, garde-fou, anti-recurrence
 """
 
 import glob

@@ -25,6 +25,7 @@ Invariants verifies :
      fichier restaure + marbre resynchronise
   5. Protocole-securite-marbre v0.1.1 documente la relecture
   6. Normes : ASCII strict + LF pur
+Tags: securite, marbre, relecture, garde-fou
 """
 
 import importlib.util

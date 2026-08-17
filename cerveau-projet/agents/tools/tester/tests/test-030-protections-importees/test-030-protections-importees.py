@@ -27,6 +27,7 @@ Invariants verifies :
   6. Le lanceur supporte --fail-fast (stoppe la suite des le premier KO)
   7. Le template-test.md reference l import obligatoire des protections
   8. Normes : ASCII strict + LF pur sur ce test
+Tags: conventions, template, protections, garde-fou
 """
 import importlib.util
 import io

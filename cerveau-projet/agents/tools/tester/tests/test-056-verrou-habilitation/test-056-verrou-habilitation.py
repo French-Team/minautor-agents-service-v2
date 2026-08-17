@@ -56,6 +56,7 @@ Invariants verifies :
      au registre-usages ; une tentative bloquee ajoute une entree au
      registre-tentatives-bloquees
   10. Normes : ASCII strict + LF pur (outil + doc + test)
+Tags: securite, verrou, habilitation, garde-fou
 """
 import importlib.util
 import io
@@ -232,8 +233,8 @@ def main():
         if point_actif(1):
             t = time.monotonic()
             r = run([PYTHON, OUTIL_PY, "--version"])
-            verifier("1. --version affiche v0.2.1",
-                     "v0.2.1" in r.stdout, r.stdout.strip())
+            verifier("1. --version affiche v0.2.2",
+                     "v0.2.2" in r.stdout, r.stdout.strip())
             chrono_etape("1. version", t)
 
         # 2. Table (--audit) POSITIVE : janus -> non-regression (seul habilite)
@@ -258,6 +259,23 @@ def main():
             verifier("3. TABLE cerberus -> non-regression : FERME (rc=1) + "
                      "commande d activation", ok, r.stdout.strip())
             chrono_etape("3. table negative", t)
+
+        # 3b. LISTE BLANCHE DEVELOPPEUR (v0.2.2, utilisateur 2026-08-16) :
+        # vulcain (constructeur du lanceur) VALIDE ses modifications sans
+        # attendre janus ; morpheus reste BLOQUE (liste stricte).
+        if point_actif("3b"):
+            t = time.monotonic()
+            r_v = run([PYTHON, OUTIL_PY, "--agent", "vulcain",
+                       "--outil", "tester-lancer-non-regression", "--audit"])
+            ok_v = (r_v.returncode == 0 and "liste blanche developpeur" in r_v.stdout)
+            verifier("3b. VULCAIN -> non-regression : OUVERT (rc=0, liste "
+                     "blanche developpeur)", ok_v, r_v.stdout.strip())
+            r_m = run([PYTHON, OUTIL_PY, "--agent", "morpheus",
+                       "--outil", "tester-lancer-non-regression", "--audit"])
+            ok_m = (r_m.returncode == 1 and "BLOQUE" in r_m.stdout)
+            verifier("3c. MORPHEUS -> non-regression : FERME (rc=1, liste "
+                     "stricte : seul vulcain dev)", ok_m, r_m.stdout.strip())
+            chrono_etape("3b/3c. liste blanche developpeur", t)
 
         # 4. Table (--audit) Exclusivite suppression : hygie OK, cerberus BLOQUE
         if point_actif(4):

@@ -58,7 +58,7 @@
 #   2 : erreur d utilisation (agent/outil manquant, agent inconnu,
 #       identite de session indeterminable)
 #
-# Version : 0.2.1
+# Version : 0.2.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -88,7 +88,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 
 AGENTS_DIR = None          # racine/cerveau-projet/agents (detectee)
 PROJECT_ROOT = None        # racine du projet (contient AGENTS.md)
@@ -265,13 +265,14 @@ def trier_registre(registre):
         pass
 
 
-def journaliser(agent, outil, verdict_str, agent_reel=""):
+def journaliser(agent, outil, verdict_str, agent_reel="", mode=""):
     """Auto-journalisation (espionnage) : l OUTIL signale lui-meme son usage.
-    Usage autorise -> registre-usages-outils.jsonl (mode verrou-auto).
-    Tentative bloquee -> registre-tentatives-bloquees.jsonl (qui, quoi,
-    quel agent reel etait actif). Non-bloquant : un echec d ecriture ne
-    change pas le verdict du verrou. Le registre est TRIE apres chaque ajout
-    (date/heure decroissant, regle utilisateur)."""
+    Usage autorise -> registre-usages-outils.jsonl (mode verrou-auto, ou
+    verrou-dev pour un essai de validation developpeur - liste blanche
+    v0.2.2). Tentative bloquee -> registre-tentatives-bloquees.jsonl (qui,
+    quoi, quel agent reel etait actif). Non-bloquant : un echec d ecriture
+    ne change pas le verdict du verrou. Le registre est TRIE apres chaque
+    ajout (date/heure decroissant, regle utilisateur)."""
     traces = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "traces")
     if not os.path.isdir(traces):
         return
@@ -279,13 +280,16 @@ def journaliser(agent, outil, verdict_str, agent_reel=""):
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if verdict_str == "OK":
             registre = os.path.join(traces, "registre-usages-outils.jsonl")
+            mode_reel = mode or "verrou-auto"
             entree = {
                 "date": now,
                 "agent": agent,
                 "outil": outil,
-                "mode": "verrou-auto",
+                "mode": mode_reel,
                 "commande": "",
-                "contexte": "auto-journalisation verrou d habilitation (usage autorise)",
+                "contexte": ("auto-journalisation verrou d habilitation (validation "
+                              "developpeur - liste blanche)" if mode_reel == "verrou-dev"
+                              else "auto-journalisation verrou d habilitation (usage autorise)"),
             }
         else:
             registre = os.path.join(traces, "registre-tentatives-bloquees.jsonl")
@@ -318,6 +322,16 @@ OUTILS_MODIF = frozenset([
 ZONE_TESTS = "tester/tests/"
 GARDIEN_TESTS = frozenset(["morpheus"])
 
+# LISTE BLANCHE DEVELOPPEUR (v0.2.2, regle utilisateur 2026-08-16) : le
+# CONSTRUCTEUR de l outil tester-lancer-non-regression doit pouvoir VALIDER
+# ses modifications sans attendre janus. Autorisation DIRECTE dans le verrou,
+# comme janus (qui est habilite via sa carte). Ne couvre QUE cet outil et QUE
+# son developpeur : les autres agents restent bloques (carte = regle). La
+# journalisation de ces essais porte le mode "verrou-dev" (traces distinctes,
+# ignorees par evaluer-processus et autorisees par test-037).
+OUTIL_NON_REGRESSION = "tester-lancer-non-regression"
+DEV_NON_REGRESSION = frozenset(["vulcain"])
+
 
 def est_zone_tests(cible):
     """Vrai si la cible pointe un fichier de test de la non-regression."""
@@ -344,6 +358,11 @@ def verdict(agent, outil, table, verbose, cible=""):
                    "  Cible : " + cible + "\n"
                    "  Action requise : activez morpheus puis redemandez.\n"
                    "  Commande : " + commande_activation("morpheus", session))
+    # LISTE BLANCHE DEVELOPPEUR (v0.2.2) : le constructeur de l outil
+    # tester-lancer-non-regression valide ses modifications sans attendre janus.
+    if outil == OUTIL_NON_REGRESSION and agent.lower() in [d.lower() for d in DEV_NON_REGRESSION]:
+        return (0, "OK : l agent '" + agent + "' est habilite (liste blanche developpeur) "
+                   "pour '" + outil + "' - validation de ses modifications.")
     habiles = table.get(outil)
     if habiles is None:
         return (1, "BLOQUE : l outil '" + outil + "' n est assigne a AUCUNE carte "
@@ -432,7 +451,10 @@ def main():
     code, msg = verdict(args.agent, args.outil, table, args.verbose, args.cible)
     sys.stdout.write(msg + "\n")
     if not args.audit:
-        journaliser(args.agent, args.outil, "OK" if code == 0 else "BLOQUE", agent_reel)
+        mode_dev = (code == 0 and args.outil == OUTIL_NON_REGRESSION
+                    and args.agent.lower() in [d.lower() for d in DEV_NON_REGRESSION])
+        journaliser(args.agent, args.outil, "OK" if code == 0 else "BLOQUE", agent_reel,
+                    "verrou-dev" if mode_dev else "")
     sys.exit(code)
 
 

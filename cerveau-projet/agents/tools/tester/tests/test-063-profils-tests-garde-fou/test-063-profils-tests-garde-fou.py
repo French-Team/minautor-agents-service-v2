@@ -42,6 +42,7 @@ Invariants verifies :
      registre ; inconnu -> aucun (KO propre)
   10. Normes : ASCII strict + LF pur (profils-tests.json + lanceur +
       test)
+Tags: performance, profils, garde-fou
 """
 import importlib.util
 import io

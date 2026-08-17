@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-013-cerberus-migration.py
-Test formel de la migration pilote du parcours-cerberus v0.5.0
+Test formel de la migration pilote du parcours-cerberus v0.5.3
 (nouveau format : indices REFERENCES + cases ACTION).
 
 Contexte (etape 6 de la spec-refonte-cartes-decision) :
@@ -23,7 +23,7 @@ Contexte (etape 6 de la spec-refonte-cartes-decision) :
      ANALYSE -> Themis c22, jamais analyser avant activer) - lecon derive 2026-08-16
      (Cerberus analysait lui-meme au lieu d activer)
  
- Cas couverts:   1. Version du parcours = 0.5.0
+ Cas couverts:   1. Version du parcours = 0.5.3
   2. Types : 23 action / 5 question / 5 controle / 3 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -31,7 +31,7 @@ Contexte (etape 6 de la spec-refonte-cartes-decision) :
   6. Navigation chemin activation -> PARCOURS TERMINE
   7. Navigation chemin retour (reactiver) -> PARCOURS TERMINE
   8. Refs resolues a la navigation (pattern-8, protocole-activation)
-  9. Case action enchaine SANS question (c0b -> c0c, pas de QUESTION)
+  9. c0b question de confirmation (OUI -> c0c, NON -> c0)
  10. --case c11 demarre a c11 (pas de relecture c0)
  11. Parcours inexistant : ERREUR + code non nul
  12. JSON invalide : ERREUR + code non nul
@@ -41,6 +41,7 @@ Contexte (etape 6 de la spec-refonte-cartes-decision) :
 
 Usage:
   python3 test-013-cerberus-migration.py
+Tags: agents, parcours, cerberus
 """
 import importlib.util
 import io
@@ -159,13 +160,13 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-013-")
     try:
-        print("=== Test formel migration cerberus v0.5.0 ===")
+        print("=== Test formel migration cerberus v0.5.3 ===")
 
         # 1. Version du parcours
         with io.open(PARCOURS, encoding="utf-8") as fh:
             donnees = json.load(fh)
-        verifier("1. Parcours version 0.5.0",
-                 donnees.get("parcours", {}).get("version") == "0.5.0",
+        verifier("1. Parcours version 0.5.1",
+                 donnees.get("parcours", {}).get("version") == "0.5.3",
                  str(donnees.get("parcours", {}).get("version")))
 
         # 2. Types de cases : 23 action / 5 question / 5 controle / 3 fin / 0 indice
@@ -228,29 +229,32 @@ def main():
                  "[REFERENCE]" in r_nav.stdout and "protocole-activation" in r_nav.stdout,
                  r_nav.stdout.strip()[-200:])
 
-        # 9. Case action enchaine SANS question (c0b -> c0c -> c1)
-        #    c0b est action : elle affiche ses indices puis enchaine vers c0c
-        #    (action) puis c1 (question) qui s'arrete la. Aucune QUESTION n'est
-        #    posee POUR c0b elle-meme : le premier arret est la question de c1.
+        # 9. c0b est maintenant une QUESTION de confirmation (migration
+        #    relecture obligatoire) : elle s arrete et pose la question
+        #    (OUI -> c0c, NON -> c0). On verifie que c0b affiche bien la
+        #    question de confirmation et ne va PAS directement a c1.
         r_act = run([PYTHON, GUIDER, PARCOURS, "--case", "c0b"])
-        verifier("9a. c0b enchaine (returncode 0)", r_act.returncode == 0,
+        verifier("9a. c0b (question) s arrete (returncode 0)", r_act.returncode == 0,
                  r_act.stdout.strip()[-80:])
-        verifier("9b. c0b (action) n'affiche pas de question pour elle-meme",
-                 "RELIRE OBLIGATOIRE" in r_act.stdout
-                 and "QUESTION POUR L'AGENT" not in r_act.stdout.split("RELIRE OBLIGATOIRE")[0],
+        verifier("9b. c0b affiche la question de confirmation",
+                 "QUESTION POUR L'AGENT" in r_act.stdout,
                  r_act.stdout.strip()[-100:])
-        verifier("9c. c0b (action) affiche ses indices",
-                 "[REGLE]" in r_act.stdout or "[REFERENCE]" in r_act.stdout,
+        verifier("9c. c0b porte les branches OUI -> c0c / NON -> c0",
+                 "OUI" in r_act.stdout and "NON" in r_act.stdout,
                  r_act.stdout.strip()[-100:])
-        verifier("9d. La navigation atteint la question suivante (c1 Mission)",
-                 "Mission" in r_act.stdout and "QUESTION POUR L'AGENT" in r_act.stdout,
-                 r_act.stdout.strip()[-100:])
+        # 9d. Avec la reponse OUI, la navigation enchaine c0b -> c0c -> c1
+        r_oui = run([PYTHON, GUIDER, PARCOURS, "--case", "c0b",
+                     "--reponses", "OUI"])
+        verifier("9d. OUI -> c0c (contexte) puis c1 Mission",
+                 r_oui.returncode == 0 and "Mission" in r_oui.stdout
+                 and "QUESTION POUR L'AGENT" in r_oui.stdout,
+                 r_oui.stdout.strip()[-100:])
 
         # 10. --case c11 demarre a c11 (pas de relecture c0)
         r_c11 = run([PYTHON, GUIDER, PARCOURS, "--case", "c11"])
         verifier("10. --case c11 demarre a c11",
                  r_c11.returncode == 0 and "Relire MA fiche" in r_c11.stdout
-                 and "Relecture : ta fiche" not in r_c11.stdout,
+                 and "RELIRE OBLIGATOIRE" not in r_c11.stdout,
                  r_c11.stdout.strip()[-120:])
 
         # 11. Parcours inexistant : ERREUR

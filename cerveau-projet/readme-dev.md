@@ -25,7 +25,7 @@ identite:
 | **Point d'entree** | `demarrer.md` (a lire en premier) |
 | **Fichiers racine** | `AGENTS.md` (sessions), `README.md` (public), `cerveau-projet/` (le cerveau) |
 | **Agents** | 15 agents + classeur-variables (voir section 4) |
-| **Outils** | 144 outils dans 36 categories (voir section 6) |
+| **Outils** | 149 outils dans 35 categories (voir section 6) |
 | **Cartes de decision** | 15 parcours JSON (voir section 5) |
 
 ---
@@ -54,7 +54,7 @@ projet/
     |   |-- [agent]/[agent].md   # Fiche de chaque agent
     |   |-- [agent]/corrections.md  # Corrections et lecons de l'agent
     |   |-- regles-immuables/    # Regles non negociables + protocoles
-    |   `-- tools/               # Boite a outils (134 outils)
+    |   `-- tools/               # Boite a outils (149 outils)
     |-- pense-betes/             # Idees, specs, todos
     |-- recherches-web/          # Historique des recherches
     `-- exemples/                # Tests et exemples d'utilisation
@@ -215,27 +215,27 @@ Chaque case porte les indices exacts a appliquer :
 Boite a outils partagee, organisee par **action** (chaque dossier = ce que
 fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 
-**144 outils dans 36 categories** :
+**149 outils dans 35 categories** :
 
 | Categorie | Nb | Exemples |
 |---|---|---|
 | Activer | 1 | activer-agent-principal |
 | Ajouter | 1 | ajouter-contenu-fichier |
-| Analyser | 5 | analyser-dependances, analyser-io-tests, analyser-structure, analyser-performance-tests, analyser-tokens |
+| Analyser | 6 | analyser-dependances, analyser-io-tests, analyser-structure, analyser-performance-tests, analyser-tokens, analyser-noms-maj |
 | Cartographier | 1 | cartographier-parcours |
 | Changer | 1 | changer-statut |
 | Combos | 21 | combos-moteur, combo-maj-readme, combos-analyse-projet |
 | Condenser | 1 | condenser-fichier |
 | Copier | 2 | copier-dossier, copier-fichier |
-| Corriger | 6 | corriger-accents, corriger-liens, corriger-nommage |
+| Corriger | 7 | corriger-accents-zones-sensibles, corriger-fins-de-ligne, corriger-noms-maj, corriger-nommage |
 | Creer | 4 | creer-fichier, creer-remplir-* |
 | Decomposer | 1 | decomposer-fichier |
 | Deplacer | 1 | deplacer-fichier |
-| Detecter | 15 | detecter-cablages-manquants, detecter-residus, detecter-fautes-orthographe |
+| Detecter | 17 | detecter-cablages-manquants, detecter-residus, detecter-fautes-orthographe, detecter-processus-residuels, detecter-contradictions |
 | Ecrire | 1 | ecrire-fichier |
 | Editer | 3 | editer-fichier, editer-parcours |
 | Enregistrer | 1 | enregistrer-usage-outil |
-| Evaluer | 6 | evaluer-processus, evaluer-agents |
+| Evaluer | 6 | evaluer-agents, evaluer-coherence, evaluer-processus, evaluer-rating |
 | Executer | 1 | executer-script-temporaire (ENTONNOIR) |
 | Generateurs | 10 | generateurs-commande, generateurs-amelioration |
 | Gerer | 1 | gerer-sous-mission |
@@ -244,8 +244,8 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Lire | 4 | lire-fichier, lire-activite-recente |
 | Lister | 8 | lister-agents, lister-outils |
 | Mettre a jour | 2 | mettre-a-jour-readme, mettre-a-jour-versions |
-| Migrer | 1 | migrer-identite |
-| Nettoyer | 3 | nettoyer-fichier, snapshot-nettoyage |
+| Migrer | 2 | migrer-identite, migrer-cases-relecture |
+| Nettoyer | 4 | nettoyer-fichier, nettoyer-processus-residuels, nettoyer-sessions, snapshot-nettoyage |
 | Proteger | 3 | proteger-verrou-habilitation, proteger-verrou-marbre, proteger-modifier-marbre |
 | Purifier | 1 | purifier-rvav |
 | Rechercher | 10 | rechercher-texte, rechercher-fichier |

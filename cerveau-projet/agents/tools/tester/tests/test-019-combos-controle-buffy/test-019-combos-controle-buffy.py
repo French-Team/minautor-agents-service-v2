@@ -25,6 +25,7 @@ Cas couverts:
 
 Usage:
   python3 test-019-combos-controle-buffy.py
+Tags: outils, combos, buffy
 """
 import importlib.util
 import io

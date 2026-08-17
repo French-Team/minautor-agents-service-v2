@@ -33,6 +33,7 @@ Invariants verifies :
   6. La fiche morpheus.md contient la REGLE ABSOLUE -- NON-REGRESSION JANUS
      (Morpheus execute des tests individuels, JAMAIS la complete)
   7. Normes : ASCII strict + LF pur (carte + fiche + regle + test)
+Tags: agents, morpheus, garde-fou
 """
 import glob
 import importlib.util

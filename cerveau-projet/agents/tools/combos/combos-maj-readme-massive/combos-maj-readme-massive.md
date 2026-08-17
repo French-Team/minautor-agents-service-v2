@@ -6,7 +6,7 @@ identite:
 ---
 # combos-maj-readme-massive
 
-**Version :** 0.1.5
+**Version :** 0.1.6
 **Statut :** prepare
 **Categorie :** combos
 **Chemin :** `agents/tools/combos/combos-maj-readme-massive/`
@@ -61,3 +61,9 @@ bash agents/tools/combos/combos-maj-readme-massive/combos-maj-readme-massive.sh 
 - La logique Python est la source de verite ; le .sh delegue au .py (parite).
 - Piege Windows : utiliser des forward slashes dans les chemins.
 - ASCII strict : aucun caractere accentue ou Unicode dans les sorties.
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.6 | 2026-08-17 | MESSAGES INFORMATIONNELS : rappels apres MAJ README (version-readme.txt + badge Outils + test-020/038, Clio seule habilitee) - regle immuable v0.3.0 |

@@ -39,6 +39,7 @@ Points couverts:
 
 Usage:
   python3 test-023-grep-budget-pondere.py
+Tags: conventions, budget, garde-fou
 """
 import importlib.util
 import io

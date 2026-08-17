@@ -41,6 +41,7 @@ Invariants verifies :
   4. PREUVE NEGATIVE : une activation fictive sans declaration registre
      avant elle est detectee comme ecart (KO si elle n etait pas detectee).
   5. Normes : ASCII strict + LF pur (test + sources).
+Tags: agents, cerberus, amelioration, garde-fou
 """
 import datetime
 import importlib.util

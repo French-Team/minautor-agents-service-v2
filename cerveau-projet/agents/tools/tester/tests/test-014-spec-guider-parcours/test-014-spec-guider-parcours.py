@@ -34,6 +34,7 @@ Cas couverts:
 
 Usage:
   python3 test-014-spec-guider-parcours.py
+Tags: conventions, parcours, spec
 """
 import importlib.util
 import io

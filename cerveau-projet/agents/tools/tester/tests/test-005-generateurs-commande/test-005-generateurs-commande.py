@@ -23,7 +23,7 @@ Objet (correction Buffy 2026-08-09) :
   - parcours-atlas v0.3.3 -> v0.4.1 (2026-08-11) : ajout case c0d LIRE LA
   - parcours-atlas v0.4.2 -> v0.4.3 (2026-08-16) : branchage corriger-symboles
   - parcours-atlas v0.4.3 -> v0.4.4 (2026-08-16) : c0b relecture avec commandes lire-fichier (corrections puis fiche) - 3e cas commande en dur documente
-  - parcours-atlas v0.4.4 -> v0.4.5 (2026-08-16) : commandes corriger-symboles --all ajoutees aux indices (c10, c18, c19) - 7 commandes en dur connues documentees
+  - parcours-atlas v0.4.6 (2026-08-16) : migration relecture obligatoire - c0 porte les 2 commandes lire-fichier (c0b devient question) - 7 commandes en dur documentees
   - parcours-atlas v0.4.1 -> v0.4.2 (2026-08-13) : Themis maillon (c11a/c11b)
     DOCUMENTATION DE L OUTIL avant utilisation (garde-fou lecture .md).
 
@@ -42,12 +42,12 @@ Cas couverts (26 points) :
  11. flag booleen ecrire-fichier backup=non : --backup ABSENT (py)
  12. parite py/sh : commande composee identique (CRLF normalise)
  13. catalogue JSON valide (json.load)
- 14. catalogue version = 0.2.9
+ 14. catalogue version = 0.2.10
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
   PARCOURS ATLAS v0.4.1
-17. parcours-atlas.json : json.load valide + version 0.4.4
-18. 7 commandes en dur connues (c0b x2 + c10/c18/c19 corriger-symboles + c11a + c30) dans les indices outil avec catalogue
+17. parcours-atlas.json : json.load valide + version 0.4.7
+18. 7 commandes en dur connues (c0 x2 + c10/c18/c19 corriger-symboles + c11a + c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
  21. valider-cartes-decision --agent atlas : CONFORME
@@ -59,8 +59,10 @@ Cas couverts (26 points) :
 
 Usage:
   python3 test-005-generateurs-commande.py
+Tags: outils, catalogue, generateurs
 """
 
+import contextlib
 import importlib.util
 import io
 import json
@@ -139,6 +141,17 @@ GUIDER = os.path.join(RACINE, "cerveau-projet/agents/tools/guider/guider-parcour
 VALIDER_CARTES = os.path.join(RACINE, "cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py")
 ASCII = os.path.join(RACINE, "cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py")
 
+
+def charger_generateur():
+    spec = importlib.util.spec_from_file_location("gen_commande_mod", GC_PY)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+GEN = charger_generateur()
+CAT_GEN = GEN.charger_catalogue(CATALOGUE)
+
 REUSSIS = 0
 ECHECS = 0
 
@@ -165,20 +178,32 @@ def exec_list(args):
 
 
 def composer(nom, reponses, sh=False):
-    """Compose via le generateur (py ou sh) et retourne la commande generee."""
+    """Compose via le generateur. py = EN PROCESS (rapide), sh = via bash.
+
+    Optimisation 2026-08-17 (goulot de la suite) : composer chaque commande
+    relancait un sous-processus python3 (~0.2s x 28 = ~6s). On importe le
+    generateur EN PROCESS et on appelle les MEMES fonctions que le CLI
+    (trouver_commande / parser_reponses_forcees / interroger_interactif /
+    composer_commande). L integrite du wrapper CLI reste couverte par les
+    points 1-4 (--version, py_compile, bash -n).
+    """
     if sh:
         r = PROTECTIONS.lancer_protege(["bash", GC_SH, "--commande", nom, "--reponses", reponses],
                            capture_output=True, text=True)
-    else:
-        # --no-journal : ne pas polluer le registre d usage pendant les tests
-        # (le .sh du generateur ne journalise pas et ne supporte pas l option)
-        r = PROTECTIONS.lancer_protege(["python3", GC_PY, "--commande", nom, "--reponses", reponses, "--no-journal"],
-                           capture_output=True, text=True)
-    lignes = ((r.stdout or "") + (r.stderr or "")).splitlines()
-    for i, ligne in enumerate(lignes):
-        if "COMMANDE A LANCER" in ligne and i + 1 < len(lignes):
-            return lignes[i + 1].strip()
-    return None
+        lignes = ((r.stdout or "") + (r.stderr or "")).splitlines()
+        for i, ligne in enumerate(lignes):
+            if "COMMANDE A LANCER" in ligne and i + 1 < len(lignes):
+                return lignes[i + 1].strip()
+        return None
+    commandes = GEN.trouver_commande(CAT_GEN, nom)
+    if commandes is None:
+        return None
+    rep = GEN.parser_reponses_forcees(reponses)
+    with contextlib.redirect_stdout(io.StringIO()):
+        valides = GEN.interroger_interactif(commandes, rep)
+    if valides is None:
+        return None
+    return GEN.composer_commande(commandes, valides)
 
 
 def normale(s):
@@ -186,7 +211,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.6 + catalogue 0.2.9 + parcours-atlas v0.4.4 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.6 + catalogue 0.2.10 + parcours-atlas v0.4.7 ===")
     print("")
 
     # ---------- GENERATEUR v0.2.6 ----------
@@ -235,7 +260,7 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         verifier(13, "catalogue-commandes.json JSON valide", True)
-        verifier(14, "catalogue version = 0.2.9", cat.get("version") == "0.2.9", str(cat.get("version")))
+        verifier(14, "catalogue version = 0.2.10", cat.get("version") == "0.2.10", str(cat.get("version")))
     except Exception as e:
         verifier(13, "catalogue-commandes.json JSON valide", False, str(e))
         verifier(14, "catalogue version = 0.2.0", False, "")
@@ -247,20 +272,23 @@ def main():
     ok = cmd is not None and "creer-fichier.py x.md" in cmd and "hello" in cmd
     verifier(16, "non-regression creer-fichier composee correctement", ok, str(cmd))
 
-    # ---------- PARCOURS ATLAS v0.3.3 ----------
+    # ---------- PARCOURS ATLAS v0.4.7 ----------
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.4",
-                 p.get("parcours", {}).get("version") == "0.4.4", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.7",
+                 p.get("parcours", {}).get("version") == "0.4.7", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.4", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.7", False, str(e))
         p = {}
 
     # Commandes en dur connues et documentees : c30 (template
-    # cartographier-parcours.py {parcours}), c11a (activer themis), c0b x2
-    # (relecture lire-fichier), c10/c18/c19 (corriger-symboles --all ajoutees
-    # par Buffy 2026-08-16). Toute commande SUPPLEMENTAIRE = regression.
+    # cartographier-parcours.py {parcours}), c11a (activer themis), c0 x2
+    # (relecture lire-fichier, portees par c0 depuis la migration relecture
+    # obligatoire 2026-08-16), c10/c18/c19 (corriger-symboles --all ajoutees
+    # par Buffy 2026-08-16), c12/c13 (detecter-recherches-obsoletes /
+    # rechercher-web ajoutees par Buffy 2026-08-16). Toute commande
+    # SUPPLEMENTAIRE = regression.
     n_commande = 0
     cases_commande = []
     for k, c in p.get("cases", {}).items():
@@ -268,8 +296,8 @@ def main():
             if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
                 n_commande += 1
                 cases_commande.append(k)
-    verifier(18, "7 commandes en dur connues (c0b x2 + c10/c18/c19 + c11a + c30) dans les indices avec catalogue",
-             n_commande == 7 and sorted(cases_commande) == ["c0b", "c0b", "c10", "c11a", "c18", "c19", "c30"],
+    verifier(18, "9 commandes en dur connues (c0 x2 + c10/c18/c19 + c11a + c12/c13 + c30) dans les indices avec catalogue",
+             n_commande == 9 and sorted(cases_commande) == ["c0", "c0", "c10", "c11a", "c12", "c13", "c18", "c19", "c30"],
              "restants=%d cases=%s" % (n_commande, sorted(cases_commande)))
 
     for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer|NON|OUI"), (20, "autre+OUI", "OUI|autre|OUI|NON|OUI")]:

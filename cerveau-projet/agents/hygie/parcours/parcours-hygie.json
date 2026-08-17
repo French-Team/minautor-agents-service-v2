@@ -1,618 +1,614 @@
 {
- "identite": {
-  "type": "parcours",
-  "appartient_a": "hygie",
-  "commun": false
- },
- "parcours": {
-  "nom": "parcours-hygie",
-  "agent": "hygie",
-  "version": "0.1.5",
-  "case_depart": "c0",
-  "description": "Parcours (jeu de piste) des missions de Hygie, agent de nettoyage du workspace : snapshot -> detection par zone -> preuve d honnetete -> suppression tracee -> rapport. Seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable (avec tracabilite). Decisions utilisateur 2026-08-13 : nom Hygie, perimetre tout workspace, snapshots dans le dossier dedie de l agent avec rotation 7 jours."
- },
- "cases": {
-  "c0": {
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question",
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "indices": [
-    {
-     "type": "ref",
-     "ref": "pattern-2"
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c0c"
-    },
-    {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c0b"
-    }
-   ]
+  "identite": {
+    "type": "parcours",
+    "appartient_a": "hygie",
+    "commun": false
   },
-  "c0b": {
-   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-   "type": "action",
-   "indices": [
-    {
-     "type": "ref",
-     "ref": "pattern-2"
-    },
-    {
-     "type": "outil",
-     "nom": "lire-fichier",
-     "catalogue": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/hygie/corrections.md"
-    },
-    {
-     "type": "outil",
-     "nom": "lire-fichier",
-     "catalogue": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/hygie/hygie.md"
-    }
-   ],
-   "suivant": "c0c"
+  "parcours": {
+    "nom": "parcours-hygie",
+    "agent": "hygie",
+    "version": "0.1.6",
+    "case_depart": "c0",
+    "description": "Parcours (jeu de piste) des missions de Hygie, agent de nettoyage du workspace : snapshot -> detection par zone -> preuve d honnetete -> suppression tracee -> rapport. Seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable (avec tracabilite). Decisions utilisateur 2026-08-13 : nom Hygie, perimetre tout workspace, snapshots dans le dossier dedie de l agent avec rotation 7 jours."
   },
-  "c0c": {
-   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-   "type": "action",
-   "indices": [
-    {
-     "type": "ref",
-     "ref": "pattern-6"
+  "cases": {
+    "c0": {
+      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/hygie/corrections.md"
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/hygie/hygie.md"
+        }
+      ],
+      "suivant": "c0b"
     },
-    {
-     "type": "outil",
-     "nom": "lire-activite-recente",
-     "catalogue": "lire-activite-recente",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+    "c0b": {
+      "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+      "type": "question",
+      "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture (c0). Reponds la VERITE."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c0c"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c0"
+        }
+      ]
     },
-    {
-     "type": "fichier",
-     "chemin": "AGENTS.md",
-     "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
+    "c0c": {
+      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+      "type": "action",
+      "indices": [
+        {
+          "type": "ref",
+          "ref": "pattern-6"
+        },
+        {
+          "type": "outil",
+          "nom": "lire-activite-recente",
+          "catalogue": "lire-activite-recente",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        },
+        {
+          "type": "fichier",
+          "chemin": "AGENTS.md",
+          "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
+        }
+      ],
+      "suivant": "c1"
+    },
+    "c1": {
+      "titre": "Mission",
+      "type": "question",
+      "question": "Quelle est la mission de nettoyage ?",
+      "branches": [
+        {
+          "reponse": "nettoyer",
+          "vers": "c2"
+        },
+        {
+          "reponse": "snapshot",
+          "vers": "cS1"
+        },
+        {
+          "reponse": "honnetete",
+          "vers": "cH1"
+        },
+        {
+          "reponse": "autre",
+          "vers": "c29"
+        }
+      ]
+    },
+    "c2": {
+      "titre": "SNAPSHOT OBLIGATOIRE avant tout nettoyage",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, verifier 100% ASCII (aucun accent, guillemets ASCII)."
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE SNAPSHOT : je ne supprime JAMAIS sans snapshot. Le snapshot est ma preuve de tracabilite (dossier hygie/snapshots/)."
+        },
+        {
+          "type": "outil",
+          "nom": "snapshot-nettoyage",
+          "catalogue": "snapshot-nettoyage",
+          "chemin": "cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/",
+          "commande": "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py creer"
+        },
+        {
+          "type": "outil",
+          "nom": "nettoyer-processus-residuels",
+          "catalogue": "nettoyer-processus-residuels",
+          "chemin": "cerveau-projet/agents/tools/nettoyer/nettoyer-processus-residuels/",
+          "commande": "python3 cerveau-projet/agents/tools/nettoyer/nettoyer-processus-residuels/nettoyer-processus-residuels.py --agent hygie --tous --force"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/hygie/snapshots/",
+          "raison": "Dossier dedie des snapshots : consulter les snapshots existants (rotation 7 jours)"
+        }
+      ],
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "Consulter le snapshot precedent",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : a chaque nettoyage, je consulte le snapshot precedent (etat avant le dernier nettoyage) pour comparer et prouver ce qui etait present."
+        },
+        {
+          "type": "outil",
+          "nom": "snapshot-nettoyage",
+          "catalogue": "snapshot-nettoyage",
+          "chemin": "cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/",
+          "commande": "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py consulter"
+        }
+      ],
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "Detection compartimentee des residus",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE COMPARTIMENTATION : je scanne par zone (cerveau-projet/ d un cote, workspace/ de l autre) - jamais de scan melange."
+        },
+        {
+          "type": "outil",
+          "nom": "detecter-residus",
+          "catalogue": "detecter-residus",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --tous"
+        },
+        {
+          "type": "outil",
+          "nom": "detecter-processus-residuels",
+          "catalogue": "detecter-processus-residuels",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-processus-residuels/",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-processus-residuels/detecter-processus-residuels.py --detail"
+        },
+        {
+          "type": "outil",
+          "nom": "combos-analyse-projet",
+          "catalogue": "combos-analyse-projet",
+          "chemin": "cerveau-projet/agents/tools/combos/combos-analyse-projet/",
+          "commande": "python3 cerveau-projet/agents/tools/combos/combos-analyse-projet/combos-analyse-projet.py"
+        }
+      ],
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "Des residus sont-ils detectes ?",
+      "type": "controle",
+      "question": "La detection a-t-elle trouve des residus (fichiers temp, rapports egare, fichiers de version a la racine, dossiers residuels) ?",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "RESIDUS TYPES : fichiers temporaires (tmp-*/.zz-*/.tmp-*), rapports egare, fichiers de version a la racine, dossiers residuels."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c6"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c30"
+        }
+      ]
+    },
+    "c6": {
+      "titre": "Classer les residus par zone",
+      "type": "action",
+      "indices": [
+        {
+          "type": "outil",
+          "nom": "detecter-residus",
+          "catalogue": "detecter-residus",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --zone <cerveau-projet|workspace> --detail"
+        },
+        {
+          "type": "regle",
+          "texte": "Chaque residu est classe : zone (cerveau-projet / workspace), type (temp / egare / version / residuel), justification."
+        }
+      ],
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "Un residu est-il suspect (honnetete non prouvee) ?",
+      "type": "question",
+      "question": "Un residu a-t-il une provenance suspecte (honnetete des changements ou fichiers presents non prouvee) ?",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE PREUVE D HONNETETE : jamais de suppression sans preuve ; si doute -> activer l agent habilite (janus / proprietaire)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE (Pattern 12) : je ne cree de rapport que dans mon dossier (hygie/) ou le workspace temporaire - jamais dans tools/."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "cH1"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c9"
+        }
+      ]
+    },
+    "c9": {
+      "titre": "Supprimer avec tracabilite (seul habilite)",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE SEUL HABILITE : supprimer sans demande, uniquement des RESIDUS PROUVES - jamais un fichier de travail legitime."
+        },
+        {
+          "type": "outil",
+          "nom": "supprimer-fichier",
+          "catalogue": "supprimer-fichier",
+          "chemin": "cerveau-projet/agents/tools/supprimer/supprimer-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/supprimer/supprimer-fichier/supprimer-fichier.py <residu>"
+        },
+        {
+          "type": "outil",
+          "nom": "supprimer-dossier",
+          "catalogue": "supprimer-dossier",
+          "chemin": "cerveau-projet/agents/tools/supprimer/supprimer-dossier/",
+          "commande": "python3 cerveau-projet/agents/tools/supprimer/supprimer-dossier/supprimer-dossier.py <residu-dossier>"
+        }
+      ],
+      "suivant": "c9b"
+    },
+    "c10": {
+      "titre": "Tous les residus ont-ils disparu ?",
+      "type": "controle",
+      "question": "Apres suppression, la re-detection confirme-t-elle la disparition de tous les residus classes (fichiers ET processus) ?",
+      "indices": [
+        {
+          "type": "outil",
+          "nom": "detecter-residus",
+          "catalogue": "detecter-residus",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --tous"
+        },
+        {
+          "type": "outil",
+          "nom": "detecter-processus-residuels",
+          "catalogue": "detecter-processus-residuels",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-processus-residuels/",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-processus-residuels/detecter-processus-residuels.py --detail"
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c11"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c9"
+        }
+      ]
+    },
+    "c11": {
+      "titre": "Rapport de nettoyage",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, verifier 100% ASCII (aucun accent, guillemets ASCII)."
+        },
+        {
+          "type": "regle",
+          "texte": "CREATION LIMITEE (Pattern 12) : rapport dans mon dossier hygie/rapports/ (jamais tools/)."
+        },
+        {
+          "type": "outil",
+          "nom": "creer-fichier",
+          "catalogue": "creer-fichier",
+          "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/hygie/rapports/nettoyage-<date>.md"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/hygie/snapshots/",
+          "raison": "Le rapport reference le snapshot pris avant nettoyage (preuve de tracabilite)"
+        },
+        {
+          "catalogue": "corriger-symboles",
+          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+          "nom": "corriger-symboles",
+          "type": "outil",
+          "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hygie/corrections.md --all"
+        },
+        {
+          "type": "outil",
+          "nom": "detecter-usage-scripts-temporaires",
+          "catalogue": "detecter-usage-scripts-temporaires",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-scripts-temporaires/",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-scripts-temporaires/detecter-usage-scripts-temporaires.py --rapport <rapport> --verbose"
+        }
+      ],
+      "suivant": "c12"
+    },
+    "c12": {
+      "titre": "Lecons et retour",
+      "type": "action",
+      "indices": [
+        {
+          "type": "ref",
+          "ref": "pattern-2"
+        },
+        {
+          "type": "ref",
+          "ref": "pattern-12"
+        },
+        {
+          "type": "ref",
+          "ref": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md"
+        },
+        {
+          "catalogue": "corriger-symboles",
+          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+          "nom": "corriger-symboles",
+          "type": "outil",
+          "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hygie/corrections.md --all"
+        },
+        {
+          "type": "outil",
+          "nom": "detecter-usage-outils-externes",
+          "catalogue": "detecter-usage-outils-externes",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <cible> --recursive"
+        }
+      ],
+      "suivant": "c34"
+    },
+    "c30": {
+      "titre": "Aucun residu : rien a nettoyer",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "Rien a supprimer : le workspace est propre. Le snapshot pris reste la preuve de l etat verifie."
+        }
+      ],
+      "suivant": "c12"
+    },
+    "c34": {
+      "titre": "Enregistrer mes usages d outils",
+      "type": "action",
+      "indices": [
+        {
+          "type": "outil",
+          "nom": "enregistrer-usage-outil",
+          "catalogue": "enregistrer-usage-outil",
+          "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/"
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL (agent=hygie, outil=<nom>, mode=<generateur/direct/combo>, contexte=<ma mission>)."
+        }
+      ],
+      "suivant": "c13"
+    },
+    "c13": {
+      "titre": "FIN - Activer Janus (second controle)",
+      "type": "fin",
+      "message": "MISSION DE NETTOYAGE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan complet (snapshot pris, residus detectes et supprimes par zone, rapport de nettoyage, preuves d honnetete obtenues, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus verifie ma tracabilite (snapshot + rapport) puis reactive Cerberus avec son verdict.",
+      "indices": [
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+        }
+      ]
+    },
+    "cS1": {
+      "titre": "Creer le snapshot de l etat du workspace",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE IMMUABLE ASCII : avant d ecrire, verifier 100% ASCII."
+        },
+        {
+          "type": "outil",
+          "nom": "snapshot-nettoyage",
+          "catalogue": "snapshot-nettoyage",
+          "chemin": "cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/",
+          "commande": "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py creer"
+        }
+      ],
+      "suivant": "cS2"
+    },
+    "cS2": {
+      "titre": "Verifier la rotation 7 jours",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ROTATION : les snapshots de plus de 7 jours sont supprimes au nettoyage suivant (dossier hygie/snapshots/)."
+        },
+        {
+          "type": "outil",
+          "nom": "snapshot-nettoyage",
+          "catalogue": "snapshot-nettoyage",
+          "chemin": "cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/",
+          "commande": "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py rotation"
+        }
+      ],
+      "suivant": "c12"
+    },
+    "cH1": {
+      "titre": "RELAIS - Activer l agent habilite (preuve d honnetete)",
+      "type": "action",
+      "indices": [
+        {
+          "type": "ref",
+          "ref": "pattern-5"
+        },
+        {
+          "type": "regle",
+          "texte": "PREUVE D HONNETETE : j active l agent habilite (janus / proprietaire) pour prouver l honnetete des changements."
+        },
+        {
+          "type": "outil",
+          "nom": "activer-agent-principal",
+          "catalogue": "activer-agent-principal",
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+        }
+      ],
+      "suivant": "cH2"
+    },
+    "cH2": {
+      "titre": "RETOUR - Verifier le rapport a la reactivation",
+      "type": "controle",
+      "question": "L agent habilite m a reactive avec son rapport : l honnetete des changements et fichiers presents est-elle PROUVEE ?",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : si la preuve manque, je ne supprime PAS - je signale (fin cH3). La delegation est active : RELAIS -> RETOUR -> CLOTURE."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c9"
+        },
+        {
+          "reponse": "NON",
+          "vers": "cH3"
+        }
+      ]
+    },
+    "cH3": {
+      "titre": "FIN - Signaler : honnetete non prouvee",
+      "type": "fin",
+      "message": "L honnetete du fichier suspect n est pas prouvee : je NE SUPPRIME PAS. Je signale a Cerberus dans mon bilan (fichier suspect non prouve, besoin de verification supplementaire). Le snapshot reste la preuve de l etat verifie."
+    },
+    "c29": {
+      "titre": "Mission hors parcours",
+      "type": "question",
+      "question": "La mission concerne-t-elle le domaine d un autre agent ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c29a"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c29b"
+        }
+      ]
+    },
+    "c29a": {
+      "titre": "FIN - Delegation",
+      "type": "fin",
+      "message": "La mission concerne un autre agent : j active l agent habilite (activer-agent-principal activer session-llm-1 <agent> <raison>) et j attends son retour selon le Pattern 5 (RELAIS -> RETOUR -> CLOTURE). Je ne fais pas le travail de l autre agent."
+    },
+    "c29b": {
+      "titre": "Besoin d un outil ?",
+      "type": "question",
+      "question": "La mission necessite-t-elle un outil qui n existe pas ?",
+      "branches": [
+        {
+          "reponse": "TEMPORAIRE",
+          "vers": "c29c"
+        },
+        {
+          "reponse": "DURABLE",
+          "vers": "c29e"
+        }
+      ]
+    },
+    "c29c": {
+      "titre": "Creer l outil temporaire",
+      "type": "action",
+      "indices": [
+        {
+          "type": "ref",
+          "ref": "pattern-2"
+        },
+        {
+          "type": "outil",
+          "nom": "generateurs-outil-temporaire",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
+        },
+        {
+          "type": "fichier",
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
+          "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l outil explique ce qu il fait et comment l utiliser"
+        }
+      ],
+      "suivant": "c29d"
+    },
+    "c29d": {
+      "titre": "FIN - Outil temporaire",
+      "type": "fin",
+      "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace - protocole-creation-scripts-temporaires : dossier tmp-hygie/ cree a la racine puis supprime). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
+      "indices": [
+        {
+          "type": "outil",
+          "nom": "enregistrer-usage-outil",
+          "catalogue": "enregistrer-usage-outil",
+          "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/"
+        },
+        {
+          "type": "regle",
+          "texte": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)."
+        }
+      ]
+    },
+    "c29e": {
+      "titre": "Signaler le besoin",
+      "type": "fin",
+      "message": "Besoin d outil DURABLE : je signale a Cerberus (besoin d outil -> activer Vulcain ; besoin de test -> Morpheus ; besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
+    },
+    "c9b": {
+      "titre": "Purifier les fichiers surcharges (RVAV)",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE RVAV ANTI-PERTE : jamais de perte - l archive recoit les lecons anciennes, ecrite AVANT le principal."
+        },
+        {
+          "type": "outil",
+          "nom": "purifier-rvav",
+          "catalogue": "purifier-rvav",
+          "chemin": "cerveau-projet/agents/tools/purifier/purifier-rvav/",
+          "commande": "python3 cerveau-projet/agents/tools/purifier/purifier-rvav/purifier-rvav.py --agent <agent> --dry-run --rapport <rapport>"
+        },
+        {
+          "type": "outil",
+          "nom": "detecter-surcharge-fichier",
+          "catalogue": "detecter-surcharge-fichier",
+          "chemin": "cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/detecter-surcharge-fichier.py cerveau-projet/agents --seuil 500 --recursive"
+        }
+      ],
+      "suivant": "c10"
     }
-   ],
-   "suivant": "c1"
-  },
-  "c1": {
-   "titre": "Mission",
-   "type": "question",
-   "question": "Quelle est la mission de nettoyage ?",
-   "branches": [
-    {
-     "reponse": "nettoyer",
-     "vers": "c2"
-    },
-    {
-     "reponse": "snapshot",
-     "vers": "cS1"
-    },
-    {
-     "reponse": "honnetete",
-     "vers": "cH1"
-    },
-    {
-     "reponse": "autre",
-     "vers": "c29"
-    }
-   ]
-  },
-  "c2": {
-   "titre": "SNAPSHOT OBLIGATOIRE avant tout nettoyage",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE IMMUABLE ASCII : avant d ecrire, verifier 100% ASCII (aucun accent, guillemets ASCII)."
-    },
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE SNAPSHOT : je ne supprime JAMAIS sans snapshot. Le snapshot est ma preuve de tracabilite (dossier hygie/snapshots/)."
-    },
-    {
-     "type": "outil",
-     "nom": "snapshot-nettoyage",
-     "catalogue": "snapshot-nettoyage",
-     "chemin": "cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/",
-     "commande": "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py creer"
-    },
-    {
-     "type": "outil",
-     "nom": "nettoyer-processus-residuels",
-     "catalogue": "nettoyer-processus-residuels",
-     "chemin": "cerveau-projet/agents/tools/nettoyer/nettoyer-processus-residuels/",
-     "commande": "python3 cerveau-projet/agents/tools/nettoyer/nettoyer-processus-residuels/nettoyer-processus-residuels.py --agent hygie --tous --force"
-    },
-    {
-     "type": "fichier",
-     "chemin": "cerveau-projet/agents/hygie/snapshots/",
-     "raison": "Dossier dedie des snapshots : consulter les snapshots existants (rotation 7 jours)"
-    }
-   ],
-   "suivant": "c3"
-  },
-  "c3": {
-   "titre": "Consulter le snapshot precedent",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : a chaque nettoyage, je consulte le snapshot precedent (etat avant le dernier nettoyage) pour comparer et prouver ce qui etait present."
-    },
-    {
-     "type": "outil",
-     "nom": "snapshot-nettoyage",
-     "catalogue": "snapshot-nettoyage",
-     "chemin": "cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/",
-     "commande": "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py consulter"
-    }
-   ],
-   "suivant": "c4"
-  },
-  "c4": {
-   "titre": "Detection compartimentee des residus",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE COMPARTIMENTATION : je scanne par zone (cerveau-projet/ d un cote, workspace/ de l autre) - jamais de scan melange."
-    },
-    {
-     "type": "outil",
-     "nom": "detecter-residus",
-     "catalogue": "detecter-residus",
-     "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
-     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --tous"
-    },
-    {
-     "type": "outil",
-     "nom": "detecter-processus-residuels",
-     "catalogue": "detecter-processus-residuels",
-     "chemin": "cerveau-projet/agents/tools/detecter/detecter-processus-residuels/",
-     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-processus-residuels/detecter-processus-residuels.py --detail"
-    },
-    {
-     "type": "outil",
-     "nom": "combos-analyse-projet",
-     "catalogue": "combos-analyse-projet",
-     "chemin": "cerveau-projet/agents/tools/combos/combos-analyse-projet/",
-     "commande": "python3 cerveau-projet/agents/tools/combos/combos-analyse-projet/combos-analyse-projet.py"
-    }
-   ],
-   "suivant": "c5"
-  },
-  "c5": {
-   "titre": "Des residus sont-ils detectes ?",
-   "type": "controle",
-   "question": "La detection a-t-elle trouve des residus (fichiers temp, rapports egare, fichiers de version a la racine, dossiers residuels) ?",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "RESIDUS TYPES : fichiers temporaires (tmp-*/.zz-*/.tmp-*), rapports egare, fichiers de version a la racine, dossiers residuels."
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c6"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c30"
-    }
-   ]
-  },
-  "c6": {
-   "titre": "Classer les residus par zone",
-   "type": "action",
-   "indices": [
-    {
-     "type": "outil",
-     "nom": "detecter-residus",
-     "catalogue": "detecter-residus",
-     "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
-     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --zone <cerveau-projet|workspace> --detail"
-    },
-    {
-     "type": "regle",
-     "texte": "Chaque residu est classe : zone (cerveau-projet / workspace), type (temp / egare / version / residuel), justification."
-    }
-   ],
-   "suivant": "c7"
-  },
-  "c7": {
-   "titre": "Un residu est-il suspect (honnetete non prouvee) ?",
-   "type": "question",
-   "question": "Un residu a-t-il une provenance suspecte (honnetete des changements ou fichiers presents non prouvee) ?",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE PREUVE D HONNETETE : jamais de suppression sans preuve ; si doute -> activer l agent habilite (janus / proprietaire)."
-    },
-    {
-     "type": "regle",
-     "texte": "CREATION LIMITEE (Pattern 12) : je ne cree de rapport que dans mon dossier (hygie/) ou le workspace temporaire - jamais dans tools/."
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "cH1"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c9"
-    }
-   ]
-  },
-  "c9": {
-   "titre": "Supprimer avec tracabilite (seul habilite)",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE SEUL HABILITE : supprimer sans demande, uniquement des RESIDUS PROUVES - jamais un fichier de travail legitime."
-    },
-    {
-     "type": "outil",
-     "nom": "supprimer-fichier",
-     "catalogue": "supprimer-fichier",
-     "chemin": "cerveau-projet/agents/tools/supprimer/supprimer-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/supprimer/supprimer-fichier/supprimer-fichier.py <residu>"
-    },
-    {
-     "type": "outil",
-     "nom": "supprimer-dossier",
-     "catalogue": "supprimer-dossier",
-     "chemin": "cerveau-projet/agents/tools/supprimer/supprimer-dossier/",
-     "commande": "python3 cerveau-projet/agents/tools/supprimer/supprimer-dossier/supprimer-dossier.py <residu-dossier>"
-    }
-   ],
-   "suivant": "c9b"
-  },
-  "c10": {
-   "titre": "Tous les residus ont-ils disparu ?",
-   "type": "controle",
-   "question": "Apres suppression, la re-detection confirme-t-elle la disparition de tous les residus classes (fichiers ET processus) ?",
-   "indices": [
-    {
-     "type": "outil",
-     "nom": "detecter-residus",
-     "catalogue": "detecter-residus",
-     "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
-     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --tous"
-    },
-    {
-     "type": "outil",
-     "nom": "detecter-processus-residuels",
-     "catalogue": "detecter-processus-residuels",
-     "chemin": "cerveau-projet/agents/tools/detecter/detecter-processus-residuels/",
-     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-processus-residuels/detecter-processus-residuels.py --detail"
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c11"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c9"
-    }
-   ]
-  },
-  "c11": {
-   "titre": "Rapport de nettoyage",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE IMMUABLE ASCII : avant d ecrire, verifier 100% ASCII (aucun accent, guillemets ASCII)."
-    },
-    {
-     "type": "regle",
-     "texte": "CREATION LIMITEE (Pattern 12) : rapport dans mon dossier hygie/rapports/ (jamais tools/)."
-    },
-    {
-     "type": "outil",
-     "nom": "creer-fichier",
-     "catalogue": "creer-fichier",
-     "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/hygie/rapports/nettoyage-<date>.md"
-    },
-    {
-     "type": "fichier",
-     "chemin": "cerveau-projet/agents/hygie/snapshots/",
-     "raison": "Le rapport reference le snapshot pris avant nettoyage (preuve de tracabilite)"
-    },
-    {
-     "catalogue": "corriger-symboles",
-     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
-     "type": "outil",
-     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hygie/corrections.md --all"
-    },
-    {
-     "type": "outil",
-     "nom": "detecter-usage-scripts-temporaires",
-     "catalogue": "detecter-usage-scripts-temporaires",
-     "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-scripts-temporaires/",
-     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-scripts-temporaires/detecter-usage-scripts-temporaires.py --rapport <rapport> --verbose"
-    }
-   ],
-   "suivant": "c12"
-  },
-  "c12": {
-   "titre": "Lecons et retour",
-   "type": "action",
-   "indices": [
-    {
-     "type": "ref",
-     "ref": "pattern-2"
-    },
-    {
-     "type": "ref",
-     "ref": "pattern-12"
-    },
-    {
-     "type": "ref",
-     "ref": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md"
-    },
-    {
-     "catalogue": "corriger-symboles",
-     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
-     "type": "outil",
-     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hygie/corrections.md --all"
-    },
-    {
-     "type": "outil",
-     "nom": "detecter-usage-outils-externes",
-     "catalogue": "detecter-usage-outils-externes",
-     "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/",
-     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <cible> --recursive"
-    }
-   ],
-   "suivant": "c34"
-  },
-  "c30": {
-   "titre": "Aucun residu : rien a nettoyer",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "Rien a supprimer : le workspace est propre. Le snapshot pris reste la preuve de l etat verifie."
-    }
-   ],
-   "suivant": "c12"
-  },
-  "c34": {
-   "titre": "Enregistrer mes usages d outils",
-   "type": "action",
-   "indices": [
-    {
-     "type": "outil",
-     "nom": "enregistrer-usage-outil",
-     "catalogue": "enregistrer-usage-outil",
-     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/"
-    },
-    {
-     "type": "regle",
-     "texte": "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL (agent=hygie, outil=<nom>, mode=<generateur/direct/combo>, contexte=<ma mission>)."
-    }
-   ],
-   "suivant": "c13"
-  },
-  "c13": {
-   "titre": "FIN - Activer Janus (second controle)",
-   "type": "fin",
-   "message": "MISSION DE NETTOYAGE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan complet (snapshot pris, residus detectes et supprimes par zone, rapport de nettoyage, preuves d honnetete obtenues, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus verifie ma tracabilite (snapshot + rapport) puis reactive Cerberus avec son verdict.",
-   "indices": [
-    {
-     "type": "outil",
-     "nom": "activer-agent-principal",
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
-    }
-   ]
-  },
-  "cS1": {
-   "titre": "Creer le snapshot de l etat du workspace",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE IMMUABLE ASCII : avant d ecrire, verifier 100% ASCII."
-    },
-    {
-     "type": "outil",
-     "nom": "snapshot-nettoyage",
-     "catalogue": "snapshot-nettoyage",
-     "chemin": "cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/",
-     "commande": "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py creer"
-    }
-   ],
-   "suivant": "cS2"
-  },
-  "cS2": {
-   "titre": "Verifier la rotation 7 jours",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ROTATION : les snapshots de plus de 7 jours sont supprimes au nettoyage suivant (dossier hygie/snapshots/)."
-    },
-    {
-     "type": "outil",
-     "nom": "snapshot-nettoyage",
-     "catalogue": "snapshot-nettoyage",
-     "chemin": "cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/",
-     "commande": "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py rotation"
-    }
-   ],
-   "suivant": "c12"
-  },
-  "cH1": {
-   "titre": "RELAIS - Activer l agent habilite (preuve d honnetete)",
-   "type": "action",
-   "indices": [
-    {
-     "type": "ref",
-     "ref": "pattern-5"
-    },
-    {
-     "type": "regle",
-     "texte": "PREUVE D HONNETETE : j active l agent habilite (janus / proprietaire) pour prouver l honnetete des changements."
-    },
-    {
-     "type": "outil",
-     "nom": "activer-agent-principal",
-     "catalogue": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
-    }
-   ],
-   "suivant": "cH2"
-  },
-  "cH2": {
-   "titre": "RETOUR - Verifier le rapport a la reactivation",
-   "type": "controle",
-   "question": "L agent habilite m a reactive avec son rapport : l honnetete des changements et fichiers presents est-elle PROUVEE ?",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : si la preuve manque, je ne supprime PAS - je signale (fin cH3). La delegation est active : RELAIS -> RETOUR -> CLOTURE."
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c9"
-    },
-    {
-     "reponse": "NON",
-     "vers": "cH3"
-    }
-   ]
-  },
-  "cH3": {
-   "titre": "FIN - Signaler : honnetete non prouvee",
-   "type": "fin",
-   "message": "L honnetete du fichier suspect n est pas prouvee : je NE SUPPRIME PAS. Je signale a Cerberus dans mon bilan (fichier suspect non prouve, besoin de verification supplementaire). Le snapshot reste la preuve de l etat verifie."
-  },
-  "c29": {
-   "titre": "Mission hors parcours",
-   "type": "question",
-   "question": "La mission concerne-t-elle le domaine d un autre agent ?",
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c29a"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c29b"
-    }
-   ]
-  },
-  "c29a": {
-   "titre": "FIN - Delegation",
-   "type": "fin",
-   "message": "La mission concerne un autre agent : j active l agent habilite (activer-agent-principal activer session-llm-1 <agent> <raison>) et j attends son retour selon le Pattern 5 (RELAIS -> RETOUR -> CLOTURE). Je ne fais pas le travail de l autre agent."
-  },
-  "c29b": {
-   "titre": "Besoin d un outil ?",
-   "type": "question",
-   "question": "La mission necessite-t-elle un outil qui n existe pas ?",
-   "branches": [
-    {
-     "reponse": "TEMPORAIRE",
-     "vers": "c29c"
-    },
-    {
-     "reponse": "DURABLE",
-     "vers": "c29e"
-    }
-   ]
-  },
-  "c29c": {
-   "titre": "Creer l outil temporaire",
-   "type": "action",
-   "indices": [
-    {
-     "type": "ref",
-     "ref": "pattern-2"
-    },
-    {
-     "type": "outil",
-     "nom": "generateurs-outil-temporaire",
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/"
-    },
-    {
-     "type": "fichier",
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.md",
-     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l outil explique ce qu il fait et comment l utiliser"
-    }
-   ],
-   "suivant": "c29d"
-  },
-  "c29d": {
-   "titre": "FIN - Outil temporaire",
-   "type": "fin",
-   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace - protocole-creation-scripts-temporaires : dossier tmp-hygie/ cree a la racine puis supprime). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
-   "indices": [
-    {
-     "type": "outil",
-     "nom": "enregistrer-usage-outil",
-     "catalogue": "enregistrer-usage-outil",
-     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/"
-    },
-    {
-     "type": "regle",
-     "texte": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)."
-    }
-   ]
-  },
-  "c29e": {
-   "titre": "Signaler le besoin",
-   "type": "fin",
-   "message": "Besoin d outil DURABLE : je signale a Cerberus (besoin d outil -> activer Vulcain ; besoin de test -> Morpheus ; besoin de nouvelle case -> Buffy). Je ne cree rien moi-meme : je signale et j attends la mission."
-  },
-  "c9b": {
-   "titre": "Purifier les fichiers surcharges (RVAV)",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE RVAV ANTI-PERTE : jamais de perte - l archive recoit les lecons anciennes, ecrite AVANT le principal."
-    },
-    {
-     "type": "outil",
-     "nom": "purifier-rvav",
-     "catalogue": "purifier-rvav",
-     "chemin": "cerveau-projet/agents/tools/purifier/purifier-rvav/",
-     "commande": "python3 cerveau-projet/agents/tools/purifier/purifier-rvav/purifier-rvav.py --agent <agent> --dry-run --rapport <rapport>"
-    },
-    {
-     "type": "outil",
-     "nom": "detecter-surcharge-fichier",
-     "catalogue": "detecter-surcharge-fichier",
-     "chemin": "cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/detecter-surcharge-fichier.py cerveau-projet/agents --seuil 500 --recursive"
-    }
-   ],
-   "suivant": "c10"
   }
- }
 }

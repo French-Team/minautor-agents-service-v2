@@ -26,10 +26,11 @@ Invariants verifies (fichiers temp, jamais le vrai depot) :
   6. corriger reel sur le registre temp : normalise puis re-analyse PROPRE
   7. Catalogue : 168 commandes, analyser-noms-maj + corriger-noms-maj
      presents, trie
-  8. index-tools : total 187, categories Analyser 6 / Corriger 7, les 2
+  8. index-tools : total 199, categories Analyser 9 / Corriger 7, les 2
      entrees presentes
   9. Normes : ASCII strict + LF pur (test + les 2 outils py/sh/md)
  10. Le dossier temp est SUPPRIME en fin de test (0 trace)
+Tags: conventions, nommage, garde-fou
 """
 import importlib.util
 import io
@@ -221,14 +222,14 @@ def main():
         shutil.rmtree(tmp, ignore_errors=True)
     chrono_etape("temp", time.monotonic())
 
-    # 10. Catalogue : 170 commandes, les 2 presentes, trie
+    # 10. Catalogue : 172 commandes, les 2 presentes, trie
     t0 = time.monotonic()
     try:
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         noms = [e["nom"] for e in cat["commandes"]]
-        verifier("10. catalogue 170 commandes trie + les 2 outils",
-                 len(noms) == 170 and noms == sorted(noms)
+        verifier("10. catalogue 178 commandes trie + les 2 outils",
+                 len(noms) == 178 and noms == sorted(noms)
                  and "analyser-noms-maj" in noms
                  and "corriger-noms-maj" in noms,
                  "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
@@ -237,23 +238,23 @@ def main():
                  False, str(e)[-80:])
     chrono_etape("10. catalogue", t0)
 
-    # 11. index-tools : total 187, Analyser 6, Corriger 7, les 2 presentes
+    # 11. index-tools : total 199, Analyser 9, Corriger 7, les 2 presentes
     t0 = time.monotonic()
     try:
         with io.open(INDEX, encoding="utf-8") as fh:
             idx = fh.read()
-        verifier("11. index-tools total 187 + Analyser 6 + Corriger 7 + les 2",
-                 "| **Total** | **187** |" in idx
-                 and "| Analyser | 6 |" in idx
+        verifier("11. index-tools total 199 + Analyser 9 + Corriger 7 + les 2",
+                 "| **Total** | **199** |" in idx
+                 and "| Analyser | 9 |" in idx
                  and "| Corriger | 7 |" in idx
                  and "analyser-noms-maj" in idx
                  and "corriger-noms-maj" in idx,
                  "total185=%s an6=%s co7=%s" % (
                      "| **Total** | **185** |" in idx,
-                     "| Analyser | 6 |" in idx,
+                     "| Analyser | 9 |" in idx,
                      "| Corriger | 7 |" in idx))
     except OSError as e:
-        verifier("11. index-tools total 185 + Analyser 6 + Corriger 7 + les 2",
+        verifier("11. index-tools total 185 + Analyser 9 + Corriger 7 + les 2",
                  False, str(e))
     chrono_etape("11. index-tools", t0)
 

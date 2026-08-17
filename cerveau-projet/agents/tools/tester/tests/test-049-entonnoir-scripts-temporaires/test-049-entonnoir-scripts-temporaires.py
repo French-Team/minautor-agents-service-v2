@@ -29,6 +29,7 @@ Cas couverts:
      non-conformite (pas de normalisation) alors que l entonnoir corrige
   10. ASCII strict : 0 non-ASCII (test + outil py/sh/md + protocole)
   11. LF pur : 0 CRLF (test + outil py/sh/md + protocole)
+Tags: securite, scripts-temp, entonnoir, garde-fou
 """
 import importlib.util
 import io

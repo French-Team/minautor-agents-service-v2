@@ -4,17 +4,17 @@
 test-080-environnement-fiches.py
 GARDE-FOU : la section `## Environnement de travail (Systeme)` est presente
 dans le template fiche-agent-template.md ET dans CHACUNE des 15 fiches
-agents, generee par verifier-systeme --bloc-fiche <agent> (v0.2.2).
+agents, generee par verifier-systeme --bloc-fiche <agent> (v0.2.3).
 
 Contexte (demande utilisateur 2026-08-16) : chaque fiche agent doit
 contenir les infos de l environnement reel (OS, shell, langages, racine
 projet) pour que l agent sache toujours sur quel systeme il travaille et
 n oublie jamais les differences Windows vs Linux. Vulcain a ajoute
-verifier-systeme --bloc-fiche (v0.2.2), Buffy a ajoute la section au
+verifier-systeme --bloc-fiche (v0.2.3), Buffy a ajoute la section au
 template et aux 15 fiches.
 
 Invariants verifies :
-  1. verifier-systeme --version = 0.2.2 (py + sh parite)
+  1. verifier-systeme --version = 0.2.3 (py + sh parite)
   2. --bloc-fiche cerberus genere ## Environnement de travail + Windows
   3. Le template fiche-agent-template.md contient la section
   4. CHACUNE des 15 fiches contient la section + Windows + Differences
@@ -22,6 +22,7 @@ Invariants verifies :
   6. verifier-conformite-fiche --tous = 11 CONFORME (verdict via subprocess)
   7. Normes : ASCII strict + LF pur (test + verifier-systeme py/sh/md)
   8. Aucun residu temp dans le workspace
+Tags: conventions, fiches, environnement, garde-fou
 """
 import importlib.util
 import io
@@ -115,18 +116,18 @@ def compter_non_ascii(chemin):
 def main():
     print("=== Garde-fou : section Environnement de travail dans les fiches agents ===")
 
-    # 1. verifier-systeme --version = 0.2.2 (py)
+    # 1. verifier-systeme --version = 0.2.3 (py)
     t0 = time.monotonic()
     code, out = run([sys.executable, VERIF_SYS, "--version"])
-    verifier("1. verifier-systeme --version = 0.2.2 (py)",
-             code == 0 and "0.2.2" in out, out.strip()[-40:])
+    verifier("1. verifier-systeme --version = 0.2.3 (py)",
+             code == 0 and "0.2.3" in out, out.strip()[-40:])
     chrono_etape("1. version py", t0)
 
     # 2. Parite .sh
     t0 = time.monotonic()
     code, out = run(["bash", VERIF_SYS_SH, "--version"])
-    verifier("2. parite .sh verifier-systeme 0.2.2",
-             code == 0 and "0.2.2" in out, out.strip()[-40:])
+    verifier("2. parite .sh verifier-systeme 0.2.3",
+             code == 0 and "0.2.3" in out, out.strip()[-40:])
     chrono_etape("2. version sh", t0)
 
     # 3. --bloc-fiche cerberus genere le bloc attendu

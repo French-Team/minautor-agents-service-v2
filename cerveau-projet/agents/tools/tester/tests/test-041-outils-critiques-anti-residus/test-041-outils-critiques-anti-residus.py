@@ -30,6 +30,7 @@ Invariants verifies (par grep sur chaque .py d outil critique) :
   4. L appel verifier_residus_racine() est present (def + appel = 2 occurrences
      de la chaine, sinon le garde-fou n est pas declenche)
   5. Normes : ASCII strict + LF pur (4 outils + test)
+Tags: securite, protections, residus, garde-fou
 """
 import importlib.util
 import io

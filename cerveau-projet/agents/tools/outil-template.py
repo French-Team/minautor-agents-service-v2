@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # [nom-outil].py
 # [Description courte de ce que fait l'outil]
-# Version : 0.2.0-beta
+# Version : 0.3.0-beta
 # Statut : ebauche
 
 # ============================================================
@@ -44,6 +44,25 @@
 #   3. CHRONO : option standard --chrono (mesure de duree, bilan en fin)
 #   Les durees alimenteront les futurs outils de suivi.
 # ============================================================
+# REGLE IMMUABLE : MESSAGES INFORMATIONNELS (v0.3.0, demande utilisateur)
+#   Les outils passent des MESSAGES contextuels aux agents dans leur sortie,
+#   aux endroits importants : 'si vous avez modifie X, n oubliez pas Y'.
+#   - afficher_messages_info(messages) affiche la section
+#     '=== MESSAGES POUR L AGENT ===' avec une ligne ' > ' par message.
+#   - L APPEL est OBLIGATOIRE en fin de main() (apres l action reussie) pour
+#     TOUT outil qui ecrit/modifie dans le projet. Les messages sont TOUJOURS
+#     affiches (pas une option) : c est le contrat informationnel.
+#   - Chaque outil fournit SES messages statiques contextuels (fichiers
+#     compagnons a mettre a jour, regles a respecter, etapes suivantes).
+#   Exemple :
+#     if not args.dry_run:
+#         afficher_messages_info([
+#             "fichier modifie : indexer dans index-tools.md",
+#             "fichier modifie : adapter les tests (Morpheus)",
+#         ])
+#   NE PAS SUPPRIMER ce bloc ni la fonction afficher_messages_info lors de
+#   la creation de l outil.
+# ============================================================
 # REGLE IMMUABLE : DOCUMENTATION OBLIGATOIRE (v0.2.0, demande utilisateur)
 #   L agent doit LIRE le .md de l outil avant de l utiliser : le mode reel
 #   (sans --dry-run) est BLOQUE tant que l agent n a pas passe --confirme-doc
@@ -63,7 +82,7 @@ import os
 import sys
 from pathlib import Path
 
-VERSION = "0.2.0-beta"
+VERSION = "0.3.0-beta"
 STATUT = "ebauche"
 
 # Couleurs ANSI (optionnel, activees uniquement si le terminal les supporte)
@@ -146,6 +165,23 @@ def exiger_confirmation_doc(script_path, dry_run, confirme_doc):
     print(_couleur("REFUS: relancez avec --confirme-doc apres lecture de la doc.", "rouge"),
           file=sys.stderr)
     sys.exit(2)
+
+
+def afficher_messages_info(messages):
+    """MESSAGES INFORMATIONNELS (regle immuable v0.3.0) : affiche une section
+    '=== MESSAGES POUR L AGENT ===' avec une ligne ' > ' par message.
+
+    A appeler en fin de main() apres une action reussie (et non dry-run)
+    pour tout outil qui ecrit/modifie dans le projet. Les messages sont
+    TOUJOURS affiches : l agent voit les consequences de son action
+    (fichiers compagnons, regles, etapes suivantes) sans avoir a les
+    deviner."""
+    if not messages:
+        return
+    print("")
+    print(_couleur("=== MESSAGES POUR L AGENT ===", "jaune"))
+    for message in messages:
+        print("  > %s" % message)
 
 
 def verifier_nommage(script_path):

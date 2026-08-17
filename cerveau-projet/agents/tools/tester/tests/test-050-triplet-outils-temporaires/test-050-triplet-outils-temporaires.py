@@ -38,6 +38,7 @@ Cas couverts:
   17. Nettoyage : le test ne laisse AUCUNE preuve tmp-t050-preuve au registre
   12. PARITE REELLE : le script genere par le .sh est identique a celui du .py
       (hors date) - la garantie triplet vaut aussi cote bash.
+Tags: conventions, template, triplet, garde-fou
 """
 import importlib.util
 import io

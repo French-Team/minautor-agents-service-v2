@@ -243,8 +243,9 @@ def usages_registre(racine):
                     d = json.loads(ligne)
                 except ValueError:
                     continue
-                if d.get("mode") == "script-temporaire":
-                    continue
+                if d.get("mode") in ("script-temporaire", "verrou-dev"):
+                    continue  # verrou-dev : essai de validation developpeur
+                              # (liste blanche v0.2.2, utilisateur 2026-08-16)
                 date = d.get("date", "")
                 jour = date[:10]
                 if len(jour) != 10 or jour < limite_s:

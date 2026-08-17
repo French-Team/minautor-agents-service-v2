@@ -26,6 +26,7 @@ Invariants verifies :
   7. Les fichiers de production sont listes en verbose (traeabilite)
   8. Normes : ASCII strict + LF pur (test)
   9. Le dossier temp est SUPPRIME en fin de test (0 trace)
+Tags: securite, workspace, garde-fou, anti-recurrence
 """
 import importlib.util
 import io

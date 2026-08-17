@@ -3887,3 +3887,353 @@ rapport-diagnostic-convention-scripts-temporaires-2026-08-16.md, RAPPORT_EGARE)
 case c4 Detection compartimentee de la carte hygie + bump parcours) puis
 MORPHEUS (adapter test-005 0.2.5 -> 0.2.6, verifier test-045 chariot) puis
 JANUS (non-regression).
+## [LECON] 2026-08-16 -- OUTIL MIGRER-CASES-RELECTURE (Vulcain)
+
+**Contexte** : demande utilisateur -- les agents ne lisaient plus leur fiche
+apres activation (ex : Janus disant "mon tmp-clio"). Cause : la structure c0
+(question "EN MEMOIRE ?" avec OUI -> c0c) permettait de contourner la lecture.
+Decision utilisateur : lecture OBLIGATOIRE + confirmation, via un outil de
+migration.
+
+**Travail realise** :
+1. Outil migrer-cases-relecture v0.1.0 (migrer/) : c0 question -> action
+   RELIRE OBLIGATOIRE (2 outils lire-fichier), c0b action -> question
+   confirmation (OUI -> c0c, NON -> c0), c0c conserve. Options --tous,
+   --agent, --dry-run, --rapport, --verbose, --version. 15/15 parcours
+   migres, versions bumpees, structure cible verifiee 15/15.
+2. valider-cartes v0.4.2 : Pattern 4 v2 (c0 action RELIRE + c0b confirmation)
+   + doc mise a jour.
+3. generateurs-carte v0.3.1 : squelette de carte aligne sur la nouvelle
+   structure (c0 action + c0b question).
+4. activer-agent-principal v0.5.9 : message DEMARRAGE adapte (c0 = relire,
+   repondre a la confirmation c0b).
+5. Catalogue 170->171 (migrer-cases-relecture) + index-tools (categorie Migrer).
+
+**Lecon** :
+- Quand une structure de parcours change, les OUTILS qui la valident ou la
+  generent (valider-cartes, generateurs-carte) et les messages d activation
+  (activer-agent-principal) doivent changer dans la MEME mission, sinon les
+  cartes deviennent NON CONFORME (detecte immediatement).
+- detecter-cablages signale c0->c0b->c0 comme BOUCLE_RE_TRAVAIL (avertissement
+  non bloquant) : c est legitime (NON -> relecture, sortie par OUI). Le
+  verdict reste PROPRE.
+- La migration JSON doit etre ecrite avec newline='\n' + ensure_ascii=True
+  pour garantir LF + ASCII strict.
+## [LECON] 2026-08-16 -- MECANIQUE CATEGORIES TAGS TESTS (Vulcain)
+
+**Contexte** : demande utilisateur - la non-regression grossit, il faut
+categoriser les tests pour ne lancer que ce qui est utile. Decision : bloc
+'Tags:' dans la docstring de chaque test (source unique), le lanceur filtre
+par tags/categories, le rating/performance guide la reorganisation.
+
+**Travail realise** :
+1. tester-lancer-non-regression v0.5.6 : fonction lire_tags_test (regex
+   'Tags:' dans les 4096 premiers octets), filtrage --tags (OR) et
+   --categorie (categories-tests.json : securite, conventions, agents,
+   outils, registre-traces, performance, anti-recurrence), categories
+   desactivees PERSISTANTES (config-tests.json, desactivees_categories),
+   --desactiver-categorie/--activer-categorie/--etat-categories. La config
+   des tests desactives PRESERVE les categories (ecrire_config_tests lit
+   l ancien fichier avant d ecrire).
+2. recommander-series v0.1.0 (tester/) : croise tags (docstrings) + durees
+   (registre-tests.jsonl, la plus recente) -> liste par tag + suggestion de
+   decoupage en series (max tests / max duree, lents ensembles). Lecture
+   seule, --rapport.
+3. Catalogue 171 -> 172, index-tools (Tester), doc lanceur a jour.
+
+**Lecon** :
+- Le verrou d habilitation (seul janus lance la suite) m empeche de tester
+  le lanceur en reel depuis une session vulcain : tester la MECANIQUE par
+  import du module (lire_tags_test, config) sans passer par main().
+- Un nouvel outil = +1 catalogue = 4 tests de compteur a adapter (007, 024,
+  060, 079) + test-032 (version lanceur) + test-024 (version) dans la meme
+  passe, sinon KO a la non-regression.
+- Les tags vivent DANS le test (docstring) : le lanceur et recommander-series
+  lisent la meme source - pas de fichier de mapping a double maintenir.
+
+
+## [LECON] 2026-08-16 -- ACCES WEB REEL DES AGENTS : 2 OUTILS CREES (Vulcain)
+
+**Contexte** : demande utilisateur - les recherches web ont ete mises de cote depuis
+le debut ; les agents doivent avoir des souvenirs vrais et d actualite (la memoire
+factuelle = recherches-web/). Le protocole-recherches-web existait mais AUCUN outil
+web n existait : les agents ne pouvaient physiquement pas acceder au web.
+
+**Cree** :
+1. `rechercher-web` (rechercher/) : recherche DuckDuckGo Lite (HTML simple sans JS)
+   + lecture de page (extraction texte) - verrou d habilitation, triplet chrono,
+   timeout INTERNE (jamais de timeout exterieur), sortie console sanitisee en ASCII
+   (le web contient n importe quel Unicode ex U+2318 qui casse le terminal Windows).
+2. `detecter-recherches-obsoletes` (detecter/) : scan recherches-web/ hors templates,
+   signale age > 30 j ou date invalidite passee - 0/1 aujourd hui (badges fraiche).
+
+**Integre** : catalogue generateurs-commande 172 -> 174 (requete avec quoter:true,
+   agent obligatoire pour le verrou), index-tools.md 193 -> 195 (sections Detecter
+   et Rechercher), bumper coherent (0.1.0 des 2 outils).
+
+**Lecons techniques** :
+- Le parseur d un site HTML peut varier dans le temps : DDG Lite utilise des
+  guillemets SIMPLES (class='result-link') - accepter les deux et les deux ordres
+  d attributs. Toujours tester en reel avant de livrer.
+- Un contenu web lu ne doit JAMAIS etre affiche en brut sur console : passer par
+  une fonction _affichable() (encode ascii replace) pour respecter la regle ASCII.
+- Le template de recherche (templates/) a un header placeholder [YYYY-MM-DD] : un
+  scan de fraicheur doit exclure templates/ sinon faux positif permanent.
+- Le verrou bloque tant que la carte n est pas branchee (outil assigne a AUCUNE
+  carte) - comportement attendu : Buffy branche l indice dans la carte Atlas,
+  puis Atlas fait la mission reelle (Next.js).
+
+**Suite de la chaine** : Buffy branche les 2 indices dans la carte Atlas (c13 +
+case detect) + bump parcours + fiche. Puis Morpheus (garde-fou test-088 + tests
+de compteurs), Atlas (mission reelle Next.js), Clio (readmes), Janus (non-regression).
+
+
+## [LECON] 2026-08-17 -- LE BUMPER AVAIT UN ANGLE MORT : FORMATS .md INVISIBLES (Vulcain)
+
+**Contexte** : demande utilisateur (audit croise Buffy) - verifier que les
+.md des outils sont synchronises avec la constante VERSION du .py. L audit a
+revele que le regex _RE_MD_VERSION du bumper ne couvrait QUE le champ
+standard '**Version :** X.Y.Z' en debut de ligne. Resultat : les .md en
+format TABLEAU ('| **Version** | X.Y.Z |'), BLOCKQUOTE ('> **Version** :'),
+LISTE ('- Version :' / '- **X.Y.Z**') ou section '## Version' etaient
+declares 'coherent' par --tous SANS AUCUNE VERIFICATION. 2 vrais ecarts
+existaient, caches : generateurs-carte (.md 0.3.0 vs py 0.3.1, en retard) et
+generateurs-ligne (.md 0.3.1 vs py 0.3.0, en avance).
+
+**Lecon technique** :
+1. Un regex trop strict = un outil qui dit 'coherent' sans rien verifier.
+   Le pire des etats : pas KO, juste un FAUX OK silencieux.
+2. Extension du motif md_version aux 4 formats avec priorite au champ
+   standard (toujours en tete de fichier) : la PREMIERE occurrence du
+   fichier est la version courante - un champ standard en tete gagne
+   TOUJOURS sur un changelog '## Version' plus bas.
+3. Normalisation : les .md sans champ standard (7 outils) ont recu un champ
+   '**Version** : X.Y.Z' en tete - c est plus robuste que d ajouter un
+   format exotique par fichier. Le champ 'Version du fichier' de
+   generateurs-amelioration (2.3.0) est la version du fichier JSON de
+   themes, PAS de l outil (2.1.0) - NE JAMAIS le confondre.
+4. La spec 'spec-guider-parcours' porte '**Version** : 0.6.2' (sa propre
+   version documentaire) + '**Version outil** : 0.5.1' (alignee sur
+   l outil) - c est le modele a suivre pour les specs.
+
+**Preuves** : --tous dry-run = 141 outils, 0 incoherent (avant : 0 aussi,
+mais 17 formats non verifies) ; bump dossier generateurs-carte en dry-run =
+4 fichiers (md tableau + py + sh + spec) detectes et alignes ; py_compile
+OK ; normes ASCII/LF 0/0 ; 2 compagnons signales (test-066/067 pinent
+v0.1.3, mission Morpheus).
+
+
+## [LECON] 2026-08-17 -- OUTILS INFORMATIONNELS : MESSAGES CONTEXTUELS (Vulcain)
+
+**Contexte** : demande utilisateur - les outils doivent passer des MESSAGES
+aux agents dans leur sortie, aux endroits importants ('si vous avez modifie
+tel fichier, ne pas oublier de modifier tel fichier'). L agent voit les
+consequences de son action sans avoir a les deviner.
+
+**Mecanisme cree** (template v0.3.0-beta) :
+- fonction afficher_messages_info(messages) : section
+  '=== MESSAGES POUR L AGENT ===' avec une ligne ' > ' par message.
+- L appel est OBLIGATOIRE en fin de main() apres une action reussie (non
+  dry-run) pour tout outil qui ecrit/modifie dans le projet.
+- Les messages sont TOUJOURS affiches (pas une option) : contrat
+  informationnel. Documente dans outil-template.md + outil-template-python.md.
+
+**Branche dans 5 outils critiques** :
+- editer-parcours v0.1.4 : rappel Pattern 14 + valider-cartes + tests pins
+- editer-fichier v0.4.3 : messages selon le type de fichier (.py/.sh ->
+  bumper+tests ; parcours -> valider-cartes+fiche ; .md -> index/README)
+- activer-agent-principal v0.5.10 : apres activer -> RELEVE MEME ROUND ;
+  apres reactiver -> relecture Cerberus
+- creer-fichier v0.3.2 : rappels apres creation (outil -> index-tools+
+  catalogue+doc+assignation ; rapport -> dossier agent jamais racine)
+- combos-maj-readme-massive v0.1.6 : version-readme.txt + badge Outils +
+  test-020/038, Clio seule habilitee pour le README
+
+**Lecons techniques** :
+1. Un champ json_version dans un .py (manifeste de lock, ex 'version':
+   '0.1.0' dans editer-parcours) est CONFONDU par le bumper avec la version
+   de l outil -> le bump de dossier KO. Contourner : aligner les .md a la
+   main (editer-fichier) puis --tous --wet corrige les en-tetes.
+2. Toujours bump l EN-TETE '# Version :' du .py en plus de la constante
+   VERSION - le bumper --tous les verifie tous les deux.
+3. ASCII strict : 'habilitee' avec accent -> KO compile. Toujours relire
+   les messages avant de les ecrire.
+
+**Preuves** : py_compile 5 outils OK, bumper --tous 0 incoherent, test reel
+editer-fichier affiche les messages, normes ASCII/LF 0/0, seul pin de test
+reel = test-020 (combos-maj-readme-massive 0.1.5 -> 0.1.6, mission
+Morpheus).
+
+## [LECON] 2026-08-17 -- --KO-PUIS-STOP : CYCLE RAPIDE KO (Vulcain)
+
+**Contexte** : demande utilisateur - le cycle de correction des KO relancait la
+suite complete (~90s) a chaque correctif. Recommandation Cerberus (workflow en
+2 temps) : valider UNIQUEMENT la serie KO persistante puis STOPPER, la suite
+complete n etant payee qu une seule fois en validation finale.
+
+**Implementation** (tester-lancer-non-regression v0.5.8 -> 0.5.9) : option
+--ko-puis-stop avec --ko reprendre. Apres la BARRIERE KO FRANCHIE (100% verte),
+la suite s ARRETE avant les series A-E, affiche 'VALIDATION FINALE REQUISE',
+retour 0 si 0 KO. Fichier KO vide -> option IGNOREE (avertissement) + suite
+normale. Barriere KO bloquee -> comportement existant (STOP + retour 1).
+Chrono en mode 'barriere-ko', reference globale jamais touchee (run partiel).
+
+**Lecon 1 - flag jamais initialise dans la branche franchie** : ma premiere
+condition de sortie testait 'barriere_ko_bloquee in dir() and not
+barriere_ko_bloquee', mais ce flag n etait defini QUE dans la branche BLOQUEE
+(barriere_ko_bloquee = True) - la branche FRANCHIE ne l initialisait jamais.
+Resultat : la barriere KO verte ne declenchait PAS la sortie, la suite
+continuait vers A-E (preuve (a) ECHEC). Correctif : barriere_ko_bloquee = False
+dans la branche franchie. LECON : un flag de barriere doit etre initialise dans
+TOUTES les branches (verte ET rouge), jamais suppose absent quand l evenement
+oppose s est produit.
+
+**Lecon 2 - % dans les help argparse** : le help de --ko-puis-stop contenait
+'100% verte' -> argparse fait help_string % params et a leve
+'ValueError: unsupported format character'. Correctif : doubler le % ('100%%').
+Meme famille que la lecon string.Template : toute chaine passee a argparse
+(help) ou a un template (%-format) doit echapper ses % (lecon deja documentee
+dans le protocole-outils - a relire AVANT d ecrire un help avec pourcentage).
+
+**Preuves reelles** : (a) test-030 injecte dans ko-tests.json + --ko-puis-stop
+-> serie KO validee, suite STOPPEE avant A-E, retour 0, fichier vide ;
+(b) test-066 (KO attendu, pins 0.5.8) -> BARRIERE KO BLOQUEE, retour 1, fichier
+conserve ; (c) ko vide + --ko-puis-stop -> avertissement + suite lancee
+normalement. Normes 0/0, bumper --tous 0 incoherent.
+
+**A noter** : la declaration registre de tester-lancer-non-regression par
+vulcain est signalee DECLARATION_FAUTIVE par evaluer-processus (outil exclusif
+janus) : la liste blanche developpeur du verrou autorise le LANCEMENT de
+validation mais pas la DECLARATION manuelle - ne pas declarer les outils
+verrouilles au registre (le precedent messages-info l avait deja montre avec
+editer-fichier).
+
+
+## [LECON] 2026-08-17 -- CYCLE BALAYAGE + KO TERMINAL (Vulcain, v0.6.0)
+
+**Contexte** : l utilisateur a signale que `--ko-puis-stop` (v0.5.9) ne
+correspondait pas a son modele : la passe 1 devait balayer TOUTES les series
+sans arret pour collecter la TOTALITE des KO (alors que le mode barrieres
+s arretait au premier KO), et la serie KO verte devait etre le CONTROLE
+TERMINE (au lieu de forcer une "validation finale requise").
+
+**Corrections** (tester-lancer-non-regression.py v0.5.9 -> v0.6.0) :
+1. `--ko nouveau` = MODE BALAYAGE COMPLET : drapeau `balayage` ; la boucle des
+   barrieres ne fait plus `break` au premier KO (elle `continue` pour collecter
+   la totalite des KO). Bilan final "BALAYAGE COMPLET : X OK / Y KO".
+2. `--ko-puis-stop` : message "VALIDATION FINALE REQUISE" remplace par
+   "SERIE KO VERTE = CONTROLE TERMINE" + note conditionnelle (suite complete
+   seulement si code partage touche - decision Janus).
+3. Doc .md + textes d aide alignes.
+
+**Preuves reelles** :
+- --ko nouveau --tests test-007,test-001 : "BALAYAGE COMPLET : 2 OK / 0 KO",
+  progression A V > C V (pas d arret).
+- --ko reprendre --ko-puis-stop sur test-007 injecte : "SERIE KO VERTE =
+  CONTROLE TERMINE", fichier KO vide a la fin, retour 0.
+- Barriere KO bloquee (chemin inchange, couvert par test-081) : intact.
+
+**Lecon Vulcain** : quand une option est ajoutee, il faut VERIFIER que la fiche
+de l agent utilisateur (ici Janus) la documente - ici `--ko-puis-stop` etait
+absente de janus.md (0 occurrence). L education de l agent utilisateur fait
+partie de la livraison d un outil, pas seulement le code.
+
+
+## [LECON] 2026-08-17 -- MESSAGE TROMPEUR ACTIVER-AGENT-PRINCIPAL (Vulcain, v0.5.11)
+
+**Contexte** : l utilisateur a signale que le rappel apres `activer` affichait
+"reactiver Cerberus si activation directe, sinon activer le maillon suivant".
+Ce message a INDUIT Cerberus a ecrire "reactiver Cerberus" dans des missions
+alors que la carte des agents dit "Activer Janus" (seconde controle). La REGLE
+IMMUABLE RELEVE MEME ROUND dit : les agents se transmettent la releve selon SA
+carte, SEUL le DERNIER maillon reactive Cerberus avec le bilan consolide,
+JAMAIS de retour a Cerberus en milieu de chaine.
+
+**Correction** : message remplace par "activer le maillon suivant selon SA
+carte ; seul le DERNIER maillon reactive Cerberus avec le bilan consolide
+(jamais de reactivation directe a Cerberus en milieu de chaine)". Bump 0.5.10
+-> 0.5.11 + historique .md.
+
+**Verifications** : py_compile OK, --version v0.5.11, normes ASCII 0 + LF pur,
+aucun test ne pinne 0.5.10.
+
+**Lecon Vulcain** : les messages INFORMATIONNELS d un outil sont de VRAIES
+instructions pour l agent qui les lit : un message ambigu ("si activation
+directe") devient une fausse regle. Toujours formuler les rappels a partir de
+la REGLE IMMUABLE source, pas d un raccourci.
+
+
+## [LECON] 2026-08-17 -- ROUND PERFORMANCE : CONFIG ADAPTATIVE + 3 ANALYSEURS (Vulcain)
+
+**Contexte** : demande utilisateur (axe performance) - definir l environnement
+de travail pour etablir des configurations adaptables selon le systeme et les
+ressources reelles, et lister les outils de performance (tests, fonction,
+worker, flux, round, session).
+
+**Environnement mesure** : Windows 10, 16 coeurs, 48 Go RAM (32 Go dispo),
+44 Go disque libre, Python 3.14.4.
+
+**Livraisons (phase 1 - fondation)** :
+1. `verifier-systeme` enrichi (RAM totale/dispo, disque libre, charge CPU) :
+   auparavant seuls OS/arch/shells/langages etaient detectes.
+2. `configurer-environnement` (NOUVELLE categorie configurer/) : mesure les
+   ressources et ecrit config-environnement.json (workers + timeout
+   recommandes) avec bareme RAM (peu de RAM -> moins de workers pour eviter
+   le swapping).
+3. `tester-lancer-non-regression` v0.6.0 -> 0.6.1 : lit config-environnement.json
+   via lire_workers_config() et auto-regle workers + timeout (CLI --workers /
+   --timeout-test prioritaires). Remplace le min(cpu_count, 16) code en dur
+   (3 occurrences).
+
+**Livraisons (phases 2-4 - analyseurs, sans doublon)** :
+4. `analyser-workers` : etude d echelle (temps mural a 1/2/4/8/16 workers,
+   recommandation de l optimum). Lance le lanceur avec --no-reference et
+   --journal (ne pollue jamais les metriques de production).
+5. `analyser-fonctions` : profilage cProfile (top N fonctions, tri cumtime /
+   tottime / ncalls), profil temporaire dans workspace/ puis supprime.
+6. `analyser-round` : croise registre-usages-outils + registre-tests sur une
+   fenetre (agents actives, outils distincts, tests lances, duree).
+
+**Axes flux/session DEJA couverts** (pas de doublon cree, regle "chercher dans
+l existant") : analyser-io-tests (I/O disque par test) et analyser-tokens
+(tokens envoyes/recus + encombrement fenetre de contexte).
+
+**Enregistrement** : catalogue 174 -> 178 commandes (v0.2.10), index-tools
+195 -> 199 (categorie Configurer 1 + Analyser 6 -> 9).
+
+**Lecon** : avant de creer un outil de performance, croiser l existant -
+analyser-io-tests et analyser-tokens couvraient deja 2 des 6 axes demandes.
+
+
+## [LECON] 2026-08-17 -- GOULOT DE LA SUITE : ROTATION REGISTRE-TESTS (Vulcain, v0.6.2)
+
+**Contexte** : l utilisateur a demande de profiler test-032 (60s, le goulot
+de la suite). analyser-fonctions a montre que test-032 n est PAS du CPU Python
+(importlib < 0.01s) : les 60s sont 7 lancements du lanceur en sous-processus.
+
+**Cause racine (profiler le lanceur, pas le test)** : le lanceur lit + JSON-
+parse + trie + REECRIT registre-tests.jsonl A CHAQUE journalisation de test.
+Ce fichier avait grossi SANS PLAFOND a 12 143 lignes / 1,9 Mo : un tri integral
+= ~7,8s par lancement (profil : method read de TextIOWrapper = 7,83s sur 8,13s).
+7 lancements x 8s = les ~56s de test-032. Les tests eux-memes (test-001 ~0,5s)
+etaient presque gratuits.
+
+**Correction (tester-lancer-non-regression v0.6.1 -> 0.6.2)** :
+1. Constante PLAFOND_REGISTRE_TESTS = 500 : trier_registre_tests ne conserve
+   que les 500 entrees valides les plus recentes (rotation, meme philosophie
+   que registre-usages-outils plafonne a 100).
+2. Nettoyage ponctuel : registre-tests.jsonl 12 143 -> 500 lignes.
+3. Test-051 adapte : apres > avant -> apres >= avant (au plafond, une entree
+   ajoutee remplace la plus ancienne).
+
+**Resultats mesures** :
+- lancement filtre (--tests test-041) : 7,87s -> 1,00s (-87%).
+- test-032 : 60s -> 21,6s (-64%), le reste etant test-003 (reel ~7,8s, lance 2x
+  pour la preuve de gain).
+- suite complete : 151,6s -> 69,6s (-54%), reference mise a jour.
+
+**Lecon** : quand un test est lent, profiler le TEST montre souvent "rien" si
+le temps est passe en sous-processus ; il faut profiler LE LANCEUR cible. Et un
+log non plafonne finit toujours par devenir le goulot des lectures/sorts
+entiers. La question "pourquoi ce test met 60s" a une reponse dans un fichier
+de donnees, pas dans le code du test.

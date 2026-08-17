@@ -10,14 +10,14 @@ GARDE-FOU : le RATING (demande utilisateur 2026-08-15) est deploye partout :
     rating du test),
   - l outil evaluer-rating.py existe avec --profil/--cible/--tous/--general
     et produit une note /100,
-  - le lanceur tester-lancer-non-regression v0.5.5 contient
+  - le lanceur tester-lancer-non-regression v0.6.2 contient
     afficher_rating_fin_de_run (rating des series + rating general en fin de
     run).
 
 Contexte :
   - Outil cree par Vulcain (evaluer/evaluer-rating, profils-rating.json),
     protection 'rating' ajoutee a tester-protections v0.2.0, template-test
-    v0.4.0, lanceur v0.5.5.
+    v0.4.0, lanceur v0.6.2.
   - Ce garde-fou verifie la chaine complete de deploiement - anti-recurrence
     d un rating present a un endroit mais oublie ailleurs.
 
@@ -27,12 +27,13 @@ Invariants verifies :
   3. template-test.md : le bloc PROTECTIONS.afficher_rating est present
   4. evaluer-rating.py existe, compile et affiche --version v0.1.0
   5. evaluer-rating --aide contient --profil/--cible/--tous/--general
-  6. Le lanceur v0.5.5 contient afficher_rating_fin_de_run (--version v0.5.5)
+  6. Le lanceur v0.6.2 contient afficher_rating_fin_de_run (--version v0.6.2)
   7. Preuve reelle : evaluer-rating --profil test --general retourne 0 et
      affiche RATING GENERAL
   8. profils-rating.json : les 5 profils (test, serie, outil, script-temp,
      fiche) avec poids somme = 100
   9. Normes : ASCII strict + LF pur (outil + doc + profils + test)
+Tags: performance, rating, garde-fou
 """
 import importlib.util
 import io
@@ -209,14 +210,14 @@ def main():
                      "manquantes dans l aide (--aide)")
             chrono_etape("5. options", t0)
 
-        # 6. Lanceur v0.5.5 + afficher_rating_fin_de_run
+        # 6. Lanceur v0.6.2 + afficher_rating_fin_de_run
         if point_actif(6):
             t0 = time.monotonic()
             r = lancer([PYTHON, LANCEUR_PY, "--version"])
             contenu = lire(LANCEUR_PY)
-            ok = ("v0.5.5" in (r.stdout or "")
+            ok = ("v0.6.2" in (r.stdout or "")
                   and "afficher_rating_fin_de_run" in contenu)
-            verifier("6. lanceur v0.5.5 + afficher_rating_fin_de_run", ok,
+            verifier("6. lanceur v0.6.2 + afficher_rating_fin_de_run", ok,
                      "version=%s" % (r.stdout or "").strip())
             chrono_etape("6. lanceur", t0)
 

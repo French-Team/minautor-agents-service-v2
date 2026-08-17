@@ -1,35 +1,12 @@
 {
  "cases": {
   "c0": {
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c0c"
-    },
-    {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c0b"
-    }
-   ],
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "action",
    "indices": [
     {
-     "ref": "pattern-2",
-     "type": "ref"
-    }
-   ],
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question"
-  },
-  "c0b": {
-   "indices": [
-    {
-     "ref": "pattern-2",
-     "type": "ref"
+     "type": "regle",
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
     },
     {
      "catalogue": "lire-fichier",
@@ -46,9 +23,28 @@
      "type": "outil"
     }
    ],
-   "suivant": "c0c",
-   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-   "type": "action"
+   "suivant": "c0b"
+  },
+  "c0b": {
+   "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+   "type": "question",
+   "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture (c0). Reponds la VERITE."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    }
+   ]
   },
   "c0c": {
    "indices": [
@@ -538,7 +534,7 @@
    "type": "action"
   },
   "c32": {
-   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me REACTIVE en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni.",
+   "message": "Themis a ete active pour auditer (maillon de chaine). A SA fin, Themis me RE-ACTIVE (commande activer) en me fournissant son rapport (evaluation ou audit). A mon retour, je reprends ma mission avec le rapport fourni.",
    "titre": "FIN - Retour de Themis avec son rapport",
    "type": "fin"
   },
@@ -597,6 +593,8 @@
    "type": "action"
   },
   "c4": {
+   "type": "action",
+   "titre": "Verifier les tests",
    "indices": [
     {
      "texte": "Verifier que les tests existent, sont numerotes et couvrent les cas limites (protocole-versionning-outils).",
@@ -619,11 +617,17 @@
      "commande": "python3 cerveau-projet/agents/tools/tester/tester-protections/tester-protections.py",
      "nom": "tester-protections",
      "type": "outil"
+    },
+    {
+     "type": "regle",
+     "texte": "WORKFLOW SERIE KO (--ko) : je constate d abord avec --etat-ko, puis --ko reprendre lance la serie KO persistante en PRIORITE avec sa barriere (les tests qui passent sortent de ko-tests.json), puis les series normales (ordre dynamique par taux de KO), puis la suite complete. Apres un correctif : --relancer-ko avant toute relance."
+    },
+    {
+     "type": "regle",
+     "texte": "COMPOSITION CIBLEE (immuable) : je ne lance JAMAIS la suite complete par reflexe. (1) identifier les fichiers modifies de la mission ; (2) choisir le mode le plus leger : --fichiers <chemins> (profils deduits) OU --profil <profils> OU --tags/--categorie (ciblage fin) OU --series a,c ; (3) desactiver les tests non pertinents (--desactiver <nums> / --desactiver-categorie <nom>, persistant) apres consultation de --etat-tests/--etat-categories ; (4) lancer et valider les series concernees ; (5) reactiver les tests en fin de mission (--activer) sauf decision durable documentee ; (6) SUITE COMPLETE UNIQUEMENT en validation finale."
     }
    ],
-   "suivant": "c5",
-   "titre": "Verifier les tests",
-   "type": "action"
+   "suivant": "c5"
   },
   "c5": {
    "indices": [
@@ -832,7 +836,7 @@
      "type": "outil"
     }
    ],
-   "message": "LIVRABLE MINERVE NON CONFORME : je RENVOIE le rapport a MINERVE pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 minerve <raison>. Elle corrige puis me reactive (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
+   "message": "LIVRABLE MINERVE NON CONFORME : je RENVOIE le rapport a MINERVE pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 minerve <raison>. Elle corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
    "titre": "FIN - Renvoyer rapport a minerve",
    "type": "fin"
   },
@@ -932,7 +936,7 @@
      "type": "outil"
     }
    ],
-   "message": "LIVRABLE ATHENA NON CONFORME : je RENVOIE le rapport a ATHENA pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 athena <raison>. Elle corrige puis me reactive (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
+   "message": "LIVRABLE ATHENA NON CONFORME : je RENVOIE le rapport a ATHENA pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 athena <raison>. Elle corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
    "titre": "FIN - Renvoyer rapport a athena",
    "type": "fin"
   },
@@ -945,7 +949,7 @@
      "type": "outil"
     }
    ],
-   "message": "LIVRABLE PROMETHEE NON CONFORME : je RENVOIE le rapport a PROMETHEE pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 promethee <raison>. Il corrige puis me reactive (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
+   "message": "LIVRABLE PROMETHEE NON CONFORME : je RENVOIE le rapport a PROMETHEE pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 promethee <raison>. Il corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
    "titre": "FIN - Renvoyer rapport a promethee",
    "type": "fin"
   }
@@ -960,6 +964,6 @@
   "case_depart": "c0",
   "description": "v0.4.8 : + indice outil c4 tester-protections (usage reel controle, garde-fou test-035)",
   "nom": "parcours-janus",
-  "version": "0.4.12"
+  "version": "0.4.18"
  }
 }

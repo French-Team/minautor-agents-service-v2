@@ -74,7 +74,7 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.4.12)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.4.18)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -208,6 +208,16 @@ python3 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-l
 | `--serial` | Passe serie simple sans barrieres (echelon de secours) |
 | `--rapport <fichier>` | Ecrire le rapport markdown (details des KO + tests les plus lents) |
 | `--relancer-ko` | Revalider UNIQUEMENT les tests KO du dernier run (run_id journalise dans registre-tests.jsonl) - OBLIGATOIRE avant toute relance de la suite complete apres un correctif |
+| `--relancer-ko --series X` | Revalider UNIQUEMENT les KO d une serie donnee (revalidation encore plus ciblee) |
+| `--ko reprendre` | MODE PAR DEFAUT : lance D ABORD la serie KO persistante (ko-tests.json) avec SA barriere - les tests qui passent sortent du fichier et ne sont PAS relances dans leur serie d origine |
+| `--ko nouveau` | MODE BALAYAGE COMPLET (v0.6.0) : vide ko-tests.json puis lance TOUTES les series SANS arret pour collecter la TOTALITE des KO (bilan "BALAYAGE COMPLET") |
+| `--ko-puis-stop` | Avec `--ko reprendre` : valide UNIQUEMENT la serie KO puis s ARRETE. Serie KO verte = "SERIE KO VERTE = CONTROLE TERMINE" (plus de "validation finale requise") - la suite complete finale n est relancee que si un code partage a ete touche |
+| `--etat-ko` | Afficher la serie KO persistante (ko-tests.json) puis quitter sans lancer |
+| `--tags <t1,t2>` | Ne lancer que les tests portant ces tags (bloc Tags: de la docstring) - ciblage fin |
+| `--categorie <nom>` | Lancer une categorie predefinie (securite, performance, agents, outils, conventions, protocoles...) definie dans categories-tests.json |
+| `--desactiver-categorie <nom>` / `--activer-categorie <nom>` | Desactiver/reactiver une categorie entiere (PERSISTANT, herite au prochain lancement) |
+| `--etat-categories` | Afficher les categories et leur etat actif/desactive sans lancer |
+| `--ordre-fixe` | Forcer l ordre historique des series (a,b,c,d,e) au lieu du classement dynamique par taux de KO (par defaut : les series qui produisent le plus de KO passent en premier) |
 | `--timeout-test <s>` | Timeout INTERNE par test (jamais de timeout exterieur - regle immuable) |
 | `--rebase-reference` | Rebaser la reference de temps apres une amelioration de performance |
 
@@ -224,9 +234,38 @@ python3 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-l
 2. **Je ne corrige jamais moi-meme** : je rapporte a Cerberus qui active l agent habilite (Morpheus pour les tests). Le correctif est applique hors de ma mission.
 3. **REVALIDATION CIBLEE (--relancer-ko)** : apres le retour du correctif, je lance `--relancer-ko` : l outil deduit la liste des tests KO du dernier run (champ run_id de registre-tests.jsonl) et ne relance QUE ceux-la - quelques secondes au lieu de ~90s. Si encore KO : retour etape 2.
 4. **VALIDATION DE LA SERIE (--series X)** : quand --relancer-ko est 100% vert, je valide la serie concernee par le KO (`--series X`) : elle doit etre 100% verte pour franchir la barriere.
-5. **SUITE COMPLETE EN DERNIER** : SEULEMENT quand toutes les series sont validees separement, je lance la suite complete. Le cycle est : barriere STOP -> rapport -> correctif -> --relancer-ko -> --series X -> suite complete.
+5. **SUITE COMPLETE CONDITIONNELLE** : la suite complete finale n est relancee que SI le correctif a touche du code partage (outil/carte pinne par plusieurs tests) - sinon, la serie KO verte suffit (voir WORKFLOW CYCLE KO v0.6.0 ci-dessous). Le cycle est : balayage (--ko nouveau) -> correctif -> --ko reprendre --ko-puis-stop -> suite complete seulement si code partage.
 
 > **Interdit** : relancer la suite complete apres un correctif NON confirme (c est le comportement qui perdait ~90s a chaque KO). La revalidation ciblee est la SEULE voie de retour apres un correctif.
+
+### WORKFLOW CYCLE KO (v0.6.0, demande utilisateur 2026-08-17)
+
+> Le cycle KO en 2 passes : la passe 1 balaye TOUT pour collecter la TOTALITE des KO, la passe 2 ne revalide QUE la serie KO. La suite complete finale n est relancee que si un correctif a touche du code partage.
+
+1. **PASSE 1 - BALAYAGE (--ko nouveau)** : je lance `--ko nouveau` : la suite vide ko-tests.json puis passe TOUTES les series SANS s arreter (pas de STOP au premier KO), collecte la **totalite des KO** dans ko-tests.json, bilan `BALAYAGE COMPLET : X OK / Y KO`.
+2. **CONSTATER (--etat-ko)** : j affiche la serie KO persistante pour savoir exactement quoi revalider, puis je rapporte a Cerberus qui active les agents habilites pour corriger.
+3. **PASSE 2 - REVALIDATION CIBLEE (--ko reprendre --ko-puis-stop)** : apres le retour des correctifs, je relance `--ko reprendre --ko-puis-stop` : la suite valide UNIQUEMENT la serie KO. Un test qui passe SORT de ko-tests.json et n est PAS relance dans sa serie d origine (gain de temps direct).
+4. **SERIE KO VERTE = CONTROLE TERMINE** : quand la serie KO est 100% verte, le message est `SERIE KO VERTE = CONTROLE TERMINE` - le controle est termine.
+5. **SUITE COMPLETE CONDITIONNELLE** : je ne relance la suite complete que SI le correctif a touche du code partage (outil ou carte pinne par plusieurs tests) - c est MA decision de Janus, pour la garantie anti-cascade. Sinon, les series deja vertes ne sont PAS relancees (elles n avaient pas de KO).
+
+> **Choix par mission** : si Janus travaille sur UNE zone precise (ex : conventions), il peut cibler `--tags conventions` ou `--profil conventions` au lieu de tout lancer - les categories/tags evoluent avec le projet (categories-tests.json).
+
+### WORKFLOW COMPOSITION CIBLEE (immuable, demande utilisateur 2026-08-17)
+
+> **REGLE** : je ne lance JAMAIS la suite complete par reflexe. Je compose MON lancement avec SEULEMENT les tests utiles au fichier que je controle, et je desactive les inutiles pour alleger le temps total. La suite complete n est reservee qu a la VALIDATION FINALE de la mission.
+
+1. **IDENTIFIER les fichiers modifies** de la mission (le rapport ou la mission me les donne).
+2. **CHOISIR le mode le plus leger adapte** :
+   - `--fichiers chemin1,chemin2` : deduction AUTOMATIQUE des profils a partir des fichiers modifies (mode profil - le choix par defaut) ;
+   - `--profil cartes,outils,tests,fiches-agents,docs,registre` : forcer un/des profils quand je connais le domaine ;
+   - `--tags <t1,t2>` / `--categorie <nom>` : ciblage FIN quand le besoin est precis (ex : conventions, securite) ;
+   - `--series a,c` : ne lancer que les series concernees.
+3. **DESACTIVER les tests non pertinents** : je consulte d abord `--etat-tests` / `--etat-categories`, puis je desactive ce qui ne sert pas au controle (`--desactiver <nums>` / `--desactiver-categorie <nom>`, PERSISTANT). Objectif : ne pas payer le temps des tests sans rapport avec ma zone.
+4. **LANCER les series concernees** et les valider 100% vertes (barrieres).
+5. **REACTIVER en fin de mission** : `--activer <nums>` / `--activer-categorie <nom>` pour rendre les tests desactives a la suite complete - SAUF si la desactivation est voulue durablement (decision documentee).
+6. **SUITE COMPLETE CONDITIONNELLE** : une fois les series ciblees 100% vertes et les tests reactives, la suite complete finale n est relancee que SI un code partage a ete touche (outil/carte pinne par plusieurs tests) - sinon la serie KO verte suffit (voir WORKFLOW CYCLE KO v0.6.0).
+
+> **Interdit** : lancer la suite complete (86 tests, ~135s) pour un controle de quelques fichiers. La composition ciblee (profils/tags/desactivation) reduit le controle a quelques secondes.
 
 ### Journalisation
 

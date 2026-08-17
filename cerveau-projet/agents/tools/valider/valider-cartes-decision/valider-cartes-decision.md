@@ -7,7 +7,7 @@ identite:
 ---
 # valider-cartes-decision
 
-**Version :** 0.4.1
+**Version :** 0.4.2
 **Statut :** prepare
 **Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-cartes-decision/`
@@ -88,12 +88,18 @@ Le `.sh` est un wrapper : il transmet les arguments au `.py` (parite stricte).
 [ ] chaque branche.vers pointe vers une case existante
 ```
 
-### 6. Case c0 de relecture (Pattern 4)
+### 6. Relecture obligatoire (Pattern 4 v2)
+
+Structure cible (migration 2026-08-16) : la lecture de la fiche est TOUJOURS
+obligatoire, puis la confirmation est posee.
 
 ```
-[ ] La case c0 existe et est de type question (relecture honnete)
-[ ] ATTENTION (non bloquant) si la question ne semble pas poser la relecture
+[ ] c0 = action RELIRE OBLIGATOIRE : corrections puis fiche (2 outils lire-fichier), suivant = c0b
+[ ] c0b = question confirmation : OUI -> c0c, NON -> c0 (relecture)
 ```
+
+Une carte avec l ancienne structure (c0 question "EN MEMOIRE" avec OUI -> c0c)
+est NON CONFORME : elle permettait de contourner la lecture.
 
 ### 7. Garde-fou : AUCUN SUIVANT MORT (v0.3.2)
 
@@ -168,8 +174,8 @@ coherente avec le parcours :
    [OK] 41 cases, tous types valides
 5. References (suivant + branches.vers)
    [OK] Toutes les references pointent vers des cases existantes
-6. Case c0 de relecture honnete (Pattern 4)
-   [OK] c0 est une question de relecture
+6. Relecture obligatoire (c0 action RELIRE + c0b confirmation)
+   [OK] c0 est une action RELIRE OBLIGATOIRE, c0b une question de confirmation
 7. Garde-fou suivant mort (fin avec suivant / branches + suivant)
    [OK] Aucun suivant mort (0 fin avec suivant, 0 branches + suivant)
 8. Commande activer exacte dans les fins 'Activer X' (P8)
@@ -195,7 +201,7 @@ coherente avec le parcours :
 | case_depart introuvable | Verifier parcours.case_depart designe une case existante |
 | Type invalide | Utiliser question / indice / controle / fin / action |
 | Reference cassee | Corriger suivant ou branche.vers qui pointe vers une case absente |
-| Case c0 absente | Ajouter la question de relecture honnete en case c0 (Pattern 4) |
+| Case c0 absente | Ajouter c0 = action RELIRE OBLIGATOIRE (corrections puis fiche) -> c0b, c0b = question confirmation (OUI -> c0c, NON -> c0) |
 | Suivant mort : fin avec suivant | Retirer le champ suivant de la case fin (la navigation s'arrete deja a la fin) |
 | Suivant mort : branches + suivant | Retirer le champ suivant de la case (les branches priment dans guider-parcours) |
 | Fichier .md passe en --fichier | La cible est le parcours JSON, pas la fiche allegee |

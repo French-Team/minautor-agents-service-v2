@@ -29,6 +29,7 @@ Invariants verifies :
   5. Preuve negative : une copie de carte avec une case de lecon SANS outil
      est DETECTEE par le scan interne, puis SUPPRIMEE (0 residu).
   6. Normes : ASCII strict + LF pur (test + parcours).
+Tags: agents, parcours, lecons, garde-fou
 """
 
 import glob

@@ -1,4 +1,5 @@
 # editer-fichier-agents
+**Version** : 0.1.0-beta
 
 > Outil d'edition structuree des fiches des agents (.md) : manipule des LIGNES ou des
 > BLOCS delimites par titre markdown, avec supprimer/remplacer/ajouter et correcteur

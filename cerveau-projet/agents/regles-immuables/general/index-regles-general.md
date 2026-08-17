@@ -56,6 +56,7 @@ identite:
 | [protocole-sante-fichiers-agents/](protocole-sante-fichiers-agents/) | Sante periodique des fichiers agents (Janus) | ebauche |
 | [protocole-fin-mission/](protocole-fin-mission/) | Fin de mission : CHAQUE maillon documente SON controle (lecon + verdict) AVANT de transmettre (anti-derive bilans sans preuve) | ebauche |
 | [protocole-argus-contradictions/](protocole-argus-contradictions/) | Detection et signalement des contradictions (Argus) : 4 elements obligatoires (type, gravite, fichier+ligne, 2 sources croisees), cas types, preuve negative --fichier quand soupcon, cycle signalement -> agent habilite | ebauche |
+| [protocole-education-continue/](protocole-education-continue/) | Education continue des agents (Chiron) : re-eduer quand les outils/regles/protocoles changent. Analyse fiches/corrections/regles/cartes pour detecter les incoherences nuisant a l intelligence operationnelle | actif |
 | [protocole-verification-coherence/](protocole-verification-coherence/) | Verification de coherence des fichiers a compteurs/tables/badges (Themis, lecons re-audit README) | ebauche |
 
 ## Navigation

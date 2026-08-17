@@ -27,6 +27,7 @@ Cas couverts:
      corrections.md documentent les citations de la faute d origine)
   9. ASCII strict : 0 non-ASCII (test + fiche + parcours + outil)
   10. LF pur : 0 CRLF (test + fiche + parcours + outil)
+Tags: agents, hermes, garde-fou
 """
 import importlib.util
 import io
@@ -171,8 +172,8 @@ def main():
     parcours = sorted(_glob.glob(os.path.join(PROJECT_ROOT,
                                               "cerveau-projet", "agents", "*",
                                               "parcours", "parcours-*.json")))
-    verifier("4. 15 parcours existent (glob agents/*/parcours/)",
-             len(parcours) == 15, "nb=%d" % len(parcours))
+    verifier("4. 16 parcours existent (glob agents/*/parcours/)",
+             len(parcours) == 16, "nb=%d" % len(parcours))
     chrono_etape("4. 15 parcours", time.time() - t4)
 
     # 5. Outil au catalogue

@@ -25,6 +25,7 @@ Invariants verifies (pour chaque test-0XX) :
   6. Code retour fiable : sys.exit(main()) ou sys.exit(0/1)
   7. AUCUN marqueur [ECHEC] (ancien format, invisible pour le lanceur)
   8. Normes : ASCII strict (0 non-ASCII) + LF pur (0 CRLF) sur chaque test
+Tags: conventions, template, garde-fou
 """
 import importlib.util
 import io

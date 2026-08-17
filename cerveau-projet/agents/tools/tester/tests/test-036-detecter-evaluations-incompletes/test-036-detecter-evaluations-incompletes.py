@@ -20,6 +20,7 @@ Invariants verifies :
   4. --version affiche la version
   5. --rapport ecrit un rapport markdown
   6. Normes : ASCII strict + LF pur (outil + test)
+Tags: outils, detecter, garde-fou
 """
 import importlib.util
 import io

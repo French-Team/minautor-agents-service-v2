@@ -8,8 +8,9 @@
    "agent": "cerberus",
    "cid": "c0",
    "raison": "Case de relecture obligatoire (comportement anti-arret de Cerberus)",
-   "empreinte": "66334c8f855c42b627f70b95aad71a0b59047cad182cb39c25048dd8995936ff",
-   "modifie_le": "2026-08-15 16:40"
+   "empreinte": "058fdaada53e0435a121de174cc2501ed5357f84411465fb8b9012f176b70a97",
+   "modifie_le": "2026-08-16 21:21:12",
+   "raison_modification": "migration relecture obligatoire: c0 devient action RELIRE (structure validee utilisateur 2026-08-16)"
   },
   "cerberus.c0b": {
    "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
@@ -17,9 +18,9 @@
    "agent": "cerberus",
    "cid": "c0b",
    "raison": "RELIRE OBLIGATOIRE : corrections puis fiche (anti-arret)",
-   "empreinte": "f4c2625c8e5f29229c7a7da98fee7ee8cf25b4135ca223ab2e4b8784562cbfbe",
-   "modifie_le": "2026-08-16 18:11:16",
-   "raison_modification": "restauration du 2e lire-fichier (corrections + fiche) exigee par test-072 - le dedoublonnage etait un faux diagnostic Themis"
+   "empreinte": "7fab2187ce7e239c452a64662f260d1fd54f395e8f39a0cf399ad419e48527f4",
+   "modifie_le": "2026-08-16 21:21:12",
+   "raison_modification": "migration relecture obligatoire: c0b devient question confirmation OUI->c0c NON->c0 (structure validee utilisateur 2026-08-16)"
   },
   "cerberus.c10": {
    "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",

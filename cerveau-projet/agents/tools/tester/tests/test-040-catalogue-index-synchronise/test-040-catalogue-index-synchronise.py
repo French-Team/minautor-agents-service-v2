@@ -27,6 +27,7 @@ Invariants verifies :
   3. Chaque outil a son entree dans index-tools.md (backticks nom-outil
      ou chemin /nom-outil/)
   4. Normes : ASCII strict + LF pur (catalogue + index + test)
+Tags: outils, catalogue, garde-fou, anti-recurrence
 """
 import importlib.util
 import io

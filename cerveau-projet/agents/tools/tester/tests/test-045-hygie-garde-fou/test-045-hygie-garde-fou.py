@@ -27,6 +27,7 @@ Cas couverts:
   8. Le dossier snapshots/ existe
   9. ASCII strict : 0 non-ASCII (test + fiche + parcours)
   10. LF pur : 0 CRLF (test + fiche + parcours)
+Tags: agents, hygie, garde-fou
 """
 import importlib.util
 import io

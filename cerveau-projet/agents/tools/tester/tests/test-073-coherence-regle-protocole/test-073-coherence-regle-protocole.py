@@ -33,6 +33,7 @@ Invariants verifies :
   4. Preuve positive : la regle RELIRE de l etat reel est detectee avec
      l ecart c0c connu (flux tronque) - l audit tourne SANS erreur.
   5. Normes : ASCII strict + LF pur (test + outil).
+Tags: securite, protocole, coherence, garde-fou
 """
 
 import importlib.util

@@ -30,6 +30,7 @@ Cas couverts:
 
 Usage:
   python3 test-026-detecter-cablages-manquants-garde-fou.py
+Tags: agents, parcours, garde-fou, anti-recurrence
 """
 import importlib.util
 import io
@@ -159,8 +160,8 @@ def main():
              "v0.1.1" in r.stdout, r.stdout.strip())
 
     parcours = lister_parcours()
-    verifier("2. 15 parcours d agents trouves",
-             len(parcours) == 15, "nb=%d" % len(parcours))
+    verifier("2. 16 parcours d agents trouves",
+             len(parcours) == 16, "nb=%d" % len(parcours))
 
     # 3-7. Scan de chaque parcours : cumul des problemes bloquants
     total_orphelines = 0

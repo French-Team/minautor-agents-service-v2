@@ -3,7 +3,7 @@
 """
 test-081-serie-ko-garde-fou.py
 GARDE-FOU : la SERIE KO PRIORITAIRE du lanceur de non-regression
-(demande utilisateur 2026-08-16, v0.5.5) :
+(demande utilisateur 2026-08-16, v0.6.2) :
   - fichier persistant ko-tests.json (cree au premier lancement, gitignore)
   - option --ko <nouveau|reprendre> (defaut : reprendre) + --etat-ko
   - mode REPRENDRE : la serie KO (tests du fichier) se lance EN PREMIER avec
@@ -19,7 +19,7 @@ en premier), puis de relancer la suite quand tout est vert.
 
 Invariants verifies (fichier temp, jamais le vrai ko-tests.json) :
   1. --aide contient --ko et --etat-ko
-  2. --version = v0.5.5
+  2. --version = v0.6.2
   3. lire_ko_tests sur fichier absent -> []
   4. ecrire_ko_tests : filtre les noms test-0XX (dedoublonnage + tri)
   5. ecrire_ko_tests : cree le fichier (ko-tests.json) avec la cle ko
@@ -29,6 +29,7 @@ Invariants verifies (fichier temp, jamais le vrai ko-tests.json) :
   8. Le test reel relance par --ko reprendre passe et sort du fichier
   9. Le fichier temp est SUPPRIME en fin de test (0 trace)
  10. Normes : ASCII strict + LF pur (test + lanceur)
+Tags: performance, series, ko, garde-fou
 """
 import importlib.util
 import io
@@ -54,7 +55,7 @@ CHRONO_ACTIF = True
 ETAPES = []
 NB_OK = 0
 NB_KO = 0
-NB_POINTS = 10
+NB_POINTS = 11
 
 
 def point_actif(numero):
@@ -114,7 +115,7 @@ def compter_non_ascii(chemin):
 
 
 def main():
-    print("=== Garde-fou : serie KO prioritaire du lanceur (v0.5.5) ===")
+    print("=== Garde-fou : serie KO prioritaire du lanceur (v0.6.2) ===")
 
     # 1. --aide contient --ko et --etat-ko
     t0 = time.monotonic()
@@ -124,11 +125,21 @@ def main():
              out[-80:])
     chrono_etape("1. --aide", t0)
 
-    # 2. --version = v0.5.5
+    # 1b. --aide decrit le cycle balayage + KO terminal (v0.6.2) : plus de
+    # "validation finale requise" en dur (la suite finale n est relancee que
+    # si un code partage a ete touche - decision Janus).
+    t0 = time.monotonic()
+    verifier("1b. --aide : BALAYAGE COMPLET + CONTROLE TERMINE (plus de validation finale requise)",
+             "BALAYAGE COMPLET" in out and "CONTROLE TERMINE" in out
+             and "VALIDATION FINALE REQUISE" not in out,
+             out[-80:])
+    chrono_etape("1b. --aide cycle", t0)
+
+    # 2. --version = v0.6.2
     t0 = time.monotonic()
     code, out = run([sys.executable, LANCEUR_PY, "--version"])
-    verifier("2. --version = v0.5.5",
-             code == 0 and "v0.5.5" in out, out[-60:])
+    verifier("2. --version = v0.6.2",
+             code == 0 and "v0.6.2" in out, out[-60:])
     chrono_etape("2. --version", t0)
 
     # 3. lire_ko_tests sur fichier absent -> []

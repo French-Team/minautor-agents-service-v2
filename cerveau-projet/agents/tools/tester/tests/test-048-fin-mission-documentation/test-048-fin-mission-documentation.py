@@ -27,6 +27,7 @@ Cas couverts:
      TERMINE) ne sont pas exigeantes de lecon
   7. ASCII strict : 0 non-ASCII (test + protocole + index)
   8. LF pur : 0 CRLF (test + protocole + index)
+Tags: agents, garde-fou, protocole
 """
 import importlib.util
 import io

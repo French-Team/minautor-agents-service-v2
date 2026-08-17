@@ -11,3 +11,6 @@ tmp-*/
 # seul le README reste versionne (documentation du dossier)
 workspace/*
 !workspace/README.md
+
+# __pycache__
+__pycache__/

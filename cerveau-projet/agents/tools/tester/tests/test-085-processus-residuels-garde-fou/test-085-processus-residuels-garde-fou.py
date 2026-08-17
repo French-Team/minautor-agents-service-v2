@@ -18,6 +18,7 @@
 Protections importees : tester-protections (lancer_protege).
 Options : --no-chrono, --isoler N, --desactiver 1,3,5.
 Normes : ASCII strict, LF pur.
+Tags: securite, processus, residus, garde-fou
 """
 import importlib.util
 import io
@@ -152,15 +153,18 @@ def lancer_residuel_preuve():
                 ["sh", "-c", "'%s' '%s' &" % (PYTHON, script)],
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=30)
         # Retrouver le pid par le nom du script dans la liste des processus.
+        # Retourne (pid, sortie) : la sortie du detecteur qui a vu le pid est
+        # reutilisee par le point 2 (verif PID + justification PROJET) - evite
+        # une 2e relance du detecteur + un sleep inutile.
         for _ in range(10):
             rc, sortie = lancer_detecteur()
             m = re.search(r"PID\s+(\d+).*residuel-preuve-085", sortie)
             if m:
-                return int(m.group(1))
+                return (int(m.group(1)), sortie)
             time.sleep(1)
-        return None
+        return (None, "")
     except Exception:
-        return None
+        return (None, "")
 
 
 def terminer_pid(pid):
@@ -210,9 +214,7 @@ def main():
     # --- 2. Injection d un vrai processus residuel puis detection PROJET
     if point_actif(2):
         t = time.monotonic()
-        _PID_PREUVE = lancer_residuel_preuve()
-        time.sleep(2)
-        rc, sortie = lancer_detecteur()
+        _PID_PREUVE, sortie = lancer_residuel_preuve()
         detecte = _PID_PREUVE is not None and str(_PID_PREUVE) in sortie
         justif_projet = ("PROJET" in sortie)
         verifier("2. processus injecte (pid=%s) detecte" % _PID_PREUVE,
@@ -236,8 +238,16 @@ def main():
         t = time.monotonic()
         if _PID_PREUVE:
             terminer_pid(_PID_PREUVE)
-            time.sleep(2)
+        # Poll court au lieu d un sleep fixe de 2s : taskkill /F (ou kill -9)
+        # est synchrone, le processus disparait presque immediatement. On
+        # re-scanne seulement si besoin (borne ~1.5s), plus rapide en nominal
+        # et aussi robuste qu un sleep fixe.
         rc, sortie = lancer_detecteur()
+        for _ in range(3):
+            if "AUCUN RESIDUEL" in sortie:
+                break
+            time.sleep(0.5)
+            rc, sortie = lancer_detecteur()
         propre_final = "AUCUN RESIDUEL" in sortie
         verifier("4. apres terminaison : AUCUN RESIDUEL", propre_final,
                  sortie[:200])

@@ -1,5 +1,7 @@
 # generateurs-amelioration
 
+**Version** : 2.1.0
+
 > Generateur d'amelioration et d'optimisation : pose des **listes de questions
 > par theme** avant toute mission d'amelioration (outil, combo, generateur,
 > carte de decision, case, regle...).

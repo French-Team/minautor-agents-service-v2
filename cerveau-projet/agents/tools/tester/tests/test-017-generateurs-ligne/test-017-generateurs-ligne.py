@@ -37,6 +37,7 @@ Cas couverts:
 
 Usage:
   python3 test-017-generateurs-ligne.py
+Tags: outils, generateurs, ligne
 """
 import importlib.util
 import io
@@ -298,18 +299,20 @@ def main():
                  r_wet.stdout.strip()[-120:])
 
         # 10. ajouter config-1 (wet) : deviation + rejoint
+        #    point d attache : c0 (action avec suivant, depuis la migration
+        #    relecture c0b est devenue une question sans suivant)
         dst10, _c10 = creer_parcours_test(tmp, "scenario-config1")
         d_base = json.load(io.open(dst10, encoding="utf-8"))
         r_c1 = run([PYTHON, OUTIL_PY, "ajouter", dst10, "--config", "config-1",
-                    "--point-attache", "c0b"], timeout=120)
+                    "--point-attache", "c0"], timeout=120)
         d_c1 = json.load(io.open(dst10, encoding="utf-8"))
         nouvelles1 = [k for k in d_c1["cases"] if k not in d_base["cases"]]
         verifier("10a. ajouter config-1 : 5 cases (decision + deviation + rejoint)",
                  r_c1.returncode == 0 and len(nouvelles1) == 5,
                  "nouvelles=%s | %s" % (nouvelles1, r_c1.stdout.strip()[-120:]))
-        verifier("10b. Suivant de c0b recable vers la 1re case de la ligne",
-                 d_c1["cases"]["c0b"].get("suivant") != "c0c",
-                 "suivant=%s" % d_c1["cases"]["c0b"].get("suivant"))
+        verifier("10b. Suivant de c0 recable vers la 1re case de la ligne",
+                 d_c1["cases"]["c0"].get("suivant") != "c0b",
+                 "suivant=%s" % d_c1["cases"]["c0"].get("suivant"))
         verifier("10c. config-1 : CONFORME",
                  "[OK] valider-case : conforme" in r_c1.stdout, r_c1.stdout.strip()[-120:])
 
@@ -331,7 +334,7 @@ def main():
         dst12, _c12 = creer_parcours_test(tmp, "scenario-config3")
         d_base = json.load(io.open(dst12, encoding="utf-8"))
         r_c3 = run([PYTHON, OUTIL_PY, "ajouter", dst12, "--config", "config-3",
-                    "--point-attache", "c0b"], timeout=120)
+                    "--point-attache", "c0"], timeout=120)
         d_c3 = json.load(io.open(dst12, encoding="utf-8"))
         nouvelles3 = [k for k in d_c3["cases"] if k not in d_base["cases"]]
         verifier("12a. ajouter config-3 : 2 cases (action + rejoint)",
@@ -353,7 +356,7 @@ def main():
 
         # 14. ajouter --force : passe outre
         r_force = run([PYTHON, OUTIL_PY, "ajouter", dst_bloc, "--config",
-                       "config-3", "--point-attache", "c0b", "--force"],
+                       "config-3", "--point-attache", "c0", "--force"],
                       timeout=120)
         verifier("14. --force passe outre le blocage carte",
                  r_force.returncode == 0 and "[OK]" in r_force.stdout,

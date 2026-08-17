@@ -6,12 +6,13 @@ identite:
 ---
 # Spec -- Generateurs-carte (squelette allege + delegation validateur-case)
 
-**Version** : 0.3.0
+**Version** : 0.3.1
 **Statut** : ebauche
 **Date creation** : 2026-08-09
 **Agent** : Vulcain (refonte etape 4 spec-refonte-cartes-decision)
 **Historique** :
 - v0.3.0 (refonte squelette allege + delegation validateur-case, 2026-08-09)
+- v0.3.1 (squelette c0/c0b aligne sur la relecture obligatoire : c0 action RELIRE -> c0b, c0b question confirmation OUI/NON, 2026-08-16)
 - v0.2.0 (generateurs-carte pre-existant, sans spec dediee)
 
 ---

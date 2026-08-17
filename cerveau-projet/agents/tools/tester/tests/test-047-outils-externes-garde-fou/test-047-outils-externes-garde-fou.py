@@ -31,6 +31,7 @@ Cas couverts:
   8. ASCII strict : 0 non-ASCII (test + outil py/sh/md)
   9. LF pur : 0 CRLF (test + outil py/sh/md)
   10. La REGLE ABSOLUE 4 est documentee dans les fichiers agents (anti-oubli)
+Tags: securite, outils-externes, garde-fou
 """
 import importlib.util
 import io

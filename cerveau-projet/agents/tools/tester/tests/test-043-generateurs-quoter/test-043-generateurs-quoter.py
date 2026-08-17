@@ -30,6 +30,7 @@ Invariants verifies :
   4. composer_commande produit une commande shlex.split-able avec une raison
      a apostrophe (argument intact)
   5. Normes : ASCII strict + LF pur (catalogue + generateurs-commande + test)
+Tags: outils, catalogue, generateurs, garde-fou
 """
 import importlib.util
 import io

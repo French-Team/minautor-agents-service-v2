@@ -1,6 +1,6 @@
 # proteger-verrou-habilitation
 
-**Version :** 0.2.1
+**Version :** 0.2.2
 **Statut :** ebauche
 **Categorie :** Proteger
 
@@ -36,6 +36,19 @@ agent habilite -> retour).
      habilites et la commande d activation ;
    - l outil n est assigne a aucune carte -> BLOQUE (code 1) avec alerte de
      declaration manquante.
+
+## Liste blanche developpeur (v0.2.2)
+
+Regle utilisateur 2026-08-16 : le CONSTRUCTEUR de l outil
+`tester-lancer-non-regression` (vulcain) doit pouvoir VALIDER ses
+modifications sans attendre janus. Il est donc autorise DIRECTEMENT dans le
+verrou, comme janus (qui est habilite via sa carte) :
+
+- couverture STRICTE : outil `tester-lancer-non-regression` + agent `vulcain`
+  uniquement. Tous les autres agents restent BLOQUES (carte = regle) ;
+- les essais de validation sont journalises au mode `verrou-dev` dans
+  registre-usages-outils.jsonl (trace distincte, ignoree par
+evaluer-processus, autorisee par test-037).
 
 ## Auto-journalisation (espionnage, v0.2.0)
 

@@ -60,6 +60,7 @@ INDICES FANTOMES (lecon c10c, 2026-08-15) :
   cause racine du KO test-016 (plus de 3 indices apres ajout d un doublon).
   La correction : type:'outil' ajoute a l indice d origine. Ce test verifie
   qu aucun fantome ne subsiste sur les 13 cartes.
+Tags: agents, parcours, garde-fou, anti-recurrence
 """
 import glob
 import importlib.util

@@ -11,7 +11,7 @@ existe et est a jour. Dry/wet pour valider l'ajout.
 | **Chemin** | `agents/tools/generateurs/generateurs-ligne/` |
 | **Python** | `generateurs-ligne.py` |
 | **Bash** | `generateurs-ligne.sh` (parite) |
-| **Version** | 0.3.1 |
+| **Version** | 0.3.0 |
 | **Statut** | ebauche |
 | **Spec** | `spec/spec-generateurs-ligne.001.01.ebauche.md` |
 | **Gabarits** | `gabarits-ligne.json` (configs externalisees) |

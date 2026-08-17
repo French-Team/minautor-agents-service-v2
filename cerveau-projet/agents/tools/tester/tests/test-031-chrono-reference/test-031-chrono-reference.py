@@ -21,7 +21,7 @@ Contexte (demande utilisateur 2026-08-13) :
     reference partielle fausserait la comparaison).
 
 Invariants verifies :
-  1. --version affiche v0.5.5
+  1. --version affiche v0.6.2
   2. Les options --seuil, --rebase-reference, --no-reference existent (--help)
   3. Le chrono est affiche (Temps ecoule) en fin de run cible
   4. Un run cible NE CREE PAS la reference si absente (preuve reelle)
@@ -29,6 +29,7 @@ Invariants verifies :
   6. Le code du lanceur contient la regle : reference uniquement pour le run
      complet sans filtre (reference_globale = not args.tests)
   7. Normes : ASCII strict + LF pur (test + lanceur + doc)
+Tags: performance, chrono, garde-fou
 """
 import importlib.util
 import io
@@ -150,8 +151,8 @@ def main():
     try:
         # 1. Version du lanceur (round 20 : v0.4.5 ordre dynamique par KO)
         r = run([PYTHON, LANCER, "--version"])
-        verifier("1. --version v0.5.5",
-                 r.returncode == 0 and "v0.5.5" in r.stdout,
+        verifier("1. --version v0.6.2",
+                 r.returncode == 0 and "v0.6.2" in r.stdout,
                  r.stdout.strip()[-60:])
 
         # 2. Options du round 11 presentes dans l aide
@@ -164,19 +165,19 @@ def main():
         verifier("2c. --no-reference present dans --help",
                  "--no-reference" in aide, "")
 
-        # 3. Le chrono est affiche a la fin d un run cible (Temps ecoule).
-        #    Le run cible (--tests) ne doit PAS toucher a la reference.
-        r = run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal",
-                 "--tests", "test-010"])
-        verifier("3. Le chrono est affiche (Temps ecoule)",
-                 "Temps ecoule" in r.stdout, r.stdout.strip()[-120:])
-
-        # 4. Un run cible ne cree PAS la reference si absente.
+        # 3+4. Fusion 2026-08-17 (goulot de la suite) : les points 3 (chrono
+        #      affiche) et 4 (reference non creee si absente) partageaient le
+        #      MEME run cible (--tests test-010) - deux relances identiques.
+        #      Un seul run suffit : il verifie les deux invariants (5 -> 4
+        #      lancements du lanceur). Le run cible ne touche JAMAIS a la
+        #      reference (reference_globale = not args.tests).
         sauvee = lire_fichier(REFERENCE)
         if sauvee is not None:
             os.remove(REFERENCE)
         r = run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal",
                  "--tests", "test-010"])
+        verifier("3. Le chrono est affiche (Temps ecoule)",
+                 "Temps ecoule" in r.stdout, r.stdout.strip()[-120:])
         creee = os.path.isfile(REFERENCE)
         verifier("4. Run cible : la reference absente n est PAS creee",
                  not creee, "creee=%s" % creee)

@@ -18,7 +18,7 @@ Contexte (demande utilisateur 2026-08-13) :
     temp unique - un Popen(stdout=PIPE) non lu se bloque au-dela de 64 Ko.
 
 Invariants verifies :
-  1. --version affiche v0.5.5
+  1. --version affiche v0.6.2
   2. Le mode par defaut utilise le pool (Pool de workers dans la sortie)
   3. --serial ou --workers 1 force le mode serie (pas de Pool)
   4. GARDE_FOUS_GLOBAUX identifie test-023/024/025/027 dans le code
@@ -27,6 +27,7 @@ Invariants verifies :
   7. Preuve de gain : un sous-ensemble en pool est plus rapide ou egal au
      mode serie (seuil large, tolerance machine)
   8. Normes : ASCII strict + LF pur (test + lanceur)
+Tags: performance, pool, workers, garde-fou
 """
 import importlib.util
 import io
@@ -139,8 +140,8 @@ def main():
     try:
         # 1. Version du lanceur (round 20 : v0.4.5 ordre dynamique par KO)
         r = run([PYTHON, LANCER, "--version"])
-        verifier("1. --version v0.5.5",
-                 r.returncode == 0 and "v0.5.5" in r.stdout,
+        verifier("1. --version v0.6.2",
+                 r.returncode == 0 and "v0.6.2" in r.stdout,
                  r.stdout.strip()[-60:])
 
         # 2. Le mode par defaut utilise les BARRIERES (filtre 1 test).
@@ -182,16 +183,13 @@ def main():
                  "--workers" in (r.stdout + r.stderr), "")
 
         # 7. Preuve de gain : sous-ensemble en pool <= serie. OPTIMISE
-        #    2026-08-15 (goulot de la suite) : le sous-ensemble etait
-        #    test-001..008 (~20.8s en serie + ~15s en pool = ~36s sur les
-        #    38.7s du test). Reduit a 4 tests (test-001/002/003/004) pour
-        #    ~19s, puis 2026-08-16 (diagnostic performance Janus/Vulcain)
-        #    a 2 tests (test-003,test-029) : le LONG test-003 (~7.5s) suffit
-        #    a demontrer le benefice du pool (serie ~7.6s, pool ~7.5s,
-        #    ~15s au lieu de ~21s). Seuil large (2.5x) pour absorber la
+        #    2026-08-16 (round performance) : test-003 (~6.8s) etait le seul
+        #    test lent du sous-ensemble ; remplace par test-001 (~1.5s) qui
+        #    suffit a montrer le gain du pool face a test-029 (~1.2s) :
+        #    serie ~2.7s, pool ~1.6s. Seuil large (2.5x) pour absorber la
         #    variabilite machine : on verifie que le pool n est PAS plus
         #    lent que le serie x 2.5.
-        subset = "test-003,test-029"
+        subset = "test-001,test-029"
         t0 = time.time()
         run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal", "--tests", subset])
         duree_serie = time.time() - t0

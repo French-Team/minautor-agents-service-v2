@@ -28,6 +28,7 @@ Cas couverts:
 
 Usage:
   python3 test-015-valider-case-garde-fou.py
+Tags: outils, parcours, valider, anti-recurrence
 """
 import importlib.util
 import io

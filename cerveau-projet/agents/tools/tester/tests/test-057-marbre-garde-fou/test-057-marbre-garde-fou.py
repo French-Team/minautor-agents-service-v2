@@ -35,6 +35,7 @@ Invariants verifies :
       editer-parcours (preuve negative avec restauration via git)
   13. ANTI-CONTOURNEMENT : --modifier-case (remplacer le contenu d une case
       SANS ecriture directe) fonctionne en dry-run
+Tags: securite, marbre, anti-contournement, garde-fou
 """
 import glob
 import importlib.util

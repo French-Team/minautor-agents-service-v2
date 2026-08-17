@@ -43,6 +43,9 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `analyser-performance-tests` | Analyser la performance des tests (dernier run) | [analyser/analyser-performance-tests/](analyser/analyser-performance-tests/) |
 | `analyser-tokens` | Mesurer les tokens de la session (envoyes/recus/encombrement) | [analyser/analyser-tokens/](analyser/analyser-tokens/) |
 | `analyser-noms-maj` | Analyser la casse et la forme des noms references (orphelins, erreurs min/MAJ) dans registre, historique, catalogue, index | [analyser/analyser-noms-maj/](analyser/analyser-noms-maj/) |
+| `analyser-workers` | Etude d echelle : temps de la suite a differents nombres de workers paralleles (optimum reel) | [analyser/analyser-workers/](analyser/analyser-workers/) |
+| `analyser-fonctions` | Profiler un script (cProfile) et afficher les fonctions les plus couteuses | [analyser/analyser-fonctions/](analyser/analyser-fonctions/) |
+| `analyser-round` | Resumer l activite d un round (agents actives, outils utilises, tests lances) | [analyser/analyser-round/](analyser/analyser-round/) |
 
 ### Cartographier
 
@@ -87,6 +90,12 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `condenser-fichier` | Condenser les fichiers markdown | [condenser/condenser-fichier/](condenser/condenser-fichier/) |
+
+### Configurer
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `configurer-environnement` | Generer la configuration d environnement adaptative (workers, timeouts) a partir des ressources reelles | [configurer/configurer-environnement/](configurer/configurer-environnement/) |
 
 ### Copier
 
@@ -149,6 +158,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-contradictions` | Croiser les sources (cases, regles, protocoles, git log --all) pour detecter les contradictions - outil d Argus, rapport classe par gravite | [detecter/detecter-contradictions/](detecter/detecter-contradictions/) |
 | `detecter-troncatures` | Detecter les elements tronques donc illisibles : fichiers trop longs a lire (binaires ignores), blocs non fermes (JSON/Python/bash invalides), marqueurs de troncature (zones de documentation ignorees), option --exclure | [detecter/detecter-troncatures/](detecter/detecter-troncatures/) |
 | `detecter-processus-residuels` | Detecter les processus residuels (python/node/bash) dont la commande reference le projet ou orphelins (parent mort), liste blanche protegee (freebuff, unsloth) | [detecter/detecter-processus-residuels/](detecter/detecter-processus-residuels/) |
+| `detecter-recherches-obsoletes` | Detecter les recherches-web obsoletes (age > 30 jours ou date invalidite passee) pour garantir des souvenirs vrais et a jour | [detecter/detecter-recherches-obsoletes/](detecter/detecter-recherches-obsoletes/) |
 
 ### Ecrire
 
@@ -249,6 +259,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `migrer-identite` | Migrer les fichiers vers le schema hybride v0.2.0 (bloc identite type/appartient_a/commun), idempotent avec --dry-run | [migrer/migrer-identite/](migrer/migrer-identite/) |
+| `migrer-cases-relecture` | Migrer les parcours vers la relecture obligatoire (c0 action RELIRE + c0b question confirmation) | [migrer/migrer-cases-relecture/](migrer/migrer-cases-relecture/) |
 
 ### Mettre a jour
 
@@ -295,6 +306,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `rechercher-templates` | Rechercher les fichiers template du projet | [rechercher/rechercher-templates/](rechercher/rechercher-templates/) |
 | `rechercher-texte` | Rechercher un pattern dans un fichier (grep generique) | [rechercher/rechercher-texte/](rechercher/rechercher-texte/) |
 | `rechercher-todos` | Rechercher les todos existants (anti-doublon) | [rechercher/rechercher-todos/](rechercher/rechercher-todos/) |
+| `rechercher-web` | Recherche web et lecture de page (acces web reel des agents, garantit des souvenirs vrais et a jour) | [rechercher/rechercher-web/](rechercher/rechercher-web/) |
 | `rechercher-extension-fichier` | Extraire l'extension d'un fichier (ou verifier une extension) | [rechercher/rechercher-extension-fichier/](rechercher/rechercher-extension-fichier/) |
 
 ### Remplacer
@@ -425,6 +437,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 ---
 
 | `tester-lancer-non-regression` | Lancer tous les tests formels avec bilan OK/KO et registre protege | [tester/tester-lancer-non-regression/](tester/tester-lancer-non-regression/) |
+| `recommander-series` | Croiser tags + durees pour recommander une reorganisation des series de la non-regression | [tester/recommander-series/](tester/recommander-series/) |
 
 ### Tests (tester/tests/)
 
@@ -482,17 +495,18 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Categorie | Nombre d'outils |
 |---|---|
 | Ajouter | 1 |
-| Analyser | 6 |
+| Analyser | 9 |
 | Cartographier | 1 |
 | Changer | 1 |
 | Combos | 21 |
 | Condenser | 1 |
+| Configurer | 1 |
 | Copier | 2 |
 | Corriger | 7 |
 | Creer | 4 |
 | Decomposer | 1 |
 | Deplacer | 1 |
-| Detecter | 15 |
+| Detecter | 18 |
 | Ecrire | 1 |
 | Editer | 3 |
 | Enregistrer | 1 |
@@ -503,20 +517,21 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Inserer | 1 |
 | Lire | 4 |
 | Lister | 8 |
-| Migrer | 1 |
+| Migrer | 2 |
 | Mettre a jour | 2 |
 | Activer | 1 |
 | Nettoyer | 4 |
 | Purifier | 1 |
 | Proteger | 3 |
-| Rechercher | 10 |
+| Rechercher | 11 |
 | Remplacer | 1 |
 | Supprimer | 3 |
 | Valider | 13 |
 | Verifier | 6 |
-| Protections | 5 |
-| Tests | 39 |
-| **Total** | **187** |
+| Executer | 1 |
+| Protections | 6 |
+| Tests | 41 |
+| **Total** | **199** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

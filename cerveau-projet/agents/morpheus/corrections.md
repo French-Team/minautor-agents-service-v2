@@ -3616,3 +3616,381 @@ test-042 4/4, test-043 10/10, test-085 8/8.
 KO. Le bumper dry-run signale les incoherences.
 
 **APRES** : activer JANUS (non-regression complete 84 tests).
+## [LECON] 2026-08-16 -- ADAPTATION TESTS MIGRATION RELECTURE (Morpheus)
+
+**Contexte** : migration relecture obligatoire (Vulcain) : c0 devient action
+RELIRE (corrections puis fiche) -> c0b, c0b devient question confirmation
+(OUI -> c0c, NON -> c0). Versions des 15 parcours bumpees, valider-cartes
+v0.4.2, generateurs-carte v0.3.1, activer-agent-principal v0.5.9.
+
+**Tests adaptes** :
+1. test-072 : invariants inverses -- c0 doit etre ACTION avec titre RELIRE +
+   2 outils lire-fichier + suivant c0b ; c0b QUESTION avec OUI->c0c/NON->c0.
+   Preuve negative : copie avec l ANCIENNE structure (c0 question +
+   OUI -> c0c) DETECTEE puis supprimee. 10/10.
+2. test-013 (cerberus v0.5.1) : point 9 refondu -- c0b est une question de
+   confirmation qui S ARRETE (plus d enchaine automatique) ; avec OUI elle
+   enchaine c0c -> c1. 22/22.
+3. test-016 (buffy v0.4.10), test-005 (atlas v0.4.5 + 7 commandes portees par
+   c0 au lieu de c0b), test-011 (generateurs-carte v0.3.1), test-007/test-060
+   (catalogue 171), test-028 (specs alignees 0.5.9 / 0.3.1).
+
+**Lecon** :
+- Quand la structure d une case change (c0 question -> action), les tests qui
+  NAVIGUENT dedans (guider-parcours) changent de comportement : une case
+  question s arrete et pose la question, une case action enchaine. Toujours
+  tester la navigation reelle avant de figer l invariant.
+- Les commandes en dur d un parcours ne changent pas de NOMBRE lors d une
+  migration, elles changent de PORTEUR (c0b -> c0) : la relecture reste
+  documentee, mais sur la nouvelle case.
+
+## [LECON] 2026-08-16 -- CATEGORIES PAR TAGS + LISTE BLANCHE DEVELOPPEUR (Morpheus)
+
+**Contexte** : round categories (demande utilisateur) + autorisation speciale
+de vulcain pour tester la non-regression (demande utilisateur).
+
+**Ce qui a ete fait** :
+1. Tague les 85 tests (bloc 'Tags:' en docstring OU '# Tags:' en commentaire,
+   virgules, taxonomie categories-tests.json) + garde-fou test-087 (bloc Tags
+   obligatoire + preuve negative + normes) + ajout test-087 en serie e.
+2. Liste blanche developpeur : proteger-verrou-habilitation v0.2.2 autorise
+   vulcain sur tester-lancer-non-regression (comme janus via sa carte, mais
+   en cle directe dans le verrou, modele GARDIEN_TESTS morpheus). Les essais
+   sont journalises au mode 'verrou-dev' (trace distincte).
+3. Aligne les consommateurs : evaluer-processus ignore le mode verrou-dev ;
+   test-037 autorise l exception documentee ; test-056 preuves 3b/3c
+   (vulcain OUVERT, morpheus FERME).
+4. Corrige le KO pre-existant test-035 : recommander-series (outil du round
+   categories) declare au registre par vulcain mais absent de sa carte ->
+   indice outil branche dans c7b via editer-parcours (parcours v0.4.25,
+   fiche synchronisee).
+
+**Lecons** :
+- Le parseur du LANCEUR et celui du GARDE-FOU doivent partager le MEME format
+  de lecture des Tags (docstring ET commentaire). La divergence (lanceur ne
+  lisant que 'Tags:' nu, garde-fou acceptant aussi '# Tags:') a failli passer
+  inapercue : test-087 validait un format que le lanceur ne lisait pas. Tout
+  nouveau format lu par un outil doit etre verifie par le test qui le verifie.
+- Tout outil declare au registre doit avoir son indice dans la carte de
+  l agent (OUTIL_HORS_CARTE sinon). Les outils crees en cours de round
+  doivent etre branches avant la declaration.
+- test-032 affiche 3 KO quand la session n est pas janus : c est l artefact
+  du verrou (identite reelle) - attendu, reverdi quand janus lance la suite.
+- Bumper : toute modif d outil (meme une docstring ou une regex) exige le
+  bump de TOUS les pinneurs compagnons (py/md/catalogue/tests).
+
+**Verifications** : test-056 17/17, test-037 6/6, test-035 10/10,
+test-087 8/8, test-064 7/7, test-007 15/15, bumper 0 incoherent, normes 0/0.
+
+## [LECON] 2026-08-16 -- KO VERSIONS LANCEUR : PINS PERIMES EN CASCADE (Morpheus)
+
+**Contexte** : KO test-066 (non-regression, barriere E) - pin de transition
+"0.5.5 -> 0.5.6" perime apres le bump du lanceur en 0.5.7.
+
+**Ce qui a ete fait** :
+1. test-066 point 4 rendu DYNAMIQUE : lit la VERSION courante du lanceur
+   (regex dans tester-lancer-non-regression.py), calcule la cible patch+1,
+   lance --nouvelle <cible>, attend "<courante> -> <cible>". Plus jamais de
+   pin de transition perime.
+2. DECOUVERTE EN CASCADE : 7 autres tests pinnaient encore v0.5.5 du lanceur
+   (test-027, 031, 051, 062, 074, 075, 081) - perimes depuis le bump 0.5.6
+   deja. Tous passes a 0.5.7 (test-087 mention v0.5.6 -> v0.5.7).
+3. Les KOs restants en session morpheus (test-027 5/6a/6b/7/8, test-031 3,
+   test-051 4) sont des ARTEFACTS du verrou d identite reelle (session !=
+   janus) : ils passent quand janus lance la suite.
+
+**Lecons** :
+- Le bumper ne detecte que les pinneurs de la version COURANTE : un test qui
+  pinne une version en RETARD de 2 bumps (0.5.5 alors que l outil est 0.5.7)
+  ou une transition passee n est JAMAIS signale. Apres CHAQUE bump, il faut
+  grep -rn '<ancienne-version>' sur les tests pour trouver les pins en
+  retard, pas seulement suivre les compagnons du bumper.
+- La solution robuste pour les pins de version : lire la version DYNAMIQUEMENT
+  dans le source de l outil (test-066) - le pin statique est une bombe a
+  retardement a chaque bump.
+- Verifier TOUS les tests qui referencent l outil bumpe, pas seulement les
+  2-3 connus (les 5 KO de ce round viennent d adaptations ratees).
+
+**Verifications** : test-066 11/11, test-027/031/051/062/074/075/081 verts
+(hors artefacts session), bumper 0 incoherent, normes 0/0.
+
+## [LECON] 2026-08-16 -- NOUVEAU TEST = 3 CONFORMITES OBLIGATOIRES (Morpheus)
+
+**Contexte** : 2 KO apres l ajout de test-087 (85e test) : test-030
+(protections non importees) et test-063 (test absent des profils).
+
+**Ce qui a ete fait** : test-087 a recu le bloc standard de protections
+(chargeur local charger_protections + PROTECTIONS = charger_protections(),
+modele test-066) + ajout au profil "outils" de profils-tests.json.
+
+**Lecons** :
+- Un NOUVEAU test doit verifier 3 conformites AVANT d etre declare dans la
+  SERIES : (1) importer le bloc protections (test-030), (2) etre couvert par
+  un profil (test-063), (3) avoir son bloc Tags (test-087 lui-meme). Les
+  deux premieres n apparaissent qu a la suite complete : il faut les verifier
+  en local avant d ajouter le test.
+- Le garde-fou test-063 a un angle mort : il ne verifie que la couverture des
+  tests REELS par les profils, pas que les nouveaux tests soient ajoutes aux
+  profils. Refaire tourner test-063 apres chaque nouveau test est la regle.
+
+
+## [LECON] 2026-08-16 -- ADAPTATION TESTS OUTILS WEB + GARDE-FOU TEST-088 (Morpheus)
+
+**Contexte** : suite chaine outils web (Vulcain a cree rechercher-web +
+detecter-recherches-obsoletes, catalogue 172->174, index-tools 195 ; Buffy a
+branche la carte atlas 0.4.6). Janus a detecte le premier KO via la barriere
+serie KO (test-024, 0.82s de STOP au lieu de ~90s - le workflow marche).
+
+**Adapte** (pins de compteurs perimes) :
+- test-024 : catalogue 172 -> 174 (point 8)
+- test-007 : catalogue 172 -> 174 (point 13) + index-tools Total 187 -> 195
+- test-060 : catalogue 172 -> 174 + Total 187 -> 195
+- test-079 : catalogue 172 -> 174 + Total 187 -> 195
+- test-005 : parcours-atlas 0.4.5 -> 0.4.6 (libelle + COMPARAISON reelle,
+  pas seulement le texte) + commandes en dur 7 -> 9 (c12/c13 ajoutees)
+- index-tools.md : tableau Statistiques REGENERE (etait en retard : 187 au
+  lieu de 195 ; les sections Protections (tester/) et Tests (tester/tests/)
+  portent des parentheses - le regex doit les capturer, ex "### Protections
+  (tester/)")
+
+**Cree** : garde-fou test-088-recherches-web-garde-fou (serie e + profil
+outils) : header yaml complet (date + source_principale + statut), fraicheur
+<= 30 jours pour validee, index a jour, outil detecter present, preuve
+negative (template placeholder date detecte puis copie supprimee), normes
+ASCII + LF. Importe les protections (bloc standard test-030).
+
+**Bumpe** : lanceur 0.5.7 -> 0.5.8 (serie e + test-088) + 7 tests pinneurs
+(024/027/031/032/051/062/074) + historique .md. test-066 (bumper compagnons)
+est deja DYNAMIQUE (cible patch+1) - plus aucun pin de transition perime.
+
+**Lecons** :
+- Adapter un test = changer le LIBELLE ET la COMPARAISON (test-005 point 17
+  comparait encore == "0.4.5" alors que le libelle disait 0.4.6 - le KO
+  affichait "0.4.6 | 0.4.6" ce qui est trompeur : toujours verifier la
+  condition, pas seulement le texte).
+- Les compteurs d index-tools (tableau Statistiques) peuvent etre en retard
+  de plusieurs rounds : regenerer depuis les sections reelles au lieu de
+  patcher ligne a ligne.
+- Les KO restants en direct (session morpheus) sont des artefacts du verrou :
+  le lanceur exige la session janus. Ne pas les "corriger" - ils passent
+  quand Janus lance avec SA session.
+
+## [LECON] 2026-08-16 -- GARDE-FOU REACTIVER ETENDU A TOUTES LES CASES (Morpheus)
+
+**Contexte** : demande utilisateur (le garde-fou anti-auto-reactivation ne
+fonctionnait pas : test-070 v1 ne scannait QUE les cases de type 'fin', les
+mentions fautives dans les cases action/regle echappaient au scan).
+
+**Correctifs** :
+- test-070 v2 : scan de TOUTES les cases des 15 parcours. Nouvelles
+  detections : REACTIVER_NON_CERBERUS (commande reactiver cible != cerberus,
+  car reactiver ramene TOUJOURS a Cerberus) et FORME_FAUTIVE (formes
+  conjuguees 'me/le/la reactiverai' et present 'me/le/la REACTIVE' visant
+  un agent autre que Cerberus), avec exceptions correctes ('PAS reactiver',
+  'reactiver ramene toujours a Cerberus', '(commande activer)').
+- Le scan etendu a detecte 3 cas majeurs restants (buffy c39, cerberus
+  c15c, janus c32) + 3 mineurs (janus cT8/cT9/cT10) -> corriges par Buffy
+  (bumps buffy 0.4.12, cerberus 0.5.3, janus 0.4.15).
+- Pins de version adaptes : test-005 (atlas 0.4.7), test-013 (cerberus
+  0.5.3), test-016 (buffy 0.4.12), test-004 (morpheus 0.4.12). Attention :
+  ne PAS confondre versions de PARCOURS et versions d'OUTILS (ex:
+  guider-parcours v0.5.1, combos-moteur v0.3.3, protocole-tests v0.3.4,
+  test-012/028/042/044 ne pinent pas les parcours).
+
+**Lecon** : un garde-fou qui scanne les cartes doit scanner TOUTES les
+cases, pas seulement les fins. Les formes PRESENT 'me REACTIVE' sont aussi
+fautives que les commandes. Verifier le contexte de chaque pin de version
+avant adaptation (parcours vs outil vs protocole vs historique).
+
+**Preuves** : test-070 11 OK/0 KO, test-004 16/16, test-005 28/0, test-013
+22/0, test-016 20/0, test-028 8/0, test-030 10/0, test-063 11/0, normes
+ASCII/LF 0 ecart sur les 5 tests modifies.
+
+
+## [LECON] 2026-08-17 -- PINS BUMPER v0.1.4 ADAPTES SANS CASCADE (Morpheus)
+
+**Contexte** : suite mission Vulcain (extension regex du bumper aux formats
+.md invisibles + bump 0.1.3 -> 0.1.4). Le bumper a signale lui-meme les 2
+fichiers compagnons pinant v0.1.3 (test-066 : 4 occurrences, test-067 : 8
+occurrences) - la mecanique compagnons du bumper fonctionne.
+
+**Lecon** : quand le bumper signale des compagnons, les adapter immediatement
+(le bumper detecte les formats de version multiples et les pins perimes) :
+- test-066 : 11/11 OK apres adaptation (il lance le bumper et verifie la
+  detection des compagnons).
+- test-067 : 8/8 OK - la PREUVE NEGATIVE (injection d un ecart 9.9.9 dans la
+  doc du bumper elle-meme, detection KO, restauration) reste valide avec le
+  nouveau regex etendu : le champ standard '**Version** : 0.1.4' est bien
+  remplace et re-detecte.
+
+**Verifications** : les 2 tests verts, normes ASCII/LF 0/0, 0 residu.
+
+
+## [LECON] 2026-08-17 -- PIN COMBO 0.1.6 ADAPTE, SORTIE AVEC MESSAGES COMPATIBLE (Morpheus)
+
+**Contexte** : suite mission Vulcain (outils informationnels, template
+v0.3.0-beta). Les 5 outils critiques affichent desormais des MESSAGES POUR
+L AGENT en fin d action. Le seul pin de test reel : test-020 pinnait
+'combos-maj-readme-massive 0.1.5' (docstring + verification --version).
+
+**Lecon** : adapter les pins de version APRES le bump des outils (le bumper
+signale les compagnons). Le test-020 verifie la sortie --version par
+SOUS-CHAINE ('combos-maj-readme-massive 0.1.6' in stdout) : les nouveaux
+messages informationnels n interferent pas (pas de comparaison de sortie
+entiere). Verifie aussi : 46/46 OK, normes ASCII/LF 0/0.
+
+**Remarque** : les futurs tests d outils modifies doivent verifier par
+sous-chaine (jamais sortie entiere) car la section MESSAGES POUR L AGENT
+s ajoute desormais en fin de sortie reelle.
+
+
+## [LECON] 2026-08-17 -- PIN EDITER-PARCOURS 0.1.4 ADAPTE (Morpheus)
+
+**Contexte** : suite mission outils informationnels (Vulcain) - editer-parcours
+bumpe 0.1.3 -> 0.1.4. La non-regression (Janus) a detecte le pin perime dans
+test-024 (point 5, --version). Adaptation : v0.1.3 -> v0.1.4 (1 ligne).
+Verification : 16/16 OK, normes ASCII/LF 0/0.
+
+**Lecon** : les pins de version d outils dans les tests se periment a CHAQUE
+bump - le bumper les signale comme compagnons. La mecanique KO (--relancer-ko)
+permet de revalider en cible apres chaque correctif.
+
+## [LECON] 2026-08-17 -- PINS 0.5.9 + VERROU D IDENTITE REELLE (Morpheus)
+
+**Contexte** : apres la mission Vulcain (--ko-puis-stop, lanceur v0.5.9), j ai
+adapte les 5 tests qui pinent la version du lanceur (0.5.8 -> 0.5.9) :
+test-024 (2 remplacements), test-051 (4), test-062 (7), test-074 (7),
+test-075 (7). Resultat : test-024/062/066/074/075 VERT, y compris test-066
+dont les 3 KO precedents venaient des compagnons 0.5.9 introuvables tant que
+les pins etaient a 0.5.8 (le bumper signale les compagnons, il ne les corrige
+pas - c est la mission Morpheus).
+
+**Lecon - verrou d identite reelle et tests qui lancent le lanceur** : le
+point 4 de test-051 lance `--series c --agent janus --journal --tests
+test-001` pour prouver la journalisation registre-tests. Le verrou v0.2.0
+verifie l identite REELLE de la session (AGENTS.md) contre --agent : quand un
+autre agent execute test-051, la commande est BLOQUEE (usurpation), aucune
+entree n est journalisee -> test-051 KO (avant=apres). Ce n est PAS un KO du
+test : il ne peut etre vert QUE quand JANUS lance la suite (sa session est
+l identite reelle). LECON : un test qui lance le lanceur avec --agent janus ne
+peut etre valide que par Janus - ne pas chercher a le reverdir soi-meme, le
+rapporter comme KO attendu en attendant la validation Janus.
+
+## [LECON] 2026-08-17 -- PINS 0.5.9 (2E PASSAGE) : TEST-032 OUBLIE (Morpheus)
+
+**Contexte** : la barriere E a bloque sur test-032-pool-workers (KO decouvert
+par Janus) : ce test pinnait aussi --version v0.5.8, oublie de ma premiere
+liste (024/051/062/074/075). Pin adapte (3 occurrences). Les 3 KO restants
+sont le VERROU D IDENTITE REELLE : test-032 lance le lanceur avec --agent
+janus (5 occurrences, lignes 148-200) - bloquee tant que la session n est pas
+janus, sera verte quand Janus lancera la suite.
+
+**Lecon - verifier TOUS les pins avant de declarer la mission terminee** :
+j ai cherche les pins 0.5.8 avec un grep cible sur les 5 tests connus, mais
+pas sur la TOTALITE des tests de la serie E (test-032 etait hors liste).
+LECON : apres un bump d outil, chercher la version ANCIENNE dans TOUS les
+tests (grep recursif sur le dossier tests/), pas seulement dans les tests
+connus - sinon la barriere E redecouvre le KO et la chaine fait un aller-retour
+supplementaire (Janus -> Morpheus -> Janus).
+
+## [LECON] 2026-08-17 -- PINS 0.5.9 (3E PASSAGE) : LE GREP GLOBAL DES LE DEPART (Morpheus)
+
+**Contexte** : la barriere E a encore bloque (test-081 decouvert par Janus),
+puis un grep GLOBAL a revele 2 autres tests oublies (test-027, test-031). Au
+total, 9 tests pinnaient 0.5.8 (024, 051, 062, 074, 075, 032, 027, 031, 081) -
+ma premiere liste n en avait que 5. Pins restants adaptes (11 remplacements),
+test-081 vert. Les KO restants de test-027/031 sont le VERROU D IDENTITE
+REELLE (ils lancent le lanceur avec --agent janus) : verts uniquement par
+Janus.
+
+**Lecon - la liste des pins doit venir d un grep, pas de la memoire** : j ai
+donne a ma premiere mission une liste de 5 tests connus de memoire (024/051/
+062/074/075) - 4 tests pinnaient ailleurs (032, 027, 031, 081). Chaque
+omission coute un aller-retour Janus -> Morpheus -> Janus dans la chaine.
+LECON : APRES TOUT bump d outil, faire DES LE DEPART un grep recursif de
+l ANCIENNE version sur tout le dossier tests/ (et non seulement les tests
+connus), et adapter TOUT ce qui matche en une seule passe. Le verrou
+d identite reelle rend les KO partiels invisibles pour un agent non-habilite :
+seul Janus voit le vrai etat.
+
+## [LECON] 2026-08-17 -- CHIRON (16E AGENT) + 2 GARDE-FOUS RENFORCES (Morpheus)
+
+**Contexte** : creation de l agent Chiron (educateur). J ai adapte les tests qui
+pinnent le nombre de parcours (15 -> 16) et renforce 2 garde-fous identifies
+par l utilisateur : (1) "reactiver Cerberus" ecrit dans les instructions de
+mission au lieu de "activer Janus" ; (2) les agents creent des scripts Python
+pour ecrire les fichiers du cerveau au lieu d utiliser les outils.
+
+**Tests adaptes (16 parcours)** :
+- test-018 (compteur 16 + commande activer exacte dans c14 chiron)
+- test-026 (compteur 16), test-037 (compteur 16 + liste AGENTS + chiron),
+  test-046 (compteur 16)
+- test-071 (case lecon chiron c12 : ajout corriger-symboles)
+- test-072 (chiron c0 : 2 lire-fichier avec commandes exactes corrections/fiche)
+
+**Garde-fou 1 renforce (test-070, anti-auto-reactivation)** : nouveau check 5b
+"les fins 'FIN - Reactiver Cerberus' n existent que chez janus" (REGLE
+IMMUABLE JANUS : les agents cerveau-projet activent JANUS en fin). Preuve
+negative 6d : une fin Reactiver injectee dans une copie buffy est DETECTEE.
+
+**Garde-fou 2 renforce (test-024, anti-scripts-temporaires)** : nouveau check
+15 "0 parcours ordonnant de creer/ecrire un script pour un fichier du cerveau"
+(REGLE ABSOLUE 4 : outils du cerveau uniquement). Les motifs "creer un script",
+"ecrire un script", "script temporaire pour ecrire/creer/modifier" sont
+detectes dans les indices des parcours.
+
+**Lecon - le verrou d identite reelle cache les KO partiels** : test-037 a une
+liste AGENTS FIXE (pas glob) - quand on ajoute un agent, il faut l ajouter a la
+liste, sinon len(signatures)==15 KO silencieux. Les tests qui verifient un
+nombre d agents doivent TOUS etre verifies (glob OU liste fixe) a chaque
+creation d agent.
+
+**Resultat** : les 9 tests passes (018/024/026/037/046/070/071/072/073),
+normes ASCII/LF 0/0 sur tous les fichiers modifies.
+
+
+## [LECON] 2026-08-17 -- PINS 0.6.0 CYCLE BALAYAGE + KO TERMINAL (Morpheus)
+
+**Contexte** : Vulcain a fait evoluer le lanceur v0.5.9 -> v0.6.0 (--ko
+nouveau = mode balayage complet, --ko-puis-stop = CONTROLE TERMINE au lieu de
+validation finale requise). J ai adapte les tests qui pinnent la version.
+
+**Corrections** :
+- grep GLOBAL de 0.5.9 des le depart (lecon du 3e passage) : 9 fichiers,
+  41 remplacements 0.5.9 -> 0.6.0 (test-024, 027, 031, 032, 051, 062, 074,
+  075, 081).
+- test-081 : ajout du point 1b (--aide contient BALAYAGE COMPLET + CONTROLE
+  TERMINE, plus de VALIDATION FINALE REQUISE) - NB_POINTS 10 -> 11.
+
+**Verifications** : test-081 11/11, test-024 17/17, test-062 11/11,
+test-074 8/8, test-075 11/11. Les tests qui lancent le lanceur avec
+--agent janus (027/031/032/051) ont des KO ATTENDUS hors session janus
+(verrou d identite) - ils passeront quand Janus lancera la suite.
+
+**Lecon Morpheus** : le grep global de la VERSION avant d adapter est la seule
+methode fiable (un pin rate = un aller-retour Janus supplementaire). Et les
+tests qui lancent le lanceur avec --agent janus ne peuvent etre VERTS qu en
+session janus : ne pas les "corriger", le verrou est volontaire.
+
+
+## [LECON] 2026-08-17 -- OPTIMISATION TEST-003 : SOUS-PROCESSUS REDONDANTS (Morpheus)
+
+**Contexte** : test-003-combos-creer (~7.85s) etait un des goulots restants,
+lance 2x dans test-032 (preuve de gain). analyser-fonctions a montre 0 CPU
+Python (le temps est en subprocess.run) : ~13 sous-processus x 3 combos = 39
+lancements, dont plusieurs redondants.
+
+**Corrections** (sans perte de couverture) :
+1. Point 6 (parite .py/.sh) relancait --liste et la navigation OUI alors que
+   les points 2 et 4 les avaient deja produits : reutilisation de liste_stdout
+   et nav_oui_stdout (-6 lancements).
+2. valider-nommage sur __file__ (le MEME fichier de test) etait appele 3x dans
+   la boucle : sorti de la boucle, execute 1x (-2 lancements).
+
+**Resultat** : test-003 7.85s -> 6.34s (-19%), 89/89 OK. Suite complete
+74.5s -> 69.7s.
+
+**Lecon** : un test qui enchaîne des sous-processus est souvent lent a cause
+des lancements redondants, pas du code teste. Avant d'optimiser un test,
+compter ses subprocess.run et chercher les appels identiques (meme commande,
+meme arguments) qui peuvent etre reutilises.

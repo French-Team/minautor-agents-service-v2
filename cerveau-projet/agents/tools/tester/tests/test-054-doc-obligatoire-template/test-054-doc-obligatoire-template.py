@@ -32,6 +32,7 @@ Invariants verifies :
   6. Preuve reelle .sh : avec --confirme-doc -> passe (code 0)
   7. Preuve negative : bloc retire du .py -> KO (le test le detecte)
   8. Normes : ASCII strict + LF pur (test + templates + protocole)
+Tags: conventions, template, garde-fou, anti-recurrence
 """
 import importlib.util
 import io

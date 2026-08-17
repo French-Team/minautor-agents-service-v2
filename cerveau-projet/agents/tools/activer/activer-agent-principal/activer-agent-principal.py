@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.8
+Version : 0.5.11
 Statut : prepare
 """
 
@@ -35,7 +35,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.5.8"
+VERSION = "0.5.11"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -178,13 +178,13 @@ def instruction_demarrage(agent):
     v0.5.4 : corrige le bug d arret a c0 - l agent sait comment lancer son
     parcours depuis la case de depart."""
     return (
-        "DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :\n"
+        "DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :\n"
         "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \\n"
-        "  cerveau-projet/agents/%s/parcours/parcours-%s.json --case c0 --reponses OUI\n"
-        "(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance\n"
-        "avec --reponses NON pour relire d abord ; suis ensuite les branches case\n"
-        "par case ; si tu reprends apres une interruption, reprends a la case courante\n"
-        "avec --case <cid> --reponses '<reponse>')."
+        "  cerveau-projet/agents/%s/parcours/parcours-%s.json --case c0\n"
+        "(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds\n"
+        "a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis\n"
+        "ensuite les branches case par case ; si tu reprends apres une interruption,\n"
+        "reprends a la case courante avec --case <cid> --reponses '<reponse>')."
     ) % (agent, agent)
 
 
@@ -788,6 +788,11 @@ def activer_agent(session, agent, raison, mission=None):
     mettre_a_jour_profil_session(session, agent)
     actualiser_sessions_connues()
     print("Session %s : agent %s active avec succes" % (session, agent))
+    # MESSAGES INFORMATIONNELS (regle immuable v0.3.0) : rappels contextuels
+    print("")
+    print("=== MESSAGES POUR L AGENT ===")
+    print("  > RELEVE MEME ROUND : l agent active (%s) doit enchainer IMMEDIATEMENT (relire SA fiche + SES corrections puis executer sa mission) - ne jamais s arreter apres une activation" % agent)
+    print("  > la fin de mission suit SA carte (Pattern 13) : activer le maillon suivant selon SA carte ; seul le DERNIER maillon reactive Cerberus avec le bilan consolide (jamais de reactivation directe a Cerberus en milieu de chaine)")
     return 0
 
 
@@ -834,6 +839,11 @@ def reactiver_cerberus(session, raison, agent_precedent):
     mettre_a_jour_profil_session(session, "Cerberus")
     actualiser_sessions_connues()
     print("Session %s : Cerberus reactive avec succes" % session)
+    # MESSAGES INFORMATIONNELS (regle immuable v0.3.0) : rappels contextuels
+    print("")
+    print("=== MESSAGES POUR L AGENT ===")
+    print("  > CERBERUS REACTIVE : il relit SA fiche et SES corrections puis reprend la suite (regle de relecture)")
+    print("  > le cycle est termine : Cerberus accueille la demande suivante ou relance une mission")
     return 0
 
 

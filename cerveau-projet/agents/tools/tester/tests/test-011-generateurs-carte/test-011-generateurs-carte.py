@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-011-generateurs-carte.py
-Test formel de l outil generateurs-carte v0.3.0 (categorie generateurs/).
+Test formel de l outil generateurs-carte v0.3.1 (categorie generateurs/).
 
 Outil teste (cerveau-projet/agents/tools/generateurs/generateurs-carte/):
   .py + .sh (wrapper pur exec python3) + .md + spec/ (creee a la refonte)
@@ -12,6 +12,8 @@ Outil teste (cerveau-projet/agents/tools/generateurs/generateurs-carte/):
   + delegation au validateur-case + references conservees a la duplication)
 
 Refonte v0.3.0 (2026-08-09) :
+  v0.3.1 (2026-08-16) : squelette c0/c0b aligne sur la relecture obligatoire
+  (c0 action RELIRE OBLIGATOIRE -> c0b, c0b question confirmation OUI/NON).
   - creer : squelette ALLEGE -- les 8 textes de regles inline longs remplaces
     par des REFERENCES resolvables (protocole-activation, pattern-N,
     chemin rvav-workflow.md) -> la carte neuve nait CONFORME (0 a alleger).
@@ -20,7 +22,7 @@ Refonte v0.3.0 (2026-08-09) :
   - validation auto : valider-case --modele --references apres chaque ecriture.
 
 Cas couverts:
-  1. --version py/sh identiques v0.3.0 (parite)
+  1. --version py/sh identiques v0.3.1 (parite)
   2. --aide : usage complet avec les 4 actions
   3. creer un squelette : CONFORME (erreurs 0, a alleger 0)
   4. Les indices portent des references (0 texte inline > 160 car)
@@ -35,6 +37,7 @@ Cas couverts:
 
 Usage:
   python3 test-011-generateurs-carte.py
+Tags: outils, generateurs
 """
 import importlib.util
 import io
@@ -153,14 +156,14 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-011-")
     try:
-        print("=== Test formel generateurs-carte v0.3.0 (etape 4 refonte) ===")
+        print("=== Test formel generateurs-carte v0.3.1 (etape 4 refonte) ===")
 
         # 1. --version py/sh identiques (parite)
         r_py = run([PYTHON, OUTIL_PY, "--version"])
         r_sh = run(["bash", OUTIL_SH, "--version"])
-        verifier("1. --version py/sh identiques v0.3.0",
+        verifier("1. --version py/sh identiques v0.3.1",
                  r_py.returncode == 0 and r_sh.returncode == 0
-                 and "v0.3.0" in r_py.stdout
+                 and "v0.3.1" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 

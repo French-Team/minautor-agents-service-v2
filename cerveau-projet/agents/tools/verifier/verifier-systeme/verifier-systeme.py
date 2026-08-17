@@ -27,7 +27,7 @@ Options:
   --version           Afficher la version
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.2-py
+Version : 0.2.3-py
 Statut : prepare
 """
 
@@ -40,7 +40,14 @@ import shutil
 import subprocess
 import sys
 
-VERSION = "0.2.2-py"
+try:
+    import psutil
+    PSUTIL = True
+except ImportError:
+    psutil = None
+    PSUTIL = False
+
+VERSION = "0.2.3-py"
 STATUT = "prepare"
 
 
@@ -111,6 +118,34 @@ def informations_systeme():
     return os_nom, version_os, arch
 
 
+def informations_ressources():
+    """Ressources materielles : RAM totale/disponible (Mo), disque libre (Go),
+    charge CPU (%). psutil en dependance douce (fallback -1 si absent)."""
+    ram_totale = -1
+    ram_dispo = -1
+    charge = -1.0
+    if PSUTIL:
+        try:
+            vm = psutil.virtual_memory()
+            ram_totale = int(vm.total // (1024 * 1024))
+            ram_dispo = int(vm.available // (1024 * 1024))
+            charge = round(float(psutil.cpu_percent(interval=None)), 1)
+        except Exception:
+            pass
+    disque_libre = -1.0
+    try:
+        usage = shutil.disk_usage(".")
+        disque_libre = round(usage.free / (1024 ** 3), 1)
+    except Exception:
+        pass
+    return {
+        "ram_totale_mo": ram_totale,
+        "ram_disponible_mo": ram_dispo,
+        "disque_libre_go": disque_libre,
+        "charge_cpu": charge,
+    }
+
+
 def extraire_version(texte):
     """Extrait le premier numero de version (ex: 'Python 3.14.4' -> '3.14.4')."""
     m = re.search(r"(\d+(?:\.\d+)+)", texte or "")
@@ -133,8 +168,16 @@ def afficher_table():
     print("|---|---|---|---|---|")
 
     os_nom, version_os, arch = informations_systeme()
+    res = informations_ressources()
     print("| Systeme | OS | %s | %s | - |" % (os_nom, version_os))
     print("| Systeme | Architecture | %s | - | - |" % arch)
+    if res["ram_totale_mo"] >= 0:
+        print("| Ressources | RAM | %d Mo total / %d Mo dispo | - | - |" % (
+            res["ram_totale_mo"], res["ram_disponible_mo"]))
+    if res["disque_libre_go"] >= 0:
+        print("| Ressources | Disque libre | %.1f Go | - | - |" % res["disque_libre_go"])
+    if res["charge_cpu"] >= 0:
+        print("| Ressources | Charge CPU | %.1f %% | - | - |" % res["charge_cpu"])
 
     bash = verifier_outil("bash")
     print("| Shell | Bash | %s | %s | %s |" % (
@@ -165,12 +208,14 @@ def afficher_json():
     git = verifier_outil("git")
     npm = verifier_outil("npm")
 
+    res = informations_ressources()
     donnees = {
         "systeme": {
             "os": os_nom,
             "version": version_os,
             "arch": arch,
         },
+        "ressources": res,
         "shells": [
             {"nom": "Bash", "disponible": bash["disponible"], "version": bash["version"]},
         ],
@@ -193,7 +238,11 @@ def afficher_resume():
     node = verifier_outil("node")
     git = verifier_outil("git")
 
+    res = informations_ressources()
     print("**Systeme** : %s %s (%s)" % (os_nom, version_os, arch))
+    if res["ram_totale_mo"] >= 0:
+        print("**Ressources** : RAM %d Mo total / %d Mo dispo, disque %.1f Go libre, charge CPU %.1f %%" % (
+            res["ram_totale_mo"], res["ram_disponible_mo"], res["disque_libre_go"], res["charge_cpu"]))
     print("**Shells** : Bash %s" % bash["version"])
     print("**Langages** : %s, %s" % (python["version"], node["version"]))
     print("**Outils** : Git %s" % git["version"])

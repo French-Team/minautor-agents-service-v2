@@ -1,0 +1,346 @@
+{
+ "parcours": {
+  "nom": "parcours-chiron",
+  "version": "0.1.0",
+  "description": "Parcours de Chiron (educateur des agents) : analyse fiches/corrections/regles/cartes pour detecter les incoherences nuisant a l intelligence operationnelle des agents.",
+  "case_depart": "c0"
+ },
+ "identite": {
+  "agent": "chiron",
+  "famille": "cerveau-projet",
+  "type": "parcours"
+ },
+ "cases": {
+  "c0": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents.",
+     "type": "regle"
+    },
+    {
+     "chemin": "cerveau-projet/agents/chiron/corrections.md",
+     "raison": "Mes corrections",
+     "type": "fichier"
+    },
+    {
+     "chemin": "cerveau-projet/agents/chiron/chiron.md",
+     "raison": "Ma fiche",
+     "type": "fichier"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/chiron/corrections.md",
+     "nom": "lire-fichier",
+     "type": "outil"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/chiron/chiron.md",
+     "nom": "lire-fichier",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c0b"
+  },
+  "c0b": {
+   "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+   "type": "question",
+   "indices": [
+    {
+     "texte": "QUESTION HONNETE : as-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Si non -> OUI -> c0c (relire) ; OUI -> c1 (continuer)",
+     "type": "regle"
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    },
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    }
+   ]
+  },
+  "c1": {
+   "titre": "Recevoir la mission (quel agent / quel outil a change)",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "La mission precise QUOI : quel agent analyser, quel outil a ete mis a jour, quel protocole a change. Si la mission n est pas claire -> demander a Cerberus de preciser.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py",
+     "nom": "lire-fichier",
+     "type": "outil"
+    },
+    {
+     "chemin": "cerveau-projet/agents/regles-immuables/general/protocole-education-continue/protocole-education-continue.md",
+     "raison": "Protocole de formation continue",
+     "type": "fichier"
+    }
+   ],
+   "suivant": "c2"
+  },
+  "c2": {
+   "titre": "Lire la fiche de l agent cible",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "LIRE la fiche de l agent concerne. Noter : version du parcours, outils P0 listes, regles absoluues, connexions. Comparer avec ce que le protocole-education-continue attend.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py",
+     "nom": "lire-fichier",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c3"
+  },
+  "c3": {
+   "titre": "Lire les corrections de l agent cible",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "LIRE les corrections de l agent concerne. Noter : lecons documentees, erreurs reperees, patterns d erreur. Si les corrections sont vides, c est un signal faible (l agent ne documente pas).",
+     "type": "regle"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py",
+     "nom": "lire-fichier",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c4"
+  },
+  "c4": {
+   "titre": "Lire les regles de l agent cible (regles-immuables/conventions)",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "LIRE les regles et conventions qui s appliquent a l agent. Verifier la coherence : les regles disent-elles la meme chose que la fiche ? Les conventions sont-elles respectees ?",
+     "type": "regle"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py",
+     "nom": "lire-fichier",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c5"
+  },
+  "c5": {
+   "titre": "Verifier les mises a jour d outils (bumper --tous)",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "LANCER le bumper --tous pour detecter les outils dont la version a change sans que les fiches/parcours des agents aient ete mis a jour.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "mettre-a-jour-versions",
+     "chemin": "cerveau-projet/agents/tools/mettre/mettre-a-jour-versions/",
+     "commande": "python3 cerveau-projet/agents/tools/mettre/mettre-a-jour-versions/mettre-a-jour-versions.py",
+     "nom": "mettre-a-jour-versions",
+     "type": "outil"
+    },
+    {
+     "catalogue": "detecter-divergences-version",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-divergences-version/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-divergences-version/detecter-divergences-version.py",
+     "nom": "detecter-divergences-version",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c6"
+  },
+  "c6": {
+   "titre": "Detecter les incoherences (regles vs actions reelles)",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "CROISER les informations : fiche vs corrections vs regles vs versions outils. Types d incoherences : fiche non conforme, version outil depassee, regle contredite, outillage manquant dans la carte, lecon non documentee, protocole absent.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "verifier-conformite-fiche",
+     "chemin": "cerveau-projet/agents/tools/verifier/verifier-conformite-fiche/",
+     "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-conformite-fiche/verifier-conformite-fiche.py",
+     "nom": "verifier-conformite-fiche",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c7"
+  },
+  "c7": {
+   "titre": "Verifier la conformite de la fiche (verifier-conformite-fiche)",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "LANCER verifier-conformite-fiche sur l agent cible. Les sections manquantes = incoherence a documenter.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "verifier-conformite-fiche",
+     "chemin": "cerveau-projet/agents/tools/verifier/verifier-conformite-fiche/",
+     "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-conformite-fiche/verifier-conformite-fiche.py",
+     "nom": "verifier-conformite-fiche",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c8"
+  },
+  "c8": {
+   "titre": "Verifier le parcours/carte (detecter-cablages-manquants)",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "LANCER detecter-cablages-manquants sur le parcours de l agent cible. Orphelins, boucles, refs mortes = incoherence a documenter.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "detecter-cablages-manquants",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py",
+     "nom": "detecter-cablages-manquants",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c9": {
+   "titre": "Synthetiser les incoherences",
+   "type": "question",
+   "indices": [
+    {
+     "texte": "Si au moins 1 incoherence detectee -> OUI -> c10 (documenter les corrections proposees) ; AUCUNE incoherence -> NON -> c12 (documenter et finir).",
+     "type": "regle"
+    },
+    {
+     "texte": "Formuler chaque incoherence : TYPE (fiche/version/regle/parcours), GRAVITE (haute/moyenne/basse), FICHIER+LIGNE, CORRECTION PROPOSEE.",
+     "type": "regle"
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c10"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c12"
+    }
+   ]
+  },
+  "c10": {
+   "titre": "Documenter les corrections proposees (rapport) puis signaler a Buffy",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "JE DETECTE JE NE CORRIGE PAS (REGLE ABSOLUE, modele Argus) : je documente chaque correction proposee (type, gravite, fichier+ligne, correction) dans mon rapport, puis je la SIGNALE a Buffy qui l applique. Je ne corrige JAMAIS moi-meme les fichiers des agents.",
+     "type": "regle"
+    },
+    {
+     "texte": "Corrections SIMPLES (texte, version, reference) et COMPLEXES (carte, parcours) vont TOUTES a Buffy. Je ne fais que les PROPOSER et les DOCUMENTER.",
+     "type": "regle"
+    }
+   ],
+   "suivant": "c11"
+  },
+  "c11": {
+   "titre": "Si incoherences complexes -> signaler a Buffy",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "SIGNALER a Buffy les incoherences de CARTE/PARCOURS (cases orphelines, refs mortes, manque d outils). Buffy les corrigera via ses outils de carte dedies. Documenter le signalement dans le rapport.",
+     "type": "regle"
+    },
+    {
+     "texte": "SIGNALER a Vulcain les incoherences d outil (version depassee, spec non alignee).",
+     "type": "regle"
+    }
+   ],
+   "suivant": "c12"
+  },
+  "c12": {
+   "titre": "Documenter mes lecons (MES corrections uniquement)",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "ECRIRE mes lecons dans MES corrections (cerveau-projet/agents/chiron/corrections.md). Je n ecris JAMAIS dans les corrections ou les fichiers des autres agents (SEUL BUFFY CORRIGE LES FICHIERS DES AGENTS).",
+     "type": "regle"
+    },
+    {
+     "texte": "Chaque lecon doit contenir : CONTEXTE (quand, pourquoi), LECON (ce qui a ete detecte et propose), PREUVES (outils lances, resultats).",
+     "type": "regle"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "nom": "corriger-symboles",
+     "type": "outil",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/chiron/corrections.md --all"
+    }
+   ],
+   "suivant": "c13"
+  },
+  "c13": {
+   "titre": "Bumper MA fiche si necessaire",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "Si MA fiche chiron.md a ete modifiee (nouvelle lecon ou section), bumper MA version. Je ne bumpe PAS les fiches des autres agents (elles sont modifiees par Buffy).",
+     "type": "regle"
+    },
+    {
+     "catalogue": "mettre-a-jour-versions",
+     "chemin": "cerveau-projet/agents/tools/mettre/mettre-a-jour-versions/",
+     "commande": "python3 cerveau-projet/agents/tools/mettre/mettre-a-jour-versions/mettre-a-jour-versions.py",
+     "nom": "mettre-a-jour-versions",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c14"
+  },
+  "c14": {
+   "titre": "FIN - Activer Janus (second controle)",
+   "type": "fin",
+   "indices": [
+    {
+     "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission (meme sans modifier du code), j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
+     "type": "regle"
+    },
+    {
+     "texte": "CHAINE BOUT-EN-BOUT : ... J ACTIVE JANUS (controle) avec le rapport et le verdict. La chaine continue : Janus controle puis REACTIVE Cerberus avec le bilan consolide.",
+     "type": "regle"
+    }
+   ],
+   "message": "CHAINE BOUT-EN-BOUT : je termine ma mission et ACTIVE JANUS (controle) avec le rapport et le verdict. COMMANDE EXACTE (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus controle puis REACTIVE Cerberus avec son verdict."
+  },
+  "c0c": {
+   "titre": "Relu : fiche et corrections memorisees",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "Je confirme : j ai lu ma fiche et mes corrections. Je suis pret a commencer ma mission.",
+     "type": "regle"
+    }
+   ],
+   "suivant": "c1"
+  }
+ }
+}

@@ -11,7 +11,7 @@ Combos testes (cerveau-projet/agents/tools/combos/):
      (agents, outils par categorie) + ecarts README vs realite
   2. combo-maj-readme (encapsule definition-combo.json, v0.1.0, 5 cases) :
      PETITE MAJ - verifier -> maj (si ecarts) -> ASCII
-  3. combos-maj-readme-massive (orchestre py/sh/md, v0.1.5) : GROSSE MAJ
+  3. combos-maj-readme-massive (orchestre py/sh/md, v0.1.6) : GROSSE MAJ
      conservative - analyse -> verifier -> maj -> correctifs -> ASCII
      (badge header Outils-N affichage + href alignes automatiquement)
 
@@ -32,6 +32,7 @@ Cas couverts:
 
 Usage:
   python3 test-020-combos-clio.py
+Tags: outils, combos, clio
 """
 import importlib.util
 import io
@@ -148,8 +149,8 @@ r = run([PYTHON, ANALYSE_PY, "--version"])
 check(r.returncode == 0 and "combos-analyse-projet 0.1.3" in (r.stdout or r.stderr),
       "version combos-analyse-projet 0.1.3")
 r = run([PYTHON, MASSIVE_PY, "--version"])
-check(r.returncode == 0 and "combos-maj-readme-massive 0.1.5" in (r.stdout or r.stderr),
-      "version combos-maj-readme-massive 0.1.5")
+check(r.returncode == 0 and "combos-maj-readme-massive 0.1.6" in (r.stdout or r.stderr),
+      "version combos-maj-readme-massive 0.1.6")
 
 # 3. JSON valide
 try:

@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-066-bumper-compagnons-garde-fou.py
-GARDE-FOU : le bumper mettre-a-jour-versions (v0.1.3, round 2026-08-16)
+GARDE-FOU : le bumper mettre-a-jour-versions (v0.1.4, round 2026-08-16)
 signale les FICHIERS COMPAGNONS : quand on bump un outil, les fichiers du
 projet qui referencent encore l ANCIENNE version (tests, docs, corrections)
 sont listes avec verdict KO - pour ne plus oublier de les adapter (8 tests
@@ -16,7 +16,7 @@ Contexte (demande utilisateur 2026-08-16) :
   - Verdict passe en KO si des compagnons existent (l agent doit les adapter).
 
 Invariants verifies :
-  1. mettre-a-jour-versions.py existe, compile, --version v0.1.3
+  1. mettre-a-jour-versions.py existe, compile, --version v0.1.4
   2. Le motif md couvre les 2 formats de doc : '**Version :**' ET '**Version** :'
      (preuve : un fichier md de test au 2e format est detecte)
   3. Preuve reelle compagnons : bump DRY-RUN du lanceur tester-lancer-non-regression
@@ -24,6 +24,7 @@ Invariants verifies :
      au moins 1 test compagnon liste (test-024/027/031/032/051/062 pincent sa version)
   4. Bump dry-run sur un outil SANS compagnons connus : aucun fichier compagnon
   5. Normes : ASCII strict + LF pur (outil + test)
+Tags: outils, bumper, garde-fou
 """
 import importlib.util
 import io
@@ -112,8 +113,8 @@ def main():
     code, out = run([PYTHON, "-m", "py_compile", BUMPER_PY])
     verifier("1b. compilation OK", code == 0, out[-80:])
     code, out = run([PYTHON, BUMPER_PY, "--version"])
-    verifier("1c. --version v0.1.3",
-             code == 0 and "v0.1.3" in out, out.strip()[-40:])
+    verifier("1c. --version v0.1.4",
+             code == 0 and "v0.1.4" in out, out.strip()[-40:])
     chrono_etape("1. outil", t0)
 
     # 2. Motif md couvre les 2 formats (preuve unitaire)
@@ -151,13 +152,23 @@ def main():
     chrono_etape("3. preuve compagnons", t0)
 
     # 4. Option --nouvelle : bump dry-run du lanceur vers une version
-    #    FUTURE (0.5.6) - le lanceur est deja a 0.5.5 (v0.5.5), la cible
-    #    doit etre superieure pour que le bumper affiche la transition
-    #    (le dry-run NE MODIFIE rien : seule la version affichee compte).
+    #    FUTURE. La cible est calculee DYNAMIQUEMENT (version courante du
+    #    lanceur lue dans le source + 1 en patch) pour ne plus jamais
+    #    dependre d une version en dur (lecon 2026-08-16 : le pin
+    #    "0.5.5 -> 0.5.6" est reste perime apres les bumps car le bumper
+    #    ne detecte que la version COURANTE, pas les transitions passees).
     t0 = time.monotonic()
-    code, out = run([PYTHON, BUMPER_PY, LANCER_DIR, "--nouvelle", "0.5.6"], timeout=90)
-    verifier("4. option --nouvelle fonctionne (0.5.5 -> 0.5.6 dry-run)",
-             code == 0 and "0.5.5 -> 0.5.6" in out, out.strip()[-60:])
+    lancer_py = os.path.join(LANCER_DIR, "tester-lancer-non-regression.py")
+    src_lancer = io.open(lancer_py, encoding="utf-8", errors="replace").read()
+    m_ver = re.search(r'VERSION\s*=\s*"([0-9]+\.[0-9]+\.[0-9]+)"', src_lancer)
+    courante = m_ver.group(1) if m_ver else "0.0.0"
+    majeur, mineur, patch = (int(x) for x in courante.split("."))
+    cible = "%d.%d.%d" % (majeur, mineur, patch + 1)
+    code, out = run([PYTHON, BUMPER_PY, LANCER_DIR, "--nouvelle", cible],
+                    timeout=90)
+    transition = "%s -> %s" % (courante, cible)
+    verifier("4. option --nouvelle fonctionne (%s dry-run)" % transition,
+             code == 0 and transition in out, out.strip()[-60:])
     chrono_etape("4. --nouvelle", t0)
 
     # 5. Normes ASCII + LF

@@ -28,9 +28,12 @@ Invariants verifies :
   2. AUCUNE des 10 autres cartes ne contient tester-lancer-non-regression dans
      ses indices outil (ni dans le texte des cases)
   2b. Le REGISTRE ne contient AUCUNE declaration de tester-lancer-non-regression
-     par un agent autre que janus (anti-recurrence : la declaration fautive
-     cerberus du 2026-08-14 passait le point 2 car elle ne touchait pas les
-     cartes - seul evaluer-processus l a attrapee indirectement)
+     par un agent autre que janus, HORS exception documentee (mode verrou-dev :
+     liste blanche developpeur v0.2.2 - vulcain valide ses modifications du
+     lanceur sans attendre janus, utilisateur 2026-08-16). (anti-recurrence :
+     la declaration fautive cerberus du 2026-08-14 passait le point 2 car elle
+     ne touchait pas les cartes - seul evaluer-processus l a attrapee
+     indirectement)
   3. La fiche morpheus.md contient la REGLE ABSOLUE -- NON-REGRESSION JANUS
      (anti-recurrence : Morpheus n execute que des tests individuels)
   4. Les 12 cartes ont des signatures de CONTENU TOUTES distinctes (identite
@@ -39,6 +42,7 @@ Invariants verifies :
      partage volontairement la MEME structure d ids (meme construction) avec
      des contenus differents (identites distinctes)
   5. Normes : ASCII strict + LF pur (cartes + fiche + test)
+Tags: agents, janus, garde-fou, anti-recurrence
 """
 import hashlib
 import importlib.util
@@ -60,7 +64,7 @@ AGENTS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents")
 AGENTS = [
     "cerberus", "buffy", "vulcain", "morpheus", "janus", "atlas",
     "themis", "clio", "athena", "promethee", "minerve",
-    "hygie", "hermes", "gardien", "argus",
+    "hygie", "hermes", "gardien", "argus", "chiron",
 ]
 
 OUTIL_NON_REGRESSION = "tester-lancer-non-regression"
@@ -196,6 +200,9 @@ def main():
     # (anti-recurrence : la declaration fautive cerberus -> tester-lancer-
     # non-regression du 2026-08-14 passait le point 2 car elle ne touchait pas
     # les cartes - seul evaluer-processus l a attrapee indirectement)
+    # EXCEPTION DOCUMENTEE (2026-08-16, demande utilisateur) : les entrees au
+    # mode "verrou-dev" (liste blanche developpeur : vulcain VALIDE ses
+    # modifications du lanceur sans attendre janus) sont LEGITIMES et ignorees.
     # Fenetre temporelle : seuls les usages du JOUR COURANT comptent (regle
     # registre CUMULATIF 2026-08-14 - les usages historiques avant les regles
     # de gouvernance, ex tester-lancer-non-regression par buffy/themis/
@@ -215,6 +222,8 @@ def main():
                     continue
                 if entree.get("outil") != OUTIL_NON_REGRESSION:
                     continue
+                if entree.get("mode") == "verrou-dev":
+                    continue  # validation developpeur (liste blanche) : legitime
                 date = str(entree.get("date", ""))
                 if not date.startswith(jour_courant):
                     continue  # usage historique : ignore
@@ -252,8 +261,8 @@ def main():
                 signatures[sig] = agent
         except Exception as e:
             doublons.append("%s(ERR %s)" % (agent, e))
-    verifier("4. Les 15 cartes ont des signatures de CONTENU TOUTES distinctes (identite)",
-             len(doublons) == 0 and len(signatures) == 15,
+    verifier("4. Les 16 cartes ont des signatures de CONTENU TOUTES distinctes (identite)",
+             len(doublons) == 0 and len(signatures) == 16,
              "doublons=%s nb_sig=%d" % (doublons, len(signatures)))
 
     # 5. Normes : ASCII strict + LF pur (15 cartes + fiche morpheus + test)

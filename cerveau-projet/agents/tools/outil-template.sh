@@ -1,7 +1,7 @@
 #!/bin/bash
 # [nom-outil].sh
 # [Description courte de ce que fait l'outil]
-# Version : 0.2.0-beta
+# Version : 0.3.0-beta
 # Statut : ebauche
 
 # ============================================================
@@ -27,7 +27,7 @@
 #   (Ne pas supprimer ce bloc lors de la creation de l'outil)
 
 # Configuration
-VERSION="0.2.0-beta"
+VERSION="0.3.0-beta"
 STATUT="ebauche"
 
 # Couleurs
@@ -146,6 +146,23 @@ exiger_confirmation_doc() {
     exit 2
 }
 
+# MESSAGES INFORMATIONNELS (regle immuable v0.3.0, demande utilisateur) :
+# les outils passent des messages contextuels aux agents dans leur sortie,
+# aux endroits importants : 'si vous avez modifie X, n oubliez pas Y'.
+# A appeler en fin d executer() apres une action reussie (non dry-run).
+# Chaque outil fournit SES messages statiques contextuels.
+afficher_messages_info() {
+    local message
+    if [ "$dry_run" = "true" ]; then
+        return 0  # pas de messages en dry-run (rien n a ete modifie)
+    fi
+    echo ""
+    echo -e "${YELLOW}=== MESSAGES POUR L AGENT ===${NC}"
+    for message in "$@"; do
+        echo "  > $message"
+    done
+}
+
 executer() {
     local cible="$1"
     
@@ -157,6 +174,10 @@ executer() {
     else
         # [Actions reelles ici]
         echo -e "${GREEN}[OK]${NC} Operation terminee"
+        # MESSAGES INFORMATIONNELS : appeler ici avec les messages de l outil
+        # afficher_messages_info \
+        #     "fichier modifie : indexer dans index-tools.md" \
+        #     "fichier modifie : adapter les tests (Morpheus)"
     fi
 }
 

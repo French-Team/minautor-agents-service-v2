@@ -37,6 +37,7 @@ Cas couverts:
 
 Usage:
   python3 test-028-coherence-documentaire.py
+Tags: conventions, garde-fou, anti-recurrence, coherence
 """
 import importlib.util
 import io

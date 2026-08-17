@@ -33,6 +33,7 @@ Invariants verifies :
   4. La fiche buffy.md contient la REGLE ABSOLUE -- SEULE A CORRIGER LES
      FICHIERS DES AGENTS (anti-recurrence : Buffy connait son exclusivite)
   5. Normes : ASCII strict + LF pur (regle + fiche + test)
+Tags: agents, buffy, garde-fou, anti-recurrence
 """
 import importlib.util
 import io

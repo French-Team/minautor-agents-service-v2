@@ -13,6 +13,7 @@ Contexte : ce test a ete migre au format template-test.md v0.2.0 (audit
 Morpheus 2026-08-12 : le TEMPLATE est la reference, pas les tests precedents).
 L ancien format utilisait coding utf-8 et le marqueur [ECHEC] invisible pour
 le lanceur de non-regression (qui compte les [KO]).
+Tags: outils, evaluer
 """
 import importlib.util
 import io

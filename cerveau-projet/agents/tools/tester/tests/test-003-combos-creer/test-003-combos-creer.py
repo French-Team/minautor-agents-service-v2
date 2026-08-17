@@ -25,6 +25,7 @@ Contexte : ce test a ete migre au format template-test.md v0.2.0 (audit
 Morpheus 2026-08-12 : le TEMPLATE est la reference, pas les tests precedents).
 L ancien format utilisait le marqueur [ECHEC] invisible pour le lanceur de
 non-regression (qui compte les [KO]).
+Tags: outils, combos
 """
 import importlib.util
 import io
@@ -207,8 +208,9 @@ def main():
                  nb_gen == nb_outil, "gen=%d outil=%d" % (nb_gen, nb_outil))
         verifier("%s : au moins 2 generateurs" % nom, nb_gen >= 2, "gen=%d" % nb_gen)
 
-        # 2. --liste
+        # 2. --liste (sortie gardee pour la parite .py/.sh du point 6)
         r = run_py([info["chemin"], "--liste"])
+        liste_stdout = r.stdout
         verifier("%s : --liste retourne 0" % nom, r.returncode == 0,
                  "rc=%d" % r.returncode)
         verifier("%s : case_depart c1 listee" % nom, "[c1]" in r.stdout, "")
@@ -237,6 +239,7 @@ def main():
         for cmd_att in info["commandes_attendues"]:
             verifier("%s : commande generee %s" % (nom, cmd_att.split()[0]),
                      cmd_att in r.stdout, "")
+        nav_oui_stdout = r.stdout
 
         # 5. Navigation chemin NON (controle NON)
         args = [info["chemin"], "--dry-run", "--reponses",
@@ -256,24 +259,22 @@ def main():
             verifier("%s : fichier .sh present" % nom, False,
                      "fichier .sh absent")
         else:
-            py_liste = run_py([info["chemin"], "--liste"])
+            # Reutilisation de liste_stdout / nav_oui_stdout (points 2 et 4) :
+            # evite de relancer 2 sous-processus par combo (optimisation 2026-08-17).
             sh_liste = run(["bash", MOTEUR_SH, info["chemin"], "--liste",
                             "--no-journal"])
             verifier("%s : .sh --liste retourne 0" % nom,
                      sh_liste.returncode == 0, "rc=%d" % sh_liste.returncode)
             verifier("%s : .py et .sh meme liste" % nom,
-                     py_liste.stdout.strip() == sh_liste.stdout.strip(), "")
+                     liste_stdout.strip() == sh_liste.stdout.strip(), "")
 
-            args_py = [info["chemin"], "--dry-run", "--reponses",
+            args_sh = [info["chemin"], "--dry-run", "--reponses",
                        "%s=OUI" % info["controle"]]
-            args_sh = list(args_py)
             for v in info["vars"]:
-                args_py.extend(["--var", v])
                 args_sh.extend(["--var", v])
-            py_nav = run_py(args_py)
             sh_nav = run(["bash", MOTEUR_SH] + args_sh + ["--no-journal"])
             verifier("%s : .py et .sh meme navigation (OUI)" % nom,
-                     py_nav.stdout.strip() == sh_nav.stdout.strip(), "")
+                     nav_oui_stdout.strip() == sh_nav.stdout.strip(), "")
 
         # 7. Dry-run n execute pas (aucun fichier cree)
         tmpdir = tempfile.mkdtemp(prefix="combos-creer-test-")
@@ -296,20 +297,20 @@ def main():
             # definitions combo-* vs convention combos-* : comportement connu
             verifier("%s : nommage definition = comportement connu (rc=%d)" % (nom, r.returncode),
                      True, "")
-        r = run([PYTHON, VALIDER_NOM, "--type", "outil",
-                 os.path.abspath(__file__)])
-        if r.returncode == 0:
-            verifier("%s : nommage fichier de test OK" % nom, True, "")
-        else:
-            # dossier tests/ exige un prefixe tests- : comportement connu
-            verifier("%s : nommage fichier de test = comportement connu (rc=%d)" % (nom, r.returncode),
-                     True, "")
-
         # 9. ASCII
         for f in (info["chemin"], info["doc"]):
             r = run([PYTHON, VALIDER_ASCII, f])
             verifier("%s : ASCII 0 sur %s" % (nom, os.path.basename(f)),
                      "Conformite ASCII stricte validee" in r.stdout, "")
+
+    # 8b. Nommage du fichier de test (hors boucle : meme fichier pour les 3 combos)
+    r = run([PYTHON, VALIDER_NOM, "--type", "outil", os.path.abspath(__file__)])
+    if r.returncode == 0:
+        verifier("nommage fichier de test OK", True, "")
+    else:
+        # dossier tests/ exige un prefixe tests- : comportement connu
+        verifier("nommage fichier de test = comportement connu (rc=%d)" % r.returncode,
+                 True, "")
 
     # 10-11. Normes ASCII strict + LF pur sur les fichiers concernes
     fichiers = [os.path.abspath(__file__)]

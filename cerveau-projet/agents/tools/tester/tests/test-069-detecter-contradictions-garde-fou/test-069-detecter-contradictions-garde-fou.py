@@ -24,6 +24,7 @@ Invariants verifies :
   4. --git : un residu temporaire cree a la racine -> GIT_RESIDU_ACTUEL
      detecte, puis SUPPRIME (0 residu en fin de test)
   5. Normes : ASCII strict + LF pur (outil + test)
+Tags: outils, detecter, garde-fou
 """
 import importlib.util
 import io

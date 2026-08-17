@@ -23,6 +23,7 @@ Invariants verifies :
   2. La source de verite de version existe (clio/version-readme.txt)
   3. La source de verite de statut existe (clio/statut-projet.txt)
   4. Normes : ASCII strict + LF pur (test)
+Tags: registre-traces, residus, garde-fou, anti-recurrence
 """
 import importlib.util
 import io

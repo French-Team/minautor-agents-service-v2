@@ -1,329 +1,321 @@
 {
- "identite": {
-  "type": "parcours",
-  "appartient_a": "gardien",
-  "commun": false
- },
- "parcours": {
-  "nom": "parcours-gardien",
-  "agent": "gardien",
-  "version": "0.1.2",
-  "case_depart": "c0",
-  "description": "Parcours (jeu de piste) des missions du Gardien, agent de la securite du marbre : relecture -> verification de l integrite des zones protegees (proteger-verrou-marbre) -> proposition de modification (proteger-modifier-marbre, autorisation utilisateur obligatoire) -> lecon et rapport. Le Gardien est le SEUL agent habilite a proposer la modification d une zone gravee dans le marbre : il propose, l UTILISATEUR valide, il execute.",
-  "version_precedente": "0.1.1"
- },
- "cases": {
-  "c0": {
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c0c"
+  "identite": {
+    "type": "parcours",
+    "appartient_a": "gardien",
+    "commun": false
+  },
+  "parcours": {
+    "nom": "parcours-gardien",
+    "agent": "gardien",
+    "version": "0.1.3",
+    "case_depart": "c0",
+    "description": "Parcours (jeu de piste) des missions du Gardien, agent de la securite du marbre : relecture -> verification de l integrite des zones protegees (proteger-verrou-marbre) -> proposition de modification (proteger-modifier-marbre, autorisation utilisateur obligatoire) -> lecon et rapport. Le Gardien est le SEUL agent habilite a proposer la modification d une zone gravee dans le marbre : il propose, l UTILISATEUR valide, il execute.",
+    "version_precedente": "0.1.1"
+  },
+  "cases": {
+    "c0": {
+      "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+      "type": "action",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
+        },
+        {
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "nom": "lire-fichier",
+          "type": "outil",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/gardien/corrections.md"
+        },
+        {
+          "catalogue": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "nom": "lire-fichier",
+          "type": "outil",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/gardien/gardien.md"
+        }
+      ],
+      "suivant": "c0b"
     },
-    {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
+    "c0b": {
+      "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+      "type": "question",
+      "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture (c0). Reponds la VERITE."
+        }
+      ],
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c0c"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c0"
+        }
+      ]
     },
-    {
-     "reponse": "NON",
-     "vers": "c0b"
+    "c0c": {
+      "indices": [
+        {
+          "texte": "CONTEXTE OBLIGATOIRE : lire l activite recente des agents avant de demarrer la mission.",
+          "type": "regle"
+        },
+        {
+          "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
+          "catalogue": "lire-activite-recente",
+          "nom": "lire-activite-recente",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c1",
+      "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+      "type": "action"
+    },
+    "c1": {
+      "branches": [
+        {
+          "reponse": "verifier",
+          "vers": "c2"
+        },
+        {
+          "reponse": "proposer",
+          "vers": "c3"
+        },
+        {
+          "reponse": "autre",
+          "vers": "c29"
+        }
+      ],
+      "question": "Quelle est la mission du marbre ? (verifier = controler l integrite, proposer = proposer une modification d une zone protegee)",
+      "titre": "Mission",
+      "type": "question"
+    },
+    "c2": {
+      "indices": [
+        {
+          "chemin": "cerveau-projet/agents/tools/proteger/proteger-verrou-marbre/",
+          "commande": "python3 cerveau-projet/agents/tools/proteger/proteger-verrou-marbre/proteger-verrou-marbre.py --tous",
+          "catalogue": "proteger-verrou-marbre",
+          "nom": "proteger-verrou-marbre",
+          "type": "outil"
+        },
+        {
+          "texte": "VERROU DU MARBRE : verifier l integrite de TOUTES les zones protegees (manifeste marbre.json). Toute divergence = violation.",
+          "type": "regle"
+        }
+      ],
+      "suivant": "c2a",
+      "titre": "Verifier l integrite du marbre (proteger-verrou-marbre --tous)",
+      "type": "action"
+    },
+    "c2a": {
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c9"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c2b"
+        }
+      ],
+      "question": "Le marbre est-il intact (0 zone divisee) ?",
+      "titre": "Marbre intact ?",
+      "type": "controle"
+    },
+    "c2b": {
+      "indices": [
+        {
+          "texte": "VIOLATION : zone protegee modifiee sans protocole. Documenter (zone, divergence) et activer l agent responsable.",
+          "type": "regle"
+        },
+        {
+          "catalogue": "corriger-symboles",
+          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+          "nom": "corriger-symboles",
+          "type": "outil",
+          "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/gardien/corrections.md --all"
+        }
+      ],
+      "suivant": "c7",
+      "titre": "Signaler la violation (rapport + activer l agent responsable)",
+      "type": "action"
+    },
+    "c3": {
+      "indices": [
+        {
+          "texte": "LIRE MA RAISON dans AGENTS.md : la mission confiee precise quelle zone du marbre est concernee et pourquoi.",
+          "type": "regle"
+        }
+      ],
+      "suivant": "c4",
+      "titre": "LIRE la raison de la mission (zone concernee)",
+      "type": "action"
+    },
+    "c4": {
+      "indices": [
+        {
+          "texte": "PROPOSER : documenter la modification souhaitee (zone, raison, impact) SANS rien modifier. Le Gardien propose, l UTILISATEUR valide.",
+          "type": "regle"
+        }
+      ],
+      "suivant": "c5",
+      "titre": "PROPOSER la modification (zone + raison + impact)",
+      "type": "action"
+    },
+    "c5": {
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c6"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c7"
+        }
+      ],
+      "question": "L utilisateur a-t-il explicitement valide la modification du marbre ?",
+      "titre": "Validation utilisateur ?",
+      "type": "controle"
+    },
+    "c6": {
+      "indices": [
+        {
+          "chemin": "cerveau-projet/agents/tools/proteger/proteger-modifier-marbre/",
+          "commande": "python3 cerveau-projet/agents/tools/proteger/proteger-modifier-marbre/proteger-modifier-marbre.py --zone <nom> --raison \"<raison>\" --autorisation UTILISATEUR",
+          "catalogue": "proteger-modifier-marbre",
+          "nom": "proteger-modifier-marbre",
+          "type": "outil"
+        },
+        {
+          "texte": "EXECUTER la porte du marbre AVEC l autorisation utilisateur. La modification est journalisee dans marbre-log.jsonl.",
+          "type": "regle"
+        }
+      ],
+      "suivant": "c7",
+      "titre": "EXECUTER proteger-modifier-marbre (autorisation utilisateur)",
+      "type": "action"
+    },
+    "c7": {
+      "indices": [
+        {
+          "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/gardien/corrections.md \"<lecon>\"",
+          "catalogue": "ajouter-contenu-fichier",
+          "nom": "ajouter-contenu-fichier",
+          "type": "outil"
+        },
+        {
+          "texte": "LECON : documenter dans corrections.md ce qui a ete fait (proposition, validation, execution) + enregistrer mes usages d outils.",
+          "type": "regle"
+        },
+        {
+          "catalogue": "corriger-symboles",
+          "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+          "nom": "corriger-symboles",
+          "type": "outil",
+          "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/gardien/corrections.md --all"
+        }
+      ],
+      "suivant": "c8",
+      "titre": "Lecon + enregistrer mes usages",
+      "type": "action"
+    },
+    "c8": {
+      "indices": [
+        {
+          "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
+          "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent gardien --outil <outil> --contexte '<contexte>'",
+          "catalogue": "enregistrer-usage-outil",
+          "nom": "enregistrer-usage-outil",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c9",
+      "titre": "Enregistrer mes usages d outils",
+      "type": "action"
+    },
+    "c9": {
+      "indices": [
+        {
+          "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission, j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
+          "type": "regle"
+        },
+        {
+          "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+          "catalogue": "activer-agent-principal",
+          "nom": "activer-agent-principal",
+          "type": "outil"
+        }
+      ],
+      "message": "MISSION DU MARBRE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan (marbre verifie, modification proposee/validee/executee, journal, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus verifie l etat du marbre (proteger-verrou-marbre --tous) puis reactive Cerberus avec son verdict.",
+      "titre": "FIN - Activer Janus (second controle)",
+      "type": "fin"
+    },
+    "c29": {
+      "branches": [
+        {
+          "reponse": "deleguer",
+          "vers": "c29a"
+        },
+        {
+          "reponse": "outil",
+          "vers": "c29b"
+        },
+        {
+          "reponse": "signaler",
+          "vers": "c29e"
+        }
+      ],
+      "titre": "Mission hors parcours",
+      "type": "question"
+    },
+    "c29a": {
+      "titre": "FIN - Delegation",
+      "type": "fin"
+    },
+    "c29b": {
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c29c"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c29e"
+        }
+      ],
+      "question": "Besoin d un outil qui n existe pas ?",
+      "titre": "Besoin d un outil ?",
+      "type": "question"
+    },
+    "c29c": {
+      "indices": [
+        {
+          "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/",
+          "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.py <nom>",
+          "catalogue": "generateurs-outil-temporaire",
+          "nom": "generateurs-outil-temporaire",
+          "type": "outil"
+        }
+      ],
+      "suivant": "c29d",
+      "titre": "Creer l outil temporaire (generateurs-outil-temporaire)",
+      "type": "action"
+    },
+    "c29d": {
+      "titre": "FIN - Outil temporaire",
+      "type": "fin"
+    },
+    "c29e": {
+      "titre": "FIN - Signaler le besoin",
+      "type": "fin"
     }
-   ],
-   "indices": [
-    {
-     "texte": "REGLE VERACITE : reponds la VERITE (OUI si c'est le cas, NON sinon), jamais ce qu'on attend de toi.",
-     "type": "regle"
-    },
-    {
-     "texte": "REGLE ANTI-ARRET : je lis MA Raison (mission confiee) dans AGENTS.md avant la case Mission.",
-     "type": "regle"
-    }
-   ],
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question"
-  },
-  "c0b": {
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
-    },
-    {
-     "catalogue": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "nom": "lire-fichier",
-     "type": "outil",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/gardien/corrections.md"
-    },
-    {
-     "catalogue": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "nom": "lire-fichier",
-     "type": "outil",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/gardien/gardien.md"
-    }
-   ],
-   "suivant": "c0c",
-   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
-   "type": "action"
-  },
-  "c0c": {
-   "indices": [
-    {
-     "texte": "CONTEXTE OBLIGATOIRE : lire l activite recente des agents avant de demarrer la mission.",
-     "type": "regle"
-    },
-    {
-     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
-     "catalogue": "lire-activite-recente",
-     "nom": "lire-activite-recente",
-     "type": "outil"
-    }
-   ],
-   "suivant": "c1",
-   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
-   "type": "action"
-  },
-  "c1": {
-   "branches": [
-    {
-     "reponse": "verifier",
-     "vers": "c2"
-    },
-    {
-     "reponse": "proposer",
-     "vers": "c3"
-    },
-    {
-     "reponse": "autre",
-     "vers": "c29"
-    }
-   ],
-   "question": "Quelle est la mission du marbre ? (verifier = controler l integrite, proposer = proposer une modification d une zone protegee)",
-   "titre": "Mission",
-   "type": "question"
-  },
-  "c2": {
-   "indices": [
-    {
-     "chemin": "cerveau-projet/agents/tools/proteger/proteger-verrou-marbre/",
-     "commande": "python3 cerveau-projet/agents/tools/proteger/proteger-verrou-marbre/proteger-verrou-marbre.py --tous",
-     "catalogue": "proteger-verrou-marbre",
-     "nom": "proteger-verrou-marbre",
-     "type": "outil"
-    },
-    {
-     "texte": "VERROU DU MARBRE : verifier l integrite de TOUTES les zones protegees (manifeste marbre.json). Toute divergence = violation.",
-     "type": "regle"
-    }
-   ],
-   "suivant": "c2a",
-   "titre": "Verifier l integrite du marbre (proteger-verrou-marbre --tous)",
-   "type": "action"
-  },
-  "c2a": {
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c9"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c2b"
-    }
-   ],
-   "question": "Le marbre est-il intact (0 zone divisee) ?",
-   "titre": "Marbre intact ?",
-   "type": "controle"
-  },
-  "c2b": {
-   "indices": [
-    {
-     "texte": "VIOLATION : zone protegee modifiee sans protocole. Documenter (zone, divergence) et activer l agent responsable.",
-     "type": "regle"
-    },
-    {
-     "catalogue": "corriger-symboles",
-     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
-     "type": "outil",
-     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/gardien/corrections.md --all"
-    }
-   ],
-   "suivant": "c7",
-   "titre": "Signaler la violation (rapport + activer l agent responsable)",
-   "type": "action"
-  },
-  "c3": {
-   "indices": [
-    {
-     "texte": "LIRE MA RAISON dans AGENTS.md : la mission confiee precise quelle zone du marbre est concernee et pourquoi.",
-     "type": "regle"
-    }
-   ],
-   "suivant": "c4",
-   "titre": "LIRE la raison de la mission (zone concernee)",
-   "type": "action"
-  },
-  "c4": {
-   "indices": [
-    {
-     "texte": "PROPOSER : documenter la modification souhaitee (zone, raison, impact) SANS rien modifier. Le Gardien propose, l UTILISATEUR valide.",
-     "type": "regle"
-    }
-   ],
-   "suivant": "c5",
-   "titre": "PROPOSER la modification (zone + raison + impact)",
-   "type": "action"
-  },
-  "c5": {
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c6"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c7"
-    }
-   ],
-   "question": "L utilisateur a-t-il explicitement valide la modification du marbre ?",
-   "titre": "Validation utilisateur ?",
-   "type": "controle"
-  },
-  "c6": {
-   "indices": [
-    {
-     "chemin": "cerveau-projet/agents/tools/proteger/proteger-modifier-marbre/",
-     "commande": "python3 cerveau-projet/agents/tools/proteger/proteger-modifier-marbre/proteger-modifier-marbre.py --zone <nom> --raison \"<raison>\" --autorisation UTILISATEUR",
-     "catalogue": "proteger-modifier-marbre",
-     "nom": "proteger-modifier-marbre",
-     "type": "outil"
-    },
-    {
-     "texte": "EXECUTER la porte du marbre AVEC l autorisation utilisateur. La modification est journalisee dans marbre-log.jsonl.",
-     "type": "regle"
-    }
-   ],
-   "suivant": "c7",
-   "titre": "EXECUTER proteger-modifier-marbre (autorisation utilisateur)",
-   "type": "action"
-  },
-  "c7": {
-   "indices": [
-    {
-     "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/gardien/corrections.md \"<lecon>\"",
-     "catalogue": "ajouter-contenu-fichier",
-     "nom": "ajouter-contenu-fichier",
-     "type": "outil"
-    },
-    {
-     "texte": "LECON : documenter dans corrections.md ce qui a ete fait (proposition, validation, execution) + enregistrer mes usages d outils.",
-     "type": "regle"
-    },
-    {
-     "catalogue": "corriger-symboles",
-     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
-     "type": "outil",
-     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/gardien/corrections.md --all"
-    }
-   ],
-   "suivant": "c8",
-   "titre": "Lecon + enregistrer mes usages",
-   "type": "action"
-  },
-  "c8": {
-   "indices": [
-    {
-     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
-     "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent gardien --outil <outil> --contexte '<contexte>'",
-     "catalogue": "enregistrer-usage-outil",
-     "nom": "enregistrer-usage-outil",
-     "type": "outil"
-    }
-   ],
-   "suivant": "c9",
-   "titre": "Enregistrer mes usages d outils",
-   "type": "action"
-  },
-  "c9": {
-   "indices": [
-    {
-     "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission, j active JANUS (second controle) qui reactive Cerberus avec son verdict.",
-     "type": "regle"
-    },
-    {
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "catalogue": "activer-agent-principal",
-     "nom": "activer-agent-principal",
-     "type": "outil"
-    }
-   ],
-   "message": "MISSION DU MARBRE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan (marbre verifie, modification proposee/validee/executee, journal, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus verifie l etat du marbre (proteger-verrou-marbre --tous) puis reactive Cerberus avec son verdict.",
-   "titre": "FIN - Activer Janus (second controle)",
-   "type": "fin"
-  },
-  "c29": {
-   "branches": [
-    {
-     "reponse": "deleguer",
-     "vers": "c29a"
-    },
-    {
-     "reponse": "outil",
-     "vers": "c29b"
-    },
-    {
-     "reponse": "signaler",
-     "vers": "c29e"
-    }
-   ],
-   "titre": "Mission hors parcours",
-   "type": "question"
-  },
-  "c29a": {
-   "titre": "FIN - Delegation",
-   "type": "fin"
-  },
-  "c29b": {
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c29c"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c29e"
-    }
-   ],
-   "question": "Besoin d un outil qui n existe pas ?",
-   "titre": "Besoin d un outil ?",
-   "type": "question"
-  },
-  "c29c": {
-   "indices": [
-    {
-     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/",
-     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.py <nom>",
-     "catalogue": "generateurs-outil-temporaire",
-     "nom": "generateurs-outil-temporaire",
-     "type": "outil"
-    }
-   ],
-   "suivant": "c29d",
-   "titre": "Creer l outil temporaire (generateurs-outil-temporaire)",
-   "type": "action"
-  },
-  "c29d": {
-   "titre": "FIN - Outil temporaire",
-   "type": "fin"
-  },
-  "c29e": {
-   "titre": "FIN - Signaler le besoin",
-   "type": "fin"
   }
- }
 }

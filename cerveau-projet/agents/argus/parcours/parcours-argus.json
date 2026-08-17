@@ -7,45 +7,13 @@
  "parcours": {
   "nom": "parcours-argus",
   "agent": "argus",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions d Argus, detecteur de contradictions : auditer les contradictions dans les cases (parcours JSON), les regles (regles-immuables), les protocoles, et lire le depot git (git log --all, evolutions vraies et fausses). Argus DETECTE et SIGNALE, il ne corrige jamais : la correction appartient a l agent habilite (Buffy fiches/parcours, Vulcain outils, Morpheus tests). Decisions utilisateur 2026-08-15 : nom Argus, role detecteur de contradictions, lecture git en lecture seule, double source obligatoire avant de signaler.",
   "version_precedente": "0.1.8"
  },
  "cases": {
   "c0": {
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question",
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "indices": [
-    {
-     "type": "ref",
-     "ref": "pattern-2"
-    },
-    {
-     "type": "outil",
-     "nom": "guider-parcours",
-     "catalogue": "guider-parcours",
-     "chemin": "cerveau-projet/agents/tools/guider/guider-parcours/",
-     "commande": "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py"
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c0c"
-    },
-    {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c0b"
-    }
-   ]
-  },
-  "c0b": {
    "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
    "type": "action",
    "indices": [
@@ -68,7 +36,28 @@
      "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/argus/argus.md"
     }
    ],
-   "suivant": "c0c"
+   "suivant": "c0b"
+  },
+  "c0b": {
+   "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+   "type": "question",
+   "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture (c0). Reponds la VERITE."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    }
+   ]
   },
   "c0c": {
    "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
@@ -409,9 +398,9 @@
    ]
   },
   "c29a": {
-   "titre": "DELEGATION - Activer l'agent habilite (il me reactivera avec le bilan)",
+   "titre": "DELEGATION - Activer l'agent habilite (il reactivera Cerberus avec le bilan)",
    "type": "action",
-   "message": "Je delegue a l agent habilite : j active l agent concerne avec la mission complete (Pattern 13 : la fin suit SA carte, il me reactivera avec son bilan). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> '<raison>' '<mission>'.",
+   "message": "Je delegue a l agent habilite : j active l agent concerne avec la mission complete (Pattern 13 : la fin suit SA carte, il reactivera Cerberus avec son bilan). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> '<raison>' '<mission>'.",
    "indices": [
     {
      "type": "regle",

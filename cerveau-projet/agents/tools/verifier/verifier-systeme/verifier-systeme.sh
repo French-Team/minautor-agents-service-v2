@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.2"
+VERSION="0.2.3"
 DATE="2026-08-05"
 
 # Couleurs pour la sortie

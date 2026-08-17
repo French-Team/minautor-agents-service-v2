@@ -84,7 +84,7 @@ outils:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.1.9)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.1.11)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Le parcours me donne,
 > a chaque etape, l'indice exact (outil a lancer, fichier a lire, regle a
 > appliquer) et les branches selon mes reponses.

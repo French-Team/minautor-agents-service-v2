@@ -34,6 +34,7 @@ Cas couverts:
 
 Usage:
   python3 test-012-guider-parcours.py
+Tags: outils, parcours, guider
 """
 import importlib.util
 import io

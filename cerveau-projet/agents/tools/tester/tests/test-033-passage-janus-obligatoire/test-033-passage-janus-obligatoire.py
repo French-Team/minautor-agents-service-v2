@@ -29,6 +29,7 @@ Invariants verifies :
   5. Fiche morpheus : la REGLE DELEGATION ne porte plus la clause erronee
      Je ne reactive CERBERUS que si j ai ete active directement par Cerberus
   6. Normes : ASCII strict + LF pur (carte + fiche + test)
+Tags: agents, janus, garde-fou, anti-recurrence
 """
 import importlib.util
 import io

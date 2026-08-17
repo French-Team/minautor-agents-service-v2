@@ -7,37 +7,12 @@
  "parcours": {
   "nom": "parcours-cerberus",
   "agent": "cerberus",
-  "version": "0.5.0",
+  "version": "0.5.3",
   "case_depart": "c0",
   "description": "v0.4.6 : + indice outil c10 combos-analyse-projet (usage reel registre, garde-fou test-035)"
  },
  "cases": {
   "c0": {
-   "titre": "Relecture : ta fiche et tes corrections en memoire ?",
-   "type": "question",
-   "question": "As-tu EN MEMOIRE ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la memorisation : relire sans retenir = inutile."
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c0c"
-    },
-    {
-     "reponse": "INCERTAIN",
-     "vers": "c0b"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c0b"
-    }
-   ]
-  },
-  "c0b": {
    "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
    "type": "action",
    "indices": [
@@ -60,7 +35,28 @@
      "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/cerberus/cerberus.md"
     }
    ],
-   "suivant": "c0c"
+   "suivant": "c0b"
+  },
+  "c0b": {
+   "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+   "type": "question",
+   "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture (c0). Reponds la VERITE."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0c"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    }
+   ]
   },
   "c1": {
    "titre": "Mission",
@@ -438,7 +434,7 @@
    ]
   },
   "c21": {
-   "titre": "Reactiver l'agent d'origine (correction)",
+   "titre": "Activer l'agent d'origine (correction)",
    "type": "action",
    "indices": [
     {
@@ -515,7 +511,7 @@
    "suivant": "c13"
   },
   "c12b": {
-   "titre": "DEVIATION : reactiver Buffy pour reparer immediatement",
+   "titre": "DEVIATION : activer Buffy pour reparer immediatement",
    "type": "action",
    "indices": [
     {
@@ -710,7 +706,7 @@
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
     }
    ],
-   "message": "Le rapport signale des problemes a resoudre : j ACTIVE IMMEDIATEMENT l'agent habilite (PASSE PAR LE GENERATEUR, commande activer) avec la liste exacte des problemes. L'agent corrige puis active Janus (sa carte) ; Janus recontrole et me reactive ; je relis son rapport (retour a c15b) jusqu'a rapport propre.",
+   "message": "Le rapport signale des problemes a resoudre : j ACTIVE IMMEDIATEMENT l'agent habilite (PASSE PAR LE GENERATEUR, commande activer) avec la liste exacte des problemes. L'agent corrige puis active Janus (sa carte) ; Janus recontrole puis REACTIVE Cerberus avec son rapport ; je relis son rapport (retour a c15b) jusqu'a rapport propre.",
    "suivant": "c15b"
   }
  }

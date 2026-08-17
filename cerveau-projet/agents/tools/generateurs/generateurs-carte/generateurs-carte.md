@@ -8,7 +8,7 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.3.0 |
+| **Version** | 0.3.1 |
 | **Statut** | ebauche |
 | **Categorie** | generateurs |
 | **Derniere mise a jour** | 2026-08-09 |

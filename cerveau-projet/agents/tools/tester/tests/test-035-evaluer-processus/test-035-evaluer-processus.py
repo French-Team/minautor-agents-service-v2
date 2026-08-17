@@ -32,6 +32,7 @@ v0.1.3 (2026-08-16) : evaluer-processus distingue DECLARATION_FAUTIVE
 (usage registre d un outil verrouille par un agent non habilite - a
 retirer du registre) de OUTIL_HORS_CARTE (outil partage manquant dans la
 carte - a ajouter).
+Tags: registre-traces, processus, garde-fou
 """
 import importlib.util
 import io

@@ -1,0 +1,13 @@
+{
+ "version": "0.1.0",
+ "description": "Taxonomie des categories de tests (demande utilisateur 2026-08-16) : chaque categorie = un groupe de TAGS portes par les tests dans leur docstring (bloc 'Tags:'). Le lanceur (--categorie <nom>) ne lance que les tests portant AU MOINS UN des tags de la categorie. Une categorie desactivee (--desactiver-categorie) exclut ses tests.",
+ "categories": {
+  "securite": ["marbre", "verrou", "habilitation", "blocage", "anti-contournement", "protection"],
+  "conventions": ["nommage", "ascii", "lf", "template", "fins-de-ligne", "budget"],
+  "agents": ["parcours", "cerberus", "janus", "morpheus", "buffy", "vulcain", "hygie", "themis", "clio", "argus", "garde-fou-agent"],
+  "outils": ["combos", "generateurs", "outil", "catalogue", "moteur", "ligne"],
+  "registre-traces": ["registre", "ko-tests", "traces", "processus", "usage"],
+  "performance": ["chrono", "pool", "workers", "perf", "duree", "reference-temps"],
+  "anti-recurrence": ["anti-recurrence", "garde-fou", "preuve-negative"]
+ }
+}

@@ -32,6 +32,7 @@ Invariants verifies :
   3. Commande = exactement {var} -> OK (commande entiere generee)
   4. Sinon, chaque {var} est entre guillemets (simples ou doubles) -> sinon KO
   5. Normes : ASCII strict + LF pur (definitions + test)
+Tags: outils, combos, garde-fou, anti-recurrence
 """
 import glob
 import importlib.util

@@ -26,7 +26,7 @@ Cas couverts:
   5. editer-parcours : --version v0.1.1
   6. tester-lancer-non-regression : --version v0.1.1
   7. enregistrer-usage-outil : mode script-temporaire accepte (--version v0.3.0)
-  8. Catalogue : les nouvelles commandes presentes (170 total)
+  8. Catalogue : les nouvelles commandes presentes (172 total)
   9. index-tools : les 4 nouvelles lignes presentes (3 outils + editer-fichier-agents)
  10. ASCII strict : 0 non-ASCII (outils + test)
  11. LF pur : 0 CRLF (outils + test)
@@ -37,6 +37,7 @@ Cas couverts:
 
 Usage:
   python3 test-024-scripts-temporaires.py
+Tags: registre-traces, garde-fou, anti-recurrence, scripts-temp
 """
 import glob
 import importlib.util
@@ -248,23 +249,23 @@ def main():
 
     # 5-6. editer-parcours + tester-lancer-non-regression
     r = run([PYTHON, EDITER_PARCOURS, "--version"])
-    verifier("5. editer-parcours --version v0.1.3",
-             r.returncode == 0 and "v0.1.3" in r.stdout, r.stdout.strip()[-60:])
+    verifier("5. editer-parcours --version v0.1.4",
+             r.returncode == 0 and "v0.1.4" in r.stdout, r.stdout.strip()[-60:])
     r = run([PYTHON, LANCER, "--version"])
-    verifier("6. tester-lancer-non-regression --version v0.5.5",
-             r.returncode == 0 and "v0.5.5" in r.stdout, r.stdout.strip()[-60:])
+    verifier("6. tester-lancer-non-regression --version v0.6.2",
+             r.returncode == 0 and "v0.6.2" in r.stdout, r.stdout.strip()[-60:])
 
     # 7. enregistrer-usage-outil v0.3.0 (mode script-temporaire + garde-fous + tri)
     r = run([PYTHON, ENREGISTRER, "--version"])
     verifier("7. enregistrer-usage-outil --version v0.3.0",
              r.returncode == 0 and "v0.3.0" in r.stdout, r.stdout.strip()[-60:])
 
-    # 8. Catalogue : 157 commandes + les nouvelles
+    # 8. Catalogue : 171 commandes + les nouvelles
     import json as json_mod
     with io.open(CATALOGUE, encoding="utf-8") as fh:
         cat = json_mod.load(fh)
     noms = [e.get("nom") for e in cat.get("commandes", [])]
-    ok_cat = (len(noms) == 170 and "tester-lancer-non-regression" in noms
+    ok_cat = (len(noms) == 178 and "tester-lancer-non-regression" in noms
               and "editer-parcours" in noms and "detecter-usage-scripts-temporaires" in noms
               and "detecter-cablages-manquants" in noms and "tester-protections" in noms
               and "detecter-fautes-orthographe" in noms and "detecter-contradictions" in noms
@@ -272,7 +273,7 @@ def main():
               and "analyser-noms-maj" in noms and "corriger-noms-maj" in noms
               and "detecter-processus-residuels" in noms
               and "nettoyer-processus-residuels" in noms)
-    verifier("8. catalogue : 170 commandes + nouvelles presentes",
+    verifier("8. catalogue : 178 commandes + nouvelles presentes",
              ok_cat, "nb=%d" % len(noms))
 
     # 9. index-tools : les 4 lignes presentes
@@ -342,6 +343,40 @@ def main():
     verifier("13. registre actif contient les 12 entrees script-temporaire (fusion)",
              nb_st >= 12 and not os.path.isfile(historique),
              "nb_st=%d historique_present=%s" % (nb_st, os.path.isfile(historique)))
+
+    # 15. Anti-recurrence (demande utilisateur 2026-08-17) : les parcours
+    # des agents ne doivent PAS ordonner "creer/ecrire un script (temporaire)
+    # pour ecrire/modifier un fichier du cerveau" (REGLE ABSOLUE 4 : outils
+    # du cerveau uniquement - creer-fichier / editer-fichier-agents /
+    # editer-parcours).
+    motifs = [r"creer\s+un\s+script", r"ecrire\s+un\s+script",
+              r"script\s+temporaire\s+pour\s+(ecrire|creer|modifier)"]
+    instructions_scripts = []
+    for f in sorted(glob.glob(os.path.join(PROJECT_ROOT, "cerveau-projet",
+                                           "agents", "*", "parcours",
+                                           "parcours-*.json"))):
+        try:
+            p = json.load(io.open(f, encoding="utf-8"))
+        except (ValueError, IOError):
+            continue
+        agent = os.path.basename(f).replace("parcours-", "").replace(".json", "")
+        for cid, c in p.get("cases", {}).items():
+            if not isinstance(c, dict):
+                continue
+            for ind in c.get("indices", []):
+                if not isinstance(ind, dict):
+                    continue
+                txt = " ".join(str(ind.get(k, "")) for k in
+                               ("texte", "commande", "message", "raison"))
+                for m in motifs:
+                    if re.search(m, txt, re.IGNORECASE):
+                        instructions_scripts.append(
+                            "%s %s : '%s'" % (agent, cid, m))
+                        break
+    verifier("15. 0 parcours ordonnant de creer/ecrire un script pour un "
+             "fichier du cerveau",
+             len(instructions_scripts) == 0,
+             instructions_scripts[:3] if instructions_scripts else "")
 
     print("")
     bilan_chrono()

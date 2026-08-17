@@ -25,6 +25,7 @@ Invariants verifies :
      (Activer l agent habilite)
   3. La fiche cerberus.md interdit d executer les tests (mot-cles de la lecon)
   4. Normes : ASCII strict + LF pur (carte + fiche + test)
+Tags: agents, cerberus, garde-fou, anti-recurrence
 """
 import importlib.util
 import io

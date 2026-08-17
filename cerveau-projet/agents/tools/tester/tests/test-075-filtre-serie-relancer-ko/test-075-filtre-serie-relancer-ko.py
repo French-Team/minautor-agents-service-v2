@@ -3,13 +3,13 @@
 """
 test-075-filtre-serie-relancer-ko.py
 GARDE-FOU : la combinaison --relancer-ko --series X de
-tester-lancer-non-regression (v0.5.5) doit revalider UNIQUEMENT les tests
+tester-lancer-non-regression (v0.6.2) doit revalider UNIQUEMENT les tests
 en KO de la serie X du dernier run (les KO des autres series sont affiches
 puis ecartes) - extension du workflow KO (demande utilisateur 2026-08-16).
 
 Contexte :
   - --relancer-ko (v0.5.2) relance tous les KO du dernier run.
-  - v0.5.5 : filtre serie - dans le bloc if args.relancer_ko, si
+  - v0.6.2 : filtre serie - dans le bloc if args.relancer_ko, si
     args.series est fourni (et != tous), les KO sont filtres via
     serie_du_test(nom) == args.series ; les KO des autres series sont
     AFFICHES puis ECARTES ; aucun KO dans la serie -> message
@@ -18,7 +18,7 @@ Contexte :
     c est la table SERIES (serie_du_test) qui deduit la serie par nom.
 
 Invariants verifies (sur un registre TEMPORAIRE, jamais le vrai) :
-  1. tester-lancer-non-regression --version = v0.5.5
+  1. tester-lancer-non-regression --version = v0.6.2
   2. Le help --aide mentionne la combinaison avec --series.
   3. FILTRE SERIE (fonctionnel via serie_du_test) : registre trie
      decroissant avec KO repartis - test-001 (serie c), test-024 (serie e),
@@ -29,6 +29,7 @@ Invariants verifies (sur un registre TEMPORAIRE, jamais le vrai) :
   5. PREUVE NEGATIVE : une serie sans KO -> liste vide.
   6. Le registre temp est SUPPRIME en fin de test (0 trace).
   7. Normes : ASCII strict + LF pur (test + lanceur).
+Tags: performance, relancer-ko, series, garde-fou
 """
 import importlib.util
 import io
@@ -123,13 +124,13 @@ def ecrire_registre(chemin, entrees):
 
 
 def main():
-    print("=== Garde-fou : filtre serie de --relancer-ko (tester-lancer-non-regression v0.5.5) ===")
+    print("=== Garde-fou : filtre serie de --relancer-ko (tester-lancer-non-regression v0.6.2) ===")
 
-    # 1. Version v0.5.5
+    # 1. Version v0.6.2
     t0 = time.monotonic()
     code, out = run([sys.executable, LANCEUR_PY, "--version"])
-    verifier("1. tester-lancer-non-regression --version v0.5.5",
-             code == 0 and "v0.5.5" in out, out.strip()[-40:])
+    verifier("1. tester-lancer-non-regression --version v0.6.2",
+             code == 0 and "v0.6.2" in out, out.strip()[-40:])
     chrono_etape("1. version", t0)
 
     # 2. Le help --aide mentionne la combinaison avec --series
