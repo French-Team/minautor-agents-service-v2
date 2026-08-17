@@ -159,6 +159,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-troncatures` | Detecter les elements tronques donc illisibles : fichiers trop longs a lire (binaires ignores), blocs non fermes (JSON/Python/bash invalides), marqueurs de troncature (zones de documentation ignorees), option --exclure | [detecter/detecter-troncatures/](detecter/detecter-troncatures/) |
 | `detecter-processus-residuels` | Detecter les processus residuels (python/node/bash) dont la commande reference le projet ou orphelins (parent mort), liste blanche protegee (freebuff, unsloth) | [detecter/detecter-processus-residuels/](detecter/detecter-processus-residuels/) |
 | `detecter-recherches-obsoletes` | Detecter les recherches-web obsoletes (age > 30 jours ou date invalidite passee) pour garantir des souvenirs vrais et a jour | [detecter/detecter-recherches-obsoletes/](detecter/detecter-recherches-obsoletes/) |
+| `detecter-ecritures-hors-cycle` | Detecter les ecritures de fichiers de travail hors cycle d activation (git + mtime croises avec l historique des activations) | [detecter/detecter-ecritures-hors-cycle/](detecter/detecter-ecritures-hors-cycle/) |
 
 ### Ecrire
 
@@ -531,7 +532,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Executer | 1 |
 | Protections | 6 |
 | Tests | 41 |
-| **Total** | **199** |
+| **Total** | **200** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

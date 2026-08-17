@@ -39,7 +39,7 @@
 #   python3 editer-parcours.py --agent cerberus --suivant c15c --vers c15b --wet
 #   python3 editer-parcours.py --agent vulcain --bump --wet
 #
-# Version : 0.1.4
+# Version : 0.1.6
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -56,9 +56,10 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 
-VERSION = "0.1.4"
+VERSION = "0.1.6"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "ebauche"
 
@@ -83,6 +84,34 @@ def racine_projet():
             break
         d = parent
     return d
+
+
+def agent_actif_session():
+    """Agent ACTIF de la session : table '## Sessions connues' d AGENTS.md,
+    agent de la session la plus recente (colonne Derniere activite). C est
+    l APPELLANT reel de l outil - distinct du parametre --agent (CIBLE)."""
+    racine = racine_projet()
+    chemin = os.path.join(racine, "AGENTS.md")
+    try:
+        contenu = io.open(chemin, encoding="utf-8", errors="replace").read()
+    except (IOError, OSError):
+        return ""
+    m = re.search(r"## Sessions connues\n(.*?)(?=\n## |\Z)", contenu, re.S)
+    if not m:
+        return ""
+    lignes = []
+    for ligne in m.group(1).splitlines():
+        ligne = ligne.strip()
+        if not ligne.startswith("| session-llm-"):
+            continue
+        cellules = [c.strip() for c in ligne.strip("|").split("|")]
+        if len(cellules) >= 4:
+            lignes.append(cellules)
+    if not lignes:
+        return ""
+    lignes.sort(key=lambda c: c[3], reverse=True)
+    actif = lignes[0][2].strip()
+    return actif if actif and actif != "-" else ""
 
 
 def chemin_parcours(racine, agent):
@@ -255,6 +284,24 @@ def afficher_messages_info(messages):
         print("  > %s" % message)
 
 
+def verrouiller_habilitation(agent, outil):
+    """Verrou d habilitation + auto-journalisation : appele
+    proteger-verrou-habilitation et retourne (code, message).
+    Code 0 = habilite (usage journalise en mode verrou-auto), 1 = bloque,
+    2 = erreur. L outil signale LUI-MEME son usage (espionnage)."""
+    racine = racine_projet()
+    verrou = os.path.join(
+        racine, "cerveau-projet", "agents", "tools", "proteger",
+        "proteger-verrou-habilitation", "proteger-verrou-habilitation.py")
+    if not os.path.isfile(verrou):
+        return (2, "[ERREUR] Verrou introuvable : %s" % verrou)
+    r = subprocess.run(
+        [sys.executable, verrou, "--agent", agent, "--outil", outil],
+        capture_output=True, text=True, encoding="utf-8", errors="replace")
+    message = (r.stdout + r.stderr).strip()
+    return (r.returncode, message)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Edite les parcours de decision JSON de maniere sure")
     parser.add_argument("--agent", type=str, required=True, help="Nom de l'agent (obligatoire)")
@@ -277,13 +324,31 @@ def main():
                   help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
 
-    verifier_residus_racine()
-
+    # Resoudre la carte cible AVANT le verrou : l anti-contournement (marbre)
+    # doit etre verifie AVANT l habilitation (integrite > habilitation).
     racine = racine_projet()
     chemin = chemin_parcours(racine, args.agent)
     if not os.path.isfile(chemin):
         print(_couleur("[ERREUR] Parcours introuvable : %s" % chemin, "rouge"))
         return 2
+
+    # ANTI-CONTOURNEMENT (marbre) AVANT le verrou : une carte modifiee HORS
+    # editer-parcours est bloquee quel que soit l appelant (la regle SEUL
+    # BUFFY est verifiee juste apres).
+    if args.wet and not args.dry_run:
+        if not verifier_lock_carte(racine, chemin):
+            print(_couleur("[BLOQUE] Ecriture refusee : anti-contournement (carte modifiee hors editer-parcours).", "rouge"))
+            return 1
+
+    # VERROU AUTO-JOURNALISATION (v0.1.6) : l outil signale LUI-MEME son usage
+    # (usage autorise -> registre mode verrou-auto ; non autorise -> bloque).
+    code_verrou, msg_verrou = verrouiller_habilitation(
+        agent_actif_session() or args.agent, "editer-parcours")
+    if code_verrou != 0:
+        print(_couleur(msg_verrou, "rouge"))
+        return code_verrou
+
+    verifier_residus_racine()
 
     d = charger(chemin)
     version_avant = d.get("parcours", {}).get("version", "")

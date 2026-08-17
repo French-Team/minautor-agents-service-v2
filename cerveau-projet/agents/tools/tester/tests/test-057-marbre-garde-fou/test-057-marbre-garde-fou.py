@@ -403,19 +403,23 @@ def main():
         finally:
             with io.open(carte_test, "w", encoding="utf-8", newline="\n") as fh:
                 fh.write(original)
-        # apres restauration, le lock doit etre resynchronise (empreinte git)
+        # apres restauration, l empreinte est resynchronisee : l
+        # anti-contournement est leve, mais le verrou SEUL BUFFY bloque
+        # (l agent actif de la non-regression n est pas buffy).
         r = lancer([PYTHON, EDITER_PY, "--agent", "themis", "--bump", "--dry-run"])
-        verifier("   restauration -> editer-parcours refonctionne (dry-run)",
-                 r.returncode == 0, "rc=%s" % r.returncode)
+        verifier("   restauration -> anti-contournement leve, verrou SEUL BUFFY bloque",
+                 r.returncode == 1 and "ANTI-CONTOURNEMENT" not in r.stdout
+                 and "BLOQUE" in r.stdout, "rc=%s" % r.returncode)
         chrono_etape("12. anti-contournement preuve", t)
 
-    # --- 13. anti-contournement : --modifier-case fonctionne (dry-run)
+    # --- 13. --modifier-case : verrou SEUL BUFFY bloque hors buffy
     if point_actif(13):
         t = time.monotonic()
         r = lancer([PYTHON, EDITER_PY, "--agent", "themis", "--modifier-case", "c1",
                     "--contenu", '{"type":"action","titre":"t","texte":"t","indice":"i"}'])
-        verifier("13. --modifier-case fonctionne (dry-run sans ecriture)",
-                 r.returncode == 0 and "MODIFY case c1" in r.stdout,
+        verifier("13. --modifier-case : verrou SEUL BUFFY bloque (hors buffy)",
+                 r.returncode == 1 and "BLOQUE" in r.stdout
+                 and "ANTI-CONTOURNEMENT" not in r.stdout,
                  "rc=%s stdout=%s" % (r.returncode, r.stdout[-200:]))
         chrono_etape("13. modifier-case", t)
 

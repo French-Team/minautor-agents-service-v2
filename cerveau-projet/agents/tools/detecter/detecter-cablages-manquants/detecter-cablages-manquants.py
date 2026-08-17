@@ -30,7 +30,7 @@
 #   --verbose           : detail des graphes (depart, cases atteignables)
 #   --version
 #
-# Version : 0.1.1
+# Version : 0.1.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -53,10 +53,11 @@ import glob
 import io
 import json
 import os
+import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -80,6 +81,24 @@ def racine_projet():
             break
         d = parent
     return d
+
+
+def verrouiller_habilitation(agent, outil):
+    """Verrou d habilitation + auto-journalisation : appele
+    proteger-verrou-habilitation et retourne (code, message).
+    Code 0 = habilite (usage journalise en mode verrou-auto), 1 = bloque,
+    2 = erreur. L outil signale LUI-MEME son usage (espionnage)."""
+    racine = racine_projet()
+    verrou = os.path.join(
+        racine, "cerveau-projet", "agents", "tools", "proteger",
+        "proteger-verrou-habilitation", "proteger-verrou-habilitation.py")
+    if not os.path.isfile(verrou):
+        return (2, "[ERREUR] Verrou introuvable : %s" % verrou)
+    r = subprocess.run(
+        [sys.executable, verrou, "--agent", agent, "--outil", outil],
+        capture_output=True, text=True, encoding="utf-8", errors="replace")
+    message = (r.stdout + r.stderr).strip()
+    return (r.returncode, message)
 
 
 def charger_parcours(chemin):
@@ -235,6 +254,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Verifie le cablage des cartes de decision (cases orphelines, boucles indirectes, references mortes, fins non joignables)")
     parser.add_argument("parcours", nargs="*", help="Chemins des parcours JSON a verifier (ou rien avec --tous)")
+    parser.add_argument("--agent", type=str, required=True, help="Agent appelant (obligatoire pour le verrou)")
     parser.add_argument("--tous", action="store_true", help="Scanne tous les parcours de cerveau-projet/agents/*/parcours/")
     parser.add_argument("--rapport", type=str, default="", help="Chemin du rapport markdown (optionnel)")
     parser.add_argument("--verbose", action="store_true", help="Detail des graphes")
@@ -243,6 +263,13 @@ def main():
     parser.add_argument("--aide", action="help",
                   help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()
+
+    # VERROU AUTO-JOURNALISATION (v0.1.2) : l outil signale LUI-MEME son usage
+    # (autorise -> registre mode verrou-auto ; non autorise -> bloque).
+    code_verrou, msg_verrou = verrouiller_habilitation(args.agent, "detecter-cablages-manquants")
+    if code_verrou != 0:
+        print(_couleur(msg_verrou, "rouge"))
+        return code_verrou
 
     racine = racine_projet()
     chemins = list(args.parcours)

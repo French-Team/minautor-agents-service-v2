@@ -1,5 +1,5 @@
 {
- "version": "0.2.10",
+ "version": "0.2.11",
  "description": "Catalogue des commandes complexes du cerveau-projet. Source de verite : chaque commande (modele) est un copier-coller d un appel d outil deja ecrit, corrige et valide (agents/tools/). Le generateur pose une question par parametre, valide les reponses, puis compose la commande exacte a lancer.",
  "commandes": [
   {
@@ -1188,6 +1188,31 @@
    "script": "cerveau-projet/agents/tools/detecter/detecter-donnees-en-dur/detecter-donnees-en-dur.py",
    "modele": "--tous",
    "parametres": []
+  },
+  {
+   "nom": "detecter-ecritures-hors-cycle",
+   "description": "Detecter les ecritures de fichiers de travail hors cycle d activation (git + mtime croises avec l historique des activations)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/detecter/detecter-ecritures-hors-cycle/detecter-ecritures-hors-cycle.py",
+   "modele": "--rapport {rapport} --verbose",
+   "parametres": [
+    {
+     "cle": "rapport",
+     "question": "Valeur pour rapport ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--rapport",
+     "defaut": ""
+    },
+    {
+     "cle": "verbose",
+     "question": "Activer --verbose ?",
+     "type": "bool",
+     "obligatoire": false,
+     "flag": "--verbose",
+     "defaut": false
+    }
+   ]
   },
   {
    "nom": "detecter-erreur-statut",

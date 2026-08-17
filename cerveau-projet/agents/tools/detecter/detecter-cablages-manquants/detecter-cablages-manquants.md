@@ -7,7 +7,7 @@ identite:
 # detecter-cablages-manquants
 
 **Categorie** : Detecter
-**Version** : 0.1.1
+**Version** : 0.1.2
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-12

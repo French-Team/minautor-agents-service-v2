@@ -7,7 +7,7 @@ identite:
 ---
 # valider-cartes-decision
 
-**Version :** 0.4.2
+**Version :** 0.4.4
 **Statut :** prepare
 **Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-cartes-decision/`

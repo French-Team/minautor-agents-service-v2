@@ -47,7 +47,7 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.2
+Version : 0.4.4
 Statut : prepare
 """
 
@@ -55,14 +55,72 @@ import io
 import json
 import os
 import re
+import subprocess
 import sys
 
-VERSION = "0.4.2"
+VERSION = "0.4.4"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "prepare"
 
 AGENTS_DIR = "cerveau-projet/agents"
 TYPES_VALIDES = ("question", "indice", "controle", "fin", "action")
+
+
+def racine_projet():
+    """Remonte jusqu au dossier racine (contenant AGENTS.md)."""
+    d = os.path.dirname(os.path.abspath(__file__))
+    while not os.path.isfile(os.path.join(d, "AGENTS.md")):
+        parent = os.path.dirname(d)
+        if parent == d:
+            break
+        d = parent
+    return d
+
+
+def agent_actif_session():
+    """Agent ACTIF de la session : table '## Sessions connues' d AGENTS.md,
+    agent de la session la plus recente. C est l APPELLANT reel de l outil -
+    distinct du parametre --agent (CIBLE de la verification)."""
+    racine = racine_projet()
+    chemin = os.path.join(racine, "AGENTS.md")
+    try:
+        contenu = io.open(chemin, encoding="utf-8", errors="replace").read()
+    except (IOError, OSError):
+        return ""
+    m = re.search(r"## Sessions connues\n(.*?)(?=\n## |\Z)", contenu, re.S)
+    if not m:
+        return ""
+    lignes = []
+    for ligne in m.group(1).splitlines():
+        ligne = ligne.strip()
+        if not ligne.startswith("| session-llm-"):
+            continue
+        cellules = [c.strip() for c in ligne.strip("|").split("|")]
+        if len(cellules) >= 4:
+            lignes.append(cellules)
+    if not lignes:
+        return ""
+    lignes.sort(key=lambda c: c[3], reverse=True)
+    actif = lignes[0][2].strip()
+    return actif if actif and actif != "-" else ""
+
+
+def verrouiller_habilitation(agent, outil):
+    """Verrou d habilitation + auto-journalisation : appele
+    proteger-verrou-habilitation et retourne (code, message).
+    Code 0 = habilite (usage journalise en mode verrou-auto), 1 = bloque,
+    2 = erreur. L outil signale LUI-MEME son usage (espionnage)."""
+    racine = racine_projet()
+    verrou = os.path.join(
+        racine, "cerveau-projet", "agents", "tools", "proteger",
+        "proteger-verrou-habilitation", "proteger-verrou-habilitation.py")
+    if not os.path.isfile(verrou):
+        return (2, "[ERREUR] Verrou introuvable : %s" % verrou)
+    r = subprocess.run(
+        [sys.executable, verrou, "--agent", agent, "--outil", outil],
+        capture_output=True, text=True, encoding="utf-8", errors="replace")
+    message = (r.stdout + r.stderr).strip()
+    return (r.returncode, message)
 
 
 def afficher_aide():
@@ -431,6 +489,13 @@ def main(argv):
             print("ERREUR : Nom de l'agent manquant")
             afficher_aide()
             return 1
+        # VERROU AUTO-JOURNALISATION (v0.4.4) : l outil signale LUI-MEME son
+        # usage (autorise -> registre mode verrou-auto ; non autorise -> bloque).
+        code_verrou, msg_verrou = verrouiller_habilitation(
+            agent_actif_session() or argv[1], "valider-cartes-decision")
+        if code_verrou != 0:
+            print(msg_verrou)
+            return code_verrou
         return verifier_agent(argv[1])
 
     if argv[0] == "--tous":

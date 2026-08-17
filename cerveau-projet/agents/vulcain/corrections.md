@@ -4237,3 +4237,82 @@ le temps est passe en sous-processus ; il faut profiler LE LANCEUR cible. Et un
 log non plafonne finit toujours par devenir le goulot des lectures/sorts
 entiers. La question "pourquoi ce test met 60s" a une reponse dans un fichier
 de donnees, pas dans le code du test.
+
+## [LECON] 2026-08-17 -- DETECTER-ECRITURES-HORS-CYCLE v0.1.0 (Vulcain)
+
+**Mission** : creer l outil anti-derive detecter-ecritures-hors-cycle
+(demande utilisateur : verifier qu aucune ecriture de fichier projet
+n echappe au cycle d activation, apres la derive du 19:47).
+
+**Resultat** : outil cree (detecter/detecter-ecritures-hors-cycle/),
+git --porcelain -uall + git diff --name-only en primaire, mtime en secours,
+exclusions (workspace, classeur-variables, traces, tmp, __pycache__,
+AGENTS.md/AGENTS-historique.md, .tmpignore). Verdict : KO si Cerberus actif +
+fichiers de travail modifies, ATTENTION si agent de travail actif. Preuve
+negative OK (--agent cerberus -> KO code 1), preuve positive OK (--agent
+vulcain -> ATTENTION code 0). Catalogue 178->179 (v0.2.11), index-tools
+199->200, normes 0/0.
+
+**Lecons** :
+1. LA PREVENTION EST IMPOSSIBLE pour les ecritures directes du LLM (write_file
+   contourne tous les outils) : le garde-fou est un DETECTEUR post-hoc
+   (git/mtime croise avec l historique), pas un bloqueur.
+2. git status --porcelain SANS -uall regroupe les dossiers non suivis en une
+   entree "dir/" (imprecis) : -uall liste les fichiers individuels, necessaire
+   pour la preuve negative fichier par fichier.
+3. Les fichiers de coordination (classeur-variables/stockage, agents/traces)
+   doivent etre EXCLUS : ils sont ecrits par les outils de coordination a
+   chaque activation, pas par un agent de travail.
+
+## [LECON] 2026-08-17 -- AUTO-JOURNALISATION VERROU-AUTO GENERALISEE (Vulcain)
+
+**Mission** : generaliser l auto-journalisation (mode verrou-auto) aux 3 outils
+critiques editer-parcours / valider-cartes-decision / detecter-cablages-manquants
+(l outil signale LUI-MEME son usage, plus l agent).
+
+**Resultat** : chaque outil embarque verrouiller_habilitation(agent, outil) qui
+appelle proteger-verrou-habilitation en debut de main() - usage autorise ->
+registre mode verrou-auto, non autorise -> BLOQUE + registre-tentatives-bloquees.
+detecter-cablages-manquants a recu l option --agent (obligatoire). Versions :
+editer-parcours 0.1.5, valider-cartes-decision 0.4.3, detecter-cablages-manquants
+0.1.2. Preuves reelles : detecter-cablages-manquants --agent vulcain -> verrou-auto
+(21:20:41) ; editer-parcours --agent vulcain -> verrou-bloque (21:20:42).
+
+**Lecons** :
+1. L ESPIONNAGE DOIT ETRE DANS L OUTIL, PAS DANS L AGENT : le verrou auto-
+   journalise a chaque appel sans discipline de l agent - c est le seul
+   mecanisme fiable (preuve : les declarations manuelles ont cesse le 08-17).
+2. LE VERROU BLOQUE AUSSI : un agent non habilite est arrete (ex vulcain sur
+   editer-parcours, seul buffy habilite) - l auto-journalisation et
+   l anti-derive partagent le MEME point d entree.
+3. IDENTITE REELLE : le verrou verifie que --agent == agent actif de AGENTS.md
+   (anti-usurpation). Les tests doivent tourner avec l agent reellement actif.
+
+
+
+## [LECON] 2026-08-17 -- VERROU CALLER/TARGET + AUTO-DETECTION APPELANT (Vulcain)
+
+**Contexte** : correction du bug decouvert par Morpheus - le verrou
+auto-journalisation etait appele avec args.agent (CIBLE) au lieu de l agent
+ACTIF (appelant).
+
+**CORRECTION** :
+1. editer-parcours (0.1.5 -> 0.1.6) : le verrou est desormais appele avec
+   agent_actif_session() (appelant reel lu dans AGENTS.md), --agent reste la
+   CIBLE du parcours a editer.
+2. valider-cartes-decision (0.4.3 -> 0.4.4) : idem, --agent reste la carte a
+   verifier. .sh + .md synchronises.
+3. detecter-cablages-manquants : DEJA correct (--agent = agent appelant
+   explicite) - pas de changement.
+
+**VERIFIE** : valider-cartes --agent atlas CONFORME (plus de blocage) ;
+test-004/005/021/045/046 redevenus verts.
+
+**Lecon** : le parametre --agent d un outil peut signifier "cible" OU
+"appelant". Le verrou veut l APPELLANT. tester-lancer-non-regression
+(--agent = appelant) est le seul modele ou le copier tel quel ; editer-parcours
+et valider-cartes (--agent = cible) exigent agent_actif_session().
+
+**RESTE (design)** : test-057 (marbre) exerce editer-parcours --agent themis
+hors buffy - bloque par la regle SEUL BUFFY. Le marbre (anti-contournement)
+devrait etre verifie AVANT le verrou (integrite > habilitation).

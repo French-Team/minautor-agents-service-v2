@@ -13,8 +13,8 @@ GARDE-FOU : les 2 outils d analyse crees par Vulcain (demande utilisateur
 
 Contexte :
   - Les 2 outils ont ete crees par Vulcain (categorie analyser) avec doc .md,
-  - entree catalogue generateurs-commande (168 commandes) et index-tools
-    (Analyser 9, Total 199).
+  - entree catalogue generateurs-commande (179 commandes) et index-tools
+    (Analyser 9, Total 200).
   - Ce garde-fou verifie leur existence reelle, leur version, leurs options,
     leur preuve d execution (sans planter sur les donnees reelles) et leur
     referencement - anti-recurrence d un outil oublie du catalogue.
@@ -25,8 +25,8 @@ Invariants verifies :
      la performance ; --session/--fenetre-total/--rapport pour les tokens)
   3. Les 2 docs .md existent avec la categorie Analyser et la version 0.1.0
   4. index-tools.md : les 2 outils listes dans la section Analyser, compteur
-     Analyser = 9, Total = 199
-  5. Catalogue : les 2 noms presents, 168 commandes triees
+     Analyser = 9, Total = 200
+  5. Catalogue : les 2 noms presents, 179 commandes triees
   6. Preuve reelle : analyser-performance-tests --version + execution sur le
      registre reel (ne plante pas, retourne 0) ; analyser-tokens --version +
      execution estimation locale (affiche ENVOYES/RECUS/ENCOMBREMENT)
@@ -223,8 +223,8 @@ def main():
             ok = ("`analyser-performance-tests`" in idx
                   and "`analyser-tokens`" in idx
                   and "| Analyser | 9 |" in idx
-                  and "| **Total** | **199** |" in idx)
-            verifier("6. index-tools : 2 outils + Analyser 9 + Total 199", ok,
+                  and "| **Total** | **200** |" in idx)
+            verifier("6. index-tools : 2 outils + Analyser 9 + Total 200", ok,
                      "perf=%s tokens=%s" % ("`analyser-performance-tests`" in idx,
                                             "`analyser-tokens`" in idx))
             chrono_etape("6. index-tools", t0)
@@ -235,10 +235,10 @@ def main():
             with io.open(CATALOGUE, encoding="utf-8") as fh:
                 cat = json.load(fh)
             noms = [e["nom"] for e in cat["commandes"]]
-            ok = (len(noms) == 178 and noms == sorted(noms)
+            ok = (len(noms) == 179 and noms == sorted(noms)
                   and "analyser-performance-tests" in noms
                   and "analyser-tokens" in noms)
-            verifier("7. catalogue : 172 trie + 2 outils presents", ok,
+            verifier("7. catalogue : 179 trie + 2 outils presents", ok,
                      "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
             chrono_etape("7. catalogue", t0)
 

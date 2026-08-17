@@ -1,7 +1,7 @@
 # editer-parcours
 
 **Categorie** : Editer
-**Version** : 0.1.4
+**Version** : 0.1.6
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-15
@@ -73,7 +73,7 @@ python3 editer-parcours.py --agent vulcain --bump --wet
 
 | Version | Date | Changements |
 |---|---|---|
-| 0.1.4 | 2026-08-17 | MESSAGES INFORMATIONNELS : afficher_messages_info en fin d action reussie (rappel Pattern 14 + valider-cartes + tests pins) - regle immuable v0.3.0 |
+| 0.1.5 | 2026-08-17 | MESSAGES INFORMATIONNELS : afficher_messages_info en fin d action reussie (rappel Pattern 14 + valider-cartes + tests pins) - regle immuable v0.3.0 |
 | 0.1.3 | 2026-08-15 | ANTI-CONTOURNEMENT : option `--modifier-case <id> --contenu <json>` (remplacer le contenu d une case sans ecriture directe) + verrou `cartes-lock.json` (empreintes SHA-256 des 14 cartes) - une carte modifiee HORS editer-parcours est REFUSEE, editer-parcours resynchronise le lock apres chaque ecriture legitime |
 | 0.1.2 | 2026-08-15 | VERROU DU MARBRE : verifier_cases_protegees() compare les cases protegees de l agent edite (manifeste marbre.json) avant d ecrire et REFUSE si une case protegee a ete modifiee/supprimee sans protocole (protocole-securite-marbre) |
 | 0.1.1 | 2026-08-13 | GARDE-FOU ANTI-RESIDUS : verifier_residus_racine() detecte les fichiers nommes comme des versions semver a la racine (residus de redirections accidentelles de sortie) et affiche un WARNING - sources de verite de version dans cerveau-projet/agents/clio/, JAMAIS a la racine |

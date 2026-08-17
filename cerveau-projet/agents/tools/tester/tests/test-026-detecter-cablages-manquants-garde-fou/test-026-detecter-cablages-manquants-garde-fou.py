@@ -9,7 +9,7 @@ Contexte :
     orphelines (vulcain c9b/c15b 'Ameliorations possibles' inaccessibles) a
     montre qu'une case orpheline non-fin passe inapercue, et qu'une boucle
     indirecte (c22 -> c9b -> c22) n'est pas signalee.
-  - detecter-cablages-manquants (v0.1.1, outil dedie) complete valider-case :
+  - detecter-cablages-manquants (v0.1.2, outil dedie) complete valider-case :
     CAS_ORPHELINE (toute case jamais atteignable), BOUCLE_BLOQUANTE (cycle
     sans sortie), REF_MORTE (suivant/branche vers case inexistante).
   - Ce garde-fou verifie que les 14 parcours des agents ont 0 cas orphelin,
@@ -17,7 +17,7 @@ Contexte :
     (case orpheline, boucle sans issue, reference cassee) fait KO.
 
 Cas couverts:
-  1. detecter-cablages-manquants --version = v0.1.1
+  1. detecter-cablages-manquants --version = v0.1.2
   2. Parcours sain (cerberus) : verdict PROPRE
   3. Les 14 parcours : 0 CAS_ORPHELINE au total
   4. Les 14 parcours : 0 BOUCLE_BLOQUANTE au total
@@ -156,8 +156,8 @@ def main():
 
     # 1. Version
     r = run([PYTHON, OUTIL_PY, "--version"])
-    verifier("1. --version = detecter-cablages-manquants v0.1.1",
-             "v0.1.1" in r.stdout, r.stdout.strip())
+    verifier("1. --version = detecter-cablages-manquants v0.1.2",
+             "v0.1.2" in r.stdout, r.stdout.strip())
 
     parcours = lister_parcours()
     verifier("2. 16 parcours d agents trouves",
@@ -170,7 +170,7 @@ def main():
     total_departs = 0
     total_fins = 0
     for chemin in parcours:
-        r = run([PYTHON, OUTIL_PY, chemin])
+        r = run([PYTHON, OUTIL_PY, "--agent", "janus", chemin])
         out = r.stdout + r.stderr
         total_orphelines += compter(out, "[CAS_ORPHELINE]")
         total_boucles += compter(out, "[BOUCLE_BLOQUANTE]")
@@ -191,7 +191,7 @@ def main():
 
     # 8. --tous : verdict global PROPRE (les boucles de re-travail sont des
     #    avertissements voulus, le verdict ne compte QUE les bloquants)
-    r = run([PYTHON, OUTIL_PY, "--tous"])
+    r = run([PYTHON, OUTIL_PY, "--agent", "janus", "--tous"])
     verifier("8. --tous : verdict global PROPRE",
              "Verdict global : PROPRE" in r.stdout, r.stdout[-120:])
 

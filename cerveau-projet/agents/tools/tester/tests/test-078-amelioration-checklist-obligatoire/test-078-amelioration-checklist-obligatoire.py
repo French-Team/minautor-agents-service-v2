@@ -36,8 +36,10 @@ Invariants verifies :
   2. Les activations d amelioration FUTURES (date >= reference) ont toutes
      une declaration generateurs-amelioration <= date d activation.
   3. Les activations d amelioration PASSEES sont listees comme ecarts
-     historiques documentes (le round detecter-troncatures 15:03 y figure,
-     la declaration 15:22 etant posterieure).
+     historiques documentes (non bloquants), et l incident
+     detecter-troncatures 15:03 est documente de facon stable dans le
+     registre (declaration a posteriori 15:22) - independamment du plafond
+     150 entrees de l historique qui purge les plus anciennes.
   4. PREUVE NEGATIVE : une activation fictive sans declaration registre
      avant elle est detectee comme ecart (KO si elle n etait pas detectee).
   5. Normes : ASCII strict + LF pur (test + sources).
@@ -151,6 +153,22 @@ def dates_generateurs_amelioration(registre):
     return sorted(dates)
 
 
+def entrees_registre(registre):
+    """Retourne la liste des entrees JSON du registre (dicts)."""
+    entrees = []
+    if not os.path.exists(registre):
+        return entrees
+    for ligne in io.open(registre, encoding="utf-8", errors="replace"):
+        ligne = ligne.strip()
+        if not ligne:
+            continue
+        try:
+            entrees.append(json.loads(ligne))
+        except ValueError:
+            continue
+    return entrees
+
+
 def activations_amelioration(texte_historique):
     """Lignes d AGENTS-historique dont la raison contient un motif
     d amelioration. Retourne [(date, agent, raison_complete)].
@@ -215,8 +233,10 @@ def main():
     chrono_etape("3. futur", t0)
 
     # 4. PASSE : les activations < DATE_REFERENCE sans declaration sont des
-    #    ecarts HISTORIQUES documentes (le round detecter-troncatures 15:03
-    #    doit y figurer) - liste attendue, pas KO bloquant.
+    #    ecarts HISTORIQUES documentes (non bloquants). L incident
+    #    detecter-troncatures 15:03 est documente de facon STABLE dans le
+    #    registre (declaration a posteriori 15:22) - independamment du plafond
+    #    150 entrees de l historique (qui purge les plus anciennes).
     t0 = time.monotonic()
     ecarts_historiques = []
     for date, agent, ligne in activations:
@@ -224,9 +244,20 @@ def main():
             continue
         if not decl_avant(date, dates):
             ecarts_historiques.append("%s %s" % (date, agent))
-    verifier("4. ecart historique documente : activation detecter-troncatures 15:03 sans checklist",
-             any("2026-08-16" in e and "vulcain" in e for e in ecarts_historiques),
-             "historiques=%s" % ecarts_historiques[:5])
+    # tous les ecarts historiques sont bien des activations PASSEES (avant
+    # DATE_REFERENCE, donc non bloquantes) : c est l invariant reel du point.
+    passe_bien_classe = all(
+        e.split()[0] < DATE_REFERENCE for e in ecarts_historiques)
+    # l incident detecter-troncatures est documente dans le registre (stable).
+    incident_documente = any(
+        "detecter-troncatures" in (e.get("contexte", "")
+                                   + " " + str(e.get("outil", "")))
+        for e in entrees_registre(REGISTRE)
+        if e.get("outil") == "generateurs-amelioration")
+    verifier("4. ecarts historiques documentes + incident detecter-troncatures (registre stable)",
+             passe_bien_classe and incident_documente,
+             "historiques=%s incident=%s" % (ecarts_historiques[:3],
+                                             incident_documente))
     chrono_etape("4. passe", t0)
 
     # 5. PREUVE NEGATIVE : injecter une activation fictive SANS declaration

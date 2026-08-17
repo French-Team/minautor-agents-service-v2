@@ -25,12 +25,12 @@ identite:
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
 | **Active par** | janus (retour de mission) |
-| **Raison** | REPARATION BOUCLE BRISEE : retour a Cerberus. DIAGNOSTIC : derive de l IA - depuis l activation de janus (19:47, non-regression finale round performance), le travail a continue en solo (optimisations test-032/005/031/085) sans activations formelles via activer-agent-principal. AGENTS.md et l historique etaient figes sur janus. Cycle Cerberus -> agent -> Cerberus retabli. |
+| **Raison** | BILAN FINAL ROUND VERROU AUTO-JOURNALISATION : NON-REGRESSION 87 OK / 0 KO (46.3s, reference amelioree 69.7s -> 46.3s). Corrige en cours de round : (1) test-089 tag derive -> anti-contournement (taxonomie), (2) test-078 point 4 rendu robuste (verifie l incident detecter-troncatures dans le registre stable au lieu de l entree purgee du plafond 150 de l historique). Lecon Morpheus enregistree. Retour a Cerberus. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-17 21:02 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-17 22:15 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

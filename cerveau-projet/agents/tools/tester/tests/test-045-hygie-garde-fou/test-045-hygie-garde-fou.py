@@ -215,7 +215,8 @@ def main():
     # 4. Cablages : 0 probleme
     rc, out = lancer(os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
                                   "tools", "detecter", "detecter-cablages-manquants",
-                                  "detecter-cablages-manquants.py"), PARCOURS)
+                                  "detecter-cablages-manquants.py"),
+                     "--agent", "janus", PARCOURS)
     verifier("4. Parcours hygie 0 probleme de cablage",
              "PROPRE" in out, "rc=%d" % rc)
 

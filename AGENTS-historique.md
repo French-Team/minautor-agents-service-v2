@@ -13,6 +13,72 @@ identite:
 
 ---
 
+| 2026-08-17 22:15 | session-llm-1 | Cerberus | BILAN FINAL ROUND VERROU AUTO-JOURNALISATION : NON-REGRESSION 87 OK / 0 KO (46.3s, reference amelioree 69.7s -> 46.3s). Corrige en cours de round : (1) test-089 tag derive -> anti-contournement (taxonomie), (2) test-078 point 4 rendu robuste (verifie l incident detecter-troncatures dans le registre stable au lieu de l entree purgee du plafond 150 de l historique). Lecon Morpheus enregistree. Retour a Cerberus. |
+| 2026-08-17 22:08 | session-llm-1 | janus | RELANCER LA NON-REGRESSION FINALE (round verrou auto-journalisation) : Morpheus a corrige le tag de test-089 (derive -> anti-contournement). test-089 9/9 vert, test-087 8 OK / 0 KO (taxonomie OK). Janus lance la non-regression complete pour confirmer 87/87 puis reactive Cerberus avec le bilan.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 22:08 | session-llm-1 | morpheus | CORRIGER LE TAG DE test-089 : la non-regression Janus a rendu 86 OK / 1 KO. Le KO = test-087-categories-tags signale que test-089 porte le tag 'derive' non autorise dans la taxonomie categories-tests.json (88 tags autorises). CORRECTION : remplacer 'derive' par 'anti-contournement' (tag autorise, categorie securite) dans la ligne Tags: de test-089. VERIFIER : test-089 vert, test-087 vert (taxonomie OK). PUIS : reactiver Janus pour la relance finale de la non-regression.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 22:08 | session-llm-1 | Cerberus | NON-REGRESSION ROUND VERROU AUTO-JOURNALISATION : 86 OK / 1 KO. SEUL KO = test-087-categories-tags signale le tag 'derive' de test-089 (non autorise dans la taxonomie categories-tests.json). Retour a Cerberus pour activer Morpheus (exclusif reparations de tests). |
+| 2026-08-17 21:56 | session-llm-1 | janus | ROUND VERROU AUTO-JOURNALISATION : Vulcain a corrige le bug caller/target + reordonne le marbre avant le verrou, Morpheus a adapte test-045/test-057/test-024/005/007 + cree test-089. Janus lance la non-regression complete pour valider l ensemble.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 21:42 | session-llm-1 | vulcain | CORRIGER LE VERROU AUTO-JOURNALISATION : dans editer-parcours et valider-cartes-decision, le verrou est appele avec args.agent (CIBLE) au lieu de l agent ACTIF (appelant). detecter-cablages-manquants est OK (--agent = agent appelant explicite). BUG : editer-parcours --agent themis et valider-cartes-decision --agent atlas sont BLOQUES par le verrou d identite (session != cible). Tests affectes test-004/005/021/045/046/057. CORRECTION : determiner l agent actif de la session (lire AGENTS.md table Sessions connues, agent le plus recent) et le passer a verrouiller_habilitation(appelant, outil) ; garder --agent comme CIBLE du travail de l outil. VERIFIER : valider-cartes-decision --agent atlas CONFORME sans blocage, editer-parcours --agent themis --bump --dry-run sans blocage identite. PUIS : bump version des 2 outils, adapter les pins tests si besoin, reactiver Morpheus.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 21:21 | session-llm-1 | morpheus | MISSION MORPHEUS : ADAPTER LES TESTS APRES LA GENERALISATION DU VERROU-AUTO + CREER test-089. CONTEXTE : Vulcain a ajoute le verrou (verrouiller_habilitation) a editer-parcours v0.1.5, valider-cartes-decision v0.4.3, detecter-cablages-manquants v0.1.2. detecter-cablages-manquants EXIGE maintenant --agent (obligatoire). Chaque outil journalise verrou-auto si autorise, bloque sinon. A FAIRE : 1) grep global des pins de version des 3 outils dans les tests (editer-parcours 0.1.4->0.1.5, valider-cartes-decision 0.4.2->0.4.3, detecter-cablages-manquants 0.1.1->0.1.2) et les adapter ; 2) adapter les tests qui appellent detecter-cablages-manquants SANS --agent (ajouter --agent <agent habilite>) - attention au verrou IDENTITE : les tests qui lancent le verrou en production doivent tourner avec l agent reellement actif, sinon utiliser --audit si le test est une preuve formelle ; 3) CREER test-089-ecritures-hors-cycle.py (garde-fou anti-recurrence de la derive, deja en attente) qui verifie detecter-ecritures-hors-cycle v0.1.0 (--version, etat propre, preuve negative KO sous Cerberus, exclusions) ; 4) lancer les tests adaptes en reel ; 5) normes ASCII + LF. FIN : lecon Morpheus + ACTIVER JANUS pour la non-regression complete.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 21:17 | session-llm-1 | vulcain | MISSION VULCAIN : GENERALISER L AUTO-JOURNALISATION (mode verrou-auto) AUX 3 OUTILS CRITIQUES QUI ECRIVENT/VALIDENT DANS LE PROJET : editer-parcours, valider-cartes-decision, detecter-cablages-manquants. CONTEXTE : l audit du registre (2026-08-17) a montre que SEUL le mode verrou-auto (auto-journalisation du verrou d habilitation) continue de tracer les usages - les declarations manuelles des agents ont cesse (derive). DECISION : l outil signale LUI-MEME son usage (espionnage), pas l agent. proteger-verrou-habilitation --agent X --outil Y fait DEJA les deux : usage autorise -> registre-usages-outils.jsonl (mode verrou-auto) ; usage non autorise -> BLOQUE + registre-tentatives-bloquees.jsonl. A FAIRE : 1) dans CHACUN des 3 outils, ajouter la fonction verrouiller_habilitation(agent, outil) (modele EXACT de tester-lancer-non-regression.py : appele proteger-verrou-habilitation.py --agent <agent> --outil <outil> en sous-processus, retourne (code, message), code != 0 = sortie bloquee) ; 2) appeler verrouiller_habilitation dans main() AVANT l action, avec l agent passe en --agent et le nom de l outil en dur ; 3) detecter-cablages-manquants : AJOUTER l option --agent (obligatoire) - il ne l a pas encore (editer-parcours et valider-cartes-decision l ont deja) ; 4) bump version de chaque outil + doc .md historique de version, normes ASCII + LF ; 5) VERIFIER la table d habilitation : chaque outil doit etre assigne a au moins une carte (sinon le verrou bloque TOUT le monde) - si un outil n est dans aucune carte, le signaler sans forcer ; 6) TESTS REELS : agent habilite -> usage autorise + entree verrou-auto dans le registre ; agent non habilite -> BLOQUE + entree registre-tentatives-bloquees.jsonl ; --version de chaque outil ; 7) 0 residu, registre trie decroissant. FIN : lecon Vulcain + ACTIVER MORPHEUS pour adapter les tests (versions pinnees des 3 outils + garde-fous d exclusivite impactes + test-089 ecritures-hors-cycle encore en attente).
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 21:15 | session-llm-1 | morpheus | MISSION MORPHEUS : CREER LE GARDE-FOU test-089-ecritures-hors-cycle (anti-recurrence de la derive) + ADAPTER LES PINS DU NOUVEL OUTIL. CONTEXTE : Vulcain a cree detecter-ecritures-hors-cycle v0.1.0 (detection combinee git --porcelain -uall + git diff en primaire, mtime en secours, exclusions workspace/classeur-variables/traces/tmp/__pycache__/AGENTS.md/AGENTS-historique.md/.tmpignore). Verdict : KO (code 1) si Cerberus actif + fichiers de travail modifies ; ATTENTION (code 0) si agent de travail actif. Catalogue 178->179 (v0.2.11), index-tools 199->200. A FAIRE : 1) creer test-089-ecritures-hors-cycle.py (modele template-test : protections importees + triplet point_actif/chrono_etape/bilan_chrono, ASCII/LF) qui verifie : a) --version = v0.1.0 ; b) etat propre (--agent vulcain) = ATTENTION ou OK avec code 0 ; c) PREUVE NEGATIVE : creer un fichier de travail temporaire puis --agent cerberus doit retourner KO (code 1) et lister le fichier, puis supprimer la preuve (0 residu) ; d) les exclusions (AGENTS.md, AGENTS-historique.md, traces/, classeur-variables/) ne sont JAMAIS listees ; e) normes ASCII + LF. 2) ADAPTER les pins : test-007 (catalogue 178->179 + version 0.2.10->0.2.11 si pinnee), test-005 (version catalogue 0.2.10->0.2.11), et tout test qui pinne index-tools Total 199->200. 3) lancer test-089 + les tests repinnes en reel. 4) normes ASCII + LF sur tous les fichiers modifies. FIN : lecon Morpheus + ACTIVER JANUS pour la non-regression complete (verrou : seul Janus lance la suite).
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 21:09 | session-llm-1 | vulcain | MISSION VULCAIN : CREER L OUTIL DETECTER-ECRITURES-HORS-CYCLE (garde-fou anti-derive). CONTEXTE : la boucle a ete brisee le 2026-08-17 19:47 - l IA a travaille en solo (optimisations test-032/005/031/085) sans activations formelles. DECISION UTILISATEUR : detection combinee - git en source primaire, mtime en secours. OUTIL A CREER : cerveau-projet/agents/tools/detecter/detecter-ecritures-hors-cycle/detecter-ecritures-hors-cycle.py (+ .md, + entree catalogue generateurs-commande, + entree index-tools.md). FONCTIONNALITES : 1) lire le DERNIER horodatage d activation de AGENTS-historique.md (format | YYYY-MM-DD HH:MM | ...) + l agent actif de AGENTS.md (session-llm-1) ; 2) collecter les fichiers modifies - PRIMAIRE git status --porcelain + git diff --name-only HEAD, SECOURS si git indisponible marcher les fichiers du projet et garder ceux dont mtime > dernier horodatage d activation ; 3) EXCLURE .git/ workspace/ tmp-* .tmp-* .zz-* traces/ __pycache__/ AGENTS.md AGENTS-historique.md + chemins couverts par .tmpignore ; 4) VERDICT v1 : KO si des fichiers de travail sont modifies APRES la derniere activation alors que l agent actif est Cerberus (coordination ne doit jamais ecrire de fichier de travail) ; si un agent de travail est actif, lister les fichiers modifies mais verdict ATTENTION (couverture presumee par la mission en cours). 5) Sortie : liste des fichiers hors cycle (chemin + preuve git/mtime + horodatage) + compteur + verdict final (0 = OK sinon KO avec nombre) + resume. OPTIONS : --depuis <horodatage> (remplacer lecture auto), --agent <nom> (forcer l agent actif), --rapport <fichier> (markdown), --verbose, --version, --aide. CONTRAINTES : ASCII strict, LF, argparse, modele outil-template (shebang, coding ascii, docstring Usage), detection racine projet via AGENTS.md, pas de script tiers. TESTS REELS : etat propre (agent de travail actif, rien modifie apres activation) = 0 hors cycle ; preuve negative (modifier un fichier de travail apres le dernier horodatage alors que l agent actif est Cerberus) = detection 100% puis suppression de la preuve (0 residu) ; --version, --aide, --rapport. FIN : lecon Vulcain + catalogue/index-tools a jour + ACTIVER MORPHEUS pour creer le garde-fou test anti-recurrence.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
 | 2026-08-17 21:02 | session-llm-1 | Cerberus | REPARATION BOUCLE BRISEE : retour a Cerberus. DIAGNOSTIC : derive de l IA - depuis l activation de janus (19:47, non-regression finale round performance), le travail a continue en solo (optimisations test-032/005/031/085) sans activations formelles via activer-agent-principal. AGENTS.md et l historique etaient figes sur janus. Cycle Cerberus -> agent -> Cerberus retabli. |
 | 2026-08-17 19:47 | session-llm-1 | janus | ROUND PERFORMANCE : non-regression finale apres config adaptative + 3 analyseurs (Vulcain v0.6.1, catalogue 178, index 199)
 
@@ -1135,79 +1201,6 @@ avec --case <cid> --reponses '<reponse>'). |
 
 DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
 python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 16:55 | session-llm-1 | morpheus | ADAPTER LES 8 TESTS APRES LE BUMP TESTER-LANCER-NON-REGRESSION 0.5.3 -> 0.5.4 (rotation non destructive du registre). CONTEXTE : le KO test-078 recidivait car rotation_registre (v0.5.3) SUPPRIMAIT les usages normaux anciens du registre a chaque lancement (perte du bloc 13:14-13:43 + declarations reconstruites). Vulcain a corrige v0.5.4 : la rotation ne plafonne PLUS QUE les entrees verrou-auto (bruit) ; les verites (direct/generateur/script-temporaire) ne sont JAMAIS retirees. Preuves : test-078 7/7, test-035 10/10, rotation idempotente (2x = 124). RESTE : 8 tests pincent la version 0.5.3 via --version et doivent passer a 0.5.4 : test-024 (2 occ), test-027 (2), test-031 (3), test-032 (3), test-051 (3), test-062 (6), test-066 (3), test-074 (7). CONSIGNE : (1) pour chaque test, remplacer 0.5.3 -> 0.5.4 (docstring + verifier --version + libelles), (2) lancer chaque test adapte pour reverdir, (3) verifier test-024 (les 2 KO : version + tmp-janus purge par Vulcain - verifier qu il reste 1 seul KO version avant adaptation), (4) verifier test-078 + test-035 toujours verts, (5) normes ASCII + LF, (6) lecon Morpheus. FIN : ACTIVER JANUS pour la revalidation ciblee puis la non-regression complete.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 16:52 | session-llm-1 | vulcain | CORRIGER LA ROTATION DESTRUCTIVE DU REGISTRE (KO test-078 recidivant). CONTEXTE : apres la restauration du registre (226 entrees, bloc HEAD 13:14-13:43 re-ajoute + 3 declarations reconstruites dont generateurs-amelioration), le KO test-078 est REVENU au lancement suivant (registre retombe a 119, generateurs-amelioration absente). CAUSE RACINE (diagnostic Janus) : tester-lancer-non-regression contient rotation_registre(racine, max_usages=100) appelee a CHAQUE lancement (lignes 1330 et 1415) : quand le registre depasse 100 usages normaux, elle SUPPRIME les plus anciens -> le bloc 13:14-13:43 et les 3 declarations reconstruites sont rognes a chaque lancement, annulant toute restauration. CONSIGNE : (1) CORRIGER rotation_registre dans tester-lancer-non-regression : NE PLUS SUPPRIMER - transformer en ARCHIVAGE non destructif (les entrees retirees vont dans registre-usages-outils.historique.jsonl, append + tri, jamais perdues) OU supprimer l appel de rotation (decision a documenter dans la docstring) - l essentiel : AUCUNE entree du registre ne doit etre perdue par le lanceur (meme philosophie que corriger-noms-maj v0.1.1 : jamais perdre une ligne) ; (2) RESTAURER le registre apres la correction (union WT actuel + HEAD + 3 declarations reconstruites - script deja pret : tmp-janus/restaurer-registre.py a adapter si besoin) ; (3) PROUVER : test-078 vert (7/7), test-035 vert, generateurs-amelioration presente, registre >= 131 + 3 ; (4) verifier que la suite peut etre lancee SANS rogner (lancer 2 fois rotation_registre, compte identique) ; (5) normes ASCII strict + LF. FIN : lecon Vulcain + activer MORPHEUS si tests a adapter puis Janus pour revalidation ciblee + suite complete.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 16:40 | session-llm-1 | janus | Revalidation ciblee puis non-regression complete apres reparation du KO critique registre. VULCAIN : corriger-noms-maj v0.1.1 repare (reecriture ligne par ligne + garde de compte avant/apres) + registre restaure (225 entrees : union WT 124 + HEAD 131 + 3 declarations reconstruites generateurs-amelioration 15:22:59 + analyser-noms-maj + corriger-noms-maj, dedoublonnage fait). MORPHEUS : test-079 adapte au bump 0.1.1, vert 15/15. Test-078 7/7, test-035 10/10, evaluer-processus 0 probleme, analyser registre PROPRE, normes 0/0 partout. ACTIONS JANUS : (1) revalidation ciblee serie A (test-078/035/079) via --relancer-ko ou directe, (2) non-regression COMPLETE toutes barrieres (E->A->D->C->B), (3) chrono + comparaison reference, (4) aucun residu (tmp-janus a purger), (5) lecon Janus + reactiver Cerberus avec le bilan consolide.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 16:40 | session-llm-1 | Cerberus | reparation KO critique terminee : corriger-noms-maj v0.1.1 repare (reecriture ligne par ligne + garde de compte), registre restaure (225 entrees, bloc 13:14-13:43 + 3 declarations reconstruites), test-079 adapte (0.1.1) et vert 15/15, test-078 7/7, test-035 10/10, evaluer-processus 0 probleme, analyser registre PROPRE, normes 0/0 partout. Relance ciblee (test-078/035/079) puis non-regression complete. |
-| 2026-08-16 16:39 | session-llm-1 | morpheus | ADAPTER TEST-079 APRES LE BUMP CORRIGER-NOMS-MAJ 0.1.0 -> 0.1.1. CONTEXTE : Janus a trouve un KO CRITIQUE - corriger-noms-maj v0.1.0 avait CORROMPU le registre-usages-outils.jsonl (~115 entrees perdues dont generateurs-amelioration, test-078 crash). Vulcain a (1) REPARE l outil v0.1.1 : reecriture ligne par ligne sur les lignes brutes + GARDE DE COMPTE avant/apres (refuse si le compte change), (2) RESTAURE le registre : 225 entrees valides (union WT 124 + HEAD 131 + 3 declarations reconstruites, dedoublonnage fait), (3) prouve : test-078 7/7, test-035 10/10, evaluer-processus 0 probleme, analyser-noms-maj --zone registre PROPRE, normes 0/0. RESTE : test-079 a 2 KO (points 2 et 4) car il pince la version 0.1.0 de corriger-noms-maj (py + sh parite) alors que l outil est desormais 0.1.1. CONSIGNE : (1) adapter test-079 : 0.1.0 -> 0.1.1 dans la docstring (lignes 10, 20) et dans les verifier (points 2 et 4, lignes ~138-150), (2) verifier test-079 vert (15/15), (3) verifier test-078 + test-035 toujours verts, (4) normes ASCII + LF du test modifie, (5) lecon Morpheus + REACTIVER JANUS pour la revalidation ciblee (test-078/035/079 serie A) puis la non-regression complete. CONTRAINTES : ne PAS toucher au registre ni a l outil (mission Vulcain terminee), declaration registre autorisee uniquement.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 16:34 | session-llm-1 | vulcain | KO CRITIQUE NON-REGRESSION : corriger-noms-maj a CORROMPU le registre-usages-outils.jsonl (test-078 crash : plus AUCUNE entree generateurs-amelioration). Diagnostic Janus : (1) le registre est passe de 131 entrees (HEAD) a 124 (WT) - le bloc 13:14-13:43 (~115 entrees auto-journalisation verrou) present dans HEAD est ABSENT du WT (116 lignes supprimees, 9 ajoutees) ; (2) les declarations analyser-noms-maj + corriger-noms-maj (faites par Vulcain ~15:43) sont AUSSI absentes ; (3) generateurs-amelioration (15:22:59, Cerberus, documentee dans la lecon Cerberus) ABSENTE ; (4) cause racine : corriger-noms-maj reecrit les lignes par INDEX d entree parsee (no-1) applique a la liste BRUTE des lignes : tout decalage (ligne vide, invalide, CRLF) ecrase/decale des entrees, ecriture PERTEUSE sans garde de compte avant/apres. ACTIONS VULCAIN : (1) REPARER corriger-noms-maj : reecriture par POSITIONS DE LIGNES BRUTES (jamais par index d entrees parsees), garde de compte avant/apres (refuser si le compte diminue), jamais perdre une ligne ; (2) RESTAURER le registre : re-ajouter le bloc 13:14-13:43 (recuperable depuis git HEAD) + les 3 declarations documentees (generateurs-amelioration 15:22:59 cerberus + analyser-noms-maj + corriger-noms-maj vulcain ~15:43) - script deja prepare : tmp-janus/restaurer-registre.py (union WT+HEAD+reconstruites, garantie aucune perte) ; (3) PROUVER : analyser-noms-maj --zone registre = PROPRE, test-078 + test-035 + test-079 verts, compte final >= 131 + 3 ; (4) normes ASCII strict + LF sur tous les fichiers modifies. FIN : lecon Vulcain + REACTIVER JANUS pour revalidation ciblee (test-078/035/079 serie A) puis suite complete.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 16:13 | session-llm-1 | janus | RELANCER LA NON-REGRESSION COMPLETE : spec verifier-systeme alignee v0.2.2 (test-028 vert par Vulcain). Verdict attendu : 79 tests, toutes barrieres vertes.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 16:12 | session-llm-1 | vulcain | ALIGNER LA SPEC verifier-systeme SUR LA VERSION 0.2.2 (test-028 KO : spec DIVERGENTE). Contexte : l outil verifier-systeme a ete enrichi avec l option --bloc-fiche <agent> (v0.2.2, generation du bloc Environnement de travail pour les fiches agents) mais la spec spec-verifier-systeme.001.01.ebauche.md documente encore la v0.2.1-py et ne mentionne pas --bloc-fiche. CONSIGNE : 1) mettre a jour la spec : mention de la v0.2.2-py dans la ligne d alignement, ajout de l exigence --bloc-fiche (genere le bloc markdown Environnement de travail a inserer dans une fiche agent), ajout dans les exemples d utilisation (verifier-systeme.py --bloc-fiche cerberus), 2) verifier test-028 vert (specs alignees), 3) normes ASCII + LF de la spec, 4) lecon + reactiver JANUS.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 16:10 | session-llm-1 | janus | RELANCER LA NON-REGRESSION COMPLETE apres ajout de la section Environnement de travail (Systeme) dans le template et les 15 fiches agents. Contexte : Vulcain a enrichi verifier-systeme (--bloc-fiche v0.2.2), Buffy a rempli les 15 fiches (verifier-conformite-fiche 11/11 + trio CONFORMES), Morpheus a cree le garde-fou test-080 (11/11, serie A + profil cartes). Verdict attendu : 79 tests, toutes barrieres vertes.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 16:09 | session-llm-1 | morpheus | CREER LE GARDE-FOU test-080 : les 15 fiches agents + le template contiennent la section Environnement de travail (Systeme) generee par verifier-systeme --bloc-fiche. CONTEXTE : demande utilisateur - chaque fiche doit contenir les infos de l environnement reel (Windows vs Linux). Vulcain a ajoute verifier-systeme --bloc-fiche <agent> (v0.2.2), Buffy a ajoute la section au template et aux 15 fiches (verifier-conformite-fiche 11/11 + trio CONFORMES). GARDE-FOU test-080 a creer : verifie (1) verifier-systeme --version = 0.2.2 (py + sh parite), (2) --bloc-fiche cerberus genere un bloc avec ## Environnement de travail + Windows + Racine projet, (3) le TEMPLATE fiche-agent-template.md contient la section, (4) CHACUNE des 15 fiches (cerberus, buffy, vulcain, morpheus, janus, themis, atlas, clio, hygie, argus, hermes, athena, promethee, minerve, gardien) contient ## Environnement de travail (Systeme) + le mot Windows + Differences Windows vs Linux, (5) la section est AVANT ## Limites dans chaque fiche, (6) verifier-conformite-fiche --tous = 11 CONFORME (sans lancer l outil, verifier le verdict via subprocess), (7) normes ASCII/LF (test + verifier-systeme py/sh/md), (8) 0 residu. AJOUTER test-080 au lanceur serie A + profil cartes. FIN : lecon Morpheus + activer JANUS pour la non-regression complete.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0 --reponses OUI
 (reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
 avec --reponses NON pour relire d abord ; suis ensuite les branches case
 par case ; si tu reprends apres une interruption, reprends a la case courante

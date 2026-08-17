@@ -3990,7 +3990,59 @@ lancements, dont plusieurs redondants.
 **Resultat** : test-003 7.85s -> 6.34s (-19%), 89/89 OK. Suite complete
 74.5s -> 69.7s.
 
-**Lecon** : un test qui enchaîne des sous-processus est souvent lent a cause
+**Lecon** : un test qui enchaine des sous-processus est souvent lent a cause
 des lancements redondants, pas du code teste. Avant d'optimiser un test,
 compter ses subprocess.run et chercher les appels identiques (meme commande,
 meme arguments) qui peuvent etre reutilises.
+
+
+## [LECON] 2026-08-17 -- VERROU AUTO-JOURNALISATION : PINS + TEST-089 + BUG CALLER/TARGET (Morpheus)
+
+**Contexte** : Vulcain a branche le verrou auto-journalisation sur 3 outils
+(editer-parcours, valider-cartes-decision, detecter-cablages-manquants).
+Morpheus adapte les tests puis lance la non-regression.
+
+**Fait** :
+1. test-024 : pin editer-parcours v0.1.4 -> v0.1.5 (verrou ajoute).
+2. test-005 : pin catalogue version 0.2.10 -> 0.2.11.
+3. test-007 : pin catalogue 178 -> 179 + index-tools 199 -> 200 +
+   entrees detecter-ecritures-hors-cycle.
+4. test-089 cree (garde-fou detecter-ecritures-hors-cycle : existence/compile,
+   --version, --aide, preuve negative code 1, agent travail code 0, --rapport,
+   nettoyage, normes) + ajoute a la serie e.
+
+**BUG TROUVE (bloquant)** : le verrou est appele avec args.agent (CIBLE) au
+lieu de l agent ACTIF (appelant). editer-parcours --agent themis et
+valider-cartes-decision --agent atlas sont BLOQUES par le verrou d identite
+(session != cible). detecter-cablages-manquants est OK (--agent = "agent
+appelant" explicite). Tests affectes : test-004/005/021/045/046/057.
+
+**Lecon** : le parametre --agent d un outil peut signifier "cible" OU
+"appelant". Le verrou veut l APPELLANT. Ne jamais copier le modele
+tester-lancer-non-regression (ou --agent = appelant) vers un outil ou
+--agent = cible sans adapter.
+
+**Suite** : reactivation Vulcain pour corriger (passer l agent actif au
+verrou, garder --agent comme cible).
+
+## [LECON] 2026-08-17 -- TAGS TEST-089 + ROBUSTESSE TEST-078 (Morpheus)
+
+**Contexte** : round verrou auto-journalisation. Deux KO de la non-regression a corriger.
+
+1. test-089 (garde-fou detecter-ecritures-hors-cycle) : portait le tag
+   'derive' non autorise dans la taxonomie categories-tests.json (88 tags).
+   CORRECTION : 'derive' -> 'anti-contournement' (categorie securite).
+   LECON : tout nouveau test doit porter des tags de la taxonomie existante.
+
+2. test-078 (checklist amelioration) : le point 4 dependait de l entree
+   historique 'detecter-troncatures 15:03 vulcain' dans AGENTS-historique.md.
+   Or ce fichier est plafonne a 150 entrees (MAX_ENTREES_HISTORIQUE) : chaque
+   activation purge les plus anciennes et l entree a fini par disparaitre.
+   CORRECTION : le point 4 verifie desormais (a) que les ecarts historiques
+   sont bien des activations PASSEES (non bloquantes) et (b) que l incident
+   detecter-troncatures est documente de facon STABLE dans le registre
+   (declaration a posteriori 15:22).
+   LECON : un test ne doit jamais dependre d une entree specifique d un
+   fichier plafonne/rotatif ; il doit verifier la source de verite stable.
+
+Verification : non-regression 87 OK / 0 KO, 46.3 s.
