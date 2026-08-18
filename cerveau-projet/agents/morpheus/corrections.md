@@ -4110,3 +4110,144 @@ KO = artefact morpheus actif, passera sous janus).
 
 **Lecon** : le flux c0e rend la pollinisation croisee reelle - chaque agent demarre sa mission avec l experience des autres agents, pas seulement ses souvenirs.
 
+## [LECON] 2026-08-18 -- TEST-091 LIRE-HEAD CREE + PINS CATALOGUE ADAPTES (Morpheus, VERDICT VALIDE)
+
+**Mission** : creer le garde-fou test-091 pour l outil lire-head v0.1.1 (Vulcain,
+delegation des tests) et adapter les pins du catalogue apres l ajout de la
+commande lire-head (181 -> 182 commandes, index-tools Total 202 -> 203,
+version catalogue 0.2.12 -> 0.2.13).
+
+**Resultat** :
+1. test-091-lire-head-garde-fou cree (13 points, 13 OK / 0 KO) : detection
+   front-matter YAML, bloc de commentaires, premiere ligne vide, --lignes
+   force, --info-commune PRESENT et PREUVE NEGATIVE (fichier sans l info =
+   ABSENT = pas a jour), fichier introuvable code 1, --dry-run, parite .sh,
+   normes ASCII + LF.
+2. Pins adaptes : test-007 (181 -> 182 + Total 202 -> 203 + lire-head dans
+   les listes de presence), test-024 (181 -> 182), test-060 (181 -> 182 +
+   Total 202 -> 203), test-079 (181 -> 182 + Total 202 -> 203), test-005
+   (version catalogue 0.2.12 -> 0.2.13).
+3. test-091 ajoute a la serie e du lanceur (couverture test-027 point 1 OK).
+4. detecter-decalages-catalogue : 182 conformes / 0 decalages (entree
+   lire-head dans le catalogue = commande exacte de l outil).
+
+**Lecons** :
+1. UN PIN DE CATALOGUE SE GREFFE EN 2 ENDROITS : ajouter une commande au
+   catalogue impose de bumpr la version du catalogue (0.2.12 -> 0.2.13,
+   verifiee par test-005) ET le nombre de commandes + Total index-tools
+   (verifies par test-007/024/060/079). La liste des tests pinnes se trouve
+   par grep des anciennes valeurs (181, 202, 0.2.12) avant de conclure.
+2. LE GARDE-FOU POSITIF : au lieu de ne faire que compter, ajouter le NOUVEAU
+   nom dans les listes de presence (lire-head in noms) : un futur retrait
+   accidentel du catalogue fera KO sur la presence, pas seulement sur le
+   compte.
+3. PIEge PREUVE NEGATIVE --info-commune : la preuve doit comparer deux
+   fichiers dont UN SEUL contient le motif (ex: motif identite: present dans
+   frontmatter.md, absent de sans-info.md) : sinon le test valide un cas
+   trivial. Mon premier jet comparait deux fichiers sans le motif -> 2 KO
+   (les deux en ABSENT, aucun PRESENT). Corrige en choisissant le motif et
+   les temoins avec soin.
+4. LES KO ARTEFACTS DU VERROU : en executant des tests individuels en tant
+   que Morpheus, test-005 point 21 et test-027 points 5-8 font KO car ils
+   lancent des outils reserves (valider-cartes-decision, tester-lancer-non-
+   regression) bloques par proteger-verrou-habilitation pour l agent actif
+   morpheus. Ce ne sont PAS des regressions : la non-regression lancee par
+   Janus (agent habilite) les reverdit. Toujours distinguer un KO reel d un
+   artefact de verrou (le message BLOQUE + la liste des agents habilites le
+   prouve).
+
+**Verdict** : VALIDE (test-091 13/13, pins adaptes, test-040 5/5 coherence
+catalogue-index, couverture series OK).
+## [LECON] 2026-08-18 -- ADAPTATION PINS APRES BUMP PARCOURS MORPHEUS 0.4.14 -> 0.4.15 (Morpheus)
+
+**Mission** : adapter les tests qui pinent la version du parcours morpheus apres le bump 0.4.14 -> 0.4.15 (ajout indice generateurs-commande c20/c21, correction Buffy via editer-parcours).
+
+**Actions** : test-004 point 7a (ligne 203 + docstring ligne 19) adapte 0.4.14 -> 0.4.15, execute 15/16 (KO point 8 = artefact verrou valider-cartes-decision, vert sous Janus). test-016 NON IMPACTE (il teste le parcours BUFFY, pas morpheus) : mon adaptation initiale etait une ERREUR, REVERTEE a l identique (git diff vide, 20/20).
+
+**Lecons** :
+1. PIEGE FAUX POSITIF GREP : un grep "0.4.14" dans tests/ ne dit PAS quelle carte le test pinne -- VERIFIER la constante PARCOURS du test (test-016 = parcours-buffy, version 0.4.14 inchangee ; test-004 = parcours-morpheus). Adapter un test qui pinne la BONNE valeur = regression creee, pas corrigee.
+2. La preuve du revert : git diff --stat vide + test 20/20 vert -- un revert est valide quand le fichier est byte-identique a HEAD, pas quand le test passe.
+3. Le KO verrou (valider-cartes-decision bloque pour morpheus) est un artefact d habilitation, PAS une regression : le verifier par la liste des agents habilites (janus/argus/buffy/vulcain) et le laisser au controleur Janus (vert sous lui).
+## [LECON] 2026-08-18 -- BRANCHEMENT CHIRON ACTIVATION : 0 PIN A ADAPTER (Morpheus)
+
+**Mission** : verifier que le branchement de chiron au dictionnaire AGENTS de
+activer-agent-principal (Vulcain, bump 0.5.11 -> 0.5.12) ne casse aucun test.
+
+**Actions** : les 10 tests qui utilisent activer-agent-principal en interne
+executes (test-002/018/021/025/028/039/040/041/052/057) : 9 verts, 1 KO =
+test-021 point 7 (valider-cartes-decision reserve a janus/argus/buffy/vulcain,
+artefact de verrou classique, reverdira sous Janus).
+
+**Lecons** :
+1. UN BRANCHEMENT ADDITIF (ajout d une entree au dictionnaire AGENTS) ne casse
+   aucun pin : aucun test ne pinne la liste des agents connus ni la version de
+   activer-agent-principal - la verification est une non-regression locale des
+   tests qui appellent l outil, pas une adaptation de pins.
+2. test-052 ne supporte PAS --no-chrono (options non uniformes entre tests) :
+   le relancer sans option - toujours verifier les options acceptees avant de
+   lancer (un --no-chrono refuse = erreur de syntaxe, pas un KO du test).
+3. Le test-021 point 7 KO en tant que morpheus est un artefact de verrou (outil
+   reserve a d autres agents) - a NE PAS corriger, il passe sous janus.
+
+**Verdict** : VALIDE - branchement chiron sans regression (9/10 verts + 1
+artefact de verrou connu).
+## [LECON] 2026-08-18 -- BUMPER v0.1.5 : PINS ADAPTES, NON-REGRESSION OK (Morpheus)
+
+**Mission** : verifier la non-regression apres la modification de
+mettre-a-jour-versions v0.1.5 (ajout de resynchroniser_cartes_lock apres
+bump --parcours --wet, audit Themis CONFORME).
+
+**Actions** :
+1. Pins adaptes : test-066 (3 occurrences : docstring, invariant, verif
+   --version) + test-067 (7 occurrences : invariant, verif --version,
+   preuve negative x4) : v0.1.4 -> v0.1.5. La ligne 10 de test-067
+   (combos-analyse-projet .py 0.1.4) PRESERVEE : c est un exemple
+   historique, pas un pin du bumper.
+2. Tests executes : test-066 11/11 OK, test-067 8/8 OK, test-007 15/15
+   VALIDE, test-057 24/24 CONFORME (marbre/lock intacts), test-005 27/28
+   (1 KO = artefact de verrou valider-cartes-decision, reverdira sous
+   Janus).
+
+**Lecons** :
+1. Les tests se lancent DEPUIS LA RACINE (pas depuis leur dossier) : 3 KO
+   de test-005 (points 6/8/23) etaient des artefacts de cwd (chemins
+   relatifs casses), disparus depuis la racine.
+2. Une adaptation de pins de version (0.1.4 -> 0.1.5) touche TOUTES les
+   formes : docstring, invariant, verification --version, preuve negative
+   (replace de la doc). Ne pas confondre les exemples historiques de la
+   docstring avec des pins (ligne 10 de test-067).
+3. La resync cartes-lock du bumper ne casse aucun test : test-057
+   (marbre/lock) 24/24 CONFORME.
+
+**Verdict** : VALIDE - non-regression OK (pins adaptes, 0 regression).
+## [LECON] 2026-08-18 -- TEST-092 PARITE AGENTS/ACTIVATION : GARDE-FOU CREE (Morpheus)
+
+**Mission** : creer le garde-fou de parite agents <-> dictionnaire AGENTS de
+activer-agent-principal (recommandation Janus, controle branchement-chiron :
+Argus v0.5.8 + Chiron v0.5.12 etaient INACTIVABLES, aucun test ne verifiait
+cette parite, 3e oubli a eviter).
+
+**Actions** :
+1. Test-092 cree (template v0.4.0, protections, options, chrono) : source
+   de verite = AGENTS.md (16 agents), parite .py, parite .sh (3 fonctions),
+   reciproques (pas d agent mort), parite py/sh, preuve negative (retrait
+   atlas -> detecte), normes.
+2. Parsing du .sh : exclure les COMMANDES (sidentifier/activer/reactiver/
+   sessions) des case statements - ce ne sont pas des agents.
+
+**Defaut detecte (VRAI, non corrige)** : le .sh d activer-agent-principal
+manque `argus` et `gardien` dans ses 3 fonctions (role, fiche, corrections)
+-> signalement Janus de la mission branchement-chiron JAMAIS corrige. Le
+test est KO (7 OK / 2 KO) tant que le .sh n est pas complete.
+
+**Lecons** :
+1. Les agents se creent en 3 etapes liees : fiche + carte + BRANCHEMENT a
+   l outil d activation (py ET sh). Le branchement est le maillon oublie
+   (2 occurrences : argus, chiron).
+2. Un garde-fou de parite doit comparer dans les DEUX sens (agent declare
+   absent de l outil = oubli ; agent de l outil absent d AGENTS.md = agent
+   mort) et verifier la parite py/sh (le .sh etait en retard meme quand le
+   .py etait a jour).
+
+**Verdict** : test cree et fonctionnel (preuve negative OK). Defaut .sh a
+corriger par Vulcain (agent d origine) avant verdict final.

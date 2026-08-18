@@ -14,23 +14,50 @@ identite:
 
 ## Sessions LLM
 
+### Session : session-llm-2
+
+| Champ | Valeur |
+|---|---|
+| **Nom LLM** | kilo-llm |
+| **Nom Agent** | themis |
+| **Role Agent** | Evaluatrice croisee -- evaluation et audit |
+| **Derniere mise a jour** | 2026-08-18 |
+| **Fiche** | [cerveau-projet/agents/themis/themis.md](cerveau-projet/agents/themis/themis.md) |
+| **Corrections** | [cerveau-projet/agents/themis/corrections.md](cerveau-projet/agents/themis/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | Inventaire et audit des outils de performance (tests, fonction, worker, workflow, flux, round, session) : analyser l environnement de travail (OS, ressources, parallelisme) puis lister les outils necessaires et possibles pour ameliorer les performances, afin d etablir des configurations adaptables selon le systeme et les ressources disponibles |
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/themis/parcours/parcours-themis.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>').
 ### Session : session-llm-1
 
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Nom Agent** | themis |
+| **Role Agent** | Evaluatrice croisee -- evaluation et audit |
 | **Derniere mise a jour** | 2026-08-18 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Fiche** | [cerveau-projet/agents/themis/themis.md](cerveau-projet/agents/themis/themis.md) |
+| **Corrections** | [cerveau-projet/agents/themis/corrections.md](cerveau-projet/agents/themis/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | BILAN CONSOLIDE (Janus, preuve pollinisation croisee) : VERDICT VALIDE. Preuve reelle obtenue : Morpheus a consulte la BDD des lecons AVANT d agir (case c0e) et a lu la lecon de vulcain 'BDD lecons = memoire longue' (domaine outil) - pollinisation croisee reelle. Traces verifiees : registre (consulter-lecons 08:10:39 mode direct + verrou-auto, enregistrer-lecon 08:11:01 verrou-auto), BDD 2 lecons (vulcain outil + morpheus test), rapport tmp-morpheus/consultation-pre-mission.md, test-006 19/19 OK, normes 0/0. La chaine c0e -> consultation -> mission -> lecon -> transmission fonctionne de bout en bout dans le meme round. |
+| **Raison** | Audit conformite carte Janus: l utilisateur se demande si Janus a ete eduque et si sa carte est conforme (il a enumere les choses et suivi sa carte). Verifier: 1) version de la carte janus vs les cartes a jour (cerberus, vulcain, morpheus), 2) presence des garde-fous C1 (classification), c21/c22 (redirection outil bloque + agents habilites) comme la re-education de Themis v0.4.10, 3) coherence carte/fiche, 4) historique des educations de Janus (corrections.md + BDD lecons). |
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/themis/parcours/parcours-themis.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>').
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | cerberus | 2026-08-18 08:13 |
+| session-llm-1 | llm-1 | themis | 2026-08-18 19:14 |
+| session-llm-2 | kilo-llm | themis | 2026-08-18 17:43 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

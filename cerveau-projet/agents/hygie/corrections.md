@@ -175,3 +175,13 @@ cerveau-projet/docs-dev-cerveau-projet/ est conserve intact.
 2. Le verrou exige --agent sur supprimer-dossier : toujours le passer (hygie).
 
 **APRES** : reactiver JANUS (verification finale).
+## [LECON] 2026-08-18 -- RESIDU RECURRENT detecter-decalages-catalogue (3e nettoyage) (Hygie)
+
+**Contexte** : nettoyage des residus bloquant la non-regression (test-024 point 2b) de la chaine lire-head : tmp-morpheus/ (dossier temporaire de consultation pre-mission) + rapport-detecter-decalages-catalogue-2026-08-18.md (rapport egare a la racine).
+
+**Actions** : snapshot (5797 fichiers) + rotation 0 -> detecter-residus 2 residus (0 cerveau-projet, 2 workspace) -> provenance prouvee (TEMP + RAPPORT_EGARE, signales par Themis/Janus) -> suppression tracee 2/2 (supprimer-dossier + supprimer-fichier, verrou --agent hygie) -> re-detection PROPRE -> rapport nettoyage-2026-08-18-1731.md.
+
+**Lecons** :
+1. RESIDU RECURRENT : le rapport de detecter-decalages-catalogue est EGARE A LA RACINE a CHAQUE fois que l outil est lance depuis la racine (deja nettoye le 08-13 et le 08-14, encore aujourd hui) -- c est un comportement d outil a corriger par Vulcain (le rapport doit aller dans le dossier de l agent ou un dossier dedie), pas un simple residu ponctuel.
+2. La chaine fonctionne : le test-024 sert de garde-fou de non-regression qui FAIT echouer la suite tant que les residus existent -- le nettoyage debloque la non-regression sans decision humaine.
+3. Le verrou exige --agent hygie sur supprimer-dossier ET supprimer-fichier (lecon 2026-08-16 confirmee pour les 2 outils).

@@ -1118,3 +1118,155 @@ Themis est un ecart.
 
 **Rapport** : themis/rapports/rapport-audit-carte-cerberus-
 habilitations-2026-08-16.md
+## [LECON] 2026-08-18 -- AUDIT CHAINE LIRE-HEAD : VERDICT CONFORME (Themis)
+
+**Mission** : auditer la chaine Vulcain -> Morpheus (outil lire-head v0.1.1 +
+garde-fou test-091 + pins catalogue), activee par Morpheus (c25b, audit de
+fin de mission).
+
+**Verdict** : CONFORME (96/100). 0 critique, 0 majeur, 2 mineurs (residus).
+
+**Resultats cles** :
+1. Outil lire-head : nommage lire- OK, ASCII 0, LF 3/3, doc complete,
+   catalogue 182 (version 0.2.13), index 203, versions alignees 0.1.1.
+2. Test-091 : 13 points couvrant les invariants (front-matter, bloc de
+   commentaires, premiere ligne vide, --lignes, --info-commune PRESENT,
+   PREUVE NEGATIVE ABSENT, fichier introuvable, --dry-run, parite .sh,
+   normes) + protections/options/chrono/rating (template v0.4.0). Execution
+   reelle relancee par Themis : 13 OK / 0 KO.
+3. Pins : test-007/024/060/079 (182 + 203 + lire-head), test-005 (0.2.13),
+   test-040 (5/5), test-027 (couverture OK).
+4. Conformite d'execution : les 3 maillons ont suivi leur carte (Vulcain ->
+   Morpheus -> Themis), la chaine ne retombe pas sur Cerberus au milieu.
+5. Etat git : perimetre respecte, aucun fichier hors mission.
+
+**Lecons** :
+1. LA CHAINE BOUT-EN-BOUT A PRODUIT UNE CHAINE COMPLETE SANS RACCROC :
+   Vulcain (construction) -> Morpheus (tests) -> Themis (audit) -> retour.
+   La delegation fonctionne sans repasser par Cerberus quand chaque maillon
+   suit SA carte (Pattern 8/13).
+2. LES ARTEFACTS DE VERROU D'HABILITATION SONT PREVISIBLES : quand un
+   maillon de chaine execute des outils reserves a un autre agent (ex:
+   test-005 point 21 execute valider-cartes-decision en tant que Morpheus,
+   non habilite), le verrou bloque avec un message clair. Le message BLOQUE
+   + la liste des agents habilites distinguent un artefact d'une vraie
+   regression : un audit ne doit PAS les compter comme KO.
+3. LES DETECTEURS QUI ECRIVENT LEUR RAPPORT DANS LE DOSSIER COURANT CREENT
+   DES RESIDUS RECURRENTS : detecter-decalages-catalogue a laisse
+   rapport-detecter-decalages-catalogue-<date>.md a la racine. Chaque agent
+   doit verifier la sortie des detecteurs qu'il lance et la nettoyer (ou
+   demander a Hygie), et les outils devraient ecrire par defaut dans
+   traces/ ou tmp-.
+4. RE-VERIFICATION INDEPENDANTE : l'audit a relance le test-091 et re-verifie
+   chaque pin au lieu de faire confiance aux rapports (regles-veracite :
+   je ne fais JAMAIS confiance a un rapport sans l'avoir verifie moi-meme).
+
+**Verdict** : CONFORME. Rapport : themis/rapports/rapport-audit-chaine-lire-head-2026-08-18.md.
+## [LECON] 2026-08-18 -- FAUTE DE CHAINE : REACTIVER AU LIEU D'ACTIVER (Themis)
+
+**Contexte** : pendant l'audit chaine lire-head, a la fin de ma mission
+(c25b), j'ai lance `reactiver session-llm-1 <raison> themis` au lieu de la
+commande exacte ordonnee par ma carte : `activer session-llm-1 morpheus
+<raison>` (Activer l'agent precedent avec son rapport). Le reactiver a
+ramene Cerberus au milieu de la chaine (violation Pattern 8/13), court-
+circuitant Morpheus (qui devait ensuite activer Janus).
+
+**Reparation** : la chaine a ete relancee au maillon manquant (activer
+morpheus) avec une raison expliquant la correction. Aucune perte de travail
+(rapport Themis ecrit, lecon enregistree).
+
+**Lecons** :
+1. c25b (Activer l'agent precedent) utilise la commande `activer`, PAS
+   `reactiver`. `reactiver` ramene TOUJOURS Cerberus : c'est reserve au
+   DERNIER maillon (Janus) ou a l'activation directe.
+2. Le 3e argument de `activer <session> <agent> <raison>` est l'agent a
+   ACTIVER (le maillon suivant), pas l'agent precedent a ramener. J'ai
+   confondu la semantique des 2 commandes.
+3. Meme faute que la lecon Cerberus du 2026-08-08 : reactiver Cerberus au
+   milieu d'une chaine = double faute (accepter la violation + court-
+   circuiter les maillons suivants). La reparation = reactiver la chaine
+   au maillon manquant et documenter l'ecart.
+4. GARDE-FOU A GRAVER : a la fin d'une mission en CHAINE (activee par un
+   maillon), TOUJOURS utiliser `activer <session> <maillon-suivant> <raison>`.
+   Seule l'activation DIRECTE par Cerberus (ou le dernier maillon Janus)
+   utilise `reactiver`.
+
+**Verdict** : CONFORME (la chaine a ete reprise au bon maillon, sans perte).
+## [CORRECTION] 2026-08-18 -- RE-EDUCATION CARTE v0.4.9 -> v0.4.10 (Themis)
+
+**Contexte** : session-llm-2 (kilo-llm) a donne a Themis une mission hors
+perimetre ("inventaire et audit des outils de performance") : Themis a
+improvise (tentative editer-parcours 2x, BLOQUE) puis s'est arretee sans
+repondre. Diagnostic Chiron : la carte v0.4.9 etait pedagogiquement en
+retard sur les cartes recentes.
+
+**Erreurs detectees** :
+1. Case c1 (Mission) : AUCUN indice de classification -> un LLM peu
+   discipline ne sait pas qu'une mission hors branches doit repondre
+   "autre" -> c21.
+2. Aucune gestion "outil non autorise / bloque" : quand le verrou
+   d'habilitation bloque un outil (ex. editer-parcours reserve a Buffy),
+   la carte ne redirigeait pas vers c21 -> c22 (activer l'agent habilite).
+
+**Corrections appliquees** (par Buffy, seule habilitee editer-parcours) :
+1. c1 : ajout de l'indice "GARDE-FOU C1" -> demande hors des 6 branches
+   -> reponse autre -> c21 (modele : Cerberus GARDE-FOU C1).
+2. c21 : ajout de l'indice "REDIRECTION OUTIL BLOQUE" -> verrou bloque
+   un outil tente -> reponse OUI -> c22.
+3. c22 : ajout de l'indice "AGENTS HABILITES" -> Buffy cartes, Vulcain
+   outils, Morpheus tests, Hygie suppression, Janus controle.
+4. Bump 0.4.9 -> 0.4.10 + synchronisation fiche themis.md (Pattern 14).
+
+**Lecon** : une carte a jour doit TOUJOURS avoir (a) un indice de
+classification dans c1 (garde-fou anti-improvisation), (b) une
+redirection quand un outil est bloque par le verrou d'habilitation.
+Apres une modification de carte, re-valider le poids des indices
+(valider-case --surcharge) pour rester sous le budget.
+## [LECON] 2026-08-18 -- AUDIT RESYNC CARTES-LOCK : VERDICT CONFORME (Themis)
+
+**Mission** : audit-fin-mission demande par Vulcain (c15f) sur sa
+modification de mettre-a-jour-versions v0.1.5 (ajout de
+resynchroniser_cartes_lock apres bump --parcours --wet).
+
+**Actions** :
+1. Carte v0.4.10 (re-education) : branche audit-fin-mission -> c25 -> combo
+   audit-themis -> c25b (FIN - activer l agent precedent avec son rapport).
+2. Combo audit-themis lance (chemin corrige : agents/tools/combos/).
+3. Verifications ciblees : code (normalisation LF+rstrip identique a
+   editer-parcours), versions (0.1.5 py+md, --version, bumper --tous 0/0),
+   normes (ASCII 0, LF 0, py_compile OK), preuve reelle (empreinte lock
+   MATCH + test de perturbation), perimetre (aucun fichier de test touche).
+
+**Verdict** : CONFORME -- 0 defaut.
+
+**Lecon** : le GARDE-FOU C1 (ajoute a ma carte en v0.4.10) fonctionne en
+conditions reelles : la mission correspondait a une branche exacte
+(audit-fin-mission) et le chemin c25 -> c25b s est execute de bout en bout.
+Tout outil qui ecrit une carte hors editer-parcours doit resynchroniser
+cartes-lock.json (modele : la correction de Vulcain dans mettre-a-jour-
+versions v0.1.5).
+## [LECON] 2026-08-18 -- AUDIT GARDE-FOU PARITE AGENTS (test-092) : VERDICT CONFORME (Themis)
+
+**Mission** : audit-fin-mission declenche par Morpheus (c31) sur la chaine :
+test-092 cree par Morpheus (garde-fou parite agents <-> dictionnaire AGENTS de
+activer-agent-principal), defaut detecte (argus + gardien absents du .sh),
+signale a Vulcain qui a corrige (bump 0.5.12 -> 0.5.13).
+
+**Actions** :
+1. Carte v0.4.10 : branche audit-fin-mission -> c25 -> combo audit-themis ->
+   c25b (FIN - activer l agent precedent avec son rapport).
+2. Combo audit-themis lance (chemin corrige : agents/tools/combos/).
+3. Verifications ciblees : parite .sh (argus/gardien dans les 3 fonctions),
+   test-092 9/9 OK, versions 0.5.13 coherentes (py/sh/md/spec), bumper --tous
+   0/0, normes ASCII/LF, perimetre git propre, non-regression 10 tests verts.
+
+**Verdict** : CONFORME -- 0 defaut.
+
+**Lecon** : le cycle "garde-fou -> detection d un vrai defaut -> signalement a
+l agent d origine -> correction -> verdissement" est la preuve que le systeme
+de protection fonctionne : le test-092 a detecte exactement le signalement
+Janus jamais corrige (argus/gardien absents du .sh depuis la mission
+branchement-chiron), et apres correction il reverdit (9/9). Un garde-fou de
+parite doit comparer dans les DEUX sens (agent declare absent de l outil =
+oubli ; agent de l outil absent d AGENTS.md = agent mort) + verifier la parite
+py/sh (le .sh etait en retard meme quand le .py etait a jour).

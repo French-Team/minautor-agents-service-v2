@@ -6,7 +6,7 @@ identite:
 ---
 # Specification -- activer-agent-principal
 
-**Version :** 0.5.11
+**Version :** 0.5.13
 **Statut :** prepare
 **ID :** 001
 **Class :** 01

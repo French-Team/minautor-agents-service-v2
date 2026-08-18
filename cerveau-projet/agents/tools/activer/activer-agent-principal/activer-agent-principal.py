@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.11
+Version : 0.5.13
 Statut : prepare
 """
 
@@ -35,7 +35,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.5.11"
+VERSION = "0.5.13"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -93,6 +93,9 @@ AGENTS = {
     "argus": ("Detecteur de contradictions -- trouve et compare les incoherences (cases, regles, protocoles, git)",
                "cerveau-projet/agents/argus/argus.md",
                "cerveau-projet/agents/argus/corrections.md"),
+    "chiron": ("Educateur des agents -- formation continue",
+               "cerveau-projet/agents/chiron/chiron.md",
+               "cerveau-projet/agents/chiron/corrections.md"),
 }
 
 

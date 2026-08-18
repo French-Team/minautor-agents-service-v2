@@ -1,0 +1,29 @@
+[OK] 1. protection 'rating' dans LISTE_PROTECTIONS
+[OK] 2. def afficher_rating existe
+[OK] 3. template-test : PROTECTIONS.afficher_rating
+[OK] 4. evaluer-rating v0.1.0 compile + --version
+[OK] 5. --profil/--cible/--tous/--general dans l aide
+[OK] 6. lanceur v0.6.2 + afficher_rating_fin_de_run
+[OK] 7. evaluer-rating --profil test --general
+[OK] 8. 5 profils + poids somme=100
+[OK] 9. ASCII strict : 0 non-ASCII (outil + doc + profils + test)
+[OK] 10. LF pur : 0 CRLF (outil + doc + profils + test)
+[OK] 11. doc .md existe avec categorie Evaluer
+
+
+=== CHRONO test-062 (total 1.3s) ===
+  1. protection rating                 0.00s
+  2. fonction afficher_rating          0.00s
+  3. template-test                     0.00s
+  4. evaluer-rating                    0.26s
+  5. options                           0.13s
+  6. lanceur                           0.16s
+  7. preuve reelle                     0.74s
+  8. profils                           0.00s
+  9. normes                            0.00s
+  11. doc                              0.00s
+=== RESULTAT : 11 OK / 0 KO (sur 11 points) ===
+test-062-rating-protection : 100.0/100 (EXCELLENT)
+
+=== RATING GENERAL (test) : a calculer avec --tous ===
+RATING GENERAL (test) : 98.6/100 (EXCELLENT)

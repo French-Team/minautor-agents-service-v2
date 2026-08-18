@@ -1,0 +1,29 @@
+=== Garde-fou : relecture Argus obligatoire avant gravure (porte marbre v0.1.3) ===
+  [OK] 1. porte v0.1.3 : est_zone_regles + audit_regles_propre + no-audit
+  [chrono] 1. fonctions relecture                   0.00s
+  [OK] 2. --version affiche v0.1.3
+  [chrono] 2. version                               0.14s
+  [OK] 3. zone regle + autorisation : audit Argus lance (PROPRE = OK)
+  [chrono] 3. audit positif                         0.28s
+Traceback (most recent call last):
+  File "C:\Users\Optimus\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 918, in move
+    os.rename(src, real_dst)
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+FileExistsError: [WinError 183] Impossible de créer un fichier déjà existant: 'Z:\\analyste-in-console\\cerveau-projet\\agents\\regles-immuables\\general\\regles-groupes-agents.md.bak-t084' -> 'Z:\\analyste-in-console\\cerveau-projet\\agents\\regles-immuables\\general\\regles-groupes-agents.md'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "Z:\analyste-in-console\cerveau-projet\agents\tools\tester\tests\test-084-relecture-avant-gravure-garde-fou\test-084-relecture-avant-gravure-garde-fou.py", line 292, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "Z:\analyste-in-console\cerveau-projet\agents\tools\tester\tests\test-084-relecture-avant-gravure-garde-fou\test-084-relecture-avant-gravure-garde-fou.py", line 197, in main
+    shutil.move(sauvegarde, REGLES)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Optimus\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 938, in move
+    copy_function(src, real_dst)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Optimus\AppData\Local\Programs\Python\Python314\Lib\shutil.py", line 514, in copy2
+    _winapi.CopyFile2(src_, dst_, flags)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 1224] L’opération demandée n’a pu s’accomplir sur un fichier ayant une section mappée utilisateur ouverte

@@ -52,7 +52,7 @@
 #   python3 mettre-a-jour-versions.py --catalogue --nouvelle 0.3.0
 #   python3 mettre-a-jour-versions.py --protocole <chemin> --mineure
 #
-# Version : 0.1.4
+# Version : 0.1.5
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -63,6 +63,7 @@
 # categorie (mettre-a-jour-).
 # =============================================================================
 import argparse
+import hashlib
 import io
 import json
 import os
@@ -70,7 +71,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.1.4"
+VERSION = "0.1.5"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -171,6 +172,36 @@ def lire_fichier(chemin):
 def ecrire_fichier(chemin, texte):
     with io.open(chemin, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(texte)
+
+
+def resynchroniser_cartes_lock(racine, chemin_carte):
+    """Resynchroniser l empreinte d une CARTE (parcours JSON) dans
+    cartes-lock.json apres un bump --parcours (ecriture HORS editer-parcours).
+    Sans cette resynchronisation, l anti-contournement (barrage n3,
+    cartes-lock.json) bloque toute ecriture ulterieure de la carte via
+    editer-parcours (lecon 2026-08-18 : bump carte sans resync lock).
+    Empreinte normalisee STRICTEMENT identique a editer-parcours (LF + rstrip).
+    """
+    lock = os.path.join(racine, "cerveau-projet", "agents", "regles-immuables",
+                        "marbre", "cartes-lock.json")
+    if not os.path.isfile(lock):
+        return
+    try:
+        with io.open(lock, "r", encoding="utf-8") as fh:
+            manifeste = json.load(fh)
+    except (ValueError, IOError):
+        return
+    relatif = rel(chemin_carte, racine)
+    cartes = manifeste.setdefault("cartes", {})
+    if relatif not in cartes:
+        return  # carte non verrouillee : rien a resynchroniser
+    texte = lire_fichier(chemin_carte).replace("\r\n", "\n").replace("\r", "\n")
+    texte = "\n".join(l.rstrip() for l in texte.split("\n"))
+    cartes[relatif] = hashlib.sha256(texte.encode("utf-8")).hexdigest()
+    with io.open(lock, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(manifeste, fh, ensure_ascii=True, indent=1)
+        fh.write("\n")
+    print(_couleur("  [LOCK] cartes-lock.json resynchronise : %s" % relatif, "vert"))
 
 
 def remplacer_version(texte, motif, ancienne, nouvelle):
@@ -694,6 +725,13 @@ def main():
         if ecarts == 0:
             print(_couleur("  Verification post-bump : TOUS les fichiers portent %s [OK]"
                            % nouvelle, "vert"))
+            # Resync cartes-lock.json apres bump d une CARTE (--parcours) :
+            # l ecriture est faite HORS editer-parcours -> sans resync, les
+            # modifications ulterieures de la carte sont BLOQUEES par
+            # l anti-contournement (lecon 2026-08-18, cas themis v0.4.10).
+            if args.parcours:
+                for chemin in fichiers:
+                    resynchroniser_cartes_lock(racine, chemin)
         else:
             print(_couleur("  Verification post-bump : %d ecart(s) restant(s) [KO]"
                            % ecarts, "rouge"))

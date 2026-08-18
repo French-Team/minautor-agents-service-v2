@@ -1,0 +1,28 @@
+=== Garde-fou : section Environnement de travail dans les fiches agents ===
+  [OK] 1. verifier-systeme --version = 0.2.3 (py)
+  [OK] 2. parite .sh verifier-systeme 0.2.3
+  [OK] 3. --bloc-fiche genere Environnement + Windows + Racine projet
+  [OK] 4. template contient la section Environnement
+  [OK] 5. les 15 fiches contiennent la section + Windows + Differences
+  [OK] 6. section Environnement AVANT ## Limites (15 fiches)
+  [OK] 7. verifier-conformite-fiche --tous : 11 CONFORME
+  [OK] 8. normes : 0 non-ASCII (test + verifier-systeme + template)
+  [OK] 9. normes : 0 CRLF (test + verifier-systeme + template)
+  [OK] 10. normes 15 fiches : 0 non-ASCII + 0 CRLF
+  [OK] 11. 0 residu tmp-test080 dans le workspace
+
+=== CHRONO test-080 (total 0.7s) ===
+  [chrono] 1. version py                       0.13s
+  [chrono] 2. version sh                       0.03s
+  [chrono] 3. bloc-fiche                       0.42s
+  [chrono] 4. template                         0.00s
+  [chrono] 5. fiches                           0.00s
+  [chrono] 6. ordre                            0.00s
+  [chrono] 7. conformite                       0.12s
+  [chrono] 8. normes ascii                     0.00s
+  [chrono] 9. normes lf                        0.00s
+  [chrono] 10. normes fiches                   0.02s
+  [chrono] 11. residus                         0.00s
+
+=== RESULTAT : 11 OK / 0 KO (sur 11 points) ===
+=== VERDICT : PROPRE (environnement de travail verrouille dans les fiches) ===

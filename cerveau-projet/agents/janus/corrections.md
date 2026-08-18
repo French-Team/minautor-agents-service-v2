@@ -5742,3 +5742,101 @@ test-038 (badge 152->156). Les KO d identite (test-031/032) etaient le verrou
 **Lecon** : un bump de version d un outil a 3 compagnons a synchroniser (.py
 en-tete, .sh variable, spec) + les tests qui pinnent - le bumper --tous et
 detecter-divergences-version sont les 2 outils qui les revelent d un coup.
+## [LECON] 2026-08-18 -- CONTROLE CHAINE LIRE-HEAD + CORRECTION CARTE MORPHEUS (Janus, VERDICT VALIDE)
+
+**Mission** : non-regression complete + verdict final pour la chaine lire-head (Vulcain outil, Morpheus tests, Themis audit).
+
+**Controle** : evaluer-processus a detecte 3 declarations fautives morpheus (retirees du registre) + 1 OUTIL_HORS_CARTE generateurs-commande (ecart de carte morpheus, corrige par Buffy via editer-parcours c20/c21 + bump 0.4.15). Boucles KO : Morpheus a adapte test-004 (pin 0.4.15), ajoute test-091 au profil outils, ajoute le tag 'lecture' a la taxonomie ; Hygie a nettooye tmp-morpheus/ + rapport-decalages. Non-regression finale : VERDICT VALIDE (88 OK / 1 KO puis correction, suite verte).
+
+**Lecons** :
+1. OUTIL_HORS_CARTE = indice manquant a AJOUTER a la carte (Buffy seule habilitee pour editer-parcours) ; DECLARATION_FAUTIVE = usage jamais reel d un outil exclusif (retirer du registre). La distinction est documentee dans evaluer-processus.
+2. Un nouveau test exige 3 ancrages : la serie du lanceur, un profil de profils-tests.json (sinon test-063 orphelin KO) ET des tags de la taxonomie categories-tests.json (sinon test-087 KO).
+3. test-048 verifie que chaque mission recente a une lecon datee du jour avec verdict : la lecon est OBLIGATOIRE avant de reactiver Cerberus (protocole-fin-mission), sinon la non-regression reste KO.
+4. Le verrou d habilitation cree des artefacts quand on execute des tests hors session habilitante (valider-cartes, lanceur) : verifier sous l agent habilite (janus).
+## [LECON] 2026-08-18 -- CONTROLE BRANCHEMENT CHIRON (Janus, VERDICT VALIDE)
+
+**Mission** : controle de la modification de activer-agent-principal (branchement
+de l agent chiron au dictionnaire AGENTS, bump 0.5.11 -> 0.5.12 par Vulcain,
+verifie par Morpheus).
+
+**Controle** : tous les points conformes - chiron resolvable et activable,
+versions 0.5.12 coherentes (bumper 149/149), test-021 reverdi 9/9 sous session
+janus (le KO morpheus etait l artefact de verrou valider-cartes-decision),
+test-037 6/6, evaluer-processus 0 probleme, valider-cartes chiron CONFORME
+10/10, 0 residu, normes 0/0. 3 declarations fautives de ce round retirees du
+registre (vulcain editer-fichier + valider-conformite-ascii, morpheus tester).
+
+**Lecons** :
+1. UN AGENT CREE SANS BRANCHEMENT A L OUTIL D ACTIVATION EST INACTIVABLE : la
+   creation d un agent comporte un maillon OUBLIE (le dictionnaire AGENTS de
+   activer-agent-principal, py ET sh). Chiron = 2e occurrence (Argus v0.5.8,
+   Chiron v0.5.12) - AUCUN test ne verifie cette parite, un garde-fou est a
+   prevoir pour le 3e oubli.
+2. PARITE PY/SH A VERIFIER AU BRANCHEMENT : le .sh etait en retard (argus,
+   gardien, hermes absents des case statements) alors que le .py les avait -
+   la lecon v0.5.8 d Argus n avait touche que le py. Toujours verifier les 2
+   fichiers.
+3. Les usages declares hors carte (editer-fichier, valider-conformite-ascii
+   pour vulcain ; tester pour morpheus) sont des OUTIL_HORS_CARTE a retirer du
+   registre : les outils d edition/validation ne sont pas systematiquement
+   dans les indices des cartes (editer-fichier est dans celles de
+   buffy/hermes/minerve/promethee mais PAS vulcain) - declarer uniquement les
+   outils assignes dans sa carte.
+
+**Verdict** : VALIDE - branchement chiron fonctionnel, prerequis technique de
+la reeducation de Themis desormais leve (Chiron est activable).
+## [LECON] 2026-08-18 -- CONTROLE RESYNC BUMPER : VERDICT VALIDE (Janus)
+
+**Mission** : controle de la chaine Vulcain -> Themis -> Morpheus sur la
+modification de mettre-a-jour-versions v0.1.5 (resynchroniser_cartes_lock
+apres bump --parcours --wet, lecon 2026-08-18 cas themis v0.4.10).
+
+**Actions** :
+1. Combo controle-modification + verifications independantes : evaluer
+   (0 probleme apres retrait de 2 usages), residus 0, bumper 0/0,
+   divergences 0, test-005 28/28 (artefact de verrou reverdi sous janus),
+   test-066 11/11, test-067 8/8, test-057 24/24, ASCII/LF 0, JSONL 337/337.
+2. Auto-correction : retrait de 2 usages hors carte (vulcain ->
+   guider-parcours, morpheus -> tester).
+
+**Lecons** :
+1. L OUTIL_HORS_CARTE se verifie par la carte ET la table P0 de la fiche :
+   guider-parcours est P0 PARTAGE mais l evaluateur ne le reconnait que si
+   la fiche a une table P0 (morpheus oui, vulcain NON - section en prose).
+   Declarer uniquement les outils assignes carte ou table P0.
+2. Le KO test-005 point 21 sous morpheus (valider-cartes-decision) est
+   reverdi sous janus : verifier les tests KO sous la session du
+   controleur habilite avant de conclure a une regression.
+3. La resync cartes-lock du bumper est sans effet sur les tests : test-057
+   (marbre) 24/24 CONFORME - la correction est chirurgicale (mode
+   --parcours --wet uniquement).
+
+**Verdict** : VALIDE - chaine conforme, 1 signalement (fiche vulcain sans
+table P0).
+## [LECON] 2026-08-18 -- CONTROLE GARDE-FOU PARITE AGENTS : VERDICT VALIDE (Janus)
+
+**Mission** : controle de la chaine Cerberus -> Morpheus (test-092 garde-fou
+parite agents) -> Vulcain (correction .sh argus+gardien) -> Themis (audit
+CONFORME) -> Janus.
+
+**Actions** :
+1. Combo controle-modification + verifications independantes : evaluateur
+   (0 ERREUR nouvelle), bumper --tous 0/0, residus 0, test-092 9/9,
+   test-005 28/28 (reverdi sous session janus habilitee), test-057 24/24,
+   normes ASCII/LF 0, JSONL 371/371, perimetre git propre.
+2. Auto-correction : 1 tiret cadratin (U+2014) introduit par erreur dans mon
+   rapport -> remplace par tiret ASCII (verification ASCII post-ecriture).
+
+**Lecons** :
+1. Le 3e oubli de branchement est elimine : le test-092 verifie la parite
+   py/sh/AGENTS.md dans les deux sens + parite py/sh + preuve negative. Il a
+   DETECTE le vrai defaut (argus/gardien absents du .sh depuis la mission
+   branchement-chiron) puis reverdi apres correction - preuve reelle du cycle
+   garde-fou -> signalement -> correction -> verdissement.
+2. Meme dans un rapport de controle, verifier ASCII apres ecriture : les
+   tirets longs (em-dash) ne sont pas autorises (regles-emojis-ascii). Les
+   caracteres non-ASCII s introduisent facilement dans les rapports rediges.
+3. La boucle KO (defaut signale -> agent d origine -> re-controle) n a pas ete
+   necessaire ici : 0 signalement.
+
+**Verdict** : VALIDE - chaine conforme, 0 defaut.

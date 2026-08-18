@@ -1,5 +1,5 @@
 {
- "version": "0.2.12",
+ "version": "0.2.13",
  "description": "Catalogue des commandes complexes du cerveau-projet. Source de verite : chaque commande (modele) est un copier-coller d un appel d outil deja ecrit, corrige et valide (agents/tools/). Le generateur pose une question par parametre, valide les reponses, puis compose la commande exacte a lancer.",
  "commandes": [
   {
@@ -2651,6 +2651,37 @@
      "type": "texte",
      "obligatoire": false,
      "flag": "--champ",
+     "defaut": ""
+    }
+   ]
+  },
+  {
+   "nom": "lire-head",
+   "description": "Lire le head (en-tete) de fichiers sans configurer le nombre de lignes (detection automatique de la fin) et comparer plusieurs heads.",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/lire/lire-head/lire-head.py",
+   "modele": "{fichiers} --info-commune {info_commune} --lignes {lignes}",
+   "parametres": [
+    {
+     "cle": "fichiers",
+     "question": "Chemin(s) du/des fichier(s) (separes par un espace) ?",
+     "type": "texte",
+     "obligatoire": true
+    },
+    {
+     "cle": "info_commune",
+     "question": "Motif a chercher dans chaque head ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--info-commune",
+     "defaut": ""
+    },
+    {
+     "cle": "lignes",
+     "question": "Forcer la lecture de N lignes ?",
+     "type": "texte",
+     "obligatoire": false,
+     "flag": "--lignes",
      "defaut": ""
     }
    ]

@@ -5,7 +5,7 @@
   "securite": ["marbre", "verrou", "habilitation", "blocage", "anti-contournement", "protection"],
   "conventions": ["nommage", "ascii", "lf", "template", "fins-de-ligne", "budget"],
   "agents": ["parcours", "cerberus", "janus", "morpheus", "buffy", "vulcain", "hygie", "themis", "clio", "argus", "garde-fou-agent"],
-  "outils": ["combos", "generateurs", "outil", "catalogue", "moteur", "ligne"],
+  "outils": ["combos", "generateurs", "outil", "catalogue", "moteur", "ligne", "lecture"],
   "registre-traces": ["registre", "ko-tests", "traces", "processus", "usage"],
   "performance": ["chrono", "pool", "workers", "perf", "duree", "reference-temps"],
   "anti-recurrence": ["anti-recurrence", "garde-fou", "preuve-negative"]

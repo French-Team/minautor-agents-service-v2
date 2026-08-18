@@ -15,7 +15,7 @@ Contexte (demande utilisateur 2026-08-16) :
     0 outil incoherent.
 
 Invariants verifies :
-  1. mettre-a-jour-versions.py existe, compile, --version v0.1.4
+  1. mettre-a-jour-versions.py existe, compile, --version v0.1.5
   2. --tous (dry-run) : 0 outil incoherent (verdict OK)
   3. PREUVE NEGATIVE : desynchroniser temporairement la version d un .md
      (ecart injecte), relancer --tous -> KO detecte, puis restaurer
@@ -106,8 +106,8 @@ def main():
     code, out = run([PYTHON, "-m", "py_compile", BUMPER_PY])
     verifier("1b. compilation OK", code == 0, out[-80:])
     code, out = run([PYTHON, BUMPER_PY, "--version"])
-    verifier("1c. --version v0.1.4",
-             code == 0 and "v0.1.4" in out, out.strip()[-40:])
+    verifier("1c. --version v0.1.5",
+             code == 0 and "v0.1.5" in out, out.strip()[-40:])
     chrono_etape("1. outil", t0)
 
     # 2. --tous dry-run : 0 outil incoherent
@@ -120,11 +120,11 @@ def main():
 
     # 3. PREUVE NEGATIVE : desynchroniser un .md temporairement -> KO
     t0 = time.monotonic()
-    # cible : la doc du bumper elle-meme (version connue 0.1.4)
+    # cible : la doc du bumper elle-meme (version connue 0.1.5)
     texte_original = io.open(BUMPER_MD, encoding="utf-8", errors="replace").read()
-    faux = texte_original.replace("**Version** : 0.1.4", "**Version** : 9.9.9", 1)
+    faux = texte_original.replace("**Version** : 0.1.5", "**Version** : 9.9.9", 1)
     if faux == texte_original:
-        faux = texte_original.replace("**Version :** 0.1.4", "**Version :** 9.9.9", 1)
+        faux = texte_original.replace("**Version :** 0.1.5", "**Version :** 9.9.9", 1)
     try:
         if faux != texte_original:
             with io.open(BUMPER_MD, "w", encoding="utf-8", newline="\n") as fh:
@@ -135,7 +135,7 @@ def main():
                      detecte, out[-100:])
         else:
             verifier("3. preuve negative : ecart injecte detecte (KO)",
-                     False, "motif version 0.1.4 introuvable dans la doc")
+                     False, "motif version 0.1.5 introuvable dans la doc")
     finally:
         with io.open(BUMPER_MD, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(texte_original)

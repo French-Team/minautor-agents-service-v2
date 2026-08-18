@@ -138,6 +138,20 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 
 ## Outils de base (P0) -- disponibles dans toutes les missions
 
+| Outil | Usage |
+|---|---|
+| `guider-parcours` | Suivre MON parcours case par case (jeu de piste) |
+| `lire-activite-recente` | Lire l activite recente de la session |
+| `lire-fichier` | Lire le contenu d un fichier |
+| `creer-fichier` | Creer un nouveau fichier (erreur si existe) |
+| `ecrire-fichier` | Ecrire ou ecraser le contenu d un fichier |
+| `editer-fichier` | Remplacer une chaine par une autre |
+| `copier-fichier` | Copier un fichier |
+| `supprimer-fichier` | Supprimer un fichier |
+| `rechercher-fichier` | Verifier si un fichier existe |
+| `rechercher-texte` | Rechercher un pattern dans un fichier |
+| `activer-agent-principal` | Activer/reactiver les agents en fin de mission |
+
 > Les outils a utiliser par mission sont donnes par MON parcours (REGLE
 > ABSOLUE 5), case par case, avec la commande exacte.
 > Catalogue complet de tous les outils : [index-tools.md](../tools/index-tools.md).

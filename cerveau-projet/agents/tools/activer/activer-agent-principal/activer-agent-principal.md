@@ -7,7 +7,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.5.11
+**Version** : 0.5.13
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -274,6 +274,8 @@ La colonne session identifie quel LLM a effectue l'action.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.5.13 | 2026-08-18 | PARITE SH COMPLETE : argus et gardien ajoutes aux 3 case statements du sh (role, fiche, corrections) - ils etaient dans le dictionnaire AGENTS du py et dans AGENTS.md mais ABSENTS du sh (signalement Janus mission branchement-chiron jamais corrige, hermes seul avait ete ajoute v0.5.12). Garde-fou cree par Morpheus (test-092-parite-agents-activation) qui compare py / sh / AGENTS.md dans les deux sens + preuve negative. |
+| 0.5.12 | 2026-08-18 | CHIRON BRANCHE A L ACTIVATION : agent Chiron (educateur des agents, 16e agent cree 2026-08-17) ajoute au dictionnaire AGENTS du py + aux 3 case statements du sh (role, fiche, corrections) - il etait cree (fiche, parcours, regles, AGENTS.md) mais ABSENT de la liste AGENTS, donc inactivable (meme oubli qu Argus v0.5.8). Signale : le sh etait en retard (argus, gardien, hermes absents des case statements). |
 | 0.5.11 | 2026-08-17 | CORRECTION MESSAGE TROMPEUR : le rappel apres activer disait "reactiver Cerberus si activation directe" (a induit des missions ecrites avec reactiver Cerberus alors que la carte dit Activer Janus) - remplace par la REGLE RELEVE MEME ROUND : activer le maillon suivant selon SA carte, seul le DERNIER maillon reactive Cerberus avec le bilan consolide. |
 | 0.5.10 | 2026-08-17 | MESSAGES INFORMATIONNELS : apres activer -> rappel RELEVE MEME ROUND (enchainer immediatement) ; apres reactiver -> rappel relecture Cerberus - regle immuable v0.3.0 |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |

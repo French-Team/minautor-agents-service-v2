@@ -248,6 +248,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `lire-lignes` | Lire des lignes specifiques d'un fichier (par numero ou plage) | [lire/lire-lignes/](lire/lire-lignes/) |
 | `lire-frontmatter` | Extraire le frontmatter YAML en tete d'un fichier markdown | [lire/lire-frontmatter/](lire/lire-frontmatter/) |
 | `lire-activite-recente` | Lire les N dernieres interventions des agents (historique) au format condense date | session | agent | action | [lire/lire-activite-recente/](lire/lire-activite-recente/) |
+| `lire-head` | Lire le head (en-tete) d'un fichier sans configurer le nombre de lignes (detection automatique de la fin) et comparer plusieurs heads | [lire/lire-head/](lire/lire-head/) |
 
 ### Lister
 
@@ -523,7 +524,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Gerer | 1 |
 | Guider | 1 |
 | Inserer | 1 |
-| Lire | 4 |
+| Lire | 5 |
 | Lister | 8 |
 | Migrer | 2 |
 | Mettre a jour | 2 |
@@ -539,7 +540,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Executer | 1 |
 | Protections | 6 |
 | Tests | 41 |
-| **Total** | **202** |
+| **Total** | **203** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

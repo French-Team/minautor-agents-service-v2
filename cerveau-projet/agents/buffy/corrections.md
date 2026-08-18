@@ -4089,3 +4089,35 @@ verrou l autorise a tous via OUTILS_P0_PARTAGES, mais l anti-usurpation
 1. La case cerberus.c0b est protegee par le marbre : editer-parcours REFUSE (hash nouveau != empreinte). Sequence correcte (precedent 2026-08-16) : (1) autorisation utilisateur, (2) ecrire la case directement (backup avant), (3) proteger-modifier-marbre --zone cerberus.c0b --autorisation re-empreinte + resynchronise cartes-lock.json, (4) verrous passent.
 2. valider-cartes-decision avait une regle EN DUR "c0b OUI -> c0c" : toute insertion de case entre c0b et c0c casse la validation. Adapter le validateur (OUI -> c0c ou OUI -> c0e -> c0c) en meme temps que la carte.
 3. L insertion d une case avec --inserer-case + --branche OUI:c0e + --bump fonctionne en UN appel editer-parcours (14 cartes non protegees).
+## [LECON] 2026-08-18 -- ECART CARTE OUTIL_HORS_CARTE : INDICE generateurs-commande AJOUTE AU PARCOURS MORPHEUS (Buffy)
+
+**Mission** : corriger l ecart de carte signale par Janus (controle de la chaine lire-head) : evaluer-processus detectait OUTIL_HORS_CARTE pour morpheus + generateurs-commande (usage reel au registre 08:36, mode generateur, mais indice absent de la carte morpheus).
+
+**Correction** : ajout de l indice outil generateurs-commande en tete des cases c20 et c21 (Enregistrer mes usages d outils, messages PASSE PAR LE GENERATEUR) via editer-parcours --modifier-case, bump 0.4.14 -> 0.4.15, synchronisation morpheus.md ligne 81 (Pattern 14). Verifie : valider-case CONFORME, valider-cartes-decision 10/10, evaluateur 0 probleme, ASCII 0, LF pur.
+
+**Lecons** :
+1. OUTIL_HORS_CARTE = indice manquant a AJOUTER a la carte (usage reel : jamais retirer du registre) ; DECLARATION_FAUTIVE = usage jamais reel d un outil exclusif (retirer l entree). La distinction est documentee dans evaluer-processus.
+2. Toute case dont le message ordonne PASSE PAR LE GENERATEUR doit porter l indice generateurs-commande dans ses indices, sinon le controleur signale un OUTIL_HORS_CARTE a chaque usage du generateur.
+3. Le verrou habilite editer-parcours a BUFFY SEULE : une correction de carte d un autre agent passe par la chaine (activer buffy, boucle KO : l agent demandeur est reactive apres la correction).
+4. Toute bump de version de parcours casse les tests qui pinent la version (test-004 point 7a, test-016 point 1 pour morpheus 0.4.14) -> adaptation par Morpheus (delegation tests), a signaler dans le bilan.
+## [LECON] 2026-08-18 -- TABLE P0 FICHE VULCAIN (Buffy)
+
+**Contexte** : signalement Janus (controle chaine resync bumper) :
+evaluer-processus detectait OUTIL_HORS_CARTE pour vulcain -> guider-
+parcours alors que c est un P0 partage. Cause : la fiche vulcain.md
+section "## Outils de base (P0)" etait en PROSE sans tableau -> le
+parseur de l evaluateur (backticks `[a-z]+-[a-z0-9-]+`) ne trouvait rien.
+
+**Correction** : ajout de la table P0 dans vulcain.md (modele
+morpheus.md) : guider-parcours, lire-activite-recente + outils de base
+(lire/creer/ecrire/editer/copier/supprimer/rechercher/activer). Les
+regles existantes (ETAPE SYSTEME, ETAPE SESSION) conservees en dessous.
+
+**Verdict** : VALIDE - evaluateur 0 probleme, test-014 13/13 (refs
+guider-parcours v0.6.2 intactes), ASCII 0, LF pur.
+
+**Lecon** : TOUTE fiche d agent doit avoir sa section P0 sous forme de
+TABLEAU (backticks), pas en prose : l evaluateur ne reconnait les P0
+partages (guider-parcours, lire-activite-recente) que s ils sont
+extraits d une table. Modele : morpheus.md. Verifier avec
+evaluer-processus apres toute modification de fiche.

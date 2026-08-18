@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.11"
+VERSION="0.5.13"
 STATUT="prepare"
 
 # Configuration
@@ -44,6 +44,9 @@ get_agent_role() {
         "Themis"|"themis") echo "Evaluatrice croisee -- evaluation et audit" ;;
         "Hygie"|"hygie") echo "Agent de nettoyage -- seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable" ;;
         "Hermes"|"hermes") echo "Agent de la langue -- orthographe, vocabulaire et fautes de francais commises par les agents" ;;
+        "Gardien"|"gardien") echo "Gardien du marbre -- propose la modification des zones protegees (l utilisateur valide), verifie l integrite du noyau" ;;
+        "Argus"|"argus") echo "Detecteur de contradictions -- trouve et compare les incoherences (cases, regles, protocoles, git)" ;;
+        "Chiron"|"chiron") echo "Educateur des agents -- formation continue" ;;
         *) echo "Agent inconnu" ;;
     esac
 }
@@ -65,6 +68,9 @@ get_agent_fiche() {
         "Themis"|"themis") echo "cerveau-projet/agents/themis/themis.md" ;;
         "Hygie"|"hygie") echo "cerveau-projet/agents/hygie/hygie.md" ;;
         "Hermes"|"hermes") echo "cerveau-projet/agents/hermes/hermes.md" ;;
+        "Gardien"|"gardien") echo "cerveau-projet/agents/gardien/gardien.md" ;;
+        "Argus"|"argus") echo "cerveau-projet/agents/argus/argus.md" ;;
+        "Chiron"|"chiron") echo "cerveau-projet/agents/chiron/chiron.md" ;;
         *) echo "cerveau-projet/agents/inconnu/inconnu.md" ;;
     esac
 }
@@ -86,6 +92,9 @@ get_agent_corrections() {
         "Themis"|"themis") echo "cerveau-projet/agents/themis/corrections.md" ;;
         "Hygie"|"hygie") echo "cerveau-projet/agents/hygie/corrections.md" ;;
         "Hermes"|"hermes") echo "cerveau-projet/agents/hermes/corrections.md" ;;
+        "Gardien"|"gardien") echo "cerveau-projet/agents/gardien/corrections.md" ;;
+        "Argus"|"argus") echo "cerveau-projet/agents/argus/corrections.md" ;;
+        "Chiron"|"chiron") echo "cerveau-projet/agents/chiron/corrections.md" ;;
         *) echo "cerveau-projet/agents/inconnu/corrections.md" ;;
     esac
 }

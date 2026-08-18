@@ -1,0 +1,21 @@
+
+=== CHRONO test (total 0.0s) ===
+=== TEST 007 -- PLAN FIGER LF ===
+  [OK] 1. version py/sh identiques v0.1.1
+  [OK] 2. dry-run ne modifie rien (CRLF intact)
+  [OK] 3. conversion reelle CRLF -> LF
+  [OK] 4. idempotence (2e passe)
+  [OK] 5. binaire ignore (intact)
+  [OK] 6. recursif convertit les sous-dossiers
+[PROTECTIONS] Attention: mot-cle 'erreur' dans stdout (code 2)
+  [OK] 7. chemin inexistant -> ERREUR
+  [OK] 8. REGRESSION creer-fichier -> LF
+  [OK] 9. REGRESSION ecrire-fichier -> LF
+  [OK] 10. ASCII 0 sur 4 fichiers outils
+  [OK] 11. valider-nommage --type outil OK
+  [OK] 12. parite py/sh (sh convertit aussi)
+  [OK] 13. catalogue JSON valide 182 trie + entree detecter-troncatures
+  [OK] 14. index-tools total 203 + Corriger 7 + detecter-troncatures
+  [OK] 15. 0 residu du test dans le workspace
+---
+BILAN : 15/15 VALIDE

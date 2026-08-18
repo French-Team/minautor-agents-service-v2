@@ -540,6 +540,12 @@
   "c20": {
    "indices": [
     {
+     "type": "outil",
+     "nom": "generateurs-commande",
+     "catalogue": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py"
+    },
+    {
      "catalogue": "enregistrer-usage-outil",
      "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
      "nom": "enregistrer-usage-outil",
@@ -557,6 +563,12 @@
   },
   "c21": {
    "indices": [
+    {
+     "type": "outil",
+     "nom": "generateurs-commande",
+     "catalogue": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py"
+    },
     {
      "catalogue": "enregistrer-usage-outil",
      "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
@@ -682,6 +694,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c16c executer-script-temporaire (usage reel entonnoir, garde-fou test-035)",
   "nom": "parcours-morpheus",
-  "version": "0.4.14"
+  "version": "0.4.15"
  }
 }

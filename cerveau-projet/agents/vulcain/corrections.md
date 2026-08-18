@@ -4349,3 +4349,102 @@ partagee, v1 = stockage + consultation.
 **Preuves** : creation OK (id=1), doublon refuse code 1, usurpation refuse
 code 1, non-ASCII refuse code 1, consultation --toutes/--recherche/--domaine/
 --rapport OK, journalisation verrou-auto + direct presentes, normes 0/0.
+## [LECON] 2026-08-18 -- OUTIL LIRE-HEAD CREE : HEAD AUTO + COMPARAISON MULTI-FICHIERS (Vulcain, VERDICT VALIDE)
+
+**Mission** : creer l outil lire-head (categorie lire) : lire le head de n importe quel fichier sans configurer le nombre de lignes, en reperant automatiquement la fin du head (front-matter YAML, bloc de commentaires, premiere ligne vide, borne --max-lignes), et comparer plusieurs heads avec --info-commune MOTIF (PRESENT/ABSENT par fichier) pour reperer le fichier pas a jour.
+
+**Actions** : lire-head.py + .sh (parite py/sh, --version identique) + .md (documentation) + entree catalogue-commandes.json (181 -> 182, version catalogue 0.2.12 -> 0.2.13) + index-tools.md (Total 202 -> 203, Lire 4 -> 5) + bump versions outil 0.1.0 -> 0.1.1 + RVAV (valider-nommage, valider-conformite-ascii 0, analyse-structure) + combo corriger-ascii + delegation tests a Morpheus (test-091 cree, 13/13 OK).
+
+**Lecons** :
+1. La detection de la fin du head suit un ordre de priorite : front-matter YAML > bloc de commentaires (en-tete de script) > premiere ligne vide > borne --max-lignes (defaut 100). Un fichier sans ligne vide ni frontmatter atteint la borne (comportement voulu et documente).
+2. Un outil de lecture simple exige quand meme le protocole complet : py + sh parite, .md de doc, entree catalogue, entree index-tools, tests delegues a Morpheus (jamais de tests ecrits par moi).
+3. mettre-a-jour-versions est DRY-RUN PAR DEFAUT : verifier le dry-run puis relancer --wet pour appliquer (le bumper annonce OK en dry-run sans rien ecrire).
+
+**Preuves** : tests reels (front-matter, bloc de commentaires, comparaison PRESENT/ABSENT, fallback borne), ASCII 0, LF pur, catalogue 182 commandes JSON valide.
+## [LECON] 2026-08-18 -- CHIRON BRANCHE A L ACTIVATION (Vulcain)
+
+**Contexte** : l utilisateur a lance kilo-llm en session-llm-2 pour verifier le
+fonctionnement ; Cerberus a active Themis (17:43) mais l agent a improvise
+(tentative editer-parcours bloquee, puis arret). Diagnostic : la mission donnee
+etait hors perimetre de la carte de Themis (inventaire de performance = Atlas/Buffy,
+pas evaluation). En preparant la reeducation de Themis par Chiron, l activation de
+Chiron a echoue : "Agent inconnu 'chiron'".
+
+**Cause racine** : Chiron (16e agent, cree 2026-08-17) etait ABSENT du dictionnaire
+AGENTS de activer-agent-principal.py (et des 3 case statements du .sh) - meme oubli
+qu Argus corrige en v0.5.8. La creation d un agent comporte un maillon OUBLIE : le
+branchement a l outil d activation. Une fiche + un parcours + une entree AGENTS.md ne
+suffisent pas - sans la liste AGENTS, l agent est inactivable et donc jamais testable.
+
+**Correction** : ajout de l entree chiron (role, fiche, corrections) au dictionnaire
+AGENTS du py + aux 3 fonctions du sh (get_agent_role, get_agent_fiche,
+get_agent_corrections) + bump 0.5.11 -> 0.5.12 (py en-tete + constante, sh, md
+version + historique, spec). Preuve : get_agent_info("chiron") resolue, activation
+reelle OK, bumper --tous 149/149 coherents, normes 0/0, py_compile OK, bash -n OK.
+
+**Verification des pins** : AUCUN test de la non-regression ne pinne la version de
+activer-agent-principal (test-004 ne pinne que les versions des parcours) - pas de
+mission Morpheus necessaire pour ce branchement.
+
+**Ecart preexistant SIGNALE** : le .sh etait en retard - argus, gardien et hermes
+sont ABSENTS de ses case statements (le .py les a, pas le .sh). Le bump 0.5.8
+d Argus n a touche que le .py. A corriger (Buffy/Vulcain) pour la parite py/sh.
+
+**Lecon** : quand on cree un agent, verifier le branchement a l outil d activation
+(py ET sh) - et verifier aussi les tests de non-regression qui listent les agents
+(test-037 liste chiron mais aucun test ne verifie la parite agents <-> dictionnaire
+AGENTS : un garde-fou est a prevoir pour eviter le 3e oubli).
+**Verdict** : VALIDE - branchement chiron 0.5.12.
+## [LECON] 2026-08-18 -- RESYNC CARTES-LOCK APRES BUMP CARTE (Vulcain)
+
+**Contexte** : amelioration deleguee par Buffy (Pattern 17). Pendant la
+correction de la carte themis (v0.4.9 -> v0.4.10), un bump de version via
+mettre-a-jour-versions --parcours a ecrit la carte JSON HORS editer-parcours
+-> l empreinte de cartes-lock.json a diverge et l anti-contournement a
+BLOQUE les ecritures suivantes jusqu a resynchronisation manuelle.
+
+**Actions** :
+1. Diagnostic : mettre-a-jour-versions --parcours ecrit le parcours
+   directement (pas via editer-parcours), donc le lock ne suit pas.
+2. Ajout de resynchroniser_cartes_lock dans mettre-a-jour-versions.py :
+   empreinte SHA-256 normalisee (LF + rstrip) STRICTEMENT identique a
+   editer-parcours, mise a jour de l entree dans cartes-lock.json.
+3. Appel systematique apres chaque bump --parcours --wet reussi.
+4. Bump outil 0.1.4 -> 0.1.5 + versionning .md.
+
+**Verdict** : VALIDE (teste : perturbation du lock puis resync -> MATCH
+avec l empreinte normalisee d editer-parcours).
+
+**Lecon** : TOUT outil qui ecrit une carte (parcours JSON) hors
+editer-parcours doit resynchroniser cartes-lock.json (empreinte normalisee
+LF + rstrip), sinon les ecritures ulterieures de la carte sont bloquees par
+l anti-contournement (regle SEUL BUFFY). Modele : proteger-modifier-marbre.
+LEÇON VULCAIN -- PARITE SH COMPLETE (test-092)
+
+Date : 2026-08-18
+Contexte : correction signalée par Morpheus (garde-fou test-092) : le .sh
+d'activer-agent-principal manquait argus et gardien dans les 3 case statements
+(role, fiche, corrections) - signalement Janus de la mission branchement-chiron
+jamais corrigé (seul hermes avait été ajouté v0.5.12).
+
+Leçons :
+1. Le 3e oubli de branchement est évité : le garde-fou de parité (test-092)
+   compare désormais py / sh / AGENTS.md dans les deux sens + preuve négative.
+   Tout nouvel agent DOIT être ajouté aux 3 sources (py, sh, AGENTS.md) -
+   le test détecte tout écart automatiquement.
+2. Bump manuel vs bumper : le bumper (mettre-a-jour-versions) refusait le bump
+   du dossier activer-agent-principal à cause d'un faux positif : le fichier
+   activer-agent-principal-test.md (rapport de test historique) porte une
+   version 0.2.0 dans un tableau "Tests v0.2.0 (historique)" - fichier
+   documentaire, pas une source de vérité. Le bump a donc été fait manuellement
+   (py, sh, md, spec) + entrée au tableau versionning. L'audit --tous du bumper
+   confirme la cohérence (0 incohérent).
+3. Ordre d'insertion dans le .sh : suivre l'ordre du .py (dictionnaire AGENTS) :
+   hermes (12), gardien (13), argus (14), chiron (15) - insérer gardien+argus
+   entre hermes et chiron pour garder la parité de style.
+4. Les .pyc trackés sont modifiés par les tests d'import : les restaurer via
+   git checkout avant de conclure (artefact, pas une régression).
+
+Verdict : test-092 9/9 OK (détectait exactement le vrai écart avant correction),
+tests liés 10/10 OK (test-002, 018, 021, 025, 028, 039, 040, 041, 052, 057),
+bumper --tous 0 incohérent, normes ASCII/LF OK.
