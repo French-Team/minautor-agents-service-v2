@@ -47,7 +47,7 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.4
+Version : 0.4.5
 Statut : prepare
 """
 
@@ -58,7 +58,7 @@ import re
 import subprocess
 import sys
 
-VERSION = "0.4.4"
+VERSION = "0.4.5"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "prepare"
 
@@ -277,12 +277,17 @@ def valider_parcours(contenu, nom_display, agent=None):
                     if b.get("reponse") == "OUI"]
         vers_non = [b.get("vers") for b in c0b.get("branches", [])
                     if b.get("reponse") == "NON"]
-        if vers_oui != ["c0c"] or vers_non != ["c0"]:
-            print("   [ERREUR] c0b doit avoir OUI -> c0c et NON -> c0")
+        # Chemin legitime de la confirmation : OUI -> c0c directement, ou
+        # OUI -> c0e (consultation pre-mission) -> c0c ; NON -> c0.
+        oui_ok = vers_oui == ["c0c"] or (
+            vers_oui == ["c0e"] and isinstance(cases.get("c0e"), dict)
+            and cases["c0e"].get("suivant") == "c0c")
+        if not oui_ok or vers_non != ["c0"]:
+            print("   [ERREUR] c0b doit avoir OUI -> c0c (ou OUI -> c0e -> c0c) et NON -> c0")
             erreurs.append("c0b")
         else:
             controles_ok.append("6. Confirmation c0b")
-            print("   [OK] c0b est une question de confirmation (OUI -> c0c, NON -> c0)")
+            print("   [OK] c0b est une question de confirmation (OUI -> c0c/c0e, NON -> c0)")
 
     # 7. Garde-fou v0.3.2 : AUCUN SUIVANT MORT
     #    Mecanique guider-parcours : (a) une case 'fin' arrete la navigation
@@ -489,7 +494,7 @@ def main(argv):
             print("ERREUR : Nom de l'agent manquant")
             afficher_aide()
             return 1
-        # VERROU AUTO-JOURNALISATION (v0.4.4) : l outil signale LUI-MEME son
+        # VERROU AUTO-JOURNALISATION (v0.4.5) : l outil signale LUI-MEME son
         # usage (autorise -> registre mode verrou-auto ; non autorise -> bloque).
         code_verrou, msg_verrou = verrouiller_habilitation(
             agent_actif_session() or argv[1], "valider-cartes-decision")

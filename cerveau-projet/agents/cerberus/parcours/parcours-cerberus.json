@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-cerberus",
   "agent": "cerberus",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "case_depart": "c0",
   "description": "v0.4.6 : + indice outil c10 combos-analyse-projet (usage reel registre, garde-fou test-035)"
  },
@@ -50,7 +50,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -708,6 +708,24 @@
    ],
    "message": "Le rapport signale des problemes a resoudre : j ACTIVE IMMEDIATEMENT l'agent habilite (PASSE PAR LE GENERATEUR, commande activer) avec la liste exacte des problemes. L'agent corrige puis active Janus (sa carte) ; Janus recontrole puis REACTIVE Cerberus avec son rapport ; je relis son rapport (retour a c15b) jusqu'a rapport propre.",
    "suivant": "c15b"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  }
 }

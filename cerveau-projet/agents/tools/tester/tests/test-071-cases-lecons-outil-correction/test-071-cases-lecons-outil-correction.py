@@ -59,7 +59,7 @@ OUTILS_CORRECTION = (
 
 # Titres de cases qui ne font QUE lire/analyser (pas une ecriture de lecon)
 TITRES_LECTURE = ("relire", "classer", "rien a corriger", "aucune faute",
-                  "verifier", "controle", "lire", "audit")
+                  "verifier", "controle", "lire", "audit", "consulter")
 
 # --- triplet chrono (template v0.3.0) ---
 T_START = time.monotonic()

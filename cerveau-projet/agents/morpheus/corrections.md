@@ -4080,3 +4080,33 @@ KO = artefact morpheus actif, passera sous janus).
 1. Toute modification de carte via editer-parcours --bump impose de chercher les pins de version dans les tests (grep des anciennes versions) - jamais attendre la non-regression pour les trouver.
 2. Les tests qui invoquent des outils VERROUILLES (valider-cartes-decision) KO en local si l agent actif n est pas habilite : verifier la table du verrou avant de conclure a un KO reel (faux KO sous morpheus, vert sous janus).
 3. L outil editer-parcours --agent <X> edite la carte de X : ne JAMAIS passer --agent buffy pour editer la carte d un autre agent (lecon Buffy 2026-08-18 : carte buffy corrompue puis restauree via git + lock).
+
+## [LECON] 2026-08-18 -- PINS APRES ROUND CONSULTATION PRE-MISSION (Morpheus)
+
+**Contexte** : Buffy a insere la case c0e (consultation pre-mission) dans les 15 cartes (bump +0.0.1) + valider-cartes-decision 0.4.4->0.4.5.
+
+**Lecons** :
+1. Toute insertion de case c0e entre c0b et c0c casse les regles EN DUR "c0b OUI -> c0c" dans valider-cartes-decision ET test-072 : les 2 doivent etre adaptes ensemble (OUI -> c0c ou OUI -> c0e -> c0c).
+2. Les compteurs de cases action (test-013 cerberus 23->24, test-016 buffy 40->41) et de commandes en dur (test-005 atlas 11->12 + liste + c0e) changent a chaque insertion de case.
+3. Le message du pin test-013 disait "Parcours version 0.5.1" alors que le check etait 0.5.3 : message perime corrige en passant (0.5.4).
+
+## [LECON] 2026-08-17 -- AJOUT C0E (CONSULTATION PRE-MISSION) : TEST-006 A ADAPTER (Morpheus)
+
+**Contexte** : ajout de la case c0e (consulter-lecons avant mission) dans les 15 cartes. La carte atlas passe de 48 a 49 cases (c0e ajoute une case mais PAS un chemin : 13 chemins inchanges car c0e est sur le chemin OUI existant).
+
+**Cause du KO** : test-006-cartographier-parcours pinnai t en dur les compteurs d atlas (48 cases, 13 chemins) dans la docstring (ligne 15) et l en-tete (ligne 176).
+
+**Correction** : 48 -> 49 cases (13 chemins inchanges). Verification : test-006 19/19 OK.
+
+**Lecon** : tout ajout de case dans UNE carte peut casser test-006 (pins atlas en dur). Apres un round de cartes, verifier test-006 avant la suite complete.
+
+## [LECON] 2026-08-18 -- PREUVE POLLINISATION CROISEE : CONSULTATION C0E AVANT MISSION (Morpheus)
+
+**Contexte** : mission micro de preuve (demande utilisateur) - verifier que la consultation pre-mission fonctionne en reel.
+
+**Deroulement** : c0e -> consulter-lecons --agent morpheus --domaine outil = 1 resultat (lecon de vulcain 'BDD lecons = memoire longue'). Puis mission test-006 : 19/19 OK. Puis enregistrer-lecon (domaine test).
+
+**Preuve** : la consultation est journalisee (message outil : 'consultation journalisee (controle d activite : qui a lu quoi)'). La BDD contient maintenant 2 lecons (vulcain outil + morpheus test).
+
+**Lecon** : le flux c0e rend la pollinisation croisee reelle - chaque agent demarre sa mission avec l experience des autres agents, pas seulement ses souvenirs.
+

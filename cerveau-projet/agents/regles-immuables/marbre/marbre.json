@@ -18,9 +18,9 @@
    "agent": "cerberus",
    "cid": "c0b",
    "raison": "RELIRE OBLIGATOIRE : corrections puis fiche (anti-arret)",
-   "empreinte": "7fab2187ce7e239c452a64662f260d1fd54f395e8f39a0cf399ad419e48527f4",
-   "modifie_le": "2026-08-16 21:21:12",
-   "raison_modification": "migration relecture obligatoire: c0b devient question confirmation OUI->c0c NON->c0 (structure validee utilisateur 2026-08-16)"
+   "empreinte": "182a9e86ad40d279a6c62abdf07250a03705fedc2ad806f9f7e17e1e9d62621e",
+   "modifie_le": "2026-08-18 07:46:33",
+   "raison_modification": "Ajout du declencheur de consultation pre-mission (case c0e) : c0b OUI -> c0e, demande utilisateur 2026-08-18"
   },
   "cerberus.c10": {
    "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",

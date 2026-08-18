@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-hermes",
   "agent": "hermes",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Hermes, agent de la langue (dieu grec de l eloquence) : relecture -> detection des fautes d orthographe -> verification du contexte -> correction tracee -> extension du dictionnaire -> rapport. Decision utilisateur 2026-08-14 : creer un agent dedie au vocabulaire et aux fautes, place comme nos outils ASCII, premiere mission = corriger readme-dev:264 (enchannements)."
  },
@@ -50,7 +50,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -449,6 +449,24 @@
     }
    ],
    "suivant": "c9"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  }
 }

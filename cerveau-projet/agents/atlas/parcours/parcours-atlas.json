@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-atlas",
   "agent": "atlas",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. PILOTE STRICT v0.1.2 : commandes composees via le generateur (catalogue), aucun fallback en dur.",
   "version_precedente": "0.4.3"
@@ -51,7 +51,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -925,6 +925,24 @@
    "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
    "titre": "Retour de Themis recu ?",
    "type": "controle"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  }
 }

@@ -38,7 +38,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -652,6 +652,24 @@
    "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
    "titre": "Retour de Themis recu ?",
    "type": "controle"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  },
  "identite": {
@@ -664,6 +682,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c16c executer-script-temporaire (usage reel entonnoir, garde-fou test-035)",
   "nom": "parcours-morpheus",
-  "version": "0.4.13"
+  "version": "0.4.14"
  }
 }

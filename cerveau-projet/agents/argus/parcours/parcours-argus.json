@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-argus",
   "agent": "argus",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions d Argus, detecteur de contradictions : auditer les contradictions dans les cases (parcours JSON), les regles (regles-immuables), les protocoles, et lire le depot git (git log --all, evolutions vraies et fausses). Argus DETECTE et SIGNALE, il ne corrige jamais : la correction appartient a l agent habilite (Buffy fiches/parcours, Vulcain outils, Morpheus tests). Decisions utilisateur 2026-08-15 : nom Argus, role detecteur de contradictions, lecture git en lecture seule, double source obligatoire avant de signaler.",
   "version_precedente": "0.1.8"
@@ -51,7 +51,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -476,6 +476,24 @@
     }
    ],
    "suivant": "c13"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  }
 }

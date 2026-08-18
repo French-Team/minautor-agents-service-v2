@@ -1,7 +1,7 @@
 {
  "parcours": {
   "nom": "parcours-chiron",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Parcours de Chiron (educateur des agents) : analyse fiches/corrections/regles/cartes pour detecter les incoherences nuisant a l intelligence operationnelle des agents.",
   "case_depart": "c0"
  },
@@ -62,7 +62,7 @@
     },
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     }
    ]
   },
@@ -355,6 +355,24 @@
     }
    ],
    "suivant": "c1"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  }
 }

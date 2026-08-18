@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-hygie",
   "agent": "hygie",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Hygie, agent de nettoyage du workspace : snapshot -> detection par zone -> preuve d honnetete -> suppression tracee -> rapport. Seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable (avec tracabilite). Decisions utilisateur 2026-08-13 : nom Hygie, perimetre tout workspace, snapshots dans le dossier dedie de l agent avec rotation 7 jours."
  },
@@ -50,7 +50,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -619,6 +619,24 @@
     }
    ],
    "suivant": "c10"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  }
 }

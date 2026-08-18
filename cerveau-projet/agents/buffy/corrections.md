@@ -4080,3 +4080,12 @@ verrou l autorise a tous via OUTILS_P0_PARTAGES, mais l anti-usurpation
 1. Le poids pondere (valider-case) = 0,5 par indice SANS texte long, 1,0 si texte > 100 car. Ajouter 2 outils = +1,0 : les cases lecons a 2-3 refs + 3-4 outils passent au-dessus du budget 3,0. Allegement etabli : retirer les refs redondantes (pattern-12/pattern-2, deja referencees dans 10+ cases) et convertir les textes regle > 100 car en refs (protocole).
 2. PIEGE --agent : editer-parcours --agent <X> edite la carte de X - passer --agent buffy pour editer une AUTRE carte la corrompt (restauration via git + cartes-lock.json). Toujours --agent <proprietaire>.
 3. PIEGE IDENTITE : detecter-cablages-manquants --agent janus est BLOQUE si la session est sur un autre agent (usurpation). Un test qui passe --agent janus n est vert QUE sous la session janus (faux KO sinon).
+
+## [LECON] 2026-08-18 -- DECLENCHEUR CONSULTATION PRE-MISSION c0e + PORTE MARBRE (Buffy)
+
+**Contexte** : demande utilisateur - ajouter une case de consultation pre-mission dans les 15 cartes (c0b OUI -> c0e -> c0c, consulter-lecons sur le domaine de la mission).
+
+**Lecons** :
+1. La case cerberus.c0b est protegee par le marbre : editer-parcours REFUSE (hash nouveau != empreinte). Sequence correcte (precedent 2026-08-16) : (1) autorisation utilisateur, (2) ecrire la case directement (backup avant), (3) proteger-modifier-marbre --zone cerberus.c0b --autorisation re-empreinte + resynchronise cartes-lock.json, (4) verrous passent.
+2. valider-cartes-decision avait une regle EN DUR "c0b OUI -> c0c" : toute insertion de case entre c0b et c0c casse la validation. Adapter le validateur (OUI -> c0c ou OUI -> c0e -> c0c) en meme temps que la carte.
+3. L insertion d une case avec --inserer-case + --branche OUI:c0e + --bump fonctionne en UN appel editer-parcours (14 cartes non protegees).

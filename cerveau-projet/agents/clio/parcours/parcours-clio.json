@@ -38,7 +38,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -661,6 +661,24 @@
    "suivant": "c10",
    "titre": "Verifier la conformite ASCII",
    "type": "action"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  },
  "identite": {
@@ -673,6 +691,6 @@
   "case_depart": "c0",
   "description": "v0.5.6 : + indice outil c20 valider-conformite-ascii (coherence regle/indice outil, garde-fou test-055)",
   "nom": "parcours-clio",
-  "version": "0.5.12"
+  "version": "0.5.13"
  }
 }

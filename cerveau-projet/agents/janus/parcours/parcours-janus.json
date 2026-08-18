@@ -38,7 +38,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -962,6 +962,24 @@
    "message": "LIVRABLE PROMETHEE NON CONFORME : je RENVOIE le rapport a PROMETHEE pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 promethee <raison>. Il corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
    "titre": "FIN - Renvoyer rapport a promethee",
    "type": "fin"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  },
  "identite": {
@@ -974,6 +992,6 @@
   "case_depart": "c0",
   "description": "v0.4.8 : + indice outil c4 tester-protections (usage reel controle, garde-fou test-035)",
   "nom": "parcours-janus",
-  "version": "0.4.19"
+  "version": "0.4.20"
  }
 }

@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-minerve",
   "agent": "minerve",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Minerve : redactrice de todos. 2 missions (creer un todo, completer un todo) couvrant les phases 0 a 9 du todo-template. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
   "version_precedente": "0.3.2"
@@ -51,7 +51,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -651,6 +651,24 @@
    "suivant": "c10",
    "titre": "Enregistrer mes usages d outils",
    "type": "action"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  }
 }

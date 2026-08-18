@@ -165,10 +165,15 @@ def analyser_parcours(agent, p):
         branches = c0b.get("branches", [])
         vers_oui = [b.get("vers") for b in branches if b.get("reponse") == "OUI"]
         vers_non = [b.get("vers") for b in branches if b.get("reponse") == "NON"]
-        if vers_oui != ["c0c"] or vers_non != ["c0"]:
+        # Chemin legitime : OUI -> c0c directement, ou OUI -> c0e
+        # (consultation pre-mission, round 2026-08-18) -> c0c ; NON -> c0.
+        oui_ok = vers_oui == ["c0c"] or (
+            vers_oui == ["c0e"] and isinstance(cases.get("c0e"), dict)
+            and cases["c0e"].get("suivant") == "c0c")
+        if not oui_ok or vers_non != ["c0"]:
             problemes.append(("C0B_BRANCHES",
                               "%s : branches OUI=%s NON=%s "
-                              "(attendu c0c/c0)" %
+                              "(attendu c0c/c0 ou c0e->c0c/c0)" %
                               (agent, vers_oui, vers_non)))
 
     return problemes

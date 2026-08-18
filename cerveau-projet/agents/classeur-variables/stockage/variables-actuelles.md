@@ -15,7 +15,7 @@ identite:
 | `donnees-transformees` | *(tableau transforme)* | transformer-donnees | 2026-08-04 | [OK] |
 | `fichier-final` | `exports/export-2026-08-04-120000.json` | exporter-donnees | 2026-08-04 | [OK] |
 | `profil-systeme` | OS: Windows / Bash: 5.2.37 / Python: 3.14.4 / Git: 2.53.0 / Node: 24.14.1 | verifier-systeme | 2026-08-07 | [OK] |
-| `profil-session-llm-1` | session: session-llm-1 / id: llm-1 / agent: buffy / date: 2026-08-18 07:42 | activer-agent-principal | 2026-08-18 | [OK] |
+| `profil-session-llm-1` | session: session-llm-1 / id: llm-1 / agent: cerberus / date: 2026-08-18 08:13 | activer-agent-principal | 2026-08-18 | [OK] |
 
 ---
 

@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-themis",
   "agent": "themis",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
  },
@@ -50,7 +50,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0c"
+     "vers": "c0e"
     },
     {
      "reponse": "NON",
@@ -770,6 +770,24 @@
     }
    ],
    "suivant": "c9"
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine de ma mission)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+    }
+   ],
+   "suivant": "c0c"
   }
  }
 }

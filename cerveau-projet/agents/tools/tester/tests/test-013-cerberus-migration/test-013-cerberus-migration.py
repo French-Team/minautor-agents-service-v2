@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-013-cerberus-migration.py
-Test formel de la migration pilote du parcours-cerberus v0.5.3
+Test formel de la migration pilote du parcours-cerberus v0.5.4
 (nouveau format : indices REFERENCES + cases ACTION).
 
 Contexte (etape 6 de la spec-refonte-cartes-decision) :
@@ -23,8 +23,8 @@ Contexte (etape 6 de la spec-refonte-cartes-decision) :
      ANALYSE -> Themis c22, jamais analyser avant activer) - lecon derive 2026-08-16
      (Cerberus analysait lui-meme au lieu d activer)
  
- Cas couverts:   1. Version du parcours = 0.5.3
-  2. Types : 23 action / 5 question / 5 controle / 3 fin, 0 indice
+ Cas couverts:   1. Version du parcours = 0.5.4
+  2. Types : 24 action / 5 question / 5 controle / 3 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
   5. Navigation chemin accueil -> PARCOURS TERMINE
@@ -160,23 +160,23 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-013-")
     try:
-        print("=== Test formel migration cerberus v0.5.3 ===")
+        print("=== Test formel migration cerberus v0.5.4 ===")
 
         # 1. Version du parcours
         with io.open(PARCOURS, encoding="utf-8") as fh:
             donnees = json.load(fh)
-        verifier("1. Parcours version 0.5.1",
-                 donnees.get("parcours", {}).get("version") == "0.5.3",
+        verifier("1. Parcours version 0.5.4",
+                 donnees.get("parcours", {}).get("version") == "0.5.4",
                  str(donnees.get("parcours", {}).get("version")))
 
-        # 2. Types de cases : 23 action / 5 question / 5 controle / 3 fin / 0 indice
+        # 2. Types de cases : 24 action / 5 question / 5 controle / 3 fin / 0 indice
         cases = donnees.get("cases", {})
         types = {}
         for c in cases.values():
             t = c.get("type", "?")
             types[t] = types.get(t, 0) + 1
-        verifier("2a. 23 cases action (19 pilotage + c0d lecture doc + c19c/c19d Pattern 17 + c24 registre + c15c maillon rapport)",
-                 types.get("action", 0) == 23, str(types.get("action")))
+        verifier("2a. 24 cases action (19 pilotage + c0d lecture doc + c19c/c19d Pattern 17 + c24 registre + c15c maillon rapport + c0e consultation pre-mission)",
+                 types.get("action", 0) == 24, str(types.get("action")))
         verifier("2b. 5 questions + 5 controles + 3 fins (Pattern 17 c19b + maillon c15b ajoutent 2 controles)",
                  types.get("question", 0) == 5 and types.get("controle", 0) == 5
                  and types.get("fin", 0) == 3, str(types))
