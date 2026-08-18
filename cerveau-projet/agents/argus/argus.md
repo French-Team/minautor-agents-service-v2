@@ -84,6 +84,8 @@ outils:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
+| `enregistrer-lecon` | Enregistrer MA lecon dans la BDD des lecons (memoire longue) |
+| `consulter-lecons` | Consulter les lecons des autres agents (evolution croisee) |
 > **REGLE ABSOLUE -- PARCOURS (v0.1.11)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Le parcours me donne,
 > a chaque etape, l'indice exact (outil a lancer, fichier a lire, regle a

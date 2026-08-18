@@ -19,18 +19,25 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-17 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | janus (retour de mission) |
-| **Raison** | BILAN FINAL ROUND VERROU AUTO-JOURNALISATION : NON-REGRESSION 87 OK / 0 KO (46.3s, reference amelioree 69.7s -> 46.3s). Corrige en cours de round : (1) test-089 tag derive -> anti-contournement (taxonomie), (2) test-078 point 4 rendu robuste (verifie l incident detecter-troncatures dans le registre stable au lieu de l entree purgee du plafond 150 de l historique). Lecon Morpheus enregistree. Retour a Cerberus. |
+| **Nom Agent** | buffy |
+| **Role Agent** | Developpeur principal -- contenu et structures |
+| **Derniere mise a jour** | 2026-08-18 |
+| **Fiche** | [cerveau-projet/agents/buffy/buffy.md](cerveau-projet/agents/buffy/buffy.md) |
+| **Corrections** | [cerveau-projet/agents/buffy/corrections.md](cerveau-projet/agents/buffy/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | MISSION BUFFY (demande utilisateur) : AJOUTER LE DECLENCHEUR DE CONSULTATION PRE-MISSION dans les 15 cartes. Inserer une case c0e (action) apres c0b : c0b OUI -> c0e -> c0c, avec indices [ref protocole-lecons, outil consulter-lecons --agent <MOI> --domaine <domaine de ma mission>]. Via editer-parcours --inserer-case + --branche c0b OUI:c0e + --bump (15 cartes). PUIS synchroniser les 15 fiches (Pattern 14) + verifier valider-cartes 16/16 + budget pondere + normes. PUIS reactiver Janus (non-regression) qui reactivera Cerberus. |
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/buffy/parcours/parcours-buffy.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>').
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-17 22:15 |
+| session-llm-1 | llm-1 | buffy | 2026-08-18 07:42 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

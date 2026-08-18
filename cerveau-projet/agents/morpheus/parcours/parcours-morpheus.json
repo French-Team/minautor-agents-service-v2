@@ -397,12 +397,8 @@
   "c8": {
    "indices": [
     {
-     "ref": "pattern-2",
-     "type": "ref"
-    },
-    {
-     "texte": "CREATION LIMITEE AUX LECONS : je cree uniquement mes lecons (corrections.md). Toute erreur detectee pendant les tests devient une lecon.",
-     "type": "regle"
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-fin-mission/protocole-fin-mission.001.01.ebauche.md"
     },
     {
      "catalogue": "ajouter-contenu-fichier",
@@ -424,6 +420,20 @@
      "catalogue": "detecter-usage-outils-externes",
      "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/",
      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <cible> --recursive"
+    },
+    {
+     "type": "outil",
+     "nom": "enregistrer-lecon",
+     "catalogue": "enregistrer-lecon",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/",
+     "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent <MOI> --domaine <domaine> --titre <titre> --lecon <texte>"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --recherche <motif>"
     }
    ],
    "suivant": "c8b",
@@ -654,6 +664,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c16c executer-script-temporaire (usage reel entonnoir, garde-fou test-035)",
   "nom": "parcours-morpheus",
-  "version": "0.4.12"
+  "version": "0.4.13"
  }
 }

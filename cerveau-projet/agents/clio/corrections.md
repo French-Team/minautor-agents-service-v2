@@ -325,3 +325,13 @@ a 152 mais le badge en dur du README affichait encore 150 (affichage + href).
   pour la 2e. Toujours verifier avec grep -o | sort | uniq -c apres.
 - Le KO a ete detecte par la barriere serie KO de Janus (nouveau workflow) :
   le cycle KO -> agent habilite (Clio) -> revalidation est fluide.
+
+## [LECON] 2026-08-17 -- BADGE OUTILS + TABLE README-DEV (Clio)
+
+**Contexte** : KO non-regression test-038 (badge 157 vs compte reel 159) apres le round BDD des lecons (2 nouveaux outils : enregistrer-lecon, consulter-lecons).
+
+**Cause** : le badge du README et la table de readme-dev ne sont pas synchronises automatiquement avec la source de verite (compter_outils de combos-analyse-projet). Chaque nouvel outil cree doit etre repere : badge README ligne 9 (affichage + href), totaux readme-dev (lignes 28, 57, 218) ET table des categories.
+
+**Actions** : badge Outils-157 -> 159 (affichage + href), readme-dev 149 outils/35 categories -> 159/38, table maj (Enregistrer 1->2, ajout Consulter 1 + Configurer 1, Analyser 6->9, Detecter 17->19, Rechercher 10->11).
+
+**Lecon** : verifier la synchronisation des compteurs a CHAQUE creation d outil ; la source de verite est compter_outils (combos-analyse-projet), jamais un comptage a la main.

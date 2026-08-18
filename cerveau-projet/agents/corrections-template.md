@@ -52,6 +52,12 @@ types:
 
 > **PRINCIPE** : Chaque erreur detectee devient une lecon. Les lecons sont lues
 > a chaque activation et evitees lors des missions suivantes.
+>
+> **MEMOIRE COURTE vs LONGUE** : ce fichier (corrections.md) est la MEMOIRE
+> COURTE (fenetre glissante des missions proches). La MEMOIRE LONGUE est la BDD
+> SQLite partagee (`cerveau-projet/agents/lecons/lecons.db`) : la meme lecon y
+> est ecrite via `enregistrer-lecon` et consultable par tous via
+> `consulter-lecons` (pollinisation croisee).
 
 > **FORMAT DES LECONS (garde-fou)** : chaque lecon commence par `## [LECON] <date> -- <titre>`.
 > NE JAMAIS ecrire un exemple de syntaxe de lien en LITTERAL (texte entre crochets suivi d'une

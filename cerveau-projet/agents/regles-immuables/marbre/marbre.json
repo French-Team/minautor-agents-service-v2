@@ -63,9 +63,9 @@
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",
    "type": "fichier",
    "raison": "Regle immuable des groupes d agents et des domaines separes",
-   "empreinte": "066f832387441c16d68be98167c25b984e9385cc72bb97529e001ccae3587960",
-   "modifie_le": "2026-08-16 18:51:10",
-   "raison_modification": "resynchronisation apres preuve negative (fichier restaure)"
+   "empreinte": "33429f9f76d6972ee8b207076eee7b412b3eba4c4cbbcbc5850d5b3b3377a1aa",
+   "modifie_le": "2026-08-18 06:48:18",
+   "raison_modification": "Ajout de la regle immuable BDD des lecons (memoire longue SQLite partagee + enregistrer-lecon/consulter-lecons), decision utilisateur 2026-08-17, audit Argus PROPRE"
   },
   "regles-general-global": {
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-general-global.md",

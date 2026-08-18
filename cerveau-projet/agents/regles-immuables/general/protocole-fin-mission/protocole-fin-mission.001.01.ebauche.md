@@ -59,7 +59,7 @@ TRAVAIL -> LECON (contexte + actions + verdict) -> TRANSMISSION
 | Etape | Action | Detail | Outils |
 |---|---|---|---|
 | E1 | Terminer le travail | Executer toutes les actions de la mission, verifier les resultats | outils de la carte |
-| E2 | Ecrire SA lecon | Ajouter dans `cerveau-projet/agents/<nom>/corrections.md` une entree `## [LECON] <date> -- <TITRE> (<Agent>)` contenant : **Contexte** (mission, origine), **Actions** (ce qui a ete fait), **Lecon** (ce qui est appris). Le verdict (VALIDE / A REVOIR / CONFORME / KO) doit apparaitre dans le titre OU le corps | editer-fichier |
+| E2 | Ecrire SA lecon | Ajouter dans `cerveau-projet/agents/<nom>/corrections.md` (memoire COURTE, fenetre glissante) une entree `## [LECON] <date> -- <TITRE> (<Agent>)` contenant : **Contexte** (mission, origine), **Actions** (ce qui a ete fait), **Lecon** (ce qui est appris). Le verdict (VALIDE / A REVOIR / CONFORME / KO) doit apparaitre dans le titre OU le corps. LA MEME lecon part AUSSI dans la BDD (memoire LONGUE, partagee) via `enregistrer-lecon` (anti-usurpation : --agent == agent actif de la session) | editer-fichier + enregistrer-lecon |
 | E3 | Verifier la lecon | Relire la lecon : date du jour, titre avec le nom de l'agent, verdict present, ASCII strict, LF pur | valider-conformite-ascii |
 | E4 | Transmettre | Seulement apres E2+E3 : activer le maillon suivant (ou reactiver Cerberus si dernier maillon) avec le bilan | activer-agent-principal |
 | E5 | Garde-fou | test-048 verifie que chaque mission recente d'AGENTS-historique a SA lecon + verdict dans corrections.md de l'agent | test-048 |

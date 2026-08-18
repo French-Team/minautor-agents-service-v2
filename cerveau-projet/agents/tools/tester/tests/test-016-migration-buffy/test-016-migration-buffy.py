@@ -8,7 +8,7 @@ Test formel de la migration du parcours-buffy v0.3.0
 Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
   - parcours-buffy passe de v0.2.11 (0 erreur / 15 a alleger) a
     v0.3.0 (0 erreur / 0 a alleger / CONFORME valider-case)
-  - 17 cases en surcharge de nombre reduites a <= 3 indices
+  - 17 cases en surcharge de nombre reduites au BUDGET PONDERE (<= 3,0)
   - textes regle longs migres en refs (pattern-2 ASCII, pattern-3
     combo, pattern-6 contexte, pattern-12 creation limitee, regles-
     perimetre-workspace) ou textes courts (< 160 car.)
@@ -29,7 +29,7 @@ Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
    - v0.4.7 (2026-08-15) : ajout indice outil guider-parcours (case c0, P0 de la fiche
      absent de la carte - OUTIL_HORS_CARTE teste par evaluer-processus, garde-fou test-035)
 
-Cas couverts:   1. Version du parcours = 0.4.12
+Cas couverts:   1. Version du parcours = 0.4.13
   2. Types : 40 action / 8 question / 5 controle / 10 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -38,7 +38,7 @@ Cas couverts:   1. Version du parcours = 0.4.12
   7. Case action enchaine SANS question (c0b -> c0c, pas de QUESTION)
   8. Refs resolues a la navigation (pattern-6, regles-perimetre-workspace)
   9. Aucun texte regle > 160 caracteres dans le parcours
- 10. Aucune case avec plus de 3 indices
+ 10. Budget pondere des indices <= 3,0 (regle autoritaire)
  11. Parcours inexistant : ERREUR + code non nul
  12. JSON invalide : ERREUR + code non nul
  13. Protection : aucun fichier cree dans le dossier outil
@@ -168,8 +168,8 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.4.12",
-                 d["parcours"].get("version") == "0.4.12",
+        verifier("1. Version du parcours = 0.4.13",
+                 d["parcours"].get("version") == "0.4.13",
                  d["parcours"].get("version"))
 
         # 2. Types
@@ -243,10 +243,19 @@ def main():
         verifier("9. Aucun texte regle > 160 caracteres",
                  not trop_long, "; ".join(trop_long[:5]))
 
-        # 10. Aucune case avec plus de 3 indices
+        # 10. Budget pondere des indices (regle autoritaire, spec v0.1.3 /
+        # Pattern 16 2026-08-11) : indice COURT (texte <= 100 car. ou sans
+        # texte) = 0,5 ; LONG (> 100 car.) = 1 ; budget 3,0 par case
+        # (6 courts = 3,0 OK). Meme calcul que valider-case (poids_indices).
+        def _poids_indices(indices):
+            p = 0.0
+            for ind in indices:
+                t = ind.get("texte", "")
+                p += 1.0 if (isinstance(t, str) and len(t) > 100) else 0.5
+            return p
         trop_ind = [k for k, c in d["cases"].items()
-                    if len(c.get("indices", [])) > 3]
-        verifier("10. Aucune case avec plus de 3 indices",
+                    if _poids_indices(c.get("indices", [])) > 3.0]
+        verifier("10. Budget pondere des indices <= 3,0",
                  not trop_ind, "; ".join(trop_ind[:5]))
 
         # 11. Parcours inexistant : ERREUR

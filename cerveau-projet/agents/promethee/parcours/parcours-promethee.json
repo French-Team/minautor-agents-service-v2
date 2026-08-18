@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-promethee",
   "agent": "promethee",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Promethee : redacteur de specs. 2 missions (creer une spec, completer une spec). A la fin de chaque mission, j'active Minerve pour le todo (FLUX). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
   "version_precedente": "0.3.2"
@@ -255,6 +255,20 @@
      "nom": "corriger-symboles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/promethee/corrections.md --all"
+    },
+    {
+     "type": "outil",
+     "nom": "enregistrer-lecon",
+     "catalogue": "enregistrer-lecon",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/",
+     "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent <MOI> --domaine <domaine> --titre <titre> --lecon <texte>"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --recherche <motif>"
     }
    ],
    "suivant": "c9b"

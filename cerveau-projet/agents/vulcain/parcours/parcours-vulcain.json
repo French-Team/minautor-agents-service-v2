@@ -482,12 +482,8 @@
   "c15h": {
    "indices": [
     {
-     "ref": "pattern-2",
-     "type": "ref"
-    },
-    {
-     "texte": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict dans corrections.md AVANT toute transmission (test-048 le verifie).",
-     "type": "regle"
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-fin-mission/protocole-fin-mission.001.01.ebauche.md"
     },
     {
      "catalogue": "ajouter-contenu-fichier",
@@ -516,6 +512,20 @@
      "catalogue": "detecter-surcharge-fichier",
      "chemin": "cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/",
      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/detecter-surcharge-fichier.py cerveau-projet/agents --seuil 500 --recursive"
+    },
+    {
+     "type": "outil",
+     "nom": "enregistrer-lecon",
+     "catalogue": "enregistrer-lecon",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/",
+     "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent <MOI> --domaine <domaine> --titre <titre> --lecon <texte>"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --recherche <motif>"
     }
    ],
    "message": "J ecris MA lecon dans corrections.md : ## [LECON] <date> -- <titre> (Vulcain) avec **Contexte** (mission, origine), **Actions** (ce que j ai fait) et **Verdict** (VALIDE / A REVOIR / CONFORME / KO). Le protocole-fin-mission impose lecon + verdict AVANT de transmettre : sans cette documentation, le garde-fou test-048 fera KO et le bilan ne sera pas accepte.",
@@ -1225,6 +1235,6 @@
   "case_depart": "c0",
   "description": "Carte de decision de Vulcain - constructeur d outils. v0.4.16 : c13 + combos-audit-general, c18c + executer-script-temporaire (mission garantie LF).",
   "nom": "parcours-vulcain",
-  "version": "0.4.26"
+  "version": "0.4.27"
  }
 }

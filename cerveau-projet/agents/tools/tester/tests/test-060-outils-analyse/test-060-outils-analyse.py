@@ -223,8 +223,8 @@ def main():
             ok = ("`analyser-performance-tests`" in idx
                   and "`analyser-tokens`" in idx
                   and "| Analyser | 9 |" in idx
-                  and "| **Total** | **200** |" in idx)
-            verifier("6. index-tools : 2 outils + Analyser 9 + Total 200", ok,
+                  and "| **Total** | **202** |" in idx)
+            verifier("6. index-tools : 2 outils + Analyser 9 + Total 202", ok,
                      "perf=%s tokens=%s" % ("`analyser-performance-tests`" in idx,
                                             "`analyser-tokens`" in idx))
             chrono_etape("6. index-tools", t0)
@@ -235,10 +235,10 @@ def main():
             with io.open(CATALOGUE, encoding="utf-8") as fh:
                 cat = json.load(fh)
             noms = [e["nom"] for e in cat["commandes"]]
-            ok = (len(noms) == 179 and noms == sorted(noms)
+            ok = (len(noms) == 181 and noms == sorted(noms)
                   and "analyser-performance-tests" in noms
                   and "analyser-tokens" in noms)
-            verifier("7. catalogue : 179 trie + 2 outils presents", ok,
+            verifier("7. catalogue : 181 trie + 2 outils presents", ok,
                      "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
             chrono_etape("7. catalogue", t0)
 

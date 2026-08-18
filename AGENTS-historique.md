@@ -13,6 +13,116 @@ identite:
 
 ---
 
+| 2026-08-18 07:42 | session-llm-1 | buffy | MISSION BUFFY (demande utilisateur) : AJOUTER LE DECLENCHEUR DE CONSULTATION PRE-MISSION dans les 15 cartes. Inserer une case c0e (action) apres c0b : c0b OUI -> c0e -> c0c, avec indices [ref protocole-lecons, outil consulter-lecons --agent <MOI> --domaine <domaine de ma mission>]. Via editer-parcours --inserer-case + --branche c0b OUI:c0e + --bump (15 cartes). PUIS synchroniser les 15 fiches (Pattern 14) + verifier valider-cartes 16/16 + budget pondere + normes. PUIS reactiver Janus (non-regression) qui reactivera Cerberus.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/buffy/parcours/parcours-buffy.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-18 07:21 | session-llm-1 | Cerberus | BILAN CONSOLIDE (Janus, round BDD des lecons) : NON-REGRESSION 88 OK / 0 KO (87 tests). Livre : lecons.db SQLite unique partagee (memoire longue) + enregistrer-lecon + consulter-lecons (verrou P0 partages, anti-usurpation, journalisation), regle immuable BDD lecons gravee au marbre (porte + audit Argus PROPRE), protocole-lecons, corrections.md = memoire courte. KO traites : test-038 (badge README 157->159 + readme-dev 149/35 -> 159/38 par Clio), test-035 (2 outils ajoutes aux 13 cartes + 15 fiches P0 par Buffy), test-024 (catalogue 179->181), test-004/005/016 (pins versions), test-045 (budget pondere allege). valider-cartes 16/16, marbre 8/8, 0 residu, normes 0/0, chrono 50.9s. Lecons Buffy/Morpheus/Clio enregistrees. |
+| 2026-08-18 07:17 | session-llm-1 | janus | RELANCE FINALE NON-REGRESSION : Buffy a allege les 6 cases Lecons au budget pondere (hygie c12 CONFORME -> test-045 point 2 regle). Janus relance la suite complete en barrieres pour confirmer 87/87, puis REACTIVE Cerberus avec le bilan consolide du round BDD des lecons.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-18 07:15 | session-llm-1 | buffy | MISSION BUFFY (Janus, KO test-045) : l ajout des indices lecons a pousse 6 cases Lecons au-dessus du budget pondere 3.0 (valider-case A ALLEGER -> test-045 KO). ALLEGER : retirer les refs redondantes (pattern-12/pattern-2, precedents etablis) + convertir les textes regle >100 car en refs protocole-fin-mission (vulcain c15h, morpheus c8, janus c9, clio c10, themis c12, hygie c12) via editer-parcours. PUIS reactiver Janus.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/buffy/parcours/parcours-buffy.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-18 07:08 | session-llm-1 | janus | RELANCE NON-REGRESSION (maillon suivant) : Morpheus a adapte test-004 (morpheus 0.4.13), test-005 (atlas 0.4.8 + 11 commandes), test-016 (buffy 0.4.13 + max 5 indices), test-024 (catalogue 181). Janus relance la suite complete en barrieres pour confirmer 87/87, puis REACTIVE Cerberus avec le bilan consolide du round BDD des lecons.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-18 07:03 | session-llm-1 | morpheus | MISSION MORPHEUS (Janus, KO non-regression) : Buffy a ajoute enregistrer-lecon + consulter-lecons aux cases Lecons des 13 cartes (bump versions : buffy 0.4.13, vulcain 0.4.27, morpheus 0.4.13, janus 0.4.19, atlas 0.4.8, clio 0.5.12, themis 0.4.8, hygie 0.1.7, hermes 0.1.4, chiron 0.1.1, athena 0.3.5, promethee 0.3.6, minerve 0.3.6). ADAPTER les tests qui pinent ces versions (test-004/005/013/016/018/063...) + CORRIGER test-024 pin catalogue 179->181. PUIS reactiver Janus pour relancer la non-regression.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-18 06:57 | session-llm-1 | buffy | MISSION BUFFY (Janus, KO test-035) : les outils enregistrer-lecon + consulter-lecons (nouveaux P0 partages, round BDD lecons) sont absents des cartes et fiches -> OUTIL_HORS_CARTE pour janus. CORRIGER : (1) ajouter les 2 indices outil (enregistrer-lecon + consulter-lecons) a la case Lecons de CHAQUE carte (14 cartes : buffy c15, vulcain c15h, morpheus c8, janus c9, atlas c10, clio c10, themis c12, hygie c12, hermes c9, chiron c12, athena c9, promethee c9, minerve c9 + chercher cerberus) via editer-parcours --modifier-case + bump, (2) ajouter les 2 outils aux tables P0 des 15 fiches, (3) verifier valider-cartes + normes. PUIS reactiver Janus.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/buffy/parcours/parcours-buffy.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-18 06:52 | session-llm-1 | janus | RELANCE NON-REGRESSION (maillon suivant) : Clio a corrige le KO test-038 (badge README 157->159 + readme-dev 149/35 -> 159/38). Janus relance la suite complete pour confirmer 87/87, puis REACTIVE Cerberus avec le bilan consolide du round BDD des lecons.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-18 06:52 | session-llm-1 | Cerberus | CORRECTION CLIO TERMINEE : badge README 157->159 (affichage + href), readme-dev 149/35 -> 159/38 (table categories maj : Enregistrer 2, Consulter 1, Configurer 1, Analyser 9, Detecter 19, Rechercher 11). test-038 7/7 OK, normes 0/0. Lecon Clio enregistree. Relance de la non-regression par Janus. |
+| 2026-08-18 06:51 | session-llm-1 | clio | MISSION CLIO (Janus, KO non-regression) : le badge Outils du README affiche 157 alors que le compte reel est 159 (2 nouveaux outils : enregistrer-lecon + consulter-lecons, round BDD des lecons). CORRIGER : (1) badge README.md ligne 9 : Outils-157 -> Outils-159 (affichage + href), (2) readme-dev.md : total 149 outils/35 categories -> 159 outils/38 categories (ligne 28, 57, 218) + table des categories (Enregistrer 1->2 avec enregistrer-lecon, ajouter ligne Consulter 1 consulter-lecons, detecter 17->19, rechercher 10->11, etc. via combos-analyse-projet source de verite), (3) verifier test-038 vert + normes ASCII/LF. PUIS reactiver Janus pour relancer la non-regression.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/clio/parcours/parcours-clio.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 22:37 | session-llm-1 | janus | LANCER LA NON-REGRESSION COMPLETE (round BDD des lecons). Vulcain a cree lecons.db + enregistrer-lecon + consulter-lecons (+ catalogue 179->181 v0.2.12, index-tools 200->202), Buffy a grave la regle, Morpheus a adapte test-007/test-005 + cree test-090 (serie e). Janus lance la suite complete, constate les KO eventuels, les signale (Morpheus pour les tests, Vulcain pour les outils), reverdit, puis REACTIVE Cerberus avec le bilan consolide.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 22:32 | session-llm-1 | morpheus | MISSION MORPHEUS : TESTS POUR LA BDD DES LECONS. Vulcain a cree lecons.db SQLite + enregistrer-lecon (anti-usurpation, verrou, ASCII, anti-doublon) + consulter-lecons (verrou, filtres, journalisation). Buffy a grave la regle. A FAIRE : 1) ADAPTER LES PINS : test-007 point 13 (catalogue 179 -> 181) + point 14 (index-tools total 200 -> 202) ; test-005 point 14 (catalogue version 0.2.11 -> 0.2.12). 2) CREER test-090 (garde-fou BDD lecons) : verifie enregistrer-lecon (creation OK, anti-usurpation code 1, non-ASCII refuse code 1, doublon refuse code 1) + consulter-lecons (liste, filtre --domaine/--recherche, --rapport, journalisation directe) + la BDD n est touchee que par les 2 outils. Avec preuve negative. Tags de la taxonomie. 3) AJOUTER test-090 a la definition SERIES du lanceur. 4) py_compile + tests cibles verts. FIN : lecon Morpheus + ACTIVER JANUS (non-regression complete + verdict). NOTE : la migration des lecons existantes (corrections.md -> BDD) est DEFEREE (a un round suivant, besoin d un mode import en masse).
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 22:29 | session-llm-1 | buffy | MISSION BUFFY : GOUVERNER LA BDD DES LECONS (Vulcain a cree lecons.db SQLite + enregistrer-lecon + consulter-lecons, verrou P0 partages deja en place). A FAIRE : 1) AJOUTER LA REGLE dans regles-groupes-agents.md (niveau regle immuable) : la BDD lecons (cerveau-projet/agents/lecons/lecons.db, SQLite unique partagee) est la MEMOIRE LONGUE des lecons ; corrections.md reste la MEMOIRE COURTE (fenetre glissante des missions proches) ; CHAQUE AGENT N ECRIT QUE SES PROPRES LECONS via enregistrer-lecon (anti-usurpation --agent == agent actif) ; la LECTURE croisee via consulter-lecons est verrouillee + journalisee (controle d activite) ; la BDD n est touchee QUE par ces 2 outils (jamais sqlite3 direct). Si la regle releve du MARBRE (zone protegee), passer par Gardien + validation utilisateur (ne pas modifier en dur sans la porte). 2) METTRE A JOUR les fiches des agents (au minimum le template/les fiches principales) pour referencer enregistrer-lecon/consulter-lecons a la place de la seule append corrections.md. 3) Documenter la fenetre glissante corrections.md (N lecons recentes, le reste en BDD). VERIFIER : normes 0 non-ASCII / 0 CRLF, valider-cartes si cartes touchees. FIN : lecon Buffy + ACTIVER HYGIE (migration des lecons existantes corrections.md -> BDD + elagage corrections.md).
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/buffy/parcours/parcours-buffy.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
+| 2026-08-17 22:21 | session-llm-1 | vulcain | MISSION VULCAIN : CREER LA BDD PORTABLE DES LECONS (SQLite) + 2 OUTILS DEDIES. DECISIONS UTILISATEUR : SQLite stdlib (aucune lib tierce), BDD UNIQUE partagee, v1 = stockage + consultation (pas de suggestion). 
+
+1. BDD : cerveau-projet/agents/lecons/lecons.db (fichier unique, portable). Schema auto-init (CREATE TABLE IF NOT EXISTS, idempotent) : table lecons(id INTEGER PK AUTOINCREMENT, date TEXT, agent TEXT, domaine TEXT, tags TEXT, titre TEXT, lecon TEXT, mission TEXT, outils TEXT, verdict TEXT) + index sur agent/date/domaine. La BDD n est touchee QUE par les 2 outils (jamais sqlite3 direct ailleurs).
+
+2. OUTIL enregistrer-lecon (categorie enregistrer) : --agent (obligatoire = auteur), --domaine, --tags, --titre, --lecon (ou --lecon-fichier), --mission, --outils, --verdict, --version, --aide. VERROU : appeler verrouiller_habilitation(agent_actif, 'enregistrer-lecon') + REGLE SPECIFIQUE anti-usurpation : le --agent (auteur) DOIT etre l agent actif de la session (lire AGENTS.md), sinon REFUS code 1. ASCII strict (refus si non-ASCII), LF, anti-doublon (meme agent+titre+date deja present -> signaler). Journalisation registre (mode direct). Retourne l id cree + confirmation.
+
+3. OUTIL consulter-lecons (categorie consulter) : --agent (obligatoire pour verrou), --toutes, --auteur, --domaine, --tags, --recent N, --recherche (LIKE), --rapport (markdown), --version, --aide. VERROU : verrouiller_habilitation(agent_actif, 'consulter-lecons') puis JOURNALISATION D ACTIVITE (qui a consulte quoi, registre mode direct). Sortie liste formatee + compteur. ASCII strict, LF.
+
+4. Doc .md pour chaque outil + entree catalogue-commandes + entree index-tools (categories enregistrer/consulter). Modele outil-template (shebang, coding ascii, docstring Usage, --aide, protections ON/OFF + chrono).
+
+5. TESTS REELS : enregistrer-lecon creation OK (id retourne) + refus non-ASCII + refus usurpation (--agent != agent actif) + doublon detecte ; consulter-lecons liste + filtre --domaine + --recherche + --rapport ; --version/--aide ; normes 0 non-ASCII / 0 CRLF sur tous les fichiers crees.
+
+FIN : lecon Vulcain + ACTIVER BUFFY (regle immuable + verrou table + fiches/cartes). PAS de script temporaire a la racine (entonnoir obligatoire), declaration registre, ASCII strict + LF partout.
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>'). |
 | 2026-08-17 22:15 | session-llm-1 | Cerberus | BILAN FINAL ROUND VERROU AUTO-JOURNALISATION : NON-REGRESSION 87 OK / 0 KO (46.3s, reference amelioree 69.7s -> 46.3s). Corrige en cours de round : (1) test-089 tag derive -> anti-contournement (taxonomie), (2) test-078 point 4 rendu robuste (verifie l incident detecter-troncatures dans le registre stable au lieu de l entree purgee du plafond 150 de l historique). Lecon Morpheus enregistree. Retour a Cerberus. |
 | 2026-08-17 22:08 | session-llm-1 | janus | RELANCER LA NON-REGRESSION FINALE (round verrou auto-journalisation) : Morpheus a corrige le tag de test-089 (derive -> anti-contournement). test-089 9/9 vert, test-087 8 OK / 0 KO (taxonomie OK). Janus lance la non-regression complete pour confirmer 87/87 puis reactive Cerberus avec le bilan.
 
@@ -1107,101 +1217,3 @@ avec --reponses NON pour relire d abord ; suis ensuite les branches case
 par case ; si tu reprends apres une interruption, reprends a la case courante
 avec --case <cid> --reponses '<reponse>'). |
 | 2026-08-16 17:45 | session-llm-1 | Cerberus | BILAN CONSOLIDE (Janus, chaine anti /tmp systeme) : 81 OK / 0 KO, 107.0s (reference mise a jour). Buffy : protocole creation-scripts-temporaires v0.2.11 (Journalisation et redirections de sortie - toute capture .log dans tmp-AGENT/, jamais /tmp systeme). Morpheus : tester-protection-erreurs-silencieuses corrige (logs dans cerveau-projet/agents/traces/protection-logs/, .py 0.2.1-py, .sh 0.1.1) + garde-fou test-082 (9/9, scan production hors tests/, preuves negatives) + test-057 corrige (classeur temp, profil intact). Janus : registre propre (2 declarations superflues retirees), verites preservees. Plus aucune ecriture /tmp dans le code de production. 0 residu. |
-| 2026-08-16 17:41 | session-llm-1 | janus | REPRISE JANUS (suite chaine, test-057 corrige par Morpheus) : relancer la NON-REGRESSION COMPLETE en mode barrieres --agent janus. RAPPEL : (1) protocole v0.2.11 anti /tmp systeme, (2) tester-protection-erreurs-silencieuses logs dans workspace, (3) test-082 garde-fou anti /tmp, (4) test-057 corrige (classeur temp, profil non modifie). Si la serie KO (ko-tests.json) contient test-024, le relancer via --ko reprendre ou le laisser passer s il est vert. FIN : lecon Janus + bilan consolide a Cerberus.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:40 | session-llm-1 | morpheus | MISSION MORPHEUS (suite chaine Janus, bug decouvert en non-regression) : test-057-marbre-garde-fou point 10 corrompt le VRAI profil classeur. DIAGNOSTIC Janus : le point 10 fait un reactiver session-llm-1 avec AGENTS_FILE et AGENTS_HISTORIQUE pointant vers des fichiers temp, MAIS CLASSEUR_STOCKAGE pointe vers le VRAI variables-actuelles.md -> la reactivation reecrit le profil avec agent: Cerberus pendant la suite, ce qui casse test-024 (dossier tmp-AGENT non reconnu car le profil dit Cerberus au lieu de janus). CORRECTION : dans le point 10, copier le vrai variables-actuelles.md vers un fichier temp (comme AGENTS_FILE) et pointer CLASSEUR_STOCKAGE vers ce temp ; supprimer le temp dans le finally. VERIFIER : test-057 vert, le profil classeur n est PLUS modifie par le test (avant/apres identiques), test-024 vert. FIN : lecon Morpheus puis REACTIVER JANUS pour relancer la non-regression complete.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:36 | session-llm-1 | janus | MISSION JANUS (suite chaine Buffy -> Morpheus, demande utilisateur anti /tmp systeme) : valider la correction + le nouveau garde-fou. CHANGEMENTS : (1) protocole creation-scripts-temporaires v0.2.11 (section Journalisation et redirections de sortie : toute capture .log va dans tmp-AGENT/, jamais /tmp systeme) ; (2) tester-protection-erreurs-silencieuses corrige (.py 0.2.1-py, .sh 0.1.1) : logs dans <racine>/cerveau-projet/agents/traces/protection-logs/ au lieu de /tmp/test-logs ; (3) test-082-pas-de-tmp-systeme-garde-fou cree (9/9, serie A + profil outils) : scan production hors tests/, preuves negatives A/B/C. VERIFIER : test-082 vert, test-029/030 verts, test-035 vert, registre sain, normes 0/0, puis NON-REGRESSION COMPLETE en mode barrieres. FIN : lecon Janus + bilan consolide a Cerberus.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:32 | session-llm-1 | morpheus | MISSION MORPHEUS (suite chaine Buffy, demande utilisateur) : les agents ecrivaient leurs .log vers le /tmp systeme au lieu de tmp-AGENT/ - protocole v0.2.11 corrige par Buffy (section Journalisation et redirections de sortie). CREER LE GARDE-FOU anti-recurrence : test-082 (nom a confirmer, prochain libre) qui scanne le code de PRODUCTION des outils et combos (fichiers .py/.sh hors dossiers tests/) et detecte toute redirection d ecriture hors workspace (/tmp/, /tmp/x.log, > /tmp). Les vieux .sh de tests d outils legacy (13 fichiers dans outils/*/*/tests/) sont EXCLUS du scan (dette documentee, hors suite). Le scan ne doit pas casser la suite existante (test-024 reste sur la racine). Ajouter le test a la serie adequate + profil. CONTEXTE : version lanceur 0.5.5, tests jusqu a test-081. FIN : lecon Morpheus puis ACTIVER JANUS pour la non-regression complete.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:31 | session-llm-1 | buffy | MISSION BUFFY (demande utilisateur) : les agents ecrivent leurs .log vers le /tmp du systeme au lieu du dossier tmp-AGENT du workspace - constat utilisateur. Le protocole creation-scripts-temporaires (v0.2.10) ne couvre que les SCRIPTS jetables, RIEN sur les journaux et redirections de sortie. AJOUTER au protocole une section explicite JOURNALISATION ET REDIRECTIONS DE SORTIE : toute capture de sortie ou .log doit aller dans tmp-AGENT/fichier.log, JAMAIS vers le /tmp systeme ni ailleurs hors workspace ; bump 0.2.10 vers 0.2.11 ; RVAV ajoutee. CONTEXTE : 13 vieux .sh de tests d outils (activer-agent-principal, detecter-impacts...) utilisent /tmp - dette legacy a DOCUMENTER dans la lecon, pas a migrer. FIN : lecon Buffy puis ACTIVER MORPHEUS pour creer le garde-fou anti-recurrence (scan des outils hors tests pour toute redirection d ecriture hors workspace).
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/buffy/parcours/parcours-buffy.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:27 | session-llm-1 | Cerberus | NON-REGRESSION COMPLETE 80 OK / 0 KO (5 barrieres, 108.9s) apres la SERIE KO PRIORITAIRE v0.5.5 (demande utilisateur). BILAN : (1) Vulcain v0.5.5 : ko-tests.json persistant (gitignore, cree au premier lancement), option --ko <nouveau|reprendre> (defaut reprendre) + --etat-ko ; mode REPRENDRE = barriere KO en premier (tests du fichier, ceux qui passent sortent et ne sont PAS relances dans leur serie = idempotence), fantomes purges, KO persistant = barriere bloquee ; mode NOUVEAU = vide le fichier, lance les series, collecte les KO ; ordre KO -> A -> B -> C -> D -> E en parallele ; (2) Morpheus : 9 tests adaptes au bump 0.5.5 (024/027/031/032/051/062/066/074/075, test-066 cible future 0.5.6) + garde-fou test-081 (10/10, serie A + profil tests, preuve negative fantome purge) ; (3) Janus : preuves reelles --etat-ko / --ko nouveau serie A 31 OK / --ko reprendre (test-007 valide non relance) / suite complete 80 OK ; (4) registre propre (141, verites preserves), ko-tests.json vide, 0 residu, normes 0/0. LECONS : la serie KO tenait sa promesse de productivite (revalider les KO sans relancer la suite) ; le verrou d identite protege la suite (preuve test-081 = structure sans dependre du rc) ; l ajout d un test = serie + profil + couverture test-027. SUITE RECOMMANDEE : Janus utilise --ko reprendre dans son workflow quotidien (KO d abord, suite complete quand tout est vert). |
-| 2026-08-16 17:23 | session-llm-1 | janus | NON-REGRESSION COMPLETE apres la serie KO prioritaire v0.5.5. CONTEXTE : Vulcain a ajoute la serie KO au lanceur (ko-tests.json persistant, --ko <nouveau|reprendre> defaut reprendre, --etat-ko, barriere KO en premier avec purge des fantomes et idempotence test-valide-non-relance) ; Morpheus a adapte les 9 tests (024/027/031/032/051/062/066/074/075 : 0.5.4 -> 0.5.5, test-066 cible future 0.5.6) et cree le garde-fou test-081 (10/10, serie A + profil tests). PREUVES REALISEES : test-081 10/10, test-030 10/10, test-029 14/14, test-027 point 1 OK (couverture), normes 0/0, registre propre (125), ko-tests.json vide. CONSIGNE : 1) lancer la non-regression COMPLETE (--agent janus, 80 tests), 2) si KO : analyser, activer l agent habilite, relancer, 3) verifier que la serie KO fonctionne en mode reel (--etat-ko, un --ko nouveau), 4) chrono + reference, 5) lecon Janus + reactiver Cerberus avec bilan consolide. IMPORTANT : les tests 027/031/032/051/062/066/074/075/081 qui pincent --version doivent etre verts (0.5.5).
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:20 | session-llm-1 | morpheus | ADAPTER LES 9 TESTS AU BUMP LANCEUR 0.5.5 (serie KO prioritaire) + CREER LE GARDE-FOU TEST-081. CONTEXTE : Vulcain a ajoute la serie KO prioritaire au lanceur v0.5.5 : fichier persistant ko-tests.json, option --ko <nouveau|reprendre> (defaut reprendre) + --etat-ko. Mode REPRENDRE : la serie KO (tests du fichier) se lance EN PREMIER avec sa barriere - ceux qui passent sortent du fichier et ne sont PAS relances dans leur serie ; mode NOUVEAU : vide le fichier et lance les series normalement (les KO du run sont collectes). PREUVES REALISEES (Janus) : --etat-ko OK, --ko nouveau serie C 15 OK, --ko reprendre avec test-007 + fantome : barriere KO en premier, test-007 valide non relance, fantome purge ; --ko reprendre avec KO persistant : barriere KO BLOQUEE. TACHE 1 - ADAPTER 9 TESTS qui pincent 0.5.4 : test-024, 027, 031, 032, 051, 062, 066, 074, 075 (0.5.4 -> 0.5.5 ; test-066 : la cible future du bumper doit passer de 0.5.5 a 0.5.6). TACHE 2 - CREER TEST-081 (garde-fou serie KO, template v0.3.0, protections importees, triplet chrono) : verifie (1) --aide contient --ko et --etat-ko, (2) --version = v0.5.5, (3) le fichier ko-tests.json est cree par --ko nouveau et vide, (4) l option --ko accepte nouveau|reprendre (rejet des autres valeurs), (5) --etat-ko affiche le contenu, (6) la fonction lire_ko_tests/ecrire_ko_tests filtre les noms test-0XX, (7) PREUVE NEGATIVE : ecrire un KO fantome dans le fichier, lancer --ko reprendre --tests <un test reel>, verifier que le fantome est purge et que le test reel passe -> fichier vide. AJOUTER test-081 a la serie A + profil outils. VERIFIER : normes ASCII + LF, purge tmp, declaration registre (outils autorises uniquement - NE PAS declarer tester-lancer-non-regression, exclusif janus). FIN : lecon Morpheus + ACTIVER JANUS pour la non-regression complete.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:15 | session-llm-1 | janus | PHASE DE TEST RAPIDE de la serie KO prioritaire v0.5.5 (mission Vulcain en cours - retour immediat a Vulcain apres). Objectif : prouver le comportement du lanceur avec --ko nouveau / --ko reprendre avant de finaliser la mission Vulcain. CONSIGNE : 1) lancer --etat-ko (fichier vide), 2) lancer --ko nouveau sur une serie rapide (ex: --series c --ko nouveau) et verifier la collecte des KO dans ko-tests.json, 3) lancer --ko reprendre et verifier que la serie KO passe en premier avec sa barriere, 4) rapporter le comportement a Vulcain (les modifications du lanceur sont en cours, NE PAS lancer la suite complete).
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:12 | session-llm-1 | vulcain | CREER LA SERIE KO PRIORITAIRE DANS TESTER-LANCER-NON-REGRESSION (design valide par l utilisateur). CONTEXTE : la non-regression (79 tests, 5 barrieres) est verte mais Janus perd du temps a revalider les KO : il relance la suite complete a chaque correction. DEMANDE : serie KO persistante et PRIORITAIRE. FONCTIONNEMENT : (1) fichier persistant ko-tests.json dans le dossier du lanceur (comme config-tests.json, cree au premier lancement, gitignore si config-tests l est) ; (2) option --ko <nouveau|reprendre> (defaut : reprendre) ; (3) mode NOUVEAU : vide le fichier ko-tests.json (les KO du run precedent sont oublies), lance les series normalement (ordre A,B,C,D,E avec barrieres), collecte les tests en KO dans ko-tests.json ; (4) mode REPRENDRE : lance D ABORD la serie KO (les tests listes dans ko-tests.json) avec SA barriere - les tests KO qui passent sont RETIRES du fichier et ne sont PAS relances dans leur serie d origine (marques valides pour ce run) ; si un test de la serie KO echoue encore, la barriere KO BLOQUE et la suite s arrete (Janus corrige puis relance en reprendre) ; une fois la barriere KO franchie, les series A-E s executent SANS les tests deja valides par la serie KO, et les nouveaux KO rejoignent ko-tests.json ; (5) ordre global : KO (barriere) -> A -> B -> C -> D -> E, chaque serie en parallele ; (6) le mode reprendre doit etre IDEMPOTENT : un test qui repasse vert sort du fichier et ne tourne qu UNE fois par run. CONTRAINTES : ASCII strict, LF, argparse, garder la rotation non destructive v0.5.4 (ne pas casser), ne pas casser les options existantes (--relancer-ko, --series, --activer/--desactiver), compatibilite avec le mode barrieres existant. TESTS REELS : (1) --ko nouveau sur la suite verte : 0 KO, fichier cree vide ; (2) simuler un KO (desactiver volontairement un test ou injecter un echec) puis --ko nouveau : le test KO est dans le fichier ; (3) --ko reprendre : la serie KO se lance en premier, le test passe -> retire du fichier, PAS relance dans sa serie ; (4) --ko reprendre avec un KO persistant : barriere KO bloquee. APRES : bump version 0.5.4 -> 0.5.5 + doc .md + lecon Vulcain. FIN : activer MORPHEUS pour le garde-fou test-081 (verifie le comportement de la serie KO) puis Janus pour la non-regression.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:06 | session-llm-1 | Cerberus | NON-REGRESSION COMPLETE 79 OK / 0 KO (5 barrieres, 103.8s) apres le correctif rotation non destructive v0.5.4. BILAN : (1) cause racine KO recidivant test-078 = rotation_registre v0.5.3 du lanceur qui supprimait les usages anciens du registre a chaque lancement (perte generateurs-amelioration) ; (2) Vulcain v0.5.4 : rotation NON DESTRUCTIVE (seul le bruit verrou-auto plafonne, les verites direct/generateur/script-temporaire jamais retirees, idempotente) + restauration registre 227 puis propre 124-139 ; (3) Morpheus : 9 tests adaptes au bump 0.5.4 (024/027/031/032/051/062/066/074/075 - test-066 piege cible future 0.5.5, test-075 oublie au premier passage) ; (4) Janus : declarations fautives retirees (vulcain tester-lancer-non-regression, morpheus test-024), entree tmp-test-declaration normalisee par corriger-noms-maj 0.1.1, test-079 15/15, test-078 7/7, test-035 10/10 ; (5) registre source-de-verite sain (verites preserves), normes 0/0, 0 residu. LECONS : un plafond de rotation qui supprime des donnees de verite est incompatible avec les garde-fous ; une restauration peut ramener d anciens artefacts a re-verifier ; un bump d outil pilier exige un scan exhaustif des tests (test-075 oublie) ; les declarations registre sont soumises aux exclusivites. SUITE RECOMMANDEE : traiter la demande utilisateur serie KO prioritaire (design + implementation lanceur). |
-| 2026-08-16 17:04 | session-llm-1 | janus | RELANCER LA NON-REGRESSION COMPLETE apres l adaptation du 9e test (test-075 0.5.4, oublie au premier passage). ETAT : rotation non destructive v0.5.4 (Vulcain), 9 tests adaptes (024/027/031/032/051/062/066/074/075), registre PROPRE (124 entrees, generateurs-amelioration presente, corriger-noms-maj 0.1.1 applique sur tmp-test-declaration), declarations fautives retirees (vulcain tester-lancer-non-regression + morpheus test-024). VERTS : test-078 7/7, test-035 10/10, test-079 15/15, test-075 11/11, normes 0/0. CONSIGNE : 1) relance ciblee serie A puis suite complete, 2) si KO : analyser, activer l agent habilite, relancer, 3) chrono + reference, 4) lecon Janus + reactiver Cerberus avec bilan consolide.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:03 | session-llm-1 | morpheus | ADAPTER LE 9e TEST AU BUMP LANCEUR 0.5.4 (test-075 oublie). CONTEXTE : la non-regression complete a trouve un KO test-075-filtre-serie-relancer-ko qui pince encore la version 0.5.3 (7 occurrences : lignes 6, 12, 21, 126, 128, 131, 132) - ce test n etait pas dans la liste des 8 adaptes par Morpheus. Le correctif rotation non destructive v0.5.4 (Vulcain) et l adaptation des 8 autres tests sont deja faits (test-078 7/7, test-035 10/10, test-079 15/15 verts). CONSIGNE : (1) remplacer 0.5.3 -> 0.5.4 dans test-075 (7 occurrences), (2) lancer test-075 pour reverdir, (3) normes ASCII + LF, (4) lecon courte Morpheus. FIN : ACTIVER JANUS pour la relance ciblee (serie A) puis suite complete.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |
-| 2026-08-16 17:00 | session-llm-1 | janus | REVALIDATION CIBLEE + NON-REGRESSION COMPLETE apres le correctif rotation non destructive v0.5.4 + adaptation des 8 tests. CONTEXTE : le KO test-078 recidivait (rotation_registre v0.5.3 supprimait les usages anciens du registre a chaque lancement - perte generateurs-amelioration). Vulcain a corrige v0.5.4 (seul le bruit verrou-auto est plafonne, les verites ne sont jamais retirees, rotation idempotente 2x = 124) et restaure le registre ; Morpheus a adapte les 8 tests (024/027/031/032/051/062/066/074) au bump 0.5.4 (test-066 cible future 0.5.5). Preuves deja faites : test-078 7/7, test-035 10/10, 062 11/11, 066 11/11, 074 8/8, normes 0/0, 0 residu. CONSIGNE : 1) revalidation ciblee serie A (078/035) puis suite complete, 2) si KO : analyser, activer l agent habilite, relancer, 3) rapporter chrono + reference, 4) lecon Janus + reactiver Cerberus avec bilan consolide.
-
-DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/janus/parcours/parcours-janus.json --case c0 --reponses OUI
-(reponds OUI si ta fiche et tes corrections sont en memoire, sinon relance
-avec --reponses NON pour relire d abord ; suis ensuite les branches case
-par case ; si tu reprends apres une interruption, reprends a la case courante
-avec --case <cid> --reponses '<reponse>'). |

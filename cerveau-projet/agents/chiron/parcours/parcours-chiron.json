@@ -1,7 +1,7 @@
 {
  "parcours": {
   "nom": "parcours-chiron",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Parcours de Chiron (educateur des agents) : analyse fiches/corrections/regles/cartes pour detecter les incoherences nuisant a l intelligence operationnelle des agents.",
   "case_depart": "c0"
  },
@@ -294,6 +294,20 @@
      "nom": "corriger-symboles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/chiron/corrections.md --all"
+    },
+    {
+     "type": "outil",
+     "nom": "enregistrer-lecon",
+     "catalogue": "enregistrer-lecon",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/",
+     "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent <MOI> --domaine <domaine> --titre <titre> --lecon <texte>"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --recherche <motif>"
     }
    ],
    "suivant": "c13"

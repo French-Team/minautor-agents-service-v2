@@ -143,6 +143,11 @@ def lister_parcours():
 OUTILS_P0_PARTAGES = frozenset([
     "guider-parcours",
     "lire-activite-recente",
+    # LECONS (BDD partagee) : chaque agent ecrit SES lecons (enregistrer-
+    # lecon, anti-usurpation interne) et lit celles des autres (consulter-
+    # lecons) - ce sont des outils communs, pas des exclusivites.
+    "enregistrer-lecon",
+    "consulter-lecons",
 ])
 
 

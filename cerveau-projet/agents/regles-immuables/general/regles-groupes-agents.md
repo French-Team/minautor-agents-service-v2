@@ -169,8 +169,9 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 > nombreuses derives.
 >
 > **Nuance (lecons OK)** : chaque agent garde le droit d ECRIRE SES lecons
-> dans SON `corrections.md` (protocole-fin-mission) et de declarer ses
-> usages au registre. L exclusivite porte sur les fichiers STRUCTURELS
+> (dans SON `corrections.md` = memoire courte, fenetre glissante ; et dans
+> la BDD lecons via `enregistrer-lecon` = memoire longue) et de declarer
+> ses usages au registre. L exclusivite porte sur les fichiers STRUCTURELS
 > (fiche, parcours, index, regles, protocoles), jamais sur les lecons
 > personnelles.
 >
@@ -180,6 +181,30 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 >
 > Le protocole de controle croise de Buffy est documente dans
 > [protocole-controle-buffy/](protocole-controle-buffy/).
+
+### LA BDD DES LECONS (IMMUABLE)
+
+> **REGLE** : les lecons des agents vivent dans une BDD SQLite UNIQUE et
+> PARTAGEE (`cerveau-projet/agents/lecons/lecons.db`) = la MEMOIRE LONGUE.
+> Les `corrections.md` restent la MEMOIRE COURTE (fenetre glissante des
+> missions proches ; le reste part en BDD).
+>
+> - **ECRITURE** : chaque agent n ecrit QUE SES propres lecons via
+>   `enregistrer-lecon` (anti-usurpation : --agent == agent actif de la
+>   session). Aucun agent n ecrit la lecon d un autre.
+> - **LECTURE** : la consultation croisee (evolution entre agents) se fait
+>   via `consulter-lecons` (verrou + journalisation d activite : qui a
+>   consulte quoi).
+> - **INTEGRITE** : la BDD n est touchee QUE par ces 2 outils (jamais
+>   sqlite3 direct ailleurs).
+>
+> **Garde-fou** : [test-090-bdd-lecons-garde-fou](../../tools/tester/tests/test-090-bdd-lecons-garde-fou/test-090-bdd-lecons-garde-fou.py)
+> (creation, anti-usurpation, ASCII, anti-doublon, consultation,
+> journalisation, integrite). Le verrou (OUTILS_P0_PARTAGES) autorise tous
+> les agents (outils communs, pas des exclusivites) ; l anti-usurpation est
+> portee par enregistrer-lecon lui-meme.
+>
+> Le protocole est documente dans [protocole-lecons/](protocole-lecons/).
 
 ### LE MODELE DE CONFIANCE (IMMUABLE)
 

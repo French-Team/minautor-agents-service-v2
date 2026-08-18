@@ -42,11 +42,11 @@ Cas couverts (26 points) :
  11. flag booleen ecrire-fichier backup=non : --backup ABSENT (py)
  12. parite py/sh : commande composee identique (CRLF normalise)
  13. catalogue JSON valide (json.load)
- 14. catalogue version = 0.2.11
+ 14. catalogue version = 0.2.12
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
   PARCOURS ATLAS v0.4.1
-17. parcours-atlas.json : json.load valide + version 0.4.7
+17. parcours-atlas.json : json.load valide + version 0.4.8
 18. 7 commandes en dur connues (c0 x2 + c10/c18/c19 corriger-symboles + c11a + c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
@@ -211,7 +211,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.6 + catalogue 0.2.11 + parcours-atlas v0.4.7 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.6 + catalogue 0.2.12 + parcours-atlas v0.4.8 ===")
     print("")
 
     # ---------- GENERATEUR v0.2.6 ----------
@@ -260,7 +260,7 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         verifier(13, "catalogue-commandes.json JSON valide", True)
-        verifier(14, "catalogue version = 0.2.11", cat.get("version") == "0.2.11", str(cat.get("version")))
+        verifier(14, "catalogue version = 0.2.12", cat.get("version") == "0.2.12", str(cat.get("version")))
     except Exception as e:
         verifier(13, "catalogue-commandes.json JSON valide", False, str(e))
         verifier(14, "catalogue version = 0.2.0", False, "")
@@ -272,12 +272,12 @@ def main():
     ok = cmd is not None and "creer-fichier.py x.md" in cmd and "hello" in cmd
     verifier(16, "non-regression creer-fichier composee correctement", ok, str(cmd))
 
-    # ---------- PARCOURS ATLAS v0.4.7 ----------
+    # ---------- PARCOURS ATLAS v0.4.8 ----------
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.7",
-                 p.get("parcours", {}).get("version") == "0.4.7", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.4.8",
+                 p.get("parcours", {}).get("version") == "0.4.8", str(p.get("parcours", {}).get("version")))
     except Exception as e:
         verifier(17, "parcours-atlas.json JSON valide + version 0.4.7", False, str(e))
         p = {}
@@ -287,8 +287,9 @@ def main():
     # (relecture lire-fichier, portees par c0 depuis la migration relecture
     # obligatoire 2026-08-16), c10/c18/c19 (corriger-symboles --all ajoutees
     # par Buffy 2026-08-16), c12/c13 (detecter-recherches-obsoletes /
-    # rechercher-web ajoutees par Buffy 2026-08-16). Toute commande
-    # SUPPLEMENTAIRE = regression.
+    # rechercher-web ajoutees par Buffy 2026-08-16), c10 x2 suppl.
+    # (enregistrer-lecon + consulter-lecons, round BDD lecons 2026-08-17).
+    # Toute commande SUPPLEMENTAIRE = regression.
     n_commande = 0
     cases_commande = []
     for k, c in p.get("cases", {}).items():
@@ -296,8 +297,8 @@ def main():
             if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
                 n_commande += 1
                 cases_commande.append(k)
-    verifier(18, "9 commandes en dur connues (c0 x2 + c10/c18/c19 + c11a + c12/c13 + c30) dans les indices avec catalogue",
-             n_commande == 9 and sorted(cases_commande) == ["c0", "c0", "c10", "c11a", "c12", "c13", "c18", "c19", "c30"],
+    verifier(18, "11 commandes en dur connues (c0 x2 + c10 x3 + c11a + c12/c13 + c18/c19 + c30) dans les indices avec catalogue",
+             n_commande == 11 and sorted(cases_commande) == ["c0", "c0", "c10", "c10", "c10", "c11a", "c12", "c13", "c18", "c19", "c30"],
              "restants=%d cases=%s" % (n_commande, sorted(cases_commande)))
 
     for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer|NON|OUI"), (20, "autre+OUI", "OUI|autre|OUI|NON|OUI")]:

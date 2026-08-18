@@ -4046,3 +4046,37 @@ verrou, garder --agent comme cible).
    fichier plafonne/rotatif ; il doit verifier la source de verite stable.
 
 Verification : non-regression 87 OK / 0 KO, 46.3 s.
+
+## [LECON] 2026-08-17 -- TESTS BDD LECONS (Morpheus)
+
+**Contexte** : round BDD des lecons (Vulcain: lecons.db + enregistrer-lecon +
+consulter-lecons ; Buffy: regle immuable). Morpheus adapte les pins + cree le
+garde-fou.
+
+**Fait** :
+- test-007 : catalogue 179->181 + index-tools 200->202 (points 13/14) +
+  entrees enregistrer-lecon/consulter-lecons verifiees.
+- test-005 : catalogue version 0.2.11->0.2.12.
+- test-090 cree (garde-fou BDD lecons) + ajoute a la serie e du lanceur.
+
+**Lecons** :
+1. Sur Windows, os.walk conserve le separateur du chemin d entree (/ ou \),
+   alors que os.sep est \ : exclure un dossier par os.sep+"x"+os.sep echoue
+   si le chemin utilise /. TOUJOURS normaliser via
+   os.path.relpath(...).split(os.sep).
+2. Les tests qui appellent un outil verrouille (valider-cartes-decision,
+   editer-parcours) dependent de l agent actif : sous morpheus ils peuvent
+   KO (morpheus non habilite), sous janus (non-regression) ils passent.
+   Verifier ces tests uniquement dans le contexte janus.
+
+**Verification** : test-090 11/11, test-007 15/15, test-005 27/28 (point 21
+KO = artefact morpheus actif, passera sous janus).
+
+## [LECON] 2026-08-18 -- PINS DE VERSION APRES BUMP CARTES LECONS (Morpheus)
+
+**Contexte** : round BDD lecons - Buffy a ajoute enregistrer-lecon + consulter-lecons aux cases Lecons des 13 cartes (bump +0.0.1 chacune). KO non-regression : test-004 (morpheus 0.4.12), test-005 (atlas 0.4.7 + 9->11 commandes en dur), test-016 (buffy 0.4.12 + max 3->5 indices), test-024 (catalogue 179->181).
+
+**Lecons** :
+1. Toute modification de carte via editer-parcours --bump impose de chercher les pins de version dans les tests (grep des anciennes versions) - jamais attendre la non-regression pour les trouver.
+2. Les tests qui invoquent des outils VERROUILLES (valider-cartes-decision) KO en local si l agent actif n est pas habilite : verifier la table du verrou avant de conclure a un KO reel (faux KO sous morpheus, vert sous janus).
+3. L outil editer-parcours --agent <X> edite la carte de X : ne JAMAIS passer --agent buffy pour editer la carte d un autre agent (lecon Buffy 2026-08-18 : carte buffy corrompue puis restauree via git + lock).

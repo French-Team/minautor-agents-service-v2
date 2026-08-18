@@ -4316,3 +4316,36 @@ et valider-cartes (--agent = cible) exigent agent_actif_session().
 **RESTE (design)** : test-057 (marbre) exerce editer-parcours --agent themis
 hors buffy - bloque par la regle SEUL BUFFY. Le marbre (anti-contournement)
 devrait etre verifie AVANT le verrou (integrite > habilitation).
+
+## [LECON] 2026-08-17 -- BDD LECONS SQLite + 2 OUTILS (Vulcain)
+
+**Contexte** : demande utilisateur - creer une BDD portable des lecons
+(SQLite unique et partagee) + 2 outils dedies (enregistrer-lecon,
+consulter-lecons). Decisions utilisateur : SQLite stdlib, BDD unique
+partagee, v1 = stockage + consultation.
+
+**Livrable** :
+- BDD cerveau-projet/agents/lecons/lecons.db (schema auto-init idempotent,
+  table lecons + index agent/date/domaine).
+- enregistrer-lecon (enregistrer) : anti-usurpation (--agent == agent actif),
+  verrou, ASCII strict, anti-doublon.
+- consulter-lecons (consulter, nouvelle categorie) : verrou, filtres
+  (--toutes/--auteur/--domaine/--tags/--recent/--recherche), --rapport,
+  journalisation d activite (mode direct avec le filtre).
+- verrou : outils ajoutes a OUTILS_P0_PARTAGES (tous les agents ecrivent
+  leurs lecons et lisent celles des autres = communs, pas exclusifs).
+- catalogue 179->181 (v0.2.12), index-tools 200->202.
+
+**Lecons** :
+1. SQLite (sqlite3 stdlib) est la bonne primitive : 0 dependance tierce,
+   SQL + index, fichier unique portable - meilleur beta-test pour la future
+   BDD que le JSONL.
+2. L anti-usurpation est distincte du verrou : le verrou dit 'cet agent peut
+   utiliser cet outil', l anti-usurpation dit 'cet agent n ecrit que SES
+   lecons' (--agent == agent actif session).
+3. La BDD est touchee QUE par les 2 outils : jamais sqlite3 direct ailleurs
+   (controle d activite + integrite).
+
+**Preuves** : creation OK (id=1), doublon refuse code 1, usurpation refuse
+code 1, non-ASCII refuse code 1, consultation --toutes/--recherche/--domaine/
+--rapport OK, journalisation verrou-auto + direct presentes, normes 0/0.

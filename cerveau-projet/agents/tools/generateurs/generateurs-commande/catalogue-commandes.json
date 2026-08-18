@@ -1,5 +1,5 @@
 {
- "version": "0.2.11",
+ "version": "0.2.12",
  "description": "Catalogue des commandes complexes du cerveau-projet. Source de verite : chaque commande (modele) est un copier-coller d un appel d outil deja ecrit, corrige et valide (agents/tools/). Le generateur pose une question par parametre, valide les reponses, puis compose la commande exacte a lancer.",
  "commandes": [
   {
@@ -670,6 +670,28 @@
      "type": "flag",
      "obligatoire": false,
      "flag": "--verbose"
+    }
+   ]
+  },
+  {
+   "nom": "consulter-lecons",
+   "description": "Consulte la BDD portable des lecons (SQLite, unique et partagee)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py",
+   "modele": "--agent {agent} --recherche {recherche}",
+   "parametres": [
+    {
+     "cle": "agent",
+     "question": "Agent qui consulte ?",
+     "type": "texte",
+     "obligatoire": true
+    },
+    {
+     "cle": "recherche",
+     "question": "Motif de recherche (titre/lecon/mission) ?",
+     "type": "texte",
+     "obligatoire": false,
+     "defaut": ""
     }
    ]
   },
@@ -1726,6 +1748,69 @@
      "type": "texte",
      "obligatoire": false,
      "flag": "--contenu",
+     "defaut": ""
+    }
+   ]
+  },
+  {
+   "nom": "enregistrer-lecon",
+   "description": "Enregistre une lecon dans la BDD portable des lecons (SQLite, unique et partagee)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py",
+   "modele": "--agent {agent} --titre {titre} --lecon {lecon} --domaine {domaine} --tags {tags} --mission {mission} --outils {outils} --verdict {verdict}",
+   "parametres": [
+    {
+     "cle": "agent",
+     "question": "Auteur de la lecon (agent actif) ?",
+     "type": "texte",
+     "obligatoire": true
+    },
+    {
+     "cle": "titre",
+     "question": "Titre court de la lecon ?",
+     "type": "texte",
+     "obligatoire": true
+    },
+    {
+     "cle": "lecon",
+     "question": "Corps de la lecon ?",
+     "type": "texte",
+     "obligatoire": true,
+     "quoter": true
+    },
+    {
+     "cle": "domaine",
+     "question": "Domaine/theme ?",
+     "type": "texte",
+     "obligatoire": false,
+     "defaut": ""
+    },
+    {
+     "cle": "tags",
+     "question": "Tags (separes par des virgules) ?",
+     "type": "texte",
+     "obligatoire": false,
+     "defaut": ""
+    },
+    {
+     "cle": "mission",
+     "question": "Contexte de la mission ?",
+     "type": "texte",
+     "obligatoire": false,
+     "defaut": ""
+    },
+    {
+     "cle": "outils",
+     "question": "Outils concernes ?",
+     "type": "texte",
+     "obligatoire": false,
+     "defaut": ""
+    },
+    {
+     "cle": "verdict",
+     "question": "Verdict associe ?",
+     "type": "texte",
+     "obligatoire": false,
      "defaut": ""
     }
    ]

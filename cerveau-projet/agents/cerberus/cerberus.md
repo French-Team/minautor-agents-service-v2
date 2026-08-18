@@ -77,6 +77,8 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
+| `enregistrer-lecon` | Enregistrer MA lecon dans la BDD des lecons (memoire longue) |
+| `consulter-lecons` | Consulter les lecons des autres agents (evolution croisee) |
 > **REGLE ABSOLUE -- PARCOURS (v0.5.3)** : Pour CHAQUE situation, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a

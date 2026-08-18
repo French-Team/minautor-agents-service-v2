@@ -693,10 +693,6 @@
      "type": "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
-    },
-    {
      "ref": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md",
      "type": "ref"
     },
@@ -713,6 +709,20 @@
      "catalogue": "detecter-usage-outils-externes",
      "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/",
      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <cible> --recursive"
+    },
+    {
+     "type": "outil",
+     "nom": "enregistrer-lecon",
+     "catalogue": "enregistrer-lecon",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/",
+     "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent <MOI> --domaine <domaine> --titre <titre> --lecon <texte>"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --recherche <motif>"
     }
    ],
    "suivant": "c9f",
@@ -964,6 +974,6 @@
   "case_depart": "c0",
   "description": "v0.4.8 : + indice outil c4 tester-protections (usage reel controle, garde-fou test-035)",
   "nom": "parcours-janus",
-  "version": "0.4.18"
+  "version": "0.4.19"
  }
 }

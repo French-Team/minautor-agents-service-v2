@@ -97,6 +97,12 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 |---|---|---|
 | `configurer-environnement` | Generer la configuration d environnement adaptative (workers, timeouts) a partir des ressources reelles | [configurer/configurer-environnement/](configurer/configurer-environnement/) |
 
+### Consulter
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `consulter-lecons` | Consulte la BDD portable des lecons (SQLite, unique et partagee) | [consulter/consulter-lecons/](consulter/consulter-lecons/) |
+
 ### Copier
 
 | Outil | Description | Chemin |
@@ -190,6 +196,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 
 | Outil | Description | Chemin |
 |---|---|---|
+| `enregistrer-lecon` | Enregistre une lecon dans la BDD portable des lecons (SQLite, unique et partagee) | [enregistrer/enregistrer-lecon/](enregistrer/enregistrer-lecon/) |
 | `enregistrer-usage-outil` | Enregistre un usage d outil dans le registre JSONL (traces/registre-usages-outils.jsonl) | [enregistrer/enregistrer-usage-outil/](enregistrer/enregistrer-usage-outil/) |
 
 ### Executer
@@ -532,7 +539,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Executer | 1 |
 | Protections | 6 |
 | Tests | 41 |
-| **Total** | **200** |
+| **Total** | **202** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

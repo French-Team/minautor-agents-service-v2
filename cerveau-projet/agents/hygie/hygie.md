@@ -74,7 +74,9 @@ surcharges:
 
 ## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.1.6)** : Pour CHAQUE mission, je suis MON
+| `enregistrer-lecon` | Enregistrer MA lecon dans la BDD des lecons (memoire longue) |
+| `consulter-lecons` | Consulter les lecons des autres agents (evolution croisee) |
+> **REGLE ABSOLUE -- PARCOURS (v0.1.7)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.

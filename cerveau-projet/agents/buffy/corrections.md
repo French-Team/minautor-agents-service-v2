@@ -4049,3 +4049,34 @@ ASCII 0 + LF pur.
 utilisateur doit etre mise a jour dans la MEME chaine (Vulcain -> Morpheus ->
 Buffy -> Janus). Une option sans education = un agent qui continue d utiliser
 l ancien comportement, exactement le bug signale par l utilisateur.
+
+## [LECON] 2026-08-17 -- GOUVERNANCE BDD LECONS (Buffy)
+
+**Contexte** : demande utilisateur - BDD portable des lecons. Vulcain a cree
+lecons.db SQLite + enregistrer-lecon + consulter-lecons (verrou P0 partages).
+Buffy grave la regle et met a jour les modeles.
+
+**Fait** :
+- regle immuable ajoutee dans regles-groupes-agents.md : "LA BDD DES LECONS"
+  (memoire longue SQLite partagee, corrections.md = memoire courte, chaque
+  agent n ecrit que SES lecons via enregistrer-lecon, lecture verrouillee +
+  journalisee via consulter-lecons, BDD touchee que par les 2 outils).
+- nuance SEUL BUFFY mise a jour (lecons OK = corrections.md + BDD).
+- protocole-fin-mission E2 : la lecon part AUSSI dans la BDD via
+  enregistrer-lecon.
+- corrections-template.md : section MEMOIRE COURTE vs LONGUE.
+
+**Lecon** : la BDD des lecons est un outil COMMUN (pas une exclusivite) - le
+verrou l autorise a tous via OUTILS_P0_PARTAGES, mais l anti-usurpation
+(chacun n ecrit que ses lecons) est portee par l outil lui-meme.
+
+**Verification** : normes 0 non-ASCII / 0 CRLF sur les 3 fichiers modifies.
+
+## [LECON] 2026-08-18 -- BUDGET PONDERE DES CASES LECONS + PIEGE --AGENT (Buffy)
+
+**Contexte** : round BDD lecons - ajout de enregistrer-lecon + consulter-lecons aux cases Lecons de 13 cartes. KO decouverts : test-045 (hygie c12 A ALLEGER), puis budget depasse sur 5 autres cases lecons.
+
+**Lecons** :
+1. Le poids pondere (valider-case) = 0,5 par indice SANS texte long, 1,0 si texte > 100 car. Ajouter 2 outils = +1,0 : les cases lecons a 2-3 refs + 3-4 outils passent au-dessus du budget 3,0. Allegement etabli : retirer les refs redondantes (pattern-12/pattern-2, deja referencees dans 10+ cases) et convertir les textes regle > 100 car en refs (protocole).
+2. PIEGE --agent : editer-parcours --agent <X> edite la carte de X - passer --agent buffy pour editer une AUTRE carte la corrompt (restauration via git + cartes-lock.json). Toujours --agent <proprietaire>.
+3. PIEGE IDENTITE : detecter-cablages-manquants --agent janus est BLOQUE si la session est sur un autre agent (usurpation). Un test qui passe --agent janus n est vert QUE sous la session janus (faux KO sinon).

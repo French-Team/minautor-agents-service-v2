@@ -115,10 +115,6 @@
      "type": "ref"
     },
     {
-     "ref": "pattern-12",
-     "type": "ref"
-    },
-    {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison> clio",
@@ -138,6 +134,20 @@
      "catalogue": "detecter-usage-outils-externes",
      "chemin": "cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/",
      "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py <cible> --recursive"
+    },
+    {
+     "type": "outil",
+     "nom": "enregistrer-lecon",
+     "catalogue": "enregistrer-lecon",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/",
+     "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent <MOI> --domaine <domaine> --titre <titre> --lecon <texte>"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --recherche <motif>"
     }
    ],
    "suivant": "c10b",
@@ -663,6 +673,6 @@
   "case_depart": "c0",
   "description": "v0.5.6 : + indice outil c20 valider-conformite-ascii (coherence regle/indice outil, garde-fou test-055)",
   "nom": "parcours-clio",
-  "version": "0.5.11"
+  "version": "0.5.12"
  }
 }
