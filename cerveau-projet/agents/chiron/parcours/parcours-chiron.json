@@ -1,7 +1,7 @@
 {
  "parcours": {
   "nom": "parcours-chiron",
-  "version": "0.1.2",
+  "version": "0.3.0",
   "description": "Parcours de Chiron (educateur des agents) : analyse fiches/corrections/regles/cartes pour detecter les incoherences nuisant a l intelligence operationnelle des agents.",
   "case_depart": "c0"
  },
@@ -257,6 +257,10 @@
     {
      "texte": "Corrections SIMPLES (texte, version, reference) et COMPLEXES (carte, parcours) vont TOUTES a Buffy. Je ne fais que les PROPOSER et les DOCUMENTER.",
      "type": "regle"
+    },
+    {
+     "type": "regle",
+     "texte": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Atlas inventaire."
     }
    ],
    "suivant": "c11"
@@ -274,7 +278,7 @@
      "type": "regle"
     }
    ],
-   "suivant": "c12"
+   "suivant": "c11b"
   },
   "c12": {
    "titre": "Documenter mes lecons (MES corrections uniquement)",
@@ -373,6 +377,112 @@
     }
    ],
    "suivant": "c0c"
+  },
+  "c11b": {
+   "titre": "Auto-correction : les incoherences concernent-elles MA carte ?",
+   "type": "question",
+   "indices": [
+    {
+     "texte": "AUTO-CORRECTION PILOTE (2026-08-18) : SEUL Chiron corrige SA carte. Cases de MA carte erronees/obsoletes -> OUI -> c15 ; autre agent/outil -> NON -> c12.",
+     "type": "regle"
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c15"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c12"
+    }
+   ]
+  },
+  "c15": {
+   "titre": "Se re-eduquer : lire MA carte et documenter MA lecon",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "SE RE-EDUQUER D ABORD : je relis MA carte, j identifie les cases erronees/obsoletes, je documente MA lecon (corrections.md + BDD) : CONTEXTE, LECON, PREUVES.",
+     "type": "regle"
+    },
+    {
+     "texte": "REGLE : je ne corrige QUE MA carte. Jamais les fichiers des autres agents (SEUL BUFFY, sauf exception pilote chiron).",
+     "type": "regle"
+    },
+    {
+     "catalogue": "enregistrer-lecon",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/",
+     "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent chiron --domaine <domaine> --titre <titre> --lecon <texte>",
+     "nom": "enregistrer-lecon",
+     "type": "outil"
+    },
+    {
+     "catalogue": "corriger-symboles",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/chiron/corrections.md --all",
+     "nom": "corriger-symboles",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c16"
+  },
+  "c16": {
+   "titre": "Corriger MA carte (editer-parcours, verrou pilote)",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "CORRIGER MA CARTE avec editer-parcours : verrou pilote m autorise UNIQUEMENT parcours-chiron.json ; autre cible BLOQUEE -> Buffy.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "editer-parcours",
+     "chemin": "cerveau-projet/agents/tools/editer/editer-parcours/",
+     "commande": "python3 cerveau-projet/agents/tools/editer/editer-parcours/editer-parcours.py cerveau-projet/agents/chiron/parcours/parcours-chiron.json",
+     "nom": "editer-parcours",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c17"
+  },
+  "c17": {
+   "titre": "Activer Themis pour verifier ma re-education",
+   "type": "action",
+   "indices": [
+    {
+     "texte": "J ACTIVE THEMIS pour verifier MA re-education : elle audite ma carte + mes lecons puis me REACTIVE (c25b) avec son verdict.",
+     "type": "regle"
+    },
+    {
+     "texte": "AGENTS HABILITES : Themis audit/verification, Buffy cartes des autres, Vulcain outils, Morpheus tests.",
+     "type": "regle"
+    }
+   ],
+   "suivant": "c18"
+  },
+  "c18": {
+   "titre": "Retour de Themis recu ?",
+   "type": "question",
+   "indices": [
+    {
+     "texte": "REPRISE : Themis m a reactive. CONFORME -> OUI -> c12 (reprendre) ; A REVOIR -> c15 (retour corriger) ; pas revenue -> NON -> c18 (attendre, re-essai).",
+     "type": "regle"
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI (CONFORME)",
+     "vers": "c12"
+    },
+    {
+     "reponse": "A REVOIR",
+     "vers": "c15"
+    },
+    {
+     "reponse": "NON (pas revenue)",
+     "vers": "c18"
+    }
+   ]
   }
  }
 }

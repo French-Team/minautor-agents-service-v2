@@ -90,7 +90,13 @@
    ],
    "question": "Quelle est la mission pense-bete ?",
    "titre": "Mission",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : demande hors des branches (creer/completer/corriger) -> reponse autre -> c18. JAMAIS improviser, JAMAIS outil hors carte."
+    }
+   ]
   },
   "c10": {
    "titre": "FIN - Activer Janus",
@@ -226,7 +232,17 @@
    ],
    "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
    "titre": "Mission hors perimetre",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REDIRECTION OUTIL BLOQUE : si le verrou bloque un outil, la mission concerne un autre agent -> activer l agent habilite. JAMAIS re-tenter."
+    },
+    {
+     "type": "regle",
+     "texte": "DOMAINES AUTRES AGENTS : inventaire -> Atlas, contenu/cartes -> Buffy, outil -> Vulcain, tests -> Morpheus, suppression -> Hygie, education -> Chiron."
+    }
+   ]
   },
   "c19": {
    "indices": [
@@ -240,6 +256,10 @@
      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
+    },
+    {
+     "type": "regle",
+     "texte": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
     }
    ],
    "suivant": "c21",
@@ -663,6 +683,6 @@
   "case_depart": "c0",
   "description": "v0.2.0 : MIGRATION AU NOUVEAU FORMAT (spec-refonte etape 6, 3e parcours apres cerberus et morpheus) - cases indice -> action, regles > 160 car. -> references (patterns/protocoles/regles), max 3 indices par case. Parcours (jeu de piste) des missions d'Athena : redactrice de pense-betes. 2 missions (creer un pense-bete, completer un pense-bete). A la fin de chaque mission, j'active Promethee pour la spec (CHAIN). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
   "nom": "parcours-athena",
-  "version": "0.3.6"
+  "version": "0.4.0"
  }
 }

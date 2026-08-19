@@ -249,8 +249,8 @@ def main():
 
     # 5-6. editer-parcours + tester-lancer-non-regression
     r = run([PYTHON, EDITER_PARCOURS, "--version"])
-    verifier("5. editer-parcours --version v0.1.6",
-             r.returncode == 0 and "v0.1.6" in r.stdout, r.stdout.strip()[-60:])
+    verifier("5. editer-parcours --version v0.1.7",
+             r.returncode == 0 and "v0.1.7" in r.stdout, r.stdout.strip()[-60:])
     r = run([PYTHON, LANCER, "--version"])
     verifier("6. tester-lancer-non-regression --version v0.6.2",
              r.returncode == 0 and "v0.6.2" in r.stdout, r.stdout.strip()[-60:])

@@ -2,13 +2,13 @@
 # evaluer-coherence.sh
 # Evalue la coherence inter-fichiers : liens, references croisees
 # Proprietaire : Themis (outil partage)
-# Version : 0.2.4
+# Version : 0.2.5
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.4"
+VERSION="0.2.5"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

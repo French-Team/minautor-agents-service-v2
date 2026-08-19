@@ -28,7 +28,7 @@
 #   --verbose           : detail des outils assignes par carte
 #   --version
 #
-# Version : 0.1.5
+# Version : 0.1.6
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -55,7 +55,7 @@ import sys
 
 FENETRE_JOURS = 1  # fenetre de verification des usages recents (v0.1.3) : le jour courant
 
-VERSION = "0.1.5"
+VERSION = "0.1.6"
 
 # Agents du cerveau-projet (famille cerveau-projet : cercles de controle).
 AGENTS_CERVE = ["cerberus", "buffy", "vulcain", "morpheus", "janus",
@@ -86,13 +86,19 @@ def charger_parcours(racine, agent):
 
 
 # Outils P0 PARTAGES : outils de base communs a TOUS les agents (navigation
-# de parcours, lecture de contexte) - references dans les fiches P0 mais pas
-# systematiquement dans les indices outil des cartes. Ils ne sont PAS des
-# exclusivites (lecon Vulcain 2026-08-15 : guider-parcours etait derive
-# 'exclusif buffy' a tort - fausse exclusivite declenchant test-035).
+# de parcours, lecture de contexte, diagnostic de coherence) - references
+# dans les fiches P0 mais pas systematiquement dans les indices outil des
+# cartes. Ils ne sont PAS des exclusivites (lecon Vulcain 2026-08-15 :
+# guider-parcours etait derive 'exclusif buffy' a tort - fausse exclusivite
+# declenchant test-035). evaluer-coherence est ajoute (2026-08-19, defaut
+# test-035 revele par Janus) : outil partage de diagnostic utilise par tous
+# les agents en mission (fiche outil : 'Proprietaire : Themis (outil
+# partage)'), absent des cartes par conception - ses usages declare au
+# registre ne doivent pas etre signales OUTIL_HORS_CARTE.
 OUTILS_P0_PARTAGES = frozenset([
     "guider-parcours",
     "lire-activite-recente",
+    "evaluer-coherence",
 ])
 
 
@@ -324,7 +330,7 @@ def detecter_outils_hors_carte(racine):
             continue
         outils_carte = outils_de_la_carte(parcours)
         outils_p0 = outils_p0_de_la_fiche(racine, agent)
-        autorises = outils_carte | outils_p0
+        autorises = outils_carte | outils_p0 | set(OUTILS_P0_PARTAGES)
         for outil in sorted(set(usages.get(agent, []))):
             if outil in autorises:
                 continue

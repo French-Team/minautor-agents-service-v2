@@ -15,8 +15,9 @@ identite:
 | `donnees-transformees` | *(tableau transforme)* | transformer-donnees | 2026-08-04 | [OK] |
 | `fichier-final` | `exports/export-2026-08-04-120000.json` | exporter-donnees | 2026-08-04 | [OK] |
 | `profil-systeme` | OS: Windows / Bash: 5.2.37 / Python: 3.14.4 / Git: 2.53.0 / Node: 24.14.1 | verifier-systeme | 2026-08-07 | [OK] |
-| `profil-session-llm-1` | session: session-llm-1 / id: llm-1 / agent: themis / date: 2026-08-18 19:14 | activer-agent-principal | 2026-08-18 | [OK] |
-| `profil-session-llm-2` | session: session-llm-2 / id: kilo-llm / agent: themis / date: 2026-08-18 17:43 | activer-agent-principal | 2026-08-18 | [OK] |
+| `profil-session-llm-1` | session: session-llm-1 / id: llm-1 / agent: vulcain / date: 2026-08-19 08:15 | activer-agent-principal | 2026-08-19 | [OK] |
+| `profil-session-llm-2` | session: session-llm-2 / id: kilo-llm / agent: themis / date: 2026-08-18 21:05 | activer-agent-principal | 2026-08-18 | [OK] |
+| `profil-session-llm-3` | session: session-llm-3 / id: kilo-test2 / agent: Cerberus / date: 2026-08-18 21:57 | activer-agent-principal | 2026-08-18 | [OK] |
 
 ---
 

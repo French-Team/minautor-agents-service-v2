@@ -14,6 +14,20 @@ identite:
 
 ## Sessions LLM
 
+### Session : session-llm-3
+
+| Champ | Valeur |
+|---|---|
+| **Nom LLM** | kilo-test2 |
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-18 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | Identification |
+| **Raison** | Identification LLM - demarrage de session |
+
+
 ### Session : session-llm-2
 
 | Champ | Valeur |
@@ -38,16 +52,16 @@ reprends a la case courante avec --case <cid> --reponses '<reponse>').
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | themis |
-| **Role Agent** | Evaluatrice croisee -- evaluation et audit |
-| **Derniere mise a jour** | 2026-08-18 |
-| **Fiche** | [cerveau-projet/agents/themis/themis.md](cerveau-projet/agents/themis/themis.md) |
-| **Corrections** | [cerveau-projet/agents/themis/corrections.md](cerveau-projet/agents/themis/corrections.md) |
+| **Nom Agent** | vulcain |
+| **Role Agent** | Constructeur d'outils -- creation et developpement |
+| **Derniere mise a jour** | 2026-08-19 |
+| **Fiche** | [cerveau-projet/agents/vulcain/vulcain.md](cerveau-projet/agents/vulcain/vulcain.md) |
+| **Corrections** | [cerveau-projet/agents/vulcain/corrections.md](cerveau-projet/agents/vulcain/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | Audit conformite carte Janus: l utilisateur se demande si Janus a ete eduque et si sa carte est conforme (il a enumere les choses et suivi sa carte). Verifier: 1) version de la carte janus vs les cartes a jour (cerberus, vulcain, morpheus), 2) presence des garde-fous C1 (classification), c21/c22 (redirection outil bloque + agents habilites) comme la re-education de Themis v0.4.10, 3) coherence carte/fiche, 4) historique des educations de Janus (corrections.md + BDD lecons). |
+| **Raison** | Combler la lacune combo->outils : creer catalogue-combos.json (source de verite : combo -> proprietaire + outils membres), ajouter champ 'combos' dans le frontmatter des fiches outils membres (~25), creer un outil de consultation qui repond 'l outil X est utilise par les combos Y,Z (proprietaire W)' |
 
 DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/themis/parcours/parcours-themis.json --case c0
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0
 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
 a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
 ensuite les branches case par case ; si tu reprends apres une interruption,
@@ -56,8 +70,9 @@ reprends a la case courante avec --case <cid> --reponses '<reponse>').
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | themis | 2026-08-18 19:14 |
-| session-llm-2 | kilo-llm | themis | 2026-08-18 17:43 |
+| session-llm-1 | llm-1 | vulcain | 2026-08-19 08:15 |
+| session-llm-2 | kilo-llm | themis | 2026-08-18 21:05 |
+| session-llm-3 | kilo-test2 | Cerberus | 2026-08-18 21:57 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

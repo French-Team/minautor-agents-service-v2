@@ -1,5 +1,5 @@
 # evaluer-processus
-**Version** : 0.1.5
+**Version** : 0.1.6
 
 Detecte les DERIVES DE PROCESSUS dans le cerveau-projet : un agent qui
 utilise un outil hors de sa carte, une mission qui finit par reactiver
@@ -87,3 +87,10 @@ Code de retour : 0 si aucun probleme, 1 sinon (utilisable en garde-fou).
   inclus), pas seulement AGENTS_CERVE - correction du faux positif
   valider-conventions (buffy + athena = partage legitime, plus derive
   exclusif).
+- v0.1.6 (2026-08-19, defaut test-035 revele par Janus pendant la mission
+  liens casses) : OUTILS_P0_PARTAGES etait utilise pour le calcul
+  d exclusivite mais PAS dans les outils autorises de detecter_outils_hors_carte
+  - un outil partage declare au registre etait signale OUTIL_HORS_CARTE a
+  tort. Correctif : autorises = outils_carte | outils_p0 | OUTILS_P0_PARTAGES
+  + ajout de evaluer-coherence (outil partage de diagnostic, fiche
+  'Proprietaire : Themis (outil partage)') a OUTILS_P0_PARTAGES.

@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-hygie",
   "agent": "hygie",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Hygie, agent de nettoyage du workspace : snapshot -> detection par zone -> preuve d honnetete -> suppression tracee -> rapport. Seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable (avec tracabilite). Decisions utilisateur 2026-08-13 : nom Hygie, perimetre tout workspace, snapshots dans le dossier dedie de l agent avec rotation 7 jours."
  },
@@ -101,6 +101,12 @@
     {
      "reponse": "autre",
      "vers": "c29"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : demande hors des branches (nettoyer/snapshot/honnetete) -> reponse autre -> c29. JAMAIS improviser, JAMAIS outil hors carte."
     }
    ]
   },
@@ -530,12 +536,28 @@
      "reponse": "NON",
      "vers": "c29b"
     }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REDIRECTION OUTIL BLOQUE : si le verrou bloque un outil, la mission concerne un autre agent -> activer l agent habilite. JAMAIS re-tenter."
+    },
+    {
+     "type": "regle",
+     "texte": "DOMAINES AUTRES AGENTS : inventaire -> Atlas, contenu/cartes -> Buffy, outil -> Vulcain, tests -> Morpheus, suppression -> Hygie, education -> Chiron."
+    }
    ]
   },
   "c29a": {
    "titre": "FIN - Delegation",
    "type": "fin",
-   "message": "La mission concerne un autre agent : j active l agent habilite (activer-agent-principal activer session-llm-1 <agent> <raison>) et j attends son retour selon le Pattern 5 (RELAIS -> RETOUR -> CLOTURE). Je ne fais pas le travail de l autre agent."
+   "message": "La mission concerne un autre agent : j active l agent habilite (activer-agent-principal activer session-llm-1 <agent> <raison>) et j attends son retour selon le Pattern 5 (RELAIS -> RETOUR -> CLOTURE). Je ne fais pas le travail de l autre agent.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
+    }
+   ]
   },
   "c29b": {
    "titre": "Besoin d un outil ?",

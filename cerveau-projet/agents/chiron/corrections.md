@@ -54,3 +54,104 @@ DIVERGENTE. Rapport : rapports/rapport-reeducation-themis-2026-08-18.md.
 
 **Verdict** : A REVOIR - 3 corrections de formation proposees (2 hautes,
 1 moyenne), signalees a Buffy.
+## [LECON] 2026-08-18 -- RE-EDUCATION JANUS : VERDICT A REVOIR (Chiron)
+
+**Mission** : re-education de Janus a la demande de Cerberus (audit Themis
+A REVOIR). L utilisateur a observe Janus "suivant sa carte" et se demande
+s il a ete eduque.
+
+**Diagnostic** : carte Janus v0.4.20 STRUCTURELLEMENT SAINE (version sync,
+51 cases, boucle KO, Pattern 17, fiche CONFORME, bumper 0/0) mais
+PEDAGOGIQUEMENT EN RETARD : c1 sans indice GARDE-FOU C1, aucune redirection
+"outil bloque", c28 sans indice AGENTS HABILITES. Janus n a JAMAIS ete
+re-eduque (seule lecon d education de Chiron = Themis).
+
+**Lecon claire** : UNE CARTE STRUCTURELLEMENT VALIDE PEUT ETRE PEDAGOGIQUEMENT
+EN RETARD - le comportement observe (suivre sa carte) est CONFORME, mais la
+carte ne couvre pas les cas limites (verrou bloque, classification libre).
+La re-education de Themis (v0.4.10) a cree un MODELE DE CONFORMITE
+PEDAGOGIQUE applicable a TOUTES les cartes : (a) indice GARDE-FOU C1 en c1,
+(b) redirection "outil bloque" -> activer l agent habilite, (c) indice AGENTS
+HABILITES. Toute carte d un agent principal doit etre verifiee contre ce
+modele - le test pedagogique est de demander : "que fait la carte si le
+verrou bloque un outil ? que fait la carte si la demande n est dans aucune
+branche ?"
+
+**Verdict** : A REVOIR - 3 corrections proposees, signalees a Buffy (seule
+habilitee editer-parcours). CHIRON NE CORRIGE PAS, il documente et signale.
+## [LECON] 2026-08-18 -- RE-EDUCATION VULCAIN/MORPHEUS/BUFFY : VERDICT A REVOIR (Chiron)
+
+**Mission** : re-education de 3 agents principaux a la demande de Cerberus
+(audit Themis A REVOIR) : les cartes de Vulcain (0.4.28), Morpheus (0.4.15)
+et Buffy (0.4.14) sont structurellement saines mais pedagogiquement en retard.
+
+**Diagnostic** : 3 cartes structurellement SAINES (fiches CONFORME, bumper
+0/0, versions sync) mais PEDAGOGIQUEMENT EN RETARD : c1 sans AUCUN indice,
+pas de redirection outil bloque, pas d indice AGENTS HABILITES. Aucun des 3
+n a JAMAIS ete eduque (seules educations : Themis #23, Janus #34).
+
+**Lecon claire** : le retard pedagogique est SYSTEMIQUE chez les agents non
+eduques - ce n est pas un cas isole (Themis, puis Janus, puis maintenant 3
+agents). Le modele de conformite pedagogique (GARDE-FOU C1, redirection outil
+bloque, AGENTS HABILITES) doit etre verifie sur TOUTES les cartes d agents
+principaux, pas seulement sur celles signalees par un incident. Le test
+pedagogique : "que fait la carte si le verrou bloque un outil ? que fait la
+carte si la demande n est dans aucune branche ?" - si la carte ne repond pas,
+elle est en retard.
+
+**Verdict** : A REVOIR - 3 cartes a re-eduquer, signalees a Buffy (seule
+habilitee editer-parcours). CHIRON NE CORRIGE PAS, il documente et signale.
+## [LECON] 2026-08-18 -- RE-EDUCATION CARTES SECONDAIRES : VERDICT A REVOIR (Chiron)
+
+**Mission** : re-education des 10 cartes secondaires a la demande de Cerberus
+(audit Themis A REVOIR) : atlas, argus, hygie, clio, hermes, gardien, chiron,
+athena, promethee, minerve.
+
+**Diagnostic** : 10 cartes structurellement SAINES (fiches CONFORME, bumper
+0/0, versions sync) mais PEDAGOGIQUEMENT EN RETARD : 9/10 sans AUCUN indice en
+c1, aucune redirection outil bloque, aucun AGENTS HABILITES. Chiron = cas
+particulier (c1 action a mission unique : le GARDE-FOU C1 classique ne
+s applique pas ; redirections c10/c11 presentes mais liste AGENTS HABILITES
+manquante). Aucun agent secondaire n a jamais ete eduque.
+
+**Lecon claire** : le retard pedagogique est GENERALISE - il touche les 10
+cartes secondaires en plus des 6 principales. Le modele de conformite
+pedagogique doit s appliquer a l ensemble des 16 cartes avec ADAPTATION pour
+les cas particuliers : les agents a mission unique (chiron) n ont pas besoin
+du GARDE-FOU C1 classique (c1 de type action) mais doivent avoir la
+redirection vers les agents habilites et la liste AGENTS HABILITES. Le test
+pedagogique reste : "que fait la carte si le verrou bloque un outil ? si la
+mission est hors perimetre ?"
+
+**Verdict** : A REVOIR - 10 cartes a re-eduquer (adaptation chiron), signalees
+a Buffy (seule habilitee editer-parcours). CHIRON NE CORRIGE PAS.
+
+## [LECON] 2026-08-18 -- EDUCATION THEMIS COMBOS ASCII (Chiron)
+
+**Mission** : eduquer Themis aux combos/outils ASCII (2e volet demande utilisateur) : sa carte ne reference aucun outil ASCII (0 mention), combo-corriger-ascii jamais utilise (0 usage registre), 8 usages executer-script-temporaire.
+
+**Diagnostic** : la regle ABSOLUE 4/5 de Themis impose les outils du cerveau assignes dans SA carte -- mais aucun outil ASCII n'y est assigne, donc elle ne peut pas en utiliser. Les outils existent : combo-corriger-ascii (definition-combo.json v0.1.0, via combos-moteur) et combos-corriger-non-ascii v0.3.0 (--full : dry obligatoire avant wet, rapport concis complet, wet cible ~3 s).
+
+**Resultat** : rapport d'education (rapport-education-themis-combos-ascii-2026-08-18.md) + lecon BDD. Corrections de carte proposees a Buffy : ajouter combos-corriger-non-ascii dans c9 (ecrire rapport) et c12 (lecons), mentionner les 2 combos dans la fiche.
+
+**Lecons** :
+1. UNE REGLE D OUTIL SANS OUTIL ASSIGNE EST INOPERANTE : Themis a la regle ABSOLUE 4/5 mais son parcours n'assigne AUCUN outil ASCII -> elle ne peut pas appliquer la regle. Eduquer = assigner l'outil dans la carte, pas seulement rappeler la regle.
+2. UN COMBO JAMAIS UTILISE EST INVISIBLE : combo-corriger-ascii existe mais 0 usage au registre. Un outil non branche dans les cartes n'est pas decouvert. L'education passe par l'indice dans la case (c9 ecriture de rapport).
+3. LES SCRIPTS TEMPORAIRES SONT LE SYMPTOME D'UN OUTIL MANQUANT : 8 usages de executer-script-temporaire par Themis = elle contourne car aucun combo ASCII n'est assigne. Diagnostiquer la CAUSE, pas le symptome.
+4. CHIRON NE MODIFIE PAS LES CARTES DES AUTRES : je documente (rapport + lecon) et je SIGNALE a Buffy. Mon pilote d'auto-correction ne couvre QUE ma propre carte.
+
+## [LECON] 2026-08-18 -- CYCLE PILOTE AUTO-CORRECTION REEL (Chiron)
+
+**Mission** : verification reelle du cycle pilote d auto-correction de MA carte (demande Cerberus) : detecter une incoherence reelle, me re-eduquer, corriger SA carte via editer-parcours, activer Themis, reprendre.
+
+**Incoherence detectee (c18)** : le texte de la regle annoncait 'A REVOIR -> NON (retour c15)' mais la branche JSON NON allait vers c18 (attente) - le cas A REVOIR n avait AUCUNE branche. En plus, le texte faisait 168 caracteres (> 160).
+
+**Correction appliquee (editer-parcours --modifier-case c18, verrou pilote OK)** : 3 branches explicites : OUI (CONFORME) -> c12 (reprendre), A REVOIR -> c15 (retour corriger), NON (pas revenue) -> c18 (attendre, re-essai legitime). Texte aligne sur les branches (151 caracteres). Lock resynchronise automatiquement.
+
+**Verifications** : navigation c11b OUI -> c15 -> c16, c18 A REVOIR -> c15, c18 OUI -> c12, ASCII 0, LF 0, poids c18 0.25, valider-cartes a faire par agent habilite (verrou session).
+
+**Lecons** :
+1. LE CYCLE PILOTE FONCTIONNE DE BOUT EN BOUT : detecter (c11b OUI) -> se re-eduquer (lecon) -> corriger (editer-parcours, verrou SA carte autorise) -> verifier (Themis) -> reprendre (c18). Le verrou pilote m a autorise l ecriture sur MA carte SANS intervention de Buffy.
+2. UN TEXTE DE REGLE QUI ANNONCE UNE BRANCHE INEXISTANTE EST UN VRAI DEFAUT : le texte de c18 promettait 'A REVOIR -> c15' mais aucune branche ne menait a c15 - l agent ne pouvait pas executer le cas A REVOIR. La regle : chaque cible annoncee dans un texte de regle de question doit exister dans les branches (et inversement).
+3. L ATTENTE EST UNE BOUCLE LEGITIME DOCUMENTEE : NON -> c18 (re-essai) suit le pattern Buffy c8b ('attente legitime du retour de Themis, voulue'). Ce n est pas une boucle d attente interdite (regle 10) car c est un CONTROLE de re-essai documente.
+4. TOUTE CORRECTION DE CARTE DOIT PASSER valider-cartes-decision SOUS UN AGENT HABILITE : le verrou m a bloque valider-cartes (artefact de session chiron non habilite) - la validation finale revient a Buffy/Janus/Vulcain/Argus.

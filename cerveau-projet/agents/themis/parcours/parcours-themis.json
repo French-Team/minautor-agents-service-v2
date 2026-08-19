@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-themis",
   "agent": "themis",
-  "version": "0.4.10",
+  "version": "0.5.0",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4)."
  },
@@ -178,6 +178,10 @@
    "type": "action",
    "indices": [
     {
+     "type": "regle",
+     "texte": "APRES redaction du rapport : verifier ASCII avec combos-corriger-non-ascii --full --dry-run puis --full (dry OBLIGATOIRE avant wet)."
+    },
+    {
      "type": "ref",
      "ref": "pattern-2"
     },
@@ -194,6 +198,13 @@
      "catalogue": "creer-fichier",
      "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
      "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/themis/rapports/rapport-evaluation-<date>.md"
+    },
+    {
+     "type": "outil",
+     "nom": "combos-corriger-non-ascii",
+     "catalogue": "combos-corriger-non-ascii",
+     "chemin": "cerveau-projet/agents/tools/combos/combos-corriger-non-ascii/",
+     "commande": "python3 cerveau-projet/agents/tools/combos/combos-corriger-non-ascii/combos-corriger-non-ascii.py --full --dry-run"
     }
    ],
    "suivant": "c12"

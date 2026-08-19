@@ -5840,3 +5840,166 @@ CONFORME) -> Janus.
    necessaire ici : 0 signalement.
 
 **Verdict** : VALIDE - chaine conforme, 0 defaut.
+## [LECON] 2026-08-18 -- CONTROLE RE-EDUCATION DE MA CARTE : VERDICT VALIDE (Janus)
+
+**Mission** : controle de la re-education de MA carte v0.4.20 -> v0.5.0
+(signalement Themis A REVOIR + Chiron A REVOIR, corrections Buffy, re-audit
+Themis CONFORME).
+
+**Actions** :
+1. Combo controle-modification + verifications sous MA session habilitee :
+   valider-cartes-decision CONFORME (10/10), test-021 9/9 (KO point 7 sous
+   themis = artefact de verrou, REVERDI sous janus - confirmation du pattern),
+   test-037 6/6, bumper --tous 0/0, residus 0, evaluateur 0 ERREUR nouvelle,
+   JSONL 432/432, normes OK, lock MATCH.
+2. Verification de ma propre carte re-eduquee : c1 GARDE-FOU C1, c27
+   REDIRECTION OUTIL BLOQUE + DOMAINES, c28 AGENTS HABILITES.
+
+**Lecons** :
+1. MA carte etait pedagogiquement en retard sans que je le sache : une carte
+   structurellement valide peut manquer de guidage (classification, verrou
+   bloque, agents habilites). Le comportement (suivre sa carte) etait
+   CONFORME - c etait la carte qui ne couvrait pas les cas limites.
+2. Le cycle complet de re-education a fonctionne : Themis audite (A REVOIR)
+   -> Chiron eduque (A REVOIR) -> Buffy corrige (v0.5.0) -> Themis re-audite
+   (CONFORME) -> Janus controle (VALIDE). La boucle KO c9f/c9g de ma carte a
+   correctement declenche l activation de Buffy pour corriger MA propre carte.
+3. Le modele de conformite pedagogique est desormais partage par cerberus,
+   themis ET janus : (a) GARDE-FOU C1 en c1, (b) redirection outil bloque,
+   (c) AGENTS HABILITES.
+
+**Verdict** : VALIDE - carte re-eduquee conforme.
+## [LECON] 2026-08-18 -- CONTROLE RE-EDUCATION 3 CARTES : VERDICT VALIDE (Janus)
+
+**Mission** : controle de la re-education des cartes de Vulcain, Morpheus et
+Buffy (0.4.x -> 0.5.0, modele Themis v0.4.10 / Janus v0.5.0).
+
+**Actions** :
+1. Combo controle-modification + verifications sous MA session habilitee :
+   valider-cartes 3x CONFORME, test-004 16/16, test-016 20/20 (pin adapte par
+   Morpheus), test-057 24/24, test-021 9/9, test-005 28/28, test-014 13/13,
+   test-013 22/22, test-092 9/9, bumper 0/0, residus 0, evaluateur 0 ERREUR
+   nouvelle, JSONL 511/511, normes OK, 3 locks MATCH.
+2. Boucle KO c9g : activation de Morpheus pour les pins (test-016, test-004),
+   re-controle avec retour.
+
+**Lecons** :
+1. Les 3 artefacts de session (test-004 sous morpheus, test-057 sous buffy,
+   test-021 sous themis) ont TOUS reverdi sous janus : le verrou d
+   habilitation est la cause, pas une regression. Verifier les tests KO sous
+   la session du controleur habilite avant de conclure.
+2. La re-education des cartes (bump --mineure 0.4.x -> 0.5.0) casse les pins
+   de version dans les tests : la boucle KO c9g (activer Morpheus pour les
+   pins) a fonctionne de bout en bout (test-016, test-004 adaptes).
+3. Les 6 cartes principales sont desormais toutes conformes au modele
+   pedagogique (GARDE-FOU C1, redirection outil bloque, AGENTS HABILITES) :
+   cerberus, themis, janus, vulcain, morpheus, buffy.
+
+**Verdict** : VALIDE - 3 cartes re-eduquees, tous tests verts sous session
+habilitee.
+## [LECON] 2026-08-18 -- CONTROLE RE-EDUCATION 10 CARTES SECONDAIRES : VALIDE (Janus)
+
+**Mission** : second controle de la re-education des 10 cartes secondaires
+(0.4.x/0.1.x -> 0.5.0/0.2.0/0.6.0/0.4.0, modele GARDE-FOU C1 + redirection
+outil bloque + AGENTS HABILITES).
+
+**Actions** :
+1. Combo controle-modification + verifications sous MA session habilitee :
+   valider-cartes 10x CONFORME, test-005 28/28 (pin atlas adapte par
+   Morpheus, point 21 artefact de verrou reverdi), test-006 19/19,
+   test-020 46/46, test-021 9/9, test-057 24/24, test-016 20/20,
+   test-013 22/22, test-014 13/13, test-092 9/9, bumper 0/0, evaluateur
+   aucune ERREUR nouvelle (15 liens protocole-X preexistants), JSONL
+   593/593, residus 0, 10 locks MATCH.
+2. Boucle KO c9g : activation de Morpheus pour le pin atlas (test-005
+   0.4.9 -> 0.5.0), re-controle avec retour.
+
+**Lecons** :
+1. L'artefact de verrou de session se DECALE apres correction du pin :
+   test-005 est passe de KO point 17 (pin atlas) a KO point 21
+   (valider-cartes BLOQUE pour morpheus) puis 28/28 sous janus. Verifier
+   les KO sous la session du controleur habilite avant de conclure.
+2. Le modele pedagogique s'applique a TOUTES les cartes (16/16 desormais)
+   avec ADAPTATION pour les agents a mission unique : Chiron (c1 action)
+   n'a pas de GARDE-FOU C1 classique mais la redirection c10/c11 + AGENTS
+   HABILITES. Le test pedagogique : "que fait la carte si le verrou bloque
+   un outil ? si la mission est hors perimetre ?"
+3. Les seuls pins de cartes secondaires dans les tests sont test-005
+   (atlas) : les autres cartes secondaires n'ont aucun pin, leur bump ne
+   casse rien.
+
+**Verdict** : VALIDE - 10 cartes re-eduquees, tous tests verts sous session
+habilitee, 16/16 cartes conformes au modele pedagogique.
+
+## [LECON] 2026-08-18 -- CONTROLE PARCOURS AUTO-CORRECTION CHIRON (Janus)
+
+**Mission** : controle final du parcours d'auto-correction de Chiron (v0.3.0) : valider-cartes, verrou pilote, tests, bumper, marbre, evaluateur.
+
+**Verdict** : VALIDE. valider-cartes chiron CONFORME, cycle c11b->c15->c16->c17->c18 complet, verrou chiron SA carte OK / atlas BLOQUE, test-058 6/6, test-027 11/11 (KO 5-8 sous Morpheus reverdis), test-056 17/17, bumper 0/0, marbre 8/8, evaluateur 15 liens preexistants, lock MATCH.
+
+**Lecons** :
+1. LE VERROU PAR CIBLE EST LA SEULE GARANTIE DE L EXCEPTION PILOTE : l indice editer-parcours dans la carte chiron est legitime UNIQUEMENT parce que le verrou bloque chiron sur toute cible != parcours-chiron.json. Controle : tester la cible POSITIVE (SA carte) ET la cible NEGATIVE (autre carte).
+2. LES KO D UNE SESSION NON HABILITEE SONT DES ARTEFACTS, PAS DES DEFAUTS : test-027 KO 5-8 sous Morpheus -> reverdis 11/11 sous Janus. Le controle final se fait TOUJOURS sous la session habilitee.
+3. UN PILOTE D AUTO-CORRECTION SE VERIFIE PAR SON CYCLE COMPLET : detecter -> se re-eduquer -> corriger -> verifier -> reprendre. La reprise en question d attente (c18) fait le lien avec le retour de l auditeur.
+4. LES POINTS D ATTENTION PREEXISTANTS NE SONT PAS DES DEFAUTS DE LA MISSION : textes > 160 dans c1-c14 documentes comme tels, pas imputes a la mission.
+
+## [LECON] 2026-08-18 -- CONTROLE EDUCATION THEMIS COMBOS ASCII (Janus)
+
+**Mission** : controle final de l'education de Themis aux combos ASCII (2e volet demande utilisateur) : carte themis v0.5.0, c9 = regle ASCII + indice OUTIL combos-corriger-non-ascii, fiche + 2 combos.
+
+**Verdict** : VALIDE. valider-cartes themis CONFORME, navigation c9 OK, lock MATCH, test-058 6/6, test-006 19/19, test-027 11/11, bumper 0/0, marbre 8/8, evaluateur 15 liens preexistants, JSONL 718/718.
+
+**Lecons** :
+1. EDUQUER UN AGENT = LUI DONNER L OUTIL, PAS LUI RAPPELER LA REGLE : Themis avait deja la regle ABSOLUE 4/5 mais aucun outil ASCII assigne dans sa carte -> inoperante, d ou ses 8 scripts temporaires. La correction efficace : l'indice OUTIL dans la case d'ecriture (c9). Le controle verifie que l'outil est ASSIGNE, pas que la regle existe.
+2. LA REGLE ASCII EN TETE DE CASE (PATTERN 2) EST LE REFLEXE A CONTROLER : dans toute case d'ecriture, le premier indice doit etre le rappel ASCII. c9 de Themis respecte le pattern : regle en tete, outil juste apres. Le controle verifie l'ORDRE des indices, pas seulement leur presence.
+3. LE CYCLE EDUCATION EST UNE CHAINE COMPLETE : Chiron diagnostique -> Buffy applique -> Themis audite sa propre education (CONFORME) -> Janus controle (VALIDE). L'exception pilote Chiron ne s'etend pas aux cartes des autres.
+4. L'EDUCATION D'UN AGENT SE VERIFIE PAR SA FUTURE ACTION : le test final n'est pas le test-058 (structurel) mais le fait que Themis utilisera combos-corriger-non-ascii --full apres chaque rapport. Le controle verifie que l'outil est DISPONIBLE dans le parcours.
+
+## [LECON] 2026-08-18 -- CONTROLE FICHE CHIRON CAPACITE PILOTE (Janus)
+
+**Mission** : controle final de la mise a jour de la fiche chiron.md (capacite pilote d auto-correction, carte v0.3.0).
+
+**Verdict** : VALIDE. valider-cartes chiron CONFORME (point 10 coherence fiche/parcours), test-058 6/6, test-006 19/19, test-027 11/11, bumper 0/0, marbre 8/8, evaluateur 15 preexistants (0 chiron), JSONL 747/747, perimetre propre.
+
+**Lecons** :
+1. LA COHERENCE FICHE/PARCOURS EST UN POINT DE CONTROLE AUTOMATISE : valider-cartes-decision point 10 verifie que la ligne PARCOURS (vX) de la fiche == version du JSON. Une fiche mise a jour a la main doit passer ce point AVANT le controle manuel.
+2. UNE FICHE D AGENT EST A JOUR QUAND L EXCEPTION EST DOCUMENTEE PARTOUT : version, liste des cases, regles absolues, workflow, faiblesses, limites. L audit Themis verifie l absence de formulation absolue non nuancee ; le controle Janus reverifie sous session habilitee.
+3. LE CONTROLE FINAL RESTE SOUS LA SESSION HABILITEE : les verrous (valider-cartes, test-027) ne s appliquent qu a la session Janus. Ce qui etait bloque sous Themis (valider-cartes) est vert ici.
+
+## [LECON] 2026-08-18 -- CONTROLE CYCLE PILOTE CHIRON REEL (Janus)
+
+**Mission** : controle final du cycle pilote reel de Chiron (verification bout en bout demandee par l utilisateur) : Chiron a detecte une incoherence reelle dans SA carte (c18 : cas A REVOIR sans branche), corrige via editer-parcours (verrou pilote SA carte), Themis a audite CONFORME, et le pin test-058 boucle registre a ete adapte par Morpheus.
+
+**Verdict** : VALIDE. valider-cartes chiron CONFORME, c18 a 3 branches (CONFORME->c12, A REVOIR->c15, NON->c18), texte 151 car, lock MATCH, navigation complete, test-058 6/6 (apres adaptation boucle registre v0.2.5), test-006 19/19, test-027 11/11, bumper 0/0, marbre 8/8, evaluateur 0 lien chiron, JSONL 780/780.
+
+**Lecons** :
+1. LA VERIFICATION D UN PILOTE = LE LAISSER TOURNER SUR UN VRAI DEFAUT : le cycle a prouve son fonctionnement en corrigeant une incoherence reelle (c18 : texte promettant une branche A REVOIR inexistante), pas en simulation. Le verrou pilote a autorise l ecriture sur SA carte, le lock s est resynchronise, Themis a verifie, Chiron a repris.
+2. UN TEXTE DE REGLE DOIT ANNONCER DES BRANCHES QUI EXISTENT : le defaut c18 etait exactement ca. Les controles futurs des cartes doivent verifier la correspondance texte <-> branches (chaque cible annoncee dans un texte de question doit etre une branche reelle).
+3. L EXCEPTION PILOTE DOIT COUVRIR CHAQUE BOUCLE DE CHAQUE GARDE-FOU : test-058 avait l exception chiron dans les boucles indices et texte mais pas la registre (2b) - adapte par Morpheus (v0.2.5). Un garde-fou a exception incomplete donne l illusion de protection.
+4. LA CHAINE PILOTE COMPLETE : Chiron (detecte/corrige) -> Themis (audite) -> Chiron (reprend) -> Janus (controle) -> Morpheus (pin test) -> Janus (cloture) -> Cerberus (bilan). Chaque maillon a documente sa lecon.
+
+## [LECON] 2026-08-18 -- CONTROLE FICHE CHIRON BRANCHE A REVOIR c18 (Janus)
+
+**Mission** : controle final de la documentation de la branche A REVOIR de c18 dans la fiche chiron.md (evolution du cycle pilote).
+
+**Verdict** : VALIDE. Branches JSON c18 (3) = fiche (2 mentions A REVOIR : branches de decision + tableau pilote), valider-cartes chiron CONFORME (point 10), verifier-conformite-fiche CONFORME, test-058 6/6, bumper 0/0, marbre 8/8, evaluateur 0 lien chiron, JSONL 801/801, perimetre propre.
+
+**Lecons** :
+1. UNE EVOLUTION DE CARTE ISSUE DU CYCLE PILOTE REMONTE JUSQU A LA FICHE : Chiron a corrige c18 (verrou pilote SA carte), Themis a verifie la re-education, puis Buffy a documente la fiche (SEUL BUFFY sur les fichiers agents) et Themis a audite. Chaque evolution de carte doit etre refletee dans la fiche, sinon la fiche et le parcours divergent.
+2. LA VERIFICATION DE LA DOCUMENTATION = CORRESPONDANCE BRANCHES JSON <-> MENTIONS FICHE : le controle verifie que les 3 branches du JSON apparaissent dans la fiche, pas seulement la branche nouvelle. Ici A REVOIR est present 2 fois (les 2 sections qui decrivent c18).
+3. LE CYCLE PILOTE EST MAINTENANT COMPLET ET DOCUMENTE : detecter (c11b) -> se re-eduquer (c15) -> corriger (c16) -> verifier (c17) -> reprendre (c18 avec 3 branches) -- carte, fiche, tests et rapports sont tous alignes.
+
+## [LECON] 2026-08-18 -- CONTROLE TABLEAU AGENTS DISPONIBLES CERBERUS (Janus)
+
+**Mission** : controle final de la completion du tableau "Agents disponibles" de cerberus.md (5 agents secondaires ajoutes : Argus, Chiron, Gardien, Hermes, Hygie).
+
+**Verdict** : VALIDE. Tableau 15/15 agents (vs dossiers agents/), les 5 manquants presents, verifier-conformite-fiche CONFORME, bumper 0/0, marbre 8/8, evaluateur 15 preexistants, JSONL 821/821, perimetre propre.
+
+**Lecons** :
+1. LE TABLEAU AGENTS DISPONIBLES EST LA CARTE D ENTREE DU ROUTEUR : un agent oublie = jamais active par Cerberus. Le controle de completude (valider-tableaux) compare le tableau aux dossiers agents/ -- 15/15 apres correction.
+2. UN FAUX POSITIF PREEXISTANT D OUTIL N INVALIDE PAS UNE MISSION : "classeur-variables" etait deja signale AVANT la correction. Il est documente comme point d attention (amelioration outil pour Vulcain), pas comme defaut de la mission.
+3. LE CONTROLE VERIFIE LES 2 SOURCES DES LIGNES : roles (AGENTS.md) ET conditions d activation (fiches). La seule presence du nom ne suffit pas -- chaque ligne doit etre operationnelle.
+
+- **2026-08-18 (boucle KO test-094)** : quand mon controle detecte un defaut dans un fichier d'un autre agent (ici test-094 de Morpheus : tags hors taxonomie + test orphelin), je ne corrige JAMAIS moi-meme (c9g) : j'active le responsable, il corrige, il me reactiver, je re-controle. Lecon pour les tests : tags obligatoires de la taxonomie (categories-tests.json + TAGS_SPECIFIQUES) + reference dans le bon profil de profils-tests.json.
+
+- **2026-08-19 (7 KO preexistants : non-regression 92/92)** : test-055 et test-058 se reconcilient en reformulant le TEXTE d'une regle (sans nommer l'outil exclusif), JAMAIS en ajoutant un indice OUTIL dans une carte non-buffy. Ajouter un indice exclusif temporaire cree des artefacts verrou-auto faux. Correctif final : Hygie (085), Morpheus (030/024/063/087), Buffy (055 texte), Vulcain (079 + 4 artefacts). Non-regression complete : 92 OK / 0 KO.

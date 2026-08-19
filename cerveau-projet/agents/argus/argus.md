@@ -86,7 +86,7 @@ outils:
 
 | `enregistrer-lecon` | Enregistrer MA lecon dans la BDD des lecons (memoire longue) |
 | `consulter-lecons` | Consulter les lecons des autres agents (evolution croisee) |
-> **REGLE ABSOLUE -- PARCOURS (v0.1.12)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.2.0)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Le parcours me donne,
 > a chaque etape, l'indice exact (outil a lancer, fichier a lire, regle a
 > appliquer) et les branches selon mes reponses.

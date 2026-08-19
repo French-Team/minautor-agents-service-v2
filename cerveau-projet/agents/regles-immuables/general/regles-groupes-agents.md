@@ -179,6 +179,22 @@ DEUX plans : la carte (le droit) et le registre (l'usage reel).
 > registre : editer-parcours / editer-fichier-agents exclusifs a Buffy,
 > aucune declaration non-Buffy).
 >
+> **EXCEPTION PILOTE -- CHIRON (2026-08-18, decision utilisateur)** : Chiron
+> est le SEUL agent autorise a CORRIGER SA PROPRE carte
+> (`parcours-chiron.json`) via `editer-parcours`, dans le cadre de SON
+> parcours d'auto-correction : quand il detecte une case erronee ou
+> obsolete dans SA carte, il suit un protocole d'auto-correction immediate
+> (documenter -> corriger SA carte -> se re-eduquer dans SES lecons ->
+> activer Themis pour verifier sa re-education -> etre reactive -> reprendre
+> ou il s'etait arrete). Le verrou restreint cette habilitation a SA carte
+> UNIQUEMENT (jamais les cartes des autres agents, qui restent exclusives a
+> Buffy). Les autres agents conservent la regle generale : ils signalent,
+> Buffy corrige.
+>
+> **Garde-fou exception** : test-058 adapte (chiron = exception pilote
+> verifiee par cible : editer-parcours autorise pour chiron sur
+> `parcours-chiron.json` uniquement).
+>
 > Le protocole de controle croise de Buffy est documente dans
 > [protocole-controle-buffy/](protocole-controle-buffy/).
 

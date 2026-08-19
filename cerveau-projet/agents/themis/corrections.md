@@ -1270,3 +1270,232 @@ branchement-chiron), et apres correction il reverdit (9/9). Un garde-fou de
 parite doit comparer dans les DEUX sens (agent declare absent de l outil =
 oubli ; agent de l outil absent d AGENTS.md = agent mort) + verifier la parite
 py/sh (le .sh etait en retard meme quand le .py etait a jour).
+## [LECON] 2026-08-18 -- AUDIT CARTE JANUS : VERDICT A REVOIR (Themis)
+
+**Mission** : audit a la demande de Cerberus (l utilisateur se demande si Janus
+a ete eduque et si sa carte est conforme).
+
+**Actions** :
+1. Combo audit-themis (chemin corrige : agents/tools/combos/).
+2. Verifications ciblees : version carte (0.4.20 = fiche PARCOURS), structure
+   (51 cases, 11 fins, boucle KO, Pattern 17), garde-fous pedagogiques
+   (GARDE-FOU C1, redirection outil bloque, AGENTS HABILITES), historique
+   d education (corrections.md + BDD lecons).
+
+**Constat** : carte structurellement SAINE mais pedagogiquement EN RETARD :
+c1 sans indice GARDE-FOU C1, aucune redirection "outil bloque", c28 sans
+l indice AGENTS HABILITES. Janus n a JAMAIS ete re-eduque par Chiron (seule
+lecon Chiron #23 = Themis). Le comportement observe par l utilisateur (Janus
+enumere puis active le maillon suivant) est CONFORME a sa carte - ce n est
+pas un defaut de comportement, c est la carte qui manque de garde-fous pour
+les cas limites (outil bloque).
+
+**Lecon** : la re-education de Themis (v0.4.10) a cree un MODELE de conformite
+pedagogique pour toutes les cartes : (a) indice de classification en c1,
+(b) redirection quand le verrou bloque un outil, (c) indice AGENTS HABILITES
+dans la case d activation. Toute carte d un agent principal doit etre
+verifiee contre ce modele. Preuve concrete pendant l audit : le verrou a
+bloque Themis sur valider-cartes-decision et MA carte re-education a
+correctement redirige (c21/c22) vers l agent habilite.
+
+**Verdict** : A REVOIR - signalement a Chiron (education) pour re-education
+de Janus sur le modele Themis v0.4.10.
+## [LECON] 2026-08-18 -- AUDIT RE-EDUCATION CARTE JANUS : VERDICT CONFORME (Themis)
+
+**Mission** : audit-fin-mission declenche par Buffy (c8a) sur la re-education
+de la carte Janus v0.4.20 -> v0.5.0 (signalement Themis + Chiron, modele
+Themis v0.4.10).
+
+**Verifications** : 3 indices en place (c1 GARDE-FOU C1, c27 REDIRECTION OUTIL
+BLOQUE + DOMAINES, c28 AGENTS HABILITES), version 0.5.0 sync fiche, lock
+MATCH (resync bumper v0.1.5), valider-cartes-decision CONFORME (sous session
+habilitee), test-021 9/9 sous buffy (KO point 7 sous themis = artefact de
+verrou), test-037 6/6, normes OK, perimetre propre.
+
+**Lecons** :
+1. Le cycle est boucle : mon audit A REVOIR (carte janus en retard
+   pedagogique) a declenche la re-education (Chiron -> Buffy -> re-audit
+   CONFORME). Le modele de conformite pedagogique est desormais applique a
+   cerberus, themis ET janus : (a) GARDE-FOU C1 en c1, (b) redirection outil
+   bloque, (c) AGENTS HABILITES.
+2. Le KO point 7 de test-021 sous ma session est un artefact de verrou
+   (valider-cartes-decision bloque pour themis) : verifier les tests KO sous
+   la session de l agent habilite (buffy l a lance 9/9) avant de conclure a
+   une regression - meme lecon que test-005 sous morpheus.
+3. Toujours verifier ASCII apres ecriture du rapport : j ai introduit 2
+   'habilitee' accentues (U+00E9) par erreur - corriger avant le verdict.
+
+**Verdict** : CONFORME - 0 defaut.
+## [LECON] 2026-08-18 -- AUDIT CARTES VULCAIN/MORPHEUS/BUFFY : VERDICT A REVOIR (Themis)
+
+**Mission** : audit a la demande de Cerberus - verifier si les cartes de
+Vulcain, Morpheus et Buffy sont conformes au modele pedagogique (re-education
+Themis v0.4.10, Janus v0.5.0).
+
+**Constat** : les 3 cartes sont structurellement SAINES (version sync
+carte/fiche, cases et fins completes, cases Activer l agent habilite presentes
+pour Pattern 17) mais PEDAGOGIQUEMENT EN RETARD : c1 sans AUCUN indice (0),
+pas de redirection outil bloque, pas d indice AGENTS HABILITES. Aucun des 3
+n a JAMAIS ete eduque par Chiron (seules educations : Themis #23, Janus #34).
+
+**Lecon** : le modele de conformite pedagogique est la NORME pour TOUTES les
+cartes d agents principaux. Les cartes de cerberus (0.5.4), themis (0.4.10)
+et janus (0.5.0) sont conformes ; celles de vulcain (0.4.28), morpheus
+(0.4.15) et buffy (0.4.14) sont en retard. Une carte structurellement valide
+peut manquer de guidage : verifier le CONTENU des indices (classification,
+verrou bloque, agents habilites), pas seulement la forme. L audit doit couvrir
+TOUTES les cartes principales, pas seulement celles signalees - le retard
+pedagogique est silencieux tant qu aucun cas limite (verrou, hors branches)
+ne le revele.
+
+**Verdict** : A REVOIR - 3 cartes a re-eduquer (vulcain, morpheus, buffy),
+modele : Themis v0.4.10 / Janus v0.5.0.
+## [LECON] 2026-08-18 -- AUDIT RE-EDUCATION 3 CARTES : VERDICT CONFORME (Themis)
+
+**Mission** : audit-fin-mission declenche par Buffy sur la re-education des
+cartes de Vulcain, Morpheus et Buffy (0.4.x -> 0.5.0, modele Themis v0.4.10 /
+Janus v0.5.0).
+
+**Verifications** : 3 garde-fous en place sur les 3 cartes (GARDE-FOU C1 en
+c1, REDIRECTION OUTIL BLOQUE + DOMAINES AUTRES AGENTS, AGENTS HABILITES),
+textes < 160 caracteres, versions 0.5.0 sync fiches, 3 locks MATCH, normes
+OK, perimetre propre.
+
+**Lecons** :
+1. Le cycle est boucle : mon audit A REVOIR (3 cartes en retard) a declenche
+   la re-education complete (Chiron -> Buffy -> re-audit CONFORME). Les 6
+   cartes principales (cerberus, themis, janus, vulcain, morpheus, buffy)
+   sont desormais toutes conformes au modele pedagogique.
+2. Les KO attendus sont documentables : test-016 pin version (domaine
+   Morpheus) et test-057 verrou SEUL BUFFY (artefact de session quand la
+   session active EST buffy - reverdit sous janus). Verifier les tests KO
+   sous la session appropriee avant de conclure.
+3. Le verrou a bloque Themis sur valider-cartes-decision pendant cet audit :
+   ma carte re-eduquee (c21/c22) a correctement redirige - la verification
+   structurelle a ete faite par Buffy (session habilitee), preuve transmise
+   dans sa mission.
+
+**Verdict** : CONFORME - 0 defaut.
+## [LECON] 2026-08-18 -- AUDIT CARTES SECONDAIRES : VERDICT A REVOIR (Themis)
+
+**Mission** : audit a la demande de Cerberus - verifier la conformite des
+cartes des agents secondaires (Atlas, Argus, Hygie, Clio, Hermes, Gardien,
+Chiron, Athena, Promethee, Minerve) au modele pedagogique.
+
+**Constat** : les 10 cartes secondaires sont structurellement SAINES
+(versions sync carte/fiche, cases Mission hors parcours + activation
+presentes) mais PEDAGOGIQUEMENT EN RETARD : 9 sur 10 sans AUCUN indice en c1,
+aucune redirection outil bloque, aucun indice AGENTS HABILITES. Chiron est un
+cas particulier (c1 de type ACTION a mission unique, redirections c10/c11
+signalent a Buffy/Vulcain) mais sans liste AGENTS HABILITES. Aucun des agents
+secondaires n a jamais ete eduque par Chiron.
+
+**Lecon** : le retard pedagogique est GENERALISE - il touche TOUTES les
+cartes non eduquees (principales ET secondaires). Le modele de conformite
+pedagogique doit etre applique a l ensemble des 16 cartes, avec adaptation
+pour les cas particuliers : les agents a mission unique (chiron) n ont pas
+besoin du GARDE-FOU C1 classique (c1 action) mais doivent avoir une
+redirection vers les agents habilites (c10/c11) et la liste AGENTS HABILITES.
+L audit de conformite pedagogique est desormais un controle recurrent : il
+reste 10 cartes en retard apres la re-education des 6 principales.
+
+**Verdict** : A REVOIR - 10 cartes a re-eduquer (avec adaptation chiron).
+## [LECON] 2026-08-18 -- AUDIT RE-EDUCATION 10 CARTES SECONDAIRES : CONFORME (Themis)
+
+**Mission** : audit de fin de mission (Buffy c8a) de la re-education des 10
+cartes secondaires au modele pedagogique (GARDE-FOU C1, redirection outil
+bloque, AGENTS HABILITES).
+
+**Actions** : combo audit-themis + verifications ciblees : garde-fous en
+place (9/10 avec les 3, chiron cas particulier avec AGENTS HABILITES en c10),
+versions bumpees (atlas 0.5.0, argus/hygie/hermes/gardien/chiron 0.2.0, clio
+0.6.0, athena/promethee/minerve 0.4.0), locks 10/10 MATCH, fiches 10/10
+CONFORME, bumper 0/0, ASCII 0, test-006 19/19, test-020 46/46, test-021 9/9.
+
+**Lecons** :
+1. Le modele pedagogique s'applique AUSSI aux cartes secondaires (16 cartes
+   au total desormais conformes) avec ADAPTATION pour les agents a mission
+   unique : Chiron (c1 action) n'a pas de GARDE-FOU C1 classique, mais la
+   redirection (c10/c11) + AGENTS HABILITES. Le test pedagogique reste :
+   "que fait la carte si le verrou bloque un outil ? si la mission est hors
+   perimetre ?"
+2. valider-cartes-decision est BLOQUE pour MA session (habilites :
+   argus/buffy/janus/vulcain) : je verifie sous la session habilitee (Buffy
+   l'a fait 10x CONFORME) et je documente l'artefact dans le rapport.
+3. Le pin de version atlas (test-005 point 17) est l'adaptation Morpheus --
+   meme pattern que test-016/test-004 des missions precedentes : chaque bump
+   de carte casse les pins, la boucle KO de Janus active Morpheus.
+
+**Verdict** : CONFORME - 0 defaut restant (hors pin Morpheus documente).
+
+## [LECON] 2026-08-18 -- AUDIT PARCOURS AUTO-CORRECTION CHIRON (Themis)
+
+**Mission** : auditer le parcours d'auto-correction de Chiron (v0.3.0, construit par Buffy) : cycle complet, budgets, navigation, verrou pilote, test-058, lock, fiche.
+
+**Verdict** : CONFORME. Cycle c11b->c15->c16->c17->c18 complet, referents 0 manquant, budgets <= 3.0, textes nouveaux < 160, navigation guider OK, verrou bloque chiron sur toute cible != SA carte, test-058 6/6, lock MATCH, fiche sync, bumper 0/0.
+
+**Lecons** :
+1. UN PILOTE D AUTO-CORRECTION EST UN CYCLE, PAS UNE BRANCHE : detecter (question d aiguillage) -> se re-eduquer (lecon) -> corriger (editer-parcours avec verrou par cible) -> verifier (Themis) -> reprendre (question d attente, pattern Buffy c8b). La reprise en QUESTION rend le cycle pilotable par le retour de l auditeur.
+2. L EXCEPTION PILOTE DOIT ETRE COHERENTE DANS LE GARDE-FOU : test-058 scannait la carte chiron a 2 niveaux (indices OUTIL + texte brut). L exception au niveau 1 sans le niveau 2 = faux positif. Morpheus a adapte la boucle texte : exception ciblee, pas d exclusion globale.
+3. LE VERROU EST LA VRAIE GARANTIE, LE TEST LE REFLETE : le verrou bloque chiron sur les autres cartes (teste : atlas -> BLOQUE). Le pilote est sur que le verrou le limite, meme si le test etait en retard.
+4. LES TEXTES > 160 PREEXISTANTS SONT HORS PERIMETRE : la carte chiron a des textes > 160 dans c1-c14 (preexistants). Ne pas les confondre avec les nouvelles cases (toutes < 160).
+
+## [LECON] 2026-08-18 -- MON EDUCATION AUX COMBOS ASCII (Themis)
+
+**Mission** : auditer les modifications appliquees a MA carte et MA fiche pour l'education aux combos ASCII (demande utilisateur, diagnostic Chiron, application Buffy).
+
+**Verdict** : CONFORME. c9 = regle ASCII en tete (pattern 2) + indice OUTIL combos-corriger-non-ascii (--full --dry-run) ; fiche themis.md + combo-corriger-ascii + combos-corriger-non-ascii ; PARCOURS v0.5.0 sync ; lock MATCH ; test-058 6/6 ; bumper 0/0 ; evaluateur 15 liens preexistants.
+
+**Lecons** :
+1. J AVAIS LA REGLE MAIS PAS L OUTIL : ma regle ABSOLUE 4/5 imposait les outils du cerveau assignes dans ma carte, mais AUCUN outil ASCII n y etait assigne -> je ne pouvais pas l appliquer, d ou mes 8 scripts temporaires. L education = l outil assigne dans la case, pas une regle de plus.
+2. APRES CHAQUE RAPPORT : combos-corriger-non-ascii --full --dry-run PUIS --full. Le dry est OBLIGATOIRE avant le wet (preuve datee verifiee par l outil, wet refuse sans elle). Le rapport dry est concis mais complet (tous fichiers, codes U+XXXX).
+3. LE COMBO --full EST RAPIDE ET SUR : dry ~1 s, wet ~3 s (correction ciblee uniquement des fichiers detectes). Plus besoin de scripts temporaires pour l ASCII.
+4. L EXCEPTION PILOTE CHIRON NE ME CONCERNE PAS : Chiron peut auto-corriger SA carte uniquement ; pour la mienne, c est Buffy qui applique (SEUL BUFFY). Le cycle education : Chiron diagnostique -> Buffy corrige -> moi j audite.
+
+## [LECON] 2026-08-18 -- AUDIT FICHE CHIRON CAPACITE PILOTE (Themis)
+
+**Mission** : auditer la mise a jour de la fiche chiron.md (capacite pilote d auto-correction, carte v0.3.0) par Buffy.
+
+**Verdict** : CONFORME. Vue ensemble v0.3.0 (23 cases) = JSON, cases 23/23, EXCEPTION PILOTE 3 occurrences (regles absolues 1/2 + limites), 0 formulation absolue non nuancee, cycle CHIRON -> THEMIS -> CHIRON documente, lock MATCH, test-058 6/6, test-006 19/19, bumper 0/0, evaluateur 15 preexistants (0 chiron).
+
+**Lecons** :
+1. UNE EXCEPTION DE CARTE DOIT ETRE DOCUMENTEE PARTOUT DANS LA FICHE, PAS SEULEMENT DANS LA CARTE : l agent relit SA fiche au demarrage (c0) -- si la fiche contredit la carte, il est desoriente. L audit verifie l ABSENCE de formulation absolue non nuancee, pas seulement la presence de l exception.
+2. LE COMPTAGE DES CASES SE FAIT SUR LE JSON : la fiche affichait 15 cases alors que le JSON en avait 18 (c0c/c0e absents de la liste). Le reflet exact = compter les cles du dict cases et aligner la liste 1:1.
+3. L AUDIT DE FICHE CROISE 3 SOURCES : carte JSON (version + cases), fiche (reflet), tests (test-058 pour l exception, test-006 pour la navigation). Les 3 doivent etre coherents entre eux.
+
+## [LECON] 2026-08-18 -- AUDIT RE-EDUCATION CHIRON CYCLE PILOTE REEL (Themis)
+
+**Mission** : verifier la re-education de Chiron (c17 du cycle pilote) apres sa correction reelle de c18 (cas A REVOIR sans branche, texte 168 car).
+
+**Verdict** : CONFORME. c18 a 3 branches (OUI CONFORME -> c12, A REVOIR -> c15, NON -> c18), texte aligne 151 car, navigation complete (A REVOIR -> c15, OUI -> c14 FIN, NON -> c18), lock MATCH, 0 branche cassee, fiche sync v0.3.0 (23 cases), lecon BDD 58.
+
+**Point d attention** : test-058 point 2b KO -- la boucle registre n a pas l exception chiron (contrairement aux boucles indices OUTIL et texte). Les declarations legitimes chiron/editer-parcours du cycle pilote reel sont faussement signalees. Adaptation a faire par Morpheus.
+
+**Lecons** :
+1. LA VERIFICATION D UN PILOTE SE FAIT PAR SON ACTION REELLE, PAS PAR UN TEST : la meilleure preuve que le cycle d auto-correction fonctionne est de le laisser tourner sur une incoherence reelle (c18 : cas A REVOIR sans branche). Le pilote a detecte, corrige, verifie - tout le cycle a fonctionne sans intervention externe.
+2. UN TEXTE DE REGLE QUI PROMET UNE BRANCHE INEXISTANTE EST UN VRAI DEFAUT DETECTABLE : la regle c18 annoncait 'A REVOIR -> c15' mais aucune branche ne menait a c15. L audit verifie que chaque cible annoncee dans un texte de question existe dans les branches.
+3. L EXCEPTION PILOTE DOIT COUVRIR TOUTES LES BOUCLES DES GARDE-FOUS : test-058 a l exception chiron dans les boucles indices et texte mais PAS dans la boucle registre (2b). Chaque nouvelle boucle de verification du garde-fou doit porter l exception, sinon le pilote est faussement signale.
+
+## [LECON] 2026-08-18 -- AUDIT FICHE CHIRON BRANCHE A REVOIR c18 (Themis)
+
+**Mission** : auditer la mise a jour de la fiche chiron.md (documentation de la branche A REVOIR de c18, issue de la verification reelle du cycle pilote).
+
+**Verdict** : CONFORME. Fiche reflete les 3 branches de c18 (OUI CONFORME -> c12, A REVOIR -> c15, NON pas revenue -> c18) dans les Branches de decision ET le tableau du cycle pilote. verifier-conformite-fiche CONFORME, valider-cartes CONFORME (point 10), lock MATCH, test-058 6/6, bumper 0/0, evaluateur 0 lien chiron, ASCII 0.
+
+**Lecons** :
+1. LA FICHE SUIT LE PARCOURS : une evolution de case (c18 : A REVOIR -> c15) doit etre refletee dans TOUTES les sections de la fiche qui decrivent cette case. L audit verifie la correspondance branches JSON <-> mentions fiche, section par section.
+2. LE CYCLE PILOTE EVOLUE LA CARTE, BUFFY EVOLUE LA FICHE : Chiron a corrige c18 (verrou pilote SA carte), Themis a verifie la re-education (CONFORME), puis Buffy a documente la fiche (SEUL BUFFY sur les fichiers agents) et Themis audite de nouveau. La separation des pouvoirs est respectee a chaque etape.
+3. L AUDIT DE FICHE APRES UNE EVOLUTION DE CARTE = verifier que les 3 branches du JSON apparaissent dans la fiche, pas seulement la branche nouvelle.
+
+## [LECON] 2026-08-18 -- AUDIT TABLEAU AGENTS DISPONIBLES CERBERUS (Themis)
+
+**Mission** : auditer la completion du tableau "Agents disponibles" de cerberus.md (5 agents secondaires ajoutes : Argus, Chiron, Gardien, Hermes, Hygie).
+
+**Verdict** : CONFORME. Tableau 15/15 agents (vs dossiers agents/), roles conformes AGENTS.md, conditions d activation operationnelles (fiches), verifier-conformite-fiche CONFORME, bumper 0/0, evaluateur 15 preexistants, ASCII 0, perimetre propre.
+
+**Lecons** :
+1. LE TABLEAU AGENTS DISPONIBLES EST LA CARTE D ENTREE DU ROUTEUR : un agent oublie ne sera jamais active par Cerberus. L audit de completude (valider-tableaux) compare le tableau aux dossiers agents/ -- 15/15 apres correction.
+2. UN FAUX POSITIF D OUTIL N EST PAS UN DEFAUT DE MISSION : "classeur-variables" (dossier de donnees, pas un agent) est signale par valider-tableaux de facon preexistante. Il ne faut PAS l ajouter au tableau (ce serait un agent fantome) -- c est l outil qui devrait distinguer `type: fiche-agent` de `type: classeur`.
+3. LES ROLES ET CONDITIONS D ACTIVATION VIENNENT DE 2 SOURCES : AGENTS.md (roles) + fiches (conditions operationnelles). L audit verifie les 2, pas seulement la presence du nom.
+
+- **2026-08-19 (audit test-055)** : audit CONFORME du correctif Buffy (10 indices editer-parcours ajoutes). Verification : cases exactes signalees -> indice present (10/10), pattern identique buffy/chiron, test-055 12/12, test-006 19/19, 10 cartes CONFORMES, ASCII/LF 0.

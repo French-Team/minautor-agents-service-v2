@@ -30,7 +30,7 @@ Invariants verifies :
 
 Usage:
   python3 test-092-parite-agents-activation.py
-Tags: registre-traces, garde-fou, anti-recurrence, parite-agents
+Tags: registre-traces, garde-fou-agent, anti-recurrence, garde-fou
 """
 import importlib.util
 import io

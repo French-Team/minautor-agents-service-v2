@@ -29,7 +29,7 @@ Contexte (etape 6 generalisee de la spec-refonte-cartes-decision) :
    - v0.4.7 (2026-08-15) : ajout indice outil guider-parcours (case c0, P0 de la fiche
      absent de la carte - OUTIL_HORS_CARTE teste par evaluer-processus, garde-fou test-035)
 
-Cas couverts:   1. Version du parcours = 0.4.14
+Cas couverts:   1. Version du parcours = 0.5.0
   2. Types : 40 action / 8 question / 5 controle / 10 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -168,8 +168,8 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.4.14",
-                 d["parcours"].get("version") == "0.4.14",
+        verifier("1. Version du parcours = 0.5.0",
+                 d["parcours"].get("version") == "0.5.0",
                  d["parcours"].get("version"))
 
         # 2. Types

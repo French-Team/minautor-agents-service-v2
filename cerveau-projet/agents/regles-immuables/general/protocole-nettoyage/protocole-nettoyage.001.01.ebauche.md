@@ -86,7 +86,7 @@ fichier present est suspect (via la delegation d un agent habilite).
    SUPPRESSION, jamais sur la detection.
 6. **NIVEAU REGLE IMMUABLE** : la regle "SEUL HYGIE SUPPRIME" est documentee
    au niveau REGLE IMMUABLE dans
-   [regles-groupes-agents.md](regles-groupes-agents.md) (section "Regles de
+   [regles-groupes-agents.md](../regles-groupes-agents.md) (section "Regles de
    gouvernance exclusives"), en plus de la fiche Hygie (comportement) et de
    ce protocole (processus). Les trois niveaux sont synchronises et
    verifies par le test-045 (point 8e : regle immuable documentee).
@@ -160,10 +160,10 @@ violation (residu NON prouve). Supprimer sans snapshot -> violation.
 
 - [detecter-residus](../../../tools/detecter/detecter-residus/detecter-residus.md)
 - [combo-nettoyage-hygie](../../../tools/combos/combo-nettoyage-hygie/combo-nettoyage-hygie.md)
-- [fiche Hygie](../../agents/hygie/hygie.md)
-- [regles-groupes-agents](regles-groupes-agents.md) (regle immuable "SEUL HYGIE SUPPRIME" - niveau reference pour tous)
-- [protocole-purification](protocole-purification/protocole-purification.001.01.ebauche.md)
-- [regles-perimetre-workspace](regles-perimetre-workspace.md)
+- [fiche Hygie](../../../../agents/hygie/hygie.md)
+- [regles-groupes-agents](../regles-groupes-agents.md) (regle immuable "SEUL HYGIE SUPPRIME" - niveau reference pour tous)
+- [protocole-purification](../protocole-purification/protocole-purification.001.01.ebauche.md)
+- [regles-perimetre-workspace](../regles-perimetre-workspace.md)
 - [test-045-hygie-garde-fou](../../../tools/tester/tests/test-045-hygie-garde-fou/test-045-hygie-garde-fou.py)
-- [test-046-compartimentation-residus](../../../tools/tester/tests/test-046-compartimentation-residus/test-046-compartimentation-residus.py)
-- [index-regles-general](index-regles-general.md)
+- [test-046-hermes-fautes](../../../tools/tester/tests/test-046-hermes-fautes/test-046-hermes-fautes.py)
+- [index-regles-general](../index-regles-general.md)

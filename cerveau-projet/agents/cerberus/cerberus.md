@@ -213,6 +213,11 @@ CERBERUS -> AGENT_1 -> AGENT_2 -> ... -> CERBERUS
 | **Minerve** | Redactrice de todos | Spec terminee -> todo |
 | **Clio** | Muse de l'histoire (README) | Quand la mise a jour du README est necessaire (selon SA carte) |
 | **Themis** | Evaluatrice croisee du cerveau-projet | Audit, evaluation, combos |
+| **Argus** | Detecteur de contradictions | Detection et signalement d'incoherences (cases, regles, protocoles, git) -- ne corrige jamais |
+| **Chiron** | Educateur des agents -- formation continue | Re-education des agents quand les outils/regles/protocoles changent |
+| **Gardien** | Gardien du marbre (securite du code) | Modification des zones protegees (l'utilisateur valide) |
+| **Hermes** | Agent de la langue (orthographe, vocabulaire, fautes) | Correction des fautes de francais |
+| **Hygie** | Agent de nettoyage du workspace | Nettoyage du workspace (SEUL habilite a TOUT le workspace) |
 
 ---
 

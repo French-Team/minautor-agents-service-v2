@@ -114,7 +114,13 @@
    ],
    "question": "Quelle est la mission ?",
    "titre": "Mission",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : demande hors branches (creer/modifier/agent/protocole/controler) -> autre -> c33. JAMAIS improviser, JAMAIS outil hors carte."
+    }
+   ]
   },
   "c10": {
    "indices": [
@@ -935,13 +941,27 @@
    ],
    "question": "La mission concerne-t-elle une sous-mission ou un domaine d'un autre agent ?",
    "titre": "Mission hors parcours",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REDIRECTION OUTIL BLOQUE : verrou bloque un outil -> autre-agent -> c34 (agent habilite). JAMAIS re-tenter, JAMAIS s arreter."
+    },
+    {
+     "type": "regle",
+     "texte": "DOMAINES AUTRES AGENTS : Atlas inventaire, Buffy cartes, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
+    }
+   ]
   },
   "c34": {
    "indices": [
     {
      "texte": "REGLE ABSOLUE : je n'execute JAMAIS une mission qui ne releve pas de mon domaine.",
      "type": "regle"
+    },
+    {
+     "type": "regle",
+     "texte": "AGENTS HABILITES : Buffy cartes, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
     },
     {
      "catalogue": "activer-agent-principal",
@@ -1309,6 +1329,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c0 guider-parcours (P0 fiche, usage reel, garde-fou test-035)",
   "nom": "parcours-buffy",
-  "version": "0.4.14"
+  "version": "0.5.0"
  }
 }

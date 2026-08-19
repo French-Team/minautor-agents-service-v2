@@ -58,7 +58,7 @@
 #   2 : erreur d utilisation (agent/outil manquant, agent inconnu,
 #       identite de session indeterminable)
 #
-# Version : 0.2.2
+# Version : 0.4.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -88,7 +88,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.2"
+VERSION = "0.4.0"
 
 AGENTS_DIR = None          # racine/cerveau-projet/agents (detectee)
 PROJECT_ROOT = None        # racine du projet (contient AGENTS.md)
@@ -327,6 +327,15 @@ OUTILS_MODIF = frozenset([
 ZONE_TESTS = "tester/tests/"
 GARDIEN_TESTS = frozenset(["morpheus"])
 
+# CLE EXCLUSIVE PILOTE (v0.2.3, regle utilisateur 2026-08-18) : CHIRON est le
+# SEUL agent autorise a CORRIGER SA PROPRE carte (parcours-chiron.json) via
+# editer-parcours, dans le cadre de son parcours d'auto-correction (exception
+# pilote gravee dans regles-groupes-agents.md). La cle est PAR CIBLE :
+# editer-parcours sur SA carte = autorise ; editer-parcours sur TOUTE AUTRE
+# carte = BLOQUE (les autres cartes restent exclusives a buffy).
+CARTE_CHIRON = "parcours-chiron.json"
+PILOTE_AUTO_CORRECTION = frozenset(["chiron"])
+
 # LISTE BLANCHE DEVELOPPEUR (v0.2.2, regle utilisateur 2026-08-16) : le
 # CONSTRUCTEUR de l outil tester-lancer-non-regression doit pouvoir VALIDER
 # ses modifications sans attendre janus. Autorisation DIRECTE dans le verrou,
@@ -368,6 +377,20 @@ def verdict(agent, outil, table, verbose, cible=""):
     if outil == OUTIL_NON_REGRESSION and agent.lower() in [d.lower() for d in DEV_NON_REGRESSION]:
         return (0, "OK : l agent '" + agent + "' est habilite (liste blanche developpeur) "
                    "pour '" + outil + "' - validation de ses modifications.")
+    # CLE EXCLUSIVE PILOTE (v0.2.3) : chiron -> editer-parcours sur SA carte
+    # uniquement (exception pilote auto-correction). Sur toute AUTRE carte,
+    # chiron est BLOQUE (les cartes restent exclusives a buffy).
+    if (outil == "editer-parcours" and agent.lower()
+            in [p.lower() for p in PILOTE_AUTO_CORRECTION]):
+        if cible and os.path.basename(cible.replace("\\", "/")) == CARTE_CHIRON:
+            return (0, "OK : l agent '" + agent + "' est habilite (cle exclusive pilote "
+                       "auto-correction) pour 'editer-parcours' sur SA carte " + cible + ".")
+        session = trouver_session_agent(agent)
+        return (1, "BLOQUE : l auto-correction de chiron est limitee a SA PROPRE carte "
+                   "(parcours-chiron.json) - les autres cartes sont exclusives a buffy.\n"
+                   "  Cible : " + (cible or "?") + "\n"
+                   "  Action requise : activez buffy puis redemandez.\n"
+                   "  Commande : " + commande_activation("buffy", session))
     habiles = table.get(outil)
     if habiles is None:
         return (1, "BLOQUE : l outil '" + outil + "' n est assigne a AUCUNE carte "

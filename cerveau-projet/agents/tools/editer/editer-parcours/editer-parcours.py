@@ -39,7 +39,7 @@
 #   python3 editer-parcours.py --agent cerberus --suivant c15c --vers c15b --wet
 #   python3 editer-parcours.py --agent vulcain --bump --wet
 #
-# Version : 0.1.6
+# Version : 0.1.7
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -59,7 +59,7 @@ import shutil
 import subprocess
 import sys
 
-VERSION = "0.1.6"
+VERSION = "0.1.7"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "ebauche"
 
@@ -284,19 +284,24 @@ def afficher_messages_info(messages):
         print("  > %s" % message)
 
 
-def verrouiller_habilitation(agent, outil):
+def verrouiller_habilitation(agent, outil, cible=""):
     """Verrou d habilitation + auto-journalisation : appele
     proteger-verrou-habilitation et retourne (code, message).
     Code 0 = habilite (usage journalise en mode verrou-auto), 1 = bloque,
-    2 = erreur. L outil signale LUI-MEME son usage (espionnage)."""
+    2 = erreur. L outil signale LUI-MEME son usage (espionnage).
+    v0.1.7 : la CIBLE (chemin du fichier modifie) est transmise au verrou
+    pour la cle exclusive par cible (exception pilote chiron)."""
     racine = racine_projet()
     verrou = os.path.join(
         racine, "cerveau-projet", "agents", "tools", "proteger",
         "proteger-verrou-habilitation", "proteger-verrou-habilitation.py")
     if not os.path.isfile(verrou):
         return (2, "[ERREUR] Verrou introuvable : %s" % verrou)
+    cmd = [sys.executable, verrou, "--agent", agent, "--outil", outil]
+    if cible:
+        cmd += ["--cible", cible]
     r = subprocess.run(
-        [sys.executable, verrou, "--agent", agent, "--outil", outil],
+        cmd,
         capture_output=True, text=True, encoding="utf-8", errors="replace")
     message = (r.stdout + r.stderr).strip()
     return (r.returncode, message)
@@ -342,8 +347,11 @@ def main():
 
     # VERROU AUTO-JOURNALISATION (v0.1.6) : l outil signale LUI-MEME son usage
     # (usage autorise -> registre mode verrou-auto ; non autorise -> bloque).
+    # La CIBLE (chemin du parcours) est transmise au verrou pour permettre la
+    # cle exclusive par cible (exception pilote chiron : editer-parcours
+    # autorise sur SA carte uniquement, v0.1.7).
     code_verrou, msg_verrou = verrouiller_habilitation(
-        agent_actif_session() or args.agent, "editer-parcours")
+        agent_actif_session() or args.agent, "editer-parcours", chemin)
     if code_verrou != 0:
         print(_couleur(msg_verrou, "rouge"))
         return code_verrou

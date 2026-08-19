@@ -20,7 +20,7 @@ Options :
 Retour: 0 toujours (outil d'evaluation, rapport sur stdout).
 
 Proprietaire : Themis (outil partage)
-Version : 0.2.4-py
+Version : 0.2.5-py
 Statut : beta
 """
 
@@ -30,7 +30,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.4-py"
+VERSION = "0.2.5-py"
 STATUT = "beta"
 
 # Couleurs ANSI : desactivees si la sortie n'est pas un terminal (capture,
@@ -45,7 +45,8 @@ NC = "\033[0m" if _ANSI else ""
 MOTIFS_GENERIQUES = ('texte', 'chemin', 'ancien.md', 'nouveau.md', 'perdu.md',
                      'exemple.md', '.*', 'fichier.md', 'dossier.md', 'cible.md',
                      'source.md', 'destination.md', 'fichier-exemple', 'index.md',
-                     'frere-a', 'frere-b', 'sous-dossier', 'parent.md', 'racine/')
+                     'frere-a', 'frere-b', 'sous-dossier', 'parent.md', 'racine/',
+                     'protocole-X')
 
 PATTERN_LIEN = re.compile(r"\[[^]]+\]\(([^)]+)\)")
 

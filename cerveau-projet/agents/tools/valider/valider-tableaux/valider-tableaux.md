@@ -8,7 +8,7 @@ identite:
 # Verifie la coherence des tableaux des fiches agents
 
 **Categorie** : Valider
-**Version** : 0.2.0-py
+**Version** : 0.2.1-py
 **Statut** : prepare
 **Proprietaire** : Vulcain (outil partage)
 
@@ -143,5 +143,6 @@ valider-tableaux.sh exemples/test-tableaux/faux-agent/faux-agent.md
 |---|---|---|
 | 0.2.0 | 2026-08-07 | Creation : 3 verifications (nombres annonces, numerotation, completude) |
 | 0.2.0-py | 2026-08-07 | Portage Python : version autonome (meme logique que le .sh) |
+| 0.2.1 | 2026-08-18 | Filtre `type: fiche-agent` (faux positif classeur-variables corrige) + .sh passe en wrapper pur (bug stdin Windows preexistant corrige) + parite .py |
 
 ---

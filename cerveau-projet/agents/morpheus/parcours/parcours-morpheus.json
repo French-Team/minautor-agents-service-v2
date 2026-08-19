@@ -86,7 +86,13 @@
    ],
    "question": "Quelle est la mission ?",
    "titre": "Mission",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : demande hors branches (tester/verifier) -> autre -> c13. JAMAIS improviser, JAMAIS outil hors carte."
+    }
+   ]
   },
   "c10": {
    "message": "CHAINE BOUT-EN-BOUT : tests termines et VERDICT rendu (RVAV passe sur mon travail). J ACTIVE JANUS (controle) avec le rapport de tests et le verdict. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec le bilan consolide.",
@@ -171,7 +177,17 @@
    ],
    "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
    "titre": "Mission hors parcours",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REDIRECTION OUTIL BLOQUE : verrou bloque un outil -> OUI -> c15 (agent habilite). JAMAIS re-tenter, JAMAIS s arreter."
+    },
+    {
+     "type": "regle",
+     "texte": "DOMAINES AUTRES AGENTS : Atlas inventaire, Buffy cartes, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
+    }
+   ]
   },
   "c14": {
    "titre": "FIN - Activer Janus",
@@ -195,6 +211,10 @@
     {
      "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine.",
      "type": "regle"
+    },
+    {
+     "type": "regle",
+     "texte": "AGENTS HABILITES : Buffy cartes, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
     },
     {
      "catalogue": "activer-agent-principal",
@@ -694,6 +714,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c16c executer-script-temporaire (usage reel entonnoir, garde-fou test-035)",
   "nom": "parcours-morpheus",
-  "version": "0.4.15"
+  "version": "0.5.0"
  }
 }

@@ -98,7 +98,13 @@
    ],
    "question": "Quelle est la mission de controle ?",
    "titre": "Mission",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : demande hors des branches (outil/statut/modification/sante/trio) -> reponse autre -> c27. JAMAIS improviser, JAMAIS outil hors carte."
+    }
+   ]
   },
   "c10": {
    "indices": [
@@ -404,6 +410,16 @@
      "vers": "c31"
     }
    ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REDIRECTION OUTIL BLOQUE : si le verrou bloque un outil tente (message BLOQUE), la demande concerne un autre agent -> OUI -> c28 (activer l agent habilite). JAMAIS re-tenter, JAMAIS s arreter."
+    },
+    {
+     "type": "regle",
+     "texte": "DOMAINES DES AUTRES AGENTS : inventaire -> Atlas, contenu/cartes -> Buffy, outil -> Vulcain, tests -> Morpheus, suppression -> Hygie, education -> Chiron."
+    }
+   ],
    "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
    "titre": "Mission hors parcours",
    "type": "question"
@@ -424,6 +440,10 @@
     {
      "texte": "PATTERN 13 : ne JAMAIS demander 'reactiver Cerberus' dans une mission - l'agent suit SA carte pour sa fin.",
      "type": "regle"
+    },
+    {
+     "type": "regle",
+     "texte": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
     }
    ],
    "suivant": "c30",
@@ -992,6 +1012,6 @@
   "case_depart": "c0",
   "description": "v0.4.8 : + indice outil c4 tester-protections (usage reel controle, garde-fou test-035)",
   "nom": "parcours-janus",
-  "version": "0.4.20"
+  "version": "0.5.0"
  }
 }

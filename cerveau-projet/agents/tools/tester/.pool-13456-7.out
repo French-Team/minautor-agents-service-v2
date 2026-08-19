@@ -1,0 +1,25 @@
+  [OK] 1. executer-script-temporaire au catalogue (155)
+  [OK] 2. index-tools : categorie Executer + outil
+  [OK] 3. protocole-creation-scripts-temporaires : entonnoir impose
+  [OK] 4. script sain : CONFORME + execute, 0 modification
+  [OK] 5. script corrompu : normalise + execute + fichier conforme
+[PROTECTIONS] Attention: mot-cle 'error' dans stdout (code 1)
+  [OK] 6. erreur de syntaxe : CONTROLE KO, execution bloquee
+  [OK] 7. --dry-run : aucun ecriture ni execution
+  [OK] 8. --version
+  [OK] 8b. chrono affiche PAR DEFAUT en PREMIERE ligne (sortie piped)
+  [OK] 9. preuve negative : direct laisse la non-conformite, entonnoir corrige
+  [OK] 9b. script SANS triplet -> entonnoir signale [TRIPLET] WARNING
+[PROTECTIONS] Attention: erreurs dans stderr (code 1):
+  Traceback (most recent call last):
+    File "Z:\analyste-in-console\tmp-test049-m_16uxd9\avec-triplet.py", line 5, in <module>
+      parser.add_argument("--dry-run")  # protection
+      ^^^^^^
+  NameError: name 'parser' is not defined
+  [OK]    script AVEC triplet -> aucun warning
+  [OK] 10. ASCII strict : 0 non-ASCII (outil + test + protocole)
+  [OK] 11. LF pur : 0 CRLF (outil + test + protocole)
+
+
+=== CHRONO test (total 4.0s) ===
+=== RESULTAT : 14 OK / 0 KO (sur 14 points) ===

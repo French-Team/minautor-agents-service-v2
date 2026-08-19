@@ -177,14 +177,41 @@ def main():
             except (ValueError, IOError) as e:
                 violateurs.append("%s (json: %s)" % (nom, e))
                 continue
-            croises = [o for o in OUTILS_EXCLUSIFS if o in noms]
-            if croises:
-                violateurs.append("%s: %s" % (nom, croises))
-            # verifier aussi que le texte des cases ne mentionne pas ces outils
+            # EXCEPTION PILOTE (v0.2.3, regle utilisateur 2026-08-18) : chiron
+            # est autorise a posseder editer-parcours (cle par cible : SA carte
+            # uniquement, verifiee par proteger-verrou-habilitation). Les
+            # indices OUTIL des autres cartes restent interdits.
+            if nom == "chiron":
+                croises = [o for o in OUTILS_EXCLUSIFS
+                           if o in noms and o != "editer-parcours"]
+                if croises:
+                    violateurs.append("%s: %s" % (nom, croises))
+            else:
+                croises = [o for o in OUTILS_EXCLUSIFS if o in noms]
+                if croises:
+                    violateurs.append("%s: %s" % (nom, croises))
+            # verifier aussi que le texte des cases ne DECLARE PAS ces outils
+            # comme outils de l agent. Les MENTIONS PEDAGOGIQUES (indices
+            # AGENTS HABILITES : "Buffy cartes/parcours (editer-parcours)")
+            # decrivent le domaine de BUFFY, pas une usurpation : elles ne
+            # sont pas des indices OUTIL et ne donnent aucune habilitation
+            # (le verrou lit les indices OUTIL, pas le texte).
             texte = lire(parcours)
             for o in OUTILS_EXCLUSIFS:
-                if o in texte:
-                    violateurs.append("%s: mention %s dans le texte" % (nom, o))
+                # EXCEPTION PILOTE (v0.2.4) : la boucle TEXTE doit refleter la
+                # meme exception que les indices OUTIL ci-dessus. Pour chiron,
+                # editer-parcours est LEGITIME (cle par cible : SA carte
+                # uniquement, verifiee par proteger-verrou-habilitation). Sans
+                # cette exception, l indice OUTIL de sa carte d auto-correction
+                # (c16) declencherait un faux positif "declaration".
+                if nom == "chiron" and o == "editer-parcours":
+                    continue
+                # une vraie usurpation = l outil declare comme outil de
+                # l agent dans un indice de type outil (deja couvert par
+                # outils_parcours). Les mentions dans les textes de regles
+                # (AGENTS HABILITES, redirections) sont documentaires.
+                if o in texte and o in noms:
+                    violateurs.append("%s: declaration %s" % (nom, o))
         verifier("2. AUCUNE autre carte ne possede editer-parcours/editer-fichier-agents",
                  not violateurs, "; ".join(violateurs))
         chrono_etape("2. autres cartes", t)
@@ -205,6 +232,16 @@ def main():
                 outil = e.get("outil", "")
                 agent = e.get("agent", "")
                 for o in OUTILS_EXCLUSIFS:
+                    # EXCEPTION PILOTE (v0.2.5) : la boucle REGISTRE doit
+                    # refleter la meme exception que les indices OUTIL et la
+                    # boucle TEXTE (v0.2.3/v0.2.4). Chiron est autorise a
+                    # utiliser editer-parcours sur SA carte uniquement (cle
+                    # par cible, verifiee par proteger-verrou-habilitation) :
+                    # ses declarations au registre sont LEGITIMES (cycle
+                    # d auto-correction pilote, c16). Sans cette exception,
+                    # le cycle reel trace des faux positifs.
+                    if agent.lower() == "chiron" and o == "editer-parcours":
+                        continue
                     if o in outil and agent.lower() != "buffy":
                         declarations.append("%s/%s (%s)" % (agent, outil, e.get("date", "")))
         verifier("2b. registre : aucune declaration editer-parcours/editer-fichier-agents non-buffy",

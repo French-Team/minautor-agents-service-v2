@@ -375,4 +375,4 @@ La methode fiable, eprouvee sur des dizaines de missions :
 - [detecter-usage-scripts-temporaires](../../../tools/detecter/detecter-usage-scripts-temporaires/detecter-usage-scripts-temporaires.md)
 - [tester-lancer-non-regression](../../../tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.md)
 - [test-024-scripts-temporaires](../../../tools/tester/tests/test-024-scripts-temporaires/test-024-scripts-temporaires.py)
-- [index-regles-general](index-regles-general.md)
+- [index-regles-general](../index-regles-general.md)

@@ -4419,32 +4419,152 @@ avec l empreinte normalisee d editer-parcours).
 editer-parcours doit resynchroniser cartes-lock.json (empreinte normalisee
 LF + rstrip), sinon les ecritures ulterieures de la carte sont bloquees par
 l anti-contournement (regle SEUL BUFFY). Modele : proteger-modifier-marbre.
-LEÇON VULCAIN -- PARITE SH COMPLETE (test-092)
+LECON VULCAIN -- PARITE SH COMPLETE (test-092)
 
 Date : 2026-08-18
-Contexte : correction signalée par Morpheus (garde-fou test-092) : le .sh
+Contexte : correction signalee par Morpheus (garde-fou test-092) : le .sh
 d'activer-agent-principal manquait argus et gardien dans les 3 case statements
 (role, fiche, corrections) - signalement Janus de la mission branchement-chiron
-jamais corrigé (seul hermes avait été ajouté v0.5.12).
+jamais corrige (seul hermes avait ete ajoute v0.5.12).
 
-Leçons :
-1. Le 3e oubli de branchement est évité : le garde-fou de parité (test-092)
-   compare désormais py / sh / AGENTS.md dans les deux sens + preuve négative.
-   Tout nouvel agent DOIT être ajouté aux 3 sources (py, sh, AGENTS.md) -
-   le test détecte tout écart automatiquement.
+Lecons :
+1. Le 3e oubli de branchement est evite : le garde-fou de parite (test-092)
+   compare desormais py / sh / AGENTS.md dans les deux sens + preuve negative.
+   Tout nouvel agent DOIT etre ajoute aux 3 sources (py, sh, AGENTS.md) -
+   le test detecte tout ecart automatiquement.
 2. Bump manuel vs bumper : le bumper (mettre-a-jour-versions) refusait le bump
-   du dossier activer-agent-principal à cause d'un faux positif : le fichier
+   du dossier activer-agent-principal a cause d'un faux positif : le fichier
    activer-agent-principal-test.md (rapport de test historique) porte une
    version 0.2.0 dans un tableau "Tests v0.2.0 (historique)" - fichier
-   documentaire, pas une source de vérité. Le bump a donc été fait manuellement
-   (py, sh, md, spec) + entrée au tableau versionning. L'audit --tous du bumper
-   confirme la cohérence (0 incohérent).
+   documentaire, pas une source de verite. Le bump a donc ete fait manuellement
+   (py, sh, md, spec) + entree au tableau versionning. L'audit --tous du bumper
+   confirme la coherence (0 incoherent).
 3. Ordre d'insertion dans le .sh : suivre l'ordre du .py (dictionnaire AGENTS) :
-   hermes (12), gardien (13), argus (14), chiron (15) - insérer gardien+argus
-   entre hermes et chiron pour garder la parité de style.
-4. Les .pyc trackés sont modifiés par les tests d'import : les restaurer via
-   git checkout avant de conclure (artefact, pas une régression).
+   hermes (12), gardien (13), argus (14), chiron (15) - inserer gardien+argus
+   entre hermes et chiron pour garder la parite de style.
+4. Les .pyc trackes sont modifies par les tests d'import : les restaurer via
+   git checkout avant de conclure (artefact, pas une regression).
 
-Verdict : test-092 9/9 OK (détectait exactement le vrai écart avant correction),
-tests liés 10/10 OK (test-002, 018, 021, 025, 028, 039, 040, 041, 052, 057),
-bumper --tous 0 incohérent, normes ASCII/LF OK.
+Verdict : test-092 9/9 OK (detectait exactement le vrai ecart avant correction),
+tests lies 10/10 OK (test-002, 018, 021, 025, 028, 039, 040, 041, 052, 057),
+bumper --tous 0 incoherent, normes ASCII/LF OK.
+## [LECON] 2026-08-18 -- VERROU : CLE EXCLUSIVE PILOTE CHIRON (Vulcain)
+
+**Mission** : adapter le verrou d'habilitation (proteger-verrou-habilitation)
+pour la cle exclusive par cible : chiron -> editer-parcours sur SA carte
+UNIQUEMENT (parcours-chiron.json), comme la cle exclusive tests pour morpheus
+(GARDIEN_TESTS). Prealable : exception pilote chiron gravee dans
+regles-groupes-agents.md (Gardien, decision utilisateur).
+
+**Corrections appliquees** :
+1. proteger-verrou-habilitation.py v0.2.2 -> v0.4.0 : constante
+   CARTE_CHIRON = "parcours-chiron.json" + PILOTE_AUTO_CORRECTION =
+   {"chiron"} + logique dans verdict() : chiron + editer-parcours + cible =
+   SA carte -> OK ; chiron + editer-parcours + autre cible -> BLOQUE (les
+   autres cartes restent exclusives a buffy).
+2. editer-parcours.py v0.1.6 -> v0.1.7 : verrouiller_habilitation() accepte
+   une CIBLE (chemin) et la transmet au verrou (--cible) ; l'appel passe
+   `chemin`.
+
+**Verifications** :
+- Tests manuels : chiron sur SA carte -> OK (cle pilote) ; chiron sur
+  parcours-buffy -> BLOQUE ; buffy sur chiron -> OK (table).
+- test-037 6/6, test-057 24/24, bumper --tous 0/0.
+- KO attendus : test-056 (pin version verrou 0.2.2 -> 0.4.0, adaptation
+  Morpheus) ; test-058 (mention "editer-parcours" dans les indices AGENTS
+  HABILITES des cartes + exception chiron a adapter, Buffy + Morpheus).
+
+**Lecons** :
+1. Le bumper a bumpe 0.2.2 -> 0.3.0 puis 0.3.0 -> 0.4.0 (2 lancages --wet) :
+   verifier la version finale avant de conclure. Le bump manuel
+   d'editer-parcours (faux positif : "0.1.0" = version du manifeste
+   cartes-lock) exige de couvrir py (constante + en-tete) + md (tableau
+   versionning) - le bumper detecte l'incoherence si l'en-tete py reste
+   obsolete.
+2. Une cle exclusive PAR CIBLE se cale sur la cible transmise par l'outil
+   appelant : sans transmission de la cible, le verrou ne peut pas
+   distinguer SA carte des autres. editer-parcours doit donc passer le
+   chemin (--cible).
+3. L'exception chiron est strictement limitee a SA carte : c'est le garde-fou
+   qui preserve la regle SEUL BUFFY pour toutes les autres cartes.
+
+**Verdict** : VALIDE - verrou adapte, tests manuels OK, bumper 0/0 (hors
+pins test-056 et test-058 documentes).
+
+---
+
+**Lecon** (2026-08-18) : correction faux positif valider-tableaux + bug stdin Windows .sh
+
+**Contexte** : valider-tableaux signalait `classeur-variables` comme un agent
+manquant dans le tableau "Agents disponibles" de cerberus.md. Ce dossier est un
+CLASSEUR de donnees (`type: classeur`), pas une fiche agent.
+
+**Correctif applique** :
+1. Filtre `type: fiche-agent` dans `verifier_liste_agents` (frontmatter) :
+   seuls les vrais agents sont compares au tableau. Faux positif corrige.
+2. Le .sh etait CASSE a HEAD (bug preexistant 0.2.0) : la ligne
+   `# -*- coding: ascii -*-` en 1re ligne du heredoc + `python3 -` (stdin)
+   sur Windows corrompait silencieusement l'interpretation du code
+   (IndentationError a une ligne du milieu, code pourtant identique via
+   fichier). Correction : .sh transforme en WRAPPER PUR
+   (`exec python3 "$SCRIPT_DIR/valider-tableaux.py" "$@"`), le pattern
+   moderne des outils (valider-case, analyser-noms-maj) - parite garantie
+   par construction, heredoc elimine.
+
+**Lecons** :
+1. Un outil .sh qui embarque un heredoc python est fragile sous Windows
+   (stdin) : preferer le wrapper pur -> .py. Tester TOUJOURS le .sh en
+   conditions reelles (bash), pas seulement le .py.
+2. Quand un outil signale un "faux positif", verifier le critere de
+   detection : ici il detectait TOUT dossier avec un `<nom>.md`, il doit
+   detecter les fiches par leur frontmatter (`type: fiche-agent`), le meme
+   pattern que les autres outils du projet.
+3. Verifier si le .sh etait deja casse a HEAD (git show HEAD:...) avant de
+   conclure qu'on l'a casse : le bug stdin etait preexistant.
+4. Apres modification d'outil : tester le .py ET le .sh, verifier ASCII/LF,
+   conventions, bumper (versions coherentes), evaluer-coherence (0 lien
+   nouveau).
+
+**Verdict** : CONFORME - valider-tableaux 23/23 (classeur-variables exclu),
+.sh wrapper fonctionnel, .py/.sh/.md coherents en 0.2.1(-py).
+
+- **2026-08-19 (test-079 registre)** : le champ outil du registre doit etre un nom CANONIQUE du catalogue (kebab-case, dossier reel). 32 entrees de session avaient des noms de convenance (tester, mettre-a-jour-parcours, verifier-marbre, evaluer-liens-rompus, test-094-valider-tableaux-fiche-agent, str_replace) -> OUTIL_ORPHELIN/OUTIL_CASSE. Correspondances : tester -> tester-lancer-non-regression, mettre-a-jour-bumper/parcours -> mettre-a-jour-versions, verifier-marbre -> proteger-verrou-marbre, evaluer-liens-rompus -> evaluer-coherence, creation test -> creer-fichier, str_replace -> editer-fichier. Apres : analyser --zone registre PROPRE, test-079 15/15.
+
+- **2026-08-19 (test-058 artefacts verrou)** : ajouter TEMPORAIREMENT un indice outil exclusif (editer-parcours) dans une carte non-buffy fait journaliser par le verrou des entrees verrou-auto FAUSSES ('usage autorise') si un test (test-057) appelle cet outil pendant la fenetre. 4 artefacts janus/editer-parcours retires du registre. Lecon : ne JAMAIS ajouter d'indice OUTIL d'outil exclusif hors buffy/chiron (test-058) ; pour couvrir une mention dans une regle (test-055), reformuler le TEXTE de la regle sans nommer l'outil.
+
+---
+
+## 2026-08-19 - Ajout protocole-X aux MOTIFS_GENERIQUES (mission liens casses)
+
+**Action** : modifie evaluer-coherence 0.2.4 -> 0.2.5-py : ajout de
+`protocole-X` aux MOTIFS_GENERIQUES. Les references [protocole-X/](protocole-X/)
+dans les lecons (buffy/janus corrections.md) sont des exemples de format
+(placeholder documentaire), pas des liens reels. Resultat : evaluer-coherence
+passe de 5 a 0 lien casse, test-001 10/10.
+
+**Lecon** : quand un motif generique contient un tiret suivi d'une lettre
+(protocole-X), il ne matche PAS les vrais noms (protocole-activation/,
+protocole-nettoyage/) car `X` n'est pas dans l'alphabet des noms reels.
+L'ajout est donc sans risque de faux negatif. Verification par greffe : un
+vrai lien vers un dossier protocole-XXX existant n'est jamais masque.
+
+---
+
+## 2026-08-19 - Defaut test-035 : OUTILS_P0_PARTAGES non inclus dans autorises
+
+**Action** : corrige evaluer-processus 0.1.5 -> 0.1.6. Deux bugs lies :
+(1) OUTILS_P0_PARTAGES (guider-parcours, lire-activite-recente) n etait
+utilise que pour le calcul d exclusivite, PAS dans les outils autorises de
+detecter_outils_hors_carte - un outil partage declare au registre etait
+signale OUTIL_HORS_CARTE a tort ; (2) evaluer-coherence (outil partage de
+diagnostic, fiche 'Proprietaire : Themis (outil partage)') absent de la
+liste. Correctif : autorises = outils_carte | outils_p0 | OUTILS_P0_PARTAGES
++ ajout de evaluer-coherence a OUTILS_P0_PARTAGES. test-035 10/10.
+
+**Lecon** : une liste blanche a DOUBLE USAGE (exclusivite + autorises) doit
+etre verifiee dans LES DEUX branches. OUTILS_P0_PARTAGES servait a exclure
+des exclusivites mais n etait pas consulte pour autoriser les usages : le
+KO latent test-035 (le test n avait pas tourne le 18) n est apparu que quand
+les usages evaluer-coherence du jour sont entres dans la fenetre de 1 jour.
+Lecon croisee avec la mission liens casses : un outil partage utilise par
+tous les agents en mission doit etre dans OUTILS_P0_PARTAGES.

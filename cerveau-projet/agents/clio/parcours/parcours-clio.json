@@ -106,7 +106,13 @@
    ],
    "question": "Quelle est la mission ?",
    "titre": "Mission",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : demande hors des branches (corriger/verifier/readme-dev) -> reponse autre -> c13. JAMAIS improviser, JAMAIS outil hors carte."
+    }
+   ]
   },
   "c10": {
    "indices": [
@@ -310,7 +316,17 @@
    ],
    "question": "La mission concerne-t-elle un domaine d'un autre agent ?",
    "titre": "Mission hors parcours",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REDIRECTION OUTIL BLOQUE : si le verrou bloque un outil, la mission concerne un autre agent -> activer l agent habilite. JAMAIS re-tenter."
+    },
+    {
+     "type": "regle",
+     "texte": "DOMAINES AUTRES AGENTS : inventaire -> Atlas, contenu/cartes -> Buffy, outil -> Vulcain, tests -> Morpheus, suppression -> Hygie, education -> Chiron."
+    }
+   ]
   },
   "c14": {
    "indices": [
@@ -324,6 +340,10 @@
      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
+    },
+    {
+     "type": "regle",
+     "texte": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
     }
    ],
    "suivant": "c16",
@@ -691,6 +711,6 @@
   "case_depart": "c0",
   "description": "v0.5.6 : + indice outil c20 valider-conformite-ascii (coherence regle/indice outil, garde-fou test-055)",
   "nom": "parcours-clio",
-  "version": "0.5.13"
+  "version": "0.6.0"
  }
 }

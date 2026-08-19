@@ -8,6 +8,9 @@ Corrections testees:
   1. evaluer-agents exclut __pycache__ des outils manquants
   2. evaluer-coherence utilise le projet root pour cible_racine
   3. evaluer-coherence exclut les commandes systeme (cat, grep, sed, basher)
+  4. GARDE-FOU 0 LIEN CASSE : l evaluateur doit etre PROPRE dans toute la
+     non-regression (mission 2026-08-19 : 15 liens corriges, motif
+     protocole-X ajoute aux MOTIFS_GENERIQUES)
 
 Contexte : ce test a ete migre au format template-test.md v0.2.0 (audit
 Morpheus 2026-08-12 : le TEMPLATE est la reference, pas les tests precedents).
@@ -168,14 +171,28 @@ def main():
     verifier("8. evaluer-coherence execute sans crash", r2.returncode == 0,
              "rc=%d" % r2.returncode)
 
-    # 9-10. Normes ASCII strict + LF pur sur les fichiers concernes
+    # 9. GARDE-FOU 0 LIEN CASSE : l evaluateur doit etre PROPRE (0 lien
+    #    casse) dans toute la non-regression. Appel direct a la fonction
+    #    lister_liens_casses (plus fiable que la sortie qui tronque a 5).
+    CERVEAU_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet")
+    ec_spec = importlib.util.spec_from_file_location(
+        "evaluer_coherence_mod", EVALUER_COHERENCE_PY)
+    ec_mod = importlib.util.module_from_spec(ec_spec)
+    ec_spec.loader.exec_module(ec_mod)
+    liens_casses = ec_mod.lister_liens_casses(CERVEAU_DIR, PROJECT_ROOT)
+    detail_liens = "; ".join("%s -> %s" % (os.path.basename(f), c)
+                              for f, c in liens_casses[:5])
+    verifier("9. GARDE-FOU : 0 lien casse dans tout le projet",
+             len(liens_casses) == 0, "encore=%d %s" % (len(liens_casses), detail_liens))
+
+    # 10-11. Normes ASCII strict + LF pur sur les fichiers concernes
     fichiers = [EVALUER_AGENTS_PY, EVALUER_COHERENCE_PY,
                 os.path.abspath(__file__)]
     total_non_ascii = sum(ascii_count(f) for f in fichiers)
-    verifier("9. ASCII strict : 0 non-ASCII (outils + test)",
+    verifier("10. ASCII strict : 0 non-ASCII (outils + test)",
              total_non_ascii == 0, "total=%d" % total_non_ascii)
     total_crlf = sum(crlf_count(f) for f in fichiers)
-    verifier("10. LF pur : 0 CRLF (outils + test)",
+    verifier("11. LF pur : 0 CRLF (outils + test)",
              total_crlf == 0, "total=%d" % total_crlf)
 
     print("")

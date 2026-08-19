@@ -1,0 +1,25 @@
+=== Garde-fou : serie KO prioritaire du lanceur (v0.6.2) ===
+  [OK] 1. --aide contient --ko et --etat-ko
+  [OK] 1b. --aide : BALAYAGE COMPLET + CONTROLE TERMINE (plus de validation finale requise)
+  [OK] 2. --version = v0.6.2
+  [OK] 3. lire_ko_tests sur fichier absent -> []
+  [OK] 4. ecrire filtre test-0XX + dedoublonnage + tri
+  [OK] 5. fichier cree avec la cle ko
+  [OK] 6. mode nouveau vide le fichier
+  [OK] 7. PREUVE NEGATIVE : fantome purge par --ko reprendre
+  [OK] 8. le fichier KO est consomme par --ko reprendre (test reel et fantome sortis)
+  [OK] 9. normes ASCII + LF (test + lanceur)
+  [OK] 10. dossier temp supprime (0 trace)
+
+
+=== CHRONO test-081 (total 3.0s) ===
+  [chrono] 1. --aide                           0.17s
+  [chrono] 1b. --aide cycle                    0.00s
+  [chrono] 2. --version                        0.18s
+  [chrono] 3. lire absent                      0.03s
+  [chrono] 4. filtre                           0.00s
+  [chrono] 5. fichier cree                     0.00s
+  [chrono] 6. reset                            0.00s
+  [chrono] 7+8. preuve negative                2.60s
+  [chrono] 9. normes                           0.00s
+=== RESULTAT : 11 OK / 0 KO (sur 11 points) ===

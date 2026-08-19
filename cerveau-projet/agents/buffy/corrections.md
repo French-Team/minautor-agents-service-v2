@@ -4121,3 +4121,198 @@ TABLEAU (backticks), pas en prose : l evaluateur ne reconnait les P0
 partages (guider-parcours, lire-activite-recente) que s ils sont
 extraits d une table. Modele : morpheus.md. Verifier avec
 evaluer-processus apres toute modification de fiche.
+## [LECON] 2026-08-18 -- RE-EDUCATION CARTE JANUS v0.5.0 (Buffy)
+
+**Contexte** : signalement Themis (audit A REVOIR) + Chiron (education
+A REVOIR) : la carte Janus v0.4.20 etait structurellement saine mais
+pedagogiquement en retard - c1 sans indice GARDE-FOU C1, aucune redirection
+outil bloque, c28 sans indice AGENTS HABILITES. Janus n avait JAMAIS ete
+re-eduque.
+
+**Corrections appliquees** (editer-parcours via str_replace) :
+1. c1 : indice GARDE-FOU C1 (classification, modele cerberus/themis) - demande
+   hors branches -> autre -> c27.
+2. c27 : indices REDIRECTION OUTIL BLOQUE (verrou bloque -> OUI -> c28) +
+   DOMAINES DES AUTRES AGENTS (Atlas/Buffy/Vulcain/Morpheus/Hygie/Chiron).
+3. c28 : indice AGENTS HABILITES (Buffy cartes/parcours, Vulcain outils,
+   Morpheus tests, Hygie suppression, Chiron education).
+4. Bump carte 0.4.20 -> 0.5.0 (--mineure --wet via bumper) + sync fiche
+   (PARCOURS v0.5.0) + resync cartes-lock automatique (v0.1.5 du bumper).
+
+**Validation** : valider-cartes-decision janus CONFORME (10/10), bumper --tous
+0/0, test-021 9/9, test-037 6/6, ASCII 0, LF 0, lock MATCH.
+
+**Lecons** :
+1. La re-education d une carte = AJOUT d indices (jamais de changement de
+   structure) : le risque de regression est minimal, mais le bump de version
+   (--mineure) reste obligatoire + sync fiche (Pattern 14) + resync lock.
+2. Les compagnons du bumper (rapports d audit, BDD lecons) qui referencent
+   l ANCIENNE version sont des MENTIONS HISTORIQUES (version auditee) : ne
+   PAS les adapter (comme corrections.md), le verdict du bumper est KO par
+   design mais les mentions d epoque doivent rester.
+3. Le modele de conformite pedagogique (re-education Themis v0.4.10) est
+   maintenant applique a Janus v0.5.0 : toute carte d agent principal doit
+   avoir (a) GARDE-FOU C1 en c1, (b) redirection outil bloque, (c) AGENTS
+   HABILITES.
+
+**Verdict** : VALIDE - carte re-eduquee, tests verts.
+## [LECON] 2026-08-18 -- RE-EDUCATION CARTES VULCAIN/MORPHEUS/BUFFY v0.5.0 (Buffy)
+
+**Contexte** : signalement Themis (audit A REVOIR) + Chiron (education
+A REVOIR) + Janus (controle) : les cartes de Vulcain (0.4.28), Morpheus
+(0.4.15) et Buffy (0.4.14) etaient structurellement saines mais
+pedagogiquement en retard - c1 sans GARDE-FOU C1, pas de redirection outil
+bloque, pas d AGENTS HABILITES.
+
+**Corrections appliquees** (3 cartes, modele Themis v0.4.10 / Janus v0.5.0) :
+1. c1 : indice GARDE-FOU C1 (classification, avec les branches exactes de
+   chaque carte et la case cible "autre").
+2. Case "hors parcours" (vulcain c16, morpheus c13, buffy c33) : indices
+   REDIRECTION OUTIL BLOQUE + DOMAINES AUTRES AGENTS.
+3. Case "Activer l agent habilite" (vulcain c17, morpheus c15, buffy c34) :
+   indice AGENTS HABILITES.
+4. Bump --mineure --wet (0.4.x -> 0.5.0 pour les 3) + sync fiche + resync
+   lock (v0.1.5 du bumper).
+
+**Lecons** :
+1. LIMITE DE LONGUEUR DES INDICES : les textes regle doivent rester < 160
+   caracteres (test-016 point 9, valider-case). Mes premiers textes (208, 173
+   caracteres) ont casse test-016 - raccourcir (modele : 115-140 caracteres).
+2. La resync lock apres re-ecriture : j ai modifie les textes APRES le bump
+   (raccourcissement) -> les 3 locks sont devenus DIFF -> resynchroniser avec
+   resynchroniser_cartes_lock du bumper AVANT la non-regression.
+3. KO attendus : test-016 point 1 (pin version 0.4.14 -> 0.5.0, adaptation
+   Morpheus) et test-057 points 12/13 (verrou SEUL BUFFY, artefact de session
+   car je suis Buffy - reverdit sous Janus). Verifier les KO sous la session
+   appropriee avant de conclure.
+4. Le modele pedagogique est desormais applique aux 6 cartes principales :
+   cerberus, themis, janus (deja conformes) + vulcain, morpheus, buffy
+   (re-eduquees v0.5.0).
+
+**Verdict** : VALIDE - 3 cartes re-eduquees, tests verts (hors pins et
+artefacts de session documentes).
+## [LECON] 2026-08-18 -- RE-EDUCATION 10 CARTES SECONDAIRES v0.5.0 (Buffy)
+
+**Contexte** : signalement Themis (audit A REVOIR) + Chiron (education
+A REVOIR) + Janus (controle) : les 10 cartes secondaires (atlas, argus,
+hygie, clio, hermes, gardien, chiron, athena, promethee, minerve) etaient
+structurellement saines mais pedagogiquement en retard - c1 sans GARDE-FOU C1,
+pas de redirection outil bloque, pas d AGENTS HABILITES. Aucun n avait ete
+eduque.
+
+**Corrections appliquees** (10 cartes, modele Janus v0.5.0) :
+1. c1 : indice GARDE-FOU C1 (branches exactes de chaque carte + case cible
+   "autre" : c26/c29/c13/c18).
+2. Case "hors parcours" : indices REDIRECTION OUTIL BLOQUE + DOMAINES AUTRES
+   AGENTS.
+3. Case "Activer l agent habilite" : indice AGENTS HABILITES.
+4. Chiron = CAS PARTICULIER : c1 est une ACTION (mission unique) -> pas de
+   GARDE-FOU C1 classique ; ajout AGENTS HABILITES dans c10 (redirection).
+5. Bump --mineure --wet pour les 10 (atlas 0.4.9->0.5.0, argus 0.1.12->0.2.0,
+   hygie 0.1.8->0.2.0, clio 0.5.13->0.6.0, hermes 0.1.5->0.2.0, gardien
+   0.1.3->0.2.0, chiron 0.1.2->0.2.0, athena 0.3.6->0.4.0, promethee
+   0.3.7->0.4.0, minerve 0.3.7->0.4.0) + sync fiche + resync lock auto.
+
+**Lecons** :
+1. Le modele pedagogique s applique AUSSI aux cartes secondaires, avec
+   ADAPTATION : les agents a mission unique (chiron, c1 action) n ont pas
+   besoin du GARDE-FOU C1 classique mais doivent avoir la redirection et la
+   liste AGENTS HABILITES. Le test pedagogique : "que fait la carte si le
+   verrou bloque un outil ? si la mission est hors perimetre ?"
+2. Textes regle < 160 caracteres ET budget pondere des indices <= 3,0 par
+   case (test-016) : verifier les deux AVANT d ecrire (mes textes cibles
+   etaient 158-155-150-128, budgets finaux 1.0-2.0-2.5 <= 3.0).
+3. KO attendu : test-005 point 17 (pin version atlas 0.4.9 -> 0.5.0) ->
+   adaptation Morpheus. test-057 artefact de session buffy. Verifier les KO
+   sous la session appropriee.
+
+**Verdict** : VALIDE - 10 cartes re-eduquees, tests verts (hors pins).
+
+## [LECON] 2026-08-18 -- PARCOURS AUTO-CORRECTION CHIRON (Buffy)
+
+**Mission** : construire le parcours d'auto-correction dans la carte de Chiron (pilote unique, decision utilisateur) : se re-eduquer, corriger SA carte, activer Themis pour verification, reprendre.
+
+**Implementation** (parcours-chiron.json v0.2.0 -> 0.3.0) :
+- c11 : suivant c12 -> c11b (question d'aiguillage)
+- c11b : question "les incoherences concernent-elles MA carte ?" (OUI -> c15, NON -> c12)
+- c15 : se re-eduquer (relire MA carte, documenter lecon corrections.md + BDD)
+- c16 : corriger MA carte via editer-parcours (indice OUTIL editer-parcours : autorise par l'exception pilote test-058 v0.2.3)
+- c17 : activer Themis (verification croisee, elle me REACTIVE via c25b)
+- c18 : question reprise (OUI -> c12, NON -> c18 attente / c15 si A REVOIR)
+- Verifie : valider-cartes CONFORME, fiche sync v0.3.0, lock MATCH, budgets <= 3.0, textes < 160, navigation guider OK sur les 2 branches.
+
+**Lecons** :
+1. UNE EXCEPTION D OUTIL DANS UNE CARTE DOIT COUVRIR LES 2 NIVEAUX DU GARDE-FOU : l'exception chiron de test-058 v0.2.3 couvre les indices OUTIL mais PAS la boucle texte ("if o in texte and o in noms"). L'indice c16 editer-parcours est dans le texte ET dans les noms -> KO point 2. L'adaptation du test doit etre coherente sur TOUTES les boucles.
+2. LE PILOTE AUTO-CORRECTION EST UN CYCLE COMPLET DANS LA CARTE : detecter (c11b) -> se re-eduquer (c15) -> corriger SA carte (c16) -> verifier par Themis (c17) -> reprendre (c18). La reprise doit etre une QUESTION d'attente (pattern Buffy c8b), pas un suivant lineaire.
+3. LE VERROU EST LE VRAI GARDE-FOU, LE TEST N EST QUE LE REFLET : le verrou bloque chiron sur toute cible != parcours-chiron.json (teste manuellement). L'indice editer-parcours dans SA carte est legitime ; le test doit le refleter sans faux positif.
+4. LE BUMP PARCOURS SE FAIT AVEC --parcours <nom> (pas un chemin). Le bumper sync la fiche + le lock automatiquement.
+
+## [LECON] 2026-08-18 -- APPLICATION EDUCATION THEMIS COMBOS ASCII (Buffy)
+
+**Mission** : appliquer les corrections de carte de Themis signalees par Chiron (education aux combos ASCII) : ajouter l'indice OUTIL combos-corriger-non-ascii dans c9 + regle ASCII, mentionner les 2 combos dans la fiche.
+
+**Implementation** (parcours-themis.json 0.4.10 -> 0.5.0, fiche sync, lock MATCH) :
+- c9 : regle ASCII en tete (pattern 2) + indice OUTIL combos-corriger-non-ascii (--full --dry-run).
+- themis.md : table des outils + combo-corriger-ascii + combos-corriger-non-ascii.
+- Verifie : valider-cartes CONFORME, verifier-conformite-fiche CONFORME, test-006 19/19, test-058 6/6, bumper 0/0, evaluateur 15 liens preexistants.
+
+**Lecons** :
+1. EDUQUER UN AGENT = ASSIGNER L OUTIL DANS SA CARTE : Chiron a diagnostique que Themis avait la regle mais AUCUN outil ASCII assigne -> inoperante. La correction efficace : indice OUTIL dans la case d'ecriture (c9), pas seulement une regle generale.
+2. LA CASE D ECRITURE EST LE POINT D INSERTION NATUREL : c9 (ecrire le rapport) est la ou Themis produit de l ASCII -> c est la case a enrichir. Regle ASCII en tete (pattern 2) + outil juste apres.
+3. LE BUMP PARCOURS THEMIS PASSE EN MAJEUR (0.4.10 -> 0.5.0) : le bumper decide, la fiche et le lock suivent.
+4. LES 12 COMPAGNONS DU BUMP SONT DES MENTIONS HISTORIQUES : rapports dates, corrections -> on ne les adapte pas. Seuls le lock et la fiche sont resynchronises automatiquement.
+
+## [LECON] 2026-08-18 -- MISE A JOUR FICHE CHIRON CAPACITE PILOTE (Buffy)
+
+**Mission** : mettre a jour la fiche chiron.md avec la capacite pilote d auto-correction (carte v0.3.0) apres la mission du parcours d auto-correction.
+
+**Verdict** : fiche chiron.md mise a jour : Parcours v0.1.0 (15 cases) -> v0.3.0 (23 cases), liste des cases completee (c0c/c0e/c11b/c15-c18), EXCEPTION PILOTE ajoutee aux regles absolues 1 et 2, cycle pilote CHIRON -> THEMIS -> CHIRON documente, Limites et Faiblesses nuancees. verifier-conformite-fiche CONFORME, lock MATCH, bumper 0/0, test-058 6/6, evaluateur 0 lien chiron.
+
+**Lecons** :
+1. LE BUMPER SYNCHRONISE LA LIGNE PARCOURS, PAS LE RESTE DE LA FICHE : la ligne "REGLE ABSOLUE -- PARCOURS (vX)" est mise a jour par le bumper --parcours, mais la Vue d ensemble (vX, nb cases), la liste des cases, les regles absolues et les limites restent a mettre a jour manuellement par Buffy. La fiche complete = bumper + edition manuelle.
+2. LA FICHE DOIT PORTER LA MEME EXCEPTION QUE LA CARTE : quand un parcours recoit une exception (pilote), la fiche doit la documenter PARTOUT ou la regle inverse apparait (regles absolues, workflow, faiblesses, limites) sinon l agent relit une fiche qui contredit sa carte.
+3. LE COMPTAGE DES CASES SE FAIT SUR LE JSON, PAS SUR LA FICHE : la fiche disait 15 cases mais le parcours en avait deja 18 (c0c/c0e absents de la liste). Toujours compter les cases du JSON (dict cases) et reporter le total exact dans la Vue d ensemble.
+
+## [LECON] 2026-08-18 -- FICHE CHIRON : DOCUMENTER BRANCHE A REVOIR c18 (Buffy)
+
+**Mission** : documenter la nouvelle branche A REVOIR de c18 dans la fiche chiron.md (le cycle pilote a evolue lors de la verification reelle : c18 a maintenant 3 branches).
+
+**Verdict** : fiche mise a jour : Branches de decision ligne c18 = OUI (CONFORME) -> c12, A REVOIR -> c15 (retour corriger), NON (pas revenue) -> c18 (attendre) ; tableau du cycle pilote c18 complete avec les 3 branches. verifier-conformite-fiche CONFORME, valider-cartes CONFORME (point 10), lock MATCH, bumper 0/0, evaluateur 0 lien chiron, ASCII 0.
+
+**Lecons** :
+1. LA FICHE SUIT LE PARCOURS, PAS L INVERSE : quand une case de parcours gagne une branche (c18 : A REVOIR -> c15 lors de la verification reelle), la fiche doit refleter TOUTES les branches dans TOUTES les sections (branches de decision ET tableau du cycle pilote). Une seule mention a jour ne suffit pas.
+2. UNE EVOLUTION DE CARTE ISSUE D UN CYCLE PILOTE DOIT REMONTER DANS LA FICHE : la correction c18 a ete faite par Chiron (verrou pilote) + audit Themis CONFORME, mais la fiche (domaine Buffy) etait restee en retard. La chaine : carte corrigee -> fiche mise a jour par Buffy -> verification par Themis.
+3. LA VERIFICATION DE FICHE APRES MODIFICATION = verifier-conformite-fiche + valider-cartes point 10 (coherence fiche/parcours) + lock MATCH : les 3 gardent la fiche et le parcours coherents.
+
+## [LECON] 2026-08-18 -- TABLEAU AGENTS DISPONIBLES COMPLETE (Buffy)
+
+**Mission** : completer le tableau "Agents disponibles" de cerberus.md (lignes 202-213) qui ne listait que 10 agents (Buffy->Themis) : 5 agents secondaires manquants (Argus, Chiron, Gardien, Hermes, Hygie).
+
+**Verdict** : tableau complete (15 agents) avec les roles exacts de AGENTS.md + "Quand l'activer" depuis les fiches. valider-tableaux : plus que le faux positif classeur-variables (dossier de donnees type classeur, pas un agent). verifier-conformite-fiche CONFORME, bumper 0/0, evaluateur 15 preexistants (0 nouveau), ASCII 0.
+
+**Lecons** :
+1. LE TABLEAU AGENTS DISPONIBLES DE CERBERUS EST LA CARTE D ENTREE DU ROUTEUR : il doit lister TOUS les agents (valider-tableaux verifie la completude vs dossiers agents/*/ contenant une fiche X.md). Un agent oublie = jamais active par Cerberus.
+2. L OUTIL VALIDER-TABLEAUX DETECTE LES CLASSES PAR LEUR FICHIER <dossier>.md : classeur-variables est un dossier de donnees (type: classeur) avec classeur-variables.md -> faux positif de completude (il n a pas de fiche agent). A ne pas ajouter au tableau.
+3. LES ROLES DU TABLEAU VIENNENT DE AGENTS.md + FICHES : le "Quand l'activer" doit etre operationnel (la condition d activation de la carte de l agent), pas un copier-coller du role.
+
+- **2026-08-19 (test-055 : indice editer-parcours)** : toute mention d un outil dans une REGLE doit avoir un indice outil (nom identique, type outil) dans la MEME case. Les cases de delegation (argus c29a, athena c19, atlas c27, clio c14, gardien c29a, hermes c29a, hygie c29a, janus c28, minerve c19, promethee c19) mentionnaient editer-parcours dans la regle 'AGENTS HABILITES' sans indice -> 10 ecarts test-055. Correctif : indice outil editer-parcours ajoute (catalogue/chemin/nom/type). test-055 12/12, test-006 19/19, 10 cartes CONFORMES.
+
+---
+
+## 2026-08-19 - Correction des 10 liens relatifs faux (mission liens casses)
+
+**Action** : corrige 10 liens relatifs faux dans 4 fichiers du cerveau-projet :
+9 dans les ebauches de protocoles (creation-scripts-temporaires, nettoyage,
+verification-coherence) + 1 dans pense-betes/specs/index-spec.md. Les cibles
+existaient toutes : seuls les chemins relatifs etaient faux (../ manquants,
+test-046 renomme en test-046-hermes-fautes, spec refonte deplacee dans
+docs-dev-cerveau-projet/). Resultat : l evaluateur de coherence passe de 15 a
+5 liens (les 5 restants sont des exemples de format [protocole-X/] dans les
+lecons - faux positifs a ignorer dans l outil, volet Vulcain).
+
+**Lecon** : les fichiers .ebauche.md (brouillons de protocoles) contiennent des
+liens relatifs qui cassent quand on deplace/renomme leurs cibles. La regle :
+quand on deplace un fichier cible (spec, test, regle), verifier les liens des
+ebauches qui le referencent - l evaluateur de coherence les detecte mais
+personne ne les corrige tant qu un test n exige pas 0 lien casse. A partir de
+cette mission, test-001 exigera 0 lien casse (renforcement Morpheus).

@@ -1,0 +1,22 @@
+=== GARDE-FOU test-064 : EXCLUSIVITES COHERENCE ===
+[OK] 1. Les 5 outils cles des regles sont dans la carte de leur proprietaire
+[OK] 2. 7 outils cles presents dans la table du verrou avec leur proprietaire
+[OK] 3. Outils exclusifs verrouilles : un non-proprietaire est BLOQUE (15 outils testes)
+[OK] 4. Aucun faux positif : derivation coherente avec TOUTES les cartes (trio inclus)
+[OK] 5. Preuve : cerberus -> editer-fichier-agents (exclusif buffy) BLOQUE
+[OK] 6. ASCII strict : 0 non-ASCII (verrou + evaluer + regles + test)
+[OK] 7. LF pur : 0 CRLF (verrou + evaluer + regles + test)
+
+
+=== CHRONO test-064 (total 2.4s) ===
+  1. outils regles                     0.01s
+  2. table verrou                      0.02s
+  3. verrou exclusifs                  2.00s
+  4. faux positifs                     0.30s
+  5. preuve                            0.10s
+  6. normes                            0.00s
+=== RESULTAT : 7 OK / 0 KO (sur 7 points) ===
+test-064-exclusivites-coherence : 82.5/100 (BIEN)
+
+=== RATING GENERAL (test) : a calculer avec --tous ===
+RATING GENERAL (test) : 86.1/100 (EXCELLENT)

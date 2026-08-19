@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-promethee",
   "agent": "promethee",
-  "version": "0.3.7",
+  "version": "0.4.0",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Promethee : redacteur de specs. 2 missions (creer une spec, completer une spec). A la fin de chaque mission, j'active Minerve pour le todo (FLUX). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
   "version_precedente": "0.3.2"
@@ -79,6 +79,12 @@
     {
      "reponse": "corriger",
      "vers": "c9f"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : demande hors des branches (creer/completer/corriger) -> reponse autre -> c18. JAMAIS improviser, JAMAIS outil hors carte."
     }
    ]
   },
@@ -403,6 +409,16 @@
      "reponse": "audit",
      "vers": "c22"
     }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REDIRECTION OUTIL BLOQUE : si le verrou bloque un outil, la mission concerne un autre agent -> activer l agent habilite. JAMAIS re-tenter."
+    },
+    {
+     "type": "regle",
+     "texte": "DOMAINES AUTRES AGENTS : inventaire -> Atlas, contenu/cartes -> Buffy, outil -> Vulcain, tests -> Morpheus, suppression -> Hygie, education -> Chiron."
+    }
    ]
   },
   "c19": {
@@ -419,6 +435,10 @@
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+    },
+    {
+     "type": "regle",
+     "texte": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
     }
    ],
    "suivant": "c21"

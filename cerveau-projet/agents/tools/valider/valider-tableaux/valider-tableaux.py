@@ -25,7 +25,7 @@ Options :
   --help              Afficher cette aide
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.0-py
+Version : 0.2.1-py
 Statut : prepare
 """
 
@@ -34,7 +34,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.2.1-py"
 STATUT = "prepare"
 
 # Racine du projet : 5 niveaux au-dessus de ce script
@@ -184,14 +184,25 @@ def analyser_liste(listes, agents_dossiers, fichier):
     return erreurs
 
 
+def est_fiche_agent(chemin_fichier):
+    """True si le fichier est une fiche agent (frontmatter type: fiche-agent).
+    Evite les faux positifs : un dossier de donnees (ex: classeur-variables,
+    type: classeur) ne doit pas etre compte comme un agent."""
+    try:
+        c = io.open(chemin_fichier, encoding="utf-8").read(800)
+    except IOError:
+        return False
+    return "type: fiche-agent" in c
+
+
 def verifier_liste_agents(fichier_cerberus):
     erreurs = []
     agents_dossiers = []
     agents_dir = os.path.join(RACINE, "cerveau-projet", "agents")
     if os.path.isdir(agents_dir):
         for d in sorted(os.listdir(agents_dir)):
-            if os.path.isdir(os.path.join(agents_dir, d)) and os.path.exists(
-                    os.path.join(agents_dir, d, d + ".md")):
+            fiche = os.path.join(agents_dir, d, d + ".md")
+            if os.path.isdir(os.path.join(agents_dir, d)) and os.path.exists(fiche) and est_fiche_agent(fiche):
                 agents_dossiers.append(d)
     if not os.path.exists(fichier_cerberus):
         return erreurs

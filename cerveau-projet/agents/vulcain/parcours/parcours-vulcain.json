@@ -102,7 +102,13 @@
    ],
    "question": "Quelle est la mission ?",
    "titre": "Mission",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : demande hors branches (construire/modifier) -> autre -> c16. JAMAIS improviser, JAMAIS outil hors carte."
+    }
+   ]
   },
   "c10": {
    "indices": [
@@ -554,7 +560,17 @@
    ],
    "question": "La mission concerne-t-elle un domaine d'un autre agent (ex: tests -> Morpheus, audit -> Themis, README -> Clio) ?",
    "titre": "Mission hors parcours",
-   "type": "question"
+   "type": "question",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REDIRECTION OUTIL BLOQUE : verrou bloque un outil -> OUI -> c17 (agent habilite). JAMAIS re-tenter, JAMAIS s arreter."
+    },
+    {
+     "type": "regle",
+     "texte": "DOMAINES AUTRES AGENTS : Atlas inventaire, Buffy cartes, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
+    }
+   ]
   },
   "c16b": {
    "indices": [
@@ -601,6 +617,10 @@
     {
      "texte": "REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine. J'active CET agent via Cerberus.",
      "type": "regle"
+    },
+    {
+     "type": "regle",
+     "texte": "AGENTS HABILITES : Buffy cartes, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
     },
     {
      "catalogue": "activer-agent-principal",
@@ -1253,6 +1273,6 @@
   "case_depart": "c0",
   "description": "Carte de decision de Vulcain - constructeur d outils. v0.4.16 : c13 + combos-audit-general, c18c + executer-script-temporaire (mission garantie LF).",
   "nom": "parcours-vulcain",
-  "version": "0.4.28"
+  "version": "0.5.0"
  }
 }

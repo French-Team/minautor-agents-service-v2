@@ -2,7 +2,7 @@
 # combos-corriger-non-ascii.sh
 # Combo corriger-non-ascii : detecte et corrige les accents et emojis
 # Ressource partagee : utilise par Themis, Buffy, ou tout autre agent
-# Version : 0.2.1
+# Version : 0.3.0
 #
 # Chainage :
 #   1. rechercher-accents-sensibles -> detecter les problemes
@@ -14,7 +14,7 @@
 #   appartient_a: commun
 #   commun: true
 
-VERSION="0.2.1"
+VERSION="0.3.0"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -39,6 +39,7 @@ afficher_aide() {
     echo "Options:"
     echo "  --dry-run     Afficher les changements sans les appliquer"
     echo "  --all         Corriger TOUS les accents (y compris texte francais et titres)"
+    echo "  --full        Scanner et corriger TOUT le projet d'un coup (dry obligatoire avant wet)"
     echo "  --rapport     Sauvegarder un rapport dans $TOOLS_DIR/../themis/rapports/"
     echo "  --help        Afficher cette aide"
 }
@@ -46,17 +47,29 @@ afficher_aide() {
 DRY_RUN=false
 SAUVEGARDER=false
 ALL_MODE=false
+FULL_MODE=false
 DOSSIER=""
 
 while [ $# -gt 0 ]; do
     case $1 in
         --dry-run) DRY_RUN=true; shift ;;
         --all) ALL_MODE=true; shift ;;
+        --full) FULL_MODE=true; shift ;;
         --rapport) SAUVEGARDER=true; shift ;;
         --help|-h) afficher_aide; exit 0 ;;
         *) DOSSIER="$1"; shift ;;
     esac
 done
+
+# Mode --full : deleguer au .py (source unique de verite)
+if [ "$FULL_MODE" = true ]; then
+    PY="$SCRIPT_DIR/combos-corriger-non-ascii.py"
+    ARGS=()
+    if [ "$DRY_RUN" = true ]; then
+        ARGS+=(--dry-run)
+    fi
+    exec python3 "$PY" --full "${ARGS[@]}"
+fi
 
 # Defaut : repertoire courant
 DOSSIER="${DOSSIER:-.}"

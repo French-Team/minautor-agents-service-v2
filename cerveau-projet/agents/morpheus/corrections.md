@@ -4251,3 +4251,172 @@ test est KO (7 OK / 2 KO) tant que le .sh n est pas complete.
 
 **Verdict** : test cree et fonctionnel (preuve negative OK). Defaut .sh a
 corriger par Vulcain (agent d origine) avant verdict final.
+## [LECON] 2026-08-18 -- PINS 3 CARTES ADAPTES (test-016, test-004) (Morpheus)
+
+**Mission** : adapter les pins de version apres la re-education des 3 cartes
+(vulcain 0.4.28->0.5.0, morpheus 0.4.15->0.5.0, buffy 0.4.14->0.5.0),
+signalee par Janus (boucle KO c9g).
+
+**Actions** :
+1. test-016 (migration buffy) : pin 0.4.14 -> 0.5.0 (lignes 32, 171-172).
+2. test-004 (combos tester-outil) : pin 0.4.15 -> 0.5.0 (lignes 19, 203).
+3. Verifie : aucun autre pin de ces 3 versions (hors test-021 = mention
+   historique v0.3.6 a preserver).
+
+**Resultats** : test-016 20/20 OK. test-004 15/16 : seul KO = point 8
+(valider-cartes-decision bloque pour morpheus - artefact de verrou classique,
+etait OK sous janus a 17:46, reverdira sous janus).
+
+**Lecons** :
+1. La re-education des cartes (bump --mineure 0.4.x -> 0.5.0) casse les pins
+   de version dans les tests : test-016 (buffy) et test-004 (morpheus). La
+   verification des pins doit couvrir TOUTES les cartes bumpees, pas
+   seulement celle signalee.
+2. test-004 point 8 (valider-cartes-decision) est un artefact de verrou sous
+   morpheus : verifier sous janus avant de conclure (meme pattern que
+   test-005 point 21).
+
+**Verdict** : VALIDE - pins adaptes, tests verts (hors artefact documente).
+## [LECON] 2026-08-18 -- PIN ATLAS test-005 ADAPTE 0.4.9 -> 0.5.0 (Morpheus)
+
+**Mission** : adaptation du pin de version dans test-005-generateurs-commande
+apres le bump de la carte atlas (0.4.9 -> 0.5.0, re-education 10 cartes
+secondaires).
+
+**Corrections appliquees** (test-005, 4 occurrences) :
+- ligne 49 docstring : "version 0.4.9" -> "version 0.5.0"
+- ligne 214 titre : "parcours-atlas v0.4.9" -> "v0.5.0"
+- ligne 275 commentaire : "PARCOURS ATLAS v0.4.9" -> "v0.5.0"
+- lignes 279-280 verifier(17) : pin "0.4.9" -> "0.5.0"
+
+**Lecons** :
+1. Test-005 passe de 1 KO (pin atlas) a 1 KO different (point 21 :
+   valider-cartes-decision BLOQUE pour MA session morpheus, habilites
+   argus/buffy/janus/vulcain) : l'artefact de verrou de session se DECALE
+   apres correction du pin -- le test ne reverdira COMPLETEMENT que sous
+   Janus (registre : test-005 OK sous janus a 17:37).
+2. Les seuls pins de cartes secondaires dans les tests : test-005 (atlas).
+   Les cartes argus/hygie/clio/hermes/gardien/chiron/athena/promethee/
+   minerve n ont AUCUN pin de version dans les tests -- leur bump ne casse
+   rien (test-006 lit la version courante, test-020/021 ne pinnent pas).
+3. Pattern confirme : chaque re-education de carte (bump --mineure) casse
+   les pins de version dans les tests -> la boucle KO de Janus m active
+   pour les adapter (test-016, test-004, test-005).
+
+**Verdict** : VALIDE - pin adapte, seul KO restant = artefact de verrou de
+session (reverdit sous Janus).
+## [LECON] 2026-08-18 -- TEST-056 + TEST-058 ADAPTES : EXCEPTION CHIRON (Morpheus)
+
+**Mission** : adapter les tests apres le verrou v0.4.0 (cle exclusive pilote
+chiron : editer-parcours sur SA carte uniquement) et l'exception gravee dans
+regles-groupes-agents.md.
+
+**Corrections appliquees** :
+1. test-056 point 1 : pin version verrou 0.2.2 -> 0.4.0 (--version).
+2. test-058 point 2 : (a) exception chiron - la carte chiron peut posseder
+   editer-parcours (cle par cible, verifiee par le verrou) ; (b) les MENTIONS
+   PEDAGOGIQUES dans les textes des indices AGENTS HABILITES ("Buffy
+   cartes/parcours (editer-parcours)") ne sont pas des usurpations : elles
+   decrivent le domaine de BUFFY et ne sont pas des indices OUTIL (le verrou
+   lit les indices OUTIL, pas le texte). Seule une DECLARATION reelle (outil
+   dans outils_parcours) est un violateur.
+
+**Verifications** : test-058 6/6, test-056 17/17, bumper --tous 0/0,
+ASCII 0, LF pur.
+
+**Lecons** :
+1. La distinction OUTIL DECLARE vs MENTION TEXTE est essentielle pour
+   test-058 : un indice AGENTS HABILITES qui mentionne "editer-parcours"
+   pour decrire le domaine de buffy n'habilite personne (le verrou lit les
+   indices de type outil). Le test doit chercher les declarations (indices
+   outil), pas les mentions documentaires.
+2. L'exception pilote chiron suit le meme pattern que la cle exclusive tests
+   (morpheus) : autorisation PAR CIBLE, pas globale. test-058 doit exclure
+   chiron pour editer-parcours MAIS verifier que chiron n'a AUCUN autre outil
+   exclusif ni editer-fichier-agents.
+3. Pattern confirme : chaque bump d'outil (verrou 0.2.2 -> 0.4.0) casse le
+   pin de version dans les tests -> la boucle KO de Janus m'active pour les
+   adapter.
+
+**Verdict** : VALIDE - test-056 17/17, test-058 6/6, tous verts.
+
+## [LECON] 2026-08-18 -- TEST-093 MODE --FULL ASCII (Morpheus)
+
+**Mission** : creer le test dedie au mode --full de combos-corriger-non-ascii v0.3.0 (Vulcain) : dry obligatoire avant wet, rapport concis mais complet, wet cible.
+
+**Resultat** : test-093-combo-full-ascii 17/17 OK (7,4 s), sans AUCUN effet de bord sur le projet, serie C du lanceur. En prime : test-092 (parite agents, cree a 18:58) etait HORS-SERIE depuis sa creation -- affecte a la serie E (defaut preexistant detecte par test-027 point 1).
+
+**Lecons** :
+1. UN TEST QUI LANCE UN WET REEL DOIT ETRE SANS EFFET DE BORD : mon premier test-093 lancait le wet --full qui a CORRIGE les fichiers reels du projet (docs-dev + corrections.md de Vulcain). Correction : le test sauvegarde les fichiers listes par le dry (dans tmp-test-093-backup/), lance le wet, puis RESTAURE les fichiers et supprime les .bak. Verifie : git status identique avant/apres.
+2. VERIFIER L ABSENCE D EFFET DE BORD DANS LE TEST LUI-MEME : comparer git status avant/apres le lancement du test est la preuve definitive (diff des 2 snapshots).
+3. UN NOUVEAU TEST DOIT ETRE AFFECTE A UNE SERIE IMMEDIATEMENT : test-092 etait hors-serie depuis 1h (cree 18:58, jamais affecte) -- test-027 point 1 le signale. L affectation fait partie de la creation, pas une etape ulterieure.
+4. LES KO 5-8 DE test-027 SOUS MORPHEUS SONT DES ARTEFACTS DE VERROU : le lanceur de non-regression est reserve a Janus. Les points 1-3 passent en isole -- les KO reverdiront sous Janus.
+
+## [LECON] 2026-08-18 -- TEST-058 BOUCLE TEXTE EXCEPTION CHIRON (Morpheus)
+
+**Mission** : adapter test-058 point 2 (boucle texte) pour l'exception chiron, apres que Buffy ait ajoute l'indice OUTIL editer-parcours dans la carte de Chiron (parcours d'auto-correction, c16).
+
+**Diagnostic** : l'exception pilote chiron (v0.2.3) couvrait les indices OUTIL mais PAS la boucle texte "if o in texte and o in noms". L'indice OUTIL de la carte chiron apparait dans le texte ET dans les noms -> faux positif "chiron: declaration editer-parcours".
+
+**Correction** : ajout de la meme exception dans la boucle texte (quand nom==chiron et o==editer-parcours -> continue). test-058 : 6/6 OK.
+
+**Lecons** :
+1. UNE EXCEPTION D OUTIL DOIT COUVRIR TOUTES LES BOUCLES DU GARDE-FOU : un meme fichier est scanne a 2 niveaux dans test-058 (indices OUTIL + texte brut). L'exception au niveau 1 sans le niveau 2 cree un faux positif des l'ajout du premier indice OUTIL legitime. Verifier TOUTES les occurrences, pas seulement la premiere.
+2. UN GARDE-FOU AVEC EXCEPTION INCOMPLETE EST PLUS DANGEREUX QUE PAS D'EXCEPTION : il donne l'illusion que l'exception est geree alors qu'elle casse des la premiere utilisation reelle.
+3. LA PREUVE DU BON FONCTIONNEMENT = LE SCENARIO REEL : l'indice c16 est le scenario reel du pilote. L'exception est ciblee (chiron + editer-parcours uniquement), pas une exclusion globale.
+
+## [LECON] 2026-08-18 -- TEST-058 BOUCLE REGISTRE EXCEPTION CHIRON (Morpheus)
+
+**Mission** : adapter test-058 point 2b (boucle registre) pour l'exception pilote chiron, apres le cycle pilote reel de Chiron (correction de c18 via editer-parcours sur SA carte).
+
+**Diagnostic** : l'exception pilote chiron couvrait les indices OUTIL (v0.2.3) et la boucle TEXTE (v0.2.4) mais PAS la boucle REGISTRE (2b). Les declarations legitimes chiron/editer-parcours (3 entrees 2026-08-18, cycle pilote reel) etaient faussement signalees comme violations -> test-058 5/6 KO.
+
+**Correction** : ajout de la meme exception dans la boucle 2b (quand agent==chiron et o==editer-parcours -> continue). test-058 : 6/6 OK.
+
+**Lecons** :
+1. L EXCEPTION PILOTE DOIT COUVRIR TOUTES LES BOUCLES DE TOUS LES GARDE-FOUS : test-058 scannait le garde-fou SEUL BUFFY a 3 niveaux (indices OUTIL, texte brut, registre JSONL). Les 2 premieres boucles avaient l exception chiron, la 3e (registre) non. C est la 3e adaptation du meme test -- a chaque nouvelle boucle, verifier TOUTES les boucles.
+2. LE REGISTRE EST LA PREUVE DU CYCLE REEL : les declarations chiron/editer-parcours au registre ne sont PAS des usurpations - ce sont les traces du cycle pilote (Chiron corrige SA carte avec le verrou pilote). Le registre sert a detecter les vraies derives, pas a punir les usages autorises par une exception.
+3. UN PIN DE TEST DECOUVERT EN CONTROLE FINAL SE CORRIGE PAR L AGENT HABILITE : Janus a detecte le KO 2b sous SA session et m a active. Le cycle pilote Chiron etait VALIDE (valider-cartes CONFORME, lock MATCH) - le KO etait un pin de test, pas un defaut de la mission.
+
+---
+
+## [LECON] 2026-08-18 -- TEST-094 VALIDER-TABLEAUX FICHE-AGENT + WRAPPER (Morpheus)
+
+**Mission** : apres la correction de valider-tableaux par Vulcain (filtre
+`type: fiche-agent` pour eliminer le faux positif classeur-variables + .sh
+transforme en wrapper pur pour le bug stdin Windows), verifier la
+non-regression et creer le test manquant (aucun test ne couvrait
+valider-tableaux).
+
+**Travail realise** :
+- Verification de tous les modes : fiche cerberus CONFORME, dossier agents
+  23/23 CONFORME (classeur-variables exclu), --agent argus CONFORME, parite
+  .sh/.py identique.
+- Creation de test-094-valider-tableaux-fiche-agent (7 OK / 0.54s) :
+  presence+compile, --version, wrapper .sh (anti-regression bug stdin),
+  cerberus CONFORME, dossier agents sans classeur-variables, --agent argus,
+  parite .sh/.py, normes ASCII/LF. Affecte a la serie "b" (Parcours et
+  validateurs).
+- test-058 6/6 (registre OK avec mes declarations d'usage).
+
+**Lecons** :
+1. LE LANCEUR DE NON-REGRESSION EST VERROUILLE A JANUS (verrou
+   d'habilitation) : les autres agents ne peuvent pas lancer les series.
+   Ils executent les tests en direct (python3 test-XXX.py) et laissent le
+   lancement officiel a Janus. test-027 (points 5-8) etait en KO pour cette
+   raison - pin preexistant, pas une regression de ma mission.
+2. UN TEST NOUVEAU DOIT ETRE AFFECTE A UNE SERIE (constante SERIES du
+   lanceur) sinon test-027 le signale hors-serie. S'assurer aussi qu'il
+   importe les protections (test-030 le verifie) - test-093 etait en KO sur
+   ce point (pin preexistant de la mission combos-full-ascii).
+3. TESTER LE .sh EN CONDITIONS REELLES (bash) : c'est le seul moyen de
+   verifier que le wrapper fonctionne - le .py seul ne couvre pas la
+   regression du heredoc stdin.
+
+**Verdict** : CONFORME - test-094 7/7 OK, aucune regression causee par la
+mission (KO preexistants documentes : test-027 verrou janus, test-030
+test-093).
+
+- **2026-08-18 (correctif test-094)** : les tags d'un test DOIVENT appartenir a la taxonomie (categories-tests.json + TAGS_SPECIFIQUES). Tags inventes (valider-tableaux, fiche-agent, faux-positif, wrapper, stdin-windows) = KO test-087. Utiliser les tags autorises : `outils, valider, garde-fou, anti-recurrence`. TOUT nouveau test doit aussi etre ajoute au profil correspondant dans profils-tests.json (sinon KO test-063 point 5 = orphelin). Controle : verifier `Tags:` ET `profils-tests.json` avant de rendre un test.
+
+- **2026-08-19 (4 KO tests preexistants reverdis)** : test-030 (bloc protections + lancer_protege ajoutes a test-093), test-024 (pin editer-parcours v0.1.7), test-063 (test-092/093 ajoutes au profil tests), test-087 (tags garde-fou-agent + preuve-negative). Verifications : 030 10/10, 024 17/17, 063 11/11, 087 8/0 KO, 092 9/9, 093 17/17. Tout test doit : bloc protections, tags taxonomie, reference profils-tests.json.
