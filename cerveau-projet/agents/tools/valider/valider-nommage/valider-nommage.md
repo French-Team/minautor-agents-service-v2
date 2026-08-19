@@ -4,6 +4,9 @@ identite:
   appartient_a: commun
   commun: true
   tags: validation, nommage, communs
+  combos:
+    - combo-creer-agent
+    - combo-creer-fichier-cerveau
 ---
 # valider-nommage
 

@@ -4568,3 +4568,48 @@ KO latent test-035 (le test n avait pas tourne le 18) n est apparu que quand
 les usages evaluer-coherence du jour sont entres dans la fenetre de 1 jour.
 Lecon croisee avec la mission liens casses : un outil partage utilise par
 tous les agents en mission doit etre dans OUTILS_P0_PARTAGES.
+
+---
+
+## 2026-08-19 - Lacune combo->outils : catalogue-combos.json + champ combos (mission utilisateur)
+
+**Action** : cree la source de verite manquante entre les combos et leurs
+outils membres. (1) catalogue-combos.json (v0.1.0) : 21 combos -> proprietaire
++ outils membres (derives des definitions-combo.json + appels reels des
+scripts). (2) Champ 'combos:' ajoute dans le frontmatter des 40 fiches outils
+membres (declaration inverse). (3) Outil consulter-combos (v0.1.0) qui repond
+"l outil X est utilise par les combos Y,Z (proprietaire W)". (4)
+catalogue-commandes.json 0.2.13 -> 0.2.14 (ajout consulter-combos) + pin
+test-005 mis a jour. Verification : test-002 37/37, test-003 89/89, test-004
+VALIDE, test-005 28/28, test-040 5/5, detecter-decalages-catalogue 183
+conformes / 0 decalage / combos 15 OK.
+
+**Lecon** : la lacune etait structurelle - les combos savaient quels outils
+ils appelaient (definition-combo.json, scripts), mais les outils ne
+declaraient pas leur appartenance : impossible de repondre "ou est utilise
+cet outil et par qui". Le pattern de fermeture : source de verite centrale
+(catalogue) + declaration inverse (frontmatter) + outil de consultation +
+garde-fou de synchronisation (a venir, volet Morpheus). Repond a la question
+initiale : evaluer-coherence est membre de combos-audit-general (proprietaire
+themis) - son statut "partage" vient de son usage via le combo, pas d une
+etiquette arbitraire.
+
+---
+
+## 2026-08-19 - Boucle KO : consulter-combos partage + pins 182->183
+
+**Action** : corrige les KO de non-regression apres la mission lacune
+combo->outils. (1) evaluer-processus 0.1.6 -> 0.1.7 : consulter-combos
+ajoute a OUTILS_P0_PARTAGES (outil partage de consultation, comme
+consulter-lecons). (2) Pins catalogue 182 -> 183 dans test-060, test-007,
+test-024. (3) catalogue-commandes re-trie : consulter-combos insere apres
+consulter-lecons cassait l ordre alphabetique (combos < lecons). Verifie :
+test-035 10/10, test-060 12/12, test-007 15/15, test-024 17/17, evaluer-
+processus 0 probleme.
+
+**Lecon** : quand on insere une commande dans catalogue-commandes.json, le
+tri alphabetique est EXIGE par 3 tests (test-060, test-007, test-024) - le
+tri est une invariant structurel, pas un detail. Et tout nouvel outil de
+consultation partage doit etre ajoute a OUTILS_P0_PARTAGES d evalue-
+processus AVANT ses premiers usages declare au registre (sinon OUTIL_HORS_
+CARTE).

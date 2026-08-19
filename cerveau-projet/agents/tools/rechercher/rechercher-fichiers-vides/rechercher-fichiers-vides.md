@@ -3,6 +3,8 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  combos:
+    - combo-sante-tableaux
 ---
 # rechercher-fichiers-vides
 

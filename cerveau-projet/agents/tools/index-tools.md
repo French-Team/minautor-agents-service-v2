@@ -102,6 +102,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `consulter-lecons` | Consulte la BDD portable des lecons (SQLite, unique et partagee) | [consulter/consulter-lecons/](consulter/consulter-lecons/) |
+| `consulter-combos` | Consulte le catalogue des combos : ou est utilise l outil X et par qui (proprietaire) | [consulter/consulter-combos/](consulter/consulter-combos/) |
 
 ### Copier
 

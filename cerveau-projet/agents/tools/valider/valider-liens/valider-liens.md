@@ -4,6 +4,10 @@ identite:
   appartient_a: commun
   commun: true
   tags: validation, liens, communs
+  combos:
+    - combo-controle-impacts
+    - combo-controle-modification
+    - combo-controle-outil
 ---
 # valider-liens
 

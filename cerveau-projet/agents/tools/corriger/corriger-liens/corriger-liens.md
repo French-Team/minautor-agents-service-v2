@@ -3,6 +3,9 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  combos:
+    - combo-corriger-fichier
+    - combos-corriger-non-ascii
 ---
 # corriger-liens
 

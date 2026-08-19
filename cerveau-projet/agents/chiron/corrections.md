@@ -155,3 +155,14 @@ a Buffy (seule habilitee editer-parcours). CHIRON NE CORRIGE PAS.
 2. UN TEXTE DE REGLE QUI ANNONCE UNE BRANCHE INEXISTANTE EST UN VRAI DEFAUT : le texte de c18 promettait 'A REVOIR -> c15' mais aucune branche ne menait a c15 - l agent ne pouvait pas executer le cas A REVOIR. La regle : chaque cible annoncee dans un texte de regle de question doit exister dans les branches (et inversement).
 3. L ATTENTE EST UNE BOUCLE LEGITIME DOCUMENTEE : NON -> c18 (re-essai) suit le pattern Buffy c8b ('attente legitime du retour de Themis, voulue'). Ce n est pas une boucle d attente interdite (regle 10) car c est un CONTROLE de re-essai documente.
 4. TOUTE CORRECTION DE CARTE DOIT PASSER valider-cartes-decision SOUS UN AGENT HABILITE : le verrou m a bloque valider-cartes (artefact de session chiron non habilite) - la validation finale revient a Buffy/Janus/Vulcain/Argus.
+
+---
+
+### Lecon 2026-08-19 -- Janus (controle + catalogue-combos)
+
+Mission catalogue-combos (garde-fou combo -> outils) terminee. 4 enseignements :
+
+1. **Nouvel outil de consultation partage** : tout outil cree dans la categorie consulter (ou diagnostic) et utilise par tous les agents doit etre ajoute a OUTILS_P0_PARTAGES + autorises dans evaluer-processus, sinon test-035 (OUTIL_HORS_CARTE) KO.
+2. **Pins de version catalogue** : chaque ajout au catalogue-commandes.json oblige a mettre a jour les pins 182 -> 183 dans test-060, test-007, test-024, test-079 (4 tests, parfois 2 occurrences chacun).
+3. **Tri alphabetique strict** : le catalogue doit rester trie (consulter-combos AVANT consulter-lecons : 'combos' < 'lecons').
+4. **Invocation evaluer-coherence** : `dossier` = racine du projet (defaut `.`), NE PAS passer `cerveau-projet` en argument sinon le fichier AGENTS.md n'est pas trouve et tous les agents sont declares manquants (faux positif).

@@ -1,5 +1,5 @@
 # evaluer-processus
-**Version** : 0.1.6
+**Version** : 0.1.7
 
 Detecte les DERIVES DE PROCESSUS dans le cerveau-projet : un agent qui
 utilise un outil hors de sa carte, une mission qui finit par reactiver
@@ -94,3 +94,8 @@ Code de retour : 0 si aucun probleme, 1 sinon (utilisable en garde-fou).
   tort. Correctif : autorises = outils_carte | outils_p0 | OUTILS_P0_PARTAGES
   + ajout de evaluer-coherence (outil partage de diagnostic, fiche
   'Proprietaire : Themis (outil partage)') a OUTILS_P0_PARTAGES.
+- v0.1.7 (2026-08-19, mission lacune combo->outils) : ajout de
+  consulter-combos (outil partage de consultation du catalogue des combos,
+  fiche 'Proprietaire : Vulcain (outil partage)') a OUTILS_P0_PARTAGES - ses
+  usages declares au registre par les agents ne doivent pas etre signales
+  OUTIL_HORS_CARTE.

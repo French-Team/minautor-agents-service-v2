@@ -1,446 +1,478 @@
-{"date":"2026-08-19 08:06:43","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:14","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:11","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:11","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:11","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:10","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:10","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:10","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:10","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:10","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:10","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:09","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:09","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:09","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:09","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:09","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:09","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:08","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:08","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:08","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:08","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:08","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:06:08","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:50","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:44","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 08:05:44","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 08:05:44","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:44","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:43","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:43","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:43","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:41","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:39","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:32","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:32","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:32","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:28","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:25","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:23","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:22","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:21","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:20","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:20","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:18","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:13","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 08:05:13","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 08:05:13","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:13","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:13","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:12","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:12","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:10","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:08","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:01","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:01","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:05:01","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:57","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:54","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:53","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:51","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:51","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:50","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:49","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:47","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:43","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:43","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:38","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:36","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:34","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:32","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:32","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:31","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:30","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 08:04:29","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"agent": "vulcain", "outil": "editer-fichier", "date": "2026-08-19 08:04:18", "mission": "defaut-test035", "mode": "verrou-auto"}
-{"agent": "vulcain", "outil": "evaluer-processus", "date": "2026-08-19 08:04:18", "mission": "defaut-test035", "mode": "verrou-auto"}
-{"agent": "vulcain", "outil": "enregistrer-lecon", "date": "2026-08-19 08:04:18", "mission": "defaut-test035", "mode": "verrou-auto"}
-{"date":"2026-08-19 08:04:12","agent":"vulcain","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:32","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 07:57:32","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 07:57:32","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:32","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:32","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:32","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:32","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:29","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:27","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:21","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:20","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:20","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:16","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:13","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:12","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:10","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:10","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:09","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:08","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:06","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:02","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 07:57:02","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:01","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 07:57:01","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:01","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:01","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:57:01","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:56:58","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:56:56","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:56:50","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:56:50","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-19 07:55:02","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 07:55:02","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 07:53:00","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 07:52:59","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:40:29", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:38:56", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:38:56", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:38:43", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:38:43", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:38:43", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:38:43", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:38:43", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:38:43", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:38:42", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:38:20", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:38:19", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:38:09", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:37:23", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:37:23", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:37:23", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:37:23", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:37:23", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:37:22", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:37:22", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:37:00", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:59", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:48", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:43", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:36:42", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:36:42", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:42", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:42", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:42", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:42", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:39", "agent": "janus", "outil": "lire-fichier", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:38", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:31", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:31", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:31", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:26", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:24", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:22", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:21", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:20", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:19", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:19", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:17", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:09", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:07", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:06", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:06", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:06", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:36:00", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:49", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:40", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:39", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:37", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:35", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:34", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:32", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:29", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:27", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:22", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:20", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:20", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:19", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:18", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:18", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:15", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:35:15", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:35:15", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:15", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:15", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:15", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:35:14", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:52", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:50", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:40", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:37", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:37", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:37", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:37", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:37", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:36", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:36", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:36", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:36", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:36", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:36", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:36", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:35", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:35", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:35", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:35", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:35", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:34", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:34", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:34", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:34", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:16", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:34:06", "agent": "vulcain", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"agent": "vulcain", "outil": "editer-fichier", "date": "2026-08-19 08:34:06", "mission": "boucle-ko-combo-outils", "mode": "verrou-auto"}
+{"agent": "vulcain", "outil": "evaluer-processus", "date": "2026-08-19 08:34:06", "mission": "boucle-ko-combo-outils", "mode": "verrou-auto"}
+{"agent": "vulcain", "outil": "enregistrer-lecon", "date": "2026-08-19 08:34:06", "mission": "boucle-ko-combo-outils", "mode": "verrou-auto"}
+{"date": "2026-08-19 08:32:25", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:32:25", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:24", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:32:24", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:24", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:24", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:24", "agent": "janus", "outil": "consulter-lecons", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:21", "agent": "janus", "outil": "lire-fichier", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:20", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:13", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:13", "agent": "janus", "outil": "detecter-cablages-manquants", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:13", "agent": "janus", "outil": "valider-cartes-decision", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:08", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:06", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:04", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:03", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:02", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:01", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:32:01", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:31:59", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "verrou-auto", "commande": "", "contexte": "auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-08-19 08:31:49", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:31:49", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:31:08", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:31:08", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:30:32", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:30:32", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:29:52", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:29:52", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:28:44", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:28:44", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"agent": "morpheus", "outil": "consulter-combos", "date": "2026-08-19 08:24:50", "mission": "test095-catalogue-combos", "mode": "direct"}
+{"agent": "vulcain", "outil": "consulter-combos", "date": "2026-08-19 08:21:37", "mission": "lacune-combo-outils", "mode": "direct"}
+{"agent": "janus", "outil": "evaluer-coherence", "date": "2026-08-19 08:06:43", "mission": "controle-final-liens-casses", "mode": "direct"}
+{"date": "2026-08-19 08:05:44", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:05:44", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 08:05:13", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 08:05:13", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 07:57:32", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 07:57:32", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 07:57:02", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 07:57:01", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 07:55:02", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 07:55:02", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 07:53:00", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 07:52:59", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
 {"agent": "janus", "outil": "evaluer-coherence", "date": "2026-08-19 07:49:23", "mission": "controle-liens-casses-v1", "mode": "direct"}
 {"agent": "themis", "outil": "evaluer-coherence", "date": "2026-08-19 07:48:58", "mission": "audit-liens-casses-v1", "mode": "direct"}
 {"agent": "buffy", "outil": "lire-fichier", "date": "2026-08-19 07:48:27", "mission": "liens-casses", "mode": "direct"}
-{"date":"2026-08-19 07:34:19","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 07:34:19","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 07:22:07","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 07:22:07","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 07:21:40","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 07:21:39","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 07:01:01","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 07:01:01","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 06:55:16","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 06:55:16","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-19 06:54:17","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-19 06:54:17","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-18 22:30:49","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-18 22:30:49","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-18 22:23:23","agent":"morpheus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"enregistrement lecon mission test-094"}
-{"date":"2026-08-18 22:23:23","agent":"morpheus","outil":"enregistrer-usage-outil","mode":"direct","commande":"","contexte":"declaration des usages de la mission"}
+{"date": "2026-08-19 07:34:19", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 07:34:19", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 07:22:07", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 07:22:07", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 07:21:40", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 07:21:39", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 07:01:01", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 07:01:01", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 06:55:16", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 06:55:16", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-19 06:54:17", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-19 06:54:17", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-18 22:30:49", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-18 22:30:49", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=test-090)"}
+{"date": "2026-08-18 22:23:23", "agent": "morpheus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "enregistrement lecon mission test-094"}
+{"date": "2026-08-18 22:23:23", "agent": "morpheus", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "declaration des usages de la mission"}
 {"date": "2026-08-18 22:22:47", "agent": "morpheus", "outil": "creer-fichier", "mode": "direct", "commande": "", "contexte": "creation test anti-regression valider-tableaux (filtre fiche-agent + wrapper)"}
-{"date":"2026-08-18 22:22:47","agent":"morpheus","outil":"valider-tableaux","mode":"direct","commande":"","contexte":"verification non-regression (tous les modes)"}
-{"date":"2026-08-18 22:22:47","agent":"morpheus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"tentative lancement serie b (bloque: verrou janus)"}
-{"date":"2026-08-18 22:22:47","agent":"morpheus","outil":"evaluer-rating","mode":"direct","commande":"","contexte":"rating du nouveau test-094"}
-{"date":"2026-08-18 22:19:28","agent":"vulcain","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"enregistrement lecon mission valider-tableaux"}
-{"date":"2026-08-18 22:19:28","agent":"vulcain","outil":"enregistrer-usage-outil","mode":"direct","commande":"","contexte":"declaration des usages de la mission"}
-{"date":"2026-08-18 22:18:56","agent":"vulcain","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"verification liens apres correction outil"}
-{"date":"2026-08-18 22:18:56","agent":"vulcain","outil":"valider-conventions","mode":"direct","commande":"","contexte":"conventions des fichiers modifiees"}
-{"date":"2026-08-18 22:18:55","agent":"vulcain","outil":"valider-tableaux","mode":"direct","commande":"","contexte":"correction faux positif classeur-variables (filtre type: fiche-agent) + .sh en wrapper pur"}
-{"date":"2026-08-18 22:18:55","agent":"vulcain","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"verification version outil apres correction"}
-{"date":"2026-08-18 22:18:19","agent":"vulcain","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py --recursive cerveau-projet/agents --all","contexte":""}
-{"date":"2026-08-18 21:56:57","agent":"janus","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"fiche cerberus CONFORME"}
-{"date":"2026-08-18 21:56:57","agent":"janus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:56:57","agent":"janus","outil":"proteger-verrou-marbre","mode":"direct","commande":"","contexte":"marbre 8/8"}
-{"date":"2026-08-18 21:56:57","agent":"janus","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 preexistants"}
-{"date":"2026-08-18 21:56:57","agent":"janus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 67"}
-{"date":"2026-08-18 21:56:56","agent":"janus","outil":"valider-tableaux","mode":"direct","commande":"","contexte":"completude 15/15"}
-{"date":"2026-08-18 21:55:55","agent":"themis","outil":"valider-tableaux","mode":"direct","commande":"","contexte":"audit completude 15/15"}
-{"date":"2026-08-18 21:55:55","agent":"themis","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"fiche cerberus CONFORME"}
-{"date":"2026-08-18 21:55:55","agent":"themis","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:55:55","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"fiche + corrections themis (garde-fou c0)"}
-{"date":"2026-08-18 21:55:55","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 66"}
-{"date":"2026-08-18 21:54:57","agent":"buffy","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:54:57","agent":"buffy","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 preexistants 0 nouveau"}
-{"date":"2026-08-18 21:54:57","agent":"buffy","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 65"}
-{"date":"2026-08-18 21:54:56","agent":"buffy","outil":"valider-tableaux","mode":"direct","commande":"","contexte":"tableau complete 15 agents"}
-{"date":"2026-08-18 21:54:56","agent":"buffy","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"fiche cerberus CONFORME"}
-{"date":"2026-08-18 21:52:06","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"chiron CONFORME point 10"}
-{"date":"2026-08-18 21:52:06","agent":"janus","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"fiche chiron CONFORME"}
-{"date":"2026-08-18 21:52:06","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"test-058 6/6"}
-{"date":"2026-08-18 21:52:06","agent":"janus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:52:06","agent":"janus","outil":"proteger-verrou-marbre","mode":"direct","commande":"","contexte":"marbre 8/8"}
-{"date":"2026-08-18 21:52:06","agent":"janus","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"0 lien chiron"}
-{"date":"2026-08-18 21:52:06","agent":"janus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 64"}
-{"date":"2026-08-18 21:51:00","agent":"themis","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"fiche chiron CONFORME"}
-{"date":"2026-08-18 21:51:00","agent":"themis","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"test-058 6/6"}
-{"date":"2026-08-18 21:51:00","agent":"themis","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:51:00","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"fiche + corrections themis (garde-fou c0)"}
-{"date":"2026-08-18 21:51:00","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 63"}
-{"date":"2026-08-18 21:50:02","agent":"buffy","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"fiche chiron CONFORME"}
-{"date":"2026-08-18 21:50:02","agent":"buffy","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"chiron CONFORME point 10"}
-{"date":"2026-08-18 21:50:02","agent":"buffy","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:50:02","agent":"buffy","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"0 lien chiron"}
-{"date":"2026-08-18 21:50:02","agent":"buffy","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 62"}
-{"date":"2026-08-18 21:46:33","agent":"janus","outil":"proteger-verrou-marbre","mode":"direct","commande":"","contexte":"marbre 8/8"}
-{"date":"2026-08-18 21:46:33","agent":"janus","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"0 lien chiron"}
-{"date":"2026-08-18 21:46:33","agent":"janus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 61"}
-{"date":"2026-08-18 21:46:32","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"chiron CONFORME (controle final)"}
-{"date":"2026-08-18 21:46:32","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"test-058 6/6 test-006 19/19 test-027 11/11"}
-{"date":"2026-08-18 21:46:32","agent":"janus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:45:53","agent":"morpheus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"fiche + corrections morpheus (garde-fou c0)"}
-{"date":"2026-08-18 21:45:53","agent":"morpheus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 60"}
-{"date":"2026-08-18 21:45:52","agent":"morpheus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"test-058 6/6"}
-{"date":"2026-08-18 21:45:52","agent":"morpheus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:43:25","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"fiche + corrections themis (garde-fou c0)"}
-{"date":"2026-08-18 21:43:25","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 59"}
-{"date":"2026-08-18 21:43:24","agent":"themis","outil":"guider-parcours","mode":"direct","commande":"","contexte":"audit c18 branches A REVOIR/CONFORME/NON"}
-{"date":"2026-08-18 21:43:24","agent":"themis","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"test-058 5/6 (pin 2b a adapter)"}
-{"date":"2026-08-18 21:43:24","agent":"themis","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:41:44","agent":"chiron","outil":"editer-parcours","mode":"direct","commande":"","contexte":"corriger c18 (verrou pilote SA carte OK)"}
-{"date":"2026-08-18 21:41:44","agent":"chiron","outil":"guider-parcours","mode":"direct","commande":"","contexte":"navigation c11b->c15->c16, c18 branches"}
-{"date":"2026-08-18 21:41:44","agent":"chiron","outil":"lire-fichier","mode":"direct","commande":"","contexte":"fiche + corrections chiron (garde-fou c0)"}
-{"date":"2026-08-18 21:41:44","agent":"chiron","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 58"}
-{"date":"2026-08-18 21:37:57","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"test-058 6/6 test-006 19/19 test-027 11/11"}
-{"date":"2026-08-18 21:37:57","agent":"janus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:37:57","agent":"janus","outil":"proteger-verrou-marbre","mode":"direct","commande":"","contexte":"marbre 8/8"}
-{"date":"2026-08-18 21:37:57","agent":"janus","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 preexistants 0 chiron"}
-{"date":"2026-08-18 21:37:57","agent":"janus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"fiche + corrections janus (garde-fou c0)"}
-{"date":"2026-08-18 21:37:57","agent":"janus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 57"}
-{"date":"2026-08-18 21:37:56","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"chiron CONFORME point 10"}
-{"date":"2026-08-18 21:35:45","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 56"}
-{"date":"2026-08-18 21:35:44","agent":"themis","outil":"guider-parcours","mode":"direct","commande":"","contexte":"chiron navigation v0.3.0"}
-{"date":"2026-08-18 21:35:44","agent":"themis","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"test-058 6/6 test-006 19/19"}
-{"date":"2026-08-18 21:35:44","agent":"themis","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:35:44","agent":"themis","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 preexistants 0 chiron"}
-{"date":"2026-08-18 21:35:44","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"fiche + corrections themis (garde-fou c0)"}
-{"date":"2026-08-18 21:34:26","agent":"buffy","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:34:26","agent":"buffy","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"test-058 6/6"}
-{"date":"2026-08-18 21:34:26","agent":"buffy","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"0 lien chiron"}
-{"date":"2026-08-18 21:34:26","agent":"buffy","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 55"}
-{"date":"2026-08-18 21:34:25","agent":"buffy","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"fiche chiron CONFORME"}
-{"date":"2026-08-18 21:28:52","agent":"janus","outil":"activer-agent-principal","mode":"direct","commande":"","contexte":"reactiver Cerberus (dernier maillon)"}
-{"date":"2026-08-18 21:28:50","agent":"janus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"fiche + corrections janus (garde-fou c0)"}
-{"date":"2026-08-18 21:28:44","agent":"janus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"fiche + corrections janus (garde-fou c0)"}
+{"date": "2026-08-18 22:22:47", "agent": "morpheus", "outil": "valider-tableaux", "mode": "direct", "commande": "", "contexte": "verification non-regression (tous les modes)"}
+{"date": "2026-08-18 22:22:47", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "tentative lancement serie b (bloque: verrou janus)"}
+{"date": "2026-08-18 22:22:47", "agent": "morpheus", "outil": "evaluer-rating", "mode": "direct", "commande": "", "contexte": "rating du nouveau test-094"}
+{"date": "2026-08-18 22:19:28", "agent": "vulcain", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "enregistrement lecon mission valider-tableaux"}
+{"date": "2026-08-18 22:19:28", "agent": "vulcain", "outil": "enregistrer-usage-outil", "mode": "direct", "commande": "", "contexte": "declaration des usages de la mission"}
+{"date": "2026-08-18 22:18:56", "agent": "vulcain", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "verification liens apres correction outil"}
+{"date": "2026-08-18 22:18:56", "agent": "vulcain", "outil": "valider-conventions", "mode": "direct", "commande": "", "contexte": "conventions des fichiers modifiees"}
+{"date": "2026-08-18 22:18:55", "agent": "vulcain", "outil": "valider-tableaux", "mode": "direct", "commande": "", "contexte": "correction faux positif classeur-variables (filtre type: fiche-agent) + .sh en wrapper pur"}
+{"date": "2026-08-18 22:18:55", "agent": "vulcain", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "verification version outil apres correction"}
+{"date": "2026-08-18 22:18:19", "agent": "vulcain", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py --recursive cerveau-projet/agents --all", "contexte": ""}
+{"date": "2026-08-18 21:56:57", "agent": "janus", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "fiche cerberus CONFORME"}
+{"date": "2026-08-18 21:56:57", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:56:57", "agent": "janus", "outil": "proteger-verrou-marbre", "mode": "direct", "commande": "", "contexte": "marbre 8/8"}
+{"date": "2026-08-18 21:56:57", "agent": "janus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 preexistants"}
+{"date": "2026-08-18 21:56:57", "agent": "janus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 67"}
+{"date": "2026-08-18 21:56:56", "agent": "janus", "outil": "valider-tableaux", "mode": "direct", "commande": "", "contexte": "completude 15/15"}
+{"date": "2026-08-18 21:55:55", "agent": "themis", "outil": "valider-tableaux", "mode": "direct", "commande": "", "contexte": "audit completude 15/15"}
+{"date": "2026-08-18 21:55:55", "agent": "themis", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "fiche cerberus CONFORME"}
+{"date": "2026-08-18 21:55:55", "agent": "themis", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:55:55", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "fiche + corrections themis (garde-fou c0)"}
+{"date": "2026-08-18 21:55:55", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 66"}
+{"date": "2026-08-18 21:54:57", "agent": "buffy", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:54:57", "agent": "buffy", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 preexistants 0 nouveau"}
+{"date": "2026-08-18 21:54:57", "agent": "buffy", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 65"}
+{"date": "2026-08-18 21:54:56", "agent": "buffy", "outil": "valider-tableaux", "mode": "direct", "commande": "", "contexte": "tableau complete 15 agents"}
+{"date": "2026-08-18 21:54:56", "agent": "buffy", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "fiche cerberus CONFORME"}
+{"date": "2026-08-18 21:52:06", "agent": "janus", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "chiron CONFORME point 10"}
+{"date": "2026-08-18 21:52:06", "agent": "janus", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "fiche chiron CONFORME"}
+{"date": "2026-08-18 21:52:06", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 6/6"}
+{"date": "2026-08-18 21:52:06", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:52:06", "agent": "janus", "outil": "proteger-verrou-marbre", "mode": "direct", "commande": "", "contexte": "marbre 8/8"}
+{"date": "2026-08-18 21:52:06", "agent": "janus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "0 lien chiron"}
+{"date": "2026-08-18 21:52:06", "agent": "janus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 64"}
+{"date": "2026-08-18 21:51:00", "agent": "themis", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "fiche chiron CONFORME"}
+{"date": "2026-08-18 21:51:00", "agent": "themis", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 6/6"}
+{"date": "2026-08-18 21:51:00", "agent": "themis", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:51:00", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "fiche + corrections themis (garde-fou c0)"}
+{"date": "2026-08-18 21:51:00", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 63"}
+{"date": "2026-08-18 21:50:02", "agent": "buffy", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "fiche chiron CONFORME"}
+{"date": "2026-08-18 21:50:02", "agent": "buffy", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "chiron CONFORME point 10"}
+{"date": "2026-08-18 21:50:02", "agent": "buffy", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:50:02", "agent": "buffy", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "0 lien chiron"}
+{"date": "2026-08-18 21:50:02", "agent": "buffy", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 62"}
+{"date": "2026-08-18 21:46:33", "agent": "janus", "outil": "proteger-verrou-marbre", "mode": "direct", "commande": "", "contexte": "marbre 8/8"}
+{"date": "2026-08-18 21:46:33", "agent": "janus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "0 lien chiron"}
+{"date": "2026-08-18 21:46:33", "agent": "janus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 61"}
+{"date": "2026-08-18 21:46:32", "agent": "janus", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "chiron CONFORME (controle final)"}
+{"date": "2026-08-18 21:46:32", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 6/6 test-006 19/19 test-027 11/11"}
+{"date": "2026-08-18 21:46:32", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:45:53", "agent": "morpheus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "fiche + corrections morpheus (garde-fou c0)"}
+{"date": "2026-08-18 21:45:53", "agent": "morpheus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 60"}
+{"date": "2026-08-18 21:45:52", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 6/6"}
+{"date": "2026-08-18 21:45:52", "agent": "morpheus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:43:25", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "fiche + corrections themis (garde-fou c0)"}
+{"date": "2026-08-18 21:43:25", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 59"}
+{"date": "2026-08-18 21:43:24", "agent": "themis", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "audit c18 branches A REVOIR/CONFORME/NON"}
+{"date": "2026-08-18 21:43:24", "agent": "themis", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 5/6 (pin 2b a adapter)"}
+{"date": "2026-08-18 21:43:24", "agent": "themis", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:41:44", "agent": "chiron", "outil": "editer-parcours", "mode": "direct", "commande": "", "contexte": "corriger c18 (verrou pilote SA carte OK)"}
+{"date": "2026-08-18 21:41:44", "agent": "chiron", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "navigation c11b->c15->c16, c18 branches"}
+{"date": "2026-08-18 21:41:44", "agent": "chiron", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "fiche + corrections chiron (garde-fou c0)"}
+{"date": "2026-08-18 21:41:44", "agent": "chiron", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 58"}
+{"date": "2026-08-18 21:37:57", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 6/6 test-006 19/19 test-027 11/11"}
+{"date": "2026-08-18 21:37:57", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:37:57", "agent": "janus", "outil": "proteger-verrou-marbre", "mode": "direct", "commande": "", "contexte": "marbre 8/8"}
+{"date": "2026-08-18 21:37:57", "agent": "janus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 preexistants 0 chiron"}
+{"date": "2026-08-18 21:37:57", "agent": "janus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "fiche + corrections janus (garde-fou c0)"}
+{"date": "2026-08-18 21:37:57", "agent": "janus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 57"}
+{"date": "2026-08-18 21:37:56", "agent": "janus", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "chiron CONFORME point 10"}
+{"date": "2026-08-18 21:35:45", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 56"}
+{"date": "2026-08-18 21:35:44", "agent": "themis", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "chiron navigation v0.3.0"}
+{"date": "2026-08-18 21:35:44", "agent": "themis", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 6/6 test-006 19/19"}
+{"date": "2026-08-18 21:35:44", "agent": "themis", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:35:44", "agent": "themis", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 preexistants 0 chiron"}
+{"date": "2026-08-18 21:35:44", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "fiche + corrections themis (garde-fou c0)"}
+{"date": "2026-08-18 21:34:26", "agent": "buffy", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:34:26", "agent": "buffy", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 6/6"}
+{"date": "2026-08-18 21:34:26", "agent": "buffy", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "0 lien chiron"}
+{"date": "2026-08-18 21:34:26", "agent": "buffy", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 55"}
+{"date": "2026-08-18 21:34:25", "agent": "buffy", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "fiche chiron CONFORME"}
+{"date": "2026-08-18 21:28:52", "agent": "janus", "outil": "activer-agent-principal", "mode": "direct", "commande": "", "contexte": "reactiver Cerberus (dernier maillon)"}
+{"date": "2026-08-18 21:28:50", "agent": "janus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "fiche + corrections janus (garde-fou c0)"}
+{"date": "2026-08-18 21:28:44", "agent": "janus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "fiche + corrections janus (garde-fou c0)"}
 {"date": "2026-08-18 21:28:40", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
 {"date": "2026-08-18 21:28:40", "agent": "janus", "outil": "proteger-verrou-marbre", "mode": "direct", "commande": "", "contexte": "marbre 8/8"}
 {"date": "2026-08-18 21:28:40", "agent": "janus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 liens preexistants"}
-{"date":"2026-08-18 21:28:40","agent":"janus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon id 54"}
-{"date":"2026-08-18 21:28:39","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"controle education themis CONFORME"}
-{"date":"2026-08-18 21:28:39","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":"test-058 6/6 test-006 19/19 test-027 11/11"}
-{"date":"2026-08-18 21:27:07","agent":"themis","outil":"combos-corriger-non-ascii","mode":"direct","commande":"","contexte":"--version (v0.3.0)"}
-{"date":"2026-08-18 21:27:07","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 21:27:06","agent":"themis","outil":"guider-parcours","mode":"direct","commande":"","contexte":"themis c9 navigation"}
+{"date": "2026-08-18 21:28:40", "agent": "janus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon id 54"}
+{"date": "2026-08-18 21:28:39", "agent": "janus", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "controle education themis CONFORME"}
+{"date": "2026-08-18 21:28:39", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 6/6 test-006 19/19 test-027 11/11"}
+{"date": "2026-08-18 21:27:07", "agent": "themis", "outil": "combos-corriger-non-ascii", "mode": "direct", "commande": "", "contexte": "--version (v0.3.0)"}
+{"date": "2026-08-18 21:27:07", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 21:27:06", "agent": "themis", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "themis c9 navigation"}
 {"date": "2026-08-18 21:27:06", "agent": "themis", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 (6/6)"}
-{"date":"2026-08-18 21:27:06","agent":"themis","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:27:06","agent":"themis","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 liens preexistants"}
+{"date": "2026-08-18 21:27:06", "agent": "themis", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:27:06", "agent": "themis", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 liens preexistants"}
 {"date": "2026-08-18 21:25:58", "agent": "buffy", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-006 (19/19)"}
 {"date": "2026-08-18 21:25:58", "agent": "buffy", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 (6/6)"}
-{"date":"2026-08-18 21:25:58","agent":"buffy","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"parcours themis 0.4.10->0.5.0"}
-{"date":"2026-08-18 21:25:58","agent":"buffy","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 liens preexistants"}
-{"date":"2026-08-18 21:25:58","agent":"buffy","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 21:25:57","agent":"buffy","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"themis CONFORME"}
-{"date":"2026-08-18 21:25:57","agent":"buffy","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"themis CONFORME"}
-{"date":"2026-08-18 21:24:08","agent":"chiron","outil":"lire-fichier","mode":"direct","commande":"","contexte":"themis fiche+corrections+carte (c2-c8)"}
-{"date":"2026-08-18 21:24:08","agent":"chiron","outil":"lire-fichier","mode":"direct","commande":"","contexte":"protocole-education-continue"}
-{"date":"2026-08-18 21:24:08","agent":"chiron","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"domaine mission (c0e)"}
-{"date":"2026-08-18 21:24:08","agent":"chiron","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon education themis"}
+{"date": "2026-08-18 21:25:58", "agent": "buffy", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "parcours themis 0.4.10->0.5.0"}
+{"date": "2026-08-18 21:25:58", "agent": "buffy", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 liens preexistants"}
+{"date": "2026-08-18 21:25:58", "agent": "buffy", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 21:25:57", "agent": "buffy", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "themis CONFORME"}
+{"date": "2026-08-18 21:25:57", "agent": "buffy", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "themis CONFORME"}
+{"date": "2026-08-18 21:24:08", "agent": "chiron", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "themis fiche+corrections+carte (c2-c8)"}
+{"date": "2026-08-18 21:24:08", "agent": "chiron", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "protocole-education-continue"}
+{"date": "2026-08-18 21:24:08", "agent": "chiron", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "domaine mission (c0e)"}
+{"date": "2026-08-18 21:24:08", "agent": "chiron", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon education themis"}
 {"date": "2026-08-18 21:21:36", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-093 (17/17)"}
-{"date":"2026-08-18 21:21:36","agent":"janus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:21:36","agent":"janus","outil":"proteger-verrou-marbre","mode":"direct","commande":"","contexte":"8/8"}
-{"date":"2026-08-18 21:21:36","agent":"janus","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 liens preexistants"}
-{"date":"2026-08-18 21:21:36","agent":"janus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 21:21:35","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"chiron CONFORME"}
+{"date": "2026-08-18 21:21:36", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:21:36", "agent": "janus", "outil": "proteger-verrou-marbre", "mode": "direct", "commande": "", "contexte": "8/8"}
+{"date": "2026-08-18 21:21:36", "agent": "janus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 liens preexistants"}
+{"date": "2026-08-18 21:21:36", "agent": "janus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 21:21:35", "agent": "janus", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "chiron CONFORME"}
 {"date": "2026-08-18 21:21:35", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 (6/6)"}
 {"date": "2026-08-18 21:21:35", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-006 (19/19)"}
 {"date": "2026-08-18 21:21:35", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-027 (11/11)"}
 {"date": "2026-08-18 21:21:35", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-056 (17/17)"}
-{"date":"2026-08-18 21:19:46","agent":"themis","outil":"guider-parcours","mode":"direct","commande":"","contexte":"chiron navigation c11b"}
-{"date":"2026-08-18 21:19:46","agent":"themis","outil":"proteger-verrou-habilitation","mode":"direct","commande":"","contexte":"chiron SA carte OK / atlas BLOQUE"}
+{"date": "2026-08-18 21:19:46", "agent": "themis", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "chiron navigation c11b"}
+{"date": "2026-08-18 21:19:46", "agent": "themis", "outil": "proteger-verrou-habilitation", "mode": "direct", "commande": "", "contexte": "chiron SA carte OK / atlas BLOQUE"}
 {"date": "2026-08-18 21:19:46", "agent": "themis", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 (6/6)"}
-{"date":"2026-08-18 21:19:46","agent":"themis","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"chiron CONFORME"}
-{"date":"2026-08-18 21:19:46","agent":"themis","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 liens preexistants"}
-{"date":"2026-08-18 21:19:46","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 21:18:28","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 21:18:27","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet","contexte":""}
-{"date":"2026-08-18 21:18:03","agent":"morpheus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:18:03","agent":"morpheus","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 liens preexistants"}
-{"date":"2026-08-18 21:18:03","agent":"morpheus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
+{"date": "2026-08-18 21:19:46", "agent": "themis", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "chiron CONFORME"}
+{"date": "2026-08-18 21:19:46", "agent": "themis", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 liens preexistants"}
+{"date": "2026-08-18 21:19:46", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 21:18:28", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 21:18:27", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet", "contexte": ""}
+{"date": "2026-08-18 21:18:03", "agent": "morpheus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:18:03", "agent": "morpheus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 liens preexistants"}
+{"date": "2026-08-18 21:18:03", "agent": "morpheus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
 {"date": "2026-08-18 21:18:02", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 (6/6)"}
 {"date": "2026-08-18 21:18:02", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-057 (24/24)"}
 {"date": "2026-08-18 21:18:02", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-092 (9/9)"}
-{"date":"2026-08-18 21:16:39","agent":"buffy","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"chiron CONFORME"}
-{"date":"2026-08-18 21:16:38","agent":"buffy","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"chiron CONFORME x2"}
-{"date":"2026-08-18 21:16:38","agent":"buffy","outil":"guider-parcours","mode":"direct","commande":"","contexte":"chiron branches c11b/c18"}
+{"date": "2026-08-18 21:16:39", "agent": "buffy", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "chiron CONFORME"}
+{"date": "2026-08-18 21:16:38", "agent": "buffy", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "chiron CONFORME x2"}
+{"date": "2026-08-18 21:16:38", "agent": "buffy", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "chiron branches c11b/c18"}
 {"date": "2026-08-18 21:16:38", "agent": "buffy", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-016 (20/20)"}
 {"date": "2026-08-18 21:16:38", "agent": "buffy", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-006 (19/19)"}
 {"date": "2026-08-18 21:16:38", "agent": "buffy", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 (KO boucle texte - pin a adapter)"}
-{"date":"2026-08-18 21:16:38","agent":"buffy","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"parcours chiron 0.2.0->0.3.0"}
-{"date":"2026-08-18 21:10:25","agent":"cerberus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (regle de relecture)"}
-{"date":"2026-08-18 21:10:02","agent":"morpheus","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 liens preexistants"}
-{"date":"2026-08-18 21:10:02","agent":"morpheus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
+{"date": "2026-08-18 21:16:38", "agent": "buffy", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "parcours chiron 0.2.0->0.3.0"}
+{"date": "2026-08-18 21:10:25", "agent": "cerberus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (regle de relecture)"}
+{"date": "2026-08-18 21:10:02", "agent": "morpheus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 liens preexistants"}
+{"date": "2026-08-18 21:10:02", "agent": "morpheus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
 {"date": "2026-08-18 21:10:01", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-093 (17/17)"}
 {"date": "2026-08-18 21:10:01", "agent": "morpheus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-027 points 1-3"}
-{"date":"2026-08-18 21:10:01","agent":"morpheus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 21:05:37","agent":"vulcain","outil":"combos-corriger-non-ascii","mode":"direct","commande":"","contexte":"test --full dry/wet"}
-{"date":"2026-08-18 21:05:37","agent":"vulcain","outil":"corriger-accents-zones-sensibles","mode":"direct","commande":"","contexte":"test mode fichier direct"}
-{"date":"2026-08-18 21:05:37","agent":"vulcain","outil":"corriger-emojis","mode":"direct","commande":"","contexte":"test mode fichier direct"}
-{"date":"2026-08-18 21:05:37","agent":"vulcain","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
+{"date": "2026-08-18 21:10:01", "agent": "morpheus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 21:05:37", "agent": "vulcain", "outil": "combos-corriger-non-ascii", "mode": "direct", "commande": "", "contexte": "test --full dry/wet"}
+{"date": "2026-08-18 21:05:37", "agent": "vulcain", "outil": "corriger-accents-zones-sensibles", "mode": "direct", "commande": "", "contexte": "test mode fichier direct"}
+{"date": "2026-08-18 21:05:37", "agent": "vulcain", "outil": "corriger-emojis", "mode": "direct", "commande": "", "contexte": "test mode fichier direct"}
+{"date": "2026-08-18 21:05:37", "agent": "vulcain", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
 {"date": "2026-08-18 21:05:31", "agent": "vulcain", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-002 (37/37)"}
 {"date": "2026-08-18 21:05:31", "agent": "vulcain", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-003 (89/89)"}
 {"date": "2026-08-18 21:05:31", "agent": "vulcain", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-004 (16/16)"}
 {"date": "2026-08-18 21:05:31", "agent": "vulcain", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-006 (19/19)"}
-{"date":"2026-08-18 21:05:31","agent":"vulcain","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 liens preexistants"}
-{"date":"2026-08-18 21:05:31","agent":"vulcain","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
+{"date": "2026-08-18 21:05:31", "agent": "vulcain", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 liens preexistants"}
+{"date": "2026-08-18 21:05:31", "agent": "vulcain", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
 {"date": "2026-08-18 20:33:23", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-057 (24/24)"}
 {"date": "2026-08-18 20:33:23", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-037 (6/6)"}
-{"date":"2026-08-18 20:33:23","agent":"janus","outil":"proteger-verrou-habilitation","mode":"direct","commande":"","contexte":"audit cle chiron"}
-{"date":"2026-08-18 20:33:23","agent":"janus","outil":"proteger-verrou-marbre","mode":"direct","commande":"","contexte":"verification 8/8"}
-{"date":"2026-08-18 20:33:23","agent":"janus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper 0/0"}
-{"date":"2026-08-18 20:33:23","agent":"janus","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"15 liens preexistants"}
+{"date": "2026-08-18 20:33:23", "agent": "janus", "outil": "proteger-verrou-habilitation", "mode": "direct", "commande": "", "contexte": "audit cle chiron"}
+{"date": "2026-08-18 20:33:23", "agent": "janus", "outil": "proteger-verrou-marbre", "mode": "direct", "commande": "", "contexte": "verification 8/8"}
+{"date": "2026-08-18 20:33:23", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0"}
+{"date": "2026-08-18 20:33:23", "agent": "janus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "15 liens preexistants"}
 {"date": "2026-08-18 20:33:22", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-056 (17/17)"}
 {"date": "2026-08-18 20:33:22", "agent": "janus", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 (6/6)"}
 {"date": "2026-08-18 20:31:45", "agent": "vulcain", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-058 seul-buffy (reverdi)"}
 {"date": "2026-08-18 20:31:44", "agent": "vulcain", "outil": "tester-lancer-non-regression", "mode": "direct", "commande": "", "contexte": "test-056 verrou (reverdi)"}
-{"date":"2026-08-18 20:31:02","agent":"morpheus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 20:31:02","agent":"morpheus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon 53 tests chiron"}
-{"date":"2026-08-18 20:29:16","agent":"vulcain","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours vulcain"}
-{"date":"2026-08-18 20:29:16","agent":"vulcain","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 20:29:16","agent":"vulcain","outil":"proteger-verrou-habilitation","mode":"direct","commande":"","contexte":"cle exclusive chiron (tests manuels OK)"}
-{"date":"2026-08-18 20:29:16","agent":"vulcain","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bump verrou v0.4.0 + editer-parcours v0.1.7"}
-{"date":"2026-08-18 20:29:16","agent":"vulcain","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon 52 verrou chiron"}
-{"date":"2026-08-18 20:20:13","agent":"gardien","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours gardien (c1-c6-c9)"}
-{"date":"2026-08-18 20:20:13","agent":"gardien","outil":"proteger-modifier-marbre","mode":"direct","commande":"","contexte":"porte zone regles-groupes-agents"}
-{"date":"2026-08-18 20:20:13","agent":"gardien","outil":"proteger-verrou-marbre","mode":"direct","commande":"","contexte":"verif --tous 8/8"}
-{"date":"2026-08-18 20:20:13","agent":"gardien","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon 51 porte marbre"}
-{"date":"2026-08-18 20:19:18","agent":"buffy","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon 50 exception chiron"}
-{"date":"2026-08-18 20:19:17","agent":"buffy","outil":"lire-fichier","mode":"direct","commande":"","contexte":"lecture regles-groupes-agents.md"}
-{"date":"2026-08-18 20:08:50","agent":"cerberus","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours cerberus (c1-c5-c20)"}
-{"date":"2026-08-18 20:08:50","agent":"cerberus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 20:08:50","agent":"cerberus","outil":"lister-agents","mode":"direct","commande":"","contexte":"matrice agents"}
-{"date":"2026-08-18 20:02:26","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"10 cartes secondaires CONFORME"}
-{"date":"2026-08-18 20:02:26","agent":"janus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper --tous 0/0"}
-{"date":"2026-08-18 20:02:26","agent":"janus","outil":"evaluer-coherence","mode":"direct","commande":"","contexte":"evaluateur aucune ERREUR nouvelle"}
-{"date":"2026-08-18 20:02:26","agent":"janus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon 49 controle re-education 10 cartes"}
-{"date":"2026-08-18 20:02:25","agent":"janus","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo controle-modification"}
-{"date":"2026-08-18 20:01:07","agent":"morpheus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon 48 pin atlas test-005"}
-{"date":"2026-08-18 20:01:06","agent":"morpheus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 19:59:22","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:59:22","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:59:05","agent":"themis","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours themis (audit-fin-mission)"}
-{"date":"2026-08-18 19:59:05","agent":"themis","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo audit-themis"}
-{"date":"2026-08-18 19:59:05","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"lecture parcours"}
-{"date":"2026-08-18 19:59:05","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon 47 audit re-education cartes secondaires"}
-{"date":"2026-08-18 19:58:19","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:58:18","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet","contexte":""}
-{"date":"2026-08-18 19:58:00","agent":"buffy","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 19:58:00","agent":"buffy","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"10 cartes secondaires CONFORME"}
-{"date":"2026-08-18 19:58:00","agent":"buffy","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bump --mineure --wet 10 cartes + sync fiche + resync lock"}
-{"date":"2026-08-18 19:58:00","agent":"buffy","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon 46 re-education 10 cartes secondaires"}
-{"date":"2026-08-18 19:57:59","agent":"buffy","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours buffy (c1-c8 re-education)"}
-{"date":"2026-08-18 19:51:21","agent":"chiron","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours chiron"}
-{"date":"2026-08-18 19:51:21","agent":"chiron","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 19:51:21","agent":"chiron","outil":"detecter-divergences-version","mode":"direct","commande":"","contexte":"verif fiches 10 agents secondaires"}
+{"date": "2026-08-18 20:31:02", "agent": "morpheus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 20:31:02", "agent": "morpheus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon 53 tests chiron"}
+{"date": "2026-08-18 20:29:16", "agent": "vulcain", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours vulcain"}
+{"date": "2026-08-18 20:29:16", "agent": "vulcain", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 20:29:16", "agent": "vulcain", "outil": "proteger-verrou-habilitation", "mode": "direct", "commande": "", "contexte": "cle exclusive chiron (tests manuels OK)"}
+{"date": "2026-08-18 20:29:16", "agent": "vulcain", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bump verrou v0.4.0 + editer-parcours v0.1.7"}
+{"date": "2026-08-18 20:29:16", "agent": "vulcain", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon 52 verrou chiron"}
+{"date": "2026-08-18 20:20:13", "agent": "gardien", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours gardien (c1-c6-c9)"}
+{"date": "2026-08-18 20:20:13", "agent": "gardien", "outil": "proteger-modifier-marbre", "mode": "direct", "commande": "", "contexte": "porte zone regles-groupes-agents"}
+{"date": "2026-08-18 20:20:13", "agent": "gardien", "outil": "proteger-verrou-marbre", "mode": "direct", "commande": "", "contexte": "verif --tous 8/8"}
+{"date": "2026-08-18 20:20:13", "agent": "gardien", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon 51 porte marbre"}
+{"date": "2026-08-18 20:19:18", "agent": "buffy", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon 50 exception chiron"}
+{"date": "2026-08-18 20:19:17", "agent": "buffy", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "lecture regles-groupes-agents.md"}
+{"date": "2026-08-18 20:08:50", "agent": "cerberus", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours cerberus (c1-c5-c20)"}
+{"date": "2026-08-18 20:08:50", "agent": "cerberus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 20:08:50", "agent": "cerberus", "outil": "lister-agents", "mode": "direct", "commande": "", "contexte": "matrice agents"}
+{"date": "2026-08-18 20:02:26", "agent": "janus", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "10 cartes secondaires CONFORME"}
+{"date": "2026-08-18 20:02:26", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper --tous 0/0"}
+{"date": "2026-08-18 20:02:26", "agent": "janus", "outil": "evaluer-coherence", "mode": "direct", "commande": "", "contexte": "evaluateur aucune ERREUR nouvelle"}
+{"date": "2026-08-18 20:02:26", "agent": "janus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon 49 controle re-education 10 cartes"}
+{"date": "2026-08-18 20:02:25", "agent": "janus", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo controle-modification"}
+{"date": "2026-08-18 20:01:07", "agent": "morpheus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon 48 pin atlas test-005"}
+{"date": "2026-08-18 20:01:06", "agent": "morpheus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 19:59:22", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:59:22", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:59:05", "agent": "themis", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours themis (audit-fin-mission)"}
+{"date": "2026-08-18 19:59:05", "agent": "themis", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo audit-themis"}
+{"date": "2026-08-18 19:59:05", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "lecture parcours"}
+{"date": "2026-08-18 19:59:05", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon 47 audit re-education cartes secondaires"}
+{"date": "2026-08-18 19:58:19", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:58:18", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet", "contexte": ""}
+{"date": "2026-08-18 19:58:00", "agent": "buffy", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 19:58:00", "agent": "buffy", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "10 cartes secondaires CONFORME"}
+{"date": "2026-08-18 19:58:00", "agent": "buffy", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bump --mineure --wet 10 cartes + sync fiche + resync lock"}
+{"date": "2026-08-18 19:58:00", "agent": "buffy", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon 46 re-education 10 cartes secondaires"}
+{"date": "2026-08-18 19:57:59", "agent": "buffy", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours buffy (c1-c8 re-education)"}
+{"date": "2026-08-18 19:51:21", "agent": "chiron", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours chiron"}
+{"date": "2026-08-18 19:51:21", "agent": "chiron", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 19:51:21", "agent": "chiron", "outil": "detecter-divergences-version", "mode": "direct", "commande": "", "contexte": "verif fiches 10 agents secondaires"}
 {"date": "2026-08-18 19:51:21", "agent": "chiron", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper 0/0 (aucune modif)"}
-{"date":"2026-08-18 19:51:21","agent":"chiron","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon 45 re-education cartes secondaires"}
-{"date":"2026-08-18 19:49:38","agent":"themis","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo audit-themis"}
-{"date":"2026-08-18 19:49:38","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:49:38","agent":"themis","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"BDD lecons (historique education)"}
-{"date":"2026-08-18 19:49:38","agent":"themis","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:49:38","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:48:16","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:48:15","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet","contexte":""}
-{"date":"2026-08-18 19:48:03","agent":"cerberus","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours cerberus (c0-c22)"}
-{"date":"2026-08-18 19:48:03","agent":"cerberus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 19:43:19","agent":"janus","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:43:19","agent":"janus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:43:18","agent":"janus","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo controle-modification"}
-{"date":"2026-08-18 19:43:18","agent":"janus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:43:18","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"RVAV 3 cartes"}
-{"date":"2026-08-18 19:43:18","agent":"janus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper --tous"}
-{"date":"2026-08-18 19:43:18","agent":"janus","outil":"detecter-residus","mode":"direct","commande":"","contexte":"0 residu"}
-{"date":"2026-08-18 19:42:13","agent":"morpheus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 19:42:13","agent":"morpheus","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:42:13","agent":"morpheus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:40:00","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:40:00","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:39:32","agent":"themis","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo audit-themis"}
-{"date":"2026-08-18 19:39:32","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:39:32","agent":"themis","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:39:32","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:38:35","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:38:34","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet","contexte":""}
-{"date":"2026-08-18 19:38:19","agent":"buffy","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"RVAV 3 cartes"}
-{"date":"2026-08-18 19:38:19","agent":"buffy","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bump 3 cartes 0.4.x -> 0.5.0 + resync lock"}
-{"date":"2026-08-18 19:38:19","agent":"buffy","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:38:19","agent":"buffy","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:38:18","agent":"buffy","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours buffy"}
-{"date":"2026-08-18 19:38:18","agent":"buffy","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:34:24","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:34:24","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:33:42","agent":"chiron","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"BDD lecons"}
-{"date":"2026-08-18 19:33:42","agent":"chiron","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:33:42","agent":"chiron","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:33:41","agent":"chiron","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours chiron"}
-{"date":"2026-08-18 19:33:41","agent":"chiron","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections"}
-{"date":"2026-08-18 19:33:41","agent":"chiron","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"conformite fiches vulcain/morpheus/buffy"}
-{"date":"2026-08-18 19:33:41","agent":"chiron","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper --tous"}
-{"date":"2026-08-18 19:32:45","agent":"themis","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo audit-themis"}
-{"date":"2026-08-18 19:32:45","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:32:45","agent":"themis","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"BDD lecons (historique education)"}
-{"date":"2026-08-18 19:32:45","agent":"themis","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:32:45","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:31:27","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:31:26","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet","contexte":""}
-{"date":"2026-08-18 19:31:11","agent":"cerberus","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours cerberus (c0-c22)"}
-{"date":"2026-08-18 19:31:11","agent":"cerberus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 19:29:12","agent":"janus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:29:11","agent":"janus","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo controle-modification"}
-{"date":"2026-08-18 19:29:11","agent":"janus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:29:11","agent":"janus","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"RVAV carte janus"}
-{"date":"2026-08-18 19:29:11","agent":"janus","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper --tous"}
-{"date":"2026-08-18 19:29:11","agent":"janus","outil":"detecter-residus","mode":"direct","commande":"","contexte":"0 residu"}
-{"date":"2026-08-18 19:29:11","agent":"janus","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:28:19","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:28:18","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:27:35","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:27:34","agent":"themis","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo audit-themis"}
-{"date":"2026-08-18 19:27:34","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:27:34","agent":"themis","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:25:52","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:25:51","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet","contexte":""}
-{"date":"2026-08-18 19:25:38","agent":"buffy","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:25:37","agent":"buffy","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours buffy"}
-{"date":"2026-08-18 19:25:37","agent":"buffy","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:25:37","agent":"buffy","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"RVAV carte janus"}
-{"date":"2026-08-18 19:25:37","agent":"buffy","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bump carte janus 0.4.20 -> 0.5.0 + audit"}
-{"date":"2026-08-18 19:25:37","agent":"buffy","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:19:32","agent":"chiron","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:19:32","agent":"chiron","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:19:31","agent":"chiron","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours chiron"}
-{"date":"2026-08-18 19:19:31","agent":"chiron","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections + fiche janus"}
-{"date":"2026-08-18 19:19:31","agent":"chiron","outil":"verifier-conformite-fiche","mode":"direct","commande":"","contexte":"conformite fiche janus"}
-{"date":"2026-08-18 19:19:31","agent":"chiron","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bumper --tous"}
-{"date":"2026-08-18 19:19:31","agent":"chiron","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"BDD lecons"}
-{"date":"2026-08-18 19:18:21","agent":"themis","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"BDD lecons (historique education)"}
-{"date":"2026-08-18 19:18:21","agent":"themis","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:18:21","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:18:20","agent":"themis","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo audit-themis"}
-{"date":"2026-08-18 19:18:20","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:15:26","agent":"themis","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=guidage pedagogique)"}
-{"date":"2026-08-18 19:15:18","agent":"chiron","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-18 19:15:14","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-18 19:14:23","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:14:22","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet","contexte":""}
-{"date":"2026-08-18 19:14:02","agent":"cerberus","outil":"guider-parcours","mode":"direct","commande":"","contexte":"parcours cerberus (c0-c20)"}
-{"date":"2026-08-18 19:14:02","agent":"cerberus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture corrections (c0)"}
-{"date":"2026-08-18 19:12:21","agent":"janus","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo controle-modification"}
-{"date":"2026-08-18 19:12:21","agent":"janus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:12:21","agent":"janus","outil":"lire-activite-recente","mode":"direct","commande":"","contexte":"activite sessions (c0)"}
-{"date":"2026-08-18 19:12:21","agent":"janus","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:12:21","agent":"janus","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:11:19","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:11:18","agent":"janus","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:10:41","agent":"themis","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"lecon corrections.md"}
-{"date":"2026-08-18 19:10:41","agent":"themis","outil":"enregistrer-lecon","mode":"direct","commande":"","contexte":"lecon BDD"}
-{"date":"2026-08-18 19:10:40","agent":"themis","outil":"combos-moteur","mode":"direct","commande":"","contexte":"combo audit-themis (c25)"}
-{"date":"2026-08-18 19:10:40","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0)"}
-{"date":"2026-08-18 19:09:58","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents","contexte":""}
-{"date":"2026-08-18 19:09:57","agent":"themis","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet","contexte":""}
-{"date":"2026-08-18 19:07:01","agent":"vulcain","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"audit coh\u00e9rence versions + bump 0.5.12 -> 0.5.13 activer-agent-principal"}
-{"date":"2026-08-18 19:06:58","agent":"vulcain","outil":"lire-fichier","mode":"direct","commande":"","contexte":"relecture fiche + corrections (c0) + exploration outil activer-agent-principal"}
+{"date": "2026-08-18 19:51:21", "agent": "chiron", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon 45 re-education cartes secondaires"}
+{"date": "2026-08-18 19:49:38", "agent": "themis", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo audit-themis"}
+{"date": "2026-08-18 19:49:38", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:49:38", "agent": "themis", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "BDD lecons (historique education)"}
+{"date": "2026-08-18 19:49:38", "agent": "themis", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:49:38", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:48:16", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:48:15", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet", "contexte": ""}
+{"date": "2026-08-18 19:48:03", "agent": "cerberus", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours cerberus (c0-c22)"}
+{"date": "2026-08-18 19:48:03", "agent": "cerberus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 19:43:19", "agent": "janus", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:43:19", "agent": "janus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:43:18", "agent": "janus", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo controle-modification"}
+{"date": "2026-08-18 19:43:18", "agent": "janus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:43:18", "agent": "janus", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "RVAV 3 cartes"}
+{"date": "2026-08-18 19:43:18", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper --tous"}
+{"date": "2026-08-18 19:43:18", "agent": "janus", "outil": "detecter-residus", "mode": "direct", "commande": "", "contexte": "0 residu"}
+{"date": "2026-08-18 19:42:13", "agent": "morpheus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 19:42:13", "agent": "morpheus", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:42:13", "agent": "morpheus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:40:00", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:40:00", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:39:32", "agent": "themis", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo audit-themis"}
+{"date": "2026-08-18 19:39:32", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:39:32", "agent": "themis", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:39:32", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:38:35", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:38:34", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet", "contexte": ""}
+{"date": "2026-08-18 19:38:19", "agent": "buffy", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "RVAV 3 cartes"}
+{"date": "2026-08-18 19:38:19", "agent": "buffy", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bump 3 cartes 0.4.x -> 0.5.0 + resync lock"}
+{"date": "2026-08-18 19:38:19", "agent": "buffy", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:38:19", "agent": "buffy", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:38:18", "agent": "buffy", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours buffy"}
+{"date": "2026-08-18 19:38:18", "agent": "buffy", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:34:24", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:34:24", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:33:42", "agent": "chiron", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "BDD lecons"}
+{"date": "2026-08-18 19:33:42", "agent": "chiron", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:33:42", "agent": "chiron", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:33:41", "agent": "chiron", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours chiron"}
+{"date": "2026-08-18 19:33:41", "agent": "chiron", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections"}
+{"date": "2026-08-18 19:33:41", "agent": "chiron", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "conformite fiches vulcain/morpheus/buffy"}
+{"date": "2026-08-18 19:33:41", "agent": "chiron", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper --tous"}
+{"date": "2026-08-18 19:32:45", "agent": "themis", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo audit-themis"}
+{"date": "2026-08-18 19:32:45", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:32:45", "agent": "themis", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "BDD lecons (historique education)"}
+{"date": "2026-08-18 19:32:45", "agent": "themis", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:32:45", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:31:27", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:31:26", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet", "contexte": ""}
+{"date": "2026-08-18 19:31:11", "agent": "cerberus", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours cerberus (c0-c22)"}
+{"date": "2026-08-18 19:31:11", "agent": "cerberus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 19:29:12", "agent": "janus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:29:11", "agent": "janus", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo controle-modification"}
+{"date": "2026-08-18 19:29:11", "agent": "janus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:29:11", "agent": "janus", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "RVAV carte janus"}
+{"date": "2026-08-18 19:29:11", "agent": "janus", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper --tous"}
+{"date": "2026-08-18 19:29:11", "agent": "janus", "outil": "detecter-residus", "mode": "direct", "commande": "", "contexte": "0 residu"}
+{"date": "2026-08-18 19:29:11", "agent": "janus", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:28:19", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:28:18", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:27:35", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:27:34", "agent": "themis", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo audit-themis"}
+{"date": "2026-08-18 19:27:34", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:27:34", "agent": "themis", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:25:52", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:25:51", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet", "contexte": ""}
+{"date": "2026-08-18 19:25:38", "agent": "buffy", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:25:37", "agent": "buffy", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours buffy"}
+{"date": "2026-08-18 19:25:37", "agent": "buffy", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:25:37", "agent": "buffy", "outil": "valider-cartes-decision", "mode": "direct", "commande": "", "contexte": "RVAV carte janus"}
+{"date": "2026-08-18 19:25:37", "agent": "buffy", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bump carte janus 0.4.20 -> 0.5.0 + audit"}
+{"date": "2026-08-18 19:25:37", "agent": "buffy", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:19:32", "agent": "chiron", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:19:32", "agent": "chiron", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:19:31", "agent": "chiron", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours chiron"}
+{"date": "2026-08-18 19:19:31", "agent": "chiron", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections + fiche janus"}
+{"date": "2026-08-18 19:19:31", "agent": "chiron", "outil": "verifier-conformite-fiche", "mode": "direct", "commande": "", "contexte": "conformite fiche janus"}
+{"date": "2026-08-18 19:19:31", "agent": "chiron", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "bumper --tous"}
+{"date": "2026-08-18 19:19:31", "agent": "chiron", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "BDD lecons"}
+{"date": "2026-08-18 19:18:21", "agent": "themis", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "BDD lecons (historique education)"}
+{"date": "2026-08-18 19:18:21", "agent": "themis", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:18:21", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:18:20", "agent": "themis", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo audit-themis"}
+{"date": "2026-08-18 19:18:20", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:15:26", "agent": "themis", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: recherche=guidage pedagogique)"}
+{"date": "2026-08-18 19:15:18", "agent": "chiron", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-18 19:15:14", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "commande": "", "contexte": "consultation lecons (filtre: tout)"}
+{"date": "2026-08-18 19:14:23", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:14:22", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet", "contexte": ""}
+{"date": "2026-08-18 19:14:02", "agent": "cerberus", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours cerberus (c0-c20)"}
+{"date": "2026-08-18 19:14:02", "agent": "cerberus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture corrections (c0)"}
+{"date": "2026-08-18 19:12:21", "agent": "janus", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo controle-modification"}
+{"date": "2026-08-18 19:12:21", "agent": "janus", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:12:21", "agent": "janus", "outil": "lire-activite-recente", "mode": "direct", "commande": "", "contexte": "activite sessions (c0)"}
+{"date": "2026-08-18 19:12:21", "agent": "janus", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:12:21", "agent": "janus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:11:19", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:11:18", "agent": "janus", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py --recursive cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:10:41", "agent": "themis", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md"}
+{"date": "2026-08-18 19:10:41", "agent": "themis", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD"}
+{"date": "2026-08-18 19:10:40", "agent": "themis", "outil": "combos-moteur", "mode": "direct", "commande": "", "contexte": "combo audit-themis (c25)"}
+{"date": "2026-08-18 19:10:40", "agent": "themis", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0)"}
+{"date": "2026-08-18 19:09:58", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-valider-cerveau/combos-valider-cerveau.py cerveau-projet/agents", "contexte": ""}
+{"date": "2026-08-18 19:09:57", "agent": "themis", "outil": "generateurs-commande", "mode": "generateur", "commande": "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py cerveau-projet", "contexte": ""}
+{"date": "2026-08-18 19:07:01", "agent": "vulcain", "outil": "mettre-a-jour-versions", "mode": "direct", "commande": "", "contexte": "audit coh\u00e9rence versions + bump 0.5.12 -> 0.5.13 activer-agent-principal"}
+{"date": "2026-08-18 19:06:58", "agent": "vulcain", "outil": "lire-fichier", "mode": "direct", "commande": "", "contexte": "relecture fiche + corrections (c0) + exploration outil activer-agent-principal"}
 {"date": "2026-08-18 19:01:48", "agent": "morpheus", "outil": "ajouter-contenu-fichier", "mode": "direct", "commande": "", "contexte": "lecon corrections.md (test-092)"}
 {"date": "2026-08-18 19:01:48", "agent": "morpheus", "outil": "enregistrer-lecon", "mode": "direct", "commande": "", "contexte": "lecon BDD (test-092)"}
 {"date": "2026-08-18 18:56:30", "agent": "cerberus", "outil": "guider-parcours", "mode": "direct", "commande": "", "contexte": "parcours cerberus (garde-fou parite agents)"}
@@ -620,6 +652,7 @@
 {"date": "2026-08-13 22:28:17", "agent": "hygie", "outil": "c2-snapshot", "mode": "script-temporaire", "commande": "", "contexte": "snapshot + rotation + consultation (c2-c3)", "horodatage": "2026-08-14 00:00:00"}
 {"date": "2026-08-13 22:28:17", "agent": "hygie", "outil": "c0b-relire", "mode": "script-temporaire", "commande": "", "contexte": "relecture corrections + fiche (c0b)", "horodatage": "2026-08-14 00:00:00"}
 {"date": "2026-08-13 22:25:52", "agent": "vulcain", "outil": "exec-preuve-hygie", "mode": "script-temporaire", "commande": "", "contexte": "preuves reelles activation hygie (script temporaire mission Vulcain)", "horodatage": "2026-08-14 00:00:00"}
-{"agent": "janus", "outil": "tester-lancer-non-regression", "date": "2026-08-19 08:06:43", "mission": "controle-final-liens-casses", "mode": "verrou-auto"}
-{"agent": "janus", "outil": "evaluer-coherence", "date": "2026-08-19 08:06:43", "mission": "controle-final-liens-casses", "mode": "direct"}
-{"agent": "janus", "outil": "enregistrer-lecon", "date": "2026-08-19 08:06:43", "mission": "controle-final-liens-casses", "mode": "verrou-auto"}
+{"date": "2026-08-19T08:54:00", "agent": "janus", "outil": "evaluer-coherence", "mode": "direct", "objet": "controle-final-catalogue-combos"}
+{"date": "2026-08-19T08:54:00", "agent": "janus", "outil": "evaluer-processus", "mode": "direct", "objet": "controle-final-catalogue-combos"}
+{"date": "2026-08-19T08:54:00", "agent": "janus", "outil": "consulter-lecons", "mode": "direct", "objet": "controle-final-catalogue-combos"}
+{"date": "2026-08-19T08:54:00", "agent": "janus", "outil": "enregistrer-lecon", "mode": "verrou-auto", "objet": "controle-final-catalogue-combos"}

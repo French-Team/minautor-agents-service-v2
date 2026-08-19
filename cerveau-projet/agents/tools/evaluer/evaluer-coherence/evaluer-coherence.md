@@ -3,6 +3,8 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  combos:
+    - combos-audit-general
 ---
 # evaluer-coherence
 

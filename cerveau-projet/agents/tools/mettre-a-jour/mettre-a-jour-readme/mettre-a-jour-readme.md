@@ -3,6 +3,9 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  combos:
+    - combo-maj-readme
+    - combos-maj-readme-massive
 ---
 # mettre-a-jour-readme
 

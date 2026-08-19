@@ -58,7 +58,7 @@ reprends a la case courante avec --case <cid> --reponses '<reponse>').
 | **Fiche** | [cerveau-projet/agents/vulcain/vulcain.md](cerveau-projet/agents/vulcain/vulcain.md) |
 | **Corrections** | [cerveau-projet/agents/vulcain/corrections.md](cerveau-projet/agents/vulcain/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | Combler la lacune combo->outils : creer catalogue-combos.json (source de verite : combo -> proprietaire + outils membres), ajouter champ 'combos' dans le frontmatter des fiches outils membres (~25), creer un outil de consultation qui repond 'l outil X est utilise par les combos Y,Z (proprietaire W)' |
+| **Raison** | Mission : creer l'outil convertir-carte-mermaid (categorie consulter) qui convertit chaque parcours-<agent>.json en graphe mermaid (fichier .mmd par agent dans cartes-vues/mermaid/), options --agent/--tous + index.md, ASCII/LF 0/0, modele standard outil. Vulcain deleguera le test garde-fou de synchronisation a Morpheus, puis Janus fera le controle final. |
 
 DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
 python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0
@@ -70,7 +70,7 @@ reprends a la case courante avec --case <cid> --reponses '<reponse>').
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | vulcain | 2026-08-19 08:15 |
+| session-llm-1 | llm-1 | vulcain | 2026-08-19 08:42 |
 | session-llm-2 | kilo-llm | themis | 2026-08-18 21:05 |
 | session-llm-3 | kilo-test2 | Cerberus | 2026-08-18 21:57 |
 ## Configuration Active

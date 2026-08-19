@@ -3,6 +3,8 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  combos:
+    - combo-creer-fichier-cerveau
 ---
 # rechercher-fichier
 

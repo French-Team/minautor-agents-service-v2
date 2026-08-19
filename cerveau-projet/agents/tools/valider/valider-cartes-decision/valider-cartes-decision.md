@@ -4,6 +4,9 @@ identite:
   appartient_a: commun
   commun: true
   tags: validation, parcours, communs
+  combos:
+    - combo-controle-outil
+    - combos-valider-cerveau
 ---
 # valider-cartes-decision
 

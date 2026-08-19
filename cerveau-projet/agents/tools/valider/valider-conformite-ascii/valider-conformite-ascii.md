@@ -4,6 +4,12 @@ identite:
   appartient_a: commun
   commun: true
   tags: validation, ascii, communs
+  combos:
+    - combo-controle-outil
+    - combo-corriger-ascii
+    - combo-maj-readme
+    - combos-maj-readme-massive
+    - combos-valider-cerveau
 ---
 # valider-conformite-ascii
 

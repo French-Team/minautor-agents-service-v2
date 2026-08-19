@@ -4,6 +4,9 @@ identite:
   appartient_a: commun
   commun: true
   tags: validation, conventions, communs
+  combos:
+    - combo-creer-fichier-cerveau
+    - combo-creer-protocole
 ---
 # valider-conventions
 

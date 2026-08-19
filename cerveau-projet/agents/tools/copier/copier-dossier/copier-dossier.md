@@ -3,6 +3,9 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  combos:
+    - combo-creer-agent
+    - combo-creer-protocole
 ---
 # copier-dossier
 

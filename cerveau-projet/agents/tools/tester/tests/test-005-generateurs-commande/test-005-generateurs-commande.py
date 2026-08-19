@@ -42,7 +42,7 @@ Cas couverts (26 points) :
  11. flag booleen ecrire-fichier backup=non : --backup ABSENT (py)
  12. parite py/sh : commande composee identique (CRLF normalise)
  13. catalogue JSON valide (json.load)
- 14. catalogue version = 0.2.13
+ 14. catalogue version = 0.2.14
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
   PARCOURS ATLAS v0.4.1
@@ -211,7 +211,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.6 + catalogue 0.2.13 + parcours-atlas v0.5.0 ===")
+    print("=== Test 005 -- generateurs-commande v0.2.6 + catalogue 0.2.14 + parcours-atlas v0.5.0 ===")
     print("")
 
     # ---------- GENERATEUR v0.2.6 ----------
@@ -260,7 +260,7 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         verifier(13, "catalogue-commandes.json JSON valide", True)
-        verifier(14, "catalogue version = 0.2.13", cat.get("version") == "0.2.13", str(cat.get("version")))
+        verifier(14, "catalogue version = 0.2.14", cat.get("version") == "0.2.14", str(cat.get("version")))
     except Exception as e:
         verifier(13, "catalogue-commandes.json JSON valide", False, str(e))
         verifier(14, "catalogue version = 0.2.0", False, "")

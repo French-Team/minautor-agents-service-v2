@@ -3,6 +3,10 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  combos:
+    - combo-audit-themis
+    - combo-controle-modification
+    - combo-sante-tableaux
 ---
 # combos-valider-cerveau
 

@@ -3,6 +3,9 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  combos:
+    - combo-controle-buffy
+    - combos-maj-readme-massive
 ---
 # lire-fichier
 

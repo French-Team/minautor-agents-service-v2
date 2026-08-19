@@ -1,3 +1,15 @@
+{"date":"2026-08-19 08:36:41","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:36:41","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:36:39","agent":"argus","outil":"lire-fichier","mode":"verrou-bloque","commande":"","contexte":"tentative USURPATION_IDENTITE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:32:23","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:32:23","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:32:22","agent":"argus","outil":"lire-fichier","mode":"verrou-bloque","commande":"","contexte":"tentative USURPATION_IDENTITE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:31:07","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:31:06","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:31:05","agent":"argus","outil":"lire-fichier","mode":"verrou-bloque","commande":"","contexte":"tentative USURPATION_IDENTITE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:29:50","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:29:50","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
+{"date":"2026-08-19 08:29:49","agent":"argus","outil":"lire-fichier","mode":"verrou-bloque","commande":"","contexte":"tentative USURPATION_IDENTITE (agent reel actif : janus)"}
 {"date":"2026-08-19 08:05:42","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
 {"date":"2026-08-19 08:05:42","agent":"janus","outil":"editer-parcours","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : janus)"}
 {"date":"2026-08-19 08:05:41","agent":"argus","outil":"lire-fichier","mode":"verrou-bloque","commande":"","contexte":"tentative USURPATION_IDENTITE (agent reel actif : janus)"}

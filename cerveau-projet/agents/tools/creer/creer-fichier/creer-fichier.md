@@ -3,6 +3,12 @@ identite:
   type: outil
   appartient_a: commun
   commun: true
+  combos:
+    - combo-controle-buffy
+    - combo-creer-agent
+    - combo-creer-fichier-cerveau
+    - combo-creer-protocole
+    - combo-tester-outil
 ---
 # creer-fichier
 

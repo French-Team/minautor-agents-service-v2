@@ -1,5 +1,5 @@
 {
- "version": "0.2.13",
+ "version": "0.2.14",
  "description": "Catalogue des commandes complexes du cerveau-projet. Source de verite : chaque commande (modele) est un copier-coller d un appel d outil deja ecrit, corrige et valide (agents/tools/). Le generateur pose une question par parametre, valide les reponses, puis compose la commande exacte a lancer.",
  "commandes": [
   {
@@ -672,6 +672,23 @@
      "flag": "--verbose"
     }
    ]
+  },
+  {
+   "nom": "consulter-combos",
+   "description": "Consulte le catalogue des combos : ou est utilise l outil X et par qui (proprietaire)",
+   "interpreteur": "python3",
+   "script": "cerveau-projet/agents/tools/consulter/consulter-combos/consulter-combos.py",
+   "modele": "--outil {outil}",
+   "parametres": [
+    {
+     "cle": "outil",
+     "question": "Nom de l outil a interroger ?",
+     "type": "texte",
+     "obligatoire": true,
+     "exemple": "evaluer-coherence"
+    }
+   ],
+   "combos": []
   },
   {
    "nom": "consulter-lecons",

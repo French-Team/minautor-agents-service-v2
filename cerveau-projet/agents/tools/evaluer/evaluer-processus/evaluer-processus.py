@@ -28,7 +28,7 @@
 #   --verbose           : detail des outils assignes par carte
 #   --version
 #
-# Version : 0.1.6
+# Version : 0.1.7
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -55,7 +55,7 @@ import sys
 
 FENETRE_JOURS = 1  # fenetre de verification des usages recents (v0.1.3) : le jour courant
 
-VERSION = "0.1.6"
+VERSION = "0.1.7"
 
 # Agents du cerveau-projet (famille cerveau-projet : cercles de controle).
 AGENTS_CERVE = ["cerberus", "buffy", "vulcain", "morpheus", "janus",
@@ -99,6 +99,7 @@ OUTILS_P0_PARTAGES = frozenset([
     "guider-parcours",
     "lire-activite-recente",
     "evaluer-coherence",
+    "consulter-combos",
 ])
 
 
