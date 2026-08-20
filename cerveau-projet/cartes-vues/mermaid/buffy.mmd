@@ -1,0 +1,145 @@
+%% Carte de decision de buffy (parcours v0.5.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0d["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10["Verifier les dependances"]
+    c10b{"Question : parcours a modifier ?"}
+    c10c["Gerer les cases de parcours avec generateurs-case"]
+    c10d["GERER UNE LIGNE DE PARCOURS AVEC GENERATEURS-LIGNE"]
+    c11["Modifier le fichier"]
+    c11b["Modifier une fiche agent (.md)"]
+    c13b["Lancer le combo controle-impacts"]
+    c13c{"Erreurs hors mission detectees ?"}
+    c13d(["FIN - Erreurs hors mission signalees a Cerberus"])
+    c14{"Valider le resultat (RVAV)"}
+    c15["Ajouter les lecons dans corrections.md"]
+    c15b{"Ameliorations possibles de mon fonctionnement ?"}
+    c15c["Lancer le generateur d amelioration"]
+    c15d["Activer l'agent habilite pour l'amelioration"]
+    c15e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c16{"Verifier la delegation (pense-bete / outil)"}
+    c17["Activer Athena (pense-bete)"]
+    c18["Verifier le nom de l'agent"]
+    c19["Creer le dossier de l'agent"]
+    c2["Verifier le nommage"]
+    c20["Copier le template + creer corrections"]
+    c21["Mettre a jour AGENTS.md"]
+    c22(["FIN - Activer Janus"])
+    c22a["Activer Themis pour auditer ma mission"]
+    c22b{"Retour de Themis recu ?"}
+    c23["Verifier la convention des protocoles"]
+    c24["Creer le dossier du protocole"]
+    c25["Creer le protocole"]
+    c26{"Passer par RVAV"}
+    c27(["FIN - Activer Janus"])
+    c27a["Activer Themis pour auditer ma mission"]
+    c27b{"Retour de Themis recu ?"}
+    c28["Lancer le combo sante-tableaux"]
+    c3["Verifier la structure"]
+    c31["Activer Vulcain (outil)"]
+    c32["Gerer les sous-missions"]
+    c33{"Mission hors parcours"}
+    c34["Activer l'agent habilite"]
+    c34b["Lancer le combo activation"]
+    c35(["Signaler le besoin"])
+    c35b{"Besoin d outil ?"}
+    c35c["Creer l outil temporaire"]
+    c35d(["FIN - Outil temporaire"])
+    c36(["FIN - Delegation"])
+    c37["Lancer le combo corriger-fichier"]
+    c38["Activer Atlas pour cartographier"]
+    c39(["FIN - Retour d Atlas avec sa carte"])
+    c4["Verifier que le fichier n'existe pas"]
+    c40["Activer Themis pour auditer"]
+    c41(["FIN - Retour de Themis avec son rapport"])
+    c42["Enregistrer mes usages d outils"]
+    c5["Creer le fichier"]
+    c6["Mettre a jour l'index"]
+    c7["Ajouter les lecons si necessaire"]
+    c8(["FIN - Activer Janus"])
+    c8a["Activer Themis pour auditer ma mission"]
+    c8b{"Retour de Themis recu ?"}
+    c9["Lire le fichier"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c0d
+    c0d --> c1
+    c0e --> c0c
+    c1 -- "creer" --> c2
+    c1 -- "modifier" --> c9
+    c1 -- "agent" --> c18
+    c1 -- "protocole" --> c23
+    c1 -- "controler" --> c28
+    c1 -- "autre" --> c33
+    c10 --> c10b
+    c10b -- "fiche" --> c11b
+    c10b -- "OUI" --> c10c
+    c10b -- "non" --> c11
+    c10b -- "ligne" --> c10d
+    c10c --> c37
+    c10d --> c37
+    c11 --> c37
+    c11b --> c37
+    c13b --> c13c
+    c13c -- "OUI" --> c13d
+    c13c -- "NON" --> c14
+    c14 -- "OUI" --> c15
+    c14 -- "NON" --> c11
+    c15 --> c15b
+    c15b -- "OUI" --> c15c
+    c15b -- "NON" --> c16
+    c15c --> c15d
+    c15d --> c15e
+    c15e --> FIN-APPELANT
+    c16 -- "pense-bete" --> c17
+    c16 -- "outil" --> c31
+    c16 -- "non" --> c8a
+    c17 --> c8a
+    c18 --> c19
+    c19 --> c20
+    c2 --> c3
+    c20 --> c21
+    c21 --> c42
+    c22a --> c22b
+    c22b -- "OUI" --> c22
+    c22b -- "NON" --> c22b
+    c23 --> c24
+    c24 --> c25
+    c25 --> c26
+    c26 -- "OUI" --> c27a
+    c26 -- "NON" --> c25
+    c27a --> c27b
+    c27b -- "OUI" --> c27
+    c27b -- "NON" --> c27b
+    c28 --> c8a
+    c3 --> c4
+    c31 --> c8a
+    c32 --> c33
+    c33 -- "sous-mission" --> c32
+    c33 -- "autre-agent" --> c34
+    c33 -- "non" --> c35b
+    c33 -- "cartographier" --> c38
+    c33 -- "audit" --> c40
+    c34 --> c34b
+    c34b --> c36
+    c35b -- "TEMPORAIRE" --> c35c
+    c35b -- "DURABLE" --> c35
+    c35c --> c35d
+    c37 --> c13b
+    c38 --> c39
+    c4 --> c5
+    c40 --> c41
+    c42 --> c22a
+    c5 --> c6
+    c6 --> c7
+    c7 --> c8a
+    c8a --> c8b
+    c8b -- "OUI" --> c8
+    c8b -- "NON" --> c8b
+    c9 --> c10

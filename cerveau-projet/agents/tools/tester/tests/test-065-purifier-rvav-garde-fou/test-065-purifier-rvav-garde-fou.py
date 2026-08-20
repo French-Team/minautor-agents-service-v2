@@ -18,7 +18,7 @@ Contexte (decision utilisateur 2026-08-15) :
     PREMIER). Ce garde-fou verifie les 2 garanties.
 
 Invariants verifies :
-  1. purifier-rvav.py existe, compile, --version v0.1.0, --aide liste les options
+  1. purifier-rvav.py existe, compile, --version v0.1.1, --aide liste les options
   2. Dry-run sur un fichier de test : plan affiche, AUCUNE modification (lecons
      conservees, aucune archive creee)
   3. Premiere purification --executer : fichier reduit sous le seuil, archive
@@ -216,9 +216,9 @@ def main():
                 ok_compile = r.returncode == 0
             r2 = lancer([PYTHON, PURIFIER_PY, "--version"], timeout=60)
             r3 = lancer([PYTHON, PURIFIER_PY, "--aide"], timeout=60)
-            ok = (ok_compile and r2.returncode == 0 and "0.1.0" in r2.stdout
+            ok = (ok_compile and r2.returncode == 0 and "0.1.1" in r2.stdout
                   and "--executer" in r3.stdout and "--dry-run" in r3.stdout)
-            verifier("1. purifier-rvav existe, compile, version 0.1.0, options",
+            verifier("1. purifier-rvav existe, compile, version 0.1.1, options",
                      ok, "rc=%d" % r2.returncode)
             chrono_etape("1. outil", t0)
 

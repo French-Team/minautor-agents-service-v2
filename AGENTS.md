@@ -14,6 +14,25 @@ identite:
 
 ## Sessions LLM
 
+### Session : session-llm-4
+
+| Champ | Valeur |
+|---|---|
+| **Nom LLM** | opencode |
+| **Nom Agent** | morpheus |
+| **Role Agent** | Testeur -- validation des outils et des tests |
+| **Derniere mise a jour** | 2026-08-19 |
+| **Fiche** | [cerveau-projet/agents/morpheus/morpheus.md](cerveau-projet/agents/morpheus/morpheus.md) |
+| **Corrections** | [cerveau-projet/agents/morpheus/corrections.md](cerveau-projet/agents/morpheus/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | TESTER l outil evaluer-progression cree par Vulcain : ecrire et executer les test-XXX sans que Vulcain touche a aucun fichier de test |
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>').
 ### Session : session-llm-3
 
 | Champ | Valeur |
@@ -52,27 +71,21 @@ reprends a la case courante avec --case <cid> --reponses '<reponse>').
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | llm-1 |
-| **Nom Agent** | vulcain |
-| **Role Agent** | Constructeur d'outils -- creation et developpement |
-| **Derniere mise a jour** | 2026-08-19 |
-| **Fiche** | [cerveau-projet/agents/vulcain/vulcain.md](cerveau-projet/agents/vulcain/vulcain.md) |
-| **Corrections** | [cerveau-projet/agents/vulcain/corrections.md](cerveau-projet/agents/vulcain/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | Mission : creer l'outil convertir-carte-mermaid (categorie consulter) qui convertit chaque parcours-<agent>.json en graphe mermaid (fichier .mmd par agent dans cartes-vues/mermaid/), options --agent/--tous + index.md, ASCII/LF 0/0, modele standard outil. Vulcain deleguera le test garde-fou de synchronisation a Morpheus, puis Janus fera le controle final. |
-
-DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json --case c0
-(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
-a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
-ensuite les branches case par case ; si tu reprends apres une interruption,
-reprends a la case courante avec --case <cid> --reponses '<reponse>').
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-20 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | janus (retour de mission) |
+| **Raison** | Session terminee. Bilan consolide : investigation opencode /tmp/opencode/ + garde-fou v0.5.19 (blocage double activation) + evaluer-processus v0.1.13 (ignore test missions) + bumper v0.1.13 + non-regression 93/96 (3 KO documentes) + nettoyage artefacts. 5 leciones documentees dans cerberus/corrections.md. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | vulcain | 2026-08-19 08:42 |
+| session-llm-1 | llm-1 | Cerberus | 2026-08-20 07:03 |
 | session-llm-2 | kilo-llm | themis | 2026-08-18 21:05 |
 | session-llm-3 | kilo-test2 | Cerberus | 2026-08-18 21:57 |
+| session-llm-4 | opencode | morpheus | 2026-08-19 20:51 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

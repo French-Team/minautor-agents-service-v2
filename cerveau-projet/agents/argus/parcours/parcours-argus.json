@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-argus",
   "agent": "argus",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions d Argus, detecteur de contradictions : auditer les contradictions dans les cases (parcours JSON), les regles (regles-immuables), les protocoles, et lire le depot git (git log --all, evolutions vraies et fausses). Argus DETECTE et SIGNALE, il ne corrige jamais : la correction appartient a l agent habilite (Buffy fiches/parcours, Vulcain outils, Morpheus tests). Decisions utilisateur 2026-08-15 : nom Argus, role detecteur de contradictions, lecture git en lecture seule, double source obligatoire avant de signaler.",
   "version_precedente": "0.1.8"
@@ -305,7 +305,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 buffy '<raison>' '<mission>'"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> buffy '<raison>' '<mission>'"
     }
    ],
    "suivant": "cR1"
@@ -334,7 +334,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 vulcain '<raison>' '<mission>'"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> vulcain '<raison>' '<mission>'"
     }
    ],
    "suivant": "cR1"
@@ -348,7 +348,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 morpheus '<raison>' '<mission>'"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> morpheus '<raison>' '<mission>'"
     }
    ],
    "suivant": "cR1"
@@ -356,7 +356,7 @@
   "c13": {
    "titre": "FIN - Activer Janus (controle final)",
    "type": "fin",
-   "message": "AUDIT D ARGUS TERMINE : j ACTIVE JANUS (controle final) avec le rapport d incoherences (preuves + gravite + agent habilite active pour corriger). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus verifie le rapport puis reactive Cerberus avec le bilan.",
+   "message": "AUDIT D ARGUS TERMINE : j ACTIVE JANUS (controle final) avec le rapport d incoherences (preuves + gravite + agent habilite active pour corriger). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. Janus verifie le rapport puis reactive Cerberus avec le bilan.",
    "indices": [
     {
      "type": "outil",
@@ -416,7 +416,7 @@
   "c29a": {
    "titre": "DELEGATION - Activer l'agent habilite (il reactivera Cerberus avec le bilan)",
    "type": "action",
-   "message": "Je delegue a l agent habilite : j active l agent concerne avec la mission complete (Pattern 13 : la fin suit SA carte, il reactivera Cerberus avec son bilan). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> '<raison>' '<mission>'.",
+   "message": "Je delegue a l agent habilite : j active l agent concerne avec la mission complete (Pattern 13 : la fin suit SA carte, il reactivera Cerberus avec son bilan). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> '<raison>' '<mission>'.",
    "indices": [
     {
      "type": "regle",
@@ -427,7 +427,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> '<raison>' '<mission>'"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> '<raison>' '<mission>'"
     },
     {
      "type": "regle",
@@ -477,7 +477,7 @@
   "c29e": {
    "titre": "FIN - Signaler le besoin",
    "type": "fin",
-   "message": "Je signale le besoin a Cerberus (reactivation avec le constat) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 '<raison>' cerberus."
+   "message": "Je signale le besoin a Cerberus (reactivation avec le constat) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> '<raison>' cerberus."
   },
   "c31": {
    "titre": "NETTOYER tmp-argus (0 residu en fin de mission)",

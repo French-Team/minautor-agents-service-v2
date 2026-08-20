@@ -1,0 +1,68 @@
+%% Carte de decision de hygie (parcours v0.2.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10{"Tous les residus ont-ils disparu ?"}
+    c11["Rapport de nettoyage"]
+    c12["Lecons et retour"]
+    c13(["FIN - Activer Janus (second controle)"])
+    c2["SNAPSHOT OBLIGATOIRE avant tout nettoyage"]
+    c29{"Mission hors parcours"}
+    c29a(["FIN - Delegation"])
+    c29b{"Besoin d un outil ?"}
+    c29c["Creer l outil temporaire"]
+    c29d(["FIN - Outil temporaire"])
+    c29e(["Signaler le besoin"])
+    c3["Consulter le snapshot precedent"]
+    c30["Aucun residu : rien a nettoyer"]
+    c34["Enregistrer mes usages d outils"]
+    c4["Detection compartimentee des residus"]
+    c5{"Des residus sont-ils detectes ?"}
+    c6["Classer les residus par zone"]
+    c7{"Un residu est-il suspect (honnetete non prouvee) ?"}
+    c9["Supprimer avec tracabilite (seul habilite)"]
+    c9b["Purifier les fichiers surcharges (RVAV)"]
+    cH1["RELAIS - Activer l agent habilite (preuve d honnetete)"]
+    cH2{"RETOUR - Verifier le rapport a la reactivation"}
+    cH3(["FIN - Signaler : honnetete non prouvee"])
+    cS1["Creer le snapshot de l etat du workspace"]
+    cS2["Verifier la rotation 7 jours"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c1
+    c0e --> c0c
+    c1 -- "nettoyer" --> c2
+    c1 -- "snapshot" --> cS1
+    c1 -- "honnetete" --> cH1
+    c1 -- "autre" --> c29
+    c10 -- "OUI" --> c11
+    c10 -- "NON" --> c9
+    c11 --> c12
+    c12 --> c34
+    c2 --> c3
+    c29 -- "OUI" --> c29a
+    c29 -- "NON" --> c29b
+    c29b -- "TEMPORAIRE" --> c29c
+    c29b -- "DURABLE" --> c29e
+    c29c --> c29d
+    c3 --> c4
+    c30 --> c12
+    c34 --> c13
+    c4 --> c5
+    c5 -- "OUI" --> c6
+    c5 -- "NON" --> c30
+    c6 --> c7
+    c7 -- "OUI" --> cH1
+    c7 -- "NON" --> c9
+    c9 --> c9b
+    c9b --> c10
+    cH1 --> cH2
+    cH2 -- "OUI" --> c9
+    cH2 -- "NON" --> cH3
+    cS1 --> cS2
+    cS2 --> c12

@@ -510,7 +510,7 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 athena <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> athena <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
@@ -639,7 +639,7 @@
      "type": "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : creation de l'agent terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation de l'agent. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
+   "message": "CHAINE BOUT-EN-BOUT : creation de l'agent terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation de l'agent. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
    "titre": "FIN - Activer Janus",
    "type": "fin"
   },
@@ -652,12 +652,12 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
    "suivant": "c22b",
    "titre": "Activer Themis pour auditer ma mission",
    "type": "action"
@@ -785,7 +785,7 @@
      "type": "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : creation du protocole terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation du protocole. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
+   "message": "CHAINE BOUT-EN-BOUT : creation du protocole terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation du protocole. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
    "titre": "FIN - Activer Janus",
    "type": "fin"
   },
@@ -798,12 +798,12 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
    "suivant": "c27b",
    "titre": "Activer Themis pour auditer ma mission",
    "type": "action"
@@ -884,7 +884,7 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 vulcain <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> vulcain <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
@@ -966,7 +966,7 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
@@ -1242,7 +1242,7 @@
      "type": "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : creation terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan (fichier cree, index mis a jour, lecons ajoutees). COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
+   "message": "CHAINE BOUT-EN-BOUT : creation terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan (fichier cree, index mis a jour, lecons ajoutees). COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
    "titre": "FIN - Activer Janus",
    "type": "fin"
   },
@@ -1255,12 +1255,12 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
    "suivant": "c8b",
    "titre": "Activer Themis pour auditer ma mission",
    "type": "action"
@@ -1329,6 +1329,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c0 guider-parcours (P0 fiche, usage reel, garde-fou test-035)",
   "nom": "parcours-buffy",
-  "version": "0.5.0"
+  "version": "0.5.1"
  }
 }

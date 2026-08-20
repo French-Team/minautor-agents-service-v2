@@ -895,3 +895,81 @@ generateurs-amelioration --theme ameliorer-outil AVANT d activer l agent
 (Pattern 17, case c19c). La checklist force l anticipation (q2/q3) et la
 completude des 5 fichiers (q8). Le generateur a ete lance a posteriori
 pour ce round : q8 (spec manquante) est le seul vrai residu.
+
+## [LECON] 2026-08-20 -- GARDE-FOU DOUBLE ACTIVATION v0.5.19 (Cerberus)
+
+**Contexte** : demande utilisateur tester pourquoi le LLM opencode (session-llm-4, Morpheus) ecrit des tests en dehors du workspace (/tmp/opencode/) alors que c est interdit. Investigation -> decouverte que les agents peuvent oublier de reactiver Cerberus, laissant la session orpheline.
+
+**Constats des tests cas limites** :
+1. AGENT OUBLIE DE SE DESACTIVER : session orpheline, aucun garde-fou ne le detecte
+2. DOUBLE ACTIVATION MEME SESSION : agent ecrase silencieusement, aucun avertissement
+3. ROUND LONG (3 agents) : chaine Cerberus->Buffy->Themis->Janus->Cerberus reussie quand le protocole est respecte
+
+**Solution implementee par Vulcain** :
+- activer-agent-principal v0.5.17 -> v0.5.19
+- v0.5.18 : garde-fou detection (avertissement si agent actuel != Cerberus)
+- v0.5.19 : garde-fou BLOCAGE (return 1 si double activation sans --forcer)
+
+**Logique du garde-fou v0.5.19** :
+- Agent actuel = Cerberus -> Autoriser (flux normal)
+- Agent cible = Cerberus -> Autoriser (reactivation)
+- Agent cible = agent actuel -> AVERTISSEMENT (auto-reactivation)
+- Agent cible != agent actuel + --forcer -> AVERTISSEMENT + autoriser
+- Agent cible != agent actuel SANS --forcer -> BLOQUER (return 1)
+
+**Tests realises** :
+- Test A : double activation sans --forcer -> BLOQUE (RC 1)
+- Test B : double activation avec --forcer -> AVERTISSEMENT + autorise
+- Test C : reactivation Cerberus -> toujours autorise
+- Test round normal : Cerberus->Buffy->Cerberus->Themis->BLOCAGE->Cerberus->Janus->Cerberus
+
+**Lecon** : un garde-fou sans blocage est un garde-fou incomplet. L avertissement suffit pour les cas ambigus (auto-reactivation), mais la double activation reellement dangereuse (agent ecrase) doit etre BLOQUEE. L option --forcer preserve la flexibilite pour les cas legitimes.
+
+**Fichiers modifies** : cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py (v0.5.19)
+
+## [LECON] 2026-08-20 -- ROUND CASSE : BUFFY NE S EST PAS DESACTIV&E (Cerberus)
+
+**Contexte** : test de round multi-agents (Buffy->Themis->Janus->Cerberus). Buffy a active Themis mais ne s est PAS desactive (pas de reactiver Cerberus). Resultat : Janus n a jamais tourne, le controle croise n a jamais eu lieu.
+
+**Constat** : le round a ete CASSE parce que Buffy etait reste actif apres avoir active Themis. La chaine etait : Cerberus->Buffy(oublie)->[arret] au lieu de Cerberus->Buffy->Themis->Janus->Cerberus.
+
+**Cause racine** : dans le contexte session unique LLM, les outils natifs (read_files, run_terminal_command) sont utilises EN PARALLELE des outils du cerveau (guider-parcours, activer-agent-principal). Cette confusion fait rester l agent actif alors qu il devrait se desactiver.
+
+**Correction** : reactiver Cerberus manuellement (reactiver session-llm-1 ... buffy) pour restaurer le cycle.
+
+**Lecon** : QUAND un agent ACTIVE un autre agent dans sa chaine, il doit SE DESACTIVER IMMEDIATEMENT apres l activation. Rester actif casse le round car les deux agents tournent en meme temps sur la meme session. Le process compte autant que le contenu.
+
+## [LECON] 2026-08-20 -- ECritures hors workspace : /tmp/opencode/ (Buffy)
+
+**Contexte** : investigation du LLM opencode (session-llm-4, Morpheus) qui ecrit des tests en dehors du workspace.
+
+**Constat** : opencode a cree des scripts dans /tmp/opencode/ (zz-ajouter-catalogue-progression.py, zz-etude-sources-progression.py) qui ont modifie le catalogue-commandes.json depuis l exterieur du workspace. Les scripts utilisaient des chemins Windows hardcoded (Z:\analyste-in-console\...).
+
+**Violations** :
+1. REGLE ABSOLUE 4 (OUTILS EXCLUSIFS) : scripts Python dans /tmp/ au lieu des outils du cerveau
+2. PROTOCOLE SCRIPTS TEMPORAIRES : pas de passage par executer-script-temporaire
+3. DELEGATION : Morpheus a ajoute une entree au catalogue (travail de Vulcain)
+
+**Action** : lecon documentee dans buffy/corrections.md, modification catalogue conservee (outil valide).
+
+**Lecon** : un LLM qui ecrit dans /tmp/ au lieu d utiliser les outils du cerveau viole la REGLE ABSOLUE 4 meme si le resultat est correct. Le PROCESS compte autant que le CONTENU.
+
+
+## [LECON] 2026-08-20 -- 2 KO ARTEFACTS NON-REGRESSION (Cerberus)
+
+**Contexte** : non-regression complete 93/96 apres garde-fou v0.5.19 + evaluer-processus v0.1.13. 3 KO au total, 1 corrige (test-067 bumper), 2 restent (artefacts de test).
+
+**KO 1 -- test-048 (fin-mission-documentation)** :
+- 1 KO : lecons recentes de vulcain (06:25) et janus (06:01) sans verdict
+- Cause : Vulcain et Janus ont ete actives pendant les tests mais n ont PAS ecrit de lecon avec verdict dans leur corrections.md
+- Resolution : dans un vrai round, chaque agent ecrit sa lecon (protocole-fin-mission). En mode test session unique, les agents simules n ecrivent pas toujours.
+- Statut : ARTEFACT DE TEST, pas de correction necessaire.
+
+**KO 2 -- test-079 (noms-maj)** :
+- 1 KO : entree Cerberus dans le registre-usages-outils.jsonl a 06:43:41
+- Cause : Cerberus a utilise lire-fichier (verrou-auto) pendant les tests, creant une entree avec agent=Cerberus
+- Resolution : dans un vrai round, Cerberus n utilise pas les outils directement (REGLE NON-EXECUTION). En mode test session unique, Cerberus joue tous les roles.
+- Statut : ARTEFACT DE TEST, pas de correction necessaire.
+
+**Lecon** : les non-regressions en mode test session unique produisent des artefacts (missions sans lecon, usages hors carte). Ces KO sont ATTENDUS et documentes. Ils ne doivent pas etre corriges (ce serait corriger le symptome, pas la cause).
+

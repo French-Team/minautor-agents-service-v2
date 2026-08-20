@@ -1,0 +1,79 @@
+%% Carte de decision de morpheus (parcours v0.5.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0d["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10(["FIN - Activer Janus"])
+    c10a["Activer Themis pour auditer ma mission"]
+    c10b{"Retour de Themis recu ?"}
+    c11["Valider un outil existant"]
+    c12{"Completer et executer les tests de l outil"}
+    c13{"Mission hors parcours"}
+    c14(["FIN - Activer Janus"])
+    c14a["Activer Themis pour auditer ma mission"]
+    c14b{"Retour de Themis recu ?"}
+    c15["Activer l'agent habilite"]
+    c16(["Signaler le besoin"])
+    c16b{"Besoin d outil ?"}
+    c16c["Creer l outil temporaire"]
+    c16d(["FIN - Outil temporaire"])
+    c17(["FIN - Delegation"])
+    c18["Activer Themis pour auditer"]
+    c19(["FIN - Retour de Themis avec son rapport"])
+    c2["Lire la documentation de l'outil"]
+    c20["Enregistrer mes usages d outils"]
+    c21["Enregistrer mes usages d outils"]
+    c3["Lire le protocole-tests"]
+    c4["Lancer le combo tester-outil"]
+    c7{"Verifier les resultats et donner le verdict"}
+    c8["Ajouter les lecons dans corrections.md"]
+    c8b{"Ameliorations possibles de mon fonctionnement ?"}
+    c8c["Lancer le generateur d amelioration"]
+    c8d["Activer l'agent habilite pour l'amelioration"]
+    c8e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c9{"Retour : qui m'a delegue ?"}
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c0d
+    c0d --> c1
+    c0e --> c0c
+    c1 -- "tester" --> c2
+    c1 -- "verifier" --> c11
+    c1 -- "autre" --> c13
+    c10a --> c10b
+    c10b -- "OUI" --> c10
+    c10b -- "NON" --> c10b
+    c11 --> c12
+    c12 -- "OUI" --> c8
+    c12 -- "NON" --> c12
+    c13 -- "OUI" --> c15
+    c13 -- "NON" --> c16b
+    c13 -- "audit" --> c18
+    c14a --> c14b
+    c14b -- "OUI" --> c14
+    c14b -- "NON" --> c14b
+    c15 --> c17
+    c16b -- "TEMPORAIRE" --> c16c
+    c16b -- "DURABLE" --> c16
+    c16c --> c16d
+    c18 --> c19
+    c2 --> c3
+    c20 --> c10a
+    c21 --> c14a
+    c3 --> c4
+    c4 --> c7
+    c7 -- "OUI" --> c8
+    c7 -- "NON" --> c8
+    c8 --> c8b
+    c8b -- "OUI" --> c8c
+    c8b -- "NON" --> c9
+    c8c --> c8d
+    c8d --> c8e
+    c8e --> FIN-APPELANT
+    c9 -- "VULCAIN" --> c20
+    c9 -- "CERBERUS" --> c21

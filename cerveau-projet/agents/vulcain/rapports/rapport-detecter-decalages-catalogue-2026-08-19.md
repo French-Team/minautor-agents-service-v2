@@ -1,6 +1,6 @@
 # Scan Systematique du Catalogue vs Interfaces Reelles
 
-**Date** : 2026-08-19 08:21 | **Catalogue** : v? | **Entrees** : 183
+**Date** : 2026-08-19 20:47 | **Catalogue** : v? | **Entrees** : 186
 
 ## COMBOS (garde-fou : cles des cases generateur vs catalogue)
 
@@ -14,7 +14,7 @@ Aucun probleme de cles detecte (toutes les entrees correspondent au catalogue).
 
 | Classe | Nombre |
 |---|---|
-| CONFORME | 183 |
+| CONFORME | 186 |
 | DECALAGE | 0 |
 | NON TESTABLE | 0 |
 
@@ -30,7 +30,7 @@ Aucun non testable.
 
 Aucune alerte.
 
-## Conformes (183)
+## Conformes (186)
 
 - activer-activer
 - activer-agent-principal
@@ -50,6 +50,7 @@ Aucune alerte.
 - audit-general
 - cartographier-parcours
 - changer-statut
+- chronometrer-duree
 - combo-maj-readme
 - combo-nettoyage-hygie
 - combos-analyse-projet
@@ -62,6 +63,7 @@ Aucune alerte.
 - configurer-environnement
 - consulter-combos
 - consulter-lecons
+- convertir-carte-mermaid
 - copier-dossier
 - copier-fichier
 - corriger-accents
@@ -108,6 +110,7 @@ Aucune alerte.
 - evaluer-coherence
 - evaluer-conventions
 - evaluer-processus
+- evaluer-progression
 - evaluer-rating
 - evaluer-structure
 - executer-script-temporaire

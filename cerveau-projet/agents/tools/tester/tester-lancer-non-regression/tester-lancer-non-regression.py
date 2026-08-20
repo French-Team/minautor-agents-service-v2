@@ -87,10 +87,12 @@ SERIES = {
           "test-048", "test-058", "test-059", "test-094"],
     "c": ["test-001", "test-002", "test-003", "test-004", "test-005", "test-006",
           "test-008", "test-010", "test-011", "test-017", "test-019", "test-020",
-          "test-022", "test-023", "test-040", "test-093", "test-095"],
+          "test-022", "test-023", "test-040", "test-093", "test-095",
+          "test-096"],
     "d": ["test-025", "test-027", "test-031", "test-036", "test-038", "test-039",
-          "test-045", "test-046", "test-047", "test-051", "test-061"],
-    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057", "test-065", "test-066", "test-087", "test-088", "test-089", "test-090", "test-091", "test-092"],
+          "test-045", "test-046", "test-047", "test-051", "test-061",
+          "test-097"],
+    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057", "test-065", "test-066", "test-087", "test-088", "test-089", "test-090", "test-091", "test-092", "test-098"],
 }
 SERIES_NOMS = {
     "a": "Fondations (nommage, ASCII/LF, template, protections)",

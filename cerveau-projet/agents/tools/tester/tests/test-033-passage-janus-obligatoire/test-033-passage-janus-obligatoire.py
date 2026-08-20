@@ -35,6 +35,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import sys
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -154,12 +155,21 @@ def main():
         verifier("2. carte c14 = FIN - Activer Janus",
                  c14.get("type") == "fin" and c14.get("titre") == "FIN - Activer Janus",
                  str(c14.get("titre")))
-        verifier("3. c14 porte la commande activer session-llm-1 janus",
-                 "activer session-llm-1 janus" in msg_c14,
+        # D6 multi-sessions : la commande porte le placeholder <session>
+        # (chaque session le remplace par SON id a l execution).
+        commande_ok = ("activer <session> janus" in msg_c14
+                       or "activer session-llm-1 janus" in msg_c14)
+        verifier("3. c14 porte la commande activer <session> janus",
+                 commande_ok,
                  msg_c14[-100:])
+        # Anti-piege : la carte peut EXPLIQUER le piege (texte pedagogique
+        # 'PAS reactiver') mais ne doit jamais porter la COMMANDE reactiver
+        # (qui ramene toujours a Cerberus).
+        commande_reactiver = ("activer-agent-principal.py reactiver" in msg_c14
+                              or re.search(r"reactiver <session>", msg_c14)
+                              or re.search(r"reactiver session-llm-\d+", msg_c14))
         verifier("4. c14 n utilise PAS reactiver dans son message de fin",
-                 "reactiver session-llm-1" not in msg_c14
-                 and "activer session-llm-1 janus" in msg_c14,
+                 not commande_reactiver and commande_ok,
                  msg_c14[-100:])
 
         with io.open(FICHE_MORPHEUS, encoding="utf-8", errors="replace") as fh:

@@ -19,7 +19,7 @@ Contexte :
 
 Invariants verifies :
   1. L outil existe et compile.
-  2. --version = v0.1.0.
+  2. --version = v0.1.2.
   3. --aide fonctionne (code 0, sans traceback).
   4. Preuve negative : une ecriture injectee + --agent cerberus -> KO (code 1)
      et le fichier injecte est liste.
@@ -164,8 +164,8 @@ def main():
         if point_actif(2):
             t = time.monotonic()
             r = lancer([PYTHON, OUTIL_PY, "--version"])
-            verifier("2. --version v0.1.0",
-                     r.returncode == 0 and "v0.1.0" in r.stdout,
+            verifier("2. --version v0.1.2",
+                     r.returncode == 0 and "v0.1.2" in r.stdout,
                      r.stdout.strip())
             chrono_etape("2. version", t)
 

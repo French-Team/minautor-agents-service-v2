@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-013-cerberus-migration.py
-Test formel de la migration pilote du parcours-cerberus v0.5.4
+Test formel de la migration pilote du parcours-cerberus v0.5.5
 (nouveau format : indices REFERENCES + cases ACTION).
 
 Contexte (etape 6 de la spec-refonte-cartes-decision) :
@@ -23,7 +23,7 @@ Contexte (etape 6 de la spec-refonte-cartes-decision) :
      ANALYSE -> Themis c22, jamais analyser avant activer) - lecon derive 2026-08-16
      (Cerberus analysait lui-meme au lieu d activer)
  
- Cas couverts:   1. Version du parcours = 0.5.4
+ Cas couverts:   1. Version du parcours = 0.5.5
   2. Types : 24 action / 5 question / 5 controle / 3 fin, 0 indice
   3. valider-case : verdict CONFORME (0 erreur, 0 a alleger)
   4. valider-case --references : CONFORME (refs resolvables)
@@ -160,13 +160,13 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-013-")
     try:
-        print("=== Test formel migration cerberus v0.5.4 ===")
+        print("=== Test formel migration cerberus v0.5.5 ===")
 
         # 1. Version du parcours
         with io.open(PARCOURS, encoding="utf-8") as fh:
             donnees = json.load(fh)
-        verifier("1. Parcours version 0.5.4",
-                 donnees.get("parcours", {}).get("version") == "0.5.4",
+        verifier("1. Parcours version 0.5.5",
+                 donnees.get("parcours", {}).get("version") == "0.5.5",
                  str(donnees.get("parcours", {}).get("version")))
 
         # 2. Types de cases : 24 action / 5 question / 5 controle / 3 fin / 0 indice

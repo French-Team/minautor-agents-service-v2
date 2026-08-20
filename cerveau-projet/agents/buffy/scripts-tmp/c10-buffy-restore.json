@@ -1,0 +1,25 @@
+{
+ "indices": [
+  {
+   "chemin": "cerveau-projet/agents/regles-immuables/general/regles-veracite.md",
+   "raison": "Regles de veracite : verifier les dependances avant de modifier",
+   "type": "fichier"
+  },
+  {
+   "catalogue": "rechercher-texte",
+   "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/",
+   "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>",
+   "nom": "rechercher-texte",
+   "type": "outil"
+  },
+  {
+   "catalogue": "detecter-cablages-manquants",
+   "chemin": "cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/",
+   "nom": "detecter-cablages-manquants",
+   "type": "outil"
+  }
+ ],
+ "suivant": "c10b",
+ "titre": "Verifier les dependances",
+ "type": "action"
+}

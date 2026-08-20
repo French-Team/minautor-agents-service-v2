@@ -166,3 +166,61 @@ Mission catalogue-combos (garde-fou combo -> outils) terminee. 4 enseignements :
 2. **Pins de version catalogue** : chaque ajout au catalogue-commandes.json oblige a mettre a jour les pins 182 -> 183 dans test-060, test-007, test-024, test-079 (4 tests, parfois 2 occurrences chacun).
 3. **Tri alphabetique strict** : le catalogue doit rester trie (consulter-combos AVANT consulter-lecons : 'combos' < 'lecons').
 4. **Invocation evaluer-coherence** : `dossier` = racine du projet (defaut `.`), NE PAS passer `cerveau-projet` en argument sinon le fichier AGENTS.md n'est pas trouve et tous les agents sont declares manquants (faux positif).
+
+---
+
+### Lecon 2026-08-19 -- Vulcain (convertir-carte-mermaid)
+
+Outil cree : convertir-carte-mermaid (consulter), convertit les 16 parcours
+JSON en graphes mermaid (.mmd) dans cerveau-projet/cartes-vues/mermaid/. 4
+enseignements :
+
+1. **Champ `branches: []` != decision** : certaines cases action/controle ont
+   `branches: []` ET `suivant` - tester la NON-vacuite (`if c.get("branches")`),
+   pas la presence de la cle, sinon les aretes et la BFS d atteignabilite sont fausses.
+2. **Mermaid** : commentaires en `%%` (pas `%`), ne pas mettre de suffixe de
+   type apres les noeuds (parseur strict), `suivant: null` (reactiver
+   l appelant) -> arete vers un noeud FIN-APPELANT.
+3. **L ecriture par str_replace double les backslashes** : pour des regex ou
+   des chaines avec `\`, reecrire le fichier entier (write_file) plutot que
+   patcher des lignes.
+4. **Registre usages** : format date `YYYY-MM-DD HH:MM:SS` (espace, pas de T)
+   et jamais d entree avec agent=inconnu (artefact de test) - test-024 (tri)
+   et test-079 (agent valide) verifient ces deux points.
+
+---
+
+### Lecon 2026-08-19 -- Morpheus (test-096 cartes-mermaid-garde-fou)
+
+Test garde-fou cree (7/7 OK, 0.2s) pour la synchronisation cartes <-> .mmd.
+Enseignements :
+
+1. **Tags taxonomie** : un nouveau test DOIT utiliser uniquement les tags de
+   categories-tests.json (44 tags). `mermaid`, `synchronisation`, `cartes`
+   n existent pas -> test-087 KO. Tags valides : parcours, outil, garde-fou,
+   preuve-negative.
+2. **Nouveau test = 4 integrations** : dossier test-NNN + serie du lanceur
+   (SERIES) + profil profils-tests.json + tags conformes. Oublier une seule
+   -> test-027/063/087 KO.
+3. **test-027 points launcher** : les points 5-8 qui LANCENT le lanceur
+   sont exclusifs Janus -> KO attendus quand un autre agent execute le test
+   (le lanceur refuse). Ce n est pas une regression.
+4. **Fichiers generes** : toujours DANS cerveau-projet (cartes-vues/mermaid)
+   et ASCII strict + LF pur (le garde-fou le verifie).
+
+---
+
+### Lecon 2026-08-19 -- Janus (controle final convertir-carte-mermaid)
+
+Controle de la mission mermaid. 3 enseignements :
+
+1. **Un test qui appelle un outil journalisant doit passer --agent** : le
+   point 5 de test-095 appelait consulter-combos sans --agent -> entree
+   registre agent=inconnu -> test-079 KO en boucle. Corrige avec
+   --agent themis (le proprietaire du combo audite).
+2. **Bumper py/md** : quand on incremente VERSION dans le .py, la ligne
+   `**Version** : X` du .md doit suivre (test-067 audit --tous). Le champ
+   reference etait 0.1.8 mais le .md annoncait 0.1.7.
+3. **Fiches outils = ASCII strict** : les guillemets francais (U+00AB/BB)
+   dans une fiche .md declenchent test-047 (detecter-usage-outils-externes).
+   Toujours ecrire les fiches en ASCII pur.

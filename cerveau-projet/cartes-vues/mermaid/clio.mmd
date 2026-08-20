@@ -1,0 +1,77 @@
+%% Carte de decision de clio (parcours v0.6.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0d["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10["Lecons et retour"]
+    c10b{"Ameliorations possibles de mon fonctionnement ?"}
+    c10c["Lancer le generateur d amelioration"]
+    c10d["Activer l'agent habilite pour l'amelioration"]
+    c10e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c11["Verifier sans modifier"]
+    c12(["FIN - Activer Janus"])
+    c12a["Activer Themis pour auditer ma mission"]
+    c12b{"Retour de Themis recu ?"}
+    c13{"Mission hors parcours"}
+    c14["Activer l'agent habilite"]
+    c15(["Signaler le besoin"])
+    c15b{"Besoin d outil ?"}
+    c15c["Creer l outil temporaire"]
+    c15d(["FIN - Outil temporaire"])
+    c16(["FIN - Delegation"])
+    c17["Activer Themis pour auditer"]
+    c18(["FIN - Retour de Themis avec son rapport"])
+    c19["Enregistrer mes usages d outils"]
+    c2["Lire la raison de l'activation"]
+    c20["Remplir readme-dev.md depuis le template"]
+    c3["Consulter les interventions recentes"]
+    c4["Verifier l etat reel"]
+    c5{"Ecarts detectes ?"}
+    c5a{"Ampleur de la correction ?"}
+    c6b["Executer combo-maj-readme (PETITE MAJ)"]
+    c6c["Executer combos-maj-readme-massive (GROSSE MAJ)"]
+    c9["Verifier la conformite ASCII"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c0d
+    c0d --> c1
+    c0e --> c0c
+    c1 -- "corriger" --> c2
+    c1 -- "verifier" --> c11
+    c1 -- "autre" --> c13
+    c1 -- "readme-dev" --> c20
+    c10 --> c10b
+    c10b -- "OUI" --> c10c
+    c10b -- "NON" --> c19
+    c10c --> c10d
+    c10d --> c10e
+    c10e --> FIN-APPELANT
+    c11 --> c19
+    c12a --> c12b
+    c12b -- "OUI" --> c12
+    c12b -- "NON" --> c12b
+    c13 -- "OUI" --> c14
+    c13 -- "NON" --> c15b
+    c13 -- "audit" --> c17
+    c14 --> c16
+    c15b -- "TEMPORAIRE" --> c15c
+    c15b -- "DURABLE" --> c15
+    c15c --> c15d
+    c17 --> c18
+    c19 --> c12a
+    c2 --> c3
+    c20 --> c10
+    c3 --> c4
+    c4 --> c5
+    c5 -- "OUI" --> c5a
+    c5 -- "NON" --> c9
+    c5a -- "PETITE" --> c6b
+    c5a -- "GROSSE" --> c6c
+    c6b --> c9
+    c6c --> c9
+    c9 --> c10

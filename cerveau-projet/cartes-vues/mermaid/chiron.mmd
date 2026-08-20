@@ -1,0 +1,53 @@
+%% Carte de decision de chiron (parcours v0.3.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["Relu : fiche et corrections memorisees"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1["Recevoir la mission (quel agent / quel outil a change)"]
+    c10["Documenter les corrections proposees (rapport) puis signaler a Buffy"]
+    c11["Si incoherences complexes -> signaler a Buffy"]
+    c11b{"Auto-correction : les incoherences concernent-elles MA carte ?"}
+    c12["Documenter mes lecons (MES corrections uniquement)"]
+    c13["Bumper MA fiche si necessaire"]
+    c14(["FIN - Activer Janus (second controle)"])
+    c15["Se re-eduquer : lire MA carte et documenter MA lecon"]
+    c16["Corriger MA carte (editer-parcours, verrou pilote)"]
+    c17["Activer Themis pour verifier ma re-education"]
+    c18{"Retour de Themis recu ?"}
+    c2["Lire la fiche de l agent cible"]
+    c3["Lire les corrections de l agent cible"]
+    c4["Lire les regles de l agent cible (regles-immuables/conventions)"]
+    c5["Verifier les mises a jour d outils (bumper --tous)"]
+    c6["Detecter les incoherences (regles vs actions reelles)"]
+    c7["Verifier la conformite de la fiche (verifier-conformite-fiche)"]
+    c8["Verifier le parcours/carte (detecter-cablages-manquants)"]
+    c9{"Synthetiser les incoherences"}
+    c0 --> c0b
+    c0b -- "NON" --> c0
+    c0b -- "OUI" --> c0e
+    c0c --> c1
+    c0e --> c0c
+    c1 --> c2
+    c10 --> c11
+    c11 --> c11b
+    c11b -- "OUI" --> c15
+    c11b -- "NON" --> c12
+    c12 --> c13
+    c13 --> c14
+    c15 --> c16
+    c16 --> c17
+    c17 --> c18
+    c18 -- "OUI (CONFORME)" --> c12
+    c18 -- "A REVOIR" --> c15
+    c18 -- "NON (pas revenue)" --> c18
+    c2 --> c3
+    c3 --> c4
+    c4 --> c5
+    c5 --> c6
+    c6 --> c7
+    c7 --> c8
+    c8 --> c9
+    c9 -- "OUI" --> c10
+    c9 -- "NON" --> c12

@@ -10,7 +10,7 @@ identite:
 ---
 # valider-cartes-decision
 
-**Version :** 0.4.5
+**Version :** 0.4.6
 **Statut :** prepare
 **Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-cartes-decision/`
@@ -128,9 +128,16 @@ Toute case type `fin` dont le titre commence par `FIN - Activer <agent>` doit
 contenir dans son message :
 
 ```
-[ ] La commande exacte : activer-agent-principal.py activer session-llm-1 <agent>
+[ ] La commande exacte : activer-agent-principal.py activer <session> <agent>
+    (le placeholder <session> est remplace par SA session a l execution ;
+    une session concrete session-llm-N est aussi acceptee - v0.4.6)
 [ ] La mention 'PAS reactiver'
 ```
+
+> **Multi-sessions (v0.4.6)** : la commande accepte le placeholder `<session>`
+> (chaque LLM l utilise dans SA session) OU une session concrete
+> `session-llm-N`. L ancien format fige `session-llm-1` interdisait aux
+> sessions llm-2/3/4 de suivre leur carte (D6).
 
 > **Pourquoi ?** Defaut decouvert le 2026-08-11 : les 8 fins 'FIN - Activer
 > Janus' disaient 'J ACTIVE JANUS' sans la commande exacte -> les agents
@@ -208,7 +215,7 @@ coherente avec le parcours :
 | Suivant mort : fin avec suivant | Retirer le champ suivant de la case fin (la navigation s'arrete deja a la fin) |
 | Suivant mort : branches + suivant | Retirer le champ suivant de la case (les branches priment dans guider-parcours) |
 | Fichier .md passe en --fichier | La cible est le parcours JSON, pas la fiche allegee |
-| Fin Activer X sans commande exacte | Ajouter 'activer-agent-principal.py activer session-llm-1 <agent>' + 'PAS reactiver' dans le message |
+| Fin Activer X sans commande exacte | Ajouter 'activer-agent-principal.py activer <session> <agent>' (ou session-llm-N) + 'PAS reactiver' dans le message |
 | Version avec prefixe v | Retirer le 'v' de parcours.version (format canonique sans v) |
 | Incoherence fiche/parcours | Aligner la fiche (Pattern 14) sur la version du parcours |
 

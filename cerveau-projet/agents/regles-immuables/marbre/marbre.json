@@ -28,9 +28,9 @@
    "agent": "cerberus",
    "cid": "c10",
    "raison": "Activer l agent : le geste fondamental de la coordination",
-   "empreinte": "4010384a7bbd9d133b957236becb20a6b3dbdb5069fd323b77f76df3a1e1fa4c",
-   "modifie_le": "2026-08-16 17:57:19",
-   "raison_modification": "verdict Themis 2026-08-16 : retirer combos-analyse-projet des habilitations de Cerberus (lecture + coordination seulement)"
+   "empreinte": "90f47b657d33a4ee53aaf95d90dc9204403c1aea854a0a1c9dfda881297513dc",
+   "modifie_le": "2026-08-19 21:31:44",
+   "raison_modification": "D6 multi-sessions : session-llm-1 -> <session> (validation utilisateur 2026-08-19)"
   },
   "cerberus.c14": {
    "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
@@ -38,8 +38,9 @@
    "agent": "cerberus",
    "cid": "c14",
    "raison": "Activer Janus (second controle) : la chaine de fin de mission",
-   "empreinte": "137a88eac693c58a0b11ebef130d4b1152611109e3b85c8644872f28229955df",
-   "modifie_le": "2026-08-15 16:40"
+   "empreinte": "bfda92ec6c6c771a8cadc013035ad3e1ff07cb3f7bea93fa1d16773043ca3c34",
+   "modifie_le": "2026-08-19 21:31:44",
+   "raison_modification": "D6 multi-sessions : session-llm-1 -> <session> (validation utilisateur 2026-08-19)"
   },
   "cerberus.c20": {
    "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",

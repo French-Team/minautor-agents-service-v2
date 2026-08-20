@@ -59,6 +59,12 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 |---|---|---|
 | `changer-statut` | Changer le statut d'un fichier en le renommant | [changer/changer-statut/](changer/changer-statut/) |
 
+### Chronometrer
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `chronometrer-duree` | Mesure la duree d une intervention d agent (journal traces/chronos.jsonl, duree ajoutee au repere ### de l historique) | [chronometrer/chronometrer-duree/](chronometrer/chronometrer-duree/) |
+
 ### Combos
 
 | Combo | Description | Chemin |
@@ -103,6 +109,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 |---|---|---|
 | `consulter-lecons` | Consulte la BDD portable des lecons (SQLite, unique et partagee) | [consulter/consulter-lecons/](consulter/consulter-lecons/) |
 | `consulter-combos` | Consulte le catalogue des combos : ou est utilise l outil X et par qui (proprietaire) | [consulter/consulter-combos/](consulter/consulter-combos/) |
+| `convertir-carte-mermaid` | Convertit les cartes de decision (parcours-<agent>.json) en graphes Mermaid (.mmd) ET en images SVG (.svg par agent) | [consulter/convertir-carte-mermaid/](consulter/convertir-carte-mermaid/) |
 
 ### Copier
 
@@ -190,6 +197,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `evaluer-coherence` | Verifier les liens et references croisees | [evaluer/evaluer-coherence/](evaluer/evaluer-coherence/) |
 | `evaluer-conventions` | Verifier le nommage, l'ASCII, le format | [evaluer/evaluer-conventions/](evaluer/evaluer-conventions/) |
 | `evaluer-processus` | Detecter les derives de processus (fins, outils hors carte, coherence fiche/carte) | [evaluer/evaluer-processus/](evaluer/evaluer-processus/) |
+| `evaluer-progression` | Evaluer la progression du cerveau-projet en temps reel (criteres definissables /100) et l'auto-amelioration (score % non plafonne) | [evaluer/evaluer-progression/](evaluer/evaluer-progression/) |
 | `evaluer-rating` | Evaluer la qualite et la performance (note ponderee /100 : tests, series, outils, scripts temp, fiches) | [evaluer/evaluer-rating/](evaluer/evaluer-rating/) |
 | `evaluer-structure` | Verifier l'arborescence et les fichiers critiques | [evaluer/evaluer-structure/](evaluer/evaluer-structure/) |
 
@@ -520,7 +528,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Ecrire | 1 |
 | Editer | 3 |
 | Enregistrer | 1 |
-| Evaluer | 6 |
+| Evaluer | 7 |
 | Generateurs | 10 |
 | Gerer | 1 |
 | Guider | 1 |
@@ -541,7 +549,7 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Executer | 1 |
 | Protections | 6 |
 | Tests | 41 |
-| **Total** | **203** |
+| **Total** | **204** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

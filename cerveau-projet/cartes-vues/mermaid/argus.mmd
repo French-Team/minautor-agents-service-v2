@@ -1,0 +1,60 @@
+%% Carte de decision de argus (parcours v0.2.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c13(["FIN - Activer Janus (controle final)"])
+    c2["AUDIT CONTRADICTIONS : cases, regles, protocoles"]
+    c29{"Mission hors parcours"}
+    c29a["DELEGATION - Activer l'agent habilite (il reactivera Cerberus avec le bilan)"]
+    c29b{"Besoin d un outil ?"}
+    c29c["Signaler le besoin d outil (outil cree par Vulcain)"]
+    c29e(["FIN - Signaler le besoin"])
+    c3["LECTURE GIT : evolutions vraies et fausses"]
+    c30["Aucune contradiction trouvee : preuve negative si soupcon"]
+    c31["NETTOYER tmp-argus (0 residu en fin de mission)"]
+    c4{"CONTROLE : une contradiction est-elle trouvee ?"}
+    c5["CROISEMENT : verifier chaque incoherence dans les sources"]
+    c6["CLASSER les incoherences par gravite"]
+    c7["RAPPORT d incoherences (detecte et signale, ne corrige pas)"]
+    c8{"CONTROLE : quel agent habilite corrige ?"}
+    cD1["RELAIS - Activer Buffy (fiches, parcours, regles)"]
+    cD2["RELAIS - Activer Vulcain (outils)"]
+    cD3["RELAIS - Activer Morpheus (tests)"]
+    cR1{"RETOUR - Verifier le rapport de l agent a la reactivation"}
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c1
+    c0e --> c0c
+    c1 -- "auditer" --> c2
+    c1 -- "git" --> c3
+    c1 -- "autre" --> c29
+    c2 --> c4
+    c29 -- "deleguer" --> c29a
+    c29 -- "outil manquant" --> c29b
+    c29 -- "signaler" --> c29e
+    c29a --> cR1
+    c29b -- "OUI" --> c29c
+    c29b -- "NON" --> c29e
+    c29c --> c29e
+    c3 --> c4
+    c30 --> c31
+    c31 --> c13
+    c4 -- "OUI" --> c5
+    c4 -- "NON" --> c30
+    c5 --> c6
+    c6 --> c7
+    c7 --> c8
+    c8 -- "fiches ou parcours" --> cD1
+    c8 -- "outils" --> cD2
+    c8 -- "tests" --> cD3
+    c8 -- "controle final" --> c31
+    cD1 --> cR1
+    cD2 --> cR1
+    cD3 --> cR1
+    cR1 -- "OUI" --> c31
+    cR1 -- "NON" --> cD1

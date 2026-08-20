@@ -1,7 +1,7 @@
 #!/bin/bash
 # generateurs-commande.sh
 # Genere une commande complexe a lancer, en posant une question par parametre.
-# Version : 0.2.6
+# Version : 0.3.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -15,7 +15,7 @@
 #   - --reponses "a=b;c=d" : reponses fournies en une fois (mode non interactif)
 #   - mode interactif   : menu de choix + une question par parametre
 
-VERSION="0.2.6"
+VERSION="0.3.1"
 STATUT="ebauche"
 
 RED='\033[0;31m'

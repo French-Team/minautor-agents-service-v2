@@ -184,6 +184,20 @@
      "catalogue": "corriger-noms-maj",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-noms-maj/",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-noms-maj/corriger-noms-maj.py --dry-run"
+    },
+    {
+     "catalogue": "detecter-ecritures-hors-cycle",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-ecritures-hors-cycle/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-ecritures-hors-cycle/detecter-ecritures-hors-cycle.py",
+     "nom": "detecter-ecritures-hors-cycle",
+     "type": "outil"
+    },
+    {
+     "catalogue": "evaluer-progression",
+     "chemin": "cerveau-projet/agents/tools/evaluer/evaluer-progression/",
+     "commande": "python3 cerveau-projet/agents/tools/evaluer/evaluer-progression/evaluer-progression.py",
+     "nom": "evaluer-progression",
+     "type": "outil"
     }
    ],
    "suivant": "c11",
@@ -454,12 +468,12 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
    "suivant": "c15g",
    "titre": "Activer Themis pour auditer ma mission",
    "type": "action"
@@ -608,7 +622,7 @@
    "type": "action"
   },
   "c16d": {
-   "message": "Documentation mise a jour et validee (RVAV + detecter-impacts). Je REACTIVE Cerberus avec le bilan consolide : commande reactiver session-llm-1 <raison> <agent_precedent> (le 3e argument est obligatoire).",
+   "message": "Documentation mise a jour et validee (RVAV + detecter-impacts). Je REACTIVE Cerberus avec le bilan consolide : commande reactiver <session> <raison> <agent_precedent> (le 3e argument est obligatoire).",
    "titre": "FIN - Documentation",
    "type": "fin"
   },
@@ -625,7 +639,7 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
@@ -876,6 +890,18 @@
     {
      "ref": "pattern-12",
      "type": "ref"
+    },
+    {
+     "catalogue": "chronometrer-duree",
+     "chemin": "cerveau-projet/agents/tools/chronometrer/chronometrer-duree/",
+     "nom": "chronometrer-duree",
+     "type": "outil"
+    },
+    {
+     "catalogue": "analyser-tokens",
+     "chemin": "cerveau-projet/agents/tools/analyser/analyser-tokens/",
+     "nom": "analyser-tokens",
+     "type": "outil"
     }
    ],
    "suivant": "c6a",
@@ -993,6 +1019,20 @@
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-fins-de-ligne/corriger-fins-de-ligne.py",
      "nom": "corriger-fins-de-ligne",
      "type": "outil"
+    },
+    {
+     "catalogue": "valider-conformite-ascii",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py",
+     "nom": "valider-conformite-ascii",
+     "type": "outil"
+    },
+    {
+     "catalogue": "valider-nommage",
+     "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/",
+     "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py",
+     "nom": "valider-nommage",
+     "type": "outil"
     }
    ],
    "suivant": "c7b",
@@ -1066,7 +1106,7 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 morpheus \"TESTER ...\"",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> morpheus \"TESTER ...\"",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
@@ -1149,12 +1189,12 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
    ],
-   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
+   "message": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'. Themis audite ma mission ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b, commande activer) avec son rapport et je continue vers le controle de retour ; si un defaut est signale (c12f/c12g) elle m active pour corriger et je l ACTIVE (commande activer) pour re-audit avec mon bilan.",
    "suivant": "c9g",
    "titre": "Activer Themis pour auditer ma mission",
    "type": "action"
@@ -1271,8 +1311,8 @@
  "parcours": {
   "agent": "vulcain",
   "case_depart": "c0",
-  "description": "Carte de decision de Vulcain - constructeur d outils. v0.4.16 : c13 + combos-audit-general, c18c + executer-script-temporaire (mission garantie LF).",
+  "description": "Carte de decision de Vulcain - constructeur d outils. v0.4.17 : c6 + chronometrer-duree (mesure duree des interventions, integre a activer-agent-principal v0.5.16). c6 + chronometrer-duree (mesure duree des interventions, integre a activer-agent-principal v0.5.16). c6 + analyser-tokens (conso tokens integree au cycle activation).",
   "nom": "parcours-vulcain",
-  "version": "0.5.0"
+  "version": "0.5.2"
  }
 }

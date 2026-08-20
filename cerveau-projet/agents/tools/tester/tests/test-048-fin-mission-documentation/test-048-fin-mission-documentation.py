@@ -132,11 +132,12 @@ def missions_recentes(texte, agents):
             continue
         if "BILAN CONSOLIDE" in ligne or "CONTROLE CROISE TERMINE" in ligne:
             continue
-        m = re.match(r"\|\s*([0-9]{4}-[0-9]{2}-[0-9]{2})\s+[0-9:]+"
-                     r"\s*\|\s*[^|]+\|\s*([a-z-]+)\s*\|", ligne)
+        # v0.5.15 : | <span>agent</span> | heure | date | session | MISSION ...
+        m = re.match(r"\|\s*<span[^>]*>([a-z-]+)</span>\s*\|\s*[0-9:]+\s*\|"
+                     r"\s*([0-9]{4}-[0-9]{2}-[0-9]{2})\s*\|", ligne)
         if not m:
             continue
-        date, agent = m.group(1), m.group(2).strip()
+        date, agent = m.group(2), m.group(1).strip()
         if agent not in agents:
             continue
         missions.append((date, agent, ligne.strip()[:80]))

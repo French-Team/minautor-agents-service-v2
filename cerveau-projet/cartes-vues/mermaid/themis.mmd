@@ -1,0 +1,89 @@
+%% Carte de decision de themis (parcours v0.5.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c12["Lecons et retour"]
+    c12b{"Ameliorations possibles de mon fonctionnement ?"}
+    c12c["Lancer le generateur d amelioration"]
+    c12d["Activer l'agent habilite pour l'amelioration"]
+    c12e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c12f{"Defaut signale dans un rapport ?"}
+    c12g["Activer l'agent habilite pour reparer le defaut"]
+    c13(["FIN - Activer Janus"])
+    c14["Lire le contexte du doute"]
+    c15{"Choisir l'evaluateur selon le domaine"}
+    c16["Lancer l'evaluateur adapte"]
+    c17["Croiser avec relecture et tableaux"]
+    c18["RVAV -- phase Analyser"]
+    c19["Executer le combo pour la phase Analyser"]
+    c2["Lire le contexte de la demande"]
+    c21{"Mission hors perimetre"}
+    c22["Activer l'agent habilite"]
+    c23(["Signaler le besoin"])
+    c23b{"Besoin d outil ?"}
+    c23c["Creer l outil temporaire"]
+    c23d(["FIN - Outil temporaire"])
+    c24(["FIN - Delegation"])
+    c25["Auditer pour un agent"]
+    c25b(["FIN - Activer l agent precedent avec son rapport"])
+    c26["Enregistrer mes usages d outils"]
+    c3["Lancer le combo audit-themis"]
+    c30["Controler la veracite des README (responsabilite README)"]
+    c8{"Verdict : evaluation complete ?"}
+    c8b{"CONFORMITE D EXECUTION : l agent a-t-il fait ce que sa carte ordonnait ?"}
+    c8c{"VERIFICATION D IMPACT (Pattern 14)"}
+    c8d{"LA FIN SUIT SA CARTE (Pattern 13)"}
+    c9["Ecrire le rapport dans themis/rapports/"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c1
+    c0e --> c0c
+    c1 -- "audit" --> c2
+    c1 -- "doute" --> c14
+    c1 -- "rvav" --> c18
+    c1 -- "autre" --> c21
+    c1 -- "audit-agent" --> c25
+    c1 -- "audit-fin-mission" --> c25
+    c1 -- "readme" --> c30
+    c12 --> c12f
+    c12b -- "OUI" --> c12c
+    c12b -- "NON" --> c26
+    c12c --> c12d
+    c12d --> c12e
+    c12f -- "OUI" --> c12g
+    c12f -- "NON" --> c12b
+    c12g --> c12e
+    c14 --> c15
+    c15 -- "structure" --> c16
+    c15 -- "conventions" --> c16
+    c15 -- "coherence" --> c16
+    c15 -- "agents" --> c16
+    c16 --> c17
+    c17 --> c8b
+    c18 --> c19
+    c19 --> c3
+    c2 --> c3
+    c21 -- "OUI" --> c22
+    c21 -- "NON" --> c23b
+    c22 --> c24
+    c23b -- "TEMPORAIRE" --> c23c
+    c23b -- "DURABLE" --> c23
+    c23c --> c23d
+    c25 --> c25b
+    c26 --> c13
+    c3 --> c8
+    c30 --> c9
+    c8 -- "OUI" --> c8b
+    c8 -- "NON" --> c3
+    c8b -- "OUI" --> c8c
+    c8b -- "NON" --> c3
+    c8c -- "OUI" --> c8d
+    c8c -- "NON" --> c3
+    c8d -- "OUI" --> c9
+    c8d -- "NON" --> c3
+    c9 --> c12

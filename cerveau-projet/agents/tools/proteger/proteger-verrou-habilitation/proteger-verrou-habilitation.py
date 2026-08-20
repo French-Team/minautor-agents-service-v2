@@ -58,7 +58,7 @@
 #   2 : erreur d utilisation (agent/outil manquant, agent inconnu,
 #       identite de session indeterminable)
 #
-# Version : 0.4.0
+# Version : 0.4.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -88,7 +88,7 @@ import os
 import re
 import sys
 
-VERSION = "0.4.0"
+VERSION = "0.4.2"
 
 AGENTS_DIR = None          # racine/cerveau-projet/agents (detectee)
 PROJECT_ROOT = None        # racine du projet (contient AGENTS.md)
@@ -186,22 +186,64 @@ def construire_table():
     return table
 
 
+def session_par_defaut():
+    """MULTI-SESSIONS (v0.2.2) : session de l appelant -- variable
+    d environnement SESSION_LLM (ex: session-llm-4), sinon premiere session
+    du classeur-variables, sinon session-llm-1 en secours."""
+    env = os.environ.get("SESSION_LLM", "").strip()
+    if env:
+        return env
+    classeur = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                            "classeur-variables", "stockage",
+                            "variables-actuelles.md")
+    try:
+        with io.open(classeur, "r", encoding="utf-8") as f:
+            for ligne in f:
+                m = re.search(r"session: (session-llm-\d+)", ligne)
+                if m:
+                    return m.group(1)
+    except IOError:
+        pass
+    return "session-llm-1"
+
+
 def trouver_session_agent(agent):
-    """Trouve la session (session-llm-N) de l agent appelant dans AGENTS.md."""
+    """Trouve la session (session-llm-N) de l agent appelant dans AGENTS.md.
+    MULTI-SESSIONS (v0.4.2) : utilise la table '## Sessions connues' et
+    retourne la session la PLUS RECENTE (colonne Derniere activite) parmi
+    celles dont l agent actif correspond -- plus de premier bloc du fichier
+    (l ordre des blocs de session est independant de la recence, 2 sessions
+    peuvent porter le meme agent actif : la commande suggeree par le verrou
+    doit viser la session de l appelant).
+    Fallback : session de l appelant (SESSION_LLM ou classeur)."""
     chemin = os.path.join(PROJECT_ROOT, "AGENTS.md")
     try:
         with io.open(chemin, "r", encoding="utf-8") as f:
             contenu = f.read()
     except IOError:
-        return "session-llm-1"
-    # Blocs : ### Session : session-llm-N ... | **Nom Agent** | X |
-    blocs = re.split(r"### Session : (session-llm-\d+)", contenu)
-    for i in range(1, len(blocs) - 1, 2):
-        session = blocs[i]
-        corps = blocs[i + 1]
-        if re.search(r"\*\*Nom Agent\*\*\s*\|\s*" + re.escape(agent) + r"\s*\|", corps):
-            return session
-    return "session-llm-1"
+        return session_par_defaut()
+    m = re.search(r"## Sessions connues\n(.*?)(?=\n## |\Z)", contenu, re.S)
+    if not m:
+        return session_par_defaut()
+    candidats = []
+    for ligne in m.group(1).splitlines():
+        ligne = ligne.strip()
+        if not ligne.startswith("| session-llm-"):
+            continue
+        cellules = [c.strip() for c in ligne.strip("|").split("|")]
+        if len(cellules) < 4:
+            continue
+        session, agent_actif, activite = cellules[0], cellules[2], cellules[3]
+        if agent_actif.lower() != agent.lower():
+            continue
+        if not session.startswith("session-llm-"):
+            continue
+        candidats.append((activite, session))
+    if not candidats:
+        return session_par_defaut()
+    # Session la plus recente = Derniere activite max (colonne 4)
+    candidats.sort(key=lambda c: c[0], reverse=True)
+    return candidats[0][1]
 
 
 def agent_actif_session():

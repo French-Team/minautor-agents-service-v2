@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-hermes",
   "agent": "hermes",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Hermes, agent de la langue (dieu grec de l eloquence) : relecture -> detection des fautes d orthographe -> verification du contexte -> correction tracee -> extension du dictionnaire -> rapport. Decision utilisateur 2026-08-14 : creer un agent dedie au vocabulaire et aux fautes, place comme nos outils ASCII, premiere mission = corriger readme-dev:264 (enchannements)."
  },
@@ -366,7 +366,7 @@
   "c13": {
    "titre": "FIN - Activer Janus (second controle)",
    "type": "fin",
-   "message": "MISSION DE CORRECTION ORTHOGRAPHIQUE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan complet (fautes detectees et corrigees, dictionnaire etendu, rapport, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus verifie ma tracabilite (rapport + rescan 0 faute) puis reactive Cerberus avec son verdict.",
+   "message": "MISSION DE CORRECTION ORTHOGRAPHIQUE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan complet (fautes detectees et corrigees, dictionnaire etendu, rapport, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. Janus verifie ma tracabilite (rapport + rescan 0 faute) puis reactive Cerberus avec son verdict.",
    "indices": [
     {
      "type": "outil",

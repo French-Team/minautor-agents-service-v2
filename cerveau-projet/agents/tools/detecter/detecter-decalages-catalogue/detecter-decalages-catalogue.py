@@ -16,7 +16,7 @@
 # d une boucle serie (~85s -> ~8s sur 147 commandes) + CACHE des aides par
 # (interpreteur, script) : un script reference par plusieurs commandes n est
 # lance qu une seule fois (ex: activer-agent-principal 5x -> 1 lancement).
-# Version : 0.2.2
+# Version : 0.2.3
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -48,8 +48,9 @@ Usage:
   detecter-decalages-catalogue.py [--sortie CHEMIN] [--version]
 
 Options:
-  --sortie CHEMIN   Chemin du rapport genere (defaut: rapport-detecter-decalages-catalogue-<date>.md
-                    dans le dossier courant)
+  --sortie CHEMIN   Chemin du rapport genere (defaut:
+                    cerveau-projet/agents/vulcain/rapports/rapport-detecter-decalages-catalogue-<date>.md
+                    - TOUJOURS dans cerveau-projet/, jamais a la racine)
   --version         Afficher la version
   --aide            Afficher cette aide
 """
@@ -64,7 +65,11 @@ import unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
-VERSION = "0.2.2"
+VERSION = "0.2.3"
+# v0.2.3 : rapport par defaut TOUJOURS dans cerveau-projet/ (agents/vulcain/rapports/)
+# au lieu du dossier courant (le chemin relatif creait le rapport a la RACINE
+# du projet quand on lancait l outil depuis la racine - regle : rien ne sort
+# de cerveau-projet/).
 # v0.2.1 : pool de threads pour lancer les aides des commandes en parallele.
 # min(16, nb) : surcharge le lanceur de tests qui utilise deja un pool a part.
 MAX_WORKERS = 16
@@ -379,7 +384,12 @@ def main(argv):
         if idx + 1 < len(argv):
             sortie = argv[idx + 1]
     if sortie is None:
-        sortie = "rapport-detecter-decalages-catalogue-%s.md" % datetime.now().strftime("%Y-%m-%d")
+        # v0.2.3 : defaut robuste au CWD, TOUJOURS dans cerveau-projet/
+        dossier = os.path.join(RACINE, "cerveau-projet", "agents", "vulcain",
+                               "rapports")
+        os.makedirs(dossier, exist_ok=True)
+        sortie = os.path.join(dossier, "rapport-detecter-decalages-catalogue-%s.md"
+                              % datetime.now().strftime("%Y-%m-%d"))
     resultats = analyser()
     problemes_combos, nb_combos = analyser_combos()
     rapport = formater(resultats, len(resultats["conformes"]) + len(resultats["decalages"]) + len(resultats["non_testables"]),

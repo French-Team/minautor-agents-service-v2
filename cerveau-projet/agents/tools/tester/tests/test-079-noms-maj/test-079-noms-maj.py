@@ -228,14 +228,14 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         noms = [e["nom"] for e in cat["commandes"]]
-        verifier("10. catalogue 183 commandes trie + les 2 outils",
-                 len(noms) == 183 and noms == sorted(noms)
+        verifier("10. catalogue 186 commandes trie + les 2 outils",
+                 len(noms) == 186 and noms == sorted(noms)
                  and "lire-head" in noms
                  and "analyser-noms-maj" in noms
                  and "corriger-noms-maj" in noms,
                  "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
     except Exception as e:
-        verifier("10. catalogue 183 commandes trie + les 2 outils",
+        verifier("10. catalogue 186 commandes trie + les 2 outils",
                  False, str(e)[-80:])
     chrono_etape("10. catalogue", t0)
 
@@ -244,19 +244,19 @@ def main():
     try:
         with io.open(INDEX, encoding="utf-8") as fh:
             idx = fh.read()
-        verifier("11. index-tools total 203 + Analyser 9 + Corriger 7 + les 2",
-                 "| **Total** | **203** |" in idx
+        verifier("11. index-tools total 204 + Analyser 9 + Corriger 7 + les 2",
+                 "| **Total** | **204** |" in idx
                  and "| Analyser | 9 |" in idx
                  and "| Corriger | 7 |" in idx
                  and "lire-head" in idx
                  and "analyser-noms-maj" in idx
                  and "corriger-noms-maj" in idx,
-                 "total203=%s an6=%s co7=%s" % (
-                     "| **Total** | **203** |" in idx,
+                 "total204=%s an6=%s co7=%s" % (
+                     "| **Total** | **204** |" in idx,
                      "| Analyser | 9 |" in idx,
                      "| Corriger | 7 |" in idx))
     except OSError as e:
-        verifier("11. index-tools total 202 + Analyser 9 + Corriger 7 + les 2",
+        verifier("11. index-tools total 203 + Analyser 9 + Corriger 7 + les 2",
                  False, str(e))
     chrono_etape("11. index-tools", t0)
 

@@ -1,0 +1,76 @@
+%% Carte de decision de athena (parcours v0.4.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0d["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10(["FIN - Activer Janus"])
+    c11["Rechercher les pense-betes existants (ANTI-DOUBLON)"]
+    c12["Lire le pense-bete existant"]
+    c13["Verifier les conventions"]
+    c14["Completer les sections manquantes"]
+    c15["Passer la boucle RVAV"]
+    c18{"Mission hors perimetre"}
+    c19["Activer l'agent habilite"]
+    c2["Rechercher les pense-betes existants (ANTI-DOUBLON)"]
+    c20(["Signaler le besoin"])
+    c20b{"Besoin d outil ?"}
+    c20c["Creer l outil temporaire"]
+    c20d(["FIN - Outil temporaire"])
+    c21(["FIN - Delegation"])
+    c22["Activer Themis pour auditer"]
+    c23(["FIN - Retour de Themis avec son rapport"])
+    c24["Enregistrer mes usages d outils"]
+    c3["Lire la demande de l'utilisateur"]
+    c4["Generer le squelette du pense-bete"]
+    c5["Remplir les sections du pense-bete"]
+    c6["Verifier la conformite ASCII"]
+    c7["Valider le fichier pense-bete"]
+    c8["Passer la boucle RVAV"]
+    c9["Lecons et retour"]
+    c9b{"Ameliorations possibles de mon fonctionnement ?"}
+    c9c["Lancer le generateur d amelioration"]
+    c9d["Activer l'agent habilite pour l'amelioration"]
+    c9e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c9f["CORRIGER selon le rapport de Janus"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c0d
+    c0d --> c1
+    c0e --> c0c
+    c1 -- "creer" --> c2
+    c1 -- "completer" --> c11
+    c1 -- "autre" --> c18
+    c1 -- "corriger" --> c9f
+    c11 --> c12
+    c12 --> c13
+    c13 --> c14
+    c14 --> c15
+    c15 --> c9
+    c18 -- "OUI" --> c19
+    c18 -- "NON" --> c20b
+    c18 -- "audit" --> c22
+    c19 --> c21
+    c2 --> c3
+    c20b -- "TEMPORAIRE" --> c20c
+    c20b -- "DURABLE" --> c20
+    c20c --> c20d
+    c22 --> c23
+    c24 --> c10
+    c3 --> c4
+    c4 --> c5
+    c5 --> c6
+    c6 --> c7
+    c7 --> c8
+    c8 --> c9
+    c9 --> c9b
+    c9b -- "OUI" --> c9c
+    c9b -- "NON" --> c24
+    c9c --> c9d
+    c9d --> c9e
+    c9e --> FIN-APPELANT
+    c9f --> c24

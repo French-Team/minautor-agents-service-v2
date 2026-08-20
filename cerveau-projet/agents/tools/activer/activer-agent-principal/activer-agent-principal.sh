@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.13"
+VERSION="0.5.19"
 STATUT="prepare"
 
 # Configuration
@@ -502,7 +502,86 @@ PYEOF
     return $?
 }
 
-# Ajouter une entree dans l'historique (4 colonnes, en haut, max 150)
+# v0.5.14 : couleur HTML fixe PAR AGENT (repere humain de l historique)
+couleur_agent() {
+    case "$1" in
+        cerberus|Cerberus) echo "#dc2626" ;;
+        vulcain) echo "#ea580c" ;;
+        morpheus) echo "#7c3aed" ;;
+        janus) echo "#0d9488" ;;
+        buffy|Buffy) echo "#2563eb" ;;
+        atlas) echo "#ca8a04" ;;
+        themis) echo "#be185d" ;;
+        clio) echo "#65a30d" ;;
+        hygie) echo "#16a34a" ;;
+        hermes) echo "#0284c7" ;;
+        gardien) echo "#475569" ;;
+        argus) echo "#9333ea" ;;
+        chiron) echo "#0891b2" ;;
+        athena) echo "#c026d3" ;;
+        promethee) echo "#d97706" ;;
+        minerve) echo "#059669" ;;
+        *) echo "#334155" ;;
+    esac
+}
+
+# v0.5.15 : compose le bloc markdown d une entree (format super lisible)
+# Structure : #> + repere '### date - agent' (couleur) + table
+# '| agent | heure | date | session | raison |' (agent colore en colonne 1)
+# + raison enroulee a LARGEUR_RAISON (100) en lignes '###>'.
+LARGEUR_RAISON=100
+enrouler_raison() {
+    # Enroule chaque ligne source (sep. \n) a <= LARGEUR_RAISON caracteres
+    # en coupant aux espaces. Lit stdin, ecrit stdout.
+    awk -v larg="$LARGEUR_RAISON" '
+        {
+            ligne = $0
+            while (length(ligne) > larg) {
+                coupure = larg
+                for (i = larg + 1; i > 1; i--) {
+                    if (substr(ligne, i, 1) == " ") { coupure = i - 1; break }
+                }
+                if (coupure <= 0) coupure = larg
+                morceau = substr(ligne, 1, coupure)
+                gsub(/^ +| +$/, "", morceau)
+                print morceau
+                ligne = substr(ligne, coupure + 1)
+                gsub(/^ +/, "", ligne)
+            }
+            gsub(/^ +| +$/, "", ligne)
+            print ligne
+        }
+    '
+}
+
+composer_bloc_historique() {
+    local timestamp=$1
+    local session=$2
+    local agent=$3
+    local raison=$4
+    local couleur
+    couleur=$(couleur_agent "$agent")
+    local date="${timestamp%% *}"
+    local heure="${timestamp#* }"
+    [ "$heure" = "$timestamp" ] && heure=""
+    local lignes_raison premiere suite ligne_suite
+    lignes_raison=$(printf '%s' "$raison" | enrouler_raison)
+    premiere=$(printf '%s\n' "$lignes_raison" | head -n 1)
+    printf '#>\n### <span style="color:%s">%s</span> - <span style="color:%s">%s</span>\n| <span style="color:%s">%s</span> | %s | %s | %s | %s |' \
+        "$couleur" "$timestamp" "$couleur" "$agent" \
+        "$couleur" "$agent" "$heure" "$date" "$session" "$premiere"
+    suite=$(printf '%s\n' "$lignes_raison" | tail -n +2)
+    if [ -n "$suite" ]; then
+        printf '\n'
+        while IFS= read -r ligne_suite; do
+            [ -n "$ligne_suite" ] && printf '###> %s\n' "$ligne_suite"
+        done <<EOF
+$suite
+EOF
+    fi
+}
+
+# Ajouter une entree dans l'historique (format bloc v0.5.14, en haut, max 150)
 ajouter_historique() {
     local timestamp=$1
     local session=$2
@@ -514,7 +593,8 @@ ajouter_historique() {
         return 1
     fi
 
-    local nouvelle_ligne="| $timestamp | $session | $agent | $raison |"
+    local nouvelle_ligne
+    nouvelle_ligne=$(composer_bloc_historique "$timestamp" "$session" "$agent" "$raison")
 
     if ! verifier_ascii "$nouvelle_ligne"; then
         echo "ERREUR: Caractere non-ASCII detecte dans la raison - ecriture historique REFUSEE"
@@ -522,20 +602,35 @@ ajouter_historique() {
     fi
 
     # v0.5.6 : anti-accumulation - quand une entree est purgeee (au-dela de la
-    # limite max), ses CONTINUATIONS (blocs DEMARRAGE, raisons multi-lignes)
-    # sont purgees AVEC elle. Le bug v0.5.4 conservait les lignes non-| date |
-    # sans limite : les continuations orphelines s accumulaient a la fin.
+    # limite max), ses CONTINUATIONS (blocs DEMARRAGE, raisons multi-lignes,
+    # lignes '#>' et '###>') sont purgees AVEC elle. Le bug v0.5.4 conservait
+    # les lignes non-| date | sans limite : les continuations orphelines
+    # s accumulaient a la fin. v0.5.15 : le debut de bloc est la ligne de
+    # table '| <span' (agent colore en colonne 1) OU le repere humain '### ' ;
+    # un bloc repere + table compte pour UNE entree (le repere, la table
+    # suivante en fait partie).
     awk -v ligne="$nouvelle_ligne" -v max="$MAX_ENTREES_HISTORIQUE" '
-        BEGIN { insere = 0; compteur = 0; sauter = 0 }
+        function afficher(s) { print s; derniere = s }
+        BEGIN { insere = 0; compteur = 0; sauter = 0; en_repere = 0; derniere = "" }
         {
-            if (index($0, "| 20") == 1) {
+            if (index($0, "| <span") == 1) {
+                if (en_repere == 1) {
+                    # table du repere precedent : meme bloc, pas de comptage
+                    en_repere = 0
+                    if (sauter == 0) afficher($0)
+                    next
+                }
                 if (insere == 0) {
-                    print ligne
+                    # eviter un double "#>" si la sortie se termine deja par la
+                    # bordure de l entree precedente
+                    l2 = ligne
+                    if (derniere == "#>") sub(/^#>\n/, "", l2)
+                    afficher(l2)
                     insere = 1
                     compteur++
                 }
                 if (compteur < max) {
-                    print $0
+                    afficher($0)
                     compteur++
                     sauter = 0
                 } else {
@@ -543,11 +638,27 @@ ajouter_historique() {
                 }
                 next
             }
-            if (sauter == 0) {
-                print $0
+            if (index($0, "### ") == 1) {
+                if (insere == 0) {
+                    l2 = ligne
+                    if (derniere == "#>") sub(/^#>\n/, "", l2)
+                    afficher(l2)
+                    insere = 1
+                    compteur++
+                }
+                if (compteur < max) {
+                    afficher($0)
+                    compteur++
+                    sauter = 0
+                } else {
+                    sauter = 1
+                }
+                en_repere = 1
+                next
             }
+            if (sauter == 0) afficher($0)
         }
-        END { if (insere == 0) print ligne }
+        END { if (insere == 0) afficher(ligne) }
     ' "$AGENTS_HISTORIQUE" > "$AGENTS_HISTORIQUE.tmp" && mv "$AGENTS_HISTORIQUE.tmp" "$AGENTS_HISTORIQUE"
 
     if ! verifier_fichier_ascii "$AGENTS_HISTORIQUE"; then
@@ -650,6 +761,139 @@ sidentifier() {
     mettre_a_jour_sessions_connues
 }
 
+# v0.5.16 : chronometrage de l intervention (parite .py). Appelle
+# chronometrer-duree.py en subprocess (pattern proteger-verrou-marbre).
+CHRONO_OUTIL_SH="$(cd "$(dirname "$0")" && pwd)/../../chronometrer/chronometrer-duree/chronometrer-duree.py"
+ANALYSEUR_TOKENS_SH="$(cd "$(dirname "$0")" && pwd)/../../analyser/analyser-tokens/analyser-tokens.py"
+
+# Snapshot cumulatif courant des tokens (JSON machine, mode hybride)
+snapshot_tokens() {
+    local mock="${TOKENS_MOCK:-}"
+    local sortie
+    if [ -n "$mock" ]; then
+        sortie=$(TOKENS_SESSION="$mock" python3 "$ANALYSEUR_TOKENS_SH" --snapshot 2>/dev/null)
+    else
+        sortie=$(python3 "$ANALYSEUR_TOKENS_SH" --snapshot 2>/dev/null)
+    fi
+    if [ -z "$sortie" ]; then
+        echo ""
+        return 0
+    fi
+    echo "$sortie" | head -1
+}
+
+# Arreter le chrono ouvert de la session (retourne 'agent | duree | tokens_debut'
+# ou vide)
+arreter_chrono_session() {
+    local session=$1
+    local chronos_env="$CHRONOS_FICHIER"
+    if [ -n "$AGENTS_FILE" ]; then
+        chronos_env="$(dirname "$AGENTS_FILE")/chronos-test.jsonl"
+    fi
+    local sortie
+    sortie=$(CHRONOS_FICHIER="$chronos_env" python3 "$CHRONO_OUTIL_SH" arreter "$session" --confirme-doc 2>/dev/null)
+    if [ "$sortie" = "AUCUN_CHRONO" ] || [ -z "$sortie" ]; then
+        echo ""
+        return 0
+    fi
+    # la sortie est 'agent | duree | tokens_debut' suivie des MESSAGES POUR
+    # L AGENT : ne garder que la 1re ligne (sinon messages parasites dans le
+    # repere ### d AGENTS-historique -- bug detecte par la non-regression
+    # Janus 2026-08-19).
+    echo "$sortie" | head -1
+}
+
+# Demarrer le chrono de l agent nouvellement active (avec snapshot tokens)
+demarrer_chrono_session() {
+    local session=$1
+    local agent=$2
+    local chronos_env="$CHRONOS_FICHIER"
+    if [ -n "$AGENTS_FILE" ]; then
+        chronos_env="$(dirname "$AGENTS_FILE")/chronos-test.jsonl"
+    fi
+    local snap
+    snap=$(snapshot_tokens)
+    if [ -n "$snap" ]; then
+        CHRONOS_FICHIER="$chronos_env" python3 "$CHRONO_OUTIL_SH" demarrer "$session" "$agent" --tokens "$snap" --confirme-doc > /dev/null 2>&1
+    else
+        CHRONOS_FICHIER="$chronos_env" python3 "$CHRONO_OUTIL_SH" demarrer "$session" "$agent" --confirme-doc > /dev/null 2>&1
+    fi
+}
+
+# Ajouter '(duree, tokens: Xk env / Yk recus)' au repere ### de la derniere
+# entree de l agent
+ajouter_duree_repere() {
+    local agent=$1
+    local duree=$2
+    local conso=$3
+    [ -z "$duree" ] && return 0
+    [ -f "$AGENTS_HISTORIQUE" ] || return 0
+    python3 - "$agent" "$duree" "$AGENTS_HISTORIQUE" "$conso" <<'PYEOF'
+import io
+import os
+import re
+import sys
+
+agent, duree, historique, conso = (sys.argv[1], sys.argv[2], sys.argv[3],
+                                    sys.argv[4] if len(sys.argv) > 4 else "")
+if not os.path.isfile(historique):
+    sys.exit(0)
+with io.open(historique, "r", encoding="utf-8", errors="replace") as fh:
+    lignes = fh.readlines()
+motif = re.compile(
+    r"- <span style=\"color:#[0-9a-f]{6}\">%s</span>" % re.escape(agent))
+cible = None
+for idx, ligne in enumerate(lignes):
+    if not ligne.startswith("### <span"):
+        continue
+    if not motif.search(ligne):
+        continue
+    cible = idx
+    break
+if cible is None:
+    sys.exit(0)
+ligne = lignes[cible].rstrip("\n")
+if "(" in ligne and "min" in ligne:
+    sys.exit(0)
+if conso:
+    suffixe = " (%s, %s)" % (duree, conso)
+else:
+    suffixe = " (%s)" % duree
+lignes[cible] = ligne + suffixe + "\n"
+with io.open(historique, "w", encoding="utf-8", newline="\n") as fh:
+    fh.writelines(lignes)
+PYEOF
+}
+
+# Conso de l intervention = snapshot fin - snapshot debut (compteurs cumulatifs)
+conso_tokens_intervention() {
+    local tokens_debut=$1
+    [ -z "$tokens_debut" ] && { echo ""; return 0; }
+    local snap_fin
+    snap_fin=$(snapshot_tokens)
+    [ -z "$snap_fin" ] && { echo ""; return 0; }
+    python3 - "$tokens_debut" "$snap_fin" <<'PYEOF'
+import json
+import sys
+
+try:
+    debut = json.loads(sys.argv[1].strip())
+    fin = json.loads(sys.argv[2].strip())
+except (ValueError, IndexError):
+    sys.exit(0)
+try:
+    env = max(0, int(fin.get("envoyes", 0)) - int(debut.get("envoyes", 0)))
+    rec = max(0, int(fin.get("recus", 0)) - int(debut.get("recus", 0)))
+except (TypeError, ValueError):
+    sys.exit(0)
+if env == 0 and rec == 0:
+    sys.exit(0)
+def _k(n):
+    return "%.1fk" % (n / 1000.0) if n >= 1000 else str(n)
+print("tokens: %s env / %s recus" % (_k(env), _k(rec)))
+PYEOF
+}
+
 activer_agent() {
     local session=$1
     local agent=$2
@@ -692,6 +936,29 @@ avec --reponses NON pour relire d abord ; suis ensuite les branches case par
 case ; si tu reprends apres une interruption, reprends a la case courante
 avec --case <cid> --reponses '<reponse>')."
     fi
+    # v0.5.16 : chronometrage de l intervention (parite .py) - on ferme le
+    # chrono de l agent precedent (passage de relais) et on ajoute sa duree
+    # au repere de son entree dans l historique, PUIS on ouvre le chrono du
+    # nouvel agent.
+    local chrono_prec
+    chrono_prec=$(arreter_chrono_session "$session")
+    if [ -n "$chrono_prec" ]; then
+        # format retour : agent | duree | tokens_debut
+        local agent_prec="${chrono_prec%%|*}"
+        local reste="${chrono_prec#*|}"
+        local duree_prec="${reste%%|*}"
+        local tokens_prec="${reste#*|}"
+        local conso_prec=""
+        if [ -n "$tokens_prec" ] && [ "$tokens_prec" != "$reste" ]; then
+            # NE PAS passer par xargs : le JSON tokens contient des espaces
+            # ({"envoyes": 10000, ...}) qui seraient decoupes en mots.
+            conso_prec=$(conso_tokens_intervention "$tokens_prec")
+        fi
+        [ -n "$agent_prec" ] && [ -n "$duree_prec" ] && \
+            ajouter_duree_repere "$(echo "$agent_prec" | xargs)" "$(echo "$duree_prec" | xargs)" "$conso_prec"
+    fi
+    demarrer_chrono_session "$session" "$agent"
+
     editer_bloc_session "$session" "$agent" "$role" "$date" "$fiche" "$corrections" "Cerberus (automatique)" "$raison_finale"
 
     ajouter_historique "$timestamp" "$session" "$agent" "$raison_finale"
@@ -732,6 +999,25 @@ reactiver_cerberus() {
     local role=$(get_agent_role "Cerberus")
     local fiche=$(get_agent_fiche "Cerberus")
     local corrections=$(get_agent_corrections "Cerberus")
+    # v0.5.16 : fin de mission - fermer le chrono de l agent precedent et
+    # ajouter sa duree au repere de son entree dans l historique (parite .py)
+    local chrono_prec
+    chrono_prec=$(arreter_chrono_session "$session")
+    if [ -n "$chrono_prec" ]; then
+        local agent_prec="${chrono_prec%%|*}"
+        local reste="${chrono_prec#*|}"
+        local duree_prec="${reste%%|*}"
+        local tokens_prec="${reste#*|}"
+        local conso_prec=""
+        if [ -n "$tokens_prec" ] && [ "$tokens_prec" != "$reste" ]; then
+            # NE PAS passer par xargs : le JSON tokens contient des espaces
+            # ({"envoyes": 10000, ...}) qui seraient decoupes en mots.
+            conso_prec=$(conso_tokens_intervention "$tokens_prec")
+        fi
+        [ -n "$agent_prec" ] && [ -n "$duree_prec" ] && \
+            ajouter_duree_repere "$(echo "$agent_prec" | xargs)" "$(echo "$duree_prec" | xargs)" "$conso_prec"
+    fi
+
     editer_bloc_session "$session" "Cerberus" "$role" "$date" "$fiche" "$corrections" "$agent_precedent (retour de mission)" "$raison"
 
     ajouter_historique "$timestamp" "$session" "Cerberus" "$raison"

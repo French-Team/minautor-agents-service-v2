@@ -1,0 +1,88 @@
+%% Carte de decision de cerberus (parcours v0.5.5)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0d["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10["Activer l'agent"]
+    c11["Relire MA fiche et MES corrections"]
+    c12["Lire la raison de la reactivation"]
+    c12a{"Erreurs hors mission signalees ?"}
+    c12b["DEVIATION : activer Buffy pour reparer immediatement"]
+    c12c["REJOINT : retour au flux principal"]
+    c13{"Mission dans la liste definie ?"}
+    c14["Activer Janus (second controle)"]
+    c15{"Traiter le verdict de Janus"}
+    c15b{"Rapport de Janus : problemes a resoudre ?"}
+    c15c["Activer l agent habilite (problemes a resoudre)"]
+    c16{"Fichiers changes ?"}
+    c17["Activer Clio (README)"]
+    c18{"Inventaire / audit ?"}
+    c19["Reprendre la coordination"]
+    c19b{"Ameliorations possibles de mon fonctionnement ?"}
+    c19c["Lancer le generateur d amelioration"]
+    c19d["Activer l'agent habilite pour l'amelioration"]
+    c19e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c1b["Lancer le generateur d amelioration"]
+    c2["Ecouter la demande"]
+    c20(["FIN - Coordination terminee"])
+    c21["Activer l'agent d'origine (correction)"]
+    c22["Activer Themis (inventaire/audit)"]
+    c23(["Signaler le besoin"])
+    c24["Enregistrer mes usages d outils"]
+    c3["Lister les agents disponibles"]
+    c5{"Identifier l'agent habilite"}
+    c6["Activer l'agent habilite"]
+    c7["Annoncer la mission et suivre le cycle"]
+    c8["Verifier l'agent (identification)"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c0d
+    c0d --> c1
+    c0e --> c0c
+    c1 -- "accueil" --> c2
+    c1 -- "activation" --> c8
+    c1 -- "retour" --> c11
+    c1 -- "ameliorer" --> c1b
+    c1 -- "autre" --> c18
+    c10 --> c7
+    c11 --> c12
+    c12 --> c12a
+    c12a -- "OUI" --> c12b
+    c12a -- "NON" --> c13
+    c12b --> c12c
+    c12c --> c13
+    c13 -- "OUI" --> c14
+    c13 -- "NON" --> c16
+    c14 --> c15
+    c15 -- "OUI" --> c15b
+    c15 -- "NON" --> c21
+    c15b -- "OUI" --> c15c
+    c15b -- "NON" --> c16
+    c15c --> c15b
+    c16 -- "OUI" --> c17
+    c16 -- "NON" --> c19
+    c17 --> c19
+    c18 -- "OUI" --> c22
+    c18 -- "NON" --> c23
+    c19 --> c19b
+    c19b -- "OUI" --> c19c
+    c19b -- "NON" --> c24
+    c19c --> c19d
+    c19d --> c19e
+    c19e --> FIN-APPELANT
+    c1b --> c5
+    c2 --> c3
+    c21 --> c24
+    c22 --> c24
+    c24 --> c20
+    c3 --> c5
+    c5 -- "OUI" --> c6
+    c5 -- "NON" --> c5
+    c6 --> c7
+    c7 --> c24
+    c8 --> c10

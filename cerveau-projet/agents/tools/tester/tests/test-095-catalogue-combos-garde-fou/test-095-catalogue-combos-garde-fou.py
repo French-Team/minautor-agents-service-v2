@@ -271,7 +271,11 @@ def main():
         verifier("5. consulter-combos : outil present + reponse correcte",
                  False, "outil absent")
     else:
-        r = run([PYTHON, CONSULTER_COMBOS_PY, "--outil", "evaluer-coherence"])
+        # --agent themis : sans agent, l outil journalise agent=inconnu et
+        # pollue le registre (test-079 KO). Themis est le proprietaire du
+        # combo audite (combos-audit-general).
+        r = run([PYTHON, CONSULTER_COMBOS_PY, "--outil", "evaluer-coherence",
+                 "--agent", "themis"])
         ok_outil = ("combos-audit-general" in r.stdout
                     and "proprietaire : themis" in r.stdout)
         verifier("5. consulter-combos --outil evaluer-coherence : reponse correcte",

@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-cerberus",
   "agent": "cerberus",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "case_depart": "c0",
   "description": "v0.4.6 : + indice outil c10 combos-analyse-projet (usage reel registre, garde-fou test-035)"
  },
@@ -171,7 +171,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison> <mission>"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison> <mission>"
     },
     {
      "type": "regle",
@@ -231,7 +231,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison> <mission>"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison> <mission>"
     },
     {
      "type": "regle",
@@ -317,7 +317,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus <raison-controle>"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus <raison-controle>"
     }
    ],
    "suivant": "c15"
@@ -381,7 +381,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 clio <raison-readme>"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> clio <raison-readme>"
     },
     {
      "type": "regle",
@@ -446,7 +446,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent-auteur> <correction-a-faire>"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent-auteur> <correction-a-faire>"
     },
     {
      "type": "regle",
@@ -468,7 +468,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 themis <raison-audit>"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison-audit>"
     },
     {
      "type": "regle",
@@ -523,7 +523,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 buffy REPARATION"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> buffy REPARATION"
     },
     {
      "type": "regle",

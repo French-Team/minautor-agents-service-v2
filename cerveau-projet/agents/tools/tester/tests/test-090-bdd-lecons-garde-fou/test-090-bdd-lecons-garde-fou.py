@@ -283,6 +283,11 @@ def main():
         legitimes = {
             "enregistrer/enregistrer-lecon/enregistrer-lecon.py",
             "consulter/consulter-lecons/consulter-lecons.py",
+            # evaluer-progression (v0.1.0, catalogue) lit le compteur de
+            # lecons pour mesurer la progression du projet : lecture seule
+            # legitime de la BDD (ajoute 2026-08-19 apres sa creation par
+            # la session llm-4).
+            "evaluer/evaluer-progression/evaluer-progression.py",
         }
         intrus = [r for r in refs
                   if r.replace("\\", "/") not in legitimes]

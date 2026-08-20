@@ -1499,3 +1499,15 @@ CONFORME, bumper 0/0, ASCII 0, test-006 19/19, test-020 46/46, test-021 9/9.
 3. LES ROLES ET CONDITIONS D ACTIVATION VIENNENT DE 2 SOURCES : AGENTS.md (roles) + fiches (conditions operationnelles). L audit verifie les 2, pas seulement la presence du nom.
 
 - **2026-08-19 (audit test-055)** : audit CONFORME du correctif Buffy (10 indices editer-parcours ajoutes). Verification : cases exactes signalees -> indice present (10/10), pattern identique buffy/chiron, test-055 12/12, test-006 19/19, 10 cartes CONFORMES, ASCII/LF 0.
+
+## [LECON] 2026-08-19 -- AUDIT INTEGRATION TOKENS VULCAIN (Themis)
+
+**Mission** : auditer la mission Vulcain (integration tokens dans le cycle d'activation : analyser-tokens --snapshot, chronometrer-duree --tokens, activer-agent-principal v0.5.17, evaluer-processus v0.1.11).
+
+**Verdict** : CONFORME. Execution conforme a la carte Vulcain (c9f -> active Themis), parite py/sh validee, bumper PROPRE, ASCII/LF 11/11, tests 098/060/092/040/028/067 verts, preuve reelle au repere (vulcain 13min 27s + chrono themis avec tokens_debut).
+
+**Lecons** :
+1. MON COMBO D'AUDIT ETAIT CLOUE : combo-audit-themis c1 genere `combos-audit-general.py cerveau-projet` (l'outil attend le WORKSPACE, pas le projet -> chemin cerveau-projet/cerveau-projet INEXISTANT -> 57 erreurs factices, score 46/100 au lieu de structure 100/100) et c4 passe un argument que combos-valider-cerveau REFUSE. `echec_ok: true` masque les echecs -> "COMBO TERMINE" avec resultats faux. Lecon : VERIFIER CHAQUE GENERATEUR DU COMBO SUR UN LANCER REEL, ne pas faire confiance a echec_ok.
+2. UNE ERREUR DE LANCEUR PRECEDE TOUTE CONCLUSION D'AUDIT : quand audit-general donnait CRITIQUE, c'etait le parametrage du combo, pas le projet. Avec le bon dossier (.), evaluer-structure = 100/100. Toujours relancer l'outil directement avec le bon parametre avant de conclure.
+3. MA CARTE PORTE UNE REFERENCE PERIMEE : c3/c25 indiquent `cerveau-projet/combos/combo-audit-themis/` (inexistant) au lieu de `agents/tools/combos/combo-audit-themis/`. Les indices fichier des cartes doivent pointer vers des chemins REELS - a corriger par Buffy (SEUL BUFFY sur les cartes).
+4. LES SCORES D'EVALUATEURS CONTIENNENT DES FAUX POSITIFS STRUCTURELS CONNUS : evaluer-agents prend les dossiers de donnees (conventions, lecons, philosophie, regles-immuables, traces) pour des agents, evaluer-coherence prend `protocole-X/` et les options CLI pour des liens casses. Les citer sans les attribuer a la mission auditee.

@@ -6,7 +6,7 @@ identite:
 ---
 # Specification -- activer-agent-principal
 
-**Version :** 0.5.13
+**Version :** 0.5.19
 **Statut :** prepare
 **ID :** 001
 **Class :** 01
@@ -65,7 +65,7 @@ Tous les agents du cerveau-projet, principalement Cerberus (coordinateur) et les
 | Champ | Description |
 |---|---|
 | **Priorite** | Moyenne |
-| **Description** | Ajoute une entree datee (AAAA-MM-JJ HH:MM) dans l'historique, avec la colonne session, limite a 150 interventions, ordre decroissant |
+| **Description** | Ajoute une entree datee (AAAA-MM-JJ HH:MM) dans l'historique, avec la colonne session, limite a 150 interventions, ordre decroissant. v0.5.14 : format de bloc lisible (`#>` + ligne `### <date> - <agent>` coloree par agent + ligne de table `| date | session | agent | raison |` INTACTE pour les parseurs + continuations `###>` decalees) |
 | **Critere d'acceptation** | L'entree est presente en haut, la limite de 150 est respectee, la session est identifiee |
 | **Dependances** | Exigence 01, fichier `AGENTS-historique.md` |
 
@@ -282,6 +282,9 @@ Tests manuels sur le dossier `exemples/` avec des fichiers de test.
 
 | Date | Version | Auteur | Description |
 |---|---|---|---|
+| 2026-08-19 | 0.5.17 | Vulcain | TOKENS INTEGRES : activer/reactiver appellent analyser-tokens --snapshot (hybride API/estimation), stockent le snapshot de debut dans le chrono (--tokens), calculent la conso par difference au relais et l affichent au repere : `(9min 11s, tokens: 12.4k env / 8.2k recus)` |
+| 2026-08-19 | 0.5.16 | Vulcain | CHRONOMETRE INTEGRE : activer/reactiver appellent chronometrer-duree (arreter le chrono precedent, demarrer le nouveau) et ajoutent la duree au repere `### <date> - <agent> (Xmin Ys)` dans AGENTS-historique |
+| 2026-08-19 | 0.5.15 | Vulcain | FORMAT HISTORIQUE RESTRUCTURE : table `agent | heure | date | session | raison`, raison enroulee a 100 caracteres (continuations `###>`), parseurs adaptes |
 | 2026-08-05 | 0.1.0 | Vulcain | Creation initiale |
 | 2026-08-07 | 0.2.0 | Promethee | Refonte selon spec-template, version outil 0.2.0 |
 | 2026-08-07 | 0.3.0 | Vulcain | Multi-session LLM : sidentifier, sessions, session obligatoire, blocs isoles, migration, historique 4 colonnes |

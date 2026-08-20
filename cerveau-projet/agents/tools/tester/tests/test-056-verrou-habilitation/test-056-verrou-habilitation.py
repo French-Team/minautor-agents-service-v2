@@ -197,6 +197,30 @@ def agent_actif_reel():
     return actif if actif and actif != "-" else None
 
 
+def _lire_table_sessions():
+    """Lit la table '## Sessions connues' d AGENTS.md : liste de tuples
+    (session, agent_actif, derniere_activite) pour les lignes valides.
+    Retourne [] si la table est absente/illisible (preuve sautee)."""
+    chemin = os.path.join(PROJECT_ROOT, "AGENTS.md")
+    try:
+        with io.open(chemin, encoding="utf-8", errors="replace") as fh:
+            contenu = fh.read()
+    except IOError:
+        return []
+    m = re.search(r"## Sessions connues\n(.*?)(?=\n## |\Z)", contenu, re.S)
+    if not m:
+        return []
+    resultats = []
+    for ligne in m.group(1).splitlines():
+        ligne = ligne.strip()
+        if not ligne.startswith("| session-llm-"):
+            continue
+        cellules = [c.strip() for c in ligne.strip("|").split("|")]
+        if len(cellules) >= 4:
+            resultats.append((cellules[0], cellules[2], cellules[3]))
+    return resultats
+
+
 def outil_de_la_carte(agent):
     """Un outil de la carte de l agent (indices type outil)."""
     chemin = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", agent,
@@ -233,8 +257,8 @@ def main():
         if point_actif(1):
             t = time.monotonic()
             r = run([PYTHON, OUTIL_PY, "--version"])
-            verifier("1. --version affiche v0.4.0",
-                     "v0.4.0" in r.stdout, r.stdout.strip())
+            verifier("1. --version affiche v0.4.2",
+                     "v0.4.2" in r.stdout, r.stdout.strip())
             chrono_etape("1. version", t)
 
         # 2. Table (--audit) POSITIVE : janus -> non-regression (seul habilite)
@@ -358,6 +382,54 @@ def main():
                 verifier("8. IDENTITE REELLE : contexte indeterminable "
                          "(preuve sautee)", True)
             chrono_etape("8. identite negative", t)
+
+        # 8b. MULTI-SESSIONS (v0.4.2) : trouver_session_agent retourne la
+        # session la PLUS RECENTE portant l agent (colonne Derniere activite
+        # de la table '## Sessions connues'), pas le premier bloc AGENTS.md.
+        # Anti-recurrence du bug detecte par Janus (D6) : quand 2 sessions
+        # portent le meme agent actif (ex: morpheus dans llm-1 et llm-4),
+        # la commande suggeree par le verrou doit viser la session de
+        # l appelant (la plus recente).
+        if point_actif(8):
+            t = time.monotonic()
+            try:
+                spec_v = importlib.util.spec_from_file_location(
+                    "verrou_habilitation", OUTIL_PY)
+                mod_v = importlib.util.module_from_spec(spec_v)
+                spec_v.loader.exec_module(mod_v)
+                mod_v.detecter_racine()
+                table_sessions = _lire_table_sessions()
+                ok_8b = True
+                detail = ""
+                if not table_sessions:
+                    verifier("8b. trouver_session_agent : table absente "
+                             "(preuve sautee)", True)
+                else:
+                    # Pour chaque agent, la resolution doit retourner SA
+                    # session la plus recente (max Derniere activite).
+                    # Un agent peut apparaitre dans plusieurs sessions : seule
+                    # la plus recente est attendue.
+                    max_par_agent = {}
+                    for session, agent_actif, activite in table_sessions:
+                        if agent_actif in ("-", ""):
+                            continue
+                        actuel = max_par_agent.get(agent_actif)
+                        if actuel is None or activite > actuel[1]:
+                            max_par_agent[agent_actif] = (session, activite)
+                    for agent_actif, (session_att, activite) in \
+                            sorted(max_par_agent.items()):
+                        resolu = mod_v.trouver_session_agent(agent_actif)
+                        if resolu != session_att:
+                            ok_8b = False
+                            detail += "%s(%s)->%s attendu %s; " % (
+                                agent_actif, activite, resolu, session_att)
+                    verifier("8b. trouver_session_agent : chaque agent resout "
+                             "vers SA session la plus recente (v0.4.2)",
+                             ok_8b, detail or "toutes resolutions exactes")
+            except Exception as e:
+                verifier("8b. trouver_session_agent (v0.4.2)", False,
+                         "exception: %s" % e)
+            chrono_etape("8b. session la plus recente", t)
 
         # 9. AUTO-JOURNALISATION (v0.2.0) : l outil signale lui-meme son
         # usage. Le point 7 (usage autorise) a du ajouter une entree

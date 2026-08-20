@@ -36,7 +36,7 @@
 #   --no-chrono         : coupe le chrono de l outil lui-meme
 #   --version
 #
-# Version : 0.1.0
+# Version : 0.1.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -63,7 +63,7 @@ import sys
 import time
 
 
-VERSION = "0.1.0"
+VERSION = "0.1.2"
 STATUT = "ebauche"
 CARACTERES_PAR_TOKEN = 4.0
 FENETRE_TOTALE_DEFAUT = 200000
@@ -87,7 +87,13 @@ def racine_projet():
 
 
 def session_par_defaut(racine):
-    """Lit la session active depuis le classeur (profil-session-*)."""
+    """MULTI-SESSIONS (v0.1.2) : session de l appelant -- variable
+    d environnement SESSION_LLM (ex: session-llm-4) en priorite, sinon
+    premiere session du classeur (profil-session-*), sinon session-llm-1 en
+    secours. Chaque LLM peut travailler avec les memes agents dans SA session."""
+    env = os.environ.get("SESSION_LLM", "").strip()
+    if env:
+        return env
     classeur = os.path.join(racine, "cerveau-projet", "agents",
                             "classeur-variables", "stockage",
                             "variables-actuelles.md")
@@ -191,6 +197,61 @@ def afficher(resultat, session, fenetre_total, verbose=False, no_chrono=False):
             "encombrement_pct": round(encombrement, 1), "fiable": fiable}
 
 
+def snapshot(racine, session):
+    """Retourne un JSON machine des compteurs CUMULATIFS a l instant T
+    (utilise pour la difference par intervention) : API reelle si
+    disponible, sinon estimation locale (taille des traces, cumulative).
+
+    Format : {"envoyes": int, "recus": int, "fiable": bool, "source": str}
+    La difference entre deux snapshots (debut/fin d intervention) = conso
+    de l intervention (meme principe que la duree du chrono)."""
+    api = charger_metadonnees_api(racine, session)
+    if api:
+        return {
+            "envoyes": int(api.get("prompt_tokens", 0)),
+            "recus": int(api.get("completion_tokens", 0)),
+            "fiable": True,
+            "source": "api",
+        }
+    est = estimer_depuis_registres(racine, session)
+    return {
+        "envoyes": int(est.get("envoyes", 0)),
+        "recus": int(est.get("recus", 0)),
+        "fiable": False,
+        "source": "estimation",
+    }
+
+
+def difference_snapshots(debut, fin):
+    """Conso d une intervention = fin - debut (compteurs cumulatifs).
+    Retourne {"envoyes", "recus", "fiable"} ou None si un snapshot manque."""
+    if not debut or not fin:
+        return None
+    try:
+        env = max(0, int(fin.get("envoyes", 0)) - int(debut.get("envoyes", 0)))
+        rec = max(0, int(fin.get("recus", 0)) - int(debut.get("recus", 0)))
+    except (TypeError, ValueError):
+        return None
+    return {"envoyes": env, "recus": rec,
+            "fiable": bool(debut.get("fiable")) and bool(fin.get("fiable"))}
+
+
+def formater_tokens(conso):
+    """Formate la conso pour le repere ### : '12.4k env / 8.2k recus'.
+    Retourne '' si la conso est nulle ou absente."""
+    if not conso:
+        return ""
+    env = conso.get("envoyes", 0) or 0
+    rec = conso.get("recus", 0) or 0
+    if env == 0 and rec == 0:
+        return ""
+    def _k(n):
+        if n >= 1000:
+            return "%.1fk" % (n / 1000.0)
+        return str(n)
+    return "tokens: %s env / %s recus" % (_k(env), _k(rec))
+
+
 def ecrire_rapport(chemin, resultat, session, fenetre_total):
     envoyes = resultat.get("envoyes", 0)
     recus = resultat.get("recus", 0)
@@ -226,6 +287,11 @@ def main():
                         help="Afficher sans ecrire le rapport")
     parser.add_argument("--no-chrono", action="store_true",
                         help="Couper le chrono de l outil")
+    parser.add_argument("--snapshot", action="store_true",
+                        help="Mode MACHINE : imprime le JSON cumulatif courant "
+                             "{envoyes, recus, fiable, source} sur une ligne "
+                             "(difference entre deux snapshots = conso d une "
+                             "intervention)")
     parser.add_argument("--version", action="version",
                         version="analyser-tokens v%s" % VERSION)
     parser.add_argument("--aide", action="help",
@@ -234,6 +300,14 @@ def main():
 
     racine = racine_projet()
     session = args.session or session_par_defaut(racine)
+
+    # MODE MACHINE --snapshot : une seule ligne JSON (consommee par
+    # activer-agent-principal pour la difference par intervention).
+    if args.snapshot:
+        import sys as _sys
+        _sys.stdout.write(json.dumps(snapshot(racine, session),
+                                    ensure_ascii=True) + "\n")
+        return 0
 
     # 1. Compteurs API reels (source fiable) si disponibles
     api = charger_metadonnees_api(racine, session)

@@ -6,7 +6,7 @@ identite:
 ---
 # lire-activite-recente
 
-**Version :** 0.1.0
+**Version :** 0.1.1
 **Statut :** prepare
 **Categorie :** lire
 **Chemin :** `agents/tools/lire/lire-activite-recente/`

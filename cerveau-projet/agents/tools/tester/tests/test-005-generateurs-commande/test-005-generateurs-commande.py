@@ -28,9 +28,9 @@ Objet (correction Buffy 2026-08-09) :
     DOCUMENTATION DE L OUTIL avant utilisation (garde-fou lecture .md).
 
 Cas couverts (26 points) :
-  GENERATEUR v0.2.6
-  1. --version py = v0.2.6
-  2. --version sh = v0.2.6
+  GENERATEUR v0.3.1
+  1. --version py = v0.3.1
+  2. --version sh = v0.3.1
   3. py_compile OK (generateurs-commande.py)
   4. bash -n OK (generateurs-commande.sh)
   5. composition lire-fichier (fichier=AGENTS.md;lignes=3) : SANS --debut/--fin vides
@@ -42,11 +42,11 @@ Cas couverts (26 points) :
  11. flag booleen ecrire-fichier backup=non : --backup ABSENT (py)
  12. parite py/sh : commande composee identique (CRLF normalise)
  13. catalogue JSON valide (json.load)
- 14. catalogue version = 0.2.14
+ 14. catalogue version = 0.2.16
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
   PARCOURS ATLAS v0.4.1
-17. parcours-atlas.json : json.load valide + version 0.5.0
+17. parcours-atlas.json : json.load valide + version 0.5.1
 18. 7 commandes en dur connues (c0 x2 + c10/c18/c19 corriger-symboles + c11a + c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
@@ -211,15 +211,15 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.2.6 + catalogue 0.2.14 + parcours-atlas v0.5.0 ===")
+    print("=== Test 005 -- generateurs-commande v0.3.1 + catalogue 0.2.16 + parcours-atlas v0.5.1 ===")
     print("")
 
-    # ---------- GENERATEUR v0.2.6 ----------
+    # ---------- GENERATEUR v0.3.1 ----------
     code, out = exec_cmd("python3 %s --version" % GC_PY)
-    verifier(1, "generateurs-commande.py --version = v0.2.6", "v0.2.6" in out, out.strip())
+    verifier(1, "generateurs-commande.py --version = v0.3.1", "v0.3.1" in out, out.strip())
 
     code, out = exec_cmd("bash %s --version" % GC_SH)
-    verifier(2, "generateurs-commande.sh --version = v0.2.6", "v0.2.6" in out, out.strip())
+    verifier(2, "generateurs-commande.sh --version = v0.3.1", "v0.3.1" in out, out.strip())
 
     code, out = exec_cmd("python3 -m py_compile %s" % GC_PY)
     verifier(3, "py_compile generateurs-commande.py", code == 0, out.strip())
@@ -260,7 +260,7 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         verifier(13, "catalogue-commandes.json JSON valide", True)
-        verifier(14, "catalogue version = 0.2.14", cat.get("version") == "0.2.14", str(cat.get("version")))
+        verifier(14, "catalogue version = 0.2.16", cat.get("version") == "0.2.16", str(cat.get("version")))
     except Exception as e:
         verifier(13, "catalogue-commandes.json JSON valide", False, str(e))
         verifier(14, "catalogue version = 0.2.0", False, "")
@@ -272,14 +272,14 @@ def main():
     ok = cmd is not None and "creer-fichier.py x.md" in cmd and "hello" in cmd
     verifier(16, "non-regression creer-fichier composee correctement", ok, str(cmd))
 
-    # ---------- PARCOURS ATLAS v0.5.0 ----------
+    # ---------- PARCOURS ATLAS v0.5.1 ----------
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.5.0",
-                 p.get("parcours", {}).get("version") == "0.5.0", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.5.1",
+                 p.get("parcours", {}).get("version") == "0.5.1", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.4.7", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.5.1", False, str(e))
         p = {}
 
     # Commandes en dur connues et documentees : c30 (template

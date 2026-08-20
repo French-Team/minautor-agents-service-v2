@@ -1,0 +1,58 @@
+%% Carte de decision de hermes (parcours v0.2.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10["Conformite ASCII + normes des fichiers modifies"]
+    c11["Rapport de correction orthographique"]
+    c12["Lecons et retour"]
+    c13(["FIN - Activer Janus (second controle)"])
+    c2["SCAN OBLIGATOIRE : detecter les fautes du projet"]
+    c29{"Mission hors parcours"}
+    c29a(["FIN - Delegation"])
+    c29b{"Besoin d un outil ?"}
+    c29c["Creer l outil temporaire"]
+    c29d(["FIN - Outil temporaire"])
+    c29e(["FIN - Signaler le besoin"])
+    c3{"Des fautes sont-elles detectees ?"}
+    c30["Aucune faute : rien a corriger"]
+    c4["Classer les fautes par fichier"]
+    c5{"Une faute est-elle un mot anglais legitime ou un faux positif ?"}
+    c6["CORRIGER : remplacer fautif par correct (trace)"]
+    c7["EXTENDRE le dictionnaire de fautes"]
+    c8{"RESCAN : 0 faute restante ?"}
+    c9["Lecon : documenter la correction dans corrections.md"]
+    cH1["Faux positif : verifier le contexte et eventuellement corriger le dictionnaire"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c1
+    c0e --> c0c
+    c1 -- "corriger" --> c2
+    c1 -- "scan" --> c4
+    c1 -- "dictionnaire" --> c7
+    c1 -- "autre" --> c29
+    c10 --> c11
+    c11 --> c12
+    c12 --> c13
+    c2 --> c3
+    c29 -- "deleguer" --> c29a
+    c29 -- "outil" --> c29b
+    c29b -- "OUI" --> c29c
+    c29b -- "NON" --> c29e
+    c29c --> c29d
+    c3 -- "OUI" --> c4
+    c3 -- "NON" --> c30
+    c30 --> c11
+    c4 --> c5
+    c5 -- "NON" --> c6
+    c5 -- "OUI" --> cH1
+    c6 --> c9
+    c7 --> c8
+    c8 -- "OK" --> c10
+    c8 -- "KO" --> c6
+    c9 --> c8
+    cH1 --> c9

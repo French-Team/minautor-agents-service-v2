@@ -1,11 +1,11 @@
 # Specification -- detecter-decalages-catalogue
 
-**Version :** 0.2.2
+**Version :** 0.2.3
 **Statut :** ebauche
 **Categorie :** Detecter
 **Date :** 2026-08-11
 **Agent :** Vulcain
-**Historique :** v0.2.1 (PERFORMANCE 2026-08-13 : aides des commandes lancees en PARALLELE -- pool de threads min(16, nb) + CACHE par (interpreteur, script) ; ~85s en serie -> ~14s, goulot test-028 de la suite anti-regression) -> v0.2.0 (round 11 coherence documentaire : SCAN DES SOUS-COMMANDES argparse -- quand l aide racine expose un bloc {sous-cmd1,...}, l outil lance l aide de CHAQUE sous-commande et fusionne les options ; corrige les faux positifs generateurs-case-convertir / generateurs-ligne) -> v0.1.1 (section COMBOS : cles des cases generateur vs catalogue, spec-combos-moteur v0.2.1) -> v0.1.0 (creation)
+**Historique :** v0.2.3 (SORTIE 2026-08-19 : rapport par defaut TOUJOURS dans `cerveau-projet/agents/vulcain/rapports/` - chemin absolu via RACINE + makedirs, robuste au CWD ; l ancien chemin relatif creait le rapport a la RACINE du projet) -> v0.2.2 (2026-08-16 sondage selectif) -> v0.2.1 (PERFORMANCE 2026-08-13 : aides des commandes lancees en PARALLELE -- pool de threads min(16, nb) + CACHE par (interpreteur, script) ; ~85s en serie -> ~14s, goulot test-028 de la suite anti-regression) -> v0.2.0 (round 11 coherence documentaire : SCAN DES SOUS-COMMANDES argparse -- quand l aide racine expose un bloc {sous-cmd1,...}, l outil lance l aide de CHAQUE sous-commande et fusionne les options ; corrige les faux positifs generateurs-case-convertir / generateurs-ligne) -> v0.1.1 (section COMBOS : cles des cases generateur vs catalogue, spec-combos-moteur v0.2.1) -> v0.1.0 (creation)
 **Pense-bete source :** scan systematique Atlas 2026-08-09 (scan-catalogue.py dans explorations/, institutionnalise)
 
 ## Objectif
@@ -41,7 +41,7 @@ du catalogue ou generalisation du pilote strict.
 
 ## Criteres d'acceptation
 
-1. `python3 detecter-decalages-catalogue.py --version` affiche 0.2.1
+1. `python3 detecter-decalages-catalogue.py --version` affiche 0.2.3
 2. `python3 detecter-decalages-catalogue.py --aide` affiche l'aide
 3. Execution sans argument : rapport ecrit, synthese imprimee (conformes/decalages/non testables/alertes)
 4. RACINE calculee correctement (6 niveaux depuis tools/detecter/detecter-decalages-catalogue/) : le scan trouve le catalogue
@@ -53,6 +53,7 @@ du catalogue ou generalisation du pilote strict.
 
 | Version | Date | Description |
 |---|---|---|
+| 0.2.3 | 2026-08-19 | SORTIE CORRIGEE : rapport par defaut dans `cerveau-projet/agents/vulcain/rapports/` (chemin absolu via RACINE + makedirs) - l ancien chemin relatif creait le rapport a la RACINE du projet |
 | 0.2.2 | 2026-08-16 | PERFORMANCE : sondage SELECTIF - seules les commandes avec flags sont sondees (99 commandes sans flag + 23 tests du catalogue non executes) - goulot detecter-decalages 12.6s -> 4.6s |
 | 0.2.1 | 2026-08-13 | PERFORMANCE : aides lancees en parallele (pool de threads min(16, nb)) + CACHE par (interpreteur, script) - goulot test-028 85s -> 14s |
 | 0.1.1 | 2026-08-11 | Section COMBOS ajoutee : garde-fou des cles des definitions-combo vs catalogue (KO test-003) |

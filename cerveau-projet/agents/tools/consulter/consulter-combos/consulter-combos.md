@@ -7,7 +7,7 @@ identite:
 ---
 # consulter-combos
 
-**Version :** 0.1.0
+**Version :** 0.1.1
 **Statut :** prepare
 **Categorie :** consulter
 **Chemin :** `agents/tools/consulter/consulter-combos/`
@@ -59,4 +59,5 @@ python3 consulter-combos.py --outil evaluer-coherence
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.1.1 | 2026-08-19 | FIX TRI DU REGISTRE (detecte par Morpheus, test-024 point 14) : journaliser() ecrivait en append brut et cassait le tri decroissant du registre-usages-outils. Reutilise trier_registre d enregistrer-usage-outil (source de verite) apres chaque journalisation. |
 | 0.1.0 | 2026-08-19 | Creation (mission lacune combo->outils) : consultation du catalogue-combos.json, reponse "ou est utilise X et par qui" |

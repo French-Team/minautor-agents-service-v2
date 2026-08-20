@@ -47,7 +47,7 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.5
+Version : 0.4.6
 Statut : prepare
 """
 
@@ -58,7 +58,7 @@ import re
 import subprocess
 import sys
 
-VERSION = "0.4.5"
+VERSION = "0.4.6"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "prepare"
 
@@ -318,6 +318,10 @@ def valider_parcours(contenu, nom_display, agent=None):
     # 8. Garde-fou v0.4.0 (P8) : COMMANDE ACTIVER EXACTE dans les fins
     #    'FIN - Activer <agent>'. Sans la commande exacte, l'agent retombe
     #    sur reactiver (qui ramene toujours a Cerberus).
+    #    MULTI-SESSIONS (v0.4.6) : la commande accepte le placeholder <session>
+    #    (chaque session le remplace par SON id a l execution) OU une session
+    #    concrete session-llm-N -- le format figee 'session-llm-1' interdisait
+    #    aux autres sessions de suivre leur carte (D6).
     print("8. Commande activer exacte dans les fins 'Activer X' (P8)")
     fins_activer = []
     for cid, case in sorted(cases.items()):
@@ -331,8 +335,9 @@ def valider_parcours(contenu, nom_display, agent=None):
         msg = case.get("message") or ""
         # Comparaison insensible a la casse : le titre porte l'agent avec une
         # majuscule (Janus) tandis que la commande reelle est en minuscule.
-        attendu = "activer-agent-principal.py activer session-llm-1 %s" % cible.lower()
-        if attendu not in msg.lower() or "PAS reactiver" not in msg:
+        motif = (r"activer-agent-principal\.py activer (?:<session>|session-llm-\d+) %s"
+                 % re.escape(cible.lower()))
+        if not re.search(motif, msg.lower()) or "PAS reactiver" not in msg:
             fins_activer.append("%s (FIN - Activer %s sans commande exacte)" % (cid, cible))
     if fins_activer:
         print("   [ERREUR] Fins Activer X sans commande exacte : %s" % "; ".join(fins_activer[:5]))

@@ -8,7 +8,7 @@ identite:
 ---
 # generateurs-commande
 
-**Version :** 0.2.6
+**Version :** 0.3.1
 **Statut :** ebauche
 **Categorie :** Generateurs
 **Chemin :** `agents/tools/generateurs/generateurs-commande/`
@@ -48,7 +48,9 @@ python3 generateurs-commande.py --commande remplir-pense-bete --reponses "fichie
 
 # Version bash equivalente
 bash generateurs-commande.sh --liste
-bash generateurs-commande.sh --commande activer-activer --reponses "session=session-llm-1;agent=Buffy;raison=Corriger un fichier"
+bash generateurs-commande.sh --commande activer-activer --reponses "session=<session>;agent=Buffy;raison=Corriger un fichier"
+# v0.3.1 (D6) : la session par defaut est celle de l appelant (SESSION_LLM ou
+# classeur) - chaque LLM journalise SON agent dans SA session.
 ```
 
 ## Options

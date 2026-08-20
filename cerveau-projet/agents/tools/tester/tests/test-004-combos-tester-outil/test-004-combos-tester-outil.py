@@ -16,7 +16,7 @@ Cas couverts:
   4. Variable commande_test manquante (apres c3=OUI) -> erreur claire (commande de la case c4)
   5. Navigation chemin OUI : fichier de test CREE + test EXECUTE + c6 FIN (COMBO TERMINE)
   6. Navigation chemin NON : c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE preservee)
-  7. Integration parcours morpheus v0.5.0 : guider-parcours affiche la case
+  7. Integration parcours morpheus v0.5.1 : guider-parcours affiche la case
      Lancer le combo tester-outil puis Verifier les resultats
   8. valider-cartes-decision --agent morpheus : CONFORME
   9. Nommage : definition-combo.json = bruit preexistant documente (identique aux 15 combos) - non bloquant
@@ -197,10 +197,10 @@ def main():
     verifier("6. Navigation NON -> c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE)",
              code == 0 and "Fin de combo atteinte : case 'c5'" in out and "PROTECTIONS MANQUANTES" in out)
 
-    # --- 7. Integration parcours morpheus v0.4.1
+    # --- 7. Integration parcours morpheus v0.5.1
     with io.open(PARCOURS, encoding="utf-8") as fh:
         p = json.load(fh)
-    verifier("7a. Parcours morpheus v0.5.0", p.get("parcours", {}).get("version") == "0.5.0")
+    verifier("7a. Parcours morpheus v0.5.1", p.get("parcours", {}).get("version") == "0.5.1")
     code, out = executer([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|tester"])
     verifier("7b. Case Lancer le combo tester-outil presente",
              "Lancer le combo tester-outil" in out)

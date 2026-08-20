@@ -1,64 +1,63 @@
 {
-  "combo": {
-    "nom": "combo-sante-tableaux",
-    "description": "Suite de controle de la sante du cerveau (chemin controler du parcours buffy, anciennes cases c28-c30) : verifier-documents-manquants -> rechercher-fichiers-vides -> combos-valider-cerveau -> valider-tableaux. Remplace la suite d'outils par un seul lancer de combo (Pattern 3).",
-    "version": "0.1.0",
-    "case_depart": "c1"
+ "combo": {
+  "nom": "combo-sante-tableaux",
+  "description": "Suite de controle de la sante du cerveau (chemin controler du parcours buffy, anciennes cases c28-c30) : verifier-documents-manquants -> rechercher-fichiers-vides -> combos-valider-cerveau -> valider-tableaux. Remplace la suite d'outils par un seul lancer de combo (Pattern 3).",
+  "version": "0.1.0",
+  "case_depart": "c1"
+ },
+ "cases": {
+  "c1": {
+   "titre": "Executer verifier-documents-manquants",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-documents-manquants/verifier-documents-manquants.py cerveau-projet/agents",
+   "sortie": "resultat_documents",
+   "suivant": "c2",
+   "echec_ok": true
   },
-  "cases": {
-    "c1": {
-      "titre": "Executer verifier-documents-manquants",
-      "type": "outil",
-      "commande": "python3 cerveau-projet/agents/tools/verifier/verifier-documents-manquants/verifier-documents-manquants.py cerveau-projet/agents",
-      "sortie": "resultat_documents",
-      "suivant": "c2",
-      "echec_ok": true
-    },
-    "c2": {
-      "titre": "Executer rechercher-fichiers-vides",
-      "type": "outil",
-      "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-fichiers-vides/rechercher-fichiers-vides.py cerveau-projet",
-      "sortie": "resultat_vides",
-      "suivant": "c3",
-      "echec_ok": true
-    },
-    "c3": {
-      "titre": "Generer la commande combos-valider-cerveau",
-      "type": "generateur",
-      "catalogue": "combos-valider-cerveau",
-      "entrees": {
-        "dossier": "cerveau-projet/agents",
-        "detail": "non",
-        "stop": "non"
-      },
-      "sortie": "cmd1",
-      "suivant": "c4"
-    },
-    "c4": {
-      "titre": "Executer combos-valider-cerveau",
-      "type": "outil",
-      "commande": "{cmd1}",
-      "sortie": "resultat_sante",
-      "suivant": "c5",
-      "echec_ok": true
-    },
-    "c5": {
-      "titre": "Executer valider-tableaux",
-      "type": "outil",
-      "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py",
-      "sortie": "resultat_tableaux",
-      "suivant": "c6",
-      "echec_ok": true
-    },
-    "c6": {
-      "titre": "FIN - controle sante termine",
-      "type": "fin",
-      "message": "Controle de sante complet : documents manquants, fichiers vides, etat de sante (relecture + cartes + ASCII) et tableaux valides. Analyser les resultats (RVAV) puis reactiver Cerberus."
-    }
+  "c2": {
+   "titre": "Executer rechercher-fichiers-vides",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/rechercher/rechercher-fichiers-vides/rechercher-fichiers-vides.py cerveau-projet",
+   "sortie": "resultat_vides",
+   "suivant": "c3",
+   "echec_ok": true
   },
-  "identite": {
-    "type": "combo",
-    "appartient_a": "commun",
-    "commun": true
+  "c3": {
+   "titre": "Generer la commande combos-valider-cerveau",
+   "type": "generateur",
+   "catalogue": "combos-valider-cerveau",
+   "entrees": {
+    "detail": "non",
+    "stop": "non"
+   },
+   "sortie": "cmd1",
+   "suivant": "c4"
+  },
+  "c4": {
+   "titre": "Executer combos-valider-cerveau",
+   "type": "outil",
+   "commande": "{cmd1}",
+   "sortie": "resultat_sante",
+   "suivant": "c5",
+   "echec_ok": true
+  },
+  "c5": {
+   "titre": "Executer valider-tableaux",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py",
+   "sortie": "resultat_tableaux",
+   "suivant": "c6",
+   "echec_ok": true
+  },
+  "c6": {
+   "titre": "FIN - controle sante termine",
+   "type": "fin",
+   "message": "Controle de sante complet : documents manquants, fichiers vides, etat de sante (relecture + cartes + ASCII) et tableaux valides. Analyser les resultats (RVAV) puis reactiver Cerberus."
   }
+ },
+ "identite": {
+  "type": "combo",
+  "appartient_a": "commun",
+  "commun": true
+ }
 }

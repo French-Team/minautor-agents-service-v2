@@ -1,7 +1,7 @@
 {
  "parcours": {
   "nom": "parcours-chiron",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Parcours de Chiron (educateur des agents) : analyse fiches/corrections/regles/cartes pour detecter les incoherences nuisant a l intelligence operationnelle des agents.",
   "case_depart": "c0"
  },
@@ -347,7 +347,7 @@
      "type": "regle"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : je termine ma mission et ACTIVE JANUS (controle) avec le rapport et le verdict. COMMANDE EXACTE (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus controle puis REACTIVE Cerberus avec son verdict."
+   "message": "CHAINE BOUT-EN-BOUT : je termine ma mission et ACTIVE JANUS (controle) avec le rapport et le verdict. COMMANDE EXACTE (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. Janus controle puis REACTIVE Cerberus avec son verdict."
   },
   "c0c": {
    "titre": "Relu : fiche et corrections memorisees",

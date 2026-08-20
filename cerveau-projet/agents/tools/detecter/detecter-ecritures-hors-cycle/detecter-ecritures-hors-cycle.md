@@ -1,6 +1,6 @@
 # detecter-ecritures-hors-cycle
 
-**Version :** 0.1.0
+**Version :** 0.1.2
 **Statut :** ebauche
 **Categorie :** detecter
 
@@ -17,7 +17,9 @@ modifies avec la chronologie des activations.
 ## Ce que fait l outil
 
 1. Lit le DERNIER horodatage d activation dans `AGENTS-historique.md` et
-   l agent actif dans `AGENTS.md` (session-llm-1).
+   l agent actif dans `AGENTS.md` (session de l appelant : `--session`,
+   variable `SESSION_LLM`, sinon premiere session du classeur -- plus de
+   session-llm-1 figee, v0.1.2 D6).
 2. Collecte les fichiers modifies :
    - PRIMAIRE : `git status --porcelain -uall` + `git diff --name-only HEAD`
    - SECOURS : si git indisponible, fichiers dont le mtime est posterieur au

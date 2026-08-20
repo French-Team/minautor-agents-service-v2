@@ -4613,3 +4613,204 @@ tri est une invariant structurel, pas un detail. Et tout nouvel outil de
 consultation partage doit etre ajoute a OUTILS_P0_PARTAGES d evalue-
 processus AVANT ses premiers usages declare au registre (sinon OUTIL_HORS_
 CARTE).
+
+---
+
+## [LECON] 2026-08-19 -- ETENDRE-SVG-MERMAID (Vulcain)
+
+**Mission** : etendre convertir-carte-mermaid (v0.1.0 -> v0.2.0) pour generer
+aussi une image SVG par agent (16 SVG) dans cerveau-projet/cartes-vues/mermaid/.
+
+**Diagnostic** : mermaid-cli est inutilisable sur ce poste (DOMPurify
+incompatible Node 24). La solution conforme au projet (0 dependance externe,
+100% local) est un rendu SVG autonome en Python pur, deterministe (meme
+carte -> memes octets), ce qui permet au garde-fou de verifier la synchro
+octet a octet.
+
+**Corrections/enseignements** :
+1. LAYOUT PAR ETAGES SUR GRAPHE CYCLIQUE : le "plus long chemin" naif gonfle
+   les rangs (le cycle c0->c0b->c0 poussait c0 au rang 3 au lieu de 1).
+   La bonne methode : BFS depuis START pour casser les cycles (aretes
+   "arriere" = cible de rang <= source), puis relaxation du plus long chemin
+   sur le DAG restant. Toute arete restante monte = retour, dessinee en
+   courbe. Resultat : compact, sans arete montante parasite.
+2. DETERMINISME : jamais d iteration sur un set, toujours des listes dans
+   l ordre d apparition du fichier + rangs tries. Teste par regeneration
+   en memoire et comparaison octet a octet.
+3. PARSEUR .mmd ROBUSTE : le noeud START est declare INLINE dans une arete
+   (START([...]) --> c0) ; les cibles nues (FIN-APPELANT) doivent etre
+   auto-creees. Formes : stadium (START/fin), losange (decision), rectangle
+   (action), rose (FIN-APPELANT).
+4. ETIQUETTES XML : echappement & < > " ' ; largeur estimee pour le fond
+   blanc ; LF pur + ASCII strict partout.
+
+---
+
+## [LECON] 2026-08-19 -- SORTIE-RAPPORT-RACINE (Vulcain)
+
+**Mission** : corriger detecter-decalages-catalogue qui ecrivait son rapport
+a la RACINE du projet (chemin relatif par defaut).
+
+**Diagnostic** : le defaut de --sortie etait un chemin RELATIF
+("rapport-...-<date>.md") -> ecrit dans le CWD ; lance depuis la racine, le
+rapport atterrissait a la racine (regle violee : rien ne sort de
+cerveau-projet/). Aucun test ne verifiait la racine -> le rapport egare est
+passe sous la non-regression.
+
+**Corrections/enseignements** :
+1. JAMAIS de chemin relatif pour une sortie par defaut : construire depuis
+   RACINE (chemins absolus calcules depuis __file__) + os.makedirs.
+   Convention de destination : <agent>/rapports/ (ex: vulcain/rapports/,
+   clio/rapports/, themis/rapports/).
+2. Bumper de version : .py + .sh + fiche .md + SPEC (ligne **Version :**) +
+   test qui pinche la version (test-028 point 2) - le detecteur de
+   divergences (test-028 point 3) signale la spec en retard.
+3. Toujours verifier ASCII/LF apres chaque ecriture (un caractere non-ascii
+   s etait glisse dans un commentaire de la v0.2.3 initiale).
+4. La preuve d un correctif de sortie : lancer l outil depuis le CWD qui
+   causait le bug (racine) et verifier qu il n y a RIEN a la racine.
+
+---
+
+## [LECON] 2026-08-19 -- FORMAT-HISTORIQUE-V2 (Vulcain)
+
+**Mission** : rendre AGENTS-historique.md "super lisible" (demande
+utilisateur) : blocs avec ligne 1 = date/agent, bordures #> / ###>,
+couleurs HTML par agent, sans casser les parseurs.
+
+**Diagnostic** : le fichier est a la fois LU PAR DES OUTILS (lire-activite-
+recente matche '| 20', evaluer-processus matche '| date | session | agent |
+Mission') ET LU PAR DES HUMAINS. La contrainte : la ligne de table doit
+rester INTACTE, les couleurs/reperes vont AUTOUR (ligne '###').
+
+**Corrections/enseignements** :
+1. LES COULEURS EN .md = spans HTML ASCII ; JAMAIS dans les cellules de
+   table (les parseurs split sur '|' et extraient date/agent -> casserait
+   test-005/test-035/test-048). Le repere humain colore est la ligne '###'
+   au-dessus de la table.
+2. NOM DE CONSTANTE PIEGE : 'COULEURS_AGENTS' contient 'AGENTS = {' ->
+   les regex permissives qui extraient le dict AGENTS (test-092
+   extraire_agents_py) matchent le MAUVAIS bloc. Nom SINGULIER
+   (COULEURS_PAR_AGENT) + AUCUN commentaire contenant la sequence
+   'AGENTS = {' (la regex matche aussi les commentaires !).
+3. PURGE DES BLOCS : une entree = repere '### ' + table '| 20' + 
+   continuations ; le compteur de purge compte les BLOCS (le repere et sa
+   table = 1 entree), sinon double comptage (150 -> 75).
+4. PARITE PY/SH : le .sh a sa propre ajouter_historique (awk) -> adapter
+   les DEUX (composition + purge + deduplication du '#>' en tete).
+5. MIGRATION : extraire la raison de la 1ere ligne avec 'reste apres le
+   4eme pipe' (pas split[4:-1] qui suppose un pipe final - les entrees a
+   raison longue n en ont pas sur la 1ere ligne).
+
+---
+
+## [LECON] 2026-08-19 -- HISTORIQUE-V3 (Vulcain)
+
+**Mission** : restructurer la table de AGENTS-historique.md (demande
+utilisateur) : colonnes 'agent | heure | date | session | raison' (agent en
+1re colonne, heure et date separees), raison ENROULEE a 100 car. avec
+continuations '###>' (fini le pave), couleurs HTML conservees (l utilisateur
+a choisi de rester en markdown : les codes ANSI casseraient l ASCII).
+
+**Diagnostic** : changer l ordre des colonnes CASSENT les 4 parseurs qui
+lisent le fichier (lire-activite-recente matche '| 20', evaluer-processus
+matche '| date | session | agent | MISSION', purifier-rvav matche '| 2026-',
+mettre-a-jour-readme matche '| 20'). Et l enroulement de la raison peut
+couper 'reactiver Cerberus' -> evaluer-processus (FIN_MISSION_ERRONEE)
+devait reconstituer la raison complete (table + continuations ###>).
+
+**Corrections/enseignements** :
+1. ENTREE_HISTORIQUE_RE : '| 20' -> '| <span' (agent colore en colonne 1).
+   Meme changement dans la purge awk du .sh et dans decouper_entrees_
+   historique de purifier-rvav.
+2. RAISON ENROULEE : enrouler_raison coupe aux espaces a 100 car. La 1re
+   ligne reste dans la cellule, les suivantes en '###>'. Les parseurs qui
+   ont besoin de la raison COMPLETE (evaluer-processus) reconstituent en
+   concatenant la table + les lignes '###>' suivantes.
+3. PREUVE CRITIQUE : verifier qu'une mission dont 'reactiver Cerberus' est
+   coupe par l enroulement est bien retrouvee (test sur mini-fichier).
+4. test-098 et test-048 pinchent l ANCIEN format : leur regex doit etre
+   adaptee en meme temps que les outils (faux OK sinon : l ancienne regex
+   de test-048 extrayait 0 mission sur le nouveau fichier sans KO !).
+5. test-065 pinche la version 0.1.0 de purifier-rvav -> bumpee en 0.1.1.
+6. PARITE PY/SH : lire-activite-recente.sh embarque le code Python duplique
+   (heredoc) -> adapter les DEUX (version + extraire_entrees + import re).
+7. Le repere humain '### <date> - <agent>' est INCHANGE (la ligne machine
+   seule change) : les humains gardent le repere colore, les outils lisent
+   la table.
+
+## Lecon 2026-08-19 (chronometre + integration activation)
+
+**Contexte** : creer l outil chronometrer-duree (duree des interventions
+d agents) + integration dans activer-agent-principal v0.5.16.
+
+**Corrections/enseignements** :
+1. TEMPLATE = SOURCE DE VERITE : tout nouvel outil doit suivre outil-template
+   (protections DOC --confirme-doc, --dry-run, --chrono, messages info).
+   Le .sh embarque le .py en heredoc -> parite garantie.
+2. CATALOGUE TRIE : ajouter un outil au catalogue-commandes.json doit
+   respecter l ordre ALPHABETIQUE (chronometrer-duree entre changer-statut
+   et combos-*) : le test-060 et test-079 pinchent le compte (184 -> 185) et
+   le tri -> les pins de test-007, test-024, test-060, test-079 doivent etre
+   bumpees en meme temps (KO en cascade sinon).
+3. INTEGRATION CHRONO : activer ferme le chrono de l agent precedent (et
+   ajoute sa duree au repere ### AVANT d ecrire la nouvelle entree), puis
+   ouvre le chrono du nouvel agent ; reactiver ferme le dernier chrono.
+   La duree n est connue qu a la FIN -> le repere ### porte la duree.
+4. PARSEURS INERTES : les parseurs (lire-activite-recente, evaluer-processus)
+   lisent la TABLE (ligne | <span), PAS le repere ### -> la duree (Xmin Ys)
+   dans le repere ne les casse pas (verifie).
+5. MODE TEST CHRONO : quand AGENTS_FILE est surcharge, appeler_chrono
+   redirige CHRONOS_FICHIER vers chronos-test.jsonl a cote du AGENTS de
+   test -> les tests ne polluent jamais traces/chronos.jsonl.
+6. PIEGE CHEMIN RELATIF : un test chrono avec un chemin relatif a cree un
+   dossier parasite cerveau-projet/cerveau-projet/ -> TOUJOURS utiliser des
+   chemins absolus ou la surcharge CHRONOS_FICHIER explicite.
+
+## [LECON] 2026-08-19 -- Integration tokens dans le cycle d'activation (Vulcain)
+**Contexte** : mission Cerberus -- afficher les consommations de tokens par agent dans AGENTS-historique (comme les durees), source hybride (API si fournie, sinon estimation locale), detail entree/sortie dans le repere.
+**Actions** : extension analyser-tokens (--snapshot JSON machine), chronometrer-duree (--tokens, 3e champ), activer-agent-principal (py+sh : conso par difference au relais), evaluer-processus (analyser-tokens en P0 partage), carte vulcain (c6), bumps de versions, pins test-060.
+**Verdict** : VALIDE -- 2 bugs de parite corriges en route : (1) le parse `split("|")` dans activer-agent-principal.py recuperait les MESSAGES apres le JSON (meme piege que la duree) -> prendre la 1re ligne ; (2) dans le .sh, `echo "$tokens_prec" | xargs` decoupait le JSON sur les espaces -> passer le JSON sans xargs + .strip() dans le python. Lecon : quand un outil retourne du JSON, ne JAMAIS le faire transiter par xargs (decoupe sur espaces) ni le parser par split naif sur un champ texte qui peut contenir des messages.
+
+## [LECON] 2026-08-19 -- COEXISTENCE MULTI-SESSIONS chronometrer-duree v0.1.2 (Vulcain)
+
+**Contexte** : 2 sessions LLM en parallele (llm-1 + llm-4/opencode) : le chrono de llm-4 restait ouvert et `etat` affichait toujours le meme chrono global.
+**Actions** : demarrer/arreter filtraient DEJA par session (chrono_actif(entrees, session)) -> la coexistence fonctionnait pour les ecritures. Le bug etait l AFFICHAGE : `etat` ignorait args.session et ne montrait qu UN chrono. Correction : nouvelle fonction chronos_actifs (un actif par session) + `etat <session>` filtre par session + `etat` (sans session) liste TOUTES les sessions actives. Parite py/sh + doc + bump 0.1.2.
+**Verdict** : VALIDE -- test 092 (parite) 9/9, bumper PROPRE, test-098 7/7, ASCII/LF purs, coexistence testee de bout en bout (2 sessions demarrees en parallele, arret de l une ne touche pas l autre).
+**Lecon** : QUAND PLUSIEURS SESSIONS LLM TOURNENT EN PARALLELE, tout affichage d etat global doit etre scinde par session. Le filtre par session doit exister dans l AFFICHAGE comme dans les ECRITURES : chrono_actif filtrait deja (ecriture), etat ne filtrait pas (lecture) -- la moitie du cycle etait multi-session, l autre non.
+
+## [LECON] 2026-08-19 -- D6 : valeurs session-llm-1 codees en dur (Vulcain)
+**Contexte** : l utilisateur a constate que le round semblait brise alors que les agents s enchainaient correctement : la vraie cause etait des valeurs `session-llm-1` codees EN DUR dans les cartes (16 parcours ~76 occurrences) ET dans les outils de validation/lecture. Quand une autre session (llm-2/3/4) suivait SA carte, la commande `activer session-llm-1 themis` activait dans la MAUVAISE session -> entrelacement historique + chrono orphelin.
+**Actions** : outils rendus generiques (acceptent `<session>` placeholder OU `session-llm-N`) : valider-cartes-decision v0.4.6 (P8 regex generique), evaluer-processus v0.1.12 (fins_de_la_carte pattern generique), detecter-ecritures-hors-cycle v0.1.2 (--session + session_par_defaut SESSION_LLM/classeur), generateurs-commande v0.3.1 (_session_appelante), proteger-verrou-habilitation v0.4.1 (fallback session_par_defaut), analyser-tokens v0.1.2 (SESSION_LLM prioritaire). Bumper PROPRE, 16/16 cartes conformes (retrocompat avec session-llm-1 pendant transition).
+**Verdict** : VALIDE -- valider-cartes accepte <session> ET session-llm-N (teste sur copie), evaluer-processus detecte les 2 formes, detecter lit la bonne session. Pins tests obsoletes a adapter par Morpheus : test-005 (0.2.6->0.3.1), test-056 (0.4.0->0.4.1), test-089 (0.1.0->0.1.2), test-060 (0.1.1->0.1.2).
+**Lecon** : UNE VALEUR DE SESSION FIGEE DANS UNE COMMANDE DE CARTE CLOUE LA CHAINE A CETTE SESSION. Toute commande qui doit etre executee par UN agent de N importe quelle session doit porter le placeholder `<session>` (remplace a l execution), jamais `session-llm-1`. Le meme piege guette les outils qui lisent l agent actif : toujours parametrer la session (--session, SESSION_LLM, ou classeur).
+
+## [LECON] 2026-08-19 -- BUG MULTI-SESSIONS trouver_session_agent (Vulcain)
+
+**Contexte** : Janus a detecte au controle final D6 que la commande suggeree
+par le verrou protege-verrou-habilitation visait la MAUVAISE session quand
+2 sessions portent le meme agent actif (ex: morpheus dans session-llm-1 ET
+session-llm-4). trouver_session_agent parcourait les blocs `### Session :`
+d AGENTS.md dans l ordre du FICHIER et retournait le PREMIER match
+(session-llm-4, bloc en tete) au lieu de la session la plus recente de
+l appelant (session-llm-1, Derniere activite max).
+
+**Actions** : trouver_session_agent v0.4.2 lit desormais la table
+'## Sessions connues' (colonne Agent actif + Derniere activite), filtre les
+sessions dont l agent actif correspond (insensible a la casse) et retourne
+la PLUS RECENTE (tri Derniere activite desc). Fallback inchange
+(session_par_defaut : SESSION_LLM puis classeur). Version 0.4.1 -> 0.4.2
+(py en-tete + VERSION + doc .md). test-056 : pin 0.4.1 -> 0.4.2 + NOUVEAU
+point 8b (trouver_session_agent resout chaque agent vers SA session la plus
+recente - preuve directe du bug corrige). Bumper PROPRE.
+
+**Verdict** : VALIDE -- test-056 18/18 (dont 8b), test-028 8/8, test-035
+10/10, test-067 8/8, ASCII/LF purs, simulation 2-sessions (morpheus llm-1
+21:38 vs llm-4 20:51 -> session-llm-1) verifiee sur copie AGENTS.md.
+
+**Lecon** : QUAND PLUSIEURS SESSIONS LLM COEXISTENT, TOUTE resolution
+agent -> session doit utiliser la table '## Sessions connues' triee par
+Derniere activite (la recence est la seule source non ambigue), JAMAIS
+l ordre des blocs du fichier (independant de la recence). Meme piege que
+le chrono multi-sessions : la moitie de la logique (lecture) ne filtrait pas
+par session.

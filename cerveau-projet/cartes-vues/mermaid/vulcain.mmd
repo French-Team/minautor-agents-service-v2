@@ -1,0 +1,129 @@
+%% Carte de decision de vulcain (parcours v0.5.2)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0d["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10["Verifier le systeme (modification)"]
+    c11["Lire l'outil existant"]
+    c12["Modifier l'outil"]
+    c12a["Bumper l outil (mettre-a-jour-versions)"]
+    c12b{"L outil concerne est-il un COMBO ou le CATALOGUE ?"}
+    c12c["Lancer le scan detecter-decalages-catalogue (section COMBOS)"]
+    c12d["Lancer le test-023-grep-budget-pondere (coherence budget pondere)"]
+    c13["Lancer le combo corriger-ascii"]
+    c13b["RVAV avant activation"]
+    c14{"Deleguer les tests a Morpheus"}
+    c15(["FIN - Modifier un outil"])
+    c15b{"Ameliorations possibles de mon fonctionnement ?"}
+    c15c["Lancer le generateur d amelioration"]
+    c15d["Activer l'agent habilite pour l'amelioration"]
+    c15e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c15f["Activer Themis pour auditer ma mission"]
+    c15g{"Retour de Themis recu ?"}
+    c15h["Ajouter les lecons dans corrections.md"]
+    c16{"Mission hors parcours"}
+    c16b["Documentation / Mise a jour de ma fiche"]
+    c16c["RVAV avant reactiver Cerberus"]
+    c16d(["FIN - Documentation"])
+    c17["Activer l'agent habilite"]
+    c18(["Signaler le besoin"])
+    c18b{"Besoin d outil ?"}
+    c18c["Creer l outil temporaire"]
+    c18d(["FIN - Outil temporaire"])
+    c19(["FIN - Delegation"])
+    c2["Verifier le systeme"]
+    c20["Activer Themis pour auditer"]
+    c21(["FIN - Retour de Themis avec son rapport"])
+    c22["Enregistrer mes usages d outils"]
+    c23["Enregistrer mes usages d outils"]
+    c3{"Lire l'outil a construire"}
+    c4["Copier le outil-template"]
+    c5{"Choisir la technologie"}
+    c6["Developper l'outil"]
+    c6a["Bumper l outil (mettre-a-jour-versions)"]
+    c6b{"L outil concerne est-il un COMBO ou le CATALOGUE ?"}
+    c6c["Lancer le scan detecter-decalages-catalogue (section COMBOS)"]
+    c6d["Lancer le test-023-grep-budget-pondere (coherence budget pondere)"]
+    c7["Lancer le combo corriger-ascii"]
+    c7b["RVAV avant activation"]
+    c8{"Deleguer les tests a Morpheus"}
+    c9(["FIN - Construire un outil"])
+    c9b{"Ameliorations possibles de mon fonctionnement ?"}
+    c9c["Lancer le generateur d amelioration"]
+    c9d["Activer l'agent habilite pour l'amelioration"]
+    c9e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c9f["Activer Themis pour auditer ma mission"]
+    c9g{"Retour de Themis recu ?"}
+    c9h["Ajouter les lecons dans corrections.md"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c0d
+    c0d --> c1
+    c0e --> c0c
+    c1 -- "construire" --> c2
+    c1 -- "modifier" --> c10
+    c1 -- "autre" --> c16
+    c10 --> c11
+    c11 --> c12
+    c12 --> c12a
+    c12a --> c12b
+    c12b -- "OUI" --> c12c
+    c12b -- "NON" --> c13
+    c12c --> c12d
+    c12d --> c13
+    c13 --> c13b
+    c13b --> c14
+    c14 -- "OUI" --> c23
+    c14 -- "NON" --> c14
+    c15b -- "OUI" --> c15c
+    c15b -- "NON" --> c15f
+    c15c --> c15d
+    c15d --> c15e
+    c15e --> FIN-APPELANT
+    c15f --> c15g
+    c15g -- "OUI" --> c15
+    c15g -- "NON" --> c15g
+    c15h --> c15b
+    c16 -- "OUI" --> c17
+    c16 -- "NON" --> c18b
+    c16 -- "documentation" --> c16b
+    c16 -- "audit" --> c20
+    c16b --> c16c
+    c16c --> c16d
+    c17 --> c19
+    c18b -- "TEMPORAIRE" --> c18c
+    c18b -- "DURABLE" --> c18
+    c18c --> c18d
+    c2 --> c3
+    c20 --> c21
+    c22 --> c9h
+    c23 --> c15h
+    c3 -- "OUI" --> c4
+    c3 -- "NON" --> c4
+    c4 --> c5
+    c5 -- "OUI" --> c6
+    c5 -- "NON" --> c6
+    c6 --> c6a
+    c6a --> c6b
+    c6b -- "OUI" --> c6c
+    c6b -- "NON" --> c7
+    c6c --> c6d
+    c6d --> c7
+    c7 --> c7b
+    c7b --> c8
+    c8 -- "OUI" --> c22
+    c8 -- "NON" --> c8
+    c9b -- "OUI" --> c9c
+    c9b -- "NON" --> c9f
+    c9c --> c9d
+    c9d --> c9e
+    c9e --> FIN-APPELANT
+    c9f --> c9g
+    c9g -- "OUI" --> c9
+    c9g -- "NON" --> c9g
+    c9h --> c9b

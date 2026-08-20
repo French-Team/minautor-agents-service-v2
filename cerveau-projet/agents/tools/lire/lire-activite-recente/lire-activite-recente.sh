@@ -2,7 +2,7 @@
 # lire-activite-recente.sh
 # Lire les N dernieres interventions des agents depuis l'historique
 # (AGENTS-historique.md) au format condense : date | session | agent | action.
-# Version : 0.1.0
+# Version : 0.1.1
 # Statut : prepare
 # Parite avec lire-activite-recente.py (meme comportement, memes resultats).
 
@@ -28,12 +28,20 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 NOM_PY="lire-activite-recente.py" python3 - "$@" <<'PYEOF'
 import argparse
 import os
+import re
 import sys
 
 # NOTE : le nommage est deja verifie par le .sh (bash) avant le heredoc.
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 STATUT = "prepare"
 FICHIER_DEFAUT = "AGENTS-historique.md"
+
+RE_BALISES = re.compile(r"<[^>]+>")
+
+
+def nettoyer_balises(texte):
+    """Retire les balises HTML (spans de couleur) d une cellule."""
+    return RE_BALISES.sub("", texte).strip()
 
 RED = "\033[0;31m"
 GREEN = "\033[0;32m"
@@ -65,26 +73,39 @@ def construire_parser():
 
 def extraire_entrees(fichier, nombre, longueur):
     """Extraire les N dernieres interventions (les plus recentes en premier).
-    Format d'une ligne : | date | session | agent | raison |.
-    Retourne la liste de tuples (date, session, agent, action)."""
+    Format v0.1.1 : | agent | heure | date | session | raison | (la 1re
+    cellule est un span colore ; la raison peut continuer en lignes '###>').
+    Retourne la liste de tuples (date, session, agent, action) avec
+    date = 'AAAA-MM-JJ HH:MM' (reconstituee) et action = raison complete."""
     entrees = []
     try:
         with open(fichier, encoding="utf-8", errors="replace") as f:
-            for ligne in f:
-                l = ligne.strip()
-                if not l.startswith("| 20"):
-                    continue
-                parties = l.split("|")
-                if len(parties) < 5:
-                    continue
-                date = parties[1].strip()
-                session = parties[2].strip()
-                agent = parties[3].strip()
-                raison = "|".join(parties[4:-1]).strip()
-                action = raison if len(raison) <= longueur else raison[:longueur] + "..."
-                entrees.append((date, session, agent, action))
-                if len(entrees) >= nombre:
-                    break
+            lignes = [ligne.strip() for ligne in f]
+        i = 0
+        while i < len(lignes) and len(entrees) < nombre:
+            l = lignes[i]
+            if not l.startswith("| <span"):
+                i += 1
+                continue
+            parties = l.split("|")
+            if len(parties) < 6:
+                i += 1
+                continue
+            agent = nettoyer_balises(parties[1])
+            heure = parties[2].strip()
+            date = parties[3].strip()
+            session = parties[4].strip()
+            raison = "|".join(parties[5:-1]).strip()
+            # continuations '###>' : suite de la raison (meme entree)
+            i += 1
+            while i < len(lignes) and lignes[i].startswith("###>"):
+                suite = lignes[i][4:].strip()
+                if suite:
+                    raison += " " + suite
+                i += 1
+            date_heure = (date + " " + heure).strip()
+            action = raison if len(raison) <= longueur else raison[:longueur] + "..."
+            entrees.append((date_heure, session, agent, action))
     except OSError as e:
         print(RED + "[ERREUR] Lecture impossible: " + str(e) + NC)
         return None

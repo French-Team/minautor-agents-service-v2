@@ -38,6 +38,7 @@ import io
 import glob
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -198,11 +199,20 @@ def main():
              not types_ko, "; ".join(types_ko))
 
     # 3. Commandes exactes dans les fins cT6..cT10 (garde-fou P8)
+    # D6 multi-sessions : la commande porte le placeholder <session> que
+    # chaque session remplace par SON id a l execution (accepte aussi la
+    # forme figee session-llm-N pour compatibilite).
     cmd_ko = []
     for k, cible in sorted(CIBLE_CMD.items()):
         msg = (cases.get(k, {}).get("message") or "").lower()
-        attendu = "activer-agent-principal.py activer session-llm-1 %s" % cible
-        if attendu not in msg or "pas reactiver" not in msg:
+        attendu_session = (
+            "activer-agent-principal.py activer <session> %s" % cible
+            in msg)
+        attendu_fige = re.search(
+            r"activer-agent-principal\.py activer session-llm-\d+ "
+            + re.escape(cible), msg)
+        if (not attendu_session and not attendu_fige) \
+                or "pas reactiver" not in msg:
             cmd_ko.append("%s (activer %s)" % (k, cible))
     verifier("3. Fins cT6..cT10 : commande activer exacte + 'PAS reactiver'",
              not cmd_ko, "; ".join(cmd_ko))

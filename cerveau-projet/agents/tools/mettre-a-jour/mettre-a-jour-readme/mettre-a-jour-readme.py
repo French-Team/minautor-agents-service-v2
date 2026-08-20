@@ -22,7 +22,7 @@ Options:
   --help             Afficher cette aide
 
 Proprietaire : Clio (agent dedie au README)
-Version : 0.4.2-py
+Version : 0.4.3-py
 Statut : prepare
 """
 
@@ -31,7 +31,7 @@ import os
 import re
 import sys
 
-VERSION = "0.4.2-py"
+VERSION = "0.4.3-py"
 STATUT = "prepare"
 
 README = "README.md"
@@ -166,7 +166,9 @@ def lire_journal(n):
     lignes = []
     with io.open(HISTORIQUE, "r", encoding="utf-8", errors="replace") as fh:
         for ligne in fh:
-            if ligne.startswith("| 20") or ligne.startswith("| 19"):
+            # v0.4.3 : les entrees commencent par '| <span' (agent colore en
+            # 1re colonne, format v0.5.15 de l historique)
+            if ligne.startswith("| <span"):
                 lignes.append(ligne.rstrip("\n"))
     return lignes[:n]
 

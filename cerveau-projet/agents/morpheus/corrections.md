@@ -4420,3 +4420,170 @@ test-093).
 - **2026-08-18 (correctif test-094)** : les tags d'un test DOIVENT appartenir a la taxonomie (categories-tests.json + TAGS_SPECIFIQUES). Tags inventes (valider-tableaux, fiche-agent, faux-positif, wrapper, stdin-windows) = KO test-087. Utiliser les tags autorises : `outils, valider, garde-fou, anti-recurrence`. TOUT nouveau test doit aussi etre ajoute au profil correspondant dans profils-tests.json (sinon KO test-063 point 5 = orphelin). Controle : verifier `Tags:` ET `profils-tests.json` avant de rendre un test.
 
 - **2026-08-19 (4 KO tests preexistants reverdis)** : test-030 (bloc protections + lancer_protege ajoutes a test-093), test-024 (pin editer-parcours v0.1.7), test-063 (test-092/093 ajoutes au profil tests), test-087 (tags garde-fou-agent + preuve-negative). Verifications : 030 10/10, 024 17/17, 063 11/11, 087 8/0 KO, 092 9/9, 093 17/17. Tout test doit : bloc protections, tags taxonomie, reference profils-tests.json.
+
+---
+
+## [LECON] 2026-08-19 -- TEST-096-SVG (Morpheus)
+
+**Mission** : etendre le garde-fou test-096 pour verrouiller les 16 images
+SVG des cartes de decision.
+
+**Diagnostic** : le rendu SVG Python pur de convertir-carte-mermaid est
+deterministe (meme carte -> memes octets), ce qui permet au garde-fou de
+comparer une regeneration en memoire aux fichiers sur disque.
+
+**Corrections/enseignements** :
+1. Un rendu deterministe simplifie le garde-fou : pas besoin de parser le
+   SVG, on compare les OCTETS (mod.rendre_svg() vs fichier disque).
+2. Les preuves negatives doivent restaurer le fichier dans un finally pour
+   ne jamais laisser le workspace modifie meme en cas de KO.
+3. Bien etendre les portees : index.md doit referencer le .svg AUSSI (pas
+   seulement le .mmd), et le scan ASCII/LF doit couvrir les .svg.
+4. XML bien forme = xml.dom.minidom.parseString (lib standard, sans
+   dependance) : 0.06s pour 16 fichiers.
+
+---
+
+## [LECON] 2026-08-19 -- TEST-097-RACINE (Morpheus)
+
+**Mission** : creer le garde-fou des fichiers egare a la racine du projet.
+
+**Diagnostic** : le rapport de detecter-decalages-catalogue a ete cree a la
+racine SANS que la non-regression ne le voie : aucun test ne verifiait le
+contenu de la racine. La lacune n est pas le bug lui-meme mais l absence de
+surveillance.
+
+**Corrections/enseignements** :
+1. La liste blanche de la racine doit etre STRICTE (fichiers nommes +
+   dossiers nommes + prefixe tmp-*) : toute entree inconnue = KO. Un
+   __pycache__/ a la racine est exactement le type de residu a attraper.
+2. La preuve negative cree un fichier, verifie qu il est detecte, puis le
+   supprime dans un finally (jamais de workspace modifie apres le test).
+3. test-027 : les points qui lancent le lanceur sont KO pour Morpheus (verrou
+   d habilitation Janus) - comportement ATTENDU, Janus le confirmera.
+4. Une nouvelle serie du lanceur doit matcher le domaine (serie "d" =
+   residus/nettoyage, avec test-039 residus-version-racine).
+
+---
+
+## [LECON] 2026-08-19 -- TEST-098-HISTORIQUE (Morpheus)
+
+**Mission** : verrouiller le format des blocs de AGENTS-historique.md.
+
+**Diagnostic** : le fichier est genere par un outil ET lu par des parseurs ;
+le garde-fou doit verifier la structure des blocs (repere ###, table, 
+bordures) SANS casser les parseurs.
+
+**Corrections/enseignements** :
+1. La couleur de l agent se verifie en extrayant COULEURS_PAR_AGENT du .py
+   par regex (pas d import du module - effets de bord).
+2. L ENTETE du fichier (frontmatter, intro) est LIBRE : le scan des lignes
+   orphelines ne commence qu a la 1re table (inversion du test au 1er run
+   : je scannais l entete au lieu des lignes entre blocs).
+3. Tags taxonomie : 'historique' n existe pas -> 'traces' (categorie
+   registre-traces).
+4. La preuve negative travaille sur une COPIE (tempfile) : jamais modifier
+   le fichier reel.
+
+---
+
+## [LECON] 2026-08-19 -- HISTORIQUE-V3-GARDE-FOU (Morpheus)
+
+**Mission** : verifier le garde-fou du nouveau format v0.5.15 de
+AGENTS-historique (test-098 mis a jour par Vulcain) + conformite des tests.
+
+**Diagnostic** : Vulcain a restructure la table (agent | heure | date |
+session | raison, raison enroulee 100 car.). test-098 et test-048 pinchaient
+l ANCIEN format : il fallait adapter leurs regex en meme temps que les
+outils (l ancienne regex de test-048 extrayait 0 mission SANS KO = faux OK).
+
+**Corrections/enseignements** :
+1. test-098 : l analyseur de blocs doit lire la table du NOUVEAU format :
+   '| <span>agent</span> | heure | date | session | raison |' (agent en
+   colonne 1 AVEC span, heure colonne 2, date colonne 3). La coherence
+   date/agent compare le repere '###' a (date + heure).
+2. test-048 : la regex d extraction des missions devient
+   '\|<span>agent</span> \| heure \| date \| session \| MISSION' -> agent =
+   groupe 1, date = groupe 2.
+3. test-065 : pin de version purifier-rvav 0.1.0 -> 0.1.1 (bumpe par
+   Vulcain).
+4. VERROUS ATTENDUS : test-032 a 3 KO quand lance par un non-Janus (verrou
+   habilitation) - pas un echec reel.
+
+## Lecon 2026-08-19 (garde-fou chronometre v0.1.0 + integration v0.5.16)
+
+**Contexte** : tester l outil chronometrer-duree et son integration dans
+activer-agent-principal (duree des interventions d agents).
+
+**Corrections/enseignements** :
+1. BUG CHEMIN PARENTS[3] : chronometrer-duree.py calculait le chemin du
+   journal via Path(__file__).parents[3] -> remontait seulement a
+   agents/ au lieu de cerveau-projet/ -> chemin agents/agents/traces/
+   inexistant -> le chrono reel ne s ecrivait PAS. Corrige : parents[4]
+   (py) et ../../../../ (sh). PREUVE : apres l activation reelle de
+   Morpheus, le repere de Vulcain n avait PAS de duree et chronos.jsonl
+   n existait pas. TOUJOURS verifier le flux REEL apres une integration.
+2. BUG TRI REGISTRE (consulter-combos) : journaliser() ecrivait en
+   append brut et cassait le tri decroissant du registre-usages-outils
+   (test-024 point 14 -> entrees=759 trie=False). Corrige : reutilise
+   trier_registre d enregistrer-usage-outil (source de verite) apres
+   chaque journalisation. Bump 0.1.0 -> 0.1.1 (py_constante + texte +
+   .md + table versionnage).
+3. VERROUS ATTENDUS : test-005 point 21 (valider-cartes-decision) KO
+   pour Morpheus (habilitation argus/buffy/janus/vulcain) - verrou, pas
+   une regression. test-032 3 KO identiques (pool workers, exclusif
+   Janus).
+4. KO PREEXISTANT : tmp-janus a la racine (residu de la mission Janus
+   precedente, dossier temporaire non nettoye) - test-024 point 2b.
+   Documente, pas une regression de la mission.
+5. Le registre reste triable via trier_registre (le plus recent en
+   premier) : apres un append parasite, relancer la fonction restaure
+   l ordre sans perte (759 lignes, 0 inversion).
+
+## Lecon 2026-08-19 (non-regression chaine tokens + coexistence multi-sessions)
+
+**Contexte** : tester les corrections de la chaine (D1 catalogue+combos par Vulcain, D2/D5 carte themis par Buffy, chronometrer v0.1.2 coexistence par Vulcain) puis activer Janus.
+
+**Corrections/enseignements** :
+1. PINS OBSOLETES APRES BUMPS (regle) : le catalogue est passe 0.2.14 -> 0.2.16 (mission D1) et l index-tools 203 -> 204 (chronometrer + convertir-carte-mermaid + evaluer-progression ajoutes). 4 tests pinnaient les anciennes valeurs : test-005 (version 0.2.15 au lieu de 0.2.16), test-060 (203/185), test-079 (203/185), test-024 (185), test-007 (203/185). SEUL Morpheus adapte les tests obsoletes (regle immuable delegation) : correction des pins -> 005 27/28 (1 KO = verrou valider-cartes, attente), 060 12/12, 079 15/15, 024 17/17, 007 15/15.
+2. CASSE DES AGENTS DANS LE REGISTRE : la session llm-4 (opencode) a auto-journalise avec des noms en MAJUSCULES (Cerberus, Vulcain) -> analyser-noms-maj signalait AGENT_INCONNU. Correction : normalisation en minuscules + contexte marque + re-tri. Regle : les agents du registre sont TOUJOURS en minuscules (source de verite).
+3. KO DE VERROU (attendu) : test-005 point 21 (valider-cartes-decision --agent atlas) reste KO pour Morpheus car l outil n est habilite que pour argus/buffy/janus/themis/vulcain. Verrou, pas une regression.
+4. test-024 tmp-janus : le KO preexistant (residu tmp-janus) a disparu (nettoye par les missions precedentes) -> 17/17 desormais.
+
+### D6 (2026-08-19) -- Pins de tests + spec oubliee
+
+- **8 pins de tests obsoletes adaptes** (SEUL Morpheus) :
+  - test-005 : generateurs-commande 0.2.6 -> 0.3.1 (py + sh) + parcours-atlas 0.5.0 -> 0.5.1
+  - test-056 : proteger-verrou-habilitation 0.4.0 -> 0.4.1
+  - test-089 : detecter-ecritures-hors-cycle 0.1.0 -> 0.1.2
+  - test-060 : analyser-tokens 0.1.1 -> 0.1.2 (version + docs)
+  - test-013 : parcours-cerberus 0.5.4 -> 0.5.5
+  - test-016 : parcours-buffy 0.5.0 -> 0.5.1
+  - test-018 (5b) : garde-fou positif accepte `activer <session>` OU `session-llm-N`
+  - test-021 (3) : fins trio acceptent `activer <session>` OU `session-llm-N`
+  - test-033 (3/4) : c14 morpheus accepte `activer <session> janus` ; anti-piege
+    reactiver ne cible que la COMMANDE reactiver (le texte pedagogique
+    'PAS reactiver' est tolere -- il explique le piege)
+- **Spec generateurs-commande oubliee par Vulcain** (D6) : il a bumpe le .py
+  a 0.3.1 sans bumpe la spec (0.2.6) -> test-028 (0 spec divergente) KO.
+  Corrige : spec 0.3.1 avec historique v0.3.1 multi-sessions. VERDICT : si un
+  outil est bumpe, SA spec doit suivre (lecon croisee a transmettre a Vulcain).
+- **Bug multi-sessions detecte dans proteger-verrou-habilitation** : la
+  commande suggeree par le verrou utilise trouver_session_agent qui retourne
+  le PREMIER bloc AGENTS.md portant l agent (session-llm-4) au lieu de la
+  session la plus recente de l appelant (session-llm-1 quand 2 sessions ont
+  le meme agent actif). A signaler a Vulcain (constructeur de l outil).
+- **KO contextuels connus** (non corrigeables par morpheus) : test-005 p21,
+  test-021 p7, test-004 p8 appellent valider-cartes-decision (verrou : seul
+  argus/buffy/janus/vulcain habilite) -- redeviennent verts quand janus lance
+  la non-regression finale (registre : deja OK par janus avant D6).
+- **Pin test-004 7a corrige (signalement Janus)** : parcours-morpheus 0.5.0 ->
+  0.5.1. NON VU en 1re passe car le point 8 (valider-cartes, verrou contextuel)
+  KO masquait la sortie complete du test quand morpheus le lancait. Lecon :
+  apres adaptation de pins, verifier la SORTIE COMPLETE de chaque test (pas
+  seulement le RESULTAT) pour ne pas rater des KO masques.
+- **Pin test-090 (9) corrige (signalement Janus)** : liste blanche lecons.db
+  etendue pour evaluer-progression (outil legitime du catalogue cree par la
+  session llm-4, lecture seule du compteur de lecons). Lecon : quand un
+  nouvel outil lit la BDD des lecons, le garde-fou test-090 doit etre
+  mis a jour en meme temps que l outil.

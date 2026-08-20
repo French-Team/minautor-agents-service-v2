@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # generateurs-commande.py
 # Genere une commande complexe a lancer, en posant une question par parametre.
-# Version : 0.2.6
+# Version : 0.3.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -46,7 +46,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.2.6"
+VERSION = "0.3.1"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n est pas un terminal)
@@ -355,9 +355,32 @@ def construire_parser():
     return parser
 
 
+def _session_appelante(racine):
+    """MULTI-SESSIONS (v0.3.1) : session de l appelant -- variable
+    d environnement SESSION_LLM (ex: session-llm-4), sinon premiere session
+    du classeur-variables, sinon session-llm-1 en secours."""
+    env = os.environ.get("SESSION_LLM", "").strip()
+    if env:
+        return env
+    classeur = os.path.join(racine, "cerveau-projet", "agents",
+                            "classeur-variables", "stockage",
+                            "variables-actuelles.md")
+    try:
+        with open(classeur, encoding="utf-8") as fh:
+            for ligne in fh:
+                m = re.search(r"session: (session-llm-\d+)", ligne)
+                if m:
+                    return m.group(1)
+    except IOError:
+        pass
+    return "session-llm-1"
+
+
 def _lire_agent_actif():
-    """Lit l agent actif de la session session-llm-1 dans AGENTS.md.
-    Retourne 'inconnu' si introuvable (jamais d erreur bloquante)."""
+    """Lit l agent actif de la session de l appelant dans AGENTS.md.
+    Retourne 'inconnu' si introuvable (jamais d erreur bloquante).
+    MULTI-SESSIONS (v0.3.1) : plus de session-llm-1 figee -- chaque session
+    lit SON bloc (chaque LLM peut travailler avec les memes agents)."""
     try:
         racine = os.path.dirname(os.path.abspath(sys.argv[0]))
         while not os.path.isfile(os.path.join(racine, "AGENTS.md")):
@@ -365,9 +388,10 @@ def _lire_agent_actif():
             if parent == racine:
                 return "inconnu"
             racine = parent
+        session = _session_appelante(racine)
         with open(os.path.join(racine, "AGENTS.md"), encoding="utf-8") as fh:
             txt = fh.read()
-        bloc = txt.split("### Session : session-llm-1", 1)
+        bloc = txt.split("### Session : " + session, 1)
         if len(bloc) < 2:
             return "inconnu"
         # couper sur la ligne de fin de bloc (--- seul en debut de ligne)

@@ -1,5 +1,5 @@
 # evaluer-processus
-**Version** : 0.1.7
+**Version** : 0.1.13
 
 Detecte les DERIVES DE PROCESSUS dans le cerveau-projet : un agent qui
 utilise un outil hors de sa carte, une mission qui finit par reactiver
@@ -99,3 +99,20 @@ Code de retour : 0 si aucun probleme, 1 sinon (utilisable en garde-fou).
   fiche 'Proprietaire : Vulcain (outil partage)') a OUTILS_P0_PARTAGES - ses
   usages declares au registre par les agents ne doivent pas etre signales
   OUTIL_HORS_CARTE.
+- v0.1.8 (2026-08-19, mission convertir-carte-mermaid) : ajout de
+  convertir-carte-mermaid (outil partage de consultation/visualisation des
+  cartes de decision) a OUTILS_P0_PARTAGES - tous les agents peuvent
+  convertir leur carte (ou celle d un autre) sans OUTIL_HORS_CARTE.
+- v0.1.10 (2026-08-19, garde-fou Morpheus mission chronometre) : ajout de
+  chronometrer-duree a OUTILS_P0_PARTAGES - appele en subprocess par
+  activer-agent-principal a chaque activation (transverse comme
+  activer-agent-principal), assigne a vulcain (constructeur) mais utilise
+  par TOUS les agents. Sans cette entree, tout agent non-vulcain qui le
+  declare au registre est signale DECLARATION_FAUTIVE (faux positif verifie
+  par Morpheus).
+- v0.1.13 (2026-08-20, FIX test missions) : ignorer les missions de test dans FIN_MISSION_ERRONEE (raisons contenant 'test' exclues). Les tests cas limites (garde-fou, double activation) font legitiment reactiver Cerberus directement.
+- v0.1.12 (2026-08-19, D6 multi-sessions) : fins_de_la_carte accepte le placeholder `<session>` OU une session concrete `session-llm-N` (l ancien format fige session-llm-1 ne fonctionnait que pour la 1re session).
+- v0.1.11 (2026-08-19, mission conso tokens) : ajout de analyser-tokens a
+  OUTILS_P0_PARTAGES - appele en subprocess par activer-agent-principal a
+  chaque activation (snapshot cumulatif pour la conso par intervention),
+  assigne a vulcain (constructeur) mais utilise par TOUS les agents.

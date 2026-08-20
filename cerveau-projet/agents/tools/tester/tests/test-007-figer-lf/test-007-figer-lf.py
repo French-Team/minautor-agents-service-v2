@@ -277,7 +277,7 @@ def main():
         with open(CATALOGUE, encoding="utf-8") as f:
             cat = json.load(f)
         noms = [e["nom"] for e in cat["commandes"]]
-        ok_cat = (len(noms) == 183 and noms == sorted(noms)
+        ok_cat = (len(noms) == 186 and noms == sorted(noms)
                   and "lire-head" in noms
                   and "executer-script-temporaire" in noms
                   and "corriger-fins-de-ligne" in noms
@@ -301,7 +301,7 @@ def main():
                   and "detecter-ecritures-hors-cycle" in noms
                   and "enregistrer-lecon" in noms
                   and "consulter-lecons" in noms)
-        verifier("13. catalogue JSON valide 183 trie + entree detecter-troncatures", ok_cat,
+        verifier("13. catalogue JSON valide 186 trie + entree detecter-troncatures", ok_cat,
                  "nb=%d" % len(noms))
     except Exception as e:
         verifier("13. catalogue JSON valide 162 trie + entree detecter-donnees-en-dur", False, str(e))
@@ -310,8 +310,8 @@ def main():
     try:
         with open(INDEX_TOOLS, encoding="utf-8") as f:
             idx = f.read()
-        verifier("14. index-tools total 203 + Corriger 7 + detecter-troncatures",
-                 "| **Total** | **203** |" in idx and "| Corriger | 7 |" in idx
+        verifier("14. index-tools total 204 + Corriger 7 + detecter-troncatures",
+                 "| **Total** | **204** |" in idx and "| Corriger | 7 |" in idx
                  and "lire-head" in idx
                  and "executer-script-temporaire" in idx
                  and "corriger-fins-de-ligne" in idx

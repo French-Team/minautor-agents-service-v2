@@ -115,7 +115,7 @@
      "type": "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT TERMINEE : je REACTIVE CERBERUS avec le BILAN CONSOLIDE de la chaine (rapport de tests de Morpheus + rapport de controle de Janus) et mon verdict (VALIDE / A REVOIR / REJETE). COMMANDE EXACTE (reactiver ramene a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver session-llm-1 <raison-bilan> cerberus. PASSE PAR LE GENERATEUR (catalogue activer-agent-principal).",
+   "message": "CHAINE BOUT-EN-BOUT TERMINEE : je REACTIVE CERBERUS avec le BILAN CONSOLIDE de la chaine (rapport de tests de Morpheus + rapport de controle de Janus) et mon verdict (VALIDE / A REVOIR / REJETE). COMMANDE EXACTE (reactiver ramene a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison-bilan> cerberus. PASSE PAR LE GENERATEUR (catalogue activer-agent-principal).",
    "titre": "FIN - Reactiver Cerberus",
    "type": "fin"
   },
@@ -433,7 +433,7 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     },
@@ -837,7 +837,7 @@
     {
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>",
      "nom": "activer-agent-principal",
      "type": "outil"
     }
@@ -866,7 +866,7 @@
      "type": "outil"
     }
    ],
-   "message": "LIVRABLE MINERVE NON CONFORME : je RENVOIE le rapport a MINERVE pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 minerve <raison>. Elle corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
+   "message": "LIVRABLE MINERVE NON CONFORME : je RENVOIE le rapport a MINERVE pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> minerve <raison>. Elle corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
    "titre": "FIN - Renvoyer rapport a minerve",
    "type": "fin"
   },
@@ -940,7 +940,7 @@
      "type": "outil"
     }
    ],
-   "message": "LIVRABLE ATHENA CONFORME : j'ACTIVE PROMETHEE (maillon suivant de la ligne trio) pour creer la spec. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 promethee <raison>. PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
+   "message": "LIVRABLE ATHENA CONFORME : j'ACTIVE PROMETHEE (maillon suivant de la ligne trio) pour creer la spec. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> promethee <raison>. PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
    "titre": "FIN - Activer promethee",
    "type": "fin"
   },
@@ -953,7 +953,7 @@
      "type": "outil"
     }
    ],
-   "message": "LIVRABLE PROMETHEE CONFORME : j'ACTIVE MINERVE (dernier maillon de la ligne trio) pour creer le todo. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 minerve <raison>. PAS reactiver : minerve reactive Cerberus avec le bilan consolide.",
+   "message": "LIVRABLE PROMETHEE CONFORME : j'ACTIVE MINERVE (dernier maillon de la ligne trio) pour creer le todo. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> minerve <raison>. PAS reactiver : minerve reactive Cerberus avec le bilan consolide.",
    "titre": "FIN - Activer minerve",
    "type": "fin"
   },
@@ -966,7 +966,7 @@
      "type": "outil"
     }
    ],
-   "message": "LIVRABLE ATHENA NON CONFORME : je RENVOIE le rapport a ATHENA pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 athena <raison>. Elle corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
+   "message": "LIVRABLE ATHENA NON CONFORME : je RENVOIE le rapport a ATHENA pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> athena <raison>. Elle corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
    "titre": "FIN - Renvoyer rapport a athena",
    "type": "fin"
   },
@@ -979,7 +979,7 @@
      "type": "outil"
     }
    ],
-   "message": "LIVRABLE PROMETHEE NON CONFORME : je RENVOIE le rapport a PROMETHEE pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 promethee <raison>. Il corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
+   "message": "LIVRABLE PROMETHEE NON CONFORME : je RENVOIE le rapport a PROMETHEE pour correction. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> promethee <raison>. Il corrige puis me RE-ACTIVE (commande activer) pour re-controle (boucle KO). PAS reactiver : je suis la chaine, seul le dernier maillon reactive Cerberus.",
    "titre": "FIN - Renvoyer rapport a promethee",
    "type": "fin"
   },
@@ -1012,6 +1012,6 @@
   "case_depart": "c0",
   "description": "v0.4.8 : + indice outil c4 tester-protections (usage reel controle, garde-fou test-035)",
   "nom": "parcours-janus",
-  "version": "0.5.0"
+  "version": "0.5.1"
  }
 }

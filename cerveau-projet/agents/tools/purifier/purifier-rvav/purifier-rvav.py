@@ -36,7 +36,7 @@
 # Retour: 0 si tout va bien (ou dry-run sans probleme), 1 si des fichiers
 # restent en surcharge ou erreur, 2 usage invalide.
 #
-# Version : 0.1.0
+# Version : 0.1.1
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -51,7 +51,7 @@ import io
 import os
 import sys
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 STATUT = "ebauche"
 
 SEUIL_CORRECTIONS = 1000
@@ -129,12 +129,14 @@ def decouper_lecons(corps):
 
 
 def decouper_entrees_historique(corps):
-    """Decoupe AGENTS-historique en blocs d entrees (| 2026- ... jusqu a la suivante)."""
+    """Decoupe AGENTS-historique en blocs d entrees (v0.1.1 : ligne de table
+    '| <span' (agent colore en 1re colonne) ou repere '### ' ... jusqu a la
+    suivante)."""
     entrees = []
     courant = None
     reste = []
     for ligne in corps:
-        if ligne.startswith("| 2026-"):
+        if ligne.startswith("| <span") or ligne.startswith("### "):
             if courant is not None:
                 entrees.append(courant)
             courant = [ligne]

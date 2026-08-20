@@ -1,6 +1,6 @@
 # proteger-verrou-habilitation
 
-**Version :** 0.4.0
+**Version :** 0.4.2
 **Statut :** ebauche
 **Categorie :** Proteger
 
@@ -122,7 +122,8 @@ $ python3 proteger-verrou-habilitation.py --agent cerberus --outil tester-lancer
 BLOQUE : l agent 'cerberus' n est PAS habilite pour l outil 'tester-lancer-non-regression' (verrou ferme).
   Agent(s) habilite(s) : janus
   Action requise : activez l agent habilite puis redemandez l outil.
-  Commande : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus 'activation par le verrou'
+  Commande : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus 'activation par le verrou'
+  # v0.4.1 (D6) : <session> = la session de l appelant (SESSION_LLM ou classeur), plus de session-llm-1 figee
 ```
 
 ## Integration dans la chaine

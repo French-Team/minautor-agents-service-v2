@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-hygie",
   "agent": "hygie",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Hygie, agent de nettoyage du workspace : snapshot -> detection par zone -> preuve d honnetete -> suppression tracee -> rapport. Seul agent habilite a acceder a tout le workspace et a supprimer sans demande prealable (avec tracabilite). Decisions utilisateur 2026-08-13 : nom Hygie, perimetre tout workspace, snapshots dans le dossier dedie de l agent avec rotation 7 jours."
  },
@@ -429,7 +429,7 @@
   "c13": {
    "titre": "FIN - Activer Janus (second controle)",
    "type": "fin",
-   "message": "MISSION DE NETTOYAGE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan complet (snapshot pris, residus detectes et supprimes par zone, rapport de nettoyage, preuves d honnetete obtenues, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus verifie ma tracabilite (snapshot + rapport) puis reactive Cerberus avec son verdict.",
+   "message": "MISSION DE NETTOYAGE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan complet (snapshot pris, residus detectes et supprimes par zone, rapport de nettoyage, preuves d honnetete obtenues, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. Janus verifie ma tracabilite (snapshot + rapport) puis reactive Cerberus avec son verdict.",
    "indices": [
     {
      "type": "outil",
@@ -492,7 +492,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"
     }
    ],
    "suivant": "cH2"
@@ -551,7 +551,7 @@
   "c29a": {
    "titre": "FIN - Delegation",
    "type": "fin",
-   "message": "La mission concerne un autre agent : j active l agent habilite (activer-agent-principal activer session-llm-1 <agent> <raison>) et j attends son retour selon le Pattern 5 (RELAIS -> RETOUR -> CLOTURE). Je ne fais pas le travail de l autre agent.",
+   "message": "La mission concerne un autre agent : j active l agent habilite (activer-agent-principal activer <session> <agent> <raison>) et j attends son retour selon le Pattern 5 (RELAIS -> RETOUR -> CLOTURE). Je ne fais pas le travail de l autre agent.",
    "indices": [
     {
      "type": "regle",

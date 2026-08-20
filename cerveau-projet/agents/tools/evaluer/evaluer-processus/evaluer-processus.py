@@ -28,7 +28,7 @@
 #   --verbose           : detail des outils assignes par carte
 #   --version
 #
-# Version : 0.1.7
+# Version : 0.1.13
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -55,7 +55,7 @@ import sys
 
 FENETRE_JOURS = 1  # fenetre de verification des usages recents (v0.1.3) : le jour courant
 
-VERSION = "0.1.7"
+VERSION = "0.1.13"
 
 # Agents du cerveau-projet (famille cerveau-projet : cercles de controle).
 AGENTS_CERVE = ["cerberus", "buffy", "vulcain", "morpheus", "janus",
@@ -100,6 +100,21 @@ OUTILS_P0_PARTAGES = frozenset([
     "lire-activite-recente",
     "evaluer-coherence",
     "consulter-combos",
+    "convertir-carte-mermaid",
+    # chronometrer-duree (2026-08-19, mission chronometre) : appele en
+    # subprocess par activer-agent-principal a CHAQUE activation/reactivation
+    # (cycle Cerberus) -> transverse comme activer-agent-principal, assigne
+    # a vulcain (constructeur) dans sa carte mais utilise par TOUS les
+    # agents. Sans cette entree, tout agent non-vulcain qui le declare au
+    # registre est signale DECLARATION_FAUTIVE (faux positif, verifie par
+    # Morpheus dans la mission garde-fou).
+    "chronometrer-duree",
+    # analyser-tokens (2026-08-19, mission conso tokens) : appele en
+    # subprocess par activer-agent-principal a chaque activation (snapshot
+    # cumulatif pour la conso par intervention) -> transverse comme
+    # activer-agent-principal, assigne a vulcain (constructeur) mais
+    # utilise par TOUS les agents.
+    "analyser-tokens",
 ])
 
 
@@ -118,26 +133,43 @@ def outils_de_la_carte(parcours):
 
 def fins_de_la_carte(parcours):
     """Retourne (a_activer_janus, a_reactiver_cerberus) booleens selon les
-    messages des cases de type fin."""
+    messages des cases de type fin.
+    MULTI-SESSIONS (v0.1.12) : les commandes acceptent le placeholder <session>
+    OU une session concrete session-llm-N (D6) -- le format figee
+    'session-llm-1' ne fonctionnait que pour la premiere session."""
     a_janus = False
     a_reactiver = False
+    motif_session = r"(?:<session>|session-llm-\d+)"
     for c in parcours.get("cases", {}).values():
         if c.get("type") != "fin":
             continue
         msg = c.get("message", "")
         titre = c.get("titre", "")
-        if "Activer Janus" in titre or "activer session-llm-1 janus" in msg:
+        if ("Activer Janus" in titre
+                or re.search(r"activer " + motif_session + r" janus", msg)):
             a_janus = True
-        if ("Reactiver Cerberus" in titre or "reactiver session-llm-1" in msg
+        if ("Reactiver Cerberus" in titre
+                or re.search(r"reactiver " + motif_session, msg)
                 or "Activer l agent precedent" in titre
                 or "Activer l agent precedent avec son rapport" in titre):
             a_reactiver = True
     return a_janus, a_reactiver
 
 
+RE_BALISES = re.compile(r"<[^>]+>")
+
+
+def nettoyer_balises(texte):
+    """Retire les balises HTML (spans de couleur) d une cellule."""
+    return RE_BALISES.sub("", texte)
+
+
 def dernieres_missions_agent(racine, agent):
     """Dernieres missions ecrites pour cet agent dans AGENTS.md + historique.
-    Retourne une liste de (source, texte)."""
+    Retourne une liste de (source, texte). Format v0.1.9 de l historique :
+    '| <span>agent</span> | heure | date | session | MISSION ... |' avec la
+    raison pouvant continuer en lignes '###>' (reconstituee pour ne pas
+    manquer 'reactiver Cerberus' coupe par l enroulement)."""
     resultats = []
     for nom_fichier in ["AGENTS.md", "AGENTS-historique.md"]:
         chemin = os.path.join(racine, nom_fichier)
@@ -148,11 +180,22 @@ def dernieres_missions_agent(racine, agent):
                 txt = fh.read()
         except (IOError, OSError):
             continue
-        # Blocs de missions : | date | session | agent | MISSION ... |
-        motif = re.compile(
-            r"\| [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9:]{5} \| [a-z0-9-]+ \| %s \| MISSION([^|\n]*)" % agent)
-        for m in motif.finditer(txt):
-            resultats.append((nom_fichier, m.group(1).strip()))
+        lignes = txt.split("\n")
+        for i, ligne in enumerate(lignes):
+            if not ligne.startswith("| <span"):
+                continue
+            cell_agent = nettoyer_balises(ligne.split("|")[1]).strip().lower()
+            if cell_agent != agent:
+                continue
+            # reconstituer la raison complete (table + continuations ###>)
+            raison = ligne
+            j = i + 1
+            while j < len(lignes) and lignes[j].startswith("###>"):
+                raison += " " + lignes[j][4:].strip()
+                j += 1
+            if " MISSION " in nettoyer_balises(raison).upper() or \
+                    "MISSION " in nettoyer_balises(raison).upper():
+                resultats.append((nom_fichier, nettoyer_balises(raison)))
     return resultats
 
 
@@ -186,7 +229,15 @@ def detecter_fins_erronees(racine):
         # Les 3 missions les PLUS RECENTES (liste en ordre decroissant).
         dernieres = missions[:3]
         for source, texte in dernieres:
-            if "reactiver cerberus" in texte.lower() and "activer janus" not in texte.lower():
+            # FIX v0.1.8 (2026-08-20) : ignorer les missions de test.
+            # Les tests cas limites (garde-fou, double activation) font
+            # legimitement reactiver Cerberus directement sans passer par
+            # Janus. La raison contient generalement 'test' (majuscule ou
+            # minuscule).
+            texte_lower = texte.lower()
+            if "test" in texte_lower:
+                continue
+            if "reactiver cerberus" in texte_lower and "activer janus" not in texte_lower:
                 problemes.append({
                     "type": "FIN_MISSION_ERRONEE",
                     "agent": agent,

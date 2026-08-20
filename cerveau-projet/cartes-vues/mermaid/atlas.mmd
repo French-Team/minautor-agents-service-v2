@@ -1,0 +1,107 @@
+%% Carte de decision de atlas (parcours v0.5.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0d["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10["Lecons et retour"]
+    c10b{"Ameliorations possibles de mon fonctionnement ?"}
+    c10c["Lancer le generateur d amelioration"]
+    c10d["Activer l'agent habilite pour l'amelioration"]
+    c10e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c11(["FIN - Activer Janus"])
+    c11a["Activer Themis pour auditer ma mission"]
+    c11b{"Retour de Themis recu ?"}
+    c12["Formuler la requete (protocole-recherches-web)"]
+    c13["Executer la recherche"]
+    c14["Documenter la source"]
+    c15["Identifier le public cible"]
+    c16["Lister les fichiers existants"]
+    c17["Analyser et decomposer la structure"]
+    c18["Creer la structure de documentation"]
+    c19["Rediger le contenu"]
+    c2["Lister les dossiers"]
+    c20["Passer la boucle RVAV"]
+    c21["Lister les fichiers"]
+    c22["Lire le contenu des fichiers cles"]
+    c23["Analyser la structure"]
+    c24["Analyser les dependances"]
+    c25["Creer la cartographie"]
+    c26{"Mission hors perimetre"}
+    c27["Activer l'agent habilite"]
+    c28(["FIN - Delegation"])
+    c29(["Signaler le besoin"])
+    c29b{"Besoin d outil ?"}
+    c29c["Creer l outil temporaire"]
+    c29d(["FIN - Outil temporaire"])
+    c3["Lister les fichiers"]
+    c30["Cartographier un parcours"]
+    c31["Cartographier pour un agent"]
+    c31b(["FIN - Activer l agent precedent avec sa carte"])
+    c32["Activer Themis pour auditer"]
+    c33(["FIN - Retour de Themis avec son rapport"])
+    c34["Enregistrer mes usages d outils"]
+    c4["Lister les fonctions"]
+    c5["Lister les appels"]
+    c6["Lire le contenu des fichiers cles"]
+    c7["Rechercher des patterns"]
+    c8["Verifier la regle de relecture (systeme d'agents)"]
+    c9["Documenter les decouvertes"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c0d
+    c0d --> c1
+    c0e --> c0c
+    c1 -- "explorer" --> c2
+    c1 -- "web" --> c12
+    c1 -- "documenter" --> c15
+    c1 -- "analyser" --> c21
+    c1 -- "autre" --> c26
+    c1 -- "cartographier" --> c30
+    c1 -- "cartographier-agent" --> c31
+    c10 --> c10b
+    c10b -- "OUI" --> c10c
+    c10b -- "NON" --> c34
+    c10c --> c10d
+    c10d --> c10e
+    c10e --> FIN-APPELANT
+    c11a --> c11b
+    c11b -- "OUI" --> c11
+    c11b -- "NON" --> c11b
+    c12 --> c13
+    c13 --> c14
+    c14 --> c10
+    c15 --> c16
+    c16 --> c17
+    c17 --> c18
+    c18 --> c19
+    c19 --> c20
+    c2 --> c3
+    c20 --> c10
+    c21 --> c22
+    c22 --> c23
+    c23 --> c24
+    c24 --> c25
+    c25 --> c30
+    c26 -- "OUI" --> c27
+    c26 -- "NON" --> c29b
+    c26 -- "audit" --> c32
+    c27 --> c28
+    c29b -- "TEMPORAIRE" --> c29c
+    c29b -- "DURABLE" --> c29
+    c29c --> c29d
+    c3 --> c4
+    c30 --> c31
+    c31 --> c31b
+    c32 --> c33
+    c34 --> c11a
+    c4 --> c5
+    c5 --> c6
+    c6 --> c7
+    c7 --> c8
+    c8 --> c9
+    c9 --> c10

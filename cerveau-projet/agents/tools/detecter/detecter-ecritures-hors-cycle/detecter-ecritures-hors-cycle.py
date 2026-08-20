@@ -35,7 +35,7 @@
 #   python3 detecter-ecritures-hors-cycle.py --rapport ecarts-hors-cycle.md
 #   python3 detecter-ecritures-hors-cycle.py --depuis "2026-08-17 19:47"
 #
-# Version : 0.1.0
+# Version : 0.1.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -53,7 +53,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.1.0"
+VERSION = "0.1.2"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -127,13 +127,38 @@ def dernier_horodatage(racine):
     return None, "inconnu"
 
 
-def agent_actif(racine):
-    """Lit l agent actif (Nom Agent) de la session session-llm-1 dans AGENTS.md."""
+def session_par_defaut(racine):
+    """MULTI-SESSIONS (v0.1.2) : retrouve la session de l agent appelant.
+    Ordre : (1) variable d environnement SESSION_LLM (ex: session-llm-4) ;
+    (2) classeur-variables (profil-session-* : premiere session listee) ;
+    (3) session-llm-1 en secours."""
+    env = os.environ.get("SESSION_LLM", "").strip()
+    if env:
+        return env
+    classeur = os.path.join(racine, "cerveau-projet", "agents",
+                            "classeur-variables", "stockage",
+                            "variables-actuelles.md")
+    if os.path.isfile(classeur):
+        with io.open(classeur, encoding="utf-8", errors="replace") as fh:
+            for ligne in fh:
+                m = re.search(r"`profil-session-([a-z0-9-]+)`.*?session: (session-llm-\d+)",
+                              ligne)
+                if m:
+                    return m.group(2)
+    return "session-llm-1"
+
+
+def agent_actif(racine, session=""):
+    """Lit l agent actif (Nom Agent) de la session donnee (defaut : session de
+    l appelant via session_par_defaut) dans AGENTS.md. MULTI-SESSIONS (v0.1.2) :
+    plus de session-llm-1 figee -- chaque session lit SON bloc."""
+    if not session:
+        session = session_par_defaut(racine)
     chemin = chemin_agents(racine)
     if not os.path.isfile(chemin):
         return "inconnu"
     txt = io.open(chemin, encoding="utf-8", errors="replace").read()
-    bloc = txt.split("### Session : session-llm-1", 1)
+    bloc = txt.split("### Session : " + session, 1)
     if len(bloc) < 2:
         return "inconnu"
     segment = bloc[1].split("\n---", 1)[0]
@@ -223,6 +248,8 @@ def main():
                         help="Horodatage de reference (YYYY-MM-DD HH:MM) - defaut : derniere activation")
     parser.add_argument("--agent", type=str, default="",
                         help="Forcer l agent actif (defaut : lu dans AGENTS.md)")
+    parser.add_argument("--session", type=str, default="",
+                        help="Session a analyser (ex: session-llm-4) - defaut : session de l appelant")
     parser.add_argument("--rapport", type=str, default="",
                         help="Chemin du rapport markdown (optionnel)")
     parser.add_argument("--verbose", action="store_true", help="Detail par fichier")
@@ -234,7 +261,8 @@ def main():
 
     racine = racine_projet()
     horodatage, agent_dernier = dernier_horodatage(racine)
-    agent = (args.agent or agent_actif(racine)).lower()
+    session = args.session or session_par_defaut(racine)
+    agent = (args.agent or agent_actif(racine, session)).lower()
     if args.depuis:
         horodatage = args.depuis
 
@@ -256,6 +284,7 @@ def main():
 
     print(_couleur("=== Detecter les ecritures hors cycle d activation ===", "bleu"))
     print("  Derniere activation : %s (%s)" % (horodatage or "inconnue", agent_dernier))
+    print("  Session analysee     : %s" % session)
     print("  Agent actif          : %s" % agent)
     print("  Source de preuve     : %s" % ("git" if git_ok else "mtime (git indisponible)"))
     print("")
@@ -286,6 +315,7 @@ def main():
             fh.write("# Rapport : ecritures hors cycle d activation\n\n")
             fh.write("Date : %s\n\n" % datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             fh.write("- Derniere activation : %s (%s)\n" % (horodatage or "inconnue", agent_dernier))
+            fh.write("- Session analysee : %s\n" % session)
             fh.write("- Agent actif : %s\n" % agent)
             fh.write("- Source : %s\n" % ("git" if git_ok else "mtime"))
             fh.write("- Verdict : %s\n\n" % verdict)

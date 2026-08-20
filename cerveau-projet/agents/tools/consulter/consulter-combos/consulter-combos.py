@@ -24,15 +24,16 @@ Options:
   --version          Affiche la version
   --aide             Affiche cette aide
 
-Version : 0.1.0
+Version : 0.1.1
 """
 import argparse
+import importlib.util
 import io
 import json
 import os
 import sys
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 STATUT = "prepare"
 
 GREEN = "\033[0;32m"
@@ -93,9 +94,25 @@ def journaliser(agent, outil_consulte):
         "contexte": "consultation: %s" % outil_consulte,
     }
     try:
-        with io.open(registre, "a", encoding="utf-8") as fh:
+        with io.open(registre, "a", encoding="utf-8", newline="\n") as fh:
             fh.write(json.dumps(entree, ensure_ascii=False) + "\n")
     except (IOError, OSError):
+        return
+    # le registre est trie par date/heure DECROISSANT (le plus recent en
+    # premier) : un append brut casse le tri (test-024 point 14). Reutilise
+    # la fonction de tri d enregistrer-usage-outil (source de verite) pour
+    # maintenir l ordre apres chaque journalisation.
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(
+            "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/")))
+        spec = importlib.util.spec_from_file_location(
+            "enregistrer_usage_outil",
+            os.path.join("cerveau-projet", "agents", "tools", "enregistrer",
+                         "enregistrer-usage-outil", "enregistrer-usage-outil.py"))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        mod.trier_registre(registre)
+    except Exception:
         pass
 
 

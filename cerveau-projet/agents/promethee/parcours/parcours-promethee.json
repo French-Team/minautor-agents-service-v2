@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-promethee",
   "agent": "promethee",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Promethee : redacteur de specs. 2 missions (creer une spec, completer une spec). A la fin de chaque mission, j'active Minerve pour le todo (FLUX). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
   "version_precedente": "0.3.2"
@@ -282,7 +282,7 @@
   "c10": {
    "titre": "FIN - Activer Janus",
    "type": "fin",
-   "message": "SPEC TERMINEE (creee depuis le pense-bete source). J ACTIVE JANUS (second controle) avec le bilan de la spec. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec le verdict consolide.",
+   "message": "SPEC TERMINEE (creee depuis le pense-bete source). J ACTIVE JANUS (second controle) avec le bilan de la spec. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec le verdict consolide.",
    "indices": [
     {
      "type": "regle",
@@ -434,7 +434,7 @@
      "nom": "activer-agent-principal",
      "catalogue": "activer-agent-principal",
      "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 <agent> <raison>"
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"
     },
     {
      "type": "regle",

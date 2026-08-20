@@ -1,0 +1,53 @@
+{
+ "indices": [
+  {
+   "ref": "pattern-3",
+   "type": "ref"
+  },
+  {
+   "texte": "PASSE PAR LE GENERATEUR : compose la commande de l outil via le catalogue (--commande corriger-symboles --reponses ...) au lieu de l ecrire en dur.",
+   "type": "regle"
+  },
+  {
+   "texte": "PATTERN 3 (spec v0.2.4) : cette case lance un COMBO - combos-moteur execute la definition du combo (correction des accents + validation ASCII).",
+   "type": "regle"
+  },
+  {
+   "catalogue": "corriger-symboles",
+   "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
+   "nom": "corriger-symboles",
+   "type": "outil",
+   "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/vulcain/corrections.md --all"
+  },
+  {
+   "catalogue": "combos-moteur",
+   "chemin": "cerveau-projet/agents/tools/combos/combos-moteur/",
+   "nom": "combos-moteur",
+   "type": "outil"
+  },
+  {
+   "catalogue": "corriger-fins-de-ligne",
+   "chemin": "cerveau-projet/agents/tools/corriger/corriger-fins-de-ligne/",
+   "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-fins-de-ligne/corriger-fins-de-ligne.py",
+   "nom": "corriger-fins-de-ligne",
+   "type": "outil"
+  },
+  {
+   "catalogue": "valider-conformite-ascii",
+   "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
+   "commande": "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py",
+   "nom": "valider-conformite-ascii",
+   "type": "outil"
+  },
+  {
+   "catalogue": "valider-nommage",
+   "chemin": "cerveau-projet/agents/tools/valider/valider-nommage/",
+   "commande": "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py",
+   "nom": "valider-nommage",
+   "type": "outil"
+  }
+ ],
+ "suivant": "c7b",
+ "titre": "Lancer le combo corriger-ascii",
+ "type": "action"
+}

@@ -7,26 +7,26 @@ GARDE-FOU : les 2 outils d analyse crees par Vulcain (demande utilisateur
   - analyser-performance-tests v0.1.0 : classe les tests du DERNIER RUN du
     registre-tests.jsonl du plus gros consommateur au moins (--top, --rapport,
     --fenetre-minutes) pour aider aux optimisations de la suite.
-  - analyser-tokens v0.1.0 : mesure les tokens ENVOYES/RECUS et l ENCOMBREMENT
+  - analyser-tokens v0.1.1 : mesure les tokens ENVOYES/RECUS et l ENCOMBREMENT
     de la fenetre de contexte, modele HYBRIDE (compteurs API TOKENS_SESSION ou
     metadonnees-session-*.json en priorite, sinon estimation locale signalee).
 
 Contexte :
   - Les 2 outils ont ete crees par Vulcain (categorie analyser) avec doc .md,
   - entree catalogue generateurs-commande (179 commandes) et index-tools
-    (Analyser 9, Total 200).
+    (Analyser 9, Total 204).
   - Ce garde-fou verifie leur existence reelle, leur version, leurs options,
     leur preuve d execution (sans planter sur les donnees reelles) et leur
     referencement - anti-recurrence d un outil oublie du catalogue.
 
 Invariants verifies :
-  1. Les 2 outils .py existent, compilent et affichent --version v0.1.0
+  1. Les 2 outils .py existent, compilent et affichent --version (perf 0.1.0, tokens 0.1.2)
   2. L aide contient les options cles (--top/--rapport/--fenetre-minutes pour
      la performance ; --session/--fenetre-total/--rapport pour les tokens)
-  3. Les 2 docs .md existent avec la categorie Analyser et la version 0.1.0
+  3. Les 2 docs .md existent avec la categorie Analyser et leur version
   4. index-tools.md : les 2 outils listes dans la section Analyser, compteur
-     Analyser = 9, Total = 200
-  5. Catalogue : les 2 noms presents, 179 commandes triees
+     Analyser = 9, Total = 204
+  5. Catalogue : les 2 noms presents, 186 commandes triees
   6. Preuve reelle : analyser-performance-tests --version + execution sur le
      registre reel (ne plante pas, retourne 0) ; analyser-tokens --version +
      execution estimation locale (affiche ENVOYES/RECUS/ENCOMBREMENT)
@@ -180,14 +180,14 @@ def main():
                      % (r1.returncode, r2.returncode))
             chrono_etape("2. compilation", t0)
 
-        # 3. --version v0.1.0
+        # 3. --version (perf 0.1.0, tokens 0.1.2)
         if point_actif(3):
             t0 = time.monotonic()
             r1 = lancer([PYTHON, PERF_PY, "--version"])
             r2 = lancer([PYTHON, TOKENS_PY, "--version"])
             ok = ("analyser-performance-tests v0.1.0" in (r1.stdout or "")
-                  and "analyser-tokens v0.1.0" in (r2.stdout or ""))
-            verifier("3. --version v0.1.0 des 2 outils", ok,
+                  and "analyser-tokens v0.1.2" in (r2.stdout or ""))
+            verifier("3. --version v0.1.2 des 2 outils", ok,
                      "perf=%s tokens=%s" % ((r1.stdout or "").strip(),
                                             (r2.stdout or "").strip()))
             chrono_etape("3. version", t0)
@@ -206,40 +206,40 @@ def main():
             verifier("4. options cles dans l aide des 2 outils", ok, "")
             chrono_etape("4. aide", t0)
 
-        # 5. Docs .md : categorie Analyser + version 0.1.0
+        # 5. Docs .md : categorie Analyser + version
         if point_actif(5):
             t0 = time.monotonic()
             d1 = io.open(PERF_MD, encoding="utf-8", errors="replace").read()
             d2 = io.open(TOKENS_MD, encoding="utf-8", errors="replace").read()
             ok = ("**Categorie** : Analyser" in d1 and "0.1.0" in d1
-                  and "**Categorie** : Analyser" in d2 and "0.1.0" in d2)
-            verifier("5. docs .md : categorie Analyser + version 0.1.0", ok, "")
+                  and "**Categorie** : Analyser" in d2 and "0.1.2" in d2)
+            verifier("5. docs .md : categorie Analyser + version (perf 0.1.0, tokens 0.1.2)", ok, "")
             chrono_etape("5. docs", t0)
 
-        # 6. index-tools : les 2 outils + compteurs Analyser 9 / Total 199
+        # 6. index-tools : les 2 outils + compteurs Analyser 9 / Total 204
         if point_actif(6):
             t0 = time.monotonic()
             idx = io.open(INDEX, encoding="utf-8", errors="replace").read()
             ok = ("`analyser-performance-tests`" in idx
                   and "`analyser-tokens`" in idx
                   and "| Analyser | 9 |" in idx
-                  and "| **Total** | **203** |" in idx)
-            verifier("6. index-tools : 2 outils + Analyser 9 + Total 203", ok,
+                  and "| **Total** | **204** |" in idx)
+            verifier("6. index-tools : 2 outils + Analyser 9 + Total 204", ok,
                      "perf=%s tokens=%s" % ("`analyser-performance-tests`" in idx,
                                             "`analyser-tokens`" in idx))
             chrono_etape("6. index-tools", t0)
 
-        # 7. Catalogue : 172 commandes triees + les 2 noms presents
+        # 7. Catalogue : 186 commandes triees + les 2 noms presents
         if point_actif(7):
             t0 = time.monotonic()
             with io.open(CATALOGUE, encoding="utf-8") as fh:
                 cat = json.load(fh)
             noms = [e["nom"] for e in cat["commandes"]]
-            ok = (len(noms) == 183 and noms == sorted(noms)
+            ok = (len(noms) == 186 and noms == sorted(noms)
                   and "lire-head" in noms
                   and "analyser-performance-tests" in noms
                   and "analyser-tokens" in noms)
-            verifier("7. catalogue : 183 trie + 2 outils presents", ok,
+            verifier("7. catalogue : 186 trie + 2 outils presents", ok,
                      "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
             chrono_etape("7. catalogue", t0)
 

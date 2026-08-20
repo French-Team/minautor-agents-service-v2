@@ -6003,3 +6003,166 @@ habilitee, 16/16 cartes conformes au modele pedagogique.
 - **2026-08-18 (boucle KO test-094)** : quand mon controle detecte un defaut dans un fichier d'un autre agent (ici test-094 de Morpheus : tags hors taxonomie + test orphelin), je ne corrige JAMAIS moi-meme (c9g) : j'active le responsable, il corrige, il me reactiver, je re-controle. Lecon pour les tests : tags obligatoires de la taxonomie (categories-tests.json + TAGS_SPECIFIQUES) + reference dans le bon profil de profils-tests.json.
 
 - **2026-08-19 (7 KO preexistants : non-regression 92/92)** : test-055 et test-058 se reconcilient en reformulant le TEXTE d'une regle (sans nommer l'outil exclusif), JAMAIS en ajoutant un indice OUTIL dans une carte non-buffy. Ajouter un indice exclusif temporaire cree des artefacts verrou-auto faux. Correctif final : Hygie (085), Morpheus (030/024/063/087), Buffy (055 texte), Vulcain (079 + 4 artefacts). Non-regression complete : 92 OK / 0 KO.
+
+---
+
+## [LECON] 2026-08-19 -- CONTROLE-FINAL-SVG (Janus)
+
+**Mission** : controle final de l extension convertir-carte-mermaid (SVG par
+agent) + garde-fou test-096 etendu.
+
+**Diagnostic** : l ajout d un nouvel artefact genere (.svg) impose d etendre
+TOUTES les portees : index.md, scan ASCII/LF, XML bien forme, determinisme,
+et une preuve negative propre au nouvel artefact. Le lanceur de
+non-regression exige --agent (verrou d habilitation) : sans lui, ERREUR.
+
+**Corrections/enseignements** :
+1. Non-regression 124/124 OK (6 profils : cartes 27, outils 36, tests 21,
+   fiches-agents 17, docs 5, registre 18) : 0 KO.
+2. evaluer-coherence : 0 erreur, 1 avertissement PREEXISTANT (11 dossiers
+   vides) - a ne pas confondre avec un impact de mission.
+3. evaluer-processus : 0 probleme. --verifier : 16 cartes synchronisees
+   (.mmd ET .svg).
+4. Le lanceur se lance avec --agent janus --profil <nom> ; le verrou
+   d habilitation est obligatoire (ERREUR sinon).
+
+---
+
+## [LECON] 2026-08-19 -- CONTROLE-FINAL-RACINE (Janus)
+
+**Mission** : controle final correctif detecter-decalages-catalogue (rapport
+a la racine) + garde-fou test-097.
+
+**Diagnostic** : 3 KO en non-regression : (1) test-067 bumper - la ligne
+d entete '# Version :' du .py (0.2.2) n avait pas ete bumpee avec VERSION ;
+(2) test-024 - dossier tmp-morpheus residuel (fin de mission non nettoye) ;
+(3) test-097 - le garde-fou a DETECTE un fichier reel : COMMENT-DEMARRER.md
+(note personnelle de l utilisateur creee pendant les runs) - preuve reelle
+que le garde-fou fonctionne ; l utilisateur a choisi de l ajouter a la liste
+blanche.
+
+**Corrections/enseignements** :
+1. Le bumper lit AUSSI '# Version :' en tete du .py (pas seulement VERSION).
+2. Les dossiers tmp-<agent>/ doivent etre supprimes en fin de mission
+   (test-024 les tolere seulement pour l agent courant).
+3. Un garde-fou de racine attrape aussi les fichiers de l UTILISATEUR :
+   la liste blanche est un contrat a ajuster avec lui (jamais supprimer un
+   fichier utilisateur sans demander).
+
+---
+
+## [LECON] 2026-08-19 -- CONTROLE-FINAL-HISTORIQUE (Janus)
+
+**Mission** : controle final du nouveau format de AGENTS-historique.
+
+**Diagnostic** : format v0.5.14 (repere ### colore par agent + table
+machine intacte + bordures #> / ###>), migration 150 entrees, garde-fou
+test-098 (7/7). Controle : non-regression 126/126, 0 erreur, parseurs OK.
+
+**Corrections/enseignements** :
+1. Non-regression 126/126 OK (cartes 27, outils 36, tests 23, fiches 17,
+   docs 5, registre 18) - 0 KO.
+2. Les activations en conditions reelles (activer-agent-principal) ecrivent
+   bien les blocs au nouveau format : preuve de bout en bout.
+3. evaluer-coherence : 0 erreur, 1 avertissement preexistant (11 dossiers
+   vides) - evaluer-processus : 0 probleme. Registre 725 lignes valide.
+4. Le rendu final : '#>' + '### date - agent' (couleur par agent) + table
+   + continuations '###>' - la ligne 1 de chaque bloc est cherchable.
+
+---
+
+## [LECON] 2026-08-19 -- HISTORIQUE-V3-CONTROLE (Janus)
+
+**Mission** : controle final du format v0.5.15 de AGENTS-historique
+(restructure par Vulcain : agent | heure | date | session | raison, raison
+enroulee 100 car. ; garde-fous verifies par Morpheus).
+
+**Diagnostic** : le changement d ordre des colonnes de l historique a des
+effets en cascade sur TOUS les tests qui lisent ce fichier, y compris des
+tests qui ne le mentionnent pas dans leur nom (test-078 amelioration
+extrait les activations avec une regex de l ANCIEN format -> 0 trouve sans
+KO = faux OK).
+
+**Corrections/enseignements** :
+1. CASCADE : apres un changement de format d un fichier partage, chercher
+   TOUS les regex '| date' ou '| 20' dans les tests (pas seulement les
+   tests nommes 'historique').
+2. test-078 : 2 corrections - (a) regex des activations au nouveau format
+   (agent colonne 1 avec span, date colonne 3), (b) le point 2 dependait
+   d une ligne AMELIORATION reelle purgeable par le plafond 150 -> passer
+   par une FIXTURE au nouveau format (robuste a la purge).
+3. REGISTRE : ne JAMAIS declarer un usage d un outil VERROUILLE dont on a
+   ete BLOQUE (test-037 : seule la carte janus declare tester-lancer-
+   non-regression). J ai retire la declaration erronee de Morpheus.
+4. AVERTISSEMENTS PREEXISTANTS a ne pas corriger en passant : docs
+   externes non-ASCII (amelioration-philosophie.md, analyse-externe.md) et
+   evaluer-structure avec chemins obsoletes (pense-betes/regles-immuables
+   vs agents/regles-immuables) - deja au HEAD.
+
+## Lecon 2026-08-19 (controle final chronometre v0.1.0 + integration v0.5.16)
+
+**Contexte** : controle final de la chaine Vulcain (construction) ->
+Morpheus (garde-fou) -> Janus (controle). Mission : duree des
+interventions d agents (chronometrer-duree + integration activation).
+
+**Corrections/enseignements** :
+1. BUG CRITIQUE PARSE DUREE (detecte par la non-regression, test-098) :
+   arreter_chrono_session faisait sortie.split("|")[1].strip() -> la
+   sortie de chronometrer-duree est 'agent | duree' SUIVIE des MESSAGES
+   POUR L AGENT sur les lignes suivantes -> le strip recuperait TOUT
+   (messages inclus) -> ils etaient inseres dans le repere ### de
+   AGENTS-historique (3 lignes parasites par relais). Corrige py (prendre
+   la 1re ligne apres le |) + sh (head -1). Preuve : test-098 2 KO
+   ('table sans repere', 'ligne orpheline MESSAGES POUR L AGENT').
+2. FICHIER POLLUE PURGE : les messages parasites de la 1re activation
+   reelle (bloc morpheus 19:22) ont ete retires a la main + parentheses
+   du repere fermees. VERIFIER le fichier reel apres chaque integration.
+3. NON-REGRESSION : apres correction, 6 profils 126/126 (cartes 27,
+   outils 36, tests 23, fiches 17, docs 5, registre 18) - 0 KO.
+4. CONSIGNES MORPHEUS VERIFIEES : chemin parents[4] (chrono ecrit au bon
+   endroit), consulter-combos v0.1.1 (tri registre maintenu),
+   evaluer-processus v0.1.10 (chronometrer-duree en P0 partages -
+   transverse appele par activer-agent-principal).
+5. PREEXISTANT : valider-conformite-ascii crashe sur l emoji du
+   dictionnaire-emojis.txt (fichier legitime de l outil, 1171 octets
+   non-ASCII identiques au HEAD) - l outil devrait ignorer son propre
+   dictionnaire (a signaler, hors perimetre de la mission).
+
+## Lecon 2026-08-19 (controle final D6 - 3 boucles KO)
+
+**Contexte** : controle final de la chaine D6 (outils multi-sessions Vulcain +
+cartes <session> Buffy + pins tests Morpheus). 3 boucles KO avant verdict.
+
+**Enseignements** :
+1. **KO contextuels verrou** : test-005 p21 / test-021 p7 / test-004 p8
+   appellent valider-cartes-decision (exclusif argus/buffy/janus/vulcain) ->
+   KO quand morpheus lance, VERTS quand janus lance. Ne pas corriger les
+   tests pour ca : le verrou est le comportement attendu.
+2. **KO masques** : test-004 p7a (parcours-morpheus 0.5.0->0.5.1) non vu par
+   Morpheus car p8 (valider-cartes KO) masquait la sortie complete. Lecon :
+   verifier la SORTIE COMPLETE des tests, pas seulement le RESULTAT.
+3. **Residus session llm-4** : 3 usages vulcain hors carte (evaluer-
+   progression, valider-conformite-ascii, valider-nommage, 20:51) + outil
+   evaluer-progression non commite -> test-035/090 KO. Correctif : carte
+   partagee entre sessions, ajouter les outils aux indices vulcain (Buffy).
+4. **Le verrou proteger-verrou-habilitation suggere la MAUVAISE session**
+   (trouver_session_agent retourne le 1er bloc AGENTS.md, session-llm-4,
+   au lieu de la session la plus recente portant l agent) -> commande
+   d activation fausse quand 2 sessions ont le meme agent. A corriger par
+   Vulcain (hors perimetre du controle).
+5. **CRLF/non-ASCII residus** : rapport theemis (60 CRLF) + COMMENT-DEMARRER
+   (2 chars) casses test-047. Corriges avec corriger-fins-de-ligne + ASCII.
+
+## Lecon 2026-08-19 (controle final bug multi-sessions verrou)
+
+**Contexte** : controle de la correction Vulcain v0.4.2 (trouver_session_agent
+-> session la plus recente portant l agent).
+
+**Verification** : non-regression complete 96/96 OK (dont le NOUVEAU point 8b
+de test-056 : chaque agent de la table Sessions connues resout vers SA session
+la plus recente), 16/16 cartes CONFORME, 0 probleme processus, bumper PROPRE.
+
+**Lecon** : le verrou suggere maintenant la bonne session (simulation 2
+sessions meme agent : morpheus llm-1 21:38 vs llm-4 20:51 -> session-llm-1).
+La resolution agent -> session doit toujours passer par la recence
+(Derniere activite), jamais par l ordre des blocs du fichier.

@@ -26,7 +26,7 @@ Contexte :
 
 Cas couverts:
   1. detecter-divergences-version --version = v0.2.0
-  2. detecter-decalages-catalogue --version = v0.2.2 (v0.2.2 : sondage
+  2. detecter-decalages-catalogue --version = v0.2.3 (v0.2.3 : rapport
      selectif des commandes avec flags, goulot 12.6s -> 4.6s)
   3. detecter-divergences-version : 0 DIVERGENTE
   4. detecter-divergences-version : 0 SANS VERSION (avec .py present)
@@ -179,8 +179,8 @@ def main():
     verifier("1. detecter-divergences-version --version = v0.2.0",
              "v0.2.0" in r.stdout, r.stdout.strip())
     r = run([PYTHON, DEC_PY, "--version"])
-    verifier("2. detecter-decalages-catalogue --version = v0.2.2",
-             "v0.2.2" in r.stdout, r.stdout.strip())
+    verifier("2. detecter-decalages-catalogue --version = v0.2.3",
+             "v0.2.3" in r.stdout, r.stdout.strip())
 
     # 3-4. Divergences de versions (scan cerveau-projet)
     r = run([PYTHON, DIV_PY, "--racine", "cerveau-projet"])

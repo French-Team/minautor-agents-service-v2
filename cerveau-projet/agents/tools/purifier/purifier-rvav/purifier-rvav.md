@@ -1,6 +1,6 @@
 # purifier-rvav
 
-**Version :** 0.1.0
+**Version :** 0.1.1
 **Statut :** ebauche
 **Categorie :** Purifier
 **Proprietaire :** Vulcain (outil partage)

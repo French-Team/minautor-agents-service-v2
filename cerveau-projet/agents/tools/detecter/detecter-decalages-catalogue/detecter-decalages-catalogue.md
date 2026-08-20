@@ -1,6 +1,6 @@
 # detecter-decalages-catalogue
 
-**Version :** 0.2.2
+**Version :** 0.2.3
 **Categorie :** detecter
 **Statut :** ebauche
 
@@ -19,7 +19,7 @@ python3 detecter-decalages-catalogue.py [--sortie CHEMIN] [--version]
 
 | Option | Description |
 |---|---|
-| `--sortie CHEMIN` | Chemin du rapport genere (defaut : `rapport-detecter-decalages-catalogue-<date>.md` dans le dossier courant) |
+| `--sortie CHEMIN` | Chemin du rapport genere (defaut : `cerveau-projet/agents/vulcain/rapports/rapport-detecter-decalages-catalogue-<date>.md` - **toujours dans `cerveau-projet/`**, jamais a la racine) |
 | `--version` | Affiche la version |
 | `--aide` | Affiche cette aide |
 
@@ -49,11 +49,13 @@ Le rapport (markdown) contient :
 5. (v0.2.1) PERFORMANCE : les aides sont lancees en parallele (pool de threads) avec cache par script -- ne jamais revenir a la boucle serie (~85s), c'est le goulot de la suite anti-regression (test-028)
 6. (v0.2.1) FIABILITE DU VERDICT SOUS CHARGE : avec un pool 16 workers, la contention au demarrage des interpretes Python (lecteur reseau) fait depasser le timeout a des outils qui repondent en 6-9s seuls (ex: test-017) -> verdict instable (CONFORME seul / TIMEOUT sous charge). TIMEOUT porte a 30s pour absorber la contention : le verdict ne doit JAMAIS dependre de la charge
 7. (v0.2.2) PERFORMANCE : ne sonder le --aide QUE des commandes avec >= 1 flag dans le modele (99/165 sans flag, dont 23 commandes-test qui n ont pas de vrai --aide et s executeraient ENTIERES). Gain mesure : 12.6s -> 4.6s sur test-028.
+8. (v0.2.3) SORTIE : le rapport par defaut est TOUJOURS dans `cerveau-projet/agents/vulcain/rapports/` (robuste au CWD) - l ancien chemin relatif creait le rapport a la RACINE du projet quand l outil etait lance depuis la racine (regle : rien ne sort de `cerveau-projet/`).
 
 ## Historique
 
 | Version | Date | Description |
 |---|---|---|
+| 0.2.3 | 2026-08-19 | SORTIE CORRIGEE : rapport par defaut dans `cerveau-projet/agents/vulcain/rapports/` (chemin absolu via RACINE, makedirs) - l ancien chemin relatif creait le rapport a la RACINE du projet |
 | 0.2.1 | 2026-08-13 | PERFORMANCE (goulot test-028) : aides des commandes lancees en PARALLELE (pool de threads min(16, nb)) + CACHE par (interpreteur, script) - ~85s en serie -> ~8s |
 | 0.2.0 | 2026-08-12 | SCAN DES SOUS-COMMANDES argparse (round 11 coherence documentaire) : fusion des options des sous-commandes - corrige les faux positifs generateurs-case-convertir / generateurs-ligne |
 | 0.1.0 | 2026-08-09 | Institutionnalisation du scan ecrit par Atlas (explorations/) - deplacement vers tools/detecter/, identite, --sortie, RACINE 6 niveaux |

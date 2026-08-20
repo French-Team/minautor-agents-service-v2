@@ -179,12 +179,13 @@ def activations_amelioration(texte_historique):
                    ("ROUND D AMELIORATION", "AMELIORER", "AMELIORATION",
                     "ROUND AMELIORATION")):
             continue
-        m = re.match(r"\|\s*([0-9]{4}-[0-9]{2}-[0-9]{2})\s+[0-9:]+\s*\|"
-                     r"\s*[^|]+\|\s*([a-zA-Z-]+)\s*\|", ligne)
+        # v0.5.15 : | <span>agent</span> | heure | date | session | ...
+        m = re.match(r"\|\s*<span[^>]*>([a-zA-Z-]+)</span>\s*\|\s*[0-9:]+\s*\|"
+                     r"\s*([0-9]{4}-[0-9]{2}-[0-9]{2})\s*\|", ligne)
         if not m:
             continue
-        date = m.group(1)
-        agent = m.group(2).strip()
+        date = m.group(2)
+        agent = m.group(1).strip()
         # l agent Cerberus (bilan/reactivation) n est pas une activation
         # de mission d amelioration : ignorer les lignes Cerberus/BILAN.
         if agent.lower() == "cerberus" and ("BILAN" in ligne or "TERMINE" in ligne):
@@ -213,11 +214,20 @@ def main():
              len(dates) > 0, "nb=%d" % len(dates))
     chrono_etape("1. registre", t0)
 
-    # 2. Liste des activations d amelioration (toutes, passees + futures)
+    # 2. Liste des activations d amelioration (toutes, passees + futures).
+    # La fonction est testee sur une FIXTURE au format v0.5.15 (le fichier
+    # reel est sujet au plafond 150 qui purge les plus anciennes : exiger
+    # >= 1 ligne AMELIORATION reelle rendrait le test fragile).
     t0 = time.monotonic()
     activations = activations_amelioration(lire(HISTORIQUE))
-    verifier("2. activations d amelioration trouv\u00e9es dans l historique (>= 1)",
-             len(activations) >= 1, "nb=%d" % len(activations))
+    fixture_v0515 = ("### <span style=\"color:#ea580c\">2026-08-18 15:03</span> "
+                     "- <span style=\"color:#ea580c\">vulcain</span>\n"
+                     "| <span style=\"color:#ea580c\">vulcain</span> | 15:03 "
+                     "| 2026-08-18 | session-llm-1 | MISSION FIXTURE : "
+                     "ROUND D AMELIORATION d un outil fictif |")
+    act_fixture = activations_amelioration(fixture_v0515)
+    verifier("2. activations d amelioration detectees (fixture v0.5.15 >= 1)",
+             len(act_fixture) >= 1, "nb=%d" % len(act_fixture))
     chrono_etape("2. historique", t0)
 
     # 3. FUTUR : chaque activation >= DATE_REFERENCE a une declaration <= date
@@ -271,7 +281,8 @@ def main():
         hist_fictif = os.path.join(tmp, "historique.md")
         premiere = datetime.datetime.strptime(min(dates)[:10], "%Y-%m-%d")
         date_fictive = (premiere - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-        ligne_fictive = ("| %s 12:00 | session-llm-1 | vulcain | "
+        ligne_fictive = ("| <span style=\"color:#ea580c\">vulcain</span> "
+                         "| 12:00 | %s | session-llm-1 | "
                          "MISSION TEST-078 FICTIVE : ROUND D AMELIORATION "
                          "d un outil fictif sans checklist |" % date_fictive)
         with io.open(hist_fictif, "w", encoding="utf-8", newline="\n") as fh:

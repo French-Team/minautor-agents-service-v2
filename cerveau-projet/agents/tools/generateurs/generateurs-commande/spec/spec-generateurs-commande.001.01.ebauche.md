@@ -7,10 +7,10 @@ identite:
 # Specification -- generateurs-commande
 
 **Statut :** ebauche
-**Version :** 0.2.6
+**Version :** 0.3.1
 **Categorie :** generateurs
 **Date :** 2026-08-07
-**Historique :** v0.2.6 (booleens des combos : composer_commande accepte True/False, flag du modele gouverne, 2026-08-16) -> v0.2.4 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 0.2.4) -> v0.2.2 (creation/derniere version documentee, 2026-08-07)
+**Historique :** v0.3.1 (MULTI-SESSIONS : _session_appelante lit SESSION_LLM puis le classeur-variables, plus de session-llm-1 figee -- chaque session journalise SON agent actif, 2026-08-19) -> v0.2.6 (booleens des combos : composer_commande accepte True/False, flag du modele gouverne, 2026-08-16) -> v0.2.4 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 0.2.4) -> v0.2.2 (creation/derniere version documentee, 2026-08-07)
 
 ---
 

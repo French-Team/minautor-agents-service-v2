@@ -9,7 +9,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.5.13
+**Version** : 0.5.19
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -202,12 +202,16 @@ eviter les collisions et comprendre qui intervient en parallele.
 ### Historique (AGENTS-historique.md)
 
 ```
-| [date et heure] | [session] | [agent] | [raison] |
+#>
+### <span color=agent>YYYY-MM-DD HH:MM</span> - <span color=agent>[agent]</span> (Xmin Ys)
+| <span color=agent>[agent]</span> | HH:MM | YYYY-MM-DD | [session] | [raison] |
+###> suite de la raison enroulee a 100 caracteres...
 ```
 
-La colonne session identifie quel LLM a effectue l'action.
-
-**Format de l'horodatage** : `YYYY-MM-DD HH:MM` (date + heure precise)
+- **Agent en 1re colonne** de la table (colore), puis **heure** et **date** separees
+- **Session** : identifie quel LLM a effectue l'action
+- **Repere `###`** : `date - agent` + **duree de l'intervention** `(Xmin Ys)` ajoutee par le chronometre a la FIN de la mission (quand l agent active le suivant ou reactive Cerberus)
+- **Raison enroulee** : continuations sur lignes `###>` (max 100 caracteres) -- les parseurs la reconstituent
 
 **Regles de l'historique** :
 - **Heure incluse** : chaque entree porte la date ET l'heure (HH:MM) pour situer precisement les groupes d'interventions
@@ -276,6 +280,11 @@ La colonne session identifie quel LLM a effectue l'action.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.5.19 | 2026-08-20 | GARDE-FOU DOUBLE ACTIVATION (demande utilisateur) : detection des agents oublies + BLOCAGE de la double activation dans activer_agent(). Si un agent autre que Cerberus est encore actif dans la session, l activation d un AUTRE agent est REFUSEE (return 1) sauf avec --forcer. L auto-reactivation (meme agent) et la reactivation de Cerberus restent toujours autorisees. Logique : agent_actuel=Cerberus->autoriser / cible=Cerberus->autoriser / cible=actuel->avertissement / cible!=actuel+forcer->avertissement+autoriser / cible!=actuel->BLOQUER. |
+| 0.5.17 | 2026-08-19 | TOKENS INTEGRES (demande utilisateur) : activer/reactiver appellent `analyser-tokens --snapshot` (mode hybride : API TOKENS_SESSION si fournie, sinon estimation locale), stockent le snapshot de debut dans le chrono (--tokens), calculent la conso de l intervention par difference au passage de relais, et l affichent au repere `###` : `(9min 11s, tokens: 12.4k env / 8.2k recus)`. |
+| 0.5.16 | 2026-08-19 | CHRONOMETRE INTEGRE (demande utilisateur) : activer / reactiver appellent `chronometrer-duree` (arreter le chrono de l agent precedent, demarrer celui du nouvel agent) et ajoutent la duree de l intervention au repere `### <date> - <agent> (Xmin Ys)` dans AGENTS-historique. Nouvel outil `chronometrer/chronometrer-duree` (traces/chronos.jsonl), assigne a Vulcain (c6). |
+| 0.5.15 | 2026-08-19 | FORMAT HISTORIQUE RESTRUCTURE (demande utilisateur) : table `| agent | heure | date | session | raison |` (agent en 1re colonne, heure et date separees) + raison enroulee a 100 caracteres en continuations `###>`. Les 4 parseurs (lire-activite-recente, evaluer-processus, purifier-rvav, mettre-a-jour-readme) adaptes + migration des 150 entrees. |
+| 0.5.14 | 2026-08-19 | FORMAT HISTORIQUE SUPER LISIBLE (demande utilisateur) : chaque entree = bloc `#>` + ligne `### <date> - <agent>` (couleur HTML fixe PAR AGENT, repere humain) + ligne de table `| date | session | agent | raison |` INTACTE (format machine exigee par lire-activite-recente et evaluer-processus) + continuations en lignes `###>` decalees. Purge anti-accumulation adaptee (ENTREE_HISTORIQUE_RE reconnait `### 20`). |
 | 0.5.13 | 2026-08-18 | PARITE SH COMPLETE : argus et gardien ajoutes aux 3 case statements du sh (role, fiche, corrections) - ils etaient dans le dictionnaire AGENTS du py et dans AGENTS.md mais ABSENTS du sh (signalement Janus mission branchement-chiron jamais corrige, hermes seul avait ete ajoute v0.5.12). Garde-fou cree par Morpheus (test-092-parite-agents-activation) qui compare py / sh / AGENTS.md dans les deux sens + preuve negative. |
 | 0.5.12 | 2026-08-18 | CHIRON BRANCHE A L ACTIVATION : agent Chiron (educateur des agents, 16e agent cree 2026-08-17) ajoute au dictionnaire AGENTS du py + aux 3 case statements du sh (role, fiche, corrections) - il etait cree (fiche, parcours, regles, AGENTS.md) mais ABSENT de la liste AGENTS, donc inactivable (meme oubli qu Argus v0.5.8). Signale : le sh etait en retard (argus, gardien, hermes absents des case statements). |
 | 0.5.11 | 2026-08-17 | CORRECTION MESSAGE TROMPEUR : le rappel apres activer disait "reactiver Cerberus si activation directe" (a induit des missions ecrites avec reactiver Cerberus alors que la carte dit Activer Janus) - remplace par la REGLE RELEVE MEME ROUND : activer le maillon suivant selon SA carte, seul le DERNIER maillon reactive Cerberus avec le bilan consolide. |

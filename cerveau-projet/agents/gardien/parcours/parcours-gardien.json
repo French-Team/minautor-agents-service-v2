@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-gardien",
   "agent": "gardien",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions du Gardien, agent de la securite du marbre : relecture -> verification de l integrite des zones protegees (proteger-verrou-marbre) -> proposition de modification (proteger-modifier-marbre, autorisation utilisateur obligatoire) -> lecon et rapport. Le Gardien est le SEUL agent habilite a proposer la modification d une zone gravee dans le marbre : il propose, l UTILISATEUR valide, il execute.",
   "version_precedente": "0.1.1"
@@ -260,7 +260,7 @@
      "type": "outil"
     }
    ],
-   "message": "MISSION DU MARBRE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan (marbre verifie, modification proposee/validee/executee, journal, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-llm-1 janus '<raison>'. Janus verifie l etat du marbre (proteger-verrou-marbre --tous) puis reactive Cerberus avec son verdict.",
+   "message": "MISSION DU MARBRE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan (marbre verifie, modification proposee/validee/executee, journal, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. Janus verifie l etat du marbre (proteger-verrou-marbre --tous) puis reactive Cerberus avec son verdict.",
    "titre": "FIN - Activer Janus (second controle)",
    "type": "fin"
   },

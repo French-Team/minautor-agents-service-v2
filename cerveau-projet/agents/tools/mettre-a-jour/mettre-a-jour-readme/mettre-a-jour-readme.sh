@@ -1,7 +1,7 @@
 #!/bin/bash
 # mettre-a-jour-readme.sh
 # Outil pour corriger le README afin qu'il reflete l'etat reel du projet
-# Version : 0.4.2
+# Version : 0.4.3
 # Statut : ebauche
 # Proprietaire : Clio (agent dedie au README)
 
@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.4.2"
+VERSION="0.4.3"
 STATUT="ebauche"
 README="README.md"
 HISTORIQUE="AGENTS-historique.md"
@@ -208,7 +208,9 @@ compter_total_outils() {
 # Lire les N dernieres interventions de l'historique (diagnostic uniquement)
 lire_journal() {
     local n="${1:-10}"
-    grep '^| 20' "$HISTORIQUE" 2>/dev/null | head -n "$n"
+    # v0.4.3 : les entrees commencent par '| <span' (agent colore en
+    # 1re colonne, format v0.5.15 de l historique)
+    grep '^| <span' "$HISTORIQUE" 2>/dev/null | head -n "$n"
 }
 
 # Verifier l'etat reel et comparer avec le README

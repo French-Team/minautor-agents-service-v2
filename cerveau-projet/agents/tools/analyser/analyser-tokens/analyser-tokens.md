@@ -7,7 +7,7 @@ identite:
 # analyser-tokens
 
 **Categorie** : Analyser
-**Version** : 0.1.0
+**Version** : 0.1.2
 **Statut** : ebauche
 
 ---
@@ -45,7 +45,7 @@ sinon `--fenetre-total` (defaut 200 000).
 python3 analyser-tokens.py
 
 # Avec compteurs API reels (metadonnees de session presentes)
-python3 analyser-tokens.py --session session-llm-1
+python3 analyser-tokens.py --session session-llm-1   # ex. ; chaque session utilise LA sienne
 
 # Fenetre de contexte differente
 python3 analyser-tokens.py --fenetre-total 128000
@@ -77,7 +77,9 @@ python3 analyser-tokens.py --version
 ## Sortie
 
 ```
-=== ANALYSE TOKENS DE LA SESSION session-llm-1 ===
+=== ANALYSE TOKENS DE LA SESSION <session> ===
+# (multi-sessions v0.1.2 : --session OU variable SESSION_LLM, sinon premiere
+# session du classeur - plus de session-llm-1 figee)
 Tokens ENVOYES       : 45000
 Tokens RECUS         : 12000
 Tokens TOTAL         : 57000
@@ -108,4 +110,6 @@ outil, test, script temp) - documentee dans le protocole correspondant.
 
 | Version | Date | Description |
 |---|---|---|
+| 0.1.2 | 2026-08-19 | MULTI-SESSIONS (D6) : la session par defaut privilegie la variable SESSION_LLM, sinon la premiere session du classeur, sinon session-llm-1 en secours -- chaque LLM analyse SA session. |
+| 0.1.1 | 2026-08-19 | MODE MACHINE --snapshot : JSON cumulatif {envoyes, recus, fiable, source} sur une ligne (difference entre deux snapshots = conso d une intervention). Integre a activer-agent-principal : conso par agent affichee au repere ### de AGENTS-historique (tokens: Xk env / Yk recus). |
 | 0.1.0 | 2026-08-15 | Creation : modele hybride (registres locaux + compteurs API), encombrement de la fenetre |

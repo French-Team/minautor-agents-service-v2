@@ -1,0 +1,113 @@
+%% Carte de decision de janus (parcours v0.5.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1{"Mission"}
+    c10(["FIN - Reactiver Cerberus"])
+    c11["Ecrire la mission de controle AVANT"]
+    c12["Lister les fichiers par statut"]
+    c13["Verifier la boucle RVAV"]
+    c14["Detecter les erreurs de statut"]
+    c15["Verifier les liens"]
+    c16{"Verdict statut : changer ?"}
+    c17["Changer le statut (apres validation)"]
+    c18["Ecrire la mission de controle AVANT"]
+    c19["Lire l'ancienne version"]
+    c2["Ecrire la mission de controle AVANT"]
+    c20["Lire la nouvelle version"]
+    c21["Verifier les impacts"]
+    c22["Lancer le combo controle-modification"]
+    c27{"Mission hors parcours"}
+    c28["Activer l'agent habilite"]
+    c29(["Signaler le besoin"])
+    c29b{"Besoin d outil ?"}
+    c29c["Creer l outil temporaire"]
+    c29d(["FIN - Outil temporaire"])
+    c3["Lire la documentation"]
+    c30(["FIN - Delegation"])
+    c31["Activer Themis pour auditer"]
+    c32(["FIN - Retour de Themis avec son rapport"])
+    c33["Verifier l etat des fichiers agents"]
+    c34["Enregistrer mes usages d outils"]
+    c4["Verifier les tests"]
+    c5["Lancer le combo controle-outil"]
+    c8{"Verdict du controle"}
+    c9["Lecons et retour"]
+    c9b{"Ameliorations possibles de mon fonctionnement ?"}
+    c9c["Lancer le generateur d amelioration"]
+    c9d["Activer l'agent habilite pour l'amelioration"]
+    c9e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c9f{"Defaut signale dans un rapport ?"}
+    c9g["Activer l'agent habilite pour reparer le defaut"]
+    cT1["Lire le protocole-controle-trio"]
+    cT10(["FIN - Renvoyer rapport a minerve"])
+    cT2{"Quel agent du trio a termine ?"}
+    cT3{"Controle du livrable athena (pense-bete)"}
+    cT4{"Controle du livrable promethee (spec)"}
+    cT5{"Controle du livrable minerve (todo)"}
+    cT6(["FIN - Activer promethee"])
+    cT7(["FIN - Activer minerve"])
+    cT8(["FIN - Renvoyer rapport a athena"])
+    cT9(["FIN - Renvoyer rapport a promethee"])
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c1
+    c0e --> c0c
+    c1 -- "outil" --> c2
+    c1 -- "statut" --> c11
+    c1 -- "modification" --> c18
+    c1 -- "autre" --> c27
+    c1 -- "sante" --> c33
+    c1 -- "trio" --> cT1
+    c11 --> c12
+    c12 --> c13
+    c13 --> c14
+    c14 --> c15
+    c15 --> c16
+    c16 -- "CHANGER" --> c17
+    c16 -- "CORRECT" --> c9
+    c17 --> c9
+    c18 --> c19
+    c19 --> c20
+    c2 --> c3
+    c20 --> c21
+    c21 --> c22
+    c22 --> c8
+    c27 -- "OUI" --> c28
+    c27 -- "NON" --> c29b
+    c27 -- "audit" --> c31
+    c28 --> c30
+    c29b -- "TEMPORAIRE" --> c29c
+    c29b -- "DURABLE" --> c29
+    c29c --> c29d
+    c3 --> c4
+    c31 --> c32
+    c33 --> c8
+    c34 --> c10
+    c4 --> c5
+    c5 --> c8
+    c8 -- "OUI" --> c9
+    c8 -- "NON" --> c9
+    c9 --> c9f
+    c9b -- "OUI" --> c9c
+    c9b -- "NON" --> c34
+    c9c --> c9d
+    c9d --> c9e
+    c9e --> FIN-APPELANT
+    c9f -- "OUI" --> c9g
+    c9f -- "NON" --> c9b
+    c9g --> c9e
+    cT1 --> cT2
+    cT2 -- "athena" --> cT3
+    cT2 -- "promethee" --> cT4
+    cT2 -- "minerve" --> cT5
+    cT3 -- "OUI" --> cT6
+    cT3 -- "NON" --> cT8
+    cT4 -- "OUI" --> cT7
+    cT4 -- "NON" --> cT9
+    cT5 -- "OUI" --> c34
+    cT5 -- "NON" --> cT10
