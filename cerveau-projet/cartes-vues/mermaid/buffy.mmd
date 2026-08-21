@@ -1,4 +1,4 @@
-%% Carte de decision de buffy (parcours v0.5.1)
+%% Carte de decision de buffy (parcours v0.5.4)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -41,7 +41,8 @@ flowchart TD
     c27b{"Retour de Themis recu ?"}
     c28["Lancer le combo sante-tableaux"]
     c3["Verifier la structure"]
-    c31["Activer Vulcain (outil)"]
+    c31(["FIN - Activer Vulcain (outil)"])
+    c31b(["FIN - Activer Morpheus (tests)"])
     c32["Gerer les sous-missions"]
     c33{"Mission hors parcours"}
     c34["Activer l'agent habilite"]
@@ -65,11 +66,14 @@ flowchart TD
     c8a["Activer Themis pour auditer ma mission"]
     c8b{"Retour de Themis recu ?"}
     c9["Lire le fichier"]
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0e
     c0b -- "NON" --> c0
     c0c --> c0d
-    c0d --> c1
+    c0d --> cU1
     c0e --> c0c
     c1 -- "creer" --> c2
     c1 -- "modifier" --> c9
@@ -100,6 +104,7 @@ flowchart TD
     c16 -- "pense-bete" --> c17
     c16 -- "outil" --> c31
     c16 -- "non" --> c8a
+    c16 -- "tests" --> c31b
     c17 --> c8a
     c18 --> c19
     c19 --> c20
@@ -119,7 +124,6 @@ flowchart TD
     c27b -- "NON" --> c27b
     c28 --> c8a
     c3 --> c4
-    c31 --> c8a
     c32 --> c33
     c33 -- "sous-mission" --> c32
     c33 -- "autre-agent" --> c34
@@ -143,3 +147,6 @@ flowchart TD
     c8b -- "OUI" --> c8
     c8b -- "NON" --> c8b
     c9 --> c10
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

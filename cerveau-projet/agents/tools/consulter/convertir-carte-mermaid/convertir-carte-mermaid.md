@@ -83,5 +83,9 @@ exiger 0 ecart.
   presence du noeud `START`, balises connues, cibles d aretes connues.
 - Le rendu SVG est autonome (aucun `node`, aucune bibliotheque) : il se
   visualise dans n importe quel navigateur ou visionneuse d images.
+- Un agent peut avoir plusieurs parcours (ex: socrate + ses sous-parcours
+  revision-*) : chaque parcours a SON fichier de sortie, nomme depuis le
+  fichier source (`<agent>.mmd` pour le principal, `<agent>-<sous>.mmd`
+  pour les sous-parcours) pour eviter toute collision.
 
-**Version** : 0.2.0
+**Version** : 0.2.1

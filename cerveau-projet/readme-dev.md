@@ -6,9 +6,9 @@ identite:
 ---
 # Cerveau-Projet -- Documentation Developpeur
 
-> Documentation technique du cerveau-projet, destinee aux developpeurs
-> qui travaillent AVEC le systeme d'agents IA. Chaque affirmation est
-> verifiable dans les sources de verite (voir section 11).
+> Je suis la documentation technique du cerveau-projet, destinee aux developpeurs
+> qui travaillent AVEC mon systeme d'agents IA. Chaque affirmation est
+> verifiable dans mes sources de verite (voir section 11).
 > Pour une presentation grand public, voir le [README.md](../README.md)
 > a la racine du projet.
 
@@ -24,20 +24,23 @@ identite:
 | **Langages** | Bash, Python, Markdown |
 | **Point d'entree** | `demarrer.md` (a lire en premier) |
 | **Fichiers racine** | `AGENTS.md` (sessions), `README.md` (public), `cerveau-projet/` (le cerveau) |
-| **Agents** | 15 agents + classeur-variables (voir section 4) |
-| **Outils** | 159 outils dans 38 categories (voir section 6) |
-| **Cartes de decision** | 15 parcours JSON (voir section 5) |
+| **Agents** | 16 agents + classeur-variables (voir section 4) |
+| **Outils** | 164 outils dans 39 categories (voir section 6) |
+| **Cartes de decision** | 16 parcours JSON (voir section 5) |
+| **Tests** | 97 tests de non-regression |
+| **Protocoles** | 36 protocoles |
+| **Regles** | 75 regles immuables |
 
 ---
 
 ## 2. Concept : le cerveau-projet
 
-Le cerveau-projet est une **structure de travail persistante** qui accompagne
-un projet de developpement. Il organise le travail, impose des regles,
-fournit des outils, et est anime par des agents IA ayant chacun un role
+Je suis une **structure de travail persistante** qui accompagne
+un projet de developpement. J'organise le travail, j'impose des regles,
+je fournis des outils, et je suis anime par des agents IA ayant chacun un role
 specifique.
 
-**Principe fondateur** : le cerveau evolue dans un projet et se copie dans
+**Mon principe fondateur** : je evolue dans un projet et je me copie dans
 le suivant, de plus en plus performant (plus d'agents, plus d'outils, plus
 de rigueur).
 
@@ -54,7 +57,7 @@ projet/
     |   |-- [agent]/[agent].md   # Fiche de chaque agent
     |   |-- [agent]/corrections.md  # Corrections et lecons de l'agent
     |   |-- regles-immuables/    # Regles non negociables + protocoles
-    |   `-- tools/               # Boite a outils (159 outils)
+    |   `-- tools/               # Boite a outils (164 outils)
     |-- pense-betes/             # Idees, specs, todos
     |-- recherches-web/          # Historique des recherches
     `-- exemples/                # Tests et exemples d'utilisation
@@ -110,7 +113,7 @@ au milieu.
 
 ### 3.4 Lancer plusieurs LLM en parallele
 
-Le systeme est **multi-session** : plusieurs LLM peuvent travailler sur le
+Je suis **multi-session** : plusieurs LLM peuvent travailler sur le
 meme projet. Chaque LLM s'identifie -> obtient SA session (`session-llm-N`)
 -> demarre comme Cerberus. Le cycle se deroule DANS la session :
 `activer <session> <agent> <raison>` puis `reactiver <session> <raison>
@@ -148,6 +151,7 @@ Source : `AGENTS.md` (liste des agents) + chaque fiche `[agent].md`.
 | **Hermes** | Agent de la langue - orthographe, vocabulaire, fautes | Correction orthographique, veille vocabulaire |
 | **Gardien** | Gardien du marbre - securite du code (zones protegees) | Modification de zone marbre (porte du marbre) |
 | **Argus** | Detecteur de contradictions - cases, regles, protocoles, historique git | Doute sur la coherence des regles / protocoles / cases |
+| **Chiron** | Educateur des agents - formation continue | Changements de regles/protocoles/outils |
 
 > **Note** : le dossier `cerveau-projet/agents/classeur-variables/` est un
 > agent-stockage (variables partagees), pas un agent d'action.
@@ -180,8 +184,9 @@ l'outil `guider-parcours` :
 python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py <chemin-du-parcours-json>
 ```
 
-**13 parcours existants** : athena, atlas, buffy, cerberus, clio, hermes,
-hygie, janus, minerve, morpheus, promethee, themis, vulcain.
+**16 parcours existants** : athena, atlas, buffy, cerberus, clio, hermes,
+hygie, janus, minerve, morpheus, promethee, themis, vulcain + parcours de
+demarrage et parcours systeme.
 
 ### 5.3 Structure d'une case
 
@@ -212,10 +217,10 @@ Chaque case porte les indices exacts a appliquer :
 
 ## 6. Les outils du cerveau
 
-Boite a outils partagee, organisee par **action** (chaque dossier = ce que
+Ma boite a outils partagee, organisee par **action** (chaque dossier = ce que
 fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 
-**159 outils dans 38 categories** :
+**164 outils dans 39 categories** :
 
 | Categorie | Nb | Exemples |
 |---|---|---|
@@ -224,10 +229,11 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Analyser | 9 | analyser-dependances, analyser-fonctions, analyser-io-tests, analyser-performance-tests, analyser-round, analyser-structure, analyser-tokens, analyser-workers, analyser-noms-maj |
 | Cartographier | 1 | cartographier-parcours |
 | Changer | 1 | changer-statut |
+| Chronometrer | 1 | chronometrer-duree |
 | Combos | 21 | combos-moteur, combo-maj-readme, combos-analyse-projet |
 | Condenser | 1 | condenser-fichier |
 | Configurer | 1 | configurer-environnement |
-| Consulter | 1 | consulter-lecons |
+| Consulter | 3 | consulter-lecons, consulter-combos |
 | Copier | 2 | copier-dossier, copier-fichier |
 | Corriger | 7 | corriger-accents-zones-sensibles, corriger-fins-de-ligne, corriger-noms-maj, corriger-nommage |
 | Creer | 4 | creer-fichier, creer-remplir-* |
@@ -237,13 +243,13 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Ecrire | 1 | ecrire-fichier |
 | Editer | 3 | editer-fichier, editer-parcours |
 | Enregistrer | 2 | enregistrer-usage-outil, enregistrer-lecon |
-| Evaluer | 6 | evaluer-agents, evaluer-coherence, evaluer-processus, evaluer-rating |
+| Evaluer | 7 | evaluer-agents, evaluer-coherence, evaluer-processus, evaluer-rating |
 | Executer | 1 | executer-script-temporaire (ENTONNOIR) |
 | Generateurs | 10 | generateurs-commande, generateurs-amelioration |
 | Gerer | 1 | gerer-sous-mission |
 | Guider | 1 | guider-parcours |
 | Inserer | 1 | inserer-contenu-fichier |
-| Lire | 4 | lire-fichier, lire-activite-recente |
+| Lire | 5 | lire-fichier, lire-activite-recente |
 | Lister | 8 | lister-agents, lister-outils |
 | Mettre a jour | 2 | mettre-a-jour-readme, mettre-a-jour-versions |
 | Migrer | 2 | migrer-identite, migrer-cases-relecture |
@@ -268,7 +274,7 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 - **ENTONNOIR obligatoire** : tout script temporaire passe par
   `executer-script-temporaire` avant execution (normalisation BOM/CRLF/accents +
   controle compilation + protection de sortie LF) - jamais de `python3` direct
-  sur un script de `tmp-<agent>/` (protocole-creation-scripts-temporaires v0.2.10).
+  sur un script de `tmp-<agent>/`.
 
 ---
 
@@ -319,7 +325,7 @@ Source : `cerveau-projet/agents/regles-immuables/general/rvav-workflow.md`.
 
 ### 9.1 La suite de non-regression
 
-- **46 tests** organises en series thematiques (a, b, c, d, e), lances en
+- **97 tests** organises en series thematiques (a, b, c, d, e), lances en
   **parallele** sur un pool de workers (les garde-fous globaux tournent en
   serie apres le pool).
 - **Chrono** : mesure le temps total, compare au temps de reference, met a
@@ -351,7 +357,7 @@ bilan_chrono).
 
 ## 10. L'auto-amelioration
 
-Le systeme s'auto-ameliore en continu :
+Je m'auto-ameliore en continu :
 
 ### 10.1 Cycle d'apprentissage des agents
 
@@ -399,9 +405,9 @@ generateurs-amelioration/themes-amelioration.json`.
 | `cerveau-projet/index-cerveau.md` | Point d'entree du cerveau |
 | `cerveau-projet/agents/index-agents.md` | Index des agents |
 | `cerveau-projet/agents/tools/index-tools.md` | Index des outils |
-| `cerveau-projet/agents/regles-immuables/` | Regles, protocoles, RVAV |
+| `cerveau-projet/agents/regles-immuables/` | 36 protocoles + 75 regles |
 | `cerveau-projet/agents/classeur-variables/` | Variables partagees |
-| `cerveau-projet/agents/<agent>/parcours/` | Cartes de decision (12 JSON) |
+| `cerveau-projet/agents/<agent>/parcours/` | 16 cartes de decision (JSON) |
 | `cerveau-projet/agents/clio/version-readme.txt` | Version du README |
 | `cerveau-projet/agents/clio/statut-projet.txt` | Statut du projet |
 

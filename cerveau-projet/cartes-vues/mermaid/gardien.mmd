@@ -1,4 +1,4 @@
-%% Carte de decision de gardien (parcours v0.2.1)
+%% Carte de decision de gardien (parcours v0.2.4)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -21,10 +21,13 @@ flowchart TD
     c7["Lecon + enregistrer mes usages"]
     c8["Enregistrer mes usages d outils"]
     c9(["FIN - Activer Janus (second controle)"])
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0c
     c0b -- "NON" --> c0
-    c0c --> c1
+    c0c --> cU1
     c1 -- "verifier" --> c2
     c1 -- "proposer" --> c3
     c1 -- "autre" --> c29
@@ -45,3 +48,6 @@ flowchart TD
     c6 --> c7
     c7 --> c8
     c8 --> c9
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

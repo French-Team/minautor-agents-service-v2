@@ -1,7 +1,7 @@
 {
  "parcours": {
   "nom": "parcours-chiron",
-  "version": "0.3.1",
+  "version": "0.3.4",
   "description": "Parcours de Chiron (educateur des agents) : analyse fiches/corrections/regles/cartes pour detecter les incoherences nuisant a l intelligence operationnelle des agents.",
   "case_depart": "c0"
  },
@@ -293,9 +293,9 @@
      "type": "regle"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/chiron/corrections.md --all"
     },
@@ -347,7 +347,7 @@
      "type": "regle"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : je termine ma mission et ACTIVE JANUS (controle) avec le rapport et le verdict. COMMANDE EXACTE (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. Janus controle puis REACTIVE Cerberus avec son verdict."
+   "message": "CHAINE BOUT-EN-BOUT : je termine ma mission et ACTIVE JANUS (controle) avec le rapport et le verdict. COMMANDE EXACTE (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. Janus controle puis REACTIVE Cerberus avec son verdict. MESSAGE DE RELAIS A L AGENT SUIVANT : quand tu es active, COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte pour continuer la boucle. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon de la chaine."
   },
   "c0c": {
    "titre": "Relu : fiche et corrections memorisees",
@@ -358,7 +358,7 @@
      "type": "regle"
     }
    ],
-   "suivant": "c1"
+   "suivant": "cU1"
   },
   "c0e": {
    "type": "action",
@@ -418,10 +418,10 @@
      "type": "outil"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/chiron/corrections.md --all",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil"
     }
    ],
@@ -483,6 +483,56 @@
      "vers": "c18"
     }
    ]
+  },
+  "cU1": {
+   "titre": "Probleme avec un outil en cours de mission ?",
+   "type": "question",
+   "question": "As-tu un probleme avec un outil (erreur de commande, fonctionnement oublie, outil qui ne marche pas) ? OUI -> COMPRENDRE L OUTIL ; NON -> je continue ma mission.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : probleme avec un outil -> je ne lis PAS le code : le mode d emploi est dans le .md (case COMPRENDRE L OUTIL)."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "cU2"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c1"
+    }
+   ]
+  },
+  "cU2": {
+   "titre": "COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo",
+   "type": "action",
+   "message": "Ne PAS lire le code de l outil : le mode d emploi est dans le .md du meme dossier (agents/tools/<categorie>/<outil>/<outil>.md). 1) Lire le .md de l outil (contrat, Pattern 9). 2) Verifier si un combo existe pour cette action avec consulter-combos ; si oui, l utiliser. 3) Sinon, utiliser generateurs-commande pour generer la commande exacte (ne pas l ecrire en dur). 4) Relancer l outil avec la commande correcte.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : le .md est le mode d emploi (Pattern 9) - je le lis AVANT de re-executer l outil."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-combos/consulter-combos.md",
+     "raison": "Verifier si un combo existe pour cette action (si oui, l utiliser)."
+    },
+    {
+     "type": "outil",
+     "catalogue": "generateurs-commande",
+     "nom": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande <outil> --reponses ..."
+    }
+   ],
+   "suivant": "cU3"
+  },
+  "cU3": {
+   "titre": "FIN - Reprendre ma mission",
+   "type": "fin",
+   "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
   }
  }
 }

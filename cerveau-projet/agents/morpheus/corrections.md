@@ -4587,3 +4587,17 @@ activer-agent-principal (duree des interventions d agents).
   session llm-4, lecture seule du compteur de lecons). Lecon : quand un
   nouvel outil lit la BDD des lecons, le garde-fou test-090 doit etre
   mis a jour en meme temps que l outil.
+
+## [LECON] 2026-08-21 -- GARDE-FOU v0.5.22 : ADAPTATION DES TESTS AU RELAIS DE CHAINE (Morpheus)
+
+**Contexte** : Option A validee (retour Pattern 8) - le garde-fou v0.5.22 (Vulcain) autorise le relais de chaine (activation directe du maillon suivant avec avertissement). Ma mission : adapter les tests de non-regression a la relaxation + verifier les test-XXX pinnant l ANCIEN blocage (BLOQUER sauf --forcer).
+
+**Corrections** :
+1. **test-099 reecrit (0.1.0 -> 0.2.0)** : le BROUILLON attendait 1) un message literal 'single-session' et 2) une option --multi-session avec reactivation auto (2 attentes inexistantes dans l outil). Reecrit pour les 6 cas REELS du garde-fou v0.5.22 : activation depuis Cerberus (sans avertissement), auto-reactivation (avertissement agent oublie), relais de chaine (avertissement relais + AUTORISEE Pattern 8), reactivation Cerberus toujours autorisee, --forcer conserve, chaine complete bout-en-bout (tous rc=0). Environnement reinitialise a 'Cerberus actif' (la copie du template portait l etat reel = morpheus actif). Ajoute aux profils 'outils' et 'tests' de profils-tests.json.
+2. **test-092 (9/9)** : REPARATION IMMEDIATE (hors mission) - parite py/sh cassee : .py avait 'chiron' COLLE sur la ligne 'argus' (regex cle-debut-ligne ne le captait pas) et .sh n avait PAS socrate. Corrige : chiron sur sa propre ligne dans le dict AGENTS + socrate ajoute aux 3 fonctions du .sh + couleur.
+3. **test-098 (7/7)** : REPARATION - le test pinnait l ANCIEN format v0.5.15 (#> + <span> + tables) mais le format reel est v0.6.1 timeline (## jour / ### agent / - HH:MM | id | raison, demande utilisateur session->id). Reecrit le parseur pour le format reel + entree historique 20:32 du 20/08 reclasssee (ordre decroissant).
+4. **test-005 (27/28)** : pins de carte atlas obsoletes (version 0.5.1 -> 0.5.3 bumpee par Buffy pour la case COMPRENDRE L OUTIL + 12 -> 13 commandes en dur avec cU2 + sequences de navigation avec le NON cU1). Le KO restant p21 (valider-cartes-decision) est CONTEXTUEL : verrou habilite argus/buffy/janus/vulcain, pas morpheus - KO preexistant documente (redevient vert quand janus lance la non-regression finale).
+
+**Validations** : test-099 6/6, test-092 9/9, test-098 7/7, test-005 27/28 (p21 contextuel verrou), test-056 18/18, test-017/028/041 OK, evaluer-processus 0 probleme, RVAV ASCII 0 CRLF 0.
+
+**Lecon** : (1) un test BROUILLON qui anticipe des fonctionnalites inexistantes doit etre reecrit pour tester l etat REEL de l outil (les 6 cas du garde-fou) plutot que corrige a la marge. (2) Le template AGENTS.md copie par les tests porte l etat REEL (agent actif courant) - reinitialiser a Cerberus pour les tests de cas nominal. (3) Une case ajoutee par Buffy dans les cartes (cU2 comprendre l outil) ajoute une commande en dur -> les tests qui pinnent les commandes des cartes doivent etre mis a jour en meme temps que les cartes (meme regle que les pins de version).

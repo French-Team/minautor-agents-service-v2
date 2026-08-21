@@ -81,7 +81,7 @@
      "type": "regle"
     }
    ],
-   "suivant": "c1",
+   "suivant": "cU1",
    "titre": "LIRE LA DOCUMENTATION DE L OUTIL avant utilisation",
    "type": "action"
   },
@@ -384,9 +384,9 @@
      "type": "outil"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/buffy/corrections.md --all"
     },
@@ -471,7 +471,7 @@
    "type": "action"
   },
   "c15e": {
-   "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
+   "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c8 (FIN - Activer Janus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
    "suivant": null,
    "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
    "type": "fin"
@@ -489,6 +489,10 @@
     {
      "reponse": "non",
      "vers": "c8a"
+    },
+    {
+     "reponse": "tests",
+     "vers": "c31b"
     }
    ],
    "indices": [
@@ -600,9 +604,9 @@
      "type": "outil"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/buffy/corrections.md --all"
     }
@@ -639,7 +643,7 @@
      "type": "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : creation de l'agent terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation de l'agent. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
+   "message": "CHAINE BOUT-EN-BOUT : creation de l'agent terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation de l'agent. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict. MESSAGE DE RELAIS A L AGENT SUIVANT : quand tu es active, COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte pour continuer la boucle. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon de la chaine.",
    "titre": "FIN - Activer Janus",
    "type": "fin"
   },
@@ -785,7 +789,7 @@
      "type": "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : creation du protocole terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation du protocole. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
+   "message": "CHAINE BOUT-EN-BOUT : creation du protocole terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan de la creation du protocole. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict. MESSAGE DE RELAIS A L AGENT SUIVANT : quand tu es active, COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte pour continuer la boucle. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon de la chaine.",
    "titre": "FIN - Activer Janus",
    "type": "fin"
   },
@@ -878,7 +882,7 @@
      "type": "regle"
     },
     {
-     "texte": "CHAINE COMPLETE : Vulcain -> Janus (second controle) -> Clio (README) -> Cerberus.",
+     "texte": "CHAINE COMPLETE : Vulcain -> Morpheus (tests) -> Janus (controle) -> Cerberus.",
      "type": "regle"
     },
     {
@@ -889,9 +893,9 @@
      "type": "outil"
     }
    ],
-   "suivant": "c8a",
-   "titre": "Activer Vulcain (outil)",
-   "type": "action"
+   "titre": "FIN - Activer Vulcain (outil)",
+   "type": "fin",
+   "message": "CHAINE BOUT-EN-BOUT : besoin d outil DURABLE. J ACTIVE VULCAIN (maillon de chaine) avec le bilan du besoin. COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> vulcain '<raison>'. La chaine continue : Vulcain cree/modifie l outil puis ACTIVE MORPHEUS (tests) qui ACTIVE JANUS (controle) qui REACTIVE CERBERUS avec le bilan consolide. MESSAGE DE RELAIS A L AGENT SUIVANT : quand tu es active, COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte pour continuer la boucle. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon de la chaine."
   },
   "c32": {
    "indices": [
@@ -999,7 +1003,7 @@
    "type": "action"
   },
   "c35": {
-   "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement - maillon de chaine, Vulcain reactive l agent precedent ; besoin de test -> Morpheus). Je ne cree rien moi-meme : je signale et j attends la mission.",
+   "message": "Mission hors perimetre : signaler le besoin a Cerberus (besoin d outil DURABLE -> activer Vulcain directement (maillon de chaine : Vulcain -> Morpheus tests -> Janus controle -> Cerberus) ; besoin de test -> Morpheus). Je ne cree rien moi-meme : je signale et j attends la mission.",
    "titre": "Signaler le besoin",
    "type": "fin"
   },
@@ -1051,7 +1055,7 @@
      "type": "regle"
     }
    ],
-   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; Vulcain reactive ensuite l agent precedent qui reprend sa mission. AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
+   "message": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN directement (maillon de chaine) pour creer l outil durable (protocole 5 fichiers) ; la chaine continue : Vulcain -> Morpheus (tests) -> Janus (controle) -> Cerberus (bilan consolide). AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
    "titre": "FIN - Outil temporaire",
    "type": "fin"
   },
@@ -1218,9 +1222,9 @@
      "type": "outil"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/buffy/corrections.md --all"
     }
@@ -1242,7 +1246,7 @@
      "type": "outil"
     }
    ],
-   "message": "CHAINE BOUT-EN-BOUT : creation terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan (fichier cree, index mis a jour, lecons ajoutees). COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict.",
+   "message": "CHAINE BOUT-EN-BOUT : creation terminee et validee (RVAV). J ACTIVE JANUS (second controle) avec le bilan (fichier cree, index mis a jour, lecons ajoutees). COMMANDE EXACTE (commandes activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. La chaine continue : Janus controle ; s il signale un defaut (boucle KO, carte Janus v0.3.8 c9f/c9g), il m activera pour corriger et je l ACTIVE (commande activer) pour re-controle avec mon bilan ; sinon il REACTIVE Cerberus avec son verdict. MESSAGE DE RELAIS A L AGENT SUIVANT : quand tu es active, COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte pour continuer la boucle. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon de la chaine.",
    "titre": "FIN - Activer Janus",
    "type": "fin"
   },
@@ -1317,6 +1321,74 @@
     }
    ],
    "suivant": "c0c"
+  },
+  "cU1": {
+   "titre": "Probleme avec un outil en cours de mission ?",
+   "type": "question",
+   "question": "As-tu un probleme avec un outil (erreur de commande, fonctionnement oublie, outil qui ne marche pas) ? OUI -> COMPRENDRE L OUTIL ; NON -> je continue ma mission.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : probleme avec un outil -> je ne lis PAS le code : le mode d emploi est dans le .md (case COMPRENDRE L OUTIL)."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "cU2"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c1"
+    }
+   ]
+  },
+  "cU2": {
+   "titre": "COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo",
+   "type": "action",
+   "message": "Ne PAS lire le code de l outil : le mode d emploi est dans le .md du meme dossier (agents/tools/<categorie>/<outil>/<outil>.md). 1) Lire le .md de l outil (contrat, Pattern 9). 2) Verifier si un combo existe pour cette action avec consulter-combos ; si oui, l utiliser. 3) Sinon, utiliser generateurs-commande pour generer la commande exacte (ne pas l ecrire en dur). 4) Relancer l outil avec la commande correcte.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : le .md est le mode d emploi (Pattern 9) - je le lis AVANT de re-executer l outil."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-combos/consulter-combos.md",
+     "raison": "Verifier si un combo existe pour cette action (si oui, l utiliser)."
+    },
+    {
+     "type": "outil",
+     "catalogue": "generateurs-commande",
+     "nom": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande <outil> --reponses ..."
+    }
+   ],
+   "suivant": "cU3"
+  },
+  "cU3": {
+   "titre": "FIN - Reprendre ma mission",
+   "type": "fin",
+   "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
+  },
+  "c31b": {
+   "titre": "FIN - Activer Morpheus (tests)",
+   "type": "fin",
+   "message": "CHAINE BOUT-EN-BOUT : des tests doivent etre corriges ou executes pour la suite. J ACTIVE MORPHEUS (maillon de chaine) avec le bilan. COMMANDE EXACTE (commandes activer, PAS reactiver) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> morpheus '<raison>'. La chaine continue : Morpheus teste puis ACTIVE JANUS (controle) qui REACTIVE CERBERUS avec le bilan consolide. MESSAGE DE RELAIS A L AGENT SUIVANT : quand tu es active, COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte pour continuer la boucle. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon de la chaine.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : je n execute jamais les tests moi-meme (domaine Morpheus/Janus) - j ACTIVE Morpheus qui teste puis active Janus."
+    },
+    {
+     "type": "outil",
+     "catalogue": "activer-agent-principal",
+     "nom": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> morpheus '<raison>'"
+    }
+   ]
   }
  },
  "identite": {
@@ -1329,6 +1401,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c0 guider-parcours (P0 fiche, usage reel, garde-fou test-035)",
   "nom": "parcours-buffy",
-  "version": "0.5.1"
+  "version": "0.5.4"
  }
 }

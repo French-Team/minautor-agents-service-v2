@@ -172,8 +172,8 @@ def main():
     parcours = sorted(_glob.glob(os.path.join(PROJECT_ROOT,
                                               "cerveau-projet", "agents", "*",
                                               "parcours", "parcours-*.json")))
-    verifier("4. 16 parcours existent (glob agents/*/parcours/)",
-             len(parcours) == 16, "nb=%d" % len(parcours))
+    verifier("4. 20 parcours existent (glob agents/*/parcours/)",
+             len(parcours) == 20, "nb=%d" % len(parcours))
     chrono_etape("4. 15 parcours", time.time() - t4)
 
     # 5. Outil au catalogue

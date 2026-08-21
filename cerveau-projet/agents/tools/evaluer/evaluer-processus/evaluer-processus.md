@@ -1,5 +1,5 @@
 # evaluer-processus
-**Version** : 0.1.13
+**Version** : 0.1.14
 
 Detecte les DERIVES DE PROCESSUS dans le cerveau-projet : un agent qui
 utilise un outil hors de sa carte, une mission qui finit par reactiver
@@ -110,6 +110,14 @@ Code de retour : 0 si aucun probleme, 1 sinon (utilisable en garde-fou).
   par TOUS les agents. Sans cette entree, tout agent non-vulcain qui le
   declare au registre est signale DECLARATION_FAUTIVE (faux positif verifie
   par Morpheus).
+- v0.1.14 (2026-08-21, conflit test-035/test-079 revele par Janus) :
+  resolution des ALIAS d outils via le catalogue-commandes.json (source de
+  verite). Le registre des usages porte le nom CANONIQUE (dossier reel,
+  regle test-079) tandis que les indices des cartes peuvent porter l alias
+  (convention etablie, ex : corriger-symboles -> corriger-accents-zones-
+  sensibles). Sans resolution, un usage registre au nom canonique etait
+  signale OUTIL_HORS_CARTE a tort. outils_de_la_carte ajoute le nom
+  canonique de chaque indice (aliases via le catalogue).
 - v0.1.13 (2026-08-20, FIX test missions) : ignorer les missions de test dans FIN_MISSION_ERRONEE (raisons contenant 'test' exclues). Les tests cas limites (garde-fou, double activation) font legitiment reactiver Cerberus directement.
 - v0.1.12 (2026-08-19, D6 multi-sessions) : fins_de_la_carte accepte le placeholder `<session>` OU une session concrete `session-llm-N` (l ancien format fige session-llm-1 ne fonctionnait que pour la 1re session).
 - v0.1.11 (2026-08-19, mission conso tokens) : ajout de analyser-tokens a

@@ -1,8 +1,8 @@
 {
   "combo": {
     "nom": "combo-maj-readme",
-    "description": "PETITE mise a jour du README (Pattern 3, encadre les petites corrections de compteurs) : verifier l'etat reel (mettre-a-jour-readme --verifier) -> maj des compteurs (--maj) -> verification ASCII (valider-conformite-ascii). A utiliser quand l'analyse (combos-analyse-projet) montre PEU d'ecarts (1-2 compteurs). Pour une grosse MAJ, utiliser combos-maj-readme-massive.",
-    "version": "0.1.0",
+    "description": "PETITE mise a jour du README (Pattern 3, encadre les petites corrections de compteurs) : verifier l'etat reel (mettre-a-jour-readme --verifier) -> dry-run (--dry-run) -> maj des compteurs (--maj) -> verification ASCII (valider-conformite-ascii). Le dry-run est OBLIGATOIRE avant tout --maj (regle Clio v0.2.2). A utiliser quand l'analyse (combos-analyse-projet) montre PEU d'ecarts (1-2 compteurs). Pour une grosse MAJ, utiliser combos-maj-readme-massive.",
+    "version": "0.2.0",
     "case_depart": "c1"
   },
   "cases": {
@@ -30,6 +30,28 @@
       ]
     },
     "c3": {
+      "titre": "Dry-run : preview AVANT/APRES",
+      "type": "outil",
+      "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --dry-run",
+      "sortie": "dry_run_resultat",
+      "suivant": "c3b"
+    },
+    "c3b": {
+      "titre": "Valider le dry-run ?",
+      "type": "controle",
+      "question": "Le dry-run montre-t-il des changements acceptables ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c3c"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c5"
+        }
+      ]
+    },
+    "c3c": {
       "titre": "Executer mettre-a-jour-readme --maj",
       "type": "outil",
       "commande": "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-readme/mettre-a-jour-readme.py --maj",

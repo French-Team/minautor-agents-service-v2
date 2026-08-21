@@ -2,7 +2,7 @@
 # lire-activite-recente.sh
 # Lire les N dernieres interventions des agents depuis l'historique
 # (AGENTS-historique.md) au format condense : date | session | agent | action.
-# Version : 0.1.1
+# Version : 0.1.2
 # Statut : prepare
 # Parite avec lire-activite-recente.py (meme comportement, memes resultats).
 

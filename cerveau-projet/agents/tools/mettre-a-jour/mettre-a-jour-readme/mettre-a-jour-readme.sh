@@ -1,7 +1,7 @@
 #!/bin/bash
 # mettre-a-jour-readme.sh
 # Outil pour corriger le README afin qu'il reflete l'etat reel du projet
-# Version : 0.4.3
+# Version : 0.4.4
 # Statut : ebauche
 # Proprietaire : Clio (agent dedie au README)
 
@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.4.3"
+VERSION="0.4.4"
 STATUT="ebauche"
 README="README.md"
 HISTORIQUE="AGENTS-historique.md"
@@ -32,6 +32,7 @@ afficher_aide() {
     echo ""
     echo "Options :"
     echo "  --verifier         Comparer l'etat reel au README, lister les ecarts (sans modifier)"
+    echo "  --dry-run          Preview AVANT/APRES sans ecrire (obligatoire avant --maj)"
     echo "  --maj              Corriger le texte du README (agents, outils, compteurs)"
     echo "  --journal [N]      Consulter les N dernieres interventions (diagnostic, non inscrit au README)"
     echo "  --logo CHEMIN      Inserer une image (logo) en tete du README, apres le titre H1"
@@ -42,6 +43,7 @@ afficher_aide() {
     echo ""
     echo "Exemples :"
     echo "  $0 --verifier                    # Apercu des ecarts"
+    echo "  $0 --dry-run                     # Preview AVANT/APRES"
     echo "  $0 --maj                         # Corriger le README"
     echo "  $0 --journal 5                   # 5 dernieres interventions"
     echo "  $0 --logo cerveau-projet/assets/images/logo.jpg   # Inserer un logo en tete"
@@ -277,6 +279,65 @@ verifier() {
     echo "Utilisez --maj pour corriger le texte du README."
 }
 
+# Mode dry-run : montrer le AVANT/APRES sans ecrire
+# Regle Clio : dry-run OBLIGATOIRE avant toute modification
+dry_run() {
+    local total=$(compter_total_outils)
+    echo "=== DRY-RUN (preview AVANT/APRES) ==="
+    echo ""
+    echo "Ce qui changerait avec --maj :"
+    echo ""
+
+    local changements=()
+
+    # 1. Titre boite a outils
+    local titre_actuel=$(grep -o '^## La boite a outils ([0-9]* outils)' "$README" | grep -o '[0-9]*' | head -1)
+    if [ -n "$titre_actuel" ] && [ "$titre_actuel" != "$total" ]; then
+        changements+=("Titre : '${titre_actuel} outils' -> '${total} outils'")
+    fi
+
+    # 2. Compteurs par categorie
+    for cle in $(lister_categories); do
+        local cat=$(echo "${cle:0:1}" | tr '[:lower:]' '[:upper:]')${cle:1}
+        cat=$(echo "$cat" | sed 's/Mettre-a-jour/Mettre a jour/')
+        local nb=$(compter_outils_categorie "$cle")
+        local lue=$(grep -o "\*\*${cat} ([0-9]*)\*\*" "$README" | grep -o '[0-9]*' | head -1)
+        if [ -n "$lue" ] && [ "$lue" != "$nb" ]; then
+            changements+=("${cat} : ${lue} -> ${nb}")
+        fi
+    done
+
+    # 3. Agents manquants
+    local agents_manquants=""
+    for agent in $(lister_agents_reels); do
+        if ! grep -qi "\*\*${agent}\*\*" "$README"; then
+            local nom_affichable="$(echo "${agent:0:1}" | tr '[:lower:]' '[:upper:]')${agent:1}"
+            if [ -z "$agents_manquants" ]; then
+                agents_manquants="$nom_affichable"
+            else
+                agents_manquants="${agents_manquants}, ${nom_affichable}"
+            fi
+        fi
+    done
+    if [ -n "$agents_manquants" ]; then
+        changements+=("Agents a ajouter : ${agents_manquants}")
+    fi
+
+    if [ ${#changements[@]} -eq 0 ]; then
+        echo "  [AUCUN CHANGEMENT] Le README est deja a jour."
+    else
+        local i=1
+        for chgt in "${changements[@]}"; do
+            echo "  ${i}. ${chgt}"
+            i=$((i + 1))
+        done
+    fi
+
+    echo ""
+    echo "=== FIN DRY-RUN ==="
+    echo "Pour appliquer ces changements, utilisez --maj."
+}
+
 # Corriger le README pour qu'il reflete l'etat reel
 mettre_a_jour() {
     local total=$(compter_total_outils)
@@ -503,6 +564,10 @@ main() {
                 action="verifier"
                 shift
                 ;;
+            --dry-run)
+                action="dry-run"
+                shift
+                ;;
             --maj)
                 action="maj"
                 shift
@@ -564,6 +629,9 @@ main() {
     case "$action" in
         verifier)
             verifier
+            ;;
+        dry-run)
+            dry_run
             ;;
         maj)
             mettre_a_jour

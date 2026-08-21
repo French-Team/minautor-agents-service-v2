@@ -2,37 +2,32 @@
 # -*- coding: ascii -*-
 """
 test-098-historique-format-garde-fou.py
-GARDE-FOU : le format des blocs de AGENTS-historique.md (v0.5.15, demande
-utilisateur 2026-08-19 "historique super lisible"). Chaque entree est un
-bloc lisible :
+GARDE-FOU : le format de AGENTS-historique.md (v0.6.1 timeline, v0.5.20 :
+colonne 2 = id LLM, demande utilisateur 2026-08-20 "session -> id"). Chaque
+entree est une ligne du corps de l historique :
 
-  #>
-  ### <span style="color:#...">2026-08-19 17:56</span> - <span style="color:#...">Cerberus</span>
-  | 2026-08-19 17:56 | session-llm-1 | Cerberus | Mission : ... |
-  ###> <continuations...>
-
-Contraintes verrouillees :
-  - la ligne de table '| date | session | agent | ...' reste le format
-    MACHINE intact (parseurs lire-activite-recente, evaluer-processus)
-  - le repere '###' est juste AU-DESSUS de sa table, avec la MEME date et
-    le MEME agent
-  - la couleur du repere = couleur fixe de l agent (COULEURS_PAR_AGENT du
-    .py de activer-agent-principal, extraite par regex)
-  - les lignes entre deux blocs ne sont que '#>' (bordure) ou '###>'
-    (continuation) - aucune ligne orpheline
-  - ordre decroissant des dates (plus recentes en haut)
-  - lire-activite-recente fonctionne sur le fichier (rc=0)
-  - ASCII strict (les couleurs sont des spans HTML ASCII)
+  ## YYYY-MM-DD
+  ### Agent
+  - HH:MM | id | raison
 
 Invariants verifies :
-  1. Chaque table a son repere '###' juste au-dessus, date/agent coherents.
-  2. La couleur du repere correspond a la couleur fixe de l agent.
-  3. Aucune ligne orpheline entre les blocs (seulement '#>' / '###>').
-  4. Dates en ordre decroissant (plus recente en haut).
-  5. lire-activite-recente --nombre 3 : rc=0.
+  1. Chaque entree '- HH:MM | ...' est sous un bloc jour '## YYYY-MM-DD'
+     et un bloc agent '### Agent' (le dernier '###' rencontre au-dessus).
+  2. Le nom du bloc agent est un agent connu (dans AGENTS.md / le .py).
+  3. Chaque bloc jour '## YYYY-MM-DD' contient au moins un bloc agent
+     (pas de jour vide) et les jours sont en ordre decroissant.
+  4. Les heures au sein d un bloc agent sont en ordre decroissant.
+  5. lire-activite-recente --nombre 3 : rc=0 (parseur officiel).
   6. ASCII strict sur tout le fichier.
-  7. Preuve negative : un bloc a date incoherente est detecte (copie).
+  7. Preuve negative : une entree orpheline (sans bloc agent) est detectee
+     (copie).
 
+Note : l entete du fichier (frontmatter + encart 'Activites recentes') est
+libre -- les verifications portent sur le CORPS de l historique (sections
+'## YYYY-MM-DD').
+
+Proprietaire : Morpheus (testeur dedie)
+Version : 0.2.0
 Tags: residus, garde-fou, preuve-negative, traces
 """
 import importlib.util
@@ -139,130 +134,121 @@ def lire_fichier(chemin):
         return fh.read()
 
 
-def extraire_couleurs_par_agent():
-    """Couleurs fixes par agent depuis COULEURS_PAR_AGENT du .py (regex)."""
-    texte = lire_fichier(ACTIVER_PY)
-    m = re.search(r"COULEURS_PAR_AGENT\s*=\s*\{(.*?)\n\}", texte, re.DOTALL)
-    couleurs = {}
-    if m:
-        for nom, hexa in re.findall(r'^\s*"([a-z-]+)":\s*"#([0-9a-f]{6})"',
-                                    m.group(1), re.MULTILINE):
-            couleurs[nom] = "#" + hexa
-    return couleurs
+def extraire_agents_md(texte):
+    """Agents declares dans AGENTS.md via les liens [X](cerveau-projet/agents/N/N.md)."""
+    return set(re.findall(r"\[([A-Za-z-]+)\]\(cerveau-projet/agents/[a-z-]+/[a-z-]+\.md\)",
+                          texte))
 
 
-def analyser_blocs(texte):
-    """Analyse les blocs de l historique.
+def analyser_corps(texte):
+    """Analyse le CORPS de l historique (sections '## YYYY-MM-DD').
 
-    Retourne (problemes, tables) : probleme = (ligne, message) ; tables =
-    liste de dicts {date, session, agent, repere_date, repere_agent,
-    couleur, en_tete} pour chaque ligne de table.
+    Retourne (problemes, entrees, jours) :
+      problemes : liste (ligne, message) des incoherences
+      entrees   : liste de dicts {jour, agent, heure, id, ligne}
+      jours     : liste de dicts {jour, ligne, nb_agents, nb_entrees}
     """
     lignes = texte.split("\n")
     problemes = []
-    tables = []
+    entrees = []
+    jours = []
+    jour_courant = None
+    agent_courant = None
+    dans_corps = False
     for i, ligne in enumerate(lignes):
-        # v0.5.15 : table = '| <span>agent</span> | heure | date | session | ...'
-        if not ligne.startswith("| <span"):
+        l = ligne.strip()
+        if l.startswith("## ") and len(l) >= 13 and l[3] in "0123456789":
+            # Bloc jour : ## YYYY-MM-DD (debut du corps)
+            jour = l[3:].strip()
+            if not re.match(r"^\d{4}-\d{2}-\d{2}$", jour):
+                problemes.append((i, "jour malforme: %r" % jour[:20]))
+            jour_courant = jour
+            agent_courant = None
+            dans_corps = True
+            jours.append({"jour": jour, "ligne": i, "nb_agents": 0,
+                          "nb_entrees": 0})
             continue
-        parties = ligne.split("|")
-        if len(parties) < 6:
-            problemes.append((i, "table malformee: %r" % ligne[:60]))
+        if not dans_corps:
             continue
-        magent_tab = re.search(r"<span style=\"color:(#[0-9a-f]{6})\">([^<]+)</span>",
-                               parties[1])
-        couleur = magent_tab.group(1) if magent_tab else ""
-        agent = magent_tab.group(2) if magent_tab else parties[1].strip()
-        heure = parties[2].strip()
-        date = parties[3].strip()
-        session = parties[4].strip()
-        repere_date = repere_agent = ""
-        en_tete = False
-        if i >= 1 and lignes[i - 1].startswith("### <span"):
-            repere = lignes[i - 1]
-            mdate = re.search(r">(\d{4}-\d{2}-\d{2} \d{2}:\d{2})</span>", repere)
-            magent = re.search(r"- <span style=\"color:(#[0-9a-f]{6})\">([^<]+)</span>",
-                               repere)
-            if mdate:
-                repere_date = mdate.group(1)
-            if magent:
-                repere_agent = magent.group(2)
-        else:
-            problemes.append((i, "table sans repere '###' au-dessus"))
-        if repere_date and repere_date != (date + " " + heure):
-            problemes.append((i, "date repere '%s' != table '%s %s'"
-                             % (repere_date, date, heure)))
-        if repere_agent and repere_agent != agent:
-            problemes.append((i, "agent repere '%s' != table '%s'"
-                             % (repere_agent, agent)))
-        if i >= 2 and lignes[i - 2].strip() == "#>":
-            en_tete = True
-        tables.append({"date": date, "session": session, "agent": agent,
-                       "repere_date": repere_date, "repere_agent": repere_agent,
-                       "couleur": couleur, "en_tete": en_tete, "ligne": i})
-    # lignes orphelines ENTRE les blocs (l entete avant la 1re table est
-    # libre : frontmatter, intro, etc.)
-    positions_tables = [t["ligne"] for t in tables]
-    premier = min(positions_tables) if positions_tables else None
-    for i, ligne in enumerate(lignes):
-        if premier is not None and i < premier:
-            continue  # entete libre
-        if ligne.startswith("| <span") or ligne.startswith("### <span"):
+        if l.startswith("### "):
+            agent = l[4:].strip()
+            agent_courant = agent
+            if jours and jour_courant:
+                jours[-1]["nb_agents"] += 1
             continue
-        if ligne.strip() in ("#>", "") or ligne.startswith("###>"):
-            continue
-        problemes.append((i, "ligne orpheline: %r" % ligne[:60]))
-    return problemes, tables
+        if l.startswith("- ") and jour_courant and agent_courant:
+            contenu = l[2:].strip()
+            parties = contenu.split(" | ")
+            if len(parties) >= 3:
+                heure = parties[0].strip()
+                identifiant = parties[1].strip()
+                if not re.match(r"^\d{2}:\d{2}$", heure):
+                    problemes.append((i, "heure malformee: %r" % heure))
+                entrees.append({"jour": jour_courant, "agent": agent_courant,
+                               "heure": heure, "id": identifiant, "ligne": i})
+                if jours:
+                    jours[-1]["nb_entrees"] += 1
+                continue
+        # Ligne dans le corps mais ni jour, ni agent, ni entree : orpheline
+        if jour_courant and l not in ("",) and not l.startswith("|"):
+            problemes.append((i, "ligne orpheline: %r" % l[:60]))
+    return problemes, entrees, jours
 
 
 def main():
     t0 = time.monotonic()
-    print("=== test-098 : format des blocs de AGENTS-historique (v0.5.15) ===")
+    print("=== test-098 : format des blocs de AGENTS-historique (v0.6.1) ===")
 
     if not os.path.isfile(HISTORIQUE):
         print("=== RESULTAT : 0 OK / 1 KO (historique absent) ===")
         return 1
     texte = lire_fichier(HISTORIQUE)
+    agents_md = extraire_agents_md(lire_fichier(
+        os.path.join(PROJECT_ROOT, "AGENTS.md")))
 
-    # 1. Chaque table a son repere '###' au-dessus, date/agent coherents
+    problemes, entrees, jours = analyser_corps(texte)
+
+    # 1. Chaque entree a un bloc jour et un bloc agent au-dessus
     t_debut = time.monotonic()
-    problemes, tables = analyser_blocs(texte)
-    structure_ko = [p for p in problemes if "date" in p[1] or "agent" in p[1]
-                    or "sans repere" in p[1] or "malformee" in p[1]]
-    verifier("1. chaque table a son repere '###' coherent (%d tables)"
-             % len(tables), not structure_ko,
+    structure_ko = [p for p in problemes if "orpheline" not in p[1]
+                    and "jour malforme" not in p[1]]
+    verifier("1. entrees sous bloc jour + bloc agent (%d entrees)"
+             % len(entrees), not structure_ko,
              "ko=%s" % structure_ko[:4])
-    chrono_etape("1. repere ### coherent", t_debut)
+    chrono_etape("1. structure jour/agent", t_debut)
 
-    # 2. Couleur du repere = couleur fixe de l agent
+    # 2. Les agents des blocs sont connus
     t_debut = time.monotonic()
-    couleurs = extraire_couleurs_par_agent()
-    mauvaise_couleur = []
-    for t in tables:
-        attendue = couleurs.get(t["agent"].lower(), "#334155")
-        if t["couleur"] and t["couleur"] != attendue:
-            mauvaise_couleur.append("%s ligne %d: %s != %s"
-                                    % (t["agent"], t["ligne"], t["couleur"],
-                                       attendue))
-    verifier("2. couleur du repere = couleur fixe de l agent (%d agents)"
-             % len(couleurs), not mauvaise_couleur,
-             "ko=%s" % mauvaise_couleur[:4])
-    chrono_etape("2. couleurs par agent", t_debut)
+    inconnus = sorted(set(e["agent"].lower() for e in entrees)
+                      - set(a.lower() for a in agents_md))
+    verifier("2. blocs agent connus (%d agents)" % len(agents_md),
+             not inconnus, "inconnus=%s" % inconnus[:5])
+    chrono_etape("2. agents connus", t_debut)
 
-    # 3. Aucune ligne orpheline entre les blocs
+    # 3. Jours en ordre decroissant + pas de jour vide
     t_debut = time.monotonic()
-    orphelines = [p for p in problemes if "orpheline" in p[1]]
-    verifier("3. 0 ligne orpheline entre les blocs (seulement '#>' / '###>')",
-             not orphelines, "ko=%s" % orphelines[:4])
-    chrono_etape("3. lignes orphelines", t_debut)
+    jours_liste = [j["jour"] for j in jours]
+    decroissant = all(jours_liste[k] >= jours_liste[k + 1]
+                      for k in range(len(jours_liste) - 1))
+    jours_vides = [j["jour"] for j in jours if j["nb_entrees"] == 0]
+    verifier("3. jours decroissants (%d jours), aucun vide"
+             % len(jours_liste), decroissant and not jours_vides,
+             "vides=%s" % jours_vides[:4])
+    chrono_etape("3. jours decroissants", t_debut)
 
-    # 4. Dates en ordre decroissant (plus recente en haut)
+    # 4. Heures en ordre decroissant au sein de chaque bloc agent
     t_debut = time.monotonic()
-    dates = [t["date"] for t in tables]
-    decroissant = all(dates[j] >= dates[j + 1] for j in range(len(dates) - 1))
-    verifier("4. dates en ordre decroissant (%d entrees)" % len(dates),
-             decroissant)
-    chrono_etape("4. ordre decroissant", t_debut)
+    mauvais_ordre = []
+    par_agent = {}
+    for e in entrees:
+        par_agent.setdefault((e["jour"], e["agent"]), []).append(e["heure"])
+    for cle, heures in par_agent.items():
+        if any(heures[k] < heures[k + 1] for k in range(len(heures) - 1)):
+            mauvais_ordre.append("%s/%s" % cle)
+    verifier("4. heures decroissantes par bloc agent (%d blocs)"
+             % len(par_agent), not mauvais_ordre,
+             "ko=%s" % mauvais_ordre[:4])
+    chrono_etape("4. heures decroissantes", t_debut)
 
     # 5. lire-activite-recente fonctionne sur le fichier
     t_debut = time.monotonic()
@@ -278,32 +264,29 @@ def main():
              "non_ascii=%d" % non_ascii)
     chrono_etape("6. ASCII", t_debut)
 
-    # 7. Preuve negative : un bloc a date incoherente est detecte (copie)
+    # 7. Preuve negative : une entree orpheline (sans bloc agent) est detectee
     t_debut = time.monotonic()
     preuve_ok = False
     espace = tempfile.mkdtemp(prefix="tmp-test098-")
     try:
         copie = os.path.join(espace, "historique.md")
         lignes = texte.split("\n")
-        # casser la date de la 2e table (sans toucher a son repere)
+        # Inserer une entree '- 00:00 | id | test orphelin' juste apres le
+        # 1er bloc jour, sans bloc agent au-dessus (on est sous un bloc agent
+        # existant -> on retire le nom du bloc pour rendre l entree orpheline)
         for i, l in enumerate(lignes):
-            if l.startswith("| <span") and i > 0 and lignes[i - 1].startswith("###"):
-                # | <span...>agent</span> | heure | date | session | ...
-                m = re.match(r"(\| <span[^>]*>[^<]*</span> \| )"
-                             r"(\d{2}:\d{2})( \| )(\d{4}-\d{2}-\d{2})",
-                             l)
-                if m:
-                    lignes[i] = (m.group(1) + "00:00" + m.group(3)
-                                 + "2020-01-01" + l[len(m.group(0)):])
-                    break
+            if l.startswith("- ") and i > 0 and lignes[i - 1].startswith("### "):
+                # casser : retirer le bloc agent (ligne '###' -> '#')
+                lignes[i - 1] = "# " + lignes[i - 1][4:]
+                break
         with io.open(copie, "w", encoding="utf-8", newline="\n") as fh:
             fh.write("\n".join(lignes))
         texte_copie = lire_fichier(copie)
-        problemes_copie, _ = analyser_blocs(texte_copie)
-        preuve_ok = any("date repere" in p[1] for p in problemes_copie)
+        problemes_copie, _, _ = analyser_corps(texte_copie)
+        preuve_ok = any("orpheline" in p[1] for p in problemes_copie)
     finally:
         shutil.rmtree(espace, ignore_errors=True)
-    verifier("7. preuve negative : date table != repere detectee",
+    verifier("7. preuve negative : entree sans bloc agent detectee",
              preuve_ok, "incoherence non detectee")
     chrono_etape("7. preuve negative", t_debut)
 

@@ -1,4 +1,4 @@
-%% Carte de decision de morpheus (parcours v0.5.1)
+%% Carte de decision de morpheus (parcours v0.5.4)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -36,11 +36,14 @@ flowchart TD
     c8d["Activer l'agent habilite pour l'amelioration"]
     c8e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
     c9{"Retour : qui m'a delegue ?"}
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0e
     c0b -- "NON" --> c0
     c0c --> c0d
-    c0d --> c1
+    c0d --> cU1
     c0e --> c0c
     c1 -- "tester" --> c2
     c1 -- "verifier" --> c11
@@ -77,3 +80,6 @@ flowchart TD
     c8e --> FIN-APPELANT
     c9 -- "VULCAIN" --> c20
     c9 -- "CERBERUS" --> c21
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

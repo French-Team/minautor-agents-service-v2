@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.19
+Version : 0.5.23
 Statut : prepare
 """
 
@@ -36,7 +36,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.5.19"
+VERSION = "0.5.23"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -69,6 +69,7 @@ COULEURS_PAR_AGENT = {
     "athena": "#c026d3",    # pense-betes - fuchsia
     "promethee": "#d97706",  # specs - ambre
     "minerve": "#059669",   # todos - emeraude
+    "socrate": "#a855f7",   # revision strategique - violet clair
 }
 COULEUR_DEFAUT = "#334155"
 
@@ -77,66 +78,27 @@ COULEUR_DEFAUT = "#334155"
 # son repere humain ('### <span ...>' colore). Les lignes '#>', '###>' et
 # les continuations sont attachees a l entree precedente. NB : le repere se
 # reconnait par son prefixe '### ' (aucun autre '### ' dans l historique).
-ENTREE_HISTORIQUE_RE = re.compile(r"^(?:\| <span|### )")
+# v0.5.20 : le corps et l encart affichent l ID LLM (ex: freebuff) au lieu
+# de la session (demande utilisateur : heure | agent | id | raison).
+ENTREE_HISTORIQUE_RE = re.compile(r"^- \d{2}:\d{2} \|")
 
 
 def couleur_agent(agent):
-    """Couleur HTML fixe de l agent (repere humain de l historique)."""
+    """Couleur ANSI de l agent (pour affichage terminal)."""
     return COULEURS_PAR_AGENT.get((agent or "").lower(), COULEUR_DEFAUT)
 
 
-LARGEUR_RAISON = 100  # enroulement de la raison (format v0.5.15)
+def composer_bloc_historique(timestamp, identifiant, agent, raison):
+    """Compose une ligne d entree (format v0.6.1 timeline).
 
-
-def enrouler_raison(raison, largeur=LARGEUR_RAISON):
-    """Decoupe la raison en lignes de <= largeur caracteres (aux espaces).
-    Chaque ligne source (sep. par \n) est enroulee independamment ; les
-    lignes vides sont conservees telles quelles."""
-    lignes = []
-    for src in (raison or "").split("\n"):
-        src = src.rstrip()
-        while len(src) > largeur:
-            coupure = src.rfind(" ", 0, largeur + 1)
-            if coupure <= 0:
-                coupure = largeur
-            lignes.append(src[:coupure].strip())
-            src = src[coupure:].strip()
-        lignes.append(src)
-    return lignes
-
-
-def composer_bloc_historique(timestamp, session, agent, raison):
-    """Compose le bloc markdown d une entree (format v0.5.15).
-
-    Structure (validee utilisateur 2026-08-19) :
-      #>
-      ### <date> - <agent>            (repere humain, couleur par agent)
-      | agent | heure | date | session | raison |   (ligne machine)
-      ###> <raison enroulee...>       (suite de la raison, debuts decales)
-      (le '#>' de l entree suivante sert de bordure basse)
-
-    NB : le timestamp 'AAAA-MM-JJ HH:MM' est decoupe en heure + date pour
-    la table ; l agent est colore dans SA cellule (colonne 1) ; la raison
-    est enroulee a LARGEUR_RAISON caracteres (le 1er morceau reste dans la
-    cellule, les suivants partent en lignes '###>').
+    Format sous un bloc ### Agent :
+      - HH:MM | id | raison
+    (id = id LLM, ex: freebuff ; repli sur la session si inconnue)
     """
-    couleur = couleur_agent(agent)
-    date, sep, heure = (timestamp or "").partition(" ")
-    if not sep:
-        date, heure = (timestamp or ""), ""
-    lignes_raison = enrouler_raison(raison)
-    premiere = lignes_raison[0].strip() if lignes_raison else ""
-    suite = [l.strip() for l in lignes_raison[1:] if l.strip()]
-    bloc = []
-    bloc.append("#>")
-    bloc.append('### <span style="color:%s">%s</span> - <span '
-                'style="color:%s">%s</span>' % (couleur, timestamp, couleur,
-                                                  agent))
-    bloc.append('| <span style="color:%s">%s</span> | %s | %s | %s | %s |'
-                % (couleur, agent, heure, date, session, premiere))
-    for s in suite:
-        bloc.append("###> " + s)
-    return "\n".join(bloc) + "\n"
+    heure = (timestamp or "").split(" ")[-1] if " " in (timestamp or "") else ""
+    raison_nettoyee = " ".join((raison or "").split())
+    # JAMAIS tronquer - l historique doit etre complet pour audit/retour
+    return "- %s | %s | %s\n" % (heure, identifiant or "", raison_nettoyee)
 PREFIXE_SESSION = "session-llm-"
 
 # agent : (role, fiche, corrections)
@@ -187,10 +149,12 @@ AGENTS = {
                "cerveau-projet/agents/argus/argus.md",
                "cerveau-projet/agents/argus/corrections.md"),
     "chiron": ("Educateur des agents -- formation continue",
-               "cerveau-projet/agents/chiron/chiron.md",
-               "cerveau-projet/agents/chiron/corrections.md"),
+                "cerveau-projet/agents/chiron/chiron.md",
+                "cerveau-projet/agents/chiron/corrections.md"),
+    "socrate": ("Conversateur de revision strategique -- discute et priorise les problemes",
+                "cerveau-projet/agents/socrate/socrate.md",
+                "cerveau-projet/agents/socrate/corrections.md"),
 }
-
 
 def get_agent_info(agent):
     """Retourner (role, fiche, corrections) d'un agent (casse insensible)."""
@@ -275,7 +239,7 @@ def instruction_demarrage(agent):
     parcours depuis la case de depart."""
     return (
         "DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :\n"
-        "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \\n"
+        "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \\\n"
         "  cerveau-projet/agents/%s/parcours/parcours-%s.json --case c0\n"
         "(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds\n"
         "a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis\n"
@@ -555,76 +519,161 @@ def editer_champs_session(contenu, session_id, champs):
 
 
 def ajouter_historique(timestamp, session, agent, raison):
-    """Ajouter une entree (4 colonnes) en haut du tableau, max 150."""
+    """Ajouter une entree dans le fichier historique, max 150.
+
+    Format v0.6.2 timeline :
+      ## YYYY-MM-DD
+      ### Agent
+      - HH:MM | id | raison
+
+    La colonne porte l ID LLM (resolu depuis la session via id_lie_a_session,
+    repli sur la session si aucun id lie). Aussi met a jour l encart
+    'Activites recentes' en haut du fichier (header : id).
+    """
     if not os.path.isfile(AGENTS_HISTORIQUE):
         print("ERREUR: Le fichier %s n'existe pas" % AGENTS_HISTORIQUE)
         return 1
 
-    nouvelle_ligne = composer_bloc_historique(timestamp, session, agent, raison)
+    identifiant = id_lie_a_session(session) or session
+    nouvelle_ligne = composer_bloc_historique(timestamp, identifiant, agent, raison)
 
     if not verifier_ascii(nouvelle_ligne):
         print("ERREUR: Caractere non-ASCII detecte dans la raison - ecriture historique REFUSEE")
         return 1
 
     with io.open(AGENTS_HISTORIQUE, "r", encoding="utf-8", errors="replace") as fh:
-        lignes = fh.readlines()
+        contenu = fh.read()
 
-    # v0.5.7 : anti-accumulation - quand une entree est purgee (au-dela de la
-    # limite MAX_ENTREES_HISTORIQUE), ses CONTINUATIONS (blocs DEMARRAGE,
-    # raisons multi-lignes, lignes '#' et '###>') sont purgees AVEC elle.
-    # Le bug v0.5.4 conservait les lignes non-\| date \| sans limite : les
-    # continuations orphelines s accumulaient a la fin du fichier (1183
-    # lignes de parasite). v0.5.14 : ENTREE_HISTORIQUE_RE reconnait aussi le
-    # repere humain '### 20' (les blocs du nouveau format restent purgeables).
-    sortie = []
-    insere = False
-    compteur = 0
-    i = 0
-    while i < len(lignes):
-        ligne = lignes[i]
-        if ENTREE_HISTORIQUE_RE.match(ligne):
-            if not insere:
-                # eviter un double '#>' quand la sortie se termine deja par
-                # la bordure de l entree precedente
-                bloc_insere = nouvelle_ligne
-                if sortie and sortie[-1].strip() == "#>":
-                    bloc_insere = nouvelle_ligne.split("\n", 1)[1]
-                sortie.append(bloc_insere)
-                insere = True
-                compteur += 1
-            # collecter le bloc complet (1 bloc = 1 entree, quel que soit
-            # son format : '### <repere>' + table, ou table seule)
-            bloc = []
-            if ligne.startswith("### "):
-                bloc.append(ligne)
-                i += 1
-                if i < len(lignes) and lignes[i].startswith("| <span"):
-                    bloc.append(lignes[i])
-                    i += 1
+    # Extraire la date et convertir en JJ/MM/AAAA
+    date_raw = (timestamp or "").split(" ")[0] if " " in (timestamp or "") else ""
+    if len(date_raw) == 10 and date_raw[4] == "-":
+        parts = date_raw.split("-")
+        date = "%s/%s/%s" % (parts[2], parts[1], parts[0])
+    else:
+        date = date_raw
+    heure = (timestamp or "").split(" ")[-1] if " " in (timestamp or "") else ""
+    agent_titre = (agent or "Inconnu")
+
+    # 1. Inserer dans le bloc jour/agent (format timeline)
+    marqueur_jour = "## %s" % date
+    marqueur_agent = "### %s" % agent_titre
+   
+    if marqueur_jour in contenu:
+        # v0.5.21 : borner la recherche du bloc agent A LA SECTION DU JOUR.
+        # Avant, contenu.index(marqueur_agent) trouvait le PREMIER '### <agent>'
+        # du fichier (souvent dans un jour anterieur) et y inserait l entree
+        # (les entrees Cerberus du jour courant tombaient dans le bloc du jour
+        # precedent).
+        idx_jour = contenu.index(marqueur_jour)
+        fin_jour = contenu.find("\n## ", idx_jour + len(marqueur_jour))
+        if fin_jour == -1:
+            fin_jour = len(contenu)
+        section_jour = contenu[idx_jour:fin_jour]
+        if marqueur_agent in section_jour:
+            idx_agent = idx_jour + section_jour.index(marqueur_agent)
+            pos_inser = idx_agent + len(marqueur_agent)
+            if pos_inser < len(contenu) and contenu[pos_inser] == "\n":
+                pos_inser += 1
+            contenu = contenu[:pos_inser] + nouvelle_ligne + contenu[pos_inser:]
+        else:
+            contenu = contenu[:idx_jour + len(marqueur_jour)] + "\n\n" + marqueur_agent + "\n" + nouvelle_ligne + contenu[idx_jour + len(marqueur_jour):]
+    else:
+        # v0.5.21 : inserer APRES l encart 'Activites recentes' (jamais entre
+        # l en-tete et l encart). Cible : la premiere section jour existante
+        # (## JJ/MM/AAAA) ; repli : apres l encart, puis fin de l en-tete.
+        m_section = re.search(r"^## \d{2}/\d{2}/\d{4}", contenu, re.MULTILINE)
+        if m_section:
+            idx_inser = m_section.start()
+        else:
+            idx_encart = contenu.find("## Activites recentes")
+            if idx_encart != -1:
+                idx_apres = contenu.find("\n---\n", idx_encart)
+                idx_inser = idx_apres + len("\n---\n") if idx_apres != -1 else len(contenu)
             else:
-                bloc.append(ligne)
-                i += 1
-            while i < len(lignes) and not ENTREE_HISTORIQUE_RE.match(lignes[i]):
-                bloc.append(lignes[i])
-                i += 1
-            if compteur < MAX_ENTREES_HISTORIQUE:
-                sortie.extend(bloc)
-            # au-dela de la limite : bloc purge (non conserve)
-            compteur += 1
-            continue
-        sortie.append(ligne)
-        i += 1
-    if not insere:
-        sortie.append(nouvelle_ligne)
+                idx_entete = contenu.find("\n---\n")
+                idx_inser = idx_entete + len("\n---\n") if idx_entete != -1 else 0
+        nouveau_bloc = "\n" + marqueur_jour + "\n\n" + marqueur_agent + "\n" + nouvelle_ligne
+        contenu = contenu[:idx_inser] + nouveau_bloc + contenu[idx_inser:]
+
+    # 2. Mettre a jour l encart 'Activites recentes' (10 dernieres)
+    contenu = maj_encart_activites(contenu, date, heure, agent_titre, identifiant, raison)
 
     with io.open(AGENTS_HISTORIQUE, "w", encoding="utf-8", newline="\n") as fh:
-        fh.writelines(sortie)
+        fh.write(contenu)
 
     if not verifier_fichier_ascii(AGENTS_HISTORIQUE):
-        print("WARNING: Caracteres non-ASCII presents dans %s (voir lignes ci-dessus)" % AGENTS_HISTORIQUE)
+        print("WARNING: Caracteres non-ASCII presents dans %s" % AGENTS_HISTORIQUE)
 
     print("Historique mis a jour dans %s" % AGENTS_HISTORIQUE)
     return 0
+
+
+def maj_encart_activites(contenu, date, heure, agent, identifiant, raison):
+    """Mettre a jour l encart 'Activites recentes' en haut du fichier.
+
+    Extrait les 10 dernieres entrees du fichier et les place dans un
+    tableau visible en haut, entre l en-tete et l historique par jour.
+    Colonne : id (id LLM, ex: freebuff).
+    """
+    # Extraire toutes les entrees du format timeline avec l agent et la date
+    entrees = []
+    agent_courant = "?"
+    date_courante = ""
+    for ligne in contenu.split("\n"):
+        l = ligne.strip()
+        if l.startswith("## ") and not l.startswith("## Activites"):
+            date_courante = l[3:].strip()
+        elif l.startswith("### "):
+            agent_courant = l[4:].strip()
+        elif l.startswith("- ") and " | " in l:
+            parties = l[2:].split(" | ", 2)
+            if len(parties) >= 3:
+                h = parties[0].strip()
+                s = parties[1].strip()
+                r = parties[2].strip()
+                # Cle de tri : date + heure (JJ/MM/AAAA HH:MM)
+                cle_tri = "%s %s" % (date_courante, h)
+                entrees.append((cle_tri, h, agent_courant, s, r))
+
+    # Trier par date/heure decroissante et prendre les 10 plus recentes
+    entrees.sort(key=lambda x: x[0], reverse=True)
+    recentes = [(h, a, s, r) for _, h, a, s, r in entrees[:10]]
+
+    # Construire l encart
+    encart = "---\n\n## Activites recentes (10)\n\n"
+    encart += "| Heure | Agent | id | Raison |\n"
+    encart += "|-------|-------|----|--------|\n"
+    for h, a, s, r in recentes:
+        r_aff = r if len(r) <= 80 else r[:77] + "..."
+        encart += "| %s | %s | %s | %s |\n" % (h, a, s, r_aff)
+    encart += "\n---\n"
+
+    # Remplacer l ancien encart (s il existe) ou l inserer
+    marqueur_debut = "## Activites recentes"
+    marqueur_fin = "---\n\n## "
+   
+    if marqueur_debut in contenu:
+        idx_debut = contenu.index(marqueur_debut)
+        # Remonter au debut de la section (lignes precedentes)
+        while idx_debut > 0 and contenu[idx_debut - 1] in "\n\r":
+            idx_debut -= 1
+        # Trouver la fin (prochain ## apres le debut)
+        idx_fin = contenu.find("\n## ", idx_debut + len(marqueur_debut))
+        if idx_fin == -1:
+            idx_fin = contenu.find("\n---\n\n## ", idx_debut)
+        if idx_fin != -1:
+            contenu = contenu[:idx_debut] + encart + contenu[idx_fin:]
+        else:
+            contenu = contenu[:idx_debut] + encart
+    else:
+        # Inserer apres le premier ---
+        idx = contenu.find("\n---\n")
+        if idx != -1:
+            contenu = contenu[:idx + 5] + "\n" + encart + contenu[idx + 5:]
+        else:
+            contenu = encart + contenu
+
+    return contenu
 
 
 def mettre_a_jour_sessions_connues(contenu):
@@ -1038,11 +1087,15 @@ def activer_agent(session, agent, raison, mission=None):
         return 1
     contenu, _ = migrer_si_necessaire(contenu)
 
-    # GARDE-FOU (v0.5.19) : detecter les agents oublies + bloquer double activation
-    # Si un agent autre que Cerberus est encore actif dans la session :
-    #   - Meme agent cible (auto-reactivation) : AVERTISSEMENT, pas de blocage
-    #   - Agent different (double activation) : BLOCAGE sauf si --forcer
+    # GARDE-FOU (v0.5.22) : relais de chaine autorise (Pattern 8, decision
+    # utilisateur Option A 2026-08-21 : l agent suivant active l agent suivant
+    # pour continuer la boucle). Si un agent autre que Cerberus est encore
+    # actif dans la session :
     #   - Agent cible = Cerberus (reactivation) : toujours autorise
+    #   - Meme agent cible (auto-reactivation) : AVERTISSEMENT, autorise
+    #   - Agent different (relais de chaine) : AVERTISSEMENT, AUTORISE
+    #     (chaque maillon active le suivant a sa fin de carte - Pattern 8)
+    #   - --forcer : option conservee (avertissement forcee, compatibilite)
     agent_actuel = agent_actif_bloc(contenu, session)
     if agent_actuel and agent_actuel.lower() != "cerberus":
         forcer = "--forcer" in sys.argv
@@ -1059,30 +1112,25 @@ def activer_agent(session, agent, raison, mission=None):
             print("==============================================")
             print("")
         elif forcer:
-            # Double activation avec --forcer : avertissement + continuation
+            # Activation forcee : avertissement + continuation
             print("")
-            print("=== AVERTISSEMENT GARDE-FOU (double activation forcee) ===")
+            print("=== AVERTISSEMENT GARDE-FOU (activation forcee) ===")
             print("L agent '%s' est encore actif dans %s." % (agent_actuel, session))
             print("Activation de '%s' FORCEE (--forcer)." % agent)
             print("Le travail de '%s' risque d etre perdu." % agent_actuel)
             print("===========================================================")
             print("")
         else:
-            # Double activation sans --forcer : BLOCAGE
+            # RELAIS DE CHAINE : autorise avec avertissement (Pattern 8)
             print("")
-            print("=== BLOQUE GARDE-FOU (double activation) ===")
+            print("=== AVERTISSEMENT GARDE-FOU (relais de chaine) ===")
             print("L agent '%s' est encore actif dans %s." % (agent_actuel, session))
-            print("Activation de '%s' REFUSEE." % agent)
+            print("Activation de '%s' AUTORISEE (relais de chaine, Pattern 8 :" % agent)
+            print("l agent suivant active l agent suivant a sa fin de carte).")
             print("")
-            print("Pourquoi : un agent ne peut pas etre remplace sans")
-            print("reactiver Cerberus d abord (Pattern 13).")
+            print("Si '%s' n a PAS termine sa mission, reactiver Cerberus d abord." % agent_actuel)
+            print("==============================================")
             print("")
-            print("Solutions :")
-            print("  1. Faire reactiver Cerberus par '%s' d abord" % agent_actuel)
-            print("  2. Utiliser --forcer pour ignorer le garde-fou")
-            print("============================================")
-            print("")
-            return 1
 
     if not any(s == session for s, _ in extraire_blocs_session(contenu)):
         contenu = creer_session(contenu, session)
@@ -1183,10 +1231,28 @@ def reactiver_cerberus(session, raison, agent_precedent):
     mettre_a_jour_profil_session(session, "Cerberus")
     actualiser_sessions_connues()
     print("Session %s : Cerberus reactive avec succes" % session)
-    # MESSAGES INFORMATIONNELS (regle immuable v0.3.0) : rappels contextuels
+    # MESSAGES OBLIGATOIRES (v0.6.2) : forcer Cerberus a suivre sa carte
+    print("")
+    print("=== INSTRUCTION OBLIGATOIRE ===")
+    print("CERBERUS REACTIVE : tu DOIS suivre ta carte de decision.")
+    print("")
+    # Lancer guider-parcours pour Cerberus
+    parcours = "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    tools_dir = os.path.dirname(os.path.dirname(script_dir))
+    guider = os.path.join(tools_dir, "guider", "guider-parcours", "guider-parcours.py")
+    if os.path.isfile(guider):
+        print("LANCE CETTE COMMANDE MAINTENANT :")
+        print("")
+        print("python3 %s %s --case c0" % (guider, parcours))
+        print("")
+        print("Puis relis ta fiche et tes corrections avant de continuer.")
+    else:
+        print("Lance guider-parcours pour ton parcours :")
+        print("python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py %s --case c0" % parcours)
     print("")
     print("=== MESSAGES POUR L AGENT ===")
-    print("  > CERBERUS REACTIVE : il relit SA fiche et SES corrections puis reprend la suite (regle de relecture)")
+    print("  > RELEVE MEME ROUND : Cerberus doit suivre sa carte IMMEDIATEMENT")
     print("  > le cycle est termine : Cerberus accueille la demande suivante ou relance une mission")
     return 0
 

@@ -173,8 +173,8 @@ def main():
         verifier("2b. En-tete complet (agent, version, depart, nb cases, nb chemins)",
                  ok_gen and all(m in contenu for m in
                                 ("| Agent | atlas |", "| Version du parcours |",
-                                 "| Case de depart | c0 |", "| Nombre de cases | 49 |",
-                                 "| Nombre de chemins (depart -> fins) | 13 |")),
+                                 "| Case de depart | c0 |", "| Nombre de cases | 52 |",
+                                 "| Nombre de chemins (depart -> fins) | 14 |")),
                  "en-tete partiel")
         verifier("2c. Sections presentes (arbre, impasses, boucles, chemins)",
                  ok_gen and all(m in contenu for m in

@@ -7,9 +7,9 @@
  "parcours": {
   "nom": "parcours-cerberus",
   "agent": "cerberus",
-  "version": "0.5.5",
+  "version": "0.5.10",
   "case_depart": "c0",
-  "description": "v0.4.6 : + indice outil c10 combos-analyse-projet (usage reel registre, garde-fou test-035)"
+  "description": "v0.5.9 : + cases c45/c46 (Activer Socrate/Chiron) corrigees au format conforme (branches[] + suivant)"
  },
  "cases": {
   "c0": {
@@ -82,6 +82,14 @@
     {
      "reponse": "autre",
      "vers": "c18"
+    },
+    {
+     "reponse": "revision",
+     "vers": "c45"
+    },
+    {
+     "reponse": "eduquer",
+     "vers": "c46"
     }
    ],
    "indices": [
@@ -259,9 +267,9 @@
      "raison": "Mes corrections (a relire en priorite)"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/cerberus/corrections.md --all"
     }
@@ -485,10 +493,18 @@
   "c0c": {
    "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
    "type": "action",
+   "suivant": "c0d",
    "indices": [
     {
      "type": "ref",
      "ref": "pattern-6"
+    },
+    {
+     "type": "outil",
+     "nom": "nettoyer-sessions",
+     "catalogue": "nettoyer-sessions",
+     "chemin": "cerveau-projet/agents/tools/nettoyer/nettoyer-sessions/",
+     "commande": "python3 cerveau-projet/agents/tools/nettoyer/nettoyer-sessions/nettoyer-sessions.py [--dry-run] [--verbose]"
     },
     {
      "type": "outil",
@@ -502,8 +518,7 @@
      "chemin": "AGENTS.md",
      "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite) -- savoir que les autres LLM existent et leur activite en temps reel"
     }
-   ],
-   "suivant": "c0d"
+   ]
   },
   "c12c": {
    "titre": "REJOINT : retour au flux principal",
@@ -629,13 +644,13 @@
   "c19e": {
    "titre": "FIN - Reprise du parcours apres retour de l'agent habilite",
    "type": "fin",
-   "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c13 (FIN - Reactiver Cerberus) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
+   "message": "L'agent habilite m'a reactive avec le bilan d'amelioration (Pattern 13 : la fin suit SA carte). Je reprends mon parcours : je continue vers ma fin normale c20 (FIN - Coordination terminee) avec le rapport d'evaluation, le bilan des outils utilises et le bilan de l'amelioration.",
    "suivant": null
   },
   "c0d": {
    "titre": "LIRE LA DOCUMENTATION DE L OUTIL avant utilisation",
    "type": "action",
-   "suivant": "c1",
+   "suivant": "cU1",
    "branches": [],
    "indices": [
     {
@@ -726,6 +741,120 @@
     }
    ],
    "suivant": "c0c"
+  },
+  "c45": {
+   "type": "action",
+   "titre": "Activer Socrate pour revision strategique",
+   "message": "Socrate discute des revisions a faire et produit missions-revision.md.",
+   "suivant": "c45b",
+   "indices": [
+    {
+     "texte": "REGLE : activer Socrate (seul habilite a diagnostiquer les problemes et prioriser les missions).",
+     "type": "regle"
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> socrate <raison>",
+     "type": "outil"
+    }
+   ]
+  },
+  "c45b": {
+   "type": "controle",
+   "titre": "Socrate actif ?",
+   "question": "Socrate est-il actif et a-t-il produit missions-revision.md ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c24"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c45"
+    }
+   ]
+  },
+  "c46": {
+   "type": "action",
+   "titre": "Activer Chiron pour eduquer un agent",
+   "message": "Chiron eduke l agent : conventions, protocoles, regles.",
+   "suivant": "c46b",
+   "indices": [
+    {
+     "texte": "REGLE : activer Chiron (seul habilite a educher les agents).",
+     "type": "regle"
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> chiron <raison>",
+     "type": "outil"
+    }
+   ]
+  },
+  "c46b": {
+   "type": "controle",
+   "titre": "Chiron actif ?",
+   "question": "Chiron est-il actif et a-t-il eduke l agent ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c24"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c46"
+    }
+   ]
+  },
+  "cU1": {
+   "titre": "Probleme avec un outil en cours de mission ?",
+   "type": "question",
+   "question": "As-tu un probleme avec un outil (erreur de commande, fonctionnement oublie, outil qui ne marche pas) ? OUI -> COMPRENDRE L OUTIL ; NON -> je continue ma mission.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : probleme avec un outil -> je ne lis PAS le code : le mode d emploi est dans le .md (case COMPRENDRE L OUTIL)."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "cU2"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c1"
+    }
+   ]
+  },
+  "cU2": {
+   "titre": "COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo",
+   "type": "action",
+   "message": "Ne PAS lire le code de l outil : le mode d emploi est dans le .md du meme dossier (agents/tools/<categorie>/<outil>/<outil>.md). 1) Lire le .md de l outil (contrat, Pattern 9). 2) Verifier si un combo existe pour cette action avec consulter-combos ; si oui, l utiliser. 3) Sinon, utiliser generateurs-commande pour generer la commande exacte (ne pas l ecrire en dur). 4) Relancer l outil avec la commande correcte.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : le .md est le mode d emploi (Pattern 9) - je le lis AVANT de re-executer l outil."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-combos/consulter-combos.md",
+     "raison": "Verifier si un combo existe pour cette action (si oui, l utiliser)."
+    },
+    {
+     "type": "outil",
+     "catalogue": "generateurs-commande",
+     "nom": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande <outil> --reponses ..."
+    }
+   ],
+   "suivant": "cU3"
+  },
+  "cU3": {
+   "titre": "FIN - Reprendre ma mission",
+   "type": "fin",
+   "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
   }
  }
 }

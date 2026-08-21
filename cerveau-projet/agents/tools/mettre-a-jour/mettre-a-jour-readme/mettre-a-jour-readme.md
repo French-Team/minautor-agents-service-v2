@@ -9,7 +9,7 @@ identite:
 ---
 # mettre-a-jour-readme
 
-**Version :** 0.4.3
+**Version :** 0.4.4
 **Statut :** prepare
 **Categorie :** mettre-a-jour
 **Chemin :** `agents/tools/mettre-a-jour/mettre-a-jour-readme/`
@@ -55,6 +55,7 @@ Version bash equivalente : `mettre-a-jour-readme.sh` (meme logique).
 | Option | Description | Defaut |
 |---|---|---|
 | `--verifier` | Comparer l'etat reel au README, lister les ecarts sans modifier | - |
+| `--dry-run` | Preview AVANT/APRES sans ecrire (obligatoire avant --maj) | - |
 | `--maj` | Corriger le texte du README (agents, outils, compteurs) | - |
 | `--logo CHEMIN` | Inserer une image (logo) en tete du README, apres le titre H1 (idempotent) | - |
 | `--badges SPEC` | Inserer des badges statiques Shields en tete (format `label=message:couleur;...`), apres le titre H1 (idempotent) | - |
@@ -124,7 +125,7 @@ Utilisez --maj pour corriger le texte du README.
 
 | Situation | Utilisation |
 |---|---|
-| **Apres chaque mission** | Clio lance `--verifier` puis `--maj` apres chaque retour d'agent |
+| **Apres chaque mission** | Clio lance `--verifier`, puis `--dry-run`, puis `--maj` apres chaque retour d'agent |
 | **Ajout/modification du projet** | Nouvel agent, nouvel outil, nouvelle structure |
 | **Avant une session** | Verifier que le README reflete l'etat reel |
 
@@ -145,6 +146,7 @@ Utilisez --maj pour corriger le texte du README.
 | 0.2.0 | 2026-08-07 | Promotion prepare : passage v2 final |
 | 0.2.0-py | 2026-08-07 | Version Python creee (mettre-a-jour-readme.py), basee sur outil-template.py. Portage fidele : verifier/maj/journal/agents/outils, cas speciaux tester/combos/templates, reconstruction des lignes outils en 3 colonnes |
 | 0.3.0 | 2026-08-07 | Ajout option `--logo CHEMIN` : inserer une image (logo) en tete du README, apres le titre H1. Idempotent (aucun doublon), fichier manquant et absence de H1 geres (exit 1). Ajoute dans les versions Python (0.3.0-py) et bash (0.3.0) |
+| 0.4.4 | 2026-08-20 | Ajout option `--dry-run` : preview AVANT/APRES sans ecrire (obligatoire avant --maj, regle Clio). Affiche les changements qui seraient faits (titres, compteurs, agents, outils manquants). |
 | 0.4.2 | 2026-08-15 | ANTI-RECURRENCE compteurs (bug Clio 132 vs 134) : verifier_somme_comptes() verifie que la SOMME des compteurs du tableau readme-dev (section 6) = le total reel calcule + chaque ligne vs le reel par categorie. Branche dans --verifier et --maj (controle final). |
 | 0.4.1 | 2026-08-14 | Filtre agents : seul un dossier avec parcours JSON (agents/<nom>/parcours/parcours-<nom>.json) est un agent d action. Les dossiers concepts (classeur-variables, conventions, philosophie, regles-immuables, traces) ne sont plus listes ni ajoutes a la table des agents du README. |
 | 0.4.0 | 2026-08-07 | Ajout option `--badges SPEC` : inserer des badges statiques Shields en tete du README (format `label=message:couleur;...`), apres le titre H1. Images Markdown liees (clic) `img.shields.io/badge/...?style=flat`. Encodage espace/tiret, validation ASCII stricte (label, message, couleur), idempotent, spec invalide et absence de H1 geres (exit 1). Base : recherche Atlas (recherches-web/badges-github-shields/). Versions Python (0.4.0-py) et bash (0.4.0) |

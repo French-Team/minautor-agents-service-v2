@@ -1,4 +1,4 @@
-%% Carte de decision de chiron (parcours v0.3.1)
+%% Carte de decision de chiron (parcours v0.3.4)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -24,10 +24,13 @@ flowchart TD
     c7["Verifier la conformite de la fiche (verifier-conformite-fiche)"]
     c8["Verifier le parcours/carte (detecter-cablages-manquants)"]
     c9{"Synthetiser les incoherences"}
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "NON" --> c0
     c0b -- "OUI" --> c0e
-    c0c --> c1
+    c0c --> cU1
     c0e --> c0c
     c1 --> c2
     c10 --> c11
@@ -51,3 +54,6 @@ flowchart TD
     c8 --> c9
     c9 -- "OUI" --> c10
     c9 -- "NON" --> c12
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

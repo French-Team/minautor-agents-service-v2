@@ -9,7 +9,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.5.19
+**Version** : 0.5.23
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -111,6 +111,11 @@ Deux LLM differents ne partagent jamais une session.
 3. Cree le bloc de session s'il n'existe pas
 4. Met Cerberus comme agent principal de la session (le LLM demarre comme Cerberus)
 5. Affiche la session attribuee + ajoute l'entree dans l'historique
+
+> **Historique (v0.5.20)** : chaque entree (corps + encart 'Activites
+> recentes') porte l'ID LLM (ex: `freebuff`) au lieu de la session, resolu
+> depuis la session liee (repli sur la session si aucun id lie). Format :
+> `- HH:MM | id | raison` sous `### Agent` ; encart `| Heure | Agent | id | Raison |`.
 
 ### 2. Activer un agent (dans sa session)
 
@@ -242,6 +247,7 @@ eviter les collisions et comprendre qui intervient en parallele.
 | Verification ASCII | Refuse toute raison contenant un caractere non-ASCII (lecon permanente 2026-08-07) |
 | Profil session classeur | Ecrit/met a jour `profil-session-<id>` (regle de derivation : partie apres `session-`) dans le classeur-variables a chaque sidentifier/activer/reactiver |
 | Sessions connues | Reconstruit la section `## Sessions connues` (table session / id LLM / agent / derniere activite) a chaque action -- contexte temps reel des autres LLM |
+| Relais de chaine | Activation directe du maillon suivant AUTORISEE avec avertissement (Pattern 8, decision utilisateur 2026-08-21) -- l agent suivant active l agent suivant a sa fin de carte ; reactivation de Cerberus et auto-reactivation inchangees |
 
 ---
 
@@ -280,7 +286,9 @@ eviter les collisions et comprendre qui intervient en parallele.
 
 | Version | Date | Changements |
 |---|---|---|
-| 0.5.19 | 2026-08-20 | GARDE-FOU DOUBLE ACTIVATION (demande utilisateur) : detection des agents oublies + BLOCAGE de la double activation dans activer_agent(). Si un agent autre que Cerberus est encore actif dans la session, l activation d un AUTRE agent est REFUSEE (return 1) sauf avec --forcer. L auto-reactivation (meme agent) et la reactivation de Cerberus restent toujours autorisees. Logique : agent_actuel=Cerberus->autoriser / cible=Cerberus->autoriser / cible=actuel->avertissement / cible!=actuel+forcer->avertissement+autoriser / cible!=actuel->BLOQUER. |
+| 0.5.23 | 2026-08-21 | COMMANDE DEMARRAGE OBLIGATOIRE CORRIGEE : le bloc instruction_demarrage() ecrivait `\\n` LITTERAL (backslash+n) au lieu d un vrai retour a la ligne apres guider-parcours.py - la commande copiee par l agent active etait inexecutable (python ouvrait le fichier litteral \\n, echec au demarrage, cas Themis 2026-08-21). Correctif : `\\\\n` -> `\\\\\\n` (backslash de continuation + vrai newline), parite avec le .sh (ligne 936). Bloc deja grave dans AGENTS.md corrige en place. |
+| 0.5.22 | 2026-08-21 | RELAIS DE CHAINE AUTORISE (decision utilisateur Option A - retour Pattern 8 : l agent suivant active l agent suivant pour continuer la boucle). Le GARDE-FOU v0.5.19 qui BLOQUAIT toute activation directe (agent actif != Cerberus vers cible != Cerberus, sauf --forcer) est RELAXE : l activation directe du maillon suivant est AUTORISEE avec un AVERTISSEMENT de relais (message 'AVERTISSEMENT GARDE-FOU (relais de chaine)'). Les cas existants conserves : reactivation de Cerberus toujours autorisee, auto-reactivation (meme agent) avertissement + autorisee, --forcer conserve (avertissement forcee, compatibilite). Justification : le blocage v0.5.19 confondait l activation de chaine LEGITIME (fin de carte, Pattern 8) avec l oubli de reactiver - les fins 'FIN - Activer X' des cartes (routage Vulcain/Morpheus/Janus + message de relais, Buffy 2026-08-21) ne pouvaient pas s executer. Logique : agent_actuel=Cerberus->autoriser / cible=Cerberus->autoriser / cible=actuel->avertissement+autoriser / cible!=actuel->AVERTISSEMENT relais + AUTORISER (au lieu de BLOQUER). |
+| 0.5.21 | 2026-08-21 | INSERTION HISTORIQUE CORRIGEE (demande utilisateur) : dans `ajouter_historique()`, la branche nouvelle date insere la section jour APRES l encart 'Activites recentes' (cible : la premiere section `## JJ/MM/AAAA` existante, repli : fin de l encart, puis fin de l en-tete) au lieu d apres le premier `---` (fin du FRONTMATTER) - les interventions du jour courant atterrissaient entre l en-tete et l encart. Section 21/08 repositionnee sous l encart dans le fichier actuel + incoherence Pattern 14 vulcain corrigee (fiche PARCOURS v0.6.0 == parcours-vulcain.json 0.6.0). | (demande utilisateur) : detection des agents oublies + BLOCAGE de la double activation dans activer_agent(). Si un agent autre que Cerberus est encore actif dans la session, l activation d un AUTRE agent est REFUSEE (return 1) sauf avec --forcer. L auto-reactivation (meme agent) et la reactivation de Cerberus restent toujours autorisees. Logique : agent_actuel=Cerberus->autoriser / cible=Cerberus->autoriser / cible=actuel->avertissement / cible!=actuel+forcer->avertissement+autoriser / cible!=actuel->BLOQUER. |
 | 0.5.17 | 2026-08-19 | TOKENS INTEGRES (demande utilisateur) : activer/reactiver appellent `analyser-tokens --snapshot` (mode hybride : API TOKENS_SESSION si fournie, sinon estimation locale), stockent le snapshot de debut dans le chrono (--tokens), calculent la conso de l intervention par difference au passage de relais, et l affichent au repere `###` : `(9min 11s, tokens: 12.4k env / 8.2k recus)`. |
 | 0.5.16 | 2026-08-19 | CHRONOMETRE INTEGRE (demande utilisateur) : activer / reactiver appellent `chronometrer-duree` (arreter le chrono de l agent precedent, demarrer celui du nouvel agent) et ajoutent la duree de l intervention au repere `### <date> - <agent> (Xmin Ys)` dans AGENTS-historique. Nouvel outil `chronometrer/chronometrer-duree` (traces/chronos.jsonl), assigne a Vulcain (c6). |
 | 0.5.15 | 2026-08-19 | FORMAT HISTORIQUE RESTRUCTURE (demande utilisateur) : table `| agent | heure | date | session | raison |` (agent en 1re colonne, heure et date separees) + raison enroulee a 100 caracteres en continuations `###>`. Les 4 parseurs (lire-activite-recente, evaluer-processus, purifier-rvav, mettre-a-jour-readme) adaptes + migration des 150 entrees. |

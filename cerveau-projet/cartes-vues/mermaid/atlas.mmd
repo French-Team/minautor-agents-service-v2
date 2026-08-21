@@ -1,4 +1,4 @@
-%% Carte de decision de atlas (parcours v0.5.1)
+%% Carte de decision de atlas (parcours v0.5.4)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -50,11 +50,14 @@ flowchart TD
     c7["Rechercher des patterns"]
     c8["Verifier la regle de relecture (systeme d'agents)"]
     c9["Documenter les decouvertes"]
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0e
     c0b -- "NON" --> c0
     c0c --> c0d
-    c0d --> c1
+    c0d --> cU1
     c0e --> c0c
     c1 -- "explorer" --> c2
     c1 -- "web" --> c12
@@ -105,3 +108,6 @@ flowchart TD
     c7 --> c8
     c8 --> c9
     c9 --> c10
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

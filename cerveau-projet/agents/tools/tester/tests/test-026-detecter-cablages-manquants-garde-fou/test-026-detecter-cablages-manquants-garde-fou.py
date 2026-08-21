@@ -160,8 +160,8 @@ def main():
              "v0.1.2" in r.stdout, r.stdout.strip())
 
     parcours = lister_parcours()
-    verifier("2. 16 parcours d agents trouves",
-             len(parcours) == 16, "nb=%d" % len(parcours))
+    verifier("2. 17 parcours d agents trouves",
+             len(parcours) == 17, "nb=%d" % len(parcours))
 
     # 3-7. Scan de chaque parcours : cumul des problemes bloquants
     total_orphelines = 0

@@ -1,0 +1,283 @@
+{
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "socrate",
+  "commun": false
+ },
+ "parcours": {
+  "version": "0.1.2",
+  "case_depart": "c0"
+ },
+ "cases": {
+  "c0": {
+   "indices": [
+    {
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/socrate/corrections.md",
+     "nom": "lire-fichier",
+     "type": "outil"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/socrate/socrate.md",
+     "nom": "lire-fichier",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c0b",
+   "titre": "RELIRE OBLIGATOIRE",
+   "type": "action"
+  },
+  "c0b": {
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0e"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    }
+   ],
+   "question": "As-tu reellement LU ta fiche et tes corrections ?",
+   "titre": "Confirmation",
+   "type": "question"
+  },
+  "c0e": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent socrate --domaine urgence"
+    }
+   ],
+   "suivant": "c0c",
+   "titre": "Consulter les lecons",
+   "type": "action"
+  },
+  "c0c": {
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "pattern-6"
+    },
+    {
+     "catalogue": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
+     "nom": "lire-activite-recente",
+     "type": "outil"
+    }
+   ],
+   "suivant": "cU1",
+   "titre": "CONTEXTE : activite recente",
+   "type": "action"
+  },
+  "c1": {
+   "question": "Quel est l'URGENCE ? Qu'est-ce qui est bloque ?",
+   "titre": "Nature de l'urgence",
+   "type": "question",
+   "branches": [
+    {
+     "reponse": "agent bloque",
+     "vers": "c2"
+    },
+    {
+     "reponse": "round casse",
+     "vers": "c2"
+    },
+    {
+     "reponse": "test KO",
+     "vers": "c2"
+    },
+    {
+     "reponse": "outil casse",
+     "vers": "c2"
+    },
+    {
+     "reponse": "securite",
+     "vers": "c2"
+    }
+   ]
+  },
+  "c2": {
+   "question": "Depuis combien de temps dure le probleme ?",
+   "titre": "Anciennete",
+   "type": "question",
+   "branches": [
+    {
+     "reponse": "immediat",
+     "vers": "c3"
+    },
+    {
+     "reponse": "quelques heures",
+     "vers": "c3"
+    },
+    {
+     "reponse": "plusieurs jours",
+     "vers": "c3"
+    }
+   ]
+  },
+  "c3": {
+   "question": "Quel agent est le mieux place pour resoudre ca ?",
+   "titre": "Agent habilite",
+   "type": "question",
+   "branches": [
+    {
+     "reponse": "buffy",
+     "vers": "c4"
+    },
+    {
+     "reponse": "vulcain",
+     "vers": "c4"
+    },
+    {
+     "reponse": "morpheus",
+     "vers": "c4"
+    },
+    {
+     "reponse": "hygie",
+     "vers": "c4"
+    },
+    {
+     "reponse": "je ne sais pas",
+     "vers": "c4"
+    }
+   ]
+  },
+  "c4": {
+   "question": "Y a-t-il d'autres urgences ?",
+   "titre": "Autres urgences ?",
+   "type": "question",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c1"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c5"
+    }
+   ]
+  },
+  "c5": {
+   "indices": [
+    {
+     "texte": "REGLE : je produce UN SEUL fichier missions-revision.md avec TOUTES les urgences.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "creer-fichier",
+     "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/socrate/missions-revision.md",
+     "nom": "creer-fichier",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c5b",
+   "titre": "Creer missions-revision.md",
+   "type": "action"
+  },
+  "c5b": {
+   "question": "Le fichier missions-revision.md a-t-il ete cree ?",
+   "titre": "Fichier cree ?",
+   "type": "controle",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c6"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c5"
+    }
+   ],
+   "indices": [
+    {
+     "texte": "GARDE-FOU : si le fichier n'existe pas, je reboucle sur c5.",
+     "type": "regle"
+    }
+   ]
+  },
+  "c6": {
+   "titre": "FIN - Activer Janus",
+   "type": "fin",
+   "message": "REVISION URGENCE TERMINEE. J ACTIVE JANUS (second controle) avec ma carte. COMMANDE EXACTE (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus <raison>. MESSAGE DE RELAIS A L AGENT SUIVANT : quand tu es active, COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte pour continuer la boucle. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon de la chaine.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE IMMUABLE JANUS : apres TOUTE mission, j active JANUS (second controle) qui reactive Cerberus avec son verdict."
+    },
+    {
+     "type": "outil",
+     "nom": "activer-agent-principal",
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/"
+    }
+   ]
+  },
+  "cU1": {
+   "titre": "Probleme avec un outil en cours de mission ?",
+   "type": "question",
+   "question": "As-tu un probleme avec un outil (erreur de commande, fonctionnement oublie, outil qui ne marche pas) ? OUI -> COMPRENDRE L OUTIL ; NON -> je continue ma mission.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : probleme avec un outil -> je ne lis PAS le code : le mode d emploi est dans le .md (case COMPRENDRE L OUTIL)."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "cU2"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c1"
+    }
+   ]
+  },
+  "cU2": {
+   "titre": "COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo",
+   "type": "action",
+   "message": "Ne PAS lire le code de l outil : le mode d emploi est dans le .md du meme dossier (agents/tools/<categorie>/<outil>/<outil>.md). 1) Lire le .md de l outil (contrat, Pattern 9). 2) Verifier si un combo existe pour cette action avec consulter-combos ; si oui, l utiliser. 3) Sinon, utiliser generateurs-commande pour generer la commande exacte (ne pas l ecrire en dur). 4) Relancer l outil avec la commande correcte.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : le .md est le mode d emploi (Pattern 9) - je le lis AVANT de re-executer l outil."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-combos/consulter-combos.md",
+     "raison": "Verifier si un combo existe pour cette action (si oui, l utiliser)."
+    },
+    {
+     "type": "outil",
+     "catalogue": "generateurs-commande",
+     "nom": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande <outil> --reponses ..."
+    }
+   ],
+   "suivant": "cU3"
+  },
+  "cU3": {
+   "titre": "FIN - Reprendre ma mission",
+   "type": "fin",
+   "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
+  }
+ }
+}

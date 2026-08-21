@@ -1,4 +1,4 @@
-%% Carte de decision de hygie (parcours v0.2.1)
+%% Carte de decision de hygie (parcours v0.2.4)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -31,10 +31,13 @@ flowchart TD
     cH3(["FIN - Signaler : honnetete non prouvee"])
     cS1["Creer le snapshot de l etat du workspace"]
     cS2["Verifier la rotation 7 jours"]
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0e
     c0b -- "NON" --> c0
-    c0c --> c1
+    c0c --> cU1
     c0e --> c0c
     c1 -- "nettoyer" --> c2
     c1 -- "snapshot" --> cS1
@@ -66,3 +69,6 @@ flowchart TD
     cH2 -- "NON" --> cH3
     cS1 --> cS2
     cS2 --> c12
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

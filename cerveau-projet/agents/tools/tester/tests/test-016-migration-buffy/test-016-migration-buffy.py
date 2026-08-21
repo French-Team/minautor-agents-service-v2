@@ -166,8 +166,8 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.5.1",
-                 d["parcours"].get("version") == "0.5.1",
+        verifier("1. Version du parcours = 0.5.4",
+                 d["parcours"].get("version") == "0.5.4",
                  d["parcours"].get("version"))
 
         # 2. Types
@@ -176,9 +176,9 @@ def main():
             types[c.get("type")] = types.get(c.get("type"), 0) + 1
         verifier("2a. 41 cases action (37 anterieures + c8a/c22a/c27a Activer Themis + c0e consultation pre-mission)",
                  types.get("action") == 41, str(types))
-        verifier("2b. 8 questions + 5 controles + 10 fins (Themis c8b/c22b/c27b)",
-                 types.get("question") == 8 and types.get("controle") == 5
-                 and types.get("fin") == 10, str(types))
+        verifier("2b. 9 questions + 5 controles + 13 fins (Themis c8b/c22b/c27b + cU1/cU2/cU3)",
+                 types.get("question") == 9 and types.get("controle") == 5
+                 and types.get("fin") == 13, str(types))
         verifier("2c. 0 case indice restante (toutes converties en action)",
                  types.get("indice", 0) == 0, str(types))
 
@@ -203,14 +203,14 @@ def main():
 
         # 5. Navigation chemin creation agent (OUI -> creer) -> TERMINE
         r_nav = run([PYTHON, GP_PY, PARCOURS, "--reponses",
-                     "OUI|creer|OUI|OUI|OUI|OUI"])
+                     "OUI|NON|creer|OUI|OUI|OUI|OUI"])
         verifier("5. Navigation chemin creation agent -> PARCOURS TERMINE",
                  "PARCOURS TERMINE" in r_nav.stdout,
                  r_nav.stdout.strip()[-150:])
 
         # 6. Navigation chemin protocole (OUI -> protocole) -> TERMINE
         r_nav2 = run([PYTHON, GP_PY, PARCOURS, "--reponses",
-                      "OUI|protocole|OUI|OUI|OUI|OUI"])
+                      "OUI|NON|protocole|OUI|OUI|OUI|OUI"])
         verifier("6. Navigation chemin protocole -> PARCOURS TERMINE",
                  "PARCOURS TERMINE" in r_nav2.stdout,
                  r_nav2.stdout.strip()[-150:])

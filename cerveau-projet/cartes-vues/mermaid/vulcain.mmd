@@ -1,4 +1,4 @@
-%% Carte de decision de vulcain (parcours v0.5.2)
+%% Carte de decision de vulcain (parcours v0.6.3)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -59,11 +59,14 @@ flowchart TD
     c9f["Activer Themis pour auditer ma mission"]
     c9g{"Retour de Themis recu ?"}
     c9h["Ajouter les lecons dans corrections.md"]
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0e
     c0b -- "NON" --> c0
     c0c --> c0d
-    c0d --> c1
+    c0d --> cU1
     c0e --> c0c
     c1 -- "construire" --> c2
     c1 -- "modifier" --> c10
@@ -127,3 +130,6 @@ flowchart TD
     c9g -- "OUI" --> c9
     c9g -- "NON" --> c9g
     c9h --> c9b
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

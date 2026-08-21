@@ -98,10 +98,18 @@ PROTECTIONS = charger_protections()
 
 
 def charger_parcours(f):
-    """Charge un parcours JSON + nom de l agent."""
+    """Charge un parcours JSON + nom de l agent.
+
+    L agent est resolu via identite.appartient_a quand il est present
+    (les sous-parcours revision-* de socrate appartiennent a socrate et
+    relisent SA fiche), sinon derive du nom de fichier.
+    """
     p = json.load(io.open(f, encoding="utf-8"))
     parts = f.replace(os.sep, "/").split("/")
     agent = parts[-1].replace("parcours-", "").replace(".json", "")
+    appartient = (p.get("identite") or {}).get("appartient_a")
+    if appartient:
+        agent = appartient
     return agent, p
 
 

@@ -165,21 +165,21 @@ def main():
         # 1. Version du parcours
         with io.open(PARCOURS, encoding="utf-8") as fh:
             donnees = json.load(fh)
-        verifier("1. Parcours version 0.5.5",
-                 donnees.get("parcours", {}).get("version") == "0.5.5",
+        verifier("1. Parcours version 0.5.10",
+                 donnees.get("parcours", {}).get("version") == "0.5.10",
                  str(donnees.get("parcours", {}).get("version")))
 
-        # 2. Types de cases : 24 action / 5 question / 5 controle / 3 fin / 0 indice
+        # 2. Types de cases : 27 action / 6 question / 7 controle / 4 fin / 0 indice
         cases = donnees.get("cases", {})
         types = {}
         for c in cases.values():
             t = c.get("type", "?")
             types[t] = types.get(t, 0) + 1
-        verifier("2a. 24 cases action (19 pilotage + c0d lecture doc + c19c/c19d Pattern 17 + c24 registre + c15c maillon rapport + c0e consultation pre-mission)",
-                 types.get("action", 0) == 24, str(types.get("action")))
-        verifier("2b. 5 questions + 5 controles + 3 fins (Pattern 17 c19b + maillon c15b ajoutent 2 controles)",
-                 types.get("question", 0) == 5 and types.get("controle", 0) == 5
-                 and types.get("fin", 0) == 3, str(types))
+        verifier("2a. 27 cases action (19 pilotage + c0d lecture doc + c19c/c19d Pattern 17 + c24 registre + c15c maillon rapport + c0e consultation pre-mission + c45/c46 socrate/chiron + cU2)",
+                 types.get("action", 0) == 27, str(types.get("action")))
+        verifier("2b. 6 questions + 7 controles + 4 fins (Pattern 17 c19b + maillon c15b ajoutent 2 controles + cU1 + c45b/c46b)",
+                 types.get("question", 0) == 6 and types.get("controle", 0) == 7
+                 and types.get("fin", 0) == 4, str(types))
         verifier("2c. Aucune case 'indice' restante",
                  types.get("indice", 0) == 0, str(types))
 
@@ -200,28 +200,28 @@ def main():
 
         # 5. Navigation chemin accueil
         r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
-                     "OUI|accueil|OUI|OUI|NON|NON"])
+                     "OUI|NON|accueil|OUI|OUI|NON|NON"])
         verifier("5. Chemin accueil -> PARCOURS TERMINE",
                  r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
                  r_nav.stdout.strip()[-100:])
 
         # 6. Navigation chemin activation
         r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
-                     "OUI|activation|OUI|OUI|OUI|NON"])
+                     "OUI|NON|activation|OUI|OUI|OUI|NON"])
         verifier("6. Chemin activation -> PARCOURS TERMINE",
                  r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
                  r_nav.stdout.strip()[-100:])
 
         # 7. Navigation chemin retour (reactiver)
         r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
-                     "OUI|retour|OUI|NON|NON|NON"])
+                     "OUI|NON|retour|OUI|NON|NON|NON"])
         verifier("7. Chemin retour -> PARCOURS TERMINE",
                  r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
                  r_nav.stdout.strip()[-100:])
 
         # 8. Refs resolues a la navigation (pattern-8, protocole-activation)
         r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
-                     "OUI|accueil|OUI|OUI|NON|NON"])
+                     "OUI|NON|accueil|OUI|OUI|NON|NON"])
         verifier("8a. [REFERENCE] pattern-8 resolue",
                  "[REFERENCE]" in r_nav.stdout and "pattern-8" in r_nav.stdout,
                  r_nav.stdout.strip()[-200:])
@@ -242,9 +242,10 @@ def main():
         verifier("9c. c0b porte les branches OUI -> c0c / NON -> c0",
                  "OUI" in r_act.stdout and "NON" in r_act.stdout,
                  r_act.stdout.strip()[-100:])
-        # 9d. Avec la reponse OUI, la navigation enchaine c0b -> c0c -> c1
+        # 9d. Avec la reponse OUI puis NON (cU1), la navigation enchaine
+        #     c0b -> c0c -> cU1 -> c1 Mission
         r_oui = run([PYTHON, GUIDER, PARCOURS, "--case", "c0b",
-                     "--reponses", "OUI"])
+                     "--reponses", "OUI|NON"])
         verifier("9d. OUI -> c0c (contexte) puis c1 Mission",
                  r_oui.returncode == 0 and "Mission" in r_oui.stdout
                  and "QUESTION POUR L'AGENT" in r_oui.stdout,
@@ -274,7 +275,7 @@ def main():
 
         # 13. Protection : aucun fichier cree dans le dossier parcours
         avant = set(os.listdir(os.path.dirname(PARCOURS)))
-        run([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|accueil|OUI|OUI|NON|NON"])
+        run([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|NON|accueil|OUI|OUI|NON|NON"])
         apres = set(os.listdir(os.path.dirname(PARCOURS)))
         verifier("13. Protection : aucun fichier cree dans le dossier parcours",
                  avant == apres, "cree: %s" % (apres - avant))

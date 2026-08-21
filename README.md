@@ -6,41 +6,47 @@ identite:
 ---
 # Cerveau-Projet
 
-[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Outils](https://img.shields.io/badge/Outils-164-blueviolet?style=flat)](https://img.shields.io/badge/Outils-164-blueviolet?style=flat) [![Langages](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat)](https://img.shields.io/badge/Langages-Bash,_Python,_Markdown-orange?style=flat) [![Version](https://img.shields.io/badge/Version-v1.5.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.5.0-blue?style=flat)
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Agents](https://img.shields.io/badge/Agents-16-blue?style=flat)](https://img.shields.io/badge/Agents-16-blue?style=flat) [![Outils](https://img.shields.io/badge/Outils-164-blueviolet?style=flat)](https://img.shields.io/badge/Outils-164-blueviolet?style=flat) [![Tests](https://img.shields.io/badge/Tests-97-red?style=flat)](https://img.shields.io/badge/Tests-97-red?style=flat) [![Protocoles](https://img.shields.io/badge/Protocoles-36-orange?style=flat)](https://img.shields.io/badge/Protocoles-36-orange?style=flat) [![Regles](https://img.shields.io/badge/Regles-75-yellow?style=flat)](https://img.shields.io/badge/Regles-75-yellow?style=flat) [![Version](https://img.shields.io/badge/Version-v1.6.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.6.0-blue?style=flat)
 
 
 ![Logo](cerveau-projet/assets/images/logo.jpg)
 
 
-Un systeme de developpement guide par des agents IA qui evolue et s'auto-ameliore au fil des projets.
-
-## Ce que c'est
-
-Le cerveau-projet est une **structure de travail persistante** qui accompagne un projet
-de developpement. Il organise le travail, impose des regles, fournit des outils, et est
-anime par des agents IA ayant chacun un role specifique.
-
-**Principe fondateur** : le cerveau evolue dans un projet et se copie dans le suivant,
-de plus en plus performant (plus d'agents, plus d'outils, plus de rigueur).
+Je suis un **systeme agentique** qui peut vous aider a developper votre projet.
+Je suis compose de **16 agents** qui s'auto-ameliorent en continu, capables de
+detecter les erreurs que les autres agents vont faire, les erreurs dans leurs
+fichiers, leurs regles, leurs protocoles, leurs conventions, et bien plus encore.
 
 ---
 
-## Ce qu'il fait
+## Qui suis-je ?
+
+Je suis une **structure de travail persistante** qui accompagne votre projet
+de developpement. J'organise le travail, j'impose des regles, je fournis
+des outils, et je suis anime par des agents IA ayant chacun un role specifique.
+
+**Mon principe fondateur** : je evolue dans votre projet et je me copie dans
+le suivant, de plus en plus performant (plus d'agents, plus d'outils, plus de
+rigueur).
+
+---
+
+## Ce que je fais
 
 | Capacite | Description |
 |---|---|
-| **Organiser** | Structure les idees, specifications, conventions et regles |
-| **Guider** | Les agents suivent une carte de decision par mission |
-| **Controler** | Chaque travail est verifie avant d etre valide |
+| **Organiser** | Je structure vos idees, specifications, conventions et regles |
+| **Guider** | Mes agents suivent une carte de decision par mission |
+| **Controler** | Chaque travail est verifie avant d'etre valide |
 | **Outiller** | Des outils partages, crees et ameliores par le systeme lui-meme |
-| **Apprendre** | Chaque agent note ses erreurs et ne les refait plus (voir Vocabulaire) |
-| **Tester** | Des tests automatiques verifient que tout fonctionne, sans blocage |
+| **Apprendre** | Chaque agent note ses erreurs et ne les refait plus |
+| **Tester** | 97 tests automatiques verifient que tout fonctionne |
 
 ---
 
-## Les agents
+## Mes agents
 
-Le cerveau-projet est anime par des agents IA, chacun avec un role et une carte de decision :
+Je suis anime par **16 agents IA**, chacun avec un role et une carte de decision :
 
 | Agent | Role |
 |---|---|
@@ -57,11 +63,11 @@ Le cerveau-projet est anime par des agents IA, chacun avec un role et une carte 
 | **Themis** | Evaluatrice croisee - maillon automatique de la chaine |
 | **Hygie** | Agent de nettoyage du workspace |
 | **Hermes** | Agent de la langue - orthographe, vocabulaire et fautes de francais |
-| **Gardien** | Gardien du marbre - securite du code (zones protegees, l utilisateur valide) |
+| **Gardien** | Gardien du marbre - securite du code (zones protegees, l'utilisateur valide) |
 | **Argus** | Detecteur de contradictions -- cases, regles, protocoles et historique git |
+| **Chiron** | Educateur des agents -- formation continue |
 
-| **Chiron** | Agent | Selon sa carte de decision |
-### Le cycle fondamental (par session)
+### Mon cycle fondamental (par session)
 
 ```
 CERBERUS -> AGENT -> CERBERUS
@@ -72,13 +78,13 @@ CERBERUS -> AGENT -> CERBERUS
 2. L'agent realise sa mission en suivant sa feuille de route
 3. A la fin, l'agent rend la main a Cerberus (ou passe au suivant de la chaine)
 
-### Les garde-fous (qualite et protection)
+### Mes garde-fous (qualite et protection)
 
-Le cerveau-projet se protege par des tests automatiques :
+Je me protege par des tests automatiques :
 
-- **Une suite de 46 tests** verifie que rien ne casse quand quelque chose change.
-  Un seul agent, **Janus**, a le droit de la lancer : les autres agents testent
-  uniquement leur propre travail.
+- **97 tests** verifient que rien ne casse quand quelque chose change.
+  Un seul agent, **Janus**, a le droit de lancer la non-regression complete :
+  les autres agents testent uniquement leur propre travail.
 - **Aucun fichier temporaire** n'est laisse a la racine du projet apres un travail :
   chaque script temporaire passe par un **controle automatique** (format, qualite)
   avant d'etre execute, puis est supprime en fin de mission.
@@ -88,11 +94,11 @@ Le cerveau-projet se protege par des tests automatiques :
 
 ---
 
-## Le classeur de variables
+## Mon classeur de variables
 
-Le cerveau-projet conserve des **variables partagees** entre les agents et les sessions
+Je conserve des **variables partagees** entre mes agents et mes sessions
 (profil de session, etat courant). Elles vivent dans
-`cerveau-projet/agents/classeur-variables/` : c'est la memoire commune du systeme.
+`cerveau-projet/agents/classeur-variables/` : c'est ma memoire commune.
 
 | Caracteristique | Detail |
 |---|---|
@@ -100,37 +106,37 @@ Le cerveau-projet conserve des **variables partagees** entre les agents et les s
 | **Partage** | Chaque agent lit et ecrit les memes variables |
 | **Verifie** | La coherence des variables est controlee en continu |
 
-## Les fondations du systeme
+## Mes fondations
 
-Au-dela du classeur, le cerveau-projet s'appuie sur des fondations partagees,
+Au-dela du classeur, je m'appuie sur des fondations partagees,
 conservees dans `cerveau-projet/agents/` :
 
 | Fondation | Role |
 |---|---|
-| **Conventions** | Les facons de faire communes : ecriture, liens, protocoles, structures |
-| **Regles immuables** | Les regles inviolables : veracite, choix des agents, groupes |
+| **36 Protocoles** | Les facons de faire communes : ecriture, liens, structures |
+| **75 Regles immuables** | Les regles inviolables : veracite, choix des agents, groupes |
 | **Traces** | Le journal des usages d'outils, pour auditer et ameliorer en continu |
 
-## Amelioration continue
+## Mon amelioration continue
 
-Le cerveau-projet s'ameliore en continu, a plusieurs niveaux :
+Je m'ameliore en continu, a plusieurs niveaux :
 
 | Niveau | Comment |
 |---|---|
 | **Les agents** | Chaque agent note ses erreurs et ne les refait plus |
 | **Les outils** | Rondes d'amelioration regulieres : robustesse, performance, securite |
 | **Le systeme** | A chaque demande, Cerberus active l'agent habilite pour ameliorer |
-| **Les tests** | Les tests verifient que rien ne casse quand quelque chose change |
+| **Les tests** | 97 tests verifient que rien ne casse quand quelque chose change |
 
 > Toute demande d'amelioration passe par Cerberus : il active le bon agent, qui
-> ameliore, et le README est mis a jour en consequence.
+> ameliore, et je suis mis a jour en consequence.
 
 ---
 
 ## Commencer
 
-Le cerveau-projet se pilote par conversation : vous ecrivez une phrase, le
-systeme repond et vous guide etape par etape.
+Je me pilote par conversation : vous ecrivez une phrase, je reponds et vous
+guide etape par etape.
 
 1. **Ouvrez un terminal** dans le dossier du projet
 2. **Lancez le guide de demarrage** (le fichier `demarrer.md` a la racine ne se
@@ -143,10 +149,10 @@ systeme repond et vous guide etape par etape.
 
 3. **Repondez aux questions du guide** : il vous demande un identifiant simple
    (par exemple `llm-1`) pour retrouver votre session au prochain lancement
-4. **Saluez le gardien** : le systeme se presente. Ecrivez par exemple
+4. **Saluez le gardien** : je me presente. Ecrivez par exemple
    `Bonjour Cerberus` puis decrivez ce que vous voulez faire
-5. **Suivez les instructions** : a chaque etape, le systeme vous indique la
-   commande exacte a executer et vous pose les questions au bon moment
+5. **Suivez les instructions** : a chaque etape, je vous indique la
+   commande exacte a executer et je vous pose les questions au bon moment
 6. **En cas de doute** : la section [Vocabulaire](#vocabulaire) ci-dessous
    explique les termes du projet
 
@@ -158,21 +164,39 @@ systeme repond et vous guide etape par etape.
 
 | Terme | Definition |
 |---|---|
-| **Cerveau-projet** | Structure persistante qui organise et guide le dev |
-| **Pense-bete** | Idee en cours de developpement |
-| **Spec** | Definition technique et fonctionnelle |
-| **Todo** | Liste des taches |
-| **Carte de decision** | Lignes de decision par mission dans chaque fiche d'agent |
-| **RVAV** | Rechercher - Verifier - Analyser - Valider |
-| **Statut** | ebauche, prepare, dev, test, valide |
-| **Corrections.md** | Memoire d'apprentissage de chaque agent |
 | **Agent** | Assistant IA specialise, chacun avec un role precis |
-| **Session** | Une conversation de travail avec le systeme |
-| **Workflow** | Enchainement d'etapes pour accomplir une tache |
-| **Parcours** | Feuille de route pas a pas suivie par un agent |
-| **Outil** | Petit programme partage que les agents utilisent pour travailler |
+| **Audit** | Verification croisee du travail d'un autre agent |
+| **Bumper** | Outil qui met a jour les versions dans les fichiers |
+| **Carte de decision** | Lignes de decision par mission dans chaque fiche d'agent |
+| **Cerveau-projet** | Structure persistante qui organise et guide le dev |
+| **Chrono** | Mesure du temps dexecution des tests et outils |
 | **Combo** | Enchainement d'outils pour realiser une tache complete |
+| **Convention** | Facons de faire communes : ecriture, liens, structures |
+| **Corrections.md** | Memoire d'apprentissage de chaque agent |
 | **Garde-fou** | Test ou regle qui protege le systeme contre les erreurs |
-| **Classeur** | Espace de stockage partage des variables entre les agents |
+| **Idee** | Demande de l'utilisateur, point de depart d'une mission |
 | **Non-regression** | Verification que les changements ne cassent rien |
-| **Test** | Verification automatique qu'un comportement attendu fonctionne |
+| **Outil** | Petit programme partage que les agents utilisent pour travailler |
+| **Parcours** | Feuille de route pas a pas suivie par un agent |
+| **Pense-bete** | Idee en cours de developpement |
+| **Performance** | Optimisation de la vitesse et des ressources |
+| **Philosophie** | Principes de comportement d'un agent |
+| **Protection** | Mecanisme de securite contre les erreurs (anti-boucles, anti-blocage) |
+| **Protocole** | Regle technique detaillee (comment faire quelque chose) |
+| **Recherche** | Demande d'exploration ou de decouverte |
+| **Regle immuable** | Regle inviolable du systeme (veracite, choix des agents) |
+| **Registre** | Journal des usages d'outils pour auditer et ameliorer |
+| **Reflexion reduite** | Analyse avant action : comprendre avant de faire |
+| **Rapport** | Document de retour d'un agent apres sa mission |
+| **RVAV** | Rechercher - Verifier - Analyser - Valider |
+| **Session** | Une conversation de travail avec le systeme |
+| **Spec** | Definition technique et fonctionnelle |
+| **Statut** | ebauche, prepare, dev, test, valide |
+| **Systeme** | L'ensemble du cerveau-projet et ses composants |
+| **Template** | Modele de fichier a reproduire |
+| **Temporaire** | Script ou fichier cree pour une mission, supprime apres |
+| **Todo** | Liste des taches |
+| **Verrou** | Mecanisme d'exclusion mutuelle pour la securite des fichiers |
+| **Workflow** | Enchainement d'etapes pour accomplir une tache |
+
+| **Socrate** | Le philosophe qui questionne -- discute des revisions avec l'utilisateur et produit une liste de missions pour Cerberus | Selon sa carte de decision |

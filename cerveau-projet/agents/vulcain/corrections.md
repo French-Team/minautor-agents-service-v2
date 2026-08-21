@@ -4814,3 +4814,69 @@ Derniere activite (la recence est la seule source non ambigue), JAMAIS
 l ordre des blocs du fichier (independant de la recence). Meme piege que
 le chrono multi-sessions : la moitie de la logique (lecture) ne filtrait pas
 par session.
+
+
+## [LECON] 2026-08-20 -- Ajout dry-run dans mettre-a-jour-readme + combos (Vulcain)
+
+**Contexte** : demande Clio -- ajouter un mode --dry-run (preview AVANT/APRES sans ecriture) et le rendre obligatoire avant tout --maj (regle Clio v0.2.2 : ton 1ere personne, dry-run obligatoire, badges dynamiques).
+
+**Actions** :
+1. mettre-a-jour-readme v0.4.3 -> v0.4.4 : ajout option --dry-run (fonction dry_run() qui affiche les changements futurs sans ecrire)
+2. combo-maj-readme v0.1.0 -> v0.2.0 : ajout etape dry-run entre verifier et maj (case c3 + c3b question + c3c maj)
+3. combos-maj-readme-massive v0.1.6 -> v0.1.7 : ajout etape 2b dry-run avant maj
+4. Parite .sh et .md a jour
+
+**Verdict** : VALIDE -- dry-run teste (38 changements detectes), ASCII 0 sur 5 fichiers, parite py/sh/md.
+
+**Lecon** : le dry-run est un garde-fou de processus : il force l agent a VOIR les changements AVANT de les appliquer. C est le meme principe que le --dry-run des scripts temporaire : l entonnoir montre ce qu il ferait avant d executer.
+## Lecon 2026-08-20 : parcours-vulcain case c13c (modification mineure)
+
+**Contexte** : La case c14 exigeait Morpheus pour TOUTE modification, meme 1 ligne.
+
+**Correction** : Ajout case c13c entre c13b et c14 :
+- question : 'Modification concerne UN SEUL champ/ligne ?'
+- OUI -> c15 (FIN, skip Morpheus)
+- NON -> c14 (Morpheus requis)
+
+**Lecon** : Les parcours doivent prevoir des raccourcis pour les missions simples. Un parcours trop rigide decourage l agent et casse la chaine.
+
+**Version** : 0.5.2 -> 0.6.0
+## [LECON] 2026-08-20 -- ENCART + CORPS JOURNAL : ID LLM AU LIEU DE LA SESSION (Vulcain)
+
+**Contexte** : demande utilisateur - dans l encart 'Activites recentes' d AGENTS-historique.md, remplacer la colonne 'session' par 'id' (l id LLM, ex: freebuff), sur l encart ET le corps du journal.
+
+**Actions** :
+1. activer-agent-principal v0.5.19 -> v0.5.20 : composer_bloc_historique ecrit '- HH:MM | id | raison' avec identifiant = id_lie_a_session(session) ou session (repli si aucun id lie) ; maj_encart_activites header '| Heure | Agent | id | Raison |'
+2. Migration AGENTS-historique.md (168 entrees) : session-llm-1 avant 20/08 20:51 -> llm-1, apres -> freebuff ; session-llm-3 -> kilo-test2 ; session-llm-4 -> opencode ; mentions dans les raisons conservees
+3. lire-activite-recente v0.1.1 -> v0.1.2 (docstring + variable identifiant)
+4. Doc outil a jour
+
+**Verdict** : VALIDE -- outil teste sur copie (encart + corps affichent freebuff), non-regression sans nouvelle regression (KOs preexistants non lies), ASCII 0, test-091 OK.
+
+**Lecon** : changer le format d un fichier journal partage impose de (1) migrer l existant avec un mappage HISTORIQUE (l id d une session a change dans le temps : llm-1 puis freebuff pour session-llm-1) et (2) verifier TOUS les parseurs/lecteurs (lire-activite-recente lit la colonne telle quelle : il suffit de migrer le corps pour que l affichage suive).
+## [LECON] 2026-08-21 -- INSERTION HISTORIQUE : SECTION JOUR SOUS L ENCART + BORNAGE SECTION (Vulcain)
+
+**Contexte** : demande utilisateur - les interventions de Themis du 21/08 etaient placees AU-DESSUS de l encart 'Activites recentes' dans AGENTS-historique.md. Cause dans ajouter_historique() (activer-agent-principal.py) : la branche 'nouvelle date' inserait apres le PREMIER \n---\n (fin du FRONTMATTER) au lieu d apres l encart.
+
+**Corrections (v0.5.20 -> v0.5.21)** :
+1. Branche 'nouvelle date' : insertion APRES l encart (cible : la 1re section jour ## JJ/MM/AAAA existante, repli : fin de l encart, puis fin de l en-tete)
+2. Branche 'date existante' : contenu.index('### <agent>') trouvait le PREMIER bloc agent du fichier (souvent dans un jour ANTERIEUR) - borne la recherche a la section du jour (fin_jour = prochain \n## ). Sans ce fix, les entrees Cerberus du 21/08 tombaient dans le bloc Cerberus du 20/08.
+3. Section 21/08 repositionnee sous l encart dans le fichier actuel (script binaire, LF purs)
+4. E5 Pattern 14 : parcours-vulcain.json 0.5.2 -> 0.6.0 (fiche deja a 0.6.0, P10 CONFORME)
+
+**Validations** : tests fonctionnels sur copie (nouvelle date -> sous l encart ; date existante + nouvel agent -> bloc cree dans la bonne section ; date existante + agent present -> entree en tete du bloc, ordre decroissant), valider-cartes-decision vulcain CONFORME + --tous 17/17, guider affiche v0.6.0, marbre 8/8, evaluer-processus 0 probleme, bumper audit --tous coherent (0.5.21), ASCII 0 CRLF 0.
+
+**Lecons** : (1) un fichier avec en-tete + encart + historique a 3 zones : le premier \n---\n est la fin de l EN-TETE, pas de l encart - pour inserer dans l historique, cibler la 1re section jour, JAMAIS le frontmatter. (2) Toute recherche de bloc/marqueur doit etre BORNEE a sa section (jour/agent) - contenu.index() global melange les jours. (3) Un script de manipulation doit etre teste AVANT ecriture reelle (mon 1er script de repositionnement a perdu le bloc themis en s arretant a la 1re ligne vide - reconstruit depuis les lignes de l encart avec validation croisee des prefixes 77 caracteres). (4) Le bumper en mode dossier signale les fichiers auxiliaires (ex: *-test.md, spec/) comme incoherents - l audit --tous les exclut par conception (faux positifs documentaires).
+
+## [LECON] 2026-08-21 -- GARDE-FOU v0.5.22 : RELAIS DE CHAINE AUTORISE (Vulcain)
+
+**Contexte** : Option A validee par l utilisateur (retour Pattern 8) - chaque agent active l agent SUIVANT a sa fin de carte (chaine bout-en-bout). Le garde-fou v0.5.19 BLOQUAIT toute activation directe (agent actif != Cerberus, cible != Cerberus -> BLOQUER sauf --forcer), ce qui rendait les chaines des cartes inexecutables : la boucle passait toujours par Cerberus.
+
+**Corrections (v0.5.21 -> v0.5.22)** :
+1. activer-agent-principal.py : le cas cible != agent_actuel passe de BLOQUER a AVERTISSEMENT + AUTORISER (relais de chaine, Pattern 8). Le message avertit : si l agent actif n a PAS termine sa mission, reactiver Cerberus d abord. Le --forcer reste dispo mais n est plus necessaire pour les chaines.
+2. .sh aligne (il n avait pas le blocage), .md doc a jour (section garde-fou + versionning), spec 0.5.21 -> 0.5.22.
+3. Test fonctionnel sur copie : chaine Cerberus->buffy->vulcain->morpheus->janus->Cerberus, tous rc=0, avertissement relais visible.
+
+**Validations** : bumper audit --tous coherent (0.5.22), ASCII 0 CRLF 0, test-099 (brouillon Morpheus) 2/4 : tests 3-4 OK (reactivation Cerberus + chaine complete), tests 1-2 KO sur des attentes du BROUILLON (message literal 'single-session' + option --multi-session inexistante) - c est le domaine de Morpheus de les adapter, je ne touche pas aux fichiers de test.
+
+**Lecon** : quand une regle immuable (garde-fou) est en decalage avec les cartes, corriger l OUTIL (la regle) plutot que contourner avec --forcer - l utilisateur valide la direction (Option A) puis l outil s aligne sur les cartes. Les tests brouillons d un autre agent (Morpheus) ne sont PAS a corriger par le constructeur : les executer pour l etat reel, documenter les ecarts, et laisser le testeur adapter son test.

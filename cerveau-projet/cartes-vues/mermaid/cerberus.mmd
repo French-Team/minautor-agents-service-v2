@@ -1,4 +1,4 @@
-%% Carte de decision de cerberus (parcours v0.5.5)
+%% Carte de decision de cerberus (parcours v0.5.10)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -34,21 +34,30 @@ flowchart TD
     c23(["Signaler le besoin"])
     c24["Enregistrer mes usages d outils"]
     c3["Lister les agents disponibles"]
+    c45["Activer Socrate pour revision strategique"]
+    c45b{"Socrate actif ?"}
+    c46["Activer Chiron pour eduquer un agent"]
+    c46b{"Chiron actif ?"}
     c5{"Identifier l'agent habilite"}
     c6["Activer l'agent habilite"]
     c7["Annoncer la mission et suivre le cycle"]
     c8["Verifier l'agent (identification)"]
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0e
     c0b -- "NON" --> c0
     c0c --> c0d
-    c0d --> c1
+    c0d --> cU1
     c0e --> c0c
     c1 -- "accueil" --> c2
     c1 -- "activation" --> c8
     c1 -- "retour" --> c11
     c1 -- "ameliorer" --> c1b
     c1 -- "autre" --> c18
+    c1 -- "revision" --> c45
+    c1 -- "eduquer" --> c46
     c10 --> c7
     c11 --> c12
     c12 --> c12a
@@ -81,8 +90,17 @@ flowchart TD
     c22 --> c24
     c24 --> c20
     c3 --> c5
+    c45 --> c45b
+    c45b -- "OUI" --> c24
+    c45b -- "NON" --> c45
+    c46 --> c46b
+    c46b -- "OUI" --> c24
+    c46b -- "NON" --> c46
     c5 -- "OUI" --> c6
     c5 -- "NON" --> c5
     c6 --> c7
     c7 --> c24
     c8 --> c10
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

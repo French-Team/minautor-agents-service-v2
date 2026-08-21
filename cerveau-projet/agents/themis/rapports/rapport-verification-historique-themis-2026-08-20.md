@@ -1,0 +1,93 @@
+# Verification AGENTS-historique.md - Position interventions Themis (2026-08-20)
+
+**Agent auditrice** : Themis
+**Demande utilisateur** : verifier que dans AGENTS-historique.md, les interventions de Themis
+sont placees AU-DESSUS de l encart 'Activites recentes'.
+
+---
+
+## VERDICT : A REVOIR - DEF AUT CONFIRME (interventions Themis AU-DESSUS de l encart)
+
+La structure actuelle du fichier place la section `## 21/08/2026` (avec les 3 interventions
+Themis du jour) AVANT l encart `## Activites recentes (10)`, contrairement a toutes les
+autres sections de date (20/08, 19/08, 18/08) qui sont positionnees SOUS l encart.
+
+---
+
+## Structure constatee (working tree)
+
+```
+lignes 1-6   : frontmatter (--- / identite / ---)
+lignes 8-14  : ## 21/08/2026          <-- AU-DESSUS de l encart (DEF A UT)
+                ### themis
+                - 06:59 | freebuff | VERIFICATION AGENTS-HISTORIQUE.MD ...
+                - 06:47 | freebuff | VERIFICATION CASES FIN VULCAIN/BUFFY/CLIO ...
+                - 06:38 | freebuff | RE-VERIFICATION BOUCLE KO SOCRATE ...
+lignes 17-30 : ## Activites recentes (10)   <-- l encart
+lignes 34+   : ## 20/08/2026 (### gardien, Cerberus, janus, themis, buffy, ...)
+                ## 19/08/2026, ## 18/08/2026  <-- SOUS l encart (correct)
+```
+
+Les 3 interventions de Themis du 21/08/2026 (06:59, 06:47, 06:38) sont dans la section
+`## 21/08/2026` positionnee AU-DESSUS de l encart 'Activites recentes'.
+
+---
+
+## Cause identifiee (outil activer-agent-principal.py)
+
+Dans `ajouter_historique()` (lignes ~570-585), la branche `else` (nouvelle date absente du
+fichier) insere la nouvelle section jour APRES le premier `\n---\n` trouve dans le fichier :
+
+```python
+else:
+    idx_entete = contenu.find("\n---\n")     # trouve la FIN DU FRONTMATTER
+    if idx_entete != -1:
+        idx_inser = idx_entete + len("\n---\n")
+    else:
+        idx_inser = 0
+    nouveau_bloc = "\n" + marqueur_jour + "\n\n" + marqueur_agent + "\n" + nouvelle_ligne
+    contenu = contenu[:idx_inser] + nouveau_bloc + contenu[idx_inser:]
+```
+
+Le premier `\n---\n` du fichier est la fin du FRONTMATTER (ligne 6), PAS la fin de l encart.
+La nouvelle section date est donc inseree entre le frontmatter et l encart 'Activites
+recentes' -> elle se retrouve AU-DESSUS de l encart.
+
+**Attendu** : la nouvelle section date devrait etre inseree APRES l encart 'Activites
+recentes' (entre la fin de l encart et la premiere section de date existante), comme les
+autres jours (20/08, 19/08, 18/08).
+
+---
+
+## Points verifies (re-executes independamment)
+
+1. **Position** : section `## 21/08/2026` (lignes 8-14) AU-DESSUS de l encart `## Activites
+   recentes (10)` (ligne 17) - DEF A UT CONFIRME
+2. **Les autres jours** : 20/08 (ligne 34), 19/08 (ligne 144), 18/08 (ligne 250) - tous SOUS
+   l encart (correct) - le defaut ne touche que la section du jour courant creee en premier
+3. **Coherence chronologique des entrees themis** : les entrees themis sont bien triees par
+   date/heure dans leurs sections respectives (21/08 : 06:59, 06:47, 06:38 decroissant ;
+   20/08 : 22:58, 22:47, 22:32, 21:31, 06:35, 06:33, 06:29, 06:27, 06:23, 06:17 decroissant)
+   - OK
+4. **Encart coherent avec le corps** : les 10 entrees de l encart correspondent aux 10
+   entrees les plus recentes du corps (trie par date/heure decroissante) - OK
+5. **ASCII / CRLF** : AGENTS-historique.md = 0 non-ASCII, 0 CRLF - OK
+6. **Doc outil** : " l encart 'Activites recentes' en haut du fichier " + " entre l en-tete
+   et l historique par jour " - la position attendue de l encart est confirmee (l encart
+   doit rester juste apres le frontmatter, et les sections de date APRES l encart)
+
+---
+
+## Agent habilite pour corriger
+- **Vulcain** (constructeur d outils - l outil activer-agent-principal.py ecrit l historique) :
+  corriger la branche `else` de `ajouter_historique()` pour inserer la nouvelle section date
+  APRES l encart 'Activites recentes' (et non apres le frontmatter), puis repositionner la
+  section `## 21/08/2026` sous l encart dans le fichier actuel.
+
+---
+
+## Lecon
+Un fichier avec EN-TETE (frontmatter) + ENCART + HISTORIQUE a 3 zones distinctes : le premier
+`\n---\n` est la fin de l EN-TETE, pas la fin de l ENCART. Pour inserer une nouvelle section
+dans l historique, il faut cibler la fin de l encart (le `---` qui suit le tableau
+'Activites recentes') ou la premiere section `## <date>` existante, jamais le frontmatter.

@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.19"
+VERSION="0.5.23"
 STATUT="prepare"
 
 # Configuration
@@ -47,6 +47,7 @@ get_agent_role() {
         "Gardien"|"gardien") echo "Gardien du marbre -- propose la modification des zones protegees (l utilisateur valide), verifie l integrite du noyau" ;;
         "Argus"|"argus") echo "Detecteur de contradictions -- trouve et compare les incoherences (cases, regles, protocoles, git)" ;;
         "Chiron"|"chiron") echo "Educateur des agents -- formation continue" ;;
+        "Socrate"|"socrate") echo "Conversateur de revision strategique -- discute et priorise les problemes" ;;
         *) echo "Agent inconnu" ;;
     esac
 }
@@ -71,6 +72,7 @@ get_agent_fiche() {
         "Gardien"|"gardien") echo "cerveau-projet/agents/gardien/gardien.md" ;;
         "Argus"|"argus") echo "cerveau-projet/agents/argus/argus.md" ;;
         "Chiron"|"chiron") echo "cerveau-projet/agents/chiron/chiron.md" ;;
+        "Socrate"|"socrate") echo "cerveau-projet/agents/socrate/socrate.md" ;;
         *) echo "cerveau-projet/agents/inconnu/inconnu.md" ;;
     esac
 }
@@ -95,6 +97,7 @@ get_agent_corrections() {
         "Gardien"|"gardien") echo "cerveau-projet/agents/gardien/corrections.md" ;;
         "Argus"|"argus") echo "cerveau-projet/agents/argus/corrections.md" ;;
         "Chiron"|"chiron") echo "cerveau-projet/agents/chiron/corrections.md" ;;
+        "Socrate"|"socrate") echo "cerveau-projet/agents/socrate/corrections.md" ;;
         *) echo "cerveau-projet/agents/inconnu/corrections.md" ;;
     esac
 }
@@ -518,6 +521,7 @@ couleur_agent() {
         gardien) echo "#475569" ;;
         argus) echo "#9333ea" ;;
         chiron) echo "#0891b2" ;;
+        socrate) echo "#a855f7" ;;
         athena) echo "#c026d3" ;;
         promethee) echo "#d97706" ;;
         minerve) echo "#059669" ;;

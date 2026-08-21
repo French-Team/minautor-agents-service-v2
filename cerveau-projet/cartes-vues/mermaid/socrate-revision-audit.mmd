@@ -1,0 +1,41 @@
+%% Carte de decision de socrate (parcours v0.1.2)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE"]
+    c0b{"Confirmation"}
+    c0c["CONTEXTE : activite recente"]
+    c0e["Consulter les lecons"]
+    c1{"Domaine d'audit"}
+    c2{"Criteres"}
+    c3{"Indices"}
+    c4{"Autres domaines ?"}
+    c5["Creer missions-revision.md"]
+    c5b{"Fichier cree ?"}
+    c6(["FIN - Activer Janus"])
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> cU1
+    c0e --> c0c
+    c1 -- "tests" --> c2
+    c1 -- "outils" --> c2
+    c1 -- "parcours" --> c2
+    c1 -- "agents" --> c2
+    c1 -- "qualite" --> c2
+    c2 -- "conformite" --> c3
+    c2 -- "performance" --> c3
+    c2 -- "securite" --> c3
+    c2 -- "coherence" --> c3
+    c3 -- "oui, des examples" --> c4
+    c3 -- "non, audit ouvert" --> c4
+    c4 -- "OUI" --> c1
+    c4 -- "NON" --> c5
+    c5 --> c5b
+    c5b -- "OUI" --> c6
+    c5b -- "NON" --> c5
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

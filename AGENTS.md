@@ -14,78 +14,23 @@ identite:
 
 ## Sessions LLM
 
-### Session : session-llm-4
-
-| Champ | Valeur |
-|---|---|
-| **Nom LLM** | opencode |
-| **Nom Agent** | morpheus |
-| **Role Agent** | Testeur -- validation des outils et des tests |
-| **Derniere mise a jour** | 2026-08-19 |
-| **Fiche** | [cerveau-projet/agents/morpheus/morpheus.md](cerveau-projet/agents/morpheus/morpheus.md) |
-| **Corrections** | [cerveau-projet/agents/morpheus/corrections.md](cerveau-projet/agents/morpheus/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | TESTER l outil evaluer-progression cree par Vulcain : ecrire et executer les test-XXX sans que Vulcain touche a aucun fichier de test |
-
-DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json --case c0
-(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
-a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
-ensuite les branches case par case ; si tu reprends apres une interruption,
-reprends a la case courante avec --case <cid> --reponses '<reponse>').
-### Session : session-llm-3
-
-| Champ | Valeur |
-|---|---|
-| **Nom LLM** | kilo-test2 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-18 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Identification |
-| **Raison** | Identification LLM - demarrage de session |
-
-
-### Session : session-llm-2
-
-| Champ | Valeur |
-|---|---|
-| **Nom LLM** | kilo-llm |
-| **Nom Agent** | themis |
-| **Role Agent** | Evaluatrice croisee -- evaluation et audit |
-| **Derniere mise a jour** | 2026-08-18 |
-| **Fiche** | [cerveau-projet/agents/themis/themis.md](cerveau-projet/agents/themis/themis.md) |
-| **Corrections** | [cerveau-projet/agents/themis/corrections.md](cerveau-projet/agents/themis/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | Inventaire et audit des outils de performance (tests, fonction, worker, workflow, flux, round, session) : analyser l environnement de travail (OS, ressources, parallelisme) puis lister les outils necessaires et possibles pour ameliorer les performances, afin d etablir des configurations adaptables selon le systeme et les ressources disponibles |
-
-DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \n  cerveau-projet/agents/themis/parcours/parcours-themis.json --case c0
-(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
-a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
-ensuite les branches case par case ; si tu reprends apres une interruption,
-reprends a la case courante avec --case <cid> --reponses '<reponse>').
 ### Session : session-llm-1
 
 | Champ | Valeur |
 |---|---|
-| **Nom LLM** | llm-1 |
+| **Nom LLM** | freebuff |
 | **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-20 |
+| **Derniere mise a jour** | 2026-08-21 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | janus (retour de mission) |
-| **Raison** | Session terminee. Bilan consolide : investigation opencode /tmp/opencode/ + garde-fou v0.5.19 (blocage double activation) + evaluer-processus v0.1.13 (ignore test missions) + bumper v0.1.13 + non-regression 93/96 (3 KO documentes) + nettoyage artefacts. 5 leciones documentees dans cerberus/corrections.md. |
+| **Active par** | cerberus (retour de mission) |
+| **Raison** | BILAN CONSOLIDE - VERDICT JANUS : VALIDE (97/97 OK, rating test 98.8 EXCELLENT). Mission alignement indices cartes terminee : 34 indices de 16 cartes alignes alias corriger-symboles -> canonique corriger-accents-zones-sensibles (convention du catalogue). Reparation immediate Janus : pin test-004 morpheus 0.5.3 -> 0.5.4. Chaine : Cerberus -> Buffy (34 modifs via editer-parcours + bumps + pins + vues) -> Themis (audit CONFORME 0 defaut) -> Buffy (retour) -> Janus (controle 97/97) -> Cerberus. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | llm-1 | Cerberus | 2026-08-20 07:03 |
-| session-llm-2 | kilo-llm | themis | 2026-08-18 21:05 |
-| session-llm-3 | kilo-test2 | Cerberus | 2026-08-18 21:57 |
-| session-llm-4 | opencode | morpheus | 2026-08-19 20:51 |
+| session-llm-1 | freebuff | Cerberus | 2026-08-21 19:52 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -151,7 +96,7 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 ## Groupes d'agents (regles-groupes-agents)
 
 > **REGLE IMMUABLE** : [regles-groupes-agents.md](cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md) -- 3 groupes aux domaines separes :
-> **1) Coordination** : Cerberus. **2) Cerveau-projet** (gerent `cerveau-projet/` lui-meme : outils, parcours, fiches, protocoles, spec des outils, README) : **Buffy** (responsable), Vulcain, Morpheus, Janus, Atlas, Themis, Clio, Hygie, Hermes. **3) Trio projets futurs** (ecrivent `pense-betes/`, `specs/`, `todos/` pour le dev des apps futures) : Athena, Promethee, Minerve.
+> **1) Coordination** : Cerberus. **2) Cerveau-projet** (gerent `cerveau-projet/` lui-meme : outils, parcours, fiches, protocoles, spec des outils, README) : **Buffy** (responsable), Vulcain, Morpheus, Janus, Atlas, Themis, Clio, Hygie, Hermes, Socrate. **3) Trio projets futurs** (ecrivent `pense-betes/`, `specs/`, `todos/` pour le dev des apps futures) : Athena, Promethee, Minerve.
 > **REGLE** : le trio n'est JAMAIS utilise pour developper le cerveau-projet -- c'est Buffy la responsable.
 
 ## Liste des agents
@@ -181,6 +126,7 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 | [Gardien](cerveau-projet/agents/gardien/gardien.md) | cerveau-projet/agents/gardien/ | Gardien du marbre (securite du code) | Disponible (en attente) | SEUL a proposer la modification des zones protegees (l utilisateur valide) |
 | [Argus](cerveau-projet/agents/argus/argus.md) | cerveau-projet/agents/argus/ | Detecteur de contradictions | Disponible (en attente) | DETECTE et SIGNALE les incoherences (cases, regles, protocoles, git) - ne corrige jamais |
 | [Chiron](cerveau-projet/agents/chiron/chiron.md) | cerveau-projet/agents/chiron/ | Educateur des agents -- formation continue | Disponible (en attente) | Re-edue les agents quand les outils/regles/protocoles changent |
+| [Socrate](cerveau-projet/agents/socrate/socrate.md) | cerveau-projet/agents/socrate/ | Conversateur de revision strategique | Disponible (en attente) | Discute des revisions, priorise, produit une liste de missions pour Cerberus |
 
 ---
 

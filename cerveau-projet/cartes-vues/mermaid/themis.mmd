@@ -1,4 +1,4 @@
-%% Carte de decision de themis (parcours v0.5.1)
+%% Carte de decision de themis (parcours v0.5.6)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -38,10 +38,13 @@ flowchart TD
     c8c{"VERIFICATION D IMPACT (Pattern 14)"}
     c8d{"LA FIN SUIT SA CARTE (Pattern 13)"}
     c9["Ecrire le rapport dans themis/rapports/"]
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0e
     c0b -- "NON" --> c0
-    c0c --> c1
+    c0c --> cU1
     c0e --> c0c
     c1 -- "audit" --> c2
     c1 -- "doute" --> c14
@@ -87,3 +90,6 @@ flowchart TD
     c8d -- "OUI" --> c9
     c8d -- "NON" --> c3
     c9 --> c12
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

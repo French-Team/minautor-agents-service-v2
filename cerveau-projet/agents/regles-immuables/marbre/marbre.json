@@ -29,8 +29,8 @@
    "cid": "c10",
    "raison": "Activer l agent : le geste fondamental de la coordination",
    "empreinte": "90f47b657d33a4ee53aaf95d90dc9204403c1aea854a0a1c9dfda881297513dc",
-   "modifie_le": "2026-08-19 21:31:44",
-   "raison_modification": "D6 multi-sessions : session-llm-1 -> <session> (validation utilisateur 2026-08-19)"
+   "modifie_le": "2026-08-20 22:00:24",
+   "raison_modification": "Reparation dette preexistante : empreinte c10 obsoleted par travail anterieur non commite (sync post-reparation) ; autorisation utilisateur obtenue via ask_user 2026-08-20 (OUI - re-empreinter c10). Retrait simultane de la cle corrompue 2 du manifeste."
   },
   "cerberus.c14": {
    "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
@@ -58,7 +58,8 @@
    "marqueur_fin": "<!-- MARBRE:FIN constitution -->",
    "raison": "Constitution du cerveau-projet : Configuration Active + cycle fondamental (regles immuables du comportement de Cerberus)",
    "empreinte": "abc67871fb36053c82fe6b3561ded3a3531f6fc92d5b9018cf0867a207a9e576",
-   "modifie_le": "2026-08-15 16:40"
+   "modifie_le": "2026-08-20",
+   "raison_modification": "Sync post-reparation parcours : sessions LLM mises a jour"
   },
   "regles-groupes-agents": {
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",

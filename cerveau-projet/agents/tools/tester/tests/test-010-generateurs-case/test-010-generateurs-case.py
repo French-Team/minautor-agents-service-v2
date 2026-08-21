@@ -273,14 +273,16 @@ def main():
                  json.dumps(inds_rej2, ensure_ascii=True))
 
         # 7. Validation auto : valider-case --modele appele et CONFORME
+        sortie_bloc = (r_bloc.stdout or "") + (r_bloc.stderr or "")
         verifier("7a. Validation auto appelle valider-case",
-                 "valider-case" in r_bloc.stdout
-                 and "--modele" in r_bloc.stdout,
-                 r_bloc.stdout.strip()[-200:])
+                 ("valider-case" in sortie_bloc
+                  or "validateur-case" in sortie_bloc)
+                 and "--modele" in sortie_bloc,
+                 sortie_bloc.strip()[-200:])
         verifier("7b. Verdict CONFORME (0 a alleger sur le bloc genere)",
-                 "CONFORME" in r_bloc.stdout
-                 and "a alleger: 0" in r_bloc.stdout,
-                 r_bloc.stdout.strip()[-200:])
+                 "CONFORME" in sortie_bloc
+                 and "a alleger: 0" in sortie_bloc,
+                 sortie_bloc.strip()[-200:])
 
         # 8. --dry-run : aucune modification
         travail3 = os.path.join(tmp, "parcours3.json")

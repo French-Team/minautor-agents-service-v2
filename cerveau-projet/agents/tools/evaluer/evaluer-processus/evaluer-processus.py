@@ -28,7 +28,7 @@
 #   --verbose           : detail des outils assignes par carte
 #   --version
 #
-# Version : 0.1.13
+# Version : 0.1.14
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -55,7 +55,50 @@ import sys
 
 FENETRE_JOURS = 1  # fenetre de verification des usages recents (v0.1.3) : le jour courant
 
-VERSION = "0.1.13"
+VERSION = "0.1.14"
+
+# ALIAS_CANONIQUE (v0.1.14, 2026-08-21, conflit test-035/test-079 revele par
+# Janus) : le catalogue-commandes.json est la SOURCE DE VERITE des noms
+# d outils. Certaines commandes sont des ALIAS (ex : corriger-symboles
+# pointe le script de corriger-accents-zones-sensibles, le dossier reel).
+# Le registre des usages DOIT porter le nom canonique (dossier reel, regle
+# test-079/analyser-noms-maj) tandis que les indices des cartes peuvent
+# porter l alias (convention etablie, 16 cartes). Sans resolution, un usage
+# registre au nom canonique etait signale OUTIL_HORS_CARTE alors que la
+# carte l autorise sous son alias. Le catalogue mappe nom -> script ; le
+# nom canonique = dossier reel contenant le script.
+CATALOGUE_CHEMIN = os.path.join("cerveau-projet", "agents", "tools",
+                                 "generateurs", "generateurs-commande",
+                                 "catalogue-commandes.json")
+
+
+def charger_catalogue(racine):
+    """Charge le catalogue-commandes.json (liste de commandes)."""
+    chemin = os.path.join(racine, CATALOGUE_CHEMIN)
+    if not os.path.isfile(chemin):
+        return []
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            data = json.load(fh)
+        return data.get("commandes", [])
+    except (OSError, ValueError):
+        return []
+
+
+def alias_vers_canonique(racine):
+    """Retourne {nom_commande: nom_canonique} pour les commandes dont le
+    dossier reel (contenant le script) differe du nom de commande.
+    Ex : corriger-symboles -> corriger-accents-zones-sensibles."""
+    mapping = {}
+    for cmd in charger_catalogue(racine):
+        nom = cmd.get("nom", "")
+        script = cmd.get("script", "")
+        if not nom or not script:
+            continue
+        dossier = os.path.basename(os.path.dirname(script))
+        if dossier and dossier != nom:
+            mapping[nom] = dossier
+    return mapping
 
 # Agents du cerveau-projet (famille cerveau-projet : cercles de controle).
 AGENTS_CERVE = ["cerberus", "buffy", "vulcain", "morpheus", "janus",
@@ -118,9 +161,12 @@ OUTILS_P0_PARTAGES = frozenset([
 ])
 
 
-def outils_de_la_carte(parcours):
+def outils_de_la_carte(parcours, aliases=None):
     """Tous les outils assignes dans les indices des cases de la carte,
-    HORS outils P0 partages (OUTILS_P0_PARTAGES)."""
+    HORS outils P0 partages (OUTILS_P0_PARTAGES).
+    v0.1.14 : si aliases (mapping alias -> nom canonique) est fourni, chaque
+    indice ajoute AUSSI son nom canonique : un usage registre porte le nom
+    canonique (dossier reel, test-079) meme si la carte reference l alias."""
     outils = set()
     for c in parcours.get("cases", {}).values():
         for ind in c.get("indices", []):
@@ -128,6 +174,10 @@ def outils_de_la_carte(parcours):
                 if ind["nom"] in OUTILS_P0_PARTAGES:
                     continue
                 outils.add(ind["nom"])
+                if aliases:
+                    canonique = aliases.get(ind["nom"])
+                    if canonique:
+                        outils.add(canonique)
     return outils
 
 
@@ -350,11 +400,12 @@ def outils_exclusifs(racine):
     present dans plusieurs cartes n est pas exclusif.
     """
     presence = {}
+    aliases = alias_vers_canonique(racine)
     for agent in tous_agents_parcours(racine):
         parcours = charger_parcours(racine, agent)
         if not parcours:
             continue
-        for outil in outils_de_la_carte(parcours):
+        for outil in outils_de_la_carte(parcours, aliases):
             presence.setdefault(outil, []).append(agent)
     return {outil: agents[0]
             for outil, agents in presence.items() if len(agents) == 1}
@@ -376,11 +427,12 @@ def detecter_outils_hors_carte(racine):
     problemes = []
     usages = usages_registre(racine)
     exclusifs = outils_exclusifs(racine)
+    aliases = alias_vers_canonique(racine)
     for agent in AGENTS_CERVE:
         parcours = charger_parcours(racine, agent)
         if not parcours:
             continue
-        outils_carte = outils_de_la_carte(parcours)
+        outils_carte = outils_de_la_carte(parcours, aliases)
         outils_p0 = outils_p0_de_la_fiche(racine, agent)
         autorises = outils_carte | outils_p0 | set(OUTILS_P0_PARTAGES)
         for outil in sorted(set(usages.get(agent, []))):

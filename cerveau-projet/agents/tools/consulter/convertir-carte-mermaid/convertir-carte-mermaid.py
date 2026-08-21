@@ -43,7 +43,7 @@ Options:
   --version        Affiche la version
   --aide           Affiche cette aide
 
-Version : 0.2.0
+Version : 0.2.1
 """
 import argparse
 import glob
@@ -53,7 +53,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 STATUT = "prepare"
 
 GREEN = "\033[0;32m"
@@ -101,6 +101,21 @@ def charger_parcours(chemin):
 def agent_du_parcours(donnees):
     ident = donnees.get("identite", {})
     return ident.get("appartient_a", ident.get("agent", "?"))
+
+
+def nom_fichier_parcours(chemin, donnees):
+    """Nom de sortie unique par parcours (source de verite : fichier).
+
+    Parcours principal : parcours-<agent>.json -> <agent>. Les sous-parcours
+    (ex: parcours-revision-audit.json de socrate) sont prefixes par l agent
+    pour eviter les collisions : <agent>-<sous>.
+    """
+    base = os.path.basename(chemin)
+    stem = base.replace("parcours-", "").replace(".json", "")
+    agent = agent_du_parcours(donnees)
+    if stem == agent:
+        return agent
+    return "%s-%s" % (agent, stem)
 
 
 def echapper(texte):
@@ -511,9 +526,10 @@ def generer(racine, agent, dossier_sortie, avec_index=False, avec_svg=False):
     nb = 0
     for p in parcours:
         donnees = charger_parcours(p)
-        nom = agent_du_parcours(donnees)
-        if agent and nom != agent:
+        agent_parcours = agent_du_parcours(donnees)
+        if agent and agent_parcours != agent:
             continue
+        nom = nom_fichier_parcours(p, donnees)
         texte, avis = convertir(donnees)
         erreurs_syntaxe = verifier_syntaxe(texte, donnees.get("cases", {}))
         chemin = os.path.join(dossier_sortie, nom + ".mmd")
@@ -544,14 +560,15 @@ def generer(racine, agent, dossier_sortie, avec_index=False, avec_svg=False):
                   "|---|---|---|---|---|"]
         for p in parcours:
             donnees = charger_parcours(p)
-            nom = agent_du_parcours(donnees)
-            if agent and nom != agent:
+            agent_parcours = agent_du_parcours(donnees)
+            if agent and agent_parcours != agent:
                 continue
+            nom = nom_fichier_parcours(p, donnees)
             parc = donnees.get("parcours", {})
             lignes.append("| %s | %s | %s | [%s.mmd](%s.mmd) | "
                           "[%s.svg](%s.svg) |"
-                          % (nom, parc.get("nom", "?"), parc.get("version", "?"),
-                             nom, nom, nom, nom))
+                          % (agent_parcours, parc.get("nom", "?"),
+                             parc.get("version", "?"), nom, nom, nom, nom))
         chemin = os.path.join(dossier_sortie, "index.md")
         with io.open(chemin, "w", encoding="ascii", newline="\n") as fh:
             fh.write("\n".join(lignes) + "\n")
@@ -565,7 +582,7 @@ def verifier(racine, dossier_sortie):
     parcours = lister_parcours(racine)
     for p in parcours:
         donnees = charger_parcours(p)
-        nom = agent_du_parcours(donnees)
+        nom = nom_fichier_parcours(p, donnees)
         texte, _ = convertir(donnees)
         chemin = os.path.join(dossier_sortie, nom + ".mmd")
         if not os.path.isfile(chemin):

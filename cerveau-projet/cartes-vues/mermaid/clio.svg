@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Carte de decision de clio (parcours v0.6.1) - genere par convertir-carte-mermaid v0.2.0 -->
-<svg xmlns="http://www.w3.org/2000/svg" width="1510" height="1980" viewBox="0 0 1510 1980" font-family="Arial, Helvetica, sans-serif">
+<!-- Carte de decision de clio (parcours v0.6.4) - genere par convertir-carte-mermaid v0.2.1 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1510" height="2158" viewBox="0 0 1510 2158" font-family="Arial, Helvetica, sans-serif">
   <defs>
     <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
     </marker>
   </defs>
-  <rect width="1510" height="1980" fill="#ffffff"/>
+  <rect width="1510" height="2158" fill="#ffffff"/>
     <path d="M 755.0 76.0 L 755.0 166.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
     <path d="M 755.0 202.0 L 755.0 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
     <path d="M 755.0 354.0 L 755.0 444.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
@@ -18,74 +18,81 @@
     <path d="M 755.0 658.0 L 755.0 748.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
     <path d="M 755.0 796.0 L 755.0 886.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
     <path d="M 755.0 506.0 L 755.0 596.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 755.0 922.0 L 870.0 1012.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="784.1" y="957.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="812.5" y="969.0" text-anchor="middle" font-size="10.5" fill="#1e293b">corriger</text>
-    <path d="M 755.0 922.0 L 448.4 1012.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="573.3" y="957.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="601.7" y="969.0" text-anchor="middle" font-size="10.5" fill="#1e293b">verifier</text>
-    <path d="M 755.0 922.0 L 668.8 1012.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="691.9" y="957.0" width="40.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="711.9" y="969.0" text-anchor="middle" font-size="10.5" fill="#1e293b">autre</text>
-    <path d="M 755.0 922.0 L 1068.0 1012.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="877.5" y="957.0" width="68.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="911.5" y="969.0" text-anchor="middle" font-size="10.5" fill="#1e293b">readme-dev</text>
-    <path d="M 221.6 1186.0 V 1237.0 H 141.8 V 1288.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 141.8 1336.0 L 435.6 1426.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="274.3" y="1371.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="288.7" y="1383.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUI</text>
-    <path d="M 141.8 1336.0 C 231.8 1243.0, 1138.8 1243.0, 1048.8 1150.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="670.9" y="1233.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="685.3" y="1245.0" text-anchor="middle" font-size="10.5" fill="#1e293b">NON</text>
-    <path d="M 435.6 1474.0 L 432.4 1564.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 432.4 1612.0 L 521.8 1702.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 521.8 1764.0 L 755.0 1854.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 448.4 1048.0 V 1099.0 H 1048.8 V 1150.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 352.6 1336.0 L 659.2 1426.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 659.2 1462.0 V 1513.0 H 646.4 V 1564.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="638.4" y="1503.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="652.8" y="1515.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUI</text>
-    <path d="M 659.2 1462.0 C 754.2 1477.0, 754.2 1411.0, 659.2 1426.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="742.8" y="1434.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="757.2" y="1446.0" text-anchor="middle" font-size="10.5" fill="#1e293b">NON</text>
-    <path d="M 668.8 1048.0 V 1099.0 H 432.4 V 1150.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="536.2" y="1089.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="550.6" y="1101.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUI</text>
-    <path d="M 668.8 1048.0 V 1099.0 H 643.2 V 1150.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="641.6" y="1089.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="656.0" y="1101.0" text-anchor="middle" font-size="10.5" fill="#1e293b">NON</text>
-    <path d="M 668.8 1048.0 V 1099.0 H 834.8 V 1150.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="731.8" y="1089.0" width="40.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="751.8" y="1101.0" text-anchor="middle" font-size="10.5" fill="#1e293b">audit</text>
-    <path d="M 432.4 1186.0 V 1237.0 H 969.0 V 1288.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 643.2 1186.0 V 1237.0 H 761.4 V 1288.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="668.3" y="1227.0" width="68.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="702.3" y="1239.0" text-anchor="middle" font-size="10.5" fill="#1e293b">TEMPORAIRE</text>
-    <path d="M 643.2 1186.0 V 1237.0 H 547.4 V 1288.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="569.7" y="1227.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="595.3" y="1239.0" text-anchor="middle" font-size="10.5" fill="#1e293b">DURABLE</text>
-    <path d="M 761.4 1324.0 V 1375.0 H 882.8 V 1426.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 834.8 1198.0 L 1163.8 1288.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 1048.8 1198.0 L 352.6 1288.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 870.0 1060.0 L 1272.4 1150.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 1068.0 1060.0 L 221.6 1150.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 1272.4 1198.0 L 1374.6 1288.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 1374.6 1324.0 V 1375.0 H 1087.2 V 1426.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 1087.2 1462.0 V 1513.0 H 860.4 V 1564.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="959.4" y="1503.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="973.8" y="1515.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUI</text>
-    <path d="M 1087.2 1462.0 V 1513.0 H 1084.0 V 1564.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="1071.2" y="1503.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="1085.6" y="1515.0" text-anchor="middle" font-size="10.5" fill="#1e293b">NON</text>
-    <path d="M 860.4 1612.0 L 755.0 1702.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="784.9" y="1647.0" width="45.6" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="807.7" y="1659.0" text-anchor="middle" font-size="10.5" fill="#1e293b">PETITE</text>
-    <path d="M 860.4 1612.0 L 988.2 1702.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="901.5" y="1647.0" width="45.6" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="924.3" y="1659.0" text-anchor="middle" font-size="10.5" fill="#1e293b">GROSSE</text>
-    <path d="M 755.0 1750.0 C 845.0 1657.0, 1174.0 1657.0, 1084.0 1564.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 988.2 1764.0 C 1078.2 1664.0, 1174.0 1664.0, 1084.0 1564.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 1084.0 1612.0 C 1174.0 1381.0, 311.6 1381.0, 221.6 1150.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 636.8 1060.0 V 1125.0 H 777.4 V 1190.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="678.7" y="1115.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="707.1" y="1127.0" text-anchor="middle" font-size="10.5" fill="#1e293b">corriger</text>
+    <path d="M 636.8 1060.0 V 1125.0 H 355.8 V 1190.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="467.9" y="1115.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="496.3" y="1127.0" text-anchor="middle" font-size="10.5" fill="#1e293b">verifier</text>
+    <path d="M 636.8 1060.0 V 1125.0 H 576.2 V 1190.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="586.5" y="1115.0" width="40.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="606.5" y="1127.0" text-anchor="middle" font-size="10.5" fill="#1e293b">autre</text>
+    <path d="M 636.8 1060.0 V 1125.0 H 975.4 V 1190.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="772.1" y="1115.0" width="68.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="806.1" y="1127.0" text-anchor="middle" font-size="10.5" fill="#1e293b">readme-dev</text>
+    <path d="M 221.6 1364.0 V 1415.0 H 141.8 V 1466.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 141.8 1514.0 L 435.6 1604.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="274.3" y="1549.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="288.7" y="1561.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUI</text>
+    <path d="M 141.8 1514.0 C 231.8 1421.0, 1138.8 1421.0, 1048.8 1328.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="670.9" y="1411.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="685.3" y="1423.0" text-anchor="middle" font-size="10.5" fill="#1e293b">NON</text>
+    <path d="M 435.6 1652.0 L 432.4 1742.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 432.4 1790.0 L 521.8 1880.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 521.8 1942.0 L 755.0 2032.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 355.8 1226.0 V 1277.0 H 1048.8 V 1328.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 352.6 1514.0 L 659.2 1604.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 659.2 1640.0 V 1691.0 H 646.4 V 1742.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="638.4" y="1681.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="652.8" y="1693.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUI</text>
+    <path d="M 659.2 1640.0 C 754.2 1655.0, 754.2 1589.0, 659.2 1604.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="742.8" y="1612.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="757.2" y="1624.0" text-anchor="middle" font-size="10.5" fill="#1e293b">NON</text>
+    <path d="M 576.2 1226.0 V 1277.0 H 432.4 V 1328.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="489.9" y="1267.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="504.3" y="1279.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUI</text>
+    <path d="M 576.2 1226.0 V 1277.0 H 643.2 V 1328.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="595.3" y="1267.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="609.7" y="1279.0" text-anchor="middle" font-size="10.5" fill="#1e293b">NON</text>
+    <path d="M 576.2 1226.0 V 1277.0 H 834.8 V 1328.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="685.5" y="1267.0" width="40.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="705.5" y="1279.0" text-anchor="middle" font-size="10.5" fill="#1e293b">audit</text>
+    <path d="M 432.4 1364.0 V 1415.0 H 969.0 V 1466.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 643.2 1364.0 V 1415.0 H 761.4 V 1466.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="668.3" y="1405.0" width="68.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="702.3" y="1417.0" text-anchor="middle" font-size="10.5" fill="#1e293b">TEMPORAIRE</text>
+    <path d="M 643.2 1364.0 V 1415.0 H 547.4 V 1466.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="569.7" y="1405.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="595.3" y="1417.0" text-anchor="middle" font-size="10.5" fill="#1e293b">DURABLE</text>
+    <path d="M 761.4 1502.0 V 1553.0 H 882.8 V 1604.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 834.8 1376.0 L 1163.8 1466.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1048.8 1376.0 L 352.6 1466.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 777.4 1238.0 L 1272.4 1328.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 975.4 1238.0 L 221.6 1328.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1272.4 1376.0 L 1374.6 1466.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1374.6 1502.0 V 1553.0 H 1087.2 V 1604.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1087.2 1640.0 V 1691.0 H 860.4 V 1742.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="959.4" y="1681.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="973.8" y="1693.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUI</text>
+    <path d="M 1087.2 1640.0 V 1691.0 H 1084.0 V 1742.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="1071.2" y="1681.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="1085.6" y="1693.0" text-anchor="middle" font-size="10.5" fill="#1e293b">NON</text>
+    <path d="M 860.4 1790.0 L 755.0 1880.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="784.9" y="1825.0" width="45.6" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="807.7" y="1837.0" text-anchor="middle" font-size="10.5" fill="#1e293b">PETITE</text>
+    <path d="M 860.4 1790.0 L 988.2 1880.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="901.5" y="1825.0" width="45.6" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="924.3" y="1837.0" text-anchor="middle" font-size="10.5" fill="#1e293b">GROSSE</text>
+    <path d="M 755.0 1928.0 C 845.0 1835.0, 1174.0 1835.0, 1084.0 1742.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 988.2 1942.0 C 1078.2 1842.0, 1174.0 1842.0, 1084.0 1742.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1084.0 1790.0 C 1174.0 1559.0, 311.6 1559.0, 221.6 1328.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 755.0 934.0 L 818.8 1024.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="772.5" y="969.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="786.9" y="981.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUI</text>
+    <path d="M 755.0 934.0 L 636.8 1024.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="681.5" y="969.0" width="28.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="695.9" y="981.0" text-anchor="middle" font-size="10.5" fill="#1e293b">NON</text>
+    <path d="M 818.8 1100.0 L 1173.4 1190.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
     <rect x="720.8" y="40.0" width="68.4" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
     <text x="755.0" y="62.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="755.0" dy="0">Debut&quot;</tspan>
@@ -117,141 +124,158 @@
       <tspan x="755.0" dy="14">autres agents (domaine de</tspan>
       <tspan x="755.0" dy="14">ma mission)&quot;</tspan>
     </text>
-    <path d="M 755.0 886.0 L 798.8 904.0 L 755.0 922.0 L 711.2 904.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
-    <text x="755.0" y="908.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="755.0" dy="0">&quot;Mission&quot;</tspan>
+    <path d="M 636.8 1024.0 L 680.6 1042.0 L 636.8 1060.0 L 593.0 1042.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="636.8" y="1046.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="636.8" dy="0">&quot;Mission&quot;</tspan>
     </text>
-    <rect x="149.0" y="1150.0" width="145.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="221.6" y="1172.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="149.0" y="1328.0" width="145.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="221.6" y="1350.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="221.6" dy="0">&quot;Lecons et retour&quot;</tspan>
     </text>
-    <path d="M 141.8 1288.0 L 233.6 1312.0 L 141.8 1336.0 L 50.0 1312.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
-    <text x="141.8" y="1309.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <path d="M 141.8 1466.0 L 233.6 1490.0 L 141.8 1514.0 L 50.0 1490.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="141.8" y="1487.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="141.8" dy="0">&quot;Ameliorations possibles</tspan>
       <tspan x="141.8" dy="14">de mon fonctionnement ?&quot;</tspan>
     </text>
-    <rect x="347.0" y="1426.0" width="177.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="435.6" y="1447.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="347.0" y="1604.0" width="177.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="435.6" y="1625.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="435.6" dy="0">&quot;Lancer le generateur d</tspan>
       <tspan x="435.6" dy="14">amelioration&quot;</tspan>
     </text>
-    <rect x="337.4" y="1564.0" width="190.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="432.4" y="1585.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="337.4" y="1742.0" width="190.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="432.4" y="1763.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="432.4" dy="0">&quot;Activer l&apos;agent habilite</tspan>
       <tspan x="432.4" dy="14">pour l&apos;amelioration&quot;</tspan>
     </text>
-    <rect x="426.8" y="1702.0" width="190.0" height="62.0" rx="31.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
-    <text x="521.8" y="1723.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="426.8" y="1880.0" width="190.0" height="62.0" rx="31.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="521.8" y="1901.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="521.8" dy="0">FIN - Reprise du parcours</tspan>
       <tspan x="521.8" dy="14">apres retour de l&apos;agent</tspan>
       <tspan x="521.8" dy="14">habilite&quot;</tspan>
     </text>
-    <rect x="356.6" y="1012.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="448.4" y="1034.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="448.4" dy="0">&quot;Verifier sans modifier&quot;</tspan>
+    <rect x="264.0" y="1190.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="355.8" y="1212.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="355.8" dy="0">&quot;Verifier sans modifier&quot;</tspan>
     </text>
-    <rect x="567.4" y="1564.0" width="158.0" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
-    <text x="646.4" y="1586.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="567.4" y="1742.0" width="158.0" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="646.4" y="1764.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="646.4" dy="0">FIN - Activer Janus&quot;</tspan>
     </text>
-    <rect x="273.6" y="1288.0" width="158.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="352.6" y="1309.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="273.6" y="1466.0" width="158.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="352.6" y="1487.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="352.6" dy="0">&quot;Activer Themis pour</tspan>
       <tspan x="352.6" dy="14">auditer ma mission&quot;</tspan>
     </text>
-    <path d="M 659.2 1426.0 L 754.2 1444.0 L 659.2 1462.0 L 564.2 1444.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
-    <text x="659.2" y="1448.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <path d="M 659.2 1604.0 L 754.2 1622.0 L 659.2 1640.0 L 564.2 1622.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="659.2" y="1626.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="659.2" dy="0">&quot;Retour de Themis recu ?&quot;</tspan>
     </text>
-    <path d="M 668.8 1012.0 L 757.4 1030.0 L 668.8 1048.0 L 580.2 1030.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
-    <text x="668.8" y="1034.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="668.8" dy="0">&quot;Mission hors parcours&quot;</tspan>
+    <path d="M 576.2 1190.0 L 664.8 1208.0 L 576.2 1226.0 L 487.6 1208.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="576.2" y="1212.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="576.2" dy="0">&quot;Mission hors parcours&quot;</tspan>
     </text>
-    <rect x="334.2" y="1150.0" width="196.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="432.4" y="1172.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="334.2" y="1328.0" width="196.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="432.4" y="1350.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="432.4" dy="0">&quot;Activer l&apos;agent habilite&quot;</tspan>
     </text>
-    <rect x="471.6" y="1288.0" width="151.6" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
-    <text x="547.4" y="1310.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="471.6" y="1466.0" width="151.6" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="547.4" y="1488.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="547.4" dy="0">Signaler le besoin&quot;</tspan>
     </text>
-    <path d="M 643.2 1150.0 L 715.8 1168.0 L 643.2 1186.0 L 570.6 1168.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
-    <text x="643.2" y="1172.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <path d="M 643.2 1328.0 L 715.8 1346.0 L 643.2 1364.0 L 570.6 1346.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="643.2" y="1350.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="643.2" dy="0">&quot;Besoin d outil ?&quot;</tspan>
     </text>
-    <rect x="663.2" y="1288.0" width="196.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="761.4" y="1310.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="663.2" y="1466.0" width="196.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="761.4" y="1488.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="761.4" dy="0">&quot;Creer l outil temporaire&quot;</tspan>
     </text>
-    <rect x="794.2" y="1426.0" width="177.2" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
-    <text x="882.8" y="1448.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="794.2" y="1604.0" width="177.2" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="882.8" y="1626.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="882.8" dy="0">FIN - Outil temporaire&quot;</tspan>
     </text>
-    <rect x="899.6" y="1288.0" width="138.8" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
-    <text x="969.0" y="1310.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="899.6" y="1466.0" width="138.8" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="969.0" y="1488.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="969.0" dy="0">FIN - Delegation&quot;</tspan>
     </text>
-    <rect x="755.8" y="1150.0" width="158.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="834.8" y="1171.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="755.8" y="1328.0" width="158.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="834.8" y="1349.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="834.8" dy="0">&quot;Activer Themis pour</tspan>
       <tspan x="834.8" dy="14">auditer&quot;</tspan>
     </text>
-    <rect x="1078.4" y="1288.0" width="170.8" height="48.0" rx="24.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
-    <text x="1163.8" y="1309.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="1078.4" y="1466.0" width="170.8" height="48.0" rx="24.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="1163.8" y="1487.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="1163.8" dy="0">FIN - Retour de Themis</tspan>
       <tspan x="1163.8" dy="14">avec son rapport&quot;</tspan>
     </text>
-    <rect x="953.8" y="1150.0" width="190.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="1048.8" y="1171.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="953.8" y="1328.0" width="190.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1048.8" y="1349.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="1048.8" dy="0">&quot;Enregistrer mes usages d</tspan>
       <tspan x="1048.8" dy="14">outils&quot;</tspan>
     </text>
-    <rect x="797.4" y="1012.0" width="145.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="870.0" y="1033.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="870.0" dy="0">&quot;Lire la raison de</tspan>
-      <tspan x="870.0" dy="14">l&apos;activation&quot;</tspan>
+    <rect x="704.8" y="1190.0" width="145.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="777.4" y="1211.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="777.4" dy="0">&quot;Lire la raison de</tspan>
+      <tspan x="777.4" dy="14">l&apos;activation&quot;</tspan>
     </text>
-    <rect x="982.6" y="1012.0" width="170.8" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="1068.0" y="1033.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="1068.0" dy="0">&quot;Remplir readme-dev.md</tspan>
-      <tspan x="1068.0" dy="14">depuis le template&quot;</tspan>
+    <rect x="890.0" y="1190.0" width="170.8" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="975.4" y="1211.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="975.4" dy="0">&quot;Remplir readme-dev.md</tspan>
+      <tspan x="975.4" dy="14">depuis le template&quot;</tspan>
     </text>
-    <rect x="1183.8" y="1150.0" width="177.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="1272.4" y="1171.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="1183.8" y="1328.0" width="177.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1272.4" y="1349.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="1272.4" dy="0">&quot;Consulter les</tspan>
       <tspan x="1272.4" dy="14">interventions recentes&quot;</tspan>
     </text>
-    <rect x="1289.2" y="1288.0" width="170.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="1374.6" y="1310.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="1289.2" y="1466.0" width="170.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1374.6" y="1488.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="1374.6" dy="0">&quot;Verifier l etat reel&quot;</tspan>
     </text>
-    <path d="M 1087.2 1426.0 L 1163.0 1444.0 L 1087.2 1462.0 L 1011.4 1444.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
-    <text x="1087.2" y="1448.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <path d="M 1087.2 1604.0 L 1163.0 1622.0 L 1087.2 1640.0 L 1011.4 1622.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="1087.2" y="1626.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="1087.2" dy="0">&quot;Ecarts detectes ?&quot;</tspan>
     </text>
-    <path d="M 860.4 1564.0 L 955.4 1588.0 L 860.4 1612.0 L 765.4 1588.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
-    <text x="860.4" y="1585.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <path d="M 860.4 1742.0 L 955.4 1766.0 L 860.4 1790.0 L 765.4 1766.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="860.4" y="1763.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="860.4" dy="0">&quot;Ampleur de la correction</tspan>
       <tspan x="860.4" dy="14">?&quot;</tspan>
     </text>
-    <rect x="656.8" y="1702.0" width="196.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="755.0" y="1723.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="656.8" y="1880.0" width="196.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="755.0" y="1901.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="755.0" dy="0">&quot;Executer combo-maj-readme</tspan>
       <tspan x="755.0" dy="14">(PETITE MAJ)&quot;</tspan>
     </text>
-    <rect x="893.2" y="1702.0" width="190.0" height="62.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="988.2" y="1723.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="893.2" y="1880.0" width="190.0" height="62.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="988.2" y="1901.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="988.2" dy="0">&quot;Executer</tspan>
       <tspan x="988.2" dy="14">combos-maj-readme-massive</tspan>
       <tspan x="988.2" dy="14">(GROSSE MAJ)&quot;</tspan>
     </text>
-    <rect x="995.4" y="1564.0" width="177.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="1084.0" y="1585.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <rect x="995.4" y="1742.0" width="177.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1084.0" y="1763.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="1084.0" dy="0">&quot;Verifier la conformite</tspan>
       <tspan x="1084.0" dy="14">ASCII&quot;</tspan>
     </text>
-    <rect x="701.6" y="1854.0" width="106.8" height="36.0" rx="18.0" fill="#fce7f3" stroke="#be185d" stroke-width="1.3"/>
-    <text x="755.0" y="1876.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+    <path d="M 755.0 886.0 L 853.2 910.0 L 755.0 934.0 L 656.8 910.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="755.0" y="907.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="755.0" dy="0">&quot;Probleme avec un outil en</tspan>
+      <tspan x="755.0" dy="14">cours de mission ?&quot;</tspan>
+    </text>
+    <rect x="720.6" y="1024.0" width="196.4" height="76.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="818.8" y="1045.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="818.8" dy="0">&quot;COMPRENDRE L OUTIL : lire</tspan>
+      <tspan x="818.8" dy="14">le .md puis</tspan>
+      <tspan x="818.8" dy="14">generateurs-commande ou</tspan>
+      <tspan x="818.8" dy="14">combo&quot;</tspan>
+    </text>
+    <rect x="1100.8" y="1190.0" width="145.2" height="48.0" rx="24.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="1173.4" y="1211.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1173.4" dy="0">FIN - Reprendre ma</tspan>
+      <tspan x="1173.4" dy="14">mission&quot;</tspan>
+    </text>
+    <rect x="701.6" y="2032.0" width="106.8" height="36.0" rx="18.0" fill="#fce7f3" stroke="#be185d" stroke-width="1.3"/>
+    <text x="755.0" y="2054.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="755.0" dy="0">FIN-APPELANT</tspan>
     </text>
 </svg>

@@ -22,7 +22,7 @@ Options:
   --help             Afficher cette aide
 
 Proprietaire : Clio (agent dedie au README)
-Version : 0.4.3-py
+Version : 0.4.4-py
 Statut : prepare
 """
 
@@ -31,7 +31,7 @@ import os
 import re
 import sys
 
-VERSION = "0.4.3-py"
+VERSION = "0.4.4-py"
 STATUT = "prepare"
 
 README = "README.md"
@@ -514,6 +514,7 @@ def afficher_aide():
     print("")
     print("Options :")
     print("  --verifier         Comparer l'etat reel au README, lister les ecarts (sans modifier)")
+    print("  --dry-run          Preview AVANT/APRES sans ecrire (obligatoire avant --maj)")
     print("  --maj              Corriger le texte du README (agents, outils, compteurs)")
     print("  --journal [N]      Consulter les N dernieres interventions (diagnostic, non inscrit au README)")
     print("  --logo CHEMIN      Inserer une image (logo) en tete du README, apres le titre H1")
@@ -524,10 +525,75 @@ def afficher_aide():
     print("")
     print("Exemples :")
     print("  mettre-a-jour-readme.py --verifier")
+    print("  mettre-a-jour-readme.py --dry-run")
     print("  mettre-a-jour-readme.py --maj")
     print("  mettre-a-jour-readme.py --journal 5")
     print("  mettre-a-jour-readme.py --logo cerveau-projet/assets/images/logo.jpg")
     print("  mettre-a-jour-readme.py --badges \"Plateforme=Windows:blue;Statut=stable:brightgreen\"")
+
+
+def dry_run():
+    """Mode dry-run : montrer le AVANT/APRES sans ecrire.
+    Affiche les changements qui seraient faits par --maj.
+    Regle Clio : dry-run OBLIGATOIRE avant toute modification."""
+    total = compter_total_outils()
+    print("=== DRY-RUN (preview AVANT/APRES) ===")
+    print("")
+    print("Ce qui changerait avec --maj :")
+    print("")
+
+    contenu = lire_readme()
+    changements = []
+
+    # 1. Titre boite a outils
+    m = re.search(r"^## La boite a outils \(([0-9]*) outils\)", contenu, re.MULTILINE)
+    if m:
+        titre_actuel = int(m.group(1))
+        if titre_actuel != total:
+            changements.append("Titre : '%d outils' -> '%d outils'" % (titre_actuel, total))
+
+    # 2. Compteurs par categorie
+    for cle in lister_categories():
+        cat = nom_categorie_affichable(cle)
+        nb = compter_outils_categorie(cle)
+        m = re.search(r"\*\*%s \(([0-9]*)\)\*\*" % re.escape(cat), contenu)
+        if m:
+            lue = int(m.group(1))
+            if lue != nb:
+                changements.append("%s : %d -> %d" % (cat, lue, nb))
+
+    # 3. Agents manquants
+    agents_manquants = []
+    for agent in lister_agents_reels():
+        if not re.search(r"\*\*%s\*\*" % re.escape(agent), contenu, re.IGNORECASE):
+            agents_manquants.append(capitaliser(agent))
+    if agents_manquants:
+        changements.append("Agents a ajouter : %s" % ", ".join(agents_manquants))
+
+    # 4. Outils manquants par categorie
+    for cle in lister_categories():
+        cat = nom_categorie_affichable(cle)
+        liste_reelle = lister_outils_categorie(cle)
+        m2 = re.search(r"\*\*%s \([0-9]*\)\*\* \| ([^|]*)" % re.escape(cat), contenu)
+        ligne_readme = m2.group(1) if m2 else ""
+        outils_manquants = []
+        for outil in [o.strip() for o in liste_reelle.split(",") if o.strip()]:
+            nom = outil.split(": ")[-1]
+            if nom and nom not in ligne_readme:
+                outils_manquants.append(nom)
+        if outils_manquants:
+            changements.append("%s : outils a ajouter : %s" % (cat, ", ".join(outils_manquants)))
+
+    if not changements:
+        print("  [AUCUN CHANGEMENT] Le README est deja a jour.")
+    else:
+        for i, chgt in enumerate(changements, 1):
+            print("  %d. %s" % (i, chgt))
+
+    print("")
+    print("=== FIN DRY-RUN ===")
+    print("Pour appliquer ces changements, utilisez --maj.")
+    return 0
 
 
 def main(argv):
@@ -546,6 +612,9 @@ def main(argv):
     if "--verifier" in argv:
         verifier()
         return 0
+
+    if "--dry-run" in argv:
+        return dry_run()
 
     if "--maj" in argv:
         mettre_a_jour()

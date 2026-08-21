@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-hermes",
   "agent": "hermes",
-  "version": "0.2.1",
+  "version": "0.2.4",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Hermes, agent de la langue (dieu grec de l eloquence) : relecture -> detection des fautes d orthographe -> verification du contexte -> correction tracee -> extension du dictionnaire -> rapport. Decision utilisateur 2026-08-14 : creer un agent dedie au vocabulaire et aux fautes, place comme nos outils ASCII, premiere mission = corriger readme-dev:264 (enchannements)."
  },
@@ -79,7 +79,7 @@
      "raison": "Section ## Sessions connues : la table des sessions existantes (session | id LLM | agent actif | derniere activite)"
     }
    ],
-   "suivant": "c1"
+   "suivant": "cU1"
   },
   "c1": {
    "titre": "Mission",
@@ -204,9 +204,9 @@
      "raison": "Documenter chaque correction (fichier, ligne, fautif -> correct)"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hermes/corrections.md --all"
     }
@@ -272,9 +272,9 @@
      "raison": "Lecon datee : fichier, ligne, fautif -> correct, contexte"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hermes/corrections.md --all"
     },
@@ -326,9 +326,9 @@
      "raison": "Rapport : fichier, ligne, fautif -> correct pour chaque correction (contenu en ARGUMENT POSITIONNEL, pas stdin)"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hermes/corrections.md --all"
     }
@@ -347,9 +347,9 @@
      "commande": "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent hermes --outil <outil> --contexte '<contexte>'"
     },
     {
-     "catalogue": "corriger-symboles",
+     "catalogue": "corriger-accents-zones-sensibles",
      "chemin": "cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/",
-     "nom": "corriger-symboles",
+     "nom": "corriger-accents-zones-sensibles",
      "type": "outil",
      "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/hermes/corrections.md --all"
     },
@@ -366,7 +366,7 @@
   "c13": {
    "titre": "FIN - Activer Janus (second controle)",
    "type": "fin",
-   "message": "MISSION DE CORRECTION ORTHOGRAPHIQUE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan complet (fautes detectees et corrigees, dictionnaire etendu, rapport, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. Janus verifie ma tracabilite (rapport + rescan 0 faute) puis reactive Cerberus avec son verdict.",
+   "message": "MISSION DE CORRECTION ORTHOGRAPHIQUE TERMINEE : j ACTIVE JANUS (second controle, REGLE IMMUABLE JANUS) avec le bilan complet (fautes detectees et corrigees, dictionnaire etendu, rapport, outils utilises). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus '<raison>'. Janus verifie ma tracabilite (rapport + rescan 0 faute) puis reactive Cerberus avec son verdict. MESSAGE DE RELAIS A L AGENT SUIVANT : quand tu es active, COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte pour continuer la boucle. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon de la chaine.",
    "indices": [
     {
      "type": "outil",
@@ -489,6 +489,56 @@
     }
    ],
    "suivant": "c0c"
+  },
+  "cU1": {
+   "titre": "Probleme avec un outil en cours de mission ?",
+   "type": "question",
+   "question": "As-tu un probleme avec un outil (erreur de commande, fonctionnement oublie, outil qui ne marche pas) ? OUI -> COMPRENDRE L OUTIL ; NON -> je continue ma mission.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : probleme avec un outil -> je ne lis PAS le code : le mode d emploi est dans le .md (case COMPRENDRE L OUTIL)."
+    }
+   ],
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "cU2"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c1"
+    }
+   ]
+  },
+  "cU2": {
+   "titre": "COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo",
+   "type": "action",
+   "message": "Ne PAS lire le code de l outil : le mode d emploi est dans le .md du meme dossier (agents/tools/<categorie>/<outil>/<outil>.md). 1) Lire le .md de l outil (contrat, Pattern 9). 2) Verifier si un combo existe pour cette action avec consulter-combos ; si oui, l utiliser. 3) Sinon, utiliser generateurs-commande pour generer la commande exacte (ne pas l ecrire en dur). 4) Relancer l outil avec la commande correcte.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : le .md est le mode d emploi (Pattern 9) - je le lis AVANT de re-executer l outil."
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-combos/consulter-combos.md",
+     "raison": "Verifier si un combo existe pour cette action (si oui, l utiliser)."
+    },
+    {
+     "type": "outil",
+     "catalogue": "generateurs-commande",
+     "nom": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande <outil> --reponses ..."
+    }
+   ],
+   "suivant": "cU3"
+  },
+  "cU3": {
+   "titre": "FIN - Reprendre ma mission",
+   "type": "fin",
+   "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
   }
  }
 }

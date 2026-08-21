@@ -183,8 +183,8 @@ def main():
     global NB_POINTS, NB_OK, NB_KO
 
     parcours_liste = sorted(glob.glob(PARCOURS_GLOB))
-    verifier("0. 16 parcours trouves",
-             len(parcours_liste) == 16, str(len(parcours_liste)))
+    verifier("0. 20 parcours trouves",
+             len(parcours_liste) == 20, str(len(parcours_liste)))
 
     print("=== Test formel fins reactivation (15 parcours) ===")
 

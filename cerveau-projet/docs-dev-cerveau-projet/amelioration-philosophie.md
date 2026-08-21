@@ -1,6 +1,6 @@
 ## User
 
-comment expliquer a un agent que ces fichiers doivent etre composé en demarrant d'un point d'entrée , qu'il doit ecrire des fonctions simples par groupe avec aussi un point d'entrée pour obtenir : un fichier (point d'entrée explicatif qui decrit l'outil et ces options) < point d'entré (premiere categorie de la fonction principal)< les fonctions simple par ficher dans un dossier. chaque categorie a son dossier pour y placer ces fonctions simples + le point  d'entrée.
+comment expliquer a un agent que ces fichiers doivent etre compose en demarrant d'un point d'entree , qu'il doit ecrire des fonctions simples par groupe avec aussi un point d'entree pour obtenir : un fichier (point d'entree explicatif qui decrit l'outil et ces options) < point d'entre (premiere categorie de la fonction principal)< les fonctions simple par ficher dans un dossier. chaque categorie a son dossier pour y placer ces fonctions simples + le point  d'entree.
 
 ## Assistant
 
@@ -42,95 +42,95 @@ Here's a thinking process that leads to the suggested advice:
 
 </details>
 
-Ceci est un problème d'architecture logicielle. Vous ne lui expliquez pas seulement "où mettre des fichiers", vous lui expliquez **comment le logiciel doit penser et s'exécuter**.
+Ceci est un probleme d'architecture logicielle. Vous ne lui expliquez pas seulement "ou mettre des fichiers", vous lui expliquez **comment le logiciel doit penser et s'executer**.
 
-Si l'agent est expérimenté, vous pouvez utiliser un vocabulaire d'architecture (Modularity, SoC, etc.). S'il est débutant, vous devez utiliser des métaphores et des analogies claires.
+Si l'agent est experimente, vous pouvez utiliser un vocabulaire d'architecture (Modularity, SoC, etc.). S'il est debutant, vous devez utiliser des metaphores et des analogies claires.
 
-Je vous propose trois approches : **L'approche Conceptuelle**, **L'approche Technique Détaillée**, et **La Check-list d'Implantation**.
-
----
-
-## 🧠 Approche 1 : La Conceptualisation (Pour un agent qui pense en "grandes parties")
-
-L'idée est de faire comprendre que vous construisez un organisme, pas juste une pile de fichiers.
-
-**Comment l'expliquer :**
-
-"Ce que nous cherchons à construire, ce n'est pas un script monolithique, mais une **machine modulaire**. Imaginez que notre outil est un bâtiment :
-
-1.  **L'Extérieur (Le Fichier Explicatif Global) :** C'est la façade et le panneau d'information. Il dit aux utilisateurs (et aux autres développeurs) : 'Voici ce que ce bâtiment fait, voici comment on y accède.'
-2.  **La Porte Principale (Point d'Entrée Global) :** C'est le lobby. Quand on entre, ce lobby ne fait pas le travail lui-même. Son rôle est de **diriger** : 'Si tu veux A, va dans le Département A. Si tu veux B, va dans le Département B.' C'est le chef d'orchestre.
-3.  **Les Départements (Les Dossiers Catégories) :** Chaque catégorie de fonction est un département distinct (Ventes, Comptabilité, Logistique, etc.). Ils sont isolés les uns des autres.
-4.  **Les Tâches Spécifiques (Les Fonctions Simples) :** À l'intérieur de chaque département, il y a des employés qui font une seule tâche très précise. C'est le principe de la **responsabilité unique**.
-
-**Le but de cette structure est la maintenance :** Si la comptabilité change, on touche uniquement le dossier 'Comptabilité', sans risquer de casser la logistique."
+Je vous propose trois approches : **L'approche Conceptuelle**, **L'approche Technique Detaillee**, et **La Check-list d'Implantation**.
 
 ---
 
-## 🛠️ Approche 2 : L'Explication Technique Détaillée (Pour un agent expérimenté)
+## [CERVEAU] Approche 1 : La Conceptualisation (Pour un agent qui pense en "grandes parties")
 
-Utilisez des termes techniques pour définir les rôles de chaque composant.
+L'idee est de faire comprendre que vous construisez un organisme, pas juste une pile de fichiers.
 
 **Comment l'expliquer :**
 
-"Nous adoptons une architecture basée sur le **Single Responsibility Principle (SRP)** et la **Modularité**. L'outil sera structuré comme suit :
+"Ce que nous cherchons a construire, ce n'est pas un script monolithique, mais une **machine modulaire**. Imaginez que notre outil est un batiment :
 
-**1. Le point d'entrée global (Interface / `main.py`) :**
-*   Ce fichier est l'unique point d'entrée public.
-*   Sa fonction principale est l'**orchestration** : il parse les options d'entrée, identifie la catégorie demandée, puis délègue l'exécution au bon point d'entrée de la catégorie correspondante. Il ne contient aucune logique métier complexe.
+1.  **L'Exterieur (Le Fichier Explicatif Global) :** C'est la facade et le panneau d'information. Il dit aux utilisateurs (et aux autres developpeurs) : 'Voici ce que ce batiment fait, voici comment on y accede.'
+2.  **La Porte Principale (Point d'Entree Global) :** C'est le lobby. Quand on entre, ce lobby ne fait pas le travail lui-meme. Son role est de **diriger** : 'Si tu veux A, va dans le Departement A. Si tu veux B, va dans le Departement B.' C'est le chef d'orchestre.
+3.  **Les Departements (Les Dossiers Categories) :** Chaque categorie de fonction est un departement distinct (Ventes, Comptabilite, Logistique, etc.). Ils sont isoles les uns des autres.
+4.  **Les Taches Specifiques (Les Fonctions Simples) :** A l'interieur de chaque departement, il y a des employes qui font une seule tache tres precise. C'est le principe de la **responsabilite unique**.
+
+**Le but de cette structure est la maintenance :** Si la comptabilite change, on touche uniquement le dossier 'Comptabilite', sans risquer de casser la logistique."
+
+---
+
+## 🛠️ Approche 2 : L'Explication Technique Detaillee (Pour un agent experimente)
+
+Utilisez des termes techniques pour definir les roles de chaque composant.
+
+**Comment l'expliquer :**
+
+"Nous adoptons une architecture basee sur le **Single Responsibility Principle (SRP)** et la **Modularite**. L'outil sera structure comme suit :
+
+**1. Le point d'entree global (Interface / `main.py`) :**
+*   Ce fichier est l'unique point d'entree public.
+*   Sa fonction principale est l'**orchestration** : il parse les options d'entree, identifie la categorie demandee, puis delegue l'execution au bon point d'entree de la categorie correspondante. Il ne contient aucune logique metier complexe.
 
 **2. Le document d'interface (Description du Tool) :**
-*   Ce fichier est la documentation utilisateur/API. Il doit décrire l'outil, les options en ligne de commande, et la manière d'interagir avec lui. C'est le `README.md` ou le fichier d'aide principal.
+*   Ce fichier est la documentation utilisateur/API. Il doit decrire l'outil, les options en ligne de commande, et la maniere d'interagir avec lui. C'est le `README.md` ou le fichier d'aide principal.
 
-**3. La Catégorie (Le Dossier) :**
+**3. La Categorie (Le Dossier) :**
 *   Chaque dossier (ex: `GestionUtilisateurs`, `CalculPrix`) est un **module logique autonome**.
-*   Chaque module doit avoir son propre *mini* point d'entrée (`__init__.py` ou `entry.py`). Ce point d'entrée est la seule porte d'accès à la logique de cette catégorie.
+*   Chaque module doit avoir son propre *mini* point d'entree (`__init__.py` ou `entry.py`). Ce point d'entree est la seule porte d'acces a la logique de cette categorie.
 
 **4. Les Fonctions Simples (Le Code de Base) :**
-*   Les fichiers à l'intérieur des dossiers contiendront des **fonctions atomiques**. Chaque fonction ne doit faire qu'une seule chose (ex: `verifier_identifiant(id)`).
-*   Elles sont purement **réutilisables** et sont appelées par le point d'entrée du module, qui les orchestre pour répondre à la requête de l'utilisateur.
+*   Les fichiers a l'interieur des dossiers contiendront des **fonctions atomiques**. Chaque fonction ne doit faire qu'une seule chose (ex: `verifier_identifiant(id)`).
+*   Elles sont purement **reutilisables** et sont appelees par le point d'entree du module, qui les orchestre pour repondre a la requete de l'utilisateur.
 
-**En résumé :** Le flow est : **Explication Global $\rightarrow$ Orchestrateur Global $\rightarrow$ Module X (Point d'entrée) $\rightarrow$ Fonction simple.**"
+**En resume :** Le flow est : **Explication Global $\rightarrow$ Orchestrateur Global $\rightarrow$ Module X (Point d'entree) $\rightarrow$ Fonction simple.**"
 
 ---
 
-## ✅ Approche 3 : La Check-list de Implantation (Le guide pratique)
+## [OK] Approche 3 : La Check-list de Implantation (Le guide pratique)
 
-Si l'agent est plus orienté "exécutant de tâches" que "architecte", donnez-lui une liste prescriptive.
+Si l'agent est plus oriente "executant de taches" que "architecte", donnez-lui une liste prescriptive.
 
 **Comment l'expliquer :**
 
-"Pour être clair sur la structure des fichiers, nous devons suivre ce schéma rigoureux :
+"Pour etre clair sur la structure des fichiers, nous devons suivre ce schema rigoureux :
 
 **Structure Racine :**
-*   `tool_description.txt` : (Le fichier explicatif global - Décrit l'outil et ses options).
-*   `main_entry.py` : (Le Point d'Entrée principal - Gère l'appel et la redirection).
+*   `tool_description.txt` : (Le fichier explicatif global - Decrit l'outil et ses options).
+*   `main_entry.py` : (Le Point d'Entree principal - Gere l'appel et la redirection).
 
-**Structure des Catégories (Exemple : Gestion des Données) :**
-*   `gestion_donnees/` (Le dossier de la catégorie)
-    *   `gestion_donnees/entry.py` : (Le Point d'Entrée pour cette catégorie - Gère la logique spécifique au groupe).
+**Structure des Categories (Exemple : Gestion des Donnees) :**
+*   `gestion_donnees/` (Le dossier de la categorie)
+    *   `gestion_donnees/entry.py` : (Le Point d'Entree pour cette categorie - Gere la logique specifique au groupe).
     *   `gestion_donnees/validation.py` : (Contient les fonctions simples de validation).
     *   `gestion_donnees/sauvegarde.py` : (Contient les fonctions simples de sauvegarde).
 
-**Règles d'Or à respecter :**
+**Regles d'Or a respecter :**
 
-1.  **Le Flow (Le Flux) :** La logique commence toujours par `main_entry.py`, passe à `[NomDossier]/entry.py`, et utilise les fonctions importées des autres fichiers du dossier (`validation.py`, etc.).
-2.  **La Simplicité :** Chaque fonction (dans les fichiers internes) doit être incroyablement simple. Elle ne doit pas contenir de boucles complexes ou de gestion d'erreurs. Son seul travail est de *faire* une petite chose.
-3.  **L'Isolation :** Les fonctions d'une catégorie ne doivent pas se connaître ou dépendre directement des fonctions d'une autre catégorie, sauf si cela est explicitement nécessaire (c'est ce que l'orchestrateur global doit gérer)."
+1.  **Le Flow (Le Flux) :** La logique commence toujours par `main_entry.py`, passe a `[NomDossier]/entry.py`, et utilise les fonctions importees des autres fichiers du dossier (`validation.py`, etc.).
+2.  **La Simplicite :** Chaque fonction (dans les fichiers internes) doit etre incroyablement simple. Elle ne doit pas contenir de boucles complexes ou de gestion d'erreurs. Son seul travail est de *faire* une petite chose.
+3.  **L'Isolation :** Les fonctions d'une categorie ne doivent pas se connaitre ou dependre directement des fonctions d'une autre categorie, sauf si cela est explicitement necessaire (c'est ce que l'orchestrateur global doit gerer)."
 
 ---
 
-### 💡 Conseil Final
+### [IDEe] Conseil Final
 
-Quel que soit l'approche que vous choisissez, mettez l'accent sur un seul mot : **Rôle**.
+Quel que soit l'approche que vous choisissez, mettez l'accent sur un seul mot : **Role**.
 
-*   **Le Point d'Entrée Global** a le rôle de *diriger*.
-*   **Le Dossier (Catégorie)** a le rôle de *regrouper la responsabilité*.
-*   **La Fonction Simple** a le rôle de *faire une chose, et une seule*.
+*   **Le Point d'Entree Global** a le role de *diriger*.
+*   **Le Dossier (Categorie)** a le role de *regrouper la responsabilite*.
+*   **La Fonction Simple** a le role de *faire une chose, et une seule*.
 
 ## User
 
-donne moi des idées de bloc que je pourrait envoyé
+donne moi des idees de bloc que je pourrait envoye
 
 ## Assistant
 
@@ -155,7 +155,7 @@ Here's a thinking process that leads to the suggested blocks:
 
     *   *Initial thought for Block 1:* Explain the structure. (Refinement: Make it professional, use architectural terms like "Modularity.")
     *   *Initial thought for Block 2:* Define the Entry Point. (Refinement: Define its role as a *dispatcher*, not a worker. This is critical.)
-    *   *Initial thought for Block 3:* Define the Functions. (Refinement: Enforce the SRP—Single Responsibility Principle. This prevents spaghetti code.)
+    *   *Initial thought for Block 3:* Define the Functions. (Refinement: Enforce the SRP--Single Responsibility Principle. This prevents spaghetti code.)
     *   *Initial thought for Block 4:* Define the Categories/Folders. (Refinement: Explain the module isolation. This prevents coupling issues.)
     *   *Initial thought for Block 5:* The Final Command/Verification. (Refinement: Give the agent clear steps to follow and confirm understanding.)
 
@@ -163,92 +163,92 @@ Here's a thinking process that leads to the suggested blocks:
 
 </details>
 
-Je vais vous donner plusieurs blocs que vous pouvez copier-coller et envoyer à votre agent. J'ai créé des blocs allant de la plus **philosophique** (pour donner le "pourquoi") à la plus **technique** (pour donner le "comment").
+Je vais vous donner plusieurs blocs que vous pouvez copier-coller et envoyer a votre agent. J'ai cree des blocs allant de la plus **philosophique** (pour donner le "pourquoi") a la plus **technique** (pour donner le "comment").
 
-Choisissez les blocs en fonction de la capacité de compréhension et de l'expérience de votre agent.
+Choisissez les blocs en fonction de la capacite de comprehension et de l'experience de votre agent.
 
 ---
 
 ## 🎯 Bloc 1 : Le Principe Fondamental (Le "Pourquoi")
-*(Idéal pour définir la philosophie de l'architecture. Envoyez ceci en premier pour cadrer le mental de l'agent.)*
+*(Ideal pour definir la philosophie de l'architecture. Envoyez ceci en premier pour cadrer le mental de l'agent.)*
 
-**Titre suggéré : Architecture et Responsabilité**
+**Titre suggere : Architecture et Responsabilite**
 
-> **[RÈGLE ARCHITECTURALE OBLIGATOIRE]**
+> **[REGLE ARCHITECTURALE OBLIGATOIRE]**
 >
-> L'outil doit être construit selon un principe de **Modularité stricte** et de **Responsabilité Unique (SRP)**. Nous construisons une *machine* capable de déléguer, pas un script monolithique.
+> L'outil doit etre construit selon un principe de **Modularite stricte** et de **Responsabilite Unique (SRP)**. Nous construisons une *machine* capable de deleguer, pas un script monolithique.
 >
-> **Le concept est le suivant :** Le code ne doit pas être une liste d'instructions séquentielles, mais un réseau de services interconnectés. Chaque pièce de code doit avoir une tâche unique, clairement définie, et doit être isolée des autres composants si possible. L'objectif principal est que si une partie change, le reste de l'outil ne casse pas.
+> **Le concept est le suivant :** Le code ne doit pas etre une liste d'instructions sequentielles, mais un reseau de services interconnectes. Chaque piece de code doit avoir une tache unique, clairement definie, et doit etre isolee des autres composants si possible. L'objectif principal est que si une partie change, le reste de l'outil ne casse pas.
 
 ---
 
-## 🧭 Bloc 2 : Le Schéma Structurel (Le "Où")
-*(Ceci définit la carte du projet. C'est le plan de construction.)*
+## [BOUSSOLE] Bloc 2 : Le Schema Structurel (Le "Ou")
+*(Ceci definit la carte du projet. C'est le plan de construction.)*
 
-**Titre suggéré : Schéma du Flux d'Exécution (L'Orchestrateur)**
+**Titre suggere : Schema du Flux d'Execution (L'Orchestrateur)**
 
-> **[STRUCTURE DU PROJET EXIGÉE]**
+> **[STRUCTURE DU PROJET EXIGEE]**
 >
-> La structure doit être hiérarchisée comme ceci :
+> La structure doit etre hierarchisee comme ceci :
 >
-> 1. **Le Point d'Entrée Global (Root Entry Point) :** Ce fichier (`main.py` par exemple) est le seul point d'accès externe. Son rôle n'est pas de travailler, mais de **DIRIGER**. Il reçoit les options utilisateur et les route vers le bon module.
-> 2. **Les Dossiers Catégories :** Chaque groupe de fonctions (ex: `Authentification`, `Rapports`, `Configuration`) doit être un dossier séparé. Chaque dossier est un module logique indépendant.
-> 3. **Le Point d'Entrée de Catégorie :** Chaque dossier de catégorie doit contenir son propre fichier d'entrée (`[categorie]/entry.py`). C'est le module qui traduit la direction donnée par `main.py` en actions spécifiques au groupe.
-> 4. **Les Fonctions Simples :** À l'intérieur des dossiers, les fichiers doivent contenir des fonctions qui sont atomiques. Elles ne font qu'une seule petite action (ex: `calculer_taux_tva(x)`). Elles sont les briques de base.
+> 1. **Le Point d'Entree Global (Root Entry Point) :** Ce fichier (`main.py` par exemple) est le seul point d'acces externe. Son role n'est pas de travailler, mais de **DIRIGER**. Il recoit les options utilisateur et les route vers le bon module.
+> 2. **Les Dossiers Categories :** Chaque groupe de fonctions (ex: `Authentification`, `Rapports`, `Configuration`) doit etre un dossier separe. Chaque dossier est un module logique independant.
+> 3. **Le Point d'Entree de Categorie :** Chaque dossier de categorie doit contenir son propre fichier d'entree (`[categorie]/entry.py`). C'est le module qui traduit la direction donnee par `main.py` en actions specifiques au groupe.
+> 4. **Les Fonctions Simples :** A l'interieur des dossiers, les fichiers doivent contenir des fonctions qui sont atomiques. Elles ne font qu'une seule petite action (ex: `calculer_taux_tva(x)`). Elles sont les briques de base.
 >
-> **Flux :** `main_entry.py` $\rightarrow$ [Catégorie]/`entry.py` $\rightarrow$ Fonction simple.
+> **Flux :** `main_entry.py` $\rightarrow$ [Categorie]/`entry.py` $\rightarrow$ Fonction simple.
 
 ---
 
-## ⚙️ Bloc 3 : Règles de Conception (Le "Comment Fonctionner")
-*(Ce bloc est le plus technique. Il détaille les rôles, ce qui est vital pour éviter le code spaghetti.)*
+## [CONFIGURER] Bloc 3 : Regles de Conception (Le "Comment Fonctionner")
+*(Ce bloc est le plus technique. Il detaille les roles, ce qui est vital pour eviter le code spaghetti.)*
 
-**Titre suggéré : Contraintes de Conception et Rôles**
+**Titre suggere : Contraintes de Conception et Roles**
 
-> **[RÈGLES DE CODE EXPLICITES]**
+> **[REGLES DE CODE EXPLICITES]**
 >
-> **RÔLE du Point d'Entrée Global (`main_entry.py`) :**
+> **ROLE du Point d'Entree Global (`main_entry.py`) :**
 > *   Doit contenir la logique de parsing des arguments (options de ligne de commande).
-> *   Doit contenir la logique de **dispatching** (redirection). Il appelle le `entry.py` de la catégorie appropriée.
-> *   NE DOIT PAS contenir de logique métier complexe (calculs, interactions de base de données, etc.).
+> *   Doit contenir la logique de **dispatching** (redirection). Il appelle le `entry.py` de la categorie appropriee.
+> *   NE DOIT PAS contenir de logique metier complexe (calculs, interactions de base de donnees, etc.).
 >
-> **RÔLE du Point d'Entrée de Catégorie (`[categorie]/entry.py`) :**
+> **ROLE du Point d'Entree de Categorie (`[categorie]/entry.py`) :**
 > *   Doit servir d'**interface** entre le global et les fonctions internes.
-> *   Doit orchestrer l'exécution : il importe et appelle une ou plusieurs fonctions simples de son dossier.
-> *   Doit gérer les erreurs spécifiques à son groupe.
+> *   Doit orchestrer l'execution : il importe et appelle une ou plusieurs fonctions simples de son dossier.
+> *   Doit gerer les erreurs specifiques a son groupe.
 >
-> **RÔLE des Fonctions Simples (Ex: `validation.py`) :**
-> *   Doivent être pures et atomiques. Une seule tâche.
-> *   Ne doivent pas avoir d'effet de bord non nécessaire (pas d'impression console, pas de modification globale, juste le calcul/la vérification).
+> **ROLE des Fonctions Simples (Ex: `validation.py`) :**
+> *   Doivent etre pures et atomiques. Une seule tache.
+> *   Ne doivent pas avoir d'effet de bord non necessaire (pas d'impression console, pas de modification globale, juste le calcul/la verification).
 
 ---
 
-## 📝 Bloc 4 : Instructions de Livrable (La Checklist)
-*(Un résumé simple que l'agent peut utiliser pour vérifier son propre travail.)*
+## [DOCUMENT] Bloc 4 : Instructions de Livrable (La Checklist)
+*(Un resume simple que l'agent peut utiliser pour verifier son propre travail.)*
 
-**Titre suggéré : Checklist de Validation**
+**Titre suggere : Checklist de Validation**
 
-> **[CHECKLIST À VÉRIFIER AVANT LIVRAISON]**
+> **[CHECKLIST A VERIFIER AVANT LIVRAISON]**
 >
-> ✅ **Description Tool :** Un fichier explicatif (comme un `README`) est bien présent, décrivant l'outil et ses options.
+> [OK] **Description Tool :** Un fichier explicatif (comme un `README`) est bien present, decrivant l'outil et ses options.
 >
-> ✅ **Orchestration :** Le point d'entrée principal reçoit-il l'input utilisateur et délègue-t-il correctement au module de la catégorie demandée ?
+> [OK] **Orchestration :** Le point d'entree principal recoit-il l'input utilisateur et delegue-t-il correctement au module de la categorie demandee ?
 >
-> ✅ **Isolation de Catégorie :** Si je modifie une fonction dans le dossier `Validation`, est-ce que cela affecte le fonctionnement du dossier `Rapports` ? (La réponse doit être non).
+> [OK] **Isolation de Categorie :** Si je modifie une fonction dans le dossier `Validation`, est-ce que cela affecte le fonctionnement du dossier `Rapports` ? (La reponse doit etre non).
 >
-> ✅ **Simplicité Fonctionnelle :** Est-ce que les fonctions internes font *vraiment* une seule chose ?
+> [OK] **Simplicite Fonctionnelle :** Est-ce que les fonctions internes font *vraiment* une seule chose ?
 >
-> ✅ **Hiérarchie respectée :** Est-ce qu'il y a un Point d'Entrée pour chaque Catégorie, qui est lui-même appelé par le Point d'Entrée Global ?
+> [OK] **Hierarchie respectee :** Est-ce qu'il y a un Point d'Entree pour chaque Categorie, qui est lui-meme appele par le Point d'Entree Global ?
 
 ---
 
-### 🚀 Conseil d'utilisation :
+### [DEMARRER] Conseil d'utilisation :
 
-Commencez par **Bloc 1**. Une fois que l'agent a confirmé avoir compris la "philosophie", envoyez-lui **Bloc 2** (le plan). Ensuite, utilisez **Bloc 3** pour détailler les règles de codage.
+Commencez par **Bloc 1**. Une fois que l'agent a confirme avoir compris la "philosophie", envoyez-lui **Bloc 2** (le plan). Ensuite, utilisez **Bloc 3** pour detailler les regles de codage.
 
 ## User
 
-en suivant la meme approche, ça donnerai quoi pouir le css et html ? 
+en suivant la meme approche, ca donnerai quoi pouir le css et html ? 
 
 ## Assistant
 
@@ -257,7 +257,7 @@ en suivant la meme approche, ça donnerai quoi pouir le css et html ?
 
 Here's a thinking process that leads to the suggested answer:
 
-1.  **Analyze the Request:** The user wants to apply the same architectural thinking (Modularité, SRP, clear flow/roles) that was applied to the software back-end (Python/Logic) to the front-end world (HTML/CSS/JS).
+1.  **Analyze the Request:** The user wants to apply the same architectural thinking (Modularite, SRP, clear flow/roles) that was applied to the software back-end (Python/Logic) to the front-end world (HTML/CSS/JS).
 
 2.  **Identify the Core Components in Front-End Development:**
     *   **Structure:** HTML (The skeleton/content).
@@ -270,7 +270,7 @@ Here's a thinking process that leads to the suggested answer:
 
     *   *Monolithic Script* $\rightarrow$ Giant, unmanageable `index.html` and one massive `style.css` and `script.js`. (BAD)
     *   *Modular/SRP* $\rightarrow$ Separating concerns (HTML for structure, CSS for style, JS for behavior).
-    *   *Module/Category* $\rightarrow$ **Component-Based Architecture** (React, Vue, Web Components). This is the modern equivalent of the "dossier catégorie."
+    *   *Module/Category* $\rightarrow$ **Component-Based Architecture** (React, Vue, Web Components). This is the modern equivalent of the "dossier categorie."
     *   *Entry Point* $\rightarrow$ The main script/file that initializes the entire application (e.g., `app.js` or the main wrapper component).
     *   *Simple Functions* $\rightarrow$ Small, specific functions within components (e.g., `toggleMenu()`, `validateInput()`, `calculatePrice()`).
 
@@ -289,52 +289,52 @@ Here's a thinking process that leads to the suggested answer:
 
 </details>
 
-C'est une excellente question, car l'architecture logicielle ne se limite pas au code backend. Le développement web moderne (HTML, CSS, JavaScript) suit exactement les mêmes principes d'**architecture modulaire** et de **séparation des préoccupations (Separation of Concerns - SoC)**.
+C'est une excellente question, car l'architecture logicielle ne se limite pas au code backend. Le developpement web moderne (HTML, CSS, JavaScript) suit exactement les memes principes d'**architecture modulaire** et de **separation des preoccupations (Separation of Concerns - SoC)**.
 
 Au lieu de parler de "fonctions" dans le code, nous allons parler de **"Composants"** ou de **"Modules de vue"**.
 
-Je vais reprendre la même approche en vous fournissant des blocs pour le **Front-End**.
+Je vais reprendre la meme approche en vous fournissant des blocs pour le **Front-End**.
 
 ---
 
-## 🧠 Bloc 1 : Le Principe Fondamental (Le "Pourquoi")
+## [CERVEAU] Bloc 1 : Le Principe Fondamental (Le "Pourquoi")
 
-**Titre suggéré : Séparation des Préoccupations (SoC)**
+**Titre suggere : Separation des Preoccupations (SoC)**
 
-> **[RÈGLE ARCHITECTURALE OBLIGATOIRE : FRONT-END]**
+> **[REGLE ARCHITECTURALE OBLIGATOIRE : FRONT-END]**
 >
-> Le développement doit être fondé sur le principe de la **Séparation des Préoccupations (SoC)**. Cela signifie que chaque technologie doit avoir un unique rôle et ne doit pas essayer de faire les tâches des autres.
+> Le developpement doit etre fonde sur le principe de la **Separation des Preoccupations (SoC)**. Cela signifie que chaque technologie doit avoir un unique role et ne doit pas essayer de faire les taches des autres.
 >
-> ❌ **Interdit :** Que le JavaScript décide du style ou que le CSS contienne des règles de logique.
+> [ERREUR] **Interdit :** Que le JavaScript decide du style ou que le CSS contienne des regles de logique.
 >
-> ✅ **Rôles clairs :**
+> [OK] **Roles clairs :**
 > 1. **HTML :** Structure (Le squelette, le contenu).
-> 2. **CSS :** Présentation (L'apparence, le design).
-> 3. **JavaScript :** Comportement (L'interaction, la logique métier côté client).
+> 2. **CSS :** Presentation (L'apparence, le design).
+> 3. **JavaScript :** Comportement (L'interaction, la logique metier cote client).
 >
-> Le but est que si le design change (on change de CSS), la logique ne soit pas affectée, et vice-versa.
+> Le but est que si le design change (on change de CSS), la logique ne soit pas affectee, et vice-versa.
 
 ---
 
-## 🧭 Bloc 2 : Le Schéma Structurel (Le "Où")
+## [BOUSSOLE] Bloc 2 : Le Schema Structurel (Le "Ou")
 
-*(Ici, nous remplaçons le "dossier catégorie" par le concept de "Composant UI".)*
+*(Ici, nous remplacons le "dossier categorie" par le concept de "Composant UI".)*
 
-**Titre suggéré : Architecture par Composants (Component-Based)**
+**Titre suggere : Architecture par Composants (Component-Based)**
 
-> **[STRUCTURE DU PROJET EXIGÉE]**
+> **[STRUCTURE DU PROJET EXIGEE]**
 >
 > Nous ne construisons pas un fichier unique, mais une collection de **Composants UI** autonomes.
 >
-> 1. **Le Point d'Entrée Global (Root Entry Point / `app.js`) :** Ce script est le seul à démarrer l'application. Son rôle est d'identifier l'environnement et de **charger** les composants nécessaires (la redirection du flux).
-> 2. **Le Composant (Le Module Logique) :** Chaque partie réutilisable de l'interface (ex: la Barre de Navigation, le Formulaire de Contact, la Carte Produit) est un Composant. Chaque composant est un module isolé.
-> 3. **La Structure du Composant :** Chaque composant doit être un ensemble logique (ou un dossier/fichier) contenant son propre code de structure, son propre style, et son propre comportement.
-> 4. **Les Fichiers "Atomiques" :** À l'intérieur du composant, les fonctions JS sont atomiques (ex: `handleClick()`, `formatDate()`).
+> 1. **Le Point d'Entree Global (Root Entry Point / `app.js`) :** Ce script est le seul a demarrer l'application. Son role est d'identifier l'environnement et de **charger** les composants necessaires (la redirection du flux).
+> 2. **Le Composant (Le Module Logique) :** Chaque partie reutilisable de l'interface (ex: la Barre de Navigation, le Formulaire de Contact, la Carte Produit) est un Composant. Chaque composant est un module isole.
+> 3. **La Structure du Composant :** Chaque composant doit etre un ensemble logique (ou un dossier/fichier) contenant son propre code de structure, son propre style, et son propre comportement.
+> 4. **Les Fichiers "Atomiques" :** A l'interieur du composant, les fonctions JS sont atomiques (ex: `handleClick()`, `formatDate()`).
 
 **Exemple de Structure :**
 ```
 /src
-|-- app.js           <-- Point d'Entrée Global (Chargement)
+|-- app.js           <-- Point d'Entree Global (Chargement)
 |-- components/
 |   |-- NavigationBar/
 |   |   |-- NavigationBar.html  <-- Structure
@@ -348,57 +348,57 @@ Je vais reprendre la même approche en vous fournissant des blocs pour le **Fron
 
 ---
 
-## ⚙️ Bloc 3 : Règles de Conception (Le "Comment Fonctionner")
+## [CONFIGURER] Bloc 3 : Regles de Conception (Le "Comment Fonctionner")
 
-**Titre suggéré : Contraintes de Rôle pour les 3 Piliers**
+**Titre suggere : Contraintes de Role pour les 3 Piliers**
 
-> **[RÈGLES DE CODE EXPLICITES]**
+> **[REGLES DE CODE EXPLICITES]**
 >
-> **1. RÔLE de HTML (Structure) :**
-> *   Doit être le plus sémantique possible (`<header>`, `<section>`, `<footer>`).
-> *   Ne doit pas contenir de styles (pas de `style="..."` inline) ni de logique (pas d'événements `onclick="..."`).
-> *   Il est la "boîte" dans laquelle le JS et le CSS travaillent.
+> **1. ROLE de HTML (Structure) :**
+> *   Doit etre le plus semantique possible (`<header>`, `<section>`, `<footer>`).
+> *   Ne doit pas contenir de styles (pas de `style="..."` inline) ni de logique (pas d'evenements `onclick="..."`).
+> *   Il est la "boite" dans laquelle le JS et le CSS travaillent.
 >
-> **2. RÔLE de CSS (Présentation) :**
-> *   Doit être uniquement concerné par l'apparence (couleurs, tailles, marges, animations).
-> *   Il ne doit jamais contenir de logique. (Exemple : ne pas utiliser `display: none` basé sur une variable JS).
+> **2. ROLE de CSS (Presentation) :**
+> *   Doit etre uniquement concerne par l'apparence (couleurs, tailles, marges, animations).
+> *   Il ne doit jamais contenir de logique. (Exemple : ne pas utiliser `display: none` base sur une variable JS).
 >
-> **3. RÔLE de JavaScript (Comportement / Les Fonctions Simples) :**
-> *   Doit gérer les *interactions* : clics, soumissions de formulaires, chargement de données.
-> *   Ses fonctions doivent être purement *réactives* : elles prennent une donnée et modifient l'état de la page ou envoient une requête.
-> *   Il importe les fonctions simples de son composant et les exécute en réponse à un événement.
+> **3. ROLE de JavaScript (Comportement / Les Fonctions Simples) :**
+> *   Doit gerer les *interactions* : clics, soumissions de formulaires, chargement de donnees.
+> *   Ses fonctions doivent etre purement *reactives* : elles prennent une donnee et modifient l'etat de la page ou envoient une requete.
+> *   Il importe les fonctions simples de son composant et les execute en reponse a un evenement.
 
 ---
 
-## 📝 Bloc 4 : Instructions de Livrable (La Checklist)
+## [DOCUMENT] Bloc 4 : Instructions de Livrable (La Checklist)
 
-**Titre suggéré : Checklist de Qualité et Modularité**
+**Titre suggere : Checklist de Qualite et Modularite**
 
-> **[CHECKLIST À VÉRIFIER AVANT LIVRAISON]**
+> **[CHECKLIST A VERIFIER AVANT LIVRAISON]**
 >
-> ✅ **Unicité du Rôle :** Mon code CSS ne contient-il aucune logique JavaScript ? Mon HTML ne contient-il aucun style en ligne ? (SoC respecté).
+> [OK] **Unicite du Role :** Mon code CSS ne contient-il aucune logique JavaScript ? Mon HTML ne contient-il aucun style en ligne ? (SoC respecte).
 >
-> ✅ **Autonomie :** Chaque Composant (ex: `NavigationBar`) peut-il fonctionner seul, sans dépendre des styles ou de la logique d'un autre Composant ? (Modularité respectée).
+> [OK] **Autonomie :** Chaque Composant (ex: `NavigationBar`) peut-il fonctionner seul, sans dependre des styles ou de la logique d'un autre Composant ? (Modularite respectee).
 >
-> ✅ **Flux clair :** Le Point d'Entrée global (`app.js`) est-il le seul à être appelé au démarrage ? Les autres composants s'initialisent-ils après avoir été chargés ?
+> [OK] **Flux clair :** Le Point d'Entree global (`app.js`) est-il le seul a etre appele au demarrage ? Les autres composants s'initialisent-ils apres avoir ete charges ?
 >
-> ✅ **Fonctions Atomiques :** Les fonctions JS ne font-elles qu'une seule chose (ex: vérifier si un champ est vide) avant de passer la responsabilité à une autre fonction ou un autre composant ?
+> [OK] **Fonctions Atomiques :** Les fonctions JS ne font-elles qu'une seule chose (ex: verifier si un champ est vide) avant de passer la responsabilite a une autre fonction ou un autre composant ?
 
 ---
 
-### 💡 Résumé de la Transition
+### [IDEe] Resume de la Transition
 
-| Concept Backend (Python) | Concept Front-End (Web) | Rôle Analogie |
+| Concept Backend (Python) | Concept Front-End (Web) | Role Analogie |
 | :--- | :--- | :--- |
 | **Code Monolithique** | Fichier unique et massif | Le script qui fait *tout* |
-| **Dossier Catégorie** | Le **Composant UI** | La pièce autonome (ex: Le panier) |
-| **Point d'Entrée de Catégorie** | Le `entry.js` du composant | Le gestionnaire de cette pièce |
-| **Fonction Simple** | Fonction JS Atomique | La mini-tâche (ex: calculer un sous-total) |
-| **Séparation des Préoccupations** | HTML/CSS/JS | La séparation Squelette/Peinture/Cerveau |
+| **Dossier Categorie** | Le **Composant UI** | La piece autonome (ex: Le panier) |
+| **Point d'Entree de Categorie** | Le `entry.js` du composant | Le gestionnaire de cette piece |
+| **Fonction Simple** | Fonction JS Atomique | La mini-tache (ex: calculer un sous-total) |
+| **Separation des Preoccupations** | HTML/CSS/JS | La separation Squelette/Peinture/Cerveau |
 
 ## User
 
-quand on ecris du code, je voudrais eviter de coder des valeurs en dur dans le code et preferé avoir la liste de variable qui son dans le code en haut du fichier ou dans un fichier separé pour eviter les problemes et erreurs qui finisse 'reccurente' pendant le dev. 'trop de valeur en dur caché qui pertube , au final, les flux dans le code
+quand on ecris du code, je voudrais eviter de coder des valeurs en dur dans le code et prefere avoir la liste de variable qui son dans le code en haut du fichier ou dans un fichier separe pour eviter les problemes et erreurs qui finisse 'reccurente' pendant le dev. 'trop de valeur en dur cache qui pertube , au final, les flux dans le code
 
 ## Assistant
 
@@ -427,30 +427,30 @@ Here's a thinking process that leads to the suggested answer:
     *   *Self-Correction on Simple Variables (Constants):* If the value is truly *never* meant to change (like `PI = 3.14`), it's a constant. If it *might* change (like `API_URL`), it's a configuration parameter. The distinction is key.
     *   *Prioritization:* Configuration files (`.env` or JSON) are superior to constants defined in the file itself because they allow runtime changes without modifying the code.
 
-6.  **Final Review:** Ensure the tone is helpful and professional, directly addressing the user's pain points ("erreurs récurrentes," "flux perturbé"). (The result is the detailed French response provided below.)
+6.  **Final Review:** Ensure the tone is helpful and professional, directly addressing the user's pain points ("erreurs recurrentes," "flux perturbe"). (The result is the detailed French response provided below.)
 
 </details>
 
-Ceci n'est pas seulement une bonne pratique de codage, c'est une **discipline d'ingénierie logicielle essentielle**.
+Ceci n'est pas seulement une bonne pratique de codage, c'est une **discipline d'ingenierie logicielle essentielle**.
 
-Le problème que vous décrivez s'appelle l'utilisation des **"Magic Numbers"** (ou "valeurs magiques") et le manque de **Gestion de Configuration**. Coder une valeur en dur (hardcoding) rend le code rigide, difficile à lire, et incroyablement fragile.
+Le probleme que vous decrivez s'appelle l'utilisation des **"Magic Numbers"** (ou "valeurs magiques") et le manque de **Gestion de Configuration**. Coder une valeur en dur (hardcoding) rend le code rigide, difficile a lire, et incroyablement fragile.
 
-Pour résoudre ce problème, il existe plusieurs niveaux de solutions, qui dépendent de la nature de la valeur (est-ce une constante absolue ou une variable qui change selon l'environnement ?).
+Pour resoudre ce probleme, il existe plusieurs niveaux de solutions, qui dependent de la nature de la valeur (est-ce une constante absolue ou une variable qui change selon l'environnement ?).
 
-Voici les idées de blocs et les techniques à employer, classées de la plus simple à la plus professionnelle.
+Voici les idees de blocs et les techniques a employer, classees de la plus simple a la plus professionnelle.
 
 ---
 
-## 💡 Technique 1 : Les Constantes Déclarées (Le plus simple)
-**(Idéal pour les valeurs qui ne devraient *jamais* changer, comme des taux ou des identifiants fixes.)**
+## [IDEe] Technique 1 : Les Constantes Declarees (Le plus simple)
+**(Ideal pour les valeurs qui ne devraient *jamais* changer, comme des taux ou des identifiants fixes.)**
 
-**Le principe :** Déplacer la valeur en dur dans un fichier ou une section de constantes dédiée.
+**Le principe :** Deplacer la valeur en dur dans un fichier ou une section de constantes dediee.
 
-**Bloc à expliquer :**
-> **Principe des Constantes :** Si une valeur est un paramètre fixe (ex: un code d'erreur, le taux de TVA, le nombre maximum d'éléments), elle ne doit pas être cachée dans une fonction. Elle doit être déclarée en tant que **constante** au début du fichier, souvent en majuscule pour indiquer qu'elle est immuable.
+**Bloc a expliquer :**
+> **Principe des Constantes :** Si une valeur est un parametre fixe (ex: un code d'erreur, le taux de TVA, le nombre maximum d'elements), elle ne doit pas etre cachee dans une fonction. Elle doit etre declaree en tant que **constante** au debut du fichier, souvent en majuscule pour indiquer qu'elle est immuable.
 >
 > **Avantage :** Si cette valeur change, je ne dois regarder qu'un seul endroit.
-> **Quand l'utiliser :** Pour les limites, les codes d'état, ou les valeurs universelles.
+> **Quand l'utiliser :** Pour les limites, les codes d'etat, ou les valeurs universelles.
 
 **Exemple en Python :**
 ```python
@@ -465,23 +465,23 @@ from CONSTANTS import MAX_UTILISATEURS, STATUT_SUCCESS
 
 def verifier_limite(nombre_utilisateurs):
     if nombre_utilisateurs > MAX_UTILISATEURS:
-        raise Exception("Limite dépassée")
+        raise Exception("Limite depassee")
 
 # Le code ne contient plus "100", il contient MAX_UTILISATEURS
 ```
 
 ---
 
-## 🌍 Technique 2 : Les Paramètres de Configuration (Le plus polyvalent)
-**(Idéal pour les valeurs qui changent selon l'environnement : base de données de DEV vs. de PRODUCTION, URL d'API, etc.)**
+## [MONDE] Technique 2 : Les Parametres de Configuration (Le plus polyvalent)
+**(Ideal pour les valeurs qui changent selon l'environnement : base de donnees de DEV vs. de PRODUCTION, URL d'API, etc.)**
 
-**Le principe :** Déplacer la valeur dans un fichier de configuration externe (comme un fichier JSON ou YAML) que le code lit au lancement.
+**Le principe :** Deplacer la valeur dans un fichier de configuration externe (comme un fichier JSON ou YAML) que le code lit au lancement.
 
-**Bloc à expliquer :**
-> **Principe de la Configuration :** Pour les valeurs qui changent en fonction de l'environnement (test, développement, production), nous devons utiliser un fichier de configuration externe. Le code lit le fichier **au démarrage** et injecte ces valeurs dans son fonctionnement.
+**Bloc a expliquer :**
+> **Principe de la Configuration :** Pour les valeurs qui changent en fonction de l'environnement (test, developpement, production), nous devons utiliser un fichier de configuration externe. Le code lit le fichier **au demarrage** et injecte ces valeurs dans son fonctionnement.
 >
-> **Avantage :** Je peux changer l'URL de l'API sans jamais toucher à une seule ligne de code métier.
-> **Quand l'utiliser :** URLs de services externes, clés d'API, ports, chemins d'accès aux fichiers.
+> **Avantage :** Je peux changer l'URL de l'API sans jamais toucher a une seule ligne de code metier.
+> **Quand l'utiliser :** URLs de services externes, cles d'API, ports, chemins d'acces aux fichiers.
 
 **Exemple (Conceptuel avec JSON) :**
 1.  **`config.json`**
@@ -492,40 +492,40 @@ def verifier_limite(nombre_utilisateurs):
       "api_endpoint": "https://api.production.com/data"
     }
     ```
-2.  **Le Code (Lecture) :** Le script lit ce fichier au début et stocke ces valeurs dans des variables globales ou passées en paramètres.
+2.  **Le Code (Lecture) :** Le script lit ce fichier au debut et stocke ces valeurs dans des variables globales ou passees en parametres.
 
 ---
 
 ## 🛡️ Technique 3 : Les Variables d'Environnement (La meilleure pratique professionnelle)
-**(Idéal pour les informations ultra-sensibles ou qui changent constamment entre environnements.)**
+**(Ideal pour les informations ultra-sensibles ou qui changent constamment entre environnements.)**
 
-**Le principe :** Ne jamais écrire la valeur dans le code ou même dans un fichier JSON visible. On la place dans l'environnement d'exécution (le système d'exploitation) du serveur. C'est l'outil `dotenv` qui permet de simuler cela localement.
+**Le principe :** Ne jamais ecrire la valeur dans le code ou meme dans un fichier JSON visible. On la place dans l'environnement d'execution (le systeme d'exploitation) du serveur. C'est l'outil `dotenv` qui permet de simuler cela localement.
 
-**Bloc à expliquer :**
-> **Principe des Variables d'Environnement (.env) :** C'est la méthode la plus sécurisée et la plus professionnelle. Les valeurs sensibles (clés secrètes, mots de passe) ne sont jamais dans le dépôt de code source. Elles sont stockées dans un fichier spécial (ex: `.env`) qui est ignoré par Git.
+**Bloc a expliquer :**
+> **Principe des Variables d'Environnement (.env) :** C'est la methode la plus securisee et la plus professionnelle. Les valeurs sensibles (cles secretes, mots de passe) ne sont jamais dans le depot de code source. Elles sont stockees dans un fichier special (ex: `.env`) qui est ignore par Git.
 >
-> Le code utilise une librairie (comme `dotenv` ou les fonctions d'environnement du langage) pour *lire* la variable du système.
+> Le code utilise une librairie (comme `dotenv` ou les fonctions d'environnement du langage) pour *lire* la variable du systeme.
 >
-> **Avantage :** Sécurité maximale. Le code est toujours le même, mais le comportement change selon le niveau de sécurité du serveur (Dev, Staging, Prod).
-> **Quand l'utiliser :** Mots de passe, clés API secrètes, informations d'authentification.
+> **Avantage :** Securite maximale. Le code est toujours le meme, mais le comportement change selon le niveau de securite du serveur (Dev, Staging, Prod).
+> **Quand l'utiliser :** Mots de passe, cles API secretes, informations d'authentification.
 
 ---
 
-## 📢 Synthèse à envoyer à votre agent
+## 📢 Synthese a envoyer a votre agent
 
-Pour résumer en un seul bloc très puissant :
+Pour resumer en un seul bloc tres puissant :
 
-**Titre : Stratégie de Configuration et Élimination des Valeurs Magiques**
+**Titre : Strategie de Configuration et Elimination des Valeurs Magiques**
 
-> **Règle d'Or :** Le code ne doit jamais connaître les valeurs; il doit seulement savoir où aller pour les trouver.
+> **Regle d'Or :** Le code ne doit jamais connaitre les valeurs; il doit seulement savoir ou aller pour les trouver.
 >
-> **Hiérarchie de Solution :**
+> **Hierarchie de Solution :**
 >
 > 1. **Constantes (Immuables) :** Pour les valeurs universelles et fixes (ex: `STATUS_CODE = 200`). Les placer dans un fichier `constants.py`.
-> 2. **Paramètres de Config (Variables changables) :** Pour les URLs, les timeouts, etc. Utiliser un fichier `config.json` ou YAML.
-> 3. **Variables d'Environnement (Sécurité/Environnement) :** Pour les données sensibles (clés API, mots de passe). Utiliser un fichier `.env` lu au démarrage pour garantir la sécurité.
+> 2. **Parametres de Config (Variables changables) :** Pour les URLs, les timeouts, etc. Utiliser un fichier `config.json` ou YAML.
+> 3. **Variables d'Environnement (Securite/Environnement) :** Pour les donnees sensibles (cles API, mots de passe). Utiliser un fichier `.env` lu au demarrage pour garantir la securite.
 >
-> **Le rôle de la logique est de *consommer* ces variables ; elle n'a pas le droit de *contenir* ces variables.**
+> **Le role de la logique est de *consommer* ces variables ; elle n'a pas le droit de *contenir* ces variables.**
 
 ## User
 
@@ -556,75 +556,75 @@ Here's a thinking process that leads to the suggested response:
 
 6.  **Draft the Content (Self-Correction during drafting):**
     *   *Initial thought:* Just tell it to use `print()` statements. (Too simplistic).
-    *   *Correction:* No, I need to explain *why* `print()` or logging is the first step—to verify the system's *state*.
+    *   *Correction:* No, I need to explain *why* `print()` or logging is the first step--to verify the system's *state*.
     *   *Focus:* Emphasize the difference between a *bug* (bad logic) and a *mistake* (bad input/configuration).
 
 7.  **Final Review:** Ensure the tone is authoritative but constructive. Use clear headings for easy consumption. (This leads to the three major blocks: Mindset, Process, and Consequences). (A strong focus on "The Principle of Single Source of Truth" is vital here).
 
 </details>
 
-Ceci est l'un des défis les plus difficiles à résoudre avec un agent, car cela ne s'agit pas d'une question de connaissance technique, mais d'un **changement de paradigme cognitif** et d'une discipline de travail. L'agent a une tendance par défaut à passer du mode "Correction" (réparer) au mode "Création" (ajouter).
+Ceci est l'un des defis les plus difficiles a resoudre avec un agent, car cela ne s'agit pas d'une question de connaissance technique, mais d'un **changement de paradigme cognitif** et d'une discipline de travail. L'agent a une tendance par defaut a passer du mode "Correction" (reparer) au mode "Creation" (ajouter).
 
-Vous devez lui donner un nouveau "protocole de diagnostic" rigide, basé sur la méthodologie d'un ingénieur ou d'un détective, plutôt que sur celle d'un créateur.
+Vous devez lui donner un nouveau "protocole de diagnostic" rigide, base sur la methodologie d'un ingenieur ou d'un detective, plutot que sur celle d'un createur.
 
-Je vous propose une approche en trois blocs : le **Changement de Mentalité**, le **Protocole de Débogage Systématique**, et les **Conséquences Professionnelles**.
-
----
-
-## 🧠 Bloc 1 : Le Changement de Mentalité (La Philosophie)
-
-*(Ceci doit être dit en premier pour lui changer la perspective. Vous passez de "construire" à "auditer".)*
-
-**Titre suggéré : De la Création à l'Audit (Le Principe du Détective)**
-
-> **[CHIMIE DU DÉVELOPPEMENT]**
->
-> Lorsque nous rencontrons un problème (un bug), nous ne devons jamais commencer par supposer que la solution est "plus de code". Nous devons adopter la mentalité d'un **détective** ou d'un **mécanicien**.
->
-> *   **Le créateur pense :** "Il manque une pièce. Je vais en ajouter une." $\rightarrow$ *Résultat : Code doublon, spaghetti.*
-> *   **Le détective pense :** "Le mécanisme ne tourne pas. D'où vient la force ? Quelle est l'erreur d'entrée ? Quel composant est défaillant ?" $\rightarrow$ *Résultat : Diagnostic ciblé et élégant.*
->
-> **Règle Absolue :** Avant d'écrire la moindre ligne de code corrective, l'agent doit prouver, par le code existant, que l'hypothèse du problème est correcte. Ne rien ajouter tant que le problème n'est pas prouvé existant.
+Je vous propose une approche en trois blocs : le **Changement de Mentalite**, le **Protocole de Debogage Systematique**, et les **Consequences Professionnelles**.
 
 ---
 
-## 🔍 Bloc 2 : Le Protocole de Débogage Systématique (Le Processus)
+## [CERVEAU] Bloc 1 : Le Changement de Mentalite (La Philosophie)
 
-*(Ceci est la marche à suivre rigide. C'est le "mode d'emploi" que l'agent doit suivre quand un problème survient.)*
+*(Ceci doit etre dit en premier pour lui changer la perspective. Vous passez de "construire" a "auditer".)*
 
-**Titre suggéré : Le Protocole D.A.G. (Détection, Analyse, Guide)**
+**Titre suggere : De la Creation a l'Audit (Le Principe du Detective)**
+
+> **[CHIMIE DU DEVELOPPEMENT]**
+>
+> Lorsque nous rencontrons un probleme (un bug), nous ne devons jamais commencer par supposer que la solution est "plus de code". Nous devons adopter la mentalite d'un **detective** ou d'un **mecanicien**.
+>
+> *   **Le createur pense :** "Il manque une piece. Je vais en ajouter une." $\rightarrow$ *Resultat : Code doublon, spaghetti.*
+> *   **Le detective pense :** "Le mecanisme ne tourne pas. D'ou vient la force ? Quelle est l'erreur d'entree ? Quel composant est defaillant ?" $\rightarrow$ *Resultat : Diagnostic cible et elegant.*
+>
+> **Regle Absolue :** Avant d'ecrire la moindre ligne de code corrective, l'agent doit prouver, par le code existant, que l'hypothese du probleme est correcte. Ne rien ajouter tant que le probleme n'est pas prouve existant.
+
+---
+
+## [RECHERCHE] Bloc 2 : Le Protocole de Debogage Systematique (Le Processus)
+
+*(Ceci est la marche a suivre rigide. C'est le "mode d'emploi" que l'agent doit suivre quand un probleme survient.)*
+
+**Titre suggere : Le Protocole D.A.G. (Detection, Analyse, Guide)**
 
 > **[PROTOCOLE OBLIGATOIRE EN CAS D'ERREUR]**
 >
-> Quand un bug apparaît, l'agent doit exécuter ce protocole dans l'ordre :
+> Quand un bug apparait, l'agent doit executer ce protocole dans l'ordre :
 >
-> **Étape 1 : Le Test d'Isolation (Où le problème est-il ?)**
-> *   **Question :** L'erreur vient-elle de l'**entrée** (un paramètre mal formulé par l'utilisateur ?) ou du **traitement** (une mauvaise logique interne ?) ou de l'**environnement** (une clé API manquante ?).
+> **Etape 1 : Le Test d'Isolation (Ou le probleme est-il ?)**
+> *   **Question :** L'erreur vient-elle de l'**entree** (un parametre mal formule par l'utilisateur ?) ou du **traitement** (une mauvaise logique interne ?) ou de l'**environnement** (une cle API manquante ?).
 > *   **Action :** Isoler l'erreur au niveau le plus bas possible (la fonction atomique).
 >
-> **Étape 2 : L'Audit de l'État (Ce qui se passe réellement)**
-> *   **Action :** Ne pas deviner. Utiliser des outils de débogage (`print`, logs, points d'arrêt) pour observer la valeur des variables *exactement* au moment du crash.
-> *   **Objectif :** Confirmer l'état. L'état réel est-il ce que nous pensions qu'il serait ? Si l'état est mauvais, le problème n'est pas dans la logique, mais dans l'entrée ou l'environnement.
+> **Etape 2 : L'Audit de l'Etat (Ce qui se passe reellement)**
+> *   **Action :** Ne pas deviner. Utiliser des outils de debogage (`print`, logs, points d'arret) pour observer la valeur des variables *exactement* au moment du crash.
+> *   **Objectif :** Confirmer l'etat. L'etat reel est-il ce que nous pensions qu'il serait ? Si l'etat est mauvais, le probleme n'est pas dans la logique, mais dans l'entree ou l'environnement.
 >
-> **Étape 3 : La Recherche de la Source Unique de Vérité (SSOT)**
-> *   **Principe :** Chaque donnée importante (une URL, un taux, un ID) doit avoir **un seul endroit** où elle est définie (la Source Unique de Vérité, ou SSOT).
-> *   **Vérification :** Si la valeur est mauvaise, je ne crée pas un nouveau paramètre pour la corriger. Je remonte immédiatement à la SSOT (le fichier de configuration, la constante, ou le paramètre d'entrée) pour corriger l'origine du problème.
+> **Etape 3 : La Recherche de la Source Unique de Verite (SSOT)**
+> *   **Principe :** Chaque donnee importante (une URL, un taux, un ID) doit avoir **un seul endroit** ou elle est definie (la Source Unique de Verite, ou SSOT).
+> *   **Verification :** Si la valeur est mauvaise, je ne cree pas un nouveau parametre pour la corriger. Je remonte immediatement a la SSOT (le fichier de configuration, la constante, ou le parametre d'entree) pour corriger l'origine du probleme.
 >
-> **En résumé :** Le code ne doit jamais être créé pour *réparer* un bug. Il doit être affiné pour *révéler* l'origine du bug.
+> **En resume :** Le code ne doit jamais etre cree pour *reparer* un bug. Il doit etre affine pour *reveler* l'origine du bug.
 
 ---
 
-## 🛑 Bloc 3 : Les Conséquences Professionnelles (La Sanction)
+## 🛑 Bloc 3 : Les Consequences Professionnelles (La Sanction)
 
-*(Ce bloc explique pourquoi cette discipline est importante dans un contexte professionnel, pour renforcer l'importance de la règle.)*
+*(Ce bloc explique pourquoi cette discipline est importante dans un contexte professionnel, pour renforcer l'importance de la regle.)*
 
-**Titre suggéré : L'Impact du Code "Spaghetti"**
+**Titre suggere : L'Impact du Code "Spaghetti"**
 
-> **[CONSÉQUENCES DE L'IMPRÉCISION]**
+> **[CONSEQUENCES DE L'IMPRECISION]**
 >
-> Les "doublons qui entrent en collision" créent ce qu'on appelle du **code spaghetti**. Ce code est imprévisible.
+> Les "doublons qui entrent en collision" creent ce qu'on appelle du **code spaghetti**. Ce code est imprevisible.
 >
-> 1. **Fragilité :** Chaque correction d'un bug peut causer dix autres bugs.
-> 2. **Maintenance (Le pire) :** Quand nous aurons besoin de modifier cette fonctionnalité dans six mois, nous perdrons tout notre temps à décortiquer l'historique des "tampons" et des corrections, au lieu de faire progresser le produit.
+> 1. **Fragilite :** Chaque correction d'un bug peut causer dix autres bugs.
+> 2. **Maintenance (Le pire) :** Quand nous aurons besoin de modifier cette fonctionnalite dans six mois, nous perdrons tout notre temps a decortiquer l'historique des "tampons" et des corrections, au lieu de faire progresser le produit.
 >
-> **Le bon développeur écrit du code pour l'avenir (lisibilité et maintenabilité). Le mauvais développeur écrit du code pour *aujourd'hui* (résolution temporaire du bug). Nous visons l'avenir.**
+> **Le bon developpeur ecrit du code pour l'avenir (lisibilite et maintenabilite). Le mauvais developpeur ecrit du code pour *aujourd'hui* (resolution temporaire du bug). Nous visons l'avenir.**

@@ -1,4 +1,4 @@
-%% Carte de decision de janus (parcours v0.5.1)
+%% Carte de decision de janus (parcours v0.5.6)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -52,10 +52,13 @@ flowchart TD
     cT7(["FIN - Activer minerve"])
     cT8(["FIN - Renvoyer rapport a athena"])
     cT9(["FIN - Renvoyer rapport a promethee"])
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0e
     c0b -- "NON" --> c0
-    c0c --> c1
+    c0c --> cU1
     c0e --> c0c
     c1 -- "outil" --> c2
     c1 -- "statut" --> c11
@@ -111,3 +114,6 @@ flowchart TD
     cT4 -- "NON" --> cT9
     cT5 -- "OUI" --> c34
     cT5 -- "NON" --> cT10
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

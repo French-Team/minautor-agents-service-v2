@@ -216,7 +216,7 @@ def main():
 
         # 8. Non-regression : guider-parcours navigue cerberus
         r_nav = run([PYTHON, GUIDER, PARCOURS_CERBERUS, "--reponses",
-                     "OUI|accueil|OUI|OUI|NON|NON"])
+                     "OUI|NON|accueil|OUI|OUI|NON|NON"])
         verifier("8. Non-regression : navigation cerberus -> PARCOURS TERMINE",
                  r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
                  r_nav.stdout.strip()[-100:])

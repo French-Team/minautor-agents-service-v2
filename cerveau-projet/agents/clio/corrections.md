@@ -335,3 +335,26 @@ a 152 mais le badge en dur du README affichait encore 150 (affichage + href).
 **Actions** : badge Outils-157 -> 159 (affichage + href), readme-dev 149 outils/35 categories -> 159/38, table maj (Enregistrer 1->2, ajout Consulter 1 + Configurer 1, Analyser 6->9, Detecter 17->19, Rechercher 10->11).
 
 **Lecon** : verifier la synchronisation des compteurs a CHAQUE creation d outil ; la source de verite est compter_outils (combos-analyse-projet), jamais un comptage a la main.
+
+## [LECON] 2026-08-20 -- NOUVELLES REGLES (ton 1ere personne, dry-run, badges dynamiques)
+
+**Contexte** : l'utilisateur veut des README parlants qui creent un premier contact avec les utilisateurs lambda.
+
+**Nouvelles regles ajoutees a la fiche Clio v0.2.2** :
+1. **Ton 1ere personne** : le README parle "je suis..." au lieu de "Le cerveau-projet est..."
+2. **Dry-run obligatoire** : montrer le AVANT/APRES avant d'ecrire
+3. **Badges dynamiques** : compter les agents, protocoles, conventions, regles AVANT de mettre a jour les badges
+
+**Lecon** : le README n'est pas qu'un document technique -- c'est le premier contact avec les utilisateurs. Le ton doit etre accueillant et explicatif, pas froid et documentaire.
+## [LECON] 2026-08-20 -- REECRITURE COMPLETE README (ton 1ere personne + badges dynamiques)
+
+**Contexte** : l'utilisateur veut des README parlants qui creent un premier contact avec les utilisateurs lambda.
+
+**Travail realise** :
+1. README.md : reecriture complete en ton 1ere personne (je suis...), badges dynamiques (16 agents, 164 outils, 97 tests, 36 protocoles, 75 regles)
+2. README-dev.md : reecriture en ton 1ere personne, compteurs mis a jour (164 outils, 39 categories, 16 parcours, 97 tests)
+3. Compteurs reels verifies via combos-analyse-projet : 16 agents, 164 outils
+
+**Lecon** : le README n'est pas qu'un document technique -- c'est le premier contact avec les utilisateurs. Le ton doit etre accueillant et explicatif, pas froid et documentaire. Les badges dynamiques donnent une vision immediate de la puissance du systeme.
+
+**Verdict** : ASCII 0/0 sur les 2 fichiers, compteurs alignes sur la realite.

@@ -224,3 +224,33 @@ Controle de la mission mermaid. 3 enseignements :
 3. **Fiches outils = ASCII strict** : les guillemets francais (U+00AB/BB)
    dans une fiche .md declenchent test-047 (detecter-usage-outils-externes).
    Toujours ecrire les fiches en ASCII pur.
+
+
+## [LECON] 2026-08-20 -- RE-EDUCATION CERBERUS : VIOLATION REGLE NON-EXECUTION (Chiron)
+
+**Contexte** : Cerberus a fait le travail de Vulcain (modifier mettre-a-jour-readme.py, combos) au lieu d'activer Vulcain. L'utilisateur a detecte la derive et demande une re-education URGENTE.
+
+**Diagnostic** : la fiche Cerberus contient DEJA la regle NON-EXECUTION (REGLE ABSOLUE) mais elle est trop faible pour empecher la derive. La cause racine :
+1. La regle dit 'je n execute JAMAIS une mission moi-meme' mais ne precise PAS que 'modifier un outil = travail de Vulcain'
+2. La regle ne dit pas 'Cerberus ne touche JAMAIS aux fichiers .py/.sh/.md des outils'
+3. Il manque un GARDE-FOU qui empeche physiquement l'ecriture
+
+**Corrections proposees a Buffy** :
+1. Renforcer la fiche Cerberus : ajouter 'Cerberus ne modifie JAMAIS les fichiers d outils (.py/.sh/.md) - seul Vulcain le peut'
+2. Ajouter un garde-fou dans activer-agent-principal : bloquer les ecritures de Cerberus sur les outils
+3. Documenter la lecon dans corrections.md de Cerberus
+
+**Verdict** : A REVOIR - 3 corrections proposees, signalees a Buffy.
+
+---
+
+## [LECON] 2026-08-20 -- EDUCATION CLIO : NOUVELLES REGLES (Chiron)
+
+**Contexte** : Clio a recu de nouvelles regles (v0.2.2) mais n a pas ete formee a leur utilisation. Les outils ont ete mis a jour (mettre-a-jour-readme v0.4.4 + dry-run) mais Clio doit savoir QUAND et COMMENT les utiliser.
+
+**Corrections proposees a Buffy** :
+1. Verifier que le parcours-clio.json reference bien les nouvelles options (--dry-run)
+2. Ajouter un indice dans la case de mission de Clio : 'Le dry-run est OBLIGATOIRE avant tout --maj'
+3. Documenter le ton 1ere personne dans les regles de Clio
+
+**Verdict** : A REVOIR - 3 corrections proposees, signalees a Buffy.

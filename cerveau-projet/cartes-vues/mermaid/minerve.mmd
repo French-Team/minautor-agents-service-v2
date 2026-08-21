@@ -1,4 +1,4 @@
-%% Carte de decision de minerve (parcours v0.4.1)
+%% Carte de decision de minerve (parcours v0.4.4)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -36,11 +36,14 @@ flowchart TD
     c9d["Activer l'agent habilite pour l'amelioration"]
     c9e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
     c9f["CORRIGER selon le rapport de Janus"]
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "OUI" --> c0e
     c0b -- "NON" --> c0
     c0c --> c0d
-    c0d --> c1
+    c0d --> cU1
     c0e --> c0c
     c1 -- "creer" --> c2
     c1 -- "completer" --> c11
@@ -74,3 +77,6 @@ flowchart TD
     c9d --> c9e
     c9e --> FIN-APPELANT
     c9f --> c24
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

@@ -16,7 +16,7 @@ Usage:
   combos-maj-readme-massive.py [OPTIONS]
 """
 
-VERSION = "0.1.6"
+VERSION = "0.1.7"
 STATUT = "prepare"
 
 import datetime
@@ -274,7 +274,7 @@ def main():
     version_avant = lire_version(racine)
 
     # Etape 1 : analyse complete
-    print(BLUE + "--- Etape 1/5 : analyse complete (combos-analyse-projet) ---" + NC)
+    print(BLUE + "--- Etape 1/6 : analyse complete (combos-analyse-projet) ---" + NC)
     r = executer(racine, OUTILS["combos-analyse-projet"], [])
     if r is None:
         return 1
@@ -283,7 +283,7 @@ def main():
     rapport.append("## Etape 1 - Analyse\n\n" + r + "\n")
 
     # Etape 2 : verifier
-    print(BLUE + "--- Etape 2/5 : verifier (mettre-a-jour-readme --verifier) ---" + NC)
+    print(BLUE + "--- Etape 2/6 : verifier (mettre-a-jour-readme --verifier) ---" + NC)
     r = executer(racine, OUTILS["mettre-a-jour-readme"], ["--verifier"])
     if r is None:
         return 1
@@ -291,8 +291,17 @@ def main():
     etapes.append("verifier")
     rapport.append("## Etape 2 - Verifier\n\n" + r + "\n")
 
+    # Etape 2b : dry-run (OBLIGATOIRE avant --maj, regle Clio v0.2.2)
+    print(BLUE + "--- Etape 2b/6 : dry-run (mettre-a-jour-readme --dry-run) ---" + NC)
+    r = executer(racine, OUTILS["mettre-a-jour-readme"], ["--dry-run"])
+    if r is None:
+        return 1
+    print(r)
+    etapes.append("dry-run")
+    rapport.append("## Etape 2b - Dry-run\n\n" + r + "\n")
+
     # Etape 3 : maj des compteurs
-    print(BLUE + "--- Etape 3/5 : maj des compteurs (--maj) ---" + NC)
+    print(BLUE + "--- Etape 3/6 : maj des compteurs (--maj) ---" + NC)
     r = executer(racine, OUTILS["mettre-a-jour-readme"], ["--maj"])
     if r is None:
         return 1
@@ -308,7 +317,7 @@ def main():
     if chemin_readme.is_file():
         readme_actuel = chemin_readme.read_text(encoding="utf-8", errors="replace")
     if snapshot_readme is not None and readme_actuel != snapshot_readme:
-        print(BLUE + "--- Etape 3b/5 : bump de version (README modifie) ---" + NC)
+        print(BLUE + "--- Etape 3b/6 : bump de version (README modifie) ---" + NC)
         bump_info = bumper_version(racine)
         if bump_info:
             etapes.append("bump")
@@ -322,7 +331,7 @@ def main():
         print(GREEN + "  [OK] README inchange - pas de bump de version." + NC)
 
     # Etape 4 : correctifs de fond (tables, categories manquantes)
-    print(BLUE + "--- Etape 4/5 : correctifs de fond (tables, categories, badge header) ---" + NC)
+    print(BLUE + "--- Etape 4/6 : correctifs de fond (tables, categories, badge header) ---" + NC)
     print(YELLOW + "  Indice : verifier le resultat du --maj - si une NOUVELLE categorie est "
                    "absente de la table, inserer manuellement la ligne avec editer-fichier "
                    "(lecon Clio : --maj ne cree pas les nouvelles lignes de categories)." + NC)
@@ -335,7 +344,7 @@ def main():
                    "Badge header aligne automatiquement : " + str(corrige_badge) + "\n")
 
     # Etape 5 : ASCII
-    print(BLUE + "--- Etape 5/5 : verification ASCII ---" + NC)
+    print(BLUE + "--- Etape 5/6 : verification ASCII ---" + NC)
     r = executer(racine, OUTILS["valider-conformite-ascii"], ["README.md"])
     if r is None:
         return 1

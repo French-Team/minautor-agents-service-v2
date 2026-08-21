@@ -149,16 +149,16 @@ r = run([PYTHON, ANALYSE_PY, "--version"])
 check(r.returncode == 0 and "combos-analyse-projet 0.1.3" in (r.stdout or r.stderr),
       "version combos-analyse-projet 0.1.3")
 r = run([PYTHON, MASSIVE_PY, "--version"])
-check(r.returncode == 0 and "combos-maj-readme-massive 0.1.6" in (r.stdout or r.stderr),
-      "version combos-maj-readme-massive 0.1.6")
+check(r.returncode == 0 and "combos-maj-readme-massive 0.1.7" in (r.stdout or r.stderr),
+      "version combos-maj-readme-massive 0.1.7")
 
 # 3. JSON valide
 try:
     d = json.load(io.open(MAJ_JSON, encoding="utf-8", newline=""))
     check(d["combo"].get("nom") == "combo-maj-readme", "json nom combo-maj-readme")
-    check(d["combo"].get("version") == "0.1.0", "json version 0.1.0")
+    check(d["combo"].get("version") == "0.2.0", "json version 0.2.0")
     check(d["combo"].get("case_depart") == "c1", "json case_depart c1")
-    check(len(d.get("cases", {})) == 5, "json 5 cases")
+    check(len(d.get("cases", {})) == 7, "json 7 cases")
 except Exception as e:
     check(False, "json combo-maj-readme valide", str(e))
 
@@ -176,8 +176,9 @@ check("Outils reels" in out, "analyse-projet outils reels detectes")
 r = run([PYTHON, MASSIVE_PY, PROJECT_ROOT, "--agent", "clio", "--audit"], timeout=600)
 out = (r.stdout or "") + (r.stderr or "")
 check(r.returncode == 0, "maj-readme-massive code 0", str(r.returncode))
-for etape in ("Etape 1/5", "Etape 2/5", "Etape 3/5", "Etape 4/5", "Etape 5/5"):
+for etape in ("Etape 1/6", "Etape 2/6", "Etape 3/6", "Etape 4/6", "Etape 5/6"):
     check(etape in out, "maj-readme-massive " + etape)
+check("Etapes executees" in out, "maj-readme-massive etapes executees")
 check("SYNTHESE" in out and "conservative" in out, "maj-readme-massive synthese conservative")
 
 # 6. combos-moteur --liste
@@ -186,8 +187,8 @@ out = (r.stdout or "") + (r.stderr or "")
 check(r.returncode == 0, "combos-moteur --liste code 0")
 check("c1" in out and "c5" in out, "combos-moteur --liste cases c1..c5")
 
-# 7. dry-run c2=OUI (verifier -> maj -> ascii -> FIN)
-r = run([PYTHON, MOTEUR_PY, MAJ_JSON, "--dry-run", "--reponses", "c2=OUI"])
+# 7. dry-run c2=OUI,c3b=OUI (verifier -> dry-run -> maj -> ascii -> FIN)
+r = run([PYTHON, MOTEUR_PY, MAJ_JSON, "--dry-run", "--reponses", "c2=OUI;c3b=OUI"])
 out = (r.stdout or "") + (r.stderr or "")
 check("--verifier" in out and "--maj" in out and "valider-conformite-ascii" in out,
       "dry-run c2=OUI enchaene verifier+maj+ascii")

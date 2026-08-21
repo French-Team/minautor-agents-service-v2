@@ -46,7 +46,7 @@ Cas couverts (26 points) :
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
   PARCOURS ATLAS v0.4.1
-17. parcours-atlas.json : json.load valide + version 0.5.1
+17. parcours-atlas.json : json.load valide + version 0.5.4
 18. 7 commandes en dur connues (c0 x2 + c10/c18/c19 corriger-symboles + c11a + c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
@@ -211,7 +211,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.3.1 + catalogue 0.2.16 + parcours-atlas v0.5.1 ===")
+    print("=== Test 005 -- generateurs-commande v0.3.1 + catalogue 0.2.16 + parcours-atlas v0.5.4 ===")
     print("")
 
     # ---------- GENERATEUR v0.3.1 ----------
@@ -272,14 +272,14 @@ def main():
     ok = cmd is not None and "creer-fichier.py x.md" in cmd and "hello" in cmd
     verifier(16, "non-regression creer-fichier composee correctement", ok, str(cmd))
 
-    # ---------- PARCOURS ATLAS v0.5.1 ----------
+    # ---------- PARCOURS ATLAS v0.5.4 ----------
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.5.1",
-                 p.get("parcours", {}).get("version") == "0.5.1", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.5.4",
+                 p.get("parcours", {}).get("version") == "0.5.4", str(p.get("parcours", {}).get("version")))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.5.1", False, str(e))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.5.4", False, str(e))
         p = {}
 
     # Commandes en dur connues et documentees : c30 (template
@@ -289,8 +289,9 @@ def main():
     # par Buffy 2026-08-16), c12/c13 (detecter-recherches-obsoletes /
     # rechercher-web ajoutees par Buffy 2026-08-16), c10 x2 suppl.
     # (enregistrer-lecon + consulter-lecons, round BDD lecons 2026-08-17),
-    # c0e (consulter-lecons consultation pre-mission, round 2026-08-18).
-    # Toute commande SUPPLEMENTAIRE = regression.
+    # c0e (consulter-lecons consultation pre-mission, round 2026-08-18),
+    # cU2 (comprendre l outil : consulter-combos, ajoutee par Buffy
+    # 2026-08-21). Toute commande SUPPLEMENTAIRE = regression.
     n_commande = 0
     cases_commande = []
     for k, c in p.get("cases", {}).items():
@@ -298,18 +299,21 @@ def main():
             if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
                 n_commande += 1
                 cases_commande.append(k)
-    verifier(18, "12 commandes en dur connues (c0 x2 + c0e + c10 x3 + c11a + c12/c13 + c18/c19 + c30) dans les indices avec catalogue",
-             n_commande == 12 and sorted(cases_commande) == ["c0", "c0", "c0e", "c10", "c10", "c10", "c11a", "c12", "c13", "c18", "c19", "c30"],
+    verifier(18, "13 commandes en dur connues (c0 x2 + c0e + c10 x3 + c11a + c12/c13 + c18/c19 + c30 + cU2) dans les indices avec catalogue",
+             n_commande == 13 and sorted(cases_commande) == ["c0", "c0", "c0e", "c10", "c10", "c10", "c11a", "c12", "c13", "c18", "c19", "c30", "cU2"],
              "restants=%d cases=%s" % (n_commande, sorted(cases_commande)))
 
-    for num, nom_chemin, chemin in [(19, "explorer", "OUI|explorer|NON|OUI"), (20, "autre+OUI", "OUI|autre|OUI|NON|OUI")]:
+    # Depuis Buffy 2026-08-21 (case COMPRENDRE L OUTIL cU1), le flux passe
+    # par cU1 (NON) avant la question Mission : les sequences de navigation
+    # portent un NON supplementaire apres le OUI de c0b.
+    for num, nom_chemin, chemin in [(19, "explorer", "OUI|NON|explorer|NON|OUI"), (20, "autre+OUI", "OUI|NON|autre|OUI|NON|OUI")]:
         c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", chemin])
         verifier(num, "navigation %s : PARCOURS TERMINE" % nom_chemin, "PARCOURS TERMINE" in out, out[-80:])
 
     c, out = exec_cmd("python3 %s --agent atlas" % VALIDER_CARTES)
     verifier(21, "valider-cartes-decision --agent atlas : CONFORME", "CONFORME" in out, out[-80:])
 
-    c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", "OUI|explorer"])
+    c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", "OUI|NON|explorer"])
     segment = out[out.find("Lister les fichiers"):out.find("Lister les fichiers") + 400] if "Lister les fichiers" in out else ""
     ok = ("PASSE PAR LE GENERATEUR" in segment) and ("catalogue: lister-fichiers" in segment)
     verifier(22, "case c3 : PASSE PAR LE GENERATEUR sans commande en dur", ok, segment[:200])
