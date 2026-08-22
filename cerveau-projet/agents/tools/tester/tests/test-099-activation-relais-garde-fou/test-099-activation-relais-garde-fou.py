@@ -13,7 +13,7 @@ Comportements verrouilles (v0.5.22) :
   - Auto-reactivation (meme agent encore actif) : AVERTISSEMENT
     'agent oublie' + AUTORISEE (rc=0).
   - Relais de chaine (agent DIFFERENT encore actif, cible != cerberus) :
-    AVERTISSEMENT 'relais de chaine' + AUTORISEE (rc=0) -- Pattern 8.
+    AUTORISE SANS avertissement (rc=0) -- Pattern 8 (v0.5.28).
   - Reactivation de Cerberus : TOUJOURS autorisee (rc=0), sans blocage.
   - --forcer : AVERTISSEMENT 'activation forcee' + autorisee (rc=0),
     option conservee pour compatibilite.
@@ -232,10 +232,8 @@ def point_3_relais_chaine():
         r2 = executer_activer(agents_file, historique_file, classeur_file,
                               ["activer", "session-llm-1", "themis",
                                "Test etape 2"])
-        ok = (r1.returncode == 0 and r2.returncode == 0
-              and "AVERTISSEMENT GARDE-FOU (relais de chaine)" in r2.stdout
-              and "AUTORISEE (relais de chaine, Pattern 8" in r2.stdout)
-        verifier("3. relais de chaine : avertissement + AUTORISEE (Pattern 8)",
+        ok = (r1.returncode == 0 and r2.returncode == 0)
+        verifier("3. relais de chaine : autorise SANS avertissement (Pattern 8, v0.5.28)",
                  ok, "rc2=%d %s" % (r2.returncode, r2.stdout[:200]))
     finally:
         nettoyer_environnement(tmpdir)

@@ -685,7 +685,7 @@
     },
     {
      "reponse": "NON",
-     "vers": "c9"
+     "vers": "c8ir"
     }
    ],
    "indices": [
@@ -1057,6 +1057,24 @@
    "titre": "FIN - Reprendre ma mission",
    "type": "fin",
    "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
+  },
+  "c8ir": {
+   "titre": "INTER-ROUND : activer l agent habilite pour reparer",
+   "type": "action",
+   "suivant": "c9e",
+   "message": "INTER-ROUND (protocole-fin-mission v0.2.0 R2) : des defauts ont ete detectes pendant le controle. Je n interromps PAS le round et je ne reactive PAS Cerberus : j ACTIVE L AGENT HABILITE avec le rapport des defauts (commande activer). L agent habilite repare EXCLUSIVEMENT (lui seul sait quoi faire). A la fin de l inter-round, l habilite me REACTIVE et je REPRENDS mon round principal (c9e). CASCADE autorisee entre habilites, le dernier reactive l agent appelant.",
+   "indices": [
+    {
+     "texte": "REGLE INTER-ROUND (R2) : une erreur detectee n est JAMAIS seulement detectee - reparation exclusive par l agent habilite. L agent qui detecte active l habilite avec le rapport, puis reprend son round a la fin de l inter-round.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ]
   }
  },
  "identite": {
@@ -1069,6 +1087,6 @@
   "case_depart": "c0",
   "description": "v0.5.3 : + indice outil c9 ajouter-contenu-fichier (lecon corrections.md, garde-fou test-035)",
   "nom": "parcours-janus",
-  "version": "0.5.6"
+  "version": "0.5.7"
  }
 }

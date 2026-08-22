@@ -1,0 +1,36 @@
+%% Carte de decision de redacteur-v2 (parcours v0.1.0)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation de lecture"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c1["Lire la mission de redaction"]
+    c1b{"Mission comprise ?"}
+    c2["Rediger le document v2"]
+    c3["Auto-validation : ASCII/LF et structure"]
+    c4["Auto-validation : impacts et coherence"]
+    c5{"RVAV : tout est conforme ?"}
+    c6["Ajouter mes lecons et usages"]
+    c7(["Fin du round SOLO : activer Cerberus"])
+    cU1{"Probleme avec un outil ?"}
+    cU2["COMPRENDRE L OUTIL"]
+    cU3["Reprendre ma mission"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> cU1
+    c0e --> c0c
+    c1 --> c1b
+    c1b -- "OUI" --> c2
+    c1b -- "NON" --> c1
+    c2 --> c3
+    c3 --> c4
+    c4 --> c5
+    c5 -- "OUI" --> c6
+    c5 -- "NON" --> c2
+    c6 --> c7
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3
+    cU3 --> c1

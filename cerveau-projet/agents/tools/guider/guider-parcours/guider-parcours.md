@@ -8,11 +8,11 @@ identite:
 
 | Champ | Valeur |
 |---|---|
-| **Version** | 0.5.1 |
+| **Version** | 0.5.2 |
 | **Statut** | ebauche |
 | **Categorie** | guider |
 | **Derniere mise a jour** | 2026-08-08 |
-| **Spec** | [spec-guider-parcours.001.01.ebauche.md](spec/spec-guider-parcours.001.01.ebauche.md) (v0.6.2) |
+| **Spec** | [spec-guider-parcours.001.01.ebauche.md](spec/spec-guider-parcours.001.01.ebauche.md) (v0.6.3) |
 
 ---
 

@@ -34,7 +34,7 @@ import os
 import shutil
 import sys
 
-VERSION = "0.4.3"
+VERSION = "0.5.0"
 STATUT = "prepare"
 
 NOM_ATTENDU = "editer-fichier.py"
@@ -114,6 +114,91 @@ def verrouiller_habilitation(agent, cible, audit=False):
     return (r.returncode, message)
 
 
+# --- VERROU CIBLE TOOLS (v0.4.4, decision utilisateur 2026-08-22) ---
+HABILITES_TOOLS = {
+    "vulcain": None,          # tout tools/
+    "morpheus": "tester" + os.sep + "tests",   # tests uniquement
+    "buffy": None,            # via exceptions fichiers ci-dessous
+}
+FICHIERS_EXCEPTIONS = ("index-tools.md", "outil-template")
+
+def verifier_cible_tools(chemin, agent):
+    """Si la cible est sous agents/tools/, l agent doit etre habilite :
+    vulcain = tout tools/ ; morpheus = tester/tests/ ; buffy = index-tools.md
+    et outil-template*. Tout autre agent est bloque (domaine exclusif Vulcain).
+    Retourne (code, message)."""
+    if chemin is None:
+        return (0, "")
+    normalise = os.path.normpath(os.path.abspath(chemin)).replace("\\", "/")
+    marqueur = "/agents/tools/"
+    marqueur_combos = "/cerveau-projet/combos/"
+    sous_combos = marqueur_combos in normalise.replace(os.sep, "/")
+    if marqueur not in normalise.replace(os.sep, "/") and not sous_combos:
+        return (0, "")
+    if sous_combos:
+        # DEFINITIONS DE COMBOS : VULCAIN exclusivement
+        if agent != "vulcain":
+            return (1, "[BLOQUE] Definition de combo sous cerveau-projet/combos "
+                       "refusee : domaine EXCLUSIF de vulcain (agent appelant : "
+                       "%s ; fichier : %s). Les combos sont plus puissants que "
+                       "les outils." % (agent or "?",
+                                        os.path.basename(chemin)))
+        return (0, "")
+    _dans_git = ("/agents/tools/git/" in
+                 normalise.replace(os.sep, "/"))
+    if _dans_git:
+        if agent == "hades":
+            return (0, "")
+        return (1, "[BLOQUE] Categorie git reservee a HADES exclusivement (agent appelant : %s)." % (agent or "?"))
+    if agent == "vulcain":
+        return (0, "")
+    relatif = normalise.split(marqueur, 1)[1]
+    nom_fichier = os.path.basename(relatif)
+    if agent == "buffy" and (nom_fichier in FICHIERS_EXCEPTIONS
+                             or nom_fichier.startswith("outil-template")):
+        return (0, "")
+    if agent == "morpheus" and relatif.replace(os.sep, "/").startswith("tester/tests"):
+        return (0, "")
+    return (1, "[BLOQUE] Ecriture dans agents/tools/ refusee : domaine "
+               "EXCLUSIF de vulcain (agent appelant : %s ; fichier : %s). "
+               "Exceptions : morpheus = tester/tests/, buffy = index-tools.md "
+               "+ outil-template*." % (agent or "?", relatif))
+
+def verifier_perimetre(chemin, agent):
+    """PERIMETRE PAR AGENT (v0.5.0, decision utilisateur 2026-08-22) :
+    si cerveau-projet/agents/<agent>/perimetre.json existe, toute cible doit
+    matcher au moins un motif (glob relatif racine projet). Sinon BLOQUE.
+    Perimetre absent -> regles anterieures (verrou cible tools)."""
+    if chemin is None or not agent:
+        return (0, "")
+    import glob as _glob
+    import json as _json
+    p = os.path.join("cerveau-projet", "agents", agent, "perimetre.json")
+    if not os.path.isfile(p):
+        return (0, "")
+    try:
+        with io.open(p, encoding="utf-8") as fh:
+            donnees = _json.load(fh)
+    except Exception:
+        return (1, "[BLOQUE] perimetre.json de %s illisible" % agent)
+    import fnmatch as _fn
+    motifs = donnees.get("fichiers", [])
+    normalise = os.path.normpath(os.path.abspath(chemin)).replace("\\", "/")
+    racine = os.path.normpath(os.getcwd()).replace("\\", "/")
+    if normalise.startswith(racine + "/"):
+        relatif_racine = normalise[len(racine) + 1:]
+    else:
+        relatif_racine = normalise
+    for m in motifs:
+        motif_rel = m.replace("\\", "/")
+        if relatif_racine == motif_rel:
+            return (0, "")
+        if _fn.fnmatch(relatif_racine, motif_rel):
+            return (0, "")
+    return (1, "[BLOQUE] %s hors du PERIMETRE de %s (voir "
+               "cerveau-projet/agents/%s/perimetre.json)" % (
+                   os.path.basename(chemin), agent, agent))
+
 def main(argv):
     verifier_nommage(os.path.basename(sys.argv[0]))
 
@@ -169,10 +254,29 @@ def main(argv):
         afficher_aide()
         return 1
 
+    # PERIMETRE PAR AGENT (v0.5.0) : si perimetre.json existe pour l agent,
+    # la cible doit y matcher (sinon BLOQUE). Prime sur tout le reste.
+    code_p, msg_p = verifier_perimetre(fichier, agent)
+    if code_p != 0:
+        print(msg_p)
+        return 1
+
+    # VERROU CIBLE TOOLS (v0.4.4, decision utilisateur 2026-08-22) : toute
+    # cible sous agents/tools/ exige un agent HABILITE (vulcain = tout,
+    # morpheus = tester/tests/, buffy = index-tools.md + outil-template*).
+    # Le controle s applique MEME sans --agent (breche fermee).
+    code_tools, msg_tools = verifier_cible_tools(fichier, agent)
+    if code_tools != 0:
+        print(msg_tools)
+        return 1
+
     # VERROU D HABILITATION (v0.2.1) : la modification d un fichier de test
-    # (tester/tests/) est EXCLUSIVE a morpheus. --agent est OBLIGATOIRE pour
-    # toute cible (le verrou verifie aussi la carte). Appele AVANT toute action.
-    if agent:
+    # (tester/tests/) est EXCLUSIVE a morpheus. Pour une cible sous tools/,
+    # la verification CIBLE TOOLS ci-dessus REMPLACE ce verrou-carte (sinon
+    # vulcain serait bloque par sa propre exclusivite).
+    sous_tools = "/agents/tools/" in os.path.abspath(
+        fichier).replace(os.sep, "/")
+    if agent and not sous_tools:
         code_verrou, msg_verrou = verrouiller_habilitation(agent, fichier)
         if code_verrou != 0:
             print(msg_verrou)

@@ -1,0 +1,175 @@
+{
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "hades",
+  "commun": false
+ },
+ "parcours": {
+  "version": "0.1.1",
+  "case_depart": "c0",
+  "nom": "parcours-hades",
+  "agent": "hades",
+  "description": "Parcours de Hades : gardien des archives git, SEUL habilite aux commandes git. Regle d anciennete : checkout interdit hors fichiers tres recents."
+ },
+ "cases": {
+  "c0": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "action",
+   "suivant": "c0b",
+   "indices": [
+    {
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/hades/corrections.md",
+     "type": "outil",
+     "nom": "lire-fichier"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/hades/hades.md",
+     "type": "outil",
+     "nom": "lire-fichier"
+    }
+   ]
+  },
+  "c0b": {
+   "titre": "Confirmation de lecture",
+   "type": "question",
+   "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0e"
+    },
+    {
+     "reponse": "INCERTAIN",
+     "vers": "c0"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    }
+   ]
+  },
+  "c1": {
+   "titre": "Mission git demandee",
+   "type": "question",
+   "question": "Quel type d operation git est demandee ?",
+   "branches": [
+    {
+     "reponse": "sauvegarder",
+     "vers": "c2"
+    },
+    {
+     "reponse": "consulter",
+     "vers": "c2"
+    },
+    {
+     "reponse": "restaurer",
+     "vers": "c3"
+    }
+   ]
+  },
+  "c2": {
+   "titre": "Operation sans risque (status/log/diff/commit)",
+   "type": "action",
+   "suivant": "c5",
+   "indices": [
+    {
+     "texte": "REGLE : operations autorisees - status log diff commit pull push avec validation utilisateur pour push.",
+     "type": "regle"
+    }
+   ]
+  },
+  "c3": {
+   "titre": "REGLE D ANCIENNETE : age des fichiers ?",
+   "type": "question",
+   "question": "Les fichiers concernes sont-ils TRES TRES RECENTS (minutes) ? Au-dela de quelques dizaines de minutes le checkout est INTERDIT (il ecraserait le travail non commite).",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c4"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c4b"
+    }
+   ]
+  },
+  "c4": {
+   "titre": "Checkout autorise sous regle d anciennete",
+   "type": "action",
+   "suivant": "c5",
+   "indices": [
+    {
+     "texte": "Checkout limite aux fichiers recents. Verifier l etat apres operation et journaliser.",
+     "type": "regle"
+    }
+   ]
+  },
+  "c4b": {
+   "titre": "Checkout INTERDIT - reparation dans le present",
+   "type": "fin",
+   "message": "CHECKOUT INTERDIT (regle d anciennete) : les fichiers datent - le git n est pas une source de verite recente. Je signale a Cerberus qui active l agent habilite pour REPARER DANS LE PRESENT (flux INTER-ROUND). Je ne restaure rien depuis le passe.",
+   "indices": [
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "type": "outil",
+     "nom": "activer-agent-principal"
+    }
+   ]
+  },
+  "c5": {
+   "titre": "Journaliser et fin",
+   "type": "fin",
+   "vers": "cerberus",
+   "message": "MISSION GIT TERMINEE : j ai journalise l operation. Je reactive Cerberus avec mon bilan (dernier maillon). COMMANDE : activer-agent-principal.py reactiver <session> <bilan> cerberus",
+   "indices": [
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "type": "outil",
+     "nom": "activer-agent-principal"
+    }
+   ]
+  },
+  "c0e": {
+   "titre": "Consulter les lecons des autres agents",
+   "type": "action",
+   "suivant": "c0c",
+   "indices": [
+    {
+     "texte": "Je consulte les lecons de mon domaine pour ne pas re-inventer.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "consulter-lecons",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hades",
+     "type": "outil",
+     "nom": "consulter-lecons"
+    }
+   ]
+  },
+  "c0c": {
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente",
+   "type": "action",
+   "suivant": "c1",
+   "indices": [
+    {
+     "texte": "Pattern 6 : je lis l activite recente pour comprendre le contexte.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "lire-activite-recente",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
+     "type": "outil",
+     "nom": "lire-activite-recente"
+    }
+   ]
+  }
+ }
+}

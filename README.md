@@ -6,14 +6,14 @@ identite:
 ---
 # Cerveau-Projet
 
-[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Agents](https://img.shields.io/badge/Agents-16-blue?style=flat)](https://img.shields.io/badge/Agents-16-blue?style=flat) [![Outils](https://img.shields.io/badge/Outils-164-blueviolet?style=flat)](https://img.shields.io/badge/Outils-164-blueviolet?style=flat) [![Tests](https://img.shields.io/badge/Tests-97-red?style=flat)](https://img.shields.io/badge/Tests-97-red?style=flat) [![Protocoles](https://img.shields.io/badge/Protocoles-36-orange?style=flat)](https://img.shields.io/badge/Protocoles-36-orange?style=flat) [![Regles](https://img.shields.io/badge/Regles-75-yellow?style=flat)](https://img.shields.io/badge/Regles-75-yellow?style=flat) [![Version](https://img.shields.io/badge/Version-v1.6.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.6.0-blue?style=flat)
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Agents](https://img.shields.io/badge/Agents-19-blue?style=flat)](https://img.shields.io/badge/Agents-19-blue?style=flat) [![Outils](https://img.shields.io/badge/Outils-165-blueviolet?style=flat)](https://img.shields.io/badge/Outils-165-blueviolet?style=flat) [![Tests](https://img.shields.io/badge/Tests-97-red?style=flat)](https://img.shields.io/badge/Tests-97-red?style=flat) [![Protocoles](https://img.shields.io/badge/Protocoles-36-orange?style=flat)](https://img.shields.io/badge/Protocoles-36-orange?style=flat) [![Regles](https://img.shields.io/badge/Regles-75-yellow?style=flat)](https://img.shields.io/badge/Regles-75-yellow?style=flat) [![Version](https://img.shields.io/badge/Version-v1.6.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.6.0-blue?style=flat)
 
 
 ![Logo](cerveau-projet/assets/images/logo.jpg)
 
 
 Je suis un **systeme agentique** qui peut vous aider a developper votre projet.
-Je suis compose de **16 agents** qui s'auto-ameliorent en continu, capables de
+Je suis compose de **19 agents** qui s'auto-ameliorent en continu, capables de
 detecter les erreurs que les autres agents vont faire, les erreurs dans leurs
 fichiers, leurs regles, leurs protocoles, leurs conventions, et bien plus encore.
 
@@ -46,7 +46,7 @@ rigueur).
 
 ## Mes agents
 
-Je suis anime par **16 agents IA**, chacun avec un role et une carte de decision :
+Je suis anime par **19 agents IA**, chacun avec un role et une carte de decision :
 
 | Agent | Role |
 |---|---|
@@ -66,6 +66,9 @@ Je suis anime par **16 agents IA**, chacun avec un role et une carte de decision
 | **Gardien** | Gardien du marbre - securite du code (zones protegees, l'utilisateur valide) |
 | **Argus** | Detecteur de contradictions -- cases, regles, protocoles et historique git |
 | **Chiron** | Educateur des agents -- formation continue |
+| **Socrate** | Conversateur de revision strategique |
+| **Redacteur-v2** | Redacteur PRO des docs de la v2 (freelance) |
+| **Hades** | Gardien des archives git - SEUL habilite aux commandes git |
 
 ### Mon cycle fondamental (par session)
 
@@ -75,8 +78,9 @@ CERBERUS -> AGENT -> CERBERUS
 ```
 
 1. Cerberus analyse la demande et confie la mission a l'agent adapte
-2. L'agent realise sa mission en suivant sa feuille de route
+2. L'agent realise sa mission en suivant sa carte de decision (parcours)
 3. A la fin, l'agent rend la main a Cerberus (ou passe au suivant de la chaine)
+4. En cas d'erreur hors-perimetre, l'agent active l'agent habilite en **inter-round** sans interrompre le round : l'habilite repare, puis reactive l'appelant qui reprend sa mission
 
 ### Mes garde-fous (qualite et protection)
 
@@ -198,5 +202,7 @@ guide etape par etape.
 | **Todo** | Liste des taches |
 | **Verrou** | Mecanisme d'exclusion mutuelle pour la securite des fichiers |
 | **Workflow** | Enchainement d'etapes pour accomplir une tache |
+| **Inter-round** | Mecanisme de reparation : un agent detecte un KO et active l'agent habilite sans interrompre le round |
 
 | **Socrate** | Le philosophe qui questionne -- discute des revisions avec l'utilisateur et produit une liste de missions pour Cerberus | Selon sa carte de decision |
+| **Redacteur-v2** | Le redacteur PRO des docs de la v2 (freelance) -- mode conversation | Sur activation (reste actif en conversation, reactive Cerberus sur "fin de cycle") |

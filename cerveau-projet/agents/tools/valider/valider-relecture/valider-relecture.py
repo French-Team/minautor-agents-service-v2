@@ -19,7 +19,7 @@ Options :
   --help            Afficher cette aide
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.2.0-py
+Version : 0.2.1-py
 Statut : prepare
 """
 
@@ -28,7 +28,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.0-py"
+VERSION = "0.2.1-py"
 STATUT = "prepare"
 
 BASE_AGENTS = "cerveau-projet/agents"
@@ -139,6 +139,10 @@ def executer(agent_filtre, verbose):
                 if not os.path.isdir(chemin):
                     continue
                 if nom == "tools":
+                    continue
+                if not os.path.isfile(os.path.join(chemin, nom + ".md")):
+                    continue
+                if nom in ("classeur-variables", "conventions", "lecons", "philosophie", "regles-immuables", "traces"):
                     continue
                 total += 1
                 if verifier_agent(nom, verbose) == 0:

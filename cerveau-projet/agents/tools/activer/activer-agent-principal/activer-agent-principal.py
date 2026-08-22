@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.23
+Version : 0.5.29
 Statut : prepare
 """
 
@@ -36,7 +36,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.5.23"
+VERSION = "0.5.29"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -70,6 +70,8 @@ COULEURS_PAR_AGENT = {
     "promethee": "#d97706",  # specs - ambre
     "minerve": "#059669",   # todos - emeraude
     "socrate": "#a855f7",   # revision strategique - violet clair
+    "redacteur-v2": "#7c3aed",
+    "hades": "#4b5563",  # redaction docs v2 - violet profond
 }
 COULEUR_DEFAUT = "#334155"
 
@@ -78,6 +80,9 @@ COULEUR_DEFAUT = "#334155"
 # son repere humain ('### <span ...>' colore). Les lignes '#>', '###>' et
 # les continuations sont attachees a l entree precedente. NB : le repere se
 # reconnait par son prefixe '### ' (aucun autre '### ' dans l historique).
+# v0.5.24 : ajout de l agent redacteur-v2 (redaction des docs v2, round
+# solo dedie) : couleur + triplet (role, fiche, corrections) dans AGENTS et
+# COULEURS_PAR_AGENT (py + sh).
 # v0.5.20 : le corps et l encart affichent l ID LLM (ex: freebuff) au lieu
 # de la session (demande utilisateur : heure | agent | id | raison).
 ENTREE_HISTORIQUE_RE = re.compile(r"^- \d{2}:\d{2} \|")
@@ -88,17 +93,17 @@ def couleur_agent(agent):
     return COULEURS_PAR_AGENT.get((agent or "").lower(), COULEUR_DEFAUT)
 
 
-def composer_bloc_historique(timestamp, identifiant, agent, raison):
+def composer_bloc_historique(timestamp, identifiant, agent, raison, type_round="R"):
     """Compose une ligne d entree (format v0.6.1 timeline).
 
     Format sous un bloc ### Agent :
-      - HH:MM | id | raison
+      - HH:MM | id | TYPE | raison   (TYPE = R round ou IR inter-round)
     (id = id LLM, ex: freebuff ; repli sur la session si inconnue)
     """
     heure = (timestamp or "").split(" ")[-1] if " " in (timestamp or "") else ""
     raison_nettoyee = " ".join((raison or "").split())
     # JAMAIS tronquer - l historique doit etre complet pour audit/retour
-    return "- %s | %s | %s\n" % (heure, identifiant or "", raison_nettoyee)
+    return "- %s | %s | %s | %s\n" % (heure, identifiant or "", type_round, raison_nettoyee)
 PREFIXE_SESSION = "session-llm-"
 
 # agent : (role, fiche, corrections)
@@ -154,6 +159,12 @@ AGENTS = {
     "socrate": ("Conversateur de revision strategique -- discute et priorise les problemes",
                 "cerveau-projet/agents/socrate/socrate.md",
                 "cerveau-projet/agents/socrate/corrections.md"),
+    "hades": ("Gardien des archives git -- SEUL habilite aux commandes git",
+              "cerveau-projet/agents/hades/hades.md",
+              "cerveau-projet/agents/hades/corrections.md"),
+    "redacteur-v2": ("Redacteur des docs de la v2 (proposition, regles, conventions) -- mode conversation (reactive Cerberus sur fin de cycle)",
+                "cerveau-projet/agents/redacteur-v2/redacteur-v2.md",
+                "cerveau-projet/agents/redacteur-v2/corrections.md"),
 }
 
 def get_agent_info(agent):
@@ -518,13 +529,13 @@ def editer_champs_session(contenu, session_id, champs):
     return "\n".join(sortie)
 
 
-def ajouter_historique(timestamp, session, agent, raison):
+def ajouter_historique(timestamp, session, agent, raison, type_round="R"):
     """Ajouter une entree dans le fichier historique, max 150.
 
     Format v0.6.2 timeline :
       ## YYYY-MM-DD
       ### Agent
-      - HH:MM | id | raison
+      - HH:MM | id | TYPE | raison   (TYPE = R round ou IR inter-round)
 
     La colonne porte l ID LLM (resolu depuis la session via id_lie_a_session,
     repli sur la session si aucun id lie). Aussi met a jour l encart
@@ -535,7 +546,7 @@ def ajouter_historique(timestamp, session, agent, raison):
         return 1
 
     identifiant = id_lie_a_session(session) or session
-    nouvelle_ligne = composer_bloc_historique(timestamp, identifiant, agent, raison)
+    nouvelle_ligne = composer_bloc_historique(timestamp, identifiant, agent, raison, type_round)
 
     if not verifier_ascii(nouvelle_ligne):
         print("ERREUR: Caractere non-ASCII detecte dans la raison - ecriture historique REFUSEE")
@@ -626,26 +637,31 @@ def maj_encart_activites(contenu, date, heure, agent, identifiant, raison):
         elif l.startswith("### "):
             agent_courant = l[4:].strip()
         elif l.startswith("- ") and " | " in l:
-            parties = l[2:].split(" | ", 2)
+            parties = l[2:].split(" | ", 3)
             if len(parties) >= 3:
                 h = parties[0].strip()
                 s = parties[1].strip()
-                r = parties[2].strip()
+                if len(parties) == 4:
+                    t = parties[2].strip()
+                    r = parties[3].strip()
+                else:
+                    t = ""
+                    r = parties[2].strip()
                 # Cle de tri : date + heure (JJ/MM/AAAA HH:MM)
                 cle_tri = "%s %s" % (date_courante, h)
-                entrees.append((cle_tri, h, agent_courant, s, r))
+                entrees.append((cle_tri, h, agent_courant, s, r, t))
 
     # Trier par date/heure decroissante et prendre les 10 plus recentes
     entrees.sort(key=lambda x: x[0], reverse=True)
-    recentes = [(h, a, s, r) for _, h, a, s, r in entrees[:10]]
+    recentes = [(h, a, s, r, t) for _, h, a, s, r, t in entrees[:10]]
 
     # Construire l encart
     encart = "---\n\n## Activites recentes (10)\n\n"
-    encart += "| Heure | Agent | id | Raison |\n"
-    encart += "|-------|-------|----|--------|\n"
-    for h, a, s, r in recentes:
+    encart += "| Heure | Agent | id | Type | Raison |\n"
+    encart += "|-------|-------|----|------|--------|\n"
+    for h, a, s, r, t in recentes:
         r_aff = r if len(r) <= 80 else r[:77] + "..."
-        encart += "| %s | %s | %s | %s |\n" % (h, a, s, r_aff)
+        encart += "| %s | %s | %s | %s | %s |\n" % (h, a, s, t, r_aff)
     encart += "\n---\n"
 
     # Remplacer l ancien encart (s il existe) ou l inserer
@@ -765,7 +781,7 @@ def mettre_a_jour_profil_session(session, agent, llm_id=None):
         return 1
 
     maintenant = datetime.now()
-    ts = maintenant.strftime("%Y-%m-%d %H:%M")
+    ts = maintenant.strftime("%Y-%m-%d %H:%M:%S.%f")
     jour = maintenant.strftime("%Y-%m-%d")
     # REGLE DE DERIVATION (IMMUABLE): id = profil-session- + partie apres le prefixe session-
     id_session = session[len("session-"):] if session.startswith("session-") else session
@@ -894,8 +910,8 @@ def sidentifier(llm_id=None):
         ecrire_agents(contenu)
 
     agent_actif = agent_actif_bloc(contenu, session)
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-    ajouter_historique(timestamp, session, agent_actif, "Identification LLM - demarrage de session")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+    ajouter_historique(timestamp, session, agent_actif, "Identification LLM - demarrage de session", "R")
     mettre_a_jour_profil_session(session, agent_actif, llm_id)
     actualiser_sessions_connues()
     return 0
@@ -1071,7 +1087,7 @@ def conso_tokens_intervention(tokens_debut):
                        and bool(snap_fin.get("fiable"))}
 
 
-def activer_agent(session, agent, raison, mission=None):
+def activer_agent(session, agent, raison, mission=None, type_round="R"):
     """Activer un agent dans la session (ne touche que son bloc)."""
     if not verifier_ascii(raison):
         print("ERREUR: Caractere non-ASCII detecte dans la raison - activation REFUSEE")
@@ -1121,16 +1137,10 @@ def activer_agent(session, agent, raison, mission=None):
             print("===========================================================")
             print("")
         else:
-            # RELAIS DE CHAINE : autorise avec avertissement (Pattern 8)
-            print("")
-            print("=== AVERTISSEMENT GARDE-FOU (relais de chaine) ===")
-            print("L agent '%s' est encore actif dans %s." % (agent_actuel, session))
-            print("Activation de '%s' AUTORISEE (relais de chaine, Pattern 8 :" % agent)
-            print("l agent suivant active l agent suivant a sa fin de carte).")
-            print("")
-            print("Si '%s' n a PAS termine sa mission, reactiver Cerberus d abord." % agent_actuel)
-            print("==============================================")
-            print("")
+            # RELAIS DE CHAINE : autorise sans avertissement (Pattern 8, v0.5.29).
+            # Chaque maillon active le suivant a sa fin de carte : c'est le
+            # comportement normal, plus besoin d'avertir.
+            pass
 
     if not any(s == session for s, _ in extraire_blocs_session(contenu)):
         contenu = creer_session(contenu, session)
@@ -1167,8 +1177,8 @@ def activer_agent(session, agent, raison, mission=None):
     contenu = editer_champs_session(contenu, session, champs)
     ecrire_agents(contenu)
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-    ajouter_historique(timestamp, session, agent, raison_finale)
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+    ajouter_historique(timestamp, session, agent, raison_finale, type_round)
     mettre_a_jour_profil_session(session, agent)
     actualiser_sessions_connues()
     print("Session %s : agent %s active avec succes" % (session, agent))
@@ -1180,7 +1190,7 @@ def activer_agent(session, agent, raison, mission=None):
     return 0
 
 
-def reactiver_cerberus(session, raison, agent_precedent):
+def reactiver_cerberus(session, raison, agent_precedent, type_round="R"):
     """Reactiver Cerberus dans la session (ne touche que son bloc)."""
     if not verifier_ascii(raison):
         print("ERREUR: Caractere non-ASCII detecte dans la raison - reactivation REFUSEE")
@@ -1226,8 +1236,8 @@ def reactiver_cerberus(session, raison, agent_precedent):
     contenu = editer_champs_session(contenu, session, champs)
     ecrire_agents(contenu)
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-    ajouter_historique(timestamp, session, "Cerberus", raison)
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+    ajouter_historique(timestamp, session, "Cerberus", raison, type_round)
     mettre_a_jour_profil_session(session, "Cerberus")
     actualiser_sessions_connues()
     print("Session %s : Cerberus reactive avec succes" % session)
@@ -1295,6 +1305,21 @@ def main(argv):
         afficher_aide()
         return 0
 
+    # v0.5.24 : extraire --type r|ir (indicateur ROUND/INTER-ROUND, regle R5
+    # protocole-fin-mission v0.2.0). Defaut R si absent.
+    type_round = "R"
+    if "--type" in argv:
+        i_type = argv.index("--type")
+        if i_type + 1 < len(argv):
+            type_round = argv[i_type + 1].upper()
+            del argv[i_type:i_type + 2]
+        else:
+            print("ERREUR: --type attend r ou ir")
+            return 1
+    if type_round not in ("R", "IR"):
+        print("ERREUR: --type attend r ou ir")
+        return 1
+
     action = argv[0]
 
     if action not in ("aide", "--help", "-h", "--version"):
@@ -1328,7 +1353,7 @@ def main(argv):
         agent = argv[2]
         raison = argv[3]
         mission = argv[4] if len(argv) > 4 else None
-        return activer_agent(session, agent, raison, mission)
+        return activer_agent(session, agent, raison, mission, type_round)
 
     if action == "reactiver":
         if len(argv) < 4:
@@ -1338,7 +1363,7 @@ def main(argv):
         session = argv[1]
         raison = argv[2]
         agent_precedent = argv[3]
-        return reactiver_cerberus(session, raison, agent_precedent)
+        return reactiver_cerberus(session, raison, agent_precedent, type_round)
 
     print("ERREUR: Action inconnue '%s'" % action)
     afficher_aide()

@@ -72,3 +72,8 @@ via editer-parcours, decision utilisateur).
 **Verdict** : marbre mis a jour (8/8 conforme), en attente de la suite de
 la chaine (verrou Vulcain + carte chiron + test-058).
 [LECON 2026-08-20] Reparation dette marbre c10 : un travail anterieur non commite (sync post-reparation) avait ecrase l empreinte de cerberus.c10 (197d59...) et ajoute une cle corrompue '2' (payload incomplet, sans fichier) qui faisait planter le verrou (KeyError: fichier). Flux correct : 1) diagnostiquer via git diff HEAD + empreinte_zone sur chaque zone ; 2) retirer la cle corrompue du manifeste (la porte n a pas d option de retrait) ; 3) re-empreinter la zone via la porte (--zone cerberus.c10 --raison ... --autorisation UTILISATEUR) avec autorisation utilisateur ; 4) la porte resynchronise cartes-lock.json automatiquement (FIX v0.1.1) ; 5) verifier proteger-verrou-marbre --tous --verbose (8/8 conforme). La re-empreinte est journalisee dans marbre-log.jsonl.
+
+
+## PHILOSOPHIE -- Principes de comportement
+
+| **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |

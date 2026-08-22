@@ -391,7 +391,7 @@
     },
     {
      "reponse": "NON",
-     "vers": "c8"
+     "vers": "c7ir"
     }
    ],
    "indices": [
@@ -464,7 +464,7 @@
    "branches": [
     {
      "reponse": "VULCAIN",
-     "vers": "c20"
+     "vers": "c9v"
     },
     {
      "reponse": "CERBERUS",
@@ -752,6 +752,37 @@
    "titre": "FIN - Reprendre ma mission",
    "type": "fin",
    "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
+  },
+  "c9v": {
+   "titre": "FIN - Reactiver Vulcain (retour delegation)",
+   "type": "fin",
+   "message": "RETOUR DELEGATION : Vulcain m a delegue les tests EN MILIEU de sa mission. Je REACTIVE VULCAIN avec mon rapport de tests et mon verdict. COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> vulcain \"RAPPORT TESTS MORPHEUS - <verdict>\". La fin suit SA carte : Vulcain reprendra sa mission a sa case RETOUR (Pattern 13). MESSAGE DE RELAIS A L AGENT SUIVANT : quand tu es active, COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte pour continuer la boucle. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon de la chaine.",
+   "indices": [
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ]
+  },
+  "c7ir": {
+   "titre": "INTER-ROUND : activer l agent habilite pour reparer (tests KO)",
+   "type": "action",
+   "suivant": "c8e",
+   "message": "INTER-ROUND (protocole-fin-mission v0.2.0 R2) : les tests ont echoue (KO). Je n interromps PAS le round : j ACTIVE L AGENT HABILITE avec le rapport des KO (commande activer). L agent habilite repare (Vulcain pour l outil, Buffy pour la carte). A la fin de l inter-round, l habilite me REACTIVE et je REPRENDS mon round (c8e). CASCADE autorisee entre habilites.",
+   "indices": [
+    {
+     "texte": "REGLE INTER-ROUND (R2) : KO de test = reparation par l agent habilite exclusivement. Activation avec le rapport des KO, reprise du round apres reparation.",
+     "type": "regle"
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ]
   }
  },
  "identite": {
@@ -764,6 +795,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c16c executer-script-temporaire (usage reel entonnoir, garde-fou test-035)",
   "nom": "parcours-morpheus",
-  "version": "0.5.4"
+  "version": "0.5.7"
  }
 }

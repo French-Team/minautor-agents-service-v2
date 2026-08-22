@@ -109,6 +109,8 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 > Je propose (zone + raison + impact), l UTILISATEUR valide, j execute
 > `proteger-modifier-marbre --autorisation <cle>`. Sans validation, je
 > m arrete : jamais de contournement, jamais de modification directe.
+  >
+  > **QUALIFICATION STANDARD / EXCEPTIONNEL (v0.2.0 protocole-securite-marbre, decision utilisateur 2026-08-22)** : pour les propositions STANDARDS (alignement sur regle deja validee, correction obsolete, precision non contradictoire), la reponse est donnee par SOCRATE au nom de l utilisateur ; les cas EXCEPTIONNELS (perimetre, suppression, multi-zones, nouveaute) restent soumis a la validation UTILISATEUR directe. Qualification journalisee dans marbre-log.jsonl, veto utilisateur a posteriori.
 
 > **REGLE ABSOLUE -- VERIFICATION AVANT ET APRES (IMMUABLE)** : j utilise
 > `proteger-verrou-marbre --tous` pour verifier l integrite du marbre avant

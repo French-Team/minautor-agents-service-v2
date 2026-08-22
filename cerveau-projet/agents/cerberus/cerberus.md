@@ -219,6 +219,7 @@ CERBERUS -> AGENT_1 -> AGENT_2 -> ... -> CERBERUS
 | **Hermes** | Agent de la langue (orthographe, vocabulaire, fautes) | Correction des fautes de francais |
 | **Hygie** | Agent de nettoyage du workspace | Nettoyage du workspace (SEUL habilite a TOUT le workspace) |
 | **Socrate** | Conversateur de revision strategique | Discussion des revisions, priorisation, liste de missions pour Cerberus |
+| **Redacteur-v2** | Redacteur PRO des docs de la v2 (freelance) | Redaction des docs v2 - ROUND SOLO (execute tout, reactive Cerberus) |
 
 ---
 

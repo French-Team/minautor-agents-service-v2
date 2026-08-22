@@ -57,9 +57,9 @@
    "marqueur_debut": "<!-- MARBRE:DEBUT constitution -->",
    "marqueur_fin": "<!-- MARBRE:FIN constitution -->",
    "raison": "Constitution du cerveau-projet : Configuration Active + cycle fondamental (regles immuables du comportement de Cerberus)",
-   "empreinte": "abc67871fb36053c82fe6b3561ded3a3531f6fc92d5b9018cf0867a207a9e576",
-   "modifie_le": "2026-08-20",
-   "raison_modification": "Sync post-reparation parcours : sessions LLM mises a jour"
+   "empreinte": "c78d5df3b9ba412aea1cc72da196600ebe984c9793c419232259949e52da8554",
+   "modifie_le": "2026-08-22 09:37:40",
+   "raison_modification": "Alignement etape 5 du cycle fondamental sur le flux ROUND INTER-ROUND REPRISE - protocole-fin-mission v0.2.0 - decision utilisateur 2026-08-22 validee via revision Socrate - rapport proposition-marbre-constitution-inter-round-2026-08-22.md"
   },
   "regles-groupes-agents": {
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",

@@ -29,6 +29,12 @@ agent:
 
 ---
 
+## [LECON] 2026-08-22 -- MISE A JOUR README INTER-ROUND + REDACTEUR-V2 (Clio)
+
+**README.md** : (1) Badge Outils 164->165, Agents 16->19. (2) Cycle fondamental: ajout etape 4 inter-round. (3) Redacteur-v2: ROUND SOLO -> MODE CONVERSATION. (4) Vocabulaire: ajout terme Inter-round. (5) Garde-fous: mention inter-round.
+
+**readme-dev.md** : (1) Section 3.3b ajoutee: documentation complete inter-round (5 agents avec cases inter-round, 3 avec reception c1ir). (2) Hades ajoute a la table des agents. (3) Outils 164->165.
+
 ## [NOTES] 2026-08-07 -- Parcours Atlas (11e et dernier parcours)
 
 **Tache** : verifier le README apres la creation du parcours Atlas (fichier du cerveau, pas un outil).
@@ -358,3 +364,20 @@ a 152 mais le badge en dur du README affichait encore 150 (affichage + href).
 **Lecon** : le README n'est pas qu'un document technique -- c'est le premier contact avec les utilisateurs. Le ton doit etre accueillant et explicatif, pas froid et documentaire. Les badges dynamiques donnent une vision immediate de la puissance du systeme.
 
 **Verdict** : ASCII 0/0 sur les 2 fichiers, compteurs alignes sur la realite.
+
+
+
+## [LECON] 2026-08-22 -- CORRECTION ECART E1 README PUBLIC + DEV (Clio)
+
+**Contexte** : audit Themis creation Redacteur-v2 - E1 MAJEUR : compteurs 16 agents
+vs 18 reels, Socrate et Redacteur-v2 absents des tables.
+**Travail realise** : README.md (16->18 x2, + lignes Socrate et Redacteur-v2 dans la
+table Mes agents) ET readme-dev.md (compteur Agents 16->18, + 2 lignes section 4,
+liste parcours 16->18 avec argus/chiron/gardien/socrate/redacteur-v2 ajoutes).
+**Verification** : combos-analyse-projet VERDICT README A JOUR (badge 164 == 164,
+0 ecart), ASCII 0, LF pur sur les 2 fichiers.
+**Verdict** : VALIDE.
+**Lecon** : l'audit avait declare readme-dev a jour a tort - les 2 documents doivent
+TOUJOURS etre verifies ensemble (grep cible sur chaque nom d'agent dans CHACUN des
+2 readmes). Le compteur de texte libre (16 agents) n'est pas detecte par --verifier :
+les compteurs narratifs se corrigent a la main apres verification --agents.

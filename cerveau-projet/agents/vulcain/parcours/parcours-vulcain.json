@@ -98,6 +98,10 @@
     {
      "reponse": "autre",
      "vers": "c16"
+    },
+    {
+     "reponse": "inter-round",
+     "vers": "c1ir"
     }
    ],
    "question": "Quelle est la mission ?",
@@ -107,6 +111,10 @@
     {
      "type": "regle",
      "texte": "GARDE-FOU C1 : demande hors branches (construire/modifier) -> autre -> c16. JAMAIS improviser, JAMAIS outil hors carte."
+    },
+    {
+     "type": "regle",
+     "texte": "INTER-ROUND : active en inter-round par un autre agent -> inter-round -> c1ir. Je n execute PAS une nouvelle mission outil, j accuse reception du rapport KO et je relance l appelant."
     }
    ]
   },
@@ -368,7 +376,7 @@
     },
     {
      "reponse": "NON",
-     "vers": "c14"
+     "vers": "c14ir"
     }
    ],
    "indices": [
@@ -1351,6 +1359,42 @@
    "titre": "FIN - Reprendre ma mission",
    "type": "fin",
    "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
+  },
+  "c14ir": {
+   "titre": "INTER-ROUND : activer l agent habilite pour reparer (tests non delegues)",
+   "type": "action",
+   "suivant": "c15e",
+   "message": "INTER-ROUND (protocole-fin-mission v0.2.0 R2) : les tests n ont pas ete delegues a Morpheus et je ne peux pas avancer. Je n interromps PAS le round : j ACTIVE L AGENT HABILITE (Buffy pour la carte) avec le rapport du blocage (commande activer). L agent habilite repare. A la fin de l inter-round, l habilite me REACTIVE et je REPRENDS mon round (c8e). CASCADE autorisee entre habilites.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE INTER-ROUND (R2) : blocage de tests = reparation par l agent habilite exclusivement. Activation avec le rapport du blocage, reprise du round apres reparation."
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ]
+  },
+  "c1ir": {
+   "titre": "RECEPTION INTER-ROUND : accuser reception du rapport KO et reactiver l appelant",
+   "type": "action",
+   "suivant": "c15e",
+   "message": "RECEPTION INTER-ROUND (protocole-fin-mission v0.2.0 R2) : un agent (Morpheus, Janus, Themis) m a active en inter-round avec un rapport de KO. Je NE commence PAS une nouvelle mission outil. PERIMETRE REDUIT: 1) Lire le rapport KO transmis, 2) Confirmer reception (message console), 3) REACTIVER l agent appelant (commande activer, PAS reactiver) avec mention \"reprends ton round en cXe\". CASCADE autorisee entre habilites.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE INTER-ROUND (R2) RECEPTION : je n execute PAS une nouvelle mission. J accuse reception et je relance l appelant qui reprend son round."
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ]
   }
  },
  "identite": {
@@ -1363,6 +1407,6 @@
   "case_depart": "c0",
   "description": "Carte de decision de Vulcain - constructeur d outils. v0.4.17 : c6 + chronometrer-duree (mesure duree des interventions, integre a activer-agent-principal v0.5.16). c6 + chronometrer-duree (mesure duree des interventions, integre a activer-agent-principal v0.5.16). c6 + analyser-tokens (conso tokens integree au cycle activation).",
   "nom": "parcours-vulcain",
-  "version": "0.6.3"
+  "version": "0.6.5"
  }
 }

@@ -19,18 +19,26 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | freebuff |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-21 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | cerberus (retour de mission) |
-| **Raison** | BILAN CONSOLIDE - VERDICT JANUS : VALIDE (97/97 OK, rating test 98.8 EXCELLENT). Mission alignement indices cartes terminee : 34 indices de 16 cartes alignes alias corriger-symboles -> canonique corriger-accents-zones-sensibles (convention du catalogue). Reparation immediate Janus : pin test-004 morpheus 0.5.3 -> 0.5.4. Chaine : Cerberus -> Buffy (34 modifs via editer-parcours + bumps + pins + vues) -> Themis (audit CONFORME 0 defaut) -> Buffy (retour) -> Janus (controle 97/97) -> Cerberus. |
+| **Nom Agent** | buffy |
+| **Role Agent** | Developpeur principal -- contenu et structures |
+| **Derniere mise a jour** | 2026-08-22 |
+| **Fiche** | [cerveau-projet/agents/buffy/buffy.md](cerveau-projet/agents/buffy/buffy.md) |
+| **Corrections** | [cerveau-projet/agents/buffy/corrections.md](cerveau-projet/agents/buffy/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | CREATION DU PREMIER AGENT V2 - SHURI. RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer. PERIMETRE: construire l agent SHURI dans cerveau-projet/freelance/. C est le constructeur des agents de la v2, le premier agent MARVEL operationnel. SPECS: (1) nom MARVEL: Shuri (D14). (2) mode conversation comme redacteur-v2: Cerberus l active, utilisateur dit fin de cycle, il reactive Cerberus. (3) role: construire les autres agents v2 (Stark et suivants). (4) quand Stark sera cree, Stark prendra le controle de Shuri. (5) il doit avoir: fiche agent, corrections.md, parcours JSON, integre dans AGENTS.md et readme-dev.md. (6) son parcours doit avoir un chemin 'construire un agent' (creation complete comme Buffy c2-c8). Chaine: Buffy->Themis->Buffy->Janus->Cerberus. |
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
+  cerveau-projet/agents/buffy/parcours/parcours-buffy.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>').
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | freebuff | Cerberus | 2026-08-21 19:52 |
+| session-llm-1 | freebuff | buffy | 2026-08-22 18:49:56.209454 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -53,7 +61,7 @@ CERBERUS -> AGENT -> CERBERUS
 | 2 | Cerberus analyse et choisit l'agent |
 | 3 | Cerberus active l'agent (mise a jour AGENTS.md) |
 | 4 | **L'agent active lit SA fiche et SES corrections** puis execute sa mission |
-| 5 | Agent termine : la fin suit SA carte (activation directe -> reactiver Cerberus ; maillon de chaine -> activer le suivant) |
+| 5 | Agent termine : la fin suit SA carte (activation directe -> reactiver Cerberus ; maillon de chaine -> activer le suivant) ; ERREUR HORS-PERIMETRE -> INTER-ROUND : l'agent active l'AGENT HABILITE avec le rapport de l'erreur, la fin de l'inter-round reactive l'appelant qui REPREND son round principal (protocole-fin-mission v0.2.0) |
 | 6 | **Cerberus relit SA fiche et SES corrections** puis reprend pour la suite |
 
 > **REGLE DE RELECTURE** : A chaque activation ou reactivation, l'agent relit SA fiche et SES corrections (jamais celles des autres). Activer sans lire = inutile.
@@ -87,7 +95,8 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 
 1. L'agent termine sa mission
 2. LA FIN SUIT SA CARTE (Pattern 8) : activation directe par Cerberus -> l'agent utilise `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent>` pour reactiver Cerberus ; maillon d'une chaine -> l'agent ACTIVE le maillon suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide
-3. L'agent documente la fin de mission
+3. ERREUR HORS-PERIMETRE -> INTER-ROUND (v0.2.0 protocole-fin-mission, decision utilisateur 2026-08-22) : l'agent N'INTERRUPT PAS le round et ne reactive PAS Cerberus : il active L'AGENT HABILITE avec le rapport de l'erreur ; a la fin de l'inter-round, l'habilite reactive l'agent appelant qui REPREND son round principal ; cascade autorisee entre habilites, le dernier reactive l'appelant ; une erreur n'est JAMAIS seulement detectee : reparation exclusive par l'habilite
+4. L'agent documente la fin de mission
 4. Le controle revient a Cerberus (directement, ou par le bilan consolide du dernier maillon de la chaine)
 5. **Cerberus relit SA fiche et SES corrections** avant de poursuivre
 
@@ -96,7 +105,7 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 ## Groupes d'agents (regles-groupes-agents)
 
 > **REGLE IMMUABLE** : [regles-groupes-agents.md](cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md) -- 3 groupes aux domaines separes :
-> **1) Coordination** : Cerberus. **2) Cerveau-projet** (gerent `cerveau-projet/` lui-meme : outils, parcours, fiches, protocoles, spec des outils, README) : **Buffy** (responsable), Vulcain, Morpheus, Janus, Atlas, Themis, Clio, Hygie, Hermes, Socrate. **3) Trio projets futurs** (ecrivent `pense-betes/`, `specs/`, `todos/` pour le dev des apps futures) : Athena, Promethee, Minerve.
+> **1) Coordination** : Cerberus. **2) Cerveau-projet** (gerent `cerveau-projet/` lui-meme : outils, parcours, fiches, protocoles, spec des outils, README) : **Buffy** (responsable), Vulcain, Morpheus, Janus, Atlas, Themis, Clio, Hygie, Hermes, Socrate, Redacteur-v2. **3) Trio projets futurs** (ecrivent `pense-betes/`, `specs/`, `todos/` pour le dev des apps futures) : Athena, Promethee, Minerve.
 > **REGLE** : le trio n'est JAMAIS utilise pour developper le cerveau-projet -- c'est Buffy la responsable.
 
 ## Liste des agents
@@ -127,9 +136,11 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 | [Argus](cerveau-projet/agents/argus/argus.md) | cerveau-projet/agents/argus/ | Detecteur de contradictions | Disponible (en attente) | DETECTE et SIGNALE les incoherences (cases, regles, protocoles, git) - ne corrige jamais |
 | [Chiron](cerveau-projet/agents/chiron/chiron.md) | cerveau-projet/agents/chiron/ | Educateur des agents -- formation continue | Disponible (en attente) | Re-edue les agents quand les outils/regles/protocoles changent |
 | [Socrate](cerveau-projet/agents/socrate/socrate.md) | cerveau-projet/agents/socrate/ | Conversateur de revision strategique | Disponible (en attente) | Discute des revisions, priorise, produit une liste de missions pour Cerberus |
+| [Redacteur-v2](cerveau-projet/agents/redacteur-v2/redacteur-v2.md) | cerveau-projet/agents/redacteur-v2/ | Redacteur PRO des docs de la v2 (freelance) | Disponible (en attente) | Agent dedie a la redaction des docs v2 - MODE CONVERSATION (reactive Cerberus sur fin de cycle) |
+| [Hades](cerveau-projet/agents/hades/hades.md) | cerveau-projet/agents/hades/ | Gardien des archives git | Disponible (en attente) | SEUL habilite aux commandes git - regle d anciennete : checkout interdit hors fichiers tres recents |
 
 ---
 
 > **Le cycle** : Chaque session LLM commence et finit avec Cerberus.
 > Chaque session utilise SON identifiant (session-llm-N) pour toutes ses activations.
-> **Regle** : La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide. La chaine ne retombe JAMAIS sur Cerberus au milieu.
+> **Regle** : La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide. La chaine ne retombe JAMAIS sur Cerberus au milieu. ERREUR HORS-PERIMETRE -> INTER-ROUND (2026-08-22) : activation de l'agent habilite avec rapport -> fin de l'inter-round reactive l'appelant qui reprend son round ; une erreur jamais seulement detectee.

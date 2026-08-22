@@ -82,6 +82,8 @@ def construire_parser():
                         help="Afficher la version")
     parser.add_argument("--aide", "-h", action="store_true",
                         help="Afficher cette aide")
+    parser.add_argument("--agent", type=str, default=None,
+                        help="Agent appelant (perimetre)")
     return parser
 
 
@@ -102,6 +104,33 @@ def main(argv=None):
         return 1
 
     fichier = args.fichier
+
+    # PERIMETRE PAR AGENT (v0.5.0-pilote, decision utilisateur 2026-08-22) :
+    # si cerveau-projet/agents/<agent>/perimetre.json existe (--agent fourni),
+    # la cible doit matcher un motif sinon BLOQUE.
+    _ag = ""
+    for _i, _a in enumerate(sys.argv):
+        if _a == "--agent" and _i + 1 < len(sys.argv):
+            _ag = sys.argv[_i + 1]
+    if _ag:
+        import json as _json
+        import io as _io
+        import fnmatch as _fn
+        _pf = os.path.join("cerveau-projet", "agents", _ag, "perimetre.json")
+        if os.path.isfile(_pf):
+            _d = _json.load(_io.open(_pf, encoding="utf-8"))
+            _n = os.path.normpath(os.path.abspath(fichier)).replace("\\", "/")
+            _r = os.path.normpath(os.getcwd()).replace("\\", "/")
+            _rel = _n[len(_r) + 1:] if _n.startswith(_r + "/") else _n
+            _ok = any(
+                _rel == m.replace("\\", "/")
+                or _fn.fnmatch(_rel, m.replace("\\", "/"))
+                for m in _d.get("fichiers", []))
+            if not _ok:
+                print(RED + "[BLOQUE] %s hors du PERIMETRE de %s (voir "
+                      "cerveau-projet/agents/%s/perimetre.json)"
+                      % (os.path.basename(fichier), _ag, _ag) + NC)
+                return 1
 
     # Securite (round 3) : octet nul dans le chemin -> refus explicite
     if "\x00" in fichier:

@@ -18,6 +18,7 @@ Genere par convertir-carte-mermaid (source de verite : parcours-<agent>.json).
 | minerve | parcours-minerve | 0.4.4 | [minerve.mmd](minerve.mmd) | [minerve.svg](minerve.svg) |
 | morpheus | parcours-morpheus | 0.5.4 | [morpheus.mmd](morpheus.mmd) | [morpheus.svg](morpheus.svg) |
 | promethee | parcours-promethee | 0.4.4 | [promethee.mmd](promethee.mmd) | [promethee.svg](promethee.svg) |
+| redacteur-v2 | parcours-redacteur-v2 | 0.1.0 | [redacteur-v2.mmd](redacteur-v2.mmd) | [redacteur-v2.svg](redacteur-v2.svg) |
 | socrate | ? | 0.1.2 | [socrate-revision-audit.mmd](socrate-revision-audit.mmd) | [socrate-revision-audit.svg](socrate-revision-audit.svg) |
 | socrate | ? | 0.1.2 | [socrate-revision-generale.mmd](socrate-revision-generale.mmd) | [socrate-revision-generale.svg](socrate-revision-generale.svg) |
 | socrate | ? | 0.1.2 | [socrate-revision-urgence.mmd](socrate-revision-urgence.mmd) | [socrate-revision-urgence.svg](socrate-revision-urgence.svg) |

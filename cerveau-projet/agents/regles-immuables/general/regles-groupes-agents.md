@@ -333,3 +333,9 @@ prepares lors de la phase "dev de nouveaux projets".
 
 
 
+
+   c. SEUL HADES UTILISE GIT (2026-08-22) : seul agent habilite aux commandes
+      git (commit, pull, push, log, status, diff, stash). REGLE D ANCIENNETE :
+      le git est une sauvegarde du passe - checkout interdit hors fichiers tres
+      tres recents (minutes), au-dela reparation dans le present par l agent
+      habilite. Caisse a outils : hades-contexte-git.

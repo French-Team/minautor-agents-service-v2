@@ -47,7 +47,7 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.6
+Version : 0.4.7
 Statut : prepare
 """
 
@@ -58,7 +58,7 @@ import re
 import subprocess
 import sys
 
-VERSION = "0.4.6"
+VERSION = "0.4.7"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "prepare"
 
@@ -233,6 +233,13 @@ def valider_parcours(contenu, nom_display, agent=None):
         suivant = case.get("suivant")
         if suivant and suivant not in cases:
             refs_cassees.append("%s.suivant->%s" % (cid, suivant))
+        # Reference morte TOP-LEVEL : le champ 'vers' d une case (hors branches)
+        # doit pointer vers une case existante. Une case fin avec 'vers' vers une
+        # case absente (ex: c7 'vers': 'conversation' de redacteur-v2) etait
+        # silencieusement ignoree par la navigation - detectee ici (2026-08-22).
+        vers_top = case.get("vers")
+        if vers_top and vers_top not in cases:
+            refs_cassees.append("%s.vers->%s" % (cid, vers_top))
         for b in case.get("branches") or []:
             vers = b.get("vers")
             if vers and vers not in cases:

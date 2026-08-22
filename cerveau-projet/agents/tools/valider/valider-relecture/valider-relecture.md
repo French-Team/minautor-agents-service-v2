@@ -9,7 +9,7 @@ identite:
 ---
 # valider-relecture
 
-**Version :** 0.2.0-py
+**Version :** 0.2.1-py
 **Statut :** prepare
 **Categorie :** Valider
 **Chemin :** `agents/tools/valider/valider-relecture/`

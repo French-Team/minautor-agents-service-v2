@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-014-spec-guider-parcours.py
-Test formel de la spec-guider-parcours v0.6.2
+Test formel de la spec-guider-parcours v0.6.3
 (patterns REFERENCES, pas dupliques -- etape 7 de la spec-refonte-cartes-decision).
 
 Contexte :
@@ -24,12 +24,12 @@ Cas couverts:
      valider-case sur un parcours qui les porte)
   4. Aucun indice regle > 160 caracteres dans les exemples de la spec
   5. Le type action documente dans les exemples (exemple minimal c2)
-  6. Refs documentaires : guider-parcours.md et vulcain.md pointent v0.6.2
+  6. Refs documentaires : guider-parcours.md et vulcain.md pointent v0.6.3
   7. Les 17 patterns toujours presents (aucun perdu)
   8. Non-regression : valider-case + guider-parcours fonctionnent toujours
   9. ASCII strict : 0 non-ASCII (spec + doc + test)
  10. LF pur : 0 CRLF
- 11. Garde-fou positif v0.6.2 : regle 11 NOMMAGE DES IDS DE CASES documentee
+ 11. Garde-fou positif v0.6.3 : regle 11 NOMMAGE DES IDS DE CASES documentee
      (convention etendue cT* presente)
 
 Usage:
@@ -155,14 +155,14 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-014-")
     try:
-        print("=== Test formel spec-guider-parcours v0.6.2 ===")
+        print("=== Test formel spec-guider-parcours v0.6.3 ===")
 
         with io.open(SPEC, encoding="utf-8") as fh:
             spec = fh.read()
         lignes = spec.split("\n")
 
         # 1. Version coherente : titre (ligne 7) == Version (ligne 9)
-        verifier("1a. Titre ligne 7 = v0.6.2", "v0.6.2" in lignes[6],
+        verifier("1a. Titre ligne 7 = v0.6.3", "v0.6.3" in lignes[6],
                  lignes[6][:80])
         verifier("1b. Version ligne 9 = 0.6.2",
                  lignes[8].strip().startswith("**Version** : 0.6.2"),
@@ -202,11 +202,11 @@ def main():
             doc = fh.read()
         with io.open(FICHE_VULCAIN, encoding="utf-8") as fh:
             fiche = fh.read()
-        verifier("6a. guider-parcours.md : Spec (v0.6.2)",
-                 "(v0.6.2)" in doc and "spec-guider-parcours.001.01.ebauche.md" in doc,
+        verifier("6a. guider-parcours.md : Spec (v0.6.3)",
+                 "(v0.6.3)" in doc and "spec-guider-parcours.001.01.ebauche.md" in doc,
                  doc.strip()[-80:])
-        verifier("6b. vulcain.md : Spec du format (v0.6.2)",
-                 "(v0.6.2)" in fiche and "Spec du format" in fiche,
+        verifier("6b. vulcain.md : Spec du format (v0.6.3)",
+                 "(v0.6.3)" in fiche and "Spec du format" in fiche,
                  fiche.strip()[-80:])
 
         # 7. Les 17 patterns toujours presents

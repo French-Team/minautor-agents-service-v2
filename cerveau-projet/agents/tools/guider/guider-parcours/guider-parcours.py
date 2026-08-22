@@ -3,7 +3,7 @@
 # guider-parcours.py
 # Guide l'agent case par case (jeu de piste) : affiche la case courante
 # (question + indices outil/fichier/regle), suit les branches selon la reponse.
-# Version : 0.5.1
+# Version : 0.5.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -41,7 +41,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.5.1"
+VERSION = "0.5.2"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "ebauche"
 
@@ -125,6 +125,13 @@ def valider_parcours(donnees):
         branches = case.get("branches")
         if suivant and suivant not in cases:
             erreurs.append("case '%s': suivant '%s' introuvable" % (cid, suivant))
+        # Reference morte TOP-LEVEL : le champ 'vers' d une case (hors branches)
+        # doit pointer vers une case existante. Une case fin avec 'vers' vers une
+        # case absente (ex: c7 'vers': 'conversation' de redacteur-v2) etait
+        # silencieusement ignoree par la navigation - detectee ici (2026-08-22).
+        vers_top = case.get("vers")
+        if vers_top and vers_top not in cases:
+            erreurs.append("case '%s': vers (top-level) '%s' introuvable" % (cid, vers_top))
         for b in branches or []:
             vers = b.get("vers")
             if vers and vers not in cases:

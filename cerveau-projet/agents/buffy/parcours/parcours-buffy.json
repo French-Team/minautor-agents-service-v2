@@ -110,6 +110,10 @@
     {
      "reponse": "autre",
      "vers": "c33"
+    },
+    {
+     "reponse": "inter-round",
+     "vers": "c1ir"
     }
    ],
    "question": "Quelle est la mission ?",
@@ -118,7 +122,11 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "GARDE-FOU C1 : demande hors branches (creer/modifier/agent/protocole/controler) -> autre -> c33. JAMAIS improviser, JAMAIS outil hors carte."
+     "texte": "GARDE-FOU C1 : demande hors branches -> autre -> c33. JAMAIS improviser, JAMAIS outil hors carte."
+    },
+    {
+     "type": "regle",
+     "texte": "INTER-ROUND : activee en inter-round par un autre agent -> inter-round -> c1ir. Je n execute PAS une nouvelle mission, j accuse reception et relance l appelant."
     }
    ]
   },
@@ -1389,6 +1397,24 @@
      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> morpheus '<raison>'"
     }
    ]
+  },
+  "c1ir": {
+   "titre": "RECEPTION INTER-ROUND : accuser reception du rapport KO et reactiver l appelant",
+   "type": "action",
+   "suivant": "c8a",
+   "message": "RECEPTION INTER-ROUND (protocole-fin-mission v0.2.0 R2) : un agent m a activee en inter-round avec un rapport de defaut. Je NE commence PAS une nouvelle mission. PERIMETRE REDUIT: 1) Lire le rapport, 2) Confirmer reception, 3) REACTIVER l agent appelant (commande activer, PAS reactiver) avec mention \"reprends ton round en cXe\". CASCADE autorisee entre habilites.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE INTER-ROUND (R2) RECEPTION : je n execute PAS une nouvelle mission. J accuse reception et je relance l appelant."
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ]
   }
  },
  "identite": {
@@ -1401,6 +1427,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c0 guider-parcours (P0 fiche, usage reel, garde-fou test-035)",
   "nom": "parcours-buffy",
-  "version": "0.5.4"
+  "version": "0.5.5"
  }
 }

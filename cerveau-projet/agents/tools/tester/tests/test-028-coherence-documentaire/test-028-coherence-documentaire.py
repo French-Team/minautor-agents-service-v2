@@ -225,7 +225,7 @@ def main():
     with io.open(SPEC_GUIDER, encoding="utf-8", errors="replace") as fh:
         spec_guider = fh.read()
     verifier("6. spec guider-parcours : **Version outil** : 0.5.0 present",
-             "**Version outil** : 0.5.1" in spec_guider)
+             "**Version outil** : 0.5.2" in spec_guider)
 
     # 7-8. Normes sur les fichiers des outils + ce test
     fichiers = [DIV_PY, DIV_MD, DEC_PY, DEC_MD, SPEC_GUIDER,

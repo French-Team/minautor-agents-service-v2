@@ -7,7 +7,7 @@ identite:
 
 # Protocole de Fin de Mission -- Documentation Obligatoire avant Transmission
 
-**Version** : 0.1.0
+**Version** : 0.2.0
 **Statut** : ebauche
 **Categorie** : General
 **Agent** : Cerberus
@@ -129,3 +129,45 @@ Janus reprend les resultats de Morpheus sans controle reel
 - [index-regles-general.md](../index-regles-general.md) -- referencement
 - [regles-veracite.md](../regles-veracite.md) -- ne jamais mentir, supposer, inventer
 - [test-048-fin-mission-documentation](../../../tools/tester/tests/test-048-fin-mission-documentation/test-048-fin-mission-documentation.py) -- garde-fou
+
+
+
+---
+
+## Le flux ROUND / INTER-ROUND / REPRISE (v0.2.0, decision utilisateur 2026-08-22)
+
+### Vocabulaire
+
+| Terme | Definition |
+|---|---|
+| **ROUND** | La mission principale : Cerberus active le premier agent, chaque agent active le suivant selon SA carte, bout-en-bout, SANS retomber sur Cerberus au milieu. UN ROUND LANCE DOIT ETRE FINI. |
+| **INTER-ROUND** | Mission secondaire de REPARATION declenchee quand un agent detecte une ERREUR HORS-PERIMETRE pendant son round. |
+| **REPRISE DE ROUND** | A la fin de l'inter-round, on reactive l'AGENT QUI AVAIT LANCE l'inter-round, qui reprend son round principal exactement ou il l'avait laisse. |
+
+### Le flux d'erreur hors-perimetre
+
+`
+ROUND en cours (AGENT_N detecte une erreur hors-perimetre)
+   -> AGENT_N active L'AGENT HABILITE avec le rapport de l'erreur
+      [INTER-ROUND : reparation exclusive de l'habilite]
+   -> fin de l'inter-round : l'habilite REACTIVE AGENT_N
+   -> AGENT_N REPREND son round principal
+`
+
+### Regles immuables
+
+| # | Regle |
+|---|---|
+| R1 | Une erreur detectee n'est JAMAIS laissee 'seulement detectee' : elle est TOUJOURS suivie d'une reparation par l'agent habilite EXCLUSIVEMENT (lui seul sait precisement quoi faire). |
+| R2 | Un agent qui detecte une erreur hors-perimetre n'interrompt PAS le round et ne reactive PAS Cerberus : il active l'agent habilite avec le rapport. |
+| R3 | CASCADE : si l'erreur concerne l'agent habilite lui-meme, OU si sa reparation revele une autre erreur hors-perimetre, l'inter-round s'enchaine en cascade ; sinon la reparation est DECOMPOSEE et les agents habilites s'enchainent DANS l'inter-round. Le DERNIER habilite reactive l'agent qui avait lance l'inter-round. |
+| R4 | Themis et Janus restent HORS des inter-rounds courts. Janus garde uniquement la non-regression finale du round. |
+| R5 | Tracabilite R/IR : les entrees d'AGENTS-historique (et l'encart Activites recentes) portent une colonne d'indicateur : R pour round, IR pour inter-round. |
+
+### Ce qui change vs l'ancien garde-fou (OBSOLETE)
+
+L'ancien garde-fou 'si l'agent n'a pas fini sa mission, il doit reactiver
+Cerberus' est SUPPRIME : il contredit le deroulement normal (Pattern 8) et
+casse le round au lieu de le reparer. La fin d'un maillon suit desormais :
+- round normal -> activer le maillon suivant selon SA carte ;
+- erreur hors-perimetre -> lancer une INTER-ROUND (R2), puis REPRISE DE ROUND.

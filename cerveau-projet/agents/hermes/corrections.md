@@ -32,3 +32,8 @@ dans readme-dev:264.
    en double) et exclure tmp-*/workspace/.
 6. La premiere mission reelle d Hermes : corriger readme-dev:264
    (`enchannements` -> `enchainements`) comme preuve bout en bout.
+
+
+## PHILOSOPHIE -- Principes de comportement
+
+| **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |

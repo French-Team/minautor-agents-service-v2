@@ -9,7 +9,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.5.23
+**Version** : 0.5.29
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -330,3 +330,4 @@ eviter les collisions et comprendre qui intervient en parallele.
 - Chaque erreur ici casse tout le cycle
 
 ---
+| 0.5.25 | 2026-08-22 | COLONNE R/IR (decision utilisateur, regle R5 protocole-fin-mission v0.2.0) : les actions activer et reactiver acceptent --type r|ir (defaut R) et ecrivent l indicateur dans l entree timeline (- HH:MM | id | TYPE | raison) et dans la colonne Type de l encart Activites recentes. Parite py/sh. Parsing tolerant des anciennes entrees 3 champs. Message obsolete 'Si X n a PAS termine sa mission, reactiver Cerberus d abord' remplace par la formulation INTER-ROUND/reprise de round. |

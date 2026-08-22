@@ -24,7 +24,7 @@ identite:
 | **Langages** | Bash, Python, Markdown |
 | **Point d'entree** | `demarrer.md` (a lire en premier) |
 | **Fichiers racine** | `AGENTS.md` (sessions), `README.md` (public), `cerveau-projet/` (le cerveau) |
-| **Agents** | 16 agents + classeur-variables (voir section 4) |
+| **Agents** | 19 agents + classeur-variables (voir section 4) |
 | **Outils** | 164 outils dans 39 categories (voir section 6) |
 | **Cartes de decision** | 16 parcours JSON (voir section 5) |
 | **Tests** | 97 tests de non-regression |
@@ -111,6 +111,32 @@ activer le suivant selon SA carte ; seul le DERNIER maillon reactive
 Cerberus avec le bilan consolide. La chaine ne retombe JAMAIS sur Cerberus
 au milieu.
 
+### 3.3b Erreur hors-perimetre : l'inter-round (protocole-fin-mission v0.2.0 R2)
+
+Quand un agent detecte une erreur qu'il ne peut pas reparer lui-meme
+(ex : KO de tests, defaut de carte, verification echouee), il **n'interrompt
+PAS le round** et ne reactive PAS Cerberus. Il active **l'agent habilite**
+en inter-round avec le rapport de l'erreur.
+
+```
+Agent (KO detecte) -> Agent habilite (repare) -> Agent (reprend son round)
+```
+
+**Agents avec case inter-round** (cablee dans leur carte) :
+
+| Agent | Case | Declencheur |
+|---|---|---|
+| Janus | c8ir | Defauts detectes au controle |
+| Morpheus | c7ir | Tests KO |
+| Morpheus | c9v | Retour delegation Vulcain (inter-round inverse) |
+| Vulcain | c14ir | Tests non delegues a Morpheus |
+| Themis | c8ir | Verification "fin de carte" echouee |
+
+**Agents avec reception inter-round** (c1ir) : Vulcain, Themis, Buffy.
+Quand un agent est active en inter-round, il repond `inter-round` a sa
+question de mission (c1) et suit la case c1ir : accuser reception du
+rapport KO puis reactiver l'appelant.
+
 ### 3.4 Lancer plusieurs LLM en parallele
 
 Je suis **multi-session** : plusieurs LLM peuvent travailler sur le
@@ -152,6 +178,9 @@ Source : `AGENTS.md` (liste des agents) + chaque fiche `[agent].md`.
 | **Gardien** | Gardien du marbre - securite du code (zones protegees) | Modification de zone marbre (porte du marbre) |
 | **Argus** | Detecteur de contradictions - cases, regles, protocoles, historique git | Doute sur la coherence des regles / protocoles / cases |
 | **Chiron** | Educateur des agents - formation continue | Changements de regles/protocoles/outils |
+| **Socrate** | Conversateur de revision strategique | Revision, priorisation, liste de missions pour Cerberus |
+| **Redacteur-v2** | Redacteur PRO des docs de la v2 (freelance) - mode conversation | Redaction des docs v2 sur activation ; reste actif en conversation, reactive Cerberus sur fin de cycle |
+| **Hades** | Gardien des archives git - SEUL habilite aux commandes git | Commandes git (log, status, diff, checkout fichiers recents) |
 
 > **Note** : le dossier `cerveau-projet/agents/classeur-variables/` est un
 > agent-stockage (variables partagees), pas un agent d'action.
@@ -184,9 +213,10 @@ l'outil `guider-parcours` :
 python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py <chemin-du-parcours-json>
 ```
 
-**16 parcours existants** : athena, atlas, buffy, cerberus, clio, hermes,
-hygie, janus, minerve, morpheus, promethee, themis, vulcain + parcours de
-demarrage et parcours systeme.
+**18 parcours d'agents existants** : athena, argus, atlas, buffy, cerberus,
+chiron, clio, gardien, hermes, hygie, janus, minerve, morpheus, promethee,
+redacteur-v2, socrate, themis, vulcain + parcours de demarrage et parcours
+systeme (+ 3 sous-parcours de revision chez socrate).
 
 ### 5.3 Structure d'une case
 
@@ -220,7 +250,7 @@ Chaque case porte les indices exacts a appliquer :
 Ma boite a outils partagee, organisee par **action** (chaque dossier = ce que
 fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 
-**164 outils dans 39 categories** :
+**165 outils dans 39 categories** :
 
 | Categorie | Nb | Exemples |
 |---|---|---|

@@ -4,23 +4,25 @@
  "cartes": {
   "cerveau-projet/agents/athena/parcours/parcours-athena.json": "11675b3b713f90e679adcf262ffcbdc5101c69e3467ea996a56818c7afa456d1",
   "cerveau-projet/agents/atlas/parcours/parcours-atlas.json": "02b93d5b9a3a1f913b3e4c304f1b6747f0a9bdfebe00b1e4eeb81f890e017053",
-  "cerveau-projet/agents/buffy/parcours/parcours-buffy.json": "87b984f15a574766f62d3ada6b158dc5d5c96b9c95c2add4bb9a48574a466102",
+  "cerveau-projet/agents/buffy/parcours/parcours-buffy.json": "c077bbfd9d4bf88fa4bbbacddcb91fb048f01ce90ead8d6e0b919d2059fb9ac9",
   "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json": "e111f966142416a87a256357b86b8949e99cedf5c0b449f4fc1e5e877b897eae",
   "cerveau-projet/agents/clio/parcours/parcours-clio.json": "4507a85d3abb4464086982a220ce8ef1ae186872c64c31e23131ed1bb2903aa5",
   "cerveau-projet/agents/gardien/parcours/parcours-gardien.json": "be1d357be7bbd477aae2c2538f5bcea8d475401a4c8090067e188871c97fce4f",
   "cerveau-projet/agents/hermes/parcours/parcours-hermes.json": "94133d8312ac64df49505a781ed4f52f83ee60e0464a25325a8a6d7532e57f9a",
   "cerveau-projet/agents/hygie/parcours/parcours-hygie.json": "af44a47f69c6f24681f1dec32264ece747f6e25d3ea085470ec53fbbf6402b47",
-  "cerveau-projet/agents/janus/parcours/parcours-janus.json": "c708e06aa19138d0ff049dfa7e0449fddeded0e202af812eba62fff3d65fd121",
+  "cerveau-projet/agents/janus/parcours/parcours-janus.json": "4a8ca72111dce8ea1b9294cb0873ce235c0ec2d82bf30313a6fa4b6f3c014f06",
   "cerveau-projet/agents/minerve/parcours/parcours-minerve.json": "e8b35bbd8978536150a6f3f4fd0817bb0f2677bb764f7ff89d73c81c898b7dd0",
-  "cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json": "b7312c06b0cdb2ea84942aec0d784bdebcf278a291d02ac6db048869f7f83372",
+  "cerveau-projet/agents/morpheus/parcours/parcours-morpheus.json": "8a6b4eccdde924c09992a2749ca60df057f62183284882fa9a9bcdf63cfc0eba",
   "cerveau-projet/agents/promethee/parcours/parcours-promethee.json": "4ac187ea1b4f7a6d60cd8f155e2c4192c09186a31d09186cb77392feb9875590",
-  "cerveau-projet/agents/themis/parcours/parcours-themis.json": "6ef5a3086d1696e2d8c26c20c4e08344bf1b4292e4dc1d1bb751ebf27fffbfdf",
-  "cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json": "78b7f6e28d29af0e5de344663c255e4344627f63460d8b04543359e2b7a543ad",
+  "cerveau-projet/agents/themis/parcours/parcours-themis.json": "f84db5dfc1ce374ec7532faa713786ffa86688c176f81eafdff7c964fd22337b",
+  "cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json": "eac153be80e305b3206a774e30b08e88113f1663d1897ece8e46cafd135ffc41",
   "cerveau-projet/agents/argus/parcours/parcours-argus.json": "2522b046c9a1a504a96c5e0d5dc43e813f03f71e5b52d433a71c3ae13a376e06",
   "cerveau-projet/agents/chiron/parcours/parcours-chiron.json": "9eff821f906d13801ea641913d2d7935e0815b1a988c0a2ff0bcdaacddf60b35",
   "cerveau-projet/agents/socrate/parcours/parcours-socrate.json": "b7c0cde95d3199aa9f5cfefee4242a12e4951eaa7e9c5e46db0038aca77b3905",
   "cerveau-projet/agents/socrate/parcours/parcours-revision-audit.json": "99fe9293af54337ce06b1fb1816c1893bfbbd1579838542aa77d5b9c45d19292",
   "cerveau-projet/agents/socrate/parcours/parcours-revision-generale.json": "70befc0b1bf9e75911d298b7f2041c5d5249ac9fe70a458fe6d3cb2e13355c79",
-  "cerveau-projet/agents/socrate/parcours/parcours-revision-urgence.json": "8dca553825c615452d7ad27e6f739c1e2410d1c7406ca6a974ceed19e778c5ca"
+  "cerveau-projet/agents/socrate/parcours/parcours-revision-urgence.json": "8dca553825c615452d7ad27e6f739c1e2410d1c7406ca6a974ceed19e778c5ca",
+  "cerveau-projet/agents/redacteur-v2/parcours/parcours-redacteur-v2.json": "b02825a12ee73008c9cc6e0ab05bbb3e8db09c134733db80e4633d537966d574",
+  "cerveau-projet/agents/hades/parcours/parcours-hades.json": "edc03e1cb7772b646bf3cfd66dbe7d25568db7c189b16d28920747772e65a3b1"
  }
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 # valider-relecture.sh
 # Verifie que chaque fiche d'agent et son corrections.md contiennent la regle de relecture
-# Version : 0.2.0
+# Version : 0.2.1
 # Statut : prepare
 
 # ============================================================
@@ -13,7 +13,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
+VERSION="0.2.1"
 STATUT="prepare"
 
 # Couleurs
@@ -158,6 +158,8 @@ executer() {
             [ -d "$dir" ] || continue
             local agent_name=$(basename "$dir")
             [[ "$agent_name" == "tools" ]] && continue
+            [ -f "${dir}${agent_name}.md" ] || continue
+            case "$agent_name" in classeur-variables|conventions|lecons|philosophie|regles-immuables|traces) continue ;; esac
             total=$((total + 1))
             if verifier_agent "$agent_name" "$verbose"; then
                 conformes=$((conformes + 1))

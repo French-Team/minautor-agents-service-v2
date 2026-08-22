@@ -8,10 +8,10 @@ entree est une ligne du corps de l historique :
 
   ## YYYY-MM-DD
   ### Agent
-  - HH:MM | id | raison
+  - HH:MM[:SS[.microsec]] | id | TYPE | raison
 
 Invariants verifies :
-  1. Chaque entree '- HH:MM | ...' est sous un bloc jour '## YYYY-MM-DD'
+  1. Chaque entree '- HH:MM[:SS[.microsec]] | ...' est sous un bloc jour '## YYYY-MM-DD'
      et un bloc agent '### Agent' (le dernier '###' rencontre au-dessus).
   2. Le nom du bloc agent est un agent connu (dans AGENTS.md / le .py).
   3. Chaque bloc jour '## YYYY-MM-DD' contient au moins un bloc agent
@@ -182,7 +182,7 @@ def analyser_corps(texte):
             if len(parties) >= 3:
                 heure = parties[0].strip()
                 identifiant = parties[1].strip()
-                if not re.match(r"^\d{2}:\d{2}$", heure):
+                if not re.match(r"^\d{2}:\d{2}(:\d{2}(\.\d+)?)?$", heure):
                     problemes.append((i, "heure malformee: %r" % heure))
                 entrees.append({"jour": jour_courant, "agent": agent_courant,
                                "heure": heure, "id": identifiant, "ligne": i})

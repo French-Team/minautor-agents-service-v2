@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.23"
+VERSION="0.5.29"
 STATUT="prepare"
 
 # Configuration
@@ -24,7 +24,7 @@ get_date() {
 
 # Fonction pour obtenir la date et l'heure actuelles (format YYYY-MM-DD HH:MM)
 get_timestamp() {
-    date +"%Y-%m-%d %H:%M"
+    date +"%Y-%m-%d %H:%M:%S.%N"
 }
 
 # Fonction pour obtenir le role d'un agent
@@ -48,6 +48,8 @@ get_agent_role() {
         "Argus"|"argus") echo "Detecteur de contradictions -- trouve et compare les incoherences (cases, regles, protocoles, git)" ;;
         "Chiron"|"chiron") echo "Educateur des agents -- formation continue" ;;
         "Socrate"|"socrate") echo "Conversateur de revision strategique -- discute et priorise les problemes" ;;
+        "Redacteur-v2"|"redacteur-v2") echo "Redacteur des docs de la v2 (proposition, regles, conventions) -- mode conversation (reactive Cerberus sur fin de cycle)" ;;
+        "Hades"|"hades") echo "Gardien des archives git -- SEUL habilite aux commandes git" ;;
         *) echo "Agent inconnu" ;;
     esac
 }
@@ -73,6 +75,8 @@ get_agent_fiche() {
         "Argus"|"argus") echo "cerveau-projet/agents/argus/argus.md" ;;
         "Chiron"|"chiron") echo "cerveau-projet/agents/chiron/chiron.md" ;;
         "Socrate"|"socrate") echo "cerveau-projet/agents/socrate/socrate.md" ;;
+        "Redacteur-v2"|"redacteur-v2") echo "cerveau-projet/agents/redacteur-v2/redacteur-v2.md" ;;
+        "Hades"|"hades") echo "cerveau-projet/agents/hades/hades.md" ;;
         *) echo "cerveau-projet/agents/inconnu/inconnu.md" ;;
     esac
 }
@@ -98,6 +102,8 @@ get_agent_corrections() {
         "Argus"|"argus") echo "cerveau-projet/agents/argus/corrections.md" ;;
         "Chiron"|"chiron") echo "cerveau-projet/agents/chiron/corrections.md" ;;
         "Socrate"|"socrate") echo "cerveau-projet/agents/socrate/corrections.md" ;;
+        "Redacteur-v2"|"redacteur-v2") echo "cerveau-projet/agents/redacteur-v2/corrections.md" ;;
+        "Hades"|"hades") echo "cerveau-projet/agents/hades/corrections.md" ;;
         *) echo "cerveau-projet/agents/inconnu/corrections.md" ;;
     esac
 }
@@ -522,6 +528,7 @@ couleur_agent() {
         argus) echo "#9333ea" ;;
         chiron) echo "#0891b2" ;;
         socrate) echo "#a855f7" ;;
+        redacteur-v2) echo "#7c3aed" ;;
         athena) echo "#c026d3" ;;
         promethee) echo "#d97706" ;;
         minerve) echo "#059669" ;;
@@ -571,9 +578,9 @@ composer_bloc_historique() {
     local lignes_raison premiere suite ligne_suite
     lignes_raison=$(printf '%s' "$raison" | enrouler_raison)
     premiere=$(printf '%s\n' "$lignes_raison" | head -n 1)
-    printf '#>\n### <span style="color:%s">%s</span> - <span style="color:%s">%s</span>\n| <span style="color:%s">%s</span> | %s | %s | %s | %s |' \
+    printf '#>\n### <span style="color:%s">%s</span> - <span style="color:%s">%s</span>\n| <span style="color:%s">%s</span> | %s | %s | %s | %s | %s |' \
         "$couleur" "$timestamp" "$couleur" "$agent" \
-        "$couleur" "$agent" "$heure" "$date" "$session" "$premiere"
+        "$couleur" "$agent" "$heure" "$date" "$session" "$TYPE_ROUND" "$premiere"
     suite=$(printf '%s\n' "$lignes_raison" | tail -n +2)
     if [ -n "$suite" ]; then
         printf '\n'
@@ -1073,6 +1080,26 @@ afficher_aide() {
     echo "  $0 activer session-llm-1 Buffy \"Mission correction\""
     echo "  $0 reactiver session-llm-1 \"Mission terminee\" Buffy"
 }
+
+# v0.5.25 : extraire --type r|ir (indicateur ROUND/INTER-ROUND, regle R5
+# protocole-fin-mission v0.2.0). Defaut R si absent.
+TYPE_ROUND="R"
+attendre_type=0
+ARGS=()
+for a in "$@"; do
+    if [ "$attendre_type" = "1" ]; then
+        TYPE_ROUND=$(printf '%s' "$a" | tr '[:lower:]' '[:upper:]')
+        attendre_type=0
+        continue
+    fi
+    if [ "$a" = "--type" ]; then attendre_type=1; continue; fi
+    ARGS+=("$a")
+done
+if [ "$TYPE_ROUND" != "R" ] && [ "$TYPE_ROUND" != "IR" ]; then
+    echo "ERREUR: --type attend r ou ir"
+    exit 1
+fi
+set -- ${ARGS[@]+"${ARGS[@]}"}
 
 # Point d'entree principal
 # GARDE-FOU (v0.5.2) : les actions reelles declenchent la detection des residus

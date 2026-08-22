@@ -2593,6 +2593,21 @@
       ]
     },
     {
+      "nom": "hades-contexte-git",
+      "description": "Outil hades-contexte-git du cerveau-projet",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools\\git\\hades-contexte-git\\hades-contexte-git.py",
+      "modele": "{chemin}",
+      "parametres": [
+        {
+          "cle": "chemin",
+          "question": "Valeur pour chemin ?",
+          "type": "texte",
+          "obligatoire": true
+        }
+      ]
+    },
+    {
       "nom": "inserer-contenu-fichier",
       "description": "Inserer du contenu a une position precise dans un fichier (apres un numero",
       "interpreteur": "python3",

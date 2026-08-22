@@ -82,3 +82,19 @@ directement. Le flux impose :
   contradictions, concordance source/protocole.
 - Garde-fou : test-084 (relecture obligatoire avant gravure) - la porte
   exige l audit Argus PROPRE pour les zones de regles.
+
+
+
+---
+
+## Qualification STANDARD / EXCEPTIONNEL des propositions (v0.2.0, decision utilisateur 2026-08-22)
+
+Le Gardien qualifie chaque proposition de modification de zone protegee :
+
+| Qualification | Criteres | Routage |
+|---|---|---|
+| **STANDARD** | alignement d une zone sur une regle DEJA validee ailleurs (protocole, spec, decision existante) ; correction de formulation obsolete sans changement de sens ; precision non contradictoire | transmission a SOCRATE (conversateur de revision strategique) qui repond au nom de l utilisateur et autorise la porte ; qualification journalisee dans marbre-log.jsonl avec la reference de sa revision (missions-revision.md) |
+| **EXCEPTIONNEL** | changement de perimetre de protection (zone ajoutee ou retiree) ; suppression ou affaiblissement d une regle noyau ; impact sur PLUSIEURS zones ou contradiction avec le marbre existant ; nouveaute sans precedent valide | proposition soumise a l UTILISATEUR pour validation directe |
+
+L utilisateur garde un droit de veto a posteriori sur toute porte STANDARD :
+annulation + re-empreinte journalisees.

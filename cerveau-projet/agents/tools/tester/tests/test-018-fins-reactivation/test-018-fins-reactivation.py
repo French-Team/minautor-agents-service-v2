@@ -46,6 +46,7 @@ Cas couverts:
      la commande reactiver (le piege corrige reste elimine)
   6. ASCII strict : 0 non-ASCII (test + 15 parcours)
   7. LF pur : 0 CRLF (test + 15 parcours)
+     NB : compteur de parcours = 21 (ajout redacteur-v2 2026-08-21).
 
 Usage:
   python3 test-018-fins-reactivation.py
@@ -183,8 +184,8 @@ def main():
     global NB_POINTS, NB_OK, NB_KO
 
     parcours_liste = sorted(glob.glob(PARCOURS_GLOB))
-    verifier("0. 20 parcours trouves",
-             len(parcours_liste) == 20, str(len(parcours_liste)))
+    verifier("0. 21 parcours trouves",
+             len(parcours_liste) == 21, str(len(parcours_liste)))
 
     print("=== Test formel fins reactivation (15 parcours) ===")
 

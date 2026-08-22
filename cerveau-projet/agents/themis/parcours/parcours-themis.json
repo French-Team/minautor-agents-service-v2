@@ -7,7 +7,7 @@
  "parcours": {
   "nom": "parcours-themis",
   "agent": "themis",
-  "version": "0.5.6",
+  "version": "0.5.8",
   "case_depart": "c0",
   "description": "Parcours (jeu de piste) des missions de Themis : evaluatrice croisee (audit general, doute d'un agent, RVAV Analyser). Elle ne modifie jamais rien -- elle evalue, croise, synthetise et rapporte. Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. Chemin audit v0.2.0 : la suite d'outils c3-c7 est remplacee par le combo combo-audit-themis (Pattern 3, spec-guider-parcours v0.2.4). v0.5.3 : indice evaluer-processus ajoute a c16 (evaluateur adapte), usage d'audit couvert (OUTIL_HORS_CARTE corrige apres controle Janus)."
  },
@@ -61,7 +61,7 @@
   "c1": {
    "titre": "Mission",
    "type": "question",
-   "question": "Quelle est la demande ? (audit a la demande de Cerberus / audit de fin de mission declenche par un agent qui me reactivera via c25b / doute / rvav / autre / audit-agent / readme)",
+   "question": "Quelle est la demande ? (audit a la demande de Cerberus / audit de fin de mission declenche par un agent qui me reactivera via c25b / doute / rvav / autre / audit-agent / readme / inter-round)",
    "branches": [
     {
      "reponse": "audit",
@@ -90,12 +90,20 @@
     {
      "reponse": "readme",
      "vers": "c30"
+    },
+    {
+     "reponse": "inter-round",
+     "vers": "c1ir"
     }
    ],
    "indices": [
     {
      "type": "regle",
-     "texte": "GARDE-FOU C1 : demande hors des 6 branches (audit, doute, rvav, audit-agent, audit-fin-mission, readme) -> reponse autre -> c21."
+     "texte": "GARDE-FOU C1 : demande hors branches -> reponse autre -> c21."
+    },
+    {
+     "type": "regle",
+     "texte": "INTER-ROUND : activee en inter-round par un autre agent -> inter-round -> c1ir. Je n execute PAS une nouvelle evaluation, j accuse reception et relance l appelant."
     }
    ]
   },
@@ -572,7 +580,7 @@
     },
     {
      "reponse": "NON",
-     "vers": "c3"
+     "vers": "c8ir"
     }
    ]
   },
@@ -875,6 +883,42 @@
    "titre": "FIN - Reprendre ma mission",
    "type": "fin",
    "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
+  },
+  "c8ir": {
+   "titre": "INTER-ROUND : activer l agent habilite pour reparer (verification fin de carte echouee)",
+   "type": "action",
+   "suivant": "c12e",
+   "message": "INTER-ROUND (protocole-fin-mission v0.2.0 R2) : la verification \"la fin suit sa carte\" a echoue de maniere persistante. Je n interromps PAS le round : j ACTIVE L AGENT HABILITE (Buffy pour la carte) avec le rapport de l echec (commande activer). L agent habilite repare EXCLUSIVEMENT. A la fin de l inter-round, l habilite me REACTIVE et je REPRENDS mon evaluation (c12e). CASCADE autorisee entre habilites.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE INTER-ROUND (R2) : echec de verification = reparation par l agent habilite exclusivement. Activation avec le rapport, reprise du round apres reparation."
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ]
+  },
+  "c1ir": {
+   "titre": "RECEPTION INTER-ROUND : accuser reception du rapport KO et reactiver l appelant",
+   "type": "action",
+   "suivant": "c12e",
+   "message": "RECEPTION INTER-ROUND (protocole-fin-mission v0.2.0 R2) : un agent m a activee en inter-round avec un rapport de defaut. Je NE commence PAS une nouvelle evaluation. PERIMETRE REDUIT: 1) Lire le rapport, 2) Confirmer reception, 3) REACTIVER l agent appelant (commande activer, PAS reactiver) avec mention \"reprends ton round en cXe\". CASCADE autorisee entre habilites.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE INTER-ROUND (R2) RECEPTION : je n execute PAS une nouvelle mission. J accuse reception et je relance l appelant."
+    },
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ]
   }
  }
 }

@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-012-guider-parcours.py
-Test formel de l outil guider-parcours v0.5.1 (categorie guider/).
+Test formel de l outil guider-parcours v0.5.2 (categorie guider/).
 
 Outil teste (cerveau-projet/agents/tools/guider/guider-parcours/):
   .py + .sh (wrapper pur exec python3) + .md + spec/
@@ -19,7 +19,7 @@ Consolidation v0.4.0 (2026-08-09) :
   - generateurs-case v0.3.1 : type action ajoute aux choix ajouter/editer.
 
 Cas couverts:
-  1. --version py/sh identiques v0.5.1 (parite)
+  1. --version py/sh identiques v0.5.2 (parite)
   2. --liste : liste les cases d un squelette (sans naviguer)
   3. Resolution ref pattern-7 : [REFERENCE] + titre extrait de la spec
   4. Resolution ref chemin rvav : fichier existant
@@ -31,6 +31,8 @@ Cas couverts:
   9. Erreur : JSON invalide (ERREUR + code non nul)
  10. Protection : aucun fichier cree dans le dossier outil
  11. ASCII strict : 0 non-ASCII sur les 4 fichiers de l outil
+ 12. Reference morte vers top-level detectee (garde-fou 2026-08-22)
+     - une case fin avec 'vers' vers une case absente -> ERREUR + code non nul
 
 Usage:
   python3 test-012-guider-parcours.py
@@ -149,14 +151,14 @@ def main():
 
     tmp = tempfile.mkdtemp(prefix="test-012-")
     try:
-        print("=== Test formel guider-parcours v0.5.1 (etape 5 refonte) ===")
+        print("=== Test formel guider-parcours v0.5.2 (etape 5 refonte) ===")
 
         # 1. --version py/sh identiques (parite)
         r_py = run([PYTHON, OUTIL_PY, "--version"])
         r_sh = run(["bash", OUTIL_SH, "--version"])
-        verifier("1. --version py/sh identiques v0.5.1",
+        verifier("1. --version py/sh identiques v0.5.2",
                  r_py.returncode == 0 and r_sh.returncode == 0
-                 and "v0.5.1" in r_py.stdout
+                 and "v0.5.2" in r_py.stdout
                  and r_py.stdout.strip() == r_sh.stdout.strip(),
                  "py=%r sh=%r" % (r_py.stdout.strip(), r_sh.stdout.strip()))
 
@@ -260,6 +262,25 @@ def main():
                               (OUTIL_PY, OUTIL_SH, OUTIL_MD, OUTIL_SPEC))
         verifier("11. ASCII strict : 0 non-ASCII (4 fichiers)",
                  total_non_ascii == 0, "total non-ASCII = %d" % total_non_ascii)
+
+        # 12. Reference morte vers top-level : une case fin avec 'vers' vers
+        #     une case absente (ex: c7 'vers': 'conversation' de redacteur-v2)
+        #     doit etre DETECTEE a la validation (garde-fou 2026-08-22).
+        parcours_mort = os.path.join(tmp, "parcours-vers-mort.json")
+        with io.open(parcours_mort, "w", encoding="utf-8") as fh:
+            json.dump({
+                "parcours": {"nom": "test", "agent": "test",
+                             "version": "0.1.0", "case_depart": "c1"},
+                "cases": {"c1": {"titre": "fin", "type": "fin",
+                                   "vers": "conversation"}}
+            }, fh, ensure_ascii=True)
+        r_mort = run([PYTHON, OUTIL_PY, parcours_mort])
+        sortie_mort = r_mort.stdout + r_mort.stderr
+        verifier("12. Reference morte vers top-level detectee",
+                 r_mort.returncode != 0
+                 and "vers (top-level)" in sortie_mort
+                 and "conversation" in sortie_mort,
+                 "code=%d out=%r" % (r_mort.returncode, sortie_mort.strip()[-200:]))
 
         print("")
         bilan_chrono()
