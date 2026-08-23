@@ -28,9 +28,9 @@ sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
                                  "fonctions"))
 
 from score import enregistrer, evenements, score, problemes, \
-    NOTATEURS, SCORE_DEPART
+    NOTATEURS, SCORE_DEPART, generer_suivi
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 
 def main():
@@ -52,6 +52,11 @@ def main():
 
     p_pr = sub.add_parser("problemes", help="Agents sous le seuil (a reparer)")
     p_pr.add_argument("--seuil", type=int, default=None)
+
+    sub.add_parser("scores", help="Tableau /100 de tous les agents")
+
+    p_s = sub.add_parser("suivi", help="Fichier de suivi d'un agent (pourquoi ses points)")
+    p_s.add_argument("--agent", required=True)
 
     args = parser.parse_args()
 
@@ -85,6 +90,19 @@ def main():
             return 0
         for a in agents:
             print("%s : %d/100" % (a, score(a)))
+        return 0
+    if args.action == "scores":
+        agents = sorted(set(e["agent"] for e in evenements()))
+        print("TABLEAU DES SCORES (/100, depart 50)")
+        print("-" * 32)
+        for a in agents:
+            s = score(a)
+            drapeau = " <-- A REPARER" if s < 40 else ""
+            print("%-12s %3d/100%s" % (a, s, drapeau))
+        return 0
+    if args.action == "suivi":
+        chemin = generer_suivi(args.agent)
+        print("Suivi genere :", chemin)
         return 0
     if args.action == "problemes":
         probs = problemes(args.seuil)

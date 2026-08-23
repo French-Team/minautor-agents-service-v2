@@ -1,0 +1,15 @@
+{
+  "nom": "test-parallel",
+  "session": "session-llm-2",
+  "mode": "parallel",
+  "missions": [
+    {
+      "agent": "shuri",
+      "mission": "TEST parallel A"
+    },
+    {
+      "agent": "forge",
+      "mission": "TEST parallel B"
+    }
+  ]
+}

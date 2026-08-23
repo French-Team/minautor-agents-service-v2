@@ -25,7 +25,7 @@ identite:
 | **Fiche** | [cerveau-projet/freelance/stark/stark.md](cerveau-projet/freelance/stark/stark.md) |
 | **Corrections** | [cerveau-projet/freelance/stark/corrections.md](cerveau-projet/freelance/stark/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | Relais de jarvis: BILAN - EDITH construite (volets 1-3 faits) |
+| **Raison** | Relais de jarvis: BILAN - fenetres cmd eliminees a la racine |
 
 | DEMARRAGE V2 (agents freelance) : relis ta fiche puis tes corrections. |
 | Pour toute action, suis TON arbre des decisions : |

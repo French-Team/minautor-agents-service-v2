@@ -1,0 +1,15 @@
+{
+  "nom": "test-parallel-reel",
+  "session": "session-llm-2",
+  "mode": "parallel",
+  "missions": [
+    {
+      "agent": "rogers",
+      "mission": "[TEST PARALLEL A] Confirme que tu es active en parallel et FIN DE CYCLE vers stark."
+    },
+    {
+      "agent": "shuri",
+      "mission": "[TEST PARALLEL B] Confirme que tu es active en parallel et FIN DE CYCLE vers stark."
+    }
+  ]
+}

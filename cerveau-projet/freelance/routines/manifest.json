@@ -3,14 +3,38 @@
   "description": "Manifest des routines EDITH (D15) - editable sans toucher au code",
   "intervalle_boucle_secondes": 600,
   "routines_demarrage": [
-    {"nom": "verifier-integrite", "script": "demarrage/verifier-integrite.py", "actif": true}
+    {
+      "nom": "verifier-integrite",
+      "script": "demarrage/verifier-integrite.py",
+      "actif": true
+    }
   ],
   "routines_arret": [
-    {"nom": "detecter-orphelins", "script": "arret/detecter-orphelins.py", "actif": true}
+    {
+      "nom": "detecter-orphelins",
+      "script": "arret/detecter-orphelins.py",
+      "actif": true
+    }
   ],
   "routines_surveillance": [
-    {"nom": "surveiller-flux-jarvis", "script": "surveillance/surveiller-flux-jarvis.py", "actif": true, "intervalles_secondes": 600},
-    {"nom": "surveiller-modifications", "script": "surveillance/surveiller-modifications.py", "actif": true, "intervalles_secondes": 60}
+    {
+      "nom": "surveiller-flux-jarvis",
+      "script": "surveillance/surveiller-flux-jarvis.py",
+      "actif": true,
+      "intervalles_secondes": 600
+    },
+    {
+      "nom": "surveiller-modifications",
+      "script": "surveillance/surveiller-modifications.py",
+      "actif": true,
+      "intervalles_secondes": 60
+    },
+    {
+      "nom": "evaluer-agents",
+      "script": "surveillance/evaluer-agents.py",
+      "actif": true,
+      "intervalles_secondes": 600
+    }
   ],
   "seuils_alerte": {
     "p1_non_acquitte": true,

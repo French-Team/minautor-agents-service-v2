@@ -88,3 +88,32 @@ def problemes(seuil=None):
     seuil = SEUIL_PROBLEMES if seuil is None else seuil
     vus = set(e["agent"] for e in evenements())
     return [(a, score(a)) for a in sorted(vus) if score(a) < seuil]
+
+
+def generer_suivi(agent):
+    """Fichier de suivi par agent : POURQUOI ses points (protocole 17)."""
+    from pathlib import Path
+    rapports = Path(RACINE) / "cerveau-projet" / "freelance" / "edith" / "rapports"
+    rapports.mkdir(parents=True, exist_ok=True)
+    date = datetime.now().strftime("%Y%m%d-%H%M")
+    chemin = rapports / f"suivi-{agent}-{date}.md"
+    lignes = [
+        f"# Suivi de score -- {agent}",
+        "",
+        "| Champ | Valeur |",
+        "|---|---|",
+        f"| Date | {datetime.now().isoformat(timespec='seconds')} |",
+        f"| Score actuel | {score(agent)}/100 |",
+        f"| Revision requise | {'OUI' if score(agent) < SEUIL_PROBLEMES else 'NON'} |",
+        "",
+        "| Date | Type | Delta | Score apres | Motif | Par |",
+        "|---|---|---|---|---|---|"]
+    events = evenements(agent)
+    for e in events:
+        lignes.append("| {} | {} | {} | {} | {} | {} |".format(
+            e["date"][:10], e["type"], e["delta"], e["score_apres"],
+            e["motif"], e["par"]))
+    if not events:
+        lignes.append("| - | aucun evenement | - | - | - | - |")
+    chemin.write_text("\n".join(lignes) + "\n", encoding="utf-8")
+    return str(chemin)

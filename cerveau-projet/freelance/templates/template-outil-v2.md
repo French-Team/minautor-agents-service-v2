@@ -91,3 +91,12 @@ Le .py ne contient AUCUNE valeur en dur (P4).
 | **D7** | Formulaire = contrat. Champs definis, validation avant execution. |
 | **P4** | Zero valeur en dur. Tout dans le fichier de donnees. |
 | **P1** | Un seul .md + un seul .py + un seul .json. |
+
+
+---
+
+## REGLE RAPPEL (protocole 18/20)
+
+Apres toute correction sur cet outil, consulter :
+    python3 tools-commun/rappel/entry.py pour --contexte correction-outil
+et verifier : parite .sh/.py, serveur MCP equivalent, tests, index.

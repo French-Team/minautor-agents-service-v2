@@ -30,6 +30,8 @@ from activations import cmd_activer
 from historique import cmd_historiser
 from files import cmd_mettre_en_attente, cmd_file, cmd_reprendre, cmd_stop_dev
 from defcon import cmd_defcon, cmd_changer_defcon
+from routines import cmd_routines_etat
+from missions import lancer as lancer_missions_fichier
 
 
 def construire_parser():
@@ -115,6 +117,13 @@ def construire_parser():
         help="[stop] DEFCON 5 : arret complet du dev, gel de toutes les missions")
     p_stop.add_argument("--raison", required=True, help="Raison de l'arret")
 
+    # missions serie/parallel (demande utilisateur)
+    p_lm = subparsers.add_parser(
+        "lancer-missions",
+        help="Lancer des missions en SERIE (controle) ou PARALLEL (sans collision)")
+    p_lm.add_argument("--fichier", required=True,
+                      help="Scenario JSON {session, mode: serie|parallel, missions:[{agent, mission}]}")
+
     # defcon (protocole 15)
     subparsers.add_parser("defcon", help="Afficher l'etat DEFCON courant")
     p_d = subparsers.add_parser(
@@ -123,10 +132,21 @@ def construire_parser():
     p_d.add_argument("--niveau", required=True, type=int, choices=[4, 3, 2])
     p_d.add_argument("--commentaire", default="", help="Contexte du changement")
 
+    # routines EDITH (protocole 16 volet 4)
+    subparsers.add_parser("routines-etat",
+                          help="Etat des routines (derniere execution / intervalle)")
+
     return parser
 
 
 def main():
+    # v0.9.2 (protocole 16) : routines executees a chaque invocation -
+    # plus de processus d'arriere-plan : jarvis EST le planificateur.
+    try:
+        from routines import executer_routines
+        executer_routines()
+    except Exception:
+        pass
     parser = construire_parser()
     args = parser.parse_args()
 
@@ -146,10 +166,20 @@ def main():
         cmd_reprendre(args)
     elif args.commande == "stop-dev":
         cmd_stop_dev(args)
+    elif args.commande == "lancer-missions":
+        import json as _json
+        print(_json.dumps(lancer_missions_fichier(args.fichier),
+                          ensure_ascii=True, indent=2))
     elif args.commande == "defcon":
         cmd_defcon(args)
     elif args.commande == "changer-defcon":
         cmd_changer_defcon(args)
+    elif args.commande == "routines-demarrer":
+        print("[ROUTINES] v0.9.2 : plus de serveur - les routines tournent a chaque invocation de jarvis.")
+    elif args.commande == "routines-arreter":
+        print("[ROUTINES] v0.9.2 : plus de serveur a arreter.")
+    elif args.commande == "routines-etat":
+        cmd_routines_etat()
     elif args.commande == "lister":
         cmd_lister(args)
     elif args.commande == "activer":

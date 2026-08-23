@@ -42,3 +42,12 @@ identite:
 ## LECONS
 
 Aucune lecon a ce jour.
+
+
+---
+
+## REGLE RAPPEL (protocole 20)
+
+Apres avoir enregistre une lecon ou corrige une erreur, consulter :
+    python3 tools-commun/rappel/entry.py pour --contexte correction-regle
+et SIGNALER dans la reponse les autres fichiers probablement concernes.

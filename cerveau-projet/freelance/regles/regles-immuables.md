@@ -41,6 +41,7 @@ cette chaine commet la violation la plus grave du projet.
 | M4 | P10 : la racine se detecte via os_path, elle ne se compte pas | 4 bugs de chemin le 2026-08-23 |
 | M5 | Zero valeur en dur (P4/D15) | bug freebuff + sessions en dur |
 | M6 | La porte du marbre elle-meme : modification seulement avec accord utilisateur OU accord exclusif de stark | DEFCON 5 du 2026-08-23 |
+| M7 | Tout nouveau script python inclut le bootstrap de detection (remonte jusqu'a AGENTS.md) des sa creation ; l usage d os_path est verifie a la livraison | 4 bugs de chemin + 1 bug de comptage dans le correctif lui-meme (2026-08-23) |
 
 
 

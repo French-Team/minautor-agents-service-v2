@@ -400,3 +400,139 @@ Modifier un fichier du perimetre EDITH en reel -> le serveur doit
 detecter, constituer le rapport forensique (qui/quoi/comment/quand),
 deposer le message P1 [EDITH-RÉVEIL], et EDITH incarnée doit rapporter
 les 4 W a l'utilisateur. Verdict Fury : PASSE si les 4 W sont exacts.
+
+## PROTOCOLE 17 : Evaluation periodique des agents (2026-08-23)
+
+> Une routine (toutes les 10 min, ajustable dans routines/manifest.json)
+> reveille EDITH pour lancer un cycle d'evaluation des agents.
+
+### Le cycle
+
+| Etape | Qui | Action |
+|---|---|---|
+| 1 | routine (serveur) | reveil periodique d'EDITH |
+| 2 | EDITH | pose le QUESTIONNAIRE STANDARD pour chaque agent actif |
+| 3 | EDITH | attribue +/- selon les reponses et les observations collectees |
+| 4 | EDITH -> JARVIS | rapport final : liste des changements proposes |
+| 5 | JARVIS -> Forge | application via rating-agents v0.2.0 (penalite/felicite) |
+
+### Questionnaire standard (par agent evalue)
+
+| Question | Points si oui |
+|---|---|
+| A-t-il livre ce qui etait attendu depuis la derniere evaluation ? | +1 |
+| Ses bilans etaient-ils traces (ID d'activation reference) ? | +1 |
+| Une violation de perimetre ou de regle lui est-elle imputable ? | -1 par violation |
+| Un test reel a-t-il echoue sur son travail ? | -1 |
+
+### Tableau des scores
+
+Commande : python3 tools-commun/rating-agents/entry.py lister
+Affiche tous les scores /100 en un coup.
+
+### Seuil de revision
+
+Un agent sous **40/100** declenche une REVISION obligatoire :
+education (Chiron) ou mission de reparation selon la gravite.
+
+### Fichier de suivi par agent
+
+fiche <agent>.md section SUIVI DE SCORE (ou notes-agents.jsonl filtre) :
+chaque evenement avec date, motif, delta. Si revision requise, on sait
+POURQUOI : la liste complete des penalites est l'ordre du jour de la
+revision.
+
+## PROTOCOLE 18 : Bibliotheque commune + detection post-modification (2026-08-23)
+
+> Le pattern os_path se generalise : chaque douleur subie DEUX FOIS devient
+> (1) un outil commun (P1/P10/D15) et (2) une routine de detection qui
+> signale sa reaparition apres chaque modification de fichier.
+
+### La bibliotheque commune (tools-commun/)
+
+| Module | Douleur payee | Ce qu'il normalise |
+|---|---|---|
+| os_path | 5 bugs de niveaux comptes | detection de racine, resolution, localisation |
+| encodage | mojibake console, coding ascii vs utf-8 | D4 mecanique : lire/ecrire/detecter |
+| exec | quoting PowerShell rate, timeouts oublies | subprocess standardise : rc + captures + timeout |
+| jsonl-store | lire/ecrire/append dupliques x4 | UNE implementation JSONL testee |
+| horloge | horodatages heterogenes | formats uniques traçables |
+
+### La routine valider-apres-modification
+
+Declenchee par le serveur de routines JUSTE APRES chaque modification
+detectee. Heuristiques PRUDENTES : signaler, ne jamais bloquer.
+
+| Verification | Regle violee si positif |
+|---|---|
+| | Niveaux comptes ("../.." repetes) hors bootstrap P10 | M7/P10 | |
+| Header coding absent/incoherent avec le contenu | D4 |
+| Caracteres interdits dans les JSON de parcours (accents) | ASCII strict |
+| Valeurs en dur suspectes (session-llm-N litteral, listes figees) | P4/M5 |
+
+### Le traitement des alertes
+
+Detection -> message [EDITH] a stark -> JARVIS prepare un INTER-ROUND
+PARALLEL pour l'agent habilite : la reparation se fait SANS casser le
+round principal en cours. Les collisions de fichiers restent regies par
+la regle serie/parallel.
+
+## PROTOCOLE 19 : Canal utilisateur -> jarvis (2026-08-23)
+
+> Un fichier USER-DEMANDES.md (a cote de AGENTS.md) permet a
+> l'utilisateur de s'adresser DIRECTEMENT a jarvis, sans passer par stark.
+
+### Le fichier
+
+Pre-rempli avec UNE SECTION par declencheur. L'utilisateur ecrit sous la
+section choisie. Detection : empreinte SHA-256 PAR SECTION par le serveur
+de routines (intervalle court), changement -> message prioritaire dans
+inbox/jarvis.jsonl : objet [USER][<prefixe>].
+
+### L'autonomie de jarvis (sans stark)
+
+| Section | jarvis fait seul |
+|---|---|
+| [question] | repond avec SES combos |
+| [attente] / [attention] / [urgent] | gere les files et distribue aux agents (seul habilite a activer - M2 preserve) |
+| [creer] / [probleme] | route vers protocoles/agents habilites |
+| [stop] | DEFCON 5 immediat |
+
+**MARBLE PRESERVE** : jarvis EXECUTE les demandes ; il ne modifie jamais
+les regles du marbre sans accord utilisateur ou accord exclusif de stark.
+
+### Limite honnete (V1-V4)
+
+Le serveur depose le message ; le traitement se fait quand la session
+incarne jarvis (pas un daemon temps reel).
+
+## PROTOCOLE 20 : Le rappel anti-dispersion (2026-08-23)
+
+> Quand un agent applique une correction quelque part, le meme probleme
+> existe probablement AILLEURS. L'oubli de ces soeurs est recurrent et
+> devient systematique s il n est pas contre mecaniquement.
+
+### La regle
+
+TOUT agent qui applique une correction consulte :
+    python3 tools-commun/rappel/entry.py pour --contexte <contexte>
+et SIGNALE dans sa reponse les pistes verifiees ou a verifier.
+
+### Contextes de rappel (D15 : tools-commun/rappel/rappels.json)
+
+| Contexte | Rappel type |
+|---|---|
+| correction-regle | autres corrections.md, regles-immuables, conventions, protocoles, templates |
+| correction-outil | parite .sh/.py, serveur MCP equivalent, tests, index |
+| correction-fiche | arbre/themes, corrections.md, AGENTS.md, jarvis-data.json |
+| correction-jarvis | serveur miroir, routines liees, contrat .md |
+| nouveau-fichier | nommage daté + declaration dans les index |
+| correction-template | protocole de creation + agents construits avec l ancienne version |
+
+Ajouter un rappel = editer rappels.json (D15), jamais le code.
+
+### Obligation dans la reponse
+
+L agent mentionne EXPLICITEMENT dans sa reponse finale les pistes
+verifiees ou restantes. Un bilan qui ne mentionne pas la dispersion
+verifiee est incomplet.

@@ -2,24 +2,24 @@
   "identite": {
     "type": "fins",
     "appartient_a": "vision",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "commun": false
   },
   "fins": {
     "fin-theme": {
       "titre": "FIN - Theme termine",
-      "description": "Le thème est traité : bilan présenté à l'utilisateur puis FIN DE CYCLE.",
-      "action": "Présenter le bilan, puis ACTIVER Stark (activer, pas reactiver) via jarvis.py ou activer-agent-principal si Stark n'est pas joignable."
+      "description": "Le theme est traite : le BILAN PART D'ABORD vers JARVIS, jamais directement a Stark.",
+      "action": "1) Envoyer le bilan : jarvis.py envoyer --de vision --vers jarvis --priorite 2 --objet 'MISSION TERMINEE ...' --corps '<bilan>' --session <session> ; 2) JARVIS informe Stark. J'ACTIVE JAMAIS Stark moi-meme pour un bilan."
     },
     "fin-refus": {
       "titre": "FIN - Demande refusee",
-      "description": "Une demande de modification a été refusée avec justification.",
-      "action": "Retourner le refus à Stark via jarvis.py envoyer, puis FIN DE CYCLE (fin-theme)."
+      "description": "Une demande de modification a ete refusee avec justification.",
+      "action": "Envoyer le refus a JARVIS (qui informera Stark), puis FIN DE CYCLE."
     },
     "fin-violation": {
       "titre": "FIN - Violation de perimetre detectee",
-      "description": "JARVIS a été modifié par un autre agent que Vision.",
-      "action": "Signaler immédiatement à Stark via jarvis.py envoyer --priorite 1, documenter la violation, puis proposer la réparation."
+      "description": "JARVIS a ete modifie par un autre agent que Vision.",
+      "action": "Message P1 a JARVIS pour Stark + rapport, puis decision Stark."
     }
   }
 }

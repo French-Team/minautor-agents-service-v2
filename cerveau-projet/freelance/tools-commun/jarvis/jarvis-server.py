@@ -42,6 +42,12 @@ AGENTS_VALIDES = _charger_agents()
 FILES_DIR = Path(__file__).parent / "files"
 PRIORITE_BLOQUANTE = 1
 
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).parent / 'serveur'))
+import logique_files as _files
+import logique_messages as _msg
+import logique_activations as _act
+
 # --- Serveur MCP ---
 
 mcp = FastMCP("jarvis", instructions="JARVIS - Hub de communication et coordination pour l'equipe freelance v2.")
@@ -92,358 +98,73 @@ def _historiser(action: str, agent: str, details: str):
 
 @mcp.tool()
 def envoyer_message(de: str, vers: str, priorite: int = 3, objet: str = "", corps: str = "") -> str:
-    """
-    Envoyer un message entre agents via JARVIS.
-
-    Args:
-        de: Expediteur (stark, shuri, forge, rogers)
-        vers: Destinataire (stark, shuri, forge, rogers)
-        priorite: 1=bloquant, 2=urgent, 3=normal, 4=basse, 5=info
-        objet: Sujet du message
-        corps: Contenu du message
-
-    Returns:
-        Confirmation avec l'ID du message
-    """
-    de = de.lower()
-    vers = vers.lower()
-
-    if de not in AGENTS_VALIDES:
-        return f"ERREUR: expediteur inconnu '{de}'. Agents valides: {AGENTS_VALIDES}"
-    if vers not in AGENTS_VALIDES:
-        return f"ERREUR: destinataire inconnu '{vers}'. Agents valides: {AGENTS_VALIDES}"
-    if priorite < 1 or priorite > 5:
-        return "ERREUR: priorite doit etre entre 1 et 5"
-
-    message = {
-        "id": str(uuid.uuid4())[:8],
-        "de": de,
-        "vers": vers,
-        "priorite": priorite,
-        "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
-        "objet": objet,
-        "corps": corps,
-        "lu": False,
-        "accuse": False,
-    }
-
-    _ajouter_message(_inbox(vers), message)
-    _ajouter_message(_outbox(de), message)
-    _historiser("envoyer", de, f"{de} -> {vers}: {objet}")
-
-    label = "BLOQUANT" if priorite == 1 else f"P{priorite}"
-    return f"[JARVIS] Message envoye ({label}): {de} -> {vers} | ID: {message['id']} | Objet: {objet}"
-
-
-def _marquer_lu(agent: str, ids: list) -> int:
-    """v0.7.0 : marquer lu+accuse une liste d'IDs (inbox + outbox)."""
-    messages = _lire_jsonl(_inbox(agent))
-    marques = 0
-    expediteurs = {}
-    for m in messages:
-        if m.get("id") in ids and not m.get("lu"):
-            m["lu"] = True
-            m["accuse"] = True
-            marques += 1
-            expediteurs.setdefault(m.get("de"), []).append(m["id"])
-    if marques:
-        _ecrire_jsonl(_inbox(agent), messages)
-        for exp, exp_ids in expediteurs.items():
-            outbox_msgs = _lire_jsonl(_outbox(exp))
-            modifie = False
-            for m in outbox_msgs:
-                if m.get("id") in exp_ids and not m.get("lu"):
-                    m["lu"] = True
-                    m["accuse"] = True
-                    modifie = True
-            if modifie:
-                _ecrire_jsonl(_outbox(exp), outbox_msgs)
-    return marques
+    """Envoyer un message entre agents via JARVIS."""
+    return _msg.envoyer_message(de, vers, priorite, objet, corps,
+                                AGENTS_VALIDES,
+                                lambda a, x, d: _historiser(a, x, d))
 
 
 @mcp.tool()
 def recu_messages(agent: str) -> str:
     """v0.7.0 (fluidite) : lire + acquitter TOUT en un seul appel."""
-    agent = agent.lower()
-    if agent not in AGENTS_VALIDES:
-        return f"ERREUR: agent inconnu '{agent}'"
-    non_lus = [m for m in _lire_jsonl(_inbox(agent)) if not m.get("lu")]
-    if not non_lus:
-        return f"[JARVIS] recu {agent}: rien en attente."
-    _marquer_lu(agent, [m["id"] for m in non_lus])
-    lignes = [f"[JARVIS] recu {agent}: {len(non_lus)} message(s) lus et acquittes :"]
-    for m in sorted(non_lus, key=lambda x: x.get("priorite", 5)):
-        p = m.get("priorite", 5)
-        lignes.append(f"  [{'BLOQUANT' if p == 1 else f'P{p}'}] {m['objet']} (de {m['de']})")
-    return "\n".join(lignes)
+    return _msg.recu_messages(agent, AGENTS_VALIDES)
 
 
 @mcp.tool()
 def lire_messages(agent: str, tous: bool = False) -> str:
-    """
-    Lire les messages en attente d'un agent.
-
-    Args:
-        agent: Nom de l'agent (stark, shuri, forge, rogers)
-        tous: Inclure les messages lus (defaut: false)
-
-    Returns:
-        Liste des messages avec statut
-    """
-    agent = agent.lower()
-    if agent not in AGENTS_VALIDES:
-        return f"ERREUR: agent inconnu '{agent}'"
-
-    messages = _lire_jsonl(_inbox(agent))
-    non_lus = [m for m in messages if not m.get("lu", False)]
-
-    # v0.7.0 : auto-accuse P3-P5 a la lecture (fluidite)
-    auto = [m["id"] for m in non_lus if m.get("priorite", 5) >= 3]
-    n_auto = _marquer_lu(agent, auto)
-
-    if tous:
-        afficher = messages
-    else:
-        afficher = [m for m in messages if not m.get("lu", False)]
-
-    entete = []
-    if n_auto and not tous:
-        entete.append(f"[JARVIS] {n_auto} message(s) P3-P5 auto-acquitte(s).")
-    if not afficher:
-        return "\n".join(entete) or f"[JARVIS] Aucun message pour {agent}."
-
-    bloquants = [m for m in afficher if m.get("priorite", 5) == PRIORITE_BLOQUANTE]
-
-    result = entete
-    if bloquants:
-        result.append(f"*** {len(bloquants)} MESSAGE(S) BLOQUANT(S) - {agent} ne peut pas demarrer ***")
-        result.append("")
-
-    for m in sorted(afficher, key=lambda x: x.get("priorite", 5)):
-        p = m.get("priorite", 5)
-        label = "BLOQUANT" if p == 1 else f"P{p}"
-        statut = "LU" if m.get("lu") else "NON-LU"
-        result.append(f"[{label}] [{statut}] ID: {m['id']}")
-        result.append(f"  De: {m['de']} | Date: {m['date']}")
-        result.append(f"  Objet: {m['objet']}")
-        result.append(f"  Corps: {m['corps']}")
-        result.append("")
-
-    return "\n".join(result)
+    """Lire les messages en attente d'un agent (auto-accuse P3-P5)."""
+    return _msg.lire_messages(agent, tous, AGENTS_VALIDES, PRIORITE_BLOQUANTE)
 
 
 @mcp.tool()
 def acquitter_message(agent: str, id_message: str) -> str:
-    """
-    Acquitter un message (marquer lu + accuse). Le message expire apres.
-
-    Args:
-        agent: Nom de l'agent qui acquitte
-        id_message: ID du message a acquitter
-
-    Returns:
-        Confirmation
-    """
-    agent = agent.lower()
-    if agent not in AGENTS_VALIDES:
-        return f"ERREUR: agent inconnu '{agent}'"
-
-    messages = _lire_jsonl(_inbox(agent))
-    trouve = False
-
-    for m in messages:
-        if m.get("id") == id_message:
-            m["lu"] = True
-            m["accuse"] = True
-            trouve = True
-            break
-
-    if not trouve:
-        return f"ERREUR: message {id_message} non trouve dans inbox/{agent}.jsonl"
-
-    _ecrire_jsonl(_inbox(agent), messages)
-
-    # Aussi marquer dans l'outbox de l'expediteur
-    expediteur = next((m["de"] for m in messages if m.get("id") == id_message), None)
-    if expediteur:
-        outbox_msgs = _lire_jsonl(_outbox(expediteur))
-        for m in outbox_msgs:
-            if m.get("id") == id_message:
-                m["lu"] = True
-                m["accuse"] = True
-                break
-        _ecrire_jsonl(_outbox(expediteur), outbox_msgs)
-
-    _historiser("acquitter", agent, f"Message {id_message} acquitte")
-    return f"[JARVIS] Message {id_message} acquitte par {agent}."
+    """Acquitter un message (marquer lu + accuse)."""
+    return _msg.acquitter_message(agent, id_message, AGENTS_VALIDES,
+                                  lambda a, x, d: _historiser(a, x, d))
 
 
 @mcp.tool()
 def activer_agent(agent: str, mission: str, session: str = "", de: str = "stark") -> str:
-    """
-    Activer un agent via JARVIS (remplace activer-agent-principal).
-    Envoie un message P1 bloquant dans l'inbox de l'agent.
-
-    Args:
-        agent: Agent a activer (stark, shuri, forge, rogers)
-        mission: Description de la mission
-        session: Nom de la session cible (OBLIGATOIRE, convention session-llm-N)
-        de: Expediteur (defaut: stark)
-
-    Returns:
-        Confirmation avec l'ID
-    """
-    agent = agent.lower()
-    de = de.lower()
-
-    if not session:
-        return "ERREUR: session obligatoire (convention session-llm-N) - jamais de session devinee"
-
-    if agent not in AGENTS_VALIDES:
-        return f"ERREUR: agent inconnu '{agent}'. Agents valides: {AGENTS_VALIDES}"
-
-    message = {
-        "id": str(uuid.uuid4())[:8],
-        "de": de,
-        "vers": agent,
-        "priorite": PRIORITE_BLOQUANTE,
-        "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
-        "objet": "ACTIVATION",
-        "corps": (
-            "AVANT DE COMMENCER : lis ta fiche et tes corrections puis "
-            "INCARNE l agent qui prend le relais.\n\n" + mission
-        ),
-        "lu": False,
-        "accuse": False,
-        "type": "activation",
-    }
-
-    _ajouter_message(_inbox(agent), message)
-    _ajouter_message(_outbox(de), message)
-
-    # v0.7.0 : livraison directe - affichage = livraison
-    _marquer_lu(agent, [message["id"]])
+    """Activer un agent via JARVIS (message P1 + incarnation + livraison directe)."""
+    sortie = _act.activer_agent(agent, mission, session, de, AGENTS_VALIDES,
+                                PRIORITE_BLOQUANTE)
     _historiser("activer", de, f"Activation de {agent}: {mission[:50]}...")
+    return sortie
 
-    return (
-        f"[JARVIS] Agent '{agent}' active.\n"
-        f"  Expediteur: {de}\n"
-        f"  Session: {session}\n"
-        f"  Mission: {mission}\n"
-        f"  ID: {message['id']}\n"
-        f"  L'agent doit lire son inbox avant de demarrer (P1 = bloquant)."
-    )
 
+# --- v0.9.0 (protocole 14) : la logique files vit dans serveur/logique_files.py ---
 
 @mcp.tool()
 def mettre_en_attente(mission: str, contexte: str = "", niveau: str = "attente", agent: str = "") -> str:
-    """v0.8.0 (protocole 13 v2) : placer une mission selon le declencheur.
+    """v0.9.0 (protocole 13 v2) : placer une mission selon le declencheur.
     niveau: attente (EN_ATTENTE) / attention (SUIVANTE en file-asap) /
     urgent (PRIORITAIRE en file-attente)."""
-    niveaux = {
-        "attente": ("file-attente", "EN_ATTENTE", "ATTENTE"),
-        "attention": ("file-asap", "SUIVANTE", "AT-1"),
-        "urgent": ("file-attente", "PRIORITAIRE", "UR-1"),
-    }
-    if niveau not in niveaux:
-        return f"ERREUR: niveau inconnu '{niveau}' (attente/attention/urgent)"
-    file, statut, type_d = niveaux[niveau]
-    entree = {
-        "type": type_d,
-        "mission": mission,
-        "agent": agent,
-        "contexte_avant": contexte,
-        "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
-        "statut": statut,
-    }
-    chemin = FILES_DIR / f"{file}.jsonl"
-    with open(chemin, "a", encoding="utf-8") as f:
-        f.write(json.dumps(entree, ensure_ascii=False) + "\n")
-    _historiser("file", "jarvis", f"Mise en attente [{niveau}]: {mission[:50]}")
-    return (f"[JARVIS] Mission placee en {file} (statut: {statut}, "
-            f"declencheur: [{niveau}]).\n  Mission: {mission}")
+    return _files.mettre_en_attente(mission, contexte, niveau, agent)
 
 
 @mcp.tool()
 def stop_dev(raison: str) -> str:
-    """v0.8.0 ([stop] DEFCON 5) : arret complet du dev, gel de toutes les
+    """v0.9.0 ([stop] DEFCON 5) : arret complet du dev, gel de toutes les
     missions en files. Reprendre exige decision explicite de l'utilisateur."""
-    gelees = 0
-    for nom in ("file-attente", "file-asap"):
-        chemin = FILES_DIR / f"{nom}.jsonl"
-        if not chemin.exists():
-            continue
-        lignes = [l for l in chemin.read_text(encoding="utf-8").splitlines() if l.strip()]
-        modifie = False
-        for i, l in enumerate(lignes):
-            try:
-                e = json.loads(l)
-            except ValueError:
-                continue
-            if e.get("statut") in ("EN_ATTENTE", "PREPAREE", "SUIVANTE", "PRIORITAIRE"):
-                e["statut"] = "DEFCON5"
-                lignes[i] = json.dumps(e, ensure_ascii=False)
-                modifie = True
-                gelees += 1
-        if modifie:
-            chemin.write_text("\n".join(lignes) + "\n", encoding="utf-8")
-    defcon = {"date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
-              "niveau": 5, "raison": raison, "missions_gelees": gelees}
-    with open(FILES_DIR / "defcon.jsonl", "a", encoding="utf-8") as f:
-        f.write(json.dumps(defcon, ensure_ascii=False) + "\n")
+    sortie = _files.stop_dev(raison)
     _historiser("stop", "jarvis", f"DEFCON 5 - arret du dev: {raison[:50]}")
-    return (f"*** [STOP] DEFCON 5 - ARRET COMPLET DU DEV ***\n  Raison: {raison}\n"
-            f"  Missions gelees: {gelees}")
+    return sortie
 
 
 @mcp.tool()
 def lister_files() -> str:
-    """v0.7.0 : lister les files d'attente (file-attente + file-asap)."""
-    result = []
-    for nom in ("file-attente", "file-asap"):
-        chemin = FILES_DIR / f"{nom}.jsonl"
-        entrees = []
-        if chemin.exists():
-            for l in chemin.read_text(encoding="utf-8").splitlines():
-                if not l.strip():
-                    continue
-                try:
-                    e = json.loads(l)
-                except ValueError:
-                    continue
-                if e.get("statut") not in (None, "VIDE"):
-                    entrees.append(e)
-        result.append(f"[{nom}] {len(entrees)} entree(s)")
-        for e in entrees:
-            result.append(f"  [{e.get('statut')}] {e.get('mission', '')[:70]} ({e.get('date', '')})")
-    return "\n".join(result)
+    """v0.9.0 : lister les files d'attente (file-attente + file-asap)."""
+    return _files.lister_files()
 
 
 @mcp.tool()
 def reprendre_mission(file: str = "file-attente") -> str:
-    """v0.7.0 : depiler la derniere mission en attente et retourner son
-    contexte de reprise (statut passe a REPRISE)."""
-    chemin = FILES_DIR / f"{file}.jsonl"
-    if not chemin.exists():
-        return f"[JARVIS] File {file} inexistante."
-    lignes = [l for l in chemin.read_text(encoding="utf-8").splitlines() if l.strip()]
-    for i in range(len(lignes) - 1, -1, -1):
-        try:
-            e = json.loads(lignes[i])
-        except ValueError:
-            continue
-        if e.get("statut") in ("EN_ATTENTE", "PREPAREE"):
-            e["statut"] = "REPRISE"
-            e["date_reprise"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
-            lignes[i] = json.dumps(e, ensure_ascii=False)
-            chemin.write_text("\n".join(lignes) + "\n", encoding="utf-8")
-            _historiser("file", "jarvis", f"Reprise depuis {file}: {e.get('mission', '')[:50]}")
-            sortie = [f"[JARVIS] Mission reprise depuis {file} :",
-                      f"  Mission: {e.get('mission')}"]
-            if e.get("contexte_avant"):
-                sortie.append(f"  Contexte avant mise en attente: {e['contexte_avant']}")
-            return "\n".join(sortie)
-    return f"[JARVIS] Aucune mission en attente dans {file}."
+    """v0.9.0 : depiler la mission la plus prioritaire et retourner son
+    contexte de reprise (statut passe a REPRISE).
+    Ordre : PRIORITAIRE > SUIVANTE > EN_ATTENTE/PREPAREE."""
+    sortie = _files.reprendre_mission(file)
+    _historiser("file", "jarvis", f"Reprise depuis {file}")
+    return sortie
 
 
 @mcp.tool()

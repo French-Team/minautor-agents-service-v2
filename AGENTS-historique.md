@@ -11,17 +11,17 @@ identite:
 
 | Heure | Agent | id | Type | Raison |
 |-------|-------|----|------|--------|
-| 13:26:17.348481 | stark | glm5 | R | Active par relais de jarvis: BILAN - EDITH construite (volets 1-3 faits) |
-| 13:26:17.344358 | jarvis | glm5 | R | Envoie a stark: BILAN - EDITH construite (volets 1-3 faits) |
-| 13:25:26.463417 | jarvis | glm5 | R | Active par relais de shuri: MISSION TERMINEE volet 3 - EDITH construite (9 agents) |
-| 13:25:26.459818 | shuri | glm5 | R | Envoie a jarvis: MISSION TERMINEE volet 3 - EDITH construite (9 agents) |
-| 13:19:40.643337 | shuri | glm5 | R | Active par relais de jarvis: MISSION EDITH volet 3 - construire l agent EDITH |
-| 13:19:40.639820 | jarvis | glm5 | R | Envoie a shuri: MISSION EDITH volet 3 - construire l agent EDITH |
-| 13:18:56.034714 | jarvis | glm5 | R | Active par relais de forge: MISSION TERMINEE volet 2 - routines + mini serveur EDITH v0.1.0 |
-| 13:18:56.030967 | forge | glm5 | R | Envoie a jarvis: MISSION TERMINEE volet 2 - routines + mini serveur EDITH v0.1.0 |
-| 13:10:12.359210 | forge | glm5 | R | Active par relais de jarvis: MISSION EDITH volet 2 - structure routines + mini serveur |
-| 13:10:12.355375 | jarvis | glm5 | R | Envoie a forge: MISSION EDITH volet 2 - structure routines + mini serveur |
-| 13:08:59.958718 | jarvis | glm5 | R | Active par relais de rogers: MISSION TERMINEE volet 1 - PROTOCOLE 16 (cellule dormante EDITH) |
+| 18:51:52.182307 | stark | glm5 | R | Active par relais de jarvis: BILAN - fenetres cmd eliminees a la racine |
+| 18:51:52.177346 | jarvis | glm5 | R | Envoie a stark: BILAN - fenetres cmd eliminees a la racine |
+| 18:51:52.019445 | jarvis | glm5 | R | Active par relais de vision: [probleme] REPARE - fenetres cmd tuees a la racine + horloge integree |
+| 18:51:52.015175 | vision | glm5 | R | Envoie a jarvis: [probleme] REPARE - fenetres cmd tuees a la racine + horloge integree |
+| 18:44:28.512033 | stark | glm5 | R | Active par relais de jarvis: BILAN - serveur supprime, routines dans jarvis v0.9.2 |
+| 18:44:28.506918 | jarvis | glm5 | R | Envoie a stark: BILAN - serveur supprime, routines dans jarvis v0.9.2 |
+| 18:44:28.343627 | jarvis | glm5 | R | Active par relais de vision: [probleme] REPARE - routines vivent dans jarvis v0.9.2 |
+| 18:44:28.339194 | vision | glm5 | R | Envoie a jarvis: [probleme] REPARE - routines vivent dans jarvis v0.9.2 |
+| 18:33:30.671731 | vision | glm5 | R | Active par jarvis: Executer la decision: (1) tuer le processus 5708 s il vit (2) archiver tools-com |
+| 18:32:43.267217 | jarvis | glm5 | R | Active par relais de stark: SUPPRESSION du serveur de routines - les routines vivent dans jarvis |
+| 18:32:43.262831 | stark | glm5 | R | Envoie a jarvis: SUPPRESSION du serveur de routines - les routines vivent dans jarvis |
 
 ---
 

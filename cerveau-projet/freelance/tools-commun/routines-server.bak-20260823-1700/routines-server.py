@@ -29,14 +29,21 @@ from datetime import datetime, timezone
 
 from pathlib import Path
 
-VERSION = "0.1.0"
-
-BASE = Path(__file__).parent.parent.parent          # freelance/
-RACINE = BASE.parent                                 # cerveau-projet/
-WS = RACINE.parent                                   # workspace root
+# P10 : racine DETECTEE en remontant jusqu'a AGENTS.md (jamais compte)
+_d = os.path.dirname(os.path.abspath(__file__))
+while not os.path.isfile(os.path.join(_d, "AGENTS.md")):
+    _p = os.path.dirname(_d)
+    if _p == _d:
+        break
+    _d = _p
+RACINE = Path(_d)
+BASE = RACINE / "cerveau-projet" / "freelance"
+WS = RACINE.parent
 SERVEUR_DIR = Path(__file__).parent
 OBS_DIR = SERVEUR_DIR / "observations"
 JARVIS = Path(RACINE, "freelance", "tools-commun", "jarvis", "jarvis.py")
+
+VERSION = "0.2.0"
 
 
 def charger_manifest():
@@ -54,9 +61,11 @@ def empreinte(fichier):
 def qui_par_git(fichier):
     """Dernier auteur ayant commite ce fichier (inconnu sinon)."""
     try:
+        flags_git = subprocess.CREATE_NO_WINDOW if hasattr(subprocess, "CREATE_NO_WINDOW") else 0
         p = subprocess.run(
             ["git", "log", "-1", "--format=%an %ad", "--", fichier],
-            capture_output=True, text=True, cwd=str(WS), timeout=10)
+            capture_output=True, text=True, cwd=str(WS), timeout=10,
+            creationflags=flags_git)
         if p.returncode == 0 and p.stdout.strip():
             return p.stdout.strip()
     except (OSError, subprocess.TimeoutExpired):
@@ -96,11 +105,22 @@ def surveiller_modifications(manifest, etat):
                 if etat.get(cle) and etat[cle] != empreinte_actuelle:
                     rel_ws = os.path.relpath(reel, WS).replace("\\", "/")
                     qui = qui_par_git(rel_ws)
+                    # v0.3.0 (protocole 18) : validation post-modification
+                    try:
+                        import validations
+                        violations = validations.valider(reel)
+                    except Exception as err:
+                        violations = [{"regle": "ERREUR",
+                                       "detail": str(err)[:80]}]
                     details = (
                         "QUI: %s | QUOI: %s modifie | "
                         "COMMENT: changement d'empreinte SHA-256 | "
                         "QUAND: %s" % (qui, rel_ws,
                                        datetime.now(timezone.utc).isoformat()))
+                    if violations:
+                        details += "\nVIOLATIONS SUSPECTEES : " + "; ".join(
+                            v["regle"] + " - " + v["detail"]
+                            for v in violations)
                     OBS_DIR.mkdir(exist_ok=True)
                     obs = OBS_DIR / ("observation-modif-%s.md"
                                      % datetime.now().strftime("%Y%m%d-%H%M%S"))
@@ -129,6 +149,39 @@ def surveiller_flux_jarvis(manifest):
                       f.stem, "-", m.get("objet", "")[:50])
 
 
+def _tick(manifest, etat, dernieres_executions):
+    """UN tour de boucle : dispatch D15 + surveillance du perimetre."""
+    maintenant = time.time()
+    for routine in manifest.get("routines_surveillance", []):
+        if not routine.get("actif", True):
+            continue
+        nom = routine.get("nom")
+        script = BASE / "routines" / routine.get("script", "")
+        intervalle = routine.get("intervalles_secondes",
+                                 manifest.get("intervalle_boucle_secondes",
+                                              600))
+        dernier = dernieres_executions.get(nom, 0)
+        if maintenant - dernier < intervalle:
+            continue
+        dernieres_executions[nom] = maintenant
+        try:
+            # v0.2.2 : CREATE_NO_WINDOW - pas de fenetre cmd qui clignote
+            flags_sans_fenetre = 0
+            if hasattr(subprocess, "CREATE_NO_WINDOW"):
+                flags_sans_fenetre = subprocess.CREATE_NO_WINDOW
+            p = subprocess.run(
+                [sys.executable, str(script)],
+                capture_output=True, text=True, timeout=120,
+                creationflags=flags_sans_fenetre)
+            print(f"[EDITH-SERVER] routine {nom} executee (rc={p.returncode})")
+            for ligne in p.stdout.splitlines():
+                if ligne.strip():
+                    print(f"  {ligne.strip()[:100]}")
+        except (OSError, subprocess.TimeoutExpired) as e:
+            print(f"[EDITH-SERVER] ERREUR routine {nom}: {e}")
+    surveiller_modifications(manifest, etat)
+
+
 def boucle(manifest, une_passe=False):
     etat = {}
     fichier_etat = SERVEUR_DIR / "observations" / "etat-empreintes.json"
@@ -138,18 +191,25 @@ def boucle(manifest, une_passe=False):
             etat = json.loads(fichier_etat.read_text(encoding="utf-8"))
         except ValueError:
             etat = {}
-    intervalle = manifest.get("intervalle_boucle_secondes", 600)
+    dernieres_executions = {}
+    intervalle_defaut = manifest.get("intervalle_boucle_secondes", 600)
     print("[EDITH-SERVER] v%s demarre (intervalle %ss)"
-          % (VERSION, intervalle))
+          % (VERSION, intervalle_defaut))
     while True:
-        surveiller_modifications(manifest, etat)
-        surveiller_flux_jarvis(manifest)
-        fichier_etat.write_text(json.dumps(etat, ensure_ascii=False),
-                                encoding="utf-8")
+        try:
+            _tick(manifest, etat, dernieres_executions)
+            fichier_etat.write_text(json.dumps(etat, ensure_ascii=False),
+                                    encoding="utf-8")
+        except Exception as e:
+            # v0.2.1 : un crash de routine ne tue JAMAIS le serveur
+            crash = OBS_DIR / "crash.log"
+            with open(crash, "a", encoding="utf-8") as f:
+                f.write(str(datetime.now(timezone.utc)) + " "
+                        + repr(e) + "\n")
         if une_passe:
             print("[EDITH-SERVER] une passe terminee.")
             return
-        time.sleep(intervalle)
+        time.sleep(1)  # tick fin : les compteurs par routine font le reste
 
 
 def main():
