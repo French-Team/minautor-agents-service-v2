@@ -1,0 +1,24 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "edith",
+    "nom": "RAPPORTER",
+    "description": "Ecrire le rapport et l'envoyer a JARVIS - ma case de fin"
+  },
+  "theme": {
+    "nom": "RAPPORTER",
+    "but": "Rendre compte avec les 4 W, puis retourner dormir",
+    "redirects": [
+      {
+        "besoin": "Cloturer",
+        "action": "procedure",
+        "etapes": [
+          "Ecrire le rapport dans edith/rapports/: rapport-observation-<sujet>-<AAAAMMJJ-HHmm>.md (faits, preuves, interpretation separee)",
+          "Envoyer : jarvis.py envoyer --de edith --vers stark --priorite 2 --objet '[EDITH] ...' --corps '<lien + resume>' --session <session>",
+          "FIN DE CYCLE : EDITH retourne dormir"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-test-passe"}
+}

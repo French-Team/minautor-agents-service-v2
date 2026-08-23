@@ -1,7 +1,7 @@
 ---
 identite:
   nom: regles-immuables
-  version: 0.3.0
+  version: 0.4.0-marbre
   cree: 2026-08-22
   type: reference
   appartient_a: rogers
@@ -13,6 +13,36 @@ identite:
 # Source : proposition-v2.md (decisions D1-D18 + principes P1-P9)
 
 > Rogers est le gardien de ces regles. Aucune exception.
+
+---
+
+## LES REGLES GRAVEES DANS LE MARBRE (2026-08-23, suite DEFCON 5)
+
+> Ces regles sont les fondations. Elles ont ete payees par des echecs reels
+> et leur modification sans controle ferait effondrer le systeme.
+
+## LA PORTE DE MARBRE
+
+**Aucune regle du marbre ne peut etre modifiee, affaiblie ou supprimee
+sans l'accord EXPLICITE de l'utilisateur, OU l'accord exclusif de Stark**
+(donne clairement, trace dans un message JARVIS).
+
+Toute proposition de modification passe par Rogers -> JARVIS -> Stark ->
+utilisateur si necessaire. Un agent qui modifie une regle du marbre sans
+cette chaine commet la violation la plus grave du projet.
+
+### Regles gravees
+
+| # | Regle gravee | Payee par |
+|---|---|---|
+| M1 | Tout passe par JARVIS : aucun travail sans message tracé (proto 8) | DEFCON 5 du 2026-08-23 |
+| M2 | Aucun agent n'execute les missions d'un autre : l'habilite travaille lui-meme, apres activation tracée | 3 ruptures de flux le 2026-08-23 |
+| M3 | V1-V4 : je ne mens pas, je n'invente pas, je ne suppose pas, affirmatif seulement si sur | discipline permanente |
+| M4 | P10 : la racine se detecte via os_path, elle ne se compte pas | 4 bugs de chemin le 2026-08-23 |
+| M5 | Zero valeur en dur (P4/D15) | bug freebuff + sessions en dur |
+| M6 | La porte du marbre elle-meme : modification seulement avec accord utilisateur OU accord exclusif de stark | DEFCON 5 du 2026-08-23 |
+
+
 
 ---
 

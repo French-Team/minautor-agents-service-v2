@@ -11,17 +11,17 @@ identite:
 
 | Heure | Agent | id | Type | Raison |
 |-------|-------|----|------|--------|
-| 11:55:51.069029 | stark | glm5 | R | Active par relais de jarvis: BILAN - 3 taches traitees selon le protocole 13 v2 |
-| 11:55:51.065100 | jarvis | glm5 | R | Envoie a stark: BILAN - 3 taches traitees selon le protocole 13 v2 |
-| 11:55:16.270682 | jarvis | glm5 | R | Active par relais de rogers: MISSION TERMINEE volet 1 - PROTOCOLE 14 redige |
-| 11:55:16.267241 | rogers | glm5 | R | Envoie a jarvis: MISSION TERMINEE volet 1 - PROTOCOLE 14 redige |
-| 11:54:16.268398 | rogers | glm5 | R | Active par jarvis: AT-1 volet 1: rediger le PROTOCOLE 14 (architecture JARVIS) dans protocoles.md - |
-| 11:54:16.082231 | jarvis | glm5 | R | Reprise de mission depuis file-asap: [AT-1] Protocole d'architecture JARVIS: jarvis.py  |
-| 11:54:00.618587 | jarvis | glm5 | R | Mise en attente [attention] (file-asap): [AT-1] Protocole d'architecture JARVIS: jarvis.py devient in |
-| 11:54:00.037178 | jarvis | glm5 | R | Mise en attente [attente] (file-attente): Combo jarvis de lancement de missions en serie ou parallel:  |
-| 11:50:13.355243 | stark | glm5 | R | Active par relais de jarvis: BILAN - systeme des 6 declencheurs operationnel |
-| 11:50:13.351705 | jarvis | glm5 | R | Envoie a stark: BILAN - systeme des 6 declencheurs operationnel |
-| 11:49:23.109845 | jarvis | glm5 | R | Active par relais de vision: MISSION TERMINEE - mecanique 6 declencheurs v0.8.0 |
+| 13:26:17.348481 | stark | glm5 | R | Active par relais de jarvis: BILAN - EDITH construite (volets 1-3 faits) |
+| 13:26:17.344358 | jarvis | glm5 | R | Envoie a stark: BILAN - EDITH construite (volets 1-3 faits) |
+| 13:25:26.463417 | jarvis | glm5 | R | Active par relais de shuri: MISSION TERMINEE volet 3 - EDITH construite (9 agents) |
+| 13:25:26.459818 | shuri | glm5 | R | Envoie a jarvis: MISSION TERMINEE volet 3 - EDITH construite (9 agents) |
+| 13:19:40.643337 | shuri | glm5 | R | Active par relais de jarvis: MISSION EDITH volet 3 - construire l agent EDITH |
+| 13:19:40.639820 | jarvis | glm5 | R | Envoie a shuri: MISSION EDITH volet 3 - construire l agent EDITH |
+| 13:18:56.034714 | jarvis | glm5 | R | Active par relais de forge: MISSION TERMINEE volet 2 - routines + mini serveur EDITH v0.1.0 |
+| 13:18:56.030967 | forge | glm5 | R | Envoie a jarvis: MISSION TERMINEE volet 2 - routines + mini serveur EDITH v0.1.0 |
+| 13:10:12.359210 | forge | glm5 | R | Active par relais de jarvis: MISSION EDITH volet 2 - structure routines + mini serveur |
+| 13:10:12.355375 | jarvis | glm5 | R | Envoie a forge: MISSION EDITH volet 2 - structure routines + mini serveur |
+| 13:08:59.958718 | jarvis | glm5 | R | Active par relais de rogers: MISSION TERMINEE volet 1 - PROTOCOLE 16 (cellule dormante EDITH) |
 
 ---
 

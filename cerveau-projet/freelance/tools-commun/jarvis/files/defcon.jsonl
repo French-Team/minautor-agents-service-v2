@@ -1,1 +1,7 @@
-{"date": "2026-08-23T09:48:17", "raison": "TEST defcon - arret controle", "missions_gelees": 1, "declare_par": "utilisateur via stark"}
+{"date": "2026-08-23T09:48:17", "raison": "TEST defcon - arret controle", "missions_gelees": 1, "declare_par": "utilisateur via stark", "niveau": 5}
+{"date": "2026-08-23T10:06:55", "raison": "test post-refactor", "missions_gelees": 2, "declare_par": "utilisateur via stark", "niveau": 5}
+{"date": "2026-08-23T10:08:18", "raison": "test post-refactor", "missions_gelees": 1, "declare_par": "utilisateur via stark", "niveau": 5}
+{"date": "2026-08-23T10:10:57", "raison": "Stark/Vision a travaille sans activation tracée - rupture du flux obligatoire (constat utilisateur)", "missions_gelees": 0, "declare_par": "utilisateur via stark", "niveau": 5}
+{"date": "2026-08-23T10:39:21", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "Reparations DEFCON faites (marbre + question + tracabilite). Validation par Fury a venir.", "par": "stark"}
+{"date": "2026-08-23T11:06:38", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "Decision utilisateur: reprise normale demandee. Les reparations (marbre M1-M6, question, tracabilite files) sont faites et le systeme de rating surveille maintenant les derapages.", "par": "stark"}
+{"date": "2026-08-23T11:06:39", "niveau": 2, "signification": "REPRISE TOTALE", "commentaire": "Decision utilisateur explicite: reprendre normalement. Surveillance maintenue via rating-agents (stark et vision sous observation).", "par": "stark"}

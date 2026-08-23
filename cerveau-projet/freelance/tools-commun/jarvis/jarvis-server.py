@@ -388,7 +388,7 @@ def stop_dev(raison: str) -> str:
         if modifie:
             chemin.write_text("\n".join(lignes) + "\n", encoding="utf-8")
     defcon = {"date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
-              "raison": raison, "missions_gelees": gelees}
+              "niveau": 5, "raison": raison, "missions_gelees": gelees}
     with open(FILES_DIR / "defcon.jsonl", "a", encoding="utf-8") as f:
         f.write(json.dumps(defcon, ensure_ascii=False) + "\n")
     _historiser("stop", "jarvis", f"DEFCON 5 - arret du dev: {raison[:50]}")

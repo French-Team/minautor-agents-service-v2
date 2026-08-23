@@ -1,0 +1,25 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "edith",
+    "nom": "LIRE",
+    "description": "Consulter un flux ou un fichier d'observations precis"
+  },
+  "theme": {
+    "nom": "LIRE",
+    "but": "Repondre a une demande ponctuelle de consultation",
+    "redirects": [
+      {
+        "besoin": "Consulter",
+        "action": "procedure",
+        "etapes": [
+          "tools-commun/routines-server/observations/ : observations et rapport forensiques",
+          "files/ : etat des files d'attente",
+          "AGENTS-historique.md : activite recente",
+          "Lecture seule - reponse formulee puis RAPPORTER si un rapport est requis"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

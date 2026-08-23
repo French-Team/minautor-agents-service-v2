@@ -1,0 +1,23 @@
+{
+  "version": "0.1.0",
+  "description": "Manifest des routines EDITH (D15) - editable sans toucher au code",
+  "intervalle_boucle_secondes": 600,
+  "routines_demarrage": [
+    {"nom": "verifier-integrite", "script": "demarrage/verifier-integrite.py", "actif": true}
+  ],
+  "routines_arret": [
+    {"nom": "detecter-orphelins", "script": "arret/detecter-orphelins.py", "actif": true}
+  ],
+  "routines_surveillance": [
+    {"nom": "surveiller-flux-jarvis", "script": "surveillance/surveiller-flux-jarvis.py", "actif": true, "intervalles_secondes": 600},
+    {"nom": "surveiller-modifications", "script": "surveillance/surveiller-modifications.py", "actif": true, "intervalles_secondes": 60}
+  ],
+  "seuils_alerte": {
+    "p1_non_acquitte": true,
+    "inbox_croissance_par_heure": 20,
+    "modification_perimetre_edith": true
+  },
+  "perimetre_edith_surveille": [
+    "tools-commun/routines-server/"
+  ]
+}

@@ -52,6 +52,14 @@ Route vers les protocoles de creation PAR TYPE :
 | fiches / arbres d'agents | Shuri |
 | historique / git | Hades (v1) - arbitrage Stark |
 
+### [question] -- phase question/reponse dediee
+Ouvre une phase DEDIEE a une question entre toi et Stark :
+1. Tu poses ta question ([question] ... )
+2. Si Stark a besoin d informations : il envoie a JARVIS qui active les
+   agents concernes pour obtenir la reponse et la lui retourne
+3. Stark repond avec les informations collectees
+Aucune autre tache pendant la phase.
+
 ### [stop] -- DEFCON 5, gravite maximale
 ROUND BRISE. Arret complet du dev : TOUTES les missions en files sont
 GELEES (statut DEFCON5), l'arret est journalise dans files/defcon.jsonl.

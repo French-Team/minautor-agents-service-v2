@@ -25,7 +25,7 @@ identite:
 | **Fiche** | [cerveau-projet/freelance/stark/stark.md](cerveau-projet/freelance/stark/stark.md) |
 | **Corrections** | [cerveau-projet/freelance/stark/corrections.md](cerveau-projet/freelance/stark/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | Relais de jarvis: BILAN - 3 taches traitees selon le protocole 13 v2 |
+| **Raison** | Relais de jarvis: BILAN - EDITH construite (volets 1-3 faits) |
 
 | DEMARRAGE V2 (agents freelance) : relis ta fiche puis tes corrections. |
 | Pour toute action, suis TON arbre des decisions : |
@@ -201,6 +201,7 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 | [JARVIS](cerveau-projet/freelance/jarvis/jarvis.md) | cerveau-projet/freelance/jarvis/ | Intelligence derriere le serveur, assistant de Stark | Disponible (en attente) | JARVIS - transforme les demandes de Stark en missions precise - MODE CONVERSATION |
 | [Vision](cerveau-projet/freelance/vision/vision.md) | cerveau-projet/freelance/vision/ | Gardien exclusif de JARVIS (agent + server MCP) | Disponible (en attente) | Synthezoide ne de JARVIS - SEUL habilite a modifier jarvis.py / jarvis-server.py / l'agent JARVIS - MODE CONVERSATION |
 | [Fury](cerveau-projet/freelance/fury/fury.md) | cerveau-projet/freelance/fury/ | Testeur reel HORS-ROUND | Disponible (en attente) | Directeur SHIELD - prend la place de l'utilisateur pour tester des rounds reels - JAMAIS dans un round - MODE CONVERSATION |
+| [EDITH](cerveau-projet/freelance/edith/edith.md) | cerveau-projet/freelance/edith/ | Observatrice -- cellule dormante | Dormante (reveil par son serveur ou sur demande) | Voit tout - analyse les observations de son serveur H24 et rapporte les 4 W - LECTURE SEULE - JAMAIS dans un round |
 
 ---
 

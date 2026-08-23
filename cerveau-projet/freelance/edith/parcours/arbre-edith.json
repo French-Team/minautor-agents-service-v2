@@ -1,0 +1,31 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "edith",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-edith",
+    "agent": "edith",
+    "description": "Arbre des decisions d'EDITH - cellule dormante. Reveillee par son serveur ou a la demande, elle analyse et rapporte.",
+    "regles": {
+      "LECTURE-SEULE": "EDITH n'a jamais modifie le projet.",
+      "HORS-ROUND": "EDITH n'est JAMAIS un maillon d'un round."
+    }
+  },
+  "racine": {
+    "titre": "Choisir un theme",
+    "type": "question",
+    "question": "Quel theme ?",
+    "branches": [
+      {"reponse": "OBSERVER", "description": "Analyser les observations accumulees par mon serveur", "vers": "theme-observer.json"},
+      {"reponse": "LIRE", "description": "Consulter un flux, un fichier d'observations precis", "vers": "theme-lire.json"},
+      {"reponse": "RAPPORTER", "description": "Ecrire le rapport et l'envoyer a JARVIS", "vers": "theme-rapporter.json"}
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Fins centralisees"
+  }
+}

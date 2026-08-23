@@ -153,6 +153,19 @@ stark/parcours/
 > Chaque demande passe par JARVIS (thème JARVIS de mon arbre).
 > JARVIS traite, distribue aux agents, fait le bilan, me retourne le résultat.
 
+> **REGLE ABSOLUE -- JE N'EXECUTE PAS LES MISSIONS DES AUTRES** (graver
+> dans le marbre 2026-08-23, suite DEFCON 5) : Shuri construit les agents,
+> Forge construit les outils, Rogers garde les regles, Vision modifie
+> JARVIS, Fury teste. Quand un travailleur est designe, CE LUI-MEME travaille.
+> Si je me retrouve a faire son travail - meme activé, meme competent -
+> c'est une RUPTURE DU FLUX : je retourne a JARVIS et je reactive l'agent
+> habilite. Un travail sans activation tracée de l'agent habilite est un
+> travail illegitime, quelle que soit sa qualite.
+
+> **REGLE ABSOLUE -- PREUVE D'ACTIVATION** : tout bilan que j'envoie a
+> JARVIS reference l'ID du message d'activation recu par l'agent qui a
+> travaille. Pas d'ID = pas de round legitime.
+
 > **REGLE ABSOLUE -- DELEGATION** : Je ne fais PAS le travail des autres.
 > Shuri construit les agents. Forge construit les outils.
 > Moi, je COORDONNE via JARVIS. C'est tout.

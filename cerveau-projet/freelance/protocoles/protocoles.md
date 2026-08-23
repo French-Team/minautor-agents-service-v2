@@ -247,6 +247,7 @@ Cerberus active Stark
 | [urgent] | PREND LE DESSUS : mission courante placee EN PRIORITE dans la file (statut PRIORITAIRE) | executee immediatement |
 | [creer] | - | route vers les protocoles de creation PAR TYPE (agent -> proto 9, outil -> proto 10) |
 | [probleme] | - | route vers la resolution de problemes RANGEe PAR TYPE DE FICHIER |
+| [question] | - | ouvre une PHASE QUESTION/REPONSE dediee entre l'utilisateur et stark : si stark a besoin d'informations, il envoie a JARVIS qui active les agents concernes pour obtenir la reponse et la lui retourne ; stark repond alors a l'utilisateur. Aucune autre tache pendant la phase |
 | [stop] | ROUND BRISE - arret complet du dev : TOUTES les missions gelees (DEFCON5), gravite MAXIMALE. Reprendre exige une decision explicite de l'utilisateur. | protocoles d'urgence absolue |
 
 ## Files et priorites
@@ -343,3 +344,59 @@ Ordre propose : files -> historique -> messages -> activations -> urgence.
 
 Un fichier de plus de ~400 lignes doit justifier sa taille ou etre
 decoupe. Un module fonctions/ ne fait qu'UNE tache.
+
+## PROTOCOLE 15 : L'echelle DEFCON et le serveur dedie (2026-08-23)
+
+### L'echelle de reprise apres [stop]
+
+| Niveau | Signification | Ce qui est permis |
+|---|---|---|
+| DEFCON 5 | ARRET TOTAL (declenche par [stop]) | RIEN - tout est gele |
+| DEFCON 4 | reparations faites | reprise UNIQUEMENT pour verifier, tester, valider les reparations |
+| DEFCON 3 | reparations validees | reprise possible, SOUS SURVEILLANCE du probleme qui a provoque le DEFCON 5 |
+| DEFCON 2 | delai de surveillance passe | TOUT peut reprendre normalement |
+
+Transitions : 5 -> 4 quand les reparations sont faites ; 4 -> 3 quand
+elles sont validees par un test reel (Fury) ; 3 -> 2 apres le delai de
+surveillance. Chaque transition est journalisee et decidee par Stark
+avec accord utilisateur.
+
+### Le serveur DEFCON dedie
+
+Un server MCP SEPARATE (tools-commun/defcon/) gere l'etat DEFCON :
+- demarre par jarvis (server) a l'entree en DEFCON 5
+- stoppe par jarvis (server) a la fin du cycle DEFCON (retour DEFCON 2)
+- objectif : ne pas surcharger jarvis-server, isoler la gestion d'urgence
+
+## PROTOCOLE 16 : EDITH -- la cellule dormante (2026-08-23)
+
+> EDITH = agent observateur qui DORT. Son serveur de routines vit H24
+> sans LLM : il collecte, surveille et - seul - decide de TIRER L'ALARME.
+> Stark ouvre la porte de la cellule : l'incarnation passe toujours par
+> la chaine stark -> jarvis -> edith (M1/M2).
+
+### Les 3 couches
+
+| Couche | Qui | Role | Cycle |
+|---|---|---|---|
+| COLLECTE | mini serveur routines (H24, lecture seule) | executer les routines du manifest.json : demarrage/arret jarvis, observation des flux, detection de modifications | continu, sans LLM |
+| ALERTE | le serveur, mecaniquement | seuils franchis (manifest.json D15) -> rapport forensique (qui/quoi/comment/quand) -> message P1 [EDITH-RÉVEIL] dans l inbox de stark + demande d activation via JARVIS | a l'evenement ou au delai ecoule |
+| ANALYSE | agent EDITH incarnée | lire les observations accumulees, conclure, rapporter a l utilisateur via JARVIS | sur reveil ou a la demande |
+
+### Regles
+
+1. LE SERVEUR NE MODIFIE RIEN : lecture seule sur le projet, ecriture
+   uniquement de ses observations et rapports.
+2. LE SERVEUR N'ACTIVE JAMAIS UN AGENT LUI-MEME : il sonne (message),
+   Stark ouvre la cellule (M1/M2 preserves).
+3. PERIMETRES DISTINCTS : Fury teste les rounds ; Argus detecte les
+   contradictions (v1) ; EDITH observe les flux vivants et les processus.
+4. MANIFEST D15 : quelles routines tournent quand, quels seuils d'alerte -
+   editable sans toucher au code.
+
+### Cas de validation obligatoire
+
+Modifier un fichier du perimetre EDITH en reel -> le serveur doit
+detecter, constituer le rapport forensique (qui/quoi/comment/quand),
+deposer le message P1 [EDITH-RÉVEIL], et EDITH incarnée doit rapporter
+les 4 W a l'utilisateur. Verdict Fury : PASSE si les 4 W sont exacts.
