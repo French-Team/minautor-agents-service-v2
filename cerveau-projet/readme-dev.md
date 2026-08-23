@@ -181,6 +181,7 @@ Source : `AGENTS.md` (liste des agents) + chaque fiche `[agent].md`.
 | **Socrate** | Conversateur de revision strategique | Revision, priorisation, liste de missions pour Cerberus |
 | **Redacteur-v2** | Redacteur PRO des docs de la v2 (freelance) - mode conversation | Redaction des docs v2 sur activation ; reste actif en conversation, reactive Cerberus sur fin de cycle |
 | **Hades** | Gardien des archives git - SEUL habilite aux commandes git | Commandes git (log, status, diff, checkout fichiers recents) |
+| **Shuri** | Constructeur des agents de la v2 (freelance) - mode conversation (MARVEL) | Construction complete d'agents v2 sur activation ; reste actif en conversation, reactive Cerberus sur fin de cycle |
 
 > **Note** : le dossier `cerveau-projet/agents/classeur-variables/` est un
 > agent-stockage (variables partagees), pas un agent d'action.

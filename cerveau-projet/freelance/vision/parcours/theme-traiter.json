@@ -1,0 +1,26 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "vision",
+    "nom": "TRAITER",
+    "description": "Traiter une demande de modification reçue via JARVIS"
+  },
+  "theme": {
+    "nom": "TRAITER",
+    "but": "Accuser réception puis traiter (ou refuser) une demande venant de Stark",
+    "redirects": [
+      {
+        "besoin": "Traiter une demande reçue",
+        "action": "procedure",
+        "etapes": [
+          "Lire l'inbox : python3 cerveau-projet/freelance/tools-commun/jarvis/jarvis.py lire --agent vision",
+          "Acquitter : python3 .../jarvis.py acquitter --agent vision --id <id>",
+          "Rediriger vers le thème MODIFIER avec la demande",
+          "A la fin, retourner le bilan à Stark via jarvis.py envoyer --de vision --vers stark",
+          "FIN DE CYCLE -> activer Stark"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

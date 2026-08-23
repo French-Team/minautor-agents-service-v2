@@ -1,3 +1,4 @@
+{"date":"2026-08-22 19:03:15","agent":"themis","outil":"valider-cartes-decision","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : themis)"}
 {"date":"2026-08-22 15:16:17","agent":"themis","outil":"valider-cartes-decision","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : themis)"}
 {"date":"2026-08-22 10:18:36","agent":"vulcain","outil":"editer-fichier","mode":"verrou-bloque","commande":"","contexte":"tentative BLOQUE (agent reel actif : vulcain)"}
 {"date":"2026-08-22 10:11:45","agent":"argus","outil":"lire-fichier","mode":"verrou-bloque","commande":"","contexte":"tentative USURPATION_IDENTITE (agent reel actif : janus)"}

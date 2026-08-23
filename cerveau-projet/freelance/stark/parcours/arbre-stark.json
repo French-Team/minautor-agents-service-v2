@@ -1,0 +1,33 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "stark",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-stark",
+    "agent": "stark",
+    "description": "Arbre des décisions de Stark - coordinateur de l'équipe freelance. L'agent choisit UN THÈME au démarrage.",
+    "regles": {
+      "D1": "Chaque branche (thème) mène à des catégories, qui mènent aux cases d'exécution.",
+      "D5": "Les cases d'un thème sont des REDIRECTIONS.",
+      "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
+      "D3": "Les passages d'un fichier à l'autre sont TRANSPARENTS."
+    }
+  },
+  "racine": {
+    "titre": "Choisir un thème",
+    "type": "question",
+    "question": "Quel thème ?",
+    "branches": [
+      {"reponse": "JARVIS", "description": "Demander à JARVIS de traiter une demande (OBLIGATOIRE pour toute mission)", "vers": "theme-jarvis.json"},
+      {"reponse": "LIRE", "description": "Consulter l'activité, les messages JARVIS, l'état de l'équipe", "vers": "theme-lire.json"},
+      {"reponse": "EXPLORER", "description": "Diagnostiquer un problème", "vers": "theme-explorer.json"}
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisées"
+  }
+}

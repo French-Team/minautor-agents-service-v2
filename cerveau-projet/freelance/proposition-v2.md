@@ -635,6 +635,21 @@ utilise les agents v1 (Cerberus, Buffy...). La session-freelance utilise
 les agents MARVEL (Stark, Rogers...). Chaque session a SA liste d'agents
 dans son arbre de decisions.
 
+**Agents MARVEL deja construits** :
+
+| Agent | Univers | Role | Statut |
+|---|---|---|---|
+| **Shuri** | Black Panther | Constructeur des agents de la v2 | Cree le 2026-08-22 -- premier agent MARVEL operationnel |
+| **Stark** | Iron Man | Coordinateur, responsable JARVIS (D16) | Cree le 2026-08-22 -- coordonne Shuri (agents) et Forge (outils) |
+| **Forge** | Mutant inventeur | Responsable des outils v2 | Cree le 2026-08-22 -- construit les outils freelance (D15) |
+| **Rogers** | Captain America | Gardien des regles, conventions et protocoles | Cree le 2026-08-22 -- veille au respect des regles |
+| **Parker** | Spider-Man | Explorateur / diagnostiqueur | Cree le 2026-08-22 -- explore et diagnostique les problemes |
+| **JARVIS** | Assistant de Stark | Centre de communication (hub des messages) | Cree le 2026-08-22 -- jarvis.py + serveur MCP |
+| **Vision** | Synthezoide (ne de JARVIS) | Gardien exclusif de JARVIS (agent + server MCP) | Cree le 2026-08-23 -- SEUL habilite a modifier jarvis.py / jarvis-server.py / l'agent JARVIS |
+
+> **Prochains agents possibles** : Romanoff, Banner, Fury (theme MARVEL D14) -- a construire par Shuri sur demande de Stark.
+> responsable JARVIS (D16). Stark prendra le controle de Shuri.
+
 ### D3 - Transparence de l activation entre agents
 
 > DECISION D3 (2026-08-21, clarifiee 2026-08-22) : l activation et le passage

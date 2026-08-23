@@ -1,0 +1,53 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "jarvis",
+    "nom": "SUIVRE",
+    "description": "Verifier l'etat des agents, messages, rounds"
+  },
+  "theme": {
+    "nom": "SUIVRE",
+    "but": "Savoir exactement ou en est l'equipe",
+    "redirects": [
+      {
+        "besoin": "Voir le status de l'equipe",
+        "action": "redirection",
+        "vers": {"type": "outil", "commande": "jarvis.py status"}
+      },
+      {
+        "besoin": "Voir qui est bloque",
+        "action": "redirection",
+        "vers": {"type": "outil", "commande": "jarvis.py bloques"}
+      },
+      {
+        "besoin": "Voir les messages en attente",
+        "action": "redirection",
+        "vers": {"type": "outil", "commande": "jarvis.py lister"}
+      },
+      {
+        "besoin": "Verifier l'activite recente",
+        "action": "redirection",
+        "vers": {"type": "outil", "commande": "lire-activite-recente"}
+      },
+      {
+        "besoin": "Verifier si une mission est en cours",
+        "action": "procedure",
+        "etapes": [
+          "Lister les messages P1 non lus (missions en cours)",
+          "Lister les messages P2 (urgents en attente)",
+          "Verifier qui a repondu (messages avec reponse)"
+        ]
+      },
+      {
+        "besoin": "Verifier qu'un agent a termine",
+        "action": "procedure",
+        "etapes": [
+          "Chercher les messages de retour d'un agent",
+          "Lire le bilan",
+          "Notifier Stark si termine"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

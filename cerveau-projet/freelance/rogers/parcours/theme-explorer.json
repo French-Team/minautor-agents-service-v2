@@ -1,0 +1,64 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "rogers",
+    "nom": "EXPLORER",
+    "description": "Diagnostiquer, comprendre un problème"
+  },
+  "theme": {
+    "nom": "EXPLORER",
+    "but": "Comprendre pourquoi quelque chose ne va pas",
+    "redirects": [
+      {
+        "besoin": "Diagnostiquer un conflit de règles",
+        "action": "procedure",
+        "etapes": [
+          "Identifier les deux règles en conflit",
+          "Lire le contexte de chaque règle",
+          "Déterminer quelle règle a priorité",
+          "Proposer une résolution",
+          "Documenter la décision"
+        ]
+      },
+      {
+        "besoin": "Comprendre pourquoi un agent viole une règle",
+        "action": "procedure",
+        "etapes": [
+          "Lire l'arbre de décision de l'agent",
+          "Vérifier que la règle est présente dans son arbre",
+          "Si absente → l'ajouter (MODIFIER)",
+          "Si présente → vérifier si elle est claire",
+          "Si ambiguë → la reformuler (MODIFIER)"
+        ]
+      },
+      {
+        "besoin": "Auditer la cohérence globale",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Lire les 3 piliers (règles, conventions, protocoles)",
+            "Vérifier la cohérence entre les 3",
+            "Vérifier que les agents respectent les thèmes (D8)",
+            "Vérifier que les fins sont correctes",
+            "Donner un rapport de cohérence"
+          ]
+        }
+      },
+      {
+        "besoin": "Consulter les leçons pour comprendre un problème récurrent",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "consulter-lecons",
+          "parametres": {"agent": "tous", "domaine": "regles"}
+        }
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

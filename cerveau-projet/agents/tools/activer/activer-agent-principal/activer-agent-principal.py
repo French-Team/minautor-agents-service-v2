@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.29
+Version : 0.5.30
 Statut : prepare
 """
 
@@ -36,7 +36,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.5.29"
+VERSION = "0.5.30"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -72,6 +72,7 @@ COULEURS_PAR_AGENT = {
     "socrate": "#a855f7",   # revision strategique - violet clair
     "redacteur-v2": "#7c3aed",
     "hades": "#4b5563",  # redaction docs v2 - violet profond
+    "stark": "#f59e0b",    # communication - ambre (Iron Man)
 }
 COULEUR_DEFAUT = "#334155"
 
@@ -165,6 +166,9 @@ AGENTS = {
     "redacteur-v2": ("Redacteur des docs de la v2 (proposition, regles, conventions) -- mode conversation (reactive Cerberus sur fin de cycle)",
                 "cerveau-projet/agents/redacteur-v2/redacteur-v2.md",
                 "cerveau-projet/agents/redacteur-v2/corrections.md"),
+    "stark": ("Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation",
+                "cerveau-projet/freelance/stark/stark.md",
+                "cerveau-projet/freelance/stark/corrections.md"),
 }
 
 def get_agent_info(agent):
@@ -256,6 +260,23 @@ def instruction_demarrage(agent):
         "a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis\n"
         "ensuite les branches case par case ; si tu reprends apres une interruption,\n"
         "reprends a la case courante avec --case <cid> --reponses '<reponse>')."
+    ) % (agent, agent)
+
+
+def instruction_demarrage_v2(agent):
+    """Bloc DEMARRAGE V2 pour un agent FREELANCE active.
+    v0.5.30 : les agents freelance n'utilisent PAS les outils v1
+    (guider-parcours, activer-agent-principal) - JARVIS les remplace.
+    Demarrage : fiche + corrections puis ARBRE des decisions."""
+    return (
+        "DEMARRAGE V2 (agents freelance) : relis ta fiche puis tes corrections.\n"
+        "Pour toute action, suis TON arbre des decisions :\n"
+        "  cerveau-projet/freelance/%s/parcours/arbre-%s.json\n"
+        "(themes : selon ton arbre ; JARVIS = point d'entree OBLIGATOIRE pour\n"
+        "toute mission)\n"
+        "REGLE V2 : les agents freelance n'utilisent PAS les outils v1\n"
+        "(guider-parcours, activer-agent-principal) -- JARVIS les remplace :\n"
+        "tout passe par jarvis.py (envoyer/lire/acquitter/lister/activer)."
     ) % (agent, agent)
 
 
@@ -1152,8 +1173,13 @@ def activer_agent(session, agent, raison, mission=None, type_round="R"):
     # v0.5.4 : ajouter l'instruction de demarrage a la Raison quand un agent
     # (autre que Cerberus) est active - anti-bug d arret a la case c0.
     raison_finale = raison
-    if agent.lower() != "cerberus" and "DEMARRAGE OBLIGATOIRE" not in raison:
-        raison_finale = raison + "\n\n" + instruction_demarrage(agent)
+    if agent.lower() != "cerberus" and "DEMARRAGE" not in raison:
+        # v0.5.30 : les agents FREELANCE recoivent le bloc V2 (arbre +
+        # jarvis.py), les agents v1 conservent le bloc guider-parcours.
+        if "freelance" in fiche:
+            raison_finale = raison + "\n\n" + instruction_demarrage_v2(agent)
+        else:
+            raison_finale = raison + "\n\n" + instruction_demarrage(agent)
     champs = {
         "Nom Agent": agent,
         "Role Agent": role,

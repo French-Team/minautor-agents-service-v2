@@ -1,0 +1,387 @@
+---
+identite:
+  nom: conventions
+  version: 0.2.0
+  cree: 2026-08-22
+  type: reference
+  appartient_a: rogers
+  commun: false
+  tags: conventions, format, nommage, freelance, v2
+  mot-cles: ["conventions", "format", "nommage", "template", "structure", "v2"]
+  session: freelance
+# Conventions -- Equipe Freelance (v2)
+# Source : proposition-v2.md + D14 + D17
+
+> Rogers veille au respect de ces conventions.
+
+---
+
+## FORMAT DE FICHIERS
+
+| Convention | Regle |
+|---|---|
+| **Encodage** | UTF-8 (D4) |
+| **Fins de ligne** | CRLF (D4) |
+| **Emojis** | Autorises (D4) |
+| **Standard v1** | ASCII + LF (ne pas melanger) |
+| **Separation** | Deux standards coexistent, chacun dans son perimetre |
+
+---
+
+## NOMMAGE DES AGENTS
+
+| Convention | Regle |
+|---|---|
+| **Theme** | MARVEL (D14) |
+| **Format** | Nom propre anglais, majuscule initiale, sans accent |
+| **Exemples** | Stark, Rogers, Shuri, Forge, Parker, Romanoff, Banner |
+| **Perimetre** | session-freelance uniquement |
+| **Coexistence** | Les agents v1 gardent leurs noms (Cerberus, Buffy...) |
+
+---
+
+## STRUCTURE DES FICHIERS
+
+### Fiche d'agent (.md)
+```
+frontmatter:
+  identite: nom, version, cree, statut, grade, medaille, notation, mot-cles
+  type: fiche-agent
+  appartient_a: <agent>
+corps:
+  Vue d'ensemble
+  PARCOURS (source de verite)
+  REGLES ABSOLUES
+  Outils utilisables
+  Phases de mission
+```
+
+### Corrections (.md)
+```
+frontmatter: nom, version, type corrections
+corps:
+  Contexte de creation
+  REGLES specifiques
+  PHILOSOPHIE
+  LECONS
+```
+
+### Parcours (.json)
+```json
+{
+  "identite": { "type": "parcours", "appartient_a": "<agent>" },
+  "parcours": { "nom", "agent", "version", "case_depart", "description" },
+  "cases": { "c0": {...}, "c0b": {...}, "c1": {...}, ... }
+}
+```
+
+### Fichiers d'outils
+```
+<outil>/             <- P1/P2 : un dossier autonome par outil
+├── <outil>.md       <- mode d'emploi (contrat, P1)
+├── entry.py         <- point d'entree orchestrateur (P1, zero logique)
+├── fonctions/       <- une tache par fonction (P2)
+│   └── ...
+└── <outil>-data.json <- donnees editables (D15, zero valeur en dur)
+```
+
+### RACINE DU WORKSPACE -- os_path OBLIGATOIRE
+```
+TOUT outil detecte le workspace via os_path :
+    from racine import trouver_racine
+    RACINE = trouver_racine(__file__)
+INTERDIT : compter les niveaux en dur ("../../..") - source de bugs
+recurrents. La detection verifie (cherche AGENTS.md), elle ne compte pas.
+```
+
+---
+
+## NOMMAGE DES THEMES (arbre v2)
+
+| Convention | Regle |
+|---|---|
+| **Format** | MAJUSCULES, verbe d'action |
+| **Noms** | CREER, MODIFIER, LIRE, VALIDER, TESTER, REDIGER, NETTOYER, COORDONNER, EXPLORER, LECONS |
+| **Unicite** | Nom canonique unique par theme (P5) |
+| **Extensible** | Themes ajoutables/retirables sans casser l'arbre |
+
+---
+
+## NOMMAGE DES OUTILS
+
+| Convention | Regle |
+|---|---|
+| **Nom canonique** | Le catalogue est la SSOT (P5) |
+| **Alias** | Interdits dans les usages |
+| **Categorie** | Un dossier = une categorie (P2) |
+| **Structure** | 1 .md + 1 .py + 1 fichier donnees (D15) |
+
+---
+
+## NOMMAGE DES FICHIERS PRODUITS (2026-08-23)
+
+> Un fichier bien nomme est identifiable dans la structure sans l'ouvrir.
+> Le nommage simple sans prefixe/suffixe/date provoque doublons et
+> ambiguites - c'est un principe cle de reussite.
+
+**Format obligatoire pour tout fichier GENRE (rapport, test, doc genere) :**
+
+```
+<type>-<sujet>-<AAAAMMJJ>[HHmm].md
+
+<type>   : nature du fichier (rapport-test, rapport-audit, bilan...)
+<sujet>  : objet court en kebab-case (inter-round, protocole13...)
+<date>   : AAAAMMJJ + HHmm si plusieurs fichiers le meme jour
+```
+
+Exemples :
+- `rapport-test-inter-round-2026-08-23.md`
+- `rapport-test-protocole13-2026-08-23.md`
+- `bilan-securite-v2-20260823-1530.md`
+
+**Regles** :
+| Regle | Detail |
+|---|---|
+| **ASCII/kebab-case** | minuscules, tirets, pas d'espaces ni d'accents |
+| **Date obligatoire** | AAAAMMJJ toujours ; HHmm si risque de doublon le meme jour |
+| **Type en prefixe** | le type d'abord : les tris alphabetes groupent par nature |
+| **Pas de v2/final/new** | interdits (ambigus) : bumper la date ou l'heure a la place |
+
+---
+
+## CARTE D'IDENTITE (D17)
+
+Chaque fichier contient dans son frontmatter :
+- `nom` : nom de l'element
+- `version` : version actuelle
+- `cree` : date de creation
+- `statut` : actif / inactif / brouillon
+- `grade` : copper → iron → silver → gold → platinum → diamond
+- `medaille` : liste de recompenses
+- `notation` : score 0-100
+- `mot-cles` : tags de recherche
+
+---
+
+## TEMPLATE AGENT V2
+
+> Chaque nouvel agent suit CE template exact. Aucune deviation.
+
+### Emplacement
+```
+cerveau-projet/freelance/<agent>/
+├── <agent>.md          <- fiche agent (D17)
+├── corrections.md      <- fenetre glissante
+├── parcours/
+│   ├── arbre-<agent>.json   <- racine : choix du theme
+│   ├── theme-*.json         <- fichiers par theme
+│   └── fins.json            <- fins centralisees
+└── tools/              <- outils dedies (vide au depart)
+```
+
+### INTERDICTIONS ABSOLUES
+
+| Interdiction | Raison |
+|---|---|
+| **PAS de modification des outils v1** | La v2 est autonome. Aucun agent freelance ne touche a cerveau-projet/agents/tools/. |
+| **PAS de parcours lineaire** | Les parcours-*.json (cases c0→c8) sont INTERDITS. Chaque agent a un ARBRE DES DECISIONS. |
+| **PAS d'enregistrement dans activer-agent-principal** | Seul Stark est dans l'outil v1. Les autres agents sont actives par Stark via JARVIS. |
+| **MOTS-CLES minimum 5** | Chaque fichier v2 doit avoir au minimum 5 mots-cles dans son frontmatter. Pas d'exception. |
+| **RIEN SANS JARVIS** | Toute communication, toute mission, tout routage passe par JARVIS. Stark ne fait rien seul. |
+
+### Template fiche (<agent>.md)
+```yaml
+---
+identite:
+  nom: <NomMarvel>
+  version: 0.1.0
+  cree: YYYY-MM-DD
+  statut: actif
+  grade: copper          <- debutant
+  medaille: []           <- vide au depart
+  notation: 50           <- score initial
+  mot-cles: ["domaine", "v2", "marvel"]
+  type: fiche-agent
+  appartient_a: <agent>
+  commun: false
+  tags: ...
+  session: freelance
+  theme: MARVEL
+---
+# Fiche d'Agent -- <NomMarvel>
+# <Role en une phrase>
+
+agent:
+  nom-agent: "<agent>"
+  version: "0.1.0"
+  cree: "YYYY-MM-DD"
+  statut-<agent>: "disponible"
+  role_principal: false
+  famille: freelance
+  role_specifique: "<Description precise>"
+
+profil:
+  role-agent: "<Description complete du role>"
+  specialites: [...]
+  forces: [...]
+  faiblesses: [...]
+
+config:
+  style: "<Style de communication>"
+  detail: "Standard"
+  communication:
+    langage: "francais"
+    ton: "<Ton>"
+    format: "Markdown"
+  limites:
+    - "<Ce que l'agent ne fait PAS>"
+
+surcharges:
+  fichier_corrections: "corrections.md"
+  fichiers_lies: [...]
+---
+
+# <NomMarvel>
+> COMMANDE FONCTIONS : `<agent> --liste-fonctions`
+
+## Vue d'ensemble
+...
+## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
+...
+## REGLES ABSOLUES
+...
+## Outils utilisables
+...
+```
+
+### Template corrections (corrections.md)
+```yaml
+---
+identite:
+  nom: <NomMarvel>
+  version: 0.1.0
+  type: corrections
+  appartient_a: <agent>
+  commun: false
+---
+# Corrections -- <NomMarvel>
+> Fenetre glissante des lecons et corrections.
+> Cree le YYYY-MM-DD. Aucune correction a ce jour.
+
+## Contexte de creation
+- **Role** : ...
+- **Univers** : MARVEL -- ...
+- **Mode conversation** : Stark active -> FIN DE CYCLE -> j'ACTIVE Stark.
+- **Perimetre** : ...
+
+## REGLES specifiques
+| Regle | Description |
+|---|---|
+| **FIN DE CYCLE** | j'ACTIVE Stark (activer, pas reactiver) |
+
+## PHILOSOPHIE
+...
+## LECONS
+Aucune lecon a ce jour.
+```
+
+### Template parcours (parcours-<agent>.json)
+Cases obligatoires : c0 (relire), c0b (confirmation), c0c (lecons), c0d (doc outils), c0e (contexte), cU1-cU3 (comprendre outil), c1 (mission), c1ir (inter-round), c1e (reprise), c7 (nouvelle demande), c8 (FIN DE CYCLE -> Stark).
+
+---
+
+## TEMPLATE OUTIL V2
+
+> Chaque nouvel outil suit CE template exact.
+
+### Emplacement
+```
+Outil dedie:   cerveau-projet/freelance/<agent>/tools/<outil>/
+Outil commun:  cerveau-projet/freelance/tools-commun/<outil>/
+```
+
+### Structure
+```
+<outil>/
+├── <outil>.md       <- mode d'emploi (contrat, D7)
+├── entry.py         <- point d'entree orchestrateur (P1)
+├── fonctions/       <- fonctions simples, une tache chacune (P2)
+└── <outil>-data.json <- donnees editables (D15)
+```
+
+### Template .md
+```yaml
+---
+identite:
+  nom: <outil>
+  version: 0.1.0
+  cree: YYYY-MM-DD
+  type: outil
+  appartient_a: <agent ou commun>
+  commun: true/false
+  grade: silver        <- minimum pour creer un outil
+  mot-cles: [...]
+  session: freelance
+---
+# <Outil> -- <Description>
+> COMMANDE : `python3 <outil>.py --help`
+
+## Vue d'ensemble
+...
+## Commandes
+...
+## Regles
+...
+```
+
+### Template .py
+```python
+#!/usr/bin/env python3
+"""<Outil> -- <Description>"""
+import argparse, json, os, sys
+
+# RACINE : detection OBLIGATOIRE via os_path (jamais de "../.." comptes)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "os_path", "fonctions"))
+from racine import trouver_racine
+RACINE = trouver_racine(__file__)
+
+DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "<outil>-data.json")
+
+def charger_donnees():
+    with open(DATA_FILE, encoding="utf-8") as f:
+        return json.load(f)
+
+def main():
+    parser = argparse.ArgumentParser()
+    # ... commandes
+    args = parser.parse_args()
+    # ... logique
+
+if __name__ == "__main__":
+    main()
+```
+
+### Template -data.json
+```json
+{
+  "version": "0.1.0",
+  "description": "Donnees de l outil",
+  "elements": []
+}
+```
+
+---
+
+## AUTONOMIE V2
+
+**REGLE ABSOLUE** : la v2 n'utilise AUCUN outil v1.
+
+| Besoin | Outil v1 (INTERDIT) | Outil v2 (OBLIGATOIRE) |
+|---|---|---|
+| Activer un agent | activer-agent-principal.py | tools-commun/activer/ |
+| Lire un fichier | lire-fichier.py | tools-commun/lire/ |
+| Suivre un parcours | guider-parcours.py | tools-commun/guider/ |
+| Valider une carte | valider-cartes-decision.py | tools-commun/valider/ |
+| Communiquer | (pas d'outil) | tools-commun/jarvis/ |

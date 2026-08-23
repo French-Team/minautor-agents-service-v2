@@ -1,0 +1,20 @@
+{
+  "identite": {
+    "type": "donnees",
+    "appartient_a": "verrou-outils",
+    "version": "0.1.0",
+    "commun": true,
+    "description": "Registre des outils/combos proteges par la securite v2 - editable sans toucher au code (D15)"
+  },
+  "journal": "journal-acces.jsonl",
+  "tracer": "tout",
+  "proteges": {
+    "tools-commun/jarvis/jarvis.py": {"niveau": "modification", "habilite_unique": "vision"},
+    "tools-commun/jarvis/jarvis-server.py": {"niveau": "modification", "habilite_unique": "vision"},
+    "freelance/jarvis/*": {"niveau": "modification", "habilite_unique": "vision"},
+    "tools-commun/securite/lecteur-de-carte/cartes-data.json": {"niveau": "modification", "habilites": ["stark", "rogers"]},
+    "tools-commun/securite/verrou-outils/verrous-data.json": {"niveau": "modification", "habilites": ["stark", "rogers"]},
+    "outils/*": {"niveau": "execution"},
+    "combos/*": {"niveau": "execution"}
+  }
+}

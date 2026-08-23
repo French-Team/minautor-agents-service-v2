@@ -1,0 +1,37 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "vision",
+    "nom": "MODIFIER",
+    "description": "Modifier JARVIS (agent + serveur MCP) - rôle exclusif de Vision"
+  },
+  "theme": {
+    "nom": "MODIFIER",
+    "but": "Faire évoluer JARVIS sans jamais casser la communication de l'équipe",
+    "redirects": [
+      {
+        "besoin": "Modifier jarvis.py ou jarvis-server.py",
+        "action": "procedure",
+        "etapes": [
+          "Lire la demande et identifier le composant visé (jarvis.py / jarvis-server.py / fiche / arbre)",
+          "ANALYSE D'IMPACT : qui casse ? parité py/sh ? tests ? inboxes compatibles ?",
+          "Expliquer l'impact AVANT d'appliquer (règle absolue)",
+          "Appliquer la modification (ASCII strict, D4)",
+          "NON-REGRESSION : tester envoyer/lire/acquitter/lister/activer/bloques",
+          "Bumper la version du composant modifié"
+        ],
+        "regle": "REGLE ABSOLUE : SEUL Vision modifie JARVIS. Toute demande vient via JARVIS (de Stark)."
+      },
+      {
+        "besoin": "Refuser une demande",
+        "action": "procedure",
+        "etapes": [
+          "Vérifier que la demande fragilise la communication ou sort du périmètre",
+          "Refuser avec JUSTIFICATION écrite dans le bilan",
+          "Retourner le refus à Stark via jarvis.py envoyer"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

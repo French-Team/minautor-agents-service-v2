@@ -1,0 +1,27 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "fury",
+    "nom": "TESTER",
+    "description": "Comprendre la demande utilisateur, construire et lancer le scenario"
+  },
+  "theme": {
+    "nom": "TESTER",
+    "but": "Declencher un round reel et verifier chaque maillon",
+    "redirects": [
+      {
+        "besoin": "Executer un test reel",
+        "action": "procedure",
+        "etapes": [
+          " reformuler la demande de l utilisateur en SCENARIO ecrit (maillons attendus)",
+          "Verifier que MES combos de scenario sont disponibles (tools/ ou combos livres par Forge) - sinon le signaler dans le rapport (statut BLOQUE)",
+          "Temps 1 du combo : lui donner le scenario ; Temps 2 : l outil declenche le round (messages --activer entre maillons) ; Temps 3 : il retourne les traces",
+          "Verifier chaque maillon ATTENDU contre les traces REELLES (activations dans AGENTS.md, messages inbox/outbox, historique)",
+          "Verdict PASSE/ECHOUE avec preuves -> theme RAPPORTER"
+        ],
+        "regle": "REGLE ABSOLUE : Fury declenche et observe - il n est jamais destinataire des messages du round teste."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

@@ -1,0 +1,28 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "parker",
+    "description": "Toutes les fins possibles pour Parker"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour à la racine",
+      "action": "redirection",
+      "vers": "arbre-parker.json"
+    },
+    "fin-stark": {
+      "titre": "FIN DE CYCLE - Retour à Stark",
+      "action": "activer",
+      "cible": "stark",
+      "commande": "jarvis.py envoyer --de parker --vers stark --priorite 2 --objet 'Bilan' --corps '<bilan>'",
+      "regle": "Via JARVIS. Stark est mon coordinateur."
+    },
+    "fin-inter-round": {
+      "titre": "Fin d'inter-round",
+      "action": "activer",
+      "cible": "<agent_appelant>",
+      "commande": "jarvis.py envoyer --de parker --vers <agent_appelant> --priorite 1 --objet 'Reprise' --corps 'Reprends ton round'",
+      "regle": "Via JARVIS."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "version": "0.1.0",
+  "description": "<Description de l'outil>",
+  "champs": [
+    {
+      "nom": "<champ1>",
+      "type": "texte",
+      "requis": true,
+      "defaut": null,
+      "description": "<Description du champ>",
+      "valeurs": []
+    }
+  ],
+  "elements": []
+}

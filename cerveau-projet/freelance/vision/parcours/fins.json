@@ -1,0 +1,25 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "vision",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "FIN - Theme termine",
+      "description": "Le thème est traité : bilan présenté à l'utilisateur puis FIN DE CYCLE.",
+      "action": "Présenter le bilan, puis ACTIVER Stark (activer, pas reactiver) via jarvis.py ou activer-agent-principal si Stark n'est pas joignable."
+    },
+    "fin-refus": {
+      "titre": "FIN - Demande refusee",
+      "description": "Une demande de modification a été refusée avec justification.",
+      "action": "Retourner le refus à Stark via jarvis.py envoyer, puis FIN DE CYCLE (fin-theme)."
+    },
+    "fin-violation": {
+      "titre": "FIN - Violation de perimetre detectee",
+      "description": "JARVIS a été modifié par un autre agent que Vision.",
+      "action": "Signaler immédiatement à Stark via jarvis.py envoyer --priorite 1, documenter la violation, puis proposer la réparation."
+    }
+  }
+}

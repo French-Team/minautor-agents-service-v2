@@ -1,0 +1,72 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "rogers",
+    "nom": "LIRE",
+    "description": "Consulter, chercher, comprendre les règles, conventions et protocoles existants"
+  },
+  "theme": {
+    "nom": "LIRE",
+    "but": "Accéder à la connaissance des règles",
+    "redirects": [
+      {
+        "besoin": "Lire les règles immuables",
+        "action": "redirection",
+        "vers": {
+          "type": "fichier",
+          "chemin": "cerveau-projet/freelance/regles/regles-immuables.md",
+          "commande": "lire-fichier"
+        }
+      },
+      {
+        "besoin": "Lire les conventions",
+        "action": "redirection",
+        "vers": {
+          "type": "fichier",
+          "chemin": "cerveau-projet/freelance/conventions/conventions.md",
+          "commande": "lire-fichier"
+        }
+      },
+      {
+        "besoin": "Lire les protocoles",
+        "action": "redirection",
+        "vers": {
+          "type": "fichier",
+          "chemin": "cerveau-projet/freelance/protocoles/protocoles.md",
+          "commande": "lire-fichier"
+        }
+      },
+      {
+        "besoin": "Chercher une règle par mot-clé",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "rechercher-texte",
+          "parametres": {"dossier": "cerveau-projet/freelance/regles/"}
+        }
+      },
+      {
+        "besoin": "Consulter les leçons liées aux règles",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "consulter-lecons",
+          "parametres": {"agent": "rogers", "domaine": "regles"}
+        }
+      },
+      {
+        "besoin": "Voir l'activité récente",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "lire-activite-recente"
+        }
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

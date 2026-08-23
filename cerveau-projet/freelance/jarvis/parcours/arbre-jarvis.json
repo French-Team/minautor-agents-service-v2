@@ -1,0 +1,35 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "jarvis",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-jarvis",
+    "agent": "jarvis",
+    "description": "Arbre des decisions de JARVIS - l'intelligence derriere le serveur. Transforme les demandes de Stark en missions precise.",
+    "regles": {
+      "D1": "Chaque branche (theme) menent a des categories, qui menent aux cases d'execution.",
+      "D5": "Les cases d'un theme sont des REDIRECTIONS.",
+      "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
+      "D3": "Les passages d'un fichier a l'autre sont TRANSPARENTS."
+    }
+  },
+  "racine": {
+    "titre": "Choisir un theme",
+    "type": "question",
+    "question": "Quel theme ?",
+    "branches": [
+      {"reponse": "REPONDRE", "description": "Repondre directement a Stark via MES combos (sans deleguer)", "vers": "theme-repondre.json"},
+      {"reponse": "TRAITER", "description": "Transformer les demandes de Stark en missions", "vers": "theme-traiter.json"},
+      {"reponse": "DISTRIBUER", "description": "Envoyer les missions aux agents", "vers": "theme-distribuer.json"},
+      {"reponse": "SUIVRE", "description": "Verifier l'etat des agents, messages, rounds", "vers": "theme-suivre.json"},
+      {"reponse": "COORDONNER", "description": "Gerer les communications inter-agents", "vers": "theme-coordonner.json"}
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

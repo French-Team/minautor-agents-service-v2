@@ -1,0 +1,28 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "<agent>",
+    "description": "Toutes les fins possibles pour <NomMarvel>"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-<agent>.json"
+    },
+    "fin-stark": {
+      "titre": "FIN DE CYCLE - Retour a Stark",
+      "action": "envoyer",
+      "cible": "stark",
+      "commande": "jarvis.py envoyer --de <agent> --vers stark --priorite 2 --objet 'Bilan' --corps '<bilan>'",
+      "regle": "Via JARVIS."
+    },
+    "fin-inter-round": {
+      "titre": "Fin d'inter-round",
+      "action": "envoyer",
+      "cible": "<agent_appelant>",
+      "commande": "jarvis.py envoyer --de <agent> --vers <agent_appelant> --priorite 1 --objet 'Reprise' --corps 'Reprends ton round'",
+      "regle": "Via JARVIS."
+    }
+  }
+}

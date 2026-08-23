@@ -1,0 +1,34 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "vision",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-vision",
+    "agent": "vision",
+    "description": "Arbre des décisions de Vision - gardien exclusif de JARVIS (agent + serveur MCP). L'agent choisit UN THÈME au démarrage.",
+    "regles": {
+      "D1": "Chaque branche (thème) mène à des catégories, qui mènent aux cases d'exécution.",
+      "D5": "Les cases d'un thème sont des REDIRECTIONS.",
+      "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
+      "EXCLU": "SEUL Vision modifie JARVIS (freelance/jarvis/ + tools-commun/jarvis/)."
+    }
+  },
+  "racine": {
+    "titre": "Choisir un thème",
+    "type": "question",
+    "question": "Quel thème ?",
+    "branches": [
+      {"reponse": "MODIFIER", "description": "Modifier JARVIS (agent + server) - rôle exclusif", "vers": "theme-modifier.json"},
+      {"reponse": "TRAITER", "description": "Traiter une demande de modification reçue via JARVIS (de Stark)", "vers": "theme-traiter.json"},
+      {"reponse": "LIRE", "description": "Consulter l'état de JARVIS, les inboxes, l'historique", "vers": "theme-lire.json"},
+      {"reponse": "EXPLORER", "description": "Diagnostiquer un problème de communication", "vers": "theme-explorer.json"}
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisées"
+  }
+}

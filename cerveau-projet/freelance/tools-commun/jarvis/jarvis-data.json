@@ -1,0 +1,12 @@
+{
+  "agents": [
+    {"nom": "stark", "role": "Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation", "fiche": "cerveau-projet/freelance/stark/stark.md", "corrections": "cerveau-projet/freelance/stark/corrections.md"},
+    {"nom": "shuri", "role": "Constructrice des agents de la v2 -- mode conversation", "fiche": "cerveau-projet/freelance/shuri/shuri.md", "corrections": "cerveau-projet/freelance/shuri/corrections.md"},
+    {"nom": "forge", "role": "Responsable des outils v2 -- mode conversation", "fiche": "cerveau-projet/freelance/forge/forge.md", "corrections": "cerveau-projet/freelance/forge/corrections.md"},
+    {"nom": "rogers", "role": "Gardien des regles, conventions et protocoles -- mode conversation", "fiche": "cerveau-projet/freelance/rogers/rogers.md", "corrections": "cerveau-projet/freelance/rogers/corrections.md"},
+    {"nom": "parker", "role": "Explorateur / diagnostiqueur -- mode conversation", "fiche": "cerveau-projet/freelance/parker/parker.md", "corrections": "cerveau-projet/freelance/parker/corrections.md"},
+    {"nom": "jarvis", "role": "Centre de communication : distribue les missions de Stark et active les agents -- mode conversation", "fiche": "cerveau-projet/freelance/jarvis/jarvis.md", "corrections": ""},
+    {"nom": "vision", "role": "Gardien exclusif de JARVIS (agent + serveur MCP) -- mode conversation", "fiche": "cerveau-projet/freelance/vision/vision.md", "corrections": "cerveau-projet/freelance/vision/corrections.md"},
+    {"nom": "fury", "role": "Testeur reel HORS-ROUND -- prend la place de l'utilisateur pour lancer et verifier des rounds -- mode conversation", "fiche": "cerveau-projet/freelance/fury/fury.md", "corrections": "cerveau-projet/freelance/fury/corrections.md"}
+  ]
+}

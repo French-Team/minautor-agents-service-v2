@@ -1,0 +1,31 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "fury",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-fury",
+    "agent": "fury",
+    "description": "Arbre des decisions de Fury - testeur reel HORS-ROUND. Prend la place de l'utilisateur pour lancer et verifier des rounds.",
+    "regles": {
+      "D1": "Chaque branche (theme) mene a des categories, qui menent aux cases d'execution.",
+      "HORS-ROUND": "Fury n'est JAMAIS un maillon d'un round : il declenche, observe, rapporte."
+    }
+  },
+  "racine": {
+    "titre": "Choisir un theme",
+    "type": "question",
+    "question": "Quel theme ?",
+    "branches": [
+      {"reponse": "TESTER", "description": "Comprendre la demande, construire et lancer le scenario", "vers": "theme-tester.json"},
+      {"reponse": "LIRE", "description": "Consulter l'etat du systeme, les traces", "vers": "theme-lire.json"},
+      {"reponse": "RAPPORTER", "description": "Ecrire le rapport, envoyer le lien a JARVIS", "vers": "theme-rapporter.json"}
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

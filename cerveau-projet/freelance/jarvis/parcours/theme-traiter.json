@@ -1,0 +1,49 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "jarvis",
+    "nom": "TRAITER",
+    "description": "Transformer les demandes de Stark en missions precises"
+  },
+  "theme": {
+    "nom": "TRAITER",
+    "but": "Comprendre ce que Stark veut et creer une mission detaillee",
+    "redirects": [
+      {
+        "besoin": "Recevoir une demande de Stark",
+        "action": "procedure",
+        "description": "Stark envoie un message via JARVIS",
+        "etapes": [
+          "Lire le message de Stark",
+          "Identifier l'intention (creer, modifier, valider, explorer...)",
+          "Identifier le destinataire (Shuri, Forge, Rogers, Parker)",
+          "Formaliser la mission"
+        ]
+      },
+      {
+        "besoin": "Formaliser une mission",
+        "action": "procedure",
+        "description": "Transformer une demande vague en mission precise",
+        "etapes": [
+          "Definir l'objectif clair",
+          "Definir le destinataire (quel agent)",
+          "Definir les livrables (ce qui est attendu)",
+          "Definir les contraintes (regles, templates, conventions)",
+          "Definir l'echeance (quand c'est termine)"
+        ]
+      },
+      {
+        "besoin": "Valider la mission avec Stark",
+        "action": "procedure",
+        "description": "Confirmer que la mission correspond a la demande",
+        "etapes": [
+          "Resume la mission a Stark",
+          "Demander confirmation",
+          "Si OK -> DISTRIBUER",
+          "Si NON -> reformuler"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

@@ -1,0 +1,9 @@
+{"date": "2026-08-23T07:25:43.688771", "agent": "vision", "cible": "tools-commun/jarvis/jarvis.py", "verdict": "REFUSE", "raison": "carte refusee par le lecteur"}
+{"date": "2026-08-23T07:25:43.801413", "agent": "forge", "cible": "tools-commun/jarvis/jarvis.py", "verdict": "REFUSE", "raison": "habilitation exclusive: vision"}
+{"date": "2026-08-23T07:26:07.297492", "agent": "vision", "cible": "tools-commun/jarvis/jarvis.py", "verdict": "ACCEDE", "raison": ""}
+{"date": "2026-08-23T07:26:07.496155", "agent": "rogers", "cible": "tools-commun/securite/lecteur-de-carte/cartes-data.json", "verdict": "REFUSE", "raison": "carte refusee par le lecteur"}
+{"date": "2026-08-23T07:26:07.653941", "agent": "parker", "cible": "outils/creer-agent", "verdict": "REFUSE", "raison": "carte refusee par le lecteur"}
+{"date": "2026-08-23T07:26:33.673417", "agent": "rogers", "cible": "tools-commun/securite/lecteur-de-carte/cartes-data.json", "verdict": "ACCEDE", "raison": "liste d'habilites"}
+{"date": "2026-08-23T07:26:33.821960", "agent": "parker", "cible": "tools-commun/securite/lecteur-de-carte/cartes-data.json", "verdict": "REFUSE", "raison": "hors liste d'habilites"}
+{"date": "2026-08-23T07:26:33.979274", "agent": "stark", "cible": "combos/lire-activite", "verdict": "ACCEDE", "raison": ""}
+{"date": "2026-08-23T07:26:34.135412", "agent": "shuri", "cible": "outils/modifier-jarvis.py", "verdict": "REFUSE", "raison": "carte refusee par le lecteur"}

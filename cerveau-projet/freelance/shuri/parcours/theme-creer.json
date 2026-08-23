@@ -1,0 +1,91 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "shuri",
+    "nom": "CREER",
+    "description": "Créer un nouvel agent v2"
+  },
+  "theme": {
+    "nom": "CREER",
+    "but": "Construire un agent complet et opérationnel",
+    "redirects": [
+      {
+        "besoin": "Vérifier le nom MARVEL",
+        "action": "procedure",
+        "etapes": [
+          "Vérifier que le nom est un héros MARVEL en anglais (D14)",
+          "Vérifier que l'agent n'existe pas déjà",
+          "Vérifier le fichier proposition-v2.md pour la liste des noms autorisés"
+        ]
+      },
+      {
+        "besoin": "Créer la structure de l'agent",
+        "action": "procedure",
+        "etapes": [
+          "Créer le dossier freelance/<agent>/",
+          "Créer le sous-dossier parcours/",
+          "Créer le sous-dossier tools/ (vide au départ)"
+        ]
+      },
+      {
+        "besoin": "Créer la fiche <agent>.md",
+        "action": "procedure",
+        "etapes": [
+          "Suivre le template v2 exact (conventions.md)",
+          "Remplir le frontmatter (D17) : nom, version, cree, statut, grade, medaille, notation, mot-cles",
+          "Écrire la vue d'ensemble",
+          "Écrire les règles absolues",
+          "Écrire les citations du personnage"
+        ]
+      },
+      {
+        "besoin": "Créer corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "Suivre le template corrections v2",
+          "Documenter le contexte de création",
+          "Ajouter les règles spécifiques",
+          "Ajouter la philosophie"
+        ]
+      },
+      {
+        "besoin": "Créer l'arbre de décision",
+        "action": "procedure",
+        "etapes": [
+          "Définir les thèmes appropriés au rôle de l'agent",
+          "Créer arbre-<agent>.json (racine)",
+          "Créer les fichiers theme-<nom>.json pour chaque thème",
+          "Créer fins.json (fins centralisées)"
+        ]
+      },
+      {
+        "besoin": "INTERDIT: Enregistrer dans activer-agent-principal",
+        "action": "INTERDIT",
+        "raison": "La v2 est autonome. Seul Stark est dans activer-agent-principal. Les autres agents sont activés par Stark via JARVIS."
+      },
+      {
+        "besoin": "Mettre à jour les documents",
+        "action": "procedure",
+        "etapes": [
+          "Mettre à jour AGENTS.md",
+          "Mettre à jour proposition-v2.md",
+          "Ajouter l'agent dans la liste des agents freelance"
+        ]
+      },
+      {
+        "besoin": "Valider l'agent créé",
+        "action": "redirection",
+        "vers": {
+          "type": "theme",
+          "fichier": "theme-valider.json",
+          "besoin": "Valider un agent créé"
+        }
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

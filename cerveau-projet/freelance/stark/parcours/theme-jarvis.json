@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "stark",
+    "nom": "JARVIS",
+    "description": "Demander à JARVIS de traiter une demande (OBLIGATOIRE pour toute mission)"
+  },
+  "theme": {
+    "nom": "JARVIS",
+    "but": "Envoyer la demande à JARVIS qui traite, distribue aux agents, et fait le bilan",
+    "redirects": [
+      {
+        "besoin": "Confier une mission (distribution a un agent)",
+        "action": "procedure",
+        "description": "Stark envoie sa demande A JARVIS. SEUL JARVIS active les agents.",
+        "etapes": [
+          "Formuler la demande clairement (mission, contraintes, fin de cycle attendue)",
+          "Envoyer : jarvis.py envoyer --de stark --vers jarvis --priorite N --objet '...' --corps '...'",
+          "INTERDIT : jarvis.py activer, envoyer --vers <agent-direct>, lire l inbox d un autre agent",
+          "JARVIS lit, acquitte, choisit l agent et utilise jarvis.py activer",
+          "L agent traite puis renvoie son bilan a JARVIS",
+          "JARVIS fait le bilan et l envoie a Stark (--vers stark)",
+          "Stark reprend le controle"
+        ],
+        "regle": "REGLE ABSOLUE : Stark n appelle JAMAIS jarvis.py activer. SEUL JARVIS distribue."
+      },
+      {
+        "besoin": "Consulter l'etat de l'equipe (status, bloques)",
+        "action": "procedure",
+        "etapes": [
+          "jarvis.py lister --agent stark --tous (mes messages)",
+          "jarvis.py bloques (lecture globale autorisee : diagnostic de coordination)"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

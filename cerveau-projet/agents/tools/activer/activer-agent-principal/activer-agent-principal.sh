@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.29"
+VERSION="0.5.30"
 STATUT="prepare"
 
 # Configuration
@@ -50,6 +50,7 @@ get_agent_role() {
         "Socrate"|"socrate") echo "Conversateur de revision strategique -- discute et priorise les problemes" ;;
         "Redacteur-v2"|"redacteur-v2") echo "Redacteur des docs de la v2 (proposition, regles, conventions) -- mode conversation (reactive Cerberus sur fin de cycle)" ;;
         "Hades"|"hades") echo "Gardien des archives git -- SEUL habilite aux commandes git" ;;
+        "Stark"|"stark") echo "Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation" ;;
         *) echo "Agent inconnu" ;;
     esac
 }
@@ -77,6 +78,7 @@ get_agent_fiche() {
         "Socrate"|"socrate") echo "cerveau-projet/agents/socrate/socrate.md" ;;
         "Redacteur-v2"|"redacteur-v2") echo "cerveau-projet/agents/redacteur-v2/redacteur-v2.md" ;;
         "Hades"|"hades") echo "cerveau-projet/agents/hades/hades.md" ;;
+        "Stark"|"stark") echo "cerveau-projet/freelance/stark/stark.md" ;;
         *) echo "cerveau-projet/agents/inconnu/inconnu.md" ;;
     esac
 }
@@ -104,6 +106,7 @@ get_agent_corrections() {
         "Socrate"|"socrate") echo "cerveau-projet/agents/socrate/corrections.md" ;;
         "Redacteur-v2"|"redacteur-v2") echo "cerveau-projet/agents/redacteur-v2/corrections.md" ;;
         "Hades"|"hades") echo "cerveau-projet/agents/hades/corrections.md" ;;
+        "Stark"|"stark") echo "cerveau-projet/freelance/stark/corrections.md" ;;
         *) echo "cerveau-projet/agents/inconnu/corrections.md" ;;
     esac
 }
@@ -935,9 +938,24 @@ activer_agent() {
     local fiche=$(get_agent_fiche "$agent")
     local corrections=$(get_agent_corrections "$agent")
     # v0.5.4 : instruction de demarrage automatique (anti-bug arret a c0)
+    # v0.5.30 : les agents FREELANCE recoivent le bloc V2 (arbre + jarvis.py),
+    # les agents v1 conservent le bloc guider-parcours.
     local raison_finale="$raison"
-    if [ "$agent" != "cerberus" ] && [[ "$raison" != *"DEMARRAGE OBLIGATOIRE"* ]]; then
-        raison_finale="$raison
+    if [ "$agent" != "cerberus" ] && [[ "$raison" != *"DEMARRAGE"* ]]; then
+        case "$fiche" in
+            *freelance*)
+                raison_finale="$raison
+
+DEMARRAGE V2 (agents freelance) : relis ta fiche puis tes corrections.
+Pour toute action, suis TON arbre des decisions :
+  cerveau-projet/freelance/$agent/parcours/arbre-$agent.json
+(themes : selon ton arbre ; JARVIS = point d'entree OBLIGATOIRE pour toute mission)
+REGLE V2 : les agents freelance n'utilisent PAS les outils v1
+(guider-parcours, activer-agent-principal) -- JARVIS les remplace :
+tout passe par jarvis.py (envoyer/lire/acquitter/lister/activer)."
+            ;;
+            *)
+                raison_finale="$raison
 
 DEMARRAGE OBLIGATOIRE (v0.5.4) : lance ta mission depuis la case c0 avec :
 python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \\
@@ -946,6 +964,8 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \\
 avec --reponses NON pour relire d abord ; suis ensuite les branches case par
 case ; si tu reprends apres une interruption, reprends a la case courante
 avec --case <cid> --reponses '<reponse>')."
+            ;;
+        esac
     fi
     # v0.5.16 : chronometrage de l intervention (parite .py) - on ferme le
     # chrono de l agent precedent (passage de relais) et on ajoute sa duree

@@ -1,0 +1,30 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "parker",
+    "nom": "LIRE",
+    "description": "Consulter les fiches, les leçons, l'activité"
+  },
+  "theme": {
+    "nom": "LIRE",
+    "but": "Accéder à la connaissance",
+    "redirects": [
+      {
+        "besoin": "Lire une fiche d'agent",
+        "action": "redirection",
+        "vers": {"type": "outil", "commande": "lire-fichier"}
+      },
+      {
+        "besoin": "Consulter les leçons",
+        "action": "redirection",
+        "vers": {"type": "outil", "commande": "consulter-lecons"}
+      },
+      {
+        "besoin": "Voir l'activité récente",
+        "action": "redirection",
+        "vers": {"type": "outil", "commande": "lire-activite-recente"}
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

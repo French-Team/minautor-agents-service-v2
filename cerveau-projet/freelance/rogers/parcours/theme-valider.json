@@ -1,0 +1,84 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "rogers",
+    "nom": "VALIDER",
+    "description": "Vérifier, contrôler, auditer la conformité des règles"
+  },
+  "theme": {
+    "nom": "VALIDER",
+    "but": "Assurer que tout est conforme",
+    "redirects": [
+      {
+        "besoin": "Vérifier la cohérence des règles",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "valider-conventions",
+          "parametres": {"dossier": "cerveau-projet/freelance/"}
+        }
+      },
+      {
+        "besoin": "Auditer un fichier contre les règles",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Lire le fichier cible",
+            "Lire les règles applicables (regles-immuables.md)",
+            "Comparer chaque ligne aux règles",
+            "Lister les écarts",
+            "Classer par gravité (critique/mineur)"
+          ]
+        }
+      },
+      {
+        "besoin": "Vérifier un protocole",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Lire le protocole",
+            "Vérifier le cycle fondamental (Cerberus → Agent → Cerberus)",
+            "Vérifier la cohérence avec les règles existantes",
+            "Vérifier la traçabilité (R/IR)",
+            "Donner le verdict (CONFORME / A REVOIR)"
+          ]
+        }
+      },
+      {
+        "besoin": "Vérifier un arbre de décision",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Lire l'arbre (racine + thèmes)",
+            "Vérifier que chaque branche a une fin",
+            "Vérifier que les fichiers référencés existent",
+            "Vérifier la cohérence des redirections",
+            "Donner le verdict"
+          ]
+        }
+      },
+      {
+        "besoin": "Auditer un agent",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Lire la fiche de l'agent",
+            "Lire son arbre de décision",
+            "Vérifier que l'arbre respecte les thèmes (D8)",
+            "Vérifier que les fins sont correctes",
+            "Vérifier les grades et habilitations (D17)"
+          ]
+        }
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

@@ -90,6 +90,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 ```
 
 **Parcours** : [cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json](parcours/parcours-cerberus.json) (v0.3.3)
+**Parcours freelance** : [cerveau-projet/agents/cerberus/parcours/parcours-cerberus-freelance.json](parcours/parcours-cerberus-freelance.json) (v0.1.0) -- dedie aux agents MARVEL (session-freelance), sans Themis/Janus/Morpheus.
 **Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
 
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
