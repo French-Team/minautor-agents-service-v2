@@ -14,37 +14,18 @@ identite:
 
 ## Sessions LLM
 
-### Session : session-llm-2
-
-| Champ | Valeur |
-|---|---|
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-25 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | buffy (retour de mission) |
-| **Raison** | Test Mecano termine : 1 ecart detecte (doublon version/cree dans templates). 20 protocoles operationnels. Rapport produit. |
 ### Session : session-admin
 
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | glm5 |
-| **Nom Agent** | buffy |
-| **Role Agent** | Developpeur principal -- contenu et structures |
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
 | **Derniere mise a jour** | 2026-08-25 |
-| **Fiche** | [cerveau-projet/agents/buffy/buffy.md](cerveau-projet/agents/buffy/buffy.md) |
-| **Corrections** | [cerveau-projet/agents/buffy/corrections.md](cerveau-projet/agents/buffy/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | Mecano v0.6.0 : proto-13 scripts temporaires (harnais obligatoire, lifecycle complet : creer/executer/verifier/supprimer), combo-harnais-script-temporaire. 13 protocoles, 6 combos, 21 fichiers. |
-
-DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
-  cerveau-projet/agents/buffy/parcours/parcours-buffy.json --case c0
-(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
-a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
-ensuite les branches case par case ; si tu reprends apres une interruption,
-reprends a la case courante avec --case <cid> --reponses '<reponse>').
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | cerberus (retour de mission) |
+| **Raison** | Nettoyage termine. Retour a Cerberus. Commit 254 fichiers fait. |
 ### Session : session-freelance
 
 | Champ | Valeur |
@@ -69,9 +50,8 @@ tout passe par jarvis.py (envoyer/lire/acquitter/lister/activer).
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-2 | - | Cerberus | 2026-08-25 18:28:43.081986 |
+| session-admin | glm5 | Cerberus | 2026-08-25 18:32:19.082587 |
 | session-freelance | freebuff | stark | 2026-08-24 19:52:52.328436 |
-| session-admin | glm5 | buffy | 2026-08-25 09:22:20.918371 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

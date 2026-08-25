@@ -10,9 +10,27 @@
 
 (traite immediatement - la mission en cours est mise de cote en priorite)
 
+### 2026-08-25 -- URGENT : outil activer-agent-principal cree encore session-llm-N
+
+**Contexte** : l'outil activer-agent-principal.py utilise encore `PREFIXE_SESSION = "session-llm-"` pour creer de nouvelles sessions. Les sessions devraient etre nommees `session-admin` ou `session-freelance` (pas `session-llm-N`).
+
+**Fichier concerne** : cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py
+
+**Lignes concernees** : 108, 341, 343, 404
+
+**Action demandee a Vulcain** : corriger l'outil pour qu'il utilise les bons noms de sessions (`session-admin`, `session-freelance`) au lieu de `session-llm-N`.
+
 ## [attention]
 
 (prepare et place juste apres la mission en cours)
+
+### 2026-08-25 -- NETTOYAGE + COMMIT TERMINE
+
+**Contexte** : session-admin a fait un nettoyage complet. Commit 254 fichiers (57k insertions, 3k suppressions). Agent Mecano v1.0.0 cree (20 protocoles pour corriger freelance/).
+
+**Action demandee a JARVIS** : au prochain demarrage de session-freelance, verifie que les changements sont bien en place. Les agents v2 doivent respecter les 20 protocoles de Mecano si ils doivent etre modifies.
+
+**Verification** : au demarrage, lis ce message et confirme que tu l'as vu.
 
 ### 2026-08-24 -- Encarts activites separes par session (v1)
 

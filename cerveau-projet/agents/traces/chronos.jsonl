@@ -433,4 +433,4 @@
 {"date_debut": "2026-08-25 09:00:36", "session": "session-admin", "agent": "buffy", "date_fin": "2026-08-25 09:15:14", "duree_secondes": 878, "tokens_debut": null}
 {"date_debut": "2026-08-25 09:15:14", "session": "session-admin", "agent": "buffy", "date_fin": "2026-08-25 09:19:28", "duree_secondes": 254, "tokens_debut": null}
 {"date_debut": "2026-08-25 09:19:28", "session": "session-admin", "agent": "buffy", "date_fin": "2026-08-25 09:22:20", "duree_secondes": 172, "tokens_debut": null}
-{"date_debut": "2026-08-25 09:22:20", "session": "session-admin", "agent": "buffy", "date_fin": null, "duree_secondes": null, "tokens_debut": null}
+{"date_debut": "2026-08-25 09:22:20", "session": "session-admin", "agent": "buffy", "date_fin": "2026-08-25 18:32:19", "duree_secondes": 32999, "tokens_debut": null}

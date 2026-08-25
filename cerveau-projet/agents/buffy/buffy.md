@@ -135,7 +135,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 > **REGLE DELEGATION** : JE N'ECRIS JAMAIS UN OUTIL MOI-MEME (activer Vulcain). JE N'ECRIS PAS LES PENSE-BETES (activer Athena).
 
 > **ETAPE SYSTEME (choix .py/.sh)** : avant d'executer un outil, je consulte le profil systeme stocke (classeur-variables, variable profil-systeme) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
-> **ETAPE SESSION (profil-session -- MODE ID)** : au demarrage, je lance `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>` -- mon id m'est donne par l'utilisateur -- l'outil compare mon id aux sessions enregistrees et me rend MA session (id deja lie = retrouvee, id inconnu = prochaine libre + liaison). Je ne deduis JAMAIS ma session d'AGENTS.md. Puis je consulte le profil de MA session dans le classeur (variable `profil-session-<session-id>`) pour connaitre mon agent principal actuel et la session (session-llm-N).
+> **ETAPE SESSION (profil-session -- MODE ID)** : au demarrage, je lance `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>` -- mon id m'est donne par l'utilisateur -- l'outil compare mon id aux sessions enregistrees et me rend MA session (id deja lie = retrouvee, id inconnu = prochaine libre + liaison). Je ne deduis JAMAIS ma session d'AGENTS.md. Puis je consulte le profil de MA session dans le classeur (variable `profil-session-<session-id>`) pour connaitre mon agent principal actuel et la session (session-admin ou session-freelance).
 
 ---
 
