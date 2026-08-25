@@ -1,0 +1,218 @@
+{
+  "version": "0.1.0",
+  "description": "Config DYNAMIQUE du harnais-jarvis (D15) : chaque ecart de comportement de JARVIS est une REGLE editable ici, jamais dans le code. Le harnais scanne les files JARVIS (lecture seule), detecte les ecarts, et alerte le destinataire (vision) avec un message format JARVIS standard.",
+  "destinataire_alertes": "vision",
+  "destinataires_par_severite": {
+    "WARN": ["vision"],
+    "ERR": ["vision", "stark"],
+    "CRIT": ["vision", "stark"]
+  },
+  "expediteur_alertes": "jarvis-harnais",
+  "priorite_alerte": 1,
+  "fichiers_critiques": [
+    "jarvis.py",
+    "jarvis-server.py",
+    "jarvis-data.json",
+    "jarvis.md"
+  ],
+  "dossiers_critiques": [
+    "fonctions",
+    "serveur",
+    "combos",
+    "inbox",
+    "outbox",
+    "files",
+    "historique"
+  ],
+  "seuils": {
+    "activation_recente_jours": 14,
+    "mission_abandonnee_jours": 7,
+    "serveur_inactif_jours": 7,
+    "alerte_non_traitee_jours": 2,
+    "demande_non_traitee_jours": 7,
+    "historique_tolerance_minutes": 5
+  },
+  "user_demandes_path": "USER-DEMANDES.md",
+  "mots_cles_traitement": [
+    "traite", "fait", "termine", "resolu", "cloture", "[FAIT]",
+    "~~", "DONE", "STATUT: FAIT"
+  ],
+  "ecarts": [
+    {
+      "nom": "p1_non_lu",
+      "famille": "messages",
+      "severite": "ERR",
+      "actif": true,
+      "message": "message P1 bloquant non lu chez <agent> : <objet> -- l agent est BLOQUE, la boucle est cassee (lecon Stark 2026-08-25)",
+      "dedup_cle": "id_msg"
+    },
+    {
+      "nom": "hub_non_route",
+      "famille": "messages",
+      "severite": "ERR",
+      "actif": true,
+      "message": "message dans inbox/jarvis.jsonl jamais route (non lu) : <objet> -- un message envoye au hub SANS --activer reste bloque (lecon Stark 2026-08-25)",
+      "dedup_cle": "id_msg"
+    },
+    {
+      "nom": "message_non_transmis",
+      "famille": "messages",
+      "severite": "ERR",
+      "actif": true,
+      "message": "JARVIS n a PAS transmis l information : message <id> (<objet>) present dans outbox/<de> mais ABSENT de inbox/<vers> -- le destinataire ne l a jamais recu (boucle/round brise)",
+      "dedup_cle": "id_msg"
+    },
+    {
+      "nom": "message_non_trace",
+      "famille": "messages",
+      "severite": "WARN",
+      "actif": true,
+      "message": "message <id> (<objet>) present dans inbox/<vers> mais ABSENT de outbox/<de> -- transmission non tracee cote expediteur (asymetrie)",
+      "dedup_cle": "id_msg"
+    },
+    {
+      "nom": "agent_inconnu",
+      "famille": "messages",
+      "severite": "ERR",
+      "actif": true,
+      "message": "agent inconnu dans un message : <champ>=<valeur> (fichier <fichier>) -- valeur codee en dur ou agent fantome (lecon Forge : freebuff)",
+      "dedup_cle": "ligne"
+    },
+    {
+      "nom": "json_corrompu",
+      "famille": "messages",
+      "severite": "CRIT",
+      "actif": true,
+      "message": "ligne JSON corrompue dans <fichier> (ligne <n>) -- le serveur la SAUTE silencieusement : perte de message sans trace",
+      "dedup_cle": "ligne"
+    },
+    {
+      "nom": "message_sans_id",
+      "famille": "messages",
+      "severite": "WARN",
+      "actif": true,
+      "message": "message sans champ id dans <fichier> -- structure illisible, impossible a acquitter proprement",
+      "dedup_cle": "ligne"
+    },
+    {
+      "nom": "message_sans_date",
+      "famille": "messages",
+      "severite": "WARN",
+      "actif": true,
+      "message": "message sans champ date dans <fichier> -- tracabilite perdue",
+      "dedup_cle": "ligne"
+    },
+    {
+      "nom": "doublon_id",
+      "famille": "messages",
+      "severite": "WARN",
+      "actif": true,
+      "message": "doublon d id de message : <id> apparait <n> fois dans <fichier> -- acquittement ambigu",
+      "dedup_cle": "id"
+    },
+    {
+      "nom": "activation_demandee_non_traitee",
+      "famille": "activations",
+      "severite": "CRIT",
+      "actif": true,
+      "message": "DEMANDE D ACTIVATION non traitee par JARVIS : message reste dans le hub (non lu) : <objet> -- JARVIS n a PAS active l agent (lecon : boucle cassee)",
+      "dedup_cle": "id_msg"
+    },
+    {
+      "nom": "mission_non_demarree",
+      "famille": "activations",
+      "severite": "ERR",
+      "actif": true,
+      "message": "activation ecrite pour <agent> mais MISSION NON DEMARREE : message d activation non lu -- l agent n a jamais pris le relais (incarnation manquee, livraison directe non faite)",
+      "dedup_cle": "id_msg"
+    },
+    {
+      "nom": "activation_sans_historique",
+      "famille": "activations",
+      "severite": "WARN",
+      "actif": true,
+      "message": "activation recente envoyee a <agent> (<objet>) mais aucune trace dans l historique du serveur -- tracabilite absente (lecon Stark : maillons sautes)",
+      "dedup_cle": "id_msg"
+    },
+    {
+      "nom": "mission_abandonnee",
+      "famille": "files",
+      "severite": "WARN",
+      "actif": true,
+      "message": "mission en file depuis plus de <jours> jour(s) sans reprise : <mission> (statut <statut>) -- JARVIS ne reprend pas les missions en attente",
+      "dedup_cle": "mission"
+    },
+    {
+      "nom": "mission_sans_statut",
+      "famille": "files",
+      "severite": "WARN",
+      "actif": true,
+      "message": "mission en file sans champ statut : <mission> -- file illisible",
+      "dedup_cle": "ligne"
+    },
+    {
+      "nom": "structure_manquante",
+      "famille": "sante",
+      "severite": "CRIT",
+      "actif": true,
+      "message": "element critique manquant dans jarvis/ : <element> -- JARVIS est incomplet",
+      "dedup_cle": "element"
+    },
+    {
+      "nom": "syntaxe_invalide",
+      "famille": "sante",
+      "severite": "CRIT",
+      "actif": true,
+      "message": "syntaxe Python invalide dans <fichier> : <erreur> -- JARVIS ne peut pas demarrer",
+      "dedup_cle": "fichier"
+    },
+    {
+      "nom": "config_invalide",
+      "famille": "sante",
+      "severite": "CRIT",
+      "actif": true,
+      "message": "jarvis-data.json invalide ou agent sans fiche/corrections : <detail> -- la config des agents est cassee",
+      "dedup_cle": "detail"
+    },
+    {
+      "nom": "bak_accumules",
+      "famille": "proprete",
+      "severite": "WARN",
+      "actif": true,
+      "message": "fichier .bak accumule dans jarvis/ : <fichier> -- le nettoyage est oublie",
+      "dedup_cle": "fichier"
+    },
+    {
+      "nom": "serveur_inactif",
+      "famille": "sante",
+      "severite": "WARN",
+      "actif": false,
+      "message": "le serveur JARVIS (MCP) n a pas journalise depuis <jours> jour(s) (historique gelee) -- OBSOLETE : serveur supprime le 2026-08-23 (jarvis v0.9.2), la tracabilite vit desormais dans AGENTS-historique.md (ecart historique_agents_gele)",
+      "dedup_cle": "fixe"
+    },
+    {
+      "nom": "alerte_non_traitee",
+      "famille": "surveillance",
+      "severite": "ERR",
+      "actif": true,
+      "message": "ALERTE non traitee depuis <jours> jour(s) : <objet> (de <de>, inbox <agent>) -- l alerte (EDITH, harnais...) n a pas ete lue/acquittee : la boucle de reparation ne se ferme pas",
+      "dedup_cle": "id_msg"
+    },
+    {
+      "nom": "demande_utilisateur_non_traitee",
+      "famille": "surveillance",
+      "severite": "WARN",
+      "actif": true,
+      "message": "DEMANDE UTILISATEUR non traitee depuis <jours> jour(s) : <titre> (section <section>, USER-DEMANDES.md) -- la demande n est pas marquee traitee",
+      "dedup_cle": "titre"
+    },
+    {
+      "nom": "historique_agents_gele",
+      "famille": "surveillance",
+      "severite": "ERR",
+      "actif": true,
+      "message": "JARVIS n a PAS historise les activites dans AGENTS-historique.md : derniere activite <derniere_activite> mais derniere trace historique <derniere_trace> -- la tracabilite des agents est en retard (JARVIS doit historiser a CHAQUE action, pour lui et pour les agents)",
+      "dedup_cle": "fixe"
+    }
+  ]
+}

@@ -34,6 +34,12 @@
       "script": "surveillance/evaluer-agents.py",
       "actif": true,
       "intervalles_secondes": 600
+    },
+    {
+      "nom": "harnais-jarvis",
+      "script": "surveillance/harnais-jarvis.py",
+      "actif": true,
+      "intervalles_secondes": 300
     }
   ],
   "seuils_alerte": {
