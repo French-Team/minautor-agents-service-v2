@@ -24,6 +24,14 @@
 
 (prepare et place juste apres la mission en cours)
 
+### 2026-08-25 -- URGENT : verifier microsecondes dans freelance/
+
+**Contexte** : les microsecondes (6 chiffres) doivent etre remplacees par des millisecondes (3 chiffres). Les fichiers v1 sont corriges. Les fichiers freelance/ doivent etre verifies.
+
+**Fichiers concernes** : cerveau-projet/freelance/tools-commun/routines-server/observations/*.md (5 fichiers)
+
+**Action demandee a Mecano** : verifier et corriger les microsecondes dans les fichiers freelance/ en appliquant le Proto-17 (securite) ou le Proto-5 (outils) selon le type de fichier.
+
 ### 2026-08-25 -- NETTOYAGE + COMMIT TERMINE
 
 **Contexte** : session-admin a fait un nettoyage complet. Commit 254 fichiers (57k insertions, 3k suppressions). Agent Mecano v1.0.0 cree (20 protocoles pour corriger freelance/).
