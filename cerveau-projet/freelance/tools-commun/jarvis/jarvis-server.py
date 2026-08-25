@@ -36,7 +36,10 @@ def _charger_agents():
         donnees = json.loads(chemin.read_text(encoding="utf-8"))["agents"]
         return {a["nom"] for a in donnees if isinstance(a, dict) and "nom" in a}
     except (OSError, ValueError, KeyError):
-        return {"stark", "shuri", "forge", "rogers", "jarvis"}
+        # fallback ASSUME (valeur_en_dur signalee) : si jarvis-data.json
+        # est illisible, un set vide rendrait le serveur muet ; on garde
+        # un plancher minimal en attendant la reparation du data file.
+        return {"stark", "shuri", "forge", "rogers", "jarvis"}  # fallback assume
 
 AGENTS_VALIDES = _charger_agents()
 FILES_DIR = Path(__file__).parent / "files"
@@ -47,6 +50,13 @@ _sys.path.insert(0, str(Path(__file__).parent / 'serveur'))
 import logique_files as _files
 import logique_messages as _msg
 import logique_activations as _act
+
+# HARNAIS (PROTOCOLE 21) : l outil s auto-verifie au demarrage.
+_sys.path.insert(0, str(Path(__file__).parent.parent / "harnais" / "fonctions"))
+try:
+    from harnais import verifier_outil
+except ImportError:
+    verifier_outil = None
 
 # --- v0.11.0 : l'HORLOGE vit avec le serveur (decision utilisateur
 # 2026-08-24) - CHAQUE routine possede SON PROPRE tic (constructeur +
@@ -157,7 +167,7 @@ def acquitter_message(agent: str, id_message: str) -> str:
 
 
 @mcp.tool()
-def activer_agent(agent: str, mission: str, session: str = "", de: str = "stark") -> str:
+def activer_agent(agent: str, mission: str, session: str = "", de: str = "jarvis") -> str:
     """Activer un agent via JARVIS (message P1 + incarnation + livraison directe)."""
     sortie = _act.activer_agent(agent, mission, session, de, AGENTS_VALIDES,
                                 PRIORITE_BLOQUANTE)
@@ -334,6 +344,8 @@ def resource_config() -> str:
 # --- Point d'entree ---
 
 if __name__ == "__main__":
+    if verifier_outil is not None:
+        verifier_outil(str(Path(__file__).parent), agent="jarvis-server")
     import argparse
 
     parser = argparse.ArgumentParser(description="JARVIS - Serveur MCP")

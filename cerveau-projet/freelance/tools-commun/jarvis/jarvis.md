@@ -23,7 +23,7 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom** | JARVIS |
-| **Version** | 0.11.0 (py) -- chaine demarrage/arret ([AT-1] 2026-08-23) |
+| **Version** | 0.12.1 (py) -- encart tronque a 80 car. + journal chronologique (2026-08-25) |
 | **Role** | Bus de messages inter-agents |
 | **Responsable** | Forge (creation), Stark (usage) |
 | **Session** | freelance |
@@ -129,6 +129,26 @@ python3 jarvis.py arret [--session session-freelance]
 Resume de session (DEFCON, files, routines) + historisation. Les files
 sont persistees (JSONL) : rien a vider, la session est recoverable par
 `demarrage`.
+
+### Historiser a la demande
+```bash
+python3 jarvis.py historiser --agent <agent> --raison "<raison>" [--session session-freelance]
+```
+Trace une etape intermediaire SANS changer d'agent.
+
+**Journal chronologique (v0.12.1, 2026-08-25)** : chaque entree est
+ECRITE A DEUX ENDROITS dans AGENTS-historique.md :
+1. **L'encart** `Activites recentes -- <session>` (10 lignes max, vue rapide --
+   **raison tronquee a 80 caracteres** pour la lisibilite du tableau) ;
+2. **Le corps chronologique** `## JJ/MM/AAAA` / `### agent` / `- HH:MM | id | TYPE | raison`
+   (tracabilite longue avec le texte COMPLET, structure identique a la v1
+   pour coexister dans le meme fichier).
+
+Avant v0.12.0, tout ce qui sortait de l'encart (10 lignes) etait PERDU :
+la mission de base restait tracee mais tout le travail long d'un agent
+(non) disparaissait. Desormais rien ne se perd : la troncature de
+l'encart est une simple question de lisibilite, le texte complet vit
+dans le corps.
 
 ---
 

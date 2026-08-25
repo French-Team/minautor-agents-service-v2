@@ -318,6 +318,104 @@ def _detecter_activations(config, ecarts):
                                      objet=(msg.get("objet") or "")[:60]))
 
 
+def _detecter_valeurs_en_dur(config, ecarts):
+    """Valeurs codees en dur suspectes dans le CODE de JARVIS
+    (esprit P4/M5 du protocole 18 : SIGNALER, pas bloquer).
+
+    3 heuristiques prudentes sur jarvis/*.py (racine, fonctions/,
+    serveur/, combos/) :
+      1. p10_chemins_comptes : os.path.join/Path avec ".." ou .parent
+         repetes >= 2 SANS detection os_path/racine sur la ligne.
+      2. session_litterale : "session-..." code en dur (P4/M5).
+      3. agent_litteral : nom d'agent en litteral chaine alors qu'il
+         devrait venir de jarvis-data.json (D15) - lignes exclues :
+         commentaires, lecture du data file, dictionnaires AGENTS/
+         COULEURS, defaults documentes, tests.
+    Dedup par fichier:ligne:regle. Faux positifs possibles : c est un
+    signal WARN pour revue humaine, pas une erreur.
+    """
+    import re
+    regles = {r["nom"]: r for r in config.get("ecarts", [])}
+    r = regles.get("valeur_en_dur")
+    if not (r and r.get("actif")):
+        return
+    agents = sorted(_agents_valides(), key=len, reverse=True)
+    cibles = []
+    for racine_rel, sous in (("jarvis.py", ""), ("jarvis-server.py", ""),
+                             ("", "fonctions"), ("", "serveur"),
+                             ("", "combos"), ("", os.path.join("combos",
+                                                               "fonctions"))):
+        dossier = os.path.join(JARVIS_DIR, sous) if sous else JARVIS_DIR
+        if racine_rel:
+            cibles.append(os.path.join(dossier, racine_rel))
+        elif os.path.isdir(dossier):
+            for n in sorted(os.listdir(dossier)):
+                if n.endswith(".py") and not n.startswith("__"):
+                    cibles.append(os.path.join(dossier, n))
+    exclusions = re.compile(
+        r"(jarvis-data|_charger_agents|AGENTS_VALIDES|_agents_valides"
+        r"|NOTATEURS|dictionnaire|fallback|defaut|parite|#|\"\"\"|exemples"
+        # defaults CLI documentes : choix de config legitime, pas un
+        # oubli de D15 ; noms d'outil/serveur : auto-reference, pas un
+        # agent cible
+        r"|default=|verifier_outil|FastMCP\(|choices=|par=|getattr\("
+        r"|\.get\()",
+        re.IGNORECASE)
+    # 'jarvis' est le nom de l'outil lui-meme : toute occurrence dans
+    # son code est une auto-reference, jamais un agent code en dur.
+    agents_scan = [a for a in agents if a != "jarvis"]
+    for chemin in cibles:
+        rel = os.path.relpath(chemin, JARVIS_DIR).replace(os.sep, "/")
+        try:
+            with open(chemin, encoding="utf-8") as fh:
+                lignes = fh.readlines()
+        except (OSError, ValueError):
+            continue
+        vus = set()
+        for i, ligne in enumerate(lignes, 1):
+            # 1. P10 : niveaux comptes SANS detection os_path. Seuil 3 :
+            # remonter 1-2 niveaux INTRA-outil est legitime ; 3+, c est
+            # du comptage vers la racine projet.
+            compte_parent = (".." in ligne and 'os_path' not in ligne
+                             and "trouver_racine" not in ligne
+                             and ('"' in ligne or "'" in ligne)
+                             and len(re.findall(r'"[.]+"', ligne)) >= 3)
+            parents = len(re.findall(r"\.parent\b", ligne))
+            if compte_parent or parents >= 3:
+                cle = "%s:%d:p10" % (rel, i)
+                if cle not in vus:
+                    vus.add(cle)
+                    ecarts.append(_ecart(r, cle, fichier=rel,
+                                         detail="chemin compte en dur "
+                                                "(P10) ligne %d : %s"
+                                                % (i, ligne.strip()[:60])))
+                continue
+            # 2. P4/M5 : session litterale
+            if re.search(r"[\"']session-(freelance|admin|llm-\d)[\"']",
+                         ligne) and not exclusions.search(ligne):
+                cle = "%s:%d:session" % (rel, i)
+                if cle not in vus:
+                    vus.add(cle)
+                    ecarts.append(_ecart(r, cle, fichier=rel,
+                                         detail="session litterale "
+                                                "(P4/M5) ligne %d : %s"
+                                                % (i, ligne.strip()[:60])))
+                continue
+            # 3. D15 : agent en litteral chaine
+            for a in agents_scan:
+                if re.search(r"[\"']%s[\"']" % a, ligne) and \
+                        not exclusions.search(ligne):
+                    cle = "%s:%d:agent-%s" % (rel, i, a)
+                    if cle not in vus:
+                        vus.add(cle)
+                        ecarts.append(_ecart(
+                            r, cle, fichier=rel,
+                            detail="agent '%s' code en dur ligne %d "
+                                   "(D15) : %s" % (a, i,
+                                                   ligne.strip()[:50])))
+                    break
+
+
 def _detecter_files(config, ecarts):
     """Missions en file : sans statut, ou abandonnees (jamais reprises)."""
     regles = {r["nom"]: r for r in config.get("ecarts", [])}
@@ -763,6 +861,61 @@ def _detecter_surveillance(config, ecarts):
             except (ValueError, TypeError):
                 pass
 
+    # --- edith_silencieuse (cellule dormante muette) ---
+    # Seuil en MINUTES (dev : le signal EDITH [EDITH-EVALUATION] arrive
+    # toutes les 10 min via la routine evaluer-agents ; le harnais scanne
+    # toutes les 5 min. 15 min = 1 cycle manque + marge : un serveur mort
+    # est alerte sous ~15 min, sans faux positif quand tout va bien.)
+    r5 = regles.get("edith_silencieuse")
+    if r5 and r5.get("actif"):
+        seuil_minutes = int(seuils.get("edith_silencieuse_minutes", 15))
+        dernier_reveil = None
+        # Signaux de vie EDITH : messages type 'reveil' OU objet
+        # [EDITH-...] dans son outbox (outbox/edith.jsonl) et dans les
+        # inbox des destinataires (stark.jsonl, jarvis.jsonl...).
+        dossiers = [os.path.join(JARVIS_DIR, "outbox"),
+                    os.path.join(JARVIS_DIR, "inbox")]
+        for dossier in dossiers:
+            if not os.path.isdir(dossier):
+                continue
+            for nom_fichier in sorted(os.listdir(dossier)):
+                if not nom_fichier.endswith(".jsonl"):
+                    continue
+                if "edith" not in nom_fichier.lower() \
+                        and nom_fichier not in ("stark.jsonl",
+                                                "jarvis.jsonl"):
+                    continue
+                for _, _, msg in _lire_jsonl(
+                        os.path.join(dossier, nom_fichier)):
+                    if msg is None or msg.get("de") != "edith":
+                        continue
+                    objet = (msg.get("objet") or "")
+                    est_reveil = (
+                        msg.get("type") == "reveil"
+                        or "[EDITH" in objet.upper()
+                        or "[EDITH-REVEIL]" in objet.upper()
+                        or "[EDITH-EVALUATION]" in objet.upper())
+                    if not est_reveil:
+                        continue
+                    try:
+                        d = datetime.strptime(
+                            str(msg.get("date", ""))[:19],
+                            "%Y-%m-%dT%H:%M:%S")
+                    except (ValueError, TypeError):
+                        continue
+                    if dernier_reveil is None or d > dernier_reveil:
+                        dernier_reveil = d
+        if dernier_reveil is None:
+            ecarts.append(_ecart(r5, "fixe", minutes=seuil_minutes,
+                                 dernier_reveil="jamais"))
+        else:
+            age_min = ((maintenant.replace(tzinfo=None) - dernier_reveil)
+                       .total_seconds() / 60.0)
+            if age_min > seuil_minutes:
+                ecarts.append(_ecart(r5, "fixe", minutes=int(age_min),
+                                     dernier_reveil=dernier_reveil.strftime(
+                                         "%d/%m %H:%M")))
+
 
 # ------------------------------------------------------------------
 # API publique
@@ -779,6 +932,7 @@ def verifier_comportement(alerter=True):
     _detecter_messages(config, ecarts)
     _detecter_activations(config, ecarts)
     _detecter_files(config, ecarts)
+    _detecter_valeurs_en_dur(config, ecarts)
     _detecter_surveillance(config, ecarts)
     if not alerter:
         return ecarts, []

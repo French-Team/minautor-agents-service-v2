@@ -28,9 +28,7 @@
     "activation_recente_jours": 14,
     "mission_abandonnee_jours": 7,
     "serveur_inactif_jours": 7,
-    "alerte_non_traitee_jours": 2,
-    "demande_non_traitee_jours": 7,
-    "historique_tolerance_minutes": 5
+    "alerte_non_traitee_jours": 2,"demande_non_traitee_jours": 7, "historique_tolerance_minutes": 5, "edith_silencieuse_minutes": 15
   },
   "user_demandes_path": "USER-DEMANDES.md",
   "mots_cles_traitement": [
@@ -183,6 +181,14 @@
       "dedup_cle": "fichier"
     },
     {
+      "nom": "valeur_en_dur",
+      "famille": "proprete",
+      "severite": "WARN",
+      "actif": true,
+      "message": "valeur en dur suspecte dans <fichier> : <detail> -- heuristique P4/M5 (protocole 18) : signaler, pas bloquer ; a revoir si la valeur devrait venir de jarvis-data.json (D15) ou d os_path (P10)",
+      "dedup_cle": "ligne"
+    },
+    {
       "nom": "serveur_inactif",
       "famille": "sante",
       "severite": "WARN",
@@ -212,6 +218,14 @@
       "severite": "ERR",
       "actif": true,
       "message": "JARVIS n a PAS historise les activites dans AGENTS-historique.md : derniere activite <derniere_activite> mais derniere trace historique <derniere_trace> -- la tracabilite des agents est en retard (JARVIS doit historiser a CHAQUE action, pour lui et pour les agents)",
+      "dedup_cle": "fixe"
+    },
+    {
+      "nom": "edith_silencieuse",
+      "famille": "surveillance",
+      "severite": "ERR",
+      "actif": true,
+      "message": "EDITH n a PAS emis de reveil depuis <minutes> minute(s) (dernier: <dernier_reveil>) -- son serveur de routines ou detection.py ne tourne plus : la cellule dormante est muette (qui va detecter les modifications de perimetre ?)",
       "dedup_cle": "fixe"
     }
   ]
