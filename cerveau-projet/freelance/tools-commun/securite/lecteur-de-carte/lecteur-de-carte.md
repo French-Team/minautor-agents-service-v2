@@ -24,8 +24,8 @@ ou un combo. Il DECIDE (ACCEDE / REFUSE) ; le verrou APPLIQUE.
 ## Contrat
 
 ```
-python3 lecteur-de-carte.py verifier --agent <agent> --cible <nom> [--type outil|combo]
-python3 lecteur-de-carte.py lister   --agent <agent>
+python3 entry.py verifier --agent <agent> --cible <nom> [--type outil|combo]
+python3 entry.py lister   --agent <agent>
 ```
 
 - Sortie ACCEDE (code 0) ou REFUSE <raison> (code 1)

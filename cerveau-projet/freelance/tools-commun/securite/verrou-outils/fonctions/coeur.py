@@ -5,7 +5,7 @@
 #   appartient_a: commun
 #   commun: true
 """
-verrou-outils.py
+entry.py (delegue) -> fonctions/coeur.py
 
 Verrou sur les outils - securite v2. S'appelle AVANT d'utiliser un outil
 ou un combo protege. Il APPLIQUE la decision du lecteur-de-carte (le
@@ -27,14 +27,22 @@ import subprocess
 import sys
 from datetime import datetime
 
+# HARNAIS (PROTOCOLE 21) : l outil s auto-verifie au demarrage.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "harnais", "fonctions"))
+try:
+    from harnais import verifier_outil
+except ImportError:
+    verifier_outil = None
+
 VERSION = "0.1.0"
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_FILE = os.environ.get(
     "VERROUS_DATA", os.path.join(BASE_DIR, "verrous-data.json"))
 LECTEUR = os.environ.get(
     "LECTEUR_CARTE",
-    os.path.join(BASE_DIR, "..", "lecteur-de-carte", "lecteur-de-carte.py"))
+    os.path.join(BASE_DIR, "..", "lecteur-de-carte", "entry.py"))
 
 
 def charger_donnees():
@@ -153,9 +161,9 @@ def lister():
 def aide():
     print("verrou-outils v%s" % VERSION)
     print("Usage:")
-    print("  verrou-outils.py controler --agent <agent> --cible <chemin|nom> "
+    print("  entry.py controler --agent <agent> --cible <chemin|nom> "
           "[--type outil|combo]")
-    print("  verrou-outils.py lister")
+    print("  entry.py lister")
     print("Donnees: verrous-data.json (D15) | Journal: %s"
           % charger_donnees().get("journal", "-"))
     return 0
@@ -186,4 +194,6 @@ def main():
 
 
 if __name__ == "__main__":
+    if verifier_outil is not None:
+        verifier_outil(BASE_DIR, agent="verrou-outils")
     main()

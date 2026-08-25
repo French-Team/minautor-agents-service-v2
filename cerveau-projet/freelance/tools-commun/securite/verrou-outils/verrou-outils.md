@@ -29,8 +29,8 @@ agent -> outil protege -> VERROU -> LECTEUR DE CARTE -> ACCEDE -> execution
 ## Contrat
 
 ```
-python3 verrou-outils.py controler --agent <agent> --cible <chemin|nom> [--type outil|combo]
-python3 verrou-outils.py lister
+python3 entry.py controler --agent <agent> --cible <chemin|nom> [--type outil|combo]
+python3 entry.py lister
 ```
 
 - OUVERT (code 0) / REFUSE <raison> (code 1) / erreur (code 2)

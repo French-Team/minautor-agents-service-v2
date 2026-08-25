@@ -5,7 +5,7 @@
 #   appartient_a: commun
 #   commun: true
 """
-lecteur-de-carte.py
+entry.py (delegue) -> fonctions/coeur.py
 
 Lecteur de carte - securite v2. Verifie si un agent est habilite a utiliser
 un outil ou un combo. Les habilitations vivent dans cartes-data.json (D15).
@@ -27,9 +27,17 @@ import os
 import sys
 from datetime import datetime
 
+# HARNAIS (PROTOCOLE 21) : l outil s auto-verifie au demarrage.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "harnais", "fonctions"))
+try:
+    from harnais import verifier_outil
+except ImportError:
+    verifier_outil = None
+
 VERSION = "0.1.0"
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_FILE = os.environ.get(
     "CARTES_DATA", os.path.join(BASE_DIR, "cartes-data.json"))
 
@@ -92,9 +100,9 @@ def lister(agent):
 def aide():
     print("lecteur-de-carte v%s" % VERSION)
     print("Usage:")
-    print("  lecteur-de-carte.py verifier --agent <agent> --cible <nom> "
+    print("  entry.py verifier --agent <agent> --cible <nom> "
           "[--type outil|combo]")
-    print("  lecteur-de-carte.py lister --agent <agent>")
+    print("  entry.py lister --agent <agent>")
     print("Donnees: cartes-data.json (D15)")
     return 0
 
@@ -127,4 +135,6 @@ def main():
 
 
 if __name__ == "__main__":
+    if verifier_outil is not None:
+        verifier_outil(BASE_DIR, agent="lecteur-de-carte")
     main()
