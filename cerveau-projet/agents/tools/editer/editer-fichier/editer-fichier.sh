@@ -1,14 +1,14 @@
 #!/bin/bash
 # editer-fichier.sh
 # Remplacer une chaine par une autre dans un fichier
-# Version : 0.4.3
+# Version : 0.5.0
 # Statut : prepare
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.4.3"
+VERSION="0.5.0"
 STATUT="prepare"
 
 RED='\033[0;31m'

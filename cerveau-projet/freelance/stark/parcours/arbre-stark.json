@@ -10,21 +10,17 @@
     "agent": "stark",
     "description": "Arbre des décisions de Stark - coordinateur de l'équipe freelance. L'agent choisit UN THÈME au démarrage.",
     "regles": {
-      "D1": "Chaque branche (thème) mène à des catégories, qui mènent aux cases d'exécution.",
-      "D5": "Les cases d'un thème sont des REDIRECTIONS.",
-      "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
-      "D3": "Les passages d'un fichier à l'autre sont TRANSPARENTS."
+      "D1": "JARVIS est mon UNIQUE branche. Je ne fais QUE transmettre a JARVIS.",
+      "D5": "Stark est une PASSERELLE : je comprends ce que l'utilisateur veut et je le dis a JARVIS.",
+      "D6": "Je ne lis JAMAIS les messages, je ne diagnostique JAMAIS. Tout passe par JARVIS.",
+      "D3": "Stark -> JARVIS -> Agent habilite. Jamais Stark -> Agent directement."
     }
   },
   "racine": {
-    "titre": "Choisir un thème",
-    "type": "question",
-    "question": "Quel thème ?",
-    "branches": [
-      {"reponse": "JARVIS", "description": "Demander à JARVIS de traiter une demande (OBLIGATOIRE pour toute mission)", "vers": "theme-jarvis.json"},
-      {"reponse": "LIRE", "description": "Consulter l'activité, les messages JARVIS, l'état de l'équipe", "vers": "theme-lire.json"},
-      {"reponse": "EXPLORER", "description": "Diagnostiquer un problème", "vers": "theme-explorer.json"}
-    ]
+    "titre": "Transmettre a JARVIS",
+    "type": "action",
+    "texte": "Stark est une passerelle : je comprends ce que l'utilisateur veut et je le transmets a JARVIS. PAS DE CHOIX DE THEME. JARVIS est mon UNIQUE destination.",
+    "suivant": "theme-jarvis.json"
   },
   "fins": {
     "fichier": "fins.json",

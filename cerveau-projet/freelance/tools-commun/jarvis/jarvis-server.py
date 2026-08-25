@@ -48,6 +48,39 @@ import logique_files as _files
 import logique_messages as _msg
 import logique_activations as _act
 
+# --- v0.11.0 : l'HORLOGE vit avec le serveur (decision utilisateur
+# 2026-08-24) - CHAQUE routine possede SON PROPRE tic (constructeur +
+# decorateur dans horloge/fonctions/tic.py), avec un decalage initial
+# pour desenlever les declenchements. Intervalles lus du manifest (D15).
+
+def _demarrer_horloge():
+    outils = JARVIS_DIR.parent                      # tools-commun/
+    _sys.path.insert(0, str(outils / "horloge" / "fonctions"))
+    _sys.path.insert(0, str(JARVIS_DIR / "fonctions"))
+    try:
+        from tic import construire_tic, arreter_tous
+        from routines import infos_routines, executer_routine
+        journal = outils / "horloge" / "signaux.jsonl"
+        tics = []
+        rang = 0
+        for nom, _, intervalle, actif in infos_routines():
+            if not actif:
+                continue
+            # decalage : 15 s de plus par routine -> moments differents
+            tics.append(construire_tic(
+                intervalle,
+                lambda n=nom: executer_routine(n),
+                nom=f"horloge-{nom}",
+                journal=journal,
+                decalage=rang * 15))
+            rang += 1
+        return tics
+    except Exception as e:
+        print(f"[JARVIS-SERVER] horloge non demarree: {e}")
+        return []
+
+_TICS_HORLOGE = _demarrer_horloge()
+
 # --- Serveur MCP ---
 
 mcp = FastMCP("jarvis", instructions="JARVIS - Hub de communication et coordination pour l'equipe freelance v2.")

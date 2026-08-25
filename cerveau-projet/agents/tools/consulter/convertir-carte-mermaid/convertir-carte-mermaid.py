@@ -8,6 +8,12 @@ de verite) en graphes Mermaid (.mmd) ET en images SVG par agent, dans le
 dossier versionne cerveau-projet/cartes-vues/mermaid/ (toujours DANS
 cerveau-projet).
 
+Depuis la v0.3.0 (2026-08-24, demande utilisateur) : convertit aussi les
+ARBRES de decision v2 (freelance/<agent>/parcours/arbre-<agent>.json) en
+.mmd + .svg dans cerveau-projet/cartes-vues/arbres/. Les agents v2 ont un
+ARBRE (racine -> themes -> fins centralisees dans fins.json), pas une carte
+(cases) : --arbres genere la vue graphique de chaque arbre.
+
 Regles de rendu (.mmd) :
   - case_depart -> noeud START (stadium)
   - case avec branches non vides (question, controle, action a choix)
@@ -31,6 +37,7 @@ Usage:
   python3 convertir-carte-mermaid.py --agent <nom>
   python3 convertir-carte-mermaid.py --agent <nom> --svg
   python3 convertir-carte-mermaid.py --tous [--sortie <dossier>]
+  python3 convertir-carte-mermaid.py --arbres [--agent <nom>]
   python3 convertir-carte-mermaid.py --verifier
   python3 convertir-carte-mermaid.py --version | --aide
 
@@ -38,12 +45,15 @@ Options:
   --agent <nom>    Convertir la carte d un seul agent (.mmd)
   --svg            Ajouter le rendu SVG (avec --agent)
   --tous           Toutes les cartes : .mmd + .svg + index.md
-  --sortie <d>     Dossier de sortie (defaut: cerveau-projet/cartes-vues/mermaid)
+  --arbres         Les ARBRES v2 (freelance/*/parcours/arbre-*.json) :
+                   .mmd + .svg + index.md dans cartes-vues/arbres/
+  --sortie <d>     Dossier de sortie (defaut: cartes-vues/mermaid ;
+                   cartes-vues/arbres pour --arbres)
   --verifier       Verifier la synchronisation cartes <-> .mmd <-> .svg (rc=0 si OK)
   --version        Affiche la version
   --aide           Affiche cette aide
 
-Version : 0.2.1
+Version : 0.3.0
 """
 import argparse
 import glob
@@ -53,7 +63,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.1"
+VERSION = "0.3.0"
 STATUT = "prepare"
 
 GREEN = "\033[0;32m"
@@ -122,6 +132,40 @@ def echapper(texte):
     """Echappe un titre pour un libelle mermaid (entre guillemets)."""
     t = (texte or "").replace("\\", "\\\\").replace('"', '\\"')
     t = t.replace("\n", " ").replace("\r", " ").strip()
+    return t
+
+
+def asciifier(texte):
+    """Remplace les caracteres non-ASCII d un libelle par leur equivalent
+    ASCII (norme ASCII strict des fichiers du cerveau). Les libelles des
+    arbres v2 peuvent porter des accents (ex: 'Envoyer la demande a JARVIS').
+    Les entrees sont ecrites en sequences \\u pour rester en ASCII pur."""
+    table = {
+        "\u00e0": "a", "\u00e1": "a", "\u00e2": "a", "\u00e3": "a",
+        "\u00e4": "a", "\u00e5": "a", "\u00e7": "c", "\u00e8": "e",
+        "\u00e9": "e", "\u00ea": "e", "\u00eb": "e", "\u00ec": "i",
+        "\u00ed": "i", "\u00ee": "i", "\u00ef": "i", "\u00f1": "n",
+        "\u00f2": "o", "\u00f3": "o", "\u00f4": "o", "\u00f5": "o",
+        "\u00f6": "o", "\u00f9": "u", "\u00fa": "u", "\u00fb": "u",
+        "\u00fc": "u", "\u00fd": "y", "\u00ff": "y",
+        "\u00c0": "A", "\u00c1": "A", "\u00c2": "A", "\u00c3": "A",
+        "\u00c4": "A", "\u00c5": "A", "\u00c7": "C", "\u00c8": "E",
+        "\u00c9": "E", "\u00ca": "E", "\u00cb": "E", "\u00cc": "I",
+        "\u00cd": "I", "\u00ce": "I", "\u00cf": "I", "\u00d1": "N",
+        "\u00d2": "O", "\u00d3": "O", "\u00d4": "O", "\u00d5": "O",
+        "\u00d6": "O", "\u00d9": "U", "\u00da": "U", "\u00db": "U",
+        "\u00dc": "U", "\u00dd": "Y", "\u0153": "oe", "\u0152": "OE",
+        "\u00e6": "ae", "\u00c6": "AE", "\u2018": "'", "\u2019": "'",
+        "\u201c": '"', "\u201d": '"', "\u2013": "-", "\u2014": "-",
+        "\u2026": "...", "\u2192": "->", "\u2190": "<-", "\u2194": "<->",
+        "\u2191": "^", "\u2193": "v", "\u00b7": "-", "\u2022": "-",
+        "\u2713": "OK", "\u2714": "OK", "\u2717": "KO", "\u2718": "KO",
+        "\u2605": "*", "\u2606": "*", "\u2705": "[OK]", "\u274c": "[KO]",
+        "\u2764": "<3", "\u00a0": " ", "\u2011": "-",
+    }
+    t = texte or ""
+    for k, v in table.items():
+        t = t.replace(k, v)
     return t
 
 
@@ -197,6 +241,237 @@ def convertir(donnees):
     entete = "%%%% Carte de decision de %s (parcours v%s)" % (
         agent_du_parcours(donnees), parcours.get("version", "?"))
     return entete + "\n" + "\n".join(lignes) + "\n", avertissements
+
+
+def lister_arbres(racine):
+    """Liste les ARBRES de decision v2 (freelance/<agent>/parcours/arbre-*.json)."""
+    motif = os.path.join(racine, "cerveau-projet", "freelance", "*",
+                         "parcours", "arbre-*.json")
+    return sorted(glob.glob(motif))
+
+
+def agent_de_l_arbre(chemin):
+    """Agent = nom du dossier parent du parcours (freelance/<agent>/parcours/)."""
+    return os.path.basename(os.path.dirname(os.path.dirname(chemin)))
+
+
+def charger_json(chemin):
+    """Charge un JSON (arbre, theme, fins) avec encodage utf-8."""
+    with io.open(chemin, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def slugifier(texte):
+    """Id mermaid sur [A-Za-z0-9_-] depuis un libelle (ex: 'JARVIS' -> 'JARVIS')."""
+    return re.sub(r"[^A-Za-z0-9_-]+", "-", (texte or "").strip()).strip("-")
+
+
+def convertir_arbre(chemin_arbre):
+    """Convertit un ARBRE de decision v2 en texte mermaid.
+
+    Structure v2 : arbre-<agent>.json -> racine (question + branches vers
+    theme-*.json) -> theme (redirects: besoin -> action/procedure + fin vers
+    fins.json) -> fins centralisees. Rendu :
+      START -> RACINE (losange question)
+      RACINE --reponse--> THEME-<nom> (rectangle, but du theme)
+      THEME -> BESOIN-<i> (rectangle, chaque redirect) OU -> FIN directement
+      BESOIN/FIN -> FIN-<case> (stadium, depuis fins.json)
+    Retourne (texte, avertissements)."""
+    donnees = charger_json(chemin_arbre)
+    arbre = donnees.get("arbre", {})
+    racine = donnees.get("racine", {})
+    agent = arbre.get("agent") or agent_de_l_arbre(chemin_arbre)
+    version = arbre.get("version") or donnees.get("identite", {}).get("version", "?")
+    dossier = os.path.dirname(chemin_arbre)
+    avertissements = []
+
+    # Fins centralisees (fins.json)
+    fins = {}
+    nom_fins = (donnees.get("fins", {}) or {}).get("fichier", "fins.json")
+    chemin_fins = os.path.join(dossier, nom_fins)
+    if os.path.isfile(chemin_fins):
+        try:
+            fins = charger_json(chemin_fins).get("fins", {})
+        except Exception as e:
+            avertissements.append("fins.json illisible: %s" % e)
+
+    lignes = []
+    lignes.append("flowchart TD")
+    lignes.append('    START(["Debut"]) --> RACINE')
+    question = asciifier(racine.get("question") or racine.get("titre", "Choisir un theme"))
+    lignes.append('    RACINE{"%s"}' % echapper(question))
+
+    # Parcourir les branches de la racine -> themes
+    for i, b in enumerate(racine.get("branches", [])):
+        reponse = b.get("reponse", "?")
+        vers = b.get("vers")
+        id_theme = "THEME-%s" % slugifier(reponse) or ("THEME-%d" % i)
+        lignes.append('    RACINE -- "%s" --> %s' % (echapper(reponse), id_theme))
+        if not vers:
+            avertissements.append("%s: branche sans vers" % reponse)
+            continue
+        chemin_theme = os.path.join(dossier, vers)
+        theme = {}
+        fin_theme = {}
+        if os.path.isfile(chemin_theme):
+            try:
+                dtheme = charger_json(chemin_theme)
+                theme = dtheme.get("theme", {})
+                fin_theme = dtheme.get("fin", {})
+            except Exception as e:
+                avertissements.append("%s illisible: %s" % (vers, e))
+        but = asciifier(theme.get("but") or theme.get("nom") or reponse)
+        lignes.append('    %s["%s"]' % (id_theme, echapper(but)[:60]))
+        # redirects (besoins) du theme
+        redirects = theme.get("redirects", [])
+        cibles = []
+        if redirects:
+            for j, r in enumerate(redirects):
+                id_besoin = "%s-B%d" % (id_theme, j)
+                besoin = asciifier(r.get("besoin") or r.get("action") or "action %d" % j)
+                lignes.append('    %s -- "besoin %d" --> %s'
+                              % (id_theme, j + 1, id_besoin))
+                lignes.append('    %s["%s"]' % (id_besoin, echapper(besoin)[:60]))
+                cibles.append(id_besoin)
+        else:
+            cibles.append(id_theme)
+        # fin du theme -> fins.json
+        nom_case = fin_theme.get("case") if fin_theme.get("type") == "lien" else None
+        id_fin = "FIN-%s" % slugifier(nom_case or "theme")
+        fin_titre = "FIN"
+        if nom_case and nom_case in fins:
+            fin_titre = asciifier(fins[nom_case].get("titre", nom_case))
+        if id_fin not in lignes and not any(l.startswith("    %s([" % id_fin)
+                                            for l in lignes):
+            lignes.append('    %s(["%s"])' % (id_fin, echapper(fin_titre)[:60]))
+        for c in cibles:
+            lignes.append("    %s --> %s" % (c, id_fin))
+
+    entete = "%%%% Arbre de decision de %s (arbre v%s)" % (agent, version)
+    return entete + "\n" + "\n".join(lignes) + "\n", avertissements
+
+
+def ids_arbre(texte_mmd):
+    """Extrait les ids de noeuds d un .mmd d arbre (pour verifier_syntaxe)."""
+    ids = set(["START", "FIN-APPELANT"])
+    for ligne in texte_mmd.splitlines():
+        ligne = ligne.strip()
+        if not ligne or ligne.startswith("%%") or ligne == "flowchart TD":
+            continue
+        if "-->" in ligne:
+            src = ligne.split(" --> ")[0]
+            src = src.split(' -- "')[0].strip()
+            m = re.match(r"^([A-Za-z0-9_-]+)", src)
+            if m:
+                ids.add(m.group(1))
+            cible = ligne.split(" --> ")[-1].replace('"', "").strip()
+            m2 = re.match(r"^([A-Za-z0-9_-]+)", cible)
+            if m2:
+                ids.add(m2.group(1))
+        else:
+            m = re.match(r"^([A-Za-z0-9_-]+)", ligne)
+            if m:
+                ids.add(m.group(1))
+    return ids
+
+
+def verifier_arbres(racine, dossier_sortie):
+    """Verifie la synchronisation arbres v2 <-> .mmd (et .svg si present).
+    Ne ECRIT rien : compare les fichiers existants au contenu attendu.
+    Retourne rc (0 = OK)."""
+    erreurs = []
+    arbres = lister_arbres(racine)
+    for a in arbres:
+        agent_arbre = agent_de_l_arbre(a)
+        texte, _ = convertir_arbre(a)
+        chemin = os.path.join(dossier_sortie, agent_arbre + ".mmd")
+        if not os.path.isfile(chemin):
+            erreurs.append("%s: .mmd manquant" % agent_arbre)
+        else:
+            with io.open(chemin, encoding="ascii") as fh:
+                if fh.read() != texte:
+                    erreurs.append("%s: .mmd non synchronise avec l arbre"
+                                   % agent_arbre)
+        donnees = charger_json(a)
+        version_arbre = (donnees.get("arbre", {}).get("version")
+                         or donnees.get("identite", {}).get("version", "?"))
+        svg = rendre_svg(texte, agent_arbre, version_arbre)
+        chemin_svg = os.path.join(dossier_sortie, agent_arbre + ".svg")
+        if not os.path.isfile(chemin_svg):
+            erreurs.append("%s: .svg manquant" % agent_arbre)
+        else:
+            with io.open(chemin_svg, encoding="ascii") as fh:
+                if fh.read() != svg:
+                    erreurs.append("%s: .svg non synchronise avec l arbre"
+                                   % agent_arbre)
+    if erreurs:
+        print(RED + "==> %d incoherence(s) arbres :" % len(erreurs) + NC)
+        for e in erreurs:
+            print("  - " + e)
+        return 1
+    print(GREEN + "==> %d arbres v2 synchronises avec leur .mmd et .svg : OK"
+          % len(arbres) + NC)
+    return 0
+
+
+def generer_arbres(racine, agent, dossier_sortie, avec_index=False, avec_svg=True):
+    """Genere .mmd + .svg pour les ARBRES v2. Retourne le compte."""
+    os.makedirs(dossier_sortie, exist_ok=True)
+    arbres = lister_arbres(racine)
+    nb = 0
+    for a in arbres:
+        agent_arbre = agent_de_l_arbre(a)
+        if agent and agent_arbre != agent:
+            continue
+        texte, avis = convertir_arbre(a)
+        erreurs_syntaxe = verifier_syntaxe(texte, dict((i, {}) for i in ids_arbre(texte)))
+        nom = agent_arbre
+        chemin = os.path.join(dossier_sortie, nom + ".mmd")
+        with io.open(chemin, "w", encoding="ascii", newline="\n") as fh:
+            fh.write(texte)
+        ligne = "  %s.mmd : %d lignes%s%s" % (
+            nom, len(texte.splitlines()),
+            " (%d avis)" % len(avis) if avis else "",
+            " (%d SYNTAXE KO)" % len(erreurs_syntaxe) if erreurs_syntaxe else "")
+        if avec_svg:
+            donnees = charger_json(a)
+            version_arbre = (donnees.get("arbre", {}).get("version")
+                             or donnees.get("identite", {}).get("version", "?"))
+            svg = rendre_svg(texte, nom, version_arbre)
+            chemin_svg = os.path.join(dossier_sortie, nom + ".svg")
+            with io.open(chemin_svg, "w", encoding="ascii", newline="\n") as fh:
+                fh.write(svg)
+            ligne += "  + %s.svg : %d octets" % (nom, len(svg.encode("ascii")))
+        print(ligne)
+        for av in avis[:5]:
+            print("      - %s" % av)
+        for e in erreurs_syntaxe[:5]:
+            print("      [SYNTAXE] %s" % e)
+        nb += 1
+    if avec_index:
+        lignes = ["# Arbres de decision v2 - vues Mermaid", "",
+                  "Genere par convertir-carte-mermaid (source de verite : "
+                  "freelance/<agent>/parcours/arbre-<agent>.json).", "",
+                  "| Agent | Arbre | Version | Vue | Image |",
+                  "|---|---|---|---|---|"]
+        for a in arbres:
+            agent_arbre = agent_de_l_arbre(a)
+            if agent and agent_arbre != agent:
+                continue
+            donnees = charger_json(a)
+            arbre_info = donnees.get("arbre", {})
+            version_arbre = (arbre_info.get("version")
+                             or donnees.get("identite", {}).get("version", "?"))
+            lignes.append("| %s | %s | %s | [%s.mmd](%s.mmd) | "
+                          "[%s.svg](%s.svg) |"
+                          % (agent_arbre, arbre_info.get("nom", "?"),
+                             version_arbre,
+                             agent_arbre, agent_arbre, agent_arbre, agent_arbre))
+        chemin = os.path.join(dossier_sortie, "index.md")
+        with io.open(chemin, "w", encoding="ascii", newline="\n") as fh:
+            fh.write("\n".join(lignes) + "\n")
+        print("  index.md (arbres v2) ecrit")
+    return nb
 
 
 def verifier_syntaxe(texte, cases):
@@ -625,8 +900,12 @@ def construire_parser():
                         help="Generer aussi le rendu SVG (avec --agent)")
     parser.add_argument("--tous", action="store_true",
                         help="Convertir toutes les cartes : .mmd + .svg + index")
+    parser.add_argument("--arbres", action="store_true",
+                        help="Convertir les ARBRES de decision v2 (freelance/*/parcours/arbre-*.json)"
+                             " : .mmd + .svg + index")
     parser.add_argument("--sortie", default="",
-                        help="Dossier de sortie (defaut: cartes-vues/mermaid)")
+                        help="Dossier de sortie (defaut: cartes-vues/mermaid ; "
+                             "cartes-vues/arbres pour --arbres)")
     parser.add_argument("--verifier", action="store_true",
                         help="Verifier la synchronisation cartes <-> .mmd <-> .svg")
     parser.add_argument("--version", action="store_true",
@@ -644,22 +923,35 @@ def main():
     if args.aide:
         print(__doc__)
         return 0
-    if not (args.agent or args.tous or args.verifier):
-        print("[ERREUR] Fournir --agent <nom>, --tous ou --verifier (--aide)")
+    if not (args.agent or args.tous or args.arbres or args.verifier):
+        print("[ERREUR] Fournir --agent <nom>, --tous, --arbres ou --verifier (--aide)")
         return 2
 
     racine = racine_projet()
-    sortie = args.sortie or os.path.join(racine, "cerveau-projet",
-                                         "cartes-vues", "mermaid")
+    sortie_mermaid = args.sortie or os.path.join(racine, "cerveau-projet",
+                                                 "cartes-vues", "mermaid")
+    sortie_arbres = os.path.join(racine, "cerveau-projet", "cartes-vues",
+                                 "arbres")
 
     if args.verifier:
-        return verifier(racine, sortie)
+        rc = verifier(racine, sortie_mermaid)
+        rc_arbres = verifier_arbres(racine, sortie_arbres)
+        return rc or rc_arbres
+
+    if args.arbres:
+        if args.agent:
+            generer_arbres(racine, args.agent, sortie_arbres,
+                           avec_index=False, avec_svg=True)
+        else:
+            generer_arbres(racine, "", sortie_arbres,
+                           avec_index=True, avec_svg=True)
+        return 0
 
     if args.agent:
-        generer(racine, args.agent, sortie, avec_index=False,
+        generer(racine, args.agent, sortie_mermaid, avec_index=False,
                 avec_svg=args.svg)
     else:
-        generer(racine, "", sortie, avec_index=True, avec_svg=True)
+        generer(racine, "", sortie_mermaid, avec_index=True, avec_svg=True)
     return 0
 
 

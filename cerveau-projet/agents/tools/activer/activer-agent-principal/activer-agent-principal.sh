@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.5.30"
+VERSION="0.7.2"
 STATUT="prepare"
 
 # Configuration
@@ -715,10 +715,16 @@ agent_actif_bloc() {
 # Cerberus pour une nouvelle session)
 sidentifier() {
     local llm_id=$1
+    local nom_session=$2
     local session=""
     migrer_si_necessaire
 
-    if [ -n "$llm_id" ]; then
+    # v0.7.0 (sessions NOMMEES) : sidentifier <id> <session> avec
+    # session = admin | freelance (ex: sidentifier glm5 admin).
+    if [ -n "$nom_session" ]; then
+        session="session-$nom_session"
+        echo "Session $session (demandee par l utilisateur, agent principal : Cerberus)"
+    elif [ -n "$llm_id" ]; then
         # MODE ID : chercher si cet id est deja lie (AGENTS.md champ Nom LLM + classeur)
         session=$(trouver_session_par_id "$llm_id")
         if [ -n "$session" ]; then
@@ -1131,7 +1137,7 @@ esac
 
 case $1 in
     "sidentifier")
-        sidentifier "$2"
+        sidentifier "$2" "$3"
         ;;
     "activer")
         if [ $# -lt 4 ]; then

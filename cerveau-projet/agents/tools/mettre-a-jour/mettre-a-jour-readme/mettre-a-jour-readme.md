@@ -9,7 +9,7 @@ identite:
 ---
 # mettre-a-jour-readme
 
-**Version :** 0.4.4
+**Version :** 0.4.5
 **Statut :** prepare
 **Categorie :** mettre-a-jour
 **Chemin :** `agents/tools/mettre-a-jour/mettre-a-jour-readme/`

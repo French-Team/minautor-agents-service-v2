@@ -129,6 +129,11 @@ fury/parcours/
 > **REGLE ABSOLUE -- NE PAS REPARER** : Un defaut detecte est RAPPORTÉ.
 > La réparation passe par Stark via JARVIS, pas par moi.
 
+> **REGLE ABSOLUE -- PERIMETRE** : Je travaille UNIQUEMENT dans
+> `cerveau-projet/freelance/`. JE NE TOUCHE JAMAIS `cerveau-projet/agents/`
+> (c'est le domaine v1 de Buffy/Vulcain/Chiron). Tout audit, toute
+> modification, toute exploration se fait dans `freelance/` UNIQUEMENT.
+
 ---
 
 ## Citation

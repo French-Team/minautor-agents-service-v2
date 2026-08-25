@@ -207,13 +207,21 @@ def main():
                           "classeur-variables", "stockage",
                           "variables-actuelles.md")
     if os.path.isfile(profil):
+        # Sessions NOMMEES (v0.7.0) : profil-session-admin / profil-
+        # session-freelance (ex profil-session-llm-N). L agent courant est
+        # celui du profil le plus RECENT (date la plus grande).
+        meilleur = None
         with io.open(profil, encoding="utf-8", errors="replace") as fh:
             for ligne in fh:
-                if "profil-session-llm-1" in ligne:
-                    m = re.search(r"agent:\s*([A-Za-z0-9_-]+)", ligne)
-                    if m:
-                        agent_courant = m.group(1)
-                    break
+                if "profil-session-" not in ligne:
+                    continue
+                m = re.search(r"agent:\s*([A-Za-z0-9_-]+)", ligne)
+                m_date = re.search(r"date:\s*([0-9]{4}-[0-9]{2}-[0-9]{2})", ligne)
+                if m and m_date and (meilleur is None
+                                     or m_date.group(1) > meilleur[1]):
+                    meilleur = (m.group(1), m_date.group(1))
+        if meilleur:
+            agent_courant = meilleur[0]
     dossiers_residuels = [n for n in os.listdir(racine)
                           if n.startswith("tmp-")
                           and os.path.isdir(os.path.join(racine, n))

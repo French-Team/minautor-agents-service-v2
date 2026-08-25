@@ -6,6 +6,7 @@ import json
 import os
 import subprocess
 import sys
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -18,7 +19,47 @@ from racine import trouver_racine
 RACINE = Path(trouver_racine(__file__))
 BASE = RACINE / "cerveau-projet" / "freelance"
 WS = RACINE.parent
-JARVIS = BASE / "tools-commun" / "jarvis" / "jarvis.py"
+JARVIS_DIR = BASE / "tools-commun" / "jarvis"
+JARVIS_INBOX = JARVIS_DIR / "inbox"
+JARVIS_OUTBOX = JARVIS_DIR / "outbox"
+OBS_DIR = BASE / "tools-commun" / "routines-server" / "observations"
+
+
+def empreinte(fichier):
+    h = hashlib.sha256()
+    with open(fichier, "rb") as f:
+        h.update(f.read())
+    return h.hexdigest()
+
+
+def envoyer_reveil(motif, details):
+    """v1.0 : Deposer un message P1 [EDITH-RÉVEIL] dans l'inbox de stark
+    ET l'outbox d'EDITH, avec un id unique (protocole 14)."""
+    msg = {
+        "id": str(uuid.uuid4())[:8],
+        "de": "edith", "vers": "stark", "priorite": 1,
+        "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
+        "objet": "[EDITH-RÉVEIL] " + motif[:60],
+        "corps": details, "lu": False, "accuse": False, "type": "reveil",
+    }
+    for cible in (JARVIS_INBOX / "stark.jsonl",
+                  JARVIS_OUTBOX / "edith.jsonl"):
+        cible.parent.mkdir(parents=True, exist_ok=True)
+        with open(cible, "a", encoding="utf-8") as f:
+            f.write(json.dumps(msg, ensure_ascii=False) + "\n")
+    # Tracabilite : le reveil apparait dans les activites recentes
+    try:
+        _fj = BASE / "tools-commun" / "jarvis" / "fonctions"
+        _fo = BASE / "tools-commun" / "os_path" / "fonctions"
+        for p in (_fo, _fj):
+            if str(p) not in sys.path:
+                sys.path.insert(0, str(p))
+        from historique import historiser
+        historiser("edith", f"Reveil emis: {motif[:60]}",
+                   "R", session="session-freelance")
+    except Exception:
+        pass
+    print("[EDITH] Réveil demandé :", motif)
 
 
 def qui_par_git(fichier):
@@ -43,11 +84,15 @@ def surveiller_modifications(manifest, etat):
     if not alertes.get("modification_perimetre_edith"):
         return
     for relatif in perimetre:
-        base = Path(RACINE, "freelance", relatif)
+        base = Path(BASE, relatif)
         for courant, dossiers, fichiers in os.walk(base):
             dossiers[:] = [d for d in dossiers if d != "__pycache__"
                            and d != "observations"]
             for f in fichiers:
+                # Fichiers volatils exclus : etat des routines reecrit a
+                # chaque invocation de jarvis - jamais surveillable.
+                if f == "etat-executions.json":
+                    continue
                 reel = os.path.join(courant, f)
                 cle = str(reel)
                 empreinte_actuelle = empreinte(reel)

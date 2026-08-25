@@ -1566,3 +1566,244 @@ a jour via Clio.
 **Lecon** : une creation d agent n est terminee que si TOUTES les surfaces de reference
 sont synchronisees (readme-dev OUI mais README public NON). Le garde-fou valider-relecture
 a attrape l ecart E2 des la premiere passe - la mecanisation fonctionne.
+## [LECON] 2026-08-23 -- AUDIT CORRECTIONS DE FORMATION DE CLIO POUR README-V2 (Themis)
+
+**Contexte** : audit de fin de mission de la mission Buffy 'corrections de formation de Clio pour readme-v2' (E1-E5 Chiron, verdict Janus VALIDE sur le diagnostic). Activee par Buffy (maillon de chaine c8a).
+
+**Verdict** : CONFORME -- 0 defaut dans le perimetre.
+
+**Verifications** : navigation reelle c1 readme-v2 -> c22 -> c23 (guider --reponses PARCOURS atteint), Pattern 14 fiche clio.md v0.6.5 == parcours 0.6.5, E1-E4 corriges (branche readme-v2 + cases c22/c23, EXCEPTION REDACTION V2, SOURCES DE VERITE V2 en Connexions, ton v2 badges agents v2), lecon Buffy dans corrections.md + BDD id 287, registre usages complet (12 outils declares), ASCII 0/0 sur clio.md + parcours-clio.json + buffy/corrections.md, conformite execution (carte Buffy suivie, Themis activee AVANT Janus = c8a -> c8).
+
+**Points hors perimetre signales** : P1 clio/corrections.md 383 CRLF PRE-EXISTANTS (fichier non modifie par la mission, git status initial confirme) -> Hygie ; P2 3 divergences d'outils (editer-fichier, valider-cartes-decision, activer-agent-principal) -> Vulcain (mission separee, deja identifiee par Chiron + Janus).
+
+**Lecon** : un audit de fin de mission se prouve par le CROISEMENT mission/carte/deroulement reel. La navigation reelle du nouveau chemin (guider --reponses) + la lecture structurelle du JSON compensent un outil verrouille (valider-cartes-decision ferme pour Themis - artefact de verrou connu) : ne pas conclure 'non verifiable' quand un outil est bloque, verifier par une voie independante.
+## [LECON] 2026-08-23 -- AUDIT MISSION CLIO (VERIFIER) : README DOIT-IL REFLETER LA REPARATION (Themis)
+
+**Contexte** : audit de fin de mission de la mission Clio "verifier" activee par Cerberus (c16 OUI) -- la reparation a modifie des fichiers, le README doit-il etre mis a jour ? Activee par Clio (maillon de chaine c12a).
+
+**Verdict** : CONFORME -- 0 defaut dans le perimetre.
+
+**Verifications** : verdict Clio NON correct (reparation documentaire : CRLF, 9 residus, 3 alignements de versions -- aucun outil/agent cree/supprime ; badges Agents-19/Outils-165 = realite 19/165 confirmee par le verifier), comportement conforme a la carte c11 (verifier sans modifier, signaler sans corriger), registre usage clio -> mettre-a-jour-readme (22:00:39), ecarts signalis PRE-EXISTANTS prouves (README.md + readme-dev.md absents du git status de session).
+
+**Points hors perimetre** : P1 readme-dev incoherence interne (entete "164 outils" vs section 6 "165 outils" vs reel 165 -- categorie Git manquante du tableau) -> Clio ; P2 mismatch structurel outil/README (le verifier attend la section 'La boite a outils' absente du README 1ere personne du 20/08 -> MANQUANT massifs a chaque verification, bruit permanent) -> Vulcain et/ou Clio.
+
+**Lecon** : une reparation documentaire ne change pas les compteurs du README (verifier creations/suppressions d'outils avant de decider) ; le verifier README peut produire un bruit structurel permanent quand le README change de format (signaler le mismatch) ; un ecart SOMME du tableau readme-dev se prouve par la categorie manquante (164 vs 165 = Git absente).
+
+**Rapport** : themis/rapports/rapport-audit-clio-verifier-readme-reparation-2026-08-23.md (ASCII 0).
+[LECON 2026-08-24] Audit P-A editer-fichier pour Clio : CONFORME (P-B fiche a aligner). La reparation (decision utilisateur) est correcte : indice editer-fichier en c20 carte clio, bump 0.6.6, Pattern 14 OK, verrou (source=cartes) reconnait clio, ASCII 0/0. P-B : la fiche Clio garde 3 occurrences de 'UNIQUE outil mettre-a-jour-readme' (l.48/124/282) contradictoires avec la nouvelle habilitation - la fiche doit etre alignee sur la decision utilisateur. LECON : quand une habilitation est elargie (decision utilisateur), TOUTES les mentions de la fiche de l agent doivent etre alignees sur la carte. Rapport : themis/rapports/rapport-audit-pa-clio-editer-fichier-2026-08-24.md.
+
+[LECON 2026-08-24] Audit validation flux editer-fichier Clio : VERDICT CONFORME. Mission Clio de validation du nouveau flux (decision utilisateur : editer-fichier habilite). Verifie : indice editer-fichier en c20 carte clio (source verrou), Pattern 14 v0.6.6, regle fiche assouplie (3 occurrences), registre complet, ASCII 0/0, dry-run sans modification. Lecon : une mission de VALIDATION prouve une habilitation par un test reel du verrou en dry-run (zero blocage, zero redirection) - plus probant qu'une relecture de carte. Flux Clio -> editer-fichier direct fonctionne.
+
+[LECON 2026-08-24] BILAN STRATEGIQUE v1 redige : rapport complet (126 lignes, ASCII 0/0) dans themis/rapports/bilan-strategique-v1-2026-08-22.md. Methode : 212 lecons BDD + AGENTS-historique + audit croise. Verdicts : benefique = lecons.db, cartes, cycle+controles, outils validation, classeur. Nefaste = sur-ingenierie gouvernance, habilitations decouvertes tard, 3 memoires non synchronisees, chaines disproportionnees, outils jetables. Regles a garder : relecture, registre, dry-run, ASCII, RVAV, verifier juge, Pattern 13, anti-usurpation, double verification. Versionning = utile signal / fardeau discipline. Lecon : un bilan strategique = relecture croisee + synthese (pas un audit de mission) - les cases c8c/c8d (impacts/fins) ne s appliquent pas a un rapport, reponse honnete OUI avec constat d absence d impact.
+
+[LECON 2026-08-24] Comparatif v1 vs v2 super-detail redige (263 lignes, ASCII 0/0) dans themis/rapports/comparatif-v1-v2-2026-08-24.md. Bandeau NON NORMATIF en tete + 16 piliers (v1/v2/DECISION/RISQUE/PREUVE) + synthese (5 vitaux + 5 pieges). Verdicts : 7 a garder, 7 a adapter, 2 a creer. Lecon : la neutralisation du risque documentaire est STRUCTURELLE (rapport dans themis/rapports/, jamais reference dans une carte/fiche, bandeau NON NORMATIF) - pas une promesse.
+
+[LECON 2026-08-24] Audit test-100 frontmatter : VERDICT CONFORME. Test Morpheus valide (2/2 OK, 806 .md, critere CLOTURE pertinent, aucun outil modifie). Lecon : le bon critere pour un garde-fou de frontmatter est la CLOTURE du bloc, pas la validite YAML complete - le projet utilise volontairement des frontmatters non-strict (block scalars, commentaires seuls, exemples avec accents) = faux positifs si parse strict exige.
+
+## [LECON] 2026-08-24 -- AUDIT MISSION ATLAS EXPLORATION FREELANCE : CONFORME
+
+**Contexte** : audit de fin de mission (chaine Cerberus -> Atlas -> Themis).
+Atlas a explore le dossier freelance et produit un dossier complet.
+
+**Verdict** : CONFORME, 0 defaut. Rapport : rapports/rapport-audit-atlas-exploration-freelance-2026-08-24.md.
+Livrable audite : atlas/rapports/dossier-complet-freelance-2026-08-24.md
+(536 lignes, 14 sections, bandeau NON NORMATIF, ASCII 0/0).
+
+**Verifications** : grades des 9 agents (fiches, exacts), 20 protocoles,
+M1-M7, 598 messages JARVIS, registre atlas 12 usages, 1 lecon BDD + bloc
+corrections.md. Point de vigilance : corriger-accents a cree un .bak (28 Ko)
+dans atlas/rapports/ -> residu domaine Hygie (a supprimer).
+
+**Lecon** : pour auditer un rapport d'exploration, verifier les DONNEES
+(chiffres, grades, volumes) contre les sources reelles, pas seulement la
+forme -- c'est la que se cachent les erreurs.
+
+## [LECON] 2026-08-24 -- AUDIT MISSION BUFFY : METHODE RIGOUREUSE ATLAS (CONFORME)
+
+**Contexte** : audit de la modification d'Atlas (carte + fiche + livrables) pour
+l'exploration rigoureuse decidee par l'utilisateur (un dossier a la fois, un .md
+par dossier, rapport complet = doublon de structure).
+
+**Verdict** : CONFORME, 0 defaut.
+
+**Lecons** :
+1. La boucle c2a-c2b-c2c (un dossier a la fois, .md par dossier, boucle jusqu a
+   couverture totale) est le pattern a garder pour les explorations exhaustives.
+2. Le doublon de structure (arborescence + liens vers les .md dedies) rend le
+   rapport complet navigable et comparable v1 vs v2.
+3. Le verrou d habilitation bloque valider-cartes-decision pour les agents non
+   habilites (themis) - c'est le verrou qui fonctionne, pas un defaut.
+
+**Preuves** : rapport-audit-buffy-atlas-methode-rigoureuse-2026-08-24.md ; carte
+v0.5.5 nav validee c2c OUI->c8 / NON->c2a ; 17 .md dedies + 35 liens ;
+fiche PARCOURS v0.5.5 + REGLE ABSOLUE METHODE RIGOUREUSE ; ASCII 0/0.
+
+## [LECON] 2026-08-24 -- AUDIT MISSION CLIO : README APRES MISSION BUFFY ATLAS (CONFORME)
+
+**Contexte** : audit de la mission Clio (verification README apres la mission
+Buffy methode rigoureuse Atlas).
+
+**Verdict** : CONFORME, 0 defaut.
+
+**Lecons** :
+1. Une modification INTERNE d'agent (carte/fiche/rapports) ne change ni le
+   nombre d'agents ni le nombre d'outils : Clio doit verifier (--verifier) et
+   NE RIEN modifier si 0 ecart. Ne pas forcer une mise a jour inutile.
+2. Le --verifier est la source de verite : 0 ecart + git status vide =
+   decision correcte de ne rien faire.
+3. Le perimetre Clio est respecte quand elle n'utilise QUE mettre-a-jour-readme.
+
+**Preuves** : rapport-audit-clio-readme-atlas-2026-08-24.md ; --verifier 0
+ecart (19 agents, Outils-165, readme-dev 40 categories = 165) ; git status
+README vide ; ASCII 0/0 ; registre clio 25.
+
+## [LECON] 2026-08-24 -- AUDIT MISSION BUFFY : CORRECTION ATLAS DOSSIER DEDIE (CONFORME)
+
+**Contexte** : audit de la correction de la methode Atlas (probleme utilisateur :
+rapports a la racine de atlas/rapports/ au lieu d'un dossier dedie par
+exploration).
+
+**Verdict** : CONFORME, 0 defaut.
+
+**Lecons** :
+1. Le DOUBLON DE STRUCTURE doit vivre dans UN DOSSIER DEDIE PAR EXPLORATION
+   (atlas/rapports/<cible>-<AAAAMMJJ>/) qui est LE DOSSIER COMPLET : c'est la
+   bonne organisation pour des explorations multiples comparables v1 vs v2.
+2. Des LIENS RELATIFS SIMPLES (noms de fichiers) dans le dossier-complet
+   rendent le deplacement du dossier entier sans casse - c'est le pattern a
+   recommander.
+3. Apres une reorganisation, verifier : la racine ne contient plus que le
+   dossier dedie, les liens resolvent, les mentions textuelles de chemins
+   sont mises a jour.
+
+**Preuves** : rapport-audit-buffy-atlas-dossier-dedie-2026-08-24.md ; carte
+v0.5.6 (c2/c2b/c9 dossier dedie, 0 orpheline) ; atlas/rapports/ = [dossier
+dedie] avec 19 fichiers ; liens 18/18 ; ASCII 0/0 ; registre buffy 229.
+
+## [LECON] 2026-08-24 -- AUDIT MISSION CLIO : README APRES CORRECTION ATLAS DOSSIER DEDIE (CONFORME)
+
+**Contexte** : audit de la mission Clio (verification README apres la
+correction de la methode Atlas : dossier dedie par exploration).
+
+**Verdict** : CONFORME, 0 defaut.
+
+**Lecons** :
+1. Une reorganisation de LIVRABLES (deplacement de rapports dans un dossier
+   dedie) ne change ni le nombre d'agents ni d'outils : Clio doit verifier
+   (--verifier) et NE RIEN modifier si 0 ecart.
+2. Le --verifier est la source de verite : 0 ecart + git status vide =
+   decision correcte de ne rien faire.
+3. Le perimetre Clio est respecte quand elle n'utilise QUE mettre-a-jour-readme.
+
+**Preuves** : rapport-audit-clio-readme-atlas-dossier-dedie-2026-08-24.md ;
+--verifier 0 ecart (19 agents, Outils-165, readme-dev 40 categories = 165) ;
+git status README vide ; ASCII 0/0 ; registre clio 27.
+
+## [LECON] 2026-08-24 -- COMPARATIF V1 VS V2 RECREE ET MIS A JOUR (perte de livrable)
+
+**Contexte** : mission de recree + mise a jour du comparatif v1 vs v2
+(demande utilisateur) apres la perte du rapport initial (263 lignes,
+valide Janus a 07:45, jamais commite, disparu du disque).
+
+**Verdict** : rapport recree dans themis/rapports/comparatif-v1-v2-2026-08-24.md
+(304 lignes, ASCII 0/0, frontmatter YAML FERME, bandeau NON NORMATIF) :
+16 piliers compares (colonnes v1/v2/DECISION/RISQUE/PREUVE) + synthese
+(5 piliers vitaux + 5 pieges) + conclusion. Colonne v2 ENRICHIE avec les
+donnees reelles du dossier complet freelance reorganise (Atlas 2026-08-24) :
+9 agents MARVEL avec grades, JARVIS v0.9.0 (~600 messages), regles M1-M7,
+protocoles 1-20, tools-commun, tests Fury PASSE.
+
+**Lecons** :
+1. Un livrable JAMAIS COMMITE peut disparaitre sans trace git : les
+   rapports d'analyse doivent etre commites rapidement ou re-verifies
+   avant toute manipulation ulterieure.
+2. Le frontmatter YAML FERME est obligatoire (lecon test-100) : tout
+   .md commencant par --- doit avoir sa cloture ---.
+3. Le dossier complet Atlas (atlas/rapports/freelance-2026-08-24/) est
+   desormais la SOURCE DE VERITE de la v2 pour toute analyse croisee.
+
+**Preuves** : comparatif-v1-v2-2026-08-24.md (304 lignes, ASCII 0/0) ;
+frontmatter ferme ligne 9 ; dossier-complet-freelance-2026-08-24.md ;
+registre themis.
+
+## [LECON] 2026-08-24 -- DECISIONS README V2 + EDUCATION V2 (recommande)
+
+**Contexte** : mission de trancher les 2 piliers restes A DECIDER du
+comparatif v1 vs v2 (demande utilisateur 2026-08-24).
+
+**Verdict** : recommandations produites (validation utilisateur requise) :
+1. README v2 = CLIO avec EXCEPTION REDACTION V2 (deja preparee par la
+   lecon Chiron 2026-08-23 : fiche EXCEPTIONS V2 + carte c22/c23
+   readme-v2) -- il suffit de LANCER la mission.
+2. Education v2 = ARBRES + BIBLE DES LECONS (D10 a construire) + ROGERS
+   (veille regles/conventions) -- principe Chiron preserve (consulter les
+   lecons avant les actions sensibles).
+
+Comparatif mis a jour : piliers 8 et 15 passes de A DECIDER a ADAPTER,
+bilan 2 garder / 14 adapter / 0 decider.
+
+**Lecons** :
+1. Quand un agent est deja PEDAGOGIQUEMENT PREPARE pour une cible
+   (Clio/readme-v2), la decision la plus economique est de LANCER la
+   mission preparee plutot que de changer d'agent.
+2. La philosophie v2 (moins c'est plus) favorise l'apprentissage INTEGRE
+   (arbres + bible) + un gardien existant (Rogers) plutot qu'un nouvel
+   agent dedie.
+3. Une recommandation de decision doit etre ACTIONNABLE (qui fait quoi,
+   quand) pour etre validee facilement.
+
+**Preuves** : recommandations-decisions-readme-education-2026-08-24.md
+(114 lignes, ASCII 0/0, frontmatter ferme) ; comparatif mis a jour
+(309 lignes) ; lecon BDD.
+
+## [LECON] 2026-08-24 -- AUDIT CLIO README-V2 (CONFORME)
+
+**Contexte** : audit de la mission Clio (redaction README-v2.md, decision
+utilisateur 2026-08-24).
+
+**Verdict** : CONFORME, 0 defaut.
+
+**Lecons** :
+1. L EXCEPTION REDACTION V2 fonctionne de bout en bout quand la fiche +
+   la carte sont preparees (lecon Chiron respectee : la pedagogie
+   precede l activation).
+2. Les badges dynamiques d un README se verifient contre les sources
+   RELLES (agents, modules, protocoles), pas contre le texte.
+3. Le frontmatter YAML FERME est verifie a chaque audit (lecon test-100).
+
+**Preuves** : rapport-audit-clio-readme-v2-2026-08-24.md ; README-v2.md
+(189 lignes, ASCII 0/0, frontmatter ferme ligne 8) ; registre clio 9
+usages ; lecon BDD.
+
+## [LECON] 2026-08-24 -- AUDIT VERIFICATION README APRES README-V2 : CONFORME
+
+**Contexte** : audit de la mission Clio (verification README apres la
+mission readme-v2 et l'inter-round Buffy carte clio v0.6.7).
+
+**Verdict** : CONFORME, 0 defaut.
+
+**Points** : mettre-a-jour-readme --verifier 0 ECART (agents table OK,
+badge Outils-165, readme-dev 40 categories somme 165) ; ASCII 0/0 sur
+README.md et readme-dev.md ; registre clio 4 usages ; aucun fichier
+modifie par la mission (verification pure).
+
+**Lecons** :
+1. Un bump de carte/fiche d agent (sans ajout ni suppression d agent ou
+   d outil) ne necessite AUCUNE mise a jour du README : le --verifier
+   le prouve (0 ecart).
+2. Une mission de VERIFICATION ne modifie jamais le README : elle
+   rapporte son etat (a jour / pas a jour).
+
+**Preuves** : rapport-audit-clio-verification-readme-apres-readme-v2-2026-08-24.md ;
+--verifier 0 ecart ; ASCII 0/0 ; registre clio 4 usages (18:00).
+
+## [LECON] 2026-08-24 -- AUDIT SESSIONS NOMMEES (Themis)
+
+Audit de la mission Buffy (sessions nommees admin/freelance + detection IR auto) : VERDICT CONFORME 0 defaut. Migration noyau complete et coherente : outil v0.7.0, demarrage a session explicite, encarts par session, detection IR auto, 11 outils + 6 tests alignes, registre et lecons complets, ASCII 0/0. Les echecs restants (catalogue 186 vs 187, redacteur-v2, marbre) sont pre-existants et hors perimetre.
+## [LECON] 2026-08-24 -- AUDIT VERIFICATION README (Clio apres mission Atlas vues-v2) : CONFORME
+
+Audit de la mission Clio verifier (apres education Atlas arbres v2 : carte v0.5.7 branche vues-v2, outil convertir-carte-mermaid v0.3.0 --arbres) : VERDICT CONFORME 0 defaut. mettre-a-jour-readme --verifier 0 ECART (agents table OK, badge Outils-165 OK, readme-dev 40 categories somme 165 = 165 OK). La mission n ajoute NI agent NI outil -> AUCUNE modification du README necessaire (README.md 0 diff). ASCII README 0/0. Registre Clio 5 usages. Lecon : une mission qui modifie une CARTE ou un OUTIL EXISTANT (sans ajouter agent/outil) ne change jamais le README - le --verifier a 0 ecart est le verdict attendu et Clio n a rien a corriger.
+
+## [LECON] 2026-08-24 -- AUDIT VERIFICATION README (Clio apres mission encart 'autre' v0.7.1) : CONFORME
+
+Audit de la mission Clio verifier (apres suppression encart 'autre' : activer-agent-principal v0.7.1, logique interne d encarts) : VERDICT CONFORME 0 defaut. mettre-a-jour-readme --verifier 0 ECART (agents table OK, badge Outils-165 OK, readme-dev 40 categories somme 165 = 165 OK). La mission modifie un OUTIL EXISTANT sans ajouter agent/outil -> AUCUNE modification du README necessaire (README.md 0 diff ; le diff readme-dev categorie Git est pre-existant). ASCII 0/0 (README, readme-dev, README-v2). Lecon : une modification de LOGIQUE INTERNE d un outil (mapping, encarts, comptage) ne change jamais le README - le --verifier a 0 ecart est le verdict attendu. Verification du perimetre : le seul diff readme-dev (categorie Git) est pre-existant et deja compte dans la somme 165.

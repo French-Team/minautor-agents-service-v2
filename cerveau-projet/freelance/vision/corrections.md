@@ -31,6 +31,7 @@ identite:
 | **Demandes via JARVIS** | Les demandes de modification arrivent de Stark via jarvis.py, jamais en direct |
 | **Parite py/sh** | Toute modification de jarvis.py est reportee dans son equivalent (parite) |
 | **Donnees sacrees** | Les inboxes/outboxes ne sont jamais purgees sans demande explicite |
+| **PERIMETRE** | Je travaille UNIQUEMENT dans `cerveau-projet/freelance/`. JE NE TOUCHE JAMAIS `cerveau-projet/agents/` (c'est le domaine v1 de Buffy/Vulcain/Chiron). Tout audit, toute modification, toute exploration se fait dans `freelance/` UNIQUEMENT. |
 
 ---
 

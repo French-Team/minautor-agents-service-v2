@@ -7,7 +7,7 @@ identite:
 # Agents du Cerveau-Projet
 
 > Ce fichier est mis a jour dynamiquement par les agents principaux.
-> Chaque session LLM (session-llm-N) possede son bloc dedie et son agent principal.
+> Chaque session LLM (session-admin, session-freelance...) possede son bloc dedie et son agent principal.
 > L'historique complet est dans [AGENTS-historique.md](AGENTS-historique.md).
 
 ---
@@ -17,55 +17,46 @@ identite:
 ### Session : session-llm-2
 
 | Champ | Valeur |
-| --- | --- |
-| **Nom LLM** | glm5 |
-| **Nom Agent** | stark |
-| **Role Agent** | Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation |
-| **Derniere mise a jour** | 2026-08-23 |
-| **Fiche** | [cerveau-projet/freelance/stark/stark.md](cerveau-projet/freelance/stark/stark.md) |
-| **Corrections** | [cerveau-projet/freelance/stark/corrections.md](cerveau-projet/freelance/stark/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | Relais de jarvis: BILAN - fenetres cmd eliminees a la racine |
-
-| DEMARRAGE V2 (agents freelance) : relis ta fiche puis tes corrections. |
-| Pour toute action, suis TON arbre des decisions : |
-| cerveau-projet/freelance/stark/parcours/arbre-stark.json |
-| (themes : selon ton arbre ; JARVIS = point d'entree OBLIGATOIRE pour |
-| toute mission) |
-| REGLE V2 : les agents freelance n'utilisent PAS les outils v1 |
-| (guider-parcours, activer-agent-principal) -- JARVIS les remplace : |
-| tout passe par jarvis.py (envoyer/lire/acquitter/lister/activer). |
-### Session : session-1
+|---|---|
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-25 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | buffy (retour de mission) |
+| **Raison** | Test Mecano termine : 1 ecart detecte (doublon version/cree dans templates). 20 protocoles operationnels. Rapport produit. |
+### Session : session-admin
 
 | Champ | Valeur |
 |---|---|
-| **Nom Agent** | themis |
-| **Role Agent** | Evaluatrice croisee -- evaluation et audit |
-| **Derniere mise a jour** | 2026-08-22 |
-| **Fiche** | [cerveau-projet/agents/themis/themis.md](cerveau-projet/agents/themis/themis.md) |
-| **Corrections** | [cerveau-projet/agents/themis/corrections.md](cerveau-projet/agents/themis/corrections.md) |
+| **Nom LLM** | glm5 |
+| **Nom Agent** | buffy |
+| **Role Agent** | Developpeur principal -- contenu et structures |
+| **Derniere mise a jour** | 2026-08-25 |
+| **Fiche** | [cerveau-projet/agents/buffy/buffy.md](cerveau-projet/agents/buffy/buffy.md) |
+| **Corrections** | [cerveau-projet/agents/buffy/corrections.md](cerveau-projet/agents/buffy/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer. MISSION: BILAN STRATEGIQUE v1. Pas de migration. Une mise a plat honnete de ce qui s'est passe pendant la v1. (1) Ce qui a ete VRAIMENT benefique (concepts, regles, outils qui ont change la donne) (2) Ce qui a ete NEFASTE (erreurs, temps perdu, complexite inutile) (3) Les regles qui fonctionnent VRAIMENT (celles qu'on garderait si on recommencait) (4) Le versionning: est-ce qu'il a ete utile ou un fardeau ? (5) Les lecons les plus importantes (celles qu'on ne doit PAS oublier) (6) Ce qu'on ne refera PAS dans la v2. Honnetete brutale, pas de politesse. RAPPORT dans themis/rapports/bilan-strategique-v1-2026-08-22.md. FIN DE CYCLE vers Cerberus. |
+| **Raison** | Mecano v0.6.0 : proto-13 scripts temporaires (harnais obligatoire, lifecycle complet : creer/executer/verifier/supprimer), combo-harnais-script-temporaire. 13 protocoles, 6 combos, 21 fichiers. |
 
 DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
 python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
-  cerveau-projet/agents/themis/parcours/parcours-themis.json --case c0
+  cerveau-projet/agents/buffy/parcours/parcours-buffy.json --case c0
 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
 a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
 ensuite les branches case par case ; si tu reprends apres une interruption,
 reprends a la case courante avec --case <cid> --reponses '<reponse>').
-### Session : session-llm-1
+### Session : session-freelance
 
 | Champ | Valeur |
-|---|---|
+| --- | --- |
 | **Nom LLM** | freebuff |
 | **Nom Agent** | stark |
 | **Role Agent** | Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation |
-| **Derniere mise a jour** | 2026-08-22 |
+| **Derniere mise a jour** | 2026-08-24 |
 | **Fiche** | [cerveau-projet/freelance/stark/stark.md](cerveau-projet/freelance/stark/stark.md) |
 | **Corrections** | [cerveau-projet/freelance/stark/corrections.md](cerveau-projet/freelance/stark/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | Reprise - Stark actif, pret pour les ordres |
+| **Raison** | Relais de jarvis: [CLOTURE] Reformulation activation terminee - controle rendu |
 
 DEMARRAGE V2 (agents freelance) : relis ta fiche puis tes corrections.
 Pour toute action, suis TON arbre des decisions :
@@ -78,8 +69,9 @@ tout passe par jarvis.py (envoyer/lire/acquitter/lister/activer).
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-llm-1 | freebuff | stark | 2026-08-22 23:07:05.872715 |
-| session-llm-2 | glm5 | stark | 2026-08-23 07:07:17.231913 |
+| session-llm-2 | - | Cerberus | 2026-08-25 18:28:43.081986 |
+| session-freelance | freebuff | stark | 2026-08-24 19:52:52.328436 |
+| session-admin | glm5 | buffy | 2026-08-25 09:22:20.918371 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -112,16 +104,18 @@ CERBERUS -> AGENT -> CERBERUS
 
 ## Comment changer d'agent (dans sa session)
 
-Chaque session LLM a son propre cycle. **MODE ID** : chaque LLM possede SON id (donne par
-l'utilisateur au demarrage, ex: `llm-1`). **REGLE ALIGNEMENT (v0.4.0)** : id `llm-N` ->
-session `session-llm-N` (le numero de session porte le numero de l'id). Chaque bloc de session
-dans AGENTS.md contient le champ `| **Id LLM** | <id> |` : **le LLM se reconnait en lisant
-AGENTS.md** -- le bloc qui porte SON id est SON bloc (source double : AGENTS.md + classeur
-synchronises). Au demarrage : 1) chercher SON bloc dans AGENTS.md (champ Id LLM) ; 2) si absent,
-lancer la SOUS-COMMANDE sidentifier d'activer-agent-principal :
-`python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>`
-(id deja lie = retrouvee ; id inconnu llm-N = session-llm-N ;
-conflit si session-llm-N liee a un autre id = prochaine libre).
+Chaque session LLM a son propre cycle. **MODE ID + SESSION (v0.3.0)** : chaque LLM possede SON id
+donne par l'utilisateur au demarrage, ET l'utilisateur indique la SESSION voulue
+(`session='admin'` = equipe v1 qui gere le cerveau, `session='freelance'` = equipe v2).
+Les sessions sont NOMMEES (`session-admin`, `session-freelance`) et non plus numerotees.
+Chaque bloc de session dans AGENTS.md contient le champ `| **Nom LLM** | <id> |` : **le LLM se
+reconnait en lisant AGENTS.md** -- le bloc qui porte SON id est SON bloc (source double :
+AGENTS.md + classeur synchronises). Au demarrage : 1) chercher SON bloc dans AGENTS.md
+(champ Nom LLM, dans la session demandee) ; 2) si absent, lancer la SOUS-COMMANDE sidentifier
+d'activer-agent-principal :
+`python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id> <ma-session>`
+(la session est creee/retrouvee ; l'id y est lie ; repli heritage : id llm-N -> session-llm-N
+si aucun nom de session n'est fourni).
 
 ### Depuis Cerberus (dans sa session)
 
@@ -179,6 +173,7 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 | [Socrate](cerveau-projet/agents/socrate/socrate.md) | cerveau-projet/agents/socrate/ | Conversateur de revision strategique | Disponible (en attente) | Discute des revisions, priorise, produit une liste de missions pour Cerberus |
 | [Redacteur-v2](cerveau-projet/agents/redacteur-v2/redacteur-v2.md) | cerveau-projet/agents/redacteur-v2/ | Redacteur PRO des docs de la v2 (freelance) | Disponible (en attente) | Agent dedie a la redaction des docs v2 - MODE CONVERSATION (reactive Cerberus sur fin de cycle) |
 | [Hades](cerveau-projet/agents/hades/hades.md) | cerveau-projet/agents/hades/ | Gardien des archives git | Disponible (en attente) | SEUL habilite aux commandes git - regle d anciennete : checkout interdit hors fichiers tres recents |
+| [Mecano](cerveau-projet/agents/ferrari/ferrari.md) | cerveau-projet/agents/ferrari/ | Agent v1 specialise freelance | Disponible (en attente) | Corrige/modifie le dossier freelance/ (conventions v2) -- DOUBLE IDENTITE v1/v2 |
 
 ### Agents v2 (freelance)
 
@@ -206,5 +201,5 @@ conflit si session-llm-N liee a un autre id = prochaine libre).
 ---
 
 > **Le cycle** : Chaque session LLM commence et finit avec Cerberus.
-> Chaque session utilise SON identifiant (session-llm-N) pour toutes ses activations.
+> Chaque session utilise SON identifiant (session-admin / session-freelance) pour toutes ses activations.
 > **Regle** : La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide. La chaine ne retombe JAMAIS sur Cerberus au milieu. ERREUR HORS-PERIMETRE -> INTER-ROUND (2026-08-22) : activation de l'agent habilite avec rapport -> fin de l'inter-round reactive l'appelant qui reprend son round ; une erreur jamais seulement detectee.

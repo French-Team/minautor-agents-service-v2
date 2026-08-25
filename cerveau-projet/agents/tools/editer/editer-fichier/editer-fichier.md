@@ -8,7 +8,7 @@ identite:
 ---
 # editer-fichier
 
-**Version :** 0.4.3
+**Version :** 0.5.0
 **Statut :** prepare
 **Categorie :** Editer
 **Chemin :** `agents/tools/editer/editer-fichier/`

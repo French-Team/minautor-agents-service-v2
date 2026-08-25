@@ -42,6 +42,6 @@
     "modification_perimetre_edith": true
   },
   "perimetre_edith_surveille": [
-    "tools-commun/routines-server/"
+    "routines/"
   ]
 }

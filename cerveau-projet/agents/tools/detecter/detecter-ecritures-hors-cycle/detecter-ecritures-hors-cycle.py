@@ -141,7 +141,7 @@ def session_par_defaut(racine):
     if os.path.isfile(classeur):
         with io.open(classeur, encoding="utf-8", errors="replace") as fh:
             for ligne in fh:
-                m = re.search(r"`profil-session-([a-z0-9-]+)`.*?session: (session-llm-\d+)",
+                m = re.search(r"`profil-session-([a-z0-9-]+)`.*?session: (session-[a-z0-9_-]+)",
                               ligne)
                 if m:
                     return m.group(2)

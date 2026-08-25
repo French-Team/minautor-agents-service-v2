@@ -20,10 +20,26 @@ import detection  # noqa: E402
 def main():
     manifest_path = RACINE / "cerveau-projet" / "freelance" / "routines" / \
         "manifest.json"
+    etat_path = Path(RACINE, "cerveau-projet", "freelance", "tools-commun",
+                     "routines-server", "observations",
+                     "etat-empreintes.json")
     import json
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    # Etat PERSISTANT (comme l'ancien serveur) : sans lui, chaque passe
+    # repart de {} et aucune modification n'est jamais detectee.
     etat = {}
+    if etat_path.exists():
+        try:
+            etat = json.loads(etat_path.read_text(encoding="utf-8"))
+        except ValueError:
+            etat = {}
+    # Hygiene : purger les empreintes de fichiers qui n'existent plus
+    # (ex: routines-server.py parti au .bak lors du refactoring).
+    etat = {k: v for k, v in etat.items() if os.path.exists(k)}
     detection.surveiller_modifications(manifest, etat)
+    etat_path.parent.mkdir(parents=True, exist_ok=True)
+    etat_path.write_text(json.dumps(etat, ensure_ascii=False),
+                         encoding="utf-8")
     print("Passe de detection terminee.")
     return 0
 

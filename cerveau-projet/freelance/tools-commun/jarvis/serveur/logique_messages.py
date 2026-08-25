@@ -118,7 +118,10 @@ def lire_messages(agent, tous, agents_valides, priorite_bloquante=1):
     if agent not in agents_valides:
         return f"ERREUR: agent inconnu '{agent}'"
     messages = _lire_jsonl(_inbox(agent))
-    non_lus = [m for m in messages if not m.get("lu", False)]
+    sans_id = [m for m in messages
+               if not m.get("lu", False) and not m.get("id")]
+    non_lus = [m for m in messages
+               if not m.get("lu", False) and m.get("id")]
     auto = [m["id"] for m in non_lus if m.get("priorite", 5) >= 3]
     n_auto = marquer_lu(agent, auto)
     afficher = messages if tous else \
@@ -126,6 +129,8 @@ def lire_messages(agent, tous, agents_valides, priorite_bloquante=1):
     entete = []
     if n_auto and not tous:
         entete.append(f"[JARVIS] {n_auto} message(s) P3-P5 auto-acquitte(s).")
+    if sans_id and not tous:
+        entete.append(f"[JARVIS] ATTENTION: {len(sans_id)} message(s) sans id ignore(s).")
     if not afficher:
         return "\n".join(entete) or f"[JARVIS] Aucun message pour {agent}."
     bloquants = [m for m in afficher
@@ -139,7 +144,7 @@ def lire_messages(agent, tous, agents_valides, priorite_bloquante=1):
         p = m.get("priorite", 5)
         label = "BLOQUANT" if p == 1 else f"P{p}"
         statut = "LU" if m.get("lu") else "NON-LU"
-        result.append(f"[{label}] [{statut}] ID: {m['id']}")
+        result.append(f"[{label}] [{statut}] ID: {m.get('id', 'N/A')}")
         result.append(f"  De: {m['de']} | Date: {m['date']}")
         result.append(f"  Objet: {m['objet']}")
         result.append(f"  Corps: {m['corps']}")

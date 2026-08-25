@@ -8,6 +8,7 @@ identite:
   commun: false
   tags: synthese, v1, v2, audit, migration
   session: freelance
+---
 # Synthese v1 -> v2 : Ce qui merite d'etre recupere
 
 **Agent** : Themis

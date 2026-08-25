@@ -93,7 +93,7 @@ def agent_actif_session():
     lignes = []
     for ligne in m.group(1).splitlines():
         ligne = ligne.strip()
-        if not ligne.startswith("| session-llm-"):
+        if not ligne.startswith("| session-"):
             continue
         cellules = [c.strip() for c in ligne.strip("|").split("|")]
         if len(cellules) >= 4:
@@ -342,7 +342,8 @@ def valider_parcours(contenu, nom_display, agent=None):
         msg = case.get("message") or ""
         # Comparaison insensible a la casse : le titre porte l'agent avec une
         # majuscule (Janus) tandis que la commande reelle est en minuscule.
-        motif = (r"activer-agent-principal\.py activer (?:<session>|session-llm-\d+) %s"
+        motif = (r"activer-agent-principal\.py activer "
+                 r"(?:<session>|session-admin|session-freelance|session-llm-\d+) %s"
                  % re.escape(cible.lower()))
         if not re.search(motif, msg.lower()) or "PAS reactiver" not in msg:
             fins_activer.append("%s (FIN - Activer %s sans commande exacte)" % (cid, cible))

@@ -119,7 +119,7 @@ Liste les agents qui ont des messages priorite 1 non-lus (= bloquants).
 | Regle | Detail |
 |---|---|
 | **Priorite 1 = bloquant** | L'agent ne demarre PAS tant que le message n'est pas acquitte. |
-| **Incarnation obligatoire (v0.2.0)** | Chaque message d'activation contient : "AVANT DE COMMENCER : lis ta fiche et tes corrections puis INCARNE l agent qui prend le relais." |
+| **Prise de relais obligatoire (v0.11.1, remplace incarnation v0.2.0)** | Chaque message d'activation contient : "Tu es l agent <nom>. AVANT DE COMMENCER : lis ta fiche et tes corrections puis PRENDS LE RELAIS." (decision utilisateur 2026-08-24 : le message s'adresse a l'agent lui-meme - il ne s'incarne pas, il EST) |
 | **Expiration apres lu** | Un message expire apres avoir ete lu et accuse. |
 | **Accuse obligatoire** | Chaque message doit etre acquitte par le destinataire. |
 | **Seul canal** | JARVIS est le SEUL moyen de communication inter-agents. |

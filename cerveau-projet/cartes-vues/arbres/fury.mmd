@@ -1,0 +1,21 @@
+%% Arbre de decision de fury (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quel theme ?"}
+    RACINE -- "TESTER" --> THEME-TESTER
+    THEME-TESTER["Declencher un round reel et verifier chaque maillon"]
+    THEME-TESTER -- "besoin 1" --> THEME-TESTER-B0
+    THEME-TESTER-B0["Executer un test reel"]
+    FIN-fin-theme(["FIN - Theme termine"])
+    THEME-TESTER-B0 --> FIN-fin-theme
+    RACINE -- "LIRE" --> THEME-LIRE
+    THEME-LIRE["Observer sans participer - lecture seule"]
+    THEME-LIRE -- "besoin 1" --> THEME-LIRE-B0
+    THEME-LIRE-B0["Consulter des traces"]
+    THEME-LIRE-B0 --> FIN-fin-theme
+    RACINE -- "RAPPORTER" --> THEME-RAPPORTER
+    THEME-RAPPORTER["Rendre compte a JARVIS qui informe Stark qui informe l'utili"]
+    THEME-RAPPORTER -- "besoin 1" --> THEME-RAPPORTER-B0
+    THEME-RAPPORTER-B0["Cloturer un test"]
+    FIN-fin-test-passe(["FIN - Test PASSE"])
+    THEME-RAPPORTER-B0 --> FIN-fin-test-passe

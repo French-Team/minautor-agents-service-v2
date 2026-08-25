@@ -25,7 +25,7 @@ Retour : 0 si succes, 1 si erreur ou si AUCUNE occurrence trouvee
          (echec explicite : jamais 0 silencieux).
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.3
+Version : 0.5.0
 Statut : prepare
 """
 

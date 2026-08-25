@@ -86,7 +86,9 @@ def nettoyer_agents(dry_run=False, verbose=False):
             nb_supprime += 1
             continue
         if dans_sessions_llm:
-            if re.match(r"^### Session : session-llm-", ligne):
+            # v0.1.3 (sessions NOMMEES) : session-admin, session-freelance,
+            # session-llm-N (legacy) - tout bloc '### Session : session-*'
+            if re.match(r"^### Session : session-", ligne):
                 dans_bloc_session = True
                 nb_supprime += 1
                 continue

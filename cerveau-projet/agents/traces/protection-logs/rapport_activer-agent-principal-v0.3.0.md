@@ -1,10 +1,10 @@
 # Rapport de Test: activer-agent-principal-v0.3.0
 
 ## Resume
-- Date: Thu Aug 20 21:18:18     2026
+- Date: Mon Aug 24 19:20:43     2026
 - Total: 12 tests
-- Reussis: 8
-- Echecs: 4
+- Reussis: 11
+- Echecs: 1
 
 ## Statut
 ECHEC

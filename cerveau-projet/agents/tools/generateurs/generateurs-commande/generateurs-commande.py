@@ -368,7 +368,7 @@ def _session_appelante(racine):
     try:
         with open(classeur, encoding="utf-8") as fh:
             for ligne in fh:
-                m = re.search(r"session: (session-llm-\d+)", ligne)
+                m = re.search(r"session: (session-[a-z0-9_-]+)", ligne)
                 if m:
                     return m.group(1)
     except IOError:

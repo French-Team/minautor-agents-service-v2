@@ -49,7 +49,7 @@ def lire_nom_llm(session: str = "") -> str:
 def historiser(agent: str, raison: str, type_action: str = "R", session: str = ""):
     """JARVIS enregistre une entree dans AGENTS-historique.md."""
     now = datetime.now()
-    heure = now.strftime("%H:%M:%S.%f")[:15]
+    heure = now.strftime("%H:%M:%S.%f")[:12]
     llm = lire_nom_llm(session)
     try:
         contenu = HISTORIQUE_FILE.read_text(encoding="utf-8")
@@ -57,9 +57,23 @@ def historiser(agent: str, raison: str, type_action: str = "R", session: str = "
         print(f"[JARVIS] ERREUR: {HISTORIQUE_FILE} introuvable")
         return False
     lignes = contenu.split("\n")
+    # Encarts SEPARES par session (demande utilisateur 2026-08-24) :
+    # chercher la table DANS l'encart de la session, jamais avant.
+    zone_debut = 0
+    if session:
+        entete_encart = f"## Activites recentes -- {session}"
+        trouve_encart = False
+        for i, ligne in enumerate(lignes):
+            if ligne.strip() == entete_encart:
+                zone_debut = i
+                trouve_encart = True
+                break
+        if not trouve_encart:
+            print(f"[JARVIS] ATTENTION: encart '{session}' introuvable "
+                  f"- premiere table utilisee")
     idx_tableau = -1
-    for i, ligne in enumerate(lignes):
-        if "| Heure | Agent |" in ligne:
+    for i in range(zone_debut, len(lignes)):
+        if "| Heure | Agent |" in lignes[i]:
             idx_tableau = i
             break
     if idx_tableau == -1:

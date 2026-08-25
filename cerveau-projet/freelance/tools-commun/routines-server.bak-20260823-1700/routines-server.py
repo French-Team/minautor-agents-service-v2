@@ -75,6 +75,7 @@ def qui_par_git(fichier):
 
 def envoyer_reveil(motif, details):
     msg = {
+        "id": str(uuid.uuid4())[:8],
         "de": "edith", "vers": "stark", "priorite": 1,
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": "[EDITH-RÉVEIL] " + motif[:60],

@@ -323,7 +323,8 @@ def main():
                 # D6 multi-sessions : le placeholder <session> est accepte
                 # (chaque session le remplace par SON id a l execution).
                 session_ok = ("activer <session>" in msg
-                              or re.search(r"activer session-llm-\d+", msg))
+                              or re.search(r"activer session-llm-\d+", msg)
+                              or re.search(r"activer session-(admin|freelance)", msg))
                 if ("activer-agent-principal.py activer" not in msg
                         or not session_ok):
                     sans_commande.append("%s %s" % (agent, k))

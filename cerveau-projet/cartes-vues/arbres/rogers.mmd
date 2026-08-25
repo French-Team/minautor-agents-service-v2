@@ -1,0 +1,81 @@
+%% Arbre de decision de rogers (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quel theme ?"}
+    RACINE -- "LIRE" --> THEME-LIRE
+    THEME-LIRE["Acceder a la connaissance des regles"]
+    THEME-LIRE -- "besoin 1" --> THEME-LIRE-B0
+    THEME-LIRE-B0["Lire les regles immuables"]
+    THEME-LIRE -- "besoin 2" --> THEME-LIRE-B1
+    THEME-LIRE-B1["Lire les conventions"]
+    THEME-LIRE -- "besoin 3" --> THEME-LIRE-B2
+    THEME-LIRE-B2["Lire les protocoles"]
+    THEME-LIRE -- "besoin 4" --> THEME-LIRE-B3
+    THEME-LIRE-B3["Chercher une regle par mot-cle"]
+    THEME-LIRE -- "besoin 5" --> THEME-LIRE-B4
+    THEME-LIRE-B4["Consulter les lecons liees aux regles"]
+    THEME-LIRE -- "besoin 6" --> THEME-LIRE-B5
+    THEME-LIRE-B5["Voir l'activite recente"]
+    FIN-fin-theme(["Retour a la racine"])
+    THEME-LIRE-B0 --> FIN-fin-theme
+    THEME-LIRE-B1 --> FIN-fin-theme
+    THEME-LIRE-B2 --> FIN-fin-theme
+    THEME-LIRE-B3 --> FIN-fin-theme
+    THEME-LIRE-B4 --> FIN-fin-theme
+    THEME-LIRE-B5 --> FIN-fin-theme
+    RACINE -- "MODIFIER" --> THEME-MODIFIER
+    THEME-MODIFIER["Creer ou faire evoluer les regles"]
+    THEME-MODIFIER -- "besoin 1" --> THEME-MODIFIER-B0
+    THEME-MODIFIER-B0["Ajouter une regle immuable"]
+    THEME-MODIFIER -- "besoin 2" --> THEME-MODIFIER-B1
+    THEME-MODIFIER-B1["Modifier une convention"]
+    THEME-MODIFIER -- "besoin 3" --> THEME-MODIFIER-B2
+    THEME-MODIFIER-B2["Ajouter un protocole"]
+    THEME-MODIFIER -- "besoin 4" --> THEME-MODIFIER-B3
+    THEME-MODIFIER-B3["Corriger une erreur dans une regle"]
+    THEME-MODIFIER-B0 --> FIN-fin-theme
+    THEME-MODIFIER-B1 --> FIN-fin-theme
+    THEME-MODIFIER-B2 --> FIN-fin-theme
+    THEME-MODIFIER-B3 --> FIN-fin-theme
+    RACINE -- "VALIDER" --> THEME-VALIDER
+    THEME-VALIDER["Assurer que tout est conforme"]
+    THEME-VALIDER -- "besoin 1" --> THEME-VALIDER-B0
+    THEME-VALIDER-B0["Verifier la coherence des regles"]
+    THEME-VALIDER -- "besoin 2" --> THEME-VALIDER-B1
+    THEME-VALIDER-B1["Auditer un fichier contre les regles"]
+    THEME-VALIDER -- "besoin 3" --> THEME-VALIDER-B2
+    THEME-VALIDER-B2["Verifier un protocole"]
+    THEME-VALIDER -- "besoin 4" --> THEME-VALIDER-B3
+    THEME-VALIDER-B3["Verifier un arbre de decision"]
+    THEME-VALIDER -- "besoin 5" --> THEME-VALIDER-B4
+    THEME-VALIDER-B4["Auditer un agent"]
+    THEME-VALIDER-B0 --> FIN-fin-theme
+    THEME-VALIDER-B1 --> FIN-fin-theme
+    THEME-VALIDER-B2 --> FIN-fin-theme
+    THEME-VALIDER-B3 --> FIN-fin-theme
+    THEME-VALIDER-B4 --> FIN-fin-theme
+    RACINE -- "COORDONNER" --> THEME-COORDONNER
+    THEME-COORDONNER["Gerer les transitions et communications"]
+    THEME-COORDONNER -- "besoin 1" --> THEME-COORDONNER-B0
+    THEME-COORDONNER-B0["Reception inter-round"]
+    THEME-COORDONNER -- "besoin 2" --> THEME-COORDONNER-B1
+    THEME-COORDONNER-B1["Signaler une violation de regle"]
+    THEME-COORDONNER -- "besoin 3" --> THEME-COORDONNER-B2
+    THEME-COORDONNER-B2["Retour a Stark (FIN DE CYCLE)"]
+    THEME-COORDONNER-B0 --> FIN-fin-theme
+    THEME-COORDONNER-B1 --> FIN-fin-theme
+    THEME-COORDONNER-B2 --> FIN-fin-theme
+    RACINE -- "EXPLORER" --> THEME-EXPLORER
+    THEME-EXPLORER["Comprendre pourquoi quelque chose ne va pas"]
+    THEME-EXPLORER -- "besoin 1" --> THEME-EXPLORER-B0
+    THEME-EXPLORER-B0["Diagnostiquer un conflit de regles"]
+    THEME-EXPLORER -- "besoin 2" --> THEME-EXPLORER-B1
+    THEME-EXPLORER-B1["Comprendre pourquoi un agent viole une regle"]
+    THEME-EXPLORER -- "besoin 3" --> THEME-EXPLORER-B2
+    THEME-EXPLORER-B2["Auditer la coherence globale"]
+    THEME-EXPLORER -- "besoin 4" --> THEME-EXPLORER-B3
+    THEME-EXPLORER-B3["Consulter les lecons pour comprendre un probleme recurrent"]
+    THEME-EXPLORER-B0 --> FIN-fin-theme
+    THEME-EXPLORER-B1 --> FIN-fin-theme
+    THEME-EXPLORER-B2 --> FIN-fin-theme
+    THEME-EXPLORER-B3 --> FIN-fin-theme

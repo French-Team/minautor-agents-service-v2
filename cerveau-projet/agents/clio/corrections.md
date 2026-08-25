@@ -381,3 +381,47 @@ liste parcours 16->18 avec argus/chiron/gardien/socrate/redacteur-v2 ajoutes).
 TOUJOURS etre verifies ensemble (grep cible sur chaque nom d'agent dans CHACUN des
 2 readmes). Le compteur de texte libre (16 agents) n'est pas detecte par --verifier :
 les compteurs narratifs se corrigent a la main apres verification --agents.
+## [LECON] 2026-08-23 -- REGISTRE INCOMPLET : 3 OUTILS DE DEMARRAGE NON DECLARES (Clio, inter-round Janus D1)
+
+**Contexte** : lors de ma mission verifier (README doit-il refleter la reparation), j ai declare au registre seulement consulter-lecons + mettre-a-jour-readme. Janus a signale D1 (VERDICT A REVOIR) : guider-parcours, lire-fichier, lire-activite-recente MANQUANTS (non auto-journalises).
+
+**Lecon** : la case c19 de ma carte ordonne "un appel a enregistrer-usage-outil PAR OUTIL" - TOUS les outils utilises dans la mission, y compris ceux de demarrage (guider-parcours, lire-fichier, lire-activite-recente), doivent etre declares au registre en mode direct (convention des autres agents). Un registre incomplet declenche une boucle KO de Janus.
+
+**Corrige** : 3 entrees ajoutees (22:09:19). Rapport : janus/controles/controle-clio-verifier-readme-reparation-2026-08-23.md.
+## [LECON] 2026-08-24 -- MISSION P1 README-DEV : CATEGORIE GIT AJOUTEE (DEVIATION)
+
+**Contexte** : deviation Pattern 7 (bilan consolide) - P1 : readme-dev incoherence interne, tableau section 6 somme 164 vs total reel 165 (categorie Git manquante, outil hades-contexte-git). Detecte par mettre-a-jour-readme --verifier [ECART SOMME].
+
+**Deroulement** : j'ai confirme P1 (verifier + combo-maj-readme), mais editer-fichier est VERROUILLE pour clio (habilites : buffy, hermes, minerve, promethee, redacteur-v2) -> redirection verrou vers buffy (habilitee) qui a insere la ligne '| Git | 1 | hades-contexte-git |' entre Gerer et Guider. Verifier final : [OK] 40 categories, somme 165 = total reel 165.
+
+**Lecons** :
+1. JE N'AI PAS D'OUTIL D'EDITION DIRECTE VERROUILLE : editer-fichier n'est pas dans mes habilitations -> pour une correction ciblee hors mettre-a-jour-readme, je passe par l'agent habilite (buffy) via la redirection verrou (jamais de contournement).
+2. MEME EN MISSION DE DIAGNOSTIC SANS CORRECTION EFFECTIVE, JE DECLARE MES USAGES D'OUTILS (guider-parcours, lire-fichier, combos-moteur...) - lecon deja apprise en D1 (23/08), reaffirmee ici.
+3. LE VERIFIER EST MA SOURCE DE VERITE : [OK] somme = total = le tableau readme-dev est coherent.
+
+**Preuves** : verifier [OK] 165=165, rapport janus/controles/controle-deviation-3-lots-2026-08-24.md.
+
+## [LECON] 2026-08-24 -- README-V2.MD REDIGE (EXCEPTION REDACTION V2)
+
+**Contexte** : mission de rediger cerveau-projet/README-v2.md (grand
+public v2, equipe freelance) avec l EXCEPTION REDACTION V2 (decision
+utilisateur 2026-08-24).
+
+**Verdict** : fichier cree (190 lignes, ASCII 0/0, frontmatter YAML FERME
+ligne 8, ton 1ere personne, badges dynamiques : 10 agents (9 MARVEL +
+Hades), 20 protocoles, M1-M7, 11 modules tools-commun, ~600 messages
+JARVIS, JARVIS v0.9.x). Dry-run AVANT/APRES presente et VALIDE par
+l utilisateur avant ecriture.
+
+**Lecons** :
+1. L EXCEPTION REDACTION V2 fonctionne : un agent lie a un fichier unique
+   peut rediger un NOUVEAU document si la fiche + la carte sont preparees
+   (lecon Chiron respectee : la pedagogie precede l activation).
+2. Le dry-run AVANT/APRES + validation utilisateur sont LA garantie avant
+   toute ecriture.
+3. Les badges dynamiques se comptent sur les sources reelles (agents,
+   modules, protocoles), pas sur des suppositions.
+
+**Preuves** : README-v2.md (190 lignes, ASCII 0/0, frontmatter ferme) ;
+sources verifiees (conventions, M1-M7, protocoles, tools-commun 11
+modules, jarvis v0.9.x) ; validation utilisateur du dry-run ; lecon BDD.

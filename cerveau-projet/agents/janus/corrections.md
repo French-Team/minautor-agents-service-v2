@@ -6176,3 +6176,238 @@ LECON 2026-08-21] Controle final non-regression 21/08 : VERDICT VALIDE (97/97 OK
 
 [LECON 2026-08-21] Controle final alignement cartes (Buffy) : VERDICT VALIDE (97/97 OK, rating test 98.8 EXCELLENT). 1 KO initial : test-004 pin parcours morpheus v0.5.3 -> v0.5.4 (consequence du bump carte morpheus) - reparation immediate, relance 97/97. Verifie : evaluer-processus 0, ASCII/LF 0/0, audit Themis CONFORME, marbre 8/8, valider-cartes-decision 17/17, lock 0 divergence, Pattern 14 16/16. Rapport : janus/controles/controle-alignement-cartes-2026-08-21.md. LECON : apres une mission qui bumpe des versions de cartes, verifier TOUS les pins de versions des tests (Buffy avait adapte test-005/013/016 mais pas test-004) - seule la non-regression complete les attrape tous.
 [LECON 2026-08-21] Controle correction sessions proposition-v2 : VERDICT VALIDE - non-regression 97/97 OK (0 KO, rating 98.9 EXCELLENT). Mission Buffy (correction proposition-v2.md : session-admin = agents existants, session-freelance = nouveaux agents) + audit Themis CONFORME 0 defaut. Verifie : 97/97 OK, evaluer-processus 0 probleme, ASCII/LF 0 sur les 3 fichiers (proposition, rapport themis, historique), coherence encart/corps 10/10. Point d'attention : la commande reactiver de Themis avec arguments inverses a cree 2 entrees parasites dans AGENTS-historique.md - reparees immediatement (suppression + activation correcte de Buffy). Lecon : apres une erreur de commande d'activation, verifier l'encart ET le corps de l'historique (grep heure) et supprimer les entrees parasites des 2 zones pour retablir la coherence 10/10.
+LECON 2026-08-23] Controle verification Clio readme-v2 : VERDICT VALIDE. Le rapport Chiron est exact : zero mention readme-v2/freelance/v2 dans agents/clio/ (fiche v0.2.2, parcours v0.6.4), carte sans branche dediee, regle 'corriger sans creer' bloquante pour un NOUVEAU document. Verifie : coherence rapport/sources, verifier-role-fichier OK, combo-controle-modification OK, evaluer-processus 0 probleme, valider-cartes-decision chiron CONFORME (sync 0.3.4). 9 residus pre-existants signales (5 .bak + tmp-buffy/tmp-vulcain/.tmp-test004 -> domaine Hygie). 3 divergences outils confirmees (activer-agent-principal spec/py, editer-fichier ref/reels, valider-cartes-decision ref/md -> Vulcain). Lecon : avant une mission de redaction d un NOUVEAU document par un agent existant, la verification pedagogique (branche de carte + sources dediees) doit PRECEDER l activation - sinon travail improvise garanti.
+LECON 2026-08-23] Controle final corrections Clio readme-v2 + inter-round D1 : VERDICT VALIDE. La mission Buffy (corrections fiche+carte Clio pour readme-v2, E1-E4 Chiron) est CONFORME : valider-cartes-decision clio 10/10 (Pattern 14 v0.6.5), navigation readme-v2 c1->c22->c23 OK, lecons Buffy 287 + Themis 288, registre complet, ASCII 0/0, combo controle-modification OK, rapport Themis exact. 1 defaut D1 detecte par evaluer-processus (OUTIL_HORS_CARTE themis -> valider-conformite-ascii, mon propre usage d audit) -> INTER-ROUND -> Buffy corrige (carte themis v0.5.9, c9 + indice valider-conformite-ascii, Pattern 14) -> re-controle evaluer-processus 0 probleme -> VALIDE. Residus pre-existants signales (9 : 5 .bak + registre.bak + tmp-buffy/tmp-vulcain/.tmp-test004 -> Hygie) + 1 divergence outil (activer-agent-principal spec/py -> Vulcain). Lecon : un controleur qui utilise un outil d audit manuel (valider-conformite-ascii sur rapport) cree un usage registre que SA carte doit couvrir - la boucle KO inter-round Janus -> Buffy -> re-controle a fonctionne et clos le defaut sans casser le round.
+LECON 2026-08-23] Controle mission Clio verifier README reparation : VERDICT VALIDE (1 defaut D1 corrige en boucle KO). CONFORME : verdict Clio NON correct (reparation documentaire : CRLF, 9 residus, 3 alignements versions - aucun outil/agent cree/supprime, badges Agents-19/Outils-165 = realite 19/165), ecarts signales PRE-EXISTANTS prouves (README.md + readme-dev.md absents du git status), carte Clio CONFORME 10/10 (Pattern 14 v0.6.5), audit Themis CONFORME 0 defaut, ASCII 0/0. D1 : registre clio INCOMPLET (seuls consulter-lecons + mettre-a-jour-readme declares, manquent guider-parcours/lire-fichier/lire-activite-recente - outils de demarrage non auto-journalises) -> boucle KO -> Clio complete (3 entrees 22:09:19, mode direct) + lecon BDD -> re-controle registre complet -> VALIDE. Hors perimetre signale : 3 problemes evaluer-processus de la chaine de reparation (buffy corriger-fins-de-ligne EXCLUSIF vulcain, buffy detecter-residus hors carte, morpheus valider-conformite-ascii hors carte) -> Buffy/Vulcain ; P1 readme-dev incoherence 164 vs 165 -> Clio ; P2 mismatch verifier/section 'La boite a outils' -> Vulcain/Clio. Lecon : verifier le registre de TOUS les outils utilises, y compris ceux de demarrage (guider-parcours/lire-fichier/lire-activite-recente ne s'auto-journalisent pas - declaration en mode direct obligatoire). Rapport : janus/controles/controle-clio-verifier-readme-reparation-2026-08-23.md.
+[LECON 2026-08-24] Controle deviation 3 lots (cartes + outil + readme-dev) : VERDICT VALIDE apres boucle KO D1. Cartes buffy 0.5.6 + morpheus 0.5.8 CONFORMES (Pattern 14), outil mettre-a-jour-readme 0.4.5 coherent py/sh/md, readme-dev 165=165 (categorie Git ajoutee), ASCII 0/0. D1 : registre clio INCOMPLET pour la mission P1 (diagnostic sans correction effective - editer-fichier verrouille -> redirection buffy) + lecon manquante -> boucle KO -> Clio complete (9 usages 24/08 + lecon BDD/corrections.md). LECON : meme en mission de DIAGNOSTIC sans correction effective, les usages d'outils doivent etre declares. P-A a surveiller : clio non habilitee editer-fichier (redirection systematique vers buffy pour les corrections ciblees readme hors mettre-a-jour-readme). Rapport : janus/controles/controle-deviation-3-lots-2026-08-24.md.
+
+[LECON 2026-08-24] Controle reparation P-A/P-B editer-fichier pour Clio : VERDICT VALIDE. Controle du second controle (decision utilisateur : ajouter editer-fichier a Clio). Verifie : carte clio CONFORME 0.6.6 (indice editer-fichier en c20), fiche clio PARCOURS v0.6.6 (regle README UNIQUEMENT assouplie, 3 occurrences alignees), ASCII 0/0, registre buffy complet. 0 defaut. Lecon : apres une decision utilisateur qui assouplit une regle d outil, verifier TOUTES les occurrences de l ancienne regle dans la fiche (Pattern 14 sync la version mais pas les regles) - l audit Themis a detecte la 3e occurrence manquante.
+
+[LECON 2026-08-24] Controle validation flux editer-fichier Clio : VERDICT VALIDE. Mission Clio de validation (decision utilisateur : editer-fichier habilite). Verifie : carte clio CONFORME (indice editer-fichier c20), verifier 0 ecart (165=165), registre clio 5 usages, ASCII 0/0, rapport Themis coherent. Lecon : une mission de VALIDATION sans ecriture (dry-run) prouve une habilitation d outil sans risque - le verrou s ouvre pour Clio en direct, la decision utilisateur est operationnelle.
+
+[LECON 2026-08-24] Controle bilan strategique v1 : VERDICT VALIDE. Rapport Themis conforme (6 sections + conclusion, donnees reelles, ASCII 0/0, registre 17 usages). Point d attention mineur : 212 lecons a l ecriture vs 213 apres la lecon de l auteur - instantane normal. Lecon : un rapport de bilan est un instantane ; le verdict porte sur la conformite a la demande, pas sur l actualite absolue des compteurs.
+
+[LECON 2026-08-24] Controle comparatif v1 vs v2 : VERDICT VALIDE. Rapport Themis conforme (16 piliers, bandeau NON NORMATIF, D1-D18 citees, ASCII 0/0). Lecon : le bandeau NON NORMATIF + la localisation (themis/rapports/, jamais reference dans une carte/fiche) sont la reponse STRUCTURELLE au risque qu un agent v2 traite une analyse comme une autorite - le rapport est correctement isole du circuit normatif.
+
+[LECON 2026-08-24] Controle test-100 frontmatter : VERDICT VALIDE. Test Morpheus conforme (2/2 OK, 808 .md, critere CLOTURE, aucun outil modifie). Lecon : le test-100 ferme la boucle de l incident preview - un frontmatter non ferme est maintenant detecte avant de casser le preview. Lecon du bilan appliquee : il manquait un TEST dedie, il est ecrit.
+
+LECON 2026-08-24] Controle mission Atlas exploration freelance : VERDICT VALIDE, 0 defaut. Rapport : janus/controles/controle-exploration-freelance-2026-08-24.md. Livrable : atlas/rapports/dossier-complet-freelance-2026-08-24.md (28 Ko, 14 sections, bandeau NON NORMATIF, ASCII 0/0) - inventaire complet du dossier v2 (9 agents MARVEL, JARVIS v0.9.0 ~598 messages, M1-M7, protocoles 1-20, routines EDITH, templates, tests Fury PASSE). Verifie : presence, structure, donnees exactes (grades/protocoles/volumes contre sources), registre atlas 12 usages, lecon BDD + corrections, impact isole (seul corrections.md modifie + rapports/ cree - diffs outils pre-existants session). Audit Themis CONFORME. Vigilance : .bak 28 Ko cree par corriger-accents dans atlas/rapports/ -> Hygie. Lecon : verifier les CHIFFRES d'un rapport d'exploration contre les sources reelles, pas seulement la forme.
+
+## [LECON] 2026-08-24 -- CONTROLE MISSION BUFFY : METHODE RIGOUREUSE ATLAS (VALIDE)
+
+**Contexte** : controle de la modification d'Atlas (carte + fiche + livrables)
+pour l'exploration rigoureuse decidee par l'utilisateur (un dossier a la fois,
+un .md par dossier, rapport complet = doublon de structure).
+
+**Verdict** : VALIDE, 0 defaut.
+
+**Lecons** :
+1. La boucle c2a-c2b-c2c (un dossier a la fois, .md par dossier, boucle jusqu a
+   couverture totale) est le pattern a garder pour les explorations exhaustives.
+2. Le doublon de structure (arborescence + liens vers les .md dedies) rend le
+   rapport complet navigable et comparable v1 vs v2.
+3. Un controle doit verifier le REGISTRE d usages (qui a fait quoi), pas
+   seulement git status : les diffs d'outils du working tree etaient
+   pre-existants (deviation Chiron -> Vulcain), la mission Buffy n a touche
+   que atlas/ + buffy/corrections.md.
+
+**Preuves** : controle-modification-atlas-methode-2026-08-24.md ; carte v0.5.5
+nav validee c2c OUI->c8 / NON->c2a ; 17 .md dedies + 35 liens ; fiche PARCOURS
+v0.5.5 + REGLE ABSOLUE METHODE RIGOUREUSE ; ASCII 0/0 ; registre buffy 213.
+
+## [LECON] 2026-08-24 -- CONTROLE MISSION CLIO : README APRES MISSION BUFFY ATLAS (VALIDE)
+
+**Contexte** : controle de la mission Clio (verification README apres la
+mission Buffy methode rigoureuse Atlas).
+
+**Verdict** : VALIDE, 0 defaut.
+
+**Lecons** :
+1. Une mission de type README peut legitiment se conclure par AUCUNE
+   modification : quand le --verifier donne 0 ecart, la decision de ne rien
+   faire est la bonne reponse (et non une mise a jour forcee).
+2. Le --verifier + git status sont les preuves : 0 ecart + README vide =
+   VALIDE.
+3. Le perimetre Clio (outil unique mettre-a-jour-readme) doit etre verifie
+   dans un controle README : aucune trace d'autre outil = conforme.
+
+**Preuves** : controle-clio-readme-atlas-2026-08-24.md ; --verifier 0 ecart
+(19 agents, Outils-165, readme-dev 40 categories = 165) ; git status README
+vide ; ASCII 0/0 ; registre clio 25.
+
+## [LECON] 2026-08-24 -- CONTROLE MISSION BUFFY : CORRECTION ATLAS DOSSIER DEDIE (VALIDE)
+
+**Contexte** : controle de la correction de la methode Atlas (probleme
+utilisateur : rapports a la racine de atlas/rapports/ au lieu d'un dossier
+dedie par exploration).
+
+**Verdict** : VALIDE, 0 defaut.
+
+**Lecons** :
+1. Le pattern DOUBLON DE STRUCTURE + DOSSIER DEDIE PAR EXPLORATION
+   (atlas/rapports/<cible>-<AAAAMMJJ>/) est la bonne organisation : le
+   dossier dedie est LE DOSSIER COMPLET de l'exploration.
+2. LIENS RELATIFS SIMPLES (noms de fichiers) = deplacement du dossier sans
+   casse : verifier qu'ils resolvent apres une reorganisation (18/18).
+3. Un controle de reorganisation doit verifier : la racine ne contient plus
+   que le dossier dedie, les liens resolvent, les mentions textuelles de
+   chemins sont a jour.
+
+**Preuves** : controle-modification-atlas-dossier-dedie-2026-08-24.md ; carte
+v0.5.6 CONFORME (valider-cartes + valider-case) ; atlas/rapports/ = [dossier
+dedie] 19 fichiers ; liens 18/18 ; ASCII 0/0 ; registre buffy 229.
+
+## [LECON] 2026-08-24 -- CONTROLE MISSION CLIO : README APRES CORRECTION ATLAS DOSSIER DEDIE (VALIDE)
+
+**Contexte** : controle de la mission Clio (verification README apres la
+correction de la methode Atlas : dossier dedie par exploration).
+
+**Verdict** : VALIDE, 0 defaut.
+
+**Lecons** :
+1. Une reorganisation de LIVRABLES (deplacement de rapports dans un dossier
+   dedie) peut legitiment se conclure par AUCUNE modification du README :
+   0 ecart au --verifier = decision correcte de ne rien faire.
+2. Le --verifier + git status sont les preuves : 0 ecart + README vide =
+   VALIDE.
+3. Le perimetre Clio (outil unique mettre-a-jour-readme) doit etre verifie
+   dans un controle README : aucune trace d'autre outil = conforme.
+
+**Preuves** : controle-clio-readme-atlas-dossier-dedie-2026-08-24.md ;
+--verifier 0 ecart (19 agents, Outils-165, readme-dev 40 categories = 165) ;
+git status README vide ; ASCII 0/0 ; registre clio 27.
+
+## [LECON] 2026-08-24 -- CONTROLE COMPARATIF V1 VS V2 RECREE (VALIDE)
+
+**Contexte** : controle de la mission Themis (recree + mise a jour du
+comparatif v1 vs v2 apres la perte du rapport initial de 263 lignes).
+
+**Verdict** : VALIDE, 0 defaut.
+
+**Lecons** :
+1. Un rapport RECREE doit verifier le frontmatter YAML FERME (lecon
+   test-100) : l incident preview ne doit pas revenir.
+2. Le dossier complet Atlas (atlas/rapports/freelance-2026-08-24/) est
+   la SOURCE DE VERITE pour croiser les donnees v2 (agents, grades,
+   volumes, protocoles) dans tout rapport d'analyse.
+3. Apres une perte de livrable, le re-controle valide la recreation
+   complete du rapport sans exiger de re-verifier les sources v1 (deja
+   croisees a la premiere redaction).
+
+**Preuves** : controle-comparatif-v1-v2-reorganise-2026-08-24.md ;
+rapport 303 lignes, frontmatter ferme ligne 9, ASCII 0/0 ; registre
+themis 10 usages ; lecon themis BDD.
+
+## [LECON] 2026-08-24 -- CONTROLE DECISIONS README V2 + EDUCATION V2 (VALIDE)
+
+**Contexte** : controle de la mission Themis (recommendations de decision
+pour les 2 piliers A DECIDER du comparatif v1 vs v2).
+
+**Verdict** : VALIDE, 0 defaut.
+
+**Lecons** :
+1. Une recommandation de decision est VALIDE si elle est ACTIONNABLE
+   (qui fait quoi, quand) et si chaque reco s'appuie sur une source
+   verifiable (lecon Chiron pour la preparation Clio, philosophie v2
+   pour l'education integree).
+2. Le passage A DECIDER -> ADAPTER dans le comparatif doit etre verifie
+   a la fois dans les piliers ET dans la conclusion (coherence des
+   bilans).
+3. Le .bak de corriger-accents est un residu standard (domaine Hygie) :
+   non bloquant.
+
+**Preuves** : controle-decisions-readme-education-2026-08-24.md ;
+rapport 113 lignes ASCII 0/0 ; comparatif 309 lignes (piliers 8/15
+ADAPTER, 0 decider) ; registre themis 11 usages.
+
+## [LECON] 2026-08-24 -- CONTROLE README-V2 (CLIO) : A REVOIR PUIS VALIDE (INTER-ROUND)
+
+**Contexte** : controle de la mission Clio (redaction README-v2.md, branche
+readme-v2 de la carte clio). Fichier 189 lignes, donnees exactes verifiees
+sur disque (10 agents 9 MARVEL + Hades, grades gold/silver/copper, JARVIS
+v0.9.x ~600 messages, 20 protocoles, M1-M7, 11 modules tools-commun),
+ASCII 0/0, frontmatter ferme (lecon test-100), dry-run valide utilisateur.
+
+**Verdict initial** : A REVOIR (1 point mineur) -- evaluer-processus
+OUTIL_HORS_CARTE : clio ajouter-contenu-fichier declare au registre mais
+absent des indices outil de la carte. Cause : c22 indiquait "Outil UNIQUE :
+mettre-a-jour-readme" alors que cet outil ne cree PAS de nouveau fichier.
+
+**Inter-round Buffy** : carte clio v0.6.7 (c22 texte + indices
+creer-fichier/ajouter-contenu-fichier), fiche v0.6.7, cartes-lock
+resynchronise. Verdict final : VALIDE.
+
+**Lecons** :
+1. Le controle doit lancer evaluer-processus : il attrape les outils
+   utilises hors indices de carte (OUTIL_HORS_CARTE) que l'audit Themis
+   (detecter-usage-outils-externes) ne voit pas toujours.
+2. Un ecart carte/execution mineur est REPARABLE par inter-round : le
+   verdict peut passer A REVOIR -> VALIDE quand l'agent habilite corrige.
+3. Les KO pre-existants (marbre regles-groupes-agents, test-018
+   redacteur-v2) doivent etre identifies comme tels pour ne pas polluer
+   le verdict de la mission controlee.
+
+**Preuves** : controle-modification-readme-v2-2026-08-24.md (VERDICT
+A REVOIR puis SUITE INTER-ROUND VALIDE) ; lecon buffy 24/08.
+
+## [LECON] 2026-08-24 -- CONTROLE VERIFICATION README (CLIO) : VALIDE
+
+**Contexte** : controle de la mission Clio (verification README apres la
+mission readme-v2 et l'inter-round Buffy carte clio v0.6.7).
+
+**Verdict** : VALIDE, 0 defaut.
+
+**Points** : --verifier 0 ECART (agents table OK, badge Outils-165,
+readme-dev 40 categories somme 165) ; ASCII 0/0 (README.md +
+readme-dev.md) ; AUCUNE modification (verification pure, README.md sans
+diff git) ; registre clio 4 usages ; audit Themis CONFORME.
+
+**Lecons** :
+1. Le flag OUTIL_HORS_CARTE clio ajouter-contenu-fichier a DISPARU
+   d'evaluer-processus (9 -> 8 problemes) : preuve que la reparation
+   inter-round Buffy (carte clio v0.6.7) est effective. Verifier
+   evaluer-processus AVANT/APRES un inter-round pour confirmer.
+2. Une mission de verification (0 modification) est VALIDE si le
+   --verifier est a 0 ecart et que rien n'a ete ecrit.
+3. readme-dev.md : modification pre-existante (ligne Git/hades-contexte-git)
+   deja refletee dans le total 165 - hors perimetre, non bloquant.
+
+**Preuves** : controle-modification-verification-readme-2026-08-24.md
+(VERDICT VALIDE) ; rapport audit themis CONFORME ; evaluer-processus
+9 -> 8 problemes (flag clio corrige).
+
+[LECON 2026-08-24] Controle sessions nommees (Buffy) : VERDICT VALIDE 0 defaut. Migration noyau complete : activer-agent-principal v0.7.0 (sidentifier <id> <session> -> session-admin/session-freelance, encarts d activite PAR SESSION, detection AUTO du type IR par prefixe INTER-ROUND/FIN D INTER-ROUND), parcours-demarrage v0.3.0 + demarrer.md, AGENTS.md (2 blocs + table), classeur, historique (encarts par session), 11 outils + 6 tests alignes. Verifie : test-056 18/18, test-090 11/11, test-025 11/11, test-024 16/17 (1 KO pre-existant catalogue), aucun nouveau KO (comparaison stash), evaluer-processus 8 problemes tous pre-existants, ASCII 0/0, registre + lecons buffy/themis complets. Lecon : un renommage de session touche la table Sessions connues, le classeur et les regex session-llm- de 11 outils + 6 tests - verifier l etat reel AVANT de valider ; le flag themis valider-cartes-decision reste pre-existant (Vulcain).
+[LECON 2026-08-24] Controle mission Vulcain arbres v2 (convertir-carte-mermaid v0.3.0) : VERDICT VALIDE 0 defaut. Outil etendu aux ARBRES de decision v2 (freelance/*/parcours/arbre-*.json : racine/branches/fins, PAS des cartes v1) : lister_arbres, convertir_arbre, verifier_arbres (compare SANS ecrire), generer_arbres, asciifier, --arbres + --verifier combine cartes v1 ET arbres v2. Livrables : 9 .mmd + 9 .svg + index.md dans cartes-vues/arbres/. Test-101 (Morpheus, inter-round) 11/11 OK avec preuves negatives. Verifie : --version v0.3.0, --arbres --verifier rc=0 ("9 arbres v2 synchronises : OK"), 19 fichiers, test-101 11/11, combo controle-modification termine, ASCII 0/0 (outil+fiche+test+controle+index), test-096 6 KO pre-existants (baseline stash), evaluer-processus 8 problemes TOUS pre-existants. Lecon : (a) une structure nouvelle (arbre vs carte) exige un parseur ET un test dedies - la ligne "9 arbres v2" du test-096 vient de l'outil, pas d'un test ; (b) verifier_arbres attend la RACINE DU PROJET (contenant cerveau-projet/) sinon 0 arbre et preuves negatives faussement vertes ; (c) --verifier combine v1+v2 : un controle isole les arbres via verifier_arbres direct car les cartes v1 portent une dette pre-existante (hades, svg desynchronises - deja signalee a Vulcain).
+[LECON 2026-08-24] Controle education Atlas arbres v2 (Chiron + Buffy inter-round) : VERDICT VALIDE 0 defaut. Mission : eduquer Atlas pour generer le dossier .md + .svg des agents v2 (ARBRES de decision, pas cartes v1). Realise : carte parcours-atlas.json v0.5.6->v0.5.7 (branche vues-v2 dans c1 -> case c35 : convertir-carte-mermaid --arbres + dossier dedie atlas/rapports/vues-v2-<AAAAMMJJ>/), fiche atlas.md (PARCOURS v0.5.7, REGLE MISSION VUES V2, METHODE v0.5.7), dossier vues-v2-2026-08-24/ (9 agents, 19 liens). Chiron a diagnostique (rapport), Buffy a applique (verrou habilitation : carte d'Atlas exclusive a Buffy). Verifie : valider-cartes-decision CONFORME, lock marbre empreinte OK, navigation c1->c35, combo controle-modification termine, ASCII 0/0, test-101 11/11 (controle precedent), perimetre propre. Lecon : (a) l'education d'agent passe par le verrou habilitation - Chiron propose (rapport), Buffy applique (inter-round) ; (b) la fiche doit suivre le bump (Pattern 14) - valider-cartes-decision exige fiche == parcours.version ; (c) le dossier dedie METHODE RIGOUREUSE s'applique aux vues v2 - documentation (atlas) separee de la generation (outil, cartes-vues/arbres/).
+[LECON 2026-08-24] Controle Clio verifier README (apres mission education Atlas vues-v2) : VERDICT VALIDE 0 defaut. Clio a verifie le README apres la mission (carte atlas v0.5.7, outil convertir-carte-mermaid v0.3.0) : --verifier 0 ECART (agents table OK, badge Outils-165, readme-dev 165=165), README.md 0 diff. Audit Themis CONFORME. Verifie : --verifier 0 ecart, pertinence (ni agent ni outil ajoute), ASCII 0/0 README+rapports, combo controle-modification termine, perimetre propre (Clio n a rien modifie). Lecon : une mission qui modifie une CARTE ou un OUTIL EXISTANT (sans ajouter agent/outil) ne change JAMAIS le README - le --verifier a 0 ecart est le verdict attendu ; la verification Clio post-mission sans impact README est un controle de coherence (anti-boucle Cerberus) verrouille par le rapport Themis CONFORME.
+
+## [LECON] 2026-08-24 -- CONTROLE MISSION VULCAIN v0.7.1 ENCART AUTRE : VERDICT VALIDE + SESSION FANTOME REPAREE (Janus)
+
+**Contexte** : l utilisateur ne veut plus d encart 'Activites recentes' generique 'autre' dans AGENTS-historique.md : seules session-admin et session-freelance doivent exister. Vulcain a corrige activer-agent-principal v0.7.0->v0.7.1 (mapping sessions historiques session-1/session-llm-1/session-llm-2 vers admin/freelance + repli 'autre' SUPPRIME). Morpheus (inter-round) a valide les tests (aucun nouveau KO). Janus : controle final.
+
+**Diagnostic** : migration VERIFIEE et appliquee - encarts = session-admin + session-freelance uniquement, colonne id = glm5/freebuff, plus de session-llm-2 dans AGENTS.md / classeur / historique. 9 problemes evaluer-processus TOUS pre-existants. En cours de mission, une commande `reactiver session-llm-2` erronee (au lieu de session-admin) avait CREE une session fantome (l outil cree la session si elle n existe pas) : bloc AGENTS.md sans Nom LLM + profil classeur + 3 entrees historiques parasites -> l id des nouvelles entrees affichait session-llm-2 au lieu de glm5. REPARE : activation dans session-admin + suppression bloc fantome + profil + entrees parasites + regeneration encart via la fonction de l outil.
+
+**Lecons** :
+1. `reactiver` ramene TOUJOURS a Cerberus (dernier maillon) ; un RETOUR DELEGATION d inter-round utilise `activer <session> <agent>` - confondre les deux cree une session fantome si la session n existe pas.
+2. VERIFIER LA SESSION AVANT TOUTE COMMANDE : session-admin (v1/glm5) et session-freelance (v2/freebuff) - les sessions session-llm-N n existent plus depuis la v0.7.0.
+3. UNE SESSION FANTOME SANS Nom LLM POLLUE LES ID DES ENCARTS : id_lie_a_session retombe sur le nom de session (repli) -> verifier la colonne id apres chaque activation.
+4. LA MIGRATION DES ENCARTS EST DECLENCHEE PAR L OUTIL A CHAQUE ACTIVATION (maj_encart_activites) - pas besoin de script manuel ; pour un nettoyage immediat, appeler la fonction de l outil sur le fichier reel.
+
+**Preuves** : rapport controle-modification-encart-autre-v0.7.1-2026-08-24.md, combo controle-modification OK, ASCII 0/0 (outil py/sh/spec + AGENTS.md + historique + classeur), tests Morpheus sans nouveau KO (test-056 18/18, test-090 11/11).
+
+## [LECON] 2026-08-24 -- CONTROLE MISSION CLIO VERIFIER README (APRES ENCART AUTRE) : VERDICT VALIDE (Janus)
+
+**Contexte** : apres la mission suppression encart 'autre' (activer-agent-principal v0.7.1), Cerberus a active Clio pour verifier le README. Clio : --verifier 0 ECART, aucune modification necessaire. Themis : audit CONFORME 0 defaut. Janus : controle final.
+
+**Diagnostic** : VERIFIE et VALIDE - --verifier 0 ECART (agents table OK, badge Outils-165 OK, readme-dev 40 categories somme 165 = 165), README.md 0 diff, ASCII 0/0 (README + readme-dev + README-v2), rapport Themis present. Le seul diff readme-dev (categorie Git/hades-contexte-git) est PRE-EXISTANT (mission anterieure, deja compte dans la somme 165) : ce n'est pas un ecart de la mission.
+
+**Lecons** :
+1. UNE MISSION QUI MODIFIE UN OUTIL EXISTANT (logique interne : mapping, encarts) NE CHANGE JAMAIS LE README : ni agent ni outil ajoute -> le --verifier a 0 ecart est le verdict ATTENDU, pas une surprise.
+2. UN DIFF PRE-EXISTANT DANS readme-dev (categorie ajoutee par une mission anterieure) N EST PAS UN ECART de la mission courante si la somme des categories = total reel (165) - verifier la somme avant de signaler.
+3. LE FLUX VERIFIER DE CLIO : c1 verifier -> c11 (--verifier) -> c19 (usages) -> c12a (activer Themis) -> c12b (retour) -> c12 (activer Janus). Ne pas confondre avec c12b qui est le point d attente du retour de Themis (PATTERN RE-ESSAI).
+
+**Preuves** : rapport controle-clio-verification-readme-encart-autre-2026-08-24.md, combo controle-modification OK, ASCII 0/0, --verifier 3 OK.
+
+## [LECON] 2026-08-24 -- CONTROLE ENCARTS 10 ACTIVITES : VALID (Janus)
+
+Controle de la mission Vulcain v0.7.2 : encarts 10 activites + raisons completes. VERDICT VALID. Versions 0.7.2 coherentes py/sh/spec, syntaxe OK, ASCII 0/0, mapping correct, repli 'autre' toujours supprime. Test fonctionnel : 10 lignes par encart, 0 troncature. Tests Morpheus : test-056 18/18, test-090 11/11, 0 regression. 9 problemes evaluer-processus pre-existants documentes.

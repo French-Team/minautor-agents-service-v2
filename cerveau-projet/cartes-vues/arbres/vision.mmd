@@ -1,0 +1,27 @@
+%% Arbre de decision de vision (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quel theme ?"}
+    RACINE -- "MODIFIER" --> THEME-MODIFIER
+    THEME-MODIFIER["Faire evoluer JARVIS sans jamais casser la communication de "]
+    THEME-MODIFIER -- "besoin 1" --> THEME-MODIFIER-B0
+    THEME-MODIFIER-B0["Modifier jarvis.py ou jarvis-server.py"]
+    THEME-MODIFIER -- "besoin 2" --> THEME-MODIFIER-B1
+    THEME-MODIFIER-B1["Refuser une demande"]
+    FIN-fin-theme(["FIN - Theme termine"])
+    THEME-MODIFIER-B0 --> FIN-fin-theme
+    THEME-MODIFIER-B1 --> FIN-fin-theme
+    RACINE -- "TRAITER" --> THEME-TRAITER
+    THEME-TRAITER["Accuser reception puis traiter (ou refuser) une demande vena"]
+    THEME-TRAITER -- "besoin 1" --> THEME-TRAITER-B0
+    THEME-TRAITER-B0["Traiter une demande recue"]
+    THEME-TRAITER-B0 --> FIN-fin-theme
+    RACINE -- "LIRE" --> THEME-LIRE
+    THEME-LIRE["LIRE"]
+    FIN-theme(["FIN"])
+    THEME-LIRE --> FIN-theme
+    RACINE -- "EXPLORER" --> THEME-EXPLORER
+    THEME-EXPLORER["Trouver la cause racine d'un dysfonctionnement de JARVIS"]
+    THEME-EXPLORER -- "besoin 1" --> THEME-EXPLORER-B0
+    THEME-EXPLORER-B0["Diagnostiquer"]
+    THEME-EXPLORER-B0 --> FIN-fin-theme

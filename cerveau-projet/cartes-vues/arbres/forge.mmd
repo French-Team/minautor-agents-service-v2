@@ -1,0 +1,63 @@
+%% Arbre de decision de forge (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quel theme ?"}
+    RACINE -- "CREER" --> THEME-CREER
+    THEME-CREER["Construire un outil complet et operationnel"]
+    THEME-CREER -- "besoin 1" --> THEME-CREER-B0
+    THEME-CREER-B0["Determiner dedie ou commun"]
+    THEME-CREER -- "besoin 2" --> THEME-CREER-B1
+    THEME-CREER-B1["Creer la structure de l'outil"]
+    THEME-CREER -- "besoin 3" --> THEME-CREER-B2
+    THEME-CREER-B2["Ecrire le formulaire (D7)"]
+    THEME-CREER -- "besoin 4" --> THEME-CREER-B3
+    THEME-CREER-B3["Separer code et donnees (D15)"]
+    THEME-CREER -- "besoin 5" --> THEME-CREER-B4
+    THEME-CREER-B4["Tester l'outil"]
+    THEME-CREER -- "besoin 6" --> THEME-CREER-B5
+    THEME-CREER-B5["VALIDER l'outil cree"]
+    FIN-fin-theme(["Retour a la racine"])
+    THEME-CREER-B0 --> FIN-fin-theme
+    THEME-CREER-B1 --> FIN-fin-theme
+    THEME-CREER-B2 --> FIN-fin-theme
+    THEME-CREER-B3 --> FIN-fin-theme
+    THEME-CREER-B4 --> FIN-fin-theme
+    THEME-CREER-B5 --> FIN-fin-theme
+    RACINE -- "LIRE" --> THEME-LIRE
+    THEME-LIRE["Acceder a la connaissance des outils"]
+    THEME-LIRE -- "besoin 1" --> THEME-LIRE-B0
+    THEME-LIRE-B0["Lire un outil existant"]
+    THEME-LIRE -- "besoin 2" --> THEME-LIRE-B1
+    THEME-LIRE-B1["Voir tous les outils disponibles"]
+    THEME-LIRE -- "besoin 3" --> THEME-LIRE-B2
+    THEME-LIRE-B2["Consulter les lecons d'outils"]
+    THEME-LIRE-B0 --> FIN-fin-theme
+    THEME-LIRE-B1 --> FIN-fin-theme
+    THEME-LIRE-B2 --> FIN-fin-theme
+    RACINE -- "VALIDER" --> THEME-VALIDER
+    THEME-VALIDER["Assurer que l'outil est conforme au template"]
+    THEME-VALIDER -- "besoin 1" --> THEME-VALIDER-B0
+    THEME-VALIDER-B0["Valider un outil cree"]
+    THEME-VALIDER -- "besoin 2" --> THEME-VALIDER-B1
+    THEME-VALIDER-B1["Verifier la separation code/donnees"]
+    THEME-VALIDER-B0 --> FIN-fin-theme
+    THEME-VALIDER-B1 --> FIN-fin-theme
+    RACINE -- "COORDONNER" --> THEME-COORDONNER
+    THEME-COORDONNER["Gerer les transitions"]
+    THEME-COORDONNER -- "besoin 1" --> THEME-COORDONNER-B0
+    THEME-COORDONNER-B0["Reception inter-round"]
+    THEME-COORDONNER -- "besoin 2" --> THEME-COORDONNER-B1
+    THEME-COORDONNER-B1["Retour a Stark"]
+    THEME-COORDONNER-B0 --> FIN-fin-theme
+    THEME-COORDONNER-B1 --> FIN-fin-theme
+    RACINE -- "EXPLORER" --> THEME-EXPLORER
+    THEME-EXPLORER["Comprendre pourquoi un outil ne fonctionne pas"]
+    THEME-EXPLORER -- "besoin 1" --> THEME-EXPLORER-B0
+    THEME-EXPLORER-B0["Diagnostiquer un outil defaillant"]
+    THEME-EXPLORER -- "besoin 2" --> THEME-EXPLORER-B1
+    THEME-EXPLORER-B1["Comprendre pourquoi un formulaire est rejete"]
+    THEME-EXPLORER -- "besoin 3" --> THEME-EXPLORER-B2
+    THEME-EXPLORER-B2["Consulter les lecons d'outils"]
+    THEME-EXPLORER-B0 --> FIN-fin-theme
+    THEME-EXPLORER-B1 --> FIN-fin-theme
+    THEME-EXPLORER-B2 --> FIN-fin-theme

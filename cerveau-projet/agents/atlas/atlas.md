@@ -71,7 +71,7 @@ surcharges:
 
 | `enregistrer-lecon` | Enregistrer MA lecon dans la BDD des lecons (memoire longue) |
 | `consulter-lecons` | Consulter les lecons des autres agents (evolution croisee) |
-> **REGLE ABSOLUE -- PARCOURS (v0.5.4)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.5.7)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -88,6 +88,28 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 > la couverture des missions.
 > **Case 0 commune** : `demarrer.md` -- tous les parcours demarrent apres
 > l'identification.
+
+> **REGLE ABSOLUE -- METHODE RIGOUREUSE (v0.5.7, decision utilisateur 2026-08-24)** :
+> quand j'explore un dossier cible (ex: freelance/), je CREE D'ABORD LE
+> DOSSIER DEDIE de l'exploration `atlas/rapports/<cible>-<AAAAMMJJ>/` qui
+> sera LE DOSSIER COMPLET contenant TOUS les rapports. J'analyse UN DOSSIER
+> A LA FOIS (jamais tout d'un coup), je redige UN .md PAR DOSSIER DANS LE
+> DOSSIER DEDIE (resume de CHAQUE fichier : nom, role, ce qu'il fait),
+> je boucle jusqu'a couvrir tous les dossiers, puis j'ecris le rapport
+> complet = DOUBLON DE LA STRUCTURE (arborescence avec liens vers chaque
+> .md dedie), DANS LE MEME dossier dedie.
+> Objectif : comprendre facilement ce qui est fait dans la v2 et comparer
+> avec la v1.
+
+> **REGLE ABSOLUE -- MISSION VUES V2 (v0.5.7, decision utilisateur 2026-08-24)** :
+> les agents de la v2 ont des ARBRES de decision (`arbre-<agent>.json` :
+> racine -> branches vers `theme-*.json` -> `fins.json` centralise), PAS des
+> cartes v1 (`parcours-<agent>.json` avec cases). Pour la mission `vues-v2`,
+> je GENERE les vues `.mmd` + `.svg` des 9 arbres v2 avec l'outil
+> `convertir-carte-mermaid --arbres` (sortie dans cartes-vues/arbres/ :
+> 9 .mmd + 9 .svg + index.md), je cree LE DOSSIER DEDIE
+> `atlas/rapports/vues-v2-<AAAAMMJJ>/` et j'y documente les vues generees.
+> C'est le dossier COMPLET des vues v2 pour comparer avec la v1.
 
 ---
 

@@ -376,6 +376,20 @@
      "catalogue": "valider-case",
      "chemin": "cerveau-projet/agents/tools/valider/valider-case/",
      "commande": "python3 cerveau-projet/agents/tools/valider/valider-case/valider-case.py <chemin-parcours>"
+    },
+    {
+     "type": "outil",
+     "nom": "detecter-residus",
+     "catalogue": "detecter-residus",
+     "chemin": "cerveau-projet/agents/tools/detecter/detecter-residus/",
+     "commande": "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --zone <cerveau-projet|workspace> --detail"
+    },
+    {
+     "type": "outil",
+     "nom": "corriger-fins-de-ligne",
+     "catalogue": "corriger-fins-de-ligne",
+     "chemin": "cerveau-projet/agents/tools/corriger/corriger-fins-de-ligne/",
+     "commande": "python3 cerveau-projet/agents/tools/corriger/corriger-fins-de-ligne/corriger-fins-de-ligne.py --dry-run"
     }
    ],
    "question": "La modification respecte-t-elle la boucle RVAV complete (nommage, liens, ASCII, coherence) ?",
@@ -1427,6 +1441,6 @@
   "case_depart": "c0",
   "description": "v0.4.7 : + indice outil c0 guider-parcours (P0 fiche, usage reel, garde-fou test-035)",
   "nom": "parcours-buffy",
-  "version": "0.5.5"
+  "version": "0.5.6"
  }
 }

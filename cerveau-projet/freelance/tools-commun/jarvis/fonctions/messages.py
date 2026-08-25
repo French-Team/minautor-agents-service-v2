@@ -29,6 +29,11 @@ def cmd_envoyer(args):
     if priorite < 1 or priorite > 5:
         print("ERREUR: priorite doit etre entre 1 et 5")
         sys.exit(1)
+    # Garde AVANT toute ecriture : l'auto-activation ne doit laisser
+    # AUCUN message derriere elle (effet de bord corrige v0.11.1).
+    if getattr(args, "activer", False) and vers == de:
+        print("ERREUR: --activer impossible vers soi-meme")
+        sys.exit(1)
 
     message = {
         "id": str(uuid.uuid4())[:8],
@@ -53,9 +58,6 @@ def cmd_envoyer(args):
 
     # v0.3.0 : --activer = le message DECLENCHE l'activation du destinataire.
     if getattr(args, "activer", False):
-        if vers == de:
-            print("ERREUR: --activer impossible vers soi-meme")
-            sys.exit(1)
         ok = maj_bloc_session(getattr(args, "session", ""), vers,
                               raison=f"Relais de {de}: {objet}")
         # v0.6.1 : livraison directe (affichage = livraison)
@@ -66,8 +68,8 @@ def cmd_envoyer(args):
         print(f"  [ACTIVATION] '{vers}' prend le relais"
               + ("" if ok else "  (bloc session introuvable - message seul)"))
         print(f"  MISSION INJECTEE - DEMARRE DIRECTEMENT (livree = affichee).")
-        print(f"  AVANT DE COMMENCER : lis ta fiche et tes corrections puis "
-              f"INCARNE l agent qui prend le relais.")
+        print(f"  Tu es l agent '{vers}'. AVANT DE COMMENCER : lis ta "
+              f"fiche et tes corrections puis PRENDS LE RELAIS.")
 
     priorite_label = "BLOQUANT" if priorite == 1 else f"P{priorite}"
     print(f"[JARVIS] Message envoye ({priorite_label}): {de} -> {vers}")
@@ -84,11 +86,17 @@ def cmd_lire(args):
         sys.exit(1)
 
     messages = lire_jsonl(get_inbox(agent))
-    non_lus = [m for m in messages if not m.get("lu", False)]
+    sans_id = [m for m in messages
+               if not m.get("lu", False) and not m.get("id")]
+    non_lus = [m for m in messages
+               if not m.get("lu", False) and m.get("id")]
 
-    if not non_lus:
+    if not non_lus and not sans_id:
         print(f"[JARVIS] Aucun message en attente pour {agent}.")
         return
+
+    if sans_id:
+        print(f"[JARVIS] ATTENTION: {len(sans_id)} message(s) sans id ignore(s).")
 
     bloquants = [m for m in non_lus if m.get("priorite", 5) == 1]
 
@@ -120,7 +128,8 @@ def cmd_recu(args):
         print(f"ERREUR: agent inconnu '{agent}'")
         sys.exit(1)
     messages = lire_jsonl(get_inbox(agent))
-    non_lus = [m for m in messages if not m.get("lu", False)]
+    non_lus = [m for m in messages
+               if not m.get("lu", False) and m.get("id")]
     if not non_lus:
         print(f"[JARVIS] recu {agent}: rien en attente.")
         return
@@ -194,7 +203,7 @@ def cmd_lister(args):
         statut = "LU" if m.get("lu") else "NON-LU"
         p = m.get("priorite", 5)
         label = "BLOQUANT" if p == 1 else f"P{p}"
-        print(f"  [{label}] [{statut}] ID: {m['id']} | {m['de']} -> {m['vers']}")
+        print(f"  [{label}] [{statut}] ID: {m.get('id', 'N/A')} | {m['de']} -> {m['vers']}")
         print(f"    Objet: {m['objet']} | {m['date']}")
 
 

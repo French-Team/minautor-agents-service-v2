@@ -7,9 +7,9 @@
  "parcours": {
   "nom": "parcours-atlas",
   "agent": "atlas",
-  "version": "0.5.4",
+  "version": "0.5.7",
   "case_depart": "c0",
-  "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). A la fin de chaque mission, je reactive Cerberus (Atlas ne delegue pas, il rend a Cerberus). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses. PILOTE STRICT v0.1.2 : commandes composees via le generateur (catalogue), aucun fallback en dur.",
+  "description": "Parcours (jeu de piste) des missions d'Atlas : explorateur et documentaliste. 4 missions (explorer le code, rechercher sur le web, documenter, analyser les dependances). METHODE RIGOUREUSE (v0.5.6, decision utilisateur 2026-08-24) : pour explorer, Atlas cree LE DOSSIER DEDIE de l exploration atlas/rapports/<cible>-<AAAAMMJJ>/ (c2) - il sera LE DOSSIER COMPLET contenant TOUS les rapports. Il analyse UN DOSSIER A LA FOIS (c2a), redige UN .md PAR DOSSIER dans le dossier dedie (c2b), boucle jusqu a couvrir tous les dossiers (c2c), puis ecrit le rapport complet = DOUBLON DE LA STRUCTURE avec liens vers chaque .md dedie, DANS LE MEME dossier dedie (c9). Chaque case donne l'indice exact (outil, fichier, regle) et les branches selon les reponses.",
   "version_precedente": "0.4.3"
  },
  "cases": {
@@ -91,22 +91,31 @@
     {
      "reponse": "cartographier-agent",
      "vers": "c31"
+    },
+    {
+     "reponse": "vues-v2",
+     "vers": "c35"
     }
    ],
    "indices": [
     {
      "type": "regle",
-     "texte": "GARDE-FOU C1 : demande hors des branches (explorer/web/documenter/analyser/cartographier) -> reponse autre -> c26. JAMAIS improviser, JAMAIS outil hors carte."
+     "texte": "GARDE-FOU C1 : demande hors des branches (explorer/web/documenter/analyser/cartographier/cartographier-agent/vues-v2) -> reponse autre -> c26. JAMAIS improviser, JAMAIS outil hors carte."
     }
    ]
   },
   "c2": {
-   "titre": "Lister les dossiers",
+   "titre": "Creer le dossier dedie et lister les dossiers",
    "type": "action",
+   "texte": "Je CREE LE DOSSIER DEDIE de l exploration : atlas/rapports/<cible>-<AAAAMMJJ>/ (mkdir) - il sera LE DOSSIER COMPLET contenant TOUS les rapports (les .md par dossier en c2b + le dossier-complet en c9). Puis je liste les dossiers de la cible (lister-dossiers) pour planifier l exploration UN DOSSIER A LA FOIS.",
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+    },
+    {
+     "type": "regle",
+     "texte": "LE DOSSIER DEDIE atlas/rapports/<cible>-<AAAAMMJJ>/ contient TOUS les rapports de l exploration : c est LE DOSSIER COMPLET."
     },
     {
      "type": "ref",
@@ -119,92 +128,7 @@
      "chemin": "cerveau-projet/agents/tools/lister/lister-dossiers/"
     }
    ],
-   "suivant": "c3"
-  },
-  "c3": {
-   "titre": "Lister les fichiers",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-    },
-    {
-     "type": "outil",
-     "nom": "lister-fichiers",
-     "catalogue": "lister-fichiers",
-     "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
-    }
-   ],
-   "suivant": "c4"
-  },
-  "c4": {
-   "titre": "Lister les fonctions",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-    },
-    {
-     "type": "outil",
-     "nom": "lister-fonctions",
-     "catalogue": "lister-fonctions",
-     "chemin": "cerveau-projet/agents/tools/lister/lister-fonctions/"
-    }
-   ],
-   "suivant": "c5"
-  },
-  "c5": {
-   "titre": "Lister les appels",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-    },
-    {
-     "type": "outil",
-     "nom": "lister-appels",
-     "catalogue": "lister-appels",
-     "chemin": "cerveau-projet/agents/tools/lister/lister-appels/"
-    }
-   ],
-   "suivant": "c6"
-  },
-  "c6": {
-   "titre": "Lire le contenu des fichiers cles",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-    },
-    {
-     "type": "outil",
-     "nom": "lire-fichier",
-     "catalogue": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
-    }
-   ],
-   "suivant": "c7"
-  },
-  "c7": {
-   "titre": "Rechercher des patterns",
-   "type": "action",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
-    },
-    {
-     "type": "outil",
-     "nom": "rechercher-texte",
-     "catalogue": "rechercher-texte",
-     "chemin": "cerveau-projet/agents/tools/rechercher/rechercher-texte/"
-    }
-   ],
-   "suivant": "c8"
+   "suivant": "c2a"
   },
   "c8": {
    "titre": "Verifier la regle de relecture (systeme d'agents)",
@@ -224,9 +148,14 @@
    "suivant": "c9"
   },
   "c9": {
-   "titre": "Documenter les decouvertes",
+   "titre": "Documenter les decouvertes (rapport complet dans le dossier dedie)",
    "type": "action",
+   "texte": "Je redige le RAPPORT COMPLET dans LE DOSSIER DEDIE de l exploration : atlas/rapports/<cible>-<AAAAMMJJ>/dossier-complet-<cible>-<AAAAMMJJ>.md. C est un DOUBLON DE LA STRUCTURE de la cible -- je reproduis l arborescence (dossiers + fichiers) et CHAQUE dossier pointe vers SON .md dedie deja redige dans le MEME dossier dedie (lien relatif simple : <dossier>-<AAAAMMJJ>.md). Le rapport complet ne re-ecrit pas le detail : il organise la structure et lie les .md dedies. SORTIE : atlas/rapports/<cible>-<AAAAMMJJ>/ contient TOUS les rapports de l exploration (les .md par dossier + le dossier-complet) = LE DOSSIER COMPLET.",
    "indices": [
+    {
+     "type": "regle",
+     "texte": "RAPPEL ASCII : j ecris TOUJOURS en ASCII strict (aucun accent, emoji ou caractere Unicode)."
+    },
     {
      "type": "ref",
      "ref": "pattern-2"
@@ -1013,6 +942,110 @@
    "titre": "FIN - Reprendre ma mission",
    "type": "fin",
    "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
+  },
+  "c2a": {
+   "type": "action",
+   "titre": "Analyser UN dossier (un a la fois)",
+   "texte": "Je choisis le PROCHAIN dossier non encore analyse de la cible. Je liste ses fichiers (lister-fichiers) puis je lis CHAQUE fichier (lire-fichier) pour comprendre son role et ce qu il fait. Je ne passe au dossier suivant qu une fois celui-ci complet et son .md ecrit.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "RIGUEUR : UN dossier a la fois. Je ne melange JAMAIS deux dossiers dans la meme analyse."
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+    },
+    {
+     "type": "outil",
+     "nom": "lister-fichiers",
+     "catalogue": "lister-fichiers",
+     "chemin": "cerveau-projet/agents/tools/lister/lister-fichiers/"
+    },
+    {
+     "type": "outil",
+     "nom": "lire-fichier",
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/"
+    }
+   ],
+   "suivant": "c2b"
+  },
+  "c2b": {
+   "titre": "Rediger le .md du dossier dans le dossier dedie",
+   "type": "action",
+   "texte": "Je redige atlas/rapports/<cible>-<AAAAMMJJ>/<dossier>-<AAAAMMJJ>.md : UN .md PAR DOSSIER qui resume CHAQUE fichier du dossier (nom, role, ce qu il fait). TOUS les .md de cette exploration vont dans LE DOSSIER DEDIE atlas/rapports/<cible>-<AAAAMMJJ>/ (cree en c2) qui sera LE DOSSIER COMPLET contenant tous les rapports. Nommage : <dossier>-<AAAAMMJJ>.md. ASCII strict + LF pur. L utilisateur veut comprendre facilement ce qui est fait dans la v2 et comparer avec la v1.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "RAPPEL ASCII : j ecris TOUJOURS en ASCII strict (aucun accent, emoji ou caractere Unicode)."
+    },
+    {
+     "type": "ref",
+     "ref": "pattern-2"
+    },
+    {
+     "type": "outil",
+     "nom": "ecrire-fichier",
+     "catalogue": "ecrire-fichier",
+     "chemin": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/"
+    }
+   ],
+   "suivant": "c2c"
+  },
+  "c2c": {
+   "type": "question",
+   "titre": "Tous les dossiers analyses ?",
+   "question": "Tous les dossiers de la cible ont-ils leur .md dedie dans LE DOSSIER DEDIE atlas/rapports/<cible>-<AAAAMMJJ>/ ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c8"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c2a"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "RIGUEUR : je boucle c2a->c2b->c2c tant qu il reste des dossiers sans .md dans le dossier dedie. Un dossier = un .md."
+    }
+   ]
+  },
+  "c35": {
+   "titre": "Generer les vues v2 (arbres de decision)",
+   "type": "action",
+   "texte": "Je GENERE les vues .mmd + .svg des ARBRES de decision v2 avec convertir-carte-mermaid --arbres (9 agents v2 : stark, shuri, forge, rogers, parker, jarvis, vision, fury, edith - structure RACINE/branches/fins, PAS des cartes v1). Je cree LE DOSSIER DEDIE atlas/rapports/vues-v2-<AAAAMMJJ>/ (mkdir) qui contiendra la documentation, je lance l outil --arbres (genere .mmd + .svg + index.md dans cartes-vues/arbres/), puis je documente dans le dossier dedie.",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+    },
+    {
+     "type": "regle",
+     "texte": "DIFFERENCE ARBRE v2 vs CARTE v1 : les agents v2 ont arbre-<agent>.json (racine -> branches vers theme-*.json -> fins.json centralise), PAS parcours-<agent>.json (cases) comme la v1. L outil --arbres gere les arbres."
+    },
+    {
+     "type": "regle",
+     "texte": "LE DOSSIER DEDIE atlas/rapports/vues-v2-<AAAAMMJJ>/ contient TOUTE la documentation des vues v2 : c est LE DOSSIER COMPLET."
+    },
+    {
+     "type": "outil",
+     "nom": "convertir-carte-mermaid",
+     "catalogue": "convertir-carte-mermaid",
+     "chemin": "cerveau-projet/agents/tools/consulter/convertir-carte-mermaid/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/convertir-carte-mermaid/convertir-carte-mermaid.py --arbres"
+    },
+    {
+     "type": "outil",
+     "nom": "lister-dossiers",
+     "catalogue": "lister-dossiers",
+     "chemin": "cerveau-projet/agents/tools/lister/lister-dossiers/"
+    }
+   ],
+   "suivant": "c10"
   }
  }
 }

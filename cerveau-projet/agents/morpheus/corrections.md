@@ -4601,3 +4601,51 @@ activer-agent-principal (duree des interventions d agents).
 **Validations** : test-099 6/6, test-092 9/9, test-098 7/7, test-005 27/28 (p21 contextuel verrou), test-056 18/18, test-017/028/041 OK, evaluer-processus 0 probleme, RVAV ASCII 0 CRLF 0.
 
 **Lecon** : (1) un test BROUILLON qui anticipe des fonctionnalites inexistantes doit etre reecrit pour tester l etat REEL de l outil (les 6 cas du garde-fou) plutot que corrige a la marge. (2) Le template AGENTS.md copie par les tests porte l etat REEL (agent actif courant) - reinitialiser a Cerberus pour les tests de cas nominal. (3) Une case ajoutee par Buffy dans les cartes (cU2 comprendre l outil) ajoute une commande en dur -> les tests qui pinnent les commandes des cartes doivent etre mis a jour en meme temps que les cartes (meme regle que les pins de version).
+## [LECON] 2026-08-23 -- TESTS ALIGNEMENT VERSIONS : AUCUN PIN A ADAPTER (Morpheus)
+
+**Contexte** : inter-round de delegation Vulcain -> Morpheus : Vulcain a aligne les sources de verite de 3 outils (spec activer-agent-principal 0.5.30, en-tetes editer-fichier 0.5.0, md valider-cartes-decision 0.4.7), je dois adapter les tests qui pinent ces versions et executer.
+
+**Resultat** : AUCUN test a adapter : les occurrences de versions dans test-016/056/005 etaient DOCUMENTAIRES (historique), pas des pins d outil. Les changements Vulcain etaient purement documentaires (en-tetes alignes sur des constantes de code deja existantes). Tests individuels : test-056 18/18 OK ; test-016 18/20, test-005 24/28, test-028 7/8, test-040 4/5, test-092 7/9 - tous les KO PREEXISTANTS ou CONTEXTUELS (verrou habilitation, migration v2 stark, artefacts d execution), aucun lie aux versions.
+
+**Lecons** :
+1. UN ALIGNEMENT D EN-TETES DOCUMENTAIRES NE CASSE AUCUN PIN : quand Vulcain aligne un .md/spec/docstring sur la VERSION deja presente dans le code, aucun test ne pinne l ancien en-tete - verifier les occurrences avant d activer Morpheus evite un inter-round inutile.
+2. AVANT d adapter un test, distinguer PIN D OUTIL (version d un outil fige dans le test) vs MENTION DOCUMENTAIRE (ligne d historique du test lui-meme) : seul le premier casse le test.
+3. KO PREEXISTANTS constates : test-092 signale 'stark' comme agent mort (migration freelance v2 non propagee au dictionnaire activer-agent-principal), test-040 manque hades-contexte-git dans index-tools, test-016 pin cases carte buffy 41->42. A signaler pour une future mission (domaine Vulcain/Buffy).
+## [LECON] 2026-08-24 -- TESTS OUTIL METTRE-A-JOUR-README (DEVIATION P2) : VALIDE
+
+**Contexte** : inter-round Vulcain (delegue par Buffy, deviation P2) - Vulcain a adapte verifier()/dry_run() de mettre-a-jour-readme pour la nouvelle norme README public (1ere personne 20/08, sans section 'La boite a outils'). Bump 0.4.4 -> 0.4.5.
+
+**Verifications** : test-064 (exclusivite mettre-a-jour-readme = clio) 7/7 OK - la carte clio n'a pas ete touchee. detecter-decalages-catalogue : 187 conformes / 0 decalages. --verifier py + sh : [OK] Badge Outils-165 + [INFO] nouvelle norme, seul l ecart SOMME readme-dev 164 vs 165 reste (P1, domaine Clio). --dry-run py + sh : [AUCUN CHANGEMENT] (le README public est deja a jour). ASCII 0/0 py/md/sh.
+
+**Lecons** :
+1. UNE MODIFICATION DOCUMENTAIRE D OUTIL (verifier tolere un nouveau format README) N IMPACTE PAS LES TESTS D EXCLUSIVITE (test-064 verifie la carte, pas le code).
+2. LA COHERENCE PY/SH EST OBLIGATOIRE : toute adaptation du verifier .py doit etre repercutee dans le .sh (wrapper porte la meme logique) + verifier la syntaxe (bash -n) et la sortie identique.
+3. LE DRY-RUN [AUCUN CHANGEMENT] EST LA PREUVE QUE L OUTIL ACCEPTE LE NOUVEAU FORMAT SANS ECRIRE - c'est le verdict attendu pour une reparation de mismatch structurel.
+
+**Preuves** : test-064 7/7 OK, catalogue 0 decalage, verifier/dry-run py=sh, rapport detecter-decalages-catalogue-2026-08-24.md.
+
+[LECON 2026-08-24] Test-100-frontmatter-yaml-ferme cree : VALIDE (2 OK/0 KO, 807 .md, 437 avec frontmatter). Incident preview : rapports Themis frontmatter NON FERME invisible pour la non-regression. Lecon : (a) un defaut qui ne se manifeste que dans un outil externe (preview) exige un test dedie ; (b) le parse YAML strict rejette des frontmatters volontaires (block scalars, commentaires seuls) - le critere pertinent est la CLOTURE ; (c) test-ascii*.md ont un frontmatter ferme sans cle : volontaire.
+## [LECON] 2026-08-24 -- TEST-101 ARBRES V2 MERMAID : VALIDE (inter-round Vulcain)
+
+**Contexte** : inter-round de Vulcain (mission: etendre convertir-carte-mermaid au mode --arbres pour les ARBRES de decision v2 - freelances avec arbre-<agent>.json, racine/branches/fins, PAS des cartes v1). Delegue a Morpheus : creer le test dedie du mode --arbres.
+
+**Verifications** : test-101-arbres-mermaid-garde-fou cree (11 points : 9 .mmd + 9 .svg + index, verifier_arbres rc=0, syntaxe 0 erreur, index 9 agents, ASCII 0/0 + LF pur 0 CRLF, XML 9/9 bien formes, determinisme 9/9 octet a octet, 2 preuves negatives .mmd/.svg detectees rc=1). 11 OK / 0 KO. 0 residu (fichiers sources restaures apres preuves). Les 6 KO de test-096 sont PRE-EXISTANTS (hades manquant + svg v1 desynchronises - identifies a la baseline via stash).
+
+**Lecons** :
+1. LES ARBRES V2 SONT UNE STRUCTURE DIFFERENTE DES CARTES V1 : arbre-<agent>.json (racine -> branches vers theme-*.json -> fins.json centralise) vs parcours-<agent>.json (cases). Un test dedie etait NECESSAIRE - le test-096 (cartes v1) ne couvre pas le mode --arbres meme s il affiche la ligne arbres via l outil.
+2. verifier_arbres(racine, dossier_sortie) attend la RACINE DU PROJET (contenant cerveau-projet/), PAS cerveau-projet/ lui-meme - sinon lister_arbres trouve 0 arbre et les preuves negatives passent a tort (faux positif). Premier essai du test : 9 OK/2 KO, les 2 preuves ne detectaient rien car 0 arbre compare. Correction : passer PROJECT_ROOT.
+3. LE --verifier COMBINE cartes v1 ET arbres v2 (rc = rc_v1 or rc_v2) : la preuve negative doit appeler verifier_arbres DIRECTEMENT (module) pour isoler les arbres, pas la CLI --verifier (deja rc=1 a cause des cartes v1 pre-existantes desynchronisees).
+
+**Preuves** : test-101 11/11 OK, --arbres --verifier "9 arbres v2 synchronises : OK", baseline stash test-096 6 KO pre-existants, ASCII 0/0 test-101.
+## [LECON] 2026-08-24 -- TESTS SUPPRESSION ENCART AUTRE (activer-agent-principal v0.7.1) : VALIDE (inter-round Vulcain)
+
+**Contexte** : inter-round de Vulcain : supprimer le concept d encart 'Activites recentes -- autre' dans AGENTS-historique.md (demande utilisateur : ne garder que session-admin et session-freelance). Modifie : mapper_id_vers_session (mapping sessions historiques session-1 -> session-admin, session-llm-1 -> session-freelance, session-llm-2 -> session-admin) + maj_encart_activites (repli 'autre' supprime : les entrees non mappees sont ignorees des encarts, pas de nouvel encart).
+
+**Verifications** : test-001 11/12 (KO Test 7 pre-existant baseline), test-002 7/8 (pre-existant baseline), test-018 10/13 (3 KO pre-existants : compte parcours 21 vs 23, redacteur-v2), test-021 8/9 (KO-7 pre-existant), test-056 18/18 OK, test-090 11/11 OK. Aucun NOUVEAU KO (comparaison stash). Fonction maj_encart_activites testee sur copie : encarts = [session-admin, session-freelance], plus d 'autre', entrees session-1/themis absorbees.
+
+**Lecons** :
+1. UNE SUPPRESSION DE CONCEPT (encart 'autre') SE VERIFIE PAR LA REGENERATION : lancer maj_encart_activites sur une copie et verifier que les encarts produits ne contiennent que admin/freelance - la preuve est dans la SORTIE, pas dans le code.
+2. LES ENTREES HISTORIQUES NON MAPPEES (session-1) DOIVENT ETRE IGNOREES DES ENCARTS, PAS CREEES DANS 'autre' : le repli par defaut d un mapping.get() est une source de concepts parasites - un repli qui cree une categorie inattendue est un bug de conception.
+3. LA COMPARAISON STASH EST LA SEULE PREUVE DE NON-REGRESSION : chaque KO constate doit etre rejoue a la baseline pour distinguer pre-existant vs nouveau.
+
+**Preuves** : test-056 18/18, test-090 11/11, baselines test-001/002/018/021 identiques, sortie maj_encart_activites sans 'autre', ASCII 0/0.

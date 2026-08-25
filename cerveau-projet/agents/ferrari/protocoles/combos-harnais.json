@@ -1,0 +1,428 @@
+{
+  "identite": {
+    "type": "combos",
+    "appartient_a": "mecano",
+    "version": "0.2.0",
+    "description": "Combos de Mecano utilises avec les harnais de securite"
+  },
+  "harnais": {
+    "harnais-test": {
+      "description": "Ecrire et lancer des tests",
+      "signal_defaut": "SIG OK",
+      "phases": [
+        {
+          "nom": "ISOLATION",
+          "etapes": [
+            "Copier dans /tmp/mecano-test/",
+            "Hash SHA256"
+          ],
+          "signaux": {
+            "SIG OK": "Pret",
+            "SIG ERR": "Arreter"
+          }
+        },
+        {
+          "nom": "ECRITURE",
+          "etapes": [
+            "Ecrire le test",
+            "Logger"
+          ],
+          "signaux": {
+            "SIG OK": "Ecriture OK",
+            "SIG ERR": "Rollback"
+          }
+        },
+        {
+          "nom": "LANCEMENT",
+          "etapes": [
+            "Executer",
+            "Parser resultats"
+          ],
+          "signaux": {
+            "SIG OK": "PASS",
+            "SIG ERR": "FAIL"
+          }
+        },
+        {
+          "nom": "VALIDATION",
+          "etapes": [
+            "Comparer AVANT/APRES",
+            "Verifier couverture"
+          ],
+          "signaux": {
+            "SIG OK": "Valide",
+            "SIG ERR": "Regression"
+          }
+        },
+        {
+          "nom": "APPLICATION",
+          "etapes": [
+            "Copier vers reel",
+            "Verifier hash",
+            "Nettoyer"
+          ],
+          "signaux": {
+            "SIG OK": "Applique",
+            "SIG ERR": "Rollback"
+          }
+        }
+      ],
+      "rollback": {
+        "declencheur": "SIG ERR",
+        "etapes": [
+          "Restaurer depuis SHA256",
+          "Nettoyer",
+          "Logger"
+        ]
+      }
+    },
+    "harnais-edition": {
+      "description": "Editer des fichiers sensibles",
+      "signal_defaut": "SIG OK",
+      "phases": [
+        {
+          "nom": "ISOLATION",
+          "etapes": [
+            "Copier dans /tmp/mecano-edit/",
+            "Hash SHA256",
+            "Lire le fichier"
+          ],
+          "signaux": {
+            "SIG OK": "Pret",
+            "SIG ERR": "Arreter"
+          }
+        },
+        {
+          "nom": "ECRITURE",
+          "etapes": [
+            "Modifier dans /tmp/",
+            "Logger"
+          ],
+          "signaux": {
+            "SIG OK": "Ecriture OK",
+            "SIG ERR": "Rollback"
+          }
+        },
+        {
+          "nom": "VALIDATION",
+          "etapes": [
+            "Relire",
+            "Verifier coherence",
+            "Comparer AVANT/APRES"
+          ],
+          "signaux": {
+            "SIG OK": "Valide",
+            "SIG ERR": "Incoherence"
+          }
+        },
+        {
+          "nom": "APPLICATION",
+          "etapes": [
+            "Copier vers reel",
+            "Verifier hash",
+            "Maj cahier",
+            "Nettoyer"
+          ],
+          "signaux": {
+            "SIG OK": "Applique",
+            "SIG ERR": "Rollback"
+          }
+        }
+      ],
+      "rollback": {
+        "declencheur": "SIG ERR",
+        "etapes": [
+          "Restaurer depuis SHA256",
+          "Nettoyer",
+          "Logger"
+        ]
+      }
+    },
+    "harnais-modification": {
+      "description": "Modifier des outils ou protocoles (impact systemique)",
+      "signal_defaut": "SIG OK",
+      "phases": [
+        {
+          "nom": "ISOLATION",
+          "etapes": [
+            "Copier TOUS les fichiers lies",
+            "Hash de CHAQUE fichier",
+            "Lire en entier"
+          ],
+          "signaux": {
+            "SIG OK": "Pret",
+            "SIG ERR": "Arreter"
+          }
+        },
+        {
+          "nom": "ECRITURE",
+          "etapes": [
+            "Modifier dans /tmp/",
+            "Verifier syntaxe",
+            "Logger"
+          ],
+          "signaux": {
+            "SIG OK": "Ecriture OK",
+            "SIG ERR": "Rollback"
+          }
+        },
+        {
+          "nom": "VALIDATION",
+          "etapes": [
+            "Lancer tests",
+            "Verifier backward compat",
+            "Comparer AVANT/APRES"
+          ],
+          "signaux": {
+            "SIG OK": "Valide",
+            "SIG CRIT": "Casse un test"
+          }
+        },
+        {
+          "nom": "APPLICATION",
+          "etapes": [
+            "Copier TOUS les fichiers",
+            "Verifier hashes",
+            "Maj cahier",
+            "Nettoyer"
+          ],
+          "signaux": {
+            "SIG OK": "Applique",
+            "SIG ERR": "Rollback complet"
+          }
+        }
+      ],
+      "rollback": {
+        "declencheur": "SIG ERR ou SIG CRIT",
+        "etapes": [
+          "Restaurer TOUS les fichiers",
+          "Verifier rollback",
+          "Nettoyer",
+          "Signaler a Cerberus"
+        ]
+      }
+    },
+    "harnais-creation": {
+      "description": "Creer de nouveaux fichiers dans freelance/",
+      "signal_defaut": "SIG OK",
+      "phases": [
+        {
+          "nom": "ISOLATION",
+          "etapes": [
+            "Verifier pas de doublon",
+            "Choisir emplacement",
+            "Verifier template"
+          ],
+          "signaux": {
+            "SIG OK": "Emplacement valide",
+            "SIG ERR": "Doublon"
+          }
+        },
+        {
+          "nom": "ECRITURE",
+          "etapes": [
+            "Creer avec template",
+            "Remplir frontmatter",
+            "Minimum 5 mots-cles"
+          ],
+          "signaux": {
+            "SIG OK": "Cree",
+            "SIG ERR": "Erreur"
+          }
+        },
+        {
+          "nom": "VALIDATION",
+          "etapes": [
+            "Relire",
+            "Verifier coherence",
+            "Verifier encodage"
+          ],
+          "signaux": {
+            "SIG OK": "Valide",
+            "SIG ERR": "Incoherence"
+          }
+        },
+        {
+          "nom": "APPLICATION",
+          "etapes": [
+            "Verifier accessibilite",
+            "Maj cahier"
+          ],
+          "signaux": {
+            "SIG OK": "Applique",
+            "SIG ERR": "Inaccessible"
+          }
+        }
+      ],
+      "rollback": {
+        "declencheur": "SIG ERR",
+        "etapes": [
+          "Supprimer le fichier cree",
+          "Verifier suppression",
+          "Logger"
+        ]
+      }
+    },
+    "harnais-reordonnancement": {
+      "description": "Reordonnancer un fichier par importance (debut + fin = impact)",
+      "signal_defaut": "SIG OK",
+      "phases": [
+        {
+          "nom": "ANALYSE",
+          "etapes": [
+            "Lire EN ENTIER",
+            "Identifier regles importantes",
+            "Classer par priorite"
+          ],
+          "signaux": {
+            "SIG OK": "Deja OK",
+            "SIG WARN": "Reordonnancement necessaire"
+          }
+        },
+        {
+          "nom": "REORDONNANCEMENT",
+          "etapes": [
+            "Copier dans /tmp/",
+            "Deplacer regles CRITIQUES au debut",
+            "Deplacer interdictions a la fin",
+            "Logger"
+          ],
+          "signaux": {
+            "SIG OK": "Reordonne",
+            "SIG ERR": "Element perdu"
+          }
+        },
+        {
+          "nom": "VALIDATION",
+          "etapes": [
+            "Relire",
+            "Verifier regles au debut",
+            "Verifier contenu IDENTIQUE"
+          ],
+          "signaux": {
+            "SIG OK": "Valide",
+            "SIG ERR": "Contenu modifie"
+          }
+        },
+        {
+          "nom": "APPLICATION",
+          "etapes": [
+            "Copier vers reel",
+            "Verifier",
+            "Maj cahier",
+            "Nettoyer"
+          ],
+          "signaux": {
+            "SIG OK": "Applique",
+            "SIG ERR": "Rollback"
+          }
+        }
+      ],
+      "rollback": {
+        "declencheur": "SIG ERR",
+        "etapes": [
+          "Restaurer original",
+          "Nettoyer",
+          "Logger"
+        ]
+      }
+    },
+    "harnais-script-temporaire": {
+      "description": "Creer et executer des scripts temporaires dans un environnement securise",
+      "signal_defaut": "SIG OK",
+      "phases": [
+        {
+          "nom": "ISOLATION",
+          "etapes": [
+            "Creer /tmp/mecano-<nom>/",
+            "Verifier pas de doublon",
+            "Nommer : <type>-<sujet>-<AAAAMMJJ>.py"
+          ],
+          "signaux": {
+            "SIG OK": "Environnement pret",
+            "SIG ERR": "Doublon ou emplacement invalide"
+          }
+        },
+        {
+          "nom": "ECRITURE",
+          "etapes": [
+            "Ecrire le script avec commentaires",
+            "Verifier la syntaxe (python3 -m py_compile)",
+            "Logger la creation dans le cahier de dev"
+          ],
+          "signaux": {
+            "SIG OK": "Script cree",
+            "SIG ERR": "Erreur de syntaxe"
+          }
+        },
+        {
+          "nom": "LANCEMENT",
+          "etapes": [
+            "Executer : python3 /tmp/mecano-<nom>/<script>.py",
+            "Capturer stdout + stderr",
+            "Parser les resultats (PASS/FAIL)",
+            "Verifier les effets sur les fichiers"
+          ],
+          "signaux": {
+            "SIG OK": "Script reussi",
+            "SIG ERR": "Script echoue",
+            "SIG CRIT": "Script plante ou effets indesirables"
+          }
+        },
+        {
+          "nom": "VALIDATION",
+          "etapes": [
+            "Verifier que le script a fait ce qu il devait faire",
+            "Comparer AVANT/APRES les fichiers modifies",
+            "Verifier l encodage des fichiers modifies",
+            "Demander confirmation si effets majeurs"
+          ],
+          "signaux": {
+            "SIG OK": "Validation reussie",
+            "SIG ERR": "Effets incorrects"
+          }
+        },
+        {
+          "nom": "SUPPRESSION",
+          "etapes": [
+            "Supprimer /tmp/mecano-<nom>/",
+            "Verifier la suppression",
+            "Logger la suppression dans le cahier de dev"
+          ],
+          "signaux": {
+            "SIG OK": "Script supprime",
+            "SIG ERR": "Suppression echouee"
+          }
+        }
+      ],
+      "rollback": {
+        "declencheur": "SIG ERR ou SIG CRIT",
+        "etapes": [
+          "Supprimer /tmp/mecano-<nom>/",
+          "Restaurer les fichiers modifies depuis les backups",
+          "Logger le rollback dans le cahier de dev",
+          "Signaler a Cerberus si effets graves"
+        ]
+      }
+    }
+  },
+  "utilisation": {
+    "description": "Comment Mecano utilise les combos",
+    "regles": [
+      "Lire le bon combo selon le type d intervention",
+      "Suivre les phases dans l ordre",
+      "Respecter les signaux (arreter sur SIG ERR)",
+      "Toujours faire le rollback en cas d erreur",
+      "Logger chaque etape dans le cahier de dev"
+    ],
+    "selection": {
+      "ecrire un test": "harnais-test",
+      "editer un fichier agent": "harnais-edition",
+      "modifier un outil": "harnais-modification",
+      "modifier un protocole": "harnais-modification",
+      "creer un fichier": "harnais-creation",
+      "reordonnancer un fichier": "harnais-reordonnancement",
+      "creer un script temporaire": "harnais-script-temporaire"
+    }
+  }
+}

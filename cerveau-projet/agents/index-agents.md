@@ -29,6 +29,7 @@ identite:
 | [Morpheus](morpheus/morpheus.md) | morpheus/morpheus.md | morpheus/corrections.md | Testeur | Disponible (en attente) | Agent dedie aux tests |
 | [Vulcain](vulcain/vulcain.md) | vulcain/vulcain.md | vulcain/corrections.md | Constructeur d'outils | Disponible (en attente) | Cree pour construire les outils reels |
 | [Themis](themis/themis.md) | themis/themis.md | themis/corrections.md | Evaluatrice croisee | Disponible | 4 evaluateurs + 1 combo |
+| [Mecano](ferrari/ferrari.md) | ferrari/ferrari.md | ferrari/corrections.md | Agent v1 specialise freelance | Disponible (en attente) | Corrige/modifie le dossier freelance/ -- double identite v1/v2 |
 
 ### Templates
 

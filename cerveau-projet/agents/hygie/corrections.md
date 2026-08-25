@@ -187,3 +187,14 @@ cerveau-projet/docs-dev-cerveau-projet/ est conserve intact.
 3. Le verrou exige --agent hygie sur supprimer-dossier ET supprimer-fichier (lecon 2026-08-16 confirmee pour les 2 outils).
 
 - **2026-08-19 (test-085 processus residuel)** : un processus orphelin (bash -x /tmp/vt-test2.sh, PID 14628) laisse par un test de diagnostic heredoc faisait KO test-085. Nettoyage : snapshot (6109 fichiers) -> detecter (1 residu, provenance prouvee) -> nettoyer-processus-residuels --agent hygie --kill 14628 --force -> re-detection PROPRE -> test-085 8/8 OK. Lecon : les tests de diagnostic qui lancent bash -x doivent terminer leurs processus avant de rendre la main.
+## [LECON] 2026-08-23 -- REPARATION INTER-ROUND : 9 RESIDUS + CRLF SUPPRIMES (Hygie)
+
+**Contexte** : inter-round de reparation (protocole v0.2.0) demande par Cerberus via Buffy : nettoyer les erreurs hors mission signalees au bilan consolide de la chaine clio-readme-v2.
+
+**Actions** : snapshot (8417 fichiers) -> detecter-residus --tous 9 residus (6 SAUVEGARDE cerveau-projet + 3 TEMP workspace) -> provenance prouvee (PRE-EXISTANTS classes par Janus, aucun cree par la mission) -> suppression 9/9 (6 supprimer-fichier + 3 supprimer-dossier --agent hygie) -> re-detection PROPRE (0 fichier + 0 processus) -> CRLF clio/corrections.md corrige via corriger-fins-de-ligne (383 lignes) -> rapport nettoyage-2026-08-23-2140.md -> ASCII 0/0.
+
+**Lecons** :
+1. INTER-ROUND = FIN DIFFERENTE DE SA CARTE : quand je suis activee en inter-round (reparation), je NE suis PAS ma fin normale c13 (Activer Janus) : le protocole v0.2.0 (R2/R3) ordonne de REACTIVER L APPELANT (Buffy), qui reprend son round (activer Vulcain pour les divergences). Janus reste HORS des inter-rounds (R4).
+2. detecter-residus --tous affiche parfois une liste TRONQUEE (N premiers + ... (1 autres)) : pour la liste COMPLETE des .bak, compter via le snapshot (chemin finissant par .bak) ou un scan dedie.
+3. analyse-externe.md.bak (backup conserve le 21/08) devenu superflu : la source originale existe -> residu prouve, supprimable.
+4. Les fichiers freelance .bak-20260823-* (jarvis, routines-server) ne sont PAS des residus detectes : ne pas les toucher en mission cerveau-projet.

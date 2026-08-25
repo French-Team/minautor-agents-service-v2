@@ -19,5 +19,5 @@ def date_tableau():
 
 
 def heure_historique():
-    """Heure pour AGENTS-historique : HH:MM:SS.microsec(15c)."""
-    return datetime.now().strftime("%H:%M:%S.%f")[:15]
+    """Heure pour AGENTS-historique : HH:MM:SS.mmm (3 chiffres)."""
+    return datetime.now().strftime("%H:%M:%S.%f")[:12]

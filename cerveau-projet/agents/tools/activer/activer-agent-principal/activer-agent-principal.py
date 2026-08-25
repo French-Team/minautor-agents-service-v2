@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.5.30
+Version : 0.7.1
 Statut : prepare
 """
 
@@ -36,7 +36,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.5.30"
+VERSION = "0.7.2"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -363,7 +363,7 @@ def trouver_session_par_id(llm_id):
             contenu = fh.read()
         for ligne in contenu.split(chr(10)):
             if "id: " + llm_id in ligne:
-                m = re.search(r"session: (session-llm-\d+)", ligne)
+                m = re.search(r"session: (session-[A-Za-z0-9_-]+)", ligne)
                 if m:
                     return m.group(1)
     return None
@@ -550,6 +550,20 @@ def editer_champs_session(contenu, session_id, champs):
     return "\n".join(sortie)
 
 
+def detecter_type_round(raison, type_round="R"):
+    """DETECTION AUTOMATIQUE du type d inter-round (decision utilisateur
+    2026-08-24) : si la raison (normalisee) commence par 'INTER-ROUND' ou
+    'FIN D INTER-ROUND', le type est IR sans flag manuel. Sinon, garder le
+    type passe (defaut R)."""
+    if type_round == "IR":
+        return type_round
+    raison_haut = (raison or "").strip().upper()
+    raison_norm = raison_haut.replace("'", " ")
+    if raison_haut.startswith("INTER-ROUND") or raison_norm.startswith("FIN D INTER-ROUND"):
+        return "IR"
+    return type_round
+
+
 def ajouter_historique(timestamp, session, agent, raison, type_round="R"):
     """Ajouter une entree dans le fichier historique, max 150.
 
@@ -559,13 +573,16 @@ def ajouter_historique(timestamp, session, agent, raison, type_round="R"):
       - HH:MM | id | TYPE | raison   (TYPE = R round ou IR inter-round)
 
     La colonne porte l ID LLM (resolu depuis la session via id_lie_a_session,
-    repli sur la session si aucun id lie). Aussi met a jour l encart
-    'Activites recentes' en haut du fichier (header : id).
+    repli sur la session si aucun id lie). Le type IR est DETECTE
+    AUTOMATIQUEMENT (raison commencant par INTER-ROUND / FIN D INTER-ROUND,
+    decision utilisateur 2026-08-24). Aussi met a jour les encarts
+    'Activites recentes' PAR SESSION en haut du fichier (header : id).
     """
     if not os.path.isfile(AGENTS_HISTORIQUE):
         print("ERREUR: Le fichier %s n'existe pas" % AGENTS_HISTORIQUE)
         return 1
 
+    type_round = detecter_type_round(raison, type_round)
     identifiant = id_lie_a_session(session) or session
     nouvelle_ligne = composer_bloc_historique(timestamp, identifiant, agent, raison, type_round)
 
@@ -640,14 +657,48 @@ def ajouter_historique(timestamp, session, agent, raison, type_round="R"):
     return 0
 
 
-def maj_encart_activites(contenu, date, heure, agent, identifiant, raison):
-    """Mettre a jour l encart 'Activites recentes' en haut du fichier.
+def mapper_id_vers_session():
+    """Construire le mapping id LLM -> session depuis le classeur-variables
+    (lignes profil-session-* : 'session: X / id: Y'). Decision utilisateur
+    2026-08-24 : les encarts d activite sont PAR SESSION (session-admin,
+    session-freelance...), chaque session ecrit dans SON encart et peut lire
+    les autres.
 
-    Extrait les 10 dernieres entrees du fichier et les place dans un
-    tableau visible en haut, entre l en-tete et l historique par jour.
-    Colonne : id (id LLM, ex: freebuff).
+    v0.7.1 (2026-08-24) : supprime le concept d encart 'autre'. Les anciennes
+    sessions (session-llm-1, session-llm-2, session-1) sont mappees vers leur
+    session nommee (freelance pour la v2/freebuff, admin pour la v1/glm5 et
+    l ancienne session-1 de themis). Les entrees dont la session ne matche
+    AUCUN mapping ne creent plus d encart : elles sont ignorees (elles restent
+    dans le corps de l historique, seuls les encarts ne les affichent pas)."""
+    mapping = {
+        # Sessions historiques (v0.6.x et avant) -> sessions nommees
+        "session-llm-1": "session-freelance",
+        "session-llm-2": "session-admin",
+        "session-1": "session-admin",
+    }
+    if os.path.isfile(CLASSEUR_STOCKAGE):
+        with io.open(CLASSEUR_STOCKAGE, "r", encoding="utf-8", errors="replace") as fh:
+            for ligne in fh:
+                if "profil-session-" not in ligne:
+                    continue
+                ms = re.search(r"session: (session-[A-Za-z0-9_-]+)", ligne)
+                mid = re.search(r"id: (\S+)", ligne)
+                if ms and mid:
+                    mapping[mid.group(1)] = ms.group(1)
+    return mapping
+
+
+def maj_encart_activites(contenu, date, heure, agent, identifiant, raison):
+    """Mettre a jour les encarts 'Activites recentes' PAR SESSION en haut du
+    fichier (decision utilisateur 2026-08-24).
+
+    Chaque session (session-admin, session-freelance...) possede SON encart
+    (les 5 dernieres entrees de SA session), et peut lire les encarts des
+    autres sessions pour savoir que les autres travaillent. Le mapping
+    id -> session vient du classeur (profil-session-*).
     """
-    # Extraire toutes les entrees du format timeline avec l agent et la date
+    mapping = mapper_id_vers_session()
+    # Extraire toutes les entrees du format timeline avec l agent, la date et l id
     entrees = []
     agent_courant = "?"
     date_courante = ""
@@ -670,34 +721,49 @@ def maj_encart_activites(contenu, date, heure, agent, identifiant, raison):
                     r = parties[2].strip()
                 # Cle de tri : date + heure (JJ/MM/AAAA HH:MM)
                 cle_tri = "%s %s" % (date_courante, h)
-                entrees.append((cle_tri, h, agent_courant, s, r, t))
+                session_entree = mapping.get(s)
+                if session_entree is None:
+                    # v0.7.1 : plus d encart 'autre' - les entrees non mappees
+                    # restent dans le corps de l historique mais ne creent pas
+                    # d encart (decision utilisateur 2026-08-24).
+                    continue
+                entrees.append((cle_tri, h, agent_courant, s, r, t, session_entree))
 
-    # Trier par date/heure decroissante et prendre les 10 plus recentes
-    entrees.sort(key=lambda x: x[0], reverse=True)
-    recentes = [(h, a, s, r, t) for _, h, a, s, r, t in entrees[:10]]
+    # Regrouper par session, trier par date/heure decroissante, garder les 10 plus recentes
+    par_session = {}
+    for cle_tri, h, a, s, r, t, session_entree in entrees:
+        par_session.setdefault(session_entree, []).append((cle_tri, h, a, s, r, t))
 
-    # Construire l encart
-    encart = "---\n\n## Activites recentes (10)\n\n"
-    encart += "| Heure | Agent | id | Type | Raison |\n"
-    encart += "|-------|-------|----|------|--------|\n"
-    for h, a, s, r, t in recentes:
-        r_aff = r if len(r) <= 80 else r[:77] + "..."
-        encart += "| %s | %s | %s | %s | %s |\n" % (h, a, s, t, r_aff)
-    encart += "\n---\n"
+    encart = "---\n\n"
+    sessions_triees = sorted(par_session.keys())
+    for session_nom in sessions_triees:
+        liste = sorted(par_session[session_nom], key=lambda x: x[0], reverse=True)[:10]
+        encart += "## Activites recentes -- %s\n\n" % session_nom
+        encart += "| Heure | Agent | id | Type | Raison |\n"
+        encart += "|-------|-------|----|------|--------|\n"
+        for _, h, a, s, r, t in liste:
+            r_aff = r if len(r) <= 80 else r[:77] + "..."
+            encart += "| %s | %s | %s | %s | %s |\n" % (h, a, s, t, r_aff)
+        encart += "\n"
+    encart += "---\n"
 
-    # Remplacer l ancien encart (s il existe) ou l inserer
+    # Remplacer l ancien bloc d encarts (s il existe) ou l inserer
     marqueur_debut = "## Activites recentes"
-    marqueur_fin = "---\n\n## "
-   
     if marqueur_debut in contenu:
         idx_debut = contenu.index(marqueur_debut)
+        # Remonter au tout premier '## Activites recentes' du bloc
+        while True:
+            prec = contenu.rfind("\n## Activites recentes", 0, idx_debut)
+            if prec == -1:
+                break
+            idx_debut = prec + 1
         # Remonter au debut de la section (lignes precedentes)
         while idx_debut > 0 and contenu[idx_debut - 1] in "\n\r":
             idx_debut -= 1
-        # Trouver la fin (prochain ## apres le debut)
-        idx_fin = contenu.find("\n## ", idx_debut + len(marqueur_debut))
+        # Trouver la fin : le '---' qui suit le dernier tableau du bloc
+        idx_fin = contenu.find("\n---\n", idx_debut)
         if idx_fin == -1:
-            idx_fin = contenu.find("\n---\n\n## ", idx_debut)
+            idx_fin = contenu.find("\n## ", idx_debut + len(marqueur_debut))
         if idx_fin != -1:
             contenu = contenu[:idx_debut] + encart + contenu[idx_fin:]
         else:
@@ -726,7 +792,7 @@ def mettre_a_jour_sessions_connues(contenu):
         for ligne in fh:
             if "profil-session-" not in ligne:
                 continue
-            m = re.search(r"session: (session-llm-\d+)", ligne)
+            m = re.search(r"session: (session-[A-Za-z0-9_-]+)", ligne)
             if not m:
                 continue
             session = m.group(1)
@@ -742,7 +808,12 @@ def mettre_a_jour_sessions_connues(contenu):
 
     def cle_session(entree):
         m = re.search(r"session-llm-(\d+)", entree[0])
-        return int(m.group(1)) if m else 0
+        if m:
+            return (0, int(m.group(1)))
+        m2 = re.search(r"session-(\d+)", entree[0])
+        if m2:
+            return (1, int(m2.group(1)))
+        return (2, 0)
 
     lignes.sort(key=cle_session)
     table = ("## Sessions connues\n\n"
@@ -869,26 +940,54 @@ def agent_actif_bloc(contenu, session_id):
     return "Cerberus"
 
 
-def sidentifier(llm_id=None):
+def normaliser_nom_session(nom_session):
+    """Normaliser un nom de session fourni par l utilisateur (decision
+    2026-08-24 : sessions NOMMEES admin/freelance au lieu de session-llm-N).
+    Accepte 'admin' -> session-admin, 'session-admin' -> session-admin.
+    Retourne None si invalide (caracteres non autorises)."""
+    if not nom_session:
+        return None
+    nom = nom_session.strip()
+    if nom.startswith("session-"):
+        nom = nom[len("session-"):]
+    if not re.match(r"^[A-Za-z0-9_-]+$", nom):
+        return None
+    return "session-" + nom
+
+
+def sidentifier(llm_id=None, nom_session=None):
     """Creer/choisir la session du LLM (agent principal = Cerberus).
     REGLE UTILISATEUR (mode ID) : chaque LLM possede SON id (donne par
     l'utilisateur au lancement).
-    REGLE ALIGNEMENT (v0.4.0) : id llm-N -> session-llm-N. Le numero de session
-    porte le numero de l'id. Conflit gere : si session-llm-N est deja liee a un
-    AUTRE id, message clair + attribution de la prochaine session libre.
+    REGLE SESSION NOMMEE (v0.7.0, decision utilisateur 2026-08-24) :
+    l utilisateur indique la session au demarrage ('admin' = equipe v1 qui
+    gere le cerveau, 'freelance' = equipe v2) : sidentifier <id> <session>.
+    La session creee/retrouvee est session-<nom> (ex: session-admin).
+    REGLE ALIGNEMENT (v0.4.0) conservee en repli : id llm-N -> session-llm-N
+    quand AUCUN nom de session n est fourni (compatibilite heritage).
     SOURCE DOUBLE : l'outil cherche la liaison dans AGENTS.md (champ **Nom LLM**)
     puis dans le classeur (id: <llm-id>). Le LLM peut donc se reconnaitre en
     lisant AGENTS.md.
+    - nom_session fourni -> session-<nom> (creee ou retrouvee), id lie
     - id deja lie -> c'est SA session (retrouvee)
     - id inconnu llm-N -> session-llm-N si libre (ou orpheline), sinon prochaine libre
-    - id inconnu non numerique (llm-atlas) -> prochaine session libre + liaison
     - sans argument -> compatibilite heritage : prochaine session libre"""
     contenu = lire_agents()
     if contenu is None:
         return 1
     contenu, migre = migrer_si_necessaire(contenu)
 
-    if llm_id is not None:
+    session_explicite = normaliser_nom_session(nom_session)
+
+    if session_explicite:
+        # REGLE SESSION NOMMEE : l utilisateur a choisi la session
+        id_deja_lie = id_lie_a_session(session_explicite)
+        if id_deja_lie is not None and llm_id and id_deja_lie != llm_id.strip():
+            print("ATTENTION: %s deja liee a l'id %s - la session reste %s (agent principal : Cerberus)"
+                  % (session_explicite, id_deja_lie, session_explicite))
+        session = session_explicite
+        print("Session %s (demandee par l utilisateur, agent principal : Cerberus)" % session)
+    elif llm_id is not None:
         llm_id = llm_id.strip()
         session_liee = trouver_session_par_id(llm_id)
         if session_liee:
@@ -1321,9 +1420,11 @@ def afficher_aide():
     print("")
     print("Exemples:")
     print("  activer-agent-principal.py sidentifier")
-    print("  activer-agent-principal.py sidentifier session-llm-1")
-    print("  activer-agent-principal.py activer session-llm-1 Buffy \"Mission correction\"")
-    print("  activer-agent-principal.py reactiver session-llm-1 \"Mission terminee\" Buffy")
+    print("  activer-agent-principal.py sidentifier <id> [session]")
+    print("  activer-agent-principal.py sidentifier glm5 admin")
+    print("  activer-agent-principal.py sidentifier freebuff freelance")
+    print("  activer-agent-principal.py activer session-admin Buffy \"Mission correction\"")
+    print("  activer-agent-principal.py reactiver session-admin \"Mission terminee\" Buffy")
 
 
 def main(argv):
@@ -1364,8 +1465,9 @@ def main(argv):
             return 1
 
     if action in ("sidentifier", "identifier"):
-        session = argv[1] if len(argv) > 1 else None
-        return sidentifier(session)
+        llm_id = argv[1] if len(argv) > 1 else None
+        nom_session = argv[2] if len(argv) > 2 else None
+        return sidentifier(llm_id, nom_session)
 
     if action == "sessions":
         return lister_sessions()

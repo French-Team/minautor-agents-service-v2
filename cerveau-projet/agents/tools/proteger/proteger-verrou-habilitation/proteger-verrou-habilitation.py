@@ -188,8 +188,8 @@ def construire_table():
 
 def session_par_defaut():
     """MULTI-SESSIONS (v0.2.2) : session de l appelant -- variable
-    d environnement SESSION_LLM (ex: session-llm-4), sinon premiere session
-    du classeur-variables, sinon session-llm-1 en secours."""
+    d environnement SESSION_LLM (ex: session-admin, session-llm-4), sinon
+    premiere session du classeur-variables, sinon session-llm-1 en secours."""
     env = os.environ.get("SESSION_LLM", "").strip()
     if env:
         return env
@@ -199,7 +199,7 @@ def session_par_defaut():
     try:
         with io.open(classeur, "r", encoding="utf-8") as f:
             for ligne in f:
-                m = re.search(r"session: (session-llm-\d+)", ligne)
+                m = re.search(r"session: (session-[A-Za-z0-9_-]+)", ligne)
                 if m:
                     return m.group(1)
     except IOError:
@@ -208,13 +208,15 @@ def session_par_defaut():
 
 
 def trouver_session_agent(agent):
-    """Trouve la session (session-llm-N) de l agent appelant dans AGENTS.md.
+    """Trouve la session (session-<nom> ou session-llm-N) de l agent
+    appelant dans AGENTS.md.
     MULTI-SESSIONS (v0.4.2) : utilise la table '## Sessions connues' et
     retourne la session la PLUS RECENTE (colonne Derniere activite) parmi
     celles dont l agent actif correspond -- plus de premier bloc du fichier
     (l ordre des blocs de session est independant de la recence, 2 sessions
     peuvent porter le meme agent actif : la commande suggeree par le verrou
     doit viser la session de l appelant).
+    SESSIONS NOMMEES (v0.7.0) : session-admin / session-freelance acceptees.
     Fallback : session de l appelant (SESSION_LLM ou classeur)."""
     chemin = os.path.join(PROJECT_ROOT, "AGENTS.md")
     try:
@@ -228,7 +230,7 @@ def trouver_session_agent(agent):
     candidats = []
     for ligne in m.group(1).splitlines():
         ligne = ligne.strip()
-        if not ligne.startswith("| session-llm-"):
+        if not ligne.startswith("| session-"):
             continue
         cellules = [c.strip() for c in ligne.strip("|").split("|")]
         if len(cellules) < 4:
@@ -236,7 +238,7 @@ def trouver_session_agent(agent):
         session, agent_actif, activite = cellules[0], cellules[2], cellules[3]
         if agent_actif.lower() != agent.lower():
             continue
-        if not session.startswith("session-llm-"):
+        if not session.startswith("session-"):
             continue
         candidats.append((activite, session))
     if not candidats:
@@ -262,7 +264,7 @@ def agent_actif_session():
     lignes = []
     for ligne in m.group(1).splitlines():
         ligne = ligne.strip()
-        if not ligne.startswith("| session-llm-"):
+        if not ligne.startswith("| session-"):
             continue
         cellules = [c.strip() for c in ligne.strip("|").split("|")]
         if len(cellules) >= 4:

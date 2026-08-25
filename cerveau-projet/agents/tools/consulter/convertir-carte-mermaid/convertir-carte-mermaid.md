@@ -20,13 +20,29 @@ en produisant une vue graphique lisible par l humain, generee depuis le JSON
 
 ## Sortie
 
+### Cartes v1 (parcours-<agent>.json)
+
 - Un fichier `cartes-vues/mermaid/<agent>.mmd` par agent (16 agents)
 - Un fichier `cartes-vues/mermaid/<agent>.svg` par agent (16 images, rendu
   100% local en Python pur, aucune dependance externe)
 - Un `cartes-vues/mermaid/index.md` (tableau agent / parcours / version /
   vue / image)
-- Le dossier de sortie est **toujours dans `cerveau-projet/`** (jamais a la
-  racine du projet ni ailleurs)
+
+### Arbres v2 (arbre-<agent>.json, agents freelance)
+
+Depuis la v0.3.0 (2026-08-24) : les agents de la v2 (stark, shuri, forge,
+rogers, parker, jarvis, vision, fury, edith) ont un **ARBRE de decision**
+(`freelance/<agent>/parcours/arbre-<agent>.json` : `racine` -> themes
+`theme-*.json` -> `fins.json` centralise), PAS une carte (`cases`).
+`--arbres` genere la vue graphique de chaque arbre :
+
+- Un fichier `cartes-vues/arbres/<agent>.mmd` par agent v2
+- Un fichier `cartes-vues/arbres/<agent>.svg` par agent v2
+- Un `cartes-vues/arbres/index.md` (tableau agent / arbre / version / vue /
+  image)
+
+Le dossier de sortie est **toujours dans `cerveau-projet/`** (jamais a la
+racine du projet ni ailleurs).
 
 ## Regles de rendu (.mmd)
 
@@ -64,9 +80,30 @@ python3 cerveau-projet/agents/tools/consulter/convertir-carte-mermaid/convertir-
 # Toutes les cartes : .mmd + .svg + index.md
 python3 cerveau-projet/agents/tools/consulter/convertir-carte-mermaid/convertir-carte-mermaid.py --tous
 
-# Verifier la synchronisation cartes <-> .mmd <-> .svg (rc=0 si OK, 1 sinon)
+# Les ARBRES v2 (freelance/*/parcours/arbre-*.json) : .mmd + .svg + index
+python3 cerveau-projet/agents/tools/consulter/convertir-carte-mermaid/convertir-carte-mermaid.py --arbres
+
+# Un seul arbre v2
+python3 cerveau-projet/agents/tools/consulter/convertir-carte-mermaid/convertir-carte-mermaid.py --arbres --agent stark
+
+# Verifier la synchronisation cartes <-> .mmd <-> .svg ET arbres (rc=0 si OK, 1 sinon)
 python3 cerveau-projet/agents/tools/consulter/convertir-carte-mermaid/convertir-carte-mermaid.py --verifier
 ```
+
+## Regles de rendu des ARBRES v2 (.mmd)
+
+| Element de l arbre | Rendu Mermaid |
+|---|---|
+| `racine` (question "Quel theme ?") | losange `RACINE`, `START` -> `RACINE` |
+| branche de la racine (`reponse` -> `theme-*.json`) | arete etiquetee par la reponse vers `THEME-<nom>` |
+| `theme.but` | rectangle `THEME-<nom>` (libelle = but du theme) |
+| `theme.redirects[]` (besoin -> action/procedure) | rectangle `THEME-<nom>-B<j>`, arete `-- besoin <j> --` |
+| `theme.fin` (lien vers `fins.json`, case) | arete vers `FIN-<case>` |
+| `fins.json[<case>].titre` | double cercle `FIN-<case>` (terminaison) |
+
+Contraintes : libelles **asciifies** (accents et symboles Unicode remplaces,
+norme ASCII strict), **LF pur**, commentaire d entete `%%` avec agent +
+version de l arbre.
 
 ## Garde-fou
 
@@ -88,4 +125,4 @@ exiger 0 ecart.
   fichier source (`<agent>.mmd` pour le principal, `<agent>-<sous>.mmd`
   pour les sous-parcours) pour eviter toute collision.
 
-**Version** : 0.2.1
+**Version** : 0.3.0

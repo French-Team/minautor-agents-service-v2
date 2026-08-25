@@ -15,9 +15,9 @@ identite:
 | `donnees-transformees` | *(tableau transforme)* | transformer-donnees | 2026-08-04 | [OK] |
 | `fichier-final` | `exports/export-2026-08-04-120000.json` | exporter-donnees | 2026-08-04 | [OK] |
 | `profil-systeme` | OS: Windows / Bash: 5.2.37 / Python: 3.14.4 / Git: 2.53.0 / Node: 24.14.1 | verifier-systeme | 2026-08-07 | [OK] |
-| `profil-session-llm-1` | session: session-llm-1 / id: freebuff / agent: stark / date: 2026-08-22 23:07:05.872715 | activer-agent-principal | 2026-08-22 | [OK] |
-| `profil-session-1` | session: session-1 / agent: themis / date: 2026-08-22 22:19:52.218270 | activer-agent-principal | 2026-08-22 | [OK] |
-| `profil-session-llm-2` | session: session-llm-2 / id: glm5 / agent: stark / date: 2026-08-23 07:07:17.231913 | activer-agent-principal | 2026-08-23 | [OK] |
+| `profil-session-freelance` | session: session-freelance / id: freebuff / agent: stark / date: 2026-08-24 19:52:52.328436 | activer-agent-principal | 2026-08-24 | [OK] |
+| `profil-session-admin` | session: session-admin / id: glm5 / agent: buffy / date: 2026-08-25 09:22:20.918371 | activer-agent-principal | 2026-08-25 | [OK] |
+| `profil-session-llm-2` | session: session-llm-2 / agent: Cerberus / date: 2026-08-25 18:28:43.081986 | activer-agent-principal | 2026-08-25 | [OK] |
 
 ---
 

@@ -5,11 +5,11 @@
   "commun": true
  },
  "parcours": {
-  "nom": "parcours-demarrage",
-  "agent": "demarrage",
-  "version": "0.2.0",
-  "case_depart": "c0",
-  "description": "Parcours (jeu de piste) du DEMARRAGE d'une session LLM : case de choix en premiere position (l'utilisateur peut demarrer par 'nettoyer la session existante' pour purger toutes les sessions avant de s'identifier a neuf), puis relecture honnete, contexte temps reel, s'identifier (sous-commande sidentifier d'activer-agent-principal), verifier son bloc dans AGENTS.md, devenir Cerberus, attendre la mission. Point d'entree commun de tous les LLM (demarrer.md pointe vers ce parcours)."
+ "nom": "parcours-demarrage",
+ "agent": "demarrage",
+ "version": "0.4.1",
+ "case_depart": "c0",
+ "description": "Parcours (jeu de piste) du DEMARRAGE d'une session LLM : v0.4.1 sessions NOMMEES (decision utilisateur 2026-08-24) - l utilisateur indique la session au demarrage (session=admin pour l equipe v1/administration, session=freelance pour l equipe v2) : sidentifier <id> <session>. Puis relecture honnete, contexte temps reel, verifier son bloc dans AGENTS.md, devenir Cerberus, attendre la mission. Session freelance : JARVIS est le point d'entree (pas Stark). Point d'entree commun de tous les LLM (demarrer.md pointe vers ce parcours)."
  },
  "cases": {
   "c0": {
@@ -125,69 +125,119 @@
    "suivant": "c1"
   },
   "c1": {
-   "titre": "S'identifier (MODE ID)",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE -- ASCII : ce parcours ecrit dans AGENTS.md (via activer-agent-principal). TOUTE ecriture du cerveau se fait en ASCII strict : jamais d accent, d emoji ni de caractere Unicode (regles-emojis-ascii)."
-    },
-    {
-     "type": "regle",
-     "texte": "REGLE ABSOLUE -- MODE ID : je note MON id (donne par l'utilisateur, ex: llm-1). Je ne deduis JAMAIS ma session d'AGENTS.md : la sous-commande sidentifier d'activer-agent-principal me rend MA session (id deja lie = retrouvee, id inconnu = creation + liaison). Si je n'ai pas d'id, je le DEMANDE a l'utilisateur avant toute action. Il n'existe AUCUN outil autonome 'sidentifier' : c'est activer-agent-principal.py sidentifier <mon-id>."
-    },
-    {
-     "type": "outil",
-     "nom": "activer-agent-principal",
-     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
-     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id>"
-    }
-   ],
-   "suivant": "c2"
-  },
-  "c2": {
-   "titre": "Mon bloc existe-t-il dans AGENTS.md ?",
-   "type": "controle",
-   "question": "Mon bloc session-llm-N existe-t-il dans AGENTS.md avec mon champ **Nom LLM** ?",
-   "indices": [
-    {
-     "type": "fichier",
-     "chemin": "AGENTS.md",
-     "raison": "Chercher MON bloc : champ **Nom LLM** = MON id. Si absent, relancer la sous-commande sidentifier d'activer-agent-principal."
-    },
-    {
-     "type": "outil",
-     "nom": "lire-fichier",
-     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
-     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md"
-    }
-   ],
-   "branches": [
-    {
-     "reponse": "OUI",
-     "vers": "c3"
-    },
-    {
-     "reponse": "NON",
-     "vers": "c1"
-    }
-   ]
-  },
-  "c3": {
-   "titre": "Devenir Cerberus : se presenter",
-   "type": "indice",
-   "indices": [
-    {
-     "type": "regle",
-     "texte": "Le LLM demarre comme CERBERUS (gardien de l entree) : ecouter, analyser, activer les agents habilites. Je n'execute JAMAIS une mission moi-meme : j'active l agent habilite."
-    },
-    {
-     "type": "regle",
-     "texte": "Se presenter : Bonjour ! Je suis Cerberus, gardien de l entree de la session session-llm-N (id <mon-id>)."
-    }
-   ],
-   "suivant": "c4"
-  },
+  "titre": "S'identifier (MODE ID + SESSION)",
+  "type": "indice",
+  "indices": [
+   {
+    "type": "regle",
+    "texte": "REGLE ABSOLUE -- ASCII : ce parcours ecrit dans AGENTS.md (via activer-agent-principal). TOUTE ecriture du cerveau se fait en ASCII strict : jamais d accent, d emoji ni de caractere Unicode (regles-emojis-ascii)."
+   },
+   {
+    "type": "regle",
+    "texte": "REGLE ABSOLUE -- SESSION NOMMEE (decision utilisateur 2026-08-24) : l utilisateur indique AU DEMARRAGE la session voulue : 'admin' (equipe v1 qui gere le cerveau = administration) OU 'freelance' (equipe v2, demarrer avec stark). Syntaxe utilisateur : lire demarrer.md | id=<id> | session=<admin|freelance>. Si la session n est PAS indiquee, la DEMANDER a l utilisateur avant toute action."
+   },
+   {
+    "type": "regle",
+    "texte": "REGLE ABSOLUE -- MODE ID : je note MON id (donne par l'utilisateur, ex: glm5). Je ne deduis JAMAIS ma session d'AGENTS.md : la sous-commande sidentifier d'activer-agent-principal me rend MA session (id deja lie = retrouvee, id inconnu = creation + liaison). Il n'existe AUCUN outil autonome 'sidentifier' : c'est activer-agent-principal.py sidentifier <mon-id> <ma-session>."
+   },
+   {
+    "type": "outil",
+    "nom": "activer-agent-principal",
+    "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+    "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py sidentifier <mon-id> <ma-session>"
+   }
+  ],
+  "suivant": "c2"
+ },  "c2": {
+  "titre": "Mon bloc existe-t-il dans AGENTS.md ?",
+  "type": "controle",
+  "question": "Mon bloc session-<nom> (ex: session-admin, session-freelance) existe-t-il dans AGENTS.md avec mon champ **Nom LLM** ?",
+  "indices": [
+   {
+    "type": "fichier",
+    "chemin": "AGENTS.md",
+    "raison": "Chercher MON bloc : champ **Nom LLM** = MON id, dans la session demandee par l utilisateur (session-admin / session-freelance). Si absent, relancer la sous-commande sidentifier d'activer-agent-principal avec id + session."
+   },
+   {
+    "type": "outil",
+    "nom": "lire-fichier",
+    "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+    "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md"
+   }
+  ],
+  "branches": [
+   {
+    "reponse": "OUI",
+    "vers": "c2s"
+   },
+   {
+    "reponse": "NON",
+    "vers": "c1"
+   }
+  ]
+ },
+ "c2s": {
+  "titre": "Quelle session ?",
+  "type": "question",
+  "question": "Quelle session as-tu demandee au demarrage ? (admin = equipe v1, freelance = equipe v2)",
+  "indices": [
+   {
+    "type": "regle",
+    "texte": " REGLE : la session determine le POINT D ENTREE : admin -> Cerberus (gardien, active les agents v1) / freelance -> activer JARVIS directement (centre nevralgique, route les communications et active Stark si besoin)."
+   }
+  ],
+  "branches": [
+   {
+    "reponse": "admin",
+    "vers": "c3"
+   },
+   {
+    "reponse": "freelance",
+    "vers": "c6"
+   }
+  ]
+ },
+ "c3": {
+  "titre": "Devenir Cerberus : se presenter",
+  "type": "indice",
+  "indices": [
+   {
+    "type": "regle",
+    "texte": "Le LLM demarre comme CERBERUS (gardien de l entree) : ecouter, analyser, activer les agents habilites. Je n'execute JAMAIS une mission moi-meme : j'active l agent habilite."
+   },
+   {
+    "type": "regle",
+    "texte": "Se presenter : Bonjour ! Je suis Cerberus, gardien de l entree de la session session-admin (id <mon-id>)."
+   }
+  ],
+  "suivant": "c4"
+ },
+ "c6": {
+  "titre": "Activer JARVIS (session freelance)",
+  "type": "indice",
+  "indices": [
+   {
+    "type": "regle",
+    "texte": "SESSION FREELANCE : je ne deviens PAS Cerberus. J active JARVIS, le centre nevralgique de l equipe freelance. JARVIS gere les communications, route les missions, historise. Stark coordonne VIA JARVIS, pas a sa place."
+   },
+   {
+    "type": "regle",
+    "texte": "REGLE V2 : les agents freelance n utilisent PAS les outils v1 (guider-parcours, activer-agent-principal) -- JARVIS les remplace. JARVIS suit son arbre de decision, pas un parcours JSON."
+   },
+   {
+    "type": "outil",
+    "nom": "activer-agent-principal",
+    "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+    "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-freelance jarvis 'JARVIS demarre en session freelance (id <mon-id>). Lis ta fiche et tes corrections, puis suis ton arbre de decision arbre-jarvis.json. Verifie les messages en attente et les activites recentes.'"
+   }
+  ],
+  "suivant": "c7"
+ },
+ "c7": {
+  "titre": "FIN -- JARVIS actif en session freelance",
+  "type": "fin",
+  "message": "Session freelance demarree. JARVIS est actif : il lit sa fiche et ses corrections, puis suit son arbre de decision (cerveau-projet/freelance/jarvis/parcours/arbre-jarvis.json). JARVIS route les communications, historise les activites, et active Stark ou d autres agents si besoin."
+ },
   "c4": {
    "titre": "L'utilisateur a-t-il formule une mission ?",
    "type": "question",

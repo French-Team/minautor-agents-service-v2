@@ -10,6 +10,7 @@ Tolerance EDITH : pas a la minute pres - l'interval elargira plus tard.
 
 import json
 import os
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -17,8 +18,12 @@ from pathlib import Path
 _sys_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                         "..", "..", "horloge", "fonctions")
 sys.path.insert(0, _sys_dir)
+# P10 : le module racine vit dans os_path - le chemin s'insere ICI,
+# avant l'import (sinon dependance cachee a l'ordre des imports).
+_sys_dir_racine = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "..", "..", "os_path", "fonctions")
+sys.path.insert(0, _sys_dir_racine)
 from horloge import maintenant  # noqa: E402
-
 from racine import trouver_racine
 
 RACINE = Path(trouver_racine(__file__))
@@ -49,6 +54,53 @@ def secondes_ecoulee(iso_derniere):
         return (datetime.utcnow() - derniere).total_seconds()
     except (ValueError, TypeError):
         return 10**9
+
+
+def infos_routines():
+    """Lister les routines du manifest :
+    [(nom, script_path, intervalle_secondes, actif), ...]"""
+    try:
+        manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    resultat = []
+    for routine in manifest.get("routines_surveillance", []):
+        intervalle = routine.get(
+            "intervalles_secondes",
+            manifest.get("intervalle_boucle_secondes", 600))
+        resultat.append((routine.get("nom"),
+                         FREELANCE / "routines" / routine.get("script", ""),
+                         int(intervalle),
+                         routine.get("actif", True)))
+    return resultat
+
+
+def executer_routine(nom):
+    """Executer UNE routine par son nom (pour un tic dedie).
+    Retourne True si l'execution a reussi."""
+    flags_no_window = 0
+    if hasattr(subprocess, "CREATE_NO_WINDOW"):
+        flags_no_window = subprocess.CREATE_NO_WINDOW
+    for nom_routine, script, _, actif in infos_routines():
+        if nom_routine != nom:
+            continue
+        if not actif or not script.exists():
+            return False
+        etat = charger_etat()
+        etat[nom] = {"derniere": maintenant()}
+        sauver_etat(etat)
+        try:
+            p = subprocess.run(
+                [sys.executable, str(script)],
+                capture_output=True, text=True, timeout=120,
+                creationflags=flags_no_window)
+            if p.returncode != 0:
+                print(f"[ROUTINES] {nom}: rc={p.returncode}")
+            return p.returncode == 0
+        except Exception as e:
+            print(f"[ROUTINES] ERREUR {nom}: {e}")
+            return False
+    return False
 
 
 def executer_routines():

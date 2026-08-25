@@ -135,7 +135,7 @@ def agent_actif():
     lignes = []
     for ligne in m.group(1).splitlines():
         ligne = ligne.strip()
-        if not ligne.startswith("| session-llm-"):
+        if not ligne.startswith("| session-"):
             continue
         cellules = [c.strip() for c in ligne.strip("|").split("|")]
         if len(cellules) >= 4:

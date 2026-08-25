@@ -189,7 +189,7 @@ def fins_de_la_carte(parcours):
     'session-llm-1' ne fonctionnait que pour la premiere session."""
     a_janus = False
     a_reactiver = False
-    motif_session = r"(?:<session>|session-llm-\d+)"
+    motif_session = r"(?:<session>|session-admin|session-freelance|session-llm-\d+)"
     for c in parcours.get("cases", {}).values():
         if c.get("type") != "fin":
             continue

@@ -86,6 +86,9 @@
    "type": "action"
   },
   "c1": {
+   "type": "question",
+   "titre": "Mission",
+   "question": "Quelle est la mission ?",
    "branches": [
     {
      "reponse": "corriger",
@@ -102,15 +105,16 @@
     {
      "reponse": "readme-dev",
      "vers": "c20"
+    },
+    {
+     "reponse": "readme-v2",
+     "vers": "c22"
     }
    ],
-   "question": "Quelle est la mission ?",
-   "titre": "Mission",
-   "type": "question",
    "indices": [
     {
      "type": "regle",
-     "texte": "GARDE-FOU C1 : demande hors des branches (corriger/verifier/readme-dev) -> reponse autre -> c13. JAMAIS improviser, JAMAIS outil hors carte."
+     "texte": "GARDE-FOU C1 : demande hors des branches corriger/verifier/readme-dev/readme-v2, reponse autre vers c13. JAMAIS improviser, JAMAIS outil hors carte."
     }
    ]
   },
@@ -516,6 +520,13 @@
      "chemin": "cerveau-projet/agents/tools/valider/valider-conformite-ascii/",
      "nom": "valider-conformite-ascii",
      "type": "outil"
+    },
+    {
+     "type": "outil",
+     "nom": "editer-fichier",
+     "catalogue": "editer-fichier",
+     "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py --agent clio <fichier> <ancien> <nouveau> (corrections ciblees readme-dev)"
     }
    ],
    "suivant": "c10",
@@ -749,6 +760,58 @@
    "titre": "FIN - Reprendre ma mission",
    "type": "fin",
    "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais avec --case <cid> --reponses '<reponse>' (la case et la reponse de mon point d arret)."
+  },
+  "c22": {
+   "type": "action",
+   "titre": "Rediger README-v2.md (dry-run AVANT/APRES)",
+   "texte": "Je redige le README-v2.md pour l equipe freelance. AVANT chaque modification je fais un dry-run pour montrer le texte AVANT/APRES. Ton 1ere personne (je suis...), badges dynamiques (agents, outils, protocoles, regles). ASCII strict + LF pur. Pour un NOUVEAU fichier j utilise creer-fichier puis ajouter-contenu-fichier (l outil mettre-a-jour-readme ne cree pas de nouveau fichier : il ne corrige que README.md/readme-dev.md). GARDE-FOU : le dry-run est OBLIGATOIRE avant toute ecriture. SORTIE : fichier cerveau-projet/README-v2.md (nouveau fichier grand public v2).",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "DRY-RUN OBLIGATOIRE : montrer AVANT/APRES. TON 1ERE PERSONNE pour les docs v2 publics."
+    },
+    {
+     "type": "regle",
+     "texte": "ASCII strict + LF pur. BADGES DYNAMIQUES (agents, outils, protocoles, regles)."
+    },
+    {
+     "type": "outil",
+     "catalogue": "creer-fichier",
+     "chemin": "cerveau-projet/agents/tools/creer/creer-fichier/",
+     "nom": "creer-fichier",
+     "commande": "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/README-v2.md"
+    },
+    {
+     "type": "outil",
+     "catalogue": "ajouter-contenu-fichier",
+     "chemin": "cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/",
+     "nom": "ajouter-contenu-fichier",
+     "commande": "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/README-v2.md <contenu>"
+    }
+   ],
+   "suivant": "c23"
+  },
+  "c23": {
+   "type": "question",
+   "titre": "Validation dry-run utilisateur",
+   "question": "L utilisateur a t il valide le dry-run du README-v2 ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c9"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c22"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : aucune modification sans validation du dry-run."
+    }
+   ],
+   "suivant": null
   }
  },
  "identite": {
@@ -758,9 +821,8 @@
  },
  "parcours": {
   "agent": "clio",
-  "case_depart": "c0",
-  "description": "v0.5.6 : + indice outil c20 valider-conformite-ascii (coherence regle/indice outil, garde-fou test-055)",
-  "nom": "parcours-clio",
-  "version": "0.6.4"
+  "case_depart": "c0",   "description": "v0.6.7 : c22 branche readme-v2 - indices outil creer-fichier + ajouter-contenu-fichier (creation d un NOUVEAU fichier, inter-round Janus 24/08)",
+   "nom": "parcours-clio",
+   "version": "0.6.7"
  }
 }

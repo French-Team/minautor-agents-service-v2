@@ -126,3 +126,65 @@ preferences:
 4. PIEGE SHELL : `grep -oE '--[a-z...]*'` est mal interprete (le pattern commence par --) -> utiliser `grep -oE -- 'pattern'` pour eviter le faux message "unknown option".
 5. L echantillon manuel de verification est indispensable : valider 4-8 outils connus (valider-relecture, lire-fichier, detecter-impacts, ecrire-fichier...) pour confirmer que le scan automatique dit la verite.
 6. LIVRABLE REUTILISABLE : le script de scan (cerveau-projet/agents/atlas/explorations/scan-catalogue.py) + le rapport (scan-catalogue-2026-08-09.md) - a rejouer apres chaque modification du catalogue (regle : le scan devient un controle standard avant chaque generalisation).
+## [LECON] 2026-08-24 -- EXPLORATION COMPLETE DU DOSSIER FREELANCE
+
+**Contexte** : demande utilisateur -- decortiquer entierement le dossier
+cerveau-projet/freelance/ pour savoir tout ce qui y est fait.
+
+**Resultat** : inventaire complet dans atlas/rapports/dossier-complet-freelance-2026-08-24.md
+(536 lignes, ASCII 0/0) : arborescence (163 fichiers / 42 dossiers), 9 agents
+MARVEL (Stark gold, JARVIS gold, Shuri/Forge/Rogers/Vision/EDITH/Fury silver,
+Parker copper), JARVIS v0.9.0 (~600 messages inbox/outbox), regles gravees
+M1-M7, veracite V1-V4, principes P1-P10, decisions D1-D18, protocoles 1-20,
+routines EDITH, templates, tests reels Fury PASSE.
+
+**Decouvertes notables** :
+1. La v2 est DEJA EN MARCHE (pas un concept) : agents construits, hub actif, tests reels passes.
+2. Chantiers restants : freelance-historique.md VIDE, README tools-commun en retard
+   (categories theoriques absentes de la structure reelle), demarrage/arret des
+   routines vides, outils D9/D10/D18 (tokens-historique, bible lecons, markers) non construits.
+3. Heritage v1 : plusieurs scripts python portent encore "# -*- coding: ascii -*-"
+   (jarvis.py, defcon-server.py) alors que le standard v2 est UTF-8 (D4) -- a harmoniser.
+4. Residus : __pycache__ nombreux, .bak jarvis (2-3 par fichier), routines-server.bak-20260823-1700/.
+
+**Lecon** : un dossier de conception evolue plus vite que ses README --
+l'exploration doit TOUJOURS comparer la documentation a la structure reelle
+(etat reel > docs), et signaler les ecarts sans les corriger (domaine des autres).
+
+## [LECON] 2026-08-24 -- METHODE RIGOUREUSE (mise a jour Buffy)
+
+**Contexte** : decision utilisateur 2026-08-24 -- Atlas doit etre plus
+rigoureux : analyser UN DOSSIER A LA FOIS, rediger UN .md PAR DOSSIER dans
+atlas/rapports/, rapport complet = DOUBLON DE LA STRUCTURE avec liens vers
+les .md dedies. Objectif : comprendre facilement la v2 et comparer avec la v1.
+
+**Changements** :
+1. Parcours v0.5.4 -> v0.5.5 : flux explorer restructure en boucle
+   c2 (lister dossiers) -> c2a (analyser UN dossier) -> c2b (rediger le .md
+   du dossier) -> c2c (tous les dossiers ? NON->c2a / OUI->c8) -> c9
+   (rapport complet = doublon de structure). Cases c3-c7 (inventaire global)
+   supprimees : 0 orpheline, 0 reference invalide.
+2. Fiche : PARCOURS v0.5.5 + REGLE ABSOLUE METHODE RIGOUREUSE.
+3. Livrables : 16 .md par dossier + dossier-complet restructure (271 lignes),
+   tous ASCII 0/0 dans atlas/rapports/.
+
+**Regle a appliquer desormais** : pour chaque exploration, UN dossier a la
+fois, UN .md par dossier, puis le rapport complet qui organise la structure.
+
+## [LECON] 2026-08-24 -- METHODE RIGOUREUSE v0.5.6 : DOSSIER DEDIE PAR EXPLORATION
+
+**Contexte** : correction de la methode (decision utilisateur) : chaque
+exploration produit UN DOSSIER DEDIE atlas/rapports/<cible>-<AAAAMMJJ>/ qui
+est LE DOSSIER COMPLET contenant TOUS les rapports (.md par dossier + rapport
+complet).
+
+**Lecons** :
+1. Je CREE le dossier dedie AVANT d'explorer (c2) et je redige TOUS les .md
+   DEDANS (c2b) ainsi que le rapport complet (c9).
+2. Le rapport complet utilise des LIENS RELATIFS SIMPLES (noms de fichiers) :
+   il reste valide si le dossier dedie est deplace.
+3. Ne JAMAIS rediger les rapports a la racine de atlas/rapports/ : toujours
+   dans le dossier dedie de l'exploration.
+
+**Preuves** : parcours v0.5.6, fiche PARCOURS v0.5.6, rapports reorganises
+dans atlas/rapports/freelance-2026-08-24/ (18 fichiers, liens 18/18 OK).

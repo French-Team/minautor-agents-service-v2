@@ -1,7 +1,7 @@
 #!/bin/bash
 # mettre-a-jour-readme.sh
 # Outil pour corriger le README afin qu'il reflete l'etat reel du projet
-# Version : 0.4.4
+# Version : 0.4.5
 # Statut : ebauche
 # Proprietaire : Clio (agent dedie au README)
 
@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.4.4"
+VERSION="0.4.5"
 STATUT="ebauche"
 README="README.md"
 HISTORIQUE="AGENTS-historique.md"
@@ -245,15 +245,25 @@ verifier() {
         echo -e "  ${GREEN}[OK]${NC} Tous les agents sont dans la table"
     fi
 
-    # Titre boite a outils
-    local titre_actuel=$(grep -o '^## La boite a outils ([0-9]* outils)' "$README" | grep -o '[0-9]*' | head -1)
-    if [ -n "$titre_actuel" ] && [ "$titre_actuel" != "$total" ]; then
-        echo -e "  ${RED}[OBSOLETE]${NC} Titre : 'La boite a outils ($titre_actuel outils)' -> devrait etre $total"
+    # Badge Outils du README public (nouvelle norme 1ere personne 20/08) :
+    # la liste technique exhaustive vit dans readme-dev (section 6), pas dans
+    # le README public. Le verifier tolere l absence de la section 'La boite
+    # a outils' (ancien format) et s appuie sur readme-dev pour les compteurs.
+    local badge=$(grep -o 'Outils-[0-9]*' "$README" | head -1 | grep -o '[0-9]*')
+    if [ -n "$badge" ] && [ "$badge" != "$total" ]; then
+        echo -e "  ${RED}[OBSOLETE]${NC} Badge Outils-$badge -> devrait etre $total"
+    elif [ -n "$badge" ]; then
+        echo -e "  ${GREEN}[OK]${NC} Badge Outils-$badge (README public)"
+    fi
+    if grep -q '^## La boite a outils ([0-9]* outils)' "$README"; then
+        echo -e "  ${YELLOW}[INFO]${NC} Section 'La boite a outils' encore presente (ancien format) : compteurs verifies ci-dessous"
     else
-        echo -e "  ${GREEN}[OK]${NC} Titre 'La boite a outils ($titre_actuel outils)'"
+        echo -e "  ${YELLOW}[INFO]${NC} README public sans section 'La boite a outils' (nouvelle norme) : compteurs verifies dans readme-dev (section 6)"
     fi
 
-    # Compteurs et outils par categorie (capitaliser les noms de categories)
+    # Compteurs et outils par categorie : uniquement si l ancienne section
+    # existe encore dans le README public (retro-compatibilite).
+    if grep -q '^## La boite a outils ([0-9]* outils)' "$README"; then
     for cle in $(lister_categories); do
         local cat=$(echo "${cle:0:1}" | tr '[:lower:]' '[:upper:]')${cle:1}
         cat=$(echo "$cat" | sed 's/Mettre-a-jour/Mettre a jour/')
@@ -274,6 +284,7 @@ verifier() {
             fi
         done
     done
+    fi
 
     echo ""
     echo "Utilisez --maj pour corriger le texte du README."
@@ -296,7 +307,10 @@ dry_run() {
         changements+=("Titre : '${titre_actuel} outils' -> '${total} outils'")
     fi
 
-    # 2. Compteurs par categorie
+    # 2. Compteurs par categorie : uniquement si l ancienne section
+    # 'La boite a outils' existe dans le README public (retro-compatibilite).
+    # Nouvelle norme : les compteurs vivent dans readme-dev (section 6).
+    if grep -q '^## La boite a outils ([0-9]* outils)' "$README"; then
     for cle in $(lister_categories); do
         local cat=$(echo "${cle:0:1}" | tr '[:lower:]' '[:upper:]')${cle:1}
         cat=$(echo "$cat" | sed 's/Mettre-a-jour/Mettre a jour/')
@@ -306,6 +320,7 @@ dry_run() {
             changements+=("${cat} : ${lue} -> ${nb}")
         fi
     done
+    fi
 
     # 3. Agents manquants
     local agents_manquants=""

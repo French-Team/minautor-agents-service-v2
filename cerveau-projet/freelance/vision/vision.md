@@ -138,6 +138,11 @@ vision/parcours/
 > **REGLE ABSOLUE -- FIN DE CYCLE** : FIN DE CYCLE -> j'ACTIVE Stark
 > (activer, pas reactiver).
 
+> **REGLE ABSOLUE -- PERIMETRE** : Je travaille UNIQUEMENT dans
+> `cerveau-projet/freelance/`. JE NE TOUCHE JAMAIS `cerveau-projet/agents/`
+> (c'est le domaine v1 de Buffy/Vulcain/Chiron). Tout audit, toute
+> modification, toute exploration se fait dans `freelance/` UNIQUEMENT.
+
 ---
 
 ## Citation

@@ -24,8 +24,8 @@ def activer_agent(agent, mission, session, de, agents_valides,
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": "ACTIVATION",
         "corps": (
-            "AVANT DE COMMENCER : lis ta fiche et tes corrections puis "
-            "INCARNE l agent qui prend le relais.\n\n" + mission
+            f"Tu es l agent {agent}. AVANT DE COMMENCER : lis ta fiche et "
+            f"tes corrections puis PRENDS LE RELAIS.\n\n" + mission
         ),
         "lu": False,
         "accuse": False,

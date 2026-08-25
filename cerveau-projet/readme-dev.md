@@ -278,6 +278,7 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Executer | 1 | executer-script-temporaire (ENTONNOIR) |
 | Generateurs | 10 | generateurs-commande, generateurs-amelioration |
 | Gerer | 1 | gerer-sous-mission |
+| Git | 1 | hades-contexte-git |
 | Guider | 1 | guider-parcours |
 | Inserer | 1 | inserer-contenu-fichier |
 | Lire | 5 | lire-fichier, lire-activite-recente |

@@ -259,3 +259,29 @@ Controle de la mission mermaid. 3 enseignements :
 ## PHILOSOPHIE -- Principes de comportement
 
 | **Relire sa fiche a chaque activation** | Quand je suis active ou reactive, je relis MA fiche et MES corrections avant de continuer. Je ne lis que mes fichiers, jamais ceux des autres agents : chacun lit les siens en prenant le relais. |
+## [LECON] 2026-08-23 -- VERIFICATION CLIO POUR README-V2 : VERDICT A REVOIR (Chiron)
+
+**Contexte** : l utilisateur veut faire rediger README-v2.md par Clio (travail COMPLET). Verification de son etat avant mission.
+
+**Diagnostic** : Clio structurellement SAINES (fiche CONFORME, carte PROPRE 1 boucle voulue) mais PEDAGOGIQUEMENT NON PREPAREE : AUCUNE mention de readme-v2/freelance/v2 dans sa fiche, ses corrections ou sa carte. Sa regle 'je corrige, je ne cree jamais' + outil unique mettre-a-jour-readme (README.md/readme-dev.md) empechent la redaction d un NOUVEAU document. 5 ecarts documentes (2 hautes : branche de carte + exception redaction v2).
+
+**Lecons** :
+1. UN AGENT DE REDACTION LIE A UN FICHIER UNIQUE NE PEUT PAS COUVRIR UN NOUVEAU FICHIER SANS RE-EDUCATION : la contrainte 'outil unique / corriger sans creer' qui rendait Clio fiable sur README.md la bloque sur readme-v2.md.
+2. LE Meme PATTERN SE CONFIRME (Themis, Janus, cartes secondaires, maintenant Clio) : toute nouvelle cible de documentation exige branche de carte + sources de verite dediees AVANT la mission.
+3. DIVERGENCES OUTILS DETECTEES AU PASSAGE : editer-fichier (ref 0.5.0 vs 0.4.3), valider-cartes-decision (ref 0.4.7 vs md 0.4.6), activer-agent-principal (spec 0.5.23 vs py 0.5.30) -> a signaler a Vulcain.
+
+**Preuves** : verifier-conformite-fiche clio CONFORME ; detecter-cablages parcours-clio PROPRE ; bumper --tous KO (2 outils incoherents) ; detecter-divergences 1 DIVERGENTE ; grep zero mention readme-v2 dans agents/clio/. Rapport : rapports/rapport-verification-clio-readme-v2-2026-08-23.md. Corrections proposees signalees a Buffy (seule habilitee).
+## [LECON] 2026-08-24 -- EDUCATION ATLAS ARBRES V2 : VERDICT A REVOIR -> CORRIGE (inter-round Buffy)
+
+**Contexte** : mission utilisateur : eduquer Atlas pour creer le dossier .md + .svg des agents v2 (ARBRES de decision, pas des cartes v1). L outil existe (convertir-carte-mermaid v0.3.0 --arbres, Vulcain + test-101 Morpheus 11/11 OK). Verification pedagogique d'Atlas.
+
+**Diagnostic** : Atlas structurellement SAIN (fiche CONFORME, carte PROPRE, METHODE RIGOUREUSE v0.5.6) mais PEDAGOGIQUEMENT NON PREPARE : AUCUNE branche vues-v2 dans sa carte c1 (explorer/web/documenter/analyser/cartographier/cartographier-agent) ni mention des arbres v2. 4 ecarts documentes (2 hautes : branche de carte + case c35).
+
+**Corrections (appliquees par Buffy, inter-round -- verrou habilitation)** : carte parcours-atlas.json v0.5.6 -> v0.5.7 (branche vues-v2 dans c1 -> case c35 : convertir-carte-mermaid --arbres + dossier dedie atlas/rapports/vues-v2-<AAAAMMJJ>/), fiche atlas.md (PARCOURS v0.5.7 + REGLE MISSION VUES V2 avec difference arbre v2 vs carte v1), dossier vues-v2-2026-08-24/ cree (9 agents + 19 liens). Verifie : valider-cartes-decision CONFORME, navigation c1 -> c35 OK, lock marbre OK, ASCII 0/0.
+
+**Lecons** :
+1. LE VERROU HABILITATION S'APPLIQUE AUSSI A CHIRON : l'educateur NE MODIFIE PAS la carte de l'agent eduque - il DOCUMENTE les corrections proposees (rapport) et SIGNALE a l'agent habilite (Buffy pour les cartes) qui les applique en inter-round. C'est le protocole inter-round (R2) : signalement -> habilite applique -> educateur reprend.
+2. LE MEME PATTERN SE CONFIRME (Clio readme-v2, maintenant Atlas vues-v2) : toute NOUVELLE capacite (nouveau fichier, nouvel outil, nouvelle mission) exige BRANCHE DE CARTE + SOURCES DE VERITE dediees AVANT la mission - sinon travail improvise garanti.
+3. LA DIFFERENCE ARBRE v2 vs CARTE v1 EST UNE EDUCATION A PART ENTIERE : les agents v2 ont arbre-<agent>.json (racine -> theme-*.json -> fins.json) PAS parcours-<agent>.json (cases) - le parcours de l'agent eduque doit le rappeler explicitement dans ses indices.
+
+**Preuves** : rapport education-atlas-arbres-v2-2026-08-24.md, valider-cartes-decision --agent atlas CONFORME (v0.5.7), navigation c1 -> c35, dossier vues-v2-2026-08-24/ 19 liens OK, test-101 11/11, ASCII 0/0.

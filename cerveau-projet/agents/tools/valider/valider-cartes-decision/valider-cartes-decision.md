@@ -10,7 +10,7 @@ identite:
 ---
 # valider-cartes-decision
 
-**Version :** 0.4.6
+**Version :** 0.4.7
 **Statut :** prepare
 **Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-cartes-decision/`

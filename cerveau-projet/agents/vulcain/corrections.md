@@ -4880,3 +4880,55 @@ par session.
 **Validations** : bumper audit --tous coherent (0.5.22), ASCII 0 CRLF 0, test-099 (brouillon Morpheus) 2/4 : tests 3-4 OK (reactivation Cerberus + chaine complete), tests 1-2 KO sur des attentes du BROUILLON (message literal 'single-session' + option --multi-session inexistante) - c est le domaine de Morpheus de les adapter, je ne touche pas aux fichiers de test.
 
 **Lecon** : quand une regle immuable (garde-fou) est en decalage avec les cartes, corriger l OUTIL (la regle) plutot que contourner avec --forcer - l utilisateur valide la direction (Option A) puis l outil s aligne sur les cartes. Les tests brouillons d un autre agent (Morpheus) ne sont PAS a corriger par le constructeur : les executer pour l etat reel, documenter les ecarts, et laisser le testeur adapter son test.
+## [LECON] 2026-08-24 -- DEVIATION P2 : METTRE-A-JOUR-README ADAPTE A LA NOUVELLE NORME README PUBLIC
+
+**Contexte** : bilan consolide (chaine Clio verifier) - P2 : mismatch structurel outil/README. mettre-a-jour-readme --verifier attendait la section 'La boite a outils' (ancien format) ABSENTE du README.md public reecrit en 1ere personne le 20/08 -> MANQUANT massifs a chaque verification.
+
+**Diagnostic** : le README public (grand public, 1ere personne) n'est pas l'endroit de la liste technique exhaustive des 165 outils - c'est le role de readme-dev (section 6, tableau complet). L'outil devait donc tolerer l'absence de la section dans le README public.
+
+**Correction** : verifier() py+sh : badge Outils-N verifie + INFO nouvelle norme (compteurs via readme-dev) + boucle categories uniquement si l'ancienne section existe (retro-compat). dry_run() py+sh aligne : [AUCUN CHANGEMENT] sur le README public actuel. Bump 0.4.4 -> 0.4.5 (bumper). Tests Morpheus VALIDE (test-064 7/7, 0 decalage catalogue).
+
+**Lecons** :
+1. UN OUTIL DE VERIFICATION DOIT SUIVRE LA NORME DU DOCUMENT QU'IL VERIFIE : quand un README change de format (reecriture 1ere personne), l'outil s'adapte (tolerance + retro-compat) au lieu de signaler des MANQUANT massifs.
+2. LA COHERENCE PY/SH EST OBLIGATOIRE : meme adaptation dans les deux portages, syntaxe bash -n, sorties identiques.
+3. LE DRY-RUN [AUCUN CHANGEMENT] SUR LE DOCUMENT ACTUEL EST LE VERDICT ATTENDU : il prouve que l'outil accepte la norme sans ecrire.
+
+**Preuves** : verifier/dry-run py=sh identiques, test-064 7/7, detecter-decalages-catalogue 0, ASCII 0/0. P1 (readme-dev 164 vs 165, categorie Git manquante) = domaine Clio, a deleguer.
+## [LECON] 2026-08-24 -- CONVERTIR-CARTE-MERMAID v0.3.0 MODE --ARBRES : VALIDE (inter-round Morpheus)
+
+**Contexte** : mission utilisateur : les agents v2 ont des ARBRES de decision (arbre-<agent>.json : racine -> branches vers theme-*.json -> fins.json centralise), PAS des cartes v1 (parcours-<agent>.json avec cases). Etendre convertir-carte-mermaid pour generer les .mmd + .svg + index.md des 9 arbres v2 dans cartes-vues/arbres/.
+
+**Realise** : v0.2.1 -> v0.3.0. Nouvelles fonctions : lister_arbres, agent_de_l_arbre, charger_json, slugifier, convertir_arbre (flowchart : START -> RACINE losange -> THEME-* rectangles (but) -> BESOIN-* (redirects) -> FIN-* stadiums depuis fins.json), ids_arbre, verifier_arbres (compare SANS ecrire), generer_arbres (.mmd + .svg + index.md, --agent pour un seul, asciifier neutralise accents+symboles Unicode). --verifier combine cartes v1 ET arbres v2 (rc = rc_v1 or rc_v2). --sortie par defaut = cartes-vues/arbres pour --arbres. Fiche-outil mise a jour.
+
+**Lecons** :
+1. UNE STRUCTURE NOUVELLE (arbre v2) EXIGE UN PARSEUR DEDIE : les cartes v1 (cases, suivant/branches) et les arbres v2 (racine/branches -> theme-*.json -> fins.json) sont incomparables - ne pas forcer convertir() sur les arbres, creer convertir_arbre().
+2. LE VERDICT DE SYNCHRONISATION DOIT ECRIRE A PART (verifier_arbres compare sans ecrire) : la premiere version appelait generer_arbres (qui ECRIT) dans --verifier - un --verifier qui ecrit est un BUG (il masque les desynchronisations). Corrige : verifier_arbres compare .mmd ET .svg octet a octet sans toucher au disque.
+3. ASCII STRICT DANS LE CODE : les libelles v2 portent accents ET symboles Unicode (->, <->) - la table asciifier doit etre ecrite en SEQUENCES ECHAPPEES (\u00e0...) sinon le fichier Python lui-meme devient non-ASCII. Neutraliser a l entree (asciifier) plutot que de laisser passer.
+4. TEST DEDIE OBLIGATOIRE POUR UN NOUVEAU MODE : test-101 (Morpheus, inter-round) verrouille le mode --arbres (11 points, preuves negatives). verifier_arbres(racine,...) attend la RACINE DU PROJET (contenant cerveau-projet/), pas cerveau-projet/ lui-meme - sinon lister_arbres trouve 0 arbre (faux positif des preuves).
+
+**Preuves** : 9 arbres v2 .mmd + .svg + index.md generes, --arbres --verifier "9 arbres v2 synchronises : OK", test-101 11/11 OK, test-096 6 KO pre-existants (baseline), ASCII 0/0 outil+fiche+test.
+
+## [LECON] 2026-08-24 -- SUPPRESSION ENCART AUTRE : activer-agent-principal v0.7.1 (Vulcain)
+
+**Contexte** : l utilisateur ne veut plus d encart 'Activites recentes' generique 'autre' dans AGENTS-historique.md : seules session-admin et session-freelance doivent exister. La cause etait `maj_encart_activites` qui faisait `mapping.get(s, "autre")` : les entrees historiques non mappees (ex: session-1 de themis) tombaient dans un encart parasite.
+
+**Changement** : activer-agent-principal v0.7.0 -> v0.7.1 : (1) mapping historique ajoute (session-1 -> session-admin, session-llm-1 -> session-freelance, session-llm-2 -> session-admin) ; (2) le repli 'autre' est SUPPRIME : les entrees non mappees sont ignorees des encarts au lieu de creer un encart parasite. Test sur copie : encarts = [session-admin, session-freelance], plus d encart 'autre'.
+
+**Lecons** :
+1. UN REPLI 'autre' DANS UN MAPPING DE SESSIONS CREE DES ENCARTS PARASITES : chaque entrete historique non reconnue (anciennes sessions, sessions temporaires) materialise un encart fantome - la suppression du repli est la vraie correction, pas le nettoyage a posteriori.
+2. LES MAPPINGS HISTORIQUES SONT UNE DETTE INVISIBLE : session-1 (themis), session-llm-1/2 (anciens ids) doivent etre mappes explicitement vers les sessions nominees, sinon la migration les perd.
+3. LA MIGRATION DU CONTENU (regenerer l historique sans 'autre') est declenchee par l OUTIL a la prochaine ecriture (ajouter_historique appelle maj_encart_activites) - pas besoin de script manuel : verifier apres une activation que l encart 'autre' a disparu.
+
+**Validations** : syntaxe OK, ASCII 0/0 (.py/.sh/spec), test fonctionnel sur copie (encarts reduits a 2), tests Morpheus inter-round : test-056 18/18, test-090 11/11, test-001/002/018/021 identiques a la baseline (aucun nouveau KO).
+
+## [LECON] 2026-08-24 -- ENCARTS 10 ACTIVITES + RAISONS COMPLETES : activer-agent-principal v0.7.1 -> v0.7.2 (Vulcain)
+
+**Contexte** : l utilisateur constate que les encarts 'Activites recentes' de AGENTS-historique.md n affichent que 5 entrees par session et tronquent les raisons a 80 caracteres, donnant l impression qu il manque des infos entre les lignes.
+
+**Changement** : v0.7.1 -> v0.7.2 : (1) [:5] -> [:10] dans maj_encart_activites (10 activites par tableau au lieu de 5), (2) suppression de la troncature r[:77] + '...' (raisons affichees en entier).
+
+**Lecons** :
+1. LA TRONCATURE A 80 CARACTERES ETAIT UNE SOURCE DE CONFUSION : l utilisateur voyait '...' et pensait qu il manquait des infos. Afficher le texte complet est plus fiable meme si c est plus long.
+2. LE NOMBRE D ENTREES PAR ENCARTE ([:5] vs [:10]) EST UNE CONSTANTE CACHEE : pas documentee dans le .md de l outil, pas teste par Morpheus. Elle aurait pu etre un parametre de l outil (ex: --limite 10) pour eviter de toucher au code.
+
+**Validations** : syntaxe OK, ASCII 0/0 (.py/.sh/spec), test fonctionnel sur copie : 10 lignes session-admin, 10 lignes session-freelance, 0 troncature.

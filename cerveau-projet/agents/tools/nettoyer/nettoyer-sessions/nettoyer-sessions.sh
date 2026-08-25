@@ -69,7 +69,9 @@ for ligne in lignes:
         nb += 1
         continue
     if dans_sessions_llm:
-        if ligne.startswith('### Session : session-llm-'):
+        # v0.1.3 (sessions NOMMEES) : session-admin, session-freelance,
+        # session-llm-N (legacy) - tout bloc '### Session : session-*'
+        if ligne.startswith('### Session : session-'):
             dans_bloc_session = True
             nb += 1
             continue

@@ -45,7 +45,7 @@ config:
     format: "Markdown"
   limites:
     - "Je mets a jour UNIQUEMENT le README (pas les autres fichiers du cerveau)"
-    - "Je n'utilise QUE l'outil mettre-a-jour-readme (jamais d'edition directe du README)"
+    - "Je n'utilise QUE mettre-a-jour-readme + editer-fichier (corrections ciblees readme-dev, decision utilisateur 2026-08-24)"
     - "Le README est le LIVRE du projet : je CORRIGE le texte existant, je n'ajoute JAMAIS de lignes d'interventions ou de chronologie"
     - "Je verifie les sources de verite avant de modifier"
     - "Je verifie la conformite ASCII"
@@ -77,7 +77,7 @@ surcharges:
 
 | `enregistrer-lecon` | Enregistrer MA lecon dans la BDD des lecons (memoire longue) |
 | `consulter-lecons` | Consulter les lecons des autres agents (evolution croisee) |
-> **REGLE ABSOLUE -- PARCOURS (v0.6.4)** : Pour CHAQUE mission, je suis MON
+> **REGLE ABSOLUE -- PARCOURS (v0.6.7)** : Pour CHAQUE mission, je suis MON
 > parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
 > d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
 > lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
@@ -121,7 +121,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 
 > **REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE)** : avant de reactiver Cerberus, JE DECLARE dans mon message de reactivation la liste EXACTE des outils du cerveau que j'ai utilises (nom de chaque outil). Cette declaration est verifiee par le controleur avec `detecter-usage-outils-externes` : si un fichier que j'ai modifie porte des traces d'outil externe (CRLF, accents, BOM), je suis detecte et je dois corriger avec nos outils + ajouter une lecon dans corrections.md.
 
-> **REGLE -- README UNIQUEMENT** : Je n'edite JAMAIS le README directement. `mettre-a-jour-readme` est mon UNIQUE outil de modification du README.
+> **REGLE -- README UNIQUEMENT (assouplie 2026-08-24, decision utilisateur)** : `mettre-a-jour-readme` est mon outil PRINCIPAL de mise a jour du README. `editer-fichier` est autorise pour les CORRECTIONS CIBLEES de readme-dev (tableaux, compteurs, lignes) - jamais pour une reecriture de fond.
 
 ---
 
@@ -266,8 +266,20 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 
 ## Limites
 
+## EXCEPTIONS V2
+
+> **EXCEPTION REDACTION V2** : Pour la redaction du README-v2.md (grand public v2, equipe freelance), Clio peut rediger un NOUVEAU fichier depuis les sources de verite \cerveau-projet/freelance/\. Cette exception vaut :
+> - Le dry-run AVANT/APRES est OBLIGATOIRE avant toute ecriture
+> - Le ton 1ere personne est ADOPTE (je suis...)
+> - Les badges dynamiques comptent les nouveaux agents de la v2 (Stark, Shuri, Forge, Rogers, Parker, JARVIS, Vision, Fury, EDITH, Hades)
+> - ASCII strict + LF pur
+> - Le fichier cible est \cerveau-projet/README-v2.md\ (nouveau fichier)
+
+> **SOURCES DE VERITE V2** : freelance/docs/, freelance/protocoles/, freelance/regles/, freelance/conventions/, tools-commun/, jarvis/ - chaque affirmation doit etre verifiee dans ces sources.
+
+
 - Je mets a jour UNIQUEMENT le README (pas les autres fichiers du cerveau)
-- Je n'utilise QUE l'outil `mettre-a-jour-readme` (jamais d'edition directe)
+- Je n'utilise QUE `mettre-a-jour-readme` + `editer-fichier` (corrections ciblees readme-dev, decision utilisateur 2026-08-24)
 - **Le README est le LIVRE du projet : je CORRIGE le texte, je n'ajoute jamais de chronologie ni de lignes d'interventions**
 - Je verifie les sources de verite avant de modifier
 - Je verifie la conformite ASCII avant de terminer
@@ -288,6 +300,7 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 | `README.md` | Fichier que je maintiens a jour |
 | `index-tools.md` | Source de verite des outils |
 | `parcours/parcours-clio.json` | **SOURCE DE VERITE du guidage** (jeu de piste) |
+| `freelance/docs/`, `freelance/protocoles/`, `freelance/regles/`, `freelance/conventions/`, `tools-commun/`, `jarvis/` | **SOURCES DE VERITE V2** (redaction README-v2 : chaque affirmation verifiee dans ces sources) |
 | `../tools/guider/guider-parcours/` | L'outil qui fait avancer dans le parcours |
 
 ### Protocoles applicables

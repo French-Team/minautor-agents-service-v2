@@ -44,6 +44,7 @@ index, README.
 | **Clio** | Muse de l'histoire | Mettre a jour le README quand necessaire |
 | **Hygie** | Agent de nettoyage | Nettoyer le workspace (snapshot, detection par zone, suppression tracee) - SEUL habilite a TOUT le workspace et a supprimer sans demande prealable |
 | **Argus** | Detecteur de contradictions | Trouver et comparer les contradictions (cases, regles, protocoles, historique git git log --all) - DETECTE et SIGNALE, ne corrige jamais (l agent habilite corrige) |
+| **Mecano** | Agent v1 specialise freelance | Corriger et modifier le dossier freelance/ (conventions v2, fiches agents, arbres, outils). Agent v1 qui applique les conventions v2 quand il touche freelance/. |
 
 > **REGLE** : Toute tache de dev/amelioration du cerveau-projet (outils,
 > parcours, fiches, protocoles, SPEC DES OUTILS comme spec-guider-parcours)

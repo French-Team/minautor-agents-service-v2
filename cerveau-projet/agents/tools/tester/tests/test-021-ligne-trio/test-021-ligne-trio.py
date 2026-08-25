@@ -209,7 +209,8 @@ def main():
             "activer-agent-principal.py activer <session> %s" % cible
             in msg)
         attendu_fige = re.search(
-            r"activer-agent-principal\.py activer session-llm-\d+ "
+            r"activer-agent-principal\.py activer "
+            r"(?:session-admin|session-freelance|session-llm-\d+|<session>) "
             + re.escape(cible), msg)
         if (not attendu_session and not attendu_fige) \
                 or "pas reactiver" not in msg:

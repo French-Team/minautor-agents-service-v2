@@ -4419,35 +4419,35 @@ avec l empreinte normalisee d editer-parcours).
 editer-parcours doit resynchroniser cartes-lock.json (empreinte normalisee
 LF + rstrip), sinon les ecritures ulterieures de la carte sont bloquees par
 l anti-contournement (regle SEUL BUFFY). Modele : proteger-modifier-marbre.
-LEÇON VULCAIN -- PARITE SH COMPLETE (test-092)
+LECON VULCAIN -- PARITE SH COMPLETE (test-092)
 
 Date : 2026-08-18
-Contexte : correction signalée par Morpheus (garde-fou test-092) : le .sh
+Contexte : correction signalee par Morpheus (garde-fou test-092) : le .sh
 d'activer-agent-principal manquait argus et gardien dans les 3 case statements
 (role, fiche, corrections) - signalement Janus de la mission branchement-chiron
-jamais corrigé (seul hermes avait été ajouté v0.5.12).
+jamais corrige (seul hermes avait ete ajoute v0.5.12).
 
-Leçons :
-1. Le 3e oubli de branchement est évité : le garde-fou de parité (test-092)
-   compare désormais py / sh / AGENTS.md dans les deux sens + preuve négative.
-   Tout nouvel agent DOIT être ajouté aux 3 sources (py, sh, AGENTS.md) -
-   le test détecte tout écart automatiquement.
+Lecons :
+1. Le 3e oubli de branchement est evite : le garde-fou de parite (test-092)
+   compare desormais py / sh / AGENTS.md dans les deux sens + preuve negative.
+   Tout nouvel agent DOIT etre ajoute aux 3 sources (py, sh, AGENTS.md) -
+   le test detecte tout ecart automatiquement.
 2. Bump manuel vs bumper : le bumper (mettre-a-jour-versions) refusait le bump
-   du dossier activer-agent-principal à cause d'un faux positif : le fichier
+   du dossier activer-agent-principal a cause d'un faux positif : le fichier
    activer-agent-principal-test.md (rapport de test historique) porte une
    version 0.2.0 dans un tableau "Tests v0.2.0 (historique)" - fichier
-   documentaire, pas une source de vérité. Le bump a donc été fait manuellement
-   (py, sh, md, spec) + entrée au tableau versionning. L'audit --tous du bumper
-   confirme la cohérence (0 incohérent).
+   documentaire, pas une source de verite. Le bump a donc ete fait manuellement
+   (py, sh, md, spec) + entree au tableau versionning. L'audit --tous du bumper
+   confirme la coherence (0 incoherent).
 3. Ordre d'insertion dans le .sh : suivre l'ordre du .py (dictionnaire AGENTS) :
-   hermes (12), gardien (13), argus (14), chiron (15) - insérer gardien+argus
-   entre hermes et chiron pour garder la parité de style.
-4. Les .pyc trackés sont modifiés par les tests d'import : les restaurer via
-   git checkout avant de conclure (artefact, pas une régression).
+   hermes (12), gardien (13), argus (14), chiron (15) - inserer gardien+argus
+   entre hermes et chiron pour garder la parite de style.
+4. Les .pyc trackes sont modifies par les tests d'import : les restaurer via
+   git checkout avant de conclure (artefact, pas une regression).
 
-Verdict : test-092 9/9 OK (détectait exactement le vrai écart avant correction),
-tests liés 10/10 OK (test-002, 018, 021, 025, 028, 039, 040, 041, 052, 057),
-bumper --tous 0 incohérent, normes ASCII/LF OK.
+Verdict : test-092 9/9 OK (detectait exactement le vrai ecart avant correction),
+tests lies 10/10 OK (test-002, 018, 021, 025, 028, 039, 040, 041, 052, 057),
+bumper --tous 0 incoherent, normes ASCII/LF OK.
 ## [LECON] 2026-08-18 -- VERROU : CLE EXCLUSIVE PILOTE CHIRON (Vulcain)
 
 **Mission** : adapter le verrou d'habilitation (proteger-verrou-habilitation)
@@ -4490,3 +4490,407 @@ regles-groupes-agents.md (Gardien, decision utilisateur).
 
 **Verdict** : VALIDE - verrou adapte, tests manuels OK, bumper 0/0 (hors
 pins test-056 et test-058 documentes).
+
+---
+
+**Lecon** (2026-08-18) : correction faux positif valider-tableaux + bug stdin Windows .sh
+
+**Contexte** : valider-tableaux signalait `classeur-variables` comme un agent
+manquant dans le tableau "Agents disponibles" de cerberus.md. Ce dossier est un
+CLASSEUR de donnees (`type: classeur`), pas une fiche agent.
+
+**Correctif applique** :
+1. Filtre `type: fiche-agent` dans `verifier_liste_agents` (frontmatter) :
+   seuls les vrais agents sont compares au tableau. Faux positif corrige.
+2. Le .sh etait CASSE a HEAD (bug preexistant 0.2.0) : la ligne
+   `# -*- coding: ascii -*-` en 1re ligne du heredoc + `python3 -` (stdin)
+   sur Windows corrompait silencieusement l'interpretation du code
+   (IndentationError a une ligne du milieu, code pourtant identique via
+   fichier). Correction : .sh transforme en WRAPPER PUR
+   (`exec python3 "$SCRIPT_DIR/valider-tableaux.py" "$@"`), le pattern
+   moderne des outils (valider-case, analyser-noms-maj) - parite garantie
+   par construction, heredoc elimine.
+
+**Lecons** :
+1. Un outil .sh qui embarque un heredoc python est fragile sous Windows
+   (stdin) : preferer le wrapper pur -> .py. Tester TOUJOURS le .sh en
+   conditions reelles (bash), pas seulement le .py.
+2. Quand un outil signale un "faux positif", verifier le critere de
+   detection : ici il detectait TOUT dossier avec un `<nom>.md`, il doit
+   detecter les fiches par leur frontmatter (`type: fiche-agent`), le meme
+   pattern que les autres outils du projet.
+3. Verifier si le .sh etait deja casse a HEAD (git show HEAD:...) avant de
+   conclure qu'on l'a casse : le bug stdin etait preexistant.
+4. Apres modification d'outil : tester le .py ET le .sh, verifier ASCII/LF,
+   conventions, bumper (versions coherentes), evaluer-coherence (0 lien
+   nouveau).
+
+**Verdict** : CONFORME - valider-tableaux 23/23 (classeur-variables exclu),
+.sh wrapper fonctionnel, .py/.sh/.md coherents en 0.2.1(-py).
+
+- **2026-08-19 (test-079 registre)** : le champ outil du registre doit etre un nom CANONIQUE du catalogue (kebab-case, dossier reel). 32 entrees de session avaient des noms de convenance (tester, mettre-a-jour-parcours, verifier-marbre, evaluer-liens-rompus, test-094-valider-tableaux-fiche-agent, str_replace) -> OUTIL_ORPHELIN/OUTIL_CASSE. Correspondances : tester -> tester-lancer-non-regression, mettre-a-jour-bumper/parcours -> mettre-a-jour-versions, verifier-marbre -> proteger-verrou-marbre, evaluer-liens-rompus -> evaluer-coherence, creation test -> creer-fichier, str_replace -> editer-fichier. Apres : analyser --zone registre PROPRE, test-079 15/15.
+
+- **2026-08-19 (test-058 artefacts verrou)** : ajouter TEMPORAIREMENT un indice outil exclusif (editer-parcours) dans une carte non-buffy fait journaliser par le verrou des entrees verrou-auto FAUSSES ('usage autorise') si un test (test-057) appelle cet outil pendant la fenetre. 4 artefacts janus/editer-parcours retires du registre. Lecon : ne JAMAIS ajouter d'indice OUTIL d'outil exclusif hors buffy/chiron (test-058) ; pour couvrir une mention dans une regle (test-055), reformuler le TEXTE de la regle sans nommer l'outil.
+
+---
+
+## 2026-08-19 - Ajout protocole-X aux MOTIFS_GENERIQUES (mission liens casses)
+
+**Action** : modifie evaluer-coherence 0.2.4 -> 0.2.5-py : ajout de
+`protocole-X` aux MOTIFS_GENERIQUES. Les references [protocole-X/](protocole-X/)
+dans les lecons (buffy/janus corrections.md) sont des exemples de format
+(placeholder documentaire), pas des liens reels. Resultat : evaluer-coherence
+passe de 5 a 0 lien casse, test-001 10/10.
+
+**Lecon** : quand un motif generique contient un tiret suivi d'une lettre
+(protocole-X), il ne matche PAS les vrais noms (protocole-activation/,
+protocole-nettoyage/) car `X` n'est pas dans l'alphabet des noms reels.
+L'ajout est donc sans risque de faux negatif. Verification par greffe : un
+vrai lien vers un dossier protocole-XXX existant n'est jamais masque.
+
+---
+
+## 2026-08-19 - Defaut test-035 : OUTILS_P0_PARTAGES non inclus dans autorises
+
+**Action** : corrige evaluer-processus 0.1.5 -> 0.1.6. Deux bugs lies :
+(1) OUTILS_P0_PARTAGES (guider-parcours, lire-activite-recente) n etait
+utilise que pour le calcul d exclusivite, PAS dans les outils autorises de
+detecter_outils_hors_carte - un outil partage declare au registre etait
+signale OUTIL_HORS_CARTE a tort ; (2) evaluer-coherence (outil partage de
+diagnostic, fiche 'Proprietaire : Themis (outil partage)') absent de la
+liste. Correctif : autorises = outils_carte | outils_p0 | OUTILS_P0_PARTAGES
++ ajout de evaluer-coherence a OUTILS_P0_PARTAGES. test-035 10/10.
+
+**Lecon** : une liste blanche a DOUBLE USAGE (exclusivite + autorises) doit
+etre verifiee dans LES DEUX branches. OUTILS_P0_PARTAGES servait a exclure
+des exclusivites mais n etait pas consulte pour autoriser les usages : le
+KO latent test-035 (le test n avait pas tourne le 18) n est apparu que quand
+les usages evaluer-coherence du jour sont entres dans la fenetre de 1 jour.
+Lecon croisee avec la mission liens casses : un outil partage utilise par
+tous les agents en mission doit etre dans OUTILS_P0_PARTAGES.
+
+---
+
+## 2026-08-19 - Lacune combo->outils : catalogue-combos.json + champ combos (mission utilisateur)
+
+**Action** : cree la source de verite manquante entre les combos et leurs
+outils membres. (1) catalogue-combos.json (v0.1.0) : 21 combos -> proprietaire
++ outils membres (derives des definitions-combo.json + appels reels des
+scripts). (2) Champ 'combos:' ajoute dans le frontmatter des 40 fiches outils
+membres (declaration inverse). (3) Outil consulter-combos (v0.1.0) qui repond
+"l outil X est utilise par les combos Y,Z (proprietaire W)". (4)
+catalogue-commandes.json 0.2.13 -> 0.2.14 (ajout consulter-combos) + pin
+test-005 mis a jour. Verification : test-002 37/37, test-003 89/89, test-004
+VALIDE, test-005 28/28, test-040 5/5, detecter-decalages-catalogue 183
+conformes / 0 decalage / combos 15 OK.
+
+**Lecon** : la lacune etait structurelle - les combos savaient quels outils
+ils appelaient (definition-combo.json, scripts), mais les outils ne
+declaraient pas leur appartenance : impossible de repondre "ou est utilise
+cet outil et par qui". Le pattern de fermeture : source de verite centrale
+(catalogue) + declaration inverse (frontmatter) + outil de consultation +
+garde-fou de synchronisation (a venir, volet Morpheus). Repond a la question
+initiale : evaluer-coherence est membre de combos-audit-general (proprietaire
+themis) - son statut "partage" vient de son usage via le combo, pas d une
+etiquette arbitraire.
+
+---
+
+## 2026-08-19 - Boucle KO : consulter-combos partage + pins 182->183
+
+**Action** : corrige les KO de non-regression apres la mission lacune
+combo->outils. (1) evaluer-processus 0.1.6 -> 0.1.7 : consulter-combos
+ajoute a OUTILS_P0_PARTAGES (outil partage de consultation, comme
+consulter-lecons). (2) Pins catalogue 182 -> 183 dans test-060, test-007,
+test-024. (3) catalogue-commandes re-trie : consulter-combos insere apres
+consulter-lecons cassait l ordre alphabetique (combos < lecons). Verifie :
+test-035 10/10, test-060 12/12, test-007 15/15, test-024 17/17, evaluer-
+processus 0 probleme.
+
+**Lecon** : quand on insere une commande dans catalogue-commandes.json, le
+tri alphabetique est EXIGE par 3 tests (test-060, test-007, test-024) - le
+tri est une invariant structurel, pas un detail. Et tout nouvel outil de
+consultation partage doit etre ajoute a OUTILS_P0_PARTAGES d evalue-
+processus AVANT ses premiers usages declare au registre (sinon OUTIL_HORS_
+CARTE).
+
+---
+
+## [LECON] 2026-08-19 -- ETENDRE-SVG-MERMAID (Vulcain)
+
+**Mission** : etendre convertir-carte-mermaid (v0.1.0 -> v0.2.0) pour generer
+aussi une image SVG par agent (16 SVG) dans cerveau-projet/cartes-vues/mermaid/.
+
+**Diagnostic** : mermaid-cli est inutilisable sur ce poste (DOMPurify
+incompatible Node 24). La solution conforme au projet (0 dependance externe,
+100% local) est un rendu SVG autonome en Python pur, deterministe (meme
+carte -> memes octets), ce qui permet au garde-fou de verifier la synchro
+octet a octet.
+
+**Corrections/enseignements** :
+1. LAYOUT PAR ETAGES SUR GRAPHE CYCLIQUE : le "plus long chemin" naif gonfle
+   les rangs (le cycle c0->c0b->c0 poussait c0 au rang 3 au lieu de 1).
+   La bonne methode : BFS depuis START pour casser les cycles (aretes
+   "arriere" = cible de rang <= source), puis relaxation du plus long chemin
+   sur le DAG restant. Toute arete restante monte = retour, dessinee en
+   courbe. Resultat : compact, sans arete montante parasite.
+2. DETERMINISME : jamais d iteration sur un set, toujours des listes dans
+   l ordre d apparition du fichier + rangs tries. Teste par regeneration
+   en memoire et comparaison octet a octet.
+3. PARSEUR .mmd ROBUSTE : le noeud START est declare INLINE dans une arete
+   (START([...]) --> c0) ; les cibles nues (FIN-APPELANT) doivent etre
+   auto-creees. Formes : stadium (START/fin), losange (decision), rectangle
+   (action), rose (FIN-APPELANT).
+4. ETIQUETTES XML : echappement & < > " ' ; largeur estimee pour le fond
+   blanc ; LF pur + ASCII strict partout.
+
+---
+
+## [LECON] 2026-08-19 -- SORTIE-RAPPORT-RACINE (Vulcain)
+
+**Mission** : corriger detecter-decalages-catalogue qui ecrivait son rapport
+a la RACINE du projet (chemin relatif par defaut).
+
+**Diagnostic** : le defaut de --sortie etait un chemin RELATIF
+("rapport-...-<date>.md") -> ecrit dans le CWD ; lance depuis la racine, le
+rapport atterrissait a la racine (regle violee : rien ne sort de
+cerveau-projet/). Aucun test ne verifiait la racine -> le rapport egare est
+passe sous la non-regression.
+
+**Corrections/enseignements** :
+1. JAMAIS de chemin relatif pour une sortie par defaut : construire depuis
+   RACINE (chemins absolus calcules depuis __file__) + os.makedirs.
+   Convention de destination : <agent>/rapports/ (ex: vulcain/rapports/,
+   clio/rapports/, themis/rapports/).
+2. Bumper de version : .py + .sh + fiche .md + SPEC (ligne **Version :**) +
+   test qui pinche la version (test-028 point 2) - le detecteur de
+   divergences (test-028 point 3) signale la spec en retard.
+3. Toujours verifier ASCII/LF apres chaque ecriture (un caractere non-ascii
+   s etait glisse dans un commentaire de la v0.2.3 initiale).
+4. La preuve d un correctif de sortie : lancer l outil depuis le CWD qui
+   causait le bug (racine) et verifier qu il n y a RIEN a la racine.
+
+---
+
+## [LECON] 2026-08-19 -- FORMAT-HISTORIQUE-V2 (Vulcain)
+
+**Mission** : rendre AGENTS-historique.md "super lisible" (demande
+utilisateur) : blocs avec ligne 1 = date/agent, bordures #> / ###>,
+couleurs HTML par agent, sans casser les parseurs.
+
+**Diagnostic** : le fichier est a la fois LU PAR DES OUTILS (lire-activite-
+recente matche '| 20', evaluer-processus matche '| date | session | agent |
+Mission') ET LU PAR DES HUMAINS. La contrainte : la ligne de table doit
+rester INTACTE, les couleurs/reperes vont AUTOUR (ligne '###').
+
+**Corrections/enseignements** :
+1. LES COULEURS EN .md = spans HTML ASCII ; JAMAIS dans les cellules de
+   table (les parseurs split sur '|' et extraient date/agent -> casserait
+   test-005/test-035/test-048). Le repere humain colore est la ligne '###'
+   au-dessus de la table.
+2. NOM DE CONSTANTE PIEGE : 'COULEURS_AGENTS' contient 'AGENTS = {' ->
+   les regex permissives qui extraient le dict AGENTS (test-092
+   extraire_agents_py) matchent le MAUVAIS bloc. Nom SINGULIER
+   (COULEURS_PAR_AGENT) + AUCUN commentaire contenant la sequence
+   'AGENTS = {' (la regex matche aussi les commentaires !).
+3. PURGE DES BLOCS : une entree = repere '### ' + table '| 20' + 
+   continuations ; le compteur de purge compte les BLOCS (le repere et sa
+   table = 1 entree), sinon double comptage (150 -> 75).
+4. PARITE PY/SH : le .sh a sa propre ajouter_historique (awk) -> adapter
+   les DEUX (composition + purge + deduplication du '#>' en tete).
+5. MIGRATION : extraire la raison de la 1ere ligne avec 'reste apres le
+   4eme pipe' (pas split[4:-1] qui suppose un pipe final - les entrees a
+   raison longue n en ont pas sur la 1ere ligne).
+
+---
+
+## [LECON] 2026-08-19 -- HISTORIQUE-V3 (Vulcain)
+
+**Mission** : restructurer la table de AGENTS-historique.md (demande
+utilisateur) : colonnes 'agent | heure | date | session | raison' (agent en
+1re colonne, heure et date separees), raison ENROULEE a 100 car. avec
+continuations '###>' (fini le pave), couleurs HTML conservees (l utilisateur
+a choisi de rester en markdown : les codes ANSI casseraient l ASCII).
+
+**Diagnostic** : changer l ordre des colonnes CASSENT les 4 parseurs qui
+lisent le fichier (lire-activite-recente matche '| 20', evaluer-processus
+matche '| date | session | agent | MISSION', purifier-rvav matche '| 2026-',
+mettre-a-jour-readme matche '| 20'). Et l enroulement de la raison peut
+couper 'reactiver Cerberus' -> evaluer-processus (FIN_MISSION_ERRONEE)
+devait reconstituer la raison complete (table + continuations ###>).
+
+**Corrections/enseignements** :
+1. ENTREE_HISTORIQUE_RE : '| 20' -> '| <span' (agent colore en colonne 1).
+   Meme changement dans la purge awk du .sh et dans decouper_entrees_
+   historique de purifier-rvav.
+2. RAISON ENROULEE : enrouler_raison coupe aux espaces a 100 car. La 1re
+   ligne reste dans la cellule, les suivantes en '###>'. Les parseurs qui
+   ont besoin de la raison COMPLETE (evaluer-processus) reconstituent en
+   concatenant la table + les lignes '###>' suivantes.
+3. PREUVE CRITIQUE : verifier qu'une mission dont 'reactiver Cerberus' est
+   coupe par l enroulement est bien retrouvee (test sur mini-fichier).
+4. test-098 et test-048 pinchent l ANCIEN format : leur regex doit etre
+   adaptee en meme temps que les outils (faux OK sinon : l ancienne regex
+   de test-048 extrayait 0 mission sur le nouveau fichier sans KO !).
+5. test-065 pinche la version 0.1.0 de purifier-rvav -> bumpee en 0.1.1.
+6. PARITE PY/SH : lire-activite-recente.sh embarque le code Python duplique
+   (heredoc) -> adapter les DEUX (version + extraire_entrees + import re).
+7. Le repere humain '### <date> - <agent>' est INCHANGE (la ligne machine
+   seule change) : les humains gardent le repere colore, les outils lisent
+   la table.
+
+## Lecon 2026-08-19 (chronometre + integration activation)
+
+**Contexte** : creer l outil chronometrer-duree (duree des interventions
+d agents) + integration dans activer-agent-principal v0.5.16.
+
+**Corrections/enseignements** :
+1. TEMPLATE = SOURCE DE VERITE : tout nouvel outil doit suivre outil-template
+   (protections DOC --confirme-doc, --dry-run, --chrono, messages info).
+   Le .sh embarque le .py en heredoc -> parite garantie.
+2. CATALOGUE TRIE : ajouter un outil au catalogue-commandes.json doit
+   respecter l ordre ALPHABETIQUE (chronometrer-duree entre changer-statut
+   et combos-*) : le test-060 et test-079 pinchent le compte (184 -> 185) et
+   le tri -> les pins de test-007, test-024, test-060, test-079 doivent etre
+   bumpees en meme temps (KO en cascade sinon).
+3. INTEGRATION CHRONO : activer ferme le chrono de l agent precedent (et
+   ajoute sa duree au repere ### AVANT d ecrire la nouvelle entree), puis
+   ouvre le chrono du nouvel agent ; reactiver ferme le dernier chrono.
+   La duree n est connue qu a la FIN -> le repere ### porte la duree.
+4. PARSEURS INERTES : les parseurs (lire-activite-recente, evaluer-processus)
+   lisent la TABLE (ligne | <span), PAS le repere ### -> la duree (Xmin Ys)
+   dans le repere ne les casse pas (verifie).
+5. MODE TEST CHRONO : quand AGENTS_FILE est surcharge, appeler_chrono
+   redirige CHRONOS_FICHIER vers chronos-test.jsonl a cote du AGENTS de
+   test -> les tests ne polluent jamais traces/chronos.jsonl.
+6. PIEGE CHEMIN RELATIF : un test chrono avec un chemin relatif a cree un
+   dossier parasite cerveau-projet/cerveau-projet/ -> TOUJOURS utiliser des
+   chemins absolus ou la surcharge CHRONOS_FICHIER explicite.
+
+## [LECON] 2026-08-19 -- Integration tokens dans le cycle d'activation (Vulcain)
+**Contexte** : mission Cerberus -- afficher les consommations de tokens par agent dans AGENTS-historique (comme les durees), source hybride (API si fournie, sinon estimation locale), detail entree/sortie dans le repere.
+**Actions** : extension analyser-tokens (--snapshot JSON machine), chronometrer-duree (--tokens, 3e champ), activer-agent-principal (py+sh : conso par difference au relais), evaluer-processus (analyser-tokens en P0 partage), carte vulcain (c6), bumps de versions, pins test-060.
+**Verdict** : VALIDE -- 2 bugs de parite corriges en route : (1) le parse `split("|")` dans activer-agent-principal.py recuperait les MESSAGES apres le JSON (meme piege que la duree) -> prendre la 1re ligne ; (2) dans le .sh, `echo "$tokens_prec" | xargs` decoupait le JSON sur les espaces -> passer le JSON sans xargs + .strip() dans le python. Lecon : quand un outil retourne du JSON, ne JAMAIS le faire transiter par xargs (decoupe sur espaces) ni le parser par split naif sur un champ texte qui peut contenir des messages.
+
+## [LECON] 2026-08-19 -- COEXISTENCE MULTI-SESSIONS chronometrer-duree v0.1.2 (Vulcain)
+
+**Contexte** : 2 sessions LLM en parallele (llm-1 + llm-4/opencode) : le chrono de llm-4 restait ouvert et `etat` affichait toujours le meme chrono global.
+**Actions** : demarrer/arreter filtraient DEJA par session (chrono_actif(entrees, session)) -> la coexistence fonctionnait pour les ecritures. Le bug etait l AFFICHAGE : `etat` ignorait args.session et ne montrait qu UN chrono. Correction : nouvelle fonction chronos_actifs (un actif par session) + `etat <session>` filtre par session + `etat` (sans session) liste TOUTES les sessions actives. Parite py/sh + doc + bump 0.1.2.
+**Verdict** : VALIDE -- test 092 (parite) 9/9, bumper PROPRE, test-098 7/7, ASCII/LF purs, coexistence testee de bout en bout (2 sessions demarrees en parallele, arret de l une ne touche pas l autre).
+**Lecon** : QUAND PLUSIEURS SESSIONS LLM TOURNENT EN PARALLELE, tout affichage d etat global doit etre scinde par session. Le filtre par session doit exister dans l AFFICHAGE comme dans les ECRITURES : chrono_actif filtrait deja (ecriture), etat ne filtrait pas (lecture) -- la moitie du cycle etait multi-session, l autre non.
+
+## [LECON] 2026-08-19 -- D6 : valeurs session-llm-1 codees en dur (Vulcain)
+**Contexte** : l utilisateur a constate que le round semblait brise alors que les agents s enchainaient correctement : la vraie cause etait des valeurs `session-llm-1` codees EN DUR dans les cartes (16 parcours ~76 occurrences) ET dans les outils de validation/lecture. Quand une autre session (llm-2/3/4) suivait SA carte, la commande `activer session-llm-1 themis` activait dans la MAUVAISE session -> entrelacement historique + chrono orphelin.
+**Actions** : outils rendus generiques (acceptent `<session>` placeholder OU `session-llm-N`) : valider-cartes-decision v0.4.6 (P8 regex generique), evaluer-processus v0.1.12 (fins_de_la_carte pattern generique), detecter-ecritures-hors-cycle v0.1.2 (--session + session_par_defaut SESSION_LLM/classeur), generateurs-commande v0.3.1 (_session_appelante), proteger-verrou-habilitation v0.4.1 (fallback session_par_defaut), analyser-tokens v0.1.2 (SESSION_LLM prioritaire). Bumper PROPRE, 16/16 cartes conformes (retrocompat avec session-llm-1 pendant transition).
+**Verdict** : VALIDE -- valider-cartes accepte <session> ET session-llm-N (teste sur copie), evaluer-processus detecte les 2 formes, detecter lit la bonne session. Pins tests obsoletes a adapter par Morpheus : test-005 (0.2.6->0.3.1), test-056 (0.4.0->0.4.1), test-089 (0.1.0->0.1.2), test-060 (0.1.1->0.1.2).
+**Lecon** : UNE VALEUR DE SESSION FIGEE DANS UNE COMMANDE DE CARTE CLOUE LA CHAINE A CETTE SESSION. Toute commande qui doit etre executee par UN agent de N importe quelle session doit porter le placeholder `<session>` (remplace a l execution), jamais `session-llm-1`. Le meme piege guette les outils qui lisent l agent actif : toujours parametrer la session (--session, SESSION_LLM, ou classeur).
+
+## [LECON] 2026-08-19 -- BUG MULTI-SESSIONS trouver_session_agent (Vulcain)
+
+**Contexte** : Janus a detecte au controle final D6 que la commande suggeree
+par le verrou protege-verrou-habilitation visait la MAUVAISE session quand
+2 sessions portent le meme agent actif (ex: morpheus dans session-llm-1 ET
+session-llm-4). trouver_session_agent parcourait les blocs `### Session :`
+d AGENTS.md dans l ordre du FICHIER et retournait le PREMIER match
+(session-llm-4, bloc en tete) au lieu de la session la plus recente de
+l appelant (session-llm-1, Derniere activite max).
+
+**Actions** : trouver_session_agent v0.4.2 lit desormais la table
+'## Sessions connues' (colonne Agent actif + Derniere activite), filtre les
+sessions dont l agent actif correspond (insensible a la casse) et retourne
+la PLUS RECENTE (tri Derniere activite desc). Fallback inchange
+(session_par_defaut : SESSION_LLM puis classeur). Version 0.4.1 -> 0.4.2
+(py en-tete + VERSION + doc .md). test-056 : pin 0.4.1 -> 0.4.2 + NOUVEAU
+point 8b (trouver_session_agent resout chaque agent vers SA session la plus
+recente - preuve directe du bug corrige). Bumper PROPRE.
+
+**Verdict** : VALIDE -- test-056 18/18 (dont 8b), test-028 8/8, test-035
+10/10, test-067 8/8, ASCII/LF purs, simulation 2-sessions (morpheus llm-1
+21:38 vs llm-4 20:51 -> session-llm-1) verifiee sur copie AGENTS.md.
+
+**Lecon** : QUAND PLUSIEURS SESSIONS LLM COEXISTENT, TOUTE resolution
+agent -> session doit utiliser la table '## Sessions connues' triee par
+Derniere activite (la recence est la seule source non ambigue), JAMAIS
+l ordre des blocs du fichier (independant de la recence). Meme piege que
+le chrono multi-sessions : la moitie de la logique (lecture) ne filtrait pas
+par session.
+
+
+## [LECON] 2026-08-20 -- Ajout dry-run dans mettre-a-jour-readme + combos (Vulcain)
+
+**Contexte** : demande Clio -- ajouter un mode --dry-run (preview AVANT/APRES sans ecriture) et le rendre obligatoire avant tout --maj (regle Clio v0.2.2 : ton 1ere personne, dry-run obligatoire, badges dynamiques).
+
+**Actions** :
+1. mettre-a-jour-readme v0.4.3 -> v0.4.4 : ajout option --dry-run (fonction dry_run() qui affiche les changements futurs sans ecrire)
+2. combo-maj-readme v0.1.0 -> v0.2.0 : ajout etape dry-run entre verifier et maj (case c3 + c3b question + c3c maj)
+3. combos-maj-readme-massive v0.1.6 -> v0.1.7 : ajout etape 2b dry-run avant maj
+4. Parite .sh et .md a jour
+
+**Verdict** : VALIDE -- dry-run teste (38 changements detectes), ASCII 0 sur 5 fichiers, parite py/sh/md.
+
+**Lecon** : le dry-run est un garde-fou de processus : il force l agent a VOIR les changements AVANT de les appliquer. C est le meme principe que le --dry-run des scripts temporaire : l entonnoir montre ce qu il ferait avant d executer.
+## Lecon 2026-08-20 : parcours-vulcain case c13c (modification mineure)
+
+**Contexte** : La case c14 exigeait Morpheus pour TOUTE modification, meme 1 ligne.
+
+**Correction** : Ajout case c13c entre c13b et c14 :
+- question : 'Modification concerne UN SEUL champ/ligne ?'
+- OUI -> c15 (FIN, skip Morpheus)
+- NON -> c14 (Morpheus requis)
+
+**Lecon** : Les parcours doivent prevoir des raccourcis pour les missions simples. Un parcours trop rigide decourage l agent et casse la chaine.
+
+**Version** : 0.5.2 -> 0.6.0
+## [LECON] 2026-08-20 -- ENCART + CORPS JOURNAL : ID LLM AU LIEU DE LA SESSION (Vulcain)
+
+**Contexte** : demande utilisateur - dans l encart 'Activites recentes' d AGENTS-historique.md, remplacer la colonne 'session' par 'id' (l id LLM, ex: freebuff), sur l encart ET le corps du journal.
+
+**Actions** :
+1. activer-agent-principal v0.5.19 -> v0.5.20 : composer_bloc_historique ecrit '- HH:MM | id | raison' avec identifiant = id_lie_a_session(session) ou session (repli si aucun id lie) ; maj_encart_activites header '| Heure | Agent | id | Raison |'
+2. Migration AGENTS-historique.md (168 entrees) : session-llm-1 avant 20/08 20:51 -> llm-1, apres -> freebuff ; session-llm-3 -> kilo-test2 ; session-llm-4 -> opencode ; mentions dans les raisons conservees
+3. lire-activite-recente v0.1.1 -> v0.1.2 (docstring + variable identifiant)
+4. Doc outil a jour
+
+**Verdict** : VALIDE -- outil teste sur copie (encart + corps affichent freebuff), non-regression sans nouvelle regression (KOs preexistants non lies), ASCII 0, test-091 OK.
+
+**Lecon** : changer le format d un fichier journal partage impose de (1) migrer l existant avec un mappage HISTORIQUE (l id d une session a change dans le temps : llm-1 puis freebuff pour session-llm-1) et (2) verifier TOUS les parseurs/lecteurs (lire-activite-recente lit la colonne telle quelle : il suffit de migrer le corps pour que l affichage suive).
+## [LECON] 2026-08-21 -- INSERTION HISTORIQUE : SECTION JOUR SOUS L ENCART + BORNAGE SECTION (Vulcain)
+
+**Contexte** : demande utilisateur - les interventions de Themis du 21/08 etaient placees AU-DESSUS de l encart 'Activites recentes' dans AGENTS-historique.md. Cause dans ajouter_historique() (activer-agent-principal.py) : la branche 'nouvelle date' inserait apres le PREMIER \n---\n (fin du FRONTMATTER) au lieu d apres l encart.
+
+**Corrections (v0.5.20 -> v0.5.21)** :
+1. Branche 'nouvelle date' : insertion APRES l encart (cible : la 1re section jour ## JJ/MM/AAAA existante, repli : fin de l encart, puis fin de l en-tete)
+2. Branche 'date existante' : contenu.index('### <agent>') trouvait le PREMIER bloc agent du fichier (souvent dans un jour ANTERIEUR) - borne la recherche a la section du jour (fin_jour = prochain \n## ). Sans ce fix, les entrees Cerberus du 21/08 tombaient dans le bloc Cerberus du 20/08.
+3. Section 21/08 repositionnee sous l encart dans le fichier actuel (script binaire, LF purs)
+4. E5 Pattern 14 : parcours-vulcain.json 0.5.2 -> 0.6.0 (fiche deja a 0.6.0, P10 CONFORME)
+
+**Validations** : tests fonctionnels sur copie (nouvelle date -> sous l encart ; date existante + nouvel agent -> bloc cree dans la bonne section ; date existante + agent present -> entree en tete du bloc, ordre decroissant), valider-cartes-decision vulcain CONFORME + --tous 17/17, guider affiche v0.6.0, marbre 8/8, evaluer-processus 0 probleme, bumper audit --tous coherent (0.5.21), ASCII 0 CRLF 0.
+
+**Lecons** : (1) un fichier avec en-tete + encart + historique a 3 zones : le premier \n---\n est la fin de l EN-TETE, pas de l encart - pour inserer dans l historique, cibler la 1re section jour, JAMAIS le frontmatter. (2) Toute recherche de bloc/marqueur doit etre BORNEE a sa section (jour/agent) - contenu.index() global melange les jours. (3) Un script de manipulation doit etre teste AVANT ecriture reelle (mon 1er script de repositionnement a perdu le bloc themis en s arretant a la 1re ligne vide - reconstruit depuis les lignes de l encart avec validation croisee des prefixes 77 caracteres). (4) Le bumper en mode dossier signale les fichiers auxiliaires (ex: *-test.md, spec/) comme incoherents - l audit --tous les exclut par conception (faux positifs documentaires).
+
+## [LECON] 2026-08-21 -- GARDE-FOU v0.5.22 : RELAIS DE CHAINE AUTORISE (Vulcain)
+
+**Contexte** : Option A validee par l utilisateur (retour Pattern 8) - chaque agent active l agent SUIVANT a sa fin de carte (chaine bout-en-bout). Le garde-fou v0.5.19 BLOQUAIT toute activation directe (agent actif != Cerberus, cible != Cerberus -> BLOQUER sauf --forcer), ce qui rendait les chaines des cartes inexecutables : la boucle passait toujours par Cerberus.
+
+**Corrections (v0.5.21 -> v0.5.22)** :
+1. activer-agent-principal.py : le cas cible != agent_actuel passe de BLOQUER a AVERTISSEMENT + AUTORISER (relais de chaine, Pattern 8). Le message avertit : si l agent actif n a PAS termine sa mission, reactiver Cerberus d abord. Le --forcer reste dispo mais n est plus necessaire pour les chaines.
+2. .sh aligne (il n avait pas le blocage), .md doc a jour (section garde-fou + versionning), spec 0.5.21 -> 0.5.22.
+3. Test fonctionnel sur copie : chaine Cerberus->buffy->vulcain->morpheus->janus->Cerberus, tous rc=0, avertissement relais visible.
+
+**Validations** : bumper audit --tous coherent (0.5.22), ASCII 0 CRLF 0, test-099 (brouillon Morpheus) 2/4 : tests 3-4 OK (reactivation Cerberus + chaine complete), tests 1-2 KO sur des attentes du BROUILLON (message literal 'single-session' + option --multi-session inexistante) - c est le domaine de Morpheus de les adapter, je ne touche pas aux fichiers de test.
+
+**Lecon** : quand une regle immuable (garde-fou) est en decalage avec les cartes, corriger l OUTIL (la regle) plutot que contourner avec --forcer - l utilisateur valide la direction (Option A) puis l outil s aligne sur les cartes. Les tests brouillons d un autre agent (Morpheus) ne sont PAS a corriger par le constructeur : les executer pour l etat reel, documenter les ecarts, et laisser le testeur adapter son test.
+## [LECON] 2026-08-24 -- DEVIATION P2 : METTRE-A-JOUR-README ADAPTE A LA NOUVELLE NORME README PUBLIC
+
+**Contexte** : bilan consolide (chaine Clio verifier) - P2 : mismatch structurel outil/README. mettre-a-jour-readme --verifier attendait la section 'La boite a outils' (ancien format) ABSENTE du README.md public reecrit en 1ere personne le 20/08 -> MANQUANT massifs a chaque verification.
+
+**Diagnostic** : le README public (grand public, 1ere personne) n'est pas l'endroit de la liste technique exhaustive des 165 outils - c'est le role de readme-dev (section 6, tableau complet). L'outil devait donc tolérer l'absence de la section dans le README public.
+
+**Correction** : verifier() py+sh : badge Outils-N verifie + INFO nouvelle norme (compteurs via readme-dev) + boucle categories uniquement si l'ancienne section existe (retro-compat). dry_run() py+sh aligne : [AUCUN CHANGEMENT] sur le README public actuel. Bump 0.4.4 -> 0.4.5 (bumper). Tests Morpheus VALIDE (test-064 7/7, 0 decalage catalogue).
+
+**Lecons** :
+1. UN OUTIL DE VERIFICATION DOIT SUIVRE LA NORME DU DOCUMENT QU'IL VERIFIE : quand un README change de format (reecriture 1ere personne), l'outil s'adapte (tolérance + retro-compat) au lieu de signaler des MANQUANT massifs.
+2. LA COHERENCE PY/SH EST OBLIGATOIRE : meme adaptation dans les deux portages, syntaxe bash -n, sorties identiques.
+3. LE DRY-RUN [AUCUN CHANGEMENT] SUR LE DOCUMENT ACTUEL EST LE VERDICT ATTENDU : il prouve que l'outil accepte la norme sans ecrire.
+
+**Preuves** : verifier/dry-run py=sh identiques, test-064 7/7, detecter-decalages-catalogue 0, ASCII 0/0. P1 (readme-dev 164 vs 165, categorie Git manquante) = domaine Clio, a deleguer.

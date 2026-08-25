@@ -22,7 +22,7 @@ Options:
   --help             Afficher cette aide
 
 Proprietaire : Clio (agent dedie au README)
-Version : 0.4.4-py
+Version : 0.4.5-py
 Statut : prepare
 """
 
@@ -31,7 +31,7 @@ import os
 import re
 import sys
 
-VERSION = "0.4.4-py"
+VERSION = "0.4.5-py"
 STATUT = "prepare"
 
 README = "README.md"
@@ -259,39 +259,48 @@ def verifier():
     if ecart == 0:
         print("  [OK] Tous les agents sont dans la table")
 
-    # Titre boite a outils
-    m = re.search(r"^## La boite a outils \(([0-9]*) outils\)", contenu, re.MULTILINE)
-    if m:
-        titre_actuel = int(m.group(1))
-        if titre_actuel != total:
-            print("  [OBSOLETE] Titre : 'La boite a outils (%d outils)' -> devrait etre %d" % (titre_actuel, total))
+    # Badge Outils du README public (nouvelle norme 1ere personne 20/08) :
+    # la liste technique exhaustive vit dans readme-dev (section 6), pas dans
+    # le README public. Le verifier tolere l absence de la section 'La boite
+    # a outils' (ancien format) et s appuie sur readme-dev pour les compteurs.
+    badge = re.search(r"Outils-(\d+)", contenu)
+    if badge:
+        lue = int(badge.group(1))
+        if lue != total:
+            print("  [OBSOLETE] Badge Outils-%d -> devrait etre %d" % (lue, total))
         else:
-            print("  [OK] Titre 'La boite a outils (%d outils)'" % titre_actuel)
+            print("  [OK] Badge Outils-%d (README public)" % lue)
+    if re.search(r"^## La boite a outils \(([0-9]*) outils\)", contenu, re.MULTILINE):
+        print("  [INFO] Section 'La boite a outils' encore presente (ancien format) : compteurs verifies ci-dessous")
     else:
-        print("  [MANQUANT] Titre 'La boite a outils' introuvable dans le README")
+        print("  [INFO] README public sans section 'La boite a outils' (nouvelle norme) : compteurs verifies dans readme-dev (section 6)")
 
-    # Compteurs et outils par categorie
-    for cle in lister_categories():
-        cat = nom_categorie_affichable(cle)
-        nb = compter_outils_categorie(cle)
-        m = re.search(r"\*\*%s \(([0-9]*)\)\*\*" % re.escape(cat), contenu)
-        if m:
-            lue = int(m.group(1))
-            if lue != nb:
-                print("  [OBSOLETE] %s : README dit %d, reel = %d" % (cat, lue, nb))
-            else:
-                print("  [OK] %s : %d" % (cat, nb))
-        else:
-            print("  [MANQUANT] %s : compteur introuvable (reel = %d)" % (cat, nb))
+    # Compteurs et outils par categorie : uniquement si l ancienne section
+    # 'La boite a outils' existe encore dans le README public
+    # (retro-compatibilite). Nouvelle norme : les compteurs par categorie et
+    # les listes d outils vivent dans readme-dev (section 6), verifies par
+    # verifier_somme_comptes() ci-dessous.
+    ancienne_section = re.search(r"^## La boite a outils \(([0-9]*) outils\)", contenu, re.MULTILINE)
+    if ancienne_section:
+        for cle in lister_categories():
+            cat = nom_categorie_affichable(cle)
+            nb = compter_outils_categorie(cle)
+            m = re.search(r"\*\*%s \(([0-9]*)\)\*\*" % re.escape(cat), contenu)
+            if m:
+                lue = int(m.group(1))
+                if lue != nb:
+                    print("  [OBSOLETE] %s : README dit %d, reel = %d" % (cat, lue, nb))
+                else:
+                    print("  [OK] %s : %d" % (cat, nb))
 
-        # Outils manquants dans la liste de la categorie
-        liste_reelle = lister_outils_categorie(cle)
-        m2 = re.search(r"\*\*%s \([0-9]*\)\*\* \| ([^|]*)" % re.escape(cat), contenu)
-        ligne_readme = m2.group(1) if m2 else ""
-        for outil in [o.strip() for o in liste_reelle.split(",") if o.strip()]:
-            nom = outil.split(": ")[-1]
-            if nom and nom not in ligne_readme:
-                print("  [MANQUANT] %s : outil '%s' absent de la liste" % (cat, nom))
+            # Outils manquants dans la liste de la categorie
+            liste_reelle = lister_outils_categorie(cle)
+            m2 = re.search(r"\*\*%s \([0-9]*\)\*\* \| ([^|]*)" % re.escape(cat), contenu)
+            ligne_readme = m2.group(1) if m2 else ""
+            for outil in [o.strip() for o in liste_reelle.split(",") if o.strip()]:
+                nom = outil.split(": ")[-1]
+                if nom and nom not in ligne_readme:
+                    print("  [MANQUANT] %s : outil '%s' absent de la liste" % (cat, nom))
 
     # Somme des compteurs du readme-dev (anti-recurrence bug Clio 132 vs 134)
     print("")
@@ -570,19 +579,22 @@ def dry_run():
     if agents_manquants:
         changements.append("Agents a ajouter : %s" % ", ".join(agents_manquants))
 
-    # 4. Outils manquants par categorie
-    for cle in lister_categories():
-        cat = nom_categorie_affichable(cle)
-        liste_reelle = lister_outils_categorie(cle)
-        m2 = re.search(r"\*\*%s \([0-9]*\)\*\* \| ([^|]*)" % re.escape(cat), contenu)
-        ligne_readme = m2.group(1) if m2 else ""
-        outils_manquants = []
-        for outil in [o.strip() for o in liste_reelle.split(",") if o.strip()]:
-            nom = outil.split(": ")[-1]
-            if nom and nom not in ligne_readme:
-                outils_manquants.append(nom)
-        if outils_manquants:
-            changements.append("%s : outils a ajouter : %s" % (cat, ", ".join(outils_manquants)))
+    # 4. Outils manquants par categorie : uniquement si l ancienne section
+    # 'La boite a outils' existe dans le README public (retro-compatibilite).
+    # Nouvelle norme : les listes d outils vivent dans readme-dev (section 6).
+    if re.search(r"^## La boite a outils \(([0-9]*) outils\)", contenu, re.MULTILINE):
+        for cle in lister_categories():
+            cat = nom_categorie_affichable(cle)
+            liste_reelle = lister_outils_categorie(cle)
+            m2 = re.search(r"\*\*%s \([0-9]*\)\*\* \| ([^|]*)" % re.escape(cat), contenu)
+            ligne_readme = m2.group(1) if m2 else ""
+            outils_manquants = []
+            for outil in [o.strip() for o in liste_reelle.split(",") if o.strip()]:
+                nom = outil.split(": ")[-1]
+                if nom and nom not in ligne_readme:
+                    outils_manquants.append(nom)
+            if outils_manquants:
+                changements.append("%s : outils a ajouter : %s" % (cat, ", ".join(outils_manquants)))
 
     if not changements:
         print("  [AUCUN CHANGEMENT] Le README est deja a jour.")
