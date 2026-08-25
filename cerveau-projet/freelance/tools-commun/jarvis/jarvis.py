@@ -15,7 +15,8 @@ Usage:
     python3 jarvis.py --help
 
 Proprietaire : Vision (perimetre JARVIS)
-Version : 0.9.0 (refactoring protocole 14)
+Version : 0.11.0 (chaine de demarrage/arret - mission [AT-1] 2026-08-23 :
+demarrage = tic routines + DEFCON + files + operationnel ; arret = resume)
 """
 
 import argparse
@@ -30,7 +31,10 @@ from activations import cmd_activer
 from historique import cmd_historiser
 from files import cmd_mettre_en_attente, cmd_file, cmd_reprendre, cmd_stop_dev
 from defcon import cmd_defcon, cmd_changer_defcon
+from verifier import cmd_verifier
+from classeur_v2 import cmd_classeur
 from routines import cmd_routines_etat
+from demarrage import cmd_demarrage, cmd_arret
 from missions import lancer as lancer_missions_fichier
 
 
@@ -136,6 +140,38 @@ def construire_parser():
     subparsers.add_parser("routines-etat",
                           help="Etat des routines (derniere execution / intervalle)")
 
+    # chaine de demarrage / arret propre (mission [AT-1] 2026-08-23)
+    p_dem = subparsers.add_parser(
+        "demarrage",
+        help="Chaine de demarrage : tic routines + DEFCON + files + operationnel")
+    p_dem.add_argument("--session", default="session-freelance",
+                       help="Session (encart AGENTS-historique cible)")
+    p_arr = subparsers.add_parser(
+        "arret",
+        help="Extinction propre : resume de session + historisation")
+    p_arr.add_argument("--session", default="session-freelance",
+                       help="Session (encart AGENTS-historique cible)")
+
+    # verifier-coherence (mecanisme de validation automatique 2026-08-25)
+    subparsers.add_parser(
+        "verifier-coherence",
+        help="Verifier la coherence d AGENTS.md contre les fichiers reels (arbres v2, fiches, corrections, jarvis-data, Sessions)")
+
+    # classeur v2 (BDD SQLite, freelance/classeur/ - decision utilisateur
+    # 2026-08-25 : la v2 a son propre classeur, stockage/consultation rapides)
+    p_cl = subparsers.add_parser(
+        "classeur",
+        help="Classeur v2 (BDD SQLite) : variable-set/get/list, session-set/get/list, agent-set/get/list, etat, exporter")
+    p_cl.add_argument("classeur_cmd", nargs="?", default="",
+                      help="Sous-commande (variable-set, session-set, agent-set, etat...)")
+    p_cl.add_argument("nom", nargs="?", default="", help="Nom (variable/session/agent/champ)")
+    p_cl.add_argument("valeur", nargs="?", default="", help="Valeur (variable-set / utilisateur-set)")
+    p_cl.add_argument("--source", default="jarvis", help="Source de la variable")
+    p_cl.add_argument("--id", dest="id_llm", default="", help="Id LLM (session-set)")
+    p_cl.add_argument("--agent", default="", help="Agent (session-set)")
+    p_cl.add_argument("--statut", default="", help="Statut (agent-set)")
+    p_cl.add_argument("--mission", default="", help="Mission (agent-set)")
+
     return parser
 
 
@@ -180,6 +216,14 @@ def main():
         print("[ROUTINES] v0.9.2 : plus de serveur a arreter.")
     elif args.commande == "routines-etat":
         cmd_routines_etat()
+    elif args.commande == "demarrage":
+        cmd_demarrage(args)
+    elif args.commande == "arret":
+        cmd_arret(args)
+    elif args.commande == "verifier-coherence":
+        cmd_verifier(args)
+    elif args.commande == "classeur":
+        cmd_classeur(args)
     elif args.commande == "lister":
         cmd_lister(args)
     elif args.commande == "activer":

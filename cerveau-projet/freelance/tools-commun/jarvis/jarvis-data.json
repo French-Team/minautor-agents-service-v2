@@ -34,7 +34,7 @@
       "nom": "jarvis",
       "role": "Centre de communication : distribue les missions de Stark et active les agents -- mode conversation",
       "fiche": "cerveau-projet/freelance/jarvis/jarvis.md",
-      "corrections": ""
+      "corrections": "cerveau-projet/freelance/jarvis/corrections.md"
     },
     {
       "nom": "vision",

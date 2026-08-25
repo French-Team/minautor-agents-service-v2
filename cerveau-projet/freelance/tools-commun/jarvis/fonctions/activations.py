@@ -97,10 +97,12 @@ def cmd_activer(args):
 
     # v0.6.1 : livraison directe - l'affichage EST la livraison.
     marquer_lu(agent, [message["id"]])
-    historiser(agent, f"Active par {expediteur}: {mission[:80]}", "R", session=session)
+    # v0.6.2 : la raison n est plus tronquee a 80 caracteres (audit ferrari
+    # 2026-08-25 : la mission complete etait perdue, lecture partielle de l etat).
+    historiser(agent, f"Active par {expediteur}: {mission}", "R", session=session)
 
     ok = maj_bloc_session(session, agent,
-                          raison=f"Active par {expediteur}: {mission[:80]}")
+                          raison=f"Active par {expediteur}: {mission}")
 
     print(f"[JARVIS] Agent '{agent}' active via JARVIS.")
     print(f"  Expediteur: {expediteur}")

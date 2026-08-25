@@ -23,7 +23,7 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom** | JARVIS |
-| **Version** | 0.1.0 |
+| **Version** | 0.11.0 (py) -- chaine demarrage/arret ([AT-1] 2026-08-23) |
 | **Role** | Bus de messages inter-agents |
 | **Responsable** | Forge (creation), Stark (usage) |
 | **Session** | freelance |
@@ -111,6 +111,24 @@ python3 jarvis.py lister --agent <agent> [--tous]
 python3 jarvis.py bloques
 ```
 Liste les agents qui ont des messages priorite 1 non-lus (= bloquants).
+
+### Chaine de demarrage (v0.11.0, mission [AT-1])
+```bash
+python3 jarvis.py demarrage [--session session-freelance]
+```
+1. Tic des routines (jarvis EST le planificateur, protocole 16)
+2. Etat DEFCON (5 = dev gele : escalade utilisateur)
+3. Files d'attente + agents bloques
+4. Declaration OPERATIONNEL + historisation.
+Premier appel : quand Cerberus active Stark en debut de session.
+
+### Arret propre (v0.11.0)
+```bash
+python3 jarvis.py arret [--session session-freelance]
+```
+Resume de session (DEFCON, files, routines) + historisation. Les files
+sont persistees (JSONL) : rien a vider, la session est recoverable par
+`demarrage`.
 
 ---
 
