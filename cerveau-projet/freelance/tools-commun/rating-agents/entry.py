@@ -26,6 +26,14 @@ import sys
 import os as _os
 sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
                                  "fonctions"))
+# HARNAIS (PROTOCOLE 21) : l outil s auto-verifie en debut de traitement.
+sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                 "..", "harnais", "fonctions"))
+try:
+    from harnais import verifier_outil
+    _CHEMIN_OUTIL = _os.path.dirname(_os.path.abspath(__file__))
+except ImportError:
+    verifier_outil = None
 
 from score import enregistrer, evenements, score, problemes, \
     NOTATEURS, SCORE_DEPART, generer_suivi
@@ -34,6 +42,8 @@ VERSION = "0.3.0"
 
 
 def main():
+    if verifier_outil is not None:
+        verifier_outil(_CHEMIN_OUTIL, agent="rating-agents")
     parser = argparse.ArgumentParser(description="rating-agents v%s" % VERSION)
     sub = parser.add_subparsers(dest="action")
 
@@ -65,7 +75,10 @@ def main():
             print("ERREUR: '%s' n'est pas notateur habilite (%s)"
                   % (args.par, ", ".join(NOTATEURS)))
             return 1
-        entree, erreur = enregistrer(args.action, args.agent, args.motif,
+        # score.py attend "felicitation" (la CLI dit "felicite")
+        type_event = ("felicitation" if args.action == "felicite"
+                      else args.action)
+        entree, erreur = enregistrer(type_event, args.agent, args.motif,
                                      args.par)
         if erreur:
             print("ERREUR:", erreur)
