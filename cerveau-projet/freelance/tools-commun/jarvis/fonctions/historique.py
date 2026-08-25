@@ -46,10 +46,31 @@ def lire_nom_llm(session: str = "") -> str:
     return "inconnu"
 
 
+def session_courante() -> str:
+    """Session la plus recente du classeur v2 (fallback quand aucune
+    session explicite n est passee : sans cela, l entree part dans le
+    PREMIER encart d AGENTS-historique.md - souvent session-admin -
+    et evince ses lignes par la fenetre glissante)."""
+    try:
+        _dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "..", "..", "..", "classeur", "fonctions")
+        sys.path.insert(0, _dir)
+        import classeur as c
+        sessions = c.session_list()
+        if sessions:
+            return str(sessions[0].get("session", "")) if isinstance(
+                sessions[0], dict) else str(sessions[0])
+    except Exception:
+        pass
+    return ""
+
+
 def historiser(agent: str, raison: str, type_action: str = "R", session: str = ""):
     """JARVIS enregistre une entree dans AGENTS-historique.md."""
     now = datetime.now()
     heure = now.strftime("%H:%M:%S.%f")[:12]
+    if not session:
+        session = session_courante()
     llm = lire_nom_llm(session)
     try:
         contenu = HISTORIQUE_FILE.read_text(encoding="utf-8")
