@@ -20,6 +20,14 @@
 
 **Action demandee a Vulcain** : corriger l'outil pour qu'il utilise les bons noms de sessions (`session-admin`, `session-freelance`) au lieu de `session-llm-N`.
 
+**Details techniques** :
+- Ligne 108 : `PREFIXE_SESSION = "session-llm-"` -> doit devenir un mapping (admin/freelance)
+- Ligne 341 : `while (PREFIXE_SESSION + str(n)) in existantes:` -> doit verifier les 2 sessions nommees
+- Ligne 343 : `return PREFIXE_SESSION + str(n)` -> doit retourner le bon nom
+- Ligne 404 : `return PREFIXE_SESSION + m.group(1)` -> compat heritage a conserver
+
+**Regression** : Aucun nouveau LLM ne peut demarrer correctement tant que cet outil n'est pas corrige.
+
 ## [attention]
 
 (prepare et place juste apres la mission en cours)
