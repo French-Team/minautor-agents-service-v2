@@ -20,10 +20,20 @@ demarrage = tic routines + DEFCON + files + operationnel ; arret = resume)
 """
 
 import argparse
+import os as _os
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / "fonctions"))
+
+# HARNAIS (PROTOCOLE 21) : l outil s auto-verifie en debut de traitement.
+sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                 "..", "harnais", "fonctions"))
+try:
+    from harnais import verifier_outil
+    _CHEMIN_OUTIL = _os.path.dirname(_os.path.abspath(__file__))
+except ImportError:
+    verifier_outil = None
 
 from messages import cmd_envoyer, cmd_lire, cmd_recu, cmd_acquitter, \
     cmd_lister, cmd_bloques
@@ -84,7 +94,9 @@ def construire_parser():
     p_act.add_argument("--agent", required=True, help="Agent a activer")
     p_act.add_argument("--session", required=True, help="Session cible (convention session-llm-N)")
     p_act.add_argument("--mission", required=True, help="Mission de l agent")
-    p_act.add_argument("--de", default="stark", help="Expediteur (defaut: stark)")
+    p_act.add_argument("--de", default="jarvis",
+                        help="Expediteur (defaut: jarvis - SEUL JARVIS "
+                             "active, meme quand la demande vient de stark)")
 
     # historiser
     p_hist = subparsers.add_parser("historiser", help="Enregistrer dans l'historique")
@@ -176,6 +188,8 @@ def construire_parser():
 
 
 def main():
+    if verifier_outil is not None:
+        verifier_outil(_CHEMIN_OUTIL, agent="jarvis")
     # v0.9.2 (protocole 16) : routines executees a chaque invocation -
     # plus de processus d'arriere-plan : jarvis EST le planificateur.
     try:

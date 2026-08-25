@@ -65,7 +65,7 @@ def cmd_activer(args):
     agent = args.agent.lower()
     session = getattr(args, "session", "")
     mission = args.mission
-    expediteur = getattr(args, 'de', 'stark').lower()
+    expediteur = getattr(args, 'de', 'jarvis').lower() or 'jarvis'
 
     if not session:
         print("ERREUR: --session obligatoire (convention session-llm-N) - "
