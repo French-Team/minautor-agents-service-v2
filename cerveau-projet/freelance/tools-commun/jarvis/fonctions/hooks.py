@@ -17,15 +17,28 @@ PID_FILE = Path(__file__).parent.parent / "routines-server.pid"
 
 
 def _pid_actuel():
-    """PID stocke s'il correspond a un processus vivant, sinon None."""
+    """PID stocke s'il correspond a un processus vivant, sinon None.
+    WINDOWS : os.kill(pid, 0) ne TESTE pas - il TERMINE le processus
+    (TerminateProcess). La sonde passe donc par OpenProcess."""
     if not PID_FILE.exists():
         return None
     try:
         pid = int(PID_FILE.read_text(encoding="utf-8").strip())
     except ValueError:
         return None
+    if hasattr(os, "name") and os.name == "nt":
+        import ctypes
+        PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+        kernel32 = ctypes.windll.kernel32
+        h = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION,
+                                 False, pid)
+        if h:
+            kernel32.CloseHandle(h)
+            return pid
+        PID_FILE.unlink(missing_ok=True)
+        return None
     try:
-        os.kill(pid, 0)  # signal 0 : verifie l'existence sans tuer
+        os.kill(pid, 0)  # POSIX : signal 0 = sondes sans tuer
         return pid
     except OSError:
         PID_FILE.unlink(missing_ok=True)

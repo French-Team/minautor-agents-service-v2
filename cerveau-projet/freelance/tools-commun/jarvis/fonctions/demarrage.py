@@ -21,6 +21,7 @@ par le tic immediat des routines dues.
 from defcon import niveau_courant, ECHELLE
 from routines import charger_etat, infos_routines, executer_routines
 from historique import historiser
+from hooks import _pid_actuel, routines_demarrer, routines_arreter
 
 JARVIS = None  # rempli par _init_chemins()
 import os
@@ -84,22 +85,30 @@ def _agents_bloques():
 
 
 def cmd_demarrage(args=None):
-    """Chaine de demarrage complete : routines -> DEFCON -> files ->
+    """Chaine de demarrage complete : daemon -> DEFCON -> files ->
     operationnel."""
     session = getattr(args, "session", "") or ""
     print("=== JARVIS DEMARRAGE ===")
 
-    # 1. tic des routines (celles dues s'executent maintenant)
+    # 1. routines : le daemon resident tick EN PERMANENCE (decision
+    # utilisateur 2026-08-25) ; le tic immediat reste en filet.
+    pid = _pid_actuel()
+    if pid:
+        print("[1/4] Daemon routines : DEJA EN MARCHE (pid %d)" % pid)
+    else:
+        routines_demarrer()
+        pid = _pid_actuel()
+        print("[1/4] Daemon routines : LANCE (pid %s)" % (pid or "?"))
     try:
         executer_routines()
         etat = charger_etat()
         n_routines = len(infos_routines())
         faites = sum(1 for r, _, _, a in infos_routines()
                      if a and etat.get(r, {}).get("derniere"))
-        print("[1/4] Routines : %d/%d executee(s) au moins une fois "
-              "(tic fait)" % (faites, n_routines))
+        print("      Tic immediat : %d/%d routine(s) executee(s) au "
+              "moins une fois" % (faites, n_routines))
     except Exception as e:
-        print("[1/4] Routines : ERREUR %s" % e)
+        print("      ERREUR tic : %s" % e)
 
     # 2. etat DEFCON
     niveau = niveau_courant()
@@ -137,18 +146,15 @@ def cmd_arret(args=None):
     session = getattr(args, "session", "") or ""
     niveau = niveau_courant()
     total, _ = _etat_files()
-    etat = charger_etat()
-    n_ok = sum(1 for r, _, _, a in infos_routines()
-               if a and etat.get(r, {}).get("derniere"))
-    n_tot = len(infos_routines())
     print("=== JARVIS ARRET ===")
+    routines_arreter()
     print("- DEFCON : %s" % (
         "%d (%s)" % (niveau, ECHELLE[niveau])
         if niveau is not None else "aucun"))
     print("- Files : %d mission(s) active(s) (persistees, rien a vider)"
           % total)
-    print("- Routines : %d/%d deja executee(s), reprise au prochain appel"
-          % (n_ok, n_tot))
+    print("- Routines : daemon arrete ; reprise au prochain "
+          "jarvis.py demarrage")
     print("- Etat sauvegarde : session recoverable par jarvis.py demarrage")
     historiser("jarvis", "Arret propre : resume ecrit, %d mission(s) "
                "en file, DEFCON=%s" %
