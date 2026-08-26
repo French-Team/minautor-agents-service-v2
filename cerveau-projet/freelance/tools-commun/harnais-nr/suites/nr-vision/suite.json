@@ -1,0 +1,40 @@
+{
+  "nom": "nr-vision",
+  "description": "Suite de non-regression de l'agent vision - fichiers d'identite + outils communs (non mutant)",
+  "actif": true,
+  "perimetre": [
+    "cerveau-projet/freelance/vision"
+  ],
+  "tests": [
+    {
+      "nom": "fiche-vision-existe-et-non-vide",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/vision/vision.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "corrections-vision-present",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/vision/corrections.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "arbre-vision-json-valide",
+      "commande": "python3 -c \"import json,sys; a=json.load(open(r'{racine}/cerveau-projet/freelance/vision/parcours/arbre-vision.json', encoding='utf-8')); assert a['racine']['branches']; print('ARBRE OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "ARBRE OK"
+      ]
+    }
+  ]
+}

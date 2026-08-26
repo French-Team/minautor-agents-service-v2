@@ -1,0 +1,104 @@
+{
+  "nom": "nr-forge",
+  "description": "Suite de non-regression de l'agent forge - fichiers d'identite + outils communs (non mutant)",
+  "actif": true,
+  "perimetre": [
+    "cerveau-projet/freelance/forge"
+  ],
+  "tests": [
+    {
+      "nom": "fiche-forge-existe-et-non-vide",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/forge/forge.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "corrections-forge-present",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/forge/corrections.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "arbre-forge-json-valide",
+      "commande": "python3 -c \"import json,sys; a=json.load(open(r'{racine}/cerveau-projet/freelance/forge/parcours/arbre-forge.json', encoding='utf-8')); assert a['racine']['branches']; print('ARBRE OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "ARBRE OK"
+      ]
+    },
+    {
+      "nom": "outil-rating-agents-repond",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/rating-agents/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "usage"
+      ]
+    },
+    {
+      "nom": "outil-encodage-repond",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/encodage/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "usage"
+      ]
+    },
+    {
+      "nom": "outil-exec-repond",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/exec/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "usage"
+      ]
+    },
+    {
+      "nom": "outil-horloge-repond",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/horloge/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "usage"
+      ]
+    },
+    {
+      "nom": "outil-jsonl-store-repond",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jsonl-store/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "usage"
+      ]
+    },
+    {
+      "nom": "outil-os_path-repond",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/os_path/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "usage"
+      ]
+    },
+    {
+      "nom": "outil-rappel-repond",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/rappel/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "usage"
+      ]
+    },
+    {
+      "nom": "outil-bdd-lecons-repond",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/bdd-lecons/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "usage"
+      ]
+    }
+  ]
+}

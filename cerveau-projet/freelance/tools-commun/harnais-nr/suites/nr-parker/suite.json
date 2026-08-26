@@ -1,0 +1,40 @@
+{
+  "nom": "nr-parker",
+  "description": "Suite de non-regression de l'agent parker - fichiers d'identite + outils communs (non mutant)",
+  "actif": true,
+  "perimetre": [
+    "cerveau-projet/freelance/parker"
+  ],
+  "tests": [
+    {
+      "nom": "fiche-parker-existe-et-non-vide",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/parker/parker.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "corrections-parker-present",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/parker/corrections.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "arbre-parker-json-valide",
+      "commande": "python3 -c \"import json,sys; a=json.load(open(r'{racine}/cerveau-projet/freelance/parker/parcours/arbre-parker.json', encoding='utf-8')); assert a['racine']['branches']; print('ARBRE OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "ARBRE OK"
+      ]
+    }
+  ]
+}
