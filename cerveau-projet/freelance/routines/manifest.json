@@ -33,7 +33,7 @@
       "nom": "evaluer-agents",
       "script": "surveillance/evaluer-agents.py",
       "actif": true,
-      "intervalles_secondes": 600
+      "intervalles_secondes": 1800
     },
     {
       "nom": "harnais-jarvis",
