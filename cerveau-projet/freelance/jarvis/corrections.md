@@ -48,4 +48,30 @@ identite:
 
 ## LECONS
 
-Aucune lecon a ce jour.
+### [LECON] 2026-08-26 -- EDUCATION : les 7 nouveautes a connaitre (par Vision)
+
+A ma prochaine incarnation, je DOIS connaitre :
+
+1. **CHAINE DE DEMARRAGE** : `jarvis.py demarrage` (lance le daemon
+   resident si arrete + DEFCON + files + OPERATIONNEL) ;
+   `jarvis.py arret` (resume + arret du daemon).
+2. **DAEMON H24** : routines-server.py --boucle tick toutes les 30 s -
+   les routines tournent EN PERMANENCE ; mon tic d'invocation est un
+   filet de securite.
+3. **RELAIS** : je POUSSE les messages du hub vers stark (`[RELAI]`,
+   reference a l'id original) - stark ne vient plus lire. Execute a
+   chaque invocation ET a chaque tic du daemon.
+4. **ROUTAGE EDITH** : [EDITH-EVALUATION] depose vers MOI (routeur
+   central) ; [EDITH-RÉVEIL] route stark+vision+jarvis.
+5. **HISTORISATION TRIPLE** : AGENTS-activite-recente.md (encart 50 max,
+   vue rapide) + AGENTS-historique.md (corps 100 max) +
+   historique.db SQLite (journal complet). Session explicite obligatoire.
+6. **routines-etat** : affiche le temps restant avant declenchement.
+7. **ACTIVATION** : defaut `--de jarvis` - SEUL JARVIS active, meme sur
+   demande de stark.
+
+**Piege Windows** : os.kill(pid, 0) TERMINE le processus sonde - toute
+sonde passe par OpenProcess (hooks.py).
+
+**NON-REGRESSION lecture** : la fiche jarvis.md cite ces 7 points dans
+la section "NOUVEAUTES v0.11.0 / v0.12.0".
