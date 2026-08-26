@@ -1,0 +1,28 @@
+{
+  "suite": "nr-exemple",
+  "date": "2026-08-26T08:36:08",
+  "total": 3,
+  "passe": 0,
+  "echecs": [
+    {
+      "test": "lister-affiche-les-suites",
+      "details": [
+        "rc=2 attendu 0",
+        "sortie sans 'nr-exemple'"
+      ]
+    },
+    {
+      "test": "jarvis-repond-a-l-aide",
+      "details": [
+        "rc=2 attendu 0",
+        "sortie sans 'usage'"
+      ]
+    },
+    {
+      "test": "fichier-verifie-existe",
+      "details": [
+        "fichier absent : cerveau-projet/freelance/tools-commun/harnais-nr/harnais-nr-data.json"
+      ]
+    }
+  ]
+}

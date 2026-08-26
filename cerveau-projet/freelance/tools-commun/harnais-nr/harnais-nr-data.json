@@ -1,0 +1,20 @@
+{
+  "version": "0.1.0",
+  "description": "Config D15 du cadre harnais-nr : AUCUNE valeur en dur dans le code - tout est donnee ici ou dans les suite.json",
+  "chemin_suites": "suites",
+  "timeout_defaut_secondes": 120,
+  "dossier_rapports": "rapports",
+  "securites": {
+    "bak_avant_ecriture": true,
+    "rollback_sur_echec": true,
+    "lecture_seule_par_defaut": true,
+    "sandbox_temp": ".nr-sandbox",
+    "hors_perimetre_interdit": true
+  },
+  "controles_reprises": {
+    "ascii_strict": true,
+    "p10_pas_de_comptage": true,
+    "valeur_en_dur": true,
+    "structure_entry_fonctions": true
+  }
+}

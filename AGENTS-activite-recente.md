@@ -10,6 +10,9 @@ identite:
 
 | Heure | Agent | id | Type | Raison |
 |-------|-------|----|------|--------|
+| 08:45:00.000 | buffy | glm5 | R | Oracle v0.2.0 : 6 ameliorations (agents, nettoyer, lire-message, verifier, hi... |
+| 08:30:55.000 | buffy | glm5 | R | Envoyer a atlas: Test auto-historisation |
+| 08:29:59.000 | buffy | glm5 | R | Envoyer a cerberus: Test historisation auto v2 |
 | 08:40:00.000 | buffy | glm5 | R | Decision : v1 et v2 separent. Harnais v2 reste pour outils/scripts v2. Verifi... |
 | 08:12:51.765 | Cerberus | glm5 | R | Mission Ferrari terminee : harnais CONFORME, 0 modification. Rapport produit. |
 | 08:12:51.000 | ferrari | glm5 | R | Mission terminee : harnais scripts temporaires v2 VERDICT CONFORME. 0 modific... |
@@ -55,6 +58,13 @@ DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis l... |
 
 | Heure | Agent | id | Type | Raison |
 |-------|-------|----|------|--------|
+| 08:37:56.578 | edith | freebuff | R | Reveil emis: perimetre EDIT modifie : cerveau-projet/freelance/routines/s |
+| 08:34:56.233 | jarvis | freebuff | R | [DEV-BATTEMENT 08:34] Je peux faire ca toute la journee. (Captain America) |
+| 08:33:25.692 | edith | freebuff | R | Depose demande d'evaluation periodique des agents |
+| 08:32:15.795 | forge | freebuff | R | Active par jarvis: [CREER][PHASE 1] harnais-non-regression - cadre de suites ... |
+| 08:29:55.256 | jarvis | freebuff | R | [DEV-BATTEMENT 08:29] Je ne suis pas un heros, je fais juste mon travail. (Ha... |
+| 08:24:54.457 | jarvis | freebuff | R | [DEV-BATTEMENT 08:24] Un equilibre parfait, comme toute chose devrait l'etre.... |
+| 08:21:53.776 | edith | freebuff | R | Reveil emis: perimetre EDIT modifie : analyste-in-console/cerveau-projet/ |
 | 08:21:42.707 | stark | freebuff | R | Fix fuseau battement-dev: libelle [DEV-BATTEMENT] passe d'UTC a l'heure local... |
 | 08:21:42.424 | jarvis | freebuff | R | [DEV-BATTEMENT 08:21] Dormez, Monsieur Stark, je veille sur vous. (Vision) |
 | 08:19:53.534 | jarvis | freebuff | R | [DEV-BATTEMENT 06:19] Faites un pas en arriere, evaluez, puis avancez. (Veuve... |

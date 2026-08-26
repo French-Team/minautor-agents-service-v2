@@ -18,7 +18,8 @@ from racine import trouver_racine
 
 RACINE = Path(trouver_racine(__file__))
 BASE = RACINE / "cerveau-projet" / "freelance"
-WS = RACINE.parent
+# la racine DETECTEE EST la racine du workspace (pas son parent !)
+WS = str(RACINE)
 JARVIS_DIR = BASE / "tools-commun" / "jarvis"
 JARVIS_INBOX = JARVIS_DIR / "inbox"
 JARVIS_OUTBOX = JARVIS_DIR / "outbox"
