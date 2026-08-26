@@ -45,6 +45,7 @@ from verifier import cmd_verifier
 from classeur_v2 import cmd_classeur
 from routines import cmd_routines_etat
 from demarrage import cmd_demarrage, cmd_arret
+from relais import relayer_vers_stark
 from missions import lancer as lancer_missions_fichier
 
 
@@ -195,6 +196,13 @@ def main():
     try:
         from routines import executer_routines
         executer_routines()
+    except Exception:
+        pass
+    # v0.12.0 (decision utilisateur) : JARVIS POUSSE vers stark les
+    # messages du hub qui lui sont destines - stark ne vient plus lire,
+    # jarvis transmet.
+    try:
+        relayer_vers_stark()
     except Exception:
         pass
     parser = construire_parser()

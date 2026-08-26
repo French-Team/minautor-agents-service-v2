@@ -51,3 +51,7 @@
   [ROUTINE] Demande d'evaluation deposee dans l'inbox de stark.
 [EDITH-SERVER] routine surveiller-modifications executee (rc=0)
   Passe de detection terminee.
+[ROUTINES-SERVER] daemon demarre (tic toutes les 30s)
+[ROUTINES-SERVER] daemon demarre (tic toutes les 30s)
+[ROUTINES-SERVER] daemon demarre (tic toutes les 30s)
+[ROUTINES-SERVER] daemon demarre (tic toutes les 30s, pid 14628)

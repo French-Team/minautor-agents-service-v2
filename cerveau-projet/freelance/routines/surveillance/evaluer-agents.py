@@ -30,8 +30,10 @@ def observations_recentes():
 
 def demande_deja_en_attente():
     """True si une demande d'evaluation NON-LUE attend deja dans l'inbox
-    de stark (anti-inondation : la routine tourne toutes les 10 min)."""
-    inbox = JARVIS_DIR / "inbox" / "stark.jsonl"
+    de jarvis (anti-inondation : la routine tourne toutes les 10 min).
+    Decision utilisateur 2026-08-25 : JARVIS est informe des demandes
+    d'EDITH pour les executer - il est le routeur central (P13 v2)."""
+    inbox = JARVIS_DIR / "inbox" / "jarvis.jsonl"
     if not inbox.exists():
         return False
     with open(inbox, encoding="utf-8") as f:
@@ -54,7 +56,7 @@ def main():
         return 0
     msg = {
         "id": str(uuid.uuid4())[:8],
-        "de": "edith", "vers": "stark", "priorite": 2,
+        "de": "edith", "vers": "jarvis", "priorite": 2,
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": "[EDITH-EVALUATION] cycle periodique d'evaluation des agents",
         "corps": (
@@ -67,7 +69,7 @@ def main():
         ),
         "lu": False, "accuse": False,
     }
-    jarvis_inbox = JARVIS_DIR / "inbox" / "stark.jsonl"
+    jarvis_inbox = JARVIS_DIR / "inbox" / "jarvis.jsonl"
     jarvis_outbox = JARVIS_DIR / "outbox" / "edith.jsonl"
     for cible in (jarvis_inbox, jarvis_outbox):
         cible.parent.mkdir(parents=True, exist_ok=True)
@@ -87,7 +89,7 @@ def main():
                    "R", session="session-freelance")
     except Exception:
         pass
-    print("[ROUTINE] Demande d'evaluation deposee dans l'inbox de stark.")
+    print("[ROUTINE] Demande d'evaluation deposee dans l'inbox de jarvis.")
     return 0
 
 

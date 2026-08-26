@@ -58,6 +58,7 @@ def nettoyer_pid():
 
 def boucler(intervalle_secondes):
     from routines import executer_routines
+    from relais import relayer_vers_stark
     ecrire_pid()
     print("[ROUTINES-SERVER] daemon demarre (tic toutes les %ds, pid %d)"
           % (intervalle_secondes, os.getpid()), flush=True)
@@ -65,6 +66,10 @@ def boucler(intervalle_secondes):
         while True:
             try:
                 executer_routines()
+                # decision utilisateur 2026-08-25 : JARVIS transmet
+                # lui-meme les messages du hub a stark - le daemon
+                # pousse aussi.
+                relayer_vers_stark()
             except Exception as e:  # le daemon ne meurt jamais sur un tic
                 print("[ROUTINES-SERVER] ERREUR tic : %s" % e, flush=True)
             time.sleep(intervalle_secondes)

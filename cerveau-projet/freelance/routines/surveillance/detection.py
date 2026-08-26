@@ -33,20 +33,33 @@ def empreinte(fichier):
 
 
 def envoyer_reveil(motif, details):
-    """v1.0 : Deposer un message P1 [EDITH-RÉVEIL] dans l'inbox de stark
-    ET l'outbox d'EDITH, avec un id unique (protocole 14)."""
-    msg = {
-        "id": str(uuid.uuid4())[:8],
-        "de": "edith", "vers": "stark", "priorite": 1,
+    """v1.1 (decision utilisateur 2026-08-25) : JARVIS est informe pour
+    executer le chainage. Deposer un message P1 [EDITH-RÉVEIL] :
+    - inbox de STARK (coordonne, routage gravite ERR/CRIT)
+    - inbox de VISION (repare - exclusive JARVIS, marbre)
+    - inbox de JARVIS (execute le chainage, routeur central P13 v2)
+    + outbox d'EDITH, id unique par destinataire (protocole 14)."""
+    base = {
+        "de": "edith", "priorite": 1,
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": "[EDITH-RÉVEIL] " + motif[:60],
         "corps": details, "lu": False, "accuse": False, "type": "reveil",
     }
-    for cible in (JARVIS_INBOX / "stark.jsonl",
-                  JARVIS_OUTBOX / "edith.jsonl"):
-        cible.parent.mkdir(parents=True, exist_ok=True)
-        with open(cible, "a", encoding="utf-8") as f:
-            f.write(json.dumps(msg, ensure_ascii=False) + "\n")
+    for destinataire in ("stark", "vision", "jarvis"):
+        msg = dict(base)
+        msg["id"] = str(uuid.uuid4())[:8]
+        msg["vers"] = destinataire
+        # outbox/edith = TRACE cote expediteur (jamais a lire) :
+        # marque lu des la creation pour ne pas simuler un bloquant.
+        msg_out = dict(msg)
+        msg_out["lu"] = True
+        msg_out["accuse"] = True
+        for cible in (JARVIS_INBOX / ("%s.jsonl" % destinataire),
+                      JARVIS_OUTBOX / "edith.jsonl"):
+            cible.parent.mkdir(parents=True, exist_ok=True)
+            ecrit = msg if "inbox" in str(cible) else msg_out
+            with open(cible, "a", encoding="utf-8") as f:
+                f.write(json.dumps(ecrit, ensure_ascii=False) + "\n")
     # Tracabilite : le reveil apparait dans les activites recentes
     try:
         _fj = BASE / "tools-commun" / "jarvis" / "fonctions"

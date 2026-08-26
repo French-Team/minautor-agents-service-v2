@@ -138,7 +138,12 @@ def _detecter_messages(config, ecarts):
                     or "MISSION" in (msg.get("objet") or "").upper())
                 if non_lu and msg.get("priorite") == 1:
                     cle = identifiant or cle_ligne
-                    if nom_fichier == "jarvis.jsonl":
+                    # le HUB est inbox/jarvis.jsonl uniquement : le
+                    # fichier outbox/jarvis.jsonl porte le meme nom mais
+                    # n est pas le hub (sinon chaque copie outbox serait
+                    # un faux "jamais route").
+                    if nom_fichier == "jarvis.jsonl" \
+                            and sous_dossier == "inbox":
                         # JARVIS a recu une demande -> il doit activer.
                         # Restee non lue = JARVIS n a pas agi.
                         if est_demande_activation:
