@@ -29,24 +29,53 @@ def observations_recentes():
 
 
 def demande_deja_en_attente():
-    """True si une demande d'evaluation NON-LUE attend deja dans l'inbox
-    de jarvis (anti-inondation : la routine tourne toutes les 10 min).
-    Decision utilisateur 2026-08-25 : JARVIS est informe des demandes
-    d'EDITH pour les executer - il est le routeur central (P13 v2)."""
+    """True si une demande d'evaluation attend deja :
+    - NON-LUE dans l'inbox de jarvis (anti-inondation d'origine), OU
+    - DEPOSEE il y a moins de 10 min dans outbox/edith (v0.2.0 : le
+      relais marque le hub 'lu' des transmission - sans ce second
+      test, chaque tic redeposait une evaluation deja transmise a
+      stark et personne ne la consomme hors session : 1 spam / 10 min).
+    """
     inbox = JARVIS_DIR / "inbox" / "jarvis.jsonl"
-    if not inbox.exists():
+    if inbox.exists():
+        with open(inbox, encoding="utf-8") as f:
+            for ligne in f:
+                if not ligne.strip():
+                    continue
+                try:
+                    m = json.loads(ligne)
+                except ValueError:
+                    continue
+                if not m.get("lu") and \
+                        "[EDITH-EVALUATION]" in str(m.get("objet", "")):
+                    return True
+    return depot_recent()
+
+
+def depot_recent(secondes=600):
+    """True si une evaluation a ete deposee il y a moins de <secondes>."""
+    from datetime import datetime, timedelta
+    outbox = JARVIS_DIR / "outbox" / "edith.jsonl"
+    if not outbox.exists():
         return False
-    with open(inbox, encoding="utf-8") as f:
-        for ligne in f:
+    borne = datetime.now(timezone.utc).replace(tzinfo=None) \
+        - timedelta(seconds=secondes)
+    with open(outbox, encoding="utf-8") as f:
+        for ligne in reversed(f.readlines()):
             if not ligne.strip():
                 continue
             try:
                 m = json.loads(ligne)
             except ValueError:
                 continue
-            if not m.get("lu") and \
-                    "[EDITH-EVALUATION]" in str(m.get("objet", "")):
-                return True
+            if "[EDITH-EVALUATION]" not in str(m.get("objet", "")):
+                continue
+            try:
+                d = datetime.strptime(str(m.get("date", ""))[:19],
+                                      "%Y-%m-%dT%H:%M:%S")
+            except ValueError:
+                continue
+            return d >= borne
     return False
 
 
