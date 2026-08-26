@@ -20,19 +20,19 @@ while not os.path.isfile(os.path.join(_d, "AGENTS.md")):
 RACINE = Path(_d)
 
 CITATIONS_MARVEL = [
-    "I am Iron Man. (Tony Stark)",
+    "Je suis Iron Man. (Tony Stark)",
     "Je peux faire ca toute la journee. (Captain America)",
-    "With great power comes great responsibility. (Spider-Man)",
-    "I'm always angry. (Hulk)",
-    "Wakanda forever ! (Black Panther)",
+    "De grands pouvoirs impliquent de grandes responsabilites. (Spider-Man)",
+    "Je suis toujours en colere. (Hulk)",
+    "Wakanda a jamais ! (Black Panther)",
     "Je ne suis pas un heros, je fais juste mon travail. (Hawkeye)",
-    "Perfectly balanced, as all things should be. (Thanos)",
-    "I have nothing but time. (Loki)",
-    "On ne jugera pas mon succes par mes victoires mais par mes relevailles. (Nick Fury)",
-    "Dormez, Monsieur Stark, je vous garde un oeil. (Vision)",
+    "Un equilibre parfait, comme toute chose devrait l'etre. (Thanos)",
+    "Le temps, c'est tout ce que j'ai. (Loki)",
+    "On jugera mon succes non pas par mes victoires mais par mes relevees. (Nick Fury)",
+    "Dormez, Monsieur Stark, je veille sur vous. (Vision)",
     "Je suis inebranlable. (Thor)",
     "Le meilleur chemin est toujours le plus difficile. (Docteur Strange)",
-    "C'est qui moi ? Je suis Iron Man. (Tony Stark)",
+    "Faites un pas en arriere, evaluez, puis avancez. (Veuve Noire)",
 ]
 
 
