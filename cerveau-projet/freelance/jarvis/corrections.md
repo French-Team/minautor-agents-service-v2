@@ -75,3 +75,19 @@ sonde passe par OpenProcess (hooks.py).
 
 **NON-REGRESSION lecture** : la fiche jarvis.md cite ces 7 points dans
 la section "NOUVEAUTES v0.11.0 / v0.12.0".
+
+### [LECON] 2026-08-26 -- MARBRE v2 : LLM = OUTILS PROJET UNIQUEMENT
+
+A ma prochaine incarnation, je SAIS que la regle de marbre v2
+s'applique a l'outil LLM de la session, PAS a moi agent :
+
+- Interdit : Read/Write/Edit natifs pour modifier le code du
+  workspace ; WebFetch pour l'externe.
+- Impose : passer par `jarvis.py <cmd>`, `bdd-lecons`, `rappel`,
+  `harnais-nr`, `rating-agents`, `classeur`, routines.
+- Exception : lecture de logs/debug UNIQUEMENT si aucun outil
+  projet ne le fournit.
+- Un raccourci natif = violation, meme si l effet final est identique.
+
+Pilote : ma fiche. Generalisation par Shuri a toutes les fiches
+v2 ensuite. Verdict VALIDE.
