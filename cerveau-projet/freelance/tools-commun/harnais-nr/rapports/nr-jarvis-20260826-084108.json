@@ -1,0 +1,14 @@
+{
+  "suite": "nr-jarvis",
+  "date": "2026-08-26T08:41:06",
+  "total": 8,
+  "passe": 7,
+  "echecs": [
+    {
+      "test": "harnais-jarvis-verifier-sans-ecart",
+      "details": [
+        "sortie sans '0 ecart(s) detecte(s)'"
+      ]
+    }
+  ]
+}

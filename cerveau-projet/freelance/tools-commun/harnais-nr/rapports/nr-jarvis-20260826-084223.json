@@ -1,0 +1,14 @@
+{
+  "suite": "nr-jarvis",
+  "date": "2026-08-26T08:42:21",
+  "total": 8,
+  "passe": 7,
+  "echecs": [
+    {
+      "test": "bloques-n-aucun-agent-bloque",
+      "details": [
+        "sortie sans 'bloques'"
+      ]
+    }
+  ]
+}
