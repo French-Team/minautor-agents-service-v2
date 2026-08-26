@@ -3,7 +3,7 @@
     "type": "theme",
     "appartient_a": "stark",
     "nom": "FILES",
-    "description": "Declencheurs de files (protocole 13 v2) : l'utilisateur commence son message par [urgent], [attention], [attente], [stop] ou demande une reprise. Branche RESTAUREE le 2026-08-26 : elle avait ete perdue lors de la reconstruction de l'arbre v0.2.0."
+    "description": "Declencheurs (protocole 13 v2, table complete des 6 declencheurs + stop) : l'utilisateur commence son message par [urgent], [attention], [attente], [creer], [probleme], [question] ou [stop], ou demande une reprise. Branche RESTAUREE le 2026-08-26 : elle avait ete perdue lors de la reconstruction de l'arbre v0.2.0."
   },
   "theme": {
     "nom": "FILES",
@@ -31,6 +31,35 @@
         "etapes": ["Formuler la mission sans le prefixe",
                    "jarvis.py mettre-en-attente --mission '...' --niveau attente (= EN_ATTENTE)"],
         "regle": "Ordre de reprise : PRIORITAIRE > SUIVANTE > EN_ATTENTE."
+      },
+      {
+        "besoin": "[creer] en tete du message : creation d'un composant v2",
+        "action": "procedure",
+        "etapes": ["Identifier le TYPE de creation",
+                   "Agent v2 -> PROTOCOLE 9 ; Outil v2 -> PROTOCOLE 10 ; autre (combo, file, protocole...) -> arbitrage Stark via JARVIS",
+                   "Transmettre A JARVIS avec le protocole de creation cite explicitement dans la mission"],
+        "regle": "[creer] route vers les protocoles de creation PAR TYPE - jamais de creation hors protocole."
+      },
+      {
+        "besoin": "[probleme] en tete du message : un probleme a resoudre",
+        "action": "procedure",
+        "etapes": ["Identifier le TYPE DE FICHIER en cause (routage protocole 13 v2)",
+                   "jarvis.py / jarvis-server.py / files/ -> VISION (exclusif)",
+                   "*.json de donnees d'outils -> FORGE puis ROGERS si regle touchee",
+                   "regles / conventions / protocoles -> ROGERS",
+                   "fiches / arbres d'agents -> SHURI",
+                   "historique / git -> HADES (v1), arbitrage Stark",
+                   "Transmettre A JARVIS : 'probleme <type> -> active <habilite> avec ce rapport'"],
+        "regle": "[probleme] se ROUTE par type de fichier vers le premier habilite - Stark ne diagnostique jamais lui-meme (D6)."
+      },
+      {
+        "besoin": "[question] en tete du message : phase QUESTION/REPONSE dediee",
+        "action": "procedure",
+        "etapes": ["Ouvrir la PHASE QUESTION/REPONSE entre l'utilisateur et moi",
+                   "Si j'ai besoin d'informations d'agents : transmettre a JARVIS qui active les agents concernes et me retourne leurs reponses",
+                   "Repondre a l'utilisateur avec SES conventions et SA langue",
+                   "AUCUNE autre tache pendant la phase"],
+        "regle": "[question] = phase dediee : pas de mission lancee en parallele."
       },
       {
         "besoin": "Reprendre la mission en attente la plus prioritaire",

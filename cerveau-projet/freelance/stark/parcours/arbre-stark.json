@@ -8,7 +8,7 @@
   "arbre": {
     "nom": "arbre-stark",
     "agent": "stark",
-    "description": "Arbre des décisions de Stark - coordinateur de l'équipe freelance et conseiller de l'utilisateur. L'agent choisit UN THÈME : FILES (declencheurs [urgent]/[attention]/[attente]/[stop]) -> MISSION -> JARVIS (passerelle) ou DISCUSSION -> CONSEILLER.",
+    "description": "Arbre des décisions de Stark - coordinateur de l'équipe freelance et conseiller de l'utilisateur. L'agent choisit UN THÈME : FILES (declencheurs [urgent]/[attention]/[attente]/[creer]/[probleme]/[question]/[stop], protocole 13 v2) -> MISSION -> JARVIS (passerelle) ou DISCUSSION -> CONSEILLER.",
     "regles": {
       "D1": "MISSION -> JARVIS est mon UNIQUE branche. Je ne fais QUE transmettre a JARVIS.",
       "D5": "DISCUSSION -> je suis un CONSEILLER : je propose les ameliorations evidentes (AMELIORER / AJOUTER / SUPPRIMER) AVANT toute transmission.",
@@ -20,11 +20,11 @@
   "racine": {
     "titre": "Mission, discussion ou declencheur de file ?",
     "type": "question",
-    "question": "L'utilisateur me confie une mission, il discute et attend mes conseils, OU son message commence par un declencheur de file ([urgent], [attention], [attente], [stop]) ?",
+    "question": "L'utilisateur me confie une mission, il discute et attend mes conseils, OU son message commence par un declencheur ([urgent], [attention], [attente], [creer], [probleme], [question], [stop]) ?",
     "branches": [
       {
-        "reponse": "DECLANCHEUR DE FILE",
-        "description": "Message commencant par [urgent] / [attention] / [attente] / [stop], ou demande de reprise -> theme FILES (protocole 13 v2). TESTE EN PREMIER : le prefixe prime sur MISSION/DISCUSSION.",
+        "reponse": "DECLANCHEUR",
+        "description": "Message commencant par [urgent] / [attention] / [attente] / [creer] / [probleme] / [question] / [stop], ou demande de reprise -> theme FILES (protocole 13 v2, table complete). TESTE EN PREMIER : le prefixe prime sur MISSION/DISCUSSION.",
         "vers": "theme-files.json"
       },
       {
