@@ -10,6 +10,10 @@ identite:
 
 | Heure | Agent | id | Type | Raison |
 |-------|-------|----|------|--------|
+| 08:25:00.000 | buffy | glm5 | R | Documentation Oracle : AGENTS.md (section Oracle ajoutee), regles-groupes-age... |
+| 08:20:00.000 | buffy | glm5 | R | Oracle integre au demarrage v1 : case c3o ajoutee dans parcours-demarrage.jso... |
+| 07:56:33.000 | oracle | glm5 | R | Test arret propre |
+| 07:56:33.000 | oracle | glm5 | R | Demarrage Oracle v0.1.0 |
 | 08:15:00.000 | buffy | glm5 | R | Creation Oracle v0.1.0 : CLI (oracle.py) + serveur MCP (oracle-server.py) + c... |
 | 07:50:32.000 | buffy | glm5 | R | Test historisation via Oracle |
 | 08:00:00.000 | buffy | glm5 | R | Decision utilisateur : Oracle = JARVIS de la v1. Coordination des agents v1 (... |
@@ -40,6 +44,14 @@ identite:
 
 | Heure | Agent | id | Type | Raison |
 |-------|-------|----|------|--------|
+| 08:07:43.017 | stark | freebuff | R | Traduction des citations battement-dev en francais (langue du projet) - commi... |
+| 08:04:51.066 | jarvis | freebuff | R | [DEV-BATTEMENT 06:04] Je peux faire ca toute la journee. (Captain America) |
+| 08:03:20.552 | edith | freebuff | R | Depose demande d'evaluation periodique des agents |
+| 08:01:50.296 | edith | freebuff | R | Reveil emis: perimetre EDIT modifie : analyste-in-console/cerveau-projet/ |
+| 08:01:37.581 | jarvis | freebuff | R | [DEV-BATTEMENT 06:01] Le temps, c'est tout ce que j'ai. (Loki) |
+| 07:59:50.068 | jarvis | freebuff | R | [DEV-BATTEMENT 05:59] I have nothing but time. (Loki) |
+| 07:56:14.552 | stark | freebuff | R | Active par jarvis: REPRISE DU CONTROLE (bilan Forge ab6d02bc) : routine TEMPO... |
+| 07:56:14.142 | forge | freebuff | R | Envoie a stark: BILAN FORGE - routine battement-dev livree (temporaire) |
 | 07:54:52.576 | jarvis | freebuff | R | [DEV-BATTEMENT 05:54] I have nothing but time. (Loki) |
 | 07:54:49.301 | jarvis | freebuff | R | [DEV-BATTEMENT 05:54] With great power comes great responsibility. (Spider-Man) |
 | 07:54:49.211 | edith | freebuff | R | Reveil emis: perimetre EDIT modifie : analyste-in-console/cerveau-projet/ |
