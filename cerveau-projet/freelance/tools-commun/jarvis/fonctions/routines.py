@@ -156,7 +156,7 @@ def cmd_routines_etat(args=None):
         return
     etat = charger_etat()
     print("[ROUTINES] Etat (intervalle ecoule = sera executee au prochain "
-          "appel de jarvis) :")
+          "appel de jarvis ou tic du daemon) :")
     for routine in manifest.get("routines_surveillance", []):
         nom = routine.get("nom")
         intervalle = routine.get("intervalles_secondes",
@@ -165,5 +165,9 @@ def cmd_routines_etat(args=None):
         dernier_iso = etat.get(nom, {}).get("derniere", "")
         ecoulé = secondes_ecoulee(dernier_iso)
         quand = f"il y a {int(ecoulé)}s" if ecoulé < 10**9 else "jamais"
-        due = "A EXECUTER" if ecoulé >= intervalle else ""
-        print(f"  {nom} [{intervalle}s] derniere: {quand} {due}")
+        if ecoulé >= intervalle:
+            reste = "A EXECUTER (au prochain tic)"
+        else:
+            reste = f"dans {int(intervalle - ecoulé)}s"
+        print(f"  {nom} [{intervalle}s] derniere: {quand} | declenchement: "
+              f"{reste}")
