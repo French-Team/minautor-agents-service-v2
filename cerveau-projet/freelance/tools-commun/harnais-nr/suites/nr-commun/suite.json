@@ -1,0 +1,60 @@
+{
+  "nom": "nr-commun",
+  "description": "Suite de non-regression des FICHIERS COMMUNS (phase 3b) - conventions racines, protocoles v2, configs D15",
+  "actif": true,
+  "perimetre": [
+    "AGENTS.md",
+    "AGENTS-historique.md",
+    "AGENTS-activite-recente.md",
+    "USER-DEMANDES.md",
+    "cerveau-projet/freelance/protocoles",
+    "cerveau-projet/freelance/routines/manifest.json",
+    "cerveau-projet/freelance/tools-commun/harnais-nr/harnais-nr-data.json"
+  ],
+  "tests": [
+    {
+      "nom": "verifier-coherence-global-coherent",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py verifier-coherence",
+      "rc_attendu": 0,
+      "sortie_contient": ["COHERENT"]
+    },
+    {
+      "nom": "fichiers-racine-convention-existent",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {"chemin": "AGENTS.md", "doit_exister": true},
+        {"chemin": "AGENTS-historique.md", "doit_exister": true},
+        {"chemin": "AGENTS-activite-recente.md", "doit_exister": true},
+        {"chemin": "USER-DEMANDES.md", "doit_exister": true}
+      ]
+    },
+    {
+      "nom": "manifest-routines-json-valide",
+      "commande": "python3 -c \"import json; m=json.load(open(r'{racine}/cerveau-projet/freelance/routines/manifest.json', encoding='utf-8')); assert m.get('routines_surveillance'); print('MANIFEST OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": ["MANIFEST OK"]
+    },
+    {
+      "nom": "harnais-nr-data-json-valide",
+      "commande": "python3 -c \"import json; c=json.load(open(r'{racine}/cerveau-projet/freelance/tools-commun/harnais-nr/harnais-nr-data.json', encoding='utf-8')); assert c.get('securites'); print('CONFIG OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": ["CONFIG OK"]
+    },
+    {
+      "nom": "jarvis-data-json-agents-valides",
+      "commande": "python3 -c \"import json; d=json.load(open(r'{racine}/cerveau-projet/freelance/tools-commun/jarvis/jarvis-data.json', encoding='utf-8')); assert len(d.get('agents', [])) >= 5; print('AGENTS OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": ["AGENTS OK"]
+    },
+    {
+      "nom": "protocoles-v2-presents",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {"chemin": "cerveau-projet/freelance/protocoles/protocoles.md",
+         "doit_exister": true}
+      ]
+    }
+  ]
+}
