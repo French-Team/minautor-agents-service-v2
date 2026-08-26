@@ -16,39 +16,41 @@
       "actif": true
     }
   ],
-  "routines_surveillance": [
-    {
-      "nom": "surveiller-flux-jarvis",
-      "script": "surveillance/surveiller-flux-jarvis.py",
-      "actif": true,
-      "intervalles_secondes": 600
-    },
-    {
-      "nom": "surveiller-modifications",
-      "script": "surveillance/surveiller-modifications.py",
-      "actif": true,
-      "intervalles_secondes": 60
-    },
-    {
-      "nom": "evaluer-agents",
-      "script": "surveillance/evaluer-agents.py",
-      "actif": true,
-      "intervalles_secondes": 1800
-    },
-    {
-      "nom": "harnais-jarvis",
-      "script": "surveillance/harnais-jarvis.py",
-      "actif": true,
-      "intervalles_secondes": 300
-    },
-    {
-      "nom": "battement-dev",
-      "script": "surveillance/battement-dev.py",
-      "actif": true,
-      "intervalles_secondes": 300,
-      "temporaire": true,
-      "note": "ROUTINE TEMPORAIRE DE DEV (2026-08-26, decision utilisateur) : citations Marvel toutes les 5 min comme repere visuel. A RETIRER EN FIN DE DEV - Hygie pourra purger script + entree."
-    }
+  "routines_surveillance": [  {
+   "nom": "flux",
+   "script": "surveillance/flux.py",
+   "actif": true,
+   "intervalles_secondes": 600,
+   "note": "ex-surveiller-flux-jarvis, renommee 2026-08-26 (nom simple)"
+  },
+  {
+   "nom": "vigie",
+   "script": "surveillance/vigie.py",
+   "actif": true,
+   "intervalles_secondes": 60,
+   "note": "ex-surveiller-modifications, renommee 2026-08-26 (nom simple)"
+  },
+  {
+   "nom": "notation",
+   "script": "surveillance/notation.py",
+   "actif": true,
+   "intervalles_secondes": 300,
+   "note": "ex-evaluer-agents, renommee 2026-08-26 (nom simple)"
+  },
+  {
+   "nom": "harnais",
+   "script": "surveillance/harnais.py",
+   "actif": true,
+   "intervalles_secondes": 300,
+   "note": "ex-harnais-jarvis, renommee 2026-08-26 (nom simple)"
+  },  {
+   "nom": "citations",
+   "script": "surveillance/citations.py",
+   "actif": true,
+   "intervalles_secondes": 300,
+   "temporaire": true,
+   "note": "ROUTINE TEMPORAIRE (2026-08-26, decision utilisateur) : citations Marvel toutes les 5 min comme repere visuel - ex-battement-dev renommee (la colonne Grade de l encart porte la couleur orange G5). A RETIRER EN FIN DE DEV - Hygie pourra purger script + entree."
+  }
   ],
   "seuils_alerte": {
     "p1_non_acquitte": true,
@@ -58,6 +60,6 @@
   "perimetre_edith_surveille": [
     "routines/",
     "USER-DEMANDES.md",
-    "AGENTS-activite-recente.md"
+    "AGENTS-activite-recente-v2.md"
   ]
 }

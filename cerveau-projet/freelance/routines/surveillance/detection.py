@@ -34,19 +34,24 @@ def empreinte(fichier):
 
 
 def envoyer_reveil(motif, details):
-    """v1.1 (decision utilisateur 2026-08-25) : JARVIS est informe pour
-    executer le chainage. Deposer un message P1 [EDITH-RÉVEIL] :
-    - inbox de STARK (coordonne, routage gravite ERR/CRIT)
-    - inbox de VISION (repare - exclusive JARVIS, marbre)
-    - inbox de JARVIS (execute le chainage, routeur central P13 v2)
-    + outbox d'EDITH, id unique par destinataire (protocole 14)."""
+    """v1.2 (decision utilisateur 2026-08-26) : les routines d'EDITH ne
+    distribuent PLUS le travail aux autres agents - elles demandent a
+    JARVIS d'ACTIVER EDITH pour qu'elle fasse SON travail (protocole 18 :
+    EDITH incarnee rapporte les 4 W). Deposer un message P1
+    [EDITH-RÉVEIL] dans le hub (inbox/jarvis.jsonl) UNIQUEMENT :
+    - JARVIS lit la demande et active EDITH (jamais stark/vision en
+      direct - leur information passe par le rapport d'EDITH).
+    + outbox d'EDITH (trace cote expediteur, protocole 14)."""
     base = {
         "de": "edith", "priorite": 1,
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
-        "objet": "[EDITH-RÉVEIL] " + motif[:60],
-        "corps": details, "lu": False, "accuse": False, "type": "reveil",
+        "objet": "[EDITH-RÉVEIL] demande activation EDITH : " + motif[:40],
+        "corps": ("DEMANDE D'ACTIVATION EDITH (protocole 18). EDITH doit "
+                  "etre activee pour analyser et rapporter les 4 W.\n"
+                  + details),
+        "lu": False, "accuse": False, "type": "reveil",
     }
-    for destinataire in ("stark", "vision", "jarvis"):
+    for destinataire in ("jarvis",):
         msg = dict(base)
         msg["id"] = str(uuid.uuid4())[:8]
         msg["vers"] = destinataire
@@ -69,7 +74,10 @@ def envoyer_reveil(motif, details):
             if str(p) not in sys.path:
                 sys.path.insert(0, str(p))
         from historique import historiser
-        historiser("edith", f"Reveil emis: {motif[:60]}",
+        # trace sous le nom de la routine vigie (decision utilisateur
+        # 2026-08-26 : les routines sont des elements surveilles avec
+        # LEUR propre nom/grade - la couleur rouge G4 s'affiche).
+        historiser("vigie", f"Perimetre modifie: {motif[:60]}",
                    "R", session="session-freelance")
     except Exception:
         pass

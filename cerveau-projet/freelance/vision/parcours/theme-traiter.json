@@ -16,6 +16,7 @@
           "Lire l'inbox : python3 cerveau-projet/freelance/tools-commun/jarvis/jarvis.py lire --agent vision",
           "Acquitter : python3 .../jarvis.py acquitter --agent vision --id <id>",
           "Rediriger vers le thème MODIFIER avec la demande",
+          "ALLER AU BOUT : je traite la demande COMPLETEMENT (appliquer + non-regression) avant tout bilan -- JAMAIS d'arrêt pour demander l'autorisation",
           "A la fin, retourner le bilan à Stark via jarvis.py envoyer --de vision --vers stark",
           "FIN DE CYCLE -> activer Stark"
         ]

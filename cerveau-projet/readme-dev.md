@@ -256,6 +256,7 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Categorie | Nb | Exemples |
 |---|---|---|
 | Activer | 1 | activer-agent-principal |
+| Coordination | 1 | Oracle (hub v1, equivaut a JARVIS v2) |
 | Ajouter | 1 | ajouter-contenu-fichier |
 | Analyser | 9 | analyser-dependances, analyser-fonctions, analyser-io-tests, analyser-performance-tests, analyser-round, analyser-structure, analyser-tokens, analyser-workers, analyser-noms-maj |
 | Cartographier | 1 | cartographier-parcours |

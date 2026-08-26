@@ -53,7 +53,7 @@ JAMAIS le fonctionnement de JARVIS.
 | `serveur_inactif` | sante | WARN | le serveur MCP n a pas journalise depuis N jours (historique gelee : down ou jamais lance) |
 | `alerte_non_traitee` | surveillance | ERR | une alerte (EDITH [EDITH-REVEIL], harnais [HARNAIS-JARVIS]) reste NON LUE depuis N jours : la boucle de reparation ne se ferme pas |
 | `demande_utilisateur_non_traitee` | surveillance | WARN/ERR | entree de USER-DEMANDES.md plus vieille que N jours ABSENTE de la section « Dernieres modifications » (urgent -> ERR) |
-| `historique_agents_gele` | surveillance | ERR | JARVIS n a PAS historise les activites dans AGENTS-historique.md (encart session-freelance) : derniere activite plus recente que la derniere trace -> la tracabilite des agents est en retard |
+| `historique_agents_gele` | surveillance | ERR | JARVIS n a PAS historise les activites dans AGENTS-activite-recente-v2.md (encart session-freelance, fichier v2 separe) : derniere activite plus recente que la derniere trace -> la tracabilite des agents est en retard |
 | `edith_silencieuse` | surveillance | ERR | **EDITH n emet plus de reveil depuis N jours (3 par defaut) : son serveur de routines ou detection.py ne tourne plus -- la cellule dormante est muette, plus personne ne detecte les modifications de perimetre** |
 
 **USER-DEMANDES.md -- section « Dernieres modifications » (source de
@@ -75,9 +75,9 @@ caracteres) apparaissent dans le journal. Les mots-cles inline
 > 3. JARVIS ne doit pas briser la boucle/le round : P1 non lu,
 >    hub non route, mission abandonnee, activation sans trace.
 > 4. JARVIS doit HISTORISER a chaque action (pour lui et les agents)
->    dans AGENTS-historique.md : si la derniere activite est plus
->    recente que la derniere trace de l encart session-freelance, la
->    tracabilite est en retard (ERR).
+>    dans AGENTS-activite-recente-v2.md (encart 50 lignes, fichier v2 separe) + historique.db
+>    (BDD SQLite, 7 jours) : si la derniere activite est plus recente
+>    que la derniere trace de l encart, la tracabilite est en retard (ERR).
 > 5. EDITH doit continuer de SE REVEILLER (cellule dormante) : si aucun
 >    signal de vie (type reveil, objet [EDITH-...]) n est emis depuis
 >    N jours (3 par defaut), son serveur de routines ou detection.py ne
@@ -122,7 +122,8 @@ harnais-jarvis aide
 
 1. **A la demande** : `harnais-jarvis verifier` (par Stark, l utilisateur,
    ou tout agent habilite).
-2. **Routine periodique** : routine `harnais-jarvis` dans
+2. **Routine periodique** : routine `harnais` (ex-harnais-jarvis, renommee
+   2026-08-26) dans
    `freelance/routines/manifest.json` (D15) -> detection + alerte
    automatiques a intervalle regle.
 

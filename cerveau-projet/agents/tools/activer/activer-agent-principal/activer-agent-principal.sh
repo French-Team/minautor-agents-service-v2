@@ -6,7 +6,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.7.2"
+VERSION="0.7.4"
 STATUT="prepare"
 
 # Configuration
@@ -23,8 +23,10 @@ get_date() {
 }
 
 # Fonction pour obtenir la date et l'heure actuelles (format YYYY-MM-DD HH:MM)
+# v0.7.3 : millisecondes (3 chiffres) au lieu des nanosecondes (9 chiffres)
+# %3N = GNU date : 3 premiers chiffres de la fraction (parite avec le .py [:-3])
 get_timestamp() {
-    date +"%Y-%m-%d %H:%M:%S.%N"
+    date +"%Y-%m-%d %H:%M:%S.%3N"
 }
 
 # Fonction pour obtenir le role d'un agent
@@ -50,6 +52,7 @@ get_agent_role() {
         "Socrate"|"socrate") echo "Conversateur de revision strategique -- discute et priorise les problemes" ;;
         "Redacteur-v2"|"redacteur-v2") echo "Redacteur des docs de la v2 (proposition, regles, conventions) -- mode conversation (reactive Cerberus sur fin de cycle)" ;;
         "Hades"|"hades") echo "Gardien des archives git -- SEUL habilite aux commandes git" ;;
+        "Ferrari"|"ferrari") echo "Agent v1 specialise freelance -- corrige et modifie le dossier v2 (conventions v2)" ;;
         "Stark"|"stark") echo "Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation" ;;
         *) echo "Agent inconnu" ;;
     esac
@@ -78,6 +81,7 @@ get_agent_fiche() {
         "Socrate"|"socrate") echo "cerveau-projet/agents/socrate/socrate.md" ;;
         "Redacteur-v2"|"redacteur-v2") echo "cerveau-projet/agents/redacteur-v2/redacteur-v2.md" ;;
         "Hades"|"hades") echo "cerveau-projet/agents/hades/hades.md" ;;
+        "Ferrari"|"ferrari") echo "cerveau-projet/agents/ferrari/ferrari.md" ;;
         "Stark"|"stark") echo "cerveau-projet/freelance/stark/stark.md" ;;
         *) echo "cerveau-projet/agents/inconnu/inconnu.md" ;;
     esac
@@ -106,6 +110,7 @@ get_agent_corrections() {
         "Socrate"|"socrate") echo "cerveau-projet/agents/socrate/corrections.md" ;;
         "Redacteur-v2"|"redacteur-v2") echo "cerveau-projet/agents/redacteur-v2/corrections.md" ;;
         "Hades"|"hades") echo "cerveau-projet/agents/hades/corrections.md" ;;
+        "Ferrari"|"ferrari") echo "cerveau-projet/agents/ferrari/corrections.md" ;;
         "Stark"|"stark") echo "cerveau-projet/freelance/stark/corrections.md" ;;
         *) echo "cerveau-projet/agents/inconnu/corrections.md" ;;
     esac

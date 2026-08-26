@@ -135,9 +135,15 @@ def lire_fichier(chemin):
 
 
 def extraire_agents_md(texte):
-    """Agents declares dans AGENTS.md via les liens [X](cerveau-projet/agents/N/N.md)."""
-    return set(re.findall(r"\[([A-Za-z-]+)\]\(cerveau-projet/agents/[a-z-]+/[a-z-]+\.md\)",
-                          texte))
+    """Agents declares dans AGENTS.md via les liens [X](cerveau-projet/agents/N/N.md).
+    On extrait le nom depuis le DOSSIER du lien (robuste aux libelles
+    particuliers, ex: ferrari reference avec le chemin complet en libelle).
+    On ajoute 'oracle' : outil de coordination v1 qui s AUTO-HISTORISE
+    (il apparait comme agent dans le corps sans avoir de fiche dediee)."""
+    agents = set(re.findall(r"\]\(cerveau-projet/agents/([a-z0-9-]+)/[a-z0-9-]+\.md\)",
+                            texte))
+    agents.add("oracle")
+    return agents
 
 
 def analyser_corps(texte):

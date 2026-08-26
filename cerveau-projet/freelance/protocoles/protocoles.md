@@ -165,7 +165,7 @@ Chaque agent n'edite que les fichiers de SON perimetre.
 **INTERDICTION ABSOLUE** :
 - PAS d'enregistrement dans activer-agent-principal (seul Stark y est)
 - PAS de parcours lineaire (parcours-*.json). Uniquement ARBRE DES DECISIONS.
-- PAS de modification des outils v1.
+- PERIMETRE WRITE : n'ecrire QUE dans `cerveau-projet/freelance/`. Tout outil - v1 OU v2 - qui ecrirait hors de ce perimetre est interdit.
 
 **REGLE** : le template est la SOURCE DE VERITE. Aucune deviation.
 
@@ -183,12 +183,16 @@ Chaque agent n'edite que les fichiers de SON perimetre.
 | 3 | Initialiser RACINE via os_path : `from racine import trouver_racine` (P10) — INTERDIT de compter les niveaux (`../..`) | Forge |
 | 4 | Creer `<outil>.md` (template v2, contrat D7) | Forge |
 | 5 | Creer `fonctions/` + `<outil>-data.json` (donnees editables, D15) | Forge |
-| 6 | Tester l'outil | Forge |
-| 7 | Acquitter dans JARVIS | Forge |
+| 6 | **Harnacher l'outil** (PROTOCOLE 21) : importer `verifier_outil` et l'appeler en debut de main() | Forge |
+| 7 | Tester l'outil (le harnais le verifie a chaque appel) | Forge |
+| 8 | Acquitter dans JARVIS | Forge |
 
 **REGLE** : le template est la SOURCE DE VERITE. Aucune deviation.
 **REGLE P10** : la detection de racine passe TOUJOURS par
 `tools-commun/os_path/` (`trouver_racine(__file__)`).
+**REGLE P21 (2026-08-25)** : AUCUN outil v2 n est livre sans son harnais.
+Le mini-test de conformite (import `verifier_outil`) est OBLIGATOIRE a
+l etape 6 -- un outil non harnache est refuse (SIG ERR du harnais).
 
 ---
 
@@ -536,3 +540,191 @@ Ajouter un rappel = editer rappels.json (D15), jamais le code.
 L agent mentionne EXPLICITEMENT dans sa reponse finale les pistes
 verifiees ou restantes. Un bilan qui ne mentionne pas la dispersion
 verifiee est incomplet.
+
+---
+
+## PROTOCOLE 21 : Harnais generalise aux outils v2 (2026-08-25)
+
+> Decision utilisateur 2026-08-25 : plus rien n est fait par un agent v2
+> SANS le harnais correspondant. Chaque outil v2 contient l import d un
+> MINI-TEST DE CONFORMITE avec plusieurs messages selon la situation
+> (erreur detectee, etc.). Les scripts temporaires sont proteges par
+> leur harnais.
+
+### La regle absolue
+
+TOUT outil v2 importe et appelle le harnais en debut de traitement :
+
+```python
+from harnais import verifier_outil   # outils
+from harnais import verifier_script  # scripts temporaires
+```
+
+| Situation | Signal | Action de l agent |
+|---|---|---|
+| Tout est conforme | `SIG OK` | Continuer |
+| Anomalie mineure | `SIG WARN` | Continuer + signaler |
+| Erreur detectee | `SIG ERR` | STOPPER + corriger avant de continuer |
+| Probleme critique | `SIG CRIT` | Arret immediat + restauration |
+
+### Ce que le mini-test verifie (conformite d un outil v2)
+
+1. Structure obligatoire : `entry.py` + `fonctions/` + `<outil>.md`.
+2. Syntaxe Python valide (compile de tous les .py).
+3. Detection racine P10 (`trouver_racine`) presente dans entry.py.
+4. L outil est harnache (appel verifier_outil present).
+
+### Scripts temporaires (REGLE D ORIGINE v1)
+
+> Comme dans la v1 (decision utilisateur 2026-08-25) : chaque agent cree
+> SON dossier temporaire a la RACINE du workspace, `tmp-<agent>/`
+> (ex: tmp-stark/, tmp-vision/). Jamais le /tmp systeme.
+
+| Regle | Detail |
+|---|---|
+| **Dossier dedie a l agent** | Script temporaire dans `tmp-<agent>/` a la RACINE du workspace |
+| **Jamais ailleurs** | /tmp systeme, racine, ou dossier d outil = SIG ERR (bloque) |
+| **Isolation** | Aucun chemin absolu suspect : le script ne touche QUE son dossier |
+| **Lifecycle** | Creer -> executer -> verifier -> SUPPRIMER (`rm -rf tmp-<agent>` en fin de mission) |
+| **Sans harnais** | Un script hors harnais = SIG ERR (bloque) |
+
+### Implementation
+
+- Module : `tools-commun/harnais/` (fonctions/harnais.py + entry.py + harnais.md).
+- Exemple : `freelance/classeur/entry.py` appelle `verifier_outil()` en debut de main().
+- Le harnais est INTUITIF : chaque message dit quoi faire ensuite. L agent
+  n a jamais a reflechir pour savoir comment reagir a un signal.
+
+### Transparence (l agent n a PAS a reflechir)
+
+| Capacite | Detail |
+|---|---|
+| **PYTHONPATH injecte** | `harnais exec` injecte les chemins v2 (os_path, bdd-lecons, harnais) avant de lancer : le script temporaire ecrit `from racine import trouver_racine` SANS sys.path manuel |
+| **Lecons diffusees** | avant chaque execution, le harnais affiche les lecons recentes de l agent depuis la BDD v2 (D10) : `=== LECONS APPRISES (BDD v2) ===` |
+| **Compensation** | le harnais DETECTE et guide les erreurs de l agent (ex: tmp-<agent> oublie) au lieu de le laisser echouer seul |
+
+### BDD des lecons v2 (D10, construite 2026-08-25)
+
+> La bible des lecons v2 : `tools-commun/bdd-lecons/` (SQLite, modele du
+> classeur v2 : rapide). Les agents n ecrivent PLUS leurs lecons dans
+> corrections.md : ils les ENREGISTRENT via l outil, le harnais les
+> DIFFUSE au moment du besoin (rappel des lecons apprises).
+
+```
+bdd-lecons enregistrer "<ce que j ai appris>" --agent <moi> [--categorie C] [--mots-cles a,b]
+bdd-lecons lister [--n 20]         # apercu recent (bible)
+bdd-lecons chercher [--mot-cle M] [--categorie C] [--agent A]
+```
+
+Format d une lecon : `{id, date, agent, categorie(outil|protocole|processus|carte|correction|technique|autre), titre(auto), resume, mots_cles[], source}`.
+
+### Architecture DYNAMIQUE (v0.2.0, decision utilisateur 2026-08-25)
+
+> « On importe le harnais, le harnais fait le reste. » Le harnais des
+> scripts temporaires est pilote par la CONFIGURATION (`harnais-data.json`,
+> D15 : separation code/donnees), jamais par des editions de code.
+> Ajouter une regle = editer UN fichier de donnees, rien d autre.
+
+Le harnais lit la config a CHAQUE appel et applique 4 categories :
+
+| Categorie | Contenu (config) | Exemple |
+|---|---|---|
+| **Securites** | `securites[]` : fonctionnement du script | zone tmp-<agent>/ dediee, isolation (pas de chemins absolus) |
+| **Verifications** | `verifications[]` : agent, raison, ... | agent obligatoire, raison obligatoire (bloquantes) |
+| **Imports obligatoires** | `imports_obligatoires[]` | trouver_racine (P10) present dans le script |
+| **Rappels** | `rappels[]` : utilisation, commande | lifecycle, promotion vers outil durable, entonnoir |
+
+**REGLE (anti-edition) :** pour ajouter un import obligatoire, une
+verification, un rappel ou une securite, on EDITE `harnais-data.json`
+-- JAMAIS le code du harnais, JAMAIS les scripts. Le harnais fait le
+reste automatiquement (preuve : un import ajoute a la config est verifie
+des l appel suivant, sans toucher au code).
+
+**Niveaux (reponse a la question « regle, convention ou protocole ? ») :**
+
+| Niveau | Ou ca vit | Role |
+|---|---|---|
+| Protocole | PROTOCOLE 21 (ce fichier) | La REGLE d usage : chaque script/outil passe par le harnais |
+| Convention | D15 (separation code/donnees) | L ARCHITECTURE : config, jamais de valeurs en dur dans le code |
+| Donnees | `harnais-data.json` | Le CONTENU dynamique : imports, verifications, rappels, securites |
+| Code | `fonctions/harnais.py` | Le MOTEUR : lit la config, applique tout (stable, ne change presque jamais) |
+
+### Execution protegee d un script temporaire (AVANT -> PENDANT -> APRES)
+
+L agent appelle UNE commande (`harnais exec tmp-<agent>/script.py --agent X
+--raison "..."`) ; le harnais fait tout le reste, transparent pour l agent :
+
+| Phase | Ce que le harnais fait |
+|---|---|
+| **AVANT** | verifications (agent, raison) ; securites (zone tmp-<agent>/, isolation) ; imports obligatoires (trouver_racine...) ; syntaxe Python (compile) ; backup empreinte + etat de la zone ; journalisation |
+| **PENDANT** | execution via subprocess ; timeout ; capture stdout/stderr (rien n est perdu) |
+| **APRES** | verdict rc ; detection d effets (fichiers crees hors zone, script modifie) ; rappels (lifecycle, promotion, entonnoir) ; journalisation finale |
+
+**REGLE :** tout ce qui peut etre verifie/decide automatiquement est fait
+par le harnais. L agent ne reflechit pas (PROTOCOLE 22) : il execute la
+commande, le harnais valide et rend un verdict clair.
+
+---
+
+## PROTOCOLE 22 : Anti-reflexion -- commande + pourquoi (2026-08-25)
+
+> Decision utilisateur 2026-08-25 : « l intelligence ne rend pas docile ».
+> Quand un agent ne comprend pas le POURQUOI, il reflechit et cherche a
+> savoir avant d agir -> ce sont des TROUS DANS LA RAQUETTE. La v2 doit
+> les eviter : chaque parcours/arbre donne la commande a executer ET le
+> pourquoi, pour que l agent execute quand il comprend ce qu il fait.
+
+### La regle d or des parcours v2
+
+Chaque case/etape d un arbre ou parcours v2 suit le format :
+
+```
+SI tu dois faire <ceci>
+  -> EXECUTE <commande exacte>
+  // POURQUOI : <une phrase qui explique le but>
+```
+
+| Element | Obligation |
+|---|---|
+| **Commande exacte** | La commande a copier-coller est donnee, jamais devinee |
+| **Pourquoi** | Une phrase courte explique le BUT (l agent n a pas a chercher) |
+| **Pas de choix ouvert** | Si plusieurs options, le parcours DECIDE (jamais « choisis toi-meme ») |
+| **Pas de recherche** | L agent n a JAMAIS a chercher le pourquoi du comment : il est dans le parcours |
+
+### Le flux ideal (JARVIS + arbre)
+
+```
+JARVIS donne la mission a un agent
+    |
+    v
+L ARBRE DE DECISION prend le relais (theme-*.json / fins.json)
+    |
+    v
+L agent EXECUTE quand il comprend ce qu il fait (commande + pourquoi)
+    |
+    v
+Des qu il ne comprend PAS -> il cherche a savoir (TROU DANS LA RAQUETTE)
+    -> le parcours doit l avoir PREVENU (le pourquoi est deja la)
+```
+
+### Ce qui est INTERDIT dans un parcours v2
+
+| Interdit | Pourquoi |
+|---|---|
+| « Choisis la bonne commande » | Oblige l agent a reflechir au lieu d executer |
+| « Utilise l outil X » sans commande | L agent doit deviner les arguments |
+| Une regle sans raison | L agent cherche le pourquoi et s arrete |
+| Renvoyer vers un doc « a lire » | L agent lit au lieu d agir (sauf si necessaire, le parcours le dit) |
+
+### Obligation a la creation d un arbre/parcours
+
+TOUT agent qui cree ou modifie un arbre/parcours v2 verifie que chaque
+case action a : (1) une commande EXACTE copiable, (2) un « pourquoi »
+clair. Un arbre avec une case « fais ce qu il faut » est NON CONFORME.
+
+### Role de JARVIS
+
+JARVIS est un element essentiel : il donne la mission (le QUOI), puis
+l arbre prend le relais (le COMMENT + le POURQUOI). JARVIS ne donne
+jamais une mission sans que l arbre du destinataire ait la commande et
+le pourquoi correspondants.

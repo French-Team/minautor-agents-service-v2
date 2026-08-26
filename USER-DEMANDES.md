@@ -6,65 +6,30 @@
 
 ---
 
+## Dernieres modifications
+
+> Journal des demandes TRAITEES. Quand une demande est traitee, ajoute
+> une ligne : `- <date> -- Traitee: <titre ou partie significative du titre>`.
+> Le harnais-jarvis considere une demande comme traitee si son titre
+> complet OU >= 2 mots significatifs (>= 5 caracteres) du titre
+> apparaissent dans les LIGNES de ce journal (celles commencant par '-').
+
+- 2026-08-26 -- Traitee: URGENT outil activer-agent-principal cree encore session-llm-N
+- 2026-08-26 -- Traitee: changer l'ordre dans le message des DEV-BATTEMENTS
+- 2026-08-26 -- Traitee: verifier microsecondes dans freelance/
+- 2026-08-26 -- Traitee: NETTOYAGE COMMIT TERMINE
+- 2026-08-26 -- Traitee: Encarts activites separes par session (v1)
+- 2026-08-26 -- Traitee: ERREUR commande jarvis.py lire-message N EXISTE PAS
+
+---
+
 ## [urgent]
 
 (traite immediatement - la mission en cours est mise de cote en priorite)
 
-### 2026-08-25 -- URGENT : outil activer-agent-principal cree encore session-llm-N
-
-**Contexte** : l'outil activer-agent-principal.py utilise encore `PREFIXE_SESSION = "session-llm-"` pour creer de nouvelles sessions. Les sessions devraient etre nommees `session-admin` ou `session-freelance` (pas `session-llm-N`).
-
-**Fichier concerne** : cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py
-
-**Lignes concernees** : 108, 341, 343, 404
-
-**Action demandee a Vulcain** : corriger l'outil pour qu'il utilise les bons noms de sessions (`session-admin`, `session-freelance`) au lieu de `session-llm-N`.
-
-**Details techniques** :
-- Ligne 108 : `PREFIXE_SESSION = "session-llm-"` -> doit devenir un mapping (admin/freelance)
-- Ligne 341 : `while (PREFIXE_SESSION + str(n)) in existantes:` -> doit verifier les 2 sessions nommees
-- Ligne 343 : `return PREFIXE_SESSION + str(n)` -> doit retourner le bon nom
-- Ligne 404 : `return PREFIXE_SESSION + m.group(1)` -> compat heritage a conserver
-
-**Regression** : Aucun nouveau LLM ne peut demarrer correctement tant que cet outil n'est pas corrige.
-
 ## [attention]
 
 (prepare et place juste apres la mission en cours)
-
-### 2026-08-25 -- URGENT : verifier microsecondes dans freelance/
-
-**Contexte** : les microsecondes (6 chiffres) doivent etre remplacees par des millisecondes (3 chiffres). Les fichiers v1 sont corriges. Les fichiers freelance/ doivent etre verifies.
-
-**Fichiers concernes** : cerveau-projet/freelance/tools-commun/routines-server/observations/*.md (5 fichiers)
-
-**Action demandee a Mecano** : verifier et corriger les microsecondes dans les fichiers freelance/ en appliquant le Proto-17 (securite) ou le Proto-5 (outils) selon le type de fichier.
-
-### 2026-08-25 -- NETTOYAGE + COMMIT TERMINE
-
-**Contexte** : session-admin a fait un nettoyage complet. Commit 254 fichiers (57k insertions, 3k suppressions). Agent Mecano v1.0.0 cree (20 protocoles pour corriger freelance/).
-
-**Action demandee a JARVIS** : au prochain demarrage de session-freelance, verifie que les changements sont bien en place. Les agents v2 doivent respecter les 20 protocoles de Mecano si ils doivent etre modifies.
-
-**Verification** : au demarrage, lis ce message et confirme que tu l'as vu.
-
-### 2026-08-24 -- Encarts activites separes par session (v1)
-
-**Contexte** : activer-agent-principal v0.7.2 est en place dans la session v1 (session-admin). Les encarts 'Activites recentes' dans AGENTS-historique.md sont maintenant SEPARES par session :
-- `## Activites recentes -- session-admin` (equipe v1 : glm5, Cerberus, Buffy, Vulcain, Morpheus, Janus, Clio, Themis, Chiron, Atlas, Hermes, Hygie...)
-- `## Activites recentes -- session-freelance` (equipe v2 : freebuff, Stark, Shuri, Forge, Rogers, Parker, JARVIS, Vision, Fury, EDITH)
-
-**Action demandee a JARVIS** : quand tu vas lire cette demande, verifie que ton fonctionnement interne prend bien en compte cette separation. Les sessions v1 et v2 ecrivent dans LEURS propres encarts. Si tu as un mecanisme de lecture d'activites recentes, assure-toi qu'il lit le bon encart selon ta session (freelance pour toi).
-
-**Verification** : au demarrage de la session freelance avec Stark, ce message devrait apparaitre dans ton inbox. Confirme que tu l'as vu.
-
-### 2026-08-24 -- ERREUR commande jarvis.py : lire-message N EXISTE PAS
-
-**Contexte** : la session freelance a produit cette erreur :
-```
-jarvis.py: error: argument commande: invalid choice: 'lire-message' (choose from envoyer, recu, lire, acquitter, lister, bloques, activer, historiser, mettre-en-attente, file, reprendre, stop-dev, lancer-missions, defcon, changer-defcon, routines-etat)
-```
-**Action demandee a JARVIS** : corrige les fiches et/ou corrections de Stark et JARVIS pour que les bonnes commandes soient utilisees. La commande correcte est `lire` (pas `lire-message`). Verifie que toutes les references a jarvis.py dans tes fiches utilisent les noms exacts des sous-commandes.
 
 ## [attente]
 

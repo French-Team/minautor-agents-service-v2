@@ -1807,3 +1807,27 @@ Audit de la mission Clio verifier (apres education Atlas arbres v2 : carte v0.5.
 ## [LECON] 2026-08-24 -- AUDIT VERIFICATION README (Clio apres mission encart 'autre' v0.7.1) : CONFORME
 
 Audit de la mission Clio verifier (apres suppression encart 'autre' : activer-agent-principal v0.7.1, logique interne d encarts) : VERDICT CONFORME 0 defaut. mettre-a-jour-readme --verifier 0 ECART (agents table OK, badge Outils-165 OK, readme-dev 40 categories somme 165 = 165 OK). La mission modifie un OUTIL EXISTANT sans ajouter agent/outil -> AUCUNE modification du README necessaire (README.md 0 diff ; le diff readme-dev categorie Git est pre-existant). ASCII 0/0 (README, readme-dev, README-v2). Lecon : une modification de LOGIQUE INTERNE d un outil (mapping, encarts, comptage) ne change jamais le README - le --verifier a 0 ecart est le verdict attendu. Verification du perimetre : le seul diff readme-dev (categorie Git) est pre-existant et deja compte dans la somme 165.
+## [LECON] 2026-08-25 -- DIAGNOSTIC MICROSECONDES 6 CHIFFRES AU LIEU DE 3 (Themis)
+
+**Contexte** : demande utilisateur - verifier pourquoi l outil continue d ecrire les micro-secondes a 6 chiffres au lieu de 3 comme demande plus tot (fichiers v1 supposes corriges).
+
+**VERDICT** : DIAGNOSTIC - cause racine identifiee. Le commit 4fbd28f (2026-08-25 18:41, fix Microsecondes -> millisecondes) n a corrige que les FICHIERS DE DONNEES (AGENTS-historique.md 250 lignes, variables-actuelles.md 3) mais PAS l outil qui ecrit ces timestamps : activer-agent-principal.py utilise %f (6 chiffres) a 4 endroits (lignes 876, 1033, 1305, 1364) pour ecrire AGENTS-historique.md, AGENTS.md (Sessions connues) et le classeur. Preuve chronologique : 30 min apres le commit, les activations 18:43/18:48/18:51 ont REECRIT des timestamps a 6 chiffres (.092801, .638046, .236346, .252571). Aucun %3f dans l historique git de l outil (git log -S %3f = 0).
+
+**Verification freelance** : les fichiers actifs sont DEJA conformes (horloge.py l.23 et historique.py l.52 tronquent %f a [:12] = 3 chiffres ; les autres utilisent isoformat(timespec=seconds)). Seuls les .bak-* (sauvegardes) gardent des formats plus longs - non concernes.
+
+**Correction proposee** : Vulcain remplace les 4 %f par %3f dans activer-agent-principal.py + parite .sh + bump version ; Hygie re-corrige les donnees (8 lignes historique + 1 AGENTS.md + classeur) ; garde-fou optionnel : test de non-regression sur absence de \.[0-9]{6} dans les entrees d historique.
+
+**Lecon** : corriger les DONNEES sans corriger la SOURCE qui les genere = correction instantanement re-ecrasee. Le diagnostic d une regression se prouve par la CHRONOLOGIE (entrees post-commit avec le mauvais format). %f = 6 chiffres (microsecondes), %3f = 3 chiffres (millisecondes).
+
+**Rapport** : themis/rapports/rapport-diagnostic-microsecondes-2026-08-25.md
+## [LECON] 2026-08-25 -- AUDIT BRANCHEMENT AGENT CONFIDENTIEL (activer-agent-principal v0.7.4) : CONFORME (Themis)
+
+Audit de la mission Vulcain (branchement a l activation de l agent v1 specialise freelance, CONFIDENTIEL - seul Cerberus le connait, invisible des agents v2). VERDICT CONFORME, 0 defaut.
+
+**Verifications** : (1) ferrari present dans le dictionnaire AGENTS du .py (role + fiche + corrections) + les 3 case statements du .sh + couleur ; (2) versions 0.7.4 coherentes py/sh/md/spec ; (3) test-092 9/9 OK (EXEMPTIONS_MORTS={stark, ferrari}, KO preexistant stark resolu) ; (4) confidentialite respectee : 0 occurrence dans AGENTS.md (table + freelance/) - seule la raison transitoire du bloc session la mentionnait, nettoyee a la prochaine activation ; (5) activation reelle sur copie OK (agent activable) ; (6) ASCII 0/0, LF pur.
+
+**Lecons** :
+1. UN AGENT CONFIDENTIEL S ACTIVE MAIS NE S AFFICHE PAS : la confidentialite (invisible des agents v2) impose 3 verifications - absent d AGENTS.md, absent des docs freelance/, mais PRESENT dans le dictionnaire d activation (sinon inactivable). La raison transitoire du bloc session est le dernier endroit ou le nom peut fuiter : la nettoyer a chaque activation suivante.
+2. LE GARDE-FOU DE PARITE DOIT PORTER L EXCEPTION EXPLICITEMENT : test-092 a ete adapte avec une liste d exemptions documentee (ferrari confidentiel + stark v2) - une exemption silencieuse serait un contournement, une exemption documentee est une regle.
+
+**Preuves** : rapport morpheus/rapports/rapport-test092-ferrari-2026-08-25.md, test-092 9/9, grep ferrari AGENTS.md -> 1 (raison transitoire), freelance/ -> 0, ASCII 0/0.

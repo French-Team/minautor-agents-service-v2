@@ -9,7 +9,7 @@ identite:
 
 agent:
   nom-agent: "cerberus"
-  version: "0.2.1"
+  version: "0.2.2"
   cree: "2026-08-05"
   statut-cerberus: "disponible"
   role_principal: true
@@ -69,7 +69,7 @@ surcharges:
 | Champ | Valeur |
 |---|---|
 | **Nom** | Cerberus |
-| **Version** | 0.2.1 |
+| **Version** | 0.2.2 |
 | **Role** | Gardien de l'entree (coordinateur) |
 | **Statut** | Disponible (principal) |
 
@@ -221,6 +221,16 @@ CERBERUS -> AGENT_1 -> AGENT_2 -> ... -> CERBERUS
 | **Hygie** | Agent de nettoyage du workspace | Nettoyage du workspace (SEUL habilite a TOUT le workspace) |
 | **Socrate** | Conversateur de revision strategique | Discussion des revisions, priorisation, liste de missions pour Cerberus |
 | **Redacteur-v2** | Redacteur PRO des docs de la v2 (freelance) | Redaction des docs v2 - ROUND SOLO (execute tout, reactive Cerberus) |
+| **ferrari** | Agent v1 specialise freelance (DOUBLE IDENTITE v1/v2, COUCHE SUPERIEURE) | Mission session-admin : intervenir sur N IMPORTE QUEL fichier du dossier `freelance/` (tous les fichiers de la v2 : fiches v2, arbres, conventions, protocoles, regles, JARVIS) - applique les conventions v2 (UTF-8 + CRLF, frontmatter D17). SEUL Cerberus peut l activer (verrouillage). Fin de cycle : ferrari reactive Cerberus. **AGENT INVISIBLE des agents v2 : seul Cerberus le connait, ne jamais le mentionner dans les docs freelance/ ni aux agents v2** |
+
+> **REGLE -- VOIE FREELANCE v1 vs v2** : pour une mission touchant le dossier
+> `cerveau-projet/freelance/` : si elle vient de SESSION-ADMIN (cote v1) ->
+> activer **ferrari** (agent v1 specialise, couche superieure, SEUL Cerberus
+> l active) ; si elle vient de SESSION-FREELANCE -> fonctionnement normal v2 :
+> agents MARVEL pilotes par JARVIS (voir parcours-cerberus-freelance.json,
+> stark coordonne ; Vision corrige JARVIS). Ne jamais router une mission
+> freelance v1 vers les agents v2, et inversement. Ne jamais mentionner
+> ferrari aux agents v2 (il n existe pas pour eux).
 
 ---
 

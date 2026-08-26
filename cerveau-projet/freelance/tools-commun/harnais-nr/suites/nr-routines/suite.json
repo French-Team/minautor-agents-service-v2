@@ -1,6 +1,6 @@
 {
   "nom": "nr-routines",
-  "description": "Suite de non-regression des ROUTINES (manifest D15, scripts, daemon resident, battement-dev)",
+  "description": "Suite de non-regression des ROUTINES (manifest D15, scripts, daemon resident, citations)",
   "actif": true,
   "perimetre": ["cerveau-projet/freelance/routines"],
   "tests": [
@@ -25,8 +25,14 @@
     {
       "nom": "routines-etat-liste-avec-temps-restant",
       "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py routines-etat",
-      "rc_attendu": 0,
-      "sortie_contient": ["battement-dev", "evaluer-agents", "harnais-jarvis", "surveiller-modifications", "declenchement"]
+      "rc_attendu": 0,   "sortie_contient": [
+    "citations",
+    "notation",
+    "harnais",
+    "vigie",
+    "flux",
+    "declenchement"
+   ]
     },
     {
       "nom": "etat-executions-lisible",
@@ -34,14 +40,15 @@
       "rc_attendu": 0,
       "sortie_contient": ["ETAT OK"]
     },
+    {   "nom": "citations-script-present",
+   "commande": "cmd /c exit /b 0",
+   "rc_attendu": 0,
+   "fichiers_verifies": [
     {
-      "nom": "battement-dev-citations-presentes",
-      "commande": "cmd /c exit /b 0",
-      "rc_attendu": 0,
-      "fichiers_verifies": [
-        {"chemin": "cerveau-projet/freelance/routines/surveillance/battement-dev.py",
-         "doit_exister": true}
-      ]
+     "chemin": "cerveau-projet/freelance/routines/surveillance/citations.py",
+     "doit_exister": true
+    }
+   ]
     }
   ]
 }

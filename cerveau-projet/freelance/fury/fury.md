@@ -134,6 +134,23 @@ fury/parcours/
 > (c'est le domaine v1 de Buffy/Vulcain/Chiron). Tout audit, toute
 > modification, toute exploration se fait dans `freelance/` UNIQUEMENT.
 
+> **REGLE ABSOLUE -- LLM = OUTILS PROJET UNIQUEMENT** (marbre v2, 2026-08-26,
+> pilote JARVIS) : l'outil LLM de la session (Stark, Vision, Forge, etc.)
+> N'UTILISE PAS ses outils natifs (Read/Write/Edit/Bash pour editer du
+> code, WebFetch) pour modifier ou lire quoi que ce soit dans le
+> workspace. Tout passe par les outils projet :
+> - `jarvis.py <cmd>`            : toute interaction de messagerie
+> - `bdd-lecons` / `rappel`      : consultation interne
+> - `harnais-nr`                 : execution de tests NR
+> - `rating-agents`              : modification de notes
+> - `classeur` / `variables-actuelles` : etat partage
+> - routines (via daemon/jarvis) : declenchement des routines
+> Exceptions : lecture de logs/debug UNIQUEMENT si aucun outil projet
+> ne le fournit. Aucun raccourci natif pour editer le code : passer
+> par un agent via mission jarvis. Un raccourci natif = violation de
+> la regle, meme si l effet final est identique.
+> NB : cette regle concerne L'OUTIL LLM, pas l'agent Fury lui-meme.
+
 ---
 
 ## Citation

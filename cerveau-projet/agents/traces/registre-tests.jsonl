@@ -1,3 +1,7 @@
+{"date": "2026-08-25 19:20:48", "agent": "janus", "serie": "e", "test": "test-099-activation-relais-garde-fou.py", "verdict": "OK", "duree": 4.046, "run_id": "20260825-192043"}
+{"date": "2026-08-25 19:20:45", "agent": "janus", "serie": "e", "test": "test-102-timestamps-millisecondes.py", "verdict": "OK", "duree": 1.215, "run_id": "20260825-192043"}
+{"date": "2026-08-25 19:20:44", "agent": "janus", "serie": "e", "test": "test-100-frontmatter-yaml-ferme.py", "verdict": "OK", "duree": 0.203, "run_id": "20260825-192043"}
+{"date": "2026-08-25 19:20:44", "agent": "janus", "serie": "e", "test": "test-101-arbres-mermaid-garde-fou.py", "verdict": "OK", "duree": 0.205, "run_id": "20260825-192043"}
 {"date": "2026-08-22 10:12:11", "agent": "janus", "serie": "ko", "test": "test-002-combos-moteur.py", "verdict": "KO", "duree": 2.327, "run_id": "20260822-101208"}
 {"date": "2026-08-22 10:12:09", "agent": "janus", "serie": "ko", "test": "test-096-cartes-mermaid-garde-fou.py", "verdict": "KO", "duree": 0.605, "run_id": "20260822-101208"}
 {"date": "2026-08-22 10:12:09", "agent": "janus", "serie": "ko", "test": "test-004-combos-tester-outil.py", "verdict": "KO", "duree": 0.911, "run_id": "20260822-101208"}
@@ -494,7 +498,3 @@
 {"date": "2026-08-21 21:52:11", "agent": "janus", "serie": "b", "test": "test-037-seul-janus-lance-non-regression.py", "verdict": "OK", "duree": 0.222, "run_id": "20260821-215203"}
 {"date": "2026-08-21 21:52:11", "agent": "janus", "serie": "b", "test": "test-014-spec-guider-parcours.py", "verdict": "OK", "duree": 0.33, "run_id": "20260821-215203"}
 {"date": "2026-08-21 21:52:10", "agent": "janus", "serie": "a", "test": "test-054-doc-obligatoire-template.py", "verdict": "OK", "duree": 0.392, "run_id": "20260821-215203"}
-{"date": "2026-08-21 21:52:10", "agent": "janus", "serie": "a", "test": "test-055-coherence-regle-indice-outil.py", "verdict": "OK", "duree": 0.109, "run_id": "20260821-215203"}
-{"date": "2026-08-21 21:52:09", "agent": "janus", "serie": "a", "test": "test-085-processus-residuels-garde-fou.py", "verdict": "OK", "duree": 4.478, "run_id": "20260821-215203"}
-{"date": "2026-08-21 21:52:09", "agent": "janus", "serie": "a", "test": "test-052-anti-echappement-activation.py", "verdict": "OK", "duree": 0.075, "run_id": "20260821-215203"}
-{"date": "2026-08-21 21:52:08", "agent": "janus", "serie": "a", "test": "test-049-entonnoir-scripts-temporaires.py", "verdict": "OK", "duree": 4.375, "run_id": "20260821-215203"}

@@ -255,23 +255,25 @@ def _detecter_activations(config, ecarts):
     regles = {r["nom"]: r for r in config.get("ecarts", [])}
     seuils = config.get("seuils", {})
     fenetre_jours = int(seuils.get("activation_recente_jours", 14))
-    # Source de tracabilite : AGENTS-activite-recente.md (encart v2,
-    # 50 entrees max, raison tronquee). Le texte complet vit dans
-    # historique.db (BDD SQLite, 7 jours).
+    # Source de tracabilite : AGENTS-activite-recente-v2.md (encart v2,
+    # 50 entrees max, raison tronquee, fichier SEPARE de la v1 - decision
+    # utilisateur 2026-08-26). Le texte complet vit dans historique.db
+    # (BDD SQLite, 7 jours).
     agents_traces = set()
     # meme source que historique_agents_gele (plus bas)
-    hist_path = os.path.join(RACINE, "AGENTS-activite-recente.md")
+    hist_path = os.path.join(RACINE, "AGENTS-activite-recente-v2.md")
     try:
         with open(hist_path, encoding="utf-8") as fh:
             for ligne in fh:
                 if not (ligne.startswith("| ") and "| R |" in ligne):
                     continue
                 cols = [c.strip() for c in ligne.split("|")]
-                # | heure | agent | llm | R | raison |
-                if len(cols) < 6:
+                # | grade | agent | raison | heure | id | R | (ordre
+                # 2026-08-26, decision utilisateur : Grade en tete)
+                if len(cols) < 7:
                     continue
                 agent = cols[2]
-                raison = cols[5].lower()
+                raison = cols[3].lower()
                 if "activ" in raison:
                     agents_traces.add(agent)
                 for mot in raison.replace(":", " ").replace(",", " ").split():
@@ -801,11 +803,11 @@ def _detecter_surveillance(config, ecarts):
                     regles.get("demande_utilisateur_non_traitee"),
                     titre, jours=age, titre=titre[:60], section=section))
 
-    # --- historique_agents_gele (AGENTS-activite-recente.md, encart v2) ---
+    # --- historique_agents_gele (AGENTS-activite-recente-v2.md, encart v2) ---
     r4 = regles.get("historique_agents_gele")
     if r4 and r4.get("actif"):
         tolerance = int(seuils.get("historique_tolerance_minutes", 5))
-        hist_path = os.path.join(RACINE, "AGENTS-activite-recente.md")
+        hist_path = os.path.join(RACINE, "AGENTS-activite-recente-v2.md")
         h_hist = None
         j_hist = None
         if os.path.isfile(hist_path):
@@ -815,8 +817,14 @@ def _detecter_surveillance(config, ecarts):
                 r"(?ms)^## Activites recentes -- session-freelance\s*$"
                 r"(.*?)^## ", texte_hist)
             if m_encart:
+                # l heure est la 4e colonne de la ligne encart
+                # (| grade | agent | raison | heure | id | type |) :
+                # cibler la colonne, pas le 1er motif temporel (une
+                # raison pourrait contenir une heure).
                 m_entree = _re.search(
-                    r"\|\s*(\d{2}:\d{2}:\d{2})", m_encart.group(1))
+                    r"^\|\s*[^|]+\|\s*[^|]+\|\s*[^|]+\|\s*"
+                    r"(\d{2}:\d{2}:\d{2})",
+                    m_encart.group(1), _re.M)
                 if m_entree:
                     h_hist = m_entree.group(1)
                     # 2) dater : le fichier est ecrit par historiser() a
@@ -922,6 +930,73 @@ def _detecter_surveillance(config, ecarts):
                                          "%d/%m %H:%M")))
 
 
+def _detecter_diagnostics_statiques(config, ecarts):
+    """Diagnostics statiques (Pyright/Pylance) sur le code freelance.
+
+    Lance Pyright via npx si disponible, parse le JSON, et signale
+    les erreurs/warnings par fichier. Dedup par fichier (un message
+    par fichier, resume des erreurs). Seuil : >= 1 erreur -> WARN.
+    """
+    import subprocess
+    regles = {r["nom"]: r for r in config.get("ecarts", [])}
+    r = regles.get("diagnostics_statiques")
+    if not (r and r.get("actif")):
+        return
+    freelance_dir = os.path.join(RACINE, "cerveau-projet", "freelance")
+    if not os.path.isdir(freelance_dir):
+        return
+    try:
+        import platform
+        cmd = ["cmd", "/c", "npx", "pyright", "--outputjson",
+               freelance_dir] if platform.system() == "Windows" else \
+              ["npx", "pyright", "--outputjson", freelance_dir]
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, timeout=60,
+            encoding="utf-8", errors="replace")
+        if result.returncode not in (0, 1):
+            return  # pyright indisponible ou erreur
+        data = json.loads(result.stdout)
+    except (subprocess.TimeoutExpired, json.JSONDecodeError, OSError):
+        return
+    # regrouper par fichier
+    par_fichier = {}
+    for diag in data.get("generalDiagnostics", []):
+        fichier = diag.get("file", "")
+        severity = diag.get("severity", "")
+        if severity not in ("error", "warning"):
+            continue
+        rel = os.path.relpath(fichier, JARVIS_DIR).replace(os.sep, "/")
+        if rel not in par_fichier:
+            par_fichier[rel] = {"errors": 0, "warnings": 0, "samples": []}
+        if severity == "error":
+            par_fichier[rel]["errors"] += 1
+        else:
+            par_fichier[rel]["warnings"] += 1
+        range_info = diag.get("range", {})
+        start = range_info.get("start", {})
+        line = start.get("line", 0)
+        msg = diag.get("message", "")[:80]
+        if len(par_fichier[rel]["samples"]) < 3:
+            par_fichier[rel]["samples"].append("L%d: %s" % (line, msg))
+    for fichier, stats in par_fichier.items():
+        if stats["errors"] == 0 and stats["warnings"] == 0:
+            continue
+        detail = "%d err, %d warn" % (stats["errors"], stats["warnings"])
+        if stats["samples"]:
+            detail += " -- " + "; ".join(stats["samples"])
+        severite = "ERR" if stats["errors"] > 0 else "WARN"
+        ecarts.append({
+            "type": "diagnostics_statiques",
+            "cle": fichier,
+            "severite": severite,
+            "message": ("diagnostic statique Pyright/Pylance dans %s : "
+                        "%s -- %d erreur(s), %d warning(s) "
+                        "(source: Pyright)") % (
+                            fichier, detail,
+                            stats["errors"], stats["warnings"]),
+        })
+
+
 # ------------------------------------------------------------------
 # API publique
 # ------------------------------------------------------------------
@@ -938,6 +1013,7 @@ def verifier_comportement(alerter=True):
     _detecter_activations(config, ecarts)
     _detecter_files(config, ecarts)
     _detecter_valeurs_en_dur(config, ecarts)
+    _detecter_diagnostics_statiques(config, ecarts)
     _detecter_surveillance(config, ecarts)
     if not alerter:
         return ecarts, []

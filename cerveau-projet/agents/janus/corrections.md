@@ -6411,3 +6411,37 @@ diff git) ; registre clio 4 usages ; audit Themis CONFORME.
 ## [LECON] 2026-08-24 -- CONTROLE ENCARTS 10 ACTIVITES : VALID (Janus)
 
 Controle de la mission Vulcain v0.7.2 : encarts 10 activites + raisons completes. VERDICT VALID. Versions 0.7.2 coherentes py/sh/spec, syntaxe OK, ASCII 0/0, mapping correct, repli 'autre' toujours supprime. Test fonctionnel : 10 lignes par encart, 0 troncature. Tests Morpheus : test-056 18/18, test-090 11/11, 0 regression. 9 problemes evaluer-processus pre-existants documentes.
+## [LECON] 2026-08-25 -- CONTROLE REPARATION MICROSECONDES (activer-agent-principal v0.7.3) : VERDICT VALID (Janus)
+
+Controle final de la chaine Cerberus -> Themis (audit) -> Vulcain (reparation) -> Morpheus (tests + garde-fou). VERDICT VALID, 0 defaut.
+
+**Verifications** : (1) versions 0.7.3 coherentes py/sh/md/spec ; (2) lanceur officiel (Janus habilite) : test-102/101/099/100 = 4 OK / 0 KO ; (3) reparation timestamps verifiee : 4 x strftime(...%f)[:-3] (l.879/1036/1308/1367) + get_timestamp %3N (.sh) ; (4) ASCII strict 0/0 sur 12 fichiers de la mission (1 correction : 4 tirets cadratins '—' dans le rapport Themis, section ajoutee par l audit -> remplaces par '-') ; (5) LF pur 0 CRLF.
+
+**Lecons** :
+1. LE VERROU D HABILITATION DU LANCEUR EST UN VRAI CONTROLE CROISE : Morpheus ne peut pas lancer le lanceur (verrou ferme pour lui, test-027 points 5-8 KO attendus) - c est Janus qui le lance : le second controle utilise l outil OFFICIEL, pas les tests en --isoler.
+2. UN TIRET CADRATIN '—' (U+2014) INTRODUIT PAR UN EDITEUR EST UNE VIOLATION ASCII : le str_replace de ma section de rapport a introduit 4 em-dashes invisibles - toujours revalider ASCII apres CHAQUE edition (pas seulement a la creation).
+3. UNE CHAINE DE REPARATION COMPLETE PRODUIT DES BONUS : le garde-fou test-102 a revele un bug preexistant du lanceur (glob test-0* excluait test-100+) - les controles en chaine (audit -> reparation -> tests -> controle) attrapent plus que la mission initiale.
+
+**Preuves** : rapport themis/rapports/rapport-diagnostic-microsecondes-2026-08-25.md (suite audit CONFORME), rapport morpheus/rapports/rapport-tests-microsecondes-2026-08-25.md, lanceur 4 OK/0 KO, ASCII 0/0.
+## [LECON] 2026-08-25 -- CONTROLE EDUCATION CERBERUS -> FERRARI : VERDICT VALID (Janus)
+
+Controle final de la chaine Cerberus -> Chiron (education) -> Buffy (application inter-round) -> Janus (controle). VERDICT VALID, 0 defaut.
+
+**Verifications** : (1) ferrari present dans la fiche cerberus.md (2 occurrences : table 'Agents disponibles' + REGLE voie freelance v1 vs v2) ; (2) ferrari present dans regles-choisir-agent.md (1 : matrice Etape 1) ; (3) verifier-conformite-fiche cerberus 1 CONFORME / 0 ECART (v0.2.2) ; (4) ASCII strict 0/0 sur les 2 fichiers modifies ; (5) aucun changement de parcours (flux generique c8 -> c10 suffisant).
+
+**Lecons** :
+1. UNE EDUCATION DE COORDINATEUR SANS CHANGEMENT DE PARCOURS SE CONTROLE PAR LA PRESENCE DU SAVOIR DANS SES SOURCES DE VERITE (fiche + matrice) : la preuve d education n est pas un diff de carte mais la presence de ferrari dans la table 'Agents disponibles' et la matrice choisir-agent.
+2. LA CONTRADICTION FERRARI/JARVIS EST UNE DETTE A SUIVRE : la fiche ferrari liste 'Corriger JARVIS' vs exclusivite Vision (AGENTS.md) - signalee dans le rapport Chiron, a arbitrer (Argus/Vision/Buffy) lors d une prochaine mission.
+
+**Preuves** : rapport chiron/rapports/rapport-education-cerberus-ferrari-2026-08-25.md, fiche cerberus v0.2.2 CONFORME, ASCII 0/0, LF pur.
+## [LECON] 2026-08-25 -- CONTROLE BRANCHEMENT AGENT CONFIDENTIEL (activer-agent-principal v0.7.4) : VERDICT VALID (Janus)
+
+Controle final de la chaine Cerberus -> Vulcain (branchement) -> Morpheus (test-092 adapte) -> Themis (audit) -> Janus (controle). VERDICT VALID, 0 defaut.
+
+**Verifications** : (1) agent v1 specialise freelance CONFIDENTIEL present dans le dictionnaire py + 3 case statements sh + couleur ; (2) versions 0.7.4 coherentes py/sh/md/spec ; (3) test-092 9/9 OK (exemption documentee ferrari/stark, KO preexistant stark resolu) ; (4) confidentialite : absent de la table AGENTS.md et des docs v2 - seule la raison transitoire du bloc session peut porter le nom, nettoyee a chaque activation ; (5) activation reelle sur copie OK.
+
+**Lecons** :
+1. LA CONFIDENTIALITE D UN AGENT SE VERIFIE PAR 3 ABSENCES + 1 PRESENCE : absent d AGENTS.md (table), absent des docs freelance/, absent des raisons d activation (a nettoyer a chaque activation) - mais PRESENT dans le dictionnaire d activation (sinon inactivable). Le nom ne doit vivre QUE dans les sources v1 internes (fiche Cerberus, matrice, corrections).
+2. LA RAISON DU BLOC SESSION EST UN VECTEUR DE FUITE TRANSOIRE : chaque activation ecrase la raison - le dernier maillon de la chaine doit reactiver Cerberus avec une raison SANS le nom confidentiel pour laisser AGENTS.md propre.
+
+**Preuves** : test-092 9/9, versions 0.7.4 coherentes, ASCII 0/0, activation sur copie OK, grep AGENTS.md -> 0 occurrence du nom (apres reactivation finale).

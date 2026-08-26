@@ -15,10 +15,11 @@
         "description": "Stark envoie sa demande A JARVIS. SEUL JARVIS active les agents.",
         "etapes": [
           "Formuler la demande clairement (mission, contraintes, fin de cycle attendue)",
-          "Envoyer : jarvis.py envoyer --de stark --vers jarvis --priorite N --objet '...' --corps '...'",
-          "INTERDIT : jarvis.py activer, envoyer --vers <agent-direct>, lire l inbox d un autre agent",
-          "JARVIS lit, acquitte, choisit l agent et utilise jarvis.py activer",
-          "L agent traite puis renvoie son bilan a JARVIS",
+          "Envoyer la demande A JARVIS : jarvis.py envoyer --de stark --vers jarvis --priorite N --objet '...' --corps '...' (SANS --activer : ce flag n'activerait QUE JARVIS, jamais l'agent final - piege lecon 2026-08-25)",
+          "INCARNER JARVIS pour traiter : jarvis.py lire (inbox jarvis) puis acquitter la demande",
+          "JARVIS (incarne) choisit l'agent habilite et DECLENCHE le round : jarvis.py activer --agent <X> --session <Y> --mission '...'",
+          "INTERDIT pour Stark : jarvis.py activer EN TANT QUE STARK, envoyer --vers <agent-direct>, lire l inbox d un autre agent",
+          "L agent active lit sa fiche + ses corrections, execute, puis renvoie son bilan a JARVIS",
           "JARVIS fait le bilan et l envoie a Stark (--vers stark)",
           "Stark reprend le controle"
         ],

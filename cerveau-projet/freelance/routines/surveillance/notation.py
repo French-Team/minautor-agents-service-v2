@@ -1,5 +1,7 @@
 # -*- coding: ascii -*-
-# routine : evaluer-agents -- depose une demande d'evaluation pour EDITH
+# routine : notation -- depose une demande d'evaluation periodique des
+# agents (ex-evaluer-agents, renommee 2026-08-26 : nom simple qui
+# exprime ce qu'elle est).
 import json
 import os
 import sys
@@ -87,12 +89,14 @@ def main():
         "id": str(uuid.uuid4())[:8],
         "de": "edith", "vers": "jarvis", "priorite": 2,
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
-        "objet": "[EDITH-EVALUATION] cycle periodique d'evaluation des agents",
+        "objet": "[EDITH-EVALUATION] demande activation EDITH : cycle "
+                  "periodique d'evaluation des agents",
         "corps": (
-            "Routine 10 min (protocole 17). EDITH est demandee en "
-            "evaluation : appliquer le QUESTIONNAIRE STANDARD aux agents "
-            "actifs depuis la derniere passe et transmettre le rapport "
-            "des changements proposes a JARVIS pour application via "
+            "DEMANDE D'ACTIVATION EDITH (protocole 17, routine 5 min - "
+            "manifest 300s, reduite pour les essais 2026-08-26). EDITH doit etre "
+            "activee pour poser le "
+            "QUESTIONNAIRE STANDARD aux agents actifs, attribuer les +/- "
+            "et transmettre son rapport a JARVIS pour application via "
             "rating-agents.\nObservations recentes du serveur : "
             + ", ".join(observations_recentes())
         ),
@@ -113,7 +117,10 @@ def main():
             if str(p) not in sys.path:
                 sys.path.insert(0, str(p))
         from historique import historiser
-        historiser("edith",
+        # trace sous le nom de la routine notation (decision utilisateur
+        # 2026-08-26 : les routines sont des elements surveilles avec
+        # LEUR propre nom/grade - la couleur rouge G4 s'affiche).
+        historiser("notation",
                    "Depose demande d'evaluation periodique des agents",
                    "R", session="session-freelance")
     except Exception:

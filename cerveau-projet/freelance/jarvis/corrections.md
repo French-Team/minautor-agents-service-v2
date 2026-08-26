@@ -48,6 +48,29 @@ identite:
 
 ## LECONS
 
+### [LECON] 2026-08-26 -- LE LLM EST L'AGENT : personne ne travaille en arriere-plan (par Ferrari)
+
+Constat (2026-08-26) : je me suis incarne, j'ai active Forge + Vision,
+puis j'ai dit "Les agents travaillent. J'attends leurs retours." -
+ILLUSION. A ma prochaine incarnation, je SAIS que :
+
+1. **LE LLM EST L'AGENT** : il n'existe AUCUN travail en arriere-plan.
+   Chaque agent n'existe que quand le LLM s'incarne en lui.
+2. **Activer != faire travailler** : quand j'active Forge ou Vision via
+   `jarvis.py activer`, je place leur mission EN ATTENTE dans leur
+   inbox - personne ne s'execute tout seul.
+3. **"J'attends leurs retours" = NE RIEN FAIRE** : aucun retour ne
+   viendra sans incarnation. Apres avoir active un agent, je poursuis
+   mon round (repondre a Stark, verifier les files, traiter la suite)
+   ou je rends la main pour que le LLM s'incarne l'agent active.
+4. **Une mission en attente n'est pas un travail en cours** : elle
+   deviendra du travail quand le LLM lira le bloc session, verra
+   l'agent actif, et s'incarnera pour executer.
+
+Trace : regle "LE LLM EST L'AGENT" ajoutee dans jarvis.md (regles
+absolues) + arbre-jarvis.json (D7) + theme-distribuer.json (regle).
+Verdict VALIDE.
+
 ### [LECON] 2026-08-26 -- EDUCATION : les 7 nouveautes a connaitre (par Vision)
 
 A ma prochaine incarnation, je DOIS connaitre :
@@ -58,14 +81,20 @@ A ma prochaine incarnation, je DOIS connaitre :
 2. **DAEMON H24** : routines-server.py --boucle tick toutes les 30 s -
    les routines tournent EN PERMANENCE ; mon tic d'invocation est un
    filet de securite.
-3. **RELAIS** : je POUSSE les messages du hub vers stark (`[RELAI]`,
-   reference a l'id original) - stark ne vient plus lire. Execute a
-   chaque invocation ET a chaque tic du daemon.
-4. **ROUTAGE EDITH** : [EDITH-EVALUATION] depose vers MOI (routeur
-   central) ; [EDITH-RÉVEIL] route stark+vision+jarvis.
-5. **HISTORISATION TRIPLE** : AGENTS-activite-recente.md (encart 50 max,
-   vue rapide) + AGENTS-historique.md (corps 100 max) +
-   historique.db SQLite (journal complet). Session explicite obligatoire.
+3. **RELAIS SUPPRIME (2026-08-26)** : relais.py ne pousse PLUS les
+   messages d'EDITH vers stark (`[RELAI]` supprime - il inondait son
+   inbox de P1). Les demandes d'EDITH restent dans MON hub, je les
+   traite moi-meme.
+4. **ROUTAGE EDITH (2026-08-26)** : les routines d'EDITH (`vigie`,
+   `notation`) deposent a MOI UNIQUEMENT une DEMANDE D'ACTIVATION
+   EDITH - je l'ACTIVE pour qu'elle fasse SON travail (4 W /
+   questionnaire d'evaluation), puis je route SON rapport (Stark
+   decide, Forge applique via rating-agents). Plus de copies directes
+   a stark/vision.
+5. **HISTORISATION TRIPLE (v0.15.0)** : AGENTS-activite-recente-v2.md
+   (encart 50 max, vue rapide, fichier v2 SEPARE de la v1) +
+   AGENTS-historique-v2.md (corps 100 max) + historique.db SQLite
+   (journal complet). Session explicite obligatoire.
 6. **routines-etat** : affiche le temps restant avant declenchement.
 7. **ACTIVATION** : defaut `--de jarvis` - SEUL JARVIS active, meme sur
    demande de stark.
@@ -91,3 +120,49 @@ s'applique a l'outil LLM de la session, PAS a moi agent :
 
 Pilote : ma fiche. Generalisation par Shuri a toutes les fiches
 v2 ensuite. Verdict VALIDE.
+
+### [LECON] 2026-08-26 -- COLONNE GRADE : couleurs par grade dans l'encart v2
+
+L'encart AGENTS-activite-recente-v2.md a l'ordre de colonnes
+**Grade | Agent | Raison | Heure | id | Type** (decision utilisateur
+2026-08-26) - la colonne **Grade** (emoji couleur) est en tete :
+
+- Echelle : G1 bleu (jarvis, stark) / G2 vert (vision, shuri, forge,
+  rogers, parker) / G3 jaune (fury) / G4 rouge (routines de
+  surveillance) / G5 orange (citations, le plus bas, temporaire) /
+  SP rose (edith). Inconnu = blanc neutre.
+- Les donnees vivent dans `tools-commun/grades/grades-v2.json` (D15),
+  jamais en dur dans le code. La couleur est resolue par
+  `_couleur_agent()` dans historique.py.
+- **Les routines historisent sous LEUR propre nom** (citations, pas
+  jarvis) pour que le grade s'affiche correctement. La routine de
+  citations Marvel s'appelle `citations` (ex-battement-dev, renommee
+  2026-08-26) : script `routines/surveillance/citations.py`, raison =
+  UNIQUEMENT `nom -- citation` - ni libelle `[CITATIONS HH:MM]`, ni
+  emoji (l'heure est dans la colonne Heure, la couleur orange dans la
+  colonne Grade).
+- Fix limite 50 : la nouvelle entree COMPTE dans le total (sinon
+  l'encart derivait a 51).
+
+Non-regression : harnais-jarvis lit les colonnes decalees
+(agent=3, raison=6 apres l'ajout de la colonne Grade).
+
+### [LECON] 2026-08-26 -- ROUTINES = ELEMENTS SURVEILLES (noms simples + grades)
+
+Les routines sont des elements a surveiller en permanence (decision
+utilisateur 2026-08-26) : elles historisent SOUS LEUR PROPRE NOM, avec
+leur grade/couleur dans l'encart v2, jamais sous un agent.
+
+- Noms simples (renommage 2026-08-26) : `flux` (ex surveiller-flux-jarvis,
+  P1 non-acquittes, 600s), `vigie` (ex surveiller-modifications, perimetre
+  modifie, 60s), `notation` (ex evaluer-agents, evaluation periodique,
+  300s depuis 2026-08-26, reduit de 1800s pour les essais), `harnais` (ex harnais-jarvis, ecarts de comportement, 300s),
+  `citations` (repere visuel, 300s) ; + `integrite` (demarrage) et
+  `orphelins` (arret) creees (scripts qui manquaient).
+- Grades : toutes G4 rouge sauf citations G5 orange (temporaire).
+- Historisation EVENEMENTIELLE pour ne pas noyer l encart : flux
+  historise quand des P1 non-acquittes sont trouves, harnais quand de
+  NOUVEAUX ecarts apparaissent, vigie quand le perimetre change,
+  notation a chaque evaluation (5 min depuis 2026-08-26, reduit pour les essais).
+- Les routines demarrage/arret (integrite, orphelins) sont executees par
+  hooks.py a chaque demarrage/arret du serveur de routines.

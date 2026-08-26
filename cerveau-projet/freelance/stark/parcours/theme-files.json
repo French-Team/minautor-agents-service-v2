@@ -13,7 +13,8 @@
         "besoin": "[urgent] en tete du message : mission PRIORITAIRE (traitement immediat / file prioritaire)",
         "action": "procedure",
         "etapes": ["Retirer le prefixe [urgent] pour formuler la mission clairement",
-                   "Transmettre A JARVIS avec priorite 1 (bloquante) : jarvis.py envoyer --de stark --vers jarvis --priorite 1 --objet '[URGENT] ...' --corps '...' --activer",
+                   "Transmettre A JARVIS avec priorite 1 : jarvis.py envoyer --de stark --vers jarvis --priorite 1 --objet '[URGENT] ...' --corps '...' (SANS --activer : ce flag n'activerait QUE JARVIS, jamais l'agent final - piege lecon 2026-08-25)",
+                   "INCARNER JARVIS pour traiter : jarvis.py lire (inbox jarvis) puis acquitter, puis DECLENCHER le round vers l'agent habilite : jarvis.py activer --agent <X> --session <Y> --mission '...'",
                    "Si la mission doit attendre malgre tout : jarvis.py mettre-en-attente --mission '...' --niveau urgent (= PRIORITAIRE)",
                    "Verifier la reprise : jarvis.py reprendre prend PRIORITAIRE d'abord"],
         "regle": "[urgent] = priorite 1 + file PRIORITAIRE. Jamais ignorer le prefixe."

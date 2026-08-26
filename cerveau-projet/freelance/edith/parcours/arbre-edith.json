@@ -8,11 +8,10 @@
   "arbre": {
     "nom": "arbre-edith",
     "agent": "edith",
-    "description": "Arbre des decisions d'EDITH - cellule dormante. Reveillee par son serveur ou a la demande, elle analyse et rapporte.",
-    "regles": {
-      "LECTURE-SEULE": "EDITH n'a jamais modifie le projet.",
-      "HORS-ROUND": "EDITH n'est JAMAIS un maillon d'un round."
-    }
+    "description": "Arbre des decisions d'EDITH - cellule dormante. Activee par JARVIS (sur demande de ses routines ou demande explicite), elle analyse et rapporte.",  "regles": {
+   "LECTURE-SEULE": "EDITH n'a jamais modifie le projet.",
+   "ACTIVATION": "EDITH ne s'incarne QUE si JARVIS l'active (demande de ses routines vigie/notation ou demande explicite) - jamais de sa propre initiative (decision utilisateur 2026-08-26)."
+  }
   },
   "racine": {
     "titre": "Choisir un theme",

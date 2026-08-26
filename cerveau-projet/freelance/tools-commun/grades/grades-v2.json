@@ -1,0 +1,67 @@
+{
+ "version": "0.1.0",
+ "description": "Grades et couleurs des agents et routines v2 (D15, decision utilisateur 2026-08-26) - alimente la colonne Grade de l'encart AGENTS-activite-recente-v2.md. Haut de grade = bleu/vert, bas de grade = rouge/orange. EDITH = rose (couleur signature de l'observatrice). Routines sous les agents : surveillance = rouge, dev = orange (le plus bas).",
+ "echelle": [
+  {
+   "grade": "G1",
+   "nom": "Bleu",
+   "emoji": "🔵",
+   "description": "Noyau du systeme - JARVIS, Stark"
+  },
+  {
+   "grade": "G2",
+   "nom": "Vert",
+   "emoji": "🟢",
+   "description": "Agents d'action - Vision, Forge, Shuri, Rogers, Parker"
+  },
+  {
+   "grade": "G3",
+   "nom": "Jaune",
+   "emoji": "🟡",
+   "description": "Agent de test hors-round - Fury"
+  },
+  {
+   "grade": "G4",
+   "nom": "Rouge",
+   "emoji": "🔴",
+   "description": "Routines de surveillance (grade moyen-bas)"
+  },
+  {
+   "grade": "G5",
+   "nom": "Orange",
+   "emoji": "🟠",
+   "description": "Routines temporaires de dev - citations (le plus bas, desactivee en fin de dev)"
+  },
+  {
+   "grade": "SP",
+   "nom": "Rose",
+   "emoji": "🌸",
+   "description": "EDITH - observatrice, cellule dormante (couleur signature)"
+  }
+ ],
+ "agents": {
+  "jarvis": "G1",
+  "stark": "G1",
+  "vision": "G2",
+  "shuri": "G2",
+  "forge": "G2",
+  "rogers": "G2",
+  "parker": "G2",
+  "fury": "G3",
+  "edith": "SP"
+ },
+ "routines": {
+  "citations": "G5",
+  "vigie": "G4",
+  "flux": "G4",
+  "notation": "G4",
+  "harnais": "G4",
+  "integrite": "G4",
+  "orphelins": "G4"
+ },
+ "defaut": {
+  "grade": "?",
+  "nom": "Inconnu",
+  "emoji": "⚪"
+ }
+}

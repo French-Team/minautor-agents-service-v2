@@ -8,7 +8,11 @@ identite:
 
 > Ce fichier est mis a jour dynamiquement par les agents principaux.
 > Chaque session LLM (session-admin, session-freelance...) possede son bloc dedie et son agent principal.
-> L'historique complet est dans [AGENTS-historique.md](AGENTS-historique.md).
+> L'historique complet est dans [AGENTS-historique.md](AGENTS-historique.md) (v1 / session-admin)
+> et [AGENTS-historique-v2.md](AGENTS-historique-v2.md) (v2 / session-freelance) - fichiers
+> SEPARES par session (decision 2026-08-26 : la v2 est l evolution de la v1, chaque session
+> a SES fichiers avec SON format). Vue rapide : [AGENTS-activite-recente.md](AGENTS-activite-recente.md)
+> (v1) + [AGENTS-activite-recente-v2.md](AGENTS-activite-recente-v2.md) (v2).
 
 ---
 
@@ -19,39 +23,39 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | glm5 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-25 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | cerberus (retour de mission) |
-| **Raison** | Nettoyage termine. Retour a Cerberus. Commit 254 fichiers fait. |
+| **Nom Agent** | ferrari |
+| **Role Agent** | Agent v1 specialise freelance -- corrige et modifie le dossier v2 (conventions v2) |
+| **Derniere mise a jour** | 2026-08-26 |
+| **Fiche** | [cerveau-projet/agents/ferrari/ferrari.md](cerveau-projet/agents/ferrari/ferrari.md) |
+| **Corrections** | [cerveau-projet/agents/ferrari/corrections.md](cerveau-projet/agents/ferrari/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | REPRISE FERRARI (mode persistant) : la regle FIN DE CYCLE est corrigee (2026-08-26) - je reste actif apres chaque mission, bilan a l'utilisateur, je ne reactive Cerberus QUE sur 'fin de cycle' explicite de l'utilisateur. Relis TA fiche puis TES corrections, puis attends la demande de l'utilisateur. |
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
+python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
+  cerveau-projet/agents/ferrari/parcours/parcours-ferrari.json --case c0
+(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
+a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
+ensuite les branches case par case ; si tu reprends apres une interruption,
+reprends a la case courante avec --case <cid> --reponses '<reponse>').
 ### Session : session-freelance
 
 | Champ | Valeur |
 | --- | --- |
 | **Nom LLM** | freebuff |
-| **Nom Agent** | stark |
-| **Role Agent** | Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation |
-| **Derniere mise a jour** | 2026-08-24 |
-| **Fiche** | [cerveau-projet/freelance/stark/stark.md](cerveau-projet/freelance/stark/stark.md) |
-| **Corrections** | [cerveau-projet/freelance/stark/corrections.md](cerveau-projet/freelance/stark/corrections.md) |
+| **Nom Agent** | vision |
+| **Role Agent** | Gardien exclusif de JARVIS (agent + serveur MCP) -- mode conversation |
+| **Derniere mise a jour** | 2026-08-26 |
+| **Fiche** | [cerveau-projet/freelance/vision/vision.md](cerveau-projet/freelance/vision/vision.md) |
+| **Corrections** | [cerveau-projet/freelance/vision/corrections.md](cerveau-projet/freelance/vision/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | Relais de jarvis: [CLOTURE] Reformulation activation terminee - controle rendu |
-
-DEMARRAGE V2 (agents freelance) : relis ta fiche puis tes corrections.
-Pour toute action, suis TON arbre des decisions :
-  cerveau-projet/freelance/stark/parcours/arbre-stark.json
-(themes : JARVIS -- point d'entree OBLIGATOIRE pour toute mission / LIRE / EXPLORER)
-REGLE V2 : les agents freelance n'utilisent PAS les outils v1
-(guider-parcours, activer-agent-principal) -- JARVIS les remplace :
-tout passe par jarvis.py (envoyer/lire/acquitter/lister/activer).
+| **Raison** | Active par jarvis: CORRIGER LE RELAIS JARVIS : quand Stark envoie une mission a JARVIS (envoyer --vers jarvis), le relais (fonctions/relais.py) attrape le message dans le hub, le marque lu et le RENVOIE A STARK avec prefixe [RELAI] au lieu de le laisser a JARVIS pour traitement. Preuve : outbox/jarvis.jsonl 17:21:47 '[RELAI] Mission Forge: reformater le message DEV-BATTEMENT' vers stark; harnais-jarvis 17:30:49 6 ecarts ERR. CAUSE RACINE : relais.py filtre 'vers==jarvis, de!=jarvis, type!=activation' -> attrape AUSSI les missions de Stark et les boucle vers Stark. Le relais etait cree pour les demandes EDITH. CORRECTION : filtrer de=='edith' (ou type observation/evaluation/reveil) pour ne relayer QUE les demandes EDITH, laisser les missions de Stark dans le hub pour que JARVIS les traite. NON-REGRESSION : harnais-jarvis verifier = 0 ecart. Bilan a stark. | phrase [DEV-BATTEMENT HH:MM]' -- Le nom du heros en premier, puis la citation, puis la balise derriere. Source : demande utilisateur via Stark. ID precedent : a5c435e0. | phrase [DEV-BATTEMENT HH:MM]' -- Le nom du heros en premier, puis la citation, puis la balise derriere. Source : demande utilisateur via Stark. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-admin | glm5 | Cerberus | 2026-08-25 18:32:19.082587 |
-| session-freelance | freebuff | stark | 2026-08-24 19:52:52.328436 |
+| session-freelance | freebuff | stark | 2026-08-26 20:31:14.252 |
+| session-admin | glm5 | ferrari | 2026-08-26 21:11:10.582 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -106,6 +110,14 @@ si aucun nom de session n'est fourni).
 5. L'agent prend le relais
 6. **L'agent lit SA fiche et SES corrections** avant de commencer sa mission
 
+### Oracle -- Hub de coordination v1 (session-admin)
+
+> Oracle est l'equivalent de JARVIS pour la session-admin. Il route les
+> messages (inbox/outbox), historise les actions, et gere les agents v1.
+> Lancement : `python3 cerveau-projet/agents/tools/oracle/oracle.py demarrage`
+> Commandes : envoyer, lire, acquitter, lister, historiser, activer, status
+> En session freelance, JARVIS joue ce role.
+
 ### Fin de mission (la fin suit SA carte)
 
 1. L'agent termine sa mission
@@ -153,13 +165,15 @@ si aucun nom de session n'est fourni).
 | [Socrate](cerveau-projet/agents/socrate/socrate.md) | cerveau-projet/agents/socrate/ | Conversateur de revision strategique | Disponible (en attente) | Discute des revisions, priorise, produit une liste de missions pour Cerberus |
 | [Redacteur-v2](cerveau-projet/agents/redacteur-v2/redacteur-v2.md) | cerveau-projet/agents/redacteur-v2/ | Redacteur PRO des docs de la v2 (freelance) | Disponible (en attente) | Agent dedie a la redaction des docs v2 - MODE CONVERSATION (reactive Cerberus sur fin de cycle) |
 | [Hades](cerveau-projet/agents/hades/hades.md) | cerveau-projet/agents/hades/ | Gardien des archives git | Disponible (en attente) | SEUL habilite aux commandes git - regle d anciennete : checkout interdit hors fichiers tres recents |
-| [Mecano](cerveau-projet/agents/ferrari/ferrari.md) | cerveau-projet/agents/ferrari/ | Agent v1 specialise freelance | Disponible (en attente) | Corrige/modifie le dossier freelance/ (conventions v2) -- DOUBLE IDENTITE v1/v2 |
+
 
 ### Agents v2 (freelance)
 
-> **REGLE V2 (independance)** : les agents freelance n'utilisent PAS les
-> outils v1 (`guider-parcours`, `activer-agent-principal`) -- JARVIS les
-> remplace. Demarrage : relire SA fiche puis SES corrections, puis suivre
+> **REGLE V2 (PERIMETRE WRITE)** : les agents freelance n'ecrivent QUE dans
+> `cerveau-projet/freelance/`. Tout outil - v1 OU v2 - qui ecrirait hors de
+> ce perimetre est interdit (ex: `activer-agent-principal` ecrit dans
+> AGENTS.md et le classeur v1 ; `guider-parcours` guide vers des parcours
+> v1). Demarrage : relire SA fiche puis SES corrections, puis suivre
 > SON arbre des decisions `cerveau-projet/freelance/<agent>/parcours/arbre-<agent>.json`.
 > Toute communication/activation passe par jarvis.py (envoyer/lire/acquitter/lister/activer).
 > **EXCLUSIVITE JARVIS** : Vision est le SEUL agent habilite a modifier JARVIS
@@ -176,7 +190,7 @@ si aucun nom de session n'est fourni).
 | [JARVIS](cerveau-projet/freelance/jarvis/jarvis.md) | cerveau-projet/freelance/jarvis/ | Intelligence derriere le serveur, assistant de Stark | Disponible (en attente) | JARVIS - transforme les demandes de Stark en missions precise - MODE CONVERSATION |
 | [Vision](cerveau-projet/freelance/vision/vision.md) | cerveau-projet/freelance/vision/ | Gardien exclusif de JARVIS (agent + server MCP) | Disponible (en attente) | Synthezoide ne de JARVIS - SEUL habilite a modifier jarvis.py / jarvis-server.py / l'agent JARVIS - MODE CONVERSATION |
 | [Fury](cerveau-projet/freelance/fury/fury.md) | cerveau-projet/freelance/fury/ | Testeur reel HORS-ROUND | Disponible (en attente) | Directeur SHIELD - prend la place de l'utilisateur pour tester des rounds reels - JAMAIS dans un round - MODE CONVERSATION |
-| [EDITH](cerveau-projet/freelance/edith/edith.md) | cerveau-projet/freelance/edith/ | Observatrice -- cellule dormante | Dormante (reveil par son serveur ou sur demande) | Voit tout - analyse les observations de son serveur H24 et rapporte les 4 W - LECTURE SEULE - JAMAIS dans un round |
+| [EDITH](cerveau-projet/freelance/edith/edith.md) | cerveau-projet/freelance/edith/ | Observatrice -- cellule dormante | Dormante (activee par JARVIS sur demande de ses routines vigie/notation ou demande explicite) | Voit tout - analyse les observations de son serveur H24 et rapporte les 4 W - LECTURE SEULE - jamais de sa propre initiative |
 
 ---
 

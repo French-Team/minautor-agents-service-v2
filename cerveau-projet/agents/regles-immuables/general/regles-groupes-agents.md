@@ -23,9 +23,10 @@ appartient au cerveau-projet, pas au trio).
 
 ### Groupe 1 -- Coordination
 
-| Agent | Role |
+| Agent/Outil | Role |
 |---|---|
 | **Cerberus** | Coordonne : analyse les besoins, choisit et active le bon agent, gere les activations (AGENTS.md) |
+| **Oracle** | Hub de communication v1 : route les messages (inbox/outbox), historise les actions, gere les agents. Session-admin uniquement. Equivaut a JARVIS (v2) |
 
 ### Groupe 2 -- Cerveau-projet (gestion du dossier `cerveau-projet/` lui-meme)
 

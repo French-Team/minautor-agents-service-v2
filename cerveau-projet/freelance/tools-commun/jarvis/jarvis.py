@@ -6,7 +6,7 @@ JARVIS -- Outil de communication inter-agents (v2 freelance)
 POINT D'ENTREE UNIQUEMENT (protocole 14) : parsing CLI + dispatch.
 Toute la logique vit dans fonctions/ (une tache par module) :
     core.py         primitives (chemins, JSONL, agents D15)
-    historique.py   ecriture AGENTS-historique.md
+    historique.py   ecriture AGENTS-historique-v2.md (fichier v2 separe)
     messages.py     envoyer / lire / recu / acquitter / lister / bloques
     activations.py  activer + maj bloc session AGENTS.md
     files.py        files d'attente + stop-dev (protocole 13 v2)
@@ -158,12 +158,12 @@ def construire_parser():
         "demarrage",
         help="Chaine de demarrage : tic routines + DEFCON + files + operationnel")
     p_dem.add_argument("--session", default="session-freelance",
-                       help="Session (encart AGENTS-historique cible)")
+                       help="Session (encart AGENTS-historique-v2 cible)")
     p_arr = subparsers.add_parser(
         "arret",
         help="Extinction propre : resume de session + historisation")
     p_arr.add_argument("--session", default="session-freelance",
-                       help="Session (encart AGENTS-historique cible)")
+                       help="Session (encart AGENTS-historique-v2 cible)")
 
     # verifier-coherence (mecanisme de validation automatique 2026-08-25)
     subparsers.add_parser(

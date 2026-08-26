@@ -124,7 +124,7 @@ cette chaine commet la violation la plus grave du projet.
 | **REACTIVER = Cerberus** | `reactiver` va toujours vers le principal de session (Cerberus). Pour aller vers un autre agent, utiliser `activer`. |
 | **JARVIS = seul canal** | Aucun agent ne communique directement vers un autre. Tout passe par JARVIS. **Rien ne passe sans JARVIS.** |
 | **Autonomie v2** | La v2 n'utilise AUCUN outil v1. Ses propres outils dans tools-commun/ et <agent>/tools/. |
-| **Interdiction v1** | Aucun agent freelance ne modifier JAMAIS les outils v1 (cerveau-projet/agents/tools/). Seul Stark est dans activer-agent-principal. Les autres agents sont actives par Stark via JARVIS. |
+| **PERIMETRE WRITE** | Aucun agent freelance n'ecrit JAMAIS hors de `cerveau-projet/freelance/` (ex: activer-agent-principal ecrit dans AGENTS.md et le classeur v1 - interdit). Aucune modification des outils v1 (`cerveau-projet/agents/tools/`). Seul Stark est dans activer-agent-principal. Les autres agents sont actives par Stark via JARVIS. |
 | **PAS DE PARCOURS V1** | Les parcours V1 (parcours-*.json lineaires) sont INTERDITS pour les agents freelance. Chaque agent a un ARBRE DES DECISIONS (arbre-*.json + theme-*.json + fins.json). |
 
 ---

@@ -13,7 +13,8 @@
       "D1": "Chaque branche (thème) mène à des catégories, qui mènent aux cases d'exécution.",
       "D5": "Les cases d'un thème sont des REDIRECTIONS.",
       "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
-      "EXCLU": "SEUL Vision modifie JARVIS (freelance/jarvis/ + tools-commun/jarvis/)."
+      "EXCLU": "SEUL Vision modifie JARVIS (freelance/jarvis/ + tools-commun/jarvis/).",
+      "D7": "RELECTURE HONNETE (2026-08-26) : au demarrage, je me demande 'As-tu EN MEMOIRE ma fiche et mes corrections ?' - je reponds la VERITE. INCERTAIN ou NON -> je RELIS avant de continuer. Seul OUI prouve la memorisation ; dire OUI sans avoir lu = trahir l'incarnation."
     }
   },
   "racine": {

@@ -183,7 +183,7 @@ cerveau-projet/freelance/<agent>/
 
 | Interdiction | Raison |
 |---|---|
-| **PAS de modification des outils v1** | La v2 est autonome. Aucun agent freelance ne touche a cerveau-projet/agents/tools/. |
+| **PERIMETRE WRITE** | Je n'ecris QUE dans `cerveau-projet/freelance/`. Tout outil - v1 OU v2 - qui ecrirait hors de ce perimetre est interdit (ex: activer-agent-principal, guider-parcours ecrivent dans AGENTS.md / classeur v1 / parcours v1). La v2 est autonome : aucun agent freelance ne touche a `cerveau-projet/agents/tools/`. |
 | **PAS de parcours lineaire** | Les parcours-*.json (cases c0→c8) sont INTERDITS. Chaque agent a un ARBRE DES DECISIONS. |
 | **PAS d'enregistrement dans activer-agent-principal** | Seul Stark est dans l'outil v1. Les autres agents sont actives par Stark via JARVIS. |
 | **MOTS-CLES minimum 5** | Chaque fichier v2 doit avoir au minimum 5 mots-cles dans son frontmatter. Pas d'exception. |

@@ -28,6 +28,10 @@ Invariants verifies :
      signale le manque (KO sur copie = le garde-fou fonctionne)
   8. Normes : ASCII 0 + LF pur (py, sh, md de l outil + ce test)
 
+EXEMPTIONS (points 4/5) : stark (agent v2, fiche sous freelance/, non couvert
+par l extraction v1 d AGENTS.md) et ferrari (agent CONFIDENTIEL, seul Cerberus
+le connait, absent volontairement d AGENTS.md par decision utilisateur).
+
 Usage:
   python3 test-092-parite-agents-activation.py
 Tags: registre-traces, garde-fou-agent, anti-recurrence, garde-fou
@@ -143,6 +147,15 @@ ACTIVER_SH = os.path.join(ACTIVER_DIR, "activer-agent-principal.sh")
 ACTIVER_MD = os.path.join(ACTIVER_DIR, "activer-agent-principal.md")
 AGENTS_MD = os.path.join(PROJECT_ROOT, "AGENTS.md")
 
+# EXEMPTIONS (agents volontairement absents d AGENTS.md, points 4/5) :
+#   - stark : agent v2 (freelance) -- present dans le dictionnaire pour activer
+#     la session-freelance, mais sa fiche est sous cerveau-projet/freelance/,
+#     non couverte par l extraction v1 d AGENTS.md (KO preexistant documente).
+#   - ferrari : agent CONFIDENTIEL (decision utilisateur 2026-08-25) -- seul
+#     Cerberus le connait, volontairement INVISIBLE des agents v2, donc absent
+#     d AGENTS.md par conception (inactivable autrement).
+EXEMPTIONS_MORTS = {"stark", "ferrari"}
+
 # Liste attendue (source de verite = liens AGENTS.md). Ce n est PAS un pin
 # dur : le test extrait les agents depuis AGENTS.md et compare aux outils.
 # Cette liste sert de garde-fou minimal (si AGENTS.md etait vide ou corrompu,
@@ -245,7 +258,7 @@ def main():
             t = time.monotonic()
             agents_md = extraire_agents_md(AGENTS_MD)
             agents_py = extraire_agents_py(ACTIVER_PY)
-            morts = sorted(agents_py - agents_md)
+            morts = sorted((agents_py - agents_md) - EXEMPTIONS_MORTS)
             verifier(
                 "4. .py : aucun agent mort (dictionnaire hors AGENTS.md)",
                 len(morts) == 0,
@@ -257,7 +270,7 @@ def main():
             t = time.monotonic()
             agents_md = extraire_agents_md(AGENTS_MD)
             agents_sh = extraire_agents_sh(ACTIVER_SH)
-            morts = sorted(agents_sh - agents_md)
+            morts = sorted((agents_sh - agents_md) - EXEMPTIONS_MORTS)
             verifier(
                 "5. .sh : aucun agent mort (case statements hors AGENTS.md)",
                 len(morts) == 0,

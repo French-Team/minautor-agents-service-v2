@@ -285,3 +285,13 @@ Controle de la mission mermaid. 3 enseignements :
 3. LA DIFFERENCE ARBRE v2 vs CARTE v1 EST UNE EDUCATION A PART ENTIERE : les agents v2 ont arbre-<agent>.json (racine -> theme-*.json -> fins.json) PAS parcours-<agent>.json (cases) - le parcours de l'agent eduque doit le rappeler explicitement dans ses indices.
 
 **Preuves** : rapport education-atlas-arbres-v2-2026-08-24.md, valider-cartes-decision --agent atlas CONFORME (v0.5.7), navigation c1 -> c35, dossier vues-v2-2026-08-24/ 19 liens OK, test-101 11/11, ASCII 0/0.
+## [LECON] 2026-08-25 -- EDUCATION CERBERUS -> FERRARI : VALIDEE (Chiron)
+
+Mission : eduquer Cerberus a l utilisation de ferrari (Mecano, agent v1 specialise freelance, double identite v1/v2). Diagnostic : Cerberus structurellement CONFORME mais PEDAGOGIQUEMENT NON PREPARE - ferrari absent de la fiche (table Agents disponibles), de regles-choisir-agent, et des parcours. Corrections proposees a Buffy (inter-round, verrou habilitation) : fiche cerberus.md (ligne ferrari + REGLE voie freelance v1 vs v2, bump 0.2.1 -> 0.2.2) + regles-choisir-agent.md (ligne ferrari). Aucun changement de parcours : le flux d activation generique c8 -> c10 couvre ferrari une fois connu. Verifie : ASCII 0/0, LF pur, verifier-conformite-fiche cerberus CONFORME.
+
+Lecons :
+1. UNE EDUCATION DE COORDINATEUR SE JOUE DANS LA FICHE + LA MATRICE CHOISIR-AGENT, PAS DANS LE PARCOURS : contrairement aux agents d execution (Atlas a besoin d une branche de carte pour une nouvelle capacite), Cerberus choisit via sa table 'Agents disponibles' et regles-choisir-agent - l education d un agent de coordination est une AFFAIRE DE CONNAISSANCE (fiche), pas de ROUTAGE (carte).
+2. LE CONTENU PEDAGOGIQUE D UN AGENT DOIT INCLURE LA VOIE ALTERNATIVE (v1 vs v2) : enseigner ferrari impose d enseigner la DISTINCTION voie v1 (ferrari, session-admin) vs voie v2 (agents MARVEL via JARVIS) - sinon Cerberus routerait les missions freelance vers les mauvais agents.
+3. CONTRADICTION RESOLUE (decision utilisateur 2026-08-25) : ferrari liste 'Corriger JARVIS' et c est NORMAL - Vision corrige JARVIS dans le fonctionnement normal de la v2 (session-freelance), ferrari est la COUCHE SUPERIEURE (session-admin) qui intervient sur N IMPORTE QUEL fichier de freelance/. CONFIDENTIALITE : ferrari est INVISIBLE des agents v2 (absent des docs freelance/ et d AGENTS.md), SEUL Cerberus le connait.
+
+**Preuves** : rapport education-cerberus-ferrari-2026-08-25.md, corrections buffy (inter-round), grep ferrari present dans cerberus.md (l.224, 228) + regles-choisir-agent.md (l.35), ASCII 0/0, fiche cerberus CONFORME v0.2.2.

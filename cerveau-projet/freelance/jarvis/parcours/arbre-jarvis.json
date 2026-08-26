@@ -13,7 +13,8 @@
       "D1": "Chaque branche (theme) menent a des categories, qui menent aux cases d'execution.",
       "D5": "Les cases d'un theme sont des REDIRECTIONS.",
       "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
-      "D3": "Les passages d'un fichier a l'autre sont TRANSPARENTS."
+      "D3": "Les passages d'un fichier a l'autre sont TRANSPARENTS.",
+      "D7": "LE LLM EST L'AGENT (2026-08-26) : activer un agent place une mission EN ATTENTE dans son inbox - personne ne travaille en arriere-plan. Le travail n'aura lieu que quand le LLM s'incarnera l'agent active. Activer != faire travailler. Jamais d'etat 'j'attends leurs retours' sans action : apres activation, je poursuis mon round ou je rends la main pour l'incarnation suivante."
     }
   },
   "racine": {

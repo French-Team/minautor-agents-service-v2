@@ -25,7 +25,9 @@ def combo_etat(besoin):
                 "agent_actif": agent.group(1).strip() if agent else "?",
                 "maj": date.group(1).strip() if date else "?",
             })
-    activite = dernieres_lignes("AGENTS-historique.md", 20)
+    # Corps v2 (decision 2026-08-26 : fichiers separes par session,
+    # la v2 lit AGENTS-historique-v2.md)
+    activite = dernieres_lignes("AGENTS-historique-v2.md", 20)
     bloques = []
     for nom in AGENTS_CONNUS:
         for msg in lire_jsonl(

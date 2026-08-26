@@ -1,206 +1,210 @@
 {
- "version": "0.1.0",
- "description": "Profils de tests de la non-regression, choisis automatiquement par les fichiers modifies (--fichiers) ou manuellement (--profil). Janus ne lance que les tests pertinents au lieu de la suite complete.",
- "profils": [
-  {
-   "nom": "cartes",
-   "description": "Parcours et cartes de decision (parcours-*.json, fiches agents, cases)",
-   "fichiers_detectes": [
-    "cerveau-projet/agents/*/parcours/*.json",
-    "cerveau-projet/agents/*/*.md"
-   ],
-   "tests": [
-    "test-006",
-    "test-009",
-    "test-010",
-    "test-011",
-    "test-012",
-    "test-013",
-    "test-014",
-    "test-015",
-    "test-016",
-    "test-017",
-    "test-018",
-    "test-019",
-    "test-020",
-    "test-021",
-    "test-026",
-    "test-033",
-    "test-034",
-    "test-048",
-    "test-055",
-    "test-058",
-    "test-070",
-    "test-071",
-    "test-072",
-    "test-073",
-    "test-074",
-    "test-075",
-    "test-080"
-   ]
-  },
-  {
-   "nom": "outils",
-   "description": "Outils du cerveau (tools/**/*.py, *.sh, combos, generateurs, catalogue)",
-   "fichiers_detectes": [
-    "cerveau-projet/agents/tools/",
-    "cerveau-projet/agents/tools/index-tools.md"
-   ],
-   "fichiers_exclus": [
-    "cerveau-projet/agents/tools/tester/tests/",
-    "cerveau-projet/agents/tools/tester/template-test.md",
-    "cerveau-projet/agents/tools/tester/tester-protections/",
-    "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/"
-   ],
-   "tests": [
-    "test-001",
-    "test-002",
-    "test-003",
-    "test-004",
-    "test-005",
-    "test-008",
-    "test-022",
-    "test-023",
-    "test-040",
-    "test-042",
-    "test-043",
-    "test-049",
-    "test-050",
-    "test-052",
-    "test-054",
-    "test-060",
-    "test-062",
-    "test-063",
-    "test-064",
-    "test-065",
-    "test-066",
-    "test-067",
-    "test-068",
-    "test-069",
-    "test-071",
-    "test-076",
-    "test-077",
-    "test-079",
-    "test-082",
-    "test-083",
-    "test-084",
-    "test-085",
-    "test-087",
-    "test-088",
-    "test-090",
-    "test-091",
-    "test-099"
-   ]
-  },
-  {
-   "nom": "tests",
-   "description": "La suite de non-regression elle-meme (tests, template-test, tester-protections, lanceur)",
-   "fichiers_detectes": [
-    "cerveau-projet/agents/tools/tester/tests/",
-    "cerveau-projet/agents/tools/tester/template-test.md",
-    "cerveau-projet/agents/tools/tester/tester-protections/",
-    "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/"
-   ],
-   "tests": [
-    "test-027",
-    "test-029",
-    "test-030",
-    "test-031",
-    "test-032",
-    "test-044",
-    "test-051",
-    "test-062",
-    "test-063",
-    "test-064",
-    "test-065",
-    "test-066",
-    "test-067",
-    "test-068",
-    "test-069",
-    "test-081",
-    "test-092",
-    "test-093",
-    "test-094",
-    "test-095",
-    "test-096",
-    "test-097",
-    "test-098",
-    "test-099"
-   ]
-  },
-  {
-   "nom": "fiches-agents",
-   "description": "Fiches et corrections des agents (AGENTS.md, AGENTS-historique.md, classeur)",
-   "fichiers_detectes": [
-    "AGENTS.md",
-    "AGENTS-historique.md",
-    "cerveau-projet/agents/classeur-variables/",
-    "cerveau-projet/agents/regles-immuables/"
-   ],
-   "tests": [
-    "test-001",
-    "test-013",
-    "test-016",
-    "test-018",
-    "test-019",
-    "test-020",
-    "test-021",
-    "test-025",
-    "test-033",
-    "test-034",
-    "test-037",
-    "test-048",
-    "test-055",
-    "test-058",
-    "test-059",
-    "test-078",
-    "test-089"
-   ]
-  },
-  {
-   "nom": "docs",
-   "description": "Documentation publique et dev (README.md, readme-dev.md, docs-dev-cerveau-projet)",
-   "fichiers_detectes": [
-    "README.md",
-    "cerveau-projet/readme-dev.md",
-    "cerveau-projet/docs-dev-cerveau-projet/"
-   ],
-   "tests": [
-    "test-007",
-    "test-028",
-    "test-038",
-    "test-039",
-    "test-040"
-   ]
-  },
-  {
-   "nom": "registre",
-   "description": "Traces, registres, verrous et garde-fous de gouvernance",
-   "fichiers_detectes": [
-    "cerveau-projet/agents/traces/",
-    "cerveau-projet/agents/hygie/snapshots/",
-    "cerveau-projet/agents/tools/proteger/"
-   ],
-   "tests": [
-    "test-024",
-    "test-025",
-    "test-027",
-    "test-031",
-    "test-035",
-    "test-036",
-    "test-037",
-    "test-039",
-    "test-041",
-    "test-045",
-    "test-046",
-    "test-047",
-    "test-051",
-    "test-056",
-    "test-057",
-    "test-061",
-    "test-078",
-    "test-090"
-   ]
-  }
- ]
+  "version": "0.1.0",
+  "description": "Profils de tests de la non-regression, choisis automatiquement par les fichiers modifies (--fichiers) ou manuellement (--profil). Janus ne lance que les tests pertinents au lieu de la suite complete.",
+  "profils": [
+    {
+      "nom": "cartes",
+      "description": "Parcours et cartes de decision (parcours-*.json, fiches agents, cases)",
+      "fichiers_detectes": [
+        "cerveau-projet/agents/*/parcours/*.json",
+        "cerveau-projet/agents/*/*.md"
+      ],
+      "tests": [
+        "test-006",
+        "test-009",
+        "test-010",
+        "test-011",
+        "test-012",
+        "test-013",
+        "test-014",
+        "test-015",
+        "test-016",
+        "test-017",
+        "test-018",
+        "test-019",
+        "test-020",
+        "test-021",
+        "test-026",
+        "test-033",
+        "test-034",
+        "test-048",
+        "test-055",
+        "test-058",
+        "test-070",
+        "test-071",
+        "test-072",
+        "test-073",
+        "test-074",
+        "test-075",
+        "test-080"
+      ]
+    },
+    {
+      "nom": "outils",
+      "description": "Outils du cerveau (tools/**/*.py, *.sh, combos, generateurs, catalogue)",
+      "fichiers_detectes": [
+        "cerveau-projet/agents/tools/",
+        "cerveau-projet/agents/tools/index-tools.md"
+      ],
+      "fichiers_exclus": [
+        "cerveau-projet/agents/tools/tester/tests/",
+        "cerveau-projet/agents/tools/tester/template-test.md",
+        "cerveau-projet/agents/tools/tester/tester-protections/",
+        "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/"
+      ],
+      "tests": [
+        "test-001",
+        "test-002",
+        "test-003",
+        "test-004",
+        "test-005",
+        "test-008",
+        "test-022",
+        "test-023",
+        "test-040",
+        "test-042",
+        "test-043",
+        "test-049",
+        "test-050",
+        "test-052",
+        "test-054",
+        "test-060",
+        "test-062",
+        "test-063",
+        "test-064",
+        "test-065",
+        "test-066",
+        "test-067",
+        "test-068",
+        "test-069",
+        "test-071",
+        "test-076",
+        "test-077",
+        "test-079",
+        "test-082",
+        "test-083",
+        "test-084",
+        "test-085",
+        "test-087",
+        "test-088",
+        "test-090",
+        "test-091",
+        "test-099",
+        "test-102",
+        "test-103"
+      ]
+    },
+    {
+      "nom": "tests",
+      "description": "La suite de non-regression elle-meme (tests, template-test, tester-protections, lanceur)",
+      "fichiers_detectes": [
+        "cerveau-projet/agents/tools/tester/tests/",
+        "cerveau-projet/agents/tools/tester/template-test.md",
+        "cerveau-projet/agents/tools/tester/tester-protections/",
+        "cerveau-projet/agents/tools/tester/tester-lancer-non-regression/"
+      ],
+      "tests": [
+        "test-027",
+        "test-029",
+        "test-030",
+        "test-031",
+        "test-032",
+        "test-044",
+        "test-051",
+        "test-062",
+        "test-063",
+        "test-064",
+        "test-065",
+        "test-066",
+        "test-067",
+        "test-068",
+        "test-069",
+        "test-081",
+        "test-092",
+        "test-093",
+        "test-094",
+        "test-095",
+        "test-096",
+        "test-097",
+        "test-098",
+        "test-099",
+        "test-102",
+        "test-103"
+      ]
+    },
+    {
+      "nom": "fiches-agents",
+      "description": "Fiches et corrections des agents (AGENTS.md, AGENTS-historique.md, classeur)",
+      "fichiers_detectes": [
+        "AGENTS.md",
+        "AGENTS-historique.md",
+        "cerveau-projet/agents/classeur-variables/",
+        "cerveau-projet/agents/regles-immuables/"
+      ],
+      "tests": [
+        "test-001",
+        "test-013",
+        "test-016",
+        "test-018",
+        "test-019",
+        "test-020",
+        "test-021",
+        "test-025",
+        "test-033",
+        "test-034",
+        "test-037",
+        "test-048",
+        "test-055",
+        "test-058",
+        "test-059",
+        "test-078",
+        "test-089"
+      ]
+    },
+    {
+      "nom": "docs",
+      "description": "Documentation publique et dev (README.md, readme-dev.md, docs-dev-cerveau-projet)",
+      "fichiers_detectes": [
+        "README.md",
+        "cerveau-projet/readme-dev.md",
+        "cerveau-projet/docs-dev-cerveau-projet/"
+      ],
+      "tests": [
+        "test-007",
+        "test-028",
+        "test-038",
+        "test-039",
+        "test-040"
+      ]
+    },
+    {
+      "nom": "registre",
+      "description": "Traces, registres, verrous et garde-fous de gouvernance",
+      "fichiers_detectes": [
+        "cerveau-projet/agents/traces/",
+        "cerveau-projet/agents/hygie/snapshots/",
+        "cerveau-projet/agents/tools/proteger/"
+      ],
+      "tests": [
+        "test-024",
+        "test-025",
+        "test-027",
+        "test-031",
+        "test-035",
+        "test-036",
+        "test-037",
+        "test-039",
+        "test-041",
+        "test-045",
+        "test-046",
+        "test-047",
+        "test-051",
+        "test-056",
+        "test-057",
+        "test-061",
+        "test-078",
+        "test-090"
+      ]
+    }
+  ]
 }

@@ -49,8 +49,12 @@ identite:
 > **REGLE ABSOLUE -- CAHIER DE DEV** : Je tiens a jour le cahier de dev
 > entre chaque intervention. Memoire de ce qui a deja ete fait.
 
-> **REGLE ABSOLUE -- FIN DE CYCLE** : FIN DE CYCLE -> je reactive Cerberus.
-> Je reste actif entre les interventions (mode persistant).
+> **REGLE ABSOLUE -- FIN DE CYCLE (mode persistant)** : je reste actif
+> entre les interventions. Apres chaque mission, je presente mon bilan a
+> l'utilisateur et j'attends sa prochaine demande. Je ne reactive Cerberus
+> QUE quand l'utilisateur dit explicitement 'fin de cycle'. La fin d'une
+> mission n'est PAS un fin de cycle : c'est le mot de l'utilisateur seul
+> qui declenche le retour a Cerberus.
 
 > **REGLE ABSOLUE -- PREUVE DE TRAVAIL** : Toute correction produit un
 > rapport dans `agents/ferrari/rapports/`.
@@ -78,7 +82,7 @@ identite:
 | Regle | Valeur |
 |---|---|
 | **Encodage** | ASCII strict + LF pur |
-| **Outils** | guider-parcours, activer-agent-principal, lire-fichier |
+| **Outils** | guider-parcours, activer-agent-principal, oracle, lire-fichier |
 | **Parcours** | Carte de decision lineaire |
 | **Activation** | Par Cerberus via activer-agent-principal |
 

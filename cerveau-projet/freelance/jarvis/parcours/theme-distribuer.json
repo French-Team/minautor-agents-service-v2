@@ -8,6 +8,7 @@
   "theme": {
     "nom": "DISTRIBUER",
     "but": "Envoyer la mission au bon agent au bon moment",
+    "regle": "LE LLM EST L'AGENT (2026-08-26) : envoyer une mission = la placer EN ATTENTE dans l'inbox de l'agent. Personne ne travaille en arriere-plan apres l'envoi. Je confirme a Stark l'envoi, je ne dis JAMAIS 'les agents travaillent, j'attends leurs retours' : j'enchaime sur la suite de mon round ou je rends la main pour que le LLM s'incarne l'agent active.",
     "redirects": [
       {
         "besoin": "Envoyer une mission a Shuri",

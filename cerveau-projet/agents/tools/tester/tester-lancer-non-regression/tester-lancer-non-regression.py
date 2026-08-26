@@ -92,7 +92,7 @@ SERIES = {
     "d": ["test-025", "test-027", "test-031", "test-036", "test-038", "test-039",
           "test-045", "test-046", "test-047", "test-051", "test-061",
           "test-097"],
-    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057", "test-065", "test-066", "test-087", "test-088", "test-089", "test-090", "test-091", "test-092", "test-098", "test-099"],
+    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057", "test-065", "test-066", "test-087", "test-088", "test-089", "test-090", "test-091", "test-092", "test-098", "test-099", "test-100", "test-101", "test-102", "test-103"],
 }
 SERIES_NOMS = {
     "a": "Fondations (nommage, ASCII/LF, template, protections)",
@@ -377,8 +377,10 @@ def rotation_registre(racine, max_usages=100):
 
 def trouver_tests(racine, filtre=None):
     """Retourne la liste des tests test-0XX (fichiers .py) tries."""
+    # v0.6.3 : glob test-* (pas test-0*) - test-100+ n etaient JAMAIS detectes
+    # (test-100/101 crees le 2026-08-24 jamais executes par la non-regression)
     pattern = os.path.join(racine, "cerveau-projet", "agents", "tools", "tester",
-                           "tests", "test-0*", "test-0*.py")
+                           "tests", "test-*", "test-*.py")
     tests = sorted(glob.glob(pattern))
     if filtre:
         noms_filtres = [f.strip() for f in filtre.split(",") if f.strip()]

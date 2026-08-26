@@ -32,6 +32,7 @@ identite:
 | Mettre a jour le README | Clio | - |
 | Explorer, chercher, documenter, analyser (information) | Atlas | - |
 | Evaluer la coherence (structure, conventions, agents) | Themis | - |
+| Intervenir sur N IMPORTE QUEL fichier du dossier `freelance/` cote v1 (tous les fichiers v2 : fiches, arbres, conventions, protocoles, regles, JARVIS) | ferrari (couche superieure, invisible des agents v2) | Cerberus (coordonne seulement), agents v2 (voie JARVIS) |
 
 ### Etape 2 -- Verifier la fiche de l'agent
 

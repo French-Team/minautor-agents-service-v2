@@ -4932,3 +4932,39 @@ par session.
 2. LE NOMBRE D ENTREES PAR ENCARTE ([:5] vs [:10]) EST UNE CONSTANTE CACHEE : pas documentee dans le .md de l outil, pas teste par Morpheus. Elle aurait pu etre un parametre de l outil (ex: --limite 10) pour eviter de toucher au code.
 
 **Validations** : syntaxe OK, ASCII 0/0 (.py/.sh/spec), test fonctionnel sur copie : 10 lignes session-admin, 10 lignes session-freelance, 0 troncature.
+## [LECON] 2026-08-25 -- REPARATION ARBRES v2 : vues stark regenerees (inter-round Morpheus)
+
+**Contexte** : inter-round de Morpheus (mission tests microsecondes). Le correctif glob du lanceur (test-0* -> test-*) a rendu test-101 actif : il n avait JAMAIS tourne et a revele une desynchronisation preexistante - arbre-stark.json (25/08 07:25) plus recent que ses vues (24/08 18:47), edith egalement signale au premier run.
+
+**Realise** : verifier_arbres -> seul stark desynchronise (edith resynchronise entre-temps, probablement par le serveur EDITH H24). Regeneration : convertir-carte-mermaid --arbres --agent stark (stark.mmd 4 lignes + stark.svg 1170 octets). Resultat : 9 arbres v2 synchronises OK, test-101 11/11 OK.
+
+**Lecons** :
+1. UN ARBRE MODIFIE SANS REGENERER SES VUES = DESYNCHRONISATION INVISIBLE tant que test-101 ne tourne pas : toute modification d un arbre-<agent>.json doit s accompagner de convertir-carte-mermaid --arbres (le garde-fou verifie octet a octet).
+2. LE GLOB DU LANCEUR PEUT EXCLURE DES TESTS SANS AUCUN SIGNE : test-100/101/102 commencent par test-1 et le glob test-0* ne les matchait pas - verifier la couverture (test-027 point 1) apres chaque ajout de test.
+
+**Validations** : --arbres --verifier section arbres OK (rc v1 cartes = preexistant socrate/themis/vulcain hors perimetre), test-101 11/11 OK, normes ASCII/LF couvertes par test-101 points 5/5b.
+## [LECON] 2026-08-25 -- MICROSECONDES -> MILLISECONDES : activer-agent-principal v0.7.2 -> v0.7.3 (Vulcain)
+
+**Contexte** : l utilisateur constate que l outil ecrit toujours les timestamps d historique a 6 chiffres (microsecondes) au lieu de 3 (millisecondes) comme demande plus tot. Le commit 4fbd28f (18:41) n avait corrige que les FICHIERS DE DONNEES (AGENTS-historique.md, variables-actuelles.md), pas l OUTIL qui les ecrit : 4 occurrences %f (l.876, 1033, 1305, 1364) dans activer-agent-principal.py + get_timestamp() en %N (9 chiffres) dans le .sh.
+
+**Realise** : (1) .py : %f -> troncature [:-3] sur les 4 occurrences (strftime puis troncature des 3 derniers chiffres) ; (2) .sh : %N -> %3N (GNU date supporte la precision) ; (3) versions : en-tete .py aligne 0.7.1 -> 0.7.2 puis bump 0.7.2 -> 0.7.3 (.py, .sh, spec, doc) ; la doc .md etait en dette massive (0.5.30 jamais bumpee) - alignee sur 0.7.3 avec entree au tableau versionning ; (4) tests Morpheus : test-102 (garde-fou millisecondes, 6/6 OK) + preuve baseline (KO test-001/002/003/008 preexistants).
+
+**Lecons** :
+1. %3f EST INVALIDE EN PYTHON (ValueError: Invalid format string) : la correction proposee dans le rapport Themis (%3f) ne fonctionne PAS - le bon pattern est la TRONCATURE [:-3] (deja utilise par horloge.py avec [:12]).
+2. UN CORRECTIF DE DONNEES SANS CORRECTIF DE L OUTIL = RECURRENCE : 4fbd28f avait corrige les fichiers de donnees mais l outil a re-ecrit les 6 chiffres a la prochaine activation - toujours corriger l OUTIL (source) en plus des donnees.
+3. LA DOC .md PEUT S'ENDETTER SANS LIMITE : la doc etait a 0.5.30 alors que l outil etait a 0.7.x (jamais bumpee depuis des versions) - le bumper en mode dossier la revele, la bumpee individuellement pour l aligner.
+4. LE .sh N EST PAS TOUJOURS UN WRAPPER PUR : activer-agent-principal.sh a sa PROPRE logique get_timestamp() (%N) - verifier la parite .py/.sh a chaque correction de format (pas seulement les appels).
+
+**Validations** : execution reelle sur copie (AGENTS_FILE surcharge) : .py et .sh ecrivent HH:MM:SS.mmm a 3 chiffres ; test-102 6/6 OK ; test-099 6/6 OK ; test-101 11/11 OK (apres reparation arbres) ; syntaxe python/bash OK ; ASCII 0/0 ; LF pur.
+## [LECON] 2026-08-25 -- FERRARI BRANCHE A L ACTIVATION : activer-agent-principal v0.7.3 -> v0.7.4 (Vulcain)
+
+**Contexte** : demande utilisateur - activer ferrari (agent v1 specialise freelance, double identite v1/v2, CONFIDENTIEL : seul Cerberus le connait, invisible des agents v2). L outil repondait 'Agent inconnu ferrari' : ferrari etait cree (fiche, parcours, protocoles) mais ABSENT du dictionnaire AGENTS - inactivable (meme oubli qu Argus v0.5.8 / Chiron v0.5.12).
+
+**Realise** : (1) dictionnaire AGENTS du .py : entree ferrari (role + fiche agents/ferrari/ferrari.md + corrections) ; (2) 3 case statements du .sh (role, fiche, corrections) ; (3) couleur ferrari (#dc2626) ; (4) bump 0.7.3 -> 0.7.4 (py, sh, md + entree versionning, spec) ; (5) tests Morpheus : test-092 adapte avec EXEMPTIONS_MORTS={stark, ferrari} (9/9 OK, stark KO preexistant resolu), activation reelle sur copie OK.
+
+**Lecons** :
+1. UN AGENT CONFIDENTIEL NE PEUT PAS APPARAITRE DANS AGENTS.md MAIS DOIT ETRE DANS LE DICTIONNAIRE D ACTIVATION : la confidentialite (invisible des agents v2) impose de ne pas le lister dans AGENTS.md, mais sans dictionnaire il est inactivable - l ajout py/sh est la seule voie, et test-092 doit porter une EXEMPTION DOCUMENTEE (pas un contournement).
+2. LE PATTERN 'AGENT CREE MAIS INACTIVABLE' RECIDIVE (Argus, Chiron, maintenant ferrari) : a chaque creation d agent v1, verifier que le dictionnaire AGENTS du .py + les 3 case statements du .sh le couvrent AVANT de le declarer disponible.
+3. UNE EXEMPTION DE TEST PEUT RESOUDRE DES KO PREEXISTANTS : stark (v2, fiche freelance/) etait deja 'mort' pour test-092 - la liste d exemptions l a couvert, test-092 passe de 7/9 a 9/9.
+
+**Validations** : syntaxe py + bash OK, get_agent_info('ferrari') + get_agent_role/fiche/corrections ferrari OK, activer session-admin ferrari sur copie OK, test-092 9/9, ASCII 0/0, LF pur.

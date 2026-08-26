@@ -4672,3 +4672,13 @@ nouveau KO ; test controle isole (AGENTS_FILE sur copie) : sidentifier glm5 admi
 4. LA FICHE DOIT SUIVRE (Pattern 14) : apres bump de carte, valider-cartes-decision exige fiche PARCOURS (vX.Y.Z) == parcours.version - mettre a jour les 2 occurrences (PARCOURS + METHODE) + documenter la nouvelle mission.
 
 **Preuves** : valider-cartes-decision --agent atlas CONFORME (v0.5.7), navigation c1 -> c35 OK, lock marbre empreinte OK, dossier vues-v2-2026-08-24/ 19 liens OK, ASCII 0/0, test-101 11/11 (Vulcain/Morpheus), --arbres --verifier rc=0.
+## [LECON] 2026-08-25 -- EDUCATION CERBERUS -> FERRARI (inter-round Chiron) : APPLIQUE
+
+Chiron a eduque Cerberus a l utilisation de ferrari (Mecano, agent v1 specialise freelance, double identite v1/v2). En inter-round, j ai applique ses corrections proposees : (1) fiche cerberus.md : ligne ferrari dans la table 'Agents disponibles' + REGLE voie freelance v1 (ferrari) vs v2 (agents MARVEL via JARVIS), bump fiche 0.2.1 -> 0.2.2 ; (2) regles-choisir-agent.md : ligne ferrari a la matrice Etape 1. Aucun changement de parcours (le flux c8 -> c10 couvre ferrari une fois connu ; ferrari ne va pas dans parcours-cerberus-freelance.json dedie aux MARVEL).
+
+Lecons :
+1. UNE EDUCATION D AGENT DE COORDINATION SE JOUE DANS LA FICHE + LA MATRICE, PAS DANS LE PARCOURS : Cerberus choisit ses agents via sa table 'Agents disponibles' et regles-choisir-agent - pas besoin de branche de carte pour un agent qui entre dans le flux d activation generique.
+2. FICHE v1 vs CARTE : seul le PARCOURS (carte) est verrouille par le marbre et exige editer-parcours (Buffy) ; la FICHE se modifie directement quand l education l exige (mais toujours via l agent habilite selon le protocole Chiron -> Buffy).
+3. CONTRADICTION SIGNALEE (a suivre) : la fiche ferrari liste 'Corriger JARVIS' alors qu AGENTS.md donne l exclusivite a Vision - Cerberus doit verifier avant de router JARVIS vers ferrari (domaine Argus/Vision).
+
+**Preuves** : rapport chiron/rapports/rapport-education-cerberus-ferrari-2026-08-25.md, ASCII 0/0 (cerberus.md + regles-choisir-agent.md), LF pur, verifier-conformite-fiche cerberus 1 CONFORME / 0 ECART.

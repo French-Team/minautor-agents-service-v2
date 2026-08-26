@@ -18,6 +18,14 @@ import argparse
 import json
 import os
 import sys
+# HARNAIS (PROTOCOLE 21) : l outil s auto-verifie en debut de traitement.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "harnais", "fonctions"))
+try:
+    from harnais import verifier_outil
+    _CHEMIN_OUTIL = os.path.dirname(os.path.abspath(__file__))
+except ImportError:
+    verifier_outil = None
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "fonctions"))
@@ -27,6 +35,8 @@ VERSION = "0.1.0"
 
 
 def main():
+    if verifier_outil is not None:
+        verifier_outil(_CHEMIN_OUTIL, agent="rappel")
     parser = argparse.ArgumentParser(description="rappel v%s" % VERSION)
     sub = parser.add_subparsers(dest="action")
     p_p = sub.add_parser("pour", help="Rappels pertinents pour un contexte")

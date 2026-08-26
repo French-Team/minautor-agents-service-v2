@@ -434,3 +434,34 @@
 {"date_debut": "2026-08-25 09:15:14", "session": "session-admin", "agent": "buffy", "date_fin": "2026-08-25 09:19:28", "duree_secondes": 254, "tokens_debut": null}
 {"date_debut": "2026-08-25 09:19:28", "session": "session-admin", "agent": "buffy", "date_fin": "2026-08-25 09:22:20", "duree_secondes": 172, "tokens_debut": null}
 {"date_debut": "2026-08-25 09:22:20", "session": "session-admin", "agent": "buffy", "date_fin": "2026-08-25 18:32:19", "duree_secondes": 32999, "tokens_debut": null}
+{"date_debut": "2026-08-25 18:42:48", "session": "session-admin", "agent": "vulcain", "date_fin": "2026-08-25 18:43:50", "duree_secondes": 62, "tokens_debut": null}
+{"date_debut": "2026-08-25 18:51:00", "session": "session-admin", "agent": "themis", "date_fin": "2026-08-25 18:55:18", "duree_secondes": 258, "tokens_debut": null}
+{"date_debut": "2026-08-25 18:55:18", "session": "session-admin", "agent": "vulcain", "date_fin": "2026-08-25 19:00:35", "duree_secondes": 317, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:00:35", "session": "session-admin", "agent": "morpheus", "date_fin": "2026-08-25 19:15:38", "duree_secondes": 903, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:15:38", "session": "session-admin", "agent": "vulcain", "date_fin": "2026-08-25 19:17:20", "duree_secondes": 102, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:17:50", "session": "session-admin", "agent": "morpheus", "date_fin": "2026-08-25 19:18:25", "duree_secondes": 35, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:18:25", "session": "session-admin", "agent": "vulcain", "date_fin": "2026-08-25 19:19:35", "duree_secondes": 70, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:19:35", "session": "session-admin", "agent": "themis", "date_fin": "2026-08-25 19:20:18", "duree_secondes": 43, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:20:18", "session": "session-admin", "agent": "janus", "date_fin": "2026-08-25 19:21:40", "duree_secondes": 82, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:23:11", "session": "session-admin", "agent": "chiron", "date_fin": "2026-08-25 19:26:53", "duree_secondes": 222, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:26:53", "session": "session-admin", "agent": "buffy", "date_fin": "2026-08-25 19:27:42", "duree_secondes": 49, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:27:42", "session": "session-admin", "agent": "chiron", "date_fin": "2026-08-25 19:28:02", "duree_secondes": 20, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:28:03", "session": "session-admin", "agent": "janus", "date_fin": "2026-08-25 19:28:24", "duree_secondes": 21, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:37:09", "session": "session-admin", "agent": "vulcain", "date_fin": "2026-08-25 19:38:22", "duree_secondes": 73, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:38:22", "session": "session-admin", "agent": "morpheus", "date_fin": "2026-08-25 19:39:40", "duree_secondes": 78, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:39:40", "session": "session-admin", "agent": "vulcain", "date_fin": "2026-08-25 19:40:21", "duree_secondes": 41, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:40:21", "session": "session-admin", "agent": "themis", "date_fin": "2026-08-25 19:40:52", "duree_secondes": 31, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:40:52", "session": "session-admin", "agent": "janus", "date_fin": "2026-08-25 19:41:13", "duree_secondes": 21, "tokens_debut": null}
+{"date_debut": "2026-08-25 19:41:25", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 07:42:53", "duree_secondes": 43288, "tokens_debut": null}
+{"date_debut": "2026-08-26 07:42:54", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 08:08:18", "duree_secondes": 1524, "tokens_debut": null}
+{"date_debut": "2026-08-26 08:08:18", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 08:08:48", "duree_secondes": 30, "tokens_debut": null}
+{"date_debut": "2026-08-26 08:08:49", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 08:09:36", "duree_secondes": 47, "tokens_debut": null}
+{"date_debut": "2026-08-26 08:09:36", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 08:12:51", "duree_secondes": 195, "tokens_debut": null}
+{"date_debut": "2026-08-26 19:23:32", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 19:32:44", "duree_secondes": 552, "tokens_debut": null}
+{"date_debut": "2026-08-26 20:16:05", "session": "session-admin", "agent": "vulcain", "date_fin": "2026-08-26 20:22:46", "duree_secondes": 401, "tokens_debut": null}
+{"date_debut": "2026-08-26 20:28:44", "session": "session-freelance", "agent": "stark", "date_fin": "2026-08-26 20:28:50", "duree_secondes": 6, "tokens_debut": null}
+{"date_debut": "2026-08-26 20:28:50", "session": "session-freelance", "agent": "stark", "date_fin": "2026-08-26 20:31:14", "duree_secondes": 144, "tokens_debut": null}
+{"date_debut": "2026-08-26 20:31:14", "session": "session-freelance", "agent": "stark", "date_fin": null, "duree_secondes": null, "tokens_debut": null}
+{"date_debut": "2026-08-26 20:50:01", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 20:52:09", "duree_secondes": 128, "tokens_debut": null}
+{"date_debut": "2026-08-26 20:52:09", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 20:54:34", "duree_secondes": 145, "tokens_debut": null}
+{"date_debut": "2026-08-26 21:11:10", "session": "session-admin", "agent": "ferrari", "date_fin": null, "duree_secondes": null, "tokens_debut": null}

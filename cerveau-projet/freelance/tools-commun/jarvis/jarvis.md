@@ -1,7 +1,7 @@
 ---
 identite:
   nom: JARVIS
-  version: 0.5.0
+  version: 0.5.2
   cree: 2026-08-22
   type: outil
   appartient_a: forge
@@ -23,7 +23,7 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom** | JARVIS |
-| **Version** | 0.12.1 (py) -- encart tronque a 80 car. + journal chronologique (2026-08-25) |
+| **Version** | 0.14.0 (py) -- encart 50 + corps 100 + BDD SQLite 7j (2026-08-26) |
 | **Role** | Bus de messages inter-agents |
 | **Responsable** | Forge (creation), Stark (usage) |
 | **Session** | freelance |
@@ -136,19 +136,36 @@ python3 jarvis.py historiser --agent <agent> --raison "<raison>" [--session sess
 ```
 Trace une etape intermediaire SANS changer d'agent.
 
-**Journal chronologique (v0.12.1, 2026-08-25)** : chaque entree est
-ECRITE A DEUX ENDROITS dans AGENTS-historique.md :
-1. **L'encart** `Activites recentes -- <session>` (10 lignes max, vue rapide --
-   **raison tronquee a 80 caracteres** pour la lisibilite du tableau) ;
-2. **Le corps chronologique** `## JJ/MM/AAAA` / `### agent` / `- HH:MM | id | TYPE | raison`
-   (tracabilite longue avec le texte COMPLET, structure identique a la v1
-   pour coexister dans le meme fichier).
+**Historisation v0.15.0 (2026-08-26, fichiers v2 SEPARES)** : la v2 est
+l evolution de la v1, chaque session a SES fichiers (decision utilisateur) :
+1. **AGENTS-activite-recente-v2.md** : encart session-freelance (50 entrees
+   max, raison tronquee a 80 car., vue rapide) ; ordre des colonnes
+   **Grade | Agent | Raison | Heure | id | Type** (decision utilisateur
+   2026-08-26) : la colonne **Grade** (emoji couleur) est en tete - haut
+   de grade = bleu/vert, bas de grade = rouge/orange, EDITH = rose
+   (grades-v2.json) ;
+2. **AGENTS-historique-v2.md** : chronologie body v2 (`## JJ/MM/AAAA` /
+   `### agent` / `- HH:MM | id | TYPE | raison`), 100 dernieres actions ;
+3. **historique.db** (SQLite) : journal chronologique complet, **texte integral**
+   (pas de troncature), **purge automatique apres 7 jours** (lazy cleanup
+   a chaque ecriture).
 
-Avant v0.12.0, tout ce qui sortait de l'encart (10 lignes) etait PERDU :
-la mission de base restait tracee mais tout le travail long d'un agent
-(non) disparaissait. Desormais rien ne se perd : la troncature de
-l'encart est une simple question de lisibilite, le texte complet vit
-dans le corps.
+La session-admin (v1) a SES fichiers (ASCII+LF) : AGENTS-activite-recente.md
++ AGENTS-historique.md, geres par activer-agent-principal. Plus aucun
+partage v1/v2 : chaque session ecrit dans SON fichier avec SON format
+(v2 = UTF8+CRLF, v1 = ASCII+LF). Format de section corps : `## JJ/MM/AAAA`
+(JAMAIS ISO YYYY-MM-DD : cree des sections paralleles vides, KO test-098).
+
+**Grades et couleurs (v2, decision utilisateur 2026-08-26)** : la colonne
+Grade de l encart affiche l emoji couleur du grade de l agent ou de la
+routine (fichier de donnees D15 `tools-commun/grades/grades-v2.json`, jamais
+en dur dans le code). Echelle : G1 bleu (jarvis, stark) / G2 vert (vision,
+shuri, forge, rogers, parker) / G3 jaune (fury) / G4 rouge (routines de
+surveillance) / G5 orange (citations, le plus bas - desactivee en fin de
+dev) / SP rose (edith, couleur signature). Les routines historisent sous
+LEUR propre nom (decision 2026-08-26 : flux, vigie, notation, harnais,
+citations, integrite, orphelins - jamais sous un agent) pour que le grade
+s affiche. Inconnu = blanc neutre.
 
 ---
 

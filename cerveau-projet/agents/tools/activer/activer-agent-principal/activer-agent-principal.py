@@ -24,7 +24,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.7.1
+Version : 0.8.0
 Statut : prepare
 """
 
@@ -36,7 +36,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.7.2"
+VERSION = "0.8.0"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -45,6 +45,7 @@ AGENTS_HISTORIQUE = os.environ.get("AGENTS_HISTORIQUE", "AGENTS-historique.md")
 CLASSEUR_STOCKAGE = os.environ.get("CLASSEUR_STOCKAGE", "cerveau-projet/agents/classeur-variables/stockage/variables-actuelles.md")
 CERBERUS_FICHE = "cerveau-projet/agents/cerberus/cerberus.md"
 MAX_ENTREES_HISTORIQUE = 150
+AGENTS_ACTIVITE_RECENTE = os.environ.get("AGENTS_ACTIVITE_RECENTE", "AGENTS-activite-recente.md")
 
 # v0.5.14 : couleur HTML fixe PAR AGENT dans l historique (rendu markdown).
 # NB : nom SINGULIER - un nom pluriel terminc par 'AGENTS' casserait les
@@ -66,6 +67,7 @@ COULEURS_PAR_AGENT = {
     "gardien": "#475569",   # securite - ardoise
     "argus": "#9333ea",     # detection - violet vif
     "chiron": "#0891b2",    # education - cyan
+    "ferrari": "#dc2626",   # freelance v1 - rouge (confidentiel)
     "athena": "#c026d3",    # pense-betes - fuchsia
     "promethee": "#d97706",  # specs - ambre
     "minerve": "#059669",   # todos - emeraude
@@ -166,6 +168,9 @@ AGENTS = {
     "redacteur-v2": ("Redacteur des docs de la v2 (proposition, regles, conventions) -- mode conversation (reactive Cerberus sur fin de cycle)",
                 "cerveau-projet/agents/redacteur-v2/redacteur-v2.md",
                 "cerveau-projet/agents/redacteur-v2/corrections.md"),
+    "ferrari": ("Agent v1 specialise freelance -- corrige et modifie le dossier v2 (conventions v2)",
+                "cerveau-projet/agents/ferrari/ferrari.md",
+                "cerveau-projet/agents/ferrari/corrections.md"),
     "stark": ("Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation",
                 "cerveau-projet/freelance/stark/stark.md",
                 "cerveau-projet/freelance/stark/corrections.md"),
@@ -644,8 +649,11 @@ def ajouter_historique(timestamp, session, agent, raison, type_round="R"):
         nouveau_bloc = "\n" + marqueur_jour + "\n\n" + marqueur_agent + "\n" + nouvelle_ligne
         contenu = contenu[:idx_inser] + nouveau_bloc + contenu[idx_inser:]
 
-    # 2. Mettre a jour l encart 'Activites recentes' (10 dernieres)
-    contenu = maj_encart_activites(contenu, date, heure, agent_titre, identifiant, raison)
+    # 2. L encart 'Activites recentes' vit UNIQUEMENT dans
+    #    AGENTS-activite-recente.md (decision 2026-08-26 : AGENTS-historique.md
+    #    ne contient que le corps chronologique 100 entrees).
+    #    (anciennement : maj_encart_activites ecrivait l encart dans
+    #    AGENTS-historique.md - SUPPRIME, doublon avec _ecrire_encart_v1)
 
     with io.open(AGENTS_HISTORIQUE, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(contenu)
@@ -653,8 +661,107 @@ def ajouter_historique(timestamp, session, agent, raison, type_round="R"):
     if not verifier_fichier_ascii(AGENTS_HISTORIQUE):
         print("WARNING: Caracteres non-ASCII presents dans %s" % AGENTS_HISTORIQUE)
 
+    # --- v0.8.0 : encart dans AGENTS-activite-recente.md + BDD SQLite ---
+    # L encart est desormais dans un fichier separe (50 entrees max, plus
+    # fragile que le corps). La chronologie est dans historique.db (7 jours).
+    _ecrire_encart_v1(session, heure, agent_titre, identifiant, type_round, raison)
+    _ecrire_bdd_v1(identifiant, agent_titre, type_round, raison, timestamp)
+
     print("Historique mis a jour dans %s" % AGENTS_HISTORIQUE)
     return 0
+
+
+def _ecrire_encart_v1(session, heure, agent, identifiant, type_round, raison):
+    """Ecrire l encart dans AGENTS-activite-recente.md (50 entrees max,
+    raison tronquee a 80 car.). Meme logique que maj_encart_activites mais
+    dans un fichier SEPAR (vue rapide, pas le corps chronologique)."""
+    mapping = mapper_id_vers_session()
+    session_nom = mapping.get(session, session)
+    if not session_nom:
+        return
+    # Raison tronquee pour l encart
+    r_aff = raison if len(raison) <= 80 else raison[:77] + "..."
+    nouvelle_entree = "| %s | %s | %s | %s | %s |" % (
+        heure, agent, identifiant, type_round, r_aff)
+    try:
+        if os.path.isfile(AGENTS_ACTIVITE_RECENTE):
+            contenu = io.open(AGENTS_ACTIVITE_RECENTE, "r",
+                              encoding="utf-8", errors="replace").read()
+        else:
+            # Creer le fichier v1 (session-admin uniquement - la session
+            # freelance a SON fichier AGENTS-activite-recente-v2.md,
+            # decision utilisateur 2026-08-26 : chaque session a SES
+            # fichiers, plus aucun partage v1/v2)
+            contenu = (
+                "---\nidentite:\n  type: activite-recente\n"
+                "  appartient_a: commun\n  commun: true\n---\n\n"
+                "## Activites recentes -- session-admin\n\n"
+                "| Heure | Agent | id | Type | Raison |\n"
+                "|-------|-------|----|------|--------|\n")
+    except OSError:
+        return
+    lignes = contenu.split("\n")
+    # Trouver l encart de la session
+    entete_encart = "## Activites recentes -- %s" % session_nom
+    zone_debut = 0
+    for i, ligne in enumerate(lignes):
+        if ligne.strip() == entete_encart:
+            zone_debut = i
+            break
+    # Trouver le tableau
+    idx_tableau = -1
+    for i in range(zone_debut, len(lignes)):
+        if "| Heure | Agent |" in lignes[i]:
+            idx_tableau = i
+            break
+    if idx_tableau == -1:
+        return
+    # Inserer apres le separateur
+    idx_separateur = idx_tableau + 1
+    while idx_separateur < len(lignes) and not lignes[idx_separateur].startswith("|---"):
+        idx_separateur += 1
+    insert_pos = idx_separateur + 1
+    lignes.insert(insert_pos, nouvelle_entree)
+    # Limiter a 50 entrees
+    debut_entrees = insert_pos + 1
+    fin_entrees = debut_entrees
+    while fin_entrees < len(lignes) and lignes[fin_entrees].startswith("| "):
+        fin_entrees += 1
+    nb_entrees = fin_entrees - debut_entrees
+    if nb_entrees > 50:
+        lignes = lignes[:fin_entrees - (nb_entrees - 50)] + lignes[fin_entrees:]
+    try:
+        io.open(AGENTS_ACTIVITE_RECENTE, "w", encoding="utf-8",
+                newline="\n").write("\n".join(lignes))
+    except OSError:
+        pass
+
+
+def _ecrire_bdd_v1(identifiant, agent, type_action, raison, timestamp):
+    """Ecrire dans la BDD SQLite (historique.db, 7 jours)."""
+    try:
+        # Import lazy du module BDD
+        _bdd_dir = os.path.join("cerveau-projet", "freelance", "tools-commun",
+                               "jarvis", "fonctions")
+        if _bdd_dir not in sys.path:
+            sys.path.insert(0, _bdd_dir)
+        import historique_bdd as hb
+        # Convertir timestamp v1 ("YYYY-MM-DD HH:MM:SS.ffffff") en ISO
+        date_iso = None
+        if timestamp:
+            date_iso = timestamp.replace(" ", "T", 1)
+        # Racine = dossier parent de AGENTS-historique.md
+        _racine = os.path.dirname(os.path.abspath(AGENTS_HISTORIQUE))
+        hb.ecrire(
+            racine=_racine,
+            agent=agent,
+            llm=identifiant,
+            type_action=type_action,
+            raison=raison,
+            date_iso=date_iso
+        )
+    except (ImportError, OSError) as exc:
+        print("WARNING: BDD historique non disponible: %s" % str(exc)[:60])
 
 
 def mapper_id_vers_session():
@@ -734,7 +841,12 @@ def maj_encart_activites(contenu, date, heure, agent, identifiant, raison):
     for cle_tri, h, a, s, r, t, session_entree in entrees:
         par_session.setdefault(session_entree, []).append((cle_tri, h, a, s, r, t))
 
-    encart = "---\n\n"
+    # v0.7.5 : PLUS de '---\n\n' initial dans l encart : le separateur haut
+    # est celui du frontmatter (fin de l identite). Avant, le while de
+    # remontee mangeait les lignes vides et collait le '---' de l encart a
+    # celui du frontmatter -> les tirets grossissaient a chaque execution
+    # (bug accumulation, grosse ligne de 1308 tirets observee).
+    encart = ""
     sessions_triees = sorted(par_session.keys())
     for session_nom in sessions_triees:
         liste = sorted(par_session[session_nom], key=lambda x: x[0], reverse=True)[:10]
@@ -757,13 +869,22 @@ def maj_encart_activites(contenu, date, heure, agent, identifiant, raison):
             if prec == -1:
                 break
             idx_debut = prec + 1
-        # Remonter au debut de la section (lignes precedentes)
-        while idx_debut > 0 and contenu[idx_debut - 1] in "\n\r":
-            idx_debut -= 1
+        # v0.7.5 : NE PAS remonter a travers les lignes vides precedentes :
+        # idx_debut pointe sur le '#' de '## Activites recentes' et le
+        # frontmatter (--- + ligne vide) reste intact au-dessus.
         # Trouver la fin : le '---' qui suit le dernier tableau du bloc
         idx_fin = contenu.find("\n---\n", idx_debut)
         if idx_fin == -1:
             idx_fin = contenu.find("\n## ", idx_debut + len(marqueur_debut))
+        else:
+            # v0.7.5 : consommer TOUS les '---' accumules (bug accumulation :
+            # l encart finit par '---\n' et idx_fin pointait sur le '\n---\n'
+            # trouve -> l ancien separateur restait, un de plus a chaque
+            # execution). On avance apres chaque separateur consecutif pour
+            # ne garder que celui de l encart.
+            idx_fin += len("\n---\n")
+            while contenu[idx_fin:idx_fin + len("\n---\n")] == "\n---\n":
+                idx_fin += len("\n---\n")
         if idx_fin != -1:
             contenu = contenu[:idx_debut] + encart + contenu[idx_fin:]
         else:
@@ -873,7 +994,10 @@ def mettre_a_jour_profil_session(session, agent, llm_id=None):
         return 1
 
     maintenant = datetime.now()
-    ts = maintenant.strftime("%Y-%m-%d %H:%M:%S.%f")
+    # v0.7.3 : millisecondes (3 chiffres) au lieu des microsecondes (6 chiffres)
+    # le format de largeur '3f' est INVALIDE en Python (ValueError) : troncature
+    # [:-3] obligatoire (pattern horloge.py)
+    ts = maintenant.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
     jour = maintenant.strftime("%Y-%m-%d")
     # REGLE DE DERIVATION (IMMUABLE): id = profil-session- + partie apres le prefixe session-
     id_session = session[len("session-"):] if session.startswith("session-") else session
@@ -1030,7 +1154,7 @@ def sidentifier(llm_id=None, nom_session=None):
         ecrire_agents(contenu)
 
     agent_actif = agent_actif_bloc(contenu, session)
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
     ajouter_historique(timestamp, session, agent_actif, "Identification LLM - demarrage de session", "R")
     mettre_a_jour_profil_session(session, agent_actif, llm_id)
     actualiser_sessions_connues()
@@ -1207,6 +1331,44 @@ def conso_tokens_intervention(tokens_debut):
                        and bool(snap_fin.get("fiable"))}
 
 
+def _afficher_oracle_inbox(agent):
+    """Afficher les messages Oracle non lus d un agent lors de son activation."""
+    oracle_inbox = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "..", "..", "oracle", "inbox", "%s.jsonl" % agent)
+    if not os.path.isfile(oracle_inbox):
+        return
+    non_lus = []
+    try:
+        with io.open(oracle_inbox, "r", encoding="utf-8", errors="replace") as fh:
+            for ligne in fh:
+                ligne = ligne.strip()
+                if not ligne:
+                    continue
+                try:
+                    msg = json.loads(ligne)
+                    if not msg.get("lu"):
+                        non_lus.append(msg)
+                except (ValueError, KeyError):
+                    continue
+    except OSError:
+        return
+    if not non_lus:
+        return
+    print("")
+    print("=== MESSAGES ORACLE NON LUS (%d) ===" % len(non_lus))
+    for msg in non_lus:
+        statut = "[PRIORITE 1]" if msg.get("priorite") == 1 else ""
+        print("  [%s] %s -> %s %s" % (msg.get("id", "?"), msg.get("de", "?"), msg.get("vers", "?"), statut))
+        print("    Objet: %s" % msg.get("objet", ""))
+        corps = msg.get("corps", "")
+        if len(corps) > 120:
+            corps = corps[:120] + "..."
+        print("    Corps: %s" % corps)
+    print("  Pour acquitter : oracle.py acquitter %s <id>" % agent)
+    print("============================")
+
+
 def activer_agent(session, agent, raison, mission=None, type_round="R"):
     """Activer un agent dans la session (ne touche que son bloc)."""
     if not verifier_ascii(raison):
@@ -1302,7 +1464,7 @@ def activer_agent(session, agent, raison, mission=None, type_round="R"):
     contenu = editer_champs_session(contenu, session, champs)
     ecrire_agents(contenu)
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
     ajouter_historique(timestamp, session, agent, raison_finale, type_round)
     mettre_a_jour_profil_session(session, agent)
     actualiser_sessions_connues()
@@ -1312,6 +1474,8 @@ def activer_agent(session, agent, raison, mission=None, type_round="R"):
     print("=== MESSAGES POUR L AGENT ===")
     print("  > RELEVE MEME ROUND : l agent active (%s) doit enchainer IMMEDIATEMENT (relire SA fiche + SES corrections puis executer sa mission) - ne jamais s arreter apres une activation" % agent)
     print("  > la fin de mission suit SA carte (Pattern 13) : activer le maillon suivant selon SA carte ; seul le DERNIER maillon reactive Cerberus avec le bilan consolide (jamais de reactivation directe a Cerberus en milieu de chaine)")
+    # Oracle v0.1.0 : afficher les messages non lus de l agent
+    _afficher_oracle_inbox(agent)
     return 0
 
 
@@ -1361,7 +1525,7 @@ def reactiver_cerberus(session, raison, agent_precedent, type_round="R"):
     contenu = editer_champs_session(contenu, session, champs)
     ecrire_agents(contenu)
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
     ajouter_historique(timestamp, session, "Cerberus", raison, type_round)
     mettre_a_jour_profil_session(session, "Cerberus")
     actualiser_sessions_connues()

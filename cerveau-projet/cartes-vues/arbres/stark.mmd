@@ -1,38 +1,4 @@
 %% Arbre de decision de stark (arbre v0.1.0)
 flowchart TD
     START(["Debut"]) --> RACINE
-    RACINE{"Quel theme ?"}
-    RACINE -- "JARVIS" --> THEME-JARVIS
-    THEME-JARVIS["Envoyer la demande a JARVIS qui traite, distribue aux agents"]
-    THEME-JARVIS -- "besoin 1" --> THEME-JARVIS-B0
-    THEME-JARVIS-B0["Confier une mission (distribution a un agent)"]
-    THEME-JARVIS -- "besoin 2" --> THEME-JARVIS-B1
-    THEME-JARVIS-B1["Consulter l'etat de l'equipe (status, bloques)"]
-    FIN-fin-theme(["Retour a la racine"])
-    THEME-JARVIS-B0 --> FIN-fin-theme
-    THEME-JARVIS-B1 --> FIN-fin-theme
-    RACINE -- "LIRE" --> THEME-LIRE
-    THEME-LIRE["Acceder a l'information"]
-    THEME-LIRE -- "besoin 1" --> THEME-LIRE-B0
-    THEME-LIRE-B0["Voir l'activite recente"]
-    THEME-LIRE -- "besoin 2" --> THEME-LIRE-B1
-    THEME-LIRE-B1["Consulter les messages en attente"]
-    THEME-LIRE -- "besoin 3" --> THEME-LIRE-B2
-    THEME-LIRE-B2["Lire une fiche d'agent"]
-    THEME-LIRE -- "besoin 4" --> THEME-LIRE-B3
-    THEME-LIRE-B3["Consulter les lecons"]
-    THEME-LIRE-B0 --> FIN-fin-theme
-    THEME-LIRE-B1 --> FIN-fin-theme
-    THEME-LIRE-B2 --> FIN-fin-theme
-    THEME-LIRE-B3 --> FIN-fin-theme
-    RACINE -- "EXPLORER" --> THEME-EXPLORER
-    THEME-EXPLORER["Comprendre pourquoi quelque chose ne va pas"]
-    THEME-EXPLORER -- "besoin 1" --> THEME-EXPLORER-B0
-    THEME-EXPLORER-B0["Diagnostiquer un agent defaillant"]
-    THEME-EXPLORER -- "besoin 2" --> THEME-EXPLORER-B1
-    THEME-EXPLORER-B1["Comprendre pourquoi un agent ne demarre pas"]
-    THEME-EXPLORER -- "besoin 3" --> THEME-EXPLORER-B2
-    THEME-EXPLORER-B2["Consulter les lecons"]
-    THEME-EXPLORER-B0 --> FIN-fin-theme
-    THEME-EXPLORER-B1 --> FIN-fin-theme
-    THEME-EXPLORER-B2 --> FIN-fin-theme
+    RACINE{"Transmettre a JARVIS"}

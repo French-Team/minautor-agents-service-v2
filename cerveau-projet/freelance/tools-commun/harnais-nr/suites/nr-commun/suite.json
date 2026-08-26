@@ -6,6 +6,8 @@
     "AGENTS.md",
     "AGENTS-historique.md",
     "AGENTS-activite-recente.md",
+    "AGENTS-historique-v2.md",
+    "AGENTS-activite-recente-v2.md",
     "USER-DEMANDES.md",
     "cerveau-projet/freelance/protocoles",
     "cerveau-projet/freelance/routines/manifest.json",
@@ -26,6 +28,8 @@
         {"chemin": "AGENTS.md", "doit_exister": true},
         {"chemin": "AGENTS-historique.md", "doit_exister": true},
         {"chemin": "AGENTS-activite-recente.md", "doit_exister": true},
+        {"chemin": "AGENTS-historique-v2.md", "doit_exister": true},
+        {"chemin": "AGENTS-activite-recente-v2.md", "doit_exister": true},
         {"chemin": "USER-DEMANDES.md", "doit_exister": true}
       ]
     },

@@ -46,6 +46,12 @@ TOOLS_DIR = os.path.join(CERVEau, "agents", "tools")
 FICHIERS_AUTORISES = frozenset([
     "AGENTS.md",
     "AGENTS-historique.md",
+    "AGENTS-activite-recente.md",
+    "USER-DEMANDES.md",
+    # Fichiers v2 SEPARES (decision utilisateur 2026-08-26 : la v2 est
+    # l evolution de la v1, chaque session a SES fichiers avec SON format)
+    "AGENTS-historique-v2.md",
+    "AGENTS-activite-recente-v2.md",
     "README.md",
     "demarrer.md",
     ".gitignore",
@@ -58,6 +64,8 @@ DOSSIERS_AUTORISES = frozenset([
     ".git",
     "cerveau-projet",
     "workspace",
+    # Outil exclusif de demarrage du LLM (ni v1, ni v2) - racine
+    "outils-llm",
 ])
 PREFIXES_DOSSIERS_AUTORISES = ("tmp-",)  # dossiers de mission (gitignores)
 

@@ -65,4 +65,19 @@ les regles D15 et proto8 (JARVIS) AVANT d'ecrire une seule ligne.
 3. activer : --session OBLIGATOIRE, plus aucun defaut devine ("session-1")
    ni en py ni dans jarvis-server.py
 4. Fin de cycle : bilan -> jarvis.py envoyer --vers jarvis -> JARVIS informe
+### [LECON] 2026-08-26 -- MARBRE v2 : LLM = OUTILS PROJET UNIQUEMENT
+
+A ma prochaine incarnation, je SAIS que la regle de marbre v2
+s'applique a l'outil LLM de la session, PAS a moi agent :
+
+- Interdit : Read/Write/Edit natifs pour modifier le code du
+  workspace ; WebFetch pour l'externe.
+- Impose : passer par `jarvis.py <cmd>`, `bdd-lecons`, `rappel`,
+  `harnais-nr`, `rating-agents`, `classeur`, routines.
+- Exception : lecture de logs/debug UNIQUEMENT si aucun outil
+  projet ne le fournit.
+- Un raccourci natif = violation, meme si l effet final est identique.
+
+La regle figure dans mes REGLES ABSOLUES (fiche). Generalisation
+par Shuri (pilote JARVIS). Verdict VALIDE.
    Stark. Jamais de question directe a l'utilisateur sur l'activation.

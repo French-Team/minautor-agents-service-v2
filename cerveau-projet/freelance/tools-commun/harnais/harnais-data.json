@@ -1,0 +1,64 @@
+{
+  "version": "0.2.0",
+  "description": "Configuration DYNAMIQUE du harnais v2 (D15 : separation code/donnees). Pour ajouter un import obligatoire, une verification, un rappel ou une securite : EDITER CE FICHIER, jamais le code du harnais. Le harnais lit cette config a chaque appel et fait le reste. Les motifs de securite sont des SOUS-CHAINES LITTERALES (pas des regex) : simples a editer, pas d echappement.",
+  "imports_obligatoires": [
+    {
+      "nom": "trouver_racine",
+      "module": "racine",
+      "motif": "trouver_racine",
+      "message": "le script doit DETECTER la racine via os_path (P10) : from racine import trouver_racine -- jamais de ../.. comptes",
+      "bloquant": false
+    }
+  ],
+  "verifications": [
+    {
+      "nom": "agent_obligatoire",
+      "cle": "agent",
+      "message": "l agent est obligatoire (--agent <nom>) : le harnais doit savoir QUI execute",
+      "bloquant": true
+    },
+    {
+      "nom": "raison_obligatoire",
+      "cle": "raison",
+      "message": "la raison est obligatoire (--raison \"...\") : un script sans raison est illisible (PROTOCOLE 22 : commande + pourquoi)",
+      "bloquant": true
+    }
+  ],
+  "rappels": [
+    {
+      "quand": "toujours",
+      "message": "LIFE CYCLE : creer -> executer -> verifier -> SUPPRIMER (rm -rf tmp-<agent> en fin de mission, 0 residu)"
+    },
+    {
+      "quand": "toujours",
+      "message": "2e utilisation d un besoin -> PROMOUVOIR : creer l outil durable (Forge), ne pas re-ecrire un script jetable"
+    },
+    {
+      "quand": "toujours",
+      "message": "ENTONNOIR : executer via l outil dedie (executer-script-temporaire v1 / combo v2), jamais python3 direct sur tmp-<agent>/<script>"
+    }
+  ],
+  "securites": [
+    {
+      "nom": "zone_dediee",
+      "motif": null,
+      "message": "le script DOIT vivre dans tmp-<agent>/ a la RACINE du workspace (jamais /tmp systeme, jamais un dossier d outil)",
+      "bloquant": true
+    },
+    {
+      "nom": "isolation",
+      "motifs": [
+        "open('/",
+        "open(\"/",
+        "os.remove('/",
+        "os.remove(\"/",
+        "shutil.rmtree('/",
+        "shutil.rmtree(\"/",
+        "Path('/",
+        "Path(\"/"
+      ],
+      "message": "le script ne doit JAMAIS ecrire hors de son dossier : chemins absolus suspects interdits (isolation)",
+      "bloquant": false
+    }
+  ]
+}

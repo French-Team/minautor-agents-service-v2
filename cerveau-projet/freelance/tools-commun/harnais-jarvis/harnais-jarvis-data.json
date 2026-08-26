@@ -193,7 +193,7 @@
       "famille": "sante",
       "severite": "WARN",
       "actif": false,
-      "message": "le serveur JARVIS (MCP) n a pas journalise depuis <jours> jour(s) (historique gelee) -- OBSOLETE : serveur supprime le 2026-08-23 (jarvis v0.9.2), la tracabilite vit desormais dans AGENTS-historique.md (ecart historique_agents_gele)",
+      "message": "le serveur JARVIS (MCP) n a pas journalise depuis <jours> jour(s) (historique gelee) -- OBSOLETE : serveur supprime le 2026-08-23 (jarvis v0.9.2), la tracabilite vit desormais dans AGENTS-activite-recente-v2.md + historique.db (ecart historique_agents_gele)",
       "dedup_cle": "fixe"
     },
     {
@@ -217,7 +217,7 @@
       "famille": "surveillance",
       "severite": "ERR",
       "actif": true,
-      "message": "JARVIS n a PAS historise les activites dans AGENTS-historique.md : derniere activite <derniere_activite> mais derniere trace historique <derniere_trace> -- la tracabilite des agents est en retard (JARVIS doit historiser a CHAQUE action, pour lui et pour les agents)",
+      "message": "JARVIS n a PAS historise les activites dans AGENTS-activite-recente-v2.md : derniere activite <derniere_activite> mais derniere trace historique <derniere_trace> -- la tracabilite des agents est en retard (JARVIS doit historiser a CHAQUE action, pour lui et pour les agents)",
       "dedup_cle": "fixe"
     },
     {
@@ -227,6 +227,14 @@
       "actif": true,
       "message": "EDITH n a PAS emis de reveil depuis <minutes> minute(s) (dernier: <dernier_reveil>) -- son serveur de routines ou detection.py ne tourne plus : la cellule dormante est muette (qui va detecter les modifications de perimetre ?)",
       "dedup_cle": "fixe"
+    },
+    {
+      "nom": "diagnostics_statiques",
+      "famille": "sante",
+      "severite": "WARN",
+      "actif": true,
+      "message": "diagnostic statique Pyright/Pylance dans <fichier> : <detail> -- <n> erreur(s), <w> warning(s) (source: <source>)",
+      "dedup_cle": "fichier"
     }
   ]
 }

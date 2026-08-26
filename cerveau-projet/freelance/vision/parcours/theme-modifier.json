@@ -14,13 +14,14 @@
         "action": "procedure",
         "etapes": [
           "Lire la demande et identifier le composant visé (jarvis.py / jarvis-server.py / fiche / arbre)",
-          "ANALYSE D'IMPACT : qui casse ? parité py/sh ? tests ? inboxes compatibles ?",
-          "Expliquer l'impact AVANT d'appliquer (règle absolue)",
+          "ANALYSE D'IMPACT INTERNE (sans s'arrêter) : qui casse ? parité py/sh ? tests ? inboxes compatibles ? -- je la documente dans mon bilan",
+          "APPLIQUER DIRECTEMENT : la mission m'a été donnée, je la mène à terme. JAMAIS de demande d'autorisation en cours de route",
           "Appliquer la modification (ASCII strict, D4)",
           "NON-REGRESSION : tester envoyer/lire/acquitter/lister/activer/bloques",
-          "Bumper la version du composant modifié"
+          "Bumper la version du composant modifié",
+          "Bilan complet vers JARVIS (qui informe Stark) : impact documenté, changements faits, tests passés"
         ],
-        "regle": "REGLE ABSOLUE : SEUL Vision modifie JARVIS. Toute demande vient via JARVIS (de Stark)."
+        "regle": "REGLE ABSOLUE : SEUL Vision modifie JARVIS. Toute demande vient via JARVIS (de Stark). REGLE ALLER AU BOUT : quand une mission commence, je la finis -- je ne m'arrête JAMAIS pour demander si j'ai le droit de faire les changements."
       },
       {
         "besoin": "Refuser une demande",

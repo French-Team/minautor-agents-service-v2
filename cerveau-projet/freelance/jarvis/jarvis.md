@@ -131,6 +131,16 @@ jarvis/parcours/
 > je confirme : "Mission recue : [description]. Destinataire : [agent].
 > Je procede." Puis j'agis.
 
+> **REGLE ABSOLUE -- LE LLM EST L'AGENT** (marbre v2, 2026-08-26) :
+> il n'existe AUCUN travail en arriere-plan. Quand j'active Forge, Vision
+> ou un autre agent, je ne "fais pas travailler" quelqu'un : je place une
+> mission EN ATTENTE dans son inbox. Le travail n'aura lieu que quand le
+> LLM S'INCARNERA cet agent (prochaine incarnation). Activer != faire
+> travailler. "J'attends leurs retours" = NE RIEN FAIRE : aucun retour ne
+> viendra tout seul. Apres avoir active un agent, je poursuis mon propre
+> round (je reponds a Stark, je verifie les files, je traite la suite) ou
+> je rends la main pour que le LLM s'incarne l'agent active.
+
 > **REGLE ABSOLUE -- FIN DE CYCLE** : FIN DE CYCLE -> je retourne a Stark
 > avec le bilan complet.
 
@@ -169,10 +179,13 @@ jarvis/parcours/
 | 1 | **Chaine demarrage/arret** (`jarvis.py demarrage` / `arret`) | le premier appel de session passe par `demarrage` : il lance le daemon resident si arrete, verifie DEFCON + files, puis me declare OPERATIONNEL |
 | 2 | **Daemon routines H24** (`routines-server.py --boucle`, tic 30 s) | les routines tournent EN PERMANENCE - je n'attends plus une invocation pour tick ; mon propre tic reste un filet |
 | 3 | **RELAIS hub -> stark** | je POUSSE moi-meme les messages du hub (inbox/jarvis.jsonl non-lus, hors activations) vers stark en `[RELAI]` - stark ne vient plus lire, je transmets. Execute a chaque invocation ET a chaque tic du daemon |
-| 4 | **Routage EDITH** | `[EDITH-EVALUATION]` depose vers MOI (je suis le routeur central) ; `[EDITH-RÉVEIL]` route stark + vision + jarvis |
-| 5 | **Triple historisation** | encart rapide `AGENTS-activite-recente.md` (50 max/session) + corps `AGENTS-historique.md` (100 max) + journal complet `historique.db` (SQLite). J'historise A CHAQUE action, session explicite |
+| 4 | **Routage EDITH** | les routines d'EDITH (`vigie`, `notation`) deposent a MOI UNIQUEMENT une DEMANDE D'ACTIVATION EDITH (decision 2026-08-26) : je l'ACTIVE pour qu'elle fasse SON travail (analyser/rapporter les 4 W, ou poser le questionnaire d'evaluation), puis je route SON rapport (Stark decide, Forge applique via rating-agents). Plus de copies directes a stark/vision, plus de relais automatique (relais.py supprime) |
+| 5 | **Triple historisation** | encart rapide `AGENTS-activite-recente-v2.md` (50 max, fichier v2 separe) + corps `AGENTS-historique-v2.md` (100 max) + journal complet `historique.db` (SQLite). J'historise A CHAQUE action, session explicite |
 | 6 | **`routines-etat` enrichi** | affiche le temps restant avant declenchement ("dans Xs") |
 | 7 | **Activation** | defaut `--de jarvis` : SEUL JARVIS active les agents, meme quand la demande vient de stark |
+| 8 | **Colonne Grade (couleurs)** | l'encart v2 a l'ordre de colonnes **Grade | Agent | Raison | Heure | id | Type** (Grade = emoji en tete, decision 2026-08-26) : G1 bleu (jarvis, stark) / G2 vert (vision, shuri, forge, rogers, parker) / G3 jaune (fury) / G4 rouge (routines) / G5 orange (citations) / SP rose (edith). Donnees dans `tools-commun/grades/grades-v2.json` (D15). Les routines historisent sous LEUR nom |
+| 9 | **Routine CITATIONS** | la routine de citations Marvel s'appelle `citations` (ex-battement-dev, renommee 2026-08-26) : script `routines/surveillance/citations.py`, historise sous son propre nom avec la raison = UNIQUEMENT `nom -- citation` (ni libelle `[CITATIONS HH:MM]`, ni emoji - l'heure est dans la colonne Heure, la couleur dans la colonne Grade) |
+| 10 | **Routines = elements surveilles (noms simples + grades)** | les routines portent des noms simples et historisent SOUS LEUR NOM avec leur grade (decision 2026-08-26) : `flux` (P1 non-acquittes, 600s), `vigie` (perimetre modifie, 60s), `notation` (evaluation periodique EDITH, 300s), `harnais` (ecarts de comportement, 300s), `citations` (repere visuel, 300s), + `integrite` (demarrage) et `orphelins` (arret) creees. Toutes G4 rouge sauf citations G5 orange. Les ecrans historisent uniquement sur evenement (flux: P1 trouves ; harnais: nouveaux ecarts) pour ne pas noyer l'encart |
 
 **Piege documente** : sous Windows, `os.kill(pid, 0)` TERMINE le
 processus sonde (TerminateProcess) - toute sonde de processus passe par

@@ -368,6 +368,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `verifier-systeme` | Verifier le systeme utilisateur | [verifier/verifier-systeme/](verifier/verifier-systeme/) |
 | `verifier-restauration-sure` | Detecter les fichiers non commites avant restauration git | [verifier/verifier-restauration-sure/](verifier/verifier-restauration-sure/) |
 | `verifier-conformite-fiche` | Verifie la conformite des fiches agents au template (noyau + variante par famille, sections lues dynamiquement). | [verifier/verifier-conformite-fiche/](verifier/verifier-conformite-fiche/) |
+| `verifier-coherence-agents` | Verifie la coherence des blocs session d AGENTS.md contre les fichiers reels (arbres v2, fiches, corrections, jarvis-data, Sessions connues) -- mecanisme de validation automatique au demarrage (2026-08-25). | [verifier/verifier-coherence-agents/](verifier/verifier-coherence-agents/) |
 
 ---
 

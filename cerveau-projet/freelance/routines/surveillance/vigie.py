@@ -1,5 +1,7 @@
 # -*- coding: ascii -*-
-# routine : surveiller-modifications -- passe de detection du perimetre EDITH
+# routine : vigie -- guetteuse des modifications du perimetre EDITH
+# (ex-surveiller-modifications, renommee 2026-08-26 : nom simple qui
+# exprime ce qu'elle est).
 import os
 import sys
 from pathlib import Path

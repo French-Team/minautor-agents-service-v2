@@ -153,8 +153,9 @@ def charger_series():
 
 
 def lister_tests():
-    """Tous les tests test-0XX du disque (fichiers .py)."""
-    return sorted(glob.glob(os.path.join(TESTS_DIR, "test-0*", "test-0*.py")))
+    """Tous les tests test-0XX du disque (fichiers .py).
+    v0.2.1 : glob test-* (pas test-0*) - test-100+ n etaient jamais detectes."""
+    return sorted(glob.glob(os.path.join(TESTS_DIR, "test-*", "test-*.py")))
 
 
 def main():

@@ -45,11 +45,39 @@ def _pid_actuel():
         return None
 
 
+def _executer_routines_manifest(cle):
+    """Executer les scripts declares dans routines_demarrage / routines_arret
+    du manifest (D15). Tolerant : une routine qui plante ne bloque pas le
+    demarrage/arret. Les routines sont des elements surveilles (grade),
+    elles historisent sous leur propre nom (ex: integrite, orphelins)."""
+    import json
+    try:
+        manifest = json.loads(
+            (RACINE / "cerveau-projet" / "freelance" / "routines" /
+             "manifest.json").read_text(encoding="utf-8"))
+        base = RACINE / "cerveau-projet" / "freelance" / "routines"
+        for r in manifest.get(cle, []):
+            if not r.get("actif", True):
+                continue
+            script = base / r.get("script", "")
+            if script.is_file():
+                try:
+                    subprocess.run([sys.executable, str(script)],
+                                   timeout=120)
+                except Exception as e:
+                    print("[JARVIS] routine %s (%s) : %s"
+                          % (r.get("nom"), script.name, e))
+    except Exception as e:
+        print("[JARVIS] routines %s : %s" % (cle, e))
+
+
 def routines_demarrer():
     pid = _pid_actuel()
     if pid:
         print(f"[JARVIS] Serveur de routines DEJA EN MARCHE (pid {pid}).")
         return 0
+    # Routines de DEMARRAGE (ex: integrite) : verifier avant de lancer.
+    _executer_routines_manifest("routines_demarrage")
     # v0.9.1 : DETACHED_PROCESS - le serveur SURVIT a la fermeture de la
     # console parente. Sorties vers un fichier de log (un crash doit etre
     # VISIBLE, jamais avale par DEVNULL).
@@ -77,6 +105,8 @@ def routines_arreter():
     if not pid:
         print("[JARVIS] Serveur de routines deja arrete.")
         return 0
+    # Routines d'ARRET (ex: orphelins) : detecter avant de couper.
+    _executer_routines_manifest("routines_arret")
     try:
         os.kill(pid, signal.SIGTERM)
         print(f"[JARVIS] Serveur de routines ARRETE (pid {pid}).")

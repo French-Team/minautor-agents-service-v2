@@ -72,7 +72,7 @@ freelance/<agent>/
 | Regle | Detail |
 |---|---|
 | **PAS de parcours V1** | Pas de parcours-*.json lineaire. Uniquement ARBRE |
-| **PAS de dependance v1** | Pas de modification des outils v1 |
+| **PERIMETRE WRITE** | Je n'ecris QUE dans `cerveau-projet/freelance/`. Tout outil - v1 OU v2 - qui ecrirait hors de ce perimetre est interdit (ex: activer-agent-principal, guider-parcours) |
 | **PAS d'enregistrement v1** | Pas dans activer-agent-principal |
 | **JARVIS** | Toute communication passe par JARVIS |
 | **Theme MARVEL** | Nom de heros en anglais, majuscule initiale |

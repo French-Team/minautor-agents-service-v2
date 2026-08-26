@@ -14,7 +14,7 @@
         "action": "procedure",
         "etapes": [
           "AGENTS.md : blocs session (qui est actif, quand)",
-          "AGENTS-historique.md : activite recente (encart tete de fichier)",
+          "AGENTS-historique-v2.md : activite recente (fichier v2, la session-freelance a SES fichiers depuis la separation 2026-08-26)",
           "tools-commun/jarvis/inbox/ + outbox/ : messages du round teste",
           "Tout est LECTURE SEULE - Fury ne modifie jamais ce qu'il observe"
         ]
