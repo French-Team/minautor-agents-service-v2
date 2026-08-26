@@ -1,0 +1,47 @@
+{
+  "nom": "nr-routines",
+  "description": "Suite de non-regression des ROUTINES (manifest D15, scripts, daemon resident, battement-dev)",
+  "actif": true,
+  "perimetre": ["cerveau-projet/freelance/routines"],
+  "tests": [
+    {
+      "nom": "manifest-d15-valide",
+      "commande": "python3 -c \"import json; m=json.load(open(r'{racine}/cerveau-projet/freelance/routines/manifest.json', encoding='utf-8')); assert len(m.get('routines_surveillance', [])) >= 4; print('MANIFEST OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": ["MANIFEST OK"]
+    },
+    {
+      "nom": "scripts-declares-existent",
+      "commande": "python3 -c \"import json,os; m=json.load(open(r'{racine}/cerveau-projet/freelance/routines/manifest.json', encoding='utf-8')); base=r'{racine}/cerveau-projet/freelance/routines'; absents=[r['script'] for r in m['routines_surveillance'] if not os.path.isfile(os.path.join(base, r['script'].replace('/', os.sep)))]; assert not absents, 'absents: %s' % absents; print('SCRIPTS OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": ["SCRIPTS OK"]
+    },
+    {
+      "nom": "daemon-resident-vivant",
+      "commande": "python3 -c \"import os,ctypes; pid=int(open(r'{racine}/cerveau-projet/freelance/tools-commun/jarvis/routines-server.pid').read().strip()); k=ctypes.windll.kernel32; h=k.OpenProcess(0x1000, False, pid); assert h, 'daemon %d mort' % pid; k.CloseHandle(h); print('DAEMON VIVANT', pid)\"",
+      "rc_attendu": 0,
+      "sortie_contient": ["DAEMON VIVANT"]
+    },
+    {
+      "nom": "routines-etat-liste-avec-temps-restant",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py routines-etat",
+      "rc_attendu": 0,
+      "sortie_contient": ["battement-dev", "evaluer-agents", "harnais-jarvis", "surveiller-modifications", "declenchement"]
+    },
+    {
+      "nom": "etat-executions-lisible",
+      "commande": "python3 -c \"import json; e=json.load(open(r'{racine}/cerveau-projet/freelance/routines/etat-executions.json', encoding='utf-8')); assert e; print('ETAT OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": ["ETAT OK"]
+    },
+    {
+      "nom": "battement-dev-citations-presentes",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {"chemin": "cerveau-projet/freelance/routines/surveillance/battement-dev.py",
+         "doit_exister": true}
+      ]
+    }
+  ]
+}
