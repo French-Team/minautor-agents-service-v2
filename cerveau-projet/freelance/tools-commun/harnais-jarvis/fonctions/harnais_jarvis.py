@@ -255,12 +255,12 @@ def _detecter_activations(config, ecarts):
     regles = {r["nom"]: r for r in config.get("ecarts", [])}
     seuils = config.get("seuils", {})
     fenetre_jours = int(seuils.get("activation_recente_jours", 14))
-    # Source de tracabilite : AGENTS-historique.md (historiser() depuis
-    # jarvis v0.9.2 -- le serveur MCP et son journal historique.jsonl
-    # ont ete supprimes le 2026-08-23 ; l ancien fichier n est qu un
-    # vestige gele qui produisait des faux WARN par centaines).
-    hist_path = os.path.join(RACINE, "AGENTS-historique.md")
+    # Source de tracabilite : AGENTS-activite-recente.md (encart v2,
+    # 50 entrees max, raison tronquee). Le texte complet vit dans
+    # historique.db (BDD SQLite, 7 jours).
     agents_traces = set()
+    # meme source que historique_agents_gele (plus bas)
+    hist_path = os.path.join(RACINE, "AGENTS-activite-recente.md")
     try:
         with open(hist_path, encoding="utf-8") as fh:
             for ligne in fh:
@@ -801,11 +801,11 @@ def _detecter_surveillance(config, ecarts):
                     regles.get("demande_utilisateur_non_traitee"),
                     titre, jours=age, titre=titre[:60], section=section))
 
-    # --- historique_agents_gele (AGENTS-historique.md, encart v2) ---
+    # --- historique_agents_gele (AGENTS-activite-recente.md, encart v2) ---
     r4 = regles.get("historique_agents_gele")
     if r4 and r4.get("actif"):
         tolerance = int(seuils.get("historique_tolerance_minutes", 5))
-        hist_path = os.path.join(RACINE, "AGENTS-historique.md")
+        hist_path = os.path.join(RACINE, "AGENTS-activite-recente.md")
         h_hist = None
         j_hist = None
         if os.path.isfile(hist_path):
