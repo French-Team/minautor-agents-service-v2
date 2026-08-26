@@ -40,6 +40,14 @@
       "script": "surveillance/harnais-jarvis.py",
       "actif": true,
       "intervalles_secondes": 300
+    },
+    {
+      "nom": "battement-dev",
+      "script": "surveillance/battement-dev.py",
+      "actif": true,
+      "intervalles_secondes": 300,
+      "temporaire": true,
+      "note": "ROUTINE TEMPORAIRE DE DEV (2026-08-26, decision utilisateur) : citations Marvel toutes les 5 min comme repere visuel. A RETIRER EN FIN DE DEV - Hygie pourra purger script + entree."
     }
   ],
   "seuils_alerte": {
