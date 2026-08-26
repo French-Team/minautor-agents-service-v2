@@ -1,0 +1,53 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "stark",
+    "nom": "FILES",
+    "description": "Declencheurs de files (protocole 13 v2) : l'utilisateur commence son message par [urgent], [attention], [attente], [stop] ou demande une reprise. Branche RESTAUREE le 2026-08-26 : elle avait ete perdue lors de la reconstruction de l'arbre v0.2.0."
+  },
+  "theme": {
+    "nom": "FILES",
+    "but": "Placer, reprendre ou geler les missions via les files JARVIS - jamais a la main, toujours via jarvis.py",
+    "redirects": [
+      {
+        "besoin": "[urgent] en tete du message : mission PRIORITAIRE (traitement immediat / file prioritaire)",
+        "action": "procedure",
+        "etapes": ["Retirer le prefixe [urgent] pour formuler la mission clairement",
+                   "Transmettre A JARVIS avec priorite 1 (bloquante) : jarvis.py envoyer --de stark --vers jarvis --priorite 1 --objet '[URGENT] ...' --corps '...' --activer",
+                   "Si la mission doit attendre malgre tout : jarvis.py mettre-en-attente --mission '...' --niveau urgent (= PRIORITAIRE)",
+                   "Verifier la reprise : jarvis.py reprendre prend PRIORITAIRE d'abord"],
+        "regle": "[urgent] = priorite 1 + file PRIORITAIRE. Jamais ignorer le prefixe."
+      },
+      {
+        "besoin": "[attention] en tete du message : mission SUIVANTE (traitee apres la courante)",
+        "action": "procedure",
+        "etapes": ["Formuler la mission sans le prefixe",
+                   "jarvis.py mettre-en-attente --mission '...' --niveau attention (= SUIVANTE)",
+                   "La mission remonte automatiquement au prochain jarvis.py reprendre"]
+      },
+      {
+        "besoin": "[attente] en tete du message : mission EN ATTENTE (file normale)",
+        "action": "procedure",
+        "etapes": ["Formuler la mission sans le prefixe",
+                   "jarvis.py mettre-en-attente --mission '...' --niveau attente (= EN_ATTENTE)"],
+        "regle": "Ordre de reprise : PRIORITAIRE > SUIVANTE > EN_ATTENTE."
+      },
+      {
+        "besoin": "Reprendre la mission en attente la plus prioritaire",
+        "action": "procedure",
+        "etapes": ["jarvis.py file (voir l'etat des files)",
+                   "jarvis.py reprendre (prend PRIORITAIRE puis SUIVANTE puis EN_ATTENTE)",
+                   "Transmettre la mission recuperee A JARVIS pour execution"]
+      },
+      {
+        "besoin": "[stop] : arret complet du dev, gel de TOUTES les missions (DEFCON 5)",
+        "action": "procedure",
+        "etapes": ["Confirmer l'intention de l'utilisateur (DEFCON 5 = arret total)",
+                   "jarvis.py stop-dev --raison '...'",
+                   "Prevenir l'utilisateur : toutes les missions sont gelees, reprise uniquement via changer-defcon 4 -> 3 -> 2"],
+        "regle": "[stop] est GRAVE : jamais execute sans confirmation explicite de l'utilisateur."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}
