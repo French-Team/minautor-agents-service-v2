@@ -47,7 +47,9 @@ def main():
             if str(p) not in sys.path:
                 sys.path.insert(0, str(p))
         from historique import historiser, session_courante
-        horodatage = datetime.now(timezone.utc).strftime("%H:%M")
+        # heure LOCALE : le libelle s'affiche a cote de la colonne Heure
+        # de l encart (qui est locale) - sinon decalage apparent de 2 h.
+        horodatage = datetime.now().strftime("%H:%M")
         historiser("jarvis",
                    "[DEV-BATTEMENT %s] %s" % (horodatage, citation),
                    "R", session=session_courante())

@@ -10,6 +10,17 @@ identite:
 
 | Heure | Agent | id | Type | Raison |
 |-------|-------|----|------|--------|
+| 08:40:00.000 | buffy | glm5 | R | Decision : v1 et v2 separent. Harnais v2 reste pour outils/scripts v2. Verifi... |
+| 08:12:51.765 | Cerberus | glm5 | R | Mission Ferrari terminee : harnais CONFORME, 0 modification. Rapport produit. |
+| 08:12:51.000 | ferrari | glm5 | R | Mission terminee : harnais scripts temporaires v2 VERDICT CONFORME. 0 modific... |
+| 08:09:36.635 | ferrari | glm5 | R | Mission transmise par Buffy via Oracle : ameliorer le harnais des scripts tem... |
+| 08:30:00.000 | buffy | glm5 | R | Oracle inbox integre a activer-agent-principal : quand un agent est active, s... |
+| 08:08:49.032 | ferrari | glm5 | R | Test Oracle inbox v2
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depui... |
+| 08:08:18.540 | ferrari | glm5 | R | Test Oracle inbox
+
+DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis l... |
 | 08:25:00.000 | buffy | glm5 | R | Documentation Oracle : AGENTS.md (section Oracle ajoutee), regles-groupes-age... |
 | 08:20:00.000 | buffy | glm5 | R | Oracle integre au demarrage v1 : case c3o ajoutee dans parcours-demarrage.jso... |
 | 07:56:33.000 | oracle | glm5 | R | Test arret propre |
@@ -44,6 +55,11 @@ identite:
 
 | Heure | Agent | id | Type | Raison |
 |-------|-------|----|------|--------|
+| 08:21:42.707 | stark | freebuff | R | Fix fuseau battement-dev: libelle [DEV-BATTEMENT] passe d'UTC a l'heure local... |
+| 08:21:42.424 | jarvis | freebuff | R | [DEV-BATTEMENT 08:21] Dormez, Monsieur Stark, je veille sur vous. (Vision) |
+| 08:19:53.534 | jarvis | freebuff | R | [DEV-BATTEMENT 06:19] Faites un pas en arriere, evaluez, puis avancez. (Veuve... |
+| 08:14:52.694 | jarvis | freebuff | R | [DEV-BATTEMENT 06:14] Je suis Iron Man. (Tony Stark) |
+| 08:09:51.834 | jarvis | freebuff | R | [DEV-BATTEMENT 06:09] Je suis toujours en colere. (Hulk) |
 | 08:07:43.017 | stark | freebuff | R | Traduction des citations battement-dev en francais (langue du projet) - commi... |
 | 08:04:51.066 | jarvis | freebuff | R | [DEV-BATTEMENT 06:04] Je peux faire ca toute la journee. (Captain America) |
 | 08:03:20.552 | edith | freebuff | R | Depose demande d'evaluation periodique des agents |
