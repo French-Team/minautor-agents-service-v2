@@ -23,39 +23,31 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | glm5 |
-| **Nom Agent** | ferrari |
-| **Role Agent** | Agent v1 specialise freelance -- corrige et modifie le dossier v2 (conventions v2) |
-| **Derniere mise a jour** | 2026-08-26 |
-| **Fiche** | [cerveau-projet/agents/ferrari/ferrari.md](cerveau-projet/agents/ferrari/ferrari.md) |
-| **Corrections** | [cerveau-projet/agents/ferrari/corrections.md](cerveau-projet/agents/ferrari/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | REPRISE FERRARI (mode persistant) : la regle FIN DE CYCLE est corrigee (2026-08-26) - je reste actif apres chaque mission, bilan a l'utilisateur, je ne reactive Cerberus QUE sur 'fin de cycle' explicite de l'utilisateur. Relis TA fiche puis TES corrections, puis attends la demande de l'utilisateur. |
-
-DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
-  cerveau-projet/agents/ferrari/parcours/parcours-ferrari.json --case c0
-(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds
-a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis
-ensuite les branches case par case ; si tu reprends apres une interruption,
-reprends a la case courante avec --case <cid> --reponses '<reponse>').
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-08-27 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | buffy (retour de mission) |
+| **Raison** | CHASSE 'reactiver' terminee : 20 corrections dans 12 parcours JSON. Les titres/messages ne confondent plus le LLM. |
 ### Session : session-freelance
 
 | Champ | Valeur |
-| --- | --- |
+|---|---|
 | **Nom LLM** | freebuff |
-| **Nom Agent** | vision |
-| **Role Agent** | Gardien exclusif de JARVIS (agent + serveur MCP) -- mode conversation |
-| **Derniere mise a jour** | 2026-08-26 |
-| **Fiche** | [cerveau-projet/freelance/vision/vision.md](cerveau-projet/freelance/vision/vision.md) |
-| **Corrections** | [cerveau-projet/freelance/vision/corrections.md](cerveau-projet/freelance/vision/corrections.md) |
+| **Nom Agent** | stark |
+| **Role Agent** | Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation |
+| **Derniere mise a jour** | 2026-08-27 |
+| **Fiche** | [cerveau-projet/freelance/stark/stark.md](cerveau-projet/freelance/stark/stark.md) |
+| **Corrections** | [cerveau-projet/freelance/stark/corrections.md](cerveau-projet/freelance/stark/corrections.md) |
 | **Active par** | Cerberus (automatique) |
-| **Raison** | Active par jarvis: CORRIGER LE RELAIS JARVIS : quand Stark envoie une mission a JARVIS (envoyer --vers jarvis), le relais (fonctions/relais.py) attrape le message dans le hub, le marque lu et le RENVOIE A STARK avec prefixe [RELAI] au lieu de le laisser a JARVIS pour traitement. Preuve : outbox/jarvis.jsonl 17:21:47 '[RELAI] Mission Forge: reformater le message DEV-BATTEMENT' vers stark; harnais-jarvis 17:30:49 6 ecarts ERR. CAUSE RACINE : relais.py filtre 'vers==jarvis, de!=jarvis, type!=activation' -> attrape AUSSI les missions de Stark et les boucle vers Stark. Le relais etait cree pour les demandes EDITH. CORRECTION : filtrer de=='edith' (ou type observation/evaluation/reveil) pour ne relayer QUE les demandes EDITH, laisser les missions de Stark dans le hub pour que JARVIS les traite. NON-REGRESSION : harnais-jarvis verifier = 0 ecart. Bilan a stark. | phrase [DEV-BATTEMENT HH:MM]' -- Le nom du heros en premier, puis la citation, puis la balise derriere. Source : demande utilisateur via Stark. ID precedent : a5c435e0. | phrase [DEV-BATTEMENT HH:MM]' -- Le nom du heros en premier, puis la citation, puis la balise derriere. Source : demande utilisateur via Stark. |
+| **Raison** | DEMARRAGE SESSION FREELANCE : Stark prend le relais, JARVIS reprendra le controle (rappel Vision si mission en attente) |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-freelance | freebuff | stark | 2026-08-26 20:31:14.252 |
-| session-admin | glm5 | ferrari | 2026-08-26 21:11:10.582 |
+| session-freelance | freebuff | stark | 2026-08-27 19:06:19.699 |
+| session-admin | glm5 | Cerberus | 2026-08-27 19:32:03.827 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

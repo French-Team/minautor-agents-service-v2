@@ -1,15 +1,36 @@
 ---
 identite:
-  type: activite-recente
+  nom: "Activites recentes"
+  type: "tableau"
+  description: "Vue rapide des 50 dernieres actions de la session-admin (ASCII+LF). Session-freelance : AGENTS-activite-recente-v2.md (UTF8+CRLF)."
   appartient_a: commun
   commun: true
-  description: "Vue rapide des activites recentes de la session-admin (50 entrees max, ASCII+LF). La session-freelance a son propre fichier : AGENTS-activite-recente-v2.md (UTF8+CRLF)."
 ---
 
 ## Activites recentes -- session-admin
 
 | Heure | Agent | id | Type | Raison |
 |-------|-------|----|------|--------|
+| 19:34:50.000 | buffy | glm5 | R | DOC V1 : lancer-missions (serie/parallel) INUTILE en v1 - un seul LLM = un se... |
+| 19:32:03.818 | Cerberus | glm5 | R | CHASSE 'reactiver' terminee : 20 corrections dans 12 parcours JSON. Les titre... |
+| 19:31:56.000 | buffy | glm5 | R | CHASSE 'reactiver' : 20 corrections dans 12 parcours JSON. Suppression des ti... |
+| 19:30:42.696 | atlas | glm5 | R | ANALYSE 'reactiver' : 85 occurrences dans les parcours JSON. Lister chaque oc... |
+| 19:24:52.225 | Cerberus | glm5 | R | ERREURS HORS MISSION: Buffy a utilise str_replace/write_file/run_terminal_com... |
+| 19:24:43.000 | buffy | glm5 | R | FIN: ERREURS HORS MISSION signalees a Cerberus - j ai utilise str_replace/wri... |
+| 19:22:03.000 | buffy | glm5 | R | FIN: restauration bloc session (Cerberus), regle historisation debut/fin, lec... |
+| 19:21:36.220 | Cerberus | glm5 | R | Restauration apres mission Buffy (corrections + historisation) |
+| 19:21:29.000 | buffy | glm5 | R | DEBUT MISSION : restauration bloc session-admin + regle historisation debut/f... |
+| 19:15:56.000 | buffy | glm5 | R | LECON HISTORISATION : utiliser Oracle (oracle.py historiser) pour tracer chaq... |
+| 19:11:57.000 | buffy | glm5 | R | DEMARRER.MD : section NETTOYAGE ajoutee |
+| 19:11:57.000 | buffy | glm5 | R | BUG FORMAT CORRIGE : demarrer-llm.py + sante.py passes a 7 colonnes |
+| 19:11:57.000 | buffy | glm5 | R | PROTOCOLE DE SECOURS 01 : guide de raisonnement philosophique (7 questions) |
+| 19:11:57.000 | buffy | glm5 | R | SYSTEME RETRO-CORRECTION : corrections.py + integration JARVIS + routines san... |
+| 19:11:57.000 | buffy | glm5 | R | OUTIL NETTOYER-SESSION.CRE (outils-llm/) : vide encarts, historiques, inbox/o... |
+| 19:11:57.000 | buffy | glm5 | R | FORMAT ENCHAT V2 RESTAURE : 1 ligne par entree, 7 colonnes avec Secteur |
+| 19:06:19.689 | stark | freebuff | R | DEMARRAGE SESSION FREELANCE : Stark prend le relais, JARVIS reprendra le cont... |
+| 19:06:19.264 | edith | freebuff | R | Identification LLM - demarrage de session |
+| 08:04:24.651 | stark | freebuff | R | DEMARRAGE SESSION FREELANCE : Stark prend le relais, JARVIS reprendra le cont... |
+| 08:04:24.116 | edith | freebuff | R | Identification LLM - demarrage de session |
 | 22:44:20.000 | ferrari | glm5 | R | EDITH clarifiee : ses routines (vigie, notation) demandent a JARVIS de l'ACTI... |
 | 22:34:25.000 | ferrari | glm5 | R | Ordre des colonnes encart v2 change : Grade | Agent | Raison | Heure | id | T... |
 | 22:31:40.000 | ferrari | glm5 | R | Routines = elements surveilles : noms simples (flux, vigie, notation, harnais... |
@@ -41,23 +62,3 @@ identite:
 | 20:21:16.000 | vulcain | glm5 | R | DEMARRAGE LLM : id=glm5, session=session-admin, agent actif=vulcain, parcours... |
 | 20:20:59.553 | vulcain | glm5 | R | Identification LLM - demarrage de session |
 | 20:18:56.000 | cerberus | glm5 | R | Envoyer a vulcain: 1 |
-| 20:16:05.348 | vulcain | glm5 | R | CREER L'OUTIL EXCLUSIF DE DEMARRAGE DU LLM (demande utilisateur, decision 202... |
-| 20:04:44.000 | cerberus | glm5 | R | Correction demarrer.md : le LLM posait la question 'Que souhaitez-vous faire ... |
-| 19:53:43.000 | cerberus | glm5 | R | Reformulation REGLE V2 (decision utilisateur) : remplacer l'interdiction par ... |
-| 19:39:09.000 | cerberus | glm5 | R | Diagnostic + activation Vision (exclusivite JARVIS) : JARVIS ne reagit plus q... |
-| 19:34:40.000 | cerberus | glm5 | R | USER-DEMANDES.md vide : 6 demandes journalisees comme Traitee (activer-agent-... |
-| 19:32:44.786 | Cerberus | glm5 | R | AUDIT STARK TERMINE (ferrari). Cause : Stark faisait le travail au lieu de tr... |
-| 19:32:10.000 | ferrari | glm5 | R | Audit Stark (ferrari) : 3 causes racines corrigees - piege --activer dans the... |
-| 19:23:32.995 | ferrari | glm5 | R | Relais utilisateur : activer ferrari  DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ... |
-| 09:00:00.000 | buffy | glm5 | R | Oracle v0.3.0 complet : 12 ameliorations livrees (defcon, files missions, dae... |
-| 08:57:41.000 | oracle | glm5 | R | Test arret avec serveur |
-| 08:56:11.000 | oracle | glm5 | R | Demarrage Oracle v0.3.0 |
-| 08:45:00.000 | buffy | glm5 | R | Oracle v0.2.0 : 6 ameliorations (agents, nettoyer, lire-message, verifier, hi... |
-| 08:40:00.000 | buffy | glm5 | R | Decision : v1 et v2 separent. Harnais v2 reste pour outils/scripts v2. Verifi... |
-| 08:30:55.000 | buffy | glm5 | R | Envoyer a atlas: Test auto-historisation |
-| 08:30:00.000 | buffy | glm5 | R | Oracle inbox integre a activer-agent-principal : quand un agent est active, s... |
-| 08:29:59.000 | buffy | glm5 | R | Envoyer a cerberus: Test historisation auto v2 |
-| 08:25:00.000 | buffy | glm5 | R | Documentation Oracle : AGENTS.md (section Oracle ajoutee), regles-groupes-age... |
-| 08:20:00.000 | buffy | glm5 | R | Oracle integre au demarrage v1 : case c3o ajoutee dans parcours-demarrage.jso... |
-| 08:15:00.000 | buffy | glm5 | R | Creation Oracle v0.1.0 : CLI (oracle.py) + serveur MCP (oracle-server.py) + c... |
-| 08:12:51.765 | Cerberus | glm5 | R | Mission Ferrari terminee : harnais CONFORME, 0 modification. Rapport produit. |

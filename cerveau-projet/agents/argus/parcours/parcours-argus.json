@@ -414,13 +414,13 @@
    ]
   },
   "c29a": {
-   "titre": "DELEGATION - Activer l'agent habilite (il reactivera Cerberus avec le bilan)",
+   "titre": "DELEGATION - Activer l'agent habilite (il activera Cerberus avec le bilan)",
    "type": "action",
-   "message": "Je delegue a l agent habilite : j active l agent concerne avec la mission complete (Pattern 13 : la fin suit SA carte, il reactivera Cerberus avec son bilan). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> '<raison>' '<mission>'.",
+   "message": "Je delegue a l agent habilite : j active l agent concerne avec la mission complete (Pattern 13 : la fin suit SA carte, il activera Cerberus avec son bilan). COMMANDE EXACTE : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> '<raison>' '<mission>'.",
    "indices": [
     {
      "type": "regle",
-     "texte": "PATTERN 13 + 5/8 : DELEGATION - activer l agent habilite. Il me reactivera avec le bilan (la fin suit SA carte)."
+     "texte": "PATTERN 13 + 5/8 : DELEGATION - activer l agent habilite. Il me transmettra le bilan (la fin suit SA carte)."
     },
     {
      "type": "outil",
@@ -477,7 +477,7 @@
   "c29e": {
    "titre": "FIN - Signaler le besoin",
    "type": "fin",
-   "message": "Je signale le besoin a Cerberus (reactivation avec le constat) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> '<raison>' cerberus."
+   "message": "Je signale le besoin a Cerberus (activation avec le constat) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> '<raison>' cerberus."
   },
   "c31": {
    "titre": "NETTOYER tmp-argus (0 residu en fin de mission)",

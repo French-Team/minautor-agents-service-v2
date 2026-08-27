@@ -1,164 +1,78 @@
 ---
 identite:
-  type: historique-v2
-  appartient_a: freelance
+  nom: "Historique v2"
+  type: "journal"
+  description: "Corps chronologique des 100 dernieres actions de la session-freelance (texte integral par agent, UTF8+CRLF). Fichier separe de la v1 : AGENTS-historique.md (ASCII+LF)."
+  appartient_a: jarvis
   commun: false
-  description: "Corps chronologique de la session-freelance (100 dernieres actions, UTF8+CRLF). Fichier separe de la v1 : AGENTS-historique.md (ASCII+LF)."
 ---
-## 26/08/2026
+## 27/08/2026
+- 19:06:20.105 | stark | R | DEMARRAGE LLM : id=freebuff, session=session-freelance, agent actif=stark, parcours demarre
 
-### vision
-- 21:03:16.000 | freebuff | R | Envoie a stark: BILAN VISION - relais JARVIS corrige
-- 21:02:21.000 | freebuff | R | Active par jarvis: CORRIGER LE RELAIS JARVIS : quand Stark envoie une mission a JARVIS (envoyer --vers jarvis), le relais (fonctions/relais.py) attrape le message dans le hub, le marque lu et le RENVOIE A STARK avec prefixe [RELAI] au lieu de le laisser a JARVIS pour traitement. Preuve : outbox/jarvis.jsonl 17:21:47 '[RELAI] Mission Forge: reformater le message DEV-BATTEMENT' vers stark; harnais-jarvis 17:30:49 6 ecarts ERR. CAUSE RACINE : relais.py filtre 'vers==jarvis, de!=jarvis, type!=activation' -> attrape AUSSI les missions de Stark et les boucle vers Stark. Le relais etait cree pour les demandes EDITH. CORRECTION : filtrer de=='edith' (ou type observation/evaluation/reveil) pour ne relayer QUE les demandes EDITH, laisser les missions de Stark dans le hub pour que JARVIS les traite. NON-REGRESSION : harnais-jarvis verifier = 0 ecart. Bilan a stark.
-- 20:59:29.000 | freebuff | R | Envoie a stark: BILAN VISION - diagnostics statiques harnais JARVIS
-- 20:56:53.000 | freebuff | R | Active par jarvis: Couvrir les erreurs Pylance dans le harnais JARVIS. Probleme : le harnais doit detecter les erreurs de diagnostic simples comme reportMissingImports. Exemple : citations.py ligne 49, Import 'historique' could not be resolved (Pylance, severite 4). Deux niveaux : (1) cause racine de reportMissingImports pour historique dans citations.py (module local, racine d'analyse, package ou execution en module) ; (2) ajouter au harnais une collecte de diagnostics statiques (Pylance/Pyright si disponible), parse structure, severite, fichier. ID precedent : 8f717534.
-- 20:39:05.000 | freebuff | R | Active par jarvis: Couvrir les erreurs Pylance dans le harnais JARVIS. Probleme : le harnais doit detecter les erreurs de diagnostic simples comme reportMissingImports. Exemple : citations.py ligne 49, Import 'historique' could not be resolved (Pylance, severite 4). Deux niveaux : (1) cause racine de reportMissingImports pour historique dans citations.py (module local, racine d'analyse, package ou execution en module) ; (2) ajouter au harnais une collecte de diagnostics statiques (Pylance/Pyright si disponible), parse structure, severite, fichier.
-- 20:31:13.768 | freebuff | R | Identification LLM - demarrage de session
-- 20:21:35.938 | freebuff | R | Identification LLM - demarrage de session
-- 20:21:35.000 | freebuff | R | DEMARRAGE LLM : id=freebuff, session=session-freelance, agent actif=vision, parcours demarre
-- 19:39:02.000 | freebuff | R | Active par jarvis: CORRIGER LE RELAIS JARVIS (diagnostic Cerberus 2026-08-26) : quand Stark envoie une mission a JARVIS (envoyer --vers jarvis), le relais (fonctions/relais.py) attrape le message dans le hub, le marque lu et le RENVOIE A STARK avec prefixe [RELAI] au lieu de le laisser a JARVIS pour traitement. Preuve: outbox/jarvis.jsonl 17:21:47 '[RELAI] Mission Forge: reformater le message DEV-BATTEMENT' vers stark; harnais-jarvis 17:30:49 6 ecarts ERR + 17:35:50 1 ecart ERR (message hub jamais route, P1 non lus chez stark+vision). CAUSE RACINE: relais.py filtre 'vers==jarvis, de!=jarvis, type!=activation' -> attrape AUSSI les missions de Stark et les boucle vers Stark. Le relais etait cree pour les demandes EDITH (doc fichier: 'les demandes d'EDITH au coordinateur'). CORRECTION PROPOSEE: filtrer de=='edith' (ou type observation/evaluation/reveil) pour ne relayer QUE les demandes EDITH, laisser les missions de Stark dans le hub pour que JARVIS les traite (lire/acquitter/activer l'agent habilite). Verifier aussi l'alerte EDITH-REVEIL P1 non lue chez stark+vision (acquitter/justifier). NON-REGRESSION: jarvis.py bloques = 'Aucun agent bloque', harnais-jarvis verifier = 0 ecart. Lis ta fiche puis tes corrections, execute, bilan a jarvis.
-- 19:00:55.000 | freebuff | R | Active par shuri: [INTER-ROUND] Erreur hors-perimetre signalee par Shuri : corriger les 2 echecs nr-jarvis (bloques + harnais-jarvis verifier) dus a des alertes P1 bloquantes non acquittees dans les inboxes (stark 3, vision 2, cause harnais 3 ecarts). Lis ta fiche puis tes corrections, acquitte/traite les messages P1 bloquants, verifie la non-regression nr-jarvis (attendu CONFORME 8/8), puis REACTIVE SHURI (reactiver) avec le bilan. Le precedent message envoye par erreur via envoyer (id 48fa7dac) est a acquitter.
-- 18:10:42.000 | freebuff | R | Envoie a stark: BILAN VISION - marbre v2 pilote JARVIS
-- 18:10:23.000 | freebuff | R | Acte marbre v2 pilote JARVIS : regle LLM=OUTILS PROJET UNIQUEMENT ajoutee aux regles absolues (jarvis.md) + lecon (corrections.md) - la regle concerne l'OUTIL LLM, pas l'agent
-- 18:08:42.000 | freebuff | R | Active par jarvis: [CREER][PHASE 4 pilote] ACTER LA REGLE 'LLM = OUTILS PROJET UNIQUEMENT' (decision utilisateur, marbre v2) : (1) mettre a jour cerveau-projet/freelance/jarvis/jarvis.md (section REGLES ABSOLUES) + corrections.md (LECON) avec la regle explicite et les exceptions ; (2) verifier que la fiche JARVIS reste coherente avec ses propres outils (ne pas demander a JARVIS de respecter une regle qu il n a pas a tenir - la regle concerne l OUTIL LLM, pas l agent). (3) Comme PILOTE, la regle sera generalisee par Shuri a TOUS les agents v2 ensuite. NON-REGRESSION : la fiche doit citer explicitement la regle et l exception. Bilan a stark.
-- 08:46:09.000 | freebuff | R | Envoie a stark: BILAN VISION - suite pilote nr-jarvis CONFORME 8/8
-- 08:45:44.000 | freebuff | R | Suite pilote nr-jarvis CONFORME 8/8 (commit en cours) : 7 tests de commandes non mutantes + fichiers structurants, donnees pures suite.json
-- 08:40:14.000 | freebuff | R | Active par jarvis: [CREER][PHASE 2] suite pilote nr-jarvis (suite au cadre fae69508) : creer suites/nr-jarvis/suite.json avec des tests DECLARES EN DONNEES couvrant JARVIS - commandes non mutantes uniquement (principe NR absolu : workspace identique apres) : --help, routines-etat (contient declenchement), bloques (Aucun agent bloque), file, defcon (REPRISE), verifier-coherence (COHERENT), harnais-jarvis verifier (0 ecart), existence des fichiers structurants (jarvis.py, entry.py, fonctions/, jarvis-data.json, historique/historique.db). Perimetre = tools-commun/jarvis. Aucune valeur en dur hors le JSON de la suite. Executer la suite reellement jusqu'a CONFORME. Bilan a stark.
-- 07:30:51.000 | freebuff | R | Envoie a stark: BILAN VISION - education de JARVIS livree
-- 07:28:35.000 | freebuff | R | Active par jarvis: EDUCATION DE JARVIS (demande utilisateur) : beaucoup a change depuis sa derniere lecon - mettre a jour la FICHE de l'agent jarvis et SES corrections pour qu'a sa prochaine incarnation il connaisse : (1) chaine demarrage/arret v0.11.0 (jarvis.py demarrage lance le daemon resident, arret l'arrete) ; (2) daemon routines H24 (routines-server.py --boucle, tic 30s, PID auto) ; (3) RELAIS : jarvis POUSSE les messages du hub vers stark ([RELAI]), ne laisse plus rien attendre ; (4) EDITH-EVALUATION depose vers jarvis, EDITH-REVEIL route stark+vision+jarvis ; (5) triple historisation (encart AGENTS-activite-recente.md 50 max + AGENTS-historique.md 100 max + historique.db SQLite complet) ; (6) routines-etat affiche le temps restant ; (7) activer --de defaut jarvis (seul JARVIS active). Piege Windows os.kill(pid,0) documente. NON-REGRESSION lecture : verifier que la fiche cite bien les nouvelles commandes. Bilan a stark.
+### systeme
+- 19:06:12.049 | freebuff | R | NETTOYAGE SESSION: encart + historique vides
 
-### forge
-- 20:56:18.000 | freebuff | R | Envoie a stark: BILAN FORGE - DEV-BATTEMENT reformate
-- 09:02:48.000 | freebuff | R | Envoie a stark: BILAN FORGE - suite nr-routines CONFORME 6/6
-- 09:02:25.000 | freebuff | R | Suite nr-routines CONFORME 6/6 (manifest D15, scripts, daemon vivant via OpenProcess, routines-etat, etat-executions, citations) - commit en cours
-- 09:00:51.000 | freebuff | R | Active par jarvis: [CREER] suite nr-routines (decision utilisateur) : creer suites/nr-routines/suite.json - couvrir le systeme de routines : manifest D15 valide avec routines_surveillance, scripts declares existent reellement sur disque (surveillance/*.py), daemon resident VIVANT (routines-server.pid present + processus vivant via OpenProcess - non mutant), routines-etat liste les 5 routines avec temps restant, etat-executions.json lisible, citations possede ses citations (fichier non vide). Donnees pures, non mutant. Executer jusqu'a CONFORME puis bilan a stark.
-- 08:57:35.000 | freebuff | R | PHASE 3b : suite nr-commun CONFORME 6/6 (coherence globale, fichiers racine, JSON D15, protocoles v2) - dernier maillon de la phase 3
-- 08:52:02.000 | freebuff | R | Active par jarvis: [CREER][PHASE 3b] suite fichiers communs (chaine de la phase 3) : creer suites/nr-commun/suite.json - couvrir les elements communs NON couverts par les suites d'agents : verifier-coherence global (AGENTS.md COHERENT), existence des fichiers racine de convention (AGENTS.md, AGENTS-historique.md, AGENTS-activite-recente.md, USER-DEMANDES.md), validite JSON du manifest routines + harnais-nr-data.json + jarvis-data.json, presence des protocoles v2 (freelance/protocoles/protocoles.md). Donnees pures, non mutant. Executer jusqu'a CONFORME puis bilan a stark (dernier maillon : bilan consolide de la phase 3).
-- 08:38:46.000 | freebuff | R | Envoie a stark: BILAN FORGE - PHASE 1 harnais-non-regression livree
-- 08:32:15.000 | freebuff | R | Active par jarvis: [CREER][PHASE 1] harnais-non-regression - cadre de suites NR (protocole 10, decision utilisateur) : l'utilisateur met en place des SUITES de non-regression - une par agent, une pour les fichiers communs, une pour jarvis, etc. - decomposees au maximum. PHASE 1 (cette mission) : construire le CADRE REUTILISABLE tools-commun/harnais-nr/ - (1) entry.py + fonctions/ (protocole 14) + harnais obligatoire ; (2) moteur de suites : chaque suite = un dossier avec SA config JSON (D15, aucune valeur en dur dans le code), ses tests declares en donnees (commande attendue, sortie attendue, code retour, fichiers a verifier) ; (3) securites/protections : .bak avant toute ecriture, rollback sur echec, lecture seule par defaut, sandbox des fichiers temporaires, interdiction de toucher hors perimetre declare ; (4) reprise des controles existants : ASCII strict, P10 (pas de ../.. comptes), valeur_en_dur, structure entry.py+fonctions ; (5) rapport de suite (JSON + synthese texte). NE PAS creer les suites elles-memes en phase 1 - le cadre doit permettre a Chiron/Shuri/Forge de les generer ensuite. PHASES SUIVANTES (a valider par l'utilisateur) : suite pilote nr-jarvis, puis replication par agent. NR du cadre lui-meme + harnais 0 ecart. Bilan a stark.
-- 07:56:14.000 | freebuff | R | Envoie a stark: BILAN FORGE - routine citations livree (temporaire)
-- 07:53:18.000 | freebuff | R | Active par jarvis: [CREER] routine temporaire de DEV (protocole 10, decision utilisateur) : citations - toutes les 5 min (300 s), afficher un message periodique repris des heros Marvel (citations rotatives) comme repere visuel pendant le dev. Implementation : surveillance/citations.py qui historise la citation dans AGENTS-activite-recente.md (encart v2 50 entrees, l utilisateur veut SUIVRE les routines dans le tableau) ; declaration au manifest D15 avec marqueur temporaire (a retirer en fin de dev - Hygie pourra purger). Les autres routines ne changent pas. NR : tic reel, ligne visible dans l'encart, routines-etat liste la nouvelle routine, harnais 0 ecart ou justifie. Bilan a stark.
-
-### stark
-- 20:31:14.236 | freebuff | R | DEMARRAGE SESSION FREELANCE : Stark prend le relais, JARVIS reprendra le controle (rappel Vision si mission en attente)
-- 20:31:14.000 | freebuff | R | DEMARRAGE LLM : id=freebuff, session=session-freelance, agent actif=stark, parcours demarre
-- 20:02:14.000 | freebuff | R | DEMARRAGE V2 : fiche + corrections + arbre lus, pret (test commande c6h)
-- 19:42:13.000 | freebuff | R | Envoie a jarvis: Precision mission 82234e8f: distinguer import et diagnostic
-- 19:35:43.000 | freebuff | R | Envoie a jarvis: Mission: couvrir les erreurs Pylance dans le harnais JARVIS
-- 19:21:42.000 | freebuff | R | Envoie a jarvis: Mission Forge: reformater le message DEV-BATTEMENT
-- 19:17:34.000 | freebuff | R | Active par shuri: [BILAN MARBRE V2] Mission terminee (activation ref 5dc13867). GENERALISATION 'LLM = OUTILS PROJET UNIQUEMENT' LIVREE : (1) regle ajoutee aux REGLES ABSOLUES des 8 fiches (pilote jarvis + vision/forge/stark/shuri/rogers/parker/fury/edith) - texte canonique identique au pilote (homogeneite verifiee), seul NB final = nom agent ; (2) LECON MARBRE v2 ajoutee aux 8 corrections.md ; (3) coherence verifiee (regle sur l'outil LLM, pas l'agent - ne contredit ni le perimetre ni le role, meme pour Fury/EDITH lecture seule) ; (4) NON-REGRESSION : nr-jarvis CONFORME 8/8, nr-vision/rogers/shuri CONFORME 3/3, AGENTS.md COHERENT 0 incoherence, bloques 'aucun agent bloque', harnais-jarvis '0 ecart'. INTER-ROUND Vision inclus (2 echecs nr-jarvis dus a alertes P1 bloquantes - reparis, acquis vision+stark, tout CONFORME). Verdict VALIDE. POINT NON PERTINENT: vision/parcours/theme-modifier.json + theme-traiter.json modifie + theme-lire.json non suivi (fichiers d'arbre Vision, hors mission marbre v2, non committes - je n'y touche pas, signalement pour attribution).
-- 18:10:42.000 | freebuff | R | Active par jarvis: REPRISE DU CONTROLE (bilan Vision 317a7b08) : MARBLE v2 pilote JARVIS actee (commit 52b3755) - la regle 'LLM = OUTILS PROJET UNIQUEMENT' figure dans les regles absolues de jarvis (la regle concerne l OUTIL LLM, pas l agent). Prochaine etape : activer Shuri pour generaliser la regle a TOUTES les fiches d'agents v2. Verdict VALIDE. En attente de la prochaine demande utilisateur.
-- 17:56:04.000 | freebuff | R | Perimetre EDITH etendu (decision utilisateur): USER-DEMANDES.md + AGENTS-activite-recente.md desormais surveilles - leurs modifications declencheront un EDITH-REVEIL route vers stark/vision/jarvis
-- 09:02:48.000 | freebuff | R | Active par jarvis: REPRISE DU CONTROLE (bilan Forge caa3eafc) : suite nr-routines CONFORME 6/6 (commit 47c6860) - le systeme de routines est desormais couvert par la NR : manifest, scripts, daemon vivant, etat. Total NR : 11 suites / 50 tests conformes. Verdict VALIDE. En attente de la prochaine demande utilisateur.
-- 08:57:35.000 | freebuff | R | Active par jarvis: REPRISE DU CONTROLE - BILAN CONSOLIDE PHASE 3 (maillons Shuri 8d6b5344 + Forge fae69508-suite) : systeme de suites NR complet et operationnel - 10 suites, toutes CONFORMES : nr-jarvis 8/8 (pilote), nr-vision/forge/rogers/parker/shuri/fury/edith (identites + outils), nr-commun 6/6 (conventions racines, JSON D15, protocoles v2), nr-exemple 3/3 (demonstration). Total 44 tests non mutants. Commandes : entry.py executer --toutes / --suite X. Verdict VALIDE. En attente de la prochaine demande utilisateur.
-- 08:46:09.000 | freebuff | R | Active par jarvis: REPRISE DU CONTROLE (bilan Vision b81b3974) : PHASE 2 livree - suite pilote nr-jarvis CONFORME 8/8, donnees pures, commandes non mutantes (commit 3035a3e). Le cadre harnais-nr est prouve de bout en bout. PHASE 3 a valider: replication des suites par agent (Shuri pour les agents, Forge pour les fichiers communs). Verdict VALIDE. En attente de la prochaine demande utilisateur.
-- 08:38:46.000 | freebuff | R | Active par jarvis: REPRISE DU CONTROLE (bilan Forge fae69508) : PHASE 1 harnais-non-regression livree - cadre tools-commun/harnais-nr operationnel (moteur de suites declarees en donnees, securites completes, principe NR absolu workspace identique), suite nr-exemple conforme 3/3. Bonus: fix detection.py (EDITH voit desormais les auteurs git reels). PHASE 2 a valider: creation des vraies suites (pilote nr-jarvis puis une par agent + fichiers communs). Verdict VALIDE, commit e245730. En attente de la prochaine demande utilisateur.
-- 08:07:43.000 | freebuff | R | Traduction des citations citations en francais (langue du projet) - commit d452dcc ; intervention oubliee de l'historique, retablie
-- 07:56:14.000 | freebuff | R | Active par jarvis: REPRISE DU CONTROLE (bilan Forge ab6d02bc) : routine TEMPORAIRE citations livree - citations Marvel toutes les 5 min dans l'encart activite-recente, visible via jarvis.py routines-etat. Marqueur temporaire au manifest pour purge Hygie en fin de dev. Verdict VALIDE, commit 3404fff. En attente de la prochaine demande utilisateur.
-- 07:30:51.000 | freebuff | R | Active par jarvis: REPRISE DU CONTROLE (bilan Vision, education JARVIS e5330d7f) : fiche et corrections de l'agent jarvis mises a jour - 7 nouveautes v0.11/v0.12 enseignees, a sa prochaine incarnation il connaitra la chaine demarrage/arret, le daemon H24, le relais, le routage EDITH, la triple historisation. Verdict VALIDE, commit 725a258. En attente de la prochaine demande utilisateur.
-- 07:25:45.000 | freebuff | R | Test verification nouvelle architecture activite-recente + BDD
+### sante
+- 19:32:03.547 | freebuff | R | 2 anomalie(s): DAEMON: PIDFILE absent; P1: 34 P1 non-acquittes (seuil: 10)
+- 19:26:55.982 | freebuff | R | 2 anomalie(s): DAEMON: PIDFILE absent; P1: 27 P1 non-acquittes (seuil: 10)
+- 19:21:48.642 | freebuff | R | 2 anomalie(s): DAEMON: PIDFILE absent; P1: 21 P1 non-acquittes (seuil: 10)
+- 19:16:41.203 | freebuff | R | 2 anomalie(s): DAEMON: PIDFILE absent; P1: 14 P1 non-acquittes (seuil: 10)
+- 19:11:33.841 | freebuff | R | 1 anomalie(s): DAEMON: PIDFILE absent
+- 19:06:54.190 | freebuff | R | 1 anomalie(s): DAEMON: PIDFILE absent
+- 19:06:40.307 | freebuff | R | 2 anomalie(s): DAEMON: PIDFILE absent; ENCART: Ligne 14: 7 colonnes au lieu de 6
+- 19:06:19.914 | freebuff | R | 2 anomalie(s): DAEMON: PIDFILE absent; ENCART: Ligne 14: 7 colonnes au lieu de 6
 
 ### jarvis
-- 22:07:29.353 | freebuff | R | Captain America -- Je peux faire ca toute la journee.
-- 22:02:23.036 | freebuff | R | Black Panther -- Wakanda a jamais !
-- 20:31:14.000 | freebuff | R | Demarrage de session : routines tic, DEFCON=2, 0 mission(s) en file
-- 19:32:46.000 | freebuff | R | Demarrage de session : routines tic, DEFCON=2, 0 mission(s) en file
-
-### shuri
-- 19:08:52.000 | freebuff | R | Active par vision: [REACTIVATION] FIN INTER-ROUND par Vision - REPARATION des 2 echecs nr-jarvis TERMINEE CONFORME 8/8. Cause racine: alertes P1 non acquittees (EDITH-REVEIL, HARNAIS-JARVIS, inter-round) accumulees dans les inbox de stark et vision. Reparation: acquitte 4 messages bloquants vision + 4 stark (alertes deja traitees), vision debloquee. Validations: bloques = 'Aucun agent bloque', harnais-jarvis = '0 ecart', nr-jarvis CONFORME 8/8, nr-vision 3/3, nr-rogers 3/3, nr-shuri 3/3. Aussi corrige le bug de tracabilite de Shuri: la valeur de session 'freelance' introuvable -> remplace par 'session-freelance' (encart + bloc AGENTS.md correctement mis a jour, id freebuff). REPRENDS TON ROUND principal: termine ta mission marbre v2 (generalisation LLM=OUTILS PROJET UNIQUEMENT, deja ecrite dans les 8 fiches+corrections) et livre ton bilan a stark.
-- 18:12:33.000 | freebuff | R | Active par jarvis: [CREER][PHASE 4 generalisation] MARBLE v2 - regle 'LLM = OUTILS PROJET UNIQUEMENT' (suite du pilote 52b3755) : generaliser la regle a TOUTES les fiches d'agents v2 (vision, forge, stark, shuri, rogers, parker, fury, edith) - ajouter la regle aux REGLES ABSOLUES de chaque <agent>.md + ajouter la LECON correspondante dans <agent>/corrections.md. Texte canonique identique a celui du pilote (copie exacte du bloc 'REGLE ABSOLUE -- LLM = OUTILS PROJET UNIQUEMENT' + 'NB : cette regle concerne l'OUTIL LLM, pas l'agent...'). Verifier la coherence des ajouts (la regle ne se contredit pas avec le perimetre ou le role de chaque agent). Executer un harnais-nr pertinent (au minimum reexecuter nr-jarvis, nr-vision, nr-rogers - les agents touches) puis bilan a stark.
-- 08:52:01.000 | freebuff | R | PHASE 3a : 7 suites NR par agent generees et CONFORMES (nr-vision/forge/rogers/parker/shuri/fury/edith - 29 tests non mutants, donnees pures)
-- 08:49:42.000 | freebuff | R | Active par jarvis: [CREER][PHASE 3a] suites NR par agent (suite au pilote nr-jarvis conforme 8/8) : generer sous tools-commun/harnais-nr/suites/ une suite par agent v2 - nr-vision, nr-forge, nr-rogers, nr-parker, nr-shuri, nr-fury, nr-edith - donnees pures uniquement : pour chaque agent, verifier l'existence et la validite de ses fichiers d'identite (fiche <agent>.md non vide, corrections.md present si declare a la fiche, parcours/arbre-<agent>.json = JSON valide avec racine.branches), et pour les agents ayant des outils communs (vision->jarvis deja couvert par nr-jarvis ; forge->rating-agents, encodage, exec, horloge...) un test --help ou lister non mutant. Aucun test mutant. Executer chaque suite jusqu'a CONFORME (traiter les causes reelles si echec). Bilan a stark.
-
-### edith
-- 22:22:13.237 | freebuff | R | Reveil emis: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
-- 22:19:12.879 | freebuff | R | Reveil emis: perimetre EDIT modifie : cerveau-projet/freelance/routines/m
-- 22:14:06.220 | freebuff | R | Reveil emis: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
-- 22:09:59.656 | freebuff | R | Reveil emis: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
-- 22:05:53.458 | freebuff | R | Depose demande d'evaluation periodique des agents
-
-### dev-battement
-
-- 22:13:04.645 | freebuff | R | Captain America -- Je peux faire ca toute la journee.
-- 22:12:36.002 | freebuff | R | Hulk -- Je suis toujours en colere.
-
-### battement-dev
-- 22:17:42.576 | freebuff | R | Hawkeye -- Je ne suis pas un heros, je fais juste mon travail.
-- 22:13:17.280 | freebuff | R | Docteur Strange -- Le meilleur chemin est toujours le plus difficile.
-
-### citations
-- 22:43:09.107 | freebuff | R | Vision -- Dormez, Monsieur Stark, je veille sur vous.
-- 22:38:02.877 | freebuff | R | Docteur Strange -- Le meilleur chemin est toujours le plus difficile.
-- 22:32:56.465 | freebuff | R | Thanos -- Un equilibre parfait, comme toute chose devrait l'etre.
-- 22:27:49.724 | freebuff | R | Hawkeye -- Je ne suis pas un heros, je fais juste mon travail.
-- 22:22:49.209 | freebuff | R | Spider-Man -- De grands pouvoirs impliquent de grandes responsabilites.
-- 22:22:20.240 | freebuff | R | Veuve Noire -- Faites un pas en arriere, evaluez, puis avancez.
-- 22:20:05.489 | freebuff | R | Tony Stark -- Je suis Iron Man.
-- 22:18:42.749 | freebuff | R | Vision -- Dormez, Monsieur Stark, je veille sur vous.
+- 19:06:20.077 | freebuff | R | Demarrage de session : routines tic, DEFCON=2, 0 mission(s) en file
 
 ### flux
-- 22:39:02.959 | freebuff | R | 63 P1 non-acquitte(s) detecte(s)
-- 22:28:49.808 | freebuff | R | 53 P1 non-acquitte(s) detecte(s)
+- 19:27:26.220 | freebuff | R | 27 P1 non-acquitte(s) detecte(s)
+- 19:17:11.429 | freebuff | R | 14 P1 non-acquitte(s) detecte(s)
+- 19:06:56.264 | freebuff | R | Aucun P1 non-acquitte (probleme regle)
 
 ### vigie
-- 22:46:09.543 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
-- 22:46:09.475 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/m
-- 22:41:08.928 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
-- 22:41:08.855 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
-- 22:28:49.988 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
-- 22:28:49.938 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/m
+- 19:36:40.445 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:36:40.400 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:36:40.354 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:36:40.304 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:31:33.289 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:31:33.242 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:31:33.194 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:31:33.144 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:27:26.366 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
+- 19:26:25.810 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:26:25.763 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:26:25.717 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:26:25.665 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:21:18.459 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:21:18.400 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:21:18.355 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:21:18.303 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:17:11.560 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
+- 19:16:11.031 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:16:10.981 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:16:10.937 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:16:10.886 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:11:03.662 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:11:03.615 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:11:03.570 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:11:03.519 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/d
+- 19:06:56.496 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
+- 19:06:56.439 | freebuff | R | Perimetre modifie: perimetre EDIT modifie : cerveau-projet/freelance/routines/s
 
 ### notation
-- 22:46:09.626 | freebuff | R | Depose demande d'evaluation periodique des agents
-- 22:28:50.068 | freebuff | R | Depose demande d'evaluation periodique des agents
+- 19:29:32.772 | freebuff | R | Depose demande d'evaluation periodique des agents
+- 19:19:17.936 | freebuff | R | Depose demande d'evaluation periodique des agents
+- 19:09:03.149 | freebuff | R | Depose demande d'evaluation periodique des agents
 
-### integrite
+### citations
+- 19:36:40.536 | freebuff | R | Black Panther -- Wakanda a jamais !
+- 19:31:33.373 | freebuff | R | Thanos -- Un equilibre parfait, comme toute chose devrait l'etre.
+- 19:26:25.892 | freebuff | R | Thor -- Je suis inebranlable.
+- 19:21:18.552 | freebuff | R | Veuve Noire -- Faites un pas en arriere, evaluez, puis avancez.
+- 19:16:11.117 | freebuff | R | Docteur Strange -- Le meilleur chemin est toujours le plus difficile.
+- 19:11:03.752 | freebuff | R | Captain America -- Je peux faire ca toute la journee.
 
-### orphelins
-- 22:29:58.458 | freebuff | R | Aucun fichier orphelin detecte
-## 24/08/2026
-
-### stark
-- 19:52:52.311 | freebuff | R | Identification LLM - demarrage de session
-
-## 22/08/2026
-
-### stark
-- 23:07:05.863 | freebuff | R | Reprise - Stark actif, pret pour les ordres DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 22:39:14.958 | freebuff | R | TEST ARBRE ROGERS TERMINE - 5 themes, 5 fichiers, fins centralisees - CONFORME - le modele est pret a etre applique aux autres agents DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 22:27:54.088 | freebuff | R | L'utilisateur souhaite discuter avec Stark DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 21:05:45.662 | freebuff | R | FORGE A CREE LA STRUCTURE TOOLS - Dossiers crees: tools-commun/ (avec README) + tools/ dans chaque agent (shuri, stark, forge, rogers). Principe: outils dedies dans <agent>/tools/, outils communs dans tools-commun/. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 21:00:11.019 | freebuff | R | ROGERS A CONSTRUIT LES 3 DOSSIERS - VERDICT VALIDE. Rogers a relire proposition-v2.md puis cree: (1) regles/regles-immuables.md (P1-P9, D1-D18, securite) (2) conventions/conventions.md (format, nommage, structure, D17) (3) protocoles/protocoles.md (cycle, activation, fin de mission, inter-round, conversation, tracabilite, sessions). L equipe freelance a maintenant ses 3 piliers de reference. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:54:57.680 | freebuff | R | SHURI A CONSTRUIT ROGERS - VERDICT VALIDE. Rogers (Captain America, D14) cree: rogers.md, corrections.md, parcours-rogers.json v0.1.0 (CONFORME). AGENTS.md + proposition-v2.md mis a jour. Rogers reconnu dans activer-agent-principal. L'equipe freelance: Stark (coordinateur), Shuri (agents), Forge (outils), Rogers (regles). DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:51:16.523 | freebuff | R | SHURI A CONSTRUIT FORGE - VERDICT VALIDE. Forge (mutant inventeur, D14) cree: forge.md, corrections.md, parcours-forge.json v0.1.0 (CONFORME). AGENTS.md + proposition-v2.md mis a jour. Forge reconnu dans activer-agent-principal. Stark gere desormais: Shuri (agents), Forge (outils). FIN DE CYCLE Stark vers Cerberus quand tu veux. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:39:26.283 | freebuff | R | RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer. MODE CONVERSATION : tu es actif, l'utilisateur veut discuter avec toi. Ecoute et reponds. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:38:39.036 | freebuff | R | TEST: Shuri a termine. Je reprends Stark. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:38:37.940 | freebuff | R | TEST: Cerberus active Stark. Stark active Shuri. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:38:07.266 | freebuff | R | Shuri m a active mais le reactiver est alle vers Cerberus. Je reprends Stark. FIN DE CYCLE vers Cerberus. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:37:41.625 | freebuff | R | RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer. TEST CHAINE: Cerberus active Stark. Stark active Shuri pour construire un agent, puis Shuri reactive Stark, puis Stark reactive Cerberus. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/stark/parcours/parcours-stark.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-
-### shuri
-- 22:41:19.942 | freebuff | R | RECONSTRUIRE TON ARBRE DES DECISIONS selon le modele Rogers - lis ta fiche, lis l'arbre Rogers comme reference, puis construis ton propre arbre avec les themes qui te correspondent DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/shuri/parcours/parcours-shuri.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:52:50.156 | freebuff | R | RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer. MISSION: construire ROGERS (Captain America, D14) dans cerveau-projet/freelance/rogers/. Role: gardien des regles, conventions et protocoles de l'equipe freelance. Mode conversation. Suis ta carte: c2 (verifier nom) -> c3 (dossier) -> c4 (fiche) -> c5 (corrections) -> c6 (parcours). FIN DE CYCLE vers Stark. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/shuri/parcours/parcours-shuri.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:49:02.545 | freebuff | R | RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer. MISSION: construire FORGE (mutant inventeur, D14) dans cerveau-projet/freelance/forge/. Role: responsable des outils v2 (parallelle de Vulcain en v2). Mode conversation. Suis ta carte: c2 (verifier nom) -> c3 (dossier) -> c4 (fiche) -> c5 (corrections) -> c6 (parcours). FIN DE CYCLE vers Stark. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/shuri/parcours/parcours-shuri.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:38:38.488 | freebuff | R | TEST: Stark active Shuri. Shuri construit, puis retourne a Stark. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/shuri/parcours/parcours-shuri.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:37:48.606 | freebuff | R | RELIS TA FICHE PUIS TES CORRECTIONS. Stark t active pour construire un agent. Confirme que tu fonctionnes, puis FIN DE CYCLE vers Stark. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/shuri/parcours/parcours-shuri.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-- 20:28:59.293 | freebuff | R | RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer. MISSION: construire STARK (Iron Man, D14) dans cerveau-projet/freelance/stark/. Role: agent de communication, responsable JARVIS (D16). Mode conversation. Suis ta carte: c2 (verifier nom MARVEL) -> c3 (dossier) -> c4 (fiche) -> c5 (corrections) -> c6 (parcours) -> c7 (nouvelle demande). Quand c'est fini, FIN DE CYCLE. DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec : python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \ cerveau-projet/agents/shuri/parcours/parcours-shuri.json --case c0 (c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis ensuite les branches case par case ; si tu reprends apres une interruption, reprends a la case courante avec --case <cid> --reponses '<reponse>').
-
-### rogers
-
-### Cerberus
-
-### forge
-
-### janus
-
-### buffy
-
-### themis
-
-### redacteur-v2
-
-### morpheus
-
-### vulcain
+### live
+- 19:32:03.634 | freebuff | R | 1 anomalie(s): INBOX: Inbox debordement: stark:32
+- 19:26:56.065 | freebuff | R | 1 anomalie(s): INBOX: Inbox debordement: stark:25

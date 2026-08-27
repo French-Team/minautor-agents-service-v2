@@ -1,67 +1,50 @@
 {
- "version": "0.1.0",
- "description": "Grades et couleurs des agents et routines v2 (D15, decision utilisateur 2026-08-26) - alimente la colonne Grade de l'encart AGENTS-activite-recente-v2.md. Haut de grade = bleu/vert, bas de grade = rouge/orange. EDITH = rose (couleur signature de l'observatrice). Routines sous les agents : surveillance = rouge, dev = orange (le plus bas).",
+ "version": "0.3.0",
+ "description": "Grades et couleurs des agents et routines v2 (D15, v0.3.0 2026-08-27) - alimente les colonnes Grade et Secteur de l'encart AGENTS-activite-recente-v2.md.",
  "echelle": [
-  {
-   "grade": "G1",
-   "nom": "Bleu",
-   "emoji": "🔵",
-   "description": "Noyau du systeme - JARVIS, Stark"
-  },
-  {
-   "grade": "G2",
-   "nom": "Vert",
-   "emoji": "🟢",
-   "description": "Agents d'action - Vision, Forge, Shuri, Rogers, Parker"
-  },
-  {
-   "grade": "G3",
-   "nom": "Jaune",
-   "emoji": "🟡",
-   "description": "Agent de test hors-round - Fury"
-  },
-  {
-   "grade": "G4",
-   "nom": "Rouge",
-   "emoji": "🔴",
-   "description": "Routines de surveillance (grade moyen-bas)"
-  },
-  {
-   "grade": "G5",
-   "nom": "Orange",
-   "emoji": "🟠",
-   "description": "Routines temporaires de dev - citations (le plus bas, desactivee en fin de dev)"
-  },
-  {
-   "grade": "SP",
-   "nom": "Rose",
-   "emoji": "🌸",
-   "description": "EDITH - observatrice, cellule dormante (couleur signature)"
-  }
+  {"grade": "G0", "nom": "Noyau", "emoji": "⭐", "description": "Cerveau du systeme - tout passe par eux (JARVIS, Stark)"},
+  {"grade": "G1", "nom": "Critique", "emoji": "🔵", "description": "Surveillance vitale - si ca s arrete, on est aveugle (flux, live)"},
+  {"grade": "G2", "nom": "Important", "emoji": "🟢", "description": "Detection d erreurs - impact direct securite (vigie, sante, Vision, Forge, Shuri, Rogers, Parker)"},
+  {"grade": "G3", "nom": "Utilitaire", "emoji": "🟡", "description": "Qualite/conformite - utile mais pas bloquant (harnais, encart, Fury)"},
+  {"grade": "G4", "nom": "Confort", "emoji": "🟠", "description": "Repere/historique - ameliore l experience (notation)"},
+  {"grade": "G5", "nom": "Temporaire", "emoji": "🔴", "description": "Dev/test - a supprimer en fin de dev (citations)"},
+  {"grade": "SP", "nom": "Special", "emoji": "🌸", "description": "Cellule dormante - couleur signature (EDITH)"}
  ],
  "agents": {
-  "jarvis": "G1",
-  "stark": "G1",
-  "vision": "G2",
-  "shuri": "G2",
-  "forge": "G2",
-  "rogers": "G2",
-  "parker": "G2",
-  "fury": "G3",
-  "edith": "SP"
+  "jarvis": "G0", "stark": "G0", "vision": "G2", "shuri": "G2",
+  "forge": "G2", "rogers": "G2", "parker": "G2", "fury": "G3", "edith": "SP"
  },
  "routines": {
-  "citations": "G5",
-  "vigie": "G4",
-  "flux": "G4",
-  "notation": "G4",
-  "harnais": "G4",
-  "integrite": "G4",
-  "orphelins": "G4"
+  "flux": "G1", "live": "G1", "vigie": "G2", "sante": "G2",
+  "harnais": "G3", "encart": "G3", "notation": "G4", "citations": "G5",
+  "integrite": "G3", "orphelins": "G3"
  },
- "defaut": {
-  "grade": "?",
-  "nom": "Inconnu",
-  "emoji": "⚪"
- }
+ "secteurs": {
+  "description": "Mapping mots-cles -> emojis pour la colonne Secteur de l'encart. Base sur les tags/mot-cles des fichiers agents.",
+  "mapping": {
+   "jarvis": "🎯", "coordination": "🎯", "messages": "🎯", "routing": "🎯",
+   "missions": "🎯", "assistant": "🎯", "intelligence": "🎯", "communication": "🎯",
+   "construction": "🔨", "agents": "🔨", "invention": "🔨", "creation": "🔨",
+   "templates": "🔨", "wakanda": "🔨", "genie": "🔨",
+   "test": "🧪", "reel": "🧪", "scenarios": "🧪", "hors-round": "🧪",
+   "non-regression": "🧪", "suites": "🧪", "harnais": "🧪",
+   "regles": "⚖️", "integrite": "⚖️", "discipline": "⚖️", "conventions": "⚖️",
+   "perimetre": "⚖️", "immuables": "⚖️", "philosophie": "⚖️",
+   "exploration": "🔍", "diagnostic": "🔍",
+   "surveillance": "👁️", "observation": "👁️", "cellule-dormante": "👁️",
+   "outils": "🔧", "mutant": "🔧", "pragmatique": "🔧", "commun": "🔧",
+   "marvel": "🌐", "v2": "🌐", "freelance": "🌐", "marvel": "🌐",
+   "iron-man": "🌐", "spider-man": "🌐", "capitaine": "🌐",
+   "rating": "📊", "notation": "📊", "evaluation": "📊",
+   "securite": "🛡️", "verrou": "🛡️", "lecteur-de-carte": "🛡️",
+   "defcon": "🚨", "alertes": "🚨",
+   "historique": "📜", "traces": "📜", "chronos": "📜",
+   "tokens": "💰", "comptage": "💰",
+   "bdd": "🗄️", "sqlite": "🗄️", "base": "🗄️",
+   "daemon": "⚙️", "serveur": "⚙️", "mcp": "⚙️", "horloge": "⚙️"
+  },
+  "defaut": "📋",
+  "regle": "Le premier mot-cle correspondant dans la liste des tags/mot-cles du fichier determine le secteur. Ordre de priorite : type d'agent/routine d'abord, puis domaines specifiques."
+ },
+ "defaut": {"grade": "?", "nom": "Inconnu", "emoji": "⚪"}
 }

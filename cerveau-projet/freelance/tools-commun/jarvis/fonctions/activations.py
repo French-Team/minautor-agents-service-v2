@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 from core import (AGENTS_INFOS, AGENTS_VALIDES, ajouter_message,
                   marquer_lu)
-from historique import historiser, AGENTS_FILE
+from historique import historiser, normaliser_session, AGENTS_FILE
 
 
 def maj_bloc_session(session: str, agent: str, raison: str = "") -> bool:
@@ -46,6 +46,12 @@ def maj_bloc_session(session: str, agent: str, raison: str = "") -> bool:
     if infos.get("corrections"):
         champs["**Corrections**"] = "[%s](%s)" % (
             infos["corrections"], infos["corrections"])
+    # v0.6.3 (2026-08-26) : proteger les | dans les valeurs AVANT ecriture
+    # dans le tableau AGENTS.md - une raison contenant un | literal (ex:
+    # mission DEV-BATTEMENT 'nom | phrase...') cassait le tableau (bug
+    # observe : bloc session-freelance a 5 colonnes au lieu de 3).
+    for champ in champs:
+        champs[champ] = champs[champ].replace("|", "-")
     for i in range(debut, fin):
         if "|" not in lignes[i]:
             continue  # ne jamais toucher aux lignes hors tableau
@@ -63,7 +69,7 @@ def maj_bloc_session(session: str, agent: str, raison: str = "") -> bool:
 def cmd_activer(args):
     """Activer un agent via JARVIS (remplace activer-agent-principal)."""
     agent = args.agent.lower()
-    session = getattr(args, "session", "")
+    session = normaliser_session(getattr(args, "session", ""))
     mission = args.mission
     expediteur = getattr(args, 'de', 'jarvis').lower() or 'jarvis'
 

@@ -71,6 +71,28 @@ types:
 5. Protocole-controle-trio v0.2.0 : nouvelle section 'Chaine de transmission et boucle de correction' + pieges (transmission non conforme, retour a Cerberus en milieu de chaine) + REGLE D EXCELLENCE (livrable passe en aval uniquement s il est excellent).
 6. Resultat : 4/4 CONFORME, non-regression 20/20, normes 0/0.
 
+## [LECON] 2026-08-27 -- UTILISER ORACLE POUR HISTORISER (Buffy)
+
+**Contexte** : l utilisateur m a rappelle que je dois historiser chaque mission. J ai d abord cree un outil dans outils-llm/ (interdit : dossier reserve aux LLM), puis utilise activer-agent-principal.py (lourd). Oracle (v1) existait deja avec une commande historiser simple.
+
+**Lecon** : Quand je travaille en session-admin, j utilise ORACLE pour historiser :
+
+```
+python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy "<raison>"
+```
+
+C est simple, rapide, et ecrit dans les 3 destinations (encart + historique + BDD).
+
+**Regle** : DEBUT + FIN de chaque mission :
+- DEBUT : `oracle.py historiser buffy "DEBUT: <mission>"` (declaration d intention)
+- FIN : `oracle.py historiser buffy "FIN: <bilan>"` (resultat)
+Si l outil bug pendant, on sait que la mission a commence.
+
+**Erreurs a ne pas reproduire** :
+- Creer des outils dans outils-llm/ (dossier reserve aux LLM)
+- Utiliser des commandes systeme directes (python -c, cat, etc.)
+- Oublier d historiser (perte de tracabilite)
+
 ## Regles specifiques
 
 | Regle | Description |

@@ -124,7 +124,7 @@ v2 ensuite. Verdict VALIDE.
 ### [LECON] 2026-08-26 -- COLONNE GRADE : couleurs par grade dans l'encart v2
 
 L'encart AGENTS-activite-recente-v2.md a l'ordre de colonnes
-**Grade | Agent | Raison | Heure | id | Type** (decision utilisateur
+**Grade | Agent | Secteur | Raison | Heure | id | Type** (decision utilisateur
 2026-08-26) - la colonne **Grade** (emoji couleur) est en tete :
 
 - Echelle : G1 bleu (jarvis, stark) / G2 vert (vision, shuri, forge,
@@ -166,3 +166,34 @@ leur grade/couleur dans l'encart v2, jamais sous un agent.
   notation a chaque evaluation (5 min depuis 2026-08-26, reduit pour les essais).
 - Les routines demarrage/arret (integrite, orphelins) sont executees par
   hooks.py a chaque demarrage/arret du serveur de routines.
+
+### [LECON] 2026-08-26 -- PROTEGER LES | DANS LES RAISONS + DEMANDES EDITH (par Ferrari)
+
+Deux bugs du 2026-08-26 (regression tableau + entree EDITH disparue) :
+
+1. **Les `|` dans les raisons cassent les tableaux** : une raison contenant
+   un `|` literal (ex: mission DEV-BATTEMENT avec le format `'nom | phrase
+   [DEV-BATTEMENT HH:MM]'`) cassait le tableau du bloc session AGENTS.md
+   (`maj_bloc_session` fait un split sur `|` : la ligne passait a 5 colonnes
+   au lieu de 3) et aurait casse l'encart v2. Depuis : `maj_bloc_session`
+   (activations.py) ET `historiser` (historique.py) remplacent les `|` par
+   `-` AVANT d'ecrire dans un tableau. Verifie que toute raison que tu
+   passes a `historiser` ou a une activation ne contient jamais de `|`.
+
+2. **Les demandes d'activation EDITH etaient classees `hub_non_route`** :
+   le harnais-jarvis ne reconnaissait comme demande d'activation que
+   `type=activation` ou "ACTIVATION"/"MISSION" en majuscules. Les demandes
+   EDITH (`[EDITH-REVEIL]` type=reveil, `[EDITH-EVALUATION]` type=evaluation,
+   objet "demande activation EDITH" en minuscules) tombaient dans
+   `hub_non_route`, et une fois lues (lu=True) sans activer EDITH, plus rien
+   ne les signalait : EDITH n'etait JAMAIS activee, son entree n'apparaissait
+   jamais. Depuis (harnais-jarvis v0.13.1) : ces demandes sont classees
+   `activation_demandee_non_traitee` (CRIT). Quand tu vois une demande
+   `[EDITH-REVEIL]` ou `[EDITH-EVALUATION]` dans ton hub : ACTIVE EDITH
+   (jamais de sa propre initiative, mais elle doit etre activee pour faire
+   SON travail - protocoles 17/18).
+## LECON 13 : Surveillance temps reel (2026-08-27)
+**Contexte** : les routines historisaient a chaque tick, noyant l'encart v2 (50 entrees max) et evincant les entrees importantes.
+**Lecon** : les routines doivent historiser UNIQUEMENT quand il y a un changement significatif (evenementiel). Trois nouvelles routines de surveillance ont ete creees : `sante` (etat global), `live` (activations, ex agents-temps-reel renommee 2026-08-27), `encart` (integrite). Elles tournent toutes les 300s et historisent uniquement en cas d'anomalie.
+**Regle** : TOUTE routine doit etre evenementielle - pas de bruit quand tout va bien.
+**Ajout aux regles absolues** : les routines historisent UNIQUEMENT en cas d'anomalie ou de changement d'etat.

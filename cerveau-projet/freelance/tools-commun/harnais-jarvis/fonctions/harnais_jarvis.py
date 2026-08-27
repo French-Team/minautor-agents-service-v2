@@ -132,10 +132,19 @@ def _detecter_messages(config, ecarts):
                     comptes_id[identifiant] = comptes_id.get(identifiant, 0) + 1
                 # P1 non lu : demandes d activation / missions non demarrees
                 non_lu = not msg.get("lu")
+                # v0.13.1 (2026-08-26) : les demandes d activation EDITH
+                # portent type=reveil/evaluation et objet 'demande activation
+                # EDITH' (minuscules) - elles sont des demandes d activation
+                # au meme titre que type=activation (sinon le harnais les
+                # classe en hub_non_route puis les oublie une fois lues).
+                objet_up = (msg.get("objet") or "").upper()
                 est_demande_activation = (
                     msg.get("type") == "activation"
-                    or "ACTIVATION" in (msg.get("objet") or "").upper()
-                    or "MISSION" in (msg.get("objet") or "").upper())
+                    or "ACTIVATION" in objet_up
+                    or "MISSION" in objet_up
+                    or "DEMANDE D ACTIVATION" in objet_up.replace("'", " ")
+                    or (msg.get("de") == "edith"
+                        and msg.get("type") in ("reveil", "evaluation")))
                 if non_lu and msg.get("priorite") == 1:
                     cle = identifiant or cle_ligne
                     # le HUB est inbox/jarvis.jsonl uniquement : le

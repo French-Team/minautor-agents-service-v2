@@ -50,7 +50,42 @@
    "intervalles_secondes": 300,
    "temporaire": true,
    "note": "ROUTINE TEMPORAIRE (2026-08-26, decision utilisateur) : citations Marvel toutes les 5 min comme repere visuel - ex-battement-dev renommee (la colonne Grade de l encart porte la couleur orange G5). A RETIRER EN FIN DE DEV - Hygie pourra purger script + entree."
-  }
+  },
+  {
+   "nom": "sante",
+   "script": "surveillance/sante.py",
+   "actif": true,
+   "intervalles_secondes": 300,
+   "note": "ROUTINE DE SURVEILLANCE TEMPS REEL : etat global du systeme (daemon vivant, BDD accessible, encart coherent, P1 non-acquittes). Historise UNIQUEMENT en cas d anomalie."
+  },
+  {
+   "nom": "live",
+   "script": "surveillance/live.py",
+   "actif": true,
+   "intervalles_secondes": 300,
+   "note": "ROUTINE DE SURVEILLANCE TEMPS REEL : surveillance des activations/desactivations d agents (inbox, activite recente, agents actifs). Historise UNIQUEMENT en cas d anomalie. Renommee 2026-08-27 (ex agents-temps-reel, nom trop long)."
+  },
+   {
+    "nom": "encart",
+    "script": "surveillance/encart.py",
+    "actif": true,
+    "intervalles_secondes": 300,
+    "note": "ROUTINE DE SURVEILLANCE TEMPS REEL : integrite de l encart v2 (format, colonnes, doublons, grades). Historise UNIQUEMENT en cas d anomalie."
+   },
+   {
+    "nom": "compter-entree",
+    "script": "surveillance/compter-entree.py",
+    "actif": true,
+    "intervalles_secondes": 300,
+    "note": "Mesure les tokens ENTREE (fichiers lus par l'LLM) - journalise dans data/journal-entree.jsonl"
+   },
+   {
+    "nom": "compter-sortie",
+    "script": "surveillance/compter-sortie.py",
+    "actif": true,
+    "intervalles_secondes": 300,
+    "note": "Mesure les tokens SORTIE (resultats d'outils executes) - journalise dans data/journal-sortie.jsonl"
+   }
   ],
   "seuils_alerte": {
     "p1_non_acquitte": true,

@@ -440,7 +440,7 @@
   "c15d": {
    "indices": [
     {
-     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan.",
+     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me transmettra le bilan.",
      "type": "regle"
     },
     {
@@ -1168,7 +1168,7 @@
   "c9d": {
    "indices": [
     {
-     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan.",
+     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me transmettra le bilan.",
      "type": "regle"
     },
     {
@@ -1379,7 +1379,7 @@
    ]
   },
   "c1ir": {
-   "titre": "RECEPTION INTER-ROUND : accuser reception du rapport KO et reactiver l appelant",
+   "titre": "RECEPTION INTER-ROUND : accuser reception du rapport KO et activer l appelant",
    "type": "action",
    "suivant": "c15e",
    "message": "RECEPTION INTER-ROUND (protocole-fin-mission v0.2.0 R2) : un agent (Morpheus, Janus, Themis) m a active en inter-round avec un rapport de KO. Je NE commence PAS une nouvelle mission outil. PERIMETRE REDUIT: 1) Lire le rapport KO transmis, 2) Confirmer reception (message console), 3) REACTIVER l agent appelant (commande activer, PAS reactiver) avec mention \"reprends ton round en cXe\". CASCADE autorisee entre habilites.",

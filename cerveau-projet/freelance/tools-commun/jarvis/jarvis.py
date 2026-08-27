@@ -47,6 +47,9 @@ from routines import cmd_routines_etat
 from demarrage import cmd_demarrage, cmd_arret
 from relais import relayer_vers_stark
 from missions import lancer as lancer_missions_fichier
+from corrections import (marquer_correction, traiter_corrections,
+                         terminer_correction, lister_corrections,
+                         nettoyer_corrections, a_corrections_en_attente)
 
 
 def construire_parser():
@@ -170,6 +173,27 @@ def construire_parser():
         "verifier-coherence",
         help="Verifier la coherence d AGENTS.md contre les fichiers reels (arbres v2, fiches, corrections, jarvis-data, Sessions)")
 
+    # corrections pre-existantes (retro-correction automatique)
+    p_corr = subparsers.add_parser(
+        "corrections",
+        help="Systeme de corrections pre-existantes")
+    p_corr.add_argument("correction_cmd", nargs="?", default="",
+                         help="Sous-commande: lister/nettoyer/traiter")
+    p_corr.add_argument("--agent", default="",
+                         help="Agent (pour marquer/annuler)")
+    p_corr.add_argument("--fichier", default="",
+                         help="Fichier en erreur (pour marquer)")
+    p_corr.add_argument("--erreur", default="",
+                         help="Description de l erreur (pour marquer)")
+    p_corr.add_argument("--source", default="routine",
+                         help="Source de detection (pour marquer)")
+    p_corr.add_argument("--session", default="session-freelance",
+                         help="Session")
+    p_corr.add_argument("--id", dest="correction_id", default="",
+                         help="ID correction (pour terminer)")
+    p_corr.add_argument("--succes", action="store_true",
+                         help="Correction reussie (pour terminer)")
+
     # classeur v2 (BDD SQLite, freelance/classeur/ - decision utilisateur
     # 2026-08-25 : la v2 a son propre classeur, stockage/consultation rapides)
     p_cl = subparsers.add_parser(
@@ -188,6 +212,35 @@ def construire_parser():
     return parser
 
 
+def cmd_corrections(args):
+    """Commande corrections : lister, nettoyer, marquer, terminer."""
+    sous = getattr(args, "correction_cmd", "")
+    if sous == "lister":
+        lister_corrections()
+    elif sous == "nettoyer":
+        nettoyer_corrections()
+    elif sous == "marquer":
+        if not args.agent or not args.erreur:
+            print("[CORRECTIONS] --agent et --erreur requis")
+            return
+        cid = marquer_correction(
+            agent=args.agent,
+            fichier=args.fichier or "",
+            erreur=args.erreur,
+            source=args.source or "routine",
+            session=args.session)
+        print(f"[CORRECTIONS] ID: {cid}")
+    elif sous == "terminer":
+        if not args.correction_id:
+            print("[CORRECTIONS] --id requis")
+            return
+        terminer_correction(args.correction_id, succes=args.succes)
+    elif sous == "traiter":
+        traiter_corrections(session=args.session)
+    else:
+        lister_corrections()
+
+
 def main():
     if verifier_outil is not None:
         verifier_outil(_CHEMIN_OUTIL, agent="jarvis")
@@ -196,6 +249,15 @@ def main():
     try:
         from routines import executer_routines
         executer_routines()
+    except Exception:
+        pass
+    # RETRO-CORRECTION : traiter les corrections pre-existantes EN PRIORITE
+    # avant toute autre operation (les erreurs sont plus urgentes que les
+    # missions en cours).
+    try:
+        if a_corrections_en_attente():
+            print("[CORRECTIONS] Corrections en attente detectees !")
+            traiter_corrections()
     except Exception:
         pass
     # v0.12.0 (decision utilisateur) : JARVIS POUSSE vers stark les
@@ -254,9 +316,23 @@ def main():
         cmd_bloques(args)
     elif args.commande == "historiser":
         cmd_historiser(args)
+    elif args.commande == "corrections":
+        cmd_corrections(args)
     else:
         parser.print_help()
 
 
 if __name__ == "__main__":
-    main()
+    # HOOK TOKENS : comptage entree/sortie a chaque commande JARVIS
+    try:
+        sys.path.insert(0, str(Path(__file__).parent.parent / "compter" / "fonctions"))
+        from hook_tokens import hook_jarvis
+        import argparse as _ap
+        _parser_hook = argparse.ArgumentParser(add_help=False)
+        _parser_hook.add_argument("commande", nargs="?", default="???")
+        _parser_hook.add_argument("rest", nargs="*")
+        _args_hook, _ = _parser_hook.parse_known_args()
+        rc = hook_jarvis(_args_hook, main)
+        sys.exit(rc)
+    except ImportError:
+        main()

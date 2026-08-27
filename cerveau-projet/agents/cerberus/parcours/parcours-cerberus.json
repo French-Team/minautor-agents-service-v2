@@ -341,7 +341,7 @@
     },
     {
      "type": "regle",
-     "texte": "FLUX CORRECTION : si REJETE / A REVOIR -> reactiver l'agent d'origine pour corriger, puis relancer Janus."
+     "texte": "FLUX CORRECTION : si REJETE / A REVOIR -> activer l'agent d'origine pour corriger, puis relancer Janus."
     }
    ],
    "branches": [
@@ -447,7 +447,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE : verdict REJETE / A REVOIR -> reactiver l'agent d'origine pour corriger, puis relancer Janus (re-controle)."
+     "texte": "REGLE : verdict REJETE / A REVOIR -> activer l'agent d'origine pour corriger, puis relancer Janus (re-controle)."
     },
     {
      "type": "outil",
@@ -630,7 +630,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
+     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me transmettra le bilan."
     },
     {
      "type": "outil",

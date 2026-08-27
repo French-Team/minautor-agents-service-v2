@@ -37,7 +37,7 @@ JAMAIS le fonctionnement de JARVIS.
 | `hub_non_route` | messages | ERR | message dans inbox/jarvis.jsonl jamais route (envoye SANS --activer) |
 | `message_non_transmis` | messages | ERR | **JARVIS n a PAS transmis : message dans outbox/<de> mais ABSENT de inbox/<vers> -- le destinataire ne l a jamais recu (boucle/round brise)** |
 | `message_non_trace` | messages | WARN | message dans inbox/<vers> mais ABSENT de outbox/<de> -- transmission non tracee cote expediteur (asymetrie) |
-| `activation_demandee_non_traitee` | activations | **CRIT** | **JARVIS n active PAS : une DEMANDE d activation (type activation / objet ACTIVATION-MISSION) reste non lue dans le hub** |
+| `activation_demandee_non_traitee` | activations | **CRIT** | **JARVIS n active PAS : une DEMANDE d activation (type activation / objet ACTIVATION-MISSION / demandes EDITH type=reveil-evaluation ou objet 'demande activation EDITH' - v0.13.1) reste non lue dans le hub** |
 | `mission_non_demarree` | activations | ERR | **activation ecrite pour un agent mais jamais livree (message non lu) : l agent n a pas pris le relais** |
 | `activation_sans_historique` | activations | WARN | activation recente (14 j) sans trace dans l historique du serveur (maillons sautes) |
 | `mission_abandonnee` | files | WARN | mission en file (EN_ATTENTE...) depuis > 7 j sans reprise : JARVIS ne reprend pas |

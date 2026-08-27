@@ -21,6 +21,9 @@ INBOX_DIR = RACINE / "cerveau-projet" / "freelance" / "tools-commun" / \
     "jarvis" / "inbox"
 
 
+# Fichier de persistance pour la derniere valeur connue
+_DERNIERE_VALEUR = Path(__file__).parent / ".flux_derniere.txt"
+
 def main():
     alertes = 0
     for f in INBOX_DIR.glob("*.jsonl"):
@@ -35,26 +38,54 @@ def main():
                 alertes += 1
                 print(f"ALERTE : P1 non-acquitte chez {f.stem} - "
                       f"{m.get('objet', '')[:50]}")
-    if alertes:
-        # Tracabilite : la routine flux est un element surveille, elle
-        # historise SOUS SON NOM quand elle detecte des P1 non-acquittes
-        # (rouge G4). Evenementiel : pas de trace quand tout va bien.
+    
+    # Historiser UNIQUEMENT si le nombre de P1 a change
+    # (evite de noyer l'encart avec des entrees identiques)
+    derniere_valeur = 0
+    if _DERNIERE_VALEUR.exists():
         try:
-            _fo = RACINE / "cerveau-projet" / "freelance" / "tools-commun" \
-                / "os_path" / "fonctions"
-            _fj = RACINE / "cerveau-projet" / "freelance" / "tools-commun" \
-                / "jarvis" / "fonctions"
-            for p in (_fo, _fj):
-                if str(p) not in sys.path:
-                    sys.path.insert(0, str(p))
-            from historique import historiser
-            historiser("flux",
-                       "%d P1 non-acquitte(s) detecte(s)" % alertes,
-                       "R", session="session-freelance")
-        except Exception:
+            derniere_valeur = int(_DERNIERE_VALEUR.read_text().strip())
+        except ValueError:
             pass
+    
+    if alertes != derniere_valeur:
+        # Le nombre a change : historiser
+        if alertes:
+            try:
+                _fo = RACINE / "cerveau-projet" / "freelance" / "tools-commun" \
+                    / "os_path" / "fonctions"
+                _fj = RACINE / "cerveau-projet" / "freelance" / "tools-commun" \
+                    / "jarvis" / "fonctions"
+                for p in (_fo, _fj):
+                    if str(p) not in sys.path:
+                        sys.path.insert(0, str(p))
+                from historique import historiser
+                historiser("flux",
+                           "%d P1 non-acquitte(s) detecte(s)" % alertes,
+                           "R", session="session-freelance")
+            except Exception:
+                pass
+        else:
+            # Retour a zero : historiser aussi (le probleme est regle)
+            try:
+                _fo = RACINE / "cerveau-projet" / "freelance" / "tools-commun" \
+                    / "os_path" / "fonctions"
+                _fj = RACINE / "cerveau-projet" / "freelance" / "tools-commun" \
+                    / "jarvis" / "fonctions"
+                for p in (_fo, _fj):
+                    if str(p) not in sys.path:
+                        sys.path.insert(0, str(p))
+                from historique import historiser
+                historiser("flux",
+                           "Aucun P1 non-acquitte (probleme regle)",
+                           "R", session="session-freelance")
+            except Exception:
+                pass
+        # Sauvegarder la nouvelle valeur
+        _DERNIERE_VALEUR.write_text(str(alertes))
+        print(f"[FLUX] Changement : {derniere_valeur} -> {alertes} P1")
     else:
-        print("Aucun P1 non-acquitte.")
+        print(f"[FLUX] Inchang : {alertes} P1 (pas d'historisation)")
     return 0
 
 

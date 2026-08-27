@@ -42,3 +42,13 @@ corrections, puis suis TON parcours/arbre.
 
 REGLE : NE DEMANDE JAMAIS "Que souhaitez-vous faire ?" -- la seule action
 possible a ce stade est d executer l outil de demarrage. Execute-le.
+
+## NETTOYAGE -- SI L UTILISATEUR DEMANDE DE NETTOYER LA SESSION
+
+```
+python3 outils-llm/nettoyer-session.py <id> <session>
+```
+
+L outil vide l encart, l historique, les inbox/outbox JARVIS (freelance)
+et purge la BDD. Sans question, obéit. Apres le nettoyage, le LLM est
+dans une session propre (rien dans les encarts/historiques).

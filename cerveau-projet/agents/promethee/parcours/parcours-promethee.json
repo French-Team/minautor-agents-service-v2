@@ -598,7 +598,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me reactivera avec le bilan."
+     "texte": "PATTERN 17 + 5/8 : DELEGATION - activer l'agent habilite (champ agent_habilite dans themes-amelioration.json). Il me transmettra le bilan."
     },
     {
      "type": "outil",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: ascii -*-
+# -*- coding: utf-8 -*-
 """
 outils-llm/demarrer-llm.py - DEMARRAGE EXCLUSIF DU LLM (ni v1, ni v2).
 
@@ -64,6 +64,20 @@ def _couleur_agent(agent):
         if e.get("grade") == grade:
             return e.get("emoji", "")
     return data.get("defaut", {}).get("emoji", "")
+
+
+def _secteur_agent(agent):
+    """Emoji secteur d un agent/routine v2 (grades-v2.json, D15).
+    La colonne Secteur de l encart v2 est remplie par cette emoji."""
+    try:
+        data = json.loads(GRADES_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return "📋"
+    secteurs = data.get("secteurs", {})
+    for mot_cle, emoji in secteurs.items():
+        if mot_cle.lower() in agent.lower():
+            return emoji
+    return data.get("defaut", {}).get("secteur_emoji", "📋")
 CLASSEUR = RACINE / "cerveau-projet" / "agents" / "classeur-variables" / "stockage" / "variables-actuelles.md"
 ACTIVER_PRINCIPAL = RACINE / "cerveau-projet" / "agents" / "tools" / "activer" / "activer-agent-principal" / "activer-agent-principal.py"
 BDD_DIR = RACINE / "cerveau-projet" / "freelance" / "tools-commun" / "jarvis" / "historique"
@@ -254,10 +268,10 @@ def historiser(agent, raison, session):
     id_llm = bloc.get("Nom LLM", "")
     v2 = (session == "session-freelance")
     if v2:
-        # v2 : colonne Grade + ORDRE Grade | Agent | Raison | Heure | id |
-        # Type (decision utilisateur 2026-08-26)
-        ligne = "| %s | %s | %s | %s | %s | R |" % (
-            _couleur_agent(agent), agent, tronquer(raison), heure, id_llm)
+        # v2 : colonne Grade + Secteur (7 colonnes, decision 2026-08-27)
+        ligne = "| %s | %s | %s | %s | %s | %s | R |" % (
+            _couleur_agent(agent), agent, _secteur_agent(agent),
+            tronquer(raison), heure, id_llm)
     else:
         ligne = "| %s | %s | %s | R | %s |" % (heure, agent, id_llm, tronquer(raison))
     if section in contenu:
@@ -297,8 +311,8 @@ def historiser(agent, raison, session):
             contenu = "\n".join(lignes)
     else:
         if v2:
-            entete = ("| Grade | Agent | Raison | Heure | id | Type |\n"
-                      "|-------|-------|--------|-------|----|------|")
+            entete = ("| Grade | Agent | Secteur | Raison | Heure | id | Type |\n"
+                      "|-------|-------|---------|--------|-------|----|------|")
         else:
             entete = ("| Heure | Agent | id | Type | Raison |\n"
                       "|-------|-------|----|------|--------|")

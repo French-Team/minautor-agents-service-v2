@@ -461,7 +461,11 @@
 {"date_debut": "2026-08-26 20:16:05", "session": "session-admin", "agent": "vulcain", "date_fin": "2026-08-26 20:22:46", "duree_secondes": 401, "tokens_debut": null}
 {"date_debut": "2026-08-26 20:28:44", "session": "session-freelance", "agent": "stark", "date_fin": "2026-08-26 20:28:50", "duree_secondes": 6, "tokens_debut": null}
 {"date_debut": "2026-08-26 20:28:50", "session": "session-freelance", "agent": "stark", "date_fin": "2026-08-26 20:31:14", "duree_secondes": 144, "tokens_debut": null}
-{"date_debut": "2026-08-26 20:31:14", "session": "session-freelance", "agent": "stark", "date_fin": null, "duree_secondes": null, "tokens_debut": null}
+{"date_debut": "2026-08-26 20:31:14", "session": "session-freelance", "agent": "stark", "date_fin": "2026-08-27 08:04:24", "duree_secondes": 41590, "tokens_debut": null}
 {"date_debut": "2026-08-26 20:50:01", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 20:52:09", "duree_secondes": 128, "tokens_debut": null}
 {"date_debut": "2026-08-26 20:52:09", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-26 20:54:34", "duree_secondes": 145, "tokens_debut": null}
-{"date_debut": "2026-08-26 21:11:10", "session": "session-admin", "agent": "ferrari", "date_fin": null, "duree_secondes": null, "tokens_debut": null}
+{"date_debut": "2026-08-26 21:11:10", "session": "session-admin", "agent": "ferrari", "date_fin": "2026-08-27 19:21:36", "duree_secondes": 79826, "tokens_debut": null}
+{"date_debut": "2026-08-27 08:04:24", "session": "session-freelance", "agent": "stark", "date_fin": "2026-08-27 19:06:19", "duree_secondes": 39715, "tokens_debut": null}
+{"date_debut": "2026-08-27 19:06:19", "session": "session-freelance", "agent": "stark", "date_fin": null, "duree_secondes": null, "tokens_debut": null}
+{"date_debut": "2026-08-27 19:21:36", "session": "session-admin", "agent": "Cerberus", "date_fin": "2026-08-27 19:24:52", "duree_secondes": 196, "tokens_debut": null}
+{"date_debut": "2026-08-27 19:30:42", "session": "session-admin", "agent": "atlas", "date_fin": "2026-08-27 19:32:03", "duree_secondes": 81, "tokens_debut": null}

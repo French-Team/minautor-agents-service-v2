@@ -117,9 +117,6 @@ def main():
             if str(p) not in sys.path:
                 sys.path.insert(0, str(p))
         from historique import historiser
-        # trace sous le nom de la routine notation (decision utilisateur
-        # 2026-08-26 : les routines sont des elements surveilles avec
-        # LEUR propre nom/grade - la couleur rouge G4 s'affiche).
         historiser("notation",
                    "Depose demande d'evaluation periodique des agents",
                    "R", session="session-freelance")
@@ -127,6 +124,10 @@ def main():
         pass
     print("[ROUTINE] Demande d'evaluation deposee dans l'inbox de jarvis.")
     return 0
+
+# NOTE : cette routine n'historise QUE quand elle depose une demande
+# (pas quand une demande est deja en attente). C'est deja le cas grace
+# a demande_deja_en_attente() en debut de main().
 
 
 if __name__ == "__main__":
