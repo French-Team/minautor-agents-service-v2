@@ -273,7 +273,7 @@ def main():
     with io.open(CATALOGUE, encoding="utf-8") as fh:
         cat = json_mod.load(fh)
     noms = [e.get("nom") for e in cat.get("commandes", [])]
-    ok_cat = (len(noms) == 186 and "lire-head" in noms
+    ok_cat = (len(noms) == 187 and "lire-head" in noms
               and "tester-lancer-non-regression" in noms
               and "editer-parcours" in noms and "detecter-usage-scripts-temporaires" in noms
               and "detecter-cablages-manquants" in noms and "tester-protections" in noms
@@ -282,7 +282,7 @@ def main():
               and "analyser-noms-maj" in noms and "corriger-noms-maj" in noms
               and "detecter-processus-residuels" in noms
               and "nettoyer-processus-residuels" in noms)
-    verifier("8. catalogue : 186 commandes + nouvelles presentes",
+    verifier("8. catalogue : 187 commandes + nouvelles presentes",
              ok_cat, "nb=%d" % len(noms))
 
     # 9. index-tools : les 4 lignes presentes

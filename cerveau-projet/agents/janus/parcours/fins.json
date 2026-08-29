@@ -1,0 +1,36 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "janus",
+    "description": "Toutes les fins possibles pour Janus (arbre v0.1.0)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-janus.json",
+      "description": "Theme termine : retour a la racine pour choisir un autre theme ou finir."
+    },
+    "fin-controle": {
+      "titre": "FIN - Controle termine (verdict donne)",
+      "description": "Controle termine, verdict donne (VALIDE/REJETE/A REVOIR). Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-non-regression": {
+      "titre": "FIN - Non-regression terminee",
+      "description": "Suite de non-regression lancee, verdict donne. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission hors parcours terminee. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    }
+  }
+}

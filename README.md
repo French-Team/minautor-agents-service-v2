@@ -6,7 +6,7 @@ identite:
 ---
 # Cerveau-Projet
 
-[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Agents](https://img.shields.io/badge/Agents-19-blue?style=flat)](https://img.shields.io/badge/Agents-19-blue?style=flat) [![Outils](https://img.shields.io/badge/Outils-165-blueviolet?style=flat)](https://img.shields.io/badge/Outils-165-blueviolet?style=flat) [![Tests](https://img.shields.io/badge/Tests-97-red?style=flat)](https://img.shields.io/badge/Tests-97-red?style=flat) [![Protocoles](https://img.shields.io/badge/Protocoles-36-orange?style=flat)](https://img.shields.io/badge/Protocoles-36-orange?style=flat) [![Regles](https://img.shields.io/badge/Regles-75-yellow?style=flat)](https://img.shields.io/badge/Regles-75-yellow?style=flat) [![Version](https://img.shields.io/badge/Version-v1.6.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.6.0-blue?style=flat)
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Agents](https://img.shields.io/badge/Agents-19-blue?style=flat)](https://img.shields.io/badge/Agents-19-blue?style=flat) [![Outils](https://img.shields.io/badge/Outils-176-blueviolet?style=flat)](https://img.shields.io/badge/Outils-176-blueviolet?style=flat) [![Tests](https://img.shields.io/badge/Tests-97-red?style=flat)](https://img.shields.io/badge/Tests-97-red?style=flat) [![Protocoles](https://img.shields.io/badge/Protocoles-36-orange?style=flat)](https://img.shields.io/badge/Protocoles-36-orange?style=flat) [![Regles](https://img.shields.io/badge/Regles-75-yellow?style=flat)](https://img.shields.io/badge/Regles-75-yellow?style=flat) [![Version](https://img.shields.io/badge/Version-v1.7.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.7.0-blue?style=flat)
 
 
 ![Logo](cerveau-projet/assets/images/logo.jpg)
@@ -40,7 +40,8 @@ rigueur).
 | **Controler** | Chaque travail est verifie avant d'etre valide |
 | **Outiller** | Des outils partages, crees et ameliores par le systeme lui-meme |
 | **Apprendre** | Chaque agent note ses erreurs et ne les refait plus |
-| **Tester** | 97 tests automatiques verifient que tout fonctionne |
+| **Coordonner** | Oracle pilote le flux entre les agents (activation, historisation, retour) |
+| **Tester** | 101 tests automatiques verifient que tout fonctionne |
 
 ---
 
@@ -70,23 +71,35 @@ Je suis anime par **19 agents IA**, chacun avec un role et une carte de decision
 | **Redacteur-v2** | Redacteur PRO des docs de la v2 (freelance) |
 | **Hades** | Gardien des archives git - SEUL habilite aux commandes git |
 
+### Mon pilote : Oracle
+
+Je suis pilote par **Oracle**, un hub de coordination qui gere le flux
+entre les agents. Oracle fait TOUT : il active les agents, historise
+les debut/fin, route les decisions, et pilote les cartes de decision.
+Les agents ne font que le travail -- Oracle coordonne.
+
 ### Mon cycle fondamental (par session)
 
 ```
-CERBERUS -> AGENT -> CERBERUS
-    1         2         3
+User -> Cerberus (communication)
+Cerberus -> Oracle (coordination)
+Oracle -> Agents (execution)
 ```
 
-1. Cerberus analyse la demande et confie la mission a l'agent adapte
-2. L'agent realise sa mission en suivant sa carte de decision (parcours)
-3. A la fin, l'agent rend la main a Cerberus (ou passe au suivant de la chaine)
-4. En cas d'erreur hors-perimetre, l'agent active l'agent habilite en **inter-round** sans interrompre le round : l'habilite repare, puis reactive l'appelant qui reprend sa mission
+1. L'utilisateur parle a **Cerberus** (son point d'entree)
+2. Cerberus analyse la demande et transmet a **Oracle**
+3. Oracle **active** l'agent habilite, **pilote** sa carte de decision,
+   **historise** le debut et la fin, puis **retourne** a Cerberus
+4. L'agent realise sa mission en suivant les commandes servies par Oracle
+5. A la fin, Oracle historise la fin et **retourne** a Cerberus
+6. En cas d'erreur hors-perimetre, Oracle gere l'**inter-round** :
+   il active l'agent habilite pour reparer, puis revient a l'appelant
 
 ### Mes garde-fous (qualite et protection)
 
 Je me protege par des tests automatiques :
 
-- **97 tests** verifient que rien ne casse quand quelque chose change.
+- **101 tests** verifient que rien ne casse quand quelque chose change.
   Un seul agent, **Janus**, a le droit de lancer la non-regression complete :
   les autres agents testent uniquement leur propre travail.
 - **Aucun fichier temporaire** n'est laisse a la racine du projet apres un travail :
@@ -206,3 +219,5 @@ guide etape par etape.
 
 | **Socrate** | Le philosophe qui questionne -- discute des revisions avec l'utilisateur et produit une liste de missions pour Cerberus | Selon sa carte de decision |
 | **Redacteur-v2** | Le redacteur PRO des docs de la v2 (freelance) -- mode conversation | Sur activation (reste actif en conversation, reactive Cerberus sur "fin de cycle") |
+
+| **Ferrari** | Agent | Selon sa carte de decision |

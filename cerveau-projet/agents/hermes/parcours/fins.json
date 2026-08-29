@@ -1,0 +1,56 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "hermes",
+    "description": "Fins reelles d'Hermes (parcours v0.2.4 : c13, c29a, c29d, c29e)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-hermes.json"
+    },
+    "fin-corriger": {
+      "titre": "FIN - Corrections terminees (activer Janus)",
+      "description": "Fautes corrigees, dictionnaire etendu, rescan 0 faute. Janus controle (c13).",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-veille": {
+      "titre": "FIN - Veille terminee (activer Janus)",
+      "description": "Scan global termine, rapport d etat orthographique produit. Janus controle.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-delegation": {
+      "titre": "FIN - Delegation terminee",
+      "description": "L agent habilite a ete active (c29a). Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-outil": {
+      "titre": "FIN - Outil temporaire cree",
+      "description": "Outil temporaire cree et utilise (c29d). Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-signaler": {
+      "titre": "FIN - Besoin signale",
+      "description": "Le besoin est signale a Cerberus (c29e).",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission hors parcours. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    }
+  }
+}

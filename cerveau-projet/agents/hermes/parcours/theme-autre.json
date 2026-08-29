@@ -1,0 +1,59 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "hermes",
+    "nom": "AUTRE",
+    "description": "Mission hors perimetre : delegation, outil temp, signaler (case c29)"
+  },
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Executer une mission hors des themes standard",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Lire le protocole creation scripts temporaires",
+        "action": "procedure",
+        "etapes": [
+          "Lire cerveau-projet/agents/regles-immuables/general/protocole-creation-scripts-temporaires/protocole-creation-scripts-temporaires.001.01.ebauche.md"
+        ],
+        "regle": "PROTOCOLE : tout script temporaire va dans tmp-<agent>/, jamais a la racine. Supprimer en fin de mission."
+      },
+      {
+        "besoin": "Verifier si la mission est hors perimetre (case c29)",
+        "action": "procedure",
+        "etapes": [
+          "Si la mission ne correspond pas a l orthographe -> deleguer ou signaler"
+        ],
+        "regle": "Je ne corrige QUE des fautes d orthographe. Le reste = delegation."
+      },
+      {
+        "besoin": "Executer la mission",
+        "action": "procedure",
+        "etapes": [
+          "Suivre les instructions de la mission"
+        ],
+        "regle": "Executer la mission confiee."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hermes/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-autre"
+  }
+}

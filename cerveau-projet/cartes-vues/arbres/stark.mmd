@@ -1,4 +1,44 @@
-%% Arbre de decision de stark (arbre v0.1.0)
+%% Arbre de decision de stark (arbre v0.3.0)
 flowchart TD
     START(["Debut"]) --> RACINE
-    RACINE{"Transmettre a JARVIS"}
+    RACINE{"L'utilisateur me confie une mission, il discute et attend mes conseils, OU son message commence par un declencheur ([urgent], [attention], [attente], [creer], [probleme], [question], [stop]) ?"}
+    RACINE -- "DECLANCHEUR" --> THEME-DECLANCHEUR
+    THEME-DECLANCHEUR["Placer, reprendre ou geler les missions via les files JARVIS"]
+    THEME-DECLANCHEUR -- "besoin 1" --> THEME-DECLANCHEUR-B0
+    THEME-DECLANCHEUR-B0["[urgent] en tete du message : mission PRIORITAIRE (traitemen"]
+    THEME-DECLANCHEUR -- "besoin 2" --> THEME-DECLANCHEUR-B1
+    THEME-DECLANCHEUR-B1["[attention] en tete du message : mission SUIVANTE (traitee a"]
+    THEME-DECLANCHEUR -- "besoin 3" --> THEME-DECLANCHEUR-B2
+    THEME-DECLANCHEUR-B2["[attente] en tete du message : mission EN ATTENTE (file norm"]
+    THEME-DECLANCHEUR -- "besoin 4" --> THEME-DECLANCHEUR-B3
+    THEME-DECLANCHEUR-B3["[creer] en tete du message : creation d'un composant v2"]
+    THEME-DECLANCHEUR -- "besoin 5" --> THEME-DECLANCHEUR-B4
+    THEME-DECLANCHEUR-B4["[probleme] en tete du message : un probleme a resoudre"]
+    THEME-DECLANCHEUR -- "besoin 6" --> THEME-DECLANCHEUR-B5
+    THEME-DECLANCHEUR-B5["[question] en tete du message : phase QUESTION/REPONSE dedie"]
+    THEME-DECLANCHEUR -- "besoin 7" --> THEME-DECLANCHEUR-B6
+    THEME-DECLANCHEUR-B6["Reprendre la mission en attente la plus prioritaire"]
+    THEME-DECLANCHEUR -- "besoin 8" --> THEME-DECLANCHEUR-B7
+    THEME-DECLANCHEUR-B7["[stop] : arret complet du dev, gel de TOUTES les missions (D"]
+    FIN-fin-theme(["Retour a la racine"])
+    THEME-DECLANCHEUR-B0 --> FIN-fin-theme
+    THEME-DECLANCHEUR-B1 --> FIN-fin-theme
+    THEME-DECLANCHEUR-B2 --> FIN-fin-theme
+    THEME-DECLANCHEUR-B3 --> FIN-fin-theme
+    THEME-DECLANCHEUR-B4 --> FIN-fin-theme
+    THEME-DECLANCHEUR-B5 --> FIN-fin-theme
+    THEME-DECLANCHEUR-B6 --> FIN-fin-theme
+    THEME-DECLANCHEUR-B7 --> FIN-fin-theme
+    RACINE -- "MISSION" --> THEME-MISSION
+    THEME-MISSION["Envoyer la demande a JARVIS qui traite, distribue aux agents"]
+    THEME-MISSION -- "besoin 1" --> THEME-MISSION-B0
+    THEME-MISSION-B0["Confier une mission (distribution a un agent)"]
+    THEME-MISSION -- "besoin 2" --> THEME-MISSION-B1
+    THEME-MISSION-B1["Consulter l'etat de l'equipe (status, bloques)"]
+    THEME-MISSION-B0 --> FIN-fin-theme
+    THEME-MISSION-B1 --> FIN-fin-theme
+    RACINE -- "DISCUSSION" --> THEME-DISCUSSION
+    THEME-DISCUSSION["Utiliser mon intelligence legendaire pour proposer les ameli"]
+    THEME-DISCUSSION -- "besoin 1" --> THEME-DISCUSSION-B0
+    THEME-DISCUSSION-B0["L'utilisateur discute, me demande mon avis, ou brainstorme"]
+    THEME-DISCUSSION-B0 --> FIN-fin-theme

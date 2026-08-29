@@ -32,3 +32,5 @@
 {"date": "2026-08-27T18:54:01.252375", "nom": "jarvis corrections", "tokens_debut": 54966, "tokens_fin": 54966, "delta": 0, "duree_secondes": 0.04}
 {"date": "2026-08-27T18:54:08.552066", "nom": "jarvis corrections", "tokens_debut": 54966, "tokens_fin": 54966, "delta": 0, "duree_secondes": 0.04}
 {"date": "2026-08-27T19:06:20.090232", "nom": "jarvis demarrage", "tokens_debut": 38520, "tokens_fin": 38520, "delta": 0, "duree_secondes": 0.28}
+{"date": "2026-08-29T10:32:15.723859", "nom": "jarvis arret", "tokens_debut": 2135702, "tokens_fin": 2135702, "delta": 0, "duree_secondes": 0.21}
+{"date": "2026-08-29T10:32:23.947057", "nom": "jarvis demarrage", "tokens_debut": 2136633, "tokens_fin": 2136633, "delta": 0, "duree_secondes": 0.18}

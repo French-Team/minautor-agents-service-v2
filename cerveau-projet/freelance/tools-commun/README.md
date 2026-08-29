@@ -31,12 +31,12 @@ identite:
 
 ```
 tools-commun/
-├── README.md                    <- ce fichier
-├── activer/                     <- activation d'agents
-├── lire/                        <- lectures partagees
-├── consulter/                   <- consultations
-├── enregistrer/                 <- enregistrements
-└── valider/                     <- validations
+|--- README.md                    <- ce fichier
+|--- activer/                     <- activation d'agents
+|--- lire/                        <- lectures partagees
+|--- consulter/                   <- consultations
+|--- enregistrer/                 <- enregistrements
++--- valider/                     <- validations
 ```
 
 ---

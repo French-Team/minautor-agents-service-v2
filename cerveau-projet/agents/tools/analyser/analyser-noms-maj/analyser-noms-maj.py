@@ -120,7 +120,12 @@ def lire(chemin):
 
 
 def lister_outils_reels(racine):
-    """Ensemble des noms d outils reels (dossiers tools/<categorie>/<outil>/)."""
+    """Ensemble des noms d outils reels. Deux structures :
+    - standard : tools/<categorie>/<outil>/ (dossier outil)
+    - plate     : tools/<categorie>/ avec un script <categorie>.py/.sh direct
+      (ex: tools/oracle/oracle.py, tools/tester/ sans sous-dossier) - l outil
+      est le script, pas la categorie.
+    """
     outils = set()
     base = os.path.join(racine, "cerveau-projet", "agents", "tools")
     for categorie in os.listdir(base):
@@ -130,18 +135,37 @@ def lister_outils_reels(racine):
         for nom in os.listdir(p):
             if os.path.isdir(os.path.join(p, nom)) and RE_NOMMAGE_OK.match(nom):
                 outils.add(nom)
+        # structure plate : scripts .py/.sh directement dans le dossier
+        # categorie (ex: oracle.py -> outil 'oracle', mais aussi
+        # routines-server.py / oracle-demarrage.py -> outils reels). Chaque
+        # script est un outil, sauf les modules internes (fonctions/, data).
+        for nom in os.listdir(p):
+            if nom.endswith((".py", ".sh")):
+                base_script = nom[:-3] if nom.endswith(".py") else nom[:-3]
+                if RE_NOMMAGE_OK.match(base_script):
+                    outils.add(base_script)
     return outils
 
 
 def lister_agents_reels(racine):
-    """Ensemble des dossiers agents reels (cerveau-projet/agents/<agent>/)."""
+    """Ensemble des dossiers agents reels, en MINUSCULE (comparaison
+    insensible a la casse) : agents v1 (cerveau-projet/agents/<agent>/) ET
+    agents freelance v2 (cerveau-projet/freelance/<agent>/). Le registre
+    historique contient des casses anciennes (ex: 'Cerberus') qui doivent
+    matcher le dossier reel 'cerberus'."""
     agents = set()
-    base = os.path.join(racine, "cerveau-projet", "agents")
-    for nom in os.listdir(base):
-        p = os.path.join(base, nom)
-        if os.path.isdir(p) and RE_NOMMAGE_OK.match(nom) and nom not in (
-                "tools", "classeur-variables", "traces", "regles-immuables"):
-            agents.add(nom)
+    bases = [
+        os.path.join(racine, "cerveau-projet", "agents"),
+        os.path.join(racine, "cerveau-projet", "freelance"),
+    ]
+    for base in bases:
+        if not os.path.isdir(base):
+            continue
+        for nom in os.listdir(base):
+            p = os.path.join(base, nom)
+            if os.path.isdir(p) and RE_NOMMAGE_OK.match(nom) and nom not in (
+                    "tools", "classeur-variables", "traces", "regles-immuables"):
+                agents.add(nom.lower())
     return agents
 
 
@@ -195,8 +219,9 @@ def analyser_registre(racine, verbose=False):
                 e.get("mode") != "script-temporaire":
             problemes.append(("OUTIL_ORPHELIN", "L%d" % i,
                               "%s -> outil=[%s]" % (e.get("date", ""), outil)))
-        # d. AGENT_INCONNU : agent sans dossier reel
-        if agent and agent not in agents_reels:
+        # d. AGENT_INCONNU : agent sans dossier reel (comparaison insensible
+        #    a la casse : le registre historique contient 'Cerberus')
+        if agent and agent.lower() not in agents_reels:
             problemes.append(("AGENT_INCONNU", "L%d" % i,
                               "%s -> agent=[%s]" % (e.get("date", ""), agent)))
         # e. FONCTION_DANS_COMMANDE (avertissement)

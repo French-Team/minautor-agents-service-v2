@@ -6,12 +6,12 @@
   },
   "fins": {
     "fin-theme": {
-      "titre": "Retour à la racine",
+      "titre": "Retour a la racine",
       "action": "redirection",
       "vers": "arbre-parker.json"
     },
     "fin-stark": {
-      "titre": "FIN DE CYCLE - Retour à Stark",
+      "titre": "FIN DE CYCLE - Retour a Stark",
       "action": "activer",
       "cible": "stark",
       "commande": "jarvis.py envoyer --de parker --vers stark --priorite 2 --objet 'Bilan' --corps '<bilan>'",

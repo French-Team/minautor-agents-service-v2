@@ -38,7 +38,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0e"
+     "vers": "c0g"
     },
     {
      "reponse": "NON",
@@ -89,23 +89,23 @@
    "branches": [
     {
      "reponse": "creer",
-     "vers": "c2"
+     "vers": "c1h"
     },
     {
      "reponse": "modifier",
-     "vers": "c9"
+     "vers": "c1hb"
     },
     {
      "reponse": "agent",
-     "vers": "c18"
+     "vers": "c1hc"
     },
     {
      "reponse": "protocole",
-     "vers": "c23"
+     "vers": "c1hd"
     },
     {
      "reponse": "controler",
-     "vers": "c28"
+     "vers": "c1he"
     },
     {
      "reponse": "autre",
@@ -506,7 +506,7 @@
     },
     {
      "reponse": "outil",
-     "vers": "c31"
+     "vers": "c31h"
     },
     {
      "reponse": "non",
@@ -514,7 +514,7 @@
     },
     {
      "reponse": "tests",
-     "vers": "c31b"
+     "vers": "c31bh"
     }
    ],
    "indices": [
@@ -525,7 +525,8 @@
    ],
    "question": "La mission concerne-t-elle un pense-bete ou un outil ?",
    "titre": "Verifier la delegation (pense-bete / outil)",
-   "type": "question"
+   "type": "question",
+   "suivant": "c31bh"
   },
   "c17": {
    "indices": [
@@ -692,7 +693,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c22"
+     "vers": "c22h"
     },
     {
      "reponse": "NON",
@@ -707,7 +708,8 @@
    ],
    "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
    "titre": "Retour de Themis recu ?",
-   "type": "controle"
+   "type": "controle",
+   "suivant": "c22h"
   },
   "c23": {
    "indices": [
@@ -838,7 +840,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c27"
+     "vers": "c27h"
     },
     {
      "reponse": "NON",
@@ -853,7 +855,8 @@
    ],
    "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
    "titre": "Retour de Themis recu ?",
-   "type": "controle"
+   "type": "controle",
+   "suivant": "c27h"
   },
   "c28": {
    "indices": [
@@ -1295,7 +1298,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c8"
+     "vers": "c8h"
     },
     {
      "reponse": "NON",
@@ -1310,7 +1313,8 @@
    ],
    "question": "Themis m'a-t-elle reactive avec son rapport (c25b) ?",
    "titre": "Retour de Themis recu ?",
-   "type": "controle"
+   "type": "controle",
+   "suivant": "c8h"
   },
   "c9": {
    "indices": [
@@ -1429,6 +1433,264 @@
      "type": "outil"
     }
    ]
+  },
+  "c1h": {
+   "titre": "HISTORISER LE DEBUT : tracer le debut de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : j historise le DEBUT de mon intervention AVANT de commencer (trace du debut, si l outil bug ensuite)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c2"
+  },
+  "c1hb": {
+   "titre": "HISTORISER LE DEBUT : tracer le debut de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : j historise le DEBUT de mon intervention AVANT de commencer (trace du debut, si l outil bug ensuite)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c1hc": {
+   "titre": "HISTORISER LE DEBUT : tracer le debut de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : j historise le DEBUT de mon intervention AVANT de commencer (trace du debut, si l outil bug ensuite)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c18"
+  },
+  "c1hd": {
+   "titre": "HISTORISER LE DEBUT : tracer le debut de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : j historise le DEBUT de mon intervention AVANT de commencer (trace du debut, si l outil bug ensuite)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c23"
+  },
+  "c1he": {
+   "titre": "HISTORISER LE DEBUT : tracer le debut de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : j historise le DEBUT de mon intervention AVANT de commencer (trace du debut, si l outil bug ensuite)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c28"
+  },
+  "c8h": {
+   "titre": "HISTORISER LA FIN : tracer la fin de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : mission terminee - j historise la FIN AVANT de reactiver/activer le maillon suivant (trace du bilan)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"FIN: <mon bilan>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c8"
+  },
+  "c22h": {
+   "titre": "HISTORISER LA FIN : tracer la fin de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : mission terminee - j historise la FIN AVANT de reactiver/activer le maillon suivant (trace du bilan)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"FIN: <mon bilan>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c22"
+  },
+  "c27h": {
+   "titre": "HISTORISER LA FIN : tracer la fin de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : mission terminee - j historise la FIN AVANT de reactiver/activer le maillon suivant (trace du bilan)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"FIN: <mon bilan>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c27"
+  },
+  "c31h": {
+   "titre": "HISTORISER LA FIN : tracer la fin de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : mission terminee - j historise la FIN AVANT de reactiver/activer le maillon suivant (trace du bilan)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"FIN: <mon bilan>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c31"
+  },
+  "c31bh": {
+   "titre": "HISTORISER LA FIN : tracer la fin de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : mission terminee - j historise la FIN AVANT de reactiver/activer le maillon suivant (trace du bilan)."
+    },
+    {
+     "type": "outil",
+     "nom": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.py",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"FIN: <mon bilan>\""
+    },
+    {
+     "type": "fichier",
+     "chemin": "cerveau-projet/agents/tools/oracle/oracle.md",
+     "raison": "LIRE AVANT USAGE (Pattern 9) : la doc de l'outil explique ce qu'il fait et comment l'utiliser"
+    }
+   ],
+   "suivant": "c31b"
+  },
+  "c0g": {
+   "titre": "GATE BON AGENT : verifier que tu es LE BON AGENT",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE GATE (decision utilisateur 2026-08-29, PAS un timer) : AVANT de commencer (analyser/decider/ecrire), je verifie que je suis LE BON AGENT de la session. S il y a un autre agent actif ou si ma mission vise une zone hors de mes habilitations, je STOP immediatement et je reactiver Cerberus SANS RIEN TOUCHER - il est inutile de travailler puis tout detruire."
+    },
+    {
+     "type": "outil",
+     "nom": "verifier-agent-perimetre",
+     "catalogue": "verifier-agent-perimetre",
+     "chemin": "cerveau-projet/agents/tools/oracle/routines/",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/routines/verifier-agent-perimetre.py --gate --moi buffy"
+    }
+   ],
+   "suivant": "c0g2"
+  },
+  "c0g2": {
+   "titre": "GATE : es-tu le bon agent ?",
+   "type": "question",
+   "question": "La porte a-t-elle rendu OK (0) ? OUI -> je continue ma mission. NON (1) -> STOP immediat : je ne touche a RIEN et je reactiver Cerberus avec le rapport de la porte.",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0e"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0h"
+    }
+   ]
+  },
+  "c0h": {
+   "titre": "FIN - STOP : pas le bon agent, reactiver Cerberus",
+   "type": "fin",
+   "message": "Je ne suis PAS le bon agent pour cette mission. Je n ai RIEN modifie. Je reactiver Cerberus immediatement avec le rapport de la porte (verifier-agent-perimetre --gate --moi buffy) pour qu il active le bon agent."
   }
  },
  "identite": {

@@ -1,0 +1,66 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "gardien",
+    "nom": "VERIFIER",
+    "description": "Verifier l integrite du marbre : proteger-verrou-marbre --tous, detecter les violations"
+  },
+  "theme": {
+    "nom": "VERIFIER",
+    "but": "Verifier l integrite de toutes les zones protegees du marbre (manifeste marbre.json) et detecter toute violation",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine securite-marbre)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent gardien --domaine securite-marbre"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Verifier l integrite du marbre - VERROU (case c2)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/proteger/proteger-verrou-marbre/proteger-verrou-marbre.py --tous"],
+        "regle": "VERROU DU MARBRE : verifier l integrite de TOUTES les zones protegees (manifeste marbre.json). Toute divergence = violation."
+      },
+      {
+        "besoin": "Le marbre est-il intact ? (controle c2a)",
+        "action": "procedure",
+        "etapes": [
+          "SI OUI (0 zone divisee) -> aller a FIN - Activer Janus (c9)",
+          "SI NON (zone divisee) -> aller a Signaler la violation (c2b)"
+        ],
+        "regle": "CONTROLE : 0 zone divisee = marbre intact. Sinon = violation a signaler."
+      },
+      {
+        "besoin": "Consulter le journal marbre-log.jsonl",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/regles-immuables/marbre/marbre-log.jsonl"],
+        "regle": "Le journal prouve les modifications autorisees. Utile pour comprendre une divergence."
+      },
+      {
+        "besoin": "Verifier les empreintes par zone",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/proteger/proteger-verrou-marbre/proteger-verrou-marbre.py --tous --verbose"],
+        "regle": "Mode verbose : affiche chaque zone et son statut (conforme/divisee)."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/gardien/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-verifier"}
+}

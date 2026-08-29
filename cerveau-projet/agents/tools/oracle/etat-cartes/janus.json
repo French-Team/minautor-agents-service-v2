@@ -1,0 +1,10 @@
+{
+ "agent": "janus",
+ "parcours": "agents/janus/parcours/arbre-janus.json",
+ "case_courante": null,
+ "mission_type": "maj",
+ "mission": "Recontrole (chaine Cerberus, fin morpheus) : 2 derniers tests obsoletes adaptes. 1) test-006 19/19 : compteurs atlas 52/14 -> 51/16 (reels, verifies par generation). 2) test-004 : version morpheus 0.5.4 -> 0.5.8 (7a OK ; point 8 valider-cartes-decision bloque par le verrou sous morpheus - passera sous toi, habilite). En plus vulcain a corrige test-079 15/15 (analyser-noms-maj : agents freelance + casse + outils plats + registre normalise) et test-096 11/11 (vues mermaid ferrari/hades + arbres v2 regeneres). Lance la non-regression complete et donne ton verdict.",
+ "historise_debut": true,
+ "precedent": "morpheus",
+ "etape": "debut"
+}

@@ -33,7 +33,7 @@
 
 ## [attente]
 
-(parké avec contexte de reprise - ne sera pas perdu)
+(parke avec contexte de reprise - ne sera pas perdu)
 
 ## [creer]
 

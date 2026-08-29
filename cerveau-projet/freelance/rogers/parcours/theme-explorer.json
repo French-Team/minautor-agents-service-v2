@@ -3,50 +3,50 @@
     "type": "theme",
     "appartient_a": "rogers",
     "nom": "EXPLORER",
-    "description": "Diagnostiquer, comprendre un problème"
+    "description": "Diagnostiquer, comprendre un probleme"
   },
   "theme": {
     "nom": "EXPLORER",
     "but": "Comprendre pourquoi quelque chose ne va pas",
     "redirects": [
       {
-        "besoin": "Diagnostiquer un conflit de règles",
+        "besoin": "Diagnostiquer un conflit de regles",
         "action": "procedure",
         "etapes": [
-          "Identifier les deux règles en conflit",
-          "Lire le contexte de chaque règle",
-          "Déterminer quelle règle a priorité",
-          "Proposer une résolution",
-          "Documenter la décision"
+          "Identifier les deux regles en conflit",
+          "Lire le contexte de chaque regle",
+          "Determiner quelle regle a priorite",
+          "Proposer une resolution",
+          "Documenter la decision"
         ]
       },
       {
-        "besoin": "Comprendre pourquoi un agent viole une règle",
+        "besoin": "Comprendre pourquoi un agent viole une regle",
         "action": "procedure",
         "etapes": [
-          "Lire l'arbre de décision de l'agent",
-          "Vérifier que la règle est présente dans son arbre",
-          "Si absente → l'ajouter (MODIFIER)",
-          "Si présente → vérifier si elle est claire",
-          "Si ambiguë → la reformuler (MODIFIER)"
+          "Lire l'arbre de decision de l'agent",
+          "Verifier que la regle est presente dans son arbre",
+          "Si absente -> l'ajouter (MODIFIER)",
+          "Si presente -> verifier si elle est claire",
+          "Si ambigue -> la reformuler (MODIFIER)"
         ]
       },
       {
-        "besoin": "Auditer la cohérence globale",
+        "besoin": "Auditer la coherence globale",
         "action": "redirection",
         "vers": {
           "type": "procedure",
           "etapes": [
-            "Lire les 3 piliers (règles, conventions, protocoles)",
-            "Vérifier la cohérence entre les 3",
-            "Vérifier que les agents respectent les thèmes (D8)",
-            "Vérifier que les fins sont correctes",
-            "Donner un rapport de cohérence"
+            "Lire les 3 piliers (regles, conventions, protocoles)",
+            "Verifier la coherence entre les 3",
+            "Verifier que les agents respectent les themes (D8)",
+            "Verifier que les fins sont correctes",
+            "Donner un rapport de coherence"
           ]
         }
       },
       {
-        "besoin": "Consulter les leçons pour comprendre un problème récurrent",
+        "besoin": "Consulter les lecons pour comprendre un probleme recurrent",
         "action": "redirection",
         "vers": {
           "type": "outil",

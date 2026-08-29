@@ -154,15 +154,23 @@ def point_2_preuve_negative_themes_orphelins():
     try:
         with io.open(agents, "r", encoding="utf-8") as f:
             src = f.read()
-        ligne_reel = "(themes : selon ton arbre ; JARVIS = point d'entree " \
-                     "OBLIGATOIRE pour toute mission)"
-        remplace = "(themes : theme-jarvis.json (JARVIS) / theme-lire.json " \
-                   "/ theme-explorer.json)"
-        if ligne_reel not in src:
+        # La ligne themes du bloc DEMARRAGE V2 a ete restructuree (refonte
+        # AGENTS.md) : on INJECTE une ligne themes orpheline dans le bloc
+        # session-freelance (stark) pour prouver que l outil detecte les
+        # themes non references par l arbre.
+        marker = "### Session : session-freelance"
+        pos = src.find(marker)
+        if pos == -1:
             verifier("ligne themes reperee pour injection", False,
-                     "ligne DEMARRAGE V2 introuvable")
+                     "bloc session-freelance introuvable")
             return
-        src = src.replace(ligne_reel, remplace)
+        fin_bloc = src.find("## Sessions connues", pos + 1)
+        if fin_bloc == -1:
+            verifier("ligne themes reperee pour injection", False,
+                     "fin bloc session-freelance introuvable")
+            return
+        injection = "\n(themes : theme-lire.json / theme-explorer.json)\n"
+        src = src[:fin_bloc] + injection + src[fin_bloc:]
         with io.open(agents, "w", encoding="utf-8", newline="") as f:
             f.write(src)
         r = run([PYTHON, VERIFIER_PY, "--agents-md", agents, "--dry-run"])

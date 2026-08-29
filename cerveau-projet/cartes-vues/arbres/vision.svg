@@ -1,53 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Carte de decision de vision (parcours v0.1.0) - genere par convertir-carte-mermaid v0.3.0 -->
-<svg xmlns="http://www.w3.org/2000/svg" width="873" height="670" viewBox="0 0 873 670" font-family="Arial, Helvetica, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="922" height="670" viewBox="0 0 922 670" font-family="Arial, Helvetica, sans-serif">
   <defs>
     <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
     </marker>
   </defs>
-  <rect width="873" height="670" fill="#ffffff"/>
-    <path d="M 436.4 76.0 L 436.4 166.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 436.4 202.0 L 213.0 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="296.3" y="237.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="324.7" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">MODIFIER</text>
-    <path d="M 213.0 328.0 L 119.4 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="137.8" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="166.2" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
-    <path d="M 213.0 328.0 L 298.2 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="227.2" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="255.6" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 2</text>
-    <path d="M 119.4 454.0 L 436.4 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 298.2 454.0 L 436.4 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 436.4 202.0 L 369.4 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="377.3" y="237.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="402.9" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">TRAITER</text>
-    <path d="M 369.4 328.0 L 473.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="393.2" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="421.6" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
-    <path d="M 473.8 454.0 L 436.4 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 436.4 202.0 L 513.0 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="457.5" y="237.0" width="34.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="474.7" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">LIRE</text>
-    <path d="M 513.0 328.0 L 612.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <path d="M 436.4 202.0 L 659.8 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="519.7" y="237.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="548.1" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">EXPLORER</text>
-    <path d="M 659.8 328.0 L 753.4 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="678.2" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
-    <text x="706.6" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
-    <path d="M 753.4 454.0 L 436.4 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
-    <rect x="402.2" y="40.0" width="68.4" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
-    <text x="436.4" y="62.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="436.4" dy="0">Debut&quot;</tspan>
+  <rect width="922" height="670" fill="#ffffff"/>
+    <path d="M 461.0 76.0 L 461.0 166.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 461.0 202.0 L 237.6 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="320.9" y="237.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="349.3" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">MODIFIER</text>
+    <path d="M 237.6 328.0 L 119.4 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="150.1" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="178.5" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 237.6 328.0 L 298.2 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="239.5" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="267.9" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 2</text>
+    <path d="M 119.4 454.0 L 461.0 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 298.2 454.0 L 461.0 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 461.0 202.0 L 394.0 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="401.9" y="237.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="427.5" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">TRAITER</text>
+    <path d="M 394.0 328.0 L 473.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="405.5" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="433.9" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 473.8 454.0 L 461.0 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 461.0 202.0 L 537.6 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="482.1" y="237.0" width="34.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="499.3" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">LIRE</text>
+    <path d="M 537.6 328.0 L 636.6 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="558.7" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="587.1" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 636.6 454.0 L 461.0 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 461.0 202.0 L 684.4 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="544.3" y="237.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="572.7" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">EXPLORER</text>
+    <path d="M 684.4 328.0 L 802.6 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="715.1" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="743.5" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 802.6 454.0 L 461.0 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="426.8" y="40.0" width="68.4" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="461.0" y="62.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="461.0" dy="0">Debut&quot;</tspan>
     </text>
-    <rect x="402.2" y="166.0" width="68.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="436.4" y="188.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="436.4" dy="0">RACINE</tspan>
+    <rect x="426.8" y="166.0" width="68.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="461.0" y="188.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="461.0" dy="0">RACINE</tspan>
     </text>
-    <rect x="153.2" y="292.0" width="119.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="213.0" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="213.0" dy="0">THEME-MODIFIER</tspan>
+    <rect x="177.8" y="292.0" width="119.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="237.6" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="237.6" dy="0">THEME-MODIFIER</tspan>
     </text>
     <rect x="50.0" y="418.0" width="138.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
     <text x="119.4" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
@@ -57,32 +60,32 @@
     <text x="298.2" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="298.2" dy="0">THEME-MODIFIER-B1</tspan>
     </text>
-    <rect x="357.4" y="544.0" width="158.0" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
-    <text x="436.4" y="566.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="436.4" dy="0">FIN - Theme termine&quot;</tspan>
+    <rect x="382.0" y="544.0" width="158.0" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="461.0" y="566.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="461.0" dy="0">FIN - Theme termine&quot;</tspan>
     </text>
-    <rect x="312.8" y="292.0" width="113.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="369.4" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="369.4" dy="0">THEME-TRAITER</tspan>
+    <rect x="337.4" y="292.0" width="113.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="394.0" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="394.0" dy="0">THEME-TRAITER</tspan>
     </text>
     <rect x="407.6" y="418.0" width="132.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
     <text x="473.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
       <tspan x="473.8" dy="0">THEME-TRAITER-B0</tspan>
     </text>
-    <rect x="466.0" y="292.0" width="94.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="513.0" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="513.0" dy="0">THEME-LIRE</tspan>
+    <rect x="490.6" y="292.0" width="94.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="537.6" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="537.6" dy="0">THEME-LIRE</tspan>
     </text>
-    <rect x="580.0" y="418.0" width="64.0" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
-    <text x="612.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="612.0" dy="0">FIN&quot;</tspan>
+    <rect x="580.0" y="418.0" width="113.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="636.6" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="636.6" dy="0">THEME-LIRE-B0</tspan>
     </text>
-    <rect x="600.0" y="292.0" width="119.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="659.8" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="659.8" dy="0">THEME-EXPLORER</tspan>
+    <rect x="624.6" y="292.0" width="119.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="684.4" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="684.4" dy="0">THEME-EXPLORER</tspan>
     </text>
-    <rect x="684.0" y="418.0" width="138.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
-    <text x="753.4" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
-      <tspan x="753.4" dy="0">THEME-EXPLORER-B0</tspan>
+    <rect x="733.2" y="418.0" width="138.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="802.6" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="802.6" dy="0">THEME-EXPLORER-B0</tspan>
     </text>
 </svg>

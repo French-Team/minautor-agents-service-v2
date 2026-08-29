@@ -1,0 +1,12 @@
+{
+ "agent": "clio",
+ "parcours": "agents/clio/parcours/arbre-clio.json",
+ "case_courante": null,
+ "mission_type": "maj",
+ "mission": "METTRE A JOUR le README - texte + compteurs + badges",
+ "historise_debut": true,
+ "precedent": "cerberus",
+ "etape": "fin",
+ "theme_courant": null,
+ "historise_fin": true
+}

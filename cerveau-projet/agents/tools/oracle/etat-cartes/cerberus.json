@@ -1,0 +1,10 @@
+{
+ "agent": "cerberus",
+ "parcours": "agents/cerberus/parcours/arbre-cerberus.json",
+ "case_courante": null,
+ "mission_type": "maj",
+ "mission": "Recontrole Janus VALIDE : toutes les adaptations morpheus sont vertes (test-070 13/13, test-007 15/15, test-060 12/12, test-067/072/080/055 verts). 0 nouveau KO introduit. Barriere KO debloquee : 4 KO caches preexistants reveles - test-096 (ferrari/hades sans vues mermaid, Vulcain/Buffy), test-001 (lien casse doc themis, Buffy), test-006 (compteur atlas 49/13 vs 51/16, Morpheus), test-004 (version morpheus 0.5.4 vs 0.5.8, Morpheus). Plus test-079 (analyser-noms-maj agents freelance, Vulcain) et test-085 (daemons, artefact attendu).",
+ "historise_debut": true,
+ "precedent": "janus",
+ "etape": "debut"
+}

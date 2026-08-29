@@ -85,6 +85,13 @@
     "actif": true,
     "intervalles_secondes": 300,
     "note": "Mesure les tokens SORTIE (resultats d'outils executes) - journalise dans data/journal-sortie.jsonl"
+   },
+   {
+    "nom": "veille-volume",
+    "script": "surveillance/veille-volume.py",
+    "actif": true,
+    "intervalles_secondes": 600,
+    "note": "Veille du volume des files JSONL JARVIS (inbox/outbox/files) : alerte [EDITH-REVEIL] quand un fichier depasse 1,5 Mo ou 2500 messages (decouverte audit 2026-08-29). Anti-spam : un fichier ne reveille qu'une fois, re-arme sous le seuil."
    }
   ],
   "seuils_alerte": {

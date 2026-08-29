@@ -1,0 +1,66 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "buffy",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-buffy",
+    "agent": "buffy",
+    "description": "Arbre des decisions de Buffy - developpeur principal v1. L agent choisit UN THEME au demarrage : CREER (nouveau fichier/outil), MODIFIER (corriger/ameliorer un fichier existant), AGENT (creer un nouvel agent), PROTOCOLE (creer un protocole), CONTROLER (controle/sante des tableaux), AUTRE (mission hors parcours) ou INTER-ROUND (reception d un rapport KO).",
+    "regles": {
+      "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
+      "D5": "Les besoins d un theme sont des REDIRECTIONS : je choisis celui qui correspond a ma situation.",
+      "D6": "Je lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils (combos, generateurs).",
+      "D3": "Les passages d un fichier a l autre (arbre -> theme -> fins) sont TRANSPARENTS.",
+      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche (lire-fichier) AVANT toute mission, puis je confirme (seul OUI prouve la lecture)."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est ma mission ?",
+    "branches": [
+      {
+        "reponse": "CREER",
+        "description": "Creer un nouveau fichier (outil, regle, doc, spec) - protocole 5 fichiers, RVAV, tests Morpheus",
+        "vers": "theme-creer.json"
+      },
+      {
+        "reponse": "MODIFIER",
+        "description": "Modifier un fichier existant (outil, carte, regle, doc) - corriger-fichier, bumper, RVAV",
+        "vers": "theme-modifier.json"
+      },
+      {
+        "reponse": "AGENT",
+        "description": "Creer un nouvel agent (dossier, fiche, corrections, AGENTS.md)",
+        "vers": "theme-agent.json"
+      },
+      {
+        "reponse": "PROTOCOLE",
+        "description": "Creer un nouveau protocole (dossier, convention, creation limitee)",
+        "vers": "theme-protocole.json"
+      },
+      {
+        "reponse": "CONTROLER",
+        "description": "Controle/sante des tableaux et des structures",
+        "vers": "theme-controler.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors parcours : sous-mission, delegation, outil temporaire",
+        "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

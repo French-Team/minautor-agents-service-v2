@@ -36,7 +36,7 @@
 #   --no-chrono         : coupe le chrono de l outil lui-meme
 #   --version
 #
-# Version : 0.1.2
+# Version : 0.1.4
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -59,11 +59,12 @@ import glob
 import io
 import json
 import os
+import re
 import sys
 import time
 
 
-VERSION = "0.1.2"
+VERSION = "0.1.4"
 STATUT = "ebauche"
 CARACTERES_PAR_TOKEN = 4.0
 FENETRE_TOTALE_DEFAUT = 200000
@@ -306,8 +307,7 @@ def main():
     # MODE MACHINE --snapshot : une seule ligne JSON (consommee par
     # activer-agent-principal pour la difference par intervention).
     if args.snapshot:
-        import sys as _sys
-        _sys.stdout.write(json.dumps(snapshot(racine, session),
+        sys.stdout.write(json.dumps(snapshot(racine, session),
                                     ensure_ascii=True) + "\n")
         return 0
 

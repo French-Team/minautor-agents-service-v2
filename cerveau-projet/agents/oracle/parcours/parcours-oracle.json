@@ -1,0 +1,404 @@
+{
+ "identite": {
+  "type": "parcours",
+  "appartient_a": "oracle",
+  "commun": false
+ },
+ "parcours": {
+  "nom": "parcours-oracle",
+  "agent": "oracle",
+  "version": "0.1.0",
+  "case_depart": "c0",
+  "description": "Parcours de l agent Oracle (v1, session-admin) - Coordinateur de l equipe v1, equivalent de JARVIS en v2. Oracle est active quand un probleme de coordination est detecte : processus fantomes, alertes harnais, routage des messages, etat des serveurs."
+ },
+ "cases": {
+  "c0": {
+   "titre": "RELIRE OBLIGATOIRE : corrections puis fiche",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "ACTION OBLIGATOIRE : je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents."
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/oracle/corrections.md",
+     "nom": "lire-fichier",
+     "type": "outil"
+    },
+    {
+     "catalogue": "lire-fichier",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/oracle/oracle.md",
+     "nom": "lire-fichier",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c0b"
+  },
+  "c0b": {
+   "titre": "Confirmation : as-tu lu ta fiche et tes corrections ?",
+   "type": "question",
+   "question": "As-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite).",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0g"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture (c0). Reponds la VERITE."
+    }
+   ]
+  },
+  "c0e": {
+   "type": "action",
+   "titre": "Consulter les lecons des autres agents (domaine coordination)",
+   "indices": [
+    {
+     "type": "ref",
+     "ref": "cerveau-projet/agents/regles-immuables/general/protocole-lecons/protocole-lecons.001.01.ebauche.md"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-lecons",
+     "catalogue": "consulter-lecons",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-lecons/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent oracle --domaine coordination"
+    }
+   ],
+   "suivant": "c0c"
+  },
+  "c0c": {
+   "titre": "CONTEXTE OBLIGATOIRE : activite recente des agents",
+   "type": "action",
+   "suivant": "c0d",
+   "indices": [
+    {
+     "ref": "pattern-6",
+     "type": "ref"
+    },
+    {
+     "catalogue": "lire-activite-recente",
+     "chemin": "cerveau-projet/agents/tools/lire/lire-activite-recente/",
+     "commande": "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
+     "nom": "lire-activite-recente",
+     "type": "outil"
+    }
+   ]
+  },
+  "c0d": {
+   "titre": "LIRE LA DOCUMENTATION DES OUTILS avant utilisation",
+   "type": "action",
+   "suivant": "cU1",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE ABSOLUE : je LIS le .md de l outil (agents/tools/<categorie>/<outil>/<outil>.md) avant toute utilisation - usage sans doc = erreur."
+    },
+    {
+     "type": "regle",
+     "texte": "La doc est le CONTRAT : je verifie le modele et les parametres avant d executer (--dry-run d abord si disponible)."
+    }
+   ]
+  },
+  "cU1": {
+   "titre": "Probleme avec un outil en cours de mission ?",
+   "type": "question",
+   "question": "As-tu un probleme avec un outil (erreur de commande, fonctionnement oublie, outil qui ne marche pas) ? OUI -> COMPRENDRE L OUTIL ; NON -> je continue ma mission.",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "cU2"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c1"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : probleme avec un outil -> je ne lis PAS le code : le mode d emploi est dans le .md (case COMPRENDRE L OUTIL)."
+    }
+   ]
+  },
+  "cU2": {
+   "titre": "COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo",
+   "type": "action",
+   "message": "Ne PAS lire le code de l outil : le mode d emploi est dans le .md du meme dossier (agents/tools/<categorie>/<outil>/<outil>.md). 1) Lire le .md de l outil (contrat, Pattern 9). 2) Verifier si un combo existe pour cette action avec consulter-combos ; si oui, l utiliser. 3) Sinon, utiliser generateurs-commande pour generer la commande exacte (ne pas l ecrire en dur). 4) Relancer l outil avec la commande correcte.",
+   "suivant": "cU3",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE : le .md est le mode d emploi (Pattern 9) - je le lis AVANT de re-executer l outil."
+    }
+   ]
+  },
+  "cU3": {
+   "titre": "FIN - Reprendre la mission de coordination",
+   "type": "fin",
+   "message": "COMPRENDRE L OUTIL termine : j ai lu le .md de l outil et utilise le generateur de commande ou le combo. Je reprends ma mission : je relance le guider a la case ou je me trouvais."
+  },
+  "c1": {
+   "titre": "Mission de coordination",
+   "type": "question",
+   "question": "Quelle est la mission de coordination ?",
+   "branches": [
+    {
+     "reponse": "controle-processus",
+     "vers": "c2"
+    },
+    {
+     "reponse": "roulage",
+     "vers": "c4"
+    },
+    {
+     "reponse": "etat",
+     "vers": "c5"
+    },
+    {
+     "reponse": "autre",
+     "vers": "c13"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "GARDE-FOU C1 : controle-processus -> c2 (verifier un seul processus par serveur), roulage -> c4, etat -> c5, autre -> c13. JAMAIS improviser hors carte."
+    }
+   ]
+  },
+  "c2": {
+   "titre": "Controle des processus (fantomes / serveurs morts)",
+   "type": "action",
+   "indices": [
+    {
+     "catalogue": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py controle-processus",
+     "nom": "oracle",
+     "type": "outil"
+    },
+    {
+     "type": "regle",
+     "texte": "CONTROLE PROCESSUS : la commande oracle.py controle-processus liste les processus reels et verifie UNE seule instance par serveur (oracle-server, routines-server v1). Un doublon = processus fantome, un serveur sans instance = serveur mort."
+    }
+   ],
+   "suivant": "c2b"
+  },
+  "c2b": {
+   "titre": "Probleme detecte ?",
+   "type": "question",
+   "question": "Le controle des processus detecte-t-il des fantomes (doublons) ou des serveurs morts ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c3"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c9"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "Si un processus fantome ou un serveur mort est detecte -> signaler a Cerberus (c3) qui activera l agent habilite (Vulcain pour les outils v1). Je ne repars jamais seul : je signale."
+    }
+   ]
+  },
+  "c3": {
+   "titre": "Signaler le probleme processus a Cerberus",
+   "type": "fin",
+   "message": "Processus fantome(s) ou serveur mort detecte(s). Je signale a Cerberus via oracle.py envoyer, qui active l agent habilite (Vulcain pour les outils v1). Je ne tue jamais un processus moi-meme sans mission : je signale.",
+   "indices": [
+    {
+     "catalogue": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py envoyer oracle cerberus PROCESSUS <rapport>",
+     "nom": "oracle",
+     "type": "outil"
+    },
+    {
+     "type": "regle",
+     "texte": "REGLE : je SIGNALE, je ne corrige pas. Cerberus active l agent habilite."
+    }
+   ]
+  },
+  "c4": {
+   "titre": "Rouler les messages du hub",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "ROULAGE : je route les messages non-lus vers leur destinataire en depitant les doublons et en signalant les messages orphelins."
+    },
+    {
+     "catalogue": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py verifier",
+     "nom": "oracle",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c5": {
+   "titre": "Etat des serveurs v1",
+   "type": "action",
+   "indices": [
+    {
+     "catalogue": "oracle-demarrage",
+     "chemin": "cerveau-projet/agents/tools/oracle/",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle-demarrage.py etat",
+     "nom": "oracle-demarrage",
+     "type": "outil"
+    },
+    {
+     "type": "regle",
+     "texte": "ETAT SERVEURS v1 : oracle-demarrage etat affiche l etat des serveurs oracle-server + routines-server v1, DEFCON, files, agents bloques."
+    }
+   ],
+   "suivant": "c9"
+  },
+  "c9": {
+   "titre": "Enregistrer mes usages d outils",
+   "type": "action",
+   "suivant": "c24",
+   "indices": [
+    {
+     "catalogue": "enregistrer-usage-outil",
+     "chemin": "cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/",
+     "nom": "enregistrer-usage-outil",
+     "type": "outil"
+    },
+    {
+     "texte": "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL.",
+     "type": "regle"
+    }
+   ]
+  },
+  "c13": {
+   "titre": "Mission hors perimetre ?",
+   "type": "question",
+   "question": "La mission concerne-t-elle un domaine d un autre agent ou un besoin non couvert ?",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c14"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c15"
+    }
+   ],
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REDIRECTION : si la mission concerne un outil/carte/test/suppression -> activer l agent habilite (Vulcain, Buffy, Morpheus, Hygie). JAMAIS re-tenter."
+    }
+   ]
+  },
+  "c14": {
+   "titre": "FIN - Delegation a l agent habilite",
+   "type": "fin",
+   "message": "La mission releve d un autre agent : j active l agent habilite avec la mission complete, puis son retour me reactive. Je suis ma carte pour la suite.",
+   "indices": [
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    }
+   ]
+  },
+  "c15": {
+   "titre": "Signaler le besoin",
+   "type": "fin",
+   "message": "Situation non couverte : je signale le besoin a Cerberus et je m arrete. Je ne cree rien moi-meme."
+  },
+  "c24": {
+   "titre": "HISTORISER LA FIN : tracer la fin de mon intervention",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE HISTORISATION : mission terminee - j historise la FIN de mon intervention AVANT de reactiver/activer le suivant : trace du bilan."
+    },
+    {
+     "catalogue": "oracle",
+     "chemin": "cerveau-projet/agents/tools/oracle/",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser oracle <FIN: bilan>",
+     "nom": "oracle",
+     "type": "outil"
+    }
+   ],
+   "suivant": "c20"
+  },
+  "c20": {
+   "titre": "FIN - Reactiver Cerberus",
+   "type": "fin",
+   "message": "Ma mission de coordination est terminee. Je reactive Cerberus avec le bilan consolide.",
+   "indices": [
+    {
+     "catalogue": "activer-agent-principal",
+     "chemin": "cerveau-projet/agents/tools/activer/activer-agent-principal/",
+     "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>",
+     "nom": "activer-agent-principal",
+     "type": "outil"
+    },
+    {
+     "type": "regle",
+     "texte": "PATTERN 8 : activation directe par Cerberus -> je reactiver Cerberus avec mon bilan consolide."
+    }
+   ]
+  },
+  "c0g": {
+   "titre": "GATE BON AGENT : verifier que tu es LE BON AGENT",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE GATE (decision utilisateur 2026-08-29, PAS un timer) : AVANT de commencer (analyser/decider/ecrire), je verifie que je suis LE BON AGENT de la session. S il y a un autre agent actif ou si ma mission vise une zone hors de mes habilitations, je STOP immediatement et je reactiver Cerberus SANS RIEN TOUCHER - il est inutile de travailler puis tout detruire."
+    },
+    {
+     "type": "outil",
+     "nom": "verifier-agent-perimetre",
+     "catalogue": "verifier-agent-perimetre",
+     "chemin": "cerveau-projet/agents/tools/oracle/routines/",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/routines/verifier-agent-perimetre.py --gate --moi oracle"
+    }
+   ],
+   "suivant": "c0g2"
+  },
+  "c0g2": {
+   "titre": "GATE : es-tu le bon agent ?",
+   "type": "question",
+   "question": "La porte a-t-elle rendu OK (0) ? OUI -> je continue ma mission. NON (1) -> STOP immediat : je ne touche a RIEN et je reactiver Cerberus avec le rapport de la porte.",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0e"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0h"
+    }
+   ]
+  },
+  "c0h": {
+   "titre": "FIN - STOP : pas le bon agent, reactiver Cerberus",
+   "type": "fin",
+   "message": "Je ne suis PAS le bon agent pour cette mission. Je n ai RIEN modifie. Je reactiver Cerberus immediatement avec le rapport de la porte (verifier-agent-perimetre --gate --moi oracle) pour qu il active le bon agent."
+  }
+ }
+}

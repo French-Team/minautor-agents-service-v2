@@ -1,0 +1,12 @@
+{
+ "agent": "hermes",
+ "parcours": "agents/hermes/parcours/arbre-hermes.json",
+ "case_courante": null,
+ "mission_type": "modifier",
+ "mission": "CORRIGER les fautes du README",
+ "historise_debut": true,
+ "precedent": "argus",
+ "etape": "fin",
+ "theme_courant": null,
+ "historise_fin": true
+}

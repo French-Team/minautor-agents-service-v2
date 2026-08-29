@@ -3,42 +3,42 @@
     "type": "theme",
     "appartient_a": "shuri",
     "nom": "VALIDER",
-    "description": "Vérifier la conformité d'un agent créé"
+    "description": "Verifier la conformite d'un agent cree"
   },
   "theme": {
     "nom": "VALIDER",
     "but": "Assurer que l'agent est conforme au template",
     "redirects": [
       {
-        "besoin": "Valider un agent créé",
+        "besoin": "Valider un agent cree",
         "action": "procedure",
         "etapes": [
-          "Vérifier l'existence des 4 fichiers (fiche, corrections, arbre, fins)",
-          "Vérifier le frontmatter (D17) : tous les champs présents",
-          "Vérifier que le nom respecte le thème MARVEL (D14)",
-          "Vérifier que l'arbre a des thèmes et des fins",
-          "Vérifier la cohérence fiche ↔ arbre ↔ corrections",
+          "Verifier l'existence des 4 fichiers (fiche, corrections, arbre, fins)",
+          "Verifier le frontmatter (D17) : tous les champs presents",
+          "Verifier que le nom respecte le theme MARVEL (D14)",
+          "Verifier que l'arbre a des themes et des fins",
+          "Verifier la coherence fiche <-> arbre <-> corrections",
           "Donner le verdict (CONFORME / A REVOIR)"
         ]
       },
       {
-        "besoin": "Vérifier la conformité du frontmatter",
+        "besoin": "Verifier la conformite du frontmatter",
         "action": "procedure",
         "etapes": [
           "Lire le frontmatter de la fiche",
-          "Vérifier : nom, version, cree, statut, grade, medaille, notation, mot-cles",
-          "Vérifier que le grade est cohérent avec le rôle",
-          "Vérifier que les mot-cles sont pertinents"
+          "Verifier : nom, version, cree, statut, grade, medaille, notation, mot-cles",
+          "Verifier que le grade est coherent avec le role",
+          "Verifier que les mot-cles sont pertinents"
         ]
       },
       {
-        "besoin": "Vérifier la cohérence arbre ↔ fiche",
+        "besoin": "Verifier la coherence arbre <-> fiche",
         "action": "procedure",
         "etapes": [
           "Lire la fiche de l'agent",
-          "Lire l'arbre de décision",
-          "Vérifier que les thèmes de l'arbre correspondent au rôle de la fiche",
-          "Vérifier que les fins sont correctes (fin-stark ou fin-cerberus)"
+          "Lire l'arbre de decision",
+          "Verifier que les themes de l'arbre correspondent au role de la fiche",
+          "Verifier que les fins sont correctes (fin-stark ou fin-cerberus)"
         ]
       }
     ]

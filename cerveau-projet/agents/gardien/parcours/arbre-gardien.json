@@ -1,0 +1,60 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "gardien",
+    "version": "0.3.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-gardien",
+    "agent": "gardien",
+    "description": "Arbre des decisions du Gardien - Gardien du marbre. 5 themes tires du parcours v0.2.4 (20 cases) : VERIFIER (c2-c2b), PROPOSER (c3-c6), SIGNALER (c2b), AUTRE (c29-c29e), OUTILS (cU1-cU3).",
+    "regles": {
+      "D1": "Chaque branche mene a des besoins, qui menent aux procedures.",
+      "D5": "Les besoins sont des REDIRECTIONS.",
+      "D7": "RELIRE OBLIGATOIRE : corrections puis fiche AVANT toute mission.",
+      "AUTORISATION_HUMAINE": "IMMUABLE : une zone du marbre ne se modifie JAMAIS sans autorisation explicite de l utilisateur. Je propose, l UTILISATEUR valide, j execute. Sans validation, je m arrete.",
+      "VERIFICATION_AVANT_APRES": "IMMUABLE : je verifie l integrite du marbre (proteger-verrou-marbre --tous) AVANT et APRES toute mission. Toute divergence = violation.",
+      "OUTILS_EXCLUSIFS": "IMMUABLE : pour TOUTE operation, j utilise UNIQUEMENT les outils du cerveau (agents/tools/). JAMAIS de commande systeme directe.",
+      "DISCIPLINE_OUTIL": "IMMUABLE : pour chaque etape, J UTILISE L OUTIL EXACT assigne dans le parcours. JAMAIS de decision improvisee.",
+      "RVAV": "OBLIGATOIRE : Rechercher -> Verifier -> Analyser -> Valider. Pas de validation sans RVAV.",
+      "TRACE": "Chaque modification autorisee est journalisee dans marbre-log.jsonl."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est la mission du marbre ?",
+    "branches": [
+      {
+        "reponse": "VERIFIER",
+        "description": "Verifier l integrite du marbre : proteger-verrou-marbre --tous (c2-c2b)",
+        "vers": "theme-verifier.json"
+      },
+      {
+        "reponse": "PROPOSER",
+        "description": "Proposer une modification d une zone protegee : raison -> proposition -> validation utilisateur -> execution (c3-c6)",
+        "vers": "theme-proposer.json"
+      },
+      {
+        "reponse": "SIGNALER",
+        "description": "Signaler une violation detectee : documenter, activer l agent responsable (c2b)",
+        "vers": "theme-signaler.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors perimetre : delegation, outil temp, signaler le besoin (c29-c29e)",
+        "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "OUTILS",
+        "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)",
+        "vers": "theme-outils.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles"
+  }
+}

@@ -48,9 +48,9 @@ def reecrire(chemin_relatif, liste):
             f.write(json.dumps(d, ensure_ascii=False) + "\n")
 
 
-def filtrer(chemin_relatif, **critères):
+def filtrer(chemin_relatif, **criteres):
     """Filtrer les entrees par egalite de champs."""
     resultats = lire(chemin_relatif)
-    for cle, valeur in critères.items():
+    for cle, valeur in criteres.items():
         resultats = [e for e in resultats if e.get(cle) == valeur]
     return resultats

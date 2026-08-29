@@ -1,0 +1,50 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "cerberus",
+    "description": "Toutes les fins possibles pour Cerberus (arbre v0.1.0)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-cerberus.json",
+      "description": "Theme termine : retour a la racine pour choisir un autre theme."
+    },
+    "fin-coordination": {
+      "titre": "FIN - Coordination terminee",
+      "description": "La coordination est terminee. Cerberus attend la prochaine demande.",
+      "action": "procedure"
+    },
+    "fin-activer": {
+      "titre": "FIN - Agent active",
+      "description": "L agent habilite est active. Cerberus enregistre ses usages et attend le retour.",
+      "action": "procedure"
+    },
+    "fin-retour": {
+      "titre": "FIN - Retour traite",
+      "description": "Le retour de l agent est traite (bilan, erreurs). Coordination terminee.",
+      "action": "procedure"
+    },
+    "fin-revision": {
+      "titre": "FIN - Revision lancee",
+      "description": "Socrate est actif pour la revision strategique. Cerberus attend le retour.",
+      "action": "procedure"
+    },
+    "fin-eduquer": {
+      "titre": "FIN - Education lancee",
+      "description": "Chiron est actif pour l education. Cerberus attend le retour.",
+      "action": "procedure"
+    },
+    "fin-signal": {
+      "titre": "FIN - Besoin signale",
+      "description": "Le besoin est signale a Cerberus pour traitement ulterieur.",
+      "action": "procedure"
+    },
+    "fin-erreurs": {
+      "titre": "FIN - Erreurs hors mission signalees",
+      "description": "Des erreurs hors mission ont ete detectees et signalees.",
+      "action": "procedure"
+    }
+  }
+}

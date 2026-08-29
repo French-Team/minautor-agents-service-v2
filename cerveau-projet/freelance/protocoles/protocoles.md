@@ -49,8 +49,8 @@ Cerberus -> Stark -> [Shuri / Forge / Rogers] -> Stark -> Cerberus
 | `reactiver <session> '<bilan>' <agent>` | Retourner au principal de session | Cerberus (toujours) |
 
 **REGLE ABSOLUE** :
-- Pour aller vers un agent specifique → `activer`
-- Pour retourner a Cerberus → `reactiver`
+- Pour aller vers un agent specifique -> `activer`
+- Pour retourner a Cerberus -> `reactiver`
 - `reactiver` ne va JAMAIS vers un agent autre que Cerberus
 
 ---
@@ -61,10 +61,10 @@ Chaque carte a SA fin. La fin dit QUI activer.
 
 | Type de fin | Action |
 |---|---|
-| **Fin de chaine** | Dernier maillon → `reactiver` Cerberus avec bilan consolide |
-| **Fin de branche** | Maillon intermediaire → `activer` le maillon suivant |
-| **Fin freelance** | Agent → `activer` Stark (pas reactiver) |
-| **Fin Stark** | Stark → `reactiver` Cerberus |
+| **Fin de chaine** | Dernier maillon -> `reactiver` Cerberus avec bilan consolide |
+| **Fin de branche** | Maillon intermediaire -> `activer` le maillon suivant |
+| **Fin freelance** | Agent -> `activer` Stark (pas reactiver) |
+| **Fin Stark** | Stark -> `reactiver` Cerberus |
 
 ---
 
@@ -120,7 +120,7 @@ Chaque agent n'edite que les fichiers de SON perimetre.
 
 ---
 
-## PROTOCOLE 8 : JARVIS — centre nevralgique
+## PROTOCOLE 8 : JARVIS -- centre nevralgique
 
 > JARVIS est le SEUL canal de communication inter-agents.
 > Aucun agent ne communique directement vers un autre.
@@ -136,11 +136,11 @@ Chaque agent n'edite que les fichiers de SON perimetre.
 
 | Priorite | Effet |
 |---|---|
-| **1** | BLOQUANT — l'agent ne demarre pas tant que non lu |
-| **2** | Urgent — a traiter en priorite |
-| **3** | Normal — traitement standard |
-| **4** | Basse — quand possible |
-| **5** | Info — simple notification |
+| **1** | BLOQUANT -- l'agent ne demarre pas tant que non lu |
+| **2** | Urgent -- a traiter en priorite |
+| **3** | Normal -- traitement standard |
+| **4** | Basse -- quand possible |
+| **5** | Info -- simple notification |
 
 **REGLE** : un message expire apres avoir ete lu et accuse.
 
@@ -180,7 +180,7 @@ Chaque agent n'edite que les fichiers de SON perimetre.
 |---|---|
 | 1 | Determiner dedie ou commun | Forge |
 | 2 | Creer le dossier `<outil>/` avec `entry.py` + `fonctions/` (P1/P2) | Forge |
-| 3 | Initialiser RACINE via os_path : `from racine import trouver_racine` (P10) — INTERDIT de compter les niveaux (`../..`) | Forge |
+| 3 | Initialiser RACINE via os_path : `from racine import trouver_racine` (P10) -- INTERDIT de compter les niveaux (`../..`) | Forge |
 | 4 | Creer `<outil>.md` (template v2, contrat D7) | Forge |
 | 5 | Creer `fonctions/` + `<outil>-data.json` (donnees editables, D15) | Forge |
 | 6 | **Harnacher l'outil** (PROTOCOLE 21) : importer `verifier_outil` et l'appeler en debut de main() | Forge |
@@ -212,7 +212,7 @@ l etape 6 -- un outil non harnache est refuse (SIG ERR du harnais).
 
 ---
 
-## PROTOCOLE 12 : JARVIS — cycle de vie
+## PROTOCOLE 12 : JARVIS -- cycle de vie
 
 > JARVIS ne tourne QUE pendant le round de Stark.
 > Il demarre a l'activation de Stark et s'eteint a la fin du cycle.
@@ -230,11 +230,11 @@ l etape 6 -- un outil non harnache est refuse (SIG ERR du harnais).
 **Lifecycle** :
 ```
 Cerberus active Stark
-  → Stark lance JARVIS (jarvis-server.py --transport stdio)
-  → Stark utilise JARVIS (messages, activation, status...)
-  → Stark dit FIN DE CYCLE
-  → Stark arrete JARVIS
-  → Stark reactive Cerberus
+  -> Stark lance JARVIS (jarvis-server.py --transport stdio)
+  -> Stark utilise JARVIS (messages, activation, status...)
+  -> Stark dit FIN DE CYCLE
+  -> Stark arrete JARVIS
+  -> Stark reactive Cerberus
 ```
 
 ## PROTOCOLE 13 v2 : Les 6 declencheurs (2026-08-23)
@@ -384,8 +384,8 @@ Un server MCP SEPARATE (tools-commun/defcon/) gere l'etat DEFCON :
 | Couche | Qui | Role | Cycle |
 |---|---|---|---|
 | COLLECTE | mini serveur routines (H24, lecture seule) | executer les routines du manifest.json : demarrage/arret jarvis, observation des flux, detection de modifications | continu, sans LLM |
-| ALERTE | le serveur, mecaniquement | seuils franchis (manifest.json D15) -> rapport forensique (qui/quoi/comment/quand) -> message P1 [EDITH-RÉVEIL] dans l inbox de stark + demande d activation via JARVIS | a l'evenement ou au delai ecoule |
-| ANALYSE | agent EDITH incarnée | lire les observations accumulees, conclure, rapporter a l utilisateur via JARVIS | sur reveil ou a la demande |
+| ALERTE | le serveur, mecaniquement | seuils franchis (manifest.json D15) -> rapport forensique (qui/quoi/comment/quand) -> message P1 [EDITH-REVEIL] dans l inbox de stark + demande d activation via JARVIS | a l'evenement ou au delai ecoule |
+| ANALYSE | agent EDITH incarnee | lire les observations accumulees, conclure, rapporter a l utilisateur via JARVIS | sur reveil ou a la demande |
 
 ### Regles
 
@@ -402,7 +402,7 @@ Un server MCP SEPARATE (tools-commun/defcon/) gere l'etat DEFCON :
 
 Modifier un fichier du perimetre EDITH en reel -> le serveur doit
 detecter, constituer le rapport forensique (qui/quoi/comment/quand),
-deposer le message P1 [EDITH-RÉVEIL], et EDITH incarnée doit rapporter
+deposer le message P1 [EDITH-REVEIL], et EDITH incarnee doit rapporter
 les 4 W a l'utilisateur. Verdict Fury : PASSE si les 4 W sont exacts.
 
 ## PROTOCOLE 17 : Evaluation periodique des agents (2026-08-23)
@@ -460,7 +460,7 @@ revision.
 | encodage | mojibake console, coding ascii vs utf-8 | D4 mecanique : lire/ecrire/detecter |
 | exec | quoting PowerShell rate, timeouts oublies | subprocess standardise : rc + captures + timeout |
 | jsonl-store | lire/ecrire/append dupliques x4 | UNE implementation JSONL testee |
-| horloge | horodatages heterogenes | formats uniques traçables |
+| horloge | horodatages heterogenes | formats uniques tracables |
 
 ### La routine valider-apres-modification
 
@@ -530,7 +530,7 @@ et SIGNALE dans sa reponse les pistes verifiees ou a verifier.
 | correction-outil | parite .sh/.py, serveur MCP equivalent, tests, index |
 | correction-fiche | arbre/themes, corrections.md, AGENTS.md, jarvis-data.json |
 | correction-jarvis | serveur miroir, routines liees, contrat .md |
-| nouveau-fichier | nommage daté + declaration dans les index |
+| nouveau-fichier | nommage date + declaration dans les index |
 | correction-template | protocole de creation + agents construits avec l ancienne version |
 
 Ajouter un rappel = editer rappels.json (D15), jamais le code.
@@ -620,7 +620,7 @@ Format d une lecon : `{id, date, agent, categorie(outil|protocole|processus|cart
 
 ### Architecture DYNAMIQUE (v0.2.0, decision utilisateur 2026-08-25)
 
-> « On importe le harnais, le harnais fait le reste. » Le harnais des
+> " On importe le harnais, le harnais fait le reste. " Le harnais des
 > scripts temporaires est pilote par la CONFIGURATION (`harnais-data.json`,
 > D15 : separation code/donnees), jamais par des editions de code.
 > Ajouter une regle = editer UN fichier de donnees, rien d autre.
@@ -640,7 +640,7 @@ verification, un rappel ou une securite, on EDITE `harnais-data.json`
 reste automatiquement (preuve : un import ajoute a la config est verifie
 des l appel suivant, sans toucher au code).
 
-**Niveaux (reponse a la question « regle, convention ou protocole ? ») :**
+**Niveaux (reponse a la question " regle, convention ou protocole ? ") :**
 
 | Niveau | Ou ca vit | Role |
 |---|---|---|
@@ -668,7 +668,7 @@ commande, le harnais valide et rend un verdict clair.
 
 ## PROTOCOLE 22 : Anti-reflexion -- commande + pourquoi (2026-08-25)
 
-> Decision utilisateur 2026-08-25 : « l intelligence ne rend pas docile ».
+> Decision utilisateur 2026-08-25 : " l intelligence ne rend pas docile ".
 > Quand un agent ne comprend pas le POURQUOI, il reflechit et cherche a
 > savoir avant d agir -> ce sont des TROUS DANS LA RAQUETTE. La v2 doit
 > les eviter : chaque parcours/arbre donne la commande a executer ET le
@@ -688,7 +688,7 @@ SI tu dois faire <ceci>
 |---|---|
 | **Commande exacte** | La commande a copier-coller est donnee, jamais devinee |
 | **Pourquoi** | Une phrase courte explique le BUT (l agent n a pas a chercher) |
-| **Pas de choix ouvert** | Si plusieurs options, le parcours DECIDE (jamais « choisis toi-meme ») |
+| **Pas de choix ouvert** | Si plusieurs options, le parcours DECIDE (jamais " choisis toi-meme ") |
 | **Pas de recherche** | L agent n a JAMAIS a chercher le pourquoi du comment : il est dans le parcours |
 
 ### Le flux ideal (JARVIS + arbre)
@@ -711,16 +711,16 @@ Des qu il ne comprend PAS -> il cherche a savoir (TROU DANS LA RAQUETTE)
 
 | Interdit | Pourquoi |
 |---|---|
-| « Choisis la bonne commande » | Oblige l agent a reflechir au lieu d executer |
-| « Utilise l outil X » sans commande | L agent doit deviner les arguments |
+| " Choisis la bonne commande " | Oblige l agent a reflechir au lieu d executer |
+| " Utilise l outil X " sans commande | L agent doit deviner les arguments |
 | Une regle sans raison | L agent cherche le pourquoi et s arrete |
-| Renvoyer vers un doc « a lire » | L agent lit au lieu d agir (sauf si necessaire, le parcours le dit) |
+| Renvoyer vers un doc " a lire " | L agent lit au lieu d agir (sauf si necessaire, le parcours le dit) |
 
 ### Obligation a la creation d un arbre/parcours
 
 TOUT agent qui cree ou modifie un arbre/parcours v2 verifie que chaque
-case action a : (1) une commande EXACTE copiable, (2) un « pourquoi »
-clair. Un arbre avec une case « fais ce qu il faut » est NON CONFORME.
+case action a : (1) une commande EXACTE copiable, (2) un " pourquoi "
+clair. Un arbre avec une case " fais ce qu il faut " est NON CONFORME.
 
 ### Role de JARVIS
 

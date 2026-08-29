@@ -3,24 +3,24 @@
     "type": "theme",
     "appartient_a": "parker",
     "nom": "COORDONNER",
-    "description": "Inter-round, retour à Stark"
+    "description": "Inter-round, retour a Stark"
   },
   "theme": {
     "nom": "COORDONNER",
-    "but": "Gérer les transitions",
+    "but": "Gerer les transitions",
     "redirects": [
       {
-        "besoin": "Réception inter-round",
+        "besoin": "Reception inter-round",
         "action": "procedure",
         "etapes": [
           "Lire le rapport",
-          "Accuser réception",
+          "Accuser reception",
           "Diagnostic rapide",
-          "Réactiver l'appelant"
+          "Reactiver l'appelant"
         ]
       },
       {
-        "besoin": "Retour à Stark",
+        "besoin": "Retour a Stark",
         "action": "fin",
         "vers": "fins.json",
         "case": "fin-stark"

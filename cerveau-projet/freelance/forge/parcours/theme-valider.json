@@ -3,32 +3,32 @@
     "type": "theme",
     "appartient_a": "forge",
     "nom": "VALIDER",
-    "description": "Vérifier la conformité d'un outil créé"
+    "description": "Verifier la conformite d'un outil cree"
   },
   "theme": {
     "nom": "VALIDER",
     "but": "Assurer que l'outil est conforme au template",
     "redirects": [
       {
-        "besoin": "Valider un outil créé",
+        "besoin": "Valider un outil cree",
         "action": "procedure",
         "etapes": [
-          "Vérifier l'existence des 3 fichiers (.md, .py, -data.json)",
-          "Vérifier le frontmatter du .md (D17)",
-          "Vérifier que le .py n'a pas de valeur en dur (D15)",
-          "Vérifier que le -data.json est valide",
-          "Vérifier que le formulaire est déclaratif (D7)",
+          "Verifier l'existence des 3 fichiers (.md, .py, -data.json)",
+          "Verifier le frontmatter du .md (D17)",
+          "Verifier que le .py n'a pas de valeur en dur (D15)",
+          "Verifier que le -data.json est valide",
+          "Verifier que le formulaire est declaratif (D7)",
           "Donner le verdict (CONFORME / A REVOIR)"
         ]
       },
       {
-        "besoin": "Vérifier la séparation code/données",
+        "besoin": "Verifier la separation code/donnees",
         "action": "procedure",
         "etapes": [
           "Lire le .py",
-          "Vérifier qu'il n'y a pas de liste, seuil, message en dur",
-          "Vérifier qu'il lit le -data.json",
-          "Vérifier que le -data.json contient les données"
+          "Verifier qu'il n'y a pas de liste, seuil, message en dur",
+          "Verifier qu'il lit le -data.json",
+          "Verifier que le -data.json contient les donnees"
         ]
       }
     ]

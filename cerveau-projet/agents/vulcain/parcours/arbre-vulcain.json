@@ -1,0 +1,56 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "vulcain",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-vulcain",
+    "agent": "vulcain",
+    "description": "Arbre des decisions de Vulcain - constructeur d outils v1. L agent choisit UN THEME au demarrage : CONSTRUIRE (creer un outil), MODIFIER (corriger/ameliorer un outil existant), AUTRE (mission hors parcours : documentation, delegation, outil temporaire, audit), INTER-ROUND (reception/relance d un rapport KO) ou LIRE (preambule : fiches, lecons, activite, doc outils). Migration de la carte v1 (parcours-vulcain.json v0.6.5, 70 cases) en arbre v2-like (refonte 2026-08-27).",
+    "regles": {
+      "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
+      "D5": "Les besoins d un theme sont des REDIRECTIONS : je choisis celui qui correspond a ma situation.",
+      "D6": "Je lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils (combos, generateurs).",
+      "D3": "Les passages d un fichier a l autre (arbre -> theme -> fins) sont TRANSPARENTS.",
+      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche (lire-fichier) AVANT toute mission, puis je confirme (seul OUI prouve la lecture)."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est ma mission ? (construire / modifier / autre / inter-round / lire)",
+    "branches": [
+      {
+        "reponse": "CONSTRUIRE",
+        "description": "Creer un nouvel outil (protocole 5 fichiers, outil-template, RVAV, tests Morpheus)",
+        "vers": "theme-construire.json"
+      },
+      {
+        "reponse": "MODIFIER",
+        "description": "Corriger / ameliorer un outil existant (bumper, RVAV, tests Morpheus)",
+        "vers": "theme-modifier.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors parcours : documentation de fiche, delegation, outil temporaire, audit Themis",
+        "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
+      },
+      {
+        "reponse": "LIRE",
+        "description": "Consulter les fiches, les lecons, l activite recente, la doc des outils",
+        "vers": "theme-lire.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

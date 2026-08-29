@@ -1,0 +1,34 @@
+{
+  "identite": {"type": "arbre", "appartient_a": "minerve", "version": "0.3.0", "commun": false},
+  "arbre": {
+    "nom": "arbre-minerve",
+    "agent": "minerve",
+    "description": "Arbre des decisions de Minerve - Redactrice de todos. 6 themes tires du parcours v0.4.4 (30 cases) : CREER (c2-c9), COMPLETER (c11-c15), CORRIGER (c9f), AMELIORER (c9b-c9e), AUTRE (c18-c23), OUTILS (cU1-cU3).",
+    "regles": {
+      "D1": "Chaque branche mene a des besoins, qui menent aux procedures.",
+      "D5": "Les besoins sont des REDIRECTIONS.",
+      "D7": "RELIRE OBLIGATOIRE : corrections puis fiche AVANT toute mission.",
+      "SPEC_SOURCE": "IMMUABLE : je travaille uniquement a partir d une spec source existante.",
+      "ANTI_DOUBLON": "Avant toute creation ou completion, je lance rechercher-todos.",
+      "PHASE_0": "IMMUABLE : la premiere action de tout todo est d activer l agent adapte.",
+      "PHASE_9": "IMMUABLE : la derniere action de tout todo suit SA carte (Pattern 13).",
+      "RVAV": "OBLIGATOIRE : Rechercher -> Verifier -> Analyser -> Valider.",
+      "OUTILS_EXCLUSIFS": "IMMUABLE : j utilise UNIQUEMENT les outils du cerveau assignes dans mon parcours.",
+      "BILAN_OUTILS": "IMMUABLE : en fin de mission, je declare tous les outils utilises."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est la mission todo ?",
+    "branches": [
+      {"reponse": "CREER", "description": "Creer un todo depuis une spec : rechercher-todos, lire spec, squelette, remplir phases 0-9, ASCII, valider, index (c2-c9)", "vers": "theme-creer.json"},
+      {"reponse": "COMPLETER", "description": "Completer un todo existant : rechercher-todos, lire, conventions, completer phases, valider (c11-c15)", "vers": "theme-completer.json"},
+      {"reponse": "CORRIGER", "description": "Corriger selon le rapport de Janus : boucle KO (c9f)", "vers": "theme-corriger.json"},
+      {"reponse": "AMELIORER", "description": "Ameliorer son fonctionnement : generateur, agent habilite, reprise (c9b-c9e)", "vers": "theme-ameliorer.json"},
+      {"reponse": "AUTRE", "description": "Mission hors perimetre : delegation, outil temp, signaler, Themis audit (c18-c23)", "vers": "theme-autre.json"},
+      {"reponse": "OUTILS", "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)", "vers": "theme-outils.json"}
+    ]
+  },
+  "fins": {"fichier": "fins.json", "description": "Toutes les fins possibles"}
+}

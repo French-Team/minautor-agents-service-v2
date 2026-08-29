@@ -50,5 +50,5 @@ python3 outils-llm/nettoyer-session.py <id> <session>
 ```
 
 L outil vide l encart, l historique, les inbox/outbox JARVIS (freelance)
-et purge la BDD. Sans question, obéit. Apres le nettoyage, le LLM est
+et purge la BDD. Sans question, obeit. Apres le nettoyage, le LLM est
 dans une session propre (rien dans les encarts/historiques).

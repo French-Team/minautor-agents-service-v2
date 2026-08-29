@@ -108,6 +108,18 @@
     {
      "type": "regle",
      "texte": "Lire le .md de l outil + generateurs-commande + consulter-combos si combo existe."
+    },
+    {
+     "type": "outil",
+     "nom": "generateurs-commande",
+     "chemin": "cerveau-projet/agents/tools/generateurs/generateurs-commande/",
+     "commande": "python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py"
+    },
+    {
+     "type": "outil",
+     "nom": "consulter-combos",
+     "chemin": "cerveau-projet/agents/tools/consulter/consulter-combos/",
+     "commande": "python3 cerveau-projet/agents/tools/consulter/consulter-combos/consulter-combos.py"
     }
    ]
   },

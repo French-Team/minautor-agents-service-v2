@@ -16,7 +16,7 @@ identite:
 | `fichier-final` | `exports/export-2026-08-04-120000.json` | exporter-donnees | 2026-08-04 | [OK] |
 | `profil-systeme` | OS: Windows / Bash: 5.2.37 / Python: 3.14.4 / Git: 2.53.0 / Node: 24.14.1 | verifier-systeme | 2026-08-07 | [OK] |
 | `profil-session-freelance` | session: session-freelance / id: freebuff / agent: stark / date: 2026-08-27 19:06:19.699 | activer-agent-principal | 2026-08-27 | [OK] |
-| `profil-session-admin` | session: session-admin / id: glm5 / agent: Cerberus / date: 2026-08-27 19:32:03.827 | activer-agent-principal | 2026-08-27 | [OK] |
+| `profil-session-admin` | session: session-admin / id: glm5 / agent: Cerberus / date: 2026-08-29 11:20:36.772 | activer-agent-principal | 2026-08-29 | [OK] |
 
 ---
 

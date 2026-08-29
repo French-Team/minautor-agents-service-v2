@@ -1,0 +1,83 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "atlas",
+    "nom": "RECHERCHER",
+    "description": "Recherche web ou docs : protocole-recherches-web, formuler, executer, documenter (cases c12-c15)"
+  },
+  "theme": {
+    "nom": "RECHERCHER",
+    "but": "Rechercher de l information via le web ou les documents",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine recherche)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent atlas --domaine recherche"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Formuler la requete (protocole-recherches-web)",
+        "action": "procedure",
+        "etapes": [
+          "Lire le protocole-recherches-web avant de formuler"
+        ],
+        "regle": "PROTOCOL OBLIGATOIRE : formuler selon le protocole-recherches-web."
+      },
+      {
+        "besoin": "Executer la recherche",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/rechercher/rechercher-web/rechercher-web.py <requete>"
+        ],
+        "regle": "Executer la recherche web."
+      },
+      {
+        "besoin": "Documenter la source trouvee",
+        "action": "procedure",
+        "etapes": [
+          "Lire la page, en extraire les informations pertinentes, documenter dans le rapport"
+        ],
+        "regle": "Documenter chaque source trouvee."
+      },
+      {
+        "besoin": "Verifier la conformite ASCII",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>"
+        ],
+        "regle": "ASCII strict + LF pur."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/atlas/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-rechercher"
+  }
+}

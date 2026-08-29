@@ -1,4 +1,4 @@
-# Rapport d'audit Themis — Mission Buffy : inter-round cartes Morpheus/Janus
+# Rapport d'audit Themis -- Mission Buffy : inter-round cartes Morpheus/Janus
 
 Date : 2026-08-22
 
@@ -20,10 +20,10 @@ Date : 2026-08-22
 
 ## Analyse
 
-**Probleme 1 — Morpheus (c9)** : La branche VULCAIN envoyait vers Janus au lieu de revenir a Vulcain (contraire a la REGLE DELEGATION de la fiche). Corrige par nouvelle case c9v (FIN - Retour delegation Vulcain). Ajout aussi de c7ir (inter-round pour KO tests).
+**Probleme 1 -- Morpheus (c9)** : La branche VULCAIN envoyait vers Janus au lieu de revenir a Vulcain (contraire a la REGLE DELEGATION de la fiche). Corrige par nouvelle case c9v (FIN - Retour delegation Vulcain). Ajout aussi de c7ir (inter-round pour KO tests).
 
-**Probleme 2 — Janus (c8)** : La branche NON (defauts) envoyait vers c9 (lecons) sans inter-round. Corrige par nouvelle case c8ir (INTER-ROUND : activer l agent habilite avec rapport, protocole-fin-mission v0.2.0 R2).
+**Probleme 2 -- Janus (c8)** : La branche NON (defauts) envoyait vers c9 (lecons) sans inter-round. Corrige par nouvelle case c8ir (INTER-ROUND : activer l agent habilite avec rapport, protocole-fin-mission v0.2.0 R2).
 
 ## Verdict
 
-**CONFORME — 0 defaut.** Les 2 corrections sont correctes et alignees avec le protocole-fin-mission v0.2.0.
+**CONFORME -- 0 defaut.** Les 2 corrections sont correctes et alignees avec le protocole-fin-mission v0.2.0.

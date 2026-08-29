@@ -6,17 +6,17 @@
   },
   "fins": {
     "fin-theme": {
-      "titre": "Retour à la racine",
+      "titre": "Retour a la racine",
       "action": "redirection",
       "vers": "arbre-stark.json"
     },
     "fin-cerberus": {
-      "titre": "FIN DE CYCLE - Réactiver Cerberus",
+      "titre": "FIN DE CYCLE - Reactiver Cerberus",
       "description": "Terminer le round et retourner au principal de session",
       "action": "reactiver",
       "cible": "cerberus",
       "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> '<bilan>' stark",
-      "regle": "REACTIVER (pas ACTIVER). ACTIVER va vers un agent spécifique. REACTIVER va vers Cerberus (le principal de session)."
+      "regle": "REACTIVER (pas ACTIVER). ACTIVER va vers un agent specifique. REACTIVER va vers Cerberus (le principal de session)."
     },
     "fin-inter-round": {
       "titre": "Fin d'inter-round",

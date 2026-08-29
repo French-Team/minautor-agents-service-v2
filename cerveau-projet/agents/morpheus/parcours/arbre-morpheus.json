@@ -1,0 +1,43 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "morpheus",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-morpheus",
+    "agent": "morpheus",
+    "description": "Arbre des decisions de Morpheus - testeur dedie. L agent choisit UN THEME au demarrage : TESTER (tester un outil), VERIFIER (valider un outil existant) ou AUTRE (mission hors parcours : delegation, outil temporaire).",
+    "regles": {
+      "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
+      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche AVANT toute mission."
+    }
+  },
+  "racine": {
+    "titre": "Quelle est la mission ?",
+    "type": "question",
+    "question": "Quelle est la mission ?",
+    "branches": [
+      {
+        "reponse": "TESTER",
+        "description": "Tester un outil (combo tester-outil, verdict, lecons)",
+        "vers": "theme-tester.json"
+      },
+      {
+        "reponse": "VERIFIER",
+        "description": "Verifier/valider un outil existant",
+        "vers": "theme-verifier.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors parcours : delegation, outil temporaire",
+        "vers": "theme-autre.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

@@ -64,6 +64,42 @@ def changer(nouveau, commentaire, par="oracle"):
     return entree, None
 
 
+def escaler(nouveau, commentaire, par="oracle"):
+    """ESCALADER vers le haut (degradation) : passe du niveau courant a un
+    niveau SUPERIEUR (2->3->4), sens CHEF DE DEFCON 2 (REPRISE TOTALE =
+    niveau normal, decision utilisateur 2026-08-29) vers l'alerte.
+
+    Sur un etat URGENT, la routine verifier-statuts monte jusqu'a DEFCON 4
+    (VALIDATION DES REPARATIONS). La descente (reparation validee) reste
+    faite par changer() (4->3->2). DEFCON 5 (arret total) reste reserve a
+    declarer_arret.
+
+    Retourne (entree, erreur) : entree=None si deja au moins au niveau
+    cible (rien a faire) ou transition invalide."""
+    if nouveau not in ECHELLE:
+        return None, f"niveau invalide '{nouveau}'"
+    if nouveau == 5:
+        return None, "DEFCON 5 se declenche via defcon-declarer (arret total)"
+    courant = niveau_courant()
+    if courant is None:
+        # Aucun etat enregistre : fonctionnement normal = DEFCON 2.
+        courant = 2
+    if courant >= nouveau:
+        return None, (f"deja au niveau DEFCON {courant} "
+                      f"(>= cible {nouveau}) : rien a faire")
+    entree = {
+        "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
+        "niveau": nouveau,
+        "signification": ECHELLE[nouveau],
+        "commentaire": commentaire,
+        "par": par,
+        "sens": "escalade",
+    }
+    with open(DEFCON_FILE, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entree, ensure_ascii=False) + "\n")
+    return entree, None
+
+
 def declarer_arret(raison, par="oracle"):
     """Declarer un DEFCON 5 (arret total) - point d'entree unique."""
     entree = {
@@ -113,6 +149,17 @@ def cmd_changer_defcon(args):
         print(f"[DEFCON] ERREUR: {erreur}")
         return
     print(f"[DEFCON] Niveau {entree['niveau']} : {entree['signification']}")
+    print(f"  {entree['commentaire']}")
+
+
+def cmd_escaler_defcon(args):
+    """Escalader vers le haut (degradation) - ex: URGENT -> DEFCON 4."""
+    entree, erreur = escaler(args.niveau, args.commentaire,
+                             par=getattr(args, "par", "oracle"))
+    if erreur:
+        print(f"[DEFCON] ERREUR: {erreur}")
+        return
+    print(f"[DEFCON] Escalade -> Niveau {entree['niveau']} : {entree['signification']}")
     print(f"  {entree['commentaire']}")
 
 

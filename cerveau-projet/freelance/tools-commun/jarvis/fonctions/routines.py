@@ -129,8 +129,8 @@ def executer_routines():
                                  manifest.get("intervalle_boucle_secondes",
                                               600))
         dernier_iso = etat.get(nom, {}).get("derniere", "")
-        ecoulé = secondes_ecoulee(dernier_iso)
-        if ecoulé < intervalle:
+        ecoule = secondes_ecoulee(dernier_iso)
+        if ecoule < intervalle:
             continue
         if not script.exists():
             continue
@@ -163,11 +163,11 @@ def cmd_routines_etat(args=None):
                                  manifest.get("intervalle_boucle_secondes",
                                               600))
         dernier_iso = etat.get(nom, {}).get("derniere", "")
-        ecoulé = secondes_ecoulee(dernier_iso)
-        quand = f"il y a {int(ecoulé)}s" if ecoulé < 10**9 else "jamais"
-        if ecoulé >= intervalle:
+        ecoule = secondes_ecoulee(dernier_iso)
+        quand = f"il y a {int(ecoule)}s" if ecoule < 10**9 else "jamais"
+        if ecoule >= intervalle:
             reste = "A EXECUTER (au prochain tic)"
         else:
-            reste = f"dans {int(intervalle - ecoulé)}s"
+            reste = f"dans {int(intervalle - ecoule)}s"
         print(f"  {nom} [{intervalle}s] derniere: {quand} | declenchement: "
               f"{reste}")

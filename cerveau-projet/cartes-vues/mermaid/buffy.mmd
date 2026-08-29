@@ -1,4 +1,4 @@
-%% Carte de decision de buffy (parcours v0.5.4)
+%% Carte de decision de buffy (parcours v0.5.6)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -26,12 +26,19 @@ flowchart TD
     c17["Activer Athena (pense-bete)"]
     c18["Verifier le nom de l'agent"]
     c19["Creer le dossier de l'agent"]
+    c1h["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hb["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hc["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hd["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1he["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1ir["RECEPTION INTER-ROUND : accuser reception du rapport KO et activer l appelant"]
     c2["Verifier le nommage"]
     c20["Copier le template + creer corrections"]
     c21["Mettre a jour AGENTS.md"]
     c22(["FIN - Activer Janus"])
     c22a["Activer Themis pour auditer ma mission"]
     c22b{"Retour de Themis recu ?"}
+    c22h["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c23["Verifier la convention des protocoles"]
     c24["Creer le dossier du protocole"]
     c25["Creer le protocole"]
@@ -39,10 +46,13 @@ flowchart TD
     c27(["FIN - Activer Janus"])
     c27a["Activer Themis pour auditer ma mission"]
     c27b{"Retour de Themis recu ?"}
+    c27h["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c28["Lancer le combo sante-tableaux"]
     c3["Verifier la structure"]
     c31(["FIN - Activer Vulcain (outil)"])
     c31b(["FIN - Activer Morpheus (tests)"])
+    c31bh["HISTORISER LA FIN : tracer la fin de mon intervention"]
+    c31h["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c32["Gerer les sous-missions"]
     c33{"Mission hors parcours"}
     c34["Activer l'agent habilite"]
@@ -65,6 +75,7 @@ flowchart TD
     c8(["FIN - Activer Janus"])
     c8a["Activer Themis pour auditer ma mission"]
     c8b{"Retour de Themis recu ?"}
+    c8h["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c9["Lire le fichier"]
     cU1{"Probleme avec un outil en cours de mission ?"}
     cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
@@ -75,12 +86,13 @@ flowchart TD
     c0c --> c0d
     c0d --> cU1
     c0e --> c0c
-    c1 -- "creer" --> c2
-    c1 -- "modifier" --> c9
-    c1 -- "agent" --> c18
-    c1 -- "protocole" --> c23
-    c1 -- "controler" --> c28
+    c1 -- "creer" --> c1h
+    c1 -- "modifier" --> c1hb
+    c1 -- "agent" --> c1hc
+    c1 -- "protocole" --> c1hd
+    c1 -- "controler" --> c1he
     c1 -- "autre" --> c33
+    c1 -- "inter-round" --> c1ir
     c10 --> c10b
     c10b -- "fiche" --> c11b
     c10b -- "OUI" --> c10c
@@ -102,28 +114,38 @@ flowchart TD
     c15d --> c15e
     c15e --> FIN-APPELANT
     c16 -- "pense-bete" --> c17
-    c16 -- "outil" --> c31
+    c16 -- "outil" --> c31h
     c16 -- "non" --> c8a
-    c16 -- "tests" --> c31b
+    c16 -- "tests" --> c31bh
     c17 --> c8a
     c18 --> c19
     c19 --> c20
+    c1h --> c2
+    c1hb --> c9
+    c1hc --> c18
+    c1hd --> c23
+    c1he --> c28
+    c1ir --> c8a
     c2 --> c3
     c20 --> c21
     c21 --> c42
     c22a --> c22b
-    c22b -- "OUI" --> c22
+    c22b -- "OUI" --> c22h
     c22b -- "NON" --> c22b
+    c22h --> c22
     c23 --> c24
     c24 --> c25
     c25 --> c26
     c26 -- "OUI" --> c27a
     c26 -- "NON" --> c25
     c27a --> c27b
-    c27b -- "OUI" --> c27
+    c27b -- "OUI" --> c27h
     c27b -- "NON" --> c27b
+    c27h --> c27
     c28 --> c8a
     c3 --> c4
+    c31bh --> c31b
+    c31h --> c31
     c32 --> c33
     c33 -- "sous-mission" --> c32
     c33 -- "autre-agent" --> c34
@@ -144,8 +166,9 @@ flowchart TD
     c6 --> c7
     c7 --> c8a
     c8a --> c8b
-    c8b -- "OUI" --> c8
+    c8b -- "OUI" --> c8h
     c8b -- "NON" --> c8b
+    c8h --> c8
     c9 --> c10
     cU1 -- "OUI" --> cU2
     cU1 -- "NON" --> c1

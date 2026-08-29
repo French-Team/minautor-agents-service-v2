@@ -1,0 +1,50 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "morpheus",
+    "nom": "VERIFIER",
+    "description": "Verifier/valider un outil existant"
+  },
+  "theme": {
+    "nom": "VERIFIER",
+    "but": "Verifier et valider un outil existant",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser morpheus \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Valider un outil existant",
+        "action": "procedure",
+        "etapes": [
+          "Lire la documentation de l outil",
+          "Executer les tests de l outil"
+        ],
+        "regle": "Verifier que l outil fonctionne conformement."
+      },
+      {
+        "besoin": "Activer Themis pour auditer",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+        ],
+        "regle": "THEMIS AVANT JANUS."
+      },
+      {
+        "besoin": "Retour de Themis recu ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-verifier",
+          "NON -> re-essai"
+        ],
+        "regle": "PATTERN RE-ESSAI."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-verifier" }
+}

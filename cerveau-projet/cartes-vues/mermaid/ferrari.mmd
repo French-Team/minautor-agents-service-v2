@@ -1,0 +1,67 @@
+%% Carte de decision de ferrari (parcours v0.2.0)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation de relecture"}
+    c0c["Contexte : activite recente"]
+    c1{"Mission : quelle correction ?"}
+    c10["Historiser l intervention"]
+    c11{"Prochaine mission ou fin de cycle ?"}
+    c12(["FIN DE CYCLE -> reactive Cerberus"])
+    c13{"Nouvelle mission"}
+    c14["PROTOCOLE 6 : Lire le protocole"]
+    c14b["Lire le protocole a corriger"]
+    c15["PROTOCOLE 7 : Lire les regles"]
+    c15b["Lire les regles a corriger"]
+    c2["PROTOCOLE 1 : Lire le protocole agent v2"]
+    c2b["Lire la fiche a corriger"]
+    c3["PROTOCOLE 4 : Lire le protocole arbre vs carte"]
+    c3b["Lire l arbre a corriger"]
+    c5["PROTOCOLE 2 : Lire le protocole JARVIS"]
+    c5b["Lire JARVIS a corriger"]
+    c6["PROTOCOLE 5 : Lire le protocole outils"]
+    c6b["Lire l outil a corriger"]
+    c7["Appliquer la correction (conventions v2)"]
+    c7b["PROTOCOLE 3 : Lire le protocole routines"]
+    c7c["Lire les routines a corriger"]
+    c8{"Verifier la correction"}
+    c9["Rapport de correction"]
+    c0 --> c0b
+    c0b -- "OUI" --> c0c
+    c0b -- "NON" --> c0
+    c0c --> c1
+    c1 -- "fiche-agent" --> c2
+    c1 -- "arbre-decision" --> c3
+    c1 -- "jarvis" --> c5
+    c1 -- "outils-combos" --> c6
+    c1 -- "routines" --> c7b
+    c1 -- "autre" --> c8
+    c10 --> c11
+    c11 -- "OUI" --> c12
+    c11 -- "NON" --> c13
+    c13 -- "fiche-agent" --> c2
+    c13 -- "arbre-decision" --> c3
+    c13 -- "jarvis" --> c5
+    c13 -- "outils-combos" --> c6
+    c13 -- "routines" --> c7b
+    c13 -- "protocoles" --> c14
+    c13 -- "regles" --> c15
+    c13 -- "autre" --> c8
+    c14 --> c14b
+    c14b --> c9
+    c15 --> c15b
+    c15b --> c9
+    c2 --> c2b
+    c2b --> c9
+    c3 --> c3b
+    c3b --> c9
+    c5 --> c5b
+    c5b --> c9
+    c6 --> c6b
+    c6b --> c9
+    c7 --> c8
+    c7b --> c7c
+    c7c --> c9
+    c8 -- "OUI" --> c9
+    c8 -- "NON" --> c7
+    c9 --> c10

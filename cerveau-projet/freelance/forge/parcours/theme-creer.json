@@ -3,61 +3,61 @@
     "type": "theme",
     "appartient_a": "forge",
     "nom": "CREER",
-    "description": "Créer un nouvel outil v2"
+    "description": "Creer un nouvel outil v2"
   },
   "theme": {
     "nom": "CREER",
-    "but": "Construire un outil complet et opérationnel",
+    "but": "Construire un outil complet et operationnel",
     "redirects": [
       {
-        "besoin": "Déterminer dédié ou commun",
+        "besoin": "Determiner dedie ou commun",
         "action": "procedure",
         "etapes": [
-          "Si l'outil est pour un agent spécifique → <agent>/tools/<outil>/",
-          "Si l'outil est partagé par tous → tools-commun/<outil>/"
+          "Si l'outil est pour un agent specifique -> <agent>/tools/<outil>/",
+          "Si l'outil est partage par tous -> tools-commun/<outil>/"
         ]
       },
       {
-        "besoin": "Créer la structure de l'outil",
+        "besoin": "Creer la structure de l'outil",
         "action": "procedure",
         "etapes": [
-          "Créer le dossier <outil>/",
-          "Créer <outil>.md (contrat, D7)",
-          "Créer <outil>.py (script)",
-          "Créer <outil>-data.json (données editables, D15)"
+          "Creer le dossier <outil>/",
+          "Creer <outil>.md (contrat, D7)",
+          "Creer <outil>.py (script)",
+          "Creer <outil>-data.json (donnees editables, D15)"
         ]
       },
       {
-        "besoin": "Écrire le formulaire (D7)",
+        "besoin": "Ecrire le formulaire (D7)",
         "action": "procedure",
         "etapes": [
-          "Définir les champs (nom, type, requis, défaut, description)",
-          "Écrire le JSON du formulaire",
+          "Definir les champs (nom, type, requis, defaut, description)",
+          "Ecrire le JSON du formulaire",
           "Documenter chaque champ dans le .md"
         ]
       },
       {
-        "besoin": "Séparer code et données (D15)",
+        "besoin": "Separer code et donnees (D15)",
         "action": "procedure",
         "etapes": [
           "Aucune valeur en dur dans le .py",
           "Tout dans le -data.json",
-          "Le .py lit le -data.json au démarrage"
+          "Le .py lit le -data.json au demarrage"
         ]
       },
       {
         "besoin": "Tester l'outil",
         "action": "procedure",
         "etapes": [
-          "Lancer l'outil avec des données test",
-          "Vérifier la sortie",
-          "Vérifier les erreurs"
+          "Lancer l'outil avec des donnees test",
+          "Verifier la sortie",
+          "Verifier les erreurs"
         ]
       },
       {
-        "besoin": "VALIDER l'outil créé",
+        "besoin": "VALIDER l'outil cree",
         "action": "redirection",
-        "vers": {"type": "theme", "fichier": "theme-valider.json", "besoin": "Valider un outil créé"}
+        "vers": {"type": "theme", "fichier": "theme-valider.json", "besoin": "Valider un outil cree"}
       }
     ]
   },

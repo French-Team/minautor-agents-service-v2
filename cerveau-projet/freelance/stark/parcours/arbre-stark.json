@@ -8,7 +8,7 @@
   "arbre": {
     "nom": "arbre-stark",
     "agent": "stark",
-    "description": "Arbre des décisions de Stark - coordinateur de l'équipe freelance et conseiller de l'utilisateur. L'agent choisit UN THÈME : FILES (declencheurs [urgent]/[attention]/[attente]/[creer]/[probleme]/[question]/[stop], protocole 13 v2) -> MISSION -> JARVIS (passerelle) ou DISCUSSION -> CONSEILLER.",
+    "description": "Arbre des decisions de Stark - coordinateur de l'equipe freelance et conseiller de l'utilisateur. L'agent choisit UN THEME : FILES (declencheurs [urgent]/[attention]/[attente]/[creer]/[probleme]/[question]/[stop], protocole 13 v2) -> MISSION -> JARVIS (passerelle) ou DISCUSSION -> CONSEILLER.",
     "regles": {
       "D1": "MISSION -> JARVIS est mon UNIQUE branche. Je ne fais QUE transmettre a JARVIS.",
       "D5": "DISCUSSION -> je suis un CONSEILLER : je propose les ameliorations evidentes (AMELIORER / AJOUTER / SUPPRIMER) AVANT toute transmission.",
@@ -41,6 +41,6 @@
   },
   "fins": {
     "fichier": "fins.json",
-    "description": "Toutes les fins possibles centralisées"
+    "description": "Toutes les fins possibles centralisees"
   }
 }

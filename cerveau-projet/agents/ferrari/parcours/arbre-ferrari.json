@@ -1,0 +1,36 @@
+{
+  "identite": {"type": "arbre", "appartient_a": "ferrari", "version": "0.3.0", "commun": false},
+  "arbre": {
+    "nom": "arbre-ferrari",
+    "agent": "ferrari",
+    "description": "Arbre des decisions de Ferrari (Mecano) - Agent v1 specialise freelance. 8 themes tires du parcours v0.2.0 (20 cases) : correction de fiches agents, arbres, JARVIS, outils, routines, protocoles, regles, autre dans freelance/.",
+    "regles": {
+      "D1": "Chaque branche mene a des besoins, qui menent aux procedures.",
+      "D5": "Les besoins sont des REDIRECTIONS.",
+      "D7": "RELIRE OBLIGATOIRE : corrections puis fiche AVANT toute mission.",
+      "PERIMETRE_WRITE": "IMMUABLE : je n ECRIS QUE dans cerveau-projet/freelance/. LECTURE dans agents/ (contexte) et freelance/ (cible).",
+      "CONVENTIONS_V2": "IMMUABLE : quand je touche freelance/ : UTF-8 + CRLF, frontmatter D17, mots-cles minimum 5, nommage kebab-case.",
+      "PAS_DE_JARVIS": "IMMUABLE : je n utilise JAMAIS jarvis.py. Je ne communique PAS avec les agents freelance.",
+      "FIN_DE_CYCLE": "Mode persistant : je reste actif entre les interventions. Je ne reactive Cerberus QUE quand l'utilisateur dit 'fin de cycle'.",
+      "NON_REGRESSION": "IMMUABLE : checklist AVANT + APRES chaque modification. Rollback si regression.",
+      "CAHIER_DEV": "IMMUABLE : je tiens a jour le cahier de dev entre chaque intervention.",
+      "PREUVE_TRAVAIL": "IMMUABLE : chaque correction produit un rapport dans agents/ferrari/rapports/."
+    }
+  },
+  "racine": {
+    "titre": "Quel type de correction ?",
+    "type": "question",
+    "question": "Quelle correction dois-tu effectuer dans le dossier freelance/ ?",
+    "branches": [
+      {"reponse": "FICHE-AGENT", "description": "Corriger une fiche d agent v2 (proto 1)", "vers": "theme-fiche-agent.json"},
+      {"reponse": "ARBRE-DECISION", "description": "Corriger un arbre de decision v2 (proto 4)", "vers": "theme-arbre-decision.json"},
+      {"reponse": "JARVIS", "description": "Corriger JARVIS (proto 2)", "vers": "theme-jarvis.json"},
+      {"reponse": "OUTILS-COMBOS", "description": "Corriger un outil ou combo (proto 5)", "vers": "theme-outils-combos.json"},
+      {"reponse": "ROUTINES", "description": "Corriger les routines (proto 3)", "vers": "theme-routines.json"},
+      {"reponse": "PROTOCOLES", "description": "Corriger un protocole (proto 6)", "vers": "theme-protocoles.json"},
+      {"reponse": "REGLES", "description": "Corriger les regles (proto 7)", "vers": "theme-regles.json"},
+      {"reponse": "AUTRE", "description": "Autre correction dans freelance/", "vers": "theme-autre.json"}
+    ]
+  },
+  "fins": {"fichier": "fins.json", "description": "Toutes les fins possibles"}
+}

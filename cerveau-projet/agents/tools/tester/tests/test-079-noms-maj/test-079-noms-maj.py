@@ -228,14 +228,14 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         noms = [e["nom"] for e in cat["commandes"]]
-        verifier("10. catalogue 186 commandes trie + les 2 outils",
-                 len(noms) == 186 and noms == sorted(noms)
+        verifier("10. catalogue 187 commandes trie + les 2 outils",
+                 len(noms) == 187 and noms == sorted(noms)
                  and "lire-head" in noms
                  and "analyser-noms-maj" in noms
                  and "corriger-noms-maj" in noms,
                  "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
     except Exception as e:
-        verifier("10. catalogue 186 commandes trie + les 2 outils",
+        verifier("10. catalogue 187 commandes trie + les 2 outils",
                  False, str(e)[-80:])
     chrono_etape("10. catalogue", t0)
 

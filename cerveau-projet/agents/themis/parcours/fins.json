@@ -1,0 +1,36 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "themis",
+    "description": "Toutes les fins possibles pour Themis (arbre v0.1.0)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-themis.json",
+      "description": "Theme termine : retour a la racine pour choisir un autre theme ou finir."
+    },
+    "fin-audit": {
+      "titre": "FIN - Audit termine (rapport livre)",
+      "description": "Audit termine, rapport cree dans themis/rapports/. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-veracite": {
+      "titre": "FIN - Verification veracite terminee",
+      "description": "Verification des README terminee. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission hors parcours terminee. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    }
+  }
+}

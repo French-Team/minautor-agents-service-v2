@@ -1,0 +1,83 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "hygie",
+    "nom": "AUTRE",
+    "description": "Mission hors perimetre : delegation, outil temporaire, signaler le besoin"
+  },
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Gerer les missions qui sortent du perimetre de nettoyage d Hygie",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine nettoyage)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hygie --domaine nettoyage"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "La mission concerne-t-elle un autre agent ? (question c29)",
+        "action": "procedure",
+        "etapes": [
+          "SI OUI -> DELEGATION (c29a)",
+          "SI NON -> Besoin d outil (c29b)"
+        ],
+        "regle": "REDIRECTION OUTIL BLOQUE : si le verrou bloque un outil, la mission concerne un autre agent."
+      },
+      {
+        "besoin": "DELEGATION - Activer l agent habilite (case c29a)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"],
+        "regle": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
+      },
+      {
+        "besoin": "Besoin d un outil temporaire ou durable ? (question c29b)",
+        "action": "procedure",
+        "etapes": [
+          "SI TEMPORAIRE -> creer outil temp (c29c)",
+          "SI DURABLE -> signaler le besoin (c29e)"
+        ],
+        "regle": "BESOIN : temporaire = outil usage unique ; durable = besoin recurrent."
+      },
+      {
+        "besoin": "Lire le protocole creation scripts temporaires",
+        "action": "procedure",
+        "etapes": [
+          "Lire cerveau-projet/agents/regles-immuables/general/protocole-creation-scripts-temporaires/protocole-creation-scripts-temporaires.001.01.ebauche.md"
+        ],
+        "regle": "PROTOCOLE : tout script temporaire va dans tmp-<agent>/, jamais a la racine. Supprimer en fin de mission. DECLARER au registre."
+      },
+      {
+        "besoin": "Creer l outil temporaire (case c29c)",
+        "action": "procedure",
+        "etapes": ["Lire generateurs-outil-temporaire.md (Pattern 9), creer dans tmp-hygie/ a la racine"],
+        "regle": "REGLE ANTI-SCRIPTS : DECLARER au registre apres usage."
+      },
+      {
+        "besoin": "Signaler le besoin durable a Cerberus (case c29e)",
+        "action": "procedure",
+        "etapes": ["Signaler a Cerberus : besoin d outil -> activer Vulcain ; besoin de test -> Morpheus"],
+        "regle": "SIGNALEMENT : je ne cree rien moi-meme pour un besoin durable."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hygie/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-delegation"}
+}

@@ -12,5 +12,51 @@ tmp-*/
 workspace/*
 !workspace/README.md
 
-# __pycache__
+# __pycache__ + fichiers compiles Python
 __pycache__/
+*.pyc
+
+# Fichiers SQLite (donnees dynamiques, jamais a versionner)
+*.db
+
+# Messages temporaires (inbox/outbox Oracle + JARVIS)
+cerveau-projet/agents/tools/oracle/inbox/
+cerveau-projet/agents/tools/oracle/outbox/
+cerveau-projet/freelance/tools-commun/jarvis/inbox/
+cerveau-projet/freelance/tools-commun/jarvis/outbox/
+
+# Dossiers historique (contiennent des .db)
+cerveau-projet/freelance/tools-commun/jarvis/historique/
+cerveau-projet/agents/lecons/
+cerveau-projet/freelance/classeur/
+cerveau-projet/freelance/tools-commun/bdd-lecons/
+
+# Donnees routines (journaux, snapshots, etats)
+cerveau-projet/freelance/routines/data/
+cerveau-projet/freelance/routines/etat-executions.json
+cerveau-projet/freelance/routines/surveillance/.flux_derniere.txt
+
+# Fichiers temporaires
+tmp/
+*.tmp
+
+# Fichiers d observation (auto-generes)
+cerveau-projet/freelance/tools-commun/routines-server/observations/observation-modif-*.md
+
+# Historique a la racine
+historique.db
+
+# Corrections temporaires
+cerveau-projet/freelance/tools-commun/jarvis/files/corrections.jsonl
+cerveau-projet/freelance/tools-commun/jarvis/files/corrections-en-cours.json
+
+# Alertes temporaires
+cerveau-projet/freelance/tools-commun/harnais-jarvis/alertes-jarvis.jsonl
+
+# Tokens historique (mis a jour en continu)
+cerveau-projet/freelance/historique/tokens-historique.md
+
+# Rapports d agents (> 7 jours, purge automatique)
+cerveau-projet/agents/*/rapports/
+cerveau-projet/freelance/*/rapports/
+cerveau-projet/freelance/tools-commun/harnais-nr/rapports/

@@ -1,0 +1,44 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "clio",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-clio",
+    "agent": "clio",
+    "description": "Arbre des decisions de Clio - Muse de l'histoire. L agent choisit UN THEME au demarrage : MAJ (mettre a jour le README texte + compteurs), VERIFIER (verifier si le README est a jour), AUTRE (mission hors parcours).",
+    "regles": {
+      "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
+      "D5": "Les besoins d un theme sont des REDIRECTIONS : je choisis celui qui correspond a ma situation.",
+      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche AVANT toute mission."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est ma mission ?",
+    "branches": [
+      {
+        "reponse": "MAJ",
+        "description": "Mettre a jour le README (texte + compteurs + badges) - sources de verite, RVAV",
+        "vers": "theme-maj.json"
+      },
+      {
+        "reponse": "VERIFIER",
+        "description": "Verifier si le README est a jour - comparer etat reel vs README",
+        "vers": "theme-verifier.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors parcours",
+        "vers": "theme-autre.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

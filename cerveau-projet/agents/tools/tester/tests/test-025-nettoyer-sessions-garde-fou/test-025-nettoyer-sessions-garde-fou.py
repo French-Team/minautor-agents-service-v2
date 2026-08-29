@@ -165,6 +165,11 @@ def env_test(espace):
     env["AGENTS_FILE"] = os.path.join(espace, "AGENTS.md")
     env["CLASSEUR_STOCKAGE"] = os.path.join(espace, "classeur.md")
     env["AGENTS_HISTORIQUE"] = os.path.join(espace, "historique.md")
+    # FIX 2026-08-29 : sans surcharge, l encart REAL (AGENTS-activite-
+    # recente.md) etait pollue par les entrees de test (llm-1/session-llm-1)
+    # avec des raisons multi-lignes qui cassaient le tableau.
+    env["AGENTS_ACTIVITE_RECENTE"] = os.path.join(espace,
+                                                   "activite-recente.md")
     return env
 
 

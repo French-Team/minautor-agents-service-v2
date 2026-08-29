@@ -169,7 +169,10 @@ def lister_tests_reels():
     if not os.path.isdir(TESTS_DIR):
         return resultats
     for nom in sorted(os.listdir(TESTS_DIR)):
-        if nom.startswith("test-0") and os.path.isdir(os.path.join(TESTS_DIR, nom)):
+        # startswith "test-" (pas "test-0") : couvre aussi test-100+
+        # (bug corrige 2026-08-28 : test-100 a test-104 etaient invisibles
+        # et traites comme fantomes par le point 6).
+        if nom.startswith("test-") and os.path.isdir(os.path.join(TESTS_DIR, nom)):
             resultats.append(nom[:8])
     return resultats
 

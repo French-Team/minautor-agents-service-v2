@@ -1,0 +1,10 @@
+{
+ "agent": "morpheus",
+ "parcours": "agents/morpheus/parcours/arbre-morpheus.json",
+ "case_courante": null,
+ "mission_type": "verifier",
+ "mission": "Chaine Cerberus (apres vulcain) : adapter les 2 derniers tests obsoletes. 1) test-006 point 2b : compteur fige - parcours-atlas attendu 49 cases/13 chemins, reel 51 cases/16 chemins (evolution v0.5.7). Adapter les compteurs + l en-tete attendu. 2) test-004 point 7a : version parcours-morpheus 0.5.4 attendue, reel 0.5.8. Adapter le pin de version. Verifie chaque test apres adaptation (test-006 et test-004 verts).",
+ "historise_debut": true,
+ "precedent": "vulcain",
+ "etape": "debut"
+}

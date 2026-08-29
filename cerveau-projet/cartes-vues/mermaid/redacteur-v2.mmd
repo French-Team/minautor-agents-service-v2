@@ -1,4 +1,4 @@
-%% Carte de decision de redacteur-v2 (parcours v0.1.0)
+%% Carte de decision de redacteur-v2 (parcours v0.1.5)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -12,12 +12,14 @@ flowchart TD
     c4["Auto-validation : impacts et coherence"]
     c5{"RVAV : tout est conforme ?"}
     c6["Ajouter mes lecons et usages"]
-    c7(["Fin du round SOLO : activer Cerberus"])
+    c7{"MODE CONVERSATION PHASE V2 : nouvelle demande ?"}
+    c8(["FIN DE CYCLE - reactiver Cerberus"])
     cU1{"Probleme avec un outil ?"}
     cU2["COMPRENDRE L OUTIL"]
     cU3["Reprendre ma mission"]
     c0 --> c0b
     c0b -- "OUI" --> c0e
+    c0b -- "INCERTAIN" --> c0
     c0b -- "NON" --> c0
     c0c --> cU1
     c0e --> c0c
@@ -30,6 +32,8 @@ flowchart TD
     c5 -- "OUI" --> c6
     c5 -- "NON" --> c2
     c6 --> c7
+    c7 -- "OUI" --> c1
+    c7 -- "FIN DE CYCLE" --> c8
     cU1 -- "OUI" --> cU2
     cU1 -- "NON" --> c1
     cU2 --> cU3

@@ -96,23 +96,23 @@ surcharges:
 **Structure** :
 ```
 forge/parcours/
-├── arbre-forge.json      <- racine : choix du thème
-├── theme-creer.json      <- thème CREER (mon rôle principal)
-├── theme-lire.json       <- thème LIRE
-├── theme-valider.json    <- thème VALIDER
-├── theme-coordonner.json <- thème COORDONNER
-├── theme-explorer.json   <- thème EXPLORER
-└── fins.json             <- fins centralisées
+|--- arbre-forge.json      <- racine : choix du theme
+|--- theme-creer.json      <- theme CREER (mon role principal)
+|--- theme-lire.json       <- theme LIRE
+|--- theme-valider.json    <- theme VALIDER
+|--- theme-coordonner.json <- theme COORDONNER
+|--- theme-explorer.json   <- theme EXPLORER
++--- fins.json             <- fins centralisees
 ```
 
-**Thèmes disponibles** :
-| Thème | But |
+**Themes disponibles** :
+| Theme | But |
 |---|---|
-| **CREER** | Créer un nouvel outil v2 (mon rôle principal) |
+| **CREER** | Creer un nouvel outil v2 (mon role principal) |
 | **LIRE** | Consulter outils existants, specs |
-| **VALIDER** | Vérifier conformité d'un outil créé |
-| **COORDONNER** | Inter-round, retour à Stark |
-| **EXPLORER** | Diagnostiquer un problème d'outil |
+| **VALIDER** | Verifier conformite d'un outil cree |
+| **COORDONNER** | Inter-round, retour a Stark |
+| **EXPLORER** | Diagnostiquer un probleme d'outil |
 
 ---
 
@@ -157,9 +157,9 @@ forge/parcours/
 
 ```
 <outil>/
-├── <outil>.md       <- mode d'emploi (contrat, D7)
-├── <outil>.py       <- script (code)
-└── <outil>-data.json <- donnees editables (D15)
+|--- <outil>.md       <- mode d'emploi (contrat, D7)
+|--- <outil>.py       <- script (code)
++--- <outil>-data.json <- donnees editables (D15)
 ```
 
 ---

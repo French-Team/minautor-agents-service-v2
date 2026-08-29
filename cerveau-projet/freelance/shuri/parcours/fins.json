@@ -2,17 +2,17 @@
   "identite": {
     "type": "fins",
     "appartient_a": "shuri",
-    "description": "Toutes les fins possibles pour Shuri, centralisées dans un seul fichier"
+    "description": "Toutes les fins possibles pour Shuri, centralisees dans un seul fichier"
   },
   "fins": {
     "fin-theme": {
-      "titre": "Retour à la racine",
-      "description": "Le thème est terminé, retourner à l'arbre pour choisir un nouveau thème",
+      "titre": "Retour a la racine",
+      "description": "Le theme est termine, retourner a l'arbre pour choisir un nouveau theme",
       "action": "redirection",
       "vers": "arbre-shuri.json"
     },
     "fin-stark": {
-      "titre": "FIN DE CYCLE - Retour à Stark",
+      "titre": "FIN DE CYCLE - Retour a Stark",
       "description": "Terminer le round et retourner au coordinateur",
       "action": "activer",
       "cible": "stark",
@@ -20,16 +20,16 @@
       "regle": "Via JARVIS. Stark est mon coordinateur."
     },
     "fin-inter-round": {
-      "titre": "Fin d'inter-round - Réactivation de l'appelant",
-      "description": "L'inter-round est terminé, réactiver l'agent qui a appelé",
+      "titre": "Fin d'inter-round - Reactivation de l'appelant",
+      "description": "L'inter-round est termine, reactiver l'agent qui a appele",
       "action": "activer",
       "cible": "<agent_appelant>",
       "commande": "jarvis.py envoyer --de shuri --vers <agent_appelant> --priorite 1 --objet 'Reprise' --corps 'Reprends ton round'",
-      "regle": "Via JARVIS. L'habilite réactive l'appelant qui reprend son round principal."
+      "regle": "Via JARVIS. L'habilite reactive l'appelant qui reprend son round principal."
     },
     "fin-arbre": {
-      "titre": "Retour à l'arbre",
-      "description": "Retourner à la racine de l'arbre pour choisir un thème",
+      "titre": "Retour a l'arbre",
+      "description": "Retourner a la racine de l'arbre pour choisir un theme",
       "action": "redirection",
       "vers": "arbre-shuri.json"
     }

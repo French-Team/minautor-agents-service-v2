@@ -85,6 +85,21 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 **Parcours** : [cerveau-projet/agents/vulcain/parcours/parcours-vulcain.json](parcours/parcours-vulcain.json) (v0.4.25)
 **Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) (v0.6.3)
 
+> **ARBRE V2-LIKE (REFONTE 2026-08-27)** : ma carte a ete migree en ARBRE de
+> decisions v2-like : `arbre-vulcain.json` (racine -> themes -> fins centralisees)
+> pilote par `guider-arbre` (racine : CONSTRUIRE / MODIFIER / AUTRE /
+> INTER-ROUND / LIRE). L'arbre est la forme migree de la carte ; le parcours
+> v1 reste la source historique. Pilote Oracle : l'arbre est le format cible
+> de la refonte des cartes v1 en arbres v2-like.
+
+```
+python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
+  cerveau-projet/agents/vulcain/parcours/arbre-vulcain.json
+```
+
+**Arbre** : [cerveau-projet/agents/vulcain/parcours/arbre-vulcain.json](parcours/arbre-vulcain.json) (v0.1.0)
+**Fins centralisees** : [cerveau-projet/agents/vulcain/parcours/fins.json](parcours/fins.json)
+
 > **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
 > la couverture des missions.
 > **Case 0 commune** : `demarrer.md` -- tous les parcours demarrent apres

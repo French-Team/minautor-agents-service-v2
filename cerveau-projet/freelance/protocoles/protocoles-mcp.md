@@ -41,12 +41,12 @@ mais pour connecter **nos agents, outils et futurs services**.
 ## 2. Architecture
 
 ```
-Agent Shuri  ──┐
-Agent Forge  ──┤
-Agent Rogers ──┼── MCP ── JARVIS Server ── inbox/outbox/agents/
-Agent Stark  ──┤
-Outil X      ──┤
-Service Y    ──┘
+Agent Shuri  ---+
+Agent Forge  ---|
+Agent Rogers --┼-- MCP -- JARVIS Server -- inbox/outbox/agents/
+Agent Stark  ---|
+Outil X      ---|
+Service Y    ---+
 ```
 
 **JARVIS** = hub MCP central. Tout le monde passe par lui.

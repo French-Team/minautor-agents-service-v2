@@ -1,2 +1,11 @@
 {"date": "2026-08-26T06:51:56", "niveau": 5, "signification": "ARRET TOTAL", "commentaire": "Test arret total", "par": "oracle"}
 {"date": "2026-08-26T06:51:56", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "Reparations en cours", "par": "oracle"}
+{"date": "2026-08-29T06:44:16", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "Sortie de validation: DEFCON 4 -> 3 (reprise surveillee) - suite correction sante + routines v1 transposes des v2", "par": "oracle"}
+{"date": "2026-08-29T08:36:37", "niveau": 5, "signification": "ARRET TOTAL", "commentaire": "REDEMARRAGE APRES BUG : test reel de l outil de reprise apres bug (round fermer/redemarrer)", "par": "oracle"}
+{"date": "2026-08-29T08:36:48", "niveau": 5, "signification": "ARRET TOTAL", "commentaire": "REDEMARRAGE APRES BUG : test reel (2e tentative) - validation reprise main", "par": "oracle"}
+{"date": "2026-08-29T08:38:31", "niveau": 5, "signification": "ARRET TOTAL", "commentaire": "REDEMARRAGE APRES BUG : reprise apres bug : le flux etait casse et le LLM a repris la main - redemarrage avec DEFCON 5 (protocole de secours)", "par": "oracle"}
+{"date": "2026-08-29T08:38:55", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "fin du test reel redemarrer-session - descente 5->4", "par": "oracle"}
+{"date": "2026-08-29T08:38:55", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "fin du test reel redemarrer-session - retour etat nominal DEFCON 3", "par": "oracle"}
+{"date": "2026-08-29T09:06:53", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "test URGENT -> 4", "par": "oracle", "sens": "escalade"}
+{"date": "2026-08-29T09:12:03", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "retour valide apres test escalade - descente vers normal", "par": "oracle"}
+{"date": "2026-08-29T09:12:03", "niveau": 2, "signification": "REPRISE TOTALE", "commentaire": "DEFCON 2 = niveau normal (reprise totale)", "par": "oracle"}

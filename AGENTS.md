@@ -25,11 +25,11 @@ identite:
 | **Nom LLM** | glm5 |
 | **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-27 |
+| **Derniere mise a jour** | 2026-08-29 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | buffy (retour de mission) |
-| **Raison** | CHASSE 'reactiver' terminee : 20 corrections dans 12 parcours JSON. Les titres/messages ne confondent plus le LLM. |
+| **Active par** | janus (retour de mission) |
+| **Raison** | DEBUT: fin du round verifier-statuts - non-regression verte (test-106 12/12) |
 ### Session : session-freelance
 
 | Champ | Valeur |
@@ -47,7 +47,7 @@ identite:
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
 | session-freelance | freebuff | stark | 2026-08-27 19:06:19.699 |
-| session-admin | glm5 | Cerberus | 2026-08-27 19:32:03.827 |
+| session-admin | glm5 | Cerberus | 2026-08-29 11:20:36.772 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -102,12 +102,15 @@ si aucun nom de session n'est fourni).
 5. L'agent prend le relais
 6. **L'agent lit SA fiche et SES corrections** avant de commencer sa mission
 
-### Oracle -- Hub de coordination v1 (session-admin)
+### Oracle -- Agent + serveur de coordination v1 (session-admin)
 
-> Oracle est l'equivalent de JARVIS pour la session-admin. Il route les
-> messages (inbox/outbox), historise les actions, et gere les agents v1.
+> Oracle est le couple agent + serveur de la session-admin, comme JARVIS en
+> v2 (agent JARVIS + serveur jarvis).
+> **Agent oracle** : [cerveau-projet/agents/oracle/oracle.md](cerveau-projet/agents/oracle/oracle.md) - coordinateur de l equipe v1, traite les alertes de coordination (processus fantomes, serveurs morts, ecarts harnais) et remonte a Cerberus.
+> **Serveur oracle** : `cerveau-projet/agents/tools/oracle/` - route les
+> messages (inbox/outbox), historise les actions, gere les agents v1.
 > Lancement : `python3 cerveau-projet/agents/tools/oracle/oracle.py demarrage`
-> Commandes : envoyer, lire, acquitter, lister, historiser, activer, status
+> Commandes : envoyer, lire, acquitter, lister, historiser, activer, status, controle-processus
 > En session freelance, JARVIS joue ce role.
 
 ### Fin de mission (la fin suit SA carte)
@@ -124,7 +127,7 @@ si aucun nom de session n'est fourni).
 ## Groupes d'agents (regles-groupes-agents)
 
 > **REGLE IMMUABLE** : [regles-groupes-agents.md](cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md) -- 3 groupes aux domaines separes :
-> **1) Coordination** : Cerberus. **2) Cerveau-projet** (gerent `cerveau-projet/` lui-meme : outils, parcours, fiches, protocoles, spec des outils, README) : **Buffy** (responsable), Vulcain, Morpheus, Janus, Atlas, Themis, Clio, Hygie, Hermes, Socrate, Redacteur-v2. **3) Trio projets futurs** (ecrivent `pense-betes/`, `specs/`, `todos/` pour le dev des apps futures) : Athena, Promethee, Minerve.
+> **1) Coordination** : Cerberus, Oracle (coordinateur v1). **2) Cerveau-projet** (gerent `cerveau-projet/` lui-meme : outils, parcours, fiches, protocoles, spec des outils, README) : **Buffy** (responsable), Vulcain, Morpheus, Janus, Atlas, Themis, Clio, Hygie, Hermes, Socrate, Redacteur-v2. **3) Trio projets futurs** (ecrivent `pense-betes/`, `specs/`, `todos/` pour le dev des apps futures) : Athena, Promethee, Minerve.
 > **REGLE** : le trio n'est JAMAIS utilise pour developper le cerveau-projet -- c'est Buffy la responsable.
 
 ## Liste des agents
@@ -157,7 +160,7 @@ si aucun nom de session n'est fourni).
 | [Socrate](cerveau-projet/agents/socrate/socrate.md) | cerveau-projet/agents/socrate/ | Conversateur de revision strategique | Disponible (en attente) | Discute des revisions, priorise, produit une liste de missions pour Cerberus |
 | [Redacteur-v2](cerveau-projet/agents/redacteur-v2/redacteur-v2.md) | cerveau-projet/agents/redacteur-v2/ | Redacteur PRO des docs de la v2 (freelance) | Disponible (en attente) | Agent dedie a la redaction des docs v2 - MODE CONVERSATION (reactive Cerberus sur fin de cycle) |
 | [Hades](cerveau-projet/agents/hades/hades.md) | cerveau-projet/agents/hades/ | Gardien des archives git | Disponible (en attente) | SEUL habilite aux commandes git - regle d anciennete : checkout interdit hors fichiers tres recents |
-
+| [Oracle](cerveau-projet/agents/oracle/oracle.md) | cerveau-projet/agents/oracle/ | Coordinateur de l equipe v1 (session-admin) | Disponible (en attente) | Equivalent de JARVIS en v2 - traitement des alertes de coordination (processus fantomes, serveurs morts, roulage messages) + controle processus |
 
 ### Agents v2 (freelance)
 

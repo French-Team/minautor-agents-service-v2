@@ -1,0 +1,61 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "athena",
+    "nom": "COMPLETER",
+    "description": "Completer un pense-bete existant"
+  },
+  "theme": {
+    "nom": "COMPLETER",
+    "but": "Enrichir un pense-bete avec de nouvelles sections",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Lire le pense-bete existant",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier>"
+        ],
+        "regle": "Lire avant de modifier."
+      },
+      {
+        "besoin": "Ajouter les sections manquantes",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/creer/creer-remplir-pense-bete/creer-remplir-pense-bete.py <fichier> <sections>"
+        ],
+        "regle": "Remplir les sections structurees."
+      },
+      {
+        "besoin": "Valider le pense-bete (RVAV)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-pense-bete/valider-pense-bete.py <fichier>",
+          "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <fichier>",
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>"
+        ],
+        "regle": "RVAV : valider structure + conventions + ASCII."
+      },
+      {
+        "besoin": "Ajouter les lecons",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/athena/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-completer"
+  }
+}

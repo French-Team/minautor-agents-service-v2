@@ -7,37 +7,37 @@
   },
   "theme": {
     "nom": "COORDONNER",
-    "but": "Gérer les transitions et communications",
+    "but": "Gerer les transitions et communications",
     "redirects": [
       {
-        "besoin": "Réception inter-round",
+        "besoin": "Reception inter-round",
         "action": "procedure",
-        "description": "Un agent m'a activé en inter-round avec un rapport KO",
+        "description": "Un agent m'a active en inter-round avec un rapport KO",
         "etapes": [
           "Lire le rapport de l'agent appelant",
-          "Accuser réception",
-          "Diagnostic rapide du problème",
-          "Si dans mon périmètre → corriger",
-          "Si hors périmètre → signaler l'agent habilité",
-          "Réactiver l'appelant (activer, pas reactiver)"
+          "Accuser reception",
+          "Diagnostic rapide du probleme",
+          "Si dans mon perimetre -> corriger",
+          "Si hors perimetre -> signaler l'agent habilite",
+          "Reactiver l'appelant (activer, pas reactiver)"
         ]
       },
       {
-        "besoin": "Signaler une violation de règle",
+        "besoin": "Signaler une violation de regle",
         "action": "redirection",
         "vers": {
           "type": "procedure",
           "etapes": [
-            "Identifier la règle violée",
+            "Identifier la regle violee",
             "Identifier l'auteur de la violation",
             "Documenter la violation (qui, quand, quoi)",
-            "Si corrigeable → corriger immédiatement",
-            "Si structurel → proposer une modification de règle (MODIFIER)"
+            "Si corrigeable -> corriger immediatement",
+            "Si structurel -> proposer une modification de regle (MODIFIER)"
           ]
         }
       },
       {
-        "besoin": "Retour à Stark (FIN DE CYCLE)",
+        "besoin": "Retour a Stark (FIN DE CYCLE)",
         "action": "fin",
         "vers": "fins.json",
         "case": "fin-stark"

@@ -3,11 +3,11 @@
     "type": "theme",
     "appartient_a": "stark",
     "nom": "JARVIS",
-    "description": "Demander à JARVIS de traiter une demande (OBLIGATOIRE pour toute mission)"
+    "description": "Demander a JARVIS de traiter une demande (OBLIGATOIRE pour toute mission)"
   },
   "theme": {
     "nom": "JARVIS",
-    "but": "Envoyer la demande à JARVIS qui traite, distribue aux agents, et fait le bilan",
+    "but": "Envoyer la demande a JARVIS qui traite, distribue aux agents, et fait le bilan",
     "redirects": [
       {
         "besoin": "Confier une mission (distribution a un agent)",

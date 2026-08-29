@@ -24,6 +24,59 @@ types:
 
 
 
+## [LECON] 2026-08-27 -- COLONNE DEBUT/FIN : CERBERUS REACTIVE = DEBUT (Vulcain)
+
+**Mission** : corriger la colonne Debut/Fin du tableau v1 - quand Cerberus est reactive (retour de mission), elle affichait FIN au lieu de DEBUT.
+
+**Diagnostic** : _debut_fin(raison) deduit le marqueur du PREFIXE de la raison. Or le bilan de fin de mission commence par 'FIN MISSION <agent> : ...' -> la reactivation de Cerberus portait donc 'FIN' dans la colonne, alors qu il s agit du DEBUT de son cycle de coordination. Controle utilisateur : 'si on revient vers cerberus, on devrait voir DEBUT pas FIN'.
+
+**Correction** (activer-agent-principal v0.8.1 -> 0.8.2) : dans activer_cerberus, prefxer la raison par 'DEBUT: ' quand elle ne commence pas deja par DEBUT, AVANT ajouter_historique. La colonne affiche DEBUT, la raison garde le bilan lisible ('DEBUT: FIN MISSION VULCAIN : ...').
+
+**Verification** : reactivation reelle -> derniere ligne du tableau = '| Cerberus | DEBUT | ... | DEBUT: FIN MISSION TEST ...'. Compilation OK, ASCII 0.
+
+**Lecons** :
+1. LE MARQUEUR DEBUT/FIN EST UNE QUESTION DE CYCLE, PAS DE CONTENU : le prefixe de la raison (bilan) n est pas le marqueur de la colonne. Un agent qui REPREND (Cerberus reactive) = DEBUT ; un agent qui QUITTE (fin de mission) = FIN. La deduction par prefixe de raison est un raccourci fragile.
+2. LE RETOUR A CERBERUS EST UN DEBUT, PAS UNE FIN : le cycle CERBERUS -> AGENT -> CERBERUS voit Cerberus redemarrer SON tour a chaque reactivation - la colonne doit le refletter (DEBUT) pour que le tableau raconte le vrai cycle.
+3. VERIFIER LE TABLEAU APRES TOUTE ACTIVATION : le symptome (colonne fausse) se voit dans AGENTS-activite-recente.md, pas dans AGENTS-historique.md (qui porte la raison brute) - verifier les 2 sources apres une modification d activation.
+
+**Outils utilises** : lire-fichier, mettre-a-jour-versions, valider-conformite-ascii, activer-agent-principal, oracle.
+## [LECON] 2026-08-27 -- REPARATION ORACLE : TOLERANCE AUX LIGNES DOUBLE-ENCODEES (Vulcain)
+
+**Mission** : reparer le round v1 bloque - Oracle (le hub de coordination) plantait et ne pouvait plus piloter les activations.
+
+**Diagnostic** : `oracle.py status` plantait avec `AttributeError: 'str' object has no attribute 'get'` a la ligne 711 (cmd_status). Cause racine : une ligne inbox/outbox DOUBLE-ENCODEE (stockee comme STRING JSON au lieu de dict, ex: `"{\"lu\": false...}"`) - json.loads reussit mais retourne une str, et `msg.get("lu")` plante. Ce meme motif existait dans 6 autres fonctions lisant les messages (lecture, acquitter, lister, lire-message, cmd_lire, cmd_nettoyer). Oracle etant le pilote unique des activations, son plantage arretait le round (l agent n etait plus active ni visible dans les activites recentes).
+
+**Correction** : garde de type `isinstance(msg, dict)` avant chaque `msg.get(...)` dans les 7 fonctions de lecture de messages d oracle.py + bump 0.5.0 -> 0.5.1 + doc oracle.md alignee (historique v0.5.1).
+
+**Verification** : status/lire/lister/agents/pilote fonctionnent (plus de traceback), compilation OK, ASCII 0, 0 CRLF.
+
+**Lecons** :
+1. UNE SEULE LIGNE CORROMPUE PEUT ARRETER TOUT UN HUB : json.loads reussit sur une string double-encodee (pas de JSONDecodeError) - le try/except classique ne protege pas. TOUTE lecture de lignes JSON doit verifier le TYPE (isinstance dict) AVANT d appeler .get.
+2. ORACLE EST LE POINT UNIQUE DE PILOTAGE : son plantage se manifeste par un round arrete et des agents invisibles dans les activites recentes - le symptome est decale du bug reel. Quand le round s arrete sans raison, auditer Oracle en premier (status).
+3. editer-fichier PEUT AFFICHER UN MESSAGE TROMPEUR : la commande a affiche 'script modifie' alors que le fichier n avait PAS change (ciblage/quotage bash) - TOUJOURS verifier le fichier apres une edition (relire la ligne) avant de continuer.
+4. DOSSIER OUTIL COMPOSITE : le dossier oracle contient 3 outils a versions differentes (0.1.1/0.2.0/0.5.0) - le bumper sur le DOSSIER echoue (KO incoherence) ; bumper le FICHIER cible individuellement (oracle.py --nouvelle X).
+5. UNE REPARATION D ORACLE SE VERIFIE PAR SES COMMANDES : status + lire + pilote doivent tous fonctionner, pas seulement la commande corrigee.
+
+**Outils utilises** : lire-fichier, editer-fichier (echec silencieux), mettre-a-jour-versions, valider-conformite-ascii, verifier-systeme, oracle (historiser/status/pilote), guider-parcours.
+## [LECON] 2026-08-27 -- COMPLETER LE PILOTE ORACLE V1 (Vulcain)
+
+**Mission** : completer le pilote oracle v1 (maitre d hotel de la carte, vision 2026-08-27) apres l avoir trouve deja partiellement implemente et documente.
+
+**Diagnostic** : le module fonctions/pilote.py (v0.1.0) + les commandes oracle.py pilote/reactiver-fin existaient deja et fonctionnaient (test reel : pilote vulcain sert les commandes de la carte c0->c7 et resout les questions verrouillees de maniere autonome). Le MANQUE etait documentaire : oracle.md affichait des versions divergentes (identite 0.2.1, tableau Vue d ensemble 0.4.0) alors que le code etait passe en 0.5.0 (pilotage de la reintegration), et la section Commandes CLI ne listait ni pilote ni reactiver-fin ni les commandes missions/defcon.
+
+**Corrections** :
+1. oracle.md : identite.version 0.2.1 -> 0.5.0 et tableau Vue d ensemble Version 0.4.0 -> 0.5.0 (alignement sur le code, dette documentaire).
+2. oracle.md : section Commandes CLI completee avec pilote, reactiver-fin, mission-ajouter/lister, defcon, harnais, relais, dashboard (inserer-contenu-fichier --apres 'python3 oracle.py status' --fichier).
+
+**Lecons** :
+1. UN OUTIL MAISON BIEN CODE PEUT RESTER MAL DOCUMENTE : le pilote oracle etait implemente (0.5.0) mais oracle.md affichait 0.2.1/0.4.0 -- la dette documentaire ne se voit pas au code, il faut CROISER la version du code (VERSION= dans le .py) avec celle des en-tetes/doc.
+2. L ETAT DE CARTE PEUT ETRE AVANCE PAR LE PILOTE LUI-MEME : lancer 'oracle.py pilote vulcain' sur MON propre etat-cartes/vulcain.json l a fait avancer (debut -> c7). Quand on teste l outil, il faut etre conscient qu il ecrit dans son etat persiste.
+3. L INSERTION MULTILIGNE PASSE PAR UN FICHIER SOURCE : editer-fichier via bash echoue des que le contenu contient des pipes (|) ou guillemets (interpretation shell) ; inserer-contenu-fichier --apres <motif> --fichier <bloc.md> est la methode fiable (bloc cree via write_file puis insere, puis purge par Hygie).
+4. SUPPRESSION EXCLUSIVE A HYGIE : le verrou supprimer-fichier n autorise que hygie ; un fichier temporaire cree en cours de mission dans agents/tools/ doit etre signale pour nettoyage en fin de mission.
+
+**Outils utilises** : lire-fichier, editer-fichier, inserer-contenu-fichier, valider-conformite-ascii, verifier-systeme, consulter-lecons, lire-activite-recente, oracle (lire/historiser/pilote), guider-parcours.
+
+
 ## [LECON] 2026-08-12 -- ROUND 11 : COHERENCE DOCUMENTAIRE SPECS/CATALOGUE (Vulcain)
 
 **Mission** : corriger les 8 specs divergentes + les 2 decalages catalogue detectes par le pre-audit (demande utilisateur round 11).
@@ -4968,3 +5021,109 @@ par session.
 3. UNE EXEMPTION DE TEST PEUT RESOUDRE DES KO PREEXISTANTS : stark (v2, fiche freelance/) etait deja 'mort' pour test-092 - la liste d exemptions l a couvert, test-092 passe de 7/9 a 9/9.
 
 **Validations** : syntaxe py + bash OK, get_agent_info('ferrari') + get_agent_role/fiche/corrections ferrari OK, activer session-admin ferrari sur copie OK, test-092 9/9, ASCII 0/0, LF pur.
+## [LECON] 2026-08-27 -- SERVEUR DE DEMARRAGE V1 (oracle-demarrage) : l impasse v1 etait identique a la v2 (Vulcain)
+
+**Contexte** : demande utilisateur - les agents ne demarraient plus apres activation depuis l ajout d oracle (hub de coordination v1, ne de JARVIS v2). L utilisateur a recadre : oracle doit reproduire la communication v1 (ancetre de la v2) mais NE PAS copier le code v2 - 2 univers distincts. Diagnostic : (1) oracle-server.py lance en mode stdio avec stdin DEVNULL = EOF immediat -> le serveur ne tournait JAMAIS (prouve : returncode 0 en 2s) ; (2) pas de DETACHED_PROCESS -> mort avec la console ; (3) sonde os.kill(pid,0) sur Windows TERMINE le processus au lieu de tester (lecon v2 hooks.py) ; (4) JSON double-encode dans inbox/cerberus.jsonl faisait crasher relais et agents_bloques ('str' object has no attribute get).
+
+**Corrections** : (1) oracle-server.py v0.2.0 : nouveau mode --boucle (daemon resident : harnais + relais toutes les N secondes, log visible dans observations/oracle-log.txt, PID file, tolerance JSON double-encode dans relais) ; (2) NOUVEL OUTIL oracle-demarrage.py v0.1.1 : serveur de demarrage v1 (demarrage/arret/etat) - lance oracle-server --boucle + futur routines-server v1 s il existe, affiche DEFCON/files/agents bloques, declare ORACLE OPERATIONNEL, sonde PID Windows via OpenProcess, dry-run qui ne lance PAS les serveurs ; (3) relais.py : tolerance ligne string (double-encode).
+
+**Lecons** :
+1. UN SERVEUR LANCE AVEC stdin=DEVNULL MEURT AU PREMIER EOF : le mode stdio d un serveur qui lit des commandes JSON sur stdin est inutilisable en daemon - il faut un mode --boucle dedie (comme routines-server v2) qui tourne sans stdin.
+2. os.kill(pid, 0) SUR WINDOWS NE TESTE PAS, IL TUE (TerminateProcess) : toute sonde PID doit passer par OpenProcess (lecon deja documentee v2 hooks.py, reproduite par oracle v1 - verifier TOUJOURS la sonde quand on cree un serveur).
+3. UN FICHIER JSONL HISTORIQUE PEUT CONTENIR DU JSON DOUBLE-ENCODE (une string JSON dans une ligne) : tout lecteur de jsonl doit tolerer isinstance(msg, str) avant msg.get() - le fichier cerberus.jsonl contenait exactement ce cas et crashait le daemon.
+4. LE DRY-RUN D UN LANCEUR DE SERVEUR DOIT NE RIEN LANCER : la premiere version de oracle-demarrage --dry-run lancait reellement le serveur (test prouve : pid cree) - un dry-run qui a des effets de bord est un mensonge.
+5. LA V1 ET LA V2 SONT 2 UNIVERS : s inspirer du PATTERN v2 (chaine de demarrage, daemon detache, log visible, PID file) est legitime, copier le CODE v2 ne l est pas - chaque univers a son code, ses chemins, ses fichiers.
+
+## [LECON] 2026-08-27 -- SERVEUR DE ROUTINES V1 (routines-server + citations) : les chemins relatifs cassent tout sous un cwd different (Vulcain)
+
+**Contexte** : demande utilisateur - construire le serveur de routines v1 (equivalent v2, mais code 100% v1, univers dieux grecs) avec la routine citations (repere visuel toutes les 5 min, temporaire, desactivee en production) + ajouter la colonne Debut/Fin au tableau activites v1 (grades/secteurs grecs ASCII, inspire v2 sans copier). Le daemon (routines-server.py) lance les scripts via subprocess avec cwd=routines/ - ce qui a revele 4 bugs lies aux chemins relatifs.
+
+**Corrections** : (1) routines-server.py v0.2.0 : daemon resident (boucle sur le manifest, etat persistant dans etat-executions.json, pid, tolerant aux erreurs) ; (2) routine citations.py v0.2.0 : citation d un dieu grec historisee dans le tableau activites v1 ; (3) manifest.json (citations 300s, actif=true dev / actif=false prod) ; (4) grades-v1.json (grades G0-SP + secteurs grecs ASCII) ; (5) activer-agent-principal.py v0.8.1 : colonnes Grade | Agent | Debut/Fin | Secteur + _construire_encart_v1 (migration qui reconstruit l encart SEUL, pas corps+encart).
+
+**Lecons** :
+1. UN DAEMON QUI LANCE DES SCRIPTS ENFANTS DOIT FORCER LES CHEMINS EN ABSOLU : le script citations.py etait lance avec cwd=routines/ donc les AGENTS_HISTORIQUE/AGENTS_ACTIVITE_RECENTE/GRADES_V1/CLASSEUR_STOCKAGE relatifs pointaient au mauvais endroit -> id=session-admin au lieu de glm5, grade [G?] au lieu de [G5]. Forcer _racine_projet() (_DOSSIER remonte jusqu a AGENTS-historique.md) ET injecter les variables d env + sys.path en ABSOLU.
+2. UNE FONCTION DE MIGRATION DOIT RECONSTRUIRE L ENCART SEUL, JAMAIS corps+encart : la premiere version appelait maj_encart_activites (qui retourne corps complet + encarts, format de l ancien fichier unique) et l ecrivait dans AGENTS-activite-recente.md -> le corps du journal ecrasait le tableau. _construire_encart_v1(corps) reconstruit frontmatter+tableau UNIQUEMENT.
+3. VERIFIER LE CODE RETOUR DES FONCTIONS CHARGEES DYNAMIQUEMENT : _historiser_agent retournait False quand le chemin etait introuvable mais main() l ignorait (print + exit 1) -> le daemon croyait la routine OK alors que rien n etait ecrit. Toujours brancher le retour sur le veritable succes.
+4. LA COLONNE GRADE/SECTEUR EST ALIMENTEE PAR MAPPING DIRECT AGENT (pas mots-cles) : le mapping par mots-cles du role retombait sur [GEN] pour des agents non listes - ajouter les entrees directes par nom d agent dans grades-v1.json (plus robuste que lire les tags des fiches).
+
+**Validations** : daemon routines + oracle-server tournent en parallele (oracle-demarrage demarrage/etat), routine citations ecrit grade [G5] secteur [TRS] id glm5 dans le tableau v1, migration du header ancien->nouveau sans incoherence (0 ligne a 9+ barres fausses), ASCII 0/0, JSON valides, syntaxe py + bump versions OK.
+
+
+## [LECON] 2026-08-28 -- PILOTE ORACLE : LE MAITRE D HOTEL N EXECUTE PAS LE TRAVAIL (Vulcain)
+
+**Contexte** : demande utilisateur - le round est brise depuis qu on a cree oracle. Diagnostic reel : oracle.py pilote deroulait TOUT l arbre de l agent en un seul appel, activait les maillons de controle automatiquement et posait FIN sans aucun travail fait.
+
+**Diagnostic** :
+1. _piloter_theme boucle sur tous les redirects avec limite 60 par defaut, tout l arbre servi d un coup.
+2. _executer_commande_oracle et _activer_maillon activaient morpheus, janus et themis automatiquement aux cases delegation, maillons actives sans aucun travail.
+3. _executer_fin_oracle reactive Cerberus automatiquement.
+4. cmd_activer posait precedent egal a l agent lui-meme lors d une auto-reactivation.
+
+**Corrections** pilote.py et oracle.py :
+a. TA MISSION plus ORDRE de demarrer en tete du plateau.
+b. limite par defaut 1 pas, a 3 endroits, cmd_pilote, main argparse de pilote.py et parser de oracle.py.
+c. delegations transformees en arrets decision-libre, plus d activation automatique des maillons.
+d. precedent egal a cerberus quand l activation vient de cerberus, auto-reactivation.
+
+**Puis** : routine vigie-round, partie detection de la decision utilisateur les deux en cascade, session orpheline plus chaine en attente, alerte 4W a Cerberus, anti-spam 30 min, lecture seule.
+
+**Lecons** :
+1. UN PILOTE NE DOIT JAMAIS EXECUTER LE TRAVAIL NI ACTIVER LES MAILLONS A LA PLACE DE L AGENT : le maitre d hotel sert le plateau, l invite mange. L activation des maillons de controle n a de sens qu apres le travail reel.
+2. UNE LIMITE PAR PAS EST LA GARANTIE DU RYTHME : sans borne, un pilote automatique deroule tout ; avec limite 1, l agent execute puis rappelle.
+3. LA MISSION ET L ORDRE DE DEMARRER SONT LE PREMIER MESSAGE : un plateau qui commence par le besoin 1 sans rappeler la mission ne demarre pas l agent.
+4. LE PRECEDENT D UNE AUTO-REACTIVATION EST CERBERUS, PAS L AGENT LUI-MEME.
+
+**Verdict** : VALIDE - pilote corrige et teste manuellement, 1 pas a la fois, plus d activation fantome, vigie-round operationnelle, manifest recharge a chaque tic, ASCII 0, compilation OK. Tests delegues a Morpheus.
+
+
+## [LECON] 2026-08-28 -- KO PREEXISTANTS CORRIGES + NON-REGRESSION OBSOLETE (Vulcain)
+
+**Contexte** : retour de la chaine Vulcain-Morpheus-Janus (round pilote Oracle + vigie-round). Janus a documente 5 KO preexistants : catalogue 187 vs 186, CRLF residuels, cerberus-freelance cU2, processus daemons, test-082 docstring pilote.py.
+
+**Corrections** :
+1. test-082 : faux positif - la docstring '<racine>/tmp-buffy' matchait le motif '>\s?/tmp' (le > de <racine> colle a /tmp). Reformule en '[racine]'. 9/9 OK.
+2. test-040 : hades-contexte-git jamais indexe dans index-tools.md (au catalogue depuis sa creation). Section Git creee. 5/5 OK.
+3. test-047 CRLF : CAUSE RACINE = write_text/open('w') sur Windows traduisent \n en \r\n. Corrige dans 5 sources oracle (pilote.py, vigie-round.py, routines-server.py, oracle-server.py, oracle-demarrage.py) avec io.open(newline='\n'). Corrige 40+ fichiers existants (parcours, etat-cartes, grades-v1) + 7 fichiers non-ASCII (emoji U+1F7E0, ideogrammes U+51B3, accents). Exclusions par defaut : freelance/ (CRLF volontaire D4) + observations/ (logs daemons generes). 10/10 OK.
+
+**Prise de conscience utilisateur** : LA NON-REGRESSION N EST PLUS VALIDE DEPUIS LA MIGRATION DES AGENTS. Les tests portent des compteurs FIGES : test-005 (parcours-atlas 0.5.4 vs 0.5.7, 13 vs 14 commandes c35), test-013 (27 vs 33 cases action c1h/c20h), test-018 (21 vs 24 parcours : cerberus-freelance/ferrari/redacteur-v2/socrate), valider-cartes hades c5.vers->cerberus (format fin obsolete). Adaptation = domaine MORPHEUS (regle immuable : seul Morpheus ecrit les tests).
+
+**Verdict** : VALIDE - les 3 vrais KO corriges (test-082 9/9, test-040 5/5, test-047 10/10), ASCII 0/0, compilation OK. Tests obsoletes transmis a Morpheus.
+
+
+
+## [LECON] 2026-08-28 -- INTER-ROUND DETTES DE CARTES : HADES C5 + CERBERUS C1H* ALLEGES (Vulcain)
+
+**Contexte** : inter-round depuis morpheus (non-regression obsolete depuis migration des agents - tests adaptes par morpheus, dettes de cartes detectees transmises).
+
+**Corrections** :
+1. HADES parcours-hades.json case c5 : fin avec champ vers='cerberus' INVALIDE (spec regle 3 : une fin n a ni branches ni suivant). Le champ vers pointait vers un AGENT au lieu d une case - reference cassee valider-cartes --tous. Corrige : champ vers RETIRE (la fin REACTIVER se materialise par la COMMANDE dans le message, comme janus c10). valider-cartes hades CONFORME.
+2. PARCOURS-CERBERUS cases c1h/c1hb/c1hc/c1he/c1hf (texte 205 car) + c20h (203 car) : indices regle >160 (commande oracle d historisation). Alleges : suppression du preambule 'apres analyse et comprehension de ma mission' et compaction du texte -> <160 car. valider-case parcours-cerberus CONFORME (0 erreur, 0 a alleger).
+
+**Lecons** :
+1. UNE FIN NE PORTE JAMAIS DE CHAMP vers : spec regle 3 - la fin REACTIVER se materialise par la COMMANDE dans le message (comme janus c10, redacteur-v2 c8). Un vers sur une fin = reference cassee silencieuse.
+2. LES INDICES REGLE >160 SONT UNE DETTE QUI S ACCUMULE : chaque ajout de case avec une regle longue (ex: commande oracle) fait passer le verdict de CONFORME a A ALLEGER - alleger immediatement en compacant, pas plus tard.
+
+**Verdict** : VALIDE - hades CONFORME, cerberus CONFORME, 0 reference cassee dans valider-cartes --tous, ASCII 0/0, LF pur.
+
+## LECON (inter-round Cerberus 2026-08-28, apres controle Janus)
+
+VERDICT OBLIGATOIRE a chaque correction : relancer le test concerne pour PROUVER le vert (test-055 12/12, test-067 8/8, test-072 10/10, test-080 11/11).
+
+1. LE .sh PARTIEL N EST PAS UN BUG DE VERSION : activer-agent-principal.sh (0.7.4) est l equivalent bash PARTIEL du .py (0.8.2) - les fonctions 0.7.5+ (encart, BDD, grades) sont cote .py uniquement (changelog v0.7.5 'Parite .sh : non concerne'). Bumper le .sh serait un mensonge. Solution : EXEMPTIONS_AUDIT dans mettre-a-jour-versions.py (chemin, version pinnee, raison) - le fichier est compte EXEMPT au lieu d INCOHERENT, et redevient INCOHERENT si bumpe sans retirer l exemption.
+
+2. NE JAMAIS REWRITER UN JSON PARCours EN ENTIER (json.dump) : ca detruit le format compact des branches ({"reponse": ..., "vers": ...}) et cree un diff de 988 lignes pour 3 changements. Toujours faire des replacements CHIRURGICAUX (str_replace sur le texte exact) : diff minimal (5-12 lignes) et format preserve.
+
+3. LES CHEMINS D OUTIL DOIVENT ETRE VERIFIES AU CATALOGUE : consulter-combos est sous consulter/consulter-combos/ (pas combos/consulter-combos/). J ai mis un chemin fantome dans cU2 de cerberus-freelance - corrige apres verification. Toujours verifier le chemin reel avant d ecrire un indice outil.
+
+4. LA FICHE BUFFY DEVIAIT DU TEMPLATE : section '## PARCOURS / ARBRE (SOURCE DE VERITE DU GUIDAGE)' au lieu de '## PARCOURS (SOURCE DE VERITE DU GUIDAGE)'. verifier-conformite-fiche --tous : buffy ECARTS -> CONFORME apres renommage (test-080 11/11).
+## LECON (chaine Cerberus 2026-08-28, apres recontrole Janus : 2 problemes OUTIL)
+
+1. ANALYSER-NOMS-MAJ IGNORAIT LES AGENTS FREELANCE ET LA CASSE : lister_agents_reels ne scannait que cerveau-projet/agents/ (pas freelance/) et comparait en casse stricte - 87 entrees AGENT_INCONNU (55 stark + 32 'Cerberus'). Correctif : 2 bases (agents/ + freelance/), comparaison en minuscule (agent.lower() vs nom.lower()).
+
+2. LES OUTILS PLATS SONT INVISIBLES DE lister_outils_reels : la fonction n attendait que tools/<categorie>/<outil>/ (2 niveaux) - oracle.py, routines-server.py, oracle-demarrage.py (scripts directs dans tools/oracle/) etaient OUTIL_ORPHELIN. Correctif : detecter aussi les scripts .py/.sh directs dans un dossier categorie (base_script = nom sans extension, RE_NOMMAGE_OK).
+
+3. LE REGISTRE EST UN ARTEFACT D EXECUTION, PAS UNE SOURCE DE VERITE : mes propres enregistrements --outil tester ont cree des OUTIL_ORPHELIN (le nom canonique est tester-lancer-non-regression). Normalisation du registre : tester->tester-lancer-non-regression, citations->oracle (routine interne oracle), tester-outil->tester-lancer-non-regression (outil supprime). Le registre doit rester PROPRE (test-079).
+
+4. LA GENERATION MERMAID DOIT SUIVRE LES AJOUTS D AGENTS : ferrari et hades avaient des parcours mais AUCUNE vue .mmd/.svg (test-096 6 KO). Regeneration : convertir-carte-mermaid --tous + --tous --svg + --arbres (les arbres v2 stark/vision et les 24 cartes sont maintenant synchronises).
+
+VERDICT OBLIGATOIRE : test-079 15/15, test-096 11/11, registre PROPRE (0 probleme), compile OK, ASCII 0/0.

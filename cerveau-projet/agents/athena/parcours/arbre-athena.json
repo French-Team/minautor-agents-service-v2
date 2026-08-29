@@ -1,0 +1,44 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "athena",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-athena",
+    "agent": "athena",
+    "description": "Arbre des decisions de Athena - Redactrice de pense-betes. L agent choisit UN THEME : CREER (nouveau pense-bete), COMPLETER (enrichir un pense-bete existant), AUTRE.",
+    "regles": {
+      "D1": "Chaque branche mene a des besoins, qui menent aux procedures.",
+      "D5": "Les besoins sont des REDIRECTIONS.",
+      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche AVANT toute mission."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est ma mission ?",
+    "branches": [
+      {
+        "reponse": "CREER",
+        "description": "Creer un nouveau pense-bete complet (template, sections, RVAV)",
+        "vers": "theme-creer.json"
+      },
+      {
+        "reponse": "COMPLETER",
+        "description": "Completer un pense-bete existant (ajouter des sections)",
+        "vers": "theme-completer.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors parcours",
+        "vers": "theme-autre.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "argus",
+    "description": "Toutes les fins possibles pour Argus (arbre v0.1.0)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-argus.json",
+      "description": "Theme termine : retour a la racine."
+    },
+    "fin-detecter": {
+      "titre": "FIN - Detection terminee (rapport livre)",
+      "description": "Contradictions detectees, rapport produit. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission hors parcours terminee. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    }
+  }
+}

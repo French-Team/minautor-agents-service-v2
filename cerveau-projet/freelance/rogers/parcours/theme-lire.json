@@ -3,14 +3,14 @@
     "type": "theme",
     "appartient_a": "rogers",
     "nom": "LIRE",
-    "description": "Consulter, chercher, comprendre les règles, conventions et protocoles existants"
+    "description": "Consulter, chercher, comprendre les regles, conventions et protocoles existants"
   },
   "theme": {
     "nom": "LIRE",
-    "but": "Accéder à la connaissance des règles",
+    "but": "Acceder a la connaissance des regles",
     "redirects": [
       {
-        "besoin": "Lire les règles immuables",
+        "besoin": "Lire les regles immuables",
         "action": "redirection",
         "vers": {
           "type": "fichier",
@@ -37,7 +37,7 @@
         }
       },
       {
-        "besoin": "Chercher une règle par mot-clé",
+        "besoin": "Chercher une regle par mot-cle",
         "action": "redirection",
         "vers": {
           "type": "outil",
@@ -46,7 +46,7 @@
         }
       },
       {
-        "besoin": "Consulter les leçons liées aux règles",
+        "besoin": "Consulter les lecons liees aux regles",
         "action": "redirection",
         "vers": {
           "type": "outil",
@@ -55,7 +55,7 @@
         }
       },
       {
-        "besoin": "Voir l'activité récente",
+        "besoin": "Voir l'activite recente",
         "action": "redirection",
         "vers": {
           "type": "outil",

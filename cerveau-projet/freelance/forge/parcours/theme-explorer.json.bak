@@ -1,0 +1,41 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "forge",
+    "nom": "EXPLORER",
+    "description": "Diagnostiquer un problème d'outil"
+  },
+  "theme": {
+    "nom": "EXPLORER",
+    "but": "Comprendre pourquoi un outil ne fonctionne pas",
+    "redirects": [
+      {
+        "besoin": "Diagnostiquer un outil défaillant",
+        "action": "procedure",
+        "etapes": [
+          "Lire le .md de l'outil",
+          "Vérifier que le -data.json existe et est valide",
+          "Vérifier que le .py lit bien le -data.json",
+          "Tester l'outil avec des données simples",
+          "Identifier l'erreur"
+        ]
+      },
+      {
+        "besoin": "Comprendre pourquoi un formulaire est rejeté",
+        "action": "procedure",
+        "etapes": [
+          "Lire les messages d'erreur",
+          "Vérifier le formulaire (D7)",
+          "Vérifier les types et les champs requis",
+          "Corriger le formulaire"
+        ]
+      },
+      {
+        "besoin": "Consulter les leçons d'outils",
+        "action": "redirection",
+        "vers": {"type": "outil", "commande": "consulter-lecons", "parametres": {"agent": "forge", "domaine": "outils"}}
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

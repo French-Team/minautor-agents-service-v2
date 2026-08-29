@@ -1,0 +1,111 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "hygie",
+    "nom": "NETTOYER",
+    "description": "Nettoyer le workspace : snapshot, detection residus, suppression tracable"
+  },
+  "theme": {
+    "nom": "NETTOYER",
+    "but": "Detecter et supprimer les residus du workspace avec snapshot et tracabilite",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine nettoyage)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hygie --domaine nettoyage"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "SNAPSHOT OBLIGATOIRE avant tout nettoyage (case c2)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py creer"],
+        "regle": "SNAPSHOT AVANT : je ne supprime JAMAIS sans snapshot. Rotation 7 jours."
+      },
+      {
+        "besoin": "Consulter le snapshot precedent (case c3)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py consulter"],
+        "regle": "Chaque nettoyage CONSULTE le snapshot precedent."
+      },
+      {
+        "besoin": "Detection compartimentee des residus (case c4)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --zone cerveau-projet",
+          "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --zone workspace"
+        ],
+        "regle": "COMPARTIMENTATION : scanner cerveau-projet/ puis workspace/ separement."
+      },
+      {
+        "besoin": "Des residus sont-ils detectes ? (case c5 - controle)",
+        "action": "procedure",
+        "etapes": [
+          "SI aucun residu -> aller a Aucun residu (c30)",
+          "SI des residus -> continuer"
+        ],
+        "regle": "CONTROLE : brancher selon le resultat."
+      },
+      {
+        "besoin": "Classer les residus par zone (case c6)",
+        "action": "procedure",
+        "etapes": ["Regrouper par type (tmp-*, .zz-*, .tmp-*, rapports egares, fichiers version)"],
+        "regle": "TRI : classer par type et par zone."
+      },
+      {
+        "besoin": "Un residu est-il suspect ? (case c7 - question)",
+        "action": "procedure",
+        "etapes": [
+          "SI suspect (honnetete non prouvee) -> aller a HONNETETE (cH1)",
+          "SI residu prouve -> continuer"
+        ],
+        "regle": "PREUVE HONNETETE : au doute, on delegue, on ne supprime pas."
+      },
+      {
+        "besoin": "Supprimer avec tracabilite - SEUL HABILITE (case c9)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/supprimer/supprimer-fichier/supprimer-fichier.py <fichier>",
+          "Documenter : fichier, raison, zone"
+        ],
+        "regle": "SEUL HABILITE A SUPPRIMER. QUE des RESIDUS PROUVES. Tracabilite complete."
+      },
+      {
+        "besoin": "Tous les residus ont-ils disparu ? (case c10 - controle)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py --tous"],
+        "regle": "RESCAN : verifier que 0 residu ne reste."
+      },
+      {
+        "besoin": "Rapport de nettoyage (case c11)",
+        "action": "procedure",
+        "etapes": ["Synthetiser : residus supprimes, zones scannees, snapshot cree"],
+        "regle": "RAPPORT : bilan tracable du nettoyage."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils (case c34)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py"],
+        "regle": "REGLE REGISTRE : declarer tous les outils utilises."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md (case c12)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hygie/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-nettoyer"}
+}

@@ -1,0 +1,84 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "vulcain",
+    "description": "Toutes les fins possibles pour Vulcain (arbre v0.1.0)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-vulcain.json",
+      "description": "Theme termine : retour a la racine pour choisir un autre theme ou finir."
+    },
+    "fin-construire": {
+      "titre": "FIN - Construire un outil (activer Morpheus)",
+      "description": "CHAINE BOUT-EN-BOUT : outil cree et valide (RVAV), MORPHEUS ACTIVE pour les tests. La chaine continue : Morpheus teste puis ACTIVE Janus (controle) qui REACTIVE Cerberus avec le bilan consolide.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>",
+      "regle": "MESSAGE DE RELAIS A L AGENT SUIVANT : COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon."
+    },
+    "fin-modifier": {
+      "titre": "FIN - Modifier un outil (activer Morpheus)",
+      "description": "CHAINE BOUT-EN-BOUT : outil modifie et valide (RVAV), MORPHEUS ACTIVE pour les tests. La chaine continue : Morpheus teste puis ACTIVE Janus (controle) qui REACTIVE Cerberus avec le bilan consolide.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>",
+      "regle": "MESSAGE DE RELAIS A L AGENT SUIVANT : COMMENCE ton travail (relis ta fiche et tes corrections, suis ta carte), FINIS-le (RVAV + lecons), puis ACTIVE l agent suivant selon TA carte. Ne REACTIVE Cerberus QUE si tu es le DERNIER maillon."
+    },
+    "fin-documentation": {
+      "titre": "FIN - Documentation (reactiver Cerberus)",
+      "description": "Documentation mise a jour et validee (RVAV + detecter-impacts). LA FIN SUIT MA CARTE (Pattern 13) : si je suis le DERNIER maillon (active directement par Cerberus), je REACTIVE Cerberus avec le bilan consolide.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent_precedent>",
+      "regle": "Le 3e argument (agent precedent) est OBLIGATOIRE."
+    },
+    "fin-delegation": {
+      "titre": "FIN - Delegation terminee",
+      "description": "La delegation est terminee. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> vulcain",
+      "regle": "Chaque agent revient a Cerberus. Oracle gere la coordination."
+    },
+    "fin-outil-temporaire": {
+      "titre": "FIN - Outil temporaire",
+      "description": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN pour creer l outil durable (protocole 5 fichiers). AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
+      "action": "procedure",
+      "etapes": [
+        "Declarer l usage : python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --mode script-temporaire",
+        "Supprimer le script temporaire (0 residu)"
+      ],
+      "regle": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)."
+    },
+    "fin-signaler-besoin": {
+      "titre": "Signaler le besoin",
+      "description": "Mission hors perimetre : signaler le besoin a Cerberus (besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Pour un OUTIL DURABLE : je le cree MOI-MEME (je suis Vulcain, protocole 5 fichiers, theme CONSTRUIRE) - pas besoin de signaler.",
+      "action": "procedure"
+    },
+    "fin-retour-themis": {
+      "titre": "FIN - Retour de Themis traite",
+      "description": "Le retour de Themis est traite. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> vulcain",
+      "regle": "Oracle gere les activations. Chaque agent revient a Cerberus."
+    },
+    "fin-reprise": {
+      "titre": "FIN - Reprise du parcours apres retour de l agent habilite",
+      "description": "L agent habilite m a reactive avec le bilan (Pattern 13 : la fin suit SA carte). Je reprends mon arbre : je continue vers ma fin normale (fin-construire ou fin-modifier) avec le rapport d evaluation, le bilan des outils utilises et le bilan de l amelioration.",
+      "action": "redirection",
+      "vers": "arbre-vulcain.json"
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Inter-round traite",
+      "description": "Le rapport inter-round est traite. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> vulcain",
+      "regle": "Oracle gere les retours inter-round. Chaque agent revient a Cerberus."
+    }
+  }
+}

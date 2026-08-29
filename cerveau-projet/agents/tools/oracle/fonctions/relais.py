@@ -38,9 +38,19 @@ def _lire_jsonl(chemin):
 
 
 def _ecrire_jsonl(chemin, messages):
+    """Ecrire une liste de lignes dans un JSONL.
+    NB (correction 2026-08-29) : les elements de la liste sont des
+    BRUTS (deja serialises, chaines JSON). Appliquer json.dumps sur un
+    brut re-echappait le JSON a chaque ecriture -> corruption en cascade
+    (le hub cerberus.jsonl a atteint 1 Go de guillemets imbriques). On
+    ecrit les bruts TELS QUELS ; un dict passe est serialize une seule
+    fois (normalisation)."""
     with open(chemin, "w", encoding="utf-8") as f:
         for msg in messages:
-            f.write(json.dumps(msg, ensure_ascii=False) + "\n")
+            if isinstance(msg, str):
+                f.write(msg + "\n")
+            else:
+                f.write(json.dumps(msg, ensure_ascii=False) + "\n")
 
 
 def relayer_hub():
@@ -54,6 +64,16 @@ def relayer_hub():
     nouveaux = []
     for brut, msg in messages:
         if msg is None:
+            nouveaux.append((brut, msg))
+            continue
+        if isinstance(msg, str):
+            # JSON double-encode (historique) : tenter un second parse
+            try:
+                msg = json.loads(msg)
+            except ValueError:
+                nouveaux.append((brut, msg))
+                continue
+        if not isinstance(msg, dict):
             nouveaux.append((brut, msg))
             continue
         if msg.get("lu"):

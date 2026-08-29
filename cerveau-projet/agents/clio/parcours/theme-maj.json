@@ -1,0 +1,94 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "clio",
+    "nom": "MAJ",
+    "description": "Mettre a jour le README (texte + compteurs + badges) : sources de verite, RVAV, dry-run"
+  },
+  "theme": {
+    "nom": "MAJ",
+    "but": "Mettre a jour le README pour qu il reflete l etat reel du projet (texte + compteurs + badges)",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Consulter les lecons (mettre-a-jour-readme)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent clio --domaine readme"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE - sa lecture est OBLIGATOIRE."
+      },
+      {
+        "besoin": "Lire les interventions pour savoir ce qui a change",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/metmettre-a-jour-readme/metmettre-a-jour-readme.py --journal"
+        ],
+        "regle": "RECHERCHE : lire les interventions AVANT de corriger."
+      },
+      {
+        "besoin": "Verifier les ecarts entre etat reel et README",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/metmettre-a-jour-readme/metmettre-a-jour-readme.py --verifier"
+        ],
+        "regle": "VERIFICATION : comparer etat reel vs README AVANT de corriger."
+      },
+      {
+        "besoin": "Mettre a jour les compteurs et badges",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/metmettre-a-jour-readme/metmettre-a-jour-readme.py --maj"
+        ],
+        "regle": "MISE A JOUR : compter les agents, outils, tests, protocoles, regles AVANT de mettre a jour les badges."
+      },
+      {
+        "besoin": "Corriger le texte du README (sections narratives)",
+        "action": "procedure",
+        "etapes": [
+          "Lire le README actuel",
+          "Identifier les sections obsolete (agents manquants, cycle fondamental, description du systeme)",
+          "Corriger le texte existant (ton 1ere personne, pas de chronologie)",
+          "Dry-run AVANT/APRES avant d ecrire"
+        ],
+        "regle": "Le README est le LIVRE du projet : je CORRIGE le texte existant, je n ajoute jamais de lignes d historique."
+      },
+      {
+        "besoin": "Verifier la conformite ASCII",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py cerveau-projet/../README.md"
+        ],
+        "regle": "ASCII strict + LF pur."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/clio/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-maj"
+  }
+}

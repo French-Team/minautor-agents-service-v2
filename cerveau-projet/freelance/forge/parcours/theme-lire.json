@@ -7,7 +7,7 @@
   },
   "theme": {
     "nom": "LIRE",
-    "but": "Accéder à la connaissance des outils",
+    "but": "Acceder a la connaissance des outils",
     "redirects": [
       {
         "besoin": "Lire un outil existant",
@@ -16,7 +16,7 @@
           "Identifier l'emplacement (tools-commun/ ou <agent>/tools/)",
           "Lire le .md (contrat)",
           "Lire le .py (code)",
-          "Lire le -data.json (données)"
+          "Lire le -data.json (donnees)"
         ]
       },
       {
@@ -25,7 +25,7 @@
         "vers": {"type": "commande", "commande": "ls cerveau-projet/freelance/tools-commun/"}
       },
       {
-        "besoin": "Consulter les leçons d'outils",
+        "besoin": "Consulter les lecons d'outils",
         "action": "redirection",
         "vers": {"type": "outil", "commande": "consulter-lecons", "parametres": {"agent": "forge", "domaine": "outils"}}
       }

@@ -42,7 +42,7 @@
    "branches": [
     {
      "reponse": "OUI",
-     "vers": "c0e"
+     "vers": "c0g"
     },
     {
      "reponse": "INCERTAIN",
@@ -325,6 +325,44 @@
      "type": "outil"
     }
    ]
+  },
+  "c0g": {
+   "titre": "GATE BON AGENT : verifier que tu es LE BON AGENT",
+   "type": "action",
+   "indices": [
+    {
+     "type": "regle",
+     "texte": "REGLE GATE (decision utilisateur 2026-08-29, PAS un timer) : AVANT de commencer (analyser/decider/ecrire), je verifie que je suis LE BON AGENT de la session. S il y a un autre agent actif ou si ma mission vise une zone hors de mes habilitations, je STOP immediatement et je reactiver Cerberus SANS RIEN TOUCHER - il est inutile de travailler puis tout detruire."
+    },
+    {
+     "type": "outil",
+     "nom": "verifier-agent-perimetre",
+     "catalogue": "verifier-agent-perimetre",
+     "chemin": "cerveau-projet/agents/tools/oracle/routines/",
+     "commande": "python3 cerveau-projet/agents/tools/oracle/routines/verifier-agent-perimetre.py --gate --moi redacteur-v2"
+    }
+   ],
+   "suivant": "c0g2"
+  },
+  "c0g2": {
+   "titre": "GATE : es-tu le bon agent ?",
+   "type": "question",
+   "question": "La porte a-t-elle rendu OK (0) ? OUI -> je continue ma mission. NON (1) -> STOP immediat : je ne touche a RIEN et je reactiver Cerberus avec le rapport de la porte.",
+   "branches": [
+    {
+     "reponse": "OUI",
+     "vers": "c0e"
+    },
+    {
+     "reponse": "NON",
+     "vers": "c0h"
+    }
+   ]
+  },
+  "c0h": {
+   "titre": "FIN - STOP : pas le bon agent, reactiver Cerberus",
+   "type": "fin",
+   "message": "Je ne suis PAS le bon agent pour cette mission. Je n ai RIEN modifie. Je reactiver Cerberus immediatement avec le rapport de la porte (verifier-agent-perimetre --gate --moi redacteur-v2) pour qu il active le bon agent."
   }
  }
 }

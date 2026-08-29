@@ -166,16 +166,16 @@ def main():
             d = json.load(fh)
 
         # 1. Version
-        verifier("1. Version du parcours = 0.5.4",
-                 d["parcours"].get("version") == "0.5.4",
+        verifier("1. Version du parcours = 0.5.6",
+                 d["parcours"].get("version") == "0.5.6",
                  d["parcours"].get("version"))
 
         # 2. Types
         types = {}
         for c in d["cases"].values():
             types[c.get("type")] = types.get(c.get("type"), 0) + 1
-        verifier("2a. 41 cases action (37 anterieures + c8a/c22a/c27a Activer Themis + c0e consultation pre-mission)",
-                 types.get("action") == 41, str(types))
+        verifier("2a. 52 cases action (evolution v0.5.6 : historisation c1h*/c8h + consultation pre-mission)",
+                 types.get("action") == 52, str(types))
         verifier("2b. 9 questions + 5 controles + 13 fins (Themis c8b/c22b/c27b + cU1/cU2/cU3)",
                  types.get("question") == 9 and types.get("controle") == 5
                  and types.get("fin") == 13, str(types))

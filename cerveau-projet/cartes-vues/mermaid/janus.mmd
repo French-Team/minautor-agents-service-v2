@@ -1,4 +1,4 @@
-%% Carte de decision de janus (parcours v0.5.6)
+%% Carte de decision de janus (parcours v0.5.7)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -7,6 +7,7 @@ flowchart TD
     c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
     c1{"Mission"}
     c10(["FIN - Reactiver Cerberus"])
+    c10h["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c11["Ecrire la mission de controle AVANT"]
     c12["Lister les fichiers par statut"]
     c13["Verifier la boucle RVAV"]
@@ -16,6 +17,11 @@ flowchart TD
     c17["Changer le statut (apres validation)"]
     c18["Ecrire la mission de controle AVANT"]
     c19["Lire l'ancienne version"]
+    c1h["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hb["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hc["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hd["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1he["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
     c2["Ecrire la mission de controle AVANT"]
     c20["Lire la nouvelle version"]
     c21["Verifier les impacts"]
@@ -35,6 +41,7 @@ flowchart TD
     c4["Verifier les tests"]
     c5["Lancer le combo controle-outil"]
     c8{"Verdict du controle"}
+    c8ir["INTER-ROUND : activer l agent habilite pour reparer"]
     c9["Lecons et retour"]
     c9b{"Ameliorations possibles de mon fonctionnement ?"}
     c9c["Lancer le generateur d amelioration"]
@@ -60,12 +67,13 @@ flowchart TD
     c0b -- "NON" --> c0
     c0c --> cU1
     c0e --> c0c
-    c1 -- "outil" --> c2
-    c1 -- "statut" --> c11
-    c1 -- "modification" --> c18
+    c1 -- "outil" --> c1h
+    c1 -- "statut" --> c1hb
+    c1 -- "modification" --> c1hc
     c1 -- "autre" --> c27
-    c1 -- "sante" --> c33
-    c1 -- "trio" --> cT1
+    c1 -- "sante" --> c1hd
+    c1 -- "trio" --> c1he
+    c10h --> c10
     c11 --> c12
     c12 --> c13
     c13 --> c14
@@ -76,6 +84,11 @@ flowchart TD
     c17 --> c9
     c18 --> c19
     c19 --> c20
+    c1h --> c2
+    c1hb --> c11
+    c1hc --> c18
+    c1hd --> c33
+    c1he --> cT1
     c2 --> c3
     c20 --> c21
     c21 --> c22
@@ -90,11 +103,12 @@ flowchart TD
     c3 --> c4
     c31 --> c32
     c33 --> c8
-    c34 --> c10
+    c34 --> c10h
     c4 --> c5
     c5 --> c8
     c8 -- "OUI" --> c9
-    c8 -- "NON" --> c9
+    c8 -- "NON" --> c8ir
+    c8ir --> c9e
     c9 --> c9f
     c9b -- "OUI" --> c9c
     c9b -- "NON" --> c34

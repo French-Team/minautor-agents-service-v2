@@ -1,0 +1,12 @@
+{
+ "agent": "hades",
+ "parcours": "agents/hades/parcours/arbre-hades.json",
+ "case_courante": null,
+ "mission_type": "sauvegarder",
+ "mission": "COMMIT les changements",
+ "historise_debut": true,
+ "precedent": "buffy",
+ "etape": "fin",
+ "theme_courant": null,
+ "historise_fin": true
+}

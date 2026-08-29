@@ -1,0 +1,10 @@
+{
+ "agent": "athena",
+ "parcours": "agents/athena/parcours/arbre-athena.json",
+ "case_courante": null,
+ "mission_type": "creer",
+ "mission": "CREER un pense-bete",
+ "historise_debut": true,
+ "precedent": "athena",
+ "etape": "debut"
+}

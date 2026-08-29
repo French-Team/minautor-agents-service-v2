@@ -3,14 +3,14 @@
     "type": "theme",
     "appartient_a": "rogers",
     "nom": "VALIDER",
-    "description": "Vérifier, contrôler, auditer la conformité des règles"
+    "description": "Verifier, controler, auditer la conformite des regles"
   },
   "theme": {
     "nom": "VALIDER",
     "but": "Assurer que tout est conforme",
     "redirects": [
       {
-        "besoin": "Vérifier la cohérence des règles",
+        "besoin": "Verifier la coherence des regles",
         "action": "redirection",
         "vers": {
           "type": "outil",
@@ -19,43 +19,43 @@
         }
       },
       {
-        "besoin": "Auditer un fichier contre les règles",
+        "besoin": "Auditer un fichier contre les regles",
         "action": "redirection",
         "vers": {
           "type": "procedure",
           "etapes": [
             "Lire le fichier cible",
-            "Lire les règles applicables (regles-immuables.md)",
-            "Comparer chaque ligne aux règles",
-            "Lister les écarts",
-            "Classer par gravité (critique/mineur)"
+            "Lire les regles applicables (regles-immuables.md)",
+            "Comparer chaque ligne aux regles",
+            "Lister les ecarts",
+            "Classer par gravite (critique/mineur)"
           ]
         }
       },
       {
-        "besoin": "Vérifier un protocole",
+        "besoin": "Verifier un protocole",
         "action": "redirection",
         "vers": {
           "type": "procedure",
           "etapes": [
             "Lire le protocole",
-            "Vérifier le cycle fondamental (Cerberus → Agent → Cerberus)",
-            "Vérifier la cohérence avec les règles existantes",
-            "Vérifier la traçabilité (R/IR)",
+            "Verifier le cycle fondamental (Cerberus -> Agent -> Cerberus)",
+            "Verifier la coherence avec les regles existantes",
+            "Verifier la tracabilite (R/IR)",
             "Donner le verdict (CONFORME / A REVOIR)"
           ]
         }
       },
       {
-        "besoin": "Vérifier un arbre de décision",
+        "besoin": "Verifier un arbre de decision",
         "action": "redirection",
         "vers": {
           "type": "procedure",
           "etapes": [
-            "Lire l'arbre (racine + thèmes)",
-            "Vérifier que chaque branche a une fin",
-            "Vérifier que les fichiers référencés existent",
-            "Vérifier la cohérence des redirections",
+            "Lire l'arbre (racine + themes)",
+            "Verifier que chaque branche a une fin",
+            "Verifier que les fichiers references existent",
+            "Verifier la coherence des redirections",
             "Donner le verdict"
           ]
         }
@@ -67,10 +67,10 @@
           "type": "procedure",
           "etapes": [
             "Lire la fiche de l'agent",
-            "Lire son arbre de décision",
-            "Vérifier que l'arbre respecte les thèmes (D8)",
-            "Vérifier que les fins sont correctes",
-            "Vérifier les grades et habilitations (D17)"
+            "Lire son arbre de decision",
+            "Verifier que l'arbre respecte les themes (D8)",
+            "Verifier que les fins sont correctes",
+            "Verifier les grades et habilitations (D17)"
           ]
         }
       }

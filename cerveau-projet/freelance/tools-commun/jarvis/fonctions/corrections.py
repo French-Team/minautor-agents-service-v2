@@ -17,7 +17,7 @@ Protocole :
      d. JARVIS DEPAUSE la mission principale
   4. Si correction echoue -> compteur d echecs, alerte si > seuil
 
-L utilisateur n est JAMAIS melé a ce processus.
+L utilisateur n est JAMAIS mele a ce processus.
 """
 
 import json

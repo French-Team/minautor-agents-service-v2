@@ -1,0 +1,100 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "argus",
+    "nom": "DETECTER",
+    "description": "Detecter les contradictions : croiser cases, regles, protocoles, git"
+  },
+  "theme": {
+    "nom": "DETECTER",
+    "but": "Trouver et signaler les incoherences entre les sources du projet",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine contradictions)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent argus --domaine contradictions"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "Lire le protocole Argus (detection et signalement)",
+        "action": "procedure",
+        "etapes": [
+          "Lire cerveau-projet/agents/regles-immuables/general/protocole-argus-contradictions/protocole-argus-contradictions.001.01.ebauche.md"
+        ],
+        "regle": "PROTOCOLE OBLIGATOIRE : chaque signalement suit les 4 elements (type, gravite, fichier+ligne, 2 sources). JE DETECTE, JE NE CORRIGE PAS."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE - sa lecture est OBLIGATOIRE."
+      },
+      {
+        "besoin": "Scanner les sources (cases, regles, protocoles)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/detecter/detecter-contradictions/detecter-contradictions.py"
+        ],
+        "regle": "SCAN : lister les sources et croiser les incoherences."
+      },
+      {
+        "besoin": "Lire l historique git (evolutions vraies et fausses)",
+        "action": "procedure",
+        "etapes": [
+          "git log --all --oneline (lecture seule)"
+        ],
+        "regle": "LECTURE SEULE : je ne modifie JAMAIS le depot git."
+      },
+      {
+        "besoin": "Croiser les sources (double source obligatoire)",
+        "action": "procedure",
+        "etapes": [
+          "Pour chaque incoherence suspectee : verifier dans >= 2 sources",
+          "Croiser fiche vs parcours vs registre"
+        ],
+        "regle": "DOUBLE SOURCE : je ne signale JAMAIS sur une seule source."
+      },
+      {
+        "besoin": "Classer par gravite (critique / majeur / mineur)",
+        "action": "procedure",
+        "etapes": [
+          "Classifier chaque incoherence avec preuves (fichier + ligne)"
+        ],
+        "regle": "CLASSEMENT : chaque incoherence a un niveau de gravite."
+      },
+      {
+        "besoin": "Produire le rapport de contradictions",
+        "action": "procedure",
+        "etapes": [
+          "Ecrire le rapport avec les 4 elements : type, gravite, fichier+ligne, 2 sources"
+        ],
+        "regle": "RAPPORT : factuel, precis, avec preuves."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/argus/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-detecter"
+  }
+}

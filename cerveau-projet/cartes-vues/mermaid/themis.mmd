@@ -1,4 +1,4 @@
-%% Carte de decision de themis (parcours v0.5.6)
+%% Carte de decision de themis (parcours v0.5.9)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -14,12 +14,20 @@ flowchart TD
     c12f{"Defaut signale dans un rapport ?"}
     c12g["Activer l'agent habilite pour reparer le defaut"]
     c13(["FIN - Activer Janus"])
+    c13h["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c14["Lire le contexte du doute"]
     c15{"Choisir l'evaluateur selon le domaine"}
     c16["Lancer l'evaluateur adapte"]
     c17["Croiser avec relecture et tableaux"]
     c18["RVAV -- phase Analyser"]
     c19["Executer le combo pour la phase Analyser"]
+    c1h["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hb["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hc["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hd["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1he["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hf["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1ir["RECEPTION INTER-ROUND : accuser reception du rapport KO et activer l appelant"]
     c2["Lire le contexte de la demande"]
     c21{"Mission hors perimetre"}
     c22["Activer l'agent habilite"]
@@ -30,6 +38,7 @@ flowchart TD
     c24(["FIN - Delegation"])
     c25["Auditer pour un agent"]
     c25b(["FIN - Activer l agent precedent avec son rapport"])
+    c25bh["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c26["Enregistrer mes usages d outils"]
     c3["Lancer le combo audit-themis"]
     c30["Controler la veracite des README (responsabilite README)"]
@@ -37,6 +46,7 @@ flowchart TD
     c8b{"CONFORMITE D EXECUTION : l agent a-t-il fait ce que sa carte ordonnait ?"}
     c8c{"VERIFICATION D IMPACT (Pattern 14)"}
     c8d{"LA FIN SUIT SA CARTE (Pattern 13)"}
+    c8ir["INTER-ROUND : activer l agent habilite pour reparer (verification fin de carte echouee)"]
     c9["Ecrire le rapport dans themis/rapports/"]
     cU1{"Probleme avec un outil en cours de mission ?"}
     cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
@@ -46,13 +56,14 @@ flowchart TD
     c0b -- "NON" --> c0
     c0c --> cU1
     c0e --> c0c
-    c1 -- "audit" --> c2
-    c1 -- "doute" --> c14
-    c1 -- "rvav" --> c18
+    c1 -- "audit" --> c1h
+    c1 -- "doute" --> c1hb
+    c1 -- "rvav" --> c1hc
     c1 -- "autre" --> c21
-    c1 -- "audit-agent" --> c25
-    c1 -- "audit-fin-mission" --> c25
-    c1 -- "readme" --> c30
+    c1 -- "audit-agent" --> c1hd
+    c1 -- "audit-fin-mission" --> c1hf
+    c1 -- "readme" --> c1he
+    c1 -- "inter-round" --> c1ir
     c12 --> c12f
     c12b -- "OUI" --> c12c
     c12b -- "NON" --> c26
@@ -61,6 +72,7 @@ flowchart TD
     c12f -- "OUI" --> c12g
     c12f -- "NON" --> c12b
     c12g --> c12e
+    c13h --> c13
     c14 --> c15
     c15 -- "structure" --> c16
     c15 -- "conventions" --> c16
@@ -70,6 +82,13 @@ flowchart TD
     c17 --> c8b
     c18 --> c19
     c19 --> c3
+    c1h --> c2
+    c1hb --> c14
+    c1hc --> c18
+    c1hd --> c25
+    c1he --> c30
+    c1hf --> c25
+    c1ir --> c12e
     c2 --> c3
     c21 -- "OUI" --> c22
     c21 -- "NON" --> c23b
@@ -77,8 +96,9 @@ flowchart TD
     c23b -- "TEMPORAIRE" --> c23c
     c23b -- "DURABLE" --> c23
     c23c --> c23d
-    c25 --> c25b
-    c26 --> c13
+    c25 --> c25bh
+    c25bh --> c25b
+    c26 --> c13h
     c3 --> c8
     c30 --> c9
     c8 -- "OUI" --> c8b
@@ -88,7 +108,8 @@ flowchart TD
     c8c -- "OUI" --> c8d
     c8c -- "NON" --> c3
     c8d -- "OUI" --> c9
-    c8d -- "NON" --> c3
+    c8d -- "NON" --> c8ir
+    c8ir --> c12e
     c9 --> c12
     cU1 -- "OUI" --> cU2
     cU1 -- "NON" --> c1

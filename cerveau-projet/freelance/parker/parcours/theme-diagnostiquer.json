@@ -3,28 +3,28 @@
     "type": "theme",
     "appartient_a": "parker",
     "nom": "DIAGNOSTIQUER",
-    "description": "Comprendre un problème"
+    "description": "Comprendre un probleme"
   },
   "theme": {
     "nom": "DIAGNOSTIQUER",
-    "but": "Comprendre la cause d'un problème",
+    "but": "Comprendre la cause d'un probleme",
     "redirects": [
       {
-        "besoin": "Diagnostiquer un agent défaillant",
+        "besoin": "Diagnostiquer un agent defaillant",
         "action": "procedure",
         "etapes": [
           "Lire la fiche de l'agent",
-          "Lire son arbre de décision",
-          "Vérifier que l'arbre est valide",
-          "Identifier le problème"
+          "Lire son arbre de decision",
+          "Verifier que l'arbre est valide",
+          "Identifier le probleme"
         ]
       },
       {
-        "besoin": "Diagnostiquer un outil défaillant",
+        "besoin": "Diagnostiquer un outil defaillant",
         "action": "procedure",
         "etapes": [
           "Lire le .md de l'outil",
-          "Vérifier les dépendances",
+          "Verifier les dependances",
           "Tester l'outil",
           "Identifier l'erreur"
         ]

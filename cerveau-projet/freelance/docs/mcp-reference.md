@@ -24,7 +24,7 @@ identite:
 des applications IA a des systemes externes.
 
 > "Pensez a MCP comme un port USB-C pour les applications IA."
-> — modelcontextprotocol.io
+> -- modelcontextprotocol.io
 
 **Ce que MCP permet** :
 - Agents accedant a Google Calendar, Notion, etc.
@@ -43,10 +43,10 @@ des applications IA a des systemes externes.
 
 ```
 MCP Host (application IA)
-    │
-    ├── MCP Client 1 ── MCP Server 1
-    ├── MCP Client 2 ── MCP Server 2
-    └── MCP Client N ── MCP Server N
+    |
+    |--- MCP Client 1 -- MCP Server 1
+    |--- MCP Client 2 -- MCP Server 2
+    +--- MCP Client N -- MCP Server N
 ```
 
 **Participants** :

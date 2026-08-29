@@ -177,12 +177,21 @@ def main():
     version_janus = d_janus["parcours"].get("version", "")
 
     # --- Passe 1 : structure statique ---
-    # 1. Branche 'trio' dans c1
+    # 1. Branche 'trio' dans c1. La refonte v0.5.7+ a insere la case
+    #    c1he (HISTORISER LE DEBUT) entre c1 et cT1 : le chemin peut etre
+    #    c1 -> trio -> cT1 (ancien) OU c1 -> trio -> c1he -> cT1 (actuel).
+    #    La condition verifie que la chaine mene bien a cT1.
     c1_branches = cases.get("c1", {}).get("branches", [])
-    branche_trio = any(b.get("reponse") == "trio" and b.get("vers") == "cT1"
-                       for b in c1_branches)
+    vers_trio = [b.get("vers") for b in c1_branches
+                 if b.get("reponse") == "trio"]
+    mene_a_ct1 = False
+    for v in vers_trio:
+        c = cases.get(v, {})
+        if v == "cT1" or c.get("suivant") == "cT1":
+            mene_a_ct1 = True
+            break
     verifier("1. Branche 'trio' dans c1 -> cT1 (parcours-janus v%s)" % version_janus,
-             branche_trio, "c1 branches=%s" % json.dumps(c1_branches, ensure_ascii=True))
+             mene_a_ct1, "c1 branches=%s" % json.dumps(c1_branches, ensure_ascii=True))
 
     # 2. Cases cT1..cT10 presentes avec les bons types
     types_attendus = {

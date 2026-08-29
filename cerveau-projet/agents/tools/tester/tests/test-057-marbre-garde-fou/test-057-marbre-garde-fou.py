@@ -326,8 +326,16 @@ def main():
             # VRAI variables-actuelles.md reecrivait agent: Cerberus pendant
             # la non-regression et cassait test-024 point 2b).
             env["CLASSEUR_STOCKAGE"] = tmp_classeur
-            r = lancer([PYTHON, ACTIVER_PY, "reactiver", "session-llm-1",
-                        "test marbre", "janus"], timeout=90, env=env)
+            # FIX 2026-08-29 : sans surcharge, l encart REAL (AGENTS-activite-
+            # recente.md) etait pollue par les entrees de test avec des
+            # raisons multi-lignes qui cassaient le tableau.
+            fd4, tmp_activite = tempfile.mkstemp(suffix=".md")
+            os.close(fd4)
+            env["AGENTS_ACTIVITE_RECENTE"] = tmp_activite
+            # Vision 2026-08-27 : PLUS de 'reactiver', toujours 'activer'.
+            # Reactiver Cerberus = activer cerberus (4e arg = agent precedent).
+            r = lancer([PYTHON, ACTIVER_PY, "activer", "session-llm-1",
+                        "cerberus", "test marbre", "janus"], timeout=90, env=env)
             contenu = lire(tmp)
             ok_debut = "MARBRE:DEBUT" in contenu
             ok_fin = "MARBRE:FIN" in contenu

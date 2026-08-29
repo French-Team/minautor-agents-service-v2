@@ -1,0 +1,77 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "chiron",
+    "nom": "OUTILS",
+    "description": "Probleme avec un outil en cours de mission : comprendre, resoudre, reprendre"
+  },
+  "theme": {
+    "nom": "OUTILS",
+    "but": "Resoudre un probleme d outil rencontre en cours de mission et reprendre",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine education)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent chiron --domaine education"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Probleme avec un outil ? (question cU1)",
+        "action": "procedure",
+        "etapes": [
+          "SI OUI (probleme outil) -> COMPRENDRE L OUTIL (cU2)",
+          "SI NON -> continuer la mission (c1)"
+        ],
+        "regle": "REGLE : probleme avec un outil -> je ne lis PAS le code : le mode d emploi est dans le .md."
+      },
+      {
+        "besoin": "COMPRENDRE L OUTIL - lire le .md (case cU2)",
+        "action": "procedure",
+        "etapes": [
+          "Lire le .md de l outil (contrat, Pattern 9)",
+          "Verifier si un combo existe avec consulter-combos",
+          "Sinon, utiliser generateurs-commande pour generer la commande exacte",
+          "Relancer l outil avec la commande correcte"
+        ],
+        "regle": "REGLE : le .md est le mode d emploi (Pattern 9) - je le lis AVANT de re-executer l outil."
+      },
+      {
+        "besoin": "Verifier si un combo existe pour l action",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-combos/consulter-combos.py <action>"],
+        "regle": "COMBO d abord : si un combo existe, je l utilise."
+      },
+      {
+        "besoin": "Generer la commande exacte",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande <outil> --reponses ..."],
+        "regle": "GENERATEUR : ne jamais ecrire la commande en dur."
+      },
+      {
+        "besoin": "Reprendre ma mission (case cU3)",
+        "action": "procedure",
+        "etapes": ["Reprendre a la case d arret : relancer guider-parcours avec --case <cid> --reponses '<reponse>'"],
+        "regle": "REPRISE : apres resolution du probleme outil, je reprends exactement ou j en etais."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/chiron/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-outils"}
+}

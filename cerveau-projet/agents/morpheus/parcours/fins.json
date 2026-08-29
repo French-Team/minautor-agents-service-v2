@@ -1,0 +1,53 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "morpheus",
+    "description": "Toutes les fins possibles pour Morpheus (arbre v0.1.0)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-morpheus.json",
+      "description": "Theme termine : retour a la racine."
+    },
+    "fin-tester": {
+      "titre": "FIN - Tester un outil (activer Janus)",
+      "description": "Tests executes, verdict donne. Janus controle, Themis audite.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-verifier": {
+      "titre": "FIN - Verifier un outil (activer Janus)",
+      "description": "Verification terminee. Janus controle.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-delegation": {
+      "titre": "FIN - Delegation terminee",
+      "description": "La delegation est terminee. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> morpheus",
+      "regle": "Chaque agent revient a Cerberus. Oracle gere la coordination."
+    },
+    "fin-retour": {
+      "titre": "FIN - Retour traite",
+      "description": "Le retour est traite. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> morpheus",
+      "regle": "Oracle gere les retours. Chaque agent revient a Cerberus."
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Inter-round traite",
+      "description": "Le rapport inter-round est traite. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> morpheus",
+      "regle": "Oracle gere les retours inter-round. Chaque agent revient a Cerberus."
+    }
+  }
+}

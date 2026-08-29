@@ -1,4 +1,4 @@
-# harnais-jarvis — Harnais de COMPORTEMENT du serveur JARVIS
+# harnais-jarvis -- Harnais de COMPORTEMENT du serveur JARVIS
 
 > Le harnais de JARVIS est SUPER important : JARVIS est le systeme
 > nerveux de la v2. Ce harnais ne se contente pas de la sante statique :
@@ -29,7 +29,7 @@ ALERTE -> inbox/vision.jsonl (format JARVIS standard, priorite 1)
 destinataire (+ l outbox du harnais) et son journal. Il ne modifie
 JAMAIS le fonctionnement de JARVIS.
 
-## Les ecarts detectes (config D15 — editable sans toucher au code)
+## Les ecarts detectes (config D15 -- editable sans toucher au code)
 
 | Ecart | Famille | Severite | Pourquoi |
 |---|---|---|---|
@@ -52,11 +52,11 @@ JAMAIS le fonctionnement de JARVIS.
 | `bak_accumules` | proprete | WARN | .bak qui s accumulent (nettoyage oublie) |
 | `serveur_inactif` | sante | WARN | le serveur MCP n a pas journalise depuis N jours (historique gelee : down ou jamais lance) |
 | `alerte_non_traitee` | surveillance | ERR | une alerte (EDITH [EDITH-REVEIL], harnais [HARNAIS-JARVIS]) reste NON LUE depuis N jours : la boucle de reparation ne se ferme pas |
-| `demande_utilisateur_non_traitee` | surveillance | WARN/ERR | entree de USER-DEMANDES.md plus vieille que N jours ABSENTE de la section « Dernieres modifications » (urgent -> ERR) |
+| `demande_utilisateur_non_traitee` | surveillance | WARN/ERR | entree de USER-DEMANDES.md plus vieille que N jours ABSENTE de la section " Dernieres modifications " (urgent -> ERR) |
 | `historique_agents_gele` | surveillance | ERR | JARVIS n a PAS historise les activites dans AGENTS-activite-recente-v2.md (encart session-freelance, fichier v2 separe) : derniere activite plus recente que la derniere trace -> la tracabilite des agents est en retard |
 | `edith_silencieuse` | surveillance | ERR | **EDITH n emet plus de reveil depuis N jours (3 par defaut) : son serveur de routines ou detection.py ne tourne plus -- la cellule dormante est muette, plus personne ne detecte les modifications de perimetre** |
 
-**USER-DEMANDES.md -- section « Dernieres modifications » (source de
+**USER-DEMANDES.md -- section " Dernieres modifications " (source de
 verite du traitement)** : quand une demande est traitee, on AJOUTE UNE
 LIGNE au journal : `- <date> -- Traitee: <titre ou partie significative>`.
 Le harnais ne matche que les LIGNES DU JOURNAL (celles commencant par
@@ -96,7 +96,7 @@ actif). Jamais le code.
 |---|---|
 | `WARN` | Vision |
 | `ERR` | **Vision + Stark** (le coordinateur responsable de JARVIS, D16) |
-| `CRIT` | **Vision + Stark** + mention « ESCALADE UTILISATEUR REQUISE » dans le corps |
+| `CRIT` | **Vision + Stark** + mention " ESCALADE UTILISATEUR REQUISE " dans le corps |
 
 - Chaque ecart detecte -> message format JARVIS standard ecrit dans les
   inbox des destinataires (`de: jarvis-harnais`, priorite 1, objet

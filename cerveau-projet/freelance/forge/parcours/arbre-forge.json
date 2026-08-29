@@ -8,28 +8,28 @@
   "arbre": {
     "nom": "arbre-forge",
     "agent": "forge",
-    "description": "Arbre des décisions de Forge - constructeur d'outils v2. L'agent choisit UN THÈME au démarrage.",
+    "description": "Arbre des decisions de Forge - constructeur d'outils v2. L'agent choisit UN THEME au demarrage.",
     "regles": {
-      "D1": "Chaque branche (thème) mène à des catégories, qui mènent aux cases d'exécution.",
-      "D5": "Les cases d'un thème sont des REDIRECTIONS.",
+      "D1": "Chaque branche (theme) mene a des categories, qui menent aux cases d'execution.",
+      "D5": "Les cases d'un theme sont des REDIRECTIONS.",
       "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
-      "D3": "Les passages d'un fichier à l'autre sont TRANSPARENTS."
+      "D3": "Les passages d'un fichier a l'autre sont TRANSPARENTS."
     }
   },
   "racine": {
-    "titre": "Choisir un thème",
+    "titre": "Choisir un theme",
     "type": "question",
-    "question": "Quel thème ?",
+    "question": "Quel theme ?",
     "branches": [
-      {"reponse": "CREER", "description": "Créer un nouvel outil v2", "vers": "theme-creer.json"},
+      {"reponse": "CREER", "description": "Creer un nouvel outil v2", "vers": "theme-creer.json"},
       {"reponse": "LIRE", "description": "Consulter les outils existants, les specs", "vers": "theme-lire.json"},
-      {"reponse": "VALIDER", "description": "Vérifier la conformité d'un outil créé", "vers": "theme-valider.json"},
-      {"reponse": "COORDONNER", "description": "Inter-round, retour à Stark", "vers": "theme-coordonner.json"},
-      {"reponse": "EXPLORER", "description": "Diagnostiquer un problème d'outil", "vers": "theme-explorer.json"}
+      {"reponse": "VALIDER", "description": "Verifier la conformite d'un outil cree", "vers": "theme-valider.json"},
+      {"reponse": "COORDONNER", "description": "Inter-round, retour a Stark", "vers": "theme-coordonner.json"},
+      {"reponse": "EXPLORER", "description": "Diagnostiquer un probleme d'outil", "vers": "theme-explorer.json"}
     ]
   },
   "fins": {
     "fichier": "fins.json",
-    "description": "Toutes les fins possibles centralisées"
+    "description": "Toutes les fins possibles centralisees"
   }
 }

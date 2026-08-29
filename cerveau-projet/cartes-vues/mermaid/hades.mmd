@@ -1,0 +1,26 @@
+%% Carte de decision de hades (parcours v0.1.1)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation de lecture"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente"]
+    c0e["Consulter les lecons des autres agents"]
+    c1{"Mission git demandee"}
+    c2["Operation sans risque (status/log/diff/commit)"]
+    c3{"REGLE D ANCIENNETE : age des fichiers ?"}
+    c4["Checkout autorise sous regle d anciennete"]
+    c4b(["Checkout INTERDIT - reparation dans le present"])
+    c5(["FIN DE MISSION - reactiver Cerberus"])
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "INCERTAIN" --> c0
+    c0b -- "NON" --> c0
+    c0c --> c1
+    c0e --> c0c
+    c1 -- "sauvegarder" --> c2
+    c1 -- "consulter" --> c2
+    c1 -- "restaurer" --> c3
+    c2 --> c5
+    c3 -- "OUI" --> c4
+    c3 -- "NON" --> c4b
+    c4 --> c5

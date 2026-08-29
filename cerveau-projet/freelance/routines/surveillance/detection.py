@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """detection.py - UNE tache : detecter les modifications du perimetre
-EDITH et alerter [EDITH-RÉVEIL] via jarvis.py."""
+EDITH et alerter [EDITH-REVEIL] via jarvis.py."""
 import hashlib
 import json
 import os
@@ -38,14 +38,14 @@ def envoyer_reveil(motif, details):
     distribuent PLUS le travail aux autres agents - elles demandent a
     JARVIS d'ACTIVER EDITH pour qu'elle fasse SON travail (protocole 18 :
     EDITH incarnee rapporte les 4 W). Deposer un message P1
-    [EDITH-RÉVEIL] dans le hub (inbox/jarvis.jsonl) UNIQUEMENT :
+    [EDITH-REVEIL] dans le hub (inbox/jarvis.jsonl) UNIQUEMENT :
     - JARVIS lit la demande et active EDITH (jamais stark/vision en
       direct - leur information passe par le rapport d'EDITH).
     + outbox d'EDITH (trace cote expediteur, protocole 14)."""
     base = {
         "de": "edith", "priorite": 1,
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
-        "objet": "[EDITH-RÉVEIL] demande activation EDITH : " + motif[:40],
+        "objet": "[EDITH-REVEIL] demande activation EDITH : " + motif[:40],
         "corps": ("DEMANDE D'ACTIVATION EDITH (protocole 18). EDITH doit "
                   "etre activee pour analyser et rapporter les 4 W.\n"
                   + details),
@@ -81,7 +81,7 @@ def envoyer_reveil(motif, details):
                    "R", session="session-freelance")
     except Exception:
         pass
-    print("[EDITH] Réveil demandé :", motif)
+    print("[EDITH] Reveil demande :", motif)
 
 
 def qui_par_git(fichier):
@@ -96,7 +96,7 @@ def qui_par_git(fichier):
             return p.stdout.strip()
     except (OSError, subprocess.TimeoutExpired):
         pass
-    return "inconnu (modification non commitée)"
+    return "inconnu (modification non commitee)"
 
 
 def surveiller_modifications(manifest, etat):

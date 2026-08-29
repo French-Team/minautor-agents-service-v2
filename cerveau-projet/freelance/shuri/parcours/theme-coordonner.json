@@ -3,26 +3,26 @@
     "type": "theme",
     "appartient_a": "shuri",
     "nom": "COORDONNER",
-    "description": "Inter-round, retour à Stark"
+    "description": "Inter-round, retour a Stark"
   },
   "theme": {
     "nom": "COORDONNER",
-    "but": "Gérer les transitions et communications",
+    "but": "Gerer les transitions et communications",
     "redirects": [
       {
-        "besoin": "Réception inter-round",
+        "besoin": "Reception inter-round",
         "action": "procedure",
         "etapes": [
           "Lire le rapport de l'agent appelant",
-          "Accuser réception",
-          "Diagnostic rapide du problème",
-          "Si dans mon périmètre (construction) → corriger",
-          "Si hors périmètre → signaler l'agent habilité",
-          "Réactiver l'appelant (activer, pas reactiver)"
+          "Accuser reception",
+          "Diagnostic rapide du probleme",
+          "Si dans mon perimetre (construction) -> corriger",
+          "Si hors perimetre -> signaler l'agent habilite",
+          "Reactiver l'appelant (activer, pas reactiver)"
         ]
       },
       {
-        "besoin": "Retour à Stark (FIN DE CYCLE)",
+        "besoin": "Retour a Stark (FIN DE CYCLE)",
         "action": "fin",
         "vers": "fins.json",
         "case": "fin-stark"

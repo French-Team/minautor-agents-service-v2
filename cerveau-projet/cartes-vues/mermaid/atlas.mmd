@@ -1,4 +1,4 @@
-%% Carte de decision de atlas (parcours v0.5.4)
+%% Carte de decision de atlas (parcours v0.5.7)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -23,7 +23,7 @@ flowchart TD
     c17["Analyser et decomposer la structure"]
     c18["Creer la structure de documentation"]
     c19["Rediger le contenu"]
-    c2["Lister les dossiers"]
+    c2["Creer le dossier dedie et lister les dossiers"]
     c20["Passer la boucle RVAV"]
     c21["Lister les fichiers"]
     c22["Lire le contenu des fichiers cles"]
@@ -37,19 +37,18 @@ flowchart TD
     c29b{"Besoin d outil ?"}
     c29c["Creer l outil temporaire"]
     c29d(["FIN - Outil temporaire"])
-    c3["Lister les fichiers"]
+    c2a["Analyser UN dossier (un a la fois)"]
+    c2b["Rediger le .md du dossier dans le dossier dedie"]
+    c2c{"Tous les dossiers analyses ?"}
     c30["Cartographier un parcours"]
     c31["Cartographier pour un agent"]
     c31b(["FIN - Activer l agent precedent avec sa carte"])
     c32["Activer Themis pour auditer"]
     c33(["FIN - Retour de Themis avec son rapport"])
     c34["Enregistrer mes usages d outils"]
-    c4["Lister les fonctions"]
-    c5["Lister les appels"]
-    c6["Lire le contenu des fichiers cles"]
-    c7["Rechercher des patterns"]
+    c35["Generer les vues v2 (arbres de decision)"]
     c8["Verifier la regle de relecture (systeme d'agents)"]
-    c9["Documenter les decouvertes"]
+    c9["Documenter les decouvertes (rapport complet dans le dossier dedie)"]
     cU1{"Probleme avec un outil en cours de mission ?"}
     cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
     cU3(["FIN - Reprendre ma mission"])
@@ -66,6 +65,7 @@ flowchart TD
     c1 -- "autre" --> c26
     c1 -- "cartographier" --> c30
     c1 -- "cartographier-agent" --> c31
+    c1 -- "vues-v2" --> c35
     c10 --> c10b
     c10b -- "OUI" --> c10c
     c10b -- "NON" --> c34
@@ -83,7 +83,7 @@ flowchart TD
     c17 --> c18
     c18 --> c19
     c19 --> c20
-    c2 --> c3
+    c2 --> c2a
     c20 --> c10
     c21 --> c22
     c22 --> c23
@@ -97,15 +97,15 @@ flowchart TD
     c29b -- "TEMPORAIRE" --> c29c
     c29b -- "DURABLE" --> c29
     c29c --> c29d
-    c3 --> c4
+    c2a --> c2b
+    c2b --> c2c
+    c2c -- "OUI" --> c8
+    c2c -- "NON" --> c2a
     c30 --> c31
     c31 --> c31b
     c32 --> c33
     c34 --> c11a
-    c4 --> c5
-    c5 --> c6
-    c6 --> c7
-    c7 --> c8
+    c35 --> c10
     c8 --> c9
     c9 --> c10
     cU1 -- "OUI" --> cU2

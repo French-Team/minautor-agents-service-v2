@@ -3,82 +3,82 @@
     "type": "theme",
     "appartient_a": "shuri",
     "nom": "CREER",
-    "description": "Créer un nouvel agent v2"
+    "description": "Creer un nouvel agent v2"
   },
   "theme": {
     "nom": "CREER",
-    "but": "Construire un agent complet et opérationnel",
+    "but": "Construire un agent complet et operationnel",
     "redirects": [
       {
-        "besoin": "Vérifier le nom MARVEL",
+        "besoin": "Verifier le nom MARVEL",
         "action": "procedure",
         "etapes": [
-          "Vérifier que le nom est un héros MARVEL en anglais (D14)",
-          "Vérifier que l'agent n'existe pas déjà",
-          "Vérifier le fichier proposition-v2.md pour la liste des noms autorisés"
+          "Verifier que le nom est un heros MARVEL en anglais (D14)",
+          "Verifier que l'agent n'existe pas deja",
+          "Verifier le fichier proposition-v2.md pour la liste des noms autorises"
         ]
       },
       {
-        "besoin": "Créer la structure de l'agent",
+        "besoin": "Creer la structure de l'agent",
         "action": "procedure",
         "etapes": [
-          "Créer le dossier freelance/<agent>/",
-          "Créer le sous-dossier parcours/",
-          "Créer le sous-dossier tools/ (vide au départ)"
+          "Creer le dossier freelance/<agent>/",
+          "Creer le sous-dossier parcours/",
+          "Creer le sous-dossier tools/ (vide au depart)"
         ]
       },
       {
-        "besoin": "Créer la fiche <agent>.md",
+        "besoin": "Creer la fiche <agent>.md",
         "action": "procedure",
         "etapes": [
           "Suivre le template v2 exact (conventions.md)",
           "Remplir le frontmatter (D17) : nom, version, cree, statut, grade, medaille, notation, mot-cles",
-          "Écrire la vue d'ensemble",
-          "Écrire les règles absolues",
-          "Écrire les citations du personnage"
+          "Ecrire la vue d'ensemble",
+          "Ecrire les regles absolues",
+          "Ecrire les citations du personnage"
         ]
       },
       {
-        "besoin": "Créer corrections.md",
+        "besoin": "Creer corrections.md",
         "action": "procedure",
         "etapes": [
           "Suivre le template corrections v2",
-          "Documenter le contexte de création",
-          "Ajouter les règles spécifiques",
+          "Documenter le contexte de creation",
+          "Ajouter les regles specifiques",
           "Ajouter la philosophie"
         ]
       },
       {
-        "besoin": "Créer l'arbre de décision",
+        "besoin": "Creer l'arbre de decision",
         "action": "procedure",
         "etapes": [
-          "Définir les thèmes appropriés au rôle de l'agent",
-          "Créer arbre-<agent>.json (racine)",
-          "Créer les fichiers theme-<nom>.json pour chaque thème",
-          "Créer fins.json (fins centralisées)"
+          "Definir les themes appropries au role de l'agent",
+          "Creer arbre-<agent>.json (racine)",
+          "Creer les fichiers theme-<nom>.json pour chaque theme",
+          "Creer fins.json (fins centralisees)"
         ]
       },
       {
         "besoin": "INTERDIT: Enregistrer dans activer-agent-principal",
         "action": "INTERDIT",
-        "raison": "La v2 est autonome. Seul Stark est dans activer-agent-principal. Les autres agents sont activés par Stark via JARVIS."
+        "raison": "La v2 est autonome. Seul Stark est dans activer-agent-principal. Les autres agents sont actives par Stark via JARVIS."
       },
       {
-        "besoin": "Mettre à jour les documents",
+        "besoin": "Mettre a jour les documents",
         "action": "procedure",
         "etapes": [
-          "Mettre à jour AGENTS.md",
-          "Mettre à jour proposition-v2.md",
+          "Mettre a jour AGENTS.md",
+          "Mettre a jour proposition-v2.md",
           "Ajouter l'agent dans la liste des agents freelance"
         ]
       },
       {
-        "besoin": "Valider l'agent créé",
+        "besoin": "Valider l'agent cree",
         "action": "redirection",
         "vers": {
           "type": "theme",
           "fichier": "theme-valider.json",
-          "besoin": "Valider un agent créé"
+          "besoin": "Valider un agent cree"
         }
       }
     ]

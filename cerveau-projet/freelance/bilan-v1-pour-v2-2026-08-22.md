@@ -7,7 +7,7 @@ identite:
   categorie: bilan-v1
 ---
 
-# Bilan V1 — Ce qu'on garde, ce qu'on laisse, ce qu'on apprend
+# Bilan V1 -- Ce qu'on garde, ce qu'on laisse, ce qu'on apprend
 
 **Date** : 22 aout 2026
 **Agent** : Themis
@@ -32,7 +32,7 @@ identite:
 ## II. CE QUI A VRAIMENT MARQUE (les reussites)
 
 ### 1. Le systeme de lecons (BDD SQLite)
-**Verdict** : EXCELLENT — le meilleur investissement de la v1.
+**Verdict** : EXCELLENT -- le meilleur investissement de la v1.
 
 - 188+ lecons enregistrees par 12 agents differents
 - La BDD est devenue la **memoire longue** du projet
@@ -54,7 +54,7 @@ identite:
 **Verdict** : BON mais trop complexe.
 
 - 97 tests qui verifient que rien ne casse
-- Le protocole de tests est rodé
+- Le protocole de tests est rode
 - Les pins protegent les versions critiques
 - **Probleme** : les tests sont devenus un Far West (97 tests, chacun avec ses regles)
 - **A garder en v2** : le principe, mais avec un framework plus simple
@@ -91,7 +91,7 @@ identite:
 ## III. CE QUI A FOIRE (les problemes)
 
 ### 1. La surcharge d'outils
-**Verdict** : CATASTROPHE — le plus gros probleme de la v1.
+**Verdict** : CATASTROPHE -- le plus gros probleme de la v1.
 
 - 250 outils pour 19 agents = 13 outils par agent en moyenne
 - Beaucoup d'outils se chevauchent (corriger-accents, corriger-emojis, corriger-fins-de-ligne...)
@@ -100,7 +100,7 @@ identite:
 - **A corriger en v2** : 20-30 outils max, pas 250
 
 ### 2. Le verrou d'habilitation
-**Verdict** : PROBLEMATIQUE — a plus creusé qu'il n'a protege.
+**Verdict** : PROBLEMATIQUE -- a plus creuse qu'il n'a protege.
 
 - Chaque outil avait un "qui peut l'utiliser"
 - Les agents etaient bloque quand ils n'avaient pas les droits
@@ -111,13 +111,13 @@ identite:
 ### 3. L'activation centralisee par Cerberus
 **Verdict** : EFFICACE mais limitant.
 
-- Cerberus etait le point d'entree unique — bon principe
-- Mais TOUT passait par Cerberus — il est devenu un goulet d'etranglement
+- Cerberus etait le point d'entree unique -- bon principe
+- Mais TOUT passait par Cerberus -- il est devenu un goulet d'etranglement
 - Les chaines d'activation (A->B->C) etaient lentes
 - **A corriger en v2** : JARVIS route les agents, Cerberus garde l'entree/sortie
 
 ### 4. Les corrections interminables
-**Verdict** : SPIRALE — on corrigeait les corrections des corrections.
+**Verdict** : SPIRALE -- on corrigeait les corrections des corrections.
 
 - Chaque agent avait un fichier corrections.md qui grossissait
 - Les corrections etaient parfois contradictoires
@@ -133,7 +133,7 @@ identite:
 - **A changer** : silencieux sauf en cas de probleme
 
 ### 6. Les tests de non-regression
-**Verdict** : DEBORDES — le systeme a depasse son but.
+**Verdict** : DEBORDES -- le systeme a depasse son but.
 
 - 97 tests, chacun avec ses pins, ses profils, ses garde-fous
 - La maintenance des tests prenait plus de temps que le developpement
@@ -235,7 +235,7 @@ identite:
 
 La v1 a ete un **laboratoire exceptionnel**. En 12 jours, on a construit un ecosysteme complet de 19 agents, 250 outils, 97 tests, et 188 lecons. Le systeme a fonctionne, a appris, a evolue.
 
-Mais la v1 a aussi ete **victime de son succes** : en voulant tout faire, on a tout complexifie. 250 outils, 97 tests, des verrous partout, des corrections interminables — c'est le signe qu'on a depasse le stade du prototype.
+Mais la v1 a aussi ete **victime de son succes** : en voulant tout faire, on a tout complexifie. 250 outils, 97 tests, des verrous partout, des corrections interminables -- c'est le signe qu'on a depasse le stade du prototype.
 
 La v2 doit etre **l'inverse de la v1** : simple, efficace, autonome. JARVIS remplace le routing complexe. Les grades remplacent les verrous. 30 outils remplacent 250. 15 tests remplacent 97.
 
@@ -247,4 +247,4 @@ La v2 doit etre **l'inverse de la v1** : simple, efficace, autonome. JARVIS remp
 
 ---
 
-> "La simplicite est la sophistication supreme." — Leonard de Vinci
+> "La simplicite est la sophistication supreme." -- Leonard de Vinci

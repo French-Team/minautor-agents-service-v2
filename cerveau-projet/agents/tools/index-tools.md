@@ -237,11 +237,18 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 |---|---|---|
 | `gerer-sous-mission` | Gerer les sorties/reentrees du flux principal | [gerer/gerer-sous-mission/](gerer/gerer-sous-mission/) |
 
+### Git
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `hades-contexte-git` | Caisse a outils git de Hades : contexte complet du depot (identite, projet, branche, remote, dernier commit + age en minutes avec verdict RECENT/PERIME) | [git/hades-contexte-git/](git/hades-contexte-git/) |
+
 ### Guider
 
 | Outil | Description | Chemin |
 |---|---|---|
 | `guider-parcours` | Guider l'agent case par case (jeu de piste) dans son parcours JSON : indices outil/fichier/regle + branches selon les reponses | [guider/guider-parcours/](guider/guider-parcours/) |
+| `guider-arbre` | Piloter un arbre de decisions v2-like (refonte 2026-08-27) : racine -> themes -> fins centralisees, mode agent non-bloquant, --liste et --valider | [guider/guider-arbre/](guider/guider-arbre/) |
 
 ### Inserer
 
@@ -368,7 +375,19 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `verifier-systeme` | Verifier le systeme utilisateur | [verifier/verifier-systeme/](verifier/verifier-systeme/) |
 | `verifier-restauration-sure` | Detecter les fichiers non commites avant restauration git | [verifier/verifier-restauration-sure/](verifier/verifier-restauration-sure/) |
 | `verifier-conformite-fiche` | Verifie la conformite des fiches agents au template (noyau + variante par famille, sections lues dynamiquement). | [verifier/verifier-conformite-fiche/](verifier/verifier-conformite-fiche/) |
+| `verifier-flux-securite` | Routine de securite : verifie que le flux Oracle > Agent > Oracle est respecte dans le tableau d activites | [verifier/verifier-flux-securite/](verifier/verifier-flux-securite/) |
 | `verifier-coherence-agents` | Verifie la coherence des blocs session d AGENTS.md contre les fichiers reels (arbres v2, fiches, corrections, jarvis-data, Sessions connues) -- mecanisme de validation automatique au demarrage (2026-08-25). | [verifier/verifier-coherence-agents/](verifier/verifier-coherence-agents/) |
+
+### Oracle (hub v1 + serveurs)
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `oracle` | Hub de coordination v1 (inbox/outbox, historique, activation, DEFCON) | [oracle/oracle.py](oracle/oracle.py) |
+| `oracle-server` | Serveur oracle (mode --boucle : daemon resident harnais+relais+DEFCON) | [oracle/oracle-server.py](oracle/oracle-server.py) |
+| `oracle-demarrage` | Serveur de demarrage v1 : lance/arrete oracle-server + routines-server (detaches), etat des serveurs | [oracle/oracle-demarrage.py](oracle/oracle-demarrage.py) |
+| `routines-server` | Daemon resident des routines v1 (manifest + boucle + etat) | [oracle/routines-server.py](oracle/routines-server.py) |
+| `routines/citations` | Routine citations (dieu grec toutes les 5 min, temporaire, repere visuel serveurs) | [oracle/routines/citations.py](oracle/routines/citations.py) |
+| `routines/vigie-round` | Routine de detection des rounds casses (session orpheline + chaine en attente, alerte 4W a Cerberus, lecture seule) | [oracle/routines/vigie-round.py](oracle/routines/vigie-round.py) |
 
 ---
 

@@ -141,6 +141,39 @@ MOTIFS = {
     "fichier_iso": (_RE_FICHIER_ISO, "fichier version isole"),
 }
 
+# ---------------------------------------------------------------------------
+# Exemptions documentees a l audit --tous (versions volontairement differentes)
+# ---------------------------------------------------------------------------
+# Chaque entree : (chemin_relatif, version_exemptee, raison). Quand un fichier
+# compagnon porte volontairement une version < reference (equivalent PARTIEL
+# dont les fonctionnalites recentes ne concernent pas ce format), l audit le
+# compte comme EXEMPT au lieu d INCOHERENT. La raison est documentee ici ET
+# dans le changelog de l outil concerne (regle : une exemption sans raison
+# ecrite = bug de version, pas une exemption).
+EXEMPTIONS_AUDIT = [
+    # activer-agent-principal.sh : equivalent bash PARTIEL (v0.7.4). Les
+    # versions 0.7.5 -> 0.8.2 du .py portent l encart AGENTS-activite-recente.md,
+    # la BDD SQLite et les colonnes Grade/Secteur/Debut-Fin - fonctionnalites
+    # cote .py uniquement (changelog v0.7.5 : "Parite .sh : non concerne (le
+    # .sh n ecrit pas l encart)"). Bumper le .sh a 0.8.2 serait un mensonge
+    # de version : il ne porte pas ces fonctions. Exempte avec version pinnee.
+    ("cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.sh",
+     "0.7.4",
+     "Equivalent bash PARTIEL : les fonctions 0.7.5+ (encart, BDD, grades) sont cote .py uniquement (changelog v0.7.5)"),
+]
+
+
+def exemption_audit(chemin, racine):
+    """Retourne (version_exemptee, raison) si le fichier est exempte de
+    l audit --tous, sinon None. La version du fichier doit ETRE la version
+    exemptee (si quelqu un bumpait le fichier sans retirer l exemption, il
+    redevient INCOHERENT - l exemption est liee a une version pinnee)."""
+    relpath = rel(chemin, racine)
+    for ex_relpath, ex_version, raison in EXEMPTIONS_AUDIT:
+        if relpath == ex_relpath:
+            return ex_version, raison
+    return None
+
 
 def motifs_pour_chemin(chemin):
     """Retourne la liste des (nom, regex) applicables a un fichier, dans
@@ -388,13 +421,25 @@ def traiter_tous(args, racine):
         if reference is None:
             continue
 
-        # ecarts : fichiers dont une version != reference
+        # ecarts : fichiers dont une version != reference (hors exemptions)
         ecarts = []
         for chemin in fichiers:
             v = versions_par_fichier.get(chemin, {})
             mauvais = [(m, ver) for m, ver in v.items() if ver != reference]
-            if mauvais:
-                ecarts.append((chemin, mauvais))
+            if not mauvais:
+                continue
+            ex = exemption_audit(chemin, racine)
+            if ex is not None:
+                ex_version, ex_raison = ex
+                versions_fichier = set(ver for _m, ver in mauvais)
+                if versions_fichier == {ex_version}:
+                    print("  %s %s : EXEMPT (%s) -- %s" % (
+                        _couleur("[OK]", "vert"), rel(chemin, racine),
+                        ex_version, ex_raison))
+                    continue
+                # la version du fichier a change sans retirer l exemption :
+                # ce n est plus l etat documente -> redevient INCOHERENT
+            ecarts.append((chemin, mauvais))
 
         if not ecarts:
             print("  %s %s : coherent (%s)" % (_couleur("[OK]", "vert"), relpath, reference))
@@ -434,9 +479,12 @@ def traiter_tous(args, racine):
             ref = version_reference_outil(versions_par_fichier, outils[dossier])
             if ref is None:
                 continue
-            for ver in versions_par_fichier.values():
+            for chemin, ver in versions_par_fichier.items():
                 for v in ver.values():
                     if v != ref:
+                        ex = exemption_audit(chemin, racine)
+                        if ex is not None and {v} == {ex[0]}:
+                            continue
                         restants += 1
         if restants == 0:
             print(_couleur("  Verification post-correction : 0 incoherence restante [OK]", "vert"))
@@ -472,8 +520,14 @@ def traiter_tous(args, racine):
                 for chemin in fichiers:
                     v = versions_par_fichier.get(chemin, {})
                     mauvais = [(m, ver) for m, ver in v.items() if ver != reference]
-                    if mauvais:
-                        ecarts.append((rel(chemin, racine), mauvais))
+                    if not mauvais:
+                        continue
+                    ex = exemption_audit(chemin, racine)
+                    if ex is not None:
+                        versions_fichier = set(ver for _m, ver in mauvais)
+                        if versions_fichier == {ex[0]}:
+                            continue
+                    ecarts.append((rel(chemin, racine), mauvais))
                 if ecarts:
                     fh.write("- %s (reference %s)\n" % (rel(dossier, racine), reference))
                     for rp, mauvais in ecarts:

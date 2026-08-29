@@ -1,0 +1,26 @@
+{
+  "identite": {"type": "arbre", "appartient_a": "hades", "version": "0.3.0", "commun": false},
+  "arbre": {
+    "nom": "arbre-hades",
+    "agent": "hades",
+    "description": "Arbre des decisions de Hades - Gardien des archives git. 2 themes tires du parcours v0.1.1 (10 cases) : SAUVEGARDER (c2, operations sans risque), RESTAURER (c3-c4b, regle d anciennete).",
+    "regles": {
+      "D1": "Chaque branche mene a des besoins, qui menent aux procedures.",
+      "D5": "Les besoins sont des REDIRECTIONS.",
+      "D7": "RELIRE OBLIGATOIRE : corrections puis fiche AVANT toute mission.",
+      "REGLE_ANCIENNETE": "IMMUABLE : le git est une SAUVEGARDE DU PASSE. Checkout interdit hors fichiers tres tres recents (minutes). Au-dela, reparation dans le present par l agent habilite (flux INTER-ROUND).",
+      "EXCLUSIVITE_GIT": "IMMUABLE : aucun autre agent ne lance de commande git. Toute demande git passe par Hades.",
+      "PUSH_VALIDATION": "PUSH avec validation utilisateur obligatoire."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quel type d operation git est demandee ?",
+    "branches": [
+      {"reponse": "SAUVEGARDER", "description": "Operations sans risque : status, log, diff, commit, pull, push (c2)", "vers": "theme-sauvegarder.json"},
+      {"reponse": "RESTAURER", "description": "Restaurer depuis le git : regle d anciennete, checkout conditionnel (c3-c4b)", "vers": "theme-restaurer.json"}
+    ]
+  },
+  "fins": {"fichier": "fins.json", "description": "Toutes les fins possibles"}
+}

@@ -78,11 +78,11 @@ corps:
 ### Fichiers d'outils
 ```
 <outil>/             <- P1/P2 : un dossier autonome par outil
-├── <outil>.md       <- mode d'emploi (contrat, P1)
-├── entry.py         <- point d'entree orchestrateur (P1, zero logique)
-├── fonctions/       <- une tache par fonction (P2)
-│   └── ...
-└── <outil>-data.json <- donnees editables (D15, zero valeur en dur)
+|--- <outil>.md       <- mode d'emploi (contrat, P1)
+|--- entry.py         <- point d'entree orchestrateur (P1, zero logique)
+|--- fonctions/       <- une tache par fonction (P2)
+|   +--- ...
++--- <outil>-data.json <- donnees editables (D15, zero valeur en dur)
 ```
 
 ### RACINE DU WORKSPACE -- os_path OBLIGATOIRE
@@ -156,7 +156,7 @@ Chaque fichier contient dans son frontmatter :
 - `version` : version actuelle
 - `cree` : date de creation
 - `statut` : actif / inactif / brouillon
-- `grade` : copper → iron → silver → gold → platinum → diamond
+- `grade` : copper -> iron -> silver -> gold -> platinum -> diamond
 - `medaille` : liste de recompenses
 - `notation` : score 0-100
 - `mot-cles` : tags de recherche
@@ -170,13 +170,13 @@ Chaque fichier contient dans son frontmatter :
 ### Emplacement
 ```
 cerveau-projet/freelance/<agent>/
-├── <agent>.md          <- fiche agent (D17)
-├── corrections.md      <- fenetre glissante
-├── parcours/
-│   ├── arbre-<agent>.json   <- racine : choix du theme
-│   ├── theme-*.json         <- fichiers par theme
-│   └── fins.json            <- fins centralisees
-└── tools/              <- outils dedies (vide au depart)
+|--- <agent>.md          <- fiche agent (D17)
+|--- corrections.md      <- fenetre glissante
+|--- parcours/
+|   |--- arbre-<agent>.json   <- racine : choix du theme
+|   |--- theme-*.json         <- fichiers par theme
+|   +--- fins.json            <- fins centralisees
++--- tools/              <- outils dedies (vide au depart)
 ```
 
 ### INTERDICTIONS ABSOLUES
@@ -184,7 +184,7 @@ cerveau-projet/freelance/<agent>/
 | Interdiction | Raison |
 |---|---|
 | **PERIMETRE WRITE** | Je n'ecris QUE dans `cerveau-projet/freelance/`. Tout outil - v1 OU v2 - qui ecrirait hors de ce perimetre est interdit (ex: activer-agent-principal, guider-parcours ecrivent dans AGENTS.md / classeur v1 / parcours v1). La v2 est autonome : aucun agent freelance ne touche a `cerveau-projet/agents/tools/`. |
-| **PAS de parcours lineaire** | Les parcours-*.json (cases c0→c8) sont INTERDITS. Chaque agent a un ARBRE DES DECISIONS. |
+| **PAS de parcours lineaire** | Les parcours-*.json (cases c0->c8) sont INTERDITS. Chaque agent a un ARBRE DES DECISIONS. |
 | **PAS d'enregistrement dans activer-agent-principal** | Seul Stark est dans l'outil v1. Les autres agents sont actives par Stark via JARVIS. |
 | **MOTS-CLES minimum 5** | Chaque fichier v2 doit avoir au minimum 5 mots-cles dans son frontmatter. Pas d'exception. |
 | **RIEN SANS JARVIS** | Toute communication, toute mission, tout routage passe par JARVIS. Stark ne fait rien seul. |
@@ -303,10 +303,10 @@ Outil commun:  cerveau-projet/freelance/tools-commun/<outil>/
 ### Structure
 ```
 <outil>/
-├── <outil>.md       <- mode d'emploi (contrat, D7)
-├── entry.py         <- point d'entree orchestrateur (P1)
-├── fonctions/       <- fonctions simples, une tache chacune (P2)
-└── <outil>-data.json <- donnees editables (D15)
+|--- <outil>.md       <- mode d'emploi (contrat, D7)
+|--- entry.py         <- point d'entree orchestrateur (P1)
+|--- fonctions/       <- fonctions simples, une tache chacune (P2)
++--- <outil>-data.json <- donnees editables (D15)
 ```
 
 ### Template .md

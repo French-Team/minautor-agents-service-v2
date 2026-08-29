@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: ascii -*-
 """
-Oracle v0.2.0 -- CLI de coordination des agents v1
+Oracle v0.5.0 -- CLI de coordination des agents v1
 
 Equivalent de JARVIS pour la session-admin (v1).
 Route les messages, gere les activations, historise les actions.
@@ -31,7 +31,7 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.3.0"
+VERSION = "0.5.2"
 
 # Modules fonctions
 _fonctions_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -42,7 +42,9 @@ if _fonctions_dir not in sys.path:
 import defcon as _defcon
 import files as _files
 import harnais_oracle as _harnais
+import pilote as _pilote
 import relais as _relais
+import controle_processus as _controle_processus
 
 
 def _cmd_defcon(args):
@@ -55,6 +57,10 @@ def _cmd_defcon_changer(args):
 
 def _cmd_defcon_declarer(args):
     _defcon.cmd_declarer(args)
+
+
+def _cmd_defcon_escaler(args):
+    _defcon.cmd_escaler_defcon(args)
 
 
 def _cmd_mission_ajouter(args):
@@ -79,6 +85,40 @@ def _cmd_harnais(args):
 
 def _cmd_relais(args):
     _relais.cmd_relais(args)
+
+
+def _cmd_controle_processus(args):
+    """Controle des processus v1 : verifie qu un seul processus tourne
+    par serveur (oracle-server, routines-server v1). Signale tout
+    doublon (processus fantome) et tout serveur mort."""
+    resume = _controle_processus.verifier()
+    print(_controle_processus.formatter(resume))
+    if not resume.get("ok"):
+        print("\n[ORACLE] ACTION REQUISE : arreter les fantomes ou relancer "
+              "le serveur mort via oracle-demarrage.")
+        return 1
+    return 0
+
+
+def _cmd_pilote(args):
+    """Piloter la carte d un agent (maitre d hotel, vision 2026-08-27).
+
+    Oracle prend le controle de la carte de l agent actif : lit la case
+    courante, resout les questions verrouillees, sert chaque commande
+    outil, avance jusqu a une decision libre ou la fin. L agent est un
+    invite servi sur un plateau - n a plus qu a executer ce qu Oracle
+    sert."""
+    _pilote.cmd_pilote(args)
+
+
+def _cmd_reactiver_fin(args):
+    """Piloter la reintegration du maillon precedent avec pose du FIN.
+
+    Oracle (maitre d hotel) : quand l agent a termine SA carte, il pose
+    FIN:<bilan> sur lui (colonne Debut/Fin) puis reactiver le maillon
+    precedent (celui qui l avait active) ou Cerberus pour la fin de
+    chaine - le round ne se brise jamais a la main de l agent."""
+    print(_pilote._reactiver_maillon(args.agent, args.bilan))
 
 
 def _cmd_dashboard(args):
@@ -212,7 +252,7 @@ def cmd_lire(args):
                 msg = json.loads(ligne)
             except json.JSONDecodeError:
                 continue
-            if not msg.get("lu"):
+            if not isinstance(msg, dict) or not msg.get("lu"):
                 statut = "PRIORITE 1" if msg.get("priorite") == 1 else ""
                 print(f"  [{msg.get('id', '?')}] {msg.get('de', '?')} -> {msg.get('vers', '?')} {statut}")
                 print(f"    Objet: {msg.get('objet', '')}")
@@ -220,8 +260,14 @@ def cmd_lire(args):
                 print()
 
 
-def _historiser_auto(agent, raison):
-    """Historisation automatique (silencieuse)."""
+def _historiser_auto(agent, raison, agent_effectif="Oracle"):
+    """Historisation automatique (silencieuse).
+
+    agent_effectif : agent affiche dans la colonne Agent du tableau.
+    Defaut Oracle (pour les actions propres d Oracle : envoyer, acquitter).
+    Pour les activations : passer l agent cible pour que le tableau
+    affiche le bon nom.
+    """
     try:
         import importlib.util
         aap_path = os.path.join(
@@ -235,7 +281,9 @@ def _historiser_auto(agent, raison):
         spec.loader.exec_module(aap)
         aap.ajouter_historique(
             datetime.now().strftime("%Y-%m-%d %H:%M:%S.000"),
-            "session-admin", agent, raison, "R")
+            "session-admin", agent, raison, "R",
+            agent_effectif=agent_effectif,
+            executeur="Oracle")
     except Exception:
         pass
 
@@ -255,7 +303,7 @@ def cmd_acquitter(args):
                 continue
             try:
                 msg = json.loads(ligne)
-                if msg.get("id") == args.id:
+                if isinstance(msg, dict) and msg.get("id") == args.id:
                     msg["lu"] = True
                     msg["accuse"] = True
                     trouve = True
@@ -287,7 +335,7 @@ def cmd_lister(args):
             try:
                 msg = json.loads(ligne)
                 total += 1
-                if not msg.get("lu"):
+                if not isinstance(msg, dict) or not msg.get("lu"):
                     non_lus += 1
             except json.JSONDecodeError:
                 continue
@@ -337,6 +385,8 @@ def _lire_tous_messages():
                         continue
                     try:
                         msg = json.loads(ligne)
+                        if not isinstance(msg, dict):
+                            continue
                         msg["_fichier"] = str(f)
                         msg["_source"] = "inbox" if "inbox" in str(f) else "outbox"
                         tous.append(msg)
@@ -368,7 +418,7 @@ def cmd_nettoyer(args):
             avant = len(messages)
             gardes = []
             for msg in messages:
-                if not msg.get("lu"):
+                if not isinstance(msg, dict) or not msg.get("lu"):
                     gardes.append(msg)
                     continue
                 try:
@@ -409,7 +459,7 @@ def cmd_agents(args):
                 for ligne in fh:
                     try:
                         msg = json.loads(ligne.strip())
-                        if not msg.get("lu"):
+                        if not isinstance(msg, dict) or not msg.get("lu"):
                             non_lus += 1
                     except (json.JSONDecodeError, ValueError):
                         continue
@@ -434,7 +484,7 @@ def cmd_lire_message(args):
                         msg = json.loads(ligne)
                     except json.JSONDecodeError:
                         continue
-                    if msg.get("id") == args.id:
+                    if isinstance(msg, dict) and msg.get("id") == args.id:
                         print(f"[ORACLE] Message {args.id}:")
                         print(f"  De: {msg.get('de', '?')}")
                         print(f"  Vers: {msg.get('vers', '?')}")
@@ -556,7 +606,7 @@ def cmd_status_detail(args):
                     try:
                         msg = json.loads(ligne.strip())
                         total += 1
-                        if not msg.get("lu"):
+                        if not isinstance(msg, dict) or not msg.get("lu"):
                             non_lus += 1
                     except (json.JSONDecodeError, ValueError):
                         continue
@@ -579,7 +629,7 @@ def cmd_status_detail(args):
 
 
 def cmd_activer(args):
-    """Activer un agent via activer-agent-principal."""
+    """Activer un agent + transmettre la mission dans son inbox."""
     import importlib.util
     aap_path = os.path.join(
         os.path.dirname(ORACLE_DIR),
@@ -591,11 +641,85 @@ def cmd_activer(args):
     spec = importlib.util.spec_from_file_location("aap", aap_path)
     aap = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(aap)
-    rc = aap.activer_agent("session-admin", args.agent, args.raison)
-    if rc == 0:
-        print(f"[ORACLE] Agent {args.agent} active")
-    else:
+    # 0. Capturer le maillon precedent (l agent actif avant cette
+    #    activation) : Oracle en aura besoin pour piloter la reactivation
+    #    du bon maillon en fin de mission (pose du FIN).
+    try:
+        contenu = aap.lire_agents()
+        agent_precedent = aap.agent_actif_bloc(contenu, "session-admin")
+    except Exception:
+        agent_precedent = None
+    # Bug corrige 2026-08-28 : lors d une auto-reactivation, l agent actif
+    # est l agent lui-meme. Le precedent doit etre Cerberus quand
+    # l activation vient de Cerberus, pas l agent lui-meme.
+    if agent_precedent and (args.agent or "").lower() == agent_precedent.lower():
+        agent_precedent = "cerberus"
+    # 1. Activer l agent (change le bloc AGENTS.md). L historisation est
+    #    deferree a Oracle (vision 2026-08-27 : Oracle maitre d hotel pose
+    #    DEBUT) pour remplir la colonne Debut/Fin et eviter le doublon
+    #    d entrees.
+    rc = aap.activer_agent("session-admin", args.agent, args.raison,
+                           historiser=False)
+    if rc != 0:
         print(f"[ORACLE] ERREUR activation (rc={rc})")
+        return
+    print(f"[ORACLE] Agent {args.agent} active")
+    # 2. Injecter la mission dans la sortie (l agent la recoit directement)
+    print()
+    print("=" * 60)
+    print(f"MISSION POUR {args.agent.upper()} :")
+    print(f"{args.raison}")
+    print()
+    print(f"Tu es {args.agent}. Relis ta fiche puis tes corrections.")
+    print(f"Ensuite, lis le message ci-dessus et AGIS.")
+    print(f"Ne demand pas de question, ne propose pas d alternative.")
+    print(f"Execute la mission, puis suis ta carte pour la suite.")
+    print("=" * 60)
+    # 3. Historiser en marquant clairement le DEBUT (colonne Debut/Fin)
+    #    Vision 2026-08-27 : Oracle est le maitre d hotel, il pose le
+    #    marqueur DEBUT a l activation (la colonne se remplit) au lieu de
+    #    compter sur l agent pour historiser lui-meme. L agent modifie/
+    #    construit/audite SA mission : DEBUT -> lui, activation -> trace
+    #    Cerberus/Oracle sans marqueur.
+    _historiser_auto(
+        args.agent,
+        "DEBUT: " + args.raison,
+        agent_effectif=args.agent)
+
+    # 4. Initialiser l etat de carte du pilote Oracle (maitre d hotel)
+    #    Oracle se souvient de la mission confiee pour piloter la carte.
+    try:
+        parcours = _pilote_parcours_agent(args.agent)
+        mission_type = _pilote._type_mission_auto(args.raison)
+        etat = _pilote.init_etat(
+            args.agent, parcours, mission_type, args.raison,
+            precedent=agent_precedent)
+        # Marquer DEBUT deja historise (evite le double dans le pilote)
+        if etat:
+            etat["historise_debut"] = True
+            _pilote._sauver_etat(etat)
+    except Exception as exc:
+        print("[ORACLE] WARNING etat-carte : %s" % exc)
+
+
+def _pilote_parcours_agent(agent):
+    """Chemin du parcours/arbre d un agent v1.
+
+    ORACLE_DIR = .../agents/tools/oracle. Le parcours vit dans
+    .../agents/<agent>/parcours/ (pas sous tools/).
+    On remonte de oracle vers tools puis agents (3 parents).
+    Priorite : arbre-<agent>.json (v2-like) > parcours-<agent>.json (v1)."""
+    agents_dir = os.path.dirname(os.path.dirname(ORACLE_DIR))  # .../agents
+    parcours_dir = os.path.join(agents_dir, agent, "parcours")
+    # Priorite : arbre v2-like
+    arbre = os.path.join(parcours_dir, "arbre-%s.json" % agent)
+    if os.path.isfile(arbre):
+        return arbre
+    # Fallback : carte v1
+    p = os.path.join(parcours_dir, "parcours-%s.json" % agent)
+    if os.path.isfile(p):
+        return p
+    return None
 
 
 def cmd_sessions(args):
@@ -628,7 +752,7 @@ def cmd_status(args):
                 for ligne in f:
                     try:
                         msg = json.loads(ligne.strip())
-                        if not msg.get("lu"):
+                        if not isinstance(msg, dict) or not msg.get("lu"):
                             non_lus += 1
                     except (json.JSONDecodeError, ValueError):
                         continue
@@ -775,6 +899,17 @@ def main():
     p_arret = subparsers.add_parser("arret", help="Arreter Oracle")
     p_arret.add_argument("--raison", default="Arret propre Oracle")
 
+    # pilote (maitre d hotel de la carte - vision 2026-08-27)
+    p_pil = subparsers.add_parser("pilote", help="Piloter la carte d un agent (sert la case + repond aux questions)")
+    p_pil.add_argument("agent", help="Agent a piloter")
+    p_pil.add_argument("--parcours", help="Parcours perso (defaut: etat de carte)")
+    p_pil.add_argument("--limite", type=int, default=1, help="Nb max de pas (defaut 1 : servir UNE etape de travail a la fois)")
+
+    # reactiver-fin (pilotage de la reintegration du maillon precedent)
+    p_rf = subparsers.add_parser("reactiver-fin", help="Piloter la reintegration du maillon precedent avec pose du FIN")
+    p_rf.add_argument("agent", help="Agent qui termine (c est lui qu on historise FIN)")
+    p_rf.add_argument("bilan", help="Bilan de fin de mission")
+
     # defcon
     p_def = subparsers.add_parser("defcon", help="Etat DEFCON")
     p_defc = subparsers.add_parser("defcon-changer", help="Descendre d'un niveau (5->4->3->2)")
@@ -782,22 +917,33 @@ def main():
     p_defc.add_argument("commentaire", help="Commentaire")
     p_defd = subparsers.add_parser("defcon-declarer", help="Declarer un DEFCON 5 (arret total)")
     p_defd.add_argument("raison", help="Raison de l'arret")
+    p_defe = subparsers.add_parser("defcon-escaler", help="Escalader vers le haut (ex: URGENT -> DEFCON 4)")
+    p_defe.add_argument("niveau", type=int, choices=[3, 4], help="Niveau cible (escalade)")
+    p_defe.add_argument("commentaire", help="Commentaire")
 
     # missions
     p_maj = subparsers.add_parser("mission-ajouter", help="Ajouter une mission dans une file")
     p_maj.add_argument("mission", help="Description de la mission")
-    p_maj.add_argument("--file", default="asap", choices=["asap", "normale", "plus-tard"])
+    p_maj.add_argument("--file", default="asap",
+                       choices=["asap", "normale", "plus-tard", "attente"])
     p_maj.add_argument("--agent", default="", help="Agent assigne (optionnel)")
     p_mp = subparsers.add_parser("mission-prendre", help="Prendre la premiere mission en attente")
-    p_mp.add_argument("--file", default="asap", choices=["asap", "normale", "plus-tard"])
+    p_mp.add_argument("--file", default="asap",
+                      choices=["asap", "normale", "plus-tard", "attente"])
     p_mt = subparsers.add_parser("mission-terminer", help="Terminer une mission")
     p_mt.add_argument("id", help="ID de la mission")
-    p_mt.add_argument("--file", default="asap", choices=["asap", "normale", "plus-tard"])
+    p_mt.add_argument("--file", default="asap",
+                      choices=["asap", "normale", "plus-tard", "attente"])
     p_ml = subparsers.add_parser("mission-lister", help="Lister les missions")
-    p_ml.add_argument("--file", default=None, choices=["asap", "normale", "plus-tard"])
+    p_ml.add_argument("--file", default=None,
+                      choices=["asap", "normale", "plus-tard", "attente"])
 
     # harnais
     subparsers.add_parser("harnais", help="Verifier la sante de la coordination v1")
+
+    # controle-processus
+    subparsers.add_parser("controle-processus",
+                          help="Verifier qu un seul processus tourne par serveur (detection des fantomes)")
 
     # relais
     subparsers.add_parser("relais", help="Relayer les messages du hub vers leurs destinataires")
@@ -829,13 +975,17 @@ def main():
         "defcon": _cmd_defcon,
         "defcon-changer": _cmd_defcon_changer,
         "defcon-declarer": _cmd_defcon_declarer,
+        "defcon-escaler": _cmd_defcon_escaler,
         "mission-ajouter": _cmd_mission_ajouter,
         "mission-prendre": _cmd_mission_prendre,
         "mission-terminer": _cmd_mission_terminer,
         "mission-lister": _cmd_mission_lister,
         "harnais": _cmd_harnais,
+        "controle-processus": _cmd_controle_processus,
         "relais": _cmd_relais,
         "dashboard": _cmd_dashboard,
+        "pilote": _cmd_pilote,
+        "reactiver-fin": _cmd_reactiver_fin,
     }
     if args.commande == "status" and getattr(args, "detail", False):
         cmd_status_detail(args)

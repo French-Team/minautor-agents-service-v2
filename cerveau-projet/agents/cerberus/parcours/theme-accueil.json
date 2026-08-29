@@ -1,0 +1,98 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "ACCUEIL",
+    "description": "Ecouter et router une demande vers l agent habilite : historiser, ecouter, lister agents, identifier l agent habilite, activer"
+  },
+  "theme": {
+    "nom": "ACCUEIL",
+    "but": "Accueillir une demande utilisateur et router vers l agent habilite",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser cerberus \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Ecouter la demande",
+        "action": "procedure",
+        "etapes": [
+          "Comprendre la demande de l utilisateur"
+        ],
+        "regle": "Ecouter avant de decider."
+      },
+      {
+        "besoin": "Lire MES protocoles (activation + identification)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/regles-immuables/general/protocole-activation/protocole-activation.001.02.prepare.md",
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/regles-immuables/general/protocole-identification/protocole-identification.001.01.ebauche.md"
+        ],
+        "regle": "PROTOCOLES : je lis mes 2 protocoles AVANT d activer un agent. protocole-activation = cycle d activation complet, protocole-identification = mode ID multi-session."
+      },
+      {
+        "besoin": "Lister les agents disponibles",
+        "action": "procedure",
+        "etapes": [
+          "Consulter AGENTS.md pour la liste des agents"
+        ],
+        "regle": "Connaitre les agents disponibles."
+      },
+      {
+        "besoin": "Identifier l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py <fichier>"
+        ],
+        "regle": "Identifier l agent le plus adapte via la matrice regles-choisir-agent."
+      },
+      {
+        "besoin": "Activer l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"
+        ],
+        "regle": "Activer l agent avec la mission precise."
+      },
+      {
+        "besoin": "Annoncer la mission et suivre le cycle",
+        "action": "procedure",
+        "etapes": [
+          "Enregistrer les usages d outils",
+          "Historiser la fin"
+        ],
+        "regle": "Suivre le cycle complet : activer -> attendre le retour."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py"
+        ],
+        "regle": "REGLE REGISTRE."
+      },
+      {
+        "besoin": "Historiser la FIN de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser cerberus \"FIN: <mon bilan>\""
+        ],
+        "regle": "REGLE HISTORISATION : tracer la FIN."
+      },
+      {
+        "besoin": "Coordination terminee ?",
+        "action": "procedure",
+        "etapes": [
+          "fin-coordination"
+        ],
+        "regle": "La coordination est terminee."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-coordination" }
+}

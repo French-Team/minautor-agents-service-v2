@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Carte de decision de chiron (parcours v0.3.4) - genere par convertir-carte-mermaid v0.2.1 -->
+<!-- Carte de decision de chiron (parcours v0.3.4) - genere par convertir-carte-mermaid v0.3.0 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="533" height="3236" viewBox="0 0 533 3236" font-family="Arial, Helvetica, sans-serif">
   <defs>
     <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">

@@ -23,7 +23,7 @@ La v1 contient **beaucoup de materiel reutilisable**. Voici ce qui merite vraime
 
 ---
 
-## PRIORITE HAUTE — Indispensable
+## PRIORITE HAUTE -- Indispensable
 
 ### 1. Templates de fiches (v1)
 | Element | Description | Adaptation v2 |
@@ -58,7 +58,7 @@ La v1 contient **beaucoup de materiel reutilisable**. Voici ce qui merite vraime
 | `regles-immuables/marbre/` | Securite du code | A adapter pour JARVIS |
 | `protocole-fin-mission.md` | Pattern 8, inter-round | Deja integre dans protocoles.md |
 
-**Verdict** : Les regles fondamentales sont REUTILISABLES. Les protocoles sont deja migrés.
+**Verdict** : Les regles fondamentales sont REUTILISABLES. Les protocoles sont deja migres.
 
 ### 5. Lire-fichier (v1)
 | Element | Description | Adaptation v2 |
@@ -70,7 +70,7 @@ La v1 contient **beaucoup de materiel reutilisable**. Voici ce qui merite vraime
 
 ---
 
-## PRIORITE MOYENNE — Utile
+## PRIORITE MOYENNE -- Utile
 
 ### 6. Combos (v1)
 | Combo | Description | Utilite v2 |
@@ -116,7 +116,7 @@ La v1 contient **beaucoup de materiel reutilisable**. Voici ce qui merite vraime
 
 ---
 
-## PRIORITE BASSE — Optionnel
+## PRIORITE BASSE -- Optionnel
 
 ### 11. Bumper versions (v1)
 | Element | Description | Adaptation v2 |

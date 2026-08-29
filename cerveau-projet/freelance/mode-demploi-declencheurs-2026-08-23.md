@@ -8,7 +8,7 @@
 
 ## Utilisation
 
-Ecris ta demande en plaçant le prefixe EN TETE :
+Ecris ta demande en placant le prefixe EN TETE :
 
 ```
 [attente]  la demande...

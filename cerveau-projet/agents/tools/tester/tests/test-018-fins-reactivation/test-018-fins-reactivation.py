@@ -46,7 +46,10 @@ Cas couverts:
      la commande reactiver (le piege corrige reste elimine)
   6. ASCII strict : 0 non-ASCII (test + 15 parcours)
   7. LF pur : 0 CRLF (test + 15 parcours)
-     NB : compteur de parcours = 21 (ajout redacteur-v2 2026-08-21).
+     NB : compteur de parcours = 24 (cerberus-freelance 2026-08-21,
+     ferrari 2026-08-25, socrate revision-audit/generale/urgence - mis a
+     jour 2026-08-28 apres la migration des agents : la non-regression
+     portait des compteurs figes).
 
 Usage:
   python3 test-018-fins-reactivation.py
@@ -136,8 +139,11 @@ PARCOURS_GLOB = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
 #  migre le 2026-08-11 vers 'Activer Janus' - il ne reste que janus,
 #  qui est le dernier maillon legitime)
 FINS_PRECISEES = {}
-# Dernier maillon de chaine (bilan consolide, sans condition activation directe)
-DERNIER_MAILLON = {"janus": "c10"}
+# Derniers maillons de chaine (bilan consolide, sans condition activation
+# directe) : janus (v1, controleur final) + redacteur-v2 (v2, MODE
+# CONVERSATION - reactive Cerberus sur fin de cycle) + hades c5 (agent git
+# dedie, fin REACTIVER avec bilan dernier maillon - titre aligne 2026-08-28).
+DERNIER_MAILLON = {"janus": "c10", "redacteur-v2": "c8", "hades": "c5", "oracle": "c20"}
 
 NB_POINTS = 0
 NB_OK = 0
@@ -184,8 +190,8 @@ def main():
     global NB_POINTS, NB_OK, NB_KO
 
     parcours_liste = sorted(glob.glob(PARCOURS_GLOB))
-    verifier("0. 21 parcours trouves",
-             len(parcours_liste) == 21, str(len(parcours_liste)))
+    verifier("0. 25 parcours trouves",
+             len(parcours_liste) == 25, str(len(parcours_liste)))
 
     print("=== Test formel fins reactivation (15 parcours) ===")
 
@@ -209,8 +215,8 @@ def main():
     doubles = ["%s:%s" % (a, ",".join(v)) for a, v in sorted(fins_par_agent.items()) if len(v) > 1]
     verifier("1. Au plus une fin REACTIVER-CERBERUS par parcours",
              not doubles, "; ".join(doubles))
-    verifier("1b. La seule fin REACTIVER restante est janus (dernier maillon)",
-             len(fins_reactiver) == 1 and "janus" in fins_reactiver,
+    verifier("1b. Les seules fins REACTIVER restantes sont les derniers maillons (janus + redacteur-v2)",
+             set(fins_reactiver) == set(DERNIER_MAILLON),
              "agents=%s" % sorted(fins_reactiver))
 
     # 2. Regle Pattern 13 : condition activation directe OU dernier maillon

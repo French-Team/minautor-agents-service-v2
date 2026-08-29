@@ -94,6 +94,22 @@ les `.sh` et la doc `.md` doivent etre alignes dessus.
   portent leurs propres versions documentaires et ne sont PAS touches.
 - `--rapport <fichier>` : ecrit un rapport markdown de l audit.
 
+## Exemptions documentees (audit --tous)
+
+Quand un fichier compagnon porte VOLONTAIREMENT une version inferieure a la
+reference (equivalent PARTIEL : les fonctionnalites recentes du `.py` ne
+concernent pas ce format), l audit le compte en **EXEMPT** au lieu de
+INCOHERENT. Liste dans `EXEMPTIONS_AUDIT` (chemin, version pinnee, raison).
+
+- **Regle** : une exemption sans raison ecrite dans le code ET dans le
+  changelog de l outil concerne = bug de version, pas une exemption.
+- **Version pinnee** : si le fichier est bumpe sans retirer l exemption, il
+  redevient INCOHERENT (l exemption ne vaut que pour la version documentee).
+- Exemple : `activer-agent-principal.sh` (v0.7.4) est l equivalent bash
+  PARTIEL du .py (v0.8.2) : les fonctions 0.7.5+ (encart
+  AGENTS-activite-recente.md, BDD SQLite, colonnes Grade/Secteur/Debut-Fin)
+  sont cote .py uniquement (changelog v0.7.5 : "Parite .sh : non concerne").
+
 ## Limites
 
 - Ne gere pas les fichiers de version non standard (uniquement les 8 formats

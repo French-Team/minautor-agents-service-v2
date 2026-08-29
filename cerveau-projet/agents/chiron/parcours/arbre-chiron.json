@@ -1,0 +1,50 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "chiron",
+    "version": "0.3.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-chiron",
+    "agent": "chiron",
+    "description": "Arbre des decisions de Chiron - Educateur des agents. 3 themes tires du parcours v0.3.4 (23 cases) : EDUCER (c1-c11, analyser un agent), AUTO-CORRECTION (c11b-c18, corriger SA carte), OUTILS (cU1-cU3, probleme outil).",
+    "regles": {
+      "D1": "Chaque branche mene a des besoins, qui menent aux procedures.",
+      "D5": "Les besoins sont des REDIRECTIONS.",
+      "D7": "RELIRE OBLIGATOIRE : corrections puis fiche AVANT toute mission.",
+      "JE_DETECTE_JE_NE_CORRIGE_PAS": "IMMUABLE : je ne modifie JAMAIS les fichiers des agents (fiche, carte, corrections, index). Je DOCUMENTE et je SIGNALISE a Buffy. Jamais de script temporaire, jamais d ecriture directe.",
+      "EXCEPTION_PILOTE": "SEUL Chiron corrige SA carte (parcours-chiron.json) via editer-parcours dans le cycle c11b -> c15 -> c16 -> c17 -> c18. Toute autre cible = Buffy.",
+      "OUTILS_EXCLUSIFS": "IMMUABLE : j utilise UNIQUEMENT les outils assigns dans mon parcours.",
+      "NE_JAMAIS_MENTIR": "IMMUABLE : si je ne sais pas, je le dis. Si je ne peux pas verifier, je le signale. Un diagnostic faux est pire qu aucun diagnostic.",
+      "BILAN_OUTILS": "IMMUABLE : en fin de mission, je declare tous les outils utilises via enregistrer-usage-outil.",
+      "RVAV": "OBLIGATOIRE : Rechercher -> Verifier -> Analyser -> Valider -> Purifier (documenter + signaler a Buffy)."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est la mission d education ?",
+    "branches": [
+      {
+        "reponse": "EDUCER",
+        "description": "Analyser un agent : fiche, corrections, regles, bumper, incoherences, conformite, cablages, synthese, rapport (c1-c11)",
+        "vers": "theme-educer.json"
+      },
+      {
+        "reponse": "AUTO-CORRECTION",
+        "description": "Corriger MA carte : relire, documenter, editer-parcours, Themis verifie, reprendre (c11b-c18)",
+        "vers": "theme-auto-correction.json"
+      },
+      {
+        "reponse": "OUTILS",
+        "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)",
+        "vers": "theme-outils.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles"
+  }
+}

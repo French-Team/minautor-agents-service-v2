@@ -22,7 +22,7 @@
 
 defcon-server est un SERVEUR MCP INDEPENDANT de jarvis-server.
 Il gere l'echelle d'urgence (DEFCON 2-5).
-Si il est casse, la gestion d'urgence est paralysée.
+Si il est casse, la gestion d'urgence est paralysee.
 
 ---
 
@@ -30,7 +30,7 @@ Si il est casse, la gestion d'urgence est paralysée.
 
 ```
 defcon/
-└── defcon-server.py    <- serveur MCP FastMCP
++--- defcon-server.py    <- serveur MCP FastMCP
 ```
 
 Le serveur ecrit dans : cerveau-projet/freelance/jarvis/files/defcon.jsonl

@@ -1,0 +1,35 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "athena",
+    "description": "Fins possibles pour Athena"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-athena.json"
+    },
+    "fin-creer": {
+      "titre": "FIN - Pense-bete cree (activer Janus)",
+      "description": "Pense-bete cree et valide. Janus controle, puis Themis audite.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-completer": {
+      "titre": "FIN - Pense-bete complete (activer Janus)",
+      "description": "Pense-bete complete et valide. Janus controle.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission hors parcours. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    }
+  }
+}

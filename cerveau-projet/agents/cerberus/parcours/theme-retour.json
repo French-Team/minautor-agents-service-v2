@@ -1,0 +1,101 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "RETOUR",
+    "description": "Retour d un agent reactivant Cerberus : relire fiche, lire raison, traiter erreurs, Verifier liste missions, activer Janus/Themis, fichiers changes -> Clio"
+  },
+  "theme": {
+    "nom": "RETOUR",
+    "but": "Traiter le retour d un agent (bilan, erreurs, controle)",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser cerberus \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Relire MA fiche et MES corrections",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/cerberus/corrections.md",
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/cerberus/cerberus.md"
+        ],
+        "regle": "Relire avant de traiter le retour."
+      },
+      {
+        "besoin": "Lire la raison de la reactivation",
+        "action": "procedure",
+        "etapes": [
+          "Comprendre le bilan transmis par l agent"
+        ],
+        "regle": "Analyser le bilan."
+      },
+      {
+        "besoin": "Erreurs hors mission signalees ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> Activer Buffy pour reparer immediatement",
+          "NON -> continuer"
+        ],
+        "regle": "Les erreurs hors mission sont traitees immediatement."
+      },
+      {
+        "besoin": "Mission dans la liste definie ?",
+        "action": "procedure",
+        "etapes": [
+          "Verifier que la mission terminee figure dans la liste des missions definies"
+        ],
+        "regle": "Verification de conformite."
+      },
+      {
+        "besoin": "Activer Janus (second controle)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus \"CONTROLE ...\""
+        ],
+        "regle": "Janus verifie la conformite."
+      },
+      {
+        "besoin": "Traiter le verdict de Janus",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> Verifier si fichiers changes",
+          "NON -> Activer l agent habilite pour resoudre"
+        ],
+        "regle": "Le verdict de Janus guide la suite."
+      },
+      {
+        "besoin": "Fichiers changes ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> Activer Clio (README)",
+          "NON -> Reprendre la coordination"
+        ],
+        "regle": "Si des fichiers ont change, Clio met a jour le README."
+      },
+      {
+        "besoin": "Reprendre la coordination",
+        "action": "procedure",
+        "etapes": [
+          "Enregistrer les usages d outils",
+          "Historiser la fin"
+        ],
+        "regle": "Terminer proprement."
+      },
+      {
+        "besoin": "Ameliorations possibles de mon fonctionnement ?",
+        "action": "procedure",
+        "etapes": [
+          "NON -> fin-retour"
+        ],
+        "regle": "PATTERN 17 : GENERATEUR D'ABORD."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-retour" }
+}

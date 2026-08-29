@@ -1,0 +1,1382 @@
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 14532)
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 8664)
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+                                                                                                                                                                                [ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+ [ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  [ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 14516)
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 13840)
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Athena -- La sagesse ne se transmet pas, elle se gagne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Changement : 67 -> 68 P1 (68 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'live' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2039548 tokens (2036508->2039548, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 878310 tokens (876867->878310, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 9052)
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2045582 tokens (2039548->2045582, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 880619 tokens (878310->880619, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 5996)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Changement : 68 -> 2 P1 (2 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2049613 tokens (2045582->2049613, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 882177 tokens (880619->882177, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2055031 tokens (2049613->2055031, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 884487 tokens (882177->884487, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 2128)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 6456)
+[ROUTINES-SERVER] flux : [FLUX] Changement : 2 -> 1 P1 (1 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2059112 tokens (2055031->2059112, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 886045 tokens (884487->886045, 12 sources)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Apollon -- La lumiere eclaire celui qui la cherche.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 11848)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2064629 tokens (2060810->2064629, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 888355 tokens (886530->888355, 12 sources)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.2s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Changement : 1 -> 0 P1 (Aucun P1 non-acquitte (probleme regle)) historique=True
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2068446 tokens (2065503->2068446, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 889913 tokens (888470->889913, 12 sources)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 17768)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2073835 tokens (2068446->2073835, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 892223 tokens (889913->892223, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2077634 tokens (2074709->2077634, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 893781 tokens (892338->893781, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2086240 tokens (2077634->2086240, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 897572 tokens (893781->897572, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2091575 tokens (2086240->2091575, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 899633 tokens (897572->899633, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2094182 tokens (2091575->2094182, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 900523 tokens (899633->900523, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2090082 tokens (2094182->2090082, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 902081 tokens (900523->902081, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-agent-perimetre : [CHRONO] verifier-agent-perimetre (fin, 1.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2095480 tokens (2090082->2095480, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 904391 tokens (902081->904391, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-agent-perimetre : [CHRONO] verifier-agent-perimetre (fin, 1.2s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2099392 tokens (2095480->2099392, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 905949 tokens (904391->905949, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Demeter -- Ce que l on seme, on le recolte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-agent-perimetre : [CHRONO] verifier-agent-perimetre (fin, 1.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2104748 tokens (2099392->2104748, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 908260 tokens (905949->908260, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-agent-perimetre : [CHRONO] verifier-agent-perimetre (fin, 1.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2108561 tokens (2104748->2108561, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 909818 tokens (908260->909818, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-agent-perimetre : [CHRONO] verifier-agent-perimetre (fin, 1.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2113927 tokens (2108561->2113927, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 912128 tokens (909818->912128, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-agent-perimetre : [CHRONO] verifier-agent-perimetre (fin, 1.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2117769 tokens (2113927->2117769, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 913686 tokens (912128->913686, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Hermes -- Le messager ne choisit pas le message, il le porte.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-agent-perimetre : [CHRONO] verifier-agent-perimetre (fin, 1.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2123128 tokens (2117769->2123128, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 915996 tokens (913686->915996, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Hephaistos -- Chaque chef-d oeuvre naquit d un metal que l on forge.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-agent-perimetre : [CHRONO] verifier-agent-perimetre (fin, 1.4s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2126971 tokens (2123128->2126971, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 917554 tokens (915996->917554, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Icare -- Ne vole jamais trop pres du soleil.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.2s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2132355 tokens (2126971->2132355, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 919864 tokens (917554->919864, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2136168 tokens (2132355->2136168, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 921422 tokens (919864->921422, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 10772)
+[ROUTINES-SERVER] daemon lance (tic toutes les 30s, pid 13296)
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.0s)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2137084 tokens (2136168->2137084, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 923351 tokens (921422->923351, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2139824 tokens (2137084->2139824, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 924174 tokens (923351->924174, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] citations : Promethee -- Le feu se partage, jamais il ne s eteint.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.0s)
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2142976 tokens (2139824->2142976, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 925204 tokens (924174->925204, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] citations : Hades -- Meme l ombre a sa place dans l equilibre du monde.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2144403 tokens (2142976->2144403, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 926027 tokens (925204->926027, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Poseidon -- La mer obeit a ceux qui la respectent.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2147315 tokens (2144403->2147315, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 927058 tokens (926027->927058, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Zeus -- Le tonnerre frappe la ou ma volonte l ordonne.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.0s)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2149765 tokens (2147315->2149765, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 927881 tokens (927058->927881, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Dionysos -- La joie est le nectar des dieux.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2152674 tokens (2149765->2152674, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 928911 tokens (927881->928911, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Ares -- La force sans strategie n est que ruine.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2155138 tokens (2152674->2155138, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 929734 tokens (928911->929734, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Artemis -- La precision vaut mieux que la puissance.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 2 URGENT (dernieres 0 gerees, rien de nouveau)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2158039 tokens (2155138->2158039, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 930764 tokens (929734->930764, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Heracles -- Les douze travaux commencent par le premier pas.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 2 URGENT (dernieres 0 gerees, rien de nouveau)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2160830 tokens (2158039->2160830, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 931587 tokens (930764->931587, 12 sources)
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] citations : Nyx -- La nuit garde les secrets que le jour revele.
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 3 URGENT (dernieres 0 gerees, rien de nouveau)

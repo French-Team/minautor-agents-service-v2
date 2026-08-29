@@ -39,7 +39,7 @@ Les decisions transmises par l utilisateur (D1 a D18) :
 | D13 | **Routage de la porte du marbre (2026-08-22)** | STANDARD -> Socrate repond ; EXCEPTIONNEL -> utilisateur. |
 | D10 | **BDD des lecons revue : classees, categorisees, consultables comme une bible** | Les lecons sont CLASSEES ET CATEGORISEES pour facilement etre consultees (categories/themes, index, recherche). Une TABLE DES 20 DERNIERES LECONS donne l apercu recent des apprentissages. Des CASES DE L ARBRE permettent de CONSULTER LES LECONS COMME UNE BIBLE au moment ou l agent en a VRAIMENT besoin (theme/branche LECONS, redirections vers la consultation par categorie). |
 | D14 | **Theme de nommage des agents freelance : heros MARVEL (2026-08-22)** | Les agents de la session-freelance prendront les noms des SUPER-HEROS de l'univers MARVEL. Chaque nouvel agent freelance sera nomme d'apres un heros Marvel (ex: Stark, Rogers, Parker, Romanoff, Banner, etc.). Le theme MARVEL donne une identite forte et reconnaissable aux agents de la v2, les distinguant clairement des agents du cerveau v1 (noms mythologiques/structurels : Cerberus, Buffy, Vulcain, etc.). |
-| D15 | **Separation code/donnees : fichiers distincts editables sans toucher au code (2026-08-22)** | Chaque outil stocke ses donnees (listes de questions, seuils, messages, regles) dans des FICHIERS DISTINCTS editables. Le code source ne contient AUCUNE valeur en dur : il sait OU les trouver. Exemple concret : un outil qui pose une liste de questions stocke cette liste dans `questions.json` — pour ajouter une question, on edite le JSON, pas le `.py`. Les tests de non-regression lisent leurs cas depuis des fichiers de donnees. TOUT comportement modifiable sans reecrire le code source. |
+| D15 | **Separation code/donnees : fichiers distincts editables sans toucher au code (2026-08-22)** | Chaque outil stocke ses donnees (listes de questions, seuils, messages, regles) dans des FICHIERS DISTINCTS editables. Le code source ne contient AUCUNE valeur en dur : il sait OU les trouver. Exemple concret : un outil qui pose une liste de questions stocke cette liste dans `questions.json` -- pour ajouter une question, on edite le JSON, pas le `.py`. Les tests de non-regression lisent leurs cas depuis des fichiers de donnees. TOUT comportement modifiable sans reecrire le code source. |
 | D16 | **JARVIS : l outil de communication de l equipe freelance (2026-08-22)** | Un outil de communication nomme JARVIS sera mis en place des le debut de la v2. Il permettra aux agents de se laisser des messages qui seront signales dans leur case de debut (demarrage). L agent qui demarre verra les messages en attente avant de commencer sa mission. JARVIS est l outil prioritaire de coordination inter-agents : il remplace les messages informels et les pertes d information entre les rounds. |
 | D17 | **Cartes d identite enrichies : grade, medaille, notation, mots-cles (2026-08-22)** | Chaque agent et chaque fichier aura une carte d identite LARGEMENT AMELIOREE contenant des champs supplementaires : `grade` (niveau hierarchique), `medaille` (recompenses/merites), `notation` (score d evaluation), `mot-cles` (tags de recherche). L en-tete (head) de chaque fichier contiendra cette carte d identite detaillee + la commande qui affiche toutes les fonctions contenues dans le fichier. La carte d identite devient le standard de documentation de TOUT fichier v2. |
 | D18 | **Outil markers (debut-fin) : isoler des fragments dans les fichiers (2026-08-22)** | Un outil prioritaire de la v2 installera des MARKERS (balises debut-fin) dans les fichiers pour isoler des fragments. Ces fragments marques seront facilement retrouvables avec les outils de recherche. Usage : `<!-- MARKER:nom -->...<!-- /MARKER:nom -->` delimite une zone nommee ; `rechercher-marker --nom <nom>` retrouve instantanement le fragment. Permet de referencer, extraire, modifier des portions de fichiers sans connaitre les numeros de ligne ni le contenu exact. |
@@ -685,7 +685,7 @@ seuls. L agent est concentre sur SA mission, pas sur la plomberie.
 > de la v2.
 
 **Pourquoi** : en v1, modifier le comportement d un outil signifie editer
-son code source — operation risquee, lente, reservee aux agents habilites.
+son code source -- operation risquee, lente, reservee aux agents habilites.
 En v2, le comportement est dans des fichiers de donnees, editables par
 n importe quel agent autorise.
 
@@ -713,7 +713,7 @@ trouver. Separation stricte :
 | Regle | Detail |
 |---|---|
 | **Zero valeur en dur** | Aucune liste, seuil, message, question, regle dans le code source. Tout est dans un fichier de donnees. |
-| **Un fichier = un type de donnees** | `questions.json`, `cas-tests.json`, `schema.json` — nommage explicite (P1). |
+| **Un fichier = un type de donnees** | `questions.json`, `cas-tests.json`, `schema.json` -- nommage explicite (P1). |
 | **Format standard** | JSON (lisible, parseable, validable). Le format est documente dans le .md de l outil. |
 | **Edition sans habilitation** | Tout agent autorise peut editer un fichier de donnees (pas besoin d etre Vulcain). |
 | **Validation avant usage** | L outil valide le fichier de donnees au chargement (structure, types, references). Invalide = refuse avec message clair. |
@@ -733,7 +733,7 @@ fichiers de donnees et generent les cas dynamiquement (D2 : outils dynamiques).
 
 JARVIS resout un probleme recurrent de la v1 : les agents ne peuvent pas
 se laisser de messages. Quand un agent detecte un probleme qu'il ne peut
-pas resoudre, il doit activer l'agent habilite en inter-round — mais si
+pas resoudre, il doit activer l'agent habilite en inter-round -- mais si
 l'agent habilite n'est pas disponible ou si le message doit attendre, il
 n'y a pas de file d'attente.
 
@@ -815,7 +815,7 @@ identite:
     - jarvis
     - activer-agent
 ---
-# Stark — Agent de communication
+# Stark -- Agent de communication
 
 > COMMANDE FONCTIONS : `stark --liste-fonctions`
 ```
@@ -881,7 +881,7 @@ def init_config():
 | Usage | Exemple |
 |---|---|
 | Referencer une section de doc | `<!-- MARKER:decisions-D14 -->...<!-- /MARKER:decisions-D14 -->` retrouve instantanement la section D14 |
-| Isoler une fonction dans le code | `# MARKER:init-config`...`# /MARKER:init-config` — `rechercher-marker --nom init-config` |
+| Isoler une fonction dans le code | `# MARKER:init-config`...`# /MARKER:init-config` -- `rechercher-marker --nom init-config` |
 | Marquer une zone a modifier | Poser un marker temporaire, travailler dessus, le retirer |
 | Extraire un fragment pour audit | `markers extraire --nom decisions-D14` affiche le contenu isole |
 

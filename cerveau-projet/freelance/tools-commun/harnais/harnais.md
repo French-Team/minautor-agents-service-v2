@@ -102,7 +102,7 @@ reste, transparent pour l agent :
 
 ## Architecture DYNAMIQUE (D15 : separation code/donnees)
 
-> « On importe le harnais, le harnais fait le reste. » Le harnais est
+> " On importe le harnais, le harnais fait le reste. " Le harnais est
 > pilote par la CONFIGURATION, jamais par des editions de code.
 
 Le harnais lit `harnais-data.json` a CHAQUE appel et applique 4 categories :
@@ -127,7 +127,7 @@ le code, jamais les scripts. Le harnais fait le reste.
 | Module | Role |
 |---|---|
 | `fonctions/lecons.py` | lit la BDD (bdd-lecons) et formate les rappels : priorite aux lecons de l agent, puis categorie, puis globales |
-| Tolérant | si la BDD est absente, message discret au lieu de planter (le harnais ne bloque JAMAIS sur une lecon) |
+| Tolerant | si la BDD est absente, message discret au lieu de planter (le harnais ne bloque JAMAIS sur une lecon) |
 
 ## Emplacement
 

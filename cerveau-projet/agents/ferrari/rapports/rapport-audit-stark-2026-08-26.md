@@ -19,7 +19,7 @@ L'utilisateur observe : quand une mission arrive, Stark l'execute lui-meme au li
 - **Ligne 16, bloc [urgent]** : la commande documentee etait
   `jarvis.py envoyer --de stark --vers jarvis --priorite 1 --objet '[URGENT] ...' --corps '...' --activer`
 - **Probleme** : `--activer` sur un `envoyer` active le DESTINATAIRE du `envoyer`. Donc `--vers jarvis --activer` active JARVIS, PAS l'agent final. La mission n'arrive jamais a l'agent habilite.
-- **Ce fichier a ete restaure le 2026-08-26 07:19** (branche DECLANCHEUR), donc APRÈS la lecon du 25/08 qui documentait ce piege. La restauration a rejoue une version anterieure a la lecon.
+- **Ce fichier a ete restaure le 2026-08-26 07:19** (branche DECLANCHEUR), donc APRES la lecon du 25/08 qui documentait ce piege. La restauration a rejoue une version anterieure a la lecon.
 
 ### 2. theme-jarvis.json (branche MISSION) -- etape d'incarnation JARVIS absente
 
@@ -28,7 +28,7 @@ L'utilisateur observe : quand une mission arrive, Stark l'execute lui-meme au li
 
 ### 3. stark.md v0.4.0 -- fiche en retard sur l'arbre v0.3.0
 
-- La fiche disait « J'ai DEUX visages » (MISSION/DISCUSSION) alors que l'arbre v0.3.0 a TROIS branches (DECLANCHEUR -> theme-files.json).
+- La fiche disait " J'ai DEUX visages " (MISSION/DISCUSSION) alors que l'arbre v0.3.0 a TROIS branches (DECLANCHEUR -> theme-files.json).
 - `theme-files.json` etait ABSENT de la structure documentee dans la fiche.
 - Stark demarre en lisant SA fiche : il ne connait pas la branche FILES -> declencheurs mal traites.
 
@@ -37,9 +37,9 @@ L'utilisateur observe : quand une mission arrive, Stark l'execute lui-meme au li
 | Fichier | Correction |
 |---|---|
 | `stark/parcours/theme-files.json` | `--activer` retire du `envoyer --vers jarvis` ; etape INCARNER JARVIS ajoutee (lire, acquitter, puis `jarvis.py activer --agent <X> --session <Y> --mission '...'`) |
-| `stark/parcours/theme-jarvis.json` | Commande SANS `--activer` + etape d'incarnation JARVIS explicite ; INTERDIT recentre sur « EN TANT QUE STARK » |
+| `stark/parcours/theme-jarvis.json` | Commande SANS `--activer` + etape d'incarnation JARVIS explicite ; INTERDIT recentre sur " EN TANT QUE STARK " |
 | `stark/stark.md` v0.5.0 | TROIS branches documentees (DECLANCHEUR/MISSION/DISCUSSION), theme-files.json ajoute a la structure, piege `--activer` note dans la regle absolue ARBRE |
-| `stark/corrections.md` | Lecon 2026-08-26 « PIEGE RESTAURE » ajoutee |
+| `stark/corrections.md` | Lecon 2026-08-26 " PIEGE RESTAURE " ajoutee |
 
 ## VALIDATIONS
 
@@ -54,4 +54,4 @@ L'utilisateur observe : quand une mission arrive, Stark l'execute lui-meme au li
 
 1. Quand on RESTAURE un fichier de parcours, le verifier contre les lecons recentes (le piege `--activer` date du 25/08).
 2. Quand l'arbre gagne une branche, la fiche doit etre mise a jour dans la MEME intervention (jamais l'arbre sans la fiche).
-3. La regle « je ne fais jamais le travail » est deja ecrite dans la fiche de Stark : le vrai probleme etait que les COMMANDES documentees ne permettaient pas de transmettre correctement.
+3. La regle " je ne fais jamais le travail " est deja ecrite dans la fiche de Stark : le vrai probleme etait que les COMMANDES documentees ne permettaient pas de transmettre correctement.

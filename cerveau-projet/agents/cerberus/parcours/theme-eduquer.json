@@ -1,0 +1,41 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "EDUQUER",
+    "description": "Education d un agent via Chiron : historiser, activer Chiron, verifier etat"
+  },
+  "theme": {
+    "nom": "EDUQUER",
+    "but": "Lancer l education d un agent via Chiron",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser cerberus \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Activer Chiron pour eduquer un agent",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> chiron \"EDUCATION ...\""
+        ],
+        "regle": "Chiron est l educateur des agents."
+      },
+      {
+        "besoin": "Chiron actif ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-eduquer",
+          "NON -> relancer Chiron"
+        ],
+        "regle": "Verifier que Chiron a bien ete active."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-eduquer" }
+}

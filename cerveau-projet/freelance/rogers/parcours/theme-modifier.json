@@ -3,23 +3,23 @@
     "type": "theme",
     "appartient_a": "rogers",
     "nom": "MODIFIER",
-    "description": "Définir, modifier, ajouter des règles, conventions ou protocoles"
+    "description": "Definir, modifier, ajouter des regles, conventions ou protocoles"
   },
   "theme": {
     "nom": "MODIFIER",
-    "but": "Créer ou faire évoluer les règles",
+    "but": "Creer ou faire evoluer les regles",
     "redirects": [
       {
-        "besoin": "Ajouter une règle immuable",
+        "besoin": "Ajouter une regle immuable",
         "action": "redirection",
         "vers": {
           "type": "procedure",
           "etapes": [
-            "Lire regles-immuables.md (thème LIRE)",
-            "Vérifier l'absence de doublon (P5 - SSOT)",
-            "Rédiger la nouvelle règle dans le format existant",
-            "Valider la cohérence avec les règles existantes (VALIDER)",
-            "Enregistrer la leçon (consulter-lecons)"
+            "Lire regles-immuables.md (theme LIRE)",
+            "Verifier l'absence de doublon (P5 - SSOT)",
+            "Rediger la nouvelle regle dans le format existant",
+            "Valider la coherence avec les regles existantes (VALIDER)",
+            "Enregistrer la lecon (consulter-lecons)"
           ],
           "fichier": "cerveau-projet/freelance/regles/regles-immuables.md"
         }
@@ -30,11 +30,11 @@
         "vers": {
           "type": "procedure",
           "etapes": [
-            "Lire conventions.md (thème LIRE)",
-            "Identifier la convention à modifier",
-            "Vérifier l'impact sur les autres conventions",
+            "Lire conventions.md (theme LIRE)",
+            "Identifier la convention a modifier",
+            "Verifier l'impact sur les autres conventions",
             "Appliquer la modification",
-            "Valider la cohérence (VALIDER)"
+            "Valider la coherence (VALIDER)"
           ],
           "fichier": "cerveau-projet/freelance/conventions/conventions.md"
         }
@@ -45,25 +45,25 @@
         "vers": {
           "type": "procedure",
           "etapes": [
-            "Lire protocoles.md (thème LIRE)",
-            "Vérifier l'absence de doublon (P5)",
-            "Rédiger le protocole dans le format existant",
-            "Valider la cohérence avec le cycle fondamental",
-            "Enregistrer la leçon"
+            "Lire protocoles.md (theme LIRE)",
+            "Verifier l'absence de doublon (P5)",
+            "Rediger le protocole dans le format existant",
+            "Valider la coherence avec le cycle fondamental",
+            "Enregistrer la lecon"
           ],
           "fichier": "cerveau-projet/freelance/protocoles/protocoles.md"
         }
       },
       {
-        "besoin": "Corriger une erreur dans une règle",
+        "besoin": "Corriger une erreur dans une regle",
         "action": "redirection",
         "vers": {
           "type": "procedure",
           "etapes": [
-            "Identifier la règle erronée",
-            "Lire le contexte de la règle",
+            "Identifier la regle erronee",
+            "Lire le contexte de la regle",
             "Corriger l'erreur",
-            "Vérifier que la correction ne casse pas autre chose",
+            "Verifier que la correction ne casse pas autre chose",
             "Documenter la correction dans corrections.md"
           ]
         }

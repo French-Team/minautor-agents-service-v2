@@ -1,4 +1,4 @@
-%% Carte de decision de vulcain (parcours v0.6.3)
+%% Carte de decision de vulcain (parcours v0.6.5)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -17,6 +17,7 @@ flowchart TD
     c13["Lancer le combo corriger-ascii"]
     c13b["RVAV avant activation"]
     c14{"Deleguer les tests a Morpheus"}
+    c14ir["INTER-ROUND : activer l agent habilite pour reparer (tests non delegues)"]
     c15(["FIN - Modifier un outil"])
     c15b{"Ameliorations possibles de mon fonctionnement ?"}
     c15c["Lancer le generateur d amelioration"]
@@ -25,19 +26,26 @@ flowchart TD
     c15f["Activer Themis pour auditer ma mission"]
     c15g{"Retour de Themis recu ?"}
     c15h["Ajouter les lecons dans corrections.md"]
+    c15hb["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c16{"Mission hors parcours"}
     c16b["Documentation / Mise a jour de ma fiche"]
     c16c["RVAV avant reactiver Cerberus"]
     c16d(["FIN - Documentation"])
+    c16hb["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c17["Activer l'agent habilite"]
     c18(["Signaler le besoin"])
     c18b{"Besoin d outil ?"}
     c18c["Creer l outil temporaire"]
     c18d(["FIN - Outil temporaire"])
     c19(["FIN - Delegation"])
+    c19hb["HISTORISER LA FIN : tracer la fin de mon intervention"]
+    c1h["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hb["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1ir["RECEPTION INTER-ROUND : accuser reception du rapport KO et activer l appelant"]
     c2["Verifier le systeme"]
     c20["Activer Themis pour auditer"]
     c21(["FIN - Retour de Themis avec son rapport"])
+    c21hb["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c22["Enregistrer mes usages d outils"]
     c23["Enregistrer mes usages d outils"]
     c3{"Lire l'outil a construire"}
@@ -59,6 +67,7 @@ flowchart TD
     c9f["Activer Themis pour auditer ma mission"]
     c9g{"Retour de Themis recu ?"}
     c9h["Ajouter les lecons dans corrections.md"]
+    c9hb["HISTORISER LA FIN : tracer la fin de mon intervention"]
     cU1{"Probleme avec un outil en cours de mission ?"}
     cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
     cU3(["FIN - Reprendre ma mission"])
@@ -68,9 +77,10 @@ flowchart TD
     c0c --> c0d
     c0d --> cU1
     c0e --> c0c
-    c1 -- "construire" --> c2
-    c1 -- "modifier" --> c10
+    c1 -- "construire" --> c1h
+    c1 -- "modifier" --> c1hb
     c1 -- "autre" --> c16
+    c1 -- "inter-round" --> c1ir
     c10 --> c11
     c11 --> c12
     c12 --> c12a
@@ -82,28 +92,36 @@ flowchart TD
     c13 --> c13b
     c13b --> c14
     c14 -- "OUI" --> c23
-    c14 -- "NON" --> c14
+    c14 -- "NON" --> c14ir
+    c14ir --> c15e
     c15b -- "OUI" --> c15c
     c15b -- "NON" --> c15f
     c15c --> c15d
     c15d --> c15e
     c15e --> FIN-APPELANT
     c15f --> c15g
-    c15g -- "OUI" --> c15
+    c15g -- "OUI" --> c15hb
     c15g -- "NON" --> c15g
     c15h --> c15b
+    c15hb --> c15
     c16 -- "OUI" --> c17
     c16 -- "NON" --> c18b
     c16 -- "documentation" --> c16b
     c16 -- "audit" --> c20
     c16b --> c16c
-    c16c --> c16d
-    c17 --> c19
+    c16c --> c16hb
+    c16hb --> c16d
+    c17 --> c19hb
     c18b -- "TEMPORAIRE" --> c18c
     c18b -- "DURABLE" --> c18
     c18c --> c18d
+    c19hb --> c19
+    c1h --> c2
+    c1hb --> c10
+    c1ir --> c15e
     c2 --> c3
-    c20 --> c21
+    c20 --> c21hb
+    c21hb --> c21
     c22 --> c9h
     c23 --> c15h
     c3 -- "OUI" --> c4
@@ -127,9 +145,10 @@ flowchart TD
     c9d --> c9e
     c9e --> FIN-APPELANT
     c9f --> c9g
-    c9g -- "OUI" --> c9
+    c9g -- "OUI" --> c9hb
     c9g -- "NON" --> c9g
     c9h --> c9b
+    c9hb --> c9
     cU1 -- "OUI" --> cU2
     cU1 -- "NON" --> c1
     cU2 --> cU3

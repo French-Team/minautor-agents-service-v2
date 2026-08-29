@@ -4662,3 +4662,88 @@ Lecons :
 3. TOUT AGENT CONFIDENTIEL DOIT AVOIR SA RAISON DANS LE TEST : la liste d exemptions doit porter la decision utilisateur (qui connait l agent, pourquoi il est absent) pour que le garde-fou reste lisible.
 
 **Preuves** : rapport test092-ferrari-2026-08-25.md, test-092 9 OK / 0 KO, activation sur copie OK, ASCII 0/0, LF pur.
+
+
+## [LECON] 2026-08-28 -- TEST-104 VIGIE-ROUND + PILOTE ORACLE : GARDE-FOU 10/10 (Morpheus)
+
+**Contexte** : mission vulcain, correction du pilote Oracle et creation de la routine vigie-round, decision utilisateur les deux en cascade. Garde-fou de non-regression demande.
+
+**Actions** : creation de test-104-vigie-round-garde-fou avec 10 points, triplet, protections importees, serie e, profils-tests mis a jour. Verifie le triplet de la vigie, la detection 4W session-orpheline, la detection chaine-en-attente, l anti-spam 30 min, le manifest, l execution reelle --dry-run, le pilote limite par defaut 1 pas, la mission et l ordre en tete du plateau, l absence d activation automatique des maillons, le parser oracle --limite 1.
+
+**Lecons** :
+1. LA LIMITE VIVAIT DANS LE PARSER, PAS DANS LA FONCTION : la limite 60 par defaut etait portee par argparse, default 60 de oracle.py, qui ecrase le defaut python de cmd_pilote. Un garde-fou doit verifier les DEUX endroits, argparse et fonction.
+2. UN GARDE-FOU DE ROUTINE SE TESTE AUSSI PAR EXECUTION REELLE --dry-run, rc egal 0 et sortie conforme : le code structurel seul ne suffit pas.
+3. L ANTI-SPAM D UNE VIGIE EST ESSENTIEL : sans lui, l alerte spammerait l inbox de Cerberus toutes les 60 secondes.
+4. LES MOTIFS DE TEST DOIVENT MATCHER LE TEXTE REEL : un retour a la ligne casse la chaine, un commentaire sur 2 lignes doit etre teste par motifs par ligne.
+
+**Verdict** : VALIDE - test-104 10 OK sur 10, serie e, profils-tests a jour, non-regression complete deleguee a Janus.
+
+
+## [LECON] 2026-08-28 -- NON-REGRESSION OBSOLETE DEPUIS LA MIGRATION : COMPTEURS FIGES ADAPTES (Morpheus)
+
+**Contexte** : prise de conscience utilisateur - la suite de non-regression n est plus valide depuis la migration des agents. Les tests portaient des compteurs figes qui n avaient pas suivi les ajouts de parcours/cases. Mission : adapter les tests obsoletes (test-005, test-013, test-018) + transmettre les dettes de cartes a Vulcain.
+
+**Adaptations (domaine Morpheus)** :
+1. test-018 : 21 -> 24 parcours (cerberus-freelance, ferrari, socrate revision-*), DERNIER_MAILLON etendu a redacteur-v2 c8 (fin REACTIVER legitime, bilan consolide, MODE CONVERSATION), point 1b adapte (set(fins) == set(DERNIER_MAILLON)). 13/13 OK.
+2. test-005 : parcours-atlas 0.5.4 -> 0.5.7, 13 -> 14 commandes (ajout c35), chemins de navigation etendus (questions c10b/c11b ajoutees), case c3 disparue -> c16 (Lister les fichiers existants) avec --case direct. 27/28 (point 21 valider-cartes bloque par le verrou d habilitation sous morpheus - passera sous Janus, habilite).
+3. test-013 : parcours-cerberus 27 -> 33 cases action (6 ajoutees c1h*/c20h, branche historisation Oracle), verdict 3b adapte : 0 erreur + dette allegement LIMITEE a la liste documentee c1h*/c20h (au lieu de CONFORME strict). 22/22 OK.
+
+**Dettes de cartes detectees (transmises a Vulcain)** :
+1. hades c5.vers->cerberus : fin avec champ vers invalide (spec regle 3 : une fin n a ni branches ni suivant) - reference cassee valider-cartes --tous.
+2. parcours-cerberus c1h*/c20h : 6 indices >160 car (commande oracle d historisation) - a alleger vers reference.
+
+**Lecons** :
+1. UN COMPTEUR FIGE DANS UN TEST DEVIENT UN MENSONGE APRES UNE MIGRATION : chaque ajout d agent/parcours/case doit etre accompagne de la mise a jour des compteurs des tests qui les comptent - la non-regression doit rester la photo de la realite.
+2. UN VERDICT STRICT (CONFORME) PEUT ETRE REMPLACE PAR UNE DETTE DOCUMENTEE LIMITEE : au lieu d accepter n importe quel A ALLEGER, verifier que la dette est EXACTEMENT la liste documentee - le garde-fou reste serre tout en reflechissant la realite.
+3. UNE FIN AVEC CHAMP vers EST INVALIDE (spec regle 3) : les fins REACTIVER se materialisent par la COMMANDE dans le message, jamais par un champ vers pointant vers un agent.
+
+**Verdict** : VALIDE - test-018 13/13, test-013 22/22, test-005 27/28 (point 21 = verrou habilitation, passera sous Janus), ASCII 0/0, compilation OK. Dettes de cartes transmises a Vulcain (inter-round).
+
+
+
+## [LECON] 2026-08-28 -- SUITE INTER-ROUND : VERDICTS STABILISES APRES CORRECTION DES CARTES (Morpheus)
+
+**Contexte** : reprise du round principal apres l inter-round vulcain (dettes de cartes hades c5 + cerberus c1h*/c20h corrigees).
+
+**Adaptations finales** :
+1. test-013 point 3b : restaure CONFORME strict (la dette c1h*/c20h a ete allegee par vulcain - la carte est redevenue CONFORME, le verdict strict redevient la bonne attente). 22/22 OK.
+2. test-018 : la correction de hades (titre 'FIN - Reactiver Cerberus' + message 'BILAN CONSOLIDE') l a rendu detecte par le test - c est une fin dernier maillon LEGITIME : DERNIER_MAILLON etendu a hades c5. 13/13 OK.
+
+**Lecons** :
+1. UNE CORRECTION DE CARTE PEUT REVELER UNE FIN LEGITIME AU TEST : retirer le champ vers de hades c5 a expose sa fin REACTIVER au garde-fou - le test doit alors l accepter comme dernier maillon (pas le corriger pour le masquer).
+2. UNE DETTE DOCUMENTEE DANS UN TEST PEUT ETRE RESORBEE : le test-013 a d abord documente la dette (A ALLEGER limite), puis l inter-round vulcain l a corrigee - le test doit REVENIR au verdict strict des que la realite le permet (sinon le garde-fou reste affaibli pour rien).
+
+**Verdict** : VALIDE - test-005 27/28 (point 21 verrou habilitation, passera sous Janus), test-013 22/22, test-018 13/13, ASCII 0/0, compilation OK. Non-regression complete deleguee a Janus (controle croise).
+
+## [LECON] 2026-08-28 -- DERNIERS TESTS OBSOLETES ADAPTES (Morpheus, inter-round Cerberus)
+
+**Contexte** : apres l inter-round vulcain (cartes corrigees), Cerberus m a active pour les 2 derniers tests obsoletes : test-070 (themis c8ir) et les compteurs catalogue 186 figes.
+
+**Adaptations** :
+1. test-070 point 3 : ajout de l exemption INTER-ROUND pour la forme presente 'me/le/la REACTIVE'. Quand le contexte immediat mentionne l inter-round (protocole-fin-mission v0.2.0), 'l habilite me REACTIVE' designe l HABILITE qui reactive l APPELANT - ce n est PAS une cible non-Cerberus fautive. Le message themis c8ir est la formulation officielle du protocole. 13/13 OK. La preuve negative 6b (injection sans mot-cle inter-round) reste detectee : l exemption ne l affaiblit pas.
+2. test-007 point 13, test-060 point 7, test-079 point 10 : compteurs catalogue 186 -> 187 (hades-contexte-git est un outil reel ajoute commit 8a85f52, catalogue correct verifie par test-040 5/5). test-007 15/15, test-060 12/12.
+3. test-060 : version analyser-tokens 0.1.2 -> 0.1.4 (le .py et le .md ont ete bumpe a 0.1.4, le test pinnait l ancienne version). 12/12 OK.
+
+**KO restant documente (hors mission)** : test-079 point 5 - le registre reel contient 87 entrees AGENT_INCONNU (55 stark + 32 Cerberus) : analyser-noms-maj ne connait pas les agents freelance (stark sous freelance/, pas agents/) ni l ancienne casse 'Cerberus'. C est un probleme d OUTIL (analyser-noms-maj doit inclure les agents freelance + normaliser la casse), domaine Vulcain - pas un probleme de test.
+
+**Lecons** :
+1. UNE EXEMPTION DE TEST DOIT GARDER SA PREUVE NEGATIVE : l exemption inter-round de test-070 reste etroite (mot-cle 'inter-round' dans le contexte immediat) - la preuve negative 6b injecte une forme SANS ce mot-cle et reste detectee. Exempter = cibler le contexte exact, pas desactiver la detection.
+2. UN COMPTEUR DE TEST DOIT SUIVRE LE CATALOGUE REEL : 187 est la realite (hades-contexte-git est indexe, test-040 le verifie) - le pin 186 etait un mensonge post-migration.
+3. UN PIN DE VERSION DANS UN TEST PEUT DEVENIR OBSOLETE SANS BUMP : analyser-tokens a ete bumpe 0.1.2 -> 0.1.4 sans que test-060 ne suive. Verifier la version reelle avant de corriger un compteur.
+
+**Verdict** : VALIDE - test-070 13/13, test-007 15/15, test-060 12/12, test-079 14/15 (point 5 = outil analyser-noms-maj, transmis a Vulcain), ASCII 0/0, compilation OK. Recontrole delegue a Janus.
+## [LECON] 2026-08-28 -- DERNIERS COMPTEURS FIGES ADAPTES (Morpheus, chaine Cerberus)
+
+**Contexte** : suite de la chaine (vulcain a corrige test-079/096), Cerberus m a active pour les 2 derniers tests obsoletes restants.
+
+**Adaptations** :
+1. test-006 point 2b : compteurs fige - parcours-atlas attendu 52 cases/14 chemins, reel 51 cases/16 chemins (evolution v0.5.7). Adapte vers les valeurs reelles verifiees par generation reelle (cartographier-parcours sort 51/16). 19/19 OK.
+2. test-004 point 7a : version parcours-morpheus 0.5.4 attendue, reel 0.5.8. Pin adapte. 7a OK.
+
+**KO restant (contrainte d execution, pas un bug de test)** : test-004 point 8 - valider-cartes-decision --agent morpheus est BLOQUE par le verrou d habilitation (morpheus n est pas habilite : seuls argus/buffy/janus/vulcain). Passera sous Janus (habilite) lors de la non-regression. Meme cas que test-005 point 21.
+
+**Lecons** :
+1. UN EN-TETE DE CARTOGRAPHIE EST UN MIROIR DU PARCOURS : les compteurs (cases/chemins) changent avec chaque evolution de carte - le test doit refleter la generation reelle, pas une version passee.
+2. LE VERROU D HABILITATION S APPLIQUE AUSSI AUX TESTS MORPHEUS : valider-cartes-decision est exclusif a argus/buffy/janus/vulcain - un test morpheus qui l appelle ne peut etre vert que lance par l agent habilite (Janus). Documenter la contrainte, pas la contourner.
+
+**Verdict** : VALIDE - test-006 19/19, test-004 7a OK (point 8 verrou habilitation, passera sous Janus), ASCII 0/0, compilation OK.

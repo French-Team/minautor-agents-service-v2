@@ -1,0 +1,44 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "themis",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-themis",
+    "agent": "themis",
+    "description": "Arbre des decisions de Themis - Evaluatrice croisee. L agent choisit UN THEME au demarrage : AUDIT (evaluer le travail d un agent), VERACITE (verifier la verite des README), AUTRE (mission hors parcours).",
+    "regles": {
+      "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
+      "D5": "Les besoins d un theme sont des REDIRECTIONS : je choisis celui qui correspond a ma situation.",
+      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche AVANT toute mission."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est ma mission ?",
+    "branches": [
+      {
+        "reponse": "AUDIT",
+        "description": "Evaluer le travail d un agent : combo audit, score, rapport, recommandations",
+        "vers": "theme-audit.json"
+      },
+      {
+        "reponse": "VERACITE",
+        "description": "Verifier la verite des README (public + dev) : compteurs, affirmations, normes",
+        "vers": "theme-veracite.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors parcours",
+        "vers": "theme-autre.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

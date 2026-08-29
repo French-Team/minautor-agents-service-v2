@@ -17,9 +17,10 @@ flowchart TD
     THEME-TRAITER-B0["Traiter une demande recue"]
     THEME-TRAITER-B0 --> FIN-fin-theme
     RACINE -- "LIRE" --> THEME-LIRE
-    THEME-LIRE["LIRE"]
-    FIN-theme(["FIN"])
-    THEME-LIRE --> FIN-theme
+    THEME-LIRE["Consulter l'etat de JARVIS sans rien modifier"]
+    THEME-LIRE -- "besoin 1" --> THEME-LIRE-B0
+    THEME-LIRE-B0["Consulter un etat"]
+    THEME-LIRE-B0 --> FIN-fin-theme
     RACINE -- "EXPLORER" --> THEME-EXPLORER
     THEME-EXPLORER["Trouver la cause racine d'un dysfonctionnement de JARVIS"]
     THEME-EXPLORER -- "besoin 1" --> THEME-EXPLORER-B0

@@ -38,23 +38,23 @@ Pas de messages informels. Tout passe par JARVIS.
 **Structure** :
 ```
 tools-commun/jarvis/
-├── jarvis.md        <- ce fichier (contrat)
-├── jarvis.py        <- script (lancement)
-├── inbox/           <- messages recus par agent
-│   ├── stark.jsonl
-│   ├── shuri.jsonl
-│   ├── forge.jsonl
-│   └── rogers.jsonl
-└── outbox/          <- messages envoyes par agent
-    ├── stark.jsonl
-    ├── shuri.jsonl
-    ├── forge.jsonl
-    └── rogers.jsonl
+|--- jarvis.md        <- ce fichier (contrat)
+|--- jarvis.py        <- script (lancement)
+|--- inbox/           <- messages recus par agent
+|   |--- stark.jsonl
+|   |--- shuri.jsonl
+|   |--- forge.jsonl
+|   +--- rogers.jsonl
++--- outbox/          <- messages envoyes par agent
+    |--- stark.jsonl
+    |--- shuri.jsonl
+    |--- forge.jsonl
+    +--- rogers.jsonl
 ```
 
 **Format JSONL** (une ligne = un message) :
 ```json
-{"de": "shuri", "vers": "stark", "priorite": 3, "date": "2026-08-22T20:45:00", "objet": "Rogers cree", "corps": "Rogers opérationnel.", "lu": false, "accuse": false}
+{"de": "shuri", "vers": "stark", "priorite": 3, "date": "2026-08-22T20:45:00", "objet": "Rogers cree", "corps": "Rogers operationnel.", "lu": false, "accuse": false}
 ```
 
 ---
@@ -187,7 +187,7 @@ s affiche. Inconnu = blanc neutre.
 
 Dans la case de depart (c0) d'un agent freelance :
 ```
-1. Lire inbox/<agent>.jsonl → afficher messages en attente
+1. Lire inbox/<agent>.jsonl -> afficher messages en attente
 2. Si priorite 1 non-lu = BLOQUER (ne pas continuer)
 3. Acquitter les messages lus
 4. Continuer le parcours

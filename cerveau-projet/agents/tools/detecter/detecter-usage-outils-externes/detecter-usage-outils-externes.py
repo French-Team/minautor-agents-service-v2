@@ -81,6 +81,10 @@ EXTENSIONS = (".md", ".sh", ".py", ".txt", ".json")
 #     non-ASCII pour prouver que les correcteurs fonctionnent.
 #   - docs-dev-cerveau-projet/ : documents externes fournis par
 #     l utilisateur (analyses) qui ne suivent pas nos normes.
+#   - freelance/ : univers v2 dont les conventions (D4) imposent
+#     CRLF + UTF-8 volontaires (oppose aux normes v1 LF + ASCII).
+#   - observations/ : logs generes par les daemons (oracle, routines)
+#     en cours d execution - artefacts de run, pas du code a normer.
 # Un motif matche des qu il apparait dans le chemin (sous-chaine).
 # ============================================================
 EXCLUSIONS_PAR_DEFAUT = (
@@ -88,6 +92,8 @@ EXCLUSIONS_PAR_DEFAUT = (
     "dictionnaire-emojis.txt",
     os.path.join("exemples", ""),
     os.path.join("docs-dev-cerveau-projet", ""),
+    os.path.join("freelance", ""),
+    os.path.join("observations", ""),
 )
 
 

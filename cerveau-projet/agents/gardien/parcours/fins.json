@@ -1,0 +1,76 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "gardien",
+    "description": "Fins reelles du Gardien (parcours v0.2.4 : c9, c2b, c29a, c29d, c29e, cU3)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-gardien.json"
+    },
+    "fin-verifier": {
+      "titre": "FIN - Verification terminee (activer Janus)",
+      "description": "Integrite verifiee, 0 zone divisee. Janus effectue le second controle (c9).",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-proposer": {
+      "titre": "FIN - Modification executee (activer Janus)",
+      "description": "Zone modifiee avec autorisation utilisateur, journalisee, marbre reverifie. Janus effectue le second controle (c9).",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-signaler": {
+      "titre": "FIN - Violation signalisee",
+      "description": "Violation documentee, agent responsable active pour reparation (c2b).",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-delegation": {
+      "titre": "FIN - Delegation terminee",
+      "description": "L agent habilite a ete active (c29a). Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-outil-temp": {
+      "titre": "FIN - Outil temporaire cree",
+      "description": "Outil temporaire cree et utilise (c29d). Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-signaler-besoin": {
+      "titre": "FIN - Besoin signale",
+      "description": "Le besoin durable est signale a Cerberus (c29e).",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-outils": {
+      "titre": "FIN - Reprendre ma mission (cU3)",
+      "description": "Le probleme d outil est resolu. Reprise de la mission interrompue.",
+      "action": "redirection",
+      "vers": "arbre-gardien.json"
+    },
+    "fin-refuse": {
+      "titre": "FIN - Modification refusee par l utilisateur",
+      "description": "L utilisateur a refuse la modification. Le marbre reste intact.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission hors parcours. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    }
+  }
+}

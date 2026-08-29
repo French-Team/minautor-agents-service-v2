@@ -2,7 +2,9 @@
 """fonctions/files.py - Files de missions pour Oracle (v1).
 
 Une mission en attente est stockee dans files/<file>.jsonl.
-Files : asap (prioritaire), normale, plus-tard.
+Files : asap (prioritaire), normale, plus-tard, attente (missions
+interrompues, transposition de la file-attente v2 - decision utilisateur
+2026-08-29 : mise en attente de la mission en cours lors d un inter-round).
 
 Chaque mission : {id, date, mission, statut, agent}
 Statuts : EN_ATTENTE -> PRISE -> TERMINEE
@@ -16,7 +18,7 @@ from pathlib import Path
 FILES_DIR = Path(__file__).parent.parent / "files"
 FILES_DIR.mkdir(exist_ok=True)
 
-FILES_VALIDES = ["asap", "normale", "plus-tard"]
+FILES_VALIDES = ["asap", "normale", "plus-tard", "attente"]
 
 
 def _file_path(nom):

@@ -73,23 +73,27 @@ surcharges:
 
 | `enregistrer-lecon` | Enregistrer MA lecon dans la BDD des lecons (memoire longue) |
 | `consulter-lecons` | Consulter les lecons des autres agents (evolution croisee) |
-> **REGLE ABSOLUE -- PARCOURS (v0.5.6)** : Pour CHAQUE mission, je suis MON
-> parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
-> d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
-> lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
+> **REGLE ABSOLUE -- ARBRE (v0.1.0)** : Pour CHAQUE mission, je suis MON
+> arbre de decisions avec l'outil `guider-arbre`. L arbre me donne, a chaque
+> etape, la commande exacte a executer (mode auto, comme le pilote Oracle).
+
+### ARBRE V2-LIKE (source de verite)
 
 ```
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
-  cerveau-projet/agents/buffy/parcours/parcours-buffy.json
+python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
+  cerveau-projet/agents/buffy/parcours/arbre-buffy.json
 ```
+
+**Arbre** : [cerveau-projet/agents/buffy/parcours/arbre-buffy.json](parcours/arbre-buffy.json)
+**Fins** : [cerveau-projet/agents/buffy/parcours/fins.json](parcours/fins.json)
+**Themes** : [theme-creer.json](parcours/theme-creer.json), [theme-modifier.json](parcours/theme-modifier.json), [theme-agent.json](parcours/theme-agent.json), [theme-protocole.json](parcours/theme-protocole.json), [theme-controler.json](parcours/theme-controler.json), [theme-autre.json](parcours/theme-autre.json), [theme-inter-round.json](parcours/theme-inter-round.json)
+
+> **Lister la structure** : `guider-arbre.py <arbre> --liste`
+> **Valider** : `guider-arbre.py <arbre> --valider`
+
+### PARCOURS V1 (legacy, conserve pour retrocompatibilite)
 
 **Parcours** : [cerveau-projet/agents/buffy/parcours/parcours-buffy.json](parcours/parcours-buffy.json)
-**Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
-
-> **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
-> la couverture des missions.
-> **Case 0 commune** : `demarrer.md` -- tous les parcours demarrent apres
-> l'identification.
 
 ---
 
@@ -302,8 +306,10 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 | `AGENTS.md` | Fichier dynamique (je suis l'agent principal) |
 | `index-cerveau.md` | Point d'entree du cerveau |
 | `demarrer.md` | Protocole de demarrage (case 0) |
-| `parcours/parcours-buffy.json` | **SOURCE DE VERITE du guidage** (jeu de piste) |
-| `../tools/guider/guider-parcours/` | L'outil qui fait avancer dans le parcours |
+| `parcours/arbre-buffy.json` | **SOURCE DE VERITE du guidage** (arbre v2-like) |
+| `parcours/fins.json` | Fins centralisees de l arbre |
+| `../tools/guider/guider-arbre/` | L'outil qui fait avancer dans l arbre |
+| `parcours/parcours-buffy.json` | Parcours v1 legacy (retrocompatibilite) |
 
 ### Protocoles applicables
 

@@ -5,7 +5,7 @@ defcon-server.py -- OBSOLETE depuis v0.1.1 (protocole 14).
 
 Le point d'entree est desormais entry.py (structure entry.py +
 fonctions/, auto-verification harnais protocole 21). Ce fichier est
-conservé comme relais de compatibilite : il delegue a entry.py.
+conserve comme relais de compatibilite : il delegue a entry.py.
 """
 
 import os

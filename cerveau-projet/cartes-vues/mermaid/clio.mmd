@@ -1,4 +1,4 @@
-%% Carte de decision de clio (parcours v0.6.4)
+%% Carte de decision de clio (parcours v0.6.7)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -28,6 +28,8 @@ flowchart TD
     c19["Enregistrer mes usages d outils"]
     c2["Lire la raison de l'activation"]
     c20["Remplir readme-dev.md depuis le template"]
+    c22["Rediger README-v2.md (dry-run AVANT/APRES)"]
+    c23{"Validation dry-run utilisateur"}
     c3["Consulter les interventions recentes"]
     c4["Verifier l etat reel"]
     c5{"Ecarts detectes ?"}
@@ -48,6 +50,7 @@ flowchart TD
     c1 -- "verifier" --> c11
     c1 -- "autre" --> c13
     c1 -- "readme-dev" --> c20
+    c1 -- "readme-v2" --> c22
     c10 --> c10b
     c10b -- "OUI" --> c10c
     c10b -- "NON" --> c19
@@ -69,6 +72,9 @@ flowchart TD
     c19 --> c12a
     c2 --> c3
     c20 --> c10
+    c22 --> c23
+    c23 -- "OUI" --> c9
+    c23 -- "NON" --> c22
     c3 --> c4
     c4 --> c5
     c5 -- "OUI" --> c5a

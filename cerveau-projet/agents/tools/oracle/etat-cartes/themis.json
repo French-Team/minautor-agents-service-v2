@@ -1,0 +1,12 @@
+{
+ "agent": "themis",
+ "parcours": "agents/themis/parcours/arbre-themis.json",
+ "case_courante": null,
+ "mission_type": "audit",
+ "mission": "AUDIT le travail de Buffy",
+ "historise_debut": true,
+ "precedent": "vulcain",
+ "etape": "fin",
+ "theme_courant": null,
+ "historise_fin": true
+}

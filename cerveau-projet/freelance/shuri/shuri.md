@@ -96,23 +96,23 @@ surcharges:
 **Structure** :
 ```
 shuri/parcours/
-├── arbre-shuri.json     <- racine : choix du thème
-├── theme-creer.json     <- thème CREER (mon rôle principal)
-├── theme-lire.json      <- thème LIRE
-├── theme-valider.json   <- thème VALIDER
-├── theme-coordonner.json <- thème COORDONNER
-├── theme-explorer.json  <- thème EXPLORER
-└── fins.json            <- fins centralisées
+|--- arbre-shuri.json     <- racine : choix du theme
+|--- theme-creer.json     <- theme CREER (mon role principal)
+|--- theme-lire.json      <- theme LIRE
+|--- theme-valider.json   <- theme VALIDER
+|--- theme-coordonner.json <- theme COORDONNER
+|--- theme-explorer.json  <- theme EXPLORER
++--- fins.json            <- fins centralisees
 ```
 
-**Thèmes disponibles** :
-| Thème | But |
+**Themes disponibles** :
+| Theme | But |
 |---|---|
-| **CREER** | Créer un nouvel agent v2 (mon rôle principal) |
+| **CREER** | Creer un nouvel agent v2 (mon role principal) |
 | **LIRE** | Consulter templates, specs, agents existants |
-| **VALIDER** | Vérifier la conformité d'un agent créé |
-| **COORDONNER** | Inter-round, retour à Stark |
-| **EXPLORER** | Diagnostiquer un problème de construction |
+| **VALIDER** | Verifier la conformite d'un agent cree |
+| **COORDONNER** | Inter-round, retour a Stark |
+| **EXPLORER** | Diagnostiquer un probleme de construction |
 
 ---
 
@@ -158,11 +158,11 @@ shuri/parcours/
 
 ```
 freelance/<agent>/
-├── <agent>.md          <- fiche (D17, template v2)
-├── corrections.md      <- fenetre glissante
-├── parcours/
-│   └── parcours-<agent>.json
-└── tools/              <- outils dedies (vide au depart)
+|--- <agent>.md          <- fiche (D17, template v2)
+|--- corrections.md      <- fenetre glissante
+|--- parcours/
+|   +--- parcours-<agent>.json
++--- tools/              <- outils dedies (vide au depart)
 ```
 
 ---

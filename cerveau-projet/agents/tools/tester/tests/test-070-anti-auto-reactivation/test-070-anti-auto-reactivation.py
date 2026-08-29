@@ -184,6 +184,14 @@ def analyser_case(agent, cid, c):
             continue  # formulation correcte ou explication
         if re.search(r"reactive\s+cerberus", apres, re.IGNORECASE):
             continue  # 'reactivera Cerberus' -> cible Cerberus
+        # INTER-ROUND (protocole-fin-mission v0.2.0) : quand une case decrit
+        # le protocole inter-round, 'me/le/la REACTIVE' designe l HABILITE qui
+        # reactive l APPELANT (moi = l appelant) - ce n est PAS une cible
+        # non-Cerberus fautive. Exemption si le contexte immediat mentionne
+        # l inter-round (l habilite reactive l appelant, pas un agent tiers).
+        if re.search(r"inter-round|inter round|interround",
+                     apres + avant, re.IGNORECASE):
+            continue  # protocole inter-round : l habilite reactive l appelant
         problemes.append(("FORME_FAUTIVE",
                           "%s %s : '%s' vise un agent autre que Cerberus" %
                           (agent, cid, m.group(0))))

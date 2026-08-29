@@ -169,28 +169,34 @@ def main():
                  donnees.get("parcours", {}).get("version") == "0.5.10",
                  str(donnees.get("parcours", {}).get("version")))
 
-        # 2. Types de cases : 27 action / 6 question / 7 controle / 4 fin / 0 indice
+        # 2. Types de cases : 33 action / 6 question / 7 controle / 4 fin / 0 indice
+        #    (maj 2026-08-28 : +6 cases action c1h/c1hb/c1hc/c1he/c1hf/c20h
+        #    ajoutees par la branche historisation Oracle - la non-regression
+        #    portait un compteur fige depuis la migration des agents)
         cases = donnees.get("cases", {})
         types = {}
         for c in cases.values():
             t = c.get("type", "?")
             types[t] = types.get(t, 0) + 1
-        verifier("2a. 27 cases action (19 pilotage + c0d lecture doc + c19c/c19d Pattern 17 + c24 registre + c15c maillon rapport + c0e consultation pre-mission + c45/c46 socrate/chiron + cU2)",
-                 types.get("action", 0) == 27, str(types.get("action")))
+        verifier("2a. 33 cases action (27 historiques + 6 historisation Oracle c1h*/c20h)",
+                 types.get("action", 0) == 33, str(types.get("action")))
         verifier("2b. 6 questions + 7 controles + 4 fins (Pattern 17 c19b + maillon c15b ajoutent 2 controles + cU1 + c45b/c46b)",
                  types.get("question", 0) == 6 and types.get("controle", 0) == 7
                  and types.get("fin", 0) == 4, str(types))
         verifier("2c. Aucune case 'indice' restante",
                  types.get("indice", 0) == 0, str(types))
 
-        # 3. valider-case : CONFORME (0 erreur, 0 a alleger)
+        # 3. valider-case : CONFORME strict (0 erreur, 0 a alleger).
+        #    (2026-08-28 : les 6 indices >160 des cases c1h*/c20h ont ete
+        #    alleges par Vulcain en inter-round - la carte est redevenue
+        #    CONFORME, le test re-exige le verdict strict)
         r = run([PYTHON, VALIDER_CASE, PARCOURS, "--dry-run"])
         verifier("3a. valider-case retourne 0", r.returncode == 0,
                  r.stdout.strip()[-80:])
         verifier("3b. Verdict CONFORME",
                  "CONFORME" in r.stdout and "erreurs: 0" in r.stdout
                  and "a alleger: 0" in r.stdout,
-                 r.stdout.strip()[:120])
+                 r.stdout.strip()[:160])
 
         # 4. valider-case --references : CONFORME (refs resolvables)
         r_ref = run([PYTHON, VALIDER_CASE, PARCOURS, "--references", "--dry-run"])

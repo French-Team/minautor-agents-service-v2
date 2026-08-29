@@ -18,9 +18,9 @@
    "agent": "cerberus",
    "cid": "c0b",
    "raison": "RELIRE OBLIGATOIRE : corrections puis fiche (anti-arret)",
-   "empreinte": "182a9e86ad40d279a6c62abdf07250a03705fedc2ad806f9f7e17e1e9d62621e",
-   "modifie_le": "2026-08-18 07:46:33",
-   "raison_modification": "Ajout du declencheur de consultation pre-mission (case c0e) : c0b OUI -> c0e, demande utilisateur 2026-08-18"
+   "empreinte": "77016bc5eb83152ecbcf6a1c432478af44127e441ad9458f64919c6534fd8907",
+   "modifie_le": "2026-08-29 10:24:40",
+   "raison_modification": "GATE BON AGENT (decision utilisateur 2026-08-29) : c0b OUI -> c0g (case de verification pre-vol verifier-agent-perimetre --gate --moi <agent>) avant c0e. Autorisation utilisateur obtenue via ask_user (OUI - resynchronisation marbre)"
   },
   "cerberus.c10": {
    "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
@@ -65,9 +65,9 @@
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",
    "type": "fichier",
    "raison": "Regle immuable des groupes d agents et des domaines separes",
-   "empreinte": "320274ffafa2acbd611d3a45f1766f2582630bedd07e15937c983be8d0cdd8b5",
-   "modifie_le": "2026-08-18 20:19:27",
-   "raison_modification": "Exception pilote Chiron : autorisation auto-correction SA carte (parcours-chiron.json) via editer-parcours - decision utilisateur 2026-08-18 (ask_user auto-correction complete)"
+   "empreinte": "bf816aa5fd3062be348ed8fd14882afc384f093df594949d7a127c994c68b01a",
+   "modifie_le": "2026-08-28 22:09:25",
+   "raison_modification": "test-084 preuve positive audit"
   },
   "regles-general-global": {
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-general-global.md",

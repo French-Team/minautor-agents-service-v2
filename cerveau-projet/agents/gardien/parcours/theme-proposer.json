@@ -1,0 +1,106 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "gardien",
+    "nom": "PROPOSER",
+    "description": "Proposer une modification d une zone protegee du marbre : raison -> proposition -> validation utilisateur -> execution"
+  },
+  "theme": {
+    "nom": "PROPOSER",
+    "but": "Documenter et executer une modification legitime d une zone du marbre, avec validation utilisateur obligatoire",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine securite-marbre)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent gardien --domaine securite-marbre"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Verifier l integrite AVANT modification (VERROU)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/proteger/proteger-verrou-marbre/proteger-verrou-marbre.py --tous"],
+        "regle": "VERIFICATION AVANT : verifier le marbre AVANT de proposer une modification."
+      },
+      {
+        "besoin": "LIRE MA RAISON dans AGENTS.md (case c3)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py AGENTS.md"],
+        "regle": "LIRE LA RAISON : la mission confiee precise quelle zone du marbre est concernee et pourquoi."
+      },
+      {
+        "besoin": "Verifier la zone concernee dans marbre.json",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/regles-immuables/marbre/marbre.json"],
+        "regle": "Verifier que la zone existe dans le manifeste et comprendre sa protection actuelle."
+      },
+      {
+        "besoin": "PROPOSER la modification (zone + raison + impact) (case c4)",
+        "action": "procedure",
+        "etapes": [
+          "Documenter : ZONE (nom exacte), RAISON (pourquoi), IMPACT (ce qui change)",
+          "Qualifier : STANDARD (alignement, correction, precision) ou EXCEPTIONNEL (perimetre, suppression, multi-zones)",
+          "Si STANDARD : Socrate peut valider au nom de l utilisateur"
+        ],
+        "regle": "PROPOSER : le Gardien propose, l UTILISATEUR valide. JAMAIS rien modifier sans validation."
+      },
+      {
+        "besoin": "Validation utilisateur ? (controle c5)",
+        "action": "procedure",
+        "etapes": [
+          "SI OUI (utilisateur valide) -> EXECUTER la porte (c6)",
+          "SI NON (utilisateur refuse) -> aller a Lecon + enregistrer usages (c7)"
+        ],
+        "regle": "CONTROLE : sans validation explicite, la modification est ANNULEE."
+      },
+      {
+        "besoin": "EXECUTER proteger-modifier-marbre (case c6)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/proteger/proteger-modifier-marbre/proteger-modifier-marbre.py --zone <nom> --raison \"<raison>\" --autorisation UTILISATEUR"],
+        "regle": "EXECUTER : la porte du marbre avec l autorisation utilisateur. La modification est journalisee dans marbre-log.jsonl."
+      },
+      {
+        "besoin": "Re-verifier l integrite APRES modification (VERROU)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/proteger/proteger-verrou-marbre/proteger-verrou-marbre.py --tous"],
+        "regle": "VERIFICATION APRES : reverifier que le marbre est intact apres modification."
+      },
+      {
+        "besoin": "Verifier conformite ASCII du fichier modifie",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier-modifie>"],
+        "regle": "REGLE ASCII : 100% ASCII, aucun accent, guillemets ASCII."
+      },
+      {
+        "besoin": "Consulter le journal marbre-log.jsonl",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/regles-immuables/marbre/marbre-log.jsonl"],
+        "regle": "TRACE : verifier que la modification est bien journalisee."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md (case c7)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/gardien/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION : documenter la proposition, la validation, l execution."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils (case c8)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent gardien --outil <outil> --contexte '<contexte>'"],
+        "regle": "REGLE REGISTRE : declarer tous les outils utilises."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-proposer"}
+}

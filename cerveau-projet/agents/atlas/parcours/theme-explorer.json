@@ -1,0 +1,100 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "atlas",
+    "nom": "EXPLORER",
+    "description": "Explorer un dossier cible : creer le dossier dedie, lister, analyser, documenter (cases c2-c9)"
+  },
+  "theme": {
+    "nom": "EXPLORER",
+    "but": "Explorer un dossier du projet et produire un rapport complet dans un dossier dedie",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine exploration)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent atlas --domaine exploration"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE - sa lecture est OBLIGATOIRE."
+      },
+      {
+        "besoin": "Creer le dossier dedie de l exploration (METHODE RIGOUREUSE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py atlas/rapports/<cible>-<AAAAMMJJ>/index.md"
+        ],
+        "regle": "METHODE RIGOUREUSE : creer D ABORD le dossier dedie. UN dossier par mission."
+      },
+      {
+        "besoin": "Lister les dossiers et fichiers de la cible",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lister/lister-dossiers/lister-dossiers.py <chemin>",
+          "python3 cerveau-projet/agents/tools/lister/lister-fichiers/lister-fichiers.py <chemin>"
+        ],
+        "regle": "Scanner la structure AVANT d analyser."
+      },
+      {
+        "besoin": "Analyser UN dossier a la fois (pas tout d un coup)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/analyser/analyser-structure/analyser-structure.py <dossier>"
+        ],
+        "regle": "UN DOSSIER A LA FOIS. Jamais tout d un coup."
+      },
+      {
+        "besoin": "Documenter chaque dossier (UN .md PAR DOSSIER dans le dossier dedie)",
+        "action": "procedure",
+        "etapes": [
+          "Creer un .md par dossier dans atlas/rapports/<cible>-<AAAAMMJJ>/ (resume : nom, role, ce qu il fait)"
+        ],
+        "regle": "UN .md PAR DOSSIER DANS LE DOSSIER DEDIE."
+      },
+      {
+        "besoin": "Ecrire le rapport complet (DOUBLON DE LA STRUCTURE)",
+        "action": "procedure",
+        "etapes": [
+          "Ecrire le rapport complet = arborescence avec liens vers chaque .md dedie, DANS LE MEME dossier dedie"
+        ],
+        "regle": "Le rapport complet = DOUBLON DE LA STRUCTURE dans le meme dossier dedie."
+      },
+      {
+        "besoin": "Verifier la conformite ASCII",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>"
+        ],
+        "regle": "ASCII strict + LF pur."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/atlas/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-explorer"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "themis",
+    "nom": "AUTRE",
+    "description": "Mission hors parcours : delegation, sous-mission, etc."
+  },
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Executer une mission hors des themes standard",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Executer la mission",
+        "action": "procedure",
+        "etapes": [
+          "Suivre les instructions de la mission"
+        ],
+        "regle": "Executer la mission confiee."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/themis/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-autre"
+  }
+}

@@ -1,0 +1,53 @@
+{
+ "version": "0.1.1",
+ "description": "Etats dynamiques de la colonne Etat de l encart v1 (AGENTS-activite-recente.md, decision utilisateur 2026-08-29 : rendre les etats dynamiques pour ne plus editer le code). Alimente _etat_action (activer-agent-principal.py) et la validation de la routine encart.py. Les regles de detection sont appliquees DANS L ORDRE du fichier (priorite : la premiere regle qui matche gagne). ASCII strict (convention v1).",
+ "defaut": "ACTIF",
+ "etats": {
+  "ACTIF": {
+   "description": "Etat par defaut - action de routine/outil sans regle specifique (aucun mot-cle ni prefixe ne matche)",
+   "detection": {}
+  },
+  "DEBUT": {
+   "description": "Mission en cours - raison commence par DEBUT/RETOUR",
+   "detection": {"prefixes": ["DEBUT", "RETOUR"]}
+  },
+  "FIN": {
+   "description": "Mission terminee - raison commence par FIN",
+   "detection": {"prefixes": ["FIN"]}
+  },
+  "URGENT": {
+   "description": "Anomalie/alerte qui necessite une action (DEFCON gele, P1 non-acquittes, debordement, processus fantome, violation...)",
+   "detection": {"mots_cles": ["ANOMALIE", "DEFCON", "P1 NON", "DEBORDEMENT", "FANTOME", "VIOLATION", "SERVEUR MORT", "PIDFILE", "INBOX:", "NON-ACQUITTE"]}
+  },
+  "BUG": {
+   "description": "Bug/corruption detecte (corruption, re-echappement, faux positif, plantage, KO...)",
+   "detection": {"mots_cles": ["CORRUPTION", "RE-ECHAPPEMENT", "BUG", "PLANTE", "ERREUR", "FAUX POSITIF", "KO ", " ECHEC"]}
+  },
+  "DEV": {
+   "description": "Presente pour le developpement, hors flux de travail reel (citations - routine temporaire)",
+   "detection": {"agents": ["citations"]}
+  },
+  "ATTENTE": {
+   "description": "Activite en attente (demande deposee, reponse attendue, evaluation en attente)",
+   "detection": {"agents": ["notation"], "mots_cles": ["EN ATTENTE", "DEMANDE DEPOSEE"]}
+  },
+  "AUTO": {
+   "description": "Routine automatique sans intervention requise (flux, sante, encart, live, vigie, compteurs...)",
+   "detection": {"agents": ["flux", "sante", "encart", "live", "vigie-round", "vigie-perimetre", "verifier-agent-perimetre", "verifier-statuts", "compter-entree", "compter-sortie"]}
+  },
+  "ACTION": {
+   "description": "Utilitaire avec une intervention a faire (relais : messages a router, oracle : decisions/activations)",
+   "detection": {"agents": ["relais", "oracle"]}
+  }
+ },
+ "inbox_outbox": {
+  "description": "Etats des messages prevus pour le futur tableau inbox-outbox-messages.md (agent | message | inbox/outbox | etat) - decision utilisateur 2026-08-29, reflexion apres ce round. Ces etats ne sont PAS valides dans la colonne Etat de l encart v1 (section separee).",
+  "etats": {
+   "A LIRE": "Message recu, non lu",
+   "A TRAITER": "Message lu, action en attente",
+   "ACQUITTE": "Message acquitte (lu + pris en compte)",
+   "REPONDU": "Reponse envoyee a l expediteur",
+   "CLOS": "Message clos/archive"
+  }
+ }
+}

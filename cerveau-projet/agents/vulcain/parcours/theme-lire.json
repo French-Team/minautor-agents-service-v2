@@ -1,0 +1,63 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "vulcain",
+    "nom": "LIRE",
+    "description": "Preambule : relire mes corrections et ma fiche, consulter les lecons et l activite recente, lire la doc des outils (flux cases c0-c0d/c0e/cU1-cU3 de la carte v1)"
+  },
+  "theme": {
+    "nom": "LIRE",
+    "but": "Acquerir le contexte obligatoire avant toute mission : relecture (fiche + corrections), lecons des autres, activite recente, doc des outils",
+    "redirects": [
+      {
+        "besoin": "RELIRE OBLIGATOIRE : corrections puis fiche",
+        "action": "procedure",
+        "description": "Je relis MES corrections EN PREMIER puis MA fiche avant de continuer. Je ne lis jamais les fichiers des autres agents.",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/vulcain/corrections.md",
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/vulcain/vulcain.md",
+          "Confirmation : as-tu reellement LU ta fiche et tes corrections, capables de les appliquer SANS relire ? Reponds la VERITE (regles-veracite). OUI -> continuer ; NON ou INCERTAIN -> relire"
+        ],
+        "regle": "REGLE ABSOLUE -- RELECTURE : seul OUI prouve la lecture et la memorisation. NON ou INCERTAIN -> relecture. Reponds la VERITE."
+      },
+      {
+        "besoin": "Consulter les lecons des autres agents (domaine de ma mission)",
+        "action": "procedure",
+        "etapes": [
+          "Reference : protocole-lecons.001.01.ebauche.md",
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique (activite des autres) se lit a chaque activation, meme en memoire."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py",
+          "Lire AGENTS.md section ## Sessions connues : savoir que les autres LLM existent et leur activite en temps reel"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE - sa lecture est OBLIGATOIRE a chaque activation, meme en memoire."
+      },
+      {
+        "besoin": "LIRE LA DOCUMENTATION DE L OUTIL avant utilisation",
+        "action": "procedure",
+        "etapes": [
+          "Lire le .md de l outil (agents/tools/<categorie>/<outil>/<outil>.md) avant toute utilisation - usage sans doc = erreur",
+          "La doc est le CONTRAT : verifier le modele et les parametres avant d executer (--dry-run d abord si disponible)"
+        ],
+        "regle": "REGLE ABSOLUE : je LIS le .md de l outil avant toute utilisation (Pattern 9)."
+      },
+      {
+        "besoin": "Probleme avec un outil en cours de mission ? (COMPRENDRE L OUTIL)",
+        "action": "procedure",
+        "description": "As-tu un probleme avec un outil (erreur de commande, fonctionnement oublie, outil qui ne marche pas) ?",
+        "etapes": [
+          "OUI -> COMPRENDRE L OUTIL : 1) Lire le .md de l outil (contrat, Pattern 9) - PAS le code, 2) Verifier si un combo existe avec consulter-combos ; si oui, l utiliser, 3) Sinon, generateurs-commande pour generer la commande exacte, 4) Relancer l outil avec la commande correcte",
+          "NON -> je continue ma mission (retour a la racine)"
+        ],
+        "regle": "REGLE : probleme avec un outil -> je ne lis PAS le code : le mode d emploi est dans le .md (case COMPRENDRE L OUTIL)."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

@@ -1,0 +1,109 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "themis",
+    "nom": "AUDIT",
+    "description": "Evaluer le travail d un agent : combo audit, score, rapport, recommandations"
+  },
+  "theme": {
+    "nom": "AUDIT",
+    "but": "Evaluer le travail d un agent et produire un rapport d evaluation",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Lire le protocole verification coherence",
+        "action": "procedure",
+        "etapes": [
+          "Lire cerveau-projet/agents/regles-immuables/general/protocole-verification-coherence/protocole-verification-coherence.001.01.ebauche.md"
+        ],
+        "regle": "PROTOCOLE : verifier la coherence entre cases, regles, protocoles et git."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine audit)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent themis --domaine audit"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE - sa lecture est OBLIGATOIRE."
+      },
+      {
+        "besoin": "Lire le rapport de mission de l agent",
+        "action": "procedure",
+        "etapes": [
+          "Identifier l agent a auditer et sa mission",
+          "Lire son rapport de mission"
+        ],
+        "regle": "Je dois comprendre ce que l agent a fait AVANT d evaluer."
+      },
+      {
+        "besoin": "Executer le combo audit general",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-audit-general/definition-combo.json"
+        ],
+        "regle": "COMBO : chainage des 4 evaluateurs + synthese."
+      },
+      {
+        "besoin": "Verifier la conformite d execution (Pattern 11)",
+        "action": "procedure",
+        "etapes": [
+          "Croiser mission / carte / deroulement reel"
+        ],
+        "regle": "c8b : l agent a-t-il fait ce que sa carte ordonnait ?"
+      },
+      {
+        "besoin": "Verifier les impacts (Pattern 14)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py <fichier>"
+        ],
+        "regle": "c8c : tous les fichiers impactes sont-ils mis a jour ?"
+      },
+      {
+        "besoin": "Verifier que la fin suit sa carte (Pattern 13)",
+        "action": "procedure",
+        "etapes": [
+          "Verifier la coherence des fins du parcours audite"
+        ],
+        "regle": "c8d : activation directe -> reactiver Cerberus ; maillon -> activer le suivant."
+      },
+      {
+        "besoin": "Produire le rapport d evaluation",
+        "action": "procedure",
+        "etapes": [
+          "Synthetiser les resultats (score /100, problemes critiques/majeurs/mineurs)",
+          "Ecrire le rapport dans themis/rapports/"
+        ],
+        "regle": "Le rapport est MON SEUL ecrit (hors corrections.md)."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/themis/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-audit"
+  }
+}

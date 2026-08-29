@@ -54,6 +54,7 @@ get_agent_role() {
         "Hades"|"hades") echo "Gardien des archives git -- SEUL habilite aux commandes git" ;;
         "Ferrari"|"ferrari") echo "Agent v1 specialise freelance -- corrige et modifie le dossier v2 (conventions v2)" ;;
         "Stark"|"stark") echo "Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation" ;;
+        "Oracle"|"oracle") echo "Coordinateur de l'equipe v1 (session-admin) -- traite les alertes de coordination (processus fantomes, serveurs morts, roulage messages) + controle processus" ;;
         *) echo "Agent inconnu" ;;
     esac
 }
@@ -83,6 +84,7 @@ get_agent_fiche() {
         "Hades"|"hades") echo "cerveau-projet/agents/hades/hades.md" ;;
         "Ferrari"|"ferrari") echo "cerveau-projet/agents/ferrari/ferrari.md" ;;
         "Stark"|"stark") echo "cerveau-projet/freelance/stark/stark.md" ;;
+        "Oracle"|"oracle") echo "cerveau-projet/agents/oracle/oracle.md" ;;
         *) echo "cerveau-projet/agents/inconnu/inconnu.md" ;;
     esac
 }
@@ -112,6 +114,7 @@ get_agent_corrections() {
         "Hades"|"hades") echo "cerveau-projet/agents/hades/corrections.md" ;;
         "Ferrari"|"ferrari") echo "cerveau-projet/agents/ferrari/corrections.md" ;;
         "Stark"|"stark") echo "cerveau-projet/freelance/stark/corrections.md" ;;
+        "Oracle"|"oracle") echo "cerveau-projet/agents/oracle/corrections.md" ;;
         *) echo "cerveau-projet/agents/inconnu/corrections.md" ;;
     esac
 }
@@ -537,6 +540,7 @@ couleur_agent() {
         chiron) echo "#0891b2" ;;
         socrate) echo "#a855f7" ;;
         redacteur-v2) echo "#7c3aed" ;;
+        oracle) echo "#0d9488" ;;
         athena) echo "#c026d3" ;;
         promethee) echo "#d97706" ;;
         minerve) echo "#059669" ;;

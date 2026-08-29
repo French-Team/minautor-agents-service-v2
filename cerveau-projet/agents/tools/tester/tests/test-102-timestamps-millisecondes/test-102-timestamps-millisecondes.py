@@ -141,12 +141,16 @@ def creer_environnement_test():
     agents_file = os.path.join(tmpdir, "AGENTS.md")
     historique_file = os.path.join(tmpdir, "AGENTS-historique.md")
     classeur_file = os.path.join(tmpdir, "variables-actuelles.md")
+    # FIX 2026-08-29 : sans surcharge, l encart REAL (AGENTS-activite-
+    # recente.md) etait pollue par les entrees de test (test102py) avec
+    # des raisons multi-lignes qui cassaient le tableau.
+    activite_file = os.path.join(tmpdir, "AGENTS-activite-recente.md")
 
     shutil.copy2(AGENT_MD_TEMPLATE, agents_file)
     shutil.copy2(HISTORIQUE_TEMPLATE, historique_file)
     shutil.copy2(CLASSEUR_TEMPLATE, classeur_file)
 
-    return tmpdir, agents_file, historique_file, classeur_file
+    return tmpdir, agents_file, historique_file, classeur_file, activite_file
 
 
 def nettoyer_environnement(tmpdir):
@@ -156,12 +160,13 @@ def nettoyer_environnement(tmpdir):
 
 
 def executer_activer(script, agents_file, historique_file, classeur_file,
-                     args):
+                     activite_file, args):
     """Executer activer-agent-principal (py ou sh) avec environnement isole."""
     env = os.environ.copy()
     env["AGENTS_FILE"] = agents_file
     env["AGENTS_HISTORIQUE"] = historique_file
     env["CLASSEUR_STOCKAGE"] = classeur_file
+    env["AGENTS_ACTIVITE_RECENTE"] = activite_file
     if script.endswith(".sh"):
         cmd = ["bash", script] + args
     else:
@@ -215,12 +220,12 @@ def point_2_sh_3n_pas_n():
 
 def point_3_execution_py_3_chiffres():
     """3. Execution reelle .py : entree d historique a 3 chiffres."""
-    tmpdir, agents_file, historique_file, classeur_file = \
+    tmpdir, agents_file, historique_file, classeur_file, activite_file = \
         creer_environnement_test()
     try:
         identifiant = "test102py"
         r = executer_activer(ACTIVER_PY, agents_file, historique_file,
-                             classeur_file,
+                             classeur_file, activite_file,
                              ["sidentifier", identifiant, "session-test102"])
         entrees = lire_entrees_historique(historique_file, identifiant)
         ok = (r.returncode == 0 and len(entrees) >= 1)
@@ -241,12 +246,12 @@ def point_4_execution_sh_3_chiffres():
     """4. Execution reelle .sh : entree d historique a 3 chiffres.
     NB : le .sh ecrit le NOM DE SESSION (pas l id LLM) dans l entree
     d historique - on cherche par le nom de session."""
-    tmpdir, agents_file, historique_file, classeur_file = \
+    tmpdir, agents_file, historique_file, classeur_file, activite_file = \
         creer_environnement_test()
     try:
         identifiant = "test102sh"
         r = executer_activer(ACTIVER_SH, agents_file, historique_file,
-                             classeur_file,
+                             classeur_file, activite_file,
                              ["sidentifier", identifiant, "session-test102"])
         entrees = lire_entrees_historique(historique_file, "session-test102")
         ok = (r.returncode == 0 and len(entrees) >= 1)

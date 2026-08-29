@@ -27,8 +27,14 @@ flowchart TD
     c19d["Activer l'agent habilite pour l'amelioration"]
     c19e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
     c1b["Lancer le generateur d amelioration"]
+    c1h["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hb["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hc["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1he["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hf["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
     c2["Ecouter la demande"]
     c20(["FIN - Coordination terminee"])
+    c20h["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c21["Activer l'agent d'origine (correction)"]
     c22["Activer Themis (inventaire/audit)"]
     c23(["Signaler le besoin"])
@@ -51,13 +57,13 @@ flowchart TD
     c0c --> c0d
     c0d --> cU1
     c0e --> c0c
-    c1 -- "accueil" --> c2
-    c1 -- "activation" --> c8
-    c1 -- "retour" --> c11
+    c1 -- "accueil" --> c1h
+    c1 -- "activation" --> c1hb
+    c1 -- "retour" --> c1hc
     c1 -- "ameliorer" --> c1b
     c1 -- "autre" --> c18
-    c1 -- "revision" --> c45
-    c1 -- "eduquer" --> c46
+    c1 -- "revision" --> c1he
+    c1 -- "eduquer" --> c1hf
     c10 --> c7
     c11 --> c12
     c12 --> c12a
@@ -85,10 +91,16 @@ flowchart TD
     c19d --> c19e
     c19e --> FIN-APPELANT
     c1b --> c5
+    c1h --> c2
+    c1hb --> c8
+    c1hc --> c11
+    c1he --> c45
+    c1hf --> c46
     c2 --> c3
+    c20h --> c20
     c21 --> c24
     c22 --> c24
-    c24 --> c20
+    c24 --> c20h
     c3 --> c5
     c45 --> c45b
     c45b -- "OUI" --> c24

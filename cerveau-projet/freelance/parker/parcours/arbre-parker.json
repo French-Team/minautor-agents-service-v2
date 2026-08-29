@@ -8,27 +8,27 @@
   "arbre": {
     "nom": "arbre-parker",
     "agent": "parker",
-    "description": "Arbre des décisions de Parker - agent d'exploration et de diagnostic. L'agent choisit UN THÈME au démarrage.",
+    "description": "Arbre des decisions de Parker - agent d'exploration et de diagnostic. L'agent choisit UN THEME au demarrage.",
     "regles": {
-      "D1": "Chaque branche (thème) mène à des catégories, qui mènent aux cases d'exécution.",
-      "D5": "Les cases d'un thème sont des REDIRECTIONS.",
+      "D1": "Chaque branche (theme) mene a des categories, qui menent aux cases d'execution.",
+      "D5": "Les cases d'un theme sont des REDIRECTIONS.",
       "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
-      "D3": "Les passages d'un fichier à l'autre sont TRANSPARENTS."
+      "D3": "Les passages d'un fichier a l'autre sont TRANSPARENTS."
     }
   },
   "racine": {
-    "titre": "Choisir un thème",
+    "titre": "Choisir un theme",
     "type": "question",
-    "question": "Quel thème ?",
+    "question": "Quel theme ?",
     "branches": [
       {"reponse": "EXPLORER", "description": "Explorer, chercher, comprendre", "vers": "theme-explorer.json"},
-      {"reponse": "LIRE", "description": "Consulter les fiches, les leçons, l'activité", "vers": "theme-lire.json"},
-      {"reponse": "DIAGNOSTIQUER", "description": "Comprendre un problème", "vers": "theme-diagnostiquer.json"},
-      {"reponse": "COORDONNER", "description": "Inter-round, retour à Stark", "vers": "theme-coordonner.json"}
+      {"reponse": "LIRE", "description": "Consulter les fiches, les lecons, l'activite", "vers": "theme-lire.json"},
+      {"reponse": "DIAGNOSTIQUER", "description": "Comprendre un probleme", "vers": "theme-diagnostiquer.json"},
+      {"reponse": "COORDONNER", "description": "Inter-round, retour a Stark", "vers": "theme-coordonner.json"}
     ]
   },
   "fins": {
     "fichier": "fins.json",
-    "description": "Toutes les fins possibles centralisées"
+    "description": "Toutes les fins possibles centralisees"
   }
 }

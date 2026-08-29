@@ -1,4 +1,4 @@
-# bdd-lecons v2 (D10) — BDD des lecons (bible)
+# bdd-lecons v2 (D10) -- BDD des lecons (bible)
 
 > La BDD des lecons v2 : lecons CLASSEES, CATEGORISEES, consultables
 > comme une bible au moment du besoin (decision D10, proposition-v2.md).
@@ -17,7 +17,7 @@
 | Champ | Detail |
 |---|---|
 | `id` | auto (increment) |
-| `date` | auto (YYYY-MM-DD HH:MM:SS.mmm — 3 chiffres ms) |
+| `date` | auto (YYYY-MM-DD HH:MM:SS.mmm -- 3 chiffres ms) |
 | `agent` | obligatoire (qui a appris la lecon) |
 | `categorie` | `outil` / `protocole` / `processus` / `carte` / `correction` / `technique` / `autre` (defaut : correction) |
 | `titre` | auto (debut du resume, ~70 caracteres) |
@@ -37,9 +37,9 @@ bdd-lecons compter                        # nombre total de lecons
 ## Usage agent (PROTOCOLE 22 : commande + pourquoi)
 
 - **ENREGISTRER une lecon** : `bdd-lecons enregistrer "<ce que j ai appris>" --agent <moi> --categorie correction`
-  → l outil fait le reste (id/date/titre auto), il CONFIRME (affiche id + categorie).
+  -> l outil fait le reste (id/date/titre auto), il CONFIRME (affiche id + categorie).
 - **CONSULTER avant de re-inventer** (D10) : `bdd-lecons chercher --mot-cle <sujet>`
-  → consulte la bible au moment du besoin, AVANT de re-inventer (P5/P6 v1).
+  -> consulte la bible au moment du besoin, AVANT de re-inventer (P5/P6 v1).
 - **Voir les apprentissages recents** : `bdd-lecons lister --n 20`.
 
 ## Regles

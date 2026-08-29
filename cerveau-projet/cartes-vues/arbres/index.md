@@ -11,5 +11,5 @@ Genere par convertir-carte-mermaid (source de verite : freelance/<agent>/parcour
 | parker | arbre-parker | 0.1.0 | [parker.mmd](parker.mmd) | [parker.svg](parker.svg) |
 | rogers | arbre-rogers | 0.1.0 | [rogers.mmd](rogers.mmd) | [rogers.svg](rogers.svg) |
 | shuri | arbre-shuri | 0.1.0 | [shuri.mmd](shuri.mmd) | [shuri.svg](shuri.svg) |
-| stark | arbre-stark | 0.1.0 | [stark.mmd](stark.mmd) | [stark.svg](stark.svg) |
+| stark | arbre-stark | 0.3.0 | [stark.mmd](stark.mmd) | [stark.svg](stark.svg) |
 | vision | arbre-vision | 0.1.0 | [vision.mmd](vision.mmd) | [vision.svg](vision.svg) |

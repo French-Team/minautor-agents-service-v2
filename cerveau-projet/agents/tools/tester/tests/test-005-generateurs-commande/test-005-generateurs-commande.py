@@ -276,8 +276,8 @@ def main():
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.5.4",
-                 p.get("parcours", {}).get("version") == "0.5.4", str(p.get("parcours", {}).get("version")))
+        verifier(17, "parcours-atlas.json JSON valide + version 0.5.7",
+                 p.get("parcours", {}).get("version") == "0.5.7", str(p.get("parcours", {}).get("version")))
     except Exception as e:
         verifier(17, "parcours-atlas.json JSON valide + version 0.5.4", False, str(e))
         p = {}
@@ -299,24 +299,24 @@ def main():
             if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
                 n_commande += 1
                 cases_commande.append(k)
-    verifier(18, "13 commandes en dur connues (c0 x2 + c0e + c10 x3 + c11a + c12/c13 + c18/c19 + c30 + cU2) dans les indices avec catalogue",
-             n_commande == 13 and sorted(cases_commande) == ["c0", "c0", "c0e", "c10", "c10", "c10", "c11a", "c12", "c13", "c18", "c19", "c30", "cU2"],
+    verifier(18, "14 commandes en dur connues (c0 x2 + c0e + c10 x3 + c11a + c12/c13 + c18/c19 + c30 + c35 + cU2) dans les indices avec catalogue",
+             n_commande == 14 and sorted(cases_commande) == ["c0", "c0", "c0e", "c10", "c10", "c10", "c11a", "c12", "c13", "c18", "c19", "c30", "c35", "cU2"],
              "restants=%d cases=%s" % (n_commande, sorted(cases_commande)))
 
     # Depuis Buffy 2026-08-21 (case COMPRENDRE L OUTIL cU1), le flux passe
     # par cU1 (NON) avant la question Mission : les sequences de navigation
     # portent un NON supplementaire apres le OUI de c0b.
-    for num, nom_chemin, chemin in [(19, "explorer", "OUI|NON|explorer|NON|OUI"), (20, "autre+OUI", "OUI|NON|autre|OUI|NON|OUI")]:
+    for num, nom_chemin, chemin in [(19, "explorer", "OUI|NON|explorer|NON|OUI|NON|OUI"), (20, "autre+OUI", "OUI|NON|autre|OUI|NON|OUI|NON|OUI")]:
         c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", chemin])
         verifier(num, "navigation %s : PARCOURS TERMINE" % nom_chemin, "PARCOURS TERMINE" in out, out[-80:])
 
     c, out = exec_cmd("python3 %s --agent atlas" % VALIDER_CARTES)
     verifier(21, "valider-cartes-decision --agent atlas : CONFORME", "CONFORME" in out, out[-80:])
 
-    c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", "OUI|NON|explorer"])
+    c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--case", "c16"])
     segment = out[out.find("Lister les fichiers"):out.find("Lister les fichiers") + 400] if "Lister les fichiers" in out else ""
     ok = ("PASSE PAR LE GENERATEUR" in segment) and ("catalogue: lister-fichiers" in segment)
-    verifier(22, "case c3 : PASSE PAR LE GENERATEUR sans commande en dur", ok, segment[:200])
+    verifier(22, "case c16 : PASSE PAR LE GENERATEUR sans commande en dur", ok, segment[:200])
 
     # ---------- CONTRAT DOCUMENTATION (REGLE ABSOLUE LECTURE DOC) ----------
     # Chaque commande du catalogue doit pointer vers un outil dont la documentation

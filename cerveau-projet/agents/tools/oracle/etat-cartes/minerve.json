@@ -1,0 +1,12 @@
+{
+ "agent": "minerve",
+ "parcours": "agents/minerve/parcours/arbre-minerve.json",
+ "case_courante": null,
+ "mission_type": "creer",
+ "mission": "CREER un todo depuis une spec",
+ "historise_debut": true,
+ "precedent": "buffy",
+ "etape": "fin",
+ "theme_courant": null,
+ "historise_fin": true
+}

@@ -1,0 +1,21 @@
+=== test-065 : purifier-rvav garantit la NON-PERTE ===
+  [OK] 1. purifier-rvav existe, compile, version 0.1.1, options
+  [OK] 2. dry-run : plan affiche, 0 modification, 0 archive
+  [OK] 3. 1re purif : sous le seuil + archive + NON-PERTE (12=6+6)
+  [OK] 4. 2e purif : ACCUMULATION (12=4+8, pas d ecrasement)
+  [OK] 5. archive : frontmatter valide + ASCII + LF purs
+  [OK] 6. purge : aucun residu (fichier test + archive)
+  [OK] 7. ASCII strict : 0 non-ASCII (outil + test)
+  [OK] 8. LF pur : 0 CRLF (outil + test)
+
+=== CHRONO test-065 (total 1.0s) ===
+  1. outil                             0.49s
+  2. dry-run                           0.15s
+  3. 1re purif                         0.17s
+  4. 2e purif                          0.21s
+  5. archive                           0.00s
+  6. purge                             0.00s
+  7. normes                            0.00s
+
+=== RESULTAT : 8 OK / 0 KO (sur 8 points) ===
+=== VERDICT : PROPRE (non-perte garantie) ===

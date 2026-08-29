@@ -1,0 +1,45 @@
+%% Carte de decision de oracle (parcours v0.1.0)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0d["LIRE LA DOCUMENTATION DES OUTILS avant utilisation"]
+    c0e["Consulter les lecons des autres agents (domaine coordination)"]
+    c1{"Mission de coordination"}
+    c13{"Mission hors perimetre ?"}
+    c14(["FIN - Delegation a l agent habilite"])
+    c15(["Signaler le besoin"])
+    c2["Controle des processus (fantomes / serveurs morts)"]
+    c20(["FIN - Reactiver Cerberus"])
+    c24["HISTORISER LA FIN : tracer la fin de mon intervention"]
+    c2b{"Probleme detecte ?"}
+    c3(["Signaler le probleme processus a Cerberus"])
+    c4["Rouler les messages du hub"]
+    c5["Etat des serveurs v1"]
+    c9["Enregistrer mes usages d outils"]
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre la mission de coordination"])
+    c0 --> c0b
+    c0b -- "OUI" --> c0e
+    c0b -- "NON" --> c0
+    c0c --> c0d
+    c0d --> cU1
+    c0e --> c0c
+    c1 -- "controle-processus" --> c2
+    c1 -- "roulage" --> c4
+    c1 -- "etat" --> c5
+    c1 -- "autre" --> c13
+    c13 -- "OUI" --> c14
+    c13 -- "NON" --> c15
+    c2 --> c2b
+    c24 --> c20
+    c2b -- "OUI" --> c3
+    c2b -- "NON" --> c9
+    c4 --> c9
+    c5 --> c9
+    c9 --> c24
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

@@ -1,0 +1,10 @@
+{
+ "agent": "vulcain",
+ "parcours": "agents/vulcain/parcours/arbre-vulcain.json",
+ "case_courante": null,
+ "mission_type": "modifier",
+ "mission": "Mission (Cerberus, garde-fou c15b, recontrole Janus) : corriger les 2 problemes OUTIL restants. 1) test-079 : analyser-noms-maj --zone registre signale 87 entrees AGENT_INCONNU (55 stark + 32 Cerberus) - l outil ne connait pas les agents freelance (stark sous cerveau-projet/freelance/, pas agents/) ni l ancienne casse 'Cerberus' (dossier cerberus en minuscule). Corriger lister_agents_reels : inclure les agents freelance + normaliser la casse (ou documenter les 2 sources). 2) test-096 : ferrari + hades n ont NI .mmd NI .svg dans cartes-vues/mermaid - la generation des vues n a jamais suivi l ajout de ces 2 agents. Regenerer/completer les vues. Verifie test-079 et test-096 apres correction, puis reactive Morpheus (test-006 compteur atlas 49/13 vs 51/16 + test-004 version morpheus 0.5.4 vs 0.5.8) en chaine.",
+ "historise_debut": true,
+ "precedent": "cerberus",
+ "etape": "debut"
+}

@@ -32,13 +32,13 @@ identite:
 ### 1. Creer la structure
 ```
 freelance/<agent>/
-├── <agent>.md              <- template-agent-v2.md
-├── corrections.md          <- template-corrections-v2.md
-├── parcours/
-│   ├── arbre-<agent>.json  <- template-arbre-v2.json
-│   ├── theme-<theme>.json  <- template-theme-v2.json (un par theme)
-│   └── fins.json           <- template-fins-v2.json
-└── tools/                  <- vide au depart
+|--- <agent>.md              <- template-agent-v2.md
+|--- corrections.md          <- template-corrections-v2.md
+|--- parcours/
+|   |--- arbre-<agent>.json  <- template-arbre-v2.json
+|   |--- theme-<theme>.json  <- template-theme-v2.json (un par theme)
+|   +--- fins.json           <- template-fins-v2.json
++--- tools/                  <- vide au depart
 ```
 
 ### 2. Remplir la fiche

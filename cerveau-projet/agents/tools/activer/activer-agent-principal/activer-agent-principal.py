@@ -13,10 +13,12 @@ parallele (chacune avec son bloc dedie et son agent principal).
 
 Actions:
   sidentifier [session]          - Creer/choisir sa session (agent principal = Cerberus)
-  activer <session> <agent> <raison> [mission]  - Activer un agent dans sa session
-  reactiver <session> <raison> <agent_precedent> - Reactiver Cerberus dans sa session
+  activer <session> <agent> <raison> [mission]  - Activer un agent (cerberus = fin de mission)
   sessions                       - Lister les sessions et leur agent principal
   aide                           - Afficher cette aide
+
+Vision 2026-08-27 : toujours 'activer', JAMAIS 'reactiver'. Activer Cerberus
+en fin de mission ferme le chrono de l agent sortant et signe le bilan.
 
 Variable d'environnement:
   AGENTS_FILE         - surcharger le chemin de AGENTS.md (tests sur copie)
@@ -24,7 +26,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.8.0
+Version : 0.8.2
 Statut : prepare
 """
 
@@ -36,7 +38,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.8.0"
+VERSION = "0.8.5"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -46,6 +48,145 @@ CLASSEUR_STOCKAGE = os.environ.get("CLASSEUR_STOCKAGE", "cerveau-projet/agents/c
 CERBERUS_FICHE = "cerveau-projet/agents/cerberus/cerberus.md"
 MAX_ENTREES_HISTORIQUE = 150
 AGENTS_ACTIVITE_RECENTE = os.environ.get("AGENTS_ACTIVITE_RECENTE", "AGENTS-activite-recente.md")
+GRADES_V1 = os.environ.get("GRADES_V1", "cerveau-projet/agents/tools/oracle/grades-v1.json")
+# v0.8.4 : la colonne Etat est DYNAMIQUE - la liste des etats + leurs
+# regles de detection vivent dans etats-actions.json (editable sans toucher
+# au code, decision utilisateur 2026-08-29). Repli : logique v0.8.3.
+# Le defaut est ABSOLU (resolu depuis ce fichier) : les routines lancees
+# avec cwd=routines/ ne resolvaient pas le chemin relatif -> repli v0.8.3
+# (bug 2026-08-29 : vigie-perimetre historise ACTIF au lieu de AUTO).
+_ETATS_ACTIONS_DEFAUT = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "..", "..", "oracle", "etats-actions.json")
+ETATS_ACTIONS = os.environ.get("ETATS_ACTIONS", "") or _ETATS_ACTIONS_DEFAUT
+
+# v0.8.1 : l encart v1 porte desormais les colonnes Grade | Agent |
+# Debut/Fin | Secteur | Raison | Heure | id | Type (inspire du tableau v2
+# qui a Grade/Secteur, decision utilisateur 2026-08-27 : rattraper le
+# retard v1 pour oracle/routines ; colonne Debut/Fin demandee car les
+# agents historisent leur DEBUT et leur FIN). ASCII strict : grades [GX]
+# et secteurs [XXX] (pas d emoji, contrairement au v2).
+ENTETE_ENCART_V1 = "| Grade | Agent | Executeur | Etat | Secteur | Raison | Heure | id | Type |"
+SEPARATEUR_ENCART_V1 = "|-------|-------|-----------|------|---------|--------|-------|----|------|"
+
+
+def _charger_grades_v1():
+    """Charger grades-v1.json (grades + secteurs des agents/routines v1)."""
+    try:
+        with io.open(GRADES_V1, "r", encoding="utf-8", errors="replace") as fh:
+            return json.load(fh)
+    except (OSError, ValueError):
+        return {}
+
+
+def _grade_label(agent):
+    """Label du grade d un agent/routine depuis grades-v1.
+    Repli : Inconnu"""
+    data = _charger_grades_v1()
+    ag = (agent or "").lower()
+    grade = data.get("agents", {}).get(ag)
+    if grade is None:
+        grade = data.get("routines", {}).get(ag)
+    if grade is None:
+        return data.get("defaut", {}).get("label", "Inconnu")
+    for e in data.get("echelle", []):
+        if e.get("grade") == grade:
+            return e.get("label", "Inconnu")
+    return data.get("defaut", {}).get("label", "Inconnu")
+
+
+def _secteur_label(agent):
+    """Secteur ASCII d un agent/routine depuis grades-v1 (mapping mots-cles).
+    Repli : [GEN]"""
+    data = _charger_grades_v1()
+    mapping = data.get("secteurs", {}).get("mapping", {})
+    defaut = data.get("secteurs", {}).get("defaut", "[GEN]")
+    ag = (agent or "").lower()
+    if not ag:
+        return defaut
+    # Priorite 1 : nom d agent present dans le mapping
+    if ag in mapping:
+        return mapping[ag]
+    # Priorite 2 : premier mot-cle contenu dans le nom d agent
+    for mot, secteur in mapping.items():
+        if mot in ag:
+            return secteur
+    return defaut
+
+
+def _charger_etats_actions():
+    """Charger etats-actions.json : liste des etats + regles de detection
+    de la colonne Etat (dynamique, editable sans toucher au code).
+    Repli : dictionnaire vide -> _etat_action retombe sur la logique v0.8.3."""
+    try:
+        with io.open(ETATS_ACTIONS, "r", encoding="utf-8", errors="replace") as fh:
+            return json.load(fh)
+    except (OSError, ValueError):
+        return {}
+
+
+def _etat_action(raison, agent=""):
+    """Colonne Etat : l etat de l activite au moment de l action.
+    Etats DYNAMIQUES (v0.8.4, decision utilisateur 2026-08-29) charges
+    depuis etats-actions.json : DEBUT, FIN, URGENT, BUG, DEV, ATTENTE,
+    AUTO, ACTION + defaut ACTIF. Les regles de detection (prefixes /
+    mots_cles / agents) sont appliquees DANS L ORDRE du fichier (la
+    premiere regle qui matche gagne). Repli : logique v0.8.3 si le
+    fichier est absent/invalide."""
+    data = _charger_etats_actions()
+    etats = data.get("etats")
+    if isinstance(etats, dict) and etats:
+        r = (raison or "").strip().upper()
+        ag = (agent or "").lower()
+        for nom, spec in etats.items():
+            det = spec.get("detection") if isinstance(spec, dict) else None
+            if not isinstance(det, dict):
+                continue
+            for pre in det.get("prefixes") or []:
+                if r.startswith(str(pre).upper()):
+                    return nom
+            for mot in det.get("mots_cles") or []:
+                if str(mot).upper() in r:
+                    return nom
+            for a in det.get("agents") or []:
+                if ag == str(a).lower():
+                    return nom
+        defaut = data.get("defaut")
+        if isinstance(defaut, str) and defaut:
+            return defaut
+    # Repli v0.8.3 : fichier absent/invalide.
+    r = (raison or "").strip().upper()
+    if r.startswith("DEBUT") or r.startswith("RETOUR"):
+        return "DEBUT"
+    if r.startswith("FIN"):
+        return "FIN"
+    mots_urgent = ("ANOMALIE", "DEFCON", "P1 NON", "DEBORDEMENT",
+                   "FANTOME", "VIOLATION", "SERVEUR MORT", "PIDFILE",
+                   "INBOX:", "NON-ACQUITTE")
+    for m in mots_urgent:
+        if m in r:
+            return "URGENT"
+    mots_bug = ("CORRUPTION", "RE-ECHAPPEMENT", "BUG", "PLANTE",
+                "ERREUR", "FAUX POSITIF", "KO ", " ECHEC")
+    for m in mots_bug:
+        if m in r:
+            return "BUG"
+    ag = (agent or "").lower()
+    if ag in ("citations", "notation", "compter-entree", "compter-sortie"):
+        return "ATTENTE"
+    return "ACTIF"
+
+
+def _trouver_entete_encart(lignes, zone_debut):
+    """Trouver la ligne d entete du tableau v1 (ancien ou nouveau format)."""
+    for i in range(zone_debut, len(lignes)):
+        ligne = lignes[i]
+        if ligne.startswith("| Grade | Agent |"):
+            return i
+        if ligne.startswith("| Heure | Agent |"):
+            return i
+    return -1
+
 
 # v0.5.14 : couleur HTML fixe PAR AGENT dans l historique (rendu markdown).
 # NB : nom SINGULIER - un nom pluriel terminc par 'AGENTS' casserait les
@@ -74,6 +215,7 @@ COULEURS_PAR_AGENT = {
     "socrate": "#a855f7",   # revision strategique - violet clair
     "redacteur-v2": "#7c3aed",
     "hades": "#4b5563",  # redaction docs v2 - violet profond
+    "oracle": "#0d9488",  # coordination v1 - teal
     "stark": "#f59e0b",    # communication - ambre (Iron Man)
 }
 COULEUR_DEFAUT = "#334155"
@@ -165,6 +307,9 @@ AGENTS = {
     "hades": ("Gardien des archives git -- SEUL habilite aux commandes git",
               "cerveau-projet/agents/hades/hades.md",
               "cerveau-projet/agents/hades/corrections.md"),
+    "oracle": ("Coordinateur de l'equipe v1 (session-admin) -- traite les alertes de coordination (processus fantomes, serveurs morts, roulage messages) + controle processus",
+               "cerveau-projet/agents/oracle/oracle.md",
+               "cerveau-projet/agents/oracle/corrections.md"),
     "redacteur-v2": ("Redacteur des docs de la v2 (proposition, regles, conventions) -- mode conversation (reactive Cerberus sur fin de cycle)",
                 "cerveau-projet/agents/redacteur-v2/redacteur-v2.md",
                 "cerveau-projet/agents/redacteur-v2/corrections.md"),
@@ -569,8 +714,13 @@ def detecter_type_round(raison, type_round="R"):
     return type_round
 
 
-def ajouter_historique(timestamp, session, agent, raison, type_round="R"):
+def ajouter_historique(timestamp, session, agent, raison, type_round="R", agent_effectif=None, executeur=None):
     """Ajouter une entree dans le fichier historique, max 150.
+
+    agent_effectif : agent affiche dans la colonne Agent (defaut: agent).
+    Utilise quand Oracle historise au lieu de l agent (Oracle = le true
+    pilote, il apparait dans le tableau).
+    executeur : qui execute l action (ex: Oracle). Colonne Executeur.
 
     Format v0.6.2 timeline :
       ## YYYY-MM-DD
@@ -606,7 +756,7 @@ def ajouter_historique(timestamp, session, agent, raison, type_round="R"):
     else:
         date = date_raw
     heure = (timestamp or "").split(" ")[-1] if " " in (timestamp or "") else ""
-    agent_titre = (agent or "Inconnu")
+    agent_titre = (agent_effectif or agent or "Inconnu")
 
     # 1. Inserer dans le bloc jour/agent (format timeline)
     marqueur_jour = "## %s" % date
@@ -664,25 +814,91 @@ def ajouter_historique(timestamp, session, agent, raison, type_round="R"):
     # --- v0.8.0 : encart dans AGENTS-activite-recente.md + BDD SQLite ---
     # L encart est desormais dans un fichier separe (50 entrees max, plus
     # fragile que le corps). La chronologie est dans historique.db (7 jours).
-    _ecrire_encart_v1(session, heure, agent_titre, identifiant, type_round, raison)
+    _ecrire_encart_v1(session, heure, agent_titre, identifiant, type_round, raison, executeur=executeur)
     _ecrire_bdd_v1(identifiant, agent_titre, type_round, raison, timestamp)
 
     print("Historique mis a jour dans %s" % AGENTS_HISTORIQUE)
     return 0
 
 
-def _ecrire_encart_v1(session, heure, agent, identifiant, type_round, raison):
+def _construire_encart_v1(corps):
+    """Construire l encart 'Activites recentes -- session-admin' UNIQUEMENT
+    (frontmatter + tableau au format Grade/Secteur/Debut-Fin), depuis le
+    corps chronologique de l historique. Retourne le contenu COMPLET du
+    fichier AGENTS-activite-recente.md (migration v0.8.1 : les anciennes
+    lignes portent elles aussi les nouvelles colonnes)."""
+    mapping = mapper_id_vers_session()
+    entrees = []
+    agent_courant = "?"
+    date_courante = ""
+    for ligne in corps.split("\n"):
+        l = ligne.strip()
+        if l.startswith("## ") and not l.startswith("## Activites"):
+            date_courante = l[3:].strip()
+        elif l.startswith("### "):
+            agent_courant = l[4:].strip()
+        elif l.startswith("- ") and " | " in l:
+            parties = l[2:].split(" | ", 3)
+            if len(parties) >= 3:
+                h = parties[0].strip()
+                s = parties[1].strip()
+                if len(parties) == 4:
+                    t = parties[2].strip()
+                    r = parties[3].strip()
+                else:
+                    t = ""
+                    r = parties[2].strip()
+                session_entree = mapping.get(s)
+                if session_entree != "session-admin":
+                    continue
+                entrees.append(("%s %s" % (date_courante, h), h, agent_courant, s, r, t))
+    liste = sorted(entrees, key=lambda x: x[0], reverse=True)[:50]
+    encart = (
+        "---\nidentite:\n  nom: \"Activites recentes\"\n"
+        "  type: \"tableau\"\n"
+        "  description: \"Vue rapide des 50 dernieres actions de la "
+        "session-admin (ASCII+LF). Session-freelance : "
+        "AGENTS-activite-recente-v2.md (UTF8+CRLF).\"\n"
+        "  appartient_a: commun\n  commun: true\n---\n\n"
+        "## Activites recentes -- session-admin\n\n"
+        + ENTETE_ENCART_V1 + "\n"
+        + SEPARATEUR_ENCART_V1 + "\n")
+    for _, h, a, s, r, t in liste:
+        r_aff = r if len(r) <= 80 else r[:77] + "..."
+        r_aff = r_aff.replace("|", "-")
+        # FIX 2026-08-29 : les raisons multi-lignes (ex: bloc DEMARRAGE
+        # OBLIGATOIRE des tests) cassaient le tableau de l encart. On
+        # remplace tout retour a la ligne par un espace.
+        r_aff = " ".join(r_aff.split())
+        grade = _grade_label(a)
+        secteur = _secteur_label(a)
+        df = _etat_action(r, a)
+        encart += "| %s | %s |  | %s | %s | %s | %s | %s | %s |\n" % (
+            grade, a, df, secteur, r_aff, h, s, t)
+    return encart
+
+
+def _ecrire_encart_v1(session, heure, agent, identifiant, type_round, raison, executeur=None):
     """Ecrire l encart dans AGENTS-activite-recente.md (50 entrees max,
     raison tronquee a 80 car.). Meme logique que maj_encart_activites mais
-    dans un fichier SEPAR (vue rapide, pas le corps chronologique)."""
+    dans un fichier SEPAR (vue rapide, pas le corps chronologique).
+    executeur : qui.execute l action (ex: Oracle). Colonne Executeur."""
     mapping = mapper_id_vers_session()
     session_nom = mapping.get(session, session)
     if not session_nom:
         return
     # Raison tronquee pour l encart
     r_aff = raison if len(raison) <= 80 else raison[:77] + "..."
-    nouvelle_entree = "| %s | %s | %s | %s | %s |" % (
-        heure, agent, identifiant, type_round, r_aff)
+    r_aff = r_aff.replace("|", "-")
+    # FIX 2026-08-29 : les raisons multi-lignes cassaient le tableau
+    # (les lignes debordaient sur 2 lignes physiques). On aplatit.
+    r_aff = " ".join(r_aff.split())
+    grade = _grade_label(agent)
+    secteur = _secteur_label(agent)
+    df = _etat_action(raison, agent)
+    exec_aff = executeur or ""
+    nouvelle_entree = "| %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
+        grade, agent, exec_aff, df, secteur, r_aff, heure, identifiant, type_round)
     try:
         if os.path.isfile(AGENTS_ACTIVITE_RECENTE):
             contenu = io.open(AGENTS_ACTIVITE_RECENTE, "r",
@@ -696,8 +912,8 @@ def _ecrire_encart_v1(session, heure, agent, identifiant, type_round, raison):
                 "---\nidentite:\n  type: activite-recente\n"
                 "  appartient_a: commun\n  commun: true\n---\n\n"
                 "## Activites recentes -- session-admin\n\n"
-                "| Heure | Agent | id | Type | Raison |\n"
-                "|-------|-------|----|------|--------|\n")
+                + ENTETE_ENCART_V1 + "\n"
+                + SEPARATEUR_ENCART_V1 + "\n")
     except OSError:
         return
     lignes = contenu.split("\n")
@@ -708,14 +924,31 @@ def _ecrire_encart_v1(session, heure, agent, identifiant, type_round, raison):
         if ligne.strip() == entete_encart:
             zone_debut = i
             break
-    # Trouver le tableau
-    idx_tableau = -1
-    for i in range(zone_debut, len(lignes)):
-        if "| Heure | Agent |" in lignes[i]:
-            idx_tableau = i
-            break
+    # Trouver le tableau (ancien ou nouveau format d entete)
+    idx_tableau = _trouver_entete_encart(lignes, zone_debut)
     if idx_tableau == -1:
         return
+    # v0.8.1 : migration de l ancien format (| Heure | Agent | id | Type |
+    # Raison |) vers le nouveau (Grade/Secteur/Debut-Fin). On REGENERE tout
+    # le tableau depuis le corps de l historique pour que les anciennes
+    # lignes portent elles aussi les nouvelles colonnes. ATTENTION : on
+    # reconstruit UNIQUEMENT l encart (frontmatter + tableau), jamais le
+    # corps complet (maj_encart_activites retourne corps+encart - format
+    # de l ancien fichier unique - bug corrige v0.8.2 : il ecrasait
+    # AGENTS-activite-recente.md avec le corps du journal).
+    if "| Grade | Agent |" not in lignes[idx_tableau]:
+        try:
+            with io.open(AGENTS_HISTORIQUE, "r", encoding="utf-8",
+                         errors="replace") as fh:
+                corps = fh.read()
+            encart = _construire_encart_v1(corps)
+            if encart:
+                with io.open(AGENTS_ACTIVITE_RECENTE, "w", encoding="utf-8",
+                             newline="\n") as fh:
+                    fh.write(encart)
+                return
+        except OSError:
+            pass
     # Inserer apres le separateur
     idx_separateur = idx_tableau + 1
     while idx_separateur < len(lignes) and not lignes[idx_separateur].startswith("|---"):
@@ -851,11 +1084,16 @@ def maj_encart_activites(contenu, date, heure, agent, identifiant, raison):
     for session_nom in sessions_triees:
         liste = sorted(par_session[session_nom], key=lambda x: x[0], reverse=True)[:10]
         encart += "## Activites recentes -- %s\n\n" % session_nom
-        encart += "| Heure | Agent | id | Type | Raison |\n"
-        encart += "|-------|-------|----|------|--------|\n"
+        encart += ENTETE_ENCART_V1 + "\n"
+        encart += SEPARATEUR_ENCART_V1 + "\n"
         for _, h, a, s, r, t in liste:
             r_aff = r if len(r) <= 80 else r[:77] + "..."
-            encart += "| %s | %s | %s | %s | %s |\n" % (h, a, s, t, r_aff)
+            r_aff = r_aff.replace("|", "-")
+            grade = _grade_label(a)
+            secteur = _secteur_label(a)
+            df = _etat_action(r, a)
+            encart += "| %s | %s | %s | %s | %s | %s | %s | %s |\n" % (
+                grade, a, df, secteur, r_aff, h, s, t)
         encart += "\n"
     encart += "---\n"
 
@@ -1347,6 +1585,8 @@ def _afficher_oracle_inbox(agent):
                     continue
                 try:
                     msg = json.loads(ligne)
+                    if not isinstance(msg, dict):
+                        continue
                     if not msg.get("lu"):
                         non_lus.append(msg)
                 except (ValueError, KeyError):
@@ -1369,8 +1609,16 @@ def _afficher_oracle_inbox(agent):
     print("============================")
 
 
-def activer_agent(session, agent, raison, mission=None, type_round="R"):
-    """Activer un agent dans la session (ne touche que son bloc)."""
+def activer_agent(session, agent, raison, mission=None, type_round="R",
+                  historiser=True):
+    """Activer un agent dans la session (ne touche que son bloc).
+
+    - historiser=True (defaut) : l activation historique l entree (usage
+    direct via la CLI, historique CE-ROUND).
+    - historiser=False : l appelant (Oracle, vision 2026-08-27) s occupe
+      LUI-MEME de l historisation (cmd_activer oracle.py pose DEBUT: pour
+      remplir la colonne Debut/Fin). Evite le DOUBLON d entrees quand
+      Oracle pilote les activations."""
     if not verifier_ascii(raison):
         print("ERREUR: Caractere non-ASCII detecte dans la raison - activation REFUSEE")
         return 1
@@ -1405,7 +1653,7 @@ def activer_agent(session, agent, raison, mission=None, type_round="R"):
             print("")
             print("=== AVERTISSEMENT GARDE-FOU (agent oublie) ===")
             print("L agent '%s' est encore actif dans %s." % (agent_actuel, session))
-            print("Il a probablement oublie de reactiver Cerberus.")
+            print("Il a probablement oublie d'activer Cerberus.")
             print("Auto-reactivation de '%s' autorisee." % agent)
             print("==============================================")
             print("")
@@ -1465,7 +1713,8 @@ def activer_agent(session, agent, raison, mission=None, type_round="R"):
     ecrire_agents(contenu)
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-    ajouter_historique(timestamp, session, agent, raison_finale, type_round)
+    if historiser:
+        ajouter_historique(timestamp, session, agent, raison_finale, type_round)
     mettre_a_jour_profil_session(session, agent)
     actualiser_sessions_connues()
     print("Session %s : agent %s active avec succes" % (session, agent))
@@ -1473,16 +1722,24 @@ def activer_agent(session, agent, raison, mission=None, type_round="R"):
     print("")
     print("=== MESSAGES POUR L AGENT ===")
     print("  > RELEVE MEME ROUND : l agent active (%s) doit enchainer IMMEDIATEMENT (relire SA fiche + SES corrections puis executer sa mission) - ne jamais s arreter apres une activation" % agent)
-    print("  > la fin de mission suit SA carte (Pattern 13) : activer le maillon suivant selon SA carte ; seul le DERNIER maillon reactive Cerberus avec le bilan consolide (jamais de reactivation directe a Cerberus en milieu de chaine)")
+    print("  > la fin de mission suit SA carte (Pattern 13) : activer le maillon suivant selon SA carte ; seul le DERNIER maillon ACTIVE Cerberus avec le bilan consolide (jamais d'activation directe a Cerberus en milieu de chaine)")
     # Oracle v0.1.0 : afficher les messages non lus de l agent
     _afficher_oracle_inbox(agent)
     return 0
 
 
-def reactiver_cerberus(session, raison, agent_precedent, type_round="R"):
-    """Reactiver Cerberus dans la session (ne touche que son bloc)."""
+def activer_cerberus(session, raison, agent_precedent=None, type_round="R"):
+    """Activer Cerberus dans la session (ne touche que son bloc).
+
+    Vision 2026-08-27 : PLUS de 'reactiver', toujours 'activer'. Quand un
+    agent termine (fin de mission / dernier maillon), il ACTIVE Cerberus.
+    Le comportement de fin (chrono, duree) etait dans reactiver_cerberus ;
+    il est conserve ici sous le seul nom 'activer'.
+
+    agent_precedent : optionnel, deduit de arreter_chrono_session si absent.
+    """
     if not verifier_ascii(raison):
-        print("ERREUR: Caractere non-ASCII detecte dans la raison - reactivation REFUSEE")
+        print("ERREUR: Caractere non-ASCII detecte dans la raison - activation REFUSEE")
         return 1
 
     if not os.path.isfile(CERBERUS_FICHE):
@@ -1505,19 +1762,19 @@ def reactiver_cerberus(session, raison, agent_precedent, type_round="R"):
 
     role, fiche, corrections = get_agent_info("cerberus")
     date = datetime.now().strftime("%Y-%m-%d")
+    # v0.5.16+ : fin de mission - fermer le chrono de l agent precedent et
+    # deduire son nom (agent_precedent optionnel -> agent_prec reel).
+    agent_prec, duree_prec, tokens_prec = arreter_chrono_session(session)
+    precedent = agent_precedent or agent_prec or "la chaine"
     champs = {
         "Nom Agent": "Cerberus",
         "Role Agent": role,
         "Derniere mise a jour": date,
         "Fiche": fiche,
         "Corrections": corrections,
-        "Active par": "%s (retour de mission)" % agent_precedent,
+        "Active par": "%s (retour de mission)" % precedent,
         "Raison": raison,
     }
-    # v0.5.16+ : fin de mission - fermer le chrono de l agent precedent et
-    # ajouter sa duree ET sa conso tokens au repere de son entree dans
-    # l historique.
-    agent_prec, duree_prec, tokens_prec = arreter_chrono_session(session)
     if agent_prec and duree_prec:
         conso_prec = conso_tokens_intervention(tokens_prec)
         ajouter_duree_repere(agent_prec, duree_prec, conso_prec)
@@ -1525,8 +1782,18 @@ def reactiver_cerberus(session, raison, agent_precedent, type_round="R"):
     contenu = editer_champs_session(contenu, session, champs)
     ecrire_agents(contenu)
 
+    # Colonne Debut/Fin : Cerberus qui reprend = DEBUT de son cycle de
+    # coordination (pas FIN), meme si la raison porte le bilan de l agent
+    # precedent (ex: 'FIN MISSION VULCAIN : ...'). On prefxe DEBUT pour
+    # que la colonne affiche DEBUT (demande utilisateur 2026-08-27).
+    # SAUF si la raison commence deja par FIN (retour de mission = FIN).
+    r_upper = (raison or "").strip().upper()
+    raison_df = raison
+    if not r_upper.startswith("DEBUT") and not r_upper.startswith("FIN") and not r_upper.startswith("RETOUR"):
+        raison_df = "DEBUT: " + raison
+
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-    ajouter_historique(timestamp, session, "Cerberus", raison, type_round)
+    ajouter_historique(timestamp, session, "Cerberus", raison_df, type_round, executeur="Oracle")
     mettre_a_jour_profil_session(session, "Cerberus")
     actualiser_sessions_connues()
     print("Session %s : Cerberus reactive avec succes" % session)
@@ -1578,7 +1845,7 @@ def afficher_aide():
     print("Actions disponibles:")
     print("  sidentifier [session]              - Creer/choisir sa session (agent principal = Cerberus)")
     print("  activer <session> <agent> <raison> [mission]  - Activer un agent dans sa session")
-    print("  reactiver <session> <raison> <agent_precedent> - Reactiver Cerberus dans sa session")
+    print("                            (agent=cerberus : fin de mission, toujours 'activer' jamais 'reactiver')")
     print("  sessions                           - Lister les sessions et leur agent principal")
     print("  aide                               - Afficher cette aide")
     print("")
@@ -1588,13 +1855,18 @@ def afficher_aide():
     print("  activer-agent-principal.py sidentifier glm5 admin")
     print("  activer-agent-principal.py sidentifier freebuff freelance")
     print("  activer-agent-principal.py activer session-admin Buffy \"Mission correction\"")
-    print("  activer-agent-principal.py reactiver session-admin \"Mission terminee\" Buffy")
+    print("  activer-agent-principal.py activer session-admin cerberus \"Mission terminee\"")
 
 
 def main(argv):
     if not argv:
         afficher_aide()
         return 0
+
+    # v0.5.30 : --forcer peut etre place n importe ou (garde-fou le detecte
+    # via sys.argv). On le retire d argv pour ne pas polluer le parsing
+    # positionnel (mission/agent_precedent).
+    argv = [a for a in argv if a != "--forcer"]
 
     # v0.5.24 : extraire --type r|ir (indicateur ROUND/INTER-ROUND, regle R5
     # protocole-fin-mission v0.2.0). Defaut R si absent.
@@ -1624,7 +1896,7 @@ def main(argv):
         print("activer-agent-principal v%s (%s)" % (VERSION, STATUT))
         return 0
 
-    if action in ("sidentifier", "identifier", "activer", "reactiver"):
+    if action in ("sidentifier", "identifier", "activer"):
         if not verrouiller_constitution():
             return 1
 
@@ -1645,17 +1917,13 @@ def main(argv):
         agent = argv[2]
         raison = argv[3]
         mission = argv[4] if len(argv) > 4 else None
+        # Vision 2026-08-27 : PLUS de 'reactiver', toujours 'activer'.
+        # Activer Cerberus = fermer/ronde de fin de mission (chrono + bilan).
+        # Le 4e argument optionnel (mission) sert d'agent_precedent pour
+        # Cerberus (option, deduit du chrono si absent).
+        if agent.lower() == "cerberus":
+            return activer_cerberus(session, raison, mission, type_round)
         return activer_agent(session, agent, raison, mission, type_round)
-
-    if action == "reactiver":
-        if len(argv) < 4:
-            print("ERREUR: Parametres manquants pour l'action 'reactiver' (session, raison, agent_precedent)")
-            afficher_aide()
-            return 1
-        session = argv[1]
-        raison = argv[2]
-        agent_precedent = argv[3]
-        return reactiver_cerberus(session, raison, agent_precedent, type_round)
 
     print("ERREUR: Action inconnue '%s'" % action)
     afficher_aide()

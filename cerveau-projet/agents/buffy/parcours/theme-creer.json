@@ -1,0 +1,148 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "buffy",
+    "nom": "CREER",
+    "description": "Creer un nouveau fichier (outil, regle, doc, spec) : protocole 5 fichiers, RVAV, combo corriger-impacts, enregistrer usages, Themis audit, Janus controle"
+  },
+  "theme": {
+    "nom": "CREER",
+    "but": "Creer un fichier conforme (protocole 5 fichiers), valide (RVAV) et controle (Janus/Themis)",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "description": "Apres analyse et comprehension de ma mission, tracer le debut AVANT de commencer.",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION : tracer le DEBUT avant de commencer."
+      },
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+      },
+      {
+        "besoin": "Consulter les lecons des autres agents (domaine de ma mission)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent <MOI> --domaine <domaine de ma mission>"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE - sa lecture est OBLIGATOIRE."
+      },
+      {
+        "besoin": "LIRE LA DOCUMENTATION DE L OUTIL avant utilisation",
+        "action": "procedure",
+        "etapes": [
+          "REGLE ABSOLUE : je LIS le .md de l outil (agents/tools/<categorie>/<outil>/<outil>.md) avant toute utilisation."
+        ],
+        "regle": "La doc est le CONTRAT : je verifie le modele et les parametres avant d executer."
+      },
+      {
+        "besoin": "Verifier les dependances",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>",
+          "python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py --tous"
+        ],
+        "regle": "Verifier les dependances AVANT de creer."
+      },
+      {
+        "besoin": "Verifier la structure du nouveau fichier",
+        "action": "procedure",
+        "etapes": [
+          "Verifier que le fichier n existe pas encore",
+          "Copier le outil-template : cerveau-projet/agents/tools/outil-template.md",
+          "References : pattern-2, pattern-12"
+        ],
+        "regle": "Creer conforme au protocole 5 fichiers (py/sh + md + spec + tests + index)."
+      },
+      {
+        "besoin": "Lancer le combo corriger-fichier",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-fichier/definition-combo.json"
+        ],
+        "regle": "COMBO CORRIGER-FICHIER : valider le fichier cree."
+      },
+      {
+        "besoin": "Lancer le combo controle-impacts",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-controle-impacts/definition-combo.json"
+        ],
+        "regle": "CONTROLE-IMPACTS : verifier les impacts de la creation."
+      },
+      {
+        "besoin": "Erreurs hors mission detectees ?",
+        "action": "procedure",
+        "description": "Si des erreurs hors mission sont detectees pendant le controle-impacts, les signaler a Cerberus.",
+        "etapes": [
+          "OUI -> fin-erreurs-hors-mission",
+          "NON -> continuer"
+        ],
+        "regle": "Les erreurs hors mission sont SIGNALEES, jamais ignorees."
+      },
+      {
+        "besoin": "Valider le resultat (RVAV)",
+        "action": "procedure",
+        "etapes": [
+          "Lire : cerveau-projet/agents/regles-immuables/general/rvav-workflow.md"
+        ],
+        "regle": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>",
+          "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/buffy/corrections.md --all"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict."
+      },
+      {
+        "besoin": "Ameliorations possibles de mon fonctionnement ?",
+        "action": "procedure",
+        "etapes": [
+          "NON -> Activer Themis pour auditer ma mission"
+        ],
+        "regle": "PATTERN 17 : GENERATEUR D'ABORD - je ne fais PAS l'amelioration moi-meme."
+      },
+      {
+        "besoin": "Activer Themis pour auditer ma mission",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+        ],
+        "regle": "THEMIS AVANT JANUS : evaluation croisee avant controle."
+      },
+      {
+        "besoin": "Retour de Themis recu ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-creer",
+          "NON -> re-essai (attente legitime)"
+        ],
+        "regle": "PATTERN RE-ESSAI : attente legitime, voulue."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-creer"
+  }
+}

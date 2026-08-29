@@ -1,0 +1,64 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "promethee",
+    "version": "0.3.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-promethee",
+    "agent": "promethee",
+    "description": "Arbre des decisions de Promethee - Redacteur de specs. 6 themes tires du parcours v0.4.4 (30 cases) : CREER (c2-c9, creer une spec depuis un pense-bete), COMPLETER (c11-c15, completer une spec existante), CORRIGER (c9f, corriger selon rapport Janus), AMELIORER (c9b-c9e, ameliorer son fonctionnement), AUTRE (c18-c23, delegation/outil temp/audit), OUTILS (cU1-cU3, probleme outil).",
+    "regles": {
+      "D1": "Chaque branche mene a des besoins, qui menent aux procedures.",
+      "D5": "Les besoins sont des REDIRECTIONS.",
+      "D7": "RELIRE OBLIGATOIRE : corrections puis fiche AVANT toute mission.",
+      "PENSE_BETE_SOURCE": "IMMUABLE : je ne cree pas de spec sans un pense-bete source.",
+      "ANTI_DOUBLON": "Avant toute creation ou completion, je lance rechercher-specs.",
+      "RVAV": "OBLIGATOIRE : Rechercher -> Verifier -> Analyser -> Valider. Pas de validation sans RVAV.",
+      "OUTILS_EXCLUSIFS": "IMMUABLE : j utilise UNIQUEMENT les outils du cerveau assignes dans mon parcours.",
+      "BILAN_OUTILS": "IMMUABLE : en fin de mission, je declare tous les outils utilises."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est la mission spec ?",
+    "branches": [
+      {
+        "reponse": "CREER",
+        "description": "Creer une spec depuis un pense-bete : rechercher-specs, lire, squelette, remplir, ASCII, valider, index (c2-c9)",
+        "vers": "theme-creer.json"
+      },
+      {
+        "reponse": "COMPLETER",
+        "description": "Completer une spec existante : rechercher-specs, lire, conventions, completer, valider (c11-c15)",
+        "vers": "theme-completer.json"
+      },
+      {
+        "reponse": "CORRIGER",
+        "description": "Corriger selon le rapport de Janus : boucle KO (c9f)",
+        "vers": "theme-corriger.json"
+      },
+      {
+        "reponse": "AMELIORER",
+        "description": "Ameliorer son fonctionnement : generateur, agent habilite, reprise (c9b-c9e)",
+        "vers": "theme-ameliorer.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors perimetre : delegation, outil temp, signaler, Themis audit (c18-c23)",
+        "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "OUTILS",
+        "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)",
+        "vers": "theme-outils.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles"
+  }
+}

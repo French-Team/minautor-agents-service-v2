@@ -223,10 +223,15 @@ def main():
              "ko=%s" % structure_ko[:4])
     chrono_etape("1. structure jour/agent", t_debut)
 
-    # 2. Les agents des blocs sont connus
+    # 2. Les agents des blocs sont connus. EXEMPTION DOCUMENTEE : la routine
+    #    v1 'citations' (serveur de routines oracle, TEMPORAIRE active en dev,
+    #    manifest.json) historise sous le bloc 'citations' - ce n est pas un
+    #    agent mais un artefact de routine documente, tolere.
     t_debut = time.monotonic()
+    blocs_routines = {"citations"}
     inconnus = sorted(set(e["agent"].lower() for e in entrees)
-                      - set(a.lower() for a in agents_md))
+                      - set(a.lower() for a in agents_md)
+                      - blocs_routines)
     verifier("2. blocs agent connus (%d agents)" % len(agents_md),
              not inconnus, "inconnus=%s" % inconnus[:5])
     chrono_etape("2. agents connus", t_debut)

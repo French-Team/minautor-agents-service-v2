@@ -6415,11 +6415,11 @@ Controle de la mission Vulcain v0.7.2 : encarts 10 activites + raisons completes
 
 Controle final de la chaine Cerberus -> Themis (audit) -> Vulcain (reparation) -> Morpheus (tests + garde-fou). VERDICT VALID, 0 defaut.
 
-**Verifications** : (1) versions 0.7.3 coherentes py/sh/md/spec ; (2) lanceur officiel (Janus habilite) : test-102/101/099/100 = 4 OK / 0 KO ; (3) reparation timestamps verifiee : 4 x strftime(...%f)[:-3] (l.879/1036/1308/1367) + get_timestamp %3N (.sh) ; (4) ASCII strict 0/0 sur 12 fichiers de la mission (1 correction : 4 tirets cadratins '—' dans le rapport Themis, section ajoutee par l audit -> remplaces par '-') ; (5) LF pur 0 CRLF.
+**Verifications** : (1) versions 0.7.3 coherentes py/sh/md/spec ; (2) lanceur officiel (Janus habilite) : test-102/101/099/100 = 4 OK / 0 KO ; (3) reparation timestamps verifiee : 4 x strftime(...%f)[:-3] (l.879/1036/1308/1367) + get_timestamp %3N (.sh) ; (4) ASCII strict 0/0 sur 12 fichiers de la mission (1 correction : 4 tirets cadratins '--' dans le rapport Themis, section ajoutee par l audit -> remplaces par '-') ; (5) LF pur 0 CRLF.
 
 **Lecons** :
 1. LE VERROU D HABILITATION DU LANCEUR EST UN VRAI CONTROLE CROISE : Morpheus ne peut pas lancer le lanceur (verrou ferme pour lui, test-027 points 5-8 KO attendus) - c est Janus qui le lance : le second controle utilise l outil OFFICIEL, pas les tests en --isoler.
-2. UN TIRET CADRATIN '—' (U+2014) INTRODUIT PAR UN EDITEUR EST UNE VIOLATION ASCII : le str_replace de ma section de rapport a introduit 4 em-dashes invisibles - toujours revalider ASCII apres CHAQUE edition (pas seulement a la creation).
+2. UN TIRET CADRATIN '--' (U+2014) INTRODUIT PAR UN EDITEUR EST UNE VIOLATION ASCII : le str_replace de ma section de rapport a introduit 4 em-dashes invisibles - toujours revalider ASCII apres CHAQUE edition (pas seulement a la creation).
 3. UNE CHAINE DE REPARATION COMPLETE PRODUIT DES BONUS : le garde-fou test-102 a revele un bug preexistant du lanceur (glob test-0* excluait test-100+) - les controles en chaine (audit -> reparation -> tests -> controle) attrapent plus que la mission initiale.
 
 **Preuves** : rapport themis/rapports/rapport-diagnostic-microsecondes-2026-08-25.md (suite audit CONFORME), rapport morpheus/rapports/rapport-tests-microsecondes-2026-08-25.md, lanceur 4 OK/0 KO, ASCII 0/0.
@@ -6445,3 +6445,71 @@ Controle final de la chaine Cerberus -> Vulcain (branchement) -> Morpheus (test-
 2. LA RAISON DU BLOC SESSION EST UN VECTEUR DE FUITE TRANSOIRE : chaque activation ecrase la raison - le dernier maillon de la chaine doit reactiver Cerberus avec une raison SANS le nom confidentiel pour laisser AGENTS.md propre.
 
 **Preuves** : test-092 9/9, versions 0.7.4 coherentes, ASCII 0/0, activation sur copie OK, grep AGENTS.md -> 0 occurrence du nom (apres reactivation finale).
+
+
+## [LECON] 2026-08-28 -- CONTROLE CROISE PILOTE ORACLE + VIGIE-ROUND (Janus)
+
+**Contexte** : round vulcain puis morpheus puis janus, decision utilisateur les deux en cascade. Controle croise de la chaine.
+
+**Constats** :
+1. Pilote Oracle corrige, limite par defaut 1 pas, mission et ordre en tete du plateau, plus d activation automatique des maillons, precedent cerberus lors d une auto-reactivation.
+2. Routine vigie-round creee et indexee, detection session orpheline et chaine en attente, alerte 4W, anti-spam 30 min.
+3. test-104 garde-fou 10 points, 10 OK via lanceur, serie e 100 sur 100.
+4. test-063 avait un BUG DE COUVERTURE : lister_tests_reels utilisait startswith test-0, excluant test-100 et plus, traites comme fantomes. Corrige en startswith test- : 102 tests reels couverts, 11 sur 11 OK.
+5. KO preexistants hors perimetre du round, documentes : catalogue 187 vs 186 attendu, CRLF residuels, cerberus-freelance cU2, processus residuels lies aux daemons actifs, test-082 pilote.py docstring tmp-buffy issue du code du 27-08 non commite.
+
+**Lecons** :
+1. UN GARDE-FOU PEUT AVOIR UN ANGLE MORT : startswith test-0 ne couvre pas test-100 plus. La couverture des listes de tests doit etre testee avec un test au-dela de 99.
+2. LES KO PREEXISTANTS D UN ETAT NON COMMITE NE DOIVENT PAS BLOQUER UN ROUND : les documenter et verifier que le round lui-meme est vert.
+
+**Verdict** : VALIDE - pilote Oracle corrige, vigie-round operationnelle, test-104 10 sur 10 via lanceur, test-063 corrige 11 sur 11, lecons avec verdict. KO preexistants documentes pour un round dedie.
+
+
+## [LECON] 2026-08-28 -- CONTROLE CROISE NON-REGRESSION OBSOLETE + CORRECTIONS ROUND (Janus)
+
+**Contexte** : prise de conscience utilisateur - la suite de non-regression n est plus valide depuis la migration des agents. Controle croise de la chaine vulcain-morpheus (inter-round inclus).
+
+**Constats** :
+1. Corrections vulcain (round precedent) : test-082 9/9, test-040 5/5 (hades-contexte-git indexe), test-047 10/10 (CRLF : 5 sources oracle LF + 40 fichiers + exclusions freelance/observations).
+2. Adaptations morpheus : test-005 28/28 SOUS JANUS (le point 21 valider-cartes est bloque par le verrou sous morpheus - habilite pour janus), test-013 22/22, test-018 13/13.
+3. Inter-round vulcain : hades c5 (vers retire, titre 'FIN DE MISSION - reactiver Cerberus', bilan consolide) + cerberus c1h*/c20h alleges -> valider-case CONFORME, 0 reference cassee.
+4. Mon adaptation hades c5 a revele la REGLE IMMUABLE JANUS (test-070 : fin 'FIN - Reactiver Cerberus' uniquement chez janus) : titre aligne sur le modele redacteur-v2 (FIN DE MISSION) qui ne matche pas le motif strict.
+
+**KO restants (9) tous PREEXISTANTS ou artefacts** :
+- test-070 themis c8ir 'me REACTIVE' : protocole inter-round legitime (l habilite reactive l appelant) - etat non commite.
+- test-072 'mecano' = parcours-ferrari avec identite.appartient_a='mecano' (renommage ferrari non reporte) + c0 type=indice (structure obsolete).
+- test-080 fiche buffy section PARCOURS (carte arbre v2 sans maj fiche).
+- test-060/067/079/007 : catalogue 187 vs 186 + activer-agent-principal.sh 0.7.4 vs .py 0.8.2 (bump .py sans .sh) + registre stark 2026-08-23.
+- test-085 processus daemons : artefact attendu (daemons oracle+routines actifs).
+- test-055 cerberus-freelance cU2 : regle mentionne generateurs-commande/consulter-combos sans indices outil.
+
+**Lecons** :
+1. LE VERROU D HABILITATION EST UN FILTRE REEL DE LA NON-REGRESSION : test-005 point 21 passe uniquement sous janus (habilite valider-cartes) - un test qui appelle un outil verrouille ne peut etre valide que par l agent habilite.
+2. UN TITRE DE FIN 'FIN - Reactiver Cerberus' EST RESERVE A JANUS (REGLE IMMUABLE) : les autres derniers maillons (redacteur-v2, hades) utilisent 'FIN DE ... - reactiver Cerberus' pour exprimer la reactivation sans matcher le motif strict.
+3. UN RENOMMAGE D AGENT (mecano -> ferrari) LAISSE DES TRACES : identite.appartient_a dans le parcours + nom du dossier - test-072 le detecte (c0 type=indice). A corriger par Vulcain (carte ferrari).
+
+**Verdict** : VALIDE - toutes les corrections du round sont vertes sous janus (test-005 28/28, test-013 22/22, test-018 13/13, test-082 9/9, test-040 5/5, test-047 10/10), 0 nouveau KO introduit (hades corrige). KO restants documentes pour un round dedie (cartes ferrari, cerberus-freelance, themis c8ir, bumper .sh, catalogue 187).
+
+## [LECON] 2026-08-28 -- RECONTROLE APRES INTER-ROUND MORPHEUS : BARRIERE KO DEBLOQUEE, 4 KO CACHES REVELES (Janus)
+
+**Contexte** : recontrole de la chaine apres l inter-round morpheus (test-070 + compteurs catalogue adaptes). La non-regression a tourne avec --desactiver 79,85 (2 KO documentes hors perimetre).
+
+**Adaptations morpheus verifiees (toutes vertes sous janus)** :
+- test-070 : 13/13 (exemption inter-round pour 'l habilite me REACTIVE' = protocole v0.2.0).
+- test-007 : 15/15 (catalogue 187).
+- test-060 : 12/12 (catalogue 187 + version analyser-tokens 0.1.4).
+- test-079 : 14/15 (point 5 KO = outil analyser-noms-maj ne connait pas les agents freelance stark ni la casse Cerberus - 87 entrees AGENT_INCONNU, domaine Vulcain).
+- test-067/072/080/055 : verts (corrections vulcain de l inter-round precedent).
+
+**BARRIERE KO DEBLOQUEE -> 4 KO CACHES REVELES (preexistants, jamais vus car la barriere s arretait sur les 9 premiers)** :
+1. test-096 (6 KO) : ferrari + hades n ont NI .mmd NI .svg dans cartes-vues/mermaid - la generation des vues n a jamais suivi l ajout de ces 2 agents. Domaine : generation cartes-vues (Vulcain/Buffy).
+2. test-001 (1 KO) : lien casse - protocole-verification-coherence.001.01.ebauche.md pointe vers ../../../themis/rapports/rapport-audit-coherence-readme-2026-08-10.md (fichier inexistant). Domaine : doc (Buffy).
+3. test-006 (1 KO) : compteur fige - parcours-atlas attendu 49 cases/13 chemins, reel 51/16 (evolution v0.5.7). Meme classe que les compteurs adaptes par morpheus. Domaine : test (Morpheus).
+4. test-004 (1 KO) : version morpheus 0.5.4 attendue, parcours-morpheus reel 0.5.8. Pin de version obsolete. Domaine : test (Morpheus).
+
+**Lecons** :
+1. LA BARRIERE KO MASQUE LES KO SUIVANTS : tant que la serie KO persiste, les tests au-dela de la barriere ne tournent pas - debloquer les premiers revele les suivants (ici 4 KO preexistants caches).
+2. UN AJOUT D AGENT DOIT GENERER SES VUES MERMAID : ferrari et hades sont dans AGENTS.md et leurs parcours existent, mais cartes-vues/mermaid n a jamais ete regenere - test-096 le detecte.
+3. LE RECONTROLE COMPLET NECESSITE --desactiver LES KO DOCUMENTES : sinon la barriere stoppe tout (verdict faussement restreint). Les KO documentes doivent etre listes pour laisser la suite tourner.
+
+**Verdict** : VALIDE - toutes les adaptations morpheus sont vertes sous janus. 0 nouveau KO introduit par le round. 6 KO restants documentes pour un round dedie : test-079 (outil analyser-noms-maj, Vulcain), test-085 (daemons, artefact attendu), test-096 (cartes-vues, Vulcain/Buffy), test-001 (lien casse doc, Buffy), test-006 (compteur atlas, Morpheus), test-004 (version morpheus, Morpheus).

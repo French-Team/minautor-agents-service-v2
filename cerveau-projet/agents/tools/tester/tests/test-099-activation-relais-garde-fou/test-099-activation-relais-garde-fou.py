@@ -157,6 +157,10 @@ def creer_environnement_test():
     agents_file = os.path.join(tmpdir, "AGENTS.md")
     historique_file = os.path.join(tmpdir, "AGENTS-historique.md")
     classeur_file = os.path.join(tmpdir, "variables-actuelles.md")
+    # FIX 2026-08-29 : sans surcharge, l encart REAL (AGENTS-activite-
+    # recente.md) etait pollue par les entrees de test (session-llm-1)
+    # avec des raisons multi-lignes qui cassaient le tableau.
+    activite_file = os.path.join(tmpdir, "AGENTS-activite-recente.md")
 
     shutil.copy2(AGENT_MD_TEMPLATE, agents_file)
     shutil.copy2(HISTORIQUE_TEMPLATE, historique_file)
@@ -165,7 +169,7 @@ def creer_environnement_test():
     if not reinitialiser_cerberus_actif(agents_file):
         print("WARNING : reinitialisation Cerberus actif impossible")
 
-    return tmpdir, agents_file, historique_file, classeur_file
+    return tmpdir, agents_file, historique_file, classeur_file, activite_file
 
 
 def nettoyer_environnement(tmpdir):
@@ -174,12 +178,14 @@ def nettoyer_environnement(tmpdir):
         shutil.rmtree(tmpdir)
 
 
-def executer_activer(agents_file, historique_file, classeur_file, args):
+def executer_activer(agents_file, historique_file, classeur_file,
+                     activite_file, args):
     """Executer activer-agent-principal avec un environnement isole."""
     env = os.environ.copy()
     env["AGENTS_FILE"] = agents_file
     env["AGENTS_HISTORIQUE"] = historique_file
     env["CLASSEUR_STOCKAGE"] = classeur_file
+    env["AGENTS_ACTIVITE_RECENTE"] = activite_file
     cmd = [PYTHON, ACTIVER] + args
     return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True,
                                       encoding="utf-8", errors="replace",
@@ -188,10 +194,11 @@ def executer_activer(agents_file, historique_file, classeur_file, args):
 
 def point_1_activation_cerberus():
     """1. Activation depuis Cerberus - autorisee sans avertissement."""
-    tmpdir, agents_file, historique_file, classeur_file = \
+    tmpdir, agents_file, historique_file, classeur_file, activite_file = \
         creer_environnement_test()
     try:
         r = executer_activer(agents_file, historique_file, classeur_file,
+                             activite_file,
                              ["activer", "session-llm-1", "atlas",
                               "Test etape 1"])
         ok = (r.returncode == 0 and "AVERTISSEMENT GARDE-FOU" not in r.stdout
@@ -204,13 +211,15 @@ def point_1_activation_cerberus():
 
 def point_2_auto_reactivation():
     """2. Auto-reactivation (meme agent) - avertissement + autorisee."""
-    tmpdir, agents_file, historique_file, classeur_file = \
+    tmpdir, agents_file, historique_file, classeur_file, activite_file = \
         creer_environnement_test()
     try:
         r1 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "atlas",
                                "Test etape 1"])
         r2 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "atlas",
                                "Test etape 2"])
         ok = (r1.returncode == 0 and r2.returncode == 0
@@ -223,13 +232,15 @@ def point_2_auto_reactivation():
 
 def point_3_relais_chaine():
     """3. Relais de chaine (agent different) - autorise (Pattern 8)."""
-    tmpdir, agents_file, historique_file, classeur_file = \
+    tmpdir, agents_file, historique_file, classeur_file, activite_file = \
         creer_environnement_test()
     try:
         r1 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "atlas",
                                "Test etape 1"])
         r2 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "themis",
                                "Test etape 2"])
         ok = (r1.returncode == 0 and r2.returncode == 0)
@@ -241,14 +252,18 @@ def point_3_relais_chaine():
 
 def point_4_reactivation_cerberus():
     """4. Reactivation de Cerberus toujours autorisee."""
-    tmpdir, agents_file, historique_file, classeur_file = \
+    tmpdir, agents_file, historique_file, classeur_file, activite_file = \
         creer_environnement_test()
     try:
         r1 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "atlas", "Test"])
+        # Vision 2026-08-27 : PLUS de 'reactiver', toujours 'activer'.
+        # Reactiver Cerberus = activer cerberus (4e arg = agent precedent).
         r2 = executer_activer(agents_file, historique_file, classeur_file,
-                              ["reactiver", "session-llm-1", "Test fin",
-                               "atlas"])
+                               activite_file,
+                              ["activer", "session-llm-1", "cerberus",
+                               "Test fin", "atlas"])
         ok = (r1.returncode == 0 and r2.returncode == 0
               and "Cerberus reactive avec succes" in r2.stdout)
         verifier("4. reactivation Cerberus toujours autorisee", ok,
@@ -259,13 +274,15 @@ def point_4_reactivation_cerberus():
 
 def point_5_forcer():
     """5. --forcer conserve (avertissement forcee, compatibilite)."""
-    tmpdir, agents_file, historique_file, classeur_file = \
+    tmpdir, agents_file, historique_file, classeur_file, activite_file = \
         creer_environnement_test()
     try:
         r1 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "atlas",
                                "Test etape 1"])
         r2 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "themis",
                                "Test forcee", "--forcer"])
         ok = (r1.returncode == 0 and r2.returncode == 0
@@ -278,20 +295,24 @@ def point_5_forcer():
 
 def point_6_chaine_complete():
     """6. Chaine complete bout-en-bout (Pattern 8)."""
-    tmpdir, agents_file, historique_file, classeur_file = \
+    tmpdir, agents_file, historique_file, classeur_file, activite_file = \
         creer_environnement_test()
     try:
         r1 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "buffy",
                                "Test chaine 1"])
         r2 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "themis",
                                "Test chaine 2"])
         r3 = executer_activer(agents_file, historique_file, classeur_file,
+                               activite_file,
                               ["activer", "session-llm-1", "janus",
                                "Test chaine 3"])
         r4 = executer_activer(agents_file, historique_file, classeur_file,
-                              ["reactiver", "session-llm-1",
+                               activite_file,
+                              ["activer", "session-llm-1", "cerberus",
                                "Test chaine fin", "janus"])
         ok = (r1.returncode == 0 and r2.returncode == 0
               and r3.returncode == 0 and r4.returncode == 0

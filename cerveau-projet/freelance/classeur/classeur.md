@@ -51,7 +51,7 @@ python3 cerveau-projet/freelance/classeur/entry.py <sous-commande> [args]
 |---|---|
 | **BDD unique** | Le classeur v2 EST la BDD SQLite (pas de fichier markdown a maintenir) |
 | **Frontiere v1/v2** | La v2 n ecrit jamais dans le classeur v1 ; la v1 ne lit pas le classeur v2 (sauf outil dedie a venir) |
-| **Traçabilite** | Chaque variable a une source et une date |
+| **Tracabilite** | Chaque variable a une source et une date |
 | **Carte identite** | Table utilisateur reservee : a remplir quand la carte d identite utilisateur sera definie |
 | **Conventions v2** | UTF-8, CRLF, emojis autorises (D4) |
 

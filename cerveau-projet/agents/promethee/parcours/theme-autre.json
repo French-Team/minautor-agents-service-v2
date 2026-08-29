@@ -1,0 +1,20 @@
+{
+  "identite": {"type": "theme", "appartient_a": "promethee", "nom": "AUTRE", "description": "Mission hors perimetre : delegation, outil temp, signaler, Themis audit"},
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Gerer les missions qui sortent du perimetre de redaction de specs",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine redaction-spec)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent promethee --domaine redaction-spec"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "La mission concerne-t-elle un autre agent ? (question c18)", "action": "procedure", "etapes": ["SI OUI -> DELEGATION (c19)", "SI NON -> Besoin d outil (c20b)", "SI audit -> Themis (c22)"], "regle": "REDIRECTION : si le verrou bloque un outil, la mission concerne un autre agent."},
+      {"besoin": "DELEGATION - Activer l agent habilite (case c19)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"], "regle": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."},
+      {"besoin": "Besoin d outil temporaire ou durable ? (question c20b)", "action": "procedure", "etapes": ["SI TEMPORAIRE -> creer outil temp (c20c)", "SI DURABLE -> signaler le besoin (c20)"], "regle": "BESOIN : temporaire = usage unique ; durable = besoin recurrent."},
+      {"besoin": "Creer l outil temporaire (case c20c)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.py <besoin>"], "regle": "OUTIL TEMP : creer dans tmp-promethee/ a la racine, supprimer en fin de mission."},
+      {"besoin": "Signaler le besoin durable a Cerberus (case c20)", "action": "procedure", "etapes": ["Signaler a Cerberus : besoin d outil -> activer Vulcain ; besoin de test -> Morpheus"], "regle": "SIGNALEMENT : je ne cree rien moi-meme pour un besoin durable."},
+      {"besoin": "Activer Themis pour auditer (case c22)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison>"], "regle": "THEMIS : activer pour audit,Themis me re-active avec son rapport."},
+      {"besoin": "Enregistrer mes usages d outils (case c24)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent promethee --outil <outil> --contexte '<contexte>'"], "regle": "BILAN OUTILS : declarer tous les outils utilises."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-autre"}
+}

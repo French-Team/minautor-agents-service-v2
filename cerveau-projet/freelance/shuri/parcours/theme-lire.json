@@ -7,7 +7,7 @@
   },
   "theme": {
     "nom": "LIRE",
-    "but": "Accéder à la connaissance des templates et des agents",
+    "but": "Acceder a la connaissance des templates et des agents",
     "redirects": [
       {
         "besoin": "Lire le template agent v2",
@@ -27,7 +27,7 @@
         }
       },
       {
-        "besoin": "Voir les agents déjà créés",
+        "besoin": "Voir les agents deja crees",
         "action": "redirection",
         "vers": {
           "type": "commande",
@@ -44,7 +44,7 @@
         ]
       },
       {
-        "besoin": "Consulter les leçons de construction",
+        "besoin": "Consulter les lecons de construction",
         "action": "redirection",
         "vers": {
           "type": "outil",

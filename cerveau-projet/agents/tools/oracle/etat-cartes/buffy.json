@@ -1,0 +1,12 @@
+{
+ "agent": "buffy",
+ "parcours": "agents/buffy/parcours/arbre-buffy.json",
+ "case_courante": null,
+ "mission_type": "creer",
+ "mission": "CREER test retour 2",
+ "historise_debut": true,
+ "precedent": "chiron",
+ "etape": "fin",
+ "theme_courant": null,
+ "historise_fin": true
+}

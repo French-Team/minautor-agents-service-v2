@@ -33,4 +33,4 @@ mis a jour vers le destinataire).
 L'outil verifie la PARTIE MECANIQUE uniquement :
 routage des messages + mises a jour du bloc session AGENTS.md.
 L'incarnation LLM de chaque agent se verifie par les TRACES
-(historique, inboxes), jamais simulée ici.
+(historique, inboxes), jamais simulee ici.

@@ -1,0 +1,85 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "athena",
+    "nom": "CREER",
+    "description": "Creer un nouveau pense-bete complet"
+  },
+  "theme": {
+    "nom": "CREER",
+    "but": "Creer un pense-bete structure conforme au template",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent athena --domaine pense-bete"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Verifier l absence de doublon (ANTI-DOUBLON)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/rechercher/rechercher-pense-betes/rechercher-pense-betes.py <theme>"
+        ],
+        "regle": "Avant toute creation, verifier qu un pense-bete proche n existe pas."
+      },
+      {
+        "besoin": "Generer le squelette du pense-bete",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-pense-bete/generateurs-squelette-pense-bete.py <theme>"
+        ],
+        "regle": "Generer conforme au pense-bete-template."
+      },
+      {
+        "besoin": "Remplir les sections",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/creer/creer-remplir-pense-bete/creer-remplir-pense-bete.py <fichier> <sections>"
+        ],
+        "regle": "Remplir les sections structurees."
+      },
+      {
+        "besoin": "Valider le pense-bete (RVAV)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-pense-bete/valider-pense-bete.py <fichier>",
+          "python3 cerveau-projet/agents/tools/valider/valider-conventions/valider-conventions.py <fichier>",
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>"
+        ],
+        "regle": "RVAV : valider structure + conventions + ASCII."
+      },
+      {
+        "besoin": "Ajouter les lecons",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/athena/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-creer"
+  }
+}

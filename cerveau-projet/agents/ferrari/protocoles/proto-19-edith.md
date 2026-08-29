@@ -34,17 +34,17 @@ EDITH n'est PAS un agent normal. Elle a 3 particularites :
 
 ```
 edith/
-├── edith.md              <- fiche (dormante, silver, notation 85)
-├── corrections.md        <- fenetre glissante
-├── parcours/
-│   ├── arbre-edith.json  <- arbre de decisions (PAS une carte)
-│   ├── fins.json         <- fins centralisees
-│   ├── theme-lire.json   <- theme lecture
-│   ├── theme-observer.json <- theme observation
-│   └── theme-rapporter.json <- theme rapport
-└── rapports/             <- rapports de suivi de score
-    ├── suivi-stark-*.md
-    └── suivi-vision-*.md
+|--- edith.md              <- fiche (dormante, silver, notation 85)
+|--- corrections.md        <- fenetre glissante
+|--- parcours/
+|   |--- arbre-edith.json  <- arbre de decisions (PAS une carte)
+|   |--- fins.json         <- fins centralisees
+|   |--- theme-lire.json   <- theme lecture
+|   |--- theme-observer.json <- theme observation
+|   +--- theme-rapporter.json <- theme rapport
++--- rapports/             <- rapports de suivi de score
+    |--- suivi-stark-*.md
+    +--- suivi-vision-*.md
 ```
 
 ---

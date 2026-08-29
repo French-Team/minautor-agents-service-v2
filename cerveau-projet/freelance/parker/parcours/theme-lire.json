@@ -3,11 +3,11 @@
     "type": "theme",
     "appartient_a": "parker",
     "nom": "LIRE",
-    "description": "Consulter les fiches, les leçons, l'activité"
+    "description": "Consulter les fiches, les lecons, l'activite"
   },
   "theme": {
     "nom": "LIRE",
-    "but": "Accéder à la connaissance",
+    "but": "Acceder a la connaissance",
     "redirects": [
       {
         "besoin": "Lire une fiche d'agent",
@@ -15,12 +15,12 @@
         "vers": {"type": "outil", "commande": "lire-fichier"}
       },
       {
-        "besoin": "Consulter les leçons",
+        "besoin": "Consulter les lecons",
         "action": "redirection",
         "vers": {"type": "outil", "commande": "consulter-lecons"}
       },
       {
-        "besoin": "Voir l'activité récente",
+        "besoin": "Voir l'activite recente",
         "action": "redirection",
         "vers": {"type": "outil", "commande": "lire-activite-recente"}
       }

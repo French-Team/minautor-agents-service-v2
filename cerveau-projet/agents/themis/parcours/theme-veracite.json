@@ -1,0 +1,80 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "themis",
+    "nom": "VERACITE",
+    "description": "Verifier la verite des README (public + dev) : compteurs, affirmations, normes"
+  },
+  "theme": {
+    "nom": "VERACITE",
+    "but": "Verifier que les affirmations factuelles des README sont vraies",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Lire le README a verifier",
+        "action": "procedure",
+        "etapes": [
+          "Lire README.md et/ou readme-dev.md"
+        ],
+        "regle": "Lecture obligatoire avant verification."
+      },
+      {
+        "besoin": "Verifier les compteurs (outils, tests, agents)",
+        "action": "procedure",
+        "etapes": [
+          "Compter les agents reels dans AGENTS.md",
+          "Compter les outils reels dans agents/tools/",
+          "Compter les tests reels dans agents/tools/tester/tests/",
+          "Comparer avec les badges du README"
+        ],
+        "regle": "COMPTAGE REEL : compter les dossiers, pas faire confiance au README."
+      },
+      {
+        "besoin": "Verifier les affirmations factuelles",
+        "action": "procedure",
+        "etapes": [
+          "Croiser les roles d agents avec les fiches agents",
+          "Verifier les references a des outils/protocoles"
+        ],
+        "regle": "VERACITE : chaque affirmation doit etre verifiable dans les sources de verite."
+      },
+      {
+        "besoin": "Verifier les normes (ASCII, LF, longueur)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py README.md"
+        ],
+        "regle": "NORMES : ASCII strict + LF pur + lignes <= 100 car."
+      },
+      {
+        "besoin": "Produire le rapport de veracite",
+        "action": "procedure",
+        "etapes": [
+          "Lister les ecarts trouves (affirmations fausses, compteurs incorrects, normes violees)",
+          "Classer par priorite (critique/majeur/mineur)"
+        ],
+        "regle": "RAPPORT : factuel, precis, sans jugement."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/themis/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-veracite"
+  }
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: ascii -*-
 """
-Oracle Server v0.1.0 -- Serveur MCP pour l'equipe v1 (session-admin)
+Oracle Server v0.2.0 -- Serveur de l'equipe v1 (session-admin)
 
 Hub central de communication, activation et coordination.
 Tourne en arriere-plan et route les messages en temps reel.
@@ -9,6 +9,7 @@ Tourne en arriere-plan et route les messages en temps reel.
 Lancement:
     python oracle-server.py                    # Stdio (local)
     python oracle-server.py --transport http   # HTTP (distant)
+    python oracle-server.py --boucle [--intervalle N]  # daemon resident (v0.2.0)
 
 Fonctionnalites:
     - Routing des messages entre agents (inbox/outbox)
@@ -16,15 +17,23 @@ Fonctionnalites:
     - Surveillance des agents (harnais)
     - Gestion des files de missions
     - DEFCON (niveau de menace)
+    - Mode --boucle : daemon resident (harnais + relais + DEFCON),
+      lance par le serveur de demarrage v1 (oracle-demarrage).
+      Le mode stdio historique (lecture de commandes JSON sur stdin)
+      reste disponible pour les appels ponctuels.
 """
 
+import io
 import json
 import os
 import sys
+import time
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+
+VERSION = "0.2.0"
 
 # --- Configuration ---
 ORACLE_DIR = Path(__file__).parent
@@ -32,10 +41,13 @@ INBOX_DIR = ORACLE_DIR / "inbox"
 OUTBOX_DIR = ORACLE_DIR / "outbox"
 DATA_FILE = ORACLE_DIR / "oracle-data.json"
 FILES_DIR = ORACLE_DIR / "files"
+PID_FILE = ORACLE_DIR / "oracle-server.pid"
+LOG_DIR = ORACLE_DIR / "observations"
 
 INBOX_DIR.mkdir(exist_ok=True)
 OUTBOX_DIR.mkdir(exist_ok=True)
 FILES_DIR.mkdir(exist_ok=True)
+LOG_DIR.mkdir(exist_ok=True)
 
 # Import du CLI pour reutiliser les fonctions
 sys.path.insert(0, str(ORACLE_DIR))
@@ -77,7 +89,7 @@ def _lire_jsonl(chemin):
 
 def _ecrire_jsonl(chemin, messages):
     """Ecrire une liste de messages dans un JSONL."""
-    with open(chemin, "w", encoding="utf-8") as f:
+    with io.open(chemin, "w", encoding="utf-8", newline="\n") as f:
         for msg in messages:
             f.write(json.dumps(msg, ensure_ascii=False) + "\n")
 
@@ -191,20 +203,116 @@ def status() -> dict:
         messages = _lire_jsonl(inbox_file)
         non_lus = sum(1 for m in messages if not m.get("lu"))
         resultats[nom] = {"messages": len(messages), "non_lus": non_lus}
-    return {"version": "0.1.0", "agents": resultats}
+    return {"version": VERSION, "agents": resultats}
+
+
+# --- Mode boucle (daemon resident v0.2.0) ---
+
+def _ecrire_pid():
+    try:
+        with io.open(PID_FILE, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(str(os.getpid()))
+    except OSError:
+        pass
+
+
+def _nettoyer_pid():
+    try:
+        PID_FILE.unlink()
+    except OSError:
+        pass
+
+
+def _boucle_tic():
+    """Un tic du daemon : controle processus + harnais (surveillance)
+    + relais (transmission). Tolerant : une erreur ne tue jamais le
+    daemon."""
+    # 0. Controle des processus fantomes : chaque serveur v1 doit avoir
+    # UNE seule instance (pid officiel du pid file). Un doublon = risque
+    # de concurrence (double tic, double routing) -> alerte cerberus.
+    try:
+        sys.path.insert(0, str(ORACLE_DIR / "fonctions"))
+        import controle_processus as _cp
+        _cp_r = _cp.verifier()
+        if not _cp_r.get("ok"):
+            _alerte_fantomes(_cp.formatter(_cp_r))
+    except Exception as exc:
+        print("[ORACLE-SERVER] ERREUR controle processus : %s" % exc,
+              flush=True)
+    try:
+        sys.path.insert(0, str(ORACLE_DIR / "fonctions"))
+        import harnais_oracle as _h
+        ecarts = _h.verifier()
+        if ecarts:
+            _h.signaler(ecarts)
+    except Exception as exc:
+        print("[ORACLE-SERVER] ERREUR harnais : %s" % exc, flush=True)
+    try:
+        sys.path.insert(0, str(ORACLE_DIR / "fonctions"))
+        import relais as _r
+        nb, _ = _r.relayer_hub()
+        if nb:
+            print("[ORACLE-SERVER] %d message(s) relaye(s)" % nb, flush=True)
+    except Exception as exc:
+        print("[ORACLE-SERVER] ERREUR relais : %s" % exc, flush=True)
+
+
+def _alerte_fantomes(rapport):
+    """Deposer une alerte P1 dans l inbox de cerberus : un processus
+    fantome (doublon) ou un serveur mort a ete detecte."""
+    try:
+        import uuid
+        msg = {
+            "id": "fantome-" + uuid.uuid4().hex[:6],
+            "de": "oracle-harnais",
+            "vers": "cerberus",
+            "priorite": 1,
+            "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
+            "objet": "[FANTOMES] processus concurrent(s) ou serveur mort detecte(s)",
+            "corps": rapport,
+            "lu": False, "accuse": False, "type": "harnais-oracle",
+        }
+        cible = INBOX_DIR / "cerberus.jsonl"
+        cible.parent.mkdir(parents=True, exist_ok=True)
+        with open(cible, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(msg, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
+
+def boucler(intervalle_secondes):
+    """Boucle residente du daemon v1 : harnais + relais toutes les N secondes.
+    Le processus tourne en permanence (lance par oracle-demarrage)."""
+    _ecrire_pid()
+    print("[ORACLE-SERVER] daemon lance (tic toutes les %ds, pid %d)"
+          % (intervalle_secondes, os.getpid()), flush=True)
+    try:
+        while True:
+            _boucle_tic()
+            time.sleep(intervalle_secondes)
+    finally:
+        _nettoyer_pid()
 
 
 # --- Lancement ---
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="Oracle Server v0.1.0")
+    parser = argparse.ArgumentParser(description="Oracle Server v0.2.0")
     parser.add_argument("--transport", default="stdio", choices=["stdio", "http"])
     parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--boucle", action="store_true",
+                        help="Mode daemon resident (harnais + relais en boucle)")
+    parser.add_argument("--intervalle", type=int, default=30,
+                        help="Secondes entre deux tics (defaut 30)")
     args = parser.parse_args()
 
+    if args.boucle:
+        boucler(args.intervalle)
+        return 0
+
     print(f"[ORACLE-SERVER] Demarrage (transport={args.transport})")
-    print(f"[ORACLE-SERVER] Version: 0.1.0")
+    print(f"[ORACLE-SERVER] Version: {VERSION}")
     print(f"[ORACLE-SERVER] Agents: {len(charger_agents())}")
 
     if args.transport == "http":

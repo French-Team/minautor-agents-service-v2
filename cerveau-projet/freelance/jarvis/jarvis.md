@@ -96,12 +96,12 @@ surcharges:
 **Structure** :
 ```
 jarvis/parcours/
-├── arbre-jarvis.json        <- racine : choix du theme
-├── theme-traiter.json       <- TRAITER les demandes de Stark
-├── theme-distribuer.json    <- DISTRIBUER les missions aux agents
-├── theme-suivre.json        <- SUIVRE l'etat des rounds
-├── theme-coordonner.json    <- COORDONNER les communications
-└── fins.json                <- fins centralisees
+|--- arbre-jarvis.json        <- racine : choix du theme
+|--- theme-traiter.json       <- TRAITER les demandes de Stark
+|--- theme-distribuer.json    <- DISTRIBUER les missions aux agents
+|--- theme-suivre.json        <- SUIVRE l'etat des rounds
+|--- theme-coordonner.json    <- COORDONNER les communications
++--- fins.json                <- fins centralisees
 ```
 
 **Themes disponibles** :

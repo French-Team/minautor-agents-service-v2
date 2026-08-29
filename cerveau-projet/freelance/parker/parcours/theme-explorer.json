@@ -7,7 +7,7 @@
   },
   "theme": {
     "nom": "EXPLORER",
-    "but": "Aller chercher l'information la où elle se cache",
+    "but": "Aller chercher l'information la ou elle se cache",
     "redirects": [
       {
         "besoin": "Explorer un dossier",
@@ -16,11 +16,11 @@
           "Lister les fichiers du dossier",
           "Identifier les fichiers pertinents",
           "Lire les fichiers cles",
-          "Synthétiser les découvertes"
+          "Synthetiser les decouvertes"
         ]
       },
       {
-        "besoin": "Chercher un mot-clé",
+        "besoin": "Chercher un mot-cle",
         "action": "redirection",
         "vers": {
           "type": "outil",
@@ -36,7 +36,7 @@
         }
       },
       {
-        "besoin": "Voir l'activité récente",
+        "besoin": "Voir l'activite recente",
         "action": "redirection",
         "vers": {
           "type": "outil",

@@ -1,0 +1,21 @@
+{
+  "identite": {"type": "theme", "appartient_a": "minerve", "nom": "COMPLETER", "description": "Completer un todo existant avec les phases manquantes"},
+  "theme": {
+    "nom": "COMPLETER",
+    "but": "Completer les phases manquantes d un todo existant en respectant les conventions et le template",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine redaction-todo)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent minerve --domaine redaction-todo"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "Rechercher les todos existants - ANTI-DOUBLON (case c11)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/rechercher/rechercher-todos/rechercher-todos.py"], "regle": "ANTI-DOUBLON : avant de completer, verifier qu un todo au theme proche n existe pas deja."},
+      {"besoin": "Lire le todo existant (case c12)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <todo-existant>"], "regle": "LIRE le todo pour comprendre ce qui manque."},
+      {"besoin": "Verifier les conventions (case c13)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/conventions/renommage/convention-renommage.md"], "regle": "CONVENTIONS : verifier le nommage et les regles."},
+      {"besoin": "Completer les phases manquantes (case c14)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/creer/creer-remplir-todo/creer-remplir-todo.py <todo>"], "regle": "COMPLETER : phases manquantes selon le todo-template."},
+      {"besoin": "Valider le todo (case c15)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>"], "regle": "RVAV : pas de validation sans boucle complete."},
+      {"besoin": "Verifier la conformite ASCII", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <todo>"], "regle": "REGLE ASCII : 100% ASCII."},
+      {"besoin": "Lecons et retour (case c9)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/minerve/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."},
+      {"besoin": "Enregistrer mes usages d outils (case c24)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent minerve --outil <outil> --contexte '<contexte>'"], "regle": "BILAN OUTILS : declarer tous les outils utilises."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-completer"}
+}

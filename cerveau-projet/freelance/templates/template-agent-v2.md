@@ -85,11 +85,11 @@ surcharges:
 **Structure** :
 ```
 <agent>/parcours/
-├── arbre-<agent>.json     <- racine : choix du theme
-├── theme-<theme1>.json    <- theme principal
-├── theme-<theme2>.json    <- theme secondaire
-├── theme-coordonner.json  <- inter-round, retour a Stark
-└── fins.json              <- fins centralisees
+|--- arbre-<agent>.json     <- racine : choix du theme
+|--- theme-<theme1>.json    <- theme principal
+|--- theme-<theme2>.json    <- theme secondaire
+|--- theme-coordonner.json  <- inter-round, retour a Stark
++--- fins.json              <- fins centralisees
 ```
 
 **Themes disponibles** :

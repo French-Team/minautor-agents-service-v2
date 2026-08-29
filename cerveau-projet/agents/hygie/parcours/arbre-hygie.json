@@ -1,0 +1,64 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "hygie",
+    "version": "0.3.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-hygie",
+    "agent": "hygie",
+    "description": "Arbre des decisions d'Hygie - Agent de nettoyage. 6 themes tires du parcours v0.2.4 (35 cases) : NETTOYER (c2-c12,c30,c34), HONNETETE (cH1-cH3), SNAPSHOTS (cS1-cS2), PURIFIER (c9b), OUTILS (cU1-cU3), AUTRE (c29).",
+    "regles": {
+      "D1": "Chaque branche mene a des besoins, qui menent aux procedures.",
+      "D5": "Les besoins sont des REDIRECTIONS.",
+      "D7": "RELIRE OBLIGATOIRE : corrections puis fiche AVANT toute mission.",
+      "SNAPSHOT_AVANT": "Je ne supprime JAMAIS sans avoir pris un SNAPSHOT (rotation 7 jours).",
+      "SEUL_HABILITE": "Je suis le SEUL agent habilite a SUPPRIMER sans demande prealable. QUE des RESIDUS PROUVES.",
+      "COMPARTIMENTATION": "Je scanne par zone : cerveau-projet/ d un cote, workspace/ de l autre.",
+      "PREUVE_HONNETETE": "Fichier suspect = activation d un agent habilite pour preuve, JAMAIS de suppression au doute.",
+      "PATTERN_5": "RELAIS -> RETOUR -> CLOTURE : jamais de fin passive."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est ma mission ?",
+    "branches": [
+      {
+        "reponse": "NETTOYER",
+        "description": "Nettoyer le workspace : snapshot, detection residus, suppression tracable (c2-c12,c30,c34)",
+        "vers": "theme-nettoyer.json"
+      },
+      {
+        "reponse": "HONNETETE",
+        "description": "Verifier l honnetete d un residu suspect : activer agent habilite, verifier rapport (cH1-cH3)",
+        "vers": "theme-honnetete.json"
+      },
+      {
+        "reponse": "SNAPSHOTS",
+        "description": "Gerer les snapshots : creer, verifier rotation 7 jours (cS1-cS2)",
+        "vers": "theme-snapshots.json"
+      },
+      {
+        "reponse": "PURIFIER",
+        "description": "Purifier les fichiers surcharges (RVAV) (c9b)",
+        "vers": "theme-purifier.json"
+      },
+      {
+        "reponse": "OUTILS",
+        "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)",
+        "vers": "theme-outils.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors perimetre : delegation, outil temp, signaler (c29)",
+        "vers": "theme-autre.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles"
+  }
+}

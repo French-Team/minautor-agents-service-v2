@@ -3,34 +3,34 @@
     "type": "theme",
     "appartient_a": "shuri",
     "nom": "EXPLORER",
-    "description": "Diagnostiquer un problème de construction"
+    "description": "Diagnostiquer un probleme de construction"
   },
   "theme": {
     "nom": "EXPLORER",
     "but": "Comprendre pourquoi un agent ne fonctionne pas",
     "redirects": [
       {
-        "besoin": "Diagnostiquer un agent défaillant",
+        "besoin": "Diagnostiquer un agent defaillant",
         "action": "procedure",
         "etapes": [
           "Lire la fiche de l'agent",
-          "Lire son arbre de décision",
-          "Vérifier que l'arbre est valide (fichiers existants, fins correctes)",
-          "Vérifier que l'agent a un arbre (arbre-*.json)",
-          "Identifier le problème"
+          "Lire son arbre de decision",
+          "Verifier que l'arbre est valide (fichiers existants, fins correctes)",
+          "Verifier que l'agent a un arbre (arbre-*.json)",
+          "Identifier le probleme"
         ]
       },
       {
-        "besoin": "Comprendre pourquoi un nom MARVEL est rejeté",
+        "besoin": "Comprendre pourquoi un nom MARVEL est rejete",
         "action": "procedure",
         "etapes": [
-          "Vérifier la liste des noms autorisés (proposition-v2.md)",
-          "Vérifier le format (majuscule initiale, anglais, sans accent)",
+          "Verifier la liste des noms autorises (proposition-v2.md)",
+          "Verifier le format (majuscule initiale, anglais, sans accent)",
           "Proposer un nom alternatif"
         ]
       },
       {
-        "besoin": "Consulter les leçons de construction",
+        "besoin": "Consulter les lecons de construction",
         "action": "redirection",
         "vers": {
           "type": "outil",

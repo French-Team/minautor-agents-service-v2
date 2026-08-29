@@ -7,7 +7,7 @@ identite:
 # analyser-tokens
 
 **Categorie** : Analyser
-**Version** : 0.1.2
+**Version** : 0.1.4
 **Statut** : ebauche
 
 ---
@@ -110,6 +110,7 @@ outil, test, script temp) - documentee dans le protocole correspondant.
 
 | Version | Date | Description |
 |---|---|---|
+| 0.1.4 | 2026-08-27 | CORRECTIF BLOQUANT : import du module `re` manquant dans `session_par_defaut()` (NameError au premier appel sans `--session` -> l outil etait inutilisable, y compris en mode `--snapshot` consomme par activer-agent-principal). Nettoyage `import sys as _sys` redondant dans le mode `--snapshot`. |
 | 0.1.2 | 2026-08-19 | MULTI-SESSIONS (D6) : la session par defaut privilegie la variable SESSION_LLM, sinon la premiere session du classeur, sinon session-llm-1 en secours -- chaque LLM analyse SA session. |
 | 0.1.1 | 2026-08-19 | MODE MACHINE --snapshot : JSON cumulatif {envoyes, recus, fiable, source} sur une ligne (difference entre deux snapshots = conso d une intervention). Integre a activer-agent-principal : conso par agent affichee au repere ### de AGENTS-historique (tokens: Xk env / Yk recus). |
 | 0.1.0 | 2026-08-15 | Creation : modele hybride (registres locaux + compteurs API), encombrement de la fenetre |

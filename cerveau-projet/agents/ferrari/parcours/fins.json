@@ -1,0 +1,10 @@
+{
+  "identite": {"type": "fins", "appartient_a": "ferrari", "description": "Fins reelles de Ferrari (parcours v0.2.0 : c12, c11)"},
+  "fins": {
+    "fin-theme": {"titre": "Retour a la racine", "action": "redirection", "vers": "arbre-ferrari.json"},
+    "fin-correction": {"titre": "FIN - Correction terminee (mode persistant)", "description": "Correction appliquee, rapport produit, intervention historisee. Mode persistant : je reste actif pour la prochaine mission (c11 -> c13).", "action": "redirection", "vers": "arbre-ferrari.json"},
+    "fin-de-cycle": {"titre": "FIN DE CYCLE - Reactiver Cerberus", "description": "L utilisateur a dit 'fin de cycle'. Bilan complet des interventions. Reactiver Cerberus (c12).", "action": "reactiver", "cible": "cerberus", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"},
+    "fin-delegation": {"titre": "FIN - Delegation terminee", "description": "L agent habilite a ete active. Oracle reactive Cerberus.", "action": "reactiver", "cible": "cerberus", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"},
+    "fin-autre": {"titre": "FIN - Mission terminee", "description": "Mission hors parcours. Oracle reactive Cerberus.", "action": "reactiver", "cible": "cerberus", "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"}
+  }
+}

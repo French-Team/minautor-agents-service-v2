@@ -1,0 +1,47 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "socrate",
+    "description": "Fins reelles de Socrate (parcours v0.1.2 : c8, cU3)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-socrate.json"
+    },
+    "fin-revision": {
+      "titre": "FIN - Revision terminee, passer a la synthese",
+      "description": "Tous les problemes ont ete explores, questionnes, classes et formules en missions. Passer a la synthese (missions-revision.md).",
+      "action": "redirection",
+      "vers": "arbre-socrate.json"
+    },
+    "fin-synthese": {
+      "titre": "FIN - Missions pretes (activer Janus)",
+      "description": "missions-revision.md produit avec la liste structuree. Janus effectue le second controle (c8).",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-outils": {
+      "titre": "FIN - Reprendre ma mission (cU3)",
+      "description": "Le probleme d outil est resolu. Reprise de la mission interrompue.",
+      "action": "redirection",
+      "vers": "arbre-socrate.json"
+    },
+    "fin-delegation": {
+      "titre": "FIN - Delegation terminee",
+      "description": "L agent habilite a ete active. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission hors parcours. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    }
+  }
+}

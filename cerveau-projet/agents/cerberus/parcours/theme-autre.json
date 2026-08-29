@@ -1,0 +1,40 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "AUTRE",
+    "description": "Inventaire, audit, analyse du projet : activer Themis ou Atlas"
+  },
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Traiter les demandes d inventaire, audit ou analyse",
+    "redirects": [
+      {
+        "besoin": "Inventaire / audit ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> Activer Themis (audit) ou Atlas (cartographie)",
+          "NON -> Signaler le besoin"
+        ],
+        "regle": "Router vers l agent adapte."
+      },
+      {
+        "besoin": "Activer Themis (inventaire/audit)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+        ],
+        "regle": "Themis est l evaluateur croise."
+      },
+      {
+        "besoin": "Signaler le besoin",
+        "action": "procedure",
+        "etapes": [
+          "fin-signal"
+        ],
+        "regle": "Si aucun agent n est adapte, signaler le besoin."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-signal" }
+}

@@ -1,0 +1,78 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "buffy",
+    "description": "Toutes les fins possibles pour Buffy (arbre v0.1.0)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-buffy.json",
+      "description": "Theme termine : retour a la racine pour choisir un autre theme ou finir."
+    },
+    "fin-creer": {
+      "titre": "FIN - Creer un fichier (activer Janus)",
+      "description": "Fichier cree et valide (RVAV). LA FIN SUIT MA CARTE (Pattern 13) : Janus controle, puis Themis audite. Seul le DERNIER maillon re-active Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-modifier": {
+      "titre": "FIN - Modifier un fichier (activer Janus)",
+      "description": "Fichier modifie et valide (RVAV + combo corriger-fichier). Janus controle, puis Themis audite.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-agent": {
+      "titre": "FIN - Creer un agent (activer Janus)",
+      "description": "Agent cree (dossier, fiche, corrections, AGENTS.md). Janus controle.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-protocole": {
+      "titre": "FIN - Creer un protocole (activer Janus)",
+      "description": "Protocole cree et valide (RVAV). Janus controle.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    },
+    "fin-controler": {
+      "titre": "FIN - Controle termine (reactiver Cerberus)",
+      "description": "Controle/sante termine. Si active directement par Cerberus, je le re-active avec le bilan.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent_precedent>"
+    },
+    "fin-delegation": {
+      "titre": "FIN - Delegation terminee",
+      "description": "La delegation est terminee. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> buffy",
+      "regle": "Chaque agent revient a Cerberus. Oracle gere la coordination."
+    },
+    "fin-outil-temporaire": {
+      "titre": "FIN - Outil temporaire",
+      "description": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu).",
+      "action": "procedure"
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Inter-round traite",
+      "description": "Le rapport inter-round est traite. Oracle reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> buffy",
+      "regle": "Oracle gere les retours inter-round. Chaque agent revient a Cerberus."
+    },
+    "fin-erreurs-hors-mission": {
+      "titre": "FIN - Erreurs hors mission signalees a Cerberus",
+      "description": "Des erreurs hors mission ont ete detectees. La fin suit SA carte.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent_precedent>"
+    }
+  }
+}

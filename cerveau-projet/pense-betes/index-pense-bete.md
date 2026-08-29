@@ -25,7 +25,7 @@ identite:
 
 | ID | Theme | Statut | Lien |
 |---|---|---|---|
-| -- | -- | -- | *(aucun pense-bete pour l'instant)* |
+| 001 | Veille de volume v2 (inbox JARVIS qui grossissent) | ebauche | [veille-volume-v2.001.01.ebauche.md](veille-volume-v2.001.01.ebauche.md) |
 
 ## Comment creer un nouveau pense-bete
 

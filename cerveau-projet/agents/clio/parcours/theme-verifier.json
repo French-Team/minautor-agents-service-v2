@@ -1,0 +1,52 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "clio",
+    "nom": "VERIFIER",
+    "description": "Verifier si le README est a jour : comparer etat reel vs contenu du README"
+  },
+  "theme": {
+    "nom": "VERIFIER",
+    "but": "Verifier que le README reflete l etat reel du projet",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Lire le README actuel",
+        "action": "procedure",
+        "etapes": [
+          "Lire README.md pour comprendre son etat actuel"
+        ],
+        "regle": "Lecture obligatoire avant verification."
+      },
+      {
+        "besoin": "Verifier les ecarts (compteurs + texte)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/metmettre-a-jour-readme/metmettre-a-jour-readme.py --verifier"
+        ],
+        "regle": "Verifier les ecarts entre etat reel et README."
+      },
+      {
+        "besoin": "Rapporter le verdict",
+        "action": "procedure",
+        "etapes": [
+          "Si 0 ecart : README A JOUR",
+          "Si ecarts : lister les ecarts et proposer une MAJ"
+        ],
+        "regle": "Rapporter clairement l etat du README."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-verifier"
+  }
+}

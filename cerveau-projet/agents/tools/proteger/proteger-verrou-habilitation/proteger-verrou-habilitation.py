@@ -142,6 +142,7 @@ def lister_parcours():
 # exclusivite declenchant test-035).
 OUTILS_P0_PARTAGES = frozenset([
     "guider-parcours",
+    "guider-arbre",
     "lire-activite-recente",
     # LECONS (BDD partagee) : chaque agent ecrit SES lecons (enregistrer-
     # lecon, anti-usurpation interne) et lit celles des autres (consulter-

@@ -34,7 +34,7 @@ partageaient les memes fichiers sans partager le format.
 4. **outils-llm/demarrer-llm.py** : choisit les fichiers selon la session ;
    ecrit ASCII+LF (v1) ou UTF8+CRLF (v2) ; format corps ## JJ/MM/AAAA
    (JAMAIS ISO YYYY-MM-DD -> sections vides KO test-098).
-5. **battement-dev.py** : SIGNAL VISUEL serveur en ORANGE 🟠 (demande
+5. **battement-dev.py** : SIGNAL VISUEL serveur en ORANGE (demande
    utilisateur) - la routine reste visible dans l'encart v2 pour prouver
    que le serveur tourne en arriere-plan ; print securise console cp1252.
 
@@ -52,5 +52,5 @@ partageaient les memes fichiers sans partager le format.
 ## Emoji orange
 
 Le DEV-BATTEMENT affiche desormais : `Tony Stark -- Je suis Iron Man.
-[DEV-BATTEMENT 21:47] 🟠` dans AGENTS-activite-recente-v2.md. Le fichier
+[DEV-BATTEMENT 21:47] ORANGE` dans AGENTS-activite-recente-v2.md. Le fichier
 v2 etant UTF8+CRLF (convention v2 D4), l'emoji est parfaitement stocke.

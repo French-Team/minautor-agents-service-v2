@@ -35,8 +35,8 @@ cette chaine commet la violation la plus grave du projet.
 
 | # | Regle gravee | Payee par |
 |---|---|---|
-| M1 | Tout passe par JARVIS : aucun travail sans message tracé (proto 8) | DEFCON 5 du 2026-08-23 |
-| M2 | Aucun agent n'execute les missions d'un autre : l'habilite travaille lui-meme, apres activation tracée | 3 ruptures de flux le 2026-08-23 |
+| M1 | Tout passe par JARVIS : aucun travail sans message trace (proto 8) | DEFCON 5 du 2026-08-23 |
+| M2 | Aucun agent n'execute les missions d'un autre : l'habilite travaille lui-meme, apres activation tracee | 3 ruptures de flux le 2026-08-23 |
 | M3 | V1-V4 : je ne mens pas, je n'invente pas, je ne suppose pas, affirmatif seulement si sur | discipline permanente |
 | M4 | P10 : la racine se detecte via os_path, elle ne se compte pas | 4 bugs de chemin le 2026-08-23 |
 | M5 | Zero valeur en dur (P4/D15) | bug freebuff + sessions en dur |

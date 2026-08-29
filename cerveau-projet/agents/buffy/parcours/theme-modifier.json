@@ -1,0 +1,145 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "buffy",
+    "nom": "MODIFIER",
+    "description": "Modifier un fichier existant (outil, carte, regle, doc) : editer-parcours, corriger-fichier, bumper, RVAV, enregistrer usages, Themis audit, Janus controle"
+  },
+  "theme": {
+    "nom": "MODIFIER",
+    "but": "Modifier un fichier conforme, valide (RVAV) et controle (Janus/Themis)",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION : tracer le DEBUT avant de commencer."
+      },
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+      },
+      {
+        "besoin": "Lire le protocole identification",
+        "action": "procedure",
+        "etapes": [
+          "Lire cerveau-projet/agents/regles-immuables/general/protocole-identification/protocole-identification.001.01.ebauche.md"
+        ],
+        "regle": "PROTOCOLE : identifier la session, l agent, le contexte AVANT toute action."
+      },
+      {
+        "besoin": "Lire le fichier a modifier",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin-outil>"
+        ],
+        "regle": "Lire le fichier AVANT de le modifier."
+      },
+      {
+        "besoin": "Verifier les dependances",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>",
+          "python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py --tous"
+        ],
+        "regle": "Verifier les dependances AVANT de modifier."
+      },
+      {
+        "besoin": "Le fichier est-il une carte de decision (parcours JSON) ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> Gerer les cases avec generateurs-case",
+          "NON -> Modifier le fichier directement"
+        ],
+        "regle": "Creation limitee pour les parcours : generateurs-case."
+      },
+      {
+        "besoin": "Lire le protocole boucles dynamiques",
+        "action": "procedure",
+        "etapes": [
+          "Lire cerveau-projet/agents/regles-immuables/general/protocole-boucles-dynamiques/protocole-boucles-dynamiques.001.01.ebauche.md"
+        ],
+        "regle": "PROTOCOLE : gerer les boucles dynamiques dans les cartes de decision."
+      },
+      {
+        "besoin": "Lancer le combo corriger-fichier",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-fichier/definition-combo.json"
+        ],
+        "regle": "COMBO CORRIGER-FICHIER : valider le fichier modifie."
+      },
+      {
+        "besoin": "Lancer le combo controle-impacts",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-controle-impacts/definition-combo.json"
+        ],
+        "regle": "CONTROLE-IMPACTS : verifier les impacts de la modification."
+      },
+      {
+        "besoin": "Erreurs hors mission detectees ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-erreurs-hors-mission",
+          "NON -> continuer"
+        ],
+        "regle": "Les erreurs hors mission sont SIGNALEES, jamais ignorees."
+      },
+      {
+        "besoin": "Valider le resultat (RVAV)",
+        "action": "procedure",
+        "etapes": [
+          "Lire : cerveau-projet/agents/regles-immuables/general/rvav-workflow.md"
+        ],
+        "regle": "REGLE IMMUABLE RVAV."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/buffy/corrections.md <lecon>",
+          "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/buffy/corrections.md --all"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      },
+      {
+        "besoin": "Ameliorations possibles de mon fonctionnement ?",
+        "action": "procedure",
+        "etapes": [
+          "NON -> Activer Themis pour auditer ma mission"
+        ],
+        "regle": "PATTERN 17 : GENERATEUR D'ABORD."
+      },
+      {
+        "besoin": "Activer Themis pour auditer ma mission",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+        ],
+        "regle": "THEMIS AVANT JANUS."
+      },
+      {
+        "besoin": "Retour de Themis recu ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-modifier",
+          "NON -> re-essai"
+        ],
+        "regle": "PATTERN RE-ESSAI."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-modifier"
+  }
+}

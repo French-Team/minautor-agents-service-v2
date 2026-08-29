@@ -1,6 +1,6 @@
 # rappel
 
-> "Quand tu corriges quelque part, il y a probablement ailleurs à corriger."
+> "Quand tu corriges quelque part, il y a probablement ailleurs a corriger."
 
 | Champ | Valeur |
 |---|---|

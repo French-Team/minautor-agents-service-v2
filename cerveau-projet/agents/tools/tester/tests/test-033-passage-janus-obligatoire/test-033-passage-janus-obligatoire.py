@@ -21,7 +21,8 @@ Contexte (2026-08-13) :
     morpheus.md + clause erronee retiree de la REGLE DELEGATION.
 
 Invariants verifies :
-  1. Carte morpheus : c10 est une fin FIN - Activer Janus
+  1. Carte morpheus : la fin de mission est FIN - Activer Janus (c14 apres
+     la refonte v0.5.8 ; c10 a ete fusionnee dans la chaine c14)
   2. Carte morpheus : c14 est une fin FIN - Activer Janus avec la commande
      exacte activer session-llm-1 janus et PAS reactiver dans le message
   3. Fiche morpheus : contient la REGLE ABSOLUE -- PASSAGE PAR JANUS
@@ -143,11 +144,13 @@ def main():
             parcours = json.load(fh)
         cases = parcours.get("cases", {})
 
-        # 1. c10 : fin Activer Janus
-        c10 = cases.get("c10", {})
-        verifier("1. carte c10 = FIN - Activer Janus",
-                 c10.get("type") == "fin" and c10.get("titre") == "FIN - Activer Janus",
-                 str(c10.get("titre")))
+        # 1. Fin Activer Janus : c14 est la fin de mission (la refonte
+        #    v0.5.8 a fusionne l ancienne c10 dans la chaine c14 -> c14h)
+        fins_janus = [cid for cid, c in cases.items()
+                      if c.get("type") == "fin"
+                      and c.get("titre") == "FIN - Activer Janus"]
+        verifier("1. carte morpheus a une fin FIN - Activer Janus",
+                 len(fins_janus) >= 1, "fins=%s" % fins_janus)
 
         # 2. c14 : fin Activer Janus + commande exacte activer (pas reactiver)
         c14 = cases.get("c14", {})

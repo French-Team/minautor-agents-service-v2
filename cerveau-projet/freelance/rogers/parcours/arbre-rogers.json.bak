@@ -1,0 +1,35 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "rogers",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-rogers",
+    "agent": "rogers",
+    "description": "Arbre des décisions de Rogers - gardien des règles. L'agent choisit UN THÈME au démarrage.",
+    "regles": {
+      "D1": "Chaque branche (thème) mène à des catégories, qui mènent aux cases d'exécution, qui mènent à leur case suivante, jusqu'à leur case de fin.",
+      "D5": "Les cases d'un thème sont des REDIRECTIONS : commande / parcours / combo selon le besoin. Un long parcours = UN AUTRE FICHIER.",
+      "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils. L'agent ne compose plus la syntaxe.",
+      "D3": "Les passages d'un fichier à l'autre sont TRANSPARENTS pour l'agent."
+    }
+  },
+  "racine": {
+    "titre": "Choisir un thème",
+    "type": "question",
+    "question": "Quel thème ?",
+    "branches": [
+      {"reponse": "LIRE", "description": "Consulter, chercher, comprendre les règles existantes", "vers": "theme-lire.json"},
+      {"reponse": "MODIFIER", "description": "Définir, modifier, ajouter des règles", "vers": "theme-modifier.json"},
+      {"reponse": "VALIDER", "description": "Vérifier, contrôler, auditer la conformité", "vers": "theme-valider.json"},
+      {"reponse": "COORDONNER", "description": "Inter-round, activer Stark, relais", "vers": "theme-coordonner.json"},
+      {"reponse": "EXPLORER", "description": "Diagnostiquer, comprendre un problème", "vers": "theme-explorer.json"}
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisées dans un seul fichier"
+  }
+}

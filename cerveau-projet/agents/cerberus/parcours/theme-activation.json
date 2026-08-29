@@ -1,0 +1,64 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "ACTIVATION",
+    "description": "Activer un agent directement (mission connue) : verifier, activer, annoncer, enregistrer, historiser"
+  },
+  "theme": {
+    "nom": "ACTIVATION",
+    "but": "Activer un agent pour une mission precise",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser cerberus \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Verifier l agent (identification)",
+        "action": "procedure",
+        "etapes": [
+          "Verifier que l agent existe et est disponible"
+        ],
+        "regle": "Verifier avant d activer."
+      },
+      {
+        "besoin": "Activer l agent",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"
+        ],
+        "regle": "Activer avec la mission precise."
+      },
+      {
+        "besoin": "Annoncer la mission et suivre le cycle",
+        "action": "procedure",
+        "etapes": [
+          "Enregistrer les usages d outils"
+        ],
+        "regle": "Suivre le cycle complet."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py"
+        ],
+        "regle": "REGLE REGISTRE."
+      },
+      {
+        "besoin": "Historiser la FIN de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser cerberus \"FIN: <mon bilan>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-activer" }
+}

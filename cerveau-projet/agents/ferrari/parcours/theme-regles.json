@@ -1,0 +1,22 @@
+{
+  "identite": {"type": "theme", "appartient_a": "ferrari", "nom": "REGLES", "description": "Corriger les regles (proto 7)"},
+  "theme": {
+    "nom": "REGLES",
+    "but": "Corriger les regles-immuables v2 en appliquant le proto 7",
+    "redirects": [
+      {"besoin": "Verifier le systeme", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE."},
+      {"besoin": "Consulter les lecons", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent ferrari --domaine freelance"], "regle": "PATTERN 6."},
+      {"besoin": "CONTEXTE : activite recente", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6."},
+      {"besoin": "Lire le cahier de dev", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/cahier-dev.md"], "regle": "CAHIER DE DEV."},
+      {"besoin": "Lire le PROTOCOLE 7 (regles-immuables) (case c15)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-7-regles-immuables.md"], "regle": "PROTOCOLE 7 : lire AVANT."},
+      {"besoin": "Lire les regles a corriger (case c15b)", "action": "procedure", "etapes": ["Lire les regles cibles EN ENTIER"], "regle": "LIRE les regles."},
+      {"besoin": "Appliquer la correction", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin-regles>"], "regle": "CONVENTIONS V2."},
+      {"besoin": "Verifier la correction", "action": "procedure", "etapes": ["Relire le fichier corrige"], "regle": "GARDE-FOU."},
+      {"besoin": "Produire le rapport", "action": "procedure", "etapes": ["Rapport dans agents/ferrari/rapports/"], "regle": "PREUVE DE TRAVAIL."},
+      {"besoin": "Historiser l intervention", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-admin mecano 'CORRECTION TERMINEE: <description>'"], "regle": "HISTORISATION."},
+      {"besoin": "Mettre a jour le cahier de dev", "action": "procedure", "etapes": ["Ajouter dans cahier-dev.md"], "regle": "CAHIER DE DEV."},
+      {"besoin": "Ajouter les lecons", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/ferrari/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-correction"}
+}

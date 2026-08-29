@@ -1,0 +1,12 @@
+{
+ "agent": "promethee",
+ "parcours": "agents/promethee/parcours/arbre-promethee.json",
+ "case_courante": null,
+ "mission_type": "creer",
+ "mission": "CREER une spec depuis un pense-bete",
+ "historise_debut": true,
+ "precedent": "buffy",
+ "etape": "fin",
+ "theme_courant": null,
+ "historise_fin": true
+}

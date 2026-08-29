@@ -221,7 +221,7 @@ racine des corruptions CRLF/LF croisees).
 - outils-llm/demarrer-llm.py : choisit ENCART/CORPS selon la session,
   ecrit LF/ASCII pour v1 et CRLF/UTF8 pour v2, format corps ## JJ/MM/
   AAAA (plus jamais ISO YYYY-MM-DD : cree des sections vides)
-- battement-dev.py : SIGNAL VISUEL orange 🟠 (UTF8), print securise
+- battement-dev.py : SIGNAL VISUEL orange (UTF8), print securise
   cp1252
 
 **Tests mis a jour** : test-097 (liste blanche + fichiers -v2 +
@@ -231,7 +231,7 @@ oracle), nr-commun (perimetre + fichiers -v2).
 **Validations** : test-097 3/3, test-098 7/7, test-102 6/6, nr-commun
 6/6, verifier-coherence v1 0 incoherence + v2 COHERENT, flux de bout en
 bout v1+v2 separes OK, formats : v1 LF/ASCII 0 non-ascii, v2 CRLF
-propre 0 \r\r\n. Emoji 🟠 present dans l encart v2.
+propre 0 \r\r\n. Emoji ORANGE present dans l encart v2.
 
 ## Intervention 2026-08-26 -- AUDIT STARK : il fait le travail au lieu de transmettre a JARVIS
 
@@ -311,7 +311,7 @@ renommee sans erreur.
 
 **Validations** : nr-routines 6/6, nr-commun 6/6, coherence v2 0,
 26/26 lignes citations sans marqueur ni fragment, BDD 189 citations
-0 marqueur/emoji. Daemon en direct : '| 22:22:20 | 🟠 | citations |
+0 marqueur/emoji. Daemon en direct : '| 22:22:20 | ORANGE | citations |
 freebuff | R | Veuve Noire -- Faites un pas en arriere, evaluez,
 puis avancez. |'
 
@@ -331,10 +331,10 @@ mortes du manifest et creer leurs scripts.
   notation (depot evaluation), flux (P1 non-acquittes - evenementiel),
   harnais (nouveaux ecarts - evenementiel). Plus d'entree sous "edith".
 - Re-attribution historique : entrees edith des routines -> vigie/notation
-  (encart 13, BDD 18+32), couleurs recalculées.
+  (encart 13, BDD 18+32), couleurs recalculees.
 - Scripts crees : demarrage/verifier-integrite.py (integrite) +
   arret/detecter-orphelins.py (orphelins) - historisent sous leur nom ;
-  branchés dans hooks.py (demarrage/arret du serveur). Faux positif
+  branches dans hooks.py (demarrage/arret du serveur). Faux positif
   pidfile corrige (processus vivant = legitime).
 - Grades : flux/vigie/notation/harnais/integrite/orphelins = G4 rouge,
   citations = G5 orange.
@@ -377,7 +377,7 @@ communication EDITH<->JARVIS. Clarifier la routine notation (doublon ?).
 
 **Corrections (validees utilisateur : JARVIS seul + EDITH rapporte ;
 EDITH activable par JARVIS ; acquitter les P1)** :
-- detection.py (vigie) : P1 [EDITH-RÉVEIL] "demande activation EDITH"
+- detection.py (vigie) : P1 [EDITH-REVEIL] "demande activation EDITH"
   vers JARVIS UNIQUEMENT (plus stark/vision), corps avec les 4 W.
 - notation.py : message corrige (30 min - manifest 1800s, pas 10 min) +
   "demande activation EDITH : cycle periodique d'evaluation".

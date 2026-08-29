@@ -1,0 +1,25 @@
+{
+  "identite": {"type": "theme", "appartient_a": "socrate", "nom": "REVISION", "description": "Discuter des problemes : ecoute, questionnement, classification, missions"},
+  "theme": {
+    "nom": "REVISION",
+    "but": "Comprendre les besoins de revision de l'utilisateur, les questionner en profondeur, les classer par gravite et formuler des missions pour Cerberus",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine revision)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent socrate --domaine revision"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "Lire MES conventions personnelles (methodologie + priorisation)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/socrate/conventions/convention-methodologie-revision.md", "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/socrate/conventions/convention-grille-priorisation.md"], "regle": "CONVENTIONS PERSONNELLES : je lis MA methodologie et MA grille de priorisation AVANT de commencer la revision. Ces conventions definissent mes 5 phases et mes regles de classification."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "Lire l activite recente (case c1)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "LIRE l activite recente pour comprendre le contexte de la revision."},
+      {"besoin": "Activite lue ? (controle c1b)", "action": "procedure", "etapes": ["SI OUI -> continuer (c2)", "SI NON -> relire (c1)"], "regle": "GARDE-FOU : si je n ai pas lu l activite, je reboucle."},
+      {"besoin": "Sujet de la revision (question c2)", "action": "procedure", "etapes": ["Demander : Quel est le sujet ? (outil/parcours/agent/regle/autre)"], "regle": "QUESTION OUVERTE : jamais de yes/no."},
+      {"besoin": "Description du probleme (question c3)", "action": "procedure", "etapes": ["Demander : Peux-tu decrire le probleme en detail ?"], "regle": "DETAIL : si vague, demander un exemple concret (c3b)."},
+      {"besoin": "Clarification si vague (question c3b)", "action": "procedure", "etapes": ["Demander : Ta description est floue. Peux-tu donner un exemple concret ?"], "regle": "RELANCER avec un exemple concret si la description est floue."},
+      {"besoin": "Impact du probleme (question c4)", "action": "procedure", "etapes": ["Demander : Quel est l impact ? Est-ce que ca bloque ?"], "regle": "IMPACT : bloque / amelioration / cosmetique."},
+      {"besoin": "Agent habilite (question c5)", "action": "procedure", "etapes": ["Demander : Quel agent devrait s en occuper ? (buffy/vulcain/morpheus/clio/autre)"], "regle": "AGENT : identifier qui doit executer la mission."},
+      {"besoin": "Autres problemes ? (question c6)", "action": "procedure", "etapes": ["SI OUI -> revenir au sujet (c2)", "SI NON -> passer a la synthese (c7)"], "regle": "BOUCLE : tant qu il y a des problemes, on continue."},
+      {"besoin": "Classification du probleme (Phase 3 - convention priorisation)", "action": "procedure", "etapes": ["URGENT : bloque le systeme ou les agents (immediate)", "IMPORTANT : amelioration majeure (24h)", "MOYEN : amelioration mineure (semaine)", "BAS : nice-to-have (quand possible)"], "regle": "PRIORISATION (convention-grille-priorisation) : justifier chaque classification (parce que...). Ne pas tout mettre en URGENT."},
+      {"besoin": "Formuler la mission (Phase 4 - convention methodologie)", "action": "procedure", "etapes": ["Agent habilite : qui doit faire ?", "Description : que doit-il faire exactement ?", "Raison : pourquoi c est necessaire ?", "Dependances : qu est-ce qui doit etre fait avant ?", "Critere de succes : comment verifier que c est fait ?"], "regle": "MISSION CLAIRE (convention-methodologie-revision) : agent + description + raison + dependances + critere."},
+      {"besoin": "Enregistrer mes usages d outils", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent socrate --outil <outil> --contexte '<contexte>'"], "regle": "BILAN OUTILS : declarer tous les outils utilises."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-revision"}
+}

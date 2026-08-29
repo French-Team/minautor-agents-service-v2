@@ -1,24 +1,97 @@
 {
-  "nom": "Oracle",
-  "version": "0.1.0",
-  "description": "Hub de coordination des agents v1 (session-admin)",
-  "agents": [
-    {"nom": "cerberus", "role": "Gardien de l'entree", "fiche": "cerveau-projet/agents/cerberus/cerberus.md"},
-    {"nom": "buffy", "role": "Developpeur principal", "fiche": "cerveau-projet/agents/buffy/buffy.md"},
-    {"nom": "atlas", "role": "Explorateur", "fiche": "cerveau-projet/agents/atlas/atlas.md"},
-    {"nom": "janus", "role": "Controleur des statuts", "fiche": "cerveau-projet/agents/janus/janus.md"},
-    {"nom": "vulcain", "role": "Constructeur d'outils", "fiche": "cerveau-projet/agents/vulcain/vulcain.md"},
-    {"nom": "themis", "role": "Evaluatrice croisee", "fiche": "cerveau-projet/agents/themis/themis.md"},
-    {"nom": "morpheus", "role": "Testeur dedie", "fiche": "cerveau-projet/agents/morpheus/morpheus.md"},
-    {"nom": "clio", "role": "Muse de l'histoire", "fiche": "cerveau-projet/agents/clio/clio.md"},
-    {"nom": "hygie", "role": "Agent de nettoyage", "fiche": "cerveau-projet/agents/hygie/hygie.md"},
-    {"nom": "hermes", "role": "Agent de la langue", "fiche": "cerveau-projet/agents/hermes/hermes.md"},
-    {"nom": "gardien", "role": "Gardien du marbre", "fiche": "cerveau-projet/agents/gardien/gardien.md"},
-    {"nom": "argus", "role": "Detecteur de contradictions", "fiche": "cerveau-projet/agents/argus/argus.md"},
-    {"nom": "chiron", "role": "Educateur des agents", "fiche": "cerveau-projet/agents/chiron/chiron.md"},
-    {"nom": "socrate", "role": "Conversateur strategique", "fiche": "cerveau-projet/agents/socrate/socrate.md"},
-    {"nom": "redacteur-v2", "role": "Redacteur de docs", "fiche": "cerveau-projet/agents/redacteur-v2/redacteur-v2.md"},
-    {"nom": "hades", "role": "Gardien des archives git", "fiche": "cerveau-projet/agents/hades/hades.md"},
-    {"nom": "ferrari", "role": "Agent specialise freelance", "fiche": "cerveau-projet/agents/ferrari/ferrari.md"}
-  ]
+ "nom": "Oracle",
+ "version": "0.1.0",
+ "description": "Hub de coordination des agents v1 (session-admin)",
+ "agents": [
+  {
+   "nom": "argus",
+   "role": "Detecteur de contradictions",
+   "fiche": "cerveau-projet/agents/argus/argus.md"
+  },
+  {
+   "nom": "atlas",
+   "role": "Explorateur",
+   "fiche": "cerveau-projet/agents/atlas/atlas.md"
+  },
+  {
+   "nom": "buffy",
+   "role": "Developpeur principal",
+   "fiche": "cerveau-projet/agents/buffy/buffy.md"
+  },
+  {
+   "nom": "cerberus",
+   "role": "Gardien de l'entree",
+   "fiche": "cerveau-projet/agents/cerberus/cerberus.md"
+  },
+  {
+   "nom": "chiron",
+   "role": "Educateur des agents",
+   "fiche": "cerveau-projet/agents/chiron/chiron.md"
+  },
+  {
+   "nom": "clio",
+   "role": "Muse de l'histoire",
+   "fiche": "cerveau-projet/agents/clio/clio.md"
+  },
+  {
+   "nom": "ferrari",
+   "role": "Agent specialise freelance",
+   "fiche": "cerveau-projet/agents/ferrari/ferrari.md"
+  },
+  {
+   "nom": "gardien",
+   "role": "Gardien du marbre",
+   "fiche": "cerveau-projet/agents/gardien/gardien.md"
+  },
+  {
+   "nom": "hades",
+   "role": "Gardien des archives git",
+   "fiche": "cerveau-projet/agents/hades/hades.md"
+  },
+  {
+   "nom": "hermes",
+   "role": "Agent de la langue",
+   "fiche": "cerveau-projet/agents/hermes/hermes.md"
+  },
+  {
+   "nom": "hygie",
+   "role": "Agent de nettoyage",
+   "fiche": "cerveau-projet/agents/hygie/hygie.md"
+  },
+  {
+   "nom": "janus",
+   "role": "Controleur des statuts",
+   "fiche": "cerveau-projet/agents/janus/janus.md"
+  },
+  {
+   "nom": "morpheus",
+   "role": "Testeur dedie",
+   "fiche": "cerveau-projet/agents/morpheus/morpheus.md"
+  },
+  {
+   "nom": "oracle",
+   "role": "Coordinateur de l equipe v1 (session-admin)",
+   "fiche": "cerveau-projet/agents/oracle/oracle.md"
+  },
+  {
+   "nom": "redacteur-v2",
+   "role": "Redacteur de docs",
+   "fiche": "cerveau-projet/agents/redacteur-v2/redacteur-v2.md"
+  },
+  {
+   "nom": "socrate",
+   "role": "Conversateur strategique",
+   "fiche": "cerveau-projet/agents/socrate/socrate.md"
+  },
+  {
+   "nom": "themis",
+   "role": "Evaluatrice croisee",
+   "fiche": "cerveau-projet/agents/themis/themis.md"
+  },
+  {
+   "nom": "vulcain",
+   "role": "Constructeur d'outils",
+   "fiche": "cerveau-projet/agents/vulcain/vulcain.md"
+  }
+ ]
 }

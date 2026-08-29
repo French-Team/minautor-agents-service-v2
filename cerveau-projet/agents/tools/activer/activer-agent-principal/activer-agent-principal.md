@@ -9,7 +9,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.8.0
+**Version** : 0.8.5
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -42,7 +42,12 @@ python3 activer-agent-principal.py <action> [parametres]     # depuis le dossier
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py <action> [parametres]   # depuis la racine du projet (FIABLE)
 ```
 
-Version bash equivalente : `activer-agent-principal.sh` (meme logique).
+Version bash equivalente PARTIELLE : `activer-agent-principal.sh` (v0.7.4,
+meme logique de base : sidentifier/activer/reactiver/sessions + dictionnaire
+AGENTS). Il ne porte PAS les fonctions 0.7.5+ du .py (encart
+AGENTS-activite-recente.md, BDD SQLite, colonnes Grade/Secteur/Debut-Fin) :
+changelog v0.7.5 "Parite .sh : non concerne (le .sh n ecrit pas l encart)".
+Exemption documentee dans l audit bumper `--tous` (EXEMPTIONS_AUDIT).
 
 > **FIABILITE** : utiliser le chemin complet depuis la racine du projet. Le nom nu `activer-agent-principal` ne fonctionne pas (pas dans le PATH).
 
@@ -286,6 +291,11 @@ eviter les collisions et comprendre qui intervient en parallele.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.8.5 | 2026-08-29 | --FORCER LIBRE (support redemarrer-session.py) : main() retire desormais --forcer d argv avant le parsing positionnel (le garde-fou le detecte toujours via sys.argv). Avant, placer --forcer apres la raison le faisait capturer comme 4e argument positionnel (mission/agent_precedent) et corrompait l encart. |
+| 0.8.4 | 2026-08-29 | ETATS DYNAMIQUES (decision utilisateur, 2e round) : la liste des etats + leurs regles de detection sortent du code vers etats-actions.json (oracle/, editable sans toucher au code, env ETATS_ACTIONS surchargeable). _etat_action applique les regles (prefixes/mots_cles/agents) DANS L ORDRE du fichier, defaut ACTIF ; repli v0.8.3 si fichier absent. Nouveaux etats : DEV (citations - routine presente pour le dev, hors flux de travail reel), AUTO (routine sans intervention : flux/sante/encart/live/vigie/compteurs), ACTION (utilitaire avec intervention a faire : relais/oracle). Section inbox_outbox ajoutee (A LIRE, A TRAITER, ACQUITTE, REPONDU, CLOS) pour le futur tableau inbox-outbox-messages.md (reflexion apres ce round). encart.py (v0.2.0) charge ETATS_CONNUS depuis le fichier ; verifier-flux-securite R6 : citations = DEV (ex-ATTENTE). BUG FIX cwd : le defaut d ETATS_ACTIONS etait relatif et les routines lancees avec cwd=routines/ ne le resolvaient pas -> repli v0.8.3 (vigie-perimetre historisait ACTIF au lieu de AUTO) ; defaut desormais ABSOLU (resolu depuis le fichier). Encart regenere : AUTO 16 / DEV 15 / ATTENTE 9 / URGENT 7 / ACTION 3. |
+| 0.8.3 | 2026-08-29 | COLONNE DEBUT/FIN -> ETAT (decision utilisateur) : la colonne Debut/Fin du tableau v1 devient Etat avec 5 etats connus (DEBUT, FIN, ATTENTE, URGENT, BUG + ACTIF par defaut) - _debut_fin renommee _etat_action (detecte les prefixes DEBUT/FIN/RETOUR + mots-cles URGENT/BUG, routines periodiques = ATTENTE, sinon ACTIF). Entete ENTETE_ENCART_V1 + SEPARATEUR mis a jour. Routine encart.py verifie desormais que les valeurs de la colonne Etat sont parmi les etats connus. verifier-flux-securite adapte (citations = ATTENTE au lieu de instant, indices de colonnes decales pour la nouvelle colonne Executeur). |
+| 0.8.2 | 2026-08-27 | COLONNE DEBUT/FIN SUR CERBERUS (demande utilisateur) : quand Cerberus est reactive (fin de mission), la colonne Debut/Fin affichait FIN (la raison du bilan commencait par 'FIN MISSION...') alors qu il s agit du DEBUT de son cycle de coordination. Correction : activer_cerberus prefxe la raison par 'DEBUT: ' quand elle ne commence pas deja par DEBUT -> la colonne affiche DEBUT. Parite : la logique _debut_fin reste inchangee (detecte le prefixe). |
+| 0.8.1 | 2026-08-27 | TABLEAU V1 GRADE/SECTEUR/DEBUT-FIN (demande utilisateur, rattraper le retard v1 inspire v2) : l encart AGENTS-activite-recente.md passe de 5 a 8 colonnes (Grade | Agent | Debut/Fin | Secteur | Raison | Heure | id | Type) avec _grade_label/_secteur_label/_debut_fin (grades-v1.json : theme grec, ASCII strict [GX]/[XXX] sans emoji, contrairement au v2) + _construire_encart_v1() qui reconstruit l encart SEUL (frontmatter+tableau) depuis le corps historique pour la MIGRATION de l ancien format (bug corrige v0.8.1 : maj_encart_activites retournait corps+encart - format ancien fichier unique - et ecrasait AGENTS-activite-recente.md avec le corps du journal). Routines v1 : citations (dieu grec toutes les 5 min, temporaire, desactivee en production) ecrit via ajouter_historique avec chemins ABSOLUS forces en env (le daemon lance le script avec cwd=routines/, un chemin relatif ecrivait au mauvais endroit + id session-admin au lieu de glm5 + grade [G?]). |
 | 0.8.0 | 2026-08-26 | SEPARATION HISTORIQUE v1 : encart dans AGENTS-activite-recente.md (50 entrees max, raison tronquee 80 car.) + chronologie dans historique.db (BDD SQLite, 7 jours). AGENTS-historique.md conserve comme archive (lecture seule, decision plus tard). Ajout _ecrire_encart_v1() et _ecrire_bdd_v1() dans ajouter_historique(). Module BDD partage v1/v2 (historique_bdd.py). |
 | 0.7.5 | 2026-08-25 | FIX ACCUMULATION DES SEPARATEURS (demande utilisateur) : `maj_encart_activites` ajoutait un `---` de plus sous le bloc des encarts a chaque execution (idx_fin pointait sur le `\n---\n` trouve -> l ancien separateur restait, l encart finit par `---\n` -> doublon a chaque fois) ET le while de remontee d idx_debut mangeait les lignes vides jusqu au frontmatter -> le `---` de l encart se collait a celui de l identite et grossissait de 3 tirets par execution (ligne de 1308 tirets observee dans AGENTS-historique.md). Corrections : consommer TOUS les `---\n` consecutifs apres idx_fin + encart SANS `---` initial (le separateur haut est celui du frontmatter) + idx_debut ne remonte plus les lignes vides. AGENTS-historique.md nettoye (44 `---` + grosse ligne supprimes). Parite .sh : non concerne (le .sh n ecrit pas l encart). Verifie par simulation 5 executions : stable (3 `---`, aucune ligne ne grossit). |
 | 0.7.4 | 2026-08-25 | FERRARI BRANCHE A L ACTIVATION : agent ferrari (v1 specialise freelance, double identite v1/v2) ajoute au dictionnaire AGENTS du .py + aux 3 case statements du .sh (role, fiche, corrections) + couleur. Il etait cree (fiche, parcours, protocoles) mais ABSENT de la liste AGENTS, donc inactivable (meme oubli qu Argus v0.5.8 / Chiron v0.5.12). CONFIDENTIEL : ferrari est volontairement ABSENT d AGENTS.md (seul Cerberus le connait, invisible des agents v2) - test-092 adapte avec exemption documentee (Morpheus). |
