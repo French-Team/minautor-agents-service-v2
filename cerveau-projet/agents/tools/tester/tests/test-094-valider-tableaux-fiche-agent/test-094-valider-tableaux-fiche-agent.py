@@ -47,7 +47,9 @@ OUTIL_PY = os.path.join(OUTIL_DIR, "valider-tableaux.py")
 OUTIL_SH = os.path.join(OUTIL_DIR, "valider-tableaux.sh")
 OUTIL_MD = os.path.join(OUTIL_DIR, "valider-tableaux.md")
 AGENTS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents")
-CERBERUS_MD = os.path.join(AGENTS_DIR, "cerberus", "cerberus.md")
+# La liste de routage "Agents disponibles" vit chez ORACLE (decision
+# utilisateur 2026-08-30 : Cerberus ne porte plus la liste des agents).
+ORACLE_MD = os.path.join(AGENTS_DIR, "oracle", "oracle.md")
 
 NB_POINTS = 0
 NB_OK = 0
@@ -175,16 +177,16 @@ def main():
                      sortie.strip()[-160:])
             chrono_etape("3. wrapper sh", t)
 
-        # 4. Fiche cerberus.md : CONFORME
+        # 4. Fiche oracle.md : CONFORME (liste de routage, decision 2026-08-30)
         if point_actif(4):
             t = time.monotonic()
-            r = run([PYTHON, OUTIL_PY, CERBERUS_MD])
+            r = run([PYTHON, OUTIL_PY, ORACLE_MD])
             sortie = r.stdout + r.stderr
             PROTECTIONS.verifier_critique(
-                "4. cerberus.md CONFORME (1 fichier, 0 probleme) - STOP si KO",
+                "4. oracle.md CONFORME (1 fichier, 0 probleme) - STOP si KO",
                 "CONFORME" in sortie and "Problemes : 0" in sortie,
                 sortie.strip()[-200:])
-            chrono_etape("4. fiche cerberus", t)
+            chrono_etape("4. fiche oracle", t)
 
         # 5. Dossier agents complet : CONFORME ET classeur-variables absent
         if point_actif(5):
@@ -242,6 +244,11 @@ def main():
     print("")
     bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
+    if NB_KO:
+        print("  [AIDE] OU CHERCHER / REPARER (KO = agent manquant dans un tableau de fiche) :")
+        print("    [AIDE] Fichier inspecte : agents/oracle/oracle.md (tableau des agents disponibles, liste de routage)")
+        print("    [AIDE] Diagnostic : python3 cerveau-projet/agents/tools/valider/valider-tableaux/valider-tableaux.py agents/oracle/oracle.md")
+        print("    [AIDE] Correctif : ajouter l agent absent signale par le rapport a la liste de routage de la fiche oracle.md")
     PROTECTIONS.afficher_rating(os.path.basename(__file__).replace(".py", ""))
     return 1 if NB_KO else 0
 

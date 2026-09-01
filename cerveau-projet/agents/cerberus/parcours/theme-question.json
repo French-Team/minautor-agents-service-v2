@@ -1,0 +1,45 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "QUESTION",
+    "description": "Ouvrir une phase DEDIEE question/reponse avec l utilisateur"
+  },
+  "theme": {
+    "nom": "QUESTION",
+    "but": "Ouvrir une phase dediee question/reponse, sans aucune autre tache",
+    "redirects": [
+      {
+        "besoin": "Repondre directement (dialogue)",
+        "action": "procedure",
+        "etapes": [
+          "Phase DEDIEE entre l utilisateur et Cerberus - AUCUNE autre tache",
+          "Repondre directement (dialogue) si Cerberus detient l information"
+        ],
+        "regle": "REGLE [question] : une phase question/reponse dediee s ouvre. Aucune autre tache pendant la phase."
+      },
+      {
+        "besoin": "Activer l agent qui detient l information",
+        "action": "procedure",
+        "etapes": [
+          "Si Cerberus ne detient pas la reponse : activer l agent habilite (Atlas pour l exploration, Socrate pour la strategie...)",
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> \"<la question>\""
+        ],
+        "regle": "Si l info est detenue par un agent, l activer puis transmettre sa reponse a l utilisateur."
+      },
+      {
+        "besoin": "Repondre avec les informations collectees",
+        "action": "procedure",
+        "etapes": [
+          "Une fois l information collectee, repondre a l utilisateur avec le resultat"
+        ],
+        "regle": "Repondre clairement a la question de l utilisateur."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-declencheur"
+  }
+}

@@ -1,0 +1,37 @@
+{
+ "identite": {
+  "type": "theme",
+  "appartient_a": "oracle",
+  "nom": "AUTRE",
+  "description": "Autre situation de coordination non couverte par les branches principales"
+ },
+ "theme": {
+  "nom": "AUTRE",
+  "but": "Traiter une situation de coordination non couverte : analyser, router ou signaler",
+  "redirects": [
+   {
+    "besoin": "Analyser la situation non couverte",
+    "action": "procedure",
+    "etapes": [
+     "Comprendre la demande ou l alerte sans l interrompre",
+     "Verifier si une branche existante s applique finalement (coordination, processus, roulage, etat, delegation)"
+    ],
+    "regle": "Je ne devine pas : je verifie la couverture des branches de mon arbre avant de classer en autre."
+   },
+   {
+    "besoin": "Router ou signaler",
+    "action": "procedure",
+    "etapes": [
+     "Si un agent habilite existe : deposer la mission asap (theme-delegation)",
+     "Sinon : signaler a Cerberus (oracle.py envoyer oracle cerberus \"BESOIN\" \"<situation + analyse>\")"
+    ],
+    "regle": "Toute situation hors arbre est SIGNALEE a Cerberus, jamais ignoree."
+   }
+  ]
+ },
+ "fin": {
+  "type": "lien",
+  "vers": "fins.json",
+  "case": "fin-coordination"
+ }
+}

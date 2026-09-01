@@ -92,7 +92,7 @@ SERIES = {
     "d": ["test-025", "test-027", "test-031", "test-036", "test-038", "test-039",
           "test-045", "test-046", "test-047", "test-051", "test-061",
           "test-097"],
-    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057", "test-065", "test-066", "test-087", "test-088", "test-089", "test-090", "test-091", "test-092", "test-098", "test-099", "test-100", "test-101", "test-102", "test-103", "test-104"],
+    "e": ["test-024", "test-028", "test-032", "test-035", "test-041", "test-057", "test-065", "test-066", "test-087", "test-088", "test-089", "test-090", "test-091", "test-092", "test-098", "test-099", "test-100", "test-101", "test-102", "test-103", "test-104", "test-105", "test-106", "test-107", "test-108", "test-109", "test-110", "test-111"],
 }
 SERIES_NOMS = {
     "a": "Fondations (nommage, ASCII/LF, template, protections)",
@@ -500,6 +500,19 @@ def extraire_lignes_ko(sortie):
             if ligne.strip().startswith("[KO]")]
 
 
+def extraire_lignes_aide(sortie):
+    """Extrait les lignes [AIDE] (CARTE DE REPARATION / ou chercher) d une
+    sortie de test. Demande utilisateur 2026-08-29 : la non-regression doit
+    indiquer OU chercher quand il y a des KO - chaque test emet, a la fin
+    et quand il a des KO, une bande [AIDE] donnant les FICHIERS inspectes,
+    la COMMANDE de diagnostic a relancer (--isoler N / --no-chrono) et un
+    indice de correctif, pour retrouver le probleme sans creuser a la main.
+    Ces lignes sont remontees dans DETAILS DES KO et le rapport markdown.
+    Seules les lignes COMMENCANT par [AIDE] (apres indentation) comptent."""
+    return [ligne.strip() for ligne in (sortie or "").splitlines()
+            if ligne.strip().startswith("[AIDE]")]
+
+
 def serie_du_test(nom):
     """Retourne la serie (a|b|c|d|e) d un test par son prefixe test-0XX."""
     for s in SERIES_ORDRE:
@@ -516,6 +529,25 @@ def registre_tests_defaut(racine):
 
 
 PLAFOND_REGISTRE_TESTS = 500
+
+
+def _ecrire_registre_avec_retry(registre, contenu, max_essais=5):
+    """Ecrit le registre avec retry court sur OSError (Errno 22 sur lecteur
+    reseau Z: quand un handle concurrent existe - crash recurrent de la
+    suite complete, observe 2026-08-30). Sans retry, la suite complete
+    s interrompt en plein milieu (journalisation OK des premiers tests puis
+    OSError Invalid argument sur open(registre, 'w'))."""
+    import time as _time
+    for essai in range(max_essais):
+        try:
+            with io.open(registre, "w", encoding="utf-8", newline="\n") as fh:
+                fh.write(contenu)
+            return True
+        except OSError:
+            if essai == max_essais - 1:
+                raise
+            _time.sleep(0.2 * (essai + 1))
+    return False
 
 
 def trier_registre_tests(registre):
@@ -547,8 +579,7 @@ def trier_registre_tests(registre):
     if len(valides) > PLAFOND_REGISTRE_TESTS:
         valides = valides[:PLAFOND_REGISTRE_TESTS]
     triees = [l for _, l in valides] + invalides
-    with io.open(registre, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write("\n".join(triees) + "\n")
+    _ecrire_registre_avec_retry(registre, "\n".join(triees) + "\n")
 
 
 def journaliser_test(racine, agent, serie, nom_test, verdict, duree, run_id=""):
@@ -681,7 +712,8 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
             else:
                 ko += 1
                 ko_liste.append((os.path.basename(t), nb_ko,
-                                 extraire_lignes_ko(r.stdout)))
+                                 extraire_lignes_ko(r.stdout),
+                                 extraire_lignes_aide(r.stdout)))
                 print("  %-50s %s (%d [KO])" % (os.path.basename(t), _couleur("KO", "rouge"), nb_ko))
                 journaliser_test(racine, agent, serie, os.path.basename(t),
                                  "KO", duree, run_id)
@@ -699,7 +731,7 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
             duree = time.monotonic() - t_debut
             durees.append((os.path.basename(t), round(duree, 2)))
             ko += 1
-            ko_liste.append((os.path.basename(t), -2, []))
+            ko_liste.append((os.path.basename(t), -2, [], []))
             print("  %-50s %s" % (os.path.basename(t), _couleur("ERREUR SILENCIEUSE (timeout)", "rouge")))
             journaliser_test(racine, agent, serie, os.path.basename(t),
                              "TIMEOUT", duree, run_id)
@@ -713,7 +745,7 @@ def executer_lot(racine, tests, libelle="", header=True, fail_fast=False,
             duree = time.monotonic() - t_debut
             durees.append((os.path.basename(t), round(duree, 2)))
             ko += 1
-            ko_liste.append((os.path.basename(t), -1, []))
+            ko_liste.append((os.path.basename(t), -1, [], []))
             print("  %-50s %s (%s)" % (os.path.basename(t), _couleur("ERREUR", "rouge"), str(e)[:40]))
             journaliser_test(racine, agent, serie, os.path.basename(t),
                              "ERREUR", duree, run_id)
@@ -829,7 +861,7 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie="",
                 # timeout expire SANS reponse ni erreur directe -> a trouver/a
                 # resoudre, puis l agent RELANCE le script ou fichier corrige.
                 ko += 1
-                ko_liste.append((os.path.basename(t), -2, []))
+                ko_liste.append((os.path.basename(t), -2, [], []))
                 print("  %-50s %s" % (os.path.basename(t), _couleur("ERREUR SILENCIEUSE (timeout)", "rouge")))
                 journaliser_test(racine, agent, serie_test, os.path.basename(t),
                                  "TIMEOUT", duree, run_id)
@@ -843,7 +875,8 @@ def executer_pool(racine, tests, workers, fail_fast=False, agent="", serie="",
             else:
                 ko += 1
                 ko_liste.append((os.path.basename(t), nb_ko,
-                                 extraire_lignes_ko(sortie)))
+                                 extraire_lignes_ko(sortie),
+                                 extraire_lignes_aide(sortie)))
                 print("  %-50s %s (%d [KO])" % (os.path.basename(t), _couleur("KO", "rouge"), nb_ko))
                 journaliser_test(racine, agent, serie_test, os.path.basename(t),
                                  "KO", duree, run_id)
@@ -871,7 +904,7 @@ def afficher_details_ko(ko_liste):
     print("")
     print(_couleur("=== DETAILS DES KO (pour action immediate) ===", "rouge"))
     for entree in ko_liste:
-        nom, nb, details = (list(entree) + [None, []])[:3]
+        nom, nb, details, aides = (list(entree) + [None, [], []])[:4]
         if nb == -2:
             print("  %s : ERREUR SILENCIEUSE (timeout) - le test n a ni reussi ni "
                   "echoue directement : a trouver/a resoudre, puis RELANCER le "
@@ -881,6 +914,10 @@ def afficher_details_ko(ko_liste):
             print("  %s : ERREUR d execution (le test n a pas pu tourner)" % nom)
             continue
         print("  %s : %d [KO]" % (nom, nb))
+        if aides:
+            print("      [OU CHERCHER] :")
+            for aide in aides:
+                print("      %s" % aide)
         for ligne in details or []:
             print("      %s" % ligne)
     print("")
@@ -937,11 +974,18 @@ def ecrire_rapport(chemin, titre, bilan, ko_liste, lignes_registre, durees=None)
         if ko_liste:
             fh.write("## Tests en echec (details)\n\n")
             for entree in ko_liste:
-                nom, nb, details = (list(entree) + [None, []])[:3]
+                nom, nb, details, aides = (list(entree) + [None, [], []])[:4]
                 if nb == -2:
                     fh.write("- %s : ERREUR SILENCIEUSE (timeout) - a resoudre puis relancer\n" % nom)
                     continue
+                if nb == -1:
+                    fh.write("- %s : ERREUR d execution (le test n a pas pu tourner)\n" % nom)
+                    continue
                 fh.write("- %s : %d [KO]\n" % (nom, nb))
+                if aides:
+                    fh.write("  - OU CHERCHER :\n")
+                    for aide in aides:
+                        fh.write("    - %s\n" % aide)
                 for ligne in details or []:
                     fh.write("  - %s\n" % ligne)
         if durees:

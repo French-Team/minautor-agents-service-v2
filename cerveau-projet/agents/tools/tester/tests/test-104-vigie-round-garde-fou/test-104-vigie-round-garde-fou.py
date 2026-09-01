@@ -183,9 +183,9 @@ def point_5_manifest():
             vigie = r
     ok = (vigie is not None
           and vigie.get("actif") is True
-          and vigie.get("intervalles_secondes") == 60
+          and vigie.get("intervalles_secondes") == 360
           and vigie.get("script") == "vigie-round.py")
-    verifier("5. manifest.json reference vigie-round (actif, 60 s)", ok,
+    verifier("5. manifest.json reference vigie-round (actif, 360 s)", ok,
              "non trouve" if vigie is None else "")
 
 

@@ -2,7 +2,7 @@
 identite:
   type: outil
   nom: Oracle
-  version: 0.5.1
+  version: 0.5.3
   cree: 2026-08-26
   appartient_a: commun
   commun: true
@@ -60,6 +60,10 @@ python3 oracle.py reactiver-fin <agent> <bilan>
 python3 oracle.py mission-ajouter <mission> [--file asap, normale, plus-tard]
 python3 oracle.py mission-lister [--file X]
 
+# Relais autonome (Oracle agent prend la main : consomme la mission, deduit\
+# l'agent, historise son DEBUT a sa place, lui envoie le message, lance le pilote)
+python3 oracle.py mission-relais [--file asap, normale, plus-tard, attente]
+
 # Defcon (niveau de menace)
 python3 oracle.py defcon
 python3 oracle.py defcon-changer <niveau> <commentaire>
@@ -107,6 +111,29 @@ Oracle ajoute :
 - Le routing des messages (inbox/outbox)
 - La consultation rapide de l'etat des agents
 - L'historisation centralisee
+
+## Consommation autonome des missions (mission-relais, decision 2026-08-29)
+
+`mission-relais` permet a ORACLE (l agent, pas seulement le serveur) de
+prendre la main avant et apres chaque mission, comme dans le flux
+`USER -> Cerberus -> Oracle -> Agent -> Cerberus -> USER` :
+
+1. **Prendre** la premiere mission EN_ATTENTE de la file (defaut `asap`)
+   via `files.relais()` (marque PRISE, FIFO).
+2. **Determiner l agent cible** : champ `agent` explicite, sinon deduction
+   par mots-cles (`files.deduire_agent()` : tests -> morpheus, outil ->
+   vulcain, audit -> themis, etc). Depuis 2026-08-30 : un **ETAT URGENT /
+   P1 non-acquittes** est deduit vers **oracle** (le coordinateur de la
+   coordination) qui declenche le super-combo purge-p1 pour distribuer les
+   P1 a chaque destinataire - au lieu du repli vague cerberus.
+3. **Historiser le DEBUT de l agent A SA PLACE** (colonne Agent = l agent
+   cible, Executeur = Oracle) - Oracle est le SEUL a historiser.
+4. **Envoyer le message** a l agent (inbox, priorite 1).
+5. **Lancer le pilote** : initialization de l etat de carte (`init_etat`) ->
+   le pilote dirige l agent (maitre d hotel).
+
+Cas limites : file vide -> message << Aucune mission >>, code 0. Missing
+agent -> repli sur Cerberus si indeducible.
 
 ## Role dans le cycle v1
 
@@ -232,6 +259,7 @@ python3 oracle.py reactiver-fin <agent> "<bilan>"
 
 | Version | Date | Description |
 |---|---|---|
+| 0.5.6 | 2026-08-30 | CLI `oracle.py historiser` renseigne TOUJOURS la colonne EXECUTEUR de l encart v1 (executeur="Oracle") - mission 4e30f06d suite detection cases EXECUTEUR vides (encart.py v0.3.0). Chaque historique CLI creait auparavant une case EXECUTEUR vide (alimentee uniquement par _historiser_auto / mission-relais). aligne sur le comportement mission-relais (Executeur=Oracle). |
 | 0.5.3 | 2026-08-29 | DEFCON-ESCALER (decision utilisateur : URGENT -> DEFCON 4 pour informer Oracle qui avise en fonction de l etat) : nouvelle commande `defcon-escaler <cible 3|4> <commentaire>` + fonction defcon.escaler() - ESCALADE vers le haut (degradation 2->4, no-op si deja au niveau cible ou superieur). Le DEFCON etant une valve a sens unique descendant (5->4->3->2), l etat URGENT devait pouvoir REMONTER vers DEFCON 4 (VALIDATION DES REPARATIONS). Niveau NORMAL corrige : DEFCON 2 = REPRISE TOTALE (protocole 15 v2), et non 3. DEFCON 5 (arret total) reste reserve a defcon-declarer. Consomme par la routine verifier-statuts. |
 | 0.5.2 | 2026-08-29 | INCIDENT CORRUPTION HUB RESOLU : le relais (fonctions/relais.py) re-echappait les lignes brutes du hub a chaque tic (_ecrire_jsonl appliquait json.dumps sur un brut deja serialise) -> inbox/cerberus.jsonl a atteint 1 Go de guillemets imbriques en cascade. Fix : un str est ecrit TEL QUEL, un dict serialize une seule fois. Reconstruction du hub (55 messages valides extraits par decodage iteratif, 41 alertes [FANTOMES] spammees purgees, 14 messages legitimes conserves, 1 Go -> 6 Ko). Faux positif SERVEUR MORT corrige (auto-exclusion os.getpid() retirait le daemon lui-meme - 18 alertes [FANTOMES] spammees, fix dans fonctions/controle_processus.py). Garde-fous : test-108 (controle processus), test-109 (relais + audit hub 11 points). Audit complet des inbox/outbox v1 + v2 : aucune autre corruption. |
 | 0.5.1 | 2026-08-27 | ROBUSTESSE LECTURE MESSAGES (reparation du round) : tolerance aux lignes inbox/outbox DOUBLE-ENCODEES (string au lieu de dict) dans cmd_status, lecture, acquitter, lister, lire-message, cmd_lire, cmd_nettoyer - isinstance(msg, dict) avant msg.get (bug : AttributeError 'str' object has no attribute 'get' plantait Oracle et arretait le pilotage du round) |

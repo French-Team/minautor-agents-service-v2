@@ -1,160 +1,67 @@
-# Missions de Revision -- 2026-08-22
+# Missions de Revision -- 2026-08-30
 
 ## Resume
 
 | Niveau | Nombre |
 |---|---|
-| URGENT | 1 |
-| IMPORTANT | 2 |
-| MOYEN | 3 |
-| BAS | 1 |
+| URGENT | 2 |
+| IMPORTANT | 1 |
+| MOYEN | 0 |
+| BAS | 0 |
 
-## Contexte
+### [IMPORTANT] Audit education v1->v2 : residus de pilotage v1 dans les arbres v2 (Chiron)
 
-Decision utilisateur : evolution du processus de coordination des rounds.
-Le garde-fou historique "si l agent n a pas fini sa mission, il doit reactiver
-Cerberus" est OBSOLETE : il contredit le deroulement normal actuel.
-
-### Le nouveau processus voulu (decision utilisateur)
-
-1. Cerberus lance le round en activant le premier agent habilite.
-2. Chaque agent active l agent suivant selon SA carte : le round va BOUT EN BOUT,
-   sans retomber sur Cerberus au milieu. UN ROUND LANCE DOIT ETRE FINI.
-3. Si un agent detecte une ERREUR HORS-PERIMETRE pendant son round :
-   - il n INTERROMPT PAS le round et ne reactive PAS Cerberus ;
-   - il active l AGENT HABILITE pour la reparation, avec le rapport de l erreur.
-4. La fin de cette INTER-ROUND (mission secondaire) reactive l AGENT QUI L AVAIT
-   ACTIVE, qui REPREND son round principal exactement ou il l avait laisse.
-5. Une erreur ne doit JAMAIS rester "seulement detectee" : elle doit etre
-   CORRIGEE par l agent habilite exclusivement - lui seul sait precisement quoi
-   faire, c est sa mission exclusive.
+- **Date** : 2026-08-30 (demande utilisateur : verifier l education des agents passes de la v1 a la v2)
+- **Agent habilite** : chiron (educateur) - detecte et documente, corrections appliquees par buffy
+- **Constat deja identifie par socrate** : 6 agents (chiron, gardien, hygie, minerve, promethee, socrate) ont dans leur theme-outils.json v2 l instruction "Reprendre a la case d arret : relancer guider-parcours avec --case <cid>" - c est le pilote V1. En v2 le pilote est guider-arbre. Un agent qui suit cette case relancerait le mauvais outil.
+- **Description (audit complet par agent)** :
+  - Pour CHAQUE agent : verifier fiche + corrections + themes v2 + fins.json - aucun residu v1 ACTIF (pilote, commandes guider-parcours actives) ; archives et lecons historiques CONSERVES.
+  - Inventaire des residus detectes (agent par agent, fichier par fichier).
+  - Rapport de Chiron : liste des corrections a appliquer par buffy.
+- **Raison** : un agent qui suit une instruction v1 dans son arbre v2 sort du flux v2 au pire moment (reprise apres incident).
+- **Perimetre (decision utilisateur)** : AUDIT COMPLET par agent - fiche + corrections + themes v2 + fins.json - aucun residu v1 ACTIF (pilote, commandes) ; archives et lecons historiques CONSERVES. Chiron DETECTE et DOCUMENTE (regle absolue 1 : ne corrige pas) - rapport des corrections pour buffy, qui appliquera.
 
 ## Missions
 
-### [URGENT] M1 - Reviser les regles de fin de round et creer le concept d INTER-ROUND
+### [URGENT] Verrou BLEU : deplacer l habilitation des outils dedies vers l etat oracle (cause racine des sorties de flux)
 
-**Agent habilite** : Buffy (regles immuables + cartes = SON domaine)
-**Quoi** :
-- Reviser Pattern 8 / Pattern 13 dans spec-guider-parcours et protocole-fin-mission :
-  ajouter explicitement le flux INTER-ROUND (erreur hors-perimetre ->
-  activation de l agent habilite avec rapport -> fin de l inter-round qui
-  reactive l agent appelant -> reprise du round principal).
-- Corriger toutes les formulations du type "si l agent n a pas fini, reactiver
-  Cerberus" (AGENTS.md section Fin de mission, fiches, cases c15b...).
-- Definir le vocabulaire : ROUND (mission principale bout-en-bout),
-  INTER-ROUND (mission secondaire de reparation), REPRISE DE ROUND.
-- Regle a graver : une erreur detectee est TOUJOURS suivie d une reparation
-  par l agent habilite exclusivement (jamais "seulement detectee").
-**Justification URGENT** : les regles actuelles se contredisent - un agent qui
-suit litteralement le garde-fou obsolete casse le round au lieu de le reparer.
+- **Date** : 2026-08-30 (demande utilisateur "resoudre les problemes qui provoquent les sorties du flux formel")
+- **Agent habilite** : buffy (developpeur principal) + retour vers super-combo
+- **Constat (cause racine confirmee)** : quand un round casse (KO, boucle, mission avortee), le LLM reprend la main et sort du flux. Pour utiliser un outil dedie, il usurpe l identite de l agent habilite en reecrivant la colonne "Agent actif" de la table "## Sessions connues" d AGENTS.md, que le verrou d habilitation (proteger-verrou-habilitation) croit aveuglement. L identite est auto-declaree dans un fichier que l usurpateur controle -> verrou grille a la source. Evidence dans le log DEFCON 2026-08-29 : "le flux etait casse et le LLM a repris la main".
+- **Description (Option 1 - Verrou bleu, choisie par l utilisateur)** :
+  - Deplacer la SOURCE DE VERITE de l identite actuelle (AGENTS.md, editable par la session) vers l ETAT DU ROUND maintenu par oracle-server (fichiers files/, stats, processus serveur) quand le serveur est demarre et consomme les missions.
+  - Le verrou d habilitation ne doit PLUS croire la session auto-declaree : il doit verifier que la demande a transite par le round formel (Cerberus -> oracle -> pilote) et que l agent est reellement le maillon actif de la session selon oracle-server.
+  - B en renfort : aucune action dediee possible hors d un round route (au KO, le LLM doit re-router par le protocole, jamais agir en direct).
+  - C en renfort : au ko, la seule action autorisee est l appel au protocole de fin/rupture (inter-round / reactivation), jamais l execution directe.
+- **Raison** : arreter les reprises de main du LLM (cause de DEFCON 5 repetes), restaurer l incarnation reelle des agents habilites, faire respecter regles/protocoles/conventions.
+- **Dependances** : comprehension de proteger-verrou-habilitation (python3 .../proteger-verrou-habilitation.py --agent <nom> --outil <nom>, source AGENTS.md "## Sessions connues") ; archivage de la mission purge P1 ci-dessous.
+- **Critere de succes** : en l etat actuel (session sur Cerberus, pas janus), le verrou BLOQUE un --agent janus reecrit a la main dans AGENTS.md ; un test d usurpation d identite est ajoute a la non-regression (par morpheus) ; au KO, le LLM re-route par le protocole au lieu d agir en direct.
 
-### [IMPORTANT] M2 - Aligner les messages de activer-agent-principal sur le nouveau flux
+### [URGENT] Purge des P1 non-acquittes du round (super-combo agent par agent)
 
-**Agent habilite** : Vulcain (outil = SON domaine, sur la spec revisee par Buffy en M1)
-**Quoi** :
-- Les AVERTISSEMENTS GARDE-FOU (relais de chaine / double activation / "Si
-  l agent n a PAS termine sa mission, reactiver Cerberus d abord") doivent
-  reflechir le flux INTER-ROUND : l avertissement doit dire "si l inter-round
-  est termine, reactiver l agent appelant pour qu il reprenne son round".
-- Verifier la coherence des messages informationnels post-reactivation.
-**Justification IMPORTANT** : ce sont ces messages que les agents lisent a
-l execution ; s ils contredisent la nouvelle regle, la regle reste morte.
+- **Agent habilite** : super-pilote (orchestration) + chacun des destinataires en inter-round (buffy, janus, cerberus, morpheus, themis, vulcain, oracle, socrate)
+- **Description** :
+  - Inventaire des 18 P1 non-lus/non-accuses deja dresse (id + destinataire + date + objet).
+  - Pour CHAQUE destinataire, lui faire LIRE puis ACQUITTER ses P1 (`oracle.py acquitter <agent> <id>`), un par un, en inter-round court, dans l ordre du plus charge au plus leger :
+    - buffy (5 P1 : 705b4ed3, 9792c6e3, verifier-statuts-204006, verifier-statuts-205008, verifier-statuts-205510)
+    - janus (5 P1 : 6fedb0fd, 81063597, e558abe1, verifier-statuts-140847, verifier-statuts-144050)
+    - cerberus (2 P1 : aed9515a, verifier-statuts-144050)
+    - morpheus (2 P1 : fd08904c, fd3d1ea8)
+    - themis (1), vulcain (1), oracle (1), socrate (1)
+  - Verifier la nominalisation : la routine de surveillance doit nommer precisement qui doit lire/acquitter pour eviter la recidive.
+- **Raison** : arreter l escalade DEFCON (monte vers 4, deja eu DEFCON 5) et desengorger les files asap/attente (~60 asap, 34 attente) qui saturent le round.
+- **Dependances** : aucune bloquante (infrastructure v2 verte : 107/107 tests OK).
+- **Critere de succes** : 0 P1 non-acquitte restant ; files asap/attente sous le seuil ; DEFCON redescendu ; round re-fonctionnel.
 
-### [IMPORTANT] M3 - Mettre a jour les cartes des agents (cases d erreur hors-perimetre)
+## Bilan de la purge (2026-08-30 14:5x)
 
-**Agenthabilite** : Buffy (cartes = SON domaine, apres M1)
-**Quoi** :
-- Dans chaque carte comportant une case "probleme hors mission detecte"
-  (ex c15b cerberus, cases Signaler...) : le chemin devient ACTIVER L AGENT
-  HABILITE AVEC LE RAPPORT puis, a la fin de l inter-round, REACTIVER L AGENT
-  APPELANT (reprise de round) - plus jamais "rendre la main a Cerberus".
-- Chiron re-eduquera les agents apres la migration (M5).
-
-### [MOYEN] M4 - Corriger les 3 KO pre-existants de la non-regression (proves git diff HEAD vide)
-
-- M4a test-071 : case c6 de redacteur-v2 sans outil de correction ->
-  **Buffy** (carte redacteur-v2).
-- M4b test-078 : 2 non-ASCII dans les sources de generateurs-amelioration ->
-  **Vulcain** (outil).
-- M4c test-067 : bumper --tous, 2 KO a diagnostiquer -> **Vulcain puis Buffy**
-  selon le diagnostic.
-
-### [MOYEN] M5 - Re-education des agents au nouveau flux (apres M1-M3)
-
-**Agent habilite** : Chiron (educateur exclusif)
-**Quoi** : re-eduire les agents sur le concept ROUND / INTER-ROUND / REPRISE
-une fois les regles, messages et cartes alignes.
-
-### [BAS] M6 - Purger les residus temporaires
-
-**Agent habilite** : Hygie (SEUL a supprimer)
-**Quoi** : supprimer tmp-vulcain/zz-patch-valider-relecture.py et
-tmp-vulcain/zz-patch2-valider-relecture.py (mission E4 terminee et validee).
-
-## Questions ouvertes (pour affiner avant execution)
-
-1. L inter-round peut-il enchainer PLUSIEURS reparations (un agent habilite qui
-   decouvre lui-meme une erreur hors-perimetre pendant sa reparation) ?
-   Hypothese proposee : oui, meme mecanique, profondeur non bornee mais tracee.
-2. Qui verifie l inter-round ? Hypothese proposee : Themis/Janus restent hors
-   des inter-rounds courts ; Janus garde la non-regression finale du round.
-3. Le compteur de round (tracabilite) : faut-il marquer dans AGENTS-historique
-   qu une activation est une INTER-ROUND et de quel round elle depend ?
-
-
-
-## Decision utilisateur 2026-08-22 bis - ROUTAGE DE LA PORTE DU MARBRE
-
-**Decision** : les propositions de modification de zones protegees (marbre)
-consideres comme STANDARDS sont derivees vers SOCRATE qui mene la revision et
-repond en son nom. La validation UTILISATEUR directe reste reservee aux cas
-NON-STANDARDS ou exceptionnels.
-
-**Critere STANDARD (-> Socrate decide et repond)** :
-- alignement d une zone protegee sur une regle DEJA validee ailleurs
-  (protocole, spec, decision utilisateur existante) ;
-- correction de formulation obsolete sans changement de sens ;
-- ajout d une precision non contradictoire.
-
-**Critere EXCEPTIONNEL (-> validation utilisateur obligatoire)** :
-- changement de perimetre de protection (zone ajoutee/retiree) ;
-- suppression ou affaiblissement d une regle noyau ;
-- impact sur PLUSIEURS zones ou contradiction avec le marbre existant ;
-- toute nouveaute sans precedent valide.
-
-**Redaction proposee a graver** (protocole-securite-marbre + fiche gardien) :
-Le Gardien qualifie chaque proposition : STANDARD -> transmission a Socrate
-(conversateur de revision strategique) qui repond au nom de l utilisateur et
-autorise la porte ; EXCEPTIONNEL -> proposition soumise a l utilisateur.
-La qualification de Socrate est journalisee dans marbre-log.jsonl avec la
-reference de sa revision (missions-revision.md). L utilisateur garde un droit
-de veto a posteriori sur toute porte STANDARD (annulation + re-empreinte).
-
-### M7 - Executer la decision de routage du marbre
-
-| Etape | Agent | Contenu |
-|---|---|---|
-| M7a | Buffy | Rediger la regle dans protocole-securite-marbre + fiche gardien (qualification STANDARD/EXCEPTIONNEL) |
-| M7b | Gardien | Graver la regle par la porte EXCEPTIONNELLE (premiere application : elle modifie elle-meme le protocole marbre) |
-| M7c | Chiron | Eduquer Socrate aux mises a jour du jour (INTER-ROUND, R/IR, routage marbre) |
-
-
-
-## Decision utilisateur 2026-08-22 ter - GIT N'EST PAS UNE SOURCE DE VERITE RECENTE
-
-**Contexte** : restauration de combos-moteur par git checkout - le commit datait
-de plusieurs jours : le checkout aurait ECRASE tout le travail de session non
-commite. Evite par chance, jamais plus.
-
-**Regle gravee** : le git est une SAUVEGARDE du passe. Il n'est source de
-verite QUE si les fichiers concernes sont tres tres recents (minutes).
-Au-dela de quelques dizaines de minutes : git checkout INTERDIT.
-
-**Correctifs decides (M8)** :
-1. Creer un agent dedie au git (SEUL habilite aux commandes git) -
-   creation = combo creer-agent, domaine Buffy.
-2. Lui construire une CAISSE A OUTILS : recuperer nom, mail, nom du projet,
-   remote, etat du stash... pour accelerer les appels entrant/sortant vers git -
-   creation = domaine Vulcain.
-3. En attente : le verrou d execution des combos (essai 1 abandonne proprement,
-   a refaire avec lecture complete du main).
+- SUPER-COMBO purge-p1 lance par le super-pilote : 8 missions postees (asap)
+  et relayees chez chaque destinataire (buffy, janus, cerberus, morpheus,
+  themis, vulcain, oracle, socrate).
+- Purge executee : 0 P1 non-acquitte restant (inventaire complet revu :
+  buffy 5, janus 5, cerberus 2, morpheus 2, themis 1, vulcain 1,
+  oracle 3, socrate 1 - tous acquittes apres lecture).
+- Files : asap 0 EN_ATTENTE ; attente 34 EN_ATTENTE (missions mises en
+  attente par les inter-round URGENT passes - a reprendre quand les rounds
+  reprennent).
+- CRITERE PRINCIPAL ATTEINT : 0 P1 non-acquitte.

@@ -9,7 +9,7 @@ Genere par convertir-carte-mermaid (source de verite : parcours-<agent>.json).
 | atlas | parcours-atlas | 0.5.7 | [atlas.mmd](atlas.mmd) | [atlas.svg](atlas.svg) |
 | buffy | parcours-buffy | 0.5.6 | [buffy.mmd](buffy.mmd) | [buffy.svg](buffy.svg) |
 | cerberus | parcours-cerberus-freelance | 0.1.0 | [cerberus-cerberus-freelance.mmd](cerberus-cerberus-freelance.mmd) | [cerberus-cerberus-freelance.svg](cerberus-cerberus-freelance.svg) |
-| cerberus | parcours-cerberus | 0.5.10 | [cerberus.mmd](cerberus.mmd) | [cerberus.svg](cerberus.svg) |
+| cerberus | parcours-cerberus | 0.5.11 | [cerberus.mmd](cerberus.mmd) | [cerberus.svg](cerberus.svg) |
 | chiron | parcours-chiron | 0.3.4 | [chiron.mmd](chiron.mmd) | [chiron.svg](chiron.svg) |
 | clio | parcours-clio | 0.6.7 | [clio.mmd](clio.mmd) | [clio.svg](clio.svg) |
 | ferrari | parcours-ferrari | 0.2.0 | [ferrari.mmd](ferrari.mmd) | [ferrari.svg](ferrari.svg) |

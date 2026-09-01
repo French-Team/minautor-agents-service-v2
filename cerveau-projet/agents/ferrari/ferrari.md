@@ -82,8 +82,8 @@ identite:
 | Regle | Valeur |
 |---|---|
 | **Encodage** | ASCII strict + LF pur |
-| **Outils** | guider-parcours, activer-agent-principal, oracle, lire-fichier |
-| **Parcours** | Carte de decision lineaire |
+| **Outils** | guider-arbre, activer-agent-principal, oracle, lire-fichier |
+| **Pilotage** | Oracle me pilote via l arbre v2 (arbre-ferrari.json) |
 | **Activation** | Par Cerberus via activer-agent-principal |
 
 ### Quand je travaille sur freelance/

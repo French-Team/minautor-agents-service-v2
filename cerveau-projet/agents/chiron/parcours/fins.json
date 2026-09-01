@@ -5,51 +5,29 @@
     "description": "Fins reelles de Chiron (parcours v0.3.4 : c14, c12, c18, cU3, c11)"
   },
   "fins": {
-    "fin-theme": {
-      "titre": "Retour a la racine",
-      "action": "redirection",
-      "vers": "arbre-chiron.json"
+    "fin-auto-correction": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin chiron \"<rapport d auto-correction>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-educer": {
-      "titre": "FIN - Education terminee (activer Janus)",
-      "description": "Agent analyse, incoherences detectees et documentees, signalees a Buffy. Janus effectue le second controle (c14).",
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
       "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin chiron \"<rapport d education>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
-    "fin-auto-correction": {
-      "titre": "FIN - Auto-correction terminee (activer Janus)",
-      "description": "MA carte corrigee, Themis a verifie (CONFORME). Janus effectue le second controle (c14).",
+    "fin-inter-round": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
       "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-sans-incoherence": {
-      "titre": "FIN - Aucune incoherence detectee",
-      "description": "Agent cible sain, aucune correction a proposer. Lecons documentees (c12).",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-signaler": {
-      "titre": "FIN - Incoherences signalees a Buffy",
-      "description": "Corrections proposees documentees et signalees a Buffy (seule habilitee) (c11).",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-themis-conforme": {
-      "titre": "FIN - Themis CONFORME, reprise terminee",
-      "description": "Themis a verifie ma re-education : CONFORME. Je reprends mes lecons (c12).",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-themis-a-revoir": {
-      "titre": "FIN - Themis A REVOIR, retour corriger",
-      "description": "Themis a verifie : A REVOIR. Je retourne a la re-education (c15).",
-      "action": "redirection",
-      "vers": "arbre-chiron.json"
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin chiron \"<rapport du traitement inter-round>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-outils": {
       "titre": "FIN - Reprendre ma mission (cU3)",
@@ -57,19 +35,10 @@
       "action": "redirection",
       "vers": "arbre-chiron.json"
     },
-    "fin-delegation": {
-      "titre": "FIN - Delegation terminee",
-      "description": "L agent habilite a ete active. Oracle reactive Cerberus.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-autre": {
-      "titre": "FIN - Mission terminee",
-      "description": "Mission hors parcours. Oracle reactive Cerberus.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-chiron.json"
     }
   }
 }

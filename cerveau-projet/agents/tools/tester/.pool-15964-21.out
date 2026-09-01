@@ -1,0 +1,21 @@
+=== test-107 : garde-fou compteurs tokens v1 ===
+  [OK] 1. compter-entree/sortie existent (main, journal, historique)
+  [OK] 2. manifest reference les 2 compteurs (actif, 600 s)
+  [OK] 3. grades-v1 G3 pour les 2 compteurs
+  [OK] 4. compter-entree journalise JSONL valide (+1 ligne)
+  [OK] 5. compter-sortie journalise JSONL valide (+1 ligne)
+  [OK] 6. historique recoit une ligne entree et une sortie
+  [OK] 7. journaux JSONL parseables (tokens>=0, date)
+  [OK] 8. scripts ASCII (convention v1)
+
+=== CHRONO test (total 0.4s) ===
+  1. existence (main, journal, historique)     0.00s
+  2. manifest {actif, 300s}                    0.00s
+  3. grades G3                                 0.00s
+  4. entree journalise JSONL                   0.09s
+  5. sortie journalise JSONL                   0.09s
+  6. historique entree+sortie                  0.20s
+  7. JSONL parseables                          0.01s
+  8. ASCII                                     0.00s
+
+=== RESULTAT : 8 OK / 0 KO (sur 8 points) ===

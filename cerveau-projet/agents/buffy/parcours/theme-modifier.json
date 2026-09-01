@@ -114,15 +114,35 @@
         "besoin": "Ameliorations possibles de mon fonctionnement ?",
         "action": "procedure",
         "etapes": [
-          "NON -> Activer Themis pour auditer ma mission"
+          "NON -> Faire tester ma modification par Morpheus (le test n est PAS mon domaine)"
         ],
         "regle": "PATTERN 17 : GENERATEUR D'ABORD."
+      },
+      {
+        "besoin": "Faire tester ma modification par Morpheus (inter-round)",
+        "action": "procedure",
+        "etapes": [
+          "LE TEST N EST PAS MON DOMAINE : c est Morpheus le testeur pro. Je ne teste jamais moi-meme, j active Morpheus.",
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent morpheus \"<ma modification a tester>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin buffy \"<bilan>\" --cible oracle (le pilote larguera morpheus et me renverra pour reprendre mon round)"
+        ],
+        "regle": "REGLE DEMARCATION (INTER-ROUND) : Buffy modifie, Morpheus teste. Morpheus teste la modification et REVIENT vers Buffy."
+      },
+      {
+        "besoin": "Retour de Morpheus (test) recu ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> Activer Themis pour auditer ma mission",
+          "NON -> re-essai (Morpheus en inter-round revient vers moi)"
+        ],
+        "regle": "PATTERN RE-ESSAI : le verdict de Morpheus (tests) revient vers Buffy."
       },
       {
         "besoin": "Activer Themis pour auditer ma mission",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin buffy \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
         ],
         "regle": "THEMIS AVANT JANUS."
       },

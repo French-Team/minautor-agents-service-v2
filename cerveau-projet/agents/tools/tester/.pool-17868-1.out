@@ -1,0 +1,17 @@
+=== Garde-fou : coherence documentaire (specs vs outils, catalogue) ===
+  [OK] 1. detecter-divergences-version --version = v0.2.0
+  [OK] 2. detecter-decalages-catalogue --version = v0.2.3
+  [KO] 3. 0 spec DIVERGENTE (specs alignees sur les outils) -- y       ALIGNE
+pense-bete-exemple-01          spec-pipeline.001.01.ebauche.md            -              -              SANS PY
+
+SYNTHESE : 34 spec | 23 ALIGNEES | 1 DIVERGENTES | 10 SANS VERSION/SPEC
+
+  [OK] 4. 0 SANS VERSION sur les outils avec .py (specs versionnees)
+  [OK] 5. detecter-decalages-catalogue : 0 decalage
+  [OK] 6. spec guider-parcours : **Version outil** : 0.5.0 present
+  [OK] 7. ASCII strict : 0 non-ASCII (outils + doc + spec + test)
+  [OK] 8. LF pur : 0 CRLF (outils + doc + spec + test)
+
+
+=== CHRONO test (total 8.6s) ===
+=== RESULTAT : 7 OK / 1 KO (sur 8 points) ===

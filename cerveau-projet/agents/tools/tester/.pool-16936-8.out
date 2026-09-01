@@ -1,0 +1,22 @@
+=== Garde-fou : detecter-ecritures-hors-cycle ===
+[OK] 1. outil present + compile
+[OK] 2. --version v0.1.2
+[OK] 3. --aide code 0 sans traceback
+[OK] 4. preuve negative : ecriture DETECTEE (KO code 1)
+[OK] 5. agent de travail : code 0 (ATTENTION, pas KO)
+[OK] 6. --rapport markdown avec verdict
+[OK] 7. nettoyage : preuve supprimee (0 trace)
+[OK] 8. ASCII strict : 0 non-ASCII (outil + doc + test)
+[OK] 8b. LF pur : 0 CRLF (outil + doc + test)
+
+
+=== CHRONO test-089 (total 1.9s) ===
+  1. outil + compile                       0.01s
+  2. version                               0.17s
+  3. aide                                  0.18s
+  4. preuve negative                       0.36s
+  5. agent travail                         0.53s
+  6. rapport                               0.64s
+  7. nettoyage                             0.00s
+  8. normes                                0.00s
+=== RESULTAT : 9 OK / 0 KO (sur 9 points) ===

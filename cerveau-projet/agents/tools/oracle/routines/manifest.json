@@ -1,104 +1,21 @@
 {
- "version": "0.1.5",
- "description": "Manifest des routines v1 (session-admin) - editable sans toucher au code. v0.1.5 (2026-08-29) : ajout verifier-statuts (lit la colonne Etat, URGENT -> escalade DEFCON 4 + mission asap + inter-round si round en cours). v0.1.4 : verifier-agent-perimetre devient GATE PRE-VOL. v0.1.3 : vigie-perimetre. v0.1.2 : notation. v0.1.1 : 6 routines v1.",
+ "version": "0.1.8",
+ "description": "Manifest des routines v1 (session-admin) : chaque routine active possede un intervalle fixe distinct, sans jitter aleatoire.",
  "intervalle_boucle_secondes": 30,
  "routines_surveillance": [
-  {
-   "nom": "citations",
-   "script": "citations.py",
-   "actif": true,
-   "intervalles_secondes": 300,
-   "temporaire": true,
-   "note": "ROUTINE TEMPORAIRE (decision utilisateur 2026-08-27) : citation d un dieu grec toutes les 5 min comme repere visuel du fonctionnement des serveurs en arriere-plan (equivalent v2 citations Marvel, mais univers v1 = dieux grecs). La colonne Grade de l encart v1 porte [G5] (temporaire). A RETIRER EN PRODUCTION (actif=false) - la routine sera desactivee en fin de dev."
-  },
-  {
-   "nom": "vigie-round",
-   "script": "vigie-round.py",
-   "actif": true,
-   "intervalles_secondes": 60,
-   "temporaire": false,
-   "note": "ROUTINE DE DETECTION (decision utilisateur 2026-08-28, les deux en cascade) : surveille en continu les rounds casses - session orpheline, agent actif sans activite depuis X minutes, et chaine en attente, etat de carte a etape=fin sans reactivation de Cerberus. Alerte Cerberus via inbox Oracle, format 4W, LECTURE SEULE. Seuil par defaut 10 minutes, reglable via --seuil-minutes."
-  },
-  {
-   "nom": "flux",
-   "script": "flux.py",
-   "actif": true,
-   "intervalles_secondes": 600,
-   "temporaire": false,
-   "note": "ROUTINE DE SURVEILLANCE (2026-08-29, transposee de la v2 flux) : surveille le flux de messages dans l inbox Oracle et alerte Cerberus quand des P1 restent non-lus/non-acquittes. Historise UNIQUEMENT quand le nombre change (fichier .flux_derniere.txt)."
-  },
-  {
-   "nom": "sante",
-   "script": "sante.py",
-   "actif": true,
-   "intervalles_secondes": 300,
-   "temporaire": false,
-   "note": "ROUTINE DE SURVEILLANCE TEMPS REEL (2026-08-29, transposee de la v2 sante) : etat global v1 - daemons oracle-server/routines-server vivants, DEFCON 5 gele, encart v1 coherent, BDD historique recent. Alerte cerberus + historise UNIQUEMENT en cas d anomalie."
-  },
-  {
-   "nom": "live",
-   "script": "live.py",
-   "actif": true,
-   "intervalles_secondes": 300,
-   "temporaire": false,
-   "note": "ROUTINE DE SURVEILLANCE TEMPS REEL (2026-08-29, transposee de la v2 live) : activations/desactivations d agents v1 - agent actif, debordement d inbox (P1 non-lus), derniere activite. Historise UNIQUEMENT en cas d anomalie."
-  },
-  {
-   "nom": "encart",
-   "script": "encart.py",
-   "actif": true,
-   "intervalles_secondes": 300,
-   "temporaire": false,
-   "note": "ROUTINE DE SURVEILLANCE TEMPS REEL (2026-08-29, transposee de la v2 encart) : integrite de l encart v1 (AGENTS-activite-recente.md, colonnes Grade|Agent|Executeur|Debut-Fin|Secteur|Raison). Historise UNIQUEMENT en cas d anomalie."
-  },
-  {
-   "nom": "notation",
-   "script": "notation.py",
-   "actif": true,
-   "intervalles_secondes": 300,
-   "temporaire": false,
-   "note": "ROUTINE PERIODIQUE (2026-08-29, transposee de la v2 notation) : depose toutes les 5 min une demande d evaluation croisee des agents dans l inbox de Cerberus (Themis evalue, Janus controle). Anti-inondation : ne depose pas si demande deja en attente (non-lue) ou deposee il y a moins de 10 min. Historise uniquement au depot."
-  },
-  {
-   "nom": "compter-entree",
-   "script": "compter-entree.py",
-   "actif": true,
-   "intervalles_secondes": 300,
-   "temporaire": false,
-   "note": "Mesure des tokens ENTREE (2026-08-29, transposee de la v2 compter-entree) - journalise dans routines/data/journal-entree.jsonl + tokens-historique-v1.md. Reutilise le compteur partage v2 pour la mesure."
-  },
-  {
-   "nom": "compter-sortie",
-   "script": "compter-sortie.py",
-   "actif": true,
-   "intervalles_secondes": 300,
-   "temporaire": false,
-   "note": "Mesure des tokens SORTIE (2026-08-29, transposee de la v2 compter-sortie) - journalise dans routines/data/journal-sortie.jsonl + tokens-historique-v1.md. Reutilise le compteur partage v2 pour la mesure."
-  },
-  {
-   "nom": "vigie-perimetre",
-   "script": "vigie-perimetre.py",
-   "actif": true,
-   "intervalles_secondes": 300,
-   "temporaire": false,
-   "note": "ROUTINE DE SURVEILLANCE (2026-08-29, transposee de la v2 vigie/ex-surveiller-modifications) : guetteuse du perimetre Oracle - empreintes SHA-256 des fichiers surveilles (perimetre_surveille), alerte Cerberus format 4W quand une modification est detectee. LECTURE SEULE + alerte."
-  },
-  {
-   "nom": "verifier-agent-perimetre",
-   "script": "verifier-agent-perimetre.py",
-   "actif": false,
-   "intervalles_secondes": 0,
-   "temporaire": false,
-   "note": "GATE DU BON AGENT (decision utilisateur 2026-08-29 : PAS un timer - il est inutile de laisser un mauvais agent travailler puis tout detruire) : le mecanisme principal est la PORTE PRE-VOL lancee PAR L AGENT au moment ou il decide de commencer (case c0g de SON parcours, verifier-agent-perimetre.py --gate --moi <agent>) : verifie l agent actif de la session + la zone de la mission (v1/v2/jarvis) AVANT qu il ne fasse quoi que ce soit. KO -> STOP immediat + reactiver Cerberus sans rien toucher. Timer DESACTIVE (actif=false) : la detection a posteriori (git) reste disponible a la demande en mode routine."
-  },
-  {
-   "nom": "verifier-statuts",
-   "script": "verifier-statuts.py",
-   "actif": true,
-   "intervalles_secondes": 300,
-   "temporaire": false,
-   "note": "ROUTINE DE SURVEILLANCE (decision utilisateur 2026-08-29) : lit la colonne Etat de l encart v1 et INFORME ORACLE qui avise en fonction de l etat. URGENT -> defcon-escaler 4 (degradation vers DEFCON 4 = VALIDATION DES REPARATIONS ; normal = DEFCON 2 REPRISE TOTALE) + mission-ajouter --file asap (prioritaire). Si un ROUND EST EN COURS (agent actif != cerberus) : met la mission courante en attente (file attente v1, transposition v2) + envoie une instruction INTER-ROUND a l agent actif (activer l agent habilite --type ir puis reprendre). Anti-inondation : agit UNE FOIS par entree URGENT (routines/data/etat-statuts.json). Filtre les faux URGENT (Demarrage oracle DEFCON=3). --dry-run sans effet."
-  }
+  {"nom":"top3-urgences","script":"top3-urgences.py","actif":true,"intervalles_secondes":30,"temporaire":false,"note":"Surveille les 3 premieres lignes et previent Oracle en P1 lorsque leur contenu critique change."},
+  {"nom":"citations","script":"citations.py","actif":true,"intervalles_secondes":300,"temporaire":true,"note":"Routine temporaire de repere visuel."},
+  {"nom":"vigie-round","script":"vigie-round.py","actif":true,"intervalles_secondes":360,"temporaire":false,"note":"Detecte les rounds casses et alerte Oracle."},
+  {"nom":"flux","script":"flux.py","actif":true,"intervalles_secondes":480,"temporaire":false,"note":"Surveille les P1 non acquittees et alerte Oracle lors d un changement."},
+  {"nom":"sante","script":"sante.py","actif":true,"intervalles_secondes":600,"temporaire":false,"note":"Verifie l etat global des daemons, DEFCON, encart et historique."},
+  {"nom":"live","script":"live.py","actif":true,"intervalles_secondes":720,"temporaire":false,"note":"Surveille l agent actif et les anomalies de session."},
+  {"nom":"encart","script":"encart.py","actif":true,"intervalles_secondes":840,"temporaire":false,"note":"Verifie l integrite de l encart v1."},
+  {"nom":"notation","script":"notation.py","actif":true,"intervalles_secondes":960,"temporaire":false,"note":"Depose les demandes d evaluation periodique avec anti-inondation."},
+  {"nom":"compter-entree","script":"compter-entree.py","actif":true,"intervalles_secondes":1080,"temporaire":false,"note":"Mesure les tokens ENTREE."},
+  {"nom":"compter-sortie","script":"compter-sortie.py","actif":true,"intervalles_secondes":1200,"temporaire":false,"note":"Mesure les tokens SORTIE."},
+  {"nom":"vigie-perimetre","script":"vigie-perimetre.py","actif":true,"intervalles_secondes":1320,"temporaire":false,"note":"Surveille le perimetre Oracle et alerte Oracle lors d une modification."},
+  {"nom":"verifier-agent-perimetre","script":"verifier-agent-perimetre.py","actif":false,"intervalles_secondes":0,"temporaire":false,"note":"Gate pre-vol, jamais executee comme routine planifiee."},
+  {"nom":"verifier-statuts","script":"verifier-statuts.py","actif":true,"intervalles_secondes":1440,"temporaire":false,"note":"Analyse les etats URGENT de l encart et informe Oracle avec anti-inondation."}
  ],
  "perimetre_surveille": [
   "cerveau-projet/agents/tools/oracle/routines/",

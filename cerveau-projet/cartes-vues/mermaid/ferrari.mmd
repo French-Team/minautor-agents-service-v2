@@ -4,6 +4,9 @@ flowchart TD
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
     c0b{"Confirmation de relecture"}
     c0c["Contexte : activite recente"]
+    c0g["GATE BON AGENT : verifier que tu es LE BON AGENT"]
+    c0ga{"GATE : es-tu le bon agent ?"}
+    c0h(["FIN - STOP : pas le bon agent, reactiver Cerberus"])
     c1{"Mission : quelle correction ?"}
     c10["Historiser l intervention"]
     c11{"Prochaine mission ou fin de cycle ?"}
@@ -27,9 +30,12 @@ flowchart TD
     c8{"Verifier la correction"}
     c9["Rapport de correction"]
     c0 --> c0b
-    c0b -- "OUI" --> c0c
+    c0b -- "OUI" --> c0g
     c0b -- "NON" --> c0
     c0c --> c1
+    c0g --> c0ga
+    c0ga -- "OUI" --> c0c
+    c0ga -- "NON" --> c0h
     c1 -- "fiche-agent" --> c2
     c1 -- "arbre-decision" --> c3
     c1 -- "jarvis" --> c5

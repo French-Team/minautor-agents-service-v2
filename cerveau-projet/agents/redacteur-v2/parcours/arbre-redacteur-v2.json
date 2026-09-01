@@ -1,0 +1,43 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "redacteur-v2",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-redacteur-v2",
+    "agent": "redacteur-v2",
+    "description": "Arbre des decisions de Redacteur-v2 - redacteur PRO des docs de la v2 (freelance). L agent choisit UN THEME : SYNTHESE (rediger un document de la v2 de maniere autonome, en un round SOLO), AUTRE (mission hors parcours), INTER-ROUND (rapport KO recu d un autre agent).",
+    "regles": {
+      "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
+      "D5": "Round SOLO : exceptionnellement capable de faire un round seul, puis reactiver Cerberus."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est ma mission ?",
+    "branches": [
+      {
+        "reponse": "SYNTHESE",
+        "description": "Rediger les documents de la v2 (proposition, decisions, conventions, protocoles) de maniere autonome",
+        "vers": "theme-synthese.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors parcours (executer les instructions de la mission)",
+        "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

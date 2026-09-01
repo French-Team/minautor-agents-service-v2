@@ -70,7 +70,7 @@ Trace : regle "RELECTURE (QUESTION HONNETE)" ajoutee dans vision.md
 ### [LECON] 2026-08-25 -- HARNAIS-JARVIS installe : je suis le destinataire des alertes de comportement
 
 **Tache** : surveiller que JARVIS fonctionne correctement (decision
-utilisateur : « son harnais est SUPER important »).
+utilisateur : " son harnais est SUPER important ").
 **Lecon** : un harnais de COMPORTEMENT a ete installe en
 `tools-commun/harnais-jarvis/`. Il scanne les files JARVIS (lecture
 seule), detecte chaque ecart (P1 bloque, hub non route, JSON corrompu,
@@ -101,8 +101,8 @@ sans routage).
 
 ### [LECON] 2026-08-25 -- Le harnais detecte quand JARVIS n ACTIVE pas les agents
 
-**Tache** : ameliorer le harnais (decision utilisateur : « il doit detecter
-quand jarvis n active pas les agents, etc »).
+**Tache** : ameliorer le harnais (decision utilisateur : " il doit detecter
+quand jarvis n active pas les agents, etc ").
 **Lecon** : deux signaux critiques ont ete ajoutes au harnais :
 1. `activation_demandee_non_traitee` (CRIT) : une DEMANDE d activation
    (type activation, objet ACTIVATION/MISSION) reste NON LUE dans
@@ -121,9 +121,9 @@ Les seuils (14 j / 7 j) sont dans `seuils` de harnais-jarvis-data.json.
 
 ### [LECON] 2026-08-25 -- Le harnais verifie que JARVIS TRANSMET les informations
 
-**Tache** : ameliorer le harnais (decision utilisateur : « verifier s il
+**Tache** : ameliorer le harnais (decision utilisateur : " verifier s il
 ( JARVIS ) transmet bien les informations aux agents, qu il ne brise pas
-la boucle ou le round »).
+la boucle ou le round ").
 **Lecon** : le contrat d envoi (envoyer/activer, CLI + MCP) ecrit TOUJOURS
 le message dans inbox/<vers> ET outbox/<de> (meme id). Le harnais
 verifie donc la CORRESPONDANCE :
@@ -132,7 +132,7 @@ verifie donc la CORRESPONDANCE :
    le destinataire ne l a jamais recu -> boucle/round brise.
 2. `message_non_trace` (WARN) : message dans inbox/<vers> mais ABSENT de
    outbox/<de> = transmission non tracee cote expediteur (asymetrie).
-**Pourquoi c est grave** : un message « envoye » qui n arrive jamais a
+**Pourquoi c est grave** : un message " envoye " qui n arrive jamais a
 son destinataire est la cause premiere des rounds casses (l agent attend
 une information qui n existe que dans l outbox de l expediteur).
 **Correction** : quand je recois une alerte `message_non_transmis`, je
@@ -143,12 +143,12 @@ accidentelle) et je retablis la transmission (re-envoi propre via
 
 ### [LECON] 2026-08-25 -- Routage par gravite + filet de securite (qui est prevenu)
 
-**Tache** : completer le harnais (decision utilisateur : « reflechir a
-qui manque », puis validation : routage + EDITH non lues + USER-DEMANDES).
+**Tache** : completer le harnais (decision utilisateur : " reflechir a
+qui manque ", puis validation : routage + EDITH non lues + USER-DEMANDES).
 **Lecon** :
 1. ROUTAGE : WARN -> Vision seule ; ERR/CRIT -> Vision + **Stark**
    (Stark coordonne et relaie, il ne corrige pas : exclusivite). Les
-   CRIT portent « ESCALADE UTILISATEUR REQUISE ».
+   CRIT portent " ESCALADE UTILISATEUR REQUISE ".
 2. `serveur_inactif` : si l historique du serveur MCP est gele depuis
    N jours (7 par defaut), le serveur ne tourne pas -- a verifier quand
    un round est actif.
@@ -157,8 +157,8 @@ qui manque », puis validation : routage + EDITH non lues + USER-DEMANDES).
    ne se ferme pas. C est le FILET DE SECURITE : mes propres alertes
    sont surveillees -- je dois les lire et les acquitter !
 4. `demande_utilisateur_non_traitee` : une entree de USER-DEMANDES.md
-   plus vieille que 7 jours ABSENTE de la section « Dernieres
-   modifications » est signalee (urgent -> ERR). Quand une demande est
+   plus vieille que 7 jours ABSENTE de la section " Dernieres
+   modifications " est signalee (urgent -> ERR). Quand une demande est
    traitee, on AJOUTE UNE LIGNE au journal de la section :
    `- <date> -- Traitee: <titre>` -- le harnais ne matche que les
    LIGNES DU JOURNAL (celles commencant par `-`), jamais les
@@ -190,7 +190,7 @@ du harnais + bloquant EDITH sur manifest.json.
 3. WARN mission_sans_statut (x7) : FAUX POSITIF -- files/defcon.jsonl
    est un JOURNAL DEFCON, pas une file de missions.
 4. Bloquant EDITH : manifest.json modifie = ajout legitime de la
-   routine harnais-jarvis, juste non committé.
+   routine harnais-jarvis, juste non committe.
 **Corrections** :
 1. _detecter_activations : source = AGENTS-historique.md ; activation
    livree (lu=True = livraison directe faite) = tracable par nature.
@@ -208,12 +208,12 @@ produisent les memes alertes que les pannes reelles.
 
 ### [LECON] 2026-08-25 -- ALLER AU BOUT : je ne m arrete jamais pour demander l autorisation
 
-**Tache** : ameliorer la fin de mission (decision utilisateur : « elle ne
+**Tache** : ameliorer la fin de mission (decision utilisateur : " elle ne
 doit pas s'arreter pour demander si elle a le droit de faire les
-changements. quand elle commence, elle doit finir son travail »).
-**Lecon** : mon ancienne regle « Expliquer l impact AVANT d appliquer »
-etait ambigue : je l interpretais comme « demander l autorisation avant
-de toucher » et je m arretais en plein travail. C est FAUX : la mission
+changements. quand elle commence, elle doit finir son travail ").
+**Lecon** : mon ancienne regle " Expliquer l impact AVANT d appliquer "
+etait ambigue : je l interpretais comme " demander l autorisation avant
+de toucher " et je m arretais en plein travail. C est FAUX : la mission
 m a ete donnee (via JARVIS de Stark, ou alerte harnais), j ai TOUTE la
 confiance pour l executer.
 **Pourquoi c est grave** : m arreter pour demander si j ai le droit =
@@ -227,8 +227,8 @@ et le harnais finit par detecter des missions abandonnees.
 2. ALLER AU BOUT : analyser -> appliquer -> non-regression -> bilan
    complet -> rendre le controle. JAMAIS d arret en cours de route.
 3. Mon arbre a ete mis a jour (theme-modifier.json + theme-traiter.json)
-   : l etape « Expliquer l impact AVANT d appliquer » est remplacee par
-   « APPLIQUER DIRECTEMENT ». Ma fiche porte la REGLE ALLER AU BOUT.
+   : l etape " Expliquer l impact AVANT d appliquer " est remplacee par
+   " APPLIQUER DIRECTEMENT ". Ma fiche porte la REGLE ALLER AU BOUT.
 4. Un seul cas legitime de refus : la demande fragilise la communication
    ou sort du perimetre -> je refuse AVEC justification dans le bilan
    (fin-refus), puis FIN DE CYCLE. Ce n est pas une pause, c est une
@@ -284,7 +284,7 @@ lister/bloques OK, harnais verifier : 0 ecart.
 **Tache** : audit Stark - jarvis.py/jarvis-server.py n importaient pas
 verifier_outil (protocole 21).
 **Realise** : pattern rating-agents reproduit (sys.path ../harnais/
-fonctions + verifier_outil tolérant) dans jarvis.py (main()) et
+fonctions + verifier_outil tolerant) dans jarvis.py (main()) et
 jarvis-server.py (__main__). Le harnais a exige entry.py (structure
 protocole 14) : cree, delegue a jarvis.main().
 **Verdict** : VALIDE -- demarrage/arret/envoyer/lire/acquitter/
@@ -394,7 +394,7 @@ attente des qu autre chose lit a votre place.
 
 **Constat** : les premieres suites NR echouaient toutes (rc=2, chemins
 inexistants) ET EDITH affichait "QUI: inconnu (modification non
-committée)" depuis toujours.
+committee)" depuis toujours.
 **Cause racine commune** : `WS = RACINE.parent` - mais trouver_racine()
 retourne DEJA la racine du workspace : .parent remontait a Z:\.
 Toutes les commandes executees depuis ce cwd tombaient hors repo git

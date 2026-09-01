@@ -1,0 +1,44 @@
+{
+ "identite": {
+  "type": "theme",
+  "appartient_a": "oracle",
+  "nom": "DELEGATION",
+  "description": "Mission hors perimetre : je delegue a l agent habilite et je signale"
+ },
+ "theme": {
+  "nom": "DELEGATION",
+  "but": "Detecter une mission hors perimetre de coordination (outil, carte, test, suppression...) et la rediriger vers l agent habilite via la file asap",
+  "redirects": [
+   {
+    "besoin": "Identifier la mission comme hors perimetre",
+    "action": "procedure",
+    "etapes": [
+     "REDIRECTION : si la mission concerne un outil/carte/test/suppression -> activer l agent habilite (Vulcain, Buffy, Morpheus, Hygie, Themis...)",
+     "JAMAIS re-tenter la mission moi-meme"
+    ],
+    "regle": "GARDE-FOU DELEGATION : je ne re-tente JAMAIS. Je depose la mission asap vers l agent habilite et je signale la redirection."
+   },
+   {
+    "besoin": "Deposer la mission asap vers l agent habilite",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter \"<la mission complete>\" --file asap --agent <agent-habilite>"
+    ],
+    "regle": "La file asap porte l agent cible. Le daemon la consomme et lance le pilote de l agent."
+   },
+   {
+    "besoin": "Signaler la redirection a Cerberus",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py envoyer oracle cerberus \"REDIRECTION\" \"<mission hors perimetre -> agent habilite + id de la mission asap deposee>\""
+    ],
+    "regle": "Cerberus reste informe du routage. Je ne remonte pas la chaine : la redirection est tracee, l agent prend la main via la file."
+   }
+  ]
+ },
+ "fin": {
+  "type": "lien",
+  "vers": "fins.json",
+  "case": "fin-coordination"
+ }
+}

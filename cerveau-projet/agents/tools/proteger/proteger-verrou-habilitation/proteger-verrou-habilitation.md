@@ -1,6 +1,6 @@
 # proteger-verrou-habilitation
 
-**Version :** 0.4.2
+**Version :** 0.5.0
 **Statut :** ebauche
 **Categorie :** Proteger
 
@@ -86,6 +86,7 @@ python3 proteger-verrou-habilitation.py --liste
 | `--agent <nom>` | Nom de l agent appelant (OBLIGATOIRE pour verrouiller) |
 | `--outil <nom>` | Nom de l outil a utiliser (OBLIGATOIRE pour verrouiller) |
 | `--audit` | Mode audit/tests : verifie la table d habilitation SANS verifier l identite reelle de la session (reserve aux preuves formelles) |
+| `--verrou-interne` | Verrou bleu (v0.5.0) : croise ET EXIGE une mission oracle EN_ATTENTE/PRISE pour l agent declare (source de verite du round, pas la seule reecriture d AGENTS.md) |
 | `--liste` | Affiche la table complete outil -> agents habilites |
 | `--verbose` | Detail du verdict (liste des habilites, source) |
 | `--version` | Affiche la version |
@@ -132,3 +133,26 @@ Le verrou se place AVANT tout outil critique dans les combos et les scripts
 temporaires : l agent doit prouver son habilitation avant d agir. Un garde-fou
 de non-regression verifie que le verrou existe, se compile, et bloque
 correctement les agents non habilites (preuve negative).
+
+## Verrou interne (v0.5.0, Verrou bleu)
+
+La faille historique : l identite etait AUTO-DECLAREE dans AGENTS.md (colonne
+"Agent actif" de la table '## Sessions connues'), un fichier que la session
+modifie directement. Un LLM qui sortait du flux pouvait y reecrire le nom de
+l agent habilite pour deverrouiller un outil dedie.
+
+Le Verrou bleu elimine cette autorite auto-declaree : l option
+`--verrou-interne` exige en PLUS qu une mission oracle (EN_ATTENTE ou PRISE)
+soit reellement relayee pour l agent declare (`oracle.py mission-lister
+--statut EN_ATTENTE --agent <X>`). Seule la presence dans AGENTS.md ne sert
+plus d autorite : il faut que le round ait passe par oracle.
+
+Usage :
+
+```
+python3 proteger-verrou-habilitation.py --agent <X> --outil <O> --verrou-interne
+```
+
+En mode hybride (recommandation Buffy, blueprint-verrou-bleu.md), ce
+croisement est le signal le plus fiable d une incarnation reelle : une
+reecriture a la main du nom sans DEBUT/FIN oracle coherent est bloquee.

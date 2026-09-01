@@ -1,0 +1,31 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "VERS-ORACLE",
+    "description": "La mission est transmise a ORACLE qui prend la main, historise et lance l agent habilite"
+  },
+  "theme": {
+    "nom": "VERS-ORACLE",
+    "but": "Passer la mission a Oracle qui historise le DEBUT de l agent habilite et lance le pilote",
+    "redirects": [
+      {
+        "besoin": "Deposer la mission dans la file prioritaire",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter \"<la mission complete>\" --file asap --agent <agent-habilite>"
+        ],
+        "regle": "La file asap porte l agent cible. Oracle la consommE a son rythme."
+      },
+      {
+        "besoin": "Verifier que la mission est bien deposee (sans rien executer)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py mission-lister --file asap"
+        ],
+        "regle": "La mission doit apparaitre avec l agent cible. Je ne lance pas l agent : c est Oracle."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-theme" }
+}

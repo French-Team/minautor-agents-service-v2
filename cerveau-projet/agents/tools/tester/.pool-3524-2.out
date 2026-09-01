@@ -1,0 +1,15 @@
+=== test-032 : pool de workers non-regression ===
+  [OK] 1. --version v0.6.2
+  [OK] 2. Defaut = BARRIERES (structure BARRIERE affichee)
+  [OK] 3a. --serial : mode serie (pas de Pool)
+  [OK] 3b. --parallele --workers 1 : mode serie (pas de Pool)
+  [OK] 4. GARDE_FOUS_GLOBAUX identifie test-023/024/025/027
+  [OK] 5. Anti-deadlock : sortie vers fichier (pas de pipe stdout)
+  [OK] 6. --workers present dans --help
+  [OK] 7. Preuve de gain : pool (1.9s) <= serie (2.0s) x 2.5
+  [OK] 8. ASCII strict : 0 non-ASCII (test + lanceur)
+  [OK] 9. LF pur : 0 CRLF (test + lanceur)
+
+
+=== CHRONO test (total 12.6s) ===
+=== RESULTAT : 10 OK / 0 KO (sur 10 points) ===

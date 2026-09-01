@@ -133,11 +133,19 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 1. Cerberus analyse le besoin et active l'agent (etape 4) avec la MISSION :
    La RAISON commence TOUJOURS par : RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer (garde-fou anti-oubli de la fiche).
    le quoi, le pourquoi, les criteres de validation.
-2. L'agent active REPREND LE CONTROLE en lancant SON parcours :
-   `guider-parcours.py cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json`
-3. SA carte de decision le guide case par case : chaque case donne l'indice
-   exact (outil a lancer, fichier a lire, regle a appliquer) et les branches
-   selon ses reponses. C'est LUI qui decide, pas Cerberus.
+2. L'agent actif REPREND LE CONTROLE : Oracle (pilote) le dirige selon SON
+   arbre de decision v2 -- `oracle.py pilote <agent>` charge l'arbre
+   (`arbre-<agent>.json` + themes `theme-*.json` + `fins.json`) et sert chaque
+   etape de travail dans l inbox de l agent (maitre d hotel, vision
+   2026-08-27). Le parcours v1 (`guider-parcours.py ...
+   parcours-<agent>.json`) est UNIQUEMENT un repli pour les agents sans arbre:
+   l etat de carte des agents pointe vers `arbre-<agent>.json` en priorite.
+3. SA carte (arbre v2) le guide redirect par redirect / case par case :
+   chaque redirect/case donne l'indice exact (outil a lancer, fichier a
+   lire, regle a appliquer) et les branches selon ses reponses. C'est LUI qui
+   decide, pas Cerberus. Les fins sont precedent-aware : un agent active en
+   inter-round rend la main a son appelant via `oracle.py reactiver-fin`
+   (protocole-fin-mission v0.3.0).
 4. L'agent EXECUTE IMMEDIATEMENT apres l'activation, DANS LE MEME ROUND
    (regle RELEVE MEME ROUND) : jamais d'arret, jamais de bilan intermediaire
    pour attendre l'utilisateur. L'activation EST l'ordre d'execution.

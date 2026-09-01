@@ -5,6 +5,9 @@ flowchart TD
     c0b{"Confirmation de lecture"}
     c0c["CONTEXTE OBLIGATOIRE : activite recente"]
     c0e["Consulter les lecons des autres agents"]
+    c0g["GATE BON AGENT : verifier que tu es LE BON AGENT"]
+    c0ga{"GATE : es-tu le bon agent ?"}
+    c0h(["FIN - STOP : pas le bon agent, reactiver Cerberus"])
     c1{"Mission git demandee"}
     c2["Operation sans risque (status/log/diff/commit)"]
     c3{"REGLE D ANCIENNETE : age des fichiers ?"}
@@ -12,11 +15,14 @@ flowchart TD
     c4b(["Checkout INTERDIT - reparation dans le present"])
     c5(["FIN DE MISSION - reactiver Cerberus"])
     c0 --> c0b
-    c0b -- "OUI" --> c0e
+    c0b -- "OUI" --> c0g
     c0b -- "INCERTAIN" --> c0
     c0b -- "NON" --> c0
     c0c --> c1
     c0e --> c0c
+    c0g --> c0ga
+    c0ga -- "OUI" --> c0e
+    c0ga -- "NON" --> c0h
     c1 -- "sauvegarder" --> c2
     c1 -- "consulter" --> c2
     c1 -- "restaurer" --> c3

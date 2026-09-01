@@ -6,7 +6,7 @@ identite:
 ---
 # Specification -- activer-agent-principal
 
-**Version :** 0.8.2
+**Version :** 0.8.8
 **Statut :** prepare
 **ID :** 001
 **Class :** 01
@@ -282,6 +282,14 @@ Tests manuels sur le dossier `exemples/` avec des fichiers de test.
 
 | Date | Version | Auteur | Description |
 |---|---|---|---|
+| 2026-08-30 | 0.8.8 | Buffy | TRACABILITE R/IR MODELE AERO : detecter_type_round elargi - une raison commencant par SIGNALER, BESOIN INTER-ROUND, ou contenant MISSION-AJOUTER / INTER-ROUND est taggee IR en plus des prefixes INTER-ROUND / FIN D INTER-ROUND. Couvre le signalement a ORACLE du modele aero R2 (le pilote largue l habilite) : l inter-round est desormais trace sans flag manuel sur le vocabulaire aero. Version 0.8.8. |
+| 2026-08-29 | 0.8.7 | Vulcain | COLONNE EXECUTEUR ROUTINES (demande utilisateur) : les entrees historisees par les routines v1 (citations, flux, sante, live, encart, vigie-round...) affichaient une colonne Executeur VIDE - elles appellent ajouter_historique sans passeur executeur. Nouveau helper _executeur_routine(agent) qui lit le manifest des routines et retourne RT(<intervalle>s) si l agent est une routine ACTIVE avec intervalle > 0. Version 0.8.7. |
+| 2026-08-29 | 0.8.6 | Vulcain | COLONNE DEFCON : l encart v1 passe de 9 a 10 colonnes `| Grade | Agent | Defcon | Executeur | Etat | Secteur | Raison | Heure | id | Type |`. Chaque entree porte le DEFCON courant au moment de l historisation. |
+| 2026-08-29 | 0.8.5 | Vulcain | --FORCER LIBRE (support redemarrer-session.py) : main() retire --forcer d argv avant le parsing positionnel. |
+| 2026-08-29 | 0.8.4 | Vulcain | ETATS DYNAMIQUES : la liste des etats + leurs regles sortent du code vers etats-actions.json (oracle/, en v ETATS_ACTIONS surchargeable), defaut ABSOLU. |
+| 2026-08-29 | 0.8.3 | Vulcain | COLONNE DEBUT/FIN -> ETAT : la colonne Debut/Fin devient Etat avec 5 etats connus, _debut_fin renommee _etat_action. |
+| 2026-08-27 | 0.8.2 | Vulcain | COLONNE DEBUT/FIN SUR CERBERUS : activer_cerberus prefxe la raison par 'DEBUT: '. Parite avec _debut_fin. |
+| 2026-08-27 | 0.8.1 | Vulcain | TABLEAU V1 GRADE/SECTEUR/DEBUT-FIN : l encart passe a 8 colonnes + _construire_encart_v1 pour la migration. |
 | 2026-08-19 | 0.5.17 | Vulcain | TOKENS INTEGRES : activer/reactiver appellent analyser-tokens --snapshot (hybride API/estimation), stockent le snapshot de debut dans le chrono (--tokens), calculent la conso par difference au relais et l affichent au repere : `(9min 11s, tokens: 12.4k env / 8.2k recus)` |
 | 2026-08-19 | 0.5.16 | Vulcain | CHRONOMETRE INTEGRE : activer/reactiver appellent chronometrer-duree (arreter le chrono precedent, demarrer le nouveau) et ajoutent la duree au repere `### <date> - <agent> (Xmin Ys)` dans AGENTS-historique |
 | 2026-08-19 | 0.5.15 | Vulcain | FORMAT HISTORIQUE RESTRUCTURE : table `agent | heure | date | session | raison`, raison enroulee a 100 caracteres (continuations `###>`), parseurs adaptes |

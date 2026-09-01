@@ -243,12 +243,48 @@ def maj_classeur(contenu_classeur, session, id_llm, agent, date_heure):
 
 # ------------------------------------------------------------- historisation
 
+def _historiser_v1_via_aap(agent, raison):
+    """Historiser le demarrage v1 via la voie officielle
+    (activer-agent-principal.ajouter_historique) : corps + encart 10
+    colonnes avec EXECUTEUR=demarrer-llm + BDD. Retourne 0 si OK."""
+    aap_path = RACINE / "cerveau-projet" / "agents" / "tools" / "activer" \
+        / "activer-agent-principal" / "activer-agent-principal.py"
+    if not aap_path.is_file():
+        print("  [HISTORISATION] aap introuvable, repli sur l ancien format")
+        return 1
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("aap_v1", str(aap_path))
+        aap = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(aap)
+        ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S.000")
+        rc = aap.ajouter_historique(ts, "session-admin", agent, raison,
+                                    type_round="R", executeur="demarrer-llm")
+        return 0 if rc == 0 else 1
+    except Exception as exc:
+        print("  [HISTORISATION] erreur aap : %s" % exc)
+        return 1
+
+
 def historiser(agent, raison, session):
     """Ecrire dans les 3 destinations (encart 50 max, corps 100 max, BDD 7j).
     Chaque session ecrit dans SES fichiers (decision 2026-08-26) :
     session-admin -> AGENTS-activite-recente.md + AGENTS-historique.md (v1,
     ASCII+LF) ; session-freelance -> AGENTS-activite-recente-v2.md +
-    AGENTS-historique-v2.md (v2, UTF8+CRLF)."""
+    AGENTS-historique-v2.md (v2, UTF8+CRLF).
+
+    v0.1.2 (2026-08-29, decision utilisateur : la case Executeur reste
+    vide) : pour la session-admin (v1), l historisation est DELEGUEE a
+    activer-agent-principal.ajouter_historique (la voie officielle) avec
+    executeur="demarrer-llm" -> la ligne de l encart v1 porte le bon format
+    10 colonnes (Grade | Agent | Defcon | EXECUTEUR | Etat | Secteur |
+    Raison | Heure | id | Type) et la colonne Executeur n est plus vide.
+    L ancien format 5 colonnes de demarrer-llm (| Heure | Agent | id |
+    Type | Raison |) etait obsolete et faisait hurler la routine encart
+    (Etat inconnu). La v2 (freelance) garde sa logique existante (fichiers
+    v2 distincts)."""
+    if session == "session-admin":
+        return _historiser_v1_via_aap(agent, raison)
     global ENCART_FILE, CORPS_FILE
     if session == "session-freelance":
         ENCART_FILE = ENCART_FILE_V2
@@ -415,14 +451,37 @@ def demarrer(llm_id, session):
     print("  id     : %s" % llm_id)
     print("  session: %s" % session)
 
-    # 0. Lire l'agent actif AVANT sidentifier (sidentifier pose Cerberus par
-    #    defaut et ECRASERAIT l'agent actif reel du bloc - bug 2026-08-26 :
-    #    le demarrage remettait Cerberus alors que vulcain etait actif).
+    # 0. Pour admin, le nettoyage/serveur de demarrage est responsable de
+    #    l activation de Cerberus. On ne lit plus ni ne restaure un agent ici.
+    #    Cela evite une activation prematuree et les doubles traces.
     agents_avant = lire(AGENTS_MD)
     bloc_avant = lire_bloc_session(agents_avant, session)
     agent_avant = bloc_avant.get("Nom Agent", "")
 
-    # 1. Verifier/creer l'id via activer-agent-principal sidentifier
+    # 0bis. DETECTION DES ERREURS BLOQUANTES (decision utilisateur
+    #   2026-08-29) : appeler detecter-erreur-bloquante AVANT sidentifier
+    #   pour AFFICHER le diagnostic debranchant (marbre divise, daemon mort,
+    #   etat-carte incoherent) AU LIEU de bloquer sur le message cryptique de
+    #   sidentifier. Affichage NON bloquant : on poursuit quand meme.
+    detecteur = RACINE / "cerveau-projet" / "agents" / "tools" / "detecter" \
+        / "detecter-erreur-bloquante" / "detecter-erreur-bloquante.py"
+    if detecteur.is_file():
+        try:
+            rd = subprocess.run([sys.executable, str(detecteur), "--status"],
+                                capture_output=True, text=True, timeout=60)
+            if rd.stdout:
+                print((rd.stdout or "").rstrip())
+            if rd.returncode == 4:
+                print("[DEMARRAGE] La routine detecter-erreur-bloquante a signale"
+                      " AU MOINS UNE condition bloquante (voir ci-dessus).")
+                print("[DEMARRAGE] Traitez les blocs OU CHERCHER / REPARER avant"
+                      " de lancer le round, sinon il risque de ne pas s enclencher.")
+        except Exception as e:
+            print("[DEMARRAGE] detecter-erreur-bloquante indisponible (%s)" % e)
+
+    # 1. Verifier/creer l'id via activer-agent-principal sidentifier.
+    # Pour admin, sidentifier initialise uniquement l identite; Cerberus
+    # sera active une seule fois par oracle-demarrage apres lecture Oracle.
     cmd = [sys.executable, str(ACTIVER_PRINCIPAL), "sidentifier", llm_id, session]
     r = subprocess.run(cmd, capture_output=True, text=True)
     for ligne in (r.stdout or "").splitlines():
@@ -448,26 +507,8 @@ def demarrer(llm_id, session):
         print("  point d'entree freelance : Stark (coordinateur, decision"
               " utilisateur) - pas l'agent du bloc (%s)" % bloc.get("Nom Agent", "?"))
     else:
-        # PRESERVER l'agent actif reel (sidentifier a pose Cerberus)
-        agent_actif = agent_avant if agent_avant else bloc.get("Nom Agent", "")
-        print("  bloc session : agent actif=%s (preserve, avant sidentifier=%s)"
-              % (agent_actif, agent_avant or "vide"))
-        if not agent_actif:
-            agent_actif = AGENT_DEFAUT_ADMIN
-            print("  [ALIGNEMENT] bloc vide -> Cerberus par defaut (admin)")
-        if agent_avant and agent_avant.lower() != "cerberus":
-            # sidentifier a ecrase l'agent par Cerberus -> le restaurer
-            raison_rest = ("RESTAURATION agent actif apres demarrage (sidentifier"
-                           " a pose Cerberus par defaut)")
-            cmd_rest = [sys.executable, str(ACTIVER_PRINCIPAL), "activer",
-                        session, agent_actif, raison_rest]
-            r_rest = subprocess.run(cmd_rest, capture_output=True, text=True)
-            if r_rest.returncode == 0:
-                print("  [RESTAURATION] agent %s restaure dans le bloc (sidentifier"
-                      " avait pose Cerberus)." % agent_actif)
-            else:
-                print("  [ATTENTION] restauration de %s a echoue (code %s)"
-                      % (agent_actif, r_rest.returncode))
+        agent_actif = AGENT_DEFAUT_ADMIN
+        print("  session-admin : initialisation systeme; Cerberus sera active par oracle-demarrage")
 
     # 3. Synchroniser les 3 sources (bloc = source de verite)
     classeur = lire(CLASSEUR)
@@ -523,10 +564,13 @@ def demarrer(llm_id, session):
         else:
             print("  [ATTENTION] jarvis.py introuvable, serveurs non demarres")
 
-    # 4. Historiser le demarrage
+    # 4. Historiser le demarrage. Admin: l acteur du demarrage est le
+    # lanceur, pas Cerberus; oracle-demarrage enregistrera la reprise de
+    # Cerberus après lecture Oracle.
+    agent_historique = "systeme" if session == "session-admin" else agent_actif
     raison = "DEMARRAGE LLM : id=%s, session=%s, agent actif=%s, parcours demarre" \
-             % (llm_id, session, agent_actif)
-    historiser(agent_actif, raison, session)
+             % (llm_id, session, agent_historique)
+    historiser(agent_historique, raison, session)
     print("  [HISTORISATION] demarrage trace (encart + corps + BDD).")
 
     # 5. Afficher l'agent actif et son parcours
@@ -548,17 +592,30 @@ def demarrer(llm_id, session):
     print()
     print("  PROCHAINES ETAPES POUR LE LLM :")
     print("  1. Relis TA fiche puis TES corrections (chacun lit les siens).")
-    # agent v1 (dans agents/) -> parcours JSON v1 ; agent v2 (freelance/) -> arbre
+    # L'arbre v2 PRIME (decision 2026-08-29 : les agents v1 ont migre vers les
+    # arbres v2 - protocole-reparer-arbres / protocole-carte-decision).
+    # Un agent v1 (agents/) qui a un arbre v2 -> guider-arbre arbre-<agent>.json
+    # (l'arbre pilote via oracle, PAS le parcours v1). Repli : parcours v1.
     dossier_v1 = RACINE / "cerveau-projet" / "agents" / agent_actif
     dossier_v2 = RACINE / "cerveau-projet" / "freelance" / agent_actif
-    if (dossier_v1 / "parcours" / ("parcours-%s.json" % agent_actif)).exists():
-        print("  2. Suis ton parcours (v1) : guider-parcours.py")
-        print("     cerveau-projet/agents/%s/parcours/parcours-%s.json"
-              % (agent_actif, agent_actif))
-    elif (dossier_v2 / "parcours" / ("arbre-%s.json" % agent_actif)).exists():
+    # Le nom du DOSSIER est en minuscules (convention cerveau-projet) alors que
+    # agent_actif vient du bloc AGENTS.md (ex: 'Cerberus'). Normaliser pour
+    # pointer vers le chemin REEL sur les systemes sensibles a la casse.
+    nom_dossier = agent_actif.lower()
+    arbre_v1 = dossier_v1 / "parcours" / ("arbre-%s.json" % nom_dossier)
+    arbre_v2 = dossier_v2 / "parcours" / ("arbre-%s.json" % nom_dossier)
+    if arbre_v1.exists():
+        print("  2. Suis TON arbre de decisions (v2) : guider-arbre.py")
+        print("     cerveau-projet/agents/%s/parcours/arbre-%s.json"
+              % (nom_dossier, nom_dossier))
+    elif arbre_v2.exists():
         print("  2. Suis TON arbre de decisions (v2) :")
         print("     cerveau-projet/freelance/%s/parcours/arbre-%s.json"
-              % (agent_actif, agent_actif))
+              % (nom_dossier, nom_dossier))
+    elif (dossier_v1 / "parcours" / ("parcours-%s.json" % nom_dossier)).exists():
+        print("  2. Suis ton parcours (v1, pas encore migre vers l arbre v2) :")
+        print("     guider-parcours.py cerveau-projet/agents/%s/parcours/parcours-%s.json"
+              % (nom_dossier, nom_dossier))
     else:
         print("  2. (aucun parcours/arbre detecte pour %s)" % agent_actif)
     print()

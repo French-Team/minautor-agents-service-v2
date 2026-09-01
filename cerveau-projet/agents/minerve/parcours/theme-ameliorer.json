@@ -1,17 +1,76 @@
 {
-  "identite": {"type": "theme", "appartient_a": "minerve", "nom": "AMELIORER", "description": "Ameliorer son fonctionnement via generateur + agent habilite"},
+  "identite": {
+    "type": "theme",
+    "appartient_a": "minerve",
+    "nom": "AMELIORER",
+    "description": "Ameliorer son fonctionnement via generateur + agent habilite"
+  },
   "theme": {
     "nom": "AMELIORER",
     "but": "Detecter les ameliorations possibles de son fonctionnement, lancer le generateur, activer l agent habilite",
     "redirects": [
-      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
-      {"besoin": "Consulter les lecons (domaine redaction-todo)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent minerve --domaine redaction-todo"], "regle": "PATTERN 6 : le contexte dynamique."},
-      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
-      {"besoin": "Ameliorations possibles ? (question c9b)", "action": "procedure", "etapes": ["Mon rapport et mes lecons revelent-ils des ameliorations de MON fonctionnement ?"], "regle": "AUTO-ANALYSE : verifier si le fonctionnement peut etre ameliore."},
-      {"besoin": "Lancer le generateur d amelioration (case c9c)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/generateurs/generateurs-amelioration/generateurs-amelioration.py"], "regle": "PATTERN 17 : GENERATEUR D ABORD."},
-      {"besoin": "Activer l agent habilite pour l amelioration (case c9d)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"], "regle": "DELEGATION : activer l agent habilite."},
-      {"besoin": "Enregistrer mes usages d outils (case c24)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent minerve --outil <outil> --contexte '<contexte>'"], "regle": "BILAN OUTILS : declarer tous les outils utilises."}
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine redaction-todo)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent minerve --domaine redaction-todo"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Ameliorations possibles ? (question c9b)",
+        "action": "procedure",
+        "etapes": [
+          "Mon rapport et mes lecons revelent-ils des ameliorations de MON fonctionnement ?"
+        ],
+        "regle": "AUTO-ANALYSE : verifier si le fonctionnement peut etre ameliore."
+      },
+      {
+        "besoin": "Lancer le generateur d amelioration (case c9c)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/generateurs/generateurs-amelioration/generateurs-amelioration.py"
+        ],
+        "regle": "PATTERN 17 : GENERATEUR D ABORD."
+      },
+      {
+        "besoin": "Activer l agent habilite pour l amelioration (case c9d)",
+        "action": "procedure",
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
+        ],
+        "regle": "DELEGATION : activer l agent habilite."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils (case c24)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent minerve --outil <outil> --contexte '<contexte>'"
+        ],
+        "regle": "BILAN OUTILS : declarer tous les outils utilises."
+      }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-ameliorer"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-ameliorer"
+  }
 }

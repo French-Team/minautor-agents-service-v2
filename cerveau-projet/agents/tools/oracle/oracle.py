@@ -31,7 +31,7 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.5.2"
+VERSION = "0.5.6"
 
 # Modules fonctions
 _fonctions_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -45,6 +45,7 @@ import harnais_oracle as _harnais
 import pilote as _pilote
 import relais as _relais
 import controle_processus as _controle_processus
+import rotation as _rotation
 
 
 def _cmd_defcon(args):
@@ -77,6 +78,82 @@ def _cmd_mission_terminer(args):
 
 def _cmd_mission_lister(args):
     _files.cmd_mission_lister(args)
+
+
+def _cmd_mission_relais(args):
+    """Consommer la file de missions en mode AUTONOME (Oracle agent).
+
+    Flux (decision utilisateur 2026-08-29) : Oracle prend la main avant et
+    apres chaque mission. 1) Prendre la premiere mission EN_ATTENTE de la
+    file (asap par defaut). 2) Determiner l agent cible (champ agent sinon
+    deduction par mots-cles). 3) Historiser son DEBUT A SA PLACE (Oracle
+    est le SEUL a historiser). 4) Lui envoyer le message. 5) Le pilote
+    dirige l agent (l etat de carte est initialise).
+    """
+    file = getattr(args, "file", "asap")
+    entree, erreur = _files.relais(file)
+    if erreur:
+        print("[ORACLE] ERREUR: %s" % erreur)
+        return 1
+    if entree is None:
+        print("[ORACLE] Aucune mission en attente dans '%s'." % file)
+        return 0
+    agent = entree.get("agent", "")
+    mission = entree.get("mission", "")
+    source = entree.get("agent_source", "inconnu")
+    print("[ORACLE] RELAIS mission %s (%s) :" % (entree["id"], file))
+    print("  Agent cible : %s (%s)" % (agent, source))
+    print("  Mission    : %s" % mission[:80])
+
+    # 3. Historiser le DEBUT de l agent A SA PLACE (Oracle maitre d hotel)
+    _historiser_auto(
+        agent, "DEBUT: " + mission, agent_effectif=agent)
+    print("[ORACLE] DEBUT historise pour %s (a sa place)." % agent)
+
+    # 4. Envoyer le message a l agent (inbox)
+    _envoyer_direct(agent, mission)
+
+    # 5. Initialiser l etat de carte du pilote pour diriger l agent
+    try:
+        parcours = _pilote_parcours_agent(agent)
+        mission_type = _pilote._type_mission_auto(mission)
+        etat = _pilote.init_etat(
+            agent, parcours, mission_type, mission, precedent=None)
+        if etat:
+            etat["historise_debut"] = True
+            _pilote._sauver_etat(etat)
+        print("[ORACLE] Etat de carte initialise : le pilote dirige %s."
+              % agent)
+    except Exception as exc:
+        print("[ORACLE] WARNING etat-carte : %s" % exc)
+    return 0
+
+
+def _envoyer_direct(agent, mission):
+    """Envoyer un message Oracle->agent sans duplicata de mission."""
+    cible = INBOX_DIR / f"{agent}.jsonl"
+    for ancien in _lire_messages_fichier(cible):
+        if (ancien.get("de") == "oracle" and ancien.get("vers") == agent
+                and ancien.get("corps") == mission and not ancien.get("accuse")):
+            print("[ORACLE] Mission deja en attente pour %s (pas de doublon)" % agent)
+            return ancien
+    msg = {
+        "id": uuid.uuid4().hex[:8],
+        "de": "oracle",
+        "vers": agent,
+        "priorite": 1,
+        "date": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+        "objet": "MISSION pour %s" % agent,
+        "corps": mission,
+        "lu": False,
+        "accuse": False,
+        "requis_accuse": True,
+        "accuse_avant": __import__("time").time() + 120,
+        "tentatives": 1,
+    }
+    # ROTATION INBOX : garder les 5 messages les plus recents (utilisateur).
+    _rotation.ajouter_message(INBOX_DIR, agent, msg)
+    print("[ORACLE] Message envoye: oracle -> %s (id=%s)" % (agent, msg["id"]))
 
 
 def _cmd_harnais(args):
@@ -117,8 +194,12 @@ def _cmd_reactiver_fin(args):
     Oracle (maitre d hotel) : quand l agent a termine SA carte, il pose
     FIN:<bilan> sur lui (colonne Debut/Fin) puis reactiver le maillon
     precedent (celui qui l avait active) ou Cerberus pour la fin de
-    chaine - le round ne se brise jamais a la main de l agent."""
-    print(_pilote._reactiver_maillon(args.agent, args.bilan))
+    chaine - le round ne se brise jamais a la main de l agent.
+
+    Modele aero (2026-08-30) : --cible oracle (ou la fin de l agent porte
+    cible=oracle) reactive ORACLE (l aeroport) au lieu du precedent."""
+    print(_pilote._reactiver_maillon(args.agent, args.bilan,
+                                     cible_forcee=args.cible or None))
 
 
 def _cmd_dashboard(args):
@@ -229,20 +310,28 @@ def cmd_envoyer(args):
     outbox_file = OUTBOX_DIR / f"{args.de}.jsonl"
     with open(outbox_file, "a", encoding="utf-8") as f:
         f.write(json.dumps(msg, ensure_ascii=False) + "\n")
-    inbox_file = INBOX_DIR / f"{args.vers}.jsonl"
-    with open(inbox_file, "a", encoding="utf-8") as f:
-        f.write(json.dumps(msg, ensure_ascii=False) + "\n")
+    # ROTATION INBOX (decision utilisateur 2026-08-29) : on ne garde que les
+    # 5 messages les plus recents du jsonl du destinataire (les anciens sont
+    # remplaces). Le outbox, lui, reste en append (trace complete).
+    _rotation.ajouter_message(INBOX_DIR, args.vers, msg)
     print(f"[ORACLE] Message envoye: {args.de} -> {args.vers} (id={msg['id']})")
     # Historisation automatique
     _historiser_auto(args.de, f"Envoyer a {args.vers}: {args.objet[:50]}")
 
 
 def cmd_lire(args):
-    """Lire les messages non lus d'un agent."""
+    """Lire les messages non lus d'un agent.
+
+    Affiche les messages non lus. Les messages AFFICHES sont marques lu
+    (consommation a la lecture, decision utilisateur 2026-08-29 : "pourquoi
+    personne ne les lit"). L acquittement explicite (cmd_acquitter) les
+    retire ensuite du fichier. Un message deja lu n est pas re-affiche."""
     inbox_file = INBOX_DIR / f"{args.agent}.jsonl"
     if not inbox_file.exists():
         print(f"[ORACLE] Aucun message pour {args.agent}")
         return
+    lignes = []
+    modifie = False
     with open(inbox_file, encoding="utf-8") as f:
         for ligne in f:
             ligne = ligne.strip()
@@ -251,13 +340,34 @@ def cmd_lire(args):
             try:
                 msg = json.loads(ligne)
             except json.JSONDecodeError:
+                lignes.append(ligne)
                 continue
-            if not isinstance(msg, dict) or not msg.get("lu"):
+            if isinstance(msg, dict) and not msg.get("lu"):
                 statut = "PRIORITE 1" if msg.get("priorite") == 1 else ""
                 print(f"  [{msg.get('id', '?')}] {msg.get('de', '?')} -> {msg.get('vers', '?')} {statut}")
                 print(f"    Objet: {msg.get('objet', '')}")
                 print(f"    Corps: {msg.get('corps', '')[:100]}")
                 print()
+                msg["lu"] = True
+                modifie = True
+            lignes.append(json.dumps(msg, ensure_ascii=False))
+    if modifie:
+        with open(inbox_file, "w", encoding="utf-8") as f:
+            f.write("\n".join(lignes) + "\n")
+
+
+def _lire_messages_fichier(chemin):
+    if not chemin.exists():
+        return []
+    result = []
+    for ligne in chemin.read_text(encoding="utf-8").splitlines():
+        try:
+            msg = json.loads(ligne)
+            if isinstance(msg, dict):
+                result.append(msg)
+        except json.JSONDecodeError:
+            pass
+    return result
 
 
 def _historiser_auto(agent, raison, agent_effectif="Oracle"):
@@ -288,8 +398,39 @@ def _historiser_auto(agent, raison, agent_effectif="Oracle"):
         pass
 
 
+def cmd_reagir(args):
+    """Accuser reception et enregistrer la reaction de l agent."""
+    inbox_file = INBOX_DIR / f"{args.agent}.jsonl"
+    if not inbox_file.exists():
+        print(f"[ORACLE] Aucun fichier pour {args.agent}")
+        return
+    messages = []
+    trouve = False
+    for ligne in inbox_file.read_text(encoding="utf-8").splitlines():
+        if not ligne.strip():
+            continue
+        try:
+            msg = json.loads(ligne)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(msg, dict) and msg.get("id") == args.id:
+            msg["lu"] = True
+            msg["accuse"] = True
+            msg["reaction"] = args.reaction
+            msg["reaction_date"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+            trouve = True
+        messages.append(msg)
+    if trouve:
+        inbox_file.write_text("\n".join(json.dumps(m, ensure_ascii=False) for m in messages) + "\n", encoding="utf-8")
+        _historiser_auto(args.agent, "Reaction message %s: %s" % (args.id, args.reaction[:80]))
+    print(f"[ORACLE] Reaction {'enregistree' if trouve else 'message introuvable'}: {args.id}")
+
+
 def cmd_acquitter(args):
-    """Marquer un message comme lu."""
+    """Acquitter un message : le RETIRE de l inbox (consommation reelle,
+    decision utilisateur 2026-08-29 : les messages s accumulaient sans
+    traitement, personne ne les lisait. Un message acquitte est CONSOMME
+    (supprime du fichier), pas seulement marque lu."""
     inbox_file = INBOX_DIR / f"{args.agent}.jsonl"
     if not inbox_file.exists():
         print(f"[ORACLE] Aucun fichier pour {args.agent}")
@@ -303,17 +444,17 @@ def cmd_acquitter(args):
                 continue
             try:
                 msg = json.loads(ligne)
+                # Le message acquitte est CONSOMME (retire du fichier).
                 if isinstance(msg, dict) and msg.get("id") == args.id:
-                    msg["lu"] = True
-                    msg["accuse"] = True
                     trouve = True
+                    continue
                 lignes.append(json.dumps(msg, ensure_ascii=False))
             except json.JSONDecodeError:
                 lignes.append(ligne)
     if trouve:
         with open(inbox_file, "w", encoding="utf-8") as f:
             f.write("\n".join(lignes) + "\n")
-        print(f"[ORACLE] Message {args.id} acquitte pour {args.agent}")
+        print(f"[ORACLE] Message {args.id} acquitte (consomme) pour {args.agent}")
         _historiser_auto(args.agent, f"Acquittement message {args.id}")
     else:
         print(f"[ORACLE] Message {args.id} non trouve pour {args.agent}")
@@ -363,7 +504,8 @@ def cmd_historiser(args):
         "session-admin",
         args.agent,
         args.raison,
-        type_action
+        type_action,
+        executeur="Oracle"
     )
     if rc == 0:
         print(f"[ORACLE] Historise: {args.agent} | {args.raison[:60]}")
@@ -705,20 +847,18 @@ def cmd_activer(args):
 def _pilote_parcours_agent(agent):
     """Chemin du parcours/arbre d un agent v1.
 
-    ORACLE_DIR = .../agents/tools/oracle. Le parcours vit dans
+    ORACLE_DIR = .../agents/tools/oracle. L arbre vit dans
     .../agents/<agent>/parcours/ (pas sous tools/).
     On remonte de oracle vers tools puis agents (3 parents).
-    Priorite : arbre-<agent>.json (v2-like) > parcours-<agent>.json (v1)."""
+    v2 est la norme (decision utilisateur 2026-08-30) : Oracle ne pilote
+    QUE l arbre v2 - PLUS AUCUN repli sur le parcours v1 (celui-ci est du
+    code mort apres migration). Chaque agent v1 a un arbre v2 cree."""
     agents_dir = os.path.dirname(os.path.dirname(ORACLE_DIR))  # .../agents
     parcours_dir = os.path.join(agents_dir, agent, "parcours")
-    # Priorite : arbre v2-like
+    # arbre v2-like UNIQUEMENT (plus de repli parcours v1)
     arbre = os.path.join(parcours_dir, "arbre-%s.json" % agent)
     if os.path.isfile(arbre):
         return arbre
-    # Fallback : carte v1
-    p = os.path.join(parcours_dir, "parcours-%s.json" % agent)
-    if os.path.isfile(p):
-        return p
     return None
 
 
@@ -852,6 +992,12 @@ def main():
     p_lire = subparsers.add_parser("lire", help="Lire les messages non lus")
     p_lire.add_argument("agent", help="Agent")
 
+    # reagir
+    p_reag = subparsers.add_parser("reagir", help="Accuser reception et enregistrer la reaction")
+    p_reag.add_argument("agent", help="Agent qui reagit")
+    p_reag.add_argument("id", help="ID du message")
+    p_reag.add_argument("reaction", help="Action ou reponse effectuee")
+
     # acquitter
     p_acq = subparsers.add_parser("acquitter", help="Acquitter un message")
     p_acq.add_argument("agent", help="Agent")
@@ -909,6 +1055,8 @@ def main():
     p_rf = subparsers.add_parser("reactiver-fin", help="Piloter la reintegration du maillon precedent avec pose du FIN")
     p_rf.add_argument("agent", help="Agent qui termine (c est lui qu on historise FIN)")
     p_rf.add_argument("bilan", help="Bilan de fin de mission")
+    p_rf.add_argument("--cible", default="",
+                      help="Cible de reactivation forcee (modele aero: oracle)")
 
     # defcon
     p_def = subparsers.add_parser("defcon", help="Etat DEFCON")
@@ -937,6 +1085,17 @@ def main():
     p_ml = subparsers.add_parser("mission-lister", help="Lister les missions")
     p_ml.add_argument("--file", default=None,
                       choices=["asap", "normale", "plus-tard", "attente"])
+    p_ml.add_argument("--statut", default=None,
+                      help="Filtrer par statut (EN_ATTENTE, PRISE, TERMINEE)")
+    p_ml.add_argument("--agent", dest="filtre_agent", default=None,
+                      help="Filtrer par agent assigne")
+    p_rel = subparsers.add_parser(
+        "mission-relais",
+        help="Consommer la file de facon autonome : prendre la mission, "
+             "deduir l agent, historiser son DEBUT a sa place, lui envoyer "
+             "le message, lancer le pilote")
+    p_rel.add_argument("--file", default="asap",
+                       choices=["asap", "normale", "plus-tard", "attente"])
 
     # harnais
     subparsers.add_parser("harnais", help="Verifier la sante de la coordination v1")
@@ -961,6 +1120,7 @@ def main():
         "envoyer": cmd_envoyer,
         "lire": cmd_lire,
         "lire-message": cmd_lire_message,
+        "reagir": cmd_reagir,
         "acquitter": cmd_acquitter,
         "lister": cmd_lister,
         "agents": cmd_agents,
@@ -980,6 +1140,7 @@ def main():
         "mission-prendre": _cmd_mission_prendre,
         "mission-terminer": _cmd_mission_terminer,
         "mission-lister": _cmd_mission_lister,
+        "mission-relais": _cmd_mission_relais,
         "harnais": _cmd_harnais,
         "controle-processus": _cmd_controle_processus,
         "relais": _cmd_relais,

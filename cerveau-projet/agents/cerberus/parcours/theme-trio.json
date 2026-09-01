@@ -1,0 +1,40 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "TRIO",
+    "description": "Lancer un SUPER-COMBO de creation (v3, 2026-08-30) : l utilisateur fournit son idee, le trio produit les fichiers bout-en-bout Athena (pense-bete) -> Promethee (spec) -> Minerve (todo) -> retour Cerberus"
+  },
+  "theme": {
+    "nom": "TRIO",
+    "but": "Lancer un round complet de creation via le trio (serviteurs de Cerberus et Socrate) : l idee de l utilisateur devient pense-bete (Athena) puis spec (Promethee) puis todo (Minerve), le dernier maillon reactive Cerberus.",
+    "redirects": [
+      {
+        "besoin": "Lancer le trio (declencheur [trio])",
+        "action": "procedure",
+        "etapes": [
+          "L utilisateur fournit son idee ([trio] je voudrais que tu fasses ...)",
+          "Oracle oriente vers Athena (redactrice de pense-betes) : elle ecrit l idee en detail dans un pense-bete, son arbre mene vers Promethee",
+          "Promethee suit son arbre : il transforme le pense-bete en spec, son arbre mene vers Minerve",
+          "Minerve suit son arbre : elle transforme la spec en todo",
+          "Le dernier maillon (Minerve) reactive Cerberus avec le bilan consolide du trio"
+        ],
+        "regle": "SUPER-COMBO TRIO : chaque maillon suit SA carte (Pattern 13). Le round commence et finit a Cerberus. Le trio sont les serviteurs de Cerberus et Socrate."
+      },
+      {
+        "besoin": "Demander l idee a l utilisateur",
+        "action": "procedure",
+        "etapes": [
+          "Avant de lancer le trio, recueillir l idee precise de l utilisateur (sujet, objectif, contraintes)",
+          "Transmettre l idee complete a Oracle qui l oriente vers le trio"
+        ],
+        "regle": "Ne jamais lancer le trio sans l idee de l utilisateur."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-trio"
+  }
+}

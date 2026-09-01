@@ -31,7 +31,8 @@
         "besoin": "Activer Themis pour auditer",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin morpheus \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
         ],
         "regle": "THEMIS AVANT JANUS."
       },
@@ -46,5 +47,9 @@
       }
     ]
   },
-  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-verifier" }
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-verifier"
+  }
 }

@@ -1,22 +1,116 @@
 {
-  "identite": {"type": "theme", "appartient_a": "ferrari", "nom": "ARBRE-DECISION", "description": "Corriger un arbre de decision v2 (proto 4)"},
+  "identite": {
+    "type": "theme",
+    "appartient_a": "ferrari",
+    "nom": "ARBRE-DECISION",
+    "description": "Corriger un arbre de decision v2 (proto 4)"
+  },
   "theme": {
     "nom": "ARBRE-DECISION",
     "but": "Corriger un arbre de decision v2 en appliquant le proto 4 et les conventions v2",
     "redirects": [
-      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE."},
-      {"besoin": "Consulter les lecons (domaine freelance)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent ferrari --domaine freelance"], "regle": "PATTERN 6."},
-      {"besoin": "CONTEXTE : activite recente", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6."},
-      {"besoin": "Lire le cahier de dev", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/cahier-dev.md"], "regle": "CAHIER DE DEV."},
-      {"besoin": "Lire le PROTOCOLE 4 (arbre vs carte) (case c3)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-4-arbre-vs-carte.md"], "regle": "PROTOCOLE 4 : lire AVANT."},
-      {"besoin": "Lire l arbre a corriger (case c3b)", "action": "procedure", "etapes": ["Lire l arbre JSON cible ET ses themes ET fins.json"], "regle": "LIRE l arbre complet."},
-      {"besoin": "Appliquer la correction", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin-fichier>"], "regle": "CONVENTIONS V2 : UTF-8 + CRLF + D17."},
-      {"besoin": "Verifier la correction", "action": "procedure", "etapes": ["Relire le fichier corrige, verifier conformite v2"], "regle": "GARDE-FOU."},
-      {"besoin": "Produire le rapport", "action": "procedure", "etapes": ["Rapport dans agents/ferrari/rapports/"], "regle": "PREUVE DE TRAVAIL."},
-      {"besoin": "Historiser l intervention", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-admin mecano 'CORRECTION TERMINEE: <description>'"], "regle": "HISTORISATION."},
-      {"besoin": "Mettre a jour le cahier de dev", "action": "procedure", "etapes": ["Ajouter dans cahier-dev.md"], "regle": "CAHIER DE DEV."},
-      {"besoin": "Ajouter les lecons", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/ferrari/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."}
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine freelance)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent ferrari --domaine freelance"
+        ],
+        "regle": "PATTERN 6."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6."
+      },
+      {
+        "besoin": "Lire le cahier de dev",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/cahier-dev.md"
+        ],
+        "regle": "CAHIER DE DEV."
+      },
+      {
+        "besoin": "Lire le PROTOCOLE 4 (arbre vs carte) (case c3)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-4-arbre-vs-carte.md"
+        ],
+        "regle": "PROTOCOLE 4 : lire AVANT."
+      },
+      {
+        "besoin": "Lire l arbre a corriger (case c3b)",
+        "action": "procedure",
+        "etapes": [
+          "Lire l arbre JSON cible ET ses themes ET fins.json"
+        ],
+        "regle": "LIRE l arbre complet."
+      },
+      {
+        "besoin": "Appliquer la correction",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin-fichier>"
+        ],
+        "regle": "CONVENTIONS V2 : UTF-8 + CRLF + D17."
+      },
+      {
+        "besoin": "Verifier la correction",
+        "action": "procedure",
+        "etapes": [
+          "Relire le fichier corrige, verifier conformite v2"
+        ],
+        "regle": "GARDE-FOU."
+      },
+      {
+        "besoin": "Produire le rapport",
+        "action": "procedure",
+        "etapes": [
+          "Rapport dans agents/ferrari/rapports/"
+        ],
+        "regle": "PREUVE DE TRAVAIL."
+      },
+      {
+        "besoin": "Historiser l intervention",
+        "action": "procedure",
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin ferrari \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
+        ],
+        "regle": "HISTORISATION."
+      },
+      {
+        "besoin": "Mettre a jour le cahier de dev",
+        "action": "procedure",
+        "etapes": [
+          "Ajouter dans cahier-dev.md"
+        ],
+        "regle": "CAHIER DE DEV."
+      },
+      {
+        "besoin": "Ajouter les lecons",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/ferrari/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-correction"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-correction"
+  }
 }

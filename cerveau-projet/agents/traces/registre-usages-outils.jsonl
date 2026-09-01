@@ -1,114 +1,288 @@
-{"date":"2026-08-29 11:20:29","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 10:40:25","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 10:40:19","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 10:40:10","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 08:29:01","agent":"Cerberus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:49","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:46","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:44","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:42","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:40","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:39","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:38","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:37","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:30","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:29","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:29","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:03","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:59:03","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"agent": "themis", "outil": "consulter-combos", "date": "2026-08-30 22:59:02", "mode": "verrou-auto", "contexte": "consultation: evaluer-coherence"}
+{"date":"2026-08-30 22:59:01","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:55","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:49","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:47","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:45","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:43","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:41","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:41","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 22:58:40","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:40","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:40","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:58:39","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:39","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:39","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:38","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:38","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:38","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:37","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:37","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:37","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:37","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:37","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:36","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:36","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:36","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:36","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:36","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:36","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:35","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:35","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:35","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:35","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:35","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:35","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:35","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:35","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:35","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:34","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:34","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:34","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:33","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:27","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:24","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:21","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:19","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:17","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:17","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:15","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:15","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:07","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:07","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:58:07","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:41","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:41","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"agent": "themis", "outil": "consulter-combos", "date": "2026-08-30 22:57:39", "mode": "verrou-auto", "contexte": "consultation: evaluer-coherence"}
+{"date":"2026-08-30 22:57:38","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:32","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:31","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:31","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:30","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:30","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:30","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:30","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:30","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:30","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:29","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:29","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:29","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:29","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:29","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:28","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:27","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:27","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:27","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:22","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:20","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:18","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:16","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:14","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 22:57:14","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:13","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:57:13","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:13","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:12","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:12","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:12","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:57:10","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:49","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:40","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:38","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:36","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:34","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:32","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:55:32","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 22:55:32","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:32","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:31","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:31","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:30","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:30","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:30","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:24","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:21","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:18","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:16","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:14","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:14","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:12","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:12","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:04","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:04","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:04","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:03","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:03","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:03","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:03","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:02","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:02","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:02","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:02","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:02","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:02","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:01","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:01","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:01","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:01","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:01","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:01","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:00","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:00","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:00","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:00","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:00","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:00","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:55:00","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-08-30 22:54:11","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 22:54:10","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:52:50","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 22:52:49","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:50:58","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:50:58","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 22:49:12","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 22:49:11","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:48:34","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:48:34","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 22:41:29","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 22:41:28","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:39:22","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 22:39:22","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 20:58:17","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 20:58:17","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 20:56:48","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 20:56:48","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 20:48:01","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 20:48:01","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 20:45:24","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 20:45:24","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 20:42:47","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 20:42:46","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 15:08:18","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 15:08:18","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 15:05:08","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 15:05:07","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 15:02:31","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 15:02:31","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 15:00:27","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 15:00:27","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 15:00:19","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 15:00:18","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 14:39:31","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 14:39:31","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 13:38:05","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 13:38:05","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 13:10:21","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 13:10:20","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 12:09:00","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 12:09:00","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:58:05","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:58:04","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:54:06","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:54:06","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:42:31","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:42:31","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:33:08","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:33:08","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:16:23","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:16:23","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:11:06","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:11:06","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:05:20","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:05:19","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:03:10","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:03:09","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:03:03","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:03:03","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 11:02:02","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 11:02:02","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 10:58:52","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 10:58:51","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 10:58:46","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 10:58:45","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-30 10:58:38","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-30 10:58:37","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 22:27:00","agent":"Cerberus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 22:26:59","agent":"Cerberus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 17:25:18","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 17:25:18","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 17:21:43","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 17:21:42","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 17:00:34","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: domaine=controle)"}
+{"date":"2026-08-29 16:58:35","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 16:58:35","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 16:54:59","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 16:54:58","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 16:51:07","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 16:51:07","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 16:39:51","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 16:39:51","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 16:37:48","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 16:37:48","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 16:36:06","agent":"buffy","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 16:36:06","agent":"buffy","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 16:35:52","agent":"buffy","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=GATE)"}
+{"date":"2026-08-29 13:47:19","agent":"buffy","outil":"verifier-systeme","mode":"direct","commande":"","contexte":"etape 1 obligatoire reparation"}
+{"date":"2026-08-29 13:47:18","agent":"buffy","outil":"oracle","mode":"direct","commande":"","contexte":"pilote mission reparation KO"}
+{"date":"2026-08-29 13:35:57","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 13:35:57","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 13:32:11","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 13:32:11","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 13:28:36","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 13:28:35","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 13:26:10","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
+{"date":"2026-08-29 13:26:09","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
+{"date":"2026-08-29 13:25:30","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: domaine=controle)"}
+{"date":"2026-08-29 13:23:30","agent":"morpheus","outil":"lire-fichier","mode":"direct","commande":"","contexte":"test colonne Executeur RT"}
+{"date":"2026-08-29 13:23:30","agent":"morpheus","outil":"lire-activite-recente","mode":"direct","commande":"","contexte":"test colonne Executeur RT"}
+{"date":"2026-08-29 13:23:30","agent":"morpheus","outil":"oracle","mode":"direct","commande":"","contexte":"pilote test colonne Executeur"}
+{"date":"2026-08-29 13:23:30","agent":"morpheus","outil":"verifier-systeme","mode":"direct","commande":"","contexte":"etape 1 obligatoire"}
+{"date":"2026-08-29 13:19:33","agent":"themis","outil":"oracle","mode":"direct","commande":"","contexte":"pilote audit"}
+{"date":"2026-08-29 13:19:32","agent":"themis","outil":"detecter-usage-outils-externes","mode":"direct","commande":"","contexte":"audit colonne Executeur routines"}
+{"date":"2026-08-29 13:19:32","agent":"themis","outil":"valider-conformite-ascii","mode":"direct","commande":"","contexte":"audit colonne Executeur routines"}
+{"date":"2026-08-29 13:19:32","agent":"themis","outil":"detecter-decalages-catalogue","mode":"direct","commande":"","contexte":"audit colonne Executeur routines"}
+{"date":"2026-08-29 13:19:32","agent":"themis","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"domaine audit"}
+{"date":"2026-08-29 13:19:31","agent":"themis","outil":"lire-activite-recente","mode":"direct","commande":"","contexte":"audit colonne Executeur routines"}
+{"date":"2026-08-29 13:19:31","agent":"themis","outil":"lire-fichier","mode":"direct","commande":"","contexte":"audit colonne Executeur routines"}
+{"date":"2026-08-29 13:19:31","agent":"themis","outil":"detecter-impacts","mode":"direct","commande":"","contexte":"audit c8c colonne Executeur routines"}
+{"date":"2026-08-29 13:14:22","agent":"themis","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: domaine=audit)"}
+{"date":"2026-08-29 13:12:37","agent":"vulcain","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"bump 0.8.7 activer-agent-principal"}
+{"date":"2026-08-29 13:12:37","agent":"vulcain","outil":"valider-conformite-ascii","mode":"direct","commande":"","contexte":"verif ASCII fichier modifie"}
+{"date":"2026-08-29 13:12:37","agent":"vulcain","outil":"detecter-decalages-catalogue","mode":"direct","commande":"","contexte":"0 decalage apres modification"}
+{"date":"2026-08-29 13:12:37","agent":"vulcain","outil":"valider-conventions","mode":"direct","commande":"","contexte":"RVAV etape verifier"}
+{"date":"2026-08-29 13:12:37","agent":"vulcain","outil":"oracle","mode":"direct","commande":"","contexte":"pilote mission colonne Executeur"}
+{"date":"2026-08-29 13:12:36","agent":"vulcain","outil":"lire-fichier","mode":"direct","commande":"","contexte":"colonne Executeur routines RT: lecture activer-agent-principal.py"}
+{"date":"2026-08-29 13:12:36","agent":"vulcain","outil":"editer-fichier","mode":"direct","commande":"","contexte":"colonne Executeur routines RT: 3 editions activer-agent-principal.py"}
+{"date":"2026-08-29 13:12:02","agent":"stark","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py --recursive cerveau-projet/agents --all","contexte":""}
 {"date":"2026-08-29 08:28:32","agent":"cerberus","outil":"oracle","mode":"direct","commande":"","contexte":""}
-{"date":"2026-08-29 08:28:32","agent":"cerberus","outil":"oracle-demarrage","mode":"direct","commande":"","contexte":""}
-{"date":"2026-08-29 08:28:32","agent":"cerberus","outil":"analyser-noms-maj","mode":"direct","commande":"","contexte":""}
 {"date": "2026-08-29 08:05:03","agent": "vulcain","outil": "oracle","mode": "direct","commande": "","contexte": ""}
-{"date": "2026-08-29 08:05:03","agent": "vulcain","outil": "oracle-demarrage","mode": "direct","commande": "","contexte": ""}
-{"date":"2026-08-29 07:44:11","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
 {"date":"2026-08-29 07:44:02","agent":"janus","outil":"tester-lancer-non-regression","mode":"direct","commande":"","contexte":""}
-{"date":"2026-08-29 07:44:02","agent":"janus","outil":"analyser-noms-maj","mode":"direct","commande":"","contexte":""}
-{"agent": "themis", "outil": "consulter-combos", "date": "2026-08-29 07:43:02", "mode": "verrou-auto", "contexte": "consultation: evaluer-coherence"}
 {"date":"2026-08-29 07:41:35","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-29 07:41:35","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
 {"date":"2026-08-29 07:41:34","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
-{"date":"2026-08-29 07:41:34","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:41:34","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:41:34","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:41:34","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:41:28","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:41:11","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:41:08","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:51","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:51","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:51","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:46","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:44","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:42","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:40","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:38","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:34","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:31","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:19","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:17","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:16","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:15","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:14","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:14","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:14","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:14","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:13","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:13","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:13","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:13","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:13","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:12","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:12","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:12","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:12","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:12","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:11","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:11","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:11","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:11","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:11","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:10","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:10","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:10","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:07","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:07","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:07","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:40:07","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:39:41","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:39:40","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:39:27","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"agent": "themis", "outil": "consulter-combos", "date": "2026-08-29 07:39:11", "mode": "verrou-auto", "contexte": "consultation: evaluer-coherence"}
 {"date":"2026-08-29 07:37:40","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
 {"date":"2026-08-29 07:37:40","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
-{"date":"2026-08-29 07:37:40","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:37:40","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:37:40","agent":"janus","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:37:39","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:37:39","agent":"janus","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:37:33","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:37:17","agent":"janus","outil":"lire-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:37:14","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:59","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:59","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:59","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:54","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:51","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:48","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:46","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:44","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:41","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:37","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:25","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:23","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:22","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:21","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:20","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:20","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:20","agent":"janus","outil":"tester-lancer-non-regression","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:19","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:19","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:19","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:19","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:19","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:18","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:18","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:18","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:18","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:18","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:17","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:17","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:17","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:17","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:17","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
-{"date":"2026-08-29 07:36:16","agent":"janus","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
 {"date":"2026-08-29 07:35:18","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: recherche=test-090)"}
 {"date":"2026-08-29 07:35:17","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}
 {"date":"2026-08-29 07:35:04","agent":"janus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: tout)"}

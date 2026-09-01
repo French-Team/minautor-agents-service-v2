@@ -25,29 +25,16 @@ identite:
 | **Nom LLM** | glm5 |
 | **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-08-29 |
+| **Derniere mise a jour** | 2026-09-01 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | janus (retour de mission) |
-| **Raison** | DEBUT: fin du round verifier-statuts - non-regression verte (test-106 12/12) |
-### Session : session-freelance
-
-| Champ | Valeur |
-|---|---|
-| **Nom LLM** | freebuff |
-| **Nom Agent** | stark |
-| **Role Agent** | Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation |
-| **Derniere mise a jour** | 2026-08-27 |
-| **Fiche** | [cerveau-projet/freelance/stark/stark.md](cerveau-projet/freelance/stark/stark.md) |
-| **Corrections** | [cerveau-projet/freelance/stark/corrections.md](cerveau-projet/freelance/stark/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | DEMARRAGE SESSION FREELANCE : Stark prend le relais, JARVIS reprendra le controle (rappel Vision si mission en attente) |
+| **Active par** | la chaine (retour de mission) |
+| **Raison** | ZERO TOTAL: etat neuf de session |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-freelance | freebuff | stark | 2026-08-27 19:06:19.699 |
-| session-admin | glm5 | Cerberus | 2026-08-29 11:20:36.772 |
+| session-admin | glm5 | Cerberus | 2026-09-01 09:18:40.663 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -70,7 +57,7 @@ CERBERUS -> AGENT -> CERBERUS
 | 2 | Cerberus analyse et choisit l'agent |
 | 3 | Cerberus active l'agent (mise a jour AGENTS.md) |
 | 4 | **L'agent active lit SA fiche et SES corrections** puis execute sa mission |
-| 5 | Agent termine : la fin suit SA carte (activation directe -> reactiver Cerberus ; maillon de chaine -> activer le suivant) ; ERREUR HORS-PERIMETRE -> INTER-ROUND : l'agent active l'AGENT HABILITE avec le rapport de l'erreur, la fin de l'inter-round reactive l'appelant qui REPREND son round principal (protocole-fin-mission v0.2.0) |
+| 5 | Agent termine : la fin va vers **ORACLE** (modele aero R1, jamais cerberus, jamais un autre agent) via `oracle.py reactiver-fin <agent> --cible oracle` ; le PILOTE decide du suivant. ERREUR HORS-PERIMETRE -> INTER-ROUND (modele aero) : l'agent SIGNALE le besoin a ORACLE (`oracle.py mission-ajouter --agent <habilite>`), MA FIN vers ORACLE, et le **pilote LARGUE l'agent habilite** ; a la fin de l'inter-round, le pilote renvoie l'appelant qui REPREND son round (protocole-fin-mission, modele aero 2026-08-30) |
 | 6 | **Cerberus relit SA fiche et SES corrections** puis reprend pour la suite |
 
 > **REGLE DE RELECTURE** : A chaque activation ou reactivation, l'agent relit SA fiche et SES corrections (jamais celles des autres). Activer sans lire = inutile.
@@ -116,8 +103,8 @@ si aucun nom de session n'est fourni).
 ### Fin de mission (la fin suit SA carte)
 
 1. L'agent termine sa mission
-2. LA FIN SUIT SA CARTE (Pattern 8) : activation directe par Cerberus -> l'agent utilise `python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent>` pour reactiver Cerberus ; maillon d'une chaine -> l'agent ACTIVE le maillon suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide
-3. ERREUR HORS-PERIMETRE -> INTER-ROUND (v0.2.0 protocole-fin-mission, decision utilisateur 2026-08-22) : l'agent N'INTERRUPT PAS le round et ne reactive PAS Cerberus : il active L'AGENT HABILITE avec le rapport de l'erreur ; a la fin de l'inter-round, l'habilite reactive l'agent appelant qui REPREND son round principal ; cascade autorisee entre habilites, le dernier reactive l'appelant ; une erreur n'est JAMAIS seulement detectee : reparation exclusive par l'habilite
+2. LA FIN SUIT SA CARTE (modele aero R1/R3) : la fin de tout agent va vers **ORACLE** (l aeroport) via `oracle.py reactiver-fin <agent> "<bilan>" --cible oracle` - jamais cerberus, jamais un autre agent. C est le **PILOTE** qui decide du suivant (largage d un maillon, retour a Cerberus en fin de round avec le bilan consolide). Les arbres ont des fins `fin-*` vers oracle (audit F4/F5 + reconstruction).
+3. ERREUR HORS-PERIMETRE -> INTER-ROUND (modele aero R2/R3, decision utilisateur 2026-08-30) : l'agent N'INTERRUPT PAS le round et ne reactive PAS Cerberus et n'ACTIVE JAMAIS un autre agent : il SIGNALE le besoin a ORACLE (`oracle.py mission-ajouter --file asap --agent <habilite> "<rapport>"`) puis sa fin va vers ORACLE ; le **PILOTE LARGUE l'agent habilite** qui repare ; a la fin de l'inter-round, le pilote renvoie l'appelant qui REPREND son round principal ; cascade autorisee entre habilites (le pilote decide), une erreur n'est JAMAIS seulement detectee : reparation exclusive par l'habilite
 4. L'agent documente la fin de mission
 4. Le controle revient a Cerberus (directement, ou par le bilan consolide du dernier maillon de la chaine)
 5. **Cerberus relit SA fiche et SES corrections** avant de poursuivre
@@ -191,4 +178,4 @@ si aucun nom de session n'est fourni).
 
 > **Le cycle** : Chaque session LLM commence et finit avec Cerberus.
 > Chaque session utilise SON identifiant (session-admin / session-freelance) pour toutes ses activations.
-> **Regle** : La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide. La chaine ne retombe JAMAIS sur Cerberus au milieu. ERREUR HORS-PERIMETRE -> INTER-ROUND (2026-08-22) : activation de l'agent habilite avec rapport -> fin de l'inter-round reactive l'appelant qui reprend son round ; une erreur jamais seulement detectee.
+> **Regle** : La fin de mission suit SA carte (modele aero R1/R3) : toute fin va vers **ORACLE** via `oracle.py reactiver-fin <agent> --cible oracle` - jamais cerberus, jamais un autre agent. C est le pilote qui decide du suivant (la chaine ne retombe JAMAIS sur Cerberus au milieu). ERREUR HORS-PERIMETRE -> INTER-ROUND (2026-08-30) : l'agent signale le besoin a ORACLE (`mission-ajouter --agent <habilite>`), le pilote largue l'habilite, puis renvoie l'appelant qui reprend son round ; une erreur jamais seulement detectee.

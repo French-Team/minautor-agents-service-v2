@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "pilote",
+    "nom": "RECUPERER",
+    "description": "Recuperer un agent largue : traiter son bilan, passer au suivant de ma liste"
+  },
+  "theme": {
+    "nom": "RECUPERER",
+    "but": "Recuperer un parachutiste a l issue de son saut : collecter son bilan, puis larguer le suivant ou revenir a oracle",
+    "redirects": [
+      {
+        "besoin": "Recuperer le bilan de l agent (parachutiste atterri)",
+        "action": "procedure",
+        "etapes": [
+          "Lire le bilan de l agent : reactiver-fin a pose FIN:<bilan> dans l historique",
+          "Recueillir le rapport : mission executee ? resultat ? incoherences signalees ?"
+        ],
+        "regle": "RECUPERATION = LECTURE DU BILAN : je collecte le rapport de l agent, je ne le juge pas."
+      },
+      {
+        "besoin": "Verifier si des agents restent a larguer",
+        "action": "procedure",
+        "etapes": [
+          "Regarder ma liste : reste-t-il un agent non largue ?",
+          "SI OUI -> LARGUER le suivant (theme-larguer.json)",
+          "SI NON -> ma mission est terminee -> RETOUR vers oracle (theme-retour.json)"
+        ],
+        "regle": "MISSION COMPLETE = TOUS LES AGENTS LARGUES ET RECUPERES (D7)."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-agent-recupere"
+  }
+}

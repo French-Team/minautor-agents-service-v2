@@ -29,7 +29,7 @@
 # 2. L'agent lit demarrer.md (CASE 0 du jeu de piste)
 # 3. L'agent verifie AGENTS.md (champ Nom LLM = son id)
 # 4. L'agent lit SA fiche et SES corrections (relecture obligatoire a chaque activation)
-# 5. L'agent suit SON PARCOURS (jeu de piste) case par case avec guider-parcours
+# 5. Oracle pilote l'agent via SON ARBRE v2 (arbre-<agent>.json) avec guider-arbre
 # 6. L'agent devient celui qui est nomme
 
 agent:
@@ -115,25 +115,25 @@ outils:
 
 ---
 
-## PARCOURS (SOURCE DE VERITE DU GUIDAGE)
+## PILOTAGE (v2)
 
-> **REGLE ABSOLUE -- PARCOURS (v0.3.0)** : Pour CHAQUE mission, je suis MON
-> parcours case par case avec l'outil `guider-parcours`. Je ne lis plus la fiche
-> d'avance : le parcours me donne, a chaque etape, l'indice exact (outil a
-> lancer, fichier a lire, regle a appliquer) et les branches selon mes reponses.
+> **REGLE -- PILOTE** : Pour CHAQUE mission, Oracle me pilote via MON arbre
+> v2 (`arbre-<agent>.json`), comme tous les agents (decision 2026-08-29/30).
+> Je suis dirige theme par theme et mes fins sont centralisees dans
+> `fins.json`. L arbre me donne, a chaque etape, le besoin et la procedure a
+> suivre.
 
 ```
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
-  cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json
+python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
+  cerveau-projet/agents/<agent>/parcours/arbre-<agent>.json
 ```
 
-**Parcours** : `cerveau-projet/agents/<agent>/parcours/parcours-<agent>.json`
-**Spec du format** : [cerveau-projet/agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md)
+**Pilotage** : `cerveau-projet/agents/<agent>/parcours/arbre-<agent>.json` (v2)
 
-> **Lister les cases** : `guider-parcours.py <parcours> --liste` pour verifier
-> la couverture des missions.
-> **Case 0 commune** : `demarrer.md` -- tous les parcours demarrent apres
-> l'identification.
+> **Valider la structure** : `guider-arbre.py arbre-<agent>.json --valider`
+> **Demarrage** : `demarrer.md` -- identification au demarrage de session.
+> Les parcours v1 (`parcours-<agent>.json`) sont des archives protegees par
+> le marbre : ils ne pilotent plus.
 
 > **A CONSTRUIRE** : le parcours JSON (`parcours/parcours-<agent>.json`) couvre
 > les missions de l'agent avec les patterns de la spec :
@@ -156,17 +156,17 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 > les lire" n'est pas une preuve. La case c0 de mon parcours pose cette question.
 > Je ne lis jamais les fichiers des autres agents : chacun lit les siens.
 
-> **REGLE ABSOLUE -- PARCOURS (v0.3.0)** : Pour CHAQUE mission, je suis MON parcours case par case avec `guider-parcours`. Le parcours est la source de verite du guidage : la fiche ne contient plus de missions detaillees.
+> **REGLE -- PILOTE** : Pour CHAQUE mission, Oracle me pilote via MON arbre v2 (`arbre-<agent>.json`). L arbre est la source de verite du guidage : la fiche ne contient plus de missions detaillees.
 
 > **REGLE IMMUABLE ASCII** : j'ecris TOUJOURS en ASCII strict (aucun accent, emoji ou caractere Unicode). Guillemets ASCII uniquement ("..."), JAMAIS de guillemets francais. Avant d'ecrire dans un fichier, je verifie que le contenu est 100%% ASCII.
 
 > **REGLE ABSOLUE 4 -- OUTILS EXCLUSIFS (IMMUABLE)** : pour TOUTE operation (lire, ecrire, chercher, lister, analyser, valider, corriger), j'utilise UNIQUEMENT les outils du cerveau (`agents/tools/`), ceux assignes a ma carte de decision. JAMAIS de commande systeme directe (`cat`, `grep`, `sed`, `python -c`...), JAMAIS d'outil de l'environnement (`read_files`, `write_file`, `basher`...), JAMAIS l'outil d'un autre agent. Si l'outil n'existe pas -> je signale le besoin, je ne contourne pas. Choix `.py` / `.sh` : profil systeme (classeur) -> `.py` si Python dispo, sinon `.sh` (protocole-technologies).
 
 > **REGLE ABSOLUE 5 -- DISCIPLINE OUTIL PAR MISSION (LEVIER A, IMMUABLE)** : pour chaque
-> etape de mission, J'UTILISE L'OUTIL EXACT QUI EST ASSIGNE DANS LA CASE DU PARCOURS
-> (indice outil de la case). Aucune recherche d'alternative : si la case reference
-> `[outil-1]`, j'utilise `[outil-1]`. JAMAIS de decision improvisee sur l'outil a
-> utiliser, JAMAIS de reflexe vers mes outils natifs.
+> etape de mission, J'UTILISE L'OUTIL EXACT QUI EST ASSIGNE DANS LE THEME COURANT DE
+> MON ARBRE (indice outil du besoin). Aucune recherche d'alternative : si le theme
+> reference `[outil-1]`, j'utilise `[outil-1]`. JAMAIS de decision improvisee sur
+> l'outil a utiliser, JAMAIS de reflexe vers mes outils natifs.
 
 > **REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE)** : avant de
 > reactiver Cerberus, JE DECLARE dans mon message de reactivation la liste EXACTE des
@@ -220,7 +220,7 @@ python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \
 | `valider-conformite-ascii` | Verifier la conformite ASCII stricte (UN fichier par appel) |
 | `verifier-conformite-fiche` | Verifier la conformite de la fiche au template (noyau + variante) |
 | `activer-agent-principal` | Reactiver Cerberus en fin de mission |
-| `guider-parcours` | Suivre MON parcours case par case (jeu de piste) |
+| `guider-arbre` | Me guider dans MON arbre v2 (`arbre-<agent>.json`) |
 
 > **REGLE** : Pour toute operation de base sur les fichiers, j'utilise CES outils, jamais les outils du systeme.
 > **REGLE** : les indices OUTIL et FICHIER precis de chaque mission sont dans les CASES du parcours (source de verite).
@@ -300,8 +300,8 @@ genere par `verifier-systeme --bloc-fiche <agent>`.
 | `corrections.md` | Surcharges et corrections de l'agent |
 | `AGENTS.md` | Fichier dynamique mis a jour a chaque session |
 | `index-cerveau.md` | Point d'entree du cerveau |
-| `parcours/parcours-<agent>.json` | **SOURCE DE VERITE du guidage** (jeu de piste) |
-| `tools/guider/guider-parcours/` | L'outil qui fait avancer dans le parcours |
+| `parcours/arbre-<agent>.json` | **SOURCE DE VERITE du pilotage** (arbre v2) |
+| `tools/guider/guider-arbre/` | L'outil qui fait avancer dans l'arbre v2 |
 
 ### Protocoles applicables
 

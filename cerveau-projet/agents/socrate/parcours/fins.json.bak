@@ -1,0 +1,58 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "socrate",
+    "description": "Fins reelles de Socrate (parcours v0.1.2 : c8, cU3)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-socrate.json"
+    },
+    "fin-revision": {
+      "titre": "FIN - Revision terminee, passer a la synthese",
+      "description": "Tous les problemes ont ete explores, questionnes, classes et formules en missions. Passer a la synthese (missions-revision.md).",
+      "action": "redirection",
+      "vers": "arbre-socrate.json"
+    },
+    "fin-synthese": {
+      "titre": "FIN - Missions pretes (activer Janus)",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin socrate \"<rapport de synthese>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin socrate lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-outils": {
+      "titre": "FIN - Reprendre ma mission (cU3)",
+      "description": "Le probleme d outil est resolu. Reprise de la mission interrompue.",
+      "action": "redirection",
+      "vers": "arbre-socrate.json"
+    },
+    "fin-delegation": {
+      "titre": "FIN - Delegation terminee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin socrate \"<rapport de delegation>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin socrate lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin socrate \"<bilan de autre>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin socrate lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Inter-round traite (retourner a l appelant)",
+      "description": "Le rapport inter-round est traite. Si mon precedent est un agent qui m a active en inter-round, je REACTIVE cet appelant pour qu il reprenne son round (Pattern 13). Si mission directe venant de Cerberus, je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin socrate \"<rapport du traitement inter-round>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin socrate lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    }
+  }
+}

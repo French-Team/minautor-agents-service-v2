@@ -1,0 +1,39 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "oracle",
+    "description": "Toutes les fins possibles pour Oracle (arbre v0.1.0)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-oracle.json",
+      "description": "Theme termine : retour a la racine pour choisir un autre theme."
+    },
+    "fin-coordination": {
+      "titre": "FIN - Coordination terminee",
+      "description": "La coordination est terminee. Si je suis en inter-round (mon precedent est un agent qui m a fait traiter une alerte), je REACTIVE cet appelant. Sinon (mission directe venant de Cerberus), je reactive Cerberus avec mon bilan.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle \"<bilan de coordination>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin oracle lit mon precedent et reactive L APPELANT s il existe, sinon Cerberus (fin de chaine, Pattern 8)."
+    },
+    "fin-signal": {
+      "titre": "FIN - Besoin signale",
+      "description": "Le besoin est signale a Cerberus pour traitement ulterieur. Coordination terminee.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle \"<besoin signale a Cerberus>\"",
+      "regle": "Un besoin signale n est JAMAIS ignore : il est trace et remonte a Cerberus qui decide."
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Inter-round traite (retourner a l appelant)",
+      "description": "Le rapport inter-round est traite. Si mon precedent est un agent qui m a active en inter-round, je REACTIVE cet appelant pour qu il reprenne son round (Pattern 13). Si mission directe venant de Cerberus, je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle \"<rapport du traitement inter-round>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin oracle lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    }
+  }
+}

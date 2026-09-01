@@ -9,7 +9,7 @@
   "agent": "cerberus",
   "version": "0.5.11",
   "case_depart": "c0",
-  "description": "v0.5.11 : + cases cD1/cD2/cDa-cDg (DECLENCHEURS v1, decision utilisateur 2026-08-29) - Cerberus reconnait [attente]/[attention]/[urgent]/[question]/[creer]/[probleme]/[stop] en tete des demandes et declenche l evenement (files mission-ajouter, defcon, routage creation/resolution). cU1 NON -> cD1 au lieu de c1. Mode d emploi : declencheurs-v1.md. v0.5.9 : + cases c45/c46 (Activer Socrate/Chiron) corrigees au format conforme (branches[] + suivant)"
+  "description": "v0.5.11 : + cases cD1/cD2/cD2a-cD2g (DECLENCHEURS v1, decision utilisateur 2026-08-29) - Cerberus reconnait [attente]/[attention]/[urgent]/[question]/[creer]/[probleme]/[stop] en tete des demandes et declenche l evenement (files mission-ajouter, defcon, routage creation/resolution). cU1 NON -> cD1 au lieu de c1. Mode d emploi : declencheurs-v1.md. v0.5.9 : + cases c45/c46 (Activer Socrate/Chiron) corrigees au format conforme (branches[] + suivant)"
  },
  "cases": {
   "c0": {
@@ -172,7 +172,11 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE ABSOLUE : je n'execute JAMAIS la mission moi-meme. J'active l'agent habilite et je lui donne la mission complete."
+     "texte": "REGLE ABSOLUE : je n'execute JAMAIS la mission moi-meme - j'active l'agent habilite."
+    },
+    {
+     "type": "regle",
+     "texte": "VERS-ORACLE (2026-08-29) : je transmets la mission a Oracle (mission-ajouter --file asap) activer-agent-principal direct = faute grave sauf reactivation retour."
     },
     {
      "type": "outil",
@@ -183,7 +187,7 @@
     },
     {
      "type": "regle",
-     "texte": "GARDE-FOU RELECTURE : ordonner dans la RAISON d'activation : RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer."
+     "texte": "GARDE-FOU RELECTURE : la RAISON d'activation ordonne : RELIS TA FICHE PUIS TES CORRECTIONS."
     }
    ],
    "suivant": "c7"
@@ -243,7 +247,7 @@
     },
     {
      "type": "regle",
-     "texte": "GARDE-FOU RELECTURE : ordonner dans la RAISON d'activation : RELIS TA FICHE PUIS TES CORRECTIONS avant de commencer."
+     "texte": "GARDE-FOU RELECTURE : la RAISON d'activation ordonne : RELIS TA FICHE PUIS TES CORRECTIONS."
     }
    ],
    "suivant": "c7"
@@ -995,7 +999,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE DECLENCHEURS v1 (mode d emploi : cerveau-projet/agents/cerberus/declencheurs-v1.md) : Cerberus est TOUJOURS l interlocuteur. Je reconnais le prefixe en tete de la demande et je declenche l evenement correspondant."
+     "texte": "REGLE DECLENCHEURS v1 (mode d emploi : declencheurs-v1.md) : Cerberus est TOUJOURS l interlocuteur. Je reconnais le prefixe en tete de la demande."
     }
    ],
    "branches": [
@@ -1016,41 +1020,41 @@
    "branches": [
     {
      "reponse": "[attente]",
-     "vers": "cDa"
+     "vers": "cD2a"
     },
     {
      "reponse": "[attention]",
-     "vers": "cDb"
+     "vers": "cD2b"
     },
     {
      "reponse": "[urgent]",
-     "vers": "cDc"
+     "vers": "cD2c"
     },
     {
      "reponse": "[question]",
-     "vers": "cDd"
+     "vers": "cD2d"
     },
     {
      "reponse": "[creer]",
-     "vers": "cDe"
+     "vers": "cD2e"
     },
     {
      "reponse": "[probleme]",
-     "vers": "cDf"
+     "vers": "cD2f"
     },
     {
      "reponse": "[stop]",
-     "vers": "cDg"
+     "vers": "cD2g"
     }
    ]
   },
-  "cDa": {
+  "cD2a": {
    "titre": "[attente] : parker la demande (file plus-tard)",
    "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE [attente] : la demande est placee en file plus-tard (statut EN_ATTENTE) - RIEN n est perdu, chaque entree porte son contexte de reprise. Elle sera traitee apres la file."
+     "texte": "REGLE [attente] : la demande est placee en file plus-tard (EN_ATTENTE) - RIEN n est perdu, chaque entree porte son contexte de reprise."
     },
     {
      "type": "outil",
@@ -1062,7 +1066,7 @@
    ],
    "suivant": "c20"
   },
-  "cDb": {
+  "cD2b": {
    "titre": "[attention] : placer la demande en file asap (SUIVANTE)",
    "type": "action",
    "indices": [
@@ -1080,13 +1084,13 @@
    ],
    "suivant": "c20"
   },
-  "cDc": {
+  "cD2c": {
    "titre": "[urgent] : traiter immediatement (priorite absolue)",
    "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE [urgent] : la demande est traitee IMMEDIATEMENT - priorite absolue. Si une mission est en cours, elle est placee en file asap avec statut PRIORITAIRE (reprise apres l urgence)."
+     "texte": "REGLE [urgent] : la demande est traitee IMMEDIATEMENT - priorite absolue. Mission en cours -> file asap PRIORITAIRE (reprise apres l urgence)."
     },
     {
      "type": "outil",
@@ -1098,13 +1102,13 @@
    ],
    "suivant": "c1"
   },
-  "cDd": {
+  "cD2d": {
    "titre": "[question] : phase question/reponse dediee",
    "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE [question] : phase DEDIEE entre l utilisateur et moi - AUCUNE autre tache pendant la phase. Je reponds directement (dialogue) ou j active l agent qui detient l information (Atlas pour l exploration, Socrate pour la strategie...) qui me retourne la reponse, puis je reponds."
+     "texte": "REGLE [question] : phase DEDIEE avec l utilisateur - AUCUNE autre tache. Je reponds (dialogue) ou j active l agent qui detient l info (Atlas, Socrate...)."
     },
     {
      "type": "fichier",
@@ -1114,13 +1118,13 @@
    ],
    "suivant": "c20"
   },
-  "cDe": {
+  "cD2e": {
    "titre": "[creer] : routage de creation par type",
    "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE [creer] : routage PAR TYPE - outil -> Vulcain ; fichier/code/doc -> Buffy ; pense-bete -> Athena ; spec -> Promethee ; todo -> Minerve ; agent -> Buffy. J identifie l agent (matrice) et je l active (c6)."
+     "texte": "REGLE [creer] : routage PAR TYPE - outil -> Vulcain ; fichier/doc -> Buffy ; pense-bete -> Athena ; spec -> Promethee ; todo -> Minerve ; agent -> Buffy (c6)."
     },
     {
      "type": "fichier",
@@ -1130,13 +1134,13 @@
    ],
    "suivant": "c5"
   },
-  "cDf": {
+  "cD2f": {
    "titre": "[probleme] : routage de resolution par fichier",
    "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE [probleme] : routage PAR TYPE DE FICHIER - outil -> Vulcain puis Morpheus ; regles/protocoles -> Buffy ; tests -> Morpheus ; marbre -> Gardien ; git -> Hades ; langue -> Hermes ; workspace -> Hygie ; contradictions -> Argus ; fichiers v2 -> ferrari. J identifie l agent et je l active (c6)."
+     "texte": "REGLE [probleme] : routage PAR TYPE - outil -> Vulcain ; regles -> Buffy ; tests -> Morpheus ; marbre -> Gardien ; git -> Hades ; langue -> Hermes ; ws (c6)."
     },
     {
      "type": "fichier",
@@ -1146,13 +1150,13 @@
    ],
    "suivant": "c5"
   },
-  "cDg": {
+  "cD2g": {
    "titre": "[stop] : DEFCON 5 (arret total)",
    "type": "action",
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE [stop] : ROUND BRISE - arret complet. Je declare le DEFCON 5 (files/defcon.jsonl, les routines le surveillent). Toute reprise exige la decision explicite de l utilisateur."
+     "texte": "REGLE [stop] : ROUND BRISE - arret complet. Je declare le DEFCON 5 (files/defcon.jsonl). Toute reprise exige la decision de l utilisateur."
     },
     {
      "type": "outil",
@@ -1170,7 +1174,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE GATE (decision utilisateur 2026-08-29, PAS un timer) : AVANT de commencer (analyser/decider/ecrire), je verifie que je suis LE BON AGENT de la session. S il y a un autre agent actif ou si ma mission vise une zone hors de mes habilitations, je STOP immediatement et je reactiver Cerberus SANS RIEN TOUCHER - il est inutile de travailler puis tout detruire."
+     "texte": "REGLE GATE (decision 2026-08-29) : AVANT de commencer, je verifie etre LE BON AGENT. Sinon STOP immediat et reactiver Cerberus SANS RIEN TOUCHER."
     },
     {
      "type": "outil",
@@ -1180,9 +1184,9 @@
      "commande": "python3 cerveau-projet/agents/tools/oracle/routines/verifier-agent-perimetre.py --gate --moi cerberus"
     }
    ],
-   "suivant": "c0g2"
+   "suivant": "c0ga"
   },
-  "c0g2": {
+  "c0ga": {
    "titre": "GATE : es-tu le bon agent ?",
    "type": "question",
    "question": "La porte a-t-elle rendu OK (0) ? OUI -> je continue ma mission. NON (1) -> STOP immediat : je ne touche a RIEN et je reactiver Cerberus avec le rapport de la porte.",

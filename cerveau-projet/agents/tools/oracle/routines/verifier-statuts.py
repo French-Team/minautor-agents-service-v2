@@ -21,9 +21,10 @@ Actes sur un NOUVEL etat URGENT :
   2. mission-ajouter --file asap (mission prioritaire) pour la source.
   3. Si un ROUND est EN COURS (agent actif != cerberus) : mettre la
      mission courante en attente (file-attente v1) + instruction
-     INTER-ROUND a l agent actif (activer l agent habilite --type ir puis
-     reprendre) - transposition de la v2 (activation reelle + mise en
-     attente dans une file).
+     INTER-ROUND a l agent actif (SIGNALER le besoin a ORACLE via
+     mission-ajouter, MA FIN vers ORACLE (reactiver-fin --cible oracle),
+     le PILOTE largue l habilite puis renvoie l appelant) - modele aero
+     R2/R3 (transposition de la v2).
 
 Anti-inondation : on agit UNE SEULE FOIS par entree URGENT (cle
 heure|agent, persiste dans routines/data/etat-statuts.json). La trace d
@@ -47,11 +48,25 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 _DOSSIER = os.path.dirname(os.path.abspath(__file__))
 ORACLE_DIR = Path(_DOSSIER).parent
 INBOX_DIR = ORACLE_DIR / "inbox"
+def _rotation_ajouter(agent, message):
+    """Rotation inbox : garder les 5 messages les plus recents (decision
+    utilisateur 2026-08-29 : les inbox s accumulaient, personne ne les
+    lisait). Reutilise le module central oracle/fonctions/rotation.py."""
+    try:
+        import importlib.util
+        _f = Path(_DOSSIER).parent / "fonctions" / "rotation.py"
+        _spec = importlib.util.spec_from_file_location("rotation", str(_f))
+        _mod = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(_mod)
+        return _mod.ajouter_message(INBOX_DIR, agent, message)
+    except Exception:
+        return False
+
 DATA_DIR = Path(_DOSSIER) / "data"
 ETAT_STATUTS = DATA_DIR / "etat-statuts.json"
 
@@ -207,12 +222,32 @@ def _alerte_inbox(agent, objet, corps, type_msg):
         "lu": False, "accuse": False, "type": type_msg,
     }
     try:
-        INBOX_DIR.mkdir(parents=True, exist_ok=True)
-        with open(INBOX_DIR / ("%s.jsonl" % agent), "a", encoding="utf-8") as f:
-            f.write(json.dumps(message, ensure_ascii=False) + "\n")
+        _rotation_ajouter(agent, message)
         return True
     except OSError:
         return False
+
+
+def _a_deja_mission_attente(agent):
+    """Vrai si l agent a deja une mission EN_ATTENTE dans la file attente.
+    Anti-inondation source (lecon 2026-08-30 : verifier-statuts empilait
+    une mission MISE EN ATTENTE par tick URGENT - 40 missions en quelques
+    heures). On ne depose la mission d attente qu une seule fois par
+    agent tant qu elle n est pas consommee/terminee."""
+    chemin = ORACLE_DIR / "files" / "attente.jsonl"
+    if not chemin.is_file():
+        return False
+    for l in chemin.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not l.strip():
+            continue
+        try:
+            e = json.loads(l)
+        except ValueError:
+            continue
+        if e.get("statut") == "EN_ATTENTE" and (not agent
+                                                 or e.get("agent") == agent):
+            return True
+    return False
 
 
 def _mettre_en_attente(agent):
@@ -289,24 +324,37 @@ def main():
     round_en_cours = bool(agent_actif) and agent_actif.lower() != "cerberus"
     if round_en_cours:
         okm = _mettre_en_attente(agent_actif)
-        _oracle("mission-ajouter", "--file", "attente", "--agent", agent_actif,
-                "MISE EN ATTENTE (inter-round URGENT) : %s" % premier[3][:120])
-        # Instruction IR reelle a l agent actif : activer l agent habilite.
+        # Anti-inondation : ne PAS empiler une nouvelle mission par tick
+        # URGENT (lecon 2026-08-30 - le file attente se gonflait sans
+        # borne). On ne depose que s il n y a pas deja une EN_ATTENTE
+        # pour cet agent (sinon la reprise reste celle existante).
+        if not _a_deja_mission_attente(agent_actif):
+            _oracle("mission-ajouter", "--file", "attente", "--agent",
+                    agent_actif,
+                    "MISE EN ATTENTE (inter-round URGENT) : %s"
+                    % premier[3][:120])
+        # Instruction IR reelle a l agent actif : signaler a Oracle (modele aero).
         _alerte_inbox(
             agent_actif,
             "[INTER-ROUND] etat URGENT detecte - traite en inter-round",
             "Un etat URGENT (voir encart) exige une action prioritaire. "
             "DEFCON monte vers 4. Ta mission est mise en attente (file "
-            "attente). A ta prochaine case : ACTIVE l agent habilite pour "
-            "l URGENT avec --type ir (inter-round), puis reprends ta mission "
-            "depuis la file attente.",
+            "attente). A ta prochaine case : SIGNALE le besoin a ORACLE "
+            "(mission-ajouter), puis MA FIN vers ORACLE (reactiver-fin "
+            "--cible oracle). Le PILOTE largue l agent habilite puis te "
+            "renvoie pour reprendre ta mission depuis la file attente.",
             "inter-round")
         print("  [inter-round] round en cours (%s) : mission mise en "
               "attente + instruction IR envoyee" % agent_actif)
 
-    # 4. Informer Cerberus + trace neutre dans l encart (etat AUTO).
+    # 4. Informer Oracle (coordinateur, qui avise Cerberus) + trace neutre
+    #    dans l encart (etat AUTO). Alerter DIRECTEMENT cerberus creait une
+    #    boucle reccursive de bruit : le P1 pose dans inbox/cerberus etait
+    #    re-compte par flux -> nouveau URGENT -> nouvelle alerte. Modele aero :
+    #    la routine previent Oracle, c est Oracle qui decide (decision
+    #    utilisateur 2026-08-30).
     _alerte_inbox(
-        "cerberus", "[URGENT] %d etat(s) URGENT traite(s) -> DEFCON 4 + mission asap" % nb,
+        "oracle", "[URGENT] %d etat(s) URGENT traite(s) -> DEFCON 4 + mission asap" % nb,
         "La routine verifier-statuts a escalade le DEFCON vers 4 et depose "
         "les missions asap pour %d etat(s) URGENT."
         % nb + (" Un round etant en cours, une instruction inter-round a ete "

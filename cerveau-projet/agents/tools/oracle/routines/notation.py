@@ -12,12 +12,13 @@ l univers v1 (decision utilisateur 2026-08-29 : creer les routines v1
 inspirees des v2, sans recuperer leur code - 2 univers distincts).
 
 Toutes les 5 minutes (manifest 300s), depose une DEMANDE D EVALUATION
-CROISEE dans l inbox de Cerberus (canal Oracle) : les agents de la v1
-(Themis evalue en croise, Janus controle les statuts) sont candidats a
-une evaluation periodique.
+CROISEE dans l inbox d Oracle (le coordinateur - decision utilisateur
+2026-08-30 : les routines previennent Oracle, pas Cerberus) : les agents
+de la v1 (Themis evalue en croise, Janus controle les statuts) sont
+candidats a une evaluation periodique.
 
 Anti-inondation (meme principe que la v2) : ne depose PAS si une demande
-d evaluation est DEJA en attente (non-lue dans l inbox de Cerberus) OU
+d evaluation est DEJA en attente (non-lue dans l inbox d Oracle) OU
 si une a ete deposee il y a moins de 10 minutes (fichier .notation_derniere).
 
 Historise UNIQUEMENT quand une demande est deposee (pas quand une demande
@@ -42,6 +43,20 @@ VERSION = "0.1.0"
 _DOSSIER = os.path.dirname(os.path.abspath(__file__))
 ORACLE_DIR = Path(_DOSSIER).parent
 INBOX_DIR = ORACLE_DIR / "inbox"
+def _rotation_ajouter(agent, message):
+    """Rotation inbox : garder les 5 messages les plus recents (decision
+    utilisateur 2026-08-29 : les inbox s accumulaient, personne ne les
+    lisait). Reutilise le module central oracle/fonctions/rotation.py."""
+    try:
+        import importlib.util
+        _f = Path(_DOSSIER).parent / "fonctions" / "rotation.py"
+        _spec = importlib.util.spec_from_file_location("rotation", str(_f))
+        _mod = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(_mod)
+        return _mod.ajouter_message(INBOX_DIR, agent, message)
+    except Exception:
+        return False
+
 _DERNIERE = Path(_DOSSIER) / ".notation_derniere.txt"
 DELAI_DEPOT_SECONDES = 600
 OBJET_PREFIX = "[NOTATION]"
@@ -90,12 +105,12 @@ def _historiser_agent(agent, raison, type_action="R"):
 
 def demande_deja_en_attente():
     """True si une demande d evaluation attend deja :
-    - NON-LUE dans l inbox de Cerberus (anti-inondation d origine), OU
+    - NON-LUE dans l inbox d Oracle (anti-inondation d origine), OU
     - DEPOSEE il y a moins de <DELAI> secondes (.notation_derniere)."""
-    cerberus_inbox = INBOX_DIR / "cerberus.jsonl"
-    if cerberus_inbox.is_file():
+    oracle_inbox = INBOX_DIR / "oracle.jsonl"
+    if oracle_inbox.is_file():
         try:
-            for ligne in cerberus_inbox.read_text(encoding="utf-8").splitlines():
+            for ligne in oracle_inbox.read_text(encoding="utf-8").splitlines():
                 if not ligne.strip():
                     continue
                 m = json.loads(ligne)
@@ -125,7 +140,7 @@ def main():
     msg = {
         "id": "notation-%s" % uuid.uuid4().hex[:8],
         "de": "notation",
-        "vers": "cerberus",
+        "vers": "oracle",
         "priorite": 2,
         "date": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": OBJET_PREFIX + " demande activation de l evaluation "
@@ -135,7 +150,7 @@ def main():
             "Themis doit etre activee pour poser le questionnaire "
             "d evaluation croisee aux agents actifs, attribuer les +/- et "
             "transmettre son rapport (protocole evaluation croisee v1). "
-            "Janus peut controler les statuts en parallele. Cerberus route."
+            "Janus peut controler les statuts en parallele. Oracle coordonne."
         ),
         "lu": False,
         "accuse": False,
@@ -147,9 +162,7 @@ def main():
             print("[NOTATION] --dry-run : demande simulee, "
                   "non deposee/historisee")
             return 0
-        with open(INBOX_DIR / "cerberus.jsonl", "a",
-                  encoding="utf-8") as f:
-            f.write(json.dumps(msg, ensure_ascii=False) + "\n")
+        _rotation_ajouter("oracle", msg)
         _DERNIERE.write_text(str(time.time()))
     except OSError as exc:
         print("[NOTATION] ERREUR depot : %s" % exc)
@@ -157,7 +170,7 @@ def main():
 
     _historiser_agent("notation",
                       "Depose demande evaluation periodique des agents", "R")
-    print("[NOTATION] Demande d evaluation deposee dans l inbox de Cerberus.")
+    print("[NOTATION] Demande d evaluation deposee dans l inbox d Oracle.")
     return 0
 
 

@@ -68,8 +68,10 @@ ROUTINES = {
     "verifier-statuts": os.path.join(ROUTINES_DIR, "verifier-statuts.py"),
 }
 # intervalle attendu dans le manifest (secondes)
-INTERVALLES = {"flux": 600, "sante": 300, "encart": 300, "live": 300,
-                "vigie-perimetre": 300, "verifier-statuts": 300}
+# NB 2026-08-30 : intervalles MAJORES de +300s (decision utilisateur
+# 2026-08-29 : ajouter 300s a chaque intervalle existant, sauf citations).
+INTERVALLES = {"flux": 900, "sante": 600, "encart": 600, "live": 600,
+                "vigie-perimetre": 600, "verifier-statuts": 600}
 # prefixe de sortie + pattern de detection
 PATTERNS = {
     "flux": ("[FLUX]", "_DERNIERE_VALEUR"),
@@ -323,6 +325,55 @@ def point_10_ne_fait_pas_croire():
     verifier("10. chaque routine applique --dry-run (option lue)", ok)
 
 
+def point_13_detecter_type_round_aero():
+    """13. Tracabilite R/IR modele aero (activation v0.8.8) :
+    detecter_type_round de activer-agent-principal doit tagger IR une raison
+    qui commence par INTER-ROUND / FIN D INTER-ROUND / SIGNALER /
+    BESOIN INTER-ROUND, ou qui mentionne MISSION-AJOUTER / INTER-ROUND;
+    et garder R pour une mission normale."""
+    import importlib.util
+    aap_path = os.path.join(os.path.dirname(ORACLE_DIR), "activer",
+                            "activer-agent-principal",
+                            "activer-agent-principal.py")
+    spec = importlib.util.spec_from_file_location("aap_ct", str(aap_path))
+    aap = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(aap)
+    cas = {
+        "INTER-ROUND : reparation": "IR",
+        "FIN D INTER-ROUND : rapport": "IR",
+        "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3)": "IR",
+        "BESOIN INTER-ROUND : tester fichier": "IR",
+        "MISSION-AJOUTER --agent morpheus": "IR",
+        "MISSION: CONSTRUIRE V3": "R",
+        "DEMARRAGE LLM": "R",
+    }
+    ko = []
+    for raison, attendu in cas.items():
+        r = aap.detecter_type_round(raison, type_round="R")
+        if r != attendu:
+            ko.append("%s->%s" % (raison[:20], r))
+    verifier("13. detecter_type_round modele aero (SIGNALER/mission-ajouter=IR)",
+             not ko, ";".join(ko))
+
+
+def point_12_encart_executeur_vide():
+    """12. Encart : detection des cases EXECUTEUR vides (lecon 2026-08-30).
+
+    Depuis encart.py v0.3.0, la routine d integrite de l encart detecte
+    aussi les entrees dont la colonne EXECUTEUR est vide (des activites
+    etaient historisees hors Oracle et AUCUNE routine ne le signalait).
+    Ce garde-fou verifie : (a) la logique de detection est presente dans
+    encart.py, (b) un dry-run sur l encart reel courant est sain (OK)."""
+    contenu = lire(ROUTINES["encart"])
+    ok_logique = "Executeur vide" in contenu
+    # Preuve reelle : dry-run sur l encart reel (doit etre sain actuellement).
+    r = run([PYTHON, ROUTINES["encart"], "--dry-run"])
+    ok_reel = r.returncode == 0 and "OK (encart v1 coherent)" in (r.stdout or "")
+    verifier("12. encart detecte cases EXECUTEUR vides (logique + dry-run sain)",
+             bool(ok_logique) and ok_reel,
+             "logique=%s reel_ok=%s" % (ok_logique, ok_reel))
+
+
 def main():
     print("=== test-106 : garde-fou routines surveillance v1 ===")
     points = [
@@ -337,6 +388,8 @@ def main():
         ("9. dry-run sans effet de bord", point_9_dry_run_sans_effet_de_bord),
         ("10. option dry-run explicite", point_10_ne_fait_pas_croire),
         ("11. verifier-statuts (escalade+mission+IR)", point_11_verifier_statuts_capacites),
+        ("12. encart executeur vide", point_12_encart_executeur_vide),
+        ("13. detecter_type_round modele aero", point_13_detecter_type_round_aero),
     ]
     for num, (nom, fn) in enumerate(points, start=1):
         if not point_actif(num):

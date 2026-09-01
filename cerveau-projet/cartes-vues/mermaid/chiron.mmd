@@ -5,6 +5,9 @@ flowchart TD
     c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
     c0c["Relu : fiche et corrections memorisees"]
     c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c0g["GATE BON AGENT : verifier que tu es LE BON AGENT"]
+    c0ga{"GATE : es-tu le bon agent ?"}
+    c0h(["FIN - STOP : pas le bon agent, reactiver Cerberus"])
     c1["Recevoir la mission (quel agent / quel outil a change)"]
     c10["Documenter les corrections proposees (rapport) puis signaler a Buffy"]
     c11["Si incoherences complexes -> signaler a Buffy"]
@@ -29,9 +32,12 @@ flowchart TD
     cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
     c0b -- "NON" --> c0
-    c0b -- "OUI" --> c0e
+    c0b -- "OUI" --> c0g
     c0c --> cU1
     c0e --> c0c
+    c0g --> c0ga
+    c0ga -- "OUI" --> c0e
+    c0ga -- "NON" --> c0h
     c1 --> c2
     c10 --> c11
     c11 --> c11b
@@ -44,7 +50,7 @@ flowchart TD
     c17 --> c18
     c18 -- "OUI (CONFORME)" --> c12
     c18 -- "A REVOIR" --> c15
-    c18 -- "NON (pas revenue)" --> c18
+    c18 -- "NON" --> c18
     c2 --> c3
     c3 --> c4
     c4 --> c5

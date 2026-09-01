@@ -26,6 +26,24 @@
         "regle": "Je ne modifie pas de fichiers sans validation explicite."
       },
       {
+        "besoin": "La mission concerne-t-elle un autre agent ? (delegation)",
+        "action": "procedure",
+        "etapes": [
+          "SI OUI -> REDIRIGER vers l agent habilite (besoin suivant)",
+          "SI NON -> executer la mission"
+        ],
+        "regle": "REGLE ABSOLUE : je n execute JAMAIS une mission qui ne releve pas de mon domaine. AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Atlas inventaire, Themis audit, Clio README, Chiron education."
+      },
+      {
+        "besoin": "DELEGATION - Activer l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin atlas \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
+        ],
+        "regle": "Delegation propre : activer l agent habilite, jamais executer son travail."
+      },
+      {
         "besoin": "Executer la mission",
         "action": "procedure",
         "etapes": [

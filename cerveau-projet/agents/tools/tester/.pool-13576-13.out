@@ -1,0 +1,23 @@
+=== test-099 : Activation et relais des agents (garde-fou v0.5.22) ===
+WARNING : reinitialisation Cerberus actif impossible
+  [OK] 1. activation depuis Cerberus sans avertissement
+WARNING : reinitialisation Cerberus actif impossible
+  [OK] 2. auto-reactivation : avertissement + autorisee
+WARNING : reinitialisation Cerberus actif impossible
+  [OK] 3. relais de chaine : autorise SANS avertissement (Pattern 8, v0.5.28)
+WARNING : reinitialisation Cerberus actif impossible
+  [OK] 4. reactivation Cerberus toujours autorisee
+WARNING : reinitialisation Cerberus actif impossible
+  [OK] 5. --forcer : avertissement + autorisee (compatibilite)
+WARNING : reinitialisation Cerberus actif impossible
+  [OK] 6. chaine complete bout-en-bout : tous rc=0
+
+
+=== CHRONO test (total 8.7s) ====
+  1. activation depuis Cerberus        0.61s
+  2. auto-reactivation                 1.77s
+  3. relais de chaine                  1.67s
+  4. reactivation Cerberus             0.74s
+  5. --forcer                          0.85s
+  6. chaine complete                   3.03s
+=== RESULTAT : 6 OK / 0 KO (sur 6 points) ===

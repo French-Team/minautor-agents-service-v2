@@ -14,24 +14,29 @@
         "action": "procedure",
         "description": "Un agent (Morpheus, Janus, Themis) m a active en inter-round avec un rapport de KO. Je NE commence PAS une nouvelle mission outil.",
         "etapes": [
-          "PERIMETRE REDUIT : 1) Lire le rapport KO transmis, 2) Confirmer reception (message console), 3) REACTIVER l agent appelant (commande activer, PAS reactiver) avec mention \"reprends ton round en cXe\"",
-          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent_appelant> '<rapport>'",
-          "CASCADE autorisee entre habilites"
+          "PERIMETRE REDUIT : 1) Lire le rapport KO transmis, 2) Confirmer reception (message console), 3) MA FIN vers ORACLE (reactiver-fin --cible oracle) - le pilote reactive l appelant avec mention \"reprends ton round en cXe\"",
+          "MA FIN : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<rapport du traitement inter-round>\" --cible oracle (le pilote reactive l appelant depuis l etat de carte - precedent)",
+          "CASCADE autorisee entre habilites",
+          "MA FIN EST geree par ORACLE (modele aero R2) : le pilote reactive l appelant depuis l etat de carte (precedent)."
         ],
-        "regle": "REGLE INTER-ROUND (R2) RECEPTION : je n execute PAS une nouvelle mission. J accuse reception et je relance l appelant qui reprend son round."
+        "regle": "REGLE INTER-ROUND (R2) RECEPTION : je n execute PAS une nouvelle mission. J accuse reception et je relance l appelant qui reprend son round. Si la cascade m avait voie moi = dernier maillon, JE reactive l appelant via reactiver-fin."
       },
       {
         "besoin": "INTER-ROUND : tests non delegues (blocage a la delegation)",
         "action": "procedure",
         "description": "Les tests n ont pas ete delegues a Morpheus et je ne peux pas avancer. Je n interromps PAS le round : j ACTIVE L AGENT HABILITE (Buffy pour la carte) avec le rapport du blocage.",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent-habilite> '<rapport du blocage>'",
-          "L agent habilite repare. A la fin de l inter-round, l habilite me REACTIVE et je REPRENDS mon round (c8e/c14)",
+          "MA FIN : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<rapport du traitement inter-round>\" --cible oracle (le pilote reactive l appelant depuis l etat de carte - precedent)",
+          "L agent habilite repare. A la fin de l inter-round, le pilote me renvoie et je REPRENDS mon round. (c8e/c14)",
           "CASCADE autorisee entre habilites"
         ],
         "regle": "REGLE INTER-ROUND (R2) : blocage de tests = reparation par l agent habilite exclusivement. Activation avec le rapport du blocage, reprise du round apres reparation."
       }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-inter-round"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-inter-round"
+  }
 }

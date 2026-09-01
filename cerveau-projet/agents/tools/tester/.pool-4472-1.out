@@ -1,0 +1,13 @@
+=== Garde-fou : coherence documentaire (specs vs outils, catalogue) ===
+  [OK] 1. detecter-divergences-version --version = v0.2.0
+  [OK] 2. detecter-decalages-catalogue --version = v0.2.3
+  [OK] 3. 0 spec DIVERGENTE (specs alignees sur les outils)
+  [OK] 4. 0 SANS VERSION sur les outils avec .py (specs versionnees)
+  [OK] 5. detecter-decalages-catalogue : 0 decalage
+  [OK] 6. spec guider-parcours : **Version outil** : 0.5.0 present
+  [OK] 7. ASCII strict : 0 non-ASCII (outils + doc + spec + test)
+  [OK] 8. LF pur : 0 CRLF (outils + doc + spec + test)
+
+
+=== CHRONO test (total 7.5s) ===
+=== RESULTAT : 8 OK / 0 KO (sur 8 points) ===

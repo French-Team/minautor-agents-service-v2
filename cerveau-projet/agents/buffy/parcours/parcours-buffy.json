@@ -1660,7 +1660,7 @@
    "indices": [
     {
      "type": "regle",
-     "texte": "REGLE GATE (decision utilisateur 2026-08-29, PAS un timer) : AVANT de commencer (analyser/decider/ecrire), je verifie que je suis LE BON AGENT de la session. S il y a un autre agent actif ou si ma mission vise une zone hors de mes habilitations, je STOP immediatement et je reactiver Cerberus SANS RIEN TOUCHER - il est inutile de travailler puis tout detruire."
+     "texte": "REGLE GATE (decision 2026-08-29) : AVANT de commencer, je verifie etre LE BON AGENT. Sinon STOP immediat et reactiver Cerberus SANS RIEN TOUCHER."
     },
     {
      "type": "outil",
@@ -1670,9 +1670,9 @@
      "commande": "python3 cerveau-projet/agents/tools/oracle/routines/verifier-agent-perimetre.py --gate --moi buffy"
     }
    ],
-   "suivant": "c0g2"
+   "suivant": "c0ga"
   },
-  "c0g2": {
+  "c0ga": {
    "titre": "GATE : es-tu le bon agent ?",
    "type": "question",
    "question": "La porte a-t-elle rendu OK (0) ? OUI -> je continue ma mission. NON (1) -> STOP immediat : je ne touche a RIEN et je reactiver Cerberus avec le rapport de la porte.",

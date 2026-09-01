@@ -1,23 +1,124 @@
 {
-  "identite": {"type": "theme", "appartient_a": "ferrari", "nom": "FICHE-AGENT", "description": "Corriger une fiche d agent v2 (proto 1)"},
+  "identite": {
+    "type": "theme",
+    "appartient_a": "ferrari",
+    "nom": "FICHE-AGENT",
+    "description": "Corriger une fiche d agent v2 (proto 1)"
+  },
   "theme": {
     "nom": "FICHE-AGENT",
     "but": "Corriger une fiche d agent v2 en appliquant le proto 1 et les conventions v2",
     "redirects": [
-      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
-      {"besoin": "Consulter les lecons (domaine freelance)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent ferrari --domaine freelance"], "regle": "PATTERN 6 : le contexte dynamique."},
-      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
-      {"besoin": "Lire le cahier de dev AVANT intervention", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/cahier-dev.md"], "regle": "CAHIER DE DEV : lire l historique des interventions."},
-      {"besoin": "Lire le PROTOCOLE 1 (agent v2) (case c2)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-1-agent-v2.md"], "regle": "PROTOCOLE 1 : lire AVANT de toucher au fichier."},
-      {"besoin": "Lire la fiche a corriger (case c2b)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin-fichier>"], "regle": "LIRE le fichier cible EN ENTIER."},
-      {"besoin": "Verifier les conventions v2", "action": "procedure", "etapes": ["UTF-8 + CRLF, frontmatter D17, mots-cles minimum 5, nommage kebab-case"], "regle": "CONVENTIONS V2 : appliquer exactement."},
-      {"besoin": "Appliquer la correction (conventions v2) (case c7)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin-fichier>"], "regle": "EDITER avec editer-fichier (outil v1) en appliquant les conventions v2."},
-      {"besoin": "Verifier la correction (controle c8)", "action": "procedure", "etapes": ["Relire le fichier corrige, verifier conformite v2"], "regle": "GARDE-FOU : verifier AVANT de continuer."},
-      {"besoin": "Produire le rapport de correction (case c9)", "action": "procedure", "etapes": ["Creer rapport dans agents/ferrari/rapports/ avec : fichier corrige, avant/apres, convention v2, justification"], "regle": "PREUVE DE TRAVAIL : chaque correction produit un rapport."},
-      {"besoin": "Historiser l intervention (case c10)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-admin mecano 'CORRECTION TERMINEE: <description>'"], "regle": "HISTORISATION : enregistrer dans AGENTS-historique.md."},
-      {"besoin": "Mettre a jour le cahier de dev", "action": "procedure", "etapes": ["Ajouter l intervention dans cahier-dev.md"], "regle": "CAHIER DE DEV : tenir a jour entre chaque intervention."},
-      {"besoin": "Ajouter les lecons dans corrections.md", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/ferrari/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."}
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine freelance)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent ferrari --domaine freelance"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Lire le cahier de dev AVANT intervention",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/cahier-dev.md"
+        ],
+        "regle": "CAHIER DE DEV : lire l historique des interventions."
+      },
+      {
+        "besoin": "Lire le PROTOCOLE 1 (agent v2) (case c2)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-1-agent-v2.md"
+        ],
+        "regle": "PROTOCOLE 1 : lire AVANT de toucher au fichier."
+      },
+      {
+        "besoin": "Lire la fiche a corriger (case c2b)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin-fichier>"
+        ],
+        "regle": "LIRE le fichier cible EN ENTIER."
+      },
+      {
+        "besoin": "Verifier les conventions v2",
+        "action": "procedure",
+        "etapes": [
+          "UTF-8 + CRLF, frontmatter D17, mots-cles minimum 5, nommage kebab-case"
+        ],
+        "regle": "CONVENTIONS V2 : appliquer exactement."
+      },
+      {
+        "besoin": "Appliquer la correction (conventions v2) (case c7)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin-fichier>"
+        ],
+        "regle": "EDITER avec editer-fichier (outil v1) en appliquant les conventions v2."
+      },
+      {
+        "besoin": "Verifier la correction (controle c8)",
+        "action": "procedure",
+        "etapes": [
+          "Relire le fichier corrige, verifier conformite v2"
+        ],
+        "regle": "GARDE-FOU : verifier AVANT de continuer."
+      },
+      {
+        "besoin": "Produire le rapport de correction (case c9)",
+        "action": "procedure",
+        "etapes": [
+          "Creer rapport dans agents/ferrari/rapports/ avec : fichier corrige, avant/apres, convention v2, justification"
+        ],
+        "regle": "PREUVE DE TRAVAIL : chaque correction produit un rapport."
+      },
+      {
+        "besoin": "Historiser l intervention (case c10)",
+        "action": "procedure",
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin ferrari \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
+        ],
+        "regle": "HISTORISATION : enregistrer dans AGENTS-historique.md."
+      },
+      {
+        "besoin": "Mettre a jour le cahier de dev",
+        "action": "procedure",
+        "etapes": [
+          "Ajouter l intervention dans cahier-dev.md"
+        ],
+        "regle": "CAHIER DE DEV : tenir a jour entre chaque intervention."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/ferrari/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-correction"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-correction"
+  }
 }

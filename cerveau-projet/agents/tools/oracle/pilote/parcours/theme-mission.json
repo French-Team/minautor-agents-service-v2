@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "pilote",
+    "nom": "MISSION",
+    "description": "Charger la mission configuree par oracle : destination + liste d agents a larguer"
+  },
+  "theme": {
+    "nom": "MISSION",
+    "but": "Lire la mission que oracle (l aeroport) m a configuree et preparer le largage",
+    "redirects": [
+      {
+        "besoin": "Lire ma mission (destination + liste d agents)",
+        "action": "procedure",
+        "etapes": [
+          "Lire la mission dans l etat de carte : oracle.py status <agent> ou lire l etat-cartes/<agent>.json",
+          "Extraire : 1) destination (objectif final), 2) liste ordonnee des agents a larguer (parachutistes)",
+          "Si la liste est vide ou absente -> signaler a oracle que la mission n est pas configuree"
+        ],
+        "regle": "MA MISSION EST CONFIGUREE PAR ORACLE (R2) : je ne l invente pas. Destination + liste d agents, dans l ordre."
+      },
+      {
+        "besoin": "Verifier que le premier agent de la liste est pret (fiche + corrections + etat)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
+          "Verifier que l agent cible existe : fiche presente, corrections presentes, etat de carte initialisable"
+        ],
+        "regle": "NE JAMAIS LARGUER UN AGENT NON VERIFIE : fiche + corrections obligatoires avant activation."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-mission-chargee"
+  }
+}

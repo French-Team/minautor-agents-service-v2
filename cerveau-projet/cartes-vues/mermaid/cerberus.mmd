@@ -1,4 +1,4 @@
-%% Carte de decision de cerberus (parcours v0.5.10)
+%% Carte de decision de cerberus (parcours v0.5.11)
 flowchart TD
     START(["Debut"]) --> c0
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
@@ -6,6 +6,9 @@ flowchart TD
     c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
     c0d["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
     c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c0g["GATE BON AGENT : verifier que tu es LE BON AGENT"]
+    c0ga{"GATE : es-tu le bon agent ?"}
+    c0h(["FIN - STOP : pas le bon agent, reactiver Cerberus"])
     c1{"Mission"}
     c10["Activer l'agent"]
     c11["Relire MA fiche et MES corrections"]
@@ -48,15 +51,27 @@ flowchart TD
     c6["Activer l'agent habilite"]
     c7["Annoncer la mission et suivre le cycle"]
     c8["Verifier l'agent (identification)"]
+    cD1{"DECLENCHEUR DETECTE ?"}
+    cD2{"Quel declencheur ?"}
+    cD2a["[attente] : parker la demande (file plus-tard)"]
+    cD2b["[attention] : placer la demande en file asap (SUIVANTE)"]
+    cD2c["[urgent] : traiter immediatement (priorite absolue)"]
+    cD2d["[question] : phase question/reponse dediee"]
+    cD2e["[creer] : routage de creation par type"]
+    cD2f["[probleme] : routage de resolution par fichier"]
+    cD2g["[stop] : DEFCON 5 (arret total)"]
     cU1{"Probleme avec un outil en cours de mission ?"}
     cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
     cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
-    c0b -- "OUI" --> c0e
+    c0b -- "OUI" --> c0g
     c0b -- "NON" --> c0
     c0c --> c0d
     c0d --> cU1
     c0e --> c0c
+    c0g --> c0ga
+    c0ga -- "OUI" --> c0e
+    c0ga -- "NON" --> c0h
     c1 -- "accueil" --> c1h
     c1 -- "activation" --> c1hb
     c1 -- "retour" --> c1hc
@@ -113,6 +128,22 @@ flowchart TD
     c6 --> c7
     c7 --> c24
     c8 --> c10
+    cD1 -- "OUI" --> cD2
+    cD1 -- "NON" --> c1
+    cD2 -- "[attente]" --> cD2a
+    cD2 -- "[attention]" --> cD2b
+    cD2 -- "[urgent]" --> cD2c
+    cD2 -- "[question]" --> cD2d
+    cD2 -- "[creer]" --> cD2e
+    cD2 -- "[probleme]" --> cD2f
+    cD2 -- "[stop]" --> cD2g
+    cD2a --> c20
+    cD2b --> c20
+    cD2c --> c1
+    cD2d --> c20
+    cD2e --> c5
+    cD2f --> c5
+    cD2g --> c20
     cU1 -- "OUI" --> cU2
-    cU1 -- "NON" --> c1
+    cU1 -- "NON" --> cD1
     cU2 --> cU3

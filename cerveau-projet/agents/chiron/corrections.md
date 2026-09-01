@@ -295,3 +295,46 @@ Lecons :
 3. CONTRADICTION RESOLUE (decision utilisateur 2026-08-25) : ferrari liste 'Corriger JARVIS' et c est NORMAL - Vision corrige JARVIS dans le fonctionnement normal de la v2 (session-freelance), ferrari est la COUCHE SUPERIEURE (session-admin) qui intervient sur N IMPORTE QUEL fichier de freelance/. CONFIDENTIALITE : ferrari est INVISIBLE des agents v2 (absent des docs freelance/ et d AGENTS.md), SEUL Cerberus le connait.
 
 **Preuves** : rapport education-cerberus-ferrari-2026-08-25.md, corrections buffy (inter-round), grep ferrari present dans cerberus.md (l.224, 228) + regles-choisir-agent.md (l.35), ASCII 0/0, fiche cerberus CONFORME v0.2.2.
+
+## [LECON] 2026-08-30 -- REPARATION ARBRE CHIRON : 6 FINS MORTES SUPPRIMEES (Chiron)
+
+**Contexte** : demande utilisateur - reparer les arbres des agents v1 un par un
+(protocole : auditer-conformite-arbre -> corriger -> valider le pilote de bout
+en bout). Chiron etait le 1er agent incoherent apres argus (sain).
+
+**Diagnostic (outil auditer-conformite-arbre, besoin C2)** : 6 fins declarees
+dans fins.json mais JAMAIS referencees par un theme : fin-autre,
+fin-delegation, fin-sans-incoherence, fin-signaler, fin-themis-a-revoir,
+fin-themis-conforme. Le modele arbre v2 est 1 theme -> 1 fin terminale
+(theme-educer->fin-educer, auto-correction->fin-auto-correction,
+outils->fin-outils, inter-round->fin-inter-round). Ces 6 fins etaient des
+residus de la structure v1 (branches c12/c11/themis) sans equivalent dans
+l arbre v2 - donc inatteignables par le pilote.
+
+**Correction (Buffy, seule habilitee)** : suppression des 6 fins mortes de
+fins.json (aucune reference hors fins.json verifiee par grep). Fichier passe
+de 11 a 5 fins reelles. ASCII 0, LF 0, JSON valide.
+
+**Verification** : audit chiron -> 17 OK / 0 bloquant / 0 avertissement
+(auparavant : 1 AVERTISSEMENT - fins mortes). Pilote de bout en bout valide
+sur theme-educer (17 besoins servis, fin -> reactiver Cerberus Pattern 13).
+
+**Lecons** :
+1. LE MODELE ARBRE V2 SUPPRIME LES FINS PARALLELES : dans un arbre v2,
+chaque theme mene a UNE fin terminale (centralisee dans fins.json). Les fins
+multiples heritees d un parcours v1 (une fin par branche) deviennent du code
+mort - elles ne peuvent pas etre atteintes par le pilote qui ne lit que le
+lien fin du theme. L'audit C2 (fins mortes) les detecte exactement.
+2. UNE FIN MORTE N EST PAS INOFFENSIVE : elle gonfle fins.json, base l audit
+et peut etre activer par erreur a la place de la bonne fin. Toute fin non
+referencee par un theme doit etre supprimee.
+3. L OUTIL auditer-conformite-arbre EST LE PREALABLE DE TOUTE CORRECTION
+D ARBRE : argus (17 OK -> rien a faire) puis chiron (fins mortes detectees et
+supprimees) - chaque arbre verifie seul, avant correction.
+
+**Preuves** : auditer-conformite-arbre --agent chiron (17 OK avant correction,
+16 OK + 1 AVERTISSEMENT avant purge, 17 OK apres), grep aucune ref hors
+fins.json, pilote chiron theme-educer PARCOURS TERMINE.
+
+**Verdict** : CORRIGE - 6 fins mortes supprimees, arbre chiron conforme et
+pilote de bout en bout valide.

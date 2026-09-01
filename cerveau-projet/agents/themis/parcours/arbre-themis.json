@@ -34,6 +34,11 @@
         "reponse": "AUTRE",
         "description": "Mission hors parcours",
         "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
       }
     ]
   },

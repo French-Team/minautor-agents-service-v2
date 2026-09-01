@@ -235,11 +235,11 @@ def main():
             with io.open(CATALOGUE, encoding="utf-8") as fh:
                 cat = json.load(fh)
             noms = [e["nom"] for e in cat["commandes"]]
-            ok = (len(noms) == 187 and noms == sorted(noms)
+            ok = (len(noms) == 188 and noms == sorted(noms)
                   and "lire-head" in noms
                   and "analyser-performance-tests" in noms
                   and "analyser-tokens" in noms)
-            verifier("7. catalogue : 187 trie + 2 outils presents", ok,
+            verifier("7. catalogue : 188 trie + 2 outils presents", ok,
                      "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
             chrono_etape("7. catalogue", t0)
 

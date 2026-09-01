@@ -8,7 +8,7 @@
   "arbre": {
     "nom": "arbre-buffy",
     "agent": "buffy",
-    "description": "Arbre des decisions de Buffy - developpeur principal v1. L agent choisit UN THEME au demarrage : CREER (nouveau fichier/outil), MODIFIER (corriger/ameliorer un fichier existant), AGENT (creer un nouvel agent), PROTOCOLE (creer un protocole), CONTROLER (controle/sante des tableaux), AUTRE (mission hors parcours) ou INTER-ROUND (reception d un rapport KO).",
+    "description": "Arbre des decisions de Buffy - developpeur principal v1. L agent choisit UN THEME au demarrage : CREER (nouveau fichier/outil), MODIFIER (corriger/ameliorer un fichier existant), AGENT (creer un nouvel agent), PROTOCOLE (creer un protocole), CONTROLER (controle/sante des tableaux), EDUQUER (education - redirection vers Chiron), AUTRE (mission hors parcours) ou INTER-ROUND (reception d un rapport KO).",
     "regles": {
       "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
       "D5": "Les besoins d un theme sont des REDIRECTIONS : je choisis celui qui correspond a ma situation.",
@@ -41,16 +41,24 @@
         "reponse": "PROTOCOLE",
         "description": "Creer un nouveau protocole (dossier, convention, creation limitee)",
         "vers": "theme-protocole.json"
-      },
-      {
-        "reponse": "CONTROLER",
-        "description": "Controle/sante des tableaux et des structures",
-        "vers": "theme-controler.json"
-      },
-      {
+      },  {
+   "reponse": "CONTROLER",
+   "description": "Controle/sante des tableaux et des structures",
+   "vers": "theme-controler.json"
+  },
+  {
+   "reponse": "TESTER",
+   "description": "Faire tester mes modifications par Morpheus (inter-round) : Morpheus testeur pro teste et revient vers moi",
+   "vers": "theme-test.json"
+  },      {
         "reponse": "AUTRE",
         "description": "Mission hors parcours : sous-mission, delegation, outil temporaire",
         "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "EDUQUER",
+        "description": "Education / re-education d un agent ou de moi-meme - redirige vers Chiron (agent habilite pour la formation continue)",
+        "vers": "theme-eduquer.json"
       },
       {
         "reponse": "INTER-ROUND",

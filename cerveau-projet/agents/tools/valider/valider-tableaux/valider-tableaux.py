@@ -171,8 +171,14 @@ def verifier_numerotation(fichier):
 
 # --- 3. Verification: completude des listes d'agents ---
 def analyser_liste(listes, agents_dossiers, fichier):
+    """Compare la liste de routage du porteur (oracle.md) aux dossiers
+    agents. Le porteur ne se liste pas lui-meme (il ne se route pas) et
+    Cerberus non plus (il est au-dessus d Oracle : il transmet, Oracle
+    route)."""
     erreurs = []
-    attends = [a for a in agents_dossiers if a.lower() != "cerberus"]
+    porteur = os.path.basename(fichier).replace(".md", "").lower()
+    attends = [a for a in agents_dossiers
+               if a.lower() not in (porteur, "cerberus")]
     manquants = [a for a in attends if a.lower() not in [x.lower() for x in listes]]
     if manquants:
         erreurs.append('  [COMPLETUDE] %s : agents absents de la liste : %s' % (
@@ -195,7 +201,10 @@ def est_fiche_agent(chemin_fichier):
     return "type: fiche-agent" in c
 
 
-def verifier_liste_agents(fichier_cerberus):
+def verifier_liste_agents(fichier_oracle):
+    """Verifie la completude de la liste de routage. La liste "Agents
+    disponibles" vit dans la fiche ORACLE (le routeur operationnel, decision
+    utilisateur 2026-08-30 : Cerberus ne porte plus cette liste)."""
     erreurs = []
     agents_dossiers = []
     agents_dir = os.path.join(RACINE, "cerveau-projet", "agents")
@@ -204,9 +213,9 @@ def verifier_liste_agents(fichier_cerberus):
             fiche = os.path.join(agents_dir, d, d + ".md")
             if os.path.isdir(os.path.join(agents_dir, d)) and os.path.exists(fiche) and est_fiche_agent(fiche):
                 agents_dossiers.append(d)
-    if not os.path.exists(fichier_cerberus):
+    if not os.path.exists(fichier_oracle):
         return erreurs
-    c = io.open(fichier_cerberus, encoding="utf-8").read()
+    c = io.open(fichier_oracle, encoding="utf-8").read()
     lignes = c.split("\n")
     in_tab = False
     listes = []
@@ -218,7 +227,7 @@ def verifier_liste_agents(fichier_cerberus):
         if in_tab:
             if re.match(r"^#{2,3} ", l):
                 if listes:
-                    erreurs.extend(analyser_liste(listes, agents_dossiers, fichier_cerberus))
+                    erreurs.extend(analyser_liste(listes, agents_dossiers, fichier_oracle))
                     listes = []
                 in_tab = False
                 continue
@@ -226,7 +235,7 @@ def verifier_liste_agents(fichier_cerberus):
             if m:
                 listes.append(m.group(1).strip())
     if listes:
-        erreurs.extend(analyser_liste(listes, agents_dossiers, fichier_cerberus))
+        erreurs.extend(analyser_liste(listes, agents_dossiers, fichier_oracle))
     return erreurs
 
 
@@ -288,7 +297,7 @@ def main(argv):
         err_f = []
         err_f += verifier_nombres_annonces(f)
         err_f += verifier_numerotation(f)
-        if os.path.basename(f) == "cerberus.md":
+        if os.path.basename(f) == "oracle.md":
             err_f += verifier_liste_agents(f)
         if err_f:
             erreurs.extend(err_f)

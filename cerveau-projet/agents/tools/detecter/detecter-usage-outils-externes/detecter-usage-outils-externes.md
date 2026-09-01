@@ -65,6 +65,10 @@ Certains fichiers sont volontairement non conformes aux traces d'outil externe :
 | `dictionnaire-emojis.txt` | Idem pour les emojis |
 | `exemples/` | Jeux de tests pedagogiques (test-emojis, test-accents-zones-sensibles...) : DOIVENT contenir du non-ASCII pour prouver que les correcteurs fonctionnent |
 | `docs-dev-cerveau-projet/` | Documents externes fournis par l utilisateur (analyses) qui ne suivent pas nos normes |
+| `freelance/` | Univers v2 dont les conventions (D4) imposent CRLF + UTF-8 volontaires (opposees aux normes v1 LF + ASCII) |
+| `observations/` | Logs generes par les daemons (oracle, routines) en cours d execution - artefacts de run |
+| `routines/` | Manifest + etats + journaux d execution des routines v1 (manifest.json, data/etat-statuts.json, tokens-historique, journaux) - artefacts de run dynamiques |
+| `oracle/grades-v1.json` | Donnees des grades/secteurs de l encart v1, maintenu par les routines - donnees, pas du code |
 
 Un motif matche des qu'il apparait dans le chemin (sous-chaine). L'option `--exclure MOTIF` ajoute des exclusions supplementaires.
 

@@ -228,14 +228,14 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         noms = [e["nom"] for e in cat["commandes"]]
-        verifier("10. catalogue 187 commandes trie + les 2 outils",
-                 len(noms) == 187 and noms == sorted(noms)
+        verifier("10. catalogue 188 commandes trie + les 2 outils",
+                 len(noms) == 188 and noms == sorted(noms)
                  and "lire-head" in noms
                  and "analyser-noms-maj" in noms
                  and "corriger-noms-maj" in noms,
                  "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
     except Exception as e:
-        verifier("10. catalogue 187 commandes trie + les 2 outils",
+        verifier("10. catalogue 188 commandes trie + les 2 outils",
                  False, str(e)[-80:])
     chrono_etape("10. catalogue", t0)
 
@@ -316,6 +316,11 @@ def main():
     print("=== VERDICT : %s ===" % (
         "PROPRE (casse et forme des noms verrouillees)" if NB_KO == 0
         else "KO A CORRIGER"))
+    if NB_KO:
+        print("  [AIDE] OU CHERCHER / REPARER (KO = registre/index/catalogue noms-maj) :")
+        print("    [AIDE] Fichier inspecte : agents/traces/registre-usages-outils.jsonl (+ index-tools.md, catalogue)")
+        print("    [AIDE] Diagnostic : python3 cerveau-projet/agents/tools/analyser/analyser-noms-maj/analyser-noms-maj.py --zone registre --no-chrono")
+        print("    [AIDE] Correctif : retirer les OUTIL_ORPHELIN (scripts de test declares mode direct) - ne JAMAIS declarer les scripts de test au registre, et corriger la casse des noms d outils")
     return 0 if NB_KO == 0 else 1
 
 

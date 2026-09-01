@@ -1,5 +1,10 @@
 {
-  "identite": {"type": "arbre", "appartient_a": "socrate", "version": "0.4.0", "commun": false},
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "socrate",
+    "version": "0.4.0",
+    "commun": false
+  },
   "arbre": {
     "nom": "arbre-socrate",
     "agent": "socrate",
@@ -22,10 +27,35 @@
     "type": "question",
     "question": "Quelle est la mission de revision ?",
     "branches": [
-      {"reponse": "REVISION", "description": "Discuter des problemes : ecoute, questionnement (3+ questions), classification (URGENT/IMPORTANT/MOYEN/BAS), formulation de missions (c1-c6)", "vers": "theme-revision.json"},
-      {"reponse": "SYNTHESE", "description": "Creer le fichier missions-revision.md avec la liste structuree des missions (c7-c7b)", "vers": "theme-synthese.json"},
-      {"reponse": "OUTILS", "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)", "vers": "theme-outils.json"}
+      {
+        "reponse": "REVISION",
+        "description": "Discuter des problemes : ecoute, questionnement (3+ questions), classification (URGENT/IMPORTANT/MOYEN/BAS), formulation de missions (c1-c6)",
+        "vers": "theme-revision.json"
+      },
+      {
+        "reponse": "SYNTHESE",
+        "description": "Creer le fichier missions-revision.md avec la liste structuree des missions (c7-c7b)",
+        "vers": "theme-synthese.json"
+      },
+      {
+        "reponse": "OUTILS",
+        "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)",
+        "vers": "theme-outils.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
+      },
+      {
+        "reponse": "TRIO",
+        "description": "L utilisateur a une idee (v3, 2026-08-30) : Socrate declenche le trio pour produire les fichiers (Athena pense-bete -> Promethee spec -> Minerve todo)",
+        "vers": "theme-trio-socrate.json"
+      }
     ]
   },
-  "fins": {"fichier": "fins.json", "description": "Toutes les fins possibles"}
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles"
+  }
 }

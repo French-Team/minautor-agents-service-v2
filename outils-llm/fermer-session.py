@@ -43,6 +43,7 @@ RACINE = Path(__file__).resolve().parent.parent
 ORACLE_DIR = RACINE / "cerveau-projet" / "agents" / "tools" / "oracle"
 PID_ORACLE = ORACLE_DIR / "oracle-server.pid"
 PID_ROUTINES_V1 = ORACLE_DIR / "routines-server.pid"
+PID_SUPER_PILOTE = ORACLE_DIR / "super-combos" / "super-pilote.pid"
 ORACLE_DEMARRAGE = ORACLE_DIR / "oracle-demarrage.py"
 
 # Serveurs de la v2 (session-freelance) : daemon routines JARVIS.
@@ -133,15 +134,17 @@ def _arreter_v1(dry_run):
     print("=== ARRET SERVEURS V1 (session-admin) ===")
     rapports = []
     force_utilise = False
-    cibles = [("oracle-server", PID_ORACLE), ("routines-server v1", PID_ROUTINES_V1)]
+    cibles = [("oracle-server", PID_ORACLE), ("routines-server v1", PID_ROUTINES_V1),
+              ("super-pilote", PID_SUPER_PILOTE)]
     pid_avant = {nom: _lire_pid(pf) for nom, pf in cibles}
     if dry_run:
         for nom, pf in cibles:
             pid, ferme, detail = _etat_serveur(pf)
             rapports.append((nom, ferme, "[dry-run] " + detail))
         return rapports, force_utilise
-    # arret propre via oracle-demarrage.py arret (--confirme-doc est une
-    # option GLOBALE : elle vient AVANT le sous-commande)
+    # Arret propre via oracle-demarrage.py. L outil de demarrage peut
+    # rencontrer un daemon deja sorti; la verification ci-dessous nettoie
+    # alors son pidfile. Les trois cibles sont toujours controlees.
     cmd = [sys.executable, str(ORACLE_DEMARRAGE), "--confirme-doc", "arret"]
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=60,

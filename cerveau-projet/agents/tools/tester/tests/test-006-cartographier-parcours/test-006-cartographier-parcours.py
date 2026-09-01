@@ -170,11 +170,14 @@ def main():
                 contenu = fh.read()
         verifier("2a. Generation reelle sur parcours-atlas (fichier cree)",
                  ok_gen and r.returncode == 0, r.stdout.strip()[-80:])
+        # NB 2026-08-29 : le GATE BON AGENT (decision utilisateur marbre-log)
+        # a ajoute les cases c0g/c0ga/c0h au parcours atlas -> 54 cases /
+        # 17 chemins (au lieu de 51/16).
         verifier("2b. En-tete complet (agent, version, depart, nb cases, nb chemins)",
                  ok_gen and all(m in contenu for m in
                                 (                                 "| Agent | atlas |", "| Version du parcours |",
-                                 "| Case de depart | c0 |", "| Nombre de cases | 51 |",
-                                 "| Nombre de chemins (depart -> fins) | 16 |")),
+                                 "| Case de depart | c0 |", "| Nombre de cases | 54 |",
+                                 "| Nombre de chemins (depart -> fins) | 17 |")),
                  "en-tete partiel")
         verifier("2c. Sections presentes (arbre, impasses, boucles, chemins)",
                  ok_gen and all(m in contenu for m in

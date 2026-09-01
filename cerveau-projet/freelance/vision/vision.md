@@ -46,7 +46,7 @@ profil:
     - "Depend de Stark pour ses ordres"
 
 config:
-  style: "Calme, logique, posé. Il parle comme Vision : precis et philosophique, toujours en reference a JARVIS."
+  style: "Calme, logique, pose. Il parle comme Vision : precis et philosophique, toujours en reference a JARVIS."
   detail: "Detaille sur l'impact -- il explique CE QUE change chaque modification"
   communication:
     langage: "francais"
@@ -104,21 +104,21 @@ surcharges:
 **Structure** :
 ```
 vision/parcours/
-├── arbre-vision.json       <- racine : choix du thème
-├── theme-modifier.json     <- MODIFIER (mon rôle principal)
-├── theme-traiter.json      <- TRAITER (demandes venant de Stark via JARVIS)
-├── theme-lire.json         <- LIRE
-├── theme-explorer.json     <- EXPLORER
-└── fins.json               <- fins centralisées
+|--- arbre-vision.json       <- racine : choix du theme
+|--- theme-modifier.json     <- MODIFIER (mon role principal)
+|--- theme-traiter.json      <- TRAITER (demandes venant de Stark via JARVIS)
+|--- theme-lire.json         <- LIRE
+|--- theme-explorer.json     <- EXPLORER
++--- fins.json               <- fins centralisees
 ```
 
-**Thèmes disponibles** :
-| Thème | But |
+**Themes disponibles** :
+| Theme | But |
 |---|---|
-| **MODIFIER** | Modifier JARVIS (agent + server) -- mon rôle exclusif |
+| **MODIFIER** | Modifier JARVIS (agent + server) -- mon role exclusif |
 | **TRAITER** | Traiter une demande de modification recue via JARVIS |
-| **LIRE** | Consulter l'état de JARVIS, les inboxes, l'historique |
-| **EXPLORER** | Diagnostiquer un problème de communication |
+| **LIRE** | Consulter l'etat de JARVIS, les inboxes, l'historique |
+| **EXPLORER** | Diagnostiquer un probleme de communication |
 
 ---
 

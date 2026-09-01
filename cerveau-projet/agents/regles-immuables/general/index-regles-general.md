@@ -45,7 +45,7 @@ identite:
 | [protocole-autoameliorer-regles/](protocole-autoameliorer-regles/) | Auto-amelioration des regles | ebauche |
 | [protocole-gestion-defaillances/](protocole-gestion-defaillances/) | Gestion automatique des defaillances | ebauche |
 | [protocole-controle-statuts/](protocole-controle-statuts/) | Controle des statuts (Janus) | ebauche |
-| [protocole-carte-decision/](protocole-carte-decision/) | Carte de decision pour les agents | ebauche |
+| [protocole-carte-decision/](protocole-carte-decision/) | Carte/arbre de decision pour les agents (historique parcours v1, SUPERSEDE par arbre v2 + oracle.py pilote) | ebauche |
 | [protocole-creation-combos/](protocole-creation-combos/) | Creation et mise en place des combos (quand/ou/comment, Pattern 3) | ebauche |
 | [protocole-creation-scripts-temporaires/](protocole-creation-scripts-temporaires/) | Encadrer l utilisation des scripts temporaires (creer/declarer/supprimer/promouvoir/detecter, anti-regression, commandes spawn_agents sans echappement JSON) | ebauche |
 | [protocole-purification/](protocole-purification/) | Purification des fichiers apres validation | ebauche |
@@ -54,10 +54,11 @@ identite:
 | [protocole-controle-buffy/](protocole-controle-buffy/) | Controle croise du travail de Buffy (Janus) | ebauche |
 | [protocole-audit-buffy/](protocole-audit-buffy/) | Audit de conformite du travail de Buffy (Themis) | ebauche |
 | [protocole-sante-fichiers-agents/](protocole-sante-fichiers-agents/) | Sante periodique des fichiers agents (Janus) | ebauche |
-| [protocole-fin-mission/](protocole-fin-mission/) | Fin de mission : CHAQUE maillon documente SON controle (lecon + verdict) AVANT de transmettre (anti-derive bilans sans preuve) | ebauche |
+| [protocole-fin-mission/](protocole-fin-mission/) | Fin de mission : CHAQUE maillon documente SON controle (lecon + verdict) + flux ROUND/INTER-ROUND + fin precedent-aware reactiver-fin v0.3.0 | ebauche |
 | [protocole-argus-contradictions/](protocole-argus-contradictions/) | Detection et signalement des contradictions (Argus) : 4 elements obligatoires (type, gravite, fichier+ligne, 2 sources croisees), cas types, preuve negative --fichier quand soupcon, cycle signalement -> agent habilite | ebauche |
 | [protocole-education-continue/](protocole-education-continue/) | Education continue des agents (Chiron) : re-eduer quand les outils/regles/protocoles changent. Analyse fiches/corrections/regles/cartes pour detecter les incoherences nuisant a l intelligence operationnelle | actif |
 | [protocole-verification-coherence/](protocole-verification-coherence/) | Verification de coherence des fichiers a compteurs/tables/badges (Themis, lecons re-audit README) | ebauche |
+| [protocole-reparer-arbres/](protocole-reparer-arbres/) | Reparer les arbres de decision (aligner la racine sur le vocabulaire du pilote `_type_mission_auto`/`_resoudre_racine`, theme-inter-round + fins precedent-aware reactiver-fin, UN AGENT A LA FOIS, test reel, checklist) | ebauche |
 
 ## Navigation
 

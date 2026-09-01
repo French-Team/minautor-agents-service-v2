@@ -40,8 +40,38 @@ PID_ORACLE = ORACLE_DIR / "oracle-server.pid"
 PID_ROUTINES = ORACLE_DIR / "routines-server.pid"
 FILES_DIR = ORACLE_DIR / "files"
 INBOX_DIR = ORACLE_DIR / "inbox"
+def _rotation_ajouter(agent, message):
+    """Rotation inbox : garder les 5 messages les plus recents (decision
+    utilisateur 2026-08-29 : les inbox s accumulaient, personne ne les
+    lisait). Reutilise le module central oracle/fonctions/rotation.py."""
+    try:
+        import importlib.util
+        _f = Path(_DOSSIER).parent / "fonctions" / "rotation.py"
+        _spec = importlib.util.spec_from_file_location("rotation", str(_f))
+        _mod = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(_mod)
+        return _mod.ajouter_message(INBOX_DIR, agent, message)
+    except Exception:
+        return False
+
 
 SEUIL_DEFCON_GELE_HEURES = 24
+ETAT_ALERTE = Path(_DOSSIER) / "data" / "etat-sante-alerte.json"
+
+
+def _alerte_deja_envoyee(corps):
+    # Empreinte deterministe: hash() varie entre processus Python.
+    import hashlib
+    empreinte = hashlib.sha256(corps.encode("utf-8")).hexdigest()
+    try:
+        ancien = json.loads(ETAT_ALERTE.read_text(encoding="utf-8"))
+        if ancien.get("empreinte") == empreinte:
+            return True
+    except (OSError, ValueError):
+        pass
+    ETAT_ALERTE.parent.mkdir(parents=True, exist_ok=True)
+    ETAT_ALERTE.write_text(json.dumps({"empreinte": empreinte}, ensure_ascii=True), encoding="utf-8")
+    return False
 
 
 def _racine_projet():
@@ -86,12 +116,13 @@ def _historiser_agent(agent, raison, type_action="R"):
 
 
 def _ecrire_alerte(corps):
-    """Ecrire une alerte dans l inbox de Cerberus (canal oracle)."""
+    """Ecrire une alerte dans l inbox d Oracle (coordinateur) - decision
+    utilisateur 2026-08-30 : routines -> Oracle, pas Cerberus."""
     maintenant = datetime.now()
     message = {
         "id": "sante-%s" % maintenant.strftime("%H%M%S"),
         "de": "sante",
-        "vers": "cerberus",
+        "vers": "oracle",
         "priorite": 1,
         "date": maintenant.strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": "[SANTE] %s" % corps[:60],
@@ -101,10 +132,7 @@ def _ecrire_alerte(corps):
         "type": "sante",
     }
     try:
-        INBOX_DIR.mkdir(parents=True, exist_ok=True)
-        with open(INBOX_DIR / "cerberus.jsonl", "a",
-                  encoding="utf-8") as f:
-            f.write(json.dumps(message, ensure_ascii=False) + "\n")
+        _rotation_ajouter("oracle", message)
         return message
     except OSError as exc:
         print("[SANTE] ERREUR ecriture alerte : %s" % exc)
@@ -213,7 +241,7 @@ def main():
 
     ok, msg = _verifier_daemon(PID_ORACLE, "oracle-server")
     stats.append(msg)
-    if not ok:
+    if not ok and not ("pidfile absent" in msg and not PID_ROUTINES.exists()):
         anomalies.append("DAEMON: " + msg)
 
     ok, msg = _verifier_daemon(PID_ROUTINES, "routines-server")
@@ -250,6 +278,9 @@ def main():
     corps = "\n".join("- %s" % a for a in anomalies)
     if dry_run:
         print("[SANTE] --dry-run : anomalies non historisees/non envoyees")
+        return 1
+    if _alerte_deja_envoyee(corps):
+        print("[SANTE] Anomalie identique deja signalee : aucune repetition")
         return 1
     _historiser_agent("sante", "%d anomalie(s): %s" %
                       (len(anomalies), "; ".join(anomalies[:3])), "R")

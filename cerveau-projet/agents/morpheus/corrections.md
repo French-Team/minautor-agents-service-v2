@@ -4747,3 +4747,49 @@ Lecons :
 2. LE VERROU D HABILITATION S APPLIQUE AUSSI AUX TESTS MORPHEUS : valider-cartes-decision est exclusif a argus/buffy/janus/vulcain - un test morpheus qui l appelle ne peut etre vert que lance par l agent habilite (Janus). Documenter la contrainte, pas la contourner.
 
 **Verdict** : VALIDE - test-006 19/19, test-004 7a OK (point 8 verrou habilitation, passera sous Janus), ASCII 0/0, compilation OK.
+## [LECON] 2026-08-29 -- TEST COLONNE EXECUTEUR ROUTINES RT(INTERVALLE) (Morpheus)
+
+**Mission** : tester la modification activer-agent-principal v0.8.7 (colonne
+Executeur de l encart v1 : les routines v1 affichent desormais RT(<intervalle>s)
+via le helper _executeur_routine qui lit manifest.json).
+
+**Tests executes** :
+1. Comportement _executeur_routine : 7/7 OK (citations RT(300s), flux RT(600s),
+   vigie-round RT(60s), sante RT(300s), agents normaux cerberus/vulcain/oracle =
+   chaine vide).
+2. Test reel sur copie (env AGENTS_* vers /tmp/aap-test2) : l encart produit
+   bien les lignes "| citations | 4 | RT(300s) | ...", "| flux | 4 | RT(600s) |",
+   "| vigie-round | 4 | RT(60s) |" et les agents normaux restent a colonne vide.
+   Les colonnes Defcon/Etat/Secteur restent intactes.
+3. Tests existants lies : test-092 9/9 OK, test-102 6/6 OK, test-098 5 OK / 2 KO
+   (les 2 KO sont PREEXISTANTS et HORS PERIMETRE : point 2 - les routines flux/
+   notation/verifier-statuts/vigie-perimetre historisent des blocs agents dans
+   AGENTS-historique.md sans etre dans la liste des agents connus du test
+   (exemption uniquement citations) ; point 3 - jour vide 28/08/2026 residu du
+   nettoyage de session). Aucun KO lie a la colonne Executeur.
+4. Le point 5 de test-098 (lire-activite-recente) depend du cwd : lance depuis
+   le dossier du test il echoue (chemin relatif AGENTS-historique.md introuvable),
+   lance depuis la racine il passe. Piege cwd : toujours lancer les tests depuis
+   la racine du projet comme la non-regression.
+
+**Verdict** : VALIDE - la modification fonctionne (preuve reelle sur copie),
+aucun test lie ne casse a cause d elle. 2 KO preexistants a traiter separement
+(routines dans test-098 + jour vide du nettoyage).
+
+**Lecons** :
+1. TESTER LE COMPORTEMENT SUR COPIE, PAS SEULEMENT LA FONCTION : l appel direct
+   de _executeur_routine prouve la logique, mais c est l ecriture reelle dans
+   l encart (env AGENTS_ACTIVITE_RECENTE vers copie) qui prouve la colonne
+   produite - les deux sont necessaires.
+2. UN TEST QUI ECHOUE N EST PAS FORCEMENT CAUSE PAR LA MODIFICATION : les 2 KO
+   de test-098 existaient avant (routines non listees, jour vide du nettoyage).
+   Toujours distinguer KO preexistant vs KO introduit (tester l etat avant ou
+   analyser la cause racine : la colonne Executeur n affecte pas les blocs du
+   corps historique).
+3. PIEge CWD DES TESTS : lire-activite-recente utilise un chemin relatif par
+   defaut - lance depuis le dossier du test il echoue, depuis la racine il passe.
+   La non-regression lance depuis la racine : reproduire SES conditions.
+
+**Outils utilises** : lire-fichier, lire-activite-recente, oracle (pilote/lire/
+acquitter/mission-lister), verifier-systeme, enregistrer-usage-outil,
+tester-protections (lancer_protege via tests individuels).

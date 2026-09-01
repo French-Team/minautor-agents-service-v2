@@ -85,6 +85,12 @@ EXTENSIONS = (".md", ".sh", ".py", ".txt", ".json")
 #     CRLF + UTF-8 volontaires (oppose aux normes v1 LF + ASCII).
 #   - observations/ : logs generes par les daemons (oracle, routines)
 #     en cours d execution - artefacts de run, pas du code a normer.
+#   - routines/ : manifest + etats + journaux d execution des routines
+#     v1 (manifest.json edite par les routines, data/etat-statuts.json,
+#     tokens-historique, journaux) - artefacts de run dynamiques, pas du
+#     code a normer.
+#   - grades-v1.json : fichier de donnees des grades/secteurs de l encart
+#     v1, maintenu par les routines - donnees, pas du code.
 # Un motif matche des qu il apparait dans le chemin (sous-chaine).
 # ============================================================
 EXCLUSIONS_PAR_DEFAUT = (
@@ -94,6 +100,8 @@ EXCLUSIONS_PAR_DEFAUT = (
     os.path.join("docs-dev-cerveau-projet", ""),
     os.path.join("freelance", ""),
     os.path.join("observations", ""),
+    os.path.join("routines", ""),
+    os.path.join("oracle", "grades-v1.json"),
 )
 
 

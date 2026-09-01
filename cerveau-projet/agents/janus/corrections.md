@@ -6513,3 +6513,27 @@ Controle final de la chaine Cerberus -> Vulcain (branchement) -> Morpheus (test-
 3. LE RECONTROLE COMPLET NECESSITE --desactiver LES KO DOCUMENTES : sinon la barriere stoppe tout (verdict faussement restreint). Les KO documentes doivent etre listes pour laisser la suite tourner.
 
 **Verdict** : VALIDE - toutes les adaptations morpheus sont vertes sous janus. 0 nouveau KO introduit par le round. 6 KO restants documentes pour un round dedie : test-079 (outil analyser-noms-maj, Vulcain), test-085 (daemons, artefact attendu), test-096 (cartes-vues, Vulcain/Buffy), test-001 (lien casse doc, Buffy), test-006 (compteur atlas, Morpheus), test-004 (version morpheus, Morpheus).
+## [LECON] 2026-08-29 -- CONTROLE FINAL REPARATION GATE : VERDICT VALIDE (Janus)
+
+Controle final de la chaine apres la reparation Buffy des 25 KO GATE (decision utilisateur marbre-log 2026-08-29 appliquee sans synchroniser les garde-fous).
+
+**Constats** : non-regression complete 96 OK / 10 KO (106 tests, serie). Tous les KO de la reparation GATE corriges + synchronisation des garde-fous : valider-cartes-decision reconnait le chemin GATE (c0b OUI -> c0g -> c0ga -> c0c), test-005 (15e commande c0g), test-006 (54 cases/17 chemins), test-021 (sequences OUI supplementaire), test-045, test-072 (branches c0b GATE), test-103 (raison tronquee sans ponctuation - corrigee dans AGENTS.md), cerberus.md PARCOURS v0.5.11 (Pattern 14).
+
+**Lecons** :
+1. UN GARDE-FOU CENTRAL MASQUE LES KO SUIVANTS : corriger valider-cartes-decision a resolu test-045 d un coup mais revele des suivants morts preexistants (buffy c16/c22b/c27b/c8b, vulcain c15g/c9g, morpheus c14b).
+2. LA DERIVE LAISSE DES TRACES FAUTIVES : registre-usages-outils (DECLARATION_FAUTIVE buffy verifier-systeme, cerberus analyser-noms-maj) + MARBRE DIVERGENT (cerberus.c10, regles-general-global) - violation de securite a nettoyer par les agents habilites.
+3. LES 10 KO RESTANTS SONT TOUS PREEXISTANTS OU CONSEQUENCE DE LA DERIVE : test-027/063 (tests 105-109 non mappes), test-028 (spec divergente), test-035 (traces fautives), test-047 (artefacts routines), test-057/068 (marbre), test-070 (oracle c14/c20), test-079 (registre noms-maj), test-094 (oracle absent table cerberus.md) - a traiter en round dedie.
+
+**Verdict** : VALIDE - la reparation GATE est conforme et verifiee. 10 KO preexistants documentes pour un round dedie (priorite : violation marbre).
+## [LECON] 2026-08-30 -- MIGRATION ARBRE V1 -> MODELE AERO (Buffy)
+
+Migration de l arbre de Janus au modele aero (spec round-avion-parachutiste 2026-08-30).
+
+**Constats** : audit initial F4 BLOQUANT (4 fins cible cerberus, vestiges v1) + C4 (activation descendante dans theme-inter-round). Reconstruction appliquee : fins -> oracle (R1) + commandes reactiver-fin --cible oracle, theme-inter-round nettoye (l agent n active plus d autre agent, R3). Fiche janus.md alignee (fin vers ORACLE, le pilote decide).
+
+**Lecons** :
+1. LES FINS V1 (cible cerberus + commande activer) SONT DES VESTIGES SYSTEMATIQUES : l audit F4 les detecte et la reconstruction les reoriente vers oracle --cible oracle, sans toucher aux themes (contenu descendant).
+2. L INTER-ROUND DANS LE MODELE AERO : l agent n active JAMAIS l appelant directement (commande activer) - il accuse reception et sa fin reactiver-fin --cible oracle ramene a ORACLE, le pilote reactive l appelant depuis l etat de carte (precedent).
+3. TEST PILOTE BOUT EN BOUT : theme NON-REGRESSION pilote -> Theme termine -> Fin de parcours : l agent doit revenir vers ORACLE (modele aero R1) - valide.
+
+**Verdict** : VALIDE - arbre de janus en phase modele aero (audit 20 OK / 0 bloquant / 0 avertissement).

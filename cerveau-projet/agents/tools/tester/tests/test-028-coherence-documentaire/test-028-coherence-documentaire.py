@@ -240,6 +240,11 @@ def main():
     print("")
     bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
+    if NB_KO:
+        print("  [AIDE] OU CHERCHER / REPARER (KO = divergence spec/outil) :")
+        print("    [AIDE] Fichiers inspectes : agents/tools/**/spec/*.md + detecter-divergences-version")
+        print("    [AIDE] Diagnostic : python3 cerveau-projet/agents/tools/detecter/detecter-divergences-version/detecter-divergences-version.py --racine cerveau-projet")
+        print("    [AIDE] Correctif : aligner la version de la SPEC (en-tete + historique) sur celle de l outil .py/.md signale DIVERGENT")
     return 1 if NB_KO else 0
 
 

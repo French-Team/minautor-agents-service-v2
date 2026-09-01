@@ -1,0 +1,42 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "DE-USER",
+    "description": "Une demande arrive de l utilisateur : j ecoute, j identifie l agent habilite, je transmets la mission a Oracle qui prend la main"
+  },
+  "theme": {
+    "nom": "DE-USER",
+    "but": "Accueillir une demande utilisateur et la transmettre a Oracle (qui historise DEBUT a la place de l agent cible puis lance le pilote)",
+    "redirects": [
+      {
+        "besoin": "Ecouter la demande completement",
+        "action": "procedure",
+        "etapes": [
+          "Comprendre la demande de l utilisateur sans l interrompre",
+          "Poser des questions si besoin (jamais decider sans comprendre)"
+        ],
+        "regle": "Ecouter avant de decider. Je ne m historise JAMAIS : c est Oracle qui historise."
+      },
+      {
+        "besoin": "Identifier l agent habilite (matrice, NE PAS executer soi-meme)",
+        "action": "procedure",
+        "etapes": [
+          "Consulter la matrice regles-choisir-agent",
+          "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py <fichier>"
+        ],
+        "regle": "GARDE-FOU DE-USER : j identifie l agent habilite mais je N EXECUTE PAS."
+      },
+      {
+        "besoin": "Envoyer la mission a Oracle et lui rendre la main",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py envoyer cerberus oracle \"MISSION: <la demande>\" \"<mission complete + agent identifie morpheus/vulcain/...>\"",
+          "ORACLE prend la main : il historise le DEBUT de l agent a sa place, envoie le message a l agent, puis le pilote le dirige"
+        ],
+        "regle": "INTERDICTION FORMELLE (2026-08-29) : je ne m historise PAS et je ne travaille JAMAIS. Oracle est le SEUL a historiser DEBUT/FIN avant et apres chaque mission. Mon role s arrete au routage vers Oracle."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-theme" }
+}

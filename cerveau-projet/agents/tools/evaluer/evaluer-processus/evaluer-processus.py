@@ -158,6 +158,14 @@ OUTILS_P0_PARTAGES = frozenset([
     # activer-agent-principal, assigne a vulcain (constructeur) mais
     # utilise par TOUS les agents.
     "analyser-tokens",
+    # verifier-systeme (2026-08-29, round reparation GATE) : ETAPE 1
+    # OBLIGATOIRE de tous les parcours (servie par 67 themes du pilote,
+    # REGLE ABSOLUE "je ne suppose JAMAIS"), assigne a vulcain dans sa
+    # carte mais utilise par TOUS les agents -> transverse comme
+    # chronometrer-duree. Sans cette entree, tout agent non-vulcain qui le
+    # declare au registre est signale DECLARATION_FAUTIVE (faux positif :
+    # l usage est legitime, c est une etape obligatoire du pilote).
+    "verifier-systeme",
 ])
 
 

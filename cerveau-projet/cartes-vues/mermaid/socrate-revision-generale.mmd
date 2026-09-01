@@ -5,6 +5,9 @@ flowchart TD
     c0b{"Confirmation"}
     c0c["CONTEXTE : activite recente"]
     c0e["Consulter les lecons"]
+    c0g["GATE BON AGENT : verifier que tu es LE BON AGENT"]
+    c0ga{"GATE : es-tu le bon agent ?"}
+    c0h(["FIN - STOP : pas le bon agent, reactiver Cerberus"])
     c1{"Sujet de la revision"}
     c2{"Description du probleme"}
     c2b{"Clarification"}
@@ -18,10 +21,13 @@ flowchart TD
     cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
     cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
-    c0b -- "OUI" --> c0e
+    c0b -- "OUI" --> c0g
     c0b -- "NON" --> c0
     c0c --> cU1
     c0e --> c0c
+    c0g --> c0ga
+    c0ga -- "OUI" --> c0e
+    c0ga -- "NON" --> c0h
     c1 -- "outil" --> c2
     c1 -- "parcours" --> c2
     c1 -- "agent" --> c2

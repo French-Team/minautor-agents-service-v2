@@ -1,0 +1,37 @@
+{
+  "identite": {
+    "type": "super-combo",
+    "appartient_a": "oracle",
+    "nom": "revision-strategique",
+    "version": "0.1.0",
+    "description": "PROTOTYPE de super-combo : enchainement d agents pour une revision strategique. Socrate demarre (questionnement + liste de missions), puis chaque mission traverse les agents habilites via oracle+pilote."
+  },
+  "super-combo": {
+    "nom": "revision-strategique",
+    "agent_depart": "socrate",
+    "case_depart": "c1",
+    "regles": {
+      "CHAINAGE": "Chaque case declenche oracle + pilote (couche inferieure) pour diriger l agent.",
+      "NE_PAS_TOUT_CONTROLER": "Le super-pilote orchestre le FLUX inter-agents. Les details de chaque mission sont geres par oracle/pilote/agents deja en place.",
+      "TERMINE": "Le super-combo se termine quand toutes les cases du chemin sont visitees."
+    }
+  },
+  "cases": {
+    "c1": {
+      "titre": "Socrate - etablir la liste de missions",
+      "agent": "socrate",
+      "type": "agent",
+      "mission": "Revision strategique : questionner l utilisateur, comprendre et prioriser le besoin, produire missions-revision.md",
+      "file": "asap",
+      "suivant": "fin"
+    }
+  },
+  "fins": {
+    "fichier": "fins-super-combo.json",
+    "fin-super-combo": {
+      "titre": "SUPER-COMBO TERMINE",
+      "description": "Toutes les cases du super-combo ont ete visitees. Le bilan consolide est remonte.",
+      "action": "procedure"
+    }
+  }
+}

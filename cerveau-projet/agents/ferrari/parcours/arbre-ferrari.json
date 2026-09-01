@@ -1,5 +1,10 @@
 {
-  "identite": {"type": "arbre", "appartient_a": "ferrari", "version": "0.3.0", "commun": false},
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "ferrari",
+    "version": "0.3.0",
+    "commun": false
+  },
   "arbre": {
     "nom": "arbre-ferrari",
     "agent": "ferrari",
@@ -22,15 +27,55 @@
     "type": "question",
     "question": "Quelle correction dois-tu effectuer dans le dossier freelance/ ?",
     "branches": [
-      {"reponse": "FICHE-AGENT", "description": "Corriger une fiche d agent v2 (proto 1)", "vers": "theme-fiche-agent.json"},
-      {"reponse": "ARBRE-DECISION", "description": "Corriger un arbre de decision v2 (proto 4)", "vers": "theme-arbre-decision.json"},
-      {"reponse": "JARVIS", "description": "Corriger JARVIS (proto 2)", "vers": "theme-jarvis.json"},
-      {"reponse": "OUTILS-COMBOS", "description": "Corriger un outil ou combo (proto 5)", "vers": "theme-outils-combos.json"},
-      {"reponse": "ROUTINES", "description": "Corriger les routines (proto 3)", "vers": "theme-routines.json"},
-      {"reponse": "PROTOCOLES", "description": "Corriger un protocole (proto 6)", "vers": "theme-protocoles.json"},
-      {"reponse": "REGLES", "description": "Corriger les regles (proto 7)", "vers": "theme-regles.json"},
-      {"reponse": "AUTRE", "description": "Autre correction dans freelance/", "vers": "theme-autre.json"}
+      {
+        "reponse": "FICHE-AGENT",
+        "description": "Corriger une fiche d agent v2 (proto 1)",
+        "vers": "theme-fiche-agent.json"
+      },
+      {
+        "reponse": "ARBRE-DECISION",
+        "description": "Corriger un arbre de decision v2 (proto 4)",
+        "vers": "theme-arbre-decision.json"
+      },
+      {
+        "reponse": "JARVIS",
+        "description": "Corriger JARVIS (proto 2)",
+        "vers": "theme-jarvis.json"
+      },
+      {
+        "reponse": "OUTILS-COMBOS",
+        "description": "Corriger un outil ou combo (proto 5)",
+        "vers": "theme-outils-combos.json"
+      },
+      {
+        "reponse": "ROUTINES",
+        "description": "Corriger les routines (proto 3)",
+        "vers": "theme-routines.json"
+      },
+      {
+        "reponse": "PROTOCOLES",
+        "description": "Corriger un protocole (proto 6)",
+        "vers": "theme-protocoles.json"
+      },
+      {
+        "reponse": "REGLES",
+        "description": "Corriger les regles (proto 7)",
+        "vers": "theme-regles.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Autre correction dans freelance/",
+        "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
+      }
     ]
   },
-  "fins": {"fichier": "fins.json", "description": "Toutes les fins possibles"}
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles"
+  }
 }

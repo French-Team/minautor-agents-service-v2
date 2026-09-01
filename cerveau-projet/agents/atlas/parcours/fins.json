@@ -5,59 +5,74 @@
     "description": "Fins reelles d'Atlas (parcours v0.5.7 : c11, c28, c29, c29d, c31b, c33)"
   },
   "fins": {
+    "fin-autre": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R1/R3).",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin atlas \"<bilan de autre>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE (l aeroport), jamais vers cerberus en milieu de chaine. Le pilote decide de la suite."
+    },
+    "fin-cartographier": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin atlas \"<rapport de cartographie>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-delegation": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin atlas \"<rapport de delegation>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-documenter": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin atlas \"<rapport de documentation>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-explorer": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin atlas \"<rapport d exploration>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin atlas \"<rapport du traitement inter-round>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-rechercher": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin atlas \"<rapport de recherche>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-signaler": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin atlas \"<besoin signale>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
     "fin-theme": {
       "titre": "Retour a la racine",
       "action": "redirection",
       "vers": "arbre-atlas.json"
-    },
-    "fin-explorer": {
-      "titre": "FIN - Exploration terminee (activer Janus)",
-      "description": "Dossier explore, rapport produit. Janus controle (c11).",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-rechercher": {
-      "titre": "FIN - Recherche terminee (activer Janus)",
-      "description": "Recherche web terminee, source documentee. Janus controle.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-documenter": {
-      "titre": "FIN - Documentation terminee (activer Janus)",
-      "description": "Documentation technique terminee, RVAV passe. Janus controle.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-cartographier": {
-      "titre": "FIN - Cartographie terminee (activer Janus)",
-      "description": "Analyse de dependances terminee, cartographie produite. Janus controle.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-delegation": {
-      "titre": "FIN - Delegation terminee",
-      "description": "L agent habilite a ete active (c28). Oracle reactive Cerberus.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-signaler": {
-      "titre": "FIN - Besoin signale",
-      "description": "Le besoin est signale a Cerberus (c29).",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-autre": {
-      "titre": "FIN - Mission terminee",
-      "description": "Mission hors parcours. Oracle reactive Cerberus.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
     }
   }
 }

@@ -30,8 +30,8 @@ Regles de perimetre (source AGENTS.md) :
 La routine surveille les commits git recents et les fichiers modifies
 (non commites) : pour chaque fichier, elle determine la zone (v1 / v2 /
 jarvis / zone protegee) et l auteur git, puis verifie si l auteur est
-habilitE pour cette zone. En cas de violation, alerte Cerberus au format
-4W via l inbox Oracle.
+habilitE pour cette zone. En cas de violation, alerte Oracle au format
+4W via l inbox Oracle (decision utilisateur 2026-08-30 : routines -> Oracle).
 
 LECTURE SEULE + alerte : ne corrige jamais, elle signale.
 
@@ -160,12 +160,13 @@ def _historiser_agent(agent, raison, type_action="R"):
 
 
 def _ecrire_alerte(details, motif):
-    """Alerte Cerberus au format 4W (canal inbox Oracle)."""
+    """Alerte Oracle au format 4W (canal inbox Oracle) - decision utilisateur
+    2026-08-30 : routines -> Oracle (coordinateur), pas Cerberus."""
     maintenant = datetime.now()
     message = {
         "id": "verifier-agent-%s" % uuid.uuid4().hex[:8],
         "de": "verifier-agent-perimetre",
-        "vers": "cerberus",
+        "vers": "oracle",
         "priorite": 1,
         "date": maintenant.strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": "[PERIMETRE-AGENT] violation : " + motif[:50],
@@ -176,7 +177,7 @@ def _ecrire_alerte(details, motif):
     }
     try:
         INBOX_DIR.mkdir(parents=True, exist_ok=True)
-        with open(INBOX_DIR / "cerberus.jsonl", "a",
+        with open(INBOX_DIR / "oracle.jsonl", "a",
                   encoding="utf-8") as f:
             f.write(json.dumps(message, ensure_ascii=False) + "\n")
         return message

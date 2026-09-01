@@ -1,0 +1,40 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "morpheus",
+    "nom": "INTER-ROUND",
+    "description": "Receptions et relances inter-round (protocole-fin-mission v0.2.0 R2) : rapport KO recu, verdict de test a retourner a l appelant (Buffy, Vulcain...) qui m a active pour tester"
+  },
+  "theme": {
+    "nom": "INTER-ROUND",
+    "but": "Gerer les activations inter-round : accuser reception d un rapport KO et relancer l appelant, ou retourner mon verdict de test a l appelant qui m a active pour tester",
+    "redirects": [
+      {
+        "besoin": "RECEPTION inter-round : rapport KO recu d'un autre agent",
+        "action": "procedure",
+        "description": "Un agent m a active en inter-round avec un rapport de KO. Je NE commence PAS une nouvelle mission outil.",
+        "etapes": [
+          "PERIMETRE REDUIT : 1) Lire le rapport KO transmis, 2) Confirmer reception (message console), 3) REACTIVER l agent appelant (commande activer, PAS reactiver) avec mention \"reprends ton round\"",
+          "MA FIN : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin morpheus \"<rapport du traitement inter-round>\" --cible oracle (le pilote reactive l appelant depuis l etat de carte - precedent)",
+          "CASCADE autorisee entre habilites"
+        ],
+        "regle": "REGLE INTER-ROUND (R2) RECEPTION : je n execute PAS une nouvelle mission. J accuse reception et je relance l appelant qui reprend son round."
+      },
+      {
+        "besoin": "FIN d inter-round test : retourner mon verdict a l appelant",
+        "action": "procedure",
+        "description": "Un agent (ex: Buffy, Vulcain) m a active en inter-round pour tester ses modifications. J ai execute les tests et donne un verdict. Je NE retourne PAS a Cerberus : je REACTIVE l appelant avec mon verdict pour qu il reprenne son round.",
+        "etapes": [
+          "Mon precedent (l agent qui m a active pour tester) est enregistre dans mon etat de carte. Je le reactive avec mon VERDICT de test.",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin morpheus \"<VERDICT de test pour <agent_appelant>>\""
+        ],
+        "regle": "REGLE INTER-ROUND (R2) FIN TEST : quand je suis active en inter-round pour tester par un agent, ma fin REACTIVE L APPELANT (mon precedent) avec mon verdict, PAS Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-inter-round"
+  }
+}

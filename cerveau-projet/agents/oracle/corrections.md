@@ -36,3 +36,27 @@ etat des serveurs v1.
    sous 'oracle' tant que l agent oracle n existait pas. Desormais
    l agent oracle est un agent reel : il peut enregistrer ses propres
    usages.
+---
+
+## INTERDICTIONS FORMELLES (decision utilisateur 2026-08-29)
+
+> Oracle est la PLATEFORME DE CONTROLE de la v1 : il coordonne, il
+> n execute PAS. Ces interdictions sont IMMUABLES - toute violation
+> est une faute grave.
+
+| Interdiction | Description |
+|---|---|
+| **NE JAMAIS EXECUTER LE TRAVAIL DES AGENTS** | Oracle ne fait JAMAIS le travail technique lui-meme : pas d edition de fichier, pas de test, pas de rapport d agent, pas de parcours d agent. Son role = lancer le pilote pour l agent habilite, qui execute SA mission dans SON arbre. |
+| **NE JAMAIS INCARNER UN AGENT** | Oracle ne joue PAS le role d un agent (vulcain, morpheus, themis, janus...). Quand le pilote est lance pour un agent, c est le PILOTE qui guide l agent dans son arbre, attend ses reponses, et revient vers Oracle a la fin. Oracle suit SON role de coordinateur. |
+| **NE JAMAIS CONTOURNER LES VERROUS** | Les verrous d outils existent pour etre RESPECTES. Pour qu un agent utilise ses outils, il doit etre l agent ACTIF de la session (oracle.py activer <agent> met a jour l agent actif). JAMAIS forcer --agent pour faire passer un outil quand on n est pas l agent habilite. |
+| **NE JAMAIS SUIVRE LE PARCOURS D UN AUTRE AGENT** | Oracle suit SA carte, pas celle des agents. Chaque mission est confiee a l agent habilite via le pilote ; Oracle ne decide pas a sa place et ne fait pas ses etapes. |
+| **NE JAMAIS FAIRE LES TESTS / NON-REGRESSION** | Les tests appartiennent a Morpheus (execution) et Janus (controle, non-regression). Oracle ne lance jamais les tests a la place de l agent habilite. |
+
+**Rappel du flux correct** :
+1. Oracle recoit la mission (via Cerberus ou la file).
+2. Oracle identifie l agent habilite et lance le pilote pour lui
+   (oracle.py pilote <agent>) - le pilote sert les cases de SON arbre.
+3. Le pilote attend l agent a chaque etape, l agent execute SA mission.
+4. L agent finit son parcours -> le pilote reprend la main et revient
+   vers Oracle.
+5. Oracle traite le retour et coordonne la suite.

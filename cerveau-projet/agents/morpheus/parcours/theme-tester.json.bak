@@ -1,0 +1,89 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "morpheus",
+    "nom": "TESTER",
+    "description": "Tester un outil : historiser, lire doc, lire protocole-tests, combo tester-outil, verdict, lecons, Themis"
+  },
+  "theme": {
+    "nom": "TESTER",
+    "but": "Tester un outil et donner le verdict",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser morpheus \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Lire la documentation de l outil",
+        "action": "procedure",
+        "etapes": [
+          "Lire le .md de l outil a tester"
+        ],
+        "regle": "Comprendre l outil AVANT de le tester."
+      },
+      {
+        "besoin": "Lire le protocole-tests",
+        "action": "procedure",
+        "etapes": [
+          "Lire cerveau-projet/agents/regles-immuables/general/protocole-tests/"
+        ],
+        "regle": "Suivre le protocole de test."
+      },
+      {
+        "besoin": "Lancer le combo tester-outil",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-tester-outil/definition-combo.json"
+        ],
+        "regle": "COMBO TESTER-OUTIL : executer la suite de tests."
+      },
+      {
+        "besoin": "Verifier les resultats et donner le verdict",
+        "action": "procedure",
+        "etapes": [
+          "Analyser les resultats des tests"
+        ],
+        "regle": "Le verdict est la decision du testeur."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/morpheus/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      },
+      {
+        "besoin": "Ameliorations possibles de mon fonctionnement ?",
+        "action": "procedure",
+        "etapes": [
+          "NON -> Activer Themis pour auditer"
+        ],
+        "regle": "PATTERN 17 : GENERATEUR D'ABORD."
+      },
+      {
+        "besoin": "Activer Themis pour auditer",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+        ],
+        "regle": "THEMIS AVANT JANUS."
+      },
+      {
+        "besoin": "Retour de Themis recu ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-tester",
+          "NON -> re-essai"
+        ],
+        "regle": "PATTERN RE-ESSAI."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-tester" }
+}

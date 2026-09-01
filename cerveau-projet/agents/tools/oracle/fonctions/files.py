@@ -29,10 +29,20 @@ def _file_path(nom):
 
 
 def ajouter(mission, file="asap", agent=""):
-    """Ajouter une mission dans la file."""
+    """Ajouter une mission dans la file, sans duplicata en attente."""
     chemin = _file_path(file)
     if chemin is None:
         return None, f"file invalide '{file}' (valides: {', '.join(FILES_VALIDES)})"
+    mission_norm = " ".join((mission or "").split()).casefold()
+    for ligne in chemin.read_text(encoding="utf-8").splitlines() if chemin.exists() else []:
+        try:
+            ancien = json.loads(ligne)
+        except ValueError:
+            continue
+        if (ancien.get("statut") == "EN_ATTENTE"
+                and ancien.get("agent", "").strip().casefold() == (agent or "").strip().casefold()
+                and " ".join((ancien.get("mission", "")).split()).casefold() == mission_norm):
+            return ancien, "doublon: mission deja en attente"
     entree = {
         "id": uuid.uuid4().hex[:8],
         "date": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
@@ -118,7 +128,10 @@ def cmd_mission_ajouter(args):
     """Ajouter une mission dans une file."""
     entree, erreur = ajouter(args.mission, file=args.file, agent=getattr(args, "agent", ""))
     if erreur:
-        print(f"[ORACLE] ERREUR: {erreur}")
+        if erreur.startswith("doublon:"):
+            print(f"[ORACLE] Mission deja en attente: {entree['id']} ({args.file})")
+        else:
+            print(f"[ORACLE] ERREUR: {erreur}")
         return
     print(f"[ORACLE] Mission ajoutee: {entree['id']} ({args.file})")
 
@@ -137,6 +150,67 @@ def cmd_mission_prendre(args):
     print(f"  Mission: {entree['mission']}")
 
 
+# Cartes de deduction de l agent cible depuis le TEXTE de la mission,
+# quand la mission est deposee sans champ `agent` explicite. Decision
+# utilisateur 2026-08-29 : Oracle choisit l agent habilite puis historise
+# son DEBUT a sa place et lance le pilote.
+_CARTE_AGENT = [
+    # Alerte de coordination (v1) : un ETAT URGENT / P1 non-acquittes doit
+    # revenir a ORACLE (coordinateur de la coordination) qui declenche le
+    # super-combo purge-p1 pour distribuer les P1 a chaque destinataire,
+    # au lieu du fallback vague cerberus (lecon 2026-08-30). Placee en
+    # TETE : prioritaire sur toute autre carte.
+    (["etat urgent", "p1 non-acquitte", "p1 non acquitte",
+      "purge p1", "alerts de coordination", "coordination v1"],
+     "oracle"),
+    (["test", "non-regression", "non regression", "ecrire/executer",
+      "lancer les tests"], "morpheus"),
+    (["outil", "creer/modifier un outil", "optimiser un outil", "construire"],
+     "vulcain"),
+    (["inventaire", "audit", "verification", "evaluation", "evaluer"],
+     "themis"),
+    (["pense-bete", "pense bete"], "athena"),
+    (["spec"], "promethee"),
+    (["todo"], "minerve"),
+    (["readme", "muse de l histoire"], "clio"),
+    (["orthographe", "vocabulaire", "fautes"], "hermes"),
+    (["workspace", "nettoyer", "residus"], "hygie"),
+    (["contradiction", "incoherence"], "argus"),
+    (["gardien", "marbre", "zone protegee"], "gardien"),
+    (["git"], "hades"),
+    (["revision strategique", "prioriser"], "socrate"),
+    (["documentation v2", "freelance"], "ferrari"),
+]
+
+
+def deduire_agent(mission, agent_explicite=""):
+    """Deviner l agent cible d une mission : champ agent explicite sinon
+    deduction par mots-cles sur le texte. Retourne (agent, source)."""
+    agent = (agent_explicite or "").strip().lower()
+    if agent:
+        return agent, "champ-agent"
+    texte = (mission or "").lower()
+    for mots, cible in _CARTE_AGENT:
+        if any(m in texte for m in mots):
+            return cible, "deduction"
+    return "cerberus", "inconnu"
+
+
+def relais(file="asap"):
+    """Prendre (PRISE) la premiere mission en attente pour la relayer a
+    l agent cible. Retourne (entree, erreur). La mission garde son champ
+    `agent` (deduit si absent) pour que Oracle sache a qui l envoyer.
+    """
+    entree, erreur = prendre(file)
+    if erreur or entree is None:
+        return entree, erreur
+    agent, source = deduire_agent(entree.get("mission",
+                                              ""), entree.get("agent", ""))
+    entree["agent"] = agent
+    entree["agent_source"] = source
+    return entree, None
+
+
 def cmd_mission_terminer(args):
     """Terminer une mission."""
     entree, erreur = terminer(args.id, file=args.file)
@@ -147,9 +221,21 @@ def cmd_mission_terminer(args):
 
 
 def cmd_mission_lister(args):
-    """Lister les missions."""
+    """Lister les missions.
+    v0.6.0 (Verrou bleu) : filtres optionnels --statut et --agent. Par
+    defaut comportement inchange (liste toutes les missions de la file).
+    Un --statut en MAJUSCULE insensible a la casse, l agent filtre aussi
+    en minuscules (l agent peut porter la casse du nom)."""
     file = getattr(args, "file", None)
+    filtre_statut = getattr(args, "statut", None)
+    filtre_agent = getattr(args, "filtre_agent", None)
     missions = lister(file)
+    if missions and filtre_statut:
+        missions = [m for m in missions
+                    if m.get("statut", "").upper() == filtre_statut.upper()]
+    if missions and filtre_agent:
+        missions = [m for m in missions
+                    if m.get("agent", "").lower() == filtre_agent.lower()]
     if not missions:
         print("[ORACLE] Aucune mission")
         return

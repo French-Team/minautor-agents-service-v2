@@ -5127,3 +5127,62 @@ VERDICT OBLIGATOIRE a chaque correction : relancer le test concerne pour PROUVER
 4. LA GENERATION MERMAID DOIT SUIVRE LES AJOUTS D AGENTS : ferrari et hades avaient des parcours mais AUCUNE vue .mmd/.svg (test-096 6 KO). Regeneration : convertir-carte-mermaid --tous + --tous --svg + --arbres (les arbres v2 stark/vision et les 24 cartes sont maintenant synchronises).
 
 VERDICT OBLIGATOIRE : test-079 15/15, test-096 11/11, registre PROPRE (0 probleme), compile OK, ASCII 0/0.
+## [LECON] 2026-08-29 -- COLONNE EXECUTEUR ROUTINES : RT(INTERVALLE) (Vulcain)
+
+**Mission** : la colonne Executeur du tableau AGENTS-activite-recente.md affichait
+VIDE pour les entrees historisees par les routines v1 (citations, flux, sante,
+live, encart, vigie-round...) : elles appellent ajouter_historique SANS passeur
+executeur, donc _ecrire_encart_v1 ecrivait exec_aff = "".
+
+**Diagnostic** : le point d ecriture de la colonne Executeur est _ecrire_encart_v1
+(exec_aff = executeur or ""). Les routines passent par ajouter_historique sans
+executeur -> colonne vide. Le manifest des routines (oracle/routines/manifest.json)
+porte l intervalle (intervalles_secondes) de chaque routine.
+
+**Correction** (activer-agent-principal v0.8.6 -> 0.8.7) :
+1. Constante MANIFEST_ROUTINES (chemin ABSOLU comme ETATS_ACTIONS - les routines
+   tournent avec cwd=routines/, un relatif serait introuvable).
+2. Helper _executeur_routine(agent) : retourne "RT(<intervalle>s)" (ex: RT(300s))
+   si l agent est une routine ACTIVE du manifest avec intervalle > 0, sinon "".
+3. _ecrire_encart_v1 : exec_aff = executeur or _executeur_routine(agent) or "".
+4. _construire_encart_v1 (reconstruction/migration) : meme helper sur la colonne
+   Executeur (elle etait codee en dur a vide).
+
+**Verification** : test reel sur copie (env AGENTS_ACTIVITE_RECENTE) -> la ligne
+test citations affiche "| Temporaire | citations | 4 | RT(300s) | ...". Test de
+reconstruction _construire_encart_v1 -> RT(300s) present. ASCII 0, 0 CRLF,
+detecter-decalages-catalogue 0 decalage, bump 0.8.7 (py + md + historique).
+
+**Lecons** :
+1. LE POINT D ECRITURE D UNE COLONNE PEUT ETRE DOUBLE : _ecrire_encart_v1 (ajout
+   d entree) ET _construire_encart_v1 (regeneration complete depuis le corps) -
+   modifier l un sans l autre cree une incoherence a la prochaine migration.
+2. L INTERVALLE D UNE ROUTINE VIT DANS LE MANIFEST, PAS DANS LE CODE : lire
+   manifest.json (chemin ABSOLU - les daemons lances avec cwd=routines/ ne
+   resolvent pas les relatifs) au lieu de dupliquer les durees en dur.
+3. TOUJOURS TESTER SUR COPIE : les env AGENTS_* permettent de simuler un
+   enregistrement reel sans polluer l encart/le corps (verif de la colonne
+   produite, pas seulement de la compilation).
+
+**Verdict** : VALIDE (test reel sur copie OK, ASCII 0, CRLF 0, catalogue 0 decalage).
+
+**Outils utilises** : lire-fichier, editer-fichier, mettre-a-jour-versions,
+valider-conformite-ascii, detecter-decalages-catalogue, valider-conventions,
+oracle (pilote), enregistrer-usage-outil.
+## [LECON] 2026-08-30 -- VERROU BLEU : CROISEMENT ORACLE ADDITIF SANS CASSER (Vulcain)
+
+**Contexte** : mission URGENT (super-combo, chaine socrate -> buffy -> vulcain) - deplacer la source de verite de l habilitation vers l etat du round oracle pour arreter l usurpation d identite (le LLM reecrit AGENTS.md puis deverrouille les outils dedies).
+
+**Diagnostic** : proteger-verrou-habilitation croyait agent_actif_session() (colonne 'Agent actif' d AGENTS.md), un fichier que la session edite directement -> verrou grille a la source. Le DEFCON log du 29/08 le prouve : 'le flux etait casse et le LLM a repris la main'.
+
+**Corrections** :
+1. oracle.py 0.5.3 -> 0.5.4 + files.py : mission-lister accepte desormais --statut et --agent (filtres optionnels, la sortie par defaut est INCHANGEE). Permet d interroger 'y a-t-il une mission EN_ATTENTE/PRISE pour tel agent ?'.
+2. proteger-verrou-habilitation 0.4.2 -> 0.5.0 : nouvelle option ADDITIVE --verrou-interne. Quand activee, croise oracle (mission-lister --statut EN_ATTENTE --agent X) et BLOQUE si aucune mission relayee prouve l incarnation. Sans l option, comportement INCHANGE (test-056 intact).
+
+**Lecons** :
+1. ADDITIF D ABORD : un outil teste (verrou, 100+ tests) se modifie par AJOUT d option, jamais en changeant le defaut - sinon toute la serie KO. Le comportement par defaut reste l ancien ; la nouvelle exigence s active explicitement.
+2. BUMBER COMPOSITE = FICHIER CIBLE : le dossier oracle contient plusieurs outils ; je bumpe FICHIER par FICHIER (oracle.py, files.py n a pas de VERSION propre), jamais le dossier (KO incoherence) - lecon deja note.
+3. UN BUMP DE VERSION CASSE LE TEST QUI FIGE L ANCIENNE : test-056 fige v0.4.2 en dur ; passer a 0.5.0 rend test-056 KO ATTENDU. Le deleguer a Morpheus pour qu il repointe la version + ajoute le test d usurpation (blueprint critere 2).
+4. LES FICHIERS 'FICHIERS' SONT TOUS ECRITS PAR LA SESSION : aucune garde purement extensionelle n arrete un LLM avec acces shell. La vraie autorite = le serveur oracle demarre (processus/PID) + croisement historique coherent (blueprint option c hybride).
+
+**Rappel** : on a ecrit du code AVANT de bumper les versions : implementation puis bump, dans cet ordre.

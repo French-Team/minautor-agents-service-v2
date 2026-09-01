@@ -11,7 +11,7 @@ Modes :
 Ce que fait chaque boucle :
   1. routines surveillance actives du manifest
   2. detection de modification du perimetre EDITH -> rapport forensique
-     (quoi/comment/quand ; qui si git le sait) -> P1 [EDITH-RÉVEIL]
+     (quoi/comment/quand ; qui si git le sait) -> P1 [EDITH-REVEIL]
   3. observations ecrites en JSONL
 
 LIMITES HONNETES : le "qui" n'est fiable que si git trace l'auteur ;
@@ -70,7 +70,7 @@ def qui_par_git(fichier):
             return p.stdout.strip()
     except (OSError, subprocess.TimeoutExpired):
         pass
-    return "inconnu (modification non commitée)"
+    return "inconnu (modification non commitee)"
 
 
 def envoyer_reveil(motif, details):
@@ -78,14 +78,14 @@ def envoyer_reveil(motif, details):
         "id": str(uuid.uuid4())[:8],
         "de": "edith", "vers": "stark", "priorite": 1,
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
-        "objet": "[EDITH-RÉVEIL] " + motif[:60],
+        "objet": "[EDITH-REVEIL] " + motif[:60],
         "corps": details, "lu": False, "accuse": False, "type": "reveil",
     }
     for cible in ("inbox/stark.jsonl", "outbox/edith.jsonl"):
         chemin = Path(RACINE, "freelance", "tools-commun", "jarvis", cible)
         with open(chemin, "a", encoding="utf-8") as f:
             f.write(json.dumps(msg, ensure_ascii=False) + "\n")
-    print("[EDITH-SERVER] Réveil demandé :", motif)
+    print("[EDITH-SERVER] Reveil demande :", motif)
 
 
 def surveiller_modifications(manifest, etat):

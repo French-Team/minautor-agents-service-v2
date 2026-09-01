@@ -286,15 +286,39 @@ def valider_parcours(contenu, nom_display, agent=None):
                     if b.get("reponse") == "NON"]
         # Chemin legitime de la confirmation : OUI -> c0c directement, ou
         # OUI -> c0e (consultation pre-mission) -> c0c ; NON -> c0.
+        # NB 2026-08-29 : le GATE BON AGENT (decision utilisateur marbre-log)
+        # s intercale apres la confirmation : OUI -> c0g -> c0ga -> (c0e|c0c)
+        # -> c0c. Ce chemin GATE est legitime et doit etre reconnu.
+        def _chemine_vers_c0c(cid, prof=0):
+            """Le flux depuis cid atteint-il c0c (suivant / branches OUI) ?"""
+            if prof > 6:
+                return False
+            c = cases.get(cid)
+            if not isinstance(c, dict):
+                return False
+            if c.get("suivant") == "c0c":
+                return True
+            if c.get("suivant") and _chemine_vers_c0c(c.get("suivant"), prof + 1):
+                return True
+            for b in c.get("branches", []):
+                if b.get("reponse") == "OUI" and b.get("vers") == "c0c":
+                    return True
+                if b.get("reponse") == "OUI" and b.get("vers") and \
+                        _chemine_vers_c0c(b.get("vers"), prof + 1):
+                    return True
+            return False
+
         oui_ok = vers_oui == ["c0c"] or (
             vers_oui == ["c0e"] and isinstance(cases.get("c0e"), dict)
-            and cases["c0e"].get("suivant") == "c0c")
+            and cases["c0e"].get("suivant") == "c0c") or (
+            len(vers_oui) == 1 and vers_oui[0] == "c0g"
+            and _chemine_vers_c0c("c0g"))
         if not oui_ok or vers_non != ["c0"]:
-            print("   [ERREUR] c0b doit avoir OUI -> c0c (ou OUI -> c0e -> c0c) et NON -> c0")
+            print("   [ERREUR] c0b doit avoir OUI -> c0c (ou OUI -> c0e -> c0c, ou GATE c0g -> c0c) et NON -> c0")
             erreurs.append("c0b")
         else:
             controles_ok.append("6. Confirmation c0b")
-            print("   [OK] c0b est une question de confirmation (OUI -> c0c/c0e, NON -> c0)")
+            print("   [OK] c0b est une question de confirmation (OUI -> c0c/c0e/GATE, NON -> c0)")
 
     # 7. Garde-fou v0.3.2 : AUCUN SUIVANT MORT
     #    Mecanique guider-parcours : (a) une case 'fin' arrete la navigation

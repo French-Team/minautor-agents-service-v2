@@ -47,6 +47,20 @@ VERSION = "0.1.0"
 _DOSSIER = os.path.dirname(os.path.abspath(__file__))
 ORACLE_DIR = Path(_DOSSIER).parent
 INBOX_DIR = ORACLE_DIR / "inbox"
+def _rotation_ajouter(agent, message):
+    """Rotation inbox : garder les 5 messages les plus recents (decision
+    utilisateur 2026-08-29 : les inbox s accumulaient, personne ne les
+    lisait). Reutilise le module central oracle/fonctions/rotation.py."""
+    try:
+        import importlib.util
+        _f = Path(_DOSSIER).parent / "fonctions" / "rotation.py"
+        _spec = importlib.util.spec_from_file_location("rotation", str(_f))
+        _mod = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(_mod)
+        return _mod.ajouter_message(INBOX_DIR, agent, message)
+    except Exception:
+        return False
+
 MANIFEST = ORACLE_DIR / "routines" / "manifest.json"
 ETAT_EMPREINTES = Path(_DOSSIER) / "etat-empreintes.json"
 
@@ -100,12 +114,13 @@ def _historiser_agent(agent, raison, type_action="R"):
 
 
 def _ecrire_alerte(details, motif):
-    """Alerte Cerberus au format 4W (canal inbox Oracle, type vigie-perimetre)."""
+    """Alerte Oracle au format 4W (canal inbox Oracle, type vigie-perimetre).
+    Decision utilisateur 2026-08-30 : routines -> Oracle (coordinateur), pas Cerberus."""
     maintenant = datetime.now()
     message = {
         "id": "vigie-perimetre-%s" % uuid.uuid4().hex[:8],
         "de": "vigie-perimetre",
-        "vers": "cerberus",
+        "vers": "oracle",
         "priorite": 1,
         "date": maintenant.strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": "[VIGIE-PERIMETRE] perimetre modifie : " + motif[:40],
@@ -115,10 +130,7 @@ def _ecrire_alerte(details, motif):
         "type": "vigie-perimetre",
     }
     try:
-        INBOX_DIR.mkdir(parents=True, exist_ok=True)
-        with open(INBOX_DIR / "cerberus.jsonl", "a",
-                  encoding="utf-8") as f:
-            f.write(json.dumps(message, ensure_ascii=False) + "\n")
+        _rotation_ajouter("oracle", message)
         return message
     except OSError as exc:
         print("[VIGIE-PERIMETRE] ERREUR ecriture alerte : %s" % exc)

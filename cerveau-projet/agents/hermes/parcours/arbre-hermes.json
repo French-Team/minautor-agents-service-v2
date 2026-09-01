@@ -37,6 +37,11 @@
         "reponse": "AUTRE",
         "description": "Mission hors perimetre : delegation, outil temp, signaler (case c29)",
         "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
       }
     ]
   },

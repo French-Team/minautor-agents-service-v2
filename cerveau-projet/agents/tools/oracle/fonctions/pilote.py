@@ -12,6 +12,9 @@ et avance seul jusqu a une vraie decision libre.
 
 v0.2.0 : support du format arbre v2-like (racine -> theme -> redirects
 -> fins centralisees). Detection auto du format depuis identite.type.
+v0.2.1 : modele aero (2026-08-30) - cible=oracle gere dans
+_executer_fin_oracle (retour vers ORACLE) + _reactiver_maillon
+(cible_forcee, reactivation d ORACLE avec pose de son etat de carte).
 
 Principe (pilotage auto fiable) :
   - case type action/indice : servir la commande outil de la case a
@@ -34,6 +37,11 @@ L etat de carte est persiste dans oracle/etat-cartes/<agent>.json :
   }
 
 Proprietaire : Vulcain (outils v1). Version : 0.1.0.
+
+REPARATION DES ARBRES : si un pilote s arrete sur 'theme <type> non reconnu
+dans la racine', suivre le protocole dedie (aligner la racine de l arbre sur
+CE vocabulaire - _type_mission_auto + _resoudre_racine) :
+cerveau-projet/agents/regles-immuables/general/protocole-reparer-arbres/
 """
 
 import io
@@ -43,7 +51,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 # Racine du projet : oracle/fonctions -> outils -> agents -> cerveau-projet -> racine
 _RACINE = Path(__file__).resolve().parents[4]
@@ -121,6 +129,24 @@ def _type_mission_auto(raison):
     autre (fallback). La carte branche dessus.
     """
     r = (raison or "").lower()
+    # PRIORITE ABSOLUE - DECLENCHEURS v1 (decision utilisateur 2026-08-30) :
+    # un prefixe [..] EN TETE de la demande prime sur TOUT. C est un signal
+    # explicite de l utilisateur (attention/urgent/question/creer/...). On le
+    # detecte avant toute deduction par mots libres, sinon un '[attention] on
+    # va verifier' serait classe 'verifier' au lieu du declencheur. Listes
+    # ordonnees du plus specifique au plus generique.
+    for decl, mots in (
+        ("attente", ("[attente]", "[attente ")),
+        ("attention", ("[attention]", "[attention ")),
+        ("urgent", ("[urgent]", "[urgent ")),
+        ("question", ("[question]", "[question ")),
+        ("creer", ("[creer]", "[creer ")),
+        ("probleme", ("[probleme]", "[probleme ")),
+        ("stop", ("[stop]", "[stop ")),
+        ("socrate", ("[socrate]", "[socrate ")),
+    ):
+        if r.startswith(mots):
+            return decl
     # Ordre de priorite : les plus specifiques d abord. Ex : "audit" avant
     # "verifier" (une mission d audit peut contenir le mot verifier), "creer"
     # avant "construire" (? non - construire est generique mais prioritaire),
@@ -179,6 +205,26 @@ def _type_mission_auto(raison):
         ("retour", ["retour ", "retour d"]),
         ("ameliorer", ["ameliorer", "amelioration"]),
     ]
+    # PRIORITE AU VERBE D ACTION PRINCIPAL (debut de mission). Une mission
+    # qui COMMENCE par un verbe d action dominant (mettre a jour, modifier,
+    # creer, construire, tester, verifier) est pilotee par CE verbe, meme si
+    # un mot-cle secondaire (ex: "auditer", "controle") apparait plus loin
+    # dans la description de la chaine. Sans quoi une mission de
+    # MODIFICATION (avec mention Themis audit en fin) serait mal deduite
+    # en "audit" au lieu de "modifier", cassant le routage de l arbre.
+    debut = r[:40]
+    for typ, mots in (
+        ("maj", ["mettre a jour", "mise a jour", "maj "]),
+        ("modifier", ["modifier ", "modifier des", "modifier le", "modifier un"]),
+        ("creer", ["creer ", "creer des", "creer le", "creer un"]),
+        ("construire", ["construire ", "construire un", "construire un nouvel"]),
+        ("tester", ["tester ", "tester des", "tester le", "tester un"]),
+        ("verifier", ["verifier ", "verifier des", "verifier le", "verifier un"]),
+        ("nettoyer", ["nettoyer", "purifier"]),
+        ("audit", ["audit", "auditer"]),
+    ):
+        if any(m in debut for m in mots):
+            return typ
     for typ, mots in mape:
         if any(m in r for m in mots):
             return typ
@@ -212,11 +258,19 @@ def _resoudre_question(case, etat):
     if titre.startswith("confirmation") and "lu ta fiche" in titre:
         return _s("OUI", branches)
 
+    # --- GATE : es-tu le bon agent ? (verification mecanique) ---
+    # L agent actif a deja ete valide par le relais/verrou avant le pilotage :
+    # la GATE est une confirmation, pas une decision. OUI (comme c0b).
+    if titre.startswith("gate") or "es-tu le bon agent" in titre:
+        return _s("OUI", branches)
+
     # --- Mission / demande / situation (type deduit de l activation) ---
-    if titre == "mission" and ("quelle est la mission" in question
-                               or "quelle est la demande" in question
-                               or "quelle est la situation" in question
-                               or "quelle est ta mission" in question):
+    # titre.startswith("mission") couvre "Mission" ET "Mission de
+    # coordination" (parcours oracle) - la question confirme le role.
+    if titre.startswith("mission") and ("quelle est la mission" in question
+                              or "quelle est la demande" in question
+                              or "quelle est la situation" in question
+                              or "quelle est ta mission" in question):
         mt = etat.get("mission_type", "autre")
         ret = _s(mt, branches)
         if ret is None:
@@ -412,6 +466,18 @@ def _fin_auto(etat, bilan):
     return ok and texte
 
 
+def _historiser_pilote(etiquette, detail):
+    """Historiser une PHASE DE VOL du pilote (Agent=pilote dans le flux).
+
+    Le pilote (l avion d oracle) trace chaque etape d un vol complet dans
+    l activite recente pour qu on voie quand il decolle, largue un agent,
+    le recupere, et revient a l aeroport (decision utilisateur 2026-08-31).
+    Etiquettes : DECOLLAGE / LARGUE <agent> / RECUPERE <agent> / \
+    RETOUR AEROPORT.
+    """
+    _historiser("pilote", "%s: %s" % (etiquette, detail))
+
+
 def _maillon_precedent(etat):
     """Deduire le maillon precedent a reactiver en fin de mission.
 
@@ -425,7 +491,7 @@ def _maillon_precedent(etat):
     return "cerberus"
 
 
-def _reactiver_maillon(agent_qui_finit, bilan):
+def _reactiver_maillon(agent_qui_finit, bilan, cible_forcee=None):
     """Piloter la reintegration du maillon precedent avec pose du FIN.
 
     Appelee quand la carte de l agent est TERMINEE. Oracle :
@@ -433,6 +499,10 @@ def _reactiver_maillon(agent_qui_finit, bilan):
       2. reactiver le maillon precedent (celui qui l avait active) OU
          Cerberus pour la fin de chaine -- en accord avec la carte
          (Pattern 8). L activation se fait via activer-agent-principal.
+
+    Modele aero (2026-08-30, R1) : quand la fin de l agent porte
+    cible=oracle (cible_forcee="oracle"), Oracle reactive ORACLE (l
+    aeroport) au lieu du precedent/Cerberus - le pilote decide de la suite.
     Retourne un message de trace.
     """
     etat = _charger_etat(agent_qui_finit)
@@ -440,8 +510,16 @@ def _reactiver_maillon(agent_qui_finit, bilan):
     # 1. Poser le FIN (toujours faire, meme si deja pose) et le signaler.
     fin = _fin_auto(etat, bilan)
     messages.append(fin)
-    # 2. Determiner la cible a reactiver.
-    cible = _maillon_precedent(etat)
+    # 2. Determiner la cible a reactiver : cible_forcee (modele aero)
+    #    prime sur le precedent (modele v1).
+    cible = cible_forcee or _maillon_precedent(etat)
+    # L AEROPORT (ORACLE) : quand c est Oracle(agent) lui-meme qui termine
+    # sa coordination, le pilote ATTERRIT TOUJOURS sur l aeroport (oracle),
+    # jamais sur un precedent non-aeroport (ex: buffy qui l avait active).
+    # Sinon le pilotage retombait chez l appelant au lieu de executer sur
+    # oracle, faisant boucler le round (decision utilisateur 2026-08-31).
+    if agent_qui_finit.lower() == "oracle" and not cible_forcee:
+        cible = "oracle"
     messages.append("[PILOTE] Fin de %s : reactivation %s" % (agent_qui_finit, cible))
     import importlib.util
     aap_path = str(_RACINE / "agents" / "tools" / "activer" /
@@ -452,12 +530,65 @@ def _reactiver_maillon(agent_qui_finit, bilan):
         spec = importlib.util.spec_from_file_location("aap", aap_path)
         aap = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(aap)
-        if cible.lower() == "cerberus":
+        if cible.lower() == "oracle":
+            # MODELE AERO (R1) : l agent revient vers ORACLE (l aeroport).
+            # Oracle est un agent activable (get_agent_info ok). On active
+            # oracle avec le bilan, puis on pose son etat de carte pour que
+            # le pilote d oracle route la suite (destination + prochain
+            # largage).
+            raison_retour = "RETOUR %s : %s" % (agent_qui_finit.upper(), bilan or "")
+            rc = aap.activer_agent("session-admin", "oracle", raison_retour,
+                                   historiser=False)
+            # HISTORISER LE DEBUT D ORACLE (agent comme les autres) : la
+            # branche oracle activait l agent avec historiser=False SANS
+            # poser de DEBUT, contrairement aux branches cerberus/maillon.
+            # Resultat : Oracle(agent) actif etait INVISIBLE dans le flux
+            # (aucune ligne dans l activite recente) -> la vigie voyait une
+            # session-orpheline et le pilote semblait ne pas demarrer.
+            _historiser("oracle", "DEBUT: " + raison_retour)
+            try:
+                etat_oracle = _charger_etat("oracle")
+                if etat_oracle:
+                    etat_oracle["mission_type"] = "coordination"
+                    etat_oracle["mission"] = raison_retour
+                    etat_oracle["precedent"] = agent_qui_finit
+                    etat_oracle["etape"] = "debut"
+                    # Une reactivation ouvre une nouvelle mission : le FIN
+                    # precedent ne doit jamais contaminer le nouveau round.
+                    etat_oracle["historise_fin"] = False
+                    etat_oracle["theme_courant"] = None
+                    etat_oracle["case_courante"] = None
+                    etat_oracle["redirect_idx"] = 0
+                    etat_oracle["etape_idx"] = 0
+                    _sauver_etat(etat_oracle)
+            except Exception:
+                pass
+        elif cible.lower() == "cerberus":
             # Retour a Cerberus : le message doit indiquer un RETOUR
             # (pas un debut de mission). Format : RETOUR <agent> : <bilan>
             raison_retour = "RETOUR %s : %s" % (agent_qui_finit.upper(), bilan or "")
             rc = aap.activer_cerberus(
                 "session-admin", raison_retour, agent_qui_finit)
+            # POSER mission_type=RETOUR dans l etat de carte de Cerberus
+            # (decision utilisateur 2026-08-29 : le sens de l echange est
+            # decide par Oracle qui REACTIVE, pas par les mots de la raison
+            # scannes dans _resoudre_racine). Sans ce signal explicite, une
+            # demande USER contenant le mot 'retour' serait mal routee vers
+            # DE-ORACLE. Le retour d agent est LE cas qui impose DE-ORACLE.
+            try:
+                etat_cerb = _charger_etat("cerberus")
+                if etat_cerb:
+                    etat_cerb["mission_type"] = "RETOUR"
+                    etat_cerb["mission"] = raison_retour
+                    etat_cerb["precedent"] = agent_qui_finit
+                    etat_cerb["etape"] = "debut"
+                    etat_cerb["theme_courant"] = None
+                    etat_cerb["case_courante"] = None
+                    etat_cerb["redirect_idx"] = 0
+                    etat_cerb["etape_idx"] = 0
+                    _sauver_etat(etat_cerb)
+            except Exception:
+                pass
         else:
             # Reprise du maillon precedent : on le reactiver pour qu il
             # reprenne son round (retour d inter-round / reprise de chaine).
@@ -466,6 +597,14 @@ def _reactiver_maillon(agent_qui_finit, bilan):
             _historiser(cible, "DEBUT: " + (bilan or ""))
         if rc == 0:
             messages.append("[PILOTE] Maillon precedent '%s' reactive par Oracle" % cible)
+            # TRACE DE VOL : la fin d un agent est un evenement du pilote.
+            # Si c est Oracle/pilote lui-meme qui se termine, c est un RETOUR AEROPORT ;
+            # sinon c est la RECUPERATION d un parachutiste (Agent=pilote dans le flux).
+            qui = (agent_qui_finit or "").lower()
+            if qui == "oracle" or qui == "pilote":
+                _historiser_pilote("RETOUR AEROPORT", qui)
+            else:
+                _historiser_pilote("RECUPERE", qui)
         else:
             messages.append("[PILOTE] Echec reactivation %s (rc=%s)" % (cible, rc))
     except Exception as exc:
@@ -522,6 +661,10 @@ def _activer_maillon(agent_pilote, case, mission_agent, cible_forcee=None):
             # Marquer DEBUT deja historise pour eviter le double
             _etat_cible = _charger_etat(cible)
             _etat_cible["historise_debut"] = True
+            # Le maillon vient d etre largue pour une nouvelle mission :
+            # reinitialiser le marqueur FIN d un vol precedent.
+            _etat_cible["historise_fin"] = False
+            _etat_cible["etape"] = "debut"
             _sauver_etat(_etat_cible)
             # Enregistrer le precedent du maillon cible (l agent pilote qui
             # vient de l activer) pour que la fin de mission puisse le
@@ -536,6 +679,8 @@ def _activer_maillon(agent_pilote, case, mission_agent, cible_forcee=None):
                     "precedent": agent_pilote,
                 }
             _sauver_etat(_etat_cible)
+            # TRACE DE VOL : le pilote a largue un parachutiste (Agent=pilote).
+            _historiser_pilote("LARGUE", cible)
             return "[PILOTE] Maillon '%s' active par Oracle (chainage automatique)" % cible
         return "[PILOTE] Echec activation maillon %s (rc=%s)" % (cible, rc)
     except Exception as exc:
@@ -576,14 +721,33 @@ def _resoudre_racine(racine, etat):
     branches = racine.get("branches", [])
     # Enumerer les reponses valides (branches reelles de la racine)
     reponses_valides = set(br.get("reponse", "").upper() for br in branches)
-    # Cerberus : ROUTEUR PUR (hub a 4 directions, decision 2026-08-29).
-    # Toujours DE-USER (une demande arrive de l utilisateur) : il route,
-    # il ne travaille jamais. Repli sur ACCUEIL si la racine l a encore.
+    # Cerberus : ROUTEUR PUR, PONT entre l UTILISATEUR et les agents via
+    # ORACLE (decision utilisateur 2026-08-29). Le sens de l echange est
+    # DECIDE PAR CELUI QUI DECLENCHE le round, jamais par les mots de la
+    # raison (une demande USER peut legitiment contenir 'retour' sans etre
+    # un retour d agent). Deux sens possibles :
+    #   - RETOUR : Oracle a reactive Cerberus (raison "RETOUR <AGENT> :
+    #     <bilan>") et a pose mission_type=RETOUR dans l etat de carte ->
+    #     Cerberus traite le bilan (DE-ORACLE) puis repond (VERS-USER).
+    #   - Sinon : c est une demande qui arrive de l utilisateur -> DE-USER
+    #     (par defaut : Cerberus ecoute, c est son role leadership).
     if agent == "cerberus":
-        for cle in ("DE-USER", "ACCUEIL"):
+        mt = (etat.get("mission_type", "") or "").upper()
+        if mt == "RETOUR":
             for br in branches:
-                if br.get("reponse", "").upper() == cle:
+                if br.get("reponse", "").upper() == "DE-ORACLE":
                     return br.get("vers")
+        # DE-USER / ACCUEIL : la demande entre de l utilisateur -> theme-de-user.
+        # NB 2026-08-30 : on ne retombe sur DE-USER QUE si le type de mission
+        # est bien DE-USER/ACCUEIL. Si mt est un DECLENCHEUR (QUESTION, ATTENTION,
+        # URGENT, CREER, PROBLEME, STOP, ATTENTE...), on NE route PAS vers
+        # theme-de-user : on laisse la correspondance directe envoyer vers le
+        # theme du declareur edicace (sinon les prefixes [] seraient ecrases).
+        if mt in ("DE-USER", "ACCUEIL"):
+            for cle in ("DE-USER", "ACCUEIL"):
+                for br in branches:
+                    if br.get("reponse", "").upper() == cle:
+                        return br.get("vers")
     # Correspondance directe par reponse exacte (CONSTRUIRE, MODIFIER, etc.)
     for br in branches:
         if br.get("reponse", "").upper() == mt:
@@ -593,7 +757,7 @@ def _resoudre_racine(racine, etat):
         "CONSTRUIRE": ["construire", "nouvel outil"],
         "CREER": ["creer ", "creation ", "pense-bete", "nouveau "],
         "COMPLETER": ["completer", "completer", "enrichir", "ajouter des sections"],
-        "MODIFIER": ["modifier", "corriger", "ameliorer", "mise a jour"],
+        "MODIFIER": ["modifier", "corriger", "ameliorer", "mise a jour", "mettre a jour", "maj"],
         "MAJ": ["maj", "mettre a jour", "synchroniser", "readme"],
         "CONTROLE": ["controle", "controler", "verifier le travail", "verifier"],
         "NON-REGRESSION": ["non-regression", "non regression", "lancer les tests", "suite de tests"],
@@ -808,9 +972,14 @@ def _executer_fin_oracle(redir, agent, etat, fins_data):
     # 2. Bug corrige 2026-08-28 : Oracle n execute PLUS l action de fin
     #    automatiquement reactiver ou activer. La fin suit SA carte : c est
     #    l agent qui active le suivant ou reactive Cerberus (Pattern 13).
+    # Modele aero (2026-08-30, R1) : une fin cible=oracle renvoie l agent
+    # vers ORACLE (l aeroport) - le pilote decide de la suite.
     if action_fin == "reactiver" and cible == "cerberus":
         messages.append("[PILOTE] Fin de parcours : l agent doit reactiver "
                         "Cerberus selon SA carte, Pattern 13")
+    elif action_fin == "reactiver" and cible == "oracle":
+        messages.append("[PILOTE] Fin de parcours : l agent doit revenir vers "
+                        "ORACLE (modele aero R1, reactiver-fin oracle)")
     elif action_fin == "activer" and cible and not cible.startswith("<"):
         messages.append("[PILOTE] Fin de parcours : l agent doit activer "
                         "'%s' selon SA carte, Pattern 13" % cible)
@@ -967,6 +1136,11 @@ def _piloter_arbre(arbre, arbre_dir, etat, agent, limite):
         etat["etape_idx"] = 0
         _sauver_etat(etat)
         messages.append("[PILOTE] Racine resolue : theme = %s" % theme_courant)
+        # TRACE DE VOL : quand le pilote demarre sa mission (plus de
+        # theme courant en cours), c est un DECOLLAGE. Agent=pilote dans
+        # le flux pour qu on voie le vol commencer.
+        if (agent or "").lower() in ("pilote", "oracle"):
+            _historiser_pilote("DECOLLAGE", "theme=%s" % theme_courant)
 
     # Charger le theme
     theme = _charger_fichier(arbre_dir, theme_courant)
@@ -1010,6 +1184,21 @@ def pilote(agent, parcours_perso=None, limite=float("inf")):
     etat = _charger_etat(agent)
     if not etat.get("parcours"):
         return {"erreur": "aucun etat de carte pour %s (oracle pilote init_etat?)" % agent}
+    # GARDE ANTI-RE-DEMARRAGE (residu ETAT-CARTE INCOHERENT, decision
+    # 2026-08-30) : si la mission est deja terminee (etape=fin + FIN posee),
+    # le pilote NE re-demarre PAS la mission : il le dit et laisse la main a
+    # l agent (qui suit SA carte : reactiver-fin <agent> --cible oracle).
+    # Sans cette garde, un appel ulterieur au pilote re-resolvait la racine
+    # et re-servait la mission depuis le debut (etape=fin, precedent=None).
+    if etat.get("etape") == "fin" and etat.get("historise_fin"):
+        return {
+            "etat": etat,
+            "messages": [
+                "[PILOTE] Mission deja terminee (etape=fin, FIN posee).",
+                "[PILOTE] Aucun nouveau travail a servir : la suite suit SA carte",
+                "(reactiver-fin %s --cible oracle)." % agent,
+            ],
+        }
     chemin = parcours_perso or etat["parcours"]
     parcours = _charger_parcours(chemin)
     if not parcours:

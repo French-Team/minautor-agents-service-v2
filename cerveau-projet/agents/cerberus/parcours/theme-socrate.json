@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "SOCRATE",
+    "description": "Lancer un SUPER-COMBO : Socrate questionne l utilisateur et produit la liste de missions pour enchainer les agents"
+  },
+  "theme": {
+    "nom": "SOCRATE",
+    "but": "Amorcer un super-combo de revision strategique via Socrate (point de depart des enchainements d agents)",
+    "redirects": [
+      {
+        "besoin": "Lancer Socrate (debut d un super-combo)",
+        "action": "procedure",
+        "etapes": [
+          "Activer Socrate pour la revision strategique : il questionne l utilisateur, comprend le besoin en profondeur, le priorise",
+          "Socrate produit la liste de missions qui definira le SUPER-COMBO (enchainement planifie d agents)",
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> socrate \"<demande de revision strategique>\""
+        ],
+        "regle": "Socrate est le point de depart des super-combos : son questionnement produit la liste de missions qui enchaine les agents."
+      },
+      {
+        "besoin": "Confirmer avant de lancer un super-combo",
+        "action": "procedure",
+        "etapes": [
+          "Avant de lancer un super-combo, verifier avec l utilisateur la liste de missions que Socrate a produite",
+          "Une fois validee, demarrer le super-combo (orchestration des agents par le super-pilote)"
+        ],
+        "regle": "Ne jamais lancer un super-combo sans la validation de la liste de missions par l utilisateur."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-revision"
+  }
+}

@@ -257,8 +257,8 @@ def main():
         if point_actif(1):
             t = time.monotonic()
             r = run([PYTHON, OUTIL_PY, "--version"])
-            verifier("1. --version affiche v0.4.2",
-                     "v0.4.2" in r.stdout, r.stdout.strip())
+            verifier("1. --version affiche v0.5.0",
+                     "v0.5.0" in r.stdout, r.stdout.strip())
             chrono_etape("1. version", t)
 
         # 2. Table (--audit) POSITIVE : janus -> non-regression (seul habilite)

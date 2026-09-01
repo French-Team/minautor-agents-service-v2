@@ -14,7 +14,8 @@
         "action": "procedure",
         "description": "La mission concerne-t-elle un domaine d'un autre agent (ex: tests -> Morpheus, audit -> Themis, README -> Clio, inventaire -> Atlas, cartes -> Buffy, suppression -> Hygie, education -> Chiron) ?",
         "etapes": [
-          "OUI -> REGLE ABSOLUE 3 : je n'execute JAMAIS une mission qui ne releve pas de mon domaine. J'ACTIVE l'agent habilite : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>",
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)",
           "L agent active execute sa mission puis active le maillon suivant (ou reactive Cerberus si active directement par lui) -> fin-delegation",
           "NON -> besoin d outil ? (besoin suivant)"
         ],
@@ -50,12 +51,17 @@
         "etapes": [
           "Reference : pattern-10 (une carte = un role)",
           "CREATION LIMITEE : je ne cree pas le rapport d audit (role Themis) - Themis cree son rapport et me le fournit a son retour",
-          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison>",
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)",
           "A SA fin : si aucun defaut, Themis me RE-ACTIVE (commande activer) avec son rapport et je reprends ma mission ; si un defaut est signale, Themis m active pour corriger et je l ACTIVE pour re-audit -> fin-retour-themis"
         ],
         "regle": "REGLE ABSOLUE : JE N'EXECUTE JAMAIS UN INVENTAIRE OU UN AUDIT MOI-MEME. Mission pour Themis (evaluatrice croisee)."
       }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
 }

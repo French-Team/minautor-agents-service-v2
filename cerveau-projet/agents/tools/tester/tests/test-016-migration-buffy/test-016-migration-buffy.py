@@ -171,14 +171,17 @@ def main():
                  d["parcours"].get("version"))
 
         # 2. Types
+        #    (maj 2026-08-29 decision utilisateur GATE : + c0g (action)
+        #    + c0ga (question) + c0h (fin) - test synchronise avec la carte
+        #    CONFORME validee par valider-case)
         types = {}
         for c in d["cases"].values():
             types[c.get("type")] = types.get(c.get("type"), 0) + 1
-        verifier("2a. 52 cases action (evolution v0.5.6 : historisation c1h*/c8h + consultation pre-mission)",
-                 types.get("action") == 52, str(types))
-        verifier("2b. 9 questions + 5 controles + 13 fins (Themis c8b/c22b/c27b + cU1/cU2/cU3)",
-                 types.get("question") == 9 and types.get("controle") == 5
-                 and types.get("fin") == 13, str(types))
+        verifier("2a. 53 cases action (52 historiques + c0g GATE)",
+                 types.get("action") == 53, str(types))
+        verifier("2b. 10 questions + 5 controles + 14 fins (Themis c8b/c22b/c27b + cU1/cU2/cU3 + c0ga/c0h)",
+                 types.get("question") == 10 and types.get("controle") == 5
+                 and types.get("fin") == 14, str(types))
         verifier("2c. 0 case indice restante (toutes converties en action)",
                  types.get("indice", 0) == 0, str(types))
 
@@ -201,16 +204,18 @@ def main():
                  r_ref.returncode == 0 and "CONFORME" in r_ref.stdout,
                  r_ref.stdout.strip()[:120])
 
-        # 5. Navigation chemin creation agent (OUI -> creer) -> TERMINE
+        # 5. Navigation chemin creation agent (GATE OUI -> creer) -> TERMINE
+        #    (maj 2026-08-29 GATE : c0b OUI -> c0g -> c0ga OUI -> lecons,
+        #    puis cU1 NON -> route : reponse OUI supplementaire)
         r_nav = run([PYTHON, GP_PY, PARCOURS, "--reponses",
-                     "OUI|NON|creer|OUI|OUI|OUI|OUI"])
+                     "OUI|OUI|NON|creer|OUI|OUI|OUI"])
         verifier("5. Navigation chemin creation agent -> PARCOURS TERMINE",
                  "PARCOURS TERMINE" in r_nav.stdout,
                  r_nav.stdout.strip()[-150:])
 
-        # 6. Navigation chemin protocole (OUI -> protocole) -> TERMINE
+        # 6. Navigation chemin protocole (GATE OUI -> protocole) -> TERMINE
         r_nav2 = run([PYTHON, GP_PY, PARCOURS, "--reponses",
-                      "OUI|NON|protocole|OUI|OUI|OUI|OUI"])
+                      "OUI|OUI|NON|protocole|OUI|OUI|OUI"])
         verifier("6. Navigation chemin protocole -> PARCOURS TERMINE",
                  "PARCOURS TERMINE" in r_nav2.stdout,
                  r_nav2.stdout.strip()[-150:])

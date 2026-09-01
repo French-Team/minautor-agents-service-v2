@@ -43,3 +43,4 @@ Tous les protocoles sont dans `regles-immuables/general/` (voir [index-regles-ge
 | [protocole-boucles-dynamiques](../../regles-immuables/general/protocole-boucles-dynamiques/) | regles-immuables/general/ | ebauche |
 | [protocole-composition](../../regles-immuables/general/protocole-composition/) | regles-immuables/general/ | ebauche |
 | [protocole-auto-correction](../../regles-immuables/general/protocole-auto-correction/) | regles-immuables/general/ | ebauche |
+| [protocole-reparer-arbres](../../regles-immuables/general/protocole-reparer-arbres/) | regles-immuables/general/ | ebauche |

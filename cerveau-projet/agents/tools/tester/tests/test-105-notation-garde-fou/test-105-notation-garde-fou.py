@@ -6,14 +6,15 @@ test-105-notation-garde-fou.py
 Garde-fou de la routine notation v1 (transposee de la v2, decision
 utilisateur 2026-08-29 : creer les routines v1 inspirees des v2).
 La routine depose une demande periodique d evaluation croisee des agents
-dans l inbox de Cerberus.
+dans l inbox d Oracle (decision utilisateur 2026-08-30 : les routines
+previennent Oracle - le coordinateur - et pas Cerberus).
 
 Points verifies :
   1. notation.py existe et porte le triplet (--dry-run, protections/options).
   2. Anti-inondation : demande_deja_en_attente() - non-lue dans l inbox
-     de Cerberus OU depot recent (fichier .notation_derniere.txt).
+     d Oracle OU depot recent (fichier .notation_derniere.txt).
   3. Delai anti-reexecution (DELAI_DEPOT_SECONDES = 600).
-  4. Format du message : objet [NOTATION], vers=cerberus, priorite 2, lu=False.
+  4. Format du message : objet [NOTATION], vers=oracle, priorite 2, lu=False.
   5. manifest.json reference la routine notation (actif, 300 s, script).
   6. grades-v1.json donne un grade G3 a notation (colonne Grade encart v1).
   7. Execution reelle --dry-run : rc=0, sortie conforme, AUCUN ecriture
@@ -46,7 +47,7 @@ ROUTINES_DIR = os.path.join(ORACLE_DIR, "routines")
 NOTATION = os.path.join(ROUTINES_DIR, "notation.py")
 MANIFEST = os.path.join(ROUTINES_DIR, "manifest.json")
 GRADES = os.path.join(ORACLE_DIR, "grades-v1.json")
-INBOX_CERBERUS = os.path.join(ORACLE_DIR, "inbox", "cerberus.jsonl")
+INBOX_ORACLE = os.path.join(ORACLE_DIR, "inbox", "oracle.jsonl")
 STATE_FILE = os.path.join(ROUTINES_DIR, ".notation_derniere.txt")
 
 NB_POINTS = 0
@@ -119,15 +120,15 @@ def lire(chemin):
 
 
 def _snap_inbox():
-    """Nombre de messages [NOTATION] dans l inbox de Cerberus.
+    """Nombre de messages [NOTATION] dans l inbox d Oracle.
     On compte UNIQUEMENT les messages de cette routine (objet '[NOTATION]'),
     pas le total de l inbox : le daemon en arriere-plan ecrit d autres alertes
     (vigie, sante, live...) entre deux mesures - compter les lignes totales
     rendrait le test faux-negatif/flaky."""
-    if not os.path.isfile(INBOX_CERBERUS):
+    if not os.path.isfile(INBOX_ORACLE):
         return 0
     n = 0
-    for l in lire(INBOX_CERBERUS).splitlines():
+    for l in lire(INBOX_ORACLE).splitlines():
         l = l.strip()
         if not l:
             continue
@@ -149,8 +150,9 @@ def point_2_anti_inondation():
     contenu = lire(NOTATION)
     ok = ("demande_deja_en_attente" in contenu
           and "not m.get(\"lu\")" in contenu
-          and ".notation_derniere" in contenu)
-    verifier("2. anti-inondation (non-lue OR depot recent)", ok)
+          and ".notation_derniere" in contenu
+          and "oracle.jsonl" in contenu)
+    verifier("2. anti-inondation (non-lue dans inbox Oracle OR depot recent)", ok)
 
 
 def point_3_delai():
@@ -163,10 +165,10 @@ def point_3_delai():
 def point_4_format_message():
     contenu = lire(NOTATION)
     ok = ("\"[NOTATION]\"" in contenu
-          and "\"vers\": \"cerberus\"" in contenu
+          and "\"vers\": \"oracle\"" in contenu
           and "priorite" in contenu and "2" in contenu
           and "\"lu\": False" in contenu)
-    verifier("4. format message (objet [NOTATION], vers cerberus, P2, lu=False)", ok)
+    verifier("4. format message (objet [NOTATION], vers oracle, P2, lu=False)", ok)
 
 
 def point_5_manifest():
@@ -181,9 +183,9 @@ def point_5_manifest():
             notr = r
     ok = (notr is not None
           and notr.get("actif") is True
-          and notr.get("intervalles_secondes") == 300
+          and notr.get("intervalles_secondes") == 600
           and notr.get("script") == "notation.py")
-    verifier("5. manifest.json reference notation (actif, 300 s)", ok,
+    verifier("5. manifest.json reference notation (actif, 600 s)", ok,
              "non trouve" if notr is None else "")
 
 

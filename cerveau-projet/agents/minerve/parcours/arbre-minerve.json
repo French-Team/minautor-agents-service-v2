@@ -1,5 +1,10 @@
 {
-  "identite": {"type": "arbre", "appartient_a": "minerve", "version": "0.3.0", "commun": false},
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "minerve",
+    "version": "0.3.0",
+    "commun": false
+  },
   "arbre": {
     "nom": "arbre-minerve",
     "agent": "minerve",
@@ -22,13 +27,45 @@
     "type": "question",
     "question": "Quelle est la mission todo ?",
     "branches": [
-      {"reponse": "CREER", "description": "Creer un todo depuis une spec : rechercher-todos, lire spec, squelette, remplir phases 0-9, ASCII, valider, index (c2-c9)", "vers": "theme-creer.json"},
-      {"reponse": "COMPLETER", "description": "Completer un todo existant : rechercher-todos, lire, conventions, completer phases, valider (c11-c15)", "vers": "theme-completer.json"},
-      {"reponse": "CORRIGER", "description": "Corriger selon le rapport de Janus : boucle KO (c9f)", "vers": "theme-corriger.json"},
-      {"reponse": "AMELIORER", "description": "Ameliorer son fonctionnement : generateur, agent habilite, reprise (c9b-c9e)", "vers": "theme-ameliorer.json"},
-      {"reponse": "AUTRE", "description": "Mission hors perimetre : delegation, outil temp, signaler, Themis audit (c18-c23)", "vers": "theme-autre.json"},
-      {"reponse": "OUTILS", "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)", "vers": "theme-outils.json"}
+      {
+        "reponse": "CREER",
+        "description": "Creer un todo depuis une spec : rechercher-todos, lire spec, squelette, remplir phases 0-9, ASCII, valider, index (c2-c9)",
+        "vers": "theme-creer.json"
+      },
+      {
+        "reponse": "COMPLETER",
+        "description": "Completer un todo existant : rechercher-todos, lire, conventions, completer phases, valider (c11-c15)",
+        "vers": "theme-completer.json"
+      },
+      {
+        "reponse": "CORRIGER",
+        "description": "Corriger selon le rapport de Janus : boucle KO (c9f)",
+        "vers": "theme-corriger.json"
+      },
+      {
+        "reponse": "AMELIORER",
+        "description": "Ameliorer son fonctionnement : generateur, agent habilite, reprise (c9b-c9e)",
+        "vers": "theme-ameliorer.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors perimetre : delegation, outil temp, signaler, Themis audit (c18-c23)",
+        "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "OUTILS",
+        "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)",
+        "vers": "theme-outils.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
+      }
     ]
   },
-  "fins": {"fichier": "fins.json", "description": "Toutes les fins possibles"}
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles"
+  }
 }

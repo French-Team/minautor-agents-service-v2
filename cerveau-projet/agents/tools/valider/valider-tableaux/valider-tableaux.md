@@ -24,7 +24,7 @@ Verifier automatiquement la coherence des tableaux des fiches agents, en 3 point
 
 1. **Nombres annonces vs lignes reelles** : chaque mission du tableau "Missions disponibles" annonce un nombre d'etapes ("X etapes") qui doit correspondre exactement au nombre de lignes de la section "### Mission : ..." correspondante.
 2. **Numerotation continue** : les tableaux numerotes (etapes de mission, points de controle, etc.) doivent etre numerotes 1..N sans doublon ni trou.
-3. **Completude des listes** : le tableau "Agents disponibles" de Cerberus doit lister TOUS les agents du projet (dossiers agents/ contenant une fiche), sans agent fantome.
+3. **Completude des listes** : le tableau "Agents disponibles" d'ORACLE (le routeur operationnel, decision utilisateur 2026-08-30 : la liste de routage vit chez Oracle, plus chez Cerberus) doit lister TOUS les agents du projet (dossiers agents/ contenant une fiche), sans agent fantome.
 
 ---
 
@@ -72,7 +72,7 @@ Pour chaque tableau dont la premiere colonne contient des numeros :
 ### 3. Completude des listes d'agents
 
 Pour la fiche de Cerberus uniquement :
-- La liste "Agents disponibles" est comparee aux dossiers `agents/*/` contenant une fiche `X.md`
+- La liste "Agents disponibles" (dans oracle.md) est comparee aux dossiers `agents/*/` contenant une fiche `X.md`
 - **Agents absents** : un agent existant mais non liste est signale
 - **Agents fantomes** : un agent liste mais sans dossier/fiche est signale
 

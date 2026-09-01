@@ -1,0 +1,200 @@
+{
+  "identite": {
+    "type": "besoins-v2",
+    "appartient_a": "cerveau-projet",
+    "nom": "besoins-v2",
+    "version": "0.1.0",
+    "description": "Liste de reference des besoins que doit verifier l arbre d un agent v1 pour etre conforme au pilotage Oracle v2-like (pilote.py). Base : pilote.py (format racine -> theme -> redirects -> fins centralisees) + template-arbre-v2 / template-theme-v2 / template-fins-v2 de la v2 (freelance). Chaque besoin = une verification exploitable par auditer-conformite-arbre.py."
+  },
+  "besoins": [
+    {
+      "id": "A1",
+      "categorie": "schema-arbre",
+      "niveau": "bloquant",
+      "cible": "arbre",
+      "titre": "identite.type == arbre",
+      "detail": "L arbre doit porter identite.type 'arbre' (pilote.py detecte le format via identite.type).",
+      "verification": "champ[:identite.type] == 'arbre'"
+    },
+    {
+      "id": "A2",
+      "categorie": "schema-arbre",
+      "niveau": "bloquant",
+      "cible": "arbre",
+      "titre": "identite.appartient_a == agent audite",
+      "detail": "L arbre appartient a l agent audite.",
+      "verification": "champ[:identite.appartient_a] == agent"
+    },
+    {
+      "id": "A3",
+      "categorie": "schema-arbre",
+      "niveau": "bloquant",
+      "cible": "arbre",
+      "titre": "arbre.agent == agent audite",
+      "detail": "Le nom de l agent dans l arbre correspond a l agent audite.",
+      "verification": "champ[:arbre.agent] == agent"
+    },
+    {
+      "id": "A4",
+      "categorie": "schema-arbre",
+      "niveau": "bloquant",
+      "cible": "arbre",
+      "titre": "racine.branches non vide",
+      "detail": "La racine doit proposer au moins une branche (un theme).",
+      "verification": "liste[:racine.branches] non vide"
+    },
+    {
+      "id": "A5",
+      "categorie": "schema-arbre",
+      "niveau": "bloquant",
+      "cible": "arbre",
+      "titre": "chaque branche porte reponse + vers",
+      "detail": "Chaque branche de la racine doit avoir un libelle (reponse) et un fichier theme cible (vers).",
+      "verification": "chaque branche: champ reponse non vide ET champ vers non vide"
+    },
+    {
+      "id": "A6",
+      "categorie": "schema-arbre",
+      "niveau": "bloquant",
+      "cible": "arbre",
+      "titre": "fins.fichier pointe un fichier existant",
+      "detail": "L arbre declare le fichier des fins (defaut fins.json). Il doit exister dans le dossier parcours.",
+      "verification": "champ[:fins.fichier] -> fichier present dans le dossier de l arbre"
+    },
+    {
+      "id": "T1",
+      "categorie": "schema-theme",
+      "niveau": "bloquant",
+      "cible": "theme",
+      "titre": "theme.redirects non vide",
+      "detail": "Chaque theme (fichier vers lequelle pointe une branche) doit avoir des redirects (besoins) pilotables. pilote.py lit theme['theme']['redirects'] puis fallback theme['redirects'].",
+      "verification": "pour chaque fichier theme pointe: redirects non vide"
+    },
+    {
+      "id": "T2",
+      "categorie": "schema-theme",
+      "niveau": "bloquant",
+      "cible": "theme",
+      "titre": "chaque redirect a besoin non vide",
+      "detail": "Chaque redirect d un theme doit exprimer un besoin (libelle) pour que le pilote puisse naviguer.",
+      "verification": "pour chaque redirect: champ besoin non vide"
+    },
+    {
+      "id": "T3",
+      "categorie": "schema-theme",
+      "niveau": "bloquant",
+      "cible": "theme",
+      "titre": "action procedure => etapes liste",
+      "detail": "Chaque redirect d action 'procedure' doit avoir une liste etapes (commandes ou infos).",
+      "verification": "pour chaque redirect action=procedure: etapes est une liste non vide"
+    },
+    {
+      "id": "T4",
+      "categorie": "schema-theme",
+      "niveau": "information",
+      "cible": "theme",
+      "titre": "action redirection => vers documente",
+      "detail": "Chaque redirect d action 'redirection' doit porter un lien vers (fichier theme, outil ou fin).",
+      "verification": "pour chaque redirect action=redirection: champ vers non vide"
+    },
+    {
+      "id": "T5",
+      "categorie": "schema-theme",
+      "niveau": "bloquant",
+      "cible": "theme",
+      "titre": "fin du theme = lien vers fins.json avec case existante",
+      "detail": "Le theme se termine par une fin ('fin' -> type lien -> vers fins.json -> case). La case doit exister dans fins.json. Sinon le pilote ne sait pas cloturer.",
+      "verification": "fin.type==lien ET fin.vers==<fichier fins de l arbre> ET fins.json contient la case fin.case"
+    },
+    {
+      "id": "T6",
+      "categorie": "schema-theme",
+      "niveau": "avertissement",
+      "cible": "theme",
+      "titre": "au moins un etape executable ou instruction claire",
+      "detail": "Chaque redirect de procedure doit soit contenir une commande executable (python3 ...) soit une instruction lisible pour l agent. Un redirect vide (besoin sans etape) est inutile.",
+      "verification": "pour chaque redirect: au moins 1 etape non vide"
+    },
+    {
+      "id": "F1",
+      "categorie": "schema-fins",
+      "niveau": "bloquant",
+      "cible": "fins",
+      "titre": "fins.fins non vide",
+      "detail": "Le fichier des fins centralisees doit contenir au moins une fin.",
+      "verification": "champ[:fins] dict non vide"
+    },
+    {
+      "id": "F2",
+      "categorie": "schema-fins",
+      "niveau": "bloquant",
+      "cible": "fins",
+      "titre": "toute fin referencee par un theme existe",
+      "detail": "Chaque case fin pointee par un theme (fin.case) doit exister dans fins.json. Sinon le pilote s arrete en fin de theme.",
+      "verification": "pour chaque theme: fins.json contient la case fin.case"
+    },
+    {
+      "id": "F3",
+      "categorie": "schema-fins",
+      "niveau": "bloquant",
+      "cible": "fins",
+      "titre": "fin reactiver/activer sans placeholder cible",
+      "detail": "Une fin d action 'reactiver' ou 'activer' doit avoir une cible resolue (pas <agent_appelant> brut non servie, pas <agent-habilite>).",
+      "verification": "pour chaque fin action=reactiver|activer: cible non vide ET->cible ne commence pas par '<'"
+    },
+    {
+      "id": "F4",
+      "categorie": "schema-fins",
+      "niveau": "bloquant",
+      "cible": "fins",
+      "titre": "aucune fin ne cible cerberus (modele aero: R1)",
+      "detail": "Modele round aero (spec 2026-08-30, R1) : toute fin d agent va vers ORACLE (l aeroport), jamais vers cerberus. Cerberus est AVANT oracle (entree utilisateur) ; les agents sont APRES oracle. Une fin action=reactiver avec cible=cerberus est un vestige v1.",
+      "verification": "pour chaque fin action=reactiver|activer: cible != cerberus"
+    },
+    {
+      "id": "F5",
+      "categorie": "schema-fins",
+      "niveau": "bloquant",
+      "cible": "fins",
+      "titre": "aucune fin n active un autre agent (vestige v1: R3)",
+      "detail": "Modele round aero (spec 2026-08-30, R3) : les agents ne connaissent PAS le suivant. Une fin action=activer vers un agent (ex: activer buffy, activer promethee) est un vestige v1 - le pilote decide du suivant, pas l agent. A supprimer/reconstruire vers oracle.",
+      "verification": "pour chaque fin action=activer: cible absent ou cible non resolve (pas un nom d agent)"
+    },
+    {
+      "id": "C1",
+      "categorie": "coherence",
+      "niveau": "bloquant",
+      "cible": "arbre",
+      "titre": "chaque fichier theme pointe existe",
+      "detail": "Chaque branche de la racine pointe vers un fichier theme (vers) qui DOIT exister. Sinon pilote.py erreur 'theme introuvable'.",
+      "verification": "chaque vers de racine -> fichier JSON present dans le dossier de l arbre"
+    },
+    {
+      "id": "C2",
+      "categorie": "coherence",
+      "niveau": "avertissement",
+      "cible": "arbre",
+      "titre": "lien arbre <-> theme <-> fins coherent (aucune case morte)",
+      "detail": "Toute fin declaree doit etre atteignable depuis un theme (pas de fin morte) et chaque theme doit mener a une fin existante.",
+      "verification": "chaque case de fins.json est referencee par au moins un theme"
+    },
+    {
+      "id": "C3",
+      "categorie": "coherence",
+      "niveau": "bloquant",
+      "cible": "arbre",
+      "titre": "couverture des types deduits par le pilote",
+      "detail": "Le pilote deduit mission_type depuis la raison d activation (pilote._type_mission_auto) et cherche une branche racine par reponse exacte (majuscule) puis par mots-cles du mapping _resoudre_racine. Une mission_type deduite sans branche -> 'DECISION LIBRE' -> round casse. La racine doit couvrir les types pertinents pour l agent.",
+      "verification": "pour chaque type deduisable (mapping _resoudre_racine + _type_mission_auto): une branche ou un keyword le couvre OU c est un autre theme de l arbre"
+    },
+    {
+      "id": "C4",
+      "categorie": "coherence",
+      "niveau": "avertissement",
+      "cible": "arbre",
+      "titre": "separation flux montant / descendant (spec R4)",
+      "detail": "Modele round aero (spec 2026-08-30, R4, a structurer) : un theme 'montant' (retour vers oracle) ne doit pas contenir de parcours 'descendant' (vers les agents). Signale les themes qui melangent les deux sens (ex: un theme de travail qui contient aussi une fin d activation d un autre agent).",
+      "verification": "pour chaque theme: pas de melange action procedure+activation dans le meme redirect"
+    }
+  ]
+}

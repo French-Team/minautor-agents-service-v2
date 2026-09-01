@@ -55,3 +55,4 @@
 [ROUTINES-SERVER] daemon demarre (tic toutes les 30s)
 [ROUTINES-SERVER] daemon demarre (tic toutes les 30s)
 [ROUTINES-SERVER] daemon demarre (tic toutes les 30s, pid 14628)
+[ROUTINES-SERVER] daemon demarre (tic toutes les 30s, pid 9912)

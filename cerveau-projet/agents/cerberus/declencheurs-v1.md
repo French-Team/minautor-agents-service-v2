@@ -20,6 +20,8 @@ Ecris ta demande en placant le prefixe EN TETE :
 [creer]     ce qu'il faut creer...
 [probleme]  le probleme constate...
 [stop]      la raison de l'arret...
+[socrate]   la revision strategique / super-combo...
+[trio]      l'idee a faire produire par le trio (pense-bete -> spec -> todo)...
 ```
 
 Sans prefixe : Cerberus traite la demande normalement (ecoute, analyse,
@@ -79,6 +81,15 @@ ROUND BRISE. Arret complet : Cerberus declare le DEFCON 5 via
 `oracle.py defcon-declarer <raison>` (journalise dans files/defcon.jsonl,
 les routines le surveillent). Toute reprise exige TA decision explicite.
 
+### [trio] -- SUPER-COMBO de creation (v3)
+Lance un round complet de production via le trio (serviteurs de Cerberus
+et Socrate). L utilisateur fournit son idee :
+1. Oracle oriente vers Athena (elle ecrit l idee en detail dans un
+   pense-bete).
+2. Son arbre mene vers Promethee (spec).
+3. L arbre de Promethee mene vers Minerve (todo).
+4. Le dernier maillon (Minerve) reactive Cerberus avec le bilan consolide.
+
 ---
 
 ## Mecanique (cote Cerberus)
@@ -92,6 +103,7 @@ les routines le surveillent). Toute reprise exige TA decision explicite.
 | [creer] | activer l'agent de creation par type (tableau ci-dessus) | routage creation |
 | [probleme] | activer l'agent de resolution par fichier (tableau ci-dessus) | routage resolution |
 | [stop] | `oracle.py defcon-declarer "<raison>"` | DEFCON 5, arret total |
+| [trio] | activer Athena (theme-trio), Oracle enchaine Promethee puis Minerve | super-combo creation (pense-bete->spec->todo) |
 
 ## Ordre de reprise des files
 

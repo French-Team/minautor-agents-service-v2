@@ -9,3 +9,14 @@
 {"date": "2026-08-29T09:06:53", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "test URGENT -> 4", "par": "oracle", "sens": "escalade"}
 {"date": "2026-08-29T09:12:03", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "retour valide apres test escalade - descente vers normal", "par": "oracle"}
 {"date": "2026-08-29T09:12:03", "niveau": 2, "signification": "REPRISE TOTALE", "commentaire": "DEFCON 2 = niveau normal (reprise totale)", "par": "oracle"}
+{"date": "2026-08-29T10:23:22", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "URGENT via verifier-statuts: 2 P1 non-acquitte(s) detecte(s)", "par": "oracle", "sens": "escalade"}
+{"date": "2026-08-29T10:24:42", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "retour normal apres incident recuperation Defcon", "par": "oracle"}
+{"date": "2026-08-29T10:24:42", "niveau": 2, "signification": "REPRISE TOTALE", "commentaire": "DEFCON 2 = niveau normal (reprise totale)", "par": "oracle"}
+{"date": "2026-08-29T10:29:26", "niveau": 5, "signification": "ARRET TOTAL", "commentaire": "REDEMARRAGE APRES BUG : reprise apres bug : le flux etait casse et le LLM a repris la main - redemarrage avec DEFCON 5 (protocole de secours)", "par": "oracle"}
+{"date": "2026-08-29T10:29:58", "niveau": 5, "signification": "ARRET TOTAL", "commentaire": "REDEMARRAGE APRES BUG : reprise apres bug : le flux etait casse et le LLM a repris la main - redemarrage avec DEFCON 5 (protocole de secours)", "par": "oracle"}
+{"date": "2026-08-29T10:46:30", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "diagnostic du bug accepte : le flux a ete restaure (Oracle seul historise, mission-relais en place)", "par": "oracle"}
+{"date": "2026-08-29T10:46:30", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "reparations validees : redemarrer-session, fleche Oracle, mission-relais - reprise surveillee", "par": "oracle"}
+{"date": "2026-08-29T10:46:30", "niveau": 2, "signification": "REPRISE TOTALE", "commentaire": "reprise totale : DEFCON 2 = niveau normal - Morpheus execute la mission", "par": "oracle"}
+{"date": "2026-08-29T10:53:29", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "URGENT via verifier-statuts: 1 P1 non-acquitte(s) detecte(s)", "par": "oracle", "sens": "escalade"}
+{"date": "2026-08-29T10:53:41", "niveau": 5, "signification": "ARRET TOTAL", "commentaire": "REDEMARRAGE APRES BUG : reprise apres bug : le flux etait casse et le LLM a repris la main - redemarrage avec DEFCON 5 (protocole de secours)", "par": "oracle"}
+{"date": "2026-08-29T11:05:22", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "Demande utilisateur : le bug de la colonne Executeur (routines RT(300s)) est a traiter - descente DEFCON 5 vers 4 pour lancer l agent habilite via Oracle", "par": "oracle"}

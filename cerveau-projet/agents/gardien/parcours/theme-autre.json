@@ -12,19 +12,25 @@
       {
         "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
         "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
       },
       {
         "besoin": "Consulter les lecons (domaine securite-marbre)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent gardien --domaine securite-marbre"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent gardien --domaine securite-marbre"
+        ],
         "regle": "PATTERN 6 : le contexte dynamique."
       },
       {
         "besoin": "CONTEXTE : activite recente des agents",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
         "regle": "PATTERN 6 : l historique est DYNAMIQUE."
       },
       {
@@ -39,7 +45,10 @@
       {
         "besoin": "DELEGATION - Activer l agent habilite (case c29a)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"],
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
+        ],
         "regle": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
       },
       {
@@ -54,22 +63,32 @@
       {
         "besoin": "Creer l outil temporaire (case c29c)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.py <nom>"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/generateurs/generateurs-outil-temporaire/generateurs-outil-temporaire.py <nom>"
+        ],
         "regle": "OUTIL TEMP : creer dans tmp-gardien/ a la racine, supprimer en fin de mission."
       },
       {
         "besoin": "Signaler le besoin durable a Cerberus (case c29e)",
         "action": "procedure",
-        "etapes": ["Signaler a Cerberus : besoin d outil -> activer Vulcain ; besoin de test -> Morpheus"],
+        "etapes": [
+          "Signaler a Cerberus : besoin d outil -> activer Vulcain ; besoin de test -> Morpheus"
+        ],
         "regle": "SIGNALEMENT : je ne cree rien moi-meme pour un besoin durable."
       },
       {
         "besoin": "Ajouter les lecons dans corrections.md",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/gardien/corrections.md <lecon>"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/gardien/corrections.md <lecon>"
+        ],
         "regle": "PROTOCOLE FIN-MISSION."
       }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-delegation"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-delegation"
+  }
 }

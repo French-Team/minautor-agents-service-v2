@@ -59,12 +59,33 @@ VERSION = "0.1.1"
 STATUT = "ebauche"
 
 # Liste blanche protegee : processus legitimes jamais signales ni tuables.
-# Comparaison insensible a la casse sur le nom du processus ET la commande.
-LISTE_BLANCHE = (
-    "freebuff",
-    "unsloth",
-    "codebuff",
+# PRINCIPE (decision utilisateur 2026-08-30) : on ne melange JAMAIS des
+# familles distinctes dans une meme structure. Deux familles, deux tuples
+# separes et nommes explicitement : une de l ENVIRONNEMENT de session,
+# l autre des DAEMONS du projet. Comparaison insensible a la casse sur le
+# nom du processus ET la commande.
+
+# FAMILLE 1 - ENVIRONNEMENT DE SESSION : les outils d edition qui tournent
+#   pendant qu on travaille. Sans eux la session serait coupee. Ils existent
+#   seulement pendant l interaction, PAS toute la journee.
+LISTE_BLANCHE_SESSION = (
+    "freebuff",  # le client node.exe (runtime Freebuff, la session en cours)
+    "unsloth",  # le studio python (python.exe de l utilisateur)
+    "codebuff",  # l assistant de codage (le moteur auquel l agent est relie)
 )
+
+# FAMILLE 2 - DAEMONS PERSISTANTS DU PROJET : les serveurs qui tournent
+#   TOUTE LA JOURNEE en fond (decision 2026-08-30, baseline v2). Ce sont des
+#   serveurs legaux jamais a nettoyer - sinon test-085 les signalerait comme
+#   residuels (cause de sa desactivation puis de sa reactivation).
+LISTE_BLANCHE_DAEMONS = (
+    "oracle-server.py",  # serveur oracle : pilote les cartes/arbres des agents
+    "routines-server.py",  # serveur des routines de surveillance v1
+)
+
+# Union des deux familles utilisee pour la detection (une seule source de
+# verite pour la comparaison, deux listes pour la lisibilite).
+LISTE_BLANCHE = LISTE_BLANCHE_SESSION + LISTE_BLANCHE_DAEMONS
 
 # Marquers du projet dans la commande d un processus.
 MARQUEURS_PROJET = (

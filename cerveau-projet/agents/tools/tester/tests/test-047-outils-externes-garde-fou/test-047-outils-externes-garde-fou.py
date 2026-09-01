@@ -280,6 +280,11 @@ def main():
     print("")
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ==="
           % (NB_OK, NB_KO, NB_POINTS))
+    if NB_KO:
+        print("  [AIDE] OU CHERCHER / REPARER (KO = fichier hors normes) :")
+        print("    [AIDE] Fichiers inspectes : workspace + detecter-usage-outils-externes + ses exclusions")
+        print("    [AIDE] Diagnostic : python3 cerveau-projet/agents/tools/detecter/detecter-usage-outils-externes/detecter-usage-outils-externes.py -v")
+        print("    [AIDE] Correctif : un fichier code non-ASCII/CRLF a corriger, OU un artefact de donnees (routines/data, grades-v1.json) a ajouter aux exclusions par defaut du .py/.md comme le dossier observations/")
     return 0 if NB_KO == 0 else 1
 
 

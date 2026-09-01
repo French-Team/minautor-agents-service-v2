@@ -130,11 +130,12 @@ def _verifier_derniere_activite(agent):
         if not ligne.startswith("| "):
             continue
         cellules = [c.strip() for c in ligne.split("|")]
-        if len(cellules) < 8:
+        # Le prefixe vide du tableau decale les colonnes : Heure=[8], pas [7].
+        if len(cellules) < 9:
             continue
         if cellules[2].lower() != agent.lower():
             continue
-        heure = cellules[7]
+        heure = cellules[8]
         try:
             h = datetime.strptime(heure[:8], "%H:%M:%S")
         except ValueError:

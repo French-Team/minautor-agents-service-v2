@@ -45,6 +45,16 @@
       "titre": "FIN - Erreurs hors mission signalees",
       "description": "Des erreurs hors mission ont ete detectees et signalees.",
       "action": "procedure"
+    },
+    "fin-declencheur": {
+      "titre": "FIN - Declencheur traite",
+      "description": "Le declencheur v1 a ete traite (attente/attention/urgent/question/creer/probleme/stop). Cerberus attend la suite.",
+      "action": "procedure"
+    },
+    "fin-trio": {
+      "titre": "FIN - Trio lance",
+      "description": "Le declencheur [trio] a lance le super-combo de creation (Athena -> Promethee -> Minerve). Cerberus attend le retour consolide du dernier maillon (Minerve reactiver Cerberus).",
+      "action": "procedure"
     }
   }
 }

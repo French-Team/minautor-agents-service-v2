@@ -165,24 +165,26 @@ def main():
         # 1. Version du parcours
         with io.open(PARCOURS, encoding="utf-8") as fh:
             donnees = json.load(fh)
-        verifier("1. Parcours version 0.5.10",
-                 donnees.get("parcours", {}).get("version") == "0.5.10",
+        verifier("1. Parcours version 0.5.11",
+                 donnees.get("parcours", {}).get("version") == "0.5.11",
                  str(donnees.get("parcours", {}).get("version")))
 
-        # 2. Types de cases : 33 action / 6 question / 7 controle / 4 fin / 0 indice
-        #    (maj 2026-08-28 : +6 cases action c1h/c1hb/c1hc/c1he/c1hf/c20h
-        #    ajoutees par la branche historisation Oracle - la non-regression
-        #    portait un compteur fige depuis la migration des agents)
+        # 2. Types de cases : 41 action / 9 question / 7 controle / 5 fin / 0 indice
+        #    (maj 2026-08-28 : +6 cases action c1h*/c20h branche historisation
+        #    Oracle ; maj 2026-08-29 decision utilisateur GATE : + c0g (action)
+        #    + c0ga (question) + c0h (fin) + cD1/cD2 (questions DECLENCHEURS
+        #    v1) + cD2a-cD2g (actions routage) - le test est synchronise avec
+        #    la carte CONFORME validee par valider-case)
         cases = donnees.get("cases", {})
         types = {}
         for c in cases.values():
             t = c.get("type", "?")
             types[t] = types.get(t, 0) + 1
-        verifier("2a. 33 cases action (27 historiques + 6 historisation Oracle c1h*/c20h)",
-                 types.get("action", 0) == 33, str(types.get("action")))
-        verifier("2b. 6 questions + 7 controles + 4 fins (Pattern 17 c19b + maillon c15b ajoutent 2 controles + cU1 + c45b/c46b)",
-                 types.get("question", 0) == 6 and types.get("controle", 0) == 7
-                 and types.get("fin", 0) == 4, str(types))
+        verifier("2a. 41 cases action (33 historiques + c0g GATE + cD2a-cD2g)",
+                 types.get("action", 0) == 41, str(types.get("action")))
+        verifier("2b. 9 questions + 7 controles + 5 fins (c0ga/cD1/cD2 GATE+DECLENCHEURS + c0h STOP)",
+                 types.get("question", 0) == 9 and types.get("controle", 0) == 7
+                 and types.get("fin", 0) == 5, str(types))
         verifier("2c. Aucune case 'indice' restante",
                  types.get("indice", 0) == 0, str(types))
 
@@ -205,29 +207,31 @@ def main():
                  r_ref.stdout.strip()[:120])
 
         # 5. Navigation chemin accueil
+        #    (maj 2026-08-29 GATE : c0b OUI -> c0g -> c0ga OUI, puis
+        #    cU1 NON -> cD1 NON -> c1 : 2 reponses supplementaires)
         r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
-                     "OUI|NON|accueil|OUI|OUI|NON|NON"])
+                     "OUI|OUI|NON|NON|accueil|OUI|OUI|NON|NON"])
         verifier("5. Chemin accueil -> PARCOURS TERMINE",
                  r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
                  r_nav.stdout.strip()[-100:])
 
         # 6. Navigation chemin activation
         r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
-                     "OUI|NON|activation|OUI|OUI|OUI|NON"])
+                     "OUI|OUI|NON|NON|activation|OUI|OUI|OUI|NON"])
         verifier("6. Chemin activation -> PARCOURS TERMINE",
                  r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
                  r_nav.stdout.strip()[-100:])
 
         # 7. Navigation chemin retour (reactiver)
         r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
-                     "OUI|NON|retour|OUI|NON|NON|NON"])
+                     "OUI|OUI|NON|NON|retour|OUI|NON|NON|NON"])
         verifier("7. Chemin retour -> PARCOURS TERMINE",
                  r_nav.returncode == 0 and "PARCOURS TERMINE" in r_nav.stdout,
                  r_nav.stdout.strip()[-100:])
 
         # 8. Refs resolues a la navigation (pattern-8, protocole-activation)
         r_nav = run([PYTHON, GUIDER, PARCOURS, "--reponses",
-                     "OUI|NON|accueil|OUI|OUI|NON|NON"])
+                     "OUI|OUI|NON|NON|accueil|OUI|OUI|NON|NON"])
         verifier("8a. [REFERENCE] pattern-8 resolue",
                  "[REFERENCE]" in r_nav.stdout and "pattern-8" in r_nav.stdout,
                  r_nav.stdout.strip()[-200:])
@@ -248,11 +252,13 @@ def main():
         verifier("9c. c0b porte les branches OUI -> c0c / NON -> c0",
                  "OUI" in r_act.stdout and "NON" in r_act.stdout,
                  r_act.stdout.strip()[-100:])
-        # 9d. Avec la reponse OUI puis NON (cU1), la navigation enchaine
-        #     c0b -> c0c -> cU1 -> c1 Mission
+        # 9d. Avec les reponses OUI (GATE OUI) -> NON (cU1) -> NON (cD1)
+        #     -> accueil (c1), la navigation passe par la case Mission puis
+        #     s arrete sur une question (L agent habilite)
+        #     (maj 2026-08-29 GATE + DECLENCHEURS : reponses supplementaires)
         r_oui = run([PYTHON, GUIDER, PARCOURS, "--case", "c0b",
-                     "--reponses", "OUI|NON"])
-        verifier("9d. OUI -> c0c (contexte) puis c1 Mission",
+                     "--reponses", "OUI|OUI|NON|NON|accueil"])
+        verifier("9d. OUI -> GATE OUI -> Mission",
                  r_oui.returncode == 0 and "Mission" in r_oui.stdout
                  and "QUESTION POUR L'AGENT" in r_oui.stdout,
                  r_oui.stdout.strip()[-100:])

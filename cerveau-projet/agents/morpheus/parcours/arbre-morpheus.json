@@ -28,13 +28,9 @@
         "reponse": "VERIFIER",
         "description": "Verifier/valider un outil existant",
         "vers": "theme-verifier.json"
-      },
-      {
-        "reponse": "AUTRE",
-        "description": "Mission hors parcours : delegation, outil temporaire",
-        "vers": "theme-autre.json"
-      }
-    ]
+      },{"reponse": "AUTRE", "description": "Mission hors parcours : delegation, outil temporaire", "vers": "theme-autre.json"},
+{"reponse": "INTER-ROUND", "description": "Active en inter-round par un autre agent : rapport KO recu a accuser / verdict de test a retourner a l appelant", "vers": "theme-inter-round.json"}
+ ]
   },
   "fins": {
     "fichier": "fins.json",

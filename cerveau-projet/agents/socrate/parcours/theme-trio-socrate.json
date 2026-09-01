@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "socrate",
+    "nom": "TRIO",
+    "description": "L utilisateur a une idee (v3, 2026-08-30) : Socrate declenche le trio pour produire les fichiers bout-en-bout (Athena pense-bete -> Promethee spec -> Minerve todo)"
+  },
+  "theme": {
+    "nom": "TRIO",
+    "but": "Quand l utilisateur expose une idee, Socrate declenche le trio (ses serviteurs) pour produire les fichiers de documentation/planification complets, du pense-bete a la todo.",
+    "redirects": [
+      {
+        "besoin": "L utilisateur a une idee a faire produire par le trio",
+        "action": "procedure",
+        "etapes": [
+          "Ecouter l idee et la formuler clairement (sujet, objectif, contraintes) sans la juger",
+          "Declencher le trio via Oracle : Athena ecrit l idee en detail (pense-bete), son arbre mene vers Promethee qui produit la spec, dont l arbre mene vers Minerve qui produit la todo",
+          "Le trio (serviteurs de Cerberus et Socrate) execute bout-en-bout ; le dernier maillon reactive Cerberus avec le bilan"
+        ],
+        "regle": "SUPER-COMBO TRIO : le trio enchaine Athena -> Promethee -> Minerve, chacun suivant SA carte (Pattern 13). Socrate declenche, il n execute pas la production."
+      },
+      {
+        "besoin": "Preciser l idee avant de lancer le trio",
+        "action": "procedure",
+        "etapes": [
+          "Poser des questions ouvertes pour cadrer l idee (au moins 3 si necessaire)",
+          "Une fois le cadre pose, lancer le trio avec l idee complete"
+        ],
+        "regle": "Ne jamais lancer le trio sans une idee correctement cadre."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-delegation"
+  }
+}

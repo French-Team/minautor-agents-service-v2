@@ -1,0 +1,47 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "janus",
+    "description": "Toutes les fins possibles pour Janus (arbre v0.1.0)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-janus.json",
+      "description": "Theme termine : retour a la racine pour choisir un autre theme ou finir."
+    },
+    "fin-controle": {
+      "titre": "FIN - Controle termine (verdict donne)",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin janus \"<rapport de controle>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin janus lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-non-regression": {
+      "titre": "FIN - Non-regression terminee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin janus \"<rapport de non-regression>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin janus lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin janus \"<bilan de autre>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin janus lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Inter-round traite (retourner a l appelant)",
+      "description": "Le rapport inter-round est traite. Si mon precedent est un agent qui m a active en inter-round, je REACTIVE cet appelant pour qu il reprenne son round (Pattern 13). Si mission directe venant de Cerberus, je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin janus \"<rapport du traitement inter-round>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin janus lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    }
+  }
+}

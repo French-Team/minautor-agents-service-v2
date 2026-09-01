@@ -211,22 +211,23 @@ def point_4_cas_normal():
 
 def point_5_serveur_mort():
     """5. Serveur mort (pid file absent) : mort=True, ok=False.
-    Simule sans toucher aux vrais pid files (remplacement en memoire)."""
+    Simule SANS toucher aux vrais pid files (remplacement en memoire,
+    comme le point 6) : ecrire le pid file reel risquait de le laisser
+    pollue si le test etait interrompu entre l ecriture et la
+    restauration (residu 99999999 observe 2026-08-30 -> doublon fantome
+    sur le serveur reel au run suivant)."""
     try:
         mod = charger_module()
-        pid_file = mod.ORACLE_DIR / "oracle-server.pid"
-        original = None
-        if pid_file.is_file():
-            original = pid_file.read_text(encoding="utf-8")
-        pid_file.write_text("99999999")
+        # Simuler un pid file INVALIDE en memoire : le pid officiel devient
+        # None -> le serveur est considere mort (aucune instance reconnue
+        # officielle). Aucun ecriture sur disque.
+        _pid_reel = mod._pid_file_valide
+        mod._pid_file_valide = lambda p: None
         try:
             r = mod.verifier()
         finally:
-            if original is not None:
-                pid_file.write_text(original, encoding="utf-8")
-            else:
-                pid_file.unlink()
-        # Le pid 99999999 n existe pas : le pid officiel est invalide.
+            mod._pid_file_valide = _pid_reel
+        # Aucun pid officiel : le serveur doit etre signale PROBLEME.
         mort = None
         for s in r.get("serveurs", []):
             if s["nom"] == "oracle-server":

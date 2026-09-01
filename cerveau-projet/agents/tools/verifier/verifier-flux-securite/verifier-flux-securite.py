@@ -24,7 +24,7 @@ import os
 import re
 import sys
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 # Fichier du tableau d activites recentes
 AGENTS_ACTIVITE_RECENTE = os.environ.get(
@@ -86,6 +86,29 @@ def _est_citations(agent):
     return (agent or "").lower() == "citations"
 
 
+# Blocs routines v1 (serveur de routines oracle, manifest.json) : ils
+# historisent sous leur NOM de routine avec un id LLM et le type 'R'
+# (colonne Executeur RT(<intervalle>) dans l encart v1). Ce ne sont pas
+# des agents : ils sont exclus du scan de flux (meme liste que test-098).
+BLOCS_ROUTINES = {"citations", "encart", "flux", "live", "notation",
+                  "verifier-statuts", "vigie-perimetre"}
+BLOCS_COORDINATION = {"cerberus", "oracle", "pilote"}
+
+
+def _est_routine(agent):
+    """Vrai si le bloc est une routine v1 (pas un agent)."""
+    return (agent or "").lower() in BLOCS_ROUTINES
+
+
+def _est_coordination(agent):
+    """Vrai si l entree appartient a la coordination et non a un agent metier.
+
+    Cerberus peut rester ouvert en accueil (DEBUT sans FIN), tandis que le
+    pilote trace les phases de vol sans constituer une mission agent.
+    """
+    return (agent or "").lower() in BLOCS_COORDINATION
+
+
 def verifier_flux(entrees=None):
     """Verifier les regles de flux. Retourne (ok, erreurs).
 
@@ -118,7 +141,9 @@ def verifier_flux(entrees=None):
         ag = e["agent"]
         ag_low = ag.lower()
         df = e["df"]
-        if _est_oracle(ag) or _est_citations(ag):
+        # Les composants de coordination ne sont pas des agents metier :
+        # Cerberus peut avoir un DEBUT ouvert et le pilote trace son vol.
+        if _est_coordination(ag) or _est_citations(ag):
             continue
         if df == "DEBUT" and ag_low not in agents_debut:
             agents_debut[ag_low] = i
@@ -142,7 +167,9 @@ def verifier_flux(entrees=None):
     for i, e in enumerate(entrees):
         ag = e["agent"]
         df = e["df"]
-        if _est_oracle(ag) or _est_citations(ag):
+        # Les marqueurs DEBUT/FIN des composants de coordination sont
+        # geres par leurs propres cycles (accueil Cerberus / vol pilote).
+        if _est_coordination(ag) or _est_citations(ag):
             continue
         if df in ("DEBUT", "FIN"):
             # Verifier si c est un DEBUT/FIN d Oracle pour cet agent
@@ -162,30 +189,34 @@ def verifier_flux(entrees=None):
                 "R6: Citation (ligne %d, %s) a Etat='%s' au lieu de 'DEV'"
                 % (i + 1, e["heure"], e["df"]))
 
-    # --- R7 : Apres le FIN d un agent, le prochain agent est Cerberus ---
+    # --- R7 : Apres le FIN d un agent, le prochain agent est Cerberus
+    # OU Oracle (modele aero 2026-08-30) ---
     # L utilisateur ne parle qu avec Cerberus. Quand un agent finit,
-    # Oracle re-active Cerberus (pas un autre agent).
-    # Casse insensible : Cerberus == cerberus.
+    # Oracle re-active Cerberus (pas un autre agent) - modele v1.
+    # MODELE AERO (spec modele-round-avion-parachutiste, R1) : la fin d un
+    # agent revient vers ORACLE (l aeroport) qui decide de la suite via le
+    # pilote. Les deux cibles sont valides selon le modele en vigueur.
+    # Casse insensible : Cerberus == cerberus, Oracle == oracle.
     # NOTE : le tableau est TRIE DESC (plus recent en haut). Pour trouver
     # le prochain evenement chronologique, on cherche VERS LE HAUT
     # (index decroissant = plus recent).
     for ag, idx in agents_fin.items():
-        if ag.lower() == "cerberus":
-            continue  # Cerberus qui finit = normal (pas de suite)
-        # Chercher la prochaine entree agent (hors Oracle, hors citations)
-        # EN REMONTANT dans le tableau (vers le plus recent)
+        if _est_coordination(ag):
+            continue  # coordination : cycle ouvert ou trace de vol normale
+        # Chercher la prochaine entree agent (hors Oracle, hors routines,
+        # hors citations) EN REMONTANT dans le tableau (vers le plus recent)
         prochain_agent = None
         for j in range(idx - 1, -1, -1):
             a = entrees[j]["agent"]
-            if _est_oracle(a) or _est_citations(a):
+            if _est_coordination(a) or _est_routine(a) or _est_citations(a):
                 continue
             prochain_agent = a
             break
-        if prochain_agent and prochain_agent.lower() != "cerberus":
+        if prochain_agent and prochain_agent.lower() not in ("cerberus", "oracle"):
             ok = False
             erreurs.append(
                 "R7: FIN de '%s' (ligne %d) -> prochain agent '%s' "
-                "(devrait etre Cerberus)"
+                "(devrait etre Cerberus ou Oracle)"
                 % (ag, idx + 1, prochain_agent))
 
     return ok, erreurs
@@ -234,7 +265,7 @@ def main():
         print("  R4: Agent ne historise pas son propre DEBUT/FIN")
         print("  R5: Oracle present entre DEBUT et FIN de chaque agent")
         print("  R6: Citations = DEV")
-        print("  R7: Apres FIN agent -> Cerberus (pas un autre agent)")
+        print("  R7: Apres FIN agent -> Cerberus ou Oracle (modele aero)")
         return 0
     else:
         print("FLUX KO : %d anomalie(s) detectee(s) :" % len(erreurs))

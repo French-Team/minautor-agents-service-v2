@@ -1,0 +1,33 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "DE-ORACLE",
+    "description": "Un retour arrive d Oracle (l agent a reactive via le pilote) : Oracle a historise ; je traite puis je reponds a l utilisateur"
+  },
+  "theme": {
+    "nom": "DE-ORACLE",
+    "but": "Recevoir le retour d un agent (via Oracle qui garde la main) et repondre a l utilisateur",
+    "redirects": [
+      {
+        "besoin": "Lire le retour (bilan et erreurs) arrive via Oracle",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py lister cerberus",
+          "Lire le bilan, les erreurs hors mission, les controles"
+        ],
+        "regle": "Ecouter le retour avant de decider. Oracle a deja historise le FIN de l agent."
+      },
+      {
+        "besoin": "Erreurs hors mission signalees ? (reparer par l agent habilite via Oracle)",
+        "action": "decision",
+        "etapes": [
+          "Si OUI : transmettre a Oracle - jamais corriger soi-meme",
+          "Si NON : continuer vers la reponse utilisateur"
+        ],
+        "regle": "INTERDICTION FORMELLE (2026-08-29) : une erreur detectee est confiee a l agent habilite ou a Oracle, JAMAIS executee par moi."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-theme" }
+}

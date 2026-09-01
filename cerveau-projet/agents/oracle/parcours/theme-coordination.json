@@ -1,0 +1,62 @@
+{
+ "identite": {
+  "type": "theme",
+  "appartient_a": "oracle",
+  "nom": "COORDINATION",
+  "description": "Mission de coordination recue de Cerberus : identifier l agent habilite, deposer la mission asap, verifier la consommation par le daemon"
+ },
+ "theme": {
+  "nom": "COORDINATION",
+  "but": "Prendre la mission de Cerberus, historiser le DEBUT de l agent a sa place, deposer la mission asap (le daemon la consomme et lance le pilote de l agent), verifier que l agent demarre",
+  "redirects": [
+   {
+    "besoin": "Lire la mission recue de Cerberus (inbox)",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py lire oracle",
+     "Identifier le contenu de la mission (agent cible, objet, type)"
+    ],
+    "regle": "Je lis ma boite de reception : les missions arrivent de Cerberus via oracle.py envoyer."
+   },
+   {
+    "besoin": "Identifier l agent habilite pour la mission (matrice, NE PAS executer moi-meme)",
+    "action": "procedure",
+    "etapes": [
+     "Consulter la matrice regles-choisir-agent (ou l agent deja indique dans la mission)",
+     "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py <fichier cible si connu>"
+    ],
+    "regle": "GARDE-FOU COORDINATION : j identifie l agent habilite mais je n EXECUTE pas sa mission. C est le daemon + pilote qui le lancent."
+   },
+   {
+    "besoin": "Historiser le DEBUT de l agent a sa place (Oracle est le SEUL a historiser)",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser <agent-habilite> \"DEBUT: <mission>\""
+    ],
+    "regle": "Oracle est le SEUL a historiser DEBUT/FIN avant et apres chaque mission (correction Cerberus 2026-08-29)."
+   },
+   {
+    "besoin": "Deposer la mission asap ciblant l agent habilite (la file asap lance l agent)",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter \"<la mission complete>\" --file asap --agent <agent-habilite>"
+    ],
+    "regle": "La file asap porte l agent cible. Le daemon mission-relais la consomme (~30s) et lance le pilote de l agent. C est LE mecanisme qui fait demarrer l agent."
+   },
+   {
+    "besoin": "Verifier que la mission est bien deposee et consommee (sans rien executer)",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py mission-lister --file asap",
+     "Confirmer que la mission apparait avec l agent cible (statut PRISE = daemon l a consommee)"
+    ],
+    "regle": "Je verifie la prise de mission. Si la mission reste EN_ATTENTE trop longtemps, le daemon est mort -> theme-processus (signaler)."
+   }
+  ]
+ },
+ "fin": {
+  "type": "lien",
+  "vers": "fins.json",
+  "case": "fin-coordination"
+ }
+}

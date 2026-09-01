@@ -411,6 +411,11 @@ def main():
     print("")
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" %
           (NB_OK, NB_KO, NB_POINTS))
+    if NB_KO:
+        print("  [AIDE] OU CHERCHER / REPARER (KO = fin/forme de reactivation fautive) :")
+        print("    [AIDE] Fichiers inspectes : agents/*/parcours/parcours-*.json (cases c14/c20 par ex)")
+        print("    [AIDE] Diagnostic : lire le detail du KO (FIN_REACTIVER_NON_JANUS / FORME_FAUTIVE / REACTIVER_NON_CERBERUS) qui cite la case incriminee")
+        print("    [AIDE] Correctif : seul janus a des fins 'FIN - Reactiver Cerberus' ; reformuler 'me/le/la REACTIVE' hors Cerberus ; les autres agents activent janus / suivent leur carte")
     bilan_chrono()
     return 1 if NB_KO else 0
 

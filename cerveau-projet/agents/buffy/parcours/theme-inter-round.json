@@ -13,8 +13,8 @@
         "besoin": "RECEPTION inter-round : rapport KO recu d un autre agent",
         "action": "procedure",
         "etapes": [
-          "PERIMETRE REDUIT : 1) Lire le rapport KO transmis, 2) Confirmer reception, 3) REACTIVER l agent appelant",
-          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent_appelant> '<rapport>'"
+          "PERIMETRE REDUIT (modele aero) : 1) Lire le rapport KO transmis, 2) Confirmer reception (message console), 3) MA FIN vers ORACLE (reactiver-fin --cible oracle) - le pilote reactive l appelant depuis l etat de carte",
+          "MA FIN : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin buffy \"<rapport du traitement inter-round>\" --cible oracle (le pilote reactive l appelant depuis l etat de carte - precedent)"
         ],
         "regle": "REGLE INTER-ROUND (R2) : je n execute PAS une nouvelle mission. J accuse reception et je relance l appelant."
       }

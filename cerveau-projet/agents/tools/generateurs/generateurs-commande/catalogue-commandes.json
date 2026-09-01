@@ -1294,6 +1294,23 @@
       ]
     },
     {
+      "nom": "detecter-erreur-bloquante",
+      "description": "Detecte et AFFICHE les erreurs bloquantes qui empechent un demarrage/round (marbre divise sans porte, daemon mort, etat-carte incoherent) - diagnostique OU CHERCHER / REPARER avant demarrer-llm.",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/detecter/detecter-erreur-bloquante/detecter-erreur-bloquante.py",
+      "modele": "--verbose",
+      "parametres": [
+        {
+          "cle": "verbose",
+          "question": "Activer --verbose ?",
+          "type": "bool",
+          "obligatoire": false,
+          "flag": "--verbose",
+          "defaut": false
+        }
+      ]
+    },
+    {
       "nom": "detecter-erreur-statut",
       "description": "Detecte les fichiers dont le statut ne correspond pas a leur contenu.",
       "interpreteur": "python3",

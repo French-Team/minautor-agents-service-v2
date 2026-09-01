@@ -173,11 +173,11 @@ def point_2_manifest():
     for nom in COMPTERS:
         r = routines.get(nom)
         if not (r and r.get("actif") is True
-                and r.get("intervalles_secondes") == 300
+                and r.get("intervalles_secondes") == 600
                 and r.get("script") == "%s.py" % nom):
             ok = False
             details.append(nom)
-    verifier("2. manifest reference les 2 compteurs (actif, 300 s)", ok,
+    verifier("2. manifest reference les 2 compteurs (actif, 600 s)", ok,
              "KO=%s" % ",".join(details) if details else "")
 
 

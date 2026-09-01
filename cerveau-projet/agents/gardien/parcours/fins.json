@@ -5,52 +5,37 @@
     "description": "Fins reelles du Gardien (parcours v0.2.4 : c9, c2b, c29a, c29d, c29e, cU3)"
   },
   "fins": {
-    "fin-theme": {
-      "titre": "Retour a la racine",
-      "action": "redirection",
-      "vers": "arbre-gardien.json"
-    },
-    "fin-verifier": {
-      "titre": "FIN - Verification terminee (activer Janus)",
-      "description": "Integrite verifiee, 0 zone divisee. Janus effectue le second controle (c9).",
+    "fin-autre": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
       "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-proposer": {
-      "titre": "FIN - Modification executee (activer Janus)",
-      "description": "Zone modifiee avec autorisation utilisateur, journalisee, marbre reverifie. Janus effectue le second controle (c9).",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-signaler": {
-      "titre": "FIN - Violation signalisee",
-      "description": "Violation documentee, agent responsable active pour reparation (c2b).",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<bilan de autre>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-delegation": {
-      "titre": "FIN - Delegation terminee",
-      "description": "L agent habilite a ete active (c29a). Oracle reactive Cerberus.",
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
       "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<rapport de delegation>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<rapport du traitement inter-round>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-outil-temp": {
-      "titre": "FIN - Outil temporaire cree",
-      "description": "Outil temporaire cree et utilise (c29d). Oracle reactive Cerberus.",
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
       "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-signaler-besoin": {
-      "titre": "FIN - Besoin signale",
-      "description": "Le besoin durable est signale a Cerberus (c29e).",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<rapport outil temporaire>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-outils": {
       "titre": "FIN - Reprendre ma mission (cU3)",
@@ -58,19 +43,50 @@
       "action": "redirection",
       "vers": "arbre-gardien.json"
     },
-    "fin-refuse": {
-      "titre": "FIN - Modification refusee par l utilisateur",
-      "description": "L utilisateur a refuse la modification. Le marbre reste intact.",
+    "fin-proposer": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
       "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<rapport de proposition>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
-    "fin-autre": {
-      "titre": "FIN - Mission terminee",
-      "description": "Mission hors parcours. Oracle reactive Cerberus.",
+    "fin-refuse": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
       "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<rapport de refus>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-signaler": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<besoin signale>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-signaler-besoin": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<besoin signale>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-gardien.json"
+    },
+    "fin-verifier": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<verdict de verification>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     }
   }
 }

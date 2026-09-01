@@ -12,19 +12,25 @@
       {
         "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
         "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
       },
       {
         "besoin": "Consulter les lecons (domaine education)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent chiron --domaine education"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent chiron --domaine education"
+        ],
         "regle": "PATTERN 6 : le contexte dynamique."
       },
       {
         "besoin": "CONTEXTE : activite recente des agents",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
         "regle": "PATTERN 6 : l historique est DYNAMIQUE."
       },
       {
@@ -49,25 +55,34 @@
       {
         "besoin": "Enregistrer ma lecon dans la BDD",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent chiron --domaine <domaine> --titre <titre> --lecon <texte>"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent chiron --domaine <domaine> --titre <titre> --lecon <texte>"
+        ],
         "regle": "BDD : enregistrer dans la memoire longue."
       },
       {
         "besoin": "Corriger les accents du rapport",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/chiron/corrections.md --all"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/chiron/corrections.md --all"
+        ],
         "regle": "REGLE ASCII : 100% ASCII, aucun accent."
       },
       {
         "besoin": "Corriger MA carte via editer-parcours (case c16)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/editer/editer-parcours/editer-parcours.py cerveau-projet/agents/chiron/parcours/parcours-chiron.json"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/editer/editer-parcours/editer-parcours.py cerveau-projet/agents/chiron/parcours/parcours-chiron.json"
+        ],
         "regle": "VERROU PILOTE : editer-parcours m autorise UNIQUEMENT parcours-chiron.json. Autre cible = BLOQUEE -> Buffy."
       },
       {
         "besoin": "Activer Themis pour verifier ma re-education (case c17)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison>"],
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin chiron \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
+        ],
         "regle": "THEMIS : elle audite ma carte + mes lecons puis me reactive avec son verdict."
       },
       {
@@ -83,16 +98,24 @@
       {
         "besoin": "Enregistrer mes usages d outils",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent chiron --outil <outil> --contexte '<contexte>'"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent chiron --outil <outil> --contexte '<contexte>'"
+        ],
         "regle": "BILAN OUTILS : declarer tous les outils utilises."
       },
       {
         "besoin": "Ajouter les lecons dans corrections.md",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/chiron/corrections.md <lecon>"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/chiron/corrections.md <lecon>"
+        ],
         "regle": "PROTOCOLE FIN-MISSION."
       }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-auto-correction"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-auto-correction"
+  }
 }

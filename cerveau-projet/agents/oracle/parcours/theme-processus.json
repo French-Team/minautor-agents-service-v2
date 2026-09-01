@@ -1,0 +1,44 @@
+{
+ "identite": {
+  "type": "theme",
+  "appartient_a": "oracle",
+  "nom": "PROCESSUS",
+  "description": "Alerte de coordination : processus fantomes ou serveurs morts (controle-processus)"
+ },
+ "theme": {
+  "nom": "PROCESSUS",
+  "but": "Verifier qu une seule instance tourne par serveur (oracle-server, routines-server v1), detecter les fantomes et les serveurs morts, et SIGNALER a Cerberus",
+  "redirects": [
+   {
+    "besoin": "Lancer le controle des processus (fantomes / serveurs morts)",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py controle-processus"
+    ],
+    "regle": "CONTROLE PROCESSUS : liste les processus reels et verifie UNE seule instance par serveur. Un doublon = processus fantome, un serveur sans instance = serveur mort."
+   },
+   {
+    "besoin": "Probleme detecte ?",
+    "action": "decision",
+    "etapes": [
+     "OUI (fantome ou serveur mort) -> signaler a Cerberus (prochaine etape)",
+     "NON (tout est sain) -> fin : coordination terminee"
+    ],
+    "regle": "Je ne repars JAMAIS seul : un probleme processus est signale a Cerberus qui active l agent habilite (Vulcain pour les outils v1)."
+   },
+   {
+    "besoin": "Signaler le probleme processus a Cerberus",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py envoyer oracle cerberus \"PROBLEME PROCESSUS\" \"<rapport du controle-processus : processus fantome / serveur mort>\""
+    ],
+    "regle": "REGLE : je SIGNALE, je ne corrige pas. Cerberus active l agent habilite pour la reparation."
+   }
+  ]
+ },
+ "fin": {
+  "type": "lien",
+  "vers": "fins.json",
+  "case": "fin-coordination"
+ }
+}

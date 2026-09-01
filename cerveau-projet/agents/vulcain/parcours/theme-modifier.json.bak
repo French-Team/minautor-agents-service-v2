@@ -1,0 +1,170 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "vulcain",
+    "nom": "MODIFIER",
+    "description": "Corriger / ameliorer un outil existant : verifier le systeme, lire l outil, modifier, bumper, RVAV, delegation des tests a Morpheus (flux cases c10-c15 de la carte v1)"
+  },
+  "theme": {
+    "nom": "MODIFIER",
+    "but": "Modifier un outil v1 existant, le bumper, le valider (RVAV) et deleguer les tests a Morpheus (chaine bout-en-bout)",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "description": "Apres analyse et comprehension de ma mission, tracer le debut AVANT de commencer.",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser vulcain \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION : tracer le DEBUT avant de commencer."
+      },
+      {
+        "besoin": "Verifier le systeme (modification) - ETAPE 1 OBLIGATOIRE",
+        "action": "procedure",
+        "description": "Verifier le systeme AVANT de modifier : profil-systeme + evaluations + residus + coherence.",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py",
+          "python3 cerveau-projet/agents/tools/evaluer/evaluer-processus/evaluer-processus.py",
+          "python3 cerveau-projet/agents/tools/detecter/detecter-evaluations-incompletes/detecter-evaluations-incompletes.py --motif <motif>",
+          "python3 cerveau-projet/agents/tools/detecter/detecter-residus/detecter-residus.py",
+          "detecter-donnees-en-dur, proteger-verrou-habilitation, evaluer-rating, detecter-troncatures --tous, analyser-noms-maj --tous, corriger-noms-maj --dry-run, detecter-ecritures-hors-cycle, evaluer-progression (via le catalogue)"
+        ],
+        "regle": "CREATION LIMITEE : verifier-systeme met a jour SON profil dans variables-actuelles - je ne cree aucun autre fichier."
+      },
+      {
+        "besoin": "Lire l'outil existant",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin-outil>"
+        ],
+        "regle": "Comprendre l'outil existant AVANT de le modifier."
+      },
+      {
+        "besoin": "Modifier l'outil",
+        "action": "procedure",
+        "etapes": [
+          "References : protocole-tests.001.01.ebauche.md, pattern-2, pattern-12"
+        ],
+        "regle": "Modifier conforme au protocole 5 fichiers et aux patterns 2/12 (creation limitee)."
+      },
+      {
+        "besoin": "Bumper l'outil (mettre-a-jour-versions)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/mettre-a-jour/mettre-a-jour-versions/mettre-a-jour-versions.py <cible> (dry-run puis --wet)"
+        ],
+        "regle": "BUMP SYSTEMATIQUE : apres TOUTE creation/modification d outil, lancer mettre-a-jour-versions sur la cible pour synchroniser TOUTES les versions (en-tete, constante, sh, md, spec)."
+      },
+      {
+        "besoin": "L'outil est-il un COMBO ou le CATALOGUE ?",
+        "action": "procedure",
+        "description": "L outil cree/modifie est-il une definition-combo (definition-combo.json) ou le catalogue de commandes (catalogue-commandes.json) ?",
+        "etapes": [
+          "OUI -> lancer le scan detecter-decalages-catalogue (section COMBOS) : python3 cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/detecter-decalages-catalogue.py (PASSE PAR LE GENERATEUR)",
+          "Le rapport doit afficher '0 problemes' : tout ecart de cles doit etre corrige avant de continuer",
+          "Lancer le test-023-grep-budget-pondere : python3 cerveau-projet/agents/tools/tester/tests/test-023-grep-budget-pondere/test-023-grep-budget-pondere.py (PASSE PAR LE GENERATEUR)",
+          "Le test doit afficher '26 OK / 0 KO'",
+          "NON -> passer directement au combo corriger-ascii"
+        ],
+        "regle": "GARDE-FOU CLES COMBOS : les entrees d un combo doivent utiliser les cles EXACTES du catalogue (source : cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json)."
+      },
+      {
+        "besoin": "Lancer le combo corriger-ascii",
+        "action": "procedure",
+        "description": "PATTERN 3 (spec v0.2.4) : cette etape lance un COMBO - combos-moteur execute la definition du combo (correction des accents + validation ASCII).",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-corriger-ascii/definition-combo.json",
+          "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py",
+          "Reference : pattern-3"
+        ],
+        "regle": "REGLE IMMUABLE : ASCII strict + LF sur tous les fichiers produits."
+      },
+      {
+        "besoin": "RVAV avant activation",
+        "action": "procedure",
+        "description": "Boucle RVAV complete avant d activer le maillon suivant (Morpheus).",
+        "etapes": [
+          "Lire : cerveau-projet/agents/regles-immuables/general/rvav-workflow.md"
+        ],
+        "regle": "REGLE IMMUABLE RVAV : je ne valide JAMAIS sans avoir passe la boucle RVAV complete (rechercher, verifier, analyser, valider)."
+      },
+      {
+        "besoin": "Deleguer les tests a Morpheus",
+        "action": "procedure",
+        "description": "CONTROLE : As-tu ACTIVE MORPHEUS pour ECRIRE et EXECUTER les tests (creation ET mise a jour des test-XXX) SANS avoir toi-meme touche a AUCUN fichier de test ?",
+        "etapes": [
+          "Si OUI -> enregistrer mes usages d outils puis lecons puis fin",
+          "Si NON -> INTER-ROUND : activer l agent habilite pour reparer (theme INTER-ROUND)",
+          "Reference : protocole-tests",
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> morpheus \"TESTER ...\""
+        ],
+        "regle": "REGLE : je ne touche JAMAIS aux fichiers de test - Morpheus les ecrit et les execute."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils",
+        "action": "procedure",
+        "description": "Avant de cloturer ma mission, enregistrer CHAQUE outil utilise dans le registre JSONL (source de verite des usages) : un appel par outil, via le generateur (PASSE PAR LE GENERATEUR).",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py (parametres : agent=vulcain, outil=<nom>, mode=<generateur/direct/combo>, contexte=<ma mission>)"
+        ],
+        "regle": "REGLE REGISTRE : j enregistre chaque outil utilise dans le registre JSONL."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "description": "J ecris MA lecon : ## [LECON] <date> -- <titre> (Vulcain) avec **Contexte**, **Actions** et **Verdict** (VALIDE / A REVOIR / CONFORME / KO).",
+        "etapes": [
+          "Reference : protocole-fin-mission.001.01.ebauche.md",
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/vulcain/corrections.md <lecon>",
+          "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/vulcain/corrections.md --all",
+          "detecter-usage-outils-externes <cible> --recursive, detecter-surcharge-fichier cerveau-projet/agents --seuil 500 --recursive, enregistrer-lecon --agent <MOI> --domaine <domaine> --titre <titre> --lecon <texte>, consulter-lecons --agent <MOI> --recherche <motif>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict AVANT toute transmission (test-048 le verifie)."
+      },
+      {
+        "besoin": "Ameliorations possibles de mon fonctionnement ?",
+        "action": "procedure",
+        "description": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, arbre, lecons, outils, protocoles) ?",
+        "etapes": [
+          "OUI -> PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite : python3 cerveau-projet/agents/tools/generateurs/generateurs-amelioration/generateurs-amelioration.py (themes : cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json)",
+          "Puis activer l'agent habilite (champ agent_habilite dans themes-amelioration.json) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison> (PASSE PAR LE GENERATEUR : generateurs-commande --commande <cmd> --reponses <cle=valeur;...>)",
+          "L agent habilite me reactive avec le bilan (fin-reprise)",
+          "NON -> activer Themis pour auditer ma mission"
+        ],
+        "regle": "PATTERN 17 : GENERATEUR D'ABORD - je ne fais PAS l'amelioration moi-meme."
+      },
+      {
+        "besoin": "Activer Themis pour auditer ma mission",
+        "action": "procedure",
+        "description": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises.",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>' (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus)",
+          "Themis audite ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale elle m active pour corriger et je l ACTIVE pour re-audit avec mon bilan"
+        ],
+        "regle": "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus."
+      },
+      {
+        "besoin": "Retour de Themis recu ?",
+        "action": "procedure",
+        "description": "CONTROLE : Themis m'a-t-elle reactive avec son rapport ?",
+        "etapes": [
+          "OUI -> HISTORISER LA FIN puis fin de theme",
+          "NON -> re-essai (attente legitime du retour de Themis, voulue - pattern re-essai)"
+        ],
+        "regle": "PATTERN RE-ESSAI (controle NON -> soi-meme) : attente legitime, voulue."
+      },
+      {
+        "besoin": "Historiser la FIN de mon intervention",
+        "action": "procedure",
+        "description": "Ma mission est terminee - tracer la fin AVANT d'activer le maillon suivant : trace du bilan.",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser vulcain \"FIN: <mon bilan>\""
+        ],
+        "regle": "REGLE HISTORISATION : tracer la FIN avant d'activer le maillon suivant."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-modifier"}
+}

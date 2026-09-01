@@ -1,0 +1,104 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "minerve",
+    "description": "Fins reelles de Minerve (parcours v0.4.4 : c10, c9e, c20, c20d, c21, c23, cU3)"
+  },
+  "fins": {
+    "fin-ameliorer": {
+      "titre": "FIN - Amelioration deleguee (reprise)",
+      "description": "L agent habilite a ete active pour l amelioration. Reprise du parcours apres retour (c9e).",
+      "action": "redirection",
+      "vers": "arbre-minerve.json"
+    },
+    "fin-autre": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-completer": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-corriger": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-creer": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-delegation": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-outil-temp": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-outils": {
+      "titre": "FIN - Reprendre ma mission (cU3)",
+      "description": "Le probleme d outil est resolu. Reprise de la mission interrompue.",
+      "action": "redirection",
+      "vers": "arbre-minerve.json"
+    },
+    "fin-reprise": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-signaler": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-minerve.json"
+    },
+    "fin-themis": {
+      "titre": "FIN - Themis active pour audit",
+      "description": "Themis activee pour audit (c22). Elle me re-active avec son rapport (c23).",
+      "action": "redirection",
+      "vers": "arbre-minerve.json"
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<rapport du traitement inter-round>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    }
+  }
+}

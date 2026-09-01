@@ -1,0 +1,47 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "pilote",
+    "description": "Toutes les fins possibles pour le pilote (arbre de mission R2, modele aero)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-pilote.json",
+      "description": "Theme termine : retour a la racine pour choisir la prochaine etape de mission."
+    },
+    "fin-mission-chargee": {
+      "titre": "FIN - Mission chargee (passer au largage)",
+      "description": "Ma mission est chargee (destination + liste d agents). Je passe au largage du premier agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin pilote \"<mission chargee - destination + liste agents>\"",
+      "regle": "R2 : mission configuree par oracle, je largue le premier agent."
+    },
+    "fin-agent-largue": {
+      "titre": "FIN - Agent largue (vol en cours)",
+      "description": "L agent est largue avec sa mission. J attends son message de fin avant de continuer.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin pilote \"<agent largue - en attente de sa fin>\"",
+      "regle": "D2 : un seul agent en vol. J attends sa fin."
+    },
+    "fin-agent-recupere": {
+      "titre": "FIN - Agent recupere (passer au suivant)",
+      "description": "L agent est recupere avec son bilan. Je largue le suivant ou je reviens a oracle si la liste est terminee.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin pilote \"<agent recupere - bilan collecte>\"",
+      "regle": "D7 : mission terminee quand TOUS les agents sont largues et recuperes."
+    },
+    "fin-retour-oracle": {
+      "titre": "FIN - Mission de pilote terminee (retour a ORACLE)",
+      "description": "Toute ma mission est terminee : tous les agents largues et recuperes. Je reviens a ORACLE (l aeroport) avec le bilan consolide.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin pilote \"<bilan consolide de ma mission de pilote>\"",
+      "regle": "R1 : ma fin va vers ORACLE, jamais vers cerberus. Le pilote ne revient qu a la fin de TOUTE sa mission."
+    }
+  }
+}

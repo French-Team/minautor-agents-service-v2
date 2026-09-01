@@ -28,9 +28,9 @@
    "agent": "cerberus",
    "cid": "c10",
    "raison": "Activer l agent : le geste fondamental de la coordination",
-   "empreinte": "90f47b657d33a4ee53aaf95d90dc9204403c1aea854a0a1c9dfda881297513dc",
-   "modifie_le": "2026-08-20 22:00:24",
-   "raison_modification": "Reparation dette preexistante : empreinte c10 obsoleted par travail anterieur non commite (sync post-reparation) ; autorisation utilisateur obtenue via ask_user 2026-08-20 (OUI - re-empreinter c10). Retrait simultane de la cle corrompue 2 du manifeste."
+   "empreinte": "8d7860cbe6a0cfaffda20e631a211891fb8d86171a8a6d3fef82efb14ba9eaab",
+   "modifie_le": "2026-08-29 17:08:40",
+   "raison_modification": "test"
   },
   "cerberus.c14": {
    "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
@@ -57,9 +57,9 @@
    "marqueur_debut": "<!-- MARBRE:DEBUT constitution -->",
    "marqueur_fin": "<!-- MARBRE:FIN constitution -->",
    "raison": "Constitution du cerveau-projet : Configuration Active + cycle fondamental (regles immuables du comportement de Cerberus)",
-   "empreinte": "c78d5df3b9ba412aea1cc72da196600ebe984c9793c419232259949e52da8554",
-   "modifie_le": "2026-08-22 09:37:40",
-   "raison_modification": "Alignement etape 5 du cycle fondamental sur le flux ROUND INTER-ROUND REPRISE - protocole-fin-mission v0.2.0 - decision utilisateur 2026-08-22 validee via revision Socrate - rapport proposition-marbre-constitution-inter-round-2026-08-22.md"
+   "empreinte": "b14866c44d240a7a535f926cd38575027c93cf09837cb1317df99f2afa78e549",
+   "modifie_le": "2026-08-30 21:39:21",
+   "raison_modification": "Mise a jour du protocole inter-round en modele aero (decision utilisateur 2026-08-30) : ERREUR HORS-PERIMETRE -> l agent SIGNALE a Oracle (mission-ajouter), MA FIN vers Oracle (reactiver-fin --cible oracle), le PILOTE largue l habilite puis renvoie l appelant. Suppression des references v1 (reactiver Cerberus, Pattern 13, activer-agent-principal reactiver)."
   },
   "regles-groupes-agents": {
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",
@@ -73,9 +73,9 @@
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-general-global.md",
    "type": "fichier",
    "raison": "REGLE D OR anti-valeurs-magiques gravee dans les regles globales (decision utilisateur 2026-08-16)",
-   "empreinte": "8bbb188ebcecfb1a69d099a0ebb80781d4489863192f20b5129f5bd21209ac0a",
-   "modifie_le": "2026-08-16 10:07:11",
-   "raison_modification": "Gravure de la REGLE D OR anti-valeurs-magiques (hierarchie constante -> config -> .env) dans regles-general-global.md"
+   "empreinte": "cb42422907fa8e05acf8042e82185c25442ad33481d39a98a62e3557b6d0770e",
+   "modifie_le": "2026-08-31 09:14:54",
+   "raison_modification": "Renforcer les regles v1 contre les boucles d annonces, les transitions implicites et la negligence du classeur de variables"
   }
  }
 }

@@ -97,7 +97,8 @@
           "Si OUI -> enregistrer mes usages d outils puis lecons puis fin",
           "Si NON -> INTER-ROUND : activer l agent habilite pour reparer (theme INTER-ROUND)",
           "Reference : protocole-tests",
-          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> morpheus \"TESTER ...\""
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent morpheus \"TESTER ...\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<bilan>\" --cible oracle (le pilote larguera morpheus et me renverra pour reprendre mon round)"
         ],
         "regle": "REGLE : je ne touche JAMAIS aux fichiers de test - Morpheus les ecrit et les execute."
       },
@@ -128,7 +129,8 @@
         "description": "Mon rapport et mes lecons revelent-ils des ameliorations possibles de MON fonctionnement (fiche, arbre, lecons, outils, protocoles) ?",
         "etapes": [
           "OUI -> PATTERN 17 : GENERATEUR D'ABORD - lancer generateurs-amelioration AVANT d'activer l'agent habilite : python3 cerveau-projet/agents/tools/generateurs/generateurs-amelioration/generateurs-amelioration.py (themes : cerveau-projet/agents/tools/generateurs/generateurs-amelioration/themes-amelioration.json)",
-          "Puis activer l'agent habilite (champ agent_habilite dans themes-amelioration.json) : python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison> (PASSE PAR LE GENERATEUR : generateurs-commande --commande <cmd> --reponses <cle=valeur;...>)",
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)",
           "L agent habilite me reactive avec le bilan (fin-reprise)",
           "NON -> activer Themis pour auditer ma mission"
         ],
@@ -139,7 +141,8 @@
         "action": "procedure",
         "description": "MA MISSION EST TERMINEE et validee (RVAV passe). J ACTIVE THEMIS (evaluation croisee) avec mon bilan et la liste des outils utilises.",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>' (commande activer, PAS reactiver - reactiver ramene toujours a Cerberus)",
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)",
           "Themis audite ; a SA fin, si aucun defaut elle me RE-ACTIVE (c25b) avec son rapport et je continue vers le controle de retour ; si un defaut est signale elle m active pour corriger et je l ACTIVE pour re-audit avec mon bilan"
         ],
         "regle": "REGLE THEMIS : en fin de mission, j active THEMIS (evaluation) AVANT le controle JANUS. Chaine : Cerberus -> Moi -> Themis -> Moi -> Janus -> Cerberus."
@@ -166,5 +169,9 @@
       }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-modifier"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-modifier"
+  }
 }

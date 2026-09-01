@@ -6,12 +6,15 @@ flowchart TD
     c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
     c0d["LIRE LA DOCUMENTATION DES OUTILS avant utilisation"]
     c0e["Consulter les lecons des autres agents (domaine coordination)"]
+    c0g["GATE BON AGENT : verifier que tu es LE BON AGENT"]
+    c0ga{"GATE : es-tu le bon agent ?"}
+    c0h(["FIN - STOP : pas le bon agent, reactiver Cerberus"])
     c1{"Mission de coordination"}
     c13{"Mission hors perimetre ?"}
     c14(["FIN - Delegation a l agent habilite"])
     c15(["Signaler le besoin"])
     c2["Controle des processus (fantomes / serveurs morts)"]
-    c20(["FIN - Reactiver Cerberus"])
+    c20(["FIN - Coordination terminee"])
     c24["HISTORISER LA FIN : tracer la fin de mon intervention"]
     c2b{"Probleme detecte ?"}
     c3(["Signaler le probleme processus a Cerberus"])
@@ -22,11 +25,14 @@ flowchart TD
     cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
     cU3(["FIN - Reprendre la mission de coordination"])
     c0 --> c0b
-    c0b -- "OUI" --> c0e
+    c0b -- "OUI" --> c0g
     c0b -- "NON" --> c0
     c0c --> c0d
     c0d --> cU1
     c0e --> c0c
+    c0g --> c0ga
+    c0ga -- "OUI" --> c0e
+    c0ga -- "NON" --> c0h
     c1 -- "controle-processus" --> c2
     c1 -- "roulage" --> c4
     c1 -- "etat" --> c5

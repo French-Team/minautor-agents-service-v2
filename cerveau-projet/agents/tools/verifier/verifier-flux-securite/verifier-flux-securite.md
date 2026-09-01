@@ -33,7 +33,7 @@ Oracle est le SEUL a historiser DEBUT/FIN.
 | R4 | Agent ne historise pas son propre DEBUT/FIN |
 | R5 | Oracle present entre DEBUT et FIN de chaque agent |
 | R6 | Citations ont toujours "instant" comme Debut/Fin |
-| R7 | Apres FIN d un agent, le prochain agent est Cerberus (pas un autre) |
+| R7 | Apres FIN d un agent, le prochain agent est Cerberus ou Oracle (modele aero 2026-08-30) |
 
 ## Utilisation
 
@@ -54,4 +54,5 @@ python3 cerveau-projet/agents/tools/verifier/verifier-flux-securite/verifier-flu
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.0 | 2026-08-30 | Modele aero : R7 accepte Cerberus OU Oracle apres une fin ; exclusion des blocs routines v1 (encart, flux, live, notation, verifier-statuts, vigie-perimetre) du scan |
 | 0.1.0 | 2026-08-28 | Creation : 6 regles de securite, lecture du tableau v1 |

@@ -83,7 +83,17 @@ def _historiser_agent(agent, raison, type_action="R"):
 
 
 def _compter_p1_non_acquittes():
-    """Nombre de messages P1 non-lus dans l inbox Oracle."""
+    """Nombre de messages P1 non-lus dans l inbox Oracle.
+
+    On ne compte QUE les P1 d action REELS (missions/instructions pour les
+    agents) : champ `type` NON renseigne (None). Les P1 dont le champ
+    `type` est renseigne sont des AUTO-ALERTES des routines (statuts,
+    vigie-perimetre, vigie-round, sante, notation...), qui se re-nourrissent
+    : la routine depose une alerte P1 non-lue, flux la re-compte -> le
+    compteur change -> verifier-statuts historise un URGENT -> nouvelle
+    mission asap. Decision utilisateur 2026-08-30 : le compteur de flux
+    doit refleter les P1 a traiter par les agents, pas le telephone interne
+    des routines."""
     total = 0
     if not INBOX_DIR.is_dir():
         return 0
@@ -95,7 +105,8 @@ def _compter_p1_non_acquittes():
                 m = json.loads(ligne)
                 if not isinstance(m, dict):
                     continue
-                if not m.get("lu") and m.get("priorite") == 1:
+                if not m.get("lu") and m.get("priorite") == 1 \
+                        and not m.get("type"):
                     total += 1
         except (ValueError, OSError):
             continue

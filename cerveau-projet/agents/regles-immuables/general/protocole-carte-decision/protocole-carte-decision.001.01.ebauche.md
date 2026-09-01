@@ -100,6 +100,15 @@ Details, schema JSON et procedure d'audit : spec-guider-parcours v0.2.13
 
 ### Regles du parcours (v0.2.0)
 
+> **SUPERSEDE par l ARBRE v2 (decision 2026-08-29)** : le guidage passe des
+> parcours v1 (`parcours-<agent>.json` + `guider-parcours`) aux **arbres v2**
+> (`arbre-<agent>.json` + themes `theme-*.json` + `fins.json`), pilotes par
+> Oracle via `oracle.py pilote <agent>`. L arbre est la NOUVELLE source de
+> verite du guidage (l etat de carte des agents pointe vers `arbre-<agent>.json`
+> en priorite). Le parcours v1 reste utilise en repli pour les agents sans
+> arbre. Reparation d arbres : voir `protocole-reparer-arbres` (aligner la
+> racine sur le vocabulaire du pilote, fins precedent-aware via reactiver-fin).
+
 1. Chaque agent a SON parcours dans `agents/<agent>/parcours/parcours-<agent>.json`
 2. `demarrer.md` est la **CASE 0** commune : apres l'identification, l'agent lance SON parcours
 3. La fiche de l'agent est **allegee** : identite, regles absolues, connexions -- le guidage vit dans le JSON

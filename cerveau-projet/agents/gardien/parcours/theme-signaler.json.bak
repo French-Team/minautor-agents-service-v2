@@ -1,0 +1,67 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "gardien",
+    "nom": "SIGNALER",
+    "description": "Signaler une violation du marbre detectee : documenter, activer l agent responsable"
+  },
+  "theme": {
+    "nom": "SIGNALER",
+    "but": "Documenter une violation du marbre (zone modifiee sans protocole) et activer l agent responsable pour reparation",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine securite-marbre)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent gardien --domaine securite-marbre"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Documenter la violation (zone + divergence + agent)",
+        "action": "procedure",
+        "etapes": [
+          "Identifier la zone divisee (nom exact dans marbre.json)",
+          "Documenter la divergence (empreinte attendue vs reelle)",
+          "Identifier l agent responsable (depuis l historique des activations)"
+        ],
+        "regle": "VIOLATION : zone protegee modifiee sans protocole. Documenter sans masquer."
+      },
+      {
+        "besoin": "Corriger les accents du rapport de violation",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/gardien/corrections.md --all"],
+        "regle": "REGLE ASCII : le rapport doit etre 100% ASCII."
+      },
+      {
+        "besoin": "Activer l agent responsable pour reparation",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"],
+        "regle": "REPARATION : l agent responsable doit corriger la violation. JAMAIS la masquer."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/gardien/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent gardien --outil <outil> --contexte '<contexte>'"],
+        "regle": "REGLE REGISTRE : declarer tous les outils utilises."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-signaler"}
+}

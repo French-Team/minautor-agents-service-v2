@@ -32,6 +32,7 @@ Statut : prepare
 """
 
 import datetime
+import importlib.util
 import json
 import os
 import platform
@@ -150,6 +151,19 @@ def extraire_version(texte):
     """Extrait le premier numero de version (ex: 'Python 3.14.4' -> '3.14.4')."""
     m = re.search(r"(\d+(?:\.\d+)+)", texte or "")
     return m.group(1) if m else "-"
+
+
+def _routine_classeur():
+    """Charger la routine centrale du classeur v1."""
+    chemin = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), "..", "..", "oracle", "fonctions", "classeur.py"))
+    try:
+        spec = importlib.util.spec_from_file_location("classeur_v1", chemin)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    except (OSError, ImportError, AttributeError):
+        return None
 
 
 def chemin_classeur(relatif):
@@ -330,10 +344,17 @@ def enregistrer_profil():
     nouvelle_ligne = "| `profil-systeme` | %s | verifier-systeme | %s | [OK] |" % (
         nouvelle_valeur, date_jour)
 
-    # --- Lecture de l'ancienne valeur (pour l'historique) ---
+    # --- Lecture de l'ancienne valeur via la routine centrale ---
+    classeur = _routine_classeur()
+    if classeur is None:
+        print("ERREUR: routine centrale du classeur introuvable")
+        return 1
+    lignes, _ = classeur.lire_fichier(
+        fichier_stockage, "profil-systeme", "verifier-systeme", "oracle", "session-admin")
+    if lignes is None:
+        print("ERREUR: lecture du classeur impossible: %s" % fichier_stockage)
+        return 1
     ancienne_valeur = "(aucune)"
-    with open(fichier_stockage, encoding="utf-8") as fh:
-        lignes = fh.read().split("\n")
     for ligne in lignes:
         if "`profil-systeme`" in ligne:
             debut = ligne.find("| `profil-systeme` | ")
@@ -342,7 +363,7 @@ def enregistrer_profil():
                 ancienne_valeur = reste.split(" | verifier-systeme")[0].strip()
             break
 
-    # --- Mise a jour du tableau de stockage (une seule ligne profil-systeme) ---
+    # --- Mise a jour du tableau de stockage via la routine centrale ---
     existe = any("`profil-systeme`" in ligne for ligne in lignes)
     resultat = []
     vu = False
@@ -366,34 +387,14 @@ def enregistrer_profil():
                 insere = True
         if not insere:
             resultat.append(nouvelle_ligne)
-    with open(fichier_stockage, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write("\n".join(resultat))
-
-    # --- Ajout de l'entree dans l'historique (recentes en premier) ---
-    if os.path.exists(fichier_hist):
-        with open(fichier_hist, encoding="utf-8") as fh:
-            lignes_hist = fh.read().split("\n")
-        entree = [
-            "## %s -- Ecriture" % date_jour,
-            "",
-            "- **Variable** : profil-systeme",
-            "- **Ancienne valeur** : %s" % ancienne_valeur,
-            "- **Nouvelle valeur** : %s" % nouvelle_valeur,
-            "- **Source** : verifier-systeme",
-            "- **Raison** : Mise a jour du profil systeme utilisateur",
-            "",
-        ]
-        resultat_hist = []
-        insere_hist = False
-        for ligne in lignes_hist:
-            resultat_hist.append(ligne)
-            if ligne.startswith("## Entrees recentes") and not insere_hist:
-                resultat_hist.extend(entree)
-                insere_hist = True
-        if not insere_hist:
-            resultat_hist.extend(entree)
-        with open(fichier_hist, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write("\n".join(resultat_hist))
+    if not classeur.ecrire_lignes(
+            fichier_stockage, resultat, "profil-systeme", "verifier-systeme",
+            "oracle", "session-admin",
+            ancienne_valeur=ancienne_valeur,
+            nouvelle_valeur=nouvelle_valeur,
+            raison="Mise a jour du profil systeme utilisateur"):
+        print("ERREUR: ecriture du classeur refusee par la routine centrale")
+        return 1
 
     print("[OK] Profil systeme enregistre dans le classeur-variables")
     print("Variable : profil-systeme")

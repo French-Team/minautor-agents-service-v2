@@ -34,16 +34,20 @@ import os
 import subprocess
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 _ORACLE_DIR = Path(__file__).parent
 ROUTINES_DIR = _ORACLE_DIR / "routines"
 MANIFEST = ROUTINES_DIR / "manifest.json"
 ETAT = ROUTINES_DIR / "etat-executions.json"
 PID_FILE = _ORACLE_DIR / "routines-server.pid"
+# Production: arret apres 30 minutes d inactivite du dernier agent actif.
+INACTIVITE_MAX_SECONDES = 30 * 60
+INACTIVITE_ETAT = _ORACLE_DIR / "session-admin-inactivite.json"
+AGENTS_FILE = _ORACLE_DIR.parents[2] / "AGENTS.md"
 
 
 def _maintenant_iso():
@@ -123,8 +127,11 @@ def executer_routine(routine):
 
 
 def tic():
-    """Un tic du daemon : executer les routines dont l intervalle est
-    ecoule. Tolerant : une erreur ne tue jamais le daemon."""
+    """Un tic du daemon : executer les routines dont la prochaine execution
+    est atteinte. Tolerant : une erreur ne tue jamais le daemon.
+
+    Chaque routine utilise uniquement son intervalle fixe declare dans
+    manifest.json. Aucun decalage aleatoire n est ajoute."""
     routines = charger_manifest()
     if not routines:
         return
@@ -135,28 +142,115 @@ def tic():
         if not routine.get("actif", True):
             continue
         intervalle = int(routine.get("intervalles_secondes", 300))
-        derniere = etat.get(nom, "")
-        if not derniere or secondes_ecoulees(derniere) >= intervalle:
+        prochaine = etat.get(nom, "")
+        # L etat stocke la prochaine execution selon l intervalle fixe.
+        echu = False
+        if not prochaine:
+            echu = True
+        else:
+            secondes = secondes_ecoulees(prochaine)
+            # date passee ou egale a maintenant -> echu ; date future -> attendre.
+            echu = secondes >= 0
+        if echu:
             try:
                 if executer_routine(routine):
-                    etat[nom] = maintenant
+                    # Prochaine execution : intervalle fixe, sans jitter.
+                    dproch = datetime.now() + timedelta(seconds=intervalle)
+                    etat[nom] = dproch.strftime("%Y-%m-%dT%H:%M:%S")
             except Exception as exc:
                 print("[ROUTINES-SERVER] ERREUR routine '%s' : %s"
                       % (nom, exc), flush=True)
     sauver_etat(etat)
 
 
+def _historiser_demarrage():
+    try:
+        oracle_cli = _ORACLE_DIR / "oracle.py"
+        subprocess.run([sys.executable, str(oracle_cli), "historiser", "routines-server",
+                        "DEMARRAGE SERVEUR: routines-server actif pid=%d" % os.getpid()],
+                       timeout=30, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+
+
+def _dernier_agent_actif():
+    try:
+        texte = AGENTS_FILE.read_text(encoding="utf-8")
+    except OSError:
+        return "cerberus"
+    actif = None
+    dans_session = False
+    for ligne in texte.splitlines():
+        if ligne.startswith("### Session :"):
+            dans_session = "session-admin" in ligne.lower()
+        elif dans_session and ligne.startswith("| **Agent actif** |"):
+            actif = ligne.split("|", 2)[1].strip(" *")
+            break
+    return actif or "cerberus"
+
+
+def _dernier_agent_a_agit():
+    try:
+        activite = AGENTS_FILE.parent / "AGENTS-activite-recente.md"
+        lignes = activite.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return time.time()
+    agent = _dernier_agent_actif().lower()
+    for ligne in lignes:
+        if not ligne.startswith("| ") or "| Grade |" in ligne or "|---" in ligne:
+            continue
+        c = [x.strip() for x in ligne.split("|")]
+        if len(c) >= 9 and c[2].lower() == agent:
+            try:
+                return datetime.now().replace(hour=int(c[8][0:2]), minute=int(c[8][3:5]), second=int(c[8][6:8]), microsecond=0).timestamp()
+            except (ValueError, IndexError):
+                return time.time()
+    return time.time()
+
+
+def _demande_user_recente():
+    try:
+        data = json.loads(INACTIVITE_ETAT.read_text(encoding="utf-8"))
+        return float(data.get("derniere_demande_user", 0))
+    except (OSError, ValueError, TypeError):
+        return time.time()
+
+
+def _arret_inactivite():
+    if time.time() - _dernier_agent_a_agit() < INACTIVITE_MAX_SECONDES:
+        return False
+    try:
+        oracle_cli = _ORACLE_DIR / "oracle.py"
+        subprocess.run([sys.executable, str(oracle_cli), "historiser", "oracle",
+                        "ARRET AUTO: dernier agent actif inactif >= 30 min"],
+                       timeout=30, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+    # routines-server ne tue pas son parent: Oracle orchestre l arret global.
+    # Il supprime uniquement son propre marqueur et termine proprement.
+    try:
+        PID_FILE.unlink()
+    except OSError:
+        pass
+    print("[ROUTINES-SERVER] arret automatique: dernier agent actif inactif >= 30 min", flush=True)
+    return True
+
+
 def boucler(intervalle_secondes):
-    """Boucle residente du daemon v1 : tic toutes les N secondes.
-    Le processus tourne en permanence (lance par oracle-demarrage)."""
+    """Boucle residente avec arret apres 30 min sans demande utilisateur."""
     try:
         PID_FILE.write_text(str(os.getpid()), encoding="utf-8")
     except OSError:
         pass
-    print("[ROUTINES-SERVER] daemon lance (tic toutes les %ds, pid %d)"
+    print("[ROUTINES-SERVER] DEMARRAGE SERVEUR: daemon lance (tic toutes les %ds, pid %d)"
           % (intervalle_secondes, os.getpid()), flush=True)
+    _historiser_demarrage()
     try:
         while True:
+            if _arret_inactivite():
+                return
             try:
                 tic()
             except Exception as exc:

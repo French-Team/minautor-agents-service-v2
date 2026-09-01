@@ -1,0 +1,61 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "buffy",
+    "nom": "CONTROLER",
+    "description": "Controle/sante des tableaux et des structures (combo sante-tableaux, audit)"
+  },
+  "theme": {
+    "nom": "CONTROLER",
+    "but": "Verifier l etat des tableaux et des structures, signaler les anomalies",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Lancer le combo sante-tableaux",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-sante-tableaux/definition-combo.json"
+        ],
+        "regle": "COMBO SANTE-TABLEAUX : controle de sante des tableaux."
+      },
+      {
+        "besoin": "Activer Themis pour auditer",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+        ],
+        "regle": "THEMIS AVANT JANUS."
+      },
+      {
+        "besoin": "Retour de Themis recu ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-controler",
+          "NON -> re-essai"
+        ],
+        "regle": "PATTERN RE-ESSAI."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-controler"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "redacteur-v2",
+    "nom": "AUTRE",
+    "description": "Mission hors parcours"
+  },
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Executer une mission hors des themes standard",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "La mission concerne-t-elle un autre agent ? (delegation)",
+        "action": "procedure",
+        "etapes": [
+          "SI OUI -> REDIRIGER vers l agent habilite (besoin suivant)",
+          "SI NON -> executer la mission"
+        ],
+        "regle": "REGLE ABSOLUE : je n execute JAMAIS une mission qui ne releve pas de mon domaine. AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Atlas inventaire, Themis audit, Clio README, Chiron education."
+      },
+      {
+        "besoin": "DELEGATION - Activer l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin redacteur-v2 \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
+        ],
+        "regle": "Delegation propre : activer l agent habilite, jamais executer son travail."
+      },
+      {
+        "besoin": "Executer la mission",
+        "action": "procedure",
+        "etapes": [
+          "Suivre les instructions de la mission"
+        ],
+        "regle": "Executer la mission confiee."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-autre"
+  }
+}

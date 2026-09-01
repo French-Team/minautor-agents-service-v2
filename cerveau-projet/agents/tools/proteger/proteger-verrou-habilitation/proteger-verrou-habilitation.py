@@ -58,7 +58,7 @@
 #   2 : erreur d utilisation (agent/outil manquant, agent inconnu,
 #       identite de session indeterminable)
 #
-# Version : 0.4.2
+# Version : 0.5.0
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -86,9 +86,10 @@ import io
 import json
 import os
 import re
+import subprocess
 import sys
 
-VERSION = "0.4.2"
+VERSION = "0.5.0"
 
 AGENTS_DIR = None          # racine/cerveau-projet/agents (detectee)
 PROJECT_ROOT = None        # racine du projet (contient AGENTS.md)
@@ -276,6 +277,59 @@ def agent_actif_session():
     lignes.sort(key=lambda c: c[3], reverse=True)
     actif = lignes[0][2].strip()
     return actif if actif and actif != "-" else None
+
+
+def verif_missions_oracle(agent):
+    """Verrou interne (v0.5.0) : interroge oracle pour verifier qu une
+    mission EN_ATTENTE ou PRISE existe pour l agent declare. Retourne
+    (ok, detail). En mode hybride du blueprint, le fait qu une mission
+    reliee DESIGN E cet agent (et non seulement reecrite a la main dans
+    AGENTS.md) est le signal d une incarnation reelle.
+    Ne lance jamais d erreur : en cas d indisponibilite d oracle, retourne
+    (None, "oracle indisponible") pour que l appelant decide (mode strict
+    = bloque ; le verrou par defaut n ajoute pas ce croisement)."""
+    # Interroge les deux statuts actifs (PRISE = mission relayee, EN_ATTENTE
+    # = mission passee en file non encore relayee). Une incarnation reelle
+    # correspond a une mission PRISE ou EN_ATTENTE pour l agent declare.
+    # Chemin fiable vers oracle.py : on remonte depuis __file__ de CE script
+    # (chemin natif correct en Windows) plutot que de PROJECT_ROOT (forme
+    # MSYS /z/ qui serait double-prefixe Z:\z\ une fois lance a nouveau).
+    # Si __file__ est en forme MSYS (/z/...), on convertit en X:\... : un
+    # subprocess Windows ne resout pas les chemins MSYS.
+    def _chemin_natif(chemin):
+        if re.match(r"^/[a-zA-Z]/", chemin):
+            return chemin[1].upper() + ":" + chemin[2:].replace("/", "\\")
+        return chemin
+
+    try:
+        ici = os.path.dirname(os.path.abspath(__file__))
+        oracle_py = _chemin_natif(os.path.normpath(os.path.join(
+            ici, "..", "..", "oracle", "oracle.py")))
+        env = os.environ.copy()
+        env.pop("AGENTS_FILE", None)
+        env.pop("AGENTS_HISTORIQUE", None)
+        env.pop("CLASSEUR_STOCKAGE", None)
+    except (OSError, subprocess.SubprocessError):
+        return (None, "oracle indisponible")
+    entreees = []
+    for statut in ("PRISE", "EN_ATTENTE"):
+        try:
+            r = subprocess.run(
+                [sys.executable, oracle_py, "mission-lister",
+                 "--statut", statut, "--agent", agent],
+                capture_output=True, text=True, env=env, timeout=20)
+        except (OSError, subprocess.SubprocessError):
+            return (None, "oracle indisponible")
+        if r.returncode != 0:
+            continue
+        lignes = [l.strip() for l in r.stdout.splitlines() if l.strip()]
+        # Une entree de mission commence par '[<file>' (ex '[asap   ] id')
+        # alors que l en-tete commence par '[ORACLE]'.
+        entreees += [l for l in lignes
+                     if l.startswith("[") and not l.startswith("[ORACLE]")]
+    if entreees:
+        return (True, "%d mission(s) PRISE/EN_ATTENTE" % len(entreees))
+    return (False, "aucune mission PRISE/EN_ATTENTE pour cet agent")
 
 
 def commande_activation(agent_habilite, session, raison=""):
@@ -469,6 +523,10 @@ def main():
                         help="fichier cible (permet la cle exclusive tests : tester/tests/ = morpheus seul)")
     parser.add_argument("--audit", action="store_true",
                         help="mode audit/tests : table d habilitation sans verifier l identite reelle")
+    parser.add_argument("--verrou-interne", action="store_true",
+                        help="Verrou bleu (v0.5.0) : croise ET EXIGE une mission oracle\n"
+                             "EN_ATTENTE/PRISE pour l agent declare (source de verite du\n"
+                             "round, pas la seule reecriture d AGENTS.md)")
     parser.add_argument("--liste", action="store_true", help="affiche la table outil -> agents habilites")
     parser.add_argument("--verbose", action="store_true", help="detail du verdict")
     parser.add_argument("--version", action="store_true", help="affiche la version")
@@ -518,6 +576,26 @@ def main():
                    + agent_reel + "', pas '" + args.agent + "'. "
                    "Activez d abord l agent habilite (activer-agent-principal).")
             journaliser(args.agent, args.outil, "USURPATION_IDENTITE", agent_reel)
+            sys.stdout.write(msg + "\n")
+            sys.exit(1)
+
+    # VERROU INTERNE (v0.5.0, Verrou bleu) : quand active, exige en PLUS
+    # qu une mission oracle EN_ATTENTE/PRISE designe l agent declare
+    # (source de verite du round). Cela bloque l usurpation d identite par
+    # simple reecriture d AGENTS.md : meme si l agent y est pose a la main,
+    # sans mission relayee par oracle le verrou reste FERME.
+    if args.verrou_interne:
+        ok_mission, detail = verif_missions_oracle(args.agent)
+        # ok_mission None = oracle indisponible/erreur -> on bloque par
+        # la route stricte (l incarnation ne peut pas etre prouvee).
+        if ok_mission is not True:
+            raison = detail if ok_mission is not None else detail
+            msg = ("BLOQUE (verrou interne) : aucune preuve d une mission oracle\n"
+                   "relayee EN_ATTENTE/PRISE pour l agent '" + args.agent
+                   + "' (" + raison + "). La simple presence dans AGENTS.md ne\n"
+                   "sert plus d autorite : re-routez la demande par oracle\n"
+                   "(mission-relais) puis redemandez l outil.")
+            journaliser(args.agent, args.outil, "VERROU_INTERNE", agent_reel)
             sys.stdout.write(msg + "\n")
             sys.exit(1)
 

@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "vulcain",
+    "nom": "INTER-ROUND",
+    "description": "Receptions et relances inter-round (protocole-fin-mission v0.2.0 R2) : rapport KO recu, tests non delegues (flux cases c1ir/c14ir de la carte v1)"
+  },
+  "theme": {
+    "nom": "INTER-ROUND",
+    "but": "Gerer les activations inter-round : accuser reception d un rapport KO et relancer l appelant, ou activer l agent habilite pour reparer",
+    "redirects": [
+      {
+        "besoin": "RECEPTION inter-round : rapport KO recu d'un autre agent",
+        "action": "procedure",
+        "description": "Un agent (Morpheus, Janus, Themis) m a active en inter-round avec un rapport de KO. Je NE commence PAS une nouvelle mission outil.",
+        "etapes": [
+          "PERIMETRE REDUIT : 1) Lire le rapport KO transmis, 2) Confirmer reception (message console), 3) REACTIVER l agent appelant (commande activer, PAS reactiver) avec mention \"reprends ton round en cXe\"",
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent_appelant> '<rapport>'",
+          "CASCADE autorisee entre habilites",
+          "MA FIN EST precedent-aware : oracle.py reactiver-fin vulcain reactivera L APPELANT (mon precedent), PAS Cerberus."
+        ],
+        "regle": "REGLE INTER-ROUND (R2) RECEPTION : je n execute PAS une nouvelle mission. J accuse reception et je relance l appelant qui reprend son round. Si la cascade m avait voie moi = dernier maillon, JE reactive l appelant via reactiver-fin."
+      },
+      {
+        "besoin": "INTER-ROUND : tests non delegues (blocage a la delegation)",
+        "action": "procedure",
+        "description": "Les tests n ont pas ete delegues a Morpheus et je ne peux pas avancer. Je n interromps PAS le round : j ACTIVE L AGENT HABILITE (Buffy pour la carte) avec le rapport du blocage.",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent-habilite> '<rapport du blocage>'",
+          "L agent habilite repare. A la fin de l inter-round, l habilite me REACTIVE et je REPRENDS mon round (c8e/c14)",
+          "CASCADE autorisee entre habilites"
+        ],
+        "regle": "REGLE INTER-ROUND (R2) : blocage de tests = reparation par l agent habilite exclusivement. Activation avec le rapport du blocage, reprise du round apres reparation."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-inter-round"}
+}

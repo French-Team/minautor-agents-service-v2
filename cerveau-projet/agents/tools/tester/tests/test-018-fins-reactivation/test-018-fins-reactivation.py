@@ -143,7 +143,10 @@ FINS_PRECISEES = {}
 # directe) : janus (v1, controleur final) + redacteur-v2 (v2, MODE
 # CONVERSATION - reactive Cerberus sur fin de cycle) + hades c5 (agent git
 # dedie, fin REACTIVER avec bilan dernier maillon - titre aligne 2026-08-28).
-DERNIER_MAILLON = {"janus": "c10", "redacteur-v2": "c8", "hades": "c5", "oracle": "c20"}
+# NB 2026-08-30 : oracle RETIRE de cette liste - il est migre en v2 (fins
+# en reactiver-fin dans fins.json, plus de fin REACTIVER en dur dans son
+# parcours v1). Seuls hades/janus/redacteur-v2 sont encore en v1.
+DERNIER_MAILLON = {"janus": "c10", "redacteur-v2": "c8", "hades": "c5"}
 
 NB_POINTS = 0
 NB_OK = 0
@@ -196,8 +199,17 @@ def main():
     print("=== Test formel fins reactivation (15 parcours) ===")
 
     # --- Passe 1 : analyse statique des fins REACTIVER-CERBERUS ---
-    fins_reactiver = {}  # agent -> (case_id, titre, message)
-    fins_par_agent = {}  # agent -> [cases] (detection des doublons)
+    # NB 2026-08-29 : le GATE BON AGENT (decision utilisateur marbre-log) a
+    # ajoute dans CHAQUE parcours une fin de STOP 'FIN - STOP : pas le bon
+    # agent, reactiver Cerberus' (c0h). C'est une CATEGORIE DISTINCTE : ce
+    # n'est PAS une fin de reactivation de fin de mission (elle ne reactive
+    # que lorsqu'on n'est PAS le bon agent, avant de commencer). Le test
+    # doit donc SEPARER les STOP-GATE (titre commencant par 'FIN - STOP')
+    # des veritables fins REACTIVER de fin de chaine.
+    GATE_STOP_PREFIX = "fin - stop"
+    fins_reactiver = {}  # agent -> (case_id, titre, message)  (hors GATE STOP)
+    fins_par_agent = {}  # agent -> [cases] (detection des doublons, hors GATE STOP)
+    gate_stop_par_agent = {}  # agent -> [cases]  (le STOP GATE "pas le bon agent")
     for chemin in parcours_liste:
         agent = agent_de_parcours(chemin)
         d = charger_parcours(chemin)
@@ -207,15 +219,23 @@ def main():
             titre = c.get("titre", "")
             msg = c.get("message", "")
             if "reactiver cerberus" in titre.lower():
-                fins_par_agent.setdefault(agent, []).append(k)
-                fins_reactiver[agent] = (k, titre, msg)
+                if titre.lower().startswith(GATE_STOP_PREFIX):
+                    gate_stop_par_agent.setdefault(agent, []).append(k)
+                else:
+                    fins_par_agent.setdefault(agent, []).append(k)
+                    fins_reactiver[agent] = (k, titre, msg)
+
+    # 0b. Chaque parcours porte AU PLUS UN STOP GATE "pas le bon agent"
+    doubles_gate = ["%s:%s" % (a, ",".join(v)) for a, v in sorted(gate_stop_par_agent.items()) if len(v) > 1]
+    verifier("0b. Au plus une fin STOP GATE 'pas le bon agent' par parcours",
+             not doubles_gate, "; ".join(doubles_gate))
 
     # 1. Aucun parcours n'a plus d'une fin REACTIVER-CERBERUS (le controleur
     #    de la chaine est unique : reactiver ne ramene qu'a Cerberus)
     doubles = ["%s:%s" % (a, ",".join(v)) for a, v in sorted(fins_par_agent.items()) if len(v) > 1]
-    verifier("1. Au plus une fin REACTIVER-CERBERUS par parcours",
+    verifier("1. Au plus une fin REACTIVER-CERBERUS par parcours (hors STOP GATE)",
              not doubles, "; ".join(doubles))
-    verifier("1b. Les seules fins REACTIVER restantes sont les derniers maillons (janus + redacteur-v2)",
+    verifier("1b. Les seules fins REACTIVER restantes sont les derniers maillons (janus + redacteur-v2 + hades + oracle)",
              set(fins_reactiver) == set(DERNIER_MAILLON),
              "agents=%s" % sorted(fins_reactiver))
 

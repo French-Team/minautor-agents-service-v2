@@ -5,31 +5,34 @@
     "description": "Fins possibles pour Athena"
   },
   "fins": {
+    "fin-autre": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin athena \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin athena \"<rapport du traitement inter-round>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-retour-oracle": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin athena \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
     "fin-theme": {
       "titre": "Retour a la racine",
       "action": "redirection",
       "vers": "arbre-athena.json"
-    },
-    "fin-creer": {
-      "titre": "FIN - Pense-bete cree (activer Janus)",
-      "description": "Pense-bete cree et valide. Janus controle, puis Themis audite.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-completer": {
-      "titre": "FIN - Pense-bete complete (activer Janus)",
-      "description": "Pense-bete complete et valide. Janus controle.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
-    },
-    "fin-autre": {
-      "titre": "FIN - Mission terminee",
-      "description": "Mission hors parcours. Oracle reactive Cerberus.",
-      "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
     }
   }
 }

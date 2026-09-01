@@ -134,6 +134,11 @@ LOG_DIR = ORACLE_DIR / "observations"
 ROUTINES_SERVER = RACINE / "cerveau-projet" / "agents" / "tools" / \
     "oracle" / "routines-server.py"
 ROUTINES_PID = ORACLE_DIR / "routines-server.pid"
+SESSION_INACTIVITE = ORACLE_DIR / "session-admin-inactivite.json"
+# SUPER-PILOTE cote Oracle : conduire les super-combos (prototype 2026-08-30).
+# Lance s il existe (comme le serveur de routines).
+SUPER_PILOTE_PY = ORACLE_DIR / "super-combos" / "super-pilote.py"
+SUPER_PILOTE_PID = ORACLE_DIR / "super-combos" / "super-pilote.pid"
 
 
 def _pid_actuel(pid_file):
@@ -162,6 +167,16 @@ def _pid_actuel(pid_file):
     except OSError:
         pid_file.unlink(missing_ok=True)
         return None
+
+
+def _marquer_demarrage_session():
+    """Initialiser l horloge d inactivite de la session-admin."""
+    try:
+        SESSION_INACTIVITE.write_text(
+            json.dumps({"derniere_demande_user": time.time()}, ensure_ascii=True),
+            encoding="utf-8")
+    except OSError:
+        pass
 
 
 def _lancer_serveur(script, pid_file, nom, args_extra=None):
@@ -293,10 +308,41 @@ def _lancer_serveur_dry(script, pid_file, nom, args_extra=None):
     return None, "SERAT LANCE (detache) : %s" % " ".join(cmd)
 
 
+def _lire_messages_oracle_demarrage():
+    """Oracle lit ses alertes avant toute activation de Cerberus."""
+    try:
+        oracle_cli = ORACLE_DIR / "oracle.py"
+        r = subprocess.run([sys.executable, str(oracle_cli), "lire", "oracle"],
+                           timeout=30, capture_output=True, text=True,
+                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        for ligne in (r.stdout or "").splitlines():
+            if ligne.strip():
+                print("      [Oracle] " + ligne)
+        return r.returncode == 0
+    except Exception as exc:
+        print("      [Oracle] lecture impossible: %s" % exc)
+        return False
+
+
+def _reprendre_cerberus():
+    """Reprendre la session-admin via l agent de communication Cerberus."""
+    try:
+        oracle_cli = ORACLE_DIR / "oracle.py"
+        mission = "Reprise session-admin apres redemarrage des serveurs; Cerberus reprend la communication utilisateur."
+        return subprocess.run(
+            [sys.executable, str(oracle_cli), "activer", "cerberus", mission],
+            timeout=30, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+            capture_output=True, text=True).returncode == 0
+    except Exception:
+        return False
+
+
 def cmd_demarrage(args):
-    """Chaine de demarrage v1 : daemons -> DEFCON -> files -> operationnel."""
+    """Chaine de demarrage v1 : daemons -> Cerberus -> operationnel."""
     print("=== ORACLE DEMARRAGE (v1) ===")
     dry = bool(getattr(args, "dry_run", False))
+    if not dry:
+        _marquer_demarrage_session()
 
     # 1. Serveur oracle (hub de coordination v1)
     if not SERVER_PY.exists():
@@ -311,6 +357,8 @@ def cmd_demarrage(args):
                                    ["--boucle", "--intervalle",
                                     str(getattr(args, "intervalle", 30))])
     print("[1/4] Serveur oracle : %s" % msg)
+    if not dry:
+        _historiser("oracle", "DEMARRAGE SERVEUR: oracle-server " + msg)
 
     # 2. Futur serveur de routines v1 (s il existe)
     if ROUTINES_SERVER.exists():
@@ -321,8 +369,27 @@ def cmd_demarrage(args):
             pid2, msg2 = _lancer_serveur(ROUTINES_SERVER, ROUTINES_PID,
                                          "routines", ["--boucle"])
         print("[2/4] Serveur routines v1 : %s" % msg2)
+        if not dry:
+            _historiser("oracle", "DEMARRAGE SERVEUR: routines-server " + msg2)
     else:
         print("[2/4] Serveur routines v1 : absent (futur) - structure prete")
+
+    # 2b. SUPER-PILOTE cote Oracle (prototype super-combos) - s il existe
+    if SUPER_PILOTE_PY.exists():
+        if dry:
+            pid_sp, msg_sp = _lancer_serveur_dry(
+                SUPER_PILOTE_PY, SUPER_PILOTE_PID, "super-pilote",
+                ["--boucle", "--intervalle", "120"])
+        else:
+            pid_sp, msg_sp = _lancer_serveur(
+                SUPER_PILOTE_PY, SUPER_PILOTE_PID, "super-pilote",
+                ["--boucle", "--intervalle", "120"])
+        print("[2b] Serveur super-pilote (super-combos) : %s" % msg_sp)
+        if not dry:
+            _historiser("oracle", "DEMARRAGE SERVEUR: super-pilote " + msg_sp)
+    else:
+        print("[2b] Serveur super-pilote (super-combos) : absent "
+              "(aucun super-combo) - structure prete")
 
     # 3. DEFCON + files + agents bloques
     niveau = _etat_defcon()
@@ -349,10 +416,20 @@ def cmd_demarrage(args):
     # 4. operationnel
     if dry:
         print("[4/4] [DRY-RUN] ORACLE OPERATIONNEL (rien n a ete lance)")
+        _historiser("oracle", "[DRY] Demarrage de session v1 : oracle-server + "
+                    "routines + super-pilote, DEFCON=%s, %d mission(s)"
+                    % (niveau if niveau is not None else "aucun", total))
     else:
+        # Oracle-agent lit son inbox une seule fois avant Cerberus.
+        print("[4/4] Lecture prioritaire des messages Oracle")
+        lus = _lire_messages_oracle_demarrage()
+        print("      Oracle : %s" % ("MESSAGES LUS" if lus else "ECHEC LECTURE"))
+        print("[4/4] Oracle-agent : traitement initial puis fin vers Cerberus")
+        print("[4/4] Activation de Cerberus (agent communication)")
+        repris = _reprendre_cerberus()
+        print("      Cerberus : %s" % ("REPRIS" if repris else "ECHEC"))
         print("[4/4] ORACLE OPERATIONNEL (session-admin)")
-        _historiser("oracle", "Demarrage de session v1 : oracle-server + "
-                    "routines, DEFCON=%s, %d mission(s) en file"
+        _historiser("oracle", "Demarrage de session v1 : serveurs + reprise Cerberus, DEFCON=%s, %d mission(s) en file"
                     % (niveau if niveau is not None else "aucun", total))
     return 0
 
@@ -363,6 +440,8 @@ def cmd_arret(args):
     print("- Serveur oracle : %s" % _arreter_serveur(PID_FILE, "oracle"))
     print("- Serveur routines v1 : %s"
           % _arreter_serveur(ROUTINES_PID, "routines"))
+    print("- Serveur super-pilote : %s"
+          % _arreter_serveur(SUPER_PILOTE_PID, "super-pilote"))
     print("- DEFCON : %s" % (_etat_defcon()
                              if _etat_defcon() is not None else "aucun"))
     print("- Etat sauvegarde : session recoverable par oracle-demarrage "

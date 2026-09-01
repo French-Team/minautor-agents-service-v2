@@ -1831,3 +1831,41 @@ Audit de la mission Vulcain (branchement a l activation de l agent v1 specialise
 2. LE GARDE-FOU DE PARITE DOIT PORTER L EXCEPTION EXPLICITEMENT : test-092 a ete adapte avec une liste d exemptions documentee (ferrari confidentiel + stark v2) - une exemption silencieuse serait un contournement, une exemption documentee est une regle.
 
 **Preuves** : rapport morpheus/rapports/rapport-test092-ferrari-2026-08-25.md, test-092 9/9, grep ferrari AGENTS.md -> 1 (raison transitoire), freelance/ -> 0, ASCII 0/0.
+## [LECON] 2026-08-29 -- AUDIT COLONNE EXECUTEUR ROUTINES : MODIFICATION CONFORME MAIS TESTS NON DELEGUES (Themis)
+
+**Mission** : auditer la mission Vulcain (activer-agent-principal v0.8.7) - les
+routines v1 affichent desormais RT(<intervalle>s) dans la colonne Executeur de
+l encart v1.
+
+**Resultats de l audit** :
+1. Modification CONFORME : helper _executeur_routine (lit manifest.json),
+   branche dans _ecrire_encart_v1 ET _construire_encart_v1. Test reel sur copie
+   (env AGENTS_*) prouve RT(300s) dans la colonne. ASCII 0, CRLF 0, versions
+   0.8.7 coherentes, 0 decalage catalogue, 0 signe outil externe, lecon+verdict
+   presents. Le .sh n ecrit pas l encart (non concerne, lecon 0.7.5).
+2. DEFAILLANCE PROCESSUS (1 defaut MAJEUR) : la carte de Vulcain ordonne la
+   DELEGATION DES TESTS A MORPHEUS avant la fin (besoin 9 du pilote). Aucune
+   mission Morpheus n a ete deposee dans les files Oracle. La chaine prevue
+   (Vulcain -> Morpheus -> Janus -> Cerberus) a ete coupee : Vulcain a depose
+   directement la mission Themis (audit) sans passer par les tests.
+
+**Verdict** : A REVOIR (modification conforme, processus de fin incomplet).
+
+**Lecons** :
+1. UNE MODIFICATION PEUT ETRE PARFAITE ET LE PROCESSUS DEFAILLANT : l audit
+   cible (code, ASCII, versions, test reel) est 100% vert, mais la regle
+   absolue de delegation des tests (Morpheus) n a pas ete suivie. Un audit qui
+   ne verifie QUE le code rate les defauts de processus.
+2. VERIFIER LA DELEGATION DES TESTS DANS LES FILES, PAS DANS LE DISCOURS : la
+   mission Themis elle-meme annoncait "tests deja prevus par Morpheus" - mais
+   aucune mission Morpheus n existait dans les files Oracle. Toujours croiser
+   les affirmations avec la realite des files (mission-lister).
+3. LA FIN DE CARTE SE VERIFIE PAR LE PARCOURS DE L AGENT AUDITE : le besoin 9
+   du pilote Vulcain ("Deleguer les tests a Morpheus") etait la preuve que la
+   carte ordonnait cette delegation. Un agent qui passe directement de la
+   modification a l audit (Themis) sans les tests viole sa carte.
+
+**Outils utilises** : lire-activite-recente, lire-fichier, detecter-impacts,
+detecter-usage-outils-externes, valider-conformite-ascii,
+detecter-decalages-catalogue, combos-audit-general, consulter-lecons,
+oracle (pilote/lire/acquitter/mission-lister), guider-parcours.

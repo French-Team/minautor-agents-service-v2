@@ -4,6 +4,9 @@ flowchart TD
     c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
     c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
     c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0g["GATE BON AGENT : verifier que tu es LE BON AGENT"]
+    c0ga{"GATE : es-tu le bon agent ?"}
+    c0h(["FIN - STOP : pas le bon agent, reactiver Cerberus"])
     c1{"Mission"}
     c2["Verifier l integrite du marbre (proteger-verrou-marbre --tous)"]
     c29{"Mission hors parcours"}
@@ -25,9 +28,12 @@ flowchart TD
     cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
     cU3(["FIN - Reprendre ma mission"])
     c0 --> c0b
-    c0b -- "OUI" --> c0c
+    c0b -- "OUI" --> c0g
     c0b -- "NON" --> c0
     c0c --> cU1
+    c0g --> c0ga
+    c0ga -- "OUI" --> c0c
+    c0ga -- "NON" --> c0h
     c1 -- "verifier" --> c2
     c1 -- "proposer" --> c3
     c1 -- "autre" --> c29

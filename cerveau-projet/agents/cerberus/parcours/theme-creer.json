@@ -1,0 +1,48 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "CREER",
+    "description": "Router une creation PAR TYPE vers l agent habilite"
+  },
+  "theme": {
+    "nom": "CREER",
+    "but": "Router une demande de creation vers l agent habilite selon son type",
+    "redirects": [
+      {
+        "besoin": "Identifier le type de creation",
+        "action": "procedure",
+        "etapes": [
+          "DETECTER le type : outil (agents/tools), fichier/code/doc, pense-bete, spec, todo, agent"
+        ],
+        "regle": "Routage PAR TYPE avant d activer."
+      },
+      {
+        "besoin": "Router vers l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "Outil -> Vulcain (constructeur d outils)",
+          "Fichier/code/doc -> Buffy (developpeur principal)",
+          "Pense-bete -> Athena (redactrice de pense-betes)",
+          "Spec -> Promethee (redacteur de specs)",
+          "Todo -> Minerve (redactrice de todos)",
+          "Agent -> Buffy"
+        ],
+        "regle": "REGLE [creer] : activer l agent habilite selon le type de creation definit dans declencheurs-v1.md."
+      },
+      {
+        "besoin": "Activer l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> \"<la demande de creation>\""
+        ],
+        "regle": "Activer l agent avec la mission de creation precise."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-declencheur"
+  }
+}

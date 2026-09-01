@@ -200,10 +200,13 @@ def main():
     # --- 7. Integration parcours morpheus v0.5.8
     # (cU1 COMPRENDRE L OUTIL ajoutee par Buffy 2026-08-21 : le flux passe
     # par cU1 (NON) avant la question Mission -> sequence OUI|NON|tester)
+    # NB 2026-08-29 : le GATE BON AGENT (decision utilisateur marbre-log)
+    # ajoute une question de verification en debut de parcours -> la
+    # sequence passe desormais par le GATE (OUI) avant c0c -> OUI|OUI|NON|tester)
     with io.open(PARCOURS, encoding="utf-8") as fh:
         p = json.load(fh)
     verifier("7a. Parcours morpheus v0.5.8", p.get("parcours", {}).get("version") == "0.5.8")
-    code, out = executer([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|NON|tester"])
+    code, out = executer([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|OUI|NON|tester"])
     verifier("7b. Case Lancer le combo tester-outil presente",
              "Lancer le combo tester-outil" in out)
     verifier("7c. Suite Verifier les resultats presente",

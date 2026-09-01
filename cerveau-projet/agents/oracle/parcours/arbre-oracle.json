@@ -1,0 +1,65 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "oracle",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-oracle",
+    "agent": "oracle",
+    "description": "Arbre des decisions d ORACLE - COORDINATEUR de l equipe v1 (migration parcours v1 -> arbre v2, decision 2026-08-29 : le pilote d Oracle tournait sur le parcours v1 sans lancer les agents). Oracle est le ROUTEUR OPERATIONNEL : il recoit la mission de Cerberus, identifie l agent habilite, depose la mission asap dans la file (le daemon la consomme et lance le pilote de l agent), controle les processus, roule les messages et surveille l etat des serveurs. La fin suit SA carte : reactiver-fin oracle (precedent-aware) reactive l appelant ou Cerberus.",
+    "regles": {
+      "D1": "Chaque branche mene a un theme (coordination, processus, roulage, etat, delegation, autre).",
+      "D5": "Les besoins d un theme sont des REDIRECTIONS : je choisis celle qui correspond a ma situation.",
+      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche AVANT toute mission.",
+      "D8": "INTERDICTION (2026-08-29) : je ne fais JAMAIS le travail de l agent moi-meme. Je depose la mission asap et le daemon/pilote lance l agent habilite. Je n execute pas les taches de l agent (test, modification, audit...)."
+    }
+  },
+  "racine": {
+    "titre": "Quelle est ma mission de coordination ?",
+    "type": "question",
+    "question": "Oracle recoit une mission de Cerberus ou une alerte de coordination. Quel est le type de ma mission ?",
+    "branches": [
+      {
+        "reponse": "coordination",
+        "description": "Une mission arrive de Cerberus (MISSION: ...) : je la traite, j identifie l agent habilite et je depose la mission asap",
+        "vers": "theme-coordination.json"
+      },
+      {
+        "reponse": "processus",
+        "description": "Alerte de coordination : processus fantomes ou serveurs morts a verifier (controle-processus)",
+        "vers": "theme-processus.json"
+      },
+      {
+        "reponse": "roulage",
+        "description": "Rouler les messages du hub vers leurs destinataires (relais)",
+        "vers": "theme-roulage.json"
+      },
+      {
+        "reponse": "etat",
+        "description": "Etat des serveurs v1, DEFCON, files, agents bloques",
+        "vers": "theme-etat.json"
+      },
+      {
+        "reponse": "delegation",
+        "description": "Mission hors perimetre : je delegue a l agent habilite et je signale",
+        "vers": "theme-delegation.json"
+      },
+      {
+        "reponse": "autre",
+        "description": "Autre situation de coordination non couverte par les branches precedentes",
+        "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

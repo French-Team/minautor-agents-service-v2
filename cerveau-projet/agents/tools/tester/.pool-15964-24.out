@@ -1,0 +1,25 @@
+=== test-110 : garde-fou migration v2 des fiches agents ===
+  [OK] 1. fiches migrees existent (cerberus, oracle, buffy, vulcain, morpheus, janus, atlas, themis, clio, hygie, hermes, argus, athena, chiron, gardien, hades, minerve, promethee, redacteur-v2, socrate)
+  [OK] 2. frontmatter D17 : nom+version+cree+statut
+  [OK] 3. frontmatter D17 : grade valide
+  [OK] 4. frontmatter D17 : medaille presente
+  [OK] 5. frontmatter D17 : notation 0..100
+  [OK] 6. frontmatter D17 : mot-cles >= 5
+  [OK] 7. frontmatter D17 : session declaree
+  [OK] 8. ASCII strict + LF pur
+  [OK] 9. conformite template (verifier-conformite-fiche)
+  [OK] 10. preuve negative : fiche sans grade detectee
+
+=== CHRONO test (total 3.8s) === 
+  1. fiches existent                   0.00s
+  2. nom+version+cree+statut           0.00s
+  3. grade valide                      0.00s
+  4. medaille                          0.00s
+  5. notation 0..100                   0.00s
+  6. mot-cles >= 5                     0.00s
+  7. session                           0.00s
+  8. ASCII + LF                        0.01s
+  9. conformite template               3.75s
+  10. preuve negative                  0.00s
+
+=== RESULTAT : 10 OK / 0 KO (sur 10 points) ===

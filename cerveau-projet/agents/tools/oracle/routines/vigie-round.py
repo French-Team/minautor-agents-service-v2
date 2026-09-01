@@ -43,6 +43,20 @@ VERSION = "0.1.0"
 _DOSSIER = os.path.dirname(os.path.abspath(__file__))
 ORACLE_DIR = Path(_DOSSIER).parent
 INBOX_DIR = ORACLE_DIR / "inbox"
+def _rotation_ajouter(agent, message):
+    """Rotation inbox : garder les 5 messages les plus recents (decision
+    utilisateur 2026-08-29 : les inbox s accumulaient, personne ne les
+    lisait). Reutilise le module central oracle/fonctions/rotation.py."""
+    try:
+        import importlib.util
+        _f = Path(_DOSSIER).parent / "fonctions" / "rotation.py"
+        _spec = importlib.util.spec_from_file_location("rotation", str(_f))
+        _mod = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(_mod)
+        return _mod.ajouter_message(INBOX_DIR, agent, message)
+    except Exception:
+        return False
+
 ETAT_CARTES_DIR = ORACLE_DIR / "etat-cartes"
 
 SEUIL_MINUTES_DEFAUT = 10
@@ -107,12 +121,14 @@ def _derniere_activite(agent):
             continue
         cellules = [c.strip() for c in ligne.split("|")]
         # | Grade | Agent | Defcon | Executeur | Etat | Secteur | Raison | Heure | id | Type |
-        if len(cellules) < 8:
+        # Le prefixe vide du tableau fait decaler les colonnes d un rang :
+        # Agent=[2], Raison=[7], Heure=[8]. <8 -> <9 pour pouvoir lire [8].
+        if len(cellules) < 9:
             continue
         nom_agent = cellules[2]
         if nom_agent.lower() != agent.lower():
             continue
-        heure = cellules[7]
+        heure = cellules[8]
         try:
             h = datetime.strptime(heure[:8], "%H:%M:%S")
         except ValueError:
@@ -140,14 +156,16 @@ def _etat_carte(agent):
 
 
 def _ecrire_alerte(ecarts):
-    """Ecrire une alerte dans l inbox de Cerberus (canal harnais Oracle)."""
+    """Ecrire une alerte dans l inbox d Oracle (coordinateur, qui avise
+    ensuite) - decision utilisateur 2026-08-30 : les routines previennent
+    Oracle et pas Cerberus (modele aero : Oracle coordonne)."""
     if not ecarts:
         return None
     maintenant = datetime.now()
     message = {
         "id": "vigie-%s" % maintenant.strftime("%H%M%S"),
         "de": "vigie-round",
-        "vers": "cerberus",
+        "vers": "oracle",
         "priorite": 1,
         "date": maintenant.strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": "[VIGIE-ROUND] %d round(s) casse(s) detecte(s)" % len(ecarts),
@@ -156,11 +174,8 @@ def _ecrire_alerte(ecarts):
         "accuse": False,
         "type": "vigie-round",
     }
-    cible = INBOX_DIR / "cerberus.jsonl"
     try:
-        INBOX_DIR.mkdir(parents=True, exist_ok=True)
-        with open(cible, "a", encoding="utf-8") as f:
-            f.write(json.dumps(message, ensure_ascii=False) + "\n")
+        _rotation_ajouter("oracle", message)
     except OSError as exc:
         print("[VIGIE-ROUND] ERREUR ecriture alerte : %s" % exc)
         return None
@@ -273,11 +288,11 @@ def main():
               "- pas de nouvelle alerte anti-spam." % ALERTE_REPETITION_MINUTES)
         return 0
     if dry_run:
-        print("[VIGIE-ROUND] --dry-run : alerte NON envoyee a Cerberus.")
+        print("[VIGIE-ROUND] --dry-run : alerte NON envoyee a Oracle.")
     else:
         msg = _ecrire_alerte(ecarts)
         if msg:
-            print("[VIGIE-ROUND] Alerte envoyee a Cerberus (%s)" % msg["id"])
+            print("[VIGIE-ROUND] Alerte envoyee a Oracle (%s)" % msg["id"])
             _sauver_etat_vigie({"cles": cles, "date":
                                 datetime.now().strftime("%Y-%m-%dT%H:%M:%S")})
         else:

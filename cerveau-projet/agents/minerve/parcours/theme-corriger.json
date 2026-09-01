@@ -1,19 +1,92 @@
 {
-  "identite": {"type": "theme", "appartient_a": "minerve", "nom": "CORRIGER", "description": "Corriger selon le rapport de Janus - boucle KO"},
+  "identite": {
+    "type": "theme",
+    "appartient_a": "minerve",
+    "nom": "CORRIGER",
+    "description": "Corriger selon le rapport de Janus - boucle KO"
+  },
   "theme": {
     "nom": "CORRIGER",
     "but": "Corriger le livrable concerne par le rapport de Janus, puis re-valider (boucle KO)",
     "redirects": [
-      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
-      {"besoin": "Consulter les lecons (domaine redaction-todo)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent minerve --domaine redaction-todo"], "regle": "PATTERN 6 : le contexte dynamique."},
-      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
-      {"besoin": "Corriger le livrable selon le rapport Janus (case c9f)", "action": "procedure", "etapes": ["Lire le rapport de Janus, identifier les ecarts, corriger UNIQUEMENT le livrable concerne"], "regle": "CREATION LIMITEE : je modifie UNIQUEMENT le livrable concerne par le rapport de Janus."},
-      {"besoin": "Corriger les accents du rapport", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/minerve/corrections.md --all"], "regle": "REGLE ASCII."},
-      {"besoin": "Re-valider le todo corrigee", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>"], "regle": "RVAV : re-valider apres correction."},
-      {"besoin": "Verifier la conformite ASCII", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <todo>"], "regle": "REGLE ASCII."},
-      {"besoin": "Activer Janus pour re-controle (BOUCLE KO)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus <raison>"], "regle": "BOUCLE KO : apres correction, activer Janus pour revalidation."},
-      {"besoin": "Enregistrer mes usages d outils (case c24)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent minerve --outil <outil> --contexte '<contexte>'"], "regle": "BILAN OUTILS : declarer tous les outils utilises."}
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine redaction-todo)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent minerve --domaine redaction-todo"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Corriger le livrable selon le rapport Janus (case c9f)",
+        "action": "procedure",
+        "etapes": [
+          "Lire le rapport de Janus, identifier les ecarts, corriger UNIQUEMENT le livrable concerne"
+        ],
+        "regle": "CREATION LIMITEE : je modifie UNIQUEMENT le livrable concerne par le rapport de Janus."
+      },
+      {
+        "besoin": "Corriger les accents du rapport",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/minerve/corrections.md --all"
+        ],
+        "regle": "REGLE ASCII."
+      },
+      {
+        "besoin": "Re-valider le todo corrigee",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>"
+        ],
+        "regle": "RVAV : re-valider apres correction."
+      },
+      {
+        "besoin": "Verifier la conformite ASCII",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <todo>"
+        ],
+        "regle": "REGLE ASCII."
+      },
+      {
+        "besoin": "Activer Janus pour re-controle (BOUCLE KO)",
+        "action": "procedure",
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin minerve \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
+        ],
+        "regle": "BOUCLE KO : apres correction, activer Janus pour revalidation."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils (case c24)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent minerve --outil <outil> --contexte '<contexte>'"
+        ],
+        "regle": "BILAN OUTILS : declarer tous les outils utilises."
+      }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-corriger"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-corriger"
+  }
 }

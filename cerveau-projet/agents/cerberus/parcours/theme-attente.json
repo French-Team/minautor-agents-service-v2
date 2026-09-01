@@ -1,0 +1,36 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "ATTENTE",
+    "description": "Placer la demande en file plus-tard (rien n est perdu)"
+  },
+  "theme": {
+    "nom": "ATTENTE",
+    "but": "Placer la demande utilisateur en file plus-tard pour traitement ulterieur",
+    "redirects": [
+      {
+        "besoin": "Placer la demande en file plus-tard (EN_ATTENTE)",
+        "action": "procedure",
+        "etapes": [
+          "La demande est placee dans la file plus-tard (statut EN_ATTENTE) - RIEN n est perdu, chaque entree porte son contexte de reprise",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter \"<la demande>\" --file plus-tard"
+        ],
+        "regle": "REGLE [attente] : la demande sera traitee apres la file en cours. Notifier l utilisateur que la demande est placee."
+      },
+      {
+        "besoin": "Notifier l utilisateur",
+        "action": "procedure",
+        "etapes": [
+          "Prevenir l utilisateur que sa demande est en file plus-tard et sera traitee ensuite"
+        ],
+        "regle": "Transparence : informer l utilisateur de l etat de sa demande."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-declencheur"
+  }
+}

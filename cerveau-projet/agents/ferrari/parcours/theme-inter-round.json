@@ -1,0 +1,30 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "ferrari",
+    "nom": "INTER-ROUND",
+    "description": "Reception inter-round : rapport KO recu d un autre agent"
+  },
+  "theme": {
+    "nom": "INTER-ROUND",
+    "but": "Accuser reception d un rapport KO et relancer l agent appelant",
+    "redirects": [
+      {
+        "besoin": "RECEPTION inter-round : rapport KO recu d un autre agent",
+        "action": "procedure",
+        "etapes": [
+          "PERIMETRE REDUIT : 1) Lire le rapport KO transmis, 2) Confirmer reception (message console), 3) REACTIVER l agent appelant (commande activer, PAS reactiver) pour qu il reprenne son round",
+          "MA FIN : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin ferrari \"<rapport du traitement inter-round>\" --cible oracle (le pilote reactive l appelant depuis l etat de carte - precedent)",
+          "CASCADE autorisee entre habilites",
+          "MA FIN EST precedent-aware : oracle.py reactiver-fin ferrari reactivera L APPELANT (mon precedent), PAS Cerberus."
+        ],
+        "regle": "REGLE INTER-ROUND (R2) RECEPTION : je n execute PAS une nouvelle mission. J accuse reception et je relance l appelant qui reprend son round. Si la cascade m avait voie moi = dernier maillon, JE reactive l appelant via reactiver-fin."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-inter-round"
+  }
+}

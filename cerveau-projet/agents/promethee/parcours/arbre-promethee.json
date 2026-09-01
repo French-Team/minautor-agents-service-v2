@@ -54,6 +54,11 @@
         "reponse": "OUTILS",
         "description": "Probleme avec un outil en cours de mission : comprendre, resoudre (cU1-cU3)",
         "vers": "theme-outils.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
       }
     ]
   },

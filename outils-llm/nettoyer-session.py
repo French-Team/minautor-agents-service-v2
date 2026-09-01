@@ -1,25 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-outils-llm/nettoyer-session.py - NETTOYAGE EXCLUSIF D UNE SESSION.
+"""Reset one LLM session without deleting required project files."""
 
-Vide l encart et l historique de la session demandee (v1 ou v2),
-purge la BDD, vide les inbox/outbox JARVIS si freelance.
-Sans question : obéit comme un soldat.
-"""
-
-import os
+import shutil
 import sqlite3
+import subprocess
 import sys
-from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.1.0"
+VERSION = "0.2.2"
 RACINE = Path(__file__).resolve().parent.parent
+ORACLE_DIR = RACINE / "cerveau-projet/agents/tools/oracle"
+CLASSEUR_DIR = RACINE / "cerveau-projet/agents/classeur-variables"
+ACTIVER_PRINCIPAL = RACINE / "cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py"
 
-AGENTS_MD = RACINE / "AGENTS.md"
-
-# Fichiers par session
 FILES = {
     "session-admin": {
         "encart": RACINE / "AGENTS-activite-recente.md",
@@ -34,255 +28,164 @@ FILES = {
         "newline": "\r\n",
     },
 }
-
-# JARVIS (freelance seulement)
-JARVIS_DIR = RACINE / "cerveau-projet" / "freelance" / "tools-commun" / "jarvis"
-INBOX_DIR = JARVIS_DIR / "inbox"
-OUTBOX_DIR = JARVIS_DIR / "outbox"
-BDD_FILE = JARVIS_DIR / "historique" / "historique.db"
+AGENT_OUVERTURE = {"session-admin": "cerberus", "session-freelance": "stark"}
 
 
-def lire(path):
-    try:
-        return path.read_text(encoding="utf-8").replace("\r\n", "\n")
-    except (OSError, UnicodeDecodeError):
-        try:
-            return path.read_text(encoding="latin-1").replace("\r\n", "\n")
-        except OSError:
-            return ""
-
-
-def ecrire(path, contenu, encoding="utf-8", newline="\r\n"):
+def _write(path, text, encoding="utf-8", newline="\n", dry_run=False):
+    if dry_run:
+        print("  [DRY-RUN] recreerait %s" % path)
+        return
     path.parent.mkdir(parents=True, exist_ok=True)
-    contenu = contenu.replace("\r\n", "\n").replace("\n", newline)
+    text = text.replace("\r\n", "\n").replace("\n", newline)
     with open(path, "w", encoding=encoding, newline="") as fh:
-        fh.write(contenu)
+        fh.write(text)
 
 
-def vider_encart(session):
-    """Vider l encart de la session (garder header + en-tete tableau)."""
+def _reset_activity_files(session, dry_run=False):
     cfg = FILES[session]
-    path = cfg["encart"]
-    contenu = lire(path)
-    if not contenu:
-        print("  [ENCART] Fichier absent ou deja vide")
-        return 0
-
-    # Trouver la section de la session
-    section = "## Activites recentes -- %s" % session
-    lignes = contenu.split("\n")
-    idx_section = None
-    for i, l in enumerate(lignes):
-        if l.strip() == section:
-            idx_section = i
-            break
-
-    if idx_section is None:
-        print("  [ENCART] Section '%s' non trouvee" % session)
-        return 0
-
-    # Trouver la fin de la section (prochain ## ou fin de fichier)
-    fin = len(lignes)
-    for i in range(idx_section + 1, len(lignes)):
-        if lignes[i].strip().startswith("## "):
-            fin = i
-            break
-
-    # Garder : header YAML + section + en-tete tableau + separateur
-    # Supprimer : toutes les lignes de donnees apres le separateur
-    header_lines = lignes[:idx_section + 1]
-    # Trouver l en-tete et le separateur
-    entete_idx = None
-    sep_idx = None
-    for i in range(idx_section + 1, fin):
-        if lignes[i].strip().startswith("|") and "Grade" in lignes[i]:
-            entete_idx = i
-        if entete_idx is not None and "---" in lignes[i]:
-            sep_idx = i
-            break
-
-    if entete_idx is not None and sep_idx is not None:
-        # Garder header + section + en-tete + separateur, supprimer le reste
-        new_lines = lignes[:sep_idx + 1]
-        # Ajouter le reste du fichier (apres la section)
-        new_lines.extend(lignes[fin:])
+    if session == "session-admin":
+        encart = (
+            "---\nidentite:\n  nom: Activites recentes\n  type: tableau\n"
+            "  description: Vue des activites recentes de la session-admin v1\n"
+            "  appartient_a: commun\n  commun: true\n---\n\n"
+            "## Activites recentes -- session-admin\n\n"
+            "| Grade | Agent | Defcon | Executeur | Etat | Secteur | Raison | Heure | id | Type |\n"
+            "|---|---|---|---|---|---|---|---|---|---|\n"
+        )
+        corps = (
+            "---\nidentite:\n  nom: Historique session-admin\n  type: historique\n"
+            "  appartient_a: commun\n  commun: true\n---\n"
+        )
     else:
-        # Pas de tableau detecte, garder tel quel
-        new_lines = lignes
+        encart = (
+            "---\nidentite:\n  nom: Activites recentes freelance\n  type: tableau\n"
+            "  appartient_a: commun\n  commun: true\n---\n"
+        )
+        corps = (
+            "---\nidentite:\n  nom: Historique session-freelance\n  type: historique\n"
+            "  appartient_a: commun\n  commun: true\n---\n"
+        )
+    _write(cfg["encart"], encart, cfg["encoding"], cfg["newline"], dry_run)
+    _write(cfg["corps"], corps, cfg["encoding"], cfg["newline"], dry_run)
 
-    nb_supprime = fin - (sep_idx + 1 if sep_idx else idx_section + 1)
-    contenu_new = "\n".join(new_lines)
-    ecrire(path, contenu_new, cfg["encoding"], cfg["newline"])
-    print("  [ENCART] %d entrees supprimees" % max(0, nb_supprime))
-    return nb_supprime
 
-
-def vider_corps(session):
-    """Vider le corps historique de la session (garder headers par date)."""
-    cfg = FILES[session]
-    path = cfg["corps"]
-    contenu = lire(path)
-    if not contenu:
-        print("  [CORPS] Fichier absent ou deja vide")
+def _clear_dir(path, dry_run=False):
+    if not path.exists():
+        if not dry_run:
+            path.mkdir(parents=True, exist_ok=True)
         return 0
-
-    lignes = contenu.split("\n")
-    # Garder uniquement les headers de section (## JJ/MM/AAAA) et le header YAML
-    new_lines = []
-    in_yaml = False
-    for l in lignes:
-        if l.strip() == "---":
-            new_lines.append(l)
-            in_yaml = not in_yaml
-            continue
-        if in_yaml:
-            new_lines.append(l)
-            continue
-        if l.strip().startswith("## "):
-            new_lines.append(l)
-            continue
-        # Supprimer les lignes de donnees (- ...)
-        # et les lignes vides entre sections
-        # On garde juste les headers
-
-    # Supprimer les sections vides (header suivi de rien)
-    final = []
-    skip_empty = False
-    for i, l in enumerate(new_lines):
-        if l.strip().startswith("## ") and i + 1 < len(new_lines):
-            # Verifier si la section suivante est vide
-            next_data = None
-            for j in range(i + 1, len(new_lines)):
-                if new_lines[j].strip().startswith("## "):
-                    break
-                if new_lines[j].strip().startswith("- "):
-                    next_data = new_lines[j]
-                    break
-            if next_data is None:
-                # Section vide, ne pas l ajouter
-                continue
-        final.append(l)
-
-    nb_supprime = len(lignes) - len(final)
-    contenu_new = "\n".join(final)
-    ecrire(path, contenu_new, cfg["encoding"], cfg["newline"])
-    print("  [CORPS] %d lignes supprimees" % nb_supprime)
-    return nb_supprime
+    children = list(path.iterdir())
+    if dry_run:
+        for child in children:
+            print("  [DRY-RUN] supprimerait %s" % child)
+        return len(children)
+    for child in children:
+        if child.is_dir():
+            shutil.rmtree(child)
+        else:
+            child.unlink()
+    return len(children)
 
 
-def vider_jarvis():
-    """Vider les inbox/outbox JARVIS."""
-    nb = 0
-    for dossier, nom in [(INBOX_DIR, "inbox"), (OUTBOX_DIR, "outbox")]:
-        if dossier.exists():
-            for f in dossier.glob("*.jsonl"):
-                f.unlink()
-                nb += 1
-                print("  [JARVIS] %s/%s supprime" % (nom, f.name))
-    if nb == 0:
-        print("  [JARVIS] inbox/outbox deja vides")
-    return nb
-
-
-def purger_bdd():
-    """Purger la BDD (entrees > 7 jours)."""
-    if not BDD_FILE.exists() or BDD_FILE.stat().st_size == 0:
-        print("  [BDD] Absente ou vide")
+def _remove_file(path, dry_run=False):
+    if not path.exists():
         return 0
-    try:
-        conn = sqlite3.connect(str(BDD_FILE))
-        # Compter avant
-        avant = conn.execute("SELECT COUNT(*) FROM historique").fetchone()[0]
-        # Purger > 7 jours
-        seuil = datetime.now().timestamp() - 7 * 86400
-        conn.execute("DELETE FROM historique WHERE date_iso < ?",
-                     (datetime.fromtimestamp(seuil).strftime("%Y-%m-%dT%H:%M:%S"),))
-        apres = conn.execute("SELECT COUNT(*) FROM historique").fetchone()[0]
-        conn.commit()
-        conn.close()
-        supprime = avant - apres
-        print("  [BDD] %d entrees purgees (%d restantes)" % (supprime, apres))
-        return supprime
-    except Exception as e:
-        print("  [BDD] Erreur: %s" % e)
-        return 0
+    if dry_run:
+        print("  [DRY-RUN] supprimerait %s" % path)
+        return 1
+    path.unlink()
+    return 1
 
 
-def nettoyer(llm_id, session):
-    print("=== NETTOYAGE SESSION (outils-llm/nettoyer-session.py v%s) ===" % VERSION)
-    print("  id     : %s" % llm_id)
-    print("  session: %s" % session)
-
+def _zero_total_admin(dry_run=False):
     total = 0
+    for relative in ("inbox", "outbox", "etat-cartes", "routines/data"):
+        total += _clear_dir(ORACLE_DIR / relative, dry_run)
+    for relative in (
+        "routines/etat-executions.json",
+        "oracle-server.pid",
+        "routines-server.pid",
+        "super-combos/super-pilote.pid",
+        "session-admin-inactivite.json",
+    ):
+        total += _remove_file(ORACLE_DIR / relative, dry_run)
+    _reset_activity_files("session-admin", dry_run)
+    _write(
+        CLASSEUR_DIR / "stockage/variables-actuelles.md",
+        "---\nidentite:\n  type: classeur\n  appartient_a: commun\n  commun: true\n---\n"
+        "# Stockage -- Variables Actuelles\n---\n\n## Variables\n"
+        "| Variable | Valeur | Source | Date | Statut |\n"
+        "|---|---|---|---|---|\n",
+        dry_run=dry_run,
+    )
+    _write(
+        CLASSEUR_DIR / "historique/historique-modifications.md",
+        "# Historique des modifications du classeur\n",
+        dry_run=dry_run,
+    )
+    return total
 
-    # 1. Vider l encart
-    print()
-    print("--- Encart ---")
-    total += vider_encart(session)
 
-    # 2. Vider le corps/historique
-    print()
-    print("--- Historique ---")
-    total += vider_corps(session)
-
-    # 3. Si freelance, vider JARVIS + purger BDD
-    if session == "session-freelance":
-        print()
-        print("--- JARVIS ---")
-        vider_jarvis()
-        print()
-        print("--- BDD ---")
-        purger_bdd()
-
-    # 4. Historiser le nettoyage
-    print()
-    print("--- Historisation ---")
-    from pathlib import Path
-    sys.path.insert(0, str(RACINE / "cerveau-projet" / "freelance" / "tools-commun" / "jarvis" / "fonctions"))
+def _reset_agent(session, dry_run=False):
+    if dry_run or not ACTIVER_PRINCIPAL.is_file():
+        return dry_run
     try:
-        from historique import historiser
-        historiser("systeme", "NETTOYAGE SESSION: encart + historique vides", "R",
-                   session=session)
-        print("  [HISTORISATION] nettoyage trace")
-    except Exception as e:
-        print("  [HISTORISATION] Erreur: %s" % e)
+        result = subprocess.run(
+            [sys.executable, str(ACTIVER_PRINCIPAL), "activer", session,
+             AGENT_OUVERTURE[session], "ZERO TOTAL: etat neuf de session"],
+            capture_output=True, text=True, timeout=60,
+        )
+        return result.returncode == 0
+    except (OSError, subprocess.TimeoutExpired):
+        return False
 
-    print()
-    print("=== NETTOYAGE TERMINE : %d elements supprimes ===" % total)
+
+def nettoyer(llm_id, session, zero_total=False, dry_run=False):
+    print("=== NETTOYAGE SESSION v%s ===" % VERSION)
+    print("  id: %s\n  session: %s" % (llm_id, session))
+    if zero_total:
+        if session != "session-admin":
+            print("ERREUR: --zero-total est reserve a session-admin")
+            return 1
+        print("  mode: ZERO TOTAL%s" % (" (simulation)" if dry_run else ""))
+        total = _zero_total_admin(dry_run)
+        print("  elements runtime concernes: %d" % total)
+    else:
+        _reset_activity_files(session, dry_run)
+        if session == "session-freelance":
+            _clear_dir(RACINE / "cerveau-projet/freelance/tools-commun/jarvis/inbox", dry_run)
+            _clear_dir(RACINE / "cerveau-projet/freelance/tools-commun/jarvis/outbox", dry_run)
+    if not dry_run and not _reset_agent(session):
+        print("  agent d ouverture: activation indisponible")
+    elif dry_run:
+        print("  [DRY-RUN] activation de %s differee" % AGENT_OUVERTURE[session])
+    else:
+        print("  agent d ouverture: %s" % AGENT_OUVERTURE[session])
+    print("=== %s TERMINE ===" % ("ZERO TOTAL" if zero_total else "NETTOYAGE"))
     return 0
 
 
 def afficher_aide():
-    print("usage: nettoyer-session.py <id> <session>")
-    print()
-    print("NETTOYAGE EXCLUSIF D UNE SESSION - outils-llm/")
-    print("Vide l encart et l historique de la session demandee.")
-    print("Pour freelance : vide aussi inbox/outbox JARVIS + purge BDD.")
-    print()
-    print("exemples :")
-    print("  python3 outils-llm/nettoyer-session.py glm5 admin")
-    print("  python3 outils-llm/nettoyer-session.py freebuff freelance")
-    print()
-    print("options :")
-    print("  --help, -h   Afficher cette aide")
+    print("usage: nettoyer-session.py <id> <session> [--zero-total] [--dry-run]")
+    print("  --zero-total  purge les historiques, messages et etats runtime admin")
+    print("  --dry-run     affiche les operations sans modifier de fichier")
 
 
 def main(argv):
-    if argv and argv[0] in ("--help", "-h", "aide"):
+    if "--help" in argv or "-h" in argv or "aide" in argv:
         afficher_aide()
         return 0
-    if not argv or len(argv) < 2:
-        print("ERREUR: id et session obligatoires")
+    zero_total = "--zero-total" in argv
+    dry_run = "--dry-run" in argv
+    args = [arg for arg in argv if arg not in ("--zero-total", "--dry-run")]
+    if len(args) < 2:
         afficher_aide()
         return 1
-    llm_id = argv[0]
-    session = argv[1]
-    if session in ("admin", "freelance"):
-        session = "session-" + session
-    if not session.startswith("session-"):
-        print("ERREUR: session invalide '%s' (admin ou freelance attendu)" % argv[1])
+    session = "session-" + args[1] if args[1] in ("admin", "freelance") else args[1]
+    if session not in FILES:
+        print("ERREUR: session invalide")
         return 1
-    return nettoyer(llm_id, session)
+    return nettoyer(args[0], session, zero_total, dry_run)
 
 
 if __name__ == "__main__":

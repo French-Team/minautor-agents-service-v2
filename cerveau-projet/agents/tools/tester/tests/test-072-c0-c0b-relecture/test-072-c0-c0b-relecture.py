@@ -175,13 +175,37 @@ def analyser_parcours(agent, p):
         vers_non = [b.get("vers") for b in branches if b.get("reponse") == "NON"]
         # Chemin legitime : OUI -> c0c directement, ou OUI -> c0e
         # (consultation pre-mission, round 2026-08-18) -> c0c ; NON -> c0.
+        # NB 2026-08-29 : le GATE BON AGENT (decision utilisateur marbre-log)
+        # s intercale apres la confirmation : OUI -> c0g -> c0ga -> (c0e|c0c)
+        # -> c0c. Ce chemin GATE est legitime et doit etre reconnu.
+        def _chemine_vers_c0c(cid, prof=0):
+            """Le flux depuis cid atteint-il c0c (via suivant / branches OUI) ?"""
+            if prof > 6:
+                return False
+            c = cases.get(cid)
+            if not isinstance(c, dict):
+                return False
+            if c.get("suivant") == "c0c":
+                return True
+            if c.get("suivant") and _chemine_vers_c0c(c.get("suivant"), prof + 1):
+                return True
+            for b in c.get("branches", []):
+                if b.get("reponse") == "OUI" and b.get("vers") == "c0c":
+                    return True
+                if b.get("reponse") == "OUI" and b.get("vers") and \
+                        _chemine_vers_c0c(b.get("vers"), prof + 1):
+                    return True
+            return False
+
         oui_ok = vers_oui == ["c0c"] or (
             vers_oui == ["c0e"] and isinstance(cases.get("c0e"), dict)
-            and cases["c0e"].get("suivant") == "c0c")
+            and cases["c0e"].get("suivant") == "c0c") or (
+            len(vers_oui) == 1 and vers_oui[0] == "c0g"
+            and _chemine_vers_c0c("c0g"))
         if not oui_ok or vers_non != ["c0"]:
             problemes.append(("C0B_BRANCHES",
                               "%s : branches OUI=%s NON=%s "
-                              "(attendu c0c/c0 ou c0e->c0c/c0)" %
+                              "(attendu c0c/c0, c0e->c0c/c0 ou GATE c0g->c0c/c0)" %
                               (agent, vers_oui, vers_non)))
 
     return problemes

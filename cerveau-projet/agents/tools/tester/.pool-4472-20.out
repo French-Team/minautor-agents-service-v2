@@ -1,0 +1,28 @@
+=== test-106 : garde-fou routines surveillance v1 ===
+  [OK] 1. flux/sante/encart/live/vigie-perimetre existent (--dry-run, main)
+  [OK] 2. manifest reference les 5 routines + perimetre_surveille
+  [OK] 3. grades-v1 G3 pour les 5 routines
+  [OK] 4. sante detection (daemons, DEFCON, encart, BDD)
+  [OK] 5. live detection (agent, inbox, activite)
+  [OK] 6. encart detection (en-tete/colonnes v1)
+  [OK] 7. flux persistance .flux_derniere.txt (changement)
+  [OK] 8. vigie-perimetre detection 4W + empreinte SHA-256
+  [OK] 9. --dry-run sans effet de bord (rc/prefixe/etats flux+vigie)
+  [OK] 10. chaque routine applique --dry-run (option lue)
+  [OK] 11. verifier-statuts (escalade DEFCON 4 + mission asap + IR)
+  [OK] 12. oracle.py + defcon.py exposent defcon-escaler (2->4)
+
+=== CHRONO test (total 0.9s) ===
+  1. existence + triplet                     0.00s
+  2. manifest {actif, intervalle}            0.00s
+  3. grades G3                               0.00s
+  4. sante detection                         0.00s
+  5. live detection                          0.00s
+  6. encart detection                        0.00s
+  7. flux persistance                        0.00s
+  8. vigie-perimetre detection 4W            0.00s
+  9. dry-run sans effet de bord              0.84s
+  10. option dry-run explicite               0.00s
+  11. verifier-statuts (escalade+mission+IR)   0.00s
+
+=== RESULTAT : 12 OK / 0 KO (sur 12 points) ===

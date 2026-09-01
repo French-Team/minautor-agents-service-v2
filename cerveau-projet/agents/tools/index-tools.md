@@ -172,6 +172,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-contradictions` | Croiser les sources (cases, regles, protocoles, git log --all) pour detecter les contradictions - outil d Argus, rapport classe par gravite | [detecter/detecter-contradictions/](detecter/detecter-contradictions/) |
 | `detecter-troncatures` | Detecter les elements tronques donc illisibles : fichiers trop longs a lire (binaires ignores), blocs non fermes (JSON/Python/bash invalides), marqueurs de troncature (zones de documentation ignorees), option --exclure | [detecter/detecter-troncatures/](detecter/detecter-troncatures/) |
 | `detecter-processus-residuels` | Detecter les processus residuels (python/node/bash) dont la commande reference le projet ou orphelins (parent mort), liste blanche protegee (freebuff, unsloth) | [detecter/detecter-processus-residuels/](detecter/detecter-processus-residuels/) |
+| `detecter-erreur-bloquante` | Detecter et AFFICHER les erreurs bloquantes qui empechent un demarrage/round (marbre divise sans porte, daemon mort, etat-carte incoherent) - diagnostique OU CHERCHER / REPARER avant demarrer-llm | [detecter/detecter-erreur-bloquante/](detecter/detecter-erreur-bloquante/) |
 | `detecter-recherches-obsoletes` | Detecter les recherches-web obsoletes (age > 30 jours ou date invalidite passee) pour garantir des souvenirs vrais et a jour | [detecter/detecter-recherches-obsoletes/](detecter/detecter-recherches-obsoletes/) |
 | `detecter-ecritures-hors-cycle` | Detecter les ecritures de fichiers de travail hors cycle d activation (git + mtime croises avec l historique des activations) | [detecter/detecter-ecritures-hors-cycle/](detecter/detecter-ecritures-hors-cycle/) |
 
@@ -302,6 +303,12 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `nettoyer-sessions` | Supprimer TOUTES les sessions LLM (AGENTS.md blocs + Sessions connues, classeur profil-session-*), le journal historique est conserve | [nettoyer/nettoyer-sessions/](nettoyer/nettoyer-sessions/) |
 | `snapshot-nettoyage` | Snapshot de l etat du workspace avant nettoyage (agent Hygie) : creer / consulter / rotation 7 jours / liste - preuve de tracabilite | [nettoyer/snapshot-nettoyage/](nettoyer/snapshot-nettoyage/) |
 | `nettoyer-processus-residuels` | Terminer les processus residuels detectes (exclusif Hygie via verrou-habilitation, dry-run par defaut, liste blanche protegee) | [nettoyer/nettoyer-processus-residuels/](nettoyer/nettoyer-processus-residuels/) |
+
+### Presenter
+
+| Outil | Description | Chemin |
+|---|---|---|
+| `presenter-agent` | Presentateur COMMUN des possibilites d un agent (genere depuis son arbre v2, toujours synchronise) - reutilisable pour l ouverture d un round | [presenter/presenter-agent/](presenter/presenter-agent/) |
 
 ### Proteger
 

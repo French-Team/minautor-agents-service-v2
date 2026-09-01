@@ -103,6 +103,49 @@ test, desactiver une fonction ou un workflow complet).
     racine en fin de test (test-024/024b verifie). Un test qui laisse des
     preuves derriere lui est INCOMPLET.
 
+## Carte de reparation [AIDE] (demande utilisateur 2026-08-29)
+
+> Le lanceur capte les lignes `[AIDE]` et les remonte en tete de
+> `DETAILS DES KO` + rapport markdown, pour que le correcteur sache
+> IMMEDIATEMENT OU chercher sans relancer/creuser les tests a la main.
+>
+> REGLE : quand un test a des KO, il affiche en fin de main() (apres le
+> `=== RESULTAT ... ===`, avant le rating) une bande `[AIDE]` qui donne :
+>   - les FICHIERS / DOSSIERS inspectes (chemins relatifs a la racine) ;
+>   - la COMMANDE de diagnostic a relancer pour le detail complet
+>     (ex: `--isoler N` + l outil en clair) ;
+>   - un indice de CORRECTIF probable en une ligne.
+> Chaque ligne de la bande COMMENCE par `[AIDE]` (le lanceur les reprend
+> telles quelles). Exemple :
+> ```
+> if NB_KO:
+>     print("  [AIDE] OU CHERCHER / REPARER :")
+>     print("    [AIDE] Fichier(s) inspecte(s) : agents/cerberus/cerberus.md")
+>     print("    [AIDE] Diagnostic : python3 agents/tools/valider/valider-tableaux/valider-tableaux.py agents/cerberus/cerberus.md")
+>     print("    [AIDE] Correctif : ajouter l agent manquant au tableau des agents disponibles de la fiche")
+> ```
+> La bande ne s affiche QUE si le test a des KO (`if NB_KO:`) : un test
+> vert reste silencieux, aucune pollution de sortie.
+
+### Regle [AIDE] fin precedent-aware (demande utilisateur 2026-08-29, suite audit round)
+
+> Quand le test verifie un ARBRE de decision ou ses fins (ex: valider qu une
+> fin d inter-round est precedent-aware), la bande [AIDE] doit aussi pointer
+> vers l ENDROIT exact de la race :
+> - pour une fin d inter-round non precedent-aware (fin qui reactive Cerberus
+>   en dur alors que l agent peut etre active en inter-round) : citer le
+>   fichier `fins.json` de l agent ET la fin fautive, avec le correctif
+>   (`oracle.py reactiver-fin <agent>`).
+> - Regle demarche : tester = verifier la FIN dans `fins.json` de l arbre
+>   (`action/reactiver` + commande `reactiver-fin`), la branche `INTER-ROUND`
+>   dans la racine, et le precedent (l appelant). Voir
+>   `protocole-fin-mission` v0.3.0 et `protocole-reparer-arbres`.
+> Exemple de bande pour un tel KO :
+> ```
+>     print("  [AIDE] Fin fautive : agents/morpheus/parcours/fins.json -> fin-inter-round")
+>     print("  [AIDE] Correctif : remplacer la commande par oracle.py reactiver-fin morpheus")
+> ```
+
 ## Mesure des tokens (PILOTE, migration progressive v0.1 - optionnel)
 
 > Volet "mesure de la fenetre de contexte" (demande utilisateur 2026-08-15).
@@ -279,6 +322,14 @@ def main():
     print("")
     bilan_chrono()
     print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" % (NB_OK, NB_KO, NB_POINTS))
+    # CARTE DE REPARATION [AIDE] (demande utilisateur 2026-08-29) : le
+    # lanceur capte ces lignes et les remonte en tete des details des KO -
+    # le correcteur sait OU chercher sans creuser a la main. Vide si le
+    # test est vert (aucune pollution).
+    if NB_KO:
+        print("  [AIDE] OU CHERCHER / REPARER :")
+        print("    [AIDE] Fichier(s) inspecte(s) : agents/categorie/nom-outil/")
+        print("    [AIDE] Diagnostic : python3 agents/tools/categorie/nom-outil/nom-outil.py --no-chrono")
     # RATING (protection 'rating', demande utilisateur 2026-08-15) : le test
     # affiche le rating GENERAL des tests et le rating du test courant.
     PROTECTIONS.afficher_rating(os.path.basename(__file__).replace(".py", ""))
@@ -306,6 +357,9 @@ if __name__ == "__main__":
   ArretProtection` dans main (protection STOP)
 - [ ] Chaque point est numerote et affiche `[OK]`/`[KO]`
 - [ ] Le bilan `=== RESULTAT : N OK / M KO ===` et le retour `1 if NB_KO else 0`
+- [ ] Carte de reparation `[AIDE]` quand le test a des KO (fichiers inspectes
+  + commande de diagnostic + indice de correctif) : le lanceur la remonte
+  dans `DETAILS DES KO` pour savoir ou chercher (demande 2026-08-29)
 - [ ] Le bloc rating `PROTECTIONS.afficher_rating(...)` en fin de main() (protection 'rating' : le test affiche sa note /100 + le rating general)
 - [ ] ASCII strict : 0 caractere non-ASCII
 - [ ] LF pur : 0 CRLF
@@ -326,6 +380,8 @@ sont la matiere premiere des futurs outils de suivi de performance.
 | Version | Date | Changements |
 |---|---|---|
 | 0.3.0 | 2026-08-13 | REGLE IMMUABLE PROTECTIONS + OPTIONS + CHRONO (demande utilisateur) : options on/off `--isoler`/`--desactiver` + chrono par etape `--no-chrono`/`chrono_etape`/`bilan_chrono`/`point_actif` dans le canevas et la checklist. Les tests EXISTANTS ne sont PAS migres (decision utilisateur) ; le triplet s impose aux FUTURS tests. Ajout OUTIL_MD manquant dans le canevas. CORRECTION BUG LATENT (decouvert par le premier test conforme test-044) : `global NB_POINTS, NB_OK, NB_KO` en tete de main() - sans lui, `NB_KO += 1` dans le except rendait NB_KO local et le bilan final levait UnboundLocalError |
+| 0.6.0 | 2026-08-29 | [AIDE] FIN PRECEDENT-AWARE (suite audit round) : la bande [AIDE] documente aussi la verification des fins d arbre precedent-aware (fin d inter-round qui doit utiliser `oracle.py reactiver-fin`, pas reactiver Cerberus en dur) et des branches/theme INTER-ROUND. Renvoi a protocole-fin-mission v0.3.0 et protocole-reparer-arbres. |
+| 0.5.0 | 2026-08-29 | CARTE DE REPARATION [AIDE] (demande utilisateur) : quand un test a des KO, il affiche une bande `[AIDE]` (fichiers inspectes, commande de diagnostic, indice de correctif) que le lanceur capte et remonte en tete de `DETAILS DES KO` + rapport. |
 | 0.4.0 | 2026-08-15 | PROTECTION RATING (demande utilisateur) : ajout du bloc `PROTECTIONS.afficher_rating(...)` en fin de main() - chaque futur test affiche le rating GENERAL des tests et le rating du test. Protection 'rating' ajoutee a LISTE_PROTECTIONS de tester-protections v0.2.0 (deploiement automatique). Le lanceur affiche le rating des SERIES et le rating GENERAL du run. |
 | 0.2.1 | 2026-08-12 | Import OBLIGATOIRE des protections via le point d entree unique tester-protections (lancer_protege + protection STOP verifier_critique/ArretProtection) - demande utilisateur : chaque test DOIT etre protege |
 | 0.2.0 | 2026-08-12 | Format PYTHON canonique (audit Morpheus, demande utilisateur : le template est LA reference, pas les tests precedents). Les tests reels sont des .py purs avec [OK]/[KO] ; l ancien format bash/protections (v0.1.0) etait obsolete et inutilisable |

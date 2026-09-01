@@ -228,10 +228,13 @@ def main():
              not cmd_ko, "; ".join(cmd_ko))
 
     # --- Passe 2 : navigation reelle OK ---
+    # NB 2026-08-29 : le GATE BON AGENT (decision utilisateur marbre-log)
+    # intercale une question apres la confirmation -> la sequence porte un
+    # OUI supplementaire (OUI|OUI|NON|trio|...).
     nav_ok_ko = []
     for agent, k in sorted(FINS_OK.items()):
         r = run([PYTHON, GUIDER, PARCOURS_JANUS, "--reponses",
-                 "OUI|NON|trio|%s|OUI" % agent])
+                 "OUI|OUI|NON|trio|%s|OUI" % agent])
         ok = (r.returncode == 0 and "Fin de parcours atteinte : case '%s'" % k in r.stdout)
         if not ok:
             nav_ok_ko.append("%s->%s (code=%d)" % (agent, k, r.returncode))
@@ -242,7 +245,7 @@ def main():
     nav_ko_ko = []
     for agent, k in sorted(FINS_KO.items()):
         r = run([PYTHON, GUIDER, PARCOURS_JANUS, "--reponses",
-                 "OUI|NON|trio|%s|NON" % agent])
+                 "OUI|OUI|NON|trio|%s|NON" % agent])
         ok = (r.returncode == 0 and "Fin de parcours atteinte : case '%s'" % k in r.stdout)
         if not ok:
             nav_ko_ko.append("%s->%s (code=%d)" % (agent, k, r.returncode))
@@ -263,7 +266,7 @@ def main():
         # par la case registre dediee avant la fin (ajout Buffy 2026-08-11).
         c9f_suiv = c9f.get("suivant")
         c24 = c.get(c9f_suiv, {}) if c9f_suiv else {}
-        r = run([PYTHON, GUIDER, p, "--reponses", "OUI|NON|corriger"])
+        r = run([PYTHON, GUIDER, p, "--reponses", "OUI|OUI|NON|corriger"])
         nav_ok = (r.returncode == 0 and
                   "Fin de parcours atteinte : case 'c10'" in r.stdout)
         if not (b_corr and c9f.get("type") == "action" and c9f_suiv == "c24"

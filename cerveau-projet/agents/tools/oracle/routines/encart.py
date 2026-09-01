@@ -15,9 +15,12 @@ est un tableau markdown simple (sans emoji grade) :
 La colonne Etat porte l etat de l activite (decision utilisateur
 2026-08-29) : DEBUT, FIN, ATTENTE, URGENT, BUG, ACTIF.
 
-Verifie la presence de l en-tete de colonnes, l integrite structurelle et
-que les valeurs de la colonne Etat sont parmi les valeurs connues,
-historise UNIQUEMENT en cas d anomalie (evenementiel).
+Verifie la presence de l en-tete de colonnes, l integrite structurelle,
+que les valeurs de la colonne Etat sont parmi les valeurs connues, et que
+la colonne EXECUTEUR n est pas vide (lecon 2026-08-30 : des entrees a
+Executeur vide etaient historisees par activer-agent-principal au lieu
+d Oracle, et AUCUNE routine ne le signalait). Historise UNIQUEMENT en cas
+d anomalie (evenementiel).
 
 Usage:
     python3 encart.py [--dry-run]
@@ -32,7 +35,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 _DOSSIER = os.path.dirname(os.path.abspath(__file__))
 ORACLE_DIR = Path(_DOSSIER).parent
@@ -113,16 +116,28 @@ def main():
         contenu = encart.read_text(encoding="utf-8", errors="replace")
         if ENTETE_V1 not in contenu:
             anomalies.append("En-tete de colonnes v1 absent : %s" % ENTETE_V1)
-        # Verifier que les valeurs de la colonne Etat sont connues.
+        # Verifier les valeurs de la colonne Etat + la colonne Executeur.
+        # Colonnes: '' | Grade | Agent | Defcon | Executeur | Etat | Secteur |
         for ligne in contenu.splitlines():
             if not ligne.strip().startswith("| ") or "| Grade |" in ligne:
                 continue
             cols = [c.strip() for c in ligne.split("|")]
             if len(cols) < 6:
                 continue
-            etat = cols[5]  # Grade|Agent|Defcon|Executeur|Etat|Secteur|...
+            # Sauver l ID d historique (colonne 9) pour le signaler.
+            ident = cols[9] if len(cols) > 9 else "?"
+            etat = cols[5]
             if etat and etat not in _charger_etats_connus():
                 anomalies.append("Etat inconnu '%s' (colonne Etat)" % etat)
+            # Executeur vide (colonne 4) : signale une historisation hors
+            # Oracle (seul Oracle doit historiser). Les lignes de donnees ont
+            # toujours un Executeur (Oracle pour un historique utilisateur,
+            # RT(<s>) pour les routines, demarrer-llm pour le demarrage).
+            executeur = cols[4]
+            if not executeur:
+                anomalies.append(
+                    "Executeur vide (ligne id=%s, agent=%s)" %
+                    (ident, cols[2]))
 
     if not anomalies:
         print("[ENCART] OK (encart v1 coherent)")

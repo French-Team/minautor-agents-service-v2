@@ -12,31 +12,42 @@
       {
         "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
         "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
       },
       {
         "besoin": "Consulter les lecons (domaine nettoyage)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hygie --domaine nettoyage"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hygie --domaine nettoyage"
+        ],
         "regle": "PATTERN 6 : le contexte dynamique."
       },
       {
         "besoin": "CONTEXTE : activite recente des agents",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
         "regle": "PATTERN 6 : l historique est DYNAMIQUE."
       },
       {
         "besoin": "RELAIS - Activer l agent habilite (preuve d honnetete) (case cH1)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"],
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
+        ],
         "regle": "PREUVE D HONNETETE : j active l agent habilite (janus / proprietaire) pour prouver l honnetete des changements."
       },
       {
         "besoin": "RETOUR - Verifier le rapport (case cH2)",
         "action": "procedure",
-        "etapes": ["Lire le rapport de l agent habilite a la reactivation"],
+        "etapes": [
+          "Lire le rapport de l agent habilite a la reactivation"
+        ],
         "regle": "REGLE ABSOLUE : si la preuve manque, je ne supprime PAS."
       },
       {
@@ -51,16 +62,24 @@
       {
         "besoin": "Consulter le snapshot precedent",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py consulter"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py consulter"
+        ],
         "regle": "Le snapshot reste la preuve de l etat verifie meme si honnetete non prouvee."
       },
       {
         "besoin": "Ajouter les lecons dans corrections.md",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hygie/corrections.md <lecon>"],
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hygie/corrections.md <lecon>"
+        ],
         "regle": "PROTOCOLE FIN-MISSION."
       }
     ]
   },
-  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-honnetete"}
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-honnetete"
+  }
 }

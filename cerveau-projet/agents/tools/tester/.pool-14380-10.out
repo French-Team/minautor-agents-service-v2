@@ -1,0 +1,35 @@
+=== Garde-fou : lire-head (lecture automatique du head) ===
+[OK] 1. outil present + compile
+[OK] 2. --version v0.1.1 (py + sh parite)
+[OK] 3. front-matter YAML detecte (head sans le corps)
+[OK] 4. bloc de commentaires detecte (sans le code)
+[OK] 5. premiere ligne vide (titre seul, sans la suite)
+[OK] 6. --lignes 2 : uniquement les 2 premieres lignes
+[OK] 7. --info-commune present : PRESENT partout
+[OK] 8. PREUVE NEGATIVE : fichier sans l info = ABSENT
+[PROTECTIONS] Attention: mot-cle 'erreur' dans stdout (code 1)
+[OK] 9. fichier introuvable -> code 1 + message
+[OK] 10. --dry-run : liste sans lire le contenu
+[OK] 11. parite .sh : lecture front-matter identique
+[OK] 12. ASCII strict : 0 non-ASCII (outil + doc + test)
+[OK] 12b. LF pur : 0 CRLF (outil + doc + test)
+
+
+=== CHRONO test-091 (total 2.6s) ===
+  1. outil                                 0.00s
+  2. version                               0.25s
+  3. front-matter                          0.16s
+  4. commentaires                          0.18s
+  5. ligne vide                            0.14s
+  6. lignes forcees                        0.17s
+  7. info presente                         0.34s
+  8. preuve negative                       0.28s
+  9. introuvable                           0.22s
+  10. dry-run                              0.18s
+  11. parite sh                            0.63s
+  12. normes                               0.00s
+=== RESULTAT : 13 OK / 0 KO (sur 13 points) ===
+test-091-lire-head-garde-fou : 82.5/100 (BIEN)
+
+=== RATING GENERAL (test) : a calculer avec --tous ===
+RATING GENERAL (test) : 94.5/100 (EXCELLENT)

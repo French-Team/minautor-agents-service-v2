@@ -223,12 +223,15 @@ def main():
              "ko=%s" % structure_ko[:4])
     chrono_etape("1. structure jour/agent", t_debut)
 
-    # 2. Les agents des blocs sont connus. EXEMPTION DOCUMENTEE : la routine
-    #    v1 'citations' (serveur de routines oracle, TEMPORAIRE active en dev,
-    #    manifest.json) historise sous le bloc 'citations' - ce n est pas un
-    #    agent mais un artefact de routine documente, tolere.
+    # 2. Les agents des blocs sont connus. EXEMPTION DOCUMENTEE : les routines
+    #    v1 (serveur de routines oracle, manifest.json) historisent sous leur
+    #    NOM de routine (live, flux, notation, verifier-statuts,
+    #    vigie-perimetre, citations, ...) avec un id LLM et le type 'R' (voir
+    #    la colonne Executeur RT(<intervalle>) dans l encart v1). Ce ne sont
+    #    pas des agents mais des artefacts de routine documentes, toleres.
     t_debut = time.monotonic()
-    blocs_routines = {"citations"}
+    blocs_routines = {"citations", "encart", "flux", "live", "notation",
+                      "verifier-statuts", "vigie-perimetre"}
     inconnus = sorted(set(e["agent"].lower() for e in entrees)
                       - set(a.lower() for a in agents_md)
                       - blocs_routines)

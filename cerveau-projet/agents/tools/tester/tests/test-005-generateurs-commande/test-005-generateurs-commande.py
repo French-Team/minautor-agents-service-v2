@@ -291,7 +291,9 @@ def main():
     # (enregistrer-lecon + consulter-lecons, round BDD lecons 2026-08-17),
     # c0e (consulter-lecons consultation pre-mission, round 2026-08-18),
     # cU2 (comprendre l outil : consulter-combos, ajoutee par Buffy
-    # 2026-08-21). Toute commande SUPPLEMENTAIRE = regression.
+    # 2026-08-21), c0g (GATE BON AGENT : verifier-agent-perimetre --gate,
+    # decision utilisateur marbre-log 2026-08-29). Toute commande
+    # SUPPLEMENTAIRE = regression.
     n_commande = 0
     cases_commande = []
     for k, c in p.get("cases", {}).items():
@@ -299,8 +301,8 @@ def main():
             if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
                 n_commande += 1
                 cases_commande.append(k)
-    verifier(18, "14 commandes en dur connues (c0 x2 + c0e + c10 x3 + c11a + c12/c13 + c18/c19 + c30 + c35 + cU2) dans les indices avec catalogue",
-             n_commande == 14 and sorted(cases_commande) == ["c0", "c0", "c0e", "c10", "c10", "c10", "c11a", "c12", "c13", "c18", "c19", "c30", "c35", "cU2"],
+    verifier(18, "15 commandes en dur connues (c0 x2 + c0e + c0g + c10 x3 + c11a + c12/c13 + c18/c19 + c30 + c35 + cU2) dans les indices avec catalogue",
+             n_commande == 15 and sorted(cases_commande) == ["c0", "c0", "c0e", "c0g", "c10", "c10", "c10", "c11a", "c12", "c13", "c18", "c19", "c30", "c35", "cU2"],
              "restants=%d cases=%s" % (n_commande, sorted(cases_commande)))
 
     # Depuis Buffy 2026-08-21 (case COMPRENDRE L OUTIL cU1), le flux passe

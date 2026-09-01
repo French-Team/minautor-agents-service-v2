@@ -26,10 +26,11 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.8.2
+Version : 0.8.8
 Statut : prepare
 """
 
+import importlib.util
 import io
 import json
 import os
@@ -38,7 +39,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.8.6"
+VERSION = "0.8.8"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -59,6 +60,15 @@ _ETATS_ACTIONS_DEFAUT = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "..", "..", "oracle", "etats-actions.json")
 ETATS_ACTIONS = os.environ.get("ETATS_ACTIONS", "") or _ETATS_ACTIONS_DEFAUT
+
+# v0.8.7 : colonne Executeur des routines v1 - l intervalle de chaque
+# routine vit dans le manifest (oracle/routines/manifest.json), pas dans
+# le code (decision utilisateur 2026-08-29 : afficher routine + temps
+# defini, style RT(300s)).
+_MANIFEST_ROUTINES_DEFAUT = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "..", "..", "oracle", "routines", "manifest.json")
+MANIFEST_ROUTINES = os.environ.get("MANIFEST_ROUTINES", "") or _MANIFEST_ROUTINES_DEFAUT
 
 # v0.8.1 : l encart v1 porte desormais les colonnes Grade | Agent |
 # Debut/Fin | Secteur | Raison | Heure | id | Type (inspire du tableau v2
@@ -136,6 +146,27 @@ def _secteur_label(agent):
         if mot in ag:
             return secteur
     return defaut
+
+
+def _executeur_routine(agent):
+    """Executeur d une routine v1 : "RT(<intervalle>s)" (ex: RT(300s))
+    si l agent est une routine active du manifest (oracle/routines/
+    manifest.json), sinon "". La colonne Executeur du tableau affiche
+    ainsi le type routine + son intervalle defini (decision utilisateur
+    2026-08-29)."""
+    if not agent:
+        return ""
+    try:
+        with io.open(MANIFEST_ROUTINES, "r", encoding="utf-8",
+                     errors="replace") as fh:
+            data = json.load(fh)
+        for r in data.get("routines_surveillance", []):
+            if r.get("nom") == agent and r.get("actif") and \
+                    r.get("intervalles_secondes"):
+                return "RT(%ds)" % r["intervalles_secondes"]
+    except (OSError, ValueError):
+        pass
+    return ""
 
 
 def _charger_etats_actions():
@@ -422,12 +453,49 @@ def verifier_residus_racine():
     print("=" * 60)
 
 
+def _trouver_racine():
+    """DETECTER la racine du workspace en remontant jusqu a AGENTS.md.
+    Pattern os_path v2 (v0.1.0, decision 2026-08-30) : on ne compte JAMAIS
+    les niveaux (../..), on CHERCHE le marqueur. Retourne chemin absolu ou
+    None."""
+    courant = os.path.abspath(os.path.dirname(__file__))
+    while True:
+        if os.path.isfile(os.path.join(courant, "AGENTS.md")):
+            return courant
+        parent = os.path.dirname(courant)
+        if parent == courant:
+            return None
+        courant = parent
+
+
 def instruction_demarrage(agent):
     """Bloc DEMARRAGE OBLIGATOIRE pour un agent active (sauf Cerberus).
+    v0.5.9 : la norme est l arbre v2 (guider-arbre). L agent lance SON arbre
+    des decisions (racine -> themes -> fins) des que l arbre existe ; sinon
+    repli sur le parcours v1 (couvre les parcours nommes, ex: socrate).
     v0.5.4 : corrige le bug d arret a c0 - l agent sait comment lancer son
     parcours depuis la case de depart."""
+    # PATTERN v2 (os_path) : on ne compte JAMAIS les niveaux ("../..").
+    # On DETECTE la racine en remontant jusqu a trouver AGENTS.md, puis on
+    # derive le chemin du haut vers le bas - a la v1 on comptait les ".."
+    # a la main (bug de niveau), la v2 a fiabilise ca (decision 2026-08-30).
+    racine = _trouver_racine()
+    arbre = os.path.join(
+        racine, "cerveau-projet", "agents", agent, "parcours",
+        "arbre-%s.json" % agent) if racine else os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+        agent, "parcours", "arbre-%s.json" % agent)
+    if os.path.isfile(arbre):
+        return (
+            "DEMARRAGE OBLIGATOIRE (v2) : lance ton arbre des decisions avec :\n"
+            "python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \\\n"
+            "  cerveau-projet/agents/%s/parcours/arbre-%s.json\n"
+            "(racine : choisis TON theme selon ta mission, puis suis les besoins /\n"
+            "procedures du theme ; Oracle te pilote via l arbre - PAS le parcours v1 ;\n"
+            "si tu reprends apres une interruption, relance l arbre et poursuis)."
+        ) % (agent, agent)
     return (
-        "DEMARRAGE OBLIGATOIRE (v0.5.5) : lance ta mission depuis la case c0 avec :\n"
+        "DEMARRAGE OBLIGATOIRE : lance ta mission avec :\n"
         "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \\\n"
         "  cerveau-projet/agents/%s/parcours/parcours-%s.json --case c0\n"
         "(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds\n"
@@ -517,6 +585,35 @@ def trouver_prochaine_session(contenu):
     return PREFIXE_SESSION + str(n)
 
 
+def _routine_classeur():
+    """Charger la routine centrale du classeur sans dependance externe."""
+    chemin = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), "..", "..", "oracle", "fonctions", "classeur.py"))
+    try:
+        spec = importlib.util.spec_from_file_location("classeur_v1", chemin)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    except (OSError, ImportError, AttributeError):
+        return None
+
+
+def lire_classeur(variable="*", source="activer-agent-principal", agent="oracle", session="session-admin", tracer=True):
+    """Lire le classeur via la routine centrale et tracer CLASSEUR ENTREE."""
+    module = _routine_classeur()
+    if module is None:
+        return None, None
+    return module.lire_fichier(CLASSEUR_STOCKAGE, variable, source, agent, session, tracer=tracer)
+
+
+def ecrire_classeur(lignes, variable="*", source="activer-agent-principal", agent="oracle", session="session-admin", ancienne_valeur=None, nouvelle_valeur=None, raison=None):
+    """Ecrire le classeur via la routine centrale et tracer CLASSEUR SORTIE."""
+    module = _routine_classeur()
+    if module is None:
+        return False
+    return module.ecrire_lignes(CLASSEUR_STOCKAGE, lignes, variable, source, agent, session, ancienne_valeur, nouvelle_valeur, raison)
+
+
 def trouver_session_par_id(llm_id):
     """Retrouver la session liee a un llm-id (ou None).
     SOURCE DOUBLE (v0.4.0) : 1) AGENTS.md -- bloc avec le champ '**Nom LLM** | <id>'
@@ -533,9 +630,8 @@ def trouver_session_par_id(llm_id):
     # 2. Classeur : liaison id dans les lignes profil-session
     fichier = CLASSEUR_STOCKAGE
     if os.path.isfile(fichier):
-        with io.open(fichier, "r", encoding="utf-8", errors="replace") as fh:
-            contenu = fh.read()
-        for ligne in contenu.split(chr(10)):
+        lignes_classeur, _ = lire_classeur("*", "activer-agent-principal", "oracle", "session-admin", tracer=False)
+        for ligne in lignes_classeur or []:
             if "id: " + llm_id in ligne:
                 m = re.search(r"session: (session-[A-Za-z0-9_-]+)", ligne)
                 if m:
@@ -559,9 +655,8 @@ def id_lie_a_session(session_id):
     # 2. Classeur
     fichier = CLASSEUR_STOCKAGE
     if os.path.isfile(fichier):
-        with io.open(fichier, "r", encoding="utf-8", errors="replace") as fh:
-            contenu = fh.read()
-        for ligne in contenu.split(chr(10)):
+        lignes_classeur, _ = lire_classeur("*", "activer-agent-principal", "oracle", "session-admin", tracer=False)
+        for ligne in lignes_classeur or []:
             if "session: " + session_id in ligne:
                 m = re.search(r"id: (\S+)", ligne)
                 if m:
@@ -726,14 +821,20 @@ def editer_champs_session(contenu, session_id, champs):
 
 def detecter_type_round(raison, type_round="R"):
     """DETECTION AUTOMATIQUE du type d inter-round (decision utilisateur
-    2026-08-24) : si la raison (normalisee) commence par 'INTER-ROUND' ou
-    'FIN D INTER-ROUND', le type est IR sans flag manuel. Sinon, garder le
-    type passe (defaut R)."""
+    2026-08-24, etendue modele aero 2026-08-30) : si la raison (normalisee)
+    commence par 'INTER-ROUND', 'FIN D INTER-ROUND', 'SIGNALER' ou contient
+    ' MISSION-AJOUTER ' (le signalement a ORACLE du modele aero R2), le type
+    est IR sans flag manuel. Sinon, garder le type passe (defaut R)."""
     if type_round == "IR":
         return type_round
     raison_haut = (raison or "").strip().upper()
-    raison_norm = raison_haut.replace("'", " ")
-    if raison_haut.startswith("INTER-ROUND") or raison_norm.startswith("FIN D INTER-ROUND"):
+    raison_norm = raison_haut.replace("'", " ").replace("\"", " ")
+    if (raison_haut.startswith("INTER-ROUND")
+            or raison_norm.startswith("FIN D INTER-ROUND")
+            or raison_haut.startswith("SIGNALER")
+            or raison_haut.startswith("BESOIN INTER-ROUND")
+            or " MISSION-AJOUTER " in " " + raison_norm + " "
+            or " INTER-ROUND " in " " + raison_norm + " "):
         return "IR"
     return type_round
 
@@ -855,13 +956,16 @@ def _construire_encart_v1(corps):
     entrees = []
     agent_courant = "?"
     date_courante = ""
-    for ligne in corps.split("\n"):
+    for ligne in corps.splitlines():
         l = ligne.strip()
         if l.startswith("## ") and not l.startswith("## Activites"):
             date_courante = l[3:].strip()
-        elif l.startswith("### "):
+            agent_courant = "?"
+            continue
+        if l.startswith("### "):
             agent_courant = l[4:].strip()
-        elif l.startswith("- ") and " | " in l:
+            continue
+        if l.startswith("- ") and " | " in l:
             parties = l[2:].split(" | ", 3)
             if len(parties) >= 3:
                 h = parties[0].strip()
@@ -873,10 +977,21 @@ def _construire_encart_v1(corps):
                     t = ""
                     r = parties[2].strip()
                 session_entree = mapping.get(s)
-                if session_entree != "session-admin":
+                # Historique v1 : l identifiant glm5 est lie a session-admin.
+                # Les entrees Oracle serveur sont donc conservees.
+                if session_entree != "session-admin" and s != "session-admin":
                     continue
-                entrees.append(("%s %s" % (date_courante, h), h, agent_courant, s, r, t))
-    liste = sorted(entrees, key=lambda x: x[0], reverse=True)[:50]
+                agent_affiche = "oracle" if "DEMARRAGE SERVEUR" in r else agent_courant
+                entrees.append(("%s %s" % (date_courante, h), h, agent_affiche, s, r, t))
+    def _cle_tri(entree):
+        date, heure = entree[0].split(" ", 1)
+        try:
+            jj, mm, aaaa = date.split("/")
+            return (int(aaaa), int(mm), int(jj), heure)
+        except (ValueError, TypeError):
+            return (0, 0, 0, heure)
+
+    liste = sorted(entrees, key=_cle_tri, reverse=True)[:50]
     encart = (
         "---\nidentite:\n  nom: \"Activites recentes\"\n"
         "  type: \"tableau\"\n"
@@ -898,8 +1013,8 @@ def _construire_encart_v1(corps):
         secteur = _secteur_label(a)
         df = _etat_action(r, a)
         defcon = _lire_defcon_v1()
-        encart += "| %s | %s | %s |  | %s | %s | %s | %s | %s | %s |\n" % (
-            grade, a, defcon, df, secteur, r_aff, h, s, t)
+        encart += "| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |\n" % (
+            grade, a, defcon, _executeur_routine(a) or "Oracle", df, secteur, r_aff, h, s, t)
     return encart
 
 
@@ -921,7 +1036,7 @@ def _ecrire_encart_v1(session, heure, agent, identifiant, type_round, raison, ex
     grade = _grade_label(agent)
     secteur = _secteur_label(agent)
     df = _etat_action(raison, agent)
-    exec_aff = executeur or ""
+    exec_aff = executeur or _executeur_routine(agent) or "Oracle"
     defcon = _lire_defcon_v1()
     nouvelle_entree = "| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
         grade, agent, defcon, exec_aff, df, secteur, r_aff, heure,
@@ -976,6 +1091,23 @@ def _ecrire_encart_v1(session, heure, agent, identifiant, type_round, raison, ex
                 return
         except OSError:
             pass
+    # Reconstruire l encart depuis le corps pour que les anciennes entrees
+    # portent aussi un executeur (Oracle par defaut). Cette reconstruction
+    # evite de laisser des lignes historiques non conformes apres l ajout
+    # de la tracabilite du classeur.
+    try:
+        with io.open(AGENTS_HISTORIQUE, "r", encoding="utf-8",
+                     errors="replace") as fh:
+            corps = fh.read()
+        encart = _construire_encart_v1(corps)
+        if encart:
+            with io.open(AGENTS_ACTIVITE_RECENTE, "w", encoding="utf-8",
+                         newline="\n") as fh:
+                fh.write(encart)
+            return
+    except OSError:
+        pass
+
     # Inserer apres le separateur
     idx_separateur = idx_tableau + 1
     while idx_separateur < len(lignes) and not lignes[idx_separateur].startswith("|---"):
@@ -1070,7 +1202,7 @@ def maj_encart_activites(contenu, date, heure, agent, identifiant, raison):
     agent_courant = "?"
     date_courante = ""
     for ligne in contenu.split("\n"):
-        l = ligne.strip()
+        l = ligne.strip().rstrip("\\r")
         if l.startswith("## ") and not l.startswith("## Activites"):
             date_courante = l[3:].strip()
         elif l.startswith("### "):
@@ -1307,8 +1439,14 @@ def mettre_a_jour_profil_session(session, agent, llm_id=None):
         else:
             lignes.append(nouvelle_ligne)
 
-    with io.open(fichier, "w", encoding="utf-8", newline=chr(10)) as fh:
-        fh.write(chr(10).join(lignes))
+    if not ecrire_classeur(
+            lignes, "profil-session-%s" % id_session,
+            "activer-agent-principal", agent, session,
+            ancienne_valeur="profil session precedent",
+            nouvelle_valeur=nouvelle_ligne,
+            raison="Mise a jour du profil de session"):
+        print("ERREUR: Ecriture du profil session refusee par la routine du classeur")
+        return 1
 
     print("Profil session mis a jour dans %s : %s (%s)" % (fichier, session, agent))
     return 0

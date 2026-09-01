@@ -149,32 +149,44 @@ def point_1_rc_zero_sur_reel():
 
 
 def point_2_preuve_negative_themes_orphelins():
-    """Une ligne themes listant un theme-orphelin est detectee."""
+    """Une ligne themes listant un theme-orphelin est detectee.
+
+    L outil ne verifie la coherence themes/arbre que pour les blocs
+    freelance (fiche contenant 'freelance'). Le bloc session-freelance a ete
+    retire d AGENTS.md (2026-08-30, seule session-admin reste) : le test
+    CREE ce bloc dans la copie tmp avec un agent reel (stark, arbre present)
+    et y injecte une ligne themes listant des themes orphelins.
+    """
     tmpdir, agents = creer_env_tmp("themes")
     try:
         with io.open(agents, "r", encoding="utf-8") as f:
             src = f.read()
-        # La ligne themes du bloc DEMARRAGE V2 a ete restructuree (refonte
-        # AGENTS.md) : on INJECTE une ligne themes orpheline dans le bloc
-        # session-freelance (stark) pour prouver que l outil detecte les
-        # themes non references par l arbre.
-        marker = "### Session : session-freelance"
-        pos = src.find(marker)
-        if pos == -1:
-            verifier("ligne themes reperee pour injection", False,
-                     "bloc session-freelance introuvable")
-            return
-        fin_bloc = src.find("## Sessions connues", pos + 1)
-        if fin_bloc == -1:
-            verifier("ligne themes reperee pour injection", False,
-                     "fin bloc session-freelance introuvable")
-            return
-        injection = "\n(themes : theme-lire.json / theme-explorer.json)\n"
-        src = src[:fin_bloc] + injection + src[fin_bloc:]
+        # Bloc session-freelance reconstruit (agent reel stark : fiche +
+        # corrections presentes sur disque, arbre-stark.json existe) avec une
+        # ligne themes listant deux themes ORPHELINS (aucun ne correspond au
+        # theme reference par la racine de l arbre de stark).
+        bloc_freelance = (
+            "\n### Session : session-freelance\n"
+            "\n"
+            "| Champ | Valeur |\n"
+            "|---|---|\n"
+            "| **Nom LLM** | glm5 |\n"
+            "| **Nom Agent** | Stark |\n"
+            "| **Role Agent** | Coordinateur de l equipe freelance |\n"
+            "| **Derniere mise a jour** | 2026-08-30 |\n"
+            "| **Fiche** | [stark.md](cerveau-projet/freelance/stark/stark.md) |\n"
+            "| **Corrections** | [corrections.md](cerveau-projet/freelance/stark/corrections.md) |\n"
+            "| **Active par** | Identification |\n"
+            "| **Raison** | Preuve negative test-103 (themes orphelins). |\n"
+            "\n"
+            "(themes : theme-lire.json / theme-explorer.json)\n"
+        )
+        src = src.rstrip() + "\n" + bloc_freelance
         with io.open(agents, "w", encoding="utf-8", newline="") as f:
             f.write(src)
         r = run([PYTHON, VERIFIER_PY, "--agents-md", agents, "--dry-run"])
         detecte = ("theme-lire.json" in (r.stdout or "")) \
+            and ("theme-explorer.json" in (r.stdout or "")) \
             and ("INCOHERENCES" in (r.stdout or "")) \
             and r.returncode >= 1
         verifier("theme orphelin detecte", detecte,
@@ -191,10 +203,12 @@ def point_3_preuve_negative_raison_tronquee():
     try:
         with io.open(agents, "r", encoding="utf-8") as f:
             src = f.read()
-        # Remplacer TOUTE la ligne Raison de session-freelance par une raison
-        # coupee au mot (sans ponctuation finale) : c est exactement le genre
-        # de coupure que produisait autrefois mission[:80].
-        marker = "### Session : session-freelance"
+        # Remplacer TOUTE la ligne Raison du bloc session courant par une
+        # raison coupee au mot (sans ponctuation finale) : c est exactement
+        # le genre de coupure que produisait autrefois mission[:80]. Le bloc
+        # session-freelance a ete retire de AGENTS.md (2026-08-30) : on cible
+        # le premier bloc session present (session-admin).
+        marker = "### Session : session-admin"
         pos = src.find(marker)
         if pos == -1:
             verifier("bloc session-freelance reperee", False)
