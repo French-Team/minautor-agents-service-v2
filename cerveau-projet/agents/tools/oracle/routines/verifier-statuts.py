@@ -133,8 +133,14 @@ def _lire_urgents():
         # cols = ['', Grade, Agent, Executeur, Etat, Secteur, Raison, Heure, id, Type, '']
         if len(cols) < 9:
             continue
-        if cols[4] == "URGENT":
-            resultats.append((cols[7], cols[2], cols[6]))
+        if cols[5] == "URGENT":
+            # cols = ['', Grade, Agent, Defcon, Executeur, Etat, Secteur,
+            #         Raison, Heure, id, Type, '']
+            resultats.append((cols[8], cols[2], cols[7]))
+    # Cap : au-dela d un seuil on suspecte un encart corrompu -
+    # on s abstenit (mieux que spammer escalade + files).
+    if len(resultats) > 15:
+        return []
     return resultats
 
 
@@ -270,10 +276,13 @@ def main():
                          "URGENT via verifier-statuts: %s" % premier[3][:90])
     print("  [defcon-escaler] " + " / ".join(lignes[:3]) + " (ok=%s)" % ok)
 
-    # 2. Mission prioritaire (asap) pour chacune, porteuse de l info.
-    for cle, heure, agent, raison in nouveaux:
-        _oracle("mission-ajouter", "--file", "asap", "--agent", agent or "oracle",
-                "ETAT URGENT: %s (source %s, %s)" % (raison[:140], agent, heure))
+    # 2. Mission prioritaire (asap) CONSOLIDEE - une seule, jamais une par
+    #    URGENT (anti-spam : un afflux d urgents ne doit pas deposer des
+    #    dizaines de missions, lecon incident 2026-08-29).
+    premier = nouveaux[0]
+    sources = ", ".join(sorted(set(x[2] for x in nouveaux))[:5])
+    _oracle("mission-ajouter", "--file", "asap",
+            "ETAT URGENT x%d: %s (sources: %s)" % (nb, premier[3][:120], sources))
 
     # 3. Round en cours -> inter-round (transposition v2).
     agent_actif, date_actif = _agent_actif()

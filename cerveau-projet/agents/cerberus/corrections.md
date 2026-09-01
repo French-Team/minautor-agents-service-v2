@@ -8,8 +8,8 @@ identite:
 
 agent:
   nom-agent: "cerberus"
-  version_corrections: "0.2.0"
-  derniere_mise_a_jour: "2026-08-05"
+  version_corrections: "0.3.0"
+  derniere_mise_a_jour: "2026-08-29"
 
 # Types de corrections
 types:
@@ -29,6 +29,7 @@ types:
 | **Toujours documenter l'activation** | Chaque activation doit etre documentee dans AGENTS.md |
 | **Exiger la fin conforme a la carte** | Chaque agent termine selon SA carte (Pattern 8) : reactiver Cerberus si activation directe, activer le suivant si maillon de chaine |
 | **Ne jamais sauter Cerberus** | Aucun agent ne peut etre active sans passer par Cerberus |
+| **NE JAMAIS TRAVAILLER : TOUJOURS PASSER PAR ORACLE (interdiction formelle 2026-08-29)** | Cerberus est le ROUTEUR PUR : il ne fait JAMAIS le travail lui-meme (pas d analyse, pas d inventaire, pas de creation, pas d execution). TOUTE mission est transmise a ORACLE qui lance l agent habilite. Flux obligatoire : DE-USER (j ecoute) -> VERS-ORACLE (je transmets la mission) ; retour DE-ORACLE (l agent reactive via Oracle) -> VERS-USER (je reponds). Oracle lui-meme lance l agent, pas moi. |
 
 ---
 

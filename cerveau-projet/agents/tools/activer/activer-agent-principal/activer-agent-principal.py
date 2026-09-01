@@ -38,7 +38,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.8.5"
+VERSION = "0.8.6"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -66,8 +66,32 @@ ETATS_ACTIONS = os.environ.get("ETATS_ACTIONS", "") or _ETATS_ACTIONS_DEFAUT
 # retard v1 pour oracle/routines ; colonne Debut/Fin demandee car les
 # agents historisent leur DEBUT et leur FIN). ASCII strict : grades [GX]
 # et secteurs [XXX] (pas d emoji, contrairement au v2).
-ENTETE_ENCART_V1 = "| Grade | Agent | Executeur | Etat | Secteur | Raison | Heure | id | Type |"
-SEPARATEUR_ENCART_V1 = "|-------|-------|-----------|------|---------|--------|-------|----|------|"
+ENTETE_ENCART_V1 = "| Grade | Agent | Defcon | Executeur | Etat | Secteur | Raison | Heure | id | Type |"
+SEPARATEUR_ENCART_V1 = "|-------|-------|--------|-----------|------|---------|--------|-------|----|------|"
+
+
+def _lire_defcon_v1():
+    """Niveau DEFCON courant (str) ou '' si aucun, depuis le journal
+    defcon.jsonl d Oracle (colonne Defcon de l encart v1, decision
+    utilisateur 2026-08-29 : afficher le DEFCON a cote de l agent)."""
+    try:
+        import importlib.util
+        # activer-agent-principal.py -> remonte jusqu a .../cerveau-projet/
+        # (5 x dirname depuis le fichier).
+        p = os.path.abspath(__file__)
+        for _ in range(5):
+            p = os.path.dirname(p)
+        defcon_path = os.path.join(p, "agents", "tools", "oracle",
+                                   "fonctions", "defcon.py")
+        if not os.path.isfile(defcon_path):
+            return ""
+        spec = importlib.util.spec_from_file_location("_defcon_v1", defcon_path)
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        n = m.niveau_courant()
+        return str(n) if n is not None else ""
+    except Exception:
+        return ""
 
 
 def _charger_grades_v1():
@@ -873,8 +897,9 @@ def _construire_encart_v1(corps):
         grade = _grade_label(a)
         secteur = _secteur_label(a)
         df = _etat_action(r, a)
-        encart += "| %s | %s |  | %s | %s | %s | %s | %s | %s |\n" % (
-            grade, a, df, secteur, r_aff, h, s, t)
+        defcon = _lire_defcon_v1()
+        encart += "| %s | %s | %s |  | %s | %s | %s | %s | %s | %s |\n" % (
+            grade, a, defcon, df, secteur, r_aff, h, s, t)
     return encart
 
 
@@ -897,8 +922,10 @@ def _ecrire_encart_v1(session, heure, agent, identifiant, type_round, raison, ex
     secteur = _secteur_label(agent)
     df = _etat_action(raison, agent)
     exec_aff = executeur or ""
-    nouvelle_entree = "| %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
-        grade, agent, exec_aff, df, secteur, r_aff, heure, identifiant, type_round)
+    defcon = _lire_defcon_v1()
+    nouvelle_entree = "| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
+        grade, agent, defcon, exec_aff, df, secteur, r_aff, heure,
+        identifiant, type_round)
     try:
         if os.path.isfile(AGENTS_ACTIVITE_RECENTE):
             contenu = io.open(AGENTS_ACTIVITE_RECENTE, "r",

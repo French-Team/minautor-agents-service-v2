@@ -37,7 +37,7 @@ VERSION = "0.2.0"
 _DOSSIER = os.path.dirname(os.path.abspath(__file__))
 ORACLE_DIR = Path(_DOSSIER).parent
 
-ENTETE_V1 = "| Grade | Agent | Executeur | Etat | Secteur | Raison |"
+ENTETE_V1 = "| Grade | Agent | Defcon | Executeur | Etat | Secteur | Raison |"
 
 # Etats connus de la colonne Etat (decision utilisateur 2026-08-29) :
 # charges DYNAMIQUEMENT depuis etats-actions.json (v0.2.0) pour ne plus
@@ -120,7 +120,7 @@ def main():
             cols = [c.strip() for c in ligne.split("|")]
             if len(cols) < 6:
                 continue
-            etat = cols[4]  # Grade|Agent|Executeur|Etat|Secteur|...
+            etat = cols[5]  # Grade|Agent|Defcon|Executeur|Etat|Secteur|...
             if etat and etat not in _charger_etats_connus():
                 anomalies.append("Etat inconnu '%s' (colonne Etat)" % etat)
 

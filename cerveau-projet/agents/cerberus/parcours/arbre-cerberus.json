@@ -2,58 +2,44 @@
   "identite": {
     "type": "arbre",
     "appartient_a": "cerberus",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "commun": false
   },
   "arbre": {
     "nom": "arbre-cerberus",
     "agent": "cerberus",
-    "description": "Arbre des decisions de Cerberus - gardien de l'entree. L agent choisit UN THEME au demarrage : ACCUEIL (ecouter et router une demande), ACTIVATION (activer un agent directement), RETOUR (retour d'un agent reactive), AMELIORER (ameliorer le fonctionnement), AUTRE (inventaire/audit), REVISION (revision strategique via Socrate) ou EDUQUER (education via Chiron).",
+    "description": "Arbre des decisions de Cerberus - ROUTEUR PUR en HUB A 4 DIRECTIONS (decision utilisateur 2026-08-29). Cerberus ne fait JAMAIS le travail : il oriente les informations et missions entre l UTILISATEUR et ORACLE. Racine legere = 4 branches evidentes : DE-USER (une demande arrive de l utilisateur) -> VERS-ORACLE (il transmet la mission a Oracle qui lance l agent) ; DE-ORACLE (un retour arrive) -> VERS-USER (il repond). Chaque direction s expanse en branches qui correspondent (activation, ameliorer, audit, revision...).",
     "regles": {
-      "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
-      "D5": "Les besoins d un theme sont des REDIRECTIONS : je choisis celui qui correspond a ma situation.",
-      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche AVANT toute mission."
+      "D1": "Chaque branche (direction) mene a des besoins, qui menent aux procedures d execution.",
+      "D5": "Les besoins d une direction sont des REDIRECTIONS : je choisis celle qui correspond a ma situation.",
+      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche AVANT toute mission.",
+      "D8": "INTERDICTION FORMELLE (2026-08-29) : je ne fais JAMAIS le travail moi-meme. Toute mission est transmise a ORACLE qui lance l agent habilite. Flux obligatoire : DE-USER -> VERS-ORACLE (je transmets, Oracle lance) ; retour DE-ORACLE -> VERS-USER (je reponds)."
     }
   },
   "racine": {
-    "titre": "Quelle est la situation ?",
+    "titre": "Dans quel sens coule l echange ?",
     "type": "question",
-    "question": "Quelle est la situation ?",
+    "question": "Cerberus est un ROUTEUR entre l UTILISATEUR et ORACLE. De/vers qui circulent l information et la mission ?",
     "branches": [
       {
-        "reponse": "ACCUEIL",
-        "description": "Ecouter et router une demande vers l agent habilite",
-        "vers": "theme-accueil.json"
+        "reponse": "DE-USER",
+        "description": "Une demande arrive de l utilisateur : j ecoute, j identifie l agent, je transmets la mission a Oracle",
+        "vers": "theme-de-user.json"
       },
       {
-        "reponse": "ACTIVATION",
-        "description": "Activer un agent directement (mission connue)",
-        "vers": "theme-activation.json"
+        "reponse": "VERS-ORACLE",
+        "description": "Je transmets la mission a ORACLE qui lance l agent habilite (jamais moi directement)",
+        "vers": "theme-vers-oracle.json"
       },
       {
-        "reponse": "RETOUR",
-        "description": "Retour d un agent reactivant Cerberus (bilan, erreurs)",
-        "vers": "theme-retour.json"
+        "reponse": "DE-ORACLE",
+        "description": "Un retour arrive (l agent a reactive via Oracle) : bilan, erreurs, controles - je traite puis je reponds",
+        "vers": "theme-de-oracle.json"
       },
       {
-        "reponse": "AMELIORER",
-        "description": "Ameliorer le fonctionnement (generateur d amelioration)",
-        "vers": "theme-ameliorer.json"
-      },
-      {
-        "reponse": "AUTRE",
-        "description": "Inventaire, audit, analyse du projet",
-        "vers": "theme-autre.json"
-      },
-      {
-        "reponse": "REVISION",
-        "description": "Revision strategique via Socrate",
-        "vers": "theme-revision.json"
-      },
-      {
-        "reponse": "EDUQUER",
-        "description": "Education d un agent via Chiron",
-        "vers": "theme-eduquer.json"
+        "reponse": "VERS-USER",
+        "description": "Je reponds a l utilisateur : resultat, question, attente, coordination terminee",
+        "vers": "theme-vers-user.json"
       }
     ]
   },

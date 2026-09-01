@@ -106,7 +106,7 @@ def _derniere_activite(agent):
         if not ligne.startswith("| "):
             continue
         cellules = [c.strip() for c in ligne.split("|")]
-        # | Grade | Agent | Executeur | Debut/Fin | Secteur | Raison | Heure | id | Type |
+        # | Grade | Agent | Defcon | Executeur | Etat | Secteur | Raison | Heure | id | Type |
         if len(cellules) < 8:
             continue
         nom_agent = cellules[2]

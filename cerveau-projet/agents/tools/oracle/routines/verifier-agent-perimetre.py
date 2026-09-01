@@ -356,9 +356,54 @@ def _gate(agent):
               "v1, ou tu (agent v2 '%s') n es pas habilite. STOP immediat."
               % moi)
         return 1
+    # CONTROLE PAR LA MISSION (decision utilisateur 2026-08-29) : le gate
+    # doit utiliser la MISSION pour savoir si c est le bon agent qui veut
+    # l executer. Si une mission pendante consigne un agent cible (`agent`
+    # dans les files asap/normale) et que moi != cet agent cible, alors
+    # je ne suis PAS celui qui doit executer cette mission -> KO. Les
+    # agents de COORDINATION (cerberus, oracle) restent exempts : ils
+    # ROUTENT la mission, ils ne l executent pas.
+    cible = _mission_agent_cible(racine)
+    if cible and moi not in AGENTS_COORDINATION \
+            and moi not in AGENTS_TOUT_WORKSPACE and cible != moi:
+        print("[GATE] KO : une mission pendante est assignee a '%s' mais tu es "
+              "'%s' - tu n es pas celui qui doit l executer. STOP immediat, "
+              "reactiver %s (ou Cerberus via Oracle)."
+              % (cible, moi, cible))
+        return 1
     print("[GATE] OK : tu es le bon agent ('%s') pour cette mission. "
           "Tu peux commencer." % moi)
     return 0
+
+
+def _mission_agent_cible(racine):
+    """Agent cible (assigne) de la mission pendante, depuis les files de
+    missions d Oracle (asap, normale, attente). Lit le PREMIER enregistrement
+    EN_ATTENTE de chaque file et renvoie son champ `agent` (vide si aucun
+    agent explicite). Decision utilisateur 2026-08-29 : le gate utilise la
+    mission pour savoir si c est le bon agent qui veut l executer."""
+    dirs = racine / "cerveau-projet" / "agents" / "tools" / "oracle" / "files"
+    if not dirs.is_dir():
+        return None
+    for file in ("asap.jsonl", "normale.jsonl", "attente.jsonl"):
+        chemin = dirs / file
+        if not chemin.is_file():
+            continue
+        try:
+            for ligne in chemin.read_text(encoding="utf-8",
+                                          errors="replace").splitlines():
+                ligne = ligne.strip()
+                if not ligne:
+                    continue
+                e = json.loads(ligne)
+                if e.get("statut") != "EN_ATTENTE":
+                    continue
+                agent = (e.get("agent") or "").strip().lower()
+                if agent:
+                    return agent
+        except (ValueError, OSError):
+            continue
+    return None
 
 
 def _agent_actif_session(racine):

@@ -56,20 +56,22 @@ def _lister_entrees():
             continue
         cols = [c.strip() for c in ligne.split("|")]
         # cols[0] et cols[-1] sont vides (debut/fin du |)
-        # Format : | Grade | Agent | Executeur | Etat | Secteur | Raison |
-        #          Heure | id | Type |  (colonne Debut/Fin -> Etat 2026-08-29)
-        if len(cols) < 11:
+        # Format : | Grade | Agent | Defcon | Executeur | Etat | Secteur |
+        #          Raison | Heure | id | Type |
+        #   (colonne Defcon creee 2026-08-29 apres Agent ; Debut/Fin -> Etat)
+        if len(cols) < 12:
             continue
         entrees.append({
             "grade": cols[1],
             "agent": cols[2],
-            "executeur": cols[3],
-            "df": cols[4],
-            "secteur": cols[5],
-            "raison": cols[6],
-            "heure": cols[7],
-            "id": cols[8],
-            "type": cols[9],
+            "defcon": cols[3],
+            "executeur": cols[4],
+            "df": cols[5],
+            "secteur": cols[6],
+            "raison": cols[7],
+            "heure": cols[8],
+            "id": cols[9],
+            "type": cols[10],
         })
     return entrees
 

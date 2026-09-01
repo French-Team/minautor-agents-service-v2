@@ -9,7 +9,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.8.5
+**Version** : 0.8.6
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -291,6 +291,7 @@ eviter les collisions et comprendre qui intervient en parallele.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.8.6 | 2026-08-29 | COLONNE DEFCON (decision utilisateur : maintenant que l on gere les defcon, ajouter une colonne Defcon apres Agent) : l encart v1 passe de 9 a 10 colonnes `| Grade | Agent | Defcon | Executeur | Etat | Secteur | Raison | Heure | id | Type |`. Chaque entree porte le DEFCON courant (defcon.jsonl d Oracle) au moment de l historisation - nouveau helper _lire_defcon_v1() (lit le dernier niveau via fonctions/defcon.py). Adaptes : _ecrire_encart_v1 + _construire_encart_v1 (insertion Defcon apres Agent), encart.py (ENTETE_V1 + Etat cols[5]), verifier-statuts, verifier-flux-securite (defcon cols[3], etat cols[5]). |
 | 0.8.5 | 2026-08-29 | --FORCER LIBRE (support redemarrer-session.py) : main() retire desormais --forcer d argv avant le parsing positionnel (le garde-fou le detecte toujours via sys.argv). Avant, placer --forcer apres la raison le faisait capturer comme 4e argument positionnel (mission/agent_precedent) et corrompait l encart. |
 | 0.8.4 | 2026-08-29 | ETATS DYNAMIQUES (decision utilisateur, 2e round) : la liste des etats + leurs regles de detection sortent du code vers etats-actions.json (oracle/, editable sans toucher au code, env ETATS_ACTIONS surchargeable). _etat_action applique les regles (prefixes/mots_cles/agents) DANS L ORDRE du fichier, defaut ACTIF ; repli v0.8.3 si fichier absent. Nouveaux etats : DEV (citations - routine presente pour le dev, hors flux de travail reel), AUTO (routine sans intervention : flux/sante/encart/live/vigie/compteurs), ACTION (utilitaire avec intervention a faire : relais/oracle). Section inbox_outbox ajoutee (A LIRE, A TRAITER, ACQUITTE, REPONDU, CLOS) pour le futur tableau inbox-outbox-messages.md (reflexion apres ce round). encart.py (v0.2.0) charge ETATS_CONNUS depuis le fichier ; verifier-flux-securite R6 : citations = DEV (ex-ATTENTE). BUG FIX cwd : le defaut d ETATS_ACTIONS etait relatif et les routines lancees avec cwd=routines/ ne le resolvaient pas -> repli v0.8.3 (vigie-perimetre historisait ACTIF au lieu de AUTO) ; defaut desormais ABSOLU (resolu depuis le fichier). Encart regenere : AUTO 16 / DEV 15 / ATTENTE 9 / URGENT 7 / ACTION 3. |
 | 0.8.3 | 2026-08-29 | COLONNE DEBUT/FIN -> ETAT (decision utilisateur) : la colonne Debut/Fin du tableau v1 devient Etat avec 5 etats connus (DEBUT, FIN, ATTENTE, URGENT, BUG + ACTIF par defaut) - _debut_fin renommee _etat_action (detecte les prefixes DEBUT/FIN/RETOUR + mots-cles URGENT/BUG, routines periodiques = ATTENTE, sinon ACTIF). Entete ENTETE_ENCART_V1 + SEPARATEUR mis a jour. Routine encart.py verifie desormais que les valeurs de la colonne Etat sont parmi les etats connus. verifier-flux-securite adapte (citations = ATTENTE au lieu de instant, indices de colonnes decales pour la nouvelle colonne Executeur). |

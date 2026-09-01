@@ -576,11 +576,14 @@ def _resoudre_racine(racine, etat):
     branches = racine.get("branches", [])
     # Enumerer les reponses valides (branches reelles de la racine)
     reponses_valides = set(br.get("reponse", "").upper() for br in branches)
-    # Cerberus : TOUJOURS accueil (il route, il ne travaille pas)
-    if agent == "cerberus" and "ACCUEIL" in reponses_valides:
-        for br in branches:
-            if br.get("reponse", "").upper() == "ACCUEIL":
-                return br.get("vers")
+    # Cerberus : ROUTEUR PUR (hub a 4 directions, decision 2026-08-29).
+    # Toujours DE-USER (une demande arrive de l utilisateur) : il route,
+    # il ne travaille jamais. Repli sur ACCUEIL si la racine l a encore.
+    if agent == "cerberus":
+        for cle in ("DE-USER", "ACCUEIL"):
+            for br in branches:
+                if br.get("reponse", "").upper() == cle:
+                    return br.get("vers")
     # Correspondance directe par reponse exacte (CONSTRUIRE, MODIFIER, etc.)
     for br in branches:
         if br.get("reponse", "").upper() == mt:
