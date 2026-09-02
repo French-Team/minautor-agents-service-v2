@@ -11,74 +11,6 @@ identite:
 
 > Ce fichier contient les lecons apprises par Chiron au fil de ses missions.
 > Chaque lection documente : CONTEXTE, LECON, PREUVES.
-## [LECON] 2026-08-18 -- REEDUCATION DE THEMIS : CARTE SAINE MAIS GUIDAGE PEDAGOGIQUE MANQUANT (Chiron)
-
-**Contexte** : session-llm-2 (kilo-llm) - Themis a recu la mission 'Inventaire
-et audit des outils de performance' qui ne correspond a aucune branche de sa
-case c1. Elle a improvise au lieu de repondre 'autre' -> c21 (hors perimetre),
-et a tente editer-parcours (outil reserve a Buffy), bloque 2x par le verrou a
-17:44:00. L utilisateur a demande sa reeducation : sa carte est en retard sur
-celles de cerberus, vulcain, morpheus et janus.
-
-**Diagnostic** : la carte de Themis est STRUCTURELLEMENT SAINE (verifier-
-conformite-fiche CONFORME, detecter-cablages PROPRE 37/37, bumper 149/149
-coherent, 0 divergence de version). Le retard est PEDAGOGIQUE :
-1. c1 (Mission) n a AUCUN indice de classification - Cerberus a un indice
-   regle 'GARDE-FOU C1' qui guide la reponse ; Themis n en a pas. Un LLM ne
-   sait pas qu une mission hors branches -> reponse 'autre' -> c21.
-2. AUCUNE redirection quand le verrou bloque un outil (message BLOQUE) : la
-   carte de Themis ne dit pas de se diriger vers c21 -> c22 (activer l agent
-   habilite). Les cartes recentes couvrent ce cas.
-3. c21 (hors perimetre) n a aucun indice listant les domaines des autres
-   agents (Atlas/Buffy/Vulcain/Morpheus/Hygie/Janus).
-
-**Lecons** :
-1. UNE CARTE STRUCTURELLEMENT VALIDE PEUT ETRE PEDAGOGIQUEMENT EN RETARD : les
-   verifications de structure (conformite, cablages, versions) passent toutes
-   alors que le guidage (indices de classification) manque. L education doit
-   verifier le CONTENU des indices, pas seulement la forme.
-2. LE GARDE-FOU C1 DE CERBERUS EST LE MODELE : une case de mission doit porter
-   un indice regle qui force la classification (branches explicites + cas
-   'aucune branche -> autre'). Sans lui, la classification est libre.
-3. LE VERROU BLOQUE EST UN SIGNAL DE REDIRECTION, PAS UN ARRET : quand
-   proteger-verrou-habilitation bloque un outil, la carte doit ordonner de
-   signaler et d activer l agent habilite (c21 -> c22) - jamais de re-tenter
-   ni de s arreter (cas observe : 2 tentatives editer-parcours puis arret).
-4. CHIRON NE CORRIGE PAS : les 3 corrections proposees (indices c1/c21/c22)
-   vont a Buffy (seule habilitee pour editer-parcours). Chiron documente et
-   signale, c est le modele Argus.
-
-**Preuves** : verifier-conformite-fiche themis CONFORME, detecter-cablages
-themis PROPRE (37/37), bumper --tous 149/149, detecter-divergences 0
-DIVERGENTE. Rapport : rapports/rapport-reeducation-themis-2026-08-18.md.
-
-**Verdict** : A REVOIR - 3 corrections de formation proposees (2 hautes,
-1 moyenne), signalees a Buffy.
-## [LECON] 2026-08-18 -- RE-EDUCATION JANUS : VERDICT A REVOIR (Chiron)
-
-**Mission** : re-education de Janus a la demande de Cerberus (audit Themis
-A REVOIR). L utilisateur a observe Janus "suivant sa carte" et se demande
-s il a ete eduque.
-
-**Diagnostic** : carte Janus v0.4.20 STRUCTURELLEMENT SAINE (version sync,
-51 cases, boucle KO, Pattern 17, fiche CONFORME, bumper 0/0) mais
-PEDAGOGIQUEMENT EN RETARD : c1 sans indice GARDE-FOU C1, aucune redirection
-"outil bloque", c28 sans indice AGENTS HABILITES. Janus n a JAMAIS ete
-re-eduque (seule lecon d education de Chiron = Themis).
-
-**Lecon claire** : UNE CARTE STRUCTURELLEMENT VALIDE PEUT ETRE PEDAGOGIQUEMENT
-EN RETARD - le comportement observe (suivre sa carte) est CONFORME, mais la
-carte ne couvre pas les cas limites (verrou bloque, classification libre).
-La re-education de Themis (v0.4.10) a cree un MODELE DE CONFORMITE
-PEDAGOGIQUE applicable a TOUTES les cartes : (a) indice GARDE-FOU C1 en c1,
-(b) redirection "outil bloque" -> activer l agent habilite, (c) indice AGENTS
-HABILITES. Toute carte d un agent principal doit etre verifiee contre ce
-modele - le test pedagogique est de demander : "que fait la carte si le
-verrou bloque un outil ? que fait la carte si la demande n est dans aucune
-branche ?"
-
-**Verdict** : A REVOIR - 3 corrections proposees, signalees a Buffy (seule
-habilitee editer-parcours). CHIRON NE CORRIGE PAS, il documente et signale.
 ## [LECON] 2026-08-18 -- RE-EDUCATION VULCAIN/MORPHEUS/BUFFY : VERDICT A REVOIR (Chiron)
 
 **Mission** : re-education de 3 agents principaux a la demande de Cerberus
@@ -125,7 +57,6 @@ mission est hors perimetre ?"
 
 **Verdict** : A REVOIR - 10 cartes a re-eduquer (adaptation chiron), signalees
 a Buffy (seule habilitee editer-parcours). CHIRON NE CORRIGE PAS.
-
 ## [LECON] 2026-08-18 -- EDUCATION THEMIS COMBOS ASCII (Chiron)
 
 **Mission** : eduquer Themis aux combos/outils ASCII (2e volet demande utilisateur) : sa carte ne reference aucun outil ASCII (0 mention), combo-corriger-ascii jamais utilise (0 usage registre), 8 usages executer-script-temporaire.
@@ -139,7 +70,6 @@ a Buffy (seule habilitee editer-parcours). CHIRON NE CORRIGE PAS.
 2. UN COMBO JAMAIS UTILISE EST INVISIBLE : combo-corriger-ascii existe mais 0 usage au registre. Un outil non branche dans les cartes n'est pas decouvert. L'education passe par l'indice dans la case (c9 ecriture de rapport).
 3. LES SCRIPTS TEMPORAIRES SONT LE SYMPTOME D'UN OUTIL MANQUANT : 8 usages de executer-script-temporaire par Themis = elle contourne car aucun combo ASCII n'est assigne. Diagnostiquer la CAUSE, pas le symptome.
 4. CHIRON NE MODIFIE PAS LES CARTES DES AUTRES : je documente (rapport + lecon) et je SIGNALE a Buffy. Mon pilote d'auto-correction ne couvre QUE ma propre carte.
-
 ## [LECON] 2026-08-18 -- CYCLE PILOTE AUTO-CORRECTION REEL (Chiron)
 
 **Mission** : verification reelle du cycle pilote d auto-correction de MA carte (demande Cerberus) : detecter une incoherence reelle, me re-eduquer, corriger SA carte via editer-parcours, activer Themis, reprendre.
@@ -224,8 +154,6 @@ Controle de la mission mermaid. 3 enseignements :
 3. **Fiches outils = ASCII strict** : les guillemets francais (U+00AB/BB)
    dans une fiche .md declenchent test-047 (detecter-usage-outils-externes).
    Toujours ecrire les fiches en ASCII pur.
-
-
 ## [LECON] 2026-08-20 -- RE-EDUCATION CERBERUS : VIOLATION REGLE NON-EXECUTION (Chiron)
 
 **Contexte** : Cerberus a fait le travail de Vulcain (modifier mettre-a-jour-readme.py, combos) au lieu d'activer Vulcain. L'utilisateur a detecte la derive et demande une re-education URGENTE.
@@ -243,7 +171,6 @@ Controle de la mission mermaid. 3 enseignements :
 **Verdict** : A REVOIR - 3 corrections proposees, signalees a Buffy.
 
 ---
-
 ## [LECON] 2026-08-20 -- EDUCATION CLIO : NOUVELLES REGLES (Chiron)
 
 **Contexte** : Clio a recu de nouvelles regles (v0.2.2) mais n a pas ete formee a leur utilisation. Les outils ont ete mis a jour (mettre-a-jour-readme v0.4.4 + dry-run) mais Clio doit savoir QUAND et COMMENT les utiliser.
@@ -295,7 +222,6 @@ Lecons :
 3. CONTRADICTION RESOLUE (decision utilisateur 2026-08-25) : ferrari liste 'Corriger JARVIS' et c est NORMAL - Vision corrige JARVIS dans le fonctionnement normal de la v2 (session-freelance), ferrari est la COUCHE SUPERIEURE (session-admin) qui intervient sur N IMPORTE QUEL fichier de freelance/. CONFIDENTIALITE : ferrari est INVISIBLE des agents v2 (absent des docs freelance/ et d AGENTS.md), SEUL Cerberus le connait.
 
 **Preuves** : rapport education-cerberus-ferrari-2026-08-25.md, corrections buffy (inter-round), grep ferrari present dans cerberus.md (l.224, 228) + regles-choisir-agent.md (l.35), ASCII 0/0, fiche cerberus CONFORME v0.2.2.
-
 ## [LECON] 2026-08-30 -- REPARATION ARBRE CHIRON : 6 FINS MORTES SUPPRIMEES (Chiron)
 
 **Contexte** : demande utilisateur - reparer les arbres des agents v1 un par un

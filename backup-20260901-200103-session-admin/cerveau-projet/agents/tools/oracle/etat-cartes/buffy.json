@@ -1,0 +1,10 @@
+{
+ "agent": "buffy",
+ "parcours": "agents/buffy/parcours/arbre-buffy.json",
+ "case_courante": null,
+ "mission_type": "inter-round",
+ "mission": "PURGE P1 : lire puis acquitter tes 5 messages non-acquittes (ids: 705b4ed3, 9792c6e3, verifier-statuts-204006, verifier-statuts-205008, verifier-statuts-205510) via oracle.py acquitter buffy <id> apres lecture. Traite en priorite les 3 INTER-ROUND etat URGENT.",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "debut"
+}

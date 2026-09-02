@@ -6,6 +6,7 @@ import shutil
 import sqlite3
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
 
 VERSION = "0.2.2"
@@ -97,10 +98,77 @@ def _remove_file(path, dry_run=False):
     return 1
 
 
+def _backup_path(session):
+    """Return a unique, session-scoped backup directory."""
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    return RACINE / ("backup-%s-%s" % (stamp, session))
+
+
+def _backup_file(source, backup_root, dry_run=False):
+    if not source.exists() or not source.is_file():
+        return 0
+    destination = backup_root / source.relative_to(RACINE)
+    if dry_run:
+        print("  [DRY-RUN] sauvegarderait %s -> %s" % (source, destination))
+        return 1
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, destination)
+    return 1
+
+
+def _backup_runtime_admin(backup_root, dry_run=False):
+    """Backup all resettable admin state before it is cleared."""
+    count = 0
+    paths = [
+        RACINE / "AGENTS-activite-recente.md",
+        RACINE / "AGENTS-historique.md",
+        ORACLE_DIR / "files/asap.jsonl",
+        ORACLE_DIR / "files/normale.jsonl",
+        ORACLE_DIR / "files/plus-tard.jsonl",
+        CLASSEUR_DIR / "stockage/variables-actuelles.md",
+        CLASSEUR_DIR / "historique/historique-modifications.md",
+    ]
+    for path in paths:
+        count += _backup_file(path, backup_root, dry_run)
+    for directory in (ORACLE_DIR / "inbox", ORACLE_DIR / "outbox",
+                      ORACLE_DIR / "etat-cartes", ORACLE_DIR / "routines/data"):
+        if directory.exists():
+            for path in directory.rglob("*"):
+                if path.is_file():
+                    count += _backup_file(path, backup_root, dry_run)
+    if dry_run:
+        print("  [DRY-RUN] creerait le manifeste %s/manifest.json" % backup_root)
+    else:
+        backup_root.mkdir(parents=True, exist_ok=True)
+        manifest = {
+            "session": "session-admin",
+            "created_at": datetime.now().isoformat(timespec="seconds"),
+            "purpose": "zero-total backup before reset",
+            "files": count,
+        }
+        (backup_root / "manifest.json").write_text(
+            __import__("json").dumps(manifest, indent=2), encoding="utf-8")
+    return count
+
+
+def _reset_queue_files(dry_run=False):
+    """Recreate all standard queues as valid empty JSONL files."""
+    count = 0
+    for name in ("asap.jsonl", "normale.jsonl", "plus-tard.jsonl"):
+        path = ORACLE_DIR / "files" / name
+        _write(path, "", dry_run=dry_run)
+        count += 1
+    return count
+
+
 def _zero_total_admin(dry_run=False):
+    backup_root = _backup_path("session-admin")
+    print("  sauvegarde: %s" % backup_root)
+    backed_up = _backup_runtime_admin(backup_root, dry_run)
     total = 0
     for relative in ("inbox", "outbox", "etat-cartes", "routines/data"):
         total += _clear_dir(ORACLE_DIR / relative, dry_run)
+    total += _reset_queue_files(dry_run)
     for relative in (
         "routines/etat-executions.json",
         "oracle-server.pid",
@@ -123,6 +191,7 @@ def _zero_total_admin(dry_run=False):
         "# Historique des modifications du classeur\n",
         dry_run=dry_run,
     )
+    print("  fichiers sauvegardes: %d" % backed_up)
     return total
 
 

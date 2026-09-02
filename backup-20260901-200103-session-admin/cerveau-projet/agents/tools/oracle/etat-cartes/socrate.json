@@ -1,0 +1,10 @@
+{
+ "agent": "socrate",
+ "parcours": "agents/socrate/parcours/arbre-socrate.json",
+ "case_courante": null,
+ "mission_type": "revision",
+ "mission": "Revision strategique : questionner l utilisateur, comprendre et prioriser le besoin, produire missions-revision.md",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "debut"
+}

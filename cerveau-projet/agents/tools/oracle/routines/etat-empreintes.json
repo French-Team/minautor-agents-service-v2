@@ -1,1 +1,24 @@
-{}
+{
+ "AGENTS-activite-recente.md": "50f7c5a8b7a198bbc0571d92db4c070fb88ab3a9d2eb34f305c4dca4ebc70598",
+ "cerveau-projet/agents/tools/oracle/oracle-demarrage.py": "59d2c79bd8a40b0a0aea40cb2497648bbf1a94366332fe5f789be0f4013573f0",
+ "cerveau-projet/agents/tools/oracle/oracle-server.py": "6e0aee4c7f67b16efc8b13088a4ced9298523bc30d29d7bd87fb36d7a33b1a31",
+ "cerveau-projet/agents/tools/oracle/oracle.py": "3f180ae7e3762129ae601bd718a380437941eacc7205921c6e0844938e2e7c07",
+ "cerveau-projet/agents/tools/oracle/routines-server.py": "d465fecb54ec1275d19d5815de9cab2de1caa975ce6c7b61c207185c9c44c2f6",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\citations.py": "e5b2755987a3461c4ddea398928576d00a0bd997406369e5d572d7a32c5df7fa",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\compter-entree.py": "fe7d051e3991f13721dde5cf47d466032f6fa3eddbfc5ee110f01abaac9aba8b",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\compter-sortie.py": "13309261999baaf39b7a5a738e34dad82af87c6ea6ce45c20ea59636bdef2f65",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\encart.py": "0b854cd81992ed088cb683133bf3dfa64f0879ad48a7d23871aef529cc5b63b2",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\etat-violations.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\flux.py": "68e9de087a32b7b73f7ff43dd262733d8b43d2205878a4a2d7ed1a2cb5e4ebf5",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\live.py": "22beb6eef18564a7a43740b23ebc8e7fd5c2407c2ff5f3c7e9b92931bd4a4d06",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\manifest.json": "bf961b9edea6757519771bf2f77989df536f9b4269e2fadda48c40e50aaf4d2d",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\notation.py": "458f6ca259ff0d306de54671d4550f8dc0420dca2cc3bfc36dc801bff867629d",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\routines-surveillance-v1.md": "ecf10f88474781d74a18451b29378786fe765f6c1ddcd3377db31371747ff1b1",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\sante.py": "ccd1d7a0bffbccf2a7a5f24d9f198df8eba56feb6ce7d46fc97445744804da0f",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\top3-urgences.py": "8efcc08065532b1c766b69adf0fbfd871ae123be0e776ecf9b8f56ffc4df2b4f",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\verifier-agent-perimetre.py": "879d12e38f49e8cfdffa27f64b4e7b405ed00a5b79a4aa86c897a981ecf16feb",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\verifier-statuts.py": "a5cbab9b057b5043043b66bdb769c8d60fa02ffc7674239f80d24d7fd120aae5",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\vigie-perimetre.py": "abbf53c4043a174c9611c1134dc30d82e61ee97dc7a70853324c3b9a9648a23a",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\vigie-round.md": "595744ac95bca8d27f08d5e179ce3dbbb6011ce5b50f69ae6248048828a327dc",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\vigie-round.py": "48c48881ea58de484eaf2fc9723d8ef6c77b0da392863f7d027ad84e7775d630"
+}

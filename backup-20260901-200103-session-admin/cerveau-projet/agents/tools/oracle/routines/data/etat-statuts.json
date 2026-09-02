@@ -1,0 +1,12 @@
+{
+ "09:30:23.567|sante|1 anomalie(s): DAEMON: oracle-server : p": "2026-09-01T09:30:24",
+ "09:54:25.438|sante|1 anomalie(s): DAEMON: routines-server :": "2026-09-01T09:54:25",
+ "09:38:28.043|flux|9 P1 non-acquitte(s) detecte(s)": "2026-09-01T09:54:25",
+ "10:02:59.881|flux|8 P1 non-acquitte(s) detecte(s)": "2026-09-01T10:18:37",
+ "09:57:57.532|sante|1 anomalie(s): DAEMON: oracle-server : p": "2026-09-01T10:18:37",
+ "09:54:56.029|flux|10 P1 non-acquitte(s) detecte(s)": "2026-09-01T10:18:37",
+ "09:54:26.919|sante|1 anomalie(s): DAEMON: oracle-server : p": "2026-09-01T10:18:37",
+ "19:51:41.032|sante|1 anomalie(s): DAEMON: oracle-server : p": "2026-09-01T19:59:14",
+ "19:51:15.506|sante|1 anomalie(s): DAEMON: oracle-server : p": "2026-09-01T19:59:14",
+ "19:51:10.596|sante|1 anomalie(s): DAEMON: routines-server :": "2026-09-01T19:59:14"
+}

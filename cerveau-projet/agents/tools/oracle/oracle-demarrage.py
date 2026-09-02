@@ -195,8 +195,21 @@ def _lancer_serveur(script, pid_file, nom, args_extra=None):
     cmd = [sys.executable, str(script)] + (args_extra or [])
     proc = subprocess.Popen(cmd, creationflags=flags, stdout=log, stderr=log,
                             stdin=subprocess.DEVNULL, close_fds=True)
-    pid_file.write_text(str(proc.pid), encoding="utf-8")
-    return proc.pid, "LANCE (pid %d, detache)" % proc.pid
+    # Le processus ecrit lui-meme son PID avant de commencer son premier tic.
+    # Evite que le lanceur ecrase un PID concurrent et que sante lise un
+    # marqueur obsolete pendant le demarrage.
+    deadline = time.time() + 5
+    while time.time() < deadline:
+        if pid_file.exists():
+            try:
+                if int(pid_file.read_text(encoding="utf-8").strip()) == proc.pid:
+                    return proc.pid, "LANCE (pid %d, detache)" % proc.pid
+            except (ValueError, OSError):
+                pass
+        if proc.poll() is not None:
+            return proc.pid, "ECHEC (processus termine, rc=%s)" % proc.returncode
+        time.sleep(0.05)
+    return proc.pid, "LANCE (pid %d, detache; pid confirme par le serveur)" % proc.pid
 
 
 def _arreter_serveur(pid_file, nom):
@@ -325,16 +338,26 @@ def _lire_messages_oracle_demarrage():
 
 
 def _reprendre_cerberus():
-    """Reprendre la session-admin via l agent de communication Cerberus."""
+    """Reprendre Cerberus puis piloter une seule fois sa carte."""
     try:
         oracle_cli = ORACLE_DIR / "oracle.py"
         mission = "Reprise session-admin apres redemarrage des serveurs; Cerberus reprend la communication utilisateur."
-        return subprocess.run(
+        activation = subprocess.run(
             [sys.executable, str(oracle_cli), "activer", "cerberus", mission],
             timeout=30, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
-            capture_output=True, text=True).returncode == 0
-    except Exception:
-        return False
+            capture_output=True, text=True)
+        if activation.returncode != 0:
+            return False, "activation Cerberus echouee"
+        # Le pilote doit suivre l arbre de Cerberus, mais ne doit pas
+        # relancer une carte deja terminee ni prendre une decision libre.
+        pilotage = subprocess.run(
+            [sys.executable, str(oracle_cli), "pilote", "cerberus", "--limite", "50"],
+            timeout=60, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+            capture_output=True, text=True)
+        return pilotage.returncode == 0, "pilotage Cerberus: " + (
+            "OK" if pilotage.returncode == 0 else "ECHEC")
+    except Exception as exc:
+        return False, "pilotage Cerberus indisponible: %s" % exc
 
 
 def cmd_demarrage(args):
@@ -344,9 +367,24 @@ def cmd_demarrage(args):
     if not dry:
         _marquer_demarrage_session()
 
-    # 1. Serveur oracle (hub de coordination v1)
+    # 1. Routines d abord: elles produisent leurs traces avant qu Oracle
+    #    ne lise son inbox et avant la reprise de Cerberus.
+    if ROUTINES_SERVER.exists():
+        if dry:
+            pid2, msg2 = _lancer_serveur_dry(ROUTINES_SERVER, ROUTINES_PID,
+                                             "routines", ["--boucle"])
+        else:
+            pid2, msg2 = _lancer_serveur(ROUTINES_SERVER, ROUTINES_PID,
+                                         "routines", ["--boucle"])
+        print("[1/4] Serveur routines v1 : %s" % msg2)
+        if not dry:
+            _historiser("routines-server", "DEMARRAGE SERVEUR: routines-server " + msg2)
+    else:
+        print("[1/4] Serveur routines v1 : absent (futur) - structure prete")
+
+    # 2. Oracle-server ensuite (hub de coordination v1).
     if not SERVER_PY.exists():
-        print(_couleur("[1/4] ERREUR: oracle-server.py introuvable", "rouge"))
+        print(_couleur("[2/4] ERREUR: oracle-server.py introuvable", "rouge"))
         return 1
     if dry:
         pid, msg = _lancer_serveur_dry(SERVER_PY, PID_FILE, "oracle",
@@ -356,23 +394,9 @@ def cmd_demarrage(args):
         pid, msg = _lancer_serveur(SERVER_PY, PID_FILE, "oracle",
                                    ["--boucle", "--intervalle",
                                     str(getattr(args, "intervalle", 30))])
-    print("[1/4] Serveur oracle : %s" % msg)
+    print("[2/4] Serveur oracle : %s" % msg)
     if not dry:
         _historiser("oracle", "DEMARRAGE SERVEUR: oracle-server " + msg)
-
-    # 2. Futur serveur de routines v1 (s il existe)
-    if ROUTINES_SERVER.exists():
-        if dry:
-            pid2, msg2 = _lancer_serveur_dry(ROUTINES_SERVER, ROUTINES_PID,
-                                             "routines", ["--boucle"])
-        else:
-            pid2, msg2 = _lancer_serveur(ROUTINES_SERVER, ROUTINES_PID,
-                                         "routines", ["--boucle"])
-        print("[2/4] Serveur routines v1 : %s" % msg2)
-        if not dry:
-            _historiser("oracle", "DEMARRAGE SERVEUR: routines-server " + msg2)
-    else:
-        print("[2/4] Serveur routines v1 : absent (futur) - structure prete")
 
     # 2b. SUPER-PILOTE cote Oracle (prototype super-combos) - s il existe
     if SUPER_PILOTE_PY.exists():
@@ -416,21 +440,22 @@ def cmd_demarrage(args):
     # 4. operationnel
     if dry:
         print("[4/4] [DRY-RUN] ORACLE OPERATIONNEL (rien n a ete lance)")
-        _historiser("oracle", "[DRY] Demarrage de session v1 : oracle-server + "
-                    "routines + super-pilote, DEFCON=%s, %d mission(s)"
-                    % (niveau if niveau is not None else "aucun", total))
+        # Le dry-run ne doit produire aucune trace : il ne modifie aucun
+        # etat et ne simule pas une activation dans l historique.
     else:
         # Oracle-agent lit son inbox une seule fois avant Cerberus.
         print("[4/4] Lecture prioritaire des messages Oracle")
         lus = _lire_messages_oracle_demarrage()
         print("      Oracle : %s" % ("MESSAGES LUS" if lus else "ECHEC LECTURE"))
         print("[4/4] Oracle-agent : traitement initial puis fin vers Cerberus")
-        print("[4/4] Activation de Cerberus (agent communication)")
-        repris = _reprendre_cerberus()
-        print("      Cerberus : %s" % ("REPRIS" if repris else "ECHEC"))
+        _historiser("oracle", "FIN: lecture et traitement initial termines; activation Cerberus autorisee")
+        print("[4/4] Activation finale de Cerberus (agent communication)")
+        repris, detail_cerb = _reprendre_cerberus()
+        print("      Cerberus : %s (%s)" % ("REPRIS" if repris else "ECHEC", detail_cerb))
         print("[4/4] ORACLE OPERATIONNEL (session-admin)")
-        _historiser("oracle", "Demarrage de session v1 : serveurs + reprise Cerberus, DEFCON=%s, %d mission(s) en file"
-                    % (niveau if niveau is not None else "aucun", total))
+        # Une seule trace de cloture pour le cycle complet. Les traces des
+        # serveurs, de la lecture Oracle et de la reprise Cerberus restent
+        # distinctes et ne sont pas reconsolidees ici.
     return 0
 
 

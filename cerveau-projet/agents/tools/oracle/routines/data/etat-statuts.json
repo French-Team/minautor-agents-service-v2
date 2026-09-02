@@ -1,0 +1,6 @@
+{
+ "20:13:04.492|sante|1 anomalie(s): DAEMON: oracle-server : p": "2026-09-01T20:25:26",
+ "20:09:18.935|flux|2 P1 non-acquitte(s) detecte(s)": "2026-09-01T20:25:26",
+ "20:01:15.905|sante|1 anomalie(s): DAEMON: routines-server :": "2026-09-01T20:25:26",
+ "20:01:15.814|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-01T20:25:26"
+}

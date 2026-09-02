@@ -40,10 +40,11 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 STATUT = "ebauche"
 
 ORACLE_DIR = Path(__file__).parent.parent
+VOL_ETATS = ORACLE_DIR / "vol-etats.py"
 SUPER_COMBOS_DIR = Path(__file__).parent
 
 # Injection du chemin pour reutiliser les fonctions oracle (files, pilote)
@@ -111,8 +112,13 @@ def _relayer(agent, mission):
     return r.stdout + r.stderr
 
 
+def _trace_vol(etat, detail):
+    """Trace chaque phase du vol sans modifier le travail de l agent."""
+    print("[SUPER-PILOTE][VOL] %s : %s" % (etat, detail))
+
+
 def lancer(nom, verbose=True):
-    """Executer un super-combo case par case."""
+    """Executer un super-combo case par case avec contrat bout-en-bout."""
     arbre, erreur = charger_super_combo(nom)
     if erreur:
         print(f"[SUPER-PILOTE] ERREUR: {erreur}")
@@ -135,19 +141,36 @@ def lancer(nom, verbose=True):
         print(f"[SUPER-PILOTE] Etape {courant}: {case.get('titre', '')}")
         print(f"  Agent   : {agent}")
         print(f"  Mission : {mission[:80]}")
+        mission_id = "%s:%s" % (nom, courant)
+        _trace_vol("DECOLLAGE", mission_id)
         # Poste + relais + pilote pour l agent (couche inferieure)
         ok, ref = _poster_mission(agent, mission, file=case.get("file", "asap"))
         if not ok:
             print(f"[SUPER-PILOTE] ERREUR poste: {ref}")
             return 1
         print(f"  Mission postee (id={ref}) -> relai oracle + pilote.")
-        _relayer(agent, mission)
+        _trace_vol("LARGUEE", "%s vers %s" % (ref, agent))
+        resultat = _relayer(agent, mission)
+        if not resultat.strip():
+            print("[SUPER-PILOTE] AVERTISSEMENT: relais sans retour pour %s" % ref)
+        _trace_vol("PRISE", "%s (preuve relais demandee)" % ref)
+        _trace_vol("EN_TRAVAIL", "%s (attente reaction/fin agent)" % ref)
+        # Le super-pilote ne fabrique jamais une FIN : elle doit provenir de
+        # l agent/pilote. La suite est donc suspendue si aucun marqueur FIN
+        # n est observable dans le retour du relais.
+        if "FIN:" not in resultat and case.get("attendre_fin", True):
+            print("[SUPER-PILOTE] VOL SUSPENDU: FIN agent absente pour %s" % ref)
+            return 2
+        _trace_vol("FIN", ref)
+        _trace_vol("RECUPEREE", agent)
         courant = case.get("suivant", "fin")
     # Fin consolidee
     fin = arbre.get("fins", {}).get("fin-super-combo", {})
     print("=" * 60)
     print(f"[SUPER-PILOTE] {fin.get('titre', 'SUPER-COMBO TERMINE')}")
     print(f"  {fin.get('description', '')}")
+    _trace_vol("RETOUR AEROPORT", nom)
+    _trace_vol("CLOTUREE", nom)
     return 0
 
 

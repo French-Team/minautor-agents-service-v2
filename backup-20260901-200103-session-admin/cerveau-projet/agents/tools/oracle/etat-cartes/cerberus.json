@@ -1,0 +1,10 @@
+{
+ "agent": "cerberus",
+ "parcours": "agents/cerberus/parcours/arbre-cerberus.json",
+ "case_courante": null,
+ "mission_type": "autre",
+ "mission": "Reprise session-admin apres redemarrage des serveurs; Cerberus reprend la communication utilisateur.",
+ "historise_debut": true,
+ "precedent": "cerberus",
+ "etape": "debut"
+}

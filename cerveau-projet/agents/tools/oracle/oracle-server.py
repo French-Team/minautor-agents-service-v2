@@ -68,12 +68,7 @@ def _dernier_agent_actif():
 
 
 def _dernier_agent_a_agit():
-    """Retourner un timestamp fiable de la derniere activite de l agent actif.
-
-    L encart ne contient que l heure; on utilise donc la date de modification
-    du fichier comme date de reference et l heure de la ligne pour eviter de
-    comparer une heure du jour avec un timestamp d un autre jour.
-    """
+    """Retourner l heure de la derniere trace de l agent actif."""
     try:
         activite = AGENTS_FILE.parent / "AGENTS-activite-recente.md"
         lignes = activite.read_text(encoding="utf-8").splitlines()
@@ -91,10 +86,11 @@ def _dernier_agent_a_agit():
             moment = base.replace(hour=int(c[8][0:2]), minute=int(c[8][3:5]),
                                   second=int(c[8][6:8]), microsecond=0)
             if moment.timestamp() > time.time() + 60:
-                moment -= __import__("datetime").timedelta(days=1)
+                from datetime import timedelta
+                moment -= timedelta(days=1)
             return moment.timestamp()
         except (ValueError, IndexError):
-            return time.time()
+            continue
     return time.time()
 
 
@@ -345,11 +341,19 @@ def status() -> dict:
 # --- Mode boucle (daemon resident v0.2.0) ---
 
 def _ecrire_pid():
+    """Publier le PID officiel de facon atomique."""
+    temporaire = PID_FILE.with_name("oracle-server.pid.tmp-%d" % os.getpid())
     try:
-        with io.open(PID_FILE, "w", encoding="utf-8", newline="\n") as fh:
+        with io.open(temporaire, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(str(os.getpid()))
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(str(temporaire), str(PID_FILE))
     except OSError:
-        pass
+        try:
+            temporaire.unlink()
+        except OSError:
+            pass
 
 
 def _nettoyer_pid():
@@ -418,10 +422,9 @@ def _boucle_tic():
             print("[ORACLE-SERVER] %d message(s) relaye(s)" % nb, flush=True)
     except Exception as exc:
         print("[ORACLE-SERVER] ERREUR relais : %s" % exc, flush=True)
-    # Consommation AUTONOME des missions asap (demande utilisateur
-    # 2026-08-29) : sans session Oracle vivante, plus rien ne consommait la
-    # file -> les agents ne demarraient plus. Le daemon prend le relais.
-    _boucle_missions()
+    # Les missions restent sous le controle d Oracle-agent/pilote.
+    # Le daemon ne consomme pas automatiquement la file : cela empeche les
+    # relais repetitifs et les activations sans reaction explicite.
 
 
 def _alerte_fantomes(rapport):
@@ -450,6 +453,9 @@ def _alerte_fantomes(rapport):
 def boucler(intervalle_secondes):
     """Boucle residente avec arret apres 30 min sans demande utilisateur."""
     _ecrire_pid()
+    if not PID_FILE.exists():
+        print("[ORACLE-SERVER] ERREUR: impossible de creer le pidfile", flush=True)
+        return
     print("[ORACLE-SERVER] DEMARRAGE SERVEUR: daemon lance (tic toutes les %ds, pid %d)"
           % (intervalle_secondes, os.getpid()), flush=True)
     _historiser("oracle", "DEMARRAGE SERVEUR: oracle-server actif pid=%d" % os.getpid())

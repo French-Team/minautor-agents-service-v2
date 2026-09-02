@@ -1,17 +1,16 @@
----
-identite:
-  nom: Historique session-admin
-  type: historique
-  appartient_a: commun
-  commun: true
----
 
-## 01/09/2026
+## 02/09/2026
 
-### sante
-- 09:18:41.533 | glm5 | R | 1 anomalie(s): DAEMON: routines-server : pidfile absent
+### cerberus
+- 08:02:25.000 | glm5 | R | DEBUT: Reprise session-admin apres redemarrage des serveurs; Cerberus reprend la communication utilisateur.
+- 08:02:25.175 | glm5 | R | CLASSEUR SORTIE: variable=profil-session-admin source=activer-agent-principal resultat=OK detail=fichier=variables-actuelles.md
 
 
-### Cerberus
-- 09:18:40.666 | glm5 | R | CLASSEUR SORTIE: variable=profil-session-admin source=activer-agent-principal resultat=OK detail=fichier=variables-actuelles.md
-- 09:18:40.648 | glm5 | R | DEBUT: ZERO TOTAL: etat neuf de session
+### oracle
+- 08:02:24.000 | glm5 | R | FIN: lecture et traitement initial termines; activation Cerberus autorisee
+- 08:02:24.000 | glm5 | R | DEMARRAGE SERVEUR: super-pilote LANCE (pid 4372, detache; pid confirme par le serveur)
+- 08:02:19.000 | glm5 | R | DEMARRAGE SERVEUR: oracle-server LANCE (pid 17552, detache)
+
+
+### routines-server
+- 08:02:19.000 | glm5 | R | DEMARRAGE SERVEUR: routines-server LANCE (pid 13468, detache)

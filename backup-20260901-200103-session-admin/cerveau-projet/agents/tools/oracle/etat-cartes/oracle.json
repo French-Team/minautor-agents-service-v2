@@ -1,0 +1,10 @@
+{
+ "agent": "oracle",
+ "parcours": "agents/oracle/parcours/arbre-oracle.json",
+ "case_courante": null,
+ "mission_type": "autre",
+ "mission": "ETAT URGENT x4: 8 P1 non-acquitte(s) detecte(s) (sources: flux, sante)",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "debut"
+}

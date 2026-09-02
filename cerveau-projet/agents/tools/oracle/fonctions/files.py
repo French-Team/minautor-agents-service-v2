@@ -56,7 +56,7 @@ def ajouter(mission, file="asap", agent=""):
 
 
 def prendre(file="asap"):
-    """Prendre la premiere mission en attente (FIFO)."""
+    """Prendre la premiere mission en attente (FIFO), de facon atomique."""
     chemin = _file_path(file)
     if chemin is None:
         return None, f"file invalide '{file}'"
@@ -68,6 +68,7 @@ def prendre(file="asap"):
             e = json.loads(l)
             if e.get("statut") == "EN_ATTENTE":
                 e["statut"] = "PRISE"
+                e["prise_date"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
                 lignes[i] = json.dumps(e, ensure_ascii=False)
                 with open(chemin, "w", encoding="utf-8") as f:
                     f.write("\n".join(lignes) + "\n")

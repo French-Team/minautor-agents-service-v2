@@ -23,18 +23,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | glm5 |
-| **Nom Agent** | Cerberus |
+| **Nom Agent** | cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-09-01 |
+| **Derniere mise a jour** | 2026-09-02 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | la chaine (retour de mission) |
-| **Raison** | ZERO TOTAL: etat neuf de session |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | Reprise session-admin apres redemarrage des serveurs; Cerberus reprend la communication utilisateur. |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-admin | glm5 | Cerberus | 2026-09-01 09:18:40.663 |
+| session-admin | glm5 | cerberus | 2026-09-02 08:02:25.172 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

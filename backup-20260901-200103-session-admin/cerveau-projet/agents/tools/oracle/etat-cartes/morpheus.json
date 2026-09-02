@@ -1,0 +1,10 @@
+{
+ "agent": "morpheus",
+ "parcours": "agents/morpheus/parcours/arbre-morpheus.json",
+ "case_courante": null,
+ "mission_type": "lire",
+ "mission": "PURGE P1 : lire puis acquitter tes 2 messages non-acquittes (ids: fd08904c, fd3d1ea8) via oracle.py acquitter morpheus <id> apres lecture.",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "debut"
+}

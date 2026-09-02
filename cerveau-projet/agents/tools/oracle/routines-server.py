@@ -191,9 +191,11 @@ def _dernier_agent_actif():
 
 
 def _dernier_agent_a_agit():
+    """Lire l heure de l agent actif sans confondre colonnes ni jours."""
     try:
         activite = AGENTS_FILE.parent / "AGENTS-activite-recente.md"
         lignes = activite.read_text(encoding="utf-8").splitlines()
+        base = datetime.fromtimestamp(activite.stat().st_mtime)
     except OSError:
         return time.time()
     agent = _dernier_agent_actif().lower()
@@ -201,11 +203,16 @@ def _dernier_agent_a_agit():
         if not ligne.startswith("| ") or "| Grade |" in ligne or "|---" in ligne:
             continue
         c = [x.strip() for x in ligne.split("|")]
-        if len(c) >= 9 and c[2].lower() == agent:
-            try:
-                return datetime.now().replace(hour=int(c[8][0:2]), minute=int(c[8][3:5]), second=int(c[8][6:8]), microsecond=0).timestamp()
-            except (ValueError, IndexError):
-                return time.time()
+        if len(c) < 9 or c[2].lower() != agent:
+            continue
+        try:
+            moment = base.replace(hour=int(c[8][0:2]), minute=int(c[8][3:5]),
+                                  second=int(c[8][6:8]), microsecond=0)
+            if moment.timestamp() > time.time() + 60:
+                moment -= timedelta(days=1)
+            return moment.timestamp()
+        except (ValueError, IndexError):
+            continue
     return time.time()
 
 
@@ -240,10 +247,18 @@ def _arret_inactivite():
 
 def boucler(intervalle_secondes):
     """Boucle residente avec arret apres 30 min sans demande utilisateur."""
+    temporaire = PID_FILE.with_name("routines-server.pid.tmp-%d" % os.getpid())
     try:
-        PID_FILE.write_text(str(os.getpid()), encoding="utf-8")
+        with io.open(temporaire, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(str(os.getpid()))
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(str(temporaire), str(PID_FILE))
     except OSError:
-        pass
+        try:
+            temporaire.unlink()
+        except OSError:
+            pass
     print("[ROUTINES-SERVER] DEMARRAGE SERVEUR: daemon lance (tic toutes les %ds, pid %d)"
           % (intervalle_secondes, os.getpid()), flush=True)
     _historiser_demarrage()

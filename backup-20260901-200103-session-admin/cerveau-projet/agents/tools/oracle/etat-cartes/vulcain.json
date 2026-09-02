@@ -1,0 +1,10 @@
+{
+ "agent": "vulcain",
+ "parcours": "agents/vulcain/parcours/arbre-vulcain.json",
+ "case_courante": null,
+ "mission_type": "lire",
+ "mission": "PURGE P1 : lire puis acquitter ton message non-acquitte (id: f5f72b83) via oracle.py acquitter vulcain <id> apres lecture.",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "debut"
+}

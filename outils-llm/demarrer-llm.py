@@ -12,8 +12,10 @@ L'outil fait TOUT le reste :
       freelance -> l'agent actif du bloc, jamais un agent par defaut)
   3. Synchroniser les 3 sources d'etat (bloc AGENTS.md, table Sessions
      connues, classeur variables) - le bloc est la source de verite
-  4. Historiser le demarrage (3 destinations : encart + corps + BDD)
-  5. Afficher l'agent actif, sa fiche, ses corrections et son parcours
+  4. Afficher l'agent actif, sa fiche, ses corrections et son parcours
+
+Pour session-admin, l historisation du cycle de demarrage est centralisee
+par oracle-demarrage.py afin d eviter les traces en double.
 
 Neutre : ne depend d AUCUN dossier v1 (agents/) ni v2 (freelance/) en
 import. Python stdlib uniquement. Appelle activer-agent-principal en
@@ -564,14 +566,17 @@ def demarrer(llm_id, session):
         else:
             print("  [ATTENTION] jarvis.py introuvable, serveurs non demarres")
 
-    # 4. Historiser le demarrage. Admin: l acteur du demarrage est le
-    # lanceur, pas Cerberus; oracle-demarrage enregistrera la reprise de
-    # Cerberus après lecture Oracle.
-    agent_historique = "systeme" if session == "session-admin" else agent_actif
-    raison = "DEMARRAGE LLM : id=%s, session=%s, agent actif=%s, parcours demarre" \
-             % (llm_id, session, agent_historique)
-    historiser(agent_historique, raison, session)
-    print("  [HISTORISATION] demarrage trace (encart + corps + BDD).")
+    # 4. L historisation du demarrage admin est centralisee par
+    #    oracle-demarrage.py. Cela evite le doublon entre sidentifier,
+    #    demarrer-llm et le serveur de demarrage. Le freelance conserve son
+    #    chemin d historisation existant.
+    if session != "session-admin":
+        raison = "DEMARRAGE LLM : id=%s, session=%s, agent actif=%s, parcours demarre" \
+                 % (llm_id, session, agent_actif)
+        historiser(agent_actif, raison, session)
+        print("  [HISTORISATION] demarrage trace (encart + corps + BDD).")
+    else:
+        print("  [HISTORISATION] session-admin : cycle centralise par oracle-demarrage.")
 
     # 5. Afficher l'agent actif et son parcours
     print()
@@ -628,8 +633,8 @@ def afficher_aide():
     print()
     print("DEMARRAGE EXCLUSIF DU LLM (ni v1, ni v2) - outils-llm/")
     print("L'utilisateur fournit : id=<id> + session=<admin|freelance>.")
-    print("L'outil fait tout le reste : verifier/creer l'id, activer dans la")
-    print("bonne session, synchroniser les 3 sources, historiser, afficher le")
+    print("L'outil fait tout le reste : verifier/creer l'id, initialiser la")
+    print("bonne session, synchroniser les 3 sources et afficher le")
     print("parcours de l'agent actif.")
     print()
     print("exemples :")

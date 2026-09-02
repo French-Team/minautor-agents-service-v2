@@ -25,8 +25,8 @@ Il lance :
 ## Utilisation
 
 ```bash
-# Chaine de demarrage v1 (daemons -> DEFCON -> files -> operationnel)
-python3 oracle-demarrage.py demarrage --confirme-doc
+# Chaine de demarrage v1 (daemons -> Oracle -> pilote Cerberus -> operationnel)
+python3 oracle-demarrage.py --confirme-doc demarrage
 
 # Extinction propre des serveurs v1
 python3 oracle-demarrage.py arret --confirme-doc
@@ -59,7 +59,7 @@ python3 oracle-demarrage.py demarrage --dry-run
    (`oracle/routines-server.py`, PID `routines-server.pid`).
 3. **[3/4]** Affiche DEFCON v1 (files/defcon.jsonl), files de missions
    actives, agents bloques (P1 non lue).
-4. **[4/4]** Declare ORACLE OPERATIONNEL et historise le demarrage.
+4. **[4/4]** Oracle lit ses messages, pilote Cerberus une seule fois, puis declare ORACLE OPERATIONNEL.
 
 ## Relation avec les autres outils
 
