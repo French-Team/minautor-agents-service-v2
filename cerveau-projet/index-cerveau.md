@@ -56,8 +56,8 @@ Liste complete des regles et protocoles : [agents/regles-immuables/index-regles-
 | `agents/index-agents.md` | Point d'entree du systeme d'agents |
 | `agents/<agent>/<agent>.md` | Fiche de l'agent |
 | `agents/<agent>/corrections.md` | Corrections de l'agent |
-| `agents/<agent>/parcours/parcours-<agent>.json` | Parcours (jeu de piste) de l'agent -- source de verite du guidage |
-| `agents/tools/guider/guider-parcours/` | Outil qui fait avancer dans le parcours (spec, py, sh, md) |
+| `agents/<agent>/parcours/arbre-<agent>.json` | Arbre de decision v2 de l'agent (racine -> themes -> fins) -- source de verite du guidage |
+| `agents/tools/guider/guider-arbre/` | Outil qui pilote l'agent dans son arbre v2 (py, md) |
 | `agents/classeur-variables/index-classeur.md` | Point d'entree du classeur de variables |
 
 ---

@@ -29,5 +29,5 @@
       }
     ]
   },
-  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-theme" }
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-retour" }
 }

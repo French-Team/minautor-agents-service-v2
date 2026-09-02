@@ -2,7 +2,8 @@
   "identite": {
     "type": "fins",
     "appartient_a": "oracle",
-    "description": "Toutes les fins possibles pour Oracle (arbre v0.1.0)"
+    "description": "Toutes les fins possibles pour Oracle (arbre v0.1.0)",
+    "version": "0.1.1"
   },
   "fins": {
     "fin-theme": {
@@ -12,28 +13,28 @@
       "description": "Theme termine : retour a la racine pour choisir un autre theme."
     },
     "fin-coordination": {
-      "titre": "FIN - Coordination terminee",
-      "description": "La coordination est terminee. Si je suis en inter-round (mon precedent est un agent qui m a fait traiter une alerte), je REACTIVE cet appelant. Sinon (mission directe venant de Cerberus), je reactive Cerberus avec mon bilan.",
+      "titre": "FIN - Retour a Cerberus (fin de round)",
+      "description": "Modele aero : coordination terminee, le round est fini. Je reviens vers CERBERUS avec le bilan consolide - Cerberus est le point de depart/arrivee quand l utilisateur fait une demande (decision utilisateur 2026-09-02 : la fin d ORACLE, l aeroport, atterrit sur CERBERUS ; seules les fins signal et inter-round restent vers oracle, le pilote decide du suivant).",
       "action": "reactiver",
       "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle \"<bilan de coordination>\"",
-      "regle": "REGLE INTER-ROUND FIN : reactiver-fin oracle lit mon precedent et reactive L APPELANT s il existe, sinon Cerberus (fin de chaine, Pattern 8)."
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle \"<bilan consolide de coordination>\" --cible cerberus",
+      "regle": "REGLE FIN DE ROUND (decision utilisateur 2026-09-02) : la fin de coordination d ORACLE (l aeroport) atterrit sur CERBERUS avec le bilan consolide - Cerberus est l agent de communication, point de depart/arrivee des demandes utilisateur. Jamais vers un autre agent. fin-signal et fin-inter-round restent vers ORACLE : c est le pilote qui decide du suivant (R3)."
     },
     "fin-signal": {
-      "titre": "FIN - Besoin signale",
-      "description": "Le besoin est signale a Cerberus pour traitement ulterieur. Coordination terminee.",
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : besoin signale, je reviens vers ORACLE (l aeroport) avec le bilan. C est le pilote qui decide du suivant (R3) : un besoin signale n est JAMAIS ignore, il est trace et traite selon la decison du pilote.",
       "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle \"<besoin signale a Cerberus>\"",
-      "regle": "Un besoin signale n est JAMAIS ignore : il est trace et remonte a Cerberus qui decide."
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle \"<besoin signale>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-inter-round": {
-      "titre": "FIN - Inter-round traite (retourner a l appelant)",
-      "description": "Le rapport inter-round est traite. Si mon precedent est un agent qui m a active en inter-round, je REACTIVE cet appelant pour qu il reprenne son round (Pattern 13). Si mission directe venant de Cerberus, je reactive Cerberus.",
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : inter-round traite, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) : il renvoie l appelant qui reprend son round principal, ou il largue le maillon suivant, ou il reactivera Cerberus en fin de round.",
       "action": "reactiver",
-      "cible": "cerberus",
-      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle \"<rapport du traitement inter-round>\"",
-      "regle": "REGLE INTER-ROUND FIN : reactiver-fin oracle lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle \"<rapport du traitement inter-round>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     }
   }
 }

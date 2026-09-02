@@ -24,6 +24,95 @@ types:
 
 
 
+## [LECON] 2026-09-02 -- VERIFIER-FLUX-SECURITE R7 FAUX POSITIF LARGAGE : v0.2.2 (mission 31fe865e)
+
+**Contexte** : inter-round apres la fin Morpheus (ca722bea). Le pilote
+signalait FLUX KO R7 a chaque reactiver-fin : 'FIN de vulcain -> prochain
+agent morpheus' alors que la sequence respectait le modele aero (fin ->
+aeroport -> largage).
+
+**Cause racine** : le scan R7 cherchait le prochain agent en SAUTANT
+_est_coordination (oracle/pilote/cerberus). Or le flux reel apres une fin
+est : FIN agent -> pilote 'RECUPERE: X' -> oracle 'DEBUT: RETOUR X' ->
+pilote active le suivant. En sautant les lignes RECUPERE/RETOUR, le scan
+trouvait l agent LARGUE (morpheus ACTIF 15:05:51 apres FIN vulcain
+15:03:35) et criait au KO a tort.
+
+**Fix v0.2.2** : le scan s arrete au premier evenement non-routine /
+non-citation. Aeroport (oracle/pilote) = OK (la fin a bien ete recue, la
+preuve 'DEBUT: RETOUR X' agent=oracle est presente). Cerberus = OK
+seulement en atterrissage terminal (rien ne redecoule au-dessus). Un agent
+METIER direct apres une fin (sans passage par l aeroport) reste une
+violation R7.
+
+**Preuves** : 4 scenarios synthetiques - (S1) fin -> agent metier direct
+= KO capture ; (S2) fin -> RECUPERE+RETOUR -> largage = OK ; (S3) fin en
+tete = OK ; (S4) fin -> RECUPERE seul -> largage = OK. Tableau reel :
+FLUX OK (etait 2 KO). Version py 0.2.2, doc .md alignee (frontmatter
+0.1.0 perime -> 0.2.2, regle R7 + changelog). ASCII 0/0, CRLF 0/0,
+syntaxe OK. Tests delegues a Morpheus (regle immuable).
+
+**Lecon** : un controleur de flux qui SAUTE la coordination pour chercher
+le prochain evenement perd LA PREUVE que la fin est bien passee par
+l aeroport - le largage du pilote est le SUIVI normal d une fin, pas une
+violation. Un scan de flux doit respecter l ordre reel des evenements
+(ne jamais sauter les maillons qui portent la preuve).
+
+## [LECON] 2026-09-02 -- SECTEURS FONCTIONNELS : grades-v1.json v0.2.0 (mission 30d8322e)
+
+**Contexte** : l utilisateur a signale [urgent] que la colonne Secteur de
+AGENTS-activite-recente.md affichait encore des dieux grecs (Olympe,
+Athena, Hephaistos, Areopage...) alors que le passage v2 avait rendu ces
+mots sans signification fonctionnelle. La mission 30d8322e (prise a
+11:16:57) n avait JAMAIS ete executee - elle etait restee bloquee en
+PRISE : l encart etait regenere par le daemon depuis grades-v1.json, donc
+les nouvelles lignes gardaient les anciens labels tant que le fichier de
+mapping n etait pas modifie.
+
+**Cause racine** : le mapping des secteurs vivait dans grades-v1.json
+(cle secteurs.mapping) avec des valeurs grecques (Olympe = coordination,
+Athena = developpement, Areopage = controle/tests/evaluation, etc.).
+Deux consommateurs : _secteur_label d activer-agent-principal (nouvelle
+entree) et la lecture du daemon encart (relecture du tableau). Aucun
+test ne pinnait les valeurs grecques - le changement etait donc sans
+risque de regression cote tests.
+
+**Fix** : remplacement par 18 categories fonctionnelles ASCII minuscules
+(coordination, developpement, tests, controle, evaluation, strategie,
+communication, exploration, securite, surveillance, traces,
+documentation, specification, planification, formation, nettoyage,
+systeme, general) avec mapping par nom d agent ou mot-cle de role (93
+cles). Nouvelle entrees : pilote/retour-aeroport/decollage ->
+coordination, nemesis/hades -> evaluation/traces, routines de
+surveillance (flux, sante, live, encart, vigie, top3, verifier-statuts)
+-> surveillance/sante. Defaut 'General' -> 'general'. Description du
+fichier alignee (les dieux grecs restent dans l IDENTITE des agents -
+citations.py - pas dans les secteurs d activite).
+
+**Regressions evitees** : (1) a la reecriture de la colonne Secteur du
+tableau (50 lignes), attention aux INDICES - dans une ligne du tableau
+decoupee par '|', Agent = colonne 2 et Secteur = colonne 6 (pas 3 et 7)
+; (2) la restauration du bloc routines ne doit PAS revenir a l etat
+HEAD : le pilote (grade SP) etait declare dans l arbre de travail par la
+mission urgente 801f952d - le reverter a fait reapparaitre 'Inconnu' en
+colonne Grade (detecte par l encart a 15:54:36, corrige en remettant
+"pilote": "SP").
+
+**Preuves** : grades-v1.json v0.2.0 - JSON valide, ASCII 0/0, CRLF 0/0,
+94 cles de mapping, 18 valeurs fonctionnelles uniques, aucun dieu grec
+residuel dans le tableau (grep = 0), encart --dry-run = OK, pilote ->
+Special/coordination. Invariants vs HEAD : version/echelle/agents/defaut
+inchanges, seulement description + routines (pilote SP) + secteurs
+modifies.
+
+**Lecon** : une mission restee PRISE sans etre executee laisse la
+REALITE (les mots affiches) inchangee - le mapping vit dans un fichier
+data consomme par les daemons ; verifier AVANT de conclure qu une tache
+est faite, et toujours verifier l alignement fichier-data <-> fichier-
+affichage. Ne jamais restaurer un bloc JSON depuis HEAD sans verifier
+les declarations ajoutees par les missions en cours (le pilote SP etait
+un ajout non-commit de la mission urgente Inconnu).
+
 ## [LECON] 2026-08-25 -- REPARATION ARBRES v2 : vues stark regenerees (inter-round Morpheus)
 
 **Contexte** : inter-round de Morpheus (mission tests microsecondes). Le correctif glob du lanceur (test-0* -> test-*) a rendu test-101 actif : il n avait JAMAIS tourne et a revele une desynchronisation preexistante - arbre-stark.json (25/08 07:25) plus recent que ses vues (24/08 18:47), edith egalement signale au premier run.
@@ -217,3 +306,93 @@ oracle (pilote), enregistrer-usage-outil.
 4. LES FICHIERS 'FICHIERS' SONT TOUS ECRITS PAR LA SESSION : aucune garde purement extensionelle n arrete un LLM avec acces shell. La vraie autorite = le serveur oracle demarre (processus/PID) + croisement historique coherent (blueprint option c hybride).
 
 **Rappel** : on a ecrit du code AVANT de bumper les versions : implementation puis bump, dans cet ordre.
+
+## [LECON] 2026-09-02 -- AGENT CREE MAIS INACTIVABLE : NEMESIS BRANCHE A L ACTIVATION (Vulcain)
+
+**Contexte** : la creation de l agent v1 nemesis (Buffy, theme AGENT) a reproduit le pattern connu : agent cree (fiche, corrections, arbre, AGENTS.md) mais ABSENT du dictionnaire AGENTS de activer-agent-principal -> inactivable. 4e occurrence (Argus v0.5.8, Chiron v0.5.12, ferrari v0.7.4, maintenant nemesis 0.8.9).
+
+**Realise** : (1) dictionnaire AGENTS du .py : entree nemesis (role + fiche agents/nemesis/nemesis.md + corrections) ; (2) 3 case statements du .sh (role, fiche, corrections) ; (3) couleur nemesis (#6d28d9) ; (4) bump 0.8.8 -> 0.8.9 (py, md, spec) ; (5) enseignement : le verrou-habilitation attend --agent <nom> pour autoriser les edits sous agents/tools/ - sans --agent, le verrou dit agent appelant: ? et BLOQUE meme si la session est activee sur vulcain.
+
+**Lecons** :
+1. LE PATTERN AGENT CREE MAIS INACTIVABLE RECIDIVE (4e fois) : le theme AGENT de Buffy cree l agent mais AUCUNE etape ne branche l outil activer-agent-principal - soit le theme AGENT gagne une etape de verification, soit le controle Janus/Themis doit le detecter avant de declarer l agent disponible.
+2. LE VERROU CIBLE TOOLS LIT --agent PASSE EN ARGUMENT, PAS LA SESSION : editer-fichier sous agents/tools/ exige --agent vulcain explicite ; l activation de la session (profil session) ne suffit pas - le verrou affiche agent appelant: ? et bloque.
+3. LES APOSTROPHES DANS UNE COMMANDE BASH CASSENT LA LIGNE : un echo avec 'Oui, mais...' passe dans une commande editer-fichier sans heredoc tronque la ligne au premier apostrophe - utiliser des variables bash single-quote ou heredoc pour les contenus avec apostrophes.
+
+**Verdict** : VALIDE - get_agent_info(nemesis) OK, syntaxe py + bash OK, ASCII 0/0 sur py/sh/md/spec, test-092 et bump de version transmis a Morpheus.
+
+
+## [LECON] 2026-09-02 -- OUTIL DETECTEUR : CIBLE = DOSSIER DES AGENTS, PAS DOSSIER D'UN AGENT
+Lors du test formel test-112 de detecter-fins-passives, les preuves factices
+etaient K.O car le test passait le DOSSIER DE L'AGENT (tmp/zz-passif) comme
+CIBLE, alors que l'outil attend le DOSSIER DES AGENTS (dossier contenant les
+sous-dossiers d'agents, par defaut cerveau-projet/agents/). Le scan listait
+alors 'parcours' comme un pseudo-agent sans fins.json -> 0 probleme, RC=0.
+CORRECTION : passer la racine des agents + filtrer avec --agents <factice>.
+LE VERDICT D'UN DETECTEUR SE PREUVE SUR UNE FIXTURE AU BON NIVEAU DE LA
+HIERARCHIE : le niveau CIBLE et le niveau des sous-dossiers analyses doivent
+respecter le contrat de l'outil.
+
+
+## [LECON] 2026-09-02 -- D6/D7 APPLIQUE : ANTI-HEREDOC + EXECUTER-FORMULAIRE + INJECTION P2
+
+**Contexte** : propositions Socrate (via utilisateur) relayees en 2026-09-02 :
+(1) l agent ne compose plus les commandes (decision D6/D7 2026-08-21, jamais
+implementee) et les outils simples doivent accepter de LONGUES instructions
+sans heredoc bash (contenus tronques vecus dans les rounds) ; (2) le pilote
+injecte la mini-description + la liste des flags avec la mission.
+
+**Realise** :
+1. Anti-heredoc : creer-fichier v0.3.3 et ecrire-fichier v0.3.3 gagnent
+   --contenu-chemin <fichier> ; editer-fichier v0.5.1 gagne
+   --remplacements-chemin <fichier.json> ([{ancien, nouveau, premier?}]).
+   Le contenu est TOUJOURS lu depuis un fichier, jamais d argument bash
+   geant. Pattern deja present chez ajouter/inserer (--fichier SOURCE).
+2. executer-formulaire v0.1.0 (categorie executer, triplet py/sh/md) :
+   --schema affiche description + champs (cle/type/requis/flag/defaut) et
+   un exemple de fichier de reponses ; --reponses <json> VALIDE (refus
+   AVANT execution si requis manquant, RC=1) puis COMPOSE depuis le modele
+   du catalogue et EXECUTE a la place de l agent (D6).
+3. Injection P2 : files.py (oracle v0.5.7) injecte un bloc [OUTIL]
+   (description + flags) par outil du catalogue mentionne (max 3), a
+   l ajout de mission. Catalogue maj (creer/ecrire: parametre
+   contenu-chemin).
+
+**Lecons** :
+1. DECISION EXISTANTE != IMPLEMENTATION : D6/D7 datait du 21/08, aucune
+   mise en oeuvre 12 jours apres - quand une decision utilisateur reste
+   lettre morte, la relancer explicitement (ici c est Socrate qui l a fait).
+2. FLAG TEXTE DANS LE MODELE DE CATALOGUE : un parametre texte avec champ
+   flag (--contenu-chemin) doit etre compose en DEUX argv (flag + valeur),
+   pas en un seul - bug attrape au test (commande b.md src.txt au lieu de
+   b.md --contenu-chemin src.txt).
+3. LE NEWLINE FINAL EST UN CONTRAT : creer/ecrire-fichier ajoutent un 
+
+   final (historique) - les tests comparent apres rstrip, pas a l identique.
+4. TEST FORMEL AVANT FIN : test-113 (11 points) couvre les 3 modes
+   anti-heredoc, le formulaire (schema/refus/execution/dry-run) et
+   l injection P2 - non-regression test-003 89/89 + test-092 9/9.
+
+**Preuves** : test-113 11/11, creer 15 Ko sans troncature, refus RC=1
+(requis manquant), injection P2 OK, ASCII 0/0, catalogue/fichiers
+synchronises.
+## [LECON] 2026-09-02 -- FILE DE RELAIS ORDONNEE + CLASSIFIEE : oracle v0.5.8 (Vulcain)
+
+**Contexte** : decision utilisateur [attention] - le relais (oracle.py mission-relais / files.py) consommait la file asap en FIFO strict : une mission EN_ATTENTE vieille partait avant un message plus recent potentiellement PLUS IMPORTANT. Demande : ordonner la file par importance (priorite puis anciennete, P1 avant P2, recent avant ancien a importance egale) et la classifier (type de mission).
+
+**Realise** (outils : lire-fichier, editer-fichier, mettre-a-jour-versions, valider-conformite-ascii, detecter-decalages-catalogue, oracle) :
+1. fonctions/files.py : nouvelle fonction classifier(mission) -> (priorite 1/2, type urgent/purge/revision/test/creation/coordination) par mots-cles ([urgent]/[attention]/etat urgent/purge p1/P1 non-acquitte/anomalie/defcon -> P1 ; sinon P2). ajouter() stocke priorite+type a l ajout. prendre() ne prend PLUS la 1ere ligne : il selectionne la mission EN_ATTENTE la PLUS IMPORTANTE (priorite basse puis DATE RECENTE d abord - tri stable, entrees sans date en fin). lister() affiche Px/type et trie par importance. relais() porte la classification.
+2. oracle.py VERSION 0.5.7 -> 0.5.8 ; oracle.md 0.5.3 -> 0.5.8 avec entree versionning.
+3. Preuves : test reel sur FILES_DIR temporaire - ordre de prise = [P1/urgent, P1/purge, P2/test(recent), P2/revision(ancien)] VALIDE ; syntaxe ast OK x2 ; ASCII 0/0 x3 ; catalogue 188 conformes/0 decalage. Bump manuel (le bumper de dossier oracle bloque : 6 versions independantes dans le dossier - sous-outils separement versionnes).
+
+**Lecons** :
+1. UNE FILE N EST PAS UNE FIFO PAR DEFAUT : l ordre de consommation d une file de travail doit reflete l IMPORTANCE (priorite explicite ou deduite), pas l anciennete brute - le FIFO strict fait patienter un message URGENT derriere une chaine de vieilles missions.
+2. LA PRIORITE SE DEDUIT AU DEPOT (classifier a l ajout) ET SE RE-DEDUIT AU TRI pour les anciennes entrees sans champ : le tri est retro-compatible sans migration des jsonl existants.
+3. LE TRI PAR DATE DESC PREND 1 LIGNE AVEC DES TUPLES : (priorite, tuple(-ord(c) pour c in date)) - comparer des dates ISO par inversion de chaque octet donne l ordre inverse lexicographique sans parser les dates.
+4. LE BUMPER DE DOSSIER REFUSE UN DOSSIER MULTI-VERSIONS : oracle/ contient oracle.py 0.5.7, oracle-demarrage 0.1.1/0.1.3, oracle-server 0.2.0, routines-server 0.2.0/0.2.1, oracle.md 0.5.3 - passer le bump a l outil individualise (--parcours/<fichier>) ou manuel quand le dossier est multi-outils.
+
+**Verdict** : VALIDE (sous test Morpheus 52ceaea1) - ordre de prise prouve P1 avant P2 puis recent avant ancien, ASCII 0/0, catalogue 0 decalage.
+2026-09-02 | CORRECTION DOC oracle.md (retour Morpheus) : une mission ne doit PAS contenir le mot-cle 'inter-round' dans sa raison si elle est en realite une modification - le pilote deduit le theme par mots-cles et se trompe de branche (theme-inter-round au lieu de theme-modifier). Reclasser la mission au depot (raison commencant par le verbe Modifier...) pour que le pilote serve le bon theme. Les corrections doc mineures dans une version deja bumpee (0.5.8) ne necessitent PAS de re-bump : la doc est corrigee dans la meme version.
+2026-09-02 | REFS PARCOURS V1 DANS LES OUTILS (mission 622127e3, suite cb6eb3ec) : demarrer-llm.py gardait un repli v1 (branche elif parcours-<agent>.json affichant guider-parcours) obsolete depuis que TOUS les agents ont un arbre v2 - retire (v0.1.1 -> v0.1.2) ; editer-parcours.md clarifie qu il ne sert qu a la MAINTENANCE des archives v1 (marbre) et jamais a creer/guider du v1. Lecons : (1) verifier l etat reel avant de garder un repli v1 - scan : 0 agent sans arbre v2, donc tout repli guider-parcours est du code mort actif ; (2) les outils qui chargent parcours-*.json sont LEGITIMES s ils maintiennent/auditent l archive v1 (editer-parcours = compagnon du cartes-lock, detecter-contradictions audite des copies) - c est le POINTEUR de guidage actif (fallback demarrage) qui doit disparaitre ; (3) les .md d outils v1 peuvent porter une note ARCHIVE sans bump de code (doc seule).
+2026-09-02 | URGENT ENCART DETECTION INCONNU (mission 801f952d) : la routine encart verifiait Etat/Executeur mais PAS Grade/Agent - des acteurs systeme non declares (pilote) affichaient grade 'Inconnu' SANS alerte. Fix : (1) grades-v1.json declare 'pilote' (routines, grade SP) - un acteur systeme legitime doit etre DECLARE au mapping sinon il pollue la colonne Grade ; (2) encart.py v0.3.1 detecte grade 'Inconnu' + agent hors mapping (helper _agents_connus). Lecon : quand une routine surveille un tableau genere, chaque COLONNE denombrant des acteurs doit croiser le mapping de reference - une colonne sans controle laisse les acteurs non declares s afficher en 'Inconnu' indefiniment ; le test synthetique (fichier temp + GRADES_V1 pointe sur le vrai fichier) valide la detection sans toucher le fichier reel.
+2026-09-02 | ORDRE DES DEFINITIONS AU MODULE (inter-round Hygie, mission cd5bc94c) : super-pilote v0.2.1 etait INDEMARRABLE - NameError a l import car PID_FILE = SUPER_COMBOS_DIR / ... etait evalue AVANT la definition de SUPER_COMBOS_DIR (lignes 47/51). Personne ne l a vu car les 9 daemons tournaient depuis AVANT le fix (ancien code en memoire) : la relance de la purge Hygie a revele le bug. Fix v0.2.2 : PID_FILE deplace APRES les definitions de chemins (ORACLE_DIR, SUPER_COMBOS_DIR). Lecon : une constante composee d une autre constante du module doit etre declaree APRES elle ; apres un fix de daemon, TOUJOURS tester le demarrage reel (--boucle) et pas seulement la compilation - un test-085 vert ne prouve pas qu un daemon demarre, il prouve qu il est whiteliste. Preuve : python3 super-pilote.py --boucle -> daemon lance, super-pilote.pid ecrit (PID vivant), detecteur 0 residuel, test-085 8/8.
+2026-09-02 | ADAPTATION PURIFIER-RVAV v0.1.1 -> v0.1.2 FORMAT V2 AGENTS-HISTORIQUE (demande utilisateur) : l outil decoupait encore le format v1 '| <span' (0 occurrence depuis la migration v2) et supposait ancien-en-haut. Le format reel v2 (## date + ### agent + entrees '- hh:mm...') est RECENT-EN-HAUT avec des sections non triees entre elles : archiver les blocs du haut aurait deplace les RECHTS au lieu des anciens - bombe a retardement des le depassement du quota. Fix : decoupage v2 par entree individuelle (date+agent+heure portes), tri par (date, heure) pour archiver les PLUS ANCIENNES, suppression des sections agents et dates devenues vides. Corrections.md inchange (blocs ## [LECON] ancien-en-haut). Preuves sur copie reelle : 513 -> 197 lignes, 0 perdu / 0 doublon, accumulation anti-ecrasement (374 = 299+75), ASCII/LF 0/0, structure v2 conservee (16 sections). Lecon : un outil qui parse un format de fichier DOIT etre re-teste contre le format reel apres une migration de structure - le format vivant a change et l outil ne le voyait pas (test-065 ne couvre que corrections.md, pas l historique v2).

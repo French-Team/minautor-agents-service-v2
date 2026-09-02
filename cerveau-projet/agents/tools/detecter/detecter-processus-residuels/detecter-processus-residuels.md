@@ -9,7 +9,7 @@ identite:
 
 # detecter-processus-residuels
 
-**Version :** 0.1.1
+**Version :** 0.1.2
 **Statut :** ebauche
 **Categorie :** Detecter
 
@@ -33,6 +33,13 @@ nettoyeur (exclusif Hygie) de les terminer.
 
 Jamais signales, jamais tuables : `freebuff` (le client), `unsloth` (le
 studio python), `codebuff`.
+
+Deux familles (decision utilisateur 2026-08-30) :
+- **ENVIRONNEMENT DE SESSION** : freebuff, unsloth, codebuff
+- **DAEMONS PERSISTANTS DU PROJET** : `oracle-server.py`, `routines-server.py`,
+  `super-pilote.py` (ajoute v0.1.2 : lance par oracle-demarrage 2b ; sans lui,
+  chaque demarrage relancait un super-pilote et test-085 signalait les copies
+  comme residuelles)
 
 ## Usage
 

@@ -334,8 +334,13 @@ def main():
             env["AGENTS_ACTIVITE_RECENTE"] = tmp_activite
             # Vision 2026-08-27 : PLUS de 'reactiver', toujours 'activer'.
             # Reactiver Cerberus = activer cerberus (4e arg = agent precedent).
+            # FIX 2026-09-02 : cwd=PROJECT_ROOT obligatoire - activer-agent-
+            # principal resout des chemins relatifs au repertoire courant
+            # (KO intermittent rc=1 quand le test est lance depuis un autre
+            # cwd que la racine du projet, ex: worker du lanceur).
             r = lancer([PYTHON, ACTIVER_PY, "activer", "session-llm-1",
-                        "cerberus", "test marbre", "janus"], timeout=90, env=env)
+                        "cerberus", "test marbre", "janus"], timeout=90,
+                       env=env, cwd=PROJECT_ROOT)
             contenu = lire(tmp)
             ok_debut = "MARBRE:DEBUT" in contenu
             ok_fin = "MARBRE:FIN" in contenu

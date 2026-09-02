@@ -2,59 +2,86 @@
   "identite": {
     "type": "fins",
     "appartient_a": "cerberus",
-    "description": "Toutes les fins possibles pour Cerberus (arbre v0.1.0)"
+    "description": "Toutes les fins possibles pour Cerberus (arbre v0.2.2) - modele aero reactiver-fin"
   },
   "fins": {
     "fin-theme": {
       "titre": "Retour a la racine",
       "action": "redirection",
       "vers": "arbre-cerberus.json",
-      "description": "Theme termine : retour a la racine pour choisir un autre theme."
+      "description": "Theme intermediaire traite : retour a la racine pour choisir le theme de cloture (fin active vers Oracle)."
     },
     "fin-coordination": {
       "titre": "FIN - Coordination terminee",
-      "description": "La coordination est terminee. Cerberus attend la prochaine demande.",
-      "action": "procedure"
+      "description": "La coordination est terminee. Ma fin suit SA carte (modele aero) : je reviens vers ORACLE qui decide du suivant.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin cerberus \"<bilan de coordination>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus (moi-meme), jamais vers un autre agent. Le pilote decide de la suite."
     },
     "fin-activer": {
       "titre": "FIN - Agent active",
-      "description": "L agent habilite est active. Cerberus enregistre ses usages et attend le retour.",
-      "action": "procedure"
+      "description": "L agent habilite est active via Oracle. Ma fin suit SA carte (modele aero) : je reviens vers ORACLE qui lance l agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin cerberus \"<bilan d activation>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus (moi-meme), jamais vers un autre agent. Le pilote lance l agent habilite."
     },
     "fin-retour": {
       "titre": "FIN - Retour traite",
-      "description": "Le retour de l agent est traite (bilan, erreurs). Coordination terminee.",
-      "action": "procedure"
+      "description": "Le retour de l agent est traite (bilan, erreurs). Ma fin suit SA carte (modele aero) : je reviens vers ORACLE qui decide du suivant.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin cerberus \"<bilan de retour>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus (moi-meme), jamais vers un autre agent. Le pilote decide de la suite."
     },
     "fin-revision": {
       "titre": "FIN - Revision lancee",
-      "description": "Socrate est actif pour la revision strategique. Cerberus attend le retour.",
-      "action": "procedure"
+      "description": "Socrate est active pour la revision strategique. Ma fin suit SA carte (modele aero) : je reviens vers ORACLE qui lance l agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin cerberus \"<bilan revision lancee>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus (moi-meme), jamais vers un autre agent. Le pilote lance l agent habilite."
     },
     "fin-eduquer": {
       "titre": "FIN - Education lancee",
-      "description": "Chiron est actif pour l education. Cerberus attend le retour.",
-      "action": "procedure"
+      "description": "Chiron est active pour l education. Ma fin suit SA carte (modele aero) : je reviens vers ORACLE qui lance l agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin cerberus \"<bilan education lancee>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus (moi-meme), jamais vers un autre agent. Le pilote lance l agent habilite."
     },
     "fin-signal": {
       "titre": "FIN - Besoin signale",
-      "description": "Le besoin est signale a Cerberus pour traitement ulterieur.",
-      "action": "procedure"
+      "description": "Le besoin est signale a Oracle pour traitement ulterieur. Ma fin suit SA carte (modele aero) : je reviens vers ORACLE qui decide du suivant.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin cerberus \"<bilan besoin signale>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus (moi-meme), jamais vers un autre agent. Le pilote decide de la suite."
     },
     "fin-erreurs": {
       "titre": "FIN - Erreurs hors mission signalees",
-      "description": "Des erreurs hors mission ont ete detectees et signalees.",
-      "action": "procedure"
+      "description": "Des erreurs hors mission ont ete detectees et signalees a Oracle. Ma fin suit SA carte (modele aero) : je reviens vers ORACLE.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin cerberus \"<bilan erreurs signalees>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus (moi-meme), jamais vers un autre agent. Le pilote largue l habilite qui repare."
     },
     "fin-declencheur": {
       "titre": "FIN - Declencheur traite",
-      "description": "Le declencheur v1 a ete traite (attente/attention/urgent/question/creer/probleme/stop). Cerberus attend la suite.",
-      "action": "procedure"
+      "description": "Le declencheur v1 est traite (attente/attention/urgent/question/creer/probleme/stop). Ma fin suit SA carte (modele aero) : je reviens vers ORACLE.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin cerberus \"<bilan declencheur traite>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus (moi-meme), jamais vers un autre agent. Le pilote decide de la suite."
     },
     "fin-trio": {
       "titre": "FIN - Trio lance",
-      "description": "Le declencheur [trio] a lance le super-combo de creation (Athena -> Promethee -> Minerve). Cerberus attend le retour consolide du dernier maillon (Minerve reactiver Cerberus).",
-      "action": "procedure"
+      "description": "Le super-combo de creation est lance (Athena -> Promethee -> Minerve). Ma fin suit SA carte (modele aero) : je reviens vers ORACLE.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin cerberus \"<bilan trio lance>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus (moi-meme), jamais vers un autre agent. Le pilote enchaine le trio."
     }
   }
 }

@@ -68,10 +68,13 @@ ROUTINES = {
     "verifier-statuts": os.path.join(ROUTINES_DIR, "verifier-statuts.py"),
 }
 # intervalle attendu dans le manifest (secondes)
-# NB 2026-08-30 : intervalles MAJORES de +300s (decision utilisateur
-# 2026-08-29 : ajouter 300s a chaque intervalle existant, sauf citations).
-INTERVALLES = {"flux": 900, "sante": 600, "encart": 600, "live": 600,
-                "vigie-perimetre": 600, "verifier-statuts": 600}
+# NB 2026-09-01 (manifest v0.1.8) : intervalles REALIGNES sur le manifest,
+# source de verite - chaque routine active possede un intervalle FIXE
+# DISTINCT (echelle 30/300/360/480/600/720/840/960/1080/1200/1320/1440,
+# sans jitter aleatoire). Les pins 600/900 (decision +300s 2026-08-29)
+# etaient obsoletes depuis le realignement du manifest.
+INTERVALLES = {"flux": 480, "sante": 600, "encart": 840, "live": 720,
+                "vigie-perimetre": 1320, "verifier-statuts": 1440}
 # prefixe de sortie + pattern de detection
 PATTERNS = {
     "flux": ("[FLUX]", "_DERNIERE_VALEUR"),

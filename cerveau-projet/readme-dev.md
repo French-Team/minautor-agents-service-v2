@@ -204,43 +204,39 @@ SI [mission] ALORS [ligne de decision]
 Source : `cerveau-projet/agents/regles-immuables/general/regles-choisir-agent.md`
 (matrice qui fait quoi).
 
-### 5.2 Parcours (jeu de piste)
+### 5.2 Arbre de decision v2
 
-Le parcours est la **SOURCE DE VERITE du guidage** : un fichier JSON
-(`parcours/parcours-<agent>.json`) ou l'agent avance case par case avec
-l'outil `guider-parcours` :
+L'arbre de decision est la **SOURCE DE VERITE du guidage** (decision
+2026-08-29) : un fichier JSON `parcours/arbre-<agent>.json` (racine ->
+themes -> fins centralisees) que l'agent suit avec l'outil `guider-arbre`
+(ou pilote par Oracle via `oracle.py pilote <agent>`) :
 
 ```bash
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py <chemin-du-parcours-json>
+python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py <chemin-arbre-json>
 ```
 
-**18 parcours d'agents existants** : athena, argus, atlas, buffy, cerberus,
-chiron, clio, gardien, hermes, hygie, janus, minerve, morpheus, promethee,
-redacteur-v2, socrate, themis, vulcain + parcours de demarrage et parcours
-systeme (+ 3 sous-parcours de revision chez socrate).
+**Chaque agent a son arbre v2** : `cerveau-projet/agents/<agent>/parcours/arbre-<agent>.json`
+(ou `cerveau-projet/freelance/<agent>/parcours/arbre-<agent>.json` en v2
+freelance). Les parcours v1 (`parcours-<agent>.json`) sont des ARCHIVES
+protegees par le marbre : ils ne pilotent plus le guidage.
 
-### 5.3 Structure d'une case
+### 5.3 Structure de l'arbre v2
 
-| Champ | Type | Role |
-|---|---|---|
-| `titre` | texte | Nom de la case |
-| `type` | enum | `question` (branches), `action` (suivant), `controle` (branches OUI/NON), `fin` |
-| `question` | texte | Question posee (si type question/controle) |
-| `branches` | liste | Reponses possibles -> `vers` (case suivante) |
-| `suivant` | texte | Case suivante (si type action) |
-| `indices` | liste | Indices a appliquer : outil / fichier / regle / ref |
-| `message` | texte | Message de fin (si type fin) |
+| Fichier | Role |
+|---|---|
+| `arbre-<agent>.json` | Racine : associe chaque type de mission a un theme |
+| `theme-*.json` | Theme : besoins/redirects a appliquer (procedure, regle, etapes) |
+| `fins.json` | Fins centralisees : chaque fin suit SA carte (modele aero, reactiver-fin vers Oracle) |
 
 ### 5.4 Les indices
 
-Chaque case porte les indices exacts a appliquer :
+Chaque besoin d'un theme porte les indications exactes a appliquer :
 
-| Type d'indice | Contenu |
+| Type d'indication | Contenu |
 |---|---|
-| `outil` | nom + catalogue + chemin + commande exacte (outil du cerveau) |
-| `fichier` | chemin + raison (fichier a lire) |
+| `etapes` | commandes exactes a executer (outil du cerveau) |
 | `regle` | texte de la regle a appliquer |
-| `ref` | reference a un pattern (ex : `pattern-3`) ou un document |
+| `action` | `procedure` (executer les etapes) ou `lien` (vers un autre theme/fin) |
 
 > **Regle d'or** : ne PAS supposer. VERIFIER a chaque etape.
 
@@ -280,7 +276,7 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Generateurs | 10 | generateurs-commande, generateurs-amelioration |
 | Gerer | 1 | gerer-sous-mission |
 | Git | 1 | hades-contexte-git |
-| Guider | 1 | guider-parcours |
+| Guider | 2 | guider-parcours (archive v1), guider-arbre (v2) |
 | Inserer | 1 | inserer-contenu-fichier |
 | Lire | 5 | lire-fichier, lire-activite-recente |
 | Lister | 8 | lister-agents, lister-outils |
@@ -453,7 +449,7 @@ generateurs-amelioration/themes-amelioration.json`.
 3. Lire `AGENTS.md` (bloc de MA session)
 4. Demarrer comme Cerberus (gardien de l'entree)
 5. Nommer un agent pour une mission -> Cerberus active l'agent habilite
-6. L'agent suit SA carte (`guider-parcours`) et reactivera selon SA carte
+6. L'agent suit SA carte (`guider-arbre` sur son arbre v2) et reactivera selon SA carte
 7. Apres une mission qui modifie des fichiers, Cerberus active Clio qui met
    a jour ce readme-dev.md et le README public
 8. Janus controle (verdict), Cerberus cloture

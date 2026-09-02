@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # creer-fichier.py
 # Creer un nouveau fichier avec verification
-# Version : 0.3.2
+# Version : 0.3.3
 # Statut : prepare
 
 # identite:
@@ -17,7 +17,7 @@ Usage:
   creer-fichier.py [OPTIONS]
 """
 
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 STATUT = "prepare"
 
 import sys
@@ -62,6 +62,8 @@ def main():
     )
     parser.add_argument("fichier", help="Chemin du fichier a creer")
     parser.add_argument("contenu", nargs="?", default="", help="Contenu du fichier (optionnel)")
+    parser.add_argument("--contenu-chemin", dest="contenu_chemin", default=None,
+                        help="Mode ANTI-HEREDOC : lire le contenu depuis un fichier source au lieu d un argument bash (contenus longs acceptes sans troncature)")
     parser.add_argument("--forcer", action="store_true", help="Ecraser si le fichier existe deja")
     parser.add_argument("--backup", action="store_true", help="Sauvegarder le fichier existant en .bak avant ecrasement")
     parser.add_argument("--dry-run", action="store_true", help="Simuler sans creer")
@@ -72,6 +74,21 @@ def main():
     args = parser.parse_args()
 
     fichier = Path(args.fichier)
+
+    # Mode ANTI-HEREDOC : le contenu est lu depuis un fichier source (jamais
+    # de ligne de commande geante). Pattern identique a ajouter-contenu-fichier
+    # --fichier SOURCE. Le contenu argumentaire devient optionnel.
+    contenu = args.contenu
+    if args.contenu_chemin:
+        try:
+            chemin_src = Path(args.contenu_chemin)
+            if not chemin_src.is_file():
+                print(RED + "[ERREUR] Fichier source introuvable: " + args.contenu_chemin + NC)
+                return 1
+            contenu = chemin_src.read_text(encoding="utf-8").rstrip("\n")
+        except OSError as e:
+            print(RED + "[ERREUR] Lecture du fichier source impossible: " + str(e) + NC)
+            return 1
 
     # Securite (round 3) : octet nul dans le chemin -> refus explicite
     if "\x00" in args.fichier:
@@ -92,8 +109,8 @@ def main():
 
     if args.dry_run:
         print(YELLOW + "[DRY-RUN] Creation de: " + args.fichier + NC)
-        if args.contenu:
-            print(YELLOW + "[DRY-RUN] Contenu: " + args.contenu + NC)
+        if contenu:
+            print(YELLOW + "[DRY-RUN] Contenu: " + contenu + NC)
         return 0
 
     # Creer le repertoire parent si necessaire
@@ -119,10 +136,10 @@ def main():
 
     # Creer le fichier
     try:
-        if args.contenu:
+        if contenu:
             # FIGER LF : open en mode texte avec newline='' (pas de traduction CRLF Windows)
             with open(fichier, "w", encoding="utf-8", newline="") as f:
-                f.write(args.contenu + "\n")
+                f.write(contenu + "\n")
         else:
             fichier.touch()
     except OSError as e:

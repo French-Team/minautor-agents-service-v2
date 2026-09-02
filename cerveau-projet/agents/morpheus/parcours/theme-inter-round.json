@@ -28,7 +28,7 @@
           "Mon precedent (l agent qui m a active pour tester) est enregistre dans mon etat de carte. Je le reactive avec mon VERDICT de test.",
           "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin morpheus \"<VERDICT de test pour <agent_appelant>>\""
         ],
-        "regle": "REGLE INTER-ROUND (R2) FIN TEST : quand je suis active en inter-round pour tester par un agent, ma fin REACTIVE L APPELANT (mon precedent) avec mon verdict, PAS Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+        "regle": "REGLE INTER-ROUND (R2, aero 2026-08-30) FIN TEST : quand je suis active en inter-round pour tester par un agent, ma fin va vers ORACLE (modele aero R1/R3, reactiver-fin <agent> --cible oracle), JAMAIS vers l appelant ni vers Cerberus. C est le PILOTE qui decide : il largue l agent habilite, puis renvoie l appelant qui reprend son round ; en fin de round il atterrit sur Cerberus avec le bilan consolide."
       }
     ]
   },

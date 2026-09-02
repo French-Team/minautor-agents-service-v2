@@ -141,16 +141,15 @@
       "titre": "fin reactiver/activer sans placeholder cible",
       "detail": "Une fin d action 'reactiver' ou 'activer' doit avoir une cible resolue (pas <agent_appelant> brut non servie, pas <agent-habilite>).",
       "verification": "pour chaque fin action=reactiver|activer: cible non vide ET->cible ne commence pas par '<'"
-    },
-    {
-      "id": "F4",
-      "categorie": "schema-fins",
-      "niveau": "bloquant",
-      "cible": "fins",
-      "titre": "aucune fin ne cible cerberus (modele aero: R1)",
-      "detail": "Modele round aero (spec 2026-08-30, R1) : toute fin d agent va vers ORACLE (l aeroport), jamais vers cerberus. Cerberus est AVANT oracle (entree utilisateur) ; les agents sont APRES oracle. Une fin action=reactiver avec cible=cerberus est un vestige v1.",
-      "verification": "pour chaque fin action=reactiver|activer: cible != cerberus"
-    },
+    }, {
+ "id": "F4",
+ "categorie": "schema-fins",
+ "niveau": "bloquant",
+ "cible": "fins",
+ "titre": "aucune fin ne cible cerberus (modele aero: R1)",
+ "detail": "Modele round aero (spec 2026-08-30, R1) : toute fin d agent va vers ORACLE (l aeroport), jamais vers cerberus. Cerberus est AVANT oracle (entree utilisateur) ; les agents sont APRES oracle. Une fin action=reactiver avec cible=cerberus est un vestige v1. EXCEPTION DOCUMENTEE (decision utilisateur 2026-09-02) : seule la fin fin-coordination de l aeroport ORACLE atterrit sur CERBERUS avec le bilan consolide (fin de round - Cerberus est le point de depart/arrivee des demandes utilisateur). fin-signal et fin-inter-round d oracle restent vers ORACLE.",
+ "verification": "pour chaque fin action=reactiver|activer: cible != cerberus, sauf agent=oracle et fin=fin-coordination"
+ },
     {
       "id": "F5",
       "categorie": "schema-fins",

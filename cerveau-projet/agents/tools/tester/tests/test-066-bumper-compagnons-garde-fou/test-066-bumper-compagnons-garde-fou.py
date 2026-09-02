@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 """
 test-066-bumper-compagnons-garde-fou.py
-GARDE-FOU : le bumper mettre-a-jour-versions (v0.1.5, round 2026-08-16)
+GARDE-FOU : le bumper mettre-a-jour-versions (v0.1.6, round 2026-09-02)
 signale les FICHIERS COMPAGNONS : quand on bump un outil, les fichiers du
 projet qui referencent encore l ANCIENNE version (tests, docs, corrections)
 sont listes avec verdict KO - pour ne plus oublier de les adapter (8 tests
@@ -16,7 +16,7 @@ Contexte (demande utilisateur 2026-08-16) :
   - Verdict passe en KO si des compagnons existent (l agent doit les adapter).
 
 Invariants verifies :
-  1. mettre-a-jour-versions.py existe, compile, --version v0.1.5
+  1. mettre-a-jour-versions.py existe, compile, --version v0.1.6
   2. Le motif md couvre les 2 formats de doc : '**Version :**' ET '**Version** :'
      (preuve : un fichier md de test au 2e format est detecte)
   3. Preuve reelle compagnons : bump DRY-RUN du lanceur tester-lancer-non-regression
@@ -113,8 +113,8 @@ def main():
     code, out = run([PYTHON, "-m", "py_compile", BUMPER_PY])
     verifier("1b. compilation OK", code == 0, out[-80:])
     code, out = run([PYTHON, BUMPER_PY, "--version"])
-    verifier("1c. --version v0.1.5",
-             code == 0 and "v0.1.5" in out, out.strip()[-40:])
+    verifier("1c. --version v0.1.6",
+             code == 0 and "v0.1.6" in out, out.strip()[-40:])
     chrono_etape("1. outil", t0)
 
     # 2. Motif md couvre les 2 formats (preuve unitaire)

@@ -1026,7 +1026,7 @@
       "description": "Creer un nouveau fichier avec verification",
       "interpreteur": "python3",
       "script": "cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py",
-      "modele": "{fichier} {contenu} {forcer}",
+      "modele": "{fichier} {contenu} {forcer} {contenu-chemin}",
       "parametres": [
         {
           "cle": "fichier",
@@ -1046,6 +1046,14 @@
           "type": "flag",
           "obligatoire": false,
           "flag": "--forcer"
+        },
+        {
+          "cle": "contenu-chemin",
+          "question": "Chemin du fichier source (anti-heredoc) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--contenu-chemin",
+          "defaut": ""
         }
       ]
     },
@@ -1643,7 +1651,7 @@
       "description": "Ecrire ou ecraser le contenu d'un fichier. Supporte l'ecriture depuis un",
       "interpreteur": "python3",
       "script": "cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.py",
-      "modele": "{fichier} {contenu} {backup}",
+      "modele": "{fichier} {contenu} {backup} {contenu-chemin}",
       "parametres": [
         {
           "cle": "fichier",
@@ -1663,6 +1671,14 @@
           "type": "flag",
           "obligatoire": false,
           "flag": "--backup"
+        },
+        {
+          "cle": "contenu-chemin",
+          "question": "Chemin du fichier source (anti-heredoc) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--contenu-chemin",
+          "defaut": ""
         }
       ]
     },

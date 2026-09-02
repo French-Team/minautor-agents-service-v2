@@ -19,7 +19,7 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom** | Oracle |
-| **Version** | 0.5.3 |
+| **Version** | 0.5.8 |
 | **Role** | Hub de communication inter-agents v1 |
 | **Session** | session-admin |
 | **Responsable** | Buffy (creation), Cerberus (usage) |
@@ -119,7 +119,9 @@ prendre la main avant et apres chaque mission, comme dans le flux
 `USER -> Cerberus -> Oracle -> Agent -> Cerberus -> USER` :
 
 1. **Prendre** la premiere mission EN_ATTENTE de la file (defaut `asap`)
-   via `files.relais()` (marque PRISE, FIFO).
+   via `files.relais()` (marque PRISE ; file triee par importance :
+   priorite la plus basse d abord, puis date la plus recente a priorite
+   egale - decision utilisateur 2026-09-02).
 2. **Determiner l agent cible** : champ `agent` explicite, sinon deduction
    par mots-cles (`files.deduire_agent()` : tests -> morpheus, outil ->
    vulcain, audit -> themis, etc). Depuis 2026-08-30 : un **ETAT URGENT /
@@ -259,6 +261,8 @@ python3 oracle.py reactiver-fin <agent> "<bilan>"
 
 | Version | Date | Description |
 |---|---|---|
+| 0.5.8 | 2026-09-02 | FILE DE RELAIS ORDONNEE + CLASSIFIEE (decision utilisateur [attention]) : mission-relais ne consomme plus en FIFO strict. `fonctions/files.py` : nouvelle fonction `classifier()` (deduit priorite 1/2 + type urgent/purge/revision/test/creation/coordination par mots-cles), `ajouter()` stocke priorite/type a l ajout, `prendre()` selectionne la mission EN_ATTENTE la PLUS IMPORTANTE (priorite basse d abord, puis DATE RECENTE d abord a priorite egale - un message recent peut etre plus important qu un ancien), `lister` affiche Px/type et trie par importance. `oracle.py mission-relais` relaye la mission la plus importante (le daemon et le relais restent FIFO-tolerant, la regle d importance est portee par files.prendre). |
+| 0.5.7 | 2026-09-02 | CLI `oracle.py lister` et messages : robustesse et enrichissements (voir historique code). |
 | 0.5.6 | 2026-08-30 | CLI `oracle.py historiser` renseigne TOUJOURS la colonne EXECUTEUR de l encart v1 (executeur="Oracle") - mission 4e30f06d suite detection cases EXECUTEUR vides (encart.py v0.3.0). Chaque historique CLI creait auparavant une case EXECUTEUR vide (alimentee uniquement par _historiser_auto / mission-relais). aligne sur le comportement mission-relais (Executeur=Oracle). |
 | 0.5.3 | 2026-08-29 | DEFCON-ESCALER (decision utilisateur : URGENT -> DEFCON 4 pour informer Oracle qui avise en fonction de l etat) : nouvelle commande `defcon-escaler <cible 3|4> <commentaire>` + fonction defcon.escaler() - ESCALADE vers le haut (degradation 2->4, no-op si deja au niveau cible ou superieur). Le DEFCON etant une valve a sens unique descendant (5->4->3->2), l etat URGENT devait pouvoir REMONTER vers DEFCON 4 (VALIDATION DES REPARATIONS). Niveau NORMAL corrige : DEFCON 2 = REPRISE TOTALE (protocole 15 v2), et non 3. DEFCON 5 (arret total) reste reserve a defcon-declarer. Consomme par la routine verifier-statuts. |
 | 0.5.2 | 2026-08-29 | INCIDENT CORRUPTION HUB RESOLU : le relais (fonctions/relais.py) re-echappait les lignes brutes du hub a chaque tic (_ecrire_jsonl appliquait json.dumps sur un brut deja serialise) -> inbox/cerberus.jsonl a atteint 1 Go de guillemets imbriques en cascade. Fix : un str est ecrit TEL QUEL, un dict serialize une seule fois. Reconstruction du hub (55 messages valides extraits par decodage iteratif, 41 alertes [FANTOMES] spammees purgees, 14 messages legitimes conserves, 1 Go -> 6 Ko). Faux positif SERVEUR MORT corrige (auto-exclusion os.getpid() retirait le daemon lui-meme - 18 alertes [FANTOMES] spammees, fix dans fonctions/controle_processus.py). Garde-fous : test-108 (controle processus), test-109 (relais + audit hub 11 points). Audit complet des inbox/outbox v1 + v2 : aucune autre corruption. |

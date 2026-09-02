@@ -9,7 +9,7 @@ identite:
 # activer-agent-principal
 
 **Categorie** : Activer
-**Version** : 0.8.8
+**Version** : 0.8.11
 **Statut** : prepare
 **Date creation** : 2026-08-05
 **Proprietaire** : Vulcain (outil partage)
@@ -134,7 +134,12 @@ python3 activer-agent-principal.py activer session-llm-1 Buffy "Corriger les fic
 3. Ajoute l'entree dans l'historique (avec la session)
 4. Ecrit le fichier
 
-### 3. Reactiver Cerberus (dans sa session)
+### 3. Reactiver Cerberus (atterrissage terminal du PILOTE, modele aero)
+
+> Modele aero (R1/R3) : AUCUN agent ne reactiver Cerberus a sa fin - la fin
+> de tout agent va vers ORACLE (oracle.py reactiver-fin <agent> --cible
+> oracle). Cette section decrit la reactivation de Cerberus par le PILOTE
+> (Oracle) quand le ROUND se termine (bilan consolide).
 
 ```bash
 python3 activer-agent-principal.py reactiver session-llm-1 "Mission terminee" Buffy
@@ -291,6 +296,9 @@ eviter les collisions et comprendre qui intervient en parallele.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.8.11 | 2026-09-02 | NORMALISATION SESSION CLI (lecon test-025) : la sous-commande 'activer' normalise le nom de session comme sidentifier ('admin' -> session-admin). Sans cela, 'activer admin <agent>' ecrivait un bloc '### Session : admin' invalide que nettoyer-sessions (motif session-*) ne supprimait pas -> test-025 KO + bloc fantome dans AGENTS.md. |
+| 0.8.10 | 2026-09-02 | MODELE AERO DANS LES MESSAGES DE GUIDANCE (directive utilisateur) : le message post-activation ne dit plus "seul le DERNIER maillon ACTIVE Cerberus" mais "MA FIN va vers ORACLE (reactiver-fin <agent> --cible oracle), JAMAIS Cerberus ni un autre agent ; le PILOTE decide et atterrit sur Cerberus en fin de round". Garde-fou auto-reactivation : "oublie d activer Cerberus" -> "oublie sa fin (modele aero) : sa fin devait aller vers ORACLE". Docstring activer_cerberus : c est le PILOTE (Oracle) qui atterrit sur Cerberus en fin de round, jamais un agent. |
+| 0.8.9 | 2026-09-02 | NEMESIS BRANCHE A L ACTIVATION : agent v1 nemesis (Analyste en Chef, avis contradictoire avant validation - audit 3 axes) ajoute au dictionnaire AGENTS du .py + aux 3 case statements du .sh (role, fiche, corrections) + couleur. Il etait cree (fiche, corrections, arbre, AGENTS.md) mais ABSENT de la liste AGENTS, donc inactivable (meme oubli qu Argus v0.5.8 / Chiron v0.5.12 / ferrari v0.7.4). |
 | 0.8.8 | 2026-08-30 | TRACABILITE R/IR MODELE AERO : detecter_type_round elargi - une raison commencant par SIGNALER, BESOIN INTER-ROUND, ou contenant MISSION-AJOUTER / INTER-ROUND est taggee IR en plus des prefixes INTER-ROUND / FIN D INTER-ROUND existants. Couvre le signalement a ORACLE du modele aero R2 (le pilote largue l habilite) : l inter-round est desormais trace sans flag manuel sur le vocabulaire aero. Version 0.8.8. |
 | 0.8.7 | 2026-08-29 | COLONNE EXECUTEUR ROUTINES (demande utilisateur) : les entrees historisees par les routines v1 (citations, flux, sante, live, encart, vigie-round...) affichaient une colonne Executeur VIDE - elles appellent ajouter_historique sans passeur executeur. Nouveau helper _executeur_routine(agent) qui lit le manifest des routines (oracle/routines/manifest.json, chemin ABSOLU comme ETATS_ACTIONS) et retourne RT(<intervalle>s) (ex: RT(300s), RT(60s), RT(600s)) si l agent est une routine ACTIVE avec intervalle > 0. _ecrire_encart_v1 : exec_aff = executeur or _executeur_routine(agent) or "". Version 0.8.7. |
 | 0.8.6 | 2026-08-29 | COLONNE DEFCON (decision utilisateur : maintenant que l on gere les defcon, ajouter une colonne Defcon apres Agent) : l encart v1 passe de 9 a 10 colonnes `| Grade | Agent | Defcon | Executeur | Etat | Secteur | Raison | Heure | id | Type |`. Chaque entree porte le DEFCON courant (defcon.jsonl d Oracle) au moment de l historisation - nouveau helper _lire_defcon_v1() (lit le dernier niveau via fonctions/defcon.py). Adaptes : _ecrire_encart_v1 + _construire_encart_v1 (insertion Defcon apres Agent), encart.py (ENTETE_V1 + Etat cols[5]), verifier-statuts, verifier-flux-securite (defcon cols[3], etat cols[5]). |

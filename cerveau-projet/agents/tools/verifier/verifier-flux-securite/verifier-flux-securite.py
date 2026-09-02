@@ -24,7 +24,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.0"
+VERSION = "0.2.2"
 
 # Fichier du tableau d activites recentes
 AGENTS_ACTIVITE_RECENTE = os.environ.get(
@@ -189,35 +189,74 @@ def verifier_flux(entrees=None):
                 "R6: Citation (ligne %d, %s) a Etat='%s' au lieu de 'DEV'"
                 % (i + 1, e["heure"], e["df"]))
 
-    # --- R7 : Apres le FIN d un agent, le prochain agent est Cerberus
-    # OU Oracle (modele aero 2026-08-30) ---
-    # L utilisateur ne parle qu avec Cerberus. Quand un agent finit,
-    # Oracle re-active Cerberus (pas un autre agent) - modele v1.
-    # MODELE AERO (spec modele-round-avion-parachutiste, R1) : la fin d un
-    # agent revient vers ORACLE (l aeroport) qui decide de la suite via le
-    # pilote. Les deux cibles sont valides selon le modele en vigueur.
-    # Casse insensible : Cerberus == cerberus, Oracle == oracle.
+    # --- R7 : Apres le FIN d un agent, le prochain agent est ORACLE
+    # (l aeroport) - modele aero R1/R3 (2026-08-30) ---
+    # MODELE AERO (spec modele-round-avion-parachutiste, R1) : la fin de
+    # TOUT agent va vers ORACLE (l aeroport), JAMAIS vers Cerberus, jamais
+    # vers un autre agent. C est le PILOTE (dans Oracle) qui decide de la
+    # suite : largage d un maillon, ou atterrissage terminal sur Cerberus
+    # en fin de round (bilan consolide) - cet atterrissage est une
+    # DECISION DU PILOTE, pas une fin d agent.
+    # Casse insensible : Oracle == oracle.
     # NOTE : le tableau est TRIE DESC (plus recent en haut). Pour trouver
     # le prochain evenement chronologique, on cherche VERS LE HAUT
     # (index decroissant = plus recent).
+    # FIX v0.2.2 (mission 31fe865e, faux positif largage) : le scan NE
+    # SAUTE PLUS la coordination (oracle/pilote/cerberus). Quand le pilote
+    # LARGUE un agent apres une fin, le flux reel est :
+    #   FIN agent -> pilote "RECUPERE: X" -> oracle "DEBUT: RETOUR X"
+    #                    -> pilote activer <suivant>
+    # L'ancien scan sautait les lignes RECUPERE/RETOUR (coordination) puis
+    # trouvait l'agent LARGUE -> R7 KO a tort (preuve : ligne 'DEBUT:
+    # RETOUR VULCAIN' agent=oracle 15:03:35 presente juste apres la fin).
+    # Le prochain evenement doit ETRE un maillon de coordination (l
+    # aeroport qui recoit la fin) : oracle/pilote = OK, cerberus = OK
+    # seulement en atterrissage terminal (rien de plus recent au-dessus).
     for ag, idx in agents_fin.items():
         if _est_coordination(ag):
             continue  # coordination : cycle ouvert ou trace de vol normale
-        # Chercher la prochaine entree agent (hors Oracle, hors routines,
-        # hors citations) EN REMONTANT dans le tableau (vers le plus recent)
+        # Chercher le PROCHAIN evenement (hors routines, hors citations)
+        # EN REMONTANT dans le tableau (vers le plus recent). On ne saute
+        # PAS la coordination : le prochain doit etre l aeroport.
         prochain_agent = None
+        prochain_idx = None
         for j in range(idx - 1, -1, -1):
             a = entrees[j]["agent"]
-            if _est_coordination(a) or _est_routine(a) or _est_citations(a):
+            if _est_routine(a) or _est_citations(a):
                 continue
             prochain_agent = a
+            prochain_idx = j
             break
-        if prochain_agent and prochain_agent.lower() not in ("cerberus", "oracle"):
-            ok = False
-            erreurs.append(
-                "R7: FIN de '%s' (ligne %d) -> prochain agent '%s' "
-                "(devrait etre Cerberus ou Oracle)"
-                % (ag, idx + 1, prochain_agent))
+        if prochain_agent is None:
+            continue  # fin en tete de tableau : rien de plus recent, OK
+        if _est_coordination(prochain_agent):
+            # Aeroport (oracle/pilote) : la fin a bien ete recue par le
+            # pilote (RECUPERE + RETOUR) avant tout largage. Cerberus =
+            # atterrissage terminal du pilote en fin de round ; verifie
+            # qu il est bien la DERNIERE entree (rien ne redecoule).
+            if prochain_agent.lower() == "cerberus" and prochain_idx:
+                for j in range(prochain_idx - 1, -1, -1):
+                    a = entrees[j]["agent"]
+                    if _est_routine(a) or _est_citations(a):
+                        continue
+                    if not _est_coordination(a):
+                        ok = False
+                        erreurs.append(
+                            "R7: FIN de '%s' (ligne %d) -> atterrissage "
+                            "Cerberus NON terminal (ligne %d, agent '%s' "
+                            "redecoule au-dessus)"
+                            % (ag, idx + 1, j + 1, a))
+                        break
+            continue
+        # Un agent METIER direct apres la fin (sans passage par l aeroport)
+        # = violation du modele aero R1/R3.
+        ok = False
+        erreurs.append(
+            "R7: FIN de '%s' (ligne %d) -> prochain agent '%s' "
+            "(devrait etre Oracle - l aeroport, modele aero R1/R3 : "
+            "la fin de tout agent va vers Oracle, rien vers "
+            "Cerberus)"
+            % (ag, idx + 1, prochain_agent))
 
     return ok, erreurs
 
@@ -265,7 +304,7 @@ def main():
         print("  R4: Agent ne historise pas son propre DEBUT/FIN")
         print("  R5: Oracle present entre DEBUT et FIN de chaque agent")
         print("  R6: Citations = DEV")
-        print("  R7: Apres FIN agent -> Cerberus ou Oracle (modele aero)")
+        print("  R7: Apres FIN agent -> aeroport Oracle/pilote (l aeroport, modele aero)")
         return 0
     else:
         print("FLUX KO : %d anomalie(s) detectee(s) :" % len(erreurs))

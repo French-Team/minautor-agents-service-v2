@@ -16,7 +16,7 @@
         "etapes": [
           "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
           "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)",
-          "L agent active execute sa mission puis active le maillon suivant (ou reactive Cerberus si active directement par lui) -> fin-delegation",
+          "L agent habilite largue par le pilote execute sa mission puis sa fin va vers ORACLE (modele aero R1/R3, jamais Cerberus ni un autre agent) -> fin-delegation : le pilote decide de la suite",
           "NON -> besoin d outil ? (besoin suivant)"
         ],
         "regle": "REDIRECTION OUTIL BLOQUE : verrou bloque un outil -> activer l agent habilite. JAMAIS re-tenter, JAMAIS s arreter. AGENTS HABILITES : Buffy cartes, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
@@ -62,6 +62,6 @@
   "fin": {
     "type": "lien",
     "vers": "fins.json",
-    "case": "fin-theme"
+    "case": "fin-autre"
   }
 }

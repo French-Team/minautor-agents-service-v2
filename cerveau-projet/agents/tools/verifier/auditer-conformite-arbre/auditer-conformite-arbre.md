@@ -42,7 +42,7 @@ python3 .../auditer-conformite-arbre.py --liste
 | **schema-arbre** | A1-A6 | identite, appartenance, racine.branches, fins.fichier |
 | **schema-theme** | T1-T6 | redirects, besoins, etapes, lien vers fins |
 | **schema-fins** | F1-F3 | fins non vides, cases existantes, pas de cible placeholder |
-| **schema-fins (aero)** | **F4** | **aucune fin ne cible cerberus (modele aero R1)** |
+| **schema-fins (aero)** | **F4** | **aucune fin ne cible cerberus (modele aero R1) - EXCEPTION : fin-coordination d ORACLE atterrit sur CERBERUS (fin de round, decision utilisateur 2026-09-02)** |
 | **schema-fins (aero)** | **F5** | **aucune fin n'active un autre agent (vestige v1, R3)** |
 | **coherence** | C1-C3 | themes existants, pas de fin morte, couverture des types deduits |
 | **coherence (aero)** | **C4** | **separation montant/descendant (R4) : pas d activation directe dans les themes** |
@@ -51,7 +51,7 @@ python3 .../auditer-conformite-arbre.py --liste
 
 | Transformation | Besoin | Mode |
 |---|---|---|
-| fin reactiver cible cerberus -> **oracle** | F4 (R1) | --ecrire |
+| fin reactiver cible cerberus -> **oracle** (sauf oracle/fin-coordination, exception 2026-09-02) | F4 (R1) | --ecrire |
 | fin activer un agent nomme -> **supprimee** + theme reoriente vers retour oracle | F5 (R3) | --ecrire |
 | activation directe dans un theme -> **signalement a ORACLE** (mission-ajouter + fin reactiver-fin --cible oracle) | C4 (R4, v0.2.0) | --ecrire |
 | theme-inter-round : reactivation de l'appelant -> **fin vers ORACLE** (le pilote reactive l'appelant depuis l'etat de carte) | C4 inter-round (R2, v0.2.0) | --ecrire |

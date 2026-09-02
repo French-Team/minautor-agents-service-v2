@@ -54,7 +54,7 @@ agent:
 | 2026-08-20 | Pieges documentes : proposer avant de comprendre, tout mettre en URGENT, missions vagues |
 | 2026-08-30 | Presentation : un round reel avec [socrate] pilote par guider-arbre (REVISION -> SE PRESENTER) a ete teste en conditions reelles. Le flux USER -> Cerberus -> Oracle -> pilote -> socrate -> presenter-agent -> AFFICHAGE fonctionne, la case d ouverture se declenche correctement, et la fin redirige vers le sujet de revision (c2). |
 | 2026-08-30 | REGLE AFFICHAGE : une presentation generee mais NON transmise a l utilisateur N EXISTE PAS pour lui. Lecon du round [socrate] : presenter-agent a tourne en arriere-plan sans etre affiche. Tout outil de presentation doit lancer la sortie COMPLETE vers l utilisateur via pilote -> oracle -> cerberus. Toujours AFFICHER, jamais garder la sortie interne. |
-| 2026-08-30 | La presentation est HUMAINE (role, ce que je fais pour toi, comment le travail se deconcerte, forces, style) et generee DYNAMIQUEMENT depuis la fiche + l arbre (jamais de texte fige). Les branches techniques seules (liste de themes) ne constituent pas une presentation. |
+| 2026-09-02 | REVISION STRATEGIQUE mission 74e0f982 : le choix utilisateur RESTREINT la portee (ici : vestiges v1 + reverse non-regression) - questionner puis produire missions-revision.md adapte, ne pas re-synthetiser tout le round. Les missions secondees (purge P1, encart Inconnu, purification) restent listees en IMPORTANT en attente de round. |
 
 ---
 

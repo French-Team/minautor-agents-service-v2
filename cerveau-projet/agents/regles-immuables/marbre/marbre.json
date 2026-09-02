@@ -57,9 +57,9 @@
    "marqueur_debut": "<!-- MARBRE:DEBUT constitution -->",
    "marqueur_fin": "<!-- MARBRE:FIN constitution -->",
    "raison": "Constitution du cerveau-projet : Configuration Active + cycle fondamental (regles immuables du comportement de Cerberus)",
-   "empreinte": "b14866c44d240a7a535f926cd38575027c93cf09837cb1317df99f2afa78e549",
-   "modifie_le": "2026-08-30 21:39:21",
-   "raison_modification": "Mise a jour du protocole inter-round en modele aero (decision utilisateur 2026-08-30) : ERREUR HORS-PERIMETRE -> l agent SIGNALE a Oracle (mission-ajouter), MA FIN vers Oracle (reactiver-fin --cible oracle), le PILOTE largue l habilite puis renvoie l appelant. Suppression des references v1 (reactiver Cerberus, Pattern 13, activer-agent-principal reactiver)."
+   "empreinte": "d49d5550070a0b7cf763b47d0543fa3aebc93847526b28f37f0133b42c987667",
+   "modifie_le": "2026-09-02 09:44:16",
+   "raison_modification": "ajout des 2 regles permanentes de round (reprise apres redemarrage + mode single-llm) dans la Configuration Active d AGENTS.md - decision utilisateur 2026-09-02"
   },
   "regles-groupes-agents": {
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",

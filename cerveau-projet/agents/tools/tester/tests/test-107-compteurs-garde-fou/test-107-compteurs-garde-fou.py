@@ -168,17 +168,18 @@ def point_2_manifest():
     except ValueError:
         data = {}
     routines = {r.get("nom"): r for r in data.get("routines_surveillance", [])}
+    attente = {"compter-entree": 1080, "compter-sortie": 1200}
     ok = True
     details = []
     for nom in COMPTERS:
         r = routines.get(nom)
         if not (r and r.get("actif") is True
-                and r.get("intervalles_secondes") == 600
+                and r.get("intervalles_secondes") == attente[nom]
                 and r.get("script") == "%s.py" % nom):
             ok = False
             details.append(nom)
-    verifier("2. manifest reference les 2 compteurs (actif, 600 s)", ok,
-             "KO=%s" % ",".join(details) if details else "")
+    verifier("2. manifest reference les 2 compteurs (actif, echelle 1080/1200)",
+             ok, "KO=%s" % ",".join(details) if details else "")
 
 
 def point_3_grade():

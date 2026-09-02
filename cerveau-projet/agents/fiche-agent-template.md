@@ -135,8 +135,9 @@ python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
 > Les parcours v1 (`parcours-<agent>.json`) sont des archives protegees par
 > le marbre : ils ne pilotent plus.
 
-> **A CONSTRUIRE** : le parcours JSON (`parcours/parcours-<agent>.json`) couvre
-> les missions de l'agent avec les patterns de la spec :
+> **A CONSTRUIRE** : l'arbre de decision v2 (`parcours/arbre-<agent>.json`,
+> racine -> theme-*.json -> fins.json) couvre les missions de l'agent ; les
+> parcours v1 sont des archives protegees par le marbre (a ne pas recreer) :
 > 1. Multi-missions : une case `Mission` (question) avec branches vers un chemin
 >    par mission, les chemins convergent vers les cases communes (verdict,
 >    lecons, retour, reactiver).

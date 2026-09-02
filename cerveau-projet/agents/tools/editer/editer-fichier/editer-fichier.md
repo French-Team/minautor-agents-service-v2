@@ -8,7 +8,7 @@ identite:
 ---
 # editer-fichier
 
-**Version :** 0.5.0
+**Version :** 0.5.2
 **Statut :** prepare
 **Categorie :** Editer
 **Chemin :** `agents/tools/editer/editer-fichier/`
@@ -21,6 +21,11 @@ Remplacer une chaine par une autre dans un fichier. Version generique de corrige
 **Echec explicite** : si AUCUNE occurrence n'est trouvee, l'outil retourne un code non nul (1) avec un message clair - jamais 0 silencieux. L'agent ne continue jamais en croyant a tort que l'edition a eu lieu.
 
 ## Utilisation
+
+**MODE ANTI-HEREDOC (v0.5.2)** : plusieurs remplacements depuis un fichier JSON :
+`python3 editer-fichier.py cible.md --remplacements-chemin specs.json` avec specs.json =
+`[{"ancien": "...", "nouveau": "..."}, {"ancien": "...", "nouveau": "...", "premier": true}]`
+(jamais de ligne bash geante - decision D6/D7 2026-08-21).
 
 ```bash
 # Remplacer la premiere occurrence
@@ -57,6 +62,7 @@ editer-fichier.sh --global fichier.md "texte" "remplacement"
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.5.2 | 2026-09-02 | MODE ANTI-HEREDOC : option `--remplacements-chemin <json>` applique plusieurs remplacements depuis un fichier JSON `[{"ancien":..,"nouveau":..,"premier": bool?}]` (jamais de ligne bash geante, decision D6/D7 2026-08-21). Parite .sh : non concerne (le .sh ne porte pas le mode anti-heredoc - exemption bumper v0.5.0). Numerotation corrigee : le 0.5.1 (2026-08-22, protection combos) avait ete loggue au changelog sans bump des champs - l anti-heredoc passe donc en 0.5.2 |
 | 0.4.3 | 2026-08-17 | MESSAGES INFORMATIONNELS : messages contextuels selon le type de fichier modifie (.py/.sh -> bumper+tests, parcours -> valider-cartes+fiche, .md -> coherence index/README) - regle immuable v0.3.0 |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0 | 2026-08-06 | Passage V2 : tests reels (premiere occurrence, --global, --dry-run, fichier inexistant), promotion prepare |

@@ -2,7 +2,7 @@
 identite:
   type: outil
   appartient_a: buffy
-  version: "0.1.0"
+  version: "0.2.2"
   description: "Routine de securite : verifie que le flux Oracle > Agent > Oracle est respecte"
 ---
 
@@ -33,7 +33,7 @@ Oracle est le SEUL a historiser DEBUT/FIN.
 | R4 | Agent ne historise pas son propre DEBUT/FIN |
 | R5 | Oracle present entre DEBUT et FIN de chaque agent |
 | R6 | Citations ont toujours "instant" comme Debut/Fin |
-| R7 | Apres FIN d un agent, le prochain agent est Cerberus ou Oracle (modele aero 2026-08-30) |
+| R7 | Apres FIN d un agent, le prochain evenement est l aeroport (Oracle/pilote, modele aero R1/R3) - la fin de tout agent va vers Oracle, RIEN vers Cerberus (atterrissage terminal sur Cerberus = decision du pilote en fin de round, pas une fin d agent). Le largage du pilote apres une fin (RECUPERE/RETOUR puis agent suivant) est un flux NORMAL |
 
 ## Utilisation
 
@@ -54,5 +54,7 @@ python3 cerveau-projet/agents/tools/verifier/verifier-flux-securite/verifier-flu
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.2.2 | 2026-09-02 | FIX faux positif R7 sur largage (mission 31fe865e) : le scan cherchait le prochain agent en SAUTANT la coordination (oracle/pilote/cerberus) -> apres une FIN, il sautait RECUPERE/RETOUR et trouvait l agent LARGUE (ex: FIN vulcain 15:03:35 -> morpheus ACTIF 15:05:51 = largage du pilote) -> FLUX KO a tort. Desormais le scan s arrete au premier evenement non-routine : aeroport (oracle/pilote) = OK, cerberus = OK seulement si atterrissage terminal, agent metier direct sans aeroport = violation |
 | 0.2.0 | 2026-08-30 | Modele aero : R7 accepte Cerberus OU Oracle apres une fin ; exclusion des blocs routines v1 (encart, flux, live, notation, verifier-statuts, vigie-perimetre) du scan |
+| 0.2.1 | 2026-09-02 | Directive utilisateur : R7 passe a ORACLE UNIQUEMENT (la fin de tout agent va vers Oracle, rien vers Cerberus ; Cerberus = atterrissage terminal du pilote en fin de round, pas une fin d agent) |
 | 0.1.0 | 2026-08-28 | Creation : 6 regles de securite, lecture du tableau v1 |

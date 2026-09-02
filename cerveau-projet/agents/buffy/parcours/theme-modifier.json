@@ -50,16 +50,15 @@
           "python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py --tous"
         ],
         "regle": "Verifier les dependances AVANT de modifier."
-      },
-      {
-        "besoin": "Le fichier est-il une carte de decision (parcours JSON) ?",
-        "action": "procedure",
-        "etapes": [
-          "OUI -> Gerer les cases avec generateurs-case",
-          "NON -> Modifier le fichier directement"
-        ],
-        "regle": "Creation limitee pour les parcours : generateurs-case."
-      },
+      },{
+ "besoin": "Le fichier est-il une ARCHIVE v1 (parcours-*.json, protegee marbre) ?",
+ "action": "procedure",
+ "etapes": [
+  "OUI (archive v1) -> Maintenance via editer-parcours uniquement (zone marbre, Gardien valide)",
+  "NON (arbre/theme/fins v2) -> Modifier le fichier directement"
+ ],
+ "regle": "Les parcours-*.json v1 sont des ARCHIVES (decision v2 2026-08-29) : aucune creation/edition de cases avec generateurs-case. Les structures actives sont les arbres/themes v2 (guider-arbre), modifies directement."
+},
       {
         "besoin": "Lire le protocole boucles dynamiques",
         "action": "procedure",

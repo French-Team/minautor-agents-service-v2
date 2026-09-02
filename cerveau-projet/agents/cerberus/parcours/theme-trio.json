@@ -3,11 +3,11 @@
     "type": "theme",
     "appartient_a": "cerberus",
     "nom": "TRIO",
-    "description": "Lancer un SUPER-COMBO de creation (v3, 2026-08-30) : l utilisateur fournit son idee, le trio produit les fichiers bout-en-bout Athena (pense-bete) -> Promethee (spec) -> Minerve (todo) -> retour Cerberus"
+    "description": "Lancer un SUPER-COMBO de creation (v3, 2026-08-30) : l utilisateur fournit son idee, le trio produit les fichiers bout-en-bout Athena (pense-bete) -> Promethee (spec) -> Minerve (todo) -> retour Oracle (le pilote atterrit sur Cerberus en fin de round)"
   },
   "theme": {
     "nom": "TRIO",
-    "but": "Lancer un round complet de creation via le trio (serviteurs de Cerberus et Socrate) : l idee de l utilisateur devient pense-bete (Athena) puis spec (Promethee) puis todo (Minerve), le dernier maillon reactive Cerberus.",
+    "but": "Lancer un round complet de creation via le trio (serviteurs de Cerberus et Socrate) : l idee de l utilisateur devient pense-bete (Athena) puis spec (Promethee) puis todo (Minerve) ; la fin de chaque maillon va vers Oracle (modele aero R1), le dernier maillon rapporte le bilan consolide du trio.",
     "redirects": [
       {
         "besoin": "Lancer le trio (declencheur [trio])",
@@ -17,9 +17,9 @@
           "Oracle oriente vers Athena (redactrice de pense-betes) : elle ecrit l idee en detail dans un pense-bete, son arbre mene vers Promethee",
           "Promethee suit son arbre : il transforme le pense-bete en spec, son arbre mene vers Minerve",
           "Minerve suit son arbre : elle transforme la spec en todo",
-          "Le dernier maillon (Minerve) reactive Cerberus avec le bilan consolide du trio"
+          "Le dernier maillon (Minerve) revient vers Oracle avec le bilan consolide du trio (modele aero R1 : fin -> Oracle, le pilote atterrit sur Cerberus en fin de round)"
         ],
-        "regle": "SUPER-COMBO TRIO : chaque maillon suit SA carte (Pattern 13). Le round commence et finit a Cerberus. Le trio sont les serviteurs de Cerberus et Socrate."
+        "regle": "SUPER-COMBO TRIO : chaque maillon suit SA carte. Le round commence a Cerberus ; la fin de chaque maillon va vers ORACLE (modele aero R1/R3) et le PILOTE decide de la suite (largage du maillon suivant, atterrissage sur Cerberus en fin de round). Le trio sont les serviteurs de Cerberus et Socrate."
       },
       {
         "besoin": "Demander l idee a l utilisateur",

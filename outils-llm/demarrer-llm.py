@@ -32,7 +32,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 RACINE = Path(__file__).resolve().parent.parent
 
 AGENTS_MD = RACINE / "AGENTS.md"
@@ -597,10 +597,11 @@ def demarrer(llm_id, session):
     print()
     print("  PROCHAINES ETAPES POUR LE LLM :")
     print("  1. Relis TA fiche puis TES corrections (chacun lit les siens).")
-    # L'arbre v2 PRIME (decision 2026-08-29 : les agents v1 ont migre vers les
-    # arbres v2 - protocole-reparer-arbres / protocole-carte-decision).
-    # Un agent v1 (agents/) qui a un arbre v2 -> guider-arbre arbre-<agent>.json
-    # (l'arbre pilote via oracle, PAS le parcours v1). Repli : parcours v1.
+    # L'arbre v2 EST la reference (decision 2026-08-29 : tous les agents ont
+    # migre vers les arbres v2 - protocole-reparer-arbres / protocole-carte-
+    # decision). Un agent v1 (agents/) ou v2 (freelance/) suit SON arbre via
+    # guider-arbre / oracle pilote. Les parcours v1 (parcours-<agent>.json)
+    # sont des ARCHIVES protegees par le marbre : ils ne pilotent plus.
     dossier_v1 = RACINE / "cerveau-projet" / "agents" / agent_actif
     dossier_v2 = RACINE / "cerveau-projet" / "freelance" / agent_actif
     # Le nom du DOSSIER est en minuscules (convention cerveau-projet) alors que
@@ -617,12 +618,9 @@ def demarrer(llm_id, session):
         print("  2. Suis TON arbre de decisions (v2) :")
         print("     cerveau-projet/freelance/%s/parcours/arbre-%s.json"
               % (nom_dossier, nom_dossier))
-    elif (dossier_v1 / "parcours" / ("parcours-%s.json" % nom_dossier)).exists():
-        print("  2. Suis ton parcours (v1, pas encore migre vers l arbre v2) :")
-        print("     guider-parcours.py cerveau-projet/agents/%s/parcours/parcours-%s.json"
-              % (nom_dossier, nom_dossier))
     else:
-        print("  2. (aucun parcours/arbre detecte pour %s)" % agent_actif)
+        print("  2. (aucun arbre v2 detecte pour %s - les parcours v1 sont" % agent_actif)
+        print("     des archives marbre, ils ne pilotent plus le guidage)")
     print()
     print("=== DEMARRAGE TERMINE - LE LLM EST ACTIVE + HISTORISE + PRET ===")
     return 0

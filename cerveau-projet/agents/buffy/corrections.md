@@ -218,3 +218,60 @@ Lecons :
 3. CONTRADICTION SIGNALEE (a suivre) : la fiche ferrari liste 'Corriger JARVIS' alors qu AGENTS.md donne l exclusivite a Vision - Cerberus doit verifier avant de router JARVIS vers ferrari (domaine Argus/Vision).
 
 **Preuves** : rapport chiron/rapports/rapport-education-cerberus-ferrari-2026-08-25.md, ASCII 0/0 (cerberus.md + regles-choisir-agent.md), LF pur, verifier-conformite-fiche cerberus 1 CONFORME / 0 ECART.
+
+## [LECON] 2026-09-02 -- CARTE CERBERUS FINS PASSIVES -> MODELE AERO REACTIVER (Buffy)
+
+**Contexte** : Cerberus a detecte que sa propre carte s arretait au lieu de continuer le round (en single-LLM, le round ne repart pas tout seul). Cause racine : cerveau-projet/agents/cerberus/parcours/fins.json contenait 9 fins action=procedure SANS commande reactiver-fin ('Cerberus attend le retour' = formulation passive) - le Pattern 5 anti-fin-passive de la spec-guider-parcours n etait pas applique a la carte de Cerberus, contrairement a argus (action=reactiver + cible=oracle + commande reactiver-fin).
+
+**Realise** (mission 4d48c8a3) :
+1. fins.json de cerberus reecrit : 9 fins -> action=reactiver + cible=oracle + commande 'oracle.py reactiver-fin cerberus "<bilan>" --cible oracle' (10 occurrences reactiver-fin), 0 formulation passive. fin-theme conserve comme redirection interne.
+2. 3 themes qui finissaient en fin-theme (passif) rediriges vers des fins ACTIVES : theme-de-user -> fin-activer, theme-vers-oracle -> fin-activer, theme-de-oracle -> fin-retour.
+3. arbre-cerberus.json version 0.2.0 -> 0.2.1 (+ fins.json identite 0.2.1).
+4. Validations : JSON OK x5, guider-arbre --valider OK, verifier-conformite-fiche cerberus CONFORME, ASCII 0/0.
+
+**Lecons** :
+1. LE ROUTEUR LUI-MEME DOIT AVOIR DES FINS ACTIVES : la carte de Cerberus n a jamais ete passe au modele aero (meme 8 jours apres la decision utilisateur) - chaque fin de la carte du routeur doit porter la commande reactiver-fin vers Oracle, sinon l arbre se fige apres chaque routage.
+2. UNE FIN 'ATTEND LE RETOUR' EST UN ARRET, PAS UNE ATTENTE DU PILOTE : en multi-LLM le serveur peut sembler reprendre, en single-LLM personne ne relance - la carte doit MATERIALISER le rebouclage (commande), pas decrire l attente.
+3. VERIFIER SES PROPRES CARTES AU MOMENT DE LA CREATION : le modele aero reactiver-fin est la norme depuis 2026-08-30 ; toute carte creee/consolidee avant doit etre auditee pour action=reactiver+cible=oracle+commande (grep reactiver-fin par agent).
+
+**Verdict** : VALIDE - arbre VALIDE, 9 fins reactiver, 0 passive, fiche CONFORME, ASCII 0/0.
+
+
+## [LECON] 2026-09-02 -- REPARATION 8 FINS PASSIVES (buffy/oracle/vulcain) : L OUTIL VA LA OU LA CARTE NE VA PAS
+
+**Contexte** : l outil detecter-fins-passives (cree le jour meme) a revele 8 fins PASSIVES chez 3 agents apres la reparation de Cerberus : buffy (fin-outil-temporaire procedure sans commande), oracle (3 fins cible=cerberus), vulcain (2 procedures sans commande + 2 themes cloturant sur fin-theme).
+
+**Cause racine** : ces cartes dataient d avant la norme aero (decision 2026-08-30) : soit action=procedure sans commande reactiver-fin (la fin ne fait rien et coupe la chaine), soit cible=cerberus au lieu d ORACLE (le coordinateur faisait lui-meme le routage au lieu de laisser le P I L O T E decider), soit themes pointant vers fin-theme (retour racine passif).
+
+**Correction** (fichiers structurels, SEULE buffy) :
+1. oracle/fins.json : 3 fins -> cible=oracle + commande reactiver-fin oracle --cible oracle (le pilote decide du suivant).
+2. buffy/fins.json : fin-outil-temporaire -> action=reactiver + cible=oracle + commande.
+3. vulcain/fins.json : fin-outil-temporaire et fin-signaler-besoin -> reactiver vers oracle (+ regle R2/R3 : mission-ajouter a ORACLE, jamais un autre agent). + Creation de fin-autre et fin-lire (pattern argus : une fin dediee par theme).
+4. vulcain themes : theme-autre -> fin-autre, theme-lire -> fin-lire.
+5. Arbres buffy/oracle/vulcain : version 0.1.0 -> 0.1.1.
+
+**Lecons** :
+1. UN OUTIL DETECTEUR PROUVE LA REGLE MIEUX QUE LA MEMOIRE : toutes les cartes creees/consolidees AVANT 2026-08-30 doivent passer au crible detecter-fins-passives (le detecteur n existe plus a la main). Verifier a CHAQUE creation de carte : action=reactiver + cible=oracle + commande reactiver-fin --cible oracle, themes vers une fin dediee (jamais fin-theme).
+2. ORACLE LUI-MEME DOIT SUIVRE LE MODELE AERO : meme le coordinateur ne route plus lui-meme - sa fin va vers ORACLE et le pilote decide du suivant.
+3. UNE FIN PROCEDURE SANS COMMANDE EST COUPE DE CHAINE : si une fin a des etapes de nettoyage (ex: outil temporaire), les etapes se font AVANT, puis la fin reactiver-fin vers oracle.
+4. LE PATTERN ARGUS EST LA REFERENCE : une fin dediee par theme (fin-autre, fin-lire...) avec action=reactiver cible=oracle.
+
+**Preuves** : 3 arbres VALIDES (guider-arbre --valider), detecter-fins-passives : 0 probleme / 30 agents, ASCII 0/0 sur 8 fichiers, fiches CONFORMES x3.
+## [LECON] 2026-09-02 -- SUPPRESSION ETAPE 2 DU THEME DE-USER CERBERUS : ORACLE IDENTIFIE L AGENT (Buffy)
+
+**Contexte** : decision utilisateur (session-admin) - dans le theme DE-USER de la carte cerberus, l etape [2] 'Identifier l agent habilite (matrice, NE PAS executer soi-meme)' est contradictoire avec l etape [3] 'Envoyer la mission a Oracle' : c est ORACLE qui prend la decision d identification/largage de l agent habilite, pas Cerberus. Cerberus est ROUTEUR PUR jusque dans sa carte : il ecoute, transmet, et Oracle decide.
+
+**Realise** :
+1. theme-de-user.json : supprime le redirect [2] (besoin, etapes matrice+detecter-impacts, regle GARDE-FOU), il ne reste que 'Ecouter' + 'Envoyer a Oracle'.
+2. theme-de-user.json description : 'j ecoute, j identifie l agent habilite' -> 'j ecoute et je transmets la mission a Oracle qui prend la main (c est Oracle qui identifie l agent habilite)'.
+3. theme-de-user.json etape [3] : retirer '+ agent identifie morpheus/vulcain/...' de la commande d envoi --> '<mission complete - c est ORACLE qui identifie l agent habilite>'.
+4. arbre-cerberus.json (ligne 26) : description branche DE-USER alignee ('j ecoute et je transmets la mission a Oracle (c est Oracle qui identifie l agent habilite)'), version 0.2.1 -> 0.2.2 + fins.json identite alignee (arbre v0.2.2).
+5. Validations : JSON OK x3, guider-arbre --valider ARBRE VALIDE, valider-cartes-decision cerberus CONFORME, ASCII 0/0 x2, detecter-cablages PROPRE, combo controle-impacts termine, 0 residu (.bak supprimes).
+
+**Lecons** :
+1. LE ROUTEUR PUR N IDENTIFIE PAS : la decision d identification/largage de l agent habilite appartient a ORACLE (le pilote), jamais a Cerberus meme en amont - sa carte DE-USER se reduit a ecouter + transmettre.
+2. QUAND ON RETIRE UNE ETAPE DE CARTE, ON ALIGNE TOUS LES TEXTES LIES : description du theme, des branches de l arbre, et la commande elle-meme (sinon l etape restante re-reference encore l ancienne responsabilite).
+3. PISTE D AMELIORATION OUTIL (signalee, pas traitee) : combo-corriger-fichier c1 lance corriger-nommage sans --type (outil exige --type {protocole,agent,outil,convention}) -> echec code 2 sur fichiers JSON de parcours. A corriger par Vulcain (domaine outils).
+
+**Verdict** : VALIDE - arbre VALIDE, cartes CONFORME, ASCII 0/0, JSON OK x3.
+2026-09-02 | CORRECTION REFERENCES PARCOURS V1 (mission cb6eb3ec) : le passage v2 n avait ete fait QUE partiellement - 6 themes theme-outils.json (chiron, gardien, hygie, minerve, promethee, socrate) portaient encore la reprise v1 'relancer guider-parcours avec --case <cid>' (lecon 7e4c2a15 deja en file mais jamais appliquee) + vulcain/theme-construire citait spec-guider-parcours. Lecons : (1) valider-cartes-decision sur un agent valide son PARCOURS v1 (archive) - pour valider un theme v2 il faut guider-arbre --valider + valider-cartes CONFORME n est parlant que sur les fichiers v2 ; (2) detecter-impacts signale 'NON MIS A JOUR' pour les themes freres partageant l identite - faux positif quand la modif est locale a un etape d un seul theme ; (3) les references v1 restantes legitimes : index-tools.md (outil archive), conventions freelance (texte d interdiction), historique/rapports, demarrer-llm.py (fallback outil -> Vulcain). Parcours v1 = archive marbre : corriger les POINTEURS, jamais supprimer les fichiers.

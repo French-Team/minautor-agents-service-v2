@@ -6,5 +6,6 @@
  "mission": "Revision strategique : questionner l utilisateur, comprendre et prioriser le besoin, produire missions-revision.md",
  "historise_debut": true,
  "precedent": null,
- "etape": "debut"
+ "etape": "fin",
+ "historise_fin": true
 }

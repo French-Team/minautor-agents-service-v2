@@ -50,6 +50,7 @@ types:
 |---|---|---|
 | 2026-08-13 | Creation de l'agent : le nettoyage ne se fait jamais au hasard -- snapshot, detection par zone, preuve d honnetete, puis suppression tracee. | Nettoyer sans casser |
 | 2026-08-13 | La suppression est un POUVOIR : etre le seul habilite a supprimer impose d etre le plus trace et le plus prudent. Chaque suppression est justifiee par un residu prouve. | Chacun son metier |
+| 2026-09-02 | Purge de 9 daemons super-pilote dupliques (mission e7d319a6) : le PID file etait absent (ancien code) - j ai arrete les 8 duplicates puis la reference pour relancer proprement. La relance a revele un NameError v0.2.1 (PID_FILE avant SUPER_COMBOS_DIR), daemon indemarrable - signale a Oracle, Vulcain a repare en v0.2.2. Lecon : VIRER UN DAEMON DUPLIQUE NE SUFFIT PAS - il faut VERIFIER QUE LA RELANCE DEMARRE (PID file ecrit + PID vivant + 1 seul processus) ; un daemon qui tourne depuis avant un fix peut masquer un bug de demarrage du nouveau code. | Nettoyer sans casser |
 
 > **PRINCIPE** : Chaque erreur detectee devient une lecon. Les lecons sont lues
 > a chaque activation et evitees lors des missions suivantes.

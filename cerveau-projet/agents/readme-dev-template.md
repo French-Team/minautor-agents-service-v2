@@ -115,17 +115,17 @@ sessions sont independantes et visibles entre elles via la table
 [ligne de decision] -> [etapes] -> [protocoles] -> [outils].
 Source : regles-immuables/general/regles-choisir-agent.md.>
 
-### 5.2 Parcours (jeu de piste)
+### 5.2 Arbre de decision v2
 
-<Le parcours est la SOURCE DE VERITE du guidage : fichier JSON
-(parcours/parcours-<agent>.json) avec des cases (question, action,
-controle, fin) reliees par des branches. Chaque case porte les
-indices exacts (outil, fichier, regle). Outil de guidage :
+<L'arbre de decision est la SOURCE DE VERITE du guidage (decision
+2026-08-29) : fichier JSON parcours/arbre-<agent>.json (racine ->
+themes -> fins centralisees) suivi avec guider-arbre (ou pilote Oracle).
+Outil de guidage :
 
-python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py <parcours-json>
+python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py <chemin-arbre-json>
 
-Structure d'une case : cid, titre, type, question/branches
-(question), suivant (action), indices (outil/fichier/regle/ref).>
+Les parcours v1 (parcours-<agent>.json) sont des ARCHIVES protegees par
+le marbre : ils ne pilotent plus.>
 
 ### 5.3 Les indices
 

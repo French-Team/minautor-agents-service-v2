@@ -18,16 +18,16 @@ alerte).
 
 | Routine | Intervalle | Role | Historise |
 |---|---|---|---|
-| `flux` | 600 s | Surveille les P1 non-acquittes dans l inbox Oracle ; alerte Oracle quand le nombre change | changement uniquement |
-| `sante` | 300 s | Etat global v1 : daemons vivants, DEFCON 5 gele, encart coherent, BDD recente | anomalie uniquement |
-| `live` | 300 s | Activations/desactivations des agents v1 : agent actif, debordement inbox, derniere activite | anomalie uniquement |
-| `encart` | 300 s | Integrite de l encart v1 (AGENTS-activite-recente.md, colonnes) - etats valides charges depuis etats-actions.json (v0.2.0) | anomalie uniquement |
-| `notation` | 300 s | Depose une demande periodique d evaluation croisee des agents dans l inbox d Oracle (Themis evalue, Janus controle, Oracle coordonne) | au depot uniquement |
-| `compter-entree` | 300 s | Mesure des tokens ENTREE -> data/journal-entree.jsonl + tokens-historique-v1.md | chaque tick |
-| `compter-sortie` | 300 s | Mesure des tokens SORTIE -> data/journal-sortie.jsonl + tokens-historique-v1.md | chaque tick |
-| `vigie-perimetre` | 300 s | Guetteuse du perimetre Oracle (empreintes SHA-256, section `perimetre_surveille` du manifest) - alerte Oracle format 4W quand un fichier surveille change | changement uniquement |
+| `flux` | 480 s | Surveille les P1 non-acquittes dans l inbox Oracle ; alerte Oracle quand le nombre change | changement uniquement |
+| `sante` | 600 s | Etat global v1 : daemons vivants, DEFCON 5 gele, encart coherent, BDD recente | anomalie uniquement |
+| `live` | 720 s | Activations/desactivations des agents v1 : agent actif, debordement inbox, derniere activite | anomalie uniquement |
+| `encart` | 840 s | Integrite de l encart v1 (AGENTS-activite-recente.md, colonnes) - etats valides charges depuis etats-actions.json (v0.2.0) + depuis v0.3.1 : detection des valeurs 'Inconnu' en colonnes Grade/Agent (acteur non declare dans grades-v1.json) | anomalie uniquement |
+| `notation` | 960 s | Depose une demande periodique d evaluation croisee des agents dans l inbox d Oracle (Themis evalue, Janus controle, Oracle coordonne) | au depot uniquement |
+| `compter-entree` | 1080 s | Mesure des tokens ENTREE -> data/journal-entree.jsonl + tokens-historique-v1.md | chaque tick |
+| `compter-sortie` | 1200 s | Mesure des tokens SORTIE -> data/journal-sortie.jsonl + tokens-historique-v1.md | chaque tick |
+| `vigie-perimetre` | 1320 s | Guetteuse du perimetre Oracle (empreintes SHA-256, section `perimetre_surveille` du manifest) - alerte Oracle format 4W quand un fichier surveille change | changement uniquement |
 | `verifier-agent-perimetre` | **TIMER DESACTIVE** (decision 2026-08-29 : pas un timer) | **GATE PRE-VOL** : l agent la lance au moment ou il decide de commencer (case c0g de SON parcours) : verifie qu il est LE BON AGENT (agent actif de la session + zone de la mission v1/v2/jarvis) AVANT de faire quoi que ce soit | jamais (porte, pas alerte) |
-| `verifier-statuts` | 300 s | Lit la colonne Etat de l encart v1 et informe ORACLE qui avise en fonction de l etat : **URGENT -> escalade DEFCON 4** (degradation ; normal = DEFCON 2) + **mission-ajouter --file asap** (prioritaire). Si un **ROUND EST EN COURS** : met la mission courante en attente (file attente v1) + instruction **INTER-ROUND** a l agent actif (SIGNALER le besoin a ORACLE via `mission-ajouter`, MA FIN vers ORACLE `--cible oracle`, le **PILOTE largue** l habilite puis renvoie l appelant -- modele aero R2/R3). Anti-inondation (une fois par URGENT), filtre les faux URGENT (Demarrage oracle) | 1 fois par nouvelle URGENT |
+| `verifier-statuts` | 1440 s | Lit la colonne Etat de l encart v1 et informe ORACLE qui avise en fonction de l etat : **URGENT -> escalade DEFCON 4** (degradation ; normal = DEFCON 2) + **mission-ajouter --file asap** (prioritaire). Si un **ROUND EST EN COURS** : met la mission courante en attente (file attente v1) + instruction **INTER-ROUND** a l agent actif (SIGNALER le besoin a ORACLE via `mission-ajouter`, MA FIN vers ORACLE `--cible oracle`, le **PILOTE largue** l habilite puis renvoie l appelant -- modele aero R2/R3). Anti-inondation (une fois par URGENT), filtre les faux URGENT (Demarrage oracle) | 1 fois par nouvelle URGENT |
 
 ## escalade DEFCON (degration URGENT -> 4)
 

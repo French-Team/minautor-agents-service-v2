@@ -301,6 +301,7 @@ python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin oracle "<bila
 | **Hermes** | Agent de la langue | Correction des fautes de francais |
 | **Hygie** | Agent de nettoyage du workspace | Nettoyage du workspace (SEUL habilite a TOUT le workspace) |
 | **Hades** | Gardien des archives git | Commandes git (SEUL habilite) |
+| **Nemesis** | Analyste en Chef - avis contradictoire avant validation | Audit des propositions (3 axes : cas limites, optimisation, securite) - ne corrige jamais |
 | **Socrate** | Conversateur de revision strategique | Discussion des revisions, priorisation, liste de missions |
 | **Redacteur-v2** | Redacteur PRO des docs de la v2 (freelance) | Redaction des docs v2 - ROUND SOLO |
 | **ferrari** | Agent v1 specialise freelance (DOUBLE IDENTITE v1/v2) | Mission session-admin : intervenir sur les fichiers du dossier `freelance/` (verrouillage Cerberus) |

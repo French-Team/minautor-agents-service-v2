@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # generateurs-commande.py
 # Genere une commande complexe a lancer, en posant une question par parametre.
-# Version : 0.3.1
+# Version : 0.3.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -46,7 +46,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 STATUT = "ebauche"
 
 # Couleurs ANSI (desactivees si la sortie n est pas un terminal)
@@ -406,7 +406,13 @@ def _lire_agent_actif():
 
 def _journaliser_usage(agent, outil, commande_finale):
     """Appelle enregistrer-usage-outil en mode generateur (discret : stderr).
-    Ne doit JAMAIS bloquer la generation (erreurs silencieuses)."""
+    Ne doit JAMAIS bloquer la generation (erreurs silencieuses).
+    GARDE-FOU (v0.3.2, lecon test-079) : un agent 'inconnu' (resolution
+    AGENTS.md impossible, ex invocation hors session) N EST JAMAIS journalise
+    - analyser-noms-maj flaguerait AGENT_INCONNU et casserait la non-regression.
+    Le --agent explicite reste prioritaire."""
+    if not agent or agent == "inconnu":
+        return
     try:
         script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..",
                               "enregistrer", "enregistrer-usage-outil",

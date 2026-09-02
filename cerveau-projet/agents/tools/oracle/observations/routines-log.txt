@@ -16242,7 +16242,90 @@
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
 [ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
 [ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
-[TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 0 URGENT (dernieres 4 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2315191 tokens (2314611->2315191, 28 fichiers)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
 [ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
@@ -16260,12 +16343,46 @@
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
 [ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
-[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
 [ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
 [ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
-[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
-[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2314544 tokens (2314544->2314544, 28 fichiers)
-[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 0 URGENT (dernieres 4 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
 [ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
@@ -16291,6 +16408,50 @@
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
 [ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2317129 tokens (2315191->2317129, 28 fichiers)
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
 [ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
@@ -16317,228 +16478,2386 @@
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
 [ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
 [ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2320522 tokens (2317129->2320522, 28 fichiers)
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 0 URGENT (dernieres 5 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2321499 tokens (2320522->2321499, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+chec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] flux : [FLUX] Changement : 2 -> 3 P1 (3 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 0 URGENT (dernieres 5 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2320911 tokens (2321499->2320911, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2325093 tokens (2320911->2325093, 28 fichiers)
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 0 URGENT (dernieres 5 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
 [ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
 [ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2314544 tokens (2314544->2314544, 28 fichiers)
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
-[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
-[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
-[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
-[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 0 URGENT (dernieres 4 gerees, rien de nouveau)
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
-[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2314611 tokens (2314544->2314611, 28 fichiers)
-[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
-[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
-[ROUTINES-SERVER] routine 'sante' : echec rc=1 : 
-[ROUTINES-SERVER] DEMARRAGE SERVEUR: daemon lance (tic toutes les 30s, pid 13468)
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
 [ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Changement : 3 -> 4 P1 (4 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2326375 tokens (2325093->2326375, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Changement : 4 -> 2 P1 (2 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2328842 tokens (2326375->2328842, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Changement : 2 -> 3 P1 (3 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2332941 tokens (2328842->2332941, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Changement : 3 -> 4 P1 (4 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 4 P1 (pas d'historisation)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Changement : 4 -> 2 P1 (2 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2336150 tokens (2332941->2336150, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 991778 tokens (991778->991778, 12 sources)
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2343301 tokens (2336150->2343301, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (991778->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Changement : 2 -> 3 P1 (3 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.2s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Changement : 3 -> 2 P1 (2 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2352083 tokens (2343301->2352083, 28 fichiers)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 2 P1 (pas d'historisation)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Changement : 2 -> 3 P1 (3 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2353526 tokens (2353526->2353526, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Changement : 3 -> 4 P1 (4 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 4 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 4 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2353698 tokens (2353698->2353698, 28 fichiers)
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Changement : 4 -> 3 P1 (3 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2353812 tokens (2353812->2353812, 28 fichiers)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2353772 tokens (2354184->2353772, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 4 URGENT (dernieres 16 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2353809 tokens (2353772->2353809, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2353854 tokens (2353809->2353854, 28 fichiers)
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 4 URGENT (dernieres 16 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2353887 tokens (2353854->2353887, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 3 URGENT (dernieres 16 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2353887 tokens (2353887->2353887, 28 fichiers)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 3 URGENT (dernieres 16 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2353914 tokens (2353887->2353914, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2354876 tokens (2353928->2354876, 28 fichiers)
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 3 URGENT (dernieres 16 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 3 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Changement : 3 -> 4 P1 (4 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2357589 tokens (2354876->2357589, 28 fichiers)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 4 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 0 URGENT (dernieres 16 gerees, rien de nouveau)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 4 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2360915 tokens (2357589->2360915, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 4 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Meme cas deja alerte il y a moins de 30 min - pas de nouvelle alerte anti-spam.
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 4 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] verifier-statuts : [VERIFIER-STATUTS] Inchange : 0 URGENT (dernieres 16 gerees, rien de nouveau)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2361701 tokens (2360915->2361701, 28 fichiers)
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 4 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Changement : 4 -> 1 P1 (1 P1 non-acquitte(s) detecte(s)) historique=True
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] flux : [FLUX] Changement : 1 -> 0 P1 (Aucun P1 non-acquitte (probleme regle)) historique=True
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2364533 tokens (2361701->2364533, 28 fichiers)
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'encart' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'top3-urgences' : echec rc=1 : 
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deposee dans l inbox d Oracle.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] compter-entree : [COMPTER-ENTREE] 2364952 tokens (2364533->2364952, 28 fichiers)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] encart : [ENCART] OK (encart v1 coherent)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [CHRONO] vigie-round (fin, 0.0s)
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] live : [LIVE] Aucune anomalie - activations normales
+[ROUTINES-SERVER] verifier-statuts : Historique mis a jour dans Z:\analyste-in-console\AGENTS-historique.md
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-perimetre : [CHRONO] vigie-perimetre (fin, 0.1s)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] vigie-round : [VIGIE-ROUND] Aucun round casse - la v1 se comporte bien.
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] sante : [SANTE] Aucune anomalie - systeme sain
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] flux : [FLUX] Inchange : 0 P1 (pas d'historisation)
+[ROUTINES-SERVER] notation : [NOTATION] Demande d evaluation deja en attente - rien depose.
+[ROUTINES-SERVER] compter-sortie : [COMPTER-SORTIE] 1085982 tokens (1085982->1085982, 12 sources)
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 

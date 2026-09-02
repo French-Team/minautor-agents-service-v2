@@ -28,8 +28,8 @@ Objet (correction Buffy 2026-08-09) :
     DOCUMENTATION DE L OUTIL avant utilisation (garde-fou lecture .md).
 
 Cas couverts (26 points) :
-  GENERATEUR v0.3.1
-  1. --version py = v0.3.1
+  GENERATEUR v0.3.2 (py) / v0.3.1 (.sh exempte - pas de journalisation)
+  1. --version py = v0.3.2
   2. --version sh = v0.3.1
   3. py_compile OK (generateurs-commande.py)
   4. bash -n OK (generateurs-commande.sh)
@@ -211,12 +211,12 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.3.1 + catalogue 0.2.16 + parcours-atlas v0.5.4 ===")
+    print("=== Test 005 -- generateurs-commande v0.3.2 + catalogue 0.2.16 + parcours-atlas v0.5.4 ===")
     print("")
 
-    # ---------- GENERATEUR v0.3.1 ----------
+    # ---------- GENERATEUR v0.3.2 ----------
     code, out = exec_cmd("python3 %s --version" % GC_PY)
-    verifier(1, "generateurs-commande.py --version = v0.3.1", "v0.3.1" in out, out.strip())
+    verifier(1, "generateurs-commande.py --version = v0.3.2", "v0.3.2" in out, out.strip())
 
     code, out = exec_cmd("bash %s --version" % GC_SH)
     verifier(2, "generateurs-commande.sh --version = v0.3.1", "v0.3.1" in out, out.strip())

@@ -15,9 +15,9 @@
         "etapes": [
           "Ecouter l idee et la formuler clairement (sujet, objectif, contraintes) sans la juger",
           "Declencher le trio via Oracle : Athena ecrit l idee en detail (pense-bete), son arbre mene vers Promethee qui produit la spec, dont l arbre mene vers Minerve qui produit la todo",
-          "Le trio (serviteurs de Cerberus et Socrate) execute bout-en-bout ; le dernier maillon reactive Cerberus avec le bilan"
+          "Le trio (serviteurs de Cerberus et Socrate) execute bout-en-bout ; la fin de chaque maillon va vers Oracle (modele aero R1) et le dernier maillon rapporte le bilan consolide du trio"
         ],
-        "regle": "SUPER-COMBO TRIO : le trio enchaine Athena -> Promethee -> Minerve, chacun suivant SA carte (Pattern 13). Socrate declenche, il n execute pas la production."
+        "regle": "SUPER-COMBO TRIO : le trio enchaine Athena -> Promethee -> Minerve, chacun suivant SA carte ; la fin de chaque maillon va vers ORACLE (modele aero R1/R3), le pilote largue le suivant. Socrate declenche, il n execute pas la production."
       },
       {
         "besoin": "Preciser l idee avant de lancer le trio",

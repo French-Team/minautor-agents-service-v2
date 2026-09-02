@@ -11,7 +11,7 @@
       {"besoin": "COMPRENDRE L OUTIL - lire le .md (case cU2)", "action": "procedure", "etapes": ["Lire le .md de l outil (contrat, Pattern 9)", "Verifier si un combo existe avec consulter-combos", "Sinon, utiliser generateurs-commande", "Relancer l outil avec la commande correcte"], "regle": "REGLE : le .md est le mode d emploi."},
       {"besoin": "Verifier si un combo existe pour l action", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-combos/consulter-combos.py <action>"], "regle": "COMBO d abord."},
       {"besoin": "Generer la commande exacte", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py --commande <outil> --reponses ..."], "regle": "GENERATEUR : ne jamais ecrire la commande en dur."},
-      {"besoin": "Reprendre ma mission (case cU3)", "action": "procedure", "etapes": ["Reprendre a la case d arret : relancer guider-parcours avec --case <cid> --reponses '<reponse>'"], "regle": "REPRISE : reprendre exactement ou j en etais."},
+      {"besoin": "Reprendre ma mission (case cU3)", "action": "procedure", "etapes": ["Reprendre a la case d arret : relancer guider-arbre cerveau-projet/agents/minerve/parcours/arbre-minerve.json --reponses '<reponse>'"], "regle": "REPRISE : reprendre exactement ou j en etais."},
       {"besoin": "Ajouter les lecons dans corrections.md", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/minerve/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."}
     ]
   },

@@ -2,9 +2,13 @@
  "agent": "oracle",
  "parcours": "agents/oracle/parcours/arbre-oracle.json",
  "case_courante": null,
- "mission_type": "autre",
- "mission": "ETAT URGENT x4: 1 anomalie(s): DAEMON: oracle-server : pidfile absent (sources: flux, sante)",
+ "mission_type": "coordination",
+ "mission": "RETOUR VULCAIN : SECTEURS FONCTIONNELS APPLIQUES (mission 30d8322e) : grades-v1.json v0.2.0 - mapping 93 cles -> 18 categories fonctionnelles minuscules (coordination, developpement, tests, controle, evaluation, strategie, communication, exploration, securite, surveillance, traces, documentation, specification, planification, formation, nettoyage, systeme, general) a la place des dieux grecs ; pilote restaure en grade SP (regression Inconnu corrigee, encart OK) ; tableau AGENTS-activite-recente regenere par daemon : 0 dieu grec residuel, colonne Secteur 100% fonctionnelle ; lecon Vulcain ajoutee, ASCII strict respecte",
  "historise_debut": true,
- "precedent": null,
- "etape": "debut"
+ "precedent": "vulcain",
+ "etape": "fin",
+ "historise_fin": true,
+ "theme_courant": null,
+ "redirect_idx": 0,
+ "etape_idx": 0
 }

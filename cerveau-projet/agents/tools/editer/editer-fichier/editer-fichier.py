@@ -25,7 +25,7 @@ Retour : 0 si succes, 1 si erreur ou si AUCUNE occurrence trouvee
          (echec explicite : jamais 0 silencieux).
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.5.0
+Version : 0.5.2
 Statut : prepare
 """
 
@@ -34,7 +34,7 @@ import os
 import shutil
 import sys
 
-VERSION = "0.5.0"
+VERSION = "0.5.2"
 STATUT = "prepare"
 
 NOM_ATTENDU = "editer-fichier.py"
@@ -211,12 +211,17 @@ def main(argv):
     verbose = False
     help_demande = False
     agent = ""
+    remplacements_chemin = ""
 
     i = 0
     while i < len(argv):
         arg = argv[i]
         if arg == "--global":
             global_remplacement = True
+        elif arg == "--remplacements-chemin":
+            if i + 1 < len(argv):
+                remplacements_chemin = argv[i + 1]
+                i += 1
         elif arg == "--backup":
             backup = True
         elif arg == "--dry-run":
@@ -249,7 +254,7 @@ def main(argv):
         afficher_aide()
         return 0
 
-    if not fichier or not ancien:
+    if not fichier or (not ancien and not remplacements_chemin):
         print("[ERREUR] Arguments manquants")
         afficher_aide()
         return 1
@@ -311,6 +316,49 @@ def main(argv):
     if contenu is None:
         print("[ERREUR] Impossible de lire le fichier : %s" % fichier)
         return 1
+
+    # Mode ANTI-HEREDOC : remplacements multiples lus depuis un fichier JSON
+    # (jamais de ligne de commande geante). Format : [ {ancien, nouveau,
+    # premier?}, ... ]. 'premier': true = une seule occurrence (defaut false =
+    # toutes). Le fichier source est lu en UTF-8, refus si illisible ou
+    # structure invalide.
+    if remplacements_chemin:
+        try:
+            with io.open(remplacements_chemin, encoding="utf-8") as fh:
+                import json
+                specs = json.load(fh)
+        except (OSError, ValueError) as e:
+            print("[ERREUR] --remplacements-chemin illisible: %s" % e)
+            return 1
+        if not isinstance(specs, list) or not specs:
+            print("[ERREUR] --remplacements-chemin doit etre une liste non vide")
+            return 1
+        for idx, spec in enumerate(specs):
+            if not isinstance(spec, dict) or "ancien" not in spec or "nouveau" not in spec:
+                print("[ERREUR] Entree %d: il faut {ancien, nouveau}" % idx)
+                return 1
+        if dry_run:
+            for idx, spec in enumerate(specs):
+                n = contenu.count(spec["ancien"])
+                print("[DRY-RUN] %d: %d occurrence(s) -> remplace par %r"
+                      % (idx, n, spec["nouveau"][:40]))
+            return 0
+        if backup:
+            shutil.copy2(fichier, fichier + ".bak")
+            if verbose:
+                print("[INFO] Sauvegarde: %s.bak" % fichier)
+        nouveau_contenu = contenu
+        for spec in specs:
+            if spec.get("premier"):
+                nouveau_contenu = nouveau_contenu.replace(
+                    spec["ancien"], spec["nouveau"], 1)
+            else:
+                nouveau_contenu = nouveau_contenu.replace(
+                    spec["ancien"], spec["nouveau"])
+        with io.open(fichier, "w", encoding="utf-8", newline="") as fh:
+            fh.write(nouveau_contenu)
+        print("[OK] %d remplacement(s) applique(s): %s" % (len(specs), fichier))
+        return 0
 
     if ancien not in contenu:
         print("[ERREUR] Aucune occurrence de '%s' dans %s" % (ancien, fichier))

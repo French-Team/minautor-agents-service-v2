@@ -80,7 +80,7 @@
         "etapes": [
           "Verifier la coherence des fins du parcours audite"
         ],
-        "regle": "c8d : activation directe -> reactiver Cerberus ; maillon -> activer le suivant."
+        "regle": "c8d (modele aero R1/R3) : ma fin va vers ORACLE (reactiver-fin themis --cible oracle) ; le pilote decide du suivant (largage du maillon, atterrissage sur Cerberus en fin de round)."
       },
       {
         "besoin": "Produire le rapport d evaluation",

@@ -12,7 +12,7 @@ identite:
 ---
 # creer-fichier
 
-**Version :** 0.3.2
+**Version :** 0.3.3
 **Statut :** prepare
 **Categorie :** Creer
 **Chemin :** `agents/tools/creer/creer-fichier/`
@@ -23,6 +23,10 @@ identite:
 Creer un nouveau fichier avec verification. L'outil verifie si le fichier existe deja avant de creer (refus explicite si present, sauf `--forcer`). `--backup` sauvegarde l'existant en .bak avant ecrasement.
 
 ## Utilisation
+
+**MODE ANTI-HEREDOC (v0.3.3)** : pour un contenu long, l ecrire dans un fichier
+puis : `python3 creer-fichier.py fichier.md --contenu-chemin source.txt` (jamais de
+ligne bash geante - decision D6/D7 2026-08-21).
 
 ### CLI Python (version 0.2.0-py)
 
@@ -77,6 +81,7 @@ creer-fichier.sh --forcer fichier.md
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.3.3 | 2026-09-02 | MODE ANTI-HEREDOC : option `--contenu-chemin <fichier>` lit le contenu depuis un fichier source (jamais de ligne bash geante, decision D6/D7 2026-08-21). Parite .sh : non concerne (le .sh ne porte pas le mode anti-heredoc - exemption bumper v0.3.2) |
 | 0.3.2 | 2026-08-17 | MESSAGES INFORMATIONNELS : rappels apres creation (outil -> index-tools+catalogue+doc+assignation ; rapport -> dossier agent jamais racine) - regle immuable v0.3.0 |
 | 0.2.0-py | 2026-08-07 | Version Python creee (meme dossier, meme nom, base sur outil-template.py) |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |

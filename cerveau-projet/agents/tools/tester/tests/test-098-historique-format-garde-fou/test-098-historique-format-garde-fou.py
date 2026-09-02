@@ -124,9 +124,9 @@ def verifier(nom, condition, detail=""):
         print("  [KO] %s %s" % (nom, ("-- " + detail) if detail else ""))
 
 
-def run(cmd, timeout=60):
+def run(cmd, timeout=60, **kwargs):
     return PROTECTIONS.lancer_protege(cmd, capture_output=True, text=True,
-                                      timeout=timeout)
+                                      timeout=timeout, **kwargs)
 
 
 def lire_fichier(chemin):
@@ -231,7 +231,14 @@ def main():
     #    pas des agents mais des artefacts de routine documentes, toleres.
     t_debut = time.monotonic()
     blocs_routines = {"citations", "encart", "flux", "live", "notation",
-                      "verifier-statuts", "vigie-perimetre"}
+                      "verifier-statuts", "vigie-perimetre", "sante",
+                      "compter-entree", "compter-sortie", "top3-urgences",
+                      "vigie-round"}
+    # Acteurs systeme/coordination legitimes (modele aero R1/R3, 2026-09-02) :
+    # - 'pilote' : trace de vol d Oracle (DECOLLAGE/RECUPERE/RETOUR AEROPORT,
+    #   _historiser_pilote) - pas un agent metier.
+    # - 'routines-server' : demarrage du serveur de routines v1.
+    blocs_routines |= {"pilote", "routines-server"}
     inconnus = sorted(set(e["agent"].lower() for e in entrees)
                       - set(a.lower() for a in agents_md)
                       - blocs_routines)
@@ -251,11 +258,16 @@ def main():
     chrono_etape("3. jours decroissants", t_debut)
 
     # 4. Heures en ordre decroissant au sein de chaque bloc agent
+    # NB 2026-09-02 : comparaison a la SECONDE pres - les entrees d une meme
+    # seconde peuvent s inscrire dans n importe quel ordre (les activateurs
+    # normalisent a HH:MM:SS.000 tandis que le classeur ecrit les ms reelles)
+    # sans que ce soit une inversion reelle.
     t_debut = time.monotonic()
     mauvais_ordre = []
     par_agent = {}
     for e in entrees:
-        par_agent.setdefault((e["jour"], e["agent"]), []).append(e["heure"])
+        par_agent.setdefault((e["jour"], e["agent"]), []).append(
+            e["heure"][:8])
     for cle, heures in par_agent.items():
         if any(heures[k] < heures[k + 1] for k in range(len(heures) - 1)):
             mauvais_ordre.append("%s/%s" % cle)
@@ -265,8 +277,10 @@ def main():
     chrono_etape("4. heures decroissantes", t_debut)
 
     # 5. lire-activite-recente fonctionne sur le fichier
+    # FIX 2026-09-02 : cwd=PROJECT_ROOT obligatoire (resolution de chemins
+    # relatifs au repertoire courant, comme test-057 pt10).
     t_debut = time.monotonic()
-    r = run([PYTHON, LIRE_ACTIVITE_PY, "--nombre", "3"])
+    r = run([PYTHON, LIRE_ACTIVITE_PY, "--nombre", "3"], cwd=PROJECT_ROOT)
     verifier("5. lire-activite-recente --nombre 3 : rc=0", r.returncode == 0,
              "rc=%d %s" % (r.returncode, (r.stderr or "")[:80]))
     chrono_etape("5. lire-activite-recente", t_debut)

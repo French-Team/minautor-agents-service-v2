@@ -10,9 +10,18 @@
 # abandone et perime. Besoins listes par Buffy (spec-purification-rvav.md) :
 #   - corrections.md d agent (lecons ## [LECON]) : quota 1000 lignes, archive
 #     dans <agent>-historique.md
-#   - AGENTS-historique.md (entrees | 2026-) : quota 800 lignes, archive dans
+#   - AGENTS-historique.md (v0.1.2 + format v2 2026-09 : '## date' + '### agent'
+#     + entrees '- hh:mm...' recent-en-haut) : quota 800 lignes, archive dans
 #     AGENTS-historique-archive.md
 #   - fiches agents (template) et protocoles : signaler seulement
+#
+# v0.1.2 (2026-09-02) : ADAPTATION V2 d AGENTS-historique. L ancien format
+# '| <span' n existe plus (0 occurrence) : le fichier est ecrit recent-en-haut
+# en sections '### <agent>' sous '## <date>', entrees '- hh:mm...'. L ordre du
+# haut n est PAS l ordre chronologique (sections non triees entre elles) : on
+# TRIE les entrees par (date, heure) et on archive les PLUS ANCIENNES, puis
+# on supprime les sections agents vides et les dates vides. Corrections.md
+# inchange : blocs ## [LECON] ancien-en-haut, on archive les premiers.
 #
 # Options :
 #   --tous                  Purifier tous les fichiers en surcharge (scan
@@ -36,7 +45,7 @@
 # Retour: 0 si tout va bien (ou dry-run sans probleme), 1 si des fichiers
 # restent en surcharge ou erreur, 2 usage invalide.
 #
-# Version : 0.1.1
+# Version : 0.1.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -51,7 +60,7 @@ import io
 import os
 import sys
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 STATUT = "ebauche"
 
 SEUIL_CORRECTIONS = 1000
@@ -129,24 +138,112 @@ def decouper_lecons(corps):
 
 
 def decouper_entrees_historique(corps):
-    """Decoupe AGENTS-historique en blocs d entrees (v0.1.1 : ligne de table
-    '| <span' (agent colore en 1re colonne) ou repere '### ' ... jusqu a la
-    suivante)."""
+    """Decoupe AGENTS-historique en ENTREES (format v2, 2026-09).
+
+    Nouveau format (recent-en-haut) :
+      ## <date>
+      ### <agent>
+      - HH:MM:SS.mmm | <id> | <type> | <message>
+
+    Chaque ligne '- ...' est UNE entree ; elle porte sa date ('## ') et son
+    agent ('### ') courants. Les lignes '| <span' (ancien format v1) sont
+    tolerees comme entree sans horodatage (vestige v1 -> archivee en
+    premier). Retourne (entrees, reste) :
+      entrees = liste de dict {date, agent, heure, lignes, debut}
+      reste   = lignes hors entrees (en-tetes date/section, vides)
+    """
     entrees = []
-    courant = None
     reste = []
-    for ligne in corps:
-        if ligne.startswith("| <span") or ligne.startswith("### "):
-            if courant is not None:
-                entrees.append(courant)
-            courant = [ligne]
-        elif courant is not None:
-            courant.append(ligne)
-        else:
+    date_courante = ""
+    agent_courant = ""
+    entree_courante = None
+    for k, ligne in enumerate(corps):
+        if ligne.startswith("## "):
+            date_courante = ligne[3:].strip()
             reste.append(ligne)
-    if courant is not None:
-        entrees.append(courant)
+        elif ligne.startswith("### "):
+            agent_courant = ligne[4:].strip()
+            reste.append(ligne)
+        elif ligne.startswith("- ") or ligne.startswith("| <span"):
+            if entree_courante is not None:
+                entrees.append(entree_courante)
+            if ligne.startswith("- "):
+                contenu = ligne[2:]
+            else:
+                contenu = ligne
+            if "|" in contenu:
+                heure = contenu.split("|")[0].strip()
+            else:
+                heure = contenu.strip()
+            entree_courante = {"date": date_courante, "agent": agent_courant,
+                               "heure": heure, "lignes": [ligne], "debut": k}
+        elif ligne.strip() == "":
+            if entree_courante is not None:
+                entree_courante["lignes"].append(ligne)
+            else:
+                reste.append(ligne)
+        else:
+            if entree_courante is not None:
+                entree_courante["lignes"].append(ligne)
+            else:
+                reste.append(ligne)
+    if entree_courante is not None:
+        entrees.append(entree_courante)
     return entrees, reste
+
+
+def cle_anciennete(entree):
+    """Cle de tri des entrees d historique : (date, heure). Les entrees SANS
+    date (ancien format v1, vestiges) sont classees les PLUS ANCIENNES et
+    donc archivees en premier. Les heures ISO (HH:MM:SS.mmm) se comparent
+    lexicographiquement."""
+    from datetime import datetime as _dt
+    date = entree.get("date", "") or ""
+    heure = entree.get("heure", "") or ""
+    try:
+        d = _dt.strptime(date, "%d/%m/%Y")
+    except (ValueError, TypeError):
+        d = _dt.max
+    return (d, heure or "000000")
+
+
+def purifier_entrees_historique(corps, a_supprimer):
+    """Reconstruit le corps sans les entrees archivees (positions donnees),
+    puis supprime les sections '### ' devenues vides et les dates '## '
+vides (une section dont toutes les entrees ont ete archivees n a plus lieu
+d etre). Les lignes vides en exces sont compressees."""
+    lignes = [l for k, l in enumerate(corps) if k not in a_supprimer]
+    # 1) reperer les '### ' vides : pas de ligne '- ' jusqu au prochain
+    #    '### ' / '## ' ou fin
+    n = len(lignes)
+    garde = [True] * n
+    for i, l in enumerate(lignes):
+        if l.startswith("### "):
+            j = i + 1
+            vide = True
+            while j < n and not lignes[j].startswith("### ") \
+                    and not lignes[j].startswith("## "):
+                if lignes[j].startswith("- "):
+                    vide = False
+                j += 1
+            if vide:
+                garde[i] = False
+    lignes = [l for k, l in enumerate(lignes) if garde[k]]
+    # 2) supprimer les '## ' qui ne precedent aucune section avec contenu
+    garde = [True] * len(lignes)
+    n = len(lignes)
+    for i, l in enumerate(lignes):
+        if l.startswith("## "):
+            j = i + 1
+            a_contenu = False
+            while j < n and not lignes[j].startswith("## "):
+                if lignes[j].startswith("### ") or lignes[j].startswith("- "):
+                    a_contenu = True
+                j += 1
+            if not a_contenu:
+                garde[i] = False
+    lignes = [l for k, l in enumerate(lignes) if garde[k]]
+    return nettoyer_lignes_vides(lignes)
 
 
 def calculer_archivage(blocs, lignes_avant, seuil):
@@ -254,7 +351,19 @@ def nettoyer_lignes_vides(lignes):
 
 
 def purifier_fichier(chemin, type_fichier, seuil, dry_run, verbose, rapport_lignes):
-    """Analyse un fichier et retourne le plan (ou l applique si not dry_run)."""
+    """Analyse un fichier et retourne le plan (ou l applique si not dry_run).
+
+    Deux vocabulaires :
+      - corrections : blocs ## [LECON], ordre ancien-en-haut (ecrit du plus
+        ancien au plus recent) -> on archive les premiers blocs (les plus
+        anciens).
+      - historique (format v2, 2026-09) : entrees individuelles '- hh:mm...'
+        sous '## date' + '### agent', ordre RECENT-EN-HAUT. L ordre du haut
+        n est PAS l ordre chronologique (les sections ne sont pas triees
+        entre elles) : on TRIE les entrees par (date, heure) et on archive
+        les PLUS ANCIENNES (tri ascendant), pas les blocs du haut. Les
+        sections agents devenues vides et les dates vides sont supprimees.
+    """
     lignes_avant = compter_lignes(chemin)
     if lignes_avant <= seuil:
         if verbose:
@@ -266,7 +375,8 @@ def purifier_fichier(chemin, type_fichier, seuil, dry_run, verbose, rapport_lign
     frontmatter, corps = decouper_frontmatter(lignes)
 
     if type_fichier == "historique":
-        blocs, reste = decouper_entrees_historique(corps)
+        entrees, reste = decouper_entrees_historique(corps)
+        blocs = [e["lignes"] for e in entrees]
     else:
         blocs, reste = decouper_lecons(corps)
 
@@ -275,14 +385,30 @@ def purifier_fichier(chemin, type_fichier, seuil, dry_run, verbose, rapport_lign
               % (os.path.basename(chemin), lignes_avant) + NC)
         return 1, lignes_avant, lignes_avant, 0
 
-    nb, lignes_apres = calculer_archivage(blocs, lignes_avant, seuil)
-    if nb == 0:
-        print(YELLOW + "[ATTENTION] %s : %d lignes, aucun bloc archivable"
-              % (os.path.basename(chemin), lignes_avant) + NC)
-        return 1, lignes_avant, lignes_avant, 0
-
-    archives = blocs[:nb]
-    gardes = blocs[nb:]
+    if type_fichier == "historique":
+        # TRI PAR ANCIENNETE (format v2, recent-en-haut) : les plus anciennes
+        # d abord dans la liste archivee. On archive TANT QUE le fichier reste
+        # au-dessus du seuil, en gardant toujours au moins UNE entree.
+        indices_tries = sorted(range(len(entrees)), key=lambda i: cle_anciennete(entrees[i]))
+        nb = 0
+        total = lignes_avant
+        while nb < len(indices_tries) - 1 and total > seuil:
+            total -= len(entrees[indices_tries[nb]]["lignes"])
+            nb += 1
+        lignes_apres = total
+        if nb == 0:
+            print(YELLOW + "[ATTENTION] %s : %d lignes, aucune entree archivable"
+                  % (os.path.basename(chemin), lignes_avant) + NC)
+            return 1, lignes_avant, lignes_avant, 0
+        archive_idx = set(indices_tries[:nb])
+        archives = [entrees[i]["lignes"] for i in indices_tries[:nb]]
+    else:
+        nb, lignes_apres = calculer_archivage(blocs, lignes_avant, seuil)
+        if nb == 0:
+            print(YELLOW + "[ATTENTION] %s : %d lignes, aucun bloc archivable"
+                  % (os.path.basename(chemin), lignes_avant) + NC)
+            return 1, lignes_avant, lignes_avant, 0
+        archives = blocs[:nb]
 
     archive_chemin = nom_archive(chemin, type_fichier)
     nb_lignes_archive = sum(len(b) for b in archives)
@@ -290,18 +416,28 @@ def purifier_fichier(chemin, type_fichier, seuil, dry_run, verbose, rapport_lign
     print("")
     print(BLUE + "=== %s (%s) : %d lignes > seuil %d ==="
           % (os.path.basename(chemin), type_fichier, lignes_avant, seuil) + NC)
-    print("  a archiver : %d blocs (%d lignes) -> %s"
-          % (nb, nb_lignes_archive, os.path.basename(archive_chemin)))
+    print("  a archiver : %d %s (%d lignes) -> %s"
+          % (nb, "entrees" if type_fichier == "historique" else "blocs",
+             nb_lignes_archive, os.path.basename(archive_chemin)))
     print("  apres purification : ~%d lignes" % lignes_apres)
 
     if not dry_run:
         # Construire les 2 contenus EN MEMOIRE d abord
-        lignes_gardees = [l for bloc in gardes for l in bloc]
-        corps_garde = lignes_gardees[:]
-        if reste:
-            corps_garde = reste + corps_garde
+        if type_fichier == "historique":
+            a_supprimer = set()
+            for i in archive_idx:
+                e = entrees[i]
+                for k in range(e["debut"], e["debut"] + len(e["lignes"])):
+                    a_supprimer.add(k)
+            corps_garde = purifier_entrees_historique(corps, a_supprimer)
+        else:
+            gardes = blocs[nb:]
+            lignes_gardees = [l for bloc in gardes for l in bloc]
+            corps_garde = lignes_gardees[:]
+            if reste:
+                corps_garde = reste + corps_garde
+            corps_garde = nettoyer_lignes_vides(corps_garde)
         nouveau = frontmatter + corps_garde
-        nouveau = nettoyer_lignes_vides(nouveau)
         contenu_principal = "\n".join(nouveau).rstrip("\n") + "\n"
 
         en_tete = en_tete_archive(chemin, type_fichier)
@@ -338,8 +474,9 @@ def purifier_fichier(chemin, type_fichier, seuil, dry_run, verbose, rapport_lign
 
     if rapport_lignes is not None:
         rapport_lignes.append(
-            "- %s : %d lignes -> ~%d lignes (%d blocs archives vers %s)"
+            "- %s : %d lignes -> ~%d lignes (%d %s archives vers %s)"
             % (os.path.basename(chemin), lignes_avant, lignes_apres, nb,
+               "entrees" if type_fichier == "historique" else "blocs",
                os.path.basename(archive_chemin)))
     return 0, lignes_avant, lignes_apres, nb
 

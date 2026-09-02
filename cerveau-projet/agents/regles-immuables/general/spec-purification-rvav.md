@@ -47,6 +47,15 @@ Ordre chronologique : le fichier corrections.md est ecrit du plus ancien (haut)
 au plus recent (bas) -- les sections ## [LECON] s ajoutent en bas. L archive
 recupere donc les sections du HAUT.
 
+MISE A JOUR V2 (2026-09-02, purifier-rvav v0.1.2) : AGENTS-historique.md a
+change de format depuis la migration v2. Il est desormais ecrit RECENT-EN-HAUT
+en sections '### <agent>' sous '## <date>', avec des entrees '- hh:mm...'
+(l ex format '| <span' n existe plus). L ordre du haut n est PAS l ordre
+chronologique (les sections ne sont pas triees entre elles) : l outil TRIE les
+entrees par (date, heure) et archive les PLUS ANCIENNES, puis supprime les
+sections agents devenues vides et les dates vides. Le principe anti-perte
+(deplacement vers archive, jamais de suppression) reste identique.
+
 ## Spec de l outil purifier (pour Vulcain)
 
 Nom : `purifier-rvav` (categorie Purifier -- NOUVELLE categorie d action)

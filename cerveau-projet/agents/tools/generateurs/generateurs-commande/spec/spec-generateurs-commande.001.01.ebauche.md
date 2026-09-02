@@ -7,10 +7,10 @@ identite:
 # Specification -- generateurs-commande
 
 **Statut :** ebauche
-**Version :** 0.3.1
+**Version :** 0.3.2
 **Categorie :** generateurs
 **Date :** 2026-08-07
-**Historique :** v0.3.1 (MULTI-SESSIONS : _session_appelante lit SESSION_LLM puis le classeur-variables, plus de session-llm-1 figee -- chaque session journalise SON agent actif, 2026-08-19) -> v0.2.6 (booleens des combos : composer_commande accepte True/False, flag du modele gouverne, 2026-08-16) -> v0.2.4 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 0.2.4) -> v0.2.2 (creation/derniere version documentee, 2026-08-07)
+**Historique :** v0.3.2 (GARDE-FOU REGISTRE : un agent 'inconnu' (resolution AGENTS.md impossible) n est JAMAIS journalise - analyser-noms-maj flaguerait AGENT_INCONNU et casserait la non-regression ; le --agent explicite reste prioritaire, 2026-09-02) -> v0.3.1 (MULTI-SESSIONS : _session_appelante lit SESSION_LLM puis le classeur-variables, plus de session-llm-1 figee -- chaque session journalise SON agent actif, 2026-08-19) -> v0.2.6 (booleens des combos : composer_commande accepte True/False, flag du modele gouverne, 2026-08-16) -> v0.2.4 (alignement spec/outil, round 11 coherence documentaire : version de la spec synchronisee avec la version de l outil 0.2.4) -> v0.2.2 (creation/derniere version documentee, 2026-08-07)
 
 ---
 

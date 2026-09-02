@@ -121,7 +121,7 @@ def _marquer_demande_utilisateur():
 
 def _historiser_arret_inactivite():
     """Tracer l arret automatique dans les activites recentes."""
-    _historiser("oracle", "ARRET AUTO: dernier agent actif inactif >= 30 min")
+    _historiser("ARRET AUTO", "oracle", "dernier agent actif inactif >= 30 min")
 
 
 def _arret_si_inactif():
@@ -458,7 +458,7 @@ def boucler(intervalle_secondes):
         return
     print("[ORACLE-SERVER] DEMARRAGE SERVEUR: daemon lance (tic toutes les %ds, pid %d)"
           % (intervalle_secondes, os.getpid()), flush=True)
-    _historiser("oracle", "DEMARRAGE SERVEUR: oracle-server actif pid=%d" % os.getpid())
+    _historiser("DEMARRAGE SERVEUR", "oracle", "oracle-server actif pid=%d" % os.getpid())
     try:
         while True:
             if _arret_si_inactif():

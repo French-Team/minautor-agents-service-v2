@@ -37,7 +37,7 @@
 #   python3 detecter-processus-residuels.py --detail
 #   python3 detecter-processus-residuels.py --rapport rapport-processus.md
 #
-# Version : 0.1.1
+# Version : 0.1.2
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -55,7 +55,7 @@ import re
 import subprocess
 import sys
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 STATUT = "ebauche"
 
 # Liste blanche protegee : processus legitimes jamais signales ni tuables.
@@ -81,6 +81,7 @@ LISTE_BLANCHE_SESSION = (
 LISTE_BLANCHE_DAEMONS = (
     "oracle-server.py",  # serveur oracle : pilote les cartes/arbres des agents
     "routines-server.py",  # serveur des routines de surveillance v1
+    "super-pilote.py",  # super-pilote des super-combos (oracle-demarrage 2b)
 )
 
 # Union des deux familles utilisee pour la detection (une seule source de

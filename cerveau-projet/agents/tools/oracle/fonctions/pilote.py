@@ -51,7 +51,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 
 # Racine du projet : oracle/fonctions -> outils -> agents -> cerveau-projet -> racine
 _RACINE = Path(__file__).resolve().parents[4]
@@ -970,13 +970,26 @@ def _executer_fin_oracle(redir, agent, etat, fins_data):
     _sauver_etat(etat)
 
     # 2. Bug corrige 2026-08-28 : Oracle n execute PLUS l action de fin
-    #    automatiquement reactiver ou activer. La fin suit SA carte : c est
-    #    l agent qui active le suivant ou reactive Cerberus (Pattern 13).
+    #    automatiquement reactiver ou activer. La fin suit SA carte.
     # Modele aero (2026-08-30, R1) : une fin cible=oracle renvoie l agent
     # vers ORACLE (l aeroport) - le pilote decide de la suite.
+    # 2026-09-02 (directive utilisateur) : plus AUCUNE carte v2 ne vise
+    # Cerberus (test-114 verrouille fins.json -> cible=oracle). Une fin
+    # cible=cerberus est un VESTIGE v1 : on le signale comme tel au lieu
+    # de guider l agent vers Cerberus.
     if action_fin == "reactiver" and cible == "cerberus":
-        messages.append("[PILOTE] Fin de parcours : l agent doit reactiver "
-                        "Cerberus selon SA carte, Pattern 13")
+        if agent == "oracle":
+            # EXCEPTION DOCUMENTEE (decision utilisateur 2026-09-02) : la
+            # fin-coordination de l aeroport ORACLE atterrit sur CERBERUS
+            # avec le bilan consolide (fin de round - Cerberus est le
+            # point de depart/arrivee des demandes utilisateur).
+            messages.append("[PILOTE] Fin oracle/fin-coordination -> CERBERUS "
+                            "(fin de round, exception decision 2026-09-02)")
+        else:
+            messages.append("[PILOTE] Fin cible=cerberus = VESTIGE v1 : en v2 "
+                            "toute fin va vers ORACLE (l aeroport, modele aero "
+                            "R1/R3). Cerberus n est reactivE que par le pilote "
+                            "en fin de round (bilan consolide).")
     elif action_fin == "reactiver" and cible == "oracle":
         messages.append("[PILOTE] Fin de parcours : l agent doit revenir vers "
                         "ORACLE (modele aero R1, reactiver-fin oracle)")

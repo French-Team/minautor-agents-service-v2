@@ -174,8 +174,14 @@ def main():
         autorises = {"morpheus", "janus"}
         derivees = []
         for agent in AGENTS:
+            chemin_v1 = chemin_parcours(agent)
+            if not os.path.isfile(chemin_v1):
+                # Agent passe en v2 : aucun parcours-*.json v1 (uniquement
+                # arbre-<agent>.json + themes). Rien a verifier ici : ce garde
+                # cible les cartes de DECISION v1 qui listent tester-protections.
+                continue
             try:
-                p = json.load(io.open(chemin_parcours(agent), encoding="utf-8"))
+                p = json.load(io.open(chemin_v1, encoding="utf-8"))
                 if OUTIL_TEST in indices_outils(p):
                     if agent not in autorises:
                         derivees.append(agent)

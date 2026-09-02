@@ -279,3 +279,31 @@ l encart v1.
 detecter-usage-outils-externes, valider-conformite-ascii,
 detecter-decalages-catalogue, combos-audit-general, consulter-lecons,
 oracle (pilote/lire/acquitter/mission-lister), guider-parcours.
+## [LECON] 2026-09-02 -- AUDIT FILE DE RELAIS ORDONNEE (oracle v0.5.8) : CONFORME APRES CORRECTION (Themis)
+
+**Contexte** : audit croise inter-round de la modification Vulcain (decision utilisateur : la file de relais mission-relais doit etre ORDONNEE par importance - priorite puis anciennete, P1 avant P2, recent avant ancien - et CLASSIFIEE par type).
+
+**Verifications** : versions py/md alignees (0.5.8), regle documentee (oracle.md + docstring files.py), ASCII 0/0 x3, syntaxe ast OK, catalogue 188/0, ordre de prise reel [P1/urgent, P1/purge, P2/test recent, P2/revision ancien], tests retro-compatibilite.
+
+**Ecart detecte et corrige** : une ANCIENNE entree (sans champ priorite/type) etait TRIEE correctement (tri via _cle_importance re-deduit) mais RENDUE PRISE SANS classification (KeyError sur priorite) - la retro-compatibilite etait partielle (tri OK, sortie pas). Correction dans prendre() : enrichissement priorite+type deduits a la prise, persiste dans le jsonl. Re-test vert (ordre + classification + persistance).
+
+**Lecons** :
+1. LA RETRO-COMPATIBILITE PORTE SUR LA SORTIE PAS SEULEMENT LE TRI : une entree ancienne peut etre correctement ORDONNEE mais rendre un resultat incomplet (champs manquants) - verifier ce que la fonction REND, pas seulement l ordre calcule.
+2. FAUX POSITIFS DES EVALUATEURS SUR DOSSIER OUTIL : evaluer-coherence (agents non references : les agents du cerveau n apparaissent pas dans un dossier outil) et combo audit-general (57 erreurs structurelles, attend une structure d agent) sont NON PERTINENTS sur oracle/ - cibler les fichiers modifies, pas le dossier.
+3. TELECHARGER LES APPELANTS AU POINT UNIQUE : tous les consommateurs de la file passent par _files.relais()/prendre() (oracle.py + oracle-server daemon) - une modification au point unique se propage partout, l impact se verifie par grep des appelants.
+
+**Verdict** : CONFORME APRES CORRECTION - rapport themis/rapports/audit-oracle-file-relais-2026-09-02.md.
+## [LECON] 2026-09-02 -- AUDIT CORRECTIONS VERSION ROUND MORPHEUS (mission aa401071) : CONFORME (Themis)
+
+**Contexte** : audit croise inter-round (decision utilisateur) des 5 corrections version du round Morpheus : activer-agent-principal 0.8.11 (normalisation session CLI), mettre-a-jour-versions 0.1.6 (exemptions .sh anti-heredoc), generateurs-commande 0.3.2 (refus agent inconnu registre), super-pilote 0.2.1 (ecriture PID file), detecter-processus-residuels 0.1.2 (whitelist daemons).
+
+**Verifications** : versions py/md/spec alignees 5/5, lecons documentees dans chaque changelog, code reel verifie (normalisation a la dispatch, garde-fou inconnu, PID atomique tmp+os.replace, whitelist 3 daemons), syntaxe ast 5/5 OK, ASCII 0/0 + LF 0 sur 11 fichiers, rejeu reel 12 tests VERT.
+
+**Reserve environnementale documentee** : test-005 point 21 + test-027 points 5-8 KO en rejeu direct, cause racine = etat de session (## Sessions connues porte oracle, le pilote, apres reactiver-fin morpheus). Les verrous d habilitation lisent l agent actif de session : valider-cartes-decision refuse oracle (non habilite), le lanceur repond usurpation (session oracle, pas janus). Preuve non-regression : les MEMES tests etaient verts plus tot dans le round (session = janus) - aucune des 5 modifications ne touche verrou/table/habilitations.
+
+**Lecons** :
+1. CROISER L ETAT DE SESSION AVANT DE CONCLURE A UNE REGRESSION : un KO sur un outil verrouille par habilitation peut etre l ETAT TRANSTOIRE NORMAL du modele aero (pilote actif entre deux maillons), pas une regression. La table ## Sessions connues est la source a lire en premier.
+2. RESOLUTION = ACTIVATION DU PROCHAIN MAILLON : le rejeu canonique du lanceur (--agent janus) basculera la session sur un agent habilite et fera disparaitre les KOs - un rejeu direct hors maillon actif produit des faux KO.
+3. DAEMONS SANS HEADER DE VERSION : super-pilote n a pas de ligne # Version en tete (contrairement aux autres daemons) - recommandation d harmonisation posee au rapport (non bloquante).
+
+**Verdict** : CONFORME - rapport themis/rapports/rapport-audit-corrections-version-round-morpheus-2026-09-02.md.

@@ -5,7 +5,7 @@
 > Il est exclusif au demarrage d'une session LLM : le LLM ne doit PLUS
 > reflechir ni poser de question au demarrage -- il suit les ordres.
 
-- **Version** : 0.1.0
+- **Version** : 0.1.2
 - **Fichier** : `outils-llm/demarrer-llm.py`
 - **Dependances** : Python stdlib uniquement (aucun import v1/v2)
 
@@ -112,5 +112,6 @@ Le LLM arrive : **ACTIVE + HISTORISE + PARCOURS DEMARRE** -- sans question.
 
 | Version | Date | Changement |
 |---|---|---|
+| 0.1.2 | 2026-09-02 | Reference parcours v1 : le repli v1 (branche elif parcours-<agent>.json affichant guider-parcours) est RETIRE - tous les agents ont un arbre v2 ; message de repli indique que les parcours v1 sont des archives marbre (decision utilisateur 2026-09-02, references v1) |
 | 0.1.1 | 2026-08-26 | Point d'entree freelance = Stark (jamais l'agent du bloc) + lancement de la chaine de demarrage JARVIS (jarvis.py demarrage : daemon routines + DEFCON + files + operationnel) |
 | 0.1.0 | 2026-08-26 | Creation (decision utilisateur : outil exclusif au demarrage, ni v1 ni v2, transparent) |

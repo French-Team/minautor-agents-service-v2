@@ -62,7 +62,7 @@
       {
         "besoin": "Reprendre ma mission (case cU3)",
         "action": "procedure",
-        "etapes": ["Reprendre a la case d arret : relancer guider-parcours avec --case <cid> --reponses '<reponse>'"],
+        "etapes": ["Reprendre a la case d arret : relancer guider-arbre cerveau-projet/agents/socrate/parcours/arbre-socrate.json --reponses '<reponse>'"],
         "regle": "REPRISE : apres resolution du probleme outil, je reprends exactement ou j en etais."
       },
       {

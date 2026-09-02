@@ -55,6 +55,7 @@ get_agent_role() {
         "Ferrari"|"ferrari") echo "Agent v1 specialise freelance -- corrige et modifie le dossier v2 (conventions v2)" ;;
         "Stark"|"stark") echo "Coordinateur de l'equipe freelance, responsable JARVIS (D16) -- mode conversation" ;;
         "Oracle"|"oracle") echo "Coordinateur de l'equipe v1 (session-admin) -- traite les alertes de coordination (processus fantomes, serveurs morts, roulage messages) + controle processus" ;;
+        "Nemesis"|"nemesis") echo "Analyste en Chef -- avis contradictoire avant validation (audit 3 axes : cas limites, optimisation, securite/integrite), reponse 'Oui, mais...'" ;;
         *) echo "Agent inconnu" ;;
     esac
 }
@@ -85,6 +86,7 @@ get_agent_fiche() {
         "Ferrari"|"ferrari") echo "cerveau-projet/agents/ferrari/ferrari.md" ;;
         "Stark"|"stark") echo "cerveau-projet/freelance/stark/stark.md" ;;
         "Oracle"|"oracle") echo "cerveau-projet/agents/oracle/oracle.md" ;;
+        "Nemesis"|"nemesis") echo "cerveau-projet/agents/nemesis/nemesis.md" ;;
         *) echo "cerveau-projet/agents/inconnu/inconnu.md" ;;
     esac
 }
@@ -115,6 +117,7 @@ get_agent_corrections() {
         "Ferrari"|"ferrari") echo "cerveau-projet/agents/ferrari/corrections.md" ;;
         "Stark"|"stark") echo "cerveau-projet/freelance/stark/corrections.md" ;;
         "Oracle"|"oracle") echo "cerveau-projet/agents/oracle/corrections.md" ;;
+        "Nemesis"|"nemesis") echo "cerveau-projet/agents/nemesis/corrections.md" ;;
         *) echo "cerveau-projet/agents/inconnu/corrections.md" ;;
     esac
 }

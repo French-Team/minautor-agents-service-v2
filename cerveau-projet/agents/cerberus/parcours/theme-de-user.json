@@ -3,7 +3,7 @@
     "type": "theme",
     "appartient_a": "cerberus",
     "nom": "DE-USER",
-    "description": "Une demande arrive de l utilisateur : j ecoute, j identifie l agent habilite, je transmets la mission a Oracle qui prend la main"
+    "description": "Une demande arrive de l utilisateur : j ecoute et je transmets la mission a Oracle qui prend la main (c est Oracle qui identifie l agent habilite)"
   },
   "theme": {
     "nom": "DE-USER",
@@ -19,24 +19,15 @@
         "regle": "Ecouter avant de decider. Je ne m historise JAMAIS : c est Oracle qui historise."
       },
       {
-        "besoin": "Identifier l agent habilite (matrice, NE PAS executer soi-meme)",
-        "action": "procedure",
-        "etapes": [
-          "Consulter la matrice regles-choisir-agent",
-          "python3 cerveau-projet/agents/tools/detecter/detecter-impacts/detecter-impacts.py <fichier>"
-        ],
-        "regle": "GARDE-FOU DE-USER : j identifie l agent habilite mais je N EXECUTE PAS."
-      },
-      {
         "besoin": "Envoyer la mission a Oracle et lui rendre la main",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/oracle/oracle.py envoyer cerberus oracle \"MISSION: <la demande>\" \"<mission complete + agent identifie morpheus/vulcain/...>\"",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py envoyer cerberus oracle \"MISSION: <la demande>\" \"<mission complete - c est ORACLE qui identifie l agent habilite>\"",
           "ORACLE prend la main : il historise le DEBUT de l agent a sa place, envoie le message a l agent, puis le pilote le dirige"
         ],
         "regle": "INTERDICTION FORMELLE (2026-08-29) : je ne m historise PAS et je ne travaille JAMAIS. Oracle est le SEUL a historiser DEBUT/FIN avant et apres chaque mission. Mon role s arrete au routage vers Oracle."
       }
     ]
   },
-  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-theme" }
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-activer" }
 }

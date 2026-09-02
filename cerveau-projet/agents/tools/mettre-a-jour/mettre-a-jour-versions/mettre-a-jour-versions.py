@@ -52,7 +52,7 @@
 #   python3 mettre-a-jour-versions.py --catalogue --nouvelle 0.3.0
 #   python3 mettre-a-jour-versions.py --protocole <chemin> --mineure
 #
-# Version : 0.1.5
+# Version : 0.1.6
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -71,7 +71,7 @@ import re
 import sys
 from datetime import datetime
 
-VERSION = "0.1.5"
+VERSION = "0.1.6"
 STATUT = "ebauche"
 
 _COULEURS = {
@@ -160,6 +160,33 @@ EXEMPTIONS_AUDIT = [
     ("cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.sh",
      "0.7.4",
      "Equivalent bash PARTIEL : les fonctions 0.7.5+ (encart, BDD, grades) sont cote .py uniquement (changelog v0.7.5)"),
+    # creer-fichier.sh : equivalent bash PARTIEL (v0.3.2). Le mode anti-heredoc
+    # (--contenu-chemin, v0.3.3) est cote .py uniquement : il lit le contenu depuis
+    # un fichier source pour eviter toute ligne bash geante (decision D6/D7).
+    # Bumper le .sh a 0.3.3 serait un mensonge de version : il ne porte pas cette
+    # option. Exempte avec version pinnee (changelog v0.3.3).
+    ("cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.sh",
+     "0.3.2",
+     "Equivalent bash PARTIEL : le mode anti-heredoc (--contenu-chemin, v0.3.3) est cote .py uniquement (changelog v0.3.3)"),
+    # ecrire-fichier.sh : equivalent bash PARTIEL (v0.3.2). Meme logique que
+    # creer-fichier : --contenu-chemin (v0.3.3) est cote .py uniquement.
+    ("cerveau-projet/agents/tools/ecrire/ecrire-fichier/ecrire-fichier.sh",
+     "0.3.2",
+     "Equivalent bash PARTIEL : le mode anti-heredoc (--contenu-chemin, v0.3.3) est cote .py uniquement (changelog v0.3.3)"),
+    # editer-fichier.sh : equivalent bash PARTIEL (v0.5.0). Le mode anti-heredoc
+    # (--remplacements-chemin, v0.5.2) est cote .py uniquement : il applique
+    # plusieurs remplacements depuis un JSON (decision D6/D7). Bumper le .sh a
+    # 0.5.2 serait un mensonge de version. Exempte avec version pinnee.
+    ("cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.sh",
+     "0.5.0",
+     "Equivalent bash PARTIEL : le mode anti-heredoc (--remplacements-chemin, v0.5.2) est cote .py uniquement (changelog v0.5.2)"),
+    # generateurs-commande.sh : equivalent bash PARTIEL (v0.3.1). Le .sh n a
+    # JAMAIS porte la journalisation d usage (enregistrer-usage-outil, v0.3.1)
+    # ni le garde-fou anti-inconnu (v0.3.2) - cote .py uniquement. Bumper le
+    # .sh a 0.3.2 serait un mensonge de version. Exempte avec version pinnee.
+    ("cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.sh",
+     "0.3.1",
+     "Equivalent bash PARTIEL : la journalisation d usage (registre JSONL) et le garde-fou anti-inconnu (v0.3.2) sont cote .py uniquement (changelog v0.3.2)"),
 ]
 
 

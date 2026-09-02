@@ -15,11 +15,19 @@ identite:
 
 ## EVOLUTION 2026-08-07 -- LA CARTE DEVIENT UN PARCOURS (jeu de piste)
 
-> **Ce protocole est IMMUABLE mais il a EVOLUE** : la carte de decision statique
-> (tableaux `Etape | Action | Protocole | Outil`) est **SUPERSEDEE par le PARCOURS**
-> (jeu de piste). L'agent ne lit plus la carte d'avance : il suit son parcours
-> **case par case** avec l'outil `guider-parcours`, qui lui donne a chaque etape
-> l'indice exact (outil, fichier, regle) et les branches selon ses reponses.
+> **SUPERSEDE par l ARBRE v2 (decision 2026-08-29)** : le guidage actuel est
+> l **arbre de decision v2** (`arbre-<agent>.json` + themes `theme-*.json` +
+> `fins.json`), pilote par Oracle via `oracle.py pilote <agent>` ou `guider-arbre`.
+> Le parcours v1 (`parcours-<agent>.json` + `guider-parcours`) decrit ci-dessous
+> est une ARCHIVE protegee par le marbre : il ne pilote plus (sauf repli pour un
+> agent sans arbre).
+
+> **Historique (avant la v2)** : la carte de decision statique (tableaux
+> `Etape | Action | Protocole | Outil`) a ete **SUPERSEDEE par le PARCOURS**
+> (jeu de piste). L'agent ne lisait plus la carte d'avance : il suivait son
+> parcours **case par case** avec l'outil `guider-parcours`, qui lui donnait a
+> chaque etape l'indice exact (outil, fichier, regle) et les branches selon ses
+> reponses.
 
 ### Le principe du parcours
 
@@ -348,12 +356,17 @@ ETAPE 3 : Developper l'outil
 
 ## EVOLUTION FINALE (v0.2.0 -- 2026-08-07)
 
-> La methode actuelle est le **PARCOURS (jeu de piste)** decrit en tete de ce
-> protocole : la carte statique (tableaux) est la version historique. Pour toute
-> nouvelle mission ou evolution d'agent :
-> 1. Creer/faire evoluer le parcours JSON (`agents/<agent>/parcours/parcours-<agent>.json`)
-> 2. Alleger la fiche (parcours = source de verite du guidage)
-> 3. Tester la navigation avec `guider-parcours --liste` et `--reponses`
+> **La methode actuelle est l ARBRE v2** (decision 2026-08-29) : racine
+> `arbre-<agent>.json` + themes `theme-*.json` + `fins.json`, pilote par Oracle
+> (`oracle.py pilote <agent>`) ou `guider-arbre`, valide par
+> `valider-cartes-decision` et `guider-arbre --valider`. Le PARCOURS v1 decrit
+> ci-dessus est la version historique (archive protegee). Pour toute nouvelle
+> mission ou evolution d'agent :
+> 1. Creer/faire evoluer l ARBRE v2 (`agents/<agent>/parcours/arbre-<agent>.json`)
+>    + themes `theme-*.json` + `fins.json` (valider avec `guider-arbre --valider`)
+> 2. Alleger la fiche (arbre v2 = source de verite du guidage)
+> 3. Tester la navigation avec `oracle.py pilote <agent>` ou
+>    `guider-arbre ... --liste` et `--reponses`
 
 ---
 

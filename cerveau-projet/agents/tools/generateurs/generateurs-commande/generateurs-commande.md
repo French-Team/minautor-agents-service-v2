@@ -8,7 +8,7 @@ identite:
 ---
 # generateurs-commande
 
-**Version :** 0.3.1
+**Version :** 0.3.2
 **Statut :** ebauche
 **Categorie :** Generateurs
 **Chemin :** `agents/tools/generateurs/generateurs-commande/`
@@ -135,6 +135,11 @@ Pour ajouter une commande, editer `catalogue-commandes.json` :
 | `remplacer-texte` | Renommages massifs (renommage + references) |
 
 ## Notes de creation
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.3.2 | 2026-09-02 | GARDE-FOU REGISTRE (lecon test-079, round vestiges v1) : un agent 'inconnu' (resolution AGENTS.md impossible, ex invocation hors session) n est JAMAIS journalise - analyser-noms-maj flaguerait AGENT_INCONNU et casserait la non-regression. Le --agent explicite reste prioritaire. Parite .sh : non concerne (le .sh ne porte pas la journalisation d usage - exemption bumper v0.3.1) |
+| 0.3.1 | 2026-08-15 | MULTI-SESSIONS : chaque session lit SON bloc AGENTS.md (plus de session-llm-1 figee). |
 
 - [ ] L'outil a ete teste en mode non-interactif (`--reponses`) sur les commandes du catalogue
 - [ ] L'outil est conforme ASCII (aucun accent, aucun emoji) -- valider avec `valider-conformite-ascii`

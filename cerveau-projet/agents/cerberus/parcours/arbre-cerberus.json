@@ -2,7 +2,7 @@
  "identite": {
   "type": "arbre",
   "appartient_a": "cerberus",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "commun": false
  },
  "arbre": {
@@ -23,7 +23,7 @@
   "branches": [
    {
     "reponse": "DE-USER",
-    "description": "Une demande arrive de l utilisateur : j ecoute, j identifie l agent, je transmets la mission a Oracle",
+    "description": "Une demande arrive de l utilisateur : j ecoute et je transmets la mission a Oracle (c est Oracle qui identifie l agent habilite)",
     "vers": "theme-de-user.json"
    },
    {

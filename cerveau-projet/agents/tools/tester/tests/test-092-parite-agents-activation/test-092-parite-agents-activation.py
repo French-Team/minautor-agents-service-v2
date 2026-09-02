@@ -163,7 +163,7 @@ EXEMPTIONS_MORTS = {"stark", "ferrari"}
 AGENTS_ATTENDUS = [
     "argus", "athena", "atlas", "buffy", "cerberus", "chiron", "clio",
     "gardien", "hermes", "hygie", "janus", "minerve", "morpheus",
-    "promethee", "themis", "vulcain",
+    "nemesis", "promethee", "themis", "vulcain",
 ]
 
 

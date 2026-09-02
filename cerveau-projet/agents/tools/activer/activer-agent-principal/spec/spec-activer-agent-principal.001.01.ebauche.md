@@ -6,7 +6,7 @@ identite:
 ---
 # Specification -- activer-agent-principal
 
-**Version :** 0.8.8
+**Version :** 0.8.11
 **Statut :** prepare
 **ID :** 001
 **Class :** 01
@@ -56,7 +56,7 @@ Tous les agents du cerveau-projet, principalement Cerberus (coordinateur) et les
 | Champ | Description |
 |---|---|
 | **Priorite** | Haute |
-| **Description** | Remet Cerberus comme agent principal (appel a la fin de chaque mission) |
+| **Description** | Remet Cerberus comme agent principal (modele aero R1/R3 : atterrissage terminal du PILOTE en fin de ROUND avec bilan consolide - plus jamais a la fin d une mission, la fin de tout agent va vers ORACLE via reactiver-fin --cible oracle) |
 | **Critere d'acceptation** | Cerberus est de nouveau declare principal dans AGENTS.md |
 | **Dependances** | Exigence 01 |
 
@@ -282,7 +282,9 @@ Tests manuels sur le dossier `exemples/` avec des fichiers de test.
 
 | Date | Version | Auteur | Description |
 |---|---|---|---|
-| 2026-08-30 | 0.8.8 | Buffy | TRACABILITE R/IR MODELE AERO : detecter_type_round elargi - une raison commencant par SIGNALER, BESOIN INTER-ROUND, ou contenant MISSION-AJOUTER / INTER-ROUND est taggee IR en plus des prefixes INTER-ROUND / FIN D INTER-ROUND. Couvre le signalement a ORACLE du modele aero R2 (le pilote largue l habilite) : l inter-round est desormais trace sans flag manuel sur le vocabulaire aero. Version 0.8.8. |
+| 2026-09-02 | 0.8.11 | Morpheus | NORMALISATION DE LA SESSION A LA DISPATCH ACTIVATION : la commande `activer <session> <agent>` ecrivait `### Session : <session>` tel quel dans AGENTS.md - un appel `activer admin vulcain` produisait un bloc malforme `### Session : admin` (invisible par nettoyer-sessions, KO test-025). La dispatch normalise desormais le nom de session comme sidentifier (admin -> session-admin, session-* preserve). Version 0.8.11. |
+| 2026-09-02 | 0.8.10 | Vulcain | MODELE AERO DANS LES MESSAGES DE GUIDANCE (directive utilisateur) : message post-activation "MA FIN va vers ORACLE (reactiver-fin <agent> --cible oracle), JAMAIS Cerberus ni un autre agent ; le PILOTE decide et atterrit sur Cerberus en fin de round" ; garde-fou auto-reactivation "oublie sa fin (modele aero)" ; docstring activer_cerberus = atterrissage terminal du PILOTE ; exigence 02 specifiee en fin de ROUND (plus de fin de mission). Version 0.8.10. |
+| 2026-08-30 | 0.8.9 | Buffy | TRACABILITE R/IR MODELE AERO : detecter_type_round elargi - une raison commencant par SIGNALER, BESOIN INTER-ROUND, ou contenant MISSION-AJOUTER / INTER-ROUND est taggee IR en plus des prefixes INTER-ROUND / FIN D INTER-ROUND. Couvre le signalement a ORACLE du modele aero R2 (le pilote largue l habilite) : l inter-round est desormais trace sans flag manuel sur le vocabulaire aero. Version 0.8.9. |
 | 2026-08-29 | 0.8.7 | Vulcain | COLONNE EXECUTEUR ROUTINES (demande utilisateur) : les entrees historisees par les routines v1 (citations, flux, sante, live, encart, vigie-round...) affichaient une colonne Executeur VIDE - elles appellent ajouter_historique sans passeur executeur. Nouveau helper _executeur_routine(agent) qui lit le manifest des routines et retourne RT(<intervalle>s) si l agent est une routine ACTIVE avec intervalle > 0. Version 0.8.7. |
 | 2026-08-29 | 0.8.6 | Vulcain | COLONNE DEFCON : l encart v1 passe de 9 a 10 colonnes `| Grade | Agent | Defcon | Executeur | Etat | Secteur | Raison | Heure | id | Type |`. Chaque entree porte le DEFCON courant au moment de l historisation. |
 | 2026-08-29 | 0.8.5 | Vulcain | --FORCER LIBRE (support redemarrer-session.py) : main() retire --forcer d argv avant le parsing positionnel. |

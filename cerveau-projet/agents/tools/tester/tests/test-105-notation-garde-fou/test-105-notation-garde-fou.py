@@ -183,9 +183,9 @@ def point_5_manifest():
             notr = r
     ok = (notr is not None
           and notr.get("actif") is True
-          and notr.get("intervalles_secondes") == 600
+          and notr.get("intervalles_secondes") == 960
           and notr.get("script") == "notation.py")
-    verifier("5. manifest.json reference notation (actif, 600 s)", ok,
+    verifier("5. manifest.json reference notation (actif, 960 s)", ok,
              "non trouve" if notr is None else "")
 
 

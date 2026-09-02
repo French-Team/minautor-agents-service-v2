@@ -26,16 +26,17 @@ Exemples:
 Retour: 0 si succes, 1 si erreur.
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.3.2
+Version : 0.3.3
 Statut : prepare
 """
 
 import argparse
+import io
 import os
 import shutil
 import sys
 
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 STATUT = "prepare"
 
 # Securite (round 3) : force la sortie en UTF-8 pour ne jamais crasher sur
@@ -72,6 +73,8 @@ def construire_parser():
                         help="Chemin du fichier a ecrire")
     parser.add_argument("contenu", nargs="?", default="",
                         help="Contenu a ecrire (ou '-' pour lire depuis stdin)")
+    parser.add_argument("--contenu-chemin", dest="contenu_chemin", default=None,
+                        help="Mode ANTI-HEREDOC : lire le contenu depuis un fichier source au lieu d un argument bash (contenus longs acceptes sans troncature)")
     parser.add_argument("--backup", action="store_true",
                         help="Creer une sauvegarde .bak avant")
     parser.add_argument("--dry-run", action="store_true",
@@ -145,6 +148,22 @@ def main(argv=None):
         return 1
 
     contenu = args.contenu
+
+    # Mode ANTI-HEREDOC : lire le contenu depuis un fichier source (jamais
+    # de ligne de commande geante). Pattern identique a creer-fichier
+    # --contenu-chemin et ajouter-contenu-fichier --fichier SOURCE.
+    if args.contenu_chemin:
+        try:
+            if not os.path.isfile(args.contenu_chemin):
+                print(RED + "[ERREUR] Fichier source introuvable: " +
+                      args.contenu_chemin + NC)
+                return 1
+            with io.open(args.contenu_chemin, "r", encoding="utf-8") as fh:
+                contenu = fh.read().rstrip("\n")
+        except OSError as e:
+            print(RED + "[ERREUR] Lecture du fichier source impossible: " +
+                  str(e) + NC)
+            return 1
 
     # Lire le contenu depuis stdin si "-" ou si stdin est un pipe
     if contenu == "-" or (not contenu and not sys.stdin.isatty()):

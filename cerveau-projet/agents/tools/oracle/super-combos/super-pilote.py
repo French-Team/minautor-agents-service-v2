@@ -33,6 +33,7 @@ REGLE IMMUABLE : ASCII strict / LF pur / 100% stdlib Python.
 """
 
 import argparse
+import io
 import json
 import os
 import sys
@@ -40,12 +41,17 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.2.0"
+VERSION = "0.2.2"
 STATUT = "ebauche"
 
 ORACLE_DIR = Path(__file__).parent.parent
 VOL_ETATS = ORACLE_DIR / "vol-etats.py"
 SUPER_COMBOS_DIR = Path(__file__).parent
+
+# FIX v0.2.2 (2026-09-02, denonce par Hygie inter-round) : PID_FILE est defini
+# APRES SUPER_COMBOS_DIR - v0.2.1 l evaluait avant sa definition (NameError a
+# l import : le daemon ne pouvait plus se lancer du tout).
+PID_FILE = SUPER_COMBOS_DIR / "super-pilote.pid"
 
 # Injection du chemin pour reutiliser les fonctions oracle (files, pilote)
 sys.path.insert(0, str(ORACLE_DIR))
@@ -177,8 +183,27 @@ def lancer(nom, verbose=True):
 # --- Mode daemon (--boucle) ---
 
 def boucle(intervalle=120):
-    """Daemon resident : surveille et consomme les super-combos declares."""
-    print(f"[SUPER-PILOTE] Daemon lance (intervalle {intervalle}s). "
+    """Daemon resident : surveille et consomme les super-combos declares.
+
+    FIX v0.2.1 (2026-09-02, lecon test-085) : ecrit SON propre fichier PID
+    (meme motif que routines-server.py) avant le premier tic. Sans ce fichier,
+    oracle-demarrage re-lance un super-pilote a chaque demarrage et les
+    copies s accumulent (9 daemons constates) - les super-pilotes orphelins
+    etaient ensuite signales RESIDUELS par test-085.
+    """
+    temporaire = PID_FILE.with_name("super-pilote.pid.tmp-%d" % os.getpid())
+    try:
+        with io.open(temporaire, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(str(os.getpid()))
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(str(temporaire), str(PID_FILE))
+    except OSError:
+        try:
+            temporaire.unlink()
+        except OSError:
+            pass
+    print(f"[SUPER-PILOTE] Daemon lance (intervalle {intervalle}s, pid {os.getpid()}). "
           f"Ctrl+C pour arreter.")
     deja = set()
     try:
@@ -192,6 +217,11 @@ def boucle(intervalle=120):
             time.sleep(intervalle)
     except KeyboardInterrupt:
         print("\n[SUPER-PILOTE] Arret du daemon.")
+    finally:
+        try:
+            PID_FILE.unlink()
+        except OSError:
+            pass
 
 
 # --- CLI ---

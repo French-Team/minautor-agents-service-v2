@@ -1,6 +1,84 @@
 
 
 
+## [LECON] 2026-09-02 -- TEST-115 R7 VERIFIER-FLUX-SECURITE (mission bdc8b291) : 9/9 OK
+
+**Contexte** : inter-round apres le fix Vulcain 31fe865e (faux positif
+R7 v0.2.2 : le scan sautait la coordination et trouvait l agent LARGUE
+apres une fin). Mission : figer le comportement dans test-115.
+
+**Verifications** :
+1. 4 scenarios cles couverts : violation (fin -> agent metier direct =
+   KO R7), largage normal (fin -> RECUPERE + RETOUR oracle -> largage =
+   OK), fin en tete (OK), cerberus terminal vs non terminal (OK vs KO).
+2. Example de scenario positif ET negatif pour chaque comportement
+   (regression 0.2.1 ne peut plus revenir silencieusement).
+3. Enregistrement serie E + profil 'outils' valide (test-027 point 1
+   'chaque test-0XX appartient a une serie' passe).
+
+**Verdict** : VALIDE - 9/9 OK x3 (deterministe), purge anti-residu OK.
+Rapport rapport-test115-r7-verifier-flux-2026-09-02.md.
+
+**Lecons** :
+1. UN TEST DE ROUTINE QUI LIT UNE CONSTANTE MODULE A L IMPORT :
+   AGENTS_ACTIVITE_RECENTE est resolue au chargement du module. Pointer
+   une fixture VIA os.environ apres l import ne sert a rien (le test lit
+   la vraie table et les scenarios negatifs passent A TORT). Il faut
+   positionner la variable AVANT exec_module et la restaurer ensuite.
+2. SCENARIO POSITIF + NEGATIF POUR CHAQUE BRANCHE : un fix de roule a
+   deux effets contradictoires (accepter le largage MAIS garder la
+   detection de la violation). Tester uniquement le largage OK laisserait
+   une regression de la detection possible ; tester uniquement la
+   violation bloquerait le fix. Les deux cotes sont obligatoires.
+3. ENREGISTRER IMMEDIATEMENT LE NOUVEAU TEST : serie E du lanceur +
+   profil 'outils' de profils-tests.json - sinon test-027 point 1 KO
+   (test non couvert) et le test ne tourne jamais dans la serie.
+
+**Outils utilises** : lire-fichier, creer-fichier, editer-fichier,
+valider-conformite-ascii, oracle (mission-prendre/lister/terminer).
+
+
+## [LECON] 2026-09-02 -- TEST-065 ADAPTATION FORMAT V2 (mission ca722bea) : 12/12 OK
+
+**Contexte** : inter-round apres l adaptation purifier-rvav v0.1.1 -> v0.1.2
+par Vulcain (decoupage v2 d AGENTS-historique : ## date + ### agent +
+entrees '- hh:mm...', tri date/heure pour archiver les PLUS ANCIENNES,
+sections vides supprimees). Mission : adapter test-065 -- pin de version
+0.1.1 -> 0.1.2 + AJOUTER un point de non-regression format v2.
+
+**Verifications** :
+1. Pin 0.1.2 valide (l outil affiche bien 'purifier-rvav 0.1.2').
+2. Nouveau point 7 format v2 (4 sous-verifications) sur fixture recent-en-haut :
+   (a) les ANCIENNES (tri date/heure) sont archivees et les recentes conservees
+   -- preuve que le bug v1 (archiver les blocs du haut) ne peut pas revenir ;
+   (b) sections ### et ## vides supprimees, structure v2 conservee ;
+   (c) non-perte 0 perdue + 0 doublon ; (d) aucun vestige '| <span'.
+3. Regle anti-residu respectee : fixture et archive purgees, tmp-test065
+   absent apres chaque execution (3 passages, 12/12 OK a chaque fois).
+4. Aucun pin 0.1.1 purifier-rvav residuel ailleurs (les 0.1.1 restants dans
+test-005/test-007 concernent d autres outils).
+
+**Verdict** : VALIDE - 12/12 OK, les 8 invariants existants (points 1-6+
+8/9 normes) restent VERTs, aucune regression induite. Rapport :
+rapport-test065-format-v2-2026-09-02.md.
+
+**Lecons** :
+1. UN PIN DE VERSION PERIME SANS ERREUR CACHE UNE REGRESSION : test-065
+   figurait 0.1.1 en dur; si l outil etait reste en 0.1.2 sans mise a jour
+   du test, la verite se serait degradee silencieusement. Toujours aligner
+   test et outil au meme round.
+2. TESTER L ORDRE CHRONOLOGIQUE, PAS SEULEMENT LA NON-PERTE : le piege v1
+   etait d archiver les blocs du haut (recent-en-haut = les PLUS RECENTES).
+   La fixture recent-en-haut avec date recente en HAUT et ancienne en BAS
+   prouve le sens du tri -- c est le point qui aurait manque sinon.
+3. LES NUMEROS DE POINTS SONT LOCAUX AU TEST : verifie avant renumeration
+   qu aucun autre fichier (profils-tests.json, lanceur) ne les reference --
+   uniquement le NOM du test est reference.
+
+**Outils utilises** : lire-fichier, oracle (mission-prendre/lister/terminer),
+purifier-rvav (via le test sur fixture), activer-agent-principal.
+
+
 ## [LECON] 2026-08-24 -- TESTS OUTIL METTRE-A-JOUR-README (DEVIATION P2) : VALIDE
 
 **Contexte** : inter-round Vulcain (delegue par Buffy, deviation P2) - Vulcain a adapte verifier()/dry_run() de mettre-a-jour-readme pour la nouvelle norme README public (1ere personne 20/08, sans section 'La boite a outils'). Bump 0.4.4 -> 0.4.5.
@@ -175,3 +253,42 @@ aucun test lie ne casse a cause d elle. 2 KO preexistants a traiter separement
 **Outils utilises** : lire-fichier, lire-activite-recente, oracle (pilote/lire/
 acquitter/mission-lister), verifier-systeme, enregistrer-usage-outil,
 tester-protections (lancer_protege via tests individuels).
+
+## [LECON] 2026-09-02 -- TEST-092 PARITE COUVRANT NEMESIS (apres branchement activer-agent-principal v0.8.9)
+
+**Contexte** : inter-round apres la creation de l agent v1 nemesis (Buffy) et son branchement a l activation (Vulcain v0.8.8 -> 0.8.9 : dictionnaire AGENTS py + 3 case statements sh + couleur). Mission : verifier/adapter le garde-fou de parite py/sh/AGENTS.md et les tests qui pinent la version.
+
+**Verifications** :
+1. test-092 : ajout de nemesis au pin minimal AGENTS_ATTENDUS (point 1), l extraction dynamique couvre automatiquement le reste (AGENTS.md -> py -> sh dans les deux sens). 9/9 OK.
+2. Aucun test ne pinne la version 0.8.8 d activer-agent-principal : test-056 pinne proteger-verrou-habilitation (v0.5.0, outil distinct), test-106 ne mentionne 0.8.8 qu en docstring descriptive (le test charge le module a la volee, pas de pin).
+3. Preuve de bout en bout : activation reelle de nemesis sur copie isolee (env AGENTS_FILE + AGENTS_HISTORIQUE vers temp) -> 'nemesis active avec succes' OK. L agent est desormais ACTIVABLE.
+4. Coherence 3 sources : AGENTS.md lien [Nemesis](...), py dictionnaire, sh 3 case statements. Version 0.8.9 py/md/spec.
+5. 0 residu (tmp-test092-* supprime), ASCII/LF du test modifies OK (point 8 du test verifie).
+
+**Lecons** :
+1. LE PIN MINIMAL D UN GARDE-FOU DE PARITE DOIT SUIVRE LES NOUVEAUX AGENTS : AGENTS_ATTENDUS est un anti-corruption (AGENTS.md vide ne doit pas rendre le test vert) - ajouter chaque nouveau agent au pin en meme temps que le branchement (Buffy cree, Vulcain branche, Morpheus pinne).
+2. LE BESOIN 'TESTS QUI PINENT LA VERSION' SE VERIFIE PAR RECHERCHE, PAS PAR SOUPcon : aucun test ne pinne 0.8.8 - la mission etait plus large que la realite. Verifier avec grep cible AVANT d adapter des tests (ne rien casser pour rien).
+3. UNE DOCSTRING QUI MENTIONNE UNE VERSION N EST PAS UN PIN : test-106 date la tracabilite R/IR 'activation v0.8.8' dans un commentaire - pas de bump necessaire tant que le test charge le module a la volee.
+4. PIEGE WINDOWS : subprocess.run avec cwd='Z:/...' (slash POSIX) echoue NotADirectoryError sur CreateProcess - utiliser os.path.abspath('.') natif pour le cwd des sous-processus (deja note lecon cwd des tests, confirme ici).
+
+**Verdict** : VALIDE - test-092 9/9 OK, activation reelle sur copie OK, 0 pin 0.8.8 residuel, 0 residu, ASCII/LF OK. Non-regression complete et recontrole delegues a Janus (pilote).
+## [LECON] 2026-09-02 -- TEST MODIFICATION CARTE CERBERUS (ETAPE 2 THEME DE-USER SUPPRIMEE) : VALIDE (Morpheus)
+
+**Contexte** : inter-round Buffy - suppression de l etape [2] 'Identifier l agent habilite (matrice, NE PAS executer soi-meme)' du theme DE-USER de la carte cerberus (decision utilisateur : c est ORACLE qui identifie/largue l agent habilite, pas Cerberus). Verification demandee : coherence carte/fiche, navigation theme DE-USER, pins eventuels.
+
+**Verifications** :
+1. verifier-conformite-fiche --agent cerberus : 1 CONFORME / 0 ECART.
+2. Navigation guider-arbre : theme DE-USER ne propose plus que 2 besoins ('Ecouter la demande completement' + 'Envoyer la mission a Oracle et lui rendre la main') - l etape 2 a bien disparu.
+3. 0 residu du texte supprime ('matrice, NE PAS executer soi-meme' introuvable dans cerveau-projet/agents/cerberus/).
+4. theme-de-user.json : redirects = [Ecouter, Envoyer a Oracle] ; arbre-cerberus.json version 0.2.2 ; JSON OK.
+5. test-034 (cerberus sans outils de test) NON IMPACTE : il epingle les cases c5/c6 du PARCOURS V1 (parcours-cerberus.json), pas le theme v2 - parcours v1 intact (c5 'Identifier l agent habilite', c6 'Activer l agent habilite' presentes).
+
+**Lecons** :
+1. CARTE V2 vs PARCOURS V1 : les tests qui pinnent des cases (test-034 c5/c6) ciblent le PARCOURS v1 archive ; une modification du THEME v2 ne les casse pas tant que le parcours v1 reste intact. Verifier la CIBLE du test avant de conclure a un impact.
+2. LA NAVIGATION REELLE EST LA PREUVE : guider-arbre --reponses 'DE-USER' montre les besoins effectifs du theme - plus fiable qu un grep du fichier seul.
+3. RESIDU NUMERIQUE : un grep retournant 'residu: 0' est ambigu (code de sortie grep) ; verifier l ABSENCE de sortie (aucune ligne affichee) plutot que le code retour.
+
+**Verdict** : VALIDE - modification conforme, 0 regression detectee, test-034 non impacte.
+2026-09-02 | TEST FILE RELAIS ORDONNEE (oracle v0.5.8) : les tests files.py doivent comparer les VALEURS int de priorite (1/2), pas les chaines ('P1') ; prendre() renvoie un TUPLE (entree, erreur) et FILES_DIR est un pathlib.Path (pas str) - le harnais de test doit unpacker et passer un Path. Tri valide a egale priorite = DATE RECENTE d abord (decision utilisateur) : un fixture avec purge plus recente qu urgent donne purge en premier - c est le comportement attendu, pas un bug. L10n ecart doc : oracle.md ligne 122 dit encore '(marque PRISE, FIFO)' - reference FIFO obsoleted a signaler a Vulcain pour mise a jour.
+2026-09-02 | TEST REFS PARCOURS V1 x2 (missions 8093a011 + 7353bea9) : VALIDE. Verification de la migration v1->v2 complete : 0 theme/arbre/fins v2 contient guider-parcours ou parcours-<agent> (grep global), 7 arbres guider-arbre --valider VALIDES, reprise v2 cible le bon arbre-<agent>.json (les 6 fichiers existent), outils : demarrer-llm.py v0.1.2 sans repli v1 (--version OK, runtime glm5 admin affiche l arbre v2 cerberus sans mention guider-parcours), editer-parcours.md porte la note ARCHIVE V1. Non-regression : test-034 6/6 + test-109 11/11 (les pins parcours v1 c5/c6 du PARCOURS archive sont intacts - la migration corrige les pointeurs v2, jamais les archives v1). Lecon : un test de migration v1->v2 doit verifier la DOUBLE direction - (1) aucun pointeur actif v2 ne redirige vers v1 (grep themes/arbres), (2) les outils de demarrage ne tombent plus sur le repli v1 (runtime reel), et la non-regression sur les tests qui pinent l ARCHIVE v1 (test-034) prouve qu on n a pas casse les fichiers proteges.
+2026-09-02 | TEST URGENT ENCART DETECTION INCONNU (mission 3c2970e6) : VALIDE. 3 zones testees : 1) run reel encart --dry-run = OK (fichier propre, pilote declare SP ne pollue plus) ; 2) detection synthetique : agent-fantome avec grade Inconnu detecte (2 anomalies : grade + agent absent mapping), pilote Special NON signale ; 3) non-regression : les controles Etat inconnu + Executeur vide existants fonctionnent toujours (2 anomalies sur fichier synthetique, pilote propre). Lecon : le test de detection sur un fichier TEMP (shim remplacant le chemin encart + GRADES_V1 pointe sur le vrai fichier) valide la logique sans toucher le fichier reel - pattern a reutiliser pour les routines de surveillance (le cwd reel ne se cale pas depuis /tmp, il faut pointer GRADES_V1 explicitement).

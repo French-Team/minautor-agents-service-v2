@@ -23,18 +23,18 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | glm5 |
-| **Nom Agent** | cerberus |
+| **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
 | **Derniere mise a jour** | 2026-09-02 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | Reprise session-admin apres redemarrage des serveurs; Cerberus reprend la communication utilisateur. |
+| **Active par** | oracle (retour de mission) |
+| **Raison** | RETOUR ORACLE : COORDINATION TERMINEE - toutes les missions routees |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-admin | glm5 | cerberus | 2026-09-02 08:02:25.172 |
+| session-admin | glm5 | Cerberus | 2026-09-02 16:17:04.461 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -61,6 +61,22 @@ CERBERUS -> AGENT -> CERBERUS
 | 6 | **Cerberus relit SA fiche et SES corrections** puis reprend pour la suite |
 
 > **REGLE DE RELECTURE** : A chaque activation ou reactivation, l'agent relit SA fiche et SES corrections (jamais celles des autres). Activer sans lire = inutile.
+
+### Regles permanentes de round (decision utilisateur 2026-09-02)
+
+1. **REPRISE APRES REDEMARRAGE** : apres CHAQUE redemarrage de session, le
+   round interrompu REPREND -- l agent ne repart pas de zero et ne demande
+   jamais "Que souhaitez-vous faire ?" : il traite les erreurs bloquantes
+   restantes (etats-cartes residuels, daemons morts) puis continue TON
+   arbre a l endroit ou il s etait arrete, missions en file comprises.
+2. **MODE SINGLE-LLM** : quand l utilisateur dit "single-llm" (ou "mode
+   mono"), le LLM incarne TOUS les maillons du round lui-meme (rien ne se
+   passe en arriere-plan) : apres chaque activation il joue immediatement le
+   role de l agent active (relecture fiche/corrections, mission, fin vers
+   ORACLE), jusqu a la fin de chaine (bilan consolide -> Cerberus).
+
+> Ces 2 regles sont aussi gravees dans `demarrer.md` (ORDRE 4 et ORDRE 5) :
+> elles sont donc lues a chaque demarrage de session, en plus d ici.
 <!-- MARBRE:FIN constitution -->
 
 ---
@@ -143,6 +159,7 @@ si aucun nom de session n'est fourni).
 | [Hermes](cerveau-projet/agents/hermes/hermes.md) | cerveau-projet/agents/hermes/ | Agent de la langue (orthographe, vocabulaire, fautes) | Disponible (en attente) | Agent dedie aux fautes de francais |
 | [Gardien](cerveau-projet/agents/gardien/gardien.md) | cerveau-projet/agents/gardien/ | Gardien du marbre (securite du code) | Disponible (en attente) | SEUL a proposer la modification des zones protegees (l utilisateur valide) |
 | [Argus](cerveau-projet/agents/argus/argus.md) | cerveau-projet/agents/argus/ | Detecteur de contradictions | Disponible (en attente) | DETECTE et SIGNALE les incoherences (cases, regles, protocoles, git) - ne corrige jamais |
+| [Nemesis](cerveau-projet/agents/nemesis/nemesis.md) | cerveau-projet/agents/nemesis/ | Analyste en Chef - avis contradictoire avant validation | Disponible (en attente) | Audite les propositions (3 axes : cas limites, optimisation, securite) et repond 'Oui, mais...' - ne corrige jamais |
 | [Chiron](cerveau-projet/agents/chiron/chiron.md) | cerveau-projet/agents/chiron/ | Educateur des agents -- formation continue | Disponible (en attente) | Re-edue les agents quand les outils/regles/protocoles changent |
 | [Socrate](cerveau-projet/agents/socrate/socrate.md) | cerveau-projet/agents/socrate/ | Conversateur de revision strategique | Disponible (en attente) | Discute des revisions, priorise, produit une liste de missions pour Cerberus |
 | [Redacteur-v2](cerveau-projet/agents/redacteur-v2/redacteur-v2.md) | cerveau-projet/agents/redacteur-v2/ | Redacteur PRO des docs de la v2 (freelance) | Disponible (en attente) | Agent dedie a la redaction des docs v2 - MODE CONVERSATION (reactive Cerberus sur fin de cycle) |

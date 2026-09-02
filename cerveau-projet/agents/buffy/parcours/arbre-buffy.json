@@ -2,7 +2,7 @@
   "identite": {
     "type": "arbre",
     "appartient_a": "buffy",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "commun": false
   },
   "arbre": {
@@ -41,16 +41,18 @@
         "reponse": "PROTOCOLE",
         "description": "Creer un nouveau protocole (dossier, convention, creation limitee)",
         "vers": "theme-protocole.json"
-      },  {
-   "reponse": "CONTROLER",
-   "description": "Controle/sante des tableaux et des structures",
-   "vers": "theme-controler.json"
-  },
-  {
-   "reponse": "TESTER",
-   "description": "Faire tester mes modifications par Morpheus (inter-round) : Morpheus testeur pro teste et revient vers moi",
-   "vers": "theme-test.json"
-  },      {
+      },
+      {
+        "reponse": "CONTROLER",
+        "description": "Controle/sante des tableaux et des structures",
+        "vers": "theme-controler.json"
+      },
+      {
+        "reponse": "TESTER",
+        "description": "Faire tester mes modifications par Morpheus (inter-round) : Morpheus testeur pro teste et revient vers moi",
+        "vers": "theme-test.json"
+      },
+      {
         "reponse": "AUTRE",
         "description": "Mission hors parcours : sous-mission, delegation, outil temporaire",
         "vers": "theme-autre.json"

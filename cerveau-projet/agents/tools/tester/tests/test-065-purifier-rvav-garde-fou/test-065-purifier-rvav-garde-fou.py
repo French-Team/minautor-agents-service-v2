@@ -18,7 +18,7 @@ Contexte (decision utilisateur 2026-08-15) :
     PREMIER). Ce garde-fou verifie les 2 garanties.
 
 Invariants verifies :
-  1. purifier-rvav.py existe, compile, --version v0.1.1, --aide liste les options
+  1. purifier-rvav.py existe, compile, --version v0.1.2, --aide liste les options
   2. Dry-run sur un fichier de test : plan affiche, AUCUNE modification (lecons
      conservees, aucune archive creee)
   3. Premiere purification --executer : fichier reduit sous le seuil, archive
@@ -29,8 +29,15 @@ Invariants verifies :
   5. L archive a un frontmatter valide et des normes ASCII + LF pures
   6. Purge : aucun fichier temporaire laisse (fichier de test et archive
      supprimes a la fin)
-  7. Normes : ASCII strict + LF pur (outil + test)
-Tags: outils, purifier, garde-fou
+  7. FORMAT V2 d AGENTS-historique (adaptation v0.1.2, mission ca722bea) : sur
+     une fixture au format v2 reel (## date + ### agent + entrees '- hh:mm...',
+     RECENT-EN-HAUT), la purification (a) archive les entrees les PLUS ANCIENNES
+     (tri date/heure) et pas celles du haut du fichier, (b) supprime les
+     sections agents et les dates devenues vides, (c) garantit la non-perte
+     0 perdue + 0 doublon (somme principale+archive == avant), (d) conserve la
+     structure v2 (aucun residu du format v1 '| <span')
+  8. Normes : ASCII strict + LF pur (outil + test)
+Tags: outils, purifier, garde-fou, format-v2
 """
 import glob
 import importlib.util
@@ -216,9 +223,9 @@ def main():
                 ok_compile = r.returncode == 0
             r2 = lancer([PYTHON, PURIFIER_PY, "--version"], timeout=60)
             r3 = lancer([PYTHON, PURIFIER_PY, "--aide"], timeout=60)
-            ok = (ok_compile and r2.returncode == 0 and "0.1.1" in r2.stdout
+            ok = (ok_compile and r2.returncode == 0 and "0.1.2" in r2.stdout
                   and "--executer" in r3.stdout and "--dry-run" in r3.stdout)
-            verifier("1. purifier-rvav existe, compile, version 0.1.1, options",
+            verifier("1. purifier-rvav existe, compile, version 0.1.2, options",
                      ok, "rc=%d" % r2.returncode)
             chrono_etape("1. outil", t0)
 
@@ -291,17 +298,93 @@ def main():
             verifier("6. purge : aucun residu (fichier test + archive)", ok)
             chrono_etape("6. purge", t0)
 
-        # 7. Normes ASCII + LF pur (outil + test)
+        # 7. FORMAT V2 d AGENTS-historique (adaptation v0.1.2, mission ca722bea) :
+        #    fixture v2 recent-en-haut, verification des 4 points (a)-(d)
         if point_actif(7):
+            t0 = time.monotonic()
+            fixture = os.path.join(TMP, "AGENTS-historique.md")
+            archive_v2 = os.path.join(TMP, "AGENTS-historique-archive.md")
+            os.makedirs(TMP, exist_ok=True)
+            # Format v2 reel (recent-en-haut) : la date la plus recente en
+            # HAUT, la plus ancienne en BAS. Si l outil archiver les blocs
+            # du haut (bug v1), il archiverait les RECENTES ; il doit
+            # archiver les ANCIENNES (tri date/heure).
+            corps = [
+                "## 02/09/2026",
+                "### morpheus",
+                "- 14:00:00.000 | glm5 | R | entree recente 1",
+                "- 14:00:01.000 | glm5 | R | entree recente 2",
+                "## 01/09/2026",
+                "### vulcain",
+                "- 08:00:00.000 | glm5 | R | entree ancienne 1",
+                "- 08:00:01.000 | glm5 | R | entree ancienne 2",
+            ]
+            with io.open(fixture, "w", encoding="ascii", newline="\n") as fh:
+                fh.write("\n".join(corps) + "\n")
+            lignes_avant = sum(1 for _ in io.open(fixture, encoding="ascii"))
+
+            def entrees_in(chemin):
+                """Liste des lignes '- ' d un fichier (None = absent)."""
+                if not chemin or not os.path.isfile(chemin):
+                    return []
+                with io.open(chemin, encoding="utf-8", errors="replace") as fh:
+                    return [l for l in fh.read().splitlines()
+                            if l.startswith("- ")]
+
+            # Seuil = lignes_avant - 2 : archive exactement les 2 ANCIENNES
+            # (8 - 2 = 6 ; l outil archive tant que total > seuil, une entree
+            # de 1 ligne a la fois, dans l ordre d anciennete).
+            r = lancer([PYTHON, PURIFIER_PY, "--fichier", fixture,
+                        "--seuil", str(lignes_avant - 2), "--executer"],
+                       timeout=60)
+            arch = entrees_in(archive_v2)
+            princ = entrees_in(fixture)
+            # (a) les PLUS ANCIENNES sont archivees, les recentes conservees
+            a_ok = (r.returncode == 0 and len(arch) == 2
+                    and any("ancienne" in l for l in arch)
+                    and not any("recente" in l for l in arch)
+                    and len(princ) == 2
+                    and any("recente" in l for l in princ)
+                    and not any("ancienne" in l for l in princ))
+            verifier("7.1 format v2 : ANCIENNES archivees, recentes conservees",
+                     a_ok,
+                     "arch=%d princ=%d rc=%d" % (len(arch), len(princ),
+                                                  r.returncode))
+            # (b) sections agents et dates devenues vides supprimees
+            with io.open(fixture, encoding="utf-8", errors="replace") as fh:
+                contenu = fh.read()
+            b_ok = ("### vulcain" not in contenu and "## 01/09/2026" not in contenu
+                    and "### morpheus" in contenu and "## 02/09/2026" in contenu)
+            verifier("7.2 format v2 : sections vides supprimees, structure conservee",
+                     b_ok)
+            # (c) non-perte : somme principale + archive == avant + 0 doublon
+            c_ok = (len(princ) + len(arch) == 4
+                    and len(set(arch)) == len(arch)
+                    and not set(arch) & set(princ))
+            verifier("7.3 format v2 : non-perte 0 perdue + 0 doublon (%d=%d+%d)"
+                     % (4, len(princ), len(arch)), c_ok)
+            # (d) aucun vestige v1 '| <span' dans le principal purifie
+            d_ok = "| <span" not in contenu
+            verifier("7.4 format v2 : aucun vestige v1 (| <span)", d_ok)
+            # Purge de la fixture v2 (regle anti-residu)
+            for p in (fixture, archive_v2):
+                if os.path.isfile(p):
+                    os.remove(p)
+            if os.path.isdir(TMP) and not os.listdir(TMP):
+                os.rmdir(TMP)
+            chrono_etape("7. format v2", t0)
+
+        # 8. Normes ASCII + LF pur (outil + test)
+        if point_actif(8):
             t0 = time.monotonic()
             fichiers = [os.path.abspath(__file__), PURIFIER_PY]
             total_na = sum(max(ascii_count(f), 0) for f in fichiers)
             total_crlf = sum(max(crlf_count(f), 0) for f in fichiers)
-            verifier("7. ASCII strict : 0 non-ASCII (outil + test)",
+            verifier("8. ASCII strict : 0 non-ASCII (outil + test)",
                      total_na == 0, "nb=%d" % total_na)
-            verifier("8. LF pur : 0 CRLF (outil + test)",
+            verifier("9. LF pur : 0 CRLF (outil + test)",
                      total_crlf == 0, "nb=%d" % total_crlf)
-            chrono_etape("7. normes", t0)
+            chrono_etape("8. normes", t0)
     except PROTECTIONS.ArretProtection as e:
         print("  [KO] ARRET PROTECTION : %s" % e.message)
         NB_KO += 1

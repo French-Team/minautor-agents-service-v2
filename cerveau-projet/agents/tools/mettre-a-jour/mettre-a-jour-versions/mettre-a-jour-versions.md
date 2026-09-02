@@ -1,7 +1,7 @@
 # mettre-a-jour-versions
 
 **Categorie** : Mettre a jour
-**Version** : 0.1.5
+**Version** : 0.1.6
 **Statut** : ebauche
 **Agent** : Vulcain
 **Date** : 2026-08-15
@@ -122,6 +122,7 @@ INCOHERENT. Liste dans `EXEMPTIONS_AUDIT` (chemin, version pinnee, raison).
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.1.6 | 2026-09-02 | EXEMPTIONS .sh PARTIELS ANTI-HEREDOC (round vestiges v1 / non-regression) : creer-fichier.sh (0.3.2), ecrire-fichier.sh (0.3.2) et editer-fichier.sh (0.5.0) declares EXEMPT - les modes anti-heredoc (--contenu-chemin / --remplacements-chemin) sont cote .py uniquement, bumper les .sh serait un mensonge de version. Meme precedent qu activer-agent-principal.sh (0.7.4). Raisons documentees au changelog de chaque outil. |
 | 0.1.5 | 2026-08-18 | RESYNC CARTES-LOCK APRES BUMP CARTE (lecon 2026-08-18, cas themis v0.4.10) : un bump --parcours ecrit la carte JSON HORS editer-parcours, ce qui faisait diverger l empreinte de cartes-lock.json et BLOQUAIT toute ecriture ulterieure de la carte par l anti-contournement. Ajout de resynchroniser_cartes_lock (empreinte normalisee LF+rstrip strictement identique a editer-parcours) appellee apres chaque bump --parcours --wet reussi. |
 | 0.1.4 | 2026-08-17 | FORMATS .md INVISIBLES COUVERTS (demande utilisateur audit croise) : le motif md_version ne couvrait QUE '**Version :** X.Y.Z' en debut de ligne - les .md en TABLEAU ('| **Version** |'), BLOCKQUOTE ('> **Version** :'), LISTE ('- Version :' / '- **X.Y.Z**') ou section '## Version' etaient declares 'coherent' sans verification. Extension du motif aux 4 formats (priorite au champ standard, toujours en tete). 2 vrais ecarts caches corriges (generateurs-carte .md 0.3.0 -> 0.3.1, generateurs-ligne .md 0.3.1 -> 0.3.0) + 7 .md normalises en champ standard (valider-case, tester-protections, editer-fichier-agents, evaluer-processus, detecter-evaluations-incompletes, verifier-conformite-fiche, generateurs-amelioration). |
 | 0.1.3 | 2026-08-16 | PRECISION DES COMPAGNONS : exclusion des corrections.md (lecons des agents = mentions historiques, jamais des pins a adapter - faux positifs du round 0.5.2) + RAPPEL OBLIGATOIRE dans le rapport : lancer le bumper sur chaque outil bumpe AVANT la non-regression (lecon : 5 KO en cascade car le bump 0.5.2 n avait pas ete precede du bumper) |

@@ -2,7 +2,8 @@
   "identite": {
     "type": "fins",
     "appartient_a": "vulcain",
-    "description": "Toutes les fins possibles pour Vulcain (arbre v0.1.0)"
+    "description": "Toutes les fins possibles pour Vulcain (arbre v0.1.0)",
+    "version": "0.1.1"
   },
   "fins": {
     "fin-construire": {
@@ -46,14 +47,12 @@
       "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-outil-temporaire": {
-      "titre": "FIN - Outil temporaire",
-      "description": "Outil temporaire cree, utilise et SUPPRIME en fin de mission (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> ACTIVER VULCAIN pour creer l outil durable (protocole 5 fichiers). AVANT suppression, DECLARATION au registre : enregistrer-usage-outil --mode script-temporaire (PASSE PAR LE GENERATEUR).",
-      "action": "procedure",
-      "etapes": [
-        "Declarer l usage : python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --mode script-temporaire",
-        "Supprimer le script temporaire (0 residu)"
-      ],
-      "regle": "REGLE ANTI-SCRIPTS : DECLARER au registre (enregistrer-usage-outil --mode script-temporaire)."
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission avec outil temporaire terminee. AVANT la fin : declarer l usage au registre (enregistrer-usage-outil --mode script-temporaire) et SUPPRIMER le script (0 residu, regle workspace). PROMOTION : si ce besoin se reproduit (2e utilisation) -> je cree l outil durable (theme CONSTRUIRE, protocole 5 fichiers). Puis je reviens vers ORACLE (l aeroport) - le pilote decide du suivant (R3).",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<bilan avec outil temporaire>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin. REGLE ANTI-SCRIPTS : declarer au registre avant suppression."
     },
     "fin-reprise": {
       "titre": "FIN - Reprise du parcours apres retour de l agent habilite",
@@ -69,10 +68,29 @@
       "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<rapport pour Themis>\" --cible oracle",
       "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
+    "fin-autre": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : mission AUTRE terminee (documentation, point de vue, traitement hors construction/modification), je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - je ne connais pas le prochain agent.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<rapport de mission autre>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
+    "fin-lire": {
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : preambule LIRE termine (relecture fiche/corrections, lecons, activite, doc outils), je reviens vers ORACLE (l aeroport). Le pilote me renverra pour la mission principale ou larguera le maillon suivant (R3) - je ne decide pas de la suite.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<preambule lu>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
+    },
     "fin-signaler-besoin": {
-      "titre": "Signaler le besoin",
-      "description": "Mission hors perimetre : signaler le besoin a Cerberus (besoin de test -> Morpheus, besoin de nouvelle case -> Buffy). Pour un OUTIL DURABLE : je le cree MOI-MEME (je suis Vulcain, protocole 5 fichiers, theme CONSTRUIRE) - pas besoin de signaler.",
-      "action": "procedure"
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero (R2/R3) : mission hors perimetre. JE N INTERROMPT PAS le round et je n active JAMAIS un autre agent : je SIGNALE le besoin a ORACLE (python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <habilite> \"<rapport>\") puis MA FIN va vers ORACLE - le pilote LARGUE l agent habilite, et a la fin de l inter-round il me renvoie pour reprendre mon round. Pour un OUTIL DURABLE : je le cree MOI-MEME (theme CONSTRUIRE) - pas besoin de signaler.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin vulcain \"<besoin signale>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. ERREUR HORS-PERIMETRE -> INTER-ROUND (R2) : signaler a ORACLE puis fin vers ORACLE."
     },
     "fin-theme": {
       "titre": "Retour a la racine",

@@ -34,3 +34,4 @@
 {"date": "2026-08-27T19:06:20.090232", "nom": "jarvis demarrage", "tokens_debut": 38520, "tokens_fin": 38520, "delta": 0, "duree_secondes": 0.28}
 {"date": "2026-08-29T10:32:15.723859", "nom": "jarvis arret", "tokens_debut": 2135702, "tokens_fin": 2135702, "delta": 0, "duree_secondes": 0.21}
 {"date": "2026-08-29T10:32:23.947057", "nom": "jarvis demarrage", "tokens_debut": 2136633, "tokens_fin": 2136633, "delta": 0, "duree_secondes": 0.18}
+{"date": "2026-09-02T11:17:26.708350", "nom": "jarvis ???", "tokens_debut": 2344326, "tokens_fin": 2350005, "delta": 5679, "duree_secondes": 7.78}

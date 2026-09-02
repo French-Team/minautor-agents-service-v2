@@ -216,7 +216,7 @@ def auditer_arbre(agent):
         elif bid == "F3":
             statut, detail = _f3(fins)
         elif bid == "F4":
-            statut, detail = _f4(fins)
+            statut, detail = _f4(fins, agent)
         elif bid == "F5":
             statut, detail = _f5(fins)
         elif bid == "C4":
@@ -444,17 +444,25 @@ def _f3(fins):
     return "OK", "aucune cible placeholder"
 
 
-def _f4(fins):
-    """Modele aero R1 : aucune fin ne cible cerberus."""
+def _f4(fins, agent=""):
+    """Modele aero R1 : aucune fin ne cible cerberus.
+
+    EXCEPTION DOCUMENTEE (decision utilisateur 2026-09-02) : la fin
+    fin-coordination de l aeroport ORACLE atterrit sur CERBERUS avec le
+    bilan consolide (fin de round). Cerberus = point de depart/arrivee
+    des demandes utilisateur. Toutes les autres fins de tous les autres
+    agents vont vers ORACLE."""
     KO = []
     for case, f in (fins or {}).get("fins", {}).items():
         if f.get("action") in ("reactiver", "activer"):
             cible = (f.get("cible", "") or "").lower()
             if cible == "cerberus":
+                if agent.lower() == "oracle" and case == "fin-coordination":
+                    continue  # EXCEPTION fin de round oracle -> cerberus
                 KO.append("%s: cible cerberus (vestige v1, doit aller vers oracle)" % case)
     if KO:
         return "BLOQUANT", "; ".join(KO)
-    return "OK", "aucune fin vers cerberus (modele aero R1)"
+    return "OK", "aucune fin vers cerberus (modele aero R1, exception oracle/fin-coordination)"
 
 
 def _f5(fins):

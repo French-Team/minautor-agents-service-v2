@@ -1,6 +1,6 @@
 # purifier-rvav
 
-**Version :** 0.1.1
+**Version :** 0.1.2
 **Statut :** ebauche
 **Categorie :** Purifier
 **Proprietaire :** Vulcain (outil partage)
@@ -63,12 +63,19 @@ python3 purifier-rvav.py --version
 ## Comportement
 
 1. Detecte les fichiers en surcharge (meme logique que detecter-surcharge-fichier)
-2. Pour chaque fichier : calcule combien de blocs archiver pour repasser sous
-   le quota (on archive TANT QUE le fichier reste au-dessus du seuil, en
-   gardant toujours au moins un bloc)
-3. Affiche le plan : fichier, lignes avant/apres, nb blocs a archiver, fichier
-   d archive cree
-4. `--executer` : deplace les blocs du HAUT (les plus anciens) vers l archive
+2. Pour chaque fichier : calcule combien de blocs/entrees archiver pour
+   repasser sous le quota (on archive TANT QUE le fichier reste au-dessus du
+   seuil, en gardant toujours au moins un bloc/entree)
+3. Affiche le plan : fichier, lignes avant/apres, nb blocs/entrees a archiver,
+   fichier d archive cree
+4. `--executer` : deplace les plus anciens vers l archive
+   - **corrections.md** : blocs `## [LECON]`, ordre ancien-en-haut -> les
+     premiers blocs (les plus anciens) sont archives
+   - **AGENTS-historique.md (format v2)** : entrees `- hh:mm...` sous `## date`
+     + `### agent`, ordre recent-en-haut. L ordre du haut n est pas l ordre
+     chronologique (sections non triees entre elles) : on TRIE les entrees
+     par (date, heure) et on archive les PLUS ANCIENNES, puis on supprime les
+     sections agents devenues vides et les dates vides
 5. **Accumulation anti-perte** : si l archive existe deja, les nouveaux blocs
    (plus anciens) sont PREFIXES devant le contenu existant (jamais ecrases)
 6. **Garantie anti-perte** : l archive est ecrite EN PREMIER, le fichier

@@ -137,9 +137,10 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
    arbre de decision v2 -- `oracle.py pilote <agent>` charge l'arbre
    (`arbre-<agent>.json` + themes `theme-*.json` + `fins.json`) et sert chaque
    etape de travail dans l inbox de l agent (maitre d hotel, vision
-   2026-08-27). Le parcours v1 (`guider-parcours.py ...
-   parcours-<agent>.json`) est UNIQUEMENT un repli pour les agents sans arbre:
-   l etat de carte des agents pointe vers `arbre-<agent>.json` en priorite.
+   2026-08-27). Tous les agents ont un arbre v2 : l etat de carte pointe vers
+   `arbre-<agent>.json`. Les parcours v1 (`guider-parcours.py ...
+   parcours-<agent>.json`) sont des ARCHIVES protegees par le marbre : ils ne
+   pilotent plus le guidage.
 3. SA carte (arbre v2) le guide redirect par redirect / case par case :
    chaque redirect/case donne l'indice exact (outil a lancer, fichier a
    lire, regle a appliquer) et les branches selon ses reponses. C'est LUI qui

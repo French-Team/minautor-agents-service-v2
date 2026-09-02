@@ -26,7 +26,7 @@ Variable d'environnement:
   CLASSEUR_STOCKAGE   - surcharger le chemin du classeur-variables (tests sur copie)
 
 Proprietaire : Vulcain
-Version : 0.8.8
+Version : 0.8.11
 Statut : prepare
 """
 
@@ -39,7 +39,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-VERSION = "0.8.8"
+VERSION = "0.8.11"
 STATUT = "prepare"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 
@@ -271,6 +271,7 @@ COULEURS_PAR_AGENT = {
     "redacteur-v2": "#7c3aed",
     "hades": "#4b5563",  # redaction docs v2 - violet profond
     "oracle": "#0d9488",  # coordination v1 - teal
+    "nemesis": "#6d28d9",  # avis contradictoire - violet profond
     "stark": "#f59e0b",    # communication - ambre (Iron Man)
 }
 COULEUR_DEFAUT = "#334155"
@@ -365,6 +366,9 @@ AGENTS = {
     "oracle": ("Coordinateur de l'equipe v1 (session-admin) -- traite les alertes de coordination (processus fantomes, serveurs morts, roulage messages) + controle processus",
                "cerveau-projet/agents/oracle/oracle.md",
                "cerveau-projet/agents/oracle/corrections.md"),
+    "nemesis": ("Analyste en Chef -- avis contradictoire avant validation (audit 3 axes : cas limites, optimisation, securite/integrite), reponse 'Oui, mais...'",
+                "cerveau-projet/agents/nemesis/nemesis.md",
+                "cerveau-projet/agents/nemesis/corrections.md"),
     "redacteur-v2": ("Redacteur des docs de la v2 (proposition, regles, conventions) -- mode conversation (reactive Cerberus sur fin de cycle)",
                 "cerveau-projet/agents/redacteur-v2/redacteur-v2.md",
                 "cerveau-projet/agents/redacteur-v2/corrections.md"),
@@ -1818,7 +1822,7 @@ def activer_agent(session, agent, raison, mission=None, type_round="R",
             print("")
             print("=== AVERTISSEMENT GARDE-FOU (agent oublie) ===")
             print("L agent '%s' est encore actif dans %s." % (agent_actuel, session))
-            print("Il a probablement oublie d'activer Cerberus.")
+            print("Il a probablement oublie sa fin (modele aero R1/R3) : sa fin devait aller vers ORACLE (reactiver-fin --cible oracle).")
             print("Auto-reactivation de '%s' autorisee." % agent)
             print("==============================================")
             print("")
@@ -1887,7 +1891,7 @@ def activer_agent(session, agent, raison, mission=None, type_round="R",
     print("")
     print("=== MESSAGES POUR L AGENT ===")
     print("  > RELEVE MEME ROUND : l agent active (%s) doit enchainer IMMEDIATEMENT (relire SA fiche + SES corrections puis executer sa mission) - ne jamais s arreter apres une activation" % agent)
-    print("  > la fin de mission suit SA carte (Pattern 13) : activer le maillon suivant selon SA carte ; seul le DERNIER maillon ACTIVE Cerberus avec le bilan consolide (jamais d'activation directe a Cerberus en milieu de chaine)")
+    print("  > la fin de mission suit SA carte (modele aero R1/R3) : MA FIN va vers ORACLE (python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin <agent> \"<bilan>\" --cible oracle), JAMAIS vers Cerberus ni vers un autre agent. Le PILOTE decide de la suite (largage du maillon suivant) et atterrit sur Cerberus en fin de round avec le bilan consolide.")
     # Oracle v0.1.0 : afficher les messages non lus de l agent
     _afficher_oracle_inbox(agent)
     return 0
@@ -1896,10 +1900,13 @@ def activer_agent(session, agent, raison, mission=None, type_round="R",
 def activer_cerberus(session, raison, agent_precedent=None, type_round="R"):
     """Activer Cerberus dans la session (ne touche que son bloc).
 
-    Vision 2026-08-27 : PLUS de 'reactiver', toujours 'activer'. Quand un
-    agent termine (fin de mission / dernier maillon), il ACTIVE Cerberus.
-    Le comportement de fin (chrono, duree) etait dans reactiver_cerberus ;
-    il est conserve ici sous le seul nom 'activer'.
+    Vision 2026-08-27 : PLUS de 'reactiver', toujours 'activer'.
+    Modele aero (2026-08-30, R1/R3) : AUCUN agent n active Cerberus a sa
+    fin - la fin de tout agent va vers ORACLE (reactiver-fin <agent>
+    --cible oracle). C est le PILOTE (Oracle, l aeroport) qui atterrit sur
+    Cerberus via cette fonction quand le ROUND se termine (bilan
+    consolide). Le comportement de fin (chrono, duree) etait dans
+    reactiver_cerberus ; il est conserve ici sous le seul nom 'activer'.
 
     agent_precedent : optionnel, deduit de arreter_chrono_session si absent.
     """
@@ -2082,13 +2089,19 @@ def main(argv):
         agent = argv[2]
         raison = argv[3]
         mission = argv[4] if len(argv) > 4 else None
+        # FIX v0.8.11 (2026-09-02, lecon test-025) : normaliser le nom de
+        # session comme sidentifier le fait. Sans normalisation, 'activer
+        # admin vulcain' ecrivait un bloc '### Session : admin' (invalide -
+        # les sessions NOMMEES sont session-admin/session-freelance) que
+        # nettoyer-sessions ne supprimait pas (motif session-*) -> test-025 KO.
+        session_normalise = normaliser_nom_session(session) or session
         # Vision 2026-08-27 : PLUS de 'reactiver', toujours 'activer'.
         # Activer Cerberus = fermer/ronde de fin de mission (chrono + bilan).
         # Le 4e argument optionnel (mission) sert d'agent_precedent pour
         # Cerberus (option, deduit du chrono si absent).
         if agent.lower() == "cerberus":
-            return activer_cerberus(session, raison, mission, type_round)
-        return activer_agent(session, agent, raison, mission, type_round)
+            return activer_cerberus(session_normalise, raison, mission, type_round)
+        return activer_agent(session_normalise, agent, raison, mission, type_round)
 
     print("ERREUR: Action inconnue '%s'" % action)
     afficher_aide()
