@@ -7,4 +7,5 @@
 {"id": "785e32c7", "date": "2026-09-02T10:58:16", "mission": "MISE EN ATTENTE (inter-round URGENT) : 2 P1 non-acquitte(s) detecte(s)", "statut": "TERMINEE", "agent": "oracle", "priorite": 1, "type": "urgent"}
 {"id": "9da21630", "date": "2026-09-02T12:10:42", "mission": "MISE EN ATTENTE (inter-round URGENT) : 4 P1 non-acquitte(s) detecte(s)", "statut": "TERMINEE", "agent": "janus", "priorite": 1, "type": "urgent"}
 {"id": "f6b2a19d", "date": "2026-09-02T15:48:04", "mission": "MISE EN ATTENTE (inter-round URGENT) : Aucun P1 non-acquitte (probleme regle)", "statut": "TERMINEE", "agent": "oracle", "priorite": 1, "type": "urgent"}
-{"id": "2cf598e9", "date": "2026-09-02T16:12:12", "mission": "MISE EN ATTENTE (inter-round URGENT) : 4 anomalie(s): Grade 'Inconnu' pour l agent 'pilote' (non declare dans grades...", "statut": "EN_ATTENTE", "agent": "oracle", "priorite": 1, "type": "urgent"}
+{"id": "2cf598e9", "date": "2026-09-02T16:12:12", "mission": "MISE EN ATTENTE (inter-round URGENT) : 4 anomalie(s): Grade 'Inconnu' pour l agent 'pilote' (non declare dans grades...", "statut": "TERMINEE", "agent": "oracle", "priorite": 1, "type": "urgent"}
+{"id": "654c4b82", "date": "2026-09-02T20:13:37", "mission": "MISE EN ATTENTE (inter-round URGENT) : 2 P1 non-acquitte(s) detecte(s)", "statut": "EN_ATTENTE", "agent": "oracle", "priorite": 1, "type": "urgent"}

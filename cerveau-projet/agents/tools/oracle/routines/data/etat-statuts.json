@@ -27,5 +27,8 @@
  "15:08:18.223|encart|2 anomalie(s): Grade 'Inconnu' pour l ag": "2026-09-02T15:48:03",
  "15:07:47.755|encart|2 anomalie(s): Grade 'Inconnu' pour l ag": "2026-09-02T15:48:03",
  "15:07:17.394|encart|2 anomalie(s): Grade 'Inconnu' pour l ag": "2026-09-02T15:48:03",
- "15:54:36.421|encart|4 anomalie(s): Grade 'Inconnu' pour l ag": "2026-09-02T16:12:12"
+ "15:54:36.421|encart|4 anomalie(s): Grade 'Inconnu' pour l ag": "2026-09-02T16:12:12",
+ "20:13:36.866|flux|2 P1 non-acquitte(s) detecte(s)": "2026-09-02T20:13:37",
+ "20:37:45.809|flux|5 P1 non-acquitte(s) detecte(s)": "2026-09-02T20:37:46",
+ "20:29:43.033|flux|3 P1 non-acquitte(s) detecte(s)": "2026-09-02T20:37:46"
 }

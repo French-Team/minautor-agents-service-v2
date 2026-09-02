@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "nemesis",
+    "nom": "AUTRE",
+    "description": "Mission hors parcours : executer les instructions de la mission"
+  },
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Executer une mission hors du parcours standard",
+    "redirects": [
+      {
+        "besoin": "Executer la mission hors parcours",
+        "action": "procedure",
+        "etapes": [
+          "Lire la mission donnee par Cerberus / l agent appelant",
+          "Executer les instructions de la mission (perimetre : avis contradictoire / audit de robustesse)",
+          "Respecter les REGLES ABSOLUES de ma fiche (3 axes, norme de communication, non-execution)"
+        ],
+        "regle": "HORS PARCOURS : la mission prime, les regles absolues de ma fiche s appliquent toujours."
+      },
+      {
+        "besoin": "Ajouter mes lecons et usages",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent nemesis --domaine audit <lecon>",
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent nemesis <outil>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mes usages."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-autre"
+  }
+}

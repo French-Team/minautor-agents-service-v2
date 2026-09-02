@@ -1,3 +1,6 @@
+{"date":"2026-09-02 20:35:57","agent":"oracle","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-02 20:35:57","agent":"themis","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: domaine=audit)"}
+{"date":"2026-09-02 20:12:25","agent":"buffy","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
 {"date":"2026-09-02 14:44:42","agent":"hygie","outil":"nettoyer-processus-residuels","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
 {"date":"2026-09-02 14:43:50","agent":"hygie","outil":"nettoyer-processus-residuels","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
 {"agent": "themis", "outil": "consulter-combos", "date": "2026-09-02 14:36:35", "mode": "verrou-auto", "contexte": "consultation: evaluer-coherence"}

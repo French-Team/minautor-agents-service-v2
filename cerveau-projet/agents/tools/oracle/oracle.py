@@ -27,11 +27,12 @@ Fichier de config: oracle-data.json (meme principe que jarvis-data.json)
 import json
 import os
 import sys
+import time
 import uuid
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.5.8"
+VERSION = "0.5.9"
 
 # Modules fonctions
 _fonctions_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -319,13 +320,101 @@ def cmd_envoyer(args):
     _historiser_auto(args.de, f"Envoyer a {args.vers}: {args.objet[:50]}")
 
 
+_FICHIER_CONSOM_NOTATION = ORACLE_DIR / "routines" / ".notation_consommation.txt"
+DELAI_CONSOM_NOTATION_SECONDES = 3600
+OBJET_NOTATION = "[NOTATION]"
+
+
+def _mission_evaluation_en_attente():
+    """True si une mission Themis d evaluation est deja EN_ATTENTE
+    (anti-inondation du consommateur [NOTATION])."""
+    for e in _files.lister():
+        if (e.get("statut") == "EN_ATTENTE"
+                and str(e.get("agent", "")).strip().casefold() == "themis"
+                and "EVALUATION" in str(e.get("mission", "")).upper()):
+            return True
+    return False
+
+
+def _consommer_notation():
+    """CONSOMMATEUR [NOTATION] (decision utilisateur 2026-09-02).
+
+    A la lecture/acquittement des messages de l inbox d Oracle, convertir
+    une demande [NOTATION] en mission Themis (evaluation croisee).
+    Auparavant personne ne consommait ces demandes : Oracle acquittait par
+    habitude et la rotation MAX_MESSAGES=5 purgeait sans traitement.
+
+    Anti-inondation : ne depose PAS si une mission Themis d evaluation est
+    deja EN_ATTENTE OU si une a ete deposee il y a moins de 60 minutes
+    (fichier .notation_consommation.txt).
+    """
+    inbox_file = INBOX_DIR / "oracle.jsonl"
+    if not inbox_file.exists():
+        return
+    if _mission_evaluation_en_attente():
+        return
+    if _FICHIER_CONSOM_NOTATION.exists():
+        try:
+            if time.time() - float(_FICHIER_CONSOM_NOTATION.read_text().strip()) \
+                    < DELAI_CONSOM_NOTATION_SECONDES:
+                return
+        except (ValueError, OSError):
+            pass
+    lignes = []
+    depose = False
+    with open(inbox_file, encoding="utf-8") as f:
+        for ligne in f:
+            ligne = ligne.strip()
+            if not ligne:
+                continue
+            try:
+                msg = json.loads(ligne)
+            except json.JSONDecodeError:
+                lignes.append(ligne)
+                continue
+            if (isinstance(msg, dict)
+                    and OBJET_NOTATION in str(msg.get("objet", ""))
+                    and not msg.get("accuse")):
+                mission = (
+                    "EVALUATION CROISEE : poser le questionnaire d evaluation "
+                    "croisee aux agents actifs, attribuer les +/- et "
+                    "transmettre son rapport (protocole evaluation croisee v1)"
+                )
+                entree, erreur = _files.ajouter(mission, file="asap",
+                                                agent="themis")
+                if erreur and "doublon" not in erreur:
+                    lignes.append(json.dumps(msg, ensure_ascii=False))
+                    continue
+                if erreur and "doublon" in erreur:
+                    print("[ORACLE] Consommateur [NOTATION] : mission Themis "
+                          "deja en attente - rien depose")
+                else:
+                    depose = True
+                    print("[ORACLE] Consommateur [NOTATION] : mission Themis "
+                          "deposee (evaluation croisee)")
+                msg["accuse"] = True
+                msg["consomme"] = True
+                msg["consomme_date"] = datetime.now().strftime(
+                    "%Y-%m-%dT%H:%M:%S")
+            lignes.append(json.dumps(msg, ensure_ascii=False))
+    if depose:
+        with open(inbox_file, "w", encoding="utf-8") as f:
+            f.write("\n".join(lignes) + "\n")
+        try:
+            _FICHIER_CONSOM_NOTATION.write_text(str(time.time()))
+        except OSError:
+            pass
+
+
 def cmd_lire(args):
     """Lire les messages non lus d'un agent.
 
     Affiche les messages non lus. Les messages AFFICHES sont marques lu
     (consommation a la lecture, decision utilisateur 2026-08-29 : "pourquoi
     personne ne les lit"). L acquittement explicite (cmd_acquitter) les
-    retire ensuite du fichier. Un message deja lu n est pas re-affiche."""
+    retire ensuite du fichier. Un message deja lu n est pas re-affiche.
+    Pour l inbox d Oracle, declenche le consommateur [NOTATION] (conversion
+    des demandes d evaluation en mission Themis, decision 2026-09-02)."""
     inbox_file = INBOX_DIR / f"{args.agent}.jsonl"
     if not inbox_file.exists():
         print(f"[ORACLE] Aucun message pour {args.agent}")
@@ -354,6 +443,8 @@ def cmd_lire(args):
     if modifie:
         with open(inbox_file, "w", encoding="utf-8") as f:
             f.write("\n".join(lignes) + "\n")
+    if args.agent == "oracle":
+        _consommer_notation()
 
 
 def _lire_messages_fichier(chemin):
@@ -435,6 +526,10 @@ def cmd_acquitter(args):
     if not inbox_file.exists():
         print(f"[ORACLE] Aucun fichier pour {args.agent}")
         return
+    # Consommateur [NOTATION] (decision 2026-09-02) : a declarer AVANT la
+    # suppression du message (le message acquitte est retire du fichier).
+    if args.agent == "oracle":
+        _consommer_notation()
     lignes = []
     trouve = False
     with open(inbox_file, encoding="utf-8") as f:

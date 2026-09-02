@@ -22,7 +22,100 @@ types:
 # Corrections et Surcharges
 ---
 
+## [LECON] 2026-09-02 -- CONSOMMATEUR [NOTATION] : oracle.py v0.5.9 (mission eaa954a0)
 
+**Contexte** : les demandes d evaluation croisee de la routine notation
+(deposees dans l inbox d Oracle toutes les 960s) n etaient JAMAIS prises en
+compte - Oracle acquittait par habitude et la rotation purgeait. Fix :
+`_consommer_notation()` convertit chaque demande [NOTATION] en mission Themis
+(hooks cmd_lire + cmd_acquitter) avec anti-inondation (mission EN_ATTENTE +
+delai 60 min).
+
+**Lecons** :
+1. Un hook dans cmd_acquitter doit s executer AVANT la suppression du message
+   (le message acquitte est RETIRE du fichier - le consommateur ne le verrait
+   plus apres).
+2. Les routines peuvent deposer a l infini : l anti-inondation est
+   indispensable (mission EN_ATTENTE + delai temporel) pour eviter la
+   surcharge de la file.
+3. Test reel indispensable : injecter un message dans l inbox, declencher la
+   lecture, verifier la mission dans la file + les marqueurs sur le message.
+
+## [LECON] 2026-09-02 -- ETATS DE VOL DU PILOTE DANS LA COLONNE ETAT : etats-actions.json v0.1.2
+
+**Contexte** : l utilisateur a vu dans AGENTS-activite-recente.md la ligne
+pilote `RETOUR AEROPORT: oracle` classee DEBUT dans la colonne Etat -
+incoherent. Cause : etats-actions.json reglait DEBUT avec les prefixes
+[DEBUT, RETOUR] : toute raison commencant par RETOUR (y compris les
+phases de vol du pilote) etait classee DEBUT a tort ; RECUPERE,
+DECOLLAGE et LARGUE ne matchaient aucune regle -> defaut ACTIF.
+
+**Correction (etats-actions.json v0.1.1 -> v0.1.2, decision utilisateur
+2026-09-02 : etats calques sur l action)** : 4 nouveaux etats de vol
+places AVANT DEBUT (l ordre du fichier compte, la premiere regle qui
+matche gagne) : DECOLLAGE (prefixe DECOLLAGE), RECUPERE (prefixe
+RECUPERE), RETOUR (prefixe RETOUR AEROPORT), LARGUE (prefixe LARGUE).
+DEBUT ne matche plus RETOUR seul - remplace par RETOUR ORACLE (les
+agents reellement reactives via Oracle restent DEBUT). Docstring de
+_etat_action (activer-agent-principal.py) aligne - seules les data ont
+change, pas le code (pas de bump d activer-agent-principal).
+
+**Preuves** : 1) json valide, 2) _etat_action 8/8 OK (4 vols pilote
+-> leurs etats ; RETOUR ORACLE : ... -> DEBUT ; DEBUT -> DEBUT ; FIN ->
+FIN ; oracle -> ACTION), 3) traces reelles AGENTS-historique (pilote)
+classent RETOUR/RECUPERE correctement, 4) encart charge dynamiquement
+les etats connus depuis le fichier (pas de pin), 5) syntaxe / ASCII 0/0
+/ CRLF 0/0.
+
+**Lecons** : 1) un prefixe commun (RETOUR) dans une regle de detection
+devore toutes les raisons qui le portent - une etiquette de vol de
+l aeroport (RETOUR AEROPORT) n est pas un DEBUT de mission ; 2) quand
+les regles vivent dans un fichier data, la PRIORITE est l ordre des
+regles dans le fichier : les plus specifiques passent avant les plus
+generales.
+
+## [LECON] 2026-09-02 -- ORDRE TRACE PILOTE RETOUR AEROPORT vs ATTERRISSAGE CERBERUS : pilote.py v0.2.3
+
+**Contexte** : l utilisateur a detecte dans AGENTS-historique que la
+fin-coordination d ORACLE affichait l activation de CERBERUS (RETOUR
+ORACLE 18:44:27.882) AVANT la trace pilote RETOUR AEROPORT (18:44:28.000)
+- ordre semantiquement inverse : on lisait l atterrissage avant le retour
+a l aeroport. Verification : dans _reactiver_maillon (fonctions/pilote.py),
+l ordre reel des operations etait : 1) _fin_auto pose FIN oracle ;
+2) aap.activer_cerberus ACTIVE Cerberus et ecrit RETOUR ORACLE ; 3) PUIS
+_historiser_pilote(RETOUR AEROPORT) dans le bloc rc==0. L activation
+precedait donc la trace du retour. Defaut secondaire : _historiser/
+_activer_maillon tronquaient a la seconde (%H:%M:%S.000 fixe) alors
+qu activer-agent-principal et les routines ecrivent de vrais ms (%f) :
+l ordre inter-ecrivains etait illisible (le round 18:22 semblait correct
+par artefact de troncature, pas par ordre reel).
+
+**Corrections (pilote.py v0.2.2 -> 0.2.3)** :
+1. Branche cible=cerberus de _reactiver_maillon : quand c est
+   l aeroport (oracle/pilote) qui termine (fin de round -> atterrissage
+   sur Cerberus), _historiser_pilote(RETOUR AEROPORT) est appele AVANT
+aap.activer_cerberus (modele aero : FIN -> RETOUR AEROPORT ->
+atterrissage Cerberus). Anti-doublon dans le bloc rc==0 (deja_trace).
+2. _historiser et _activer_maillon : vrais millisecondes
+   (%H:%M:%S.%f tronque a 3) au lieu de .000 fixe - aligne sur
+   activer-agent-principal et les routines (encart/flux/notation).
+
+**Preuves** : 1) ordre code verifie (RETOUR AEROPORT pos 1060 <
+activer_cerberus pos 1119 dans la branche) ; 2) anti-doublon present ;
+3) plus aucun %H:%M:%S.000 dans pilote.py ; 4) test-115 (flux R7)
+9/9 OK, test-102 (ms) 6/6 OK, test-098 6/7 (1 KO PRE-EXISTANT bloc
+Inconnu Hygie 14:49, hors perimetre - deja documente mission 9e00c945),
+verifier-flux-securite reel : seul R1 vulcain actif (moi, normal) ;
+5) ASCII 0/0, CRLF 0/0, syntaxe OK.
+
+**Lecons** : 1) L ORDRE D ECRITURE DANS L HISTORIQUE EST L ORDRE DU
+CODE, pas l ordre semantique : si une trace de vol est posee dans un bloc
+rc==0 APRES l action qu elle decrit, l historique raconte l inverse du
+modele. Tracer la phase AVANT l action qu elle introduit (retour aeroport
+avant atterrissage). 2) PRECISION DES HORODATAGES : melanger .000 fixe
+et ms reels rend l ordre inter-ecrivains illisible - un .000 fixe peut
+faire paraitre correct un ordre faux (artefact de troncature). Tout
+producteur d historique doit ecrire de vrais ms.
 
 ## [LECON] 2026-09-02 -- VERIFIER-FLUX-SECURITE R7 FAUX POSITIF LARGAGE : v0.2.2 (mission 31fe865e)
 
@@ -112,6 +205,58 @@ est faite, et toujours verifier l alignement fichier-data <-> fichier-
 affichage. Ne jamais restaurer un bloc JSON depuis HEAD sans verifier
 les declarations ajoutees par les missions en cours (le pilote SP etait
 un ajout non-commit de la mission urgente Inconnu).
+
+## [LECON] 2026-09-02 -- FIN D ORACLE -> CERBERUS (fin de round) : decision utilisateur
+
+**Contexte** : l utilisateur a observe que chaque fin de mission aboutissait
+en boucle 'pilote -> oracle -> pilote -> oracle...'. Il a precise : le
+pilote n est PAS en cause ; seul la fin d ORACLE (l aeroport) etait a
+verifier. Modele attendu : oracle avertit puis active cerberus ->
+cerberus finit la mission avec le bilan (cerberus = point de
+Depart/arrivee des demandes utilisateur).
+
+**Cause racine** : la carte d oracle (oracle/parcours/fins.json) portait
+TOUTES ses fins (fin-coordination, fin-signal, fin-inter-round) en
+cible=oracle + '--cible oracle' : oracle se reactivait lui-meme a chaque
+fin. Le pilote avait deja la branche cible=cerberus (activer_cerberus +
+mission_type=RETOUR + theme-de-oracle cote cerberus) mais elle n etait
+JAMAIS atteinte car la carte forqait --cible oracle. Boucle infinie,
+la chaine ne retombait jamais sur cerberus avec le bilan consolide.
+
+**Fix (decision utilisateur : seule fin-coordination atterrit sur
+cerberus)** :
+  1. oracle/parcours/fins.json : fin-coordination -> cible=cerberus +
+     commande --cible cerberus (bilan consolide de coordination).
+     fin-signal et fin-inter-round RESTENT cible=oracle (le pilote
+     decide du suivant).
+  2. pilote.py (_executer_fin_oracle) : le message 'cible=cerberus =
+     VESTIGE v1' exemPE desormais l agent oracle (fin de round
+     legitime, exception decision 2026-09-02).
+  3. auditer-conformite-arbre : _f4(fins, agent) + besoins-v2.json F4
+     documentes - exception oracle/fin-coordination -> cerberus.
+  4. detecter-fins-passives : CIBLE_NON_ORACLE exemPE le couple
+     (agent=oracle, nom_fin=fin-coordination, cible=cerberus).
+
+**Regle _reactiver_maillon verifiee** : la ligne 'oracle atterrit
+TOUJOURS sur l aeroport' ne s applique que si cible_forcee est VIDE.
+Avec '--cible cerberus' (cible_forcee=cerberus), la branche
+elif cible==cerberus s execute -> Cerberus est active avec le bilan.
+
+**Preuves** : test bout-en-bout reactiver-fin oracle --cible cerberus ->
+'Cerberus reactive avec succes', raison 'RETOUR ORACLE : COORDINATION
+TERMINEE', etat de carte mission_type=RETOUR ; auditer-conformite-arbre
+--agent oracle -> F4 OK (exception) 18 OK / 0 bloquant ;
+detecter-fins-passives -> 30 agents, 0 probleme ; syntaxe/ASCII/CRLF
+0/0 sur les 6 fichiers touches.
+
+**Lecon** : (1) ne jamais confondre 'la carte d un agent fixe la cible'
+et 'le pilote decide' - si la carte force --cible oracle, la branche
+cerberus du pilote est morte ; (2) une modification de carte doit
+verifier TOUS les garde-fous qui scrutent la structure (test-114,
+auditer-conformite-arbre F4, detecter-fins-passives) - deleguE a
+Morpheus via mission fe00998c pour test-114 ; (3) toujours confirmer
+au pres de l utilisateur quelle fin precise doit changer (ici : seule
+fin-coordination, pas fin-signal/fin-inter-round).
 
 ## [LECON] 2026-08-25 -- REPARATION ARBRES v2 : vues stark regenerees (inter-round Morpheus)
 

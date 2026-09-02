@@ -1,0 +1,14 @@
+{
+ "agent": "morpheus",
+ "parcours": "agents/morpheus/parcours/arbre-morpheus.json",
+ "case_courante": null,
+ "mission_type": "audit",
+ "mission": "CONSOMMATEUR [NOTATION] (decision utilisateur 2026-09-02, suite mission eaa954a0 - partie test) : creer un GARDE-FOU testant le consommateur [NOTATION] branche par Vulcain dans oracle.py v0.5.9. POINTS A TESTER : 1) la fonction _consommer_notation() existe et convertit un message [NOTATION] non-acquitte en mission Themis (files.ajouter agent=themis EVALUATION CROISEE) ; 2) les hooks cmd_lire et cmd_acquitter (agent oracle) declenchent le consommateur ; 3) ANTI-INONDATION : pas de depot si une mission Themis evaluation est deja EN_ATTENTE ; 4) ANTI-INONDATION : pas de depot si depot recent (< 60 min via .notation_consommation.txt) ; 5) marqueurs : le message [NOTATION] est marque accuse+consomme+consomme_date apres consommation ; 6) preuve negative : un message NON-[NOTATION] ne declenche aucun depot ; 7) normes ASCII/LF + purge. Utiliser des repertoires TEMPORAIRES (inbox + files) pour ne jamais toucher les vrais messages/missions. Enregistrer le test dans les 2 registres.",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "fin",
+ "theme_courant": "theme-tester.json",
+ "redirect_idx": 1,
+ "etape_idx": 0,
+ "historise_fin": true
+}

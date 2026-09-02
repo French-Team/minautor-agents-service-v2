@@ -1,0 +1,11 @@
+{
+ "agent": "vulcain",
+ "parcours": "agents/vulcain/parcours/arbre-vulcain.json",
+ "case_courante": null,
+ "mission_type": "audit",
+ "mission": "CONSOMMATEUR [NOTATION] (decision utilisateur 2026-09-02) : brancher un consommateur automatique pour les demandes d evaluation croisee de la routine notation. CONTEXTE : notation.py depose toutes les 960s une demande [NOTATION] dans l inbox d Oracle (inbox/oracle.jsonl, message : 'Themis doit etre activee pour poser le questionnaire d evaluation croisee... Oracle coordonne') mais AUCUN code ne convertit ce message en mission Themis - Oracle acquitte par habitude et la rotation MAX_MESSAGES=5 purge sans traitement. ACTIONS : 1) creer le consommateur (ou l ajouter a oracle.py) : a la lecture d un message [NOTATION] dans l inbox d Oracle, deposer une mission pour Themis (mission-ajouter --file asap --agent themis 'EVALUATION CROISEE : poser le questionnaire d evaluation croisee aux agents actifs, attribuer les +/- et transmettre son rapport (protocole evaluation croisee v1)') ; 2) ANTI-INONDATION : ne pas deposer si une mission Themis de type evaluation est deja EN_ATTENTE ou si une a ete deposee il y a moins de X minutes (a definir, ex: 60 min) ; 3) versionner (bump oracle.py + oracle.md versionning) ; 4) ASCII + syntaxe + catalogue. Le test Morpheus (garde-fou) sera lance par le pilote ensuite.",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "fin",
+ "historise_fin": true
+}

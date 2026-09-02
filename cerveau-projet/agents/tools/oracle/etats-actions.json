@@ -1,15 +1,31 @@
 {
- "version": "0.1.1",
- "description": "Etats dynamiques de la colonne Etat de l encart v1 (AGENTS-activite-recente.md, decision utilisateur 2026-08-29 : rendre les etats dynamiques pour ne plus editer le code). Alimente _etat_action (activer-agent-principal.py) et la validation de la routine encart.py. Les regles de detection sont appliquees DANS L ORDRE du fichier (priorite : la premiere regle qui matche gagne). ASCII strict (convention v1).",
+ "version": "0.1.2",
+ "description": "Etats dynamiques de la colonne Etat de l encart v1 (AGENTS-activite-recente.md, decision utilisateur 2026-08-29 : rendre les etats dynamiques pour ne plus editer le code ; 2026-09-02 : etats de vol du pilote calques sur l action, decision utilisateur - DECOLLAGE/RECUPERE/RETOUR/LARGUE). Alimente _etat_action (activer-agent-principal.py) et la validation de la routine encart.py. Les regles de detection sont appliquees DANS L ORDRE du fichier (priorite : la premiere regle qui matche gagne). ASCII strict (convention v1).",
  "defaut": "ACTIF",
  "etats": {
   "ACTIF": {
    "description": "Etat par defaut - action de routine/outil sans regle specifique (aucun mot-cle ni prefixe ne matche)",
    "detection": {}
   },
+  "DECOLLAGE": {
+   "description": "Pilote (aero, modele aeroport) : phase de vol DECOLLAGE - lancement d une mission (trace _historiser_pilote 'DECOLLAGE: theme=...')",
+   "detection": {"prefixes": ["DECOLLAGE"]}
+  },
+  "RECUPERE": {
+   "description": "Pilote (aero) : phase de vol RECUPERE - recuperation d une fin d agent (trace _historiser_pilote 'RECUPERE: <agent>')",
+   "detection": {"prefixes": ["RECUPERE"]}
+  },
+  "RETOUR": {
+   "description": "Pilote (aero) : phase de vol RETOUR AEROPORT - retour a l aeroport avant atterrissage (trace _historiser_pilote 'RETOUR AEROPORT: <agent>')",
+   "detection": {"prefixes": ["RETOUR AEROPORT"]}
+  },
+  "LARGUE": {
+   "description": "Pilote (aero) : phase de vol LARGUE - largage d un agent en inter-round (trace _historiser_pilote 'LARGUE: <cible>')",
+   "detection": {"prefixes": ["LARGUE"]}
+  },
   "DEBUT": {
-   "description": "Mission en cours - raison commence par DEBUT/RETOUR",
-   "detection": {"prefixes": ["DEBUT", "RETOUR"]}
+   "description": "Mission en cours - raison commence par DEBUT (ou RETOUR ORACLE : reactivation d un agent via Oracle)",
+   "detection": {"prefixes": ["DEBUT", "RETOUR ORACLE"]}
   },
   "FIN": {
    "description": "Mission terminee - raison commence par FIN",

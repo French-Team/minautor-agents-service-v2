@@ -51,7 +51,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.2.2"
+VERSION = "0.2.3"
 
 # Racine du projet : oracle/fonctions -> outils -> agents -> cerveau-projet -> racine
 _RACINE = Path(__file__).resolve().parents[4]
@@ -438,7 +438,7 @@ def _historiser(agent, raison, agent_effectif=None):
         return False
     try:
         aap.ajouter_historique(
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S.000"),
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
             "session-admin", agent, raison, "R",
             agent_effectif=agent_effectif,
             executeur="Oracle")
@@ -567,6 +567,18 @@ def _reactiver_maillon(agent_qui_finit, bilan, cible_forcee=None):
             # Retour a Cerberus : le message doit indiquer un RETOUR
             # (pas un debut de mission). Format : RETOUR <agent> : <bilan>
             raison_retour = "RETOUR %s : %s" % (agent_qui_finit.upper(), bilan or "")
+            # ORDRE DE TRACE (decision utilisateur 2026-09-02) : quand c est
+            # l aeroport (oracle/pilote) qui termine sa coordination (fin de
+            # round -> atterrissage sur Cerberus), la trace pilote RETOUR
+            # AEROPORT doit etre ecrite AVANT l atterrissage (activer_cerberus).
+            # Avant, elle etait posee APRES (bloc rc==0) : on lisait
+            # l activation de Cerberus avant le retour du pilote a l aeroport
+            # (observation utilisateur, AGENTS-historique 18:44). Le modele
+            # aero : FIN -> pilote RETOUR AEROPORT -> atterrissage Cerberus.
+            qui_fin = (agent_qui_finit or "").lower()
+            trace_aeroport_faite = (qui_fin == "oracle" or qui_fin == "pilote")
+            if trace_aeroport_faite:
+                _historiser_pilote("RETOUR AEROPORT", qui_fin)
             rc = aap.activer_cerberus(
                 "session-admin", raison_retour, agent_qui_finit)
             # POSER mission_type=RETOUR dans l etat de carte de Cerberus
@@ -600,11 +612,17 @@ def _reactiver_maillon(agent_qui_finit, bilan, cible_forcee=None):
             # TRACE DE VOL : la fin d un agent est un evenement du pilote.
             # Si c est Oracle/pilote lui-meme qui se termine, c est un RETOUR AEROPORT ;
             # sinon c est la RECUPERATION d un parachutiste (Agent=pilote dans le flux).
+            # NB 2026-09-02 : le cas (cible=cerberus, qui=oracle/pilote) a deja
+            # trace RETOUR AEROPORT AVANT activer_cerberus (ordre aeroport puis
+            # atterrissage) - on ne le trace pas deux fois ici.
             qui = (agent_qui_finit or "").lower()
-            if qui == "oracle" or qui == "pilote":
-                _historiser_pilote("RETOUR AEROPORT", qui)
-            else:
-                _historiser_pilote("RECUPERE", qui)
+            deja_trace = (cible.lower() == "cerberus"
+                          and (qui == "oracle" or qui == "pilote"))
+            if not deja_trace:
+                if qui == "oracle" or qui == "pilote":
+                    _historiser_pilote("RETOUR AEROPORT", qui)
+                else:
+                    _historiser_pilote("RECUPERE", qui)
         else:
             messages.append("[PILOTE] Echec reactivation %s (rc=%s)" % (cible, rc))
     except Exception as exc:
@@ -653,7 +671,7 @@ def _activer_maillon(agent_pilote, case, mission_agent, cible_forcee=None):
             # DEBUT pour chaque maillon qu il active, comme cmd_activer.
             try:
                 aap.ajouter_historique(
-                    datetime.now().strftime("%Y-%m-%d %H:%M:%S.000"),
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
                     "session-admin", cible, "DEBUT: " + mission_agent, "R",
                     executeur="Oracle")
             except Exception:

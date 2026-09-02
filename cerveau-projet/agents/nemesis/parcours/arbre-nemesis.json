@@ -1,0 +1,44 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "nemesis",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-nemesis",
+    "agent": "nemesis",
+    "description": "Arbre des decisions de Nemesis - Analyste en Chef, avis contradictoire avant validation. L agent choisit UN THEME au demarrage : AUDIT (auditer une proposition selon les 3 axes : cas limites, optimisation, securite/integrite), AUTRE (mission hors parcours), INTER-ROUND (rapport KO recu d un autre agent).",
+    "regles": {
+      "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
+      "D5": "Les besoins d un theme sont des REDIRECTIONS : je choisis celui qui correspond a ma situation.",
+      "D7": "RELIRE OBLIGATOIRE : je relis MES corrections puis MA fiche AVANT toute mission."
+    }
+  },
+  "racine": {
+    "titre": "Quel theme ?",
+    "type": "question",
+    "question": "Quelle est ma mission ?",
+    "branches": [
+      {
+        "reponse": "AUDIT",
+        "description": "Auditer une proposition (solution, plan, conception) : avis contradictoire axe cas limites / optimisation / securite, reponse 'Oui, mais...'",
+        "vers": "theme-audit.json"
+      },
+      {
+        "reponse": "AUTRE",
+        "description": "Mission hors parcours",
+        "vers": "theme-autre.json"
+      },
+      {
+        "reponse": "INTER-ROUND",
+        "description": "Active en inter-round par un autre agent (rapport KO : accuser reception et relancer l appelant)",
+        "vers": "theme-inter-round.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

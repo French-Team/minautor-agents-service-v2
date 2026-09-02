@@ -233,7 +233,7 @@ CERBERUS -> ORACLE -> AGENT -> ORACLE -> CERBERUS
 | `[attente]` | mission-ajouter --file plus-tard (EN_ATTENTE, rien perdu) |
 | `[attention]` | mission-ajouter --file asap (SUIVANTE) |
 | `[urgent]` | traitement IMMEDIAT (priorite absolue) |
-| `[question]` | phase question/reponse dediee |
+| `[question]` | transmettre la question a Oracle qui active l agent detenteur de l information (jamais repondre directement) |
 | `[creer]` | routage de creation par type (Vulcain/Buffy/Athena/Promethee/Minerve) |
 | `[probleme]` | routage de resolution par fichier (Vulcain/Buffy/Morpheus/Gardien/Hades/Hermes/Hygie/Argus/ferrari) |
 | `[stop]` | DEFCON 5 (defcon-declarer, arret total) |

@@ -2,9 +2,13 @@
  "agent": "buffy",
  "parcours": "agents/buffy/parcours/arbre-buffy.json",
  "case_courante": null,
- "mission_type": "inter-round",
- "mission": "PURGE P1 : lire puis acquitter tes 5 messages non-acquittes (ids: 705b4ed3, 9792c6e3, verifier-statuts-204006, verifier-statuts-205008, verifier-statuts-205510) via oracle.py acquitter buffy <id> apres lecture. Traite en priorite les 3 INTER-ROUND etat URGENT.",
+ "mission_type": "verifier",
+ "mission": "FLUX [mot] CERBERUS (decision utilisateur 2026-09-02 - partie 1/2) : formaliser le traitement des demandes commencant par [mot]. ACTIONS : 1) theme-question.json : retirer/remplacer le besoin 'Repondre directement (dialogue)' - Cerberus ne repond JAMAIS directement, il envoie la question a Oracle qui active l agent detenteur de l info (Atlas/Oracle) ; aligner la description du theme et la regle. 2) Verifier que chaque theme [mot] (attention/urgent/question/creer/probleme/stop/attente/socrate/trio) impose la fin reactiver-fin cerberus --cible oracle (fin jamais sautee). 3) Aligner la fiche cerberus.md si necessaire (tableau declencheurs). 4) RVAV + ASCII + valider-cartes-decision. La partie 2 (garde-fou Morpheus) sera lancee par le pilote ensuite.\n=== OUTILS A UTILISER (injectes par le pilote) ===\n[OUTIL] valider-cartes-decision -- Verifie que les agents respectent leur CARTE DE DECISION. Depuis la v0.2.0\n  Flags : agent (texte, REQUIS)\n  Pour etre guide : python3 cerveau-projet/agents/tools/executer/executer-formulaire/executer-formulaire.py --outil valider-cartes-decision --schema",
  "historise_debut": true,
  "precedent": null,
- "etape": "debut"
+ "etape": "fin",
+ "theme_courant": "theme-agent.json",
+ "redirect_idx": 1,
+ "etape_idx": 0,
+ "historise_fin": true
 }

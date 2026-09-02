@@ -1,0 +1,17 @@
+[ORACLE-SERVER] Demarrage (transport=stdio)
+[ORACLE-SERVER] Version: 0.2.0
+[ORACLE-SERVER] Agents: 18
+[ORACLE-SERVER] Mode stdio - en attente de commandes JSON...
+[ORACLE-SERVER] DEMARRAGE SERVEUR: daemon lance (tic toutes les 30s, pid 14464)
+Traceback (most recent call last):
+  File "Z:\analyste-in-console\cerveau-projet\agents\tools\oracle\oracle-server.py", line 546, in <module>
+    main()
+    ~~~~^^
+  File "Z:\analyste-in-console\cerveau-projet\agents\tools\oracle\oracle-server.py", line 487, in main
+    boucler(args.intervalle)
+    ~~~~~~~^^^^^^^^^^^^^^^^^
+  File "Z:\analyste-in-console\cerveau-projet\agents\tools\oracle\oracle-server.py", line 461, in boucler
+    _historiser("oracle", "DEMARRAGE SERVEUR: oracle-server actif pid=%d" % os.getpid())
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: _historiser() missing 1 required positional argument: 'details'
+[ORACLE-SERVER] DEMARRAGE SERVEUR: daemon lance (tic toutes les 30s, pid 7512)

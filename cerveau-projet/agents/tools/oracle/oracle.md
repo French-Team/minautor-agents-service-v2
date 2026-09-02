@@ -2,7 +2,7 @@
 identite:
   type: outil
   nom: Oracle
-  version: 0.5.3
+  version: 0.5.9
   cree: 2026-08-26
   appartient_a: commun
   commun: true
@@ -261,6 +261,7 @@ python3 oracle.py reactiver-fin <agent> "<bilan>"
 
 | Version | Date | Description |
 |---|---|---|
+| 0.5.9 | 2026-09-02 | CONSOMMATEUR [NOTATION] (decision utilisateur) : les demandes d evaluation croisee de la routine `notation` (deposees dans l inbox d Oracle toutes les 960s) n etaient JAMAIS prises en compte - Oracle acquittait par habitude et la rotation MAX_MESSAGES=5 purgeait sans traitement. Ajout dans `oracle.py` de `_consommer_notation()` : a la lecture/acquittement des messages d Oracle (hooks cmd_lire + cmd_acquitter), convertit chaque demande [NOTATION] non-acquittee en mission Themis (EVALUATION CROISEE) via `files.ajouter(mission, file=asap, agent=themis)`. Anti-inondation : pas de depot si une mission Themis d evaluation est deja EN_ATTENTE OU si un depot a eu lieu il y a moins de 60 min (fichier .notation_consommation.txt). |
 | 0.5.8 | 2026-09-02 | FILE DE RELAIS ORDONNEE + CLASSIFIEE (decision utilisateur [attention]) : mission-relais ne consomme plus en FIFO strict. `fonctions/files.py` : nouvelle fonction `classifier()` (deduit priorite 1/2 + type urgent/purge/revision/test/creation/coordination par mots-cles), `ajouter()` stocke priorite/type a l ajout, `prendre()` selectionne la mission EN_ATTENTE la PLUS IMPORTANTE (priorite basse d abord, puis DATE RECENTE d abord a priorite egale - un message recent peut etre plus important qu un ancien), `lister` affiche Px/type et trie par importance. `oracle.py mission-relais` relaye la mission la plus importante (le daemon et le relais restent FIFO-tolerant, la regle d importance est portee par files.prendre). |
 | 0.5.7 | 2026-09-02 | CLI `oracle.py lister` et messages : robustesse et enrichissements (voir historique code). |
 | 0.5.6 | 2026-08-30 | CLI `oracle.py historiser` renseigne TOUJOURS la colonne EXECUTEUR de l encart v1 (executeur="Oracle") - mission 4e30f06d suite detection cases EXECUTEUR vides (encart.py v0.3.0). Chaque historique CLI creait auparavant une case EXECUTEUR vide (alimentee uniquement par _historiser_auto / mission-relais). aligne sur le comportement mission-relais (Executeur=Oracle). |

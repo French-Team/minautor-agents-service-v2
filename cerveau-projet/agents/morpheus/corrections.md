@@ -1,6 +1,223 @@
 
 
 
+## [LECON] 2026-09-02 -- TEST-120 CONSOMMATEUR [NOTATION] (mission f141af1d) : 8/8 OK
+
+**Contexte** : oracle.py v0.5.9 a branche un consommateur qui convertit les
+messages [NOTATION] de la routine notation en mission Themis (evaluation
+croisee). Ce test verrouille : conversion, marqueurs accuse/consomme/
+consomme_date, anti-inondation (mission EN_ATTENTE + delai 60 min), preuve
+negative (NON-[NOTATION] -> rien), hook cmd_lire.
+
+**Lecons** :
+1. Chaque point d un test de file/inbox doit avoir SON sous-repertoire isole
+   (lecon test-118 re-appliquee) : sinon la mission d un point precedent reste
+   EN_ATTENTE et fausse les tests d anti-inondation des points suivants
+   (premiers essais 5 OK / 3 KO, corrige en isolant p1..p6).
+2. Charger oracle.py en module et rediriger INBOX_DIR + FILES_DIR +
+   _FICHIER_CONSOM_NOTATION + _files.FILES_DIR vers des repertoires
+   temporaires : test fiable sans jamais toucher les vrais messages/missions.
+3. Le hook cmd_lire affiche le message ET declenche le consommateur : verifier
+   les deux effets (mission deposee + message lu).
+
+## [LECON] 2026-09-02 -- TEST-119 FLUX [mot] (mission 119cfe78) : 7/7 OK
+
+**Contexte** : l utilisateur a constate que sa demande [question] avait ete
+traitee sans servir le theme dedie ni faire la fin vers Oracle. Ce test
+verrouille le flux complet : detection des prefixes [mot] (pilote.py
+_type_mission_auto), routage vers le theme dedie (_resoudre_racine), theme-
+question.json sans 'Repondre directement', et les 9 themes [mot] pointent vers
+une fin reactiver cible=oracle.
+
+**Lecons** :
+1. VERIFIER L INDENT DU JSON AVANT REECRITURE : profils-tests.json utilise
+   json.dump indent=1, pas indent=2. Un mauvais indent reformate tout le
+   fichier (diff 454 lignes pour un ajout de 1 ligne). Toujours verifier le
+   diff apres ecriture JSON.
+2. Charger pilote.py en module (importlib) pour tester _type_mission_auto et
+   _resoudre_racine directement - plus fiable qu une simulation CLI.
+3. Preuve negative sur les fins : cloner fins.json en memoire, corrompre la
+   cible (oracle -> cerberus), verifier que le garde-fou la detecte.
+
+## [LECON] 2026-09-02 -- TEST-118 FILE DE RELAIS (mission 52ceaea1) : 8/8 OK
+
+**Contexte** : garde-fou dedie sur la file de relais ordonnee/classifiee
+(oracle v0.5.8, decision utilisateur [attention] 2026-09-02 : priorite
+basse d abord puis date recente, classifier par mots-cles).
+
+**Travail** : creation de test-118 (8 points, v0.1.0) sur FILES_DIR
+TEMPORAIRE (jamais les vraies files) : classifier 8 cas, ajouter/lister,
+tri importance (P1 recentes puis P2 recentes), prendre atomique,
+retro-compat, relais, ASCII/LF. Enregistrement dans les DEUX registres
+(serie E + profils) - test-027 point 1 vert.
+
+**Lecons** :
+1. DANS UN TEST DE FILE, ISOLER CHAQUE POINT DANS SON PROPRE
+   SOUS-REPERTOIRE : les points se partageaient le meme FILES_DIR et la
+   mission du point 2 restait EN_ATTENTE quand le point 3 ajoutait les
+   siennes -> l ordre attendu etait fausse (une mission fantome en fin de
+   classement). Sous-dossier par point (sous_tmp) = files vierges a
+   chaque point.
+2. RELAIS() RETOURNE (entree, erreur) COMME PRENDRE() : un tuple, pas
+   une entree directe - depaqueter avant de tester les champs. Lire la
+   signature de la fonction sous test AVANT d ecrire l assertion (lecon
+   test-118 : 'tuple' object has no attribute 'get').
+3. PIEGE DES DOSSIERS TEMPORAIRES : _file_path ne cree pas le dossier
+   parent - le test doit os.makedirs sur le FILES_DIR temporaire AVANT
+   le premier ajouter().
+
+## [LECON] 2026-09-02 -- CARTE CERBERUS THEME DE-USER (mission bbdf735b) : VALIDE
+
+**Contexte** : la carte Cerberus a ete modifiee (suppression de l etape
+[2] 'Identifier l agent habilite' du theme DE-USER - il ne reste que
+'Ecouter' + 'Envoyer a Oracle', c est Oracle qui identifie l agent).
+
+**Verifications** : 1) verifier-conformite-fiche cerberus CONFORME ;
+2) navigation reelle guider-arbre --reponses DE-USER : 2 besoins
+seulement, plus aucune trace 'Identifier l agent' ni 'matrice' dans
+theme-de-user.json ; 3) aucun test ne pinne arbre-cerberus. VALIDE.
+
+**Lecons** :
+1. VERIFIER LA NAVIGATION REELLE EN PLUS DES VALIDATIONS STATIQUES :
+   guider-arbre affiche la vraie experience - un theme peut etre un JSON
+   valide (guider-arbre --valider OK) mais afficher une etape oubliee a
+   la navigation. Lancer --reponses DE-USER prouve le flux reel.
+2. PIEGE GUEDILLEMETS : ne JAMAIS mettre de guillemets francais (ou
+   accents) dans un rapport - meme une citation d un libelle (comme
+   'Identifier l agent') doit etre ecrite avec des apostrophes ASCII.
+   Re-valider l ASCII du rapport APRES redaction (piege recurrent).
+
+## [LECON] 2026-09-02 -- TEST-117 ETATS PILOTE (mission 05a239b9) : 7/7 OK
+
+**Contexte** : suite au fix etats-actions.json v0.1.2 (mission 8d3fbc34),
+la colonne Etat des lignes pilote doit reflecter les phases de vol
+reelles. DECISION UTILISATEUR : etats calques sur l action - DECOLLAGE,
+RECUPERE, RETOUR, LARGUE, et DEBUT ne matche plus RETOUR seul mais
+RETOUR ORACLE (agents reactives).
+
+**Travail** : creation de test-117 (7 points, v0.1.0) : 1) JSON valide
+v0.1.2 ; 2) les 4 etats pilote presents AVANT DEBUT dans le fichier
+(l ordre = priorite) ; 3) _etat_action 8 cas reels + non-regression ;
+4) encart etats connus ; 5) PREUVE NEGATIVE (retirer la regle RETOUR ->
+la trace RETOUR AEROPORT retombe a tort) ; 6-7) ASCII/LF. Enregistrement
+dans les DEUX registres (serie E du lanceur + profils-tests.json) -
+test-027 point 1 couverture vert.
+
+**Lecons** :
+1. PREUVE NEGATIVE SUR FICHIER DATA : la priorite des regles
+   (etats-actions.json) se teste en la RETIRANT - copier le fichier dans
+   tmp, supprimer une regle, recharger _etat_action avec env
+   ETATS_ACTIONS pointe sur la copie, verifier que la trace retombe a
+   tort. C est la preuve que la regle servait a quelque chose.
+2. EXIGER LE VRAI FICHIER (etats-actions.json) DANS LE TEST : pinner la
+   version 0.1.2 et l ordre des cles dans le fichier - pas seulement le
+   comportement de _etat_action, parce que c est le fichier data qui est
+   editable sans toucher au code (la lecon de etats-action v0.8.4).
+
+## [LECON] 2026-09-02 -- TEST-116 RETOUR AEROPORT AVANT CERBERUS (mission 787de42a) : 7/7 OK
+
+**Contexte** : suite au fix pilote.py v0.2.3 (mission a7a14712), aucun
+garde-fou ne pinnat l ORDRE chronologique exact de la fin-coordination
+d Oracle : la trace pilote RETOUR AEROPORT doit etre ecrite AVANT
+l activation Cerberus (retour aeroport puis atterrissage). C etait
+invisible car la troncature .000 masquait l inversion.
+
+**Travail** : creation de test-116 (7 points, v0.1.0) : 1) ordre dans le
+code pilote.py (RETOUR AEROPORT ligne 581 < activer_cerberus ligne 582) ;
+2) flux reel AGENTS-historique (cycle le plus recent conforme) ; 3) vrais
+ms sur la trace pilote recente ; 4) preuve negative (inversion simulee
+detectee) ; 5) modele conforme ; 6-7) ASCII/LF. Enregistrement dans les
+DEUX registres : SERIES e du lanceur + profils-tests.json serie outils.
+test-027 point 1 couverture OK.
+
+**Lecons** :
+1. UN GARDE-FOU D ORDRE CHRONOLOGIQUE DOIT VERIFIER LE CYCLE RECENT,
+   PAS L HISTOIRE : AGENTS-historique conserve les anciennes traces du
+   bug (avant v0.2.3 elles etaient inversees) - si le test exigeait
+   l ordre sur TOUTES les entrees, il serait KO en permanence sur le
+   passe. Le test prend le DERNIER retour pilote et verifie qu une
+   activation le suit bien apres (et qu aucune activation ne le precede).
+   Les traces historiques du bug restent comme archive.
+2. UN NOUVEAU TEST DOIT ETRE ENREGISTRE DANS LES SERIES DU LANCEUR ET
+   LES PROFILS : test-116 a d abord rate test-027 point 1 (hors-serie)
+   car il manquait dans la constante SERIES de tester-lancer-non-
+   regression.py ET dans profils-tests.json. Les deux registres sont
+   requis - la couverture du garde-fou depend de l un comme de l autre.
+
+## [LECON] 2026-09-02 -- REVERSE NON-REGRESSION 047cb88b : MISSION RESTEE PRISE SANS FIN (Morpheus)
+
+**Contexte** : la mission 047cb88b (reverse de la non-regression - classer
+les tests v1 obsolete/a-refaire/a-conserver, produire le rapport) a ete
+PRISE a 11:16:57 et un premier passage a 11:35 a produit le rapport +
+cree test-114, MAIS la mission n a JAMAIS ete TERMINEE : elle est restee
+PRISE des heures, decalee par les missions suivantes (fe00998c, f6963ebd...),
+jusqu a ce que l utilisateur la reclame. Reprise en flux formel : Oracle a
+re-active Morpheus (etat de carte re-initialise) et la mission a ete
+re-executee proprement.
+
+**Travail de reprise** : 1) re-verification du classement sur la suite
+reelle (113 tests, scan code a code) : obsolete = 013/016/018/072 (role
+actif transfere a test-114), a-conserver = outils v1 maintenus
+(006/009/010/011/012/014/015/017/022/023/096) + gouvernance corpus global
+(024/046/055/057/070/071), a-refaire = fait via test-114 ; 2) mise a jour
+du rapport avec la realite actuelle (test-114 v0.1.1 exception
+fin-coordination oracle->cerberus, vestige 1 buffy CORRIGE f6963ebd, .bak
+toujours presents = domaine Hygie signale) ; 3) verdict VALIDE.
+
+**Lecons** :
+1. UNE MISSION PRISE SANS FIN RESTE UNE MISSION NON FAITE : produire le
+   livrable (rapport + test) ne TERMINE pas la mission - il faut
+   mission-terminer + lecon + fin selon SA carte. Le statut PRISE sans fin
+   fausse l etat de la file (l agent semble occupe, la mission n est pas
+   livree au pilote).
+2. A LA REPRISE, RE-VERIFIER LA REALITE : entre 11:35 et la reprise, la
+   realite avait change (test-114 v0.1.1, vestige buffy corrige) - le
+   rapport devait etre mis a jour, pas recopie tel quel.
+
+**Verdict** : VALIDE - rapport mis a jour, classement verifie, mission
+047cb88b TERMINEE, lecon posee, fin selon carte. ASCII 0/0, CRLF 0/0.
+
+## [LECON] 2026-09-02 -- TEST-114 EXCEPTION FIN DE ROUND ORACLE (mission fe00998c) : 8/8 OK
+
+**Contexte** : inter-round apres la decision utilisateur 2026-09-02 - la
+fin-coordination d ORACLE (l aeroport) atterrit sur CERBERUS avec le bilan
+consolide (fin de round) au lieu de se reactiver lui-meme en boucle. Vulcain
+a modifie oracle/parcours/fins.json (fin-coordination -> cible=cerberus) +
+les garde-fous outils (auditer-conformite-arbre F4, detecter-fins-passives,
+pilote.py). Le point 3 de test-114 (reverse vestiges v1) exigeait TOUTE fin
+reactiver -> cible=oracle : il cassait.
+
+**Adaptation (v0.1.0 -> 0.1.1)** : erreurs_fins accepte l exception etroite
+(oracle, fin-coordination, cible=cerberus) ; fin-signal et fin-inter-round
+d oracle restent cible=oracle ; docstring point 3 documente la decision ;
+point 8 (preuve negative) inchange.
+
+**Verdict** : VALIDE - 8/8 OK x3 deterministe. Point 3 vert avec
+l exception, point 8 vert (zz-vestige != oracle avec fin cerberus TOUJOURS
+detecte : l exception ne desactive rien pour les autres agents). ASCII 0/0,
+CRLF 0/0, 0 residu. Rapport :
+rapport-test114-fin-oracle-cerberus-2026-09-02.md.
+
+**Lecons** :
+1. UNE DECISION UTILISATEUR QUI CHANGE LA CIBLE D UNE FIN CREE UNE
+   EXCEPTION DOCUMENTEE DANS LE GARDE-FOU DE REVERSE, PAS UNE
+   DESACTIVATION : le test-114 (jamais cerberus) et la nouvelle regle
+   (seulement oracle/fin-coordination -> cerberus) coexistent si
+   l exception est la PLUS ETROITE possible - triplet (agent, fid, cible)
+   verifie, jamais une liste d agents a la volee.
+2. LA PREUVE NEGATIVE PROUVE L ETROITESSE DE L EXCEPTION : l agent
+   factice du point 8 porte un nom != oracle -> il reste detecte. Si la
+   preuve negative passait, l exception serait trop large.
+3. UNE MODIFICATION DE CARTE D AGENT (fins.json) A DEUX EFFETS : le
+   comportement reel (pilote) ET les garde-fous structurels (test-114,
+   auditer-conformite-arbre, detecter-fins-passives). Verifier les TROIS
+   avant de conclure - c est le pilote (oracle) qui largue le bon
+   maillon pour chaque garde-fou (outils -> vulcain, tests -> morpheus).
+
+**Outils utilises** : lire-fichier, editer-fichier, valider-conformite-ascii,
+oracle (mission-prendre/lister/terminer), tester-protections (executions
+protegees).
+
 ## [LECON] 2026-09-02 -- TEST-115 R7 VERIFIER-FLUX-SECURITE (mission bdc8b291) : 9/9 OK
 
 **Contexte** : inter-round apres le fix Vulcain 31fe865e (faux positif

@@ -47,10 +47,11 @@ mise en attente dans la file `asap` avec statut PRIORITAIRE).
 ### [question] -- phase question/reponse dediee
 Ouvre une phase DEDIEE entre toi et Cerberus :
 1. Tu poses ta question ([question] ...)
-2. Cerberus repond directement (dialogue) ou active l'agent qui detient
-   l'information (Atlas pour l'exploration, Socrate pour la strategie...)
-   qui lui retourne la reponse.
-3. Cerberus repond avec les informations collectees.
+2. Cerberus ne repond JAMAIS directement : il transmet la question a
+   Oracle qui active l'agent detenteur de l'information (Atlas pour
+   l'exploration, Socrate pour la strategie...) qui lui retourne la
+   reponse.
+3. Cerberus transmet la reponse collectee (via Oracle) a l'utilisateur.
 Aucune autre tache pendant la phase.
 
 ### [creer] -- routage de creation PAR TYPE

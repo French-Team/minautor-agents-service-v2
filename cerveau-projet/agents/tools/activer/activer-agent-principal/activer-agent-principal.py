@@ -183,7 +183,9 @@ def _charger_etats_actions():
 def _etat_action(raison, agent=""):
     """Colonne Etat : l etat de l activite au moment de l action.
     Etats DYNAMIQUES (v0.8.4, decision utilisateur 2026-08-29) charges
-    depuis etats-actions.json : DEBUT, FIN, URGENT, BUG, DEV, ATTENTE,
+    depuis etats-actions.json : DECOLLAGE, RECUPERE, RETOUR, LARGUE
+    (etats de vol du pilote, v0.1.2 decision utilisateur 2026-09-02),
+    DEBUT, FIN, URGENT, BUG, DEV, ATTENTE,
     AUTO, ACTION + defaut ACTIF. Les regles de detection (prefixes /
     mots_cles / agents) sont appliquees DANS L ORDRE du fichier (la
     premiere regle qui matche gagne). Repli : logique v0.8.3 si le

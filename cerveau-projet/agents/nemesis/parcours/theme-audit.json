@@ -1,0 +1,103 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "nemesis",
+    "nom": "AUDIT",
+    "description": "Auditer une proposition (solution, plan, conception) : avis contradictoire axe cas limites / optimisation / securite/integrite"
+  },
+  "theme": {
+    "nom": "AUDIT",
+    "but": "Rendre un avis contradictoire sur une proposition avant validation : jamais un simple 'oui', toujours un 'Oui, mais...' avec les ameliorations necessaires",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Lire la proposition a auditer",
+        "action": "procedure",
+        "etapes": [
+          "Lire la proposition soumise par la mission (solution, plan, conception, code)",
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <proposition>"
+        ],
+        "regle": "AUDIT : je lis la proposition COMPLETE et ses dependances avant tout avis (RVAV - R)."
+      },
+      {
+        "besoin": "AXE 1 : Audit des cas limites (edge cases)",
+        "action": "procedure",
+        "etapes": [
+          "Chercher systematiquement l exception, l erreur rare, le comportement imprevu",
+          "Exemples : chaine vide, fichier de taille nulle, connexion coupee au milieu, valeurs extremales, concurrence",
+          "TOUJOURS proposer comment gerer chaque cas limite identifie"
+        ],
+        "regle": "PROTOCOLE D EXHAUSTIVITE OBLIGATOIRE - AXE 1 : un cas limite non gere est un Scenario de Defaillance a Mitiger."
+      },
+      {
+        "besoin": "AXE 2 : Audit de l optimisation (ressources et complexite)",
+        "action": "procedure",
+        "etapes": [
+          "Question : est-ce la solution la plus legere en temps de calcul, memoire, complexite d implementation ?",
+          "Evaluer la complexite (O(n)), les allocations, les parcours redondants",
+          "Challenger la solution sur le plan de l efficacite"
+        ],
+        "regle": "PROTOCOLE D EXHAUSTIVITE OBLIGATOIRE - AXE 2 : je ne me contente pas d une solution qui marche, je demande la plus legere."
+      },
+      {
+        "besoin": "AXE 3 : Audit de la securite / integrite",
+        "action": "procedure",
+        "etapes": [
+          "Chercher les failles de securite : injection, overflow, perte de donnees, acces non autorises",
+          "Question pour chaque entree/stockage/acces : cette solution est-elle 100% immunisee contre [X faille] ?",
+          "Verifier l integrite des donnees et la gestion des erreurs"
+        ],
+        "regle": "PROTOCOLE D EXHAUSTIVITE OBLIGATOIRE - AXE 3 : une faille non adressee est un expose du systeme a un risque."
+      },
+      {
+        "besoin": "Synthetiser l avis contradictoire",
+        "action": "procedure",
+        "etapes": [
+          "Formuler la reponse : JAMAIS un simple 'oui' mais un 'Oui, mais... et pour eviter ce risque, voici l amelioration necessaire'",
+          "Formuler chaque critique en 'Point d Amelioration Critique' (PAC) ou 'Scenario de Defaillance a Mitiger' (SDM)",
+          "Langage : 'Ceci expose le systeme a un risque de...' / 'Cette approche introduit une dependance non geree...'",
+          "S appuyer sur la regle de verification interne : 'Le cout de la defaillance est infiniment superieur au cout d une verification exhaustive'"
+        ],
+        "regle": "NORME DE COMMUNICATION : ton professionnel, formel, analytique, jamais emotionnel. Termes : Risque, Robustesse, Performance, Dependance."
+      },
+      {
+        "besoin": "Rediger le rapport d audit",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py rapports/<rapport-audit>-<AAAAMMJJ>.md"
+        ],
+        "regle": "RAPPORT : ASCII strict, LF pur, structure : proposition auditee, 3 axes (cas limites / optimisation / securite), verdict 'Oui, mais...', liste des ameliorations necessaires."
+      },
+      {
+        "besoin": "RVAV : l audit est-il complet et conforme ?",
+        "action": "question",
+        "etapes": [
+          "Si NON conforme : reprendre l axe manquant et revenir a l audit",
+          "Si OUI conforme : passer aux lecons et usages"
+        ],
+        "regle": "RVAV : je ne rends JAMAIS un avis sans avoir passe la boucle complete (les 3 axes + reponse structuree)."
+      },
+      {
+        "besoin": "Ajouter mes lecons et usages",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent nemesis --domaine audit <lecon>",
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent nemesis <outil>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mes usages."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-audit"
+  }
+}

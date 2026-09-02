@@ -23,18 +23,25 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | glm5 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Nom Agent** | oracle |
+| **Role Agent** | Coordinateur de l'equipe v1 (session-admin) -- traite les alertes de coordination (processus fantomes, serveurs morts, roulage messages) + controle processus |
 | **Derniere mise a jour** | 2026-09-02 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | oracle (retour de mission) |
-| **Raison** | RETOUR ORACLE : COORDINATION TERMINEE - toutes les missions routees |
+| **Fiche** | [cerveau-projet/agents/oracle/oracle.md](cerveau-projet/agents/oracle/oracle.md) |
+| **Corrections** | [cerveau-projet/agents/oracle/corrections.md](cerveau-projet/agents/oracle/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | RETOUR CERBERUS : Demande [attention] transmise a Oracle (id e9e470d1) : finir de cabler nemesis. Theme ATTENTION servi (file asap SUIVANTE). |
+
+DEMARRAGE OBLIGATOIRE (v2) : lance ton arbre des decisions avec :
+python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
+  cerveau-projet/agents/oracle/parcours/arbre-oracle.json
+(racine : choisis TON theme selon ta mission, puis suis les besoins /
+procedures du theme ; Oracle te pilote via l arbre - PAS le parcours v1 ;
+si tu reprends apres une interruption, relance l arbre et poursuis).
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-admin | glm5 | Cerberus | 2026-09-02 16:17:04.461 |
+| session-admin | glm5 | oracle | 2026-09-02 20:39:24.458 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
