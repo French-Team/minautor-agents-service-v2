@@ -20,3 +20,8 @@
 {"date": "2026-08-29T10:53:29", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "URGENT via verifier-statuts: 1 P1 non-acquitte(s) detecte(s)", "par": "oracle", "sens": "escalade"}
 {"date": "2026-08-29T10:53:41", "niveau": 5, "signification": "ARRET TOTAL", "commentaire": "REDEMARRAGE APRES BUG : reprise apres bug : le flux etait casse et le LLM a repris la main - redemarrage avec DEFCON 5 (protocole de secours)", "par": "oracle"}
 {"date": "2026-08-29T11:05:22", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "Demande utilisateur : le bug de la colonne Executeur (routines RT(300s)) est a traiter - descente DEFCON 5 vers 4 pour lancer l agent habilite via Oracle", "par": "oracle"}
+{"date": "2026-09-04T07:22:05", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "Etats URGENT resolus - inter-round 6ad0c87c/57d45fdb TERMINEE, flux a 0 P1", "par": "oracle"}
+{"date": "2026-09-04T07:22:05", "niveau": 2, "signification": "REPRISE TOTALE", "commentaire": "Retour nominal - cause racine flux corrigee (auto-consommation notifications), aucune mission URGENT restante", "par": "oracle"}
+{"date": "2026-09-04T07:38:23", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "URGENT via verifier-statuts: Aucun P1 non-acquitte (probleme regle)", "par": "oracle", "sens": "escalade"}
+{"date": "2026-09-04T07:52:44", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "Etats URGENT resolus - flux confirme 0 P1 (no-op), mission plan 8e0ccf1b TERMINEE", "par": "oracle"}
+{"date": "2026-09-04T07:52:45", "niveau": 2, "signification": "REPRISE TOTALE", "commentaire": "Retour nominal - aucune mission URGENT restante", "par": "oracle"}

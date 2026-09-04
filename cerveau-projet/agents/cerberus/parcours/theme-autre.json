@@ -3,28 +3,28 @@
     "type": "theme",
     "appartient_a": "cerberus",
     "nom": "AUTRE",
-    "description": "Inventaire, audit, analyse du projet : activer Themis ou Atlas"
+    "description": "Inventaire, audit, analyse du projet : signaler au pilote via ORACLE"
   },
   "theme": {
     "nom": "AUTRE",
     "but": "Traiter les demandes d inventaire, audit ou analyse",
     "redirects": [
       {
-        "besoin": "Inventaire / audit ?",
+        "besoin": "Inventaire / audit : signaler au pilote via ORACLE",
         "action": "procedure",
         "etapes": [
-          "OUI -> Activer Themis (audit) ou Atlas (cartographie)",
+          "OUI -> Signaler le besoin au PILOTE, qui previent ORACLE ; ORACLE choisit et active Themis ou Atlas",
           "NON -> Signaler le besoin"
         ],
         "regle": "Router vers l agent adapte."
       },
       {
-        "besoin": "Activer Themis (inventaire/audit)",
+        "besoin": "Signaler au pilote l inventaire/audit",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport inventaire ou audit>\""
         ],
-        "regle": "Themis est l evaluateur croise."
+        "regle": "Le PILOTE transmet le signalement a ORACLE ; ORACLE choisit et active l agent habilite (Themis pour l audit, Atlas pour l inventaire)."
       },
       {
         "besoin": "Signaler le besoin",
@@ -32,7 +32,7 @@
         "etapes": [
           "fin-signal"
         ],
-        "regle": "Si aucun agent n est adapte, signaler le besoin."
+        "regle": "Si aucun agent n est adapte, le PILOTE signale le besoin a ORACLE, puis la fin revient vers ORACLE."
       }
     ]
   },

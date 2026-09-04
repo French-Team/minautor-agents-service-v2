@@ -13,19 +13,19 @@
         "besoin": "Mission hors parcours",
         "action": "procedure",
         "etapes": [
-          "OUI -> Activer l agent habilite",
+          "OUI -> Signaler le besoin au pilote via ORACLE",
           "NON -> Signaler le besoin"
         ],
         "regle": "ROUTER vers l agent adapte."
       },
       {
-        "besoin": "Activer l agent habilite",
+        "besoin": "Signaler au pilote via ORACLE",
         "action": "procedure",
         "etapes": [
           "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
           "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin morpheus \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
         ],
-        "regle": "Delegation propre."
+        "regle": "Morpheus signale le besoin au PILOTE via ORACLE ; le PILOTE choisit et active l agent habilite. Morpheus n active jamais directement un autre agent."
       },
       {
         "besoin": "Besoin d outil ?",

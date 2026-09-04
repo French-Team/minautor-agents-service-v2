@@ -237,6 +237,69 @@ def prendre(file="asap"):
     return e, None
 
 
+def _consommer_notification_mission(entree):
+    """Apres une TERMINEE, consommer le message 'MISSION pour X' envoye
+    a l agent lors du relais de cette mission.
+
+    Cause racine (constat utilisateur 2026-09-04) : mission-relais
+    (_envoyer_direct dans oracle.py) depose un P1 'MISSION pour X'
+    (lu=False, sans champ type) dans inbox/<agent>.jsonl. flux.py compte
+    exactement ces messages (not lu and priorite==1 and not type). Quand
+    la mission devenait TERMINEE, RIEN ne marquait ce message lu/accuse :
+    flux le recomptait a chaque cycle -> encart URGENT (source flux) ->
+    verifier-statuts escaladait DEFCON 4 et deposait un ETAT URGENT asap
+    -> Oracle devait acquitter manuellement chaque round.
+
+    Fix : consommer le message correspondant (de=oracle, vers=agent,
+    objet='MISSION pour <agent>', corps==texte de la mission) au moment
+    ou la mission passe TERMINEE - convention acquitter = consommer
+    (suppression). Idempotent : message deja consomme = no-op.
+    """
+    agent = (entree.get("agent") or "").strip()
+    mission = entree.get("mission") or ""
+    if not agent:
+        return 0
+    cible = FILES_DIR.parent / "inbox" / ("%s.jsonl" % agent)
+    if not cible.is_file():
+        return 0
+    objet = "MISSION pour %s" % agent
+    norm_mission = " ".join(mission.split())
+    garde = []
+    consommes = 0
+    try:
+        for brut in cible.read_text(encoding="utf-8",
+                                    errors="replace").splitlines():
+            brut = brut.strip()
+            if not brut:
+                continue
+            try:
+                m = json.loads(brut)
+            except ValueError:
+                garde.append(brut)
+                continue
+            if not isinstance(m, dict):
+                garde.append(brut)
+                continue
+            correspond = (m.get("de") == "oracle"
+                          and m.get("vers") == agent
+                          and m.get("objet") == objet
+                          and " ".join((m.get("corps") or "").split())
+                          == norm_mission)
+            if correspond:
+                consommes += 1
+                continue
+            garde.append(json.dumps(m, ensure_ascii=False))
+    except OSError:
+        return 0
+    if consommes:
+        try:
+            with open(cible, "w", encoding="utf-8") as f:
+                f.write("\n".join(garde) + "\n")
+        except OSError:
+            return 0
+    return consommes
+
+
 def terminer(id_mission, file="asap"):
     """Marquer une mission comme terminee."""
     chemin = _file_path(file)
@@ -253,6 +316,7 @@ def terminer(id_mission, file="asap"):
                 lignes[i] = json.dumps(e, ensure_ascii=False)
                 with open(chemin, "w", encoding="utf-8") as f:
                     f.write("\n".join(lignes) + "\n")
+                _consommer_notification_mission(e)
                 return e, None
         except ValueError:
             continue
@@ -372,6 +436,14 @@ def relais(file="asap"):
     `agent` (deduit si absent) pour que Oracle sache a qui l envoyer.
     Ordonnancement par importance (decision utilisateur 2026-09-02,
     voir prendre()).
+
+    PERSISTANCE DE L AGENT (correctif 2026-09-04, oracle v0.5.11) :
+    l agent deduit etait garde en memoire seulement - le fichier gardait
+    agent="" -> a la TERMINEE, files.terminer() (via
+    _consommer_notification_mission) ne pouvait pas retrouver l agent pour
+    consommer la notification 'MISSION pour X' de l inbox (P1 fantome pour
+    flux). On reecrit l entree dans le fichier avec l agent deduit pour
+    que la file soit la source de verite.
     """
     entree, erreur = prendre(file)
     if erreur or entree is None:
@@ -384,6 +456,27 @@ def relais(file="asap"):
         priorite, typ = classifier(entree.get("mission", ""))
         entree["priorite"] = priorite
         entree["type"] = typ
+    # Persister l agent deduit dans le fichier (source de verite).
+    chemin = _file_path(file)
+    if chemin is not None and chemin.exists():
+        try:
+            lignes = [l.strip()
+                      for l in chemin.read_text(encoding="utf-8").splitlines()
+                      if l.strip()]
+            for i, l in enumerate(lignes):
+                try:
+                    e = json.loads(l)
+                except ValueError:
+                    continue
+                if e.get("id") == entree.get("id"):
+                    e["agent"] = agent
+                    e["agent_source"] = source
+                    lignes[i] = json.dumps(e, ensure_ascii=False)
+                    with open(chemin, "w", encoding="utf-8") as f:
+                        f.write("\n".join(lignes) + "\n")
+                    break
+        except OSError:
+            pass
     return entree, None
 
 

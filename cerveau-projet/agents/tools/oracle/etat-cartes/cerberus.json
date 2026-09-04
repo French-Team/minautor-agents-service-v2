@@ -2,13 +2,10 @@
  "agent": "cerberus",
  "parcours": "agents/cerberus/parcours/arbre-cerberus.json",
  "case_courante": null,
- "mission_type": "RETOUR",
- "mission": "RETOUR ORACLE : Round consommateur [NOTATION] termine : Vulcain a branche le consommateur (oracle.py v0.5.9, _consommer_notation + hooks + anti-inondation), Morpheus a cree test-120 (8/8 OK), la mission Themis 0d3992df generee automatiquement a ete executee (evaluation croisee periodique, chaine + conforme, rapport depose). PREUVE BOUT EN BOUT : la routine notation a enfin produit une evaluation reelle. File 0 EN_ATTENTE, 1 PRISE autre round (8244d42f outil flags). Fin-coordination - atterrissage Cerberus.",
- "historise_debut": true,
- "precedent": "oracle",
- "etape": "fin",
- "historise_fin": true,
- "theme_courant": null,
- "redirect_idx": 0,
- "etape_idx": 0
+ "mission_type": null,
+ "mission": null,
+ "historise_debut": false,
+ "precedent": null,
+ "etape": "debut",
+ "historise_fin": false
 }

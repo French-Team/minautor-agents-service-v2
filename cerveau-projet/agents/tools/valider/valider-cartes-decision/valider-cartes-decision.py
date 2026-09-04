@@ -46,8 +46,13 @@ Utilisation:
   valider-cartes-decision.py --tous
   valider-cartes-decision.py --fichier <chemin.json>
 
+v0.5.0 : support du format v2 - detection auto (identite.type == 'arbre')
+et validation des arbres v2 servis par le pilote (racine/branches ->
+themes -> fins centralisees). --agent valide l arbre v2 s il existe
+(arbre-<agent>.json), repli v1 sinon. La validation v1 reste inchangee.
+
 Proprietaire : Vulcain (outil partage)
-Version : 0.4.7
+Version : 0.5.0
 Statut : prepare
 """
 
@@ -58,7 +63,7 @@ import re
 import subprocess
 import sys
 
-VERSION = "0.4.7"
+VERSION = "0.5.0"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "prepare"
 
@@ -156,6 +161,181 @@ def lister_agents():
 
 def chemin_parcours_agent(agent):
     return os.path.join(AGENTS_DIR, agent, "parcours", "parcours-" + agent + ".json")
+
+
+def chemin_arbre_agent(agent):
+    return os.path.join(AGENTS_DIR, agent, "parcours", "arbre-" + agent + ".json")
+
+
+def _charger_json(chemin):
+    """Charger un JSON depuis un chemin, None si illisible/invalide."""
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            return json.loads(fh.read())
+    except (IOError, OSError, ValueError):
+        return None
+
+
+def valider_arbre_v2(chemin, nom_display, agent=None):
+    """Valide un arbre v2 (arbre-<agent>.json : racine/branches -> themes
+    -> fins centralisees). C est le format SERVI par le pilote v0.2.4
+    (detection auto : identite.type == 'arbre'). Retourne 0 si conforme.
+
+    Points de controle :
+      1. JSON valide
+      2. Structure : identite.type=arbre + arbre + racine presents
+      3. Version sans prefixe 'v' (identite.version)
+      4. Racine : titre/question + branches non vides
+      5. Chaque branche a une reponse et un vers pointant vers un fichier
+         theme existant (theme-*.json) - les vers non resolves sont des
+         references cassees
+      6. Chaque theme reference est valide : JSON parse, identite.type =
+         theme, theme.nom + theme.redirects presents, chaque redirect a un
+         besoin et une action (procedure/question)
+      7. Fins : la reference fins.fichier existe (fins.json), JSON valide,
+         identite.type = fins, definition non vide
+    """
+    print("=== Verification %s (format v2 arbre) ===" % nom_display)
+    print("")
+
+    donnees = _charger_json(chemin)
+    if donnees is None:
+        print("1. JSON valide")
+        print("   [ERREUR] JSON invalide ou illisible : %s" % chemin)
+        print("")
+        print("=== Resultat : NON CONFORME ===")
+        return 1
+    erreurs = []
+
+    print("1. JSON valide")
+    print("   [OK] JSON parse sans erreur")
+
+    # 2. Structure : identite + arbre + racine
+    print("2. Structure (identite + arbre + racine)")
+    identite = donnees.get("identite") or {}
+    arbre = donnees.get("arbre") or {}
+    racine = donnees.get("racine") or {}
+    if identite.get("type") != "arbre":
+        print("   [ERREUR] identite.type doit etre 'arbre' (trouve: %s)"
+              % identite.get("type"))
+        erreurs.append("identite.type")
+    else:
+        print("   [OK] identite.type = arbre")
+    if not arbre or not racine:
+        print("   [ERREUR] Cles 'arbre' et/ou 'racine' absentes")
+        erreurs.append("structure")
+    else:
+        print("   [OK] Cles top-level presentes (identite + arbre + racine)")
+
+    # 3. Version sans prefixe 'v'
+    print("3. Format de version sans prefixe 'v' (P9)")
+    version = identite.get("version")
+    if not version:
+        print("   [ERREUR] identite.version absente")
+        erreurs.append("version")
+    elif str(version).startswith("v"):
+        print("   [ERREUR] identite.version '%s' commence par 'v'" % version)
+        erreurs.append("version")
+    else:
+        print("   [OK] identite.version '%s' sans prefixe v" % version)
+
+    dossier = os.path.dirname(chemin)
+
+    # 4. Racine : titre/question + branches
+    print("4. Racine (titre/question + branches)")
+    branches = racine.get("branches") or []
+    if not isinstance(branches, list) or not branches:
+        print("   [ERREUR] racine.branches absente ou vide")
+        erreurs.append("racine.branches")
+    else:
+        print("   [OK] %d branche(s) a la racine" % len(branches))
+
+    # 5. Branches : reponse + vers -> fichier theme existant
+    print("5. Branches (reponse + vers vers un theme existant)")
+    refs_cassees = []
+    vers_uniques = set()
+    for b in branches:
+        rep = b.get("reponse")
+        vers = b.get("vers")
+        if not rep or not vers:
+            refs_cassees.append("branche sans reponse/vers: %s" % (rep or vers or "?"))
+            continue
+        cible = os.path.join(dossier, vers)
+        if not os.path.isfile(cible):
+            refs_cassees.append("%s -> %s (fichier absent)" % (rep, vers))
+        else:
+            vers_uniques.add(vers)
+    if refs_cassees:
+        print("   [ERREUR] References cassees : %s" % "; ".join(refs_cassees[:5]))
+        erreurs.append("branches.vers")
+    else:
+        print("   [OK] %d branche(s), toutes vers un fichier existant" % len(branches))
+
+    # 6. Themes references : structure valide
+    print("6. Themes references (identite.type=theme + redirects)")
+    themes_ko = []
+    for vers in sorted(vers_uniques):
+        cible = os.path.join(dossier, vers)
+        t = _charger_json(cible)
+        if t is None:
+            themes_ko.append("%s: JSON invalide" % vers)
+            continue
+        tid = (t.get("identite") or {}).get("type")
+        theme = t.get("theme") or {}
+        redirects = theme.get("redirects") or []
+        if tid != "theme":
+            themes_ko.append("%s: identite.type=%s (attendu theme)" % (vers, tid))
+        elif not theme.get("nom"):
+            themes_ko.append("%s: theme.nom absent" % vers)
+        elif not isinstance(redirects, list) or not redirects:
+            themes_ko.append("%s: theme.redirects absent ou vide" % vers)
+        else:
+            for r in redirects:
+                if not r.get("besoin") or not r.get("action"):
+                    themes_ko.append("%s: redirect sans besoin/action" % vers)
+                    break
+    if themes_ko:
+        print("   [ERREUR] Themes invalides : %s" % "; ".join(themes_ko[:5]))
+        erreurs.append("themes")
+    else:
+        print("   [OK] %d theme(s) valide(s)" % len(vers_uniques))
+
+    # 7. Fins : reference fins.json
+    print("7. Fins centralisees (fins.fichier)")
+    fins_ref = (donnees.get("fins") or {}).get("fichier")
+    if not fins_ref:
+        print("   [ERREUR] fins.fichier absent de l arbre")
+        erreurs.append("fins")
+    else:
+        cible_fins = os.path.join(dossier, fins_ref)
+        fj = _charger_json(cible_fins)
+        if fj is None:
+            print("   [ERREUR] %s absent ou JSON invalide" % fins_ref)
+            erreurs.append("fins")
+        else:
+            fid = (fj.get("identite") or {}).get("type")
+            contenu_fins = fj.get("fins") or {}
+            if fid != "fins":
+                print("   [ERREUR] %s : identite.type=%s (attendu fins)" % (fins_ref, fid))
+                erreurs.append("fins")
+            elif not isinstance(contenu_fins, dict) or not contenu_fins:
+                print("   [ERREUR] %s : definition fins vide" % fins_ref)
+                erreurs.append("fins")
+            else:
+                actions = set()
+                for nom_fin, fdef in contenu_fins.items():
+                    if isinstance(fdef, dict) and fdef.get("action"):
+                        actions.add(fdef["action"])
+                print("   [OK] %s present (%d fin(s), actions: %s)"
+                      % (fins_ref, len(contenu_fins),
+                         ", ".join(sorted(actions)) if actions else "?"))
+
+    print("")
+    if erreurs:
+        print("=== Resultat : NON CONFORME (%d erreur(s)) ===" % len(erreurs))
+        return 1
+    print("=== Resultat : CONFORME (arbre v2) ===")
+    return 0
 
 
 def valider_parcours(contenu, nom_display, agent=None):
@@ -427,7 +607,8 @@ def valider_parcours(contenu, nom_display, agent=None):
 
 
 def verifier_parcours_fichier(chemin, nom_display, agent=None):
-    """Verifie un fichier parcours JSON (ou signale qu'une fiche .md n'est plus la cible)."""
+    """Verifie un fichier carte JSON - parcours v1 OU arbre v2 (detection
+    auto par contenu, v0.5.0). Retourne 0 si conforme."""
     if not os.path.isfile(chemin):
         print("=== Verification %s : %s ===" % (nom_display, chemin))
         print("")
@@ -438,13 +619,18 @@ def verifier_parcours_fichier(chemin, nom_display, agent=None):
         print("=== Verification %s : %s ===" % (nom_display, chemin))
         print("")
         print("NOTE : la carte de decision ne vit plus dans la fiche .md")
-        print("(allegement v0.2.0). La SOURCE DE VERITE est le parcours JSON :")
-        print("  agents/<agent>/parcours/parcours-<agent>.json")
-        print("Utiliser --agent <nom> ou --fichier <parcours.json>.")
+        print("(allegement v0.2.0). La SOURCE DE VERITE est le JSON de carte :")
+        print("  agents/<agent>/parcours/parcours-<agent>.json (v1)")
+        print("  agents/<agent>/parcours/arbre-<agent>.json (v2, servi par le pilote)")
+        print("Utiliser --agent <nom> ou --fichier <carte.json>.")
         print("")
         print("=== Resultat : NON CONFORME (mauvaise cible) ===")
         return 1
 
+    # DETECTION AUTO DU FORMAT (v0.5.0) : un fichier de carte dont
+    # identite.type == 'arbre' est un arbre v2 - le valider comme tel.
+    # (Le pilote v0.2.4 sert les arbres v2 : les valider en v1 etait un
+    # faux NON CONFORME - constat Janus mission 8bca6f3d.)
     try:
         with io.open(chemin, encoding="utf-8") as fh:
             contenu = fh.read()
@@ -453,11 +639,25 @@ def verifier_parcours_fichier(chemin, nom_display, agent=None):
         print("")
         print("ERREUR : Impossible de lire le fichier %s" % chemin)
         return 1
+    try:
+        donnees = json.loads(contenu)
+    except ValueError:
+        donnees = None
+    if isinstance(donnees, dict):
+        identite = donnees.get("identite") or {}
+        if identite.get("type") == "arbre" or donnees.get("racine"):
+            return valider_arbre_v2(chemin, nom_display, agent=agent)
 
     return valider_parcours(contenu, nom_display, agent=agent)
 
 
 def verifier_agent(agent):
+    # v0.5.0 : si l agent a un arbre v2 (arbre-<agent>.json, celui que le
+    # pilote sert reellement), c est LA carte a valider. Repli v1 sinon.
+    chemin_v2 = chemin_arbre_agent(agent)
+    if os.path.isfile(chemin_v2):
+        return verifier_parcours_fichier(
+            chemin_v2, "de l'agent %s (arbre v2)" % agent, agent=agent)
     chemin = chemin_parcours_agent(agent)
     return verifier_parcours_fichier(chemin, "de l'agent %s" % agent, agent=agent)
 

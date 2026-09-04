@@ -13,26 +13,26 @@
         "besoin": "Mission dans le domaine d un autre agent ? (delegation)",
         "action": "procedure",
         "etapes": [
-          "OUI -> Activer l agent habilite",
+          "OUI -> Signaler le besoin au pilote via ORACLE",
           "NON -> Verifier si outil temporaire necessaire"
         ],
         "regle": "REGLE ABSOLUE : je n execute JAMAIS une mission qui ne releve pas de mon domaine."
       },
       {
-        "besoin": "Activer l agent habilite",
+        "besoin": "Signaler au pilote via ORACLE",
         "action": "procedure",
         "etapes": [
           "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
           "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin buffy \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
         ],
-        "regle": "Delegation propre : activer l agent, pas executer soi-meme."
+        "regle": "Buffy signale le besoin au PILOTE via ORACLE ; le PILOTE choisit et active l agent habilite. Buffy n active jamais directement un autre agent."
       },
       {
         "besoin": "Besoin d outil qui n existe pas ?",
         "action": "procedure",
         "etapes": [
           "TEMPORAIRE -> creer l outil temporaire",
-          "DURABLE -> activer Vulcain (je suis Buffy, pas Vulcain)"
+          "DURABLE -> signaler au PILOTE via ORACLE pour que Vulcain soit active (je suis Buffy, pas Vulcain)"
         ],
         "regle": "REGLE ANTI-SCRIPTS : DECLARER au registre."
       },
@@ -58,7 +58,7 @@
         "etapes": [
           "fin-delegation"
         ],
-        "regle": "Signaler a Cerberus si le besoin depasse mon perimetre."
+        "regle": "Signaler au PILOTE via ORACLE si le besoin depasse mon perimetre ; le pilote choisit et active l agent habilite."
       }
     ]
   },

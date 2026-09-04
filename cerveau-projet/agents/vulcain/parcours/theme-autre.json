@@ -19,7 +19,7 @@
           "L agent habilite largue par le pilote execute sa mission puis sa fin va vers ORACLE (modele aero R1/R3, jamais Cerberus ni un autre agent) -> fin-delegation : le pilote decide de la suite",
           "NON -> besoin d outil ? (besoin suivant)"
         ],
-        "regle": "REDIRECTION OUTIL BLOQUE : verrou bloque un outil -> activer l agent habilite. JAMAIS re-tenter, JAMAIS s arreter. AGENTS HABILITES : Buffy cartes, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
+        "regle": "REDIRECTION OUTIL BLOQUE : verrou bloque un outil -> signaler au PILOTE via ORACLE. JAMAIS re-tenter, JAMAIS s arreter. ORACLE choisit et le PILOTE active l agent habilite. AGENTS HABILITES : Buffy cartes, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
       },
       {
         "besoin": "Besoin d'un outil qui n'existe pas ?",

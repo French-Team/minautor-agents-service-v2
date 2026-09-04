@@ -32,7 +32,7 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.5.9"
+VERSION = "0.5.12"
 
 # Modules fonctions
 _fonctions_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -118,11 +118,9 @@ def _cmd_mission_relais(args):
     try:
         parcours = _pilote_parcours_agent(agent)
         mission_type = _pilote._type_mission_auto(mission)
-        etat = _pilote.init_etat(
-            agent, parcours, mission_type, mission, precedent=None)
-        if etat:
-            etat["historise_debut"] = True
-            _pilote._sauver_etat(etat)
+        _pilote.initialiser_mission_verifiee(
+            agent, parcours, mission_type, mission, precedent=None,
+            historise_debut=True)
         print("[ORACLE] Etat de carte initialise : le pilote dirige %s."
               % agent)
     except Exception as exc:
@@ -323,15 +321,55 @@ def cmd_envoyer(args):
 _FICHIER_CONSOM_NOTATION = ORACLE_DIR / "routines" / ".notation_consommation.txt"
 DELAI_CONSOM_NOTATION_SECONDES = 3600
 OBJET_NOTATION = "[NOTATION]"
+_FORMAT_DATE_MISSION = "%Y-%m-%dT%H:%M:%S"
 
 
-def _mission_evaluation_en_attente():
-    """True si une mission Themis d evaluation est deja EN_ATTENTE
-    (anti-inondation du consommateur [NOTATION])."""
-    for e in _files.lister():
-        if (e.get("statut") == "EN_ATTENTE"
-                and str(e.get("agent", "")).strip().casefold() == "themis"
-                and "EVALUATION" in str(e.get("mission", "")).upper()):
+def _age_secondes(ref):
+    """Age en secondes d une date ISO (%Y-%m-%dT%H:%M:%S) par rapport a
+    maintenant. Retourne None si la date est absente ou illisible."""
+    if not ref:
+        return None
+    try:
+        d = datetime.strptime(ref, _FORMAT_DATE_MISSION)
+    except (ValueError, TypeError):
+        return None
+    return (datetime.now() - d).total_seconds()
+
+
+def _est_mission_evaluation(e):
+    """True si l entree est une mission Themis d EVALUATION CROISEE."""
+    return (str(e.get("agent", "")).strip().casefold() == "themis"
+            and "EVALUATION" in str(e.get("mission", "")).upper())
+
+
+def _mission_evaluation_active_ou_recente():
+    """True si une mission Themis d evaluation est EN_ATTENTE, PRISE (en
+    cours) ou TERMINEE recemment (< 60 min) - anti-inondation du
+    consommateur [NOTATION] (correctif avis Nemesis 2026-09-02 : la garde
+    ne couvrait que EN_ATTENTE et permettait une DOUBLE evaluation croisee
+    quand la mission etait PRISE). Ne scanne que la file asap (les missions
+    evaluation y sont toujours deposees par ce consommateur)."""
+    for e in _files.lister(file="asap"):
+        if not _est_mission_evaluation(e):
+            continue
+        statut = e.get("statut")
+        if statut in ("EN_ATTENTE", "PRISE"):
+            return True
+        if statut == "TERMINEE":
+            # TERMINEE recente : date de depot (ou de prise) < 60 min -> une
+            # evaluation vient d avoir lieu, ne pas en relancer une double.
+            age = _age_secondes(e.get("prise_date") or e.get("date"))
+            if age is not None and age < DELAI_CONSOM_NOTATION_SECONDES:
+                return True
+    return False
+
+
+def _mission_evaluation_deja_deposee():
+    """True si une mission Themis d evaluation existe dans la file asap
+    (meme TERMINEE ancienne) - distingue une premiere activation d un
+    fichier anti-inondation SUPPRIME apres des depots precedents."""
+    for e in _files.lister(file="asap"):
+        if _est_mission_evaluation(e):
             return True
     return False
 
@@ -344,14 +382,15 @@ def _consommer_notation():
     Auparavant personne ne consommait ces demandes : Oracle acquittait par
     habitude et la rotation MAX_MESSAGES=5 purgeait sans traitement.
 
-    Anti-inondation : ne depose PAS si une mission Themis d evaluation est
-    deja EN_ATTENTE OU si une a ete deposee il y a moins de 60 minutes
-    (fichier .notation_consommation.txt).
+    Anti-inondation (correctif avis Nemesis 2026-09-02) : ne depose PAS si
+    une mission Themis d evaluation est EN_ATTENTE, PRISE (en cours) ou
+    TERMINEE recemment (< 60 min), OU si une a ete deposee il y a moins de
+    60 minutes (fichier .notation_consommation.txt).
     """
     inbox_file = INBOX_DIR / "oracle.jsonl"
     if not inbox_file.exists():
         return
-    if _mission_evaluation_en_attente():
+    if _mission_evaluation_active_ou_recente():
         return
     if _FICHIER_CONSOM_NOTATION.exists():
         try:
@@ -360,6 +399,21 @@ def _consommer_notation():
                 return
         except (ValueError, OSError):
             pass
+    else:
+        # Vigilance (avis Nemesis, axe 3) : fichier anti-inondation ABSENT
+        # (supprime, purge, erreur) alors que des evaluations ont deja eu
+        # lieu -> ne PAS deposer immediatement (contournement du delai) :
+        # initialiser le fichier avec un timestamp recent et attendre le
+        # prochain cycle. Premiere activation (aucune mission d evaluation
+        # dans l historique asap) -> deposer normalement.
+        if _mission_evaluation_deja_deposee():
+            try:
+                _FICHIER_CONSOM_NOTATION.write_text(str(time.time()))
+            except OSError:
+                pass
+            print("[ORACLE] Consommateur [NOTATION] : fichier anti-inondation "
+                  "absent - reinitialise, depot differe (vigilance Nemesis)")
+            return
     lignes = []
     depose = False
     with open(inbox_file, encoding="utf-8") as f:
@@ -928,13 +982,9 @@ def cmd_activer(args):
     try:
         parcours = _pilote_parcours_agent(args.agent)
         mission_type = _pilote._type_mission_auto(args.raison)
-        etat = _pilote.init_etat(
+        _pilote.initialiser_mission_verifiee(
             args.agent, parcours, mission_type, args.raison,
-            precedent=agent_precedent)
-        # Marquer DEBUT deja historise (evite le double dans le pilote)
-        if etat:
-            etat["historise_debut"] = True
-            _pilote._sauver_etat(etat)
+            precedent=agent_precedent, historise_debut=True)
     except Exception as exc:
         print("[ORACLE] WARNING etat-carte : %s" % exc)
 

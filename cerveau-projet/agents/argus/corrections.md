@@ -1,3 +1,21 @@
+## [LECON] 2026-09-04 -- AUDIT CONSTAT : BDD DES CORRECTIONS v1 vs v2 (mission 82151e40, Argus)
+
+**Contexte** : demande utilisateur [attention] - verifier comment les agents utilisent la bdd des corrections. Dans freelance (v2), corrections.md ne contient plus tout : les agents se partagent les corrections (corrections.jsonl + bdd-lecons partagees). Verifier ce qui est en place encore en v1.
+
+**Resultat (rapport classe par gravite livre en FIN)** :
+- V2 : 2 systemes partages distincts = (1) corrections.jsonl/corrections.py (retro-correction automatique traitee en priorite par JARVIS, 1653 entrees dont 1650 EN_ATTENTE = backlog non traite) et (2) bdd-lecons (lecons partagees, doctrine D10 "plus de lecons dans corrections.md", mais seulement 6 lecons enregistrees alors que les corrections.md v2 contiennent ENCORE des [LECON] jusqu au 2026-08-26 - la bascule est restee incomplete).
+- V1 : infra triple existante et documentee (corrections-db.md) : corrections.md = memoire courte ~10 dernieres lecons ; lecons/lecons.db = memoire longue (255 lecons, 13 agents) ; corrections.db = index de compatibilite (360 lignes, 19 agents, import UNIQUE le 2026-09-01 jamais re-importe).
+- ECART 1 (majeur) : la doctrine v1 (corrections-db.md : corrections.md = fenetre courte ~10 lecons) n est PAS respectee en pratique : corrections.md reels accumulent TOUT l historique (vulcain 27 [LECON]/644 lignes, morpheus 26/609, themis 12/310, buffy 15/289...) - le --trim n a jamais ete lance (corrections-db.py : 0 usage declare au registre).
+- ECART 2 (majeur) : double ecriture protocole-fin-mission E2 (corrections.md + enregistrer-lecon vers lecons.db) NON FAITE depuis le 2026-08-18 (dernier usage reel d enregistrer-lecon hors verrou-auto : 2026-08-18 ; les 4 lecons du 09-04 de ce round : 0 usage enregistrer-lecon) - les lecons restent dans corrections.md sans aller en memoire longue partagee.
+- ECART 3 (mineur) : 3 agents ont des [LECON] dans corrections.md mais AUCUNE lecon dans lecons.db (argus 4, hermes 1, promethee 10).
+- ECART 4 (mineur) : corrections.db (index) importe UNE fois (2026-09-01, 09:38) puis plus JAMAIS re-importe - index fige.
+- ECART 5 (mineur) : v2 corrections.jsonl = 1650 entrees EN_ATTENTE sur 1653 (backlog retro-correction non traite depuis aout).
+
+**Lecons** :
+- Une doctrine documentee (corrections-db.md) peut etre en decalage total avec la pratique : croiser la doctrine avec les fichiers REELS et le registre des usages distingue le theorique du reel.
+- Deux modeles ont ete batis en parallele (v1 triple infra vs v2 corrections.jsonl+bdd-lecons) sans convergence : le risque est la double infrastructure et la perte des lecons hors corrections.md.
+- Le protocole E2 impose la double ecriture (corrections.md + lecons.db) mais rien ne la verifie en pratique depuis le 08-18 : un garde-fou (test) manque pour controler que chaque lecon de corrections.md part bien dans lecons.db (et inversement).
+
 ## [LECON] 2026-08-16 -- PREMIERE ACTIVATION : TEST DE COMPORTEMENT (Argus)
 
 **Contexte** : premiere activation reelle apres branchement a la liste AGENTS (etait inactivable depuis la creation 2026-08-15). Mission : tester le comportement pour rediger ensuite protocoles et parcours.

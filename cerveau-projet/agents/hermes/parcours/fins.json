@@ -7,11 +7,11 @@
   "fins": {
     "fin-autre": {
       "titre": "FIN - Retour a ORACLE (l aeroport)",
-      "description": "Modele aero : mission terminee, je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R1/R3).",
+      "description": "Modele aero : je remets mon bilan au PILOTE via ORACLE. Le PILOTE previent ORACLE, choisit l agent habilite et le fait activer ; je ne connais pas le prochain agent.",
       "action": "reactiver",
       "cible": "oracle",
       "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hermes \"<bilan de autre>\" --cible oracle",
-      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE (l aeroport), jamais vers cerberus en milieu de chaine. Le pilote decide de la suite."
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE ; le PILOTE decide et active l agent habilite, jamais l agent courant. Jamais vers cerberus ni vers un autre agent directement."
     },
     "fin-corriger": {
       "titre": "FIN - Retour a ORACLE (l aeroport)",

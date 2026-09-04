@@ -2911,6 +2911,114 @@
       ]
     },
     {
+      "nom": "lister-flags",
+      "description": "Lister les flags des outils et combos du cerveau-projet.",
+      "interpreteur": "python3",
+      "script": "cerveau-projet/agents/tools/lister/lister-flags/lister-flags.py",
+      "modele": "{cibles} --outil {outil} --combo {combo} --tous --categorie {categorie} --flag-partage {flag_partage} --source {source} --format {format} --json --inclure-vides --verbose --dry-run --chrono",
+      "parametres": [
+        {
+          "cle": "cibles",
+          "question": "Noms d outils ou de combos (separes par un espace) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "defaut": ""
+        },
+        {
+          "cle": "outil",
+          "question": "Outil cible (repetable) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--outil",
+          "defaut": ""
+        },
+        {
+          "cle": "combo",
+          "question": "Combo cible (repetable) ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--combo",
+          "defaut": ""
+        },
+        {
+          "cle": "tous",
+          "question": "Lister toutes les entites ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--tous"
+        },
+        {
+          "cle": "categorie",
+          "question": "Filtre de categorie ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--categorie",
+          "defaut": ""
+        },
+        {
+          "cle": "flag_partage",
+          "question": "Flag utilise par plusieurs entites ?",
+          "type": "texte",
+          "obligatoire": false,
+          "flag": "--flag-partage",
+          "defaut": ""
+        },
+        {
+          "cle": "source",
+          "question": "Source des flags ?",
+          "type": "choix",
+          "choix": ["tous", "catalogue", "argparse", "definition-combo"],
+          "obligatoire": false,
+          "flag": "--source",
+          "defaut": "tous"
+        },
+        {
+          "cle": "format",
+          "question": "Format de sortie ?",
+          "type": "choix",
+          "choix": ["table", "json"],
+          "obligatoire": false,
+          "flag": "--format",
+          "defaut": "table"
+        },
+        {
+          "cle": "json",
+          "question": "Utiliser le format JSON ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--json"
+        },
+        {
+          "cle": "inclure_vides",
+          "question": "Inclure les entites sans flag ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--inclure-vides"
+        },
+        {
+          "cle": "verbose",
+          "question": "Afficher les sources detaillees ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--verbose"
+        },
+        {
+          "cle": "dry_run",
+          "question": "Simuler le lancement ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--dry-run"
+        },
+        {
+          "cle": "chrono",
+          "question": "Afficher la duree ?",
+          "type": "flag",
+          "obligatoire": false,
+          "flag": "--chrono"
+        }
+      ]
+    },
+    {
       "nom": "lister-fonctions",
       "description": "Lister les fonctions definies dans un fichier.",
       "interpreteur": "python3",

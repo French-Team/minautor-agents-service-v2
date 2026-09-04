@@ -43,13 +43,13 @@
         "regle": "REDIRECTION : si le verrou bloque un outil, la mission concerne un autre agent."
       },
       {
-        "besoin": "DELEGATION - Activer l agent habilite (case c29a)",
+        "besoin": "DELEGATION - Signaler au pilote via ORACLE (case c29a)",
         "action": "procedure",
         "etapes": [
           "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
           "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin gardien \"<bilan>\" --cible oracle (le pilote larguera <agent_habilite> et me renverra pour reprendre mon round)"
         ],
-        "regle": "AGENTS HABILITES : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
+        "regle": "Le PILOTE transmet le signalement a ORACLE ; ORACLE choisit et active l agent habilite. Agents habilites : Buffy cartes/parcours, Vulcain outils, Morpheus tests, Hygie suppression, Chiron education."
       },
       {
         "besoin": "Besoin d un outil temporaire ou durable ? (question c29b)",
@@ -72,7 +72,7 @@
         "besoin": "Signaler le besoin durable a Cerberus (case c29e)",
         "action": "procedure",
         "etapes": [
-          "Signaler a Cerberus : besoin d outil -> activer Vulcain ; besoin de test -> Morpheus"
+          "Signaler au PILOTE via ORACLE : besoin d outil -> ORACLE choisit et active Vulcain ; besoin de test -> ORACLE choisit et active Morpheus"
         ],
         "regle": "SIGNALEMENT : je ne cree rien moi-meme pour un besoin durable."
       },

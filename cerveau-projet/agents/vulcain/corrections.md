@@ -19,8 +19,67 @@ types:
   - configuration: "Parametre de travail specifique"
 ---
 
+## [LECON] 2026-09-04 -- GRADE 'INCONNU' RECURRENT : LE CABLAGE D'UN AGENT NE S'ARRETE PAS A oracle-data.json (mission ec25a0c1)
+
+**Contexte** : inter-round (detecte via alertes top3-urgences en boucle) : la routine encart.py signalait a CHAQUE cycle "Grade 'Inconnu' pour l'agent 'nemesis'" + "Agent 'nemesis' absent du mapping grades-v1.json" (8 anomalies) depuis la creation de nemesis (09-02). La mission precedente 8074e47a ("finir de cabler nemesis") avait ajoute nemesis a oracle-data.json MAIS le dictionnaire agents de grades-v1.json etait reste sans nemesis - l'entree "nemesis": "evaluation" ne figurait QUE dans la section secteurs (mapping des secteurs fonctionnels), pas dans agents (grades).
+
+**Actions** : 1) Verification : encart._agents_connus() construit l'ensemble depuis agents+routines de grades-v1.json - nemesis absent -> anomalie a chaque cycle ; oracle-data.json (19 agents) contient bien nemesis/hades/ferrari mais grades-v1 agents n'a ni nemesis ni hades ni ferrari. 2) Correction : ajout de nemesis G3 (avis contradictoire avant validation = qualite/conformite/veille, meme echelon qu argus), hades G3 (gardien archives git = securite, meme echelon que gardien), ferrari G3 (v1 specialiste freelance = utilitaire) au dictionnaire agents + ferrari -> "developpement" dans le mapping secteurs + version 0.1.0 -> 0.1.1. 3) Verification reelle : encart.py live -> "OK (encart v1 coherent)" (0 anomalie), JSON valide, ASCII 0/0, CRLF 0/0, 24 agents declares.
+
+**Lecons** :
+1. LE CABLAGE D'UN AGENT V1 A DEUX SURFACES DANS grades-v1.json : le dictionnaire agents (grades G0-SP) ET le mapping secteurs (categories fonctionnelles) - une entree dans les secteurs ne declare PAS le grade ; les routines (encart/top3-urgences) verifient les DEUX. Toute creation d agent v1 doit verifier : activer-agent-principal (dico py + cases sh), oracle-data.json, grades-v1.json agents, grades-v1.json secteurs.
+2. UNE ANOMALIE ROUTINE EN BOUCLE = UNE ALERTE TOP3 PAR CYCLE : tant que le fichier data n est pas corrige, chaque cycle de l encart re-historise l anomalie et top3-urgences remonte un URGENT - le vrai correctif est le fichier source, pas l acquittement des alertes.
+3. LE GRADE G-SCALE EST FONCTIONNEL, PAS LA MEDAILLE DE LA FICHE : nemesis est silver dans sa fiche mais G3 (fonction qualite) comme argus (gold->G3) - attribuer selon le role reel (echelle description G0-G5/SP), pas selon gold/silver/iron.
+
+**Verdict** : VALIDE - encart live OK, 0 anomalie, JSON valide, ASCII 0/0, CRLF 0/0.
+
 # Corrections et Surcharges
 ---
+
+## [LECON] 2026-09-02 -- GARDE ANTI-INONDATION : UNE MISSION EN COURS (PRISE) COMPTE (mission 7e2ee68b)
+
+**Contexte** : avis Nemesis (premiere activation reelle) sur le consommateur
+[NOTATION] d oracle.py v0.5.9 : la garde _mission_evaluation_en_attente ne
+couvrait que EN_ATTENTE, pas PRISE -> si Themis evaluait EN COURS et que la
+routine notation re-deposait 960s plus tard, une DEUXIEME mission etait
+posee (preuve : 0d3992df et 6dd150d2 a 11 min d intervalle).
+
+**Correction (oracle.py v0.5.9 -> v0.5.10)** :
+1. _mission_evaluation_active_ou_recente() couvre EN_ATTENTE + PRISE (en
+   cours) + TERMINEE recente (< 60 min via prise_date/date) ; ne scanne QUE
+   la file asap (les missions evaluation y sont toujours deposees).
+2. Vigilance axe 3 : fichier .notation_consommation.txt ABSENT avec
+   historique d evaluations -> reinitialise + depot DIFFERE ; premiere
+   activation (aucune mission) -> depot normal.
+
+**Lecons** :
+1. UNE GARDE ANTI-INONDATION PAR STATUT PARTIEL EST TROUEE : verifier TOUS
+   les etats du cycle de vie (EN_ATTENTE mais aussi PRISE = travail en
+   cours, et TERMINEE recente = travail tout juste fini) - une mission
+   PRISE est une evaluation qui tourne ENCORE, la bloquer est aussi
+   important que bloquer une mission en attente.
+2. LA MEMOIRE TEMPORELLE NE DOIT JAMAIS REPOSER SUR UN SEUL FICHIER : le
+   fichier anti-inondation peut etre supprime (purge, erreur) ; l historique
+   des missions (asap) est une seconde memoire - en cas de fichier absent,
+   croiser l historique AVANT de deposer (distinguer premiere activation de
+   fichier supprime).
+3. SCANNER LA BONNE FILE : _files.lister() scanne TOUTES les files ; quand
+   un consommateur depose toujours dans la meme file (asap), passer
+   file="asap" pour borner le scan (optimisation gratuite).
+
+## [LECON] 2026-09-02 -- CABLAGE NEMESIS : oracle-data.json (mission 8074e47a)
+
+**Contexte** : nemesis etait cable dans activer-agent-principal, AGENTS.md et
+grades-v1 mais ABSENT de oracle-data.json (liste des agents d Oracle) - status
+affichait 18 agents sans lui. Fix : ajout de l entree dans oracle-data.json.
+
+**Lecons** :
+1. Le cablage d un agent v1 ne se limite pas a activer-agent-principal : il
+   faut AUSSI l ajouter a oracle-data.json (source de charger_agents() ->
+   status/agent_valide/lister/dashboard) sinon l agent n apparait pas dans la
+   coordination.
+2. Le test-092 verifie la parite AGENTS.md/py/sh mais PAS oracle-data.json :
+   angle mort - un agent peut etre cable dans AAP mais absent de la liste
+   d Oracle sans que le test le detecte. A considerer pour un futur test.
 
 ## [LECON] 2026-09-02 -- CONSOMMATEUR [NOTATION] : oracle.py v0.5.9 (mission eaa954a0)
 
@@ -541,3 +600,58 @@ synchronises.
 2026-09-02 | URGENT ENCART DETECTION INCONNU (mission 801f952d) : la routine encart verifiait Etat/Executeur mais PAS Grade/Agent - des acteurs systeme non declares (pilote) affichaient grade 'Inconnu' SANS alerte. Fix : (1) grades-v1.json declare 'pilote' (routines, grade SP) - un acteur systeme legitime doit etre DECLARE au mapping sinon il pollue la colonne Grade ; (2) encart.py v0.3.1 detecte grade 'Inconnu' + agent hors mapping (helper _agents_connus). Lecon : quand une routine surveille un tableau genere, chaque COLONNE denombrant des acteurs doit croiser le mapping de reference - une colonne sans controle laisse les acteurs non declares s afficher en 'Inconnu' indefiniment ; le test synthetique (fichier temp + GRADES_V1 pointe sur le vrai fichier) valide la detection sans toucher le fichier reel.
 2026-09-02 | ORDRE DES DEFINITIONS AU MODULE (inter-round Hygie, mission cd5bc94c) : super-pilote v0.2.1 etait INDEMARRABLE - NameError a l import car PID_FILE = SUPER_COMBOS_DIR / ... etait evalue AVANT la definition de SUPER_COMBOS_DIR (lignes 47/51). Personne ne l a vu car les 9 daemons tournaient depuis AVANT le fix (ancien code en memoire) : la relance de la purge Hygie a revele le bug. Fix v0.2.2 : PID_FILE deplace APRES les definitions de chemins (ORACLE_DIR, SUPER_COMBOS_DIR). Lecon : une constante composee d une autre constante du module doit etre declaree APRES elle ; apres un fix de daemon, TOUJOURS tester le demarrage reel (--boucle) et pas seulement la compilation - un test-085 vert ne prouve pas qu un daemon demarre, il prouve qu il est whiteliste. Preuve : python3 super-pilote.py --boucle -> daemon lance, super-pilote.pid ecrit (PID vivant), detecteur 0 residuel, test-085 8/8.
 2026-09-02 | ADAPTATION PURIFIER-RVAV v0.1.1 -> v0.1.2 FORMAT V2 AGENTS-HISTORIQUE (demande utilisateur) : l outil decoupait encore le format v1 '| <span' (0 occurrence depuis la migration v2) et supposait ancien-en-haut. Le format reel v2 (## date + ### agent + entrees '- hh:mm...') est RECENT-EN-HAUT avec des sections non triees entre elles : archiver les blocs du haut aurait deplace les RECHTS au lieu des anciens - bombe a retardement des le depassement du quota. Fix : decoupage v2 par entree individuelle (date+agent+heure portes), tri par (date, heure) pour archiver les PLUS ANCIENNES, suppression des sections agents et dates devenues vides. Corrections.md inchange (blocs ## [LECON] ancien-en-haut). Preuves sur copie reelle : 513 -> 197 lignes, 0 perdu / 0 doublon, accumulation anti-ecrasement (374 = 299+75), ASCII/LF 0/0, structure v2 conservee (16 sections). Lecon : un outil qui parse un format de fichier DOIT etre re-teste contre le format reel apres une migration de structure - le format vivant a change et l outil ne le voyait pas (test-065 ne couvre que corrections.md, pas l historique v2).
+## [LECON] 2026-09-03 -- REFERENCE COMBO SCRIPTE A ALIGNER (Vulcain)\n\n**Contexte** : la mission urgente 70703ff8 devait reparer le blocage du combo audit general. Themis reference une definition declarative absente sous cerveau-projet/combos/combo-audit-general/definition-combo.json. Le catalogue declare combos-audit-general comme combo scripte, avec la source canonique cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py.\n\n**Actions** : verifier-systeme confirme Python disponible. Lire le moteur combos-moteur et le script canonique confirme le contrat. detecter-impacts confirme que la definition attendue est absente. detecter-decalages-catalogue retourne 189 conformes, 0 decalage et 0 probleme combo. Le bumper en dry-run signale un bump potentiel et 14 compagnons ; aucun bump applique. Vulcain n a pas modifie le parcours de Themis : la correction doit etre routee vers l agent habilite.\n\n**Lecon** : distinguer un combo scripte d une definition declarative ; avant de restaurer un fichier absent, verifier le catalogue et la source canonique. Une reference de parcours doit pointer vers le type reel du combo.\n\n**Verdict** : A REVOIR - diagnostic etabli, correction du parcours Themis non appliquee et tests non executes par Vulcain.
+## [LECON] 2026-09-03 -- REINITIALISATION COMPLETE DES CARTES LORS D UN RELAIS
+
+**Contexte** : une activation de maillon ou un mission-relais pouvait reutiliser une carte persistante en FIN. Reinitialiser seulement `etape` et `historise_fin` conservait l ancienne mission, le type et la case courante ; en single-llm, le pilote servait donc une ancienne mission au lieu de la mission consommee.
+
+**Correction** : `fonctions/pilote.py` centralise l initialisation dans `initialiser_mission_verifiee()` : mission complete, type, case nulle, etape debut, marqueur FIN faux, precedent conserve, puis relecture et verification de la carte persistante. `oracle.py mission-relais` et les delegations du pilote utilisent ce chemin. Les prefixes `[attention]` recus par un arbre sans branche ATTENTION sont rediriges vers AUTRE ; un arbre qui declare ATTENTION conserve sa branche directe.
+
+**Lecon** : toute nouvelle mission doit remplacer l ensemble du contexte de carte, jamais seulement son etat d execution. Une reinitialisation doit etre verifiee apres ecriture et les declencheurs sans branche compatible doivent suivre une branche AUTRE explicite, pas un theme invente.
+
+## [LECON] 2026-09-04 -- VALIDER-CARTES-DECISION v0.5.0 : SUPPORT DU FORMAT V2 (mission 83ff5727)
+
+**Contexte** : constat Janus (mission 8bca6f3d) - valider-cartes-decision (v0.4.7) ne validait que le format v1 (parcours-<agent>.json) alors que le pilote v0.2.4 sert les arbres v2 (arbre-<agent>.json) : l outil rendait NON CONFORME (5 erreurs) sur un arbre v2 sain et les parcours v1 legacy non servis faussaient les verdicts.
+
+**Realise (v0.4.7 -> v0.5.0)** : (1) DETECTION AUTO du format dans verifier_parcours_fichier : identite.type == 'arbre' (ou presence de racine) -> valider_arbre_v2 ; (2) valider_arbre_v2 : 7 points - JSON, structure (identite/arbre/racine), version sans v (identite.version), racine/branches, branches.vers -> fichier theme existant (references cassees detectees), themes references valides (identite.type=theme + theme.nom + redirects avec besoin/action), fins centralisees (fins.fichier -> fins.json identite.type=fins + definitions) ; (3) --agent valide l arbre v2 (arbre-<agent>.json) s il existe, repli v1 sinon - la validation v1 est INCHANGEE (verifiee : buffy v1 rend toujours NON CONFORME avec ses 4 suivants morts c16/c22b/c27b/c8b, hades v1 CONFORME) ; (4) bump py/sh/md 0.5.0 + entree changelog.
+
+**Lecons** :
+1. UN VALIDATEUR DOIT VALIDER LE FORMAT REELLEMENT SERVI, PAS LE FORMAT LEGACY : le pilote v0.2.4 navigue les arbres v2 - valider les parcours v1 non servis produisait des verdicts NON CONFORME hors-sujet. La detection auto par identite.type est la voie (aucun flag, aucun changement d usage).
+2. UN ARBRE V2 S'ACCOMPAGNE DE SES THEMES ET DE SES FINS : valider le fichier arbre seul ne suffit pas - les branches.vers doivent pointer vers des themes existants, chaque theme doit avoir des redirects (besoin+action), et fins.fichier doit resoudre vers fins.json. La validation devient transversale (arbre -> themes -> fins).
+3. LE REPLI v1 DOIT RESTER INTACT : les agents sans arbre v2 (hades, etc.) continuent en parcours v1 - tester la preuve negative (un parcours v1 casse rend TOUJOURS NON CONFORME) pour prouver que la branche v1 ne dort pas.
+
+**Verdict** : VALIDE - 22/22 agents conformes (tous les arbres v2 + repli v1), preuve negative v1 OK, test-005 28/28 (point 21 atlas CONFORME), test-013 22/22, py_compile + bash -n OK, ASCII 0/0, CRLF 0/0.
+
+## [LECON] 2026-09-04 -- BOUCLE FLUX / P1 FANTOMES : files.py v0.5.11 (mission 6ad0c87c)
+
+**Contexte** : constat utilisateur 2026-09-04 - la routine flux re-seedait des ETAT URGENT recursifs 'N P1 non-acquitte(s) detecte(s)' a chaque round, obligeant Oracle a acquitter manuellement les memes messages chaque fois. Preuve : apres les missions 87c4d709/fececd2a/83ff5727 TERMINEE, les messages 'MISSION pour buffy/morpheus/vulcain' (P1, lu=False, SANS champ type) restaient indefiniment dans les inbox.
+
+**Cause racine** : flux.py compte exactement ces messages (`not lu and priorite==1 and not type`) comme P1 d action reels. Quand une mission devenait TERMINEE (files.terminer, point unique de transition), RIEN ne marquait sa notification lu/accuse : le message fantome restait P1 non-lu -> flux le recomptait -> changement de compteur -> encart URGENT (source flux) -> verifier-statuts escaladait DEFCON 4 et deposait 'ETAT URGENT xN' asap -> Oracle acquittait manuellement.
+
+**Correction (oracle v0.5.10 -> 0.5.11)** : `_consommer_notification_mission(entree)` dans fonctions/files.py - a la TERMINEE (files.terminer), consomme le message 'MISSION pour X' correspondant (meme agent, de=oracle, objet=='MISSION pour <agent>', corps==texte mission normalise) - convention acquitter = consommer (suppression). Idempotent : no-op si agent absent, inbox absente ou message deja consomme ; ne touche PAS les autres P1 de l inbox (message non-mission preserve). L anti-doublon _envoyer_direct (accuse=False) et la rotation 5 max sont preserves (message consomme -> re-relais possible sans doublon).
+
+**Lecons** :
+1. UN MESSAGE DE NOTIFICATION DE MISSION DOIT SUIVRE LE CYCLE DE VIE DE SA MISSION : envoye a la PRISE (mission-relais -> _envoyer_direct), il doit etre CONSOMME a la TERMINEE - un message de mission terminee est un P1 fantome pour flux.
+2. LE POINT UNIQUE DE TRANSITION EST LE BON ENDROIT : files.terminer() est la seule porte vers TERMINEE (CLI mission-terminer ET tests l appellent) - y accrocher la consommation couvre tous les chemins sans dupliquer la logique.
+3. LA CORRESPONDANCE MESSAGE<->MISSION SE FAIT PAR CONTENU, PAS PAR ID : le message porte le texte de la mission en corps (pas l id mission) - matcher agent + objet + corps normalise (espaces) ; normaliser avant de comparer (le corps passe par injecter_bloc_outil).
+4. VERIFIER L IMPACT SUR LES TESTS QUI APPELENT LA FONCTION MODIFIEE : test-118 appelle files.terminer sur FILES_DIR temporaire - le helper lit FILES_DIR.parent/inbox (absent en test) -> no-op silencieux, 8/8 OK confirme.
+
+**Verdict** : VALIDE - miroir temporel (mission consommee, non-mission preservee), test-118 8/8 OK, py_compile OK, ASCII 0/0, CRLF 0/0. Tests formels delegues a Morpheus (test-123).
+
+**COMPLEMENT 0.5.12 (decouvert en validation live par Oracle)** :
+`relais()` deduisait l agent cible en MEMOIRE seulement - l entree du
+fichier gardait agent="" sur disque. Pour une mission relayee sans champ
+agent explicite (ex: ETAT URGENT deduit vers oracle), `terminer()` lisait
+l entree du FICHIER (agent="") et `_consommer_notification_mission` ne
+pouvait pas retrouver la notification dans l inbox de l agent deduit.
+Fix : `relais()` reecrit l entree dans le fichier avec l agent +
+agent_source deduits (la file devient la source de verite, symetrique de
+prendre() qui persiste PRISE). Verifie : miroir live (deduction morpheus
+persistee, TERMINEE -> notification consommee), test-118 8/8 + test-123
+8/8 (point 8 ajoute par Morpheus). Lecon : une deduction qui ne persiste
+PAS dans la source de verite (le fichier) est perdue pour tous les
+lecteurs subsequents - relais() doit ecrire l agent deduit comme
+prendre() ecrit le statut PRISE.
+
+**Verdict final** : VALIDE - oracle v0.5.12, test-118 8/8, test-123 8/8,
+py_compile OK, ASCII 0/0, CRLF 0/0.

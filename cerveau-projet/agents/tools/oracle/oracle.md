@@ -2,7 +2,7 @@
 identite:
   type: outil
   nom: Oracle
-  version: 0.5.9
+  version: 0.5.12
   cree: 2026-08-26
   appartient_a: commun
   commun: true
@@ -19,7 +19,7 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom** | Oracle |
-| **Version** | 0.5.8 |
+| **Version** | 0.5.12 |
 | **Role** | Hub de communication inter-agents v1 |
 | **Session** | session-admin |
 | **Responsable** | Buffy (creation), Cerberus (usage) |
@@ -261,6 +261,9 @@ python3 oracle.py reactiver-fin <agent> "<bilan>"
 
 | Version | Date | Description |
 |---|---|---|
+| 0.5.12 | 2026-09-04 | COMPLEMENT 0.5.11 (meme mission 6ad0c87c, decouvert en validation live) : `relais()` ne PERSISTAIT pas l agent deduit dans le fichier (agent="" garde sur disque) - la mission 91ccea62 relayee vers oracle (deduction) avait bien sa notification dans inbox/oracle.jsonl mais l entree fichier sans agent empechait `_consommer_notification_mission` de la retrouver a la TERMINEE. Fix : `relais()` reecrit l entree dans le fichier avec l agent + agent_source deduits (la file devient la source de verite, symetrique de prendre() qui persiste PRISE). Verifie : miroir live (deduction morpheus persiste dans le fichier, TERMINEE -> notification consommee), test-118 8/8 + test-123 7/7 OK. |
+| 0.5.11 | 2026-09-04 | CORRECTIF BOUCLE FLUX (constat utilisateur 2026-09-04) : les missions TERMINEE laissaient leur notification 'MISSION pour X' (P1, lu=False, sans type) indefiniment dans l inbox de l agent -> flux.py la recomptait a chaque cycle -> encart URGENT (source flux) -> verifier-statuts escaladait DEFCON 4 et deposait 'ETAT URGENT xN: N P1 non-acquitte(s)' en asap -> Oracle devait acquitter manuellement chaque round (preuve : messages fantomes buffy/morpheus/vulcain apres missions 87c4d709/fececd2a/83ff5727 TERMINEE). Fix dans `fonctions/files.py` : `terminer()` (point unique de transition vers TERMINEE) consomme desormais la notification correspondante via `_consommer_notification_mission()` (meme agent, de=oracle, objet='MISSION pour X', corps==texte mission) - convention acquitter = consommer. Idempotent, no-op si agent absent ou message deja consomme ; les autres P1 de l inbox sont preserves. Verifie : miroir temporel (mission consommee, non-mission preservee), test-118 8/8 OK (non-regression). Tests formels delegues a Morpheus (test-123). |
+| 0.5.10 | 2026-09-02 | CORRECTIF AVIS NEMESIS (premiere activation reelle, mission 7e2ee68b) : la garde anti-inondation du consommateur [NOTATION] ne couvrait que EN_ATTENTE et permettait une DOUBLE evaluation croisee (preuve : 2 missions Themis a 11 min d intervalle, 0d3992df et 6dd150d2). `_mission_evaluation_active_ou_recente()` couvre desormais EN_ATTENTE, PRISE (mission en cours) et TERMINEE recente (< 60 min via prise_date/date), et ne scanne QUE la file asap (les missions evaluation y sont toujours deposees). Vigilance axe 3 : fichier .notation_consommation.txt ABSENT alors que des evaluations existent deja -> reinitialise avec timestamp recent et depot differe (plus de depot immediat apres suppression du fichier) ; premiere activation (aucune mission dans l historique) -> depot normal. |
 | 0.5.9 | 2026-09-02 | CONSOMMATEUR [NOTATION] (decision utilisateur) : les demandes d evaluation croisee de la routine `notation` (deposees dans l inbox d Oracle toutes les 960s) n etaient JAMAIS prises en compte - Oracle acquittait par habitude et la rotation MAX_MESSAGES=5 purgeait sans traitement. Ajout dans `oracle.py` de `_consommer_notation()` : a la lecture/acquittement des messages d Oracle (hooks cmd_lire + cmd_acquitter), convertit chaque demande [NOTATION] non-acquittee en mission Themis (EVALUATION CROISEE) via `files.ajouter(mission, file=asap, agent=themis)`. Anti-inondation : pas de depot si une mission Themis d evaluation est deja EN_ATTENTE OU si un depot a eu lieu il y a moins de 60 min (fichier .notation_consommation.txt). |
 | 0.5.8 | 2026-09-02 | FILE DE RELAIS ORDONNEE + CLASSIFIEE (decision utilisateur [attention]) : mission-relais ne consomme plus en FIFO strict. `fonctions/files.py` : nouvelle fonction `classifier()` (deduit priorite 1/2 + type urgent/purge/revision/test/creation/coordination par mots-cles), `ajouter()` stocke priorite/type a l ajout, `prendre()` selectionne la mission EN_ATTENTE la PLUS IMPORTANTE (priorite basse d abord, puis DATE RECENTE d abord a priorite egale - un message recent peut etre plus important qu un ancien), `lister` affiche Px/type et trie par importance. `oracle.py mission-relais` relaye la mission la plus importante (le daemon et le relais restent FIFO-tolerant, la regle d importance est portee par files.prendre). |
 | 0.5.7 | 2026-09-02 | CLI `oracle.py lister` et messages : robustesse et enrichissements (voir historique code). |

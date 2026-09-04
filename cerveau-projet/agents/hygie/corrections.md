@@ -199,3 +199,12 @@ cerveau-projet/docs-dev-cerveau-projet/ est conserve intact.
 2. detecter-residus --tous affiche parfois une liste TRONQUEE (N premiers + ... (1 autres)) : pour la liste COMPLETE des .bak, compter via le snapshot (chemin finissant par .bak) ou un scan dedie.
 3. analyse-externe.md.bak (backup conserve le 21/08) devenu superflu : la source originale existe -> residu prouve, supprimable.
 4. Les fichiers freelance .bak-20260823-* (jarvis, routines-server) ne sont PAS des residus detectes : ne pas les toucher en mission cerveau-projet.
+## [LECON] 2026-09-02 -- SUPPRESSION ARTEFACT DE TEST COMMITE _test_attente.jsonl (Hygie)
+
+**Contexte** : controle de coherence des files de missions (demande Cerberus) - un fichier _test_attente.jsonl (hors FILES_VALIDES) trainait dans oracle/files/ avec une entree EN_ATTENTE sans id ni mission. Ajoute au commit c3ec8a4, jamais consomme par le relais, aucun code/test ne le reference.
+
+**Actions** : snapshot (10635 fichiers) -> detection (375 SAUVEGARDE .bak pre-existants, bruit connu, hors cible) -> cible prouvee (committe, hors FILES_VALIDES, non referencee) -> supprimer-fichier --agent hygie (verrou d habilitation : l activation reelle de hygie a ete necessaire, la session etait sur oracle apres le relais) -> SUPPRIME -> re-verification (fichier absent, aucune reference dans le code ni les tests) -> rapport nettoyage-artefact-test-attente-2026-09-02.md.
+
+**Lecons** :
+1. Un artefact de test peut rester committe dans git sans jamais etre utilise : le controle de coherence des files doit aussi regarder les fichiers hors FILES_VALIDES (ils echappent au relais et s accumulent silencieusement).
+2. Le verrou supprimer-fichier exige que la session soit RELLEMENT sur l agent : apres un relais Oracle, il faut activer hygie (activer-agent-principal) avant de pouvoir supprimer - sinon 'usurpation d identite'.

@@ -1,0 +1,10 @@
+{
+ "agent": "hygie",
+ "parcours": "../None",
+ "case_courante": null,
+ "mission_type": "verifier",
+ "mission": "",
+ "historise_debut": false,
+ "precedent": null,
+ "etape": "debut"
+}

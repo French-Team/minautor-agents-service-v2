@@ -275,6 +275,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `lister-appels` | Lister les appels de fonctions | [lister/lister-appels/](lister/lister-appels/) |
 | `lister-dossiers` | Lister les dossiers d'un chemin | [lister/lister-dossiers/](lister/lister-dossiers/) |
 | `lister-fichiers` | Lister les fichiers d'un chemin | [lister/lister-fichiers/](lister/lister-fichiers/) |
+| `lister-flags` | Lister les flags des outils et combos | [lister/lister-flags/](lister/lister-flags/) |
 | `lister-fonctions` | Lister les fonctions d'un fichier | [lister/lister-fonctions/](lister/lister-fonctions/) |
 | `lister-outils` | Lister les outils partages | [lister/lister-outils/](lister/lister-outils/) |
 | `lister-prepares` | Lister les fichiers 'prepare' et verifier les specs | [lister/lister-prepares/](lister/lister-prepares/) |

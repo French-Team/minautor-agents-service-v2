@@ -2,7 +2,7 @@
   "identite": {
     "type": "arbre",
     "appartient_a": "vulcain",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "commun": false
   },
   "arbre": {
@@ -20,8 +20,13 @@
   "racine": {
     "titre": "Quel theme ?",
     "type": "question",
-    "question": "Quelle est ma mission ? (construire / modifier / autre / inter-round / lire)",
+    "question": "Quelle est ma mission ? (construire / creer / modifier / autre / inter-round / lire)",
     "branches": [
+      {
+        "reponse": "CREER",
+        "description": "Creer un nouvel outil (alias CONSTRUIRE : protocole 5 fichiers, outil-template, RVAV, tests Morpheus)",
+        "vers": "theme-construire.json"
+      },
       {
         "reponse": "CONSTRUIRE",
         "description": "Creer un nouvel outil (protocole 5 fichiers, outil-template, RVAV, tests Morpheus)",

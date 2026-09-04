@@ -69,6 +69,11 @@
    "fiche": "cerveau-projet/agents/morpheus/morpheus.md"
   },
   {
+   "nom": "nemesis",
+   "role": "Analyste en Chef -- avis contradictoire avant validation (audit 3 axes : cas limites, optimisation, securite/integrite), reponse 'Oui, mais...'",
+   "fiche": "cerveau-projet/agents/nemesis/nemesis.md"
+  },
+  {
    "nom": "oracle",
    "role": "Coordinateur de l equipe v1 (session-admin)",
    "fiche": "cerveau-projet/agents/oracle/oracle.md"

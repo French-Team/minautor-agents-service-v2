@@ -3,21 +3,21 @@
     "type": "theme",
     "appartient_a": "nemesis",
     "nom": "AUTRE",
-    "description": "Mission hors parcours : executer les instructions de la mission"
+    "description": "Mission hors parcours : signaler au pilote via ORACLE"
   },
   "theme": {
     "nom": "AUTRE",
-    "but": "Executer une mission hors du parcours standard",
+    "but": "Qualifier une mission hors parcours et la signaler au pilote via ORACLE",
     "redirects": [
       {
-        "besoin": "Executer la mission hors parcours",
+        "besoin": "Qualifier la mission hors parcours et signaler au pilote",
         "action": "procedure",
         "etapes": [
           "Lire la mission donnee par Cerberus / l agent appelant",
-          "Executer les instructions de la mission (perimetre : avis contradictoire / audit de robustesse)",
-          "Respecter les REGLES ABSOLUES de ma fiche (3 axes, norme de communication, non-execution)"
+          "SIGNALER le besoin au PILOTE via ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "Ne jamais executer une mission hors de mon domaine : le PILOTE choisit et active l agent habilite apres signalement a ORACLE"
         ],
-        "regle": "HORS PARCOURS : la mission prime, les regles absolues de ma fiche s appliquent toujours."
+        "regle": "HORS PARCOURS : je n execute pas la mission ici ; le PILOTE previent ORACLE, qui choisit et active l agent habilite."
       },
       {
         "besoin": "Ajouter mes lecons et usages",

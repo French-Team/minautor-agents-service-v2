@@ -22,10 +22,10 @@
     "besoin": "Router ou signaler",
     "action": "procedure",
     "etapes": [
-     "Si un agent habilite existe : deposer la mission asap (theme-delegation)",
-     "Sinon : signaler a Cerberus (oracle.py envoyer oracle cerberus \"BESOIN\" \"<situation + analyse>\")"
+     "Si un agent habilite existe : deposer la mission asap (theme-delegation) ; le PILOTE choisit et active l agent habilite",
+     "Sinon : signaler le besoin au PILOTE, qui le trace dans ORACLE et decide de la suite"
     ],
-    "regle": "Toute situation hors arbre est SIGNALEE a Cerberus, jamais ignoree."
+    "regle": "Toute situation hors arbre est SIGNALEE au PILOTE et a ORACLE, jamais ignoree. Le PILOTE decide de l activation ou du retour vers Cerberus en fin de round."
    }
   ]
  },

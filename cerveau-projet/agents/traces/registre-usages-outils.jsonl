@@ -1,3 +1,69 @@
+{"date":"2026-09-04 19:11:22","agent":"buffy","outil":"editer-fichier","mode":"direct","commande":"","contexte":""}
+{"date":"2026-09-04 19:11:22","agent":"buffy","outil":"lire-fichier","mode":"direct","commande":"","contexte":""}
+{"date":"2026-09-04 19:07:39","agent":"socrate","outil":"lire-fichier","mode":"direct","commande":"","contexte":""}
+{"date":"2026-09-04 19:07:39","agent":"socrate","outil":"creer-fichier","mode":"direct","commande":"","contexte":""}
+{"date":"2026-09-04 18:59:17","agent":"vulcain","outil":"editer-fichier","mode":"direct","commande":"","contexte":""}
+{"date":"2026-09-04 18:59:17","agent":"vulcain","outil":"lire-fichier","mode":"direct","commande":"","contexte":""}
+{"date":"2026-09-04 18:48:43","agent":"nemesis","outil":"verifier-systeme","mode":"direct","commande":"","contexte":""}
+{"date":"2026-09-04 18:48:42","agent":"nemesis","outil":"lire-fichier","mode":"direct","commande":"","contexte":""}
+{"date":"2026-09-04 18:48:42","agent":"nemesis","outil":"creer-fichier","mode":"direct","commande":"","contexte":""}
+{"date":"2026-09-04 09:52:12","agent":"buffy","outil":"enregistrer-lecon","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date": "2026-09-04 09:16:50", "agent": "morpheus", "outil": "tester", "mode": "direct", "commande": "test-123 sous protections", "contexte": "mission 57d45fdb test-123 consommation notification MISSION a la TERMINEE"}
+{"date": "2026-09-04 09:14:12", "agent": "vulcain", "outil": "oracle (pilote)", "mode": "direct", "commande": "pilote vulcain + mission-ajouter test-123", "contexte": "mission 6ad0c87c correctif boucle flux"}
+{"date":"2026-09-04 08:48:06","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:48:05","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:48:05","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:46:54","agent":"buffy","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"mission 87c4d709 : verification theme-creer.json apres correction description (CONFORME arbre v2)"}
+{"date":"2026-09-04 08:46:30","agent":"buffy","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:44:38","agent":"vulcain","outil":"valider-cartes-decision","mode":"direct","commande":"","contexte":"mission 83ff5727 : v0.5.0 support format v2 (arbres/themes/fins) - detection auto, 22/22 agents conformes, test-005 28/28 + test-013 22/22 sans regression"}
+{"date":"2026-09-04 08:44:22","agent":"vulcain","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:44:21","agent":"vulcain","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:43:22","agent":"vulcain","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:43:22","agent":"vulcain","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:43:16","agent":"vulcain","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:30:09","agent":"morpheus","outil":"lister-flags","mode":"direct","commande":"","contexte":"test-121 : validation lister-flags v0.1.1 (mission c967fced) - py_compile, wrapper bash, protection doc, dry-run outil+combo, json, filtres, cible inconnue, non-execution, catalogue 189"}
+{"date":"2026-09-04 08:30:09","agent":"morpheus","outil":"tester-outil","mode":"combo","commande":"","contexte":"test-121 : execution sous protections (lancer_protege) + protections importees - 27/27 OK"}
+{"agent": "inconnu", "outil": "consulter-combos", "date": "2026-09-04 08:30:00", "mode": "verrou-auto", "contexte": "consultation: enregistrer-usage-outil"}
+{"date":"2026-09-04 08:22:23","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:22:22","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:21:54","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:21:48","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-04 08:21:45","agent":"janus","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-03 20:50:17","agent":"vulcain","outil":"editer-fichier","mode":"direct","commande":"editer-fichier.py pilote.py","contexte":"reinitialisation complete des cartes lors des relais"}
+{"date":"2026-09-03 20:50:17","agent":"vulcain","outil":"valider-conformite-ascii","mode":"direct","commande":"valider-conformite-ascii.py --dry-run","contexte":"pilote.py et corrections.md"}
+{"date":"2026-09-03 20:50:17","agent":"vulcain","outil":"ajouter-contenu-fichier","mode":"direct","commande":"ajouter-contenu-fichier.py corrections.md","contexte":"lecon reinitialisation cartes"}
+{"date":"2026-09-03 19:55:54","agent":"buffy","outil":"lire-fichier","mode":"direct","commande":"","contexte":"Correction reference combo theme-audit"}
+{"date":"2026-09-03 19:55:54","agent":"buffy","outil":"verifier-systeme","mode":"direct","commande":"","contexte":"Correction reference combo theme-audit"}
+{"date":"2026-09-03 19:55:54","agent":"buffy","outil":"editer-fichier","mode":"direct","commande":"","contexte":"Remplacement de la reference obsolete dans theme-audit.json"}
+{"date":"2026-09-03 19:55:54","agent":"buffy","outil":"guider-arbre","mode":"direct","commande":"","contexte":"Validation arbre Themis apres correction"}
+{"date":"2026-09-03 19:55:54","agent":"buffy","outil":"valider-conformite-ascii","mode":"direct","commande":"","contexte":"Validation ASCII theme-audit.json"}
+{"date":"2026-09-03 19:55:54","agent":"buffy","outil":"ajouter-contenu-fichier","mode":"direct","commande":"","contexte":"Lecon de fin mission 53b48784"}
+{"date":"2026-09-03 19:52:59","agent":"buffy","outil":"editer-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-03 19:47:03","agent":"oracle","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-03 19:47:03","agent":"buffy","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: domaine=parcours)"}
+{"date":"2026-09-03 19:42:27","agent":"vulcain","outil":"detecter-decalages-catalogue","mode":"direct","commande":"","contexte":"Verification des references combos et catalogue"}
+{"date":"2026-09-03 19:42:27","agent":"vulcain","outil":"mettre-a-jour-versions","mode":"direct","commande":"","contexte":"Dry-run du bumper sur combos-audit-general"}
+{"date":"2026-09-03 19:42:26","agent":"vulcain","outil":"verifier-systeme","mode":"direct","commande":"","contexte":"Reparation du blocage combo-audit-general"}
+{"date":"2026-09-03 19:42:26","agent":"vulcain","outil":"detecter-impacts","mode":"direct","commande":"","contexte":"Verification de la definition combo absente"}
+{"date":"2026-09-03 19:42:17","agent":"vulcain","outil":"lire-fichier","mode":"direct","commande":"","contexte":"Reparation du blocage combo-audit-general : lecture du moteur combos-moteur et du combo canonique"}
+{"date":"2026-09-03 19:21:32","agent":"oracle","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-03 19:21:32","agent":"themis","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: domaine=audit)"}
+{"date":"2026-09-03 10:09:59","agent":"buffy","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-03 10:09:43","agent":"buffy","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-03 09:16:03","agent":"oracle","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-03 09:16:03","agent":"argus","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: domaine=contradictions)"}
+{"date":"2026-09-03 08:33:40","agent":"vulcain","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-03 08:33:39","agent":"vulcain","outil":"detecter-cablages-manquants","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-03 08:32:59","agent":"vulcain","outil":"generateurs-commande","mode":"generateur","commande":"python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py --recursive cerveau-projet/agents --all","contexte":""}
+{"date":"2026-09-02 21:45:21","agent":"hygie","outil":"supprimer-fichier","mode":"direct","commande":"","contexte":"etape 10 arbre hygie (suppression tracee _test_attente.jsonl)"}
+{"date":"2026-09-02 21:45:20","agent":"hygie","outil":"verifier-systeme","mode":"direct","commande":"","contexte":"etape 1 arbre hygie (mission nettoyage artefact)"}
+{"date":"2026-09-02 21:45:20","agent":"hygie","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"etape 2 arbre hygie"}
+{"date":"2026-09-02 21:45:20","agent":"hygie","outil":"lire-activite-recente","mode":"direct","commande":"","contexte":"etape 3 arbre hygie (Pattern 6)"}
+{"date":"2026-09-02 21:45:20","agent":"hygie","outil":"snapshot-nettoyage","mode":"direct","commande":"","contexte":"etapes 4-5 arbre hygie (snapshot + consultation)"}
+{"date":"2026-09-02 21:45:20","agent":"hygie","outil":"detecter-residus","mode":"direct","commande":"","contexte":"etapes 6-11 arbre hygie (detection + rescan)"}
+{"date":"2026-09-02 21:44:31","agent":"hygie","outil":"supprimer-fichier","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-02 21:37:19","agent":"oracle","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
+{"date":"2026-09-02 21:37:19","agent":"hygie","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: domaine=nettoyage)"}
 {"date":"2026-09-02 20:35:57","agent":"oracle","outil":"consulter-lecons","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}
 {"date":"2026-09-02 20:35:57","agent":"themis","outil":"consulter-lecons","mode":"direct","commande":"","contexte":"consultation lecons (filtre: domaine=audit)"}
 {"date":"2026-09-02 20:12:25","agent":"buffy","outil":"valider-cartes-decision","mode":"verrou-auto","commande":"","contexte":"auto-journalisation verrou d habilitation (usage autorise)"}

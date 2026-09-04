@@ -2,9 +2,10 @@
 # -*- coding: ascii -*-
 """
 test-120-consommateur-notation-garde-fou.py
-GARDE-FOU : le consommateur [NOTATION] d oracle.py v0.5.9 convertit les
-demandes d evaluation croisee de la routine notation en mission Themis
-(decision utilisateur 2026-09-02, mission eaa954a0 + f141af1d).
+GARDE-FOU : le consommateur [NOTATION] d oracle.py (v0.5.9 -> v0.5.10)
+convertit les demandes d evaluation croisee de la routine notation en
+mission Themis (decision utilisateur 2026-09-02, missions eaa954a0 +
+f141af1d + 7e2ee68b).
 
 Contexte (2026-09-02) :
   - La routine notation (routines/notation.py) depose toutes les 960s une
@@ -20,6 +21,11 @@ Contexte (2026-09-02) :
     (agent oracle). Anti-inondation : pas de depot si une mission Themis
     d evaluation est deja EN_ATTENTE OU si un depot a eu lieu il y a moins
     de 60 min (.notation_consommation.txt).
+  - Correctif avis Nemesis (oracle.py v0.5.10, mission 7e2ee68b) : la garde
+    _mission_evaluation_active_ou_recente() couvre EN_ATTENTE + PRISE (en
+    cours) + TERMINEE recente (< 60 min) et ne scanne que la file asap ;
+    vigilance : fichier anti-inondation ABSENT avec historique ->
+    reinitialise + depot differe (premiere activation -> depot normal).
 
 Invariants verifies (sur repertoires TEMPORAIRES, jamais les vrais) :
   1. _consommer_notation() convertit un message [NOTATION] non-acquitte en
@@ -32,6 +38,11 @@ Invariants verifies (sur repertoires TEMPORAIRES, jamais les vrais) :
   5. Preuve negative : un message NON-[NOTATION] ne declenche aucun depot
   6. Hooks : cmd_lire(agent=oracle) avec un [NOTATION] non lu declenche le
      consommateur
+  9. Anti-inondation PRISE : mission Themis PRISE (en cours) -> 1 seule
+  10. Anti-inondation TERMINEE recente (< 60 min) -> 1 seule
+  11. Vigilance : fichier anti-inondation absent + historique -> depot
+      differe + fichier reinitialise
+  12. Premiere activation (aucune mission dans asap) -> depot normal
   7-8. Normes : ASCII strict + LF pur + purge
 
 Proprietaire : Morpheus (testeur dedie)
@@ -281,6 +292,86 @@ def point_6_hook_cmd_lire(o):
              len(ms) == 1, "missions=%d" % len(ms))
 
 
+def maj_statut_mission(o, statut, prise_date=None, date=None):
+    """Passer la(les) mission(s) Themis EVALUATION d asap a un statut donne
+    (re-ecriture du fichier temporaire - jamais les vrais fichiers)."""
+    p = o.FILES_DIR / "asap.jsonl"
+    if not p.exists():
+        return
+    lignes = []
+    for l in p.read_text(encoding="utf-8").splitlines():
+        if not l.strip():
+            continue
+        e = json.loads(l)
+        if (e.get("agent", "").strip().casefold() == "themis"
+                and "EVALUATION" in str(e.get("mission", "")).upper()):
+            e["statut"] = statut
+            if prise_date:
+                e["prise_date"] = prise_date
+            if date:
+                e["date"] = date
+        lignes.append(json.dumps(e, ensure_ascii=False))
+    p.write_text("\n".join(lignes) + "\n", encoding="utf-8")
+
+
+def point_9_anti_inondation_prise(o):
+    # 1re demande -> mission deposee EN_ATTENTE, puis passe PRISE (en cours)
+    ecrire_inbox(o, [message_notation("n9a")])
+    o._consommer_notation()
+    maj_statut_mission(o, "PRISE",
+                       prise_date=datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
+    # supprimer le fichier temporel : la garde MISSION doit bloquer seule
+    o._FICHIER_CONSOM_NOTATION.unlink(missing_ok=True)
+    ecrire_inbox(o, [message_notation("n9b")])
+    o._consommer_notation()
+    ms = missions_themis(o)
+    verifier("9. Anti-inondation : mission Themis PRISE (en cours) -> 1 seule",
+             len(ms) == 1, "missions=%d" % len(ms))
+
+
+def point_10_anti_inondation_terminee_recente(o):
+    # mission TERMINEE depuis moins de 60 min (prise_date recente) -> bloque
+    ecrire_inbox(o, [message_notation("n10a")])
+    o._consommer_notation()
+    maj_statut_mission(o, "TERMINEE",
+                       prise_date=datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
+    o._FICHIER_CONSOM_NOTATION.unlink(missing_ok=True)
+    ecrire_inbox(o, [message_notation("n10b")])
+    o._consommer_notation()
+    ms = missions_themis(o)
+    verifier("10. Anti-inondation : TERMINEE recente (< 60 min) -> 1 seule",
+             len(ms) == 1, "missions=%d" % len(ms))
+
+
+def point_11_vigilance_fichier_absent(o):
+    # mission TERMINEE ANCIENNE (2020) dans l historique + fichier temporel
+    # ABSENT -> la vigilance reinitialise le fichier et DIFFERE le depot
+    ecrire_inbox(o, [message_notation("n11a")])
+    o._consommer_notation()
+    maj_statut_mission(o, "TERMINEE", prise_date="2020-01-01T00:00:00",
+                       date="2020-01-01T00:00:00")
+    o._FICHIER_CONSOM_NOTATION.unlink(missing_ok=True)
+    ecrire_inbox(o, [message_notation("n11b")])
+    o._consommer_notation()
+    ms = missions_themis(o)
+    ok_une_seule = len(ms) == 1
+    ok_fichier_cree = o._FICHIER_CONSOM_NOTATION.exists()
+    verifier("11. Vigilance : fichier absent + historique -> differe + reinit",
+             ok_une_seule and ok_fichier_cree,
+             "missions=%d fichier_cree=%s"
+             % (len(ms), ok_fichier_cree))
+
+
+def point_12_premiere_activation(o):
+    # aucune mission dans l historique + fichier absent (premiere activation)
+    # -> depot NORMAL (pas de vigilance)
+    ecrire_inbox(o, [message_notation("n12a")])
+    o._consommer_notation()
+    ms = missions_themis(o)
+    verifier("12. Premiere activation (aucun historique) -> depot normal",
+             len(ms) == 1, "missions=%d" % len(ms))
+
+
 def point_7_normes():
     fichiers = [os.path.abspath(__file__), ORACLE_PY]
     total_na = sum(max(ascii_count(f), 0) for f in fichiers)
@@ -326,6 +417,26 @@ def main():
             t0 = time.monotonic()
             point_6_hook_cmd_lire(charger_oracle(os.path.join(tmp_base, "p6")))
             chrono_etape("6. hook cmd_lire", t0)
+        if point_actif(9):
+            t0 = time.monotonic()
+            point_9_anti_inondation_prise(
+                charger_oracle(os.path.join(tmp_base, "p9")))
+            chrono_etape("9. anti-inondation PRISE", t0)
+        if point_actif(10):
+            t0 = time.monotonic()
+            point_10_anti_inondation_terminee_recente(
+                charger_oracle(os.path.join(tmp_base, "p10")))
+            chrono_etape("10. anti-inondation TERMINEE recente", t0)
+        if point_actif(11):
+            t0 = time.monotonic()
+            point_11_vigilance_fichier_absent(
+                charger_oracle(os.path.join(tmp_base, "p11")))
+            chrono_etape("11. vigilance fichier absent", t0)
+        if point_actif(12):
+            t0 = time.monotonic()
+            point_12_premiere_activation(
+                charger_oracle(os.path.join(tmp_base, "p12")))
+            chrono_etape("12. premiere activation", t0)
         if point_actif(7):
             t0 = time.monotonic()
             point_7_normes()

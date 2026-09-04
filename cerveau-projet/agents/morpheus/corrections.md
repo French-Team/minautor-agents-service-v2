@@ -1,6 +1,80 @@
 
 
 
+## [LECON] 2026-09-04 -- TEST-123 CONSOMMATION NOTIFICATION MISSION A LA TERMINEE (mission 57d45fdb) : 7/7 OK
+
+**Contexte** : suite mission 6ad0c87c (Vulcain, oracle v0.5.11/0.5.12) -
+correctif boucle flux/P1 fantomes : mission-relais depose un P1 'MISSION
+pour X' (lu=False, sans type) dans l inbox ; flux.py compte exactement ces
+messages (not lu and priorite==1 and not type) ; a la TERMINEE
+(files.terminer), RIEN ne marquait la notification lu/accuse -> P1 fantome
+indefini -> URGENT recursif -> acquittement manuel par Oracle a chaque
+round. Fix : _consommer_notification_mission() dans fonctions/files.py,
+appele par terminer() (point unique de transition TERMINEE) + complement
+0.5.12 : relais() persiste l agent deduit dans le fichier (sinon la
+consommation ne retrouve pas l agent d une mission relayee sans champ
+agent).
+
+**Test cree** : test-123-consommation-notification-mission-garde-fou
+(miroir FILES_DIR + inbox temporaires, hierarchie files/ et inbox/ FRERES
+comme oracle reelle). 8 points : 1) terminer() consomme MISSION et preserve
+le non-mission ; 2) idempotence (2e terminer no-op) ; 3) entree sans agent
+no-op sans planter ; 4) corps different -> message NON consomme (pas de
+faux positif) ; 5) agent sans inbox no-op ; 6) apres TERMINEE : 0
+notification MISSION restante (plus de P1 fantome pour flux) ; 7) normes
+ASCII 0/0 + CRLF 0/0 (files.py + test) ; 8) persistance relais : mission
+sans agent -> relais() deduit ET persiste l agent dans le fichier ->
+terminer() consomme la notification. Execution directe 8/8 OK puis sous
+protections (retcode 0).
+
+**Lecons** :
+1. UN MIROIR DE FILES.PY DOIT REPRODUIRE LA HIERARCHIE RELLE (files/ ET
+   inbox/ FRERES), pas seulement rediriger FILES_DIR :
+   _consommer_notification_mission lit FILES_DIR.parent/inbox - un miroir
+   ou l inbox vit DANS le dossier files visait le mauvais chemin (3 KO au
+   premier run, 7/7 apres correction de la structure du miroir). Le pattern
+   test-118 (FILES_DIR = tmp seul) suffit pour les fonctions qui ne lisent
+   QUE FILES_DIR ; il ne suffit plus des qu une fonction croise files et
+   inbox.
+2. LA 2E TERMINEE N EST PAS UNE ERREUR : files.terminer re-marque une
+   mission deja TERMINEE sans erreur (idempotent) - le test doit le couvrir
+   pour prouver que la consommation ne casse pas les appels repetes.
+3. TESTER LE FAUX POSITIF (corps different -> message conserve) est aussi
+   important que le cas nominal : la consommation matche agent + objet +
+   corps normalise - sans la preuve negative, une consommation trop large
+   passerait inapercue.
+
+**Verdict** : PROPRE - 8 OK / 0 KO (direct + protections), ASCII 0/0,
+CRLF 0/0, py_compile OK, aucun fichier de production modifie.
+
+
+## [LECON] 2026-09-02 -- TEST-120 COMPLEMENT NEMESIS (mission 6f90f35a) : 12/12 OK
+
+**Contexte** : l avis Nemesis (premiere activation reelle) a revele 4 angles
+morts dans l anti-inondation du consommateur [NOTATION] (oracle.py v0.5.10) :
+la garde ne couvrait que EN_ATTENTE. Extension du garde-fou test-120 de 8 a
+12 points : 9) mission PRISE (en cours) -> pas de double depot ; 10) TERMINEE
+recente (< 60 min via prise_date) -> pas de double depot ; 11) vigilance
+fichier .notation_consommation.txt ABSENT avec historique -> depot DIFFERE +
+fichier reinitialise ; 12) premiere activation (aucune mission) -> depot
+normal.
+
+**Lecons** :
+1. ISOLER LA GARDE TESTEE : pour prouver que la garde MISSION bloque seule,
+   supprimer le fichier anti-inondation temporaire (sinon la garde temporelle
+   masque la regression) - chaque point garde son sous-repertoire (lecon
+   test-118) et son propre scenario d etat (EN_ATTENTE/PRISE/TERMINEE).
+2. UN TEST QUI PASSE PAR UN LANCEUR AVEC --agent <autre> EST KO
+   ENVIRONNEMENTAL HORS ROUND : test-027 points 5-8 lancent le lanceur avec
+   --agent janus -> verrou-habilitation KO quand la session n est pas janus.
+   Seul le point 1 (couverture) est exigible pour valider un enregistrement
+   (pattern rounds test-118/119/120).
+3. EXTENSION EN PLACE SANS NOUVEAU NUMERO : ajouter des points a un test
+   existant ne change ni profils-tests.json ni SERIES (le numero reste
+   test-120) - verifier l enregistrement sans le re-ecrire.
+4. RESTAURER LES .pyc SUIVIS PAR GIT : rm d un __pycache__/ suivi cree un
+   diff binaire - toujours git checkout -- sur les .pyc suivis apres purge.
+
 ## [LECON] 2026-09-02 -- TEST-120 CONSOMMATEUR [NOTATION] (mission f141af1d) : 8/8 OK
 
 **Contexte** : oracle.py v0.5.9 a branche un consommateur qui convertit les
@@ -509,3 +583,27 @@ tester-protections (lancer_protege via tests individuels).
 2026-09-02 | TEST FILE RELAIS ORDONNEE (oracle v0.5.8) : les tests files.py doivent comparer les VALEURS int de priorite (1/2), pas les chaines ('P1') ; prendre() renvoie un TUPLE (entree, erreur) et FILES_DIR est un pathlib.Path (pas str) - le harnais de test doit unpacker et passer un Path. Tri valide a egale priorite = DATE RECENTE d abord (decision utilisateur) : un fixture avec purge plus recente qu urgent donne purge en premier - c est le comportement attendu, pas un bug. L10n ecart doc : oracle.md ligne 122 dit encore '(marque PRISE, FIFO)' - reference FIFO obsoleted a signaler a Vulcain pour mise a jour.
 2026-09-02 | TEST REFS PARCOURS V1 x2 (missions 8093a011 + 7353bea9) : VALIDE. Verification de la migration v1->v2 complete : 0 theme/arbre/fins v2 contient guider-parcours ou parcours-<agent> (grep global), 7 arbres guider-arbre --valider VALIDES, reprise v2 cible le bon arbre-<agent>.json (les 6 fichiers existent), outils : demarrer-llm.py v0.1.2 sans repli v1 (--version OK, runtime glm5 admin affiche l arbre v2 cerberus sans mention guider-parcours), editer-parcours.md porte la note ARCHIVE V1. Non-regression : test-034 6/6 + test-109 11/11 (les pins parcours v1 c5/c6 du PARCOURS archive sont intacts - la migration corrige les pointeurs v2, jamais les archives v1). Lecon : un test de migration v1->v2 doit verifier la DOUBLE direction - (1) aucun pointeur actif v2 ne redirige vers v1 (grep themes/arbres), (2) les outils de demarrage ne tombent plus sur le repli v1 (runtime reel), et la non-regression sur les tests qui pinent l ARCHIVE v1 (test-034) prouve qu on n a pas casse les fichiers proteges.
 2026-09-02 | TEST URGENT ENCART DETECTION INCONNU (mission 3c2970e6) : VALIDE. 3 zones testees : 1) run reel encart --dry-run = OK (fichier propre, pilote declare SP ne pollue plus) ; 2) detection synthetique : agent-fantome avec grade Inconnu detecte (2 anomalies : grade + agent absent mapping), pilote Special NON signale ; 3) non-regression : les controles Etat inconnu + Executeur vide existants fonctionnent toujours (2 anomalies sur fichier synthetique, pilote propre). Lecon : le test de detection sur un fichier TEMP (shim remplacant le chemin encart + GRADES_V1 pointe sur le vrai fichier) valide la logique sans toucher le fichier reel - pattern a reutiliser pour les routines de surveillance (le cwd reel ne se cale pas depuis /tmp, il faut pointer GRADES_V1 explicitement).
+## [LECON] 2026-09-04 -- TEST-121 LISTER-FLAGS V0.1.1 : 27/27 OK, VERDICT PROPRE (Morpheus)
+
+**Contexte** : mission c967fced - tester l outil lister-flags v0.1.1 (Vulcain, catalogue 189 commandes). Test cree et execute : test-121-lister-flags-garde-fou.
+
+**Verifications** : (1) py_compile + bash -n OK ; (2) protection doc : sans --confirme-doc code 2 (REFUS), avec code 0 ; (3) --dry-run outil catalogue (verifier-systeme) code 0 ; (4) --dry-run combo definition-combo (combo-tester-outil) code 0 + --source definition-combo ; (5) --format json parseable (cles version/entites) ; (6) --tous (197 entites) + --categorie lister ; (7) --flag-partage fichier ; (8) cible inconnue code 1 + message stderr ; (9) non-execution des scripts inspectes (ast.parse/argparse, aucun subprocess.run/os.system dans l outil) ; (10) catalogue 189 commandes + version 0.1.1 coherente dans les 4 fichiers (py/sh/md/spec) ; (11) ASCII strict 0 + LF pur 0. Protections importees (point d entree unique) + execution sous lancer_protege. 27 OK / 0 KO.
+
+**Lecons** :
+1. L OUTIL LISTER-FLAGS EST CONFORME A SA SPEC : il n execute JAMAIS les scripts inspectes (analyse ast + argparse uniquement) - la preuve de non-execution est structurelle (grep des appels d execution dans le source), pas seulement comportementale.
+2. LA PROTECTION DOCUMENTATION (code 2 sans --confirme-doc) EST UN VRAI GARDE-FOU D USAGE : elle force la lecture du .md avant l usage reel, mais --dry-run en dispense (mode lecture explicite) - tester les DEUX branches.
+3. LE SIGNAL 'Aucune entite' D UNE CIBLE INCONNUE VA SUR STDERR avec code 1 : ne pas confondre avec le code 0 d une liste vide legitime apres filtrage - le code retour distingue l erreur du resultat vide.
+
+**Verdict** : PROPRE - test-121 27/27 OK, lister-flags v0.1.1 conforme a sa spec (mission c967fced), protections importees et execution protegee validees.
+## [LECON] 2026-09-04 -- TEST-122 VALIDER-CARTES-DECISION V0.5.0 FORMAT V2 : 9/9 OK, VERDICT PROPRE (Morpheus)
+
+**Contexte** : mission fececd2a (suite Vulcain 83ff5727) - tester que valider-cartes-decision v0.5.0 couvre le format v2 (arbres servis par le pilote). Test cree et execute : test-122-valider-cartes-v2-garde-fou (execute sous janus, habilite valider-cartes-decision - verrou).
+
+**Verifications** : (1-3) --agent buffy/morpheus/vulcain CONFORME (arbre v2) ; (4) --tous 22 agents conformes / 0 non conforme ; (5) PREUVE NEGATIVE v2 : copie d arbre avec branche.vers vers theme-absent-xyz -> NON CONFORME (references cassees detectees) ; (6) PREUVE NEGATIVE v1 : parcours-buffy v1 (suivants morts c16/c22b/c27b/c8b) -> NON CONFORME - la branche v1 ne dort pas ; (7) repli v1 : parcours-hades.json CONFORME ; (8) ASCII strict 0 + LF pur 0. Protections importees. 9 OK / 0 KO.
+
+**Lecons** :
+1. LES PREUVES NEGATIVES PROUVENT QUE LES DEUX BRANCHES VIVENT : un support v2 qui rendrait TOUT conforme (ou tout non conforme) serait inutile - casser une branche.vers (v2) ET un suivant mort (v1) doit rendre NON CONFORME dans les DEUX cas, et le repli v1 (hades) doit rester CONFORME.
+2. L EXECUTION D UN TEST QUI APPELLE UN OUTIL VERROUILLE SE FAIT SOUS L AGENT HABILITE : valider-cartes-decision est habilite argus/buffy/janus/vulcain - morpheus ecrit le test, janus l execute (pattern test-005 deja documente).
+3. UN OUTIL QUI VALIDE LE FORMAT SERVI (v2) AU LIEU DU FORMAT LEGACY (v1) CHANGE LE VERDICT DES AGENTS : buffy/morpheus/vulcain passent de NON CONFORME (faux positif v1) a CONFORME (arbre v2) - verifier --tous complet apres ce type de correctif.
+
+**Verdict** : PROPRE - test-122 9/9 OK, valider-cartes-decision v0.5.0 couvre le format v2 (mission fececd2a), preuves negatives v1 et v2 actives, repli v1 intact.

@@ -1,5 +1,5 @@
 {
- "version": "0.1.0",
+ "version": "0.1.1",
  "description": "Grades et secteurs des agents et routines v1 (session-admin, 2026-08-27) - alimente les colonnes Grade et Secteur du tableau AGENTS-activite-recente.md. Grades = echelle [GX] ; SECTEURS = CATEGORIES FONCTIONNELLES (decision utilisateur 2026-09-02 : coordination, developpement, tests, controle, evaluation, strategie, communication, exploration, securite, surveillance, traces, documentation, specification, planification, formation, nettoyage, systeme, general). ASCII strict : pas d emoji.",
  "echelle": [
   {
@@ -66,7 +66,10 @@
   "minerve": "G3",
   "redacteur-v2": "G4",
   "systeme": "SP",
-  "Cerberus": "G1"
+  "Cerberus": "G1",
+  "nemesis": "G3",
+  "hades": "G3",
+  "ferrari": "G3"
  },
  "routines": {
   "pilote": "SP",
@@ -178,6 +181,7 @@
    "mesure": "traces",
    "nemesis": "evaluation",
    "hades": "traces",
+   "ferrari": "developpement",
    "systeme": "systeme"
   },
   "defaut": "general",

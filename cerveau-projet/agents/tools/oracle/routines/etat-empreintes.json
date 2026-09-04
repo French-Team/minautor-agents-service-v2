@@ -1,9 +1,10 @@
 {
- "AGENTS-activite-recente.md": "0fb5fb0a002ce385f7317ee75955ccd49851521592423272bec8cfff838618f3",
+ "AGENTS-activite-recente.md": "fab4f350576900b39c91cefde099542fb272a55887f950454aaa6b94be0b518a",
  "cerveau-projet/agents/tools/oracle/oracle-demarrage.py": "59d2c79bd8a40b0a0aea40cb2497648bbf1a94366332fe5f789be0f4013573f0",
  "cerveau-projet/agents/tools/oracle/oracle-server.py": "91b969c470b983398fabaca806afd071104f56b410799fb399837d5339de450c",
- "cerveau-projet/agents/tools/oracle/oracle.py": "d1cd02d3c7b8759b2aa9c553ee7987cd707ff3b7459f018baafdef2fd7cdaa21",
+ "cerveau-projet/agents/tools/oracle/oracle.py": "a7f0c035aba12792ea21e9f87991c1f41832279f4e5f3655f97cc3ac9d2947e8",
  "cerveau-projet/agents/tools/oracle/routines-server.py": "d465fecb54ec1275d19d5815de9cab2de1caa975ce6c7b61c207185c9c44c2f6",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\.notation_consommation.txt": "cab52402d16ad1ec442ff72d433408b7b18db6c99644e2f0c4ec6b385fbbedfe",
  "cerveau-projet\\agents\\tools\\oracle\\routines\\citations.py": "e5b2755987a3461c4ddea398928576d00a0bd997406369e5d572d7a32c5df7fa",
  "cerveau-projet\\agents\\tools\\oracle\\routines\\compter-entree.py": "fe7d051e3991f13721dde5cf47d466032f6fa3eddbfc5ee110f01abaac9aba8b",
  "cerveau-projet\\agents\\tools\\oracle\\routines\\compter-sortie.py": "13309261999baaf39b7a5a738e34dad82af87c6ea6ce45c20ea59636bdef2f65",

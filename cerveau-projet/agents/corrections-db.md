@@ -27,3 +27,6 @@ outil dedie, avec test et conservation en BDD.
 
 Socrate n'est pas responsable de cette infrastructure. Il peut la consulter
 comme les autres agents, mais il conserve son role de revision strategique.
+
+Le fichier source reste en francais ; toute contribution future doit aussi
+rester en francais.

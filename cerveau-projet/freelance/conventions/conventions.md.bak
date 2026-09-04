@@ -33,7 +33,7 @@ identite:
 | Convention | Regle |
 |---|---|
 | **Theme** | MARVEL (D14) |
-| **Format** | Nom propre anglais, majuscule initiale, sans accent |
+| **Format** | Nom propre en anglais, majuscule initiale, sans accent |
 | **Exemples** | Stark, Rogers, Shuri, Forge, Parker, Romanoff, Banner |
 | **Perimetre** | session-freelance uniquement |
 | **Coexistence** | Les agents v1 gardent leurs noms (Cerberus, Buffy...) |

@@ -2,10 +2,11 @@
  "agent": "socrate",
  "parcours": "agents/socrate/parcours/arbre-socrate.json",
  "case_courante": null,
- "mission_type": "revision",
- "mission": "Revision strategique : questionner l utilisateur, comprendre et prioriser le besoin, produire missions-revision.md",
+ "mission_type": "attention",
+ "mission": "[attention] SOCRATE : traiter les QUESTIONS OUVERTES Q1-Q8 du plan de migration v1->v2 (perimetre corrections/memoire) - recommander une reponse pour chacune, pour decision utilisateur.\n\nCONTEXTE : le plan (cerveau-projet/docs-dev-cerveau-projet/plan-migration-corrections-v1-v2-2026-09-04.md) contient 5 questions ouvertes (section 7) + l avis Nemesis (rapport cerveau-projet/agents/nemesis/rapports/avis-plan-migration-corrections-v1-v2-2026-09-04.md) en ajoute 3. L utilisateur veut que TU les traites (tu es le conversateur de revision strategique : discuter, prioriser, produire la liste).\n\nLES 8 QUESTIONS A TRAITER (lire le plan section 7 + l avis Nemesis pour le detail) :\n\nQ1. Les corrections.md v1 geles : CONSERVES en l etat (historique lisible + git) ou PURGES une fois migres ? (recommandation plan : conserves)\nQ2. Les [LECON] orphelins (argus 4, hermes 1, promethee 10) : TOUS a migrer, ou certains obsoletes (a verifier avant) ?\nQ3. Les [LECON] encore presents dans les corrections.md v2 (jusqu au 08-26) : a migrer dans bdd-lecons ou declares historiques conserves ?\nQ4. Le backlog corrections.jsonl (1650 EN_ATTENTE) : a traiter reellement ou a purger comme artefacts ? (recommandation plan : audit Vision d abord)\nQ5. Validation du plan en 2 vagues (session-admin A+B+D puis session-freelance C) ou une seule validation globale avant tout ?\nQ6. (Nemesis) Le gel (B.1) passe-t-il AVANT la migration (A) ou un point de coupure horodate est-il defini ? (recommandation Nemesis : gel/coupure AVANT)\nQ7. (Nemesis) Le schema v2 recoit-il les colonnes mission/outils (extension Vision) ou la tracabilite est-elle fusionnee en texte ?\nQ8. (Nemesis) corrections.db est-il archive (obligatoire) ou supprime sans archive ?\n\nTA MISSION : pour CHAQUE question, produire UNE RECOMMANDATION ARGUMENTEE (pros/cons, risque, alignement avec la decision utilisateur \"on passe de v1 a v2, on oublie la v1\" et le constat Argus/Nemesis) + une PROPOSITION DE DECISION a soumettre a l utilisateur. Prioriser les questions (lesquelles bloquent l execution, lesquelles sont decorrelables). Produire une LISTE DE MISSIONS pour Cerberus (qui doit etre lance apres les decisions utilisateur, avec agents habilites). NE PAS executer la migration ni modifier le plan : ton livrable est la synthese/recommandations (depose-la selon ton protocole de revision).\n\nA LA FIN : suis TA carte pour ta fin vers Oracle (Pattern 13).",
  "historise_debut": true,
  "precedent": null,
  "etape": "fin",
- "historise_fin": true
+ "historise_fin": true,
+ "theme_courant": null
 }

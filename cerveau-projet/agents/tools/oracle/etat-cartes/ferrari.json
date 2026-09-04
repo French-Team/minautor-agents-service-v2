@@ -1,0 +1,11 @@
+{
+ "agent": "ferrari",
+ "parcours": "agents/ferrari/parcours/arbre-ferrari.json",
+ "case_courante": null,
+ "mission_type": "verifier",
+ "mission": "",
+ "historise_debut": false,
+ "precedent": null,
+ "etape": "debut",
+ "historise_fin": false
+}

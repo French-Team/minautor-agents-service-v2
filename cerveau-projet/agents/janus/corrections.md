@@ -134,3 +134,21 @@ Migration de l arbre de Janus au modele aero (spec round-avion-parachutiste 2026
 3. TEST PILOTE BOUT EN BOUT : theme NON-REGRESSION pilote -> Theme termine -> Fin de parcours : l agent doit revenir vers ORACLE (modele aero R1) - valide.
 
 **Verdict** : VALIDE - arbre de janus en phase modele aero (audit 20 OK / 0 bloquant / 0 avertissement).
+## [LECON] 2026-09-04 -- CONTROLE SIGNAL DETECTER-IMPACTS + CORRECTION BRANCHES AUTRE : A REVOIR (Janus)
+
+**Contexte** : mission 8bca6f3d - verifier le signal detecter-impacts suite a la correction des branches AUTRE (18 theme-autre.json realignes sur le modele ORACLE/pilote, R3 - l agent signale au pilote au lieu d activer lui-meme).
+
+**Verifications** : (1) signal detecter-impacts reproduit sur theme-autre.json (15 impliques / 14 potentiellement non mis a jour) et sur theme-agent.json (15 impliques / 3) ; (2) examen des 15 fichiers Buffy : distinction impacts reels vs traces/preexistants ; (3) valider-cartes-decision sur les 3 parcours sous controle : Buffy, Morpheus, Vulcain.
+
+**Constats** :
+1. LA CORRECTION DES BRANCHES AUTRE EST CONTENTE ET COMPLETE : les 18 theme-autre.json sont realignes (0 residu ancien modele 'Activer l agent habilite' sur tout le corpus), les fins v2 pointent vers ORACLE (reactiver-fin --cible oracle).
+2. LE SIGNAL DETECTER-IMPACTS EST FIABLE MAIS BRUITEUX : il compare les dates de modification des fichiers partageant le meme appartient_a - sur un changement de theme, il flag 14 fichiers dont la plupart n ont pas besoin de mise a jour (artefacts de timestamp) et IGNORE les impacts reels hors appartient_a. Verifier par CONTENU (grep du motif change), pas par la seule liste.
+3. IMPACT REEL RESIDUEL : theme-creer.json de Buffy (l.92) porte encore la description 'les signaler a Cerberus' au lieu d ORACLE/pilote (la fin reelle fin-erreurs-hors-mission est correctement vers ORACLE - ecart de COHERENCE doc/code, domaine Buffy, mineur).
+4. ECART DE VALIDATION PARCOURS : valider-cartes-decision valide encore le parcours v1 (parcours-<agent>.json) alors que le pilote v0.2.4 sert les arbres v2 (arbre-<agent>.json + themes) - le validateur ne couvre PAS le format navigue (5 erreurs NON CONFORME sur un arbre v2 sain). Les 3 parcours v1 sous controle sont NON CONFORME pour des suivants morts PREEXISTANTS documentes (buffy c16/c22b/c27b/c8b, morpheus c14b, vulcain c15g/c9g, lecons 2026-08-29) + Pattern 14 absent - aucun n est lie a la correction AUTRE.
+
+**Lecons** :
+1. UNE CORRECTION DE NAVIGATION SE CONTROLE PAR LE MOTIF DE CONTENU, PAS PAR LA LISTE D IMPACTS : le signal detecter-impacts oriente, le grep du motif (ancien modele -> nouveau modele) prouve. Toujours recouper les deux.
+2. QUAND LE PILOTE NAVIGUE UN FORMAT ET LE VALIDATEUR EN VERIFIE UN AUTRE (v2 servi vs v1 valide), les ecarts de validation ne refletent PAS l etat reel des cartes - l ecart est dans l OUTIL (valider-cartes-decision a aligner sur le format v2, domaine Vulcain/Buffy).
+3. LES PARCOURS V1 LEGACY NON SERVIS SONT DES SOURCES DE FAUX POSITIFS : detecter-impacts les flag (timestamp) et valider-cartes-decision les valide (NON CONFORME) alors que le pilote ne les lit plus - dette de migration a trancher (supprimer ou figer).
+
+**Verdict** : A REVOIR - correction AUTRE CONFORME (0 residu), signal detecter-impacts VERIFIE (fiable mais a recouper par contenu), mais 1 ecart doc residuel (theme-creer Buffy -> ORACLE, domaine Buffy) + 1 ecart outil de validation (valider-cartes-decision ne couvre pas le format v2 servi par le pilote, domaine Vulcain). Les NON CONFORME des parcours v1 sont PREEXISTANTS et hors perimetre.

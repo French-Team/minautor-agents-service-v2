@@ -2,9 +2,10 @@
  "agent": "janus",
  "parcours": "agents/janus/parcours/arbre-janus.json",
  "case_courante": null,
- "mission_type": "non-regression",
- "mission": "Non-regression finale mission 9e00c945 (test-105/106/107 + 098 + 057 realignes)",
- "historise_debut": true,
- "precedent": "morpheus",
- "etape": "debut"
+ "mission_type": "verifier",
+ "mission": "ROUND TERMINE - carte remise a neutre",
+ "historise_debut": false,
+ "precedent": null,
+ "etape": "debut",
+ "historise_fin": false
 }

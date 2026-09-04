@@ -54,7 +54,7 @@
         "besoin": "Executer le combo audit general",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/combos/combo-audit-general/definition-combo.json"
+          "python3 cerveau-projet/agents/tools/combos/combos-audit-general/combos-audit-general.py . --rapport"
         ],
         "regle": "COMBO : chainage des 4 evaluateurs + synthese."
       },

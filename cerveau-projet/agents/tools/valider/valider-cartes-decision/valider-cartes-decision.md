@@ -10,7 +10,7 @@ identite:
 ---
 # valider-cartes-decision
 
-**Version :** 0.4.7
+**Version :** 0.5.0
 **Statut :** prepare
 **Categorie :** valider
 **Chemin :** `agents/tools/valider/valider-cartes-decision/`
@@ -21,10 +21,15 @@ identite:
 ## Objectif
 
 Verifier que les agents respectent leur **CARTE DE DECISION**. Depuis
-l'allegement des fiches (v0.2.0), la carte de decision d'un agent est son
-**PARCOURS JSON** (`agents/<agent>/parcours/parcours-<agent>.json`) : c'est la
-SOURCE DE VERITE du guidage (jeu de piste). L'outil valide la structure, les
-references et la case de relecture d'un parcours.
+l'allegement des fiches (v0.2.0), la carte de decision d'un agent etait son
+**PARCOURS JSON** (`agents/<agent>/parcours/parcours-<agent>.json`) : la
+SOURCE DE VERITE du guidage (jeu de piste). Depuis la v0.5.0, l'outil
+detecte AUTOMATIQUEMENT le format : les **arbres v2**
+(`arbre-<agent>.json` : racine/branches -> themes -> fins, le format servi
+par le pilote Oracle) sont valides en v2 (structure, branches vers des
+themes existants, themes avec redirects, fins centralisees), les parcours
+v1 en v1 (structure, references, relecture). --agent valide l'arbre v2
+s'il existe (repli v1 sinon).
 
 **Pourquoi cet outil ?**
 - Les fiches allegees ne contiennent plus de section "Carte de Decision"
@@ -232,6 +237,7 @@ coherente avec le parcours :
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.5.0 | 2026-09-04 | SUPPORT FORMAT V2 (constat Janus 8bca6f3d) : detection auto (identite.type == 'arbre' -> valider_arbre_v2) ; --agent valide l'arbre v2 (arbre-<agent>.json, celui que sert le pilote) s'il existe, repli v1 sinon ; l'arbre v2 verifie structure, version, racine/branches (vers -> fichier theme existant), themes references (type + redirects) et fins centralisees. Validation v1 inchangee (--fichier sur un parcours v1). 22/22 agents conformes. |
 | 0.4.1 | 2026-08-13 | GARDE-FOU ANTI-RESIDUS : verifier_residus_racine() detecte les fichiers nommes comme des versions semver a la racine (residus de redirections accidentelles de sortie) et affiche un WARNING - sources de verite de version dans cerveau-projet/agents/clio/, JAMAIS a la racine |
 | 0.1.0-beta | 2026-08-05 | Creation initiale |
 | 0.2.0-py | 2026-08-06 | Portage Python (validait la section Carte de Decision des fiches) |

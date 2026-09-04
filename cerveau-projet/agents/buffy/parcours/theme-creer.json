@@ -89,12 +89,12 @@
       {
         "besoin": "Erreurs hors mission detectees ?",
         "action": "procedure",
-        "description": "Si des erreurs hors mission sont detectees pendant le controle-impacts, les signaler a Cerberus.",
+        "description": "Si des erreurs hors mission sont detectees pendant le controle-impacts, les signaler au pilote via ORACLE.",
         "etapes": [
           "OUI -> fin-erreurs-hors-mission",
           "NON -> continuer"
         ],
-        "regle": "Les erreurs hors mission sont SIGNALEES, jamais ignorees."
+        "regle": "Les erreurs hors mission sont SIGNALEES au pilote via ORACLE, jamais ignorees, jamais a Cerberus directement (modele aero R3)."
       },
       {
         "besoin": "Valider le resultat (RVAV)",

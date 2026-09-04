@@ -12,6 +12,8 @@ et avance seul jusqu a une vraie decision libre.
 
 v0.2.0 : support du format arbre v2-like (racine -> theme -> redirects
 -> fins centralisees). Detection auto du format depuis identite.type.
+v0.2.4 : reinitialisation verifiee des cartes lors des relais et repli
+ATTENTION vers AUTRE pour les arbres qui ne declarent pas cette branche.
 v0.2.1 : modele aero (2026-08-30) - cible=oracle gere dans
 _executer_fin_oracle (retour vers ORACLE) + _reactiver_maillon
 (cible_forcee, reactivation d ORACLE avec pose de son etat de carte).
@@ -36,7 +38,7 @@ L etat de carte est persiste dans oracle/etat-cartes/<agent>.json :
     "etape": "travail" | "fin" | "autre"
   }
 
-Proprietaire : Vulcain (outils v1). Version : 0.1.0.
+Proprietaire : Vulcain (outils v1). Version : 0.2.4.
 
 REPARATION DES ARBRES : si un pilote s arrete sur 'theme <type> non reconnu
 dans la racine', suivre le protocole dedie (aligner la racine de l arbre sur
@@ -51,7 +53,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.2.3"
+VERSION = "0.2.4"
 
 # Racine du projet : oracle/fonctions -> outils -> agents -> cerveau-projet -> racine
 _RACINE = Path(__file__).resolve().parents[4]
@@ -102,9 +104,33 @@ def init_etat(agent, parcours, mission_type, mission, precedent=None):
         "historise_debut": False,
         "precedent": precedent,
         "etape": "debut",
+        "historise_fin": False,
     }
     _sauver_etat(etat)
     return etat
+
+
+def initialiser_mission_verifiee(agent, parcours, mission_type, mission, precedent=None, historise_debut=False):
+    """Initialiser une mission et verifier que la carte persiste le nouveau contexte."""
+    if parcours and not os.path.isabs(str(parcours)):
+        parcours = _RACINE / str(parcours)
+    etat = init_etat(agent, parcours, mission_type, mission, precedent=precedent)
+    if historise_debut:
+        etat["historise_debut"] = True
+        _sauver_etat(etat)
+    verifie = _charger_etat(agent)
+    attendus = {
+        "agent": agent,
+        "mission_type": mission_type,
+        "mission": mission,
+        "case_courante": None,
+        "etape": "debut",
+        "historise_fin": False,
+    }
+    for cle, valeur in attendus.items():
+        if verifie.get(cle) != valeur:
+            raise RuntimeError("etat de carte non initialise pour %s (%s)" % (agent, cle))
+    return verifie
 
 
 def _charger_parcours(chemin):
@@ -588,19 +614,17 @@ def _reactiver_maillon(agent_qui_finit, bilan, cible_forcee=None):
             # demande USER contenant le mot 'retour' serait mal routee vers
             # DE-ORACLE. Le retour d agent est LE cas qui impose DE-ORACLE.
             try:
-                etat_cerb = _charger_etat("cerberus")
-                if etat_cerb:
-                    etat_cerb["mission_type"] = "RETOUR"
-                    etat_cerb["mission"] = raison_retour
-                    etat_cerb["precedent"] = agent_qui_finit
-                    etat_cerb["etape"] = "debut"
-                    etat_cerb["theme_courant"] = None
-                    etat_cerb["case_courante"] = None
-                    etat_cerb["redirect_idx"] = 0
-                    etat_cerb["etape_idx"] = 0
-                    _sauver_etat(etat_cerb)
-            except Exception:
-                pass
+                # L activation de Cerberus peut reutiliser une carte ancienne
+                # ou corrompue (ex: ../None). Une fin d aeroport ouvre toujours
+                # une nouvelle mission sur l arbre v2 reel de Cerberus ; ne pas
+                # dependre du parcours laisse par l activation precedente.
+                parcours_cerb = (_RACINE / "agents" / "cerberus" /
+                                 "parcours" / "arbre-cerberus.json")
+                initialiser_mission_verifiee(
+                    "cerberus", parcours_cerb, "RETOUR", raison_retour,
+                    precedent=agent_qui_finit, historise_debut=False)
+            except Exception as exc:
+                messages.append("[PILOTE] Etat Cerberus non initialise : %s" % exc)
         else:
             # Reprise du maillon precedent : on le reactiver pour qu il
             # reprenne son round (retour d inter-round / reprise de chaine).
@@ -676,27 +700,18 @@ def _activer_maillon(agent_pilote, case, mission_agent, cible_forcee=None):
                     executeur="Oracle")
             except Exception:
                 pass
-            # Marquer DEBUT deja historise pour eviter le double
-            _etat_cible = _charger_etat(cible)
-            _etat_cible["historise_debut"] = True
-            # Le maillon vient d etre largue pour une nouvelle mission :
-            # reinitialiser le marqueur FIN d un vol precedent.
-            _etat_cible["historise_fin"] = False
-            _etat_cible["etape"] = "debut"
-            _sauver_etat(_etat_cible)
-            # Enregistrer le precedent du maillon cible (l agent pilote qui
-            # vient de l activer) pour que la fin de mission puisse le
-            # reactiver proprement.
-            _etat_cible = _charger_etat(cible)
-            if _etat_cible.get("agent"):
-                _etat_cible["precedent"] = agent_pilote
-            else:
-                _etat_cible = {
-                    "agent": cible,
-                    "case_courante": None,
-                    "precedent": agent_pilote,
-                }
-            _sauver_etat(_etat_cible)
+            # Une delegation ouvre une nouvelle mission : reinitialiser
+            # TOUT le contexte (mission, type, case et marqueur FIN), puis
+            # verifier la persistance. L ancien code ne reinitialisait que
+            # etape et historise_fin, ce qui reutilisait une carte FIN.
+            ancien = _charger_etat(cible)
+            parcours = ancien.get("parcours")
+            if not parcours:
+                parcours = str(_RACINE / "agents" / cible / "parcours" /
+                               "arbre-%s.json" % cible)
+            initialiser_mission_verifiee(
+                cible, parcours, _type_mission_auto(mission_agent),
+                mission_agent, precedent=agent_pilote, historise_debut=True)
             # TRACE DE VOL : le pilote a largue un parachutiste (Agent=pilote).
             _historiser_pilote("LARGUE", cible)
             return "[PILOTE] Maillon '%s' active par Oracle (chainage automatique)" % cible
@@ -770,6 +785,14 @@ def _resoudre_racine(racine, etat):
     for br in branches:
         if br.get("reponse", "").upper() == mt:
             return br.get("vers")
+    # Les declencheurs utilisateur peuvent etre recus par un agent dont
+    # l arbre ne declare pas la branche correspondante. Dans ce cas, garder
+    # la mission dans le parcours via AUTRE, sans inventer un theme.
+    if mt in ("ATTENTION", "URGENT", "QUESTION", "PROBLEME", "STOP", "SOCRATE") \
+            and "AUTRE" in reponses_valides:
+        for br in branches:
+            if br.get("reponse", "").upper() == "AUTRE":
+                return br.get("vers")
     # Fallback : recherche par mots-cles dans la description
     mapping = {
         "CONSTRUIRE": ["construire", "nouvel outil"],
