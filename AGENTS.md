@@ -25,33 +25,16 @@ identite:
 | **Nom LLM** | glm5 |
 | **Nom Agent** | Cerberus |
 | **Role Agent** | Gardien de l'entree -- analyse et active les agents |
-| **Derniere mise a jour** | 2026-09-04 |
+| **Derniere mise a jour** | 2026-09-05 |
 | **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
 | **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | oracle (retour de mission) |
-| **Raison** | RETOUR ORACLE : BILAN ROUND - DEMANDE UTILISATEUR : "demander les ajustements + demander a socrate pour les q1-q8". |
-
-1) PLAN 0.2.0 (mission afa63972, Buffy TERMINEE) : PAC NEMESIS INTEGRES dans cerveau-projet/docs-dev-cerveau-projet/plan-migration-corrections-v1-v2-2026-09-04.md (268 -> 304 lignes, ASCII strict, LF, 0 execution) :
-   - PAC-1 (CRITIQUE) : dependances reecrites - OPTION A (gel B.1+B.2 incluant coupure E2 avant migration) ou OPTION B (cutoff horodate + verif de fermeture) - lecons.db v1 VIVANTE (256 lecons le 09-04 09:52).
-   - PAC-8 (CRITIQUE) : transaction SQLite + contrainte UNIQUE au schema v2 + INSERT OR IGNORE + test crash/re-jeu D.3.
-   - PAC-2/3 (MAJEURS) : anti-doublon A.1/A.2 (source unique, A.2 limite aux 3 orphelins) + parse adapte au format v1.
-   - PAC-9 (MAJEUR) : .bak OBLIGATOIRE avant toute suppression (plus d option).
-   - PAC-7/10/11 : tracabilite mission/outils (Q7), Vision valide/execute l ecriture v2 (PAC-10), purge prouvee + .bak (PAC-11).
-   - PAC-4/5/6 : etendre migrer_depuis_corrections, COMPTAGES DYNAMIQUES (255/276 retires), --verifier integre.
-   - Criteres 8 -> 11 + questions Q6-Q8 ajoutees (section 7 = 8 questions, validation unique).
-
-2) SOCRATE Q1-Q8 (mission bb512aac TERMINEE) : recommandations livre dans cerveau-projet/agents/socrate/missions-revision.md (228 lignes) + 8 missions pour Cerberus :
-   - Q1 CONSERVER corrections.md v1 (historique + git) ; Q2 migrer TOUS les 15 orphelins apres controle ; Q3 migrer les [LECON] v2 (un seul modele bdd-lecons) ; Q4 audit Vision d abord + .bak (1648 artefacts 08-2026 vs 5 reelles 09-2026) ; Q5 2 VAGUES (A+B+D puis C) avec validation a chaque jalon ; Q6 GEL AVANT MIGRATION (incluant coupure E2) ; Q7 EXTENSION schema v2 (colonnes mission/outils) ; Q8 ARCHIVE OBLIGATOIRE.
-   - Priorite : decisions (URGENT) > gel+migration (IMPORTANT) > v2 (IMPORTANT) > retrait infra (MOYEN) > doctrine (BAS).
-
-3) ETAT FINAL : 0 non-lu (3 acquis : notation re-seed Themis deja en file, message mission traite, vigie attendue) ; seule mission pendante : 6df6adb8 (evaluation croisee Themis, P2 legitime) ; lecons posees (buffy, socrate + E2).
-
-AUCUN BLOQUANT - ROUND TERMINAL. PROCHAINE ETAPE UTILISATEUR : valider le plan 0.2.0 + trancher les 8 questions Q1-Q8 (recommandations Socrate disponibles) -> je route vers les agents habilites (Buffy/Vulcain/Morpheus/Hygie/Gardien cote v1 ; Vision/JARVIS cote v2).
+| **Active par** | janus (retour de mission) |
+| **Raison** | Suite complete lancee par janus : 107 tests OK / 0 KO (fin migration v1->v2 2026-09-05). |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-admin | glm5 | Cerberus | 2026-09-04 19:12:46.999 |
+| session-admin | glm5 | Cerberus | 2026-09-05 14:16:58.859 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

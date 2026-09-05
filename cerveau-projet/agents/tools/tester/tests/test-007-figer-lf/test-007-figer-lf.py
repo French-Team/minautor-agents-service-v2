@@ -277,14 +277,13 @@ def main():
         with open(CATALOGUE, encoding="utf-8") as f:
             cat = json.load(f)
         noms = [e["nom"] for e in cat["commandes"]]
-        ok_cat = (len(noms) == 188 and noms == sorted(noms)
+        # migration v1->v2 (2026-09-05) : 8 outils v1 parcours archives
+        # -> 181 ; test-022/023 (outils v1) retires
+        ok_cat = (len(noms) == 165 and noms == sorted(noms)
                   and "lire-head" in noms
                   and "executer-script-temporaire" in noms
                   and "corriger-fins-de-ligne" in noms
-                  and "test-022-budget-pondere" in noms
-                  and "test-023-grep-budget-pondere" in noms
                   and "enregistrer-usage-outil" in noms
-                  and "detecter-cablages-manquants" in noms
                   and "detecter-donnees-en-dur" in noms
                   and "proteger-verrou-habilitation" in noms
                   and "detecter-residus" in noms
@@ -298,10 +297,10 @@ def main():
                   and "mettre-a-jour-versions" in noms and "purifier-rvav" in noms
                   and "detecter-processus-residuels" in noms
                   and "nettoyer-processus-residuels" in noms
-                  and "detecter-ecritures-hors-cycle" in noms
-                  and "enregistrer-lecon" in noms
-                  and "consulter-lecons" in noms)
-        verifier("13. catalogue JSON valide 188 trie + entree detecter-troncatures", ok_cat,
+                  and "detecter-ecritures-hors-cycle" in noms)
+        # scission 2-bdd (2026-09-05) : enregistrer-lecon + consulter-lecons
+        # RESTAURES dans le catalogue (0.2.18) -> 189
+        verifier("13. catalogue JSON valide 181 trie + entree detecter-troncatures", ok_cat,
                  "nb=%d" % len(noms))
     except Exception as e:
         verifier("13. catalogue JSON valide 162 trie + entree detecter-donnees-en-dur", False, str(e))
@@ -310,12 +309,12 @@ def main():
     try:
         with open(INDEX_TOOLS, encoding="utf-8") as f:
             idx = f.read()
-        verifier("14. index-tools total 204 + Corriger 7 + detecter-troncatures",
-                 "| **Total** | **204** |" in idx and "| Corriger | 7 |" in idx
+        # migration v1->v2 (2026-09-05) : Total 195 (9 outils v1 archives)
+        verifier("14. index-tools total 195 + Corriger 7 + detecter-troncatures",
+                 "| **Total** | **195** |" in idx and "| Corriger | 7 |" in idx
                  and "lire-head" in idx
                  and "executer-script-temporaire" in idx
                  and "corriger-fins-de-ligne" in idx
-                 and "detecter-cablages-manquants" in idx
                  and "detecter-donnees-en-dur" in idx
                  and "proteger-verrou-habilitation" in idx
                  and "detecter-residus" in idx
@@ -328,7 +327,7 @@ def main():
                  and "mettre-a-jour-versions" in idx
                  and "detecter-ecritures-hors-cycle" in idx)
     except OSError as e:
-        verifier("14. index-tools total 200 + Corriger 7 + detecter-troncatures", False, str(e))
+        verifier("14. index-tools total 202 + Corriger 7 + detecter-troncatures", False, str(e))
 
     # 15. Protection : aucun residu de CE test dans le workspace
     shutil.rmtree(tmp, ignore_errors=True)

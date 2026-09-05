@@ -1,0 +1,85 @@
+%% Arbre de decision de janus (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "CONTROLE" --> THEME-CONTROLE
+    THEME-CONTROLE["Verifier le travail d un agent/outil et donner un verdict (V"]
+    THEME-CONTROLE -- "besoin 1" --> THEME-CONTROLE-B0
+    THEME-CONTROLE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CONTROLE -- "besoin 2" --> THEME-CONTROLE-B1
+    THEME-CONTROLE-B1["Consulter les lecons (domaine controle)"]
+    THEME-CONTROLE -- "besoin 3" --> THEME-CONTROLE-B2
+    THEME-CONTROLE-B2["CONTEXTE : activite recente des agents"]
+    THEME-CONTROLE -- "besoin 4" --> THEME-CONTROLE-B3
+    THEME-CONTROLE-B3["Lire MES protocoles de controle AVANT de controler"]
+    THEME-CONTROLE -- "besoin 5" --> THEME-CONTROLE-B4
+    THEME-CONTROLE-B4["Identifier les fichiers a controler"]
+    THEME-CONTROLE -- "besoin 6" --> THEME-CONTROLE-B5
+    THEME-CONTROLE-B5["Verifier la conformite (RVAV)"]
+    THEME-CONTROLE -- "besoin 7" --> THEME-CONTROLE-B6
+    THEME-CONTROLE-B6["Verifier la coherence"]
+    THEME-CONTROLE -- "besoin 8" --> THEME-CONTROLE-B7
+    THEME-CONTROLE-B7["Verifier les traces d outils externes"]
+    THEME-CONTROLE -- "besoin 9" --> THEME-CONTROLE-B8
+    THEME-CONTROLE-B8["Donner le verdict"]
+    THEME-CONTROLE -- "besoin 10" --> THEME-CONTROLE-B9
+    THEME-CONTROLE-B9["Ajouter les lecons dans corrections.md"]
+    FIN-fin-controle(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-CONTROLE-B0 --> FIN-fin-controle
+    THEME-CONTROLE-B1 --> FIN-fin-controle
+    THEME-CONTROLE-B2 --> FIN-fin-controle
+    THEME-CONTROLE-B3 --> FIN-fin-controle
+    THEME-CONTROLE-B4 --> FIN-fin-controle
+    THEME-CONTROLE-B5 --> FIN-fin-controle
+    THEME-CONTROLE-B6 --> FIN-fin-controle
+    THEME-CONTROLE-B7 --> FIN-fin-controle
+    THEME-CONTROLE-B8 --> FIN-fin-controle
+    THEME-CONTROLE-B9 --> FIN-fin-controle
+    RACINE -- "NON-REGRESSION" --> THEME-NON-REGRESSION
+    THEME-NON-REGRESSION["Lancer la non-regression et donner le verdict"]
+    THEME-NON-REGRESSION -- "besoin 1" --> THEME-NON-REGRESSION-B0
+    THEME-NON-REGRESSION-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-NON-REGRESSION -- "besoin 2" --> THEME-NON-REGRESSION-B1
+    THEME-NON-REGRESSION-B1["Consulter les lecons (domaine tests)"]
+    THEME-NON-REGRESSION -- "besoin 3" --> THEME-NON-REGRESSION-B2
+    THEME-NON-REGRESSION-B2["Verifier l etat des tests KO"]
+    THEME-NON-REGRESSION -- "besoin 4" --> THEME-NON-REGRESSION-B3
+    THEME-NON-REGRESSION-B3["Lancer la non-regression"]
+    THEME-NON-REGRESSION -- "besoin 5" --> THEME-NON-REGRESSION-B4
+    THEME-NON-REGRESSION-B4["Analyser les resultats"]
+    THEME-NON-REGRESSION -- "besoin 6" --> THEME-NON-REGRESSION-B5
+    THEME-NON-REGRESSION-B5["Donner le verdict"]
+    THEME-NON-REGRESSION -- "besoin 7" --> THEME-NON-REGRESSION-B6
+    THEME-NON-REGRESSION-B6["Ajouter les lecons dans corrections.md"]
+    FIN-fin-non-regression(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-NON-REGRESSION-B0 --> FIN-fin-non-regression
+    THEME-NON-REGRESSION-B1 --> FIN-fin-non-regression
+    THEME-NON-REGRESSION-B2 --> FIN-fin-non-regression
+    THEME-NON-REGRESSION-B3 --> FIN-fin-non-regression
+    THEME-NON-REGRESSION-B4 --> FIN-fin-non-regression
+    THEME-NON-REGRESSION-B5 --> FIN-fin-non-regression
+    THEME-NON-REGRESSION-B6 --> FIN-fin-non-regression
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Executer une mission hors des themes standard"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["La mission concerne-t-elle un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["DELEGATION - Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["Executer la mission"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["Ajouter les lecons dans corrections.md"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    THEME-AUTRE-B4 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

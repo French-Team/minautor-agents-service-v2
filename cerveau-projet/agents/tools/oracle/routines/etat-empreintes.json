@@ -1,5 +1,5 @@
 {
- "AGENTS-activite-recente.md": "fab4f350576900b39c91cefde099542fb272a55887f950454aaa6b94be0b518a",
+ "AGENTS-activite-recente.md": "5c2b921cbf98584afbf57add751a5521c88c5a5c5664069627a08d1cd97ef9b1",
  "cerveau-projet/agents/tools/oracle/oracle-demarrage.py": "59d2c79bd8a40b0a0aea40cb2497648bbf1a94366332fe5f789be0f4013573f0",
  "cerveau-projet/agents/tools/oracle/oracle-server.py": "91b969c470b983398fabaca806afd071104f56b410799fb399837d5339de450c",
  "cerveau-projet/agents/tools/oracle/oracle.py": "a7f0c035aba12792ea21e9f87991c1f41832279f4e5f3655f97cc3ac9d2947e8",
@@ -20,6 +20,6 @@
  "cerveau-projet\\agents\\tools\\oracle\\routines\\verifier-agent-perimetre.py": "879d12e38f49e8cfdffa27f64b4e7b405ed00a5b79a4aa86c897a981ecf16feb",
  "cerveau-projet\\agents\\tools\\oracle\\routines\\verifier-statuts.py": "a5cbab9b057b5043043b66bdb769c8d60fa02ffc7674239f80d24d7fd120aae5",
  "cerveau-projet\\agents\\tools\\oracle\\routines\\vigie-perimetre.py": "abbf53c4043a174c9611c1134dc30d82e61ee97dc7a70853324c3b9a9648a23a",
- "cerveau-projet\\agents\\tools\\oracle\\routines\\vigie-round.md": "595744ac95bca8d27f08d5e179ce3dbbb6011ce5b50f69ae6248048828a327dc",
+ "cerveau-projet\\agents\\tools\\oracle\\routines\\vigie-round.md": "888d5699c2d82eeb47d4ed23c1fb72039a9d18bbe0af4a0655d25a119c9c40af",
  "cerveau-projet\\agents\\tools\\oracle\\routines\\vigie-round.py": "48c48881ea58de484eaf2fc9723d8ef6c77b0da392863f7d027ad84e7775d630"
 }

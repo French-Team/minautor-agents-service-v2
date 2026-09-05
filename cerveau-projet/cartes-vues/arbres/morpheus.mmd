@@ -1,0 +1,73 @@
+%% Arbre de decision de morpheus (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est la mission ?"}
+    RACINE -- "TESTER" --> THEME-TESTER
+    THEME-TESTER["Tester un outil et donner le verdict"]
+    THEME-TESTER -- "besoin 1" --> THEME-TESTER-B0
+    THEME-TESTER-B0["Historiser le DEBUT de mon intervention"]
+    THEME-TESTER -- "besoin 2" --> THEME-TESTER-B1
+    THEME-TESTER-B1["Lire la documentation de l outil"]
+    THEME-TESTER -- "besoin 3" --> THEME-TESTER-B2
+    THEME-TESTER-B2["Lire le protocole-tests"]
+    THEME-TESTER -- "besoin 4" --> THEME-TESTER-B3
+    THEME-TESTER-B3["Lancer le combo tester-outil"]
+    THEME-TESTER -- "besoin 5" --> THEME-TESTER-B4
+    THEME-TESTER-B4["Verifier les resultats et donner le verdict"]
+    THEME-TESTER -- "besoin 6" --> THEME-TESTER-B5
+    THEME-TESTER-B5["Ajouter les lecons dans corrections.md"]
+    THEME-TESTER -- "besoin 7" --> THEME-TESTER-B6
+    THEME-TESTER-B6["Ameliorations possibles de mon fonctionnement ?"]
+    THEME-TESTER -- "besoin 8" --> THEME-TESTER-B7
+    THEME-TESTER-B7["Activer Themis pour auditer"]
+    THEME-TESTER -- "besoin 9" --> THEME-TESTER-B8
+    THEME-TESTER-B8["Retour de Themis recu ?"]
+    FIN-fin-tester(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-TESTER-B0 --> FIN-fin-tester
+    THEME-TESTER-B1 --> FIN-fin-tester
+    THEME-TESTER-B2 --> FIN-fin-tester
+    THEME-TESTER-B3 --> FIN-fin-tester
+    THEME-TESTER-B4 --> FIN-fin-tester
+    THEME-TESTER-B5 --> FIN-fin-tester
+    THEME-TESTER-B6 --> FIN-fin-tester
+    THEME-TESTER-B7 --> FIN-fin-tester
+    THEME-TESTER-B8 --> FIN-fin-tester
+    RACINE -- "VERIFIER" --> THEME-VERIFIER
+    THEME-VERIFIER["Verifier et valider un outil existant"]
+    THEME-VERIFIER -- "besoin 1" --> THEME-VERIFIER-B0
+    THEME-VERIFIER-B0["Historiser le DEBUT de mon intervention"]
+    THEME-VERIFIER -- "besoin 2" --> THEME-VERIFIER-B1
+    THEME-VERIFIER-B1["Valider un outil existant"]
+    THEME-VERIFIER -- "besoin 3" --> THEME-VERIFIER-B2
+    THEME-VERIFIER-B2["Activer Themis pour auditer"]
+    THEME-VERIFIER -- "besoin 4" --> THEME-VERIFIER-B3
+    THEME-VERIFIER-B3["Retour de Themis recu ?"]
+    FIN-fin-verifier(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-VERIFIER-B0 --> FIN-fin-verifier
+    THEME-VERIFIER-B1 --> FIN-fin-verifier
+    THEME-VERIFIER-B2 --> FIN-fin-verifier
+    THEME-VERIFIER-B3 --> FIN-fin-verifier
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Gerer les missions hors parcours"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Mission hors parcours"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["Besoin d outil ?"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["Signaler le besoin"]
+    FIN-fin-delegation(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-delegation
+    THEME-AUTRE-B1 --> FIN-fin-delegation
+    THEME-AUTRE-B2 --> FIN-fin-delegation
+    THEME-AUTRE-B3 --> FIN-fin-delegation
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Gerer les activations inter-round : accuser reception d un r"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d'un autre agent"]
+    THEME-INTER-ROUND -- "besoin 2" --> THEME-INTER-ROUND-B1
+    THEME-INTER-ROUND-B1["FIN d inter-round test : retourner mon verdict a l appelant"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round
+    THEME-INTER-ROUND-B1 --> FIN-fin-inter-round

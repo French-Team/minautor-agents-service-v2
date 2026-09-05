@@ -40,7 +40,7 @@ Demande utilisateur
   -> Cerberus active Buffy
   -> Buffy active Athena (mission : Creer un pense-bete)
   -> Athena redige le pense-bete jusqu'au statut ebauche
-  -> Athena reactive Cerberus
+  -> la fin d'Athena va vers ORACLE (reactiver-fin athena --cible oracle)
 ```
 
 ### Etapes d'Athena (mission : Creer un pense-bete)

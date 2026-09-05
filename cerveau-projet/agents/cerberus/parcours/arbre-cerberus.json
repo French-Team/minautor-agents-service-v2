@@ -75,16 +75,17 @@
     "reponse": "STOP",
     "description": "ROUND BRISE - arret complet (DEFCON 5)",
     "vers": "theme-stop.json"
-   },    {
-      "reponse": "SOCRATE",
-      "description": "Lancement d un SUPER-COMBO : Socrate questionne l utilisateur et produit la liste de missions pour enchainer les agents",
-      "vers": "theme-socrate.json"
-    },
-    {
-      "reponse": "TRIO",
-      "description": "SUPER-COMBO de creation (v3) : l idee de l utilisateur devient pense-bete (Athena) -> spec (Promethee) -> todo (Minerve) - declencheur [trio]",
-      "vers": "theme-trio.json"
-    }
+   },
+   {
+    "reponse": "SOCRATE",
+    "description": "Lancement d un SUPER-COMBO : Socrate questionne l utilisateur et produit la liste de missions pour enchainer les agents",
+    "vers": "theme-socrate.json"
+   },
+   {
+    "reponse": "TRIO",
+    "description": "SUPER-COMBO de creation (v3) : l idee de l utilisateur devient pense-bete (Athena) -> spec (Promethee) -> todo (Minerve) - declencheur [trio]",
+    "vers": "theme-trio.json"
+   }
   ]
  },
  "fins": {

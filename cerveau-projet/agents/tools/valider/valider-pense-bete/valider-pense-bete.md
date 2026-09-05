@@ -14,7 +14,7 @@ identite:
 
 ## Description
 
-Verifie l'integrite d'un pense-bete : structure, header, sections, nommage, placeholders et conformite ASCII. Athena l'utilise a la fin de sa mission pour s'assurer que le fichier n'est pas casse, corrompu ou incomplet avant de reactiver Cerberus.
+Verifie l'integrite d'un pense-bete : structure, header, sections, nommage, placeholders et conformite ASCII. Athena l'utilise a la fin de sa mission pour s'assurer que le fichier n'est pas casse, corrompu ou incomplet avant de rendre sa fin (reactiver-fin --cible oracle, modele aero).
 
 ## Utilisation
 
@@ -86,7 +86,7 @@ Fichier : pense-bete-incomplet.001.01.ebauche.md
 
 | Situation | Utilisation |
 |---|---|
-| **Fin de mission d'Athena** | Verification avant de reactiver Cerberus |
+| **Fin de mission d'Athena** | Verification avant de rendre la fin (reactiver-fin --cible oracle, modele aero) |
 | **Apres remplissage** | S'assurer que toutes les sections sont completes |
 | **Avant changement de statut** | Verifier que le pense-bete est pret pour `prepare` |
 

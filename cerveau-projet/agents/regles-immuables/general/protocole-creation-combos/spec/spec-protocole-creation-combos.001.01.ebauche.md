@@ -202,7 +202,7 @@ audit parcours -> suite lineaire repetee ? -> NON : reste dans le parcours
        -> creation definition-combo.json -> --liste/--dry-run -> json.load+ASCII
        -> integration Pattern 3 (remplacer suite par case combo + indice CITER en tete)
        -> recablage refs (suivant+vers) -> revalidation chemins -> parite
-       -> lecon corrections.md -> reactiver Cerberus
+       -> lecon corrections.md -> MA FIN vers ORACLE (reactiver-fin --cible oracle)
 ```
 
 ---
@@ -273,7 +273,7 @@ existants, la spec-combos-moteur et la spec-guider-parcours.
 ### 9.2 Specs connexes
 
 - [spec-combos-moteur](../../../../../agents/tools/combos/combos-moteur/spec/spec-combos-moteur.001.01.ebauche.md) -- format des cases
-- [spec-guider-parcours](../../../../../agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- Pattern 3
+- [guider-arbre](../../../../../agents/tools/guider/guider-arbre/guider-arbre.md) -- Pattern 3
 
 ### 9.3 Conventions applicables
 

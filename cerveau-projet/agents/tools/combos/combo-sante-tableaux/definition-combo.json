@@ -52,7 +52,7 @@
   "c6": {
    "titre": "FIN - controle sante termine",
    "type": "fin",
-   "message": "Controle de sante complet : documents manquants, fichiers vides, etat de sante (relecture + cartes + ASCII) et tableaux valides. Analyser les resultats (RVAV) puis reactiver Cerberus."
+   "message": "Controle de sante complet : documents manquants, fichiers vides, etat de sante (relecture + cartes + ASCII) et tableaux valides. Analyser les resultats (RVAV) puis MA FIN suit MA carte (modele aero : reactiver-fin --cible oracle, jamais reactiver Cerberus directement)."
   }
  },
  "identite": {

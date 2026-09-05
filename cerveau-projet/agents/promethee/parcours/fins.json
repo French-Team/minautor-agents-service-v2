@@ -20,11 +20,12 @@
       "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-completer": {
-      "titre": "FIN - Spec completee (activer Janus)",
-      "description": "Spec completee avec les sections manquantes, validee. Janus effectue le second controle (c10).",
-      "action": "activer",
-      "cible": "minerve",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : spec completee avec les sections manquantes, validee. Je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - il peut larguer Minerve puis Janus pour les controles croises.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin promethee \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-corriger": {
       "titre": "FIN - Retour a ORACLE (l aeroport)",
@@ -35,11 +36,12 @@
       "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-creer": {
-      "titre": "FIN - Spec creee (activer Janus)",
-      "description": "Spec creee depuis le pense-bete, validee, indexee. Janus effectue le second controle (c10).",
-      "action": "activer",
-      "cible": "minerve",
-      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> cerberus <raison>"
+      "titre": "FIN - Retour a ORACLE (l aeroport)",
+      "description": "Modele aero : spec creee depuis le pense-bete, validee, indexee. Je reviens vers ORACLE (l aeroport). C est le pilote qui decide du suivant (R3) - il peut larguer Minerve puis Janus pour les controles croises.",
+      "action": "reactiver",
+      "cible": "oracle",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin promethee \"<bilan>\" --cible oracle",
+      "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite. --cible oracle transmis a reactiver-fin."
     },
     "fin-delegation": {
       "titre": "FIN - Retour a ORACLE (l aeroport)",

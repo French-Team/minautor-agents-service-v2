@@ -64,5 +64,7 @@
  "08:42:01.471|flux|1 P1 non-acquitte(s) detecte(s)": "2026-09-04T08:50:05",
  "09:14:13.870|flux|1 P1 non-acquitte(s) detecte(s)": "2026-09-04T09:14:14",
  "09:06:10.732|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-04T09:14:14",
- "09:22:17.264|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-04T09:38:23"
+ "09:22:17.264|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-04T09:38:23",
+ "19:41:52.579|flux|1 P1 non-acquitte(s) detecte(s)": "2026-09-04T19:41:52",
+ "19:57:59.274|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-04T20:06:02"
 }

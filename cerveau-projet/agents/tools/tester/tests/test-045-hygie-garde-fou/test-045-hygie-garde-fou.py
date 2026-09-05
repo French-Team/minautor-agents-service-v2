@@ -17,9 +17,9 @@ Contexte (mission utilisateur 2026-08-13) :
 
 Cas couverts:
   1. La fiche hygie.md est CONFORME (verifier-conformite-fiche)
-  2. Le parcours hygie est valide (valider-case : 0 erreur)
-  3. Le parcours hygie est CONFORME (valider-cartes-decision)
-  4. Le parcours hygie a 0 probleme de cablage (detecter-cablages-manquants)
+  2. L arbre hygie est CONFORME (valider-cartes-decision --fichier --audit)
+  3. L agent hygie est CONFORME (valider-cartes-decision --audit)
+  4. L arbre hygie a 0 bloquant (auditer-conformite-arbre)
   5. Le chariot existe sur disque (detecter-residus, snapshot-nettoyage,
      combo-nettoyage-hygie)
   6. Le chariot est au catalogue generateurs-commande
@@ -104,7 +104,7 @@ def bilan_chrono():
 AGENT_DIR_ROOT = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents")
 AGENT_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "hygie")
 FICHE = os.path.join(AGENT_DIR, "hygie.md")
-PARCOURS = os.path.join(AGENT_DIR, "parcours", "parcours-hygie.json")
+PARCOURS = os.path.join(AGENT_DIR, "parcours", "arbre-hygie.json")
 SNAPSHOTS = os.path.join(AGENT_DIR, "snapshots")
 PROTOCOLE_NETTOYAGE = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
                                   "regles-immuables", "general",
@@ -198,27 +198,29 @@ def main():
     verifier("1. Fiche hygie CONFORME (verifier-conformite-fiche)",
              rc == 0 and "CONFORME" in out, "rc=%d" % rc)
 
-    # 2. Parcours valide (valider-case : 0 erreur)
-    rc, out = lancer(os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
-                                  "tools", "valider", "valider-case",
-                                  "valider-case.py"), PARCOURS)
-    verifier("2. Parcours hygie valide (valider-case 0 erreur)",
-             rc == 0 and "CONFORME" in out, "rc=%d" % rc)
-
-    # 3. Parcours CONFORME (valider-cartes-decision)
+    # 2. Arbre v2 conforme (valider-cartes-decision --fichier --audit)
     rc, out = lancer(os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
                                   "tools", "valider", "valider-cartes-decision",
-                                  "valider-cartes-decision.py"), "--agent", "hygie")
-    verifier("3. Parcours hygie CONFORME (valider-cartes-decision)",
+                                  "valider-cartes-decision.py"),
+                     "--fichier", PARCOURS, "--audit")
+    verifier("2. Arbre hygie CONFORME (valider-cartes --fichier --audit)",
              rc == 0 and "CONFORME" in out, "rc=%d" % rc)
 
-    # 4. Cablages : 0 probleme
+    # 3. Agent hygie CONFORME (valider-cartes-decision --audit)
     rc, out = lancer(os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
-                                  "tools", "detecter", "detecter-cablages-manquants",
-                                  "detecter-cablages-manquants.py"),
-                     "--agent", "janus", PARCOURS)
-    verifier("4. Parcours hygie 0 probleme de cablage",
-             "PROPRE" in out, "rc=%d" % rc)
+                                  "tools", "valider", "valider-cartes-decision",
+                                  "valider-cartes-decision.py"),
+                     "--agent", "hygie", "--audit")
+    verifier("3. Agent hygie CONFORME (valider-cartes-decision --audit)",
+             rc == 0 and "CONFORME" in out, "rc=%d" % rc)
+
+    # 4. Audit de conformite de l arbre (auditer-conformite-arbre)
+    rc, out = lancer(os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                                  "tools", "verifier", "auditer-conformite-arbre",
+                                  "auditer-conformite-arbre.py"),
+                     "--agent", "hygie")
+    verifier("4. Arbre hygie 0 bloquant (auditer-conformite-arbre)",
+             rc == 0 and "0 bloquant" in out, "rc=%d" % rc)
 
     # 5. Chariot sur disque
     chariot_ok = all(os.path.isfile(chemin) for _, chemin in CHARIOT)
@@ -253,7 +255,7 @@ def main():
         if agent == "hygie":
             continue
         chemin = os.path.join(AGENT_DIR_ROOT, agent, "parcours",
-                              "parcours-%s.json" % agent)
+                              "arbre-%s.json" % agent)
         if not os.path.isfile(chemin):
             continue
         try:

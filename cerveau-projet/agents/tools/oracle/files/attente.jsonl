@@ -15,3 +15,5 @@
 {"id": "0780177b", "date": "2026-09-04T08:50:05", "mission": "MISE EN ATTENTE (inter-round URGENT) : 3 P1 non-acquitte(s) detecte(s)", "statut": "TERMINEE", "agent": "oracle", "priorite": 1, "type": "urgent"}
 {"id": "4549cfa9", "date": "2026-09-04T09:14:14", "mission": "MISE EN ATTENTE (inter-round URGENT) : 1 P1 non-acquitte(s) detecte(s)", "statut": "TERMINEE", "agent": "vulcain", "priorite": 1, "type": "urgent"}
 {"id": "a6f51896", "date": "2026-09-04T09:38:24", "mission": "MISE EN ATTENTE (inter-round URGENT) : Aucun P1 non-acquitte (probleme regle)", "statut": "TERMINEE", "agent": "oracle", "priorite": 1, "type": "urgent"}
+{"id": "0fab5900", "date": "2026-09-04T19:41:53", "mission": "MISE EN ATTENTE (inter-round URGENT) : 1 P1 non-acquitte(s) detecte(s)", "statut": "EN_ATTENTE", "agent": "vulcain", "priorite": 1, "type": "urgent"}
+{"id": "742bc19b", "date": "2026-09-04T20:06:02", "mission": "MISE EN ATTENTE (inter-round URGENT) : Aucun P1 non-acquitte (probleme regle)", "statut": "EN_ATTENTE", "agent": "oracle", "priorite": 1, "type": "urgent"}

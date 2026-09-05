@@ -7,39 +7,24 @@
 """
 valider-cartes-decision.py
 
-Verifie que les agents respectent leur CARTE DE DECISION. Depuis la v0.2.0
-(allegement des fiches), la carte de decision d'un agent est son PARCOURS JSON
-(agents/<agent>/parcours/parcours-<agent>.json) : c'est la SOURCE DE VERITE du
-guidage. Cet outil valide la structure et les references d'un parcours.
+Verifie que les agents respectent leur CARTE DE DECISION. Depuis la
+migration v1->v2 (2026-09-05), la carte de decision d'un agent est SON ARBRE
+v2 (agents/<agent>/parcours/arbre-<agent>.json, format identite.type='arbre',
+racine/branches -> themes -> fins centralisees) : c'est la SEULE SOURCE DE
+VERITE du guidage. Les parcours v1 (parcours-<agent>.json) ont ete RETIRES
+(vestiges) : cet outil ne valide QUE le format v2.
 
-Validations d'un parcours :
-  1. Le fichier parcours-<agent>.json existe
+Validations d'un arbre v2 :
+  1. Le fichier arbre-<agent>.json existe
   2. Le JSON est valide (json.load)
-  3. Structure : cles top-level identite + parcours + cases presentes
-  4. parcours.case_depart existe et designe une case reelle
-  5. Chaque case a un type valide (question/indice/controle/fin/action)
-  6. References valides : suivant et vers des branches pointent vers des cases
-  7. La case c0 est une question de relecture honnete (Pattern 4, spec v0.5.0)
-  8. AUCUN SUIVANT MORT (garde-fou v0.3.2) :
-     - case type 'fin' avec champ suivant -> la navigation s'arrete a la fin,
-       le suivant est ignore (mort)
-     - case avec branches non vides ET champ suivant -> les branches priment,
-       le suivant n'est jamais lu (mort)
-     Le suivant n'est legitime que sur une case SANS branches et NON-fin
-       (question/indice/action/controle qui enchaine).
-  9. COMMANDE ACTIVER EXACTE (garde-fou v0.4.0, P8) :
-     - toute case type 'fin' dont le titre commence par 'FIN - Activer <agent>'
-       doit contenir dans son message la commande exacte
-       'activer-agent-principal.py activer session-llm-1 <agent>' ET la
-       mention 'PAS reactiver' (sinon l'agent retombe sur reactiver qui
-       ramene toujours a Cerberus).
-  10. FORMAT DE VERSION (garde-fou v0.4.0, P9) :
-      - parcours.version ne doit PAS commencer par le prefixe 'v'
-        (format canonique sans v, ex: 0.3.3).
-  11. COHERENCE FICHE/PARCOURS (garde-fou v0.4.0, P10) :
-      - si la fiche agents/<agent>/<agent>.md contient le Pattern 14
-        'PARCOURS (vX.Y.Z)', la version doit correspondre a parcours.version.
-      - signale KO si la ligne PARCOURS (v manque ou differe.
+  3. Structure : cles top-level identite (type=arbre) + arbre + racine
+  4. Chaque branche de la racine a une reponse + un vers pointant vers un
+     fichier theme existant (theme-*.json)
+  5. Chaque theme reference est valide : JSON parse, identite.type=theme,
+     theme.nom + theme.redirects presents, chaque redirect a un besoin
+  6. Les fins centralisees : fins.fichier existe (fins.json), JSON valide
+  7. TOUT FICHIER v1 (parcours-*.json) passe en --fichier est declare
+     NON CONFORME (vestige v1 - il doit etre supprime)
 
 Utilisation:
   valider-cartes-decision.py --agent <nom>
@@ -47,12 +32,12 @@ Utilisation:
   valider-cartes-decision.py --fichier <chemin.json>
 
 v0.5.0 : support du format v2 - detection auto (identite.type == 'arbre')
-et validation des arbres v2 servis par le pilote (racine/branches ->
-themes -> fins centralisees). --agent valide l arbre v2 s il existe
-(arbre-<agent>.json), repli v1 sinon. La validation v1 reste inchangee.
+et validation des arbres v2 servis par le pilote.
+v0.6.0 (2026-09-05, migration v1->v2) : format v2 UNIQUEMENT - le repli v1
+est retire, tout fichier v1 passe en --fichier est NON CONFORME (vestige).
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.5.0
+Version : 0.6.0
 Statut : prepare
 """
 
@@ -63,7 +48,7 @@ import re
 import subprocess
 import sys
 
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 REGEX_RESIDU = re.compile(r"^v?\d+\.\d+\.\d+$")
 STATUT = "prepare"
 
@@ -131,30 +116,32 @@ def verrouiller_habilitation(agent, outil):
 def afficher_aide():
     print("=== valider-cartes-decision v%s ===" % VERSION)
     print("")
-    print("Verifie la carte de decision d'un agent = son PARCOURS JSON (source de verite).")
+    print("Verifie la carte de decision d'un agent = son ARBRE v2 (source de verite unique).")
     print("")
     print("Usage: valider-cartes-decision.py [options]")
     print("")
     print("Options:")
-    print("  --agent <nom>          Verifier le parcours d'un agent specifique")
-    print("  --tous                 Verifier les parcours de tous les agents")
-    print("  --fichier <chemin>     Verifier un fichier parcours JSON specifique")
+    print("  --agent <nom>          Verifier l arbre v2 d'un agent specifique")
+    print("  --tous                 Verifier les arbres v2 de tous les agents")
+    print("  --fichier <chemin>     Verifier un fichier carte JSON (arbre v2 attendu)")
     print("  --aide                 Afficher cette aide")
     print("")
     print("Exemples:")
     print("  valider-cartes-decision.py --agent buffy")
     print("  valider-cartes-decision.py --tous")
-    print("  valider-cartes-decision.py --fichier cerveau-projet/agents/buffy/parcours/parcours-buffy.json")
+    print("  valider-cartes-decision.py --fichier cerveau-projet/agents/buffy/parcours/arbre-buffy.json")
 
 
 def lister_agents():
-    """Tous les dossiers agents qui ont un dossier parcours/."""
+    """Tous les agents qui ont un arbre v2 (arbre-<agent>.json) - la seule
+    carte de decision valide depuis la migration v1->v2."""
     agents = []
     if not os.path.isdir(AGENTS_DIR):
         return agents
     for nom in sorted(os.listdir(AGENTS_DIR)):
         dossier = os.path.join(AGENTS_DIR, nom)
-        if os.path.isdir(dossier) and os.path.isdir(os.path.join(dossier, "parcours")):
+        if os.path.isdir(dossier) and os.path.isdir(os.path.join(dossier, "parcours")) \
+                and os.path.isfile(chemin_arbre_agent(nom)):
             agents.append(nom)
     return agents
 
@@ -620,17 +607,15 @@ def verifier_parcours_fichier(chemin, nom_display, agent=None):
         print("")
         print("NOTE : la carte de decision ne vit plus dans la fiche .md")
         print("(allegement v0.2.0). La SOURCE DE VERITE est le JSON de carte :")
-        print("  agents/<agent>/parcours/parcours-<agent>.json (v1)")
         print("  agents/<agent>/parcours/arbre-<agent>.json (v2, servi par le pilote)")
         print("Utiliser --agent <nom> ou --fichier <carte.json>.")
         print("")
         print("=== Resultat : NON CONFORME (mauvaise cible) ===")
         return 1
 
-    # DETECTION AUTO DU FORMAT (v0.5.0) : un fichier de carte dont
-    # identite.type == 'arbre' est un arbre v2 - le valider comme tel.
-    # (Le pilote v0.2.4 sert les arbres v2 : les valider en v1 etait un
-    # faux NON CONFORME - constat Janus mission 8bca6f3d.)
+    # FORMAT UNIQUE (v0.6.0) : seul l arbre v2 est valide. Un fichier v1
+    # (parcours-*.json, identite.type='parcours') est un VESTIGE : NON
+    # CONFORME, il doit etre supprime (les tests v1 servent a les pister).
     try:
         with io.open(chemin, encoding="utf-8") as fh:
             contenu = fh.read()
@@ -648,18 +633,31 @@ def verifier_parcours_fichier(chemin, nom_display, agent=None):
         if identite.get("type") == "arbre" or donnees.get("racine"):
             return valider_arbre_v2(chemin, nom_display, agent=agent)
 
-    return valider_parcours(contenu, nom_display, agent=agent)
+    print("=== Verification %s : %s ===" % (nom_display, chemin))
+    print("")
+    print("NON CONFORME : format v1 (parcours JSON) - vestige de la migration")
+    print("v1->v2. Seul le format v2 (arbre-<agent>.json, identite.type=arbre)")
+    print("est valide. Le fichier doit etre SUPPRIME (les tests v1 pistent ces")
+    print("vestiges).")
+    print("")
+    print("=== Resultat : NON CONFORME (vestige v1) ===")
+    return 1
 
 
 def verifier_agent(agent):
-    # v0.5.0 : si l agent a un arbre v2 (arbre-<agent>.json, celui que le
-    # pilote sert reellement), c est LA carte a valider. Repli v1 sinon.
+    # v0.6.0 : seul l arbre v2 est la carte de decision (plus de repli v1).
+    # Si l agent n a pas d arbre, c est une ERREUR (agent non migrate).
     chemin_v2 = chemin_arbre_agent(agent)
     if os.path.isfile(chemin_v2):
         return verifier_parcours_fichier(
             chemin_v2, "de l'agent %s (arbre v2)" % agent, agent=agent)
-    chemin = chemin_parcours_agent(agent)
-    return verifier_parcours_fichier(chemin, "de l'agent %s" % agent, agent=agent)
+    print("=== Verification de l'agent %s ===" % agent)
+    print("")
+    print("ERREUR : l agent '%s' n a pas d arbre v2" % agent)
+    print("  (attendu : agents/%s/parcours/arbre-%s.json)" % (agent, agent))
+    print("")
+    print("=== Resultat : NON CONFORME (agent sans arbre v2) ===")
+    return 1
 
 
 def verifier_tous():
@@ -731,13 +729,18 @@ def main(argv):
             print("ERREUR : Nom de l'agent manquant")
             afficher_aide()
             return 1
-        # VERROU AUTO-JOURNALISATION (v0.4.5) : l outil signale LUI-MEME son
-        # usage (autorise -> registre mode verrou-auto ; non autorise -> bloque).
-        code_verrou, msg_verrou = verrouiller_habilitation(
-            agent_actif_session() or argv[1], "valider-cartes-decision")
-        if code_verrou != 0:
-            print(msg_verrou)
-            return code_verrou
+        # v0.6.0 : --audit reserve aux tests (meme convention que le verrou)
+        # pour verifier la conformite d un arbre SANS verrou d habilitation.
+        audit = "--audit" in argv
+        if not audit:
+            # VERROU AUTO-JOURNALISATION (v0.4.5) : l outil signale LUI-MEME
+            # son usage (autorise -> registre mode verrou-auto ; non autorise
+            # -> bloque).
+            code_verrou, msg_verrou = verrouiller_habilitation(
+                agent_actif_session() or argv[1], "valider-cartes-decision")
+            if code_verrou != 0:
+                print(msg_verrou)
+                return code_verrou
         return verifier_agent(argv[1])
 
     if argv[0] == "--tous":

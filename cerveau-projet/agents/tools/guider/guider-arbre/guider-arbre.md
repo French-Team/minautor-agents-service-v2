@@ -6,7 +6,7 @@ identite:
 ---
 # guider-arbre
 
-**Version :** 0.1.0
+**Version :** 0.1.1
 **Statut :** ebauche
 **Categorie :** guider
 **Chemin :** `agents/tools/guider/guider-arbre/`

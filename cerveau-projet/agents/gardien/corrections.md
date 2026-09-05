@@ -4,6 +4,9 @@ identite:
   appartient_a: gardien
   commun: false
 ---
+> MEMOIRE GELEE le 2026-09-04 - decision utilisateur v1->v2 : les
+> nouvelles lecons vont dans bdd-lecons (outil v2). Historique conserve
+> pour relecture - AUCUN [LECON] supplementaire.
 # Corrections -- Gardien
 
 Fichier de corrections et de lecons du Gardien, agent de la securite du

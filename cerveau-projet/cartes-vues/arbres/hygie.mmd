@@ -1,0 +1,199 @@
+%% Arbre de decision de hygie (arbre v0.3.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "NETTOYER" --> THEME-NETTOYER
+    THEME-NETTOYER["Detecter et supprimer les residus du workspace avec snapshot"]
+    THEME-NETTOYER -- "besoin 1" --> THEME-NETTOYER-B0
+    THEME-NETTOYER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-NETTOYER -- "besoin 2" --> THEME-NETTOYER-B1
+    THEME-NETTOYER-B1["Consulter les lecons (domaine nettoyage)"]
+    THEME-NETTOYER -- "besoin 3" --> THEME-NETTOYER-B2
+    THEME-NETTOYER-B2["CONTEXTE : activite recente des agents"]
+    THEME-NETTOYER -- "besoin 4" --> THEME-NETTOYER-B3
+    THEME-NETTOYER-B3["SNAPSHOT OBLIGATOIRE avant tout nettoyage (case c2)"]
+    THEME-NETTOYER -- "besoin 5" --> THEME-NETTOYER-B4
+    THEME-NETTOYER-B4["Consulter le snapshot precedent (case c3)"]
+    THEME-NETTOYER -- "besoin 6" --> THEME-NETTOYER-B5
+    THEME-NETTOYER-B5["Detection compartimentee des residus (case c4)"]
+    THEME-NETTOYER -- "besoin 7" --> THEME-NETTOYER-B6
+    THEME-NETTOYER-B6["Des residus sont-ils detectes ? (case c5 - controle)"]
+    THEME-NETTOYER -- "besoin 8" --> THEME-NETTOYER-B7
+    THEME-NETTOYER-B7["Classer les residus par zone (case c6)"]
+    THEME-NETTOYER -- "besoin 9" --> THEME-NETTOYER-B8
+    THEME-NETTOYER-B8["Un residu est-il suspect ? (case c7 - question)"]
+    THEME-NETTOYER -- "besoin 10" --> THEME-NETTOYER-B9
+    THEME-NETTOYER-B9["Supprimer avec tracabilite - SEUL HABILITE (case c9)"]
+    THEME-NETTOYER -- "besoin 11" --> THEME-NETTOYER-B10
+    THEME-NETTOYER-B10["Tous les residus ont-ils disparu ? (case c10 - controle)"]
+    THEME-NETTOYER -- "besoin 12" --> THEME-NETTOYER-B11
+    THEME-NETTOYER-B11["Rapport de nettoyage (case c11)"]
+    THEME-NETTOYER -- "besoin 13" --> THEME-NETTOYER-B12
+    THEME-NETTOYER-B12["Enregistrer mes usages d outils (case c34)"]
+    THEME-NETTOYER -- "besoin 14" --> THEME-NETTOYER-B13
+    THEME-NETTOYER-B13["Ajouter les lecons dans corrections.md (case c12)"]
+    FIN-fin-nettoyer(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-NETTOYER-B0 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B1 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B2 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B3 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B4 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B5 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B6 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B7 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B8 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B9 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B10 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B11 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B12 --> FIN-fin-nettoyer
+    THEME-NETTOYER-B13 --> FIN-fin-nettoyer
+    RACINE -- "HONNETETE" --> THEME-HONNETETE
+    THEME-HONNETETE["Prouver l honnetete des changements ou fichiers suspects par"]
+    THEME-HONNETETE -- "besoin 1" --> THEME-HONNETETE-B0
+    THEME-HONNETETE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-HONNETETE -- "besoin 2" --> THEME-HONNETETE-B1
+    THEME-HONNETETE-B1["Consulter les lecons (domaine nettoyage)"]
+    THEME-HONNETETE -- "besoin 3" --> THEME-HONNETETE-B2
+    THEME-HONNETETE-B2["CONTEXTE : activite recente des agents"]
+    THEME-HONNETETE -- "besoin 4" --> THEME-HONNETETE-B3
+    THEME-HONNETETE-B3["RELAIS - Activer l agent habilite (preuve d honnetete) (case"]
+    THEME-HONNETETE -- "besoin 5" --> THEME-HONNETETE-B4
+    THEME-HONNETETE-B4["RETOUR - Verifier le rapport (case cH2)"]
+    THEME-HONNETETE -- "besoin 6" --> THEME-HONNETETE-B5
+    THEME-HONNETETE-B5["Honnetete prouvee ? (controle cH2)"]
+    THEME-HONNETETE -- "besoin 7" --> THEME-HONNETETE-B6
+    THEME-HONNETETE-B6["Consulter le snapshot precedent"]
+    THEME-HONNETETE -- "besoin 8" --> THEME-HONNETETE-B7
+    THEME-HONNETETE-B7["Ajouter les lecons dans corrections.md"]
+    FIN-fin-honnetete(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-HONNETETE-B0 --> FIN-fin-honnetete
+    THEME-HONNETETE-B1 --> FIN-fin-honnetete
+    THEME-HONNETETE-B2 --> FIN-fin-honnetete
+    THEME-HONNETETE-B3 --> FIN-fin-honnetete
+    THEME-HONNETETE-B4 --> FIN-fin-honnetete
+    THEME-HONNETETE-B5 --> FIN-fin-honnetete
+    THEME-HONNETETE-B6 --> FIN-fin-honnetete
+    THEME-HONNETETE-B7 --> FIN-fin-honnetete
+    RACINE -- "SNAPSHOTS" --> THEME-SNAPSHOTS
+    THEME-SNAPSHOTS["Creer un snapshot de l etat du workspace et gerer la rotatio"]
+    THEME-SNAPSHOTS -- "besoin 1" --> THEME-SNAPSHOTS-B0
+    THEME-SNAPSHOTS-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-SNAPSHOTS -- "besoin 2" --> THEME-SNAPSHOTS-B1
+    THEME-SNAPSHOTS-B1["Consulter les lecons (domaine nettoyage)"]
+    THEME-SNAPSHOTS -- "besoin 3" --> THEME-SNAPSHOTS-B2
+    THEME-SNAPSHOTS-B2["CONTEXTE : activite recente des agents"]
+    THEME-SNAPSHOTS -- "besoin 4" --> THEME-SNAPSHOTS-B3
+    THEME-SNAPSHOTS-B3["Creer le snapshot de l etat du workspace (case cS1)"]
+    THEME-SNAPSHOTS -- "besoin 5" --> THEME-SNAPSHOTS-B4
+    THEME-SNAPSHOTS-B4["Verifier la rotation 7 jours (case cS2)"]
+    THEME-SNAPSHOTS -- "besoin 6" --> THEME-SNAPSHOTS-B5
+    THEME-SNAPSHOTS-B5["Consulter le snapshot cree"]
+    THEME-SNAPSHOTS -- "besoin 7" --> THEME-SNAPSHOTS-B6
+    THEME-SNAPSHOTS-B6["Ajouter les lecons dans corrections.md"]
+    FIN-fin-snapshots(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-SNAPSHOTS-B0 --> FIN-fin-snapshots
+    THEME-SNAPSHOTS-B1 --> FIN-fin-snapshots
+    THEME-SNAPSHOTS-B2 --> FIN-fin-snapshots
+    THEME-SNAPSHOTS-B3 --> FIN-fin-snapshots
+    THEME-SNAPSHOTS-B4 --> FIN-fin-snapshots
+    THEME-SNAPSHOTS-B5 --> FIN-fin-snapshots
+    THEME-SNAPSHOTS-B6 --> FIN-fin-snapshots
+    RACINE -- "PURIFIER" --> THEME-PURIFIER
+    THEME-PURIFIER["Purger les fichiers corrections.md surcharges en archivant l"]
+    THEME-PURIFIER -- "besoin 1" --> THEME-PURIFIER-B0
+    THEME-PURIFIER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-PURIFIER -- "besoin 2" --> THEME-PURIFIER-B1
+    THEME-PURIFIER-B1["Consulter les lecons (domaine nettoyage)"]
+    THEME-PURIFIER -- "besoin 3" --> THEME-PURIFIER-B2
+    THEME-PURIFIER-B2["CONTEXTE : activite recente des agents"]
+    THEME-PURIFIER -- "besoin 4" --> THEME-PURIFIER-B3
+    THEME-PURIFIER-B3["Detecter les fichiers surcharges (case c9b)"]
+    THEME-PURIFIER -- "besoin 5" --> THEME-PURIFIER-B4
+    THEME-PURIFIER-B4["Purifier en dry-run d abord (case c9b)"]
+    THEME-PURIFIER -- "besoin 6" --> THEME-PURIFIER-B5
+    THEME-PURIFIER-B5["Verifier le rapport dry-run"]
+    THEME-PURIFIER -- "besoin 7" --> THEME-PURIFIER-B6
+    THEME-PURIFIER-B6["Executer la purification reelle"]
+    THEME-PURIFIER -- "besoin 8" --> THEME-PURIFIER-B7
+    THEME-PURIFIER-B7["Verifier que le fichier principal est intact"]
+    THEME-PURIFIER -- "besoin 9" --> THEME-PURIFIER-B8
+    THEME-PURIFIER-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-purifier(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-PURIFIER-B0 --> FIN-fin-purifier
+    THEME-PURIFIER-B1 --> FIN-fin-purifier
+    THEME-PURIFIER-B2 --> FIN-fin-purifier
+    THEME-PURIFIER-B3 --> FIN-fin-purifier
+    THEME-PURIFIER-B4 --> FIN-fin-purifier
+    THEME-PURIFIER-B5 --> FIN-fin-purifier
+    THEME-PURIFIER-B6 --> FIN-fin-purifier
+    THEME-PURIFIER-B7 --> FIN-fin-purifier
+    THEME-PURIFIER-B8 --> FIN-fin-purifier
+    RACINE -- "OUTILS" --> THEME-OUTILS
+    THEME-OUTILS["Resoudre un probleme d outil rencontre en cours de mission e"]
+    THEME-OUTILS -- "besoin 1" --> THEME-OUTILS-B0
+    THEME-OUTILS-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-OUTILS -- "besoin 2" --> THEME-OUTILS-B1
+    THEME-OUTILS-B1["Consulter les lecons (domaine nettoyage)"]
+    THEME-OUTILS -- "besoin 3" --> THEME-OUTILS-B2
+    THEME-OUTILS-B2["CONTEXTE : activite recente des agents"]
+    THEME-OUTILS -- "besoin 4" --> THEME-OUTILS-B3
+    THEME-OUTILS-B3["Probleme avec un outil ? (question cU1)"]
+    THEME-OUTILS -- "besoin 5" --> THEME-OUTILS-B4
+    THEME-OUTILS-B4["COMPRENDRE L OUTIL - lire le .md (case cU2)"]
+    THEME-OUTILS -- "besoin 6" --> THEME-OUTILS-B5
+    THEME-OUTILS-B5["Verifier si un combo existe pour l action"]
+    THEME-OUTILS -- "besoin 7" --> THEME-OUTILS-B6
+    THEME-OUTILS-B6["Generer la commande exacte avec generateurs-commande"]
+    THEME-OUTILS -- "besoin 8" --> THEME-OUTILS-B7
+    THEME-OUTILS-B7["Reprendre ma mission (case cU3)"]
+    THEME-OUTILS -- "besoin 9" --> THEME-OUTILS-B8
+    THEME-OUTILS-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-outils(["FIN - Reprendre ma mission (cU3)"])
+    THEME-OUTILS-B0 --> FIN-fin-outils
+    THEME-OUTILS-B1 --> FIN-fin-outils
+    THEME-OUTILS-B2 --> FIN-fin-outils
+    THEME-OUTILS-B3 --> FIN-fin-outils
+    THEME-OUTILS-B4 --> FIN-fin-outils
+    THEME-OUTILS-B5 --> FIN-fin-outils
+    THEME-OUTILS-B6 --> FIN-fin-outils
+    THEME-OUTILS-B7 --> FIN-fin-outils
+    THEME-OUTILS-B8 --> FIN-fin-outils
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Gerer les missions qui sortent du perimetre de nettoyage d H"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Consulter les lecons (domaine nettoyage)"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["CONTEXTE : activite recente des agents"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["La mission concerne-t-elle un autre agent ? (question c29)"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["DELEGATION - Signaler au pilote via ORACLE (case c29a)"]
+    THEME-AUTRE -- "besoin 6" --> THEME-AUTRE-B5
+    THEME-AUTRE-B5["Besoin d un outil temporaire ou durable ? (question c29b)"]
+    THEME-AUTRE -- "besoin 7" --> THEME-AUTRE-B6
+    THEME-AUTRE-B6["Lire le protocole creation scripts temporaires"]
+    THEME-AUTRE -- "besoin 8" --> THEME-AUTRE-B7
+    THEME-AUTRE-B7["Creer l outil temporaire (case c29c)"]
+    THEME-AUTRE -- "besoin 9" --> THEME-AUTRE-B8
+    THEME-AUTRE-B8["Signaler le besoin durable a Cerberus (case c29e)"]
+    THEME-AUTRE -- "besoin 10" --> THEME-AUTRE-B9
+    THEME-AUTRE-B9["Ajouter les lecons dans corrections.md"]
+    FIN-fin-delegation(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-delegation
+    THEME-AUTRE-B1 --> FIN-fin-delegation
+    THEME-AUTRE-B2 --> FIN-fin-delegation
+    THEME-AUTRE-B3 --> FIN-fin-delegation
+    THEME-AUTRE-B4 --> FIN-fin-delegation
+    THEME-AUTRE-B5 --> FIN-fin-delegation
+    THEME-AUTRE-B6 --> FIN-fin-delegation
+    THEME-AUTRE-B7 --> FIN-fin-delegation
+    THEME-AUTRE-B8 --> FIN-fin-delegation
+    THEME-AUTRE-B9 --> FIN-fin-delegation
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

@@ -19,12 +19,14 @@ Contexte (2026-08-15) :
     corrections.md (protocole-fin-mission). L exclusivite porte sur les
     fichiers STRUCTURELS : fiche, parcours, index, regles, protocoles.
 Invariants verifies :
-  1. La carte buffy (parcours-buffy.json) contient editer-parcours ET
-     editer-fichier-agents dans ses indices outil
-  2. AUCUNE des 13 autres cartes ne contient editer-parcours ni
-     editer-fichier-agents (ni dans les indices, ni dans le texte des cases)
-  2b. Le REGISTRE ne contient AUCUNE declaration de editer-parcours /
-     editer-fichier-agents par un agent autre que buffy (anti-recurrence :
+  1. La table d habilitation de buffy (habilitation-buffy.json) contient
+     editer-fichier-agents (outil v2 exclusif de correction des fichiers
+     structurels des agents) ; editer-parcours (v1, archive le 2026-09-05)
+     n apparait dans AUCUNE table (chasseur de vestiges v1)
+  2. AUCUNE autre table d habilitation ne contient editer-fichier-agents ni
+     editer-parcours (la table est la source du verrou)
+  2b. Le REGISTRE ne contient AUCUNE declaration de editer-fichier-agents /
+     editer-parcours par un agent autre que buffy (anti-recurrence :
      le contournement passait par des scripts directs - le registre est la
      trace de l usage reel)
   3. La regle immuable est documentee dans regles-groupes-agents.md
@@ -53,6 +55,7 @@ REGLE = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "regles-immuables
                      "general", "regles-groupes-agents.md")
 FICHE_BUFFY = os.path.join(AGENTS_DIR, "buffy", "buffy.md")
 REGISTRE = os.path.join(AGENTS_DIR, "traces", "registre-usages-outils.jsonl")
+HABILITATION_DIR = os.path.join(AGENTS_DIR, "habilitation")
 OUTILS_EXCLUSIFS = ["editer-parcours", "editer-fichier-agents"]
 NB_POINTS = 0
 NB_OK = 0
@@ -138,83 +141,49 @@ def lire(chemin):
         return fh.read()
 
 
-def outils_parcours(chemin):
-    """Retourner l ensemble des noms d outils (indices outil) d un parcours."""
+def outils_table(agent):
+    """Retourner l ensemble des outils d une table d habilitation."""
+    chemin = os.path.join(HABILITATION_DIR, "habilitation-%s.json" % agent)
+    if not os.path.isfile(chemin):
+        return None
     d = json.load(io.open(chemin, encoding="utf-8"))
     noms = set()
-    for c in d.get("cases", {}).values():
-        for ind in c.get("indices", []):
-            if ind.get("type") == "outil":
-                noms.add((ind.get("nom", "") or ind.get("catalogue", "")).split("/")[-1])
+    for o in d.get("outils", []):
+        # les outils peuvent etre listes avec une cle (ex: tester-protection-*)
+        noms.add((o.get("nom", "") if isinstance(o, dict) else o))
     return noms
 
 
 def main():
-    # --- 1. carte buffy : les 2 outils presents
+    # --- 1. table buffy : editer-fichier-agents present, editer-parcours
+    #      (archive) absent de TOUTES les tables (chasseur de vestiges v1)
     if point_actif(1):
         t = time.monotonic()
-        chemin = os.path.join(AGENTS_DIR, "buffy", "parcours", "parcours-buffy.json")
-        noms = outils_parcours(chemin)
-        verifier("1. carte buffy : editer-parcours + editer-fichier-agents",
-                 "editer-parcours" in noms and "editer-fichier-agents" in noms,
-                 "manquants: %s" % [o for o in OUTILS_EXCLUSIFS if o not in noms])
-        chrono_etape("1. carte buffy", t)
+        noms = outils_table("buffy")
+        verifier("1. table buffy : editer-fichier-agents present",
+                 noms is not None and "editer-fichier-agents" in noms,
+                 "manquants: %s" % [o for o in ["editer-fichier-agents"] if o not in (noms or set())])
+        chrono_etape("1. table buffy", t)
 
-    # --- 2. aucune autre carte ne contient ces outils
+    # --- 2. aucune autre table ne contient ces outils
     if point_actif(2):
         t = time.monotonic()
         violateurs = []
-        for nom in sorted(os.listdir(AGENTS_DIR)):
-            if not os.path.isdir(os.path.join(AGENTS_DIR, nom)):
+        for chemin_table in sorted(os.listdir(HABILITATION_DIR)):
+            if not chemin_table.endswith(".json"):
                 continue
-            parcours = os.path.join(AGENTS_DIR, nom, "parcours", "parcours-%s.json" % nom)
-            if not os.path.isfile(parcours):
-                continue
+            nom = chemin_table.replace("habilitation-", "").replace(".json", "")
             if nom == "buffy":
                 continue
-            try:
-                noms = outils_parcours(parcours)
-            except (ValueError, IOError) as e:
-                violateurs.append("%s (json: %s)" % (nom, e))
+            noms = outils_table(nom)
+            if noms is None:
                 continue
-            # EXCEPTION PILOTE (v0.2.3, regle utilisateur 2026-08-18) : chiron
-            # est autorise a posseder editer-parcours (cle par cible : SA carte
-            # uniquement, verifiee par proteger-verrou-habilitation). Les
-            # indices OUTIL des autres cartes restent interdits.
-            if nom == "chiron":
-                croises = [o for o in OUTILS_EXCLUSIFS
-                           if o in noms and o != "editer-parcours"]
-                if croises:
-                    violateurs.append("%s: %s" % (nom, croises))
-            else:
-                croises = [o for o in OUTILS_EXCLUSIFS if o in noms]
-                if croises:
-                    violateurs.append("%s: %s" % (nom, croises))
-            # verifier aussi que le texte des cases ne DECLARE PAS ces outils
-            # comme outils de l agent. Les MENTIONS PEDAGOGIQUES (indices
-            # AGENTS HABILITES : "Buffy cartes/parcours (editer-parcours)")
-            # decrivent le domaine de BUFFY, pas une usurpation : elles ne
-            # sont pas des indices OUTIL et ne donnent aucune habilitation
-            # (le verrou lit les indices OUTIL, pas le texte).
-            texte = lire(parcours)
-            for o in OUTILS_EXCLUSIFS:
-                # EXCEPTION PILOTE (v0.2.4) : la boucle TEXTE doit refleter la
-                # meme exception que les indices OUTIL ci-dessus. Pour chiron,
-                # editer-parcours est LEGITIME (cle par cible : SA carte
-                # uniquement, verifiee par proteger-verrou-habilitation). Sans
-                # cette exception, l indice OUTIL de sa carte d auto-correction
-                # (c16) declencherait un faux positif "declaration".
-                if nom == "chiron" and o == "editer-parcours":
-                    continue
-                # une vraie usurpation = l outil declare comme outil de
-                # l agent dans un indice de type outil (deja couvert par
-                # outils_parcours). Les mentions dans les textes de regles
-                # (AGENTS HABILITES, redirections) sont documentaires.
-                if o in texte and o in noms:
-                    violateurs.append("%s: declaration %s" % (nom, o))
-        verifier("2. AUCUNE autre carte ne possede editer-parcours/editer-fichier-agents",
+            croises = [o for o in OUTILS_EXCLUSIFS if o in noms]
+            if croises:
+                violateurs.append("%s: %s" % (nom, croises))
+        verifier("2. AUCUNE autre table ne possede editer-parcours/editer-fichier-agents",
                  not violateurs, "; ".join(violateurs))
-        chrono_etape("2. autres cartes", t)
+        chrono_etape("2. autres tables", t)
 
     # --- 2b. registre : aucune declaration non-buffy
     if point_actif(3):
@@ -232,14 +201,12 @@ def main():
                 outil = e.get("outil", "")
                 agent = e.get("agent", "")
                 for o in OUTILS_EXCLUSIFS:
-                    # EXCEPTION PILOTE (v0.2.5) : la boucle REGISTRE doit
-                    # refleter la meme exception que les indices OUTIL et la
-                    # boucle TEXTE (v0.2.3/v0.2.4). Chiron est autorise a
-                    # utiliser editer-parcours sur SA carte uniquement (cle
-                    # par cible, verifiee par proteger-verrou-habilitation) :
-                    # ses declarations au registre sont LEGITIMES (cycle
-                    # d auto-correction pilote, c16). Sans cette exception,
-                    # le cycle reel trace des faux positifs.
+                    # EXCEPTION HISTORIQUE (2026-08-18, avant l archivage
+                    # d editer-parcours le 2026-09-05) : chiron utilisait
+                    # editer-parcours sur SA carte uniquement (cle par cible,
+                    # verifiee par proteger-verrou-habilitation). L entree du
+                    # registre documente un usage reel LEGITIME de l epoque :
+                    # on ne reecrit pas l histoire, l exception reste toleree.
                     if agent.lower() == "chiron" and o == "editer-parcours":
                         continue
                     if o in outil and agent.lower() != "buffy":

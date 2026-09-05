@@ -85,7 +85,7 @@ Fichier : todo-pipeline.001.01.ebauche.md
 
 | Situation | Utilisation |
 |---|---|
-| **Fin de mission todo** | Verification avant de reactiver Cerberus |
+| **Fin de mission todo** | Verification avant de rendre la fin (reactiver-fin --cible oracle, modele aero) |
 | **Avant finalisation** | S'assurer que le cycle est complet (0 -> 9) |
 | **Controle de qualite** | Verifier qu'aucune phase obligatoire n'est absente |
 

@@ -1,0 +1,64 @@
+%% Arbre de decision de argus (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "DETECTER" --> THEME-DETECTER
+    THEME-DETECTER["Trouver et signaler les incoherences entre les sources du pr"]
+    THEME-DETECTER -- "besoin 1" --> THEME-DETECTER-B0
+    THEME-DETECTER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-DETECTER -- "besoin 2" --> THEME-DETECTER-B1
+    THEME-DETECTER-B1["Consulter les lecons (domaine contradictions)"]
+    THEME-DETECTER -- "besoin 3" --> THEME-DETECTER-B2
+    THEME-DETECTER-B2["Lire le protocole Argus (detection et signalement)"]
+    THEME-DETECTER -- "besoin 4" --> THEME-DETECTER-B3
+    THEME-DETECTER-B3["CONTEXTE : activite recente des agents"]
+    THEME-DETECTER -- "besoin 5" --> THEME-DETECTER-B4
+    THEME-DETECTER-B4["Scanner les sources (cases, regles, protocoles)"]
+    THEME-DETECTER -- "besoin 6" --> THEME-DETECTER-B5
+    THEME-DETECTER-B5["Lire l historique git (evolutions vraies et fausses)"]
+    THEME-DETECTER -- "besoin 7" --> THEME-DETECTER-B6
+    THEME-DETECTER-B6["Croiser les sources (double source obligatoire)"]
+    THEME-DETECTER -- "besoin 8" --> THEME-DETECTER-B7
+    THEME-DETECTER-B7["Classer par gravite (critique / majeur / mineur)"]
+    THEME-DETECTER -- "besoin 9" --> THEME-DETECTER-B8
+    THEME-DETECTER-B8["Produire le rapport de contradictions"]
+    THEME-DETECTER -- "besoin 10" --> THEME-DETECTER-B9
+    THEME-DETECTER-B9["Ajouter les lecons dans corrections.md"]
+    FIN-fin-detecter(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-DETECTER-B0 --> FIN-fin-detecter
+    THEME-DETECTER-B1 --> FIN-fin-detecter
+    THEME-DETECTER-B2 --> FIN-fin-detecter
+    THEME-DETECTER-B3 --> FIN-fin-detecter
+    THEME-DETECTER-B4 --> FIN-fin-detecter
+    THEME-DETECTER-B5 --> FIN-fin-detecter
+    THEME-DETECTER-B6 --> FIN-fin-detecter
+    THEME-DETECTER-B7 --> FIN-fin-detecter
+    THEME-DETECTER-B8 --> FIN-fin-detecter
+    THEME-DETECTER-B9 --> FIN-fin-detecter
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Executer une mission hors des themes standard"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Lire le protocole creation scripts temporaires"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["La mission concerne-t-elle un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["DELEGATION - Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["Executer la mission"]
+    THEME-AUTRE -- "besoin 6" --> THEME-AUTRE-B5
+    THEME-AUTRE-B5["Ajouter les lecons dans corrections.md"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    THEME-AUTRE-B4 --> FIN-fin-autre
+    THEME-AUTRE-B5 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

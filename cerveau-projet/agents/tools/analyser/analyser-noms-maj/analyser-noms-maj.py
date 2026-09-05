@@ -125,6 +125,10 @@ def lister_outils_reels(racine):
     - plate     : tools/<categorie>/ avec un script <categorie>.py/.sh direct
       (ex: tools/oracle/oracle.py, tools/tester/ sans sous-dossier) - l outil
       est le script, pas la categorie.
+    - ARCHIVES  : cerveau-projet/agents/archive-outils-v1-<date>/ (outils
+      retires du catalogue mais conserves - ex: enregistrer-lecon /
+      consulter-lecons, migration v1->v2 2026-09-04). Les entrees historiques
+      du registre qui les reference restent LEGITIMES (pas orphelines).
     """
     outils = set()
     base = os.path.join(racine, "cerveau-projet", "agents", "tools")
@@ -144,6 +148,24 @@ def lister_outils_reels(racine):
                 base_script = nom[:-3] if nom.endswith(".py") else nom[:-3]
                 if RE_NOMMAGE_OK.match(base_script):
                     outils.add(base_script)
+    # outils archives (retires du catalogue, conserves pour historique)
+    agents_dir = os.path.join(racine, "cerveau-projet", "agents")
+    if os.path.isdir(agents_dir):
+        for nom in os.listdir(agents_dir):
+            if nom.startswith("archive-outils-v1-") and os.path.isdir(
+                    os.path.join(agents_dir, nom)):
+                for sous in os.listdir(os.path.join(agents_dir, nom)):
+                    if os.path.isdir(os.path.join(agents_dir, nom, sous)) \
+                            and RE_NOMMAGE_OK.match(sous):
+                        outils.add(sous)
+    # outils v2 (freelance/tools-commun/<outil>/) : legitimes aussi
+    commun_dir = os.path.join(racine, "cerveau-projet", "freelance",
+                              "tools-commun")
+    if os.path.isdir(commun_dir):
+        for nom in os.listdir(commun_dir):
+            if os.path.isdir(os.path.join(commun_dir, nom)) \
+                    and RE_NOMMAGE_OK.match(nom):
+                outils.add(nom)
     return outils
 
 

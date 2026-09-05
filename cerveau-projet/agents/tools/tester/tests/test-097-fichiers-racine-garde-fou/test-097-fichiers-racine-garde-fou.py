@@ -17,7 +17,7 @@ etre signale.
 Liste blanche (fichiers) : AGENTS.md, AGENTS-historique.md, README.md,
 demarrer.md, .gitignore, .gitattributes, .tmpignore, COMMENT-DEMARRER.md
 (note personnelle de l utilisateur, ajoutee a la liste blanche le 2026-08-19)
-Liste blanche (dossiers) : .git, cerveau-projet, workspace, tmp-* (missions)
+Liste blanche (dossiers) : .git, cerveau-projet, workspace, tmp-* (missions), backup-* (backups de session)
 
 Invariants verifies :
   1. Chaque entree a la racine appartient a la liste blanche (0 entree
@@ -67,7 +67,7 @@ DOSSIERS_AUTORISES = frozenset([
     # Outil exclusif de demarrage du LLM (ni v1, ni v2) - racine
     "outils-llm",
 ])
-PREFIXES_DOSSIERS_AUTORISES = ("tmp-",)  # dossiers de mission (gitignores)
+PREFIXES_DOSSIERS_AUTORISES = ("tmp-", "backup-")  # missions (tmp-) + backups de session (backup-2026*, commites)
 
 NB_POINTS = 0
 NB_OK = 0

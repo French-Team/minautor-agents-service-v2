@@ -89,7 +89,9 @@ et Socrate). L utilisateur fournit son idee :
    pense-bete).
 2. Son arbre mene vers Promethee (spec).
 3. L arbre de Promethee mene vers Minerve (todo).
-4. Le dernier maillon (Minerve) reactive Cerberus avec le bilan consolide.
+4. La fin de Minerve suit SA carte (modele aero) : `reactiver-fin minerve
+   --cible oracle` - le pilote ramene le bilan consolide a Cerberus en fin
+   de round.
 
 ---
 
@@ -117,5 +119,6 @@ et Socrate). L utilisateur fournit son idee :
 Utilisateur : "[urgent] je ne vois pas 'activer-agent-principal' dans index-tools..."
 Cerberus    : reconnait [urgent] -> traite immediatement -> identifie l'agent
               habilite (Vulcain si outil, Argus si detection...) -> l'active
-Agent       : resout -> la fin suit SA carte -> reactiver Cerberus avec le bilan
+Agent       : resout -> la fin suit SA carte -> reactiver-fin --cible oracle
+              (le pilote ramene le bilan a Cerberus en fin de round)
 ```

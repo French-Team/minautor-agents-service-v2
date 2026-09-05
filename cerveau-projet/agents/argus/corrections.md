@@ -1,3 +1,6 @@
+> MEMOIRE GELEE le 2026-09-04 - decision utilisateur v1->v2 : les
+> nouvelles lecons vont dans bdd-lecons (outil v2). Historique conserve
+> pour relecture - AUCUN [LECON] supplementaire.
 ## [LECON] 2026-09-04 -- AUDIT CONSTAT : BDD DES CORRECTIONS v1 vs v2 (mission 82151e40, Argus)
 
 **Contexte** : demande utilisateur [attention] - verifier comment les agents utilisent la bdd des corrections. Dans freelance (v2), corrections.md ne contient plus tout : les agents se partagent les corrections (corrections.jsonl + bdd-lecons partagees). Verifier ce qui est en place encore en v1.

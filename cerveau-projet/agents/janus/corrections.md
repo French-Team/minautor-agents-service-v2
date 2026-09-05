@@ -1,3 +1,6 @@
+> MEMOIRE GELEE le 2026-09-04 - decision utilisateur v1->v2 : les
+> nouvelles lecons vont dans bdd-lecons (outil v2). Historique conserve
+> pour relecture - AUCUN [LECON] supplementaire.
 ## [LECON] 2026-08-24 -- CONTROLE MISSION CLIO VERIFIER README (APRES ENCART AUTRE) : VERDICT VALIDE (Janus)
 
 **Contexte** : apres la mission suppression encart 'autre' (activer-agent-principal v0.7.1), Cerberus a active Clio pour verifier le README. Clio : --verifier 0 ECART, aucune modification necessaire. Themis : audit CONFORME 0 defaut. Janus : controle final.

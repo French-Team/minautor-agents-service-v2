@@ -225,7 +225,7 @@ eviter les collisions et comprendre qui intervient en parallele.
 
 - **Agent en 1re colonne** de la table (colore), puis **heure** et **date** separees
 - **Session** : identifie quel LLM a effectue l'action
-- **Repere `###`** : `date - agent` + **duree de l'intervention** `(Xmin Ys)` ajoutee par le chronometre a la FIN de la mission (quand l agent active le suivant ou reactive Cerberus)
+- **Repere `###`** : `date - agent` + **duree de l'intervention** `(Xmin Ys)` ajoutee par le chronometre a la FIN de la mission (quand l agent rend sa fin : reactiver-fin --cible oracle, modele aero)
 - **Raison enroulee** : continuations sur lignes `###>` (max 100 caracteres) -- les parseurs la reconstituent
 
 **Regles de l'historique** :

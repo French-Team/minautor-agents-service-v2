@@ -168,9 +168,10 @@ python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
 > 2026-08-13)** : SEUL JANUS lance la non-regression complete
 > (tester-lancer-non-regression). Moi (Morpheus), j execute UNIQUEMENT des
 > tests INDIVIDUELS (python3 test-XXX.py avec protections) pour verifier mon
-> travail. Je ne lance JAMAIS tester-lancer-non-regression : en fin de ligne
-> de travail multi-agents, c est JANUS (dernier maillon) qui lance la
-> non-regression et reactive Cerberus avec son verdict.
+> travail. Je ne lance JAMAIS tester-lancer-non-regression : quand un
+> second controle est necessaire, le PILOTE (Oracle) largue JANUS ; sa fin
+> suit SA carte (`reactiver-fin janus --cible oracle`), jamais reactiver
+> Cerberus directement.
 
 > **REGLE ABSOLUE 5 -- DISCIPLINE OUTIL PAR MISSION (LEVIER A, IMMUABLE)** :
 > pour chaque etape de mission, J UTILISE L OUTIL EXACT QUI EST ASSIGNE DANS

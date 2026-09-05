@@ -2,55 +2,6 @@
  "version": "0.1.0",
  "description": "Manifeste du marbre : zones protegees du noyau. Toute modification d une zone sans passer par proteger-modifier-marbre (autorisation utilisateur) est une violation (verrou avant + garde-fou test-057 apres).",
  "zones": {
-  "cerberus.c0": {
-   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
-   "type": "case",
-   "agent": "cerberus",
-   "cid": "c0",
-   "raison": "Case de relecture obligatoire (comportement anti-arret de Cerberus)",
-   "empreinte": "058fdaada53e0435a121de174cc2501ed5357f84411465fb8b9012f176b70a97",
-   "modifie_le": "2026-08-16 21:21:12",
-   "raison_modification": "migration relecture obligatoire: c0 devient action RELIRE (structure validee utilisateur 2026-08-16)"
-  },
-  "cerberus.c0b": {
-   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
-   "type": "case",
-   "agent": "cerberus",
-   "cid": "c0b",
-   "raison": "RELIRE OBLIGATOIRE : corrections puis fiche (anti-arret)",
-   "empreinte": "77016bc5eb83152ecbcf6a1c432478af44127e441ad9458f64919c6534fd8907",
-   "modifie_le": "2026-08-29 10:24:40",
-   "raison_modification": "GATE BON AGENT (decision utilisateur 2026-08-29) : c0b OUI -> c0g (case de verification pre-vol verifier-agent-perimetre --gate --moi <agent>) avant c0e. Autorisation utilisateur obtenue via ask_user (OUI - resynchronisation marbre)"
-  },
-  "cerberus.c10": {
-   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
-   "type": "case",
-   "agent": "cerberus",
-   "cid": "c10",
-   "raison": "Activer l agent : le geste fondamental de la coordination",
-   "empreinte": "8d7860cbe6a0cfaffda20e631a211891fb8d86171a8a6d3fef82efb14ba9eaab",
-   "modifie_le": "2026-08-29 17:08:40",
-   "raison_modification": "test"
-  },
-  "cerberus.c14": {
-   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
-   "type": "case",
-   "agent": "cerberus",
-   "cid": "c14",
-   "raison": "Activer Janus (second controle) : la chaine de fin de mission",
-   "empreinte": "bfda92ec6c6c771a8cadc013035ad3e1ff07cb3f7bea93fa1d16773043ca3c34",
-   "modifie_le": "2026-08-19 21:31:44",
-   "raison_modification": "D6 multi-sessions : session-llm-1 -> <session> (validation utilisateur 2026-08-19)"
-  },
-  "cerberus.c20": {
-   "fichier": "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json",
-   "type": "case",
-   "agent": "cerberus",
-   "cid": "c20",
-   "raison": "FIN - Coordination terminee : la fin legitime du cycle Cerberus",
-   "empreinte": "00d0d0eb5ea6f36904b61c5923890d17425a442d10dd459393063895b0c6d296",
-   "modifie_le": "2026-08-15 16:40"
-  },
   "constitution": {
    "fichier": "AGENTS.md",
    "type": "marqueurs",

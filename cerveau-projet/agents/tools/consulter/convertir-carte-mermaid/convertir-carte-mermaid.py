@@ -244,10 +244,20 @@ def convertir(donnees):
 
 
 def lister_arbres(racine):
-    """Liste les ARBRES de decision v2 (freelance/<agent>/parcours/arbre-*.json)."""
-    motif = os.path.join(racine, "cerveau-projet", "freelance", "*",
-                         "parcours", "arbre-*.json")
-    return sorted(glob.glob(motif))
+    """Liste les ARBRES de decision v2 - agents v1 (cerveau-projet/agents/*/)
+    ET agents freelance (cerveau-projet/freelance/*/). Les parcours v1 sont
+    des vestiges retires (migration v1->v2 2026-09-05) : la conversion ne
+    couvre que le format v2."""
+    motifs = [
+        os.path.join(racine, "cerveau-projet", "agents", "*",
+                     "parcours", "arbre-*.json"),
+        os.path.join(racine, "cerveau-projet", "freelance", "*",
+                     "parcours", "arbre-*.json"),
+    ]
+    resultats = []
+    for motif in motifs:
+        resultats.extend(glob.glob(motif))
+    return sorted(set(resultats))
 
 
 def agent_de_l_arbre(chemin):
@@ -933,25 +943,17 @@ def main():
     sortie_arbres = os.path.join(racine, "cerveau-projet", "cartes-vues",
                                  "arbres")
 
+    # v0.4.0 (migration v1->v2) : le format v2 (arbres) est le seul supporte.
+    # Les modes --tous/--agent/--arbres/--verifier convergent vers les arbres.
     if args.verifier:
-        rc = verifier(racine, sortie_mermaid)
-        rc_arbres = verifier_arbres(racine, sortie_arbres)
-        return rc or rc_arbres
-
-    if args.arbres:
-        if args.agent:
-            generer_arbres(racine, args.agent, sortie_arbres,
-                           avec_index=False, avec_svg=True)
-        else:
-            generer_arbres(racine, "", sortie_arbres,
-                           avec_index=True, avec_svg=True)
-        return 0
+        return verifier_arbres(racine, sortie_arbres)
 
     if args.agent:
-        generer(racine, args.agent, sortie_mermaid, avec_index=False,
-                avec_svg=args.svg)
+        generer_arbres(racine, args.agent, sortie_arbres,
+                       avec_index=False, avec_svg=args.svg)
     else:
-        generer(racine, "", sortie_mermaid, avec_index=True, avec_svg=True)
+        generer_arbres(racine, "", sortie_arbres,
+                       avec_index=True, avec_svg=True)
     return 0
 
 

@@ -80,12 +80,13 @@ def compter_agents(racine):
     agents_dir = Path(racine) / "cerveau-projet" / "agents"
     if not agents_dir.is_dir():
         return 0
-    # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
+    # Un agent d action a un arbre v2 : agents/<nom>/parcours/arbre-<nom>.json
+    # (migration v1->v2 : les parcours v1 sont retires)
     nb = 0
     for d in agents_dir.iterdir():
         if not (d.is_dir() and d.name != "tools"):
             continue
-        if (d / "parcours" / ("parcours-" + d.name + ".json")).is_file():
+        if (d / "parcours" / ("arbre-" + d.name + ".json")).is_file():
             nb += 1
     return nb
 

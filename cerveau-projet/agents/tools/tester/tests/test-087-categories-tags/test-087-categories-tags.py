@@ -116,6 +116,25 @@ TAGS_SPECIFIQUES = set([
     "parcours", "garde-fou", "anti-recurrence", "preuve-negative", "perf",
     "duree", "reference-temps", "combos", "generateurs", "outil", "catalogue",
     "recherches", "fraicheur", "web",
+    # Tags des tests v2 + migration (2026-09-05) : ajoutes a la taxonomie
+    # car les tests 100-126 (pilote, routines, vigie, notation, vestiges v1,
+    # bdd-lecons...) portent des tags specifiques legitimes.
+    "vestiges", "vestiges-v1", "v1", "v2", "migration", "reverse",
+    "arbres-v2", "modele-aero", "format-v2", "bdd-lecons", "scission",
+    "2-bdd", "frontmatter", "yaml", "markdown", "preview", "agents-md",
+    "verifier-coherence", "vigie", "round", "oracle", "pilote", "notation",
+    "routine", "anti-inondation", "evaluation", "routines", "surveillance",
+    "flux", "sante", "encart", "live", "vigie-perimetre", "compteur",
+    "tokens", "entree", "sortie", "fantome", "controle", "harnais",
+    "relais", "hub", "corruption", "jsonl", "fiche", "d17", "d6", "d7",
+    "etat-carte", "anti-redemarrage", "detecter-fins-passives",
+    "anti-heredoc", "formulaire", "executer-formulaire", "injection-outil",
+    "p2", "r7", "etats", "colonne-etat", "file", "files", "classification",
+    "ordre-importance", "flux-mot", "declencheurs", "theme", "fin-oracle",
+    "consommateur", "lister-flags", "flags", "dry-run",
+    "valider-cartes-decision", "arbre", "terminer", "mission",
+    "notification", "gel", "corrections.md", "anti-regression", "fixture",
+    "idempotence",
 ])
 
 

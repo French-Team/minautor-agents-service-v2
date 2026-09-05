@@ -33,10 +33,10 @@ CERBERUS -> IDENTIFIER -> LIRE -> ACTIVER -> TRAVAILLER -> REACTIVER -> [SECOND 
 | 3 | Lire la fiche et les corrections | Cerberus |
 | 4 | Activer dans AGENTS.md | Cerberus |
 | 5 | Agent execute sa mission en lancant SON parcours (carte de decision) | Agent active |
-| 6 | Reactiver Cerberus | Agent active |
-| 7 | Si la mission figure dans la liste definie : activer Janus | Cerberus |
+| 6 | La fin de l agent suit SA carte (modele aero : reactiver-fin --cible oracle) ; le pilote decide du suivant | Agent active |
+| 7 | Si la mission figure dans la liste definie : le pilote largue Janus | Pilote (Oracle) |
 
-> **Second controle** : la liste des missions exigeant le second controle est dans la carte de decision de Cerberus. Janus controle, puis reactive Cerberus.
+> **Second controle** : la liste des missions exigeant le second controle est dans la carte de decision de Cerberus. Le pilote largue Janus ; sa fin suit SA carte (reactiver-fin janus --cible oracle).
 
 ---
 
@@ -150,7 +150,7 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 4. L'agent EXECUTE IMMEDIATEMENT apres l'activation, DANS LE MEME ROUND
    (regle RELEVE MEME ROUND) : jamais d'arret, jamais de bilan intermediaire
    pour attendre l'utilisateur. L'activation EST l'ordre d'execution.
-5. L'agent termine sa mission et reactive Cerberus (etape 6).
+5. L'agent termine sa mission ; sa fin suit SA carte (modele aero : reactiver-fin <agent> --cible oracle).
 
 ### La todolist de Cerberus = orchestration UNIQUEMENT
 
@@ -196,15 +196,15 @@ AVANT de terminer la session.
 
 | Regle | Description |
 |---|---|
-| **RELEVE MEME ROUND (IMMUABLE)** | Apres activation, l agent active EXECUTE IMMEDIATEMENT dans le meme round (activation + execution dans le meme message) : jamais d arret pour attendre l utilisateur. Il suit SA carte, active le maillon suivant, seul le dernier maillon reactive Cerberus. Reference : regles-groupes-agents.md (RELEVE MEME ROUND) |
+| **RELEVE MEME ROUND (IMMUABLE)** | Apres activation, l agent active EXECUTE IMMEDIATEMENT dans le meme round (activation + execution dans le meme message) : jamais d arret pour attendre l utilisateur. Il suit SA carte ; sa fin va vers ORACLE (reactiver-fin --cible oracle), le pilote decide du suivant. Reference : regles-groupes-agents.md (RELEVE MEME ROUND) |
 | **OUI seulement continue** | Seul OUI (memorisation prouvee) permet de continuer sans relire |
 | **Historique = lecture obligatoire** | Lire TOUJOURS l'historique (lire-activite-recente) + la section Sessions connues, meme en memoire -- le dynamique ne se memorise pas |
 | **Corrections = Ecriture** | TOUJOURS ecrire ; relire si la reponse n'est pas OUI |
 | **Documenter l'activation** | Raison et mission dans AGENTS.md |
-| **Fin de mission = SA carte** | La fin suit SA carte (Pattern 13) : la commande reactiver ramene TOUJOURS a Cerberus (conception de l outil). Regle de decision : QUI m a active ? |
-| **MODE DIRECT (active par Cerberus)** | Fin = reactiver <session> <raison> <mon-nom> : ramene a Cerberus (le retour normal) |
-| **MODE CHAINE (active par un agent)** | Fin = activer <session> <agent-suivant> <raison> pour enchainer, OU activer <session> <agent-precedent> <raison> pour le retour - l action activer accepte N IMPORTE QUEL agent |
-| **DERNIER MAILLON de la chaine** | Fin = reactiver <session> <raison> <mon-nom> avec le bilan consolide de la chaine |
+| **Fin de mission = SA carte (modele aero R1/R3)** | La fin suit SA carte : reactiver-fin <agent> --cible oracle, JAMAIS reactiver Cerberus directement, JAMAIS activer un autre agent. C est le pilote qui decide du suivant. |
+| **MODE DIRECT (active par Cerberus)** | Fin = reactiver-fin <agent> "<bilan>" --cible oracle : le pilote ramene a Cerberus en fin de round (le retour normal) |
+| **MODE CHAINE (active par un agent)** | Fin = reactiver-fin <agent> "<bilan>" --cible oracle : le pilote enchaIne sur le maillon suivant OU renvoie l appelant (inter-round) |
+| **DERNIER MAILLON de la chaine** | Fin = reactiver-fin <agent> "<bilan consolide>" --cible oracle : le pilote ramene le bilan consolide a Cerberus en fin de round |
 
 | **Pas de saut** | Ne jamais sauter une etape |
 | **Cerberus = orchestration** | Cerberus donne la MISSION (quoi + pourquoi + criteres), l'agent suit SA carte de decision (SON parcours) |
@@ -221,11 +221,11 @@ AVANT de terminer la session.
 | Sauter la question de relecture | La case c0 du parcours la pose automatiquement |
 | Sauter la lecture de l'historique ("je l'ai deja lu") | C'est le FIL TEMPS REEL : il change a chaque activation des autres LLM -- la case c0c du parcours la rend obligatoire |
 | Oublier de documenter | Mettre a jour AGENTS.md immediatement |
-| Ne pas reactiver Cerberus | C'est la DERNIERE action |
+| Ne pas rendre sa fin | La fin est OBLIGATOIRE : reactiver-fin <agent> --cible oracle (modele aero) - jamais de mission sans fin vers ORACLE |
 | Lire apres avoir agi | Lire AVANT de commencer |
 | Cerberus detaille les etapes internes de l'agent dans sa todolist | La carte de decision devient inutile : Cerberus ne prepare QUE l'orchestration, les etapes internes vivent dans le parcours de l'agent |
 | Oublier le 3e argument de reactiver (`agent_precedent`) | La commande affiche l aide et ECHOUE EN SILENCE : le bloc session reste sur l agent -- verifier `Session ... : Cerberus reactive avec succes` |
-| S arreter apres une activation (brisure de chaine) | L activation EST l ordre d execution (regle RELEVE MEME ROUND) : l agent active enchainE IMMEDIATEMENT SA mission dans le meme round -- jamais de bilan intermediaire, jamais de retour a Cerberus en milieu de chaine |
+| S arreter apres une activation (brisure de chaine) | L activation EST l ordre d execution (regle RELEVE MEME ROUND) : l agent active enchainE IMMEDIATEMENT SA mission dans le meme round -- jamais de bilan intermediaire, jamais de fin vers Cerberus en milieu de chaine (toute fin va vers ORACLE) |
 
 ---
 

@@ -572,17 +572,19 @@ def collecter_fichiers_cible(args, racine):
     detail_cible = ""
 
     if args.parcours:
+        # v0.5.0 (migration v1->v2) : la carte d un agent est SON ARBRE v2
+        # (arbre-<agent>.json) - les parcours v1 sont retires.
         agent = args.parcours
         base = os.path.join(racine, "cerveau-projet", "agents", agent)
-        parcours_json = os.path.join(base, "parcours", "parcours-%s.json" % agent)
+        arbre_json = os.path.join(base, "parcours", "arbre-%s.json" % agent)
         fiche_md = os.path.join(base, "%s.md" % agent)
-        if not os.path.isfile(parcours_json):
-            print(_couleur("[KO] Parcours introuvable : %s" % parcours_json, "rouge"))
+        if not os.path.isfile(arbre_json):
+            print(_couleur("[KO] Arbre v2 introuvable : %s" % arbre_json, "rouge"))
             sys.exit(1)
-        fichiers.append(parcours_json)
+        fichiers.append(arbre_json)
         if os.path.isfile(fiche_md):
             fichiers.append(fiche_md)
-        detail_cible = "parcours agent '%s' (%d fichier(s))" % (agent, len(fichiers))
+        detail_cible = "arbre v2 agent '%s' (%d fichier(s))" % (agent, len(fichiers))
         return fichiers, detail_cible
 
     if args.protocole:

@@ -18,7 +18,7 @@ Points verifies :
   8. Cible inconnue : code 1 + message sur stderr (aucune invention)
   9. Aucune execution des scripts inspectes : lister-flags ne fait que
      lire (ast.parse + argparse) - preuve par dry-run sans effet
-  10. Coherence catalogue : 189 commandes dans catalogue-commandes.json
+  10. Coherence catalogue : 165 commandes dans catalogue-commandes.json
       et version 0.1.1 coherente dans les 4 fichiers lister-flags
       (py, sh, md, spec)
   11. Normes : ASCII strict + LF pur (fichier data + test)
@@ -224,7 +224,7 @@ def point_6_tous_categorie():
             nb = int(p.stdout.split(m)[1].split("|")[0].strip())
         except (ValueError, IndexError):
             nb = -1
-        verifier("6b. --tous liste > 150 entites (catalogue 189)",
+        verifier("6b. --tous liste > 150 entites (catalogue 165)",
                  nb > 150, "nb=%s" % nb)
     else:
         verifier("6b. --tous liste > 150 entites", False)
@@ -282,10 +282,10 @@ def point_10_coherence():
     try:
         cat = json.loads(io.open(CATALOGUE, "r", encoding="utf-8").read())
         commandes = cat.get("commandes", [])
-        verifier("10. catalogue 189 commandes", len(commandes) == 189,
+        verifier("10. catalogue 165 commandes", len(commandes) == 165,
                  "nb=%s" % len(commandes))
     except (OSError, ValueError) as exc:
-        verifier("10. catalogue 189 commandes", False, str(exc))
+        verifier("10. catalogue 165 commandes", False, str(exc))
     versions = []
     for f in (LF_PY, LF_SH, LF_MD, LF_SPEC):
         try:

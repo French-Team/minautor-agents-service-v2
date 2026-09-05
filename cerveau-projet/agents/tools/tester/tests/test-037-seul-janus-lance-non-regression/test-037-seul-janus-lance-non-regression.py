@@ -23,7 +23,7 @@ Contexte (2026-08-13) :
     (Morpheus execute des tests individuels, JAMAIS la complete).
 
 Invariants verifies :
-  1. La carte janus (parcours-janus.json) contient tester-lancer-non-regression
+  1. La carte janus (arbre-janus.json) contient tester-lancer-non-regression
      dans ses indices outil (Janus = controle final)
   2. AUCUNE des 10 autres cartes ne contient tester-lancer-non-regression dans
      ses indices outil (ni dans le texte des cases)
@@ -59,6 +59,7 @@ TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
 
 AGENTS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents")
+HABILITATION_DIR = os.path.join(AGENTS_DIR, "habilitation")
 
 # Les 15 agents (ordre stable pour la lecture)
 AGENTS = [
@@ -148,49 +149,84 @@ def verifier(nom, ok, detail=""):
 
 
 def chemin_parcours(agent):
-    return os.path.join(AGENTS_DIR, agent, "parcours", "parcours-%s.json" % agent)
+    return os.path.join(AGENTS_DIR, agent, "parcours", "arbre-%s.json" % agent)
 
 
-def signature_contenu(cases):
-    """Signature du CONTENU complet (ids + types + titres + suivants +
-    branches) : identite reelle de la carte. Deux cartes au meme contenu =
-    violation du principe d identite (jamais de parcours identiques)."""
-    blocs = []
-    for cid in sorted(cases.keys()):
-        c = cases[cid]
-        blocs.append("%s|%s|%s|%s|%s" % (
-            cid, c.get("type"), c.get("titre"), c.get("suivant"),
-            json.dumps(c.get("branches", []), sort_keys=True)))
-    return hashlib.md5("\n".join(blocs).encode()).hexdigest()
+def contenu_carte(agent):
+    """Contenu complet de la carte v2 : arbre + themes suivis par les
+    branches racine (vers=theme-*.json) + fins.json centralisees."""
+    morceaux = []
+    chemin = chemin_parcours(agent)
+    with io.open(chemin, encoding="utf-8") as fh:
+        arbre = json.load(fh)
+    morceaux.append(arbre)
+    dossier = os.path.join(AGENTS_DIR, agent, "parcours")
+    vus = set()
+    for b in arbre.get("racine", {}).get("branches", []):
+        vers = b.get("vers", "")
+        if not vers or vers in vus:
+            continue
+        vus.add(vers)
+        p = os.path.join(dossier, vers)
+        if os.path.isfile(p):
+            with io.open(p, encoding="utf-8") as fh:
+                morceaux.append(json.load(fh))
+    fins = arbre.get("fins", {}).get("fichier", "")
+    if fins:
+        p = os.path.join(dossier, fins)
+        if os.path.isfile(p):
+            with io.open(p, encoding="utf-8") as fh:
+                morceaux.append(json.load(fh))
+    return morceaux
+
+
+def signature_contenu(donnees):
+    """Signature du CONTENU complet de l arbre v2 (identite + arbre +
+    racine + fins) : identite reelle de la carte. Deux arbres au meme
+    contenu = violation du principe d identite (jamais de cartes
+    identiques)."""
+    return hashlib.md5(json.dumps(donnees, sort_keys=True, ensure_ascii=True)
+                       .encode()).hexdigest()
 
 
 def main():
     global NB_POINTS, NB_OK, NB_KO
     print("=== Test formel seul-janus-lance-non-regression ===")
 
-    # 1. Janus contient l outil (legitime)
+    # 1. Janus contient l outil (legitime) : table d habilitation + carte v2
     try:
-        with io.open(chemin_parcours("janus"), encoding="utf-8") as fh:
-            p_janus = json.load(fh)
-        janus_contient = OUTIL_NON_REGRESSION in json.dumps(p_janus, ensure_ascii=True)
-        verifier("1. La carte janus contient tester-lancer-non-regression (controle final)",
-                 janus_contient, "introuvable dans parcours-janus.json")
+        pieces_janus = contenu_carte("janus")
+        janus_carte = any(OUTIL_NON_REGRESSION in json.dumps(p, ensure_ascii=True)
+                          for p in pieces_janus)
+        with io.open(os.path.join(HABILITATION_DIR,
+                                  "habilitation-janus.json"),
+                     encoding="utf-8") as fh:
+            table_janus = json.load(fh)
+        janus_table = OUTIL_NON_REGRESSION in table_janus.get("outils", [])
+        verifier("1. Janus habilite pour tester-lancer-non-regression (table + carte)",
+                 janus_table and janus_carte,
+                 "table=%s carte=%s" % (janus_table, janus_carte))
     except Exception as e:
-        p_janus = {}
-        verifier("1. La carte janus contient tester-lancer-non-regression (controle final)",
+        verifier("1. Janus habilite pour tester-lancer-non-regression (table + carte)",
                  False, str(e))
 
-    # 2. Aucune des 10 autres cartes ne contient l outil
+    # 2. Aucune des autres cartes ni tables ne contient l outil
     derivees = []
     for agent in AGENTS:
         if agent == "janus":
             continue
         try:
-            with io.open(chemin_parcours(agent), encoding="utf-8") as fh:
-                p = json.load(fh)
-            contenu = json.dumps(p, ensure_ascii=True)
-            if OUTIL_NON_REGRESSION in contenu:
-                derivees.append(agent)
+            pieces = contenu_carte(agent)
+            if any(OUTIL_NON_REGRESSION in json.dumps(p, ensure_ascii=True)
+                   for p in pieces):
+                derivees.append("%s(carte)" % agent)
+            chemin_table = os.path.join(HABILITATION_DIR,
+                                        "habilitation-%s.json" % agent)
+            if os.path.isfile(chemin_table):
+                with io.open(chemin_table, encoding="utf-8") as fh:
+                    table = json.load(fh)
+                if OUTIL_NON_REGRESSION in table.get("outils", []):
+                    derivees.append("%s(table)" % agent)
         except Exception as e:
             derivees.append("%s(ERR %s)" % (agent, e))
     verifier("2. Aucune des 10 autres cartes ne contient tester-lancer-non-regression",
@@ -252,17 +288,17 @@ def main():
     doublons = []
     for agent in AGENTS:
         try:
-            with io.open(chemin_parcours(agent), encoding="utf-8") as fh:
-                p = json.load(fh)
-            sig = signature_contenu(p.get("cases", {}))
+            pieces = contenu_carte(agent)
+            sig = signature_contenu(pieces)
             if sig in signatures:
                 doublons.append("%s==%s(%s)" % (signatures[sig], agent, sig[:8]))
             else:
                 signatures[sig] = agent
         except Exception as e:
             doublons.append("%s(ERR %s)" % (agent, e))
-    verifier("4. Les 16 cartes ont des signatures de CONTENU TOUTES distinctes (identite)",
-             len(doublons) == 0 and len(signatures) == 16,
+    verifier("4. Les %d cartes ont des signatures de CONTENU TOUTES distinctes (identite)"
+             % len(AGENTS),
+             len(doublons) == 0 and len(signatures) == len(AGENTS),
              "doublons=%s nb_sig=%d" % (doublons, len(signatures)))
 
     # 5. Normes : ASCII strict + LF pur (15 cartes + fiche morpheus + test)
@@ -277,7 +313,7 @@ def main():
                 normes_ko.append("%s crlf" % os.path.basename(f))
         except Exception as e:
             normes_ko.append("%s ERR %s" % (os.path.basename(f), e))
-    verifier("5. Normes ASCII strict + LF pur (15 cartes + fiche + test)",
+    verifier("5. Normes ASCII strict + LF pur (16 cartes + fiche + test)",
              len(normes_ko) == 0, "ko=%s" % normes_ko)
 
     print()

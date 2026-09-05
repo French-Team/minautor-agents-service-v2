@@ -1,0 +1,42 @@
+{
+ "identite": {
+  "type": "habilitation",
+  "appartient_a": "themis",
+  "version": "0.1.0",
+  "commun": false
+ },
+ "agent": "themis",
+ "description": "Table d habilitation dediee (migration v1->v2 2026-09-05) : fusion parcours v1 + arbres/themes v2 + P0 partages. Source unique du verrou d habilitation.",
+ "outils": [
+  "activer-agent-principal",
+  "ajouter-contenu-fichier",
+  "combos-analyse-projet",
+  "combos-audit-general",
+  "combos-corriger-non-ascii",
+  "combos-moteur",
+  "consulter-combos",
+  "consulter-lecons",
+  "corriger-accents-zones-sensibles",
+  "creer-fichier",
+  "detecter-decalages-catalogue",
+  "detecter-impacts",
+  "detecter-usage-outils-externes",
+  "enregistrer-lecon",
+  "enregistrer-usage-outil",
+  "evaluer-agents",
+  "evaluer-processus",
+  "evaluer-structure",
+  "generateurs-amelioration",
+  "generateurs-commande",
+  "generateurs-outil-temporaire",
+  "guider-arbre",
+  "lire-activite-recente",
+  "lire-fichier",
+  "oracle",
+  "valider-conformite-ascii",
+  "valider-relecture",
+  "valider-tableaux",
+  "verifier-agent-perimetre",
+  "verifier-systeme"
+ ]
+}

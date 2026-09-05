@@ -30,7 +30,7 @@ Agent fait une erreur
     ↓
 Agent ajoute la correction dans corrections.md
     ↓
-Agent reactive Cerberus
+Agent envoie sa fin vers ORACLE (reactiver-fin --cible oracle)
 
 SESSION 2 (Correction)
     ↓
@@ -44,7 +44,7 @@ Agent evite la meme erreur
     ↓
 Agent ajoute de nouvelles lecons
     ↓
-Agent reactive Cerberus
+Agent envoie sa fin vers ORACLE (reactiver-fin --cible oracle)
 ```
 
 ## Tests a effectuer

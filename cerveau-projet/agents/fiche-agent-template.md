@@ -170,19 +170,21 @@ python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
 > l'outil a utiliser, JAMAIS de reflexe vers mes outils natifs.
 
 > **REGLE ABSOLUE 6 -- BILAN OUTILS EN FIN DE MISSION (LEVIER C, IMMUABLE)** : avant de
-> reactiver Cerberus, JE DECLARE dans mon message de reactivation la liste EXACTE des
+> rendre la main (ma fin suit MA carte, modele aero : `reactiver-fin <agent> --cible
+> oracle`), JE DECLARE dans mon message de reactivation la liste EXACTE des
 > outils du cerveau que j'ai utilises (nom de chaque outil). Cette declaration est
 > verifiee par le controleur avec `detecter-usage-outils-externes` : si un fichier que
 > j'ai modifie porte des traces d'outil externe (CRLF, accents, BOM), je suis detecte
 > et je dois corriger avec nos outils + ajouter une lecon dans corrections.md.
 
 > **REGLE ABSOLUE 7 -- CHAINE DE DELEGATION ACTIVE (IMMUABLE, Pattern 5)** :
-> JAMAIS de fin passive dans MON parcours. Une delegation a un autre agent ne se
+> JAMAIS de fin passive dans MON arbre. Une delegation a un autre agent ne se
 > termine PAS par une case fin du type "X teste et te reactive" : la chaine s'arreterait.
-> Quand je delegue, MA carte MATERIALISE la boucle : case RELAIS (lancer le parcours
+> Quand je delegue, MA carte MATERIALISE la boucle : case RELAIS (lancer l'arbre
 > de l'agent delegue) -> case RETOUR (verifier son rapport a la reactivation) -> case
-> CLOTURE (reactive Cerberus). Je ne m'arrete JAMAIS en attente : je suis la chaine
-> complete jusqu'au retour a Cerberus.
+> CLOTURE (verifier, RVAV). MA FIN suit TOUJOURS MA carte : `reactiver-fin <agent>
+> --cible oracle` (modele aero R1/R3). Je ne m'arrete JAMAIS en attente : je suis la
+> chaine complete, et c est le PILOTE (Oracle) qui decide du suivant.
 
 > **REGLE ABSOLUE 8 -- CONTEXTE TEMPS REEL (IMMUABLE, Pattern 6)** : a
 > chaque activation, meme si je viens de le lire, je relis TOUJOURS l'historique des
@@ -257,7 +259,11 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> "Raison" "AgentPrecedent"
 ```
 
-> La fin de mission suit SA carte (Pattern 8) : activation directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine -> activer le suivant selon SA carte ; seul le DERNIER maillon reactiver Cerberus avec le bilan consolide.
+> La fin de mission suit SA carte (modele aero R1/R3, decision utilisateur 2026-08-30) :
+> MA FIN va vers ORACLE (`python3 cerveau-projet/agents/tools/oracle/oracle.py
+> reactiver-fin <agent> "<bilan>" --cible oracle`) - JAMAIS reactiver Cerberus
+> directement, JAMAIS activer un autre agent. C est le PILOTE qui decide du suivant
+> (largage d'un maillon, ou retour a Cerberus en fin de round avec le bilan consolide).
 > Utiliser TOUJOURS l outil activer-agent-principal (jamais str_replace/write_file) pour AGENTS.md.
 > Ne JAMAIS utiliser `str_replace` ou `write_file` pour ce fichier.
 
@@ -313,7 +319,7 @@ genere par `verifier-systeme --bloc-fiche <agent>`.
 - [rvav-workflow](../agents/regles-immuables/general/rvav-workflow.md) -- **OBLIGATOIRE**
 - [regles-emojis-ascii](../agents/regles-immuables/general/regles-emojis-ascii.md) -- **IMMUABLE**
 - [regles-veracite](../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
-- [spec-guider-parcours](tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours
+- [guider-arbre](tools/guider/guider-arbre/guider-arbre.md) -- format de l arbre v2
 
 ### Outils disponibles
 

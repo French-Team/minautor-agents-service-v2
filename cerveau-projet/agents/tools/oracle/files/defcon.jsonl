@@ -25,3 +25,4 @@
 {"date": "2026-09-04T07:38:23", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "URGENT via verifier-statuts: Aucun P1 non-acquitte (probleme regle)", "par": "oracle", "sens": "escalade"}
 {"date": "2026-09-04T07:52:44", "niveau": 3, "signification": "REPRISE SURVEILLEE", "commentaire": "Etats URGENT resolus - flux confirme 0 P1 (no-op), mission plan 8e0ccf1b TERMINEE", "par": "oracle"}
 {"date": "2026-09-04T07:52:45", "niveau": 2, "signification": "REPRISE TOTALE", "commentaire": "Retour nominal - aucune mission URGENT restante", "par": "oracle"}
+{"date": "2026-09-04T17:41:52", "niveau": 4, "signification": "VALIDATION DES REPARATIONS", "commentaire": "URGENT via verifier-statuts: 1 P1 non-acquitte(s) detecte(s)", "par": "oracle", "sens": "escalade"}

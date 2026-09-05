@@ -56,7 +56,7 @@
         "action": "procedure",
         "etapes": [
           "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>",
-          "python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py --tous"
+          "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --tous"
         ],
         "regle": "Verifier les dependances AVANT de creer."
       },

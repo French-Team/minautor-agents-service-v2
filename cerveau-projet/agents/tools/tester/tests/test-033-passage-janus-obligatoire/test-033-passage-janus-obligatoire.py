@@ -47,7 +47,7 @@ TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
 
 PARCOURS_MORPHEUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
-                                 "morpheus", "parcours", "parcours-morpheus.json")
+                                 "morpheus", "parcours", "arbre-morpheus.json")
 FICHE_MORPHEUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
                               "morpheus", "morpheus.md")
 
@@ -141,39 +141,47 @@ def main():
     print("=== test-033 : passage obligatoire par Janus (Morpheus) ===")
     try:
         with io.open(PARCOURS_MORPHEUS, encoding="utf-8") as fh:
-            parcours = json.load(fh)
-        cases = parcours.get("cases", {})
+            arbre = json.load(fh)
+        dossier = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                               "morpheus", "parcours")
+        # Modele aero v2 : les fins sont centralisees dans fins.json et vont
+        # vers ORACLE (l aeroport) - jamais Cerberus, jamais un autre agent.
+        fichier_fins = arbre.get("fins", {}).get("fichier", "fins.json")
+        chemin_fins = os.path.join(dossier, fichier_fins)
+        with io.open(chemin_fins, encoding="utf-8") as fh:
+            donnees_fins = json.load(fh)
+        fins = donnees_fins.get("fins", {})
 
-        # 1. Fin Activer Janus : c14 est la fin de mission (la refonte
-        #    v0.5.8 a fusionne l ancienne c10 dans la chaine c14 -> c14h)
-        fins_janus = [cid for cid, c in cases.items()
-                      if c.get("type") == "fin"
-                      and c.get("titre") == "FIN - Activer Janus"]
-        verifier("1. carte morpheus a une fin FIN - Activer Janus",
-                 len(fins_janus) >= 1, "fins=%s" % fins_janus)
+        # 1. Au moins une fin reactiver vers ORACLE existe (fin de mission)
+        fins_oracle = [nom for nom, f in fins.items()
+                       if f.get("action") == "reactiver"
+                       and f.get("cible") == "oracle"]
+        verifier("1. fins.json a au moins une fin reactiver vers ORACLE",
+                 len(fins_oracle) >= 1, "fins=%s" % fins_oracle)
 
-        # 2. c14 : fin Activer Janus + commande exacte activer (pas reactiver)
-        c14 = cases.get("c14", {})
-        msg_c14 = c14.get("message", "")
-        verifier("2. carte c14 = FIN - Activer Janus",
-                 c14.get("type") == "fin" and c14.get("titre") == "FIN - Activer Janus",
-                 str(c14.get("titre")))
-        # D6 multi-sessions : la commande porte le placeholder <session>
-        # (chaque session le remplace par SON id a l execution).
-        commande_ok = ("activer <session> janus" in msg_c14
-                       or "activer session-llm-1 janus" in msg_c14)
-        verifier("3. c14 porte la commande activer <session> janus",
-                 commande_ok,
-                 msg_c14[-100:])
-        # Anti-piege : la carte peut EXPLIQUER le piege (texte pedagogique
-        # 'PAS reactiver') mais ne doit jamais porter la COMMANDE reactiver
-        # (qui ramene toujours a Cerberus).
-        commande_reactiver = ("activer-agent-principal.py reactiver" in msg_c14
-                              or re.search(r"reactiver <session>", msg_c14)
-                              or re.search(r"reactiver session-llm-\d+", msg_c14))
-        verifier("4. c14 n utilise PAS reactiver dans son message de fin",
-                 not commande_reactiver and commande_ok,
-                 msg_c14[-100:])
+        # 2-3. Chaque fin reactiver porte reactiver-fin <agent> --cible oracle
+        msg_ok = True
+        msg_ko = []
+        for nom, f in fins.items():
+            if f.get("action") != "reactiver":
+                continue
+            cmd = f.get("commande", "")
+            if "reactiver-fin morpheus" not in cmd or "--cible oracle" not in cmd:
+                msg_ok = False
+                msg_ko.append(nom)
+        verifier("2. fins reactiver portent reactiver-fin morpheus --cible oracle",
+                 msg_ok, "ko=%s" % msg_ko)
+
+        # 4. Aucune fin ne reactiver Cerberus ni n active un agent directement
+        commande_reactiver = False
+        for nom, f in fins.items():
+            cmd = f.get("commande", "") + " " + f.get("description", "")
+            if "reactiver cerberus" in cmd.lower() \
+                    or "--cible cerberus" in cmd.lower() \
+                    or "reactiver <session>" in cmd:
+                commande_reactiver = True
+        verifier("4. aucune fin ne reactiver Cerberus directement (modele aero)",
+                 not commande_reactiver, "")
 
         with io.open(FICHE_MORPHEUS, encoding="utf-8", errors="replace") as fh:
             fiche = fh.read()
@@ -195,8 +203,10 @@ def main():
         print("  [KO] ARRET PROTECTION : %s" % e.message)
         NB_KO += 1
 
-    # 8-9. Normes ASCII strict + LF pur (carte + fiche + test)
-    fichiers = [PARCOURS_MORPHEUS, FICHE_MORPHEUS, os.path.abspath(__file__)]
+    # 8-9. Normes ASCII strict + LF pur (fins.json + fiche + test)
+    fichiers = [os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                             "morpheus", "parcours", "fins.json"),
+                FICHE_MORPHEUS, os.path.abspath(__file__)]
     total_non_ascii = sum(ascii_count(f) for f in fichiers)
     verifier("8. ASCII strict : 0 non-ASCII (carte + fiche + test)",
              total_non_ascii == 0, "total=%d" % total_non_ascii)

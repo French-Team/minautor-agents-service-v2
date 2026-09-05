@@ -32,6 +32,7 @@ bdd-lecons enregistrer "<resume>" --agent <nom> [--categorie C] [--mots-cles a,b
 bdd-lecons lister [--n 20]                # les 20 dernieres (bible : apercu recent)
 bdd-lecons chercher [--mot-cle M] [--categorie C] [--agent A]
 bdd-lecons compter                        # nombre total de lecons
+bdd-lecons migrer-v1 --chemin <lecons.db v1> [--dry-run]  # migration lecons v1 -> v2
 ```
 
 ## Usage agent (PROTOCOLE 22 : commande + pourquoi)
@@ -41,6 +42,8 @@ bdd-lecons compter                        # nombre total de lecons
 - **CONSULTER avant de re-inventer** (D10) : `bdd-lecons chercher --mot-cle <sujet>`
   -> consulte la bible au moment du besoin, AVANT de re-inventer (P5/P6 v1).
 - **Voir les apprentissages recents** : `bdd-lecons lister --n 20`.
+- ~~MIGRER les lecons v1~~ : **OBSOLETE depuis la scission 2-bdd
+  (2026-09-05)** - les lecons v1 vivent dans la BDD v1, jamais ici.
 
 ## Regles
 
@@ -50,8 +53,38 @@ bdd-lecons compter                        # nombre total de lecons
   une lecon fausse est signalee, pas corrigee).
 - HARNAIS (PROTOCOLE 21) : l outil s auto-verifie en debut de traitement.
 
-## Migration (une fois, 2026-08-25)
+## Migrations
+
+### Migration corrections.md v2 (2026-08-25)
 
 Les lecons historiques des `corrections.md` (9 agents v2) ont ete importees
 avec `source` = fichier d origine. Les corrections.md cessent d accueillir
 de nouvelles lecons.
+
+#### SCISSION 2-BDD (2026-09-05, decision utilisateur) : ANNULATION de la fusion
+
+La migration v1->v2 du plan 0.2.0 a fusionne par erreur les memoires des
+deux equipes. L utilisateur a clarifie : **deux equipes DISTINCTES, deux
+perimetres, deux memoires collectives separees**.
+- Les 279 lecons v1 (256 migrees + 16 orphelines + 7 du round de migration)
+  ont ete RETIREES de cette BDD (backup
+  `lecons.db.bak-scission-2bdd-2026-09-05`) et REINTEGREES dans la BDD v1
+  `cerveau-projet/agents/lecons/lecons.db` (279 lecons).
+- Cette BDD ne contient plus QUE les 6 lecons freelance (ids 1-6,
+  forge/shuri/stark) importees des corrections.md v2 le 2026-08-25.
+- **La commande `migrer-v1` ne doit PLUS etre utilisee** : les lecons v1
+  vivent dans la BDD v1, pas ici. Un agent v1 qui ecrirait ici commettrait
+  une violation de perimetre.
+
+## Perimetre actuel (depuis 2026-09-05)
+
+- **Cette BDD (bdd-lecons v2) = memoire collective des agents FREELANCE uniquement.**
+- Les agents v1 (cerveau-projet) utilisent LEUR BDD v1
+  (`cerveau-projet/agents/lecons/lecons.db`, outils v1 `enregistrer-lecon` /
+  `consulter-lecons` restaures) - voir protocole-lecons v0.3.0.
+
+### Migration corrections.md v2 (2026-08-25) -- historique
+
+Les lecons historiques des `corrections.md` (9 agents v2) ont ete importees
+avec `source` = fichier d origine. Les corrections.md cessent d accueillir
+de nouvelles lecons. C est l origine des 6 lecons freelance actuelles.

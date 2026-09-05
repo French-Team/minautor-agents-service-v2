@@ -239,6 +239,12 @@ def main():
     #   _historiser_pilote) - pas un agent metier.
     # - 'routines-server' : demarrage du serveur de routines v1.
     blocs_routines |= {"pilote", "routines-server"}
+    # Exceptions documentees (historique v1, 2026-09-05) :
+    # - 'ferrari' : agent reel v1 (dossier + fiche existent) mais absent
+    #   d AGENTS.md (agent v1 historique, hors liste des sessions actives).
+    # - 'inconnu' : bloc artefact historise par le pilote (traitement d un
+    #   evenement sans agent nomme) - tolere dans l historique.
+    blocs_routines |= {"ferrari", "inconnu"}
     inconnus = sorted(set(e["agent"].lower() for e in entrees)
                       - set(a.lower() for a in agents_md)
                       - blocs_routines)

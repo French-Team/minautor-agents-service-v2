@@ -302,7 +302,7 @@ def main():
                 profils = data.get("profils", [])
                 cas = [
                     ("cerveau-projet/agents/cerberus/parcours/"
-                     "parcours-cerberus.json", ["cartes"]),
+                     "arbre-cerberus.json", ["cartes"]),
                     ("cerveau-projet/agents/tools/tester/tests/"
                      "test-001-evaluer-agents-coherence/"
                      "test-001-evaluer-agents-coherence.py", ["tests"]),

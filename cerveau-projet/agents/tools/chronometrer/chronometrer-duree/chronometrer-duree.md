@@ -83,7 +83,7 @@ Une ligne JSON par chrono :
 ## Regles
 
 1. Le chrono couvre la mission COMPLETE de l agent : du `activer` au
-   passage du relais (activer suivant / reactiver Cerberus).
+   passage du relais (reactiver-fin --cible oracle, modele aero).
 2. La duree est ajoutee au repere `###` de l entree de l agent dans
    `AGENTS-historique.md` : `(Xmin Ys)`.
 3. Un chrono deja ouvert pour une session est ferme automatiquement au

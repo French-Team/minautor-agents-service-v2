@@ -23,18 +23,41 @@ Usage:
   guider-arbre.py <arbre.json> [--reponses 'A|B'] [--liste] [--valider]
 
 Proprietaire : Vulcain (outils v1)
-Version : 0.1.0
+Version : 0.1.1
 Statut : ebauche
 """
 
 import argparse
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 STATUT = "ebauche"
+
+REGEX_RESIDU = re.compile(r"^(v?\d+\.\d+(\.\d+)?)$")
+
+
+def verifier_residus_racine():
+    """GARDE-FOU ANTI-RESIDUS : detecter dans le repertoire courant les
+    fichiers nommes comme des versions semver pures (ex: 0.2.1, v0.2.6).
+    Ces fichiers sont des residus probables de redirections accidentelles."""
+    try:
+        residus = sorted(n for n in os.listdir(".")
+                         if os.path.isfile(n) and REGEX_RESIDU.match(n))
+    except OSError:
+        return
+    if not residus:
+        return
+    print("=" * 60)
+    print("!!! WARNING GARDE-FOU (v%s) !!!" % VERSION)
+    print("Des fichiers nommes comme des versions semver sont presents dans le")
+    print("repertoire courant : %s" % ", ".join(residus))
+    print("=" * 60)
+
+
 
 # Racine du projet : guider-arbre -> guider -> tools -> agents -> cerveau-projet -> racine
 RACINE = Path(__file__).resolve().parents[5]
@@ -367,6 +390,7 @@ def construire_parser():
 
 def main():
     verifier_nommage(sys.argv[0])
+    verifier_residus_racine()
     parser = construire_parser()
     parser.add_argument("--aide", action="help", help="Afficher cette aide (alias de -h)")
     args = parser.parse_args()

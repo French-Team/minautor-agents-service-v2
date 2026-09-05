@@ -3,9 +3,9 @@
  "parcours": "agents/morpheus/parcours/arbre-morpheus.json",
  "case_courante": null,
  "mission_type": "tester",
- "mission": "TESTER (inter-round, suite mission 6ad0c87c Vulcain) : oracle v0.5.11 - files.terminer() consomme la notification 'MISSION pour X' a la TERMINEE (correctif boucle flux/P1 fantomes). Creer test-123 : (1) miroir FILES_DIR temporaire (pattern test-118) : ajouter une mission agent=X, poser dans inbox/X.jsonl un message {de=oracle, vers=X, objet='MISSION pour X', corps==texte mission, lu=False} + un second message P1 non-mission ; prendre puis terminer -> le message MISSION est CONSOMME (absent de l inbox), le non-mission est PRESERVE ; (2) idempotence : terminer une deuxieme fois (deja TERMINEE) -> no-op sans erreur ; (3) sans agent (entree sans champ agent) -> terminer ne plante pas et ne touche aucune inbox ; (4) corps different (mission differente) -> message NON consomme (pas de faux positif) ; (5) agent sans fichier inbox -> no-op ; (6) flux --dry-run sur le miroir apres TERMINEE = 0 P1 non-acquitte pour ce message ; (7) normes ASCII/CRLF sur files.py (0/0) et le test. Ne pas modifier l outil. A LA FIN : suis TA carte pour ta fin vers Oracle.",
+ "mission": "MIGRATION v1->v2 ETAPE D : garde-fous et tests (D.1-D.4, mission 85b4545d)",
  "historise_debut": true,
- "precedent": null,
+ "precedent": "Cerberus",
  "etape": "fin",
  "historise_fin": true,
  "theme_courant": null

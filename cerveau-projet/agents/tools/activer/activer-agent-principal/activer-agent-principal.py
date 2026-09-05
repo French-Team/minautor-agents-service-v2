@@ -476,11 +476,10 @@ def _trouver_racine():
 
 def instruction_demarrage(agent):
     """Bloc DEMARRAGE OBLIGATOIRE pour un agent active (sauf Cerberus).
-    v0.5.9 : la norme est l arbre v2 (guider-arbre). L agent lance SON arbre
-    des decisions (racine -> themes -> fins) des que l arbre existe ; sinon
-    repli sur le parcours v1 (couvre les parcours nommes, ex: socrate).
-    v0.5.4 : corrige le bug d arret a c0 - l agent sait comment lancer son
-    parcours depuis la case de depart."""
+    v0.6.0 (2026-09-05, migration v1->v2) : la norme est l arbre v2
+    (guider-arbre) UNIQUEMENT - le repli parcours v1 est RETIRE (les
+    parcours v1 sont des vestiges supprimes). L agent lance SON arbre des
+    decisions (racine -> themes -> fins)."""
     # PATTERN v2 (os_path) : on ne compte JAMAIS les niveaux ("../..").
     # On DETECTE la racine en remontant jusqu a trouver AGENTS.md, puis on
     # derive le chemin du haut vers le bas - a la v1 on comptait les ".."
@@ -497,18 +496,14 @@ def instruction_demarrage(agent):
             "python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \\\n"
             "  cerveau-projet/agents/%s/parcours/arbre-%s.json\n"
             "(racine : choisis TON theme selon ta mission, puis suis les besoins /\n"
-            "procedures du theme ; Oracle te pilote via l arbre - PAS le parcours v1 ;\n"
+            "procedures du theme ; Oracle te pilote via l arbre ;\n"
             "si tu reprends apres une interruption, relance l arbre et poursuis)."
         ) % (agent, agent)
     return (
-        "DEMARRAGE OBLIGATOIRE : lance ta mission avec :\n"
-        "python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py \\\n"
-        "  cerveau-projet/agents/%s/parcours/parcours-%s.json --case c0\n"
-        "(c0 = RELIRE OBLIGATOIRE : lis tes corrections puis ta fiche, puis reponds\n"
-        "a la confirmation c0b : OUI si tu as lu et compris, NON pour relire ; suis\n"
-        "ensuite les branches case par case ; si tu reprends apres une interruption,\n"
-        "reprends a la case courante avec --case <cid> --reponses '<reponse>')."
-    ) % (agent, agent)
+        "DEMARRAGE OBLIGATOIRE : INTROUVABLE - l agent %s n a pas d arbre v2\n"
+        "(attendu : cerveau-projet/agents/%s/parcours/arbre-%s.json).\n"
+        "Contacte Cerberus avant de demarrer."
+    ) % (agent, agent, agent)
 
 
 def instruction_demarrage_v2(agent):
@@ -1976,20 +1971,20 @@ def activer_cerberus(session, raison, agent_precedent=None, type_round="R"):
     print("=== INSTRUCTION OBLIGATOIRE ===")
     print("CERBERUS REACTIVE : tu DOIS suivre ta carte de decision.")
     print("")
-    # Lancer guider-parcours pour Cerberus
-    parcours = "cerveau-projet/agents/cerberus/parcours/parcours-cerberus.json"
+    # Lancer guider-arbre pour Cerberus (v0.6.0 : arbre v2 uniquement)
+    arbre = "cerveau-projet/agents/cerberus/parcours/arbre-cerberus.json"
     script_dir = os.path.dirname(os.path.abspath(__file__))
     tools_dir = os.path.dirname(os.path.dirname(script_dir))
-    guider = os.path.join(tools_dir, "guider", "guider-parcours", "guider-parcours.py")
+    guider = os.path.join(tools_dir, "guider", "guider-arbre", "guider-arbre.py")
     if os.path.isfile(guider):
         print("LANCE CETTE COMMANDE MAINTENANT :")
         print("")
-        print("python3 %s %s --case c0" % (guider, parcours))
+        print("python3 %s %s" % (guider, arbre))
         print("")
         print("Puis relis ta fiche et tes corrections avant de continuer.")
     else:
-        print("Lance guider-parcours pour ton parcours :")
-        print("python3 cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py %s --case c0" % parcours)
+        print("Lance guider-arbre pour ton arbre :")
+        print("python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py %s" % arbre)
     print("")
     print("=== MESSAGES POUR L AGENT ===")
     print("  > RELEVE MEME ROUND : Cerberus doit suivre sa carte IMMEDIATEMENT")

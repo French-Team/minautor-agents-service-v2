@@ -197,10 +197,10 @@ lister-statuts.sh --verbose cerveau-projet/
 ```
 1. Buffy cree un fichier (ebauche)
 2. Buffy fait la boucle RVAV
-3. Buffy reactive Cerberus
-4. Cerberus active Janus pour controle
+3. La fin de Buffy suit SA carte (reactiver-fin buffy --cible oracle) ; le pilote decide du suivant
+4. Le pilote largue Janus pour controle
 5. Janus verifie et decide
-6. Janus reactive Cerberus
+6. La fin de Janus suit SA carte (reactiver-fin janus --cible oracle) ; le pilote ramene a Cerberus
 7. Cerberus informe Buffy du resultat
 ```
 
@@ -219,7 +219,7 @@ lister-statuts.sh --verbose cerveau-projet/
 - **Janus est independant** -- il ne depend pas de Buffy
 - **Le controle est obligatoire** -- pas de passage de statut sans controle
 - **La documentation est essentielle** -- chaque decision doit etre justifiee
-- **Le cycle est sacre** -- la fin de mission suit SA carte : reactiver Cerberus (activation directe ou dernier maillon) ou activer le suivant selon la carte
+- **Le cycle est sacre** -- la fin de mission suit SA carte (modele aero R1/R3) : `reactiver-fin <agent> --cible oracle` ; le pilote decide du suivant et ramene a Cerberus en fin de round avec le bilan consolide
 - **Les outils sont obligatoires** -- utiliser les outils pour chaque verification
 - **`valider-relecture` est SYSTEMATIQUE** -- a chaque controle, verifier que tous les agents portent la regle de relecture (garde-fou du cycle d'activation)
 

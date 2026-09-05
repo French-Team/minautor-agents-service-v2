@@ -45,7 +45,7 @@ PYTHON = sys.executable
 DETECT_DIR = os.path.join(TOOLS_DIR, "detecter", "detecter-contradictions")
 DETECT_PY = os.path.join(DETECT_DIR, "detecter-contradictions.py")
 PARCOURS_CERBERUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
-                                 "cerberus", "parcours", "parcours-cerberus.json")
+                                 "cerberus", "parcours", "arbre-cerberus.json")
 
 # --- triplet chrono (template v0.3.0) ---
 T_START = time.monotonic()
@@ -122,32 +122,28 @@ def main():
              code == 0 and "v0.1.3" in out, out.strip()[-40:])
     chrono_etape("1. version", t0)
 
-    # 2. --fichier : preuve negative (REF_MORTE + CAS_ORPHELINE injectees)
+    # 2. --fichier : preuve negative v2 (REF_MORTE : branche -> theme absent)
     t0 = time.monotonic()
     tmp = tempfile.mkdtemp(prefix="tmp-test069-")
     try:
         src = json.load(io.open(PARCOURS_CERBERUS, encoding="utf-8"))
-        cases = src["cases"]
-        cible = None
-        for cid, c in cases.items():
-            if isinstance(c, dict) and c.get("suivant"):
-                cible = cid
-                break
-        if cible:
-            cases[cible]["suivant"] = "cZZ-inexistante"
-        cases["cZZ-orpheline"] = {"id": "cZZ-orpheline", "type": "action",
-                                  "titre": "Case orpheline injectee",
-                                  "suivant": cible}
-        bogue = os.path.join(tmp, "parcours-bogue.json")
+        # format v2 : casser une branche de la racine vers un theme absent
+        branche = src["racine"]["branches"][0]
+        theme_absent = "theme-cZZ-inexistante.json"
+        branche["vers"] = theme_absent
+        bogue = os.path.join(tmp, "arbre-bogue.json")
         with io.open(bogue, "w", encoding="utf-8", newline="\n") as fh:
             json.dump(src, fh, ensure_ascii=True, indent=1)
         code, out = run([PYTHON, DETECT_PY, "--fichier", bogue], timeout=60)
-        a_ref = "REF_MORTE" in out and "cZZ-inexistante" in out
-        a_orph = "CAS_ORPHELINE" in out and "cZZ-orpheline" in out
-        verifier("2. --fichier : REF_MORTE detectee (injection)",
+        a_ref = "REF_MORTE" in out and "theme-cZZ-inexistante" in out
+        verifier("2. --fichier : REF_MORTE detectee (branche -> theme absent)",
                  a_ref, out[-140:] if not a_ref else "")
-        verifier("2b. --fichier : CAS_ORPHELINE detectee (injection)",
-                 a_orph, out[-140:] if not a_orph else "")
+        # 2b. cas sain : l arbre cerberus ne remonte AUCUNE contradiction
+        code2, out2 = run([PYTHON, DETECT_PY, "--fichier", PARCOURS_CERBERUS],
+                          timeout=60)
+        verifier("2b. --fichier : arbre sain = aucune contradiction",
+                 code2 == 0 and "Aucune contradiction" in out2,
+                 out2[-140:] if code2 != 0 else "")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     chrono_etape("2. --fichier preuve negative", t0)

@@ -81,5 +81,5 @@ identite:
 | **Auto-correction** | L'agent corrige ses propres erreurs dans `corrections.md` |
 | **AGENTS.md dynamique** | L'agent principal met a jour AGENTS.md a chaque session |
 | **Fiche obligatoire** | Pas de travail sans fiche d'agent prealable |
-| **Cycle complet** | Cerberus -> Agent -> (la fin suit SA carte : reactiver Cerberus si activation directe, sinon activer le suivant ; dernier maillon reactiver Cerberus avec bilan consolide) |
+| **Cycle complet** | Cerberus -> Agent -> (la fin suit SA carte, modele aero R1/R3 : `reactiver-fin <agent> --cible oracle` ; le pilote decide du suivant et ramene a Cerberus en fin de round avec le bilan consolide) |
 | **Ordre logique** | Fichiers principaux d'abord, agents secondaires ensuite |

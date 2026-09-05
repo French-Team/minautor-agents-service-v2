@@ -100,12 +100,12 @@
         "regle": "CONFORMITE : sections manquantes = incoherence a documenter."
       },
       {
-        "besoin": "Verifier le parcours/carte - detecter-cablages-manquants (case c8)",
+        "besoin": "Verifier ma carte - valider-cartes-decision (arbre v2)",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py"
+          "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --agent chiron"
         ],
-        "regle": "CABLAGE : orphelins, boucles, refs mortes = incoherence a documenter."
+        "regle": "CABLAGE v2 : branches->themes->fins = incoherence a documenter."
       },
       {
         "besoin": "Synthetiser les incoherences (controle c9)",

@@ -25,17 +25,40 @@ Retour : 0 si succes, 1 si erreur ou si AUCUNE occurrence trouvee
          (echec explicite : jamais 0 silencieux).
 
 Proprietaire : Vulcain (outil partage)
-Version : 0.5.2
+Version : 0.5.3
 Statut : prepare
 """
 
 import io
 import os
+import re
 import shutil
 import sys
 
-VERSION = "0.5.2"
+VERSION = "0.5.3"
 STATUT = "prepare"
+
+REGEX_RESIDU = re.compile(r"^(v?\d+\.\d+(\.\d+)?)$")
+
+
+def verifier_residus_racine():
+    """GARDE-FOU ANTI-RESIDUS : detecter dans le repertoire courant les
+    fichiers nommes comme des versions semver pures (ex: 0.2.1, v0.2.6).
+    Ces fichiers sont des residus probables de redirections accidentelles."""
+    try:
+        residus = sorted(n for n in os.listdir(".")
+                         if os.path.isfile(n) and REGEX_RESIDU.match(n))
+    except OSError:
+        return
+    if not residus:
+        return
+    print("=" * 60)
+    print("!!! WARNING GARDE-FOU (v%s) !!!" % VERSION)
+    print("Des fichiers nommes comme des versions semver sont presents dans le")
+    print("repertoire courant : %s" % ", ".join(residus))
+    print("=" * 60)
+
+
 
 NOM_ATTENDU = "editer-fichier.py"
 
@@ -201,6 +224,7 @@ def verifier_perimetre(chemin, agent):
 
 def main(argv):
     verifier_nommage(os.path.basename(sys.argv[0]))
+    verifier_residus_racine()
 
     fichier = ""
     ancien = ""

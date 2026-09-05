@@ -117,8 +117,10 @@ def racine_projet():
 
 
 def charger_parcours(racine, agent):
+    # v0.7.0 (migration v1->v2) : l arbre v2 est la carte de decision
+    # (arbre-<agent>.json) - les parcours v1 sont retires.
     chemin = os.path.join(racine, "cerveau-projet", "agents", agent,
-                          "parcours", "parcours-%s.json" % agent)
+                          "parcours", "arbre-%s.json" % agent)
     if not os.path.isfile(chemin):
         return None
     try:
@@ -170,36 +172,51 @@ OUTILS_P0_PARTAGES = frozenset([
 
 
 def outils_de_la_carte(parcours, aliases=None):
-    """Tous les outils assignes dans les indices des cases de la carte,
-    HORS outils P0 partages (OUTILS_P0_PARTAGES).
-    v0.1.14 : si aliases (mapping alias -> nom canonique) est fourni, chaque
-    indice ajoute AUSSI son nom canonique : un usage registre porte le nom
-    canonique (dossier reel, test-079) meme si la carte reference l alias."""
+    """Tous les outils habilites de l agent (table d habilitation dediee
+    habilitation-<agent>.json, source unique du verrou), HORS outils P0
+    partages (OUTILS_P0_PARTAGES).
+    v0.7.0 (migration v1->v2) : la table remplace les indices des cases v1
+    (les parcours v1 sont retires, les arbres v2 ne portent pas d indices).
+    v0.1.14 (historique) : si aliases etait fourni, chaque indice ajoutait
+    AUSSI son nom canonique - conserve pour compatibilite (sans effet)."""
     outils = set()
-    for c in parcours.get("cases", {}).values():
-        for ind in c.get("indices", []):
-            if isinstance(ind, dict) and ind.get("type") == "outil" and ind.get("nom"):
-                if ind["nom"] in OUTILS_P0_PARTAGES:
-                    continue
-                outils.add(ind["nom"])
-                if aliases:
-                    canonique = aliases.get(ind["nom"])
-                    if canonique:
-                        outils.add(canonique)
+    agent = ""
+    if isinstance(parcours, dict):
+        a = parcours.get("arbre", {})
+        if isinstance(a, dict):
+            agent = a.get("agent", "")
+    if not agent:
+        return outils
+    chemin = os.path.join(racine_projet(), "cerveau-projet", "agents",
+                          "habilitation", "habilitation-%s.json" % agent)
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            table = json.load(fh)
+        for nom in table.get("outils", []):
+            if nom in OUTILS_P0_PARTAGES:
+                continue
+            outils.add(nom)
+    except (IOError, OSError, ValueError):
+        pass
     return outils
 
 
 def fins_de_la_carte(parcours):
     """Retourne (a_activer_janus, a_reactiver_cerberus) booleens selon les
-    messages des cases de type fin.
-    MULTI-SESSIONS (v0.1.12) : les commandes acceptent le placeholder <session>
-    OU une session concrete session-llm-N (D6) -- le format figee
-    'session-llm-1' ne fonctionnait que pour la premiere session."""
+    fins de la carte.
+    v0.7.0 (migration v1->v2) : les arbres v2 centralisent les fins dans
+    fins.json - modele aero R1/R3 : toute fin va vers ORACLE (reactiver
+    --cible oracle). Il n existe plus de fin 'Activer Janus' ni 'Reactiver
+    Cerberus' dans les cartes : (False, False) est retourne.
+    v0.1.12 (historique) : les cases de type fin v1 portaient ces messages
+    - conservee pour compatibilite si une carte v1 subsiste."""
     a_janus = False
     a_reactiver = False
+    if not isinstance(parcours, dict) or not parcours.get("cases"):
+        return a_janus, a_reactiver
     motif_session = r"(?:<session>|session-admin|session-freelance|session-llm-\d+)"
     for c in parcours.get("cases", {}).values():
-        if c.get("type") != "fin":
+        if not isinstance(c, dict) or c.get("type") != "fin":
             continue
         msg = c.get("message", "")
         titre = c.get("titre", "")

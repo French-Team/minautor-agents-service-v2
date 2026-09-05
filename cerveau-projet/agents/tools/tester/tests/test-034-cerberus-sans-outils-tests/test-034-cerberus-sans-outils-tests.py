@@ -18,7 +18,7 @@ Contexte (2026-08-13) :
     test.
 
 Invariants verifies :
-  1. La carte cerberus (parcours-cerberus.json) ne contient AUCUN outil de
+  1. La carte cerberus (arbre-cerberus.json) ne contient AUCUN outil de
      test dans ses indices (ni tester-lancer-non-regression, ni
      tester-protections, ni chrono/reference/temps/mesurer)
   2. La carte contient les cases c5 (Identifier l agent habilite) et c6
@@ -41,7 +41,7 @@ TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
 PYTHON = sys.executable
 
 PARCOURS_CERBERUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
-                                 "cerberus", "parcours", "parcours-cerberus.json")
+                                 "cerberus", "parcours", "arbre-cerberus.json")
 FICHE_CERBERUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
                               "cerberus", "cerberus.md")
 
@@ -142,18 +142,19 @@ def crlf_count(chemin):
         return fh.read().count(b"\r\n")
 
 
-def collecter_indices_texte(case):
-    """Recolte tout le texte des indices d une case (noms + texte)."""
+def collecter_texte_json(donnees):
+    """Recolte tout le texte d une structure JSON (arbre v2 : branches,
+    descriptions, etapes, regles) pour le scan des outils de test interdits."""
     morceaux = []
-    indices = case.get("indices", [])
-    if isinstance(indices, list):
-        for ind in indices:
-            if isinstance(ind, dict):
-                morceaux.append(ind.get("nom", ""))
-                morceaux.append(ind.get("texte", ""))
-            elif isinstance(ind, str):
-                morceaux.append(ind)
-    return " ".join(morceaux)
+    if isinstance(donnees, dict):
+        for v in donnees.values():
+            morceaux.extend(collecter_texte_json(v))
+    elif isinstance(donnees, list):
+        for v in donnees:
+            morceaux.extend(collecter_texte_json(v))
+    elif isinstance(donnees, str):
+        morceaux.append(donnees)
+    return morceaux
 
 
 def main():
@@ -162,32 +163,42 @@ def main():
     try:
         with io.open(PARCOURS_CERBERUS, encoding="utf-8") as fh:
             parcours = json.load(fh)
-        cases = parcours.get("cases", {})
 
-        # 1. Aucun outil de test dans les indices de la carte
+        # 1. Aucun outil de test dans TOUTE la structure de la carte v2
+        # (arbre + themes + fins : le texte des branches/etapes/regles).
+        texte_carte = " ".join(collecter_texte_json(parcours)).lower()
         trouve = []
-        for cid, c in sorted(cases.items()):
-            texte = collecter_indices_texte(c)
-            for mot in OUTILS_TESTS_INTERDITS:
-                if mot.lower() in texte.lower():
-                    trouve.append("%s/%s" % (cid, mot))
-        verifier("1. Carte Cerberus : AUCUN outil de test dans les indices",
+        for mot in OUTILS_TESTS_INTERDITS:
+            if mot.lower() in texte_carte:
+                trouve.append(mot)
+        verifier("1. Carte Cerberus : AUCUN outil de test dans la structure v2",
                  len(trouve) == 0, "; ".join(trouve[:5]) if trouve else "")
 
-        # 2. Les cases c5/c6 existent (identifier puis activer l agent habilite)
-        c5 = cases.get("c5", {})
-        c6 = cases.get("c6", {})
-        # Les titres de la carte portent une apostrophe (l'agent) : on
-        # normalise en remplacant l apostrophe par un espace avant de comparer.
+        # 2. La racine v2 contient la branche VERS-ORACLE (Oracle identifie
+        # et active l agent habilite - jamais Cerberus directement) : la
+        # description de la branche et du theme le materialisent.
+        branches = parcours.get("racine", {}).get("branches", [])
+        vers_oracle = None
+        for b in branches:
+            if b.get("reponse") == "VERS-ORACLE":
+                vers_oracle = b
+        # L'agent habilite est identifie/active par ORACLE (regle D8 + theme
+        # vers-oracle) - on verifie la presence du concept dans l arbre.
         def normaliser(t):
             return t.lower().replace("'", " ").replace("\u2019", " ")
 
-        verifier("2a. Case c5 = Identifier l agent habilite",
-                 normaliser(c5.get("titre", "")).startswith("identifier l agent"),
-                 str(c5.get("titre")))
-        verifier("2b. Case c6 = Activer l agent habilite",
-                 normaliser(c6.get("titre", "")).startswith("activer l agent"),
-                 str(c6.get("titre")))
+        verifier("2a. Branche VERS-ORACLE presente (Oracle identifie l agent habilite)",
+                 vers_oracle is not None and "habilite" in normaliser(
+                     vers_oracle.get("description", "")),
+                 str((vers_oracle or {}).get("description", ""))[:80])
+        verifier("2b. Oracle ACTIVE l agent habilite (pas Cerberus)",
+                 "lance l agent habilite" in normaliser(
+                     vers_oracle.get("description", ""))
+                 or "active l agent habilite" in normaliser(
+                     vers_oracle.get("description", ""))
+                 or "lance l agent habilite" in normaliser(
+                     parcours.get("arbre", {}).get("regles", {}).get("D8", "")),
+                 "regle D8 ou description VERS-ORACLE")
 
         # 3. La fiche cerberus interdit d executer les tests (lecon)
         with io.open(FICHE_CERBERUS, encoding="utf-8", errors="replace") as fh:

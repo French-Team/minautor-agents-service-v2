@@ -312,11 +312,11 @@ def score_nettoyage(nom_script):
 
 
 def score_synchro(nom_fiche, contenu):
-    """Mode synchro : coherence fiche/parcours/AGENTS.md."""
+    """Mode synchro : coherence fiche/arbre v2/AGENTS.md (migration v1->v2)."""
     score = 50.0
     base = os.path.join(RACINE, "cerveau-projet", "agents", nom_fiche)
-    parcours = os.path.join(base, "parcours", "parcours-%s.json" % nom_fiche)
-    if os.path.exists(parcours):
+    arbre = os.path.join(base, "parcours", "arbre-%s.json" % nom_fiche)
+    if os.path.exists(arbre):
         score += 25.0
     ag = lire_fichier(os.path.join(RACINE, "AGENTS.md"))
     if nom_fiche in ag:

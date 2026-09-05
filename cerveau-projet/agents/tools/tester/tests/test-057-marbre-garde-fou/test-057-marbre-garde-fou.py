@@ -61,16 +61,16 @@ PROTOCOLE = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "regles-immua
                          "general", "protocole-securite-marbre",
                          "protocole-securite-marbre.001.01.ebauche.md")
 CERBERUS_PARCOURS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "cerberus",
-                                 "parcours", "parcours-cerberus.json")
+                                 "parcours", "arbre-cerberus.json")
 ACTIVER_PY = os.path.join(TOOLS_DIR, "activer", "activer-agent-principal",
                           "activer-agent-principal.py")
 EDITER_PY = os.path.join(TOOLS_DIR, "editer", "editer-parcours", "editer-parcours.py")
 CATALOGUE = os.path.join(TOOLS_DIR, "generateurs", "generateurs-commande",
                          "catalogue-commandes.json")
 INDEX = os.path.join(TOOLS_DIR, "index-tools.md")
+# v0.2.0 (migration v1->v2) : les zones cerberus.c* (cases v1) sont retirees
 ZONES_ATTENDUES = ["constitution", "regles-groupes-agents",
-                   "cerberus.c0", "cerberus.c0b", "cerberus.c10",
-                   "cerberus.c14", "cerberus.c20"]
+                   "regles-general-global"]
 CARTES_LOCK = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "regles-immuables",
                            "marbre", "cartes-lock.json")
 NB_POINTS = 0
@@ -210,23 +210,29 @@ def main():
                  "rc=%s stdout=%s" % (r.returncode, r.stdout[-200:]))
         chrono_etape("3. etat conforme", t)
 
-    # --- 4. preuve negative (violation c0) avec restauration garantie
+    # --- 4. preuve negative (violation regles-groupes-agents) avec
+    # restauration garantie
     if point_actif(4):
         t = time.monotonic()
+        # v0.2.0 (migration v1->v2) : la zone cerberus.c* (cases v1) est
+        # retiree du marbre - la preuve negative passe par une zone type
+        # 'fichier' (empreinte) : regles-groupes-agents.
+        regles = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                              "regles-immuables", "general",
+                              "regles-groupes-agents.md")
         original = None
         try:
-            d = json.load(io.open(CERBERUS_PARCOURS, encoding="utf-8"))
-            original = json.dumps(d, ensure_ascii=True, indent=1) + "\n"
-            d["cases"]["c0"]["titre"] = "VIOLATION TEST MARBRE"
-            with io.open(CERBERUS_PARCOURS, "w", encoding="utf-8", newline="\n") as fh:
-                fh.write(json.dumps(d, ensure_ascii=True, indent=1) + "\n")
-            r = lancer([PYTHON, VERROU_PY, "--zone", "cerberus.c0"])
-            verifier("4. preuve negative : c0 violee -> BLOQUE rc=1",
+            original = lire(regles)
+            with io.open(regles, "a", encoding="utf-8", newline="\n") as fh:
+                fh.write("\n<!-- VIOLATION TEST MARBRE -->\n")
+            r = lancer([PYTHON, VERROU_PY, "--zone", "regles-groupes-agents"])
+            verifier("4. preuve negative : regles-groupes-agents violee -> "
+                     "BLOQUE rc=1",
                      r.returncode == 1 and "BLOQUE" in r.stdout,
                      "rc=%s stdout=%s" % (r.returncode, r.stdout[-200:]))
         finally:
             if original is not None:
-                with io.open(CERBERUS_PARCOURS, "w", encoding="utf-8", newline="\n") as fh:
+                with io.open(regles, "w", encoding="utf-8", newline="\n") as fh:
                     fh.write(original)
         r = lancer([PYTHON, VERROU_PY, "--tous"])
         verifier("   restauration -> marbre intact", r.returncode == 0,
@@ -245,12 +251,14 @@ def main():
     # --- 6. integration avant (outils du noyau verrouilles)
     if point_actif(6):
         t = time.monotonic()
+        # v0.2.0 (migration v1->v2) : editer-parcours est archive - les
+        # verrous du noyau sont verrouiller_constitution (activer-agent-
+        # principal) et verrouiller_cartes (verrou marbre, cartes-lock.json).
         contenu_activer = lire(ACTIVER_PY)
-        contenu_editer = lire(EDITER_PY)
         verifier("6. activer-agent-principal verrouille (constitution)",
                  "verrouiller_constitution" in contenu_activer)
-        verifier("   editer-parcours verrouille (cases protegees)",
-                 "verifier_cases_protegees" in contenu_editer)
+        verifier("   editer-parcours archive (vestige v1 purge)",
+                 not os.path.isdir(os.path.join(TOOLS_DIR, "editer", "editer-parcours")))
         chrono_etape("6. integration", t)
 
     # --- 7. catalogue
@@ -278,8 +286,9 @@ def main():
     # --- 9. normes ASCII + LF
     if point_actif(9):
         t = time.monotonic()
+        # v0.2.0 : EDITER_PY retire (editer-parcours archive)
         fichiers = [VERROU_PY, MODIF_PY, MARBRE_JSON, PROTOCOLE,
-                    CERBERUS_PARCOURS, ACTIVER_PY, EDITER_PY]
+                    CERBERUS_PARCOURS, ACTIVER_PY]
         ok_normes = True
         details = []
         for f in fichiers:
@@ -293,7 +302,7 @@ def main():
             if na or crlf:
                 details.append("%s: %d non-ascii / %d CRLF" % (os.path.basename(f), na, crlf))
                 ok_normes = False
-        verifier("9. normes ASCII strict + LF pur (7 fichiers)", ok_normes,
+        verifier("9. normes ASCII strict + LF pur (6 fichiers)", ok_normes,
                  "; ".join(details))
         chrono_etape("9. normes", t)
 
@@ -377,7 +386,7 @@ def main():
                 cles_lock = set(dict_lock.keys())
                 reels = set()
                 for p in glob.glob(os.path.join(PROJECT_ROOT, "cerveau-projet",
-                                                "agents", "*", "parcours", "parcours-*.json")):
+                                                "agents", "*", "parcours", "arbre-*.json")):
                     rel = os.path.relpath(p, PROJECT_ROOT).replace(os.sep, "/")
                     reels.add(rel)
                 manquantes = reels - cles_lock
@@ -390,51 +399,12 @@ def main():
                 verifier("   cartes-lock.json JSON valide", False, str(e))
         chrono_etape("11. cartes-lock", t)
 
-    # --- 12. anti-contournement : ecriture directe -> editer-parcours BLOQUE
-    if point_actif(12):
-        t = time.monotonic()
-        import shutil
-        import tempfile
-        carte_test = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "themis",
-                                  "parcours", "parcours-themis.json")
-        tmp_carte = None
-        env = None
-        try:
-            # copie de travail : editer-parcours calcule son lock relatif a la
-            # racine projet, on fait donc la preuve sur la VRAIE carte avec
-            # restauration garantie (sauvegarde du contenu original)
-            original = lire(carte_test)
-            d = json.loads(original)
-            d["cases"]["cZZ"] = {"type": "question", "titre": "factice",
-                                 "question": "preuve", "indice": "factice"}
-            with io.open(carte_test, "w", encoding="utf-8", newline="\n") as fh:
-                fh.write(json.dumps(d, ensure_ascii=True, indent=1) + "\n")
-            r = lancer([PYTHON, EDITER_PY, "--agent", "themis", "--bump", "--wet"])
-            verifier("12. anti-contournement : ecriture directe -> BLOQUE",
-                     r.returncode == 1 and "ANTI-CONTOURNEMENT" in r.stdout,
-                     "rc=%s stdout=%s" % (r.returncode, r.stdout[-200:]))
-        finally:
-            with io.open(carte_test, "w", encoding="utf-8", newline="\n") as fh:
-                fh.write(original)
-        # apres restauration, l empreinte est resynchronisee : l
-        # anti-contournement est leve, mais le verrou SEUL BUFFY bloque
-        # (l agent actif de la non-regression n est pas buffy).
-        r = lancer([PYTHON, EDITER_PY, "--agent", "themis", "--bump", "--dry-run"])
-        verifier("   restauration -> anti-contournement leve, verrou SEUL BUFFY bloque",
-                 r.returncode == 1 and "ANTI-CONTOURNEMENT" not in r.stdout
-                 and "BLOQUE" in r.stdout, "rc=%s" % r.returncode)
-        chrono_etape("12. anti-contournement preuve", t)
-
-    # --- 13. --modifier-case : verrou SEUL BUFFY bloque hors buffy
-    if point_actif(13):
-        t = time.monotonic()
-        r = lancer([PYTHON, EDITER_PY, "--agent", "themis", "--modifier-case", "c1",
-                    "--contenu", '{"type":"action","titre":"t","texte":"t","indice":"i"}'])
-        verifier("13. --modifier-case : verrou SEUL BUFFY bloque (hors buffy)",
-                 r.returncode == 1 and "BLOQUE" in r.stdout
-                 and "ANTI-CONTOURNEMENT" not in r.stdout,
-                 "rc=%s stdout=%s" % (r.returncode, r.stdout[-200:]))
-        chrono_etape("13. modifier-case", t)
+    # --- 12-13. (2026-09-05, migration v1->v2) : editer-parcours est
+    # ARCHIVE (outil v1). L anti-contournement v2 est couvert par
+    # proteger-verrou-marbre (points 3-10) + cartes-lock.json (point 11) :
+    # toute ecriture hors verrou sur une zone marbre est BLOQUEE.
+    verifier("12. editer-parcours archive (vestige v1)",
+             not os.path.isdir(os.path.join(TOOLS_DIR, "editer", "editer-parcours")))
 
     bilan_chrono()
     print("")

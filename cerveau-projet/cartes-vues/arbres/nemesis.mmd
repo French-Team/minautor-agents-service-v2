@@ -1,0 +1,52 @@
+%% Arbre de decision de nemesis (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "AUDIT" --> THEME-AUDIT
+    THEME-AUDIT["Rendre un avis contradictoire sur une proposition avant vali"]
+    THEME-AUDIT -- "besoin 1" --> THEME-AUDIT-B0
+    THEME-AUDIT-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUDIT -- "besoin 2" --> THEME-AUDIT-B1
+    THEME-AUDIT-B1["Lire la proposition a auditer"]
+    THEME-AUDIT -- "besoin 3" --> THEME-AUDIT-B2
+    THEME-AUDIT-B2["AXE 1 : Audit des cas limites (edge cases)"]
+    THEME-AUDIT -- "besoin 4" --> THEME-AUDIT-B3
+    THEME-AUDIT-B3["AXE 2 : Audit de l optimisation (ressources et complexite)"]
+    THEME-AUDIT -- "besoin 5" --> THEME-AUDIT-B4
+    THEME-AUDIT-B4["AXE 3 : Audit de la securite / integrite"]
+    THEME-AUDIT -- "besoin 6" --> THEME-AUDIT-B5
+    THEME-AUDIT-B5["Synthetiser l avis contradictoire"]
+    THEME-AUDIT -- "besoin 7" --> THEME-AUDIT-B6
+    THEME-AUDIT-B6["Rediger le rapport d audit"]
+    THEME-AUDIT -- "besoin 8" --> THEME-AUDIT-B7
+    THEME-AUDIT-B7["RVAV : l audit est-il complet et conforme ?"]
+    THEME-AUDIT -- "besoin 9" --> THEME-AUDIT-B8
+    THEME-AUDIT-B8["Ajouter mes lecons et usages"]
+    FIN-fin-audit(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUDIT-B0 --> FIN-fin-audit
+    THEME-AUDIT-B1 --> FIN-fin-audit
+    THEME-AUDIT-B2 --> FIN-fin-audit
+    THEME-AUDIT-B3 --> FIN-fin-audit
+    THEME-AUDIT-B4 --> FIN-fin-audit
+    THEME-AUDIT-B5 --> FIN-fin-audit
+    THEME-AUDIT-B6 --> FIN-fin-audit
+    THEME-AUDIT-B7 --> FIN-fin-audit
+    THEME-AUDIT-B8 --> FIN-fin-audit
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Qualifier une mission hors parcours et la signaler au pilote"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Qualifier la mission hors parcours et signaler au pilote"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Ajouter mes lecons et usages"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Traiter un rapport KO recu d un autre agent et rendre la mai"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["Accuser reception du rapport KO"]
+    THEME-INTER-ROUND -- "besoin 2" --> THEME-INTER-ROUND-B1
+    THEME-INTER-ROUND-B1["Rendre ma fin vers ORACLE (le pilote decide du suivant)"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round
+    THEME-INTER-ROUND-B1 --> FIN-fin-inter-round

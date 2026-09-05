@@ -6,6 +6,9 @@ identite:
   version: 0.1.0
   date_creation: 2026-08-17
 ---
+> MEMOIRE GELEE le 2026-09-04 - decision utilisateur v1->v2 : les
+> nouvelles lecons vont dans bdd-lecons (outil v2). Historique conserve
+> pour relecture - AUCUN [LECON] supplementaire.
 
 # Corrections -- Chiron
 

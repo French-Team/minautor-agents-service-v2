@@ -116,8 +116,7 @@ DIV_MD = os.path.join(DIV_DIR, "detecter-divergences-version.md")
 DEC_DIR = os.path.join(TOOLS_DIR, "detecter", "detecter-decalages-catalogue")
 DEC_PY = os.path.join(DEC_DIR, "detecter-decalages-catalogue.py")
 DEC_MD = os.path.join(DEC_DIR, "detecter-decalages-catalogue.md")
-SPEC_GUIDER = os.path.join(TOOLS_DIR, "guider", "guider-parcours", "spec",
-                           "spec-guider-parcours.001.01.ebauche.md")
+# (2026-09-05, migration v1->v2) : SPEC_GUIDER retire (guider-parcours archive)
 
 NB_POINTS = 0
 NB_OK = 0
@@ -221,14 +220,13 @@ def main():
     verifier("5. detecter-decalages-catalogue : 0 decalage",
              "/ 0 decalages " in out or "0 decalages" in out, out[-200:])
 
-    # 6. Cas guider-parcours documente
-    with io.open(SPEC_GUIDER, encoding="utf-8", errors="replace") as fh:
-        spec_guider = fh.read()
-    verifier("6. spec guider-parcours : **Version outil** : 0.5.0 present",
-             "**Version outil** : 0.5.2" in spec_guider)
+    # 6. (2026-09-05, migration v1->v2) : spec-guider-parcours archive avec
+    # l outil guider-parcours - la spec v2 est guider-arbre (pas de spec).
+    verifier("6. guider-parcours archive (vestige v1 purge)",
+             not os.path.isdir(os.path.join(TOOLS_DIR, "guider", "guider-parcours")))
 
     # 7-8. Normes sur les fichiers des outils + ce test
-    fichiers = [DIV_PY, DIV_MD, DEC_PY, DEC_MD, SPEC_GUIDER,
+    fichiers = [DIV_PY, DIV_MD, DEC_PY, DEC_MD,
                 os.path.abspath(__file__)]
     total_non_ascii = sum(ascii_count(f) for f in fichiers)
     verifier("7. ASCII strict : 0 non-ASCII (outils + doc + spec + test)",

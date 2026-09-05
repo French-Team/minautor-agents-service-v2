@@ -46,7 +46,7 @@ Cas couverts (26 points) :
  15. flag optionnel renseigne conserve : lister-fichiers --extension md PRESENT
  16. non-regression : creer-fichier (fichier;contenu) compose correctement
   PARCOURS ATLAS v0.4.1
-17. parcours-atlas.json : json.load valide + version 0.5.4
+17. arbre-atlas.json : json.load valide + version 0.5.4
 18. 7 commandes en dur connues (c0 x2 + c10/c18/c19 corriger-symboles + c11a + c30) dans les indices outil avec catalogue
  19. navigation chemin explorer : PARCOURS TERMINE
  20. navigation chemin autre+OUI (delegation) : PARCOURS TERMINE
@@ -136,7 +136,7 @@ def bilan_chrono():
 GC_PY = os.path.join(RACINE, "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.py")
 GC_SH = os.path.join(RACINE, "cerveau-projet/agents/tools/generateurs/generateurs-commande/generateurs-commande.sh")
 CATALOGUE = os.path.join(RACINE, "cerveau-projet/agents/tools/generateurs/generateurs-commande/catalogue-commandes.json")
-PARCOURS_ATLAS = os.path.join(RACINE, "cerveau-projet/agents/atlas/parcours/parcours-atlas.json")
+PARCOURS_ATLAS = os.path.join(RACINE, "cerveau-projet/agents/atlas/parcours/arbre-atlas.json")
 GUIDER = os.path.join(RACINE, "cerveau-projet/agents/tools/guider/guider-parcours/guider-parcours.py")
 VALIDER_CARTES = os.path.join(RACINE, "cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py")
 ASCII = os.path.join(RACINE, "cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py")
@@ -211,7 +211,7 @@ def normale(s):
 
 
 def main():
-    print("=== Test 005 -- generateurs-commande v0.3.2 + catalogue 0.2.16 + parcours-atlas v0.5.4 ===")
+    print("=== Test 005 -- generateurs-commande v0.3.2 + catalogue 0.2.17 + parcours-atlas v0.5.4 ===")
     print("")
 
     # ---------- GENERATEUR v0.3.2 ----------
@@ -260,7 +260,8 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         verifier(13, "catalogue-commandes.json JSON valide", True)
-        verifier(14, "catalogue version = 0.2.16", cat.get("version") == "0.2.16", str(cat.get("version")))
+        # scission 2-bdd (2026-09-05) : outils v1 restaures -> 0.2.18
+        verifier(14, "catalogue version = 0.2.21", cat.get("version") == "0.2.21", str(cat.get("version")))
     except Exception as e:
         verifier(13, "catalogue-commandes.json JSON valide", False, str(e))
         verifier(14, "catalogue version = 0.2.0", False, "")
@@ -272,53 +273,43 @@ def main():
     ok = cmd is not None and "creer-fichier.py x.md" in cmd and "hello" in cmd
     verifier(16, "non-regression creer-fichier composee correctement", ok, str(cmd))
 
-    # ---------- PARCOURS ATLAS v0.5.4 ----------
+    # ---------- ARBRE ATLAS v2 (migration v1->v2) ----------
     try:
         with io.open(PARCOURS_ATLAS, encoding="utf-8") as fh:
             p = json.load(fh)
-        verifier(17, "parcours-atlas.json JSON valide + version 0.5.7",
-                 p.get("parcours", {}).get("version") == "0.5.7", str(p.get("parcours", {}).get("version")))
+        version_arbre = ((p.get("identite") or {}).get("version")
+                         or (p.get("arbre") or {}).get("version"))
+        verifier(17, "arbre-atlas.json JSON valide + version identite 0.2.0",
+                 version_arbre == "0.2.0", str(version_arbre))
     except Exception as e:
-        verifier(17, "parcours-atlas.json JSON valide + version 0.5.4", False, str(e))
+        verifier(17, "arbre-atlas.json JSON valide + version", False, str(e))
         p = {}
 
-    # Commandes en dur connues et documentees : c30 (template
-    # cartographier-parcours.py {parcours}), c11a (activer themis), c0 x2
-    # (relecture lire-fichier, portees par c0 depuis la migration relecture
-    # obligatoire 2026-08-16), c10/c18/c19 (corriger-symboles --all ajoutees
-    # par Buffy 2026-08-16), c12/c13 (detecter-recherches-obsoletes /
-    # rechercher-web ajoutees par Buffy 2026-08-16), c10 x2 suppl.
-    # (enregistrer-lecon + consulter-lecons, round BDD lecons 2026-08-17),
-    # c0e (consulter-lecons consultation pre-mission, round 2026-08-18),
-    # cU2 (comprendre l outil : consulter-combos, ajoutee par Buffy
-    # 2026-08-21), c0g (GATE BON AGENT : verifier-agent-perimetre --gate,
-    # decision utilisateur marbre-log 2026-08-29). Toute commande
-    # SUPPLEMENTAIRE = regression.
-    n_commande = 0
-    cases_commande = []
-    for k, c in p.get("cases", {}).items():
-        for i in c.get("indices", []):
-            if i.get("type") == "outil" and i.get("catalogue") and i.get("commande"):
-                n_commande += 1
-                cases_commande.append(k)
-    verifier(18, "15 commandes en dur connues (c0 x2 + c0e + c0g + c10 x3 + c11a + c12/c13 + c18/c19 + c30 + c35 + cU2) dans les indices avec catalogue",
-             n_commande == 15 and sorted(cases_commande) == ["c0", "c0", "c0e", "c0g", "c10", "c10", "c10", "c11a", "c12", "c13", "c18", "c19", "c30", "c35", "cU2"],
-             "restants=%d cases=%s" % (n_commande, sorted(cases_commande)))
+    # v0.3.0 (migration v1->v2) : les cases/indices v1 sont retires. Le
+    # format v2 (arbre/theme/fins) est valide par valider-cartes-decision
+    # (point 21) et l absence de tokens v1 par test-126. On verifie ici que
+    # l arbre atlas ne contient AUCUN token de guidage v1 (vestige).
+    contenu_arbre = json.dumps(p, ensure_ascii=True)
+    tokens_v1 = [t for t in ("guider-parcours", "parcours-demarrage",
+                             "editer-parcours", "generateurs-case")
+                 if t in contenu_arbre]
+    verifier(18, "arbre-atlas sans token v1 (vestige)", not tokens_v1,
+             "tokens: %s" % ", ".join(tokens_v1))
 
-    # Depuis Buffy 2026-08-21 (case COMPRENDRE L OUTIL cU1), le flux passe
-    # par cU1 (NON) avant la question Mission : les sequences de navigation
-    # portent un NON supplementaire apres le OUI de c0b.
-    for num, nom_chemin, chemin in [(19, "explorer", "OUI|NON|explorer|NON|OUI|NON|OUI"), (20, "autre+OUI", "OUI|NON|autre|OUI|NON|OUI|NON|OUI")]:
-        c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--reponses", chemin])
-        verifier(num, "navigation %s : PARCOURS TERMINE" % nom_chemin, "PARCOURS TERMINE" in out, out[-80:])
+    # 19-20. (retires : navigation guider-parcours v1, outil archive)
+    verifier(19, "guider-parcours archive (vestige v1 purge)",
+             not os.path.isdir(os.path.join(RACINE, "cerveau-projet", "agents",
+                                            "tools", "guider", "guider-parcours")))
 
-    c, out = exec_cmd("python3 %s --agent atlas" % VALIDER_CARTES)
-    verifier(21, "valider-cartes-decision --agent atlas : CONFORME", "CONFORME" in out, out[-80:])
+    # 21. valider-cartes-decision --audit : conformite de l arbre v2
+    c, out = exec_cmd("python3 %s --agent atlas --audit" % VALIDER_CARTES)
+    verifier(21, "valider-cartes-decision --agent atlas --audit : CONFORME",
+             "CONFORME" in out, out[-80:])
 
-    c, out = exec_list(["python3", GUIDER, PARCOURS_ATLAS, "--case", "c16"])
-    segment = out[out.find("Lister les fichiers"):out.find("Lister les fichiers") + 400] if "Lister les fichiers" in out else ""
-    ok = ("PASSE PAR LE GENERATEUR" in segment) and ("catalogue: lister-fichiers" in segment)
-    verifier(22, "case c16 : PASSE PAR LE GENERATEUR sans commande en dur", ok, segment[:200])
+    # 22. (retire : case c16 v1 / generateurs-case archive)
+    verifier(22, "generateurs-case archive (vestige v1 purge)",
+             not os.path.isdir(os.path.join(RACINE, "cerveau-projet", "agents",
+                                            "tools", "generateurs", "generateurs-case")))
 
     # ---------- CONTRAT DOCUMENTATION (REGLE ABSOLUE LECTURE DOC) ----------
     # Chaque commande du catalogue doit pointer vers un outil dont la documentation

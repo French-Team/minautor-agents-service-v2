@@ -99,27 +99,29 @@ python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agen
 Regle fondamentale : **activer SANS lire la fiche = inutile**. Chaque agent
 relit SA fiche et SES corrections avant d'agir (jamais celles des autres).
 
-### 3.3 Reactiver Cerberus (fin de mission)
+### 3.3 Fin de mission vers ORACLE (modele aero R1/R3)
 
 ```bash
-python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> <raison> <agent-precedent>
+python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin <agent> "<bilan>" --cible oracle
 ```
 
-La fin de mission suit **LA CARTE de l'agent** (Pattern 13) : activation
-directe par Cerberus -> reactiver Cerberus ; maillon d'une chaine ->
-activer le suivant selon SA carte ; seul le DERNIER maillon reactive
-Cerberus avec le bilan consolide. La chaine ne retombe JAMAIS sur Cerberus
-au milieu.
+La fin de mission suit **LA CARTE de l'agent** (modele aero R1/R3) : TOUTE
+fin d'agent va vers **ORACLE** (`reactiver-fin <agent> --cible oracle`) -
+JAMAIS reactiver Cerberus directement, JAMAIS activer un autre agent. C est
+le **pilote** qui decide du suivant (largage d'un maillon, renvoi de
+l'appelant) et qui ramene a Cerberus en fin de round avec le bilan consolide.
 
 ### 3.3b Erreur hors-perimetre : l'inter-round (protocole-fin-mission v0.2.0 R2)
 
 Quand un agent detecte une erreur qu'il ne peut pas reparer lui-meme
 (ex : KO de tests, defaut de carte, verification echouee), il **n'interrompt
-PAS le round** et ne reactive PAS Cerberus. Il active **l'agent habilite**
-en inter-round avec le rapport de l'erreur.
+PAS le round** et ne reactive PAS Cerberus. Il **signale le besoin a ORACLE**
+(`oracle.py mission-ajouter --file asap --agent <habilite> "<rapport>"`)
+puis sa fin va vers ORACLE ; le **pilote largue l'agent habilite** qui
+repare, puis renvoie l'appelant qui reprend son round.
 
 ```
-Agent (KO detecte) -> Agent habilite (repare) -> Agent (reprend son round)
+Agent (KO detecte) -> signalement ORACLE -> pilote largue l'habilite (repare) -> pilote renvoie l'appelant (reprend son round)
 ```
 
 **Agents avec case inter-round** (cablee dans leur carte) :
@@ -135,7 +137,7 @@ Agent (KO detecte) -> Agent habilite (repare) -> Agent (reprend son round)
 **Agents avec reception inter-round** (c1ir) : Vulcain, Themis, Buffy.
 Quand un agent est active en inter-round, il repond `inter-round` a sa
 question de mission (c1) et suit la case c1ir : accuser reception du
-rapport KO puis reactiver l'appelant.
+rapport KO ; c'est le pilote qui renvoie l'appelant en fin d'inter-round.
 
 ### 3.4 Lancer plusieurs LLM en parallele
 
@@ -152,7 +154,7 @@ intervention par sa session : `| date | session | agent | raison |`.
 | 2 | Il consulte SA session dans `AGENTS.md` (son bloc) |
 | 3 | Cerberus analyse le besoin et active l'agent habilite |
 | 4 | L'agent execute sa mission en suivant SA carte |
-| 5 | La fin suit SA carte (reactiver Cerberus ou activer le suivant) |
+| 5 | La fin suit SA carte : reactiver-fin <agent> --cible oracle (le pilote decide du suivant) |
 
 ---
 

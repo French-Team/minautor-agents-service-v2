@@ -1,0 +1,97 @@
+%% Arbre de decision de hermes (arbre v0.2.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "CORRIGER" --> THEME-CORRIGER
+    THEME-CORRIGER["Detecter et corriger les fautes d orthographe avec tracabili"]
+    THEME-CORRIGER -- "besoin 1" --> THEME-CORRIGER-B0
+    THEME-CORRIGER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CORRIGER -- "besoin 2" --> THEME-CORRIGER-B1
+    THEME-CORRIGER-B1["Consulter les lecons (domaine orthographe)"]
+    THEME-CORRIGER -- "besoin 3" --> THEME-CORRIGER-B2
+    THEME-CORRIGER-B2["CONTEXTE : activite recente des agents"]
+    THEME-CORRIGER -- "besoin 4" --> THEME-CORRIGER-B3
+    THEME-CORRIGER-B3["SCAN OBLIGATOIRE : detecter les fautes du projet (case c2)"]
+    THEME-CORRIGER -- "besoin 5" --> THEME-CORRIGER-B4
+    THEME-CORRIGER-B4["Des fautes sont-elles detectees ? (case c3)"]
+    THEME-CORRIGER -- "besoin 6" --> THEME-CORRIGER-B5
+    THEME-CORRIGER-B5["Classer les fautes par fichier (case c4)"]
+    THEME-CORRIGER -- "besoin 7" --> THEME-CORRIGER-B6
+    THEME-CORRIGER-B6["Verifier le contexte de chaque faute (case c5)"]
+    THEME-CORRIGER -- "besoin 8" --> THEME-CORRIGER-B7
+    THEME-CORRIGER-B7["CORRIGER : remplacer fautif par correct avec tracabilite (ca"]
+    THEME-CORRIGER -- "besoin 9" --> THEME-CORRIGER-B8
+    THEME-CORRIGER-B8["Etendre le dictionnaire de fautes (case c7)"]
+    THEME-CORRIGER -- "besoin 10" --> THEME-CORRIGER-B9
+    THEME-CORRIGER-B9["RESCAN : 0 faute restante ? (case c8)"]
+    THEME-CORRIGER -- "besoin 11" --> THEME-CORRIGER-B10
+    THEME-CORRIGER-B10["Documenter la lecon dans corrections.md (case c9)"]
+    THEME-CORRIGER -- "besoin 12" --> THEME-CORRIGER-B11
+    THEME-CORRIGER-B11["Verifier la conformite ASCII des fichiers modifies (case c10"]
+    THEME-CORRIGER -- "besoin 13" --> THEME-CORRIGER-B12
+    THEME-CORRIGER-B12["Rapport de correction orthographique (case c11)"]
+    FIN-fin-corriger(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-CORRIGER-B0 --> FIN-fin-corriger
+    THEME-CORRIGER-B1 --> FIN-fin-corriger
+    THEME-CORRIGER-B2 --> FIN-fin-corriger
+    THEME-CORRIGER-B3 --> FIN-fin-corriger
+    THEME-CORRIGER-B4 --> FIN-fin-corriger
+    THEME-CORRIGER-B5 --> FIN-fin-corriger
+    THEME-CORRIGER-B6 --> FIN-fin-corriger
+    THEME-CORRIGER-B7 --> FIN-fin-corriger
+    THEME-CORRIGER-B8 --> FIN-fin-corriger
+    THEME-CORRIGER-B9 --> FIN-fin-corriger
+    THEME-CORRIGER-B10 --> FIN-fin-corriger
+    THEME-CORRIGER-B11 --> FIN-fin-corriger
+    THEME-CORRIGER-B12 --> FIN-fin-corriger
+    RACINE -- "VEILLE" --> THEME-VEILLE
+    THEME-VEILLE["Mesurer l etat orthographique global du projet et produire u"]
+    THEME-VEILLE -- "besoin 1" --> THEME-VEILLE-B0
+    THEME-VEILLE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-VEILLE -- "besoin 2" --> THEME-VEILLE-B1
+    THEME-VEILLE-B1["Consulter les lecons (domaine orthographe)"]
+    THEME-VEILLE -- "besoin 3" --> THEME-VEILLE-B2
+    THEME-VEILLE-B2["CONTEXTE : activite recente des agents"]
+    THEME-VEILLE -- "besoin 4" --> THEME-VEILLE-B3
+    THEME-VEILLE-B3["Scanner tout le projet (scan --tous)"]
+    THEME-VEILLE -- "besoin 5" --> THEME-VEILLE-B4
+    THEME-VEILLE-B4["Produire le rapport d etat orthographique"]
+    THEME-VEILLE -- "besoin 6" --> THEME-VEILLE-B5
+    THEME-VEILLE-B5["Ajouter les lecons dans corrections.md"]
+    FIN-fin-veille(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-VEILLE-B0 --> FIN-fin-veille
+    THEME-VEILLE-B1 --> FIN-fin-veille
+    THEME-VEILLE-B2 --> FIN-fin-veille
+    THEME-VEILLE-B3 --> FIN-fin-veille
+    THEME-VEILLE-B4 --> FIN-fin-veille
+    THEME-VEILLE-B5 --> FIN-fin-veille
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Executer une mission hors des themes standard"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Lire le protocole creation scripts temporaires"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["Verifier si la mission est hors perimetre (case c29)"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["La mission concerne-t-elle un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["DELEGATION - Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 6" --> THEME-AUTRE-B5
+    THEME-AUTRE-B5["Executer la mission"]
+    THEME-AUTRE -- "besoin 7" --> THEME-AUTRE-B6
+    THEME-AUTRE-B6["Ajouter les lecons dans corrections.md"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    THEME-AUTRE-B4 --> FIN-fin-autre
+    THEME-AUTRE-B5 --> FIN-fin-autre
+    THEME-AUTRE-B6 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

@@ -7,24 +7,34 @@ identite:
 
 # Protocole de Fin de Mission -- Documentation Obligatoire avant Transmission
 
-**Version** : 0.3.0
+**Version** : 0.4.0
 **Statut** : ebauche
 **Categorie** : General
 **Agent** : Cerberus
-**Date** : 2026-08-29
+**Date** : 2026-09-05
 
 Impose que CHAQUE maillon d'une chaine documente SON controle (lecon + verdict)
-dans SA fiche de corrections AVANT de transmettre au maillon suivant ou de
-reactiver Cerberus. Un bilan consolide ne peut jamais affirmer un verdict VALIDE
-si les maillons n'ont pas documente leur propre controle.
+dans SA BDD des lecons AVANT de transmettre au maillon suivant ou de reactiver
+Cerberus. Un bilan consolide ne peut jamais affirmer un verdict VALIDE si les
+maillons n'ont pas documente leur propre controle.
+
+DEUX TEAMs, DEUX BDD (decision utilisateur 2026-09-05, scission 2-bdd) :
+- Agents v1 (cerveau-projet) : BDD v1 `cerveau-projet/agents/lecons/lecons.db`
+  via les outils v1 `enregistrer-lecon` / `consulter-lecons` (restaures).
+- Agents v2 (freelance) : BDD v2 `cerveau-projet/freelance/tools-commun/bdd-lecons/lecons.db`
+  via la commande `bdd-lecons entry.py enregistrer`.
+Chaque equipe a SON perimetre et SA zone de memoire collective : aucune lecon
+v1 ne doit atterrir dans bdd-lecons v2, et inversement.
 
 ---
 
 ## Objectif
 
 Garantir qu'aucune mission ne se termine sans trace documentaire de son
-controle : chaque agent qui execute une mission ecrit obligatoirement SA lecon
-dans `corrections.md` (avec contexte, actions, verdict) PUIS transmet.
+controle : chaque agent qui execute une mission enregistre obligatoirement SA
+lecon dans SA BDD (avec contexte, actions, verdict) PUIS transmet. Les
+corrections.md v1 sont GELEES depuis le 2026-09-04 (historique conserve pour
+relecture, AUCUNE nouvelle lecon dedans).
 
 **Pourquoi ce protocole ?**
 - Le 2026-08-14, la verification de la chaine Hermes a revele que le bilan
@@ -44,7 +54,7 @@ dans `corrections.md` (avec contexte, actions, verdict) PUIS transmet.
 |---|---|---|
 | 1 | Mission attribuee | Un agent a recu une mission (activation via activer-agent-principal) |
 | 2 | Travail termine | L'agent a execute les actions de sa mission |
-| 3 | Lecon non ecrite | Pas encore de lecon dans corrections.md pour cette mission |
+| 3 | Lecon non enregistree | Pas encore de lecon dans SA BDD (v1 ou v2 selon l equipe) pour cette mission |
 | 4 | Verdict connu | L'agent connait le resultat de son travail (VALIDE / A REVOIR / CONFORME / KO) |
 
 ---
@@ -59,15 +69,15 @@ TRAVAIL -> LECON (contexte + actions + verdict) -> TRANSMISSION
 | Etape | Action | Detail | Outils |
 |---|---|---|---|
 | E1 | Terminer le travail | Executer toutes les actions de la mission, verifier les resultats | outils de la carte |
-| E2 | Ecrire SA lecon | Ajouter dans `cerveau-projet/agents/<nom>/corrections.md` (memoire COURTE, fenetre glissante) une entree `## [LECON] <date> -- <TITRE> (<Agent>)` contenant : **Contexte** (mission, origine), **Actions** (ce qui a ete fait), **Lecon** (ce qui est appris). Le verdict (VALIDE / A REVOIR / CONFORME / KO) doit apparaitre dans le titre OU le corps. LA MEME lecon part AUSSI dans la BDD (memoire LONGUE, partagee) via `enregistrer-lecon` (anti-usurpation : --agent == agent actif de la session) | editer-fichier + enregistrer-lecon |
+| E2 | Ecrire SA lecon | **Agents v1** : `enregistrer-lecon` (BDD v1 `cerveau-projet/agents/lecons/lecons.db` - LEUR memoire collective). **Agents v2** : `bdd-lecons entry.py enregistrer` (BDD v2 freelance). Chaque equipe ecrit UNIQUEMENT dans SA BDD (scission 2-bdd, decision utilisateur 2026-09-05). Entree `## [LECON] <date> -- <TITRE> (<Agent>)` avec **Contexte** (mission, origine), **Actions** (ce qui a ete fait), **Lecon** (ce qui est appris). Le verdict (VALIDE / A REVOIR / CONFORME / KO) doit apparaitre dans le titre OU le corps. **Les corrections.md v1 sont GELEES le 2026-09-04 (memoire historique conservee pour relecture) : AUCUN [LECON] supplementaire dedans.** | agents v1 : enregistrer-lecon ; agents v2 : bdd-lecons (enregistrer) |
 | E3 | Verifier la lecon | Relire la lecon : date du jour, titre avec le nom de l'agent, verdict present, ASCII strict, LF pur | valider-conformite-ascii |
-| E4 | Transmettre | Seulement apres E2+E3 : activer le maillon suivant (ou reactiver Cerberus si dernier maillon) avec le bilan | activer-agent-principal |
-| E5 | Garde-fou | test-048 verifie que chaque mission recente d'AGENTS-historique a SA lecon + verdict dans corrections.md de l'agent | test-048 |
+| E4 | Transmettre | Seulement apres E2+E3 : MA FIN suit MA carte (modele aero R1/R3) - `oracle.py reactiver-fin <agent> "<bilan>" --cible oracle` ; le pilote decide du suivant | oracle.py reactiver-fin |
+| E5 | Garde-fou | test-048 verifie que chaque mission recente d'AGENTS-historique a SA lecon + verdict dans SA BDD (agents v1 -> lecons.db v1, agents v2 -> bdd-lecons v2) - les missions pre-migration (avant 2026-09-04) sont verifiees dans l historique gele corrections.md | test-048 |
 
 **REGLE : AUCUNE TRANSMISSION SANS LECON + VERDICT.** Si la lecon n'est pas
-ecrite, l'agent n'est pas autorise a activer le maillon suivant ni a reactiver
-Cerberus. Le bilan consolide du dernier maillon ne peut affirmer VALIDE que si
-chaque maillon precedent a documente son controle.
+ecrite, l'agent n'est pas autorise a rendre sa fin (reactiver-fin --cible
+oracle). Le bilan consolide ramene par le pilote a Cerberus en fin de round ne
+peut affirmer VALIDE que si chaque maillon precedent a documente son controle.
 
 ---
 
@@ -89,15 +99,16 @@ chaque maillon precedent a documente son controle.
 
 ```
 Buffy execute MISSION BUFFY (creation Hermes)
-  -> ecrit LECON "CREATION AGENT HERMES (Buffy)" avec verdict VALIDE dans buffy/corrections.md
-  -> active Clio
+  -> enregistre LECON "CREATION AGENT HERMES (Buffy)" avec verdict VALIDE dans lecons.db v1 (enregistrer-lecon)
+  -> MA FIN vers ORACLE (reactiver-fin buffy --cible oracle) ; le pilote largue Clio
 Clio execute MISSION CLIO (README)
-  -> ecrit LECON "README HERMES (Clio)" avec verdict VALIDE dans clio/corrections.md
-  -> active Morpheus
+  -> enregistre LECON "README HERMES (Clio)" avec verdict VALIDE dans lecons.db v1 (enregistrer-lecon)
+  -> MA FIN vers ORACLE (reactiver-fin clio --cible oracle) ; le pilote largue Morpheus
 ...
 Janus execute MISSION JANUS (controle croise final)
-  -> ecrit LECON "CONTROLE HERMES (Janus)" avec verdict VALIDE dans janus/corrections.md
-  -> reactiver Cerberus avec le bilan consolide
+  -> enregistre LECON "CONTROLE HERMES (Janus)" avec verdict VALIDE dans lecons.db v1 (enregistrer-lecon)
+  -> MA FIN vers ORACLE (reactiver-fin janus --cible oracle) ; le pilote ramene
+     le bilan consolide a Cerberus en fin de round
 ```
 
 ### Exemple 2 : chaine NON conforme (derive a eviter)
@@ -118,6 +129,7 @@ Janus reprend les resultats de Morpheus sans controle reel
 | Piege | Consequence | Protection |
 |---|---|---|
 | Transmettre sans ecrire la lecon | Le bilan affirme sans preuve | E2 obligatoire + test-048 |
+| Ecrire sa lecon dans la BDD de l'autre equipe | Fusion des memoires (violation du perimetre 2-bdd) | E2 : chaque equipe ecrit UNIQUEMENT dans SA BDD |
 | Recopier les resultats d'un autre agent sans controle | Faux verdict VALIDE | Lecon doit decrire SON controle, pas celui des autres |
 | Verdict absent de la lecon | Impossible de savoir si le travail a reussi | E2 : verdict obligatoire |
 | Lecon ecrite mais pas relue (accents, CRLF) | Normes violees | E3 : valider-conformite-ascii |

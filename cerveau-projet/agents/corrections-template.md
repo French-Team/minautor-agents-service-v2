@@ -53,11 +53,15 @@ types:
 > **PRINCIPE** : Chaque erreur detectee devient une lecon. Les lecons sont lues
 > a chaque activation et evitees lors des missions suivantes.
 >
-> **MEMOIRE COURTE vs LONGUE** : ce fichier (corrections.md) est la MEMOIRE
-> COURTE (fenetre glissante des missions proches). La MEMOIRE LONGUE est la BDD
-> SQLite partagee (`cerveau-projet/agents/lecons/lecons.db`) : la meme lecon y
-> est ecrite via `enregistrer-lecon` et consultable par tous via
-> `consulter-lecons` (pollinisation croisee).
+> **MEMOIRE GELEE (decision utilisateur 2026-09-04, v1->v2)** : les
+> corrections.md v1 sont GELEES - AUCUN nouveau [LECON]. Les lecons vont dans
+> **SA BDD** (scission 2-bdd 2026-09-05) :
+> - agents v1 : **lecons.db v1** (`cerveau-projet/agents/lecons/lecons.db`,
+>   outils v1 `enregistrer-lecon` / `consulter-lecons` restaures) ;
+> - agents v2 : **bdd-lecons v2** (`cerveau-projet/freelance/tools-commun/bdd-lecons/`,
+>   CLI `entry.py enregistrer`).
+> Chaque equipe ecrit UNIQUEMENT dans SA BDD (deux equipes distinctes, deux
+> memoires collectives).
 
 > **FORMAT DES LECONS (garde-fou)** : chaque lecon commence par `## [LECON] <date> -- <titre>`.
 > NE JAMAIS ecrire un exemple de syntaxe de lien en LITTERAL (texte entre crochets suivi d'une

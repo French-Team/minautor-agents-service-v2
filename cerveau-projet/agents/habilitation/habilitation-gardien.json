@@ -1,0 +1,28 @@
+{
+ "identite": {
+  "type": "habilitation",
+  "appartient_a": "gardien",
+  "version": "0.1.0",
+  "commun": false
+ },
+ "agent": "gardien",
+ "description": "Table d habilitation dediee (migration v1->v2 2026-09-05) : fusion parcours v1 + arbres/themes v2 + P0 partages. Source unique du verrou d habilitation.",
+ "outils": [
+  "activer-agent-principal",
+  "ajouter-contenu-fichier",
+  "consulter-combos",
+  "consulter-lecons",
+  "corriger-accents-zones-sensibles",
+  "enregistrer-usage-outil",
+  "generateurs-commande",
+  "generateurs-outil-temporaire",
+  "guider-arbre",
+  "lire-activite-recente",
+  "lire-fichier",
+  "proteger-modifier-marbre",
+  "proteger-verrou-marbre",
+  "valider-conformite-ascii",
+  "verifier-agent-perimetre",
+  "verifier-systeme"
+ ]
+}

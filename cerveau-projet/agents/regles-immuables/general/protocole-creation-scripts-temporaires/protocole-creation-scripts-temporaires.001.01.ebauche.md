@@ -374,5 +374,5 @@ La methode fiable, eprouvee sur des dizaines de missions :
 - [enregistrer-usage-outil](../../../tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.md)
 - [detecter-usage-scripts-temporaires](../../../tools/detecter/detecter-usage-scripts-temporaires/detecter-usage-scripts-temporaires.md)
 - [tester-lancer-non-regression](../../../tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.md)
-- [test-024-scripts-temporaires](../../../tools/tester/tests/test-024-scripts-temporaires/test-024-scripts-temporaires.py)
+- [test-024-scripts-temporaires](../../../tools/tester/tests/test-024-scripts-temporaires/test-024-scripts-temporaires.py) (garde-fou restaure et adapte migration v1->v2)
 - [index-regles-general](../index-regles-general.md)

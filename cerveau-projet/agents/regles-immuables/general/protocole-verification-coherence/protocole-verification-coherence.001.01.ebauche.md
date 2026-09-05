@@ -165,6 +165,5 @@ Tri alphabetique automatique de la table (32 lignes) :
 | [combos-analyse-projet](../../../tools/combos/combos-analyse-projet/) | Source de verite croisee (ecarts README vs realite) |
 | [rapport-audit-clio-readme](../../../themis/rapports/rapport-audit-clio-readme-2026-08-22.md) | Cas reel d audit README (l ancien rapport-audit-coherence-readme-2026-08-10 a ete renomme) |
 | [spec-refonte-cartes-decision](../../../../docs-dev-cerveau-projet/spec-refonte-cartes-decision.001.01.ebauche.md) | Reference des seuils budget pondere (v0.1.3) |
-| [spec-valider-case](../../../tools/valider/valider-case/spec/spec-valider-case.001.01.ebauche.md) + [valider-case.md](../../../tools/valider/valider-case/valider-case.md) | Spec + doc d'outil a croiser (E7) |
-| [spec-guider-parcours](../../../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) | Spec Pattern 16 ALLEGEMENT a croiser (E7) |
-| [valider-case.py](../../../tools/valider/valider-case/valider-case.py) + [generateurs-case.py](../../../tools/generateurs/generateurs-case/generateurs-case.py) | Constantes code du budget pondere (SEUIL_COURT / BUDGET_INDICES / SEUIL_TEXTE) |
+| [valider-cartes-decision](../../../tools/valider/valider-cartes-decision/valider-cartes-decision.py) | Validation v2 des arbres (source de verite apres migration v1->v2) |
+| [auditer-conformite-arbre](../../../tools/verifier/auditer-conformite-arbre/auditer-conformite-arbre.py) | Audit de conformite des arbres v2 |

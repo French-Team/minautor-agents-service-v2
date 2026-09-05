@@ -11,7 +11,7 @@
     "description": "Arbre des decisions de Redacteur-v2 - redacteur PRO des docs de la v2 (freelance). L agent choisit UN THEME : SYNTHESE (rediger un document de la v2 de maniere autonome, en un round SOLO), AUTRE (mission hors parcours), INTER-ROUND (rapport KO recu d un autre agent).",
     "regles": {
       "D1": "Chaque branche (theme) mene a des besoins, qui menent aux procedures d execution.",
-      "D5": "Round SOLO : exceptionnellement capable de faire un round seul, puis reactiver Cerberus."
+      "D5": "Round SOLO : exceptionnellement capable de faire un round seul, puis MA FIN suit MA carte (modele aero : reactiver-fin redacteur-v2 --cible oracle)."
     }
   },
   "racine": {

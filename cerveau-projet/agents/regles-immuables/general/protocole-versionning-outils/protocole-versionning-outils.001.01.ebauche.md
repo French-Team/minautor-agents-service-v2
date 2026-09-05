@@ -71,7 +71,7 @@ BETA -> TEST -> OPTIMISATION -> INTEGRATION -> SECOND CONTROLE -> PRODUCTION
 3. **Mission** : Ecrite pour la tache en cours
 4. **Points** : Documentation, tests, conventions
 5. **Verdict** : Valide ou rejete
-6. **Retour** : Janus reactive Cerberus
+6. **Retour** : la fin de Janus suit SA carte (modele aero) - reactiver-fin janus --cible oracle ; le pilote ramene le verdict a Cerberus en fin de round
 
 ---
 

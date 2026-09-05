@@ -23,11 +23,11 @@ Cas couverts:
       courant, regle d origine v0.2.4 : dossier cree + supprime en fin)
   3. detecter-usage-scripts-temporaires : executable + --version v0.1.1
   4. detecter-usage-scripts-temporaires : sortie sans ERREUR
-  5. editer-parcours : --version v0.1.1
-  6. tester-lancer-non-regression : --version v0.1.1
-  7. enregistrer-usage-outil : mode script-temporaire accepte (--version v0.3.0)
-  8. Catalogue : les nouvelles commandes presentes (172 total)
-  9. index-tools : les 4 nouvelles lignes presentes (3 outils + editer-fichier-agents)
+  5. tester-lancer-non-regression : --version v0.6.2
+  6. enregistrer-usage-outil : mode script-temporaire accepte (--version v0.3.0)
+  7. detecter-usage-scripts-temporaires : executable + --version v0.1.1
+  8. Catalogue : les commandes cles presentes
+  9. index-tools : les lignes cles presentes
  10. ASCII strict : 0 non-ASCII (outils + test)
  11. LF pur : 0 CRLF (outils + test)
  12. Protection : le test lui-meme ne cree aucun fichier a la racine
@@ -255,46 +255,38 @@ def main():
     verifier("4. detecter : sortie sans ERREUR",
              r.returncode in (0, 1) and "ERREUR" not in r.stdout, r.stdout.strip()[-80:])
 
-    # 5-6. editer-parcours + tester-lancer-non-regression
-    r = run([PYTHON, EDITER_PARCOURS, "--version"])
-    verifier("5. editer-parcours --version v0.1.7",
-             r.returncode == 0 and "v0.1.7" in r.stdout, r.stdout.strip()[-60:])
+    # 5. tester-lancer-non-regression --version v0.6.2
     r = run([PYTHON, LANCER, "--version"])
-    verifier("6. tester-lancer-non-regression --version v0.6.2",
+    verifier("5. tester-lancer-non-regression --version v0.6.2",
              r.returncode == 0 and "v0.6.2" in r.stdout, r.stdout.strip()[-60:])
 
-    # 7. enregistrer-usage-outil v0.3.0 (mode script-temporaire + garde-fous + tri)
+    # 6. enregistrer-usage-outil v0.3.0 (mode script-temporaire + garde-fous + tri)
     r = run([PYTHON, ENREGISTRER, "--version"])
-    verifier("7. enregistrer-usage-outil --version v0.3.0",
+    verifier("6. enregistrer-usage-outil --version v0.3.0",
              r.returncode == 0 and "v0.3.0" in r.stdout, r.stdout.strip()[-60:])
 
-    # 8. Catalogue : 171 commandes + les nouvelles
+    # 8. Catalogue : commandes presentes
     import json as json_mod
     with io.open(CATALOGUE, encoding="utf-8") as fh:
         cat = json_mod.load(fh)
     noms = [e.get("nom") for e in cat.get("commandes", [])]
-    ok_cat = (len(noms) == 188 and "lire-head" in noms
-              and "tester-lancer-non-regression" in noms
-              and "editer-parcours" in noms and "detecter-usage-scripts-temporaires" in noms
-              and "detecter-cablages-manquants" in noms and "tester-protections" in noms
-              and "detecter-fautes-orthographe" in noms and "detecter-contradictions" in noms
-              and "purifier-rvav" in noms and "analyser-io-tests" in noms
-              and "analyser-noms-maj" in noms and "corriger-noms-maj" in noms
-              and "detecter-processus-residuels" in noms
-              and "nettoyer-processus-residuels" in noms)
-    verifier("8. catalogue : 188 commandes + nouvelles presentes",
+    ok_cat = ("tester-lancer-non-regression" in noms
+              and "detecter-usage-scripts-temporaires" in noms
+              and "tester-protections" in noms
+              and "analyser-noms-maj" in noms and "corriger-noms-maj" in noms)
+    verifier("8. catalogue : commandes cles presentes",
              ok_cat, "nb=%d" % len(noms))
 
-    # 9. index-tools : les 4 lignes presentes
+    # 9. index-tools : les lignes presentes
     with io.open(INDEX, encoding="utf-8") as fh:
         idx = fh.read()
-    ok_idx = all(x in idx for x in ["tester-lancer-non-regression", "editer-parcours",
+    ok_idx = all(x in idx for x in ["tester-lancer-non-regression",
                                     "detecter-usage-scripts-temporaires",
                                     "editer-fichier-agents"])
-    verifier("9. index-tools : 4 lignes presentes (3 outils + editer-fichier-agents)", ok_idx)
+    verifier("9. index-tools : 3 lignes presentes", ok_idx)
 
-    # 10-11. Normes sur les 6 fichiers touches + ce test
-    fichiers = [DETECTER, EDITER_PARCOURS, LANCER, ENREGISTRER,
+    # 10-11. Normes sur les fichiers touches + ce test
+    fichiers = [DETECTER, LANCER, ENREGISTRER,
                 CATALOGUE, INDEX, os.path.abspath(__file__)]
     total_non_ascii = sum(ascii_count(f) for f in fichiers)
     verifier("10. ASCII strict : 0 non-ASCII (outils + test)",

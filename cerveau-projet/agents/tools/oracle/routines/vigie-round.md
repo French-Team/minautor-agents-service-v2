@@ -15,7 +15,7 @@ Cerberus. **LECTURE SEULE** : elle ne corrige jamais, elle signale.
 | Type | Detection | Format |
 |---|---|---|
 | **Session orpheline** | Un agent actif (non Cerberus) sans activite historisee depuis X minutes alors qu il a une mission en cours | Alerte 4W |
-| **Chaine en attente** | Etat de carte de l agent actif a `etape=fin` depuis X minutes : le round est termine mais personne n a reactive Cerberus (Pattern 13 non execute) | Alerte 4W |
+| **Chaine en attente** | Etat de carte de l agent actif a `etape=fin` depuis X minutes : le round est termine mais la fin n a pas ete rendue (reactiver-fin --cible oracle non execute, modele aero) | Alerte 4W |
 
 Cas normal jamais alerte : Cerberus actif en accueil (attente utilisateur).
 

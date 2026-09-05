@@ -70,7 +70,7 @@
         "regle": "OUTIL TEMP : creer dans tmp-minerve/ a la racine, supprimer en fin de mission."
       },
       {
-        "besoin": "Signaler le besoin durable a Cerberus (case c20)",
+        "besoin": "Signaler le besoin durable au pilote via ORACLE (case c20)",
         "action": "procedure",
         "etapes": [
           "Signaler au PILOTE via ORACLE : besoin d outil -> ORACLE choisit et active Vulcain ; besoin de test -> ORACLE choisit et active Morpheus"

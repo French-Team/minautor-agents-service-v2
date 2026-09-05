@@ -10,14 +10,17 @@
 # supprime, seul morpheus ecrit les tests, seul clio met a jour le README).
 # Le verrou mecanise cette regle A LA SOURCE : quand un agent veut utiliser un
 # outil, il passe par le verrou avec --agent <nom> ; si l outil n est pas dans
-# SA carte de decision (indices outil du parcours), le verrou BLOQUE et
-# indique QUI est habilite et COMMENT l activer (cycle Cerberus -> agent).
+# SA table d habilitation (agents/habilitation/habilitation-<agent>.json), le
+# verrou BLOQUE et indique QUI est habilite et COMMENT l activer (cycle
+# Cerberus -> agent).
 #
-# SOURCE DE VERITE : les cartes de decision (cerveau-projet/agents/*/parcours/
-# parcours-*.json). Un agent est habilite pour un outil SI ET SEULEMENT SI
-# l outil figure dans les indices de type "outil" de sa carte. Aucune liste en
-# dur dans ce script : la carte EST la regle (anti-derive, meme philosophie que
-# test-035/037/045).
+# SOURCE DE VERITE : la table d habilitation DEDIEE (cerveau-projet/agents/
+# habilitation/habilitation-<agent>.json, un fichier par agent, champ "outils").
+# La table a ete creee le 2026-09-05 (migration v1->v2) en fusionnant les
+# parcours v1 (retires depuis) + les arbres/themes v2 + les P0 partages.
+# Un agent est habilite pour un outil SI ET SEULEMENT SI l outil figure dans
+# SON fichier d habilitation. Aucune liste en dur dans ce script : la table
+# EST la regle (anti-derive, meme philosophie que test-035/037/045).
 #
 # IDENTITE REELLE (v0.2.0, 2026-08-15, demande utilisateur) : le verrou
 # verifie en plus que l agent DECLARE (--agent) est bien l agent REEL de la
@@ -58,7 +61,10 @@
 #   2 : erreur d utilisation (agent/outil manquant, agent inconnu,
 #       identite de session indeterminable)
 #
-# Version : 0.5.0
+# Version : 0.6.0 (2026-09-05, migration v1->v2) : source de verite = table
+# d habilitation DEDIEE (agents/habilitation/habilitation-<agent>.json) au
+# lieu des cartes/parcours v1 (retires). Aucune perte d habilitation.
+# Version : 0.5.0 (precedente : cartes de decision v1 = source)
 # Statut : ebauche
 # identite:
 #   type: outil
@@ -89,7 +95,7 @@ import re
 import subprocess
 import sys
 
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 
 AGENTS_DIR = None          # racine/cerveau-projet/agents (detectee)
 PROJECT_ROOT = None        # racine du projet (contient AGENTS.md)
@@ -120,71 +126,47 @@ def charger_parcours(chemin):
         return {}
 
 
-def lister_parcours():
-    """Liste les parcours-*.json de tous les agents."""
-    if not os.path.isdir(AGENTS_DIR):
+def lister_habilitation():
+    """Liste les fichiers de la table d habilitation dediee
+    (habilitation-<agent>.json) de tous les agents v1."""
+    dossier = os.path.join(AGENTS_DIR, "habilitation")
+    if not os.path.isdir(dossier):
         return []
     resultats = []
-    for nom_agent in sorted(os.listdir(AGENTS_DIR)):
-        dossier = os.path.join(AGENTS_DIR, nom_agent, "parcours")
-        if not os.path.isdir(dossier):
-            continue
-        for fichier in sorted(os.listdir(dossier)):
-            if fichier.startswith("parcours-") and fichier.endswith(".json"):
-                resultats.append((nom_agent, os.path.join(dossier, fichier)))
+    for fichier in sorted(os.listdir(dossier)):
+        if fichier.startswith("habilitation-") and fichier.endswith(".json"):
+            nom_agent = fichier[len("habilitation-"):-len(".json")]
+            resultats.append((nom_agent, os.path.join(dossier, fichier)))
     return resultats
 
 
-# Outils P0 PARTAGES : outils de base communs a TOUS les agents (navigation
-# de parcours, lecture de contexte) qui ne sont PAS des exclusivites. Ils sont
-# references dans les fiches (P0) mais pas systematiquement dans les indices
-# outil des cartes - le verrou ne les bloque jamais (lecon Vulcain
-# 2026-08-15 : guider-parcours etait derive 'exclusif buffy' a tort, fausse
-# exclusivite declenchant test-035).
-OUTILS_P0_PARTAGES = frozenset([
-    "guider-parcours",
-    "guider-arbre",
-    "lire-activite-recente",
-    # LECONS (BDD partagee) : chaque agent ecrit SES lecons (enregistrer-
-    # lecon, anti-usurpation interne) et lit celles des autres (consulter-
-    # lecons) - ce sont des outils communs, pas des exclusivites.
-    "enregistrer-lecon",
-    "consulter-lecons",
-])
+# (2026-09-05, migration v1->v2) : les P0 partages (guider-arbre,
+# guider-parcours, lire-activite-recente) sont desormais inscrits DANS la
+# table d habilitation dediee de chaque agent (fichiers habilitation-*.json),
+# plus besoin de les injecter ici : la table EST la regle.
 
 
-def extraire_indices_outils(parcours):
-    """Extrait les noms d outils des indices de type 'outil' de toutes les cases."""
-    outils = set()
-    cases = parcours.get("cases", {}) if isinstance(parcours, dict) else {}
-    for cid, case in cases.items():
-        if not isinstance(case, dict):
-            continue
-        indices = case.get("indices", [])
-        if not isinstance(indices, list):
-            continue
-        for indice in indices:
-            if not isinstance(indice, dict):
-                continue
-            if indice.get("type") == "outil":
-                nom = indice.get("nom") or indice.get("catalogue")
-                if nom:
-                    outils.add(nom)
-    return outils
+def charger_outils_habilitation(chemin):
+    """Charge le champ 'outils' d un fichier de la table d habilitation
+    dediee (retourne set() si illisible)."""
+    data = charger_parcours(chemin)
+    if not isinstance(data, dict):
+        return set()
+    outils = data.get("outils", [])
+    if not isinstance(outils, list):
+        return set()
+    return {o for o in outils if isinstance(o, str) and o}
 
 
 def construire_table():
-    """Construit la table outil -> set(agents habilites) depuis les cartes.
-    Les outils P0 partages (OUTILS_P0_PARTAGES) sont ajoutes a TOUS les
-    agents : ce sont des outils de base communs, pas des exclusivites."""
+    """Construit la table outil -> set(agents habilites) depuis la table
+    d habilitation DEDIEE (un fichier habilitation-<agent>.json par agent).
+    La table contient tout (outils de la carte + P0 partages) : aucune
+    injection supplementaire ici."""
     table = {}
-    tous = set()
-    for nom_agent, chemin in lister_parcours():
-        tous.add(nom_agent)
-        for outil in extraire_indices_outils(charger_parcours(chemin)):
+    for nom_agent, chemin in lister_habilitation():
+        for outil in charger_outils_habilitation(chemin):
             table.setdefault(outil, set()).add(nom_agent)
-    for outil in OUTILS_P0_PARTAGES:
-        table[outil] = set(tous)
     return table
 
 
@@ -418,22 +400,15 @@ def journaliser(agent, outil, verdict_str, agent_reel="", mode=""):
 # autre agent, la MODIFICATION d un fichier de test (zone tester/tests/) est
 # BLOQUEE hors morpheus. Les autres agents passent par lui (cycle activer).
 # Outils de modification couverts par la zone protegee :
+# v0.6.0 (migration v1->v2) : editer-parcours retire (outil v1 archive -
+# les arbres v2 s editer via editer-fichier).
 OUTILS_MODIF = frozenset([
-    "editer-fichier", "editer-parcours", "creer-fichier", "ecrire-fichier",
+    "editer-fichier", "creer-fichier", "ecrire-fichier",
     "supprimer-fichier", "supprimer-dossier", "corriger-symboles",
     "corriger-fins-de-ligne", "corriger-accents-zones-sensibles",
 ])
 ZONE_TESTS = "tester/tests/"
 GARDIEN_TESTS = frozenset(["morpheus"])
-
-# CLE EXCLUSIVE PILOTE (v0.2.3, regle utilisateur 2026-08-18) : CHIRON est le
-# SEUL agent autorise a CORRIGER SA PROPRE carte (parcours-chiron.json) via
-# editer-parcours, dans le cadre de son parcours d'auto-correction (exception
-# pilote gravee dans regles-groupes-agents.md). La cle est PAR CIBLE :
-# editer-parcours sur SA carte = autorise ; editer-parcours sur TOUTE AUTRE
-# carte = BLOQUE (les autres cartes restent exclusives a buffy).
-CARTE_CHIRON = "parcours-chiron.json"
-PILOTE_AUTO_CORRECTION = frozenset(["chiron"])
 
 # LISTE BLANCHE DEVELOPPEUR (v0.2.2, regle utilisateur 2026-08-16) : le
 # CONSTRUCTEUR de l outil tester-lancer-non-regression doit pouvoir VALIDER
@@ -476,24 +451,13 @@ def verdict(agent, outil, table, verbose, cible=""):
     if outil == OUTIL_NON_REGRESSION and agent.lower() in [d.lower() for d in DEV_NON_REGRESSION]:
         return (0, "OK : l agent '" + agent + "' est habilite (liste blanche developpeur) "
                    "pour '" + outil + "' - validation de ses modifications.")
-    # CLE EXCLUSIVE PILOTE (v0.2.3) : chiron -> editer-parcours sur SA carte
-    # uniquement (exception pilote auto-correction). Sur toute AUTRE carte,
-    # chiron est BLOQUE (les cartes restent exclusives a buffy).
-    if (outil == "editer-parcours" and agent.lower()
-            in [p.lower() for p in PILOTE_AUTO_CORRECTION]):
-        if cible and os.path.basename(cible.replace("\\", "/")) == CARTE_CHIRON:
-            return (0, "OK : l agent '" + agent + "' est habilite (cle exclusive pilote "
-                       "auto-correction) pour 'editer-parcours' sur SA carte " + cible + ".")
-        session = trouver_session_agent(agent)
-        return (1, "BLOQUE : l auto-correction de chiron est limitee a SA PROPRE carte "
-                   "(parcours-chiron.json) - les autres cartes sont exclusives a buffy.\n"
-                   "  Cible : " + (cible or "?") + "\n"
-                   "  Action requise : activez buffy puis redemandez.\n"
-                   "  Commande : " + commande_activation("buffy", session))
+    # (v0.6.0 : la cle exclusive pilote chiron/editer-parcours a ete retiree
+    # avec l outil editer-parcours archive - l auto-correction passe par
+    # editer-fichier sur son arbre.)
     habiles = table.get(outil)
     if habiles is None:
-        return (1, "BLOQUE : l outil '" + outil + "' n est assigne a AUCUNE carte "
-                   "(verifier qu il est declare dans les indices outil d un parcours).")
+        return (1, "BLOQUE : l outil '" + outil + "' n est assigne a AUCUNE table "
+                   "d habilitation (verifier qu il figure dans agents/habilitation/).")
     if agent.lower() in [h.lower() for h in habiles]:
         msg = "OK : l agent '" + agent + "' est habilite pour l outil '" + outil + "' (verrou ouvert)."
         if verbose:
@@ -508,7 +472,7 @@ def verdict(agent, outil, table, verbose, cible=""):
         "  Commande : " + commande_activation(habiles_tries[0], session)
     )
     if verbose:
-        msg += "\n  Source : cartes de decision (indices outil des parcours)."
+        msg += "\n  Source : table d habilitation dediee (agents/habilitation/habilitation-<agent>.json)."
     return (1, msg)
 
 
@@ -553,7 +517,7 @@ def main():
         sys.exit(2)
 
     agents_connus = set()
-    for nom_agent, _ in lister_parcours():
+    for nom_agent, _ in lister_habilitation():
         agents_connus.add(nom_agent)
     if args.agent.lower() not in [a.lower() for a in agents_connus]:
         sys.stderr.write("ERREUR : agent inconnu '" + args.agent + "'. Agents connus : "

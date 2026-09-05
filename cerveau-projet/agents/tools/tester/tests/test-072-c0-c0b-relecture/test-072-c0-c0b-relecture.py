@@ -2,87 +2,43 @@
 # -*- coding: ascii -*-
 """
 test-072-c0-c0b-relecture.py
-GARDE-FOU : chaque parcours (carte de decision) doit porter le mecanisme
-de relecture OBLIGATOIRE de la fiche avant mission : c0 = action
-RELIRE OBLIGATOIRE (corrections puis fiche) puis c0b = question de
-confirmation (OUI -> c0c, NON -> c0).
+CHASSEUR DE VESTIGES V1 (migration v1->v2, 2026-09-05) : la relecture
+obligatoire vivait dans les CASES v1 c0/c0b des parcours (type action +
+question avec branches OUI->c0c / NON->c0). Les parcours v1 sont RETIRES :
+la relecture est une REGLE des arbres v2 (regles D7 : RELIRE OBLIGATOIRE),
+plus de cases.
 
-Contexte (mission 2026-08-16) :
-  - La regle "RELIRE SA FICHE AVANT MISSION (IMMUABLE)" a ete gravee dans
-    regles-groupes-agents.md (zone du marbre) apres des derives ou un agent
-    agissait sans avoir relu SA fiche + SES corrections.
-  - L ANCIENNE structure (c0 question "EN MEMOIRE ?" avec OUI -> c0c)
-    permettait de contourner la lecture en repondant OUI. Migration
-    migrer-cases-relecture v0.1.0 : la lecture est desormais TOUJOURS
-    exigee (c0 action), puis la confirmation est posee (c0b question).
-  - Ce test verrouille la NOUVELLE structure pour les 15 parcours.
+Ce test PISTE les vestiges : si une structure v2 contient encore des cases
+nommees c0/c0b/c0c (format v1) ou une cle "cases", le test ECHOUE.
 
-Invariants verifies :
-  1. Chaque parcours a une case c0 de type 'action' dont le titre contient
-     'RELIRE' et dont suivant = c0b.
-  2. c0 contient au moins 2 indices outil 'lire-fichier' (le premier vers
-     corrections.md, le second vers <agent>.md).
-  3. Chaque parcours a une case c0b de type 'question' de confirmation.
-  4. c0b a les branches OUI -> c0c et NON -> c0 (relecture).
-  5. Preuve negative : une copie avec l ancienne structure (c0 question +
-     OUI -> c0c) ou sans c0b est DETECTEE, puis SUPPRIMEE (0 trace).
-  6. Normes : ASCII strict + LF pur (test + parcours).
-Tags: agents, parcours, relecture, garde-fou
+Points verifies :
+  1. Aucun fichier parcours-*.json (v1) ne subsiste dans les agents.
+  2. Les structures v2 ne portent AUCUNE cle top-level "cases".
+  3. Aucune case v1 (cle de case "c0", "c0b", "c0c" ou type action avec
+     indices) dans les structures v2.
+  4. La regle de relecture v2 est presente dans les arbres (D7/RELIRE).
+  5. PREUVE NEGATIVE : une structure synthetique v1 (cases c0/c0b) est
+     DETECTEE par le scan de vestiges.
+  6. Normes : ASCII strict + LF pur (test + structures v2 scannees).
+Tags: vestiges, v1, migration, relecture, garde-fou
 """
-
 import glob
 import importlib.util
 import io
 import json
 import os
-import shutil
 import sys
-import tempfile
-import time
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
     PROJECT_ROOT = os.path.dirname(PROJECT_ROOT)
 
 TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
-PARCOURS_GLOB = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "*",
-                             "parcours", "parcours-*.json")
+AGENTS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents")
 
-# --- triplet chrono (template v0.3.0) ---
-T_START = time.monotonic()
-CHRONO_ACTIF = True
-ETAPES = []
+NB_POINTS = 0
 NB_OK = 0
 NB_KO = 0
-NB_POINTS = 10
-
-
-def point_actif(numero):
-    return True
-
-
-def chrono_etape(nom, t_debut):
-    ETAPES.append((nom, time.monotonic() - t_debut))
-
-
-def bilan_chrono():
-    if not CHRONO_ACTIF:
-        return
-    total = time.monotonic() - T_START
-    print("")
-    print("=== CHRONO test-072 (total %.1fs) ===" % total)
-    for nom, duree in ETAPES:
-        print("  [chrono] %-35s %.2fs" % (nom, duree))
-
-
-def verifier(nom, condition, detail=""):
-    global NB_OK, NB_KO
-    if condition:
-        NB_OK += 1
-        print("  [OK] %s" % nom)
-    else:
-        NB_KO += 1
-        print("  [KO] %s -- %s" % (nom, str(detail)[-100:]))
 
 
 def charger_protections():
@@ -97,252 +53,128 @@ def charger_protections():
 PROTECTIONS = charger_protections()
 
 
-def charger_parcours(f):
-    """Charge un parcours JSON + nom de l agent.
-
-    L agent est resolu via identite.appartient_a quand il est present
-    (les sous-parcours revision-* de socrate appartiennent a socrate et
-    relisent SA fiche), sinon derive du nom de fichier.
-    """
-    p = json.load(io.open(f, encoding="utf-8"))
-    parts = f.replace(os.sep, "/").split("/")
-    agent = parts[-1].replace("parcours-", "").replace(".json", "")
-    appartient = (p.get("identite") or {}).get("appartient_a")
-    if appartient:
-        agent = appartient
-    return agent, p
-
-
-def analyser_parcours(agent, p):
-    """Analyse un parcours : retourne la liste des problemes c0/c0b.
-
-    Structure cible (migration 2026-08-16, relecture OBLIGATOIRE) :
-      c0  = action RELIRE OBLIGATOIRE (corrections puis fiche) -> c0b
-      c0b = question confirmation (OUI -> c0c, NON -> c0)
-
-    Retourne une liste de tuples (type, detail) :
-      - C0_ABSENT : aucune case c0
-      - C0_MAUVAIS_TYPE : c0 n est pas de type action
-      - C0_TITRE : le titre ne contient pas RELIRE
-      - C0_SUIVANT : c0 suivant != c0b
-      - C0_OUTILS : moins de 2 outils lire-fichier (ou mauvaises cibles)
-      - C0B_ABSENT : aucune case c0b
-      - C0B_MAUVAIS_TYPE : c0b n est pas de type question
-      - C0B_BRANCHES : branches OUI -> c0c et NON -> c0 absentes ou mal dirigees
-    """
-    problemes = []
-    cases = p.get("cases", {})
-    c0 = cases.get("c0")
-    c0b = cases.get("c0b")
-
-    # --- c0 : action RELIRE OBLIGATOIRE -> c0b ---
-    if not isinstance(c0, dict):
-        problemes.append(("C0_ABSENT", "%s : c0 absent" % agent))
+def verifier(nom, condition, detail=""):
+    global NB_POINTS, NB_OK, NB_KO
+    NB_POINTS += 1
+    if condition:
+        NB_OK += 1
+        print("  [OK] %s" % nom)
     else:
-        if c0.get("type") != "action":
-            problemes.append(("C0_MAUVAIS_TYPE",
-                              "%s : c0 type=%s (attendu action)" %
-                              (agent, c0.get("type"))))
-        titre = c0.get("titre", "")
-        if "RELIRE" not in titre.upper():
-            problemes.append(("C0_TITRE",
-                              "%s : c0 titre sans RELIRE : %s" % (agent, titre)))
-        if c0.get("suivant") != "c0b":
-            problemes.append(("C0_SUIVANT",
-                              "%s : c0 suivant=%s (attendu c0b)" %
-                              (agent, c0.get("suivant"))))
-        outils = [i for i in c0.get("indices", [])
-                  if i.get("type") == "outil" and i.get("nom") == "lire-fichier"]
-        cibles = [i.get("commande", "") for i in outils]
-        nb_corr = sum(1 for c in cibles if "corrections.md" in c)
-        nb_fiche = sum(1 for c in cibles if ("%s.md" % agent) in c)
-        if len(outils) < 2 or nb_corr < 1 or nb_fiche < 1:
-            problemes.append(("C0_OUTILS",
-                              "%s : c0 outils lire-fichier=%d "
-                              "(corrections=%d, fiche=%d) - attendu 2 (1+1)" %
-                              (agent, len(outils), nb_corr, nb_fiche)))
+        NB_KO += 1
+        print("  [KO] %s %s" % (nom, ("-- " + detail) if detail else ""))
 
-    # --- c0b : question confirmation (OUI -> c0c, NON -> c0) ---
-    if not isinstance(c0b, dict):
-        problemes.append(("C0B_ABSENT", "%s : c0b absent" % agent))
-    else:
-        if c0b.get("type") != "question":
-            problemes.append(("C0B_MAUVAIS_TYPE",
-                              "%s : c0b type=%s (attendu question)" %
-                              (agent, c0b.get("type"))))
-        branches = c0b.get("branches", [])
-        vers_oui = [b.get("vers") for b in branches if b.get("reponse") == "OUI"]
-        vers_non = [b.get("vers") for b in branches if b.get("reponse") == "NON"]
-        # Chemin legitime : OUI -> c0c directement, ou OUI -> c0e
-        # (consultation pre-mission, round 2026-08-18) -> c0c ; NON -> c0.
-        # NB 2026-08-29 : le GATE BON AGENT (decision utilisateur marbre-log)
-        # s intercale apres la confirmation : OUI -> c0g -> c0ga -> (c0e|c0c)
-        # -> c0c. Ce chemin GATE est legitime et doit etre reconnu.
-        def _chemine_vers_c0c(cid, prof=0):
-            """Le flux depuis cid atteint-il c0c (via suivant / branches OUI) ?"""
-            if prof > 6:
-                return False
-            c = cases.get(cid)
-            if not isinstance(c, dict):
-                return False
-            if c.get("suivant") == "c0c":
+
+def ascii_count(chemin):
+    with io.open(chemin, encoding="utf-8", errors="replace") as fh:
+        return sum(1 for c in fh.read() if ord(c) > 127)
+
+
+def crlf_count(chemin):
+    with open(chemin, "rb") as fh:
+        return fh.read().count(b"\r\n")
+
+
+def structures_v2():
+    """Arbres + themes + fins des agents v1 (structures actives v2)."""
+    resultats = []
+    for motif in ("arbre-*.json", "theme-*.json", "fins.json"):
+        resultats.extend(glob.glob(os.path.join(AGENTS, "*", "parcours", motif)))
+    return sorted(set(resultats))
+
+
+def detecter_cases_v1(donnees, prefixe=""):
+    """Detecte une case v1 (cle c0/c0b/c0c ou type action + indices)."""
+    if isinstance(donnees, dict):
+        for k, v in donnees.items():
+            if k in ("c0", "c0b", "c0c") and isinstance(v, dict):
                 return True
-            if c.get("suivant") and _chemine_vers_c0c(c.get("suivant"), prof + 1):
+            if isinstance(v, dict) and isinstance(v.get("indices"), list) \
+                    and v.get("type") in ("action", "fin", "question"):
                 return True
-            for b in c.get("branches", []):
-                if b.get("reponse") == "OUI" and b.get("vers") == "c0c":
-                    return True
-                if b.get("reponse") == "OUI" and b.get("vers") and \
-                        _chemine_vers_c0c(b.get("vers"), prof + 1):
-                    return True
-            return False
-
-        oui_ok = vers_oui == ["c0c"] or (
-            vers_oui == ["c0e"] and isinstance(cases.get("c0e"), dict)
-            and cases["c0e"].get("suivant") == "c0c") or (
-            len(vers_oui) == 1 and vers_oui[0] == "c0g"
-            and _chemine_vers_c0c("c0g"))
-        if not oui_ok or vers_non != ["c0"]:
-            problemes.append(("C0B_BRANCHES",
-                              "%s : branches OUI=%s NON=%s "
-                              "(attendu c0c/c0, c0e->c0c/c0 ou GATE c0g->c0c/c0)" %
-                              (agent, vers_oui, vers_non)))
-
-    return problemes
-
-
-def scanner_tous_les_parcours(racine_parcours):
-    """Scanne tous les parcours et retourne la liste des problemes."""
-    problemes = []
-    for f in sorted(glob.glob(racine_parcours)):
-        try:
-            agent, p = charger_parcours(f)
-        except Exception as e:
-            problemes.append(("JSON_INVALIDE", "%s : %s" % (f, str(e)[-60:])))
-            continue
-        problemes.extend(analyser_parcours(agent, p))
-    return problemes
+            if detecter_cases_v1(v, prefixe + k + "."):
+                return True
+        return False
+    if isinstance(donnees, list):
+        return any(detecter_cases_v1(v, prefixe) for v in donnees)
+    return False
 
 
 def main():
-    print("=== Garde-fou : c0/c0b relecture obligatoire sur tous les parcours ===")
+    global NB_POINTS, NB_OK, NB_KO
+    print("=== Chasseur de vestiges v1 : c0/c0b relecture (format v1) ===")
 
-    # 1. Scan : chaque parcours a c0 (action RELIRE)
-    t0 = time.monotonic()
-    problemes = scanner_tous_les_parcours(PARCOURS_GLOB)
-    c0_manquants = [p for p in problemes if p[0] == "C0_ABSENT"]
-    verifier("1. 15 parcours : c0 present", len(c0_manquants) == 0,
-             c0_manquants[:3] if c0_manquants else "")
-    chrono_etape("1. scan c0 present", t0)
+    # 1. Aucun parcours-*.json v1 ne subsiste
+    vestiges_parcours = glob.glob(os.path.join(AGENTS, "*", "parcours",
+                                               "parcours-*.json"))
+    verifier("1. aucun parcours-*.json v1 ne subsiste",
+             len(vestiges_parcours) == 0, "vestiges=%s" % vestiges_parcours[:5])
 
-    # 2. c0 action RELIRE + suivant c0b
-    t0 = time.monotonic()
-    c0_types = [p for p in problemes if p[0] in ("C0_MAUVAIS_TYPE", "C0_TITRE")]
-    verifier("2. c0 : type action + titre RELIRE OBLIGATOIRE",
-             len(c0_types) == 0, c0_types[:3] if c0_types else "")
-    c0_suiv = [p for p in problemes if p[0] == "C0_SUIVANT"]
-    verifier("3. c0 : suivant = c0b", len(c0_suiv) == 0,
-             c0_suiv[:3] if c0_suiv else "")
-    chrono_etape("2-3. scan c0 action", t0)
-
-    # 4. c0 outils lire-fichier (corrections puis fiche)
-    t0 = time.monotonic()
-    c0_outils = [p for p in problemes if p[0] == "C0_OUTILS"]
-    verifier("4. c0 : 2 outils lire-fichier (corrections puis fiche)",
-             len(c0_outils) == 0, c0_outils[:3] if c0_outils else "")
-    chrono_etape("4. scan c0 outils", t0)
-
-    # 5. c0b present, question de confirmation
-    t0 = time.monotonic()
-    c0b_manquants = [p for p in problemes
-                     if p[0] in ("C0B_ABSENT", "C0B_MAUVAIS_TYPE")]
-    verifier("5. c0b : present, type question de confirmation",
-             len(c0b_manquants) == 0, c0b_manquants[:3] if c0b_manquants else "")
-    chrono_etape("5. scan c0b present", t0)
-
-    # 6. c0b branches OUI->c0c, NON->c0
-    t0 = time.monotonic()
-    c0b_branches = [p for p in problemes if p[0] == "C0B_BRANCHES"]
-    verifier("6. c0b : branches OUI->c0c / NON->c0",
-             len(c0b_branches) == 0, c0b_branches[:3] if c0b_branches else "")
-    chrono_etape("6. scan c0b branches", t0)
-
-    # 7. Preuve negative : copie sans c0b detectee puis supprimee
-    t0 = time.monotonic()
-    tmp = tempfile.mkdtemp(prefix="tmp-test072-")
-    try:
-        src = None
-        for f in glob.glob(PARCOURS_GLOB):
-            if "parcours-buffy.json" in f:
-                src = json.load(io.open(f, encoding="utf-8"))
-                break
-        if src is None:
-            verifier("7. preuve negative : copie trouvee", False,
-                     "parcours buffy introuvable")
-        else:
-            # copie avec l ANCIENNE structure (c0 question + OUI -> c0c)
-            # -> doit etre DETECTEE (C0_MAUVAIS_TYPE / C0_SUIVANT / C0B_BRANCHES)
-            src2 = json.loads(json.dumps(src))
-            src2["cases"]["c0"] = {
-                "titre": "Relecture : ta fiche en memoire ?",
-                "type": "question",
-                "question": "As-tu EN MEMOIRE ta fiche et tes corrections ?",
-                "branches": [{"reponse": "OUI", "vers": "c0c"},
-                              {"reponse": "NON", "vers": "c0b"}],
-            }
-            src2["cases"]["c0b"] = {
-                "titre": "RELIRE OBLIGATOIRE", "type": "action",
-                "indices": [{"type": "regle", "texte": "ACTION OBLIGATOIRE"}],
-                "suivant": "c0c",
-            }
-            sous = os.path.join(tmp, "parcours-buffy.json")
-            with io.open(sous, "w", encoding="utf-8", newline="\n") as fh:
-                json.dump(src2, fh, ensure_ascii=True, indent=1)
-            # copie sans c0b du tout
-            src3 = json.loads(json.dumps(src))
-            src3["cases"].pop("c0b", None)
-            sous3 = os.path.join(tmp, "parcours-clio.json")
-            with io.open(sous3, "w", encoding="utf-8", newline="\n") as fh:
-                json.dump(src3, fh, ensure_ascii=True, indent=1)
-            # scanner les copies avec le meme analyseur
-            pb2 = analyser_parcours("buffy", json.load(io.open(sous, encoding="utf-8")))
-            pb3 = analyser_parcours("clio", json.load(io.open(sous3, encoding="utf-8")))
-            detecte = (any(x[0] in ("C0_MAUVAIS_TYPE", "C0_SUIVANT") for x in pb2)
-                       or any(x[0] == "C0B_BRANCHES" for x in pb2)) and \
-                any(x[0] == "C0B_ABSENT" for x in pb3)
-            verifier("7. preuve negative : ancienne structure + c0b absent DETECTES",
-                     detecte, "non detecte: %s / %s" % (pb2[:2], pb3[:2]))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-        verifier("7b. preuve negative : copies SUPPRIMEES (0 trace)",
-                 not os.path.exists(tmp), "copies encore presentes")
-    chrono_etape("7. preuve negative", t0)
-
-    # 8. Normes ASCII + LF (test + parcours)
-    t0 = time.monotonic()
-    na_total = 0
-    crlf_total = 0
-    fichiers = [os.path.abspath(__file__)]
-    fichiers.extend(sorted(glob.glob(PARCOURS_GLOB)))
-    for f in fichiers:
+    # 2. Les structures v2 ne portent AUCUNE cle top-level "cases"
+    structures = structures_v2()
+    verifier("2. structures v2 detectees (%d)" % len(structures),
+             len(structures) >= 100, "nb=%d" % len(structures))
+    avec_cases = []
+    for f in structures:
         try:
-            d = io.open(f, encoding="utf-8", errors="replace").read()
+            d = json.load(io.open(f, encoding="utf-8"))
         except Exception:
             continue
-        na_total += sum(1 for ch in d if ord(ch) > 127)
-        b = io.open(f, "rb").read()
-        crlf_total += b.count(b"\r\n")
-    verifier("8. normes : 0 non-ASCII (test + parcours)",
-             na_total == 0, "non-ascii=%d" % na_total)
-    verifier("8b. normes : 0 CRLF (test + parcours)",
-             crlf_total == 0, "crlf=%d" % crlf_total)
-    chrono_etape("8. normes", t0)
+        if isinstance(d, dict) and "cases" in d:
+            avec_cases.append(os.path.basename(f))
+    verifier("3. aucune structure v2 avec cle top-level 'cases'",
+             len(avec_cases) == 0, "avec_cases=%s" % avec_cases[:5])
 
-    print("")
-    print("=== RESULTAT : %d OK / %d KO (sur %d points) ===" %
-          (NB_OK, NB_KO, NB_POINTS))
-    bilan_chrono()
-    return 1 if NB_KO else 0
+    # 4. Aucune case c0/c0b/c0c ni case action+indices dans les structures v2
+    avec_case = []
+    for f in structures:
+        try:
+            d = json.load(io.open(f, encoding="utf-8"))
+        except Exception:
+            continue
+        if detecter_cases_v1(d):
+            avec_case.append(os.path.basename(f))
+    verifier("4. aucune case c0/c0b/c0c v1 dans les structures v2",
+             len(avec_case) == 0, "avec_case=%s" % avec_case[:5])
+
+    # 5. La relecture v2 est une REGLE des arbres (D7 RELIRE OBLIGATOIRE)
+    regles_relecture = []
+    for f in glob.glob(os.path.join(AGENTS, "*", "parcours", "arbre-*.json")):
+        try:
+            d = json.load(io.open(f, encoding="utf-8"))
+        except Exception:
+            continue
+        regles = (d.get("arbre", {}) or {}).get("regles", {}) if \
+            isinstance(d.get("arbre"), dict) else {}
+        texte = json.dumps(regles, ensure_ascii=True)
+        if "RELIRE" in texte.upper() or "relecture" in texte.lower():
+            regles_relecture.append(os.path.basename(f))
+    verifier("5. regle de relecture v2 presente dans les arbres (%d)"
+             % len(regles_relecture), len(regles_relecture) >= 15,
+             "nb=%d" % len(regles_relecture))
+
+    # 6. PREUVE NEGATIVE : une structure synthetique v1 est DETECTEE
+    fake = {"parcours": {"agent": "x"}, "cases": {
+        "c0": {"type": "action", "titre": "RELIRE OBLIGATOIRE",
+               "suivant": "c0b"},
+        "c0b": {"type": "question", "titre": "As-tu relu ?",
+                "branches": [{"reponse": "OUI", "vers": "c0c"},
+                             {"reponse": "NON", "vers": "c0"}]}}}
+    verifier("6. PREUVE NEGATIVE : c0/c0b synthetique detectee",
+             detecter_cases_v1(fake) and ("cases" in fake), "")
+
+    # 7-8. Normes : ASCII strict + LF pur
+    fichiers = [os.path.abspath(__file__)] + structures
+    total_na = sum(ascii_count(f) for f in fichiers)
+    verifier("7. ASCII strict : 0 non-ASCII (test + structures v2)",
+             total_na == 0, "na=%d" % total_na)
+    total_crlf = sum(crlf_count(f) for f in fichiers)
+    verifier("8. LF pur : 0 CRLF (test + structures v2)",
+             total_crlf == 0, "crlf=%d" % total_crlf)
+
+    print()
+    print("=== RESULTAT : %d OK / %d KO (sur %d points) ==="
+          % (NB_OK, NB_KO, NB_POINTS))
+    return 0 if NB_KO == 0 else 1
 
 
 if __name__ == "__main__":

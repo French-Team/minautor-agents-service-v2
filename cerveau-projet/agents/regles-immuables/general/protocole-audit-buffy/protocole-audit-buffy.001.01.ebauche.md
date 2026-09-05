@@ -130,7 +130,7 @@ Audit Themis :
 |---|---|
 | [convention-protocoles](../../../conventions/protocoles/convention-protocoles.md) | Structure des protocoles (en-tete + 7 sections) |
 | [protocole-controle-buffy](../protocole-controle-buffy/) | Protocole de Janus (controle croise du travail de Buffy) |
-| [spec-guider-parcours](../../../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) | Patterns 13/14, procedure 4i, criteres |
+| [guider-arbre](../../../tools/guider/guider-arbre/guider-arbre.md) | Patterns 13/14, procedure 4i, criteres |
 | [rvav-workflow](../rvav-workflow.md) | Boucle obligatoire avant verdict |
 | [regles-veracite](../regles-veracite.md) | Ne jamais mentir ou inventer |
 | [regles-emojis-ascii](../regles-emojis-ascii.md) | ASCII strict |

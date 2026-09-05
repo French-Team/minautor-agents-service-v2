@@ -162,7 +162,7 @@ Controle Janus :
 | **Format de fin obsolete** | La fin c10 du trio doit etre 'FIN - Activer Janus' avec la commande exacte - une fin 'Reactiver Cerberus' (ancien modele) casse la chaine de controle | Verifier E9 avec valider-cartes-decision + lecture du message |
 | **Correction au lieu de signalement** | Je ne suis pas habilite a corriger | Je documente uniquement les problemes, l agent du trio ou l agent habilite corrige |
 | **Transmission d un livrable non conforme** | Transmettre en aval un pense-bete/spec/todo avec des ecarts : l erreur se propage dans toute la chaine | Renvoyer le rapport a l agent concerne (boucle KO) - JAMAIS de transmission sans verdict OK |
-| **Retour a Cerberus au milieu de la chaine** | La fin c10 de Janus (reactiver) n est legitime qu apres le dernier maillon (minerve OK) | Les fins cT6/cT7 activent le maillon suivant ; seul cT5 -> c10 reactiver Cerberus |
+| **Retour a Cerberus au milieu de la chaine** | La fin de Janus (reactiver) n est legitime qu apres le dernier maillon (minerve OK), et seulement via le PILOTE | Les fins cT6/cT7 suivent le modele aero : reactiver-fin --cible oracle ; c est le pilote qui ramene a Cerberus en fin de round |
 
 ---
 
@@ -179,4 +179,4 @@ Controle Janus :
 | [todo-template](../../../../pense-betes/specs/todo/todo-template.md) | Template des todos (minerve) |
 | [rvav-workflow](../rvav-workflow.md) | Boucle obligatoire avant verdict |
 | [regles-validation-rigoureuse](../regles-validation-rigoureuse.md) | Validation rigoureuse |
-| [parcours-janus](../../../../agents/janus/parcours/parcours-janus.json) | Ligne trio (branche 'trio', cases cT1 a cT10) implementee dans la carte de Janus v0.3.6 |
+| [arbre-janus](../../../../agents/janus/parcours/arbre-janus.json) | Ligne trio (branche 'trio') implementee dans l arbre de Janus |

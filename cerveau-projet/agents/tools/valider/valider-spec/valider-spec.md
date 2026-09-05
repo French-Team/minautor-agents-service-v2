@@ -84,7 +84,7 @@ Fichier : spec-pipeline.001.01.ebauche.md
 
 | Situation | Utilisation |
 |---|---|
-| **Fin de mission spec** | Verification avant de reactiver Cerberus |
+| **Fin de mission spec** | Verification avant de rendre la fin (reactiver-fin --cible oracle, modele aero) |
 | **Apres remplissage** | S'assurer que toutes les sections sont completes |
 | **Avant changement de statut** | Verifier que la spec est pret pour `prepare` |
 

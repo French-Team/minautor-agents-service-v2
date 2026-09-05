@@ -225,15 +225,53 @@ def auditer_parcours(chemin):
     return resultats
 
 
+def auditer_arbre_v2(chemin):
+    """Audit d un arbre v2 (arbre-<agent>.json) : retourne une liste de
+    contradictions (gravite, type, message). Le format v2 (migration
+    v1->v2 2026-09-05) remplace les cases v1 par racine/branches ->
+    themes -> fins centralisees : on verifie les references cassees."""
+    resultats = []
+    nom = os.path.basename(os.path.dirname(chemin))
+    try:
+        with io.open(chemin, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except ValueError as e:
+        return [("critique", "JSON_INVALIDE", "%s : %s" % (nom, e))]
+    dossier = os.path.dirname(chemin)
+    racine = data.get("racine") or {}
+    # Branches de la racine -> fichiers theme existants
+    for b in racine.get("branches", []) or []:
+        vers = b.get("vers")
+        if vers and not os.path.isfile(os.path.join(dossier, vers)):
+            resultats.append(("majeur", "REF_MORTE",
+                              "%s : branche '%s' -> theme '%s' inexistant"
+                              % (nom, b.get("reponse", "?"), vers)))
+        if vers and os.path.isfile(os.path.join(dossier, vers)):
+            try:
+                t = json.load(io.open(os.path.join(dossier, vers), encoding="utf-8"))
+                if (t.get("identite") or {}).get("type") != "theme":
+                    resultats.append(("majeur", "THEME_TYPE",
+                                      "%s : %s identite.type != theme" % (nom, vers)))
+            except ValueError:
+                resultats.append(("majeur", "JSON_INVALIDE",
+                                  "%s : theme '%s' JSON invalide" % (nom, vers)))
+    # Fins centralisees
+    fins_ref = (data.get("fins") or {}).get("fichier")
+    if fins_ref and not os.path.isfile(os.path.join(dossier, fins_ref)):
+        resultats.append(("majeur", "FINS_MANQUANTES",
+                          "%s : fins.fichier '%s' inexistant" % (nom, fins_ref)))
+    return resultats
+
+
 def auditer_cases(racine, verbose=False):
-    """Audit de tous les parcours JSON."""
-    pattern = os.path.join(racine, "cerveau-projet", "agents", "*", "parcours", "parcours-*.json")
+    """Audit de tous les arbres v2 (les parcours v1 sont des vestiges retires)."""
+    pattern = os.path.join(racine, "cerveau-projet", "agents", "*", "parcours", "arbre-*.json")
     chemins = sorted(glob.glob(pattern))
     resultats = []
     for chemin in chemins:
-        resultats.extend(auditer_parcours(chemin))
+        resultats.extend(auditer_arbre_v2(chemin))
     if verbose:
-        print(_couleur("  [AUDIT CASES] %d parcours scannes" % len(chemins), "bleu"))
+        print(_couleur("  [AUDIT ARBRES V2] %d arbres scannes" % len(chemins), "bleu"))
     return resultats
 
 
@@ -672,12 +710,12 @@ def ecrire_rapport(chemin_rapport, resultats, audits_lances):
 def main():
     parser = argparse.ArgumentParser(
         description="Croise les sources du cerveau-projet pour detecter les contradictions (cases, regles, protocoles, git)")
-    parser.add_argument("--tous", action="store_true", help="Lance les 3 audits (cases, regles, git)")
-    parser.add_argument("--cases", action="store_true", help="Audit des parcours JSON uniquement")
+    parser.add_argument("--tous", action="store_true", help="Lance les 3 audits (arbres v2, regles, git)")
+    parser.add_argument("--cases", action="store_true", help="Audit des arbres v2 uniquement (les parcours v1 sont retires)")
     parser.add_argument("--regles", action="store_true", help="Audit des regles/protocoles uniquement")
     parser.add_argument("--coherence", action="store_true", help="Audit de coherence regle gravee <-> protocole associe (IMMUABLE)")
     parser.add_argument("--git", action="store_true", help="Lecture git (lecture seule) uniquement")
-    parser.add_argument("--fichier", type=str, default="", help="Auditer UN parcours JSON arbitraire (copie, preuve negative)")
+    parser.add_argument("--fichier", type=str, default="", help="Auditer UN arbre v2 arbitraire (copie, preuve negative)")
     parser.add_argument("--rapport", type=str, default="", help="Chemin du rapport markdown (optionnel)")
     parser.add_argument("--verbose", action="store_true", help="Detail des verifications")
     parser.add_argument("--version", action="version",
@@ -695,7 +733,7 @@ def main():
     audits_lances = []
     if args.fichier:
         audits_lances.append("fichier:%s" % os.path.basename(args.fichier))
-        resultats.extend(auditer_parcours(args.fichier))
+        resultats.extend(auditer_arbre_v2(args.fichier))
     elif args.tous or args.cases:
         audits_lances.append("cases")
         resultats.extend(auditer_cases(racine, args.verbose))

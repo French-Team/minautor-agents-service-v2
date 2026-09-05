@@ -1,0 +1,73 @@
+%% Arbre de decision de hades (arbre v0.3.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quel type d operation git est demandee ?"}
+    RACINE -- "SAUVEGARDER" --> THEME-SAUVEGARDER
+    THEME-SAUVEGARDER["Executer les operations git sans risque (status, log, diff, "]
+    THEME-SAUVEGARDER -- "besoin 1" --> THEME-SAUVEGARDER-B0
+    THEME-SAUVEGARDER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-SAUVEGARDER -- "besoin 2" --> THEME-SAUVEGARDER-B1
+    THEME-SAUVEGARDER-B1["Consulter les lecons (domaine git)"]
+    THEME-SAUVEGARDER -- "besoin 3" --> THEME-SAUVEGARDER-B2
+    THEME-SAUVEGARDER-B2["CONTEXTE : activite recente des agents"]
+    THEME-SAUVEGARDER -- "besoin 4" --> THEME-SAUVEGARDER-B3
+    THEME-SAUVEGARDER-B3["Verifier l etat du depot avant operation"]
+    THEME-SAUVEGARDER -- "besoin 5" --> THEME-SAUVEGARDER-B4
+    THEME-SAUVEGARDER-B4["Executer l operation git demandee (case c2)"]
+    THEME-SAUVEGARDER -- "besoin 6" --> THEME-SAUVEGARDER-B5
+    THEME-SAUVEGARDER-B5["Push avec validation utilisateur"]
+    THEME-SAUVEGARDER -- "besoin 7" --> THEME-SAUVEGARDER-B6
+    THEME-SAUVEGARDER-B6["Journaliser l operation"]
+    THEME-SAUVEGARDER -- "besoin 8" --> THEME-SAUVEGARDER-B7
+    THEME-SAUVEGARDER-B7["Verifier l etat apres operation"]
+    THEME-SAUVEGARDER -- "besoin 9" --> THEME-SAUVEGARDER-B8
+    THEME-SAUVEGARDER-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-sauvegarder(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-SAUVEGARDER-B0 --> FIN-fin-sauvegarder
+    THEME-SAUVEGARDER-B1 --> FIN-fin-sauvegarder
+    THEME-SAUVEGARDER-B2 --> FIN-fin-sauvegarder
+    THEME-SAUVEGARDER-B3 --> FIN-fin-sauvegarder
+    THEME-SAUVEGARDER-B4 --> FIN-fin-sauvegarder
+    THEME-SAUVEGARDER-B5 --> FIN-fin-sauvegarder
+    THEME-SAUVEGARDER-B6 --> FIN-fin-sauvegarder
+    THEME-SAUVEGARDER-B7 --> FIN-fin-sauvegarder
+    THEME-SAUVEGARDER-B8 --> FIN-fin-sauvegarder
+    RACINE -- "RESTAURER" --> THEME-RESTAURER
+    THEME-RESTAURER["Restaurer des fichiers depuis le git en appliquant la regle "]
+    THEME-RESTAURER -- "besoin 1" --> THEME-RESTAURER-B0
+    THEME-RESTAURER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-RESTAURER -- "besoin 2" --> THEME-RESTAURER-B1
+    THEME-RESTAURER-B1["Consulter les lecons (domaine git)"]
+    THEME-RESTAURER -- "besoin 3" --> THEME-RESTAURER-B2
+    THEME-RESTAURER-B2["CONTEXTE : activite recente des agents"]
+    THEME-RESTAURER -- "besoin 4" --> THEME-RESTAURER-B3
+    THEME-RESTAURER-B3["Verifier l etat du depot avant operation"]
+    THEME-RESTAURER -- "besoin 5" --> THEME-RESTAURER-B4
+    THEME-RESTAURER-B4["Verifier l age des fichiers (REGLE D ANCIENNETE) (case c3)"]
+    THEME-RESTAURER -- "besoin 6" --> THEME-RESTAURER-B5
+    THEME-RESTAURER-B5["Fichiers tres recents ? (controle c3)"]
+    THEME-RESTAURER -- "besoin 7" --> THEME-RESTAURER-B6
+    THEME-RESTAURER-B6["Checkout autorise sous regle d anciennete (case c4)"]
+    THEME-RESTAURER -- "besoin 8" --> THEME-RESTAURER-B7
+    THEME-RESTAURER-B7["Checkout INTERDIT - reparation dans le present (case c4b)"]
+    THEME-RESTAURER -- "besoin 9" --> THEME-RESTAURER-B8
+    THEME-RESTAURER-B8["Journaliser l operation"]
+    THEME-RESTAURER -- "besoin 10" --> THEME-RESTAURER-B9
+    THEME-RESTAURER-B9["Ajouter les lecons dans corrections.md"]
+    FIN-fin-restaurer(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-RESTAURER-B0 --> FIN-fin-restaurer
+    THEME-RESTAURER-B1 --> FIN-fin-restaurer
+    THEME-RESTAURER-B2 --> FIN-fin-restaurer
+    THEME-RESTAURER-B3 --> FIN-fin-restaurer
+    THEME-RESTAURER-B4 --> FIN-fin-restaurer
+    THEME-RESTAURER-B5 --> FIN-fin-restaurer
+    THEME-RESTAURER-B6 --> FIN-fin-restaurer
+    THEME-RESTAURER-B7 --> FIN-fin-restaurer
+    THEME-RESTAURER-B8 --> FIN-fin-restaurer
+    THEME-RESTAURER-B9 --> FIN-fin-restaurer
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

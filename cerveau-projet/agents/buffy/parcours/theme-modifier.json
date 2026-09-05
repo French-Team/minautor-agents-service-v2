@@ -3,7 +3,7 @@
     "type": "theme",
     "appartient_a": "buffy",
     "nom": "MODIFIER",
-    "description": "Modifier un fichier existant (outil, carte, regle, doc) : editer-parcours, corriger-fichier, bumper, RVAV, enregistrer usages, Themis audit, Janus controle"
+    "description": "Modifier un fichier existant (outil, carte, regle, doc) : editer-fichier, corriger-fichier, bumper, RVAV, enregistrer usages, Themis audit, Janus controle"
   },
   "theme": {
     "nom": "MODIFIER",
@@ -47,17 +47,16 @@
         "action": "procedure",
         "etapes": [
           "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>",
-          "python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py --tous"
+          "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --tous"
         ],
         "regle": "Verifier les dependances AVANT de modifier."
       },{
- "besoin": "Le fichier est-il une ARCHIVE v1 (parcours-*.json, protegee marbre) ?",
+ "besoin": "Le fichier est-il une structure v2 (arbre/theme/fins) ?",
  "action": "procedure",
  "etapes": [
-  "OUI (archive v1) -> Maintenance via editer-parcours uniquement (zone marbre, Gardien valide)",
-  "NON (arbre/theme/fins v2) -> Modifier le fichier directement"
+  "OUI (arbre/theme/fins v2) -> Modifier le fichier directement (editer-fichier)"
  ],
- "regle": "Les parcours-*.json v1 sont des ARCHIVES (decision v2 2026-08-29) : aucune creation/edition de cases avec generateurs-case. Les structures actives sont les arbres/themes v2 (guider-arbre), modifies directement."
+ "regle": "Migration v1->v2 (2026-09-05) : les parcours-*.json v1 sont RETIRES. Les structures actives sont les arbres/themes v2 (guider-arbre), modifies directement."
 },
       {
         "besoin": "Lire le protocole boucles dynamiques",

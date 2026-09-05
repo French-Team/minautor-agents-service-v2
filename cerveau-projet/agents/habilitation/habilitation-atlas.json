@@ -1,0 +1,41 @@
+{
+ "identite": {
+  "type": "habilitation",
+  "appartient_a": "atlas",
+  "version": "0.1.0",
+  "commun": false
+ },
+ "agent": "atlas",
+ "description": "Table d habilitation dediee (migration v1->v2 2026-09-05) : fusion parcours v1 + arbres/themes v2 + P0 partages. Source unique du verrou d habilitation.",
+ "outils": [
+  "activer-agent-principal",
+  "ajouter-contenu-fichier",
+  "analyser-dependances",
+  "analyser-structure",
+  "consulter-combos",
+  "consulter-lecons",
+  "convertir-carte-mermaid",
+  "corriger-accents-zones-sensibles",
+  "creer-fichier",
+  "decomposer-fichier",
+  "detecter-recherches-obsoletes",
+  "ecrire-fichier",
+  "enregistrer-lecon",
+  "enregistrer-usage-outil",
+  "generateurs-amelioration",
+  "generateurs-commande",
+  "generateurs-outil-temporaire",
+  "guider-arbre",
+  "lire-activite-recente",
+  "lire-fichier",
+  "lister-appels",
+  "lister-dossiers",
+  "lister-fichiers",
+  "lister-fonctions",
+  "rechercher-web",
+  "valider-conformite-ascii",
+  "valider-relecture",
+  "verifier-agent-perimetre",
+  "verifier-systeme"
+ ]
+}

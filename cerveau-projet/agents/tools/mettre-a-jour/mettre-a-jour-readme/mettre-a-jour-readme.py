@@ -52,8 +52,9 @@ def compter_agents():
         dossier = os.path.join(AGENTS_DIR, nom)
         if not (os.path.isdir(dossier) and nom != "tools"):
             continue
-        # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
-        if os.path.isfile(os.path.join(dossier, "parcours", "parcours-" + nom + ".json")):
+        # Un agent d action a un arbre v2 : agents/<nom>/parcours/arbre-<nom>.json
+        # (migration v1->v2 : les parcours v1 sont retires)
+        if os.path.isfile(os.path.join(dossier, "parcours", "arbre-" + nom + ".json")):
             nb += 1
     return nb
 
@@ -67,9 +68,10 @@ def lister_agents_reels():
         dossier = os.path.join(AGENTS_DIR, nom)
         if not (os.path.isdir(dossier) and nom != "tools"):
             continue
-        # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
+        # Un agent d action a un arbre v2 : agents/<nom>/parcours/arbre-<nom>.json
+        # (migration v1->v2 : les parcours v1 sont retires)
         parcours_dir = os.path.join(dossier, "parcours")
-        if os.path.isdir(parcours_dir) and os.path.isfile(os.path.join(parcours_dir, "parcours-" + nom + ".json")):
+        if os.path.isdir(parcours_dir) and os.path.isfile(os.path.join(parcours_dir, "arbre-" + nom + ".json")):
             resultat.append(nom)
     return resultat
 

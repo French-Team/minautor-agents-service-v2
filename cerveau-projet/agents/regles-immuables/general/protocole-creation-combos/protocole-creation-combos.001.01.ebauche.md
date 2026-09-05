@@ -236,7 +236,7 @@ parcours (Pattern 3) : themis c3, janus c5/c22, vulcain c7/c13, buffy c28.
 ## 10. Liens
 
 - **Spec moteur** : [spec-combos-moteur](../../../../agents/tools/combos/combos-moteur/spec/spec-combos-moteur.001.01.ebauche.md) -- format JSON (le QUOI)
-- **Spec parcours** : [spec-guider-parcours](../../../../agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- Pattern 3 (integration)
+- **Spec arbre v2** : [guider-arbre](../../../../agents/tools/guider/guider-arbre/guider-arbre.md) -- Pattern 3 (integration)
 - **Doc moteur** : [combos-moteur.md](../../../../agents/tools/combos/combos-moteur/combos-moteur.md) -- conventions d'emplacement
 - **Convention protocoles** : [convention-protocoles.md](../../../conventions/protocoles/convention-protocoles.md)
 - **Spec technique** : [spec-protocole-creation-combos](spec/spec-protocole-creation-combos.001.01.ebauche.md)

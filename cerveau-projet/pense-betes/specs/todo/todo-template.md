@@ -111,13 +111,13 @@ mission:
 
 ---
 
-## Phase 9 -- Reactivation de Cerberus
+## Phase 9 -- Fin de mission vers ORACLE
 
-> **Regle OBLIGATOIRE** : La derniere action de tout todo suit SA carte (Pattern 8) : reactiver Cerberus si active directement par Cerberus, sinon activer le maillon suivant de la chaine ; seul le dernier maillon reactiver Cerberus avec le bilan consolide.
+> **Regle OBLIGATOIRE** : La derniere action de tout todo suit SA carte (modele aero R1/R3) : la fin va vers ORACLE (`oracle.py reactiver-fin <agent> "<bilan>" --cible oracle`) - JAMAIS reactiver Cerberus directement, JAMAIS activer un autre agent. C est le pilote qui decide du suivant et ramene a Cerberus en fin de round (bilan consolide).
 
 1. Verifier que tout est termine
 2. Mettre a jour AGENTS.md (Cerberus agent principal)
-3. Documenter la raison du retour
+3. Envoyer la fin vers ORACLE : `oracle.py reactiver-fin <agent> "<bilan>" --cible oracle`
 
 ---
 

@@ -195,9 +195,7 @@ python3 cerveau-projet/agents/tools/oracle/oracle.py pilote oracle
 | `oracle` | CLI de coordination v1 (envoyer/lire/acquitter/activer/historiser/pilote/controle-processus/mission-*) |
 | `oracle-demarrage` | Etat/demarrage/arret des serveurs v1 |
 | `lire-activite-recente` | Lire l activite recente |
-| `consulter-lecons` | Consulter les lecons des autres agents |
 | `enregistrer-usage-outil` | Enregistrer mes usages |
-| `enregistrer-lecon` | Enregistrer MA lecon |
 | `valider-conformite-ascii` | Verifier la conformite ASCII stricte |
 | `detecter-usage-outils-externes` | Detecter les traces d outils externes |
 | `activer-agent-principal` | Reactiver Cerberus en fin de mission |

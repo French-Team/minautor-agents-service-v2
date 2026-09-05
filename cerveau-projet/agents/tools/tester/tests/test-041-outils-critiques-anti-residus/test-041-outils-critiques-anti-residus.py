@@ -12,8 +12,8 @@ Contexte (2026-08-13) :
     d appel vers des fichiers nommes comme des versions du contexte.
   - Le garde-fou verifier_residus_racine (WARNING encadre + regle anti-residu,
     sources de verite de version dans cerveau-projet/agents/clio/) a ete ajoute
-    dans activer-agent-principal (v0.5.2) puis etendu a guider-parcours
-    (v0.5.1), valider-cartes-decision (v0.4.1) et editer-parcours (v0.1.1).
+    dans activer-agent-principal (v0.5.2) puis etendu a valider-cartes-decision
+    (v0.4.1), guider-arbre (v0.1.1) et editer-fichier (v0.5.3).
   - Demande utilisateur : un garde-fou verifie en permanence que TOUT outil
     critique integre verifier_residus_racine - si un nouvel outil critique est
     cree sans le garde-fou, la non-regression le signale immediatement.
@@ -49,10 +49,10 @@ PYTHON = sys.executable
 OUTILS_CRITIQUES = [
     ("activer-agent-principal", os.path.join("activer", "activer-agent-principal",
                                              "activer-agent-principal.py")),
-    ("guider-parcours", os.path.join("guider", "guider-parcours", "guider-parcours.py")),
+    ("guider-arbre", os.path.join("guider", "guider-arbre", "guider-arbre.py")),
     ("valider-cartes-decision", os.path.join("valider", "valider-cartes-decision",
                                              "valider-cartes-decision.py")),
-    ("editer-parcours", os.path.join("editer", "editer-parcours", "editer-parcours.py")),
+    ("editer-fichier", os.path.join("editer", "editer-fichier", "editer-fichier.py")),
     ("executer-script-temporaire", os.path.join("executer", "executer-script-temporaire",
                                                 "executer-script-temporaire.py")),
 ]

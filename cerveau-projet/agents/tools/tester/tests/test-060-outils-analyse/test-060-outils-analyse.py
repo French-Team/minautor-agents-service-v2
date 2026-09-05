@@ -13,8 +13,9 @@ GARDE-FOU : les 2 outils d analyse crees par Vulcain (demande utilisateur
 
 Contexte :
   - Les 2 outils ont ete crees par Vulcain (categorie analyser) avec doc .md,
-  - entree catalogue generateurs-commande (179 commandes) et index-tools
-    (Analyser 9, Total 204).
+  - entree catalogue generateurs-commande et index-tools (Analyser 9,
+    Total 202 - adapte 2026-09-04, migration v1->v2 B.4 : retrait des 2
+    outils lecons, Total 204 -> 202, catalogue 188 -> 187).
   - Ce garde-fou verifie leur existence reelle, leur version, leurs options,
     leur preuve d execution (sans planter sur les donnees reelles) et leur
     referencement - anti-recurrence d un outil oublie du catalogue.
@@ -25,7 +26,7 @@ Invariants verifies :
      la performance ; --session/--fenetre-total/--rapport pour les tokens)
   3. Les 2 docs .md existent avec la categorie Analyser et leur version
   4. index-tools.md : les 2 outils listes dans la section Analyser, compteur
-     Analyser = 9, Total = 204
+     Analyser = 9, Total = 202
   5. Catalogue : les 2 noms presents, 187 commandes triees
   6. Preuve reelle : analyser-performance-tests --version + execution sur le
      registre reel (ne plante pas, retourne 0) ; analyser-tokens --version +
@@ -216,30 +217,33 @@ def main():
             verifier("5. docs .md : categorie Analyser + version (perf 0.1.0, tokens 0.1.4)", ok, "")
             chrono_etape("5. docs", t0)
 
-        # 6. index-tools : les 2 outils + compteurs Analyser 9 / Total 204
+        # 6. index-tools : les 2 outils + compteurs Analyser 9 / Total 195
         if point_actif(6):
             t0 = time.monotonic()
             idx = io.open(INDEX, encoding="utf-8", errors="replace").read()
             ok = ("`analyser-performance-tests`" in idx
                   and "`analyser-tokens`" in idx
                   and "| Analyser | 9 |" in idx
-                  and "| **Total** | **204** |" in idx)
-            verifier("6. index-tools : 2 outils + Analyser 9 + Total 204", ok,
+                  and "| **Total** | **195** |" in idx)
+            # migration v1->v2 (2026-09-05) : 8 outils v1 parcours archives -> Total 195
+            verifier("6. index-tools : 2 outils + Analyser 9 + Total 195", ok,
                      "perf=%s tokens=%s" % ("`analyser-performance-tests`" in idx,
                                             "`analyser-tokens`" in idx))
             chrono_etape("6. index-tools", t0)
 
-        # 7. Catalogue : 187 commandes triees + les 2 noms presents
+        # 7. Catalogue : 165 commandes triees + les 2 noms presents
         if point_actif(7):
             t0 = time.monotonic()
             with io.open(CATALOGUE, encoding="utf-8") as fh:
                 cat = json.load(fh)
             noms = [e["nom"] for e in cat["commandes"]]
-            ok = (len(noms) == 188 and noms == sorted(noms)
+            # migration v1->v2 (2026-09-05) : 8 outils v1 parcours archives
+            # 189 -> 165 commandes
+            ok = (len(noms) == 165 and noms == sorted(noms)
                   and "lire-head" in noms
                   and "analyser-performance-tests" in noms
                   and "analyser-tokens" in noms)
-            verifier("7. catalogue : 188 trie + 2 outils presents", ok,
+            verifier("7. catalogue : 181 trie + 2 outils presents", ok,
                      "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
             chrono_etape("7. catalogue", t0)
 

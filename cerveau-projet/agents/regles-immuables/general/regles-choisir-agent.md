@@ -58,8 +58,8 @@ identite:
 ```
 1. Activer l'agent via activer-agent-principal
 2. Documenter la raison et la mission
-3. L'agent execute puis reactive Cerberus
-4. Cerberus declenche Janus (si second controle) puis Clio (si fichiers changes)
+3. L'agent execute puis sa fin suit SA carte (modele aero : reactiver-fin --cible oracle) ; le pilote decide du suivant
+4. Le pilote largue Janus (si second controle) puis Clio (si fichiers changes), et ramene a Cerberus en fin de round
 ```
 
 ---

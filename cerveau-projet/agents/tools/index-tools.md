@@ -51,7 +51,6 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 
 | Outil | Description | Chemin |
 |---|---|---|
-| `cartographier-parcours` | Cartographier le parcours d un agent (arbre ASCII + chemins + impasses) dans un fichier markdown | [cartographier/cartographier-parcours/](cartographier/cartographier-parcours/) |
 
 ### Changer
 
@@ -107,8 +106,8 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 
 | Outil | Description | Chemin |
 |---|---|---|
-| `consulter-lecons` | Consulte la BDD portable des lecons (SQLite, unique et partagee) | [consulter/consulter-lecons/](consulter/consulter-lecons/) |
 | `consulter-combos` | Consulte le catalogue des combos : ou est utilise l outil X et par qui (proprietaire) | [consulter/consulter-combos/](consulter/consulter-combos/) |
+| `consulter-lecons` | Consulte la BDD v1 des lecons des agents v1 (SQLite, memoire collective v1, restaure le 2026-09-05) | [consulter/consulter-lecons/](consulter/consulter-lecons/) |
 | `convertir-carte-mermaid` | Convertit les cartes de decision (parcours-<agent>.json) en graphes Mermaid (.mmd) ET en images SVG (.svg par agent) | [consulter/convertir-carte-mermaid/](consulter/convertir-carte-mermaid/) |
 
 ### Copier
@@ -167,7 +166,6 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `detecter-divergences-version` | Detecter les spec/ dont la version diverge de leur .py (regle des 5 fichiers, formats de version varies) | [detecter/detecter-divergences-version/](detecter/detecter-divergences-version/) |
 | `detecter-impacts` | Detecter les fichiers impliques par la modification d'un fichier du cerveau (schema identite:) | [detecter/detecter-impacts/](detecter/detecter-impacts/) |
 | `detecter-usage-scripts-temporaires` | Mesurer l usage des scripts temporaires (.zz-*/.tmp-*) par les agents et le croiser avec le registre | [detecter/detecter-usage-scripts-temporaires/](detecter/detecter-usage-scripts-temporaires/) |
-| `detecter-cablages-manquants` | Detecter les cablages manquants des cartes de decision : cases orphelines, boucles indirectes, references mortes, fins non joignables (complete valider-case) | [detecter/detecter-cablages-manquants/](detecter/detecter-cablages-manquants/) |
 | `detecter-residus` | Detecter les residus du workspace, compartimente par zone (cerveau-projet / workspace / tous) : fichiers temp, version egaree, sauvegardes, rapports egare, caches | [detecter/detecter-residus/](detecter/detecter-residus/) |
 | `detecter-contradictions` | Croiser les sources (cases, regles, protocoles, git log --all) pour detecter les contradictions - outil d Argus, rapport classe par gravite | [detecter/detecter-contradictions/](detecter/detecter-contradictions/) |
 | `detecter-troncatures` | Detecter les elements tronques donc illisibles : fichiers trop longs a lire (binaires ignores), blocs non fermes (JSON/Python/bash invalides), marqueurs de troncature (zones de documentation ignorees), option --exclure | [detecter/detecter-troncatures/](detecter/detecter-troncatures/) |
@@ -188,7 +186,6 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 |---|---|---|
 | `editer-fichier` | Remplacer une chaine par une autre dans un fichier | [editer/editer-fichier/](editer/editer-fichier/) |
 | `editer-fichier-agents` | Editer les fiches agents (ligne/bloc, ajouter/supprimer, correcteur ASCII) | [editer/editer-fichier-agents/](editer/editer-fichier-agents/) |
-| `editer-parcours` | Editer les parcours de decision JSON de maniere sure (insertion/retrait case, branche, suivant, bump) | [editer/editer-parcours/](editer/editer-parcours/) |
 
 ### Evaluer
 
@@ -206,7 +203,7 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 
 | Outil | Description | Chemin |
 |---|---|---|
-| `enregistrer-lecon` | Enregistre une lecon dans la BDD portable des lecons (SQLite, unique et partagee) | [enregistrer/enregistrer-lecon/](enregistrer/enregistrer-lecon/) |
+| `enregistrer-lecon` | Enregistre une lecon dans la BDD v1 des lecons des agents v1 (SQLite, memoire collective v1, restaure le 2026-09-05) | [enregistrer/enregistrer-lecon/](enregistrer/enregistrer-lecon/) |
 | `enregistrer-usage-outil` | Enregistre un usage d outil dans le registre JSONL (traces/registre-usages-outils.jsonl) | [enregistrer/enregistrer-usage-outil/](enregistrer/enregistrer-usage-outil/) |
 
 ### Executer
@@ -226,9 +223,6 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `generateurs-squelette-todo` | Generer le squelette d'un todo conforme au todo-template | [generateurs/generateurs-squelette-todo/](generateurs/generateurs-squelette-todo/) |
 | `generateurs-commande` | Composer et generer une commande complexe en posant une question par parametre | [generateurs/generateurs-commande/](generateurs/generateurs-commande/) |
 | `generateurs-amelioration` | Pose une checklist de questions par theme avant toute amelioration d un outil, combo, generateur ou carte | [generateurs/generateurs-amelioration/](generateurs/generateurs-amelioration/) |
-| `generateurs-case` | Ajouter, editer, supprimer une case OU ajouter un bloc modele compose COMPLET (decision + branches min 2 + deviation + rejoint, refs pattern-7) d'une carte de decision (parcours JSON) avec recablage auto, --ref (indices reference) et validation auto valider-case --modele | [generateurs/generateurs-case/](generateurs/generateurs-case/) |
-| `generateurs-carte` | Agir sur une carte COMPLETE (parcours JSON) : creer un squelette ALLEGE (indices = references, nait CONFORME 0 surcharge), analyser les chemins, detecter les anomalies (structure + delegation validateur-case), dupliquer un chemin (refs conservees) | [generateurs/generateurs-carte/](generateurs/generateurs-carte/) |
-| `generateurs-ligne` | Ajouter une LIGNE (chemin de bout en bout) a une carte de decision via des gabarits de groupes de cases (configs : defaut, config-1 deviation, config-2 RVAV, config-3 action), apres verification de la carte Atlas (existence + mtime, blocage + invite a activer Atlas sinon), dry/wet | [generateurs/generateurs-ligne/](generateurs/generateurs-ligne/) |
 | `generateurs-outil-temporaire` | Generer un outil temporaire (script Python jetable) dans le workspace : en-tete standard (identite outil-temporaire, ASCII, LF), dry-run par defaut, question de promotion (2e utilisation -> activer Vulcain) | [generateurs/generateurs-outil-temporaire/](generateurs/generateurs-outil-temporaire/) |
 | `generateurs-regenerer-catalogue` | Regenerer/synchroniser le catalogue de commandes du generateur a partir des outils reels (descriptions extraites des en-tetes .py, 2 formats) | [generateurs/generateurs-regenerer-catalogue/](generateurs/generateurs-regenerer-catalogue/) |
 
@@ -248,7 +242,6 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 
 | Outil | Description | Chemin |
 |---|---|---|
-| `guider-parcours` | Guider l'agent case par case (jeu de piste) dans son parcours JSON : indices outil/fichier/regle + branches selon les reponses | [guider/guider-parcours/](guider/guider-parcours/) |
 | `guider-arbre` | Piloter un arbre de decisions v2-like (refonte 2026-08-27) : racine -> themes -> fins centralisees, mode agent non-bloquant, --liste et --valider | [guider/guider-arbre/](guider/guider-arbre/) |
 
 ### Inserer
@@ -286,7 +279,6 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | Outil | Description | Chemin |
 |---|---|---|
 | `migrer-identite` | Migrer les fichiers vers le schema hybride v0.2.0 (bloc identite type/appartient_a/commun), idempotent avec --dry-run | [migrer/migrer-identite/](migrer/migrer-identite/) |
-| `migrer-cases-relecture` | Migrer les parcours vers la relecture obligatoire (c0 action RELIRE + c0b question confirmation) | [migrer/migrer-cases-relecture/](migrer/migrer-cases-relecture/) |
 
 ### Mettre a jour
 
@@ -364,7 +356,6 @@ Les outils sont organises par **CATEGORIE** (le dossier = ce que fait l'outil : 
 | `valider-conventions` | Verifier que les conventions sont respectees | [valider/valider-conventions/](valider/valider-conventions/) |
 | `valider-ebauche` | Verifier les exigences minimales d'un ebauche | [valider/valider-ebauche/](valider/valider-ebauche/) |
 | `valider-liens` | Verifier que les liens sont valides | [valider/valider-liens/](valider/valider-liens/) |
-| `valider-case` | Valide et allege une carte de decision (parcours JSON) : structure, modele compose, surcharge des indices, references, normes - verdict CONFORME / A ALLEGER / NON CONFORME | [valider/valider-case/](valider/valider-case/) |
 | `valider-nommage` | Verifier que le nommage est correct | [valider/valider-nommage/](valider/valider-nommage/) |
 | `valider-pense-bete` | Verifier l'integrite d'un pense-bete (structure, sections, ASCII) | [valider/valider-pense-bete/](valider/valider-pense-bete/) |
 | `valider-relecture` | Verifier que chaque fiche agent + corrections contient la regle de relecture | [valider/valider-relecture/](valider/valider-relecture/) |
@@ -494,27 +485,12 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | `test-003-combos-creer` | Test formel des 3 combos creer-* (cases generateur -> outil, Pattern 3). | [tester/tests/test-003-combos-creer/](tester/tests/test-003-combos-creer/) |
 | `test-004-combos-tester-outil` | Test formel du combo tester-outil v0.1.0 (Pattern 3, chemin de test de Morpheus encapsule). | [tester/tests/test-004-combos-tester-outil/](tester/tests/test-004-combos-tester-outil/) |
 | `test-005-generateurs-commande` | Test formel du generateur de commande v0.2.4 (fiabilisation des flags optionnels), | [tester/tests/test-005-generateurs-commande/](tester/tests/test-005-generateurs-commande/) |
-| `test-006-cartographier-parcours` | Test formel de l'outil cartographier-parcours v0.1.0 (categorie cartographier/). | [tester/tests/test-006-cartographier-parcours/](tester/tests/test-006-cartographier-parcours/) |
 | `test-007-figer-lf` | Test formel de la mission 1 du plan FIGER LF. | [tester/tests/test-007-figer-lf/](tester/tests/test-007-figer-lf/) |
 | `test-008-generateurs-amelioration` | Test formel de l'outil generateurs-amelioration v2.1.0 (categorie generateurs/). | [tester/tests/test-008-generateurs-amelioration/](tester/tests/test-008-generateurs-amelioration/) |
-| `test-009-valider-case` | Test formel de l'outil valider-case v1.1.1 (categorie valider/). | [tester/tests/test-009-valider-case/](tester/tests/test-009-valider-case/) |
-| `test-010-generateurs-case` | Test formel de l outil generateurs-case v0.4.2 (categorie generateurs/). | [tester/tests/test-010-generateurs-case/](tester/tests/test-010-generateurs-case/) |
-| `test-011-generateurs-carte` | Test formel de l outil generateurs-carte v0.3.0 (categorie generateurs/). | [tester/tests/test-011-generateurs-carte/](tester/tests/test-011-generateurs-carte/) |
-| `test-012-guider-parcours` | Test formel de l outil guider-parcours v0.5.0 (categorie guider/). | [tester/tests/test-012-guider-parcours/](tester/tests/test-012-guider-parcours/) |
-| `test-013-cerberus-migration` | Test formel de la migration pilote du parcours-cerberus v0.4.3 | [tester/tests/test-013-cerberus-migration/](tester/tests/test-013-cerberus-migration/) |
-| `test-014-spec-guider-parcours` | Test formel de la spec-guider-parcours v0.6.2 | [tester/tests/test-014-spec-guider-parcours/](tester/tests/test-014-spec-guider-parcours/) |
-| `test-015-valider-case-garde-fou` | Test formel du garde-fou anti-pollution de valider-case v1.1.1 | [tester/tests/test-015-valider-case-garde-fou/](tester/tests/test-015-valider-case-garde-fou/) |
-| `test-016-migration-buffy` | Test formel de la migration du parcours-buffy v0.3.0 | [tester/tests/test-016-migration-buffy/](tester/tests/test-016-migration-buffy/) |
-| `test-017-generateurs-ligne` | Test formel de l'outil generateurs-ligne v0.3.0 (categorie generateurs/). | [tester/tests/test-017-generateurs-ligne/](tester/tests/test-017-generateurs-ligne/) |
-| `test-018-fins-reactivation` | Test formel des fins REACTIVER-CERBERUS precisees dans les 11 parcours. | [tester/tests/test-018-fins-reactivation/](tester/tests/test-018-fins-reactivation/) |
 | `test-019-combos-controle-buffy` | Test formel du combo controle-buffy v0.1.0 (Pattern 3, preparation d'une mission | [tester/tests/test-019-combos-controle-buffy/](tester/tests/test-019-combos-controle-buffy/) |
 | `test-020-combos-clio` | Test formel des 3 combos Clio (Pattern 3, crees pour le test reel de la | [tester/tests/test-020-combos-clio/](tester/tests/test-020-combos-clio/) |
-| `test-021-ligne-trio` | Test formel de la LIGNE TRIO de Janus + boucle de correction du trio. | [tester/tests/test-021-ligne-trio/](tester/tests/test-021-ligne-trio/) |
-| `test-022-budget-pondere` | Test formel du BUDGET PONDERE des indices par case (valider-case v1.1.0). | [tester/tests/test-022-budget-pondere/](tester/tests/test-022-budget-pondere/) |
-| `test-023-grep-budget-pondere` | Test formel du GREP CROISE des seuils BUDGET PONDERE (protocole-verification- | [tester/tests/test-023-grep-budget-pondere/](tester/tests/test-023-grep-budget-pondere/) |
-| `test-024-scripts-temporaires` | Test formel du garde-fou anti-scripts-temporaires v0.1.0 | [tester/tests/test-024-scripts-temporaires/](tester/tests/test-024-scripts-temporaires/) |
+| `test-024-scripts-temporaires` | Garde-fou anti-scripts-temporaires : aucun .zz-*/.tmp-* a la racine, outil detecter-usage-scripts-temporaires vert. | [tester/tests/test-024-scripts-temporaires/](tester/tests/test-024-scripts-temporaires/) |
 | `test-025-nettoyer-sessions-garde-fou` | Test formel du garde-fou anti-recurrence : en-tete ## Sessions LLM PRESERVE | [tester/tests/test-025-nettoyer-sessions-garde-fou/](tester/tests/test-025-nettoyer-sessions-garde-fou/) |
-| `test-026-detecter-cablages-manquants-garde-fou` | Garde-fou anti-recurrence du bug des cases ORPHELINES (lecon 2026-08-12). | [tester/tests/test-026-detecter-cablages-manquants-garde-fou/](tester/tests/test-026-detecter-cablages-manquants-garde-fou/) |
 | `test-027-series-garde-fou` | mod = importlib.util.module_from_spec(spec) | [tester/tests/test-027-series-garde-fou/](tester/tests/test-027-series-garde-fou/) |
 | `test-028-coherence-documentaire` | Garde-fou anti-recurrence des ecarts documentaires (lecon 2026-08-12, round 11). | [tester/tests/test-028-coherence-documentaire/](tester/tests/test-028-coherence-documentaire/) |
 | `test-029-conformite-template` | GARDE-FOU : chaque test-0XX doit respecter la structure du TEMPLATE de test | [tester/tests/test-029-conformite-template/](tester/tests/test-029-conformite-template/) |
@@ -542,7 +518,6 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 |---|---|
 | Ajouter | 1 |
 | Analyser | 9 |
-| Cartographier | 1 |
 | Changer | 1 |
 | Combos | 21 |
 | Condenser | 1 |
@@ -552,18 +527,18 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Creer | 4 |
 | Decomposer | 1 |
 | Deplacer | 1 |
-| Detecter | 18 |
+| Detecter | 19 |
 | Ecrire | 1 |
-| Editer | 3 |
-| Enregistrer | 1 |
+| Editer | 2 |
+| Enregistrer | 2 |
 | Evaluer | 7 |
-| Generateurs | 10 |
+| Generateurs | 7 |
 | Gerer | 1 |
 | Guider | 1 |
 | Inserer | 1 |
 | Lire | 5 |
-| Lister | 8 |
-| Migrer | 2 |
+| Lister | 9 |
+| Migrer | 1 |
 | Mettre a jour | 2 |
 | Activer | 1 |
 | Nettoyer | 4 |
@@ -572,12 +547,12 @@ cerveau-projet/agents/tools/lister/lister-prepares/lister-prepares.sh
 | Rechercher | 11 |
 | Remplacer | 1 |
 | Supprimer | 3 |
-| Valider | 13 |
-| Verifier | 6 |
+| Valider | 12 |
+| Verifier | 8 |
 | Executer | 1 |
 | Protections | 6 |
 | Tests | 41 |
-| **Total** | **204** |
+| **Total** | **195** |
 
 > **Note sur le decompte** : 87 outils d'action + 12 combos + 3 protections + 1 template = 104 au total ; `lister-outils.sh` affiche les outils d'action car il exclut `combos/` et `tester/` de son comptage.
 

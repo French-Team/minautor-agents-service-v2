@@ -175,7 +175,7 @@ def main():
         if sauvee is not None:
             os.remove(REFERENCE)
         r = run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal",
-                 "--tests", "test-010"])
+                 "--tests", "test-001"])
         verifier("3. Le chrono est affiche (Temps ecoule)",
                  "Temps ecoule" in r.stdout, r.stdout.strip()[-120:])
         creee = os.path.isfile(REFERENCE)
@@ -189,7 +189,7 @@ def main():
             with io.open(REFERENCE, "w", encoding="utf-8", newline="\n") as fh:
                 fh.write(sauvee)
         r = run([PYTHON, LANCER, "--serial", "--agent", "janus", "--journal",
-                 "--tests", "test-010"])
+                 "--tests", "test-001"])
         apres = lire_fichier(REFERENCE)
         if sauvee is not None:
             verifier("5. Run cible : la reference existante est inchangee",

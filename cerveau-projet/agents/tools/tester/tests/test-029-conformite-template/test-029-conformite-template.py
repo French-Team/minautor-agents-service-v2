@@ -170,16 +170,17 @@ def main():
     verifier("2. template-test.md existe en v0.3.0 (Python + protections + chrono)",
              template_ok, "chemin=%s" % TEMPLATE)
 
-    # 3. Le template est reference dans la carte de Morpheus
-    carte = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "morpheus",
-                         "parcours", "parcours-morpheus.json")
-    carte_template = False
-    if os.path.isfile(carte):
-        with io.open(carte, encoding="utf-8", errors="replace") as fh:
-            carte_texte = fh.read()
-        carte_template = "template-test" in carte_texte
-    verifier("3. La carte de Morpheus reference template-test.md",
-             carte_template, "chemin=%s" % carte)
+    # 3. Le template est reference dans la fiche de Morpheus (v2 : les
+    # arbres ne portent pas les indices v1 - la fiche est la reference).
+    fiche = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "morpheus",
+                         "morpheus.md")
+    fiche_template = False
+    if os.path.isfile(fiche):
+        with io.open(fiche, encoding="utf-8", errors="replace") as fh:
+            fiche_texte = fh.read()
+        fiche_template = "template-test" in fiche_texte
+    verifier("3. La fiche de Morpheus reference template-test.md",
+             fiche_template, "chemin=%s" % fiche)
 
     # 4. Invariants vitaux sur CHAQUE test
     ko_marqueur = []

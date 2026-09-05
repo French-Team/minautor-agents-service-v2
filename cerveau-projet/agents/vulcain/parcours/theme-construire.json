@@ -100,10 +100,8 @@
           "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py",
           "python3 cerveau-projet/agents/tools/valider/valider-nommage/valider-nommage.py",
           "python3 cerveau-projet/agents/tools/detecter/detecter-divergences-version/detecter-divergences-version.py",
-          "python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py --tous",
           "python3 cerveau-projet/agents/tools/tester/recommander-series/recommander-series.py",
-          "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --agent vulcain",
-          "python3 cerveau-projet/agents/tools/migrer/migrer-cases-relecture/migrer-cases-relecture.py"
+          "python3 cerveau-projet/agents/tools/valider/valider-cartes-decision/valider-cartes-decision.py --agent vulcain"
         ],
         "regle": "REGLE IMMUABLE : ASCII strict + LF sur tous les fichiers produits."
       },

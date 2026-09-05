@@ -7,6 +7,9 @@ identite:
   commun: false
   mot-cles: ["mecano", "corrections", "freelance", "maintenance", "v2"]
 ---
+> MEMOIRE GELEE le 2026-09-04 - decision utilisateur v1->v2 : les
+> nouvelles lecons vont dans bdd-lecons (outil v2). Historique conserve
+> pour relecture - AUCUN [LECON] supplementaire.
 # Corrections -- Mecano
 
 > Fenetre glissante des lecons et corrections de Mecano.

@@ -255,7 +255,7 @@ CERBERUS -> ORACLE -> AGENT -> ORACLE -> CERBERUS
 | `rechercher-texte` | Rechercher un pattern dans un fichier |
 | `lister-agents` | Lister les agents disponibles |
 | `lister-outils` | Lister les outils disponibles |
-| `activer-agent-principal` | Activer un agent / reactiver Cerberus |
+| `activer-agent-principal` | Activer un agent (les fins d agents reviennent via ORACLE, reactiver-fin --cible oracle) |
 | `guider-arbre` | Me guider dans MON arbre v2 (`arbre-cerberus.json`) |
 | `executer-script-temporaire` | ENTONNOIR : normaliser + controler + executer tout script temporaire |
 

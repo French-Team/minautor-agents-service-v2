@@ -5,7 +5,8 @@
  "mission_type": null,
  "mission": null,
  "historise_debut": false,
- "precedent": null,
- "etape": "debut",
- "historise_fin": false
+ "precedent": "oracle",
+ "etape": null,
+ "historise_fin": false,
+ "theme_courant": null
 }

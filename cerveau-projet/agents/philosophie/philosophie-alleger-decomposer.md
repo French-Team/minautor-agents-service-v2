@@ -45,6 +45,6 @@ perdre de l'information : c'est la reorganiser pour la rendre accessible.
 
 | Cible | Chemin |
 |---|---|
-| Spec guide-parcours (Patterns 1, 3, 7) | [agents/tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) |
+| Spec guide-arbre v2 (Patterns 1, 3, 7) | [agents/tools/guider/guider-arbre/guider-arbre.md](../tools/guider/guider-arbre/guider-arbre.md) |
 | Protocole composition | [agents/regles-immuables/general/protocole-composition/](../regles-immuables/general/protocole-composition/) |
 | Index des philosophies | [index-philosophie.md](index-philosophie.md) |

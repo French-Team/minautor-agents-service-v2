@@ -27,7 +27,7 @@ Contexte (2026-08-16, audit Cerberus) :
 
 Invariants verifies :
   1. Les 5 outils cles des regles de gouvernance sont dans la carte de leur
-     proprietaire (buffy: editer-parcours, editer-fichier-agents ; clio:
+     proprietaire (buffy: editer-fichier, editer-fichier-agents ; clio:
      combos-maj-readme-massive, mettre-a-jour-readme ; janus:
      tester-lancer-non-regression ; morpheus: tester-protections ; hygie:
      detecter-residus)
@@ -181,21 +181,16 @@ def derivation_exclusifs():
 
 
 def outils_carte_agent(agent):
-    """Retourne les outils de la carte d un agent (tous types outil)."""
-    chemin = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", agent,
-                          "parcours", "parcours-%s.json" % agent)
+    """Retourne les outils de la carte d un agent : table d habilitation
+    dediee (habilitation-<agent>.json, source unique du verrou, migration
+    v1->v2 2026-09-05 - les parcours v1 sont retires)."""
+    chemin = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                          "habilitation", "habilitation-%s.json" % agent)
     if not os.path.isfile(chemin):
         return set()
     import json
     p = json.load(io.open(chemin, encoding="utf-8"))
-    outils = set()
-    for cid, c in p.get("cases", {}).items():
-        for idx in c.get("indices", []):
-            if idx.get("type") == "outil":
-                nom = idx.get("nom") or idx.get("catalogue")
-                if nom:
-                    outils.add(nom)
-    return outils
+    return set(p.get("outils", []))
 
 
 def tous_agents():
@@ -217,7 +212,7 @@ def main():
         if point_actif(1):
             t0 = time.monotonic()
             regles = {
-                "buffy": ["editer-parcours", "editer-fichier-agents"],
+                "buffy": ["editer-fichier", "editer-fichier-agents"],
                 "clio": ["combos-maj-readme-massive", "mettre-a-jour-readme"],
                 "janus": ["tester-lancer-non-regression"],
                 "morpheus": ["tester-protections"],
@@ -239,7 +234,7 @@ def main():
             t0 = time.monotonic()
             table = table_verrou()
             attendus = {
-                "editer-parcours": "buffy",
+                "editer-fichier": "buffy",
                 "editer-fichier-agents": "buffy",
                 "combos-maj-readme-massive": "clio",
                 "mettre-a-jour-readme": "clio",

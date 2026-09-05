@@ -16,23 +16,23 @@ Contexte :
     verrou carte/registre.
 
 Invariants verifies :
-  1. La carte morpheus (parcours-morpheus.json) contient tester-protections
-     dans ses indices outil (le testeur = proprietaire des protections)
-  2. AUCUNE carte AUTRE que morpheus ET janus ne contient tester-protections :
-     janus est autorise car il lance la non-regression (c4 Verifier les tests,
-     tester-lancer-non-regression importe les protections en interne) - mais
-     ni morpheus ni janus ne possede l outil ailleurs, et AUCUN autre agent
-     ne l a en carte
+  1. La table d habilitation de morpheus (habilitation-morpheus.json)
+     contient tester-protections (le testeur = proprietaire des protections)
+  2. AUCUNE table AUTRE que morpheus ET janus ne contient tester-protections :
+     janus est autorise car il lance la non-regression (tester-lancer-
+     non-regression importe les protections en interne) - mais AUCUN autre
+     agent ne l a en table
   3. Le REGISTRE du jour courant ne contient AUCUNE declaration de
      tester-protections par un agent autre que morpheus (seul le testeur
      declare l outil ; janus declare tester-lancer-non-regression)
-  4. La carte morpheus reference le domaine tester/ (l index c12
-     tester-protections pointe vers cerveau-projet/agents/tools/tester/)
+  4. La table morpheus reference le domaine tester/ (tester-protections
+     pointe vers cerveau-projet/agents/tools/tester/, present dans
+     index-tools.md)
   5. La regle immuable est documentee dans regles-groupes-agents.md
      (section SEUL MORPHEUS ECRIT ET EXECUTE LES TESTS)
   6. La fiche morpheus.md contient la REGLE ABSOLUE -- NON-REGRESSION JANUS
      (Morpheus execute des tests individuels, JAMAIS la complete)
-  7. Normes : ASCII strict + LF pur (carte + fiche + regle + test)
+  7. Normes : ASCII strict + LF pur (arbre + fiche + regle + test)
 Tags: agents, morpheus, garde-fou
 """
 import glob
@@ -53,22 +53,23 @@ REGISTRE = os.path.join(AGENTS_DIR, "traces", "registre-usages-outils.jsonl")
 FICHE_MORPHEUS = os.path.join(AGENTS_DIR, "morpheus", "morpheus.md")
 REGLES = os.path.join(AGENTS_DIR, "regles-immuables", "general",
                       "regles-groupes-agents.md")
-# Les 14 agents (parcours reels)
+HABILITATION_DIR = os.path.join(AGENTS_DIR, "habilitation")
+INDEX_TOOLS = os.path.join(TOOLS_DIR, "index-tools.md")
+# Les agents (arbres reels : dossier parcours contenant arbre-<agent>.json)
 AGENTS = sorted(a for a in os.listdir(AGENTS_DIR)
-                if os.path.isdir(os.path.join(AGENTS_DIR, a, "parcours")))
+                if os.path.isfile(os.path.join(AGENTS_DIR, a, "parcours",
+                                               "arbre-%s.json" % a)))
 
 
-def chemin_parcours(agent):
-    return os.path.join(AGENTS_DIR, agent, "parcours", "parcours-%s.json" % agent)
-
-
-def indices_outils(parcours):
-    """Ensemble des noms d outils des indices de toutes les cases."""
+def outils_table(agent):
+    """Ensemble des outils d une table d habilitation (None si absente)."""
+    chemin = os.path.join(HABILITATION_DIR, "habilitation-%s.json" % agent)
+    if not os.path.isfile(chemin):
+        return None
+    d = json.load(io.open(chemin, encoding="utf-8"))
     noms = set()
-    for c in parcours.get("cases", {}).values():
-        for ind in c.get("indices", []):
-            if isinstance(ind, dict) and ind.get("nom"):
-                noms.add(ind["nom"])
+    for o in d.get("outils", []):
+        noms.add((o.get("nom", "") if isinstance(o, dict) else o))
     return noms
 
 
@@ -159,14 +160,11 @@ def main():
     # --- 1. Morpheus contient tester-protections (legitime)
     if point_actif(1):
         t = time.monotonic()
-        try:
-            p = json.load(io.open(chemin_parcours("morpheus"), encoding="utf-8"))
-            verifier("1. carte morpheus contient tester-protections",
-                     OUTIL_TEST in indices_outils(p),
-                     "introuvable dans parcours-morpheus.json")
-        except Exception as e:
-            verifier("1. carte morpheus contient tester-protections", False, str(e))
-        chrono_etape("1. carte morpheus", t)
+        noms = outils_table("morpheus")
+        verifier("1. table morpheus contient tester-protections",
+                 noms is not None and OUTIL_TEST in noms,
+                 "introuvable dans habilitation-morpheus.json")
+        chrono_etape("1. table morpheus", t)
 
     # --- 2. Seuls morpheus ET janus (non-regression) ont tester-protections
     if point_actif(2):
@@ -174,22 +172,14 @@ def main():
         autorises = {"morpheus", "janus"}
         derivees = []
         for agent in AGENTS:
-            chemin_v1 = chemin_parcours(agent)
-            if not os.path.isfile(chemin_v1):
-                # Agent passe en v2 : aucun parcours-*.json v1 (uniquement
-                # arbre-<agent>.json + themes). Rien a verifier ici : ce garde
-                # cible les cartes de DECISION v1 qui listent tester-protections.
+            noms = outils_table(agent)
+            if noms is None:
                 continue
-            try:
-                p = json.load(io.open(chemin_v1, encoding="utf-8"))
-                if OUTIL_TEST in indices_outils(p):
-                    if agent not in autorises:
-                        derivees.append(agent)
-            except Exception as e:
-                derivees.append("%s(ERR %s)" % (agent, e))
+            if OUTIL_TEST in noms and agent not in autorises:
+                derivees.append(agent)
         verifier("2. tester-protections uniquement dans morpheus + janus (non-regression)",
                  len(derivees) == 0, "derivees=%s" % derivees)
-        chrono_etape("2. exclusivite cartes", t)
+        chrono_etape("2. exclusivite tables", t)
 
     # --- 3. Registre du jour : seul morpheus declare tester-protections
     if point_actif(3):
@@ -220,18 +210,16 @@ def main():
                  len(derivees) == 0, "derivees=%s" % derivees)
         chrono_etape("3. registre", t)
 
-    # --- 4. La carte morpheus reference le domaine tester/ (index c12)
+    # --- 4. La table morpheus reference le domaine tester/ (via
+    #      tester-protections, pointe dans index-tools.md)
     if point_actif(4):
         t = time.monotonic()
-        try:
-            p = json.load(io.open(chemin_parcours("morpheus"), encoding="utf-8"))
-            texte = json.dumps(p, ensure_ascii=True)
-            verifier("4. carte morpheus reference le domaine tester/ (tester-protections c12)",
-                     "tester/tester-protections/" in texte,
-                     "chemin tester/tester-protections/ introuvable dans la carte")
-        except Exception as e:
-            verifier("4. carte morpheus reference le domaine tester/ (tester-protections c12)",
-                     False, str(e))
+        noms = outils_table("morpheus")
+        index = lire(INDEX_TOOLS)
+        verifier("4. table morpheus reference le domaine tester/ (tester-protections)",
+                 noms is not None and OUTIL_TEST in noms
+                 and "tester/tester-protections/" in index,
+                 "chemin tester/tester-protections/ introuvable dans index-tools.md")
         chrono_etape("4. domaine tests", t)
 
     # --- 5. Regle immuable documentee
@@ -263,7 +251,8 @@ def main():
     if point_actif(7):
         t = time.monotonic()
         normes_ko = []
-        for f in [chemin_parcours("morpheus"), FICHE_MORPHEUS, REGLES,
+        for f in [os.path.join(AGENTS_DIR, "morpheus", "parcours",
+                               "arbre-morpheus.json"), FICHE_MORPHEUS, REGLES,
                   os.path.abspath(__file__)]:
             try:
                 txt = lire(f)

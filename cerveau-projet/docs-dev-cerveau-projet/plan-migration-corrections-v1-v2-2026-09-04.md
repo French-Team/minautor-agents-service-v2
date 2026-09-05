@@ -1,8 +1,7 @@
----
-identite:
+---  identite:
   type: plan
   nom: plan-migration-corrections-v1-v2
-  version: 0.2.0
+  version: 0.3.0
   cree: 2026-09-04
   statut: a-valider
   appartient_a: buffy
@@ -23,6 +22,20 @@ identite:
 > INSERT OR IGNORE), anti-doublon A.1/A.2, parse [LECON] v1, backup
 > obligatoire, tracabilite mission/outils, perimetre Vision, comptages
 > dynamiques, --verifier integre, questions Q6-Q8 ajoutees.
+>
+> **v0.3.0 (2026-09-05) : SCISSION 2-BDD -- CORRECTION DU PLAN**
+> L utilisateur a clarifie que les deux equipes (v1 cerveau-projet, v2
+> freelance) sont DISTINCTES et gardent chacune LEUR perimetre et LEUR zone
+> de memoire collective. La fusion des memoires (migrer les lecons v1 dans
+> bdd-lecons v2) est ANNULEE :
+> - les agents v1 gardent LEUR BDD v1 (`cerveau-projet/agents/lecons/lecons.db`,
+>   279 lecons, outils v1 restaures `enregistrer-lecon`/`consulter-lecons`) ;
+> - bdd-lecons v2 reste la memoire des agents FREELANCE (6 lecons) ;
+> - les 279 lecons v1 ont ete retirees de bdd-lecons v2 le 2026-09-05
+>   (backup `lecons.db.bak-scission-2bdd-2026-09-05`) et reintegrees en v1 ;
+> - ce qui subsiste du plan : le gel des corrections.md v1 (fait), la
+>   suppression de corrections.db/corrections-db.py (fait), la finition du
+>   cote v2 (etape C, session-freelance, Vision/JARVIS - hors perimetre v1).
 
 ---
 

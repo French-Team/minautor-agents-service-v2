@@ -16,8 +16,9 @@ Cas couverts:
   4. Variable commande_test manquante (apres c3=OUI) -> erreur claire (commande de la case c4)
   5. Navigation chemin OUI : fichier de test CREE + test EXECUTE + c6 FIN (COMBO TERMINE)
   6. Navigation chemin NON : c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE preservee)
-  7. Integration parcours morpheus v0.5.8 : guider-parcours affiche la case
-     Lancer le combo tester-outil puis Verifier les resultats
+  7. Integration carte morpheus v2 (arbre + theme-tester.json) : le theme
+     Tester contient les besoins Lancer le combo tester-outil puis
+     Verifier les resultats et donner le verdict
   8. valider-cartes-decision --agent morpheus : CONFORME
   9. Nommage : definition-combo.json = bruit preexistant documente (identique aux 15 combos) - non bloquant
  10. ASCII : valider-conformite-ascii 0 (definition + parcours)
@@ -102,10 +103,10 @@ def bilan_chrono():
 MOTEUR_PY = os.path.join(TOOLS_DIR, "combos", "combos-moteur", "combos-moteur.py")
 VALIDER_CARTES = os.path.join(TOOLS_DIR, "valider", "valider-cartes-decision", "valider-cartes-decision.py")
 VALIDER_ASCII = os.path.join(TOOLS_DIR, "valider", "valider-conformite-ascii", "valider-conformite-ascii.py")
-GUIDER = os.path.join(TOOLS_DIR, "guider", "guider-parcours", "guider-parcours.py")
 
 COMBO = os.path.join(TOOLS_DIR, "combos", "combo-tester-outil", "definition-combo.json")
-PARCOURS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "morpheus", "parcours", "parcours-morpheus.json")
+ARBRE_MORPHEUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "morpheus", "parcours", "arbre-morpheus.json")
+THEME_TESTER = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "morpheus", "parcours", "theme-tester.json")
 
 NB_POINTS = 0
 NB_OK = 0
@@ -197,20 +198,22 @@ def main():
     verifier("6. Navigation NON -> c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE)",
              code == 0 and "Fin de combo atteinte : case 'c5'" in out and "PROTECTIONS MANQUANTES" in out)
 
-    # --- 7. Integration parcours morpheus v0.5.8
-    # (cU1 COMPRENDRE L OUTIL ajoutee par Buffy 2026-08-21 : le flux passe
-    # par cU1 (NON) avant la question Mission -> sequence OUI|NON|tester)
-    # NB 2026-08-29 : le GATE BON AGENT (decision utilisateur marbre-log)
-    # ajoute une question de verification en debut de parcours -> la
-    # sequence passe desormais par le GATE (OUI) avant c0c -> OUI|OUI|NON|tester)
-    with io.open(PARCOURS, encoding="utf-8") as fh:
-        p = json.load(fh)
-    verifier("7a. Parcours morpheus v0.5.8", p.get("parcours", {}).get("version") == "0.5.8")
-    code, out = executer([PYTHON, GUIDER, PARCOURS, "--reponses", "OUI|OUI|NON|tester"])
-    verifier("7b. Case Lancer le combo tester-outil presente",
-             "Lancer le combo tester-outil" in out)
-    verifier("7c. Suite Verifier les resultats presente",
-             "Verifier les resultats et donner le verdict" in out)
+    # --- 7. Integration carte morpheus v2 (arbre + theme-tester.json)
+    # Migration v1->v2 (2026-09-05) : guider-parcours archive, la carte v2 =
+    # arbre-morpheus.json + themes. Le flux de test de Morpheus passe par
+    # le theme TESTER (besoins "Lancer le combo tester-outil" puis
+    # "Verifier les resultats et donner le verdict").
+    with io.open(ARBRE_MORPHEUS, encoding="utf-8") as fh:
+        arbre = json.load(fh)
+    verifier("7a. arbre morpheus v2 (identite arbre)",
+             arbre.get("identite", {}).get("type") == "arbre",
+             "type=%s" % arbre.get("identite", {}).get("type"))
+    with io.open(THEME_TESTER, encoding="utf-8") as fh:
+        theme = fh.read()
+    verifier("7b. theme Tester : besoin Lancer le combo tester-outil",
+             "Lancer le combo tester-outil" in theme)
+    verifier("7c. theme Tester : besoin Verifier les resultats et donner le verdict",
+             "Verifier les resultats et donner le verdict" in theme)
 
     # --- 8. valider-cartes-decision --agent morpheus
     code, out = executer([PYTHON, VALIDER_CARTES, "--agent", "morpheus"])
@@ -221,7 +224,8 @@ def main():
              True, "identique aux combos existants (hors perimetre valider-nommage)")
 
     # --- 10. ASCII
-    for nom, chemin in [("definition combo", COMBO), ("parcours morpheus", PARCOURS)]:
+    for nom, chemin in [("definition combo", COMBO), ("arbre morpheus", ARBRE_MORPHEUS),
+                        ("theme tester", THEME_TESTER)]:
         with io.open(chemin, encoding="utf-8") as fh:
             txt = fh.read()
         na = sum(1 for c in txt if ord(c) > 127)

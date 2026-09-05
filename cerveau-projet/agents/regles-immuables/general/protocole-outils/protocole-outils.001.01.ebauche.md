@@ -253,7 +253,7 @@ grep -rn "\\K" agents/tools/ --include="*.sh"              # doit etre vide
 
 ```
 1. L'agent execute sa mission en utilisant L'OUTIL de chaque etape (levier A)
-2. Avant de reactiver Cerberus, l'agent declare son BILAN OUTILS (levier C)
+2. Avant de rendre la main (reactiver-fin --cible oracle, modele aero), l'agent declare son BILAN OUTILS (levier C)
 3. Le controleur (Janus/Themis) lance detecter-usage-outils-externes sur les fichiers modifies (levier B)
 4. Aucune trace -> mission validee
 5. Trace detectee (CRLF, accents, BOM) -> l'agent est sanctionne :

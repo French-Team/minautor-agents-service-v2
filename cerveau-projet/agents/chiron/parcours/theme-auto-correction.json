@@ -3,7 +3,7 @@
     "type": "theme",
     "appartient_a": "chiron",
     "nom": "AUTO-CORRECTION",
-    "description": "Corriger MA carte : relire, documenter, editer-parcours, Themis verifie, reprendre"
+    "description": "Corriger MA carte : relire, documenter, editer-fichier sur mon arbre, Themis verifie, reprendre"
   },
   "theme": {
     "nom": "AUTO-CORRECTION",
@@ -69,12 +69,12 @@
         "regle": "REGLE ASCII : 100% ASCII, aucun accent."
       },
       {
-        "besoin": "Corriger MA carte via editer-parcours (case c16)",
+        "besoin": "Corriger MA carte (mon arbre v2)",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/editer/editer-parcours/editer-parcours.py cerveau-projet/agents/chiron/parcours/parcours-chiron.json"
+          "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/agents/chiron/parcours/arbre-chiron.json"
         ],
-        "regle": "VERROU PILOTE : editer-parcours m autorise UNIQUEMENT parcours-chiron.json. Autre cible = BLOQUEE -> Buffy."
+        "regle": "AUTO-CORRECTION : je corrige MON arbre v2 (arbre-chiron.json) - les autres fichiers restent dans le perimetre de leur agent."
       },
       {
         "besoin": "Activer Themis pour verifier ma re-education (case c17)",

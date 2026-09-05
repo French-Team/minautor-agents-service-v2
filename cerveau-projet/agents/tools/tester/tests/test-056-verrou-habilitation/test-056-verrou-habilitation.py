@@ -33,9 +33,12 @@ Contexte :
     045 : cartes + registre). Le verrou les applique AVANT coup : au moment
     ou l agent appelle l outil, il doit prouver son habilitation (--agent)
     ET etre l agent reel de la session.
-  - SOURCE DE VERITE : les cartes de decision (indices outil des parcours)
-    + la table '## Sessions connues' d AGENTS.md (agent actif reel).
-    Aucune liste en dur dans l outil : si une carte evolue, le verrou suit.
+  - SOURCE DE VERITE (v0.6.0, migration v1->v2 2026-09-05) : la table
+    d habilitation DEDIEE (cerveau-projet/agents/habilitation/
+    habilitation-<agent>.json, un fichier par agent, champ 'outils') + la
+    table '## Sessions connues' d AGENTS.md (agent actif reel). Les cartes
+    de decision v1 (parcours-*.json) ont ete retirees : la table EST la
+    regle. Aucune liste en dur dans l outil.
   - Verdict : rc=0 OK (verrou ouvert) / rc=1 BLOQUE (verrou ferme, avec la
     liste des habilites + la commande d activation, OU usurpation
     d identite) / rc=2 erreur d usage (--agent manquant, agent inconnu).
@@ -222,30 +225,30 @@ def _lire_table_sessions():
 
 
 def outil_de_la_carte(agent):
-    """Un outil de la carte de l agent (indices type outil)."""
-    chemin = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", agent,
-                          "parcours", "parcours-%s.json" % agent)
+    """Un outil de la table d habilitation dediee de l agent
+    (v0.6.0 : agents/habilitation/habilitation-<agent>.json, champ outils)."""
+    chemin = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                          "habilitation", "habilitation-%s.json" % agent)
     try:
-        p = json.load(io.open(chemin, encoding="utf-8"))
+        data = json.load(io.open(chemin, encoding="utf-8"))
     except Exception:
         return None
-    for cid, case in p.get("cases", {}).items():
-        for ind in case.get("indices", []):
-            if isinstance(ind, dict) and ind.get("type") == "outil" \
-                    and ind.get("nom"):
-                return ind["nom"]
+    outils = data.get("outils", []) if isinstance(data, dict) else []
+    if isinstance(outils, list) and outils:
+        return outils[0]
     return None
 
 
 def autres_agents():
-    """Liste des agents connus (hors hygienes du test)."""
+    """Liste des agents connus (fichiers de la table d habilitation
+    dediee - v0.6.0)."""
     resultats = []
-    if os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet", "agents")):
-        for nom in sorted(os.listdir(os.path.join(PROJECT_ROOT,
-                                                  "cerveau-projet", "agents"))):
-            if os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet",
-                                          "agents", nom, "parcours")):
-                resultats.append(nom)
+    doss_habil = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents",
+                              "habilitation")
+    if os.path.isdir(doss_habil):
+        for nom in sorted(os.listdir(doss_habil)):
+            if nom.startswith("habilitation-") and nom.endswith(".json"):
+                resultats.append(nom[len("habilitation-"):-len(".json")])
     return resultats
 
 
@@ -257,8 +260,8 @@ def main():
         if point_actif(1):
             t = time.monotonic()
             r = run([PYTHON, OUTIL_PY, "--version"])
-            verifier("1. --version affiche v0.5.0",
-                     "v0.5.0" in r.stdout, r.stdout.strip())
+            verifier("1. --version affiche v0.6.0",
+                     "v0.6.0" in r.stdout, r.stdout.strip())
             chrono_etape("1. version", t)
 
         # 2. Table (--audit) POSITIVE : janus -> non-regression (seul habilite)
@@ -333,7 +336,7 @@ def main():
             r = run([PYTHON, OUTIL_PY, "--agent", "janus",
                      "--outil", "outil-inexistant", "--audit"])
             sortie = r.stdout + r.stderr
-            ok = r.returncode == 1 and "AUCUNE carte" in sortie
+            ok = r.returncode == 1 and "AUCUNE table" in sortie
             verifier("6. TABLE outil non assigne : alerte rc=1 (declaration "
                      "manquante)", ok, r.stdout.strip())
             chrono_etape("6. outil non assigne", t)

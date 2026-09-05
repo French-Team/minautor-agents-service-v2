@@ -15,7 +15,7 @@ Points verifies :
      ABSENT -> NON CONFORME (references cassees detectees)
   6. PREUVE NEGATIVE v1 : --fichier sur un parcours v1 avec suivant mort
      -> NON CONFORME (la branche v1 ne dort pas)
-  7. Repli v1 : --fichier parcours-hades.json -> CONFORME (format v1
+  7. Repli v1 : --fichier arbre-hades.json -> CONFORME (format v1
      toujours valide)
   8. Normes : ASCII strict + LF pur (outil py/sh/md + test)
 
@@ -147,7 +147,9 @@ def lancer(argv):
 def point_1_2_3_agents_v2():
     for num, agent in ((1, "buffy"), (2, "morpheus"), (3, "vulcain")):
         t0 = time.monotonic()
-        p = lancer(["--agent", agent])
+        # v0.6.0 : --audit pour sauter le verrou d habilitation (l agent
+        # actif de session n est pas toujours habilite pour valider-cartes).
+        p = lancer(["--agent", agent, "--audit"])
         out = (p.stdout or "") if p else ""
         verifier("%d. --agent %s : CONFORME (arbre v2)" % (num, agent),
                  "CONFORME" in out and "arbre v2" in out,
@@ -190,25 +192,38 @@ def point_5_preuve_negative_v2():
 
 def point_6_preuve_negative_v1():
     t0 = time.monotonic()
-    # Le parcours v1 de buffy porte des suivants morts (c16/c22b/c27b/c8b) :
-    # la branche v1 doit TOUJOURS les detecter (validation v1 inchangee).
-    p = lancer(["--fichier", os.path.join(AGENTS_DIR, "buffy", "parcours",
-                                          "parcours-buffy.json")])
-    out = (p.stdout or "") if p else ""
-    verifier("6. PREUVE NEGATIVE v1 : parcours v1 avec suivant mort "
-             "-> NON CONFORME (branche v1 intacte)",
-             "NON CONFORME" in out and "Suivants morts" in out,
-             (out or "AUCUNE SORTIE")[-150:])
+    # v0.6.0 (migration v1->v2) : un parcours v1 (parcours-*.json) est un
+    # VESTIGE - valider-cartes doit le declarer NON CONFORME (format v1).
+    tmp = tempfile.mkdtemp(prefix="test122-v1-")
+    try:
+        cible = os.path.join(tmp, "parcours-vestige.json")
+        vestige = {
+            "identite": {"type": "parcours", "appartient_a": "factice"},
+            "parcours": {"nom": "parcours-vestige", "version": "0.1.0"},
+            "cases": {
+                "c0": {"type": "question", "message": "depart"}
+            }
+        }
+        with io.open(cible, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(vestige, ensure_ascii=True))
+        p = lancer(["--fichier", cible])
+        out = (p.stdout or "") if p else ""
+        verifier("6. PREUVE NEGATIVE v1 : parcours v1 factice -> NON CONFORME "
+                 "(vestige v1)",
+                 "NON CONFORME" in out and "vestige v1" in out,
+                 (out or "AUCUNE SORTIE")[-150:])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
     chrono_etape("6. preuve negative v1", t0)
 
 
 def point_7_repli_v1():
     t0 = time.monotonic()
     p = lancer(["--fichier", os.path.join(AGENTS_DIR, "hades", "parcours",
-                                          "parcours-hades.json")])
+                                          "arbre-hades.json")])
     out = (p.stdout or "") if p else ""
-    verifier("7. Repli v1 : parcours-hades.json CONFORME (format v1)",
-             "CONFORME" in out,
+    verifier("7. arbre v2 : arbre-hades.json CONFORME (format v2)",
+             "CONFORME" in out and "arbre v2" in out,
              (out or "AUCUNE SORTIE")[-100:])
     chrono_etape("7. repli v1", t0)
 

@@ -228,14 +228,16 @@ def main():
         with io.open(CATALOGUE, encoding="utf-8") as fh:
             cat = json.load(fh)
         noms = [e["nom"] for e in cat["commandes"]]
-        verifier("10. catalogue 188 commandes trie + les 2 outils",
-                 len(noms) == 188 and noms == sorted(noms)
+        # scission 2-bdd (2026-09-05) : outils v1 restaures
+        # (187 -> 189 commandes)
+        verifier("10. catalogue 165 commandes trie + les 2 outils",
+                 len(noms) == 165 and noms == sorted(noms)
                  and "lire-head" in noms
                  and "analyser-noms-maj" in noms
                  and "corriger-noms-maj" in noms,
                  "nb=%d trie=%s" % (len(noms), noms == sorted(noms)))
     except Exception as e:
-        verifier("10. catalogue 188 commandes trie + les 2 outils",
+        verifier("10. catalogue 165 commandes trie + les 2 outils",
                  False, str(e)[-80:])
     chrono_etape("10. catalogue", t0)
 
@@ -244,19 +246,20 @@ def main():
     try:
         with io.open(INDEX, encoding="utf-8") as fh:
             idx = fh.read()
-        verifier("11. index-tools total 204 + Analyser 9 + Corriger 7 + les 2",
-                 "| **Total** | **204** |" in idx
+        # scission 2-bdd (2026-09-05) : outils v1 restaures (Total 204)
+        verifier("11. index-tools total 195 + Analyser 9 + Corriger 7 + les 2",
+                 "| **Total** | **195** |" in idx
                  and "| Analyser | 9 |" in idx
                  and "| Corriger | 7 |" in idx
                  and "lire-head" in idx
                  and "analyser-noms-maj" in idx
                  and "corriger-noms-maj" in idx,
-                 "total204=%s an6=%s co7=%s" % (
-                     "| **Total** | **204** |" in idx,
+                 "total195=%s an9=%s co7=%s" % (
+                     "| **Total** | **195** |" in idx,
                      "| Analyser | 9 |" in idx,
                      "| Corriger | 7 |" in idx))
     except OSError as e:
-        verifier("11. index-tools total 203 + Analyser 9 + Corriger 7 + les 2",
+        verifier("11. index-tools total 195 + Analyser 9 + Corriger 7 + les 2",
                  False, str(e))
     chrono_etape("11. index-tools", t0)
 

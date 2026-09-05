@@ -232,14 +232,14 @@ def detecter_inversion(texte):
 # Points
 # ------------------------------------------------------------------
 def point_1_code():
-    """pilote.py v0.2.3 : RETOUR AEROPORT AVANT activer_cerberus."""
+    """pilote.py v0.2.4 : RETOUR AEROPORT AVANT activer_cerberus."""
     ok_existe = os.path.isfile(PILOTE_PY)
     ok_version = False
     ok_ordre = False
     detail = ""
     if ok_existe:
         r = lancer([PYTHON, PILOTE_PY, "--version"], timeout=60)
-        ok_version = (r.returncode == 0 and "0.2.3" in r.stdout)
+        ok_version = (r.returncode == 0 and "0.2.4" in r.stdout)
         with io.open(PILOTE_PY, encoding="utf-8", errors="replace") as fh:
             lignes = fh.read().split("\n")
         # Numero de la ligne _historiser_pilote(RETOUR AEROPORT) et du
@@ -258,7 +258,7 @@ def point_1_code():
                                                            pos_activer + 1)
         else:
             detail = "pos_retour=%s pos_activer=%s" % (pos_retour, pos_activer)
-    verifier("1. pilote.py v0.2.3 : RETOUR AEROPORT AVANT activer_cerberus",
+    verifier("1. pilote.py v0.2.4 : RETOUR AEROPORT AVANT activer_cerberus",
              ok_existe and ok_version and ok_ordre,
              detail or "fichier/version/ordre KO")
 

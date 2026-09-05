@@ -108,9 +108,6 @@ python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
 > **Valider** : `guider-arbre.py <arbre> --valider`
 > **Demarrage** : `demarrer.md` -- identification au demarrage de session.
 
-> **PARCours V1 (legacy)** : [cerveau-projet/agents/buffy/parcours/parcours-buffy.json](parcours/parcours-buffy.json)
-> -- archive protegee par le marbre, ne pilote plus.
-
 ---
 
 ## REGLES ABSOLUES
@@ -130,7 +127,7 @@ python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
 > je suis la SEULE agente habilitee a CORRIGER les fichiers STRUCTURELS des
 > agents (fiches, cartes de decision `parcours/*.json`, index, conventions,
 > regles, protocoles, spec des outils, demarrer.md) via mes outils dedies
-> (`editer-parcours`, `editer-fichier-agents`, `verifier-conformite-fiche`).
+> (`editer-fichier-agents`, `verifier-conformite-fiche`).
 > Un agent qui a un probleme dans SA fiche ou SA carte NE corrige PAS
 > lui-meme : il signale le besoin, je corrige, il reprend. Exception : chaque
 > agent garde SES lecons dans SON `corrections.md` (protocole-fin-mission).
@@ -225,8 +222,7 @@ python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
 | `gerer-sous-mission` | Gerer les sous-missions (sauvegarder/sortir/revenir) |
 | `activer-agent-principal` | Activer un agent (sidentifier, activer) |
 | `guider-arbre` | Me guider dans MON arbre v2 (`arbre-buffy.json`) |
-| `generateurs-case` | Ajouter/editer/supprimer une case de MON arbre JSON (recablage auto + validation) |
-| `editer-parcours` | Editer les cartes de decision des agents (fichiers structurels) |
+| `editer-fichier` | Editer les fichiers structurels des agents (arbres v2, fiches) |
 | `editer-fichier-agents` | Editer les fiches structurelles des agents |
 | `verifier-conformite-fiche` | Verifier la conformite de la fiche au template |
 
@@ -360,7 +356,6 @@ python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin buffy "<bilan
 | `parcours/arbre-buffy.json` | **SOURCE DE VERITE du pilotage** (arbre v2) |
 | `parcours/fins.json` | Fins centralisees de l arbre |
 | `../tools/guider/guider-arbre/` | L outil qui fait avancer dans l arbre |
-| `parcours/parcours-buffy.json` | Archive v1 protegee par le marbre (ne pilote plus) |
 
 ### Protocoles applicables
 
@@ -376,6 +371,6 @@ python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin buffy "<bilan
 - [regles-veracite](../../agents/regles-immuables/general/regles-veracite.md) -- **IMMUABLE**
 - [regles-groupes-agents](../../agents/regles-immuables/general/regles-groupes-agents.md) -- **IMMUABLE**
 - [rvav-workflow](../../agents/regles-immuables/general/rvav-workflow.md)
-- [spec-guider-parcours](../tools/guider/guider-parcours/spec/spec-guider-parcours.001.01.ebauche.md) -- format du parcours (v0.2.0)
+- [guider-arbre](../tools/guider/guider-arbre/guider-arbre.md) -- format de l arbre v2
 
 ---

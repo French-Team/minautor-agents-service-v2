@@ -1,0 +1,88 @@
+%% Arbre de decision de themis (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "AUDIT" --> THEME-AUDIT
+    THEME-AUDIT["Evaluer le travail d un agent et produire un rapport d evalu"]
+    THEME-AUDIT -- "besoin 1" --> THEME-AUDIT-B0
+    THEME-AUDIT-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUDIT -- "besoin 2" --> THEME-AUDIT-B1
+    THEME-AUDIT-B1["Lire le protocole verification coherence"]
+    THEME-AUDIT -- "besoin 3" --> THEME-AUDIT-B2
+    THEME-AUDIT-B2["Consulter les lecons (domaine audit)"]
+    THEME-AUDIT -- "besoin 4" --> THEME-AUDIT-B3
+    THEME-AUDIT-B3["CONTEXTE : activite recente des agents"]
+    THEME-AUDIT -- "besoin 5" --> THEME-AUDIT-B4
+    THEME-AUDIT-B4["Lire le rapport de mission de l agent"]
+    THEME-AUDIT -- "besoin 6" --> THEME-AUDIT-B5
+    THEME-AUDIT-B5["Executer le combo audit general"]
+    THEME-AUDIT -- "besoin 7" --> THEME-AUDIT-B6
+    THEME-AUDIT-B6["Verifier la conformite d execution (Pattern 11)"]
+    THEME-AUDIT -- "besoin 8" --> THEME-AUDIT-B7
+    THEME-AUDIT-B7["Verifier les impacts (Pattern 14)"]
+    THEME-AUDIT -- "besoin 9" --> THEME-AUDIT-B8
+    THEME-AUDIT-B8["Verifier que la fin suit sa carte (Pattern 13)"]
+    THEME-AUDIT -- "besoin 10" --> THEME-AUDIT-B9
+    THEME-AUDIT-B9["Produire le rapport d evaluation"]
+    THEME-AUDIT -- "besoin 11" --> THEME-AUDIT-B10
+    THEME-AUDIT-B10["Ajouter les lecons dans corrections.md"]
+    FIN-fin-audit(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUDIT-B0 --> FIN-fin-audit
+    THEME-AUDIT-B1 --> FIN-fin-audit
+    THEME-AUDIT-B2 --> FIN-fin-audit
+    THEME-AUDIT-B3 --> FIN-fin-audit
+    THEME-AUDIT-B4 --> FIN-fin-audit
+    THEME-AUDIT-B5 --> FIN-fin-audit
+    THEME-AUDIT-B6 --> FIN-fin-audit
+    THEME-AUDIT-B7 --> FIN-fin-audit
+    THEME-AUDIT-B8 --> FIN-fin-audit
+    THEME-AUDIT-B9 --> FIN-fin-audit
+    THEME-AUDIT-B10 --> FIN-fin-audit
+    RACINE -- "VERACITE" --> THEME-VERACITE
+    THEME-VERACITE["Verifier que les affirmations factuelles des README sont vra"]
+    THEME-VERACITE -- "besoin 1" --> THEME-VERACITE-B0
+    THEME-VERACITE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-VERACITE -- "besoin 2" --> THEME-VERACITE-B1
+    THEME-VERACITE-B1["Lire le README a verifier"]
+    THEME-VERACITE -- "besoin 3" --> THEME-VERACITE-B2
+    THEME-VERACITE-B2["Verifier les compteurs (outils, tests, agents)"]
+    THEME-VERACITE -- "besoin 4" --> THEME-VERACITE-B3
+    THEME-VERACITE-B3["Verifier les affirmations factuelles"]
+    THEME-VERACITE -- "besoin 5" --> THEME-VERACITE-B4
+    THEME-VERACITE-B4["Verifier les normes (ASCII, LF, longueur)"]
+    THEME-VERACITE -- "besoin 6" --> THEME-VERACITE-B5
+    THEME-VERACITE-B5["Produire le rapport de veracite"]
+    THEME-VERACITE -- "besoin 7" --> THEME-VERACITE-B6
+    THEME-VERACITE-B6["Ajouter les lecons dans corrections.md"]
+    FIN-fin-veracite(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-VERACITE-B0 --> FIN-fin-veracite
+    THEME-VERACITE-B1 --> FIN-fin-veracite
+    THEME-VERACITE-B2 --> FIN-fin-veracite
+    THEME-VERACITE-B3 --> FIN-fin-veracite
+    THEME-VERACITE-B4 --> FIN-fin-veracite
+    THEME-VERACITE-B5 --> FIN-fin-veracite
+    THEME-VERACITE-B6 --> FIN-fin-veracite
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Executer une mission hors des themes standard"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["La mission concerne-t-elle un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["DELEGATION - Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["Executer la mission"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["Ajouter les lecons dans corrections.md"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    THEME-AUTRE-B4 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

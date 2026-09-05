@@ -16,9 +16,9 @@ Contexte (mission utilisateur 2026-08-14) :
 
 Cas couverts:
   1. La fiche hermes.md est CONFORME (verifier-conformite-fiche)
-  2. Le parcours hermes est valide (valider-case : 0 erreur)
-  3. Le parcours hermes est CONFORME (valider-cartes-decision)
-  4. Les 15 parcours existent (glob cerveau-projet/agents/*/parcours/)
+  2. La carte hermes est un arbre v2 valide (json + identite type arbre)
+  3. La carte hermes est CONFORME (valider-cartes-decision)
+  4. Les 22 arbres v2 existent (glob cerveau-projet/agents/*/parcours/arbre-*.json)
   5. L outil detecter-fautes-orthographe est au catalogue generateurs-commande
   6. L outil detecter-fautes-orthographe est dans index-tools.md
   7. Le dictionnaire de l outil ne contient que de VRAIES fautes (fautif != correct)
@@ -59,7 +59,7 @@ PROTECTIONS = charger_protections()
 
 AGENT_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "hermes")
 FICHE = os.path.join(AGENT_DIR, "hermes.md")
-PARCOURS = os.path.join(AGENT_DIR, "parcours", "parcours-hermes.json")
+PARCOURS = os.path.join(AGENT_DIR, "parcours", "arbre-hermes.json")
 OUTIL = os.path.join(TOOLS_DIR, "detecter", "detecter-fautes-orthographe",
                      "detecter-fautes-orthographe.py")
 OUTIL_MD = os.path.join(TOOLS_DIR, "detecter", "detecter-fautes-orthographe",
@@ -145,15 +145,20 @@ def main():
              (r or "")[-120:])
     chrono_etape("1. fiche conforme", time.time() - t1)
 
-    # 2. Parcours valide (valider-case)
+    # 2. Carte hermes : arbre v2 valide (valider-case archive le 2026-09-05)
     t2 = time.time()
-    r = run([sys.executable,
-             os.path.join(TOOLS_DIR, "valider", "valider-case",
-                          "valider-case.py"), PARCOURS])
-    verifier("2. parcours hermes valide (valider-case 0 erreur)",
-             r is not None and "CONFORME" in r and "erreurs: 0" in r,
-             (r or "")[-120:])
-    chrono_etape("2. parcours valide", time.time() - t2)
+    try:
+        with io.open(PARCOURS, encoding="utf-8") as fh:
+            arbre = json.load(fh)
+        type_arbre = arbre.get("identite", {}).get("type") == "arbre"
+        a_racine = "racine" in arbre and "branches" in arbre.get("racine", {})
+        verifier("2. carte hermes : arbre v2 valide (json + identite arbre)",
+                 type_arbre and a_racine,
+                 "type=%s racine=%s" % (arbre.get("identite", {}).get("type"), a_racine))
+    except Exception as e:
+        verifier("2. carte hermes : arbre v2 valide (json + identite arbre)",
+                 False, str(e))
+    chrono_etape("2. carte valide", time.time() - t2)
 
     # 3. Parcours conforme (valider-cartes-decision)
     t3 = time.time()
@@ -166,15 +171,16 @@ def main():
              (r or "")[-120:])
     chrono_etape("3. parcours conforme", time.time() - t3)
 
-    # 4. Les 15 parcours existent (glob)
+    # 4. Les 22 arbres v2 existent (glob) - migration v1->v2 2026-09-05 :
+    #    les parcours-*.json v1 sont supprimes, seul l arbre v2 reste.
     t4 = time.time()
     import glob as _glob
-    parcours = sorted(_glob.glob(os.path.join(PROJECT_ROOT,
-                                              "cerveau-projet", "agents", "*",
-                                              "parcours", "parcours-*.json")))
-    verifier("4. 25 parcours existent (glob agents/*/parcours/)",
-             len(parcours) == 25, "nb=%d" % len(parcours))
-    chrono_etape("4. 15 parcours", time.time() - t4)
+    arbres = sorted(_glob.glob(os.path.join(PROJECT_ROOT,
+                                            "cerveau-projet", "agents", "*",
+                                            "parcours", "arbre-*.json")))
+    verifier("4. 22 arbres v2 existent (glob agents/*/parcours/arbre-*.json)",
+             len(arbres) == 22, "nb=%d" % len(arbres))
+    chrono_etape("4. arbres v2", time.time() - t4)
 
     # 5. Outil au catalogue
     t5 = time.time()
